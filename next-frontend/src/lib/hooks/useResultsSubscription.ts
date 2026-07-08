@@ -40,6 +40,10 @@ export type CompressedLiveResult = {
     an: number;
   }[];
   at: string;
+  // Forecast stats (only present on incomplete `updated` results).
+  bpa?: number;
+  wpa?: number;
+  pra?: number;
 };
 
 type CompressedLiveResultWithUser = CompressedLiveResult & {

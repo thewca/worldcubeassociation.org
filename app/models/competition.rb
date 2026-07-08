@@ -2269,7 +2269,7 @@ class Competition < ApplicationRecord
   end
 
   def world_or_continental_championship?
-    championship_types.any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
+    championship_types.intersect?(Championship::MAJOR_CHAMPIONSHIP_TYPES)
   end
 
   def any_championship?

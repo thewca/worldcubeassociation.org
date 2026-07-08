@@ -104,6 +104,7 @@ function ContactEditProfilePage({ loggedInUserId, recaptchaPublicKey }) {
       {wcaId && (
         <EditProfileFormHolder
           wcaId={wcaId}
+          editOthersProfileMode={editOthersProfileMode}
           onContactSuccess={(res) => {
             setContactSuccess(true);
             setTicketId(res?.ticket_id);

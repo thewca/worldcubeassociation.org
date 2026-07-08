@@ -84,6 +84,7 @@ module ResultsValidators
           r.round_type.rank,
           valid_average ? r.average : BACKOFF_INT_MAX,
           valid_best ? r.best : BACKOFF_INT_MAX,
+          r.id, # tie-breaker for the rare case that two persons in the same round achieved the same single and average
         ]
       end
 

@@ -29,7 +29,7 @@ RSpec.describe "WCA Live API" do
         end
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         expect(round.live_results.pluck(:advancing)).to eq([true, true, true, false, false])
       end
@@ -45,7 +45,7 @@ RSpec.describe "WCA Live API" do
         end
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         # 40% of 5 is exactly 2.
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
@@ -60,7 +60,7 @@ RSpec.describe "WCA Live API" do
         end
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         # 40% of 5 is exactly 2.
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
@@ -77,7 +77,7 @@ RSpec.describe "WCA Live API" do
         create(:live_result, registration: registrations[4], round: round, average: -1)
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         # 40% of 5 is exactly 2.
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
@@ -94,7 +94,7 @@ RSpec.describe "WCA Live API" do
         create(:live_result, registration: registrations[4], round: round, average: -2)
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         # 40% of 5 is exactly 2.
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
@@ -236,7 +236,7 @@ RSpec.describe "WCA Live API" do
         end
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         # Only strictly _better_ than 3 seconds will proceed, so that's two entries.
         expect(round.live_results.pluck(:advancing)).to eq([true, true, false, false, false])
@@ -362,7 +362,7 @@ RSpec.describe "WCA Live API" do
         end
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         round.lock_results(User.first)
         # Update best/average after locking
@@ -489,7 +489,7 @@ RSpec.describe "WCA Live API" do
         end
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         # Open next round and quit first result from it
         final.open_and_lock_previous(User.first)
@@ -515,7 +515,7 @@ RSpec.describe "WCA Live API" do
         end
 
         expect(round.total_competitors).to eq 5
-        expect(round.competitors_live_results_entered).to eq 5
+        expect(round.completed_competitors).to eq 5
 
         # Open next round and quit first result from it while letting the next one advance
         final.open_and_lock_previous(User.first)

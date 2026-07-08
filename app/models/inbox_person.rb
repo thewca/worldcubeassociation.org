@@ -6,7 +6,7 @@ class InboxPerson < ApplicationRecord
 
   # For historic reasons, we insert the registrant ID as the SQL table `id` column.
   #   These IDs are only unique per competition however, so we use a composite foreign key.
-  self.primary_key = %i[id competition_id]
+  self.primary_key = %i[competition_id id]
 
   MISMATCH_CHECKS = %i[name country_iso2 gender dob wca_id].freeze
 
@@ -14,8 +14,8 @@ class InboxPerson < ApplicationRecord
   belongs_to :country, foreign_key: "country_iso2", primary_key: "iso2", inverse_of: :inbox_persons
   belongs_to :registration, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], optional: true, inverse_of: :inbox_person
 
-  has_many :inbox_results, foreign_key: %i[person_id competition_id], inverse_of: :inbox_person
-  has_many :results, foreign_key: %i[person_id competition_id], inverse_of: :inbox_person
+  has_many :inbox_results, foreign_key: %i[competition_id person_id], inverse_of: :inbox_person
+  has_many :results, foreign_key: %i[competition_id person_id], inverse_of: :inbox_person
 
   alias_attribute :ref_id, :id
   alias_method :wca_person, :person

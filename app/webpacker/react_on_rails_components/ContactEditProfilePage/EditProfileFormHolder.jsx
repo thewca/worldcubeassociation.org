@@ -8,6 +8,7 @@ import EditProfileForm from './EditProfileForm';
 
 export default function EditProfileFormHolder({
   wcaId,
+  editOthersProfileMode,
   onContactSuccess,
   recaptchaPublicKey,
 }) {
@@ -24,6 +25,7 @@ export default function EditProfileFormHolder({
   return (
     <EditProfileForm
       wcaId={wcaId}
+      editOthersProfileMode={editOthersProfileMode}
       profileDetails={profileDetails}
       onContactSuccess={onContactSuccess}
       recaptchaPublicKey={recaptchaPublicKey}

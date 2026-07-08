@@ -1496,7 +1496,7 @@ es-ES:
         #original_hash: 2035811
         wmt: Equipo de Marketing de la WCA
         #original_hash: 2517097
-        wmct: Equipo del Campeonato Grande de la WCA
+        wmct: Equipo de Campeonatos Grandes de la WCA
         #original_hash: 8f32116
         wqac: Comité de Control de Calidad de la WCA
         #original_hash: 3da1e85
@@ -1756,6 +1756,9 @@ es-ES:
         edit_reason:
           #original_hash: fdfcccf
           label: Motivo del cambio
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: 'Razón para el cambio de %{attribute}'
         proof_attach:
           #original_hash: a9645b1
           label: Adjuntar documentación
@@ -2992,6 +2995,8 @@ es-ES:
         submit_results: Enviar resultados
         #original_hash: 0ed766a
         add_to_batch: Añadir al lote
+        #original_hash: 1a2e4ff
+        remove_from_batch: Eliminar del lote
         #original_hash: 8b6d8cb
         batch_mode: Modo lote
         #original_hash: a577fa2

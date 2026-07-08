@@ -10,8 +10,8 @@ export default function Wrapper({
   resultsSubmitted,
   hasTemporaryResults,
   uploadedScrambleFilesCount,
-  showWcaLiveBeta,
   canSubmitResults,
+  scoretakingSoftware,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -20,8 +20,8 @@ export default function Wrapper({
         resultsSubmitted={resultsSubmitted}
         hasTemporaryResults={hasTemporaryResults}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
-        showWcaLiveBeta={showWcaLiveBeta}
         canSubmitResults={canSubmitResults}
+        scoretakingSoftware={scoretakingSoftware}
       />
     </WCAQueryClientProvider>
   );
@@ -32,8 +32,8 @@ function CompetitionResultSubmission({
   resultsSubmitted,
   hasTemporaryResults: hasTemporaryResultsInitial,
   uploadedScrambleFilesCount,
-  showWcaLiveBeta,
   canSubmitResults,
+  scoretakingSoftware,
 }) {
   const [hasTemporaryResults, setHasTemporaryResults] = useState(hasTemporaryResultsInitial);
   const [accordionIndex, setAccordionIndex] = useState(hasTemporaryResultsInitial ? 1 : 0);
@@ -62,7 +62,7 @@ function CompetitionResultSubmission({
             uploadedScrambleFilesCount={uploadedScrambleFilesCount}
             onImportSuccess={onImportSuccess}
             hasTemporaryResults={hasTemporaryResults}
-            showWcaLiveBeta={showWcaLiveBeta}
+            scoretakingSoftware={scoretakingSoftware}
           />
         ),
       },
@@ -89,7 +89,7 @@ function CompetitionResultSubmission({
     uploadedScrambleFilesCount,
     onImportSuccess,
     hasTemporaryResults,
-    showWcaLiveBeta,
+    scoretakingSoftware,
     canSubmitResults,
   ]);
 
@@ -110,9 +110,11 @@ function CompetitionResultSubmission({
           Providing valid results data to the website.
           This can be done in one of the following ways:
           <List.List>
-            <List.Item value="a">Uploading a Results JSON file</List.Item>
-            {showWcaLiveBeta && (
-              <List.Item value="b">Importing results directly from WCA Live</List.Item>
+            {scoretakingSoftware !== 'external' && (
+              <List.Item value="a">Importing results directly from Live Results</List.Item>
+            )}
+            {scoretakingSoftware !== 'internal' && (
+              <List.Item value="a">Uploading a Results JSON file</List.Item>
             )}
           </List.List>
         </List.Item>

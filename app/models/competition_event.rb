@@ -157,7 +157,11 @@ class CompetitionEvent < ApplicationRecord
       #   is never read back (see `Round#to_wcif`). Persisting the WCIF snapshot just creates
       #   stale data that drifts from `live_results`, so we don't store it (and clear any leftovers).
       round_attributes[:round_results] = [] if self.competition.scoretaking_software_internal?
-      round.update!(**round_attributes)
+      round.assign_attributes(**round_attributes)
+      # `participation_source` is required, but it can only be computed in the second pass below
+      #   (it depends on `linked_round`). Persist without validation here so the record has an ID
+      #   to reference; the second pass runs full validations once everything is wired up.
+      round.save!(validate: false)
       WcifExtension.update_wcif_extensions!(round, round_wcif["extensions"]) if round_wcif["extensions"]
       round
     end
