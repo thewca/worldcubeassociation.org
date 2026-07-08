@@ -25,6 +25,11 @@ updates:
     - dependency-name: eslint-plugin-react-hooks
       versions:
         - ">= 7"
+    # Fundamental compatibility issue with @pmmmwh/react-refresh-webpack-plugin,
+    #   see https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/1014
+    - dependency-name: webpack-dev-server
+      versions:
+        - ">= 6"
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/next-frontend"
