@@ -43,14 +43,11 @@ export default function ImportResultsData({
 
   return (
     <>
-      <Message
-        warning={hasTemporaryResults}
-        info={!hasTemporaryResults}
-      >
-        {hasTemporaryResults
-          ? 'Some results have already been uploaded before, importing results data again will override all of them!'
-          : 'Please start by selecting a JSON file to import.'}
-      </Message>
+      {hasTemporaryResults && (
+        <Message warning>
+          Some results have already been uploaded before, importing results data again will override all of them!
+        </Message>
+      )}
       <Tab panes={panes} />
     </>
   );
