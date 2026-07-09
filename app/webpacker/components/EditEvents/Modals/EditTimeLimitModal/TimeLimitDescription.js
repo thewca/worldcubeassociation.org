@@ -32,6 +32,7 @@ export default function TimeLimitDescription({ wcifRound, timeLimit, onOk }) {
           total for all of their solves in this round.
           <br />
           This is called a cumulative time limit (see
+          {' '}
           <RegulationLink regulation="A1a2" />
           ).
           <br />
@@ -39,6 +40,28 @@ export default function TimeLimitDescription({ wcifRound, timeLimit, onOk }) {
         </span>
         <SelectRoundsModal excludeEventId={wcifRound.id.split('-')[0]} timeLimit={timeLimit} onOk={onOk} />
       </>
+    );
+  }
+
+  if (_.isEqual(timeLimit.cumulativeRoundIds, wcifRound.linkedRounds)) {
+    return (
+      <span>
+        This round has a Dual Round cumulative time limit (see
+        {' '}
+        <RegulationLink regulation="A1a2" />
+        ).
+        <br />
+        This means that competitors have
+        {' '}
+        {centisecondsToString(timeLimit.centiseconds)}
+        {' '}
+        total for all of their solves in this Dual Round consisting of:
+        <ul>
+          {wcifRound.linkedRounds.map((roundId) => (
+            <li key={roundId}>{roundIdToString(roundId)}</li>
+          ))}
+        </ul>
+      </span>
     );
   }
 
