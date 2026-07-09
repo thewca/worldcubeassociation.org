@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 import _ from 'lodash';
-import { Form, Label, Radio } from 'semantic-ui-react';
+import { Form, Label } from 'semantic-ui-react';
 import { events } from '../../../../lib/wca-data.js.erb';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import { centisecondsToClockFormat } from '../../../../lib/wca-live/attempts';
@@ -23,8 +23,15 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
   const dispatch = useDispatch();
   const event = events.byId[wcifEvent.id];
 
+  const linkedRoundIds = useMemo(() => wcifRound.linkedRounds ?? [], [wcifRound.linkedRounds]);
+
   const [centiseconds, setCentiseconds] = useState(timeLimit?.centiseconds ?? 0);
   const [cumulativeRoundIds, setCumulativeRoundIds] = useState(timeLimit?.cumulativeRoundIds ?? []);
+
+  const isLinkedGroupCumulative = useMemo(
+    () => _.isEqual(cumulativeRoundIds, linkedRoundIds),
+    [cumulativeRoundIds, linkedRoundIds],
+  );
 
   const Trigger = useMemo(() => {
     if (!timeLimit) {
@@ -99,23 +106,31 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
         onChange={setCentiseconds}
         disabled={disabled}
       />
-      <br />
-      <Form.Field inline>
-        <Radio
+      <Form.Group inline>
+        <Form.Radio
           label="per-solve"
           name="timeLimitType"
           value="per-solve"
           checked={cumulativeRoundIds.length === 0}
           onChange={() => setCumulativeRoundIds([])}
         />
-        <Radio
+        <Form.Radio
           label="cumulative"
           name="timeLimitType"
-          value="per-solve"
-          checked={cumulativeRoundIds.length > 0}
+          value="cross-events"
+          checked={cumulativeRoundIds.length > 0 && !isLinkedGroupCumulative}
           onChange={() => setCumulativeRoundIds([wcifRound.id])}
         />
-      </Form.Field>
+        {linkedRoundIds.length > 0 && (
+          <Form.Radio
+            label="Dual Rounds cumulative"
+            name="timeLimitType"
+            value="linked-round"
+            checked={cumulativeRoundIds.length > 0 && isLinkedGroupCumulative}
+            onChange={() => setCumulativeRoundIds(wcifRound.linkedRounds)}
+          />
+        )}
+      </Form.Group>
       <TimeLimitDescription
         wcifRound={wcifRound}
         timeLimit={{ centiseconds, cumulativeRoundIds }}
