@@ -45,7 +45,8 @@ export default function ImportResultsData({
     <>
       {hasTemporaryResults && (
         <Message warning>
-          Some results have already been uploaded before, importing results data again will override all of them!
+          Some results have already been uploaded before,
+          importing results data again will replace all of them!
         </Message>
       )}
       <Tab panes={panes} />
