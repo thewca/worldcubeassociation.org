@@ -218,20 +218,24 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
             </Button>
           )}
         </FocusScope>
-        <HStack justify="space-between">
-          <Stat.Root>
-            <Stat.Label>{t("common.best")}</Stat.Label>
-            <Stat.ValueText>
-              {formatAttemptResult(bestResult, eventId)}
-            </Stat.ValueText>
-          </Stat.Root>
-          <Stat.Root>
-            <Stat.Label>{t("common.average")}</Stat.Label>
-            <Stat.ValueText>
-              {formatAttemptResult(averageResult, eventId)}
-            </Stat.ValueText>
-          </Stat.Root>
-        </HStack>
+        {selectedCompetitor && (
+          <HStack justify="space-between">
+            <Stat.Root flex="0">
+              <Stat.Label>{t("common.best")}</Stat.Label>
+              <Stat.ValueText>
+                {formatAttemptResult(bestResult, eventId)}
+              </Stat.ValueText>
+            </Stat.Root>
+            {averageResult !== SKIPPED_VALUE && (
+              <Stat.Root flex="0">
+                <Stat.Label>{t("common.average")}</Stat.Label>
+                <Stat.ValueText>
+                  {formatAttemptResult(averageResult, eventId)}
+                </Stat.ValueText>
+              </Stat.Root>
+            )}
+          </HStack>
+        )}
         <Checkbox.Root checked={batchMode} onCheckedChange={batchConfirmation}>
           <Checkbox.HiddenInput />
           <Checkbox.Control />
