@@ -13,7 +13,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
 import { padSkipped } from "@/lib/live/padSkipped";
-import { LiveCompetitor } from "@/types/live";
+import { LiveAttempt, LiveCompetitor } from "@/types/live";
 import { useRoundInfo } from "@/providers/RoundInfoProvider";
 import { components } from "@/types/openapi";
 import useStoredState from "@/lib/hooks/useStoredState";
@@ -27,6 +27,10 @@ interface AdminResultsContextValue {
   batchMode: boolean;
   setBatchMode: (value: boolean) => void;
   batchCount: number;
+  // Staged (not-yet-submitted) attempts per competitor, so their result row
+  // can preview them in a muted colour.
+  batchAttemptsByRegistrationId: Map<number, LiveAttempt[]>;
+  removeFromBatch: (registrationId: number) => void;
   submitBatch: () => void;
   handleRegistrationIdChange: (value?: number) => void;
   handleAttemptChange: (index: number, value: number) => void;
@@ -98,12 +102,24 @@ export function LiveResultAdminProvider({
 
   const api = useAPI();
 
-  const [batchMode, setBatchMode] = useState(false);
+  const [batchModeEnabled, setBatchModeEnabled] = useState(false);
   // Persisted to localStorage so staged results survive a refresh/crash — the
   // whole point of batch mode is unreliable connections. Cleared on submit.
   const [batch, setBatch] = useStoredState<BatchEntry[]>(
     [],
     `live-batch-${roundId}`,
+  );
+
+  // Stay in batch mode while staged results exist, so they can't be left behind
+  // and accidentally submitted later. Exiting must clear the batch (see setBatchMode).
+  const batchMode = batchModeEnabled || batch.length > 0;
+
+  const setBatchMode = useCallback(
+    (value: boolean) => {
+      setBatchModeEnabled(value);
+      if (!value) setBatch([]);
+    },
+    [setBatch],
   );
 
   const handleRegistrationIdChange = useCallback(
@@ -285,6 +301,13 @@ export function LiveResultAdminProvider({
     );
   };
 
+  const removeFromBatch = useCallback(
+    (toRemoveId: number) => {
+      setBatch((prev) => prev.filter((e) => e.registration_id !== toRemoveId));
+    },
+    [setBatch],
+  );
+
   const submitBatch = () => {
     if (batch.length === 0) return;
 
@@ -336,6 +359,10 @@ export function LiveResultAdminProvider({
         batchMode,
         setBatchMode,
         batchCount: batch.length,
+        batchAttemptsByRegistrationId: new Map(
+          batch.map((e) => [e.registration_id, e.attempts]),
+        ),
+        removeFromBatch,
         submitBatch,
         quitCompetitor,
         handleRegistrationIdChange,
@@ -349,6 +376,11 @@ export function LiveResultAdminProvider({
       <Toaster />
     </AdminResultsContext.Provider>
   );
+}
+
+// Null outside an admin provider (e.g. the public results table reuses LiveResultsTable).
+export function useResultsAdminOptional(): AdminResultsContextValue | null {
+  return useContext(AdminResultsContext);
 }
 
 export function useResultsAdmin(): AdminResultsContextValue {

@@ -342,6 +342,56 @@ RSpec.describe UsersController do
         expect(user2.competitions_announced.count).to eq 0
         expect(user2.competitions_results_posted.count).to eq 0
       end
+
+      it 'updates corresponding result records during merge' do
+        user1.update!(wca_id: nil)
+        user2_wca_id = user2.wca_id
+
+        comp1 = create(:competition, :past)
+        reg1 = create(:registration, :accepted, user: user1, competition: comp1)
+        result1 = create(:result, competition: comp1, person_id: reg1.registrant_id.to_s)
+
+        comp2 = create(:competition, :past)
+        reg2 = create(:registration, :accepted, user: user2, competition: comp2)
+        result2 = create(:result, competition: comp2, person_id: reg2.registrant_id.to_s)
+
+        post :merge, params: {
+          toUserId: user1.id,
+          fromUserId: user2.id,
+        }
+
+        expect(response).to have_http_status :ok
+        expect(user1.reload.wca_id).to eq user2_wca_id
+        expect(result1.reload.person_id).to eq user2_wca_id
+        expect(result2.reload.person_id).to eq user2_wca_id
+      end
+    end
+  end
+
+  describe 'POST #update_user_data' do
+    let(:user) { create(:user, wca_id: nil) }
+    let(:admin) { create(:admin) }
+
+    before :each do
+      sign_in admin
+    end
+
+    it 'updates user data and matching newcomer results' do
+      comp = create(:competition, :past)
+      reg = create(:registration, :accepted, user: user, competition: comp)
+      result = create(:result, competition: comp, person_id: reg.registrant_id.to_s, person_name: user.name, country_id: user.country.id)
+
+      post :update_user_data, params: {
+        id: user.id,
+        name: "New Name",
+        country_iso2: "FR",
+      }
+
+      expect(response).to have_http_status :ok
+      expect(user.reload.name).to eq "New Name"
+      expect(user.country_iso2).to eq "FR"
+      expect(result.reload.person_name).to eq "New Name"
+      expect(result.country_id).to eq "France"
     end
   end
 end

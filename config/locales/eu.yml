@@ -232,6 +232,8 @@ eu:
       ranking: '%{ranking} hoberenak'
       #original_hash: 0664a83
       percent: '%{percent}% hoberena'
+      #original_hash: 023a81e
+      all_advance: Denak aurreratuko dira
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -239,6 +241,8 @@ eu:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+    #original_hash: ba6fa8b
+    all_advance: Lehiakide denak aurreratuko dira
     #original_hash: 6e55337
     ranking: '%{ranking} hoberenak hurrengo txandara aurreratuko dira'
     #original_hash: 7ee969c
@@ -1713,6 +1717,9 @@ eu:
         edit_reason:
           #original_hash: fdfcccf
           label: Aldaketaren zergatia
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: '%{attribute} aldaketarako arrazoia'
         proof_attach:
           #original_hash: a9645b1
           label: Frogak erantsi
@@ -1744,7 +1751,7 @@ eu:
       title: Gutaz
       #original_hash: ed77e4c
       text: >-
-        Munduko Kuboaren Elkarteak (World Cube Associationak) pieza multzoak
+        Munduko Kuboaren Elkarteak (World Cube Associationek) pieza multzoak
         maneiatuz funtzionatzen duten puzzle mekaniko eta "buru-hausgarri
         bihurriak" deitzen zaien lehiaketak zuzentzen ditu.
     competitions:
@@ -2843,6 +2850,18 @@ eu:
     live:
       #original_hash: 10d1a3c
       title: Zuzenezko emaitzak
+      #original_hash: ef1c23b
+      manage_rounds: Txandak kudeatu
+      incompatible:
+        #original_hash: 4e41690
+        external: >-
+          Lehiaketa hau emaitzak gordetzeko kanpoko software bat erabiltzen ari
+          da, lehiaketaren informazioan begiratu zuzeneko emaitzak non ikusi
+          jakiteko mesedez.
+        #original_hash: 92b3341
+        wca_live: >-
+          Lehiaketa honek emaitzak gordetzeko WCA Live erabiltzen ari da,
+          lehiaketaren zuzeneko emaitzaki ikusteko segi hona mesedez:
       round_state:
         #original_hash: 98aadb3
         ongoing: zuzenean
@@ -2865,8 +2884,8 @@ eu:
       podiums:
         #original_hash: 02ae2bd
         title: Podiumak
-        #original_hash: d7297a7
-        undetermined: Podiumak zehazteko daude
+        #original_hash: 69c4270
+        undetermined: Zehaztearren
         #original_hash: 61e88df
         none: Ez dago podiumik oraindik!
       admin:
@@ -2874,6 +2893,8 @@ eu:
         open: Zabaldu
         #original_hash: 719ea39
         clear: Garbitu
+        #original_hash: bbfa773
+        close: Itxita
         #original_hash: 42faad9
         competitors_entered: >-
           %{total_competitors}/%{competitors_live_results_entered} sartuta
@@ -2886,6 +2907,22 @@ eu:
         results: Emaitzak
         #original_hash: b233e77
         registration: Izen-ematea
+        #original_hash: 1e0d934
+        admin_view: Administratzaile ikuspuntua
+        #original_hash: 530a71b
+        results_view: Emaitzen ikuspuntua
+        #original_hash: 1dadee2
+        double_check: Birritan ziurtatu
+        #original_hash: a5be381
+        submit_results: Emaitzak bidali
+        #original_hash: 0ed766a
+        add_to_batch: Sortara gehitu
+        #original_hash: 1a2e4ff
+        remove_from_batch: Sortatik atera
+        #original_hash: 8b6d8cb
+        batch_mode: Sorta modua
+        #original_hash: a577fa2
+        submit_batch: '(%{count}) Sorta bidali'
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2933,6 +2970,10 @@ eu:
             failure: Ezin izan da lehiakide eskerga utzi
             #original_hash: 774050e
             menu: Eskerga utzi
+            #original_hash: 89f89c0
+            id: IDa
+            #original_hash: 709a232
+            name: Izena
           #original_hash: 1a2285d
           quit_menu: Utzi
           #original_hash: 70835a0
@@ -2945,6 +2986,16 @@ eu:
           still_processing: >-
             Ezin da "Lehiakidea utzi" ekintza gauzatu, emaitza batzuk oraindik
             prozesatzen ari diren bitartean
+        add_competitor:
+          #original_hash: 9dcb50d
+          single_round: Txandara lehiakide bat gehitu
+          #original_hash: bf3b670
+          multiple_rounds:
+            zero: Lehiakidea zero txandatara gehitu.
+            one: Lehiakidea txanda bikoitzera gehitu.
+            other: >-
+              Lehiakidea txandara gehitu, txanda bikoitzaren lehen txanda itxita
+              dagoenez bereiz gehitu beharko duzu.
       results:
         #original_hash: 4705687
         competitor: Lehiakidea
@@ -4635,6 +4686,8 @@ eu:
         none: Bat ere ez
         #original_hash: 9b9a6aa
         show_buttons: Ordu-eremu botoiak erakutsi
+        #original_hash: dd3c440
+        hide_buttons: Ordu-eremu botoiak ezkutatu
         #original_hash: d2ac826
         use_time_zone: Ordu-eremu hau erabili
       #original_hash: 73acb7f
@@ -4654,10 +4707,14 @@ eu:
         direnak.
       #original_hash: 97df911
       timezone_message: 'Leku honetako ordu-eremua %{timezone} da.'
-      #original_hash: 94b2570
-      timezone_setting: 'Ordutegia hurrengo ordu-eremu honetan ikusten ari zara:'
-      #original_hash: 75194fd
-      multiple_timezones_available: Adi! Leku guztiak ez daude ordu-eremu berean -- kontuz ibil zaitez!
+      #original_hash: f948a0e
+      timezone_setting: 'Ordutegia hurrengo ordu-eremuan ikusten ari zara:'
+      #original_hash: ca4f078
+      multiple_timezones_available: 'Ohart zaitez leku batzuk ordu-eremu desberdinetan daudela, kontuz ibili!'
+      #original_hash: 459e545
+      select_a_timezone: Ordu-eremu bat aukeratu
+      #original_hash: 80e8704
+      select_a_venue_to_view: 'Ordutegia ikusteko, hautatu leku bat goian.'
       #original_hash: d94a371
       timezone_set_local: Bertakoan ezarri
       #original_hash: 17ab650
@@ -6628,6 +6685,12 @@ eu:
       missing_scrambles_for_multi_error: >-
         [%{round_id}] 3x3 Multi-Itsututarako hainbat talde dauzkazun harren,
         gutxienez talde batek saiakera guztietarako nahasketak izan behar ditu.
+      #original_hash: 2757334
+      mbld_scrambles_warning: >-
+        [%{round_id}] Txanda honek 3x3x3 Multi-Itsututako emaitzak dauzka.
+        Mesedez, zehaztu zure bidalketaren iruzkinean nahasketa sorta bakoitzeko
+        zenbat nahasketa lehiakideek erabiliak izan diren zinez, WRTk erabili
+        gabeko nahasketa extrak ezaba ditzan.
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] FMCrako hainbat talde erabilita daude. FMCko talde bakarra
@@ -6640,6 +6703,13 @@ eu:
         fitxan zehaztutako nahasketa sorta kopurua (%{expected}) desberdina da.
         "Probak kudeatu" fitxako nahasketa sorta kopurua erabili zen kopurura
         doitu mesedez.
+    schedule:
+      #original_hash: 7a12424
+      activity_outside_competition_dates_warning: >-
+        '%{activity_name}' (%{activity_code} kodea duen) ekintza lehiaketaren
+        data tartetik at programatuta dago lekuaren bertako ordu-eremuan.
+        Eguneratu ezazu lehiaketaren ordutegia lehiaketaren benetazko data isla
+        dezan.
   tickets:
     type:
       #original_hash: e43f273

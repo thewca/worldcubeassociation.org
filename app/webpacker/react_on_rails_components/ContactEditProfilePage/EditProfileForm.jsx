@@ -1,54 +1,93 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { Form, Message } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { QueryClient, useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
 import I18n from '../../lib/i18n';
-import { apiV0Urls, contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
+import { contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import UtcDatePicker from '../../components/wca/UtcDatePicker';
-import RegionSelector from '../../components/wca/RegionSelector';
-import GenderSelector from '../../components/wca/GenderSelector';
+import useCheckboxState from '../../lib/hooks/useCheckboxState';
+import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
+import EditNameField from './fields/EditNameField';
+import EditRegionField from './fields/EditRegionField';
+import EditGenderField from './fields/EditGenderField';
+import EditDobField from './fields/EditDobField';
 
-const CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT = new QueryClient();
+const EDITABLE_FIELDS = [
+  { name: 'name', Component: EditNameField },
+  { name: 'country_iso2', Component: EditRegionField },
+  { name: 'gender', Component: EditGenderField },
+  { name: 'dob', Component: EditDobField },
+];
 
 export default function EditProfileForm({
   wcaId,
+  editOthersProfileMode,
+  profileDetails,
   onContactSuccess,
   recaptchaPublicKey,
 }) {
-  const [editProfileReason, setEditProfileReason] = useState();
-  const [editedProfileDetails, setEditedProfileDetails] = useState();
+  const [editedProfileDetails, setEditedProfileDetails] = useState(() => _.fromPairs(
+    EDITABLE_FIELDS.map(({ name }) => [
+      name,
+      { newValue: profileDetails?.[name] || '', editReason: '' },
+    ]),
+  ));
   const [proofAttachment, setProofAttachment] = useState();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
   const [saveError, setSaveError] = useState();
+  const [verified, setVerified] = useCheckboxState(false);
   const { save, saving } = useSaveAction();
+  const { loggedInUserPermissions } = useLoggedInUserPermissions();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['profileData'],
-    queryFn: () => fetchJsonOrError(apiV0Urls.persons.show(wcaId)),
-  }, CONTACT_EDIT_PROFILE_FORM_QUERY_CLIENT);
+  const isProofOptional = loggedInUserPermissions?.canRequestToEditOthersProfile;
 
-  const profileDetails = data?.data?.person;
+  const hasFieldBeenChanged = useCallback((field) => !_.isEqual(
+    profileDetails?.[field],
+    editedProfileDetails[field].newValue,
+  ), [profileDetails, editedProfileDetails]);
 
-  const isSubmitDisabled = useMemo(
-    () => !editedProfileDetails || _.isEqual(editedProfileDetails, profileDetails) || !captchaValue,
-    [captchaValue, editedProfileDetails, profileDetails],
-  );
+  const isSubmitDisabled = useMemo(() => {
+    if (!profileDetails || !captchaValue) return true;
+    if (editOthersProfileMode && !verified) return true;
 
-  useEffect(() => {
-    setEditedProfileDetails(profileDetails);
-  }, [profileDetails]);
+    const changedFields = Object.keys(editedProfileDetails).filter(hasFieldBeenChanged);
+
+    const noChanges = changedFields.length === 0;
+    const hasMissingReason = changedFields.some(
+      (field) => !editedProfileDetails[field].editReason.trim(),
+    );
+
+    return noChanges || hasMissingReason;
+  }, [
+    captchaValue,
+    editOthersProfileMode,
+    verified,
+    editedProfileDetails,
+    hasFieldBeenChanged,
+    profileDetails,
+  ]);
+
+  const handleValueChange = (_event, { name, value }) => {
+    setEditedProfileDetails((prev) => ({
+      ...prev,
+      [name]: { ...prev[name], newValue: value },
+    }));
+  };
+
+  const handleEditReasonChange = (_event, { name, value }) => {
+    setEditedProfileDetails((prev) => ({
+      ...prev,
+      [name]: { ...prev[name], editReason: value },
+    }));
+  };
 
   const formSubmitHandler = () => {
     const formData = new FormData();
 
     formData.append('formValues', JSON.stringify({
-      editedProfileDetails, editProfileReason, wcaId,
+      editedProfileDetails, wcaId,
     }));
     if (proofAttachment) {
       formData.append('attachment', proofAttachment);
@@ -63,25 +102,11 @@ export default function EditProfileForm({
     );
   };
 
-  const handleEditProfileReasonChange = (e, { value }) => {
-    setEditProfileReason(value);
-  };
-
   const handleProofUpload = (event) => {
     setProofAttachment(event.target.files[0]);
   };
 
-  const handleFormChange = (e, { name: formName, value }) => {
-    setEditedProfileDetails((prev) => ({ ...prev, [formName]: value }));
-  };
-
-  const handleDobChange = (date) => handleFormChange(null, {
-    name: 'dob',
-    value: date,
-  });
-
-  if (saving || isLoading) return <Loading />;
-  if (isError) return <Errored />;
+  if (saving) return <Loading />;
 
   return (
     <Form onSubmit={formSubmitHandler} error={!!saveError} warning>
@@ -91,58 +116,49 @@ export default function EditProfileForm({
           content={saveError.json?.error || 'Something went wrong.'}
         />
       )}
+      {EDITABLE_FIELDS.map(({ name, Component }) => (
+        <Component
+          key={name}
+          value={editedProfileDetails[name].newValue}
+          reason={editedProfileDetails[name].editReason}
+          isChanged={hasFieldBeenChanged(name)}
+          onValueChange={handleValueChange}
+          onReasonChange={handleEditReasonChange}
+        />
+      ))}
+      <Message warning>
+        <Message.Header>IMPORTANT</Message.Header>
+        {isProofOptional && (
+          <p>
+            <strong>
+              Note: Since you are an authorized user, attaching proof is optional for you. However,
+              the following are the usual requirements that you need to validate:
+            </strong>
+          </p>
+        )}
+        <Message.List>
+          <Message.Item>
+            Proof is not required when you change your first name or gender.
+          </Message.Item>
+          <Message.Item>
+            If you are changing your last name, region of representation, or birthdate, please
+            upload a
+            {' '}
+            <u>legal document</u>
+            {' '}
+            (e.g., identity card, driver&apos;s licence, passport, marriage certificate, etc.)
+            {' '}
+            that validates the requested field. Feel free to blur-out/obfuscate any other
+            {' '}
+            personal data on the identification.
+          </Message.Item>
+        </Message.List>
+      </Message>
       <Form.Input
-        label={I18n.t('activerecord.attributes.user.name')}
-        name="name"
-        value={editedProfileDetails?.name}
-        onChange={handleFormChange}
-        required
-      />
-      <RegionSelector
-        label={I18n.t('activerecord.attributes.user.country_iso2')}
-        name="country_iso2"
-        onlyCountries
-        region={editedProfileDetails?.country_iso2}
-        onRegionChange={handleFormChange}
-      />
-      <GenderSelector
-        name="gender"
-        gender={editedProfileDetails?.gender}
-        onChange={handleFormChange}
-      />
-      <Form.Field
-        label={I18n.t('activerecord.attributes.user.dob')}
-        name="dob"
-        control={UtcDatePicker}
-        showYearDropdown
-        dateFormatOverride="yyyy-MM-dd"
-        dropdownMode="select"
-        isoDate={editedProfileDetails?.dob}
-        onChange={handleDobChange}
-        required
-      />
-      <Form.TextArea
-        label={I18n.t('page.contact_edit_profile.form.edit_reason.label')}
-        name="editProfileReason"
-        required
-        value={editProfileReason}
-        onChange={handleEditProfileReasonChange}
-      />
-      <Form.Input
-        label={I18n.t('page.contact_edit_profile.form.proof_attach.label')}
+        label={`${I18n.t('page.contact_edit_profile.form.proof_attach.label')}${isProofOptional ? ' (optional for authorized users)' : ''}`}
         type="file"
         onChange={handleProofUpload}
       />
-      <Message warning>
-        <strong>IMPORTANT</strong>
-        : Attach a picture of a
-        {' '}
-        <u>legal document</u>
-        {' '}
-        (identity card, driver license, passport...) that validates the requested fields;
-        {' '}
-        feel free to blur-out/obfuscate any other personal data on the identification.
-      </Message>
       <Form.Field>
         <ReCAPTCHA
           sitekey={recaptchaPublicKey}
@@ -159,6 +175,13 @@ export default function EditProfileForm({
           />
         )}
       </Form.Field>
+      {editOthersProfileMode && (
+        <Form.Checkbox
+          label={I18n.t('page.contact_edit_profile.form.verified_checkbox.label')}
+          checked={verified}
+          onChange={setVerified}
+        />
+      )}
       <Form.Button
         type="submit"
         disabled={isSubmitDisabled}

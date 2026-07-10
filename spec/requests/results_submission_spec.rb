@@ -53,6 +53,27 @@ RSpec.describe ResultsSubmissionController do
       end
     end
 
+    describe "Uploading a Results JSON" do
+      it "is refused when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+
+        post competition_upload_results_json_path(internal_comp.id)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("internal scoretaking")
+      end
+
+      it "is allowed for admins even when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+        sign_in create(:user, :wrt_member)
+
+        # Getting past the scoretaking guard means the action demands the actual file params.
+        expect do
+          post competition_upload_results_json_path(internal_comp.id)
+        end.to raise_error(ActionController::ParameterMissing)
+      end
+    end
+
     describe "Posting results" do
       let(:results_submission_params) do
         { message: submission_message, competition_id: comp.id }
@@ -66,7 +87,8 @@ RSpec.describe ResultsSubmissionController do
         expect do
           post competition_submit_results_path(comp.id), params: results_submission_params
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
-        assert_enqueued_jobs 0
+        # Newcomer checks will be triggered along with results submission.
+        assert_enqueued_jobs 1
       end
 
       it "throw error if empty message is provided" do

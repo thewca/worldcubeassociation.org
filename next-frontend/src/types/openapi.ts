@@ -1040,7 +1040,7 @@ export interface components {
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
-            competitors_live_results_entered: number;
+            completed_competitors: number;
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -1095,7 +1095,8 @@ export interface components {
             forecast_statistics?: {
                 best_possible_average?: number;
                 worst_possible_average?: number;
-            };
+                projected_average?: number;
+            } | null;
         };
         LiveCompetitor: {
             id: number;
@@ -1110,6 +1111,7 @@ export interface components {
             round_id: number;
             state_hash: string;
             linked_round_ids?: string[];
+            completed_competitors: number;
         };
         SubmitLiveResult: {
             attempts: components["schemas"]["LiveAttempt"][];

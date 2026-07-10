@@ -9,6 +9,7 @@ class Competition < ApplicationRecord
   has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
   has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
   has_many :results
+  has_many :live_results, through: :registrations
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
@@ -677,6 +678,7 @@ class Competition < ApplicationRecord
         case association_name
         when 'registrations',
              'results',
+             'live_results',
              'competitors',
              'competitor_users',
              'delegate_report',
@@ -1951,6 +1953,7 @@ class Competition < ApplicationRecord
         :competition_event,
         :wcif_extensions,
         { participation_source: [:competition_event, { rounds: :competition_event }] },
+        include_results ? { live_results: [:live_attempts] } : {},
       ] },
       :wcif_extensions,
     ]
@@ -1977,13 +1980,19 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.json_validation_options(is_strict: true)
+    { noAdditionalProperties: is_strict }
+  end
+
   def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
-    expected_schema = Competition.wcif_json_schema(version: version)
-    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
+    expected_schema = self.wcif_json_schema(version: version)
+    validation_opts = self.json_validation_options(is_strict: is_strict)
+
+    JSON::Validator.validate!(expected_schema, wcif, **validation_opts)
   end
 
   def set_wcif!(wcif, current_user, strict_schema_checks: true)
-    import_version = wcif["formatVersion"]
+    import_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
 
     Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
@@ -2166,12 +2175,15 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
+  def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
     {
+      # This $id property is the actual JsonSchema URI
+      "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
+      # This id property is used by the Ruby Gem that checks JsonSchema when printing error messages.
+      # Without specifying an ID, it will use random UUIDs so we use this field to make error messages clear and predictable.
+      "id" => "WCIFv#{version}",
       "type" => "object",
-      # Normally we want to force tools to tell us which version they're patching,
-      #   but as of writing this comment we need more time to tell that to tools.
-      # "required" => %w[formatVersion],
+      "required" => required_props ? %w[id formatVersion] : [],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },
@@ -2260,7 +2272,7 @@ class Competition < ApplicationRecord
   end
 
   def world_or_continental_championship?
-    championship_types.any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
+    championship_types.intersect?(Championship::MAJOR_CHAMPIONSHIP_TYPES)
   end
 
   def any_championship?

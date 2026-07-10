@@ -44,13 +44,10 @@ class Round < ApplicationRecord
   serialize :advancement_condition, coder: AdvancementConditions::AdvancementCondition
   validates_associated :advancement_condition
 
-  serialize :round_results, coder: RoundResults
-  validates_associated :round_results
-
   serialize :participation_condition, coder: ResultConditions::ResultCondition
   validates_associated :participation_condition
 
-  belongs_to :participation_source, polymorphic: true, optional: true
+  belongs_to :participation_source, polymorphic: true
   has_many :target_rounds, class_name: "Round", as: :participation_source
 
   has_many :schedule_activities, -> { root_activities }, dependent: :destroy, inverse_of: :round
@@ -343,7 +340,7 @@ class Round < ApplicationRecord
     live_results.includes(:live_attempts).map(&:to_live_state)
   end
 
-  def competitors_live_results_entered
+  def completed_competitors
     if live_results.loaded?
       live_results.count(&:complete?)
     else
@@ -362,7 +359,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done?
-    open? && competitors_live_results_entered == total_competitors
+    open? && completed_competitors == total_competitors
   end
 
   def time_limit_undefined?
@@ -618,7 +615,6 @@ class Round < ApplicationRecord
       cutoff: Cutoff.load(round_wcif["cutoff"]),
       advancement_condition: self.load_wcif_advancement_condition(round_wcif, all_rounds_wcif, version: version),
       scramble_set_count: round_wcif["scrambleSetCount"],
-      round_results: RoundResults.load(round_wcif["results"]),
     }
   end
 
@@ -832,7 +828,6 @@ class Round < ApplicationRecord
 
   def to_wcif(include_results: true, version: Competition::WCIF_STABLE_VERSION)
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
-    results = at_least_v2 || competition.scoretaking_software_internal? ? live_results : round_results
 
     base_wcif = {
       "id" => wcif_id,
@@ -840,7 +835,7 @@ class Round < ApplicationRecord
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif(version: version),
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => include_results ? results.map(&:to_wcif) : nil,
+      "results" => include_results ? live_results.map(&:to_wcif) : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
 
@@ -872,6 +867,7 @@ class Round < ApplicationRecord
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
+      "completed_competitors" => completed_competitors,
     }
   end
 
@@ -889,7 +885,7 @@ class Round < ApplicationRecord
 
     if state == STATE_OPEN
       json = json.merge({
-                          "competitors_live_results_entered" => competitors_live_results_entered,
+                          "completed_competitors" => completed_competitors,
                         })
     end
     json
@@ -908,7 +904,7 @@ class Round < ApplicationRecord
       "format" => { "type" => "string", "enum" => Format.ids },
       "timeLimit" => TimeLimit.wcif_json_schema,
       "cutoff" => Cutoff.wcif_json_schema(version: version),
-      "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
+      "results" => { "type" => "array", "items" => LiveResult.wcif_json_schema },
       "scrambleSets" => { "type" => "array" }, # TODO: expand on this
       "scrambleSetCount" => { "type" => "integer" },
       "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },

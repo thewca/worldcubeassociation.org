@@ -13,6 +13,8 @@ import getPermissions from "@/lib/wca/permissions";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
 import { RoundInfoProvider } from "@/providers/RoundInfoProvider";
 import RoundResults from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/RoundResults";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import events from "@/lib/wca/data/events";
 
 export default async function ResultPage({
   params,
@@ -39,6 +41,8 @@ export default async function ResultPage({
     !!permissions && permissions.canScoretakeCompetition(competitionId);
 
   if (linked_round_ids) {
+    const eventName = events.byId[parseActivityCode(id).eventId].name;
+
     const linkedRounds = await Promise.all(
       linked_round_ids
         .filter((wcif_id) => wcif_id !== id)
@@ -62,7 +66,7 @@ export default async function ResultPage({
               >
                 <LiveUpdatingResultsTable
                   competitionId={competitionId}
-                  title={t("competitions.live.combined_title")}
+                  title={`${eventName} - ${t("competitions.live.combined_title")}`}
                   isLinkedRound
                   canManage={canManage}
                 />
