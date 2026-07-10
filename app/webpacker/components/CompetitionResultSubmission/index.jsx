@@ -1,8 +1,9 @@
-import React from 'react';
-import { List, Message } from 'semantic-ui-react';
-import { ImportResultsData } from './ImportResultsData';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Accordion, List, Message } from 'semantic-ui-react';
+import { useQueryClient } from '@tanstack/react-query';
+import ImportResultsData from './ImportResultsData';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import FormToWrt from './FormToWrt';
+import FormToWrt, { IMPORT_STEP_ICON, IMPORT_STEP_TITLE } from './FormToWrt';
 
 export default function Wrapper({
   competitionId,
@@ -29,11 +30,69 @@ export default function Wrapper({
 function CompetitionResultSubmission({
   competitionId,
   resultsSubmitted,
-  hasTemporaryResults,
+  hasTemporaryResults: hasTemporaryResultsInitial,
   uploadedScrambleFilesCount,
   canSubmitResults,
   scoretakingSoftware,
 }) {
+  const [hasTemporaryResults, setHasTemporaryResults] = useState(hasTemporaryResultsInitial);
+  const [accordionIndex, setAccordionIndex] = useState(hasTemporaryResultsInitial ? 1 : 0);
+
+  const queryClient = useQueryClient();
+
+  const onImportSuccess = useCallback(() => {
+    // the string descriptor is enough for invalidation, the query library supports prefix matching
+    queryClient.invalidateQueries({ queryKey: ['competition-validation-output'] });
+
+    setHasTemporaryResults(true);
+    setAccordionIndex(1);
+  }, [queryClient, setHasTemporaryResults, setAccordionIndex]);
+
+  const accordionPanels = useMemo(() => [
+    {
+      key: 'import-results',
+      title: {
+        icon: IMPORT_STEP_ICON,
+        content: IMPORT_STEP_TITLE,
+      },
+      content: {
+        content: (
+          <ImportResultsData
+            competitionId={competitionId}
+            uploadedScrambleFilesCount={uploadedScrambleFilesCount}
+            onImportSuccess={onImportSuccess}
+            hasTemporaryResults={hasTemporaryResults}
+            scoretakingSoftware={scoretakingSoftware}
+          />
+        ),
+      },
+    },
+    {
+      key: 'form-to-wrt',
+      title: {
+        icon: 'mail',
+        content: 'Submit to WRT',
+      },
+      content: {
+        content: (
+          <FormToWrt
+            competitionId={competitionId}
+            hasTemporaryResults={hasTemporaryResults}
+            canSubmitResults={canSubmitResults}
+            onClickImportStep={() => setAccordionIndex(0)}
+          />
+        ),
+      },
+    },
+  ], [
+    competitionId,
+    uploadedScrambleFilesCount,
+    onImportSuccess,
+    hasTemporaryResults,
+    scoretakingSoftware,
+    canSubmitResults,
+  ]);
+
   if (resultsSubmitted) {
     return (
       <Message positive>
@@ -63,15 +122,13 @@ function CompetitionResultSubmission({
           Submit these results to the WRT after addressing warnings (if any).
         </List.Item>
       </List>
-      <ImportResultsData
-        competitionId={competitionId}
-        uploadedScrambleFilesCount={uploadedScrambleFilesCount}
-        hasTemporaryResults={hasTemporaryResults}
-        scoretakingSoftware={scoretakingSoftware}
+      <Accordion
+        styled
+        fluid
+        panels={accordionPanels}
+        activeIndex={accordionIndex}
+        onTitleClick={(e, props) => setAccordionIndex(props.index)}
       />
-      {hasTemporaryResults && (
-        <FormToWrt competitionId={competitionId} canSubmitResults={canSubmitResults} />
-      )}
     </>
   );
 }

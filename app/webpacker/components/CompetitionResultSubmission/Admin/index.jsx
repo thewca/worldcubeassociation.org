@@ -1,8 +1,8 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
-import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
-import { ImportResultsData } from '../CompetitionResultSubmission/ImportResultsData';
-import { viewUrls } from '../../lib/requests/routes.js.erb';
+import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
+import ImportResultsData from '../ImportResultsData';
+import { viewUrls } from '../../../lib/requests/routes.js.erb';
 
 export default function Wrapper({
   competitionId,
@@ -37,6 +37,7 @@ function CompetitionResultSubmissionAdmin({
       </Message>
     );
   }
+
   return (
     <>
       <p>
@@ -48,6 +49,7 @@ function CompetitionResultSubmissionAdmin({
       <ImportResultsData
         competitionId={competitionId}
         hasTemporaryResults={hasTemporaryResults}
+        onImportSuccess={() => window.location.reload()}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         isAdminView
       />
