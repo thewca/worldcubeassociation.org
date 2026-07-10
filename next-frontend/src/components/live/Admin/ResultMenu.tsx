@@ -147,15 +147,19 @@ export default function ResultMenu({
                     </Menu.Item>
                   ) : (
                     <Tooltip
-                      content={t(
-                        "competitions.live.admin.quit.still_processing",
-                      )}
-                      disabled={pendingLiveResults.length === 0}
+                      content={
+                        inBatch
+                          ? t("competitions.live.admin.quit.in_batch")
+                          : t("competitions.live.admin.quit.still_processing")
+                      }
+                      disabled={pendingLiveResults.length === 0 && !inBatch}
                     >
                       <Menu.Item
                         value="quit"
                         onClick={() => setIsQuitting(true)}
-                        disabled={isPending || pendingLiveResults.length > 0}
+                        disabled={
+                          isPending || pendingLiveResults.length > 0 || inBatch
+                        }
                       >
                         {t("competitions.live.admin.quit.quit_menu")}
                       </Menu.Item>

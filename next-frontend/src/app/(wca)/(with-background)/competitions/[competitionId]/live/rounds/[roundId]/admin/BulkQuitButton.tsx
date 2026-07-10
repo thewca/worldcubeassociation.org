@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button, Checkbox, Table } from "@chakra-ui/react";
 import { ConfirmDialog } from "@/providers/ConfirmProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
+import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
@@ -18,6 +19,7 @@ export default function BulkQuitButton({
 }) {
   const { liveResultsByRegistrationId, pendingLiveResults, competitors } =
     useLiveResults();
+  const { batchAttemptsByRegistrationId } = useResultsAdmin();
   const api = useAPI();
   const { t } = useT();
 
@@ -26,7 +28,8 @@ export default function BulkQuitButton({
 
   const emptyRegistrationIds = Object.entries(liveResultsByRegistrationId)
     .filter(([, results]) => results.every((r) => r.attempts.length === 0))
-    .map(([id]) => Number(id));
+    .map(([id]) => Number(id))
+    .filter((id) => !batchAttemptsByRegistrationId.has(id));
 
   const { mutate: bulkQuit, isPending } = api.useMutation(
     "delete",

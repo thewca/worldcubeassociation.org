@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useState,
   ReactNode,
 } from "react";
@@ -67,7 +68,7 @@ export function LiveResultAdminProvider({
   const { id: roundId, cutoff, timeLimit, format: formatId } = useRoundInfo();
   const format = formats.byId[formatId];
 
-  const { liveResultsByRegistrationId, addPendingLiveResult } =
+  const { liveResultsByRegistrationId, addPendingLiveResult, competitors } =
     useLiveResults();
 
   const solveCount = format.expected_solve_count;
@@ -105,9 +106,17 @@ export function LiveResultAdminProvider({
   const [batchModeEnabled, setBatchModeEnabled] = useState(false);
   // Persisted to localStorage so staged results survive a refresh/crash — the
   // whole point of batch mode is unreliable connections. Cleared on submit.
-  const [batch, setBatch] = useStoredState<BatchEntry[]>(
+  const [storedBatch, setBatch] = useStoredState<BatchEntry[]>(
     [],
     `live-batch-${roundId}`,
+  );
+
+  // Quitting removes a competitor from the round, so their staged results drop
+  // out of the batch. `competitors` is kept up to date by the websocket
+  // subscription, so this also covers quits from other devices.
+  const batch = useMemo(
+    () => storedBatch.filter((e) => competitors.has(e.registration_id)),
+    [storedBatch, competitors],
   );
 
   // Stay in batch mode while staged results exist, so they can't be left behind
