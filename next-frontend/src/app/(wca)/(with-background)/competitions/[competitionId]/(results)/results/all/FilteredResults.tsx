@@ -27,17 +27,36 @@ export default function FilteredResults({
 
   const roundGroups = useMemo(() => {
     const eventResults = resultsByEvent[activeEventId] ?? [];
-    const byKey = _.groupBy(eventResults, (r) =>
-      r.linked_round_id != null
-        ? `linked-${r.linked_round_id}`
-        : r.round_type_id,
+
+    const [linked, normal] = _.partition(
+      eventResults,
+      (r) => r.linked_round_id != null,
     );
-    return _.map(byKey, (rows, key) => ({
-      key,
-      isLinked: key.startsWith("linked-"),
-      roundTypeId: rows[0].round_type_id,
-      results: rows,
-    }));
+
+    const linkedGroups = _.map(
+      _.groupBy(linked, "linked_round_id"),
+      (results, linkedRoundId) => ({
+        key: `linked-${linkedRoundId}`,
+        isLinked: true,
+        roundTypeId: results[0].round_type_id,
+        results,
+      }),
+    );
+
+    const normalGroups = _.map(
+      _.groupBy(normal, "round_type_id"),
+      (results, roundTypeId) => ({
+        key: roundTypeId,
+        isLinked: false,
+        roundTypeId,
+        results,
+      }),
+    );
+
+    // keep the rounds in the order the API returned them
+    return _.sortBy([...normalGroups, ...linkedGroups], (group) =>
+      eventResults.indexOf(group.results[0]),
+    );
   }, [activeEventId, resultsByEvent]);
 
   return (

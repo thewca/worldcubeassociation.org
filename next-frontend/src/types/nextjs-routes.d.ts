@@ -63,7 +63,8 @@ declare module "nextjs-routes" {
     | StaticRoute<"/score-tools">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
-    | StaticRoute<"/translators">;
+    | StaticRoute<"/translators">
+    | DynamicRoute<"/widgets/[competitionId]/linkedRounds", { "competitionId": string }>;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;

@@ -22,14 +22,13 @@ export function combineLinkedRound(rows: Result[], showAll = false): Result[] {
   };
   const kept = showAll
     ? rows
-    : _.chain(rows)
-        .groupBy("wca_id")
-        .map((personRows) => _.minBy(personRows, metric)!)
-        .value();
-  return _.chain(kept)
-    .map((r) => ({ ...r, pos: r.global_pos }))
-    .sortBy(["pos", metric])
-    .value();
+    : Object.values(_.groupBy(rows, "wca_id")).map((personRows) =>
+        _.minBy(personRows, metric)!,
+      );
+  return _.sortBy(
+    kept.map((r) => ({ ...r, pos: r.global_pos })),
+    ["pos", metric],
+  );
 }
 
 export default function LinkedRoundResults({

@@ -22,15 +22,18 @@ export default async function LinkedRoundsPage({
 
   if (error) return <OpenapiError t={t} response={response} />;
 
-  const linkedRoundGroups = _.chain(competitionResults)
-    .filter((result) => result.linked_round_id != null)
-    .groupBy("linked_round_id")
-    .map((results, linkedRoundId) => ({
+  const linkedResults = competitionResults.filter(
+    (result) => result.linked_round_id != null,
+  );
+
+  const linkedRoundGroups = _.map(
+    _.groupBy(linkedResults, "linked_round_id"),
+    (results, linkedRoundId) => ({
       linkedRoundId,
       eventId: results[0].event_id,
       results,
-    }))
-    .value();
+    }),
+  );
 
   return (
     <Card.Root>
