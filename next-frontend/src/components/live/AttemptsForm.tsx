@@ -8,8 +8,8 @@ import {
   Portal,
   VStack,
   Text,
-  HStack,
   Stat,
+  StatGroup,
 } from "@chakra-ui/react";
 import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
 import _ from "lodash";
@@ -219,7 +219,7 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
           )}
         </FocusScope>
         {selectedCompetitor && (
-          <HStack justify="space-between">
+          <StatGroup justifyContent="space-between">
             <Stat.Root flex="0">
               <Stat.Label>{t("common.best")}</Stat.Label>
               <Stat.ValueText>
@@ -234,7 +234,7 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
                 </Stat.ValueText>
               </Stat.Root>
             )}
-          </HStack>
+          </StatGroup>
         )}
         <Checkbox.Root checked={batchMode} onCheckedChange={batchConfirmation}>
           <Checkbox.HiddenInput />
