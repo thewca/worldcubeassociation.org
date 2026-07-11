@@ -7,7 +7,7 @@ class Competition < ApplicationRecord
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
   has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
-  has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
+  has_many :scoretakers, through: :scoretaking_registrations, source: :user
   has_many :results
   has_many :live_results, through: :registrations
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition

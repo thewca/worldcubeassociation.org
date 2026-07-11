@@ -25,6 +25,17 @@ RSpec.describe "Scoretakers API" do
       expect(competitor.can_scoretake_competition?(competition)).to be true
     end
 
+    it "lists a scoretaker only once even with multiple assignments" do
+      assignment = assign_scoretaker(competitor)
+      Assignment.create!(
+        registration: assignment.registration,
+        schedule_activity: competition.all_activities.last,
+        assignment_code: Assignment::SCORETAKER_ASSIGNMENT_CODE,
+      )
+
+      expect(competition.scoretakers).to eq [competitor]
+    end
+
     it "does not treat users without that assignment as scoretakers" do
       create(:registration, :accepted, competition: competition, user: competitor)
 

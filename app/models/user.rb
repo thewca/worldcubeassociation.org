@@ -17,7 +17,7 @@ class User < ApplicationRecord
   has_many :registrations
   has_many :newcomer_results, through: :registrations, source: :newcomer_results
   has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :user
-  has_many :scoretaking_competitions, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: "competition"
+  has_many :scoretaking_competitions, through: :scoretaking_registrations, source: "competition"
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
   belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true, inverse_of: :unconfirmed_user
