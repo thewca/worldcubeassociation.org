@@ -34,7 +34,7 @@
     "@payloadcms/storage-s3": "3.85.2",
     "@rails/actioncable": "^8.1.300",
     "@react-aria/focus": "^3.22.1",
-    "@tanstack/react-form": "^1.33.0",
+    "@tanstack/react-form": "^1.33.2",
     "@tanstack/react-query": "^5.101.2",
     "@wrksz/themes": "^1.0.0",
     "accept-language-parser": "^1.5.0",
