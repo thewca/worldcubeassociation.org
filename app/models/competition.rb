@@ -6,8 +6,8 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
-  has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
-  has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
+  has_many :competition_scoretakers, dependent: :delete_all
+  has_many :scoretakers, through: :competition_scoretakers, source: :user
   has_many :results
   has_many :live_results, through: :registrations
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
@@ -715,7 +715,7 @@ class Competition < ApplicationRecord
              'scramble_file_uploads',
              'accepted_registrations',
              'accepted_newcomers',
-             'scoretaking_registrations',
+             'competition_scoretakers',
              'scoretakers',
              'duplicate_checker_job_runs',
              'tickets_competition_result',
