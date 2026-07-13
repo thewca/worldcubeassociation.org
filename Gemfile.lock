@@ -157,8 +157,8 @@ GEM
       aws-sdk-core (~> 3, >= 3.254.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sdk-sqs (1.116.0)
-      aws-sdk-core (~> 3, >= 3.248.0)
+    aws-sdk-sqs (1.117.0)
+      aws-sdk-core (~> 3, >= 3.254.0)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
@@ -1180,7 +1180,7 @@ CHECKSUMS
   aws-sdk-kms (1.130.0) sha256=a2e83662ca31b77a2a19c9aa2f40a98165a67270c18c718fe1c70d0cbd7cd749
   aws-sdk-rds (1.316.0) sha256=81fec624bee0e66c8360fa6295e33c615719d9847bb4ebb6f145738699217804
   aws-sdk-s3 (1.227.0) sha256=552b23bf9a37c7db4957e9291543e61c8de886cf31d1d45ea3b429df0feea939
-  aws-sdk-sqs (1.116.0) sha256=6378f95b0bd4acc8296aa4089983e7da0e50b4a306afd13f9d44f691c9dcbbe3
+  aws-sdk-sqs (1.117.0) sha256=cdfebf190a26f1ccb7396ad3edfa23253909d1b8961676b4b58a953d78424472
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   babel-source (5.8.35) sha256=79ef222a9dcb867ac2efa3b0da35b4bcb15a4bfa67b6b2dcbf1e9a29104498d9
   babel-transpiler (0.7.0) sha256=4c06f4ad9e8e1cabe94f99e11df2f140bb72aca9ba067dbb49dc14d9b98d1570
