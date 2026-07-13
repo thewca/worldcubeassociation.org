@@ -17,6 +17,15 @@ paths:
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
 
+  /v1/competitions/{competitionId}/scoretakers:
+    get:
+      $ref: 'paths/competitions/scoretakers/ListScoretakers.yaml'
+    post:
+      $ref: 'paths/competitions/scoretakers/AddScoretaker.yaml'
+  /v1/competitions/{competitionId}/scoretakers/{id}:
+    delete:
+      $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
+
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
