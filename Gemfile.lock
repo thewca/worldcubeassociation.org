@@ -921,7 +921,7 @@ GEM
     superconfig (3.0.0)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
-    terser (1.2.7)
+    terser (1.2.8)
       execjs (>= 0.3.0, < 3)
     thor (1.5.0)
     tilt (2.7.0)
@@ -1497,7 +1497,7 @@ CHECKSUMS
   stripe (19.3.0) sha256=fcc356a2a552f8b0402dac78dfc439b6deaa77ad0203e80959558130e47e74bf
   superconfig (3.0.0) sha256=2f89acd3635ecf8783fcc881b3768ec4b088987f1d4113351f1c9810bba22133
   terminal-table (4.0.0) sha256=f504793203f8251b2ea7c7068333053f0beeea26093ec9962e62ea79f94301d2
-  terser (1.2.7) sha256=1b12eb49769dadac44caac3485b38928ff4ab435f1bbbacfe8048cff84c6aa1b
+  terser (1.2.8) sha256=64931851d173bc5be0a90bd4570d751be5e83b2b063ccb750dbdc11a7b1d14db
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   tilt (2.7.0) sha256=0d5b9ba69f6a36490c64b0eee9f6e9aad517e20dcc848800a06eb116f08c6ab3
   time_will_tell (0.1.0)
