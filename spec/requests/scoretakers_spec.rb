@@ -8,7 +8,7 @@ RSpec.describe "Scoretakers API" do
   let!(:competitor) { create(:user) }
 
   # Per the WCIF standard, scoretakers are the people with a `staff-dataentry` assignment.
-  def assign_scoretaker(user)
+  def assign_scoretaker(user, competition: self.competition)
     registration = create(:registration, :accepted, competition: competition, user: user)
     Assignment.create!(
       registration: registration,
@@ -34,6 +34,15 @@ RSpec.describe "Scoretakers API" do
       )
 
       expect(competition.scoretakers).to eq [competitor]
+    end
+
+    it "does not treat scoretakers from other competitions as scoretakers" do
+      other_competition = create(:competition, :with_valid_schedule, event_ids: ["333"])
+      assign_scoretaker(competitor, competition: other_competition)
+      create(:registration, :accepted, competition: competition, user: competitor)
+
+      expect(competition.scoretakers).not_to include(competitor)
+      expect(competitor.can_scoretake_competition?(competition)).to be false
     end
 
     it "does not treat users without that assignment as scoretakers" do
