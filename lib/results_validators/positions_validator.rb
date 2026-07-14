@@ -19,6 +19,9 @@ module ResultsValidators
         results_for_comp = competition_data.results
 
         results_for_comp.group_by(&:round_human_id).each do |round_id, results_for_round|
+          # H2H positions are determined by match outcomes, not by comparing times.
+          next if results_for_round.first.round.is_h2h_mock?
+
           expected_pos = 0
           last_result = nil
           # Number of tied competitors, *without* counting the first one
