@@ -1,4 +1,4 @@
-<h1 align="center">WorldCubeAssociation Website</h1>
+<h1 align="center">World Cube Association Website</h1>
 <div align="center">
   <img height="120" src="public/files/wca_icon_only.png" />
 </div>
@@ -18,6 +18,12 @@
 </div>
 
 ----
+
+## Joining WST 
+
+Our code is open-source, and you are free to submit changes without being part of the WCA Software Team (WST) - just leave a comment indicating interest on any issue you want to work on. 
+
+If you would like to join WST, we currently have open positions on the volunteer team - please feel free to [submit an application](https://docs.google.com/document/d/1_uZzs4r8Rvjvvd9z9-IzxHqnXcpC7FKuUvKJaqVs8DY/edit?tab=t.0#heading=h.e9pxlxygjaql)!
 
 ## Common Queries
 - [Overview of the WCA's software ecosystem](https://docs.worldcubeassociation.org/)
