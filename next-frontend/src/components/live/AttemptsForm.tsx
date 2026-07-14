@@ -220,14 +220,14 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
         </FocusScope>
         {selectedCompetitor && (
           <StatGroup justifyContent="space-between">
-            <Stat.Root flex="0">
+            <Stat.Root flex="0" alignItems="flex-start">
               <Stat.Label>{t("common.best")}</Stat.Label>
               <Stat.ValueText>
                 {formatAttemptResult(bestResult, eventId)}
               </Stat.ValueText>
             </Stat.Root>
             {averageResult !== SKIPPED_VALUE && (
-              <Stat.Root flex="0">
+              <Stat.Root flex="0" alignItems="flex-end">
                 <Stat.Label>{t("common.average")}</Stat.Label>
                 <Stat.ValueText>
                   {formatAttemptResult(averageResult, eventId)}
