@@ -19,9 +19,9 @@
 
 ----
 
-## Joining WST 
+## Joining WST
 
-Our code is open-source, and you are free to submit changes without being part of the WCA Software Team (WST) - just leave a comment indicating interest on any issue you want to work on. 
+Our code is open-source, and you are free to submit changes without being part of the WCA Software Team (WST) - just leave a comment indicating interest on any issue you want to work on.
 
 If you would like to join WST, we currently have open positions on the volunteer team - please feel free to [submit an application](https://docs.google.com/document/d/1_uZzs4r8Rvjvvd9z9-IzxHqnXcpC7FKuUvKJaqVs8DY/edit?tab=t.0#heading=h.e9pxlxygjaql)!
 
