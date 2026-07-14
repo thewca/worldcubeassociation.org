@@ -58,7 +58,7 @@
     "react-image-crop": "^11.1.2",
     "react-intersection-observer": "^10.1.0",
     "react-leaflet": "^4.2.1",
-    "react-on-rails": "17.0.0-rc.7",
+    "react-on-rails": "17.0.0-rc.9",
     "react-simplemde-editor": "^5.2.0",
     "react-spinners": "^0.17.0",
     "react-textarea-autosize": "^8.5.9",
