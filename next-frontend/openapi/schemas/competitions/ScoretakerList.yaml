@@ -1,11 +1,3 @@
 type: array
 items:
-  type: object
-  required:
-    - user_id
-    - name
-  properties:
-    user_id:
-      type: number
-    name:
-      type: string
+  $ref: './Scoretaker.yaml'

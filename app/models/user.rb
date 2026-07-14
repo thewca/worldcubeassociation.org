@@ -13,6 +13,8 @@ class User < ApplicationRecord
   has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
+  has_many :competition_scoretakers
+  has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
   has_many :newcomer_results, through: :registrations, source: :newcomer_results
@@ -928,10 +930,6 @@ class User < ApplicationRecord
 
   def can_scoretake_competition?(competition)
     can_manage_competition?(competition) || competition.scoretakers.include?(self)
-  end
-
-  def scoretaking_competition_ids
-    CompetitionScoretaker.where(user_id: id).pluck(:competition_id)
   end
 
   def can_manage_any_not_over_competitions?

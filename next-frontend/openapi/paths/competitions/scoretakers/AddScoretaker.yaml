@@ -21,8 +21,8 @@ requestBody:
             type: number
 responses:
   '200':
-    description: The competition's scoretakers after adding
+    description: The scoretaker that was added
     content:
       application/json:
         schema:
-          $ref: '../../../schemas/competitions/ScoretakerList.yaml'
+          $ref: '../../../schemas/competitions/Scoretaker.yaml'

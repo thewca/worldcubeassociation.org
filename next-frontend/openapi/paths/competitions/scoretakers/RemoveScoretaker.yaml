@@ -16,8 +16,10 @@ parameters:
       type: number
 responses:
   '200':
-    description: The competition's scoretakers after removal
+    description: The scoretaker that was removed, or null if there was none
     content:
       application/json:
         schema:
-          $ref: '../../../schemas/competitions/ScoretakerList.yaml'
+          oneOf:
+            - $ref: '../../../schemas/competitions/Scoretaker.yaml'
+            - type: 'null'

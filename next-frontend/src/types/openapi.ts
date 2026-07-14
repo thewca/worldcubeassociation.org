@@ -997,10 +997,11 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
-        ScoretakerList: {
+        Scoretaker: {
             user_id: number;
             name: string;
-        }[];
+        };
+        ScoretakerList: components["schemas"]["Scoretaker"][];
         WcifTimeLimit: {
             /** @example 18000 */
             centiseconds: number;
@@ -2029,13 +2030,13 @@ export interface operations {
             };
         };
         responses: {
-            /** @description The competition's scoretakers after adding */
+            /** @description The scoretaker that was added */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ScoretakerList"];
+                    "application/json": components["schemas"]["Scoretaker"];
                 };
             };
         };
@@ -2053,13 +2054,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description The competition's scoretakers after removal */
+            /** @description The scoretaker that was removed, or null if there was none */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ScoretakerList"];
+                    "application/json": components["schemas"]["Scoretaker"] | null;
                 };
             };
         };
