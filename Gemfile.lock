@@ -687,7 +687,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    react_on_rails (17.0.0.rc.10)
+    react_on_rails (17.0.0)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -1092,7 +1092,7 @@ DEPENDENCIES
   rails-i18n
   rake
   react-rails
-  react_on_rails (= 17.0.0.rc.10)
+  react_on_rails (= 17.0.0)
   recaptcha
   redcarpet
   redis
@@ -1406,7 +1406,7 @@ CHECKSUMS
   rbs (4.0.3) sha256=5a7bf70e2628549d9a1f44eae447b2cfe55968a9c60cfff52693a4bdcc020e14
   rdoc (8.0.0) sha256=03bf8c08a9639658855a0cfd77c0abca8325c227693f7f33f82957811348c469
   react-rails (3.3.1) sha256=9610889832c2064a17c1474e9fafdcb8d3f72687c67ef722014243f4ec6562f5
-  react_on_rails (17.0.0.rc.10) sha256=8b75715d7b9d08ab0b3a781358bd31b030ceeff9039905501f370fcc53505e25
+  react_on_rails (17.0.0) sha256=0a4280afa048f2a3ebf54c92fbea728c72f7c4e5325f3bc0ea6c4f33d88e809b
   recaptcha (5.21.2) sha256=8f7bb6cc9f04c523fff3f38126b7c5f1314c35fcb3691fc8e70d2b464533c12a
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.1) sha256=b5e675b57ad22b15c9bcc765d5ac26f60b675408af916d31527af9bd5a81faae
