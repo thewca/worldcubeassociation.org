@@ -9,6 +9,10 @@ class Registration < ApplicationRecord
   SYSTEM_ENTITY_ID = 'system'
   USER_ENTITY_ID = 'user'
 
+  CSV_IMPORT = "CSV Import"
+  OTS_FORM = "OTS Form"
+  SOURCES = [CSV_IMPORT, OTS_FORM].freeze
+
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
@@ -271,6 +275,26 @@ class Registration < ApplicationRecord
     changes.each_key do |key|
       new_entry.registration_history_changes.create(value: changes[key], key: key)
     end
+  end
+
+  def save_registration_data!(registration_data:, creator:, source:)
+    raise ArgumentError.new("Invalid source: #{source}") unless SOURCES.include?(source)
+
+    formatted_payload = {
+      "competing" => {
+        "event_ids" => registration_data.dig(:registration, :eventIds) || [],
+        "comment" => registration_data[:comments].presence,
+        "status" => (Registrations::Helper::STATUS_ACCEPTED unless accepted?),
+      }.compact,
+    }
+
+    Registrations::Lanes::Competing.update!(
+      formatted_payload,
+      self,
+      creator.id,
+      send_emails: (source != CSV_IMPORT),
+      history_action: source,
+    )
   end
 
   def wcif_status

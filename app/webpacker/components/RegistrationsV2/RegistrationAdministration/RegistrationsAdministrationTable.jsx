@@ -44,6 +44,7 @@ export default function RegistrationAdministrationTable({
   handleOnDragEnd,
   color,
   distinguishPaidUnpaid = false,
+  isReadOnly = false,
 }) {
   const [{ sortColumn, sortDirection }, dispatchSort] = useReducer(sortReducer, {
     sortColumn: initialSortColumn ?? (competitionInfo['using_payment_integrations?']
@@ -95,8 +96,9 @@ export default function RegistrationAdministrationTable({
           sortColumn={sortColumn}
           onColumnClick={sortable ? changeSortColumn : noop}
           competitionInfo={competitionInfo}
-          withCheckbox={!draggable}
+          withCheckbox={!isReadOnly && !draggable}
           withPosition={withPosition}
+          isReadOnly={isReadOnly}
         />
 
         <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -117,6 +119,7 @@ export default function RegistrationAdministrationTable({
                       withPosition={withPosition}
                       color={color}
                       distinguishPaidUnpaid={distinguishPaidUnpaid}
+                      isReadOnly={isReadOnly}
                     />
                   ))}
                   {providedDroppable.placeholder}
@@ -131,6 +134,7 @@ export default function RegistrationAdministrationTable({
             registrations={registrations}
             competitionInfo={competitionInfo}
             withPosition={withPosition}
+            isReadOnly={isReadOnly}
           />
         </TableFooter>
       </Table>

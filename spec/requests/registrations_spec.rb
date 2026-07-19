@@ -26,25 +26,42 @@ RSpec.describe "registrations" do
         expect(response).to redirect_to competition_path(competition)
       end
 
-      it "renders an error when there are missing columns" do
-        file = csv_file [
-          ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
-          ["a", "Sherlock Holmes", "", "2000-01-01", "m", "sherlock@example.com", "1"],
-        ]
-        post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+      it "renders an error when registrations is not an array" do
+        post competition_registrations_do_import_path(competition), params: { registrations: "not_an_array" }, as: :json
         expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to include "Missing columns: country, 333."
+        expect(response.parsed_body["error"]).to eq "Expected array of registrations"
+      end
+
+      it "renders an error when there are invalid country codes" do
+        registrations = [
+          { name: "Sherlock Holmes", countryIso2: "XX", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
+        ]
+        expect do
+          post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
+        end.not_to(change { competition.registrations.count })
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include "Invalid country codes: XX"
+      end
+
+      it "renders an error when there are invalid event IDs" do
+        registrations = [
+          { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["999"] } },
+        ]
+        expect do
+          post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
+        end.not_to(change { competition.registrations.count })
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include "Invalid event IDs for this competition: 999"
       end
 
       it "renders an error when the number of accepted registrations exceeds competitor limit" do
         competition.update!(competitor_limit: 1, competitor_limit_enabled: true, competitor_limit_reason: "Testing!")
-        file = csv_file [
-          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-          ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-          ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "1", "1"],
+        registrations = [
+          { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
+          { name: "John Watson", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "watson@example.com", registration: { eventIds: %w[333 444] } },
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+          post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
         end.not_to(change { competition.registrations.count })
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
@@ -62,52 +79,50 @@ RSpec.describe "registrations" do
         # make sure there is a dummy registration for the partner competition.
         create(:registration, :accepted, competition: partner_competition, user: two_timer_dave)
 
-        file = csv_file [
-          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-          ["a", two_timer_dave.name, two_timer_dave.country.id, two_timer_dave.wca_id, two_timer_dave.dob, two_timer_dave.gender, two_timer_dave.email, "1", "1"],
+        registrations = [
+          { name: two_timer_dave.name, countryIso2: two_timer_dave.country.iso2, wcaId: two_timer_dave.wca_id,
+            birthdate: two_timer_dave.dob.to_s, gender: two_timer_dave.gender, email: two_timer_dave.email,
+            registration: { eventIds: %w[333 444] } },
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+          post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
         end.not_to(change { competition.registrations.count })
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Error importing #{two_timer_dave.name}: Validation failed: Competition You can only be accepted for one Series competition at a time."
       end
 
       it "renders an error when there are email duplicates" do
-        file = csv_file [
-          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-          ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-          ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "1"],
+        registrations = [
+          { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
+          { name: "John Watson", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: %w[333 444] } },
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+          post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
         end.not_to(change { competition.registrations.count })
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
 
       it "renders an error when there are WCA ID duplicates" do
-        file = csv_file [
-          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-          ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
-          ["a", "John Watson", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "watson@example.com", "1", "1"],
+        registrations = [
+          { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "2019HOLM01", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
+          { name: "John Watson", countryIso2: "GB", wcaId: "2019HOLM01", birthdate: "2000-01-01", gender: "m", email: "watson@example.com", registration: { eventIds: %w[333 444] } },
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+          post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
         end.not_to(change { competition.registrations.count })
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
 
       it "renders an error when there are invalid DOBs" do
-        file = csv_file [
-          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-          ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "01.01.2000", "m", "sherlock@example.com", "1", "0"],
-          ["a", "John Watson", "United Kingdom", "2019WATS01", "2000-01-01", "m", "watson@example.com", "1", "1"],
-          ["a", "James Moriarty", "United Kingdom", "2019MORI01", "Jan 01 2000", "m", "moriarty@example.com", "0", "1"],
+        registrations = [
+          { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "2019HOLM01", birthdate: "01.01.2000", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
+          { name: "John Watson", countryIso2: "GB", wcaId: "2019WATS01", birthdate: "2000-01-01", gender: "m", email: "watson@example.com", registration: { eventIds: %w[333 444] } },
+          { name: "James Moriarty", countryIso2: "GB", wcaId: "2019MORI01", birthdate: "Jan 01 2000", gender: "m", email: "moriarty@example.com", registration: { eventIds: ["444"] } },
         ]
         expect do
-          post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+          post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
         end.not_to(change { competition.registrations.count })
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
@@ -117,12 +132,11 @@ RSpec.describe "registrations" do
         context "registrant has WCA ID" do
           it "renders an error if the WCA ID doesn't exist" do
             expect(RegistrationsMailer).not_to receive(:notify_registrant_of_locked_account_creation)
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", "Sherlock Holmes", "United Kingdom", "1000DARN99", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+            registrations = [
+              { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "1000DARN99", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+              post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
             end.not_to(change { competition.registrations.count })
             expect(response).to have_http_status(:unprocessable_content)
             expect(response.body).to match(/The WCA ID 1000DARN99 doesn.*t exist/)
@@ -136,12 +150,13 @@ RSpec.describe "registrations" do
                 context "the user already has WCA ID" do
                   it "renders an error" do
                     user = create(:user, :wca_id)
-                    file = csv_file [
-                      ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                      ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
+                    registrations = [
+                      { name: dummy_user.name, countryIso2: dummy_user.country.iso2, wcaId: dummy_user.wca_id,
+                        birthdate: dummy_user.dob.to_s, gender: dummy_user.gender, email: user.email,
+                        registration: { eventIds: ["333"] } },
                     ]
                     expect do
-                      post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                      post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
                     end.not_to(change { competition.registrations.count })
                     expect(response).to have_http_status(:unprocessable_content)
                     expect(response.body).to include "There is already a user with email #{user.email}, but it has WCA ID of #{user.wca_id} instead of #{dummy_user.wca_id}."
@@ -151,12 +166,13 @@ RSpec.describe "registrations" do
                 context "the user doesn't have WCA ID" do
                   it "merges the user with the dummy one and registers him" do
                     user = create(:user)
-                    file = csv_file [
-                      ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                      ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, user.email, "1", "0"],
+                    registrations = [
+                      { name: dummy_user.name, countryIso2: dummy_user.country.iso2, wcaId: dummy_user.wca_id,
+                        birthdate: dummy_user.dob.to_s, gender: dummy_user.gender, email: user.email,
+                        registration: { eventIds: ["333"] } },
                     ]
                     expect do
-                      post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                      post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
                     end.to change(User, :count).by(-1)
                     expect(User.exists?(dummy_user.id)).to be false
                     user.reload
@@ -170,12 +186,13 @@ RSpec.describe "registrations" do
               context "no user exists with registrant's email" do
                 it "promotes the dummy user to a locked one, registers and notifies him" do
                   expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
-                  file = csv_file [
-                    ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                    ["a", dummy_user.name, dummy_user.country.id, dummy_user.wca_id, dummy_user.dob, dummy_user.gender, "sherlock@example.com", "1", "0"],
+                  registrations = [
+                    { name: dummy_user.name, countryIso2: dummy_user.country.iso2, wcaId: dummy_user.wca_id,
+                      birthdate: dummy_user.dob.to_s, gender: dummy_user.gender, email: "sherlock@example.com",
+                      registration: { eventIds: ["333"] } },
                   ]
                   expect do
-                    post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                    post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
                   end.not_to change(User, :count)
                   user = dummy_user.reload
                   expect(user).not_to be_dummy_account
@@ -190,12 +207,13 @@ RSpec.describe "registrations" do
             context "the user is not a dummy account" do
               it "registers this user" do
                 user = create(:user, :wca_id)
-                file = csv_file [
-                  ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                  ["a", user.name, user.country.id, user.wca_id, user.dob, user.gender, "sherlock@example.com", "1", "0"],
+                registrations = [
+                  { name: user.name, countryIso2: user.country.iso2, wcaId: user.wca_id,
+                    birthdate: user.dob.to_s, gender: user.gender, email: "sherlock@example.com",
+                    registration: { eventIds: ["333"] } },
                 ]
                 expect do
-                  post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                  post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
                 end.not_to change(User, :count)
                 expect(user.registrations.first.events.map(&:id)).to eq %w[333]
                 expect(competition.registrations.count).to eq 1
@@ -216,12 +234,13 @@ RSpec.describe "registrations" do
                     dob_verification: unconfirmed_person.dob,
                     delegate_to_handle_wca_id_claim: delegate.user,
                   )
-                  file = csv_file [
-                    ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                    ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
+                  registrations = [
+                    { name: person.name, countryIso2: person.country.iso2, wcaId: person.wca_id,
+                      birthdate: person.dob.to_s, gender: person.gender, email: user.email,
+                      registration: { eventIds: ["333"] } },
                   ]
                   expect do
-                    post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                    post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
                   end.not_to(change { competition.registrations.count })
                   expect(response).to have_http_status(:unprocessable_content)
                   expect(response.body).to include "There is already a user with email #{user.email}, but it has unconfirmed WCA ID of #{unconfirmed_person.wca_id} instead of #{person.wca_id}."
@@ -238,12 +257,13 @@ RSpec.describe "registrations" do
                     dob_verification: person.dob,
                     delegate_to_handle_wca_id_claim: delegate.user,
                   )
-                  file = csv_file [
-                    ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                    ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
+                  registrations = [
+                    { name: person.name, countryIso2: person.country.iso2, wcaId: person.wca_id,
+                      birthdate: person.dob.to_s, gender: person.gender, email: user.email,
+                      registration: { eventIds: ["333"] } },
                   ]
                   expect do
-                    post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                    post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
                   end.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.reload.unconfirmed_wca_id).to be_nil
@@ -257,12 +277,13 @@ RSpec.describe "registrations" do
                 it "updates this user with the WCA ID and registers him" do
                   person = create(:person)
                   user = create(:user)
-                  file = csv_file [
-                    ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                    ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, user.email, "1", "0"],
+                  registrations = [
+                    { name: person.name, countryIso2: person.country.iso2, wcaId: person.wca_id,
+                      birthdate: person.dob.to_s, gender: person.gender, email: user.email,
+                      registration: { eventIds: ["333"] } },
                   ]
                   expect do
-                    post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                    post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
                   end.not_to change(User, :count)
                   expect(user.reload.wca_id).to eq person.wca_id
                   expect(user.registrations.first.events.map(&:id)).to eq %w[333]
@@ -275,12 +296,13 @@ RSpec.describe "registrations" do
               it "creates a locked user with this WCA ID, registers and notifies him" do
                 expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
                 person = create(:person)
-                file = csv_file [
-                  ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                  ["a", person.name, person.country.id, person.wca_id, person.dob, person.gender, "sherlock@example.com", "1", "0"],
+                registrations = [
+                  { name: person.name, countryIso2: person.country.iso2, wcaId: person.wca_id,
+                    birthdate: person.dob.to_s, gender: person.gender, email: "sherlock@example.com",
+                    registration: { eventIds: ["333"] } },
                 ]
                 expect do
-                  post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                  post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
                 end.to change(User, :count).by(1)
                 user = competition.registrations.first.user
                 expect(user.wca_id).to eq person.wca_id
@@ -294,12 +316,11 @@ RSpec.describe "registrations" do
           context "user exists with registrant's email" do
             it "registers this user" do
               user = create(:user)
-              file = csv_file [
-                ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
+              registrations = [
+                { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: user.email, registration: { eventIds: ["333"] } },
               ]
               expect do
-                post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
               end.not_to change(User, :count)
               expect(user.registrations.first.events.map(&:id)).to eq %w[333]
               expect(competition.registrations.count).to eq 1
@@ -307,12 +328,11 @@ RSpec.describe "registrations" do
 
             it "updates user data unless it has WCA ID" do
               user = create(:user)
-              file = csv_file [
-                ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", user.email, "1", "0"],
+              registrations = [
+                { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: user.email, registration: { eventIds: ["333"] } },
               ]
               expect do
-                post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
               end.not_to change(User, :count)
               expect(user.reload.name).to eq "Sherlock Holmes"
               expect(user.dob).to eq Date.new(2000, 1, 1)
@@ -323,12 +343,11 @@ RSpec.describe "registrations" do
           context "no user exists with registrant's email" do
             it "creates a locked user without WCA ID, registers and notifies him" do
               expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
-              file = csv_file [
-                ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-                ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+              registrations = [
+                { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
               ]
               expect do
-                post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+                post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
               end.to change(User, :count).by(1)
               user = competition.registrations.first.user
               expect(user.wca_id).to be_blank
@@ -339,77 +358,75 @@ RSpec.describe "registrations" do
       end
 
       describe "registrations re-import" do
-        context "CSV registrant already accepted in the database" do
+        context "registrant already accepted in the database" do
           it "leaves existing registration unchanged" do
             registration = create(:registration, :accepted, competition: competition, events: %w[333])
             user = registration.user
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "0"],
+            registrations = [
+              { name: user.name, countryIso2: user.country.iso2, wcaId: "", birthdate: user.dob.to_s, gender: user.gender, email: user.email, registration: { eventIds: ["333"] } },
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+              post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
             end.to not_change { competition.registrations.count }
               .and(not_change { registration.reload.competing_status })
           end
         end
 
-        context "CSV registrant already accepted in the database, but with different events" do
+        context "registrant already accepted in the database, but with different events" do
           it "only updates registration events" do
             registration = create(:registration, :accepted, competition: competition, events: %(333))
             user = registration.user
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "1"],
+            registrations = [
+              { name: user.name, countryIso2: user.country.iso2, wcaId: "", birthdate: user.dob.to_s, gender: user.gender, email: user.email, registration: { eventIds: %w[333 444] } },
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+              post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
             end.to not_change { competition.registrations.count }
               .and not_change { registration.reload.competing_status }
               .and change { registration.reload.events.map(&:id) }.from(%w[333]).to(%w[333 444])
           end
         end
 
-        context "CSV registrant already in the database, but deleted" do
-          it "acceptes the registration again" do
+        context "registrant already in the database, but deleted" do
+          it "accepts the registration again" do
             registration = create(:registration, :cancelled, competition: competition)
             user = registration.user
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", user.name, user.country.id, "", user.dob, user.gender, user.email, "1", "0"],
+            registrations = [
+              { name: user.name, countryIso2: user.country.iso2, wcaId: "", birthdate: user.dob.to_s, gender: user.gender, email: user.email, registration: { eventIds: ["333"] } },
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+              post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
             end.to not_change { competition.registrations.count }
               .and(change { registration.reload.competing_status })
             expect(registration.reload).to be_accepted
           end
         end
 
-        context "registrant deleted in the database, but not in the CSV file" do
+        context "registrant deleted in the database, but not in the import data" do
           it "leaves the registration unchanged" do
             registration = create(:registration, :cancelled, competition: competition)
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+            other_user = create(:user)
+            registrations = [
+              { name: other_user.name, countryIso2: other_user.country.iso2, wcaId: "", birthdate: other_user.dob.to_s, gender: other_user.gender, email: other_user.email, registration: { eventIds: ["333"] } },
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
-            end.to not_change { competition.registrations.count }
-              .and(not_change { registration.reload.competing_status })
+              post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
+            end.to change { competition.registrations.count }.by(1).and(not_change { registration.reload.competing_status })
             expect(registration.reload).to be_cancelled
           end
         end
 
-        context "registrant accepted in the database, but not in the CSV file" do
-          it "deletes the registration" do
+        context "registrant accepted in the database, but not in the import data" do
+          it "cancels the registration" do
             registration1 = create(:registration, :accepted, competition: competition, events: %w[333])
             registration2 = create(:registration, :accepted, competition: competition, events: %w[444])
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", registration1.user.name, registration1.user.country.id, "", registration1.user.dob, registration1.user.gender, registration1.user.email, "1", "0"],
+            registrations = [
+              { name: registration1.user.name, countryIso2: registration1.user.country.iso2, wcaId: "",
+                birthdate: registration1.user.dob.to_s, gender: registration1.user.gender, email: registration1.user.email,
+                registration: { eventIds: ["333"] } },
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+              post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
             end.to not_change { User.count }
               .and not_change { competition.registrations.count }
               .and change { competition.registrations.accepted.count }.by(-1)
@@ -417,30 +434,178 @@ RSpec.describe "registrations" do
           end
         end
 
-        context "CSV registrant not in the database" do
+        context "registrant not in the database" do
           it "creates a new registration" do
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-              ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+            registrations = [
+              { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
             ]
             expect do
-              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
+              post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
             end.to change { competition.registrations.count }.by(1)
           end
         end
 
-        context "CSV empty file" do
+        context "empty registrations array" do
           it "throws an error" do
-            file = csv_file [
-              ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
-            ]
+            registrations = []
             expect do
-              post competition_registrations_do_import_path(competition), params: { csv_registration_file: file }
-            end.not_to(change { competition.registrations.count })
-            expect(response).to have_http_status(:unprocessable_content)
-            expect(response.body).to include "The file is empty."
+              post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
+            end.to raise_error(ActionController::ParameterMissing)
           end
         end
+      end
+    end
+  end
+
+  describe "POST #validate_and_convert_registrations" do
+    context "when signed in as a normal user" do
+      it "doesn't allow access" do
+        sign_in create(:user)
+        post competition_registrations_validate_and_convert_path(competition)
+        expect(response).to redirect_to root_url
+      end
+    end
+
+    context "when signed in as competition manager" do
+      before do
+        sign_in competition.delegates.first
+      end
+
+      it "redirects when WCA registration is used" do
+        competition.update!(use_wca_registration: true)
+        post competition_registrations_validate_and_convert_path(competition)
+        expect(response).to redirect_to competition_path(competition)
+      end
+
+      it "renders an error when there are missing columns" do
+        file = csv_file [
+          ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
+          ["a", "Sherlock Holmes", "", "2000-01-01", "m", "sherlock@example.com", "1"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include "Missing columns: country, 333."
+      end
+
+      it "renders an error when the number of accepted registrations exceeds competitor limit" do
+        competition.update!(competitor_limit: 1, competitor_limit_enabled: true, competitor_limit_reason: "Testing!")
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "1", "1"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
+      end
+
+      it "renders an error when there are email duplicates" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "1"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
+      end
+
+      it "renders an error when there are WCA ID duplicates" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "watson@example.com", "1", "1"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
+      end
+
+      it "renders an error when there are invalid DOBs" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "01.01.2000", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "2019WATS01", "2000-01-01", "m", "watson@example.com", "1", "1"],
+          ["a", "James Moriarty", "United Kingdom", "2019MORI01", "Jan 01 2000", "m", "moriarty@example.com", "0", "1"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
+      end
+
+      it "renders an error when CSV has no accepted rows" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include "The file is empty."
+      end
+
+      it "successfully converts valid CSV to JSON registration data" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "0", "1"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:ok)
+        json = response.parsed_body
+        expect(json).to match [
+          {
+            "name" => "Sherlock Holmes",
+            "wcaId" => "",
+            "countryIso2" => "GB",
+            "gender" => "m",
+            "birthdate" => "2000-01-01",
+            "email" => "sherlock@example.com",
+            "registration" => {
+              "eventIds" => ["333"],
+              "status" => "accepted",
+              "isCompeting" => true,
+              "registeredAt" => a_kind_of(String),
+            },
+          },
+          {
+            "name" => "John Watson",
+            "wcaId" => "",
+            "countryIso2" => "GB",
+            "gender" => "m",
+            "birthdate" => "2000-01-01",
+            "email" => "watson@example.com",
+            "registration" => {
+              "eventIds" => ["444"],
+              "status" => "accepted",
+              "isCompeting" => true,
+              "registeredAt" => a_kind_of(String),
+            },
+          },
+        ]
+      end
+
+      it "only includes rows with accepted status" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
+          ["p", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "0", "1"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:ok)
+        json = response.parsed_body
+        expect(json.length).to eq 1
+        expect(json[0]["name"]).to eq "Sherlock Holmes"
+      end
+
+      it "uppercases WCA IDs and lowercases emails" do
+        file = csv_file [
+          ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
+          ["a", "Sherlock Holmes", "United Kingdom", "2019holm01", "2000-01-01", "m", "Sherlock@Example.COM", "1", "0"],
+        ]
+        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        expect(response).to have_http_status(:ok)
+        json = response.parsed_body
+        expect(json[0]["wcaId"]).to eq "2019HOLM01"
+        expect(json[0]["email"]).to eq "sherlock@example.com"
       end
     end
   end
