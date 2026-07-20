@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "^3.1081.0",
-    "@chakra-ui/react": "^3.36.0",
+    "@chakra-ui/react": "^3.36.1",
     "@emotion/react": "^11.14.0",
     "@fullcalendar/core": "^6.1.21",
     "@fullcalendar/interaction": "^6.1.21",
@@ -84,7 +84,7 @@
     }
   },
   "devDependencies": {
-    "@chakra-ui/cli": "^3.36.0",
+    "@chakra-ui/cli": "^3.36.1",
     "@eslint/eslintrc": "^3",
     "@redocly/cli": "2.38.0",
     "@stylistic/eslint-plugin": "^5.10.0",
