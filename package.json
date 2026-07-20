@@ -123,7 +123,7 @@
     "terser-webpack-plugin": "^5.6.1",
     "webpack": "^5.108.4",
     "webpack-assets-manifest": "^6.5.2",
-    "webpack-bundle-analyzer": "^5.3.0",
+    "webpack-bundle-analyzer": "^5.3.1",
     "webpack-cli": "^7.2.1",
     "webpack-dev-server": "^5.2.6"
   },
