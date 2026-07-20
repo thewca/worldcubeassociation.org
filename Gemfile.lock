@@ -911,7 +911,7 @@ GEM
     stringio (3.2.0)
     strip_attributes (2.0.1)
       activemodel (>= 3.0, < 9.0)
-    stripe (19.3.0)
+    stripe (19.3.1)
       bigdecimal
       logger
     superconfig (3.0.0)
@@ -1488,7 +1488,7 @@ CHECKSUMS
   ssrf_filter (1.5.0) sha256=e03dcdb9d1730d7f6710532a606b3543df2a448a0293ce04a2d995523c5a97f6
   stringio (3.2.0) sha256=c37cb2e58b4ffbd33fe5cd948c05934af997b36e0b6ca6fdf43afa234cf222e1
   strip_attributes (2.0.1) sha256=604cb833fc69aedefffc60a79bd91a7faf3753caf34db3889beaf2d88afa7e8b
-  stripe (19.3.0) sha256=fcc356a2a552f8b0402dac78dfc439b6deaa77ad0203e80959558130e47e74bf
+  stripe (19.3.1) sha256=db738acb9df95dcf84f683886556fa8d7ae409d34a92ab8130bbf773828bbb1d
   superconfig (3.0.0) sha256=2f89acd3635ecf8783fcc881b3768ec4b088987f1d4113351f1c9810bba22133
   terminal-table (4.0.0) sha256=f504793203f8251b2ea7c7068333053f0beeea26093ec9962e62ea79f94301d2
   terser (1.2.8) sha256=64931851d173bc5be0a90bd4570d751be5e83b2b063ccb750dbdc11a7b1d14db
