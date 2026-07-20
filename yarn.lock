@@ -2226,6 +2226,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@full-ui/headless-calendar@npm:7.0.1":
+  version: 7.0.1
+  resolution: "@full-ui/headless-calendar@npm:7.0.1"
+  peerDependencies:
+    temporal-polyfill: ^1.0.1
+  checksum: 10c0/0eca5d11e4ca76501e87af53533e06d6bdd7abf60f6117335d8408b8a95cf657420d5772cb3b5cca275db28f272441b7314f215085e70f5470483c45ade0f0e5
+  languageName: node
+  linkType: hard
+
+"@fullcalendar/core@npm:7.0.1":
+  version: 7.0.1
+  resolution: "@fullcalendar/core@npm:7.0.1"
+  peerDependencies:
+    "@full-ui/headless-calendar": 7.0.1
+    temporal-polyfill: ^1.0.1
+  checksum: 10c0/7906b92b42e083fb4b2f7e00e9b3f8d2adeab3eb649e75a1fa1f574eae6e611e1265edfd2bc797d66622431976843f4fa0b8837436f702fd94ab0a305aba25df
+  languageName: node
+  linkType: hard
+
 "@fullcalendar/core@npm:^6.1.21":
   version: 6.1.21
   resolution: "@fullcalendar/core@npm:6.1.21"
@@ -2263,14 +2282,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/react@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/react@npm:6.1.21"
+"@fullcalendar/react@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "@fullcalendar/react@npm:7.0.1"
+  dependencies:
+    "@full-ui/headless-calendar": "npm:7.0.1"
+    "@fullcalendar/core": "npm:7.0.1"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.21
-    react: ^16.7.0 || ^17 || ^18 || ^19
-    react-dom: ^16.7.0 || ^17 || ^18 || ^19
-  checksum: 10c0/7103e724676ea12a43c5020e2581902394c0e3d30ace0a15319d869efc099b0a4e053aac1ab52576e8086649679f616236399996bebd5b36a131e5cb338d6ec3
+    react: ^17 || ^18 || ^19
+    react-dom: ^17 || ^18 || ^19
+    temporal-polyfill: ^1.0.1
+  checksum: 10c0/7c95cb7ba6bc17746b068a91f9bcffe1374c8e38b36efc4b93875655b3c0d215d9067c8007300a09758f754da75379fcbdc81de6649f6ae2399bfff4b4e455b6
   languageName: node
   linkType: hard
 
@@ -10527,7 +10549,7 @@ __metadata:
     "@fullcalendar/core": "npm:^6.1.21"
     "@fullcalendar/interaction": "npm:^6.1.21"
     "@fullcalendar/luxon3": "npm:^6.1.21"
-    "@fullcalendar/react": "npm:^6.1.21"
+    "@fullcalendar/react": "npm:^7.0.1"
     "@fullcalendar/timegrid": "npm:^6.1.21"
     "@hello-pangea/dnd": "npm:^18.0.1"
     "@playwright/test": "npm:^1.61.1"
