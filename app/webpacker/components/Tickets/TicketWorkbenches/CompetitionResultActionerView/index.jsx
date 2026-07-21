@@ -1,18 +1,33 @@
 import React from 'react';
-import { DateTime } from 'luxon';
 import { useQuery } from '@tanstack/react-query';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
-import WarningsVerification from './WarningsVerification';
 import TimelineView from './TimelineView';
-import { MergeInboxResults, MergeInboxScrambles } from './MergeInboxResultsData';
-import VerifyNewcomers from './VerifyNewcomers';
-import CreateWcaIds from './CreateWcaIds';
-import FinalSteps from './FinalSteps';
 import MiscActions from './MiscActions';
-import I18n from '../../../../lib/i18n';
 import getUnfinishedPersons from '../../api/competitionResult/getUnfinishedPersons';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
+import { TIMELINE_ORDER, TIMELINE_STATUSES, ResultsPostedMessage } from './TimelineStatuses';
+
+function getNextStatus(status, hasUnfinishedPersons) {
+  const currentIndex = TIMELINE_ORDER.indexOf(status);
+  if (currentIndex === -1 || currentIndex + 1 >= TIMELINE_ORDER.length) {
+    return null;
+  }
+
+  const nextStatus = TIMELINE_ORDER[currentIndex + 1];
+
+  if (!hasUnfinishedPersons) {
+    // If there are no newcomers to process, we can skip the newcomer verification
+    // and WCA ID creation steps and jump straight to Final Steps (posted).
+    if (
+      nextStatus === ticketsCompetitionResultStatuses.newcomers_verified
+      || nextStatus === ticketsCompetitionResultStatuses.created_wca_ids
+    ) {
+      return ticketsCompetitionResultStatuses.posted;
+    }
+  }
+  return nextStatus;
+}
 
 export default function CompetitionResultActionerView({ ticketDetails, currentStakeholder }) {
   const { ticket: { metadata: { status, competition: { id: competitionId } } } } = ticketDetails;
@@ -36,11 +51,17 @@ export default function CompetitionResultActionerView({ ticketDetails, currentSt
   if (isFetching) return <Loading />;
   if (isError) return <Errored error={error} />;
 
+  const hasUnfinishedPersons = (
+    unfinishedPersons?.persons_to_finish && unfinishedPersons.persons_to_finish.length > 0
+  );
+
+  const nextStatus = getNextStatus(status, hasUnfinishedPersons);
+
   return (
     <>
-      <TimelineView status={status} />
+      <TimelineView nextStatus={nextStatus} />
       <ViewForStatus
-        status={status}
+        nextStatus={nextStatus}
         ticketDetails={ticketDetails}
         currentStakeholder={currentStakeholder}
         unfinishedPersons={unfinishedPersons}
@@ -53,98 +74,26 @@ export default function CompetitionResultActionerView({ ticketDetails, currentSt
 }
 
 function ViewForStatus({
-  status,
+  nextStatus,
   ticketDetails,
   currentStakeholder,
   unfinishedPersons,
 }) {
-  const {
-    ticket: {
-      metadata: {
-        competition: { results_posted_at: resultsPostedAt, posted_user: postedUser },
-      },
-    },
-  } = ticketDetails;
-
-  const hasUnfinishedPersons = (
-    unfinishedPersons?.persons_to_finish && unfinishedPersons.persons_to_finish.length > 0
-  );
-
-  switch (status) {
-    case ticketsCompetitionResultStatuses.submitted:
-      return <p>Please lock the competition results from the Posting dashboard.</p>;
-
-    case ticketsCompetitionResultStatuses.locked_for_posting:
-      return (
-        <WarningsVerification
-          ticketDetails={ticketDetails}
-          currentStakeholder={currentStakeholder}
-        />
-      );
-
-    case ticketsCompetitionResultStatuses.warnings_verified:
-      return (
-        <MergeInboxResults
-          ticketDetails={ticketDetails}
-          currentStakeholder={currentStakeholder}
-        />
-      );
-
-    case ticketsCompetitionResultStatuses.merged_inbox_results:
-      return (
-        <MergeInboxScrambles
-          ticketDetails={ticketDetails}
-          currentStakeholder={currentStakeholder}
-        />
-      );
-
-    case ticketsCompetitionResultStatuses.merged_inbox_scrambles:
-      if (!hasUnfinishedPersons) {
-        return (
-          <FinalSteps
-            ticketDetails={ticketDetails}
-          />
-        );
-      }
-      return (
-        <VerifyNewcomers
-          ticketDetails={ticketDetails}
-          currentStakeholder={currentStakeholder}
-        />
-      );
-
-    case ticketsCompetitionResultStatuses.newcomers_verified:
-      if (!hasUnfinishedPersons) {
-        return (
-          <FinalSteps
-            ticketDetails={ticketDetails}
-          />
-        );
-      }
-      return (
-        <CreateWcaIds
-          ticketDetails={ticketDetails}
-          currentStakeholder={currentStakeholder}
-          unfinishedPersons={unfinishedPersons}
-        />
-      );
-    case ticketsCompetitionResultStatuses.created_wca_ids:
-      return (
-        <FinalSteps
-          ticketDetails={ticketDetails}
-        />
-      );
-    case ticketsCompetitionResultStatuses.posted:
-      return (
-        <>
-          {I18n.t('competitions.results_posted_by_html', {
-            poster_name: postedUser.name,
-            date_time: DateTime.fromISO(resultsPostedAt).toLocaleString(DateTime.DATETIME_FULL),
-          })}
-        </>
-      );
-
-    default:
-      return null;
+  if (nextStatus === null) {
+    return <ResultsPostedMessage ticketDetails={ticketDetails} />;
   }
+
+  const statusConfig = TIMELINE_STATUSES[nextStatus];
+  if (statusConfig && statusConfig.Component) {
+    const { Component } = statusConfig;
+    return (
+      <Component
+        ticketDetails={ticketDetails}
+        currentStakeholder={currentStakeholder}
+        unfinishedPersons={unfinishedPersons}
+      />
+    );
+  }
+
+  return null;
 }
