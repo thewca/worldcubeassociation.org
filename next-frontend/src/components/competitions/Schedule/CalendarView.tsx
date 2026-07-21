@@ -18,6 +18,7 @@ import { ACTIVITY_OTHER_GREY, getTextColor } from "@/lib/wca/calendar";
 
 import type { WcifRoom, WcifVenue } from "@/lib/wca/wcif/activities";
 import type { WcifEvent } from "@/lib/wca/wcif/rounds";
+
 import "@fullcalendar/react/skeleton.css";
 import "@fullcalendar/react/themes/classic/theme.css";
 import "@fullcalendar/react/themes/classic/palette.css";
