@@ -488,5 +488,12 @@
     "topic": "Schedule activities outside competition date range",
     "comments": null,
     "query_file": "consistency_of_schedule_activities_with_competition_days.sql"
+  },
+  {
+    "id": "74",
+    "sanity_check_category_id": "12",
+    "topic": "Competitors advancing without a valid result in the source round",
+    "comments": null,
+    "query_file": "advanced_without_valid_source_result.sql"
   }
 ]
