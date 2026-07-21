@@ -30,6 +30,11 @@ updates:
     - dependency-name: webpack-dev-server
       versions:
         - ">= 6"
+    # Version 7 has some major migration requirements, which are too much for the legacy React.
+    #   We will support the new releases in NextJS, so the migration will happen as part of porting pages
+    - dependency-name: "@fullcalendar/*"
+      versions:
+        - ">= 7"
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/next-frontend"
