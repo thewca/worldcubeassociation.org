@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import luxonPlugin from "@fullcalendar/luxon3";
+import luxonFormatPlugin from "@fullcalendar/format-luxon3";
 import FullCalendar from "@fullcalendar/react";
-import timeGridPlugin from "@fullcalendar/timegrid";
+import timeGridPlugin from "@fullcalendar/react/timegrid";
 import { useT } from "@/lib/i18n/useI18n";
 import { DateTime } from "luxon";
 import {
@@ -89,8 +89,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
       <FullCalendar
         // plugins for the basic FullCalendar implementation.
         //   - timeGridPlugin: Display days as vertical grid
-        //   - luxonPlugin: Support timezones
-        plugins={[timeGridPlugin, luxonPlugin]}
+        //   - luxonFormatPlugin: Support Luxon3 formatting strings
+        plugins={[timeGridPlugin, luxonFormatPlugin]}
         // define our "own" view
         initialView="agendaForComp"
         views={{

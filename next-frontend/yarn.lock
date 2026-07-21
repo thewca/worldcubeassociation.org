@@ -2476,7 +2476,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/core@npm:7.0.1, @fullcalendar/core@npm:^7.0.1":
+"@fullcalendar/core@npm:7.0.1":
   version: 7.0.1
   resolution: "@fullcalendar/core@npm:7.0.1"
   peerDependencies:
@@ -2486,31 +2486,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/daygrid@npm:~6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/daygrid@npm:6.1.21"
+"@fullcalendar/format-luxon3@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "@fullcalendar/format-luxon3@npm:7.0.1"
+  dependencies:
+    "@full-ui/headless-calendar": "npm:7.0.1"
+    "@fullcalendar/core": "npm:7.0.1"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.21
-  checksum: 10c0/8e7a9e25b7390ec9c09970a729259a3882ebd4d5551084d532e330c7584d302e492dc1f15ae100c2430ae885485182dcd9fd75697962ffb1d7ac6f8f74e53407
-  languageName: node
-  linkType: hard
-
-"@fullcalendar/interaction@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/interaction@npm:6.1.21"
-  peerDependencies:
-    "@fullcalendar/core": ~6.1.21
-  checksum: 10c0/70167d97ce97a20aca2aa2f271e2941c88a21e0b6b825d0fe8b97fb4d6f527476398cce7091c004db6a42fddc985f8806ed75ee62cf9d6683e5080cffd2e12da
-  languageName: node
-  linkType: hard
-
-"@fullcalendar/luxon3@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/luxon3@npm:6.1.21"
-  peerDependencies:
-    "@fullcalendar/core": ~6.1.21
     luxon: ^3.0.0
-  checksum: 10c0/04e40071bc12282131444f05e04a2338a699b2ef12c0f92720d944d0405ea2a170a795952c50d4089971a24aeb5d72075168e2e769b5118790ed433a8381085f
+    temporal-polyfill: ^1.0.1
+  checksum: 10c0/614e781281c144919811ede323194b000270bc01fe97a42a5a63f878c07740832885984ae6e2df0129997f739c1ac2ad364043aa9ba2e2844a00c2e0c9678f0b
   languageName: node
   linkType: hard
 
@@ -2525,17 +2510,6 @@ __metadata:
     react-dom: ^17 || ^18 || ^19
     temporal-polyfill: ^1.0.1
   checksum: 10c0/7c95cb7ba6bc17746b068a91f9bcffe1374c8e38b36efc4b93875655b3c0d215d9067c8007300a09758f754da75379fcbdc81de6649f6ae2399bfff4b4e455b6
-  languageName: node
-  linkType: hard
-
-"@fullcalendar/timegrid@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/timegrid@npm:6.1.21"
-  dependencies:
-    "@fullcalendar/daygrid": "npm:~6.1.21"
-  peerDependencies:
-    "@fullcalendar/core": ~6.1.21
-  checksum: 10c0/657d3c574c2ba434fee03bfbac70ab1999778476dd8ce1b1506c229aab46f9285188e09cac5a0d036795b3c73476d3e0eaaac05a7d55c742f832668c67e92bf1
   languageName: node
   linkType: hard
 
@@ -12157,11 +12131,8 @@ __metadata:
     "@chakra-ui/react": "npm:^3.36.1"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
-    "@fullcalendar/core": "npm:^7.0.1"
-    "@fullcalendar/interaction": "npm:^6.1.21"
-    "@fullcalendar/luxon3": "npm:^6.1.21"
+    "@fullcalendar/format-luxon3": "npm:^7.0.1"
     "@fullcalendar/react": "npm:^7.0.1"
-    "@fullcalendar/timegrid": "npm:^6.1.21"
     "@payloadcms/db-mongodb": "npm:3.86.0"
     "@payloadcms/db-sqlite": "npm:3.86.0"
     "@payloadcms/live-preview-react": "npm:3.86.0"
@@ -12229,6 +12200,7 @@ __metadata:
     react-intersection-observer: "npm:^10.1.0"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
+    temporal-polyfill: "npm:^1.0.1"
     typescript: "npm:^6"
     vitest: "npm:^4.1.10"
   dependenciesMeta:
@@ -14697,6 +14669,30 @@ __metadata:
     minizlib: "npm:^3.1.0"
     yallist: "npm:^5.0.0"
   checksum: 10c0/4df4335c6d958b76adf1eaced55889dec3ca1c51f450658a074af80694bb0d9c154a8e93fdf4da617372d1575b121295379993961bbe4cd4b0867c0e5689846a
+  languageName: node
+  linkType: hard
+
+"temporal-polyfill@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "temporal-polyfill@npm:1.0.1"
+  dependencies:
+    temporal-spec: "npm:1.0.0"
+    temporal-utils: "npm:1.0.1"
+  checksum: 10c0/a663055293ae334d95e7829508dc5c8b0a11eb8386760b0a5d9cd189c7e013c3b9d010b8e6f33c384ddede532feb506ff44e51f8a6cb00e90a0be6e689fc8947
+  languageName: node
+  linkType: hard
+
+"temporal-spec@npm:1.0.0":
+  version: 1.0.0
+  resolution: "temporal-spec@npm:1.0.0"
+  checksum: 10c0/16f24e418ed8f58f094752df2698db29153afed7f36cbbe5a889127ff86479a7f3e7338ed1480e3a96834f9613b55dbe45c74ac46a5a7fd1366ffb1f923e3338
+  languageName: node
+  linkType: hard
+
+"temporal-utils@npm:1.0.1":
+  version: 1.0.1
+  resolution: "temporal-utils@npm:1.0.1"
+  checksum: 10c0/cf229258c81f8283513ef7626f8089e23fb346d53b48d1c37581a11ca621ce4b65f3e0798565fa6f3c4fb48562202634adb343648350caad2e349eeae083d00b
   languageName: node
   linkType: hard
 
