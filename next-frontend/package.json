@@ -21,11 +21,8 @@
     "@aws-sdk/credential-providers": "^3.1091.0",
     "@chakra-ui/react": "^3.36.1",
     "@emotion/react": "^11.14.0",
-    "@fullcalendar/core": "^6.1.21",
-    "@fullcalendar/interaction": "^6.1.21",
-    "@fullcalendar/luxon3": "^6.1.21",
-    "@fullcalendar/react": "^6.1.21",
-    "@fullcalendar/timegrid": "^6.1.21",
+    "@fullcalendar/format-luxon3": "^7.0.1",
+    "@fullcalendar/react": "^7.0.1",
     "@payloadcms/db-mongodb": "3.86.0",
     "@payloadcms/db-sqlite": "3.86.0",
     "@payloadcms/live-preview-react": "3.86.0",
@@ -64,7 +61,8 @@
     "react-icons": "^5.7.0",
     "react-intersection-observer": "^10.1.0",
     "react-markdown": "^10.1.0",
-    "react-world-flags": "^1.6.0"
+    "react-world-flags": "^1.6.0",
+    "temporal-polyfill": "^1.0.1"
   },
   "dependenciesMeta": {
     "@datadog/pprof": {
