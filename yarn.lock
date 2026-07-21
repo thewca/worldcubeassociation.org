@@ -9859,7 +9859,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.5.16, postcss@npm:^8.5.20":
+"postcss@npm:^8.5.16":
   version: 8.5.20
   resolution: "postcss@npm:8.5.20"
   dependencies:
@@ -9867,6 +9867,17 @@ __metadata:
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
   checksum: 10c0/9c7a0e32c77ac54c5613f974e6ccc97d4a70fdb3bf242617f3fb4d652e5c62a37c86c589e6e7a2d1e7120f80bc169cdf673482b88bd75020d2a44899fa569c13
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.5.21":
+  version: 8.5.21
+  resolution: "postcss@npm:8.5.21"
+  dependencies:
+    nanoid: "npm:^3.3.16"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.1"
+  checksum: 10c0/89bf8860bba456eafcbc6c8addc3f5d3010529069ec67adb1a26b79b098d1b2afa49cc1abf80c5b01867980db6eae0c02fd0350e17a84c5f12d07aaec704aa50
   languageName: node
   linkType: hard
 
@@ -10663,7 +10674,7 @@ __metadata:
     mini-css-extract-plugin: "npm:^2.10.2"
     path-complete-extname: "npm:^1.0.0"
     pnp-webpack-plugin: "npm:^1.7.0"
-    postcss: "npm:^8.5.20"
+    postcss: "npm:^8.5.21"
     postcss-flexbugs-fixes: "npm:^5.0.2"
     postcss-import: "npm:^16.1.1"
     postcss-loader: "npm:^8.2.1"
