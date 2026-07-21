@@ -36,6 +36,8 @@ updates:
       versions:
         - ">= 7"
   open-pull-requests-limit: 10
+  cooldown:
+    default-days: 1
 - package-ecosystem: npm
   directory: "/next-frontend"
   schedule:
@@ -66,6 +68,14 @@ updates:
         - "@tanstack/react-query"
         - "@tanstack/eslint-plugin-query"
   open-pull-requests-limit: 10
+  cooldown:
+    default-days: 1
+    exclude:
+      - "react"
+      - "react-dom"
+      - "next"
+      - "payload"
+      - "@payloadcms/*"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
