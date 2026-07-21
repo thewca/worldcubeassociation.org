@@ -73,8 +73,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
           title: eventName,
           start: activity.startTime,
           end: activity.endTime,
-          backgroundColor: eventColor,
-          textColor: getTextColor(eventColor),
+          color: eventColor,
+          contrastColor: getTextColor(eventColor),
         };
       }),
   );
