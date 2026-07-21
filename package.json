@@ -65,7 +65,7 @@
     "react_ujs": "^3.3.1",
     "regenerator-runtime": "^0.14.1",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.101.0",
+    "sass": "^1.101.3",
     "sass-loader": "^17.0.0",
     "semantic-ui-react": "^2.1.5",
     "style-loader": "^4.0.0",
