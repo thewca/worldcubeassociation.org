@@ -61,6 +61,10 @@ updates:
       patterns:
         - "next"
         - "eslint-config-next"
+    tanstack-query:
+      patterns:
+        - "@tanstack/react-query"
+        - "@tanstack/eslint-plugin-query"
   open-pull-requests-limit: 10
 - package-ecosystem: github-actions
   directory: "/"
