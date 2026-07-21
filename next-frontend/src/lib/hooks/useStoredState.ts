@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, type Dispatch, type SetStateAction } from "react";
 
 type StoredState<T> = [T, Dispatch<SetStateAction<T>>];

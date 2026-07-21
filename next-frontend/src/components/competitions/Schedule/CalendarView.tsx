@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import themePlugin from "@fullcalendar/react/themes/classic";
 import luxonFormatPlugin from "@fullcalendar/format-luxon3";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/react/timegrid";
@@ -16,6 +17,10 @@ import { ACTIVITY_OTHER_GREY, getTextColor } from "@/lib/wca/calendar";
 
 import type { WcifRoom, WcifVenue } from "@/lib/wca/wcif/activities";
 import type { WcifEvent } from "@/lib/wca/wcif/rounds";
+
+import "@fullcalendar/react/skeleton.css";
+import "@fullcalendar/react/themes/classic/theme.css";
+import "@fullcalendar/react/themes/classic/palette.css";
 
 interface CalendarViewProps {
   dates: DateTime[];
@@ -88,9 +93,10 @@ const CalendarView: React.FC<CalendarViewProps> = ({
     <>
       <FullCalendar
         // plugins for the basic FullCalendar implementation.
+        //   - themePlugin: To make sure you actually see something
         //   - timeGridPlugin: Display days as vertical grid
         //   - luxonFormatPlugin: Support Luxon3 formatting strings
-        plugins={[timeGridPlugin, luxonFormatPlugin]}
+        plugins={[themePlugin, timeGridPlugin, luxonFormatPlugin]}
         // define our "own" view
         initialView="agendaForComp"
         views={{
