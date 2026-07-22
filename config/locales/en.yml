@@ -1126,6 +1126,7 @@ en:
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please contact the <a href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> to resolve this."
       email_used_by_locked_account_html: "is already used by another account. It has been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
       must_match_person: "must match person details corresponding to the WCA ID"
+      name_invalid_parentheses: "can only contain parentheses for a localized name at the end (e.g., 'Seung Hyuk Nahm (남승혁)')"
     #context: when an action was successful
     successes:
       messages:

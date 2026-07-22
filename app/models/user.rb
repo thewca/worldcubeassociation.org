@@ -320,6 +320,28 @@ class User < ApplicationRecord
     self.name = self.name.strip if self.name.present?
   end
 
+  validate :name_parenthesis_format
+  def name_parenthesis_format
+    return unless name.present?
+
+    # Check if there's a closing paren without an opening paren
+    return errors.add(:name, I18n.t('users.errors.name_invalid_parentheses')) if name.include?(')') && !name.include?('(')
+
+    # Check if there's an opening paren without a closing paren
+    return errors.add(:name, I18n.t('users.errors.name_invalid_parentheses')) if name.include?('(') && !name.include?(')')
+
+    # Check if there are multiple sets of parentheses
+    return errors.add(:name, I18n.t('users.errors.name_invalid_parentheses')) if name.count('(') > 1 || name.count(')') > 1
+
+    # If there's a parenthesis, check format: must be " (text)" at the end
+    if name.include?('(')
+      # Must have space before opening paren and closing paren at the end
+      unless name.match?(/\s\([^)]*\)\z/)
+        return errors.add(:name, I18n.t('users.errors.name_invalid_parentheses'))
+      end
+    end
+  end
+
   validate :wca_id_prereqs
   def wca_id_prereqs
     p = person || unconfirmed_person
