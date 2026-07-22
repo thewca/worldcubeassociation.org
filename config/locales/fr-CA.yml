@@ -1617,7 +1617,7 @@ fr-CA:
       #original_hash: 597b791
       success_message: Courriel envoyé - nous vous répondrons sous peu.
       #original_hash: a38a97d
-      prefilled: >-
+      to_update_registration_prefilled: >-
         Pour mettre à jour votre inscription, vous devez contacter les
         organisateurs de la compétition. Nous avons pré-rempli le formulaire de
         contact avec les modifications souhaitées - veuillez soumettre le
