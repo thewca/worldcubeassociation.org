@@ -1251,7 +1251,10 @@ en:
       country_plural:
         one: "1 region"
         other: "%{count} regions"
-      export_csv: "Export to CSV"
+      export_to_csv:
+        zero: "Export all registrations to CSV"
+        one: "Export %{count} registration to CSV"
+        other: "Export %{count} registrations to CSV"
       email: "Email"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"
@@ -1399,7 +1402,7 @@ en:
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       registration_already_closed: "The deadline to register has already passed. Please set it to be in the future."
       tooltip_registered: "You are registered."
-      tooltip_pending: "Your registration is awaiting manual approval. Please ensure you have followed all instructions (eg, payment) listed in the Competition Page."
+      tooltip_pending: "Your registration is awaiting manual approval. Please ensure you have followed all instructions (e.g., payment) listed in the Competition Page."
       tooltip_waiting_list: "You are currently on the waiting list."
       tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
       confirmed_visible: "This competition is confirmed and visible."
@@ -1965,7 +1968,7 @@ en:
           other: "%{count} spots remaining"
         pending:
           title: "Pending Registrations"
-          information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
+          information: "Pending should only be used for incomplete (e.g., unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
           waitlist_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to move the selected registration(s) to the Waiting List?"
           approve_skipped_warning: "You've skipped %{count} earlier Pending registration(s). Are you sure you want to accept the selected registration(s)?"
         waitlist:
@@ -1974,6 +1977,7 @@ en:
           skipped_warning: "You've skipped %{count} registration(s) on the Waiting List. Are you sure you want to approve the selected registration(s)?"
         approved:
           title: "Approved Registrations"
+          information: "Approved competitors are confirmed to be able to participate in the competition in their registered events."
           pending_waitlist_combined_skipped_warning: "You've skipped %{count} earlier Pending/Waiting List registration(s). Are you sure you want to accept the selected registration(s)?"
         cancelled:
           title: "Cancelled Registrations"
@@ -2009,18 +2013,23 @@ en:
         update_contact_message: "I would like to update my registration details as follows: %{update_params}"
         delete_contact_message: "I want to delete my registration"
         no_changes: "There are no changes"
-        email_send: "Send Email"
-        email_copy: "Copy Emails"
+        send_email:
+          one: "Send email to %{count} email address"
+          other: "Send email to %{count} email addresses"
+        copy_emails:
+          one: "Copy %{count} email address"
+          other: "Copy %{count} email addresses"
         email_message: "Copied to clipboard. Remember to use bcc!"
+        scroll_to: "Scroll to"
         move_to:
-          zero: "Move to"
-          one: "Move %{count} to"
-          other: "Move %{count} to"
+          one: "Move %{count} registration to"
+          other: "Move %{count} registrations to"
         pending: "Pending"
         waitlist: "Waiting List"
         approved: "Approved"
         cancelled: "Cancelled"
         rejected: "Rejected"
+        non_competing: "Non-Competing"
         amount: "Amount"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}."
         no_self_update: "Contact the Organization Team to update your registration."
@@ -2101,7 +2110,7 @@ en:
     #context: and when an error occurred
     errors:
       must_use_wca_registration: "Auto-accept can only be used if you are using the WCA website for registrations"
-      must_use_payment_integration: "You must enable a payment integration (eg, Stripe) in order to use auto-accept"
+      must_use_payment_integration: "You must enable a payment integration (e.g., Stripe) in order to use auto-accept"
       auto_accept_limit: "Limit for auto-accepted registrations must be less than the competitor limit"
       auto_accept_not_negative: "Limit for auto-accepted registrations cannot be less than 0."
       auto_accept_accept_paid_pending: "Can't enable auto-accept if there are paid-pending registrations - either accept them or move them to the waiting list"
@@ -2435,7 +2444,7 @@ en:
           primary_email: "Email"
         manual:
           payment_instructions: "Payment instructions (will be displayed on Competition Page)"
-          payment_reference_label: "What information should the user provide for you to identify their payment? (eg, payment reference number / account ID / etc)"
+          payment_reference_label: "What information should the user provide for you to identify their payment? (e.g., payment reference number / account ID / etc)"
         fallback_not_applicable: "N/A"
   persons:
     #context: Person search page
