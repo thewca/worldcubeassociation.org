@@ -120,6 +120,13 @@ class ResultsSubmissionController < ApplicationController
       }
     end
 
+    empty_results = competition.live_results.includes(:round, :registration).where(best: 0)
+    if empty_results.exists?
+      return render status: :unprocessable_content, json: {
+        error: "Please enter all results, the following results are outstanding: #{empty_results.map { "#{it.round_wcif_id}: #{it.registrant_id}" }.join(", ")}",
+      }
+    end
+
     results_to_import = competition.rounds.flat_map do |round|
       round.live_results
            .includes(:live_attempts, :registration)
