@@ -43,6 +43,15 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     render json: groups, methods: %w[lead_user]
   end
 
+  def show
+    user_group_id = params.require(:id)
+    user_group = UserGroup.find(user_group_id)
+
+    return head :unauthorized unless user_group.readable_by?(current_user)
+
+    render json: user_group
+  end
+
   def create
     group_type = params.require(:group_type)
     name = params.require(:name)
@@ -69,10 +78,21 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
 
     return head :unauthorized unless current_user&.has_permission?(:can_edit_groups, user_group_id)
 
-    user_group.update!(user_group_params)
+    deactivating = user_group.is_active && user_group_params.key?(:is_active) && !ActiveRecord::Type::Boolean.new.cast(user_group_params[:is_active])
+    active_roles_to_end = deactivating ? user_group.active_roles.to_a : []
 
-    render json: {
-      success: true,
-    }
+    if user_group.update(user_group_params)
+      if deactivating
+        active_roles_to_end.each do |role|
+          RoleChangeMailer.notify_role_end(role, current_user).deliver_later
+        end
+      end
+
+      render json: {
+        success: true,
+      }
+    else
+      render json: { error: user_group.errors.full_messages.join(", ") }, status: :unprocessable_content
+    end
   end
 end

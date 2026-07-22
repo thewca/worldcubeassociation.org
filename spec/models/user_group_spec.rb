@@ -199,4 +199,28 @@ RSpec.describe UserGroup do
       expect(UserGroup.teams_committees_group_wrc.changes_in_group_for_digest).to eq expected_output
     end
   end
+
+  describe "deactivation" do
+    it "ends all active lead roles when deactivated" do
+      group = UserGroup.create!(group_type: :officers, name: "Officers Group Test", is_active: true, is_hidden: false)
+      role1 = create(:user_role, :active, :officers, group: group, end_date: nil)
+      role2 = create(:user_role, :active, :officers, group: group, end_date: Date.today + 5.days)
+
+      group.update!(is_active: false)
+
+      expect(role1.reload.active?).to be false
+      expect(role1.end_date).to eq Date.today
+      expect(role2.reload.active?).to be false
+      expect(role2.end_date).to eq Date.today
+    end
+
+    it "fails validation if there are active non-lead roles when deactivating" do
+      group = UserGroup.create!(group_type: :translators, name: "Catalan Test", is_active: true, is_hidden: false)
+      create(:translator_role, group: group, end_date: nil)
+
+      expect do
+        group.update!(is_active: false)
+      end.to raise_error(ActiveRecord::RecordInvalid, /Active roles must be blank/)
+    end
+  end
 end
