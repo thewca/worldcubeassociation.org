@@ -322,7 +322,7 @@ class User < ApplicationRecord
 
   validate :name_parenthesis_format
   def name_parenthesis_format
-    return unless name.present?
+    return if name.blank?
 
     # Check if there's a closing paren without an opening paren
     return errors.add(:name, I18n.t('users.errors.name_invalid_parentheses')) if name.include?(')') && !name.include?('(')
@@ -334,12 +334,10 @@ class User < ApplicationRecord
     return errors.add(:name, I18n.t('users.errors.name_invalid_parentheses')) if name.count('(') > 1 || name.count(')') > 1
 
     # If there's a parenthesis, check format: must be " (text)" at the end
-    if name.include?('(')
-      # Must have space before opening paren and closing paren at the end
-      unless name.match?(/\s\([^)]*\)\z/)
-        return errors.add(:name, I18n.t('users.errors.name_invalid_parentheses'))
-      end
-    end
+    return unless name.include?('(')
+    return if name.match?(/\s\([^)]*\)\z/)
+
+    errors.add(:name, I18n.t('users.errors.name_invalid_parentheses'))
   end
 
   validate :wca_id_prereqs
