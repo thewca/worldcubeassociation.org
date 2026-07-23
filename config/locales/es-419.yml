@@ -1754,6 +1754,11 @@ es-419:
         captcha:
           #original_hash: 58c1271
           validation_error: Por favor verifica que no eres un robot.
+        verified_checkbox:
+          #original_hash: 54f118d
+          label: >-
+            Al enviar este formulario, confirmas que has revisado la
+            documentación legal y verificado la información correspondiente.
       #original_hash: 126541e
       success_message: Pedido solicitado. Te responderemos a la brevedad.
       #original_hash: bb6a0cf
@@ -3015,6 +3020,10 @@ es-419:
           still_processing: >-
             No se pueden eliminar competidores mientras aún se están procesando
             los resultados
+          #original_hash: ecb0dd4
+          in_batch: >-
+            No se puede quitar a un competidor que es parte de un lote sin
+            enviar.
         add_competitor:
           #original_hash: 9dcb50d
           single_round: Agregar competidor a la ronda
@@ -5157,6 +5166,8 @@ es-419:
         greater_china: Podios en Campeonatos de Gran China
       #original_hash: c32a014
       place: Posición
+      #original_hash: 89e4fa7
+      dual: Dual
       #original_hash: ddb18c1
       medal_collection: Medallero
       #original_hash: 9e69e13
