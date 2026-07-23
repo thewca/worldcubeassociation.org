@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 
 import { Button, Icon, Modal } from 'semantic-ui-react';
 
-import NewPersonForm from '../../Persons/NewPersonForm/NewPersonForm';
+import NewPersonForm from '../../../components/Persons/NewPersonForm/NewPersonForm';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 
 const NewPersonModal = ({ trigger, onPersonCreate, competitionId }) => {

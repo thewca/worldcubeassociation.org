@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateEntry from '../ResultsData/Panel/CreateEntry';
+import CreateEntry from '../../components/ResultsData/Panel/CreateEntry';
 import { InlineEditForm } from './index';
 
 function NewScramble({

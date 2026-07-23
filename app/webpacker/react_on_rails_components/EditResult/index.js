@@ -1,7 +1,7 @@
 import React from 'react';
-import EditEntry from '../ResultsData/Panel/EditEntry';
+import EditEntry from '../../components/ResultsData/Panel/EditEntry';
 import { resultUrl } from '../../lib/requests/routes.js.erb';
-import ShowSingleResult from '../ResultsData/Results/ShowSingleResult';
+import ShowSingleResult from '../../components/ResultsData/Results/ShowSingleResult';
 import ResultForm from './ResultForm/ResultForm';
 
 export function InlineEditForm({
