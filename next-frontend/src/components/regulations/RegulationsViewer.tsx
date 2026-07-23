@@ -1,7 +1,14 @@
 "use client";
 
 import { MouseEvent, useCallback, useMemo, useState } from "react";
-import { Box, Input, InputGroup, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Combobox,
+  Portal,
+  Text,
+  VStack,
+  createListCollection,
+} from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 
 const MIN_QUERY_LENGTH = 2;
@@ -78,16 +85,8 @@ export default function RegulationsViewer({
   contentHtml: string;
 }) {
   const [query, setQuery] = useState("");
-  // Whether the results dropdown is showing. Opens while typing, closes once a
-  // result is picked (or the query is cleared).
-  const [resultsOpen, setResultsOpen] = useState(false);
 
   const items = useMemo(() => extractSearchItems(contentHtml), [contentHtml]);
-
-  const selectResult = useCallback((id: string) => {
-    setResultsOpen(false);
-    scrollToId(id);
-  }, []);
 
   // Intercept clicks on in-page fragment links (e.g. `#1a`, `./#contents`)
   // so they scroll to the anchor regardless of the route's trailing slash,
@@ -127,61 +126,62 @@ export default function RegulationsViewer({
       .slice(0, MAX_RESULTS);
   }, [query, items]);
 
-  const showEmpty =
-    resultsOpen &&
-    query.trim().length >= MIN_QUERY_LENGTH &&
-    matches.length === 0;
+  // The collection holds the already-filtered matches; the Combobox renders it
+  // as-is (no built-in filtering) and handles opening/closing, click-outside,
+  // Escape, and closing on select for us.
+  const collection = useMemo(
+    () =>
+      createListCollection({
+        items: matches,
+        itemToValue: (item) => item.id,
+        itemToString: (item) => item.id,
+      }),
+    [matches],
+  );
+
+  const hasQuery = query.trim().length >= MIN_QUERY_LENGTH;
 
   return (
     <VStack align="stretch" gap={4}>
       <Box position="sticky" top={0} zIndex={1} bg="bg" py={2}>
-        <InputGroup startElement={<LuSearch />}>
-          <Input
-            placeholder="Search the regulations…"
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setResultsOpen(true);
-            }}
-          />
-        </InputGroup>
-
-        {resultsOpen && matches.length > 0 && (
-          <VStack
-            align="stretch"
-            gap={0}
-            mt={2}
-            maxH="20rem"
-            overflowY="auto"
-            borderWidth="1px"
-            borderRadius="md"
-          >
-            {matches.map((item) => (
-              <Box
-                key={item.id}
-                as="button"
-                textAlign="left"
-                px={3}
-                py={2}
-                borderBottomWidth="1px"
-                _last={{ borderBottomWidth: 0 }}
-                _hover={{ bg: "bg.muted" }}
-                onClick={() => selectResult(item.id)}
-              >
-                <Text fontWeight="bold">{item.id}</Text>
-                <Text fontSize="sm" color="fg.muted" lineClamp={2}>
-                  {item.text}
-                </Text>
-              </Box>
-            ))}
-          </VStack>
-        )}
-
-        {showEmpty && (
-          <Text mt={2} color="fg.muted">
-            No matching regulations.
-          </Text>
-        )}
+        <Combobox.Root
+          collection={collection}
+          openOnClick={false}
+          selectionBehavior="clear"
+          placeholder="Search the regulations…"
+          onInputValueChange={(details) => setQuery(details.inputValue)}
+          onValueChange={(details) => {
+            const id = details.value[0];
+            if (id) scrollToId(id);
+          }}
+        >
+          <Combobox.Control>
+            <Combobox.Input />
+            <Combobox.IndicatorGroup>
+              <LuSearch />
+            </Combobox.IndicatorGroup>
+          </Combobox.Control>
+          <Portal>
+            <Combobox.Positioner>
+              <Combobox.Content maxH="20rem" overflowY="auto">
+                {hasQuery && (
+                  <Combobox.Empty>No matching regulations.</Combobox.Empty>
+                )}
+                {collection.items.map((item) => (
+                  <Combobox.Item item={item} key={item.id}>
+                    <VStack align="start" gap={0}>
+                      <Text fontWeight="bold">{item.id}</Text>
+                      <Text fontSize="sm" color="fg.muted" lineClamp={2}>
+                        {item.text}
+                      </Text>
+                    </VStack>
+                    <Combobox.ItemIndicator />
+                  </Combobox.Item>
+                ))}
+              </Combobox.Content>
+            </Combobox.Positioner>
+          </Portal>
+        </Combobox.Root>
       </Box>
 
       <Box
