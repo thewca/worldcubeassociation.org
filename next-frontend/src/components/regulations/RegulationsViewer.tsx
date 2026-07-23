@@ -78,9 +78,16 @@ export default function RegulationsViewer({
   contentHtml: string;
 }) {
   const [query, setQuery] = useState("");
+  // Whether the results dropdown is showing. Opens while typing, closes once a
+  // result is picked (or the query is cleared).
+  const [resultsOpen, setResultsOpen] = useState(false);
 
-  // Derived from the prop during render — no effect, no live-DOM read.
   const items = useMemo(() => extractSearchItems(contentHtml), [contentHtml]);
+
+  const selectResult = useCallback((id: string) => {
+    setResultsOpen(false);
+    scrollToId(id);
+  }, []);
 
   // Intercept clicks on in-page fragment links (e.g. `#1a`, `./#contents`)
   // so they scroll to the anchor regardless of the route's trailing slash,
@@ -121,7 +128,9 @@ export default function RegulationsViewer({
   }, [query, items]);
 
   const showEmpty =
-    query.trim().length >= MIN_QUERY_LENGTH && matches.length === 0;
+    resultsOpen &&
+    query.trim().length >= MIN_QUERY_LENGTH &&
+    matches.length === 0;
 
   return (
     <VStack align="stretch" gap={4}>
@@ -130,11 +139,14 @@ export default function RegulationsViewer({
           <Input
             placeholder="Search the regulations…"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setResultsOpen(true);
+            }}
           />
         </InputGroup>
 
-        {matches.length > 0 && (
+        {resultsOpen && matches.length > 0 && (
           <VStack
             align="stretch"
             gap={0}
@@ -154,7 +166,7 @@ export default function RegulationsViewer({
                 borderBottomWidth="1px"
                 _last={{ borderBottomWidth: 0 }}
                 _hover={{ bg: "bg.muted" }}
-                onClick={() => scrollToId(item.id)}
+                onClick={() => selectResult(item.id)}
               >
                 <Text fontWeight="bold">{item.id}</Text>
                 <Text fontSize="sm" color="fg.muted" lineClamp={2}>
