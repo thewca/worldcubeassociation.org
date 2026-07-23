@@ -105,8 +105,17 @@ paths:
   /v0/users/me/permissions:
     $ref: 'paths/users/userPermissions.yaml'
 
+  /v0/regulations:
+    $ref: 'paths/regulations/regulations.yaml'
+
+  /v0/regulations/history/official/{version}:
+    $ref: 'paths/regulations/historicalRegulations.yaml'
+
   /v0/regulations/translations:
     $ref: 'paths/regulations/regulationTranslations.yaml'
+
+  /v0/regulations/translations/{language}:
+    $ref: 'paths/regulations/translatedRegulations.yaml'
 
   /v0/export/public:
     $ref: 'paths/results/publicExports.yaml'
