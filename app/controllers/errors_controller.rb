@@ -8,7 +8,7 @@ class ErrorsController < ApplicationController
     @status_code = ActionDispatch::ExceptionWrapper.new(request.env, @exception).status_code
     @request_id = request.env["action_dispatch.request_id"]
 
-    return render_api_error(@status_code, @request_id) if api_request?
+    return render_api_error if api_request?
 
     if @exception.instance_of?(ActiveRecord::RecordNotFound) && @exception.model == "Competition"
       @id = params['id']
@@ -30,11 +30,14 @@ class ErrorsController < ApplicationController
       request.env["action_dispatch.original_path"] || request.path
     end
 
-    def render_api_error(status_code, request_id)
-      render json: { error_code: status_code,
-                     request_id: request_id,
-                     contact_url: Rails.application.routes.url_helpers.contact_url(contactRecipient: 'wst', requestId: request_id) },
-             status: status_code
+    def render_api_error
+      error = { error_code: @status_code,
+                request_id: @request_id,
+                contact_url: Rails.application.routes.url_helpers.contact_url(contactRecipient: 'wst', requestId: @request_id) }
+      # 4xx messages describe what was wrong with the request, not our internals,
+      # so they are safe and useful to surface. 5xx stays opaque (request_id only).
+      error[:error] = @exception.message if (400...500).cover?(@status_code)
+      render json: error, status: @status_code
     end
 
     def error_page(code)
