@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
 class Assignment < ApplicationRecord
-  # WCIF assignment code that designates a person as a scoretaker (data entry staff).
-  SCORETAKER_ASSIGNMENT_CODE = "staff-dataentry"
-
   belongs_to :registration, polymorphic: true
   belongs_to :schedule_activity
-
-  scope :scoretaker, -> { where(assignment_code: SCORETAKER_ASSIGNMENT_CODE) }
 
   validates :station_number, numericality: { only_integer: true }, allow_nil: true
   validate :validate_assignment_code

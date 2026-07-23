@@ -405,6 +405,7 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "competition_scoretakers" => :skip_all_rows,
     "competition_series" => {
       # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
       where_clause: "LEFT JOIN competitions ON competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
