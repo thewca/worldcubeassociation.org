@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent, useCallback, useMemo, useState } from "react";
 import { Box, Input, InputGroup, Text, VStack } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 
@@ -17,6 +10,34 @@ const MAX_RESULTS = 50;
 interface SearchItem {
   id: string;
   text: string;
+}
+
+const HTML_ENTITIES: Record<string, string> = {
+  "&quot;": '"',
+  "&amp;": "&",
+  "&lt;": "<",
+  "&gt;": ">",
+  "&#39;": "'",
+  "&nbsp;": " ",
+};
+
+// Builds the search index straight from the HTML string, so it works during
+// server render with no dependency on the live DOM. For each regulation `<li>`
+// we capture only its own text (up to a nested list) to keep snippets tidy.
+function extractSearchItems(html: string): SearchItem[] {
+  const items: SearchItem[] = [];
+  const regex = /<li\s+id="([^"]+)"[^>]*>([\s\S]*?)(?=<ul|<li|<\/li>)/g;
+
+  for (const [, id, rawText] of html.matchAll(regex)) {
+    const text = rawText
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&#?\w+;/g, (entity) => HTML_ENTITIES[entity] ?? entity)
+      .replace(/\s+/g, " ")
+      .trim();
+    items.push({ id, text });
+  }
+
+  return items;
 }
 
 // Styling for the raw regulations HTML fragment. Chakra's CSS reset strips
@@ -56,31 +77,10 @@ export default function RegulationsViewer({
 }: {
   contentHtml: string;
 }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [items, setItems] = useState<SearchItem[]>([]);
   const [query, setQuery] = useState("");
 
-  // Once the fragment is in the DOM, index each regulation for searching and
-  // honor the initial deep-link hash (the browser doesn't always scroll to it
-  // after client-side hydration).
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    setItems(
-      Array.from(container.querySelectorAll<HTMLElement>("li[id]")).map(
-        (el) => ({
-          id: el.id,
-          text: (el.textContent ?? "").replace(/\s+/g, " ").trim(),
-        }),
-      ),
-    );
-
-    const hashId = decodeURIComponent(window.location.hash.slice(1));
-    if (hashId) {
-      document.getElementById(hashId)?.scrollIntoView();
-    }
-  }, [contentHtml]);
+  // Derived from the prop during render — no effect, no live-DOM read.
+  const items = useMemo(() => extractSearchItems(contentHtml), [contentHtml]);
 
   // Intercept clicks on in-page fragment links (e.g. `#1a`, `./#contents`)
   // so they scroll to the anchor regardless of the route's trailing slash,
@@ -173,7 +173,6 @@ export default function RegulationsViewer({
       </Box>
 
       <Box
-        ref={containerRef}
         onClick={handleContentClick}
         css={contentStyles}
         // The fragment comes from our own regulations API and is trusted; it
