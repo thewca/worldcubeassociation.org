@@ -1,19 +1,34 @@
-"use client";
+import { Container } from "@chakra-ui/react";
+import type { Metadata } from "next";
+import { getTranslatedRegulations } from "@/lib/wca/regulations/getRegulations";
+import RegulationsViewer from "@/components/regulations/RegulationsViewer";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 
-import { useParams } from "next/navigation";
-import { AspectRatio, Container } from "@chakra-ui/react";
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ language: string }>;
+}): Promise<Metadata> {
+  const { language } = await params;
+  return { title: `WCA Regulations (${language})` };
+}
 
-export default function TranslatedRegulations() {
-  const params = useParams<"/regulations/translations/[language]">();
+export default async function TranslatedRegulations({
+  params,
+}: {
+  params: Promise<{ language: string }>;
+}) {
+  const { language } = await params;
+
+  const { t } = await getT();
+  const { data, error, response } = await getTranslatedRegulations(language);
+
+  if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <Container>
-      <AspectRatio>
-        <iframe
-          width="100%"
-          src={`https://regulations.worldcubeassociation.org/translations/${params.language}`}
-        ></iframe>
-      </AspectRatio>
+    <Container bg="bg">
+      <RegulationsViewer contentHtml={data.content_html} />
     </Container>
   );
 }

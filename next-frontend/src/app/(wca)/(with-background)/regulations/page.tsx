@@ -1,15 +1,21 @@
-import { AspectRatio, Container } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
+import type { Metadata } from "next";
+import { getRegulations } from "@/lib/wca/regulations/getRegulations";
+import RegulationsViewer from "@/components/regulations/RegulationsViewer";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
+
+export const metadata: Metadata = { title: "WCA Regulations" };
 
 export default async function Regulations() {
+  const { t } = await getT();
+  const { data, error, response } = await getRegulations();
+
+  if (error) return <OpenapiError response={response} t={t} />;
+
   return (
     <Container bg="bg">
-      <AspectRatio>
-        <iframe
-          width="100%"
-          src="https://regulations.worldcubeassociation.org"
-          style={{ border: "none", background: "transparent" }}
-        ></iframe>
-      </AspectRatio>
+      <RegulationsViewer contentHtml={data.content_html} />
     </Container>
   );
 }
