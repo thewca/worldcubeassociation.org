@@ -15,11 +15,11 @@ class PollsController < ApplicationController
   end
 
   def results
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.require(:id))
   end
 
   def edit
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.require(:id))
   end
 
   def create
@@ -36,7 +36,7 @@ class PollsController < ApplicationController
   end
 
   def update
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.require(:id))
     if @poll.update(poll_params)
       flash[:success] = if params[:commit] == "Confirm"
                           "Poll confirmed and open to voting"
@@ -50,7 +50,7 @@ class PollsController < ApplicationController
   end
 
   def destroy
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.require(:id))
 
     if !@poll.confirmed? && @poll.destroy
       flash[:success] = "Deleted poll"
@@ -62,13 +62,13 @@ class PollsController < ApplicationController
   end
 
   def poll_params
-    params.require(:poll).permit(
-      :question,
-      :comment,
-      :multiple,
-      :deadline,
-      :confirmed_at,
-      poll_options_attributes: %i[id description _destroy],
+    params.expect(
+      poll: [:question,
+             :comment,
+             :multiple,
+             :deadline,
+             :confirmed_at,
+             { poll_options_attributes: [%i[id description _destroy]] }],
     ).tap do |poll_params|
       poll_params[:confirmed_at] = Time.now if params[:commit] == "Confirm" && current_user.can_create_poll?
     end

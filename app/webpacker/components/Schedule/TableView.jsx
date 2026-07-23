@@ -22,7 +22,7 @@ import { formats } from '../../lib/wca-data.js.erb';
 import {
   parseActivityCode,
   timeLimitToString,
-  advancementConditionToString,
+  roundAdvancementToString,
   cutoffToString,
 } from '../../lib/utils/wcif';
 import '../../stylesheets/schedule_events.scss';
@@ -195,8 +195,10 @@ function ActivityRow({
 
   // note: round may be undefined for custom activities like lunch
   const {
-    format, timeLimit, cutoff, advancementCondition,
+    format, timeLimit, cutoff,
   } = round || {};
+
+  const advancement = round && roundAdvancementToString(round, wcifEvents);
 
   const roomsUsed = rooms.filter(
     (room) => room.activities.some((activity) => activityIds.includes(activity.id)),
@@ -236,9 +238,9 @@ function ActivityRow({
                 </>
               )}
             </Grid.Column>
-            <Grid.Column width={2}>{cutoff && cutoffToString(round)}</Grid.Column>
+            <Grid.Column width={2}>{cutoff && cutoffToString(round, { isV2: true })}</Grid.Column>
             <Grid.Column width={2}>
-              {advancementCondition && advancementConditionToString(round)}
+              {advancement}
             </Grid.Column>
           </>
         )}
@@ -302,17 +304,17 @@ function ActivityRow({
                   {I18n.t('competitions.events.cutoff')}
                 </Grid.Column>
                 <Grid.Column textAlign="right" mobile={10} tablet={4}>
-                  <b>{cutoffToString(round)}</b>
+                  <b>{cutoffToString(round, { isV2: true })}</b>
                 </Grid.Column>
               </>
             )}
-            {advancementCondition && (
+            {advancement && (
               <>
                 <Grid.Column textAlign="left" mobile={6} tablet={4}>
                   {I18n.t('competitions.events.proceed')}
                 </Grid.Column>
                 <Grid.Column textAlign="right" mobile={10} tablet={4}>
-                  <b>{advancementConditionToString(round)}</b>
+                  <b>{advancement}</b>
                 </Grid.Column>
               </>
             )}

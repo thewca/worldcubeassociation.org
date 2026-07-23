@@ -139,7 +139,7 @@ Rails.application.configure do
 
   # Error pages for production
   config.exceptions_app = lambda { |env|
-    if EnvConfig.API_ONLY?
+    if EnvConfig.API_ONLY? || request.path.start_with?("/api/")
       ApiErrorsController.action(:show).call(env)
     else
       ErrorsController.action(:show).call(env)

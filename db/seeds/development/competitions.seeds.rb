@@ -76,7 +76,6 @@ after "development:users", "development:user_roles" do
           cutoff: nil,
           advancement_condition: is_final ? nil : AdvancementConditions::RankingCondition.new(16),
           scramble_set_count: rand(1..4),
-          round_results: [],
         )
         users.each_with_index do |competitor, k|
           person = competitor.person
@@ -94,7 +93,10 @@ after "development:users", "development:user_roles" do
             regional_average_record: k.zero? ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
-            result.send(:"value#{v + 1}=", random_wca_value)
+            result.result_attempts.build(
+              attempt_number: v + 1,
+              value: random_wca_value,
+            )
           end
           result.average = result.compute_correct_average
           result.best = result.compute_correct_best

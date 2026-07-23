@@ -30,7 +30,7 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
   const dispatch = useDispatch();
 
   const [numberOfAttempts, setNumberOfAttempts] = useInputState(cutoff?.numberOfAttempts ?? 0);
-  const [attemptResult, setAttemptResult] = useState(cutoff?.attemptResult ?? 0);
+  const [resultValue, setResultValue] = useState(cutoff?.resultValue ?? 0);
 
   const cutoffFormats = formats.byId[format].allowedFirstPhaseFormats;
   // temporary fix until the backend properly tells us the valid formats; see issue 7555
@@ -42,31 +42,31 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
   const explanationText = (
     numberOfAttempts > 0 ? roundCutoffToString({
       ...wcifRound,
-      ...{ numberOfAttempts, attemptResult },
-    }) : null
+      ...{ numberOfAttempts, resultValue },
+    }, { isV2: true }) : null
   );
 
   const hasUnsavedChanges = () => (
     !_.isEqual(cutoff, numberOfAttempts
-      ? { numberOfAttempts, attemptResult }
+      ? { numberOfAttempts, resultValue }
       : null)
   );
 
   const reset = () => {
     setNumberOfAttempts(cutoff?.numberOfAttempts ?? 0);
-    setAttemptResult(cutoff?.attemptResult ?? 0);
+    setResultValue(cutoff?.resultValue ?? 0);
   };
 
   const handleOk = () => {
     if (hasUnsavedChanges()) {
       dispatch(updateCutoff(wcifRound.id, numberOfAttempts
-        ? { numberOfAttempts, attemptResult }
+        ? { numberOfAttempts, resultValue }
         : null));
     }
   };
 
   const Title = `Cutoff for ${roundIdToString(wcifRound.id)}`;
-  const Trigger = roundCutoffToString(wcifRound, { short: true });
+  const Trigger = roundCutoffToString(wcifRound, { short: true, isV2: true });
 
   return (
     <ButtonActivatedModal
@@ -91,16 +91,16 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
               <MbldPointsField
                 label={<Label>Cutoff Result</Label>}
                 eventId={wcifEvent.id}
-                value={attemptResult}
-                onChange={setAttemptResult}
+                value={resultValue}
+                onChange={setResultValue}
               />
             )
             : (
               <AttemptResultField
                 label={<Label>Cutoff Result</Label>}
                 eventId={wcifEvent.id}
-                value={attemptResult}
-                onChange={setAttemptResult}
+                value={resultValue}
+                onChange={setResultValue}
                 resultType="single"
               />
             )

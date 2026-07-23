@@ -54,21 +54,22 @@ module Admin
     end
 
     def new
-      competition = Competition.find(params[:competition_id])
-      round = Round.find(params[:round_id])
+      competition = Competition.find(params.require(:competition_id))
+      round = Round.find(params.require(:round_id))
       # Create some basic attributes for that empty result.
       # Using Result.new wouldn't work here: we have no idea what the country
       # could be and so on, so serialization would fail.
       @result = {
         competition_id: competition.id,
         round_type_id: round.round_type_id,
+        round_id: round.id,
         format_id: round.format.id,
         event_id: round.event.id,
       }
     end
 
     def show_events_data
-      competition = Competition.find(params[:competition_id])
+      competition = Competition.find(params.require(:competition_id))
       events_data = competition.competition_events.to_h do |ce|
         [ce.event_id, {
           eventId: ce.event_id,
@@ -88,24 +89,30 @@ module Admin
     end
 
     def edit
-      @result = Result.includes(:competition).find(params[:id])
+      @result = Result.includes(:competition).find(params.require(:id))
     end
 
     def create
-      json = {}
       # Build a brand new result, validations will make sure the specified round
       # data are valid.
       result = Result.new(result_params)
+
+      attempt_attributes = Result.unpack_attempt_attributes(attempts_params)
+      result.result_attempts.build(attempt_attributes)
+
       if result.save
         # We just inserted a new result, make sure we at least give it the
         # correct position.
         validator = ResultsValidators::PositionsValidator.new(apply_fixes: true)
         validator.validate(competition_ids: [result.competition_id])
-        json[:messages] = ["Result inserted!"].concat(validator.infos.map(&:to_s))
+        render json: {
+          messages: ["Result inserted!"].concat(validator.infos.map(&:to_s)),
+        }
       else
-        json[:errors] = result.errors.map(&:full_message)
+        render json: {
+          errors: result.errors.map(&:full_message),
+        }
       end
-      render json: json
     end
 
     def update
@@ -113,7 +120,18 @@ module Admin
       # Since we may move the result to another competition, we want to validate
       # both competitions if needed.
       competitions_to_validate = [result.competition_id]
-      if result.update(result_params)
+
+      result_updated = result.with_transaction_returning_status do
+        attempt_attributes = Result.unpack_attempt_attributes(attempts_params, result_id: result.id)
+        ResultAttempt.upsert_all(attempt_attributes)
+
+        attempt_numbers = attempt_attributes.pluck(:attempt_number)
+        result.result_attempts.where.not(attempt_number: attempt_numbers).delete_all
+
+        result.update(result_params)
+      end
+
+      if result_updated
         competitions_to_validate << result.competition_id
         competitions_to_validate.uniq!
         validator = ResultsValidators::PositionsValidator.new(apply_fixes: true)
@@ -151,11 +169,15 @@ module Admin
     end
 
     private def result_params
-      params.require(:result).permit(:value1, :value2, :value3, :value4, :value5,
-                                     :competition_id, :round_type_id, :round_id, :event_id,
-                                     :format_id, :person_name, :person_id, :country_id,
-                                     :best, :average,
-                                     :regional_single_record, :regional_average_record)
+      params.expect(result: %i[competition_id round_type_id round_id event_id
+                               format_id person_name person_id country_id
+                               best average
+                               regional_single_record regional_average_record])
+    end
+
+    private def attempts_params
+      # This is Rails notation for saying "the key `attempts` should hold an array of values".
+      params.expect(attempts: [])
     end
   end
 end

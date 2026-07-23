@@ -26,29 +26,17 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
     wca_id = params.require(:id)
     person = Person.current.find_by(wca_id: wca_id)
     person_params = params.require(:person)
+    change_type = params.require(:method)
 
     if person.nil?
-      render status: :unprocessable_entity, json: { error: "Person with WCA ID #{wca_id} not found." }
+      render status: :unprocessable_content, json: { error: "Person with WCA ID #{wca_id} not found." }
       return
     end
 
     edit_params = edit_params_from_person_params(person_params)
+    person.execute_edit_person_request(change_type, edit_params)
 
-    if params[:method] == "fix"
-      if person.update(edit_params)
-        render status: :ok, json: { success: "Successfully fixed #{person.name}." }
-      else
-        render status: :unprocessable_entity, json: { error: "Error while fixing #{person.name}." }
-      end
-    elsif params[:method] == "update"
-      if person.update_using_sub_id(edit_params)
-        render status: :ok, json: { success: "Successfully updated #{person.name}." }
-      else
-        render status: :unprocessable_entity, json: { error: "Error while updating #{person.name}." }
-      end
-    else
-      render status: :unprocessable_entity, json: { error: "Unknown method #{params[:method]}." }
-    end
+    render status: :ok, json: { success: true }
   end
 
   def destroy
@@ -56,14 +44,14 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
     person = Person.current.find_by(wca_id: wca_id)
 
     if person.nil?
-      render status: :unprocessable_entity, json: { error: "Person with WCA ID #{wca_id} not found." }
+      render status: :unprocessable_content, json: { error: "Person with WCA ID #{wca_id} not found." }
       return
     end
 
     if person.results.any?
-      render status: :unprocessable_entity, json: { error: "#{person.name} has results, can't destroy them." }
+      render status: :unprocessable_content, json: { error: "#{person.name} has results, can't destroy them." }
     elsif person.user.present?
-      render status: :unprocessable_entity, json: { error: "#{person.wca_id} is linked to a user, can't destroy them." }
+      render status: :unprocessable_content, json: { error: "#{person.wca_id} is linked to a user, can't destroy them." }
     else
       name = person.name
       person.destroy
@@ -76,7 +64,7 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
     person = Person.current.find_by(wca_id: wca_id)
 
     if person.nil?
-      render status: :unprocessable_entity, json: { error: "Person with WCA ID #{wca_id} not found." }
+      render status: :unprocessable_content, json: { error: "Person with WCA ID #{wca_id} not found." }
       return
     end
 

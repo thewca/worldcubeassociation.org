@@ -1,0 +1,41 @@
+<h2>Sanity Check Results</h2>
+<% if @non_empty_results.empty? %>
+  <h4>No inconsistencies found.</h4>
+  <% else %>
+  <h4>Found inconsistencies in <%= @non_empty_results.count %> topics</h4>
+  <% @non_empty_results.each_with_index do |result, i| %>
+    <h3>
+      <%= i + 1 %>.
+      [<%= result.sanity_check_category.name %>]
+      <%= result.sanity_check.topic %>
+    </h3>
+
+    <div style="overflow-x: auto;">
+      <table style="border: 1px solid black;">
+        <thead>
+        <tr style="background-color: #f2f2f2;">
+          <% headers = result.query_results.first.keys %>
+          <% headers.each do |header| %>
+            <th scope="col" style="border: 1px solid black;">
+              <%= header %>
+            </th>
+          <% end %>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% result.results_without_exclusions.each do |item| %>
+          <tr>
+            <% headers.each do |header| %>
+              <td style="border: 1px solid black;">
+                <%= item.key?(header) ? item[header] : "-" %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+    <br><br>
+  <% end %>
+<% end %>

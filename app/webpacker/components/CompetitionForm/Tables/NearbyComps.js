@@ -61,7 +61,7 @@ export default function NearbyComps() {
     loading,
   } = useLoadedData(nearbyDataUrl);
 
-  const label = I18n.t('competitions.adjacent_competitions.label', { days: 5, kms: 10 });
+  const label = I18n.t('competitions.adjacent_competitions.label', { days: 5, kms: 30 });
 
   if (loading) {
     return (

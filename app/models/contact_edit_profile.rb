@@ -3,8 +3,7 @@
 class ContactEditProfile < ContactForm
   attribute :wca_id
   attribute :changes_requested
-  attribute :edit_profile_reason
-  attribute :requestor
+  attribute :requestor_user
   attribute :ticket
   attribute :document, attachment: true
 
@@ -12,7 +11,59 @@ class ContactEditProfile < ContactForm
     :field,
     :from,
     :to,
+    :reason,
   )
+
+  def value_humanized(value, field)
+    case field
+    when :country_iso2
+      Country.c_find_by_iso2(value).name_in(:en)
+    when :gender
+      User::GENDER_LABEL_METHOD.call(value.to_sym)
+    else
+      value
+    end
+  end
+
+  def requestor_info
+    edit_others_profile_mode = requestor_user.wca_id != wca_id
+    requestor_role = if !edit_others_profile_mode
+                       "Self"
+                     elsif requestor_user.any_kind_of_delegate?
+                       "Delegate"
+                     else
+                       "Unknown"
+                     end
+    "#{requestor_user.name} (#{requestor_role})"
+  end
+
+  delegate :any_kind_of_delegate?, to: :requestor_user, prefix: :requestor, allow_nil: true
+
+  # Requests from Delegates do not require proof attachment.
+  validate :attachment_requirement, unless: :requestor_any_kind_of_delegate?
+  private def attachment_requirement
+    attachment_requirement_reasons&.each do |reason|
+      errors.add(:base, reason)
+    end
+  end
+
+  def attachment_requirement_reasons
+    return nil if document.present? || requestor_user.can_request_to_edit_others_profile?
+
+    changes_requested&.filter_map do |change|
+      case change.field
+      when :name
+        old_last_name = FinishUnfinishedPersons.last_name_with_suffix(change.from)
+        new_last_name = FinishUnfinishedPersons.last_name_with_suffix(change.to)
+
+        "Proof attachment is required if last name is changed." if old_last_name != new_last_name
+      when :country_iso2
+        "Proof attachment is required if country is changed."
+      when :dob
+        "Proof attachment is required if date of birth is changed."
+      end
+    end
+  end
 
   def to_email
     UserGroup.teams_committees_group_wrt.metadata.email

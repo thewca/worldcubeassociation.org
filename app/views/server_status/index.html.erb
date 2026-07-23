@@ -6,7 +6,7 @@
   <ol>
     <% @locale_stats.each do |locale, count| %>
       <li>
-        <% data = Locales::AVAILABLE[locale] %>
+        <% data = AvailableLocales::ALL[locale] %>
         <%= data[:name] %>
         <%= count %> views
       </li>

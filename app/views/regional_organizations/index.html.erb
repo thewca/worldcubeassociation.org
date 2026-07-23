@@ -1,7 +1,7 @@
 <% provide(:title, t('regional_organizations.title')) %>
 
 <div class="container">
-  <%= react_component("RegionalOrganizations/index", {
+  <%= react_on_rails_component("RegionalOrganizations", props: {
     orgs: @acknowledged_regional_organizations,
   }) %>
 </div>

@@ -1,0 +1,12 @@
+type: object
+required:
+  - activityId
+  - stationNumber
+  - assignmentCode
+properties:
+  activityId:
+    type: number
+  stationNumber:
+    type: number
+  assignmentCode:
+    type: string

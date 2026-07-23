@@ -144,5 +144,4 @@ ActiveRecord::Schema[7.1].define(version: 0) do
     t.string "championship_type", null: false
     t.string "eligible_country_iso2", null: false
   end
-
 end

@@ -1,63 +1,73 @@
-import { Button, Flex, Link, Text, VStack, Card } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
+import AnnouncementContent from "@/components/AnnouncementContent";
+import { Announcement } from "@/types/payload";
+import { LuChevronsRight } from "react-icons/lu";
+import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
+
+function AnnouncementItem({ announcement }: { announcement: Announcement }) {
+  return (
+    <Accordion.Item
+      value={announcement.id}
+      layerStyle="fill.subtle"
+      _open={{ layerStyle: "card.pastel" }}
+    >
+      <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
+        <Accordion.ItemIndicator _open={{ display: "none" }} />
+        <Stack gap={1} alignItems="flex-start">
+          <Text textStyle="s1">{announcement.title}</Text>
+          <Text>
+            {getFullDateTimeStringNoSeconds(announcement.publishedAt)}
+          </Text>
+        </Stack>
+      </Accordion.ItemTrigger>
+      <Accordion.ItemContent>
+        <AnnouncementContent
+          contentMarkdown={announcement.contentMarkdown}
+          url={announcement.url}
+        />
+      </Accordion.ItemContent>
+    </Accordion.Item>
+  );
+}
 
 export default function AnnouncementsCard({
   hero,
-  others,
+  others = [],
+  colorPalette,
+  showSeeAll = true,
 }: {
-  hero: {
-    title: string;
-    postedBy: string;
-    postedAt: string;
-    markdown: string;
-    fullLink: string;
-  };
-  others: { title: string; href: string }[];
+  hero: Announcement;
+  others: Announcement[];
+  colorPalette: string;
+  showSeeAll?: boolean;
 }) {
   return (
-    <Flex direction="column" gap={3} width="full">
-      {/* HERO ANNOUNCEMENT */}
-      <Card.Root
-        variant="info"
-        flexDirection="column"
-        overflow="hidden"
-        colorPalette="grey"
-        flex="2"
-      >
-        <Card.Body bg="blue.100" color="blue.fg">
-          <Card.Title>{hero.title}</Card.Title>
-          <Text fontSize="sm" mt={1}>
-            Posted by {hero.postedBy} · {hero.postedAt}
-          </Text>
-          <MarkdownProse content={hero.markdown} />
-          <Button mt="auto" mr="auto" asChild>
-            <Link href={hero.fullLink}>Read full article</Link>
-          </Button>
-        </Card.Body>
-      </Card.Root>
+    <Accordion.Root
+      variant="card"
+      defaultValue={[hero.id]}
+      colorPalette={colorPalette}
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+    >
+      <AnnouncementItem announcement={hero} />
 
-      {/* OTHER ANNOUNCEMENTS */}
-      <VStack align="start" gap={3}>
-        {others.map((a, i) => (
-          <Button
-            key={i}
-            asChild
-            variant="solid"
-            width="full"
-            justifyContent="flex-start"
-          >
-            <Link href={a.href}>{a.title}</Link>
-          </Button>
-        ))}
-        <Button
-          asChild
-          variant="solid"
-          width="full"
-          justifyContent="flex-start"
-        >
-          <Link href="#">See All Announcements</Link>
-        </Button>
-      </VStack>
-    </Flex>
+      {others.map((announcement) => (
+        <AnnouncementItem key={announcement.id} announcement={announcement} />
+      ))}
+
+      {showSeeAll && (
+        <Accordion.Item value="see-all" layerStyle="fill.subtle">
+          <Accordion.ItemTrigger textStyle="s1" asChild>
+            <ChakraLink href="/posts" color="currentColor">
+              <Accordion.ItemIndicator transition={undefined}>
+                <LuChevronsRight />
+              </Accordion.ItemIndicator>
+              See all announcements
+            </ChakraLink>
+          </Accordion.ItemTrigger>
+        </Accordion.Item>
+      )}
+    </Accordion.Root>
   );
 }

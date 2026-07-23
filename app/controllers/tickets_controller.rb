@@ -4,9 +4,13 @@ class TicketsController < ApplicationController
   include Rails::Pagination
 
   before_action :authenticate_user!
-  before_action -> { check_ticket_errors(TicketLog.action_types[:update_status]) }, only: [:update_status]
+  before_action :check_ticket_errors_join_as_bcc_stakeholder, only: [:join_as_bcc_stakeholder]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_warnings]) }, only: [:verify_warnings]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_scrambles]) }, only: [:merge_inbox_scrambles]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_newcomers]) }, only: [:verify_newcomers]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:create_wca_ids]) }, only: [:create_wca_ids]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:approve_edit_person_request]) }, only: [:approve_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons]
@@ -15,6 +19,13 @@ class TicketsController < ApplicationController
     createdAt:
       ->(ticket) { ticket.created_at },
   }.freeze
+
+  private def check_ticket_errors_join_as_bcc_stakeholder
+    @ticket = Ticket.find(params.require(:ticket_id))
+    @stakeholder_role = params.require(:stakeholder_role)
+
+    render status: :unauthorized unless @ticket.metadata.eligible_roles_for_bcc(current_user).include?(@stakeholder_role)
+  end
 
   private def check_ticket_errors(action_type, metadata_action = nil)
     @action_type = action_type
@@ -66,13 +77,14 @@ class TicketsController < ApplicationController
     respond_to do |format|
       format.html do
         @ticket_id = params.require(:id).to_i
+        @ticket = Ticket.find(@ticket_id)
         render :show
       end
       format.json do
         ticket = Ticket.find(params.require(:id))
 
-        # Currently only stakeholders can access the ticket.
-        return head :unauthorized unless ticket.can_user_access?(current_user)
+        # Only stakeholders can access the ticket.
+        return render json: { error: "No access to ticket" }, status: :unauthorized unless ticket.can_user_access?(current_user)
 
         render json: {
           ticket: ticket,
@@ -82,22 +94,12 @@ class TicketsController < ApplicationController
     end
   end
 
-  def update_status
-    ticket_status = params.require(:ticket_status)
+  def eligible_roles_for_bcc
+    ticket = Ticket.find(params.require(:ticket_id))
 
-    ActiveRecord::Base.transaction do
-      @ticket.metadata.update!(status: ticket_status)
-      ticket_log = @ticket.ticket_logs.create!(
-        action_type: @action_type,
-        acting_user_id: current_user.id,
-        acting_stakeholder_id: @acting_stakeholder.id,
-      )
-      ticket_log.ticket_log_changes.create!(
-        field_name: TicketLogChange.field_names[:status],
-        field_value: ticket_status,
-      )
-    end
-    render json: { success: true }
+    render json: {
+      eligible_roles_for_bcc: ticket.metadata.eligible_roles_for_bcc(current_user),
+    }
   end
 
   def edit_person_validators
@@ -145,11 +147,11 @@ class TicketsController < ApplicationController
     @user, @person = user_and_person_from_params
 
     if @user.present? && @person.present? && @person.user != @user
-      render status: :unprocessable_entity, json: {
+      render status: :unprocessable_content, json: {
         error: "Person and user not linked.",
       }
     elsif @user.nil? && @person.nil?
-      render status: :unprocessable_entity, json: {
+      render status: :unprocessable_content, json: {
         error: "User ID and WCA ID is not provided.",
       }
     end
@@ -179,7 +181,7 @@ class TicketsController < ApplicationController
 
   def anonymize
     if @user&.banned?
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "Error anonymizing: This person is currently banned and cannot be anonymized.",
       }
     end
@@ -207,6 +209,14 @@ class TicketsController < ApplicationController
     competition = Competition.find(params.require(:competition_id))
 
     render json: competition.inbox_results.includes(:inbox_person)
+  end
+
+  def imported_temporary_scrambles
+    competition = Competition.find(params.require(:competition_id))
+
+    render json: competition.matched_scrambles
+                            .includes(**MatchedScramble::POSTING_INCLUDES)
+                            .as_json(MatchedScramble::PREVIEW_SERIALIZE_OPTIONS)
   end
 
   def verify_warnings
@@ -237,6 +247,20 @@ class TicketsController < ApplicationController
     render status: :ok, json: { success: true }
   end
 
+  def merge_inbox_scrambles
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.merge_inbox_scrambles
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: { success: true }
+  end
+
   def inbox_person_summary
     ticket = Ticket.find(params.require(:ticket_id))
     competition = ticket.metadata.competition
@@ -244,8 +268,85 @@ class TicketsController < ApplicationController
     render status: :ok, json: {
       inbox_person_count: competition.inbox_persons.count,
       inbox_person_no_wca_id_count: competition.inbox_persons.where(wca_id: '').count,
-      result_no_wca_id_count: competition.results.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'").count,
+      result_no_wca_id_count: competition.results.select(:person_id).distinct.unmerged_newcomers.count,
     }
+  end
+
+  def verify_newcomers
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:newcomers_verified])
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: { success: true }
+  end
+
+  def create_wca_ids
+    person_wca_id_data = params.require(:unfinished_persons)
+    competition = @ticket.metadata.competition
+
+    request_registrant_ids = person_wca_id_data.pluck("personId")
+    existing_registrant_ids = competition.registrations.where(registrant_id: request_registrant_ids).pluck(:registrant_id).to_set
+    missing_registration_data = person_wca_id_data.find do |data|
+      existing_registrant_ids.exclude?(data["personId"].to_i)
+    end
+
+    if missing_registration_data
+      person_id = missing_registration_data["personId"]
+      return render status: :not_found, json: { error: "Registration with registrant ID #{person_id} not found for competition #{competition.id}" }
+    end
+
+    # Compute all WCA IDs beforehand to ensure they are valid.
+    wca_id_index = Person.pluck(:wca_id)
+    wca_ids_by_person = person_wca_id_data.index_by { |d| d["personId"] }.transform_values do |data|
+      new_wca_id, wca_id_index = FinishUnfinishedPersons.next_available_wca_id(data["editedSemiId"], wca_id_index)
+      new_wca_id
+    end
+
+    invalid_data = person_wca_id_data.find { |data| wca_ids_by_person[data["personId"]].nil? }
+    return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{invalid_data['editedSemiId']}" } if invalid_data
+
+    ActiveRecord::Base.transaction do
+      person_wca_id_data.each do |data|
+        person_id = data["personId"]
+        new_wca_id = wca_ids_by_person[person_id]
+
+        registration = competition.registrations.find_by(registrant_id: person_id)
+
+        FinishUnfinishedPersons.insert_person(
+          wca_id: new_wca_id,
+          name: registration.name,
+          country_id: registration.country.id,
+          gender: registration.gender,
+          dob: registration.dob,
+        )
+
+        FinishUnfinishedPersons.adapt_results(
+          person_id,
+          registration.name,
+          registration.country.id,
+          new_wca_id,
+          registration.name,
+          registration.country.id,
+          competition.id,
+        )
+      end
+
+      @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:created_wca_ids])
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: { success: true }
   end
 
   def delete_inbox_persons
@@ -265,7 +366,7 @@ class TicketsController < ApplicationController
     competition = ticket.metadata.competition
 
     error = CompetitionResultsImport.post_results_error(competition)
-    return render status: :unprocessable_entity, json: { error: error } if error
+    return render status: :unprocessable_content, json: { error: error } if error
 
     CompetitionResultsImport.post_results(competition, current_user)
 
@@ -288,6 +389,43 @@ class TicketsController < ApplicationController
     end
 
     render status: :ok, json: rounds_data
+  end
+
+  def approve_edit_person_request
+    change_type = params.require(:change_type)
+    person = @ticket.metadata.person
+    edit_params = @ticket.metadata.tickets_edit_person_fields.to_h do |edit_person_field|
+      # Temporary hack till we migrate to using country_iso2 everywhere
+      if edit_person_field.field_name == TicketsEditPersonField.field_names[:country_iso2]
+        [:country_id, Country.c_find_by_iso2(edit_person_field.new_value).id]
+      else
+        [edit_person_field.field_name.to_sym, edit_person_field.new_value]
+      end
+    end
+
+    ticket_status = TicketsEditPerson.statuses[:closed]
+
+    if @ticket.metadata.out_of_sync?
+      return render status: :unprocessable_content, json: {
+        error: "The person's data has changed since this request was created. Please sync the request before approving it.",
+      }
+    end
+
+    ActiveRecord::Base.transaction do
+      person.execute_edit_person_request(change_type, edit_params)
+      @ticket.metadata.update!(status: ticket_status)
+      ticket_log = @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+      ticket_log.ticket_log_changes.create!(
+        field_name: TicketLogChange.field_names[:status],
+        field_value: ticket_status,
+      )
+    end
+    render status: :ok, json: { success: true }
   end
 
   def reject_edit_person_request
@@ -315,7 +453,7 @@ class TicketsController < ApplicationController
     end
 
     unless any_request_still_valid
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "All requested changes have already been applied. If you think this is correct, please reject the request.",
       }
     end
@@ -337,5 +475,26 @@ class TicketsController < ApplicationController
     end
 
     render status: :ok, json: @ticket
+  end
+
+  def join_as_bcc_stakeholder
+    connection = params.require(:connection)
+    is_active = ActiveRecord::Type::Boolean.new.cast(params.require(:is_active))
+
+    ActiveRecord::Base.transaction do
+      new_stakeholder = @ticket.ticket_stakeholders.create!(
+        stakeholder: current_user,
+        connection: connection,
+        stakeholder_role: @stakeholder_role,
+        is_active: is_active,
+      )
+      @ticket.ticket_logs.create!(
+        action_type: TicketLog.action_types[:join_as_bcc_stakeholder],
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: new_stakeholder.id,
+      )
+    end
+
+    render status: :ok, json: { success: true }
   end
 end

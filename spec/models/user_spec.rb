@@ -194,6 +194,125 @@ RSpec.describe User do
     end
   end
 
+  describe "#assign_wca_id" do
+    let(:person) { create(:person) }
+    let(:user) { create(:user, name: person.name, dob: person.dob, country_iso2: person.country_iso2, gender: person.gender) }
+
+    it "assigns the WCA ID to the user" do
+      user.assign_wca_id(person.wca_id)
+      expect(user.wca_id).to eq person.wca_id
+    end
+
+    it "is a no-op when wca_id is blank" do
+      user.assign_wca_id("")
+      expect(user.wca_id).to be_nil
+    end
+
+    it "raises if the user already has a WCA ID" do
+      user_with_id = create(:user_with_wca_id)
+      expect { user_with_id.assign_wca_id(person.wca_id) }.to raise_error(RuntimeError, /already has WCA ID/)
+    end
+
+    it "clears potential duplicate persons for the user" do
+      job_run = DuplicateCheckerJobRun.create!(competition: create(:competition), run_status: :not_started)
+      PotentialDuplicatePerson.create!(duplicate_checker_job_run_id: job_run.id, original_user: user, duplicate_person: person, name_matching_algorithm: :jarowinkler, score: 90)
+
+      expect { user.assign_wca_id(person.wca_id) }
+        .to change { user.potential_duplicate_persons.count }.from(1).to(0)
+    end
+
+    it "updates corresponding result records for the user's registrations" do
+      comp = create(:competition, :past)
+      reg = create(:registration, :accepted, user: user, competition: comp)
+      result = create(:result, competition: comp, person_id: reg.registrant_id.to_s)
+
+      user.assign_wca_id(person.wca_id)
+
+      expect(result.reload.person_id).to eq person.wca_id
+    end
+
+    context "when other users have pending claims for the same WCA ID" do
+      let(:delegate_role) { create(:delegate_role) }
+      let!(:claimant1) do
+        create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      end
+      let!(:claimant2) do
+        create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      end
+
+      it "clears unconfirmed_wca_id and delegate fields on stale claimants" do
+        user.assign_wca_id(person.wca_id)
+
+        expect(claimant1.reload.unconfirmed_wca_id).to be_nil
+        expect(claimant1.delegate_id_to_handle_wca_id_claim).to be_nil
+        expect(claimant2.reload.unconfirmed_wca_id).to be_nil
+        expect(claimant2.delegate_id_to_handle_wca_id_claim).to be_nil
+      end
+
+      it "sends a cancellation email to each stale claimant" do
+        allow(WcaIdClaimMailer).to receive(:notify_user_of_claim_cancelled)
+          .with(claimant1, person.wca_id).and_return(double(deliver_later: nil))
+        allow(WcaIdClaimMailer).to receive(:notify_user_of_claim_cancelled)
+          .with(claimant2, person.wca_id).and_return(double(deliver_later: nil))
+
+        user.assign_wca_id(person.wca_id)
+      end
+    end
+
+    context "when the user itself has a pending claim for the same WCA ID" do
+      let(:delegate_role) { create(:delegate_role) }
+
+      before do
+        user.update!(unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      end
+
+      it "does not send a cancellation email to the user being assigned" do
+        expect(WcaIdClaimMailer).not_to receive(:notify_user_of_claim_cancelled).with(user, person.wca_id)
+        user.assign_wca_id(person.wca_id)
+      end
+
+      it "still assigns the WCA ID" do
+        user.assign_wca_id(person.wca_id)
+        expect(user.reload.wca_id).to eq person.wca_id
+      end
+    end
+  end
+
+  describe "clearing WCA claims via constant" do
+    let(:delegate_role) { create(:delegate_role) }
+    let(:person) { create(:person) }
+
+    it "clears unconfirmed_wca_id and delegate fields for all users in the relation" do
+      user1 = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      user2 = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+
+      User.where(id: [user1.id, user2.id]).update_all(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+      expect(user1.reload.unconfirmed_wca_id).to be_nil
+      expect(user1.delegate_id_to_handle_wca_id_claim).to be_nil
+      expect(user2.reload.unconfirmed_wca_id).to be_nil
+      expect(user2.delegate_id_to_handle_wca_id_claim).to be_nil
+    end
+
+    it "clears unconfirmed_wca_id and delegate_id_to_handle_wca_id_claim on the user" do
+      user = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+
+      user.update_columns(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+      expect(user.reload.unconfirmed_wca_id).to be_nil
+      expect(user.delegate_id_to_handle_wca_id_claim).to be_nil
+    end
+
+    it "does not affect other fields on the user" do
+      user = create(:user, unconfirmed_wca_id: person.wca_id, delegate_id_to_handle_wca_id_claim: delegate_role.user.id, dob_verification: person.dob.to_s)
+      original_name = user.name
+
+      user.update_columns(**User::CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
+
+      expect(user.reload.name).to eq original_name
+    end
+  end
+
   it "can create user with empty password" do
     create(:user, encrypted_password: "")
   end
@@ -511,6 +630,14 @@ RSpec.describe User do
       expect(board_member.can_view_all_users?).to be true
     end
 
+    it "returns true for higher permission officer" do
+      executive_director = create(:executive_director_role).user
+      expect(executive_director.can_view_all_users?).to be true
+
+      chief_operating_officer = create(:chief_operating_officer_role).user
+      expect(chief_operating_officer.can_view_all_users?).to be true
+    end
+
     it "returns false for normal user" do
       normal_user = create(:user)
       expect(normal_user.can_view_all_users?).to be false
@@ -523,6 +650,14 @@ RSpec.describe User do
     it "returns true for board" do
       board_member = create(:user, :board_member)
       expect(board_member.can_edit_user?(user)).to be true
+    end
+
+    it "returns true for higher permission officer" do
+      executive_director = create(:executive_director_role).user
+      expect(executive_director.can_edit_user?(user)).to be true
+
+      chief_operating_officer = create(:chief_operating_officer_role).user
+      expect(chief_operating_officer.can_edit_user?(user)).to be true
     end
 
     it "returns false for normal user" do
@@ -695,12 +830,14 @@ RSpec.describe User do
 
     it "returns true for Officer roles" do
       executive_director = create(:executive_director_role)
+      chief_operating_officer = create(:chief_operating_officer_role)
       chair = create(:chair_role)
       vice_chair = create(:vice_chair_role)
       secretary = create(:secretary_role)
       treasurer = create(:treasurer_role)
 
       expect(executive_director.user.staff?).to be true
+      expect(chief_operating_officer.user.staff?).to be true
       expect(chair.user.staff?).to be true
       expect(vice_chair.user.staff?).to be true
       expect(secretary.user.staff?).to be true
@@ -781,32 +918,45 @@ RSpec.describe User do
   end
 
   describe '#can_check_newcomers_data?' do
-    it "returns true for WRT if competition is in future" do
+    let(:competition_delegate) { create(:delegate) }
+    let(:competition) { create(:competition, :announced, starts: 1.month.from_now, delegates: [competition_delegate]) }
+
+    it "returns true for WRT" do
       wrt_user = create(:user, :wrt_member)
-      competition = create(:competition, starts: 1.month.from_now)
 
       expect(wrt_user.can_check_newcomers_data?(competition)).to be true
     end
 
-    it "returns false for WRT if competition is in past" do
-      wrt_user = create(:user, :wrt_member)
-      competition = create(:competition, starts: 1.month.ago)
+    it "returns true for competition delegate" do
+      expect(competition_delegate.can_check_newcomers_data?(competition)).to be true
+    end
 
-      expect(wrt_user.can_check_newcomers_data?(competition)).to be false
+    it "returns true for competition organizer who is also a delegate" do
+      organizer_delegate = create(:delegate)
+      competition.organizers << organizer_delegate
+      competition.delegates << organizer_delegate
+
+      expect(organizer_delegate.can_check_newcomers_data?(competition)).to be true
+    end
+
+    it "returns false for competition organizer who is not a delegate" do
+      organizer = create(:user)
+      competition.organizers << organizer
+
+      expect(organizer.can_check_newcomers_data?(competition)).to be false
+    end
+
+    it "returns false for delegate of another competition" do
+      other_delegate = create(:delegate)
+      create(:competition, :announced, starts: 1.month.from_now, delegates: [other_delegate])
+
+      expect(other_delegate.can_check_newcomers_data?(competition)).to be false
     end
 
     it "returns false for non-WRT user" do
       user = create(:user)
-      competition = create(:competition, starts: 1.month.from_now)
 
       expect(user.can_check_newcomers_data?(competition)).to be false
-    end
-
-    it "returns false for WRT if competition is happening now" do
-      wrt_user = create(:user, :wrt_member)
-      competition = create(:competition, starts: Time.current, ends: 1.hour.from_now)
-
-      expect(wrt_user.can_check_newcomers_data?(competition)).to be false
     end
   end
 
@@ -896,6 +1046,136 @@ RSpec.describe User do
 
     it "returns false for trainee Delegate" do
       expect(trainee_delegate.can_submit_competition_results?(competition)).to be false
+    end
+  end
+
+  describe '#my_competitions', :clean_db_with_truncation do
+    let(:delegate) { create(:delegate) }
+    let(:organizer) { create(:user) }
+    let!(:future_competition1) { create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition2) { create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition3) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:future_competition4) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition1) { create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition2) { create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w[222 333])) }
+    let(:registered_user) { create(:user, name: "Jan-Ove Waldner") }
+    let!(:registration1) { create(:registration, :accepted, competition: future_competition1, user: registered_user) }
+    let!(:registration2) { create(:registration, :accepted, competition: future_competition3, user: registered_user) }
+    let!(:registration3) { create(:registration, :accepted, competition: past_competition1, user: registered_user) }
+    let!(:registration4) { create(:registration, :accepted, competition: past_competition3, user: organizer) }
+    let!(:registration5) { create(:registration, :accepted, competition: future_competition3, user: delegate) }
+    let!(:results_person) { create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
+    let!(:results_user) { create(:user, name: "Jeff Plumb", wca_id: "2014PLUM01") }
+    let!(:result) { create(:result, person: results_person, competition: past_competition1) }
+
+    context 'for a user with results for a comp they did not register for' do
+      it 'shows my upcoming and past competitions' do
+        grouped_competitions, = results_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq []
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+    end
+
+    context 'for a regular user' do
+      it 'shows my upcoming and past competitions' do
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'does not show past competitions they have a rejected registration for' do
+        create(:registration, :rejected, competition: past_competition2, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'does not show upcoming competitions they have a rejected registration for' do
+        create(:registration, :cancelled, competition: future_competition2, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'shows upcoming competition they have a pending registration for' do
+        create(:registration, :pending, competition: future_competition2, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition2, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'does not show past competitions they have a pending registration for' do
+        create(:registration, :pending, competition: past_competition2, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'does not show past competitions with results uploaded they have an accepted registration but not results for' do
+        create(:registration, :accepted, competition: past_competition4, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+
+      it 'shows upcoming competitions they have bookmarked' do
+        BookmarkedCompetition.create(competition: future_competition2, user: registered_user)
+        BookmarkedCompetition.create(competition: future_competition4, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:bookmarked]).to eq [future_competition4, future_competition2]
+      end
+
+      it 'does not show past competitions they have bookmarked' do
+        BookmarkedCompetition.create(competition: past_competition1, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:bookmarked]).to eq []
+      end
+
+      it 'does not list cancelled competitions under the past section' do
+        cancelled_competition = create(:competition, :cancelled, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333]))
+        create(:registration, :accepted, competition: cancelled_competition, user: registered_user)
+
+        grouped_competitions, = registered_user.my_competitions
+
+        expect(grouped_competitions[:past]).to eq [past_competition1]
+      end
+    end
+
+    context 'for an organizer' do
+      it 'shows my upcoming and past competitions' do
+        grouped_competitions, = organizer.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [future_competition1, future_competition2, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition1, past_competition3]
+      end
+    end
+
+    context 'for a Delegate' do
+      it 'shows my upcoming and past competitions' do
+        grouped_competitions, = delegate.my_competitions
+
+        expect(grouped_competitions[:future]).to eq [unscheduled_competition1, future_competition1, future_competition3]
+        expect(grouped_competitions[:past]).to eq [past_competition2, past_competition3, past_competition4]
+      end
     end
   end
 end

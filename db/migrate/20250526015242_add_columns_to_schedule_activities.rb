@@ -10,13 +10,13 @@ class AddColumnsToScheduleActivities < ActiveRecord::Migration[7.2]
 
     reversible do |direction|
       direction.up do
-        execute <<-SQL.squish
+        execute <<~SQL.squish
           UPDATE schedule_activities
           SET venue_room_id = holder_id
           WHERE holder_type = 'VenueRoom'
         SQL
 
-        execute <<-SQL.squish
+        execute <<~SQL.squish
           UPDATE schedule_activities
           SET parent_activity_id = holder_id
           WHERE holder_type = 'ScheduleActivity'

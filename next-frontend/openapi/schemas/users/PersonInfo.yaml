@@ -6,6 +6,7 @@ required:
   - personal_records
   - championship_podiums
   - competition_count
+  - total_solves
 properties:
   person:
     $ref: './Person.yaml'
@@ -49,4 +50,6 @@ properties:
         items:
           type: object
   competition_count:
+    type: integer
+  total_solves:
     type: integer

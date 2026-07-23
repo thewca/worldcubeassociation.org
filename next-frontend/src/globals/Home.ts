@@ -1,147 +1,8 @@
-import { Block, CheckboxField, GlobalConfig, SelectField } from "payload";
-import { markdownConvertedField } from "@/collections/helpers";
-
-const colorPaletteSelect: SelectField = {
-  name: "colorPalette",
-  type: "select",
-  required: true,
-  interfaceName: "ColorPaletteSelect",
-  options: ["blue", "red", "green", "orange", "yellow", "grey"],
-};
-
-const colorPaletteToneToggle: CheckboxField = {
-  name: "colorPaletteDarker",
-  type: "checkbox",
-  admin: {
-    description: "Use a slightly darker nuance of the color palette",
-  },
-};
-
-const TextCard: Block = {
-  slug: "TextCard",
-  interfaceName: "TextCardBlock",
-  imageURL: "/payload/text_card.png",
-  fields: [
-    {
-      name: "heading",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "body",
-      type: "richText",
-      required: true,
-    },
-    markdownConvertedField("body"),
-    {
-      name: "variant",
-      type: "select",
-      options: ["info", "hero"],
-      defaultValue: "info",
-      required: true,
-    },
-    {
-      name: "separatorAfterHeading",
-      type: "checkbox",
-      required: true,
-      defaultValue: false,
-    },
-    {
-      name: "buttonText",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "buttonLink",
-      type: "text",
-      required: false,
-    },
-    {
-      name: "headerImage",
-      type: "upload",
-      relationTo: "media",
-    },
-    colorPaletteSelect,
-  ],
-};
-
-const ImageBanner: Block = {
-  slug: "ImageBanner",
-  interfaceName: "ImageBannerBlock",
-  imageURL: "/payload/image_banner.png",
-  fields: [
-    {
-      name: "heading",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "body",
-      type: "richText",
-      required: true,
-    },
-    markdownConvertedField("body"),
-    {
-      name: "mainImage",
-      type: "upload",
-      relationTo: "media",
-      required: true,
-    },
-    colorPaletteSelect,
-    colorPaletteToneToggle,
-    {
-      ...colorPaletteSelect,
-      name: "headingColor",
-      required: false,
-      admin: {
-        description:
-          "Color for the heading. Will follow the overall color palette by default, only use this field if you want to purposely override (for example, to achieve a more striking contrast that garners attention)",
-      },
-    },
-    {
-      name: "bgImage",
-      type: "upload",
-      relationTo: "media",
-    },
-    {
-      name: "bgSize",
-      type: "number",
-      min: 10,
-      max: 100,
-      defaultValue: 100,
-      required: true,
-      admin: {
-        description: "The size of the background image in percent (%)",
-      },
-    },
-    {
-      name: "bgPos",
-      type: "select",
-      options: ["right", "left"],
-      defaultValue: "right",
-      required: true,
-    },
-  ],
-};
-
-const ImageOnlyCard: Block = {
-  slug: "ImageOnlyCard",
-  interfaceName: "ImageOnlyCardBlock",
-  imageURL: "/payload/image_only_card.png",
-  fields: [
-    {
-      name: "mainImage",
-      type: "upload",
-      relationTo: "media",
-      required: true,
-    },
-    {
-      name: "heading",
-      type: "text",
-    },
-    colorPaletteSelect,
-  ],
-};
+import { Block, GlobalConfig } from "payload";
+import { colorPaletteSelect } from "@/blocks/utils";
+import { TextCardBlock } from "@/blocks/text/textCard";
+import { BannerImageBlock } from "@/blocks/image/bannerImage";
+import { ImageCardBlock } from "@/blocks/image/imageCard";
 
 const FeaturedCompetitions: Block = {
   slug: "FeaturedComps", // intentionally short to avoid Payload internally assigning a long table name
@@ -180,6 +41,12 @@ const AnnouncementsSection: Block = {
       relationTo: "announcements",
       hasMany: true,
     },
+    {
+      name: "showSeeAll",
+      type: "checkbox",
+      required: true,
+      defaultValue: true,
+    },
     colorPaletteSelect,
   ],
 };
@@ -212,141 +79,105 @@ const TestimonialsSpinner: Block = {
 };
 
 const coreBlocks = [
-  TextCard,
+  TextCardBlock,
   AnnouncementsSection,
-  ImageBanner,
-  ImageOnlyCard,
+  BannerImageBlock,
+  ImageCardBlock,
   TestimonialsSpinner,
   FeaturedCompetitions,
 ];
 
-const twoBlocksLeaf: Block = {
-  slug: "twoBlocksLeaf",
-  interfaceName: "TwoBlocksLeafBlock",
-  fields: [
-    {
-      name: "type",
-      type: "select",
-      required: true,
-      options: [
-        "1/3 & 2/3",
-        "2/3 & 1/3",
-        "1/2 & 1/2",
-        "1/4 & 3/4",
-        "3/4 & 1/4",
-      ],
-    },
-    {
-      name: "alignment",
-      type: "select",
-      required: true,
-      options: ["horizontal", "vertical"],
-    },
-    {
-      name: "blocks",
-      type: "blocks",
-      blocks: coreBlocks,
-      required: true,
-      minRows: 2,
-      maxRows: 2,
-    },
-  ],
-};
+const createTwoBlocks = (depth: number = 1): Block => {
+  const allowedBlocks =
+    depth === 0 ? coreBlocks : [...coreBlocks, createTwoBlocks(depth - 1)];
 
-const twoBlocksBranch: Block = {
-  slug: "twoBlocksBranch",
-  interfaceName: "TwoBlocksBranchBlock",
-  fields: [
-    {
-      name: "type",
-      type: "select",
-      required: true,
-      options: [
-        "1/3 & 2/3",
-        "2/3 & 1/3",
-        "1/2 & 1/2",
-        "1/4 & 3/4",
-        "3/4 & 1/4",
-      ],
+  return {
+    slug: `twoBlocksLevel${depth}`,
+    interfaceName: `TwoBlocksLevel${depth}Block`,
+    labels: {
+      singular: "Horizontal Splitter",
+      plural: "Horizontal Splitters",
     },
-    {
-      name: "alignment",
-      type: "select",
-      required: true,
-      options: ["horizontal", "vertical"],
-    },
-    {
-      name: "blocks",
-      type: "blocks",
-      blocks: [...coreBlocks, twoBlocksLeaf],
-      required: true,
-      minRows: 2,
-      maxRows: 2,
-    },
-  ],
-};
-
-const twoBlocks: Block = {
-  slug: "twoBlocks",
-  interfaceName: "TwoBlocksBlock",
-  fields: [
-    {
-      name: "type",
-      type: "select",
-      required: true,
-      options: [
-        "1/3 & 2/3",
-        "2/3 & 1/3",
-        "1/2 & 1/2",
-        "1/4 & 3/4",
-        "3/4 & 1/4",
-      ],
-    },
-    {
-      name: "alignment",
-      type: "select",
-      required: true,
-      options: ["horizontal", "vertical"],
-    },
-    {
-      name: "blocks",
-      type: "blocks",
-      blocks: [...coreBlocks, twoBlocksBranch],
-      required: true,
-      minRows: 2,
-      maxRows: 2,
-    },
-  ],
-};
-
-const fullWidth: Block = {
-  slug: "fullWidth",
-  interfaceName: "FullWidthBlock",
-  fields: [
-    {
-      name: "blocks",
-      type: "blocks",
-      blocks: coreBlocks,
-      required: true,
-      maxRows: 1,
-    },
-  ],
+    fields: [
+      {
+        name: "ratio",
+        type: "select",
+        required: true,
+        defaultValue: "1/2 & 1/2",
+        options: [
+          "1/3 & 2/3",
+          "2/3 & 1/3",
+          "1/2 & 1/2",
+          "1/4 & 3/4",
+          "3/4 & 1/4",
+        ],
+      },
+      {
+        type: "row",
+        fields: [
+          {
+            name: "left",
+            type: "blocks",
+            blocks: allowedBlocks,
+            required: true,
+            minRows: 1,
+          },
+          {
+            name: "right",
+            type: "blocks",
+            blocks: allowedBlocks,
+            required: true,
+            minRows: 1,
+          },
+        ],
+      },
+      {
+        type: "select",
+        name: "growthStrategy",
+        interfaceName: "GrowthStrategy",
+        options: [
+          {
+            label: "Grow the height of the bento boxes to fill space",
+            value: "grow",
+          },
+          {
+            label:
+              "Redistribute vertical space between the bento boxes (may introduce gaps)",
+            value: "justify",
+          },
+        ],
+      },
+    ],
+  };
 };
 
 export const Home: GlobalConfig = {
   slug: "home",
   fields: [
     {
-      name: "item",
+      name: "layout",
       type: "blocks",
-      blocks: [twoBlocks, fullWidth],
+      blocks: [...coreBlocks, createTwoBlocks(2)],
       required: true,
-      minRows: 1,
     },
   ],
+  versions: {
+    drafts: {
+      autosave: true,
+    },
+    max: 5,
+  },
   admin: {
     livePreview: {
       url: "/",
+    },
+    preview: () => {
+      const encodedParams = new URLSearchParams({
+        path: "/",
+        previewSecret: process.env.PREVIEW_SECRET!,
+      });
+
+      return `/api/payload/draft?${encodedParams.toString()}`;
     },
   },
 };

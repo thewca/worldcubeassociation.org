@@ -1,20 +1,24 @@
+import React, { ComponentPropsWithoutRef } from "react";
 import { Text } from "@chakra-ui/react";
 import WCACountries from "@/lib/wca/data/countries";
 import { TFunction } from "i18next";
 
+type TextProps = ComponentPropsWithoutRef<typeof Text>;
+
 type CountryMapProps = {
   code: string;
   t: TFunction;
-  bold?: boolean;
-};
+} & TextProps;
 
-const CountryMap = ({ code, t, bold = false }: CountryMapProps) => {
+const CountryMap = ({ code, t, ...textProps }: CountryMapProps) => {
   const translatedCountryName = t(`countries.${code}`);
+
   const countryName =
     translatedCountryName ||
     WCACountries.byIso2[code.toUpperCase()].id ||
     "Unknown";
-  return <Text fontWeight={bold ? "bold" : "normal"}>{countryName}</Text>;
+
+  return <Text {...textProps}>{countryName}</Text>;
 };
 
 export default CountryMap;

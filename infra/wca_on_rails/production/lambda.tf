@@ -3,7 +3,7 @@ resource "aws_lambda_function" "registration_status_lambda" {
   function_name    = "${var.name_prefix}-poller-lambda"
   role             = aws_iam_role.lambda_role.arn
   handler          = "processing_status.lambda_handler"
-  runtime          = "ruby3.3"
+  runtime          = "ruby3.4"
   source_code_hash = filebase64sha256("./lambda/processing_status.zip")
   vpc_config {
     security_group_ids = [var.shared.cluster_security.id]

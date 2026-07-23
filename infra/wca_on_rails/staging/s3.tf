@@ -17,3 +17,17 @@ resource "aws_s3_bucket" "avatars_private" {
     "Name" = "wca-avatar-private-staging"
   }
 }
+
+resource "aws_s3_bucket" "next-media" {
+  bucket = "wca-nextjs-media-prod"
+  tags = {
+    "Name" = "wca-nextjs-media-prod"
+  }
+}
+
+resource "aws_s3_bucket" "assets" {
+  bucket = "assets-staging.worldcubeassociation.org"
+  tags = {
+    "Name" = "assets-staging.worldcubeassociation.org"
+  }
+}

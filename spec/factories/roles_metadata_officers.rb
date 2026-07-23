@@ -2,6 +2,10 @@
 
 FactoryBot.define do
   factory :roles_metadata_officers do
+    factory :chief_operating_officer_role_metadata do
+      status { RolesMetadataOfficers.statuses[:chief_operating_officer] }
+    end
+
     factory :executive_director_role_metadata do
       status { RolesMetadataOfficers.statuses[:executive_director] }
     end

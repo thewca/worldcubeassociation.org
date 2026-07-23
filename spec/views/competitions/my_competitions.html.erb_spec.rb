@@ -10,10 +10,8 @@ RSpec.describe "competitions/my_competitions" do
 
   before do
     allow(view).to receive(:current_user) { registration.user }
-    assign(:not_past_competitions, [competition])
-    assign(:past_competitions, [])
-    assign(:registered_for_by_competition_id, competition.id => registration)
-    assign(:bookmarked_competitions, [competition2, competition3])
+    assign(:my_competitions, { past: [], future: [competition], bookmarked: [competition2, competition3] })
+    assign(:my_registrations, competition.id => registration)
   end
 
   it "shows upcoming competitions" do

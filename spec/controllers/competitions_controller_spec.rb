@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { create(:competition, :with_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
+  let(:competition) { create(:competition, :with_lead_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #show' do
@@ -100,7 +100,7 @@ RSpec.describe CompetitionsController do
     let!(:my_competition) { create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
     let!(:other_competition) do
       create(
-        :competition, :with_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
+        :competition, :with_lead_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
       )
     end
 
@@ -281,7 +281,7 @@ RSpec.describe CompetitionsController do
       it 'saves staff_delegate_ids' do
         staff_delegates = create_list(:delegate, 2)
         staff_delegate_ids = staff_delegates.map(&:id)
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: staff_delegate_ids })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: staff_delegate_ids, leadDelegateId: staff_delegates.first.id })
         patch :update, params: update_params, as: :json
         expect(competition.reload.delegates).to eq staff_delegates
       end
@@ -352,7 +352,7 @@ RSpec.describe CompetitionsController do
 
       it 'can change the delegate' do
         new_delegate = create(:delegate)
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [new_delegate.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [new_delegate.id], leadDelegateId: new_delegate.id })
         post :update, params: update_params, as: :json
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
@@ -371,7 +371,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [organizer.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], leadDelegateId: nil, organizerIds: [organizer.id] })
         patch :update, params: update_params, as: :json
         expect(response).to be_successful
         expect(competition.reload.delegates).to eq []
@@ -429,7 +429,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [] }, userSettings: { receiveRegistrationEmails: true })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], leadDelegateId: nil, organizerIds: [] }, userSettings: { receiveRegistrationEmails: true })
         patch :update, params: update_params, as: :json
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []
@@ -517,12 +517,14 @@ RSpec.describe CompetitionsController do
           number: 1,
           advancement_condition: AdvancementConditions::RankingCondition.new(4),
           total_number_of_rounds: 2,
+          participation_source: competition.competition_events[0],
         )
         round_two = competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 2,
           total_number_of_rounds: 2,
           scramble_set_count: 1,
+          participation_source: round_one,
         )
         start_time = Time.zone.local_to_utc(competition.start_time)
         end_time = start_time
@@ -550,16 +552,18 @@ RSpec.describe CompetitionsController do
 
       it "cannot confirm a competition that is not having advancement conditions" do
         competition.competition_events[0].rounds.destroy_all!
-        competition.competition_events[0].rounds.create!(
+        round_one = competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 1,
           total_number_of_rounds: 2,
+          participation_source: competition.competition_events[0],
         )
         competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 2,
           total_number_of_rounds: 2,
           scramble_set_count: 1,
+          participation_source: round_one,
         )
         put :confirm, params: { competition_id: competition }
         expect(competition.reload.confirmed?).to be false
@@ -1047,129 +1051,12 @@ RSpec.describe CompetitionsController do
   end
 
   describe 'GET #my_competitions', :clean_db_with_truncation do
-    let(:delegate) { create(:delegate) }
-    let(:organizer) { create(:user) }
-    let!(:future_competition1) { create(:competition, :registration_open, starts: 5.weeks.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let!(:future_competition2) { create(:competition, :registration_open, starts: 4.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
-    let!(:future_competition3) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [organizer], events: Event.where(id: %w[222 333])) }
-    let!(:future_competition4) { create(:competition, :registration_open, starts: 3.weeks.from_now, organizers: [], events: Event.where(id: %w[222 333])) }
-    let!(:past_competition1) { create(:competition, starts: 1.month.ago, organizers: [organizer], events: Event.where(id: %w[222 333])) }
-    let!(:past_competition2) { create(:competition, starts: 2.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let!(:past_competition3) { create(:competition, starts: 3.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let!(:past_competition4) { create(:competition, :results_posted, starts: 4.months.ago, delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let!(:unscheduled_competition1) { create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w[222 333])) }
-    let(:registered_user) { create(:user, name: "Jan-Ove Waldner") }
-    let!(:registration1) { create(:registration, :accepted, competition: future_competition1, user: registered_user) }
-    let!(:registration2) { create(:registration, :accepted, competition: future_competition3, user: registered_user) }
-    let!(:registration3) { create(:registration, :accepted, competition: past_competition1, user: registered_user) }
-    let!(:registration4) { create(:registration, :accepted, competition: past_competition3, user: organizer) }
-    let!(:registration5) { create(:registration, :accepted, competition: future_competition3, user: delegate) }
-    let!(:results_person) { create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
-    let!(:results_user) { create(:user, name: "Jeff Plumb", wca_id: "2014PLUM01") }
-    let!(:result) { create(:result, person: results_person, competition_id: past_competition1.id) }
-
     context 'when not signed in' do
       sign_out
 
       it 'redirects to the sign in page' do
         get :my_competitions
         expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'when signed in as user with results for a comp they did not register for' do
-      before do
-        sign_in results_user
-      end
-
-      it 'shows my upcoming and past competitions' do
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq []
-        expect(assigns(:past_competitions)).to eq [past_competition1]
-      end
-    end
-
-    context 'when signed in as a regular user' do
-      before do
-        sign_in registered_user
-      end
-
-      it 'shows my upcoming and past competitions' do
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
-      end
-
-      it 'does not show past competitions they have a rejected registration for' do
-        create(:registration, :rejected, competition: past_competition2, user: registered_user)
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
-      end
-
-      it 'does not show upcoming competitions they have a rejected registration for' do
-        create(:registration, :cancelled, competition: future_competition2, user: registered_user)
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
-      end
-
-      it 'shows upcoming competition they have a pending registration for' do
-        create(:registration, :pending, competition: future_competition2, user: registered_user)
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition2, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
-      end
-
-      it 'does not show past competitions they have a pending registration for' do
-        create(:registration, :pending, competition: past_competition2, user: registered_user)
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
-      end
-
-      it 'does not show past competitions with results uploaded they have an accepted registration but not results for' do
-        create(:registration, :accepted, competition: past_competition4, user: registered_user)
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1]
-      end
-
-      it 'shows upcoming competitions they have bookmarked' do
-        BookmarkedCompetition.create(competition: future_competition2, user: registered_user)
-        BookmarkedCompetition.create(competition: future_competition4, user: registered_user)
-        get :my_competitions
-        expect(assigns(:bookmarked_competitions)).to eq [future_competition4, future_competition2]
-      end
-
-      it 'does not show past competitions they have bookmarked' do
-        BookmarkedCompetition.create(competition: past_competition1, user: registered_user)
-        get :my_competitions
-        expect(assigns(:bookmarked_competitions)).to eq []
-      end
-    end
-
-    context 'when signed in as an organizer' do
-      before do
-        sign_in organizer
-      end
-
-      it 'shows my upcoming and past competitions' do
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [future_competition1, future_competition2, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition1, past_competition3]
-      end
-    end
-
-    context 'when signed in as a delegate' do
-      before do
-        sign_in delegate
-      end
-
-      it 'shows my upcoming and past competitions' do
-        get :my_competitions
-        expect(assigns(:not_past_competitions)).to eq [unscheduled_competition1, future_competition1, future_competition3]
-        expect(assigns(:past_competitions)).to eq [past_competition2, past_competition3, past_competition4]
       end
     end
   end
@@ -1310,6 +1197,36 @@ RSpec.describe CompetitionsController do
         get :edit_schedule, params: { id: competition }
         expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
+      end
+
+      context 'when results are submitted' do
+        before do
+          competition.update!(results_submitted_at: Time.now)
+        end
+
+        it 'redirects with an error message' do
+          get :edit_schedule, params: { id: competition }
+          expect(response).to redirect_to competition_path(competition)
+          expect(flash[:danger]).to eq "The schedule cannot be edited after results have been submitted."
+        end
+      end
+    end
+
+    context 'when signed in as a competition admin' do
+      before do
+        sign_in create(:admin)
+      end
+
+      context 'when results are submitted' do
+        before do
+          competition.update!(results_submitted_at: Time.now)
+        end
+
+        it 'allows access to the page' do
+          get :edit_schedule, params: { id: competition }
+          expect(response).to have_http_status :ok
+          expect(assigns(:competition)).to eq competition
+        end
       end
     end
   end

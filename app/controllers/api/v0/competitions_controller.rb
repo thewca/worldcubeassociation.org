@@ -17,6 +17,19 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     paginate json: competitions
   end
 
+  def mine
+    grouped_competitions, registration_statuses = require_user!.my_competitions
+
+    serial_competitions = grouped_competitions
+                          .transform_keys { :"#{it}_competitions" }
+                          .transform_values { it.as_json(User::MY_COMPETITIONS_SERIALIZATION_HASH) }
+
+    render json: {
+      **serial_competitions,
+      registrations_by_competition: registration_statuses,
+    }
+  end
+
   def competition_index
     admin_mode = current_user&.can_see_admin_competitions?
 
@@ -29,7 +42,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     serial_includes = {}
 
     serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode
-    serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user] if admin_mode
+    serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user lead_delegate_id] if admin_mode
 
     paginate json: competitions,
              only: %w[id name start_date end_date registration_open registration_close venue competitor_limit main_event_id],
@@ -38,7 +51,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def show
-    competition = competition_from_params
+    competition = competition_from_params(associations: Competition::INFO_SERIALIZATION_INCLUDES)
 
     render json: competition.to_competition_info if stale?(competition)
   end
@@ -61,7 +74,12 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def results
     competition = competition_from_params
-    render json: competition.results
+    render json: competition.results.includes(:result_attempts)
+  end
+
+  def tabs
+    competition = competition_from_params
+    render json: competition.tabs
   end
 
   def podiums
@@ -73,20 +91,18 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_results
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
-    results_by_round = competition.results
-                                  .where(event_id: event.id)
-                                  .group_by(&:round_type)
-                                  .sort_by { |round_type, _| -round_type.rank }
-    rounds = results_by_round.map do |round_type, results|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
-      {
-        id: round&.id,
-        roundTypeId: round_type.id,
-        results: results.sort_by { |r| [r.pos, r.person_name] },
-      }
+    rounds = competition.rounds
+                        .includes(:results)
+                        .where(competition_events: { event: event })
+                        .except(:order)
+                        .order(number: :desc)
+                        .map do |round|
+                          {
+                            id: round.id,
+                            roundTypeId: round.round_type_id,
+                            isH2hMock: round.is_h2h_mock?,
+                            results: round.results.sort_by { |r| [r.pos, r.person_name] },
+                          }
     end
     render json: {
       id: event.id,
@@ -102,20 +118,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def event_scrambles
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
-    scrambles_by_round = competition.scrambles
-                                    .where(event_id: event.id)
-                                    .group_by(&:round_type)
-                                    .sort_by { |round_type, _| -round_type.rank }
-    rounds = scrambles_by_round.map do |round_type, scrambles|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
-      {
-        id: round&.id,
-        roundTypeId: round_type.id,
-        scrambles: scrambles,
-      }
+    rounds = competition.rounds
+                        .includes(:scrambles)
+                        .where(competition_events: { event: event })
+                        .except(:order)
+                        .order(number: :desc)
+                        .map do |round|
+                          {
+                            id: round.id,
+                            roundTypeId: round.round_type_id,
+                            scrambles: round.scrambles,
+                          }
     end
     render json: {
       id: event.id,
@@ -153,31 +166,137 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: data
   end
 
-  def show_wcif
-    competition = competition_from_params
-    require_can_manage!(competition)
+  WCIF_CACHE_MAX_AGE = 5.minutes
 
-    render json: competition.to_wcif(authorized: true)
+  private def render_wcif(competition, version, force_public: false)
+    if can_manage?(competition) && !force_public
+      # authorized access always gets a "fresh" WCIF,
+      #   because it might be relevant for syncing
+      return render json: competition.to_wcif(authorized: true, version: version)
+    end
+
+    # In the context of WCIF, "unauthorized" means "public",
+    #   that is you can still see the WCIF but only without sensitive information like DOB.
+    # As this is the far more common use-case, we cache the public version for up to 5 minutes
+    #   to reduce traffic and counteract scraping.
+    return unless stale?(
+      etag: [competition, version],
+      last_modified: competition.updated_at,
+      public: true,
+      cache_control: { max_age: WCIF_CACHE_MAX_AGE },
+    )
+
+    cache_key = "wcif/#{competition.id}/#{version}"
+    render json: Rails.cache.fetch(cache_key, expires_in: WCIF_CACHE_MAX_AGE) { competition.to_wcif(authorized: false, version: version) }
   end
 
-  def show_wcif_public
-    id = params[:competition_id] || params[:id]
-    cache_key = "wcif/#{id}"
+  def show_wcif
     competition = competition_from_params
-    expires_in 5.minutes, public: true
-    return unless stale?(competition, public: true)
 
-    render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
-      competition.to_wcif
-    }
+    render_wcif(competition, Competition::WCIF_STABLE_VERSION)
+  end
+
+  def show_wcif_by_lifecycle
+    competition = competition_from_params
+
+    lifecycle_raw = params.require(:lifecycle_name)
+    force_public = lifecycle_raw == 'public'
+
+    lifecycle_name = lifecycle_raw
+                     # backwards compatibility with legacy /wcif/public route
+                     .gsub('public', 'stable')
+                     .to_sym
+
+    unless Competition::WCIF_VERSION_CATALOGUE.key?(lifecycle_name)
+      return render json: {
+        message: "invalid lifecycle name '#{lifecycle_name}'",
+        valid_lifecycle_names: Competition::WCIF_VERSION_CATALOGUE.keys,
+      }, status: :bad_request
+    end
+
+    lifecycle_version = Competition::WCIF_VERSION_CATALOGUE.fetch(lifecycle_name)
+
+    render_wcif(competition, lifecycle_version, force_public: force_public)
+  end
+
+  def show_wcif_by_version
+    competition = competition_from_params
+
+    version_number = params.require(:version_number)
+    user_version = Gem::Version.new(version_number)
+
+    available_versions = Competition::WCIF_VERSION_CATALOGUE.values
+                                                            .map { Gem::Version.new(it) }
+
+    # The idea behind this loop is: Find all pre-defined version numbers
+    #   that "match" the user's desired version by prefix:
+    # - If the user passes just "2", then any version like `2.0.0` or `2.1.1` or `2.6` match
+    # - If the user passes "2.1", then any version like `2.1` or `2.1.3` match
+    # - If the user passes "2.1.7", then only that specific version matches
+    matching_versions = available_versions.select do |version|
+      version.segments.take(user_version.segments.size) == user_version.segments
+    end
+
+    if matching_versions.empty?
+      return render json: {
+        message: "invalid version number '#{version_number}'",
+        valid_version_numbers: Competition::WCIF_VERSION_CATALOGUE.values.uniq,
+        highest_version_number: available_versions.max.to_s,
+        stable_version_number: Competition::WCIF_STABLE_VERSION,
+      }, status: :bad_request
+    end
+
+    # Pick the highest version number that satisfies what the user requested
+    best_version = matching_versions.max.to_s
+
+    render_wcif(competition, best_version)
+  end
+
+  def check_wcif
+    wcif = params.permit!.to_h.except(:controller, :action, :competition, :format)
+
+    format_version = wcif["formatVersion"] || Competition::WCIF_STABLE_VERSION
+    expected_schema = Competition.wcif_json_schema(version: format_version, required_props: true)
+
+    validation_errors = JSON::Validator.fully_validate(expected_schema, wcif, **Competition.json_validation_options)
+
+    return render json: validation_errors, status: :bad_request if validation_errors.present?
+
+    head :ok
+  end
+
+  def wcif_json_schema
+    format_version = params.require(:version)
+    expected_schema = Competition.wcif_json_schema(version: format_version, required_props: true)
+
+    render json: expected_schema
   end
 
   def update_wcif
     competition = competition_from_params
     require_can_manage!(competition)
-    wcif = params.permit!.to_h
+
+    # Only admins can update WCIF (including schedule) after results are submitted
+    require_can_admin_competitions! if competition.results_submitted?
+
+    # We need to clean out some Rails-y stuff.
+    #   Normally, this isn't a problem because you're never supposed to just use `params.permit!`
+    #   without _explicitly_ sanitizing which parameters you *approve*, but WCIF is too big
+    #   for any one developer's mental sanity to control that.
+    # Note that none of the keys that we're "throwing away" here are currently WCIF-compliant,
+    #   nor are we ever likely to introduce any of them in top-level WCIF.
+    wcif = params.permit!.to_h.except(:controller, :action, :competition_id, :competition, :strict)
+
     wcif = wcif["_json"] || wcif
-    competition.set_wcif!(wcif, require_user!)
+
+    # If the user specified a "strictness" param, then use it.
+    # If not, then fall back to a default behavior where:
+    #  - local environments (dev, test) are strict
+    #  - other environments (most notably prod) are NOT strict right now
+    # Strictness will be enforced at some time in May 2026. Signed GB 2026-05-01
+    strict_schema_checks = params.key?(:strict) ? ActiveRecord::Type::Boolean.new.cast(params[:strict]) : Rails.env.local?
+
+    competition.set_wcif!(wcif, require_user!, strict_schema_checks: strict_schema_checks)
     render json: {
       status: "Successfully saved WCIF",
     }
@@ -206,9 +325,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition
   end
 
+  private def can_perform_action?(*oauth_scopes)
+    api_user_can_perform = yield(current_api_user) && oauth_scopes.all? { doorkeeper_token.scopes.exists?(it) }
+    api_user_can_perform || yield(current_user)
+  end
+
   private def can_manage?(competition)
-    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
-    api_user_can_manage || current_user&.can_manage_competition?(competition)
+    can_perform_action?("manage_competitions") { it&.can_manage_competition?(competition) }
+  end
+
+  private def can_admin_competitions?
+    can_perform_action?("manage_competitions") { it&.can_admin_competitions? }
   end
 
   private def require_scope!(scope)
@@ -219,5 +346,10 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def require_can_manage!(competition)
     require_user!
     raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
+  end
+
+  def require_can_admin_competitions!
+    require_user!
+    raise WcaExceptions::NotPermitted.new("The competition data cannot be edited after results have been submitted.") unless can_admin_competitions?
   end
 end

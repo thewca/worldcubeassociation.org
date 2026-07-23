@@ -6,16 +6,18 @@ module ResultsValidators
 
     BACKOFF_INT_MAX = 2_147_483_648
 
-    attr_accessor :competition, :results, :persons
+    attr_accessor :competition, :results, :persons, :scrambles
 
     def self.from_competitions(validator, competition_ids, check_real_results, batch_size: nil)
       associations = self.load_associations(validator, check_real_results: check_real_results)
 
       results_assoc = check_real_results ? :results : :inbox_results
       # Deliberately NOT sending :format and :event because those are cached values anyways
-      associations.deep_merge!({ results_assoc => [] })
+      associations.deep_merge!({ results_assoc => { round: [:competition_event] } })
+      # TODO: Reconsider the `if` postfix once we have migrated away from inbox_results
+      associations.deep_merge!({ results_assoc => { result_attempts: [] } }) if check_real_results
 
-      competition_scope = self.load_competition_includes(validator, associations)
+      competition_scope = self.load_competition_includes(validator, associations, check_real_results: check_real_results)
                               .where(id: competition_ids)
 
       competition_scope = competition_scope.find_each(batch_size: batch_size) if batch_size.present?
@@ -27,27 +29,33 @@ module ResultsValidators
       end
     end
 
-    def self.from_results(validator, results)
+    def self.from_results(validator, results, check_real_results)
       results.group_by(&:competition_id)
              .map do |competition_id, comp_results|
-        # TODO: A bit hacky to check this, but fair given the assumptions of the previous default `validate` method.
-        check_real_results = comp_results.any?(Result)
+               competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
+               model_competition = competition_scope.find(competition_id)
 
-        competition_scope = self.load_competition_includes(validator, check_real_results: check_real_results)
-        model_competition = competition_scope.find(competition_id)
-
-        self.load_data(validator, model_competition, comp_results, check_real_results: check_real_results)
+               self.load_data(validator, model_competition, comp_results, check_real_results: check_real_results)
       end
     end
 
     def self.load_associations(validator, check_real_results: false)
-      associations = validator.competition_associations
+      associations = validator.competition_associations(check_real_results: check_real_results)
 
       if validator.include_persons?
         persons_assoc = check_real_results ? :competitors : :inbox_persons
-        assoc_models = check_real_results ? [] : [:person]
+        person_assoc_models = check_real_results ? [] : [:person]
 
-        associations.deep_merge!({ persons_assoc => assoc_models })
+        associations.deep_merge!({ persons_assoc => person_assoc_models })
+      end
+
+      if validator.include_scrambles?
+        scrambles_assoc = check_real_results ? :scrambles : :matched_scrambles
+
+        round_assoc_models = { round: [:competition_event] }
+        scrambles_assoc_models = check_real_results ? round_assoc_models : { matched_scramble_set: round_assoc_models }
+
+        associations.deep_merge!({ scrambles_assoc => scrambles_assoc_models })
       end
 
       associations
@@ -76,6 +84,7 @@ module ResultsValidators
           r.round_type.rank,
           valid_average ? r.average : BACKOFF_INT_MAX,
           valid_best ? r.best : BACKOFF_INT_MAX,
+          r.id, # tie-breaker for the rare case that two persons in the same round achieved the same single and average
         ]
       end
 
@@ -86,6 +95,10 @@ module ResultsValidators
 
       if validator.include_persons?
         data.persons = check_real_results ? competition.competitors : competition.inbox_persons
+      end
+
+      if validator.include_scrambles?
+        data.scrambles = check_real_results ? competition.scrambles : competition.matched_scrambles
       end
 
       data

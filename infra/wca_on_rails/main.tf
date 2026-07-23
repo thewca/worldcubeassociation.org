@@ -6,7 +6,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.72.1"
+      version = ">= 6.28.0"
     }
   }
 
@@ -29,32 +29,37 @@ provider "aws" {
 }
 
 module "production" {
-  source = "./production"
-  name_prefix = "${var.name_prefix}-prod"
-  region = var.region
-  shared = module.shared
-  VAULT_ADDR = "http://172.31.63.154:8200"
-  DATABASE_WRT_USER = var.DATABASE_WRT_USER
-  rails_startup_time = local.rails_startup_time
-  WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
+  source                   = "./production"
+  name_prefix              = "${var.name_prefix}-prod"
+  region                   = var.region
+  shared                   = module.shared
+  VAULT_ADDR               = var.VAULT_ADDR
+  DATABASE_WRT_USER        = var.DATABASE_WRT_USER
+  DATABASE_WRT_SENIOR_USER = var.DATABASE_WRT_SENIOR_USER
+  rails_startup_time       = local.rails_startup_time
+  WRC_WEBHOOK_URL          = var.WRC_WEBHOOK_URL
+  anycable_path            = var.anycable_path
 }
 
 module "staging" {
-  source = "./staging"
-  name_prefix = "${var.name_prefix}-staging"
-  region = var.region
-  VAULT_ADDR = "http://172.31.63.154:8200"
-  DATABASE_WRT_USER = var.DATABASE_WRT_USER
-  shared = module.shared
-  rails_startup_time = local.rails_startup_time
-  WRC_WEBHOOK_URL = var.WRC_WEBHOOK_URL
+  source                   = "./staging"
+  name_prefix              = "${var.name_prefix}-staging"
+  region                   = var.region
+  VAULT_ADDR               = var.VAULT_ADDR
+  DATABASE_WRT_USER        = var.DATABASE_WRT_USER
+  DATABASE_WRT_SENIOR_USER = var.DATABASE_WRT_SENIOR_USER
+  shared                   = module.shared
+  rails_startup_time       = local.rails_startup_time
+  WRC_WEBHOOK_URL          = var.WRC_WEBHOOK_URL
+  anycable_path            = var.anycable_path
 }
 
 module "shared" {
-  source = "./shared"
-  name_prefix = var.name_prefix
-  region = var.region
+  source             = "./shared"
+  name_prefix        = var.name_prefix
+  region             = var.region
   availability_zones = var.availability_zones
   rails_startup_time = local.rails_startup_time
-  pma_auth_secret = var.pma_auth_secret
+  pma_auth_secret    = var.pma_auth_secret
+  anycable_path      = var.anycable_path
 }

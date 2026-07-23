@@ -16,18 +16,6 @@ function RegulationLink({ regulation }) {
   );
 }
 
-function GuidelineLink({ guideline }) {
-  return (
-    <span>
-      guideline
-      {' '}
-      <a href={`https://www.worldcubeassociation.org/regulations/guidelines.html#${guideline}`} target="_blank" rel="noreferrer">
-        {guideline}
-      </a>
-    </span>
-  );
-}
-
 export default function TimeLimitDescription({ wcifRound, timeLimit, onOk }) {
   if (timeLimit.cumulativeRoundIds.length === 0) {
     return `Competitors have ${centisecondsToString(timeLimit.centiseconds)} for each of their solves.`;
@@ -44,15 +32,36 @@ export default function TimeLimitDescription({ wcifRound, timeLimit, onOk }) {
           total for all of their solves in this round.
           <br />
           This is called a cumulative time limit (see
+          {' '}
           <RegulationLink regulation="A1a2" />
           ).
           <br />
-          The button below allows you to share this cumulative time limit with other rounds (see
-          <GuidelineLink guideline="A1a2++" />
-          ).
+          The button below allows you to share this cumulative time limit with other rounds.
         </span>
         <SelectRoundsModal excludeEventId={wcifRound.id.split('-')[0]} timeLimit={timeLimit} onOk={onOk} />
       </>
+    );
+  }
+
+  if (_.isEqual(timeLimit.cumulativeRoundIds, wcifRound.linkedRounds)) {
+    return (
+      <span>
+        This round has a Dual Round cumulative time limit (see
+        {' '}
+        <RegulationLink regulation="A1a2" />
+        ).
+        <br />
+        This means that competitors have
+        {' '}
+        {centisecondsToString(timeLimit.centiseconds)}
+        {' '}
+        total for all of their solves in this Dual Round consisting of:
+        <ul>
+          {wcifRound.linkedRounds.map((roundId) => (
+            <li key={roundId}>{roundIdToString(roundId)}</li>
+          ))}
+        </ul>
+      </span>
     );
   }
 
@@ -63,7 +72,7 @@ export default function TimeLimitDescription({ wcifRound, timeLimit, onOk }) {
       <span>
         This round has a cross round cumulative time limit (see
         {' '}
-        <GuidelineLink guideline="A1a2++" />
+        <RegulationLink regulation="A1a2" />
         ).
         <br />
         This means that competitors have

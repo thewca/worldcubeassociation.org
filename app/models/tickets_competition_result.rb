@@ -9,16 +9,21 @@ class TicketsCompetitionResult < ApplicationRecord
     locked_for_posting: "locked_for_posting",
     warnings_verified: "warnings_verified",
     merged_inbox_results: "merged_inbox_results",
+    merged_inbox_scrambles: "merged_inbox_scrambles",
+    newcomers_verified: "newcomers_verified",
     created_wca_ids: "created_wca_ids",
     posted: "posted",
   }
 
-  has_one :ticket, as: :metadata
+  has_one :ticket, as: :metadata, dependent: :destroy
   belongs_to :competition
 
   ACTION_TYPE = {
     verify_warnings: "verify_warnings",
     merge_inbox_results: "merge_inbox_results",
+    merge_inbox_scrambles: "merge_inbox_scrambles",
+    verify_newcomers: "verify_newcomers",
+    create_wca_ids: "create_wca_ids",
   }.freeze
 
   def metadata_actions_allowed_for(ticket_stakeholder)
@@ -26,10 +31,22 @@ class TicketsCompetitionResult < ApplicationRecord
       [
         ACTION_TYPE[:verify_warnings],
         ACTION_TYPE[:merge_inbox_results],
+        ACTION_TYPE[:merge_inbox_scrambles],
+        ACTION_TYPE[:verify_newcomers],
+        ACTION_TYPE[:create_wca_ids],
       ]
     else
       []
     end
+  end
+
+  def eligible_roles_for_bcc(user)
+    return [] unless user.admin?
+
+    [
+      TicketStakeholder.stakeholder_roles[:actioner],
+      TicketStakeholder.stakeholder_roles[:requester],
+    ]
   end
 
   def self.create_ticket!(competition, delegate_message, submitted_delegate)
@@ -58,7 +75,7 @@ class TicketsCompetitionResult < ApplicationRecord
     )
 
     ticket_log = ticket.ticket_logs.create!(
-      action_type: TicketLog.action_types[:update_status],
+      action_type: TicketLog.action_types[:create_ticket],
       acting_user_id: submitted_delegate.id,
       acting_stakeholder_id: competition_stakeholder.id,
     )
@@ -76,9 +93,21 @@ class TicketsCompetitionResult < ApplicationRecord
     end
   end
 
+  def merge_inbox_scrambles
+    ActiveRecord::Base.transaction do
+      CompetitionResultsImport.merge_inbox_scrambles(competition)
+
+      self.update!(status: TicketsCompetitionResult.statuses[:merged_inbox_scrambles])
+    end
+  end
+
+  def page_title
+    competition.name
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: {
-      competition: { only: %i[id name results_posted_at], methods: [], include: %i[posted_user] },
+      competition: { only: %i[id name use_wca_registration results_posted_at], methods: [], include: %i[posted_user] },
     },
   }.freeze
 

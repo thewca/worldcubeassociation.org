@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'bundler', '4.0.14'
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
@@ -49,7 +50,6 @@ gem 'wca_i18n'
 gem 'cookies_eu'
 gem 'superconfig'
 gem 'eu_central_bank'
-gem 'devise-jwt'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
 gem 'csv'
@@ -66,13 +66,14 @@ gem 'aws-sdk-cloudfront'
 gem 'redis'
 # Faster Redis library
 gem 'hiredis'
-gem 'mini_magick'
+gem 'mini_magick', require: false
+gem 'ruby-vips', require: false
 gem 'mysql2'
 gem 'premailer-rails'
 gem 'nokogiri'
 gem 'cocoon'
-gem 'momentjs-rails', github: 'derekprior/momentjs-rails'
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', submodules: true
+gem 'momentjs-rails'
+gem 'bootstrap3-datetimepicker-rails'
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
 gem 'api-pagination'
@@ -81,7 +82,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '8.4.0'
+gem 'shakapacker', '10.3.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -90,9 +91,8 @@ gem 'activestorage-validator'
 gem 'image_processing'
 gem 'rest-client'
 gem 'icalendar'
-# pointing to our fork which has Rails 7 support enabled (aka monkey-patched)
-gem 'starburst', github: 'thewca/starburst'
 gem 'react-rails'
+gem 'react_on_rails', '17.0.0'
 gem 'sprockets-rails'
 gem 'jaro_winkler'
 gem 'sidekiq'
@@ -100,11 +100,13 @@ gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
 gem 'slack-ruby-client'
 gem 'puma'
-gem "tzf"
+gem 'tzf'
 gem 'playwright-ruby-client', require: 'playwright'
 gem 'hash_diff'
 gem 'tsort'
 gem 'html_safe_flash'
+gem 'benchmark'
+gem 'anycable-rails-core'
 
 group :development, :test do
   gem 'spring'
@@ -139,6 +141,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'web-console'
+  gem 'active_record_query_trace'
 end
 
 group :test do

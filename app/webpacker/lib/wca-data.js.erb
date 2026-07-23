@@ -237,6 +237,7 @@ export const ticketTypes = <%= Ticket::TICKET_TYPES.to_json %>;
 export const ticketStatuses = <%= Ticket::TICKET_TYPES.transform_values { |value| value.safe_constantize&.statuses }.to_json %>;
 export const ticketLogActionTypes = <%= TicketLog.action_types.to_json %>;
 export const ticketStakeholderRoles = <%= TicketStakeholder.stakeholder_roles.to_json %>;
+export const ticketStakeholderConnections = <%= TicketStakeholder.connections.to_json %>;
 export const ticketsCompetitionResultStatuses = <%= TicketsCompetitionResult.statuses.to_json %>
 
 // ----- VALIDATORS -----

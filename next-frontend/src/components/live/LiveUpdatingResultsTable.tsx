@@ -1,0 +1,222 @@
+"use client";
+
+import LiveResultsTable from "@/components/live/LiveResultsTable";
+import {
+  Heading,
+  HStack,
+  Spacer,
+  IconButton,
+  Switch,
+  VStack,
+  Link,
+} from "@chakra-ui/react";
+import ConnectionPulse from "@/components/live/ConnectionPulse";
+import { useLiveResults } from "@/providers/LiveResultProvider";
+import PendingResultsTable from "@/components/live/PendingResultsTable";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import { useState } from "react";
+import AddPersonModal from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
+import BulkQuitButton from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
+import {
+  LuCheckCheck,
+  LuEye,
+  LuPencil,
+  LuGalleryVertical,
+} from "react-icons/lu";
+import NextLink from "next/link";
+import ResultsProjector from "@/components/live/ResultsProjector";
+import { route } from "nextjs-routes";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { Tooltip } from "@/components/ui/tooltip";
+import { useT } from "@/lib/i18n/useI18n";
+import { forecastViewSupported } from "@/lib/live/forecastviewSupported";
+
+export default function LiveUpdatingResultsTable({
+  competitionId,
+  title,
+  isAdminView = false,
+  showEmpty = true,
+  isLinkedRound = false,
+  canManage = false,
+}: {
+  competitionId: string;
+  title: string;
+  isAdminView?: boolean;
+  showEmpty?: boolean;
+  isLinkedRound?: boolean;
+  canManage?: boolean;
+}) {
+  const { t } = useT();
+
+  const [showLinkedRoundsView, setShowLinkedRoundsView] =
+    useState(isLinkedRound);
+  const [inProjectorMode, setInProjectorMode] = useState(false);
+  const [forecastView, setForecastView] = useState(false);
+
+  const {
+    connectionState,
+    liveResultsByRegistrationId,
+    pendingLiveResults,
+    competitors,
+    pendingQuitCompetitors,
+  } = useLiveResults();
+
+  const round = useRoundInfo();
+
+  const { id: roundWcifId, format: formatId, state } = round;
+
+  const { eventId } = parseActivityCode(roundWcifId);
+
+  const roundFinished = state === "locked";
+
+  const enableProjectorView = () => setInProjectorMode(true);
+  const disableProjectorView = () => setInProjectorMode(false);
+
+  if (inProjectorMode) {
+    return (
+      <ResultsProjector
+        competitors={competitors}
+        results={liveResultsByRegistrationId}
+        disableProjectorView={disableProjectorView}
+        formatId={formatId}
+        eventId={eventId}
+        title={title}
+        isLinkedRound={isLinkedRound}
+      />
+    );
+  }
+
+  return (
+    <VStack align="left">
+      <HStack>
+        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
+        {isAdminView && <ConnectionPulse connectionState={connectionState} />}
+        <Spacer flex={1} />
+        {!isAdminView && <ConnectionPulse connectionState={connectionState} />}
+        {isLinkedRound && (
+          <Switch.Root
+            checked={showLinkedRoundsView}
+            onCheckedChange={(e) => setShowLinkedRoundsView(e.checked)}
+            colorPalette="green"
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            <Switch.Label>Show combined Results</Switch.Label>
+          </Switch.Root>
+        )}
+        {!isAdminView && (
+          <Switch.Root
+            checked={forecastView}
+            onCheckedChange={(e) => setForecastView(e.checked)}
+            colorPalette="green"
+            disabled={!forecastViewSupported(round, roundFinished)}
+          >
+            <Switch.HiddenInput />
+            <Switch.Control>
+              <Switch.Thumb />
+            </Switch.Control>
+            <Switch.Label>Forecast view</Switch.Label>
+          </Switch.Root>
+        )}
+        {!isAdminView && (
+          <Tooltip content="Projector Mode" showArrow openDelay={200}>
+            <IconButton variant="ghost" onClick={enableProjectorView}>
+              <LuGalleryVertical />
+            </IconButton>
+          </Tooltip>
+        )}
+        {canManage && (
+          <Tooltip
+            content={
+              isAdminView
+                ? t("competitions.live.admin.results_view")
+                : t("competitions.live.admin.admin_view")
+            }
+            showArrow
+            openDelay={200}
+          >
+            <IconButton variant="ghost">
+              <Link asChild>
+                {isAdminView ? (
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuEye />
+                  </NextLink>
+                ) : (
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]/admin",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuPencil />
+                  </NextLink>
+                )}
+              </Link>
+            </IconButton>
+          </Tooltip>
+        )}
+        {isAdminView && (
+          <>
+            <AddPersonModal
+              competitionId={competitionId}
+              competitors={competitors}
+              roundId={roundWcifId}
+            />
+            <BulkQuitButton
+              competitionId={competitionId}
+              roundId={roundWcifId}
+            />
+            <Tooltip
+              content={t("competitions.live.admin.double_check")}
+              showArrow
+              openDelay={200}
+            >
+              <IconButton variant="ghost">
+                <Link asChild>
+                  <NextLink
+                    href={route({
+                      pathname:
+                        "/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check",
+                      query: { competitionId, roundId: roundWcifId },
+                    })}
+                  >
+                    <LuCheckCheck />
+                  </NextLink>
+                </Link>
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
+      </HStack>
+      <PendingResultsTable
+        pendingLiveResults={pendingLiveResults}
+        formatId={formatId}
+        eventId={eventId}
+        competitors={competitors}
+      />
+      <LiveResultsTable
+        resultsByRegistrationId={liveResultsByRegistrationId}
+        roundWcifId={roundWcifId}
+        formatId={formatId}
+        competitionId={competitionId}
+        competitors={competitors}
+        pendingQuitCompetitors={pendingQuitCompetitors}
+        pendingLiveResults={pendingLiveResults}
+        isAdmin={isAdminView}
+        showEmpty={showEmpty}
+        showLinkedRoundsView={showLinkedRoundsView}
+        isLinkedRound={isLinkedRound}
+        forecastView={forecastView}
+      />
+    </VStack>
+  );
+}

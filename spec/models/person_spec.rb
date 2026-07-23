@@ -21,12 +21,12 @@ RSpec.describe Person do
       expect(person.likely_delegates).to eq [delegate]
 
       competition2 = create(:competition, delegates: [delegate], starts: 3.days.ago)
-      create(:result, person: person, competition_id: competition2.id)
+      create(:result, person: person, competition: competition2)
       expect(person.likely_delegates).to eq [delegate]
 
       new_delegate = create(:delegate)
       competition3 = create(:competition, delegates: [new_delegate], starts: 2.days.ago)
-      create(:result, person: person, competition_id: competition3.id)
+      create(:result, person: person, competition: competition3)
       expect(person.likely_delegates).to eq [delegate, new_delegate]
     end
   end
@@ -124,18 +124,128 @@ RSpec.describe Person do
     end
   end
 
-  describe "#championship_podiums" do
+  describe "#continental_championship_podiums" do
+    let!(:nac2025) { create(:competition, championship_types: ["_North America", "CA"], starts: Date.new(2017, 1, 1)) }
+    let!(:nac_333) { create(:round, competition: nac2025) }
+    let!(:nac_444) { create(:round, event_id: '444', competition: nac2025) }
+
+    let!(:fr_competitor) do
+      create(:person, country_id: "France").tap do |fr_competitor|
+        create(:result, person: fr_competitor, competition: nac2025, pos: 1, event_id: "333", round: nac_333)
+        create(:result, person: fr_competitor, competition: nac2025, pos: 2, event_id: "444", round: nac_444)
+      end
+    end
+
+    let!(:us_competitor) do
+      create(:person, country_id: "USA").tap do |us_competitor|
+        create(:result, person: us_competitor, competition: nac2025, pos: 2, event_id: "333", round: nac_333)
+        create(:result, person: us_competitor, competition: nac2025, pos: 5, event_id: "444", round: nac_444)
+      end
+    end
+
+    let!(:can_competitor) do
+      create(:person, country_id: "Canada").tap do |can_competitor|
+        create(:result, person: can_competitor, competition: nac2025, pos: 3, event_id: "333", round: nac_333)
+        create(:result, person: can_competitor, competition: nac2025, pos: 4, event_id: "444", round: nac_444)
+      end
+    end
+
+    let!(:us_competitor_2) do
+      create(:person, country_id: "USA").tap do |us_2|
+        create(:result, person: us_2, competition: nac2025, pos: 4, event_id: "333", round: nac_333)
+        create(:result, person: us_2, competition: nac2025, pos: 3, event_id: "444", round: nac_444)
+      end
+    end
+
+    let!(:can_competitor_2) do
+      create(:person, country_id: "Canada").tap do |can_2|
+        create(:result, person: can_2, competition: nac2025, pos: 5, event_id: "333", round: nac_333)
+        create(:result, person: can_2, competition: nac2025, pos: 1, event_id: "444", round: nac_444)
+      end
+    end
+
+    it 'does not assign any podium to non-NA competitor' do
+      expect(fr_competitor.championship_podiums[:continental]).to be_empty
+    end
+
+    it 'assigns correct 333 podium placements to competitors from different NA countries' do
+      expect(
+        us_competitor.championship_podiums[:continental].find { it.event_id == '333' }.pos,
+      ).to be(1)
+      expect(
+        can_competitor.championship_podiums[:continental].find { it.event_id == '333' }.pos,
+      ).to be(2)
+      expect(
+        us_competitor_2.championship_podiums[:continental].find { it.event_id == '333' }.pos,
+      ).to be(3)
+    end
+
+    it 'assigns correct 444 podium placements to competitors from different NA countries' do
+      expect(
+        can_competitor_2.championship_podiums[:continental].find { it.event_id == '444' }.pos,
+      ).to be(1)
+      expect(
+        us_competitor_2.championship_podiums[:continental].find { it.event_id == '444' }.pos,
+      ).to be(2)
+      expect(
+        can_competitor.championship_podiums[:continental].find { it.event_id == '444' }.pos,
+      ).to be(3)
+    end
+
+    it 'also recognizes 333 national podiums' do
+      expect(
+        us_competitor.championship_podiums[:national].find { it.event_id == '333' },
+      ).to be_nil
+      expect(
+        us_competitor_2.championship_podiums[:national].find { it.event_id == '333' },
+      ).to be_nil
+      expect(
+        can_competitor.championship_podiums[:national].find { it.event_id == '333' }.pos,
+      ).to be(1)
+      expect(
+        can_competitor_2.championship_podiums[:national].find { it.event_id == '333' }.pos,
+      ).to be(2)
+    end
+
+    it 'also recognizes 444 national podiums' do
+      expect(
+        us_competitor.championship_podiums[:national].find { it.event_id == '444' },
+      ).to be_nil
+      expect(
+        us_competitor_2.championship_podiums[:national].find { it.event_id == '444' },
+      ).to be_nil
+      expect(
+        can_competitor.championship_podiums[:national].find { it.event_id == '444' }.pos,
+      ).to be(2)
+      expect(
+        can_competitor_2.championship_podiums[:national].find { it.event_id == '444' }.pos,
+      ).to be(1)
+    end
+
+    it 'makes no assignment for 4th-place NA competitors' do
+      expect(
+        can_competitor_2.championship_podiums[:continental].find { it.event_id == '333' },
+      ).to be_nil
+
+      expect(
+        us_competitor.championship_podiums[:continental].find { it.event_id == '444' },
+      ).to be_nil
+    end
+  end
+
+  describe "#national_championship_podiums" do
     let!(:fr_nationals2016) { create(:competition, championship_types: ["FR"], starts: Date.new(2016, 1, 1)) }
     let!(:us_nationals2017) { create(:competition, championship_types: ["US"], starts: Date.new(2017, 1, 1)) }
+    let!(:us_nationals2017_333_round) { create(:round, competition: us_nationals2017) }
     let!(:fr_competitor) do
       create(:person, country_id: "France").tap do |fr_competitor|
         create(:result, person: fr_competitor, competition: fr_nationals2016, pos: 1, event_id: "333")
-        create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "333")
+        create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "333", round: us_nationals2017_333_round)
       end
     end
     let!(:us_competitor) do
       create(:person, country_id: "USA").tap do |us_competitor|
-        create(:result, person: us_competitor, competition: us_nationals2017, pos: 2, event_id: "333")
+        create(:result, person: us_competitor, competition: us_nationals2017, pos: 2, event_id: "333", round: us_nationals2017_333_round)
       end
     end
 
@@ -182,14 +292,114 @@ RSpec.describe Person do
       us_competitor1 = create(:person, country_id: "USA")
       us_competitor2 = create(:person, country_id: "USA")
       us_competitor3 = create(:person, country_id: "USA")
-      create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "222")
-      create(:result, person: us_competitor1, competition: us_nationals2017, pos: 2, event_id: "222")
-      create(:result, person: us_competitor2, competition: us_nationals2017, pos: 2, event_id: "222")
-      create(:result, person: us_competitor3, competition: us_nationals2017, pos: 4, event_id: "222")
+      round = create(:round, competition: us_nationals2017, event_id: "222")
+      create(:result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "222", round: round)
+      create(:result, person: us_competitor1, competition: us_nationals2017, pos: 2, event_id: "222", round: round)
+      create(:result, person: us_competitor2, competition: us_nationals2017, pos: 2, event_id: "222", round: round)
+      create(:result, person: us_competitor3, competition: us_nationals2017, pos: 4, event_id: "222", round: round)
 
       expect(us_competitor1.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor2.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor3.championship_podiums[:national].first.pos).to eq 3
+    end
+
+    context "when a competition has two championship types" do
+      before do
+        us_nationals2017.championships.create!(championship_type: "FR")
+        @fr_podiums = fr_competitor.championship_podiums[:national]
+        @us_podiums = us_competitor.championship_podiums[:national]
+        @finals_id = us_nationals2017_333_round.id
+      end
+
+      it 'assigns national podiums to both nationalities' do
+        expect(fr_competitor.championship_podiums[:national].pluck(:round_id)).to include(@finals_id)
+        expect(us_competitor.championship_podiums[:national].pluck(:round_id)).to include(@finals_id)
+      end
+
+      it 'both competitors are first in their respective national podiums' do
+        expect(@fr_podiums.find { it.round_id == @finals_id }.pos).to be(1)
+        expect(@us_podiums.find { it.round_id == @finals_id }.pos).to be(1)
+      end
+    end
+  end
+
+  describe "#medals" do
+    context "with a dual final round" do
+      let!(:competition) { create(:competition, event_ids: ["333"]) }
+      let!(:round_one) { create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2) }
+      let!(:round_two) { create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2) }
+
+      let!(:gold_person) { create(:person) }
+      let!(:silver_person) { create(:person) }
+      let!(:bronze_person) { create(:person) }
+      let!(:fourth_person) { create(:person) }
+
+      before do
+        create(:linked_round, rounds: [round_one, round_two])
+
+        create(:result, person: gold_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 50, average: 100, pos: 1, global_pos: 1)
+        create(:result, person: silver_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 150, average: 200, pos: 2, global_pos: 2)
+      end
+
+      context "when the bronze medalist's better average was in the second round" do
+        before do
+          # Third in round one, but only fourth across the linked rounds.
+          create(:result, person: fourth_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 350, average: 400, pos: 3, global_pos: 4)
+          # Competed in both rounds, so both results carry the same global_pos.
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 450, average: 500, pos: 4, global_pos: 3)
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 250, average: 300, pos: 1, global_pos: 3)
+        end
+
+        it "awards the bronze medal to the person with global_pos 3" do
+          expect(bronze_person.medals).to eq(gold: 0, silver: 0, bronze: 1, total: 1)
+        end
+
+        it "does not award a medal to the person who was third in only one of the linked rounds" do
+          expect(fourth_person.medals).to eq(gold: 0, silver: 0, bronze: 0, total: 0)
+        end
+
+        it "awards gold and silver by global_pos" do
+          expect(gold_person.medals).to eq(gold: 1, silver: 0, bronze: 0, total: 1)
+          expect(silver_person.medals).to eq(gold: 0, silver: 1, bronze: 0, total: 1)
+        end
+      end
+
+      context "when the bronze medalist's better average was in the first round" do
+        before do
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 250, average: 300, pos: 3, global_pos: 3)
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 450, average: 500, pos: 1, global_pos: 3)
+          create(:result, person: fourth_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 350, average: 400, pos: 4, global_pos: 4)
+        end
+
+        it "awards the bronze medal only once" do
+          expect(bronze_person.medals).to eq(gold: 0, silver: 0, bronze: 1, total: 1)
+        end
+
+        it "does not award a medal to the person with global_pos 4" do
+          expect(fourth_person.medals).to eq(gold: 0, silver: 0, bronze: 0, total: 0)
+        end
+      end
+
+      context "when everyone competes in both rounds" do
+        before do
+          create(:result, person: gold_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 100, average: 150, pos: 1, global_pos: 1)
+          create(:result, person: silver_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 130, average: 180, pos: 2, global_pos: 2)
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 250, average: 300, pos: 3, global_pos: 3)
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 300, average: 350, pos: 3, global_pos: 3)
+          create(:result, person: fourth_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 400, average: 450, pos: 4, global_pos: 4)
+          create(:result, person: fourth_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 350, average: 400, pos: 4, global_pos: 4)
+        end
+
+        it "awards each medal exactly once" do
+          expect(gold_person.medals).to eq(gold: 1, silver: 0, bronze: 0, total: 1)
+          expect(silver_person.medals).to eq(gold: 0, silver: 1, bronze: 0, total: 1)
+          expect(bronze_person.medals).to eq(gold: 0, silver: 0, bronze: 1, total: 1)
+        end
+
+        it "does not award a medal to the person with global_pos 4" do
+          expect(fourth_person.medals).to eq(gold: 0, silver: 0, bronze: 0, total: 0)
+        end
+      end
     end
   end
 end

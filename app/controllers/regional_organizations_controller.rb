@@ -89,10 +89,10 @@ class RegionalOrganizationsController < ApplicationController
       ]
     end
 
-    params.require(:regional_organization).permit(*permitted_regional_organization_params)
+    params.expect(regional_organization: [*permitted_regional_organization_params])
   end
 
   private def regional_organization_from_params
-    RegionalOrganization.find(params[:id])
+    RegionalOrganization.find(params.require(:id))
   end
 end

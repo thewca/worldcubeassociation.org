@@ -1,7 +1,7 @@
 <% provide(:title, 'New post') %>
 
 <div class="container">
-  <%= react_component("Posts/CreatePost", {
+  <%= react_on_rails_component("CreatePost", props: {
     allTags: PostTag.select(:tag).distinct.pluck(:tag),
   }) %>
 </div>

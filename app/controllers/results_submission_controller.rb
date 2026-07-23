@@ -5,13 +5,11 @@ require 'fileutils'
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
-  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
+  before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
+  before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
 
   def new
     @competition = competition_from_params
-
-    expected_feature_flag = ServerSetting.find_by(name: ServerSetting::WCA_LIVE_BETA_FEATURE_FLAG)
-    @show_wca_live_beta = expected_feature_flag.present? && params[:wcaLiveBeta] == expected_feature_flag.value
   end
 
   def newcomer_checks
@@ -53,13 +51,7 @@ class ResultsSubmissionController < ApplicationController
   end
 
   def compute_potential_duplicates
-    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: params.require(:competition_id))
-    job_run_running_too_long = last_job_run&.run_status_not_started? || last_job_run&.run_status_in_progress?
-
-    last_job_run.update!(run_status: DuplicateCheckerJobRun.run_statuses[:long_running_uncertain]) if job_run_running_too_long
-
-    job_run = DuplicateCheckerJobRun.create!(competition_id: params.require(:competition_id))
-    ComputePotentialDuplicates.perform_later(job_run)
+    job_run = trigger_compute_potential_duplicates(params.require(:competition_id))
 
     render status: :ok, json: job_run
   end
@@ -67,8 +59,8 @@ class ResultsSubmissionController < ApplicationController
   def upload_scrambles
     @competition = Competition.includes(
       scramble_file_uploads: ScrambleFileUpload::SERIALIZATION_INCLUDES,
-      **ScrambleFileUpload::SERIALIZATION_INCLUDES,
-    ).find(params[:competition_id])
+      matched_scramble_sets: MatchedScrambleSet::SERIALIZATION_INCLUDES,
+    ).find(params.require(:competition_id))
   end
 
   def upload_json
@@ -76,8 +68,17 @@ class ResultsSubmissionController < ApplicationController
 
     # Only admins can upload results for the competitions where results are already submitted.
     if competition.results_submitted? && !current_user.can_admin_results?
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "Results have already been submitted for this competition.",
+      }
+    end
+
+    # JSON files derived from our WCIF carry the merged (global) ranking as `position`,
+    #   which corrupts `pos` for Dual Rounds. Competitions scored with the internal
+    #   scoretaking must use the direct Live import instead.
+    if competition.scoretaking_software_internal? && !current_user.can_admin_results?
+      return render status: :unprocessable_content, json: {
+        error: "This competition was scored with the website's internal scoretaking. Please import the results directly from ILR instead of uploading a Results JSON.",
       }
     end
 
@@ -91,19 +92,20 @@ class ResultsSubmissionController < ApplicationController
     mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
     store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
 
-    return render status: :unprocessable_entity, json: { error: upload_json.errors.full_messages } unless upload_json.valid?
+    return render status: :unprocessable_content, json: { error: upload_json.errors.full_messages } unless upload_json.valid?
 
     temporary_results_data = upload_json.temporary_results_data
 
     errors = CompetitionResultsImport.import_temporary_results(
       competition,
       temporary_results_data,
+      UploadedJson.upload_types[:results_json],
       mark_result_submitted: mark_result_submitted,
       store_uploaded_json: store_uploaded_json,
       results_json_str: upload_json.results_json_str,
     )
 
-    return render status: :unprocessable_entity, json: { error: errors } if errors.any?
+    return render status: :unprocessable_content, json: { error: errors } if errors.any?
 
     render status: :ok, json: { success: true }
   end
@@ -113,30 +115,20 @@ class ResultsSubmissionController < ApplicationController
 
     # Only admins can upload results for the competitions where results are already submitted.
     if competition.results_submitted? && !current_user.can_admin_results?
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "Results have already been submitted for this competition.",
       }
     end
 
     results_to_import = competition.rounds.flat_map do |round|
-      round.round_results.map do |result|
-        InboxResult.new({
-                          competition: competition,
-                          person_id: result.person_id,
-                          pos: result.ranking,
-                          event_id: round.event_id,
-                          round_type_id: round.round_type_id,
-                          round_id: round.id,
-                          format_id: round.format_id,
-                          best: result.best,
-                          average: result.average,
-                          value1: result.attempts[0].result,
-                          value2: result.attempts[1]&.result || 0,
-                          value3: result.attempts[2]&.result || 0,
-                          value4: result.attempts[3]&.result || 0,
-                          value5: result.attempts[4]&.result || 0,
-                        })
-      end
+      round.live_results
+           .includes(:live_attempts, :registration)
+           .map(&:to_inbox_result)
+    end.map do |ibr|
+      # This is _technically_ useless because the IBR already knows its competition ID,
+      #   but not its actual competition memory object.
+      # Redundantly assigning here saves a ton of "does this competition exist?" validation checks later.
+      ibr.tap { it.competition = competition }
     end
 
     person_with_results = results_to_import.map(&:person_id).uniq
@@ -145,39 +137,42 @@ class ResultsSubmissionController < ApplicationController
                                    .includes(:user)
                                    .select { it.wcif_status == "accepted" && person_with_results.include?(it.registrant_id.to_s) }
                                    .map do |registration|
-      InboxPerson.new({
-                        id: [registration.registrant_id, competition.id],
-                        wca_id: registration.wca_id || '',
-                        name: registration.name,
-                        country_iso2: registration.country.iso2,
-                        gender: registration.gender,
-                        dob: registration.dob,
-                      })
+                                     InboxPerson.new({
+                                                       id: [competition.id, registration.registrant_id],
+                                                       wca_id: registration.wca_id || '',
+                                                       name: registration.name,
+                                                       country_iso2: registration.country.iso2,
+                                                       gender: registration.gender,
+                                                       dob: registration.dob,
+                                                     })
     end
 
-    scrambles_to_import = competition.matched_scramble_sets.flat_map do |scramble_set|
-      scramble_set.matched_inbox_scrambles.map do |scramble|
-        Scramble.new({
-                       competition_id: competition.id,
-                       event_id: scramble_set.event_id,
-                       round_type_id: scramble_set.round_type_id,
-                       round_id: scramble_set.matched_round_id,
-                       group_id: scramble_set.alphabetic_group_index,
-                       is_extra: scramble.is_extra?,
-                       scramble_num: scramble.ordered_index + 1,
-                       scramble: scramble.scramble_string,
-                     })
-      end
-    end
+    scramble_sets_to_import = competition.matched_scramble_sets
 
     temporary_results_data = {
       results_to_import: results_to_import,
-      scrambles_to_import: scrambles_to_import,
+      scramble_sets_to_import: scramble_sets_to_import,
       persons_to_import: persons_to_import,
     }
-    errors = CompetitionResultsImport.import_temporary_results(competition, temporary_results_data)
 
-    return render status: :unprocessable_entity, json: { error: errors } if errors.any?
+    mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
+    store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
+
+    errors = CompetitionResultsImport.import_temporary_results(
+      competition,
+      temporary_results_data,
+      UploadedJson.upload_types[:wca_live],
+      mark_result_submitted: mark_result_submitted,
+      store_uploaded_json: store_uploaded_json,
+      # The "traditional" Results JSON also contains personal data like DOB,
+      #   so it is fine to hard-code the `authorized: true` here.
+      # It is intentional and desired that WRT (who have admin power to view DOBs anyway)
+      #   can reconstruct personal information from the moment the upload happened.
+      results_json_str: competition.to_wcif(authorized: true).to_json,
+      import_matched_scrambles: false,
+    )
+
+    return render status: :unprocessable_content, json: { error: errors } if errors.any?
 
     render status: :ok, json: { success: true }
   end
@@ -187,10 +182,10 @@ class ResultsSubmissionController < ApplicationController
     message = params.require(:message)
     results_validator = ResultsValidators::CompetitionsResultsValidator.create_full_validation.validate(competition.id)
 
-    return render status: :unprocessable_entity, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
+    return render status: :unprocessable_content, json: { error: "Submitted results contain errors." } if results_validator.any_errors?
 
     if competition.tickets_competition_result.present? && !competition.tickets_competition_result.aborted?
-      return render status: :unprocessable_entity, json: {
+      return render status: :unprocessable_content, json: {
         error: "There is already a ticket associated with this, hence the results can be resubmitted only if the previous posting has been cancelled by WRT.",
       }
     end
@@ -209,10 +204,40 @@ class ResultsSubmissionController < ApplicationController
       end
     end
 
+    trigger_compute_potential_duplicates(competition.id)
+
     render status: :ok, json: { success: true }
   end
 
   private def competition_from_params
-    Competition.find(params[:competition_id])
+    Competition.find(params.require(:competition_id))
+  end
+
+  private def trigger_compute_potential_duplicates(competition_id)
+    last_job_run = DuplicateCheckerJobRun.find_by(competition_id: competition_id)
+    job_run_running_too_long = last_job_run&.run_status_not_started? || last_job_run&.run_status_in_progress?
+
+    last_job_run.update!(run_status: DuplicateCheckerJobRun.run_statuses[:long_running_uncertain]) if job_run_running_too_long
+
+    DuplicateCheckerJobRun.create!(competition_id: competition_id).tap { ComputePotentialDuplicates.perform_later(it) }
+  end
+
+  private def check_newcomers_data_access
+    competition = competition_from_params
+
+    return head :unauthorized unless current_user.can_check_newcomers_data?(competition)
+
+    # WRTs can check newcomers data even after the results are submitted.
+    return if current_user.can_admin_results?
+
+    render status: :bad_request, json: { error: "The newcomer check dashboard can only be used before the results are submitted." } if competition.results_submitted?
+  end
+
+  def unfinished_persons
+    competition = competition_from_params
+
+    persons_to_finish = FinishUnfinishedPersons.search_persons(competition.id, compute_similar: false)
+
+    render status: :ok, json: { persons_to_finish: persons_to_finish }
   end
 end

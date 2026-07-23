@@ -1,5 +1,7 @@
 import { Block, GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
+import { QuoteBlock } from "@/blocks/text/quote";
+import { newTabCheckbox } from "@/blocks/utils";
 
 const callToActionBlock: Block = {
   slug: "callToAction",
@@ -29,6 +31,7 @@ const callToActionBlock: Block = {
           type: "text",
           required: true,
         },
+        newTabCheckbox,
       ],
     },
   ],
@@ -61,28 +64,6 @@ const simpleItemBlock: Block = {
   ],
 };
 
-const quouteBlock: Block = {
-  slug: "quote",
-  labels: {
-    singular: "Quote",
-    plural: "Quotes",
-  },
-  fields: [
-    {
-      name: "content",
-      type: "richText",
-      required: true,
-    },
-    markdownConvertedField("content"),
-    {
-      name: "quotedPerson",
-      type: "text",
-      required: true,
-      label: "Who is quoted",
-    },
-  ],
-};
-
 export const AboutUsPage: GlobalConfig = {
   slug: "about-us-page",
   label: "About Us Page",
@@ -91,7 +72,7 @@ export const AboutUsPage: GlobalConfig = {
       name: "blocks",
       type: "blocks",
       required: true,
-      blocks: [callToActionBlock, simpleItemBlock, quouteBlock],
+      blocks: [callToActionBlock, simpleItemBlock, QuoteBlock],
     },
   ],
 };

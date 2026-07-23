@@ -3,7 +3,7 @@
 class WaitingList < ApplicationRecord
   belongs_to :holder, polymorphic: true
 
-  delegate :empty?, :length, to: :entries
+  delegate :empty?, :blank?, :length, to: :entries
 
   def remove(entry)
     return unless entries.include?(entry.id)

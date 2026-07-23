@@ -4,20 +4,82 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches:
+      - '**'
+    paths:
+      - 'app/**/*'
+      - 'config/**/*'
+      - 'db/**/*'
+      - 'public/**/*'
+      - 'vendor/**/*'
+      - '**/*.rb'
+      - '**/*.erb'
+      - '**/*.rake'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'Rakefile'
+      - '.ruby-version'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.env*'
+      - 'docker-compose.yml'
+      - 'Dockerfile*'
+      - '.github/workflows/ruby-test.yml'
+      - 'lib/sanity_check_sql/**/*.sql'
 
 jobs:
-  test:
+  overcommit:
     runs-on: ubuntu-latest
     env:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
+      NODE_MAJOR: 24
+      DISABLE_SPRING: 1
+    steps:
+      - uses: actions/checkout@v7
+      - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Install fresh Bundler packages
+        run: bin/bundle install
+      - name: Set up Corepack/Yarn
+        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_MAJOR }}
+          cache: 'yarn'
+      - name: Install fresh Yarn packages
+        run: bin/yarn install
+      - name: Run Overcommit commit hooks
+        run: |
+          gem install overcommit
+          overcommit --sign
+          overcommit --sign pre-commit
+          overcommit --run
+
+  rspec:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: js # browser-driven feature specs tagged `:js`
+            rspec-args: "--tag js"
+          - suite: other # everything else
+            rspec-args: "--tag ~js"
+    env:
+      RACK_ENV: test
+      RAILS_ENV: test
+      NODE_ENV: test
+      NODE_MAJOR: 24
       DISABLE_SPRING: 1
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up ImageMagick and Libvips # This is not included in GitHub runners by default anymore
         run: |
@@ -31,43 +93,72 @@ jobs:
         run: bin/bundle install
       - name: Set up Corepack/Yarn
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_MAJOR }}
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: bin/yarn install
-      - name: Run Overcommit commit hooks
-        run: |
-          gem install overcommit
-          overcommit --sign
-          overcommit --sign pre-commit
-          overcommit --run
       - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
         run: sudo systemctl start mysql.service
       - name: Populate database with seeds
         run: bin/rake db:reset
       - name: Pre-compile assets for frontend tests
+        if: matrix.suite == 'js' # only the browser-driven `:js` specs need precompiled assets
         run: |
-          bin/bundle exec i18n export
+          bin/i18n export
           bin/rake assets:precompile
       - name: Cache Playwright runnables
-        uses: actions/cache@v4
+        if: matrix.suite == 'js'
+        uses: actions/cache@v6
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}-capybara
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
+        if: matrix.suite == 'js'
         run: bin/yarn playwright install --with-deps --no-shell chromium
       - name: Run tests
         id: rspec
-        run: bin/rspec
+        run: bin/rspec ${{ matrix.rspec-args }}
       - name: Push coverage data to Coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: ${{ matrix.suite }}
+          parallel: true
           fail-on-error: false
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always() && steps.rspec.outcome == 'failure'
         with:
-          name: capybara-screenshots
+          name: capybara-screenshots-${{ matrix.suite }}
           path: tmp/capybara
+
+  # Single aggregating check so branch protection can require one stable name
+  # ("test") regardless of how the rspec matrix above evolves.
+  test:
+    needs: [rspec, overcommit]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all rspec matrix jobs and overcommit passed
+        run: |
+          if [ "${{ needs.rspec.result }}" != "success" ]; then
+            echo "One or more rspec matrix jobs failed: ${{ needs.rspec.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.overcommit.result }}" != "success" ]; then
+            echo "Overcommit hooks failed: ${{ needs.overcommit.result }}"
+            exit 1
+          fi
+
+  finish-coverage:
+    needs: rspec
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tell Coveralls all parallel jobs are done
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+          fail-on-error: false

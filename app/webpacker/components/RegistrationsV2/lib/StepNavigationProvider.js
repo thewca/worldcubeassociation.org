@@ -25,7 +25,8 @@ export default function StepNavigationProvider({
 
   const extendedStepsConfig = useMemo(() => {
     if (summaryPanelConfig) {
-      return [...stepsConfiguration, summaryPanelConfig];
+      const appendedSteps = [...stepsConfiguration, summaryPanelConfig];
+      return _.uniqBy(appendedSteps, 'key');
     }
 
     return stepsConfiguration;

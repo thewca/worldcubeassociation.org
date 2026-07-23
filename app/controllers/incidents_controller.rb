@@ -59,7 +59,7 @@ class IncidentsController < ApplicationController
   end
 
   def mark_as
-    @incident = Incident.find(params[:incident_id])
+    @incident = Incident.find(params.require(:incident_id))
     updated_attrs = {}
     case params[:kind]
     when "sent"
@@ -107,18 +107,18 @@ class IncidentsController < ApplicationController
   private
 
     def set_incident
-      @incident = Incident.find(params[:id])
+      @incident = Incident.find(params.require(:id))
     end
 
     def incident_params
-      params.require(:incident).permit(
-        :title,
-        :private_description,
-        :private_wrc_decision,
-        :public_summary,
-        :tags,
-        :digest_worthy,
-        incident_competitions_attributes: %i[id competition_id comments _destroy],
+      params.expect(
+        incident: [:title,
+                   :private_description,
+                   :private_wrc_decision,
+                   :public_summary,
+                   :tags,
+                   :digest_worthy,
+                   { incident_competitions_attributes: [%i[id competition_id comments _destroy]] }],
       )
     end
 end

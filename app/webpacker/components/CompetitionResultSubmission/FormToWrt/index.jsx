@@ -1,5 +1,7 @@
 import React from 'react';
-import { Accordion, Form, Message } from 'semantic-ui-react';
+import {
+  Form, Icon, Label, Message,
+} from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Errored from '../../Requests/Errored';
 import useInputState from '../../../lib/hooks/useInputState';
@@ -11,16 +13,24 @@ import runValidatorsForCompetitionList from '../../Panel/pages/RunValidatorsPage
 import { ALL_VALIDATORS } from '../../../lib/wca-data.js.erb';
 import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutput';
 
+export const IMPORT_STEP_TITLE = 'Import Results Data';
+export const IMPORT_STEP_ICON = 'upload';
+
 const DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL = 'https://documents.worldcubeassociation.org/edudoc/delegate-handbook/delegate-handbook.pdf#competition-results';
 const ERROR_MESSAGE_UPLOADED_RESULTS = "Please upload a JSON file and make sure the results don't contain any errors.";
 
-export default function FormToWrt({ competitionId, canSubmitResults }) {
+export default function FormToWrt({
+  competitionId,
+  hasTemporaryResults,
+  canSubmitResults,
+  onClickImportStep,
+}) {
   const [confirmDetails, setConfirmDetails] = useCheckboxState(false);
   const [message, setMessage] = useInputState();
 
   const {
     data: validationOutput,
-    isPending: isValidationPending,
+    isFetching: isValidationPending,
     isError: isErrorInPreviousUpload,
   } = useQuery({
     queryKey: ['competition-validation-output', competitionId],
@@ -30,6 +40,7 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
       false,
       false,
     ),
+    enabled: hasTemporaryResults,
   });
 
   const {
@@ -44,53 +55,65 @@ export default function FormToWrt({ competitionId, canSubmitResults }) {
     submitToWrtMutate({ competitionId, message });
   };
 
+  if (!hasTemporaryResults) return <Message info>Please import some results first!</Message>;
   if (isValidationPending || isSubmitPending) return <Loading />;
   if (isSuccess) return <Message success>Thank you for submitting the results!</Message>;
   if (isErrorInPreviousUpload) return <Errored error={ERROR_MESSAGE_UPLOADED_RESULTS} />;
   if (isErrorInCurrentUpload) return <Errored error={errorInSubmission} />;
 
   return (
-    <Accordion fluid styled>
-      <Accordion.Title active>
-        Submit to WRT
-      </Accordion.Title>
-      <Accordion.Content active>
-        <ValidationOutput validationOutput={validationOutput} />
-        {canSubmitResults && (
-          <>
-            <p>Please enter the body of your email to the Results Team.</p>
-            <p>
-              Make sure the schedule on the WCA website actually reflects what happened during the
-              competition.
-            </p>
-            <p>
-              Please also make sure to include any other additional details required by the
-              {' '}
-              <a href={DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL}>
-                &apos;Competition Results&apos; section of the Delegate Handbook.
-              </a>
-            </p>
-            <Form onSubmit={formSubmitHandler}>
-              <MarkdownEditor
-                id="message"
-                value={message}
-                onChange={setMessage}
-              />
-              <Form.Checkbox
-                value={confirmDetails}
-                onChange={setConfirmDetails}
-                label="I confirm the information displayed on the WCA website's events page and on the competition's schedule page reflect what happened during the competition."
-              />
-              <Form.Button
-                type="submit"
-                disabled={!confirmDetails || !message}
-              >
-                Submit
-              </Form.Button>
-            </Form>
-          </>
-        )}
-      </Accordion.Content>
-    </Accordion>
+    <>
+      <Message info icon>
+        <Icon name="info circle" />
+        <Message.Content>
+          These validations are based on your
+          {' '}
+          <b>imported</b>
+          {' '}
+          results data.
+          If you have changed or fixed some results,
+          you must go through the
+          {' '}
+          <Label as="a" content={IMPORT_STEP_TITLE} icon={IMPORT_STEP_ICON} onClick={onClickImportStep} />
+          {' '}
+          step above again!
+        </Message.Content>
+      </Message>
+      <ValidationOutput validationOutput={validationOutput} />
+      {canSubmitResults && (
+        <>
+          <p>Please enter the body of your email to the Results Team.</p>
+          <p>
+            Make sure the schedule on the WCA website actually reflects what happened during the
+            competition.
+          </p>
+          <p>
+            Please also make sure to include any other additional details required by the
+            {' '}
+            <a href={DELEGATE_HANDBOOK_COMPETITION_RESULTS_URL}>
+              &apos;Competition Results&apos; section of the Delegate Handbook.
+            </a>
+          </p>
+          <Form onSubmit={formSubmitHandler}>
+            <MarkdownEditor
+              id="message"
+              value={message}
+              onChange={setMessage}
+            />
+            <Form.Checkbox
+              value={confirmDetails}
+              onChange={setConfirmDetails}
+              label="I confirm the information displayed on the WCA website's events page and on the competition's schedule page reflect what happened during the competition."
+            />
+            <Form.Button
+              type="submit"
+              disabled={!confirmDetails || !message}
+            >
+              Submit
+            </Form.Button>
+          </Form>
+        </>
+      )}
+    </>
   );
 }

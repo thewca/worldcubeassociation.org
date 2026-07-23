@@ -1,6 +1,14 @@
 "use client";
 
-import { Menu, Button, ClientOnly, Skeleton, Icon } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ClientOnly,
+  Collapsible,
+  Menu,
+  Skeleton,
+  VStack,
+} from "@chakra-ui/react";
 import React from "react";
 import { LuChevronDown } from "react-icons/lu";
 import {
@@ -8,9 +16,8 @@ import {
   fallbackLng,
   storageKey,
 } from "@/lib/i18n/settings";
-import availableLocales from "@/lib/i18n/locales/available.json";
+import { availableLocales } from "@/lib/i18n/settings";
 import Cookies from "js-cookie";
-import Flag from "react-world-flags";
 
 export default function Wrapper() {
   return (
@@ -32,32 +39,70 @@ const LanguageSelector = () => {
 
   const currentLanguageLabel = availableLocales[currentLocale]?.name;
 
+  const localeEntries = Object.entries(availableLocales);
+
   return (
-    <Menu.Root>
-      <Menu.Trigger asChild>
-        <Button variant="ghost" size="sm">
-          {currentLanguageLabel}
-          <LuChevronDown />
-        </Button>
-      </Menu.Trigger>
-      <Menu.Positioner>
-        <Menu.Content>
-          <Menu.ItemGroup>
-            {Object.entries(availableLocales).map(([lang, config]) => (
-              <Menu.Item
-                value={lang}
-                key={lang}
-                onClick={() => handleChangeLocale(lang)}
-              >
-                <Icon size="sm">
-                  <Flag code={config.flag_id} />
-                </Icon>
-                {config.name}
-              </Menu.Item>
-            ))}
-          </Menu.ItemGroup>
-        </Menu.Content>
-      </Menu.Positioner>
-    </Menu.Root>
+    <>
+      {/* Desktop: popup dropdown */}
+      <Box hideBelow="md">
+        <Menu.Root>
+          <Menu.Trigger asChild>
+            <Button variant="ghost" size="sm">
+              {currentLanguageLabel}
+              <LuChevronDown />
+            </Button>
+          </Menu.Trigger>
+          <Menu.Positioner>
+            <Menu.Content>
+              <Menu.ItemGroup>
+                {localeEntries.map(([lang, cfg]) => (
+                  <Menu.Item
+                    value={lang}
+                    key={lang}
+                    onClick={() => handleChangeLocale(lang)}
+                  >
+                    {cfg.name}
+                  </Menu.Item>
+                ))}
+              </Menu.ItemGroup>
+            </Menu.Content>
+          </Menu.Positioner>
+        </Menu.Root>
+      </Box>
+
+      {/* Mobile: inline collapsible */}
+      <Box hideFrom="md" width="full">
+        <Collapsible.Root>
+          <Collapsible.Trigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              justifyContent="flex-start"
+              width="full"
+            >
+              {currentLanguageLabel}
+              <Collapsible.Indicator ml="auto">
+                <LuChevronDown />
+              </Collapsible.Indicator>
+            </Button>
+          </Collapsible.Trigger>
+          <Collapsible.Content>
+            <VStack align="stretch" pl={4} gap={1} py={1}>
+              {localeEntries.map(([lang, cfg]) => (
+                <Button
+                  key={lang}
+                  variant={lang === currentLocale ? "subtle" : "ghost"}
+                  size="sm"
+                  justifyContent="flex-start"
+                  onClick={() => handleChangeLocale(lang)}
+                >
+                  {cfg.name}
+                </Button>
+              ))}
+            </VStack>
+          </Collapsible.Content>
+        </Collapsible.Root>
+      </Box>
+    </>
   );
 };

@@ -5,4 +5,4 @@ if [ "$WCA_LIVE_SITE" = "0" ]; then
   mailcatcher --http-ip=0.0.0.0 --no-quit
 fi
 
-./bin/bundle exec sidekiq
+./bin/sidekiq

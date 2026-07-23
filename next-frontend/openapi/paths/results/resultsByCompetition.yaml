@@ -1,0 +1,17 @@
+get:
+  summary: Returns all results
+  operationId: resultsByCompetition
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/results/Results.yaml"
+

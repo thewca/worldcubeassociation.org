@@ -16,7 +16,6 @@ required:
   - end_date
   - enable_donations
   - competitor_limit
-  - extra_registration_requirements
   - on_the_spot_registration
   - refund_policy_percent
   - refund_policy_limit_date
@@ -30,12 +29,12 @@ required:
   - allow_registration_edits
   - allow_registration_without_qualification
   - competitor_can_cancel
+  - scoretaking_software
   - url
   - website
   - short_name
   - city
   - venue_address
-  - venue_details
   - latitude_degrees
   - longitude_degrees
   - country_iso2
@@ -47,10 +46,12 @@ required:
   - uses_cutoff?
   - competition_series_ids
   - registration_full?
+  - registration_full_and_accepted?
   - part_of_competition_series?
   - registration_full_and_accepted?
   - delegates
   - organizers
+  - tab_names
   - class
 properties:
   id:
@@ -143,6 +144,13 @@ properties:
   competitor_can_cancel:
     type: string
     example: "not_accepted"
+  scoretaking_software:
+    type: string
+    enum:
+      - external
+      - internal
+      - wca_live
+    example: external
   url:
     type: string
     format: uri
@@ -187,6 +195,17 @@ properties:
   registration_full?:
     type: boolean
     example: true
+  registration_full_and_accepted?:
+    type: boolean
+    example: true
+  spots_left:
+    type: integer
+    nullable: true
+    example: 42
+  tab_names:
+    type: array
+    items:
+      type: string
   delegates:
     type: array
     items:

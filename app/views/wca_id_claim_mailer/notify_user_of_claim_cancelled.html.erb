@@ -1,0 +1,13 @@
+<p>Hello <%= @user.name %>,</p>
+
+<p>You have previously requested to claim the WCA ID <%= @unconfirmed_wca_id %> for your account.</p>
+
+<% if @cleanup %>
+<p>We are currently cleaning up our records and reviewing these requests. We found that the WCA ID you asked for, was already taken by another account (<%= wca_id_link @unconfirmed_wca_id %>) before we could process your request.</p>
+<% else %>
+<p>The WCA ID you asked for (<%= wca_id_link @unconfirmed_wca_id %>), is now taken by another account before we could process your request.</p>
+<% end %>
+
+<p>It means that this WCA ID is no longer available, so we have cancelled your claim.</p>
+
+<p>If you believe this is an error, please <%= link_to "contact us", contact_url %>.</p>

@@ -17,7 +17,7 @@ RSpec.describe "registrations/register" do
     assign(:selected_events, [])
 
     render
-    expect(rendered).to match(/Accept competition terms/)
+    expect(rendered).to include('Accept competition terms')
     expect(rendered).to match(/Your registration is pending approval by the organizers./)
   end
 
@@ -34,7 +34,7 @@ RSpec.describe "registrations/register" do
     assign(:competition, competition)
 
     render
-    expect(rendered).to match(/Accept competition terms/)
+    expect(rendered).to include('Accept competition terms')
     expect(rendered).to match(/Registration closed <strong>[^>]*<.strong> ago/)
   end
 
@@ -51,7 +51,7 @@ RSpec.describe "registrations/register" do
     assign(:competition, competition)
 
     render
-    expect(rendered).to match(/Accept competition terms/)
+    expect(rendered).to include('Accept competition terms')
     expect(rendered).to match(/Registration will open in <strong>[^>]*<.strong>/)
   end
 
@@ -69,31 +69,31 @@ RSpec.describe "registrations/register" do
     pending("Until we find a better way to statically test React pages. Signed GB 11/13/2024")
 
     setup :paid
-    expect(rendered).to match(/Accept competition terms/)
-    expect(rendered).to match(/which fully covers the registration fees/)
+    expect(rendered).to include('Accept competition terms')
+    expect(rendered).to include('which fully covers the registration fees')
   end
 
   it "renders unpaid registrations and ask for payment" do
     pending("Until we find a better way to statically test React pages. Signed GB 11/13/2024")
 
     setup :unpaid
-    expect(rendered).to match(/Accept competition terms/)
-    expect(rendered).to match(/Pay now!/)
+    expect(rendered).to include('Accept competition terms')
+    expect(rendered).to include('Pay now!')
   end
 
   it "only shows fields that are editable by a competitor" do
     pending("Until we find a better way to statically test React pages. Signed GB 11/13/2024")
 
     setup :paid
-    expect(rendered).to match(/Accept competition terms/)
+    expect(rendered).to include('Accept competition terms')
 
-    expect(rendered).to match(/Events/)
-    expect(rendered).to match(/Guests/)
-    expect(rendered).to match(/Comments/)
+    expect(rendered).to include('Events')
+    expect(rendered).to include('Guests')
+    expect(rendered).to include('Comments')
 
     expect(rendered).not_to match(/Administrative [Nn]otes/)
-    expect(rendered).not_to match(/👽/)
+    expect(rendered).not_to include('👽')
 
-    expect(rendered).not_to match(/Status/)
+    expect(rendered).not_to include('Status')
   end
 end

@@ -6,8 +6,8 @@ class UserAvatar < ApplicationRecord
   has_one :current_user, class_name: "User", foreign_key: :current_avatar_id, inverse_of: :current_avatar, dependent: :nullify
   has_one :pending_user, class_name: "User", foreign_key: :pending_avatar_id, inverse_of: :pending_avatar, dependent: :nullify
 
-  belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by, optional: true
-  belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true
+  belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by, optional: true, inverse_of: :approved_user_avatars
+  belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true, inverse_of: :revoked_user_avatars
 
   has_one_attached :public_image, service: EnvConfig.AVATARS_PUBLIC_STORAGE
   has_one_attached :private_image, service: EnvConfig.AVATARS_PRIVATE_STORAGE
@@ -35,6 +35,11 @@ class UserAvatar < ApplicationRecord
   validates :public_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
   validates :private_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
 
+  # Only active_storage avatars go through the crop pipeline (see `can_edit_thumbnail?`).
+  # Legacy backends never set valid crops and many have nil/garbage crop columns, so validating
+  # them would make existing legacy rows invalid and break any later save/touch on them.
+  validates :thumbnail_crop_w, :thumbnail_crop_h, numericality: { greater_than: 0 }, if: :active_storage?
+
   private def linked_user
     # Make sure that we're traversing back the correct association (using `inverse_of`)
     #   when accessing current profile pictures. Marked as `private` because this is a pure
@@ -60,6 +65,10 @@ class UserAvatar < ApplicationRecord
     when 'local'
       ActionController::Base.helpers.asset_url(self.filename)
     end
+  end
+
+  def strict_url
+    self.url unless self.default_avatar? || (self.active_storage? && !self.attached?)
   end
 
   def thumbnail_url

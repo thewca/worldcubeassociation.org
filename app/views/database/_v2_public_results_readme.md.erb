@@ -1,0 +1,201 @@
+<% long_date ||= DateTime.now %>
+<% export_version ||= '2.0.2' %>
+# World Cube Association – Results Database Export
+
+- Encoding: UTF-8
+- Date: <%= long_date.strftime('%B %e, %Y') %>
+- Export Format Version: <%= export_version %>
+- Contact: WCA Results Team (https://www.worldcubeassociation.org/contact?contactRecipient=wrt)
+- Website: https://www.worldcubeassociation.org/export/results
+
+Opt in to the WCA Software Mailing List via [your profile preferences](https://www.worldcubeassociation.org/profile/edit?section=preferences) if you would like to receive email notifications about version changes.
+
+## V2.0.0 Changelog
+
+- Solved snake_case/CamelCase inconsistency by changing all table names to snake_case (this matches the WCA codebase's convention)
+- In addition to the above change in naming convention, the following column names have been changed:
+  - `competitions.wcaDelegate` -> `competitions.delegates`
+  - `competitions.organiser` -> `competitions.organizers`
+  - `competitions.latitude` -> `competitions.latitude_microdegrees`
+  - `competitions.longitude` -> `competitions.longitude_microdegrees`
+  - `persons.id` -> `persons.wca_id`
+  - `persons.subid` -> `persons.sub_id`
+  - `scrambles.scramble_id` -> `scrambles.id`
+  - ``
+- The following columns have been removed:
+  - `continents.latitude`
+  - `continents.longitude`
+  - `continents.zoom`
+  - `eligible_country_iso2s_for_championship.id`
+  - `events.cellName`
+  - `results.value{1-5}`
+- The following columns have been added:
+  - `results.id`
+
+- Changes to recording of attempts
+  - Added `result_attempts` SQL table / TSV export file, and removed `value1-5` in `results` table
+  - See [results and result_attempts](#results-and-resultattempts) for more information on how this data interacts
+
+## V2.0.1 Changelog
+- Fixed missing `results.id` and `result_attempts.id` keys
+- Fixed SQL error rendering in `WCA_exports_scrambles.tsv`
+
+## V2.0.2 Changelog
+- Removed the following fields from `result_attempts` to reduce filesize:
+  - `id`
+  - `created_at`
+  - `updated_at`
+- Changed `result_attempts.attempt_number` to an unsigned tinyint, also to reduce filesize
+
+## Description
+
+This database export contains public information about all official WCA
+competitions, WCA members, and WCA competition results.
+
+## Goal
+
+The goal of this database export is to provide members of the speedcubing
+community a practical way to perform analysis on competition information for
+statistical and personal purposes.
+
+## Allowed Use
+
+The information in this file may be re-published, in whole or in part, as long
+as users are clearly notified of the following:
+
+> This information is based on competition results owned and maintained by the
+> World Cube Assocation, published at https://worldcubeassociation.org/results
+> as of <%= long_date.strftime('%B %e, %Y') %>.
+
+## Acknowledgements
+
+The WCA database was originally created and maintained by:
+
+- Clément Gallet, France
+- Stefan Pochmann, Germany
+- Josef Jelinek, Czech Republic
+- Ron van Bruchem, Netherlands
+
+The database contents are now maintained by the WCA Results Team, and the
+software for the database is maintained by the WCA Software Team:
+https://www.worldcubeassociation.org/about
+
+## Date and Format Version
+
+The export contains a `metadata.json` file, with the following fields:
+
+| Field                   | Sample Value              |
+|-------------------------|---------------------------|
+| `export_date`           | `"<%= long_date.to_s %>"` |
+| `export_format_version` | `"<%= export_version %>"` |
+
+If you regularly process this export, we recommend that you check the
+`export_format_version` value in your program and and review your code if the
+major part of the version (the part before the first `.`) changes.
+
+If you are processing the exported data using an automated system, we recommend
+using a cron job to check the API endpoint at:
+https://www.worldcubeassociation.org/api/v0/export/public
+You can use the `export_date` to detect if there is a new export, and the
+`sql_url` and `tsv_url` will contain the URLs for the corresponding downloads.
+
+## Format (version <%= export_version %>)
+
+The database export consists of these tables:
+
+| Table                                   | Contents                                           |
+|-----------------------------------------|----------------------------------------------------|
+| persons                                 | WCA competitors                                    |
+| competitions                            | WCA competitions                                   |
+| events                                  | WCA events (3x3x3 Cube, Megaminx, etc)             |
+| results                                 | WCA results per competition+event+round+person     |
+| result_attempts                         | Individual attempts which make up a given `result` |
+| ranks_single                            | Best single result per competitor+event and ranks  |
+| ranks_average                           | Best average result per competitor+event and ranks |
+| round_types                             | The round types (first, final, etc)                |
+| formats                                 | The round formats (best of 3, average of 5, etc)   |
+| countries                               | Countries                                          |
+| continents                              | Continents                                         |
+| scrambles                               | Scrambles                                          |
+| championships                           | Championship competitions                          |
+| eligible_country_iso2s_for_championship | See explanation below                              |
+
+Most of the tables should be self-explanatory, but here are a few specific details:
+
+### countries
+
+`countries` stores include those from the Wikipedia list of countries at
+http://en.wikipedia.org/wiki/List_of_countries, and may include some countries
+that no longer exist. The ISO2 column should reflect ISO 3166-1 alpha-2
+country codes, for countries that have them. Custom codes may be used in some
+circumstances.
+
+### scrambles
+
+`scrambles` stores all scrambles.
+
+For `333mbf`, an attempt is comprised of multiple newline-separated scrambles.
+However, newlines can cause compatibility issues with TSV parsers. Therefore, in
+the TSV version of the data we replace each newline in a `333mbf` scramble with
+the `|` character.
+
+### eligible_country_iso2s_for_championship
+
+`eligible_country_iso2s_for_championship` stores information about which
+citizenships are eligible to win special cross-country championship types.
+
+For example, `greater_china` is a special championship type which contains 4
+`iso2` values: `CN`, `HK`, `MO` and `TW`. This means that any competitor from
+China, Hong Kong, Macau, or Taiwan is eligible to win a competition with
+championship type `greater_china`.
+
+### results and result_attempts
+
+Please see https://www.worldcubeassociation.org/regulations/#article-9-events
+for information about how results are measured.
+
+Values of the `results` and `result_attempts` tables can be interpreted as follows:
+
+- A `result` entry indicates the overall result achieved by a competitor in a given `round`.
+- `result.best` indicates the best single solve in a round, `result.average` indicates the average
+  achieved in the round.
+- The individual attempt/solve values which make up a result are in the `result_attempts` table,
+  and can be looked up using a given `result`'s `id` in the `result_attempt.result_id` column
+- The value `-1` means DNF (Did Not Finish).
+- The value `-2` means DNS (Did Not Start).
+- The value `0` means "no result". For example a result in a `best-of-3` round
+  has a value of `0` for the `average` field.
+- Positive values depend on the event; see the column "format" in Events.
+
+  - Most events have the format "time", where the value represents centiseconds.
+    For example, 8653 means 1 minute and 26.53 seconds.
+  - The format "number" means the value is a raw number, currently only used by
+    "fewest moves" for number of moves.
+    - Fewest moves averages are stored as 100 times the average, rounded.
+  - The format "multi" is for old and new multi-blind, encoding the time as well
+    as the number of cubes attempted and solved. This is a decimal value,
+    which can be interpreted ("decoded") as follows:
+
+        old: 1SSAATTTTT
+             solved        = 99 - SS
+             attempted     = AA
+             timeInSeconds = TTTTT (99999 means unknown)
+        new: 0DDTTTTTMM
+             difference    = 99 - DD
+             timeInSeconds = TTTTT (99999 means unknown)
+             missed        = MM
+             solved        = difference + missed
+             attempted     = solved + missed
+
+    In order to encode data, use the following procedure:
+
+             solved        = # cubes solved
+             attempted     = # cubes attempted
+             missed        = # cubes missed = attempted - solved
+             DD            = 99 - (solved - missed)
+             TTTTT         = solve time in seconds
+             MM            = missed
+
+    Note that this is designed so that a smaller decimal value means a better
+    result. This format does not support more than 99 attempted cubes, or times
+    greater than 99999 seconds (about 27.7 hours).

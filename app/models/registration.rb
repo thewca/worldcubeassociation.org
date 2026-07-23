@@ -20,11 +20,13 @@ class Registration < ApplicationRecord
   scope :with_payments, -> { joins(:registration_payments).distinct }
   scope :wcif_ordered, -> { order(:id) }
   scope :might_attend, -> { where(competing_status: %w[accepted waiting_list]) }
+  scope :scoretakers, -> { accepted.joins(:assignments).merge(Assignment.scoretaker) }
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
-  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy
-  has_many :registration_competition_events
+
+  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy, inverse_of: :registration
+  has_many :registration_competition_events, dependent: :destroy
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
@@ -32,6 +34,9 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
+
+  has_one :inbox_person, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], inverse_of: :registration
+  has_many :newcomer_results, -> { unmerged_newcomers }, class_name: "Result", foreign_key: %i[competition_id person_id], primary_key: %i[competition_id registrant_id], inverse_of: :newcomer_registration
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
@@ -59,14 +64,22 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
+  # rubocop:disable Rails/ActiveRecordCallbacksOrder
+  before_save :mark_accepted_at, if: :trying_to_accept?
+  private def mark_accepted_at
+    self.accepted_at = current_time_from_proper_timezone
+  end
+
   validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
 
   # Run the hook twice so that even if you try to skip validations, it still persists a non-null value to the DB
   before_validation :ensure_registrant_id, on: :create
   before_create :ensure_registrant_id
+  # rubocop:enable Rails/ActiveRecordCallbacksOrder
 
   private def ensure_registrant_id
-    self.registrant_id ||= competition.registrations.count + 1
+    max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
+    self.registrant_id ||= max_registrant_id + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
@@ -75,6 +88,9 @@ class Registration < ApplicationRecord
   validates :guests, numericality: { less_than_or_equal_to: DEFAULT_GUEST_LIMIT, if: :guests_unrestricted?, frontend_code: Registrations::ErrorCodes::UNREASONABLE_GUEST_COUNT }
 
   after_save :mark_registration_processing_as_done
+  after_save :trigger_bulk_auto_accept, if: lambda {
+    competition.auto_accept_preference_live? && competing_status_previously_changed?(from: 'accepted')
+  }
 
   private def mark_registration_processing_as_done
     Rails.cache.delete(CacheAccess.registration_processing_cache_key(competition_id, user_id))
@@ -142,7 +158,7 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
-  delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
+  delegate :name, :gender, :country, :country_iso2, :email, :dob, :wca_id, to: :user
 
   alias_method :birthday, :dob
 
@@ -212,7 +228,8 @@ class Registration < ApplicationRecord
     amount_lowest_denomination,
     currency_code,
     receipt,
-    user_id
+    user_id,
+    paid_at: nil
   )
     add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
     registration_payments.create!(
@@ -220,6 +237,7 @@ class Registration < ApplicationRecord
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
+      paid_at: paid_at,
     )
   end
 
@@ -279,6 +297,10 @@ class Registration < ApplicationRecord
         action: r.action,
       }
     end
+  end
+
+  def to_live_json
+    as_json(methods: %i[name country_iso2], only: %i[id user_id registrant_id])
   end
 
   def to_v2_json(admin: false, pii: false)
@@ -553,12 +575,17 @@ class Registration < ApplicationRecord
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 
+  # Allows us to trigger bulk_auto_accept from within an instance of Registration
+  def trigger_bulk_auto_accept
+    self.class.bulk_auto_accept(self.competition)
+  end
+
   def self.bulk_auto_accept(competition)
     if competition.waiting_list.present?
       waitlisted_registrations = competition.registrations.find(competition.waiting_list.entries)
 
       waitlisted_outcomes = waitlisted_registrations.each_with_object({}) do |reg, hash|
-        result = reg.attempt_auto_accept(:bulk)
+        result = reg.attempt_auto_accept
         hash[reg.id] = result
         break hash unless result[:succeeded]
       end
@@ -571,7 +598,7 @@ class Registration < ApplicationRecord
                             .sort_by { |registration| registration.last_positive_payment.paid_at }
 
     # We dont need to break out of pending registrations because auto accept can still put them on the waiting list
-    pending_outcomes = pending_registrations.index_by(&:id).transform_values { it.attempt_auto_accept(:bulk) }
+    pending_outcomes = pending_registrations.index_by(&:id).transform_values(&:attempt_auto_accept)
 
     waitlisted_outcomes.present? ? waitlisted_outcomes.merge(pending_outcomes) : pending_outcomes
   end
@@ -586,34 +613,39 @@ class Registration < ApplicationRecord
 
   delegate :auto_accept_preference, :auto_accept_preference_disabled?, :auto_accept_preference_bulk?, :auto_accept_preference_live?, to: :competition
 
-  def attempt_auto_accept(mode)
-    failure_reason = auto_accept_failure_reason(mode)
+  def attempt_auto_accept
+    failure_reason = auto_accept_failure_reason
     if failure_reason.present?
       log_auto_accept_failure(failure_reason)
       return { succeeded: false, info: failure_reason }
     end
 
-    update_payload = build_auto_accept_payload
-    auto_accepted_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+    new_competing_status = eligible_for_accepted_status? ? Registrations::Helper::STATUS_ACCEPTED : Registrations::Helper::STATUS_WAITING_LIST
+    # String keys because this is mimicing a params payload
+    update_payload = { 'user_id' => user_id, 'competing' => { 'status' => new_competing_status } }
 
-    if auto_accepted_registration.valid?
+    updated_registration = Registrations::RegistrationChecker.apply_payload(self, update_payload, clone: false)
+
+    if updated_registration.valid?
       update_lanes!(
         update_payload,
         AUTO_ACCEPT_ENTITY_ID,
       )
-      { succeeded: true, info: auto_accepted_registration.competing_status }
+      { succeeded: true, info: updated_registration.competing_status }
     else
-      error = auto_accepted_registration.errors.messages.values.flatten
+      error = updated_registration.errors.messages.values.flatten
       log_auto_accept_failure(error)
       { succeeded: false, info: error }
     end
   end
 
-  private def auto_accept_failure_reason(mode)
+  private def auto_accept_failure_reason
     return Registrations::ErrorCodes::OUTSTANDING_FEES if outstanding_entry_fees.positive?
-    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled? || (auto_accept_preference.to_sym != mode)
+    return Registrations::ErrorCodes::AUTO_ACCEPT_NOT_ENABLED if auto_accept_preference_disabled?
     return Registrations::ErrorCodes::INELIGIBLE_FOR_AUTO_ACCEPT unless competing_status_pending? || waiting_list_leader?
     return Registrations::ErrorCodes::AUTO_ACCEPT_DISABLE_THRESHOLD if competition.auto_accept_threshold_reached?
+    # Pending registrations can still be accepted onto the waiting list, so we only raise an error for already-waitlisted registrations
+    return Registrations::ErrorCodes::COMPETITOR_LIMIT_REACHED if competing_status_waiting_list? && competition.registration_full_and_accepted?
 
     Registrations::ErrorCodes::REGISTRATION_NOT_OPEN unless competition.registration_currently_open?
   end
@@ -627,14 +659,19 @@ class Registration < ApplicationRecord
     )
   end
 
-  private def build_auto_accept_payload
-    status = if competition.registration_full_and_accepted? && competing_status_pending?
-               Registrations::Helper::STATUS_WAITING_LIST
-             else
-               Registrations::Helper::STATUS_ACCEPTED
-             end
+  private def eligible_for_accepted_status?
+    return false if competition.registration_full_and_accepted?
 
-    # String keys because this is mimicing a params payload
-    { 'user_id' => user_id, 'competing' => { 'status' => status } }
+    case competing_status
+    when Registrations::Helper::STATUS_WAITING_LIST
+      waiting_list_leader?
+    when Registrations::Helper::STATUS_PENDING
+      # The Rails shorthand `blank?` specifically checks "nil or empty". This is exactly what we need because:
+      #   - Either a competition has no waiting list at all, in which case a pending registration can be accepted
+      #   - Or the waiting list exists and is empty, in which case a pending registration can proceed to accepted
+      waiting_list_blank?
+    else
+      false
+    end
   end
 end

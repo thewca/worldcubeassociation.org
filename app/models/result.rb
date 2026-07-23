@@ -3,7 +3,7 @@
 class Result < ApplicationRecord
   include Resultable
 
-  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true
+  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true, inverse_of: :results
   validates :person_name, presence: true
   belongs_to :country
   has_one :continent, through: :country
@@ -11,20 +11,11 @@ class Result < ApplicationRecord
 
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
   # we also need sure to query the correct competition as well through a composite key.
-  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
+  belongs_to :inbox_person, foreign_key: %i[competition_id person_id], optional: true, inverse_of: :results
+  belongs_to :newcomer_registration, class_name: "Registration", foreign_key: %i[competition_id person_id], primary_key: %i[competition_id registrant_id], optional: true, inverse_of: :newcomer_results
 
-  has_many :result_attempts
-
-  after_commit :create_or_update_attempts
-
-  def create_or_update_attempts
-    attempts = (1..5).filter_map do |n|
-      value = public_send(:"value#{n}")
-
-      { value: value, attempt_number: n, result_id: id } unless value.zero?
-    end
-    ResultAttempt.upsert_all(attempts)
-  end
+  has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
+  validates_associated :result_attempts
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
@@ -35,37 +26,36 @@ class Result < ApplicationRecord
     Country.c_find(self.country_id)
   end
 
-  # If saving changes to person_id, make sure that there is no results for
-  # that person yet for the round.
-  validate :unique_result_per_round, if: lambda {
-    will_save_change_to_person_id? || will_save_change_to_competition_id? || will_save_change_to_event_id? || will_save_change_to_round_type_id?
-  }
+  validates :person_id, uniqueness: { scope: :round_id, message: "this WCA ID already has a result for that round" }
 
-  def unique_result_per_round
-    has_result = Result.where(competition_id: competition_id,
-                              person_id: person_id,
-                              event_id: event_id,
-                              round_type_id: round_type_id).any?
-    errors.add(:person_id, "this WCA ID already has a result for that round") if has_result
-  end
-
-  scope :final, -> { where(round_type_id: RoundType.final_rounds.select(:id)) }
+  scope :final, -> { joins(:round).merge(Round.final) }
   scope :succeeded, -> { where("best > 0") }
   scope :average_succeeded, -> { where("average > 0") }
-  scope :podium, -> { final.succeeded.where(pos: [1..3]) }
-  scope :winners, -> { final.succeeded.where(pos: 1).joins(:event).order("events.rank") }
+  # A dual (linked) round stores one result row per round, so a competitor who took part in
+  # both rounds appears twice with the same global_pos. Keep only their better solve so each
+  # competitor shows up once. No-op for normal rounds (already one row per competitor).
+  scope :merged_dual_rounds, lambda {
+    best_per_person = select(:id).joins(:format).select(Arel.sql(<<~SQL.squish))
+      ROW_NUMBER() OVER (
+        PARTITION BY results.competition_id, results.event_id, results.person_id
+        ORDER BY (CASE WHEN formats.sort_by = 'average' THEN results.average ELSE results.best END) <= 0,
+                 (CASE WHEN formats.sort_by = 'average' THEN results.average ELSE results.best END) ASC,
+                 results.best <= 0, results.best ASC, results.id ASC
+      ) AS rn
+    SQL
+    where("results.id IN (SELECT id FROM (#{best_per_person.to_sql}) ranked WHERE rn = 1)")
+  }
+  scope :podium, -> { final.succeeded.where(global_pos: [1..3]).merged_dual_rounds }
+  scope :winners, -> { final.succeeded.where(global_pos: 1).merged_dual_rounds.joins(:event).order("events.rank") }
   scope :before, ->(date) { joins(:competition).where(competition: { end_date: ...date }) }
   scope :on_or_before, ->(date) { joins(:competition).where(competition: { end_date: ..date }) }
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }
   scope :average_better_than, ->(time) { where("average < ? AND average > 0", time) }
   scope :in_event, ->(event_id) { where(event_id: event_id) }
+  scope :unmerged_newcomers, -> { where("person_id REGEXP '^[0-9]+$'") }
 
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
-
-  def attempts
-    [value1, value2, value3, value4, value5]
-  end
 
   delegate :iso2, to: :country, prefix: true
 
@@ -78,5 +68,25 @@ class Result < ApplicationRecord
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def self.unpack_attempt_attributes(attempt_values, **additional_attributes)
+    attempt_values
+      .map
+      .with_index(1)
+      .filter { |value, _n| value != SolveTime::SKIPPED_VALUE }
+      .map do |value, n|
+        { value: value, attempt_number: n, **additional_attributes }
+    end
+  end
+
+  def self.augment_attempts(result_attrs, id_key: "id")
+    result_ids = result_attrs.pluck(id_key).uniq
+
+    result_attempts_by_result = ResultAttempt.where(result_id: result_ids)
+                                             .group_by(&:result_id)
+                                             .transform_values { it.sort_by(&:attempt_number).map(&:value) }
+
+    result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
   end
 end

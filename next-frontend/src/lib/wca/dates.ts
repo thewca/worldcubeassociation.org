@@ -1,4 +1,4 @@
-import { DateTime, Interval, Zone } from "luxon";
+import { DateTime, Interval, ToRelativeUnit, Zone } from "luxon";
 
 // parameter name conventions:
 // - `luxonDate` for luxon DateTime objects
@@ -12,7 +12,7 @@ export const toRelativeOptions = (locale: string) => ({
   roundUpAndAtBestDayPrecision: {
     locale,
     // don't be more precise than "days" (i.e. no hours/minutes/seconds)
-    unit: ["years", "months", "weeks", "days"],
+    unit: ["years", "months", "weeks", "days"] as ToRelativeUnit[],
     // round up, e.g. in 8 hours -> pads to 1 day 8 hours -> rounds to "in 1 day"
     padding: 24 * 60 * 60 * 1000,
   },
@@ -58,6 +58,13 @@ export const fullTimeDiff = (luxonDate: DateTime) => {
 
 export function hasPassed(dateTime: string, timeZone?: string | Zone) {
   return DateTime.fromISO(dateTime, { zone: timeZone }) < DateTime.now();
+}
+
+// for date-only strings, which would otherwise parse as midnight
+export function hasPassedEndOfDay(date: string, timeZone?: string | Zone) {
+  return (
+    DateTime.fromISO(date, { zone: timeZone }).endOf("day") < DateTime.now()
+  );
 }
 
 export function hasNotPassed(dateTime: string, timeZone?: string | Zone) {
@@ -124,6 +131,14 @@ export const getRegistrationTimestamp = (
   dateTime: string,
   timeZone: string | Zone = "local",
 ) => DateTime.fromISO(dateTime).setZone(timeZone).toFormat("D TT.u ZZZZ");
+
+export const getFullDateTimeStringNoSeconds = (
+  dateTime: string,
+  timeZone: string | Zone = "local",
+) =>
+  DateTime.fromISO(dateTime)
+    .setZone(timeZone)
+    .toLocaleString(DateTime.DATETIME_FULL);
 
 export const getFullDateTimeString = (
   dateTime: string,

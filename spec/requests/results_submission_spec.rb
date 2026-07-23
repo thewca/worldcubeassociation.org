@@ -53,6 +53,27 @@ RSpec.describe ResultsSubmissionController do
       end
     end
 
+    describe "Uploading a Results JSON" do
+      it "is refused when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+
+        post competition_upload_results_json_path(internal_comp.id)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("internal scoretaking")
+      end
+
+      it "is allowed for admins even when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+        sign_in create(:user, :wrt_member)
+
+        # Getting past the scoretaking guard means the action demands the actual file params.
+        expect do
+          post competition_upload_results_json_path(internal_comp.id)
+        end.to raise_error(ActionController::ParameterMissing)
+      end
+    end
+
     describe "Posting results" do
       let(:results_submission_params) do
         { message: submission_message, competition_id: comp.id }
@@ -66,7 +87,8 @@ RSpec.describe ResultsSubmissionController do
         expect do
           post competition_submit_results_path(comp.id), params: results_submission_params
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
-        assert_enqueued_jobs 0
+        # Newcomer checks will be triggered along with results submission.
+        assert_enqueued_jobs 1
       end
 
       it "throw error if empty message is provided" do
@@ -87,6 +109,64 @@ RSpec.describe ResultsSubmissionController do
         comp.update!(announced_at: nil)
         post competition_submit_results_path(comp.id), params: results_submission_params
         expect(response).to redirect_to(root_url)
+      end
+    end
+  end
+
+  describe "#check_newcomers_data_access" do
+    let(:wrt_user) { create(:user, :wrt_member) }
+    let(:regular_user) { create(:user) }
+
+    context "when competition is upcoming" do
+      let(:upcoming_comp) { create(:competition, :announced, :future) }
+
+      it "allows access for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(upcoming_comp.id)
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns unauthorized for regular user" do
+        sign_in regular_user
+
+        get competition_newcomer_name_format_check_path(upcoming_comp.id)
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when competition is ongoing and results not yet submitted" do
+      let(:comp_delegate) { create(:delegate) }
+      let(:ongoing_comp) { create(:competition, :announced, :ongoing, delegates: [comp_delegate]) }
+
+      it "allows access for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(ongoing_comp.id)
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "allows access for a Delegate of this current competition" do
+        sign_in comp_delegate
+
+        get competition_newcomer_name_format_check_path(ongoing_comp.id)
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "when competition has results submitted" do
+      let(:results_submitted_comp) { create(:competition, :announced, :with_valid_submitted_results) }
+
+      it "allows access for WRT user" do
+        sign_in wrt_user
+
+        get competition_newcomer_name_format_check_path(results_submitted_comp.id)
+
+        expect(response).to have_http_status(:ok)
       end
     end
   end

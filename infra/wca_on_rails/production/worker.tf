@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "worker" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3911"
+  memory = "3850"
 
   container_definitions = jsonencode([
 
@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "worker" {
       name              = "sqs-worker-production"
       image             = "${var.shared.ecr_repository.repository_url}:production-sqs-worker"
       cpu    = 1024
-      memory = 3911
+      memory = 3850
       portMappings = []
       logConfiguration = {
         logDriver = "awslogs"
@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "worker" {
       }
       environment = local.rails_environment
       healthCheck       = {
-        command            = ["CMD-SHELL", "pgrep bundle || exit 1"]
+        command            = ["CMD-SHELL", "pgrep ruby || exit 1"]
         interval           = 30
         retries            = 3
         startPeriod        = 60
