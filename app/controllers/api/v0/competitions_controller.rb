@@ -88,6 +88,18 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.results.podium
   end
 
+  def head_to_head
+    competition = competition_from_params
+    rounds = competition.rounds
+                        .h2h
+                        .includes(h2h_matches: [
+                                    { h2h_match_competitors: :user },
+                                    { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
+                                  ])
+
+    render json: rounds.map(&:to_h2h_json)
+  end
+
   def event_results
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])

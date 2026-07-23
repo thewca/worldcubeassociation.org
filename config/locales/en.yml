@@ -1487,6 +1487,7 @@ en:
             other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
       results:
         competitor: "Competitor"
+        head_to_head: "Head To Head Bracket"
         mean: "Mean"
       errors:
         round_closed: "The Round is not open yet"
@@ -2295,6 +2296,13 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+    h2h:
+      set_number: "Set %{number}"
+      stage_of: "Stage of %{number}"
+      quarterfinal_stage: "Quarterfinal Stage"
+      semifinal_stage: "Semifinal Stage"
+      final_stage: "Final Stage"
+      third_place: "Third Place"
     results_table:
       h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
       wca_profile: "WCA profile"

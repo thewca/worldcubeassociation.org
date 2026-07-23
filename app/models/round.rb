@@ -891,6 +891,31 @@ class Round < ApplicationRecord
     json
   end
 
+  def to_h2h_json
+    final_pos_by_user_id = h2h_final_positions_by_user_id
+
+    {
+      id: wcif_id,
+      event_id: event_id,
+      round_type_id: round_type_id,
+      matches: h2h_matches.sort_by(&:match_number).map { it.to_h2h_json(final_pos_by_user_id) },
+    }
+  end
+
+  # H2H rounds store their final standings either as posted results (keyed by
+  # WCA ID) or, before posting, as live results (keyed by registration).
+  private def h2h_final_positions_by_user_id
+    result_positions = results.pluck(:person_id, :pos).to_h
+
+    if result_positions.any?
+      return User.where(wca_id: result_positions.keys)
+                 .pluck(:id, :wca_id)
+                 .to_h { |id, wca_id| [id, result_positions[wca_id]] }
+    end
+
+    live_results.joins(:registration).pluck("registrations.user_id", :global_pos).to_h
+  end
+
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => "object",
