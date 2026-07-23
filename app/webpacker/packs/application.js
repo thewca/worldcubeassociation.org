@@ -36,6 +36,10 @@ import EventsTable from '../react_on_rails_components/EventsTable';
 import ManualPaymentSetup from '../react_on_rails_components/ManualPaymentSetup';
 import EditAvatar from '../react_on_rails_components/EditAvatar';
 import ImportRegistrations from '../react_on_rails_components/ImportRegistrations';
+import UserAvatar from '../components/UserAvatar';
+import Schedule from '../react_on_rails_components/Schedule';
+import EditSchedule from '../react_on_rails_components/EditSchedule';
+import ScrambleMatcher from '../react_on_rails_components/ScrambleMatcher';
 import {
   getUrlParams,
   setUrlParams,
@@ -91,6 +95,10 @@ ReactOnRails.register({
   ManualPaymentSetup,
   EditAvatar,
   ImportRegistrations,
+  UserAvatar,
+  Schedule,
+  EditSchedule,
+  ScrambleMatcher,
 });
 
 // Support component names relative to this directory:
