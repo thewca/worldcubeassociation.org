@@ -1,7 +1,7 @@
 <% provide(:title, t('registrations.import.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
-  <%= react_component("ImportRegistrations", {
+  <%= react_on_rails_component("ImportRegistrations", props: {
     competitionId: @competition.id,
   }) %>
 <% end %>
