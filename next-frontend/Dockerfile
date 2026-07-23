@@ -7,6 +7,9 @@ FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 
+# While we are not using sqlite we are importing it, so we do need the binaries
+RUN apk add --no-cache sqlite
+
 # NewRelic v12 does not bundle Alpine-compatible binaries anymore. So they have to be built from scratch.
 #   See https://github.com/newrelic/node-native-metrics?tab=readme-ov-file#musl-libc-systems for details.
 RUN apk add g++ make py3-pip
