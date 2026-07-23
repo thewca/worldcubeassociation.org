@@ -59,8 +59,9 @@ source_agg AS (
   SELECT
     psb.dest_round_id,
     COUNT(*) AS participants_source,
-    -- Only used for resultAchieved; ranking and percent derive participants_eligible from condition_value directly
-    SUM(IF(psb.max_best > 0 AND psb.best_scope_result <= dr.condition_value, 1, 0)) AS participants_eligible_ra
+    -- Only used for resultAchieved; ranking and percent derive participants_eligible from condition_value directly.
+    -- A "result achieved" condition requires a result strictly better than the threshold, hence `<`.
+    SUM(IF(psb.max_best > 0 AND psb.best_scope_result < dr.condition_value, 1, 0)) AS participants_eligible_ra
   FROM person_source_best AS psb
   INNER JOIN dest_rounds AS dr
   ON psb.dest_round_id = dr.round_id
