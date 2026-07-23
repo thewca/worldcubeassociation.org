@@ -173,7 +173,7 @@
 
     <% if current_user.can_change_users_avatar?(@user) %>
       <div class="tab-pane active" id="avatar">
-        <%= react_component("EditAvatar", {
+        <%= react_on_rails_component("EditAvatar", props: {
           userId: @user.id,
           showStaffGuidelines: @user.staff_or_any_delegate?,
           uploadDisabled: !editable_fields.include?(:pending_avatar),

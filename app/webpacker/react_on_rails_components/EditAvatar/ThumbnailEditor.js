@@ -16,7 +16,7 @@ import ReactCrop, {
   makeAspectCrop,
 } from 'react-image-crop';
 import I18n from '../../lib/i18n';
-import CroppedImage from './CroppedImage';
+import CroppedImage from '../../components/CroppedImage';
 
 // Crop starts as 33% of the original image size
 const SUGGESTED_IMG_RATIO = 33;

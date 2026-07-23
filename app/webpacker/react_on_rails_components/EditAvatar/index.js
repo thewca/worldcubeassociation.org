@@ -17,9 +17,9 @@ import 'react-image-crop/dist/ReactCrop.css';
 import ThumbnailEditor from './ThumbnailEditor';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { userAvatarDataUrl, panelUrls } from '../../lib/requests/routes.js.erb';
-import Errored from '../Requests/Errored';
+import Errored from '../../components/Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import UserAvatar from '../UserAvatar';
+import UserAvatar from '../../components/UserAvatar';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import { avatarImageTypes } from '../../lib/wca-data.js.erb';
 
