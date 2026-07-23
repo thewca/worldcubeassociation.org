@@ -1034,7 +1034,7 @@ export interface components {
             results: components["schemas"]["WcifResult"][];
         };
         /** @enum {string} */
-        RoundState: "open" | "locked" | "pending" | "ready";
+        RoundState: "open" | "locked" | "pending" | "ready" | "blocked";
         BaseAdminRound: components["schemas"]["WcifRound"] & {
             state: components["schemas"]["RoundState"];
         };
@@ -1071,7 +1071,16 @@ export interface components {
              */
             state: "ready";
         };
-        LiveRoundAdmin: components["schemas"]["OpenRound"] | components["schemas"]["LockedRound"] | components["schemas"]["PendingRound"] | components["schemas"]["ReadyRound"];
+        BlockedRound: components["schemas"]["BaseAdminRound"] & {
+            competitor_count_needed: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            state: "blocked";
+        };
+        LiveRoundAdmin: components["schemas"]["OpenRound"] | components["schemas"]["LockedRound"] | components["schemas"]["PendingRound"] | components["schemas"]["ReadyRound"] | components["schemas"]["BlockedRound"];
         LiveAttempt: {
             value: number;
             attempt_number: number;

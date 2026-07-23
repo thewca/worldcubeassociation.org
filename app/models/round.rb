@@ -685,13 +685,57 @@ class Round < ApplicationRecord
   STATE_OPEN = "open"
   STATE_READY = "ready"
   STATE_PENDING = "pending"
+  STATE_BLOCKED = "blocked"
+
+  NINE_M_MESSAGES = {
+    "9m1" => "a round with 99 or fewer competitors must have at most two subsequent rounds",
+    "9m2" => "a round with 15 or fewer competitors must have at most one subsequent round",
+    "9m3" => "a round with 7 or fewer competitors must not have subsequent rounds",
+  }.freeze
+
+  # Minimum number of competitors a previous round needs to satisfy the violated regulation
+  NINE_M_THRESHOLDS = {
+    "9m1" => 100,
+    "9m2" => 16,
+    "9m3" => 8,
+  }.freeze
 
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if participation_source.score_taking_done?
+    return STATE_PENDING unless participation_source.score_taking_done?
+    return STATE_BLOCKED if nine_m_violation.present?
 
-    STATE_PENDING
+    STATE_READY
+  end
+
+  # Returns the violated regulation ("9m1"/"9m2"/"9m3") if opening this round
+  # would violate https://www.worldcubeassociation.org/regulations/#9m
+  def nine_m_violation
+    # We allow opening all linked rounds even if that would break 9m for a better user experience
+    return nil if linked_round.present?
+
+    violation = nil
+    enforced_max_round = 4 # 9m: events may have at most four rounds
+
+    # Walk back through the previous rounds: each one caps the number of the
+    #   last round that may be held, based on how many competitors it had
+    previous = participation_source
+
+    while previous.is_a?(Round) || previous.is_a?(LinkedRound)
+      competitor_count = previous.total_competitors
+      subsequent_rounds_allowed = NINE_M_THRESHOLDS.values.count { competitor_count >= it }
+      max_round_number = previous.number + subsequent_rounds_allowed
+
+      if max_round_number < enforced_max_round
+        enforced_max_round = max_round_number
+        violation = %w[9m3 9m2 9m1][subsequent_rounds_allowed]
+      end
+
+      previous = previous.participation_source
+    end
+
+    enforced_max_round >= number ? nil : violation
   end
 
   def open?
@@ -886,6 +930,12 @@ class Round < ApplicationRecord
     if state == STATE_OPEN
       json = json.merge({
                           "completed_competitors" => completed_competitors,
+                        })
+    end
+
+    if state == STATE_BLOCKED
+      json = json.merge({
+                          "competitor_count_needed" => NINE_M_THRESHOLDS[nine_m_violation],
                         })
     end
     json

@@ -3,6 +3,7 @@
 import { Button } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
+import { Tooltip } from "@/components/ui/tooltip";
 import { LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
@@ -13,11 +14,13 @@ export default function ActionButtons({
   roundId,
   competitionId,
   hasResultsEntered,
+  blockedCompetitorCount,
 }: {
   state: LiveRoundState;
   roundId: string;
   competitionId: string;
   hasResultsEntered: boolean;
+  blockedCompetitorCount?: number;
 }) {
   const api = useAPI();
   const { setRoundState } = useAllRoundsInfo();
@@ -91,6 +94,24 @@ export default function ActionButtons({
   const { t } = useT();
 
   const confirm = useConfirm();
+
+  if (state == "blocked") {
+    return (
+      <Tooltip
+        showArrow
+        content={t("competitions.live.admin.warnings.9m_violated", {
+          competitor_count_needed: blockedCompetitorCount,
+        })}
+      >
+        {/* span wrapper so the tooltip still opens over the disabled button */}
+        <span>
+          <Button variant="outline" size="sm" disabled>
+            {t("competitions.live.admin.open")}
+          </Button>
+        </span>
+      </Tooltip>
+    );
+  }
 
   if (state == "ready") {
     return (
