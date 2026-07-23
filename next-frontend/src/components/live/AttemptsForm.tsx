@@ -8,6 +8,8 @@ import {
   Portal,
   VStack,
   Text,
+  Stat,
+  StatGroup,
 } from "@chakra-ui/react";
 import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
 import _ from "lodash";
@@ -24,6 +26,8 @@ import {
 import { flushSync } from "react-dom";
 import type { KeyboardEvent, ReactNode, Ref } from "react";
 import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
+import { average, best } from "@/lib/wca/results/attempts";
+import { formatAttemptResult, SKIPPED_VALUE } from "@/lib/wca/wcif/attempts";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import { useRoundInfo } from "@/providers/RoundInfoProvider";
@@ -131,6 +135,13 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
 
   const hasMetCutoff = meetsCutoff(attempts, cutoff);
 
+  const bestResult = best(attempts);
+  // `average` only supports Mo3/Ao5-shaped attempt counts and throws otherwise.
+  const averageResult =
+    attempts.length === 3 || attempts.length === 5
+      ? average(attempts, eventId)
+      : SKIPPED_VALUE;
+
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <VStack align="left">
@@ -207,6 +218,24 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
             </Button>
           )}
         </FocusScope>
+        {selectedCompetitor && (
+          <StatGroup justifyContent="space-between">
+            <Stat.Root flex="0" alignItems="flex-start">
+              <Stat.Label>{t("common.best")}</Stat.Label>
+              <Stat.ValueText>
+                {formatAttemptResult(bestResult, eventId)}
+              </Stat.ValueText>
+            </Stat.Root>
+            {averageResult !== SKIPPED_VALUE && (
+              <Stat.Root flex="0" alignItems="flex-end">
+                <Stat.Label>{t("common.average")}</Stat.Label>
+                <Stat.ValueText>
+                  {formatAttemptResult(averageResult, eventId)}
+                </Stat.ValueText>
+              </Stat.Root>
+            )}
+          </StatGroup>
+        )}
         <Checkbox.Root checked={batchMode} onCheckedChange={batchConfirmation}>
           <Checkbox.HiddenInput />
           <Checkbox.Control />
