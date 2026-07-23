@@ -1,6 +1,6 @@
 import { Container } from "@chakra-ui/react";
 import type { Metadata } from "next";
-import { getHistoricalRegulations } from "@/lib/wca/regulations/getRegulations";
+import { getTranslatedRegulations } from "@/lib/wca/regulations/getRegulations";
 import RegulationsViewer from "@/components/regulations/RegulationsViewer";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
@@ -8,21 +8,21 @@ import { getT } from "@/lib/i18n/get18n";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ version: string }>;
+  params: Promise<{ language: string }>;
 }): Promise<Metadata> {
-  const { version } = await params;
-  return { title: `WCA Regulations ${version}` };
+  const { language } = await params;
+  return { title: `WCA Regulations (${language})` };
 }
 
-export default async function HistoricalRegulation({
+export default async function TranslatedRegulations({
   params,
 }: {
-  params: Promise<{ version: string }>;
+  params: Promise<{ language: string }>;
 }) {
-  const { version } = await params;
+  const { language } = await params;
 
   const { t } = await getT();
-  const { data, error, response } = await getHistoricalRegulations(version);
+  const { data, error, response } = await getTranslatedRegulations(language);
 
   if (error) return <OpenapiError response={response} t={t} />;
 

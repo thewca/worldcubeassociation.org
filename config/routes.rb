@@ -442,7 +442,10 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/records' => "persons#records", as: :person_records
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
+      get '/regulations' => 'regulations#show', as: :regulations
       get '/regulations/translations' => 'regulations#translations', as: :regulations_translations
+      get '/regulations/translations/:language' => 'regulations#translation', as: :regulations_translation
+      get '/regulations/history/official/:version' => 'regulations#historical', as: :regulations_historical
       get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
       get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'

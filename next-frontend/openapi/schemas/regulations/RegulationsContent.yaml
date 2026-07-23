@@ -1,0 +1,7 @@
+type: object
+required:
+  - content_html
+properties:
+  content_html:
+    type: string
+    description: Rendered HTML fragment of the regulations, including deep-link anchors.
