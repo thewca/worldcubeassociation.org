@@ -27,13 +27,17 @@
     },
     "plugins": [
         "react",
-        "jquery"
+        "jquery",
+        "import"
     ],
     "rules": {
         "react/prop-types": "off",
         "react/jsx-filename-extension": "off",
         "import/no-unresolved": ["error", {
             "ignore": ["semantic-css/"]
+        }],
+        "import/order": ["error", {
+            "groups": ["builtin", "external", "internal"]
         }],
         "no-console": ["error", { "allow": ["warn", "error"] }]
     }
