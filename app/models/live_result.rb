@@ -150,23 +150,23 @@ class LiveResult < ApplicationRecord
     )
   end
 
-  def to_wcif
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
     {
       "personId" => registrant_id,
       "ranking" => global_pos,
-      "attempts" => live_attempts.map(&:to_wcif),
+      "attempts" => live_attempts.map { it.to_wcif(version: version) },
       "best" => best,
       "average" => average,
     }
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => %w[object null],
       "properties" => {
         "personId" => { "type" => "integer" },
         "ranking" => { "type" => %w[integer null] },
-        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema },
+        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema(version: version) },
         "best" => { "type" => "integer" },
         "average" => { "type" => "integer" },
       },

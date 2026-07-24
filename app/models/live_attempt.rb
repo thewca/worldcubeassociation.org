@@ -30,15 +30,19 @@ class LiveAttempt < ApplicationRecord
     ResultAttempt.new(value: value, attempt_number: attempt_number)
   end
 
-  def to_wcif
-    { "result" => self.value, "reconstruction" => nil }
+  def wcif_result_field(version)
+    Gem::Version.new(version) >= Gem::Version.new("2.0.0") ? "value" : "result"
   end
 
-  def self.wcif_json_schema
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+    { wcif_result_field(version) => self.value, "reconstruction" => nil }
+  end
+
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => %w[object null],
       "properties" => {
-        "result" => { "type" => "integer" },
+        wcif_result_field(version) => { "type" => "integer" },
         "reconstruction" => { "type" => %w[string null] },
       },
     }
