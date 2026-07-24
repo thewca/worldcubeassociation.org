@@ -61,6 +61,52 @@ RSpec.describe User do
     expect(user).to be_invalid_with_errors(email: ["is invalid"])
   end
 
+  describe "name validation" do
+    it "allows names without parentheses" do
+      user = build(:user, name: "John Doe")
+      expect(user).to be_valid
+    end
+
+    it "allows names with localized name in parentheses at the end" do
+      user = build(:user, name: "Seung Hyuk Nahm (남승혁)")
+      expect(user).to be_valid
+    end
+
+    it "invalidates names with multiple sets of parentheses" do
+      user = build(:user, name: "John (Preferred) Doe (한글)")
+      expect(user).to be_invalid_with_errors(name: [I18n.t('users.errors.name_invalid_parentheses')])
+    end
+
+    it "invalidates names with parentheses not at the end" do
+      user = build(:user, name: "Legal (Preferred) Last")
+      expect(user).to be_invalid_with_errors(name: [I18n.t('users.errors.name_invalid_parentheses')])
+
+      user = build(:user, name: "John (Nickname) Doe Smith")
+      expect(user).to be_invalid_with_errors(name: [I18n.t('users.errors.name_invalid_parentheses')])
+    end
+
+    it "invalidates names with opening parenthesis not preceded by space" do
+      user = build(:user, name: "John(Nickname)")
+      expect(user).to be_invalid_with_errors(name: [I18n.t('users.errors.name_invalid_parentheses')])
+    end
+
+    it "invalidates names with opening parenthesis but no closing parenthesis" do
+      user = build(:user, name: "John Doe (incomplete")
+      expect(user).to be_invalid_with_errors(name: [I18n.t('users.errors.name_invalid_parentheses')])
+    end
+
+    it "invalidates names with closing parenthesis but no opening parenthesis" do
+      user = build(:user, name: "John Doe) incomplete")
+      expect(user).to be_invalid_with_errors(name: [I18n.t('users.errors.name_invalid_parentheses')])
+    end
+
+    it "trims whitespace from names" do
+      user = build(:user, name: "  John Doe  ")
+      user.valid?
+      expect(user.name).to eq "John Doe"
+    end
+  end
+
   it "can confirm a user who has never competed before" do
     user = build(:user, unconfirmed_wca_id: "")
     user.confirm

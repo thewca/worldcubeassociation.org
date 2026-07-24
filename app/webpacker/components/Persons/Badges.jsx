@@ -66,26 +66,42 @@ export default function Badges({ userId }) {
   ));
   const roles = data || [];
 
+  const badges = [];
+  const badgesByKey = {};
+  roles.forEach((role) => {
+    const {
+      roleTitle, groupTitle, badgeClass, url,
+    } = badgeParams(role);
+    const key = `${badgeClass}-${roleTitle}-${url}`;
+    if (badgesByKey[key]) {
+      badgesByKey[key].groupTitles.push(groupTitle);
+    } else {
+      const badge = {
+        roleTitle, groupTitles: [groupTitle], badgeClass, url,
+      };
+      badgesByKey[key] = badge;
+      badges.push(badge);
+    }
+  });
+
   return (
     <div className="positions-container">
       {
-        roles.map((role) => {
-          const {
-            roleTitle, groupTitle, badgeClass, url,
-          } = badgeParams(role);
-          return (
-            <Popup
-              content={groupTitle}
-              position="bottom center"
-              inverted
-              trigger={(
-                <span className={`badge ${badgeClass}`}>
-                  <a href={url}>{roleTitle}</a>
-                </span>
+        badges.map(({
+          roleTitle, groupTitles, badgeClass, url,
+        }) => (
+          <Popup
+            key={`${badgeClass}-${roleTitle}-${url}`}
+            content={groupTitles.join(', ')}
+            position="bottom center"
+            inverted
+            trigger={(
+              <span className={`badge ${badgeClass}`}>
+                <a href={url}>{roleTitle}</a>
+              </span>
             )}
-            />
-          );
-        })
+          />
+        ))
       }
     </div>
   );
