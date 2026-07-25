@@ -3,7 +3,8 @@
 class Api::V1::Live::LiveController < Api::V1::ApiController
   protect_from_forgery with: :null_session
   skip_before_action :require_user!, only: %i[round_results by_person podiums rounds]
-  before_action :require_score_taking_internal
+  before_action :competition_from_params
+  before_action :require_scoretaking_internal, except: :round_results
 
   def add_or_update_result
     results = params.expect(attempts: [%i[value attempt_number]])
@@ -281,8 +282,12 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   private
 
-    def require_score_taking_internal
+    def competition_from_params
       @competition = Competition.find(params.require(:competition_id))
-      raise WcaExceptions::NotPermitted.new("Score Taking Software needs to be set to Internal") unless @competition.scoretaking_software_internal?
+    end
+
+    def require_scoretaking_internal
+      @competition ||= competition_from_params
+      raise WcaExceptions::NotPermitted.new("Scoretaking software needs to be set to Internal") unless @competition.scoretaking_software_internal?
     end
 end

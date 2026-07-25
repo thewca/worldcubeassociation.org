@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_13_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_25_121610) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1689,7 +1689,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_13_000000) do
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "potential_duplicate_persons", "duplicate_checker_job_runs"
-  add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
+  add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id", on_delete: :cascade
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_competition_events", "competition_events", on_delete: :cascade

@@ -111,6 +111,31 @@ RSpec.describe ResultsSubmissionController do
         expect(response).to redirect_to(root_url)
       end
     end
+
+    describe "Importing results from WCA Live" do
+      let(:live_comp) { create(:competition, :announced, event_ids: ["333"], delegates: [user]) }
+      let(:round) { create(:round, competition: live_comp, event_id: "333") }
+      let(:registration) { create(:registration, :accepted, competition: live_comp) }
+
+      it "is refused when some results are still outstanding" do
+        create(:live_result, round: round, registration: registration, best: 0, average: 0, attempts_count: 0)
+
+        post competition_import_from_live_path(live_comp.id)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("outstanding")
+        expect(response.parsed_body["error"]).to include(registration.registrant_id.to_s)
+      end
+
+      it "gets past the outstanding-results guard when all results are entered" do
+        create(:live_result, round: round, registration: registration, best: 500, average: 600)
+
+        # Getting past the outstanding-results guard means the action demands the import params.
+        expect do
+          post competition_import_from_live_path(live_comp.id)
+        end.to raise_error(ActionController::ParameterMissing)
+      end
+    end
   end
 
   describe "#check_newcomers_data_access" do

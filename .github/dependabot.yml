@@ -30,7 +30,14 @@ updates:
     - dependency-name: webpack-dev-server
       versions:
         - ">= 6"
+    # Version 7 has some major migration requirements, which are too much for the legacy React.
+    #   We will support the new releases in NextJS, so the migration will happen as part of porting pages
+    - dependency-name: "@fullcalendar/*"
+      versions:
+        - ">= 7"
   open-pull-requests-limit: 10
+  cooldown:
+    default-days: 1
 - package-ecosystem: npm
   directory: "/next-frontend"
   schedule:
@@ -56,7 +63,19 @@ updates:
       patterns:
         - "next"
         - "eslint-config-next"
+    tanstack-query:
+      patterns:
+        - "@tanstack/react-query"
+        - "@tanstack/eslint-plugin-query"
   open-pull-requests-limit: 10
+  cooldown:
+    default-days: 1
+    exclude:
+      - "react"
+      - "react-dom"
+      - "next"
+      - "payload"
+      - "@payloadcms/*"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:

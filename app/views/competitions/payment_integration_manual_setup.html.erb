@@ -1,7 +1,7 @@
 <% provide(:title, @competition.name) %>
 
 <%= render layout: 'nav' do %>
-  <%= react_component("ManualPaymentSetup", {
+  <%= react_on_rails_component("ManualPaymentSetup", props: {
     competitionId: @competition.id,
     accountDetails: @account_details,
   }) %>

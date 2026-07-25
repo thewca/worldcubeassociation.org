@@ -1,6 +1,6 @@
 import TabCompetitors from "@/components/competitions/TabCompetitors";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
-import { hasPassed } from "@/lib/wca/dates";
+import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import getPermissions from "@/lib/wca/permissions";
@@ -22,7 +22,7 @@ export default async function Competitors({
 
   const isLive =
     hasPassed(competitionInfo.start_date) &&
-    !hasPassed(competitionInfo.end_date);
+    !hasPassedEndOfDay(competitionInfo.end_date);
 
   return (
     <TabCompetitors

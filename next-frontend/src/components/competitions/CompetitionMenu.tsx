@@ -1,5 +1,5 @@
 import { components } from "@/types/openapi";
-import { hasPassed } from "@/lib/wca/dates";
+import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import {
   afterCompetitionTabs,
   beforeCompetitionTabs,
@@ -27,7 +27,7 @@ export default function CompetitionMenu({
     );
   }
 
-  if (!hasPassed(competitionInfo.end_date) || LIVE_RESULT_BETA) {
+  if (!hasPassedEndOfDay(competitionInfo.end_date) || LIVE_RESULT_BETA) {
     return (
       <LiveMenu
         competitionInfo={competitionInfo}

@@ -562,7 +562,7 @@ RSpec.describe "API Competitions" do
             {
               personId: competitor.registrant_id,
               ranking: 10,
-              attempts: [{ result: 456 }, { result: 745 }, { result: 657 }, { result: 465 }, { result: 835 }],
+              attempts: [{ value: 456 }, { value: 745 }, { value: 657 }, { value: 465 }, { value: 835 }],
               best: 456,
               average: 622,
             },

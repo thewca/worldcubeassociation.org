@@ -256,7 +256,6 @@ export default function RegionManager() {
         status={(selectedGroup?.parent_group_id
           ? delegateRegionsStatus.regional_delegate
           : delegateRegionsStatus.senior_delegate)}
-        location={selectedGroup?.name}
       />
     </>
   );
