@@ -3,7 +3,7 @@ import { Icon, Table } from 'semantic-ui-react';
 import cn from 'classnames';
 
 import { personUrl, editResultUrl } from '../../../lib/requests/routes.js.erb';
-import RegionFlag from '../../wca/RegionFlag';
+import RegionFlag from '../../../components/wca/RegionFlag';
 import {
   formatAttemptResult,
   formatAttemptsForResult,

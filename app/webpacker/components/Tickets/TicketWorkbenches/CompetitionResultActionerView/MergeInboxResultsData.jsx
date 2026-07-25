@@ -10,10 +10,10 @@ import getImportedTemporaryScrambles from '../../api/competitionResult/getImport
 import mergeInboxResults from '../../api/competitionResult/mergeInboxResults';
 import mergeInboxScrambles from '../../api/competitionResult/mergeInboxScrambles';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
-import { ResultRowHeader } from '../../../ResultsData/Results/ResultRowHeader';
-import ResultRowBody from '../../../ResultsData/Results/ResultRowBody';
-import ScrambleRowHeader from '../../../ResultsData/Scrambles/ScrambleRowHeader';
-import ScrambleRowBody from '../../../ResultsData/Scrambles/ScrambleRowBody';
+import { ResultRowHeader } from '../../../../react_on_rails_components/ResultsData/Results/ResultRowHeader';
+import ResultRowBody from '../../../../react_on_rails_components/ResultsData/Results/ResultRowBody';
+import ScrambleRowHeader from '../../../../react_on_rails_components/ResultsData/Scrambles/ScrambleRowHeader';
+import ScrambleRowBody from '../../../../react_on_rails_components/ResultsData/Scrambles/ScrambleRowBody';
 
 export function MergeInboxResults({ ticketDetails, currentStakeholder }) {
   return (

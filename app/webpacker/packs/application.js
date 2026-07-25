@@ -49,6 +49,10 @@ import CompetitionResultSubmission from '../react_on_rails_components/Competitio
 import CompetitionResultSubmissionAdmin from '../react_on_rails_components/CompetitionResultSubmission/Admin';
 import CompetitionResultSubmissionCheckExistingResults from '../react_on_rails_components/CompetitionResultSubmission/CheckExistingResults';
 import NewcomerChecksPage from '../react_on_rails_components/NewcomerChecks';
+import ResultsDataResults from '../react_on_rails_components/ResultsData/Results';
+import ResultsDataScrambles from '../react_on_rails_components/ResultsData/Scrambles';
+import RolesTab from '../react_on_rails_components/RolesTab';
+import PersonsBadges from '../react_on_rails_components/Persons/Badges';
 import {
   getUrlParams,
   setUrlParams,
@@ -117,6 +121,10 @@ ReactOnRails.register({
   CompetitionResultSubmissionAdmin,
   CompetitionResultSubmissionCheckExistingResults,
   NewcomerChecks: NewcomerChecksPage,
+  ResultsDataResults,
+  ResultsDataScrambles,
+  RolesTab,
+  PersonsBadges,
 });
 
 // Support component names relative to this directory:

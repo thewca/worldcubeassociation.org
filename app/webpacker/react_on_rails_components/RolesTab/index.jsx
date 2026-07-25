@@ -1,8 +1,8 @@
 import React from 'react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
-import Errored from '../Requests/Errored';
-import Loading from '../Requests/Loading';
+import Errored from '../../components/Requests/Errored';
+import Loading from '../../components/Requests/Loading';
 import ActiveRoles from './ActiveRoles';
 import PastRoles from './PastRoles';
 

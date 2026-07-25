@@ -4,8 +4,8 @@ import {
   Button, Icon, Form, Message,
 } from 'semantic-ui-react';
 
-import RegionSelector from '../../wca/RegionSelector';
-import GenderSelector from '../../wca/GenderSelector';
+import RegionSelector from '../../../components/wca/RegionSelector';
+import GenderSelector from '../../../components/wca/GenderSelector';
 import { adminGenerateIds, personsUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { countries } from '../../../lib/wca-data.js.erb';
