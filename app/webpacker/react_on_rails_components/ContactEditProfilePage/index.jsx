@@ -11,8 +11,8 @@ import EditProfileFormHolder from './EditProfileFormHolder';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import useQueryParams from '../../lib/hooks/useQueryParams';
 import useInputState from '../../lib/hooks/useInputState';
-import { IdWcaSearch } from '../../components/SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../components/SearchWidget/SearchModel';
+import { IdWcaSearch } from '../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../SearchWidget/SearchModel';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 
 export default function Wrapper({ loggedInUserId, recaptchaPublicKey }) {

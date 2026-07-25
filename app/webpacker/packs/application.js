@@ -57,6 +57,11 @@ import RegistrationsV2Registrations from '../react_on_rails_components/Registrat
 import RegistrationsV2RegistrationEdit from '../react_on_rails_components/RegistrationsV2/RegistrationEdit';
 import RegistrationsV2Register from '../react_on_rails_components/RegistrationsV2/Register';
 import RegistrationsV2RegistrationAdministration from '../react_on_rails_components/RegistrationsV2/RegistrationAdministration';
+import CompetitionFormEdit from '../react_on_rails_components/CompetitionForm/Edit';
+import CompetitionFormCreate from '../react_on_rails_components/CompetitionForm/Create';
+import PanelTemplate from '../react_on_rails_components/Panel/PanelTemplate';
+import Tickets from '../react_on_rails_components/Tickets';
+import SearchWidget from '../react_on_rails_components/SearchWidget';
 import {
   getUrlParams,
   setUrlParams,
@@ -133,6 +138,11 @@ ReactOnRails.register({
   RegistrationsV2RegistrationEdit,
   RegistrationsV2Register,
   RegistrationsV2RegistrationAdministration,
+  CompetitionFormEditXX: CompetitionFormEdit,
+  CompetitionFormCreateXX: CompetitionFormCreate,
+  PanelTemplateXX: PanelTemplate,
+  TicketsXX: Tickets,
+  SearchWidgetXX: SearchWidget,
 });
 
 // Support component names relative to this directory:

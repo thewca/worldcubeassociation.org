@@ -1,9 +1,9 @@
 import React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Message } from 'semantic-ui-react';
-import MergeUsers from '../../components/Panel/pages/MergeUsersPage/MergeUsers';
-import AssignWcaIdToUser from '../../components/Panel/views/AssignWcaIdToUser';
-import ApproveWcaIdClaim from '../../components/Panel/views/ApproveWcaIdClaim';
+import MergeUsers from '../Panel/pages/MergeUsersPage/MergeUsers';
+import AssignWcaIdToUser from '../Panel/views/AssignWcaIdToUser';
+import ApproveWcaIdClaim from '../Panel/views/ApproveWcaIdClaim';
 import { editPersonUrl } from '../../lib/requests/routes.js.erb';
 
 export default function MergeModal({

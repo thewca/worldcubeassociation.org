@@ -9,9 +9,9 @@ import MarkdownEditor from '../../../components/wca/FormBuilder/input/MarkdownEd
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import submitToWrt from '../api/submitToWrt';
 import Loading from '../../../components/Requests/Loading';
-import runValidatorsForCompetitionList from '../../../components/Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
+import runValidatorsForCompetitionList from '../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
 import { ALL_VALIDATORS } from '../../../lib/wca-data.js.erb';
-import ValidationOutput from '../../../components/Panel/pages/RunValidatorsPage/ValidationOutput';
+import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutput';
 
 export const IMPORT_STEP_TITLE = 'Import Results Data';
 export const IMPORT_STEP_ICON = 'upload';

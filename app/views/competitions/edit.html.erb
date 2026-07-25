@@ -2,7 +2,7 @@
 <% add_to_packs("wca_maps") %>
 
 <%= render layout: 'nav' do %>
-  <%= react_component("CompetitionForm/Edit", {
+  <%= react_on_rails_component("CompetitionFormEdit", props: {
     competition: @competition.to_form_data,
     storedEvents: @competition.events,
     isAdminView: @competition_admin_view,

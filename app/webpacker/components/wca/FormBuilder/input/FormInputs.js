@@ -15,8 +15,8 @@ import AutonumericField from './AutonumericField';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import UtcDatePicker from '../../UtcDatePicker';
-import { IdWcaSearch, useIdQueries } from '../../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import { IdWcaSearch, useIdQueries } from '../../../../react_on_rails_components/SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../../react_on_rails_components/SearchWidget/SearchModel';
 import {
   readValueRecursive,
   useSectionAllowIgnoreDisabled,
