@@ -10,7 +10,7 @@ RSpec.feature "Upload scrambles page", :js do
   end
 
   scenario "renders the ScrambleMatcher React on Rails component" do
-    visit upload_scrambles_path(competition)
+    visit competition_upload_scrambles_path(competition)
 
     # The Reset button is rendered unconditionally by the ScrambleMatcher
     # component, so seeing it proves the React on Rails component mounted.
