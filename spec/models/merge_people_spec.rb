@@ -77,7 +77,7 @@ RSpec.describe MergePeople do
       original_user: user,
       duplicate_person: person2,
       name_matching_algorithm: :jarowinkler,
-      score: 90
+      score: 90,
     )
 
     expect(merge_people.do_merge).to be true
