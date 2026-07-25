@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "Competition schedule tab", :js do
-  let!(:competition) { create(:competition, :with_valid_schedule) }
+  let!(:competition) { create(:competition, :announced, :with_valid_schedule) }
 
   scenario "renders the Schedule React on Rails component" do
     visit competition_path(competition)
