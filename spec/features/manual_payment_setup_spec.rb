@@ -10,7 +10,7 @@ RSpec.feature "Manual payment setup page", :js do
   end
 
   scenario "renders the ManualPaymentSetup React on Rails component" do
-    visit manual_payment_setup_path(competition)
+    visit competition_manual_payment_setup_path(competition)
 
     # This header is rendered by the ManualPaymentSetup component, so seeing it
     # proves the React on Rails component actually mounted.
