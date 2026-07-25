@@ -47,13 +47,15 @@ class RegistrationsController < ApplicationController
         :birthdate,
         :email,
         :comments,
-        registration: [
-          :status,
-          :isCompeting,
-          :registeredAt,
-          eventIds: []
-        ]
-      ]]
+        {
+          registration: [
+            :status,
+            :isCompeting,
+            :registeredAt,
+            { eventIds: [] },
+          ],
+        },
+      ]],
     )
 
     errors = [
@@ -322,7 +324,7 @@ class RegistrationsController < ApplicationController
         birth_date: params[:registration_data][:birth_date],
         email: params[:registration_data][:email],
         comments: params[:registration_data][:comments],
-        event_ids: params[:registration_data][:event_ids] || []
+        event_ids: params[:registration_data][:event_ids] || [],
       )
       user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
