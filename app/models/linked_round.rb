@@ -86,6 +86,12 @@ class LinkedRound < ApplicationRecord
   #   so this is always the CompetitionEvent
   delegate :participation_source, to: :first_round_in_link
 
+  # For 9m purposes a LinkedRound counts as a single round sitting at the
+  #   position of its last round; its own source is always the CompetitionEvent.
+  def previous_rounds
+    [self, *participation_source.previous_rounds]
+  end
+
   def live_podium
     merged_live_results.filter { it.advancing? && it.global_pos.in?(LiveResult::PODIUM_RANGE) }
   end

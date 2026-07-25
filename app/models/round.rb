@@ -715,27 +715,21 @@ class Round < ApplicationRecord
     # We allow opening all linked rounds even if that would break 9m for a better user experience
     return nil if linked_round.present?
 
-    violation = nil
-    enforced_max_round = 4 # 9m: events may have at most four rounds
+    # Each earlier round caps the number of the last round the event may hold,
+    #   based on how many competitors it had; the tightest (lowest) cap binds us.
+    binding_cap = participation_source.previous_rounds.map do |previous|
+      subsequent_rounds_allowed = NINE_M_THRESHOLDS.values.count { previous.total_competitors >= it }
 
-    # Walk back through the previous rounds: each one caps the number of the
-    #   last round that may be held, based on how many competitors it had
-    previous = participation_source
+      {
+        max_round_number: previous.number + subsequent_rounds_allowed,
+        violation: %w[9m3 9m2 9m1][subsequent_rounds_allowed],
+      }
+    end.min_by { it[:max_round_number] }
 
-    while previous.is_a?(Round) || previous.is_a?(LinkedRound)
-      competitor_count = previous.total_competitors
-      subsequent_rounds_allowed = NINE_M_THRESHOLDS.values.count { competitor_count >= it }
-      max_round_number = previous.number + subsequent_rounds_allowed
+    return nil if binding_cap.nil?
 
-      if max_round_number < enforced_max_round
-        enforced_max_round = max_round_number
-        violation = %w[9m3 9m2 9m1][subsequent_rounds_allowed]
-      end
-
-      previous = previous.participation_source
-    end
-
-    enforced_max_round >= number ? nil : violation
+    enforced_max_round = [binding_cap[:max_round_number], 4].min # 9m: events may have at most four rounds
+    enforced_max_round >= number ? nil : binding_cap[:violation]
   end
 
   def open?
@@ -797,6 +791,12 @@ class Round < ApplicationRecord
 
   def rounds
     [self]
+  end
+
+  # The round-like ancestors that feed into this one, walking back through
+  #   `participation_source` until it bottoms out at the CompetitionEvent.
+  def previous_rounds
+    [self, *participation_source.previous_rounds]
   end
 
   def quit_from_round!(registration_id, quitting_user, to_advance: nil)
