@@ -228,8 +228,11 @@ class RegistrationsController < ApplicationController
     if @competition.registration_full?
       flash[:danger] = I18n.t("registrations.mailer.deleted.causes.registrations_full")
       return redirect_to competition_path(@competition)
-    elsif !@competition.registration_currently_open? && (!@competition.on_the_spot_registration? || !@competition.after_registration_open?)
+    elsif !@competition.on_the_spot_registration?
       flash[:danger] = I18n.t("registrations.add.ots_not_enabled")
+      return redirect_to competition_path(@competition)
+    elsif @competition.before_registration_open?
+      flash[:danger] = I18n.t("registrations.add.ots_before_registration_open")
       return redirect_to competition_path(@competition)
     elsif @competition.probably_over?
       flash[:danger] = I18n.t("registrations.add.competition_over")
