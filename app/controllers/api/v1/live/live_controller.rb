@@ -170,8 +170,8 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     return render json: { status: "round already open" }, status: :bad_request if [Round::STATE_OPEN, Round::STATE_LOCKED].include?(state)
 
     if state == Round::STATE_BLOCKED
-      violation = round.nine_m_violation
-      return render json: { status: "regulation #{violation}: #{Round::NINE_M_MESSAGES[violation]}" }, status: :bad_request
+      violation = round.insufficient_competitors_violation
+      return render json: { status: "regulation #{violation}: #{Round::INSUFFICIENT_COMPETITORS_MESSAGES[violation]}" }, status: :bad_request
     end
 
     created_rows, locked_rows = round.open_and_lock_previous(@current_user)
