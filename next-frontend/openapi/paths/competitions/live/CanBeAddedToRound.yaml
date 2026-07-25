@@ -3,8 +3,7 @@ get:
   description: >
     Returns the competitors eligible to be added to the round (the round's
     participation source; for first rounds, anyone registered for the competition)
-    along with the lifecycle state of any colinked rounds and whether the
-    competition currently permits event edits on registrations.
+    along with the lifecycle state of any colinked rounds.
   tags:
     - live
   operationId: canBeAddedToRound
@@ -29,10 +28,7 @@ get:
             required:
               - registrations
               - colinked_status
-              - event_edits_allowed
             properties:
-              event_edits_allowed:
-                type: boolean
               registrations:
                 type: array
                 items:

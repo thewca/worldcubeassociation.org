@@ -263,7 +263,6 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     render json: {
       registrations: registrations.map(&:to_v2_json),
       colinked_status: colinked_rounds.map(&:lifecycle_state),
-      event_edits_allowed: @competition.event_edits_currently_permitted?,
     }
   end
 

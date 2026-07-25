@@ -18,6 +18,7 @@ import React, { useMemo, useState } from "react";
 import { useT } from "@/lib/i18n/useI18n";
 import Loading from "@/components/ui/loading";
 import { RegistrationData } from "@/types/registrations";
+import { hasNotPassedOrNull } from "@/lib/wca/dates";
 
 export default function AddPersonModal({
   competitionId,
@@ -99,19 +100,25 @@ function AddPerson({
     { params: { path: { competitionId, roundId } } },
   );
 
-  if (isFetching) return <Loading />;
-  if (!registrationsQuery)
+  const { data: competitionInfo, isFetching: isFetchingCompetitionInfo } =
+    api.useQuery("get", "/v0/competitions/{competitionId}/", {
+      params: { path: { competitionId } },
+    });
+
+  if (isFetching || isFetchingCompetitionInfo) return <Loading />;
+  if (!registrationsQuery || !competitionInfo)
     return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
 
-  const { registrations, colinked_status, event_edits_allowed } =
-    registrationsQuery;
+  const { registrations, colinked_status } = registrationsQuery;
 
   return (
     <AddPersonCombobox
       coLinkedStatus={colinked_status}
       registrations={registrations.filter((r) => !competitors.has(r.id))}
       setSelectedCompetitor={setSelectedCompetitor}
-      eventEditsAllowed={event_edits_allowed}
+      eventEditsAllowed={hasNotPassedOrNull(
+        competitionInfo.event_change_deadline_date,
+      )}
       eventId={roundId.split("-r")[0]}
     />
   );
