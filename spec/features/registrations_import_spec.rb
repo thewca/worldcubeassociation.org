@@ -10,7 +10,7 @@ RSpec.feature "Registrations import page", :js do
   end
 
   scenario "renders the ImportRegistrations React on Rails component" do
-    visit registrations_import_path(competition)
+    visit competition_registrations_import_path(competition)
 
     # This info message is rendered directly by the ImportRegistrations component,
     # so seeing it proves the React on Rails component actually mounted.
