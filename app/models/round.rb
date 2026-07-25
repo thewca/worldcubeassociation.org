@@ -406,7 +406,7 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def load_live_results!(round_results_wcif, current_user)
+  def load_live_results!(round_results_wcif, current_user, version: Competition::WCIF_STABLE_VERSION)
     person_id_to_registration_id = self.competition.registrations
                                        .to_h { [it.registrant_id, it.id] }
 
@@ -486,12 +486,13 @@ class Round < ApplicationRecord
         results_by_registration_id[registration_id].id
       end
 
+      result_field = LiveAttempt.wcif_result_field(version)
       attempts_to_load = result_wcif_by_id.flat_map do |live_result_id, round_result_wcif|
         round_result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
           {
             live_result_id: live_result_id,
             attempt_number: attempt_number,
-            value: attempt["result"],
+            value: attempt[result_field],
           }
         end
       end
