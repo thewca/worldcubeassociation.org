@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Modal } from 'semantic-ui-react';
-import RegistrationsAdministrationTable from '../RegistrationsV2/RegistrationAdministration/RegistrationsAdministrationTable';
+import RegistrationsAdministrationTable from '../../components/RegistrationsV2/RegistrationAdministration/RegistrationsAdministrationTable';
 import importRegistrations from './api/importRegistrations';
-import Errored from '../Requests/Errored';
+import Errored from '../../components/Requests/Errored';
 import I18n from '../../lib/i18n';
 
 function transformRegistration(registrationRow, index) {
