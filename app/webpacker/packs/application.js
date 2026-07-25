@@ -45,6 +45,10 @@ import EditScrambleCreate from '../react_on_rails_components/EditScramble/Create
 import EditResult from '../react_on_rails_components/EditResult';
 import EditResultCreate from '../react_on_rails_components/EditResult/Create';
 import EditEvents from '../react_on_rails_components/EditEvents';
+import CompetitionResultSubmission from '../react_on_rails_components/CompetitionResultSubmission';
+import CompetitionResultSubmissionAdmin from '../react_on_rails_components/CompetitionResultSubmission/Admin';
+import CompetitionResultSubmissionCheckExistingResults from '../react_on_rails_components/CompetitionResultSubmission/CheckExistingResults';
+import NewcomerChecksPage from '../react_on_rails_components/NewcomerChecks';
 import {
   getUrlParams,
   setUrlParams,
@@ -109,6 +113,10 @@ ReactOnRails.register({
   EditResult,
   EditResultCreate,
   EditEvents,
+  CompetitionResultSubmission,
+  CompetitionResultSubmissionAdmin,
+  CompetitionResultSubmissionCheckExistingResults,
+  NewcomerChecks: NewcomerChecksPage,
 });
 
 // Support component names relative to this directory:

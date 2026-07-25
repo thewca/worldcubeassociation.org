@@ -5,7 +5,7 @@ import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import DuplicateChecker from './DuplicateChecker';
 import NameFormatChecker from './NameFormatChecker';
 import DobChecker from './DobChecker';
-import EditUser from '../EditUser';
+import EditUser from '../../components/EditUser';
 import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 
 export default function Wrapper({ competitionId }) {

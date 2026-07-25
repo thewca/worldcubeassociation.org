@@ -3,15 +3,15 @@ import {
   Form, Icon, Label, Message,
 } from 'semantic-ui-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import Errored from '../../Requests/Errored';
+import Errored from '../../../components/Requests/Errored';
 import useInputState from '../../../lib/hooks/useInputState';
-import MarkdownEditor from '../../wca/FormBuilder/input/MarkdownEditor';
+import MarkdownEditor from '../../../components/wca/FormBuilder/input/MarkdownEditor';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import submitToWrt from '../api/submitToWrt';
-import Loading from '../../Requests/Loading';
-import runValidatorsForCompetitionList from '../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
+import Loading from '../../../components/Requests/Loading';
+import runValidatorsForCompetitionList from '../../../components/Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
 import { ALL_VALIDATORS } from '../../../lib/wca-data.js.erb';
-import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutput';
+import ValidationOutput from '../../../components/Panel/pages/RunValidatorsPage/ValidationOutput';
 
 export const IMPORT_STEP_TITLE = 'Import Results Data';
 export const IMPORT_STEP_ICON = 'upload';

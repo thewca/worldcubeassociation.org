@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
 import computePotentialDuplicates from './api/computePotentialDuplicates';
 import getLastDuplicateCheckerJobRun from './api/getLastDuplicateCheckerJobRun';
 import SimilarPersons from './SimilarPersons';
