@@ -32,6 +32,10 @@ import CreatePost from '../react_on_rails_components/Posts/CreatePost';
 import EditPost from '../react_on_rails_components/Posts/EditPost';
 import LivestreamManager from '../react_on_rails_components/Posts/LivestreamManager';
 import CompetitionsOverview from '../react_on_rails_components/CompetitionsOverview';
+import EventsTable from '../react_on_rails_components/EventsTable';
+import ManualPaymentSetup from '../react_on_rails_components/ManualPaymentSetup';
+import EditAvatar from '../react_on_rails_components/EditAvatar';
+import ImportRegistrations from '../react_on_rails_components/ImportRegistrations';
 import {
   getUrlParams,
   setUrlParams,
@@ -83,6 +87,10 @@ ReactOnRails.register({
   EditPost,
   LivestreamManager,
   CompetitionsOverview,
+  EventsTable,
+  ManualPaymentSetup,
+  EditAvatar,
+  ImportRegistrations,
 });
 
 // Support component names relative to this directory:

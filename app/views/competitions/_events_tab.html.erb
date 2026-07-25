@@ -1,4 +1,4 @@
-<%= react_component("EventsTable", {
+<%= react_on_rails_component("EventsTable", props: {
   wcifEvents: @competition.events_wcif(version: '2.1.1', include_results: false),
   competitionInfo: @competition.to_competition_info
 }) %>

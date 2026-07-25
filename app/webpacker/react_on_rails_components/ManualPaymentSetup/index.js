@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Header } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
-import MarkdownEditor from '../wca/FormBuilder/input/MarkdownEditor';
+import MarkdownEditor from '../../components/wca/FormBuilder/input/MarkdownEditor';
 import useInputState from '../../lib/hooks/useInputState';
 import { connectPaymentIntegrationUrl } from '../../lib/requests/routes.js.erb';
 
