@@ -138,11 +138,11 @@ ReactOnRails.register({
   RegistrationsV2RegistrationEdit,
   RegistrationsV2Register,
   RegistrationsV2RegistrationAdministration,
-  CompetitionFormEditXX: CompetitionFormEdit,
-  CompetitionFormCreateXX: CompetitionFormCreate,
-  PanelTemplateXX: PanelTemplate,
-  TicketsXX: Tickets,
-  SearchWidgetXX: SearchWidget,
+  CompetitionFormEdit,
+  CompetitionFormCreate,
+  PanelTemplate,
+  Tickets,
+  SearchWidget,
 });
 
 // Support component names relative to this directory:
