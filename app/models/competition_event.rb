@@ -177,7 +177,7 @@ class CompetitionEvent < ApplicationRecord
     # This is not techincally a third pass, because we're not updating the round itself.
     #   But for the advancement through rounds, the whole CE already needs to be fully linked up
     new_rounds.zip(wcif["rounds"]).each do |round, round_wcif|
-      round.load_live_results!(round_wcif["results"], current_user) if round_wcif["results"].present?
+      round.load_live_results!(round_wcif["results"], current_user, version: version) if round_wcif["results"].present?
     end
     wcif_qualification = CompetitionEvent.load_wcif_qualification(wcif, version: version)
     self.update!(
