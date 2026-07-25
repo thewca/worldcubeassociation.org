@@ -10,10 +10,12 @@ export const BannerImageBlock: Block = {
     {
       name: "heading",
       type: "text",
+      localized: true,
     },
     {
       name: "body",
       type: "richText",
+      localized: true,
     },
     markdownConvertedField("body"),
     {

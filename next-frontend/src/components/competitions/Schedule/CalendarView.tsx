@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
-import luxonPlugin from "@fullcalendar/luxon3";
+import themePlugin from "@fullcalendar/react/themes/classic";
+import luxonFormatPlugin from "@fullcalendar/format-luxon3";
 import FullCalendar from "@fullcalendar/react";
-import timeGridPlugin from "@fullcalendar/timegrid";
+import timeGridPlugin from "@fullcalendar/react/timegrid";
 import { useT } from "@/lib/i18n/useI18n";
+import { useColorMode } from "@/components/ui/color-mode";
 import { DateTime } from "luxon";
 import {
   earliestTimeOfDayWithBuffer,
@@ -16,6 +18,10 @@ import { ACTIVITY_OTHER_GREY, getTextColor } from "@/lib/wca/calendar";
 
 import type { WcifRoom, WcifVenue } from "@/lib/wca/wcif/activities";
 import type { WcifEvent } from "@/lib/wca/wcif/rounds";
+
+import "@fullcalendar/react/skeleton.css";
+import "@fullcalendar/react/themes/classic/theme.css";
+import "@fullcalendar/react/themes/classic/palette.css";
 
 interface CalendarViewProps {
   dates: DateTime[];
@@ -49,6 +55,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   wcifEvents,
 }) => {
   const { t, i18n } = useT();
+  const { colorMode } = useColorMode();
 
   const fcActivities = activeRooms.flatMap((room) =>
     room.activities
@@ -67,8 +74,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
           title: eventName,
           start: activity.startTime,
           end: activity.endTime,
-          backgroundColor: eventColor,
-          textColor: getTextColor(eventColor),
+          color: eventColor,
+          contrastColor: getTextColor(eventColor),
         };
       }),
   );
@@ -87,10 +94,12 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   return (
     <>
       <FullCalendar
+        colorScheme={colorMode}
         // plugins for the basic FullCalendar implementation.
+        //   - themePlugin: To make sure you actually see something
         //   - timeGridPlugin: Display days as vertical grid
-        //   - luxonPlugin: Support timezones
-        plugins={[timeGridPlugin, luxonPlugin]}
+        //   - luxonFormatPlugin: Support Luxon3 formatting strings
+        plugins={[themePlugin, timeGridPlugin, luxonFormatPlugin]}
         // define our "own" view
         initialView="agendaForComp"
         views={{

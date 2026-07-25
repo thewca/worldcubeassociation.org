@@ -23,6 +23,10 @@ class LinkedRound < ApplicationRecord
   validates :round_cutoffs, length: { maximum: 1, message: "all rounds must have the same cutoff" }
   validates :round_time_limits, length: { maximum: 1, message: "all rounds must have the same time limit" }
 
+  # All linked rounds draw their competitors from the same place. Presence of a
+  #   participation source is enforced per-round on Round; here we ensure they match.
+  validates :participation_sources, length: { maximum: 1, message: "all rounds must have the same participation source" }
+
   after_touch :reset_round_information
   def reset_round_information
     self.rounds.reset
@@ -39,6 +43,10 @@ class LinkedRound < ApplicationRecord
 
   def round_time_limits
     rounds.filter_map(&:time_limit).uniq(&:to_wcif)
+  end
+
+  def participation_sources
+    rounds.filter_map(&:participation_source).uniq { |source| [source.class.polymorphic_name, source.id] }
   end
 
   delegate :number, to: :first_round_in_link, prefix: :first_round, allow_nil: true

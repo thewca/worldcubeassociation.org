@@ -10,9 +10,6 @@ class ResultsSubmissionController < ApplicationController
 
   def new
     @competition = competition_from_params
-
-    expected_feature_flag = ServerSetting.find_by(name: ServerSetting::WCA_LIVE_BETA_FEATURE_FLAG)
-    @show_wca_live_beta = expected_feature_flag.present? && params[:wcaLiveBeta] == expected_feature_flag.value
   end
 
   def newcomer_checks
@@ -76,6 +73,15 @@ class ResultsSubmissionController < ApplicationController
       }
     end
 
+    # JSON files derived from our WCIF carry the merged (global) ranking as `position`,
+    #   which corrupts `pos` for Dual Rounds. Competitions scored with the internal
+    #   scoretaking must use the direct Live import instead.
+    if competition.scoretaking_software_internal? && !current_user.can_admin_results?
+      return render status: :unprocessable_content, json: {
+        error: "This competition was scored with the website's internal scoretaking. Please import the results directly from ILR instead of uploading a Results JSON.",
+      }
+    end
+
     # Do json analysis + insert record in db, then redirect to check inbox
     # (and delete existing record if any)
     upload_json = UploadJson.new({
@@ -111,6 +117,13 @@ class ResultsSubmissionController < ApplicationController
     if competition.results_submitted? && !current_user.can_admin_results?
       return render status: :unprocessable_content, json: {
         error: "Results have already been submitted for this competition.",
+      }
+    end
+
+    empty_results = competition.live_results.includes(:round, :registration).where(best: 0)
+    if empty_results.exists?
+      return render status: :unprocessable_content, json: {
+        error: "Please enter all results, the following results are outstanding: #{empty_results.map { "#{it.round_wcif_id}: #{it.registrant_id}" }.join(', ')}",
       }
     end
 

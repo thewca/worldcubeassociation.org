@@ -1768,6 +1768,11 @@ es-ES:
         captcha:
           #original_hash: 58c1271
           validation_error: 'Por favor, demuestra que no eres un robot.'
+        verified_checkbox:
+          #original_hash: 54f118d
+          label: >-
+            Al enviar este formulario, confirmas que ya has revisado su
+            documentación legal y verificado la información facilitada.
       #original_hash: 126541e
       success_message: Solicitud enviada. Nos pondremos en contacto contigo en breve.
       #original_hash: bb6a0cf
@@ -3066,6 +3071,10 @@ es-ES:
           still_processing: >-
             No puedes ejecutar «Eliminar competidor» mientras algunos resultados
             aún se están procesando
+          #original_hash: ecb0dd4
+          in_batch: >-
+            No puedes eliminar a un competidor cuyos resultados forman parte de
+            un lote no enviado
         add_competitor:
           #original_hash: 9dcb50d
           single_round: Añadir competidor a la ronda

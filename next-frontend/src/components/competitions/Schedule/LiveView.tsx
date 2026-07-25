@@ -25,7 +25,7 @@ import { components } from "@/types/openapi";
 import {
   getDatesBetweenInclusive,
   getSimpleTimeString,
-  hasPassed,
+  hasPassedEndOfDay,
 } from "@/lib/wca/dates";
 import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
@@ -76,7 +76,8 @@ export default function LiveView({
   // if all of them have passed, show the last day
   const lastDate = dates[dates.length - 1];
   const defaultDate =
-    dates.filter((d) => !hasPassed(d.endOf("day").toISO()!))[0] ?? lastDate;
+    dates.filter((d) => !hasPassedEndOfDay(d.toISO()!, timeZone))[0] ??
+    lastDate;
 
   const roundsByWcifId = _.keyBy(rounds, "id");
 

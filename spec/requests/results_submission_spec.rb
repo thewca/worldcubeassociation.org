@@ -53,6 +53,27 @@ RSpec.describe ResultsSubmissionController do
       end
     end
 
+    describe "Uploading a Results JSON" do
+      it "is refused when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+
+        post competition_upload_results_json_path(internal_comp.id)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("internal scoretaking")
+      end
+
+      it "is allowed for admins even when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+        sign_in create(:user, :wrt_member)
+
+        # Getting past the scoretaking guard means the action demands the actual file params.
+        expect do
+          post competition_upload_results_json_path(internal_comp.id)
+        end.to raise_error(ActionController::ParameterMissing)
+      end
+    end
+
     describe "Posting results" do
       let(:results_submission_params) do
         { message: submission_message, competition_id: comp.id }
@@ -88,6 +109,31 @@ RSpec.describe ResultsSubmissionController do
         comp.update!(announced_at: nil)
         post competition_submit_results_path(comp.id), params: results_submission_params
         expect(response).to redirect_to(root_url)
+      end
+    end
+
+    describe "Importing results from WCA Live" do
+      let(:live_comp) { create(:competition, :announced, event_ids: ["333"], delegates: [user]) }
+      let(:round) { create(:round, competition: live_comp, event_id: "333") }
+      let(:registration) { create(:registration, :accepted, competition: live_comp) }
+
+      it "is refused when some results are still outstanding" do
+        create(:live_result, round: round, registration: registration, best: 0, average: 0, attempts_count: 0)
+
+        post competition_import_from_live_path(live_comp.id)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("outstanding")
+        expect(response.parsed_body["error"]).to include(registration.registrant_id.to_s)
+      end
+
+      it "gets past the outstanding-results guard when all results are entered" do
+        create(:live_result, round: round, registration: registration, best: 500, average: 600)
+
+        # Getting past the outstanding-results guard means the action demands the import params.
+        expect do
+          post competition_import_from_live_path(live_comp.id)
+        end.to raise_error(ActionController::ParameterMissing)
       end
     end
   end

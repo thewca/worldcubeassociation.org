@@ -9,6 +9,7 @@ class Competition < ApplicationRecord
   has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
   has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
   has_many :results
+  has_many :live_results, through: :registrations
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
@@ -677,6 +678,7 @@ class Competition < ApplicationRecord
         case association_name
         when 'registrations',
              'results',
+             'live_results',
              'competitors',
              'competitor_users',
              'delegate_report',
@@ -1951,6 +1953,7 @@ class Competition < ApplicationRecord
         :competition_event,
         :wcif_extensions,
         { participation_source: [:competition_event, { rounds: :competition_event }] },
+        include_results ? { live_results: [:live_attempts] } : {},
       ] },
       :wcif_extensions,
     ]
@@ -2269,7 +2272,7 @@ class Competition < ApplicationRecord
   end
 
   def world_or_continental_championship?
-    championship_types.any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
+    championship_types.intersect?(Championship::MAJOR_CHAMPIONSHIP_TYPES)
   end
 
   def any_championship?

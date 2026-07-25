@@ -1480,6 +1480,7 @@ en:
           cancel: "Cancel"
           failed_to_fetch: "Failed to fetch next advancing competitor"
           still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
+          in_batch: "Cannot quit a competitor whose results are part of an unsubmitted batch"
         add_competitor:
           single_round: "Add Competitor to Round"
           multiple_rounds:
@@ -2461,6 +2462,7 @@ en:
         national: "National Championship Podiums"
         greater_china: "Greater China Championship Podiums"
       place: "Place"
+      dual: "Dual"
       medal_collection: "Medal Collection"
       record_collection: "Record Collection"
       medals:
