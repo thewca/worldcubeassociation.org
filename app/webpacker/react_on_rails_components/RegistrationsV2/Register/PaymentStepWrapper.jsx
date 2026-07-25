@@ -8,7 +8,7 @@ import PaymentOverview from './PaymentOverview';
 import { hasPassed } from '../../../lib/utils/dates';
 import I18n from '../../../lib/i18n';
 import getRegistrationPayments from '../api/payment/get/getRegistrationPayments';
-import Loading from '../../Requests/Loading';
+import Loading from '../../../components/Requests/Loading';
 
 export default function PaymentStepWrapper({
   competitionInfo,

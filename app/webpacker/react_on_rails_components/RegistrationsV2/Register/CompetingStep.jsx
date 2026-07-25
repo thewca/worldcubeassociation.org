@@ -15,11 +15,11 @@ import {
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import Processing from './Processing';
 import { contactCompetitionUrl, userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
-import EventSelector from '../../wca/EventSelector';
+import EventSelector from '../../../components/wca/EventSelector';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
-import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../../components/I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { events, defaultGuestLimit, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
@@ -33,7 +33,7 @@ import {
   useFormObjectState,
   useFormSuccessHandler,
   useHasFormValueChanged,
-} from '../../wca/FormBuilder/provider/FormObjectProvider';
+} from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
 import { useRegistrationMutationErrorHandler, useUpdateRegistrationMutation } from '../lib/mutations';
 import { useStepNavigation } from '../lib/StepNavigationProvider';
