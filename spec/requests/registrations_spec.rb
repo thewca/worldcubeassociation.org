@@ -457,7 +457,7 @@ RSpec.describe "registrations" do
     end
 
     context "when signed in as competition manager" do
-      let(:ots_competition) { create(:competition, :registration_open, :with_delegate, :visible) }
+      let(:ots_competition) { create(:competition, :registration_open, :with_delegate, :visible, on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500) }
 
       before do
         sign_in ots_competition.delegates.first
@@ -586,10 +586,26 @@ RSpec.describe "registrations" do
               }
             end.not_to(change { past_comp.registrations.count })
           end
+
+          it 'doesnt work before registration opens' do
+            not_opened_comp = create(:competition, :registration_not_opened, delegates: [ots_competition.delegates.first])
+            not_opened_comp.update!(on_the_spot_registration: true, on_the_spot_entry_fee_lowest_denomination: 500)
+
+            expect do
+              post competition_registrations_do_add_path(not_opened_comp), params: {
+                registration_data: {
+                  name: "Sherlock Holmes", country: "United Kingdom", birth_date: "2000-01-01",
+                  gender: "m", email: "sherlock@example.com", event_ids: ["444"]
+                },
+              }
+            end.not_to(change { not_opened_comp.registrations.count })
+            follow_redirect!
+            expect(response.body).to include "On-the-spot registration cannot be used until registration has opened."
+          end
         end
 
         context 'on-the-spot is disabled' do
-          it 'works when registration is open' do
+          it 'doesnt work when registration is open' do
             expect do
               post competition_registrations_do_add_path(open_comp), params: {
                 registration_data: {
@@ -597,7 +613,9 @@ RSpec.describe "registrations" do
                   gender: "m", email: "sherlock@example.com", event_ids: ["444"]
                 },
               }
-            end.to(change { open_comp.registrations.count })
+            end.not_to(change { open_comp.registrations.count })
+            follow_redirect!
+            expect(response.body).to include "On-the-spot registration is not enabled"
           end
 
           it 'doesnt work when registration is closed' do
