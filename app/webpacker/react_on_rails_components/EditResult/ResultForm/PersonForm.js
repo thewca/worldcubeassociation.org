@@ -3,7 +3,7 @@ import {
   Icon, Form, Grid, Popup,
 } from 'semantic-ui-react';
 
-import RegionSelector from '../../wca/RegionSelector';
+import RegionSelector from '../../../components/wca/RegionSelector';
 import { personApiUrl } from '../../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import useNestedInputUpdater from '../../../lib/hooks/useNestedInputUpdater';

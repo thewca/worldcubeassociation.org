@@ -6,14 +6,14 @@
       Events management has been locked after results being posted. Please contact WRT if you want to edit them.
     <% end %>
   <% end %>
-  <%= react_component("EditEvents/index", {
+  <%= react_on_rails_component("EditEvents", props: {
     competitionId: @competition.id,
     canAddAndRemoveEvents: current_user.can_add_and_remove_events?(@competition),
     canUpdateEvents: current_user.can_update_events?(@competition),
     canUpdateQualifications: current_user.can_update_qualifications?(@competition),
     usesIlr: @competition.scoretaking_software_internal?,
     wcifEvents: @competition.events_wcif(version: '2.1.1')
-  }, {
+  }, html_options: {
     id: "events-edit-area",
   }) %>
 <% end %>

@@ -40,6 +40,11 @@ import UserAvatar from '../components/UserAvatar';
 import Schedule from '../react_on_rails_components/Schedule';
 import EditSchedule from '../react_on_rails_components/EditSchedule';
 import ScrambleMatcher from '../react_on_rails_components/ScrambleMatcher';
+import EditScramble from '../react_on_rails_components/EditScramble';
+import EditScrambleCreate from '../react_on_rails_components/EditScramble/Create';
+import EditResult from '../react_on_rails_components/EditResult';
+import EditResultCreate from '../react_on_rails_components/EditResult/Create';
+import EditEvents from '../react_on_rails_components/EditEvents';
 import {
   getUrlParams,
   setUrlParams,
@@ -99,6 +104,11 @@ ReactOnRails.register({
   Schedule,
   EditSchedule,
   ScrambleMatcher,
+  EditScramble,
+  EditScrambleCreate,
+  EditResult,
+  EditResultCreate,
+  EditEvents,
 });
 
 // Support component names relative to this directory:
