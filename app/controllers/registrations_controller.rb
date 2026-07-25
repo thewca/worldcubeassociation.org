@@ -112,23 +112,19 @@ class RegistrationsController < ApplicationController
         competition_event.event_id if row[competition_event.event_id.to_sym] == "1"
       end
 
-      csv_to_wcif(row, event_ids, import_time)
+      build_wcif_data(
+        name: row[:name],
+        wca_id: row[:wca_id],
+        country: row[:country],
+        gender: row[:gender],
+        birth_date: row[:birth_date],
+        email: row[:email],
+        event_ids: event_ids,
+        status: "accepted",
+        is_competing: true,
+        registered_at: import_time,
+      )
     end
-  end
-
-  private def csv_to_wcif(row, event_ids, import_time)
-    build_wcif_data(
-      name: row[:name],
-      wca_id: row[:wca_id],
-      country: row[:country],
-      gender: row[:gender],
-      birth_date: row[:birth_date],
-      email: row[:email],
-      event_ids: event_ids,
-      status: "accepted",
-      is_competing: true,
-      registered_at: import_time,
-    )
   end
 
   private def build_wcif_data(name:, wca_id:, country:, gender:, birth_date:, email:, event_ids:, comments: nil, status: nil, is_competing: nil, registered_at: nil)
