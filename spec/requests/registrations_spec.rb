@@ -27,9 +27,9 @@ RSpec.describe "registrations" do
       end
 
       it "renders an error when registrations is not an array" do
-        post competition_registrations_do_import_path(competition), params: { registrations: "not_an_array" }, as: :json
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(response.parsed_body["error"]).to eq "Expected array of registrations"
+        expect do
+          post competition_registrations_do_import_path(competition), params: { registrations: "not_an_array" }, as: :json
+        end.to raise_error(ActionController::ParameterMissing)
       end
 
       it "renders an error when there are invalid country codes" do

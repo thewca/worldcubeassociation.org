@@ -38,9 +38,23 @@ class RegistrationsController < ApplicationController
   private def validate_import_registration
     @competition = competition_from_params
 
-    @registrations = params.require(:registrations)
-
-    return render status: :unprocessable_content, json: { error: "Expected array of registrations" } unless @registrations.is_a?(Array)
+    @registrations = params.expect(
+      registrations: [[
+        :name,
+        :wcaId,
+        :countryIso2,
+        :gender,
+        :birthdate,
+        :email,
+        :comments,
+        registration: [
+          :status,
+          :isCompeting,
+          :registeredAt,
+          eventIds: []
+        ]
+      ]]
+    )
 
     errors = [
       validate_registrations(@registrations, @competition),
