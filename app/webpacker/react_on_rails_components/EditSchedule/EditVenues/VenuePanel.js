@@ -25,7 +25,7 @@ import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { geocodingTimeZoneUrl } from '../../../lib/requests/routes.js.erb';
 import { getTimeZoneDropdownLabel, sortByOffset } from '../../../lib/utils/timezone';
-import RegionSelector from '../../wca/RegionSelector';
+import RegionSelector from '../../../components/wca/RegionSelector';
 
 // We need to keep track of which timezones the frontend can actually understand.
 //   Sometimes, package updates or Ruby runtime updates can introduce newly-fangled IANA timezones

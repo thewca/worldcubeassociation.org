@@ -16,7 +16,7 @@ import { AUTOMATCH_DEFAULT_SETTINGS, useConfigState, useScrambleFilesQuery } fro
 import EventAndRoundPicker from './EventAndRoundPicker';
 import { MoveModalProvider } from './MoveScrambleSetModal';
 import AutoMatchPanel from './AutoMatchPanel';
-import Errored from '../Requests/Errored';
+import Errored from '../../components/Requests/Errored';
 
 export default function Wrapper({
   wcifEvents,
