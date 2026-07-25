@@ -14,6 +14,6 @@ RSpec.feature "Upload scrambles page", :js do
 
     # The Reset button is rendered unconditionally by the ScrambleMatcher
     # component, so seeing it proves the React on Rails component mounted.
-    expect(page).to have_button("Reset")
+    expect(page).to have_button("Reset", disabled: true)
   end
 end
