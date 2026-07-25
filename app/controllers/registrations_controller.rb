@@ -127,7 +127,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  private def build_wcif_data(name:, wca_id:, country:, gender:, birth_date:, email:, event_ids:, comments: nil, status: nil, is_competing: nil, registered_at: nil)
+  private def build_wcif_data(name:, country:, gender:, birth_date:, email:, event_ids:, wca_id: nil, comments: nil, status: nil, is_competing: nil, registered_at: nil)
     registration = {
       eventIds: event_ids || [],
     }
@@ -312,16 +312,19 @@ class RegistrationsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      registration_data = build_wcif_data(
-        name: params[:registration_data][:name],
-        wca_id: params[:registration_data][:wca_id],
-        country: params[:registration_data][:country],
-        gender: params[:registration_data][:gender],
-        birth_date: params[:registration_data][:birth_date],
-        email: params[:registration_data][:email],
-        comments: params[:registration_data][:comments],
-        event_ids: params[:registration_data][:event_ids] || [],
-      )
+      registration_params = params.expect(
+        registration_data: [
+          :name,
+          :wca_id,
+          :country,
+          :gender,
+          :birth_date,
+          :email,
+          :comments,
+          { event_ids: [] },
+        ],
+      ).to_h.symbolize_keys
+      registration_data = build_wcif_data(**registration_params)
       user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
         reg.registered_at = Time.now.utc
