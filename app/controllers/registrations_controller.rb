@@ -110,21 +110,44 @@ class RegistrationsController < ApplicationController
         competition_event.event_id if row[competition_event.event_id.to_sym] == "1"
       end
 
-      {
-        name: row[:name],
-        wcaId: row[:wca_id]&.upcase,
-        countryIso2: Country.c_find(row[:country]).iso2,
-        gender: row[:gender],
-        birthdate: row[:birth_date],
-        email: row[:email]&.downcase,
-        registration: {
-          eventIds: event_ids,
-          status: "accepted",
-          isCompeting: true,
-          registeredAt: import_time,
-        },
-      }
+      csv_to_wcif(row, event_ids, import_time)
     end
+  end
+
+  private def csv_to_wcif(row, event_ids, import_time)
+    build_wcif_data(
+      name: row[:name],
+      wca_id: row[:wca_id],
+      country: row[:country],
+      gender: row[:gender],
+      birth_date: row[:birth_date],
+      email: row[:email],
+      event_ids: event_ids,
+      status: "accepted",
+      is_competing: true,
+      registered_at: import_time,
+    )
+  end
+
+  private def build_wcif_data(name:, wca_id:, country:, gender:, birth_date:, email:, event_ids:, comments: nil, status: nil, is_competing: nil, registered_at: nil)
+    registration = {
+      eventIds: event_ids || [],
+    }
+    registration[:status] = status if status
+    registration[:isCompeting] = is_competing unless is_competing.nil?
+    registration[:registeredAt] = registered_at if registered_at
+
+    data = {
+      name: name,
+      wcaId: wca_id&.upcase,
+      countryIso2: Country.c_find(country).iso2,
+      gender: gender,
+      birthdate: birth_date,
+      email: email&.downcase,
+      registration: registration,
+    }
+    data[:comments] = comments if comments
+    data
   end
 
   private def validate_required_headers(headers, competition)
@@ -291,18 +314,16 @@ class RegistrationsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      registration_data = {
+      registration_data = build_wcif_data(
         name: params[:registration_data][:name],
-        wcaId: params[:registration_data][:wca_id],
-        countryIso2: Country.c_find(params[:registration_data][:country]).iso2,
+        wca_id: params[:registration_data][:wca_id],
+        country: params[:registration_data][:country],
         gender: params[:registration_data][:gender],
-        birthdate: params[:registration_data][:birth_date],
+        birth_date: params[:registration_data][:birth_date],
         email: params[:registration_data][:email],
         comments: params[:registration_data][:comments],
-        registration: {
-          eventIds: params[:registration_data][:event_ids] || [],
-        },
-      }
+        event_ids: params[:registration_data][:event_ids] || []
+      )
       user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
         reg.registered_at = Time.now.utc

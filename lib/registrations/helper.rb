@@ -15,6 +15,8 @@ module Registrations
     ADMIN_ONLY_STATES = [STATUS_PENDING, STATUS_WAITING_LIST, STATUS_ACCEPTED, STATUS_REJECTED].freeze # Only admins are allowed to change registration state to one of these states
 
     def self.action_type(request, registration_user_id, current_user_id)
+      return request['history_action'] if request['history_action'].present?
+
       self_updating = registration_user_id == current_user_id
       status = request.dig('competing', 'status')
       if status == STATUS_CANCELLED
