@@ -16,9 +16,7 @@ export default function ActiveStatus({ userGroup, nonLeadRoles }) {
     mutate: updateUserGroupMutation, isPending, isError, error,
   } = useMutation({
     mutationFn: updateUserGroup,
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user_group', userGroup.id], data);
-    },
+    onSuccess: (data) => queryClient.setQueryData(['user_group', userGroup.id], data),
   });
 
   const hasNonLeadRoles = nonLeadRoles.length > 0;

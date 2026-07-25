@@ -83,7 +83,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
 
     if user_group.update(user_group_params)
       if deactivating
-        active_roles_to_end.each do |role|
+        user_group.active_roles.find_each do |role|
           RoleChangeMailer.notify_role_end(role, current_user).deliver_later
         end
       end
