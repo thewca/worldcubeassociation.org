@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin new scramble page", :js do
-  let!(:competition) { create(:competition, :with_rounds) }
+  let!(:competition) { create(:competition, with_rounds: true) }
   let(:round) { competition.rounds.first }
 
   before do
@@ -11,7 +11,7 @@ RSpec.feature "Admin new scramble page", :js do
   end
 
   scenario "renders the EditScramble/Create React on Rails component" do
-    visit new_scramble_path(competition_id: competition.id, round_id: round.id)
+    visit competition_new_scramble_path(competition, round)
 
     # This heading is rendered by the CreateEntry component that EditScramble/Create
     # wraps, so seeing it proves the React on Rails component actually mounted.
