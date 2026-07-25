@@ -7,6 +7,9 @@ class TicketsController < ApplicationController
   before_action :check_ticket_errors_join_as_bcc_stakeholder, only: [:join_as_bcc_stakeholder]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_warnings]) }, only: [:verify_warnings]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_results]) }, only: [:merge_inbox_results]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:merge_inbox_scrambles]) }, only: [:merge_inbox_scrambles]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:verify_newcomers]) }, only: [:verify_newcomers]
+  before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsCompetitionResult::ACTION_TYPE[:create_wca_ids]) }, only: [:create_wca_ids]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:approve_edit_person_request]) }, only: [:approve_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
@@ -208,6 +211,14 @@ class TicketsController < ApplicationController
     render json: competition.inbox_results.includes(:inbox_person)
   end
 
+  def imported_temporary_scrambles
+    competition = Competition.find(params.require(:competition_id))
+
+    render json: competition.matched_scrambles
+                            .includes(**MatchedScramble::POSTING_INCLUDES)
+                            .as_json(MatchedScramble::PREVIEW_SERIALIZE_OPTIONS)
+  end
+
   def verify_warnings
     ActiveRecord::Base.transaction do
       @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:warnings_verified])
@@ -236,6 +247,20 @@ class TicketsController < ApplicationController
     render status: :ok, json: { success: true }
   end
 
+  def merge_inbox_scrambles
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.merge_inbox_scrambles
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: { success: true }
+  end
+
   def inbox_person_summary
     ticket = Ticket.find(params.require(:ticket_id))
     competition = ticket.metadata.competition
@@ -243,8 +268,85 @@ class TicketsController < ApplicationController
     render status: :ok, json: {
       inbox_person_count: competition.inbox_persons.count,
       inbox_person_no_wca_id_count: competition.inbox_persons.where(wca_id: '').count,
-      result_no_wca_id_count: competition.results.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'").count,
+      result_no_wca_id_count: competition.results.select(:person_id).distinct.unmerged_newcomers.count,
     }
+  end
+
+  def verify_newcomers
+    ActiveRecord::Base.transaction do
+      @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:newcomers_verified])
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: { success: true }
+  end
+
+  def create_wca_ids
+    person_wca_id_data = params.require(:unfinished_persons)
+    competition = @ticket.metadata.competition
+
+    request_registrant_ids = person_wca_id_data.pluck("personId")
+    existing_registrant_ids = competition.registrations.where(registrant_id: request_registrant_ids).pluck(:registrant_id).to_set
+    missing_registration_data = person_wca_id_data.find do |data|
+      existing_registrant_ids.exclude?(data["personId"].to_i)
+    end
+
+    if missing_registration_data
+      person_id = missing_registration_data["personId"]
+      return render status: :not_found, json: { error: "Registration with registrant ID #{person_id} not found for competition #{competition.id}" }
+    end
+
+    # Compute all WCA IDs beforehand to ensure they are valid.
+    wca_id_index = Person.pluck(:wca_id)
+    wca_ids_by_person = person_wca_id_data.index_by { |d| d["personId"] }.transform_values do |data|
+      new_wca_id, wca_id_index = FinishUnfinishedPersons.next_available_wca_id(data["editedSemiId"], wca_id_index)
+      new_wca_id
+    end
+
+    invalid_data = person_wca_id_data.find { |data| wca_ids_by_person[data["personId"]].nil? }
+    return render status: :unprocessable_content, json: { error: "Could not compute a WCA ID suffix for #{invalid_data['editedSemiId']}" } if invalid_data
+
+    ActiveRecord::Base.transaction do
+      person_wca_id_data.each do |data|
+        person_id = data["personId"]
+        new_wca_id = wca_ids_by_person[person_id]
+
+        registration = competition.registrations.find_by(registrant_id: person_id)
+
+        FinishUnfinishedPersons.insert_person(
+          wca_id: new_wca_id,
+          name: registration.name,
+          country_id: registration.country.id,
+          gender: registration.gender,
+          dob: registration.dob,
+        )
+
+        FinishUnfinishedPersons.adapt_results(
+          person_id,
+          registration.name,
+          registration.country.id,
+          new_wca_id,
+          registration.name,
+          registration.country.id,
+          competition.id,
+        )
+      end
+
+      @ticket.metadata.update!(status: TicketsCompetitionResult.statuses[:created_wca_ids])
+      @ticket.ticket_logs.create!(
+        action_type: @action_type,
+        acting_user_id: current_user.id,
+        acting_stakeholder_id: @acting_stakeholder.id,
+        metadata_action: @metadata_action,
+      )
+    end
+
+    render status: :ok, json: { success: true }
   end
 
   def delete_inbox_persons

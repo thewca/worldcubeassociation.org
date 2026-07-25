@@ -221,6 +221,16 @@ RSpec.describe User do
         .to change { user.potential_duplicate_persons.count }.from(1).to(0)
     end
 
+    it "updates corresponding result records for the user's registrations" do
+      comp = create(:competition, :past)
+      reg = create(:registration, :accepted, user: user, competition: comp)
+      result = create(:result, competition: comp, person_id: reg.registrant_id.to_s)
+
+      user.assign_wca_id(person.wca_id)
+
+      expect(result.reload.person_id).to eq person.wca_id
+    end
+
     context "when other users have pending claims for the same WCA ID" do
       let(:delegate_role) { create(:delegate_role) }
       let!(:claimant1) do

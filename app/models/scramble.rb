@@ -2,23 +2,27 @@
 
 class Scramble < ApplicationRecord
   belongs_to :competition
+  belongs_to :event
   belongs_to :round
+  belongs_to :round_type
   belongs_to :external_scramble, optional: true
 
-  validates :group_id, format: { presence: true, with: /\A[A-Z]+\Z/, message: "Invalid scramble group name" }
-  validates :event_id, presence: true
-  validates :round_type_id, presence: true
+  validates :group_id, presence: true, format: { with: /\A[A-Z]+\Z/, message: "Invalid scramble group name" }
   validates :scramble, presence: true
-  validates :scramble_num, numericality: { presence: true, greater_than: 0 }
-  validates :is_extra, inclusion: { presence: true, in: [true, false] }
+  validates :scramble_num, numericality: { only_integer: true, greater_than: 0 }
+  validates :is_extra, inclusion: { in: [true, false] }
 
   delegate :competition_id, :round_type_id, :event_id, to: :round, prefix: true
   validates :competition_id, comparison: { equal_to: :round_competition_id }
   validates :round_type_id, comparison: { equal_to: :round_round_type_id }
   validates :event_id, comparison: { equal_to: :round_event_id }
 
+  def event
+    Event.c_find(self.event_id)
+  end
+
   def round_type
-    RoundType.c_find(round_type_id)
+    RoundType.c_find(self.round_type_id)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

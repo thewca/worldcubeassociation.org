@@ -73,5 +73,6 @@ WCA_export_*
 /blob-report/
 /playwright/.cache/
 
-# Claude Code
+# AI coding assistants
 .claude/
+.agents/

@@ -49,8 +49,7 @@ export default function RoundActions({
               {roundName}{" "}
               {round.state == "open" &&
                 `(${t("competitions.live.admin.competitors_entered", {
-                  competitors_live_results_entered:
-                    round.competitors_live_results_entered,
+                  competitors_live_results_entered: round.completed_competitors,
                   total_competitors: round.total_competitors,
                 })})`}
               {round.state == "locked" &&
@@ -68,7 +67,7 @@ export default function RoundActions({
         roundId={round.id}
         competitionId={competitionId}
         hasResultsEntered={
-          round.state === "open" && round.competitors_live_results_entered > 0
+          round.state === "open" && round.completed_competitors > 0
         }
       />
     </HStack>

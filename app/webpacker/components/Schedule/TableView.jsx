@@ -304,7 +304,7 @@ function ActivityRow({
                   {I18n.t('competitions.events.cutoff')}
                 </Grid.Column>
                 <Grid.Column textAlign="right" mobile={10} tablet={4}>
-                  <b>{cutoffToString(round)}</b>
+                  <b>{cutoffToString(round, { isV2: true })}</b>
                 </Grid.Column>
               </>
             )}

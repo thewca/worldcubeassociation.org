@@ -232,6 +232,8 @@ sl:
       ranking: 'Najboljših %{ranking}'
       #original_hash: 0664a83
       percent: 'Najboljših %{percent}%'
+      #original_hash: 023a81e
+      all_advance: Napredujejo vsi
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -239,6 +241,8 @@ sl:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+    #original_hash: ba6fa8b
+    all_advance: Napredujejo vsi tekmovalci
     #original_hash: 6e55337
     ranking: 'Najboljših %{ranking} se uvrsti v naslednji krog'
     #original_hash: 7ee969c
@@ -432,9 +436,9 @@ sl:
     submit:
       competition_medium:
         #original_hash: dc112af
-        create: Pošlji medij
+        create: Pošlji vsebino
         #original_hash: 4cf19ca
-        update: Posodobi medij
+        update: Posodobi vsebino
   activerecord:
     attributes:
       user:
@@ -719,7 +723,7 @@ sl:
         #original_hash: 4360c2d
         article: Članek
         #original_hash: 82dabd0
-        multimedia: Multimedija
+        multimedia: Večpredstavnostna vsebina
   simple_form:
     #original_hash: 5397e05
     'yes': Da
@@ -1344,7 +1348,7 @@ sl:
       #original_hash: 2086b21
       statistics: Statistika
       #original_hash: 82dabd0
-      multimedia: Multimedija
+      multimedia: Večpredstavnostna vsebina
       #original_hash: cfde9db
       db_results_export: Izvoz rezultatov
       #original_hash: 7533c29
@@ -1402,7 +1406,7 @@ sl:
       #original_hash: 0e8b212
       manage_auth_app: Upravljaj odobrene aplikacije
       #original_hash: acac109
-      media_submission: Pošiljanje medijev
+      media_submission: Oddaja vsebin
       #original_hash: cf01481
       privacy: Zasebnost
       #original_hash: 4c4a2e8
@@ -1710,6 +1714,9 @@ sl:
         edit_reason:
           #original_hash: fdfcccf
           label: Razlog za spremembo
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: 'Razlog za spremembo %{attribute}'
         proof_attach:
           #original_hash: a9645b1
           label: Priložite dokazilo
@@ -1749,8 +1756,7 @@ sl:
       #original_hash: 0ac88bc
       text_html: >-
         Poiščite tekmovanja v vaši bližini ali si oglejte rezultate tekmovanj.
-        Ste na tekmovanju in želite videti rezultate? Oglejte si
-        %{wca_live_link}!
+        Ste na tekmovanju in želite videti rezultate? Obiščite %{wca_live_link}!
     merchandise:
       #original_hash: 698cfc8
       title: Izdelki
@@ -1761,7 +1767,7 @@ sl:
         Oglejte si našo novo predstavljeno uradno ponudbo oblačil, od majic s
         kratkimi rokavi do puloverjev.
       #original_hash: b0fc6c4
-      link_title: Povezava do trgovine
+      link_title: Trgovina
     records:
       #original_hash: e51c552
       title: Rekordi
@@ -1971,9 +1977,9 @@ sl:
       #original_hash: cc1d51b
       cdn_warning: 'Naj vas ne zmede, če se vaša slika po shranjevanju ne posodobi takoj!'
       #original_hash: 79f14eb
-      current: 'Trenutna slika:'
+      current: 'Trenutna sličica:'
       #original_hash: b42ba27
-      new: 'Nova slika:'
+      new: 'Nova sličica:'
       #original_hash: efc007a
       save: Shrani
       #original_hash: 44c57ab
@@ -2809,6 +2815,18 @@ sl:
     live:
       #original_hash: 10d1a3c
       title: Rezultati v živo
+      #original_hash: ef1c23b
+      manage_rounds: Upravljanje krogov
+      incompatible:
+        #original_hash: 4e41690
+        external: >-
+          To tekmovanje za beleženje rezultatov uporablja zunanjo programsko
+          opremo - preverite informacije o tekmovanju, da ugotovite, kje si
+          lahko ogledate rezultate v živo.
+        #original_hash: 92b3341
+        wca_live: >-
+          To tekmovanje za beleženje rezultatov uporavlja WCA Live - za ogled
+          rezultatov sledite naslednji povezavi:
       round_state:
         #original_hash: 98aadb3
         ongoing: v živo
@@ -2831,8 +2849,8 @@ sl:
       podiums:
         #original_hash: 02ae2bd
         title: Stopničke
-        #original_hash: d7297a7
-        undetermined: 'Stopničke, ki še niso razdeljene'
+        #original_hash: 69c4270
+        undetermined: Še ni določeno
         #original_hash: 61e88df
         none: Stopničk še ni!
       admin:
@@ -2840,6 +2858,8 @@ sl:
         open: Odpri
         #original_hash: 719ea39
         clear: Počisti
+        #original_hash: bbfa773
+        close: Zapri
         #original_hash: 42faad9
         competitors_entered: 'Vpisano: %{competitors_live_results_entered}/%{total_competitors}'
         #original_hash: adec79f
@@ -2856,6 +2876,16 @@ sl:
         results_view: Pogled rezultatov
         #original_hash: 1dadee2
         double_check: Dvojno preverjanje
+        #original_hash: a5be381
+        submit_results: Objavi rezultate
+        #original_hash: 0ed766a
+        add_to_batch: Dodaj v skupino
+        #original_hash: 1a2e4ff
+        remove_from_batch: Odstrani iz skupine
+        #original_hash: 8b6d8cb
+        batch_mode: Skupinski način
+        #original_hash: a577fa2
+        submit_batch: 'Oddaj skupino (%{count})'
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2904,6 +2934,10 @@ sl:
             failure: Množično izločanje tekmovalcev ni uspelo
             #original_hash: 774050e
             menu: Množično izločanje
+            #original_hash: 89f89c0
+            id: ID
+            #original_hash: 709a232
+            name: Ime
           #original_hash: 1a2285d
           quit_menu: Izločanje
           #original_hash: 70835a0
@@ -3072,7 +3106,7 @@ sl:
       no_refunds: Prijavnine ne moremo vrniti pod nobenimi pogoji.
       #original_hash: b016d2f
       waiting_list_deadline_html: >-
-        Tekmovalci so s čakalnega seznama lahko sprejeti najkasneje do
+        Tekmovalce s čakalnega seznama sprejemamo najkasneje do
         %{waiting_list_deadline}.
       #original_hash: 14c5699
       event_change_deadline_html: >-
@@ -3139,15 +3173,15 @@ sl:
         label: Obdobje prijav
         #original_hash: 0c7c1dc
         range_future_html: >-
-          Spletna prijava bo odprta od %{start_date_and_time} do
+          Spletne prijave bodo odprte od %{start_date_and_time} do
           %{end_date_and_time}.
         #original_hash: 679222e
         range_ongoing_html: >-
-          Spletna prijava se je odprla %{start_date_and_time} in se bo zaprla
+          Spletne prijave so se odprle %{start_date_and_time} in se bodo zaprle
           %{end_date_and_time}.
         #original_hash: 7ac8349
         range_past_html: >-
-          Spletna prijava se je odprla %{start_date_and_time} in zaprla
+          Spletne prijave so se odprle %{start_date_and_time} in zaprle
           %{end_date_and_time}.
       #original_hash: 1f9c9c4
       highlights: Poudarki
@@ -4600,6 +4634,8 @@ sl:
         none: Noben
         #original_hash: 9b9a6aa
         show_buttons: Prikaži gumbe za časovne pasove
+        #original_hash: dd3c440
+        hide_buttons: Skrij gumbe za časovne pasove
         #original_hash: d2ac826
         use_time_zone: Uporabi ta časovni pas
       #original_hash: 73acb7f
@@ -4625,10 +4661,14 @@ sl:
       venue_selection_all: 'Ogledujete si urnik za vseh %{venueCount} prizorišč hkrati.'
       #original_hash: 97df911
       timezone_message: 'Časovni pas tega prizorišča je %{timezone}.'
-      #original_hash: 94b2570
-      timezone_setting: 'Urnik si ogledujete z naslednjo nastavitvijo časovnega pasu:'
-      #original_hash: 75194fd
-      multiple_timezones_available: 'Bodite pozorni, saj prizorišča ležijo v različnih časovnih pasovih!'
+      #original_hash: f948a0e
+      timezone_setting: 'Ogledujete si urnik za naslednji časovni pas:'
+      #original_hash: ca4f078
+      multiple_timezones_available: 'Pozor: prizorišča ležijo v različnih časovnih pasovih!'
+      #original_hash: 459e545
+      select_a_timezone: Izberi časovni pas
+      #original_hash: 80e8704
+      select_a_venue_to_view: Za ogled urnika zgoraj izberite prizorišče.
       #original_hash: d94a371
       timezone_set_local: Nastavi na lokalno
       #original_hash: 17ab650
@@ -4681,7 +4721,7 @@ sl:
         #original_hash: 4c9f914
         delegate_report: Delegatsko poročilo
         #original_hash: b233e77
-        registration: Prijava
+        registration: Prijave
         #original_hash: 3f9176e
         import_registrations: Uvozi prijave
         #original_hash: d672995
@@ -5337,7 +5377,7 @@ sl:
     world_championship_title: Svetovno prvenstvo
     #original_hash: 57cf7f7
     world_championship_content_html: >-
-      <p>Vsaki dve leti odobrimo tekmovanje, ki na katerem določimo svetovnega
+      <p>Vsaki dve leti odobrimo tekmovanje, na katerem določimo svetovnega
       prvaka. Ti dogodki zahtevajo izjemno skrbno načrtovanje številnih
       prostovoljcev, pa tudi veliko finančno vlaganje v rezervacijo prizorišča
       in potrebne priprave.</p>
@@ -5394,7 +5434,7 @@ sl:
         <strong>višjimi delegati (senior delegati)</strong>,
         <strong>regionalnimi delegati</strong>, <strong>polnopravnimi
         delegati</strong>, <strong>delegati začetniki (junior delegati)</strong>
-        in <strong>delegati pripravniki</strong>%{see_link}.</p> <p>Poleg
+        in <strong>delegati pripravniki</strong> %{see_link}.</p> <p>Poleg
         običajnih obveznosti WCA delegata je višji delegat ali regionalni
         delegat zadolžen za vodenje delegatov s svojega področja, nanj pa se
         lahko obrne tudi skupnost glede regionalnih zadev.</p> <p>Novi delegati
@@ -5406,8 +5446,8 @@ sl:
       see_link_html: '(glej %{link})'
       #original_hash: 5b01fcc
       members_html: >-
-        Vsi tekmovalci samodejno postanejo WCA <strong>člani</strong> na
-        njihovem prvem WCA tekmovanju.
+        Vsi tekmovalci samodejno postanejo <strong>člani</strong> WCA na svojem
+        prvem WCA tekmovanju.
   speedcubing_history:
     #original_hash: 431e667
     title: Zgodovina kockarske skupnosti in WCA
@@ -5434,7 +5474,7 @@ sl:
     strategic_plan: Strateški načrt
   education:
     #original_hash: 746e863
-    title: Izobraževalni materiali WCA
+    title: Viri za izobraževanje
     #original_hash: 081d65d
     description: >-
       WCA odbor za zagotavljanje kakovosti (WQAC) je objavil nekaj dokumentov,
@@ -5555,9 +5595,9 @@ sl:
         pri organizaciji tekmovanj WCA.
       #original_hash: 479b542
       disclaimer: >-
-        WST ne vzdržuje vseh orodij na tej strani: to je vsekakor v redu! Za
-        upravljanje vse programske opreme, povezane z WCA, nimamo dovolj delovne
-        sile :)
+        WST ne vzdržuje vseh orodij na tej strani: vseeno jih lahko uporabljate!
+        Za upravljanje vse programske opreme, povezane z WCA, nimamo dovolj
+        delovne sile :)
       #original_hash: 80f97b9
       used: >-
         Vsi programi na tem seznamu so že bili uporabljeni na pravih tekmovanjih
@@ -6063,44 +6103,44 @@ sl:
   media:
     common:
       #original_hash: f9b7a97
-      view_media_page: Ogled vseh medijev
+      view_media_page: Ogled vseh vsebin
       #original_hash: b251e98
-      confirm_delete: 'Ali ste prepričani, da želite izbrisati ta medij?'
+      confirm_delete: 'Ali ste prepričani, da želite izbrisati to vsebino?'
     new:
       #original_hash: 65cdb28
-      title: Oddaj medij
+      title: Oddaj večpredstavnostno vsebino
       #original_hash: 35caed2
       review_warning_html: >-
-        Vsi mediji morajo biti pregledani preden se pojavijo na <a
-        href="/media">strani z vsemi mediji</a>.
+        Vsa vsebina mora biti pregledana preden se pojavi na <a
+        href="/media">strani z večpredstavnostno vsebino</a>.
       #original_hash: 141d1d7
       guidelines: Smernice
       media_guidelines:
         #original_hash: fd6984b
-        '1': Vsa vsebina v mediju se mora navezovati na izbrano tekmovanje.
+        '1': Vsa vsebina se mora navezovati na izbrano tekmovanje.
         #original_hash: 9821119
         '2': >-
-          Vse vsebina medijev mora biti primerna, čista in ne sme vsebovati
-          žaljivih vsebin.
+          Vse vsebina mora biti primerna, čista in ne sme vsebovati žaljivih
+          vsebin.
         #original_hash: 5114fe4
         '3': Vsebina ne sme vsebovati obsežne prisotnosti sponzorjev ali reklam.
         #original_hash: c9d797b
-        '4': Vsa vsebina medijev mora imeti ustrezne naslove.
+        '4': Vsa vsebina mora imeti ustrezne naslove.
     edit:
       #original_hash: 32c7cc0
-      title: Uredi medij
+      title: Uredi vsebino
       #original_hash: 6f161d0
-      validate_media_page: Poglej vse čakajoče medije
+      validate_media_page: Poglej vse čakajoče vsebine
     index:
       #original_hash: 0c77aee
-      title: Medij
+      title: Večpredstavnostne vsebine
       #original_hash: df43670
-      validate_media: Potrdi medij
+      validate_media: Potrdi vsebino
       #original_hash: 9f2158f
-      submit_media_html: Medij lahko oddate <a href="/media/new">tukaj</a>.
+      submit_media_html: Večpredstavnostno vsebino lahko oddate <a href="/media/new">tukaj</a>.
     validate:
       #original_hash: 1e0eee6
-      title: Potrdi medij
+      title: Potrdi vsebino
     media_table:
       #original_hash: 879e323
       year: Leto
@@ -6109,30 +6149,28 @@ sl:
       #original_hash: bb54db5
       accept: Potrdi
       #original_hash: 66b69a8
-      confirm_accept: 'Ali ste prepričani, da želite potrditi ta medij?'
+      confirm_accept: 'Ali ste prepričani, da želite potrditi to vsebino?'
       #original_hash: 5301648
       edit: Uredi
   media_and_instagram:
     #original_hash: 1e9793e
-    page_title: Mediji in Instagram
+    page_title: Multimedija in Instagram
     general_media_submission:
       #original_hash: 2b4c8c8
-      title: Oddaja splošnih medijev
+      title: Oddaja splošnih večpredstavnostnih vsebin
       #original_hash: 670a1a8
       body_html: >-
-        WCA deli članke in slike s tekmovanj, ki jih je zagotovila skupnost, na
-        naši <a href="/media">strani za medije</a>. Če imate kaj, kar bi radi
-        delili, izpolnite naš <a href="/media/new">splošni obrazec za oddajo
-        medijskih prispevkov</a>!
+        Na <a href="/media">strani z večpredstavnostnimi vsebinami</a> delimo
+        članke in slike s tekmovanj. Če imate vsebino, ki bi jo radi delili,
+        izpolnite <a href="/media/new">splošni obrazec za oddajo vsebin</a>!
     instagram_submission:
       #original_hash: e01c612
-      title: Oddaja Instagrama
+      title: Instagram
       #original_hash: 1acd0d2
       paragraph1_html: >-
-        Kot ste morda videli, ima WCA <a
-        href="https://www.instagram.com/thewcaofficial/">aktiven Instagram</a>!
-        Da bi kar najbolje odražali globalno skupnost kockarjev, objavljamo
-        vsebine, ki nam jih pošljejo kockarji z vsega sveta.
+        WCA ima <a href="https://www.instagram.com/thewcaofficial/">aktiven
+        Instagram</a>! Da bi kar najbolje odražali globalno skupnost kockarjev,
+        objavljamo vsebine, ki nam jih pošljejo kockarji z vsega sveta.
       #original_hash: 9b6abcd
       paragraph2: >-
         Če imate visokokakovostne fotografije ali videoposnetke, ki bi jih
@@ -6144,40 +6182,41 @@ sl:
       #original_hash: cf5c955
       photo_quality: >-
         Poskrbite, da je kakovost fotografije/videoposnetka dobra. Ni nujno, da
-        je posneto profesionalno, vendar kakovost ne sme negativno vplivati ​​na
-        fotografijo ali videoposnetek.
+        so posnetki profesionalni, vendar mora biti kakovost vsebine dovolj
+        dobra.
       #original_hash: 0742378
       photo_interest: >-
-        Poskusite narediti svojo vsebino zanimivo za širše občinstvo. Vsebina,
-        ki je zanimiva le za peščico ljudi, ne sodi sem.
+        Vsebina naj bo zanimiva za širše občinstvo. Vsebina, ki je zanimiva le
+        za peščico ljudi, ne sodi sem.
       #original_hash: 497bc27
       wca_related: >-
         Objavljajte fotografije in videoposnetke, ki so povezani z WCA, saj je
-        to bistvo našega računa! Radi vidimo, kako se kockarji zabavajo!
+        to bistvo našega računa! Radi vidimo kockarje, ki se zabavajo!
       #original_hash: af882f2
-      submit_instagram_content: Oddaj Instagram vsebino
+      submit_instagram_content: Oddaj vsebino za Instagram
     instagram_hosting:
       #original_hash: 5156783
       title: Gostovanje na Instagramu
       #original_hash: 541106b
       paragraph1_html: >-
-        Včasih bomo članom skupnosti omogočili, da gostujejo na WCA Instagramu z
-        objavljanjem zgodb (angl. Instagram stories) s tekmovanja, ki se ga
-        udeležujejo! Če ste zainteresirani, kliknite gumb in izpolnite spodnji
-        obrazec. WCA ekipa za komunikacijo vas bo kontaktirala, ko bodo
-        posredovane vse informacije, če boste odobreni za gostovanje. Če imate
-        kakršna koli vprašanja, <a
+        Včasih članom skupnosti omogočimo, da gostujejo na WCA Instagramu z
+        objavljanjem zgodb (angl. stories) s tekmovanja, ki se ga udeležujejo!
+        Če ste zainteresirani, kliknite gumb in izpolnite spodnji obrazec. WCA
+        ekipa za komunikacijo vas bo kontaktirala, ko bodo posredovane vse
+        informacije, če boste izbrani za gostovanje. Če imate kakršna koli
+        vprašanja, <a
         href="https://www.worldcubeassociation.org/contact/website">nas
         kontaktirajte</a>.
       #original_hash: aca6c32
       paragraph2: >-
         Naš cilj je deliti malo osebne plati vsakega kockarja in vsakega
-        tekmovanja. Ne žeimo, da je to veliko breme in seveda želimo, da najprej
-        uživate v tekmovanju in ga nato delite z drugimi.
+        tekmovanja. Ne želimo, da je gostovanje veliko breme za ustvarjalca -
+        prijetna izkušnja na tekmovanju je na prvem mestu, šele nato pride
+        deljenje izkušnje z drugimi.
       #original_hash: af023ed
       paragraph3: 'Vlogo gostitelja lahko povzamemo takole:'
       #original_hash: 21efafe
-      short_intro: 'Na kratko se predstavite, povejte nekaj o sebi in o tekmovanju'
+      short_intro: 'Na kratko se predstavite, povejte nekaj o sebi in o tekmovanju.'
       #original_hash: a053b5a
       venue_feel: >-
         Posnemite nekaj posnetkov, da gledalci dobijo občutek za prizorišče in
@@ -6185,13 +6224,13 @@ sl:
       #original_hash: d17fb2f
       people_solving: >-
         Poskusite posneti nekaj posnetkov ljudi, ki rešujejo (po možnosti hitrih
-        ljudi na njihovih glavnih disciplinah)
+        ljudi v njihovih glavnih disciplinah).
       #original_hash: 76d2358
       mini_interviews: >-
         Lahko poskusite opraviti kratke intervjuje z ljudmi (organizatorji,
         delegati itd.), ki želijo povedati, kaj si mislijo o tekmovanju.
       #original_hash: 6003b20
-      pictures_too: 'Lahko pošljete tudi slike, ni nujno, da so samo videoposnetki'
+      pictures_too: 'Pošiljate lahko tudi slike, ni nujno, da so samo videoposnetki.'
       #original_hash: 8813619
       paragraph4: >-
         Naša komunikacija čez vikend običajno poteka prek WhatsApp skupine.
@@ -6567,6 +6606,12 @@ sl:
         [%{round_id}] Čeprav je v disciplini 3x3x3 več kock slepo lahko več
         skupin, mora vsaj ena od skupin vsebovati mešalne algoritme za vse
         poskuse.
+      #original_hash: 2757334
+      mbld_scrambles_warning: >-
+        [%{round_id}] Ta krog vključuje rezultate za disciplino 3x3x3 več kock
+        slepo . V komentarju navedite, koliko mešalnih algoritmov iz vsakega
+        seta je bilo dejansko uporabljenih, da lahko WRT neuporabljene mešalne
+        algoritme odstrani.
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] Za disciplino 3x3x3 opitimalno je navedenih več skupin. Če
@@ -6580,6 +6625,12 @@ sl:
         (%{actual}), kot je določeno na zavihku Upravljanje disciplin
         (%{expected}). Na zavihku Upravljanje disciplin ustrezno popravite
         število uporabljenih mešalnih algoritmov.
+    schedule:
+      #original_hash: 7a12424
+      activity_outside_competition_dates_warning: >-
+        Dejavnost '%{activity_name}' (koda: %{activity_code}) je načrtovana
+        izven datuma tekmovanja v lokalnem časovnem pasu prizorišča. Prosimo,
+        posodobite urnik tekmovanja, da bo odražal dejanske datume tekmovanja.
   tickets:
     type:
       #original_hash: e43f273
