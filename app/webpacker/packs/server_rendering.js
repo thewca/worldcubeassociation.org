@@ -1,8 +1,4 @@
-// By default, this pack is loaded for server-side rendering.
-// It must expose react_ujs as `ReactRailsUJS` and prepare a require context.
-const componentRequireContext = require.context('components', true);
-const ReactRailsUJS = require('react_ujs');
-
-// This method "accidentally" sounds like a React Hook, but it's not!
-// eslint-disable-next-line react-hooks/rules-of-hooks
-ReactRailsUJS.useContext(componentRequireContext);
+// Server rendering is currently disabled: `config.server_bundle_js_file` is blank in
+// config/initializers/react_on_rails.rb. This pack is kept as a placeholder because
+// config/webpack/serverWebpackConfig.js requires an entry with this exact name to exist.
+// If server rendering is ever enabled, register the server-rendered components here.
