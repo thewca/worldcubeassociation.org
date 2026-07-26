@@ -25,31 +25,15 @@ export default function UpdateModal({
   const isLoading = isGroupLoading || isRolesLoading;
   const error = groupError || rolesError;
 
-  if (isLoading) {
-    return (
-      <Modal open={open} onClose={onClose}>
-        <Modal.Content>
-          <Loading />
-        </Modal.Content>
-      </Modal>
-    );
-  }
-
-  if (error) {
-    return (
-      <Modal open={open} onClose={onClose}>
-        <Modal.Content>
-          <Errored error={error.message || error} />
-        </Modal.Content>
-      </Modal>
-    );
-  }
-
   return (
     <Modal open={open} onClose={onClose}>
-      <Modal.Header>{title || 'Edit User Group'}</Modal.Header>
+      {!isLoading && !error && (
+        <Modal.Header>{title || 'Edit User Group'}</Modal.Header>
+      )}
       <Modal.Content>
-        {userGroup && (
+        {isLoading && <Loading />}
+        {error && <Errored error={error.message || error} />}
+        {!isLoading && !error && userGroup && (
           <ActiveStatus userGroup={userGroup} nonLeadRoles={nonLeadRolesData || []} />
         )}
       </Modal.Content>

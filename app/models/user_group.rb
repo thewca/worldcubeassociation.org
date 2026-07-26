@@ -29,6 +29,8 @@ class UserGroup < ApplicationRecord
   has_many :direct_child_users, through: :direct_child_roles, source: :user
   has_many :active_direct_child_users, through: :active_direct_child_roles, source: :user
 
+  before_validation :end_active_lead_roles, if: -> { is_active_changed? && !is_active }
+
   # The `touch` is important because we generally access "semantic" UserGroups
   #   (ie T/Cs, DelegateRegions, Translators, etc.) through their metadata.
   #   This metadata however is cached, because we don't want to fire a SELECT call every time the code wants to know
@@ -38,7 +40,6 @@ class UserGroup < ApplicationRecord
   #   and thus the old memberships.
   # The `touch` makes it so that a small change to the metadata is written, which triggers an `after_commit` hook
   #   in our custom caching mechanism (see also concerns/cachable.rb)
-  before_validation :end_active_lead_roles, if: -> { is_active_changed? && !is_active }
   belongs_to :metadata, polymorphic: true, optional: true, touch: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
 
@@ -350,7 +351,8 @@ class UserGroup < ApplicationRecord
 
   private def end_active_lead_roles
     active_roles.select(&:lead?).each { |role| role.update!(end_date: Date.today) }
-    # Clear the association cache to prevent the absence validation from failing on stale data.
+    # Since `active_roles` is cached in memory, we must reset it so the
+    # `validates :active_roles, absence: true` validation doesn't fail.
     active_roles.reset
   end
 end

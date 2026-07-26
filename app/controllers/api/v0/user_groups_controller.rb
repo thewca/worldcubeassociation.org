@@ -79,7 +79,6 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     return head :unauthorized unless current_user&.has_permission?(:can_edit_groups, user_group_id)
 
     deactivating = user_group.is_active && user_group_params.key?(:is_active) && !ActiveRecord::Type::Boolean.new.cast(user_group_params[:is_active])
-    active_roles_to_end = deactivating ? user_group.active_roles.to_a : []
 
     if user_group.update(user_group_params)
       if deactivating
@@ -92,7 +91,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
         success: true,
       }
     else
-      render json: { error: user_group.errors.full_messages.join(", ") }, status: :unprocessable_content
+      render json: { error: user_group.errors.full_messages }, status: :unprocessable_content
     end
   end
 end
