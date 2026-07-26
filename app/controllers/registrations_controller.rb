@@ -113,12 +113,7 @@ class RegistrationsController < ApplicationController
       end
 
       build_wcif_data(
-        name: row[:name],
-        wca_id: row[:wca_id],
-        country: row[:country],
-        gender: row[:gender],
-        birth_date: row[:birth_date],
-        email: row[:email],
+        **row.to_h,
         event_ids: event_ids,
         status: "accepted",
         is_competing: true,
@@ -127,7 +122,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  private def build_wcif_data(name:, country:, gender:, birth_date:, email:, event_ids:, wca_id: nil, comments: nil, status: nil, is_competing: nil, registered_at: nil)
+  private def build_wcif_data(name:, country:, gender:, birth_date:, email:, event_ids:, wca_id: nil, comments: nil, status: nil, is_competing: nil, registered_at: nil, **_)
     registration = {
       eventIds: event_ids || [],
     }
