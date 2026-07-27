@@ -6,8 +6,8 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
-  has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :competition
-  has_many :scoretakers, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: :user
+  has_many :competition_scoretakers, dependent: :delete_all
+  has_many :scoretakers, through: :competition_scoretakers, source: :user
   has_many :results
   has_many :live_results, through: :registrations
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
@@ -715,7 +715,7 @@ class Competition < ApplicationRecord
              'scramble_file_uploads',
              'accepted_registrations',
              'accepted_newcomers',
-             'scoretaking_registrations',
+             'competition_scoretakers',
              'scoretakers',
              'duplicate_checker_job_runs',
              'tickets_competition_result',
@@ -1153,11 +1153,16 @@ class Competition < ApplicationRecord
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
-  # can registration edits be done right now
+  # can event edits be done right now (independent of whether the competition has started)
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
-  def registration_edits_currently_permitted?
-    !started? && self.allow_registration_edits &&
+  def event_edits_currently_permitted?
+    self.allow_registration_edits &&
       (!event_change_deadline_date_required? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
+  end
+
+  # can registration edits be done right now
+  def registration_edits_currently_permitted?
+    !started? && event_edits_currently_permitted?
   end
 
   private def dates_must_be_valid

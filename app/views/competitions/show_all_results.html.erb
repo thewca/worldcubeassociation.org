@@ -5,7 +5,5 @@
   <%= react_on_rails_component("ResultsDataResults", props: {
     competitionId: @competition.id,
     canAdminResults: current_user&.can_admin_results?,
-  }, html_options: {
-    id: "competition_results",
-  }) %>
+  }, id: "competition_results") %>
 <% end %>

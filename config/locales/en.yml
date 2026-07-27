@@ -1485,6 +1485,7 @@ en:
           multiple_rounds:
             one: "Add Competitor to both Rounds in the Dual Round."
             other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
+          event_edit_warning: "This competitor is not registered for this event, and the competition no longer allows event changes to registrations. Adding them will still work, but make sure this is intended."
       results:
         competitor: "Competitor"
         mean: "Mean"

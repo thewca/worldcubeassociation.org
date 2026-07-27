@@ -358,6 +358,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_25_121610) do
     t.index ["connected_account_type", "connected_account_id"], name: "index_competition_payment_integrations_on_connected_account"
   end
 
+  create_table "competition_scoretakers", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["competition_id", "user_id"], name: "index_competition_scoretakers_on_competition_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_competition_scoretakers_on_user_id"
+  end
+
   create_table "competition_series", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.string "name"

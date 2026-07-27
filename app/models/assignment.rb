@@ -7,8 +7,6 @@ class Assignment < ApplicationRecord
   belongs_to :registration, polymorphic: true
   belongs_to :schedule_activity
 
-  scope :scoretaker, -> { where(assignment_code: SCORETAKER_ASSIGNMENT_CODE) }
-
   validates :station_number, numericality: { only_integer: true }, allow_nil: true
   validate :validate_assignment_code
 
