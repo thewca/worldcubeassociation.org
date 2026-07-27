@@ -5,7 +5,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import I18n from '../../../lib/i18n';
 import useDebounce from '../../../lib/hooks/useDebounce';
-import { getPersons } from '../../../components/Persons/api/getPersons';
+import { getPersons } from '../api/getPersons';
 import Loading from '../../../components/Requests/Loading';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import { personUrl } from '../../../lib/requests/routes.js.erb';

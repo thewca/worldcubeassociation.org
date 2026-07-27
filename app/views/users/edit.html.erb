@@ -183,7 +183,7 @@
       </div>
     <% end %>
     <div class="tab-pane" id="roles">
-      <%= react_component("RolesTab", {
+      <%= react_on_rails_component("RolesTab", props: {
         userId: @user.id,
       }) %>
     </div>

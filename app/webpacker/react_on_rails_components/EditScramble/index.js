@@ -1,7 +1,7 @@
 import React from 'react';
-import EditEntry from '../../components/ResultsData/Panel/EditEntry';
+import EditEntry from '../ResultsData/Panel/EditEntry';
 import { scrambleUrl } from '../../lib/requests/routes.js.erb';
-import ShowSingleScramble from '../../components/ResultsData/Scrambles/ShowSingleScramble';
+import ShowSingleScramble from '../ResultsData/Scrambles/ShowSingleScramble';
 import ScrambleForm from './ScrambleForm/ScrambleForm';
 
 export function InlineEditForm({

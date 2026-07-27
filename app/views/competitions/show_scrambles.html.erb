@@ -2,10 +2,8 @@
 
 <%= render layout: 'results_nav' do %>
   <%= tag :div, id: "selected-event", "data-selected": params[:event] %>
-  <%= react_component("ResultsData/Scrambles", {
+  <%= react_on_rails_component("ResultsDataScrambles", props: {
     competitionId: @competition.id,
     canAdminResults: current_user&.can_admin_results?,
-  }, {
-    id: "competition_scrambles",
-  }) %>
+  }, id: "competition_scrambles") %>
 <% end %>
