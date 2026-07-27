@@ -10604,7 +10604,7 @@ __metadata:
     react_ujs: "npm:^3.3.1"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
-    sass: "npm:^1.101.3"
+    sass: "npm:^1.102.0"
     sass-loader: "npm:^17.0.0"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:10.3.0"
@@ -10717,9 +10717,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.101.3":
-  version: 1.101.3
-  resolution: "sass@npm:1.101.3"
+"sass@npm:^1.102.0":
+  version: 1.102.0
+  resolution: "sass@npm:1.102.0"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^5.0.0"
@@ -10730,7 +10730,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/a1ae0d12511f7bb3b49bc0bc3c126093078b0c901608b5f45c03dfec82b4afdef2887f4699188e818b0ce159c5f6eee297282a387e19a264f4dd41437329e1b8
+  checksum: 10c0/77c05a0d14dc05653e98978c4f1cc6754254fcbf6cba71f111bc49c0c69477f3f9e180f99c65641d19a23b964d6039ef116191700144ebefc1709a5b6d5899b1
   languageName: node
   linkType: hard
 
