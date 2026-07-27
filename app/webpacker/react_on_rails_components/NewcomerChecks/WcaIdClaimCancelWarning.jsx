@@ -2,8 +2,8 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { List, Message } from 'semantic-ui-react';
 import getPendingClaims from './api/getPendingClaims';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
+import Loading from '../../components/Requests/Loading';
+import Errored from '../../components/Requests/Errored';
 import { viewUrls } from '../../lib/requests/routes.js.erb';
 
 export default function WcaIdClaimCancelWarning({ wcaId, userId }) {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Message } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
-import { NewcomerChecks } from '../../../NewcomerChecks';
+import { NewcomerChecks } from '../../../../react_on_rails_components/NewcomerChecks';
 import CreateWcaIdsNonWcaRegistrations from './CreateWcaIdsNonWcaRegistrations';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';

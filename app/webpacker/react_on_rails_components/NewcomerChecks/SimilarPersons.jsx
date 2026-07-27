@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {
   Button, Message, Modal, Segment,
 } from 'semantic-ui-react';
-import { RESYNC_MESSAGE } from '../EditUser/EditUserForm';
+import { RESYNC_MESSAGE } from '../../components/EditUser/EditUserForm';
 import SimilarPersonTable from './SimilarPersonTable';
 import MergeModal from './MergeModal';
 
