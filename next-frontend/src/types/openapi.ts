@@ -236,7 +236,7 @@ export interface paths {
         };
         /**
          * Get competitors that can be added to a round
-         * @description Returns the competitors eligible to be added to the round (the round's participation source) along with the lifecycle state of any colinked rounds.
+         * @description Returns the competitors eligible to be added to the round (the round's participation source; for first rounds, anyone registered for the competition) along with the lifecycle state of any colinked rounds.
          */
         get: operations["canBeAddedToRound"];
         put?: never;
