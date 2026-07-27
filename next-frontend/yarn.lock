@@ -2265,49 +2265,49 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@full-ui/headless-calendar@npm:7.0.1":
-  version: 7.0.1
-  resolution: "@full-ui/headless-calendar@npm:7.0.1"
+"@full-ui/headless-calendar@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@full-ui/headless-calendar@npm:7.0.2"
   peerDependencies:
     temporal-polyfill: ^1.0.1
-  checksum: 10c0/0eca5d11e4ca76501e87af53533e06d6bdd7abf60f6117335d8408b8a95cf657420d5772cb3b5cca275db28f272441b7314f215085e70f5470483c45ade0f0e5
+  checksum: 10c0/53650711eb335db3a96e49a0a75cc2b40a837f37b1f9a8c3bca7e4d65b3ec08807dc62b227e6f952c287deb9275d86a199a4989266f6f0994688ccf78010de64
   languageName: node
   linkType: hard
 
-"@fullcalendar/core@npm:7.0.1":
-  version: 7.0.1
-  resolution: "@fullcalendar/core@npm:7.0.1"
+"@fullcalendar/core@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@fullcalendar/core@npm:7.0.2"
   peerDependencies:
-    "@full-ui/headless-calendar": 7.0.1
+    "@full-ui/headless-calendar": 7.0.2
     temporal-polyfill: ^1.0.1
-  checksum: 10c0/7906b92b42e083fb4b2f7e00e9b3f8d2adeab3eb649e75a1fa1f574eae6e611e1265edfd2bc797d66622431976843f4fa0b8837436f702fd94ab0a305aba25df
+  checksum: 10c0/7950877fea512e130d6785876bc6820bd48d067a813199438d664b522313abd68a828f2e9c8531041c7066618b5d8c05234952c6eb817694cc14737e4af2e27b
   languageName: node
   linkType: hard
 
-"@fullcalendar/format-luxon3@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "@fullcalendar/format-luxon3@npm:7.0.1"
+"@fullcalendar/format-luxon3@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "@fullcalendar/format-luxon3@npm:7.0.2"
   dependencies:
-    "@full-ui/headless-calendar": "npm:7.0.1"
-    "@fullcalendar/core": "npm:7.0.1"
+    "@full-ui/headless-calendar": "npm:7.0.2"
+    "@fullcalendar/core": "npm:7.0.2"
   peerDependencies:
     luxon: ^3.0.0
     temporal-polyfill: ^1.0.1
-  checksum: 10c0/614e781281c144919811ede323194b000270bc01fe97a42a5a63f878c07740832885984ae6e2df0129997f739c1ac2ad364043aa9ba2e2844a00c2e0c9678f0b
+  checksum: 10c0/0ef07e223e57de969876c148d0ab46e49d4c49bdaf99d89833143da32f9153f03f07fbb23373770e78aae98032dec00d1f1095c8809967f234028c844042ea02
   languageName: node
   linkType: hard
 
-"@fullcalendar/react@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "@fullcalendar/react@npm:7.0.1"
+"@fullcalendar/react@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "@fullcalendar/react@npm:7.0.2"
   dependencies:
-    "@full-ui/headless-calendar": "npm:7.0.1"
-    "@fullcalendar/core": "npm:7.0.1"
+    "@full-ui/headless-calendar": "npm:7.0.2"
+    "@fullcalendar/core": "npm:7.0.2"
   peerDependencies:
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
     temporal-polyfill: ^1.0.1
-  checksum: 10c0/7c95cb7ba6bc17746b068a91f9bcffe1374c8e38b36efc4b93875655b3c0d215d9067c8007300a09758f754da75379fcbdc81de6649f6ae2399bfff4b4e455b6
+  checksum: 10c0/606210344547a2098b2c6fb4d076012fef4f1dd77831e5937405a6f5f941e7a71fb1665430e99676c2bff08faef856e1dbd3ed431feac5deb26351ad8c468ea8
   languageName: node
   linkType: hard
 
@@ -11859,8 +11859,8 @@ __metadata:
     "@chakra-ui/react": "npm:^3.36.1"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
-    "@fullcalendar/format-luxon3": "npm:^7.0.1"
-    "@fullcalendar/react": "npm:^7.0.1"
+    "@fullcalendar/format-luxon3": "npm:^7.0.2"
+    "@fullcalendar/react": "npm:^7.0.2"
     "@payloadcms/db-mongodb": "npm:3.86.0"
     "@payloadcms/db-sqlite": "npm:3.86.0"
     "@payloadcms/live-preview-react": "npm:3.86.0"
