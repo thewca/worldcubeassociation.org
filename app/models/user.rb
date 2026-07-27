@@ -13,11 +13,11 @@ class User < ApplicationRecord
   has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
+  has_many :competition_scoretakers
+  has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
   has_many :newcomer_results, through: :registrations, source: :newcomer_results
-  has_many :scoretaking_registrations, -> { scoretakers }, class_name: "Registration", inverse_of: :user
-  has_many :scoretaking_competitions, -> { joins(registrations: [:assignments]) }, through: :scoretaking_registrations, source: "competition"
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
   belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true, inverse_of: :unconfirmed_user
