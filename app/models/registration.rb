@@ -286,13 +286,13 @@ class Registration < ApplicationRecord
         "comment" => registration_data[:comments].presence,
         "status" => (Registrations::Helper::STATUS_ACCEPTED unless accepted?),
       }.compact,
-      "history_action" => source,
     }
 
     Registrations::Lanes::Competing.update!(
       formatted_payload,
       self,
       creator.id,
+      history_action_type: source,
       send_emails: (source != CSV_IMPORT),
     )
   end
