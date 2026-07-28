@@ -125,24 +125,22 @@ class RegistrationsController < ApplicationController
   end
 
   private def build_wcif_data(name:, country:, gender:, birth_date:, email:, event_ids:, wca_id: nil, comments: nil, status: nil, is_competing: nil, registered_at: nil)
-    registration = {
-      eventIds: event_ids || [],
-    }
-    registration[:status] = status if status
-    registration[:isCompeting] = is_competing unless is_competing.nil?
-    registration[:registeredAt] = registered_at if registered_at
-
-    data = {
+    {
       name: name,
       wcaId: wca_id&.upcase,
       countryIso2: Country.c_find(country).iso2,
       gender: gender,
       birthdate: birth_date,
       email: email&.downcase,
-      registration: registration,
-    }
-    data[:comments] = comments if comments
-    data
+      comments: comments,
+      registration: {
+        # The empty array default will NOT be kicked out by `compact`
+        eventIds: event_ids || [],
+        status: status,
+        isCompeting: is_competing,
+        registeredAt: registered_at,
+      }.compact,
+    }.compact
   end
 
   private def validate_required_headers(headers, competition)
