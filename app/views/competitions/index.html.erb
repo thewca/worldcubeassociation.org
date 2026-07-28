@@ -1,6 +1,6 @@
 <% provide(:title, t('.title')) %>
 
-<%= react_on_rails_component("CompetitionsOverview", props: {
+<%= react_component("CompetitionsOverview", props: {
   canViewAdminDetails: current_user&.can_see_admin_competitions?,
 }, html_options: {
   id: 'container',

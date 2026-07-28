@@ -155,7 +155,7 @@
 
     <ul class="nav navbar-nav navbar-right">
       <li class="search-container my-2 my-lg-0">
-        <%= react_on_rails_component("SearchWidget", id: "omnisearch-form") %>
+        <%= react_component("SearchWidget", id: "omnisearch-form") %>
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
@@ -178,7 +178,7 @@
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <% if current_user %>
             <% notification_count = notifications_for_user(current_user).length %>
-            <%= react_on_rails_component("UserAvatar", props: {
+            <%= react_component("UserAvatar", props: {
               avatar: current_user.avatar,
               size: "tiny",
               disableHover: true,

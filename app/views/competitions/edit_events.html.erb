@@ -6,7 +6,7 @@
       Events management has been locked after results being posted. Please contact WRT if you want to edit them.
     <% end %>
   <% end %>
-  <%= react_on_rails_component("EditEvents", props: {
+  <%= react_component("EditEvents", props: {
     competitionId: @competition.id,
     canAddAndRemoveEvents: current_user.can_add_and_remove_events?(@competition),
     canUpdateEvents: current_user.can_update_events?(@competition),

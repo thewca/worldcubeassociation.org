@@ -1,5 +1,5 @@
 <%= render layout: 'competitions/nav' do %>
-  <%= react_on_rails_component("CompetitionResultSubmissionCheckExistingResults", props: {
+  <%= react_component("CompetitionResultSubmissionCheckExistingResults", props: {
     competitionId: @competition.id,
   }) %>
 <% end %>

@@ -9966,7 +9966,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.2.0, react-dom@npm:^18.3.1":
+"react-dom@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
   dependencies:
@@ -10132,22 +10132,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0, react@npm:^18.3.1":
+"react@npm:^18.3.1":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 10c0/283e8c5efcf37802c9d1ce767f302dd569dd97a70d9bb8c7be79a789b9902451e0d16334b05d73299b20f048cbc3c7d288bbbde10b701fa194e2089c237dbea3
-  languageName: node
-  linkType: hard
-
-"react_ujs@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "react_ujs@npm:3.3.1"
-  dependencies:
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
-  checksum: 10c0/bda205c044b3d4db18f6a37e9de53acf138bef1701cd11a58341de029bc49e90762e9262b86f6819e4b479d85139a59d76ec396f7142c1682780e76166155cc3
   languageName: node
   linkType: hard
 
@@ -10585,7 +10575,6 @@ __metadata:
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.17.0"
     react-textarea-autosize: "npm:^8.5.9"
-    react_ujs: "npm:^3.3.1"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
     sass: "npm:^1.102.0"

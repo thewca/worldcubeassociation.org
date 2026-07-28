@@ -1,5 +1,5 @@
 <%= render layout: 'competitions/nav' do %>
-  <%= react_on_rails_component("ScrambleMatcher", props: {
+  <%= react_component("ScrambleMatcher", props: {
     wcifEvents: @competition.events_wcif,
     competitionId: @competition.id,
     initialScrambleFiles: @competition.scramble_file_uploads,

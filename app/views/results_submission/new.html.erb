@@ -3,7 +3,7 @@
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 
-  <%= react_on_rails_component("CompetitionResultSubmission", props: {
+  <%= react_component("CompetitionResultSubmission", props: {
     competitionId: @competition.id,
     resultsSubmitted: @competition.results_submitted?,
     hasTemporaryResults: @competition.inbox_results.present?,

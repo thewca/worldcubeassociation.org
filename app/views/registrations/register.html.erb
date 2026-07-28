@@ -21,7 +21,7 @@
       <% end %>
     <% end %>
   <% else %>
-  <%= react_on_rails_component('RegistrationsRegister', props: {
+  <%= react_component('RegistrationsRegister', props: {
     competitionInfo: @competition.to_competition_info,
     userInfo: @current_user,
     serverRegistration: @registration&.to_v2_json(admin: true),
