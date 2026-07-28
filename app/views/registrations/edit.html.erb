@@ -1,6 +1,6 @@
 <% provide(:title, t('registrations.edit_registration.title', person: @user.name, comp: @competition.name)) %>
 <%= render layout: 'nav' do %>
-  <%= react_on_rails_component('RegistrationsEdit', props: {
+  <%= react_component('RegistrationsEdit', props: {
     registrationId: @registration.id,
     competitionInfo: @competition.to_competition_info,
     user: @user,

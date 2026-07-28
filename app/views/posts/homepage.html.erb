@@ -49,7 +49,7 @@
           <div class="column">
             <h2 class="ui header"><%= t('homepage.announcements') %></h2>
             <div class="ui divider"></div>
-            <%= react_on_rails_component("PostsWidget", props: {
+            <%= react_component("PostsWidget", props: {
               titleOnly: true,
             }, html_options: {
               id: "posts_widget",

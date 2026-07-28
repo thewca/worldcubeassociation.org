@@ -1,4 +1,4 @@
-<%= react_on_rails_component("Schedule", props: {
+<%= react_component("Schedule", props: {
   wcifSchedule: @competition.schedule_wcif,
   wcifEvents: @competition.events_wcif(version: '2.1.1', include_results: false),
   competitionName: @competition.name,

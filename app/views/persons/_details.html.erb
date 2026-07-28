@@ -13,7 +13,7 @@
       </h4>
     <% end %>
     <% if @person.user %>
-      <%= react_on_rails_component("PersonsBadges", props: {
+      <%= react_component("PersonsBadges", props: {
         userId: @person.user&.id,
       }) %>
     <% end %>
