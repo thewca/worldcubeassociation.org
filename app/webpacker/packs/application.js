@@ -12,7 +12,7 @@ import autosize from 'autosize';
 import Rails from '@rails/ujs';
 import ReactOnRails from 'react-on-rails';
 import SearchWidget from '../react_on_rails_components/SearchWidget';
-import UserAvatar from '../components/UserAvatar';
+import UserAvatar from '../react_on_rails_components/UserAvatar';
 import {
   getUrlParams,
   setUrlParams,

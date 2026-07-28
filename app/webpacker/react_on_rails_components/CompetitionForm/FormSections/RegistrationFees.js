@@ -6,11 +6,11 @@ import {
   InputDate,
   InputNumber,
   InputSelect,
-} from '../../../components/wca/FormBuilder/input/FormInputs';
+} from '../../wca/FormBuilder/input/FormInputs';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
 import ConditionalSection from './ConditionalSection';
-import SubSection from '../../../components/wca/FormBuilder/SubSection';
-import { useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import DuesEstimate from './DuesEstimate';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({

@@ -3,8 +3,8 @@ import { useMutation } from '@tanstack/react-query';
 import {
   Button, Form, Header, Message,
 } from 'semantic-ui-react';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 import assignWcaIdToUser from '../../../NewcomerChecks/api/assignWcaIdToUser';
 import useInputState from '../../../../lib/hooks/useInputState';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Confirm } from 'semantic-ui-react';
-import UserBadge from '../../components/UserBadge';
-import UtcDatePicker from '../../components/wca/UtcDatePicker';
+import UserBadge from '../UserBadge';
+import UtcDatePicker from '../wca/UtcDatePicker';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 
 export default function ProbationListTable({

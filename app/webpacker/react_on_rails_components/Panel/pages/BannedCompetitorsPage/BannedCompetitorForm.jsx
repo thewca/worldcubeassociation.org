@@ -4,10 +4,10 @@ import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { groupTypes, banScopes } from '../../../../lib/wca-data.js.erb';
 import WcaSearch from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
-import UtcDatePicker from '../../../../components/wca/UtcDatePicker';
+import UtcDatePicker from '../../../wca/UtcDatePicker';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import I18n from '../../../../lib/i18n';
 
 const banScopeOptions = Object.keys(banScopes).map((option) => ({

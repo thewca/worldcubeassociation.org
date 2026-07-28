@@ -3,8 +3,8 @@ import { Header, List, Message } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import { panelPageUrl } from '../../../../lib/requests/routes.js.erb';
 import { cronjobs, PANEL_PAGES } from '../../../../lib/wca-data.js.erb';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import getCronjobDetails from '../../views/CronJobStatus/api/getCronjobDetails';
 import CheckRecordsForm from './CheckRecordsForm';
 

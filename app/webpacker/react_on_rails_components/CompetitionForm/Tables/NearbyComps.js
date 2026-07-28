@@ -5,10 +5,10 @@ import { Message } from 'semantic-ui-react';
 import { competitionNearbyJsonUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
-import Loading from '../../../components/Requests/Loading';
+import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (

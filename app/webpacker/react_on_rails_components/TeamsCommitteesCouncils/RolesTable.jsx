@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
-import UserBadge from '../../components/UserBadge';
+import UserBadge from '../UserBadge';
 
 export default function RolesTable({ roleList }) {
   return (

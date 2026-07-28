@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { Form } from 'semantic-ui-react';
 import useInputState from '../../../../lib/hooks/useInputState';
 import I18n from '../../../../lib/i18n';
-import RegionSelector from '../../../../components/wca/RegionSelector';
-import GenderSelector from '../../../../components/wca/GenderSelector';
-import UtcDatePicker from '../../../../components/wca/UtcDatePicker';
+import RegionSelector from '../../../wca/RegionSelector';
+import GenderSelector from '../../../wca/GenderSelector';
+import UtcDatePicker from '../../../wca/UtcDatePicker';
 
 export default function EditPersonFieldEditor({
   id,

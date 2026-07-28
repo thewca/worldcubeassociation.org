@@ -4,7 +4,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import { contactEditProfileActionUrl } from '../../lib/requests/routes.js.erb';
-import Loading from '../../components/Requests/Loading';
+import Loading from '../Requests/Loading';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';

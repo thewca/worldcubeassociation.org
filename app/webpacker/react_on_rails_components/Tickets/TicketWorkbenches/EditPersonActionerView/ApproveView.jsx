@@ -4,8 +4,8 @@ import { Button, Confirm } from 'semantic-ui-react';
 import approveEditPersonRequest from '../../api/editPerson/approveEditPersonRequest';
 import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 import { ticketStatuses } from '../../../../lib/wca-data.js.erb';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 
 export default function ApproveView({ ticketId, currentStakeholder }) {
   const queryClient = useQueryClient();

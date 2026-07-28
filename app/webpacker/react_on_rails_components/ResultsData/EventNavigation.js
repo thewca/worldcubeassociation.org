@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import { Popup, Menu } from 'semantic-ui-react';
 import React from 'react';
-import EventIcon from '../../components/wca/EventIcon';
+import EventIcon from '../wca/EventIcon';
 import { events } from '../../lib/wca-data.js.erb';
 import '../../stylesheets/event_navigation.scss';
 

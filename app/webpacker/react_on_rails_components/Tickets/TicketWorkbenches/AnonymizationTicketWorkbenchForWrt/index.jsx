@@ -5,8 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { QueryClient, useQuery } from '@tanstack/react-query';
 import getDetailsBeforeAnonymization from './api/getDetailsBeforeAnonymization';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import VerifyAnonymizeDetails from './VerifyAnonymizeDetails';
 import AnonymizeAction from './AnonymizeAction';
 import { competitionUrl } from '../../../../lib/requests/routes.js.erb';

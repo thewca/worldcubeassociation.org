@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
 import StoreProvider from '../../lib/providers/StoreProvider';
 import { competitionUrl, confirmCompetitionUrl, homepageUrl } from '../../lib/requests/routes.js.erb';
-import EditForm from '../../components/wca/FormBuilder/EditForm';
+import EditForm from '../wca/FormBuilder/EditForm';
 import Header from './Header';
 import MainForm from './MainForm';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';

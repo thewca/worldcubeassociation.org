@@ -1,8 +1,8 @@
 import React from 'react';
-import { InputBoolean, InputSelect, InputString } from '../../../components/wca/FormBuilder/input/FormInputs';
+import { InputBoolean, InputSelect, InputString } from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
-import SubSection from '../../../components/wca/FormBuilder/SubSection';
-import { useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import I18n from '../../../lib/i18n';
 
 const ilrChoiceText = I18n.t('competitions.competition_form.choices.website.scoretaking_software.internal');

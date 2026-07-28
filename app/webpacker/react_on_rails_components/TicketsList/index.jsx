@@ -2,8 +2,8 @@ import React from 'react';
 import { List } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { viewUrls } from '../../lib/requests/routes.js.erb';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 
 export default function TicketsList({ type, status, sort }) {
   const { data: tickets, loading, error } = useLoadedData(

@@ -3,8 +3,8 @@ import {
   Button, Container, Message, Modal,
 } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 import useInputState from '../../lib/hooks/useInputState';
 import WCAQueryClientProvider from '../../lib/providers/WCAQueryClientProvider';
 import TicketContent from './TicketContent';

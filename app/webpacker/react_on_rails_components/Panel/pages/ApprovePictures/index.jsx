@@ -11,7 +11,7 @@ import AvatarCard from './AvatarCard';
 import updateAvatars from './api/updateAvatars';
 import WCAQueryClientProvider from '../../../../lib/providers/WCAQueryClientProvider';
 import getPendingAvatarUsers from './api/getPendingAvatarUsers';
-import Loading from '../../../../components/Requests/Loading';
+import Loading from '../../../Requests/Loading';
 
 export default function Wrapper() {
   return (

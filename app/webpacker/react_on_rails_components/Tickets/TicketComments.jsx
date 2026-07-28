@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { DateTime } from 'luxon';
 import TicketCommentCreate from './TicketCommentCreate';
 import getComments from './api/getComments';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 import '../../stylesheets/semantic/components/comment.min.css';
 
 export default function TicketComments({ ticketId, currentStakeholder }) {

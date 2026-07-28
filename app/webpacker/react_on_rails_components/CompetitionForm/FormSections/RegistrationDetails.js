@@ -7,14 +7,14 @@ import {
   InputNumber,
   InputRadio,
   InputSelect,
-} from '../../../components/wca/FormBuilder/input/FormInputs';
+} from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
-import SubSection from '../../../components/wca/FormBuilder/SubSection';
+import SubSection from '../../wca/FormBuilder/SubSection';
 import {
   useFormInitialObject,
   useFormObject,
-} from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+} from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { hasNotPassedOrNull } from '../../../lib/utils/dates';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({

@@ -1,5 +1,5 @@
 import React from 'react';
-import GenderSelector from '../../../components/wca/GenderSelector';
+import GenderSelector from '../../wca/GenderSelector';
 import EditReasonField from './EditReasonField';
 import I18n from '../../../lib/i18n';
 

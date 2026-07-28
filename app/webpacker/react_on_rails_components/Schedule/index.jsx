@@ -10,7 +10,7 @@ import useStoredState from '../../lib/hooks/useStoredState';
 import useSet from '../../lib/hooks/useSet';
 import { earliestWithLongestTieBreaker } from '../../lib/utils/activities';
 import { getDatesBetweenInclusive } from '../../lib/utils/dates';
-import EventSelector from '../../components/wca/EventSelector';
+import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
 
 export default function Schedule({

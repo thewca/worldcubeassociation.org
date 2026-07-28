@@ -6,7 +6,7 @@ import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../../../lib/wca-data.js.erb';
-import Loading from '../../../../components/Requests/Loading';
+import Loading from '../../../Requests/Loading';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import WcaSearch from '../../../SearchWidget/WcaSearch';
 import useInputState from '../../../../lib/hooks/useInputState';

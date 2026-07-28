@@ -7,7 +7,7 @@ import React, { useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
 import { updateUserNotificationsUrl } from '../../lib/requests/routes.js.erb';
-import Loading from '../../components/Requests/Loading';
+import Loading from '../Requests/Loading';
 import { userPreferencesQueryKey, useUserPreferences } from './api';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 

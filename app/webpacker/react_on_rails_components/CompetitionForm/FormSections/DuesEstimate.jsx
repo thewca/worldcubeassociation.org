@@ -4,8 +4,8 @@ import { QueryClient, useQuery } from '@tanstack/react-query';
 import useInputState from '../../../lib/hooks/useInputState';
 import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
-import Loading from '../../../components/Requests/Loading';
-import Errored from '../../../components/Requests/Errored';
+import Loading from '../../Requests/Loading';
+import Errored from '../../Requests/Errored';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 
 const CALCULATE_DUES_QUERY_CLIENT = new QueryClient();

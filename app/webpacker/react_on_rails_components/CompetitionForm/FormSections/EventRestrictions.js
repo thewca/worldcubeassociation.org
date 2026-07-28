@@ -6,11 +6,11 @@ import {
   InputNumber,
   InputSelect,
   InputTextArea,
-} from '../../../components/wca/FormBuilder/input/FormInputs';
+} from '../../wca/FormBuilder/input/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
-import SubSection from '../../../components/wca/FormBuilder/SubSection';
-import { useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function EventRestrictions({
   isCloning = false,

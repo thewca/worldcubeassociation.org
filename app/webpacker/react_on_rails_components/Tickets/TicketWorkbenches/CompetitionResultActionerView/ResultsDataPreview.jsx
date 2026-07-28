@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useMemo, useState } from 'react';
 import _ from 'lodash';
 import { Accordion, Message } from 'semantic-ui-react';
-import Errored from '../../../../components/Requests/Errored';
-import Loading from '../../../../components/Requests/Loading';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
 import ResultsDataPreviewAccordion from './ResultsDataPreviewAccordion';
 
 export default function ResultsDataPreview({

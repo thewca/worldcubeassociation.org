@@ -6,8 +6,8 @@ import useInputState from '../../../../lib/hooks/useInputState';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { delegateRegionsStatus, groupTypes } from '../../../../lib/wca-data.js.erb';
-import Errored from '../../../../components/Requests/Errored';
-import Loading from '../../../../components/Requests/Loading';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
 import Region from './Region';
 
 export function RegionsDetailView({ regions }) {

@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { Button, Confirm, Message } from 'semantic-ui-react';
-import Errored from '../../../../components/Requests/Errored';
-import Loading from '../../../../components/Requests/Loading';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
 import anonymize from './api/anonymize';
 
 export default function AnonymizeAction({ userId, wcaId }) {

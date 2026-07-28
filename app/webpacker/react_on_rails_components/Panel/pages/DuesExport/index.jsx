@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { wfcCompetitionsExportUrl } from '../../../../lib/requests/routes.js.erb';
 
-import UtcDatePicker from '../../../../components/wca/UtcDatePicker';
+import UtcDatePicker from '../../../wca/UtcDatePicker';
 
 export default function DuesExport() {
   const [fromDate, setFromDate] = React.useState(null);

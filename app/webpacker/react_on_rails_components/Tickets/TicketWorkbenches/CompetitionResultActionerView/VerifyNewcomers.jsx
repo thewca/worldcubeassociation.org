@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import { NewcomerChecks } from '../../../NewcomerChecks';
 import CreateWcaIdsNonWcaRegistrations from './CreateWcaIdsNonWcaRegistrations';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import verifyNewcomers from '../../api/competitionResult/verifyNewcomers';
 import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 

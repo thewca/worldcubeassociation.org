@@ -5,8 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { keyBy, mapValues } from 'lodash';
 import createWcaIds from '../../api/competitionResult/createWcaIds';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 import { updateTicketMetadata } from '../../../../lib/helpers/update-ticket-query-data';
 
