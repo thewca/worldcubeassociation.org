@@ -1,7 +1,7 @@
 <% provide(:title, "Upload results") %>
 <%= render layout: 'competitions/nav' do %>
   <h1><%= yield(:title) %></h1>
-  <%= react_on_rails_component("CompetitionResultSubmissionAdmin", props: {
+  <%= react_component("CompetitionResultSubmissionAdmin", props: {
     competitionId: @competition.id,
     hasTemporaryResults: @competition.inbox_results.present?,
     uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,

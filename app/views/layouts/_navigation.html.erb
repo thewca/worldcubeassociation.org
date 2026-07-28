@@ -157,7 +157,7 @@
       <li class="search-container my-2 my-lg-0">
         <%# This partial renders after the layout's javascript_pack_tag, so the widget
             cannot auto-load a pack; it is registered in packs/application.js instead. %>
-        <%= react_on_rails_component("SearchWidget", id: "omnisearch-form", auto_load_bundle: false) %>
+        <%= react_component("SearchWidget", id: "omnisearch-form", auto_load_bundle: false) %>
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
@@ -180,7 +180,7 @@
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <% if current_user %>
             <% notification_count = notifications_for_user(current_user).length %>
-            <%= react_on_rails_component("UserAvatar", props: {
+            <%= react_component("UserAvatar", props: {
               avatar: current_user.avatar,
               size: "tiny",
               disableHover: true,

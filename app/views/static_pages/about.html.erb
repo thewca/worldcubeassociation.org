@@ -1,6 +1,6 @@
 <% provide(:title, t('about.title')) %>
 
-<%= react_on_rails_component("StaticPagesAbout", props: {
+<%= react_component("StaticPagesAbout", props: {
   currentBoardMembers: UserGroup.board.flat_map(&:active_users).sort_by(&:name)
 }, html_options: {
   class: 'container'

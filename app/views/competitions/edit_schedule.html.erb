@@ -15,7 +15,7 @@
       <%= link_to "here", edit_competition_path(@competition, anchor: "competition_countryId") %>.
     </div>
   <% else %>
-    <%= react_on_rails_component("EditSchedule", props: {
+    <%= react_component("EditSchedule", props: {
       competitionId: @competition.id,
       wcifEvents: @competition.events_wcif,
       wcifSchedule: @competition.schedule_wcif,
