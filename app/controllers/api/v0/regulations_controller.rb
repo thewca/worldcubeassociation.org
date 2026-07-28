@@ -44,7 +44,7 @@ class Api::V0::RegulationsController < Api::V0::ApiController
   end
 
   private def fetch_regulations_erb(route, version_file)
-    if Rails.env.development?
+    if Rails.env.local?
       static_path = route.delete_suffix(".erb")
       Faraday.get("#{REGULATIONS_STATIC_SITE}/#{static_path}").body
     else
