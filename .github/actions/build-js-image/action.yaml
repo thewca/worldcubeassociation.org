@@ -27,14 +27,14 @@ runs:
       shell: bash
       run: aws s3 cp s3://wca-fonts ./next-frontend/src/styles/fonts/ --recursive
     - name: Build and push JS Docker image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       id: build-js-image
       with:
         push: true
         context: ./next-frontend
         tags: |
           ${{ inputs.registry }}:${{ inputs.tag }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        cache-from: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.tag }}
+        cache-to: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.tag }},mode=max,image-manifest=true,oci-mediatypes=true
         build-args: |
           WCA_SITE=${{ inputs.base_url }}

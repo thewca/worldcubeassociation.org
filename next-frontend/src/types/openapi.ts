@@ -782,6 +782,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/regulations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets the current WCA Regulations as a rendered HTML fragment */
+        get: operations["regulations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/regulations/history/official/{version}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets a historical official version of the WCA Regulations as a rendered HTML fragment */
+        get: operations["historicalRegulations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/regulations/translations": {
         parameters: {
             query?: never;
@@ -791,6 +825,23 @@ export interface paths {
         };
         /** Gets all translations of regulations */
         get: operations["regulationTranslations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/regulations/translations/{language}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets a translated version of the WCA Regulations as a rendered HTML fragment */
+        get: operations["translatedRegulations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1885,6 +1936,10 @@ export interface components {
                 scope: string[] | string;
             };
         };
+        RegulationsContent: {
+            /** @description Rendered HTML fragment of the regulations, including deep-link anchors. */
+            content_html: string;
+        };
         Translation: {
             version: string;
             language: string;
@@ -2963,6 +3018,48 @@ export interface operations {
             };
         };
     };
+    regulations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegulationsContent"];
+                };
+            };
+        };
+    };
+    historicalRegulations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegulationsContent"];
+                };
+            };
+        };
+    };
     regulationTranslations: {
         parameters: {
             query?: never;
@@ -2979,6 +3076,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RegulationsTranslations"];
+                };
+            };
+        };
+    };
+    translatedRegulations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                language: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegulationsContent"];
                 };
             };
         };
