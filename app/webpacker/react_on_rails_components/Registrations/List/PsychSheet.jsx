@@ -6,16 +6,16 @@ import {
 import {
   getPsychSheetForEvent,
 } from '../api/registration/get/get_registrations';
-import EventIcon from '../../wca/EventIcon';
+import EventIcon from '../../../components/wca/EventIcon';
 import { personUrl } from '../../../lib/requests/routes.js.erb';
 import { formatAttemptResult } from '../../../lib/wca-live/attempts';
 import I18n from '../../../lib/i18n';
 import { countries } from '../../../lib/wca-data.js.erb';
 import { getPeopleCounts, getTotals, getUserPositionInfo } from './utils';
 import PreTableInfo from './PreTableInfo';
-import Loading from '../../Requests/Loading';
-import Errored from '../../Requests/Errored';
-import RegionFlag from '../../wca/RegionFlag';
+import Loading from '../../../components/Requests/Loading';
+import Errored from '../../../components/Requests/Errored';
+import RegionFlag from '../../../components/wca/RegionFlag';
 
 // for consistency with competitors table data, to reuse helper functions
 function mapPsychSheetDate(data) {

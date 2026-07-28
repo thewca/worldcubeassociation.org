@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import React, { useCallback } from 'react';
 import { Message } from 'semantic-ui-react';
-import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../../components/I18nHTMLTranslate';
 import { fullTimeDiff } from '../../../lib/utils/dates';
 import usePerpetualState from '../hooks/usePerpetualState';
 

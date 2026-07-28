@@ -1,5 +1,5 @@
 import React from 'react';
-import EventSelector from '../../wca/EventSelector';
+import EventSelector from '../../../components/wca/EventSelector';
 
 export default function PsychSheetEventSelector({
   eventList,

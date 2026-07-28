@@ -10,7 +10,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { showMessage } from '../Register/RegistrationMessage';
-import EventSelector from '../../wca/EventSelector';
+import EventSelector from '../../../components/wca/EventSelector';
 import RegistrationPayments from './RegistrationPayments';
 import { personUrl, editPersonUrl } from '../../../lib/requests/routes.js.erb';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -21,7 +21,7 @@ import {
   useFormObjectState,
   useFormSuccessHandler,
   useHasFormValueChanged,
-} from '../../wca/FormBuilder/provider/FormObjectProvider';
+} from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
 import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
 import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';

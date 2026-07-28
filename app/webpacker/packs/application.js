@@ -53,6 +53,10 @@ import ResultsDataResults from '../react_on_rails_components/ResultsData/Results
 import ResultsDataScrambles from '../react_on_rails_components/ResultsData/Scrambles';
 import RolesTab from '../react_on_rails_components/RolesTab';
 import PersonsBadges from '../react_on_rails_components/Persons/Badges';
+import RegistrationsList from '../react_on_rails_components/Registrations/List';
+import RegistrationsEdit from '../react_on_rails_components/Registrations/Edit';
+import RegistrationsRegister from '../react_on_rails_components/Registrations/Register';
+import RegistrationsAdministration from '../react_on_rails_components/Registrations/Administration';
 import {
   getUrlParams,
   setUrlParams,
@@ -125,6 +129,10 @@ ReactOnRails.register({
   ResultsDataScrambles,
   RolesTab,
   PersonsBadges,
+  RegistrationsList,
+  RegistrationsEdit,
+  RegistrationsRegister,
+  RegistrationsAdministration,
 });
 
 // Support component names relative to this directory:

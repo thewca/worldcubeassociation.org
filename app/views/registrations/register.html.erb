@@ -21,12 +21,13 @@
       <% end %>
     <% end %>
   <% else %>
-  <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
-                                                    userInfo: @current_user,
-                                                    serverRegistration: @registration&.to_v2_json(admin: true),
-                                                    userCanPreRegister: @competition.user_can_pre_register?(@current_user),
-                                                    cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition),
-                                                    isProcessing: @is_processing,
-    }) %>
+  <%= react_on_rails_component('RegistrationsRegister', props: {
+    competitionInfo: @competition.to_competition_info,
+    userInfo: @current_user,
+    serverRegistration: @registration&.to_v2_json(admin: true),
+    userCanPreRegister: @competition.user_can_pre_register?(@current_user),
+    cannotRegisterReasons: current_user.cannot_register_for_competition_reasons(@competition),
+    isProcessing: @is_processing,
+  }) %>
   <% end %>
 <% end %>
