@@ -686,13 +686,56 @@ class Round < ApplicationRecord
   STATE_OPEN = "open"
   STATE_READY = "ready"
   STATE_PENDING = "pending"
+  STATE_BLOCKED = "blocked"
+
+  # Keyed by the clause of https://www.worldcubeassociation.org/regulations/#9m each message describes
+  INSUFFICIENT_COMPETITORS_MESSAGES = {
+    "9m1" => "a round with 99 or fewer competitors must have at most two subsequent rounds",
+    "9m2" => "a round with 15 or fewer competitors must have at most one subsequent round",
+    "9m3" => "a round with 7 or fewer competitors must not have subsequent rounds",
+  }.freeze
+
+  # Minimum number of competitors a previous round needs to satisfy each clause
+  MIN_COMPETITORS_PER_CLAUSE = {
+    "9m1" => 100,
+    "9m2" => 16,
+    "9m3" => 8,
+  }.freeze
 
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if participation_source.score_taking_done?
+    return STATE_PENDING unless participation_source.score_taking_done?
+    return STATE_BLOCKED if insufficient_competitors_violation.present?
 
-    STATE_PENDING
+    STATE_READY
+  end
+
+  # Returns the violated regulation clause ("9m1"/"9m2"/"9m3") if opening this round
+  # would violate https://www.worldcubeassociation.org/regulations/#9m, which limits
+  # how many rounds an event may hold based on the competitor counts of earlier rounds.
+  def insufficient_competitors_violation
+    # We allow opening all linked rounds even if that would break the rule for a better user experience
+    return nil if linked_round.present?
+
+    # Each earlier round caps the number of the last round the event may hold,
+    #   based on how many competitors it had; the tightest (lowest) cap binds us.
+    binding_cap = participation_source.previous_rounds.map do |previous|
+      subsequent_rounds_allowed = MIN_COMPETITORS_PER_CLAUSE.values.count { previous.total_competitors >= it }
+
+      {
+        max_round_number: previous.number + subsequent_rounds_allowed,
+        subsequent_rounds_allowed: subsequent_rounds_allowed,
+      }
+    end.min_by { it[:max_round_number] }
+
+    return nil if binding_cap.nil?
+
+    enforced_max_round = [binding_cap[:max_round_number], 4].min # 9m: events may have at most four rounds
+    return nil if enforced_max_round >= number
+
+    # The fewer subsequent rounds a previous round allows, the stricter the clause it violates
+    MIN_COMPETITORS_PER_CLAUSE.keys.reverse[binding_cap[:subsequent_rounds_allowed]]
   end
 
   def open?
@@ -754,6 +797,12 @@ class Round < ApplicationRecord
 
   def rounds
     [self]
+  end
+
+  # The round-like ancestors that feed into this one, walking back through
+  #   `participation_source` until it bottoms out at the CompetitionEvent.
+  def previous_rounds
+    [self, *participation_source.previous_rounds]
   end
 
   def quit_from_round!(registration_id, quitting_user, to_advance: nil)
@@ -887,6 +936,12 @@ class Round < ApplicationRecord
     if state == STATE_OPEN
       json = json.merge({
                           "completed_competitors" => completed_competitors,
+                        })
+    end
+
+    if state == STATE_BLOCKED
+      json = json.merge({
+                          "competitor_count_needed" => MIN_COMPETITORS_PER_CLAUSE[insufficient_competitors_violation],
                         })
     end
     json

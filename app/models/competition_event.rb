@@ -44,6 +44,12 @@ class CompetitionEvent < ApplicationRecord
     []
   end
 
+  # A CompetitionEvent is the registration source, not a round, so it is where
+  #   the chain of previous rounds bottoms out.
+  def previous_rounds
+    []
+  end
+
   def score_taking_done?
     true
   end
