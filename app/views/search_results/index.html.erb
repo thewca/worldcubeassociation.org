@@ -45,7 +45,7 @@
           <% @persons.includes(:user).each do |person| %>
             <tr>
               <td>
-                <%= react_component("UserAvatar", props: {
+                <%= react_component("UserAvatar", auto_load_bundle: false, props: {
                   avatar: (person.user || User.new).avatar,
                   size: "small"
                 }) %>

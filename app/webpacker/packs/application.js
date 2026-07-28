@@ -12,6 +12,7 @@ import autosize from 'autosize';
 import Rails from '@rails/ujs';
 import ReactOnRails from 'react-on-rails';
 import SearchWidget from '../react_on_rails_components/SearchWidget';
+import UserAvatar from '../components/UserAvatar';
 import {
   getUrlParams,
   setUrlParams,
@@ -44,9 +45,12 @@ window.wca.setUrlParams = setUrlParams;
 
 // Every other component is auto-bundled: React on Rails generates a pack per
 // file in app/webpacker/react_on_rails_components/ror_components and appends it
-// to the page rendering that component. SearchWidget can't use that mechanism
-// because it is rendered from the layout itself, i.e. after `javascript_pack_tag`
-// has already run and appending another pack would raise.
+// to the page rendering that component. These two can't use that mechanism
+// because layouts/_navigation renders them, i.e. after `javascript_pack_tag`
+// has already run and appending another pack would raise. They appear on every
+// page anyway, so they belong in this always-loaded pack. Their call sites pass
+// `auto_load_bundle: false`.
 ReactOnRails.register({
   SearchWidget,
+  UserAvatar,
 });
