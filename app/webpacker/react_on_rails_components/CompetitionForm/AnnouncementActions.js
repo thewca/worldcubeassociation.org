@@ -20,8 +20,8 @@ import {
   useAnnouncementData,
   useQueryDataSetter,
 } from './api';
-import Loading from '../../components/Requests/Loading';
-import { FormActionButton } from '../../components/wca/FormBuilder/EditForm';
+import Loading from '../Requests/Loading';
+import { FormActionButton } from '../wca/FormBuilder/EditForm';
 
 function AnnounceAction({
   competitionId,

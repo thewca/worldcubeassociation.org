@@ -3,17 +3,17 @@ import { Button } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import ResultsDataPreview from './ResultsDataPreview';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import getImportedTemporaryResults from '../../api/competitionResult/getImportedTemporaryResults';
 import getImportedTemporaryScrambles from '../../api/competitionResult/getImportedTemporaryScrambles';
 import mergeInboxResults from '../../api/competitionResult/mergeInboxResults';
 import mergeInboxScrambles from '../../api/competitionResult/mergeInboxScrambles';
 import { ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
-import { ResultRowHeader } from '../../../../react_on_rails_components/ResultsData/Results/ResultRowHeader';
-import ResultRowBody from '../../../../react_on_rails_components/ResultsData/Results/ResultRowBody';
-import ScrambleRowHeader from '../../../../react_on_rails_components/ResultsData/Scrambles/ScrambleRowHeader';
-import ScrambleRowBody from '../../../../react_on_rails_components/ResultsData/Scrambles/ScrambleRowBody';
+import { ResultRowHeader } from '../../../ResultsData/Results/ResultRowHeader';
+import ResultRowBody from '../../../ResultsData/Results/ResultRowBody';
+import ScrambleRowHeader from '../../../ResultsData/Scrambles/ScrambleRowHeader';
+import ScrambleRowBody from '../../../ResultsData/Scrambles/ScrambleRowBody';
 
 export function MergeInboxResults({ ticketDetails, currentStakeholder }) {
   return (

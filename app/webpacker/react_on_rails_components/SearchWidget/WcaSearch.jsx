@@ -14,7 +14,7 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import MultiSearchInput, { itemToOption } from './MultiSearchInput';
 import SEARCH_MODELS from './SearchModel';
-import Loading from '../../components/Requests/Loading';
+import Loading from '../Requests/Loading';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
 const WCA_SEARCH_QUERY_CLIENT = new QueryClient();

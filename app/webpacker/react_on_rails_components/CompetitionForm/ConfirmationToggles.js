@@ -7,10 +7,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
-import { useFormErrorHandler } from '../../components/wca/FormBuilder/provider/FormObjectProvider';
+import { useFormErrorHandler } from '../wca/FormBuilder/provider/FormObjectProvider';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { confirmationDataQueryKey, useConfirmationData } from './api';
-import Loading from '../../components/Requests/Loading';
+import Loading from '../Requests/Loading';
 import { updateCompetitionConfirmationDataUrl } from '../../lib/requests/routes.js.erb';
 
 function ConfirmationControlCheckbox({

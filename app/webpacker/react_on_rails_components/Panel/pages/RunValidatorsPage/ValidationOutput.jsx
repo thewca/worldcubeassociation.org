@@ -1,8 +1,8 @@
 import React from 'react';
 import { Header, Message } from 'semantic-ui-react';
 import _ from 'lodash';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import ValidationListView from './ValidationListView';
 
 export default function ValidationOutput({

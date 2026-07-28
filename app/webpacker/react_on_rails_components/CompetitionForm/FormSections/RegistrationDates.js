@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { Form } from 'semantic-ui-react';
-import { InputDate } from '../../../components/wca/FormBuilder/input/FormInputs';
+import { InputDate } from '../../wca/FormBuilder/input/FormInputs';
 import RegistrationCollisions from '../Tables/RegistrationCollisions';
-import SubSection from '../../../components/wca/FormBuilder/SubSection';
-import { useFormInitialObject, useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormInitialObject, useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { hasNotPassedOrNull } from '../../../lib/utils/dates';
 
 export default function RegistrationDates() {

@@ -11,8 +11,8 @@ import FinalSteps from './FinalSteps';
 import MiscActions from './MiscActions';
 import I18n from '../../../../lib/i18n';
 import getUnfinishedPersons from '../../api/competitionResult/getUnfinishedPersons';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 
 export default function CompetitionResultActionerView({ ticketDetails, currentStakeholder }) {
   const { ticket: { metadata: { status, competition: { id: competitionId } } } } = ticketDetails;

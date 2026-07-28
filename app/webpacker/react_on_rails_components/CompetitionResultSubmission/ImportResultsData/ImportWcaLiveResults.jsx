@@ -1,9 +1,9 @@
 import React from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Form, Message } from 'semantic-ui-react';
-import Errored from '../../../components/Requests/Errored';
+import Errored from '../../Requests/Errored';
 import importWcaLiveResults from '../api/importWcaLiveResults';
-import Loading from '../../../components/Requests/Loading';
+import Loading from '../../Requests/Loading';
 import { contactRecipientUrl, uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 

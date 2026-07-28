@@ -2,8 +2,8 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 import EditProfileForm from './EditProfileForm';
 
 export default function EditProfileFormHolder({

@@ -5,13 +5,13 @@ import {
   Table, Message, Button, Popup,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import Loading from '../../../components/Requests/Loading';
+import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import { registrationCollisionsJsonUrl } from '../../../lib/requests/routes.js.erb';
 import { events } from '../../../lib/wca-data.js.erb';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import useToggleState from '../../../lib/hooks/useToggleState';
-import { useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function NotConfirmedIcon() {
   return (

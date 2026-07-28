@@ -7,8 +7,8 @@ import {
   fetchUserGroupsUrl, addUserGroupsUrl,
 } from '../../../../lib/requests/routes.js.erb';
 import { delegateRegionsStatus } from '../../../../lib/wca-data.js.erb';
-import Errored from '../../../../components/Requests/Errored';
-import Loading from '../../../../components/Requests/Loading';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import CreateModal from '../../views/UserRoles/CreateModal';
 import UpdateModal from '../../views/UserGroups/UpdateModal';

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import StepPanel from './StepPanel';
-import Loading from '../../../components/Requests/Loading';
+import Loading from '../../Requests/Loading';
 import RegistrationProvider, { useRegistration } from '../lib/RegistrationProvider';
 import RegistrationMessage from './RegistrationMessage';
 import StoreProvider from '../../../lib/providers/StoreProvider';
@@ -15,7 +15,7 @@ import usePerpetualState from '../hooks/usePerpetualState';
 import StepConfigProvider, { useStepConfig } from '../lib/StepConfigProvider';
 import StepNavigationProvider from '../lib/StepNavigationProvider';
 import { availableSteps, registrationOverviewConfig } from '../lib/stepConfigs';
-import FormObjectProvider, { useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import FormObjectProvider, { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 
 // The following states should show the Panel even when registration is already closed.

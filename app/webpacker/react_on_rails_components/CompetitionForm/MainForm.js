@@ -6,7 +6,7 @@ import {
   InputChampionships,
   InputMarkdown,
   InputTextArea,
-} from '../../components/wca/FormBuilder/input/FormInputs';
+} from '../wca/FormBuilder/input/FormInputs';
 import CompetitorLimit from './FormSections/CompetitorLimit';
 import Staff from './FormSections/Staff';
 import Website from './FormSections/Website';
@@ -18,7 +18,7 @@ import NearbyComps from './Tables/NearbyComps';
 import Series from './FormSections/Series';
 import CompDates from './FormSections/CompDates';
 import RegistrationDates from './FormSections/RegistrationDates';
-import SubSection from '../../components/wca/FormBuilder/SubSection';
+import SubSection from '../wca/FormBuilder/SubSection';
 
 export default function MainForm({
   isCloning = false,

@@ -3,11 +3,11 @@ import { useMutation } from '@tanstack/react-query';
 import {
   Button, Header,
 } from 'semantic-ui-react';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
-import confirmWcaId from '../../../../react_on_rails_components/NewcomerChecks/api/confirmWcaId';
-import WcaIdClaimCancelWarning from '../../../../react_on_rails_components/NewcomerChecks/WcaIdClaimCancelWarning';
+import confirmWcaId from '../../../NewcomerChecks/api/confirmWcaId';
+import WcaIdClaimCancelWarning from '../../../NewcomerChecks/WcaIdClaimCancelWarning';
 
 export default function ApproveWcaIdClaim({
   user, onSuccess, requireConfirmation,

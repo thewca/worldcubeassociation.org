@@ -1,12 +1,12 @@
 import React from 'react';
 import {
   InputBooleanSelect, InputNumber, InputSelect, InputTextArea,
-} from '../../../components/wca/FormBuilder/input/FormInputs';
+} from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
-import SubSection from '../../../components/wca/FormBuilder/SubSection';
+import SubSection from '../../wca/FormBuilder/SubSection';
 import { autoAcceptPreferences, newcomerMonthEnabled } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
-import { useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function CompetitorLimit() {
   const {

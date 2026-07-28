@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import createUserRole from './api/createUserRole';
-import Errored from '../../../../components/Requests/Errored';
+import Errored from '../../../Requests/Errored';
 import useInputState from '../../../../lib/hooks/useInputState';
 
 export default function CreateModal({

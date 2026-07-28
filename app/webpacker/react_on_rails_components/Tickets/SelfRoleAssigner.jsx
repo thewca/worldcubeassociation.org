@@ -8,8 +8,8 @@ import I18n from '../../lib/i18n';
 import { ticketStakeholderConnections } from '../../lib/wca-data.js.erb';
 import joinAsBccStakeholder from './api/joinAsBccStakeholder';
 import getEligibleRolesForBcc from './api/getEligibleRolesForBcc';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('tickets.stakeholder_role.actioner')

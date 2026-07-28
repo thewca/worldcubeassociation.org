@@ -5,8 +5,8 @@ import {
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../../../lib/wca-data.js.erb';
-import Errored from '../../../../components/Requests/Errored';
-import Loading from '../../../../components/Requests/Loading';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import WcaSearch from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';

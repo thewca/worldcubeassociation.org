@@ -7,9 +7,9 @@ import _ from 'lodash';
 import { DateTime } from 'luxon';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
-import RegionFlag from '../../components/wca/RegionFlag';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
+import RegionFlag from '../wca/RegionFlag';
 import {
   adminCheckUploadedResults,
   adminPostingCompetitionsUrl,

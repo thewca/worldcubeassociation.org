@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon, Table, Segment } from 'semantic-ui-react';
-import UserBadge from '../../../../components/UserBadge';
-import PaginationFooter from '../../../../components/PaginationFooter';
+import UserBadge from '../../../UserBadge';
+import PaginationFooter from '../../../PaginationFooter';
 
 export default function BannedCompetitors({
   bannedCompetitorRoles,

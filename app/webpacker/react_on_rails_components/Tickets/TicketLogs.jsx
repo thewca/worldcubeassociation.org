@@ -3,8 +3,8 @@ import { Header, List } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
 import { ticketLogActionTypes } from '../../lib/wca-data.js.erb';
 import getLogs from './api/getLogs';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 
 export default function TicketLogs({ ticketId }) {
   const { data: logs, isLoading, isError } = useQuery({

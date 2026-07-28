@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Confirm, List } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import postResults from '../../api/competitionResult/postResults';
 import { viewUrls, competitionAllResultsUrl } from '../../../../lib/requests/routes.js.erb';
 

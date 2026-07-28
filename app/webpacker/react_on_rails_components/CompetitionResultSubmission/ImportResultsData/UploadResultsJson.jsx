@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import uploadResultsJson from '../api/uploadResultsJson';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
-import Errored from '../../../components/Requests/Errored';
-import Loading from '../../../components/Requests/Loading';
+import Errored from '../../Requests/Errored';
+import Loading from '../../Requests/Loading';
 
 export default function UploadResultsJson({ competitionId, isAdminView, onImportSuccess }) {
   const [resultFile, setResultFile] = useState();

@@ -7,8 +7,8 @@ import StoreProvider from '../../../lib/providers/StoreProvider';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 import ConfirmProvider from '../../../lib/providers/ConfirmProvider';
 import RegistrationProvider, { useRegistration } from '../lib/RegistrationProvider';
-import FormObjectProvider from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
-import Loading from '../../../components/Requests/Loading';
+import FormObjectProvider from '../../wca/FormBuilder/provider/FormObjectProvider';
+import Loading from '../../Requests/Loading';
 
 export default function RegistrationEdit({ registrationId, competitionInfo, user }) {
   const ref = useRef();

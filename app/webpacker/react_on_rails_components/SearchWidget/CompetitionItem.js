@@ -1,6 +1,6 @@
 import React from 'react';
 
-import RegionFlag from '../../components/wca/RegionFlag';
+import RegionFlag from '../wca/RegionFlag';
 import '../../stylesheets/search_widget/CompetitionItem.scss';
 
 function CompetitionItem({

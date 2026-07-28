@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { useMutation } from '@tanstack/react-query';
 import StoreProvider from '../../lib/providers/StoreProvider';
 import { createCompetitionUrl } from '../../lib/requests/routes.js.erb';
-import EditForm from '../../components/wca/FormBuilder/EditForm';
+import EditForm from '../wca/FormBuilder/EditForm';
 import MainForm from './MainForm';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { useQueryRedirect } from './api';

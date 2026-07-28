@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
-import EventSelector from '../../../../components/wca/EventSelector';
+import EventSelector from '../../../wca/EventSelector';
 import { events } from '../../../../lib/wca-data.js.erb';
 import { viewUrls } from '../../../../lib/requests/routes.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';

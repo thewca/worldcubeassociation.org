@@ -5,8 +5,8 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { DateTime } from 'luxon';
 import getCronjobDetails from './api/getCronjobDetails';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import CronjobActions from './CronjobActions';
 
 const STEPS_INVOLVED = {

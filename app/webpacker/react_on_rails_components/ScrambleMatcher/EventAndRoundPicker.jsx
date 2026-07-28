@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { Button, Header } from 'semantic-ui-react';
-import EventSelector from '../../components/wca/EventSelector';
+import EventSelector from '../wca/EventSelector';
 import I18n from '../../lib/i18n';
 import { roundToRoundTypeName } from './util';
 import DndWorkbench from './DndWorkbench';

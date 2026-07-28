@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Item } from 'semantic-ui-react';
 import WcaSearch from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
-import Loading from '../../../../components/Requests/Loading';
+import Loading from '../../../Requests/Loading';
 import useQueryParams from '../../../../lib/hooks/useQueryParams';
 import EditPersonForm from './EditPersonForm';
 

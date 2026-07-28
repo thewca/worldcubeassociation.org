@@ -1,6 +1,6 @@
 import React from 'react';
 
-import UserAvatar from '../../components/UserAvatar';
+import UserAvatar from '../UserAvatar';
 import '../../stylesheets/search_widget/UserItem.scss';
 
 function UserItem({

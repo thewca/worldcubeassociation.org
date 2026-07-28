@@ -12,7 +12,7 @@ import { updateQualification } from '../../store/actions';
 import ButtonActivatedModal from '../ButtonActivatedModal';
 import QualificationType from './QualificationTypeInput';
 import QualificationResultType from './QualificationResultTypeInput';
-import UtcDatePicker from '../../../../components/wca/UtcDatePicker';
+import UtcDatePicker from '../../../wca/UtcDatePicker';
 
 /**
  *

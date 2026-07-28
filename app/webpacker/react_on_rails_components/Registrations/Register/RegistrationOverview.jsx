@@ -3,7 +3,7 @@ import {
   Button, ButtonGroup, Form, Header, List, Message, Segment,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import EventIcon from '../../../components/wca/EventIcon';
+import EventIcon from '../../wca/EventIcon';
 import { hasPassed } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
 import { useUpdateRegistrationMutation } from '../lib/mutations';
@@ -15,7 +15,7 @@ import RegistrationStatus from './RegistrationStatus';
 import { useRegistration } from '../lib/RegistrationProvider';
 import { useStepNavigation } from '../lib/StepNavigationProvider';
 import { isoMoneyToHumanReadable } from '../../../lib/helpers/money';
-import { useFormSuccessHandler } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import { useFormSuccessHandler } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function RegistrationOverview({
   competitionInfo,

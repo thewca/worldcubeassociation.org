@@ -7,7 +7,7 @@ import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import { events, roundTypes } from '../../../../lib/wca-data.js.erb';
 import { editResultUrl } from '../../../../lib/requests/routes.js.erb';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
-import Errored from '../../../../components/Requests/Errored';
+import Errored from '../../../Requests/Errored';
 import { getCompetitions, getEvents, getResults } from './api/getFixResultsData';
 
 function FixResultsPage() {

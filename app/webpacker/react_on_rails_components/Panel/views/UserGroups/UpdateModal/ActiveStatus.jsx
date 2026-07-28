@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import updateUserGroup from '../api/updateUserGroup';
-import Errored from '../../../../../components/Requests/Errored';
+import Errored from '../../../../Requests/Errored';
 import { useConfirm } from '../../../../../lib/providers/ConfirmProvider';
 
 export default function ActiveStatus({ userGroup, nonLeadRoles }) {

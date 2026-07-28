@@ -5,7 +5,7 @@ import { Form } from 'semantic-ui-react';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { councilsStatus } from '../../../../lib/wca-data.js.erb';
-import Loading from '../../../../components/Requests/Loading';
+import Loading from '../../../Requests/Loading';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import WcaSearch from '../../../SearchWidget/WcaSearch';
 

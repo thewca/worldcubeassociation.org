@@ -4,10 +4,10 @@ import {
 } from 'semantic-ui-react';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import { wfcDuesRedirectsUrl, wfcXeroUsersUrl } from '../../../../lib/requests/routes.js.erb';
-import Errored from '../../../../components/Requests/Errored';
-import Loading from '../../../../components/Requests/Loading';
+import Errored from '../../../Requests/Errored';
+import Loading from '../../../Requests/Loading';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
-import RegionSelector from '../../../../components/wca/RegionSelector';
+import RegionSelector from '../../../wca/RegionSelector';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 

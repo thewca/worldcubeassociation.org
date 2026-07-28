@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import ActiveStatus from './ActiveStatus';
 import readUserGroup from '../api/readUserGroup';
 import readUserRoles from '../api/readUserRoles';
-import Loading from '../../../../../components/Requests/Loading';
-import Errored from '../../../../../components/Requests/Errored';
+import Loading from '../../../../Requests/Loading';
+import Errored from '../../../../Requests/Errored';
 
 export default function UpdateModal({
   open, onClose, title, userGroupId,

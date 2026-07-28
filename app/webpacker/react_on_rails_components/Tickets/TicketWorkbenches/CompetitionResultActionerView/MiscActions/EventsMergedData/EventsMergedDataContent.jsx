@@ -4,8 +4,8 @@ import {
   Button, Confirm, Message, Table,
 } from 'semantic-ui-react';
 import getEventsMergedData from '../../../../api/competitionResult/getEventsMergedData';
-import Loading from '../../../../../../components/Requests/Loading';
-import Errored from '../../../../../../components/Requests/Errored';
+import Loading from '../../../../../Requests/Loading';
+import Errored from '../../../../../Requests/Errored';
 import deleteResultsData from '../../../../api/competitionResult/deleteResultsData';
 
 export default function EventsMergedDataContent({ ticketDetails }) {

@@ -5,8 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { apiV0Urls, editUserAvatarUrl } from '../../../../lib/requests/routes.js.erb';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
-import Loading from '../../../../components/Requests/Loading';
-import Errored from '../../../../components/Requests/Errored';
+import Loading from '../../../Requests/Loading';
+import Errored from '../../../Requests/Errored';
 import WcaSearch from '../../../SearchWidget/WcaSearch';
 import I18n from '../../../../lib/i18n';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';

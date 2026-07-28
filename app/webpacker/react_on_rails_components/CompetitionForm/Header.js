@@ -3,9 +3,9 @@ import { Message } from 'semantic-ui-react';
 import { useStore } from '../../lib/providers/StoreProvider';
 import AnnouncementActions from './AnnouncementActions';
 import UserPreferences from './UserPreferences';
-import { useFormInitialObject } from '../../components/wca/FormBuilder/provider/FormObjectProvider';
-import I18nHTMLTranslate from '../../components/I18nHTMLTranslate';
-import Loading from '../../components/Requests/Loading';
+import { useFormInitialObject } from '../wca/FormBuilder/provider/FormObjectProvider';
+import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import Loading from '../Requests/Loading';
 import { useConfirmationData } from './api';
 import ConfirmationToggles from './ConfirmationToggles';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import I18n from '../../../lib/i18n';
-import { InputString } from '../../../components/wca/FormBuilder/input/FormInputs';
+import { InputString } from '../../wca/FormBuilder/input/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
-import { useFormObject } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function NameDetails() {
   const { isPersisted, isAdminView } = useStore();

@@ -7,9 +7,9 @@ import {
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { useCheckboxUpdater } from '../../../lib/hooks/useCheckboxState';
-import I18nHTMLTranslate from '../../../components/I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useStepNavigation } from '../lib/StepNavigationProvider';
-import { useFormObjectState } from '../../../components/wca/FormBuilder/provider/FormObjectProvider';
+import { useFormObjectState } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function RegistrationFullMessage({ competitionInfo }) {
   if (competitionInfo['registration_full_and_accepted?']) {

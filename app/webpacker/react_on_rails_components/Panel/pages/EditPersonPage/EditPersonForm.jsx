@@ -6,13 +6,13 @@ import _ from 'lodash';
 import { panelPageUrl, apiV0Urls, personUrl } from '../../../../lib/requests/routes.js.erb';
 import { PANEL_PAGES } from '../../../../lib/wca-data.js.erb';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
-import Loading from '../../../../components/Requests/Loading';
+import Loading from '../../../Requests/Loading';
 import I18n from '../../../../lib/i18n';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
-import Errored from '../../../../components/Requests/Errored';
-import UtcDatePicker from '../../../../components/wca/UtcDatePicker';
-import RegionSelector from '../../../../components/wca/RegionSelector';
-import GenderSelector from '../../../../components/wca/GenderSelector';
+import Errored from '../../../Requests/Errored';
+import UtcDatePicker from '../../../wca/UtcDatePicker';
+import RegionSelector from '../../../wca/RegionSelector';
+import GenderSelector from '../../../wca/GenderSelector';
 
 export default function EditPersonForm({ wcaId, onSuccess, showDestroyButton = false }) {
   const {
