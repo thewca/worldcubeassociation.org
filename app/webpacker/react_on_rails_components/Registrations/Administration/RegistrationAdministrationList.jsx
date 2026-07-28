@@ -12,7 +12,7 @@ import { showMessage, showMessages } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { autoAcceptPreferences } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
-import Loading from '../../../components/Requests/Loading';
+import Loading from '../../Requests/Loading';
 import { bulkUpdateRegistrations } from '../api/registration/patch/update_registration';
 import bulkAutoAccept from '../api/registration/patch/bulk_auto_accept';
 import RegistrationAdministrationTable from './RegistrationsAdministrationTable';

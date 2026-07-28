@@ -8,7 +8,7 @@
     <%= alert :info, t('.note_clone'), note: true %>
   <% end %>
 
-  <%= react_component("CompetitionForm/Create", {
+  <%= react_on_rails_component("CompetitionFormCreate", props: {
     competition: @competition.to_form_data,
     isCloning: @competition.being_cloned_from.present?,
   }) %>

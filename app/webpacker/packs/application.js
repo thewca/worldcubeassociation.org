@@ -36,7 +36,7 @@ import EventsTable from '../react_on_rails_components/EventsTable';
 import ManualPaymentSetup from '../react_on_rails_components/ManualPaymentSetup';
 import EditAvatar from '../react_on_rails_components/EditAvatar';
 import ImportRegistrations from '../react_on_rails_components/ImportRegistrations';
-import UserAvatar from '../components/UserAvatar';
+import UserAvatar from '../react_on_rails_components/UserAvatar';
 import Schedule from '../react_on_rails_components/Schedule';
 import EditSchedule from '../react_on_rails_components/EditSchedule';
 import ScrambleMatcher from '../react_on_rails_components/ScrambleMatcher';
@@ -57,6 +57,11 @@ import RegistrationsList from '../react_on_rails_components/Registrations/List';
 import RegistrationsEdit from '../react_on_rails_components/Registrations/Edit';
 import RegistrationsRegister from '../react_on_rails_components/Registrations/Register';
 import RegistrationsAdministration from '../react_on_rails_components/Registrations/Administration';
+import CompetitionFormEdit from '../react_on_rails_components/CompetitionForm/Edit';
+import CompetitionFormCreate from '../react_on_rails_components/CompetitionForm/Create';
+import PanelTemplate from '../react_on_rails_components/Panel/PanelTemplate';
+import Tickets from '../react_on_rails_components/Tickets';
+import SearchWidget from '../react_on_rails_components/SearchWidget';
 import {
   getUrlParams,
   setUrlParams,
@@ -133,6 +138,11 @@ ReactOnRails.register({
   RegistrationsEdit,
   RegistrationsRegister,
   RegistrationsAdministration,
+  CompetitionFormEdit,
+  CompetitionFormCreate,
+  PanelTemplate,
+  Tickets,
+  SearchWidget,
 });
 
 // Support component names relative to this directory:

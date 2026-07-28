@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import UtcDatePicker from '../../../components/wca/UtcDatePicker';
+import UtcDatePicker from '../../wca/UtcDatePicker';
 import EditReasonField from './EditReasonField';
 
 export default function EditDobField({

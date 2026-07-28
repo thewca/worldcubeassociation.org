@@ -3,8 +3,8 @@ import {
   Button, Checkbox, Icon, Table,
 } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 import '../../stylesheets/competition_results.scss';
 import EventNavigation from './EventNavigation';
 import { getUrlParams, setUrlParams } from '../../lib/utils/wca';

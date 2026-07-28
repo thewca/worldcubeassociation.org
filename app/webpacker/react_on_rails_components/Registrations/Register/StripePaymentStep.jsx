@@ -16,8 +16,8 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import getPaymentTicket from '../api/payment/get/getPaymentTicket';
 import { showMessage } from './RegistrationMessage';
-import AutonumericField from '../../../components/wca/FormBuilder/input/AutonumericField';
-import Loading from '../../../components/Requests/Loading';
+import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
+import Loading from '../../Requests/Loading';
 
 const convertISOAmount = async (competitionId, userId, isoDonationAmount) => {
   const { data } = await fetchJsonOrError(

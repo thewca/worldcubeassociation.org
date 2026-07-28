@@ -5,7 +5,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
-import Loading from '../../components/Requests/Loading';
+import Loading from '../Requests/Loading';
 import {
   ATTEMPTS_UNPACKING_MARKER,
   autoMatchSearch, calculateBestInsertIndex, filterUnusedScrambles,

@@ -6,10 +6,10 @@ import { useQuery } from '@tanstack/react-query';
 import _ from 'lodash';
 import { getIsoDateString, getShortTimeString, getTimeWithSecondsString } from '../../../lib/utils/dates';
 import { events } from '../../../lib/wca-data.js.erb';
-import EventIcon from '../../../components/wca/EventIcon';
+import EventIcon from '../../wca/EventIcon';
 import I18n from '../../../lib/i18n';
 import getUsersInfo from '../api/user/post/getUserInfo';
-import Loading from '../../../components/Requests/Loading';
+import Loading from '../../Requests/Loading';
 import { getRegistrationHistory } from '../api/registration/get/get_registrations';
 
 export default function RegistrationHistory({ registrationId }) {

@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { List, Message } from 'semantic-ui-react';
 import newcomerDobCheck from './api/newcomerDobCheck';
-import Loading from '../../components/Requests/Loading';
-import Errored from '../../components/Requests/Errored';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 import I18n from '../../lib/i18n';
 
 export default function DobChecker({ competitionId }) {

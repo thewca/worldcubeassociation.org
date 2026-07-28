@@ -1,6 +1,6 @@
 import React from 'react';
 import I18n from '../../../lib/i18n';
-import RegionSelector from '../../../components/wca/RegionSelector';
+import RegionSelector from '../../wca/RegionSelector';
 import EditReasonField from './EditReasonField';
 
 export default function EditRegionField({

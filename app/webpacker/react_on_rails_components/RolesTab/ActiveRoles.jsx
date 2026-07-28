@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header, List, Icon } from 'semantic-ui-react';
 import { panelPageUrl } from '../../lib/requests/routes.js.erb';
-import Loading from '../../components/Requests/Loading';
+import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { groupTypes, delegateRegionsStatus, PANEL_PAGES } from '../../lib/wca-data.js.erb';
 import { getRoleDescription, getRoleSubDescription } from '../../lib/helpers/roles-tab';

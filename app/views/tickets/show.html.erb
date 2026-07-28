@@ -1,2 +1,2 @@
 <% provide(:title, @ticket.page_title) %>
-<%= react_component("Tickets", {id: @ticket_id}) %>
+<%= react_on_rails_component("Tickets", props: {id: @ticket_id}) %>

@@ -6,11 +6,11 @@ import {
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
-import assignWcaIdToUser from '../../../../react_on_rails_components/NewcomerChecks/api/assignWcaIdToUser';
+import assignWcaIdToUser from '../../../NewcomerChecks/api/assignWcaIdToUser';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
-import WcaIdClaimCancelWarning from '../../../../react_on_rails_components/NewcomerChecks/WcaIdClaimCancelWarning';
+import WcaIdClaimCancelWarning from '../../../NewcomerChecks/WcaIdClaimCancelWarning';
 
 export default function AssignWcaIdToUser({
   user, prefilledWcaId, onSuccess, requireConfirmation,
