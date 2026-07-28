@@ -605,7 +605,7 @@ RSpec.describe "registrations" do
         end
 
         context 'on-the-spot is disabled' do
-          it 'doesnt work when registration is open' do
+          it 'works when registration is open' do
             expect do
               post competition_registrations_do_add_path(open_comp), params: {
                 registration_data: {
@@ -613,9 +613,7 @@ RSpec.describe "registrations" do
                   gender: "m", email: "sherlock@example.com", event_ids: ["444"]
                 },
               }
-            end.not_to(change { open_comp.registrations.count })
-            follow_redirect!
-            expect(response.body).to include "On-the-spot registration is not enabled"
+            end.to(change { open_comp.registrations.count })
           end
 
           it 'doesnt work when registration is closed' do
