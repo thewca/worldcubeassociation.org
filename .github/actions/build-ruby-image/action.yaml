@@ -38,7 +38,7 @@ runs:
           echo "WCA_LIVE_SITE=true" >> $GITHUB_ENV
         fi
     - name: Build and push Ruby Docker image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       id: build-ruby-image
       with:
         push: true

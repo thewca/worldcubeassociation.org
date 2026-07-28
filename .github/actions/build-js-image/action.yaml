@@ -27,7 +27,7 @@ runs:
       shell: bash
       run: aws s3 cp s3://wca-fonts ./next-frontend/src/styles/fonts/ --recursive
     - name: Build and push JS Docker image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       id: build-js-image
       with:
         push: true
