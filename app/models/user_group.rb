@@ -351,8 +351,10 @@ class UserGroup < ApplicationRecord
 
   private def end_active_lead_roles
     active_roles.select(&:lead?).each { |role| role.update!(end_date: Date.today) }
-    # Since `active_roles` is cached in memory, we must reset it so the
-    # `validates :active_roles, absence: true` validation doesn't fail.
+    # Since `active_roles` is loading the data based on timestamps, the
+    # association may currently be loaded based on older timestamps. We have
+    # just changed some of the timestamps in the update calls above, so
+    # force-reset the association to ensure time-accurate data.
     active_roles.reset
   end
 end
