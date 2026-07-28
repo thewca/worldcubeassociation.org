@@ -53,10 +53,10 @@ import ResultsDataResults from '../react_on_rails_components/ResultsData/Results
 import ResultsDataScrambles from '../react_on_rails_components/ResultsData/Scrambles';
 import RolesTab from '../react_on_rails_components/RolesTab';
 import PersonsBadges from '../react_on_rails_components/Persons/Badges';
-import RegistrationsV2Registrations from '../react_on_rails_components/RegistrationsV2/Registrations';
-import RegistrationsV2RegistrationEdit from '../react_on_rails_components/RegistrationsV2/RegistrationEdit';
-import RegistrationsV2Register from '../react_on_rails_components/RegistrationsV2/Register';
-import RegistrationsV2RegistrationAdministration from '../react_on_rails_components/RegistrationsV2/RegistrationAdministration';
+import RegistrationsRegistrations from '../react_on_rails_components/Registrations/Registrations';
+import RegistrationsRegistrationEdit from '../react_on_rails_components/Registrations/RegistrationEdit';
+import RegistrationsRegister from '../react_on_rails_components/Registrations/Register';
+import RegistrationsRegistrationAdministration from '../react_on_rails_components/Registrations/RegistrationAdministration';
 import {
   getUrlParams,
   setUrlParams,
@@ -129,10 +129,10 @@ ReactOnRails.register({
   ResultsDataScrambles,
   RolesTab,
   PersonsBadges,
-  RegistrationsV2Registrations,
-  RegistrationsV2RegistrationEdit,
-  RegistrationsV2Register,
-  RegistrationsV2RegistrationAdministration,
+  RegistrationsRegistrations,
+  RegistrationsRegistrationEdit,
+  RegistrationsRegister,
+  RegistrationsRegistrationAdministration,
 });
 
 // Support component names relative to this directory:
