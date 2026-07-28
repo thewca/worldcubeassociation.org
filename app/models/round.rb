@@ -724,14 +724,17 @@ class Round < ApplicationRecord
 
       {
         max_round_number: previous.number + subsequent_rounds_allowed,
-        violation: %w[9m3 9m2 9m1][subsequent_rounds_allowed],
+        subsequent_rounds_allowed: subsequent_rounds_allowed,
       }
     end.min_by { it[:max_round_number] }
 
     return nil if binding_cap.nil?
 
     enforced_max_round = [binding_cap[:max_round_number], 4].min # 9m: events may have at most four rounds
-    enforced_max_round >= number ? nil : binding_cap[:violation]
+    return nil if enforced_max_round >= number
+
+    # The fewer subsequent rounds a previous round allows, the stricter the clause it violates
+    MIN_COMPETITORS_PER_CLAUSE.keys.reverse[binding_cap[:subsequent_rounds_allowed]]
   end
 
   def open?

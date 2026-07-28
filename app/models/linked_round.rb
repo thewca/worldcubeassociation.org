@@ -82,8 +82,8 @@ class LinkedRound < ApplicationRecord
   # For 9m purposes, a Dual Round sits at the position of its last round
   delegate :number, to: :last_round_in_link
 
-  # A LinkedRound can only span the first rounds of an event,
-  #   so this is always the CompetitionEvent
+  # If you want to know the previous participation source before a linked round,
+  # you have to ask the first of the linked rounds for its predecessor
   delegate :participation_source, to: :first_round_in_link
 
   # For 9m purposes a LinkedRound counts as a single round sitting at the

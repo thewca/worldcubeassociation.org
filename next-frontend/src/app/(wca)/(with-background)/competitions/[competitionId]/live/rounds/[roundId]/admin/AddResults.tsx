@@ -4,7 +4,7 @@ import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable
 import RoundNameHeader from "./RoundNameHeader";
 import RoundLockedAlert from "./RoundLockedAlert";
 import RoundLimits from "./RoundLimits";
-import Round9mAlert from "./Round9mAlert";
+import InsufficientCompetitorAlert from "./InsufficientCompetitorAlert";
 
 export default async function AddResults({
   competitionId,
@@ -14,7 +14,7 @@ export default async function AddResults({
   return (
     <>
       <RoundLockedAlert />
-      <Round9mAlert />
+      <InsufficientCompetitorAlert />
       <RoundNameHeader />
       <RoundLimits />
       <SimpleGrid columns={16} gap={6}>

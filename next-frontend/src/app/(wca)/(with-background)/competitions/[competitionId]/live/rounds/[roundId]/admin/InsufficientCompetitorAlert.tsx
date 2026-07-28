@@ -4,7 +4,7 @@ import ClosableAlert from "@/components/ui/ClosableAlert";
 import { useRoundInfo } from "@/providers/RoundInfoProvider";
 import { useT } from "@/lib/i18n/useI18n";
 
-export default function Round9mAlert() {
+export default function InsufficientCompetitorAlert() {
   const round = useRoundInfo();
   const { t } = useT();
 
