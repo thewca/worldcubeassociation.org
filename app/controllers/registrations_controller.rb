@@ -112,8 +112,10 @@ class RegistrationsController < ApplicationController
         competition_event.event_id if row[competition_event.event_id.to_sym] == "1"
       end
 
+      wcif_row = row.to_h.slice(:name, :wca_id, :country, :gender, :birth_date, :email, :comments)
+
       build_wcif_data(
-        **row.to_h,
+        **wcif_row,
         event_ids: event_ids,
         status: "accepted",
         is_competing: true,
@@ -122,7 +124,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  private def build_wcif_data(name:, country:, gender:, birth_date:, email:, event_ids:, wca_id: nil, comments: nil, status: nil, is_competing: nil, registered_at: nil, **_)
+  private def build_wcif_data(name:, country:, gender:, birth_date:, email:, event_ids:, wca_id: nil, comments: nil, status: nil, is_competing: nil, registered_at: nil)
     registration = {
       eventIds: event_ids || [],
     }
