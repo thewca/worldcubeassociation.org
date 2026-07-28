@@ -369,6 +369,7 @@ Rails.application.routes.draw do
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
       resources :competitions, only: [] do
+        resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
@@ -493,7 +494,7 @@ Rails.application.routes.draw do
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
       resources :user_roles, only: %i[index show create update destroy]
-      resources :user_groups, only: %i[index create update]
+      resources :user_groups, only: %i[index show create update]
       namespace :wrt do
         resources :persons, only: %i[update destroy] do
           put '/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count

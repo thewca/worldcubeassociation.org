@@ -13,7 +13,5 @@
     canUpdateQualifications: current_user.can_update_qualifications?(@competition),
     usesIlr: @competition.scoretaking_software_internal?,
     wcifEvents: @competition.events_wcif(version: '2.1.1')
-  }, html_options: {
-    id: "events-edit-area",
-  }) %>
+  }, id: "events-edit-area") %>
 <% end %>

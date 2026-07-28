@@ -53,10 +53,10 @@ import ResultsDataResults from '../react_on_rails_components/ResultsData/Results
 import ResultsDataScrambles from '../react_on_rails_components/ResultsData/Scrambles';
 import RolesTab from '../react_on_rails_components/RolesTab';
 import PersonsBadges from '../react_on_rails_components/Persons/Badges';
-import RegistrationsV2Registrations from '../react_on_rails_components/RegistrationsV2/Registrations';
-import RegistrationsV2RegistrationEdit from '../react_on_rails_components/RegistrationsV2/RegistrationEdit';
-import RegistrationsV2Register from '../react_on_rails_components/RegistrationsV2/Register';
-import RegistrationsV2RegistrationAdministration from '../react_on_rails_components/RegistrationsV2/RegistrationAdministration';
+import RegistrationsList from '../react_on_rails_components/Registrations/List';
+import RegistrationsEdit from '../react_on_rails_components/Registrations/Edit';
+import RegistrationsRegister from '../react_on_rails_components/Registrations/Register';
+import RegistrationsAdministration from '../react_on_rails_components/Registrations/Administration';
 import CompetitionFormEdit from '../react_on_rails_components/CompetitionForm/Edit';
 import CompetitionFormCreate from '../react_on_rails_components/CompetitionForm/Create';
 import PanelTemplate from '../react_on_rails_components/Panel/PanelTemplate';
@@ -134,10 +134,10 @@ ReactOnRails.register({
   ResultsDataScrambles,
   RolesTab,
   PersonsBadges,
-  RegistrationsV2Registrations,
-  RegistrationsV2RegistrationEdit,
-  RegistrationsV2Register,
-  RegistrationsV2RegistrationAdministration,
+  RegistrationsList,
+  RegistrationsEdit,
+  RegistrationsRegister,
+  RegistrationsAdministration,
   CompetitionFormEdit,
   CompetitionFormCreate,
   PanelTemplate,

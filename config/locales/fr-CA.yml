@@ -232,6 +232,8 @@ fr-CA:
       ranking: 'Top %{ranking}'
       #original_hash: 0664a83
       percent: 'Top %{percent}%'
+      #original_hash: 97d9da5
+      all_advance: Tout le monde se qualifie
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -239,6 +241,8 @@ fr-CA:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+    #original_hash: 97d9da5
+    all_advance: Tout le monde se qualifie
     #original_hash: 805d2d4
     ranking: 'Les %{ranking} premiers avancent au tour suivant'
     #original_hash: 2ea20d3
@@ -1532,13 +1536,13 @@ fr-CA:
           tels que la politique d'exigences de compétition de la WCA. Le WCAT
           n'est PAS responsable de l'organisation et de la délégation des
           compétitions individuelles.
-        #original_hash: dbc3e4b
+        #original_hash: 19b6ebe
         wic: >-
           Le Comité d’intégrité de la WCA (WIC) effectue des enquêtes
           indépendantes concernant les membres de la communauté WCA et les
           incidents lors des compétitions WCA ou sur les plateformes officielles
-          en ligne de la WCA. Ces incidents sont des violations présumées de
-          l’esprit, du code de conduite, du code de déontologie et/ou du
+          en ligne de la WCA. Ces incidents sont des violations présumées des
+          valeurs, du code de conduite, du code de déontologie et/ou du
           règlement de la WCA.
         #original_hash: 19d4a02
         weat: >-
@@ -1763,6 +1767,9 @@ fr-CA:
         edit_reason:
           #original_hash: b9acf4e
           label: Raison du changement
+        edit_reason_for:
+          #original_hash: e36fd68
+          label: 'Motif de la modification de %{attribute}'
         proof_attach:
           #original_hash: 2e04e11
           label: Joindre une preuve
@@ -1772,6 +1779,11 @@ fr-CA:
         captcha:
           #original_hash: 345f4e4
           validation_error: Veuillez vérifier que vous n'êtes pas un robot.
+        verified_checkbox:
+          #original_hash: 6dd3f6e
+          label: >-
+            En envoyant ce formulaire, vous confirmez avoir pris connaissance de
+            leur document juridique et vérifié les informations fournies.
       #original_hash: b3ce1ed
       success_message: Demande soumise - nous vous contacterons bientôt.
       #original_hash: 45300da
@@ -2947,6 +2959,8 @@ fr-CA:
     live:
       #original_hash: 20bdee1
       title: Résultats en direct
+      #original_hash: cc7232d
+      manage_rounds: Gérer les tours
       incompatible:
         #original_hash: 7fe69dd
         external: >-
@@ -2979,8 +2993,8 @@ fr-CA:
       podiums:
         #original_hash: 02ae2bd
         title: Podiums
-        #original_hash: d27b628
-        undetermined: Podiums à déterminer
+        #original_hash: 3040469
+        undetermined: À déterminer
         #original_hash: bdf0487
         none: Il n'y a pas encore de podiums !
       admin:
@@ -2988,6 +3002,8 @@ fr-CA:
         open: Ouvrir
         #original_hash: fe23de7
         clear: Effacer
+        #original_hash: 5ab4ec6
+        close: Fermer
         #original_hash: 7fd4807
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} saisis'
         #original_hash: eacca7b
@@ -3004,6 +3020,16 @@ fr-CA:
         results_view: Voir les résultats
         #original_hash: 2a1a4c2
         double_check: Double vérification
+        #original_hash: 678d15b
+        submit_results: Envoyer les résultats
+        #original_hash: c3e93d3
+        add_to_batch: Ajouter au lot
+        #original_hash: a74c6ea
+        remove_from_batch: Retirer du lot
+        #original_hash: 0a9e3fc
+        batch_mode: Mode par lots
+        #original_hash: 687c6af
+        submit_batch: 'Envoyer le lot (%{count})'
         warnings:
           #original_hash: 229c10e
           omitted: >-
@@ -3051,6 +3077,10 @@ fr-CA:
             failure: Échec de la suppression groupée des compétiteurs
             #original_hash: f9fd9a9
             menu: Suppression groupée
+            #original_hash: 89f89c0
+            id: ID
+            #original_hash: 7ff2037
+            name: Nom
           #original_hash: 1acfc1c
           quit_menu: Supprimer
           #original_hash: a4546af
@@ -3063,6 +3093,10 @@ fr-CA:
           still_processing: >-
             Il est impossible d'exécuter les actions « Supprimer le compétiteur
             » tant que certains résultats sont encore en cours de traitement
+          #original_hash: 38da0d4
+          in_batch: >-
+            Impossible de retirer un compétiteur dont les résultats font partie
+            d'un lot non soumis
         add_competitor:
           #original_hash: 6c15985
           single_round: Ajouter un compétiteur au tour
@@ -4866,6 +4900,8 @@ fr-CA:
         none: Aucune
         #original_hash: 1d81998
         show_buttons: Afficher les boutons de fuseau horaire
+        #original_hash: fa0f914
+        hide_buttons: Masquer les boutons de fuseau horaire
         #original_hash: 723d448
         use_time_zone: Utiliser ce fuseau horaire
       #original_hash: 76c0de8
@@ -4887,10 +4923,16 @@ fr-CA:
       timezone_message: 'Le fuseau horaire pour cette salle est %{timezone}.'
       #original_hash: f6889a4
       timezone_setting: "Vous consultez cet horaire dans le fuseau horaire suivant\_:"
-      #original_hash: 5093f65
+      #original_hash: 0be8444
       multiple_timezones_available: >-
-        Notez que toutes les salles ne sont pas sur le même fuseau horaire –
+        Notez que certaines salles sont dans un fuseau horaire différent --
         veuillez faire attention !
+      #original_hash: c80a682
+      select_a_timezone: Sélectionnez un fuseau horaire
+      #original_hash: babb3d2
+      select_a_venue_to_view: >-
+        Pour consulter l'horaire, sélectionnez un lieu parmi ceux proposés
+        ci-dessus.
       #original_hash: a529c4e
       timezone_set_local: Utiliser le fuseau horaire local
       #original_hash: 14806bf
@@ -5284,6 +5326,8 @@ fr-CA:
         greater_china: Podiums de Championnats de Grande Chine
       #original_hash: c32a014
       place: Place
+      #original_hash: 8158159
+      dual: Double
       #original_hash: 340c00c
       medal_collection: Médailles obtenues
       #original_hash: 20c6186
@@ -5601,13 +5645,12 @@ fr-CA:
       Avec plus de soutien financier, nous espérons apporter un niveau de
       professionnalisme encore plus grand à nos compétitions alors que nous
       continuons à homologuer plus d'événements à travers le monde.</p>
-    #original_hash: eb18a06
+    #original_hash: ddd4b9e
     spirit: >-
-      Notre esprit est que des personnes venant de tout le globe puissent
-      s'amuser ensemble dans une atmosphère conviviale, s'entraider et se
-      comporter de manière sportive.
-    #original_hash: dfc4e53
-    spirit_footer: Esprit de la WCA
+      Nos valeurs sont la communauté, l'équité, le plaisir, l'excellence et le
+      bénévolat.
+    #original_hash: 005b705
+    spirit_footer: Valeurs de la WCA
     #original_hash: b02f298
     our_goals_title: Nos objectifs
     #original_hash: 08cac07
@@ -5692,13 +5735,13 @@ fr-CA:
         %{committees_and_teams} de la WCA.
       #original_hash: e7082a7
       teams_committees: Équipes et Comités
-      #original_hash: 02137fe
+      #original_hash: 55b7088
       delegates_html: >-
         <p><strong>Délégués WCA</strong> est un rôle défini dans les statuts de
         la WCA et décrit dans le Règlement WCA. Le devoir principal d'un Délégué
         est de superviser les compétitions au nom de la WCA. Le Délégué WCA est
-        responsable de s'assurer que les compétitions WCA se déroulent selon la
-        mission, le règlement, et l'esprit de la WCA. La WCA distingue les
+        responsable de s'assurer que les compétitions WCA se déroulent selon
+        l'objectif, le règlement, et les valeurs de la WCA. La WCA distingue les
         statuts suivants : <strong>Délégués Senior</strong>, <strong>Délégués
         Régionaux</strong>, <strong>Délégués</strong>, <strong>Délégués
         Junior</strong>, et <strong>Délégué Stagiaire</strong>
@@ -6976,6 +7019,13 @@ fr-CA:
         (%{actual}) de celui indiqué dans l'onglet Gérer les événements
         (%{expected}). Veuillez ajuster le nombre d'ensembles de mélanges dans
         l'onglet Gérer les événements en fonction du nombre ayant étés utilisés.
+    schedule:
+      #original_hash: 0b30103
+      activity_outside_competition_dates_warning: >-
+        L'activité « %{activity_name} » (code : %{activity_code}) est programmée
+        en dehors de la période de la compétition, selon le fuseau horaire local
+        du lieu. Veuillez mettre à jour le calendrier de la compétition afin
+        qu'il corresponde aux dates réelles de la compétition.
   tickets:
     type:
       #original_hash: 170f350
