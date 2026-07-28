@@ -47,8 +47,8 @@ runs:
         target: ${{ inputs.target }}
         tags: |
           ${{ inputs.registry }}:${{ inputs.tag }}
-        cache-from: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.target }}-${{ inputs.environment }}
-        cache-to: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.target }}-${{ inputs.environment }},mode=max,image-manifest=true,oci-mediatypes=true
+        cache-from: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.tag }}
+        cache-to: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.tag }},mode=max,image-manifest=true,oci-mediatypes=true
         build-args: |
           BUILD_TAG=${{ inputs.build_tag }}
           WCA_LIVE_SITE=${{ env.WCA_LIVE_SITE }}
