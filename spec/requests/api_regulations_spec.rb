@@ -13,12 +13,15 @@ RSpec.describe "API Regulations" do
     HTML
   end
 
-  before do
-    allow(RegulationsS3Helper).to receive(:fetch_regulations_from_s3).and_return(erb_fragment)
+  def stub_static_site(path)
+    stub_request(:get, "#{Api::V0::RegulationsController::REGULATIONS_STATIC_SITE}/#{path}")
+      .to_return(status: 200, body: erb_fragment, headers: { 'Content-Type' => 'text/html' })
   end
 
   describe "GET /api/v0/regulations" do
     it "returns the rendered HTML fragment with anchors preserved" do
+      stub = stub_static_site("index.html")
+
       get api_v0_regulations_path
 
       expect(response).to be_successful
@@ -27,30 +30,31 @@ RSpec.describe "API Regulations" do
       expect(content).to include('id="1a"')
       # ... and the leading ERB tag is consumed by rendering
       expect(content).not_to include("provide(:title")
-      expect(RegulationsS3Helper).to have_received(:fetch_regulations_from_s3)
-        .with("index.html.erb", RegulationsController::REGULATIONS_VERSION_FILE)
+      expect(stub).to have_been_requested
     end
   end
 
   describe "GET /api/v0/regulations/history/official/:version" do
     it "fetches the requested historical version" do
+      stub = stub_static_site("history/official/2024/index.html")
+
       get api_v0_regulations_historical_path(version: "2024")
 
       expect(response).to be_successful
       expect(response.parsed_body["content_html"]).to include('id="1a"')
-      expect(RegulationsS3Helper).to have_received(:fetch_regulations_from_s3)
-        .with("history/official/2024/index.html.erb", RegulationsController::REGULATIONS_VERSION_FILE)
+      expect(stub).to have_been_requested
     end
   end
 
   describe "GET /api/v0/regulations/translations/:language" do
-    it "fetches the requested translation using the translations version file" do
+    it "fetches the requested translation" do
+      stub = stub_static_site("translations/chinese/index.html")
+
       get api_v0_regulations_translation_path(language: "chinese")
 
       expect(response).to be_successful
       expect(response.parsed_body["content_html"]).to include('id="1a"')
-      expect(RegulationsS3Helper).to have_received(:fetch_regulations_from_s3)
-        .with("translations/chinese/index.html.erb", RegulationsTranslationsController::REGULATIONS_TRANSLATIONS_VERSION_FILE)
+      expect(stub).to have_been_requested
     end
   end
 end
