@@ -1,3 +1,0 @@
-import CompetitionResultSubmissionCheckExistingResults from '../CompetitionResultSubmission/CheckExistingResults';
-
-export default CompetitionResultSubmissionCheckExistingResults;
