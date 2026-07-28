@@ -1,0 +1,26 @@
+import React, { useRef } from 'react';
+import { Sticky } from 'semantic-ui-react';
+import RegistrationAdministrationList from '../components/Registrations/Administration/RegistrationAdministrationList';
+import RegistrationMessage from '../components/Registrations/Register/RegistrationMessage';
+import messageReducer from '../components/Registrations/reducers/messageReducer';
+import StoreProvider from '../lib/providers/StoreProvider';
+import WCAQueryClientProvider from '../lib/providers/WCAQueryClientProvider';
+import ConfirmProvider from '../lib/providers/ConfirmProvider';
+
+export default function RegistrationEdit({ competitionInfo }) {
+  const ref = useRef();
+  return (
+    <div ref={ref}>
+      <WCAQueryClientProvider>
+        <StoreProvider reducer={messageReducer} initialState={{ messages: [] }}>
+          <ConfirmProvider>
+            <Sticky context={ref} offset={60}>
+              <RegistrationMessage />
+            </Sticky>
+            <RegistrationAdministrationList competitionInfo={competitionInfo} />
+          </ConfirmProvider>
+        </StoreProvider>
+      </WCAQueryClientProvider>
+    </div>
+  );
+}
