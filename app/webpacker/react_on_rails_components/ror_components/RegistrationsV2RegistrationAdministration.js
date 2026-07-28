@@ -1,0 +1,3 @@
+import RegistrationsV2RegistrationAdministration from '../RegistrationsV2/RegistrationAdministration';
+
+export default RegistrationsV2RegistrationAdministration;
