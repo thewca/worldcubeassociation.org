@@ -7,8 +7,14 @@ RSpec.feature "Search widget", :js do
     visit root_path
 
     # The Rails view only renders the empty #omnisearch-form mount point; the
-    # input inside it comes from the SearchWidget component, so finding it
+    # dropdown inside it comes from the SearchWidget component, so finding it
     # proves the React on Rails component actually mounted.
-    expect(page).to have_css("#omnisearch-form input[placeholder='#{I18n.t('common.search_site')}']", visible: :all)
+    # Semantic UI renders a Dropdown's `placeholder` as its text div, not as a
+    # `placeholder` attribute on the search input.
+    expect(page).to have_css(
+      "#omnisearch-form .multisearch-dropdown div.text",
+      text: I18n.t('common.search_site'),
+      visible: :all,
+    )
   end
 end
