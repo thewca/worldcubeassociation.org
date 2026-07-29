@@ -18,18 +18,17 @@
 //= require selectize.do_not_clear_on_blur
 //= require selectize.tags_options
 //= require jquery.wca-autocomplete
-//= require jquery.floatThead.js
 //= require cocoon
 //= require moment
-//= require moment-timezone-with-data
 //= require bootstrap-datetimepicker
-//= require bootstrap-table
-//= require bootstrap-table-locale-all
-//= require extensions/bootstrap-table-mobile
 //= require_self
-// We don't require_tree here, because we don't want fullcalendar and locales
-// to be included.
-//= require_directory
+// We list the files below explicitly rather than using require_directory,
+// because tables.js is a manifest of its own that is loaded on demand.
+// Neither do we require_tree, because we don't want the locales to be included.
+//= require associated-events-picker
+//= require competition_tabs
+//= require persons
+//= require users
 
 // Global variables
 window.wca.TEXT_INPUT_DEBOUNCE_MS = 250;
@@ -143,14 +142,6 @@ $(function() {
   window.wca.reloadPopover();
   $('input.wca-autocomplete').wcaAutocomplete();
 
-  var $tablesToFloatHeaders = $('table.floatThead');
-  $tablesToFloatHeaders.floatThead({
-    zIndex: 999, // Allow bootstrap popups (z-index 1000) to show up on top.
-    responsiveContainer: function($table) {
-      return $table.closest(".table-responsive");
-    },
-  });
-
   // After a popup actually occurs, there may be some images that need to load.
   // Here we add load listeners for those images and resize the popup once they
   // have loaded. We have to be careful not to end up in an infinite loop
@@ -194,61 +185,6 @@ $(function() {
     if(e.which === 13 && !e.ctrlKey && e.target.tagName !== "TEXTAREA") {
       e.preventDefault();
     }
-  });
-});
-
-// Bootstrap-table default options
-$.extend($.fn.bootstrapTable.defaults, {
-  searchTimeOut: window.wca.TEXT_INPUT_DEBOUNCE_MS,
-  trimOnSearch: false
-});
-
-// Setting up bootstrap-table
-$(function() {
-  $('table[data-toggle="table"]').addClass('bs-table');
-
-  // Hide loading box
-  $('.bs-table').bootstrapTable('hideLoading');
-
-  // It's not necessary when bootstrap-table will be distributed with this merged:
-  // https://github.com/wenzhixin/bootstrap-table/pull/2145
-  // (and the appropriate gem will be updated)
-  // -------------------------------------------------------------------
-  // Triggered when a sort arrow is clicked but before a table is sorted
-  $('table').on('sort.bs.table', function(e, name, order) {
-    // The table column that we are sorting by
-    var field = $(this).floatThead('getRowGroups').eq(0).find('th[data-field="' + name + '"] .sortable');
-    // If it's not the field we are currently sorting by
-    if(!field.is('.asc, .desc')) {
-      // Change the sort order that's set in data-order ('asc' by default)
-      var options = $(this).bootstrapTable('getOptions');
-      options.sortOrder = options.columns[0].find(function(option) { return option.field == name; }).order;
-      // Now the table will be sorted using the order that we set
-    }
-  });
-  // -------------------------------------------------------------------
-
-  // It's not necessary when bootstrap-table will be distributed with this issue solved:
-  // https://github.com/wenzhixin/bootstrap-table/issues/2154
-  // (and the appropriate gem will be updated)
-  // -------------------------------------------------------------------
-  // Prevent bootstrap-table from selecting a row when a link is clicked
-  $('.bs-table td a').on('click', function(e) {
-    e.stopPropagation();
-  });
-  // -------------------------------------------------------------------
-
-  // Set values of checkboxes in a table to corresponding rows ids
-  var initCheckboxesValues = function($table) {
-    $table.find('tr td input[type="checkbox"]').each(function(index) {
-      $(this).val($(this).parents('tr').attr('id'));
-    });
-  };
-  initCheckboxesValues($('.bs-table'));
-  $('table').on('post-body.bs.table', function() {
-    initCheckboxesValues($(this));
-    // Re-apply tooltip on each table body change
-    $('[data-toggle="tooltip"]').tooltip();
   });
 });
 

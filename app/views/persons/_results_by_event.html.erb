@@ -1,3 +1,5 @@
+<%# Outside of the cache block below, so that it also runs on a cache hit. %>
+<% add_to_js_assets("tables") %>
 <div class="results-by-event">
   <div class="event-selector text-center">
     <% @results.map(&:event).uniq.each do |event| %>
