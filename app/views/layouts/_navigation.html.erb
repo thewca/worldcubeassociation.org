@@ -155,7 +155,9 @@
 
     <ul class="nav navbar-nav navbar-right">
       <li class="search-container my-2 my-lg-0">
-        <%= react_component("SearchWidget", id: "omnisearch-form") %>
+        <%# This partial renders after the layout's javascript_pack_tag, so the components
+            in it cannot auto-load a pack; they are registered in packs/application.js instead. %>
+        <%= react_component("SearchWidget", id: "omnisearch-form", auto_load_bundle: false) %>
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
@@ -178,7 +180,7 @@
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <% if current_user %>
             <% notification_count = notifications_for_user(current_user).length %>
-            <%= react_component("UserAvatar", props: {
+            <%= react_component("UserAvatar", auto_load_bundle: false, props: {
               avatar: current_user.avatar,
               size: "tiny",
               disableHover: true,

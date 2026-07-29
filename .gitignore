@@ -27,6 +27,9 @@ public/assets/**
 # Ignore js-specific generated locales (they are rebuilt whenever we compile assets)
 app/webpacker/rails_translations/*.json
 
+# Ignore the packs React on Rails generates for auto-bundled components
+app/webpacker/packs/generated/
+
 # Environment configuration
 .env*
 !.env.development
