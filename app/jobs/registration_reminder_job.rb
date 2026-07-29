@@ -15,8 +15,7 @@ class RegistrationReminderJob < WcaCronjob
       .select { |c| should_send_reminder?(c) }.each do |competition|
         ActiveRecord::Base.transaction do
           competition.update_attribute(:registration_reminder_sent_at, Time.now)
-          users_to_email = competition.bookmarked_users
-          users_to_email.concat(competition.managers)
+          users_to_email = competition.bookmarked_users | competition.managers
           registered_users = competition.registrations.accepted.pluck(:user_id)
           pending_registered_users = competition.registrations.pending.pluck(:user_id)
           users_to_email.select { |user| registered_users.exclude?(user.id) }.uniq.each do |user|
