@@ -2775,6 +2775,10 @@ es-ES:
       ots_not_enabled: >-
         El registro está cerrado y el registro in situ no está activado. Primero
         tienes que editar la competición para permitirlo
+      #original_hash: ed9d329
+      ots_before_registration_open: >-
+        El registro in-situ no se podrá usar hasta que abra el periodo de
+        registro.
       #original_hash: 61125b5
       competition_over: No puedes añadir registros in situ tras finalizar la competición.
       errors:
@@ -3031,6 +3035,12 @@ es-ES:
           round_locked: >-
             ¡La siguiente ronda ya se ha abierto, así que cualquier cambio no la
             afectará!
+          #original_hash: 3380184
+          9m_violated: >-
+            No se han introducido suficientes resultados en la ronda anterior
+            para cumplir la Regla 9m3. Si la ronda anterior no tiene al menos
+            %{competitor_count_needed} resultados introducidos, los resultados
+            de esta ronda no estarán permitidos.
         quit:
           #original_hash: de62de1
           title: Eliminar competidor
@@ -3086,6 +3096,11 @@ es-ES:
               Añadir competidor a la ronda, ya que la segunda ronda de las
               Rondas Duales no está abierta y necesitarás añadirle de forma
               separada.
+          #original_hash: b3bdfaa
+          event_edit_warning: >-
+            Este competidor no se ha registrado a esta categoría y la
+            competición no permite cambios en el registro. Se le podrá añadir
+            siempre que se haga intencionadamente.
       results:
         #original_hash: 4705687
         competitor: Competidor
