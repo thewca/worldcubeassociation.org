@@ -24,6 +24,31 @@ RSpec.feature "Registering for a competition", :js do
       sign_in user
     end
 
+    scenario "shows waiting list information" do
+      create(:registration, :waiting_list, competition: competition)
+      create(:registration, :waiting_list, user: user, competition: competition)
+      create(:registration, :waiting_list, competition: competition)
+
+      visit competition_register_path(competition)
+
+      expect(page).to have_text(I18n.t('competitions.registration_v2.register.registration_status.waiting_list', waiting_list_position: 2))
+    end
+
+    scenario "only shows fields that are editable by a competitor" do
+      create(:registration, user: user, competition: competition, administrative_notes: "👽")
+
+      visit competition_register_path(competition)
+      click_button "Update Registration"
+
+      expect(page).to have_text(I18n.t('activerecord.attributes.registration.guests'))
+      expect(page).to have_text(I18n.t('competitions.registration_v2.register.comment'))
+      expect(page).to have_css("#events")
+
+      expect(page).to have_no_text(I18n.t('activerecord.attributes.registration.administrative_notes'))
+      expect(page).to have_no_text("👽")
+      expect(page).to have_no_css('label[for="radio-status-cancelled"]')
+    end
+
     scenario "User registers for a competition normally" do
       visit competition_register_path(competition)
       reg_requirements_checkbox.click
@@ -108,6 +133,55 @@ RSpec.feature "Registering for a competition", :js do
         # The browser shows a validation for numeric inputs client-side.
         #   See the scenario "User registers for a competition with invalid guest info" for details.
         expect(page).to have_text("Update Registration")
+      end
+    end
+
+    context "when registration is not currently open" do
+      scenario "shows message about registration being past" do
+        past_competition = create(:competition, :visible,
+                                  use_wca_registration: true,
+                                  registration_open: 1.week.ago,
+                                  registration_close: Time.now.yesterday,
+                                  starts: 1.month.from_now,
+                                  ends: 1.month.from_now)
+
+        visit competition_register_path(past_competition)
+
+        expect(page).to have_text("Registration closed")
+      end
+
+      scenario "shows message about registration not yet being open" do
+        future_competition = create(:competition, :visible,
+                                    use_wca_registration: true,
+                                    registration_open: 1.week.from_now,
+                                    registration_close: 2.weeks.from_now,
+                                    starts: 1.month.from_now,
+                                    ends: 1.month.from_now)
+
+        visit competition_register_path(future_competition)
+
+        expect(page).to have_text("Registration will open in")
+      end
+    end
+
+    context "with payments enabled" do
+      let(:paid_competition) { create(:competition, :stripe_connected, :visible, :registration_open) }
+
+      scenario "renders paid registrations" do
+        create(:registration, :paid, user: user, competition: paid_competition)
+
+        visit competition_register_path(paid_competition)
+        find('.step', text: I18n.t('competitions.registration_v2.register.panel.payment.title')).click
+
+        expect(page).to have_text("which fully covers the registration fees")
+      end
+
+      scenario "renders unpaid registrations and ask for payment" do
+        create(:registration, user: user, competition: paid_competition)
+
+        visit competition_register_path(paid_competition)
+
+        expect(page).to have_button("Pay now!")
       end
     end
   end
