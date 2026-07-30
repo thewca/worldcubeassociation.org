@@ -8,7 +8,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
-import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { Trans } from "react-i18next/TransWithoutContext";
 import { getRegulationsTranslations } from "@/lib/wca/regulations/getRegulationsTranslations";
 import OpenapiError from "@/components/ui/openapiError";
 import { Metadata } from "next";
@@ -51,7 +51,11 @@ export default async function RegulationsTranslations() {
           {t("regulations_translations.translating")}
         </Heading>
         <TranslationList translations={outdated} />
-        <I18nHTMLTranslate i18nKey="regulations_translations.paragraph3_html" />
+        <Trans
+          t={t}
+          i18nKey="regulations_translations.paragraph3_html"
+          components={{ a: <Link /> }}
+        />
       </VStack>
     </Container>
   );
