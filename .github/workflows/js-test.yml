@@ -31,6 +31,12 @@ jobs:
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: yarn install
+      - name: Build OpenAPI types
+        # Fails if a $ref points at a schema file that was never committed, and
+        # (via the diff) if the committed types are stale.
+        run: |
+          yarn run types:openapi
+          git diff --exit-code -- src/types/openapi.ts
       - name: Check types
         run: yarn run check:types
       - name: Run Lint
