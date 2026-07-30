@@ -27,17 +27,16 @@ export default async function ResultExportPage() {
     <Container bg="bg">
       <VStack align="left" gap="16px" as="span">
         <Heading size="5xl">{t("database.developer_export.heading")}</Heading>
-        <Text>
-          <Trans
-            t={t}
-            i18nKey="database.developer_export.description_html"
-            values={{
-              github_link:
-                "<a href='https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export'>GitHub</a>",
-            }}
-            components={{ a: <Link /> }}
-          />
-        </Text>
+        <Trans
+          parent={Text}
+          t={t}
+          i18nKey="database.developer_export.description_html"
+          values={{
+            github_link:
+              "<a href='https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export'>GitHub</a>",
+          }}
+          components={{ a: <Link /> }}
+        />
         <Link href={exports.developer_url}>
           {t("database.developer_export.download")}
         </Link>

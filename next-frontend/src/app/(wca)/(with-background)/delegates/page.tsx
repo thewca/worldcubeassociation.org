@@ -42,13 +42,12 @@ export default async function DelegatesPage() {
     <Container bg="bg">
       <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">{t("delegates_page.title")}</Heading>
-        <Prose>
-          <Trans
-            t={t}
-            i18nKey="about.structure.delegates_html"
-            values={{ see_link: "" }}
-          />
-        </Prose>
+        <Trans
+          parent={Prose}
+          t={t}
+          i18nKey="about.structure.delegates_html"
+          values={{ see_link: "" }}
+        />
         <Prose>{t("delegates_page.acknowledges")}</Prose>
         <Tabs.Root
           variant="enclosed"

@@ -102,16 +102,15 @@ function ResultContent({ item, t }: { item: ComboItem; t: TFunction }) {
     case "text":
     default:
       return (
-        <Text>
-          <Trans
-            t={t}
-            i18nKey="search_results.index.search_for"
-            values={{
-              search_string: item.search,
-            }}
-            components={{ b: <b /> }}
-          />
-        </Text>
+        <Trans
+          parent={Text}
+          t={t}
+          i18nKey="search_results.index.search_for"
+          values={{
+            search_string: item.search,
+          }}
+          components={{ b: <b /> }}
+        />
       );
   }
 }
