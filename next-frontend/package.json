@@ -2,6 +2,7 @@
   "name": "next-frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --webpack",
     "check:types": "tsc --noEmit",
