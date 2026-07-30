@@ -1527,13 +1527,13 @@ es-419:
           de envío de torneos tomando como base la Política de Requerimientos
           para Competiciones WCA. El WCAT NO es responsable de la organización
           de competiciones individuales.
-        #original_hash: 5007698
+        #original_hash: 58daf5b
         wic: >-
           El Comité de Integridad WCA (WIC) realiza investigaciones
           independientes acerca de miembros de la comunidad WCA e incidentes
           durante Competiciones WCA o en plataformas oficiales, online de la
-          WCA. Estos incidentes son presuntas violaciones al Espíritu, Código de
-          Conducta, Código de Ética y/o Reglamento de la WCA.
+          WCA. Estos incidentes son presuntas violaciones a los Valores, Código
+          de Conducta, Código de Ética y/o Reglamento de la WCA.
         #original_hash: be491ec
         weat: >-
           El Equipo de Asistentes Ejecutivos WCA (WEAT) realiza tareas
@@ -2727,6 +2727,10 @@ es-419:
       ots_not_enabled: >-
         El registro ha cerrado y no se permiten registros in situ. Debes editar
         la competición para habilitarlo primero.
+      #original_hash: ed9d329
+      ots_before_registration_open: >-
+        Los registros in situ no pueden utilizarse antes de que abra el
+        registro.
       #original_hash: 61125b5
       competition_over: No puedes agregar registros in situ después de la competición.
       errors:
@@ -2982,6 +2986,12 @@ es-419:
           round_locked: >-
             La siguiente ronda ya ha sido abierta. ¡Cualquier cambio en esta
             ronda no la afectará!
+          #original_hash: 3380184
+          9m_violated: >-
+            La ronda anterior no tiene suficientes resultados para satisfacer la
+            Regla 9m3. Si la ronda anterior no tiene al menos
+            %{competitor_count_needed} resultados ingresados, los resultados de
+            esta ronda no se contabilizarán.
         quit:
           #original_hash: de62de1
           title: Eliminar competidor
@@ -3034,6 +3044,11 @@ es-419:
             other: >-
               Agregar competidor a la ronda. La segunda ronda de la ronda dual
               no está abierta, así que lo tendrás que agregar luego.
+          #original_hash: b3bdfaa
+          event_edit_warning: >-
+            Este competidor no está registrado a este evento, y la competición
+            ya no permite cambios en el registro. Se podrá añadirlo via
+            software, pero procura controlar que esto es lo deseado.
       results:
         #original_hash: 4705687
         competitor: Competidor
@@ -5480,12 +5495,12 @@ es-419:
       económico, esperamos incorporar un aún mayor nivel de profesionalidad a
       nuestras competiciones mientras continuamos apoyando más eventos a lo
       largo del mundo</p>
-    #original_hash: bccd8c5
+    #original_hash: 1076bcb
     spirit: >-
-      Nuestro espíritu es que gente de todo el mundo se divierta junta en una
-      atmósfera amigable, se ayuden unos a otros y se comporten deportivamente.
-    #original_hash: 69131cc
-    spirit_footer: Espíritu de la WCA
+      Nuestros Valores son Comunidad, Justicia, Diversión, Excelencia, y
+      Voluntariado.
+    #original_hash: 9679c23
+    spirit_footer: Valores de la WCA
     #original_hash: c1781ee
     our_goals_title: Nuestros objetivos
     #original_hash: c1144d4
@@ -5569,12 +5584,12 @@ es-419:
         %{committees_and_teams} de la WCA.
       #original_hash: 0e7a036
       teams_committees: Equipos y Comités
-      #original_hash: 7e849d2
+      #original_hash: c319cc2
       delegates_html: >-
         <p>Los <strong>Delegados de la WCA</strong> son miembros de la WCA que
         se responsabilizan de asegurar que todas las competiciones de la WCA se
-        llevan a término de acuerdo a los objetivos, el reglamento y el espíritu
-        de la WCA. La WCA diferencia entre <strong>Delegados Senior</strong>,
+        llevan a término de acuerdo al Propósito, el Reglamento y los Valores de
+        la WCA. La WCA diferencia entre <strong>Delegados Senior</strong>,
         <strong>Delegados Regionales</strong>, <strong>Delegados</strong>,
         <strong>Delegados Junior</strong> y
          <strong>Delegados en prácticas</strong>%{see_link}.</p> <p>Además de las responsabilidades de Delegado, un Delegado Senior o un Delegado regional es responsable de controlar y coordinar los Delegados de su área. Cualquier miembro de la comunidad puede ponerse en contacto con ellos por cuestiones relacionadas con su región. Los Delegados recién incorporados ostenta el título de Delegados Junior hasta que muestran ser capaces de administrar las competiciones satisfactoriamente y adquieren el título de Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados para ser Delegados y solo pueden revisar competiciones en las que un Delegado WCA está presente.</p>
