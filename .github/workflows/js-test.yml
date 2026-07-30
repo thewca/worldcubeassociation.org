@@ -37,6 +37,14 @@ jobs:
         run: |
           yarn run types:openapi
           git diff --exit-code -- src/types/openapi.ts
+      - name: Build Chakra types
+        # Fails if the theme can no longer be loaded by the Chakra CLI, and
+        # (via the diff) if the committed types are stale. --intent-to-add makes
+        # newly generated files show up in the diff as well.
+        run: |
+          yarn run types:chakra
+          git add --intent-to-add src/types/chakra
+          git diff --exit-code -- src/types/chakra
       - name: Check types
         run: yarn run check:types
       - name: Run Lint
