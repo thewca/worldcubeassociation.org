@@ -1,0 +1,30 @@
+import React from 'react';
+import EditEntry from '../components/ResultsData/Panel/EditEntry';
+import { resultUrl } from '../lib/requests/routes.js.erb';
+import ShowSingleResult from '../components/ResultsData/Results/ShowSingleResult';
+import ResultForm from '../components/EditResult/ResultForm/ResultForm';
+
+export function InlineEditForm({
+  dataItem,
+  sync,
+}) {
+  return (
+    <ResultForm result={dataItem} sync={sync} />
+  );
+}
+
+function EditResult({
+  id,
+}) {
+  return (
+    <EditEntry
+      id={id}
+      dataUrlFn={resultUrl}
+      dataType="result"
+      DisplayTable={ShowSingleResult}
+      EditForm={InlineEditForm}
+    />
+  );
+}
+
+export default EditResult;

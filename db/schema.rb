@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_25_121610) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -356,6 +356,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.datetime "updated_at", null: false
     t.index ["competition_id"], name: "index_competition_payment_integrations_on_competition_id"
     t.index ["connected_account_type", "connected_account_id"], name: "index_competition_payment_integrations_on_connected_account"
+  end
+
+  create_table "competition_scoretakers", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["competition_id", "user_id"], name: "index_competition_scoretakers_on_competition_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_competition_scoretakers_on_user_id"
   end
 
   create_table "competition_series", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -748,6 +757,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.integer "value3", default: 0, null: false
     t.integer "value4", default: 0, null: false
     t.integer "value5", default: 0, null: false
+    t.index ["competition_id", "person_id"], name: "index_inbox_results_on_competition_id_and_person_id"
     t.index ["competition_id"], name: "InboxResults_fk_tournament"
     t.index ["event_id"], name: "InboxResults_fk_event"
     t.index ["format_id"], name: "InboxResults_fk_format"
@@ -1203,6 +1213,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
     t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
     t.index ["best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
+    t.index ["competition_id", "person_id"], name: "index_results_on_competition_id_and_person_id"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
@@ -1678,7 +1689,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_12_000000) do
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "potential_duplicate_persons", "duplicate_checker_job_runs"
-  add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id"
+  add_foreign_key "potential_duplicate_persons", "persons", column: "duplicate_person_id", on_delete: :cascade
   add_foreign_key "potential_duplicate_persons", "users", column: "original_user_id"
   add_foreign_key "regional_records_lookup", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "registration_competition_events", "competition_events", on_delete: :cascade

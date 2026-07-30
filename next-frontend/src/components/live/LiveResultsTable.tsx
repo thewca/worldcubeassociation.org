@@ -36,6 +36,7 @@ export default function LiveResultsTable({
   showEmpty = true,
   showLinkedRoundsView = false,
   isLinkedRound = false,
+  forecastView = false,
 }: {
   resultsByRegistrationId: LiveResultsByRegistrationId;
   formatId: string;
@@ -48,6 +49,7 @@ export default function LiveResultsTable({
   showEmpty?: boolean;
   showLinkedRoundsView?: boolean;
   isLinkedRound?: boolean;
+  forecastView?: boolean;
 }) {
   const { t } = useT();
 
@@ -71,6 +73,7 @@ export default function LiveResultsTable({
     resultsByRegistrationId,
     competitors,
     format,
+    forecastView,
   ).filter((c) => !pendingRegistrationIds.has(c.id));
 
   const stats = statColumnsForFormat(format);
@@ -88,6 +91,7 @@ export default function LiveResultsTable({
           isLinked={showLinkedRoundsView}
           t={t}
           isAdmin={isAdmin}
+          forecastView={forecastView}
         />
         <Table.Body>
           {competitorsWithOrderedResults.map((competitorAndTheirResults) => {
@@ -199,6 +203,8 @@ export default function LiveResultsTable({
                     eventId={eventId}
                     result={result}
                     highlight={showText}
+                    forecastView={forecastView}
+                    format={format}
                   />
                 </Table.Row>
               );

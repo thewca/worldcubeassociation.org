@@ -231,6 +231,9 @@ class RegistrationsController < ApplicationController
     elsif !@competition.registration_currently_open? && !@competition.on_the_spot_registration?
       flash[:danger] = I18n.t("registrations.add.ots_not_enabled")
       return redirect_to competition_path(@competition)
+    elsif @competition.before_registration_open?
+      flash[:danger] = I18n.t("registrations.add.ots_before_registration_open")
+      return redirect_to competition_path(@competition)
     elsif @competition.probably_over?
       flash[:danger] = I18n.t("registrations.add.competition_over")
       return redirect_to competition_path(@competition)
