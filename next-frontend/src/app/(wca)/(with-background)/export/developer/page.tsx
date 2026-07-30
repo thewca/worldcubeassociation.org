@@ -3,7 +3,7 @@ import { getT } from "@/lib/i18n/get18n";
 import { getExportDetails } from "@/lib/wca/exports/getExportDetails";
 import Loading from "@/components/ui/loading";
 import OpenapiError from "@/components/ui/openapiError";
-import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { Trans } from "react-i18next/TransWithoutContext";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,14 +27,17 @@ export default async function ResultExportPage() {
     <Container bg="bg">
       <VStack align="left" gap="16px" as="span">
         <Heading size="5xl">{t("database.developer_export.heading")}</Heading>
-        <I18nHTMLTranslate
-          as={Text}
-          i18nKey="database.developer_export.description_html"
-          options={{
-            github_link:
-              "<a href='https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export'>GitHub</a>",
-          }}
-        />
+        <Text>
+          <Trans
+            t={t}
+            i18nKey="database.developer_export.description_html"
+            values={{
+              github_link:
+                "<a href='https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export'>GitHub</a>",
+            }}
+            components={{ a: <Link /> }}
+          />
+        </Text>
         <Link href={exports.developer_url}>
           {t("database.developer_export.download")}
         </Link>

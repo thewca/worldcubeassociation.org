@@ -11,10 +11,10 @@ import { toRelativeOptions } from "@/lib/wca/dates";
 import { TFunction } from "i18next";
 import { SiCheckmarx, SiClockify } from "react-icons/si";
 import UserIcon from "@/components/icons/UserIcon";
-import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { Trans } from "react-i18next";
 import { AiFillHourglass } from "react-icons/ai";
 import { BiSolidTrash } from "react-icons/bi";
-import { Alert, Table } from "@chakra-ui/react";
+import { Alert, Link, Table } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import { components } from "@/types/openapi";
@@ -162,9 +162,11 @@ export default function UpcomingCompetitionTable({
       <Alert.Root status="info">
         <Alert.Indicator></Alert.Indicator>
         <Alert.Title>
-          <I18nHTMLTranslate
+          <Trans
+            t={t}
             i18nKey={fallbackMessage.key}
-            options={fallbackMessage.options}
+            values={fallbackMessage.options}
+            components={{ a: <Link /> }}
           />
         </Alert.Title>
       </Alert.Root>

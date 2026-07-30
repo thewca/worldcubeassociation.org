@@ -1,6 +1,5 @@
 "use client";
 
-import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import { useState } from "react";
 import { Button, Checkbox, Link, VStack } from "@chakra-ui/react";
 import { Trans } from "react-i18next";
@@ -32,7 +31,7 @@ export default function LogoDownload({
       </Checkbox.Root>
       <Button disabled={!acceptedGuidelines} asChild>
         <Link href={logoDownloadLink}>
-          <I18nHTMLTranslate i18nKey="logo.headings.download_logo_assets.download_button_text" />
+          {t("logo.headings.download_logo_assets.download_button_text")}
         </Link>
       </Button>
     </VStack>

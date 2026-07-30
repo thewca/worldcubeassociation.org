@@ -18,7 +18,7 @@ import useDebounce from "@/lib/hooks/useDebounce";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import type { components } from "@/types/openapi";
-import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { Trans } from "react-i18next";
 import { TFunction } from "i18next";
 
 const DEBOUNCE_MS = 300;
@@ -102,13 +102,16 @@ function ResultContent({ item, t }: { item: ComboItem; t: TFunction }) {
     case "text":
     default:
       return (
-        <I18nHTMLTranslate
-          i18nKey="search_results.index.search_for"
-          options={{
-            search_string: item.search,
-          }}
-          as={Text}
-        />
+        <Text>
+          <Trans
+            t={t}
+            i18nKey="search_results.index.search_for"
+            values={{
+              search_string: item.search,
+            }}
+            components={{ b: <b /> }}
+          />
+        </Text>
       );
   }
 }
