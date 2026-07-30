@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RegionalOrganizations() {
-  const I18n = await getT();
+  const { t } = await getT();
 
   const {
     data: organizations,
@@ -40,14 +40,14 @@ export default async function RegionalOrganizations() {
     response,
   } = await getRegionalOrganizations();
 
-  if (error) return <OpenapiError response={response} t={I18n.t} />;
+  if (error) return <OpenapiError response={response} t={t} />;
   if (!organizations) return <Loading />;
 
   return (
     <Container bg="bg">
       <VStack align="left">
-        <Heading size="5xl">{I18n.t("regional_organizations.title")}</Heading>
-        <Text>{I18n.t("regional_organizations.content")}</Text>
+        <Heading size="5xl">{t("regional_organizations.title")}</Heading>
+        <Text>{t("regional_organizations.content")}</Text>
         <SimpleGrid columns={3} columnGap={4} rowGap={6}>
           {organizations.map((org) => (
             <LinkBox
@@ -101,31 +101,27 @@ export default async function RegionalOrganizations() {
             </LinkBox>
           ))}
         </SimpleGrid>
-        <Heading size="2xl">
-          {I18n.t("regional_organizations.how_to.title")}
-        </Heading>
-        <Text>{I18n.t("regional_organizations.how_to.description")}</Text>
+        <Heading size="2xl">{t("regional_organizations.how_to.title")}</Heading>
+        <Text>{t("regional_organizations.how_to.description")}</Text>
 
         <Heading size="xl">
-          {I18n.t("regional_organizations.requirements.title")}
+          {t("regional_organizations.requirements.title")}
         </Heading>
         <List.Root>
           {_.times(6).map((requirement) => (
             <List.Item
               key={`regional_organizations.requirements.list.${requirement}`}
             >
-              {I18n.t(
-                `regional_organizations.requirements.list.${requirement + 1}`,
-              )}
+              {t(`regional_organizations.requirements.list.${requirement + 1}`)}
             </List.Item>
           ))}
         </List.Root>
 
         <Heading size="xl">
-          {I18n.t("regional_organizations.application_instructions.title")}
+          {t("regional_organizations.application_instructions.title")}
         </Heading>
         <Trans
-          t={I18n.t}
+          t={t}
           i18nKey="regional_organizations.application_instructions.description_html"
           components={{ a: <Link /> }}
         />
