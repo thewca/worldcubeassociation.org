@@ -370,6 +370,7 @@ Rails.application.routes.draw do
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
       resources :competitions, only: [] do
+        resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
@@ -443,7 +444,10 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/records' => "persons#records", as: :person_records
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
+      get '/regulations' => 'regulations#show', as: :regulations
       get '/regulations/translations' => 'regulations#translations', as: :regulations_translations
+      get '/regulations/translations/:language' => 'regulations#translation', as: :regulations_translation
+      get '/regulations/history/official/:version' => 'regulations#historical', as: :regulations_historical
       get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
       get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'
@@ -494,7 +498,7 @@ Rails.application.routes.draw do
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
       resources :user_roles, only: %i[index show create update destroy]
-      resources :user_groups, only: %i[index create update]
+      resources :user_groups, only: %i[index show create update]
       namespace :wrt do
         resources :persons, only: %i[update destroy] do
           put '/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count

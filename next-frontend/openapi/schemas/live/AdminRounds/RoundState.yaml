@@ -4,3 +4,4 @@ enum:
   - locked
   - pending
   - ready
+  - blocked

@@ -1534,14 +1534,14 @@ es-ES:
           documentos como la Política de Requisitos de Competiciones de la WCA.
           El WCAT NO es responsable de la organización de competiciones
           individuales.
-        #original_hash: 5007698
+        #original_hash: 58daf5b
         wic: >-
           El Comité de Integridad de la WCA (WIC) realiza investigaciones
           independientes acerca de miembros de la comunidad de la WCA e
           incidentes durante Competiciones de la WCA o en las plataformas en
           línea oficiales de la WCA. Estos incidentes son presuntas violaciones
-          al Espíritu, Código de Conducta, Código de Ética y/o Reglamento de la
-          WCA.
+          a los Valores, Código de Conducta, Código de Ética y/o Reglamento de
+          la WCA.
         #original_hash: be491ec
         weat: >-
           El Equipo de Asistentes Ejecutivos de la WCA (WEAT) lleva a cabo las
@@ -5247,6 +5247,8 @@ es-ES:
         greater_china: Podios en Campeonatos de la Gran China
       #original_hash: c32a014
       place: Lugar
+      #original_hash: 89e4fa7
+      dual: Dual
       #original_hash: ddb18c1
       medal_collection: Medallero
       #original_hash: 9e69e13
@@ -5560,12 +5562,12 @@ es-ES:
       Con mayor soporte económico, esperamos incorporar un aún mayor nivel de
       profesionalidad a nuestras competiciones mientras continuamos apoyando más
       eventos a lo largo del mundo.</p>
-    #original_hash: bccd8c5
+    #original_hash: 1076bcb
     spirit: >-
-      Nuestro espíritu es que gente de todo el mundo se divierta junta en una
-      atmósfera amigable, se ayuden unos a otros y se comporten deportivamente.
-    #original_hash: 69131cc
-    spirit_footer: Espíritu de la WCA
+      Nuestros Valores son Comunidad, Justicia, Diversión, Excelencia y
+      Voluntariado.
+    #original_hash: 9679c23
+    spirit_footer: Valores de la WCA
     #original_hash: c1781ee
     our_goals_title: Nuestros objetivos
     #original_hash: c1144d4
@@ -5648,14 +5650,14 @@ es-ES:
         %{committees_and_teams} de la WCA.
       #original_hash: 0e7a036
       teams_committees: Equipos y Comités
-      #original_hash: 7e849d2
+      #original_hash: c319cc2
       delegates_html: >-
         <p><strong>Delegado de la WCA</strong> es un rol definido en las
         Mociones de la WCA y descrito en el Reglamento de la WCA. La función
         principal de un Delegado es supervisar las competiciones en nombre de la
         WCA. Un Delegado de la WCA es responsable de garantizar que todas las
-        Competiciones de la WCA se desarrollen de acuerdo con la Misión, el
-        Espíritu y el Reglamento de la WCA. La WCA diferencia entre
+        Competiciones de la WCA se desarrollen de acuerdo con el Propósito, los
+        Valores y el Reglamento de la WCA. La WCA diferencia entre
         <strong>Delegados Sénior</strong>, <strong>Delegados
         Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados
         Júnior</strong> y
