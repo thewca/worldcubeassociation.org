@@ -489,6 +489,10 @@ export interface Announcement {
   id: string;
   image?: (string | null) | Media;
   title: string;
+  /**
+   * Shown on the announcements list before 'Read More'. Falls back to the beginning of the content when empty.
+   */
+  summary?: string | null;
   content: {
     root: {
       type: string;
@@ -792,6 +796,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
 export interface AnnouncementsSelect<T extends boolean = true> {
   image?: T;
   title?: T;
+  summary?: T;
   content?: T;
   contentMarkdown?: T;
   url?: T;
