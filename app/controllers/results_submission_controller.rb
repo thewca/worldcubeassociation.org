@@ -4,7 +4,17 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check upcoming_results]
+  before_action(
+    -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) },
+    except: %i[
+      newcomer_checks
+      last_duplicate_checker_job_run
+      compute_potential_duplicates
+      newcomer_name_format_check
+      newcomer_dob_check
+      upcoming_results
+    ],
+  )
   before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
   before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wrt) }, only: %i[upcoming_results]

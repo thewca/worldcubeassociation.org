@@ -228,7 +228,7 @@ RSpec.describe ResultsSubmissionController do
           results_submitted_at: nil,
           results_posted_at: nil,
         )
-        past_submitted = create(
+        create(
           :competition,
           :visible,
           starts: 3.days.ago,
@@ -236,7 +236,7 @@ RSpec.describe ResultsSubmissionController do
           results_submitted_at: 1.day.ago,
           results_posted_at: nil,
         )
-        future_unsubmitted = create(
+        create(
           :competition,
           :visible,
           starts: 1.day.from_now,
@@ -248,7 +248,7 @@ RSpec.describe ResultsSubmissionController do
         get upcoming_results_path
         expect(response).to be_successful
         response_json = response.parsed_body
-        expect(response_json.map { |c| c["id"] }).to eq([past_unsubmitted.id])
+        expect(response_json.pluck("id")).to eq([past_unsubmitted.id])
       end
     end
   end
