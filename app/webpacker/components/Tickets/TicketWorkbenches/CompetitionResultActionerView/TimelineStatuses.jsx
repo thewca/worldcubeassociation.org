@@ -36,19 +36,19 @@ export const TIMELINE_STATUSES = {
     ActionComponent: null,
   },
   [ticketsCompetitionResultStatuses.locked_for_posting]: {
-    label: 'Lock for Posting',
+    label: 'Locked for Posting',
     description: `WRT has to lock the results for posting. This is to avoid
     issues like two people accidentally work on same results.`,
     ActionComponent: LockResultsMessage,
   },
   [ticketsCompetitionResultStatuses.warnings_verified]: {
-    label: 'Verify Warnings',
+    label: 'Warnings Verified',
     description: `WRT will be shown the list of warnings and the message from
     Delegate. WRT needs to review them and mark it as done.`,
     ActionComponent: WarningsVerification,
   },
   [ticketsCompetitionResultStatuses.merged_inbox_results]: {
-    label: 'Merge Inbox Results',
+    label: 'Merged Inbox Results',
     description: `WRT will have a rough look at the results to make sure that
     there is no major flaw that requires aborting the posting process. For
     example, check if there are big suspicious chunks of DNFs/DNSs and verify
@@ -60,7 +60,7 @@ export const TIMELINE_STATUSES = {
     ActionComponent: MergeInboxResults,
   },
   [ticketsCompetitionResultStatuses.merged_inbox_scrambles]: {
-    label: 'Merge Inbox Scrambles',
+    label: 'Merged Inbox Scrambles',
     description: `WRT will have a rough look at the scrambles to make sure that
     there is no major flaw that requires aborting the posting process. For
     example, check if every scramble looks like it uses notation for that event.
@@ -70,19 +70,19 @@ export const TIMELINE_STATUSES = {
     ActionComponent: MergeInboxScrambles,
   },
   [ticketsCompetitionResultStatuses.newcomers_verified]: {
-    label: 'Verify Newcomers',
+    label: 'Newcomers Verified',
     description: `WRT will have to go through the newcomers, verify their
     details.`,
     ActionComponent: VerifyNewcomers,
   },
   [ticketsCompetitionResultStatuses.created_wca_ids]: {
-    label: 'Create WCA IDs',
+    label: 'Created WCA IDs',
     description: `WRT will have to go through the newcomers, verify their
     details and generate WCA ID for them.`,
     ActionComponent: CreateWcaIds,
   },
   [ticketsCompetitionResultStatuses.posted]: {
-    label: 'Post Results',
+    label: 'Posted',
     description: `When the results are posted, the results become public, and
     also email notification will be sent to participants informing that the
     results are posted.`,
