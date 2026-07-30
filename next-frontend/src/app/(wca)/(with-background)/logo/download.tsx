@@ -3,6 +3,8 @@
 import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
 import { useState } from "react";
 import { Button, Checkbox, Link, VStack } from "@chakra-ui/react";
+import { Trans } from "react-i18next";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function LogoDownload({
   logoDownloadLink,
@@ -10,6 +12,7 @@ export default function LogoDownload({
   logoDownloadLink: string;
 }) {
   const [acceptedGuidelines, setAcceptedGuidelines] = useState(false);
+  const { t } = useT();
 
   return (
     <VStack align="left">
@@ -20,7 +23,11 @@ export default function LogoDownload({
         <Checkbox.HiddenInput />
         <Checkbox.Control />
         <Checkbox.Label>
-          <I18nHTMLTranslate i18nKey="logo.headings.download_logo_assets.accept_terms_and_conditions" />
+          <Trans
+            t={t}
+            i18nKey="logo.headings.download_logo_assets.accept_terms_and_conditions"
+            components={{ a: <Link /> }}
+          />
         </Checkbox.Label>
       </Checkbox.Root>
       <Button disabled={!acceptedGuidelines} asChild>
