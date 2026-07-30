@@ -2674,8 +2674,12 @@ es-419:
       registrations_file_hint: >-
         Fichero CSV con columnas: Estado, Nombre, Región, WCA ID, Fecha de
         nacimiento, Género, Correo electrónico y una columna por cada evento.
+      #original_hash: 01beb54
+      preview: Vista previa de la información del registro
       #original_hash: d6fbc9d
       import: Importar
+      #original_hash: 77dfd21
+      cancel: Cancelar
       errors:
         #original_hash: 0ef547d
         error: 'Error importando %{registration}: %{error}.'
