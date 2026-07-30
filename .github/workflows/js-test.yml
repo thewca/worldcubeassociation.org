@@ -45,6 +45,13 @@ jobs:
           yarn run types:chakra
           git add --intent-to-add src/types/chakra
           git diff --exit-code -- src/types/chakra
+      - name: Build Payload types
+        # Fails if a collection/global config no longer loads, and (via the
+        # diff) if the committed types are stale. Needs no database: Payload
+        # builds the config without connecting to Mongo.
+        run: |
+          yarn run types:payload
+          git diff --exit-code -- src/types/payload.ts
       - name: Check types
         run: yarn run check:types
       - name: Run Lint
