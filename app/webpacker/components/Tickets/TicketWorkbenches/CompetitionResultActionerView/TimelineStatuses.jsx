@@ -19,24 +19,33 @@ export const TIMELINE_ORDER = [
   ticketsCompetitionResultStatuses.posted,
 ];
 
+/**
+ * @typedef {Object} TimelineStatusConfig
+ * @property {string} label - The display name of the step/status.
+ * @property {string} description - A description of what needs to be done.
+ * @property {React.ComponentType|null} ActionComponent - The component containing
+ * the actions/forms required to transition the ticket to this status.
+ */
+
+/** @type {Object<string, TimelineStatusConfig>} */
 export const TIMELINE_STATUSES = {
   [ticketsCompetitionResultStatuses.submitted]: {
     label: 'Submitted',
     description: `Delegate has to go through the warnings (if any) and address
     the warnings by filling the details in the form.`,
-    Component: null,
+    ActionComponent: null,
   },
   [ticketsCompetitionResultStatuses.locked_for_posting]: {
     label: 'Lock for Posting',
     description: `WRT has to lock the results for posting. This is to avoid
     issues like two people accidentally work on same results.`,
-    Component: LockResultsMessage,
+    ActionComponent: LockResultsMessage,
   },
   [ticketsCompetitionResultStatuses.warnings_verified]: {
     label: 'Verify Warnings',
     description: `WRT will be shown the list of warnings and the message from
     Delegate. WRT needs to review them and mark it as done.`,
-    Component: WarningsVerification,
+    ActionComponent: WarningsVerification,
   },
   [ticketsCompetitionResultStatuses.merged_inbox_results]: {
     label: 'Merge Inbox Results',
@@ -48,7 +57,7 @@ export const TIMELINE_STATUSES = {
     Once done with the rough look, proceed to click the “Merge Inbox Results”
     button which will copy data from InboxResults to Results, then clear the
     data in InboxResults.`,
-    Component: MergeInboxResults,
+    ActionComponent: MergeInboxResults,
   },
   [ticketsCompetitionResultStatuses.merged_inbox_scrambles]: {
     label: 'Merge Inbox Scrambles',
@@ -58,25 +67,25 @@ export const TIMELINE_STATUSES = {
     Once done with the rough look, proceed to click the “Merge Inbox Scrambles”
     button which will copy data from InboxScrambles to Scrambles, then clear the
     data in InboxScrambles.`,
-    Component: MergeInboxScrambles,
+    ActionComponent: MergeInboxScrambles,
   },
   [ticketsCompetitionResultStatuses.newcomers_verified]: {
     label: 'Verify Newcomers',
     description: `WRT will have to go through the newcomers, verify their
     details.`,
-    Component: VerifyNewcomers,
+    ActionComponent: VerifyNewcomers,
   },
   [ticketsCompetitionResultStatuses.created_wca_ids]: {
     label: 'Create WCA IDs',
     description: `WRT will have to go through the newcomers, verify their
     details and generate WCA ID for them.`,
-    Component: CreateWcaIds,
+    ActionComponent: CreateWcaIds,
   },
   [ticketsCompetitionResultStatuses.posted]: {
     label: 'Post Results',
     description: `When the results are posted, the results become public, and
     also email notification will be sent to participants informing that the
     results are posted.`,
-    Component: FinalSteps,
+    ActionComponent: FinalSteps,
   },
 };

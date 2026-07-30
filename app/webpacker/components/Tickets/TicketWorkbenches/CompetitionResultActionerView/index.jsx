@@ -84,10 +84,10 @@ function ViewForStatus({
   }
 
   const statusConfig = TIMELINE_STATUSES[nextStatus];
-  if (statusConfig && statusConfig.Component) {
-    const { Component } = statusConfig;
+  if (statusConfig && statusConfig.ActionComponent) {
+    const { ActionComponent } = statusConfig;
     return (
-      <Component
+      <ActionComponent
         ticketDetails={ticketDetails}
         currentStakeholder={currentStakeholder}
         unfinishedPersons={unfinishedPersons}
