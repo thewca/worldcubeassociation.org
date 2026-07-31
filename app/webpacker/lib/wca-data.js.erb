@@ -98,7 +98,8 @@ function extendFormats(rawFormat) {
 const eventsData = loadStaticData(<%= Event.all_raw.to_json.html_safe %>);
 
 export const events = {
-  official: _.map(_.filter(eventsData, 'isOfficial'), extendEvents),
+  official: _.map(_.filter(eventsData, (e) => e.rank < 800), extendEvents),
+  officialWithFuture: _.map(_.filter(eventsData, (e) => e.rank < 990), extendEvents),
   byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
 
