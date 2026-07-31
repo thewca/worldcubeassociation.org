@@ -1,6 +1,6 @@
 import { Card, Link as ChakraLink, Separator } from "@chakra-ui/react";
 import Link from "next/link";
-import { ChakraMarkdown } from "@/components/Markdown";
+import AnnouncementMarkdown from "@/components/announcements/AnnouncementMarkdown";
 import {
   announcementByline,
   announcementRoute,
@@ -52,9 +52,9 @@ export function AnnouncementCard({
     >
       <Card.Body gap={2}>
         <AnnouncementHeader announcement={announcement} linkTitle />
-        <ChakraMarkdown paragraphAs={Card.Description} textStyle="body">
+        <AnnouncementMarkdown>
           {announcementSummary(announcement)}
-        </ChakraMarkdown>
+        </AnnouncementMarkdown>
       </Card.Body>
       <Card.Footer>
         <ReadMoreButton announcement={announcement} />
@@ -80,14 +80,14 @@ export function AnnouncementFullCard({
         <AnnouncementHeader announcement={announcement} linkTitle={false} />
 
         <Card.Title textStyle="h3">Summary</Card.Title>
-        <ChakraMarkdown paragraphAs={Card.Description} textStyle="body">
+        <AnnouncementMarkdown>
           {announcementSummary(announcement)}
-        </ChakraMarkdown>
+        </AnnouncementMarkdown>
 
         <Card.Title textStyle="h3">Body</Card.Title>
-        <ChakraMarkdown paragraphAs={Card.Description} textStyle="body">
+        <AnnouncementMarkdown>
           {announcement.contentMarkdown}
-        </ChakraMarkdown>
+        </AnnouncementMarkdown>
       </Card.Body>
     </Card.Root>
   );
