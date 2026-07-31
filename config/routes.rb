@@ -457,7 +457,9 @@ Rails.application.routes.draw do
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
       get '/competitions/mine' => 'competitions#mine', as: :my_competitions
 
-      resources :incidents, only: %i[index]
+      resources :incidents, only: %i[index show destroy] do
+        patch '/mark_as/:kind' => 'incidents#mark_as', as: :mark_as
+      end
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
       namespace :results do

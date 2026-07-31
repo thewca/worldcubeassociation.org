@@ -629,6 +629,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/incidents/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a single incident */
+        get: operations["incidentById"];
+        put?: never;
+        post?: never;
+        /** Delete an incident */
+        delete: operations["deleteIncident"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/incidents/{incident_id}/mark_as/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Publish or unpublish an incident */
+        patch: operations["incidentMarkAs"];
+        trace?: never;
+    };
     "/v0/search": {
         parameters: {
             query?: never;
@@ -1678,6 +1713,7 @@ export interface components {
             id: string;
             title: string;
             private_description?: string;
+            private_wrc_decision?: string;
             public_summary: string;
             /** Format: date-time */
             created_at: string;
@@ -1931,6 +1967,9 @@ export interface components {
             };
             can_access_panels: {
                 scope: string[];
+            };
+            can_manage_incidents: {
+                scope: components["schemas"]["CompetitionPermissions"];
             };
             can_request_to_edit_others_profile: {
                 scope: string[] | string;
@@ -2783,6 +2822,90 @@ export interface operations {
                     "application/json": components["schemas"]["Incident"][];
                 };
             };
+        };
+    };
+    incidentById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Incident"];
+                };
+            };
+            /** @description Incident not found, or not visible to the current user */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                    };
+                };
+            };
+        };
+    };
+    deleteIncident: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                    };
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            403: components["responses"]["NotPermitted"];
+        };
+    };
+    incidentMarkAs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                incident_id: string;
+                kind: "resolved" | "unresolve";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Incident"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            403: components["responses"]["NotPermitted"];
         };
     };
     omniSearch: {

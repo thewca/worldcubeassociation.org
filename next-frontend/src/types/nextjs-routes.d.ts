@@ -48,6 +48,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
     | StaticRoute<"/incidents">
+    | DynamicRoute<"/incidents/[id]", { "id": string }>
     | StaticRoute<"/logo">
     | StaticRoute<"/officers-and-board">
     | StaticRoute<"/organizations">

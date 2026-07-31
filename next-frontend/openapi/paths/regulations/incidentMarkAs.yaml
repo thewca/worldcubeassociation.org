@@ -1,0 +1,30 @@
+patch:
+  summary: Publish or unpublish an incident
+  tags:
+    - regulations
+  operationId: incidentMarkAs
+  parameters:
+    - name: incident_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: kind
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - resolved
+          - unresolve
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/regulations/Incident.yaml'
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'
+    '403':
+      $ref: '../../errorResponses/NotPermitted.yaml'

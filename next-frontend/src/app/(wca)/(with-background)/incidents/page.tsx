@@ -4,6 +4,7 @@ import {
   ButtonGroup,
   Container,
   IconButton,
+  Link,
   Pagination,
   Table,
   VStack,
@@ -17,14 +18,11 @@ import {
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { useAPIClient } from "@/lib/wca/useAPI";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { useCallback, useMemo, useState } from "react";
+import { Suspense, useCallback, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Loading from "@/components/ui/loading";
 import _ from "lodash";
-import {
-  CompetitionTag,
-  MiscTag,
-  RegulationTag,
-} from "@/components/incidents/Tags";
+import { CompetitionTag, IncidentTags } from "@/components/incidents/Tags";
 
 const itemsPerPageChoices = createListCollection({
   items: [5, 10, 15, 20, 30, 40],
@@ -33,11 +31,22 @@ const itemsPerPageChoices = createListCollection({
 });
 
 export default function IncidentsPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <IncidentsLog />
+    </Suspense>
+  );
+}
+
+function IncidentsLog() {
   const api = useAPIClient();
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [query, setQuery] = useState<string | undefined>(undefined);
-  const [searchTags, setSearchTags] = useState<string[]>([]);
+  const [searchTags, setSearchTags] = useState<string[]>(
+    () => searchParams.get("tags")?.split(",").filter(Boolean) ?? [],
+  );
 
   // TODO GB: Use "proper" pagination for this endpoint (inifinite?) like in competition_index
   //   or at least fall back to API-typed queryOptions
@@ -126,32 +135,11 @@ export default function IncidentsPage() {
           <Table.Body>
             {incidents.map((item) => (
               <Table.Row key={item.id}>
-                <Table.Cell>{item.title}</Table.Cell>
                 <Table.Cell>
-                  {item.tags.map(
-                    ({ name, id: tagId, url, content_html: contentHtml }) =>
-                      // non-regulation/guideline tags will only have a name
-                      tagId !== undefined ? (
-                        <RegulationTag
-                          key={tagId}
-                          id={tagId.toString()}
-                          type={
-                            url.indexOf("guideline") === -1
-                              ? "Regulation"
-                              : "Guideline"
-                          }
-                          link={url}
-                          description={contentHtml}
-                          addToSearch={addTagToSearch}
-                        />
-                      ) : (
-                        <MiscTag
-                          key={name}
-                          tag={name}
-                          addToSearch={addTagToSearch}
-                        />
-                      ),
-                  )}
+                  <Link href={`/incidents/${item.id}`}>{item.title}</Link>
+                </Table.Cell>
+                <Table.Cell>
+                  <IncidentTags tags={item.tags} addToSearch={addTagToSearch} />
                 </Table.Cell>
                 <Table.Cell>
                   {item.competitions.map((competition) => (

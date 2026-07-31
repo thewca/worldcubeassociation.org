@@ -95,6 +95,9 @@ paths:
   /v0/incidents/{id}:
     $ref: 'paths/regulations/incidentById.yaml'
 
+  /v0/incidents/{incident_id}/mark_as/{kind}:
+    $ref: 'paths/regulations/incidentMarkAs.yaml'
+
   /v0/search:
     $ref: 'paths/search/omniSearch.yaml'
 

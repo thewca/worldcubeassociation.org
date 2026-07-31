@@ -27,3 +27,30 @@ get:
             properties:
               error:
                 type: string
+delete:
+  summary: Delete an incident
+  tags:
+    - regulations
+  operationId: deleteIncident
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              status:
+                type: string
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'
+    '403':
+      $ref: '../../errorResponses/NotPermitted.yaml'

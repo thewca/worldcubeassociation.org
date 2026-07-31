@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Tag as ChakraTag,
@@ -9,6 +11,46 @@ import {
 } from "@chakra-ui/react";
 
 import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
+import type { components } from "@/types/openapi";
+
+const incidentSearchUrl = (tag: string) =>
+  `/incidents?tags=${encodeURIComponent(tag)}`;
+
+type IncidentTag = components["schemas"]["Incident"]["tags"][number];
+
+interface IncidentTagsProps {
+  tags: IncidentTag[];
+  addToSearch?: (tag: string) => void;
+  linkToSearch?: boolean;
+}
+
+export function IncidentTags({
+  tags,
+  addToSearch,
+  linkToSearch,
+}: IncidentTagsProps) {
+  return tags.map(({ name, id, url, content_html: contentHtml }) =>
+    // non-regulation/guideline tags will only have a name
+    id !== undefined ? (
+      <RegulationTag
+        key={id}
+        id={id.toString()}
+        type={url.indexOf("guideline") === -1 ? "Regulation" : "Guideline"}
+        link={url}
+        description={contentHtml}
+        addToSearch={addToSearch}
+        linkToSearch={linkToSearch}
+      />
+    ) : (
+      <MiscTag
+        key={name}
+        tag={name}
+        addToSearch={addToSearch}
+        linkToSearch={linkToSearch}
+      />
+    ),
+  );
+}
 
 interface RegulationTagProps {
   id: string;
@@ -16,6 +58,7 @@ interface RegulationTagProps {
   description: string;
   link: string;
   addToSearch?: (query: string) => void;
+  linkToSearch?: boolean;
 }
 
 export function RegulationTag({
@@ -24,22 +67,17 @@ export function RegulationTag({
   description,
   link,
   addToSearch,
+  linkToSearch,
 }: RegulationTagProps) {
-  const links = (
-    <Link href={link} className="hide-new-window-icon">
-      {type}s Reference
-    </Link>
-  );
-
   return (
     <Tag
       tagType="incident"
       labelClass="primary"
       label={id}
       title={`${type} ${id}`}
+      titleLink={link}
       description={description}
-      links={links}
-      buttons={addToSearch && SearchForTagButton(addToSearch, id)}
+      buttons={searchForTag(id, addToSearch, linkToSearch)}
     />
   );
 }
@@ -47,25 +85,39 @@ export function RegulationTag({
 interface MiscTagProps {
   tag: string;
   addToSearch?: (query: string) => void;
+  linkToSearch?: boolean;
 }
 
-function SearchForTagButton(
-  addTagToSearch: (tag: string) => void,
+function searchForTag(
   tag: string,
+  addToSearch?: (tag: string) => void,
+  linkToSearch?: boolean,
 ) {
-  return (
-    <Button onClick={() => addTagToSearch(tag)}>Filter by this tag</Button>
-  );
+  if (linkToSearch) {
+    return (
+      <Link
+        href={incidentSearchUrl(tag)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Search incidents with this tag
+      </Link>
+    );
+  }
+
+  if (addToSearch) {
+    return <Button onClick={() => addToSearch(tag)}>Filter by this tag</Button>;
+  }
 }
 
-export function MiscTag({ tag, addToSearch }: MiscTagProps) {
+export function MiscTag({ tag, addToSearch, linkToSearch }: MiscTagProps) {
   return (
     <Tag
       tagType="incident"
       labelClass="default"
       label={tag}
       title={tag}
-      buttons={addToSearch && SearchForTagButton(addToSearch, tag)}
+      buttons={searchForTag(tag, addToSearch, linkToSearch)}
     />
   );
 }
@@ -84,20 +136,23 @@ export function CompetitionTag({ id, name, comments }: CompetitionTagProps) {
   const { data: permissions } = usePermissionsQuery();
   const canViewDelegateMatters = permissions?.canViewDelegateReport(id);
 
-  const links = canViewDelegateMatters ? (
+  const links = (
     <>
       <Link href={competitionUrl(id)} className="hide-new-window-icon">
         Competition Page
       </Link>
-      <br />
-      <Link href={competitionReportUrl(id)} className="hide-new-window-icon">
-        Delegate Report
-      </Link>
+      {canViewDelegateMatters && (
+        <>
+          <br />
+          <Link
+            href={competitionReportUrl(id)}
+            className="hide-new-window-icon"
+          >
+            Delegate Report
+          </Link>
+        </>
+      )}
     </>
-  ) : (
-    <Link href={competitionUrl(id)} className="hide-new-window-icon">
-      Competition Page
-    </Link>
   );
 
   return (
@@ -117,6 +172,7 @@ interface TagProps {
   labelClass: "primary" | "default" | "info";
   label: string;
   title: string;
+  titleLink?: string;
   description?: string | null;
   links?: React.ReactNode;
   buttons?: React.ReactNode;
@@ -126,6 +182,7 @@ function Tag({
   labelClass,
   label,
   title,
+  titleLink,
   description,
   links,
   buttons,
@@ -135,6 +192,12 @@ function Tag({
     default: "gray",
     info: "teal",
   };
+
+  const sections = [
+    description && <Box dangerouslySetInnerHTML={{ __html: description }} />,
+    links && <Box>{links}</Box>,
+    buttons && <Box>{buttons}</Box>,
+  ].filter(Boolean);
 
   return (
     <Popover.Root>
@@ -149,26 +212,22 @@ function Tag({
         </ChakraTag.Root>
       </Popover.Trigger>
       <Popover.Content>
-        <Popover.Header fontWeight="bold">{title}</Popover.Header>
+        <Popover.Header fontWeight="bold">
+          {titleLink ? (
+            <Link href={titleLink} target="_blank" rel="noopener noreferrer">
+              {title}
+            </Link>
+          ) : (
+            title
+          )}
+        </Popover.Header>
         <Popover.Body>
-          {description && (
-            <>
-              <Separator my={2} />
-              <Box dangerouslySetInnerHTML={{ __html: description }} />
-            </>
-          )}
-          {links && (
-            <>
-              <Separator my={2} />
-              <Box>{links}</Box>
-            </>
-          )}
-          {buttons && (
-            <>
-              <Separator my={2} />
-              <Box>{buttons}</Box>
-            </>
-          )}
+          {sections.map((section, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <Separator my={2} />}
+              {section}
+            </React.Fragment>
+          ))}
         </Popover.Body>
       </Popover.Content>
     </Popover.Root>

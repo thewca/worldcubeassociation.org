@@ -59,4 +59,75 @@ RSpec.describe "API Incidents" do
       expect(response).to have_http_status :not_found
     end
   end
+
+  describe "PATCH /api/v0/incidents/:incident_id/mark_as/:kind" do
+    context "when logged in as a WRC member" do
+      before { sign_in create(:user, :wrc_member) }
+
+      it "publishes a pending incident" do
+        patch api_v0_incident_mark_as_path(incident_id: pending_incident.id, kind: "resolved")
+
+        expect(response).to be_successful
+        expect(pending_incident.reload).to be_resolved
+      end
+
+      it "unpublishes a resolved incident" do
+        patch api_v0_incident_mark_as_path(incident_id: resolved_incident.id, kind: "unresolve")
+
+        expect(response).to be_successful
+        expect(resolved_incident.reload).not_to be_resolved
+      end
+
+      it "rejects an unrecognized kind" do
+        patch api_v0_incident_mark_as_path(incident_id: resolved_incident.id, kind: "sent")
+
+        expect(response).to have_http_status :bad_request
+        expect(resolved_incident.reload).to be_resolved
+      end
+    end
+
+    context "when logged in as a Delegate" do
+      before { sign_in create(:delegate) }
+
+      it "does not allow publishing" do
+        patch api_v0_incident_mark_as_path(incident_id: pending_incident.id, kind: "resolved")
+
+        expect(response).to have_http_status :forbidden
+        expect(pending_incident.reload).not_to be_resolved
+      end
+    end
+
+    context "when logged out" do
+      it "does not allow publishing" do
+        patch api_v0_incident_mark_as_path(incident_id: pending_incident.id, kind: "resolved")
+
+        expect(response).to have_http_status :unauthorized
+        expect(pending_incident.reload).not_to be_resolved
+      end
+    end
+  end
+
+  describe "DELETE /api/v0/incidents/:id" do
+    context "when logged in as a WRC member" do
+      before { sign_in create(:user, :wrc_member) }
+
+      it "destroys the incident" do
+        incident = resolved_incident
+
+        expect { delete api_v0_incident_path(incident) }.to change(Incident, :count).by(-1)
+        expect(response).to be_successful
+      end
+    end
+
+    context "when logged in as a Delegate" do
+      before { sign_in create(:delegate) }
+
+      it "does not allow destroying" do
+        incident = resolved_incident
+
+        expect { delete api_v0_incident_path(incident) }.not_to change(Incident, :count)
+        expect(response).to have_http_status :forbidden
+      end
+    end
+  end
 end
