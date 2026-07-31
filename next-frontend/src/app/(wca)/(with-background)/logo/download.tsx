@@ -29,7 +29,7 @@ export default function LogoDownload({
           />
         </Checkbox.Label>
       </Checkbox.Root>
-      <Button disabled={!acceptedGuidelines} asChild>
+      <Button disabled={!acceptedGuidelines} alignSelf="start" asChild>
         <Link href={logoDownloadLink}>
           {t("logo.headings.download_logo_assets.download_button_text")}
         </Link>
