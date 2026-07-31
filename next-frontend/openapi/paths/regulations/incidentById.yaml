@@ -1,0 +1,29 @@
+get:
+  summary: Get a single incident
+  tags:
+    - regulations
+  operationId: incidentById
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/regulations/Incident.yaml'
+    '404':
+      description: Incident not found, or not visible to the current user
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+            properties:
+              error:
+                type: string

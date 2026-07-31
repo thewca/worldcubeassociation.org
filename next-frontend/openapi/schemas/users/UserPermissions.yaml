@@ -13,6 +13,7 @@ required:
   - can_request_to_edit_others_profile
   - can_view_delegate_admin_page
   - can_view_delegate_report
+  - can_manage_incidents
 properties:
   can_attend_competitions:
     type: object
@@ -112,6 +113,13 @@ properties:
         type: array
         items:
           type: string
+  can_manage_incidents:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
   can_request_to_edit_others_profile:
     type: object
     required:

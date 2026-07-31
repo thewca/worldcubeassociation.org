@@ -16,4 +16,14 @@ class Api::V0::IncidentsController < Api::V0::ApiController
       ),
     )
   end
+
+  def show
+    incident = Incident.includes(:competitions, :incident_tags).find(params.require(:id))
+    # Unresolved incidents are not publicly visible, mirroring the scoping in `index`.
+    return render status: :not_found, json: { error: "Incident not found" } unless incident.resolved? || current_user&.can_manage_incidents?
+
+    render json: incident.as_json(
+      can_view_delegate_matters: current_user&.can_view_delegate_matters?,
+    )
+  end
 end

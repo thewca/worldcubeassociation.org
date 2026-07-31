@@ -17,6 +17,8 @@ properties:
     type: string
   private_description:
     type: string
+  private_wrc_decision:
+    type: string
   public_summary:
     type: string
   created_at:
