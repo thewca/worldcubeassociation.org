@@ -7,3 +7,4 @@ tzdata
 tzdata-legacy
 libclang-dev
 cargo
+libvips

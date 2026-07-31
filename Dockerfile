@@ -52,7 +52,8 @@ RUN apt-get update -qq && \
       cargo \
       pkg-config \
       libssl-dev \
-      libyaml-dev
+      libyaml-dev \
+      libvips
 
 COPY bin ./bin
 
