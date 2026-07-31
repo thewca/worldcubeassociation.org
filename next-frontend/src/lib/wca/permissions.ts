@@ -17,6 +17,7 @@ export interface PermissionFunctions {
   canReadGroupCurrent: (group: string) => boolean;
   canReadGroupPast: (group: string) => boolean;
   canRequestToEditProfile: (profile: string) => boolean;
+  canManageIncidents: (incident: string) => boolean;
 }
 
 export type UserPermissions = components["schemas"]["UserPermissions"];
@@ -122,6 +123,11 @@ export const hydrateUserPermissions = (
         profile,
         rawPermissions.can_request_to_edit_others_profile.scope,
       ),
+    ),
+  canManageIncidents: (incident) =>
+    Boolean(
+      rawPermissions &&
+      allOrSpecificScope(incident, rawPermissions.can_manage_incidents.scope),
     ),
 });
 
