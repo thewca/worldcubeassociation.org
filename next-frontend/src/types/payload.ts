@@ -1735,7 +1735,7 @@ export interface LogoPage {
   id: string;
   blocks: (
     | {
-        title: string;
+        title?: string | null;
         content: {
           root: {
             type: string;
@@ -1759,6 +1759,7 @@ export interface LogoPage {
     | {
         title: string;
         caption: string;
+        logoOnly?: boolean | null;
         images: {
           image: string | Media;
           darkBackground?: boolean | null;
@@ -2375,6 +2376,7 @@ export interface LogoPageSelect<T extends boolean = true> {
           | {
               title?: T;
               caption?: T;
+              logoOnly?: T;
               images?:
                 | T
                 | {
