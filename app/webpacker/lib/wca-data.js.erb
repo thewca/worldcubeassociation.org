@@ -103,7 +103,10 @@ export const events = {
   byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
 
-export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+// This is the universe of event IDs that can legitimately appear in our data, so it has to
+// include events that aren't holdable yet. It is used for ordering and validity checks,
+// not to decide which events a competition may offer.
+export const WCA_EVENT_IDS = Object.values(events.officialWithFuture).map((e) => e.id);
 
 function extendEvents(rawEvent) {
   return {
