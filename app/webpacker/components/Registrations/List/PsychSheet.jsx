@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-  Icon, Segment, Table,
+  Icon, Input, Segment, Table,
 } from 'semantic-ui-react';
 import {
   getPsychSheetForEvent,
@@ -71,6 +71,17 @@ export default function PsychSheet({
     retry: false,
   });
 
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredRankings = useMemo(() => {
+    if (!rankings) return [];
+    if (!searchQuery) return rankings;
+    const q = searchQuery.toLowerCase();
+    return rankings.filter(
+      (r) => r.user.name.toLowerCase().includes(q),
+    );
+  }, [rankings, searchQuery]);
+
   if (isError) {
     return (
       <Errored componentName="PsychSheet" />
@@ -86,12 +97,12 @@ export default function PsychSheet({
   }
 
   const { userIsInTable, userPosition } = getUserPositionInfo(
-    rankings,
+    filteredRankings,
     userId,
   );
 
   const { registrationCount, newcomerCount, returnerCount } = getPeopleCounts(
-    rankings,
+    filteredRankings,
   );
 
   return (
@@ -105,6 +116,16 @@ export default function PsychSheet({
         returnerCount={returnerCount}
         onScrollToMeClick={onScrollToMeClick}
       />
+      <div style={{ marginBottom: '1em' }}>
+        <Input
+          fluid
+          icon={<Icon name="search" />}
+          iconPosition="left"
+          placeholder={I18n.t('registrations.list.search_by_name')}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       <div style={{ overflowX: 'auto' }}>
         <Table striped sortable unstackable compact singleLine textAlign="left">
           <PsychSheetHeader
@@ -114,14 +135,14 @@ export default function PsychSheet({
             hideAverage={eventIsMbf}
           />
           <PsychSheetBody
-            registrations={rankings}
+            registrations={filteredRankings}
             selectedEvent={selectedEvent}
             userId={userId}
             userRowRef={userRowRef}
             hideAverage={eventIsMbf}
           />
           <PsychSheetFooter
-            registrations={rankings}
+            registrations={filteredRankings}
             hideAverage={eventIsMbf}
           />
         </Table>
