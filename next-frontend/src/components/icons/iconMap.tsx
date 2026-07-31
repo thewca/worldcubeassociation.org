@@ -75,6 +75,7 @@ import VenueIcon from "@/components/icons/VenueIcon";
 import WcaDelegatesIcon from "@/components/icons/WcaDelegatesIcon";
 import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import WcaLiveIcon from "@/components/icons/WcaLiveIcon";
+import WcaLogoIcon from "@/components/icons/WcaLogoIcon";
 import WcaOfficersAndBoardIcon from "@/components/icons/WcaOfficersAndBoardIcon";
 import WeiboIcon from "@/components/icons/WeiboIcon";
 import XIcon from "@/components/icons/XIcon";
@@ -179,6 +180,7 @@ export const iconMap = {
   "WCA Delegates": WcaDelegatesIcon,
   "WCA Documents": WcaDocsIcon,
   "WCA Live": WcaLiveIcon,
+  "WCA Logo": WcaLogoIcon,
   "WCA Officers and Board": WcaOfficersAndBoardIcon,
   Weibo: WeiboIcon,
   "X (formerly Twitter)": XIcon,
