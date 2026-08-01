@@ -69,9 +69,13 @@ class RegistrationsController < ApplicationController
   before_action :validate_and_parse_registration_preview, only: %i[validate_and_convert_registrations]
   private def validate_and_parse_registration_preview
     @competition = competition_from_params
-    file = params.require(:csv_registration_file)
+    file = params.require(:registration_file)
 
-    @converted_registrations = parse_csv_to_registration_data(file.path, @competition)
+    @converted_registrations = if file.content_type == "application/json"
+                                 parse_json_to_registration_data(file.path)
+                               else
+                                 parse_csv_to_registration_data(file.path, @competition)
+                               end
   end
 
   def validate_and_convert_registrations
@@ -121,6 +125,17 @@ class RegistrationsController < ApplicationController
         is_competing: true,
         registered_at: import_time,
       )
+    end
+  end
+
+  private def parse_json_to_registration_data(file_path)
+    wcif = JSON.parse(File.read(file_path))
+
+    # TODO: Maybe make WCIF validation bit more strict - check if the persons row has all the required fields?
+    return render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.invalid_wcif") } unless wcif.is_a?(Hash) && wcif["persons"].is_a?(Array)
+
+    wcif["persons"].select do |person|
+      person["registration"]&.[]("status") == "accepted"
     end
   end
 

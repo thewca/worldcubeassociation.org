@@ -6,10 +6,10 @@ import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import I18n from '../../lib/i18n';
 
-export default function UploadRegistrationCsv({
+export default function UploadRegistrationFile({
   competitionId, setRegistrationsToPreview,
 }) {
-  const [csvFile, setCsvFile] = useState();
+  const [file, setFile] = useState();
   const {
     mutate: validateAndConvertRegistrationsMutate, isPending, error, isError,
   } = useMutation({
@@ -21,16 +21,16 @@ export default function UploadRegistrationCsv({
   if (isError) return <Errored error={error} />;
 
   return (
-    <Form onSubmit={() => validateAndConvertRegistrationsMutate({ competitionId, csvFile })}>
+    <Form onSubmit={() => validateAndConvertRegistrationsMutate({ competitionId, file })}>
       <Form.Input
         type="file"
-        accept="text/csv"
-        onChange={(event) => setCsvFile(event.target.files[0])}
+        accept="text/csv,application/json"
+        onChange={(event) => setFile(event.target.files[0])}
         label={I18n.t('registrations.import.registrations_file_label')}
       />
       <p>{I18n.t('registrations.import.registrations_file_hint')}</p>
       <Form.Button
-        disabled={!csvFile}
+        disabled={!file}
         type="submit"
       >
         {I18n.t('registrations.import.preview')}

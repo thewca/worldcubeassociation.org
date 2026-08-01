@@ -482,7 +482,7 @@ RSpec.describe "registrations" do
           ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
           ["a", "Sherlock Holmes", "", "2000-01-01", "m", "sherlock@example.com", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Missing columns: country, 333."
       end
@@ -494,7 +494,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "1", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
@@ -505,7 +505,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
@@ -516,7 +516,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "watson@example.com", "1", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
@@ -528,7 +528,7 @@ RSpec.describe "registrations" do
           ["a", "John Watson", "United Kingdom", "2019WATS01", "2000-01-01", "m", "watson@example.com", "1", "1"],
           ["a", "James Moriarty", "United Kingdom", "2019MORI01", "Jan 01 2000", "m", "moriarty@example.com", "0", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
       end
@@ -537,7 +537,7 @@ RSpec.describe "registrations" do
         file = csv_file [
           ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "The file is empty."
       end
@@ -548,7 +548,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "0", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:ok)
         json = response.parsed_body
         expect(json).to match [
@@ -589,7 +589,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["p", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "0", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:ok)
         json = response.parsed_body
         expect(json.length).to eq 1
@@ -601,7 +601,7 @@ RSpec.describe "registrations" do
           ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
           ["a", "Sherlock Holmes", "United Kingdom", "2019holm01", "2000-01-01", "m", "Sherlock@Example.COM", "1", "0"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:ok)
         json = response.parsed_body
         expect(json[0]["wcaId"]).to eq "2019HOLM01"
@@ -1704,3 +1704,5 @@ def payment_confirmation_webhook_as_json(intent, account_id)
     type: "payment_intent.succeeded",
   }.to_json
 end
+
+# TODO: Add unit tests for WCIF import registrations
