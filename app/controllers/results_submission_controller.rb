@@ -4,17 +4,7 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action(
-    -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) },
-    except: %i[
-      newcomer_checks
-      last_duplicate_checker_job_run
-      compute_potential_duplicates
-      newcomer_name_format_check
-      newcomer_dob_check
-      upcoming_results
-    ],
-  )
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, only: %i[new upload_scrambles upload_json import_from_live create unfinished_persons]
   before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
   before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wrt) }, only: %i[upcoming_results]
@@ -227,13 +217,8 @@ class ResultsSubmissionController < ApplicationController
     render status: :ok, json: { success: true }
   end
 
-  def upcoming_results
-    competitions = Competition.not_cancelled.visible.where(
-      results_submitted_at: nil,
-      end_date: ..Date.today,
-    ).order(
-      end_date: :asc,
-    )
+  def pending_results_submissions
+    competitions = Competition.pending_results_submission.order_by_date
 
     render json: competitions.as_json(
       only: %i[id name end_date],

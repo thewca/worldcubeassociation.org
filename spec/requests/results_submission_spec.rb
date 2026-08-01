@@ -196,13 +196,13 @@ RSpec.describe ResultsSubmissionController do
     end
   end
 
-  describe "GET #upcoming_results" do
+  describe "GET #pending_results_submissions" do
     let(:wrt_member) { create(:user, :wrt_member) }
     let(:regular_user) { create(:user) }
 
     context "when not logged in" do
       it "redirects to sign in" do
-        get upcoming_results_path
+        get pending_results_submissions_path
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -211,7 +211,7 @@ RSpec.describe ResultsSubmissionController do
       before { sign_in regular_user }
 
       it "redirects to root" do
-        get upcoming_results_path
+        get pending_results_submissions_path
         expect(response).to redirect_to(root_url)
       end
     end
@@ -245,7 +245,7 @@ RSpec.describe ResultsSubmissionController do
           results_posted_at: nil,
         )
 
-        get upcoming_results_path
+        get pending_results_submissions_path
         expect(response).to be_successful
         response_json = response.parsed_body
         expect(response_json.pluck("id")).to eq([past_unsubmitted.id])

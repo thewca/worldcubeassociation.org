@@ -4,21 +4,21 @@ import { useQuery } from '@tanstack/react-query';
 import { getMediumDateString } from '../../../../lib/utils/dates';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
-import getUpcomingResults from './api/getUpcomingResults';
+import getPendingResultsSubmissions from './api/getPendingResultsSubmissions';
 
-export default function UpcomingResults() {
+export default function PendingResultsSubmissions() {
   const {
-    data: upcomingCompetitions, isPending, isError, error,
+    data: pendingCompetitions, isPending, isError, error,
   } = useQuery({
-    queryKey: ['upcomingResults'],
-    queryFn: getUpcomingResults,
+    queryKey: ['pendingResultsSubmissions'],
+    queryFn: getPendingResultsSubmissions,
   });
 
   if (isPending) return <Loading />;
   if (isError) return <Errored error={error} />;
 
-  if (!upcomingCompetitions || upcomingCompetitions.length === 0) {
-    return <Message info>No upcoming results</Message>;
+  if (!pendingCompetitions || pendingCompetitions.length === 0) {
+    return <Message info>No pending results submissions</Message>;
   }
 
   return (
@@ -30,7 +30,7 @@ export default function UpcomingResults() {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {upcomingCompetitions.map((comp) => (
+        {pendingCompetitions.map((comp) => (
           <Table.Row key={comp.id}>
             <Table.Cell>
               {comp.name}
