@@ -23,9 +23,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apm-js-collab/code-transformer@npm:^0.14.0":
-  version: 0.14.0
-  resolution: "@apm-js-collab/code-transformer@npm:0.14.0"
+"@apm-js-collab/code-transformer@npm:^0.18.0":
+  version: 0.18.1
+  resolution: "@apm-js-collab/code-transformer@npm:0.18.1"
   dependencies:
     "@types/estree": "npm:^1.0.8"
     astring: "npm:^1.9.0"
@@ -33,18 +33,20 @@ __metadata:
     meriyah: "npm:^6.1.4"
     semifies: "npm:^1.0.0"
     source-map: "npm:^0.6.0"
-  checksum: 10c0/8b0b126c1626492a3cd149989461081ae58ffc526f9b55e799cbad5784f13f56479f17e0cb1c08102b83235ff31e82a42a73a59fb2e9007c797fa414316e774a
+  bin:
+    code-transformer: cli.js
+  checksum: 10c0/253ba76f7efec39a337327e5f23029ab5a8c5b3e3db4e1c41b97636b8e842372c285301f7a3e3a19d344eb9a680091926f6f38e06bdd6233f33a958777094322
   languageName: node
   linkType: hard
 
-"@apm-js-collab/tracing-hooks@npm:^0.9.1":
-  version: 0.9.1
-  resolution: "@apm-js-collab/tracing-hooks@npm:0.9.1"
+"@apm-js-collab/tracing-hooks@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "@apm-js-collab/tracing-hooks@npm:0.13.0"
   dependencies:
-    "@apm-js-collab/code-transformer": "npm:^0.14.0"
+    "@apm-js-collab/code-transformer": "npm:^0.18.0"
     debug: "npm:^4.4.1"
     module-details-from-path: "npm:^1.0.4"
-  checksum: 10c0/393c65ec3c68cc37b55fce5735de91c54b66b61083ce8f7799b3ef1ea96c45bed953f719bbcb8a2c41c289f8178adbfefcf6d86665493ede5793ef28af6087e4
+  checksum: 10c0/2891fc52b8aa2b68d59674f40f1340ce71ac68f6aff07394146565a5afcc10d99b8efe2d05af1346c188d440fcbb53c9d48eb017012417109740207e8a85e390
   languageName: node
   linkType: hard
 
@@ -11760,11 +11762,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^14.3.3":
-  version: 14.3.3
-  resolution: "newrelic@npm:14.3.3"
+"newrelic@npm:^14.3.4":
+  version: 14.3.4
+  resolution: "newrelic@npm:14.3.4"
   dependencies:
-    "@apm-js-collab/tracing-hooks": "npm:^0.9.1"
+    "@apm-js-collab/tracing-hooks": "npm:^0.13.0"
     "@datadog/pprof": "npm:^5.14.2"
     "@grpc/grpc-js": "npm:^1.13.2"
     "@grpc/proto-loader": "npm:^0.8.1"
@@ -11803,7 +11805,7 @@ __metadata:
       optional: true
   bin:
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 10c0/585c0363ad49674a0facf697d46950e15a810d237e3823bd5a1f305eabb5a07820f3a7ce2b79a52d3e55c94caf516019cd6b9ce40be6d4495065af5aace27da3
+  checksum: 10c0/ba3b98d86d4299d6574c29d432dd4f82e8ee88be1b2bf5816f679ac4f0d7760e2422487b5be3008eb41dce2e74934a9ade27bc0a3e8d2b8b7cab64763d06f04f
   languageName: node
   linkType: hard
 
@@ -11887,7 +11889,7 @@ __metadata:
     jsdom: "npm:^29.1.1"
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
-    newrelic: "npm:^14.3.3"
+    newrelic: "npm:^14.3.4"
     next: "npm:16.2.12"
     next-auth: "npm:5.0.0-beta.32"
     nextjs-routes: "npm:^2.2.5"
