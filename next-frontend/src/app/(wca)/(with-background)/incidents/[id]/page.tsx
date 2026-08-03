@@ -12,10 +12,10 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ChakraMarkdown } from "@/components/Markdown";
 import IncidentAdminButtons from "@/components/incidents/IncidentAdminButtons";
-import IncidentDate from "@/components/incidents/IncidentDate";
 import { CompetitionTag, IncidentTags } from "@/components/incidents/Tags";
 import { getIncident } from "@/lib/wca/incidents/getIncident";
 import getPermissions from "@/lib/wca/permissions";
+import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
 
 type IncidentPageProps = {
   params: Promise<{ id: string }>;
@@ -73,7 +73,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
               comments={competition.comments}
             />
           ))}
-          <IncidentDate isoDate={incident.created_at} />
+          <Text>{getFullDateTimeStringNoSeconds(incident.created_at)}</Text>
         </HStack>
 
         {!resolved && (
