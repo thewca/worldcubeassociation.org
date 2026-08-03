@@ -12141,7 +12141,7 @@ __metadata:
     react-intersection-observer: "npm:^11.0.0"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
-    temporal-polyfill: "npm:^1.0.1"
+    temporal-polyfill: "npm:^1.0.2"
     typescript: "npm:^6"
     vitest: "npm:^4.1.10"
   dependenciesMeta:
@@ -14613,20 +14613,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"temporal-polyfill@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "temporal-polyfill@npm:1.0.1"
+"temporal-polyfill@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "temporal-polyfill@npm:1.0.2"
   dependencies:
-    temporal-spec: "npm:1.0.0"
+    temporal-spec: "npm:1.0.1"
     temporal-utils: "npm:1.0.1"
-  checksum: 10c0/a663055293ae334d95e7829508dc5c8b0a11eb8386760b0a5d9cd189c7e013c3b9d010b8e6f33c384ddede532feb506ff44e51f8a6cb00e90a0be6e689fc8947
+  checksum: 10c0/5d1dab031414df3f66f6d07659e6741938f97e5881052b964c9ad2ca0a29d0536d1db88df016396fa739153dd5e306a97bebf04d91c0625747587114a7bfdeb6
   languageName: node
   linkType: hard
 
-"temporal-spec@npm:1.0.0":
-  version: 1.0.0
-  resolution: "temporal-spec@npm:1.0.0"
-  checksum: 10c0/16f24e418ed8f58f094752df2698db29153afed7f36cbbe5a889127ff86479a7f3e7338ed1480e3a96834f9613b55dbe45c74ac46a5a7fd1366ffb1f923e3338
+"temporal-spec@npm:1.0.1":
+  version: 1.0.1
+  resolution: "temporal-spec@npm:1.0.1"
+  checksum: 10c0/99f6bfe4a8e59cd0664d0e97706798a1e10d42b1b682da9b60778a4cb9a23362da01ea3d83a674ef426ed743bbab835e2e3d1acea5d2d4a9eabe33863237b014
   languageName: node
   linkType: hard
 
