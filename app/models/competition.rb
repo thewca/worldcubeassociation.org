@@ -356,7 +356,7 @@ class Competition < ApplicationRecord
     errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event')) if no_events?
   end
 
-  validate :fto_not_before_introduction_date, if: -> { start_date.present? }
+  validate :fto_not_before_introduction_date, if: :start_date?
   private def fto_not_before_introduction_date
     return unless saved_and_unsaved_events.any? { it.id == 'fto' }
     return if start_date >= FTO_INTRODUCTION_DATE
