@@ -3,17 +3,28 @@ name: Style guide review
 # Reviews pull requests against docs/STYLE_GUIDE.md and leaves inline comments.
 # Advisory only: this workflow never fails a PR, it just comments.
 #
+# Runs OpenCodeReview (https://github.com/alibaba/open-code-review, Apache-2.0).
+# The rules it applies live in .opencodereview/rule.json, which maps each area of
+# the repo onto the relevant section of docs/STYLE_GUIDE.md. That file is the
+# thing to edit when the guide changes -- OCR does not read STYLE_GUIDE.md
+# itself, so the two must be kept in step by hand.
+#
 # Uses `pull_request_target` so that fork PRs (which is most contributions) can
 # be reviewed at all -- `pull_request` runs from forks get no secrets, and this
-# job needs AWS credentials to reach Bedrock.
+# job needs an LLM token.
 #
 # Because `pull_request_target` runs in the context of the BASE repo with
 # secrets available, this job must never execute code from the PR:
 #   * no `yarn install`, no `bundle install`, no build, no tests
-#   * Claude runs with Read/Grep/Glob only -- no Bash, no Write, no Edit
-#   * the style guide is restored from the base branch, so a PR cannot edit
-#     the rules it is about to be judged against
+#   * the action checks out the trusted BASE branch and fetches the PR head as
+#     bare git objects, so untrusted files are never materialised in the tree
+#   * consequently .opencodereview/rule.json is always read from base, so a PR
+#     cannot edit the rules it is about to be judged against
 # Keep it that way when editing this file.
+#
+# Both the action and the npm package it installs are pinned. Bump them
+# deliberately; `ocr_version: latest` would pull unreviewed code into a job that
+# holds secrets.
 
 on:
   pull_request:
@@ -26,6 +37,7 @@ on:
       - 'config/**'
       - 'next-frontend/**'
       - 'docs/STYLE_GUIDE.md'
+      - '.opencodereview/rule.json'
       - '.github/workflows/style-guide-review.yml'
 
 # A new push supersedes the review of the previous one.
@@ -36,131 +48,72 @@ concurrency:
 permissions:
   contents: read
   pull-requests: write
-  # Not needed for the static access keys below, but the action requests an OIDC
-  # token, and it is what you would need if AWS auth is ever moved to a role.
-  id-token: write
 
 jobs:
   review:
     # Draft PRs are still work in progress; don't spend tokens on them.
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - name: Checkout PR merge commit
-        uses: actions/checkout@v7
-        with:
-          # The merge ref is what the PR would look like once merged, which is
-          # what we want to review. fetch-depth 0 so we can diff against base.
-          ref: refs/pull/${{ github.event.pull_request.number }}/merge
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Restore style guide from base branch
-        # The PR must not be able to weaken the rules it is reviewed against.
-        # If the guide does not exist on base yet, fall back to the PR's copy.
-        run: |
-          git checkout ${{ github.event.pull_request.base.sha }} -- docs/STYLE_GUIDE.md \
-            || echo "::notice::docs/STYLE_GUIDE.md not found on base, using the PR's version"
-
-      - name: Compute PR diff
-        # Precomputed so that Claude never needs a shell to inspect the PR.
-        # Capped so a huge PR cannot blow up the context window (or the bill);
-        # beyond the cap Claude falls back to reading the changed files.
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          git diff --stat "$BASE_SHA"...HEAD > pr-changed-files.txt
-          git diff "$BASE_SHA"...HEAD > pr.diff
-          if [ "$(wc -c < pr.diff)" -gt 400000 ]; then
-            echo "DIFF TRUNCATED -- too large to include in full. Read the changed files directly instead." > pr.diff
-          fi
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          aws-access-key-id: ${{ secrets.CI_CD_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.CI_CD_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-
       - name: Review against the style guide
-        uses: anthropics/claude-code-action@v1
-        env:
-          # Billing goes through Bedrock in the WCA AWS account. Claude Code
-          # picks the credentials up from the standard AWS SDK chain, which the
-          # step above populated.
-          CLAUDE_CODE_USE_BEDROCK: '1'
-          # configure-aws-credentials already exports AWS_REGION; setting it
-          # again is deliberate. Without it Bedrock would silently fall back to
-          # us-east-1, where the models are not enabled, and the `us.` inference
-          # profile below only resolves in a US region anyway.
-          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        uses: alibaba/open-code-review@v1.8.6
+        # Advisory, never a merge gate: a provider outage or a malformed diff
+        # must not put a red X on a contributor's PR.
+        continue-on-error: true
         with:
-          use_bedrock: 'true'
-          # Using the built-in GITHUB_TOKEN means this works without installing
-          # the Claude GitHub App. Comments appear as github-actions[bot].
+          ocr_version: '1.8.6'
+
+          # Provider. See the note at the bottom of this file about Bedrock --
+          # this must be an Anthropic- or OpenAI-shaped endpoint, and a Bedrock
+          # runtime URL is neither.
+          llm_url: ${{ secrets.OCR_LLM_URL }}
+          llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN }}
+          llm_model: ${{ secrets.OCR_LLM_MODEL }}
+          # 'true' for an Anthropic-shaped endpoint, 'false' for an
+          # OpenAI-compatible one (which is what a LiteLLM proxy exposes).
+          llm_use_anthropic: 'true'
+
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # TEMPORARY: needed to see the model's actual error text in the job log.
-          # Remove once the workflow is known-good -- it prints the full session.
-          show_full_output: 'true'
-          claude_args: |
-            --model us.anthropic.claude-sonnet-5
-            --max-turns 8
-            --allowedTools "Read,Grep,Glob,mcp__github_inline_comment__create_inline_comment"
-          prompt: |
-            REPO: ${{ github.repository }}
-            PR NUMBER: ${{ github.event.pull_request.number }}
 
-            You are reviewing a pull request for compliance with this project's
-            style guide, and for nothing else.
+          # Update one summary comment in place rather than adding a new one on
+          # every push, and only add inline comments on lines that don't already
+          # have one -- otherwise a long-running PR accumulates duplicates.
+          sticky_summary: 'true'
+          incremental: 'true'
 
-            ## How to do this review
+          # Keep the high bar: low-severity findings go to the summary instead
+          # of interrupting the diff. Nothing is ever dropped.
+          route_severity_below: 'low'
 
-            1. Read `docs/STYLE_GUIDE.md` in full. It is the ONLY standard you
-               are reviewing against.
-            2. Read `pr.diff` for the changes (`pr-changed-files.txt` lists the
-               changed files). If the diff says it was truncated, read the
-               changed files directly instead.
-            3. Read surrounding code where you need context to judge whether
-               something is actually a violation.
-            4. Post inline comments on the specific lines that violate the guide,
-               using the `mcp__github_inline_comment__create_inline_comment` tool
-               with `confirmed: true`.
+          # Raw model output is kept as a workflow artifact for debugging.
+          upload_artifacts: 'true'
 
-            Inline comments are your ONLY means of output. You have no tool for
-            posting a general PR comment, so do not try: if you find nothing,
-            call no tools and simply end your turn.
-
-            ## What to flag
-
-            ONLY flag a clear violation of a specific rule in the style guide.
-            Every comment you post must:
-              * cite the section it comes from, e.g. "Style guide §3.2 (query
-                performance)";
-              * say concretely what to change, not just what is wrong;
-              * be about a line that this PR actually changed.
-
-            ## What NOT to flag
-
-            * Anything not covered by the style guide. General code review,
-              architecture opinions, bug hunting and test coverage are out of
-              scope. Someone else does those.
-            * Anything RuboCop, ESLint or Prettier already enforces. They run in
-              their own jobs and they are the authority on formatting.
-            * Pre-existing code the PR merely moved or touched incidentally.
-              Only new and modified lines are in scope.
-            * Style preferences you hold that the guide does not state.
-
-            ## Judgement
-
-            Be genuinely useful, not thorough for its own sake. A PR with no real
-            violations must get NO inline comments -- silence is the correct and
-            expected outcome for a clean PR, and false positives cost
-            contributors more than missed nits cost the project.
-
-            Pay attention to which part of the codebase you are in:
-            `next-frontend/` and `app/webpacker/` have deliberately different
-            rules (see the guide). Applying the wrong set is itself a mistake.
-
-            You are advisory. You are not a merge gate, so do not tell the author
-            their PR is blocked, and phrase findings as requests a reviewer would
-            make, not as commands.
+# ---------------------------------------------------------------------------
+# Required secrets
+#
+#   OCR_LLM_URL         LLM endpoint
+#   OCR_LLM_AUTH_TOKEN  bearer token for that endpoint
+#   OCR_LLM_MODEL       model name
+#
+# On Bedrock: pointing OCR_LLM_URL straight at a bedrock-runtime invoke URL
+# does not work, and the reason is the wire format rather than auth. A Bedrock
+# API key would satisfy OCR's bearer auth fine, but:
+#   * NewAnthropicClient appends "/v1/messages" to whatever URL it is given,
+#     turning .../invoke into .../invoke/v1/messages;
+#   * it then hands the base URL to the Anthropic SDK, which always POSTs to
+#     {base}/v1/messages -- it cannot be routed to /model/{id}/invoke;
+#   * it sends "model" in the request body, whereas InvokeModel takes the model
+#     in the path and wants anthropic_version in the body instead.
+#
+# So reaching Bedrock needs something in front that speaks one of the two
+# supported shapes:
+#
+#   1. Bedrock Access Gateway (aws-samples/bedrock-access-gateway) or LiteLLM,
+#      exposing an OpenAI-compatible endpoint that signs to Bedrock. Point
+#      OCR_LLM_URL at it and set llm_use_anthropic to 'false'. Keeps AWS
+#      billing; costs us a service to run and keep available.
+#   2. Use an Anthropic API key directly (llm_use_anthropic stays 'true').
+#      Works immediately, but billing moves to the Anthropic console and out
+#      of AWS.
+# ---------------------------------------------------------------------------
