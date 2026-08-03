@@ -3124,10 +3124,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/actioncable@npm:^8.1.300":
-  version: 8.1.300
-  resolution: "@rails/actioncable@npm:8.1.300"
-  checksum: 10c0/144e6cc6d83e5bc56287ecd3c989c494915f0bf8593eedf7cbf4c10741fa2a1f75e4bcf7963b3e14114a70563a1dd64272580f81ed707b5fbb7e3734a3f3a6a8
+"@rails/actioncable@npm:^8.1.301":
+  version: 8.1.301
+  resolution: "@rails/actioncable@npm:8.1.301"
+  checksum: 10c0/50d395e012f23b7cbdd18ad42077baaf8f15fd2b3e55cdc93e0ae771c7d24ec0deeea97062e7e9549f0ebeae3f90d6a32ef7de909389d957f87e3384fe23501e
   languageName: node
   linkType: hard
 
@@ -10517,7 +10517,7 @@ __metadata:
     "@hello-pangea/dnd": "npm:^18.0.1"
     "@playwright/test": "npm:^1.61.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.2"
-    "@rails/actioncable": "npm:^8.1.300"
+    "@rails/actioncable": "npm:^8.1.301"
     "@rails/ujs": "npm:^7.1.600"
     "@stripe/react-stripe-js": "npm:^6.8.0"
     "@stripe/stripe-js": "npm:^9.12.1"
