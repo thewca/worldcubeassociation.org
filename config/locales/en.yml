@@ -1145,6 +1145,9 @@ en:
         locale: "Locale"
         group_name: "Team/Committee Name"
         delegated_competitions_count: "Number of Delegated Competitions"
+        wca_id: "WCA ID"
+        location: "Location"
+        email: "Email"
   user_groups:
     group_types:
       board: "WCA Board of Directors"
