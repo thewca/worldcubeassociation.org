@@ -99,7 +99,9 @@ jobs:
           # Using the built-in GITHUB_TOKEN means this works without installing
           # the Claude GitHub App. Comments appear as github-actions[bot].
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          use_sticky_comment: 'true'
+          # TEMPORARY: needed to see the model's actual error text in the job log.
+          # Remove once the workflow is known-good -- it prints the full session.
+          show_full_output: 'true'
           claude_args: |
             --model us.anthropic.claude-sonnet-5
             --max-turns 8
@@ -121,7 +123,12 @@ jobs:
             3. Read surrounding code where you need context to judge whether
                something is actually a violation.
             4. Post inline comments on the specific lines that violate the guide,
-               using the `mcp__github_inline_comment__create_inline_comment` tool.
+               using the `mcp__github_inline_comment__create_inline_comment` tool
+               with `confirmed: true`.
+
+            Inline comments are your ONLY means of output. You have no tool for
+            posting a general PR comment, so do not try: if you find nothing,
+            call no tools and simply end your turn.
 
             ## What to flag
 
@@ -153,10 +160,6 @@ jobs:
             Pay attention to which part of the codebase you are in:
             `next-frontend/` and `app/webpacker/` have deliberately different
             rules (see the guide). Applying the wrong set is itself a mistake.
-
-            When you are done, post a single summary comment. If you found
-            nothing, that summary should simply say the PR looks consistent with
-            the style guide. Do not pad it with praise or a file-by-file recap.
 
             You are advisory. You are not a merge gate, so do not tell the author
             their PR is blocked, and phrase findings as requests a reviewer would
