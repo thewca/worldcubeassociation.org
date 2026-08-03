@@ -103,10 +103,13 @@ export const events = {
   byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
 
-// This is the universe of event IDs that can legitimately appear in our data, so it has to
-// include events that aren't holdable yet. It is used for ordering and validity checks,
-// not to decide which events a competition may offer.
-export const WCA_EVENT_IDS = Object.values(events.officialWithFuture).map((e) => e.id);
+// The events that are official as of today.
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+
+// The universe of event IDs that can legitimately appear in our data, including events that
+// are already announced but not holdable yet. Use this for ordering and validity checks,
+// never to decide which events a competition may offer today.
+export const WCA_EVENT_IDS_WITH_FUTURE = Object.values(events.officialWithFuture).map((e) => e.id);
 
 function extendEvents(rawEvent) {
   return {

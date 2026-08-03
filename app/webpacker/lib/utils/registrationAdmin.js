@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { countries, WCA_EVENT_IDS } from '../wca-data.js.erb';
+import { countries, WCA_EVENT_IDS_WITH_FUTURE } from '../wca-data.js.erb';
 
 export const PENDING_COLOR = 'grey';
 export const WAITLIST_COLOR = 'yellow';
@@ -166,7 +166,7 @@ export function sortRegistrations(registrations, sortColumn, sortDirection) {
         return a.competing.waiting_list_position - b.competing.waiting_list_position;
 
       default: {
-        if (WCA_EVENT_IDS.includes(sortColumn)) {
+        if (WCA_EVENT_IDS_WITH_FUTURE.includes(sortColumn)) {
           const aHasEvent = a.competing.event_ids.includes(sortColumn);
           const bHasEvent = b.competing.event_ids.includes(sortColumn);
 
