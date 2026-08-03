@@ -18,6 +18,7 @@ import { CompetitionTag, IncidentTags } from "@/components/incidents/Tags";
 import { getIncident } from "@/lib/wca/incidents/getIncident";
 import getPermissions from "@/lib/wca/permissions";
 import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
+import { getT } from "@/lib/i18n/get18n";
 
 type IncidentPageProps = {
   params: Promise<{ id: string }>;
@@ -28,10 +29,11 @@ export async function generateMetadata({
 }: IncidentPageProps): Promise<Metadata> {
   const { id } = await params;
   const { data: incident } = await getIncident(id);
+  const { t } = await getT();
 
-  if (!incident) return { title: "Incident Not Found" };
+  if (!incident) return { title: t("incidents_log.not_found") };
 
-  return { title: `Incident: ${incident.title}` };
+  return { title: `${t("incidents_log.incident")} ${incident.title}` };
 }
 
 export default async function IncidentPage({ params }: IncidentPageProps) {
@@ -42,6 +44,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
     notFound();
   }
 
+  const { t } = await getT();
   const permissions = await getPermissions();
   const canManageIncidents = Boolean(
     permissions?.canManageIncidents(incident.id),
@@ -53,7 +56,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
       <VStack gap="8" width="full" pt="8" alignItems="stretch">
         <Link href="/incidents">
           <LuArrowLeft />
-          Back to the incidents log
+          {t("incidents_log.back_to_log")}
         </Link>
 
         <Card.Root>
@@ -63,13 +66,15 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
 
               <HStack gap="4" wrap="wrap">
                 <Text as="span">
-                  Status:{" "}
+                  {t("incidents_log.status")}:{" "}
                   <Text
                     as="span"
                     fontWeight="bold"
                     color={resolved ? "green.fg" : "orange.fg"}
                   >
-                    {resolved ? "Resolved" : "Pending"}
+                    {resolved
+                      ? t("incidents_log.resolved")
+                      : t("incidents_log.pending")}
                   </Text>
                 </Text>
                 <IncidentTags tags={incident.tags} linkToSearch />
@@ -90,15 +95,14 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
                 <Alert.Root status="warning">
                   <Alert.Indicator />
                   <Alert.Title>
-                    Note: This log has not been resolved yet, so it is not
-                    publicly visible.
+                    {t("incidents_log.not_public_warning")}
                   </Alert.Title>
                 </Alert.Root>
               )}
 
               <Box>
                 <Heading size="xl" mb="4">
-                  Incident description and resolution
+                  {t("incidents_log.public_summary")}
                 </Heading>
                 <ChakraMarkdown>{incident.public_summary}</ChakraMarkdown>
               </Box>
@@ -107,7 +111,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
               {incident.private_description !== undefined && (
                 <Box>
                   <Heading size="xl" mb="4">
-                    Description (private to Delegates)
+                    {t("incidents_log.private_description")}
                   </Heading>
                   <ChakraMarkdown>
                     {incident.private_description}
@@ -118,7 +122,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
               {incident.private_wrc_decision !== undefined && (
                 <Box>
                   <Heading size="xl" mb="4">
-                    WRC Decision (private to Delegates)
+                    {t("incidents_log.private_wrc_decision")}
                   </Heading>
                   <ChakraMarkdown>
                     {incident.private_wrc_decision}

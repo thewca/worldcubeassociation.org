@@ -11,7 +11,9 @@ import {
 } from "@chakra-ui/react";
 
 import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
+import { useT } from "@/lib/i18n/useI18n";
 import type { components } from "@/types/openapi";
+import { TFunction } from "i18next";
 
 const incidentSearchUrl = (tag: string) =>
   `/incidents?tags=${encodeURIComponent(tag)}`;
@@ -29,13 +31,19 @@ export function IncidentTags({
   addToSearch,
   linkToSearch,
 }: IncidentTagsProps) {
+  const { t } = useT();
+
   return tags.map(({ name, id, url, content_html: contentHtml }) =>
     // non-regulation/guideline tags will only have a name
     id !== undefined ? (
       <RegulationTag
         key={id}
         id={id.toString()}
-        type={url.indexOf("guideline") === -1 ? "Regulation" : "Guideline"}
+        type={t(
+          url.indexOf("guideline") === -1
+            ? "incidents_log.tags.regulation"
+            : "incidents_log.tags.guideline",
+        )}
         link={url}
         description={contentHtml}
         addToSearch={addToSearch}
@@ -69,6 +77,8 @@ export function RegulationTag({
   addToSearch,
   linkToSearch,
 }: RegulationTagProps) {
+  const { t } = useT();
+
   return (
     <Tag
       tagType="incident"
@@ -77,7 +87,7 @@ export function RegulationTag({
       title={`${type} ${id}`}
       titleLink={link}
       description={description}
-      buttons={searchForTag(id, addToSearch, linkToSearch)}
+      buttons={searchForTag(t, id, addToSearch, linkToSearch)}
     />
   );
 }
@@ -89,6 +99,7 @@ interface MiscTagProps {
 }
 
 function searchForTag(
+  t: TFunction,
   tag: string,
   addToSearch?: (tag: string) => void,
   linkToSearch?: boolean,
@@ -100,24 +111,30 @@ function searchForTag(
         target="_blank"
         rel="noopener noreferrer"
       >
-        Search incidents with this tag
+        {t("incidents_log.tags.search_with_tag")}
       </Link>
     );
   }
 
   if (addToSearch) {
-    return <Button onClick={() => addToSearch(tag)}>Filter by this tag</Button>;
+    return (
+      <Button onClick={() => addToSearch(tag)}>
+        {t("incidents_log.tags.filter_by_tag")}
+      </Button>
+    );
   }
 }
 
 export function MiscTag({ tag, addToSearch, linkToSearch }: MiscTagProps) {
+  const { t } = useT();
+
   return (
     <Tag
       tagType="incident"
       labelClass="default"
       label={tag}
       title={tag}
-      buttons={searchForTag(tag, addToSearch, linkToSearch)}
+      buttons={searchForTag(t, tag, addToSearch, linkToSearch)}
     />
   );
 }
@@ -133,13 +150,14 @@ const competitionReportUrl = (id: string) =>
   `/competitions/${id}/delegate-report`;
 
 export function CompetitionTag({ id, name, comments }: CompetitionTagProps) {
+  const { t } = useT();
   const { data: permissions } = usePermissionsQuery();
   const canViewDelegateMatters = permissions?.canViewDelegateReport(id);
 
   const links = (
     <>
       <Link href={competitionUrl(id)} className="hide-new-window-icon">
-        Competition Page
+        {t("incidents_log.tags.competition_page")}
       </Link>
       {canViewDelegateMatters && (
         <>
@@ -148,7 +166,7 @@ export function CompetitionTag({ id, name, comments }: CompetitionTagProps) {
             href={competitionReportUrl(id)}
             className="hide-new-window-icon"
           >
-            Delegate Report
+            {t("incidents_log.tags.delegate_report")}
           </Link>
         </>
       )}

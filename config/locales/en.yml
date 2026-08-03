@@ -2796,6 +2796,52 @@ en:
     #context: disclaimer displayed to inform incidents are only in English
     i18n_disclaimer: "Please note the incidents section is only available in English, the content below is not translated."
     incident: "Incident:"
+    title: "Incidents Log"
+    #context: shown when no incident exists for the requested ID
+    not_found: "Incident Not Found"
+    #context: link leading from a single incident back to the list of all incidents
+    back_to_log: "Back to the incidents log"
+    search_placeholder: "Search"
+    status: "Status"
+    #context: an incident which has been resolved and is therefore publicly visible
+    resolved: "Resolved"
+    #context: an incident which has not been resolved yet
+    pending: "Pending"
+    #context: column header, whether the incident has already been sent out in a WRC digest
+    sent_in_digest: "Sent in digest"
+    #context: an incident which has been sent out in a WRC digest
+    sent: "Sent"
+    #context: "<select>" is a dropdown to pick how many incidents are shown per page, please keep it within the sentence
+    showing_entries: "Showing entries %{first} to %{last} of %{total} entries with <select></select> per page"
+    #context: warning shown to Delegates when looking at an incident which is not resolved yet
+    not_public_warning: "Note: This log has not been resolved yet, so it is not publicly visible."
+    public_summary: "Incident description and resolution"
+    private_description: "Description (private to Delegates)"
+    private_wrc_decision: "WRC Decision (private to Delegates)"
+    #context: labels of the tags attached to an incident
+    tags:
+      regulation: "Regulation"
+      guideline: "Guideline"
+      search_with_tag: "Search incidents with this tag"
+      filter_by_tag: "Filter by this tag"
+      competition_page: "Competition Page"
+      delegate_report: "Delegate Report"
+    #context: actions only available to people who can manage incidents
+    admin:
+      publish: "Publish"
+      unpublish: "Unpublish"
+      edit: "Edit"
+      destroy: "Destroy"
+      cancel: "Cancel"
+      confirm: "Confirm"
+      change_status: "Change status"
+      destroy_title: "Destroy incident"
+      confirm_publish: "You are about to make this incident log public, are you sure?"
+      confirm_unpublish: "You are about to unpublish this incident log, are you sure?"
+      confirm_destroy: "Are you sure you want to delete this incident?"
+      publish_error: "Could not publish this incident."
+      unpublish_error: "Could not unpublish this incident."
+      destroy_error: "Could not delete this incident."
   #context: About the regulations
   about_regulations:
     title: "About the Regulations"

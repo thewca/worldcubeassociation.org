@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ConfirmDialog } from "@/providers/ConfirmProvider";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import useAPI from "@/lib/wca/useAPI";
+import { useT } from "@/lib/i18n/useI18n";
 
 interface IncidentAdminButtonsProps {
   incidentId: string;
@@ -16,6 +17,7 @@ export default function IncidentAdminButtons({
   incidentId,
   resolved,
 }: IncidentAdminButtonsProps) {
+  const { t } = useT();
   const api = useAPI();
   const router = useRouter();
   const [confirming, setConfirming] = useState<"publish" | "destroy" | null>(
@@ -29,7 +31,11 @@ export default function IncidentAdminButtons({
       onSuccess: () => router.refresh(),
       onError: () =>
         toaster.create({
-          description: `Could not ${resolved ? "unpublish" : "publish"} this incident.`,
+          description: t(
+            resolved
+              ? "incidents_log.admin.unpublish_error"
+              : "incidents_log.admin.publish_error",
+          ),
           type: "error",
         }),
     },
@@ -42,7 +48,7 @@ export default function IncidentAdminButtons({
       onSuccess: () => router.push("/incidents"),
       onError: () =>
         toaster.create({
-          description: "Could not delete this incident.",
+          description: t("incidents_log.admin.destroy_error"),
           type: "error",
         }),
     },
@@ -73,36 +79,52 @@ export default function IncidentAdminButtons({
           loading={isMarking}
           onClick={() => setConfirming("publish")}
         >
-          {resolved ? "Unpublish" : "Publish"}
+          {t(
+            resolved
+              ? "incidents_log.admin.unpublish"
+              : "incidents_log.admin.publish",
+          )}
         </Button>
         <Button asChild colorPalette="blue">
           {/* The incident editor still lives in the monolith. */}
-          <Link href={`/incidents/${incidentId}/edit`}>Edit</Link>
+          <Link href={`/incidents/${incidentId}/edit`}>
+            {t("incidents_log.admin.edit")}
+          </Link>
         </Button>
         <Button
           colorPalette="red"
           loading={isDestroying}
           onClick={() => setConfirming("destroy")}
         >
-          Destroy
+          {t("incidents_log.admin.destroy")}
         </Button>
       </ButtonGroup>
 
       <ConfirmDialog
         lazyMount
         open={confirming !== null}
-        title={confirming === "destroy" ? "Destroy incident" : "Change status"}
+        title={t(
+          confirming === "destroy"
+            ? "incidents_log.admin.destroy_title"
+            : "incidents_log.admin.change_status",
+        )}
         onCancel={() => setConfirming(null)}
         onConfirm={handleConfirm}
-        cancelButton="Cancel"
-        confirmButton={confirming === "destroy" ? "Destroy" : "Confirm"}
+        cancelButton={t("incidents_log.admin.cancel")}
+        confirmButton={t(
+          confirming === "destroy"
+            ? "incidents_log.admin.destroy"
+            : "incidents_log.admin.confirm",
+        )}
       >
         <Text>
-          {confirming === "destroy"
-            ? "Are you sure you want to delete this incident?"
-            : resolved
-              ? "You are about to unpublish this incident log, are you sure?"
-              : "You are about to make this incident log public, are you sure?"}
+          {t(
+            confirming === "destroy"
+              ? "incidents_log.admin.confirm_destroy"
+              : resolved
+                ? "incidents_log.admin.confirm_unpublish"
+                : "incidents_log.admin.confirm_publish",
+          )}
         </Text>
       </ConfirmDialog>
 

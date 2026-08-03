@@ -22,7 +22,9 @@ import { Suspense, useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Loading from "@/components/ui/loading";
 import _ from "lodash";
+import { Trans } from "react-i18next";
 import { CompetitionTag, IncidentTags } from "@/components/incidents/Tags";
+import { useT } from "@/lib/i18n/useI18n";
 
 const itemsPerPageChoices = createListCollection({
   items: [5, 10, 15, 20, 30, 40],
@@ -39,6 +41,7 @@ export default function IncidentsPage() {
 }
 
 function IncidentsLog() {
+  const { t } = useT();
   const api = useAPIClient();
   const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
@@ -115,9 +118,9 @@ function IncidentsLog() {
   return (
     <Container bg="bg">
       <VStack align="left">
-        <Heading size="5xl">Incidents Log</Heading>
+        <Heading size="5xl">{t("incidents_log.title")}</Heading>
         <Input
-          placeholder="Search"
+          placeholder={t("incidents_log.search_placeholder")}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -125,11 +128,21 @@ function IncidentsLog() {
         <Table.Root size="sm" variant="outline" striped>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>Title</Table.ColumnHeader>
-              <Table.ColumnHeader>Tags</Table.ColumnHeader>
-              <Table.ColumnHeader>Happened during</Table.ColumnHeader>
-              <Table.ColumnHeader>Status</Table.ColumnHeader>
-              <Table.ColumnHeader>Sent in digest</Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("activerecord.attributes.incident.title")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("activerecord.attributes.incident.tags")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("activerecord.attributes.incident.competition_id")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("incidents_log.status")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("incidents_log.sent_in_digest")}
+              </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -152,12 +165,18 @@ function IncidentsLog() {
                   ))}
                 </Table.Cell>
                 <Table.Cell>
-                  {item.resolved_at ? "Resolved" : "Pending"}
+                  {t(
+                    item.resolved_at
+                      ? "incidents_log.resolved"
+                      : "incidents_log.pending",
+                  )}
                 </Table.Cell>
                 <Table.Cell>
-                  {item.digest_worthy && item.digest_sent_at
-                    ? "Sent"
-                    : "Pending"}
+                  {t(
+                    item.digest_worthy && item.digest_sent_at
+                      ? "incidents_log.sent"
+                      : "incidents_log.pending",
+                  )}
                 </Table.Cell>
               </Table.Row>
             ))}
@@ -165,42 +184,51 @@ function IncidentsLog() {
         </Table.Root>
 
         <HStack justify="space-between">
-          <Text as="span">
-            Showing entries {topEntryIndex + 1} to {bottomEntryIndex + 1} of{" "}
-            {totalEntries} entries with{" "}
-            <Select.Root
-              collection={itemsPerPageChoices}
-              value={[itemsPerPage.toString()]}
-              onValueChange={(e) => setItemsPerPage(parseInt(e.value[0]))}
-              width="5rem"
-              display="inline-block"
-            >
-              <Select.HiddenSelect />
+          <Trans
+            parent={Text}
+            t={t}
+            i18nKey="incidents_log.showing_entries"
+            values={{
+              first: topEntryIndex + 1,
+              last: bottomEntryIndex + 1,
+              total: totalEntries,
+            }}
+            components={{
+              select: (
+                <Select.Root
+                  collection={itemsPerPageChoices}
+                  value={[itemsPerPage.toString()]}
+                  onValueChange={(e) => setItemsPerPage(parseInt(e.value[0]))}
+                  width="5rem"
+                  display="inline-block"
+                >
+                  <Select.HiddenSelect />
 
-              <Select.Control>
-                <Select.Trigger>
-                  <Select.ValueText />
-                </Select.Trigger>
-                <Select.IndicatorGroup>
-                  <Select.Indicator />
-                </Select.IndicatorGroup>
-              </Select.Control>
+                  <Select.Control>
+                    <Select.Trigger>
+                      <Select.ValueText />
+                    </Select.Trigger>
+                    <Select.IndicatorGroup>
+                      <Select.Indicator />
+                    </Select.IndicatorGroup>
+                  </Select.Control>
 
-              <Select.Positioner>
-                <Select.Content>
-                  {itemsPerPageChoices.items.map((perPageChoice) => (
-                    <Select.Item
-                      key={perPageChoice.toString()}
-                      item={perPageChoice.toString()}
-                    >
-                      {perPageChoice}
-                    </Select.Item>
-                  ))}
-                </Select.Content>
-              </Select.Positioner>
-            </Select.Root>
-            per page
-          </Text>
+                  <Select.Positioner>
+                    <Select.Content>
+                      {itemsPerPageChoices.items.map((perPageChoice) => (
+                        <Select.Item
+                          key={perPageChoice.toString()}
+                          item={perPageChoice.toString()}
+                        >
+                          {perPageChoice}
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Positioner>
+                </Select.Root>
+              ),
+            }}
+          />
 
           <Pagination.Root
             count={totalEntries}
