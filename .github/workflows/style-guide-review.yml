@@ -16,7 +16,7 @@ name: Style guide review
 # Keep it that way when editing this file.
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, ready_for_review]
     paths:
       - 'app/**'
