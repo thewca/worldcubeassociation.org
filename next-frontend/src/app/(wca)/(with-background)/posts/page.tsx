@@ -1,4 +1,4 @@
-import { Container, Heading, Text, VStack } from "@chakra-ui/react";
+import { Card, Container, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -40,32 +40,37 @@ export default async function AnnouncementsPage({
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
 
   return (
-    <Container>
-      <VStack align="stretch" gap={8} py={8}>
-        <Heading size="5xl">Announcements</Heading>
+    <Container py={8}>
+      <Card.Root size="md">
+        <Card.Header>
+          <Heading textStyle="h1">Announcements</Heading>
+        </Card.Header>
+        <Card.Body>
+          <VStack align="stretch" gap={8}>
+            {announcements.docs.length === 0 ? (
+              <Text>There are no announcements yet.</Text>
+            ) : (
+              announcements.docs.map((announcement: Announcement, index) => (
+                <AnnouncementCard
+                  key={announcement.id}
+                  announcement={announcement}
+                  colorPalette={
+                    CARD_COLOR_PALETTES[
+                      (firstIndexOnPage + index) % CARD_COLOR_PALETTES.length
+                    ]
+                  }
+                />
+              ))
+            )}
 
-        {announcements.docs.length === 0 ? (
-          <Text>There are no announcements yet.</Text>
-        ) : (
-          announcements.docs.map((announcement: Announcement, index) => (
-            <AnnouncementCard
-              key={announcement.id}
-              announcement={announcement}
-              colorPalette={
-                CARD_COLOR_PALETTES[
-                  (firstIndexOnPage + index) % CARD_COLOR_PALETTES.length
-                ]
-              }
+            <AnnouncementsPagination
+              page={currentPage}
+              totalAnnouncements={announcements.totalDocs}
+              pageSize={ANNOUNCEMENTS_PER_PAGE}
             />
-          ))
-        )}
-
-        <AnnouncementsPagination
-          page={currentPage}
-          totalAnnouncements={announcements.totalDocs}
-          pageSize={ANNOUNCEMENTS_PER_PAGE}
-        />
-      </VStack>
+          </VStack>
+        </Card.Body>
+      </Card.Root>
     </Container>
   );
 }
