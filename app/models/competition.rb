@@ -219,6 +219,8 @@ class Competition < ApplicationRecord
   MAX_GUEST_LIMIT = 100
   NEWCOMER_MONTH_ENABLED = false
   NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
+  # Face Turning Octahedron only becomes an official event from this date onwards.
+  FTO_INTRODUCTION_DATE = Date.new(2027, 1, 2)
 
   validates :competitor_limit_enabled, inclusion: { in: [true, false], if: :competitor_limit_required? }
   validates :competitor_limit, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled? }
@@ -352,6 +354,14 @@ class Competition < ApplicationRecord
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   private def must_have_at_least_one_event
     errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event')) if no_events?
+  end
+
+  validate :fto_not_before_introduction_date, if: :start_date?
+  private def fto_not_before_introduction_date
+    return unless self.event_ids.include?("fto")
+    return if start_date >= FTO_INTRODUCTION_DATE
+
+    errors.add(:competition_events, I18n.t('competitions.errors.fto_not_yet_allowed', date: I18n.l(FTO_INTRODUCTION_DATE, format: :long)))
   end
 
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation

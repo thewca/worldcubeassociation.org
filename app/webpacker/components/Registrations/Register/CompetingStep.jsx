@@ -21,7 +21,7 @@ import { showMessage } from './RegistrationMessage';
 import I18n from '../../../lib/i18n';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { events, defaultGuestLimit, WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
+import { events, defaultGuestLimit, WCA_EVENT_IDS_WITH_FUTURE } from '../../../lib/wca-data.js.erb';
 import { eventsNotQualifiedFor, isQualifiedForEvent } from '../../../lib/helpers/qualifications';
 import { eventQualificationToString } from '../../../lib/utils/wcif';
 import { hasNotPassed } from '../../../lib/utils/dates';
@@ -110,7 +110,11 @@ export default function CompetingStep({
   const setComment = useInputUpdater(setCommentRaw);
 
   const [nativeEventIds, setNativeEventIds] = useFormObjectState('event_ids', ['competing']);
-  const selectedEventIds = useOrderedSetWrapper(nativeEventIds, setNativeEventIds, WCA_EVENT_IDS);
+  const selectedEventIds = useOrderedSetWrapper(
+    nativeEventIds,
+    setNativeEventIds,
+    WCA_EVENT_IDS_WITH_FUTURE,
+  );
 
   const [guests, setGuestsRaw] = useFormObjectState('guests');
   const setGuests = useInputUpdater(setGuestsRaw, true);

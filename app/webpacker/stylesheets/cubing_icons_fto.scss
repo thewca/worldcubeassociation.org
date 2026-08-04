@@ -1,0 +1,5 @@
+// @cubing/icons only ships this glyph as 'unofficial-fto', but we render
+// official events with the 'event-<id>' class.
+.cubing-icon.event-fto:before {
+  content: "\f135";
+}
