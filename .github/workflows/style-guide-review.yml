@@ -116,10 +116,15 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # TEMPORARY: without this the action prints is_error:true but swallows
           # the model's actual error text, which makes every failure look alike.
-          # Remove once the Haiku model access question is settled.
+          # Remove once this run has confirmed the cost, and note that it prints
+          # the whole session into a log anyone can read.
           show_full_output: 'true'
+          # On the model choice: Haiku 4.5 was tried on 2026-08-04 and found 3 of
+          # 6 known violations on the same PR where Sonnet found all 6. Roughly a
+          # third of the price, but a reviewer that misses half the findings is
+          # not worth the saving. Don't switch back without re-testing.
           claude_args: |
-            --model us.anthropic.claude-haiku-4-5-20251001-v1:0
+            --model us.anthropic.claude-sonnet-5
             --max-turns 8
             --allowedTools "Read,Grep,Glob,mcp__github_inline_comment__create_inline_comment"
             --disallowedTools "Bash,Write,Edit,MultiEdit,NotebookEdit,WebFetch,WebSearch,Task,KillShell,BashOutput"
