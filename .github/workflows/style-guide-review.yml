@@ -64,14 +64,9 @@ jobs:
         with:
           ocr_version: '1.8.6'
 
-          # Provider. See the note at the bottom of this file about Bedrock --
-          # this must be an Anthropic- or OpenAI-shaped endpoint, and a Bedrock
-          # runtime URL is neither.
-          llm_url: ${{ secrets.OCR_LLM_URL }}
+          llm_url: https://api.deepseek.com/anthropic
           llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN }}
-          llm_model: ${{ secrets.OCR_LLM_MODEL }}
-          # 'true' for an Anthropic-shaped endpoint, 'false' for an
-          # OpenAI-compatible one (which is what a LiteLLM proxy exposes).
+          llm_model: deepseek-v4-pro
           llm_use_anthropic: 'true'
 
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -88,32 +83,3 @@ jobs:
 
           # Raw model output is kept as a workflow artifact for debugging.
           upload_artifacts: 'true'
-
-# ---------------------------------------------------------------------------
-# Required secrets
-#
-#   OCR_LLM_URL         LLM endpoint
-#   OCR_LLM_AUTH_TOKEN  bearer token for that endpoint
-#   OCR_LLM_MODEL       model name
-#
-# On Bedrock: pointing OCR_LLM_URL straight at a bedrock-runtime invoke URL
-# does not work, and the reason is the wire format rather than auth. A Bedrock
-# API key would satisfy OCR's bearer auth fine, but:
-#   * NewAnthropicClient appends "/v1/messages" to whatever URL it is given,
-#     turning .../invoke into .../invoke/v1/messages;
-#   * it then hands the base URL to the Anthropic SDK, which always POSTs to
-#     {base}/v1/messages -- it cannot be routed to /model/{id}/invoke;
-#   * it sends "model" in the request body, whereas InvokeModel takes the model
-#     in the path and wants anthropic_version in the body instead.
-#
-# So reaching Bedrock needs something in front that speaks one of the two
-# supported shapes:
-#
-#   1. Bedrock Access Gateway (aws-samples/bedrock-access-gateway) or LiteLLM,
-#      exposing an OpenAI-compatible endpoint that signs to Bedrock. Point
-#      OCR_LLM_URL at it and set llm_use_anthropic to 'false'. Keeps AWS
-#      billing; costs us a service to run and keep available.
-#   2. Use an Anthropic API key directly (llm_use_anthropic stays 'true').
-#      Works immediately, but billing moves to the Anthropic console and out
-#      of AWS.
-# ---------------------------------------------------------------------------
