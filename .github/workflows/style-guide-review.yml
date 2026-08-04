@@ -115,7 +115,7 @@ jobs:
           # the Claude GitHub App. Comments appear as github-actions[bot].
           github_token: ${{ secrets.GITHUB_TOKEN }}
           claude_args: |
-            --model us.anthropic.claude-sonnet-5
+            --model us.anthropic.claude-haiku-4-5-20251001-v1:0
             --max-turns 8
             --allowedTools "Read,Grep,Glob,mcp__github_inline_comment__create_inline_comment"
             --disallowedTools "Bash,Write,Edit,MultiEdit,NotebookEdit,WebFetch,WebSearch,Task,KillShell,BashOutput"
