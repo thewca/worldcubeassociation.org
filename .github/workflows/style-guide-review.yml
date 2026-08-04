@@ -114,6 +114,10 @@ jobs:
           # Using the built-in GITHUB_TOKEN means this works without installing
           # the Claude GitHub App. Comments appear as github-actions[bot].
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          # TEMPORARY: without this the action prints is_error:true but swallows
+          # the model's actual error text, which makes every failure look alike.
+          # Remove once the Haiku model access question is settled.
+          show_full_output: 'true'
           claude_args: |
             --model us.anthropic.claude-haiku-4-5-20251001-v1:0
             --max-turns 8
