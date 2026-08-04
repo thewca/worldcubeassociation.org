@@ -14,6 +14,12 @@ name: Style guide review
 #   * the style guide is restored from the base branch, so a PR cannot edit
 #     the rules it is about to be judged against
 # Keep it that way when editing this file.
+#
+# NOTE ON TOOL RESTRICTION: `--allowedTools` does NOT restrict anything. It only
+# marks tools as not needing an interactive permission prompt; every other tool
+# stays available. A run on 2026-08-03 called Bash despite the allowlist below,
+# with no permission denial. `--disallowedTools` is what actually enforces the
+# contract above -- do not drop it, and add to it if new tools appear.
 
 on:
   pull_request:
@@ -66,12 +72,16 @@ jobs:
         # Precomputed so that Claude never needs a shell to inspect the PR.
         # Capped so a huge PR cannot blow up the context window (or the bill);
         # beyond the cap Claude falls back to reading the changed files.
+        #
+        # 60KB is roughly 15k tokens. The cap is the tail-risk control: the whole
+        # diff sits in the cached prefix and is re-read on every turn, so an
+        # uncapped 400KB diff could cost several dollars on its own.
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           git diff --stat "$BASE_SHA"...HEAD > pr-changed-files.txt
           git diff "$BASE_SHA"...HEAD > pr.diff
-          if [ "$(wc -c < pr.diff)" -gt 400000 ]; then
+          if [ "$(wc -c < pr.diff)" -gt 60000 ]; then
             echo "DIFF TRUNCATED -- too large to include in full. Read the changed files directly instead." > pr.diff
           fi
 
@@ -94,18 +104,21 @@ jobs:
           # us-east-1, where the models are not enabled, and the `us.` inference
           # profile below only resolves in a US region anyway.
           AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          # Matching code against a written rulebook is closer to classification
+          # than open-ended reasoning, and thinking tokens bill as output. A run
+          # that produced ~1.5k tokens of actual comments spent ~14k output
+          # tokens in total, nearly all of it thinking.
+          MAX_THINKING_TOKENS: '0'
         with:
           use_bedrock: 'true'
           # Using the built-in GITHUB_TOKEN means this works without installing
           # the Claude GitHub App. Comments appear as github-actions[bot].
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # TEMPORARY: needed to see the model's actual error text in the job log.
-          # Remove once the workflow is known-good -- it prints the full session.
-          show_full_output: 'true'
           claude_args: |
             --model us.anthropic.claude-sonnet-5
             --max-turns 8
             --allowedTools "Read,Grep,Glob,mcp__github_inline_comment__create_inline_comment"
+            --disallowedTools "Bash,Write,Edit,MultiEdit,NotebookEdit,WebFetch,WebSearch,Task,KillShell,BashOutput"
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
