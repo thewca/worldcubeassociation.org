@@ -1650,13 +1650,6 @@ class Competition < ApplicationRecord
     end
   end
 
-  # For associated_events_picker
-  def events_to_associated_events(events)
-    events.map do |event|
-      competition_events.find_by(event_id: event.id) || competition_events.build(event_id: event.id)
-    end
-  end
-
   def self.years
     Competition.where(show_at_all: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
