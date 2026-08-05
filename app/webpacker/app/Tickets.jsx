@@ -7,6 +7,7 @@ import Loading from '../components/Requests/Loading';
 import Errored from '../components/Requests/Errored';
 import useInputState from '../lib/hooks/useInputState';
 import WCAQueryClientProvider from '../lib/providers/WCAQueryClientProvider';
+import ConfirmProvider from '../lib/providers/ConfirmProvider';
 import TicketContent from '../components/Tickets/TicketContent';
 import SkateholderSelector from '../components/Tickets/SkateholderSelector';
 import getTicketDetails from '../components/Tickets/api/getTicketDetails';
@@ -15,7 +16,9 @@ import SelfRoleAssigner from '../components/Tickets/SelfRoleAssigner';
 export default function Wrapper({ id }) {
   return (
     <WCAQueryClientProvider>
-      <Tickets id={id} />
+      <ConfirmProvider>
+        <Tickets id={id} />
+      </ConfirmProvider>
     </WCAQueryClientProvider>
   );
 }
