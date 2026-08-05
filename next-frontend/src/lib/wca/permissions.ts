@@ -17,7 +17,9 @@ export interface PermissionFunctions {
   canReadGroupCurrent: (group: string) => boolean;
   canReadGroupPast: (group: string) => boolean;
   canRequestToEditProfile: (profile: string) => boolean;
-  canManageIncidents: (incident: string) => boolean;
+  // `can_manage_incidents` is granted to WRC and admins for every incident or none, so unlike its
+  // siblings its scope is never a list of ids and there is nothing to pass in.
+  canManageIncidents: () => boolean;
 }
 
 export type UserPermissions = components["schemas"]["UserPermissions"];
@@ -124,11 +126,7 @@ export const hydrateUserPermissions = (
         rawPermissions.can_request_to_edit_others_profile.scope,
       ),
     ),
-  canManageIncidents: (incident) =>
-    Boolean(
-      rawPermissions &&
-      allOrSpecificScope(incident, rawPermissions.can_manage_incidents.scope),
-    ),
+  canManageIncidents: () => rawPermissions?.can_manage_incidents.scope === "*",
 });
 
 const fetchPermissions = cache(async (authToken: string) => {
