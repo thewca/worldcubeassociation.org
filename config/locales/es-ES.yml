@@ -119,6 +119,8 @@ es-ES:
     555bf: 5x5x5 Ciega
     #original_hash: cedbf87
     333mbf: 3x3x3 Multi Ciega
+    #original_hash: a103de4
+    fto: FTO
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
@@ -2722,7 +2724,7 @@ es-ES:
         nacimiento, Género, Correo electrónico, y una columna para cada
         categoría.
       #original_hash: 01beb54
-      preview: Datos Previos de Registro
+      preview: Previsualizar datos de registro
       #original_hash: d6fbc9d
       import: Importar
       #original_hash: 77dfd21
@@ -4546,6 +4548,8 @@ es-ES:
       cannot_delete_confirmed: No puedes eliminar una competición confirmada.
       #original_hash: 191df37
       must_contain_event: tiene que tener al menos una categoría
+      #original_hash: d01c9f5
+      fto_not_yet_allowed: 'FTO no puede usarse en competiciones que empiecen antes del %{date}.'
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
         tiene que tener al menos una ronda y todas las rondas tienen que estar
