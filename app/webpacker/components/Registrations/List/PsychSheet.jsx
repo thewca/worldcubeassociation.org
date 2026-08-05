@@ -116,7 +116,7 @@ export default function PsychSheet({
         returnerCount={returnerCount}
         onScrollToMeClick={onScrollToMeClick}
       />
-      <div style={{ marginBottom: '1em' }}>
+      <Segment basic>
         <Input
           fluid
           icon={<Icon name="search" />}
@@ -125,7 +125,7 @@ export default function PsychSheet({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-      </div>
+      </Segment>
       <div style={{ overflowX: 'auto' }}>
         <Table striped sortable unstackable compact singleLine textAlign="left">
           <PsychSheetHeader
