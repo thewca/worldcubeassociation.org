@@ -1720,8 +1720,8 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
             /** Format: date-time */
-            resolved_at: string;
-            digest_worthy: boolean;
+            resolved_at?: string;
+            digest_worthy?: boolean;
             /** Format: date-time */
             digest_sent_at?: string;
             /** Format: uri */
@@ -2040,6 +2040,15 @@ export interface components {
             };
             content: {
                 "application/json": components["schemas"]["Competition404"];
+            };
+        };
+        /** @description Incident not found, or not visible to the current user */
+        IncidentNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["General404"];
             };
         };
     };
@@ -2844,17 +2853,7 @@ export interface operations {
                     "application/json": components["schemas"]["Incident"];
                 };
             };
-            /** @description Incident not found, or not visible to the current user */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        error: string;
-                    };
-                };
-            };
+            404: components["responses"]["IncidentNotFound"];
         };
     };
     deleteIncident: {
@@ -2881,6 +2880,7 @@ export interface operations {
             };
             401: components["responses"]["NotLoggedIn"];
             403: components["responses"]["NotPermitted"];
+            404: components["responses"]["IncidentNotFound"];
         };
     };
     incidentMarkAs: {
@@ -2904,8 +2904,31 @@ export interface operations {
                     "application/json": components["schemas"]["Incident"];
                 };
             };
+            /** @description The `kind` is not one of the recognized actions */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                    };
+                };
+            };
             401: components["responses"]["NotLoggedIn"];
             403: components["responses"]["NotPermitted"];
+            404: components["responses"]["IncidentNotFound"];
+            /** @description The incident could not be updated */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string[];
+                    };
+                };
+            };
         };
     };
     omniSearch: {

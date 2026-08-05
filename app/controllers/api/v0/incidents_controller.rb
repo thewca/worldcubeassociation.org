@@ -20,9 +20,13 @@ class Api::V0::IncidentsController < Api::V0::ApiController
   end
 
   def show
-    incident = Incident.includes(:competitions, :incident_tags).find(params.require(:id))
-    # Unresolved incidents are not publicly visible, mirroring the scoping in `index`.
-    return render status: :not_found, json: { error: "Incident not found" } unless incident.resolved? || current_user&.can_manage_incidents?
+    # Unresolved incidents are not publicly visible, mirroring the scoping in `index`. Scoping the
+    # lookup rather than checking after the fact lets `find` raise, so a hidden incident and a
+    # missing one produce the same 404 through the shared `ActiveRecord::RecordNotFound` handler.
+    base_model = current_user&.can_manage_incidents? ? Incident.all : Incident.resolved
+    # `serializable_hash` walks the tags and the competition of each `incident_competition`.
+    incident = base_model.includes(:incident_tags, incident_competitions: :competition)
+                         .find(params.require(:id))
 
     render json: incident.as_json(
       can_view_delegate_matters: current_user&.can_view_delegate_matters?,
@@ -43,7 +47,9 @@ class Api::V0::IncidentsController < Api::V0::ApiController
 
     return render status: :unprocessable_content, json: { error: incident.errors.full_messages } unless incident.update(resolved_at: resolved_at)
 
-    render json: incident.as_json(can_view_delegate_matters: true)
+    render json: incident.as_json(
+      can_view_delegate_matters: current_user.can_view_delegate_matters?,
+    )
   end
 
   def destroy

@@ -24,7 +24,34 @@ patch:
         application/json:
           schema:
             $ref: '../../schemas/regulations/Incident.yaml'
+    '400':
+      description: The `kind` is not one of the recognized actions
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+            properties:
+              error:
+                type: string
     '401':
       $ref: '../../errorResponses/NotLoggedIn.yaml'
     '403':
       $ref: '../../errorResponses/NotPermitted.yaml'
+    '404':
+      $ref: '../../errorResponses/IncidentNotFound.yaml'
+    '422':
+      description: The incident could not be updated
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+            properties:
+              # One entry per validation failure, so the frontend can render them as a list.
+              error:
+                type: array
+                items:
+                  type: string

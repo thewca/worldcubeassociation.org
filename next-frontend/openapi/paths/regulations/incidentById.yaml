@@ -17,16 +17,7 @@ get:
           schema:
             $ref: '../../schemas/regulations/Incident.yaml'
     '404':
-      description: Incident not found, or not visible to the current user
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - error
-            properties:
-              error:
-                type: string
+      $ref: '../../errorResponses/IncidentNotFound.yaml'
 delete:
   summary: Delete an incident
   tags:
@@ -54,3 +45,5 @@ delete:
       $ref: '../../errorResponses/NotLoggedIn.yaml'
     '403':
       $ref: '../../errorResponses/NotPermitted.yaml'
+    '404':
+      $ref: '../../errorResponses/IncidentNotFound.yaml'
