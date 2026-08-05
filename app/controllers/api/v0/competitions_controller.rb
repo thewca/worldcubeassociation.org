@@ -92,10 +92,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     rounds = competition.rounds
                         .h2h
-                        .includes(h2h_matches: [
-                                    { h2h_match_competitors: :user },
-                                    { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
-                                  ])
+                        .includes(
+                          { results: { person: :user } },
+                          { live_results: :registration },
+                          h2h_matches: [
+                            { h2h_match_competitors: :user },
+                            { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
+                          ],
+                        )
 
     render json: rounds.map(&:to_h2h_json)
   end
