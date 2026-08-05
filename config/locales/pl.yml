@@ -119,6 +119,8 @@ pl:
     555bf: 5x5x5 Bez patrzenia
     #original_hash: cedbf87
     333mbf: 3x3x3 Wiele kostek bez patrzenia
+    #original_hash: a103de4
+    fto: FTO
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
@@ -4482,6 +4484,8 @@ pl:
       cannot_delete_confirmed: Nie można usunąć potwierdzonych zawodów.
       #original_hash: 191df37
       must_contain_event: musi zawierać co najmniej jedną konkurencję
+      #original_hash: d01c9f5
+      fto_not_yet_allowed: 'FTO nie może być przeprowadzane na zawodach przed  %{date}.'
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
         musi mieć co najmniej jedną rundę, harmonogram musi zawierać wszystkie
