@@ -188,6 +188,11 @@ RSpec.describe Round do
       round3.participation_source = round2
       expect(round3).to be_valid
     end
+
+    it "requires a participation source" do
+      round3.participation_source = nil
+      expect(round3).to be_invalid_with_errors(participation_source: ["must exist"])
+    end
   end
 end
 

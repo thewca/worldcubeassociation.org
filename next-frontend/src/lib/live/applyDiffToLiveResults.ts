@@ -37,7 +37,14 @@ export function applyDiffToLiveResults({
 
   const diffedResults = retainedResults.map((res) => {
     const update = updatesMap.get(res.registration_id) ?? {};
-    return { ...res, ...update };
+    // The backend recomputes forecast stats whenever attempts change and omits
+    // them once a result is complete, so attempts arriving without forecast
+    // stats means the result completed: clear any stale stats.
+    const forecastReset =
+      "attempts" in update && !("forecast_statistics" in update)
+        ? { forecast_statistics: null }
+        : {};
+    return { ...res, ...update, ...forecastReset };
   });
 
   return [...diffedResults, ...created].map((r) =>

@@ -95,6 +95,7 @@ export type IconName =
   | 'WCA Delegates'
   | 'WCA Documents'
   | 'WCA Live'
+  | 'WCA Logo'
   | 'WCA Officers and Board'
   | 'Weibo'
   | 'X (formerly Twitter)'
@@ -489,6 +490,10 @@ export interface Announcement {
   id: string;
   image?: (string | null) | Media;
   title: string;
+  /**
+   * Shown on the announcements list before 'Read More'. Falls back to the beginning of the content when empty.
+   */
+  summary?: string | null;
   content: {
     root: {
       type: string;
@@ -505,6 +510,9 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
+  /**
+   * Optional. When set, the 'Read More' button links to this URL instead of expanding the content.
+   */
   url?: string | null;
   publishedAt: string;
   publishedBy: string | User;
@@ -789,6 +797,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
 export interface AnnouncementsSelect<T extends boolean = true> {
   image?: T;
   title?: T;
+  summary?: T;
   content?: T;
   contentMarkdown?: T;
   url?: T;
@@ -1135,6 +1144,7 @@ export interface SocialLink {
           | 'WCA Delegates'
           | 'WCA Documents'
           | 'WCA Live'
+          | 'WCA Logo'
           | 'WCA Officers and Board'
           | 'Weibo'
           | 'X (formerly Twitter)'
@@ -1732,7 +1742,7 @@ export interface LogoPage {
   id: string;
   blocks: (
     | {
-        title: string;
+        title?: string | null;
         content: {
           root: {
             type: string;
@@ -1756,6 +1766,7 @@ export interface LogoPage {
     | {
         title: string;
         caption: string;
+        logoOnly?: boolean | null;
         images: {
           image: string | Media;
           darkBackground?: boolean | null;
@@ -2372,6 +2383,7 @@ export interface LogoPageSelect<T extends boolean = true> {
           | {
               title?: T;
               caption?: T;
+              logoOnly?: T;
               images?:
                 | T
                 | {

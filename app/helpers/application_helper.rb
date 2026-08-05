@@ -87,6 +87,7 @@ module ApplicationHelper
 
   def wca_table(responsive: true, hover: true, striped: true, float_thead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
+    add_to_js_assets("tables") if float_thead || data[:toggle].to_s == "table"
     table_classes = "table table-condensed #{table_class}"
     table_classes += " floatThead" if float_thead
     table_classes += " table-hover" if hover

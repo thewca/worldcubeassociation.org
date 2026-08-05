@@ -1,3 +1,4 @@
+<% add_to_js_assets("tables") %>
 <div>
   <div class="text-center">
     <h2>
@@ -13,7 +14,7 @@
       </h4>
     <% end %>
     <% if @person.user %>
-      <%= react_component("Persons/Badges", {
+      <%= react_component("PersonsBadges", props: {
         userId: @person.user&.id,
       }) %>
     <% end %>

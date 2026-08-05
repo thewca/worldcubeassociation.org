@@ -1,6 +1,15 @@
 "use client";
 
-import { Card, Container, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Card,
+  Container,
+  HStack,
+  Link,
+  SimpleGrid,
+  VStack,
+} from "@chakra-ui/react";
+import { route } from "nextjs-routes";
 
 import EventIcon from "@/components/EventIcon";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
@@ -20,6 +29,16 @@ export default function RoundAdmin({
 
   return (
     <Container>
+      <Button asChild mb={4} variant="outline" size="sm">
+        <Link
+          href={route({
+            pathname: "/competitions/[competitionId]/live/scoretakers",
+            query: { competitionId },
+          })}
+        >
+          Manage scoretakers
+        </Link>
+      </Button>
       <SimpleGrid columns={3} gap={2}>
         {_.map(roundsById, (rounds, eventId) => {
           return (

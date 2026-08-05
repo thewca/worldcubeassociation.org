@@ -1,0 +1,18 @@
+get:
+  summary: Gets a historical official version of the WCA Regulations as a rendered HTML fragment
+  tags:
+    - regulations
+  operationId: historicalRegulations
+  parameters:
+    - name: version
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/regulations/RegulationsContent.yaml'

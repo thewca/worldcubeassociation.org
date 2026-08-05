@@ -17,6 +17,15 @@ paths:
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
 
+  /v1/competitions/{competitionId}/scoretakers:
+    get:
+      $ref: 'paths/competitions/scoretakers/ListScoretakers.yaml'
+    post:
+      $ref: 'paths/competitions/scoretakers/AddScoretaker.yaml'
+  /v1/competitions/{competitionId}/scoretakers/{id}:
+    delete:
+      $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
+
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
@@ -107,8 +116,17 @@ paths:
   /v0/users/me/permissions:
     $ref: 'paths/users/userPermissions.yaml'
 
+  /v0/regulations:
+    $ref: 'paths/regulations/regulations.yaml'
+
+  /v0/regulations/history/official/{version}:
+    $ref: 'paths/regulations/historicalRegulations.yaml'
+
   /v0/regulations/translations:
     $ref: 'paths/regulations/regulationTranslations.yaml'
+
+  /v0/regulations/translations/{language}:
+    $ref: 'paths/regulations/translatedRegulations.yaml'
 
   /v0/export/public:
     $ref: 'paths/results/publicExports.yaml'

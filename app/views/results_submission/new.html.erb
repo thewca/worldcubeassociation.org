@@ -3,12 +3,12 @@
 <%= render layout: 'nav' do %>
   <h1><%= yield(:title) %></h1>
 
-  <%= react_component("CompetitionResultSubmission", {
+  <%= react_component("CompetitionResultSubmission", props: {
     competitionId: @competition.id,
     resultsSubmitted: @competition.results_submitted?,
     hasTemporaryResults: @competition.inbox_results.present?,
     uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
-    showWcaLiveBeta: @show_wca_live_beta,
+    scoretakingSoftware: @competition.scoretaking_software,
     canSubmitResults: @current_user.can_submit_competition_results?(@competition),
   }) %>
 <% end %>

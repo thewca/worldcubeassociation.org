@@ -23,6 +23,10 @@ jobs:
       PW_TEST_BASE_URL: http://localhost:3001 # Talk to Next directly on this machine
     steps:
       - uses: actions/checkout@v7
+      - name: Set up Libvips # This is not included in GitHub runners by default
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends libvips
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -31,7 +35,7 @@ jobs:
         run: bin/bundle install
       - name: Set up Corepack/Yarn
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_MAJOR }}
           cache: 'yarn'

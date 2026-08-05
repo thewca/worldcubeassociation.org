@@ -14,7 +14,7 @@ import {
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
 import UserBadge from "@/components/UserBadge";
-import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { Trans } from "react-i18next/TransWithoutContext";
 import _ from "lodash";
 import OpenapiError from "@/components/ui/openapiError";
 import { Metadata } from "next";
@@ -42,12 +42,13 @@ export default async function DelegatesPage() {
     <Container bg="bg">
       <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">{t("delegates_page.title")}</Heading>
-        <I18nHTMLTranslate
+        <Trans
+          parent={Prose}
+          t={t}
           i18nKey="about.structure.delegates_html"
-          options={{ see_link: "" }}
-          as={Prose}
+          values={{ see_link: "" }}
         />
-        <I18nHTMLTranslate i18nKey="delegates_page.acknowledges" as={Prose} />
+        <Prose>{t("delegates_page.acknowledges")}</Prose>
         <Tabs.Root
           variant="enclosed"
           orientation="vertical"

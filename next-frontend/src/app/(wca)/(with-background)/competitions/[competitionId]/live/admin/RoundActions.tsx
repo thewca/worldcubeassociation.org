@@ -32,7 +32,7 @@ export default function RoundActions({
         flex="1"
         justifyContent="flex-start"
         textAlign="left"
-        disabled={["ready", "pending"].includes(state)}
+        disabled={["ready", "pending", "blocked"].includes(state)}
       >
         {isOpen ? (
           <Link asChild>
@@ -49,8 +49,7 @@ export default function RoundActions({
               {roundName}{" "}
               {round.state == "open" &&
                 `(${t("competitions.live.admin.competitors_entered", {
-                  competitors_live_results_entered:
-                    round.competitors_live_results_entered,
+                  competitors_live_results_entered: round.completed_competitors,
                   total_competitors: round.total_competitors,
                 })})`}
               {round.state == "locked" &&
@@ -68,7 +67,10 @@ export default function RoundActions({
         roundId={round.id}
         competitionId={competitionId}
         hasResultsEntered={
-          round.state === "open" && round.competitors_live_results_entered > 0
+          round.state === "open" && round.completed_competitors > 0
+        }
+        blockedCompetitorCount={
+          round.state === "blocked" ? round.competitor_count_needed : undefined
         }
       />
     </HStack>

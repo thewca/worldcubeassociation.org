@@ -119,6 +119,8 @@ es-ES:
     555bf: 5x5x5 Ciega
     #original_hash: cedbf87
     333mbf: 3x3x3 Multi Ciega
+    #original_hash: a103de4
+    fto: FTO
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
@@ -1496,7 +1498,7 @@ es-ES:
         #original_hash: 2035811
         wmt: Equipo de Marketing de la WCA
         #original_hash: 2517097
-        wmct: Equipo del Campeonato Grande de la WCA
+        wmct: Equipo de Campeonatos Grandes de la WCA
         #original_hash: 8f32116
         wqac: Comité de Control de Calidad de la WCA
         #original_hash: 3da1e85
@@ -1534,14 +1536,14 @@ es-ES:
           documentos como la Política de Requisitos de Competiciones de la WCA.
           El WCAT NO es responsable de la organización de competiciones
           individuales.
-        #original_hash: 5007698
+        #original_hash: 58daf5b
         wic: >-
           El Comité de Integridad de la WCA (WIC) realiza investigaciones
           independientes acerca de miembros de la comunidad de la WCA e
           incidentes durante Competiciones de la WCA o en las plataformas en
           línea oficiales de la WCA. Estos incidentes son presuntas violaciones
-          al Espíritu, Código de Conducta, Código de Ética y/o Reglamento de la
-          WCA.
+          a los Valores, Código de Conducta, Código de Ética y/o Reglamento de
+          la WCA.
         #original_hash: be491ec
         weat: >-
           El Equipo de Asistentes Ejecutivos de la WCA (WEAT) lleva a cabo las
@@ -1756,6 +1758,9 @@ es-ES:
         edit_reason:
           #original_hash: fdfcccf
           label: Motivo del cambio
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: 'Razón para el cambio de %{attribute}'
         proof_attach:
           #original_hash: a9645b1
           label: Adjuntar documentación
@@ -1765,6 +1770,11 @@ es-ES:
         captcha:
           #original_hash: 58c1271
           validation_error: 'Por favor, demuestra que no eres un robot.'
+        verified_checkbox:
+          #original_hash: 54f118d
+          label: >-
+            Al enviar este formulario, confirmas que ya has revisado su
+            documentación legal y verificado la información facilitada.
       #original_hash: 126541e
       success_message: Solicitud enviada. Nos pondremos en contacto contigo en breve.
       #original_hash: bb6a0cf
@@ -2713,8 +2723,12 @@ es-ES:
         Archivo CSV con columnas: Estado, Nombre, Región, ID de la WCA, Fecha de
         nacimiento, Género, Correo electrónico, y una columna para cada
         categoría.
+      #original_hash: 01beb54
+      preview: Previsualizar datos de registro
       #original_hash: d6fbc9d
       import: Importar
+      #original_hash: 77dfd21
+      cancel: Cancelar
       errors:
         #original_hash: 0ef547d
         error: 'Error al importar %{registration}: %{error}.'
@@ -2767,6 +2781,10 @@ es-ES:
       ots_not_enabled: >-
         El registro está cerrado y el registro in situ no está activado. Primero
         tienes que editar la competición para permitirlo
+      #original_hash: ed9d329
+      ots_before_registration_open: >-
+        El registro in situ no se podrá usar hasta que abra el período de
+        registro.
       #original_hash: 61125b5
       competition_over: No puedes añadir registros in situ tras finalizar la competición.
       errors:
@@ -2992,6 +3010,8 @@ es-ES:
         submit_results: Enviar resultados
         #original_hash: 0ed766a
         add_to_batch: Añadir al lote
+        #original_hash: 1a2e4ff
+        remove_from_batch: Eliminar del lote
         #original_hash: 8b6d8cb
         batch_mode: Modo lote
         #original_hash: a577fa2
@@ -3021,6 +3041,12 @@ es-ES:
           round_locked: >-
             ¡La siguiente ronda ya se ha abierto, así que cualquier cambio no la
             afectará!
+          #original_hash: 3380184
+          9m_violated: >-
+            No se han introducido suficientes resultados en la ronda anterior
+            para cumplir la Regla 9m3. Si la ronda anterior no tiene al menos
+            %{competitor_count_needed} resultados introducidos al subir los
+            resultados, los resultados de esta ronda no estarán permitidos.
         quit:
           #original_hash: de62de1
           title: Eliminar competidor
@@ -3061,6 +3087,10 @@ es-ES:
           still_processing: >-
             No puedes ejecutar «Eliminar competidor» mientras algunos resultados
             aún se están procesando
+          #original_hash: ecb0dd4
+          in_batch: >-
+            No puedes eliminar a un competidor cuyos resultados forman parte de
+            un lote no enviado
         add_competitor:
           #original_hash: 9dcb50d
           single_round: Añadir competidor a la ronda
@@ -3072,6 +3102,11 @@ es-ES:
               Añadir competidor a la ronda, ya que la segunda ronda de las
               Rondas Duales no está abierta y necesitarás añadirle de forma
               separada.
+          #original_hash: b3bdfaa
+          event_edit_warning: >-
+            Este competidor no se ha registrado a esta categoría y la
+            competición ya no permite cambios de categorías. Se le podrá añadir
+            siempre que se haga intencionadamente.
       results:
         #original_hash: 4705687
         competitor: Competidor
@@ -4513,6 +4548,8 @@ es-ES:
       cannot_delete_confirmed: No puedes eliminar una competición confirmada.
       #original_hash: 191df37
       must_contain_event: tiene que tener al menos una categoría
+      #original_hash: d01c9f5
+      fto_not_yet_allowed: 'FTO no puede usarse en competiciones que empiecen antes del %{date}.'
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
         tiene que tener al menos una ronda y todas las rondas tienen que estar
@@ -5233,6 +5270,8 @@ es-ES:
         greater_china: Podios en Campeonatos de la Gran China
       #original_hash: c32a014
       place: Lugar
+      #original_hash: 89e4fa7
+      dual: Dual
       #original_hash: ddb18c1
       medal_collection: Medallero
       #original_hash: 9e69e13
@@ -5546,12 +5585,12 @@ es-ES:
       Con mayor soporte económico, esperamos incorporar un aún mayor nivel de
       profesionalidad a nuestras competiciones mientras continuamos apoyando más
       eventos a lo largo del mundo.</p>
-    #original_hash: bccd8c5
+    #original_hash: 1076bcb
     spirit: >-
-      Nuestro espíritu es que gente de todo el mundo se divierta junta en una
-      atmósfera amigable, se ayuden unos a otros y se comporten deportivamente.
-    #original_hash: 69131cc
-    spirit_footer: Espíritu de la WCA
+      Nuestros Valores son Comunidad, Justicia, Diversión, Excelencia y
+      Voluntariado.
+    #original_hash: 9679c23
+    spirit_footer: Valores de la WCA
     #original_hash: c1781ee
     our_goals_title: Nuestros objetivos
     #original_hash: c1144d4
@@ -5634,14 +5673,14 @@ es-ES:
         %{committees_and_teams} de la WCA.
       #original_hash: 0e7a036
       teams_committees: Equipos y Comités
-      #original_hash: 7e849d2
+      #original_hash: c319cc2
       delegates_html: >-
         <p><strong>Delegado de la WCA</strong> es un rol definido en las
         Mociones de la WCA y descrito en el Reglamento de la WCA. La función
         principal de un Delegado es supervisar las competiciones en nombre de la
         WCA. Un Delegado de la WCA es responsable de garantizar que todas las
-        Competiciones de la WCA se desarrollen de acuerdo con la Misión, el
-        Espíritu y el Reglamento de la WCA. La WCA diferencia entre
+        Competiciones de la WCA se desarrollen de acuerdo con el Propósito, los
+        Valores y el Reglamento de la WCA. La WCA diferencia entre
         <strong>Delegados Sénior</strong>, <strong>Delegados
         Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados
         Júnior</strong> y

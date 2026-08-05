@@ -260,6 +260,21 @@
     ]
   },
   {
+    "id": "fto",
+    "rank": 810,
+    "format": "time",
+    "name": "Face Turning Octahedron",
+    "can_change_time_limit": true,
+    "can_have_cutoff": true,
+    "is_timed_event": true,
+    "is_fewest_moves": false,
+    "is_multiple_blindfolded": false,
+    "is_official": true,
+    "format_ids": [
+      "a"
+    ]
+  },
+  {
     "id": "333ft",
     "rank": 996,
     "format": "time",
