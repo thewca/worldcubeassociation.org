@@ -1357,6 +1357,7 @@ en:
         wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
         invalid_wcif: "The JSON file does not contain valid WCIF data."
         empty_file: "The file is empty."
+        unsupported_file_format: "Unsupported file format. Please upload a JSON or CSV file."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."

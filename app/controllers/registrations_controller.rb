@@ -71,11 +71,13 @@ class RegistrationsController < ApplicationController
     @competition = competition_from_params
     file = params.require(:registration_file)
 
-    @converted_registrations = if file.content_type == "application/json"
-                                 parse_json_to_registration_data(file.path)
-                               else
-                                 parse_csv_to_registration_data(file.path, @competition)
-                               end
+    if file.content_type == "application/json"
+      @converted_registrations = parse_json_to_registration_data(file.path)
+    elsif file.content_type == "text/csv"
+      @converted_registrations = parse_csv_to_registration_data(file.path, @competition)
+    else
+      render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.unsupported_file_format") }
+    end
   end
 
   def validate_and_convert_registrations
@@ -131,11 +133,10 @@ class RegistrationsController < ApplicationController
   private def parse_json_to_registration_data(file_path)
     wcif = JSON.parse(File.read(file_path))
 
-    # TODO: Maybe make WCIF validation bit more strict - check if the persons row has all the required fields?
-    return render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.invalid_wcif") } unless wcif.is_a?(Hash) && wcif["persons"].is_a?(Array)
+    return render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.invalid_wcif") } unless JSON::Validator.validate(Competition.wcif_json_schema, wcif)
 
     wcif["persons"].select do |person|
-      person["registration"]&.[]("status") == "accepted"
+      person.dig("registration", "status") == "accepted"
     end
   end
 
