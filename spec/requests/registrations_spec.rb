@@ -607,6 +607,53 @@ RSpec.describe "registrations" do
         expect(json[0]["wcaId"]).to eq "2019HOLM01"
         expect(json[0]["email"]).to eq "sherlock@example.com"
       end
+
+      context "with an unsupported file format" do
+        it "renders an error" do
+          file = text_file("some content")
+
+          post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response.body).to include I18n.t("registrations.import.errors.unsupported_file_format")
+        end
+      end
+
+      context "with a JSON file" do
+        it "renders an error when the WCIF is invalid" do
+          allow(JSON::Validator).to receive(:validate).and_return(false)
+          file = json_file({ "persons" => [] })
+
+          post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response.body).to include I18n.t("registrations.import.errors.invalid_wcif")
+        end
+
+        it "successfully converts valid JSON to registration data and only includes accepted registrations" do
+          allow(JSON::Validator).to receive(:validate).and_return(true)
+          file = json_file({
+            "persons" => [
+              {
+                "name" => "Sherlock Holmes",
+                "registration" => { "status" => "accepted", "eventIds" => ["333"] },
+              },
+              {
+                "name" => "John Watson",
+                "registration" => { "status" => "pending", "eventIds" => ["333"] },
+              },
+            ],
+          })
+
+          post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
+
+          expect(response).to have_http_status(:ok)
+          json = response.parsed_body
+          expect(json.length).to eq 1
+          expect(json[0]["name"]).to eq "Sherlock Holmes"
+          expect(json[0].dig("registration", "status")).to eq "accepted"
+        end
+      end
     end
   end
 
@@ -1505,6 +1552,20 @@ def csv_file(lines)
     lines.each { |line| csv << line }
   end
   Rack::Test::UploadedFile.new(temp_file.path, "text/csv")
+end
+
+def text_file(content)
+  temp_file = Tempfile.new(["registrations", ".txt"])
+  temp_file.write(content)
+  temp_file.close
+  Rack::Test::UploadedFile.new(temp_file.path, "text/plain")
+end
+
+def json_file(hash)
+  temp_file = Tempfile.new(["registrations", ".json"])
+  temp_file.write(hash.to_json)
+  temp_file.close
+  Rack::Test::UploadedFile.new(temp_file.path, "application/json")
 end
 
 def expect_error_to_be(response, message)
