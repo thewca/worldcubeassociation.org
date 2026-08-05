@@ -84,6 +84,17 @@ RSpec.describe "API Incidents" do
         expect(response).to have_http_status :bad_request
         expect(resolved_incident.reload).to be_resolved
       end
+
+      it "reports the validation errors when the incident cannot be updated" do
+        # An incident that has already gone out in a digest cannot be unresolved again.
+        sent_incident = create(:sent_incident)
+
+        patch api_v0_incident_mark_as_path(incident_id: sent_incident.id, kind: "unresolve")
+
+        expect(response).to have_http_status :unprocessable_content
+        expect(response.parsed_body["error"]).to include(/not resolved/)
+        expect(sent_incident.reload).to be_resolved
+      end
     end
 
     context "when logged in as a Delegate" do
@@ -108,12 +119,12 @@ RSpec.describe "API Incidents" do
   end
 
   describe "DELETE /api/v0/incidents/:id" do
+    let!(:incident) { create(:incident, :resolved) }
+
     context "when logged in as a WRC member" do
       before { sign_in create(:user, :wrc_member) }
 
       it "destroys the incident" do
-        incident = resolved_incident
-
         expect { delete api_v0_incident_path(incident) }.to change(Incident, :count).by(-1)
         expect(response).to be_successful
       end
@@ -123,10 +134,15 @@ RSpec.describe "API Incidents" do
       before { sign_in create(:delegate) }
 
       it "does not allow destroying" do
-        incident = resolved_incident
-
         expect { delete api_v0_incident_path(incident) }.not_to change(Incident, :count)
         expect(response).to have_http_status :forbidden
+      end
+    end
+
+    context "when logged out" do
+      it "does not allow destroying" do
+        expect { delete api_v0_incident_path(incident) }.not_to change(Incident, :count)
+        expect(response).to have_http_status :unauthorized
       end
     end
   end

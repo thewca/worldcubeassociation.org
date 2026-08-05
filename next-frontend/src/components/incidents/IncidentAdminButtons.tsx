@@ -31,6 +31,7 @@ export default function IncidentAdminButtons({
       onSuccess: () => router.refresh(),
       onError: () =>
         toaster.create({
+          id: "incident-mark-as-error",
           description: t(
             resolved
               ? "incidents_log.admin.unpublish_error"
@@ -48,26 +49,47 @@ export default function IncidentAdminButtons({
       onSuccess: () => router.push("/incidents"),
       onError: () =>
         toaster.create({
+          id: "incident-destroy-error",
           description: t("incidents_log.admin.destroy_error"),
           type: "error",
         }),
     },
   );
 
-  const handleConfirm = () => {
-    if (confirming === "publish") {
-      markAs({
-        params: {
-          path: {
-            incident_id: incidentId,
-            kind: resolved ? "unresolve" : "resolved",
+  // `useConfirm` would save the state juggling below, but its options carry no title and each of
+  // these two actions needs its own.
+  const confirmations = {
+    publish: {
+      title: t("incidents_log.admin.change_status"),
+      confirmButton: t("incidents_log.admin.confirm"),
+      body: t(
+        resolved
+          ? "incidents_log.admin.confirm_unpublish"
+          : "incidents_log.admin.confirm_publish",
+      ),
+      onConfirm: () =>
+        markAs({
+          params: {
+            path: {
+              incident_id: incidentId,
+              kind: resolved ? "unresolve" : "resolved",
+            },
           },
-        },
-      });
-    } else {
-      destroy({ params: { path: { id: incidentId } } });
-    }
+        }),
+    },
+    destroy: {
+      title: t("incidents_log.admin.destroy_title"),
+      confirmButton: t("incidents_log.admin.destroy"),
+      body: t("incidents_log.admin.confirm_destroy"),
+      onConfirm: () => destroy({ params: { path: { id: incidentId } } }),
+    },
+  } as const;
 
+  // Undefined exactly while the dialog is closed, which is also the only time it isn't rendered.
+  const confirmation = confirming ? confirmations[confirming] : undefined;
+
+  const handleConfirm = () => {
+    confirmation?.onConfirm();
     setConfirming(null);
   };
 
@@ -103,29 +125,13 @@ export default function IncidentAdminButtons({
       <ConfirmDialog
         lazyMount
         open={confirming !== null}
-        title={t(
-          confirming === "destroy"
-            ? "incidents_log.admin.destroy_title"
-            : "incidents_log.admin.change_status",
-        )}
+        title={confirmation?.title}
         onCancel={() => setConfirming(null)}
         onConfirm={handleConfirm}
         cancelButton={t("incidents_log.admin.cancel")}
-        confirmButton={t(
-          confirming === "destroy"
-            ? "incidents_log.admin.destroy"
-            : "incidents_log.admin.confirm",
-        )}
+        confirmButton={confirmation?.confirmButton}
       >
-        <Text>
-          {t(
-            confirming === "destroy"
-              ? "incidents_log.admin.confirm_destroy"
-              : resolved
-                ? "incidents_log.admin.confirm_unpublish"
-                : "incidents_log.admin.confirm_publish",
-          )}
-        </Text>
+        <Text>{confirmation?.body}</Text>
       </ConfirmDialog>
 
       <Toaster />

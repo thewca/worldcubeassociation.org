@@ -8,29 +8,32 @@ import {
   Popover,
   Separator,
   Button,
+  Stack,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { route } from "nextjs-routes";
 
 import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
 import { useT } from "@/lib/i18n/useI18n";
 import type { components } from "@/types/openapi";
-import { TFunction } from "i18next";
 
-const incidentSearchUrl = (tag: string) =>
-  `/incidents?tags=${encodeURIComponent(tag)}`;
+const incidentSearchRoute = (tag: string) =>
+  route({ pathname: "/incidents", query: { tags: tag } });
 
 type IncidentTag = components["schemas"]["Incident"]["tags"][number];
 
+// On the log itself a tag toggles the filter in place; on a single incident there is no filter to
+// toggle, so the tag links back to the log instead.
+export type TagAction =
+  | { kind: "toggleFilter"; onToggle: (tag: string) => void }
+  | { kind: "linkToLog" };
+
 interface IncidentTagsProps {
   tags: IncidentTag[];
-  addToSearch?: (tag: string) => void;
-  linkToSearch?: boolean;
+  action?: TagAction;
 }
 
-export function IncidentTags({
-  tags,
-  addToSearch,
-  linkToSearch,
-}: IncidentTagsProps) {
+export function IncidentTags({ tags, action }: IncidentTagsProps) {
   const { t } = useT();
 
   return tags.map(({ name, id, url, content_html: contentHtml }) =>
@@ -39,103 +42,83 @@ export function IncidentTags({
       <RegulationTag
         key={id}
         id={id.toString()}
-        type={t(
-          url.indexOf("guideline") === -1
-            ? "incidents_log.tags.regulation"
-            : "incidents_log.tags.guideline",
+        typeLabel={t(
+          url.includes("guideline")
+            ? "incidents_log.tags.guideline"
+            : "incidents_log.tags.regulation",
         )}
         link={url}
         description={contentHtml}
-        addToSearch={addToSearch}
-        linkToSearch={linkToSearch}
+        action={action}
       />
     ) : (
-      <MiscTag
-        key={name}
-        tag={name}
-        addToSearch={addToSearch}
-        linkToSearch={linkToSearch}
-      />
+      <MiscTag key={name} tag={name} action={action} />
     ),
   );
 }
 
 interface RegulationTagProps {
   id: string;
-  type: string;
+  typeLabel: string;
   description: string;
   link: string;
-  addToSearch?: (query: string) => void;
-  linkToSearch?: boolean;
+  action?: TagAction;
 }
 
-export function RegulationTag({
+function RegulationTag({
   id,
-  type,
+  typeLabel,
   description,
   link,
-  addToSearch,
-  linkToSearch,
+  action,
 }: RegulationTagProps) {
-  const { t } = useT();
-
   return (
     <Tag
       tagType="incident"
       labelClass="primary"
       label={id}
-      title={`${type} ${id}`}
+      title={`${typeLabel} ${id}`}
       titleLink={link}
       description={description}
-      buttons={searchForTag(t, id, addToSearch, linkToSearch)}
+      buttons={action && <SearchForTag tag={id} action={action} />}
     />
   );
 }
 
 interface MiscTagProps {
   tag: string;
-  addToSearch?: (query: string) => void;
-  linkToSearch?: boolean;
+  action?: TagAction;
 }
 
-function searchForTag(
-  t: TFunction,
-  tag: string,
-  addToSearch?: (tag: string) => void,
-  linkToSearch?: boolean,
-) {
-  if (linkToSearch) {
-    return (
-      <Link
-        href={incidentSearchUrl(tag)}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {t("incidents_log.tags.search_with_tag")}
-      </Link>
-    );
-  }
-
-  if (addToSearch) {
-    return (
-      <Button onClick={() => addToSearch(tag)}>
-        {t("incidents_log.tags.filter_by_tag")}
-      </Button>
-    );
-  }
-}
-
-export function MiscTag({ tag, addToSearch, linkToSearch }: MiscTagProps) {
-  const { t } = useT();
-
+function MiscTag({ tag, action }: MiscTagProps) {
   return (
     <Tag
       tagType="incident"
       labelClass="default"
       label={tag}
       title={tag}
-      buttons={searchForTag(t, tag, addToSearch, linkToSearch)}
+      buttons={action && <SearchForTag tag={tag} action={action} />}
     />
+  );
+}
+
+function SearchForTag({ tag, action }: { tag: string; action: TagAction }) {
+  const { t } = useT();
+
+  if (action.kind === "linkToLog") {
+    return (
+      <Link asChild>
+        <NextLink href={incidentSearchRoute(tag)}>
+          {t("incidents_log.tags.search_with_tag")}
+        </NextLink>
+      </Link>
+    );
+  }
+
+  return (
+    <Button onClick={() => action.onToggle(tag)}>
+      {t("incidents_log.tags.filter_by_tag")}
+    </Button>
   );
 }
 
@@ -211,12 +194,6 @@ function Tag({
     info: "teal",
   };
 
-  const sections = [
-    description && <Box dangerouslySetInnerHTML={{ __html: description }} />,
-    links && <Box>{links}</Box>,
-    buttons && <Box>{buttons}</Box>,
-  ].filter(Boolean);
-
   return (
     <Popover.Root>
       <Popover.Trigger>
@@ -240,12 +217,14 @@ function Tag({
           )}
         </Popover.Header>
         <Popover.Body>
-          {sections.map((section, index) => (
-            <React.Fragment key={index}>
-              {index > 0 && <Separator my={2} />}
-              {section}
-            </React.Fragment>
-          ))}
+          {/* Stack drops falsy children, so absent sections take no separator with them. */}
+          <Stack separator={<Separator />} gap="2">
+            {description && (
+              <Box dangerouslySetInnerHTML={{ __html: description }} />
+            )}
+            {links && <Box>{links}</Box>}
+            {buttons && <Box>{buttons}</Box>}
+          </Stack>
         </Popover.Body>
       </Popover.Content>
     </Popover.Root>

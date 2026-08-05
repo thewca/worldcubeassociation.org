@@ -2799,6 +2799,8 @@ en:
     i18n_disclaimer: "Please note the incidents section is only available in English, the content below is not translated."
     incident: "Incident:"
     title: "Incidents Log"
+    #context: browser tab title of a single incident, "%{title}" is the title of that incident
+    page_title: "Incident: %{title}"
     #context: shown when no incident exists for the requested ID
     not_found: "Incident Not Found"
     #context: link leading from a single incident back to the list of all incidents
