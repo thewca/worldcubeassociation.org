@@ -247,14 +247,12 @@ module DatabaseDumper
         copy: %w[
           id
           wca_id
-          comments
           country_id
           gender
           name
           sub_id
         ],
         db_default: %w[
-          comments
           incorrect_wca_id_claim_count
         ],
         fake_values: {

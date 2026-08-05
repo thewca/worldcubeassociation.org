@@ -196,7 +196,6 @@ module FinishUnfinishedPersons
     Person.create!(
       gender: gender,
       sub_id: 1,
-      comments: '',
       **attrs,
     )
   end
