@@ -75,7 +75,7 @@ function normalizeWcifEvents(wcifEvents) {
   // it with WCIF data if any.
   // And then we add all events that are still in the WCIF (which means they are
   // not official anymore).
-  const ret = events.official.map(
+  const ret = events.officialWithFuture.map(
     (event) => _.remove(wcifEvents, { id: event.id })[0] || {
       id: event.id,
       rounds: null,
