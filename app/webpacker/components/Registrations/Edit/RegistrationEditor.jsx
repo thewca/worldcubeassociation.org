@@ -24,7 +24,7 @@ import {
 } from '../../wca/FormBuilder/provider/FormObjectProvider';
 import { useInputUpdater } from '../../../lib/hooks/useInputState';
 import { useOrderedSetWrapper } from '../../../lib/hooks/useOrderedSet';
-import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
+import { WCA_EVENT_IDS_WITH_FUTURE } from '../../../lib/wca-data.js.erb';
 import { useUpdateRegistrationMutation } from '../lib/mutations';
 
 export default function RegistrationEditor({ registrationId, competitor, competitionInfo }) {
@@ -41,7 +41,11 @@ export default function RegistrationEditor({ registrationId, competitor, competi
   const setGuests = useInputUpdater(setGuestsRaw, true);
 
   const [nativeEventIds, setNativeEventIds] = useFormObjectState('event_ids', ['competing']);
-  const selectedEventIds = useOrderedSetWrapper(nativeEventIds, setNativeEventIds, WCA_EVENT_IDS);
+  const selectedEventIds = useOrderedSetWrapper(
+    nativeEventIds,
+    setNativeEventIds,
+    WCA_EVENT_IDS_WITH_FUTURE,
+  );
 
   const [status, setStatusRaw] = useFormObjectState('registration_status', ['competing']);
   const setStatus = useInputUpdater(setStatusRaw);

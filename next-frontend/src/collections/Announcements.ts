@@ -18,6 +18,15 @@ export const Announcements: CollectionConfig = {
       required: true,
     },
     {
+      name: "summary",
+      type: "textarea",
+      maxLength: 400,
+      admin: {
+        description:
+          "Shown on the announcements list before 'Read More'. Falls back to the beginning of the content when empty.",
+      },
+    },
+    {
       name: "content",
       type: "richText",
       required: true,

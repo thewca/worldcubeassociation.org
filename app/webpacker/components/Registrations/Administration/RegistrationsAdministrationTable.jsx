@@ -9,7 +9,7 @@ import TableHeader from './AdministrationTableHeader';
 import TableRow from './AdministrationTableRow';
 import RegistrationAdministrationTableFooter from './RegistrationAdministrationTableFooter';
 import { sortRegistrations } from '../../../lib/utils/registrationAdmin';
-import { WCA_EVENT_IDS } from '../../../lib/wca-data.js.erb';
+import { WCA_EVENT_IDS_WITH_FUTURE } from '../../../lib/wca-data.js.erb';
 import createSortReducer from '../reducers/sortReducer';
 
 export const sortReducer = createSortReducer([
@@ -25,7 +25,7 @@ export const sortReducer = createSortReducer([
   'comment',
   'dob',
   'administrative_notes',
-  ...WCA_EVENT_IDS,
+  ...WCA_EVENT_IDS_WITH_FUTURE,
 ]);
 
 export default function RegistrationAdministrationTable({
