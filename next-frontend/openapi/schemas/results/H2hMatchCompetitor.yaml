@@ -1,0 +1,20 @@
+type: object
+required:
+  - user_id
+  - name
+  - wca_id
+  - country_iso2
+  - final_pos
+properties:
+  user_id:
+    type: integer
+  name:
+    type: string
+  wca_id:
+    type: string
+    nullable: true
+  country_iso2:
+    type: string
+  final_pos:
+    type: integer
+    nullable: true

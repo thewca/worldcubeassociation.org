@@ -1641,24 +1641,27 @@ export interface components {
         /** @enum {string} */
         CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         Results: components["schemas"]["Result"][];
+        H2hMatchCompetitor: {
+            user_id: number;
+            name: string;
+            wca_id: string | null;
+            country_iso2: string;
+            final_pos: number | null;
+        };
+        H2hAttempt: {
+            user_id: number;
+            set_attempt_number: number;
+            value: number | null;
+        };
+        H2hSet: {
+            set_number: number;
+            attempts: components["schemas"]["H2hAttempt"][];
+        };
         H2hMatch: {
             /** @example 1 */
             match_number: number;
-            competitors: {
-                user_id: number;
-                name: string;
-                wca_id: string | null;
-                country_iso2: string;
-                final_pos: number | null;
-            }[];
-            sets: {
-                set_number: number;
-                attempts: {
-                    user_id: number;
-                    set_attempt_number: number;
-                    value: number | null;
-                }[];
-            }[];
+            competitors: components["schemas"]["H2hMatchCompetitor"][];
+            sets: components["schemas"]["H2hSet"][];
         };
         H2hRound: {
             /** @example 333-r1 */

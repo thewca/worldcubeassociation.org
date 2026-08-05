@@ -10,49 +10,8 @@ properties:
   competitors:
     type: array
     items:
-      type: object
-      required:
-        - user_id
-        - name
-        - wca_id
-        - country_iso2
-        - final_pos
-      properties:
-        user_id:
-          type: integer
-        name:
-          type: string
-        wca_id:
-          type: string
-          nullable: true
-        country_iso2:
-          type: string
-        final_pos:
-          type: integer
-          nullable: true
+      $ref: "./H2hMatchCompetitor.yaml"
   sets:
     type: array
     items:
-      type: object
-      required:
-        - set_number
-        - attempts
-      properties:
-        set_number:
-          type: integer
-        attempts:
-          type: array
-          items:
-            type: object
-            required:
-              - user_id
-              - set_attempt_number
-              - value
-            properties:
-              user_id:
-                type: integer
-              set_attempt_number:
-                type: integer
-              value:
-                type: integer
-                nullable: true
+      $ref: "./H2hSet.yaml"
