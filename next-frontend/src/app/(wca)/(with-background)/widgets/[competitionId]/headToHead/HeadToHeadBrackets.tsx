@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
 import {
   Box,
   Flex,
@@ -17,7 +17,6 @@ import NextLink from "next/link";
 import _ from "lodash";
 import { TFunction } from "i18next";
 import { HiOutlineInformationCircle } from "react-icons/hi";
-import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
@@ -26,16 +25,25 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import {
   computeMatchScores,
   groupMatchesIntoStages,
+  orderedSets,
   raceWinnerUserId,
+  H2hCompetitorScore,
   H2hMatch,
+  H2hMatchCompetitor,
   H2hRound,
   H2hSet,
 } from "@/lib/wca/results/headToHead";
 
+// Final standings, used to tell the final apart from the third place match.
+const FIRST_PLACE = 1;
+const THIRD_PLACE = 3;
+// A match whose competitors have no final position yet sorts last.
+const UNPLACED = Number.POSITIVE_INFINITY;
+
 export default function HeadToHeadBrackets({
   h2hRounds,
 }: {
-  h2hRounds: components["schemas"]["H2hRound"][];
+  h2hRounds: H2hRound[];
 }) {
   const eventIds = _.uniq(h2hRounds.map((round) => round.event_id));
   const [activeEventId, setActiveEventId] = useState<string>(eventIds[0]);
@@ -50,7 +58,6 @@ export default function HeadToHeadBrackets({
     <VStack align="left" gap={4}>
       {eventIds.length > 1 && (
         <SingleEventSelector
-          title=""
           selectedEvent={activeEventId}
           onEventClick={setActiveEventId}
           eventList={eventIds}
@@ -62,19 +69,17 @@ export default function HeadToHeadBrackets({
             {events.byId[round.event_id].name}{" "}
             {t(`rounds.${round.round_type_id}.name`)}
           </Heading>
-          <Bracket round={round} t={t} />
+          <Bracket round={round} />
         </Fragment>
       ))}
     </VStack>
   );
 }
 
-function Bracket({ round, t }: { round: H2hRound; t: TFunction }) {
-  const stages = useMemo(
-    () => groupMatchesIntoStages(round.matches),
-    [round.matches],
-  );
+function Bracket({ round }: { round: H2hRound }) {
+  const { t } = useT();
 
+  const stages = groupMatchesIntoStages(round.matches);
   const places = _.uniqBy(
     round.matches.flatMap((match) => match.competitors),
     "user_id",
@@ -91,8 +96,13 @@ function Bracket({ round, t }: { round: H2hRound; t: TFunction }) {
             : stageMatches;
 
           return (
-            <VStack key={stageIndex} align="stretch" minW="18rem" gap={4}>
-              <Heading textStyle="h5">
+            <VStack
+              key={stageMatches[0].match_number}
+              align="stretch"
+              minW="18rem"
+              gap={4}
+            >
+              <Heading textStyle="s3">
                 {stageLabel(stageIndex, stages.length, places, t)}
               </Heading>
               <VStack
@@ -140,14 +150,16 @@ function bestFinalPos(match: H2hMatch) {
     .map((competitor) => competitor.final_pos)
     .filter((pos) => pos != null);
 
-  return positions.length > 0 ? Math.min(...positions) : Infinity;
+  return positions.length > 0 ? Math.min(...positions) : UNPLACED;
 }
 
 function thirdPlaceLabel(match: H2hMatch, t: TFunction) {
   const positions = match.competitors.map((competitor) => competitor.final_pos);
-  if (positions.includes(1)) return undefined;
-  if (positions.includes(3)) return t("competitions.h2h.third_place");
-  return undefined;
+  if (positions.includes(FIRST_PLACE)) return undefined;
+
+  return positions.includes(THIRD_PLACE)
+    ? t("competitions.h2h.third_place")
+    : undefined;
 }
 
 function MatchCard({
@@ -159,46 +171,18 @@ function MatchCard({
   eventId: string;
   label?: string;
 }) {
-  const { scores, winnerUserId } = computeMatchScores(match);
-  const sets = _.sortBy(match.sets, "set_number");
-
-  const competitorCells = (competitorIndex: number) => {
-    const competitor = match.competitors[competitorIndex];
-    const score = scores[competitorIndex];
-    const fontWeight = competitor.user_id === winnerUserId ? "bold" : "normal";
-
-    return (
-      <Fragment key={competitor.user_id}>
-        {competitor.wca_id ? (
-          <Link asChild fontWeight={fontWeight}>
-            <NextLink
-              href={route({
-                pathname: "/persons/[wcaId]",
-                query: { wcaId: competitor.wca_id },
-              })}
-            >
-              {competitor.name}
-            </NextLink>
-          </Link>
-        ) : (
-          <Text fontWeight={fontWeight}>{competitor.name}</Text>
-        )}
-        {score.raceWinsPerSet.map((raceWins, setIndex) => (
-          <Text key={setIndex} color="fg.muted" textAlign="center">
-            {raceWins}
-          </Text>
-        ))}
-        <Text fontWeight="bold" textAlign="center">
-          {score.setWins}
-        </Text>
-      </Fragment>
-    );
-  };
+  const { scoresByUserId, winnerUserId } = computeMatchScores(match);
+  const sets = orderedSets(match);
 
   return (
     <Box borderWidth="1px" rounded="md" px={3} py={2}>
       {label && (
-        <Text textStyle="xs" color="fg.muted" textTransform="uppercase" mb={1}>
+        <Text
+          textStyle="annotation"
+          color="fg.muted"
+          textTransform="uppercase"
+          mb={1}
+        >
           {label}
         </Text>
       )}
@@ -207,18 +191,86 @@ function MatchCard({
         columnGap={3}
         alignItems="center"
       >
-        {competitorCells(0)}
-        {/* Liquipedia-style row of per-set info icons between the competitors */}
-        <Box />
-        {sets.map((set) => (
-          <Flex key={set.set_number} justify="center">
-            <SetAttemptsInfo set={set} match={match} eventId={eventId} />
-          </Flex>
+        {match.competitors.map((competitor, competitorIndex) => (
+          <Fragment key={competitor.user_id}>
+            {competitorIndex === 1 && (
+              <SetInfoRow sets={sets} match={match} eventId={eventId} />
+            )}
+            <CompetitorRow
+              competitor={competitor}
+              score={scoresByUserId[competitor.user_id]}
+              sets={sets}
+              isWinner={competitor.user_id === winnerUserId}
+            />
+          </Fragment>
         ))}
-        <Box />
-        {_.range(1, match.competitors.length).map(competitorCells)}
       </Grid>
     </Box>
+  );
+}
+
+function CompetitorRow({
+  competitor,
+  score,
+  sets,
+  isWinner,
+}: {
+  competitor: H2hMatchCompetitor;
+  score: H2hCompetitorScore;
+  sets: H2hSet[];
+  isWinner: boolean;
+}) {
+  const fontWeight = isWinner ? "bold" : "normal";
+
+  return (
+    <>
+      {competitor.wca_id ? (
+        <Link asChild fontWeight={fontWeight}>
+          <NextLink
+            href={route({
+              pathname: "/persons/[wcaId]",
+              query: { wcaId: competitor.wca_id },
+            })}
+          >
+            {competitor.name}
+          </NextLink>
+        </Link>
+      ) : (
+        <Text fontWeight={fontWeight}>{competitor.name}</Text>
+      )}
+      {sets.map((set, setIndex) => (
+        <Text key={set.set_number} color="fg.muted" textAlign="center">
+          {score.raceWinsPerSet[setIndex]}
+        </Text>
+      ))}
+      <Text fontWeight="bold" textAlign="center">
+        {score.setWins}
+      </Text>
+    </>
+  );
+}
+
+// Liquipedia-style row of per-set info icons, sitting in the grid between the
+// competitors: an empty name cell, one icon per set, an empty total cell.
+function SetInfoRow({
+  sets,
+  match,
+  eventId,
+}: {
+  sets: H2hSet[];
+  match: H2hMatch;
+  eventId: string;
+}) {
+  return (
+    <>
+      <Box />
+      {sets.map((set) => (
+        <Flex key={set.set_number} justify="center">
+          <SetAttemptsInfo set={set} match={match} eventId={eventId} />
+        </Flex>
+      ))}
+      <Box />
+    </>
   );
 }
 

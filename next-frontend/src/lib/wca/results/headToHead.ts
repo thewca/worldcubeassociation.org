@@ -3,9 +3,12 @@ import { components } from "@/types/openapi";
 
 export type H2hRound = components["schemas"]["H2hRound"];
 export type H2hMatch = components["schemas"]["H2hMatch"];
+export type H2hMatchCompetitor = components["schemas"]["H2hMatchCompetitor"];
+export type H2hSet = components["schemas"]["H2hSet"];
+export type H2hAttempt = components["schemas"]["H2hAttempt"];
 
-export type H2hSet = H2hMatch["sets"][number];
-export type H2hAttempt = H2hSet["attempts"][number];
+// A race the competitor never started, as opposed to a DNF/DNS they did.
+const SKIPPED = 0;
 
 export interface H2hCompetitorScore {
   userId: number;
@@ -26,73 +29,89 @@ export function compareAttemptValues(a: number, b: number) {
 }
 
 /**
+ * Sets in play order. The API does not promise an ordering, and the
+ * `raceWinsPerSet` entries of a score line up with this array positionally.
+ */
+export function orderedSets(match: H2hMatch) {
+  return _.sortBy(match.sets, "set_number");
+}
+
+/**
  * The winner of a single race, i.e. one `set_attempt_number` solved by
  * every competitor in the match. Null when nobody has a result or on a tie.
  */
 export function raceWinnerUserId(attempts: H2hAttempt[]) {
-  const valid = attempts.filter((a) => a.value != null && a.value !== 0);
-  if (valid.length === 0) return null;
+  const attempted = attempts.flatMap((attempt) =>
+    attempt.value != null && attempt.value !== SKIPPED
+      ? [{ userId: attempt.user_id, value: attempt.value }]
+      : [],
+  );
+  if (attempted.length === 0) return null;
 
-  const sorted = _.toArray(valid).sort((a, b) =>
-    compareAttemptValues(a.value!, b.value!),
+  const [best, runnerUp] = attempted.toSorted((a, b) =>
+    compareAttemptValues(a.value, b.value),
   );
 
   const isTied =
-    sorted.length > 1 &&
-    compareAttemptValues(sorted[0].value!, sorted[1].value!) === 0;
+    attempted.length > 1 &&
+    compareAttemptValues(best.value, runnerUp.value) === 0;
 
-  return isTied ? null : sorted[0].user_id;
+  return isTied ? null : best.userId;
+}
+
+/** Races each competitor took in a set, in `competitors` order. */
+function raceWinsPerCompetitor(
+  set: H2hSet,
+  competitors: H2hMatchCompetitor[],
+): number[] {
+  const races = Object.values(_.groupBy(set.attempts, "set_attempt_number"));
+  const winnerIds = races.map(raceWinnerUserId);
+
+  return competitors.map(
+    (competitor) =>
+      winnerIds.filter((userId) => userId === competitor.user_id).length,
+  );
+}
+
+/** Index of the competitor who took the most races, or null when tied or unplayed. */
+function setWinnerIndex(raceWins: number[]) {
+  const mostWins = Math.max(0, ...raceWins);
+  const winnerIndices = raceWins.flatMap((wins, index) =>
+    wins === mostWins ? [index] : [],
+  );
+
+  return mostWins > 0 && winnerIndices.length === 1 ? winnerIndices[0] : null;
 }
 
 /**
- * Computes each competitor's races won per set and total sets won.
- * Within a set, every `set_attempt_number` is one race between the
- * competitors; the set goes to whoever wins the most races. The match
- * winner is the competitor with the most sets, or null when undecidable.
+ * Computes each competitor's races won per set and total sets won. Within a
+ * set, every `set_attempt_number` is one race between the competitors; the set
+ * goes to whoever wins the most races. The match winner is the competitor with
+ * the most sets, or null when undecidable.
  */
-export function computeMatchScores(match: H2hMatch): {
-  scores: H2hCompetitorScore[];
-  winnerUserId: number | null;
-} {
-  const scores = match.competitors.map((competitor) => ({
-    userId: competitor.user_id,
-    setWins: 0,
-    raceWinsPerSet: [] as number[],
-  }));
-  const scoresByUserId = _.keyBy(scores, "userId");
+export function computeMatchScores(match: H2hMatch) {
+  const raceWinsPerSet = orderedSets(match).map((set) =>
+    raceWinsPerCompetitor(set, match.competitors),
+  );
+  const setWinnerIndices = raceWinsPerSet.map(setWinnerIndex);
 
-  _.sortBy(match.sets, "set_number").forEach((set, setIndex) => {
-    scores.forEach((score) => {
-      score.raceWinsPerSet[setIndex] = 0;
-    });
+  const scores: H2hCompetitorScore[] = match.competitors.map(
+    (competitor, competitorIndex) => ({
+      userId: competitor.user_id,
+      setWins: setWinnerIndices.filter((index) => index === competitorIndex)
+        .length,
+      raceWinsPerSet: raceWinsPerSet.map(
+        (raceWins) => raceWins[competitorIndex],
+      ),
+    }),
+  );
 
-    const races = _.groupBy(set.attempts, "set_attempt_number");
-    Object.values(races).forEach((raceAttempts) => {
-      const winnerId = raceWinnerUserId(raceAttempts);
-      if (winnerId != null && scoresByUserId[winnerId]) {
-        scoresByUserId[winnerId].raceWinsPerSet[setIndex] += 1;
-      }
-    });
-
-    const bestRaceWins = Math.max(
-      ...scores.map((score) => score.raceWinsPerSet[setIndex]),
-    );
-    const setWinners = scores.filter(
-      (score) => score.raceWinsPerSet[setIndex] === bestRaceWins,
-    );
-    if (bestRaceWins > 0 && setWinners.length === 1) {
-      setWinners[0].setWins += 1;
-    }
-  });
-
-  const bestSetWins = Math.max(...scores.map((score) => score.setWins));
-  const matchWinners = scores.filter((score) => score.setWins === bestSetWins);
+  const mostSetWins = Math.max(0, ...scores.map((score) => score.setWins));
+  const winners = scores.filter((score) => score.setWins === mostSetWins);
   const winnerUserId =
-    bestSetWins > 0 && matchWinners.length === 1
-      ? matchWinners[0].userId
-      : null;
+    mostSetWins > 0 && winners.length === 1 ? winners[0].userId : null;
 
-  return { scores, winnerUserId };
+  return { scoresByUserId: _.keyBy(scores, "userId"), winnerUserId };
 }
 
 /**
@@ -101,8 +120,10 @@ export function computeMatchScores(match: H2hMatch): {
  * any of its competitors already played in.
  */
 export function groupMatchesIntoStages(matches: H2hMatch[]): H2hMatch[][] {
-  const stages: H2hMatch[][] = [];
+  // Inherently sequential — a match's stage depends on every earlier match — so
+  // we carry the latest stage each competitor has played in a mutable lookup.
   const lastStageByUserId = new Map<number, number>();
+  const stages: H2hMatch[][] = [];
 
   _.sortBy(matches, "match_number").forEach((match) => {
     const stage = Math.max(
@@ -116,8 +137,10 @@ export function groupMatchesIntoStages(matches: H2hMatch[]): H2hMatch[][] {
       lastStageByUserId.set(competitor.user_id, stage),
     );
 
+    // A stage is only reachable once the stage before it has been played, so
+    // `stages` never ends up with holes.
     (stages[stage] ??= []).push(match);
   });
 
-  return stages.filter((stage) => stage !== undefined);
+  return stages;
 }

@@ -67,12 +67,12 @@ describe("computeMatchScores", () => {
       ],
     );
 
-    const { scores, winnerUserId } = computeMatchScores(match);
+    const { scoresByUserId, winnerUserId } = computeMatchScores(match);
 
-    expect(scores[0].raceWinsPerSet).toEqual([1]);
-    expect(scores[1].raceWinsPerSet).toEqual([3]);
-    expect(scores[0].setWins).toBe(0);
-    expect(scores[1].setWins).toBe(1);
+    expect(scoresByUserId[1].raceWinsPerSet).toEqual([1]);
+    expect(scoresByUserId[2].raceWinsPerSet).toEqual([3]);
+    expect(scoresByUserId[1].setWins).toBe(0);
+    expect(scoresByUserId[2].setWins).toBe(1);
     expect(winnerUserId).toBe(2);
   });
 
@@ -99,9 +99,10 @@ describe("computeMatchScores", () => {
       ],
     );
 
-    const { scores, winnerUserId } = computeMatchScores(match);
+    const { scoresByUserId, winnerUserId } = computeMatchScores(match);
 
-    expect(scores.map((score) => score.setWins)).toEqual([2, 1]);
+    expect(scoresByUserId[1].setWins).toBe(2);
+    expect(scoresByUserId[2].setWins).toBe(1);
     expect(winnerUserId).toBe(1);
   });
 
