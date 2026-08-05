@@ -18,12 +18,18 @@ import {
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { useAPIClient } from "@/lib/wca/useAPI";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { Suspense, useCallback, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import NextLink from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { route } from "nextjs-routes";
 import Loading from "@/components/ui/loading";
 import _ from "lodash";
 import { Trans } from "react-i18next";
-import { CompetitionTag, IncidentTags } from "@/components/incidents/Tags";
+import {
+  CompetitionTag,
+  IncidentTags,
+  type TagAction,
+} from "@/components/incidents/Tags";
 import { useT } from "@/lib/i18n/useI18n";
 
 const itemsPerPageChoices = createListCollection({
@@ -32,6 +38,14 @@ const itemsPerPageChoices = createListCollection({
   itemToString: (n) => n.toString(),
 });
 
+const filterRoute = (tags: string[]) =>
+  route({
+    pathname: "/incidents",
+    query: tags.length > 0 ? { tags: tags.join(",") } : {},
+  });
+
+// `useSearchParams` opts the tree into client-side rendering, which Next requires a Suspense
+// boundary for.
 export default function IncidentsPage() {
   return (
     <Suspense fallback={<Loading />}>
@@ -43,13 +57,15 @@ export default function IncidentsPage() {
 function IncidentsLog() {
   const { t } = useT();
   const api = useAPIClient();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [query, setQuery] = useState<string | undefined>(undefined);
-  const [searchTags, setSearchTags] = useState<string[]>(
-    () => searchParams.get("tags")?.split(",").filter(Boolean) ?? [],
-  );
+
+  // The tag filter lives in the URL so that it stays shareable and so that linking to
+  // `/incidents?tags=...` from a single incident actually applies the filter.
+  const searchTags = searchParams.get("tags")?.split(",").filter(Boolean) ?? [];
 
   // TODO GB: Use "proper" pagination for this endpoint (inifinite?) like in competition_index
   //   or at least fall back to API-typed queryOptions
@@ -73,43 +89,27 @@ function IncidentsLog() {
     placeholderData: keepPreviousData,
   });
 
-  const { totalEntries, totalPages } = useMemo(() => {
-    if (!incidentQuery) {
-      return {
-        totalPages: 0,
-        totalEntries: 0,
-        entriesPerPage: 0,
-      };
-    } else {
-      const headers = incidentQuery.response.headers;
-      const totalEntries = parseInt(headers.get("total") ?? "0", 10);
-      const entriesPerPage = parseInt(
-        headers.get("per-page") ?? `${itemsPerPage}`,
-        10,
-      );
-      const totalPages = Math.ceil(totalEntries / entriesPerPage);
-
-      return {
-        totalEntries,
-        entriesPerPage,
-        totalPages,
-      };
-    }
-  }, [incidentQuery, itemsPerPage]);
+  // Rails::Pagination reports the totals in the response headers rather than the body.
+  const headers = incidentQuery?.response.headers;
+  const totalEntries = parseInt(headers?.get("total") ?? "0", 10);
+  const entriesPerPage = parseInt(
+    headers?.get("per-page") ?? `${itemsPerPage}`,
+    10,
+  );
+  const totalPages = Math.ceil(totalEntries / entriesPerPage);
 
   const [topEntryIndex, bottomEntryIndex] = [
     (page - 1) * itemsPerPage,
     Math.min(page * itemsPerPage, totalEntries) - 1,
   ];
 
-  const addTagToSearch = useCallback(
-    (tag: string) => {
-      setSearchTags(_.xor(searchTags, [tag]));
-    },
-    [searchTags],
-  );
+  const tagAction: TagAction = {
+    kind: "toggleFilter",
+    onToggle: (tag) =>
+      router.replace(filterRoute(_.xor(searchTags, [tag])), { scroll: false }),
+  };
 
-  const incidents = useMemo(() => incidentQuery?.data ?? [], [incidentQuery]);
+  const incidents = incidentQuery?.data ?? [];
 
   if (isLoading) {
     return <Loading />;
@@ -149,10 +149,19 @@ function IncidentsLog() {
             {incidents.map((item) => (
               <Table.Row key={item.id}>
                 <Table.Cell>
-                  <Link href={`/incidents/${item.id}`}>{item.title}</Link>
+                  <Link asChild>
+                    <NextLink
+                      href={route({
+                        pathname: "/incidents/[id]",
+                        query: { id: item.id },
+                      })}
+                    >
+                      {item.title}
+                    </NextLink>
+                  </Link>
                 </Table.Cell>
                 <Table.Cell>
-                  <IncidentTags tags={item.tags} addToSearch={addTagToSearch} />
+                  <IncidentTags tags={item.tags} action={tagAction} />
                 </Table.Cell>
                 <Table.Cell>
                   {item.competitions.map((competition) => (
