@@ -33,6 +33,7 @@ services:
       DISABLE_SPRING: 1
     command: >
       bash -c './package-install.dev.sh packages.dev.txt &&
+      ./package-install.dev.sh packages.runtime.txt &&
       rm -f .db-inited &&
       bin/setup &&
       touch .db-inited'
