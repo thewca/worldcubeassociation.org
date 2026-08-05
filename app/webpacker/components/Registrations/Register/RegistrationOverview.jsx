@@ -118,7 +118,7 @@ export default function RegistrationOverview({
                 :
               </List.Header>
               { /* Make sure to keep WCA Event order */}
-              {events.official
+              {events.officialWithFuture
                 .filter((e) => eventIds.includes(e.id))
                 .map((e) => (
                   <React.Fragment key={e.id}>
