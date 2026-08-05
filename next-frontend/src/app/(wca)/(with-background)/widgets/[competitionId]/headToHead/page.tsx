@@ -24,9 +24,7 @@ export default async function HeadToHeadPage({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">
-          {t("competitions.live.results.head_to_head")}
-        </Card.Title>
+        <Card.Title textStyle="s4">{t("competitions.h2h.title")}</Card.Title>
         {h2hRounds.length > 0 ? (
           <HeadToHeadBrackets h2hRounds={h2hRounds} />
         ) : (

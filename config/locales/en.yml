@@ -1493,7 +1493,6 @@ en:
           event_edit_warning: "This competitor is not registered for this event, and the competition no longer allows event changes to registrations. Adding them will still work, but make sure this is intended."
       results:
         competitor: "Competitor"
-        head_to_head: "Head To Head Bracket"
         mean: "Mean"
       errors:
         round_closed: "The Round is not open yet"
@@ -2304,6 +2303,7 @@ en:
         competitors: "Competitors"
         scrambles: "Scrambles"
     h2h:
+      title: "Head To Head Bracket"
       set_number: "Set %{number}"
       stage_of: "Stage of %{number}"
       quarterfinal_stage: "Quarterfinal Stage"
