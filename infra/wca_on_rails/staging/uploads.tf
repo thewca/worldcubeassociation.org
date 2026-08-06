@@ -98,16 +98,9 @@ resource "aws_s3_bucket_policy" "uploads" {
   })
 }
 
-# NOTE: DNS is otherwise managed outside Terraform in this repo. Drop this block
-# and create the record by hand if you would rather keep it that way.
-resource "aws_route53_record" "uploads" {
-  zone_id = "Z06972271NGRVXJI4XQPM" # worldcubeassociation.org.
-  name    = local.uploads_domain
-  type    = "A"
-
-  alias {
-    name                   = aws_cloudfront_distribution.uploads.domain_name
-    zone_id                = aws_cloudfront_distribution.uploads.hosted_zone_id
-    evaluate_target_health = false
-  }
+# DNS is managed outside Terraform, so uploads-staging.worldcubeassociation.org
+# has to be created by hand as an A/ALIAS record in the worldcubeassociation.org
+# zone, pointing at this value.
+output "uploads_cloudfront_domain" {
+  value = aws_cloudfront_distribution.uploads.domain_name
 }
