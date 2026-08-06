@@ -52,6 +52,93 @@ RSpec.describe "API Competitions" do
     end
   end
 
+  describe "GET #head_to_head" do
+    let!(:competition) { create(:competition, :visible, with_rounds: true, h2h_finals_event_ids: ['333']) }
+    let!(:round) { competition.competition_events.find_by(event_id: "333").rounds.first }
+    let!(:users) { create_list(:user_with_wca_id, 2) }
+    let!(:registrations) { users.map { create(:registration, competition: competition, user: it) } }
+    let!(:match) { round.h2h_matches.create!(match_number: 1) }
+    let!(:competitors) { users.map { match.h2h_match_competitors.create!(user: it) } }
+
+    # The winner of the first race is ranked first, so that the live standings
+    # and the posted results below disagree about who came where.
+    def enter_live_results(values)
+      set = match.h2h_sets.create!(set_number: 1)
+
+      registrations.zip(competitors, values).each_with_index do |(registration, competitor, value), index|
+        live_result = create(:live_result, registration: registration, round: round, best: value, average: 0,
+                                           global_pos: index + 1, local_pos: index + 1, attempts_count: 0)
+        live_attempt = create(:live_attempt, live_result: live_result, value: value, attempt_number: 1)
+        set.h2h_attempts.create!(h2h_match_competitor: competitor, live_attempt: live_attempt, set_attempt_number: 1)
+      end
+    end
+
+    it "renders matches with competitors, sets and attempts" do
+      enter_live_results([500, 600])
+
+      get api_v0_competition_head_to_head_path(competition)
+      expect(response).to be_successful
+
+      json = response.parsed_body
+      expect(json.length).to eq 1
+      expect(json[0]["id"]).to eq round.wcif_id
+      expect(json[0]["event_id"]).to eq "333"
+
+      json_match = json[0]["matches"][0]
+      expect(json_match["match_number"]).to eq 1
+      expect(json_match["competitors"].pluck("user_id")).to match_array users.map(&:id)
+      expect(json_match["competitors"].pluck("wca_id")).to match_array users.map(&:wca_id)
+      expect(json_match["sets"][0]["attempts"].pluck("value")).to contain_exactly(500, 600)
+    end
+
+    it "takes final positions from the live standings before results are posted" do
+      enter_live_results([500, 600])
+
+      get api_v0_competition_head_to_head_path(competition)
+
+      competitors_json = response.parsed_body.dig(0, "matches", 0, "competitors")
+      expect(competitors_json.to_h { [it["user_id"], it["final_pos"]] })
+        .to eq({ users[0].id => 1, users[1].id => 2 })
+    end
+
+    it "prefers posted results over the live standings once results exist" do
+      enter_live_results([500, 600])
+      # Deliberately the reverse of the live standings, so we can tell which won.
+      users.reverse.each_with_index do |user, index|
+        create(:result, competition: competition, round: round, person: user.person,
+                        event_id: "333", round_type_id: round.round_type_id, format_id: "h",
+                        best: 500, average: 0, pos: index + 1)
+      end
+
+      get api_v0_competition_head_to_head_path(competition)
+
+      competitors_json = response.parsed_body.dig(0, "matches", 0, "competitors")
+      expect(competitors_json.to_h { [it["user_id"], it["final_pos"]] })
+        .to eq({ users[0].id => 2, users[1].id => 1 })
+    end
+
+    it "orders matches and sets by number regardless of insertion order" do
+      round.h2h_matches.create!(match_number: 3)
+      round.h2h_matches.create!(match_number: 2)
+      [3, 1, 2].each { match.h2h_sets.create!(set_number: it) }
+
+      get api_v0_competition_head_to_head_path(competition)
+
+      json_round = response.parsed_body[0]
+      expect(json_round["matches"].pluck("match_number")).to eq [1, 2, 3]
+      expect(json_round["matches"][0]["sets"].pluck("set_number")).to eq [1, 2, 3]
+    end
+
+    it "renders nothing for a competition without head-to-head rounds" do
+      plain_competition = create(:competition, :visible, with_rounds: true)
+
+      get api_v0_competition_head_to_head_path(plain_competition)
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to be_empty
+    end
+  end
+
   describe "GET #scrambles" do
     let!(:competition) { create(:competition, :visible) }
     let!(:scramble) { create(:scramble, competition: competition) }

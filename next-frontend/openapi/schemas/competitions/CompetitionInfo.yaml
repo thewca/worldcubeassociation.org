@@ -206,6 +206,11 @@ properties:
     type: array
     items:
       type: string
+  h2h_rounds:
+    type: array
+    items:
+      type: string
+    example: [ "333-r1" ]
   delegates:
     type: array
     items:

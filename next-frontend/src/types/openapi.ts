@@ -578,6 +578,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/competitions/{competitionId}/head-to-head": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns head-to-head matches for all head-to-head rounds */
+        get: operations["headToHeadByCompetition"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/scrambles": {
         parameters: {
             query?: never;
@@ -1492,6 +1509,12 @@ export interface components {
             /** @example 42 */
             spots_left?: number | null;
             tab_names: string[];
+            /**
+             * @example [
+             *       "333-r1"
+             *     ]
+             */
+            h2h_rounds?: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
         };
@@ -1653,6 +1676,37 @@ export interface components {
         /** @enum {string} */
         CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         Results: components["schemas"]["Result"][];
+        H2hMatchCompetitor: {
+            user_id: number;
+            name: string;
+            wca_id: string | null;
+            country_iso2: string;
+            final_pos: number | null;
+        };
+        H2hAttempt: {
+            user_id: number;
+            set_attempt_number: number;
+            value: number | null;
+        };
+        H2hSet: {
+            set_number: number;
+            attempts: components["schemas"]["H2hAttempt"][];
+        };
+        H2hMatch: {
+            /** @example 1 */
+            match_number: number;
+            competitors: components["schemas"]["H2hMatchCompetitor"][];
+            sets: components["schemas"]["H2hSet"][];
+        };
+        H2hRound: {
+            /** @example 333-r1 */
+            id: string;
+            /** @example 333 */
+            event_id: string;
+            /** @example f */
+            round_type_id: string;
+            matches: components["schemas"]["H2hMatch"][];
+        };
         Scramble: {
             id: number;
             competition_id: string;
@@ -2750,6 +2804,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Results"];
+                };
+            };
+        };
+    };
+    headToHeadByCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["H2hRound"][];
                 };
             };
         };
