@@ -394,6 +394,25 @@ RSpec.describe "API Competitions" do
           expect(registration.reload.assignments.map(&:to_wcif)).to match_array assignments
         end
 
+        it "makes a person with the data entry role a scoretaker" do
+          persons = [{ wcaUserId: registration.user.id, roles: ["scrambler", Registration::SCORETAKER_ROLE] }]
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
+          expect(competition.reload.scoretakers).to include(registration.user)
+        end
+
+        it "does not make a person without the data entry role a scoretaker" do
+          persons = [{ wcaUserId: registration.user.id, roles: ["scrambler"] }]
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
+          expect(competition.reload.scoretakers).to be_empty
+        end
+
+        it "keeps a scoretaker when their data entry role is taken away" do
+          competition.competition_scoretakers.create!(user: registration.user)
+          persons = [{ wcaUserId: registration.user.id, roles: ["scrambler"] }]
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
+          expect(competition.reload.scoretakers).to include(registration.user)
+        end
+
         it "cannot change person immutable data" do
           persons = [{
             wcaUserId: registration.user.id,

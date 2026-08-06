@@ -2105,6 +2105,7 @@ class Competition < ApplicationRecord
     competition_activities = all_activities
     new_assignments = []
     removed_assignments = []
+    scoretaker_user_ids = []
     wcif_persons.each do |wcif_person|
       local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
@@ -2126,6 +2127,7 @@ class Competition < ApplicationRecord
         # The additional roles are only for WCIF purposes and we don't validate them,
         # so we can safely skip validations by using update_attribute
         registration.update_attribute(:roles, roles)
+        scoretaker_user_ids << registration.user_id if roles.include?(Registration::SCORETAKER_ROLE)
       end
       wcif_person["assignments"]&.each do |assignment_wcif|
         schedule_activity = competition_activities.find do |competition_activity|
@@ -2155,6 +2157,14 @@ class Competition < ApplicationRecord
     end
     Assignment.where(id: removed_assignments).delete_all if removed_assignments.any?
     Assignment.upsert_all(new_assignments) if new_assignments.any?
+
+    # Groupifier and the Delegate Dashboard express "this person does data entry" as a person role,
+    # so people holding that role become scoretakers. Scoretakers are never removed here, because
+    # they can also be assigned by hand outside of the WCIF.
+    return if scoretaker_user_ids.empty?
+
+    new_scoretaker_ids = scoretaker_user_ids.uniq - competition_scoretakers.where(user_id: scoretaker_user_ids).pluck(:user_id)
+    CompetitionScoretaker.insert_all(new_scoretaker_ids.map { { competition_id: id, user_id: it } }) if new_scoretaker_ids.any?
   end
 
   def set_wcif_schedule!(wcif_schedule)
