@@ -8,6 +8,7 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { payloadAuthConfig } from "@/auth.config";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/collections/Media";
+import { MediaOriginals } from "@/collections/MediaOriginals";
 import { Testimonials } from "@/collections/Testimonials";
 import { Announcements } from "@/collections/Announcements";
 import {
@@ -54,6 +55,12 @@ function plugins() {
       collections: {
         media: {
           prefix: isLiveSite ? "media" : "media-staging",
+          generateFileURL: ({ prefix, filename }) => {
+            return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
+          },
+        },
+        "media-originals": {
+          prefix: isLiveSite ? "media-originals" : "media-originals-staging",
           generateFileURL: ({ prefix, filename }) => {
             return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
           },
@@ -113,6 +120,7 @@ export default buildConfig({
   },
   collections: [
     Media,
+    MediaOriginals,
     Testimonials,
     Announcements,
     FaqCategories,
