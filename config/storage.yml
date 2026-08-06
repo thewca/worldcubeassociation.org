@@ -23,3 +23,10 @@ s3_avatars_public:
 s3_avatars_private:
   <<: *s3_default
   bucket: <%= EnvConfig.S3_AVATARS_PRIVATE_BUCKET %>
+
+# Deliberately not `public: true`: the bucket blocks public ACLs and is only
+# readable through CloudFront via OAC. URLs are built against
+# S3_UPLOADS_ASSET_HOST instead.
+s3_uploads:
+  <<: *s3_default
+  bucket: <%= EnvConfig.S3_UPLOADS_BUCKET %>

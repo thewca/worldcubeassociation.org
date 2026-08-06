@@ -109,6 +109,18 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
+      name = "S3_UPLOADS_BUCKET"
+      value = aws_s3_bucket.uploads.id
+    },
+    {
+      name = "S3_UPLOADS_ASSET_HOST"
+      value = "https://${local.uploads_domain}"
+    },
+    {
+      name = "UPLOADS_STORAGE"
+      value = "s3_uploads"
+    },
+    {
       name = "CDN_EXPORTS_DISTRIBUTION_ID"
       value = "E1752JAESQHVEE"
     },
