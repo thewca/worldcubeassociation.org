@@ -106,7 +106,8 @@ RSpec.describe "API Competitions" do
       # Deliberately the reverse of the live standings, so we can tell which won.
       users.reverse.each_with_index do |user, index|
         create(:result, competition: competition, round: round, person: user.person,
-                        event_id: "333", round_type_id: round.round_type_id, pos: index + 1)
+                        event_id: "333", round_type_id: round.round_type_id, format_id: "h",
+                        best: 500, average: 0, pos: index + 1)
       end
 
       get api_v0_competition_head_to_head_path(competition)
