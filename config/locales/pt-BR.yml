@@ -1519,7 +1519,7 @@ pt-BR:
       #original_hash: ea20be0
       success_message: E-mail enviado - retornaremos em breve.
       #original_hash: 8fa6b95
-      prefilled: >-
+      to_update_registration_prefilled: >-
         Para atualizar sua inscrição, você precisa contatar os organizadores da
         competição. Já preenchemos o formulário de contato com as mudanças
         solicitadas - por favor envie o formulário.
