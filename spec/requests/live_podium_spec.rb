@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "WCA Live API" do
   describe "GET #podiums" do
-    let(:competition) { create(:competition, :with_delegate, event_ids: ["333"]) }
+    let(:competition) { create(:competition, :with_delegate, scoretaking_software: :internal, event_ids: ["333"]) }
     let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
 
     it "Correctly gets the podium of a normal round" do

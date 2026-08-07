@@ -213,10 +213,19 @@ it:
     #original_hash: 17dae1e
     attempt_name: 'Tentativo %{number}'
   round:
+    #original_hash: ceeac4a
+    title: Turni
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'
     #original_hash: 747df5a
     round_number: 'Turno %{round_number}'
+  scramble_set:
+    #original_hash: ba18ca7
+    name: 'Scramble Set %{letter_code}'
+    #original_hash: d46fe75
+    group: 'Gruppo %{number}'
+    #original_hash: 17dae1e
+    attempt: 'Tentativo %{number}'
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -685,6 +694,8 @@ it:
           chair: Presidente WCA
           #original_hash: 7d405ff
           executive_director: Direttore Esecutivo WCA
+          #original_hash: 36a137f
+          chief_operating_officer: Direttore Operativo WCA
           #original_hash: 1dd4a07
           secretary: Segretario WCA
           #original_hash: 0388b19
@@ -870,15 +881,17 @@ it:
           incidenti ti sembrano generici, riporta almeno il caso che ritieni più
           rappresentativo o degno di nota. Assicurati di spuntare le caselle in
           basso se desideri ricevere un feedback.
-        #original_hash: f2309fc
+        #original_hash: 7577db4
         setup_images: >-
           Devi allegare almeno %{image_count} immagini che illustrino
-          l'allestimento delle aree di scrambling e di competizione (ulteriori
-          immagini sono ben accette). È possibile selezionare più file
-          contemporaneamente. È possibile eliminare le immagini solo quando sono
-          state caricate un numero sufficiente di altre immagini (se si desidera
-          sostituire un'immagine, è necessario caricare prima quella nuova e poi
-          eliminare quella vecchia).
+          l'allestimento delle aree di scrambling e di gara per questa
+          competizione, preferibilmente scattate durante la competizione
+          (ulteriori immagini sono ben accette). Puoi selezionare più file
+          contemporaneamente. Puoi eliminare immagini solo dopo aver caricato un
+          numero sufficiente di nuove immagini (se desideri sostituire
+          un'immagine, è necessario caricare prima quella nuova e poi eliminare
+          quella vecchia). Se non possiedi immagini dell'area di gara e/o di
+          scrambling durante la competizione, spiega il perché.
         #original_hash: da39a3e
         wrc_feedback_requested: ''
         #original_hash: 98bb5cd
@@ -1017,6 +1030,8 @@ it:
       contact_wrt:
         #original_hash: 603a218
         wca_id: WCA ID
+    #original_hash: 687d968
+    competition_link_html: 'Clicca <a href=''%{url}''>qui</a> per visitare la pagina della competizione'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -1471,8 +1486,8 @@ it:
         wfc: WCA Financial Committee
         #original_hash: 2035811
         wmt: WCA Marketing Team
-        #original_hash: c90653c
-        wmct: WCA Major Championships Team
+        #original_hash: 2517097
+        wmct: WCA Major Championship Team
         #original_hash: 8f32116
         wqac: WCA Quality Assurance Committee
         #original_hash: 3da1e85
@@ -1738,6 +1753,10 @@ it:
           validation_error: 'Per favore, conferma di non essere un robot.'
       #original_hash: 126541e
       success_message: Richiesta inviata. Ti risponderemo al più presto.
+      #original_hash: bb6a0cf
+      success_message_with_ticket_link_html: >-
+        Richiesta inviata. Ti risponderemo al più presto. Per controllare lo
+        stato di questa richiesta, visita <a href="%{link}">questo link</a>.
   homepage:
     #original_hash: 824d76b
     learn_more: Scopri di più
@@ -1783,6 +1802,13 @@ it:
       text: >-
         Consulta i record attuali e storici per tutte le discipline ufficiali
         WCA.
+    volunteer:
+      #original_hash: cbf217d
+      title: Volontario
+      #original_hash: 949f739
+      text: >-
+        Partecipa anche tu! La WCA offre opportunità di volontariato in diversi
+        team. Non è necessario essere un speedcuber per diventare volontario.
     faq:
       #original_hash: 03688ba
       title: Domande Frequenti
@@ -2010,6 +2036,14 @@ it:
       profile: Profilo
       #original_hash: 7b2c7f1
       approve: Approva
+      #original_hash: d9455bf
+      approve_confirm: 'Sei sicuro di voler approvare il WCA ID %{wca_id}?'
+      #original_hash: 1ada587
+      clear_claim: Cancella richiesta
+      #original_hash: dc39741
+      clear_claim_confirm: >-
+        Sei sicuro di voler cancellare la richiesta relativa all'ID WCA
+        %{wca_id}?
       #original_hash: 85de4b8
       unconfirmed_email: 'L''indirizzo email (%{email}) di questo account non è confermato.'
       #original_hash: 7069007
@@ -2689,6 +2723,8 @@ it:
           La data di nascita deve rispettare il formato YYYY-mm-dd
           (anno-mese-giorno, per esempio 1944-07-13). Le seguenti date non
           possono essere analizzate: %{raw_dobs}.
+        #original_hash: 6d8e34b
+        empty_file: Il file è vuoto.
     add:
       #original_hash: 975275e
       title: 'Aggiungi iscrizione per %{comp}'
@@ -2848,16 +2884,142 @@ it:
         partecipanti in lista d'attesa. Se stai utilizzando una lista d'attesa,
         ti preghiamo di indicare una scadenza. Se non è prevista una lista
         d'attesa, ricorda di specificarlo nei requisiti di iscrizione.
+      #original_hash: 51376ef
+      schedule_locked_after_results_submitted: Il programma non può essere modificato dopo l'invio dei risultati.
+      #original_hash: 1877b69
+      spots_left:
+        zero: Competizione al completo
+        one: Un posto rimasto
+        other: '%{count} posti rimasti'
     live:
       #original_hash: 10d1a3c
       title: Risultati in diretta
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: in diretta
+        #original_hash: e5fd9cf
+        done: terminato
       connection:
         #original_hash: f92b311
         initialized: Connessione in inizializzazione
-        #original_hash: 66d44d4
-        connected: Connesso. I risultati sono in fase di aggiornamento
+        #original_hash: b574812
+        connected: Connesso. Ricevo aggiornamenti sui risultati in tempo reale
         #original_hash: 53abaa2
         disconnected: Connessione persa. I risultati non saranno aggiornati
+        status:
+          #original_hash: 3ec2f2a
+          initialized: Inizializzazione
+          #original_hash: c2f9b7b
+          connected: Connesso
+          #original_hash: 771e05f
+          disconnected: Disconnesso
+      podiums:
+        #original_hash: 02ae2bd
+        title: Podi
+        #original_hash: d7297a7
+        undetermined: Podi ancora da definire
+        #original_hash: 61e88df
+        none: Nessun podio definito finora!
+      admin:
+        #original_hash: cf9b770
+        open: Apri
+        #original_hash: 719ea39
+        clear: Svuota
+        #original_hash: 42faad9
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} inseriti'
+        #original_hash: adec79f
+        round_locked: bloccato
+        #original_hash: 5301648
+        edit: Modifica
+        #original_hash: 612e12d
+        results: Risultati
+        #original_hash: b233e77
+        registration: Iscrizioni
+        #original_hash: 1e0d934
+        admin_view: Visualizzazione Amministratore
+        #original_hash: 530a71b
+        results_view: Visualizzazione Risultati
+        #original_hash: 1dadee2
+        double_check: Doppio Controllo
+        warnings:
+          #original_hash: 9198c71
+          omitted: >-
+            Hai omesso il tentativo %{attempt_number}. Assicurati che sia
+            intenzionale.
+          #original_hash: 82d8e53
+          DNS: >-
+            C'è almeno un DNS seguito da un risultato valido. Assicurati che sia
+            effettivamente un DNS e non un DNF.
+          #original_hash: 6becd6c
+          impossible: >-
+            Il risultato che stai cercando di inserire sembra impossibile: il
+            tentativo %{attempt_number} è stato completato in meno di 30 secondi
+            per ogni cubo provato. Se vuoi inserire i minuti, non dimenticare di
+            aggiungere due zeri  alla fine del risultato per i centesimi di
+            secondo.
+          #original_hash: a03301d
+          inconsistent: >-
+            Il risultato che stai cercando di inviare sembra incoerente: c'è una
+            differenza notevole tra il miglior singolo (%{best_single}) e il
+            peggior singolo (%{worst_single}). Assicurati che i risultati siano
+            corretti.
+          #original_hash: 0be6543
+          round_locked: >-
+            Il prossimo turno è stato già aperto, e non verrà influenzato da
+            modifiche successive!
+        quit:
+          #original_hash: de62de1
+          title: Elimina Partecipante
+          #original_hash: c25b336
+          next_to_advance:
+            zero: '-'
+            one: 'Il prossimo partecipante ad avanzare è %{competitors}'
+            other: 'I prossimi partecipanti ad avanzare sono %{competitors}'
+          #original_hash: c87ca67
+          advance: Fai avanzare il prossimo partecipante
+          #original_hash: aa59a26
+          quit_confirm:
+            zero: '-'
+            one: Elimina il partecipante dal turno
+            other: Elimina i partecipanti dal turno
+          bulk:
+            #original_hash: e0981de
+            success: 'Eliminati %{count} partecipanti con successo'
+            #original_hash: 98fe723
+            failure: Impossibile eliminare in blocco i partecipanti
+            #original_hash: 774050e
+            menu: Elimina in blocco
+          #original_hash: 1a2285d
+          quit_menu: Elimina
+          #original_hash: 70835a0
+          no_next: Nessun altro partecipante da far avanzare.
+          #original_hash: 77dfd21
+          cancel: Annulla
+          #original_hash: 79d6737
+          failed_to_fetch: Impossibile recuperare il prossimo partecipante ad avanzare
+          #original_hash: d4dcd86
+          still_processing: >-
+            Impossibile eseguire l'azione "Elimina partecipante" mentre i
+            risultati sono ancora in elaborazione
+        add_competitor:
+          #original_hash: 9dcb50d
+          single_round: Aggiungi partecipante al turno
+          #original_hash: bf3b670
+          multiple_rounds:
+            zero: '-'
+            one: Aggiungi il partecipante a entrambi i turni del doppio turno
+            other: >-
+              Aggiungi il partecipante a questo turno. Poiché il secondo turno
+              del doppio turno è ancora chiuso, dovrai aggiungerlo
+              successivamente.
+      results:
+        #original_hash: 4705687
+        competitor: Partecipante
+        #original_hash: 51cda54
+        mean: Media
+      errors:
+        #original_hash: f522c26
+        round_closed: Il turno non è ancora aperto
     my_competitions:
       #original_hash: 5c6d3ea
       title: Le mie competizioni
@@ -3091,14 +3253,22 @@ it:
         L'evento principale era %{event_name}. Non è stato dichiarato un
         vincitore, poiché nessun partecipante ha ottenuto risultati validi
         nell'evento.
+      #original_hash: 5262865
+      h2h_winner: '%{winner} ha vinto la finale testa a testa dell''evento %{event_name}.'
       #original_hash: 6c3b236
-      winner: '%{winner} vince %{result_sentence} nell''evento %{event_name}.'
+      winner: '%{winner} ha vinto l''evento %{event_name} %{result_sentence}.'
       #original_hash: ec7f18a
-      first_runner_up: '%{first_runner_up} termina secondo (%{first_runner_up_result})'
+      first_runner_up: '%{first_runner_up} si è classificato secondo (%{first_runner_up_result})'
+      #original_hash: 2926d10
+      h2h_first_runner_up: '%{first_runner_up} si è classificato secondo'
       #original_hash: cffa50a
       and: e
       #original_hash: 67d285c
-      second_runner_up: '%{second_runner_up} termina terzo (%{second_runner_up_result}).'
+      second_runner_up: >-
+        %{second_runner_up} si è classificato terzo
+        (%{second_runner_up_result}).
+      #original_hash: 157b649
+      h2h_second_runner_up: '%{second_runner_up} si è classificato terzo.'
       records:
         #original_hash: 0658e11
         wr: Record Mondiali
@@ -3310,10 +3480,11 @@ it:
         grado di modificare le informazioni. Controlla la tua email per
         verificare che il WCA Competition Announcement Team sia stato
         notificato.
-      #original_hash: 4c7deb7
+      #original_hash: 89fbbca
       submit_delete: >-
-        Sei sicuro di voler cancellare questa competizione? L'operazione non è
-        reversibile.
+        Questa operazione non può essere annullata. Inserisci l'ID della
+        competizione "%{competition_id}" qui sotto per confermare la
+        cancellazione.
       #original_hash: 8ebebca
       coordinates: Coordinate
       #original_hash: a672984
@@ -3407,6 +3578,8 @@ it:
           organizer_ids: Organizzatori
           #original_hash: b37456c
           contact: Contatti
+          #original_hash: 78ef126
+          lead_delegate_id: Delegato principale
         #original_hash: 991f419
         championships: Campionati
         website:
@@ -3418,8 +3591,8 @@ it:
           external_registration_page: Pagina di iscrizione
           #original_hash: 87b7d5f
           uses_wca_registration: Voglio utilizzare il sito WCA per le iscrizioni
-          #original_hash: ebe8c47
-          uses_wca_live: Desidero utilizzare WCA Live per l'immissione dei risultati
+          #original_hash: 0611f2d
+          scoretaking_software: Software utilizzato per l'inserimento dei risultati
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Codice valuta
@@ -3632,6 +3805,11 @@ it:
             le richieste di contatto verranno effettuate tramite un form, senza
             che l'email dell'organizzatore venga mostrata. %{md}. Example:
             [CubingItaly](mailto:cubingitaly@gmail.com)
+          #original_hash: 7a51d00
+          lead_delegate_id: >-
+            Il Delegato principale è responsabile degli aspetti amministrativi
+            della competizione (risultati, report, ricevute delle quote
+            associative)
         website:
           #original_hash: da39a3e
           generate_website: ''
@@ -3643,8 +3821,8 @@ it:
             Deve avere un url http(s) valido.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
+          #original_hash: cc7d557
+          scoretaking_software: 'Seleziona "%{choice_ilr}" se desideri usare i doppi turni'
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3796,6 +3974,14 @@ it:
             live: >-
               Accetta automaticamente le iscrizioni quando viene effettuato il
               pagamento
+        website:
+          scoretaking_software:
+            #original_hash: 1c88388
+            external: 'Un tool esterno, non gestito dalla WCA'
+            #original_hash: 4b175c3
+            wca_live: 'WCA Live, disponibile su live.worldcubeassociation.org'
+            #original_hash: 1ee034d
+            internal: Risultati in tempo reale integrati
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -4511,6 +4697,13 @@ it:
         qualification_some_events_html: >-
           I tempi di qualificazione per %{events} devono essere stabiliti entro
           il <b>%{date}</b>.
+        #original_hash: ce9b21b
+        advancement_condition_html: >-
+          Il numero di partecipanti indicati come qualificati al turno
+          successivo corrisponde al numero massimo previsto. Il numero effettivo
+          potrebbe essere inferiore se sono presenti meno partecipanti del
+          previsto, o in caso di parità nelle ultime posizioni di
+          qualificazione.
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
@@ -4521,6 +4714,8 @@ it:
       proceed: Avanza
       #original_hash: 2ffe44e
       qualification: Qualificazione
+      #original_hash: 5289f93
+      advancement_condition: Condizioni di avanzamento
     schedule:
       display_as:
         #original_hash: 0424f6e
@@ -4646,6 +4841,12 @@ it:
         #original_hash: c4622c3
         scrambles: Scramble
     results_table:
+      #original_hash: bdbfcdc
+      h2h_results_disclaimer: >-
+        I risultati sono stati determinati tramite una finale testa a testa.
+        Sono riportati solo l'ordine di piazzamento e il miglior tempo. La
+        visualizzazione completa dei risultati testa a testa è ancora in fase di
+        sviluppo.
       #original_hash: 3e9a6b5
       wca_profile: Profilo WCA
       #original_hash: ad8919a
@@ -5246,11 +5447,12 @@ it:
   about:
     #original_hash: 9ac918a
     title: Riguardo la WCA
-    #original_hash: af00571
+    #original_hash: ee35764
     mission_statement: >-
-      La nostra missione è avere più competizioni, in più paesi, con più persone
-      e più divertimento possibile, in condizioni giuste ed eque.
-    #original_hash: e627278
+      Il nostro obiettivo è quello di sostenere la comunità mondiale dello
+      speedcubing e garantire un ambiente competitivo divertente ed equo per
+      tutti.
+    #original_hash: 5bed828
     mission_footer: Dichiarazione d'Intenti WCA
     #original_hash: cdab446
     who_we_are_title: Chi siamo
@@ -5445,6 +5647,8 @@ it:
       last_delegated: Ultima gara da Delegato
       #original_hash: 5ab4a17
       total_delegated: Gare totali da Delegato
+      #original_hash: cec62d6
+      lead_delegated: Competizioni da Delegato principale
       #original_hash: 90ccd64
       history: Cronologia
   regional_organizations:
@@ -5922,10 +6126,10 @@ it:
     paragraph4:
       #original_hash: b6dca56
       title: Criterio di prossimità
-      #original_hash: f5eeb95
+      #original_hash: 0574d31
       content1: >-
         Le competizioni WCA saranno approvate solamente nel caso in cui si
-        trovino ad almeno 10 km o a 5 giorni di distanza da qualsiasi altra
+        trovino ad almeno 30 km o a 5 giorni di distanza da qualsiasi altra
         competizione. In caso di conflitti con la regola, il WCAT dovrà decidere
         se approvarla o meno. Un Delegato WCA che richieda l'approvazione di una
         competizione con problemi di prossimità geografica o temporale, dovrà
@@ -6364,7 +6568,7 @@ it:
         il dato attualmente presente nel database WCA ('%{expected_country}').
         Se si tratta di un errore, correggilo. Altrimenti lascia un commento a
         riguardo per il WCA Results Team.
-      #original_hash: e15e700
+      #original_hash: 6179b35
       multiple_newcomers_with_same_name_warning: >-
         Ci sono più esordienti con lo stesso identico nome: %{name}. Assicurati
         che tutti i risultati per questi partecipanti siano corretti, e che
@@ -6375,6 +6579,17 @@ it:
         Il carattere di parentesi usato in '%{name}' è un carattere irregolare.
         Sostituiscilo con una normale parentesi tonda '(' o ')' e la corretta
         spaziatura.
+      #original_hash: fec0347
+      special_characters_in_name_warning: >-
+        Il nome "%{name}" contiene caratteri speciali non validi (numeri,
+        virgolette, altri simboli). I nomi possono contenere soltanto lettere,
+        spazi, trattini, apostrofi, punti e parentesi tonde.
+      #original_hash: 031123e
+      suspicious_last_name_warning: >-
+        "%{name}" ha come cognome "%{suffix}", che potrebbe non essere un vero e
+        proprio cognome (ad esempio, un suffisso generazionale scritto per
+        esteso). Verificare che si tratti del cognome legale, o
+        sostituirlo/rimuoverlo di conseguenza.
       #original_hash: 4b90583
       successive_uppercase_name_warning: >-
         '%{name}' ha nel proprio nome più lettere maiuscole consecutive.
@@ -6406,6 +6621,16 @@ it:
         al limite di partecipanti (%{competitor_limit}). I risultati dei
         partecipanti iscritti dopo il raggiungimento del limite devono essere
         cancellati.
+      #original_hash: d8f2f1e
+      registration_details_mismatch_warning: >-
+        L'utente con ID %{person_id} (%{name}) presenta dati che non
+        corrispondono a quelli di registrazione: %{mismatches}
+      #original_hash: 1a9da05
+      missing_matching_registration_warning: 'Non è stata trovata alcuna iscrizione a nome %{name}.'
+      #original_hash: 7d62dd5
+      unaccepted_registration_with_results_warning: >-
+        %{name} ha fatto registrare dei risultati nella competizione, ma la sua
+        iscrizione non è contrassegnata come “accettata”.
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-
@@ -6440,10 +6665,6 @@ it:
         di cutoff. Correggi i risultati includendo i tentativi mancanti, oppure
         modifica le informazioni del turno nella pagina di gestione eventi della
         competizione.
-      #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] I risultati di %{person_name} sono nel formato sbagliato:
-        previsto %{expected_format}, inserito %{format}.
       #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Almeno un risultato di %{person_name} supera il time limit
@@ -6453,12 +6674,6 @@ it:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] La somma dei risultati di %{person_name} supera il time
         limit cumulativo, che era %{time_limit}.
-      #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Non esistono informazioni su cutoff e time limit di questo
-        turno. La convalida di questi valori è stata saltata. Modifica le
-        informazioni del turno nella pagina di gestione eventi della
-        competizione.
       #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] Il time limit di questo turno non è definito. La convalida
@@ -6490,11 +6705,6 @@ it:
         partecipanti di quelli previsti dalle condizioni di avanzamento
         (%{actual} anziché %{expected}, la condizione era: %{condition}).
         Modifica le informazioni del turno nella pagina di gestione eventi.
-      #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        Il turno %{round_id} è presente nei risultati ma non è stato creato
-        nella scheda eventi. Aggiungi le informazioni del turno nella pagina di
-        gestione eventi della competizione.
       #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         Il turno %{round_id} ha meno di 100 partecipanti ma ha più di due turni
@@ -6542,12 +6752,6 @@ it:
         Non ci sono risultati per il turno %{round_id}, ma il turno è elencato
         nella scheda eventi. Se il turno non si è tenuto, rimuovilo nella pagina
         di gestione eventi della competizione.
-      #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Non è stato indicato un cutoff per '%{round_name}', ma è stato
-        identificato come un turno combinato nei risultati. Modifica le
-        informazioni del turno nella pagina di gestione eventi della
-        competizione.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6563,12 +6767,6 @@ it:
       no_main_event_warning: >-
         Non è stato selezionato alcun evento principale per questa competizione.
         Se è corretto, informa il WCA Results Team.
-      #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Sono presenti risultati per %{event_id}, tuttavia non è elencato come
-        evento ufficiale. Rimuovi l'evento dai risultati o contatta il WCA
-        Competition Announcement Team per richiedere che l'evento venga aggiunto
-        al sito WCA della competizione.
       #original_hash: fde208d
       missing_results_warning: >-
         Non ci sono risultati per %{event_id}, ma è elencato come evento
@@ -6584,10 +6782,6 @@ it:
       missing_scrambles_for_competition_error: >-
         Scramble mancanti per la competizione. Usa Scrambles Matcher per
         allegare gli scramble.
-      #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Troppi scramble. Usa Scrambles Matcher per deselezionare
-        scramble inutilizzati.
       #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Gruppo %{group_id}: scramble mancanti, rilevati solo
@@ -6603,14 +6797,19 @@ it:
         gruppo di FMC, usa Scrambles Matcher per deselezionare gli scramble
         inutilizzati. Altrimenti, aggiungi un commento per il WCA Results Team
         spiegando perché si sono tenuti più gruppi di FMC.
-      #original_hash: d6830c0
+      #original_hash: ce201ef
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Questo turno ha un numero di set di scramble diverso da
-        quello specificato nella pagina di gestione eventi. Correggi con il
-        numero di set che sono stati utilizzati.
+        [%{round_id}] Questo turno ha un numero di set di scramble (%{actual})
+        diverso da quello specificato nella pagina di gestione eventi
+        (%{expected}). Correggi con il numero di set che sono stati utilizzati.
   tickets:
     type:
       #original_hash: e43f273
       edit_person: Modifica persona
       #original_hash: 5fb2137
       competition_result: Risultati della competizione
+    stakeholder_role:
+      #original_hash: e095187
+      actioner: Esecutore
+      #original_hash: bcdf8d3
+      requester: Committente

@@ -40,27 +40,33 @@ export default async function LogoPage() {
 
   return (
     <Container bg="bg">
-      <VStack alignItems="left">
+      <VStack gap="4" alignItems="left">
         <Heading size="5xl">{t("logo.title")}</Heading>
         {logoItems.map((item) => {
           switch (item.blockType) {
             case "paragraph": {
               return (
                 <Fragment key={item.id}>
-                  <Heading size="2xl">{item.title}</Heading>
+                  {item.title && (
+                    <Heading size="2xl" mt="8">
+                      {item.title}
+                    </Heading>
+                  )}
                   <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
                 </Fragment>
               );
             }
             case "logoDownload": {
-              return <LogoDownload logoDownloadLink={item.url} />;
+              return <LogoDownload key={item.id} logoDownloadLink={item.url} />;
             }
             case "logoVariant": {
               return (
                 <Fragment key={item.id}>
-                  <Heading size="2xl">{item.title}</Heading>
+                  <Heading size="2xl" mt="8">
+                    {item.title}
+                  </Heading>
                   <Text>{item.caption}</Text>
-                  <HStack w="full">
+                  <HStack w="full" mt="4">
                     {item.images.map((value) => {
                       const image = value.image as Media;
                       return (
@@ -69,7 +75,7 @@ export default async function LogoPage() {
                           alt={item.caption}
                           key={image.id}
                           w="100%"
-                          maxW="400px"
+                          maxW={item.logoOnly ? "150px" : "400px"}
                           bg={value.darkBackground ? "black" : "white"}
                         />
                       );

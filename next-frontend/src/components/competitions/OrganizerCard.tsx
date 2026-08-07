@@ -16,8 +16,7 @@ import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
 type OrganizerPerson =
-  | components["schemas"]["Person"]
-  | components["schemas"]["Organizer"];
+  components["schemas"]["Person"] | components["schemas"]["Organizer"];
 
 function OrganizerCarousel({ organizers }: { organizers: OrganizerPerson[] }) {
   return (

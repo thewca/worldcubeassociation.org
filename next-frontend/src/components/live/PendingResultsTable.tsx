@@ -37,9 +37,6 @@ export default function PendingResultsTable({
                 <Table.ColumnHeader>
                   {t("competitions.live.results.competitor")}
                 </Table.ColumnHeader>
-                <Table.ColumnHeader>
-                  {t("results.table_elements.region")}
-                </Table.ColumnHeader>
                 {attemptIndexes.map((num) => (
                   <Table.ColumnHeader key={num} textAlign="right">
                     {num + 1}

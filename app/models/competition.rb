@@ -6,7 +6,10 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
+  has_many :competition_scoretakers, dependent: :delete_all
+  has_many :scoretakers, through: :competition_scoretakers, source: :user
   has_many :results
+  has_many :live_results, through: :registrations
   has_many :scrambles, -> { order(:group_id, :is_extra, :scramble_num) }, inverse_of: :competition
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
@@ -216,6 +219,8 @@ class Competition < ApplicationRecord
   MAX_GUEST_LIMIT = 100
   NEWCOMER_MONTH_ENABLED = false
   NEWCOMER_MONTH_RESERVATIONS_FRACTION = 0.5
+  # Face Turning Octahedron only becomes an official event from this date onwards.
+  FTO_INTRODUCTION_DATE = Date.new(2027, 1, 2)
 
   validates :competitor_limit_enabled, inclusion: { in: [true, false], if: :competitor_limit_required? }
   validates :competitor_limit, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: MAX_COMPETITOR_LIMIT, if: :competitor_limit_enabled? }
@@ -349,6 +354,14 @@ class Competition < ApplicationRecord
   validate :must_have_at_least_one_event, if: :confirmed_or_visible?
   private def must_have_at_least_one_event
     errors.add(:competition_events, I18n.t('competitions.errors.must_contain_event')) if no_events?
+  end
+
+  validate :fto_not_before_introduction_date, if: :start_date?
+  private def fto_not_before_introduction_date
+    return unless self.event_ids.include?("fto")
+    return if start_date >= FTO_INTRODUCTION_DATE
+
+    errors.add(:competition_events, I18n.t('competitions.errors.fto_not_yet_allowed', date: I18n.l(FTO_INTRODUCTION_DATE, format: :long)))
   end
 
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
@@ -511,7 +524,7 @@ class Competition < ApplicationRecord
   end
 
   def number_of_bookmarks
-    bookmarked_users.count
+    bookmarked_competitions.count
   end
 
   def country
@@ -675,6 +688,7 @@ class Competition < ApplicationRecord
         case association_name
         when 'registrations',
              'results',
+             'live_results',
              'competitors',
              'competitor_users',
              'delegate_report',
@@ -711,6 +725,8 @@ class Competition < ApplicationRecord
              'scramble_file_uploads',
              'accepted_registrations',
              'accepted_newcomers',
+             'competition_scoretakers',
+             'scoretakers',
              'duplicate_checker_job_runs',
              'tickets_competition_result',
              'result_ticket',
@@ -973,6 +989,10 @@ class Competition < ApplicationRecord
     !registration_not_yet_opened?
   end
 
+  def before_registration_open?
+    registration_not_yet_opened?
+  end
+
   def registration_currently_open?
     use_wca_registration? && !cancelled? && after_registration_open? && !registration_past?
   end
@@ -1147,11 +1167,16 @@ class Competition < ApplicationRecord
     start_date.present? && start_date > Date.new(2021, 6, 24)
   end
 
-  # can registration edits be done right now
+  # can event edits be done right now (independent of whether the competition has started)
   # must be allowed in general, and if the deadline field exists, is it a date and in the future
-  def registration_edits_currently_permitted?
-    !started? && self.allow_registration_edits &&
+  def event_edits_currently_permitted?
+    self.allow_registration_edits &&
       (!event_change_deadline_date_required? || event_change_deadline_date.blank? || event_change_deadline_date > DateTime.now)
+  end
+
+  # can registration edits be done right now
+  def registration_edits_currently_permitted?
+    !started? && event_edits_currently_permitted?
   end
 
   private def dates_must_be_valid
@@ -1451,7 +1476,7 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.includes(:result_attempts).podium.order(:pos).group_by(&:event)
+    results.includes(:result_attempts).podium.order(:global_pos).group_by(&:event)
            .sort_by { |event, _results| event.rank }
   end
 
@@ -1622,13 +1647,6 @@ class Competition < ApplicationRecord
         sort_by: sort_by,
         sort_by_second: sort_by_second,
       )
-    end
-  end
-
-  # For associated_events_picker
-  def events_to_associated_events(events)
-    events.map do |event|
-      competition_events.find_by(event_id: event.id) || competition_events.build(event_id: event.id)
     end
   end
 
@@ -1863,12 +1881,23 @@ class Competition < ApplicationRecord
     }
   end
 
+  # Associations that `to_competition_info` touches: delegates and organizers are serialized
+  # via `User#serializable_hash` (see `User::SERIALIZATION_INCLUDES`), `event_ids` reads the
+  # events association, and `uses_cutoff?`/`uses_qualification?` iterate over every round of
+  # every competition event. Eager load them all to avoid an N+1 explosion.
+  INFO_SERIALIZATION_INCLUDES = [
+    :events,
+    { competition_events: :rounds },
+    { delegates: User::SERIALIZATION_INCLUDES },
+    { organizers: User::SERIALIZATION_INCLUDES },
+  ].freeze
+
   def to_competition_info
     options = {
       only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
-               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel scoretaking_software
                allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
                force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                information events_per_registration_limit guests_enabled auto_accept_preference auto_accept_disable_threshold],
@@ -1930,19 +1959,20 @@ class Competition < ApplicationRecord
     persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
   end
 
-  def events_wcif(version: WCIF_STABLE_VERSION)
+  def events_wcif(version: WCIF_STABLE_VERSION, include_results: true)
     includes_associations = [
       { rounds: [
         :competition_event,
         :wcif_extensions,
         { participation_source: [:competition_event, { rounds: :competition_event }] },
+        include_results ? { live_results: [:live_attempts] } : {},
       ] },
       :wcif_extensions,
     ]
     competition_events
       .includes(includes_associations)
       .sort_by { |ce| ce.event.rank }
-      .map { it.to_wcif(version: version) }
+      .map { it.to_wcif(version: version, include_results: include_results) }
   end
 
   def schedule_wcif
@@ -1962,13 +1992,19 @@ class Competition < ApplicationRecord
     }
   end
 
+  def self.json_validation_options(is_strict: true)
+    { noAdditionalProperties: is_strict }
+  end
+
   def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
-    expected_schema = Competition.wcif_json_schema(version: version)
-    JSON::Validator.validate!(expected_schema, wcif, noAdditionalProperties: is_strict)
+    expected_schema = self.wcif_json_schema(version: version)
+    validation_opts = self.json_validation_options(is_strict: is_strict)
+
+    JSON::Validator.validate!(expected_schema, wcif, **validation_opts)
   end
 
   def set_wcif!(wcif, current_user, strict_schema_checks: true)
-    import_version = wcif["formatVersion"]
+    import_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
 
     Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
 
@@ -2151,12 +2187,15 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def self.wcif_json_schema(version: WCIF_STABLE_VERSION)
+  def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
     {
+      # This $id property is the actual JsonSchema URI
+      "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
+      # This id property is used by the Ruby Gem that checks JsonSchema when printing error messages.
+      # Without specifying an ID, it will use random UUIDs so we use this field to make error messages clear and predictable.
+      "id" => "WCIFv#{version}",
       "type" => "object",
-      # Normally we want to force tools to tell us which version they're patching,
-      #   but as of writing this comment we need more time to tell that to tools.
-      # "required" => %w[formatVersion],
+      "required" => required_props ? %w[id formatVersion] : [],
       "properties" => {
         "formatVersion" => { "type" => "string" },
         "id" => { "type" => "string" },
@@ -2245,7 +2284,7 @@ class Competition < ApplicationRecord
   end
 
   def world_or_continental_championship?
-    championship_types.any? { |ct| Championship::MAJOR_CHAMPIONSHIP_TYPES.include?(ct) }
+    championship_types.intersect?(Championship::MAJOR_CHAMPIONSHIP_TYPES)
   end
 
   def any_championship?

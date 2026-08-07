@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Tag as ChakraTag,
@@ -6,67 +8,117 @@ import {
   Popover,
   Separator,
   Button,
+  Stack,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { route } from "nextjs-routes";
 
 import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
+import { useT } from "@/lib/i18n/useI18n";
+import type { components } from "@/types/openapi";
+
+const incidentSearchRoute = (tag: string) =>
+  route({ pathname: "/incidents", query: { tags: tag } });
+
+type IncidentTag = components["schemas"]["Incident"]["tags"][number];
+
+// On the log itself a tag toggles the filter in place; on a single incident there is no filter to
+// toggle, so the tag links back to the log instead.
+export type TagAction =
+  | { kind: "toggleFilter"; onToggle: (tag: string) => void }
+  | { kind: "linkToLog" };
+
+interface IncidentTagsProps {
+  tags: IncidentTag[];
+  action?: TagAction;
+}
+
+export function IncidentTags({ tags, action }: IncidentTagsProps) {
+  const { t } = useT();
+
+  return tags.map(({ name, id, url, content_html: contentHtml }) =>
+    // non-regulation/guideline tags will only have a name
+    id !== undefined ? (
+      <RegulationTag
+        key={id}
+        id={id.toString()}
+        typeLabel={t(
+          url.includes("guideline")
+            ? "incidents_log.tags.guideline"
+            : "incidents_log.tags.regulation",
+        )}
+        link={url}
+        description={contentHtml}
+        action={action}
+      />
+    ) : (
+      <MiscTag key={name} tag={name} action={action} />
+    ),
+  );
+}
 
 interface RegulationTagProps {
   id: string;
-  type: string;
+  typeLabel: string;
   description: string;
   link: string;
-  addToSearch?: (query: string) => void;
+  action?: TagAction;
 }
 
-export function RegulationTag({
+function RegulationTag({
   id,
-  type,
+  typeLabel,
   description,
   link,
-  addToSearch,
+  action,
 }: RegulationTagProps) {
-  const links = (
-    <Link href={link} className="hide-new-window-icon">
-      {type}s Reference
-    </Link>
-  );
-
   return (
     <Tag
       tagType="incident"
       labelClass="primary"
       label={id}
-      title={`${type} ${id}`}
+      title={`${typeLabel} ${id}`}
+      titleLink={link}
       description={description}
-      links={links}
-      buttons={addToSearch && SearchForTagButton(addToSearch, id)}
+      buttons={action && <SearchForTag tag={id} action={action} />}
     />
   );
 }
 
 interface MiscTagProps {
   tag: string;
-  addToSearch?: (query: string) => void;
+  action?: TagAction;
 }
 
-function SearchForTagButton(
-  addTagToSearch: (tag: string) => void,
-  tag: string,
-) {
-  return (
-    <Button onClick={() => addTagToSearch(tag)}>Filter by this tag</Button>
-  );
-}
-
-export function MiscTag({ tag, addToSearch }: MiscTagProps) {
+function MiscTag({ tag, action }: MiscTagProps) {
   return (
     <Tag
       tagType="incident"
       labelClass="default"
       label={tag}
       title={tag}
-      buttons={addToSearch && SearchForTagButton(addToSearch, tag)}
+      buttons={action && <SearchForTag tag={tag} action={action} />}
     />
+  );
+}
+
+function SearchForTag({ tag, action }: { tag: string; action: TagAction }) {
+  const { t } = useT();
+
+  if (action.kind === "linkToLog") {
+    return (
+      <Link asChild>
+        <NextLink href={incidentSearchRoute(tag)}>
+          {t("incidents_log.tags.search_with_tag")}
+        </NextLink>
+      </Link>
+    );
+  }
+
+  return (
+    <Button onClick={() => action.onToggle(tag)}>
+      {t("incidents_log.tags.filter_by_tag")}
+    </Button>
   );
 }
 
@@ -81,23 +133,27 @@ const competitionReportUrl = (id: string) =>
   `/competitions/${id}/delegate-report`;
 
 export function CompetitionTag({ id, name, comments }: CompetitionTagProps) {
+  const { t } = useT();
   const { data: permissions } = usePermissionsQuery();
   const canViewDelegateMatters = permissions?.canViewDelegateReport(id);
 
-  const links = canViewDelegateMatters ? (
+  const links = (
     <>
       <Link href={competitionUrl(id)} className="hide-new-window-icon">
-        Competition Page
+        {t("incidents_log.tags.competition_page")}
       </Link>
-      <br />
-      <Link href={competitionReportUrl(id)} className="hide-new-window-icon">
-        Delegate Report
-      </Link>
+      {canViewDelegateMatters && (
+        <>
+          <br />
+          <Link
+            href={competitionReportUrl(id)}
+            className="hide-new-window-icon"
+          >
+            {t("incidents_log.tags.delegate_report")}
+          </Link>
+        </>
+      )}
     </>
-  ) : (
-    <Link href={competitionUrl(id)} className="hide-new-window-icon">
-      Competition Page
-    </Link>
   );
 
   return (
@@ -117,6 +173,7 @@ interface TagProps {
   labelClass: "primary" | "default" | "info";
   label: string;
   title: string;
+  titleLink?: string;
   description?: string | null;
   links?: React.ReactNode;
   buttons?: React.ReactNode;
@@ -126,6 +183,7 @@ function Tag({
   labelClass,
   label,
   title,
+  titleLink,
   description,
   links,
   buttons,
@@ -149,26 +207,24 @@ function Tag({
         </ChakraTag.Root>
       </Popover.Trigger>
       <Popover.Content>
-        <Popover.Header fontWeight="bold">{title}</Popover.Header>
+        <Popover.Header fontWeight="bold">
+          {titleLink ? (
+            <Link href={titleLink} target="_blank" rel="noopener noreferrer">
+              {title}
+            </Link>
+          ) : (
+            title
+          )}
+        </Popover.Header>
         <Popover.Body>
-          {description && (
-            <>
-              <Separator my={2} />
+          {/* Stack drops falsy children, so absent sections take no separator with them. */}
+          <Stack separator={<Separator />} gap="2">
+            {description && (
               <Box dangerouslySetInnerHTML={{ __html: description }} />
-            </>
-          )}
-          {links && (
-            <>
-              <Separator my={2} />
-              <Box>{links}</Box>
-            </>
-          )}
-          {buttons && (
-            <>
-              <Separator my={2} />
-              <Box>{buttons}</Box>
-            </>
-          )}
+            )}
+            {links && <Box>{links}</Box>}
+            {buttons && <Box>{buttons}</Box>}
+          </Stack>
         </Popover.Body>
       </Popover.Content>
     </Popover.Root>

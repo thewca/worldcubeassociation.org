@@ -19,9 +19,9 @@ variable "availability_zones" {
 # Environment Variables that are the same between prod/staging
 
 variable "VAULT_ADDR" {
-  type = string
+  type        = string
   description = "The Address that vault is running at"
-  default = "http://vault.private.worldcubeassociation.org:8200"
+  default     = "http://vault.private.worldcubeassociation.org:8200"
 }
 
 variable "DATABASE_WRT_USER" {
@@ -38,18 +38,18 @@ variable "DATABASE_WRT_SENIOR_USER" {
 
 variable "WRC_WEBHOOK_URL" {
   description = "The URL to send delegate report webhook notifications for WRC to"
-  type = string
-  default = "https://joba.me/wca/reports_webhook"
+  type        = string
+  default     = "https://joba.me/wca/reports_webhook"
 }
 
 variable "pma_auth_secret" {
-  type = string
+  type        = string
   description = "The client secret for pma you can get it at https://www.worldcubeassociation.org/oauth/applications/1069"
 }
 
 variable "anycable_path" {
-  type = string
+  type        = string
   description = "The Path where anycable is mounted"
-  default = "/api/v1/live/cable"
+  default     = "/api/v1/live/cable"
 }
 

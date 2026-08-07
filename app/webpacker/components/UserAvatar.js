@@ -2,7 +2,7 @@ import React from 'react';
 import { Popup } from 'semantic-ui-react';
 
 import '../stylesheets/user_avatar.scss';
-import CroppedImage from './EditAvatar/CroppedImage';
+import CroppedImage from './CroppedImage';
 
 function UserAvatar({
   avatar = {},

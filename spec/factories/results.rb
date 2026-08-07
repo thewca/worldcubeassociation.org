@@ -12,6 +12,7 @@ FactoryBot.define do
 
     competition_id { competition.id }
     pos { 1 }
+    global_pos { pos }
     event_id { "333oh" }
     round_type_id { "f" }
     format_id { "a" }

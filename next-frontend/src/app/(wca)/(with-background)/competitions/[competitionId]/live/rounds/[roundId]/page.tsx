@@ -9,10 +9,12 @@ import {
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import { getRoundName } from "@/lib/wca/live/getRoundName";
-import { getRounds } from "@/lib/wca/live/getRounds";
 import getPermissions from "@/lib/wca/permissions";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
+import { RoundInfoProvider } from "@/providers/RoundInfoProvider";
+import RoundResults from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/RoundResults";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import events from "@/lib/wca/data/events";
 
 export default async function ResultPage({
   params,
@@ -31,14 +33,16 @@ export default async function ResultPage({
     return <OpenapiError response={response} t={t} />;
   }
 
-  const { format, id, linked_round_ids } = data;
+  const { id, linked_round_ids } = data;
 
   const permissions = await getPermissions();
 
   const canManage =
-    !!permissions && permissions.canAdministerCompetition(competitionId);
+    !!permissions && permissions.canScoretakeCompetition(competitionId);
 
   if (linked_round_ids) {
+    const eventName = events.byId[parseActivityCode(id).eventId].name;
+
     const linkedRounds = await Promise.all(
       linked_round_ids
         .filter((wcif_id) => wcif_id !== id)
@@ -54,50 +58,42 @@ export default async function ResultPage({
     return (
       <Container bg="bg">
         <VStack align="left">
-          <MultiRoundResultProvider
-            initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
-            competitionId={competitionId}
-          >
-            <LiveUpdatingResultsTable
-              formatId={format}
-              roundWcifId={roundId}
-              competitionId={competitionId}
-              title="Combined Dual Rounds"
-              isLinkedRound
-              canManage={canManage}
-            />
-          </MultiRoundResultProvider>
+          <RoundInfoProvider roundId={id}>
+            <RoundOpenCheck>
+              <MultiRoundResultProvider
+                initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
+                competitionId={competitionId}
+              >
+                <LiveUpdatingResultsTable
+                  competitionId={competitionId}
+                  title={`${eventName} - Combined Dual Rounds`}
+                  isLinkedRound
+                  canManage={canManage}
+                />
+              </MultiRoundResultProvider>
+            </RoundOpenCheck>
+          </RoundInfoProvider>
         </VStack>
       </Container>
     );
   }
 
-  const {
-    data: roundsData,
-    error: roundsError,
-    response: roundsResponse,
-  } = await getRounds(competitionId);
-
-  if (roundsError) return <OpenapiError response={roundsResponse} t={t} />;
-
-  const roundName = getRoundName(id, t, roundsData.rounds, true);
-
-  const round = roundsData.rounds.find((r) => r.id === id)!;
-
   return (
     <Container bg="bg">
       <VStack align="left">
-        <RoundOpenCheck state={round.state} t={t}>
-          <LiveResultProvider initialRound={data} competitionId={competitionId}>
-            <LiveUpdatingResultsTable
-              formatId={format}
-              roundWcifId={roundId}
+        <RoundInfoProvider roundId={id}>
+          <RoundOpenCheck>
+            <LiveResultProvider
+              initialRound={data}
               competitionId={competitionId}
-              title={roundName}
-              canManage={canManage}
-            />
-          </LiveResultProvider>
-        </RoundOpenCheck>
+            >
+              <RoundResults
+                competitionId={competitionId}
+                canManage={canManage}
+              />
+            </LiveResultProvider>
+          </RoundOpenCheck>
+        </RoundInfoProvider>
       </VStack>
     </Container>
   );

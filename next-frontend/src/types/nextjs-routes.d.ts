@@ -32,6 +32,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]", { "competitionId": string; "roundId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]/admin", { "competitionId": string; "roundId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check", { "competitionId": string; "roundId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/scoretakers", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/podiums", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/register", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/results/all", { "competitionId": string }>
@@ -48,17 +49,22 @@ declare module "nextjs-routes" {
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
     | StaticRoute<"/incidents">
+    | DynamicRoute<"/incidents/[id]", { "id": string }>
     | StaticRoute<"/logo">
     | StaticRoute<"/officers-and-board">
     | StaticRoute<"/organizations">
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>
     | DynamicRoute<"/persons/[wcaId]", { "wcaId": string }>
+    | StaticRoute<"/posts">
+    | DynamicRoute<"/posts/[announcementId]", { "announcementId": string }>
     | StaticRoute<"/privacy">
+    | StaticRoute<"/regulations">
     | StaticRoute<"/regulations/about">
     | StaticRoute<"/regulations/history">
     | DynamicRoute<"/regulations/history/official/[version]", { "version": string }>
     | StaticRoute<"/regulations/scrambles">
     | StaticRoute<"/regulations/translations">
+    | DynamicRoute<"/regulations/translations/[language]", { "language": string }>
     | StaticRoute<"/results/rankings">
     | StaticRoute<"/results/records">
     | StaticRoute<"/score-tools">

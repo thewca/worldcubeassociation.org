@@ -43,8 +43,8 @@ export default async function RootLayout({
             <AuthProvider>
               <UiProvider>
                 <Navbar />
+                <NextTopLoader height={5} />
                 {children}
-                <NextTopLoader height={5} showAtBottom />
                 <Footer />
               </UiProvider>
             </AuthProvider>

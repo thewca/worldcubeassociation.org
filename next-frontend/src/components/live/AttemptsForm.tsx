@@ -1,42 +1,54 @@
 "use client";
 import {
   Button,
+  Checkbox,
   Combobox,
+  createListCollection,
   Heading,
   Portal,
-  useListCollection,
   VStack,
+  Text,
+  Stat,
+  StatGroup,
 } from "@chakra-ui/react";
 import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
-import { LiveCompetitor, LiveRoundAdminBase } from "@/types/live";
-import { useCallback, useImperativeHandle, useRef } from "react";
+import { LiveCompetitor } from "@/types/live";
+import {
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { flushSync } from "react-dom";
 import type { KeyboardEvent, ReactNode, Ref } from "react";
 import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
+import { average, best } from "@/lib/wca/results/attempts";
+import { formatAttemptResult, SKIPPED_VALUE } from "@/lib/wca/wcif/attempts";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import formats from "@/lib/wca/data/formats";
 import { FocusScope, useFocusManager } from "@react-aria/focus";
 
 interface AttemptsFormProps {
-  solveCount: number;
   header: string;
-  eventId: string;
-  cutoff?: LiveRoundAdminBase["cutoff"];
 }
 
 const toCompetitorString = (competitor: LiveCompetitor) =>
   `${competitor.name} (${competitor.registrant_id})`;
 
-export default function AttemptsForm({
-  solveCount,
-  cutoff,
-  header,
-  eventId,
-}: AttemptsFormProps) {
+export default function AttemptsForm({ header }: AttemptsFormProps) {
   const { t } = useT();
+
+  const { id, format: formatId, cutoff } = useRoundInfo();
+  const { eventId } = parseActivityCode(id);
+  const format = formats.byId[formatId];
+  const solveCount = format.expected_solve_count;
 
   const {
     handleRegistrationIdChange,
@@ -45,6 +57,10 @@ export default function AttemptsForm({
     handleAttemptChange,
     registrationId,
     isPending,
+    batchMode,
+    setBatchMode,
+    batchCount,
+    submitBatch,
   } = useResultsAdmin();
 
   const confirm = useConfirm();
@@ -54,16 +70,28 @@ export default function AttemptsForm({
   const inputRef = useRef<HTMLInputElement>(null);
   const attemptFieldsRef = useRef<AttemptFieldsNavHandle>(null);
 
-  const { collection, filter } = useListCollection({
-    initialItems: Array.from(competitors.values()).toSorted(
-      (a, b) => a.registrant_id - b.registrant_id,
-    ),
-    itemToValue: (competitor) => competitor.id.toString(),
-    itemToString: toCompetitorString,
-    filter: (itemText, filterText, item) =>
-      itemText.toLowerCase().includes(filterText.toLowerCase()) ||
-      parseInt(filterText, 10) === item.registrant_id,
-  });
+  const [filterText, setFilterText] = useState("");
+
+  // Derived from `competitors` (instead of useListCollection's mount-time
+  // snapshot) so websocket updates like quits are reflected in the dropdown.
+  const collection = useMemo(() => {
+    const items = Array.from(competitors.values())
+      .toSorted((a, b) => a.registrant_id - b.registrant_id)
+      .filter(
+        (competitor) =>
+          !filterText ||
+          toCompetitorString(competitor)
+            .toLowerCase()
+            .includes(filterText.toLowerCase()) ||
+          parseInt(filterText, 10) === competitor.registrant_id,
+      );
+
+    return createListCollection({
+      items,
+      itemToValue: (competitor) => competitor.id.toString(),
+      itemToString: toCompetitorString,
+    });
+  }, [competitors, filterText]);
 
   const selectedCompetitor = registrationId
     ? competitors.get(registrationId)
@@ -78,7 +106,7 @@ export default function AttemptsForm({
 
     if (submissionWarning) {
       confirm({
-        content: submissionWarning,
+        content: <Text>{submissionWarning}</Text>,
         confirmButton: "Submit",
       }).then(() => handleSubmit(refocusInput));
     } else {
@@ -86,14 +114,40 @@ export default function AttemptsForm({
     }
   }, [attempts, eventId, t, handleSubmit, confirm]);
 
+  const batchConfirmation = useCallback(
+    (e: Checkbox.CheckedChangeDetails) => {
+      if (e.checked) {
+        setBatchMode(true);
+      } else {
+        confirm({
+          content: (
+            <Text>
+              Are you sure you want to exit Batch Mode? All unsubmitted results
+              will be lost.
+            </Text>
+          ),
+          confirmButton: "Confirm",
+        }).then(() => setBatchMode(false));
+      }
+    },
+    [confirm, setBatchMode],
+  );
+
   const hasMetCutoff = meetsCutoff(attempts, cutoff);
+
+  const bestResult = best(attempts);
+  // `average` only supports Mo3/Ao5-shaped attempt counts and throws otherwise.
+  const averageResult =
+    attempts.length === 3 || attempts.length === 5
+      ? average(attempts, eventId)
+      : SKIPPED_VALUE;
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <VStack align="left">
         <Combobox.Root
           collection={collection}
-          onInputValueChange={(e) => filter(e.inputValue)}
+          onInputValueChange={(e) => setFilterText(e.inputValue)}
           inputValue={inputDisplayValue}
           onValueChange={(e) => {
             if (e.value.length > 0) {
@@ -151,9 +205,44 @@ export default function AttemptsForm({
             onClick={confirmSubmission}
             disabled={isPending || attempts.length === 0}
           >
-            Submit Results
+            {batchMode
+              ? t("competitions.live.admin.add_to_batch")
+              : t("competitions.live.admin.submit_results")}
           </Button>
+          {batchMode && (
+            <Button
+              onClick={submitBatch}
+              disabled={isPending || batchCount === 0}
+            >
+              {t("competitions.live.admin.submit_batch", { count: batchCount })}
+            </Button>
+          )}
         </FocusScope>
+        {selectedCompetitor && (
+          <StatGroup justifyContent="space-between">
+            <Stat.Root flex="0" alignItems="flex-start">
+              <Stat.Label>{t("common.best")}</Stat.Label>
+              <Stat.ValueText>
+                {formatAttemptResult(bestResult, eventId)}
+              </Stat.ValueText>
+            </Stat.Root>
+            {averageResult !== SKIPPED_VALUE && (
+              <Stat.Root flex="0" alignItems="flex-end">
+                <Stat.Label>{t("common.average")}</Stat.Label>
+                <Stat.ValueText>
+                  {formatAttemptResult(averageResult, eventId)}
+                </Stat.ValueText>
+              </Stat.Root>
+            )}
+          </StatGroup>
+        )}
+        <Checkbox.Root checked={batchMode} onCheckedChange={batchConfirmation}>
+          <Checkbox.HiddenInput />
+          <Checkbox.Control />
+          <Checkbox.Label>
+            {t("competitions.live.admin.batch_mode")}
+          </Checkbox.Label>
+        </Checkbox.Root>
       </VStack>
     </form>
   );
@@ -195,7 +284,7 @@ function AttemptFieldsNav({
       e.key === "Enter" ||
       e.key === "ArrowDown" ||
       e.code === "NumpadAdd" ||
-      e.key === "Tab"
+      (e.key === "Tab" && !e.shiftKey)
     ) {
       e.preventDefault();
       const from = e.target as HTMLElement;
@@ -207,7 +296,11 @@ function AttemptFieldsNav({
       return;
     }
 
-    if (e.key === "ArrowUp" || e.code === "NumpadSubtract") {
+    if (
+      e.key === "ArrowUp" ||
+      e.code === "NumpadSubtract" ||
+      (e.key === "Tab" && e.shiftKey)
+    ) {
       e.preventDefault();
       const from = e.target as HTMLElement;
       flushSync(() => from.blur());

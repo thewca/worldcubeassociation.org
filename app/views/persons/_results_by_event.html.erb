@@ -1,3 +1,5 @@
+<%# Outside of the cache block below, so that it also runs on a cache hit. %>
+<% add_to_js_assets("tables") %>
 <div class="results-by-event">
   <div class="event-selector text-center">
     <% @results.map(&:event).uniq.each do |event| %>
@@ -41,8 +43,9 @@
                       <%= link_to result.competition.name, result.competition %>
                     <% end %>
                   </td>
-                  <td class="round"><%= t "rounds.#{result.round_type_id}.cell_name" %></td>
-                  <td class="place"><%= result.pos %></td>
+                  <% dual_round = result.round.linked_round_id? %>
+                  <td class="round"><%= t "rounds.#{result.round_type_id}.cell_name" %><%= " (#{t 'persons.show.dual'})" if dual_round %></td>
+                  <td class="place"><%= result.pos %><%= " (#{result.global_pos})" if dual_round %></td>
                   <td class="single <%= pb_type_class_for_result(result.regional_single_record, pb_markers[result.id][:single]) %>">
                     <%= result.best_solve.clock_format %>
                   </td>

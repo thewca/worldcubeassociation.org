@@ -17,6 +17,15 @@ paths:
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
 
+  /v1/competitions/{competitionId}/scoretakers:
+    get:
+      $ref: 'paths/competitions/scoretakers/ListScoretakers.yaml'
+    post:
+      $ref: 'paths/competitions/scoretakers/AddScoretaker.yaml'
+  /v1/competitions/{competitionId}/scoretakers/{id}:
+    delete:
+      $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
+
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
@@ -26,6 +35,9 @@ paths:
       $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
     get:
       $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/batch:
+    post:
+      $ref: 'paths/competitions/live/BatchSubmitLiveResults.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit:
     $ref: 'paths/competitions/live/GetNextCompetitorIfQuit.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors:
@@ -40,6 +52,8 @@ paths:
       $ref: 'paths/competitions/live/BulkQuitCompetitor.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
     $ref: 'paths/competitions/live/ClearRound.yaml'
+  /v1/competitions/{competitionId}/live/rounds/{roundId}/close:
+    $ref: 'paths/competitions/live/CloseRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/open:
     $ref: 'paths/competitions/live/OpenRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}/clear:
@@ -78,6 +92,12 @@ paths:
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
 
+  /v0/incidents/{id}:
+    $ref: 'paths/regulations/incidentById.yaml'
+
+  /v0/incidents/{incident_id}/mark_as/{kind}:
+    $ref: 'paths/regulations/incidentMarkAs.yaml'
+
   /v0/search:
     $ref: 'paths/search/omniSearch.yaml'
 
@@ -100,8 +120,17 @@ paths:
   /v0/users/me/permissions:
     $ref: 'paths/users/userPermissions.yaml'
 
+  /v0/regulations:
+    $ref: 'paths/regulations/regulations.yaml'
+
+  /v0/regulations/history/official/{version}:
+    $ref: 'paths/regulations/historicalRegulations.yaml'
+
   /v0/regulations/translations:
     $ref: 'paths/regulations/regulationTranslations.yaml'
+
+  /v0/regulations/translations/{language}:
+    $ref: 'paths/regulations/translatedRegulations.yaml'
 
   /v0/export/public:
     $ref: 'paths/results/publicExports.yaml'

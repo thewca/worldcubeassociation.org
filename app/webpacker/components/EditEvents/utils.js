@@ -59,14 +59,15 @@ export const removeSharedTimeLimits = (event, roundIdsToRemove) => {
   return event;
 };
 
-export const roundCutoffToString = (wcifRound, { short } = {}) => {
+export const roundCutoffToString = (wcifRound, { short, isV2 } = {}) => {
   const { cutoff } = wcifRound;
   if (!cutoff) {
     return '-';
   }
 
   const { eventId } = parseActivityCode(wcifRound.id);
-  const matchStr = matchResult(cutoff.attemptResult, eventId, { short });
+  const resultValue = isV2 ? cutoff.resultValue : cutoff.attemptResult;
+  const matchStr = matchResult(resultValue, eventId, { short });
   if (short) {
     return `Best of ${cutoff.numberOfAttempts} ${matchStr}`;
   }

@@ -102,6 +102,7 @@ Rails.application.routes.draw do
     post 'registrations/export' => 'registrations#export', as: :registrations_export
     get 'registrations/import' => 'registrations#import', as: :registrations_import
     post 'registrations/import' => 'registrations#do_import', as: :registrations_do_import
+    post 'registrations/validate_and_convert_registrations' => 'registrations#validate_and_convert_registrations', as: :registrations_validate_and_convert
     get 'registrations/add' => 'registrations#add', as: :registrations_add
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
@@ -120,6 +121,7 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    get 'unfinished-persons' => 'results_submission#unfinished_persons', as: :unfinished_persons
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end
@@ -219,10 +221,13 @@ Rails.application.routes.draw do
     get 'details_before_anonymization' => 'tickets#details_before_anonymization', as: :tickets_details_before_anonymization
     post 'anonymize' => 'tickets#anonymize', as: :tickets_anonymize
     get 'imported_temporary_results' => 'tickets#imported_temporary_results', as: :imported_temporary_results
+    get 'imported_temporary_scrambles' => 'tickets#imported_temporary_scrambles', as: :imported_temporary_scrambles
   end
   resources :tickets, only: %i[index show] do
     post 'verify_warnings' => 'tickets#verify_warnings', as: :verify_warnings
     post 'merge_inbox_results' => 'tickets#merge_inbox_results', as: :merge_inbox_results
+    post 'merge_inbox_scrambles' => 'tickets#merge_inbox_scrambles', as: :merge_inbox_scrambles
+    post 'verify_newcomers' => 'tickets#verify_newcomers', as: :verify_newcomers
     post 'post_results' => 'tickets#post_results', as: :post_results
     get 'edit_person_validators' => 'tickets#edit_person_validators', as: :edit_person_validators
     get 'eligible_roles_for_bcc' => 'tickets#eligible_roles_for_bcc', as: :eligible_roles_for_bcc
@@ -231,6 +236,7 @@ Rails.application.routes.draw do
     get 'events_merged_data' => 'tickets#events_merged_data', as: :events_merged_data
     post 'approve_edit_person_request' => 'tickets#approve_edit_person_request', as: :approve_edit_person_request
     post 'reject_edit_person_request' => 'tickets#reject_edit_person_request', as: :reject_edit_person_request
+    post 'create_wca_ids' => 'tickets#create_wca_ids', as: :create_wca_ids
     post 'sync_edit_person_request' => 'tickets#sync_edit_person_request', as: :sync_edit_person_request
     post 'join_as_bcc_stakeholder' => 'tickets#join_as_bcc_stakeholder', as: :join_as_bcc_stakeholder
     resources :ticket_comments, only: %i[index create], as: :comments
@@ -364,10 +370,12 @@ Rails.application.routes.draw do
     # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
       resources :competitions, only: [] do
+        resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
           put '/rounds/:round_id/clear' => "live#clear_round", as: :live_round_clear
+          delete '/rounds/:round_id/close' => "live#close_round", as: :live_round_close
           delete '/rounds/:round_id/bulk_quit' => 'live#bulk_quit_competitors', as: :bulk_quit_competitors_from_round
           delete '/rounds/:round_id/:registration_id' => 'live#quit_competitor', as: :quit_competitor_from_round
           put '/rounds/:round_id/:registration_id/clear' => 'live#clear_competitor', as: :clear_competitor_in_round
@@ -376,6 +384,7 @@ Rails.application.routes.draw do
           put '/rounds/:round_id/:registration_id' => 'live#add_competitor_to_round', as: :add_competitor_to_round
           post '/rounds/:round_id' => 'live#add_or_update_result', as: :add_results
           patch '/rounds/:round_id' => 'live#add_or_update_result', as: :update_results
+          post '/rounds/:round_id/batch' => 'live#batch_add_or_update_results', as: :batch_add_results
           get '/podiums' => 'live#podiums', as: :live_podiums
           get '/registrations/:registration_id' => 'live#by_person', as: :get_live_by_person
           get '/rounds' => 'live#rounds', as: :live_admin
@@ -435,7 +444,10 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/records' => "persons#records", as: :person_records
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
+      get '/regulations' => 'regulations#show', as: :regulations
       get '/regulations/translations' => 'regulations#translations', as: :regulations_translations
+      get '/regulations/translations/:language' => 'regulations#translation', as: :regulations_translation
+      get '/regulations/history/official/:version' => 'regulations#historical', as: :regulations_historical
       get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
       get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'
@@ -445,7 +457,9 @@ Rails.application.routes.draw do
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
       get '/competitions/mine' => 'competitions#mine', as: :my_competitions
 
-      resources :incidents, only: %i[index]
+      resources :incidents, only: %i[index show destroy] do
+        patch '/mark_as/:kind' => 'incidents#mark_as', as: :mark_as
+      end
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
       namespace :results do
@@ -473,6 +487,11 @@ Rails.application.routes.draw do
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
+
+        collection do
+          put '/wcif/check' => 'competitions#check_wcif'
+          get '/wcif/schema/:version' => 'competitions#wcif_json_schema', constraints: { version: /(\d\.){0,2}\d/ }, as: :wcif_json_schema
+        end
       end
 
       post '/registration-data' => 'competitions#registration_data', as: :registration_data
@@ -481,7 +500,7 @@ Rails.application.routes.draw do
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
       resources :user_roles, only: %i[index show create update destroy]
-      resources :user_groups, only: %i[index create update]
+      resources :user_groups, only: %i[index show create update]
       namespace :wrt do
         resources :persons, only: %i[update destroy] do
           put '/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count

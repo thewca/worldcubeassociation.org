@@ -5,7 +5,8 @@
         "jquery": true
     },
   "ignorePatterns": [
-    "app/assets/javascripts/*"
+    "app/assets/javascripts/*",
+    "app/webpacker/packs/generated/*"
   ],
     "extends": [
         "plugin:react/recommended",

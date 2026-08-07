@@ -13,6 +13,7 @@ class Person < ApplicationRecord
   has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
   has_many :inbox_persons, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
   has_many :tickets_edit_person, primary_key: "wca_id", foreign_key: "wca_id", class_name: "TicketsEditPerson", inverse_of: :person
+  has_many :potential_duplicate_persons, foreign_key: :duplicate_person_id, class_name: "PotentialDuplicatePerson", dependent: :destroy, inverse_of: :duplicate_person
 
   enum :gender, User::ALLOWABLE_GENDERS.index_with(&:to_s)
 
@@ -231,7 +232,7 @@ class Person < ApplicationRecord
   end
 
   def medals
-    positions = results.podium.pluck(:pos)
+    positions = results.podium.pluck(:global_pos)
     {
       gold: positions.count(1),
       silver: positions.count(2),

@@ -1,33 +1,44 @@
-import { getT } from "@/lib/i18n/get18n";
-import OpenapiError from "@/components/ui/openapiError";
-import { Card, Container, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
+"use client";
+
+import {
+  Button,
+  Card,
+  Container,
+  HStack,
+  Link,
+  SimpleGrid,
+  VStack,
+} from "@chakra-ui/react";
+import { route } from "nextjs-routes";
 
 import EventIcon from "@/components/EventIcon";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import RoundActions from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/admin/RoundActions";
-import { getRounds } from "@/lib/wca/live/getRounds";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
-export default async function RoundAdmin({
+export default function RoundAdmin({
   competitionId,
 }: {
   competitionId: string;
 }) {
-  const { t } = await getT();
-  const { error, data, response } = await getRounds(competitionId);
+  const { rounds } = useAllRoundsInfo();
 
-  if (error) {
-    return <OpenapiError t={t} response={response} />;
-  }
-
-  const roundsById = _.groupBy(
-    data.rounds,
-    (d) => parseActivityCode(d.id).eventId,
-  );
+  const roundsById = _.groupBy(rounds, (d) => parseActivityCode(d.id).eventId);
 
   return (
     <Container>
+      <Button asChild mb={4} variant="outline" size="sm">
+        <Link
+          href={route({
+            pathname: "/competitions/[competitionId]/live/scoretakers",
+            query: { competitionId },
+          })}
+        >
+          Manage scoretakers
+        </Link>
+      </Button>
       <SimpleGrid columns={3} gap={2}>
         {_.map(roundsById, (rounds, eventId) => {
           return (
@@ -46,7 +57,6 @@ export default async function RoundAdmin({
                         <RoundActions
                           key={r.id}
                           round={r}
-                          rounds={rounds}
                           competitionId={competitionId}
                         />
                       );

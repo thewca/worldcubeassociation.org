@@ -517,12 +517,14 @@ RSpec.describe CompetitionsController do
           number: 1,
           advancement_condition: AdvancementConditions::RankingCondition.new(4),
           total_number_of_rounds: 2,
+          participation_source: competition.competition_events[0],
         )
         round_two = competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 2,
           total_number_of_rounds: 2,
           scramble_set_count: 1,
+          participation_source: round_one,
         )
         start_time = Time.zone.local_to_utc(competition.start_time)
         end_time = start_time
@@ -550,16 +552,18 @@ RSpec.describe CompetitionsController do
 
       it "cannot confirm a competition that is not having advancement conditions" do
         competition.competition_events[0].rounds.destroy_all!
-        competition.competition_events[0].rounds.create!(
+        round_one = competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 1,
           total_number_of_rounds: 2,
+          participation_source: competition.competition_events[0],
         )
         competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 2,
           total_number_of_rounds: 2,
           scramble_set_count: 1,
+          participation_source: round_one,
         )
         put :confirm, params: { competition_id: competition }
         expect(competition.reload.confirmed?).to be false

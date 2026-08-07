@@ -95,6 +95,7 @@ export type IconName =
   | 'WCA Delegates'
   | 'WCA Documents'
   | 'WCA Live'
+  | 'WCA Logo'
   | 'WCA Officers and Board'
   | 'Weibo'
   | 'X (formerly Twitter)'
@@ -149,6 +150,11 @@ export type StaticTargetLink =
   | '/speedcubing-history'
   | '/teams-committees'
   | '/translators';
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GrowthStrategy".
+ */
+export type GrowthStrategy = ('grow' | 'justify') | null;
 /**
  * Supported timezones in IANA format.
  *
@@ -429,6 +435,24 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -466,6 +490,10 @@ export interface Announcement {
   id: string;
   image?: (string | null) | Media;
   title: string;
+  /**
+   * Shown on the announcements list before 'Read More'. Falls back to the beginning of the content when empty.
+   */
+  summary?: string | null;
   content: {
     root: {
       type: string;
@@ -482,6 +510,10 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
+  /**
+   * Optional. When set, the 'Read More' button links to this URL instead of expanding the content.
+   */
+  url?: string | null;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -720,6 +752,30 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -741,8 +797,10 @@ export interface TestimonialsSelect<T extends boolean = true> {
 export interface AnnouncementsSelect<T extends boolean = true> {
   image?: T;
   title?: T;
+  summary?: T;
   content?: T;
   contentMarkdown?: T;
+  url?: T;
   publishedAt?: T;
   publishedBy?: T;
   updatedAt?: T;
@@ -1086,6 +1144,7 @@ export interface SocialLink {
           | 'WCA Delegates'
           | 'WCA Documents'
           | 'WCA Live'
+          | 'WCA Logo'
           | 'WCA Officers and Board'
           | 'Weibo'
           | 'X (formerly Twitter)'
@@ -1175,6 +1234,13 @@ export interface TextCardBlock {
 export interface BentoActionButton {
   displayText: string;
   hyperlink: string;
+  /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
+  /**
+   * Buttons are solid blue by default. If you click this checkbox, their color will follow the original text box instead
+   */
   inheritColorScheme: boolean;
   id?: string | null;
   blockName?: string | null;
@@ -1240,6 +1306,14 @@ export interface ImageBannerBlock {
 export interface ImageOnlyCardBlock {
   mainImage: string | Media;
   heading?: string | null;
+  /**
+   * Optional. If set, the whole card becomes a link to this URL.
+   */
+  url?: string | null;
+  /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
   textPosition?: ('top' | 'bottom') | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -1300,6 +1374,7 @@ export interface TwoBlocksLevel2Block {
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel1Block
   )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel2';
@@ -1328,6 +1403,7 @@ export interface TwoBlocksLevel1Block {
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel0Block
   )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel1';
@@ -1354,6 +1430,7 @@ export interface TwoBlocksLevel0Block {
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
   )[];
+  growthStrategy?: GrowthStrategy;
   id?: string | null;
   blockName?: string | null;
   blockType: 'twoBlocksLevel0';
@@ -1385,6 +1462,10 @@ export interface AboutUsPage {
         buttons: {
           label: string;
           url: string;
+          /**
+           * Open this link in a new tab
+           */
+          newTab?: boolean | null;
           id?: string | null;
         }[];
         id?: string | null;
@@ -1661,7 +1742,7 @@ export interface LogoPage {
   id: string;
   blocks: (
     | {
-        title: string;
+        title?: string | null;
         content: {
           root: {
             type: string;
@@ -1685,6 +1766,7 @@ export interface LogoPage {
     | {
         title: string;
         caption: string;
+        logoOnly?: boolean | null;
         images: {
           image: string | Media;
           darkBackground?: boolean | null;
@@ -1918,6 +2000,7 @@ export interface TextCardBlockSelect<T extends boolean = true> {
 export interface BentoActionButtonSelect<T extends boolean = true> {
   displayText?: T;
   hyperlink?: T;
+  newTab?: T;
   inheritColorScheme?: T;
   id?: T;
   blockName?: T;
@@ -1960,6 +2043,8 @@ export interface ImageBannerBlockSelect<T extends boolean = true> {
 export interface ImageOnlyCardBlockSelect<T extends boolean = true> {
   mainImage?: T;
   heading?: T;
+  url?: T;
+  newTab?: T;
   textPosition?: T;
   colorPalette?: T;
   id?: T;
@@ -2023,6 +2108,7 @@ export interface TwoBlocksLevel2BlockSelect<T extends boolean = true> {
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLevel1?: T | TwoBlocksLevel1BlockSelect<T>;
       };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }
@@ -2054,6 +2140,7 @@ export interface TwoBlocksLevel1BlockSelect<T extends boolean = true> {
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
         twoBlocksLevel0?: T | TwoBlocksLevel0BlockSelect<T>;
       };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }
@@ -2083,6 +2170,7 @@ export interface TwoBlocksLevel0BlockSelect<T extends boolean = true> {
         TestimonialsSpinner?: T | TestimonialsBlockSelect<T>;
         FeaturedComps?: T | FeaturedCompetitionsBlockSelect<T>;
       };
+  growthStrategy?: T;
   id?: T;
   blockName?: T;
 }
@@ -2104,6 +2192,7 @@ export interface AboutUsPageSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     url?: T;
+                    newTab?: T;
                     id?: T;
                   };
               id?: T;
@@ -2294,6 +2383,7 @@ export interface LogoPageSelect<T extends boolean = true> {
           | {
               title?: T;
               caption?: T;
+              logoOnly?: T;
               images?:
                 | T
                 | {

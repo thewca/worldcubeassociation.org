@@ -13,6 +13,11 @@ class Api::V1::ApiController < ApplicationController
     raise WcaExceptions::NotPermitted.new("Organizer privileges required") unless @current_user.can_manage_competition?(competition)
   end
 
+  def require_scoretake!(competition)
+    require_user!
+    raise WcaExceptions::NotPermitted.new("Score taking privileges required") unless @current_user.can_scoretake_competition?(competition)
+  end
+
   def api_user
     User.find_by(id: doorkeeper_token&.resource_owner_id) if doorkeeper_token&.accessible?
   end

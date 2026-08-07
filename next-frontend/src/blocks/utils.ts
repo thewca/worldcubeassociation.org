@@ -15,6 +15,14 @@ export const colorPaletteSelect: SelectField = {
   ],
 };
 
+export const newTabCheckbox: CheckboxField = {
+  name: "newTab",
+  type: "checkbox",
+  admin: {
+    description: "Open this link in a new tab",
+  },
+};
+
 export const colorPaletteToneToggle: CheckboxField = {
   name: "colorPaletteDarker",
   type: "checkbox",

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Assignment < ApplicationRecord
+  # WCIF assignment code that designates a person as a scoretaker (data entry staff).
+  SCORETAKER_ASSIGNMENT_CODE = "staff-dataentry"
+
   belongs_to :registration, polymorphic: true
   belongs_to :schedule_activity
 

@@ -87,6 +87,7 @@ en:
     444bf: "4x4x4 Blindfolded"
     555bf: "5x5x5 Blindfolded"
     333mbf: "3x3x3 Multi-Blind"
+    fto: "Face Turning Octahedron"
     magic: "Magic"
     mmagic: "Master Magic"
     333mbo: "3x3x3 Multi-Blind Old Style"
@@ -161,10 +162,12 @@ en:
     short:
       ranking: "Top %{ranking}"
       percent: "Top %{percent}%"
+      all_advance: "All advance"
       attempt_result:
         time: "%{round_format} < %{time}"
         moves: "%{round_format} < %{moves}"
         points: "%{round_format} > %{points}"
+    all_advance: "All competitors advance"
     ranking: "Top %{ranking} advance to next round"
     percent: "Top %{percent}% advance to next round"
     attempt_result:
@@ -809,7 +812,7 @@ en:
         wat: "The WCA Archive Team (WAT) manages the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
         wct: "The WCA Communication Team (WCT) oversees and supports communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
         wcat: "The WCA Competition Announcement Team (WCAT) approves and announces WCA Competitions submitted by WCA Delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. The WCAT is NOT responsible for the organization and delegation of individual competitions."
-        wic: "The WCA Integrity Committee (WIC) performs independent investigations regarding WCA community members and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, Code of Ethics and/or Regulations of the WCA."
+        wic: "The WCA Integrity Committee (WIC) performs independent investigations regarding WCA community members and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Values, Code of Conduct, Code of Ethics and/or Regulations of the WCA."
         weat: "The WCA Executive Assistants Team (WEAT) carries out the administrative tasks of the WCA Board of Directors."
         wfc: "The WCA Financial Committee (WFC) manages the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
         wmt: "The WCA Marketing Team (WMT) manages the WCA Brand, seeking sponsorships, and marketing WCA Merchandise."
@@ -902,12 +905,16 @@ en:
           label: "Search for the WCA ID that you want to edit."
         edit_reason:
           label: "Reason for the change"
+        edit_reason_for:
+          label: "Reason for %{attribute} change"
         proof_attach:
           label: "Attach proof"
         submit_edit_request_button:
           label: "Submit Edit Request"
         captcha:
           validation_error: "Please verify that you are not a robot."
+        verified_checkbox:
+          label: "By submitting this form, you confirm that you have already reviewed their legal document and verified the information provided."
       success_message: "Request submitted - we'll get back to you soon."
       success_message_with_ticket_link_html: "Request submitted - we'll get back to you soon. To view the status of this request, please visit <a href=\"%{link}\">this link</a>."
   #context: Key used on the website homepage
@@ -1335,7 +1342,9 @@ en:
       info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
       registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event."
+      preview: "Preview Registration Data"
       import: "Import"
+      cancel: "Cancel"
       errors:
         error: "Error importing %{registration}: %{error}."
         missing_columns: "Missing columns: %{columns}."
@@ -1353,6 +1362,7 @@ en:
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
       add: "Add registration"
       ots_not_enabled: "Registration is closed and on-the-spot registration is not enabled - you must edit the competition to enable it first"
+      ots_before_registration_open: "On-the-spot registration cannot be used until registration has opened."
       competition_over: You cannot add on-the-spot registrations after the competition has ended.
       errors:
         already_registered: "This person already has a registration."
@@ -1411,6 +1421,10 @@ en:
         other: "%{count} spots left"
     live:
       title: "Live Results"
+      manage_rounds: "Manage Rounds"
+      incompatible:
+        external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
+        wca_live: "This competition uses WCA Live for scoretaking - please follow this link to see the live results:"
       round_state:
         ongoing: "live"
         done: "done"
@@ -1424,11 +1438,12 @@ en:
           disconnected: "Disconnected"
       podiums:
         title: "Podiums"
-        undetermined: "Podiums to be determined"
+        undetermined: "To Be Determined"
         none: "There are no podiums yet!"
       admin:
         open: "Open"
         clear: "Clear"
+        close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
         edit: "Edit"
@@ -1437,12 +1452,18 @@ en:
         admin_view: "Admin View"
         results_view: "Results View"
         double_check: "Double Check"
+        submit_results: "Submit Results"
+        add_to_batch: "Add to Batch"
+        remove_from_batch: "Remove from Batch"
+        batch_mode: "Batch Mode"
+        submit_batch: "Submit Batch (%{count})"
         warnings:
           omitted: "You've omitted attempt %{attempt_number}. Make sure it's intentional."
           DNS: "There's at least one DNS followed by a valid result. Please ensure it is indeed a DNS and not a DNF."
           impossible: "The result you're trying to submit seems to be impossible: attempt %{attempt_number} is done in less than 30 seconds per cube tried. If you want to enter minutes, don't forget to add two zeros for centiseconds at the end of the score"
           inconsistent: "The result you're trying to submit seem to be inconsistent. There's a big difference between the best single (%{best_single}) and the worst single (%{worst_single}). Please check that the results are accurate."
           round_locked: "The next round has already been open, any changes won't affect it!"
+          9m_violated: "The previous round does not have enough entered results to satisfy Regulation 9m3. If the previous round doesn't have at least %{competitor_count_needed} entered results by result submission, the results of this round will not be permitted."
         quit:
           title: "Quit Competitor"
           next_to_advance:
@@ -1456,16 +1477,20 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            id: "ID"
+            name: "Name"
           quit_menu: "Quit"
           no_next: "No next competitor to advance."
           cancel: "Cancel"
           failed_to_fetch: "Failed to fetch next advancing competitor"
           still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
+          in_batch: "Cannot quit a competitor whose results are part of an unsubmitted batch"
         add_competitor:
           single_round: "Add Competitor to Round"
           multiple_rounds:
             one: "Add Competitor to both Rounds in the Dual Round."
             other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
+          event_edit_warning: "This competitor is not registered for this event, and the competition no longer allows event changes to registrations. Adding them will still work, but make sure this is intended."
       results:
         competitor: "Competitor"
         mean: "Mean"
@@ -2098,6 +2123,7 @@ en:
       cannot_delete_public: "Cannot delete a competition that is publicly visible."
       cannot_delete_confirmed: "Cannot delete a confirmed competition."
       must_contain_event: "must contain at least one event for this competition"
+      fto_not_yet_allowed: "Face Turning Octahedron cannot be held at competitions starting before %{date}."
       schedule_must_match_rounds: "must have at least one round, and all rounds must be included in the schedule."
       must_contain_delegate: "must contain at least one WCA Delegate"
       must_contain_organizer: "must contain at least one organizer"
@@ -2232,6 +2258,7 @@ en:
         all: "All"
         none: "None"
         show_buttons: "Show time zone buttons"
+        hide_buttons: "Hide time zone buttons"
         use_time_zone: "Use this time zone"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
@@ -2240,8 +2267,10 @@ en:
         other: "You are viewing the schedule for the venue %{venue_name}, one of %{count} venues for this competition."
       venue_selection_all: "You are viewing the schedule for all %{venueCount} venues at once."
       timezone_message: "The time zone for this venue is %{timezone}."
-      timezone_setting: "You are viewing this schedule in the following timezone setting:"
-      multiple_timezones_available: "Note that not all venues are in the same time zone -- please be careful!"
+      timezone_setting: "You are viewing this schedule in the following time zone:"
+      multiple_timezones_available: "Note that some venues are in different time zones -- please be careful!"
+      select_a_timezone: "Select a time zone"
+      select_a_venue_to_view: "To view the schedule, select a venue above."
       timezone_set_local: "Set to local"
       timezone_set_venue: "Set to venue"
       timezone_follow_venue: "Automatically use the active venue's time zone"
@@ -2439,6 +2468,7 @@ en:
         national: "National Championship Podiums"
         greater_china: "Greater China Championship Podiums"
       place: "Place"
+      dual: "Dual"
       medal_collection: "Medal Collection"
       record_collection: "Record Collection"
       medals:
@@ -2571,8 +2601,8 @@ en:
     who_we_are_title: Who we are
     who_we_are_content_html: <p>The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
       <p>As the WCA has evolved over the past decade, over 245,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
-    spirit: Our spirit is that people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.
-    spirit_footer: WCA Spirit
+    spirit: Our Values are Community, Fairness, Fun, Excellence, and Volunteerism.
+    spirit_footer: WCA Values
     our_goals_title: Our goals
     our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Strategic Plan for the WCA can be found <a href="https://documents.worldcubeassociation.org/documents/WCA_Strategic_Plan.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
@@ -2597,7 +2627,7 @@ en:
         profile: "%{user_name}'s profile"
       operations_html: "The day to day operations are run by the WCA's %{committees_and_teams}."
       teams_committees: "Teams and Committees"
-      delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Mission, Spirit, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
+      delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Purpose, Values, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
 <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
 <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
 <p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>"
@@ -2768,6 +2798,54 @@ en:
     #context: disclaimer displayed to inform incidents are only in English
     i18n_disclaimer: "Please note the incidents section is only available in English, the content below is not translated."
     incident: "Incident:"
+    title: "Incidents Log"
+    #context: browser tab title of a single incident, "%{title}" is the title of that incident
+    page_title: "Incident: %{title}"
+    #context: shown when no incident exists for the requested ID
+    not_found: "Incident Not Found"
+    #context: link leading from a single incident back to the list of all incidents
+    back_to_log: "Back to the incidents log"
+    search_placeholder: "Search"
+    status: "Status"
+    #context: an incident which has been resolved and is therefore publicly visible
+    resolved: "Resolved"
+    #context: an incident which has not been resolved yet
+    pending: "Pending"
+    #context: column header, whether the incident has already been sent out in a WRC digest
+    sent_in_digest: "Sent in digest"
+    #context: an incident which has been sent out in a WRC digest
+    sent: "Sent"
+    #context: "<select>" is a dropdown to pick how many incidents are shown per page, please keep it within the sentence
+    showing_entries: "Showing entries %{first} to %{last} of %{total} entries with <select></select> per page"
+    #context: warning shown to Delegates when looking at an incident which is not resolved yet
+    not_public_warning: "Note: This log has not been resolved yet, so it is not publicly visible."
+    public_summary: "Incident description and resolution"
+    private_description: "Description (private to Delegates)"
+    private_wrc_decision: "WRC Decision (private to Delegates)"
+    #context: labels of the tags attached to an incident
+    tags:
+      regulation: "Regulation"
+      guideline: "Guideline"
+      search_with_tag: "Search incidents with this tag"
+      filter_by_tag: "Filter by this tag"
+      competition_page: "Competition Page"
+      delegate_report: "Delegate Report"
+    #context: actions only available to people who can manage incidents
+    admin:
+      publish: "Publish"
+      unpublish: "Unpublish"
+      edit: "Edit"
+      destroy: "Destroy"
+      cancel: "Cancel"
+      confirm: "Confirm"
+      change_status: "Change status"
+      destroy_title: "Destroy incident"
+      confirm_publish: "You are about to make this incident log public, are you sure?"
+      confirm_unpublish: "You are about to unpublish this incident log, are you sure?"
+      confirm_destroy: "Are you sure you want to delete this incident?"
+      publish_error: "Could not publish this incident."
+      unpublish_error: "Could not unpublish this incident."
+      destroy_error: "Could not delete this incident."
   #context: About the regulations
   about_regulations:
     title: "About the Regulations"
@@ -3044,8 +3122,11 @@ en:
       missing_scrambles_for_competition_error: "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
       missing_scrambles_for_group_error: "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
       missing_scrambles_for_multi_error: "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
+      mbld_scrambles_warning: "[%{round_id}] This round includes 3x3x3 Multi-Blind results. Please specify in your submission comment how many scrambles from each scramble set were actually used by competitors, so that WRT can remove the unused extra scrambles."
       multiple_fmc_groups_warning: "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
       wrong_number_of_scramble_sets_error: "[%{round_id}] This round has a different number of scramble sets (%{actual}) than specified on the Manage Events tab (%{expected}). Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
+    schedule:
+      activity_outside_competition_dates_warning: "The activity '%{activity_name}' (code: %{activity_code}) is scheduled outside the competition's date range in the venue's local timezone. Please update the competition schedule to reflect the actual competition dates."
   tickets:
     type:
       edit_person: "Edit Person"

@@ -1,8 +1,9 @@
-import { Container, Heading, Text, VStack } from "@chakra-ui/react";
+import { Container, Heading, HStack, Separator, Text } from "@chakra-ui/react";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import { getLivePodiums } from "@/lib/wca/live/getLivePodiums";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
+import EventIcon from "@/components/EventIcon";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import _ from "lodash";
 import OpenapiError from "@/components/ui/openapiError";
@@ -45,7 +46,26 @@ export default async function PodiumsPage({
   return (
     <Container bg="bg">
       <Heading textStyle="h1">{t("competitions.live.podiums.title")}</Heading>
-      {noPodiums && <Text>{t("competitions.live.podiums.none")}</Text>}
+      {noPodiums ? (
+        <Text>{t("competitions.live.podiums.none")}</Text>
+      ) : (
+        eventsNotFinished.length > 0 && (
+          <>
+            <HStack gap="3" wrap="wrap">
+              <Heading textStyle="h3">
+                {t("competitions.live.podiums.undetermined")}:
+                <HStack gap="2" wrap="wrap">
+                  {eventsNotFinished.map((finalRound) => {
+                    const { eventId } = parseActivityCode(finalRound.id);
+                    return <EventIcon key={finalRound.id} eventId={eventId} />;
+                  })}
+                </HStack>
+              </Heading>
+            </HStack>
+            <Separator my="4" />
+          </>
+        )
+      )}
       {eventsFinished.map((finalRound) => {
         const { eventId } = parseActivityCode(finalRound.id);
 
@@ -63,8 +83,11 @@ export default async function PodiumsPage({
 
         return (
           <Fragment key={finalRound.id}>
-            <Heading textStyle="h3" p="2">
-              {events.byId[eventId].name}
+            <Heading textStyle="h3" p="2" asChild>
+              <HStack gap="2">
+                <EventIcon eventId={eventId} />
+                {events.byId[eventId].name}
+              </HStack>
             </Heading>
             <LiveResultsTable
               showLinkedRoundsView={isDualRound}
@@ -78,19 +101,6 @@ export default async function PodiumsPage({
           </Fragment>
         );
       })}
-      {!noPodiums && eventsNotFinished.length > 0 && (
-        <>
-          <Heading textStyle="h3">
-            {t("competitions.live.podiums.undetermined")}
-          </Heading>
-          <VStack align="left">
-            {eventsNotFinished.map((finalRound) => {
-              const { eventId } = parseActivityCode(finalRound.id);
-              return events.byId[eventId].name;
-            })}
-          </VStack>
-        </>
-      )}
     </Container>
   );
 }

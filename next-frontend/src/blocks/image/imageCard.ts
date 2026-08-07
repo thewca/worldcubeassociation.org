@@ -1,5 +1,5 @@
 import { Block } from "payload";
-import { colorPaletteSelect } from "@/blocks/utils";
+import { colorPaletteSelect, newTabCheckbox } from "@/blocks/utils";
 
 export const ImageCardBlock: Block = {
   slug: "ImageOnlyCard",
@@ -17,6 +17,15 @@ export const ImageCardBlock: Block = {
       type: "text",
       localized: true,
     },
+    {
+      name: "url",
+      type: "text",
+      admin: {
+        description:
+          "Optional. If set, the whole card becomes a link to this URL.",
+      },
+    },
+    newTabCheckbox,
     {
       name: "textPosition",
       type: "radio",

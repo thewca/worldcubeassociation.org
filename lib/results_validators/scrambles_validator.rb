@@ -8,6 +8,7 @@ module ResultsValidators
     MISSING_SCRAMBLES_FOR_MULTI_ERROR = :missing_scrambles_for_multi_error
     MULTIPLE_FMC_GROUPS_WARNING = :multiple_fmc_groups_warning
     WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR = :wrong_number_of_scramble_sets_error
+    MBLD_SCRAMBLES_WARNING = :mbld_scrambles_warning
 
     def self.description
       "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
@@ -85,6 +86,9 @@ module ResultsValidators
                                              :scrambles, competition.id,
                                              round_id: round.human_id)
             end
+            @warnings << ValidationWarning.new(MBLD_SCRAMBLES_WARNING,
+                                               :scrambles, competition.id,
+                                               round_id: round.human_id)
           else
             @errors.concat(errors_for_round)
           end

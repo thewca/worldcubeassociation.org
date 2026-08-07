@@ -13,20 +13,22 @@ module CompetitionResultsImport
     errors = []
 
     results_to_import = temporary_results_data[:results_to_import]
-    scramble_sets_to_import = temporary_results_data[:scramble_sets_to_import]
     persons_to_import = temporary_results_data[:persons_to_import]
 
     ActiveRecord::Base.transaction do
       InboxPerson.where(competition_id: competition.id).delete_all
       InboxResult.where(competition_id: competition.id).delete_all
-      Scramble.where(competition_id: competition.id).delete_all
       InboxPerson.import!(persons_to_import)
       InboxResult.import!(results_to_import)
+
+      # Compute global_pos for inbox results with linked_rounds
+      competition.rounds.includes(:linked_round).where.not(linked_round_id: nil).find_each(&:recompute_inbox_results_global_pos)
 
       if import_matched_scrambles
         # Foreign Key handles transitive deletion of individual scrambles
         competition.rounds.each { it.matched_scramble_sets.delete_all }
 
+        scramble_sets_to_import = temporary_results_data[:scramble_sets_to_import]
         MatchedScrambleSet.import!(scramble_sets_to_import)
 
         scramble_set_lookup = competition.reload
@@ -43,31 +45,6 @@ module CompetitionResultsImport
         MatchedScramble.import!(scrambles_to_import)
       end
 
-      flat_scrambles_to_import = scramble_sets_to_import
-                                 .flat_map do |matched_scr_set|
-                                   matched_scr_set.matched_scrambles.map do |matched_scr|
-                                     new_scramble_attributes = {
-                                       competition_id: matched_scr_set.competition_id,
-                                       event_id: matched_scr_set.event_id,
-                                       group_id: matched_scr_set.alphabetic_group_index,
-                                       is_extra: matched_scr.is_extra?,
-                                       round_id: matched_scr_set.round_id,
-                                       round_type_id: matched_scr_set.round_type_id,
-                                       scramble: matched_scr.scramble_string,
-                                       scramble_num: matched_scr.ordered_index + 1,
-                                     }
-
-                                     Scramble.new(new_scramble_attributes).tap do |new_scr|
-                                       # See upload_json for an explanation on setting these associations
-                                       new_scr.competition = competition
-                                       new_scr.round = matched_scr_set.round
-                                       new_scr.external_scramble = matched_scr.external_scramble
-                                     end
-                                   end
-      end
-
-      Scramble.import!(flat_scrambles_to_import)
-
       competition.touch(:results_submitted_at) if mark_result_submitted && !competition.results_submitted?
 
       competition.uploaded_jsons.create!(json_str: results_json_str, upload_type: result_submission_method) if store_uploaded_json
@@ -75,12 +52,10 @@ module CompetitionResultsImport
       errors << "Duplicate record found while uploading results. Maybe there is a duplicate personId in the JSON?"
     rescue ActiveRecord::RecordInvalid => e
       object = e.record
-      errors << if object.instance_of?(Scramble)
-                  "Scramble in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
-                elsif object.instance_of?(MatchedScrambleSet)
+      errors << if object.instance_of?(MatchedScrambleSet)
                   "Scramble Set in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(MatchedScramble)
-                  "Scramble ##{object.ordered_index + 1} in set '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
+                  "Scramble ##{object.scramble_num} in set '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(InboxPerson)
                   "Person #{object.name} is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(InboxResult)
@@ -105,6 +80,7 @@ module CompetitionResultsImport
 
                                  {
                                    pos: inbox_res.pos,
+                                   global_pos: inbox_res.global_pos,
                                    person_id: person_id,
                                    person_name: inbox_res.person_name,
                                    country_id: person_country.id,
@@ -131,6 +107,19 @@ module CompetitionResultsImport
       ResultAttempt.insert_all!(attempt_rows)
 
       competition.inbox_results.destroy_all
+    end
+  end
+
+  def self.merge_inbox_scrambles(competition)
+    ActiveRecord::Base.transaction do
+      scramble_rows = competition.matched_scrambles
+                                 .includes(**MatchedScramble::POSTING_INCLUDES)
+                                 .map(&:scramble_attrs)
+
+      Scramble.insert_all!(scramble_rows)
+      # Not deleting the MatchedScrambles so that the Delegate can go back
+      #   and upload "more stuff" later and add it to existing matchings.
+      # WRT can action these based on `external_scramble_id` above.
     end
   end
 

@@ -9,6 +9,10 @@ class Registration < ApplicationRecord
   SYSTEM_ENTITY_ID = 'system'
   USER_ENTITY_ID = 'user'
 
+  CSV_IMPORT = "CSV Import"
+  OTS_FORM = "OTS Form"
+  SOURCES = [CSV_IMPORT, OTS_FORM].freeze
+
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
@@ -35,6 +39,7 @@ class Registration < ApplicationRecord
   has_many :payment_intents, as: :holder, dependent: :delete_all
 
   has_one :inbox_person, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], inverse_of: :registration
+  has_many :newcomer_results, -> { unmerged_newcomers }, class_name: "Result", foreign_key: %i[competition_id person_id], primary_key: %i[competition_id registrant_id], inverse_of: :newcomer_registration
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
@@ -271,6 +276,26 @@ class Registration < ApplicationRecord
     end
   end
 
+  def save_registration_data!(registration_data:, creator:, source:)
+    raise ArgumentError.new("Invalid source: #{source}") unless SOURCES.include?(source)
+
+    formatted_payload = {
+      "competing" => {
+        "event_ids" => registration_data.dig(:registration, :eventIds) || [],
+        "comment" => registration_data[:comments].presence,
+        "status" => (Registrations::Helper::STATUS_ACCEPTED unless accepted?),
+      }.compact,
+    }
+
+    Registrations::Lanes::Competing.update!(
+      formatted_payload,
+      self,
+      creator.id,
+      history_action_type: source,
+      send_emails: (source != CSV_IMPORT),
+    )
+  end
+
   def wcif_status
     # Non-competing staff are treated as accepted.
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
@@ -434,14 +459,6 @@ class Registration < ApplicationRecord
 
   def force_comment?
     competition&.force_comment_in_registration?
-  end
-
-  # For associated_events_picker
-  def events_to_associated_events(events)
-    events.map do |event|
-      competition_event = competition.competition_events.find_by!(event: event)
-      registration_competition_events.find_by(competition_event_id: competition_event.id) || registration_competition_events.build(competition_event: competition_event)
-    end
   end
 
   def permit_user_cancellation?
