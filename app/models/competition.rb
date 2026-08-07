@@ -2106,6 +2106,7 @@ class Competition < ApplicationRecord
     new_assignments = []
     removed_assignments = []
     scoretaker_user_ids = []
+    patched_roles_user_ids = []
     wcif_persons.each do |wcif_person|
       local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
@@ -2123,11 +2124,12 @@ class Competition < ApplicationRecord
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]
-        roles = wcif_person["roles"] - %w[delegate trainee-delegate organizer] # These three are added on the fly.
+        roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer", Registration::SCORETAKER_ROLE] # These four are added on the fly.
         # The additional roles are only for WCIF purposes and we don't validate them,
         # so we can safely skip validations by using update_attribute
         registration.update_attribute(:roles, roles)
-        scoretaker_user_ids << registration.user_id if roles.include?(Registration::SCORETAKER_ROLE)
+        patched_roles_user_ids << registration.user_id
+        scoretaker_user_ids << registration.user_id if wcif_person["roles"].include?(Registration::SCORETAKER_ROLE)
       end
       wcif_person["assignments"]&.each do |assignment_wcif|
         schedule_activity = competition_activities.find do |competition_activity|
@@ -2159,11 +2161,13 @@ class Competition < ApplicationRecord
     Assignment.upsert_all(new_assignments) if new_assignments.any?
 
     # Groupifier and the Delegate Dashboard express "this person does data entry" as a person role,
-    # so people holding that role become scoretakers. Scoretakers are never removed here, because
-    # they can also be assigned by hand outside of the WCIF.
-    return if scoretaker_user_ids.empty?
+    # so for every person whose roles were patched, the WCIF decides whether they are a scoretaker.
+    # People that the patch doesn't mention keep whatever they had.
+    return if patched_roles_user_ids.empty?
 
-    new_scoretaker_ids = scoretaker_user_ids.uniq - competition_scoretakers.where(user_id: scoretaker_user_ids).pluck(:user_id)
+    scoretaker_user_ids.uniq!
+    competition_scoretakers.where(user_id: patched_roles_user_ids - scoretaker_user_ids).delete_all
+    new_scoretaker_ids = scoretaker_user_ids - competition_scoretakers.where(user_id: scoretaker_user_ids).pluck(:user_id)
     CompetitionScoretaker.insert_all(new_scoretaker_ids.map { { competition_id: id, user_id: it } }) if new_scoretaker_ids.any?
   end
 

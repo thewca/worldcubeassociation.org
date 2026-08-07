@@ -398,6 +398,8 @@ RSpec.describe "API Competitions" do
           persons = [{ wcaUserId: registration.user.id, roles: ["scrambler", Registration::SCORETAKER_ROLE] }]
           patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           expect(competition.reload.scoretakers).to include(registration.user)
+          # The role is derived from the scoretakers, so it must not be persisted on the registration as well
+          expect(registration.reload.roles).to eq ["scrambler"]
         end
 
         it "does not make a person without the data entry role a scoretaker" do
@@ -406,11 +408,24 @@ RSpec.describe "API Competitions" do
           expect(competition.reload.scoretakers).to be_empty
         end
 
-        it "keeps a scoretaker when their data entry role is taken away" do
+        it "removes a scoretaker when their data entry role is taken away" do
           competition.competition_scoretakers.create!(user: registration.user)
           persons = [{ wcaUserId: registration.user.id, roles: ["scrambler"] }]
           patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
+          expect(competition.reload.scoretakers).to be_empty
+        end
+
+        it "keeps a scoretaker that the patch doesn't mention" do
+          competition.competition_scoretakers.create!(user: registration.user)
+          persons = [{ wcaUserId: organizer_registration.user.id, roles: ["scrambler"] }]
+          patch api_v0_competition_update_wcif_path(competition), params: { formatVersion: Competition::WCIF_STABLE_VERSION, persons: persons }.to_json, headers: headers
           expect(competition.reload.scoretakers).to include(registration.user)
+        end
+
+        it "exposes scoretakers as a person role" do
+          competition.competition_scoretakers.create!(user: registration.user)
+          person_wcif = competition.to_wcif["persons"].find { |person| person["wcaUserId"] == registration.user.id }
+          expect(person_wcif["roles"]).to include Registration::SCORETAKER_ROLE
         end
 
         it "cannot change person immutable data" do
