@@ -19,6 +19,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/payload/draft">
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
+    | StaticRoute<"/api/translate/strings">
     | StaticRoute<"/competitions">
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
@@ -69,6 +70,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/score-tools">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
+    | StaticRoute<"/translate">
     | StaticRoute<"/translators">;
 
   interface StaticRoute<Pathname> {
