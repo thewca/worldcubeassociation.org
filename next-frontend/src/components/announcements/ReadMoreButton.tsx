@@ -2,29 +2,17 @@ import { Button, Link as ChakraLink } from "@chakra-ui/react";
 import { announcementReadMoreHref } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 
-/// Announcement cards are `card.pastel`, so their background is the card's own
-/// `1A` and the palette varies per card. `pastelSolid` is locked to blue and
-/// paints `blue.1A`, which is exactly the blue card's background — so the
-/// button vanishes into it. Border and label follow the card's contrast colour
-/// instead, which works on every palette. The hover veil has to come from
-/// `pastelContrast` rather than the built-in `outline` variant's
-/// `colorPalette.subtle`: a pale tint of the card's own hue would leave the
-/// `currentColor` label unreadable.
+/// Announcement cards are `fill.subtle`, so the built-in `outline` variant
+/// already borders and labels the button in the card's own palette. The link
+/// still needs `currentColor`: the `link` recipe pins `colorPalette: "link"`,
+/// which would paint the label fixed WCA blue on every card regardless of hue.
 export default function ReadMoreButton({
   announcement,
 }: {
   announcement: Announcement;
 }) {
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      alignSelf="flex-start"
-      asChild
-      color="currentColor"
-      borderColor="currentColor"
-      _hover={{ bg: "colorPalette.pastelContrast/15" }}
-    >
+    <Button variant="outline" size="sm" alignSelf="flex-start" asChild>
       <ChakraLink
         href={announcementReadMoreHref(announcement)}
         color="currentColor"

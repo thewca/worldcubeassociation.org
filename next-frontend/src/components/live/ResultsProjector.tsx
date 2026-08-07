@@ -211,7 +211,7 @@ function ResultsProjector({
                                 pr={2}
                                 textAlign="right"
                                 rowSpan={rowSpan}
-                                layerStyle="fill.deep"
+                                layerStyle="fill.solid"
                                 colorPalette={rankingCellColorPalette(
                                   competitor,
                                 )}
