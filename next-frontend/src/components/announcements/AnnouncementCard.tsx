@@ -47,7 +47,7 @@ export function AnnouncementCard({
   return (
     <Card.Root
       colorPalette={colorPalette}
-      layerStyle="fill.subtle"
+      layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
       width="full"
     >
       <Card.Body gap={2}>
@@ -73,7 +73,7 @@ export function AnnouncementFullCard({
   return (
     <Card.Root
       colorPalette={colorPalette}
-      layerStyle="fill.subtle"
+      layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
       width="full"
     >
       <Card.Body gap={2}>

@@ -52,7 +52,10 @@ export default function AnnouncementsCard({
       ))}
 
       {showSeeAll && (
-        <Accordion.Item value="see-all" layerStyle="fill.subtle">
+        <Accordion.Item
+          value="see-all"
+          layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
+        >
           <Accordion.ItemTrigger textStyle="s1" asChild>
             <ChakraLink href="/posts" color="currentColor">
               <Accordion.ItemIndicator transition={undefined}>
