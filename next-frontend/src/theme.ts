@@ -580,6 +580,24 @@ const customConfig = defineConfig({
                 bg: "colorPalette.subtle",
               },
             },
+            // Outline button for a `fill.solid` surface. Chakra's `outline`
+            // variant colours itself from `colorPalette.fg` and
+            // `colorPalette.border`, which are rungs of the same hue as
+            // `colorPalette.solid` — on blue, `fg` resolves to the *same* value
+            // as the background, so the button disappears entirely. Inheriting
+            // `currentColor` picks up the surface's `contrast` foreground
+            // instead, which reads on every palette and in both colour modes.
+            onSolid: {
+              borderWidth: "1px",
+              borderColor: "currentColor",
+              color: "currentColor",
+              _hover: {
+                bg: "colorPalette.contrast/15",
+              },
+              _expanded: {
+                bg: "colorPalette.contrast/15",
+              },
+            },
           },
         },
       },
