@@ -712,10 +712,10 @@ const customConfig = defineConfig({
             slatePastel: {
               root: {
                 colorPalette: "wcaWhite",
-                layerStyle: "fill.subtle",
+                layerStyle: "fill.solid",
               },
               description: {
-                layerStyle: "fill.subtle",
+                layerStyle: "fill.solid",
               },
             },
           },
