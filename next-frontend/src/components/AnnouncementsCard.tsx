@@ -9,7 +9,7 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
     <Accordion.Item
       value={announcement.id}
       layerStyle="fill.subtle"
-      _open={{ layerStyle: "fill.muted" }}
+      _open={{ layerStyle: { _light: "fill.solid", _dark: "fill.muted" } }}
     >
       <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
         <Accordion.ItemIndicator _open={{ display: "none" }} />
@@ -52,10 +52,7 @@ export default function AnnouncementsCard({
       ))}
 
       {showSeeAll && (
-        <Accordion.Item
-          value="see-all"
-          layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
-        >
+        <Accordion.Item value="see-all" layerStyle="fill.subtle">
           <Accordion.ItemTrigger textStyle="s1" asChild>
             <ChakraLink href="/posts" color="currentColor">
               <Accordion.ItemIndicator transition={undefined}>
