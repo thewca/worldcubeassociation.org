@@ -57,6 +57,9 @@ function LayerStyleRow({ layerStyle }: { layerStyle: LayerStyleName }) {
               <Button size="xs" variant="outline">
                 Outline
               </Button>
+              <Button size="xs" variant="onSolid">
+                onSolid
+              </Button>
             </HStack>
           </Box>
         ))}
