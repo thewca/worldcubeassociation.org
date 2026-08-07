@@ -384,7 +384,13 @@ const customConfig = defineConfig({
         //   own `solid` token points at the right colour without help.
         yellow: brandSolid("yellow"),
         blue: brandSolid("blue"),
-        orange: brandSolid("orange"),
+        orange: {
+          ...brandSolid("orange"),
+          // Chakra pairs orange with white in light mode, which only reaches
+          //   3.16:1 on the brand orange. Black clears AA at 6.65:1, and is
+          //   already what Chakra does for yellow in both modes.
+          contrast: { value: "black" },
+        },
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
