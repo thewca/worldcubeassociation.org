@@ -1935,7 +1935,7 @@ ko:
         이 WCA ID에 대한 생년월일이 기록되어 있지 않습니다. 이 <a href="%{dob_form_path}">전용 양식</a>을
         사용하여 WCA 결과 팀에게 문의하십시오.
       #original_hash: f7dde6e
-      wca_id_no_gender_html: "이 WCA ID에 대한 성별 정보가 기록되어 있지 않습니다.  <a href='%{wrt_contact_path}'='%{wrt_contact_path}' target='_blank'>WCA \b결과 팀</a>에 연락하여 이 문제를 해결하십시오."
+      wca_id_no_gender_html: "이 WCA ID에 대한 성별 정보가 기록되어 있지 않습니다.  <a href='%{wrt_contact_path}' target='_blank'>WCA 결과 팀</a>에 연락하여 이 문제를 해결하십시오."
       #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
         이 WCA ID에 대한 국적 정보가 기록되어 있지 않습니다.  <a
