@@ -12111,7 +12111,7 @@ __metadata:
     react-intersection-observer: "npm:^11.0.0"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
-    temporal-polyfill: "npm:^1.0.2"
+    temporal-polyfill: "npm:^1.0.3"
     typescript: "npm:^6"
     vitest: "npm:^4.1.10"
   dependenciesMeta:
@@ -14583,13 +14583,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"temporal-polyfill@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "temporal-polyfill@npm:1.0.2"
+"temporal-polyfill@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "temporal-polyfill@npm:1.0.3"
   dependencies:
     temporal-spec: "npm:1.0.1"
     temporal-utils: "npm:1.0.1"
-  checksum: 10c0/5d1dab031414df3f66f6d07659e6741938f97e5881052b964c9ad2ca0a29d0536d1db88df016396fa739153dd5e306a97bebf04d91c0625747587114a7bfdeb6
+  checksum: 10c0/67012421c620332365b5b48b83e0486bdb70392b4d3f56583cd07e1adcc8ba9724ee59c9301b90918cfe75a0e6c017b066a3a067bfeedcf2f6738a2bc3890f74
   languageName: node
   linkType: hard
 
