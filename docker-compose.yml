@@ -231,7 +231,7 @@ services:
         condition: service_healthy
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.61.1
+    image: mcr.microsoft.com/playwright:v1.62.1
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"
