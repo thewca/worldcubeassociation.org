@@ -119,6 +119,8 @@ vi:
     555bf: 5x5x5 Bịt mắt
     #original_hash: cedbf87
     333mbf: Bịt mắt Nhiều 3x3x3
+    #original_hash: a103de4
+    fto: Face Turning Octahedron
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
@@ -232,6 +234,8 @@ vi:
       ranking: 'Top %{ranking}'
       #original_hash: 0664a83
       percent: 'Top %{percent}%'
+      #original_hash: 023a81e
+      all_advance: Tất cả vào vòng sau
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -239,6 +243,8 @@ vi:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+    #original_hash: ba6fa8b
+    all_advance: Tất cả thí sinh vào vòng sau
     #original_hash: 6e55337
     ranking: 'Top %{ranking} vào vòng tiếp theo'
     #original_hash: 7ee969c
@@ -1478,13 +1484,13 @@ vi:
           đóng vai trò duy trì các quy trình đề xuất giải đấu thông qua các tài
           liệu như Chính sách Yêu cầu Giải đấu WCA. WCAT KHÔNG chịu trách nhiệm
           tổ chức hoặc thực hiện các nhiệm vụ của Delegate cho các giải đấu.
-        #original_hash: 5007698
+        #original_hash: 58daf5b
         wic: >-
           Ủy ban Liêm chính WCA (WIC) chịu trách nhiệm thực hiện các cuộc điều
           tra độc lập về các thành viên cộng đồng WCA và các vụ việc xảy ra tại
           các Giải đấu WCA, hoặc trên các kênh trực tuyến chính thức của WCA.
-          Các vụ việc này bao gồm các cáo buộc vi phạm Tinh thần, Quy tắc Ứng
-          xử, Quy chuẩn Đạo đức và/hoặc Quy định của WCA.
+          Các vụ việc này bao gồm các cáo buộc vi phạm các Giá trị Cốt lõi, Quy
+          tắc Ứng xử, Quy chuẩn Đạo đức và/hoặc Quy định của WCA.
         #original_hash: be491ec
         weat: >-
           Đội ngũ Trợ lý Điều hành WCA (WEAT) có nhiệm vụ thực hiện các công
@@ -1695,6 +1701,9 @@ vi:
         edit_reason:
           #original_hash: fdfcccf
           label: Lý do chỉnh sửa
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: 'Lý do thay đổi %{attribute}'
         proof_attach:
           #original_hash: a9645b1
           label: Minh chứng đính kèm
@@ -1704,8 +1713,18 @@ vi:
         captcha:
           #original_hash: 58c1271
           validation_error: Vui lòng xác thực bạn không phải robot.
+        verified_checkbox:
+          #original_hash: 54f118d
+          label: >-
+            Khi nộp đơn này, bạn đồng ý đã xác minh giấy tờ tùy thân và xác nhận
+            thông tin là đúng.
       #original_hash: 126541e
       success_message: Yêu cầu đã được nộp - chúng tôi sẽ sớm hồi âm lại đên bạn.
+      #original_hash: bb6a0cf
+      success_message_with_ticket_link_html: >-
+        Đã gửi yêu cầu - chúng tôi sẽ liên hệ bạn trong thời gian sớm nhất. Để
+        xem trạng thái yêu cầu, vui lòng truy cập <a href="%{link}">link
+        này</a>.
   homepage:
     #original_hash: 824d76b
     learn_more: Biết thêm thông tin
@@ -2582,8 +2601,12 @@ vi:
       registrations_file_hint: >-
         File CSV có các cột: Trang thái, Họ tên, Quốc tịch, WCA ID, Ngày sinh,
         Giới tính, Email và một cột cho mỗi nội dung.
+      #original_hash: 01beb54
+      preview: Xem trước Thông tin đăng ký
       #original_hash: d6fbc9d
       import: Nhập
+      #original_hash: 77dfd21
+      cancel: Hủy
       errors:
         #original_hash: 0ef547d
         error: 'Lỗi khi nhập %{registration}: %{error}.'
@@ -2630,6 +2653,8 @@ vi:
       ots_not_enabled: >-
         Thời hạn đăng ký đã đóng và giải đấu không kích hoạt đăng ký tại chỗ -
         bạn phải chỉnh sửa thông tin giải đấu để kích hoạt tùy chọn này
+      #original_hash: ed9d329
+      ots_before_registration_open: Không thể tạo đơn đăng ký tại chỗ trước khi mở đơn đăng ký.
       #original_hash: 61125b5
       competition_over: Bạn không thể thêm các đơn đăng ký tại chỗ sau khi giải đấu đã kết thúc.
       errors:
@@ -2774,26 +2799,57 @@ vi:
         sách chờ, vui lòng ghi chú rõ ràng trên yêu cầu đăng ký.
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: Không thể sửa đổi lịch trình sau khi đã nộp kết quả.
+      #original_hash: 1877b69
+      spots_left:
+        zero: Giải đấu đã đầy
+        other: 'Còn %{count} chỗ'
     live:
       #original_hash: 10d1a3c
       title: Kết quả Trực tiếp
+      #original_hash: ef1c23b
+      manage_rounds: Quản lý vòng thi
+      incompatible:
+        #original_hash: 4e41690
+        external: >-
+          Giải đấu này sử dụng phần mềm nhập liệu riêng - vui lòng đọc thông tin
+          giải đấu để có thông tin về nơi đăng tải kết quả trực tiếp.
+        #original_hash: 92b3341
+        wca_live: >-
+          Giải đấu này sử dụng WCA Live để nhập liệu - truy cập link này để xem
+          kết quả trực tiếp:
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: đang diễn ra
+        #original_hash: e5fd9cf
+        done: đã xong
       connection:
         #original_hash: f92b311
         initialized: Đang kết nối
-        #original_hash: 66d44d4
-        connected: 'Đã kết nối, kết quả đang được cập nhật'
+        #original_hash: b574812
+        connected: 'Đã kết nối, đang nhận cập nhật kết quả trực tiếp'
         #original_hash: 53abaa2
         disconnected: 'Đã mất kết nối, hiện đang không cập nhật kết quả'
+        status:
+          #original_hash: 3ec2f2a
+          initialized: Đang khởi tạo
+          #original_hash: c2f9b7b
+          connected: Đã kết nối
+          #original_hash: 771e05f
+          disconnected: Đã ngắt kết nối
       podiums:
         #original_hash: 02ae2bd
         title: Top 3
-        #original_hash: d7297a7
-        undetermined: Chưa ấn định Top 3
+        #original_hash: 69c4270
+        undetermined: Chưa ấn định
+        #original_hash: 61e88df
+        none: Chưa có top 3!
       admin:
         #original_hash: cf9b770
         open: Mở
         #original_hash: 719ea39
         clear: Xóa
+        #original_hash: bbfa773
+        close: Đóng
         #original_hash: 42faad9
         competitors_entered: 'Đã nhập %{competitors_live_results_entered}/%{total_competitors}'
         #original_hash: adec79f
@@ -2802,6 +2858,24 @@ vi:
         edit: Chỉnh sửa
         #original_hash: 612e12d
         results: Kết quả
+        #original_hash: b233e77
+        registration: Đăng ký
+        #original_hash: 1e0d934
+        admin_view: Chế độ admin
+        #original_hash: 530a71b
+        results_view: Chế độ xem kết quả
+        #original_hash: 1dadee2
+        double_check: Kiểm tra lại
+        #original_hash: a5be381
+        submit_results: Nộp kết quả
+        #original_hash: 0ed766a
+        add_to_batch: Thêm vào batch
+        #original_hash: 1a2e4ff
+        remove_from_batch: Bỏ khỏi batch
+        #original_hash: 8b6d8cb
+        batch_mode: Chế độ hàng loạt
+        #original_hash: a577fa2
+        submit_batch: 'Nộp batch (%{count})'
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2826,6 +2900,12 @@ vi:
           round_locked: >-
             Vòng thi tiếp theo đã được mở, việc chỉnh sửa dữ liệu của vòng thi
             này sẽ không làm ảnh hưởng đến vòng thi tiếp theo!
+          #original_hash: 3380184
+          9m_violated: >-
+            Vòng thi trước đó không đủ thí sinh có kết quả để thỏa mãn Quy định
+            9m3. Nếu vòng thi trước không có đủ %{competitor_count_needed} thí
+            sinh khi nộp kết quả, kết quả của vòng thi này sẽ không được công
+            nhận.
         quit:
           #original_hash: de62de1
           title: Lược bỏ thí sinh
@@ -2835,8 +2915,21 @@ vi:
             other: 'Các thí sinh tiếp theo vào vòng sau là %{competitors}'
           #original_hash: c87ca67
           advance: Cho thí sinh tiếp theo vào vòng sau
-          #original_hash: e85b311
-          quit_confirm: Lược bỏ thí sinh khỏi vòng thi
+          #original_hash: aa59a26
+          quit_confirm:
+            zero: Bỏ thí sinh khỏi vòng thi
+            other: Bỏ thí sinh khỏi vòng thi
+          bulk:
+            #original_hash: e0981de
+            success: 'Đã bỏ %{count} thí sinh'
+            #original_hash: 98fe723
+            failure: Bỏ hàng loạt thí sinh thất bại
+            #original_hash: 774050e
+            menu: Bỏ hàng loạt
+            #original_hash: 89f89c0
+            id: ID
+            #original_hash: 709a232
+            name: Tên
           #original_hash: 1a2285d
           quit_menu: Lược bỏ
           #original_hash: 70835a0
@@ -2845,6 +2938,24 @@ vi:
           cancel: Hủy
           #original_hash: 79d6737
           failed_to_fetch: Tìm tên thí sinh vào vòng sau thất bại
+          #original_hash: d4dcd86
+          still_processing: Không thể bỏ thí sinh khi đang xử lý kết quả
+          #original_hash: ecb0dd4
+          in_batch: Không thể bỏ thí sinh trong batch chưa nộp
+        add_competitor:
+          #original_hash: 9dcb50d
+          single_round: Thêm thí sinh vào vòng thi
+          #original_hash: bf3b670
+          multiple_rounds:
+            zero: Thêm thí sinh vào cả hai vòng của vòng thi kép.
+            other: >-
+              Thêm thí sinh vào vòng thi, bạn sẽ phải thêm thí sinh vào vòng thi
+              thứ hai của vòng thi kép sau vì vòng thi này chưa mở.
+          #original_hash: b3bdfaa
+          event_edit_warning: >-
+            Thí sinh chưa đăng ký nội dung này và thời gian chỉnh sửa nội dung
+            thi đấu đã đóng. Bạn vẫn có thể thêm thí sinh này, nhưng hãy đảm bảo
+            bạn chắc chắn muốn làm như vậy.
       results:
         #original_hash: 4705687
         competitor: Thí sinh
@@ -3397,8 +3508,8 @@ vi:
           external_registration_page: Trang đăng ký
           #original_hash: 87b7d5f
           uses_wca_registration: Tôi muốn sử dụng trang web của WCA cho việc đăng ký
-          #original_hash: ebe8c47
-          uses_wca_live: Tôi sẽ sử dụng WCA Live để nhập liệu
+          #original_hash: 0611f2d
+          scoretaking_software: Phần mềm nhập liệu
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Mã tiền tệ
@@ -3613,8 +3724,8 @@ vi:
             phải điền một đường dẫn có hiệu lực.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
+          #original_hash: cc7d557
+          scoretaking_software: 'Chọn ''%{choice_ilr}'' nếu muốn dùng Vòng thi kép'
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3754,6 +3865,14 @@ vi:
             bulk: Hiện nút 'Duyệt Tự động Số lượng lớn' tại menu Đơn đăng ký
             #original_hash: 490ed83
             live: Tự động duyệt đơn đăng ký khi đã nhận lệ phí thi
+        website:
+          scoretaking_software:
+            #original_hash: 1c88388
+            external: Phần mềm riêng không do WCA duy trì
+            #original_hash: 4b175c3
+            wca_live: 'WCA Live, tại live.worldcubeassociation.org'
+            #original_hash: 1ee034d
+            internal: Kết quả Trực tiếp Tích hợp
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -4184,6 +4303,10 @@ vi:
       cannot_delete_confirmed: Không thể xoá một giải đấu đã được xác nhận.
       #original_hash: 191df37
       must_contain_event: phải có ít nhất một nội dung trong giải đấu
+      #original_hash: d01c9f5
+      fto_not_yet_allowed: >-
+        Không thể tổ chức nội dung Face Turning Octahedron ở các giải đấu bắt
+        đầu trước ngày %{date}.
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
         Phải có ít nhất một vòng thi, và tất cả các vòng đều phải được ghi rõ
@@ -4412,6 +4535,11 @@ vi:
         qualification_some_events_html: >-
           Các thành tích điều kiện của nội dung %{events} phải đạt trước hoặc
           trong ngày <b>%{date}</b>.
+        #original_hash: ce9b21b
+        advancement_condition_html: >-
+          Số thí sinh vào vòng sau là con số dự kiến. Số thí sinh vào vòng sau
+          có thể ít hơn nếu có ít thí sinh hơn dự kiến, hoặc nhiều thí sinh cùng
+          kết quả.
       #original_hash: 041a5de
       format: Hình thức
       #original_hash: 0d1fcc3
@@ -4422,6 +4550,8 @@ vi:
       proceed: Tiếp tục
       #original_hash: 2ffe44e
       qualification: Điều kiện
+      #original_hash: 5289f93
+      advancement_condition: Điều kiện vào vòng sau
     schedule:
       display_as:
         #original_hash: 0424f6e
@@ -4460,6 +4590,8 @@ vi:
         none: Không có
         #original_hash: 9b9a6aa
         show_buttons: Hiển thị nút đổi múi giờ
+        #original_hash: dd3c440
+        hide_buttons: Ẩn nút chuyển múi giờ
         #original_hash: d2ac826
         use_time_zone: Dùng múi giờ này
       #original_hash: 73acb7f
@@ -4478,10 +4610,14 @@ vi:
         lúc.
       #original_hash: 97df911
       timezone_message: 'Múi giờ của hội trường này là %{timezone}.'
-      #original_hash: 94b2570
-      timezone_setting: 'Bạn đang xem lịch trình với múi giờ sau:'
-      #original_hash: 75194fd
+      #original_hash: f948a0e
+      timezone_setting: 'Bạn đang xem lịch trình tại múi giờ sau:'
+      #original_hash: ca4f078
       multiple_timezones_available: Lưu ý rằng các hội trường không cùng múi giờ -- hãy để ý!
+      #original_hash: 459e545
+      select_a_timezone: Chọn múi giờ
+      #original_hash: 80e8704
+      select_a_venue_to_view: Vui lòng chọn hội trường để xem lịch trình.
       #original_hash: d94a371
       timezone_set_local: Đặt theo giờ địa phương
       #original_hash: 17ab650
@@ -4864,6 +5000,8 @@ vi:
         greater_china: Giải thưởng trong Giải Vô địch Trung Quốc Đại lục
       #original_hash: c32a014
       place: Thứ hạng
+      #original_hash: 89e4fa7
+      dual: Kép
       #original_hash: ddb18c1
       medal_collection: Bộ sưu tập huy chương
       #original_hash: 9e69e13
@@ -5162,13 +5300,12 @@ vi:
       động. Với hỗ trợ tài chính, chúng tôi mong muốn các giải đấu càng chuyên
       nghiệp hơn nữa trong quá trình công nhận thêm nhiều giải đấu trên toàn thế
       giới.</p>
-    #original_hash: bccd8c5
+    #original_hash: 1076bcb
     spirit: >-
-      Chúng tôi mong muốn mọi cá nhân trên thế giới cùng chia sẻ niềm vui trong
-      một không gian thân thiện, giúp đỡ nhau và ứng xử với một tinh thần thượng
-      võ.
-    #original_hash: 69131cc
-    spirit_footer: Tinh thần của WCA
+      Các Giá trị Cốt lõi của chúng tôi là Tính cộng đồng, Sự công bằng, Sự thú
+      vị, Sự xuất sắc, và Tinh thần tình nguyện.
+    #original_hash: 9679c23
+    spirit_footer: Giá trị Cốt lõi của WCA
     #original_hash: c1781ee
     our_goals_title: Mục tiêu của chúng tôi
     #original_hash: c1144d4
@@ -5250,13 +5387,13 @@ vi:
         WCA.
       #original_hash: 0e7a036
       teams_committees: Các nhóm và ủy ban
-      #original_hash: 7e849d2
+      #original_hash: c319cc2
       delegates_html: >-
         <p><strong>WCA Delegate</strong> là vị trí được định nghĩa trong bản
         Kiến nghị WCA và được mô tả trong Quy định WCA. Nhiệm vụ chính của
         Delegate là thay mặt WCA giám sát các giải đấu. WCA Delegate có trách
-        nhiệm đảm bảo các Giải đấu WCA tuân theo Sứ mệnh, Tinh thần, và Quy định
-        WCA. WCA Delegate phân tách các cấp bậc là <strong>Senior
+        nhiệm đảm bảo các Giải đấu WCA tuân theo Sứ mệnh, Giá trị Cốt lõi, và
+        Quy định WCA. WCA Delegate phân tách các cấp bậc là <strong>Senior
         Delegate</strong>, <strong>Regional Delegate</strong>, <strong>Full
         Delegate</strong>, <strong>Junior Delegate</strong>, và <strong>Trainee
         Delegate</strong>%{see_link}.</p> <p>Kèm theo những nhiệm vụ thông
@@ -5337,6 +5474,8 @@ vi:
       last_delegated: Giải đấu Delegate cuối cùng
       #original_hash: 5ab4a17
       total_delegated: Tổng số giải đấu Delegate
+      #original_hash: cec62d6
+      lead_delegated: Các giải đấu làm Trưởng nhóm Delegate
       #original_hash: 90ccd64
       history: Lịch sử
   regional_organizations:
@@ -5611,6 +5750,82 @@ vi:
       được dịch.
     #original_hash: 2c23c1a
     incident: 'Sự cố:'
+    #original_hash: 42edeaa
+    title: Nhật trình sự cố
+    #original_hash: c387a75
+    page_title: 'Sự cố: %{title}'
+    #original_hash: 70c5337
+    not_found: Không tìm thấy sự cố
+    #original_hash: 251a7bb
+    back_to_log: Về lại nhật trình sự cố
+    #original_hash: bce0641
+    search_placeholder: Tìm kiếm
+    #original_hash: bae7d5b
+    status: Trạng thái
+    #original_hash: d999aeb
+    resolved: Đã giải quyết
+    #original_hash: 96f608c
+    pending: Đang chờ
+    #original_hash: 4a0e607
+    sent_in_digest: Đã gửi vào digest
+    #original_hash: 35f49dc
+    sent: Đã gửi
+    #original_hash: 93934ad
+    showing_entries: >-
+      Đang hiện kết quả %{first} đến %{last} trong tổng số %{total}, mỗi trang
+      có <select></select> kết quả
+    #original_hash: 329a7c2
+    not_public_warning: >-
+      Ghi chú: Nhật trình này chưa hiển thị công khai do chưa được giải quyết
+      xong.
+    #original_hash: 0d96264
+    public_summary: Mô tả và phương thức giải quyết sự cố
+    #original_hash: 47f8842
+    private_description: Mô tả (riêng cho Delegate)
+    #original_hash: 504b671
+    private_wrc_decision: Quyết định WRC (riêng cho Delegate)
+    tags:
+      #original_hash: 0fd2d3d
+      regulation: Quy định
+      #original_hash: 3f63aa0
+      guideline: Hướng dẫn
+      #original_hash: 180b14c
+      search_with_tag: Tìm kiếm các sự cố có thẻ này
+      #original_hash: d25382e
+      filter_by_tag: Lọc theo thẻ này
+      #original_hash: 491db57
+      competition_page: Trang giải đấu
+      #original_hash: a2bfe4c
+      delegate_report: Báo cáo Delegate
+    admin:
+      #original_hash: 5656400
+      publish: Xuất bản
+      #original_hash: 1ac0a74
+      unpublish: Hủy xuất bản
+      #original_hash: 5301648
+      edit: Chỉnh sửa
+      #original_hash: 577ef7d
+      destroy: Xóa
+      #original_hash: 77dfd21
+      cancel: Hủy
+      #original_hash: 04a2122
+      confirm: Xác nhận
+      #original_hash: 6fc0529
+      change_status: Đổi trạng thái
+      #original_hash: a926b77
+      destroy_title: Xóa sự cố
+      #original_hash: b9bea79
+      confirm_publish: Bạn có chắc chắn muốn công khai nhật trình sự cố này không?
+      #original_hash: f683adb
+      confirm_unpublish: Bạn có chắc chắn muốn gỡ nhật trình sự cố này không?
+      #original_hash: 02e27c6
+      confirm_destroy: Bạn có chắc chắn muốn xóa nhật trình sự cố này không?
+      #original_hash: 8fa3ce7
+      publish_error: Không thể đăng nhật trình sự cố.
+      #original_hash: 229c8ce
+      unpublish_error: Không thể gỡ nhật trình sự cố.
+      #original_hash: e332db5
+      destroy_error: Không thể xóa nhật trình sự cố.
   about_regulations:
     #original_hash: 6bce1b5
     title: Về Quy định
@@ -6421,17 +6636,29 @@ vi:
       missing_scrambles_for_multi_error: >-
         [%{round_id}] Kể cả nếu có nhiều nhóm thi cho Giải Bịt mắt Nhiều 3x3x3,
         ít nhất một nhóm thi phải có đủ công thức tráo cho tất cả lượt thi.
+      #original_hash: 2757334
+      mbld_scrambles_warning: >-
+        [%{round_id}] Vòng thi này có kết quả Giải bịt mắt Nhiều 3x3x3. Vui lòng
+        nêu rõ trong bình luận rằng vòng thi này sử dụng bao nhiêu công thức
+        tráo trong mỗi bộ công thức để WRT có thể lược bỏ các công thức dư thừa.
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] Có nhiều nhóm thi FMC. Nếu chỉ có một nhóm thi FMC, sử
         dụng Scrambles Matcher để lược bỏ các công thức tráo không dùng đến. Nếu
         có nhiều nhóm thi, vui lòng ghi chú cho FMC để giải thích vì sao lại có
         nhiều nhóm thi FMC.
-      #original_hash: d6830c0
+      #original_hash: ce201ef
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Vòng thi có số công thức tráo khác so với số công thức
-        được ghi trên trang Quản lý Nội dung của giải đấu. Xin vui lòng chỉnh
-        sửa số công thức tráo ở trang trên thành số công thức được sử dụng.
+        [%{round_id}] Vòng thi có số công thức tráo (%{actual}) khác so với số
+        công thức được ghi trên trang Quản lý Nội dung của giải đấu
+        (%{expected}). Xin vui lòng chỉnh sửa số công thức tráo ở trang trên
+        thành số công thức được sử dụng.
+    schedule:
+      #original_hash: 7a12424
+      activity_outside_competition_dates_warning: >-
+        Hoạt động '%{activity_name}' (mã: %{activity_code}) nằm ngoài các ngày
+        tổ chức giải đấu theo múi giờ địa phương tại hội trường. Vui lòng chỉnh
+        sửa lại các ngày tổ chức giải đấu trong thực tế tại lịch trình.
   tickets:
     type:
       #original_hash: e43f273
