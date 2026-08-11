@@ -35,7 +35,7 @@ RSpec.describe "sessions" do
     user = create(:user)
     browser = ActionDispatch::Integration::Session.new(Rails.application)
 
-    travel_to(Time.current) do
+    freeze_time do
       browser.post(user_session_path, params: sign_in_params(user))
       original_remember_cookie = browser.cookies["remember_user_token"]
       browser.cookies.delete("_WcaOnRails_session")
