@@ -195,4 +195,61 @@ RSpec.describe ResultsSubmissionController do
       end
     end
   end
+
+  describe "GET #pending_results_submissions" do
+    let(:wrt_member) { create(:user, :wrt_member) }
+    let(:regular_user) { create(:user) }
+
+    context "when not logged in" do
+      it "redirects to sign in" do
+        get pending_results_submissions_path
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when logged in as regular user" do
+      before { sign_in regular_user }
+
+      it "redirects to root" do
+        get pending_results_submissions_path
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context "when logged in as WRT member" do
+      before { sign_in wrt_member }
+
+      it "returns a list of competitions with unsubmitted results whose end date is past or today" do
+        past_unsubmitted = create(
+          :competition,
+          :visible,
+          starts: 2.days.ago,
+          ends: 1.day.ago,
+          results_submitted_at: nil,
+          results_posted_at: nil,
+        )
+        create(
+          :competition,
+          :visible,
+          starts: 3.days.ago,
+          ends: 2.days.ago,
+          results_submitted_at: 1.day.ago,
+          results_posted_at: nil,
+        )
+        create(
+          :competition,
+          :visible,
+          starts: 1.day.from_now,
+          ends: 2.days.from_now,
+          results_submitted_at: nil,
+          results_posted_at: nil,
+        )
+
+        get pending_results_submissions_path
+        expect(response).to be_successful
+        response_json = response.parsed_body
+        expect(response_json.pluck("id")).to eq([past_unsubmitted.id])
+      end
+    end
+  end
 end

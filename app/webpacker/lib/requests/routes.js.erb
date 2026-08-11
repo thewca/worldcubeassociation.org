@@ -300,6 +300,7 @@ export const viewUrls = {
     newcomerDobFormatCheck: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_newcomer_dob_check_path(competition_id: "${competitionId}")) %>`,
     adminDoComputeAuxiliaryData: `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_do_compute_auxiliary_data_path) %>`,
     unfinishedPersons: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_unfinished_persons_path(competition_id: "${competitionId}")) %>`,
+    pendingResultsSubmissions: `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_results_submissions_path) %>`,
   },
   persons: {
     results: (wcaId, competitionId, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_results_path) %>?${jsonToQueryString({ wcaId, competitionId, eventId })}`,
