@@ -2807,11 +2807,11 @@ sl:
       schedule_locked_after_results_submitted: Urnika ni mogoče urejati po objavi rezultatov.
       #original_hash: 1877b69
       spots_left:
-        zero: Vsa mesta so zapolnjena.
         one: Še eno prosto mesto.
         two: Še dve prosti mesti.
         few: 'Še %{count} prosta mesta.'
         other: 'Še %{count} prostih mest.'
+      spots_left_none: Vsa mesta so zapolnjena.
     live:
       #original_hash: 10d1a3c
       title: Rezultati v živo
@@ -3993,11 +3993,11 @@ sl:
         empty: Prazno
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: ni prostih mest
           one: eno prosto mesto
           two: dve prosti mesti
           few: '%{count} prosta mesta'
           other: '%{count} prostih mest'
+        spots_remaining_none: ni prostih mest
         pending:
           #original_hash: 4210670
           title: Čakajoče prijave
@@ -4112,11 +4112,11 @@ sl:
           angl. bcc)!
         #original_hash: beedd53
         move_to:
-          zero: Premakni
           one: 'Premakni %{count} v'
           two: 'Premakni %{count} v'
           few: 'Premakni %{count} v'
           other: 'Premakni %{count} v'
+        move_to_none: Premakni
         #original_hash: 96f608c
         pending: Čakajoče
         #original_hash: 92d40dc

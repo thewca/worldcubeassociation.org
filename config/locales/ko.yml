@@ -2457,8 +2457,8 @@ ko:
       schedule_locked_after_results_submitted: 결과 제출 후에는 일정을 수정할 수 없습니다.
       #original_hash: 1877b69
       spots_left:
-        zero: 정원 마감
         other: '%{count}자리 남음'
+      spots_left_none: 정원 마감
     live:
       #original_hash: 10d1a3c
       title: 실시간 결과
@@ -3484,8 +3484,8 @@ ko:
         empty: 없음
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: 남은 자리 없음
           other: '%{count}자리 남음'
+        spots_remaining_none: 남은 자리 없음
         pending:
           #original_hash: 4210670
           title: 승인 보류자 명단
@@ -3581,8 +3581,8 @@ ko:
         email_message: 클립보드에 복사되었습니다. 숨은 참조(bcc)를 사용하는 것을 잊지 마십시오!
         #original_hash: beedd53
         move_to:
-          zero: 다음으로 이동
           other: '%{count}을(를) 다음으로 이동'
+        move_to_none: 다음으로 이동
         #original_hash: 96f608c
         pending: 보류
         #original_hash: 92d40dc

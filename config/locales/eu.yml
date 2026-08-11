@@ -2844,9 +2844,9 @@ eu:
       schedule_locked_after_results_submitted: Ordutegia ezin da aldatu emaitzak bidali ondoren.
       #original_hash: 1877b69
       spots_left:
-        zero: Lehiaketa beteta
         one: Toki bat libre
         other: '%{count} toki libre'
+      spots_left_none: Lehiaketa beteta
     live:
       #original_hash: 10d1a3c
       title: Zuzenezko emaitzak
@@ -4037,9 +4037,9 @@ eu:
         empty: Bat ere ez
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: ez da tokirik gelditzen
           one: '%{count} gelditzen da'
           other: '%{count} gelditzen dira'
+        spots_remaining_none: ez da tokirik gelditzen
         pending:
           #original_hash: 4210670
           title: Zain dauden erregistroak
@@ -4156,9 +4156,9 @@ eu:
         email_message: Arbelera kopiatu da. Gogoratu bcc erabiltzeaz!
         #original_hash: beedd53
         move_to:
-          zero: 'Mugitu hona:'
           one: 'Mugitu %{count} hona:'
           other: 'Mugitu %{count} hona:'
+        move_to_none: 'Mugitu hona:'
         #original_hash: 96f608c
         pending: Zain
         #original_hash: 92d40dc

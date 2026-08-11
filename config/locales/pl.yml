@@ -2887,11 +2887,11 @@ pl:
       schedule_locked_after_results_submitted: Harmonogram nie może być edytowany po wysłaniu wyników.
       #original_hash: 1877b69
       spots_left:
-        zero: Zawody są pełne
         one: Zostało jedno miejsce
         few: 'Zostało %{count} miejsc'
         many: 'Zostało %{count} miejsc'
         other: 'Zostało %{count} miejsc'
+      spots_left_none: Zawody są pełne
     live:
       #original_hash: 10d1a3c
       title: Wyniki Live
@@ -4118,11 +4118,11 @@ pl:
         empty: Brak
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: nie ma już miejsc
           one: 'pozostało %{count} miejsce'
           few: 'pozostały %{count} miejsca'
           many: 'pozostało %{count} miejsc'
           other: 'pozostało %{count} miejsc'
+        spots_remaining_none: nie ma już miejsc
         pending:
           #original_hash: 4210670
           title: Oczekujące Rejestracje
@@ -4243,11 +4243,11 @@ pl:
         email_message: Skopiowano do schowka. Pamiętaj o użyciu UDW!
         #original_hash: beedd53
         move_to:
-          zero: Przenieś do
           one: 'Przenieś %{count} do'
           few: 'Przenieś %{count} do'
           many: 'Przenieś %{count} do'
           other: 'Przenieś %{count} do'
+        move_to_none: Przenieś do
         #original_hash: 96f608c
         pending: Oczekujące
         #original_hash: 92d40dc

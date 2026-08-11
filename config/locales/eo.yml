@@ -3710,9 +3710,9 @@ eo:
         empty: Neniu
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: neniu registriĝloko disponebla
           one: '%{count} registriĝloko disponebla'
           other: '%{count} registriĝlokoj disponeblaj'
+        spots_remaining_none: neniu registriĝloko disponebla
         pending:
           #original_hash: 4210670
           title: Pritraktotaj registriĝoj
@@ -3829,9 +3829,9 @@ eo:
         email_message: Kopiita al tondujo. Memoru uzi BCC!
         #original_hash: beedd53
         move_to:
-          zero: Movi al
           one: 'Movi %{count} al'
           other: 'Movi %{count} al'
+        move_to_none: Movi al
         #original_hash: 96f608c
         pending: Pritraktota
         #original_hash: 92d40dc

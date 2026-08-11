@@ -2938,9 +2938,9 @@ es-ES:
       schedule_locked_after_results_submitted: El horario no se puede editar tras haber subido los resultados.
       #original_hash: 1877b69
       spots_left:
-        zero: Competición llena
         one: Una plaza libre
         other: '%{count} plazas libres'
+      spots_left_none: Competición llena
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
@@ -4172,9 +4172,9 @@ es-ES:
         empty: Ninguno
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: no quedan plazas
           one: queda una plaza
           other: 'quedan %{count} plazas'
+        spots_remaining_none: no quedan plazas
         pending:
           #original_hash: 4210670
           title: Registros pendientes
@@ -4293,9 +4293,9 @@ es-ES:
         email_message: Copiado al portapapeles. ¡Recuerda usar CCO (con copia oculta)!
         #original_hash: beedd53
         move_to:
-          zero: Mover a
           one: 'Mover %{count} a'
           other: 'Mover %{count} a'
+        move_to_none: Mover a
         #original_hash: 96f608c
         pending: Pendiente
         #original_hash: 92d40dc

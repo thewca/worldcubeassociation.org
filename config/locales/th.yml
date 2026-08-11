@@ -2703,8 +2703,8 @@ th:
       schedule_locked_after_results_submitted: ไม่สามารถแก้ไขตารางการแข่งขันได้หลังจากส่งผลการแข่งขันแล้ว
       #original_hash: 1877b69
       spots_left:
-        zero: ผู้สมัครเต็มแล้ว
         other: 'เหลืออีก %{count} คน'
+      spots_left_none: ผู้สมัครเต็มแล้ว
     live:
       #original_hash: 10d1a3c
       title: ผลการแข่งขัน
@@ -3844,8 +3844,8 @@ th:
         empty: ไม่พบ
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
           other: 'เหลืออีก %{count} คน'
+        spots_remaining_none: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
         pending:
           #original_hash: 4210670
           title: การสมัครการแข่งขันที่รอดำเนินการ
@@ -3959,8 +3959,8 @@ th:
         email_message: คัดลอกไปยังคลิปบอร์ดแล้ว อย่าลืมส่งด้วย BCC!
         #original_hash: beedd53
         move_to:
-          zero: ย้ายไปยัง
           other: 'ย้าย %{count} ไปยัง'
+        move_to_none: ย้ายไปยัง
         #original_hash: 96f608c
         pending: รอดำเนินการ
         #original_hash: 92d40dc

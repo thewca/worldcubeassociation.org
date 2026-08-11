@@ -3666,10 +3666,10 @@ hr:
         empty: Ništa
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: nema slobodnih mjesta
           one: '%{count} slobodno mjesto'
           few: '%{count} slobodnih mjesta'
           other: '%{count} slobodnih mjesta'
+        spots_remaining_none: nema slobodnih mjesta
         pending:
           #original_hash: 4210670
           title: Registracije na čekanju
@@ -3756,10 +3756,10 @@ hr:
         email_message: Kopirano u međuspremnik. Ne zaboravi koristiti bcc!
         #original_hash: beedd53
         move_to:
-          zero: Prebaci
           one: 'Prebaci %{count} u'
           few: 'Prebaci %{count} u'
           other: 'Prebaci %{count} u'
+        move_to_none: Prebaci
         #original_hash: 96f608c
         pending: Na čekanju
         #original_hash: 92d40dc

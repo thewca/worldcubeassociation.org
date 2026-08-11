@@ -1416,9 +1416,9 @@ en:
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
       schedule_locked_after_results_submitted: "The schedule cannot be edited after results have been submitted."
       spots_left:
-        zero: "Competition full"
         one: "One spot left"
         other: "%{count} spots left"
+      spots_left_none: "Competition full"
     live:
       title: "Live Results"
       manage_rounds: "Manage Rounds"
@@ -1966,9 +1966,9 @@ en:
       list:
         empty: "None"
         spots_remaining_plural:
-          zero: "no spots remaining"
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
+        spots_remaining_none: "no spots remaining"
         pending:
           title: "Pending Registrations"
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
@@ -2019,9 +2019,9 @@ en:
         email_copy: "Copy Emails"
         email_message: "Copied to clipboard. Remember to use bcc!"
         move_to:
-          zero: "Move to"
           one: "Move %{count} to"
           other: "Move %{count} to"
+        move_to_none: "Move to"
         pending: "Pending"
         waitlist: "Waiting List"
         approved: "Approved"

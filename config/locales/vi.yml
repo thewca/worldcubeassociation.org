@@ -2801,8 +2801,8 @@ vi:
       schedule_locked_after_results_submitted: Không thể sửa đổi lịch trình sau khi đã nộp kết quả.
       #original_hash: 1877b69
       spots_left:
-        zero: Giải đấu đã đầy
         other: 'Còn %{count} chỗ'
+      spots_left_none: Giải đấu đã đầy
     live:
       #original_hash: 10d1a3c
       title: Kết quả Trực tiếp
@@ -3956,8 +3956,8 @@ vi:
         empty: Không có
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: Hết chỗ
           other: 'Còn %{count} chỗ'
+        spots_remaining_none: Hết chỗ
         pending:
           #original_hash: 4210670
           title: Đơn đăng ký Đang chờ
@@ -4072,8 +4072,8 @@ vi:
         email_message: Đã lưu vào bảng nhớ tạm. Hãy nhớ gửi bằng Bcc!
         #original_hash: beedd53
         move_to:
-          zero: Di chuyển đến
           other: 'Di chuyển %{count} đơn đến'
+        move_to_none: Di chuyển đến
         #original_hash: 96f608c
         pending: Đang chờ
         #original_hash: 92d40dc

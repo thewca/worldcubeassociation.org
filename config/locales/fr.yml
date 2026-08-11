@@ -2953,9 +2953,9 @@ fr:
       schedule_locked_after_results_submitted: Le planning ne peut plus être modifié une fois les résultats soumis.
       #original_hash: 1877b69
       spots_left:
-        zero: Compétition pleine
         one: Une place restante
         other: '%{count} places restantes'
+      spots_left_none: Compétition pleine
     live:
       #original_hash: 10d1a3c
       title: Résultats en direct
@@ -4203,9 +4203,9 @@ fr:
         empty: Aucun
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: Aucune place disponible
           one: '%{count} place disponible'
           other: '%{count} places disponibles'
+        spots_remaining_none: Aucune place disponible
         pending:
           #original_hash: 4210670
           title: Inscriptions en suspens
@@ -4331,9 +4331,9 @@ fr:
         email_message: 'Copié dans le presse-papiers. N’oubliez pas d’utiliser le cci: !'
         #original_hash: beedd53
         move_to:
-          zero: Déplacer vers
           one: 'Déplacer %{count} vers'
           other: 'Déplacer %{count} vers'
+        move_to_none: Déplacer vers
         #original_hash: 96f608c
         pending: En suspens
         #original_hash: 92d40dc

@@ -3748,9 +3748,9 @@ fi:
         empty: None
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: ei paikkoja jäljellä
           one: '%{count} paikka jäljellä'
           other: '%{count} paikkaa jäljellä'
+        spots_remaining_none: ei paikkoja jäljellä
         pending:
           #original_hash: 4210670
           title: Vireillä olevat rekisteröitymiset
@@ -3869,9 +3869,9 @@ fi:
         email_message: Copied to clipboard. Remember to use bcc!
         #original_hash: beedd53
         move_to:
-          zero: Move to
           one: 'Move %{count} to'
           other: 'Move %{count} to'
+        move_to_none: Move to
         #original_hash: 96f608c
         pending: Pending
         #original_hash: 92d40dc

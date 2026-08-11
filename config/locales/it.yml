@@ -2888,9 +2888,9 @@ it:
       schedule_locked_after_results_submitted: Il programma non può essere modificato dopo l'invio dei risultati.
       #original_hash: 1877b69
       spots_left:
-        zero: Competizione al completo
         one: Un posto rimasto
         other: '%{count} posti rimasti'
+      spots_left_none: Competizione al completo
     live:
       #original_hash: 10d1a3c
       title: Risultati in diretta
@@ -4075,9 +4075,9 @@ it:
         empty: Nessuno
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: Nessun posto rimanente
           one: '%{count} posto rimanente'
           other: '%{count} posti rimanenti'
+        spots_remaining_none: Nessun posto rimanente
         pending:
           #original_hash: 4210670
           title: Iscrizioni in attesa
@@ -4194,9 +4194,9 @@ it:
         email_message: Copiato negli appunti. Ricorda di scrivere i destinatari in Ccn!
         #original_hash: beedd53
         move_to:
-          zero: Sposta in
           one: 'Sposta %{count} in'
           other: 'Sposta %{count} in'
+        move_to_none: Sposta in
         #original_hash: 96f608c
         pending: In attesa
         #original_hash: 92d40dc

@@ -3839,9 +3839,9 @@ pt:
         empty: Nenhum
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: Sem vagas disponíveis
           one: '%{count} vaga disponível'
           other: '%{count} vagas disponíveis'
+        spots_remaining_none: Sem vagas disponíveis
         pending:
           #original_hash: 4210670
           title: Registos Pendentes
@@ -3963,9 +3963,9 @@ pt:
         email_message: Copiado para a área de transferência. Lembre-se de usar bcc!
         #original_hash: beedd53
         move_to:
-          zero: Move para
           one: 'Move %{count} para'
           other: 'Move %{count} para'
+        move_to_none: Move para
         #original_hash: 96f608c
         pending: Pendente
         #original_hash: 92d40dc

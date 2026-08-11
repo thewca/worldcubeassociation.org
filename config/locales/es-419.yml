@@ -2891,9 +2891,9 @@ es-419:
       schedule_locked_after_results_submitted: El horario no puede ser editado luego de enviar los resultados.
       #original_hash: 1877b69
       spots_left:
-        zero: Sin cupos libres
         one: Queda un solo cupo
         other: 'Quedan %{count} cupos'
+      spots_left_none: Sin cupos libres
     live:
       #original_hash: 10d1a3c
       title: Resultados en vivo
@@ -4103,9 +4103,9 @@ es-419:
         empty: Ninguno
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: Sin lugares restantes
           one: '%{count} lugar restante'
           other: '%{count} lugares restantes'
+        spots_remaining_none: Sin lugares restantes
         pending:
           #original_hash: 4210670
           title: Registros pendientes
@@ -4225,9 +4225,9 @@ es-419:
         email_message: Copiado al portapapeles. ¡Recuerda usar CCO (con copia oculta)!
         #original_hash: beedd53
         move_to:
-          zero: Mover a
           one: 'Mover %{count} a'
           other: 'Mover %{count} a'
+        move_to_none: Mover a
         #original_hash: 96f608c
         pending: Pendiente
         #original_hash: 92d40dc

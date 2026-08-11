@@ -164,10 +164,12 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   // some sticky/floating bar somewhere with totals/info would be better
   // than putting this in the table headers which scroll out of sight
   const spotsRemaining = (competitionInfo.competitor_limit || Infinity) - accepted.length;
-  const spotsRemainingText = I18n.t(
-    'competitions.registration_v2.list.spots_remaining_plural',
-    { count: spotsRemaining },
-  );
+  const spotsRemainingText = spotsRemaining === 0
+    ? I18n.t('competitions.registration_v2.list.spots_remaining_none')
+    : I18n.t(
+      'competitions.registration_v2.list.spots_remaining_plural',
+      { count: spotsRemaining },
+    );
 
   const handleOnDragEnd = useMemo(() => async (result) => {
     if (!result.destination) return;

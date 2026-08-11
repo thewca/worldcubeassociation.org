@@ -3190,8 +3190,8 @@ zh-TW:
         empty: 無
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: 已無報名名額
           other: '還剩%{count}個報名名額'
+        spots_remaining_none: 已無報名名額
         pending:
           #original_hash: 4210670
           title: 等待處理的報名
@@ -3266,8 +3266,8 @@ zh-TW:
         email_message: 已複製到剪貼簿。記得要使用BCC密件副本！
         #original_hash: beedd53
         move_to:
-          zero: 移動
           other: '移動%{count}個到'
+        move_to_none: 移動
         #original_hash: 96f608c
         pending: 待核准
         #original_hash: 92d40dc

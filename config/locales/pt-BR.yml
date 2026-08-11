@@ -3700,9 +3700,9 @@ pt-BR:
         empty: Nenhum
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: nenhuma vaga restante
           one: '%{count} vaga restante'
           other: '%{count} vagas restantes'
+        spots_remaining_none: nenhuma vaga restante
         pending:
           #original_hash: 4210670
           title: Inscrições Pendentes
@@ -3795,9 +3795,9 @@ pt-BR:
           (bcc)!
         #original_hash: beedd53
         move_to:
-          zero: Mover para
           one: 'Mover %{count} para'
           other: 'Mover %{count} para'
+        move_to_none: Mover para
         #original_hash: 96f608c
         pending: Pendente
         #original_hash: 92d40dc
