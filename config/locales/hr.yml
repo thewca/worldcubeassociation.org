@@ -238,19 +238,16 @@ hr:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} pokušaja u vremenu od < %{time}'
       one: '%{count} pokušaj u vremenu od < %{time}'
       few: '%{count} pokušaja u vremenu od < %{time}'
       other: '%{count} pokušaja u vremenu od < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} pokušaja za dobiti < %{moves} poteza'
       one: '%{count} pokušaj za dobiti < %{moves} poteza'
       few: '%{count} pokušaja za dobiti < %{moves} poteza'
       other: '%{count} pokušaja za dobiti < %{moves} poteza'
     #original_hash: eba1b97
     points:
-      zero: '%{count} pokušaja za dobiti  > %{points} bodova'
       one: '%{count} pokušaj za dobiti  > %{points} bodova'
       few: '%{count} pokušaja za dobiti  > %{points} bodova'
       other: '%{count} pokušaja za dobiti  > %{points} bodova'
@@ -366,7 +363,6 @@ hr:
       invalid: netočno
     #original_hash: 49d0140
     days:
-      zero: 0 dana
       one: 1 dan
       few: '%{count} dan(a)'
       other: '%{count} dan(a)'
@@ -1164,7 +1160,6 @@ hr:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Prijavnica sadrži %{count} grešaka.'
           one: Prijavnica sadrži jednu grešku.
           few: 'Prijavnica sadrži %{count} grešaka.'
           other: 'Prijavnica sadrži %{count} grešaka.'
@@ -2159,7 +2154,6 @@ hr:
       must_register: moraš se registrirati za bar jednu disciplinu
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: se može registrirati u točno 1 disciplini
         one: možeš se samo registrirati u točno 1 disciplini
         few: možeš se samo registrirati u točno 1 disciplini
         other: >-
@@ -2184,19 +2178,16 @@ hr:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: first-timer(a)
         one: first-timer
         few: first-timer(a)
         other: first-timer(a)
       #original_hash: bc010e3
       returner:
-        zero: povratnik(a)
         one: povratnik(a)
         few: povratnik(a)
         other: povratnik(a)
       #original_hash: b7da17a
       person:
-        zero: osoba
         one: osoba
         few: osoba
         other: osoba
@@ -2300,7 +2291,6 @@ hr:
       edit: Uredi
       #original_hash: beffc45
       country_plural:
-        zero: 0 država
         one: 1 država
         few: '%{count} država'
         other: '%{count} država'
@@ -2762,7 +2752,6 @@ hr:
       display_name: '[Otkazano] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizatora
         one: Organizator
         few: Organizator(i)
         other: Organizator(i)
@@ -2770,7 +2759,6 @@ hr:
       organization_team: Organizacijski tim
       #original_hash: 6afa61e
       delegate:
-        zero: WCA Delegata
         one: WCA Delegat
         few: WCA Delegat(i)
         other: WCA Delegat(i)
@@ -2869,13 +2857,11 @@ hr:
           natjecatelja.
       #original_hash: 35f892a
       guest_limit:
-        zero: Natjecatelji mogu povesti 0 gostiju.
         one: Natjecatelji mogu povesti 1 gosta.
         few: Natjecatelji mogu povesti nekoliko gostiju.
         other: 'Natjecatelji mogu povesti najviše %{count} gostiju.'
       #original_hash: bad09c8
       event_limit:
-        zero: Natjecatelj se može registrirati samo u 1 disciplini.
         one: Natjecatelj se može registrirati samo u 1 disciplini.
         few: Natjecatelj se može registrirati samo u nekoliko disciplina.
         other: 'Natjecatelj se može registrirati maksimalno u %{count} disciplina.'
@@ -4211,9 +4197,6 @@ hr:
       room_in_venue: '%{room} u %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Gledate raspored za mjesto %{venue_name}, prazno mjesto za ovo
-          natjecanje.
         one: >-
           Gledate raspored za mjesto %{venue_name}, jedino mjesto za ovo
           natjecanje.

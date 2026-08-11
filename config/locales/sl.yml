@@ -257,21 +257,18 @@ sl:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} poskusov za < %{time}'
       one: '%{count} poskus za < %{time}'
       two: '%{count} poskusa za < %{time}'
       few: '%{count} poskusi za < %{time}'
       other: '%{count} poskusov za < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} poskusov za < %{moves} potez'
       one: '%{count} poskus za < %{moves} potez'
       two: '%{count} poskusa za < %{moves} potez'
       few: '%{count} poskusi za < %{moves} potez'
       other: '%{count} poskusov za < %{moves} potez'
     #original_hash: eba1b97
     points:
-      zero: '%{count} poskusov za > %{points} točk'
       one: '%{count} poskus za > %{points} točk'
       two: '%{count} poskusa za > %{points} točk'
       few: '%{count} poskusi za > %{points} točk'
@@ -388,7 +385,6 @@ sl:
       invalid: neveljaven
     #original_hash: 49d0140
     days:
-      zero: 0 dni
       one: 1 dan
       two: 2 dni
       few: '%{count} dni'
@@ -1219,7 +1215,6 @@ sl:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Obrazec vsebuje %{count} napak:'
           one: 'Obrazec vsebuje 1 napako:'
           two: 'Obrazec vsebuje 2 napaki:'
           few: 'Obrazec vsebuje %{count} napake:'
@@ -2263,7 +2258,6 @@ sl:
       must_register: Prijaviti se morate vsaj na eno disciplino.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Prijaviti se morate na natanko 0 disciplin.
         one: Prijaviti se morate na natanko eno disciplino.
         two: Prijaviti se morate na eno ali dve disciplini.
         few: 'Prijaviti se morate na 1 do %{count} discipline.'
@@ -2291,21 +2285,18 @@ sl:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: novincev
         one: novinec
         two: novinca
         few: novinci
         other: novincev
       #original_hash: bc010e3
       returner:
-        zero: povratnikov
         one: povratnik
         two: povratnika
         few: povratniki
         other: povratnikov
       #original_hash: b7da17a
       person:
-        zero: oseb
         one: oseba
         two: osebi
         few: osebe
@@ -2407,7 +2398,6 @@ sl:
       edit: Uredi
       #original_hash: beffc45
       country_plural:
-        zero: 0 držav
         one: 1 država
         two: '%{count} državi'
         few: '%{count} države'
@@ -2913,7 +2903,6 @@ sl:
           title: Izloči tekmovalca
           #original_hash: c25b336
           next_to_advance:
-            zero: 'Ni naslednjega tekmovalca, ki napreduje.'
             one: 'Naslednji tekmovalec, ki napreduje, je %{competitors}.'
             two: 'Naslednja tekmovalca, ki napredujeta, sta %{competitors}.'
             few: 'Naslednji tekmovalci, ki napredujejo, so %{competitors}.'
@@ -2922,7 +2911,6 @@ sl:
           advance: Napreduj naslednjega tekmovalca
           #original_hash: aa59a26
           quit_confirm:
-            zero: Izloči tekmovalca iz kroga
             one: Izloči tekmovalca iz kroga
             two: Izloči tekmovalca iz kroga
             few: Izloči tekmovalce iz kroga
@@ -2955,7 +2943,6 @@ sl:
           single_round: Dodaj tekmovalca v krog
           #original_hash: bf3b670
           multiple_rounds:
-            zero: Dodaj tekmovalca v dvojni krog
             one: Dodaj tekmovalca v dvojni krog
             two: Dodaj tekmovalca v dvojni krog
             few: Dodaj tekmovalca v dvojni krog
@@ -3039,7 +3026,6 @@ sl:
       display_name: '[Odpovedano] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizator
         one: Organizator
         two: Organizatorja
         few: Organizatorji
@@ -3048,7 +3034,6 @@ sl:
       organization_team: Organizacijska ekipa
       #original_hash: 6afa61e
       delegate:
-        zero: WCA delegat
         one: WCA delegat
         two: WCA delegata
         few: WCA delegati
@@ -3146,14 +3131,12 @@ sl:
         restricted: Gledalci so dovoljeni le kot spremljevalci tekmovalcev.
       #original_hash: 35f892a
       guest_limit:
-        zero: Tekmovalci ne smejo pripeljati gostov.
         one: Tekmovalci lahko pripeljejo po največ enega gosta.
         two: Tekmovalci lahko pripeljejo po največ dva gosta.
         few: 'Tekmovalci lahko pripeljejo po največ %{count} goste.'
         other: 'Tekmovalci lahko pripeljejo po največ %{count} gostov.'
       #original_hash: bad09c8
       event_limit:
-        zero: Tekmovalci se lahko prijavijo na največ 0 disciplin.
         one: Tekmovalci se lahko prijavijo na največ eno disciplino.
         two: Tekmovalci se lahko prijavijo na največ dve disciplini.
         few: 'Tekmovalci se lahko prijavijo na največ %{count} discipline.'
@@ -4642,9 +4625,6 @@ sl:
       room_in_venue: '%{venue}: %{room}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Ogledujete si urnik za %{venue_name}, ki je edino prizorišče tega
-          tekmovanja.
         one: >-
           Ogledujete si urnik za %{venue_name}, ki je edino prizorišče tega
           tekmovanja.

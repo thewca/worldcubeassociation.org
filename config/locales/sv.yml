@@ -238,17 +238,14 @@ sv:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} försök att få < %{time}'
       one: '%{count} försök att få < %{time}'
       other: '%{count} försök att få < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} försök att få < %{moves} drag'
       one: '%{count} försök att få < %{moves} drag'
       other: '%{count} försök att få < %{moves} drag'
     #original_hash: eba1b97
     points:
-      zero: '%{count} försök att få > %{points} poäng'
       one: '%{count} försök att få > %{points} poäng'
       other: '%{count} försök att få > %{points} poäng'
   time_limit:
@@ -363,7 +360,6 @@ sv:
       invalid: ogiltig
     #original_hash: 49d0140
     days:
-      zero: '%{count} dagar'
       one: 1 dag
       other: '%{count} dagar'
     #original_hash: 51ef7d4
@@ -1172,7 +1168,6 @@ sv:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Formuläret innehåller %{count} fel:'
           one: 'Formuläret innehåller ett fel:'
           other: 'Formuläret innehåller %{count} fel:'
       error_pages:
@@ -2195,7 +2190,6 @@ sv:
       must_register: Du måste anmäla dig till minst en gren.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 'Du måste anmäla dig till %{count} grenar.'
         one: Du måste anmäla dig till exakt 1 gren.
         other: 'Du måste anmäla dig till mellan 1 och %{count} grenar.'
       #original_hash: 87f7c12
@@ -2220,17 +2214,14 @@ sv:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nya tävlande
         one: ny tävlande
         other: nya tävlande
       #original_hash: bc010e3
       returner:
-        zero: återkommande tävlande
         one: återkommande tävlande
         other: återkommande tävlande
       #original_hash: b7da17a
       person:
-        zero: personer
         one: person
         other: personer
     flash:
@@ -2333,7 +2324,6 @@ sv:
       edit: Redigera
       #original_hash: beffc45
       country_plural:
-        zero: '%{count} länder'
         one: 1 region
         other: '%{count} regioner'
       #original_hash: 1feee0e
@@ -2807,14 +2797,12 @@ sv:
       display_name: '[Inställd] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Arrangörer
         one: Arrangör
         other: Arrangörer
       #original_hash: 53a9522
       organization_team: Arrangörsteam
       #original_hash: 6afa61e
       delegate:
-        zero: WCA-delegater
         one: WCA-delegat
         other: WCA-delegater
       #original_hash: b37456c
@@ -2902,12 +2890,10 @@ sv:
         restricted: Åskådare är endast tillåtna tillsammans med tävlande.
       #original_hash: 35f892a
       guest_limit:
-        zero: Tävlande får inte ha med några gäster.
         one: 'Tävlande får ha med max %{count} gäster.'
         other: 'Tävlande får ha med max %{count} gäster.'
       #original_hash: bad09c8
       event_limit:
-        zero: 'Tävlande får som mest anmäla sig till %{count} grenar.'
         one: Tävlande måste anmäla sig till exakt 1 gren.
         other: 'Tävlande får som mest anmäla sig till %{count} grenar.'
       #original_hash: 64e0ddd
@@ -4368,9 +4354,6 @@ sv:
       room_in_venue: '%{room} i %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Du tittar på schemat för lokalen %{venue_name}, som är den enda
-          lokalen för denna tävling.
         one: >-
           Du tittar på schemat för lokalen %{venue_name}, som är den enda
           lokalen för denna tävling.

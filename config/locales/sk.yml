@@ -133,19 +133,16 @@ sk:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '-'
       one: '%{count} pokus na dostanie < %{time}'
       few: '-'
       other: '%{count} pokusov na dostanie < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '-'
       one: '%{count} pokus na dostanie < %{moves} ťahov'
       few: '-'
       other: '%{count} pokusov na dostanie < %{moves} ťahov'
     #original_hash: eba1b97
     points:
-      zero: '-'
       one: '%{count} pokus na dostanie > %{points} bodov'
       few: '-'
       other: '%{count} pokusov na dostanie > %{points} bodov'
@@ -187,13 +184,11 @@ sk:
       invalid: neplatný
     #original_hash: 49d0140
     days:
-      zero: '-'
       one: Jeden deň
       few: '-'
       other: '%{count} dní'
     #original_hash: 203e1b3
     these_events:
-      zero: '-'
       one: tento event
       few: '-'
       other: 'tieto %{count} eventy'
@@ -852,7 +847,6 @@ sk:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Nula
           one: 'Forma obsahuje jednu chybu:'
           few: Niekoľko
           other: 'Forma obsahuje %{count} chýb'
@@ -1196,19 +1190,16 @@ sk:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: '-'
         one: začiatočník
         few: '-'
         other: začiatočníci
       #original_hash: bc010e3
       returner:
-        zero: '-'
         one: returner
         few: '-'
         other: returneri
       #original_hash: b7da17a
       person:
-        zero: '-'
         one: osoba
         few: '-'
         other: osoby
@@ -1217,19 +1208,16 @@ sk:
       not_using_wca: Táto súťaž nepoužíva prihlasovanie WCA
       #original_hash: d528030
       accepted_and_mailed:
-        zero: '-'
         one: Registrácia bola akceptovaná! Poslali sme emailovú notifikáciu.
         few: '-'
         other: Registrácie boli akceptované! Poslali sme emailové notifikácie.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: '-'
         one: Registrácia bola posunutá do čakacieho listu.
         few: '-'
         other: Registrácie boli posunuté do čakacieho listu.
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: '-'
         one: Registrácia bola vymazaná
         few: '-'
         other: Registrácie boli vymazané
@@ -1309,7 +1297,6 @@ sk:
       edit: Pozmeniť
       #original_hash: 0ab725c
       country_plural:
-        zero: '-'
         one: 1 krajina
         few: '-'
         other: '%{count} krajín'
@@ -1517,13 +1504,11 @@ sk:
       website: Webová stránka
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizátor
         one: Organizátor
         few: Organizátori
         other: Organizátori
       #original_hash: 6afa61e
       delegate:
-        zero: WCA delegát
         one: WCA delegát
         few: WCA delegáti
         other: WCA delegáti
@@ -1924,7 +1909,6 @@ sk:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Žiadne súťaže
         one: 1 súťaž
         few: '-'
         other: '%{count} súťaží'

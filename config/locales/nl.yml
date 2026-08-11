@@ -236,17 +236,14 @@ nl:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: 'geen pogingen voor < %{time}'
       one: 'één poging voor < %{time}'
       other: '%{count} pogingen voor < %{time}'
     #original_hash: b49d930
     moves:
-      zero: 'geen pogingen voor < %{moves} draaien'
       one: 'één poging voor < %{moves} draaien'
       other: '%{count} pogingen voor < %{moves} draaien'
     #original_hash: eba1b97
     points:
-      zero: 'geen pogingen voor > %{moves} punten'
       one: 'één poging voor > %{moves} punten'
       other: '%{count} pogingen voor > %{moves} punten'
   time_limit:
@@ -295,12 +292,10 @@ nl:
       invalid: onjuist
     #original_hash: 49d0140
     days:
-      zero: 0 dagen
       one: 1 dag
       other: '%{count} dagen'
     #original_hash: 203e1b3
     these_events:
-      zero: geen wedstrijdonderdelen
       one: dit wedstrijdonderdeel
       other: 'deze %{count} wedstrijdonderdelen'
     #original_hash: 51ef7d4
@@ -1393,7 +1388,6 @@ nl:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Dit formulier bevat geen fouten.
           one: 'Dit formulier bevat één fout:'
           other: 'Dit formulier bevat %{count} fouten:'
     doorkeeper:
@@ -2030,17 +2024,14 @@ nl:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nieuwkomers
         one: nieuwkomer
         other: nieuwkomers
       #original_hash: bc010e3
       returner:
-        zero: bestaande leden
         one: bestaand lid
         other: bestaande leden
       #original_hash: b7da17a
       person:
-        zero: personen
         one: persoon
         other: personen
     flash:
@@ -2048,17 +2039,14 @@ nl:
       not_using_wca: Deze wedstrijd gebruikt niet de aanmeldingsprocedure van de WCA-website
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Geen aanmelding geaccepteerd. Geen bevestigingsmail verzonden.
         one: Aanmelding geaccepteerd. Bevestigingsmail verzonden.
         other: Aanmeldingen geaccepteerd. Bevestigingsmails verzonden.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Geen aanmelding verplaatst naar wachtlijst
         one: Aanmelding verplaatst naar wachtlijst
         other: Aanmeldingen verplaatst naar wachtlijst
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Geen aanmelding verwijderd
         one: Aanmelding verwijderd
         other: Aanmeldingen verwijderd
       #original_hash: c3aa289
@@ -2156,7 +2144,6 @@ nl:
       edit: Bewerken
       #original_hash: 0ab725c
       country_plural:
-        zero: 0 landen
         one: 1 land
         other: '%{count} landen'
       #original_hash: 1feee0e
@@ -2551,14 +2538,12 @@ nl:
       display_name: '[Geannuleerd] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organisatoren
         one: Organisator
         other: Organisatoren
       #original_hash: 53a9522
       organization_team: Organisatieteam
       #original_hash: 6afa61e
       delegate:
-        zero: WCA-delegates
         one: WCA-delegate
         other: WCA-delegates
       #original_hash: b37456c
@@ -3202,7 +3187,6 @@ nl:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Geen wedstrijden
         one: 1 wedstrijd
         other: '%{count} wedstrijden'
       #original_hash: 3446062

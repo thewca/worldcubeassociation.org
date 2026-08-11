@@ -257,17 +257,14 @@ eu:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} saiakera  < %{time} lortzeko'
       one: 'saiakera %{count}  < %{time} lortzeko'
       other: '%{count} saiakera  < %{time} lortzeko'
     #original_hash: b49d930
     moves:
-      zero: '%{count} saiakera  < %{moves} lortzeko'
       one: 'saiakera %{count}  < %{moves} lortzeko'
       other: '%{count} saiakera  < %{moves} lortzeko'
     #original_hash: eba1b97
     points:
-      zero: '%{count} saiakera  < %{points} lortzeko'
       one: 'saiakera %{count}  < %{points} lortzeko'
       other: '%{count} saiakera  < %{points} lortzeko'
   time_limit:
@@ -382,7 +379,6 @@ eu:
       invalid: baliogabea
     #original_hash: 49d0140
     days:
-      zero: 0 egun
       one: egun 1
       other: '%{count} egun'
     #original_hash: 51ef7d4
@@ -1221,7 +1217,6 @@ eu:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Formularioak ez dauka akatsik.
           one: 'Formularioak akats bat dauka:'
           other: 'Formularioak %{count} akats dauzka:'
       error_pages:
@@ -2283,7 +2278,6 @@ eu:
       must_register: Gutxienez kategoria batean izena eman behar duzu.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 0 probetan izena eman behar duzu.
         one: Proba bakar-bakarrean izena eman behar duzu.
         other: '1 eta %{count} proben artean izena eman behar duzu.'
       #original_hash: 87f7c12
@@ -2309,17 +2303,14 @@ eu:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: berri
         one: berri
         other: berri
       #original_hash: bc010e3
       returner:
-        zero: errepikatzaile
         one: errepikatzaile
         other: errepikatzaile
       #original_hash: b7da17a
       person:
-        zero: pertsona
         one: pertsona
         other: pertsona
     flash:
@@ -2423,7 +2414,6 @@ eu:
       edit: Editatu
       #original_hash: beffc45
       country_plural:
-        zero: 0 eskualde
         one: Eskualde 1
         other: '%{count} eskualde'
       #original_hash: 1feee0e
@@ -2953,14 +2943,12 @@ eu:
           title: Lehiakidea utzi
           #original_hash: c25b336
           next_to_advance:
-            zero: Ez dago lehiakiderik aurreratzeko
             one: 'Aurreratuko den hurrengo lehiakidea %{competitors} da'
             other: 'Aurreratuko diren hurrengo lehiakideak %{competitors} dira'
           #original_hash: c87ca67
           advance: Hurrengo lehiakidea aurreratu
           #original_hash: aa59a26
           quit_confirm:
-            zero: Ez utzi lehiakiderik txandatik
             one: Txandatik lehiakidea utzi
             other: Txandatik lehiakideak utzi
           bulk:
@@ -2991,7 +2979,6 @@ eu:
           single_round: Txandara lehiakide bat gehitu
           #original_hash: bf3b670
           multiple_rounds:
-            zero: Lehiakidea zero txandatara gehitu.
             one: Lehiakidea txanda bikoitzera gehitu.
             other: >-
               Lehiakidea txandara gehitu, txanda bikoitzaren lehen txanda itxita
@@ -3077,14 +3064,12 @@ eu:
       display_name: '[Bertan bera utzita] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Antolatzaile
         one: Antolatzailea
         other: Antolatzaileak
       #original_hash: 53a9522
       organization_team: Antolakuntza taldea
       #original_hash: 6afa61e
       delegate:
-        zero: WCAko ordezkari
         one: WCAko ordezkaria
         other: WCAko ordezkariak
       #original_hash: b37456c
@@ -3183,12 +3168,10 @@ eu:
         restricted: Ikusleak lehiakideen lagun gisa etorri daiteke besterik.
       #original_hash: 35f892a
       guest_limit:
-        zero: Lehiakideek ezin dute lagunik ekarri.
         one: Lehiakideek lagun bakarra ekar dezakete.
         other: 'Lehiakideek %{count} lagun ekar ditzakete gehienez.'
       #original_hash: bad09c8
       event_limit:
-        zero: Lehiakideek ezin dute inolako probetarako izena eman.
         one: Lehiakideek proba bakarrerako izena eman dezakete.
         other: 'Lehiakideek %{count} probetarako izena eman dezakete.'
       #original_hash: 64e0ddd
@@ -4694,7 +4677,6 @@ eu:
       room_in_venue: '%{room} %{venue} lekuan'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: .
         one: >-
           %{venue_name} lekurako ordutegia ikusten ari zara, lehiaketako leku
           bakarra.

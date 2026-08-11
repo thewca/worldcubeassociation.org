@@ -244,17 +244,14 @@ pt:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} tentativas para obter < %{time}'
       one: '%{count} tentativa para obter < %{time}'
       other: '%{count} tentativas para obter < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} tentativas para obter < %{moves} movimentos'
       one: '%{count} tentativa para obter < %{moves} movimentos'
       other: '%{count} tentativas para obter < %{moves} movimentos'
     #original_hash: eba1b97
     points:
-      zero: '%{count} tentativas para obter > %{points} pontos'
       one: '%{count} tentativa para obter > %{points} pontos'
       other: '%{count} tentativas para obter > %{points} pontos'
   time_limit:
@@ -369,7 +366,6 @@ pt:
       invalid: inválido
     #original_hash: 49d0140
     days:
-      zero: 0 dias
       one: 1 dia
       other: '%{count} dias'
     #original_hash: 51ef7d4
@@ -1205,7 +1201,6 @@ pt:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: O formulário contém zero erros.
           one: 'O formulário contém um erro:'
           other: 'O formulário contém %{count} erros:'
       error_pages:
@@ -2244,7 +2239,6 @@ pt:
       must_register: Deve inscrever-se em pelo menos um evento
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Tem que se registar em exatamente 0 eventos
         one: Tem que se registar em exatamente 1 evento
         other: 'Tem que se registar em de 1 a %{count} eventos.'
       #original_hash: 87f7c12
@@ -2268,17 +2262,14 @@ pt:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: principiantes
         one: principiante
         other: principiantes
       #original_hash: bc010e3
       returner:
-        zero: regressantes
         one: regressante
         other: regressantes
       #original_hash: b7da17a
       person:
-        zero: pessoas
         one: pessoa
         other: pessoas
     flash:
@@ -2380,7 +2371,6 @@ pt:
       edit: Editar
       #original_hash: beffc45
       country_plural:
-        zero: 0 regiões
         one: 1 região
         other: '%{count} regiões'
       #original_hash: 1feee0e
@@ -2889,14 +2879,12 @@ pt:
       display_name: '[Cancelado] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizadores
         one: Organizador
         other: Organizadores
       #original_hash: 53a9522
       organization_team: Equipa de organização
       #original_hash: 6afa61e
       delegate:
-        zero: Delegados da WCA
         one: Delegado da WCA
         other: Delegados da WCA
       #original_hash: b37456c
@@ -2990,12 +2978,10 @@ pt:
         restricted: Espectadores só são permitidos como companhia para competidores.
       #original_hash: 35f892a
       guest_limit:
-        zero: Competidores não podem trazer convidados.
         one: Competidores podem trazer no máximo 1 convidado.
         other: 'Competidores podem trazer no máximo %{count} convidados.'
       #original_hash: bad09c8
       event_limit:
-        zero: Competidores podem registar-se em exatamente 0 eventos.
         one: Competidores podem registar-se em exatamente 1 evento.
         other: 'Competidores podem registar-se em, no máximo, %{count} eventos.'
       #original_hash: 64e0ddd
@@ -4499,9 +4485,6 @@ pt:
       room_in_venue: '%{room} em %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Está a ver a programação do local %{venue_name}, um de %{count} locais
-          desta competição.
         one: >-
           Está a ver a programação do local %{venue_name}, o único local desta
           competição.

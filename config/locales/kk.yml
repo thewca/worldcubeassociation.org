@@ -711,17 +711,14 @@ kk:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: Уақыт шектеусіз
       one: '%{count} әрекет %{time} уақыттан аз жасау'
       other: '%{count} әрекеттер %{time} уақыттан аз жасау'
     #original_hash: b49d930
     moves:
-      zero: Жүріс шектеусіз
       one: '%{count} әрекет %{moves} жүрістен аз орындау'
       other: '%{count} әрекеттер %{moves} жүрістен аз орындау'
     #original_hash: eba1b97
     points:
-      zero: Ұпай шектеусіз
       one: '%{count} әрекет %{points} ұпайдан көп жинау'
       other: '%{count} әрекеттер %{points} ұпайдан көп жинау'
   time_limit:
@@ -836,7 +833,6 @@ kk:
       invalid: Жарамсыз
     #original_hash: 49d0140
     days:
-      zero: 0 күн
       one: 1 күн
       other: '%{count} күндер'
     #original_hash: 51ef7d4
@@ -1683,7 +1679,6 @@ kk:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Формада қате жоқ.
           one: 'Формада бір қате бар:'
           other: 'Формада %{count} қате бар:'
       error_pages:
@@ -2742,7 +2737,6 @@ kk:
       must_register: Сіз кем дегенде бір іс-шараға тіркелуіңіз керек.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Сіз кемінде 1 іс-шараға тіркелуіңіз керек.
         one: Сіз дәл 1 іс-шараға тіркелуіңіз керек.
         other: 'Сіз кемінде 1 және %{count} іс-шараға тіркелуіңіз керек.'
       #original_hash: 87f7c12
@@ -2766,17 +2760,14 @@ kk:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: жаңа қатысушы
         one: жаңа қатысушы
         other: жаңа қатысушылар
       #original_hash: bc010e3
       returner:
-        zero: ардагер
         one: ардагер
         other: ардагерлер
       #original_hash: b7da17a
       person:
-        zero: қатысушы
         one: қатысушы
         other: қатысушылар
     flash:
@@ -2876,7 +2867,6 @@ kk:
       edit: Өңдеу
       #original_hash: beffc45
       country_plural:
-        zero: мемлекет жоқ
         one: 1 мемлекет
         other: '%{count} мемлекеттер'
       #original_hash: 1feee0e
@@ -3332,7 +3322,6 @@ kk:
           title: Бәсекелестіктен шығу
           #original_hash: c25b336
           next_to_advance:
-            zero: 'Келесі өтетін бәсекелестер: %{competitors}'
             one: 'Келесі өтетін бәсекелестер: %{competitors}'
             other: 'Келесі өтетін бәсекелестер: %{competitors}'
           #original_hash: c87ca67
@@ -3426,14 +3415,12 @@ kk:
       display_name: '[Жойылды] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Ұйымдастырушы
         one: Ұйымдастырушы
         other: Ұйымдастырушылар
       #original_hash: 53a9522
       organization_team: Ұйымдастыру тобы
       #original_hash: 6afa61e
       delegate:
-        zero: WCA Делегаты
         one: WCA Делегаты
         other: WCA Делегаттары
       #original_hash: b37456c
@@ -3523,12 +3510,10 @@ kk:
           етіледі.
       #original_hash: 35f892a
       guest_limit:
-        zero: Қатысушы көрермен алып келе алмайды.
         one: Қатысушы бір ғана көрермен алып келуге құқылы.
         other: 'Қатысушы ең көбі %{count} көрермен алып келуге құқылы.'
       #original_hash: bad09c8
       event_limit:
-        zero: Қатысушы ешбір іс-шараға тіркеле алмайды.
         one: Қатысушы дәл 1 іс-шараға тіркеле алады.
         other: 'Қатысушы ең көбі %{count} іс-шараға тіркеле алады.'
       #original_hash: 64e0ddd
@@ -5019,9 +5004,6 @@ kk:
       room_in_venue: '%{venue} %{room}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Сіз осы сайыстың жалғыз орны %{venue_name} өткізу орнының кестесін
-          қарап жатырсыз.
         one: >-
           Сіз осы сайыстың жалғыз орны %{venue_name} өткізу орнының кестесін
           қарап жатырсыз.

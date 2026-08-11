@@ -259,15 +259,12 @@ ko:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count}번의 시도 중 단일기록 < %{time}'
       other: '%{count}번의 시도 중 단일 기록 < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count}번의 시도 중 단일기록 < %{moves}회전'
       other: '%{count}번의 시도 중 단일 기록 < %{moves}회전'
     #original_hash: eba1b97
     points:
-      zero: '%{count}번의 시도 중 단일기록 > %{points}점'
       other: '%{count}번의 시도 중 단일 기록 > %{points}점'
   time_limit:
     cumulative:
@@ -381,7 +378,6 @@ ko:
       invalid: 유효하지 않음
     #original_hash: 49d0140
     days:
-      zero: 0일
       other: '%{count}일'
     #original_hash: 51ef7d4
     search_site: 홈페이지 검색
@@ -1136,7 +1132,6 @@ ko:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: '하나의 오류가 있습니다:'
           other: '%{count}개의 오류가 있습니다:'
       error_pages:
         #original_hash: 1042478
@@ -2018,7 +2013,6 @@ ko:
       must_register: 최소 한 종목은 신청해야 합니다.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 1종목만 신청할 수 있습니다.
         other: '1~%{count}종목에 신청할 수 있습니다.'
       #original_hash: 87f7c12
       banned_html: >-
@@ -2040,15 +2034,12 @@ ko:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: 첫 참가자
         other: 첫 참가자
       #original_hash: bc010e3
       returner:
-        zero: 참가 경험자
         other: 기참가자
       #original_hash: b7da17a
       person:
-        zero: 명
         other: 명
     flash:
       #original_hash: da7ec53
@@ -2127,7 +2118,6 @@ ko:
       edit: 수정
       #original_hash: beffc45
       country_plural:
-        zero: 한 나라
         other: '%{count} 개국'
       #original_hash: 1feee0e
       export_csv: CSV로 추출
@@ -2552,13 +2542,11 @@ ko:
           title: 선수 내보내기
           #original_hash: c25b336
           next_to_advance:
-            zero: '다음으로 진출할 선수는 %{competitors}입니다'
             other: '다음으로 진출할 선수는 %{competitors}입니다'
           #original_hash: c87ca67
           advance: 다음 선수 진출시키기
           #original_hash: aa59a26
           quit_confirm:
-            zero: 라운드에서 선수 내보내기
             other: 라운드에서 선수 내보내기
           bulk:
             #original_hash: e0981de
@@ -2588,7 +2576,6 @@ ko:
           single_round: 라운드에 선수 추가하기
           #original_hash: bf3b670
           multiple_rounds:
-            zero: 듀얼 라운드의 두 라운드 모두에 선수 추가하기.
             other: 듀얼 라운드의 두 번째 라운드가 아직 개시되지 않았으므로 선수를 라운드에 추가하려면 별도로 추가해야 합니다.
           #original_hash: b3bdfaa
           event_edit_warning: >-
@@ -2670,13 +2657,11 @@ ko:
       display_name: '[취소됨] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: 주최자
         other: 주최자
       #original_hash: 53a9522
       organization_team: 주최 팀
       #original_hash: 6afa61e
       delegate:
-        zero: WCA 파견위원
         other: WCA 파견위원
       #original_hash: b37456c
       contact: 문의
@@ -2755,11 +2740,9 @@ ko:
         restricted: 관람객은 선수의 동반인으로만 입장할 수 있습니다.
       #original_hash: 35f892a
       guest_limit:
-        zero: 선수는 관람객을 데려올 수 없습니다.
         other: '선수는 최대 %{count}명의 관람객을 동반할 수 있습니다.'
       #original_hash: bad09c8
       event_limit:
-        zero: '선수는 최대 %{count}개의 종목에만 참가 신청할 수 있습니다.'
         other: '선수는 최대 %{count}개의 종목에만 참가 신청할 수 있습니다.'
       #original_hash: 64e0ddd
       require_qualification: 선수는 이미 참가 자격 요건을 갖춘 종목에만 참가 신청할 수 있습니다.
@@ -4036,7 +4019,6 @@ ko:
       room_in_venue: '%{venue}의 %{room}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: '이 대회의 %{count}개 장소 중 하나인 %{venue_name} 장소의 일정을 보고 있습니다.'
         other: '이 대회의 %{count}개 장소 중 하나인 %{venue_name} 장소의 일정을 보고 있습니다.'
       #original_hash: 8d175ad
       venue_selection_all: '%{venueCount}개의 모든 장소의 일정을 한 번에 보고 있습니다.'

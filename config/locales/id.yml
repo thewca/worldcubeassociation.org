@@ -236,15 +236,12 @@ id:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} Attempt yang didapat < %{time}'
       other: '%{count} Attempt yang didapat < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} Attempt yang didapat < %{moves} gerakan'
       other: '%{count} Attempt yang didapat < %{moves} gerakan'
     #original_hash: eba1b97
     points:
-      zero: '%{count} Attempt yang didapat < %{points} poin'
       other: '%{count} Attempt yang didapat < %{points} poin'
   time_limit:
     cumulative:
@@ -335,11 +332,9 @@ id:
       invalid: tidak valid
     #original_hash: 49d0140
     days:
-      zero: '%{count} hari'
       other: '%{count} hari'
     #original_hash: 203e1b3
     these_events:
-      zero: '%{count} cabang ini'
       other: '%{count} cabang ini'
     #original_hash: 51ef7d4
     search_site: Situs pencarian
@@ -1146,7 +1141,6 @@ id:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Formulir mengandung %{count} kesalahan:'
           other: 'Formulir mengandung %{count} kesalahan:'
       error_pages:
         #original_hash: 1042478
@@ -2058,7 +2052,6 @@ id:
       must_register: wajib mendaftar minimal satu cabang
       #original_hash: abdc718
       exceeds_event_limit:
-        zero: anda harus mendaftar hanya di 1 cabang
         other: 'anda harus mendaftar di %{count} cabang atau kurang'
       #original_hash: e78eec3
       banned_html: >-
@@ -2081,30 +2074,24 @@ id:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: pendatang baru
         other: pendatang baru
       #original_hash: bc010e3
       returner:
-        zero: pendatang lama
         other: pendatang lama
       #original_hash: b7da17a
       person:
-        zero: orang
         other: orang
     flash:
       #original_hash: da7ec53
       not_using_wca: Kompetisi ini tidak memakai pendaftaran pada situs WCA
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Pendaftaran diterima! Email notifikasi telah terkirim.
         other: Pendaftaran diterima! Email notifikasi telah terkirim.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Pendaftaran telah dipindahkan ke daftar tunggu
         other: Pendaftaran telah dipindahkan ke daftar tunggu
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Pendaftaran telah dihapus
         other: Pendaftaran telah dihapus
       #original_hash: c3aa289
       single_deletion_and_mail: 'Pendaftaran telah dihapus dan email ke %{mail} telah terkirim'
@@ -2205,7 +2192,6 @@ id:
       edit: Sunting
       #original_hash: beffc45
       country_plural:
-        zero: '%{count} wilayah'
         other: '%{count} wilayah'
       #original_hash: 1feee0e
       export_csv: Ekspor dalam CSV
@@ -2672,13 +2658,11 @@ id:
       display_name: '[Dibatalkan] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Panitia
         other: Panitia
       #original_hash: 53a9522
       organization_team: Tim panitia
       #original_hash: 6afa61e
       delegate:
-        zero: Delegasi WCA
         other: Delegasi WCA
       #original_hash: b37456c
       contact: Kontak
@@ -2774,11 +2758,9 @@ id:
         restricted: Penonton hanya boleh datang sebagai pendamping kompetitor.
       #original_hash: 35f892a
       guest_limit:
-        zero: Jumlah pendamping kompetitor maksimal adalah 1.
         other: 'Jumlah pendamping kompetitor maksimal adalah %{count}.'
       #original_hash: bad09c8
       event_limit:
-        zero: Kompetitor dapat mendaftar hanya di 1 cabang.
         other: 'Kompetitor dapat mendaftar maksimal %{count} events.'
       #original_hash: 64e0ddd
       require_qualification: Kompetitor hanya diperbolehkan mendaftar cabang yang lolos kualifikasi.

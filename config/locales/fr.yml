@@ -257,17 +257,14 @@ fr:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: 'Aucun essai pour obtenir un résultat < %{time}'
       one: '%{count} essai pour obtenir un résultat < %{time}'
       other: '%{count} essais pour obtenir un résultat < %{time}'
     #original_hash: b49d930
     moves:
-      zero: 'Aucun essai pour obtenir un résultat < %{moves} mouvements'
       one: '%{count} essai pour obtenir un résultat < %{moves} mouvements'
       other: '%{count} essais pour obtenir un résultat < %{moves} mouvements'
     #original_hash: eba1b97
     points:
-      zero: 'Aucun essai pour obtenir un résultat > %{points} points'
       one: '%{count} essai pour obtenir un résultat > %{points} points'
       other: '%{count} essais pour obtenir un résultat > %{points} points'
   time_limit:
@@ -382,7 +379,6 @@ fr:
       invalid: invalide
     #original_hash: 49d0140
     days:
-      zero: 0 jour
       one: 1 jour
       other: '%{count} jours'
     #original_hash: 51ef7d4
@@ -1246,7 +1242,6 @@ fr:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Le formulaire ne contient pas d'erreur
           one: 'Le formulaire contient une erreur :'
           other: 'Le formulaire contient %{count} erreurs :'
       error_pages:
@@ -2368,7 +2363,6 @@ fr:
       must_register: Vous devez vous inscrire au moins à une épreuve.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Vous ne devez vous inscrire à aucune épreuve.
         one: Vous devez vous inscrire à 1 épreuve.
         other: 'Vous devez vous inscrire dans au plus à %{count} épreuves.'
       #original_hash: 87f7c12
@@ -2399,17 +2393,14 @@ fr:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nouveau
         one: nouveau
         other: nouveaux
       #original_hash: bc010e3
       returner:
-        zero: de retour
         one: de retour
         other: de retour
       #original_hash: b7da17a
       person:
-        zero: personne
         one: personne
         other: personnes
     flash:
@@ -2520,7 +2511,6 @@ fr:
       edit: Éditer
       #original_hash: beffc45
       country_plural:
-        zero: Aucune région
         one: 1 région
         other: '%{count} régions'
       #original_hash: 1feee0e
@@ -3060,14 +3050,12 @@ fr:
           title: Retirer compétiteur
           #original_hash: c25b336
           next_to_advance:
-            zero: Il n'y a pas de prochain compétiteur pouvant se qualifier
             one: 'Le prochain compétiteur à se qualifier est %{competitors}'
             other: 'Les prochains compétiteurs à se qualifier sont %{competitors}'
           #original_hash: c87ca67
           advance: Qualifier le prochain compétiteur
           #original_hash: aa59a26
           quit_confirm:
-            zero: Il n'y a pas de compétiteur à retirer
             one: Retrait d'un compétiteur du tour
             other: Retrait de compétiteurs du tour
           bulk:
@@ -3102,7 +3090,6 @@ fr:
           single_round: Ajouter un compétiteur au tour
           #original_hash: bf3b670
           multiple_rounds:
-            zero: Aucune ronde ouverte pour cette double confrontation
             one: >-
               Ajouter un compétiteur aux deux manches de la double
               confrontation.
@@ -3190,14 +3177,12 @@ fr:
       display_name: '[Annulée] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organisateur
         one: Organisateur
         other: Organisateurs
       #original_hash: 53a9522
       organization_team: Équipe organisatrice
       #original_hash: 6afa61e
       delegate:
-        zero: Délégué WCA
         one: Délégué WCA
         other: Délégués WCA
       #original_hash: b37456c
@@ -3298,12 +3283,10 @@ fr:
           compétiteurs.
       #original_hash: 35f892a
       guest_limit:
-        zero: Les accompagnateurs ne sont pas acceptés.
         one: Les compétiteurs peuvent venir avec 1 seul accompagnateur.
         other: 'Les compétiteurs peuvent venir au plus avec %{count} accompagnateurs.'
       #original_hash: bad09c8
       event_limit:
-        zero: Les compétiteurs ne peuvent pas s'inscrires aux épreuves.
         one: Les compétiteurs ne peuvent s'inscrire qu'à 1 seule épreuve.
         other: 'Les compétiteurs peuvent s''inscrire au plus à %{count} épreuves.'
       #original_hash: 64e0ddd
@@ -4907,7 +4890,6 @@ fr:
       room_in_venue: '%{room} - %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: Vous ne consultez actuellement aucun planning.
         one: >-
           Vous consultez le planning de la salle %{venue_name}, seule salle pour
           cette compétition.

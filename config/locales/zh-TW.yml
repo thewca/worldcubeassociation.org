@@ -253,15 +253,12 @@ zh-TW:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count}次還原 < %{time}'
       other: '%{count}次還原 < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count}次還原 < %{moves} 步'
       other: '%{count}次還原 < %{moves} 步'
     #original_hash: eba1b97
     points:
-      zero: '%{count}次還原 > %{points} 點'
       other: '%{count}次還原 > %{points} 點'
   time_limit:
     cumulative:
@@ -375,7 +372,6 @@ zh-TW:
       invalid: 無效的
     #original_hash: 49d0140
     days:
-      zero: 1天
       other: '%{count}天'
     #original_hash: 51ef7d4
     search_site: 搜尋網站
@@ -1085,7 +1081,6 @@ zh-TW:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 1個錯誤：
           other: '有%{count}個錯誤：'
       error_pages:
         #original_hash: 1042478
@@ -1920,7 +1915,6 @@ zh-TW:
       must_register: 您必須報名至少一個項目。
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 您必須只能報名一個項目。
         other: '您必須報名介於1個到%{count}個項目。'
       #original_hash: 87f7c12
       banned_html: >-
@@ -1939,15 +1933,12 @@ zh-TW:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: 初參賽
         other: 初參賽
       #original_hash: bc010e3
       returner:
-        zero: 非初次參賽
         other: 非初次參賽
       #original_hash: b7da17a
       person:
-        zero: 人
         other: 人
     flash:
       #original_hash: da7ec53
@@ -2022,7 +2013,6 @@ zh-TW:
       edit: 編輯
       #original_hash: beffc45
       country_plural:
-        zero: 0個區域
         other: '%{count}個區域'
       #original_hash: 1feee0e
       export_csv: 下載CSV檔
@@ -2371,7 +2361,6 @@ zh-TW:
           title: 退出參賽者
           #original_hash: c25b336
           next_to_advance:
-            zero: '接下來晉級的選手是 %{competitors}'
             other: '接下來晉級的選手是 %{competitors}'
           #original_hash: c87ca67
           advance: 晉級下一位參賽者
@@ -2459,13 +2448,11 @@ zh-TW:
       display_name: '[已取消] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: 沒有主辦團隊
         other: 主辦團隊
       #original_hash: 53a9522
       organization_team: 主辦團隊
       #original_hash: 6afa61e
       delegate:
-        zero: WCA代表
         other: WCA代表
       #original_hash: b37456c
       contact: 聯絡
@@ -2532,11 +2519,9 @@ zh-TW:
         restricted: 只有參賽者的陪同者才能入場當觀眾
       #original_hash: 35f892a
       guest_limit:
-        zero: 比賽可以最多1位陪同者。
         other: '比賽最多可以有%{count}位陪同者。'
       #original_hash: bad09c8
       event_limit:
-        zero: 參賽者可以報名最多一個比賽項目。
         other: '參賽者可以報名最多%{count}個比賽項目。'
       #original_hash: 64e0ddd
       require_qualification: 參賽者只能報名他們已經取得資格的比賽項目。
@@ -3676,7 +3661,6 @@ zh-TW:
       room_in_venue: '在%{venue}的%{room}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: '您正在瀏覽這場比賽唯一的比賽場地%{venue_name}的賽程。'
         other: '您正在瀏覽比賽場地%{venue_name}的賽程。這場比賽有%{count}個比賽場地。'
       #original_hash: 8d175ad
       venue_selection_all: '您正在閱覽所有%{venueCount}個比賽會場的賽程。'

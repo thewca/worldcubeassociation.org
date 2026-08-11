@@ -238,17 +238,14 @@ eo:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} provo por havi tempon < %{time}'
       one: '%{count} provo por havi tempon < %{time}'
       other: '%{count} provoj por havi tempon < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} provo por havi rezulton < %{time} movoj'
       one: '%{count} provo por havi rezulton < %{time} movoj'
       other: '%{count} provoj por havi rezulton < %{time} movoj'
     #original_hash: eba1b97
     points:
-      zero: '%{count} provo por havi rezulton > %{time} poentoj'
       one: '%{count} provo por havi rezulton > %{time} poentoj'
       other: '%{count} provoj por havi rezulton > %{time} poentoj'
   time_limit:
@@ -363,7 +360,6 @@ eo:
       invalid: nevalida
     #original_hash: 49d0140
     days:
-      zero: 0 tago
       one: 1 tago
       other: '%{count} tagoj'
     #original_hash: 51ef7d4
@@ -1168,7 +1164,6 @@ eo:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'La formularo enhavas %{count} erarojn'
           one: La formularo enhavas unu eraron
           other: 'La formularo enhavas %{count} erarojn'
       error_pages:
@@ -2175,7 +2170,6 @@ eo:
       must_register: Vi devas registriĝi al almenaŭ unu konkursero.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Vi devas registriĝi al ekzakte 0 konkursero.
         one: Vi devas registriĝi al ekzakte 1 konkursero.
         other: 'Vi devas registriĝi al etre 1 kaj %{count} konkurseroj.'
       #original_hash: 87f7c12
@@ -2199,17 +2193,14 @@ eo:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: novulo
         one: novulo
         other: novuloj
       #original_hash: bc010e3
       returner:
-        zero: revenuloj
         one: revenulo
         other: revenuloj
       #original_hash: b7da17a
       person:
-        zero: personoj
         one: persono
         other: personoj
     flash:
@@ -2308,7 +2299,6 @@ eo:
       edit: Redakti
       #original_hash: beffc45
       country_plural:
-        zero: 0 regiono
         one: 1 regiono
         other: '%{count} regionoj'
       #original_hash: 1feee0e
@@ -2783,14 +2773,12 @@ eo:
       display_name: '[Nuligita] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizanto
         one: Organizanto
         other: Organizantoj
       #original_hash: 53a9522
       organization_team: Organizanta teamo
       #original_hash: 6afa61e
       delegate:
-        zero: WCA-Delegito
         one: WCA-Delegito
         other: WCA-Delegitoj
       #original_hash: b37456c
@@ -2879,12 +2867,10 @@ eo:
         restricted: Spektantoj estas permesataj nur kiel akompanantoj de konkursantoj.
       #original_hash: 35f892a
       guest_limit:
-        zero: Konkursantoj povas veni kun tiom da gastoj kiom ili deziras
         one: Konkursantoj povas veni kun maksimume 1 gasto.
         other: 'Konkursantoj povas veni kun maksimume %{count} gastoj.'
       #original_hash: bad09c8
       event_limit:
-        zero: Konkursantoj povas registriĝi por ekzakte 0 konkursero.
         one: Konkursantoj povas registriĝi por ekzakte 1 konkursero.
         other: 'Konkursantoj povas registriĝi por maksimume %{count} konkurseroj.'
       #original_hash: 64e0ddd
@@ -4352,9 +4338,6 @@ eo:
       room_in_venue: '%{room} en %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Vi rigardas la horaron de la konkursejo %{venue_name} kiu estas la
-          ununura konkursejo de ĉi tiu konkurso.
         one: >-
           Vi rigardas la horaron de la konkursejo %{venue_name} kiu estas la
           ununura konkursejo de ĉi tiu konkurso.

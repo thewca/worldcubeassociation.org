@@ -259,21 +259,18 @@ pl:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} prób na uzyskanie < %{time}'
       one: '%{count} próba na uzyskanie < %{time}'
       few: '%{count} próby na uzyskanie < %{time}'
       many: '%{count} prób na uzyskanie < %{time}'
       other: '%{count} próby na uzyskanie < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} prób na uzyskanie < %{moves} ruchów'
       one: '%{count} próba na uzyskanie < %{moves} ruchów'
       few: '%{count} próby na uzyskanie < %{moves} ruchów'
       many: '%{count} prób na uzyskanie < %{moves} ruchów'
       other: '%{count} próby na uzyskanie < %{moves} ruchów'
     #original_hash: eba1b97
     points:
-      zero: '%{count} prób na uzyskanie > %{points} punktów'
       one: '%{count} próba na uzyskanie > %{points} punktów'
       few: '%{count} próby na uzyskanie > %{points} punktów'
       many: '%{count} prób na uzyskanie > %{points} punktów'
@@ -390,7 +387,6 @@ pl:
       invalid: niepoprawny
     #original_hash: 49d0140
     days:
-      zero: 0 dni
       one: 1 dzień
       few: '%{count} dni'
       many: '%{count} dni'
@@ -1240,7 +1236,6 @@ pl:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Formularz nie zawiera błędów.
           one: 'Formularz zawiera jeden błąd:'
           few: 'Formularz zawiera %{count} błędy:'
           many: 'Formularz zawiera %{count} błędów:'
@@ -2307,7 +2302,6 @@ pl:
       must_register: Musisz się zarejestrować na co najmniej jedną konkurencję
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Musisz zarejestrować się na 0 konkurencji.
         one: Musisz zarejestrować się na dokładnie 1 konkurencję.
         few: 'Musisz zarejestrować się na liczbę konkurencji pomiędzy 1 a %{count}.'
         many: 'Musisz zarejestrować się na liczbę konkurencji pomiędzy 1 a %{count}.'
@@ -2337,21 +2331,18 @@ pl:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nowicjuszy
         one: nowicjusz
         few: nowicjuszy
         many: nowicjuszy
         other: nowicjuszy
       #original_hash: bc010e3
       returner:
-        zero: uczestniczących wcześniej
         one: uczestniczący wcześniej
         few: uczestniczących wcześniej
         many: uczestniczących wcześniej
         other: uczestniczących wcześniej
       #original_hash: b7da17a
       person:
-        zero: osób
         one: osoba
         few: osoby
         many: osób
@@ -2457,7 +2448,6 @@ pl:
       edit: Edytuj
       #original_hash: beffc45
       country_plural:
-        zero: 0 państw
         one: 1 państwo
         few: '%{count} państwa'
         many: '%{count} państw'
@@ -2998,7 +2988,6 @@ pl:
           title: Usuń Zawodnika
           #original_hash: c25b336
           next_to_advance:
-            zero: Nie ma kolejnych zawodników do awansu
             one: 'Kolejnym zawodnikiem do awansu jest %{competitors}'
             few: 'Kolejnymi zawodnikami do awansu są %{competitors}'
             many: 'Kolejnymi zawodnikami do awansu są %{competitors}'
@@ -3007,7 +2996,6 @@ pl:
           advance: Awansuj kolejnego Zawodnika
           #original_hash: aa59a26
           quit_confirm:
-            zero: Usuń zawodnika z Rundy
             one: Usuń zawodnika z Rundy
             few: Usuń zawodników z Rundy
             many: Usuń zawodników z Rundy
@@ -3044,7 +3032,6 @@ pl:
           single_round: Dodaj Zawodnika do Rundy
           #original_hash: bf3b670
           multiple_rounds:
-            zero: Dodaj zawodnika do obu rund Rundy Podwójnej
             one: Dodaj zawodnika do obu rund Rundy Podwójnej
             few: Dodaj zawodnika do obu rund Rundy Podwójnej
             many: Dodaj zawodnika do obu rund Rundy Podwójnej
@@ -3135,7 +3122,6 @@ pl:
       display_name: '[Odwołane] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizatorzy
         one: Organizator
         few: Organizatorzy
         many: Organizatorzy
@@ -3144,7 +3130,6 @@ pl:
       organization_team: Zespół organizacyjny
       #original_hash: 6afa61e
       delegate:
-        zero: Delegaci WCA
         one: Delegat WCA
         few: Delegaci WCA
         many: Delegaci WCA
@@ -3243,14 +3228,12 @@ pl:
         restricted: Widzowie będą wpuszczani jedynie jako goście zawodników.
       #original_hash: 35f892a
       guest_limit:
-        zero: Zawodnicy nie mogą przyprowadzać gości
         one: Zawodnicy mogą przyprowadzić maksymalnie jednego gościa.
         few: 'Zawodnicy mogą przyprowadzić maksymalnie %{count} gości.'
         many: 'Zawodnicy mogą przyprowadzić maksymalnie %{count} gości.'
         other: 'Zawodnicy mogą przyprowadzić maksymalnie %{count} gości.'
       #original_hash: bad09c8
       event_limit:
-        zero: Zawodnicy mogą się zarejestrować do 0 konkurencji.
         one: Zawodnicy mogą się zarejestrować dokładnie do 1 konkurencji.
         few: >-
           Zawodnicy mogą się zarejestrować na liczbę konkurencji od 1 do
@@ -4788,9 +4771,6 @@ pl:
       room_in_venue: '%{room} w %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Wyświetlasz harmonogram dla miejsca %{venue_name}, jedynego miejsca
-          tych zawodów.
         one: >-
           Wyświetlasz harmonogram dla miejsca %{venue_name}, jedynego miejsca
           tych zawodów.

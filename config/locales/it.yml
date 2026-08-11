@@ -253,17 +253,14 @@ it:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} tentativi per fare < %{time}'
       one: '%{count} tentativo per fare < %{time}'
       other: '%{count} tentativi per fare < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} tentativi per fare < %{moves} mosse'
       one: '%{count} tentativo per fare < %{moves} mosse'
       other: '%{count} tentativi per fare < %{moves} mosse'
     #original_hash: eba1b97
     points:
-      zero: '%{count} tentativi per fare < %{points} punti'
       one: '%{count} tentativo per fare < %{points} punti'
       other: '%{count} tentativi per fare < %{points} punti'
   time_limit:
@@ -378,7 +375,6 @@ it:
       invalid: non valido
     #original_hash: 49d0140
     days:
-      zero: zero giorni
       one: un giorno
       other: '%{count} giorni'
     #original_hash: 51ef7d4
@@ -1239,7 +1235,6 @@ it:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Il form non contiene errori
           one: 'Il form contiene un errore:'
           other: 'Il form contiene %{count} errori:'
       error_pages:
@@ -2309,7 +2304,6 @@ it:
       must_register: È necessario iscriversi almeno a un evento.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Puoi iscriverti a 0 eventi.
         one: Devi iscriverti a un solo evento.
         other: 'Devi iscriverti da uno a un massimo di %{count} eventi.'
       #original_hash: 87f7c12
@@ -2337,17 +2331,14 @@ it:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: esordienti
         one: esordiente
         other: esordienti
       #original_hash: bc010e3
       returner:
-        zero: veterani
         one: veterano
         other: veterani
       #original_hash: b7da17a
       person:
-        zero: persone
         one: persona
         other: persone
     flash:
@@ -2455,7 +2446,6 @@ it:
       edit: Modifica
       #original_hash: beffc45
       country_plural:
-        zero: Nessuna nazione
         one: Una nazione
         other: '%{count} nazioni'
       #original_hash: 1feee0e
@@ -2972,14 +2962,12 @@ it:
           title: Elimina Partecipante
           #original_hash: c25b336
           next_to_advance:
-            zero: '-'
             one: 'Il prossimo partecipante ad avanzare è %{competitors}'
             other: 'I prossimi partecipanti ad avanzare sono %{competitors}'
           #original_hash: c87ca67
           advance: Fai avanzare il prossimo partecipante
           #original_hash: aa59a26
           quit_confirm:
-            zero: '-'
             one: Elimina il partecipante dal turno
             other: Elimina i partecipanti dal turno
           bulk:
@@ -3006,7 +2994,6 @@ it:
           single_round: Aggiungi partecipante al turno
           #original_hash: bf3b670
           multiple_rounds:
-            zero: '-'
             one: Aggiungi il partecipante a entrambi i turni del doppio turno
             other: >-
               Aggiungi il partecipante a questo turno. Poiché il secondo turno
@@ -3091,14 +3078,12 @@ it:
       display_name: '[Cancellato] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Nessun organizzatore
         one: Organizzatore
         other: Organizzatori
       #original_hash: 53a9522
       organization_team: Team organizzativo
       #original_hash: 6afa61e
       delegate:
-        zero: Nessun Delegato WCA
         one: Delegato WCA
         other: Delegati WCA
       #original_hash: b37456c
@@ -3197,14 +3182,12 @@ it:
         restricted: Sono ammessi solo gli spettatori che accompagnano un partecipante.
       #original_hash: 35f892a
       guest_limit:
-        zero: I partecipanti NON possono portare accompagnatori.
         one: Ciascun partecipante può portare UN SOLO accompagnatore.
         other: >-
           Ciascun partecipante può portare un massimo di %{count}
           accompagnatori.
       #original_hash: bad09c8
       event_limit:
-        zero: I partecipanti possono iscriversi in 0 eventi.
         one: I partecipanti possono iscriversi a un solo evento.
         other: 'I partecipanti possono iscriversi a un massimo di %{count} eventi.'
       #original_hash: 64e0ddd
@@ -4760,7 +4743,6 @@ it:
       room_in_venue: '%{room} in %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: Stai vedendo il programma per la sede 0.
         one: >-
           Stai vedendo il programma relativo alla sede %{venue_name}, l'unica
           sede della competizione.

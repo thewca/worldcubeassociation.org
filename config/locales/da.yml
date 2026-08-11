@@ -236,17 +236,14 @@ da:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} forsøg til at få under %{time}'
       one: '%{count} forsøg til at få under %{time}'
       other: '%{count} forsøg til at få under %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} forsøg til at få under %{moves} moves'
       one: '%{count} forsøg til at få under %{moves} moves'
       other: '%{count} forsøg til at få under %{moves} moves'
     #original_hash: eba1b97
     points:
-      zero: '%{count} forsøg til at få over %{points} point'
       one: '%{count} forsøg til at få over %{points} point'
       other: '%{count} forsøg til at få over %{points} point'
   time_limit:
@@ -295,12 +292,10 @@ da:
       invalid: ugyldig
     #original_hash: 49d0140
     days:
-      zero: dage
       one: dag
       other: '%{count} dage'
     #original_hash: 203e1b3
     these_events:
-      zero: ingen discipliner
       one: denne disciplin
       other: disse discipliner
     #original_hash: 51ef7d4
@@ -1357,7 +1352,6 @@ da:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Formularen indeholder ingen fejl:'
           one: 'Formularen indeholder en fejl:'
           other: 'Formularen indeholder %{count} fejl:'
     doorkeeper:
@@ -2000,17 +1994,14 @@ da:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nye
         one: ny
         other: nye
       #original_hash: bc010e3
       returner:
-        zero: tilbagevendende
         one: tilbagevendende
         other: tilbagevendende
       #original_hash: b7da17a
       person:
-        zero: personer
         one: person
         other: personer
     flash:
@@ -2018,17 +2009,14 @@ da:
       not_using_wca: Denne konkurrence bruger ikke WCAs tilmeldingssystem
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Tilmeldinger blev accepteret! Email notifikationer blev sendt.
         one: Tilmeldingen blev accepteret! En email notifikation blev sendt.
         other: Tilmeldingerne blev accepteret! Email notifikationer blev sendt.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Tilmeldinger blev flyttet til ventelisten.
         one: Tilmeldingen blev flyttet til ventelisten.
         other: Tilmeldingerne flyttet til ventelisten.
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Tilmeldingerne blev slettet.
         one: Tilmeldingen blev slettet.
         other: Tilmeldingerne blev slettet.
       #original_hash: c3aa289
@@ -2118,7 +2106,6 @@ da:
       edit: Rediger
       #original_hash: 0ab725c
       country_plural:
-        zero: 0 lande
         one: 1 land
         other: '%{count} lande'
       #original_hash: 1feee0e
@@ -2506,14 +2493,12 @@ da:
       display_name: '[Aflyst] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Arrangører
         one: Arrangør
         other: Arrangører
       #original_hash: 53a9522
       organization_team: Arrangørholdet
       #original_hash: 6afa61e
       delegate:
-        zero: WCA Delegerede
         one: WCA Delegeret
         other: WCA Delegerede
       #original_hash: b37456c
@@ -3144,7 +3129,6 @@ da:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Ingen konkurrencer
         one: 1 konkurrence
         other: '%{count} konkurrencer'
       #original_hash: 3446062

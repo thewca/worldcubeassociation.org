@@ -238,15 +238,12 @@ zh-CN:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count}次尝试 < %{time}'
       other: '%{count}次尝试 < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count}次尝试 < %{moves}步'
       other: '%{count}次尝试 < %{moves}步'
     #original_hash: eba1b97
     points:
-      zero: '%{count}次尝试 > %{points}分'
       other: '%{count}次尝试 > %{points}分'
   time_limit:
     cumulative:
@@ -360,12 +357,10 @@ zh-CN:
       invalid: 不正确
     #original_hash: 49d0140
     days:
-      zero: 0 天
       one: 1 天
       other: '%{count} 天'
     #original_hash: 203e1b3
     these_events:
-      zero: 没有项目
       other: '这 %{count} 个项目'
     #original_hash: 51ef7d4
     search_site: 搜索本站
@@ -1269,7 +1264,6 @@ zh-CN:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 没有错误
           other: '表单有 %{count} 项错误：'
       error_pages:
         #original_hash: 1042478
@@ -1879,30 +1873,24 @@ zh-CN:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: 新人
         other: 新人
       #original_hash: bc010e3
       returner:
-        zero: 老手
         other: 老手
       #original_hash: b7da17a
       person:
-        zero: 选手
         other: 选手
     flash:
       #original_hash: da7ec53
       not_using_wca: 该比赛没有使用 WCA 的报名系统
       #original_hash: d528030
       accepted_and_mailed:
-        zero: 报名已审核！邮件通知已发送！
         other: 报名已审核！邮件通知已发送！
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: 报名已移至候选列表
         other: 报名已移至候选列表
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: 报名已删除
         other: 报名已删除
       #original_hash: c3aa289
       single_deletion_and_mail: '报名已删除并发邮件给%{mail}了'
@@ -1977,7 +1965,6 @@ zh-CN:
       edit: 编辑
       #original_hash: 0ab725c
       country_plural:
-        zero: '0'
         other: '%{count}个国家/地区'
       #original_hash: 1feee0e
       export_csv: 导出到 CSV
@@ -2229,11 +2216,9 @@ zh-CN:
       website: 网站
       #original_hash: 680567f
       organizer_plural:
-        zero: 主办方
         other: 主办方
       #original_hash: 6afa61e
       delegate:
-        zero: WCA代表
         other: WCA代表
       #original_hash: b37456c
       contact: 联系方式
@@ -2593,7 +2578,6 @@ zh-CN:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: 没有比赛
         other: '%{count}场比赛'
       #original_hash: 3446062
       label_admin: '过去%{days}天'
