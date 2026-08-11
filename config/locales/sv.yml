@@ -261,8 +261,6 @@ sv:
     333fm: 1 timme
     #original_hash: cc7d8bb
     333mbf: '10:00.00 per kub, upp till 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Kvalificeringstyp
@@ -701,8 +699,6 @@ sv:
       text: krävs
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Var vänlig granska problemen nedan:'
@@ -724,12 +720,6 @@ sv:
         public_summary: >-
           En övergripande beskrivning av händelsen och dess beslut som visas
           offentligt. Fyll i detta på engelska.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Ange den tävlandes födelsedatum i formatet ÅÅÅÅ-MM-DD.
@@ -739,36 +729,14 @@ sv:
           <strong>Stefan Pochmann</strong>. Inte slarvigt som <strong>s
           pochman</strong>.<br/>Mellannamn (antingen hela eller som initialer)
           är valfria.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           När du har laddat upp en ny profilbild behöver du vänta på att WCA
           Results Team godkänner den.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Detta gäller endast tävlingar som du är arrangör eller delegat för,
           och kan ändras för varje enskild tävling.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: c564b74
         receive_delegate_reports: >-
           Om du är senior-delegat eller medlem i WRC eller WQAC, får du
@@ -784,12 +752,6 @@ sv:
           Se din konfigurerade mobilapplikation för ett engångslösenord eller
           ange en av dina återställningskoder.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Din korrekta födelsedag i formatet ÅÅÅÅ-MM-DD
         #original_hash: 49ee4af
@@ -852,14 +814,10 @@ sv:
           flera filer samtidigt. Du kan ta bort bilder först när tillräckligt
           många andra bilder har laddats upp (om du vill byta ut en bild måste
           du först ladda upp den nya bilden och sedan ta bort den gamla).
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Lista över nummer på alla incidenter som du vill ha feedback från WRC
           på.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           Lista med incidentnummer som du vill ha WIC-feedbacken på. <br>
@@ -880,50 +838,10 @@ sv:
           förbättring/försämring inom communityt, framtida planer för regionen).
           Om du för korthetens skull lämnade något osagt i de föregående
           avsnitten, är du välkommen att kommentera dem här.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Exempel: Resor, betalningar, priser, boende'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Måste vara en giltig http(s)-url. HTTPS rekommenderas
         #original_hash: 2ace571
@@ -932,28 +850,12 @@ sv:
           bakgrund
         #original_hash: da54ab5
         email: Bör vara en e-postlista som innehåller alla i organisationens ledning
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Måste vara i PDF-format
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Måste vara i PDF-format. Om du behöver lägga till fler filer, vänligen
           lägg ihop dem till en
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3362,17 +3264,11 @@ sv:
           clone_tabs: Jag vill även klona alla flikar med ytterligare information
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Om detta är inaktiverat kommer byte av anmälningssystem att orsaka
             tekniska problem. Kontakta WST för att få hjälp om du fortfarande
             behöver byta anmälningssystem.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Tävlingens fullständiga namn inklusive årtalet i slutet (t.ex. Danish
@@ -3390,8 +3286,6 @@ sv:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Namn på staden och delstaten (om tillämpligt) som tävlingen äger rum
@@ -3405,20 +3299,7 @@ sv:
           details_html: >-
             Detaljer för lokalen (t.ex. På första våningen längst in, följ
             skyltarna). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             Tävlingsseriens fulla namn, inklusive årtalet på slutet (t.ex.
@@ -3492,8 +3373,6 @@ sv:
             arrangörernas e-postadresser. %{md}. Exempel: [Text att
             visa](mailto:some@email.com)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Tävlingens hemsida. Måste vara en giltig http(s)-url.
           #original_hash: b2af5f5
@@ -3501,12 +3380,7 @@ sv:
             Sida där de tävlande behöver anmäla sig till tävlingen. Måste vara
             en giltig http(s)-url.
           #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
           uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Valutakoden för avgifterna.
@@ -3525,8 +3399,6 @@ sv:
             För närvarande är detta nummer endast informativt, gästavgifter kan
             inte hanteras via denna webbplats. Om detta är satt till 0, kommer
             en valfri mening att visas om åskådarpolicyn.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             För närvarande är detta nummer endast informativt, återbetalningar
@@ -3538,8 +3410,6 @@ sv:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Notera: Start- och sluttider för anmälan anges i UTC-tid.'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Det datum då personer på väntelistan inte längre kommer att
@@ -3554,16 +3424,6 @@ sv:
             tävlande kan lägga till ett grenar till sina registrerade grenar
             fram till dess att grenen hålls. Om anmälan på plats används måste
             detta sättas till samma dag som tävlingen.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             Antal gäster per anmälan som tillåts för denna tävling. Anmälningar
@@ -3576,35 +3436,23 @@ sv:
             detta på <b>engelska</b> och eventuella språk som de tävlande talar;
             detta kommer att visas på tävlingens informationssida, samt på
             anmälningssidan om du använder WCAs hemsida för anmälningar.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Vänligen förklara här varför du inte vill att nykomlingar ska
               anmäla sig till din tävling. Vänligen fyll i detta på engelska!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Vänligen utveckla här varför du vill att tävlande ska lämna in
               sina pussel tidigt. Vänligen fyll i detta på engelska!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Vänligen utveckla här varför du vill använda kvalgränser. Vänligen
               fyll i detta på engelska.
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Vänligen utveckla här varför du vill begränsa vissa kombinationer
@@ -3623,9 +3471,6 @@ sv:
           Ytterligare information du vill skicka med till WCAT. Till exempel om
           det är något du är osäker på , eller om det finns speciella önskemål
           till WCAT. Vänligen fyll i detta på engelska!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4688,8 +4533,6 @@ sv:
           Genom att ansluta ditt PayPal-konto får WCA:s webbplats möjlighet att
           dirigera betalningar till dig och utfärda återbetalningar direkt på
           ditt PayPal-konto.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Denna tävling är inställd på att acceptera betalningar via %{provider}.

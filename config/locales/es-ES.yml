@@ -282,8 +282,6 @@ es-ES:
     333fm: Una hora
     #original_hash: cc7d8bb
     333mbf: '10:00.00 por cubo, hasta 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Tipo de clasificación
@@ -738,8 +736,6 @@ es-ES:
       text: requerido
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Por favor, revisa los siguientes problemas:'
@@ -761,12 +757,6 @@ es-ES:
         public_summary: >-
           Una descripción general del incidente y la decisión, para mostrar
           públicamente. Por favor, rellénalo en inglés.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Introduce la fecha de nacimiento del competidor en formato AAAA-MM-DD.
@@ -776,36 +766,14 @@ es-ES:
           ejemplo <strong>Carlos Méndez</strong> y no <strong>C
           Mendez</strong>.<br/>Los segundos nombres (completos o con iniciales)
           son opcionales.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Después de subir un nuevo avatar, tendrás que esperar a que el Equipo
           de Resultados de la WCA lo apruebe.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Esto solo se aplica en competiciones que organices o delegues y puedes
           cambiarlo en cada competición.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           Esto se limita a notificaciones sobre cambios mayores de versión en
@@ -827,12 +795,6 @@ es-ES:
           Comprueba tu aplicación de móvil configurada para una contraseña de un
           sólo uso o introduce uno de tus códigos de recuperación.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Tu fecha de nacimiento correcta en formato AAAA-MM-DD
         #original_hash: 49ee4af
@@ -901,14 +863,10 @@ es-ES:
           primero y luego eliminar la antigua). Si no dispones de fotografías
           actuales de la zona de competición y/o de la zona de mezclas mientras
           se utilizan, explica por qué.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Lista de números referenciando los incidentes de los cuales te
           gustaría obtener retroalimentación del WRC.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           Lista de números referenciando los incidentes de los cuales te
@@ -932,50 +890,10 @@ es-ES:
           progreso o regresión dentro de la comunidad o planes de futuro para la
           región). Si por ser conciso te has dejado algo sin decir en las
           secciones anteriores, puedes comentarlo ahora.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Ejemplos: Cómo llegar, Pago, Premios, Alojamiento'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Tiene que ser una URL http(s) válida. Se recomienda HTTPS
         #original_hash: 2ace571
@@ -986,28 +904,12 @@ es-ES:
         email: >-
           Debería ser una lista de correo electrónico que incluya a todos los
           miembros de la Junta Directiva y Oficiales
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Tiene que estar en formato PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Tiene que estar en formato PDF. Si necesitas añadir más archivos, por
           favor, únelos en un único archivo
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3771,17 +3673,11 @@ es-ES:
             adicional
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Si esto se desactiva, cambiar el sistema de registro causará
             problemas técnicos. Por favor, ponte en contacto con el WST para
             recibir asistencia si aún necesitas cambiar el sistema de registro.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           El nombre completo de la competición incluyendo el año al final (por
@@ -3801,8 +3697,6 @@ es-ES:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Política
           de Requisitos de Competiciones de la WCA</a>.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Nombre de la ciudad y provincia donde tendrá lugar la competición.
@@ -3815,20 +3709,7 @@ es-ES:
           details_html: >-
             Detalles sobre el recinto (por ejemplo, «En la primera planta, al
             fondo, sigue los carteles»). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             El nombre completo de la serie de competiciones incluyendo el año al
@@ -3908,8 +3789,6 @@ es-ES:
             administrativos de una competición (Resultados, Informe, pago de la
             Cuota)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: >-
             La página web de la competición. Tiene que ser una URL http(s)
@@ -3918,13 +3797,8 @@ es-ES:
           external_registration_page: >-
             La página donde los competidores se tienen que registrar para la
             competición. Tiene que ser una URL http(s) válida.
-          #original_hash: da39a3e
-          uses_wca_registration: ''
           #original_hash: cc7d557
           scoretaking_software: 'Selecciona «%{choice_ilr}» si quieres utilizar Rondas Duales'
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Divisa para la cuota.
@@ -3948,8 +3822,6 @@ es-ES:
             acompañantes no pueden ser gestionadas a través de esta página web.
             Si esto se pone en 0, se mostrará una frase de tu elección sobre la
             política de espectadores.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Por ahora, este número es solo informativo, los reembolsos se
@@ -3961,8 +3833,6 @@ es-ES:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Nota: La apertura y el cierre del registro están en horario UTC'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Fecha tras la cual no se aceptarán registros en lista de espera. Si
@@ -3979,16 +3849,6 @@ es-ES:
             a sus categorías registradas hasta que empiecen esas categoría. Si
             tienes registro in situ, esto tiene que ponerse en el mismo día que
             la competición.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             El número de acompañantes permitidos por registro en esta
@@ -4002,36 +3862,24 @@ es-ES:
             idioma adicional que hablen tus competidores; será mostrado en la
             página de información de la competición, así como en página de
             registro si estás usando el registro de la página web de la WCA.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Por favor, elabora aquí por qué no te gustaría que se registren
               nuevos en tu competición. ¡Por favor, rellénalo en inglés!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Por favor, explica aquí por qué te gustaría requerir que los
               competidores entreguen sus puzzles con antelación. ¡Por favor,
               rellena esto en inglés!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Por favor, explica aquí por qué te gustaría usar tiempos de
               clasificación. ¡Por favor, rellena esto en inglés!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Por favor, explica aquí por qué te gustaría restringir ciertas
@@ -4050,9 +3898,6 @@ es-ES:
           Alguna información adicional que quieras pasar al WCAT. Por ejemplo,
           si hay algo de lo que no estés seguro o si hay alguna petición
           especial para el WCAT. ¡Por favor, rellena esto en inglés!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -5187,8 +5032,6 @@ es-ES:
           Conectar tu cuenta de PayPal permite a la página web de la WCA
           redirigirte pagos y realizar reembolsos directamente en tu cuenta de
           Stripe.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Esta competición ha sido configurada para recibir pagos a través de

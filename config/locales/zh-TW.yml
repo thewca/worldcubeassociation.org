@@ -273,8 +273,6 @@ zh-TW:
     333fm: 1小時
     #original_hash: cc7d8bb
     333mbf: 10分鐘/每顆，最多60分鐘
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: 參賽資格取得方式
@@ -714,8 +712,6 @@ zh-TW:
       text: 必須
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 請確認以下的問題：
@@ -729,12 +725,6 @@ zh-TW:
         private_wrc_decision: WRC的最終裁決，包括非公開的資訊。請用英文填寫。
         #original_hash: 3de5729
         public_summary: 關於意外事件以及其裁決的完整描述，並將公開顯示。請用英文填寫。
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: 請依照YYYY-MM-DD格式輸入參賽者的出生年月日。
@@ -745,32 +735,10 @@ zh-TW:
           Chieh-Lun Chou </strong>。而不是<strong> Jay Chou（綽號）、Chou
           Chieh-Lun（姓名相反）或chiehlun chou（沒有大寫） </strong>。<br/>若名字有中間名(middle
           name)，則可以不用輸入。
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: 上傳新的頭像之後，必須等待WCA成績組的審核。
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: 這只適用您是比賽的代表或是主辦團隊的時候，且可以在各別比賽中設定忽視此規則。
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           此通知僅限於與資料匯出、WCIF 結構（schema）及公開 API
@@ -782,12 +750,6 @@ zh-TW:
         #original_hash: 0627e5c
         otp_attempt: 請開啟您的行動裝置上的應用程式來取得一次性的密碼，或是輸入您其中一個備用碼。
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: 將您的生日填成YYYY-MM-DD的格式
         #original_hash: 49ee4af
@@ -819,12 +781,8 @@ zh-TW:
         setup_images: >-
           您必須選擇 %{image_count}
           張能夠說明比賽現場打亂區、比賽區的照片等來自本次比賽的照片，最好是在比賽進行期間拍攝(其他照片也沒問題)。您可以一次選擇多個檔案。只有在上傳足夠數量的其他圖片後，才能刪除現有圖片（如果您想替換某張圖片，請先上傳新的，再刪除舊的）。如果您沒有最新的比賽區域和／或打亂區域的最新照片，請說明原因。
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: 列出希望WRC回饋的意外事件編號。
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: '請列出您希望WIC提供意見的事件編號清單。<br><strong>%{wic_incident_alert}</strong>'
         #original_hash: c4fd7a6
@@ -832,76 +790,20 @@ zh-TW:
           如果WIC事件內容較為敏感（包括但不限於犯罪、騷擾、攻擊等），請勿在報告中提及，並另行以電子郵件單獨聯繫WIC。對於其他WIC事件，請以簡要、匿名的方式進行描述，並私下向WIC補充詳細資訊。即使是匿名版本，WIC仍會提供意見以提升整體認識。若事件涉及WCA志工，請完全不要在報告中提及任何細節，務必私下聯繫WIC。
         #original_hash: f30abdc
         remarks: 分享任何關於比賽的其他細節(例如：進步/社群/這區域的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 例如：交通、付款方式、獎品、住宿
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: 必須要是正確的http(s)網址。建議是HTTPS。
         #original_hash: 2ace571
         logo: 必須是PNG格式，有好的解析度，且背景是透明的。
         #original_hash: da54ab5
         email: 應該含有所有理事和專員的郵件清單。
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: 必須是PDF格式。
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: 必須是PDF格式。如果您想要加入更多檔案，請合併檔案。
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -2955,14 +2857,8 @@ zh-TW:
           clone_tabs: 我想要複製所有索引標籤以及當中的附加訊息
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: 如果停用這功能，更改報名系統會產生技術問題。如果您仍要更改報名系統請聯絡WCA軟體組來取得協助。
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           比賽的全名且必須以年份為結尾（例如：All is Well
@@ -2974,8 +2870,6 @@ zh-TW:
           簡短解釋比賽名稱。名稱必須要符合<a
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA比賽要求政策</a>
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: 比賽舉行的城市或州（如果適用）。不要包含國家名稱（例如使用：Taipei、Taichung或Kaohsiung）。
           #original_hash: 9d9126e
@@ -2984,20 +2878,7 @@ zh-TW:
             University](https://www.ntnu.edu.tw/)
           #original_hash: 2651d1a
           details_html: '場地的細節（例如：一樓的正後方，跟隨指標走）%{md}'
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: 系列賽比賽全名的最後有年份，（例如：Southern Australia 2022）。務必要首字母大寫。單獨比賽所用的名字規則也適用。
           #original_hash: 778c20c
@@ -3029,19 +2910,12 @@ zh-TW:
             可任意選擇聯絡資訊。若您未填寫，聯繫請求內容會由表格方式送出，主辦人的電子郵件將不會被顯示。%{md}
             範例：[顯示內容](mailto:some@email.com)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: 這場比賽的網站網站。必須為有效的http(s)網址。
           #original_hash: b2af5f5
           external_registration_page: 參賽者報名比賽的頁面，必須為有效的http(s)網址。
           #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
           uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: 報名費的貨幣代碼。
@@ -3052,8 +2926,6 @@ zh-TW:
           on_the_spot_entry_fee: 如果此處設為0，會有一個句子表示現場報名為免費的。
           #original_hash: 0419547
           guest_entry_fee: 目前這個數字僅供顯示資訊用，本網站不處理陪同者入場費。如果此處設為0，可以選擇顯示一個觀眾政策的文字。
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: 目前這個數字僅供顯示資訊用，退費還是由人工處理。如果此處設為0，會有一個句子表示報名費在任何情況下皆不退費。
           #original_hash: f64d853
@@ -3061,52 +2933,28 @@ zh-TW:
         registration:
           #original_hash: 9965635
           opening_date_time: 備註：報名開始和結束時間採用UTC時間
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: 不再接受候補名單的日期。如果您有退費的截止日期，不受理候補的日期不應該早於退費的截止日期。
           #original_hash: 75e6c1f
           event_change_deadline_date: >-
             在這個時間以前，參賽者都有權利聯絡主辦團隊更新報名的比賽項目。這個期限禁止設在報名截止之前。如果這裡留白，代表參賽者在該比賽項目開始之前都可以追加該比賽項目。如果允許現場報名，這個期限必須是比賽當天。
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: 這個比賽每個參賽者所允許的陪同者人數。太多陪同者的報名會被擋下來。如果沒有人數限制，請留空白。
           #original_hash: 3de153b
           extra_requirements: >-
             請在此處說明任何以上未提及到的額外報名條件，例如有關如何支付。<br/>請用 <b>英文</b>
             和您當地參賽者使用的語言填寫此欄。它將顯示在比賽的資訊頁面上，如果您使用WCA網站報名，它也會顯示在報名頁面上。
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: 請詳細說明為什麼您不希望新手報名您的比賽。填入請使用英文！
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: 請在這裡說明為什麼您希望參賽者提早繳交方塊。請用英文填寫！
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: 請在這裡說明為什麼您希望設定特定成績。請用英文填寫！
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: 請在這裡說明為什麼您希望設定禁止報名特定的項目組合。請用英文填寫！
             #original_hash: d09af8f
@@ -3116,9 +2964,6 @@ zh-TW:
           main_event_id: 這個項目的優勝參賽者將會是這場比賽的優勝參賽者
         #original_hash: 9ea6021
         remarks: 任何您想跟WCAT說明的事。例如，有疑問的事項，或是您想向WCAT請求特別事項。請用英文填寫！
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -3928,8 +3773,6 @@ zh-TW:
         stripe: 連結Stripe帳號能讓您在WCA網站上面做變更以及直接退款到您的Stripe帳號。
         #original_hash: 7cedd12
         paypal: 連結PayPal帳號到WCA網站能讓款項直接進入到您的戶頭，以及直接用您的PayPal帳號退款。
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: '這場比賽被設定成接受%{provider}的付款。這場比賽的WCA代表應該要聯絡比賽公告組 (WCAT)來做連結帳號的更改。'
       #original_hash: bc14f0f

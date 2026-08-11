@@ -279,8 +279,6 @@ th:
     333fm: 1 ชั่วโมง
     #original_hash: cc7d8bb
     333mbf: '10:00.00 ต่อลูก, ไม่เกิน 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: ประเภทการคัดเลือก
@@ -722,8 +720,6 @@ th:
       text: จำเป็น
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: โปรดตรวจสอบปัญหาด้านล่าง
@@ -741,12 +737,6 @@ th:
         public_summary: >-
           คำอธิบายโดยรวมของ incident และการตัดสินใจที่จะแสดงต่อสาธารณะ
           กรุณากรอกเป็นภาษาอังกฤษ
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: กรอกวันเกิดของผู้เข้าแข่งขันในรูปแบบ YYYY-MM-DD
@@ -757,34 +747,12 @@ th:
           <strong>Chanatupe Songrasai (ชนาธูป สรงกระสัย)</strong>,
           ไม่กรอกรูปแบบนี้ <strong>c songrasai</strong>.<br/>ชื่อกลาง
           (เต็มหรือย่อ) ไม่จำเป็น
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: หลังจากอัปโหลดภาพแทนตัวใหม่คุณจะต้องรอให้ทีม WCA Results อนุมัติ
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           ใช้ได้เฉพาะกับการแข่งขันที่คุณจัดหรือ delegate เท่านั้น
           และสามารถแทนที่ได้ในแต่ละการแข่งขัน
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           ข้อจำกัดนี้จำกัดเฉพาะการแจ้งเตือนการเปลี่ยนแปลงเวอร์ชันหลักของ เช่น
@@ -805,12 +773,6 @@ th:
           ตรวจสอบโทรศัพท์มือถือของคุณสำหรับ one-time password หรือ ใส่ recovery
           codes
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: วันเกิดของคุณในรูปแบบ YYYY-MM-DD
         #original_hash: 49ee4af
@@ -875,12 +837,8 @@ th:
           จากนั้นจึงลบรูปภาพเก่า)
           หากคุณไม่มีรูปของพื้นที่แข่งขันและ/หรือพื้นที่ตั้งโจทย์ขณะกำลังใช้งาน
           กรุณาแจ้งเหตุผล
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: หมายเลขของ incident ที่ต้องการข้อเสนอแนะจาก WRC
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           รายการตัวเลขที่อ้างอิงถึง Incidents ที่คุณต้องการให้ WIC
@@ -901,76 +859,20 @@ th:
           พูดเกี่ยวกับรายละเอียดอย่างอื่นที่คุณต้องการแบ่งปัน (เช่น
           การพัฒนา/การถดถอยของกลุ่มผู้เข้าแข่งขัน, แผนงานในอนาคต)
           คุณสามารถอธิบายเนื้อหาจากส่วนก่อนหน้าเพื่มเติมได้
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: เช่น การเดินทาง การชำระเงิน รางวัล ที่พัก
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: 'ต้องเป็น http(s) url ที่ถูกต้อง, แนะนำ HTTPS'
         #original_hash: 2ace571
         logo: 'ต้องเป็น PNG, ความละเอียดที่ดี และพื้นหลังต้องโปร่งใส'
         #original_hash: da54ab5
         email: ควรเป็นรายชื่อผู้รับ email ที่มีกรรมการและเจ้าหน้าที่ทั้งหมด
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: ต้องเป็น PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: 'ต้องเป็น PDF, ถ้าคุณต้องการเพิ่มไฟล์ กรุณารวมมันเข้าด้วยกัน'
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3480,16 +3382,10 @@ th:
           clone_tabs: ฉันต้องการโคลนแท็บทั้งหมดพร้อมข้อมูลเพิ่มเติมเช่นกัน
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             หากปิดใช้งาน การเปลี่ยนระบบการสมัครนจะทำให้เกิดปัญหาทางเทคนิค
             โปรดติดต่อ WST เพื่อขอความช่วยเหลือหากคุณยังต้องเปลี่ยนระบบการสมัคร
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           ชื่อเต็มของการแข่งขันรวมถึงปีที่สิ้นสุด (เช่น Danish Open 2016)
@@ -3507,8 +3403,6 @@ th:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             ชื่อของเมืองหรือรัฐ (ถ้ามี) ที่จะมีการแข่งขัน ไม่ต้องใส่ประเทศ (เช่น
@@ -3519,20 +3413,7 @@ th:
             de l'Industrie](http://www.cite-sciences.fr)
           #original_hash: 2651d1a
           details_html: 'รายละเอียดเกี่ยวกับสถานที่ (เช่น ชั้นที่ 1 ด้านหลัง ตามป้าย) %{md}'
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             ชื่อเต็มของการแข่งขันซีรีส์รวมทั้งปีที่สิ้นสุด (เช่น Southern
@@ -3599,19 +3480,12 @@ th:
             หัวหน้า Delegate รับผิดชอบด้านการบริหารจัดการการแข่งขัน
             (ผลการแข่งขัน รายงาน ใบแจ้งค่าธรรมเนียม)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: website ของการแข่งขัน ต้องเป็น http(s) url ที่ถูกต้อง
           #original_hash: b2af5f5
           external_registration_page: หน้าเว็บที่ผู้เข้าแข่งขันต้องสมัครการแข่งขัน ต้องเป็น URL ที่ถูกต้อง
-          #original_hash: da39a3e
-          uses_wca_registration: ''
           #original_hash: cc7d557
           scoretaking_software: 'เลือก ''%{choice_ilr}'' หากคุณต้องการใช้ Dual Rounds'
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: สกลุเงินสำหรับต่าสมัคร
@@ -3633,8 +3507,6 @@ th:
             สำหรับตอนนี้ตัวเลขนี้เป็นข้อมูลเท่านั้น
             ค่าเข้าชมการแข่งขันไม่สามารถจัดการผ่าน website นี้ได้ หากตั้งเป็น 0
             จะแสดงข้อความที่คุณเลือกเกี่ยวกับนโยบายของผู้เข้าชมการแข่งขัน
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             สำหรับตอนนี้ตัวเลขนี้เป็นข้อมูลเท่านั้น
@@ -3645,8 +3517,6 @@ th:
         registration:
           #original_hash: 9965635
           opening_date_time: เวลาเปิดและปิดรับสมัคร (UTC time)
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             วันที่ผู้เข้าแข่งขันที่อยู่ใน waitlisted registrants
@@ -3659,16 +3529,6 @@ th:
             เว้นว่างไว้หากผู้เข้าแข่งขันสามารถเพิ่มประเภทการแข่งขันได้จนถึงวันแข่งขัน
             หากคุณมีการรับสมัครที่การแข่งขัน
             จะต้องตั้งเป็นวันเดียวกับวันที่แข่งขัน
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             จำนวนผู้ติดตามที่ได้รับอนุญาติในการแข่งขันนี้
@@ -3681,35 +3541,23 @@ th:
             <br/>กรุณากรอกเป็น <b>ภาษาอังกฤษ</b> และภาษาอื่นที่ผู้เข้าแข่งขันใช้
             สิ่งนี้จะปรากฏในหน้าข้อมูลการแข่งขันรวมถึงหน้าลงสมัครการแข่งขันหากคุณใช้การสมัครการแข่งขันในเว็บไซต์
             WCA
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               โปรดอธิบายรายละเอียดที่นี่ว่าทำไมคุณถึงไม่อยากให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขันของคุณ
               กรุณากรอกเป็นภาษาอังกฤษ!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               โปรดอธิบายรายละเอียดที่นี่ทำไมคุณต้องการให้ผู้เข้าแข่งขันส่ง
               puzzle ก่อน กรุณากรอกเป็นภาษาอังกฤษ!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               ปรดอธิบายรายละเอียดที่นี่ ทำไมคุณถึงต้องการใช้การคัดเลือก
               กรุณากรอกเป็นภาษาอังกฤษ!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               โปรดอธิบายรายละเอียดที่นี่ ทำไมคุณต้องการจำกัดการสมัครบางประเภท
@@ -3727,9 +3575,6 @@ th:
         remarks: >-
           ข้อมูลบางอย่างที่คุณอยากส่งให้ WCAT เช่น บางอย่างที่คุณไม่มั่นใจกับมัน
           หรือคำขอพิเศษที่จะส่งไปให้ WCAT กรุณากรอกเป็นภาษาอังกฤษ!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4780,8 +4625,6 @@ th:
           การเชื่อมต่อบัญชี PayPal ของคุณทำให้เว็บไซต์ WCA
           สามารถกำหนดเส้นทางการชำระเงินให้กับคุณ และคืนเงืนได้โดยตรงในบัญชี
           PayPal ของคุณ
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         การแข่งขันนี้จัดทำขึ้นเพื่อรับการชำระเงินผ่าน %{provider} Delegate

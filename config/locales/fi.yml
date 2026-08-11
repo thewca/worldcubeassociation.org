@@ -267,8 +267,6 @@ fi:
     333fm: 1 tunti
     #original_hash: cc7d8bb
     333mbf: '10:00.00/kuutio, max. 60:00:00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Karsintatyyppi
@@ -711,8 +709,6 @@ fi:
       text: vaaditaan
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Tarkista allaolevat ongelmat:'
@@ -732,12 +728,6 @@ fi:
         public_summary: >-
           Kokonaiskuvaus tapauksesta ja sitä koskevasta päätöksestä (nähtävillä
           julkisesti). Täytäthän tämän englanniksi.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Syötä kilpailijan syntymäpäivä muodossa VVVV-KK-PP.
@@ -747,36 +737,14 @@ fi:
           <strong>Stefan Pochmann</strong>. Ei huolimattomasti, kuten <strong>s
           pochman</strong>. Muut (toinen, kolmas jne.) etunimet (joko kokonaan
           tai pelkkänä alkukirjaimena) ovat vapaaehtoisia.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Uuden profiilikuvan lataamisen jälkeen sinun täytyy odottaa, että WCA
           Results Team hyväksyy sen.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Tämä pätee ainoastaan kilpailuihin, joissa olet järjestäjä tai
           delegaatti, ja voidaan poistaa käytöstä kilpailukohtaisesti.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           This is limited to notifications for major version changes to
@@ -797,12 +765,6 @@ fi:
           Tarkista määritetty mobiilisovelluksesi saadaksesi kertakäyttöisen
           salasanan tai syötä palautuskoodi.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Oikea syntymäpäiväsi muodossa VVVV-KK-PP
         #original_hash: 49ee4af
@@ -864,14 +826,10 @@ fi:
           enough other images have been uploaded (if you want to replace an
           image, you need to upload the new one first, and then delete the old
           one).
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           List of numbers referencing any incidents that you would like the
           WRC's feedback on.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           List of numbers referencing any incidents that you would like the
@@ -892,50 +850,10 @@ fi:
           yhteisöllisyyden paraneminen/huononeminen tai aluetta koskevat
           tulevaisuudensuunnitelmat). Jos jätit aikaisemmissa osioissa jotakin
           tiivistämisen vuoksi kertomatta, kerro tässä.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Esimerkkejä: Matkustus, Palkinnot, Majoitus'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Must be a valid http(s) url. HTTPS is recommended
         #original_hash: 2ace571
@@ -944,28 +862,12 @@ fi:
           background
         #original_hash: da54ab5
         email: Should be a mailing list containing all the Directors and Officers
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: PDF-muodossa
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Must be in PDF format. If you need to add more files, please merge
           them together
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3379,17 +3281,11 @@ fi:
           clone_tabs: I would like to clone all tabs with additional information as well
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             If this is disabled, changing the registration system will cause
             technical issues. Please contact WST for assistance if you still
             need to change the registration system.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Kilpailun koko nimi sisältäen vuosiluvun lopussa (esim. Danish Open
@@ -3406,8 +3302,6 @@ fi:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Name Policyn</a> vaatimuksia.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Kaupunki (ja osavaltio, jos olemassa), jossa kilpailu pidetään. Älä
@@ -3421,20 +3315,7 @@ fi:
           details_html: >-
             Lisätietoa kilpailupaikasta (esim. Ensimmäisen kerroksen perällä,
             seuraa opasteita). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             The full name of the Competition Series including the year at the
@@ -3501,8 +3382,6 @@ fi:
             sähköpostiosoitteita. %{md}. Esimerkiksi: [Näytettävä
             teksti](mailto:esim@email.com)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Kilpailun verkkosivusto. Pätevä http(s)-osoite.
           #original_hash: b2af5f5
@@ -3510,12 +3389,7 @@ fi:
             Sivu, jolla kilpailijoiden täytyy rekisteröityä kilpailuun. Pätevä
             http(s)-osoite.
           #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
           uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Osallistumismaksujen valuuttatunnus.
@@ -3539,8 +3413,6 @@ fi:
             Vaikka vieraiden pääsymaksun suuruus näytetään kilpailusivulla,
             näitä maksuja ei voi hallita tämän sivuston kautta. Jos arvoksi
             asetetaan 0, itse valitsemasi teksti näytetään.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Tämä numero ilmoitetaan kilpailusivulla, mutta palautukset täytyy
@@ -3553,8 +3425,6 @@ fi:
           opening_date_time: >-
             Huomio: Rekisteröitymisen alkamis- ja päättymisajat ovat
             UTC-yleisaikoja
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Päivä, jolloin jonotuslistalla olevia kilpailijoita ei enää
@@ -3569,16 +3439,6 @@ fi:
             rekisteröitymiseensä siihen asti, kun laji pidetään kilpailussa. Jos
             paikan päällä rekisteröityminen on käytössä, tähän tulee asettaa
             kilpailun päivä.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             The number of guests per registration allowed at this competition.
@@ -3591,35 +3451,23 @@ fi:
             <b>englanniksi<b/> ja muilla kilpailijoiden todennäköisesti
             puhumilla kielillä. Tämä näytetään kilpailusivun Tietoa-osiossa sekä
             rekisteröitymissivulla, jos käytät sitä.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Please elaborate here why you would not like newcomers to register
               for your competition. Please fill this out in English!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Please elaborate here why you would like to require competitors to
               submit puzzles early. Please fill this out in English!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Please elaborate here why you would like to use qualification
               times. Please fill this out in English!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Please elaborate here why you would like to restrict certain event
@@ -3638,9 +3486,6 @@ fi:
           example, if there is something you are uncertain about, or if there
           are any special requests for the WCAT. Please fill this out in
           English!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4696,8 +4541,6 @@ fi:
           Connecting your PayPal account gives the WCA website the ability to
           route payments to you, and issue refunds directly on your PayPal
           account.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         This competition is set up to accept payments through %{provider}. The

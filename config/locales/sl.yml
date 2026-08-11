@@ -286,8 +286,6 @@ sl:
     333fm: 1 ura
     #original_hash: cc7d8bb
     333mbf: '10:00.00 na kocko, največ 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Način kvalifikacije
@@ -734,8 +732,6 @@ sl:
       text: obvezno
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Prosimo, preglejte sledeče težave:'
@@ -755,12 +751,6 @@ sl:
         public_summary: >-
           Splošen opis incidenta in odločitev, povezanih z njim. Te informacije
           bodo javno prikazane. Prosimo, izpolnite v angleščini.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Vnesite datum rojstva tekmovalca v formatu LLLL-MM-DD.
@@ -770,36 +760,14 @@ sl:
           Novak</strong>. Izogibajte se površnim zapisom, kot je <strong>j
           novak</strong>.<br/>Srednja imena (v celoti ali kot začetnice) so
           neobvezna.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Po prenosu novega avatarja morate počakati na odobritev s strani WCA
           ekipe za rezultate.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Velja le za tekmovanja, ki jih organizirate ali delegirate. To
           nastavitev lahko spremenite za vsako tekmovanje posebej.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           Omejeno na obvestila ob večjih spremembah med različicami orodij, kot
@@ -820,12 +788,6 @@ sl:
           Preverite vašo nastavljeno mobilno aplikacijo za enkratno geslo ali
           vnesite eno izmed vaših obnovitvenih kod.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Vaš točen datum rojstva v formatu LLLL-MM-DD
         #original_hash: 49ee4af
@@ -891,14 +853,10 @@ sl:
           najprej naložiti novo, šele potem izbrisati staro). Če slik z območij
           mešanja in tekmovanja, medtem ko sta ti v uporabi, nimate, prosimo,
           razložite zakaj.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Seznam številk, ki se sklicujejo na incidente, za katere želite dobiti
           povratno informacijo WRC.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           Seznam številk, ki se sklicujejo na incidente, za katere želite dobiti
@@ -920,78 +878,22 @@ sl:
           (npr. izboljšanje/upadanje znotraj skupnosti, prihodnji načrti za to
           regijo). Če ste z namenom jedrnatosti v prejšnjih predelih kaj
           izpustili, lahko pišete o tem tu.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Primeri: potovanje, plačila, nagrade, nastanitve'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Mora biti veljaven http(s) URL. HTTPS je priporočen
         #original_hash: 2ace571
         logo: 'Mora biti v formatu PNG, v dobri resoluciji, s prozornim ozadjem'
         #original_hash: da54ab5
         email: Naj bo seznam e-naslovov vseh direktorjev in vodstvenih delavcev
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Mora biti v formatu PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Mora biti v formatu PDF. Če morate dodati več datotek, jih, prosimo,
           združite
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3617,17 +3519,11 @@ sl:
           clone_tabs: Podvojiti želim tudi vse zavihke z dodatnimi informacijami
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Če to onemogočite, bo sprememba sistema za prijave povzročila
             tehnične težave. Če vseeno želite spremeniti sistem za prijave,
             kontaktirajte WST.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Polno ime tekmovanja, vključno z letnico na koncu (npr. Slovenian Open
@@ -3644,8 +3540,6 @@ sl:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Politiki
           zahtev za WCA tekmovanja</a>.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Ime mesta in pokrajine (če je potrebno), kjer bo potekalo
@@ -3659,20 +3553,7 @@ sl:
           details_html: >-
             Podrobnosti o prizorišču (npr. prvo nadstropje, sledite znakom).
             %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             Polno ime serije tekmovanj, vključno z letnico na koncu (npr.
@@ -3747,21 +3628,14 @@ sl:
             Glavni delegat je zadolžen za administrativne vidike tekmovanje
             (rezultati, poročilo, dajatve)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Spletna stran tekmovanja. To mora biti veljaven http(s) URL.
           #original_hash: b2af5f5
           external_registration_page: >-
             Spletna stran, kjer se tekmovalci prijavijo na tekmovanje. To mora
             biti veljaven http(s) URL.
-          #original_hash: da39a3e
-          uses_wca_registration: ''
           #original_hash: cc7d557
           scoretaking_software: 'Izberite ''%{choice_ilr}'', če želite uporabiti dvojne kroge'
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Koda valute za vstopnine.
@@ -3781,8 +3655,6 @@ sl:
             Trenutno je to število le informacijske narave, vstopnine za goste
             ni možno urejati preko spletne strani. Če nastavite na 0, bo
             prikazano besedilo po vaši izbiri.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Trenutno je ta številka le informativne narave, vračila morate
@@ -3793,8 +3665,6 @@ sl:
         registration:
           #original_hash: 9965635
           opening_date_time: Odprtje in zaprtje prijav v univerzalnem koordiniranem času (UTC)
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Datum, po katerem se tekmovalcev s čakalnega seznama več ne
@@ -3808,16 +3678,6 @@ sl:
             dodatne discipline lahko prijavijo do pričetka posamezne discipline.
             Če ste omogočili prijave na samem tekmovanju, mora biti ta datum
             nastavljen na datum samega tekmovanja.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             Največje dovoljeno število gostov na tekmovalca za to tekmovanje.
@@ -3831,35 +3691,23 @@ sl:
             govorijo vaši tekmovalci; to bo prikazano na strani z informacijami
             in na strani za prijave, če za prijave uporabljate WCA spletno
             stran.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Razložite, zakaj ne želite, da se na to tekmovanje prijavljajo
               novinci. Prosimo, izpolnite v angleščini!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Razložite, zakaj želite, da tekmovalci uganke oddajo predčasno.
               Prosimo, izpolnite v angleščini!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Razložite, zakaj želite uporabiti kvalifikacijske pogoje. Prosimo,
               izpolnite v angleščini!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Razložite, zakaj želite omejiti kombinacije disciplin, na katere
@@ -3877,9 +3725,6 @@ sl:
           Dodatne informacije, ki jih želite posredovati WCAT. Na primer, če
           imate kakršna koli vprašanja ali posebne zahteve v zvezi z WCAT.
           Prosimo, izpolnite v angleščini!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4969,8 +4814,6 @@ sl:
         paypal: >-
           Povezava vašega PayPal računa omogoča WCA spletni strani, da vam
           usmerja plačila in izdaja vračila neposredno na vaš PayPal račun.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         To tekmovanje sprejema plačila preko ponudnika %{provider}. Delegat(i)

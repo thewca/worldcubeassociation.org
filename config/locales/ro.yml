@@ -262,8 +262,6 @@ ro:
     333fm: 1 oră
     #original_hash: cc7d8bb
     333mbf: '10:00.00 per cube, până la 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Tipul Calificării
@@ -792,8 +790,6 @@ ro:
       text: necesar
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Te rugăm să corectezi problemele:'
@@ -813,12 +809,6 @@ ro:
         public_summary: >-
           O descriere completă a evenimentului și a deciziei luate, pentru a fi
           afișată public. Te rugăm să completezi în engleză.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: >-
@@ -830,40 +820,18 @@ ro:
           <strong>Stefan Pochmann</strong>. Nu introdu numele neglijent, de
           exemplu <strong>s pochman</strong>.<br/> Prenumele suplimentare
           (complete sau doar inițialele) sunt opționale.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           După încărcarea unui nou avatar, va trebui să aștepți ca Echipa de
           Rezultate WCA să îl aprobe.
         #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
         region: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Se aplică doar competițiilor pe care le organizezi sau delegi și poate
           fi suprascris individual per competiție.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 81a76a3
         receive_delegate_reports: >-
           Dacă ești Delegat Stagiar, Junior sau Senior, ori Membru al WRC sau al
@@ -1067,12 +1035,6 @@ ro:
         #original_hash: da39a3e
         your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: 'Data ta de naștere corectă, în formatul AAAA-LL-ZZ'
         #original_hash: 49ee4af
@@ -1139,8 +1101,6 @@ ro:
           Simte-te liber să ceri feedback de la Delegați sau de la WRC. Dacă
           dorești intervenția WDC pentru unele incidente, menționează clar
           această cerere.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: Lista cu numerele incidentelor pentru care ai vrea feedback de la WRC
         #original_hash: da39a3e
@@ -1153,13 +1113,9 @@ ro:
           (exemplu: îmbunătățiri/regres în rândul comunității, planuri de viitor
           pentru regiunea respectivă). Dacă ai uitat să menționezi ceva în
           secțiunile trecute, scrie aici.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Exemple: Călătorie, Plăți, Premii, Cazare'
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: 498f4c5
         dob: Data nașterii trebuie să fie în formatul an-lună-zi (AAAA-LL-ZZ)
@@ -1170,22 +1126,11 @@ ro:
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
         #original_hash: da39a3e
         comments: ''
@@ -1197,26 +1142,6 @@ ro:
         administrative_notes: >-
           Note suplimentare cu privire la managementul acestei înregistrări.
           Concurentul nu are acces la aceste note.
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       results_submission:
         #original_hash: da39a3e
         schedule_url: ''
@@ -1225,10 +1150,6 @@ ro:
         #original_hash: da39a3e
         message: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: >-
           Trebuie să fie un URL http(s) valid. Se recomandă folosirea linkurilor
@@ -1237,28 +1158,12 @@ ro:
         logo: 'Trebuie să fie în format PNG, cu rezoluție bună și fundal transparent.'
         #original_hash: da54ab5
         email: Trebuie să fie o listă de mailuri care conține toți Directorii
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Trebuie să fie în format PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Trebuie să fie în format PDF. Dacă mai trebuie să adaugi alte fișiere,
           te rugăm să le unești.
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
       wfc:
         #original_hash: da39a3e
         from_date: ''
@@ -3318,10 +3223,6 @@ ro:
         clone_tabs: Vreau să multiplic, de asemenea, toate taburile cu informații
           suplimentare
       hints:
-        admin:
-          is_confirmed: ''
-          is_visible: ''
-        competition_id: ''
         name: 'Numele complet al competiției, inclusiv anul la sfârșitul ei (de exemplu
           U.R.A. Spring 2016). Asigură-te că începi cuvintele cu literă mare. Numele
           trebuie să conțină numai caractere alfanumerice, spații și următoareel caractere
@@ -3333,19 +3234,14 @@ ro:
           să respecte <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Politica
           de Competiții WCA</a>.
         venue:
-          country_id: ''
           city_name: 'Numele orașului și statului (unde este cazul) în care are loc
             competiția. Nu scrieți țara (exemplu: Paris SAU San Francisco, California)'
           name_html: 'Locația unde se desfășoară competiția. %{md}. De exemplu: [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
           details_html: 'Detalii despre locație (exemplu: La parter, urmați semnele
             din partea dreaptă a holului).  %{md}'
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         series:
-          series_id: ''
           name: >-
             Numele complet al Seriei de Competiții, incluzând anul la sfârșit
             (de ex. Southern Australia 2022). Folosește majuscule pentru prima
@@ -3380,15 +3276,11 @@ ro:
             adresele de e-mail ale organizatorilor. %{md} Exemplu: [Text de afișat](mailto:some@email.com)'
         championships:
         website:
-          generate_website: ''
           external_website: Site-ul competiției. Trebuie să aiba un URL http sau https
             valid.
           external_registration_page: Pagina unde concurenții se pot înregistra pentru
             competiție. Trebuie să fi un URL http(s) valid .
-          uses_wca_registration: ''
           uses_wca_live: ''
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: Codul valutei pentru taxe
           base_entry_fee: 'Taxa de înregistrare de bază. Va fi afișată pe pagina de
@@ -3403,7 +3295,6 @@ ro:
           guest_entry_fee: Deocamdată, acest număr este doar informativ, taxele pentru
             spectatori nu pot fi administrate prin acest site. Dacă este setat la
             0, va fi afișat un mesaj la alegerea ta despre regimul spectatorilor.
-          donations_enabled: ''
           refund_policy_percent: Deocamdată, acest număr este doar informativ, restituirile
             vor trebui să fie cerute manual. Dacă este setat la 0, va fi afișat un
             mesaj conform căruia taxele de înregistrare nu vor fi restituite sub nicio
@@ -3412,7 +3303,6 @@ ro:
         registration:
           opening_date_time: 'Notă: Orele pentru începutul și sfarșitul înregistrării
             sunt în UTC'
-          closing_date_time: ''
           waiting_list_deadline_date: Data la care ce înscriși pe lista de așteptare
             nu vor mai fi aceptați. Dacă ai termen limită pentru rambursări, termenul
             limită pentru acceptare nu ar trebui să preceadă celui pentru rambursări.
@@ -3422,11 +3312,7 @@ ro:
             Dacă acest câmp nu este completat, atunci concurenții își pot adăuga o
             probă până la momentul desfășurării acesteia. Dacă accepți înscrieri pe
             loc, acest lucru trebuie să se întâmple în ziua competiției.
-          allow_on_the_spot: ''
           allow_self_delete_after_acceptance: ''
-          allow_self_edits: ''
-          guests_enabled: ''
-          guest_entry_status: ''
           guests_per_registration: Numărul de spectatori per înregistrare permis în
             cadrul acestei competiții. Înregistrările care au prea mulți spectatori
             asociați vor fi blocate. Lasă câmpul gol dacă nu există limită.
@@ -3436,19 +3322,14 @@ ro:
             orice alte limbi care te aștepți să fie vorbite la competiție; acestea
             vor fi afișate pe pagina de informații a competiției, precum și pe pagina
             de înregistrări (dacă folosești interfața WCA).
-          force_comment: ''
         event_restrictions:
           early_puzzle_submission:
-            enabled: ''
             reason: Te rugăm să elaborezi aici de ce soliciți depunerea puzzle-urilor
               mai devreme. Completează în engleză!
           qualification_results:
-            enabled: ''
             reason: Te rugăm să elaborezi aici de ce soliciți utilizarea timpilor
               din calificări. Completează în engleză!
-            allow_registration_without: ''
           event_limitation:
-            enabled: ''
             reason: Te rugăm să elaborezi aici de ce soliciți restricționarea participării
               la anumite combinații de probe. Completează în engleză!
             per_registration_limit: Opțional, setează numărul total de probe pentru

@@ -261,8 +261,6 @@ pt-BR:
     333fm: 1 hora
     #original_hash: cc7d8bb
     333mbf: '10 minutos por cubo, no máximo 60 minutos'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Tipo de Qualificação
@@ -699,8 +697,6 @@ pt-BR:
       text: obrigatório
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Por favor verifique os problemas abaixo:'
@@ -722,12 +718,6 @@ pt-BR:
         public_summary: >-
           Uma descrição geral do incidente e sua decisão, para ser mostrada
           publicamente. Por favor preencha em Inglês.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Informe a data de nascimento do competidor no formato AAAA-MM-DD.
@@ -736,36 +726,14 @@ pt-BR:
           Informe o nome completo do competidor corretamente, por exemplo
           <strong>Ayrton Senna da Silva</strong>, não desleixadamente como
           <strong>ayrton s</strong>.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Após enviar um novo avatar, será necessário esperar a Equipe de
           Resultados da WCA aprová-lo.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Isso só se aplica para competições que você organiza ou delega, e pode
           ser sobrescrito em cada competição.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 27c2251
         receive_delegate_reports: >-
           Se você é um Delegado Sênior ou Membro do WRC ou WQAC, você receberá
@@ -781,12 +749,6 @@ pt-BR:
           Verifique seu aplicativo móvel para uma senha única, ou informe um de
           seus códigos de recuperação.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Sua data de nascimento no formato AAAA-MM-DD
         #original_hash: 49ee4af
@@ -851,14 +813,10 @@ pt-BR:
           selecionados em número suficiente (se quiser substituir uma imagem,
           você deve primeiro fazer o upload da nova imagem, e depois excluir a
           antiga).
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Lista dos números de incidentes para os quais você deseja uma resposta
           do WRC.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 0aca3b0
         wic_incidents: >-
           Lista de números referenciando os incidentes para os quais você
@@ -869,45 +827,20 @@ pt-BR:
           (p. ex. melhora/piora na comunidade, planos futuros para esta região).
           Se você omitiu algo nas seções anteriores para ser conciso, pode
           comentar aqui.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Exemplos: Como chegar, Pagamento, Prêmios, Acomodações'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
       competition_medium:
         #original_hash: da39a3e
         competitionId: ''
         #original_hash: da39a3e
         type: ''
         #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
         submitterName: ''
         #original_hash: da39a3e
         submitterEmail: ''
         #original_hash: da39a3e
         submitterComment: ''
-        #original_hash: da39a3e
-        status: ''
       results_submission:
         #original_hash: da39a3e
         schedule_url: ''
@@ -918,38 +851,18 @@ pt-BR:
         #original_hash: da39a3e
         confirm_information: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Deve ser um url http(s) válido. HTTPS é recomendado.
         #original_hash: 2ace571
         logo: 'Deve estar em formato PNG, com boa resolução e fundo transparente'
         #original_hash: da54ab5
         email: Deve ser uma lista de email contendo todos os Diretores e Oficiais
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Deve estar em formato PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Deve estar em formato PDF. Se você precisar incluir mais de um
           arquivo, por favor faça um arquivo único.
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3354,17 +3267,11 @@ pt-BR:
             também
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Se isso estiver desabilitado, alterar o sistema de inscrição irá
             causar problemas técnicos. Por favor contate o WST para assistência
             se você ainda precisa alterar o sistema de inscrição.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           O nome completo da competição, incluindo o ano no final (p. ex.
@@ -3382,8 +3289,6 @@ pt-BR:
           href='/documents/policies/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Nome da cidade e estado onde a competição acontecerá. Não inclua o
@@ -3396,20 +3301,7 @@ pt-BR:
           details_html: >-
             Detalhes do local (p. ex. No primeiro andar, ao fundo. Siga as
             placas). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             O nome completo da Série de Competições, incluindo o ano no final
@@ -3471,8 +3363,6 @@ pt-BR:
             emails dos organizadores. %{md}. Exemplo: [Texto
             mostrado](mailto:alguem@email.com)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Website da competição. Deve ser uma URL http(s) válida.
           #original_hash: b2af5f5
@@ -3480,12 +3370,7 @@ pt-BR:
             A página na qual os competidores se inscrevem. Deve ser uma URL
             http(s) válida.
           #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
           uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: O código da moeda da taxa de inscrição.
@@ -3507,8 +3392,6 @@ pt-BR:
             convidados não são gerenciadas por este website. Se for configurado
             como 0, uma frase a sua escolha será mostrada acerca da política de
             espectadores.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Por enquanto este número é apenas informacional; devoluções terão
@@ -3520,8 +3403,6 @@ pt-BR:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Nota: início e término das inscrições no fuso horário UTC.'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             A data em que os inscritos na lista de espera não serão mais
@@ -3535,16 +3416,6 @@ pt-BR:
             campo em branco significa que competidores podem adicionar eventos
             até que o evento aconteça. Se você terá inscrições no local, esta
             data deve ser a mesma da competição.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             O número máximo de convidados por competidor permitido nessa
@@ -3558,35 +3429,23 @@ pt-BR:
             competidores falem; estes serão mostrados na página de informações
             da competição, e também na página de inscrições se você estiver
             usando a inscrição pelo website da WCA.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Por favor elabore aqui porque você não quer permitir a inscrição
               de novatos para sua competição. Preencha em inglês!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Por favor detalhe aqui os motivos para exigir a entrega antecipada
               dos quebra-cabeças. Por favor preencha em Inglês!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Por favor detalhe aqui os motivos para o uso de resultados de
               qualificação. Por favor preencha em Inglês!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Por favor detalhe aqui os motivos para restrição de combinações de
@@ -3605,9 +3464,6 @@ pt-BR:
           Alguma informação adicional que você queira passar para o WCAT. Por
           exemplo, se há algo sobre o qual você não tem certeza, ou algum pedido
           especial. Por favor preencha em Inglês!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d

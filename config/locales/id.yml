@@ -256,8 +256,6 @@ id:
     333fm: 1 jam
     #original_hash: cc7d8bb
     333mbf: '10:00.00 per kubus, total hingga 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Tipe Kualifikasi
@@ -663,8 +661,6 @@ id:
       text: wajib diisi
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Silakan tinjau ulang masalah di bawah:'
@@ -686,12 +682,6 @@ id:
         public_summary: >-
           Deskripsi keseluruhan dari insiden dan keputusannya untuk ditampilkan
           secara publik. Harap isi dalam Bahasa Inggris.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Isi tanggal lahir kompetitor dengan format YYYY-MM-DD.
@@ -701,36 +691,14 @@ id:
           Pochmann</strong>. Tidak sembarangan seperti <strong>s
           pochman</strong>.<br/>Nama tengah (lengkap atau disingkat) tidak
           diharuskan.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Setelah mengunggah avatar baru, Anda harus menunggu Tim Hasil WCA
           untuk disetujui.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Hal ini hanya berlaku untuk kompetisi yang Anda selenggarakan atau
           delegasikan, dan dapat dibatalkan dalam basis per-kompetisi.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 81a76a3
         receive_delegate_reports: >-
           Jika Anda adalah Delegasi Pelatihan, Delegasi Junior, Delegasi Senior,
@@ -742,12 +710,6 @@ id:
           Cek aplikasi mobile Anda untuk one-time password (OTP), atau isi
           dengan kode pemulihan Anda.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Tanggal lahir Anda dengan format YYYY-MM-DD
         #original_hash: 49ee4af
@@ -809,8 +771,6 @@ id:
           Meskipun semua kasus terlihat biasa, tulis kasus yang setidaknya perlu
           ditindaklanjuti. Centang kotak di bawah jika Anda menginginkan umpan
           balik.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Daftar angka yang mereferensikan insiden yang Anda inginkan untuk
@@ -828,27 +788,12 @@ id:
           ini). Jika Anda menyadari bahwa ada sesuatu yang belum disampaikan
           karena ingin menyampaikannya secara singkat, jangan ragu untuk
           menuliskannya di dalam komentar.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Contoh: Perjalanan, Pembayaran, Hadiah, Akomodasi'
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
         person_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
         #original_hash: da39a3e
         comments: ''
@@ -860,26 +805,6 @@ id:
         administrative_notes: >-
           Catatan tambahan disimpan sebagai bagian untuk mengatur pendaftaran
           ini. Hal ini tidak dapat dilihat oleh kompetitor.
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       results_submission:
         #original_hash: da39a3e
         schedule_url: ''
@@ -888,10 +813,6 @@ id:
         #original_hash: da39a3e
         message: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: >-
           Wajib merupakan url http(s) yang valid. Direkomendasikan untuk memakai
@@ -902,28 +823,12 @@ id:
         email: >-
           Harus merupakan mailing list yang berisikan seluruh Direktur dan
           Pengurus
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Wajib dalam format PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Wajib dalam format PDF. Jika Anda perlu menambahkan berkas lainnya,
           harap digabung menjadi satu
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3202,13 +3107,6 @@ id:
           #original_hash: c305010
           clone_tabs: Saya ingin menduplikasi semua tab dan juga dengan informasi tambahan
       hints:
-        admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Nama lengkap kompetisi yang disertai tahun di bagian akhir (contohnya
@@ -3226,8 +3124,6 @@ id:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Kebijakan
           Syarat Kompetisi WCA</a>.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Nama kota dan negara bagian (jika ada) di mana kompetisi
@@ -3241,20 +3137,7 @@ id:
           details_html: >-
             Detail mengenai venue (contohnya, Di lantai pertama bagian belakang,
             ikuti papan petunjuk). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             Nama lengkap dari Rangkaian Kompetisi termasuk tahun di bagian akhir
@@ -3307,8 +3190,6 @@ id:
             pertanyaan akan dikirim melalui formulir tanpa memunculkan email
             panitia. %{md}. Contoh: [Teks yang muncul](mailto:some@email.com)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Situs web kompetisi. Harus url http(s) yang valid.
           #original_hash: b2af5f5
@@ -3316,12 +3197,7 @@ id:
             Laman di mana kompetitor mendaftar untuk kompetisi tersebut. Harus
             url http(s) yang valid.
           #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
           uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Kode mata uang untuk biaya.
@@ -3343,8 +3219,6 @@ id:
             tamu/pendamping tidak dapat diatur pada situs web ini. Jika diisi 0,
             pernyataan yang Anda pilih tentang kebijakan penonton akan
             ditampilkan.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Untuk sekarang, angka ini hanya sebagai informasi, pengembalian dana
@@ -3356,8 +3230,6 @@ id:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Catatan: Pembukaan dan penutupan pendaftaran dalam zona waktu UTC'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Tanggal di mana pendaftar dalam daftar tunggu tidak dapat lagi
@@ -3374,15 +3246,7 @@ id:
             pendaftaran di tempat, hal ini harus diisi dengan hari yang sama
             dengan hari kompetisi.
           #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
           allow_self_delete_after_acceptance: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             Jumlah pendamping per pendaftaran yang diperbolehkan pada kompetisi
@@ -3396,28 +3260,18 @@ id:
             secara umum; hal ini akan ditampilkan pada laman informasi
             kompetisi, juga pada laman pendaftaran jika Anda menggunakan
             pendaftaran pada situs web WCA.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Mohon jelaskan di sini alasan Anda mengharuskan kompetitor untuk
               mengumpulkan puzzle lebih awal. Mohon isi dengan Bahasa Inggris!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Mohon jelaskan di sini alasan Anda ingin menggunakan waktu
               kualifikasi. Mohon isi dengan Bahasa Inggris!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Mohon jelaskan di sini alasan Anda ingin membatasi kombinasi
@@ -3436,9 +3290,6 @@ id:
           Beberapa informasi tambahan yang ingin Anda sampaikan ke WCAT.
           Contohnya, jika ada hal yang Anda masih ragu, atau jika ada permintaan
           khusus kepada WCAT. Mohon isi dengan Bahasa Inggris!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d

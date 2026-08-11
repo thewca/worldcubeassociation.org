@@ -504,8 +504,6 @@ sk:
       text: potrebné
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Prosím, pozrite si problémy uvedené nižšie:'
@@ -525,12 +523,6 @@ sk:
         public_summary: >-
           Celkový popis incidentu a jeho rozhodnutia, bude videný verejne.
           Prosím, vyplňte toto v angličtine.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Napíšte váš dátum narodenia vo formáte YYYY-MM-DD
@@ -544,31 +536,11 @@ sk:
           Po tom, ako nahráte svojho nového Avatara, budete musieť počkať,
           pokiaľ ho Výsledkový Tím WCA schváli.
         #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
         current_password: ''
         #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
         region: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: da39a3e
         location_description: ''
         #original_hash: da39a3e
@@ -661,12 +633,6 @@ sk:
         #original_hash: da39a3e
         your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Váš správny deň narodenia vo formáte YYYY-MM-DD
         #original_hash: c6d8a97
@@ -732,13 +698,9 @@ sk:
           zlepšenie/zhoršenie v komunite, budúce plány pre tento región). Ak ste
           kvôli stručnosti niečo vynechali v predošlých sekciách, nebojte sa ich
           napísať sem.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Príklady:Cestovanie, Platenie, Ceny, Ubytovanie'
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: 498f4c5
         dob: Dátum narodenia by mal mať formát YYYY-MM-DD.
@@ -749,18 +711,7 @@ sk:
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
         wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
         #original_hash: da39a3e
         comments: ''
@@ -771,26 +722,6 @@ sk:
       team:
         #original_hash: da39a3e
         friendly_id: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
     options:
       registration:
         status:
@@ -1763,8 +1694,6 @@ sk:
       hints:
         admin:
           is_confirmed:
-          is_visible: ''
-        competition_id: ''
         name: Celé meno súťaže aj s rokom na konci(napr. Danish Open 2016).Dávajte
           si pozor, aby meno bolo kapitalizované. Meno musí obsahovať iba alfanumerické
           znaky, pomlčky(-), ampersandy(&), bodky(.), dvojbodky(:), apostrofy(') a
@@ -1773,17 +1702,13 @@ sk:
           krátke, môžete ho znovu použiť(napr. Europe 2006).
         name_reason_html:
         venue:
-          country_id: ''
           city_name: Meno mesta a štátu(ak je), kde sa súťaž bude nachádzať. Nepíšte
             krajinu(napr. Paris ALEBO San Francisco, Kalifornia)
           name_html: 'Miesto, kde sa daná súťaž bude konať. %{md}. Napríklad: [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
           details_html: Detaily o mieste (napr. On the first floor far in the back,
             follow the signs). %{md}
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         information: Informácie o limite súťažiacich, vstupných poplatkoch pre súťažiacich
           a divákov a iné detaily relevantné pre ľudí, ktorí maju záujem v zúčastnení
           sa súťaže.
@@ -1803,13 +1728,9 @@ sk:
             organizátorov budú publikované verejnosti. %{md}. Príklad: [Text na ukážku](mailto:some@email.com)'
         championships: ''
         website:
-          generate_website: ''
           external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
           external_registration_page:
-          uses_wca_registration: ''
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: Kód meny pre vstupné poplatky.
           base_entry_fee: Základný vstupný poplatok pre súťaž. Vstupný poplatok bude
@@ -1817,18 +1738,15 @@ sk:
             je použitá).
           on_the_spot_entry_fee:
           guest_entry_fee:
-          donations_enabled: ''
           refund_policy_percent:
           refund_policy_limit_date:
         registration:
           opening_date_time: 'Poznámka: Otvorenie a zatvorenie súťaže sú v čase UTC.'
-          closing_date_time: ''
           waiting_list_deadline_date:
           event_change_deadline_date:
           allow_on_the_spot:
           allow_self_delete_after_acceptance:
           allow_self_edits:
-          guests_enabled: ''
           guest_entry_status:
           guests_per_registration:
           extra_requirements:

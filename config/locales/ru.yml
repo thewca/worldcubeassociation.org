@@ -265,8 +265,6 @@ ru:
     333fm: 1 час
     #original_hash: cc7d8bb
     333mbf: '10 минут на куб, до 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Тип квалификации
@@ -783,8 +781,6 @@ ru:
       text: обязательное поле
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Возникли следующие проблемы:'
@@ -806,12 +802,6 @@ ru:
         public_summary: >-
           Описание инцидента, а также его решение, которые будут доступны всем.
           Пожалуйста, заполняйте по-английски.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Введите день рождения участника в формате ГГГГ-ММ-ДД.
@@ -825,41 +815,19 @@ ru:
           ввести имя в соответствии с ним. При желании, можно написать в скобках
           вариант имени на местном языке, например, <strong>Anton Rostovikov
           (Антон Ростовиков)</strong>
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           После загрузки новой аватарки вам придётся подождать, пока её одобрит
           WCA Results Team.
         #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
         region: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Это применяется только для соревнований, где вы организатор или
           делегат. Вы можете изменить значение для каждого отдельного
           соревнования.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 81a76a3
         receive_delegate_reports: >-
           Если вы — Делегат-стажёр, Младший Делегат, Старший Делегат или член
@@ -1072,12 +1040,6 @@ ru:
         #original_hash: da39a3e
         your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: День Рождения в формате ГГГГ-ММ-ДД
         #original_hash: 49ee4af
@@ -1136,8 +1098,6 @@ ru:
           номерам. Даже если не было особенных инцидентов, хотя бы перечислите
           самые примечательные. Отметьте галочки ниже, если вам нужна обратная
           связь.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: 'Номера инцидентов, к которым требуется обратная связь от WRC'
         #original_hash: da39a3e
@@ -1150,13 +1110,9 @@ ru:
           улучшения/ухудшения в сообществе, планы на будущее в этом регионе).
           Если ради краткости вы не написали чего-либо в предыдущих полях,
           можете написать это здесь.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Например: как добраться, оплата, проживание.'
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: 498f4c5
         dob: День рождения должен быть в формате ГГГГ-ММ-ДД.
@@ -1167,47 +1123,16 @@ ru:
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
         #original_hash: da39a3e
         comments: ''
         #original_hash: da39a3e
         guests: ''
-        #original_hash: da39a3e
-        status: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
@@ -1218,10 +1143,6 @@ ru:
         #original_hash: da39a3e
         message: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Должен быть правильный http(s) url. Рекомендуется HTTPS
         #original_hash: 2ace571
@@ -1230,28 +1151,12 @@ ru:
           фоном
         #original_hash: da54ab5
         email: Email-адрес Совета Директоров
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Должен быть в формате PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Должен быть в формате PDF. Если вы хотите добавить больше файлов,
           пожалуйста, объедините их в один
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
       wfc:
         #original_hash: da39a3e
         from_date: ''
@@ -3222,10 +3127,6 @@ ru:
         remarks: Заметки
         clone_tabs: Скопировать также все вкладки с дополнительной информацией
       hints:
-        admin:
-          is_confirmed: ''
-          is_visible: ''
-        competition_id: ''
         name: Полное название соревнования, включая год в конце (например, Moscow
           North-West Open 2011). Слова лучше писать с большой буквы. Название должно
           содержать только английские буквы, цифры, дефисы (-), амперсанды (&), точки
@@ -3237,7 +3138,6 @@ ru:
           удовлетворять <a href='/documents/policies/external/Competition%20Name20Requirements.pdf'>Требованиям
           к Соревнованиям WCA</a>.
         venue:
-          country_id: ''
           city_name: Название города, и штат (если применимо), где будет проходить
             соревнование. Не пишите здесь страну. Например, <strong>Moscow</strong>,
             или <strong>San Francisco, California</strong>. <br/>Это поле, а также
@@ -3246,12 +3146,8 @@ ru:
             [Moscow Aviation Institute](http://intstudy.mai.ru/)'
           details_html: Детали помещения (например, главный вход, второй этаж, следуйте
             указателям). %{md}
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         series:
-          series_id: ''
           name: >-
             Полное название серии соревнований, включая год в конце, каждое
             слово начинается с заглавной буквы, например, Southern Australia
@@ -3285,14 +3181,10 @@ ru:
             адресов организаторов. %{md}. Например: [Вася Пупкин](mailto:vasya@pupkin.ru)'
         championships:
         website:
-          generate_website: ''
           external_website: Сайт соревнования. Должен быть правильный http(s) URL.
           external_registration_page: Страница, где участники должны регистрироваться
             на соревнование. Должна быть правильным http(s) URL.
-          uses_wca_registration: ''
           uses_wca_live: ''
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: Код валюты для взноса за участие.
           base_entry_fee: 'Базовый взнос за участие на соревнованиях. Он будет отображаться
@@ -3311,7 +3203,6 @@ ru:
           guest_entry_fee: Пока что это число только для информации, на этом сайте
             нельзя принимать взносы для гостей. Если здесь стоит 0, на странице соревнований
             будет показано выбранное сообщение о политике в отношении гостей.
-          donations_enabled: ''
           refund_policy_percent: Пока что это поле только для информации, вы должны
             сами возвращать взносы. Если здесь стоит 0, участникам будет показано,
             что взносы не будут возвращаться.
@@ -3319,7 +3210,6 @@ ru:
         registration:
           opening_date_time: Время открытия и закрытия регистрации указаны в часовом
             поясе UTC.
-          closing_date_time: ''
           waiting_list_deadline_date: Дата, после которой регистрации из списка ожидания
             больше не будут приниматься. Эта дата не должна быть до крайнего срока
             возвратов, если он есть.
@@ -3329,11 +3219,7 @@ ru:
             оставить это поле пустым то участники смогут добавлять дисциплины до первого
             раунда этой дисциплины. Если у вас есть регистрация на месте, то срок
             изменения списка дисциплин должен включать дни регистрации на месте.
-          allow_on_the_spot: ''
           allow_self_delete_after_acceptance: ''
-          allow_self_edits: ''
-          guests_enabled: ''
-          guest_entry_status: ''
           guests_per_registration: Число гостей на одну регистрацию, разрешённое для
             этих соревнований. Регистрации с превышением этого числа будут недоступны.
             Оставьте пустым, если лимита нет.
@@ -3343,19 +3229,14 @@ ru:
             которых разговаривают ваши участники; эти требования будут отображаться
             на странице соревнования, а также на странице регистрации, если вы используете
             для них сайт WCA.
-          force_comment: ''
         event_restrictions:
           early_puzzle_submission:
-            enabled: ''
             reason: Пожалуйста, объясните, почему вы хотите заставить участников заранее
               сдать головоломки. Заполняйте это поле по-английски!
           qualification_results:
-            enabled: ''
             reason: Пожалуйста, объясните, почему вы хотите использовать квалификацию.
               Заполняйте это поле по-английски!
-            allow_registration_without: ''
           event_limitation:
-            enabled: ''
             reason: Пожалуйста, объясните, почему вы хотите запретить участникам регистрироваться
               на некоторые комбинации дисциплин. Заполняйте это поле по-английски!
             per_registration_limit: Вы можете ограничить количество дисциплин, на

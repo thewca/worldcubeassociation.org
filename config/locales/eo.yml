@@ -261,8 +261,6 @@ eo:
     333fm: 1 horo
     #original_hash: cc7d8bb
     333mbf: '10:00:00 po kubo, ĝis 60:00:00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Kvalifika Tipo
@@ -703,8 +701,6 @@ eo:
       text: estas deviga
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Bonvolu ekzameni la malsuprajn problemojn:'
@@ -724,12 +720,6 @@ eo:
         public_summary: >-
           Tuta priskribo de la incidento kaj ĝia decido, por publikigi ĝin.
           Bonvolu plenigi ĝin en la angla.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Enigu la naskiĝdaton de la konkursanto kiel JJJJ-MM-TT
@@ -739,36 +729,14 @@ eo:
           Pochmann</strong>. Ne neglekteme kiel <strong>s pochman</strong> aŭ
           <strong>POCHMAN Stefan</strong>. Mezaj nomoj eblas (aŭ tute skribitaj
           aŭ per komencliteroj).
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Kiam via nova profilbildo estas alŝutita, vi devas atendi la aprobon
           de la Rezulta Teamo de la WCA.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Ĉi tio validas nur por konkursoj, kiujn vi organizas aŭ delegas, kaj
           povas esti anstataŭita por specifaj konkursoj.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 27c2251
         receive_delegate_reports: >-
           Se vi estas Ĉefa Delegito aŭ Membro de la WRC aŭ WQAC, vi defaŭlte
@@ -784,12 +752,6 @@ eo:
           Kontrolu vian konfigurintan poŝtelefonan apon por unufoja pasvorto, aŭ
           enigu unu el viaj restaŭrkopiaj kodoj.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Via ĝusta naskiĝtago kiel JJJJ-MM-TT
         #original_hash: 49ee4af
@@ -848,14 +810,10 @@ eo:
           plurajn dosierojn samtempe. Vi povas forigi bildojn nur kiam sufiĉe da
           aliaj bildoj estas alŝutitaj (se vi volas anstataŭigi bildon, vi devas
           unue alŝuti la novan, kaj poste forigi la malnovan).
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Listo de la numeroj de la incidentoj por kiuj vi ŝatus ricevi opinion
           de la WRC.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           Listo de la numeroj de la incidentoj por kiuj vi ŝatus ricevi opinion
@@ -876,78 +834,22 @@ eo:
           plibonigo/malplibonigo ene de la komunumo, estontaj projektoj por tiu
           ĉi regiono). Se vi ne diris ion pro la volo esti konciza antaŭe, diru
           ĝin tie!
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Ekzemploj: Vojaĝo, Pagoj, Premioj, Tranoktejo'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Devas esti valida http(s) reteja adreso. HTTPS estas rekomendita.
         #original_hash: 2ace571
         logo: 'Devas esti PNG-dosiero, bonkvalite kaj kun travidebla fono'
         #original_hash: da54ab5
         email: Devus esti dissendolisto kiu enhavas ĉiujn Direktorojn kaj Oficistojn
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Devas esti en dosierformo PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Devas esti en dosierformo PDF. Se vi bezonas aldoni pliajn dosierojn,
           bonvolu kunfandi ilin
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3334,17 +3236,11 @@ eo:
           clone_tabs: Mi ankaŭ ŝatus kloni ĉiujn langetojn kun aldonaj informoj
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Se ĉi tio estas malŝaltita, ŝanĝi la registriĝ-sistemon kaŭzos
             teknikajn problemojn. Bonvolu kontakti WST por ricevi helpon se vi
             tamen bezonas ŝanĝi la registriĝ-sistemon.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           La tuta nomo de la konkurso kun la jaro en la fino (t.e., Danish Open
@@ -3362,8 +3258,6 @@ eo:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Politiko
           pri Postuloj de Konkursoj de la WCA</a>.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Urbonomo kaj ŝtatnomo (se aplikebla) kie la konkurso okazas. Ne
@@ -3376,20 +3270,7 @@ eo:
           details_html: >-
             Detaloj pri la konkursejo (ekz., Je la unua etaĝo, funde, sekvu la
             ŝildojn). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             La plena nomo de la Konkursa Serio kun la jaro ĉe la fino (ekz.,
@@ -3459,8 +3340,6 @@ eo:
             organizantoj. %{md}. Ekzemple: [Videbla
             teksto](mailto:iu@retpoŝto.com)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: >-
             La retejo de la konkurso. Ĝi devas esti valida reteja adreso
@@ -3470,12 +3349,7 @@ eo:
             La paĝo kie la konkursantoj povas registriĝi por la konkurso. Ĝi
             devas esti valida reteja adreso (http(s)).
           #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
           uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: La valuto uzata por la kostoj.
@@ -3496,8 +3370,6 @@ eo:
             Nuntempe, tiu nombro estas nur sciiga ĉar pagoj de akompanantoj ne
             povas esti faritaj per tiu retejo. Se vi enigas 0, vi povos elekti
             frazon pri kiel vi traktos spektantojn.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Nun, tiu nombro estas nur sciiga, repagoj devos esti farita permane.
@@ -3510,8 +3382,6 @@ eo:
           opening_date_time: >-
             Noto: Horoj de komenco kaj fino de registriĝperiodo estas indikitaj
             laŭ UTC
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             La dato post kiam oni ne plu akceptos registriĝoj de la atendolisto.
@@ -3525,16 +3395,6 @@ eo:
             signifas ke konkursantoj povas aldoni konkurseron ĝis kiam tiu
             konkursero okazas. Se vi havas surlokajn registriĝojn, vi devas
             enigi la tagon de la konkurso.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             La nombro da gastoj permesitaj per registriĝo ĉe ĉi tiu konkurso.
@@ -3548,35 +3408,23 @@ eo:
             viaj konkursontoj; tio aperos ĉe la informa paĝo de la konkurso, kaj
             ankaŭ en la paĝo por registriĝi se vi uzas la registran sistemon de
             retejo de la WCA.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Bonvolu detali ĉi tie kial vi ne ŝatus ke novuloj registriĝu por
               via konkurenco. Bonvolu plenigi ĉi tion en la angla!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Bonvolu detali tie kial vi ŝatus devigi konkursantojn antaŭtempe
               submetiĝi puzloj. Bonvolu plenigi tion en la angla!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Bonvolu detali tie kial vi ŝatus uzi kvalifikajn rezultojn.
               Bonvolu plenigi tion en la angla!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Bonvolu detali tie kial vi ŝatus limigi specifajn kombinadojn de
@@ -3595,9 +3443,6 @@ eo:
           Iujn aldonajn informojn kiujn vi ŝatus komuniki al la WCAT. Ekzemple,
           se vi ne certas pri io aŭ se vi havas specifajn petojn por la WCAT.
           Bonvolu plenigi tion en la angla!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d

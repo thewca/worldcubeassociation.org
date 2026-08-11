@@ -734,8 +734,6 @@ kk:
     333fm: 1 сағат
     #original_hash: cc7d8bb
     333mbf: 'Әр кубик үшін 10:00.00, барлығы 60:00.00 дейін'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Біліктілік Түрі
@@ -1184,8 +1182,6 @@ kk:
       text: қажетті
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Төмендегі мәселелерді қарастырыңыз:'
@@ -1207,12 +1203,6 @@ kk:
         public_summary: >-
           Оқиға мен оның шешімінің жалпы сипаттамасы, көпшілікке көрсету үшін.
           Оны Ағылшын тілінде толтырыңыз.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Қатысушының туған күнін ЖЖЖЖ-АА-КК форматында енгізіңіз.
@@ -1223,36 +1213,14 @@ kk:
           Nurtas</strong>.<br/>Егер сізде шетелдік төлқұжат болса, оған сәйкес
           атауды енгізуді ұсынамыз. Қаласаңыз, жақшаға атаудың жергілікті
           тілдегі нұсқасын жаза аласыз, мысалы, Kairat Nurtas (Қайрат Нұртас)
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Жаңа аватар жүктегеннен кейін, оны WCA Нәтижелер Тобының мақұлдауын
           күтуіңіз қажет.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Бұл тек сіз ұйымдастыратын немесе делегат ретінде қатысатын жарыстарға
           қолданылады және әр жарыс үшін жеке өзгертілуі мүмкін.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           Бұл деректер экспорттары, WCIF схемасы және ашық API сияқты
@@ -1274,12 +1242,6 @@ kk:
           Бір реттік құпия сөз үшін бапталған мобильді қосымшаңызды тексеріңіз
           немесе қалпына келтіру кодтарының бірін енгізіңіз.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: 'Туған күніңізді дұрыс форматта енгізіңіз: ЖЖЖЖ-АА-КК'
         #original_hash: 49ee4af
@@ -1345,14 +1307,10 @@ kk:
           кейін ескісін өшіріңіз). Егер жарыс аймағының және/немесе скрамблинг
           аймағының қолданылып жатқан сәтіндегі қазіргі фотосуреттері болмаса,
           себебін түсіндіріңіз.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           WRC-ның пікірін алғыңыз келетін оқиғаларға сілтеме жасайтын нөмірлер
           тізімі.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           WIC-тен кері байланыс алғыңыз келетін оқиғалардың нөмірлер тізімі.
@@ -1373,50 +1331,10 @@ kk:
           жетілдіру/кері кету, осы аймаққа арналған болашақ жоспарлар). Алдыңғы
           бөлімдерде қысқалық үшін айтылмай қалған нәрсе болса, оны осында
           түсіндіре аласыз.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Мысалдар: Саяхат, Төлемдер, Марапаттар, Тұру орындары'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: HTTP(S) дұрыс URL болуы керек. HTTPS ұсынылады.
         #original_hash: 2ace571
@@ -1425,28 +1343,12 @@ kk:
         email: >-
           Барлық Директорлар мен Қызметкерлерді қамтитын пошта тізімі болуы
           керек.
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: PDF форматында болуы керек.
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           PDF форматында болуы керек. Егер қосымша файлдар қосу қажет болса,
           оларды біріктіріңіз.
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3995,17 +3897,11 @@ kk:
           clone_tabs: Қосымша ақпарат бар барлық қойындыларды да көшіруді қалаймын
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Егер бұл өшірілсе, тіркелу жүйесін өзгерту техникалық ақауларға
             әкелуі мүмкін. Тіркелу жүйесін өзгерту қажет болса, көмек алу үшін
             WST (WCA Support Team) тобына хабарласыңыз.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Жарыстың толық атауы, соңында жылы көрсетілуі керек (мысалы: Danish
@@ -4023,8 +3919,6 @@ kk:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Жарыс Талаптары Саясатына</a> сәйкес болуы керек.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Жарыс өтетін қала мен (қажет болса) штат атауы. Елді қоспаңыз
@@ -4037,20 +3931,7 @@ kk:
           details_html: >-
             Өтетін орын туралы мәліметтер (мысалы: Бірінші қабаттың соңында,
             белгілерді басшылыққа алыңыз). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             Жарыс Сериясының толық атауы, соңында жылы көрсетілуі тиіс (мысалы:
@@ -4126,8 +4007,6 @@ kk:
             Жетекші делегат конкурстың әкімшілік аспектілеріне жауап береді
             (нәтижелер, есеп беру, алымдар бойынша шот-фактура)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Жарыстың веб-сайты. Қолданыстағы http(s) сілтемесі болуы қажет.
           #original_hash: b2af5f5
@@ -4135,12 +4014,7 @@ kk:
             Қатысушылар жарысқа тіркелуі қажет бет. Қолданыстағы http(s)
             сілтемесі болуы тиіс.
           #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
           uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Төлемдерге арналған валюта коды.
@@ -4163,8 +4037,6 @@ kk:
             көрермендерге арналған төлемдер осы веб-сайт арқылы басқарылмайды.
             Егер бұл мән 0 болса, көрермендерге қатысты саясат туралы өз
             таңдауыңыз бойынша сөйлем көрсетіледі.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Қазіргі уақытта бұл сан тек ақпараттық мақсатта көрсетіледі,
@@ -4177,8 +4049,6 @@ kk:
           opening_date_time: >-
             Ескерту: Тіркелудің ашылу және жабылу уақыты UTC уақыты бойынша
             көрсетілген.
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Күту тізіміндегі тіркелушілерді қабылдау тоқтатылатын күн. Егер
@@ -4192,16 +4062,6 @@ kk:
             қалдырсаңыз, қатысушылар іс-шара басталғанға дейін оны тіркелген
             іс-шаралар тізіміне қоса алады. Егер орнында тіркеу болса, бұл күн
             жарыс өтетін күнмен бірдей болуы тиіс.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             Бұл жарысқа бір тіркеуге рұқсат етілген көрермендер саны.
@@ -4215,37 +4075,25 @@ kk:
             басқа тілдерде толтырылуы тиіс; ол жарыс туралы ақпарат бетінде және
             егер сіз WCA веб-сайты арқылы тіркеуді қолдансаңыз, тіркеу бетінде
             көрсетіледі.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Жаңадан келгендердің бұл жарысқа тіркелуін не себепті
               қаламайтыныңызды осында нақтылап жазыңыз. Бұл ақпаратты ағылшын
               тілінде толтырыңыз!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Неліктен қатысушылардан тапсырмаларды алдын ала тапсыруды талап
               еткіңіз келетінін мұнда нақтылап жазыңыз. Бұл бөлікті ағылшын
               тілінде толтырыңыз!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Неліктен біліктілік уақыттарын пайдаланғыңыз келетінін мұнда
               нақтылап жазыңыз. Бұл бөлікті ағылшын тілінде толтырыңыз!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Неліктен кейбір жарыс түрлерінің комбинацияларына шектеу қойғыңыз
@@ -4265,9 +4113,6 @@ kk:
           WCAT-қа жеткізгіңіз келетін қосымша ақпарат. Мысалы, егер сенімсіз бір
           нәрсе болса немесе WCAT-қа арнайы өтініштеріңіз болса. Бұл жолақты
           ағылшын тілінде толтырыңыз!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -5341,8 +5186,6 @@ kk:
         paypal: >-
           PayPal тіркелгісін қосу WCA веб-сайтына төлемдерді сізге бағыттау және
           төлемдерді тікелей PayPal тіркелгіңізге қайтару мүмкіндігін береді.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Бұл конкурс %{provider} арқылы төлемдерді қабылдау үшін орнатылған.
