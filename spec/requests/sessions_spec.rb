@@ -34,20 +34,21 @@ RSpec.describe "sessions" do
   it "refreshes the remember period when a cookie restores the session" do
     user = create(:user)
     browser = ActionDispatch::Integration::Session.new(Rails.application)
+    signed_in_at = Time.current
 
-    freeze_time do
-      browser.post(user_session_path, params: sign_in_params(user))
-      original_remember_cookie = browser.cookies["remember_user_token"]
-      browser.cookies.delete("_WcaOnRails_session")
+    browser.post(user_session_path, params: sign_in_params(user))
+    original_remember_cookie = browser.cookies["remember_user_token"]
+    browser.cookies.delete("_WcaOnRails_session")
 
-      travel 1.week
+    travel_to(signed_in_at + 1.week) do
       browser.get(profile_edit_path)
       expect(browser.response).to be_successful
       expect(browser.cookies["remember_user_token"]).not_to eq(original_remember_cookie)
+    end
 
-      browser.cookies.delete("_WcaOnRails_session")
+    browser.cookies.delete("_WcaOnRails_session")
 
-      travel 13.days
+    travel_to(signed_in_at + 20.days) do
       browser.get(profile_edit_path)
       expect(browser.response).to be_successful
     end
