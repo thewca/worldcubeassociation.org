@@ -1767,5 +1767,3 @@ def payment_confirmation_webhook_as_json(intent, account_id)
     type: "payment_intent.succeeded",
   }.to_json
 end
-
-# TODO: Add unit tests for WCIF import registrations
