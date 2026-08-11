@@ -79,12 +79,6 @@ export function AnnouncementFullCard({
       <Card.Body gap={2}>
         <AnnouncementHeader announcement={announcement} linkTitle={false} />
 
-        <Card.Title textStyle="h3">Summary</Card.Title>
-        <AnnouncementMarkdown>
-          {announcementSummary(announcement)}
-        </AnnouncementMarkdown>
-
-        <Card.Title textStyle="h3">Body</Card.Title>
         <AnnouncementMarkdown>
           {announcement.contentMarkdown}
         </AnnouncementMarkdown>

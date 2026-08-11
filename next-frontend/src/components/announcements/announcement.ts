@@ -1,10 +1,24 @@
 import _ from "lodash";
 import { route } from "nextjs-routes";
 import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
-import { Announcement } from "@/types/payload";
+import { Announcement, ColorPaletteSelect } from "@/types/payload";
 
 // Matches the `summary` field's limit in the Announcements collection.
 const SUMMARY_CHARACTER_LIMIT = 400;
+
+// Announcement cards alternate through the WCA primary colors.
+const CARD_COLOR_PALETTES: ColorPaletteSelect[] = [
+  "blue",
+  "red",
+  "green",
+  "orange",
+  "yellow",
+];
+
+/// `index` is the announcement's position in the newest-first list, so an
+/// announcement keeps the color of the card it was opened from.
+export const announcementColorPalette = (index: number) =>
+  CARD_COLOR_PALETTES[index % CARD_COLOR_PALETTES.length];
 
 /// The teaser shown before "Read More". Announcements written before the
 /// `summary` field existed fall back to the beginning of their content.
