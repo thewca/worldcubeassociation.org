@@ -140,7 +140,10 @@ ignore_unused:
   - 'activerecord.attributes.delegate_report.*'
   - 'simple_form.hints.delegate_report.*'
   - 'competitions.live.*'
-  - 'competitions.messages.spots_left.*'
+  # No dot before the `*`: this has to cover the plural forms under
+  # `spots_left` and its sibling `spots_left_none`, which holds the wording
+  # used at zero. Both are read from next-frontend, which is not searched.
+  - 'competitions.messages.spots_left*'
   - 'errors.next_frontend.*'
   # The incident pages live in next-frontend, which is not searched by i18n-tasks
   - 'incidents_log.*'
