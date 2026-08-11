@@ -839,6 +839,9 @@ class User < ApplicationRecord
       can_request_to_edit_others_profile: {
         scope: can_request_to_edit_others_profile? ? "*" : [],
       },
+      can_manage_incidents: {
+        scope: can_manage_incidents? ? "*" : [],
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []

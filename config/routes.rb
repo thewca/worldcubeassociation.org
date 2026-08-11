@@ -141,6 +141,8 @@ Rails.application.routes.draw do
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
 
+  get 'pending-results-submissions' => 'results_submission#pending_results_submissions', as: :pending_results_submissions
+
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
@@ -457,7 +459,9 @@ Rails.application.routes.draw do
       get '/competition_index' => 'competitions#competition_index', as: :competition_index
       get '/competitions/mine' => 'competitions#mine', as: :my_competitions
 
-      resources :incidents, only: %i[index]
+      resources :incidents, only: %i[index show destroy] do
+        patch '/mark_as/:kind' => 'incidents#mark_as', as: :mark_as
+      end
       resources :regional_organizations, only: %i[index], path: '/regional-organizations'
 
       namespace :results do

@@ -33,6 +33,7 @@ services:
       DISABLE_SPRING: 1
     command: >
       bash -c './package-install.dev.sh packages.dev.txt &&
+      ./package-install.dev.sh packages.runtime.txt &&
       rm -f .db-inited &&
       bin/setup &&
       touch .db-inited'
@@ -64,7 +65,9 @@ services:
       RUNNING_IN_DOCKER: true
     tty: true
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
-    command: bin/dev -b 0.0.0.0
+    command: >
+      bash -c './package-install.dev.sh packages.runtime.txt &&
+      bin/dev -b 0.0.0.0'
     depends_on:
       wca_environment:
         condition: service_completed_successfully
@@ -80,7 +83,8 @@ services:
       - "3001:3001"
     working_dir: /app
     command: >
-      bash -c 'corepack install && yarn install &&
+      bash -c 'corepack install &&
+      yarn install &&
       yarn run dev'
     volumes:
       - ./next-frontend:/app
@@ -129,7 +133,10 @@ services:
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
     # The dev server never runs Shakapacker's precompile hook, so the auto-bundled
     # packs have to be generated before webpack enumerates its entrypoints.
-    command: bash -c 'bin/rake react_on_rails:generate_packs && bin/shakapacker-dev-server'
+    command: >
+      bash -c './package-install.dev.sh packages.runtime.txt &&
+      bin/rake react_on_rails:generate_packs &&
+      bin/shakapacker-dev-server'
     depends_on:
       wca_environment:
         # We need to make sure that the database is populated because our frontend code
@@ -155,7 +162,9 @@ services:
       # Cronjobs are disabled in development by default. If you wish to run cronjobs,
       # set this env variable to any integer value greater than zero
       # CRONJOB_POLLING_MINUTES: 30
-    command: bin/sidekiq
+    command: >
+      bash -c './package-install.dev.sh packages.runtime.txt &&
+      bin/sidekiq'
     depends_on:
       wca_environment:
         condition: service_completed_successfully
@@ -222,7 +231,7 @@ services:
         condition: service_healthy
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.61.1
+    image: mcr.microsoft.com/playwright:v1.62.1
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"

@@ -35,6 +35,9 @@ export default function ImportWcaLiveResults({
         <Message.Header>Please Note</Message.Header>
         <Message.List>
           <Message.Item>
+            You may use this feature to import results from WCA Live or Integrated Live Results.
+          </Message.Item>
+          <Message.Item>
             If you are using WCA Live, make sure to hit
             {' '}
             <b>&quot;Synchronize&quot;</b>
@@ -72,7 +75,7 @@ export default function ImportWcaLiveResults({
           type="submit"
           disabled={uploadedScrambleFilesCount === 0}
         >
-          Use WCA Live Results
+          Import Live Results
         </Form.Button>
       </Form>
     </>

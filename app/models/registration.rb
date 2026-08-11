@@ -461,14 +461,6 @@ class Registration < ApplicationRecord
     competition&.force_comment_in_registration?
   end
 
-  # For associated_events_picker
-  def events_to_associated_events(events)
-    events.map do |event|
-      competition_event = competition.competition_events.find_by!(event: event)
-      registration_competition_events.find_by(competition_event_id: competition_event.id) || registration_competition_events.build(competition_event: competition_event)
-    end
-  end
-
   def permit_user_cancellation?
     case competition.competitor_can_cancel.to_sym
     when :always

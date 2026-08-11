@@ -119,6 +119,8 @@ es-ES:
     555bf: 5x5x5 Ciega
     #original_hash: cedbf87
     333mbf: 3x3x3 Multi Ciega
+    #original_hash: a103de4
+    fto: FTO
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
@@ -2721,8 +2723,12 @@ es-ES:
         Archivo CSV con columnas: Estado, Nombre, Región, ID de la WCA, Fecha de
         nacimiento, Género, Correo electrónico, y una columna para cada
         categoría.
+      #original_hash: 01beb54
+      preview: Previsualizar datos de registro
       #original_hash: d6fbc9d
       import: Importar
+      #original_hash: 77dfd21
+      cancel: Cancelar
       errors:
         #original_hash: 0ef547d
         error: 'Error al importar %{registration}: %{error}.'
@@ -2777,7 +2783,7 @@ es-ES:
         tienes que editar la competición para permitirlo
       #original_hash: ed9d329
       ots_before_registration_open: >-
-        El registro in-situ no se podrá usar hasta que abra el periodo de
+        El registro in situ no se podrá usar hasta que abra el período de
         registro.
       #original_hash: 61125b5
       competition_over: No puedes añadir registros in situ tras finalizar la competición.
@@ -3039,8 +3045,8 @@ es-ES:
           9m_violated: >-
             No se han introducido suficientes resultados en la ronda anterior
             para cumplir la Regla 9m3. Si la ronda anterior no tiene al menos
-            %{competitor_count_needed} resultados introducidos, los resultados
-            de esta ronda no estarán permitidos.
+            %{competitor_count_needed} resultados introducidos al subir los
+            resultados, los resultados de esta ronda no estarán permitidos.
         quit:
           #original_hash: de62de1
           title: Eliminar competidor
@@ -3099,7 +3105,7 @@ es-ES:
           #original_hash: b3bdfaa
           event_edit_warning: >-
             Este competidor no se ha registrado a esta categoría y la
-            competición no permite cambios en el registro. Se le podrá añadir
+            competición ya no permite cambios de categorías. Se le podrá añadir
             siempre que se haga intencionadamente.
       results:
         #original_hash: 4705687
@@ -4542,6 +4548,8 @@ es-ES:
       cannot_delete_confirmed: No puedes eliminar una competición confirmada.
       #original_hash: 191df37
       must_contain_event: tiene que tener al menos una categoría
+      #original_hash: d01c9f5
+      fto_not_yet_allowed: 'FTO no puede usarse en competiciones que empiecen antes del %{date}.'
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
         tiene que tener al menos una ronda y todas las rondas tienen que estar
@@ -6046,6 +6054,80 @@ es-ES:
       en inglés, el siguiente contenido no está traducido.
     #original_hash: 2c23c1a
     incident: 'Incidente:'
+    #original_hash: 42edeaa
+    title: Registro de incidentes
+    #original_hash: c387a75
+    page_title: 'Incidente: %{title}'
+    #original_hash: 70c5337
+    not_found: Incidente no encontrado
+    #original_hash: 251a7bb
+    back_to_log: Volver al registro de incidentes
+    #original_hash: bce0641
+    search_placeholder: Buscar
+    #original_hash: bae7d5b
+    status: Estado
+    #original_hash: d999aeb
+    resolved: Resuelto
+    #original_hash: 96f608c
+    pending: Pendiente
+    #original_hash: 4a0e607
+    sent_in_digest: Enviado en el resumen
+    #original_hash: 35f49dc
+    sent: Enviado
+    #original_hash: 93934ad
+    showing_entries: >-
+      Mostrando los registros desde el %{first} hasta el %{last} de %{total}
+      registros con <select></select> por página
+    #original_hash: 329a7c2
+    not_public_warning: 'Este registro todavía no se ha resuelto, por lo que no es público.'
+    #original_hash: 0d96264
+    public_summary: Descripción y resolución del incidente
+    #original_hash: 47f8842
+    private_description: Descripción (solo para Delegados)
+    #original_hash: 504b671
+    private_wrc_decision: Decisión del WRC (solo para Delegados)
+    tags:
+      #original_hash: 0fd2d3d
+      regulation: Regla
+      #original_hash: 3f63aa0
+      guideline: Guía
+      #original_hash: 180b14c
+      search_with_tag: Buscar incidencias con esta etiqueta
+      #original_hash: d25382e
+      filter_by_tag: Filtrar según esta etiqueta
+      #original_hash: 491db57
+      competition_page: Página de la Competición
+      #original_hash: a2bfe4c
+      delegate_report: Informe del Delegado
+    admin:
+      #original_hash: 5656400
+      publish: Publicar
+      #original_hash: 1ac0a74
+      unpublish: Ocultar
+      #original_hash: 5301648
+      edit: Editar
+      #original_hash: 577ef7d
+      destroy: Eliminar
+      #original_hash: 77dfd21
+      cancel: Cancelar
+      #original_hash: 04a2122
+      confirm: Confirmar
+      #original_hash: 6fc0529
+      change_status: Cambiar estado
+      #original_hash: a926b77
+      destroy_title: Eliminar el incidente
+      #original_hash: b9bea79
+      confirm_publish: 'Vas a hacer público el registro de este incidente, ¿estás seguro?'
+      #original_hash: f683adb
+      confirm_unpublish: 'Vas a ocultar el registro de este incidente, ¿estás seguro?'
+      #original_hash: 02e27c6
+      confirm_destroy: ¿Estás seguro de que quieres borrar este incidente?
+      #original_hash: 8fa3ce7
+      publish_error: No se ha podido publicar este incidente
+      #original_hash: 229c8ce
+      unpublish_error: No se ha podido ocultar este incidente.
+      #original_hash: e332db5
+      destroy_error: No se ha podido eliminar este incidente
   about_regulations:
     #original_hash: 6bce1b5
     title: Sobre el Reglamento

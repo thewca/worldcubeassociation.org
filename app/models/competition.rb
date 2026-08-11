@@ -110,6 +110,7 @@ class Competition < ApplicationRecord
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
   scope :results_posted, -> { where.not(results_posted_at: nil).where.not(results_posted_by: nil) }
+  scope :pending_results_submission, -> { not_cancelled.visible.where(results_submitted_at: nil, end_date: ..Date.today) }
 
   enum :guest_entry_status, {
     unclear: 0,
@@ -1647,13 +1648,6 @@ class Competition < ApplicationRecord
         sort_by: sort_by,
         sort_by_second: sort_by_second,
       )
-    end
-  end
-
-  # For associated_events_picker
-  def events_to_associated_events(events)
-    events.map do |event|
-      competition_events.find_by(event_id: event.id) || competition_events.build(event_id: event.id)
     end
   end
 
