@@ -53,10 +53,51 @@ RSpec.describe "API Incidents" do
       end
     end
 
+    context "when authenticated with an OAuth token as a Delegate" do
+      before { api_sign_in_as(create(:delegate)) }
+
+      it "returns the private fields of a resolved incident" do
+        get api_v0_incident_path(resolved_incident)
+
+        expect(response).to be_successful
+        expect(response.parsed_body["private_description"]).to eq resolved_incident.private_description
+        expect(response.parsed_body["private_wrc_decision"]).to eq resolved_incident.private_wrc_decision
+      end
+    end
+
     it "returns not found for an unknown incident" do
       get api_v0_incident_path(id: 0)
 
       expect(response).to have_http_status :not_found
+    end
+  end
+
+  describe "GET /api/v0/incidents" do
+    context "when authenticated with an OAuth token as a WRC member" do
+      before { api_sign_in_as(create(:user, :wrc_member)) }
+
+      it "lists pending incidents with their private fields" do
+        pending_incident
+
+        get api_v0_incidents_path
+
+        expect(response).to be_successful
+        expect(response.parsed_body.pluck("id")).to include(pending_incident.id)
+        expect(response.parsed_body.first["private_wrc_decision"]).to eq pending_incident.private_wrc_decision
+      end
+    end
+
+    context "when logged out" do
+      it "lists only resolved incidents without their private fields" do
+        resolved_incident
+        pending_incident
+
+        get api_v0_incidents_path
+
+        expect(response).to be_successful
+        expect(response.parsed_body.pluck("id")).to contain_exactly(resolved_incident.id)
+        expect(response.parsed_body.first).not_to have_key("private_wrc_decision")
+      end
     end
   end
 
