@@ -1446,6 +1446,8 @@ en:
         close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
+        #context: tooltip on an icon next to competitors who don't have a WCA ID yet
+        first_timer: "First-timer"
         edit: "Edit"
         results: "Results"
         registration: "Registration"
