@@ -632,18 +632,20 @@ RSpec.describe "registrations" do
 
         it "successfully converts valid JSON to registration data and only includes accepted registrations" do
           allow(JSON::Validator).to receive(:validate).and_return(true)
-          file = json_file({
-            "persons" => [
-              {
-                "name" => "Sherlock Holmes",
-                "registration" => { "status" => "accepted", "eventIds" => ["333"] },
-              },
-              {
-                "name" => "John Watson",
-                "registration" => { "status" => "pending", "eventIds" => ["333"] },
-              },
-            ],
-          })
+          file = json_file(
+            {
+              "persons" => [
+                {
+                  "name" => "Sherlock Holmes",
+                  "registration" => { "status" => "accepted", "eventIds" => ["333"] },
+                },
+                {
+                  "name" => "John Watson",
+                  "registration" => { "status" => "pending", "eventIds" => ["333"] },
+                },
+              ],
+            },
+          )
 
           post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
 

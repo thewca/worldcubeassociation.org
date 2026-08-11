@@ -7,6 +7,10 @@ class RegistrationsController < ApplicationController
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
+  rescue_from JSON::Schema::ValidationError do |_e|
+    render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.invalid_wcif") }
+  end
+
   private def competition_from_params
     competition = if params[:competition_id].present?
                     Competition.find(params.require(:competition_id))
@@ -133,7 +137,7 @@ class RegistrationsController < ApplicationController
   private def parse_json_to_registration_data(file_path)
     wcif = JSON.parse(File.read(file_path))
 
-    return render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.invalid_wcif") } unless JSON::Validator.validate(Competition.wcif_json_schema, wcif)
+    Competition.validate_wcif_schema!(wcif)
 
     wcif["persons"].select do |person|
       person.dig("registration", "status") == "accepted"
