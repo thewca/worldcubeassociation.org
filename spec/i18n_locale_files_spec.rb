@@ -16,6 +16,34 @@ RSpec.describe "Locale files content" do
   end
 end
 
+RSpec.describe "Non-CLDR plural forms" do
+  # Rails' i18n backend checks for a `zero` entry before consulting any plural
+  # rule, so `zero:` is an exact-zero text override rather than a grammatical
+  # form. CLDR does define a `zero` category, but only for languages whose
+  # grammar needs one (Arabic, Welsh, Latvian), and none of ours do — so
+  # tooling that normalises plurals to the target language's CLDR forms drops
+  # these silently. When a string needs different wording at zero, give it its
+  # own key (see `spots_left_none`) and branch on the count at the call site.
+  Rails.root.glob("config/locales/*.yml").each do |locale_file|
+    it "#{locale_file.basename} has no `zero` plural entries" do
+      offenders = []
+
+      collect = lambda do |node, path|
+        return unless node.is_a?(Hash)
+
+        node.each do |key, value|
+          offenders << (path + [key]).join(".") if key == "zero"
+          collect.call(value, path + [key])
+        end
+      end
+
+      collect.call(YAML.unsafe_load_file(locale_file), [])
+
+      expect(offenders).to be_empty
+    end
+  end
+end
+
 RSpec.describe "Momentjs activation" do
   locale_mappings = { "es-es" => "es", "es-419" => "es-mx" }
 
