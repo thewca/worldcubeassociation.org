@@ -102,7 +102,12 @@ SimpleForm.setup do |config|
   # config.item_wrapper_class = nil
 
   # How the label text should be generated altogether with the required text.
-  # config.label_text = lambda { |label, required, explicit_label| "#{required} #{label}" }
+  # WCA shows no required marker. This used to be done by setting
+  # `simple_form.required.html` to an empty string in every locale file, which
+  # only worked because simple_form falls back to `<abbr title="required">*</abbr>`
+  # when that key is absent. Dropping the marker here instead means the locale
+  # files do not have to carry a blank entry in all 33 languages.
+  config.label_text = ->(label, _required, _explicit_label) { label }
 
   # You can define the class to use on all labels. Default is nil.
   # config.label_class = nil

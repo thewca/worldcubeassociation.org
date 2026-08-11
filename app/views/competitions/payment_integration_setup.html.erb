@@ -78,7 +78,9 @@
       <h2><%= t('payments.payment_setup.provider_heading', provider: t("payments.payment_providers.#{type}")) %></h2>
 
       <p>
-        <b><%= t("payments.payment_setup.connect_account_warning.#{type}") %></b>
+        <%# Not every provider has a warning (manual has none), so render nothing
+            rather than "Translation missing: ...". %>
+        <b><%= t("payments.payment_setup.connect_account_warning.#{type}", default: "") %></b>
       </p>
       <p>
         <%= t("payments.payment_setup.connect_account_info.#{type}") %>
