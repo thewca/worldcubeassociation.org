@@ -73,25 +73,25 @@ RSpec.describe "API Incidents" do
   end
 
   describe "GET /api/v0/incidents" do
+    # The index has to have both kinds on record before it runs, so unlike the `show` specs
+    # above these cannot be lazy.
+    let!(:resolved_incident) { create(:incident, :resolved) }
+    let!(:pending_incident) { create(:incident) }
+
     context "when authenticated with an OAuth token as a WRC member" do
       before { api_sign_in_as(create(:user, :wrc_member)) }
 
       it "lists pending incidents with their private fields" do
-        pending_incident
-
         get api_v0_incidents_path
 
         expect(response).to be_successful
-        expect(response.parsed_body.pluck("id")).to include(pending_incident.id)
-        expect(response.parsed_body.first["private_wrc_decision"]).to eq pending_incident.private_wrc_decision
+        listed_incident = response.parsed_body.find { it["id"] == pending_incident.id }
+        expect(listed_incident["private_wrc_decision"]).to eq pending_incident.private_wrc_decision
       end
     end
 
     context "when logged out" do
       it "lists only resolved incidents without their private fields" do
-        resolved_incident
-        pending_incident
-
         get api_v0_incidents_path
 
         expect(response).to be_successful
