@@ -52,6 +52,9 @@ properties:
         type: string
       admin_comment:
         type: string
+      # only when the registration is on the waiting list
+      waiting_list_position:
+        type: integer
   # only when authenticated
   payment:
     type: object

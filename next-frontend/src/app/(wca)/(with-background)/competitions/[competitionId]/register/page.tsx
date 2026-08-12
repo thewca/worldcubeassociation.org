@@ -18,6 +18,19 @@ const fetchConfig = cache(async (authToken: string, competitionId: string) => {
   );
 });
 
+const fetchRegistration = cache(
+  async (authToken: string, competitionId: string, userId: number) => {
+    const client = serverClientWithToken(authToken);
+
+    return await client.GET(
+      "/v1/competitions/{competitionId}/registrations/{userId}",
+      {
+        params: { path: { competitionId, userId } },
+      },
+    );
+  },
+);
+
 export default async function RegisterPage({
   params,
 }: {
@@ -30,6 +43,19 @@ export default async function RegisterPage({
       <Alert.Root>
         <Alert.Indicator />
         <Alert.Content>You need to log in first</Alert.Content>
+      </Alert.Root>
+    );
+  }
+
+  // Sessions minted before the WCA user id was carried through the token cannot address the
+  //   user-scoped registration API, and signing in again is what mints a token that can.
+  if (session.wcaUserId === undefined || Number.isNaN(session.wcaUserId)) {
+    return (
+      <Alert.Root status="warning">
+        <Alert.Indicator />
+        <Alert.Content>
+          Your session is out of date. Please sign out and sign in again.
+        </Alert.Content>
       </Alert.Root>
     );
   }
@@ -50,6 +76,20 @@ export default async function RegisterPage({
     return "Something went wrong while fetching";
   }
 
+  const registrationResponse = await fetchRegistration(
+    session.accessToken,
+    competitionId,
+    session.wcaUserId,
+  );
+
+  // A 404 is how the backend says "this user has not registered yet", which is a normal state here.
+  if (
+    registrationResponse.error &&
+    registrationResponse.response.status !== 404
+  ) {
+    return "Something went wrong while fetching your registration";
+  }
+
   return (
     <VStack>
       <Box width="full" asChild>
@@ -68,25 +108,12 @@ export default async function RegisterPage({
         </Card.Root>
       )}
       <Card.Root width="full">
-        <Card.Header>
-          <Alert.Root status="error">
-            <Alert.Indicator />
-            <Alert.Content>
-              <Alert.Title>
-                This is NOT the real registration panel!!
-              </Alert.Title>
-              <Alert.Description>
-                You are currently viewing the demo of an upcoming website
-                redesign. Any data submitted here will NOT allow you to actually
-                compete!
-              </Alert.Description>
-            </Alert.Content>
-          </Alert.Root>
-        </Card.Header>
         <Card.Body>
           <StepPanel
             steps={stepConfig.data}
             competitionInfo={competitionInfo}
+            userId={session.wcaUserId}
+            initialRegistration={registrationResponse.data ?? null}
           />
         </Card.Body>
       </Card.Root>

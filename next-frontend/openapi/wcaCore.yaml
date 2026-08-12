@@ -13,7 +13,14 @@ servers:
     description: The production API server
 paths:
   /v1/competitions/{competitionId}/registrations:
-    $ref: 'paths/registrations/registrationsByCompetition.yaml'
+    get:
+      $ref: 'paths/registrations/registrationsByCompetition.yaml#/get'
+    post:
+      $ref: 'paths/registrations/createRegistration.yaml'
+  /v1/competitions/{competitionId}/registrations/{userId}:
+    $ref: 'paths/registrations/registrationByUser.yaml'
+  /v1/registrations/{registrationId}:
+    $ref: 'paths/registrations/updateRegistration.yaml'
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
 
