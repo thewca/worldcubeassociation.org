@@ -410,6 +410,7 @@ Rails.application.routes.draw do
 
         member do
           get 'registration_config', to: 'registrations#registration_config', as: :registration_config
+          get 'registration_eligibility', to: 'registrations#registration_eligibility', as: :registration_eligibility
         end
       end
     end

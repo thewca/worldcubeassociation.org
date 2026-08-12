@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
-import StepPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
+import RegistrationPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/RegistrationPanel";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import RegistrationRequirementsCard from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/RegistrationRequirementsCard";
 import { ChakraMarkdown } from "@/components/Markdown";
@@ -26,6 +26,19 @@ const fetchRegistration = cache(
       "/v1/competitions/{competitionId}/registrations/{userId}",
       {
         params: { path: { competitionId, userId } },
+      },
+    );
+  },
+);
+
+const fetchEligibility = cache(
+  async (authToken: string, competitionId: string) => {
+    const client = serverClientWithToken(authToken);
+
+    return await client.GET(
+      "/v1/competitions/{competitionId}/registration_eligibility",
+      {
+        params: { path: { competitionId } },
       },
     );
   },
@@ -90,6 +103,15 @@ export default async function RegisterPage({
     return "Something went wrong while fetching your registration";
   }
 
+  const eligibility = await fetchEligibility(
+    session.accessToken,
+    competitionId,
+  );
+
+  if (eligibility.error) {
+    return "Something went wrong while checking whether you can register";
+  }
+
   return (
     <VStack>
       <Box width="full" asChild>
@@ -109,9 +131,10 @@ export default async function RegisterPage({
       )}
       <Card.Root width="full">
         <Card.Body>
-          <StepPanel
+          <RegistrationPanel
             steps={stepConfig.data}
             competitionInfo={competitionInfo}
+            eligibility={eligibility.data}
             userId={session.wcaUserId}
             initialRegistration={registrationResponse.data ?? null}
           />

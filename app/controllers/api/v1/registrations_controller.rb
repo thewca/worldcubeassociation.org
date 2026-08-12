@@ -81,6 +81,21 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     render json: competition.available_registration_lanes(@current_user)
   end
 
+  # Everything the register page needs to decide whether it may show the registration form at all,
+  # and which blocker to explain to the user if not.
+  def registration_eligibility
+    competition = Competition.find(params.require(:id))
+    is_banned = @current_user.banned_at_date?(competition.start_date)
+
+    render json: {
+      can_pre_register: competition.user_can_pre_register?(@current_user),
+      banned: is_banned,
+      banned_until: is_banned ? @current_user.ban_end : nil,
+      missing_profile_fields: @current_user.missing_registration_profile_fields,
+      waiting_list_count: competition.registrations.waitlisted.count,
+    }
+  end
+
   def create
     # Currently we only have one lane
     if params[:competing]

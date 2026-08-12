@@ -26,7 +26,6 @@ import type {
   RegistrationFormValues,
 } from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
 import { LuSend } from "react-icons/lu";
-import { DateTime } from "luxon";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type CompetingStepParameters =
@@ -90,11 +89,6 @@ export default function CompetingStep({
     registration !== null && !hasWithdrawn && !canEditRegistration;
 
   const warnings = [];
-  if (DateTime.fromISO(competitionInfo.registration_open) > DateTime.now()) {
-    warnings.push(
-      t("competitions.registration_v2.register.early_registration"),
-    );
-  }
   if (parameters.events_per_registration_limit) {
     warnings.push(
       t("competitions.registration_v2.register.event_limit", {

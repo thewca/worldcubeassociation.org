@@ -151,13 +151,19 @@ export default function StepPanel({
   const form = useRegistrationForm(registrationFormValues(registration));
 
   const competingStatus = registration?.competing.registration_status;
+  const isRejected = competingStatus === "rejected";
+  const isAccepted = competingStatus === "accepted";
+  const isWaitlisted = competingStatus === "waiting_list";
   const isRegistered = registration !== null && competingStatus !== "cancelled";
 
   const isStepComplete: Record<StepKey, boolean> = {
     requirements: hasAcknowledgedRequirements || isRegistered,
     competing: isRegistered,
-    payment: registration?.payment?.has_paid ?? false,
-    approval: competingStatus === "accepted",
+    // Organizers accepting or waitlisting someone settles the payment question for the purposes
+    //   of navigation: their fee has been waived, or is being collected some other way.
+    payment:
+      (registration?.payment?.has_paid ?? false) || isAccepted || isWaitlisted,
+    approval: isAccepted,
   };
 
   const firstIncompleteStep = steps.findIndex(
@@ -167,7 +173,44 @@ export default function StepPanel({
   //   `count` as "the whole flow is completed".
   const furthestOpenStep =
     firstIncompleteStep === -1 ? steps.length : firstIncompleteStep;
-  const activeStep = pinnedStep ?? furthestOpenStep;
+
+  // A rejected competitor is sent straight to the outcome, since it is the only step they may see.
+  const approvalStep = steps.findIndex((step) => step.key === "approval");
+  const defaultStep =
+    isRejected && approvalStep !== -1 ? approvalStep : furthestOpenStep;
+
+  const activeStep = pinnedStep ?? defaultStep;
+
+  const isStepDisabled = (step: StepConfig, index: number) => {
+    // A rejected competitor has nothing left to do but read the outcome.
+    if (isRejected) {
+      return step.key !== "approval";
+    }
+
+    // Approval doubles as the registration summary, so it is reachable as soon as there is a
+    //   registration to summarise - including before paying, so that competitors can check and
+    //   correct their events first.
+    if (step.key === "approval") {
+      return !isRegistered;
+    }
+
+    if (index === activeStep) {
+      return false;
+    }
+
+    if (index < activeStep) {
+      const earlierStepIncomplete = steps
+        .slice(0, index)
+        .some((earlier) => !isStepComplete[earlier.key]);
+
+      return (
+        (isStepComplete[step.key] && !step.isEditable) || earlierStepIncomplete
+      );
+    }
+
+    // Still ahead of the competitor: only reachable if they are done with it and may revise it.
+    return !(isStepComplete[step.key] && step.isEditable);
+  };
 
   const submitRegistration = ({
     comment,
@@ -204,7 +247,6 @@ export default function StepPanel({
       case "requirements":
         return (
           <RequirementsStep
-            competitionInfo={competitionInfo}
             hasAcknowledged={hasAcknowledgedRequirements}
             onAcknowledgedChange={setHasAcknowledgedRequirements}
             onContinue={() => setPinnedStep(activeStep + 1)}
@@ -255,15 +297,9 @@ export default function StepPanel({
           const stepTranslationLookup = `competitions.registration_v2.register.panel.${step.key}`;
           const stepTitle = t(`${stepTranslationLookup}.title`);
 
-          // A step can be revisited while it is still open for changes, but steps beyond the one
-          //   that needs attention are locked until the earlier ones are done.
-          const isDisabled =
-            index > furthestOpenStep ||
-            (isStepComplete[step.key] && !step.isEditable);
-
           return (
             <Steps.Item key={step.key} index={index} title={stepTitle}>
-              <Steps.Trigger disabled={isDisabled}>
+              <Steps.Trigger disabled={isStepDisabled(step, index)}>
                 <Steps.Indicator />
                 <Box>
                   <Steps.Title>{stepTitle}</Steps.Title>

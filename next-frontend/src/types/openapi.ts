@@ -81,6 +81,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/registration_eligibility": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the current user's eligibility to register for a competition
+         * @description Whether the calling user may be shown the registration form at all, and which blocker to
+         *     explain to them if not. Complements `registrationConfig`, which describes the steps
+         *     themselves.
+         */
+        get: operations["registrationEligibility"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/scoretakers": {
         parameters: {
             query?: never;
@@ -1131,6 +1153,21 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
+        RegistrationEligibility: {
+            /** @description Whether the user may register before registration opens, i.e. is a delegate or organizer of this competition */
+            can_pre_register: boolean;
+            /** @description Whether the user is still banned on the day the competition starts */
+            banned: boolean;
+            /**
+             * Format: date
+             * @description When the ban lapses, or null for an indefinite ban
+             */
+            banned_until?: string | null;
+            /** @description Profile fields the user has to fill in before they can register */
+            missing_profile_fields: ("name" | "gender" | "dob" | "country_iso2")[];
+            /** @description How many competitors are currently on the waiting list */
+            waiting_list_count: number;
+        };
         Scoretaker: {
             user_id: number;
             name: string;
@@ -2257,6 +2294,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RegistrationConfig"][];
+                };
+            };
+        };
+    };
+    registrationEligibility: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationEligibility"];
                 };
             };
         };
