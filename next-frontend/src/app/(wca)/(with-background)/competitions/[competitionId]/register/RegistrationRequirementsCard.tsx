@@ -78,11 +78,17 @@ export default function RegistrationRequirementsCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <SpotsLeftIcon />
-              Number of Registrations
+              Spots Left
             </Stat.Label>
             <Stat.ValueText>
-              <FormatNumber value={0} />/
-              <FormatNumber value={competitionInfo.competitor_limit} />
+              {competitionInfo.spots_left == null ? (
+                "No competitor limit"
+              ) : (
+                <>
+                  <FormatNumber value={competitionInfo.spots_left} />/
+                  <FormatNumber value={competitionInfo.competitor_limit} />
+                </>
+              )}
             </Stat.ValueText>
           </Stat.Root>
 
@@ -138,9 +144,11 @@ export default function RegistrationRequirementsCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <PaymentIcon />
-              Payment
+              Online Payment
             </Stat.Label>
-            <Stat.ValueText>API Needed</Stat.ValueText>
+            <Stat.ValueText>
+              {competitionInfo["using_payment_integrations?"] ? "Yes" : "No"}
+            </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>
       </Card.Body>
