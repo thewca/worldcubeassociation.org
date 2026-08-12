@@ -1,11 +1,20 @@
 # frozen_string_literal: true
 
 class Api::V1::ApiController < ApplicationController
+  protect_from_forgery with: :null_session
+
   prepend_before_action :require_user!
 
   def require_user!
     @current_user = current_user || api_user
     raise WcaExceptions::MustLogIn.new if @current_user.nil?
+  end
+
+  # Requests authenticated by a session cookie (i.e. our own Rails frontend) carry no token and
+  # so have no scopes to check. A request that authenticated with an OAuth token, on the other
+  # hand, may only do what that token was explicitly granted.
+  def token_has_scope?(scope)
+    doorkeeper_token.blank? || doorkeeper_token.scopes.include?(scope)
   end
 
   def require_manage!(competition)
