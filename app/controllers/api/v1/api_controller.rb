@@ -3,19 +3,24 @@
 class Api::V1::ApiController < ApplicationController
   prepend_before_action :require_user!
 
+  # Deliberately not `@current_user`: Devise memoises its own session-based user into that
+  # variable and wipes it whenever it handles an unverified request (see
+  # `Devise::Controllers::Helpers#handle_unverified_request`, which signs out every scope). A
+  # token-authenticated request that trips CSRF would otherwise lose the user we just resolved
+  # and blow up further down the callback chain.
   def require_user!
-    @current_user = current_user || api_user
-    raise WcaExceptions::MustLogIn.new if @current_user.nil?
+    @authenticated_user = current_user || api_user
+    raise WcaExceptions::MustLogIn.new if @authenticated_user.nil?
   end
 
   def require_manage!(competition)
     require_user!
-    raise WcaExceptions::NotPermitted.new("Organizer privileges required") unless @current_user.can_manage_competition?(competition)
+    raise WcaExceptions::NotPermitted.new("Organizer privileges required") unless @authenticated_user.can_manage_competition?(competition)
   end
 
   def require_scoretake!(competition)
     require_user!
-    raise WcaExceptions::NotPermitted.new("Score taking privileges required") unless @current_user.can_scoretake_competition?(competition)
+    raise WcaExceptions::NotPermitted.new("Score taking privileges required") unless @authenticated_user.can_scoretake_competition?(competition)
   end
 
   def api_user
