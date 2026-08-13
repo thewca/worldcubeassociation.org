@@ -1,7 +1,8 @@
 "use client";
 
-import { Box, Steps } from "@chakra-ui/react";
+import { Steps } from "@chakra-ui/react";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
+import StepList from "@/components/competitions/Registration/StepList";
 import type { components } from "@/types/openapi";
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
@@ -304,33 +305,17 @@ export default function StepPanel({
   };
 
   return (
-    <Steps.Root
-      count={steps.length}
-      colorPalette="blue"
-      step={activeStep}
-      onStepChange={({ step }) => setPinnedStep(step)}
-    >
-      <Steps.List>
-        {steps.map((step, index) => {
-          const stepTranslationLookup = `competitions.registration_v2.register.panel.${step.key}`;
-          const stepTitle = t(`${stepTranslationLookup}.title`);
-
-          return (
-            <Steps.Item key={step.key} index={index} title={stepTitle}>
-              <Steps.Trigger disabled={isStepDisabled(step, index)}>
-                <Steps.Indicator />
-                <Box>
-                  <Steps.Title>{stepTitle}</Steps.Title>
-                  <Steps.Description>
-                    {t(`${stepTranslationLookup}.description`)}
-                  </Steps.Description>
-                </Box>
-              </Steps.Trigger>
-              <Steps.Separator />
-            </Steps.Item>
-          );
-        })}
-      </Steps.List>
+    // `Steps` is kept only for switching panels: it decides which `Content` is visible from
+    //   `step`, and shows `CompletedContent` once that reaches `count`. Navigation and the step
+    //   strip itself are ours, because the machine's notion of "complete" is positional.
+    <Steps.Root count={steps.length} colorPalette="blue" step={activeStep}>
+      <StepList
+        steps={steps}
+        activeStep={activeStep}
+        isStepComplete={isStepComplete}
+        isStepDisabled={isStepDisabled}
+        onStepSelect={setPinnedStep}
+      />
 
       {steps.map((step, index) => (
         <Steps.Content key={step.key} index={index}>
