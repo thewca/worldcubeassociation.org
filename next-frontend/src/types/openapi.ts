@@ -1153,6 +1153,20 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
+        };
         RegistrationEligibility: {
             /** @description Whether the user may register before registration opens, i.e. is a delegate or organizer of this competition */
             can_pre_register: boolean;
@@ -1339,20 +1353,6 @@ export interface components {
         };
         BatchSubmitLiveResult: {
             results: components["schemas"]["SubmitLiveResult"][];
-        };
-        General404: {
-            error: string;
-            data: {
-                model: string;
-                id: string;
-            };
-        };
-        Competition404: components["schemas"]["General404"] & {
-            data?: {
-                /** @enum {string} */
-                model: "Competition";
-                id: string;
-            };
         };
         UserAvatar: {
             /**
@@ -2119,6 +2119,15 @@ export interface components {
                 };
             };
         };
+        /** @description Competition not found */
+        CompetitionNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Competition404"];
+            };
+        };
         /** @description Organizer privileges required */
         NotPermitted: {
             headers: {
@@ -2128,15 +2137,6 @@ export interface components {
                 "application/json": {
                     error: string;
                 };
-            };
-        };
-        /** @description Competition not found */
-        CompetitionNotFound: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["Competition404"];
             };
         };
         /** @description Incident not found, or not visible to the current user */
@@ -2296,6 +2296,8 @@ export interface operations {
                     "application/json": components["schemas"]["RegistrationConfig"][];
                 };
             };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     registrationEligibility: {
@@ -2318,6 +2320,8 @@ export interface operations {
                     "application/json": components["schemas"]["RegistrationEligibility"];
                 };
             };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     listScoretakers: {

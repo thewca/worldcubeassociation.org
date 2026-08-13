@@ -6,6 +6,8 @@ import RegistrationPanel from "@/app/(wca)/(with-background)/competitions/[compe
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import RegistrationRequirementsCard from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/RegistrationRequirementsCard";
 import { ChakraMarkdown } from "@/components/Markdown";
+import OpenapiError from "@/components/ui/openapiError";
+import { getT } from "@/lib/i18n/get18n";
 
 const fetchConfig = cache(async (authToken: string, competitionId: string) => {
   const client = serverClientWithToken(authToken);
@@ -49,6 +51,7 @@ export default async function RegisterPage({
 }: {
   params: Promise<{ competitionId: string }>;
 }) {
+  const { t } = await getT();
   const session = await auth();
 
   if (session === null) {
@@ -78,7 +81,7 @@ export default async function RegisterPage({
   const competitionInfoResponse = await getCompetitionInfo(competitionId);
 
   if (competitionInfoResponse.error) {
-    return "Something went wrong: The competition does not exist";
+    return <OpenapiError t={t} response={competitionInfoResponse.response} />;
   }
 
   const competitionInfo = competitionInfoResponse.data;
@@ -86,7 +89,7 @@ export default async function RegisterPage({
   const stepConfig = await fetchConfig(session.accessToken, competitionId);
 
   if (stepConfig.error) {
-    return "Something went wrong while fetching";
+    return <OpenapiError t={t} response={stepConfig.response} />;
   }
 
   const registrationResponse = await fetchRegistration(
@@ -100,7 +103,7 @@ export default async function RegisterPage({
     registrationResponse.error &&
     registrationResponse.response.status !== 404
   ) {
-    return "Something went wrong while fetching your registration";
+    return <OpenapiError t={t} response={registrationResponse.response} />;
   }
 
   const eligibility = await fetchEligibility(
@@ -109,7 +112,7 @@ export default async function RegisterPage({
   );
 
   if (eligibility.error) {
-    return "Something went wrong while checking whether you can register";
+    return <OpenapiError t={t} response={eligibility.response} />;
   }
 
   return (
