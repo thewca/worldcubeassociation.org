@@ -4,7 +4,7 @@ import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import RegistrationPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/RegistrationPanel";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
-import RegistrationRequirementsCard from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/RegistrationRequirementsCard";
+import { RegistrationCard } from "@/components/competitions/Cards";
 import { ChakraMarkdown } from "@/components/Markdown";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
@@ -118,7 +118,7 @@ export default async function RegisterPage({
   return (
     <VStack>
       <Box width="full" asChild>
-        <RegistrationRequirementsCard competitionInfo={competitionInfo} />
+        <RegistrationCard competitionInfo={competitionInfo} columns={3} />
       </Box>
       {competitionInfo.extra_registration_requirements && (
         <Card.Root width="full">

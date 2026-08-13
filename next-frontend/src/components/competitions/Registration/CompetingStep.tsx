@@ -88,17 +88,21 @@ export default function CompetingStep({
   const isEditingLocked =
     registration !== null && !hasWithdrawn && !canEditRegistration;
 
-  const warnings = [];
-  if (parameters.events_per_registration_limit) {
-    warnings.push(
+  const warnings = [
+    parameters.events_per_registration_limit &&
       t("competitions.registration_v2.register.event_limit", {
         max_events: parameters.events_per_registration_limit,
       }),
-    );
-  }
-  if (competitionInfo["part_of_competition_series?"]) {
-    warnings.push(t("competitions.competition_info.part_of_a_series"));
-  }
+    competitionInfo["part_of_competition_series?"] &&
+      t("competitions.competition_info.part_of_a_series"),
+  ].filter((warning) => typeof warning === "string");
+
+  const selectableEventIds = parameters.event_ids.filter(
+    (eventId) => !eventsDisabled.includes(eventId),
+  );
+
+  const qualificationFor = (eventId: string) =>
+    qualificationToString(t, parameters.qualification_wcif[eventId], eventId);
 
   const submitLabel =
     registration === null || hasWithdrawn
@@ -160,25 +164,13 @@ export default function CompetingStep({
                 selectedEvents={field.state.value}
                 maxEvents={maxEvents}
                 eventsDisabled={eventsDisabled}
-                disabledText={(eventId) =>
-                  qualificationToString(
-                    t,
-                    parameters.qualification_wcif[eventId],
-                    eventId,
-                  )
-                }
+                disabledText={qualificationFor}
                 onEventClick={(eventId) =>
                   field.handleChange((prevSelected) =>
                     toggleEvent(eventId, prevSelected),
                   )
                 }
-                onAllClick={() =>
-                  field.handleChange(
-                    parameters.event_ids.filter(
-                      (eventId) => !eventsDisabled.includes(eventId),
-                    ),
-                  )
-                }
+                onAllClick={() => field.handleChange(selectableEventIds)}
                 onClearClick={() => field.handleChange([])}
               />
               <Fieldset.ErrorText>

@@ -65,6 +65,8 @@ export default function StepPanel({
   steps: StepConfig[];
   competitionInfo: CompetitionInfo;
   userId: number;
+  // `null` rather than `undefined` for "not registered": react-query reads `initialData:
+  //   undefined` as "no initial data" and refetches on mount, throwing away the server fetch.
   initialRegistration: Registration | null;
 }) {
   const { t } = useT();

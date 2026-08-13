@@ -1,5 +1,7 @@
 const POLL_URL = process.env.NEXT_PUBLIC_REGISTRATIONS_POLL_URL;
 
+// Hand-written rather than generated: the queue is a separate service and is not described by
+// our OpenAPI spec.
 export interface RegistrationQueueStatus {
   processing: boolean;
   queue_count?: number;

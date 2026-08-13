@@ -1027,10 +1027,10 @@ export interface components {
                 waiting_list_position?: number;
             };
             payment?: {
-                has_paid?: boolean;
+                has_paid: boolean;
                 payment_status?: string;
-                paid_amount_iso?: number;
-                currency_code?: string;
+                paid_amount_iso: number;
+                currency_code: string;
                 /** Format: datetime */
                 updated_at?: string;
             };

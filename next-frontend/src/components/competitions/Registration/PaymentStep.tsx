@@ -1,7 +1,8 @@
 "use client";
 
-import { Alert, FormatNumber, Link, Stack, Text } from "@chakra-ui/react";
+import { Alert, Link, Stack, Text } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
+import CurrencyValue from "@/components/CurrencyValue";
 import type { components } from "@/types/openapi";
 import { DateTime } from "luxon";
 
@@ -30,10 +31,9 @@ export default function PaymentStep({
             {t("registrations.payment_form.labels.fees_paid")}
           </Alert.Title>
           <Alert.Description>
-            <FormatNumber
-              value={(payment.paid_amount_iso ?? 0) / 100}
-              style="currency"
-              currency={payment.currency_code ?? competitionInfo.currency_code}
+            <CurrencyValue
+              lowestDenomination={payment.paid_amount_iso}
+              currencyCode={payment.currency_code}
             />
           </Alert.Description>
         </Alert.Content>

@@ -115,7 +115,11 @@ export default function RegistrationOverview({
           <DataList.ItemLabel>
             {t("activerecord.attributes.registration.guests")}
           </DataList.ItemLabel>
-          <DataList.ItemValue>{registration.guests ?? 0}</DataList.ItemValue>
+          <DataList.ItemValue>
+            {/* `guests` is only serialised on the authenticated variant of this payload, which
+                is the only one this panel is ever handed. */}
+            {registration.guests ?? 0}
+          </DataList.ItemValue>
         </DataList.Item>
         {registration.competing.registered_on && (
           <DataList.Item>

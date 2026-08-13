@@ -85,11 +85,10 @@ export default function RegistrationPanel({
   const isPreRegistering =
     eligibility.can_pre_register && !registrationHasOpened;
 
+  const initialStatus = initialRegistration?.competing.registration_status;
   const hasViewableRegistration =
-    initialRegistration !== null &&
-    VIEWABLE_REGISTRATION_STATES.includes(
-      initialRegistration.competing.registration_status ?? "",
-    );
+    initialStatus !== undefined &&
+    VIEWABLE_REGISTRATION_STATES.includes(initialStatus);
 
   const showPanel =
     (registrationHasOpened && registrationHasNotClosed) ||

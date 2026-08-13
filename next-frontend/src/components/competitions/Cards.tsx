@@ -5,9 +5,7 @@ import {
   Heading,
   SimpleGrid,
   Text,
-  HStack,
   Stat,
-  Badge,
   Wrap,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
@@ -17,6 +15,9 @@ import CountryMap from "@/components/CountryMap";
 import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
 import { components } from "@/types/openapi";
 import { TFunction } from "i18next";
+import { getT } from "@/lib/i18n/get18n";
+import { DateTime } from "luxon";
+import CurrencyValue from "@/components/CurrencyValue";
 import PaymentIcon from "@/components/icons/PaymentIcon";
 import SpotsLeftIcon from "@/components/icons/SpotsLeftIcon";
 import SpectatorsIcon from "@/components/icons/SpectatorsIcon";
@@ -167,113 +168,114 @@ export function RefundPolicyCard({
   );
 }
 
-export function RegistrationCard({
+export async function RegistrationCard({
   competitionInfo,
+  columns = 2,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
+  columns?: number;
 }) {
-  const regoOpenDate = new Date(competitionInfo.registration_open);
-  const regoClosedDate = new Date(competitionInfo.registration_close);
+  const { t } = await getT();
 
-  const formattedRegoOpenDate = regoOpenDate.toLocaleString(
-    "en-US",
-    dateFormat,
-  );
-  const formattedRegoClosedDate = regoClosedDate.toLocaleString(
-    "en-US",
-    dateFormat,
-  );
+  const formatDateTime = (isoDateTime: string) =>
+    DateTime.fromISO(isoDateTime).toLocaleString(DateTime.DATETIME_FULL);
 
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">Registration</Card.Title>
-        <SimpleGrid columns={2} gap="4">
+        <Card.Title textStyle="s4">
+          {t("competitions.nav.menu.registration")}
+        </Card.Title>
+        <SimpleGrid columns={columns} gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <PaymentIcon />
-              Base Registration Fee
-            </Stat.Label>
-            <HStack>
-              <Stat.ValueText>
-                <FormatNumber
-                  value={
-                    competitionInfo.base_entry_fee_lowest_denomination / 100
-                  }
-                  style="currency"
-                  currency={competitionInfo.currency_code}
-                />
-              </Stat.ValueText>
-              <Badge variant="solid">{competitionInfo.currency_code}</Badge>
-            </HStack>
-          </Stat.Root>
-
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <SpotsLeftIcon />
-              Number of Registrations
+              {t(
+                "competitions.competition_form.labels.entry_fees.base_entry_fee",
+              )}
             </Stat.Label>
             <Stat.ValueText>
-              <FormatNumber value={0} />/
-              <FormatNumber value={competitionInfo.competitor_limit} />
+              <CurrencyValue
+                lowestDenomination={
+                  competitionInfo.base_entry_fee_lowest_denomination
+                }
+                currencyCode={competitionInfo.currency_code}
+              />
             </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
-              <SpectatorsIcon />
-              Spectators
+              <SpotsLeftIcon />
+              {t("competitions.competition_info.competitor_limit")}
             </Stat.Label>
             <Stat.ValueText>
-              {competitionInfo.guests_entry_fee_lowest_denomination === 0 ? (
-                "Free"
+              {competitionInfo.spots_left == null ? (
+                t("competitions.competition_info.no_competitor_limit")
               ) : (
-                <HStack>
-                  <FormatNumber
-                    value={
-                      competitionInfo.guests_entry_fee_lowest_denomination / 100
-                    }
-                    style="currency"
-                    currency={competitionInfo.currency_code}
-                  />
-                  <Badge variant="solid">{competitionInfo.currency_code}</Badge>
-                </HStack>
+                <>
+                  <FormatNumber value={competitionInfo.spots_left} />/
+                  <FormatNumber value={competitionInfo.competitor_limit} />
+                </>
               )}
             </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
-              <OnTheSpotRegistrationIcon />
-              On the spot Registration
+              <SpectatorsIcon />
+              {t(
+                "competitions.competition_form.labels.entry_fees.guest_entry_fee",
+              )}
             </Stat.Label>
             <Stat.ValueText>
-              {competitionInfo.on_the_spot_registration ? "Yes" : "No"}
+              {/* A free guest entry formats as a zero amount rather than the word "free",
+                  which has no translation of its own. */}
+              <CurrencyValue
+                lowestDenomination={
+                  competitionInfo.guests_entry_fee_lowest_denomination
+                }
+                currencyCode={competitionInfo.currency_code}
+              />
+            </Stat.ValueText>
+          </Stat.Root>
+
+          <Stat.Root variant="competition">
+            <Stat.Label>
+              <OnTheSpotRegistrationIcon />
+              {t(
+                "competitions.competition_form.labels.registration.allow_on_the_spot",
+              )}
+            </Stat.Label>
+            <Stat.ValueText>
+              {competitionInfo.on_the_spot_registration
+                ? t("simple_form.yes")
+                : t("simple_form.no")}
             </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoOpenDateIcon />
-              Registration Opens
+              {t(
+                "competitions.competition_form.labels.registration.opening_date_time",
+              )}
             </Stat.Label>
-            <Stat.ValueText>{formattedRegoOpenDate}</Stat.ValueText>
+            <Stat.ValueText>
+              {formatDateTime(competitionInfo.registration_open)}
+            </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoCloseDateIcon />
-              Registration Closes
+              {t(
+                "competitions.competition_form.labels.registration.closing_date_time",
+              )}
             </Stat.Label>
-            <Stat.ValueText>{formattedRegoClosedDate}</Stat.ValueText>
-          </Stat.Root>
-
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <PaymentIcon />
-              Payment
-            </Stat.Label>
-            <Stat.ValueText>API Needed</Stat.ValueText>
+            <Stat.ValueText>
+              {formatDateTime(competitionInfo.registration_close)}
+            </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>
       </Card.Body>

@@ -15,7 +15,7 @@ export default function RequirementsStep({
   const { t } = useT();
 
   return (
-    <VStack gap={3}>
+    <VStack gap="3">
       <Checkbox.Root
         variant="solid"
         width="full"

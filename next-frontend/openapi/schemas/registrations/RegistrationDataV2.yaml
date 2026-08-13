@@ -58,6 +58,13 @@ properties:
   # only when authenticated
   payment:
     type: object
+    # The whole object is only serialized for competitions using a payment integration, but when
+    #   it is, these three are always set together. `payment_status` and `updated_at` depend on a
+    #   payment having actually been made.
+    required:
+      - has_paid
+      - paid_amount_iso
+      - currency_code
     properties:
       has_paid:
         type: boolean

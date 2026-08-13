@@ -73,6 +73,7 @@ const asLooseHeading = (
 //   even though CommonMark demands a space after the hashes. Authors write against Redcarpet,
 //   so what they wrote has to keep working here. Only top-level paragraphs are promoted; a
 //   space-less heading nested in a list or quote stays a paragraph.
+// Transformers are handed the tree to edit in place; that is the remark plugin contract.
 const remarkLooseHeadings = () => (tree: MdastRoot) => {
   tree.children = tree.children.map((child) =>
     child.type === "paragraph" ? (asLooseHeading(child) ?? child) : child,
