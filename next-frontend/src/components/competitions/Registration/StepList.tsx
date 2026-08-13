@@ -37,7 +37,17 @@ export default function StepList({
   const { t } = useT();
 
   return (
-    <HStack width="full" align="center" colorPalette="blue">
+    // Four labelled steps do not fit side by side on a phone. Rather than drop the labels - which
+    //   would leave a row of anonymous circles saying nothing once they are all ticked - the strip
+    //   turns into one step per row, the same thing the Semantic UI panel does with
+    //   `stackable="tablet"`.
+    <Stack
+      width="full"
+      colorPalette="blue"
+      direction={{ base: "column", lg: "row" }}
+      align={{ base: "stretch", lg: "center" }}
+      gap={{ base: "4", lg: "0" }}
+    >
       {steps.map((step, index) => {
         const translationKey = `competitions.registration_v2.register.panel.${step.key}`;
         const isComplete = isStepComplete[step.key];
@@ -83,7 +93,9 @@ export default function StepList({
                     index + 1
                   )}
                 </Circle>
-                <Stack gap="0" textAlign="start">
+                {/* `minW` lets a long label shrink rather than push the row wider than the
+                      viewport once the steps sit side by side. */}
+                <Stack gap="0" textAlign="start" minW="0">
                   <Text textStyle="sm" fontWeight="medium" color="fg">
                     {t(`${translationKey}.title`)}
                   </Text>
@@ -96,8 +108,10 @@ export default function StepList({
 
             {index < steps.length - 1 && (
               // The bar leading out of a step is filled once that step itself is done, so the
-              //   strip reads as complete up to wherever the registration actually is.
+              //   strip reads as complete up to wherever the registration actually is. It only
+              //   connects anything while the steps are in a row.
               <Box
+                hideBelow="lg"
                 flex="1"
                 marginX="3"
                 height={INDICATOR_THICKNESS}
@@ -107,6 +121,6 @@ export default function StepList({
           </Fragment>
         );
       })}
-    </HStack>
+    </Stack>
   );
 }
