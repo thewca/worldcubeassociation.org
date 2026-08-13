@@ -5,7 +5,7 @@ import {
   DataList,
   HStack,
   Spinner,
-  Stack,
+  VStack,
   Text,
 } from "@chakra-ui/react";
 import EventIcon from "@/components/EventIcon";
@@ -89,7 +89,7 @@ export default function RegistrationOverview({
   }
 
   return (
-    <Stack>
+    <VStack gap={4} alignItems="start">
       <RegistrationStatus registration={registration} />
       <DataList.Root orientation="horizontal">
         <DataList.Item>
@@ -97,9 +97,11 @@ export default function RegistrationOverview({
             {t("competitions.competition_form.events")}
           </DataList.ItemLabel>
           <DataList.ItemValue>
-            {registration.competing.event_ids.map((eventId) => (
-              <EventIcon key={eventId} eventId={eventId} />
-            ))}
+            <HStack>
+              {registration.competing.event_ids.map((eventId) => (
+                <EventIcon key={eventId} eventId={eventId} size="lg" />
+              ))}
+            </HStack>
           </DataList.ItemValue>
         </DataList.Item>
         <DataList.Item>
@@ -146,6 +148,6 @@ export default function RegistrationOverview({
           </DataList.Item>
         )}
       </DataList.Root>
-    </Stack>
+    </VStack>
   );
 }

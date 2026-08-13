@@ -308,7 +308,12 @@ export default function StepPanel({
     // `Steps` is kept only for switching panels: it decides which `Content` is visible from
     //   `step`, and shows `CompletedContent` once that reaches `count`. Navigation and the step
     //   strip itself are ours, because the machine's notion of "complete" is positional.
-    <Steps.Root count={steps.length} colorPalette="blue" step={activeStep}>
+    <Steps.Root
+      count={steps.length}
+      colorPalette="blue"
+      step={activeStep}
+      gap="8"
+    >
       <StepList
         steps={steps}
         activeStep={activeStep}
