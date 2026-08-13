@@ -12,14 +12,17 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
+import pollRegistrationQueue from "@/lib/wca/registrations/pollRegistrationQueue";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type StepKey = StepConfig["key"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
-// How often we ask the backend whether the registration job has finished.
-const REGISTRATION_POLL_INTERVAL_MS = 2000;
+// How often we ask the queue whether it has worked off our submission yet.
+const QUEUE_POLL_INTERVAL_MS = 3000;
+// Once the queue says it is done, how often we ask Rails for the registration it produced.
+const REGISTRATION_REFETCH_INTERVAL_MS = 1000;
 
 export const { fieldContext, formContext } = createFormHookContexts();
 
@@ -93,8 +96,8 @@ export default function StepPanel({
     "/v1/competitions/{competitionId}/registrations",
     {
       onError: showRegistrationError,
-      // Creation is queued in the background, so there is no registration to store yet -
-      //   the query below polls until the job has produced one.
+      // Creation is queued, so there is no registration to store yet - the queue poll below
+      //   takes over from here.
       onSuccess: () => setPinnedStep(undefined),
     },
   );
@@ -116,6 +119,18 @@ export default function StepPanel({
     },
   );
 
+  // Creating a registration only puts it on a queue, and the queue - not Rails - is what knows
+  //   whether it has been worked off yet, so that is what we wait on.
+  const { data: queueStatus } = useQuery({
+    queryKey: ["registration-queue", competitionInfo.id, userId],
+    queryFn: () => pollRegistrationQueue(competitionInfo.id, userId),
+    enabled: createRegistration.isSuccess,
+    refetchInterval: (query) =>
+      query.state.data?.processing === false ? false : QUEUE_POLL_INTERVAL_MS,
+  });
+
+  const isQueueDone = queueStatus?.processing === false;
+
   const { data: registration } = useQuery({
     queryKey: registrationQueryKey,
     queryFn: async () => {
@@ -124,8 +139,7 @@ export default function StepPanel({
         { params: { path: { competitionId: competitionInfo.id, userId } } },
       );
 
-      // Not being registered is a normal answer rather than a failure, so it must not reject:
-      //   after creating a registration we poll this query until the background job is done.
+      // Not being registered is a normal answer rather than a failure, so it must not reject.
       if (response.status === 404) {
         return null;
       }
@@ -137,14 +151,15 @@ export default function StepPanel({
       return data;
     },
     initialData: initialRegistration,
+    // Only once the queue reports it is finished do we go and collect the registration itself.
     refetchInterval: (query) =>
-      createRegistration.isSuccess && query.state.data === null
-        ? REGISTRATION_POLL_INTERVAL_MS
+      createRegistration.isSuccess && isQueueDone && query.state.data === null
+        ? REGISTRATION_REFETCH_INTERVAL_MS
         : false,
   });
 
-  // The create endpoint only queues a job, so the submission is not finished until the poll above
-  //   has actually found the registration it produced.
+  // The create endpoint only queues a job, so the submission is not finished until the queue has
+  //   worked it off and Rails has handed us the registration it produced.
   const isAwaitingCreation =
     createRegistration.isSuccess && registration === null;
 
@@ -280,6 +295,7 @@ export default function StepPanel({
           <RegistrationOverview
             competitionInfo={competitionInfo}
             registration={registration}
+            queueCount={queueStatus?.queue_count}
           />
         );
     }
@@ -324,6 +340,7 @@ export default function StepPanel({
         <RegistrationOverview
           competitionInfo={competitionInfo}
           registration={registration}
+          queueCount={queueStatus?.queue_count}
         />
       </Steps.CompletedContent>
     </Steps.Root>

@@ -63,19 +63,27 @@ function RegistrationStatus({ registration }: { registration: Registration }) {
 export default function RegistrationOverview({
   competitionInfo,
   registration,
+  queueCount,
 }: {
   competitionInfo: CompetitionInfo;
   registration: Registration | null;
+  queueCount?: number;
 }) {
   const { t } = useT();
 
-  // The registration is created by a background job, so right after submitting there is a short
-  //   window in which the backend does not know about it yet.
+  // The registration is created by a queue worker, so right after submitting there is a window in
+  //   which it does not exist yet. The queue tells us how many submissions are ahead of ours.
   if (registration === null) {
     return (
       <HStack>
         <Spinner />
-        <Text>{t("competitions.registration_v2.register.processing")}</Text>
+        <Text>
+          {queueCount === undefined
+            ? t("competitions.registration_v2.register.processing")
+            : t("competitions.registration_v2.register.processing_queue", {
+                queueCount,
+              })}
+        </Text>
       </HStack>
     );
   }
