@@ -25,6 +25,7 @@ type MarkdownBaseProps = {
   children: Options["children"];
   linkProps?: ComponentPropsWithoutRef<typeof ChakraLink>;
   imageProps?: ComponentPropsWithoutRef<typeof ChakraImage>;
+  listProps?: ComponentPropsWithoutRef<typeof List.Root>;
   headingAs?: ComponentType<{ as?: ElementType }>;
 };
 
@@ -43,6 +44,7 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
   children,
   linkProps = {},
   imageProps = {},
+  listProps = {},
   headingAs: HeadingRenderAs = Heading,
   paragraphAs: ParagraphRenderAs = Text,
   ...paragraphProps
@@ -71,8 +73,8 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
         em: Em,
         hr: Separator,
         code: Code,
-        ul: (ulTag) => <List.Root {...ulTag} as="ul" />,
-        ol: (olTag) => <List.Root {...olTag} as="ol" />,
+        ul: (ulTag) => <List.Root {...ulTag} {...listProps} as="ul" />,
+        ol: (olTag) => <List.Root {...olTag} {...listProps} as="ol" />,
         li: List.Item,
         blockquote: (blockquoteTag) => (
           <Blockquote.Root>

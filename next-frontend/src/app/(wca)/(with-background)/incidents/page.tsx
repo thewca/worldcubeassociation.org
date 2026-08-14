@@ -118,7 +118,7 @@ function IncidentsLog() {
   return (
     <Container bg="bg">
       <VStack align="left">
-        <Heading size="5xl">{t("incidents_log.title")}</Heading>
+        <Heading textStyle="h1">{t("incidents_log.title")}</Heading>
         <Input
           placeholder={t("incidents_log.search_placeholder")}
           value={query}
