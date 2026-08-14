@@ -152,9 +152,13 @@ RSpec.describe UserGroup do
   end
 
   context "Monthly digest changes" do
+    let(:last_month) { 1.month.ago }
+
     it "Added 2 new members" do
-      create(:wrc_member_role, user_id: users[6].id, start_date: Time.now - 4.days)
-      create(:wrc_member_role, user_id: users[7].id, start_date: Time.now - 4.days)
+      role6 = create(:wrc_member_role, user_id: users[6].id, start_date: last_month)
+      role7 = create(:wrc_member_role, user_id: users[7].id, start_date: last_month)
+      role6.update_columns(updated_at: last_month)
+      role7.update_columns(updated_at: last_month)
 
       expected_output = [
         "<br><b>Changes in WCA Regulations Committee</b>",
@@ -168,8 +172,9 @@ RSpec.describe UserGroup do
     it "Promoted 1 member" do
       wrc_group = UserGroup.teams_committees_group_wrc
       team_member = wrc_group.roles[3]
-      team_member.update_columns(end_date: Time.now - 5.days, updated_at: Time.now - 5.days)
-      create(:wrc_senior_member_role, user_id: team_member.user.id, start_date: Time.now - 5.days)
+      team_member.update_columns(end_date: last_month, updated_at: last_month)
+      role = create(:wrc_senior_member_role, user_id: team_member.user.id, start_date: last_month)
+      role.update_columns(updated_at: last_month)
 
       expected_output = [
         "<br><b>Changes in WCA Regulations Committee</b>",
@@ -180,14 +185,30 @@ RSpec.describe UserGroup do
       expect(UserGroup.teams_committees_group_wrc.changes_in_group_for_digest).to eq expected_output
     end
 
+    it "does not include changes from the current month" do
+      role6 = create(:wrc_member_role, user_id: users[6].id, start_date: last_month)
+      role6.update_columns(updated_at: last_month)
+      create(:wrc_member_role, user_id: users[7].id, start_date: Time.now)
+
+      expected_output = [
+        "<br><b>Changes in WCA Regulations Committee</b>",
+        "",
+        "<b>New Members</b>",
+        users[6].name,
+      ].join("<br>")
+      expect(UserGroup.teams_committees_group_wrc.changes_in_group_for_digest).to eq expected_output
+    end
+
     it "Leader resigned and another person became leader" do
       wrc_group = UserGroup.teams_committees_group_wrc
       cur_leader = wrc_group.roles[0]
       new_leader = wrc_group.roles[1]
-      cur_leader.update_columns(end_date: Time.now - 10.days, updated_at: Time.now - 10.days)
-      new_leader.update_columns(end_date: Time.now - 10.days, updated_at: Time.now - 10.days)
-      create(:wrc_senior_member_role, user_id: users[0].id, start_date: Time.now - 10.days)
-      create(:wrc_leader_role, user_id: new_leader.user.id, start_date: Time.now - 10.days)
+      cur_leader.update_columns(end_date: last_month, updated_at: last_month)
+      new_leader.update_columns(end_date: last_month, updated_at: last_month)
+      role_senior = create(:wrc_senior_member_role, user_id: users[0].id, start_date: last_month)
+      role_senior.update_columns(updated_at: last_month)
+      role_leader = create(:wrc_leader_role, user_id: new_leader.user.id, start_date: last_month)
+      role_leader.update_columns(updated_at: last_month)
 
       expected_output = [
         "<br><b>Changes in WCA Regulations Committee</b>",

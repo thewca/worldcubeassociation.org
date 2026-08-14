@@ -384,6 +384,51 @@ RSpec.describe User do
     expect(avatar.private_image.attached?).to be true
   end
 
+  describe ".delegate_milestones_for_digest" do
+    let(:delegate) { create(:delegate) }
+    let(:last_month_end) { (Time.now.beginning_of_month - 1.day).to_date }
+    let(:two_years_ago) { 2.years.ago.to_date }
+
+    def bulk_insert_competitions(count, end_date, cancelled: false)
+      now = Time.now
+      ids = Array.new(count) { |i| "BulkComp#{SecureRandom.hex(4)}#{i}" }
+      Competition.insert_all(
+        ids.map { |id| { id: id[0..31], name: id[0..49], cell_name: id[0..44], show_at_all: true, end_date: end_date, cancelled_at: (now if cancelled), created_at: now, updated_at: now } },
+      )
+      CompetitionDelegate.insert_all(
+        ids.map { |id| { competition_id: id[0..31], delegate_id: delegate.id, created_at: now, updated_at: now } },
+      )
+    end
+
+    it "returns empty hash when no delegate crosses a milestone" do
+      bulk_insert_competitions(49, two_years_ago)
+      expect(User.delegate_milestones_for_digest).to eq({})
+    end
+
+    it "returns delegate who reaches the 50 milestone during last month" do
+      bulk_insert_competitions(49, two_years_ago)
+      bulk_insert_competitions(1, last_month_end)
+      expect(User.delegate_milestones_for_digest).to eq({ 50 => [delegate] })
+    end
+
+    it "does not include a delegate who reached the milestone before last month" do
+      bulk_insert_competitions(50, two_years_ago)
+      expect(User.delegate_milestones_for_digest).to eq({})
+    end
+
+    it "does not count cancelled competitions toward milestones" do
+      bulk_insert_competitions(49, two_years_ago)
+      bulk_insert_competitions(1, last_month_end, cancelled: true)
+      expect(User.delegate_milestones_for_digest).to eq({})
+    end
+
+    it "does not count competitions from future months" do
+      bulk_insert_competitions(49, two_years_ago)
+      bulk_insert_competitions(1, 1.month.from_now.to_date)
+      expect(User.delegate_milestones_for_digest).to eq({})
+    end
+  end
+
   describe "#delegated_competitions" do
     let(:delegate) { create(:delegate) }
     let(:other_delegate) { create(:delegate) }

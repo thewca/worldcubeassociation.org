@@ -2,6 +2,19 @@
 
 <p>Here's the draft for this month digest (Please verify whether all the changes were informed to the WCA Board):</p>
 
-<div><b>Changes in Teams/Committees/Councils</b></div>
+<div><b>Changes in Teams/Committees</b></div>
 
 <p><%= sanitize UserGroup.changes_in_groups_for_digest %></p>
+
+<div><b>Delegate Milestones</b></div>
+
+<% if @delegate_milestones.empty? %>
+  <p>There are no delegate milestones to show.</p>
+<% else %>
+  <p>
+    <% @delegate_milestones.each do |milestone, delegates| %>
+      <br><b><%= milestone %> competitions</b><br>
+      <%= delegates.map(&:name).join("<br>").html_safe %>
+    <% end %>
+  </p>
+<% end %>
