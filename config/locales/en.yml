@@ -2806,7 +2806,7 @@ en:
     #context: shown when no incident exists for the requested ID
     not_found: "Incident Not Found"
     #context: link leading from a single incident back to the list of all incidents
-    back_to_log: "Back to the incidents log"
+    back_to_log: "Back to the Incidents Log"
     search_placeholder: "Search"
     status: "Status"
     #context: an incident which has been resolved and is therefore publicly visible

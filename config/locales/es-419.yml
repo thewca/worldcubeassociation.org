@@ -1392,7 +1392,7 @@ es-419:
       #original_hash: c420cb4
       disciplinary: Registro disciplinario
       #original_hash: ecba5f4
-      incidents: Registro de incidentes
+      incidents: Registro de Incidentes
       #original_hash: b8be3d1
       administration: Administración
       #original_hash: b7ee3c4
@@ -5969,6 +5969,82 @@ es-419:
       inglés, El contenido  de abajo no está traducido.
     #original_hash: 2c23c1a
     incident: 'incidente:'
+    #original_hash: 42edeaa
+    title: Registro de incidentes
+    #original_hash: c387a75
+    page_title: 'Incidente: %{title}'
+    #original_hash: 70c5337
+    not_found: No se ha encontrado el incidente
+    #original_hash: 251a7bb
+    back_to_log: Regresar al Registro de Incidentes
+    #original_hash: bce0641
+    search_placeholder: Buscar
+    #original_hash: bae7d5b
+    status: Estado
+    #original_hash: d999aeb
+    resolved: Resuelto
+    #original_hash: 96f608c
+    pending: Pendiente
+    #original_hash: 4a0e607
+    sent_in_digest: Enviado en boletín
+    #original_hash: 35f49dc
+    sent: Enviado
+    #original_hash: 93934ad
+    showing_entries: >-
+      Mostrando entradas %{first} a %{last} de un total de %{total} con
+      <select></select> por página
+    #original_hash: 329a7c2
+    not_public_warning: >-
+      Nota: Este caso no se ha resuelto aún, por lo que no es visible
+      públicamente.
+    #original_hash: 0d96264
+    public_summary: Descripción y resolución del incidente
+    #original_hash: 47f8842
+    private_description: Descripción (privado para Delegados)
+    #original_hash: 504b671
+    private_wrc_decision: Decisión del WRC (privado para Delegados)
+    tags:
+      #original_hash: 0fd2d3d
+      regulation: Regla
+      #original_hash: 3f63aa0
+      guideline: Directriz
+      #original_hash: 180b14c
+      search_with_tag: Buscar incidentes con esta etiqueta
+      #original_hash: d25382e
+      filter_by_tag: Filtrar por esta etiqueta
+      #original_hash: 491db57
+      competition_page: Página de competición
+      #original_hash: a2bfe4c
+      delegate_report: Reporte del Delegado
+    admin:
+      #original_hash: 5656400
+      publish: Publicar
+      #original_hash: 1ac0a74
+      unpublish: Despublicar
+      #original_hash: 5301648
+      edit: Editar
+      #original_hash: 577ef7d
+      destroy: Destruir
+      #original_hash: 77dfd21
+      cancel: Cancelar
+      #original_hash: 04a2122
+      confirm: Confirmar
+      #original_hash: 6fc0529
+      change_status: Cambiar estado
+      #original_hash: a926b77
+      destroy_title: Destruir incidente
+      #original_hash: b9bea79
+      confirm_publish: Estás a punto de publicar este incidente. ¿Estás seguro?
+      #original_hash: f683adb
+      confirm_unpublish: Estás a punto de despublicar este incidente. ¿Estás seguro?
+      #original_hash: 02e27c6
+      confirm_destroy: ¿Deseas eliminar este incidente?
+      #original_hash: 8fa3ce7
+      publish_error: No se pudo publicar este incidente.
+      #original_hash: 229c8ce
+      unpublish_error: No se pudo despublicar este incidente.
+      #original_hash: e332db5
+      destroy_error: No se pudo eliminar este incidente.
   about_regulations:
     #original_hash: 6bce1b5
     title: Sobre el Reglamento
