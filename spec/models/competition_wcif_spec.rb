@@ -930,6 +930,20 @@ RSpec.describe "Competition WCIF" do
         end.not_to raise_error
       end
 
+      it "passes when an unregistered manager has personal bests" do
+        create(:ranks_single, person_id: delegate.wca_id)
+
+        wcif = competition.to_wcif(version: '2.0.0')
+        manager_wcif = wcif["persons"].find { it["wcaUserId"] == delegate.id }
+
+        expect(manager_wcif["registration"]).to be_nil
+        expect(manager_wcif["personalBests"].first).to include("value")
+
+        expect do
+          Competition.validate_wcif_schema!(wcif, version: '2.0.0')
+        end.not_to raise_error
+      end
+
       it "passes when activities carry a scrambleSetId" do
         wcif = competition.to_wcif
         wcif["schedule"]["venues"].first["rooms"].first["activities"].first["scrambleSetId"] = nil
