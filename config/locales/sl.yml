@@ -1573,7 +1573,7 @@ sl:
       #original_hash: ea20be0
       success_message: Sporočilo je bilo poslano - odgovor lahko pričakujete kmalu.
       #original_hash: 8fa6b95
-      prefilled: >-
+      to_update_registration_prefilled: >-
         Če želite posodobiti prijavo, kontaktirajte organizatorje tekmovanja.
         Obrazec smo za vas zapolnili z zahtevanimi podatki - prosimo, oddajte
         obrazec.
