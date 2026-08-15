@@ -621,7 +621,8 @@ RSpec.describe "registrations" do
 
       context "with a JSON file" do
         it "renders an error when the WCIF is invalid" do
-          allow(JSON::Validator).to receive(:validate).and_return(false)
+          schema = Struct.new(:uri, :schema).new("fake_uri", {})
+          allow(Competition).to receive(:validate_wcif_schema!).and_raise(JSON::Schema::ValidationError.new("Invalid", [], "fake", schema))
           file = json_file({ "persons" => [] })
 
           post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
@@ -631,7 +632,7 @@ RSpec.describe "registrations" do
         end
 
         it "successfully converts valid JSON to registration data and only includes accepted registrations" do
-          allow(JSON::Validator).to receive(:validate).and_return(true)
+          allow(Competition).to receive(:validate_wcif_schema!).and_return(true)
           file = json_file(
             {
               "persons" => [
