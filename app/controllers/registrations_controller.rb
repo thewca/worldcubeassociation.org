@@ -170,7 +170,10 @@ class RegistrationsController < ApplicationController
       end
     end
 
+    invalid_countries = csv_rows.pluck(:country).reject { |c| Country.c_find(c) }.uniq
+
     [
+      invalid_countries.map { |c| I18n.t("registrations.import.errors.invalid_country", country: c) },
       event_column_errors,
       validate_dob_formats(csv_rows.pluck(:birth_date)),
       validate_no_duplicates(csv_rows.pluck(:email), 'email_duplicates', :emails),
