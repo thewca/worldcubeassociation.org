@@ -40,7 +40,7 @@ RSpec.describe "registrations" do
           post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
         end.not_to(change { competition.registrations.count })
         expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to include "Invalid country codes: XX"
+        expect(response.body).to include I18n.t("registrations.import.errors.invalid_country", country: "XX")
       end
 
       it "renders an error when there are invalid event IDs" do
