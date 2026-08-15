@@ -930,6 +930,15 @@ RSpec.describe "Competition WCIF" do
         end.not_to raise_error
       end
 
+      it "passes when activities carry a scrambleSetId" do
+        wcif = competition.to_wcif
+        wcif["schedule"]["venues"].first["rooms"].first["activities"].first["scrambleSetId"] = nil
+
+        expect do
+          Competition.validate_wcif_schema!(wcif)
+        end.not_to raise_error
+      end
+
       it "does not pass on cross-version schema" do
         expect do
           Competition.validate_wcif_schema!(
