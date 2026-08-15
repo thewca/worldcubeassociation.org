@@ -190,7 +190,10 @@ class RegistrationsController < ApplicationController
       end
     end
 
+    invalid_countries = csv_rows.pluck(:country).uniq - Country::WCA_COUNTRY_IDS
+
     [
+      invalid_countries.map { |c| I18n.t("registrations.import.errors.invalid_country", country: c) },
       event_column_errors,
       validate_dob_formats(csv_rows.pluck(:birth_date)),
       validate_no_duplicates(csv_rows.pluck(:email), 'email_duplicates', :emails),
@@ -200,7 +203,7 @@ class RegistrationsController < ApplicationController
 
   private def validate_registrations(registration_rows, competition)
     # Validate country codes
-    invalid_countries = registration_rows.filter_map { |e| e[:countryIso2] }.uniq.reject { |iso2| Country.c_find_by_iso2(iso2) }
+    invalid_countries = registration_rows.pluck(:countryIso2).compact_blank.uniq - Country::WCA_COUNTRY_ISO_CODES
 
     # Validate event IDs against competition events
     valid_event_ids = competition.competition_events.pluck(:event_id)
@@ -208,7 +211,7 @@ class RegistrationsController < ApplicationController
     invalid_event_ids = all_event_ids - valid_event_ids
 
     [
-      invalid_countries.any? && "Invalid country codes: #{invalid_countries.join(', ')}",
+      invalid_countries.map { |c| I18n.t("registrations.import.errors.invalid_country", country: c) },
       invalid_event_ids.any? && "Invalid event IDs for this competition: #{invalid_event_ids.join(', ')}",
       validate_dob_formats(registration_rows.filter_map { |e| e[:birthdate] }),
       validate_no_duplicates(registration_rows.filter_map { |e| e[:email]&.downcase }, 'email_duplicates', :emails),
