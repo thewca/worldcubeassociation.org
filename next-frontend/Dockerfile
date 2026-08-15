@@ -72,6 +72,10 @@ COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
 COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
 COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
 COPY --from=builder /app/export-dump.sh /app/export-dump.sh
+COPY --from=builder /app/sanitize-dump.mjs /app/sanitize-dump.mjs
+# `bson` is used by sanitize-dump.mjs and may be pruned from the standalone
+# output, so copy the full package in explicitly.
+COPY --from=deps /app/node_modules/bson /app/node_modules/bson
 
 RUN apk add --no-cache jq
 
