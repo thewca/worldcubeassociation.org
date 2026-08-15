@@ -1341,7 +1341,7 @@ en:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
-      registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event."
+      registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event, or JSON file containing WCIF data."
       preview: "Preview Registration Data"
       import: "Import"
       cancel: "Cancel"
@@ -1357,7 +1357,9 @@ en:
         wca_id_duplicates: "WCA ID must be unique, found the following duplicates: %{wca_ids}."
         wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
         invalid_country: "Invalid country: %{country}."
+        invalid_wcif: "The JSON file does not contain valid WCIF data."
         empty_file: "The file is empty."
+        unsupported_file_format: "Unsupported file format. Please upload a JSON or CSV file."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
