@@ -1957,7 +1957,7 @@ class Competition < ApplicationRecord
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
-    persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
+    persons_wcif + managers.map { it.to_wcif(self, authorized: authorized, version: version) }
   end
 
   def events_wcif(version: WCIF_STABLE_VERSION, include_results: true)
