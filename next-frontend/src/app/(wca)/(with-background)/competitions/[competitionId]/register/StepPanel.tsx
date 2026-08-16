@@ -14,6 +14,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
 import pollRegistrationQueue from "@/lib/wca/registrations/pollRegistrationQueue";
+import { preselectedEventIds } from "@/lib/wca/registrations/eventSelection";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -51,10 +52,11 @@ export type RegistrationForm = ReturnType<typeof useRegistrationForm>;
 
 const registrationFormValues = (
   registration: Registration | null,
+  defaultEventIds: string[],
 ): RegistrationFormValues => ({
   comment: registration?.competing.comment ?? "",
   guests: registration?.guests ?? 0,
-  eventIds: registration?.competing.event_ids ?? [],
+  eventIds: registration?.competing.event_ids ?? defaultEventIds,
 });
 
 export default function StepPanel({
@@ -166,7 +168,15 @@ export default function StepPanel({
   const isAwaitingCreation =
     createRegistration.isSuccess && registration === null;
 
-  const form = useRegistrationForm(registrationFormValues(registration));
+  // `flatMap` rather than `find`, because returning `[]` from the non-matching branch is what lets
+  //   TypeScript narrow the step union down to the competing step and reach its parameters.
+  const preferredEventIds = steps.flatMap((step) =>
+    step.key === "competing" ? preselectedEventIds(step.parameters) : [],
+  );
+
+  const form = useRegistrationForm(
+    registrationFormValues(registration, preferredEventIds),
+  );
 
   const competingStatus = registration?.competing.registration_status;
   const isRejected = competingStatus === "rejected";

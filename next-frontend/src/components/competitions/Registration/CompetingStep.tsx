@@ -18,7 +18,7 @@ import {
   DEFAULT_GUEST_LIMIT,
 } from "@/lib/wca/data/wca";
 import { useT } from "@/lib/i18n/useI18n";
-import { eventsNotQualifiedFor } from "@/lib/wca/qualifications";
+import { disabledEventIds } from "@/lib/wca/registrations/eventSelection";
 import { qualificationToString } from "@/lib/wca/wcif/rounds";
 import type { components } from "@/types/openapi";
 import type {
@@ -60,13 +60,7 @@ export default function CompetingStep({
 
   const maxEvents = parameters.events_per_registration_limit ?? Infinity;
 
-  const eventsDisabled = parameters.allow_registration_without_qualification
-    ? []
-    : eventsNotQualifiedFor(
-        parameters.event_ids,
-        parameters.qualification_wcif,
-        parameters.personalRecords,
-      );
+  const eventsDisabled = disabledEventIds(parameters);
 
   // A competition's own guest limit only binds when it restricts guests in the first place;
   //   otherwise only the site-wide sanity cap applies.
@@ -160,6 +154,7 @@ export default function CompetingStep({
             <Fieldset.Root invalid={!field.state.meta.isValid}>
               <FormEventSelector
                 title={t("competitions.competition_form.events")}
+                wrap
                 eventList={parameters.event_ids}
                 selectedEvents={field.state.value}
                 maxEvents={maxEvents}
