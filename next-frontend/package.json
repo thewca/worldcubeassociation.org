@@ -32,6 +32,8 @@
     "@payloadcms/storage-s3": "3.87.1",
     "@rails/actioncable": "^8.1.301",
     "@react-aria/focus": "^3.22.1",
+    "@stripe/react-stripe-js": "^6.8.1",
+    "@stripe/stripe-js": "^9.13.0",
     "@tanstack/react-form": "^1.33.4",
     "@tanstack/react-query": "^5.101.4",
     "@wrksz/themes": "^1.1.0",

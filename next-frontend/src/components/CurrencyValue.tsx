@@ -1,7 +1,5 @@
 import { Badge, FormatNumber, HStack } from "@chakra-ui/react";
-
-// Money crosses the API in the currency's smallest unit (cents, pence, yen).
-const LOWEST_DENOMINATION_PER_UNIT = 100;
+import { LOWEST_DENOMINATION_PER_UNIT } from "@/lib/wca/data/wca";
 
 export default function CurrencyValue({
   lowestDenomination,

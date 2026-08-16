@@ -398,6 +398,7 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
+            get 'payment_denomination', to: 'registrations#payment_denomination'
           end
 
           collection do

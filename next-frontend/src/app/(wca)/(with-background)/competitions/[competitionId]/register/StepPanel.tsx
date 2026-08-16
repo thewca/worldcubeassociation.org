@@ -306,6 +306,7 @@ export default function StepPanel({
           <PaymentStep
             competitionInfo={competitionInfo}
             registration={registration}
+            parameters={step.parameters}
             deadline={step.deadline}
           />
         );

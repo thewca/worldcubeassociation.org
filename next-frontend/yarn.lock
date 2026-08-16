@@ -4731,6 +4731,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/react-stripe-js@npm:^6.8.1":
+  version: 6.8.1
+  resolution: "@stripe/react-stripe-js@npm:6.8.1"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ">=9.5.0 <10.0.0"
+    react: ">=16.8.0 <20.0.0"
+    react-dom: ">=16.8.0 <20.0.0"
+  checksum: 10c0/98b956a37d5e5a8659d91586e0aab982e9ad5ab1140acecb701d8d40cdc3135b5de59060d18dec92b909dd1a880129a5b0172c7b3adc6dbfa55643f982149619
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^9.13.0":
+  version: 9.13.0
+  resolution: "@stripe/stripe-js@npm:9.13.0"
+  checksum: 10c0/dc5e043e8694ca351eb03e53ae4844968b437487e1296bf9b83bd5bee1b65b56ba4f275c9f4f853a3e1ae3797c81cc7bc47c9e99c891ce320019b4eda77bbcfb
+  languageName: node
+  linkType: hard
+
 "@stylistic/eslint-plugin@npm:^5.10.0":
   version: 5.10.0
   resolution: "@stylistic/eslint-plugin@npm:5.10.0"
@@ -11900,6 +11920,8 @@ __metadata:
     "@rails/actioncable": "npm:^8.1.301"
     "@react-aria/focus": "npm:^3.22.1"
     "@redocly/cli": "npm:2.46.0"
+    "@stripe/react-stripe-js": "npm:^6.8.1"
+    "@stripe/stripe-js": "npm:^9.13.0"
     "@stylistic/eslint-plugin": "npm:^5.10.0"
     "@tanstack/eslint-plugin-query": "npm:^5.101.4"
     "@tanstack/react-form": "npm:^1.33.4"
@@ -12837,7 +12859,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
