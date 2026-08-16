@@ -106,7 +106,7 @@ export default function RegistrationOverview({
         </DataList.Item>
         <DataList.Item>
           <DataList.ItemLabel>
-            {t("competitions.registration_v2.register.comment")}
+            {t("competitions.registration_v2.register.comment_overview")}
           </DataList.ItemLabel>
           <DataList.ItemValue>
             {registration.competing.comment ||

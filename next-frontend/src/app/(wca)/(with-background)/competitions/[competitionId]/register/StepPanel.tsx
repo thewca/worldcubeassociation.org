@@ -266,7 +266,13 @@ export default function StepPanel({
         return (
           <RequirementsStep
             hasAcknowledged={hasAcknowledgedRequirements}
-            onAcknowledgedChange={setHasAcknowledgedRequirements}
+            // Ticking the box completes this step, which would otherwise move `activeStep` on by
+            //   itself and swap this panel out before the competitor ever reaches the button.
+            //   Pinning the step keeps them here until they press Continue.
+            onAcknowledgedChange={(acknowledged) => {
+              setHasAcknowledgedRequirements(acknowledged);
+              setPinnedStep(activeStep);
+            }}
             onContinue={() => setPinnedStep(activeStep + 1)}
           />
         );

@@ -40,7 +40,7 @@ export default function RequirementsStep({
         onClick={onContinue}
         colorPalette="blue"
       >
-        {t("competitions.registration_v2.requirements.next_step")}
+        {t("competitions.registration_v2.requirements.accept")}
       </Button>
     </VStack>
   );

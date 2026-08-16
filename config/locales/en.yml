@@ -2006,6 +2006,7 @@ en:
       requirements:
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
+        accept: "Accept"
       update:
         being_updated: "Registration is being updated..."
         being_deleted: "Registration is being deleted..."
@@ -2051,6 +2052,7 @@ en:
         error: "Registration failed with error %{error}"
         early_registration: "Registration is not open yet - you are pre-registering as an organizer/delegate"
         comment: "Additional comments to the organizers"
+        comment_overview: "Your comments"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
         view_registration: "View Registration"
