@@ -1529,7 +1529,7 @@ RSpec.describe "registrations" do
       # Make the API call to issue the refund
       registration_payment = registration.registration_payments.first
       refund_params = { payment: { refund_amount: registration_payment.amount_lowest_denomination } }
-      post registration_payment_refund_path(competition, 'paypal', registration_payment.receipt), params: refund_params
+      post payment_refund_api_v1_registration_path(registration, 'paypal', registration_payment.receipt), params: refund_params
 
       # make sure every follow-up test gets a hold of the refunds
       registration.reload

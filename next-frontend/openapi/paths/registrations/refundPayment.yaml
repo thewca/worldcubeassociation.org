@@ -1,0 +1,92 @@
+post:
+  summary: Refund part or all of a charge against a registration
+  description: |
+    Issues a refund with the competition's payment provider and records it against the
+    registration. Organizers of the competition only. The refund is capped at what is still
+    refundable on the charge.
+  tags:
+    - registrations
+    - payments
+  operationId: refundRegistrationPayment
+  parameters:
+    - name: registrationId
+      in: path
+      required: true
+      schema:
+        type: integer
+    - name: payment_integration
+      in: path
+      required: true
+      description: Which provider holds the charge
+      schema:
+        type: string
+        enum:
+          - stripe
+          - paypal
+          - manual
+    - name: payment_id
+      in: path
+      required: true
+      description: The id of the provider-specific receipt record
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - payment
+          properties:
+            payment:
+              type: object
+              required:
+                - refund_amount
+              properties:
+                refund_amount:
+                  type: integer
+                  description: How much to refund, in the currency's lowest denomination
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+              - message
+              - refunded_charge
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              refunded_charge:
+                $ref: '../../schemas/registrations/RegistrationPayment.yaml'
+    '400':
+      description: The requested amount is negative, or higher than what is still refundable
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+            properties:
+              error:
+                type: string
+                enum:
+                  - refund_amount_too_high
+                  - refund_amount_too_low
+    '404':
+      description: The competition has no such provider connected, or the charge is not this registration's
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                enum:
+                  - provider_disconnected
