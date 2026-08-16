@@ -16,6 +16,8 @@ paths:
     $ref: 'paths/registrations/registrationsByCompetition.yaml'
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
+  /v1/registrations/{registrationId}/payment_denomination:
+    $ref: 'paths/registrations/paymentDenomination.yaml'
 
   /v1/competitions/{competitionId}/scoretakers:
     get:

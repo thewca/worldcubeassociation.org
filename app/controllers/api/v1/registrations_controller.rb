@@ -17,6 +17,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   before_action :user_can_bulk_modify_registrations, only: [:bulk_update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
   before_action :validate_payment_ticket_request, only: [:payment_ticket]
+  before_action :validate_payment_denomination_request, only: [:payment_denomination]
 
   rescue_from ActiveRecord::RecordNotFound do
     render_error(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND)
@@ -270,6 +271,28 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     payment_account = @competition.payment_account_for(:stripe)
     payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, @current_user)
     render json: { client_secret: payment_intent.client_secret }
+  end
+
+  def validate_payment_denomination_request
+    @registration = Registration.find(params_id)
+
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+      @current_user.id == @registration.user_id || @current_user.can_manage_competition?(@registration.competition)
+  end
+
+  # What a payment attempt would charge, in every denomination the frontend needs: the payment
+  # providers want their own integer formats, and the user wants a formatted string. Keeping the
+  # currency rules here means clients never have to know about Stripe's special-case currencies.
+  def payment_denomination
+    iso_donation_amount = params[:iso_donation_amount].to_i
+    ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
+
+    api_amounts = {
+      stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),
+      paypal: PaypalRecord.amount_to_paypal(ruby_money.cents, ruby_money.currency.iso_code),
+    }
+
+    render json: { api_amounts: api_amounts, human_amount: helpers.format_money(ruby_money) }
   end
 
   private
