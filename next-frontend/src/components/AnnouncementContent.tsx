@@ -1,7 +1,7 @@
 import { Accordion } from "@chakra-ui/react";
 import AnnouncementMarkdown from "@/components/announcements/AnnouncementMarkdown";
 import { announcementSummary } from "@/components/announcements/announcement";
-import ReadMoreButton from "@/components/announcements/ReadMoreButton";
+import AnnouncementDialog from "@/components/announcements/AnnouncementDialog";
 import { Announcement } from "@/types/payload";
 
 export default function AnnouncementContent({
@@ -18,7 +18,7 @@ export default function AnnouncementContent({
       </Accordion.ItemBody>
 
       <Accordion.ItemBody>
-        <ReadMoreButton announcement={announcement} />
+        <AnnouncementDialog announcement={announcement} />
       </Accordion.ItemBody>
     </>
   );

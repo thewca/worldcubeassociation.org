@@ -15,10 +15,15 @@ const CARD_COLOR_PALETTES: ColorPaletteSelect[] = [
   "yellow",
 ];
 
-/// `index` is the announcement's position in the newest-first list, so an
-/// announcement keeps the color of the card it was opened from.
+/// `index` is the announcement's position in the newest-first list, so the
+/// cards on /posts alternate through the palettes instead of clustering.
 export const announcementColorPalette = (index: number) =>
   CARD_COLOR_PALETTES[index % CARD_COLOR_PALETTES.length];
+
+/// An announcement's own page is reached by link, not from a card, so there is
+/// no neighbouring color to match — pick one at random.
+export const randomAnnouncementColorPalette = () =>
+  announcementColorPalette(_.random(CARD_COLOR_PALETTES.length - 1));
 
 /// The teaser shown before "Read More". Announcements written before the
 /// `summary` field existed fall back to the beginning of their content.
@@ -39,8 +44,3 @@ export const announcementRoute = (announcement: Announcement) =>
 /// Phase 2 prefixes this with "Posted by {team name} | ".
 export const announcementByline = (announcement: Announcement) =>
   getFullDateTimeStringNoSeconds(announcement.publishedAt);
-
-/// Announcements that only exist on the legacy site link out to it; everything
-/// else opens the announcement's own page.
-export const announcementReadMoreHref = (announcement: Announcement) =>
-  announcement.url ?? announcementRoute(announcement);
