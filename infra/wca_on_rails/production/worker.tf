@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_log_group" "worker" {
   name = "${var.name_prefix}-sqs-worker"
+  retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "worker" {

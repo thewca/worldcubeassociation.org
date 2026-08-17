@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_log_group" "nextjs" {
   name = "${var.name_prefix}-next"
+  retention_in_days = 30
 }
 
 locals {

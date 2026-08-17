@@ -34,6 +34,7 @@ locals {
 
 resource "aws_cloudwatch_log_group" "anycable" {
   name = "${var.name_prefix}-anycable"
+  retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "anycable" {
