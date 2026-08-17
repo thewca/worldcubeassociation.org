@@ -275,7 +275,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   private
 
     def action_type(request)
-      self_updating = request[:user_id] == authenticated_user
+      self_updating = request[:user_id] == authenticated_user.id
       status = request.dig('competing', 'status')
       if status == 'cancelled'
         return self_updating ? 'Competitor delete' : 'Admin delete'
