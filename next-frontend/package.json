@@ -62,7 +62,7 @@
     "react-intersection-observer": "^11.0.0",
     "react-markdown": "^10.1.0",
     "react-world-flags": "^1.6.0",
-    "temporal-polyfill": "^1.0.3"
+    "temporal-polyfill": "^1.0.4"
   },
   "dependenciesMeta": {
     "@datadog/pprof": {
