@@ -279,8 +279,6 @@ vi:
     333fm: 1 giờ
     #original_hash: cc7d8bb
     333mbf: '10:00.00 mỗi khối hình, tối đa 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Loại điều kiện
@@ -726,8 +724,6 @@ vi:
       text: bắt buộc
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Vui lòng kiểm tra các vấn đề sau đây:'
@@ -747,12 +743,6 @@ vi:
         public_summary: >-
           Mô tả tổng quan về sự cố và quyết định cuối cùng để hiển thị công
           khai. Vui lòng điền bằng tiếng Anh.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: >-
@@ -764,37 +754,15 @@ vi:
           A</strong>. Không nhập cẩu thả như <strong>nguyen van a</strong> hay
           <strong>NGUYEN VAN A</strong>.<br/>Không bắt buộc nhập tên đệm (đầy đủ
           hoặc viết tắt).
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Sau khi đăng tải hình đại diện mới, bạn cần đợi Đội ngũ Kết quả WCA
           (WCA Results Team) xét duyệt trước khi hình đại diện được hiển thị
           công khai.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Cài đặt này chỉ áp dụng cho các giải đấu bạn tổ chức hoặc làm nhiệm vụ
           Delegate, và có thể thiết lập riêng cho mỗi giải đấu.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           Tùy chọn này chỉ áp dụng đối với các bản cập nhật lớn của các tài
@@ -815,12 +783,6 @@ vi:
           Kiểm tra ứng dụng tạo mã đã cài đặt trên điện thoại để lấy mã OTP,
           hoặc nhập mã phục hồi.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: >-
           Ngày sinh chính xác của bạn, viết dưới dạng YYYY-MM-DD
@@ -886,12 +848,8 @@ vi:
           khác (nếu muốn thay thế, bạn phải đăng hình mới lên trước khi xóa hình
           cũ). Vui lòng giải thích lý do nếu không có hình chụp khu vực thi đấu
           và/hoặc khu vực tráo đổi khi giải đấu đang diễn ra.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: Số thứ tự của các sự cố cần phản hồi từ WRC.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           Số thứ tự của các sự cố cần phản hồi từ WIC. <br>
@@ -912,50 +870,10 @@ vi:
           Nói về bất kỳ điều gì khác mà bạn muốn chia sẻ (VD: cộng đồng phát
           triển hơn/suy thoái đi, các kế hoạch sắp tới của khu vực). Nếu bạn
           muốn bổ sung nội dung cho các phần trước, xin mời viết thêm tại đây.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Ví dụ: Đi lại, Thanh toán lệ phí, Giải thưởng, Nhà tài trợ'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Bắt buộc phải là đường dẫn HTTP(S) hợp lệ. Khuyến khích sử dụng HTTPS
         #original_hash: 2ace571
@@ -964,28 +882,12 @@ vi:
           suốt
         #original_hash: da54ab5
         email: Nên là một danh sách gửi thư đến toàn bộ các Giám đốc và Cán bộ
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Bắt buộc dùng định dạng PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Bắt buộc dùng định dạng PDF. Nếu bạn cần thêm file, vui lòng gộp các
           file lại
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3588,17 +3490,11 @@ vi:
           clone_tabs: Tôi muốn sao chép các tab nội dung thêm
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Nếu lựa chọn này bị tắt, việc thay đổi hệ thống đăng ký sẽ gây vấn
             đề kỹ thuật. Liên hệ WST để được hỗ trợ nếu vẫn cần đổi hệ thông
             đăng ký.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Tên đầy đủ của giải đấu bao gồm năm (v.d Hanoi Open 2018). Để ý tên
@@ -3616,8 +3512,6 @@ vi:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Chính
           sách về Quy định Giải đấu của WCA</a>.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Tên của thành phố và bang (nếu có thể) nơi giải đấu diễn ra. Không
@@ -3630,20 +3524,7 @@ vi:
           details_html: >-
             Thông tin chi tiết về địa điểm (v.d. ở hội trường tầng đầu tiên, đi
             theo biển chỉ dẫn). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             Tên đầy đủ của Chuỗi Giải đấu, bao gồm năm ở cuối tên (VD: Southern
@@ -3714,21 +3595,14 @@ vi:
             Trưởng nhóm Delegate chịu trách nhiệm thực hiện các nhiệm vụ điều
             hành của giải đấu (nộp kết quả, báo cáo, nộp hội phí WCA)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Trang chủ của giải đấu. Bắt buộc phải là đường dẫn http(s) hợp lệ.
           #original_hash: b2af5f5
           external_registration_page: >-
             Trang web dành cho thí sinh để đăng ký tham gia giải đấu. Bắt buộc
             phải điền một đường dẫn có hiệu lực.
-          #original_hash: da39a3e
-          uses_wca_registration: ''
           #original_hash: cc7d557
           scoretaking_software: 'Chọn ''%{choice_ilr}'' nếu muốn dùng Vòng thi kép'
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Mã tiền tệ cho lệ phí.
@@ -3747,8 +3621,6 @@ vi:
             Hiện tại con số này chỉ mang tính thông báo, lệ phí cho khách mời
             không thể được quản lý qua trang này. Nếu được đặt bằng 0, một thông
             báo sẽ được hiển thị rằng khách mời có thể vào cửa miễn phí.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Hiện tại con số này chỉ mang tính thông báo, phần hoàn tiền sẽ được
@@ -3760,8 +3632,6 @@ vi:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Ghi chú: Thời gian mở và đóng đơn đăng ký theo múi giờ UTC.'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Hạn cuối chấp nhận các thí sinh trên danh sach chờ. Nếu bạn có hạn
@@ -3774,16 +3644,6 @@ vi:
             trước khi đóng đơn đăng ký. Để trống ô này để cho phép thí sinh thêm
             nội dung cho đến khi nội dung tương ứng bắt đầu. Nếu bạn bật đăng ký
             tại chỗ, hạn cuối này phải đặt cùng ngày với giải đấu.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             Số khách mời tối đa cho mỗi thí sinh cho giải đấu này. Các đơn đăng
@@ -3796,35 +3656,23 @@ vi:
             tiếng Anh</b> và bất kỳ ngôn ngữ nào thí sinh sử dụng; thông tin này
             sẽ được hiển thị trên trang thông tin của giải đấu, và trang đăng ký
             của WCA nếu được sử dụng.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Xin giải thích vì sao bạn không muốn thí sinh lần đầu tham gia
               đăng ký thi. Vui lòng điền bằng tiếng Anh!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Vui lòng nói rõ vì sao bạn muốn yêu cầu thí sinh nộp khối hình
               sớm. Vui lòng viết bằng tiếng Anh!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Vui lòng giải thích vì sao bạn muốn đặt giới hạn thời gian. Vui
               lòng viết bằng tiếng Anh!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Vui lòng giải thích vì sao bạn muốn giới hạn một số tổ hợp nội
@@ -3843,9 +3691,6 @@ vi:
         remarks: >-
           Thông tin bổ sung dành cho WCAT, ví dụ nếu còn thắc mắc hoặc yêu cầu
           đặc biệt dành cho WCAT. Vui lòng điền bằng tiếng Anh!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4922,8 +4767,6 @@ vi:
         paypal: >-
           Việc kết nối tài khoản PayPal cho phép website WCA trực tiếp cộng và
           trừ tiền (khi hoàn tiền) vào tài khoản PayPal của bạn.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Giải đấu này được cài đặt nhận lệ phí thi qua %{provider}. Delegate nên

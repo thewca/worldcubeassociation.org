@@ -280,8 +280,6 @@ eu:
     333fm: Ordu 1
     #original_hash: cc7d8bb
     333mbf: 'Kubo bakoitzeko 10:00.00, 60:00.00-ra arte'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Sailkatze mota
@@ -726,8 +724,6 @@ eu:
       text: beharrezkoa
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Hurrengo arazo hauek azter itzazu mesedez:'
@@ -747,12 +743,6 @@ eu:
         public_summary: >-
           Gertaeraren deskribapen orokorra eta erabakia, publikoki ager dadin.
           Mesedez, bete hau ingelesez.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Lehiatzailearen jaioteguna UUUU-HH-EE formatuan sartu.
@@ -762,36 +752,14 @@ eu:
           <strong>José Miguel Beguiristain</strong>. Ez erratikotiki <strong>jm
           beguiristain</strong> bezala. <br/>Bigarren izenak (osoak edo
           inizialak) aukerakoak dira.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Irudi berri bat igo ondoren, WCAko Emaitzen Taldeak onartu arte
           itxaron beharko duzu.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Hau antolatzen edo ordezkatzen dituzun lehiaketetan aplikatzen da
           besterik, eta lehiaketa bakoitzean berridatz dezakezu.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           Hau baliabideen bertsio aldaketa nagusietara mugatuta dago, hala nola
@@ -812,12 +780,6 @@ eu:
           Ikuskatu zure behin-behineko pasahitz bat lortzeko konfiguratutako
           aplikazio mugikorra  edo sartu zure berreskuratze-kodeetako bat.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: 'Zure jaiotegun zuzena, UUUU-HH-EE formatuan'
         #original_hash: 49ee4af
@@ -883,14 +845,10 @@ eu:
           duzu, eta gero zaharra ezabatu). Ez baduzu lehia-guneko mementuko
           irudirik edota nahas-gunea erabiltzen ari zen bitarteko irudirik
           azaldu zergatik mesedez.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           WRCren feedbacka jasotzea nahi zenukeen edozein gertaeren zenbakien
           zerrenda.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           WICren feedbacka jasotzea nahi zenukeen edozein gertaeren zenbakien
@@ -912,50 +870,10 @@ eu:
           (adibidez, komunitatearen barruko hobekuntza/erregresioa, eskualde
           honetarako etorkizunerako planak). Aurreko atalak laburragoak izateko
           ezer idatzirik utzi baduzu, hemen apia ditzakezu.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Adibideak: bidaiak, ordainketak, sariak, ostatua'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Baliozko http(s) helbidea izan behar du. HTTPS gomendatzen da
         #original_hash: 2ace571
@@ -964,28 +882,12 @@ eu:
         email: >-
           Zuzendari eta Ofizial guztiak biltzen dituen posta-zerrenda izan behar
           luke
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: PDF formatuan egon behar du
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           PDF formatuan egon behar du. Fitxategi gehiago gehitu behar badituzu,
           mesedez, bateratu
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3651,17 +3553,11 @@ eu:
             batera
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Hau desaktibatzen bada, erregistrazio sistema aldatzeak arazo
             teknikoak sortuko ditu. Mesedez, jarri WSTrekin harremanetan
             laguntzarako oraindik erregistrazio sistema aldatu behar baduzu.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Lehiaketaren izen osoa, urtea bukaeran jarriz (adibidez, Basauri Open
@@ -3679,8 +3575,6 @@ eu:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCAko
           Lehiaketen Baldintza Politikarekin</a> bat egin behar du.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Hiria eta estatuaren izena (aplikagarri bada) non lehiaketa
@@ -3695,20 +3589,7 @@ eu:
           details_html: >-
             Tokiari buruzko zehaztasunak (adibidez, lehenengo pisuko atzealdean,
             ikurrak jarraitu). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             Lehiaketa seriearen izen osoa, urtea bukaeran jarriz (adibidez,
@@ -3781,21 +3662,14 @@ eu:
             Ordezkari Nagusia lehiaketa baten alde administratiboez arduratzen
             da (emaitzez, txostenez, kuoten fakturez)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Lehiaketaren webgunea. Http(s) url baliozko bat izan behar du.
           #original_hash: b2af5f5
           external_registration_page: >-
             Lehiakideek lehiaketarako izena eman behar duten webgunea. Http(s)
             url baliozkoa izan behar du.
-          #original_hash: da39a3e
-          uses_wca_registration: ''
           #original_hash: cc7d557
           scoretaking_software: 'Hautatu "%{choice_ilr}" txanda bikoitzak erabili nahi badituzu'
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Kuotentzako moneta kodea
@@ -3816,8 +3690,6 @@ eu:
             Oraingoz zenbaki hau informatiboa baino ez da, ikusle tarifak ezin
             dira webgune honen bidez kudeatu. Hau 0n ezartzen bada, zuk
             aukeratutako esaldi bat erakutsiko da ikusleen politikari buruz.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Izan ere, orain zenbaki hau informatiboa da. Itzulketak eskuz egin
@@ -3830,8 +3702,6 @@ eu:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Oharra: izen ematea zabaldu eta ixten den datak UCT orduan daude.'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Itxaron-zerrendako erregistratuak onartzeko epemuga. Itzulketarako
@@ -3846,16 +3716,6 @@ eu:
             ahal izango dutela esan nahi du, proba hori gauzatzen den arte.
             Unean bertako izena eman ahal bada epea lehiaketaren egun berean
             ezarri beharko duzu.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             Erregistro bakoitzeko baimendutako gonbidatu kopurua. Gonbidatu
@@ -3869,35 +3729,23 @@ eu:
             egiten duten beste edozein hizkuntzatan; hau lehiaketaren
             informazio-orrian agertuko da, baita izen-emate orrian ere, WCAko
             webguneko izen-ematea erabiltzen ari bazara.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Mesedez, zehaztu hemen zergatik zure lehiaketan ez zenukeen nahi
               lehiakide berririk izena ematea. Mesedez, bete hau ingelesez!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Mesedez, zehaztu hemen zergatik eskatu nahi diezun lehiakideei
               puzzleak goiz aurkezteko. Mesedez, bete hau ingelesez!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Zehaztu hemen zergatik erabili nahi dituzun sailkatze-denborak.
               Bete hau ingelesez mesedez!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Zehaztu hemen zergatik murriztu nahi dituzun proba konbinazio
@@ -3916,9 +3764,6 @@ eu:
           WCATri pasatu nahi diozun informazio gehigarria. Adibidez, zerbaitez
           ziur ez bazaude edota WCATrentzako eskaera berezirik baduzu. Bete hau
           ingelesez mesedez!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -5019,8 +4864,6 @@ eu:
         paypal: >-
           PayPal kontua konektatzeak WCAri ordainketak zuri bideratzeko eta
           diru-itzulketak zeure PayPal kontuan jaulkitzeko ahalmena ematen dio.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Lehiaketa honetako ordainketak %{provider} hornitzailearen bidez

@@ -192,7 +192,6 @@ en:
       across_rounds: "%{time} total for %{rounds}"
     333fm: "1 hour"
     333mbf: "10:00.00 per cube, up to 60:00.00"
-    333mbo: ""
   #context: Words used to describe qualification limits.
   qualification:
     type_label: "Qualification Type"
@@ -460,9 +459,6 @@ en:
     required:
       text: 'required'
       mark: '*'
-      # You can uncomment the line below if you need to overwrite the whole required html.
-      # When using html, text and mark won't be used.
-      html: ''
     error_notification:
       default_message: "Please review the problems below:"
     #context: and a hint given about a specific field
@@ -473,34 +469,17 @@ en:
         private_description: "A description of the incident which can only be viewed by Delegates. Please fill this in English."
         private_wrc_decision: "The final WRC decision, including private details. Please fill this in English."
         public_summary: "An overall description of the incident and its decision, to be displayed publicly. Please fill this in English."
-        digest_worthy: ""
-        tags: ""
-        competition_id: ""
       #context: for a user
       user:
         dob: "Enter the competitor's date of birth in the format YYYY-MM-DD."
         name: "Enter the competitor's full name correctly, for example <strong>Stefan Pochmann</strong>. Not sloppily like <strong>s pochman</strong>.<br/>Middle names (either full or as initials) are optional."
-        email: ""
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
-        country_iso2: ""
-        dob_verification: ""
-        gender: ""
-        login: ""
-        password: ""
-        password_confirmation: ""
-        remember_me: ""
-        results_notifications_enabled: ""
         registration_notifications_enabled: "This only applies for competitions you organize or delegate, and can be overridden on a per-competition basis."
-        unconfirmed_wca_id: ""
-        wca_id: ""
         receive_developer_mails: "This is limited to notifications for major version changes to resources like data exports, WCIF schema and public APIs. Recommended for developers maintaing software that relies on these tools."
         receive_delegate_reports: "If you are a Senior Delegate or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to 12 hours to take effect."
         delegate_reports_region: "If you want to receive all reports, leave this field blank (the dropdown option at the very top). Note: the change may take up to 12 hours to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
       dob_contact:
-        name: ""
-        your_email: ""
-        wca_id: ""
         dob: "Your correct day of birth in the format YYYY-MM-DD"
         document: "To prove your identity and your correct date of birth to us, you have to attach a picture of any legal document (identity card, driver license, student card, passport, birth certificate, ...) where your name and date of birth are visible and understandable for an English speaker (or contact your local WCA Delegate if you don't have such a document). On the identification we need at minimum your name and date of birth; feel free to blur-out/obfuscate any other personal data on the identification."
       #context: for a post
@@ -516,52 +495,19 @@ en:
         organization: "The listed points above are just for guidance for a complete report. Use them at your discretion for what you see fit. Please remove unused parts!"
         incidents: "Please report all incidents which are non-standard cases. Number the incidents starting from 1., so that other Delegates can comment referring to them by their numbers. Even if everything seemed generic, just list at least the most noteworthy cases. Please check off the appropriate boxes below if you are actively seeking feedback."
         setup_images: "You MUST include at least %{image_count} images which illustrate the scrambling and competition areas from this current competition, preferably during the competition (other images are also welcome). You can select multiple files at once. You can delete images only when enough other images have been uploaded (if you want to replace an image, you need to upload the new one first, and then delete the old one). If you do not have current pictures of the competition area and/or the scrambling area while in use, please explain why."
-        wrc_feedback_requested: ""
         wrc_incidents: "List of numbers referencing any incidents that you would like the WRC's feedback on."
-        wic_feedback_requested: ""
         wic_incidents_html: "List of numbers referencing any incidents that you would like the WIC's feedback on. <br> <strong>%{wic_incident_alert}</strong>"
         wic_incident_alert: "If the WIC incident is sensitive (including but not limited to crimes, harassment, assault, etc.), please exclude this from your report and email the WIC separately. For other WIC incidents, default to a brief, anonymized version of the incident and follow-up with the WIC privately with further details. The WIC will still provide feedback on anonymized versions for general awareness. For all WIC incidents involving a WCA Volunteer, please exclude all details from the report, and contact the WIC privately."
         remarks: "Talk about any other detail that you'd like to share (e.g., improvement/regression within the community, future plans for this region). If for the sake of conciseness you left something unsaid in the previous sections, feel free to comment them here."
-        discussion_url: ""
       #context: for a competition tab
       competition_tab:
         name: "Examples: Travel, Payments, Awards, Accommodation"
-        content: ""
-      #context: for a person
-      person:
-        person1_wca_id: ""
-        person2_wca_id: ""
-      poll:
-        comment: ""
-        multiple: ""
-        question: ""
-      vote:
-        comment: ""
-      competition_medium:
-        competition_id: ""
-        media_type: ""
-        text: ""
-        uri: ""
-        submitter_name: ""
-        submitter_email: ""
-        submitter_comment: ""
-        status: ""
       regional_organization:
-        name: ""
-        country: ""
         website: "Must be a valid http(s) url. HTTPS is recommended"
         logo: "Must be in PNG format, in good resolution, and with a transparent background"
         email: "Should be a mailing list containing all the Directors and Officers"
-        address: ""
         bylaws: "Must be in PDF format"
-        directors_and_officers: ""
-        area_description: ""
-        past_and_current_activities: ""
-        future_plans: ""
-        extra_information: ""
         extra_file: "Must be in PDF format. If you need to add more files, please merge them together"
-        start_date: ""
-        end_date: ""
     #context: and a label for an option
     options:
       #context: about registration
@@ -1823,27 +1769,16 @@ en:
       #context: for a competition
       hints:
         admin:
-          is_confirmed: ""
-          is_visible: ""
           uses_new_registration_system: "If this is disabled, changing the registration system will cause technical issues. Please contact WST for assistance if you still need to change the registration system."
-        competition_id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
         name_reason_html: "A brief explanation of the competition name. The name must comply with the <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA Competition Requirements Policy</a>."
         venue:
-          country_id: ""
           city_name: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
           name_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
           details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
-          address: ""
-          coordinates:
-            lat: ""
-            long: ""
-        start_date: ""
-        end_date: ""
         #context: when part of a Competition Series
         series:
-          series_id: ""
           name: "The full name of the Competition Series including the year at the end (e.g., Southern Australia 2022). Be sure to capitalize. The same rules as for the name of the individual competition apply."
           short_name: "A short name for displaying. The same rules as for the name of the individual competition apply.."
           competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
@@ -1863,53 +1798,34 @@ en:
           contact_html: "Optional contact information. If you do not fill this in, contact inquiries will be submitted through a form without revealing organizers' emails. %{md}. Example: [Text to display](mailto:some@email.com)"
           lead_delegate_id: "The Lead Delegate is responsible for the administrative aspects of a competition (Results, Report, Dues Invoice)"
         website:
-          generate_website: ""
           external_website: "The website of the competition. Must be a valid http(s) url."
           external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
-          uses_wca_registration: ""
           scoretaking_software: "Select '%{choice_ilr}' if you want to use Dual Rounds"
-        user_settings:
-          receive_registration_emails: ""
         entry_fees:
           currency_code: "The currency code for fees."
           base_entry_fee: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
           on_the_spot_entry_fee: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
           guest_entry_fee: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence of your choice will be displayed about the spectator policy."
-          donations_enabled: ""
           refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
           refund_policy_limit_date: "Date after which no more refunds will be issued."
         registration:
           opening_date_time: "Note: Registration open and close are in UTC time"
-          closing_date_time: ""
           waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
           event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
-          allow_on_the_spot: ""
-          competitor_can_cancel: ""
-          allow_self_edits: ""
-          guests_enabled: ""
-          guest_entry_status: ""
           guests_per_registration: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
           extra_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
-          force_comment: ""
         event_restrictions:
           forbid_newcomers:
-            enabled: ""
             reason: "Please elaborate here why you would not like newcomers to register for your competition. Please fill this out in English!"
           early_puzzle_submission:
-            enabled: ""
             reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
           qualification_results:
-            enabled: ""
             reason: "Please elaborate here why you would like to use qualification times. Please fill this out in English!"
-            allow_registration_without: ""
           event_limitation:
-            enabled: ""
             reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
             per_registration_limit: "Optionally enforce the total number of events a competitor can register for (commonly used for \"Favorites\" competitions). You should add events before using this field. Registrations with too many events will be blocked. Leave blank if there is no limit."
           main_event_id: "The winner of this event will be the winner of the competition."
         remarks: "Some additional information you want to pass on to the WCAT. For example, if there is something you are uncertain about, or if there are any special requests for the WCAT. Please fill this out in English!"
-        cloning:
-          clone_tabs: ""
       choices:
         #context: about guests
         guests_enabled:
@@ -2431,7 +2347,6 @@ en:
       connect_account_warning:
         stripe: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
         paypal: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly on your PayPal account."
-        manual:  ""
       currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
       before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
       before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."

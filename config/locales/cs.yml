@@ -262,8 +262,6 @@ cs:
     333fm: 1 hodina
     #original_hash: cc7d8bb
     333mbf: '10:00.00 na kostku, až 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Typ kvalifikace
@@ -780,8 +778,6 @@ cs:
       text: povinné
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Prosíme, překontrolujte níže uvedené problémy:'
@@ -803,12 +799,6 @@ cs:
         public_summary: >-
           Celkový popis incidentu a jeho závěr, který bude možno publikovat
           veřejně. Prosíme, vyplňte toto pole v angličtině.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Zadejte datum narození soutěžícího ve formátu RRRR-MM-DD.
@@ -818,40 +808,18 @@ cs:
           <strong>Béďa Trávníček</strong>. Ne nedbale jako <strong>b
           travnicek</strong>.<br/>Prostřední jména (celá i iniciály) jsou
           nepovinná.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Po nahrání nového avataru budete muset počkat na schválení od WCA
           Results Teamu.
         #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
         delegate_status: ''
         #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
         region: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Toto se týká jen soutěží, které organizujete nebo delegujete a lze to
           změnit i pro každou konkrétní soutěž.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 81a76a3
         receive_delegate_reports: >-
           Pokud jste Trainee delegát, Junior delegát, Senior delegát, nebo člen
@@ -1052,12 +1020,6 @@ cs:
         #original_hash: da39a3e
         your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Vaše správné datum narození ve formátu RRRR-MM-DD
         #original_hash: 49ee4af
@@ -1113,8 +1075,6 @@ cs:
           čísel. I pokud se vše zdálo obyčejné, vypište alespoň nejdůležitější
           případy. Prosíme zaškrtněte správná pole níže, pokud aktivně chcete
           zpětnou vazbu.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: 'Seznam čísel incidentů, ke kterým chcete zpětnou vazbu WRC.'
         #original_hash: da39a3e
@@ -1127,13 +1087,9 @@ cs:
           zlepšení/zhoršení v rámci komunity, plány do budoucna v daném
           regionu). Pokud jste kvůli stručnosti v předešlých sekcích něco
           vynechali, neváhejte se k tomu zde vyjádřit.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Příklady: cestování, platby, ocenění, ubytování'
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: 498f4c5
         dob: Datum narození by mělo být uvedeno ve formátu RRRR-MM-DD.
@@ -1144,22 +1100,11 @@ cs:
         #original_hash: da39a3e
         name: ''
         #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
         #original_hash: da39a3e
         comments: ''
@@ -1169,26 +1114,6 @@ cs:
         status: ''
         #original_hash: 34ef763
         administrative_notes: Dodatečné poznámky pro správu registrace. Soutěžící je nevidí.
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       results_submission:
         #original_hash: da39a3e
         schedule_url: ''
@@ -1197,10 +1122,6 @@ cs:
         #original_hash: da39a3e
         message: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Musí být platné HTTP(S) URL. HTTPS je doporučené.
         #original_hash: 2ace571
@@ -1211,28 +1132,12 @@ cs:
         email: >-
           Mělo by se jednat o mailing list, který obsahuje všechny ředitele a
           úředníky.
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Musí být v PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Musí být ve formátu PDF. Pokud chcete přidat více souborů, prosíme,
           spojte je dohromady.
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
       wfc:
         #original_hash: da39a3e
         from_date: ''
@@ -3174,10 +3079,6 @@ cs:
         remarks: Poznámky
         clone_tabs: Chci zkopírovat všechny záložky s dalšími informacemi
       hints:
-        admin:
-          is_confirmed: ''
-          is_visible: ''
-        competition_id: ''
         name: Celý název soutěže včetně roku na konci (např. Czech Open 2016). Dodržujte
           velká písmena. Název může obsahovat pouze písmena, čísla, pomlčky (-), ampersandy
           (&), tečky (.), dvojtečky (:), apostrofy (') a mezery ( ).
@@ -3187,19 +3088,14 @@ cs:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA Competition
           Requirements Policy</a>.
         venue:
-          country_id: ''
           city_name: Název města a (případně) stát, ve kterém se bude soutěž konat.
             Nezahrnujte zemi (např. Brno NEBO San Francisco, California).
           name_html: 'Místo konání soutěže. %{md}. Například: [Cité des Sciences et
             de l''Industrie](http://www.cite-sciences.fr)'
           details_html: Podrobnosti o místě konání (např. V prvním poschodí vzadu,
             následujte šipky). %{md}
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         series:
-          series_id: ''
           name: >-
             Celé jméno série soutěží včetně roku na konci (např. Southern
             Australia 2022). Slova začínejte velkými písmeny. Platí stejná
@@ -3233,14 +3129,10 @@ cs:
             %{md}. Například: [Text k zobrazení](mailto:some@email.com)'
         championships:
         website:
-          generate_website: ''
           external_website: Webové stránky soutěže. Musí to být platná http(s) url.
           external_registration_page: Stránka, na které se budou soutěží přihlašovat
             na soutěž. Musí to být platná http(s) url.
-          uses_wca_registration: ''
           uses_wca_live: ''
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: Kód měny pro poplatky.
           base_entry_fee: 'Základní registrační poplatek pro soutěž. Zobrazí se na
@@ -3255,7 +3147,6 @@ cs:
           guest_entry_fee: Prozatím je toto číslo pouze informativní a poplatky za
             hosty nelze řešit pomocí této stránky. Pokud toto nastavíte na 0, zobrazí
             se věta o divácích dle vaší volby.
-          donations_enabled: ''
           refund_policy_percent: Nyní je toto číslo pouze informativní, vrácení peněz
             se bude muset řešit manuálně. Pokud to nastavíte na 0, zobrazí se věta,
             že se registrační poplatky nebudou vracet za žádných podmínek.
@@ -3264,7 +3155,6 @@ cs:
         registration:
           opening_date_time: 'Poznámka: Zahájení a ukončení registrace jsou uvedeny
             v UTC čase.'
-          closing_date_time: ''
           waiting_list_deadline_date: Datum po kterém osoby na waiting listu už nemohou
             být přijaty. Pokud máte deadline na vrácení poplatků, tento deadline by
             neměl být před ním.
@@ -3273,11 +3163,7 @@ cs:
             nesmí být nastavena před datum konce registrace. Pokud toto pole necháte
             prázdné, soutěžící budou moci měnit eventy až do jejich začátku. Pokud
             máte povolené registrace na místě, toto musí být nastaveno na den soutěže.
-          allow_on_the_spot: ''
           allow_self_delete_after_acceptance: ''
-          allow_self_edits: ''
-          guests_enabled: ''
-          guest_entry_status: ''
           guests_per_registration: Počet hostů na jednu registraci povolený na této
             soutěži. Registrace s příliš velkým počtem hostů bude zablokována. Nechte
             prázdné, pokud nechcete stanovit limit.
@@ -3286,19 +3172,14 @@ cs:
             napište to <b>v Angličtině</b> a v jakémkoli dalším jazyce, kterým vaši
             soutěžící mluví; zobrazí se to na stránkách s informacemi o soutěži a
             na registrační stránce, pokud používáte registrační stránky WCA.
-          force_comment: ''
         event_restrictions:
           early_puzzle_submission:
-            enabled: ''
             reason: Prosíme rozeberte, proč byste chtěli požadovat, aby soutěžící
               odevzdali své kostky dříve. Prosíme, vyplňte toto v angličtině!
           qualification_results:
-            enabled: ''
             reason: Prosíme rozeberte, proč byste chtěli používat kvalifikační časy.
               Prosíme, vyplňte toto v angličtině!
-            allow_registration_without: ''
           event_limitation:
-            enabled: ''
             reason: Prosíme rozepište, proč byste chtěli zakázat některé kombinace
               eventů. Prosíme, vyplňte toto v angličtině!
             per_registration_limit: Volitelně vynuťte maximální počet eventů, na které

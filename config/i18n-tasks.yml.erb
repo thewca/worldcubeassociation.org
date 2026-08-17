@@ -95,8 +95,14 @@ ignore_missing:
   - 'devise.{mailer,passwords,registrations,sessions,shared,confirmations,unlocks}.*'
 # - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
 # - '{devise,simple_form}.*'
+  # CustomWcaI18nScanner marks `simple_form.hints.<model>.<attribute>` as used
+  # for every form input that does not pass an inline `hint:`, but most inputs
+  # have no hint at all. simple_form's lookup ends in '' and then `.presence`,
+  # so an absent hint renders nothing — exactly like the empty string these keys
+  # used to hold in all 33 locale files. Only flag hints as unused, never as
+  # missing. (Subsumes the old `simple_form.hints.translation.*` entry.)
+  - 'simple_form.hints.*'
   # We don't want to translate these.
-  - 'simple_form.hints.translation.*'
   - 'activerecord.attributes.translation.*'
 
 ## Consider these keys used:

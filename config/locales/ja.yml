@@ -256,8 +256,6 @@ ja:
     333fm: 1時間
     #original_hash: cc7d8bb
     333mbf: 1個あたり10分（最大60分）
-    #original_hash: da39a3e
-    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: 世界
@@ -571,8 +569,6 @@ ja:
       text: 必須
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: '以下のエラー内容をご確認ください:'
@@ -586,12 +582,6 @@ ja:
         private_wrc_decision: WRC の最終決議です。非公開情報を含みます。英語で記述してください。
         #original_hash: 3de5729
         public_summary: 全体的な内容 (インシデントと決議) です。公開されます。英語で記述してください。
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: 競技者の生年月日を「西暦-月-日」の形式で記入してください。　例：2001-04-01
@@ -599,44 +589,16 @@ ja:
         name: >-
           競技者の氏名をフルネームで記載してください。<br/>例：Shuhei Omura
           (大村周平)<br/>※<strong>ローマ字表記は必須</strong>です。パスポートなどに記載の正確な表記を使用してください。ミドルネームは省略可です。<br/>※母国語表記（漢字表記など）は、上の例のようにカッコ書きで併記することができます。
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: プロフィール画像の変更は、 WCA 競技結果チームの承認後に反映されます。
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: 自分が運営または代理人として担当する大会に適用されます。ただし大会ごとに別途設定した場合は、その設定が優先されます。
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           データエクスポート・WCIFスキーマやAPI等の変更といったメジャーバージョン変更のみに対してのみ通知が行われます。これらのツールに依存したソフトウェア開発・保守を行う開発者向けの項目です。
         #original_hash: 0627e5c
         otp_attempt: 設定済みの携帯端末でワンタイムパスワードを確認するか、復旧コードを入力してください。
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: 生年月日を YYYY-MM-DD (西暦-月-日) の形式で入力してください
         #original_hash: 49ee4af
@@ -659,84 +621,24 @@ ja:
         #original_hash: 74affff
         incidents: >-
           典型的でないすべてのインシデントについて報告してください。インシデントは1.から順に番号づけをして、代理人が個別のインシデントに言及しやすくしてください。基本的なインシデントしか発生していない場合は、そのうち最も代表的なものを記載してください。フィードバックを求める場合は、以下のチェックボックスにチェックを入れてください。
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: WCA 規則委員会のフィードバックを求めるインシデントの番号
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: f30abdc
         remarks: その他報告事項 (コミュニティーの変化、地域的の今後の計画等ほか、前項までで省いた軽微な事項も構いません)
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: '例: 参加費徴収、表彰、渡航、宿泊施設等'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: 有効なhttp(s)アドレス。https推奨。
         #original_hash: 2ace571
         logo: 高解像度、透過背景のPNG形式としてください
         #original_hash: da54ab5
         email: すべての役員・事務を含むメーリングリストが好ましい
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: pdf形式
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: pdf形式。複数にわたる場合は、統合してください。
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -2369,15 +2271,9 @@ ja:
           clone_tabs: すべての追加情報とタブをコピーする
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             無効化した場合、申し込みシステムの変更により技術的問題が発生する場合があります。申し込みシステムの変更が必要な場合は、WSTに相談してください。
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           大会の正式名称 (英名) 。<p> (1) 必ず末尾に年号を含める (例 : SCJ Kansai Winter 2020)</p><p>
@@ -2390,8 +2286,6 @@ ja:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           大会要件方針</a>に沿っている必要があります。
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
           #original_hash: 9d9126e
@@ -2400,20 +2294,7 @@ ja:
             Hall](http://www.city.kawasaki.jp/takatsu/category/111-11-1-0-0-0-0-0-0-0.html)。
           #original_hash: 2651d1a
           details_html: '会場の詳細 (例: 12階)。%{md}'
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: シリーズ大会の正式名称 (英名) 。大会名と同様のルールで設定してください。
           #original_hash: 778c20c
@@ -2442,19 +2323,12 @@ ja:
             speedcubing.or.jpドメインのメーリングリストを使用することを推奨します。詳細はSCJ社員に尋ねてください。記載がない場合、主催者がWCAアカウントに登録しているメールアドレスが公開されます。%{md}の文法で書いてください　例:
             [○○大会実行委員会](mailto:○○@speedcubing.or.jp)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: 大会ウェブサイトの URL
           #original_hash: b2af5f5
           external_registration_page: 競技者が参加申し込みを行うためのページ。httpまたはhttpsのURLとしてください。
           #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
           uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: 参加費の通貨コード
@@ -2468,8 +2342,6 @@ ja:
           guest_entry_fee: >-
             現在のところ見学者入場料集金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0
             と入力した場合、「見学者入場料は無料です。」と表示されます。
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             現在のところ返金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の返金は手動で行ってください。<br/>0
@@ -2479,24 +2351,12 @@ ja:
         registration:
           #original_hash: 9965635
           opening_date_time: 申し込み受付期間 (世界標準時。日本時間 -9 時間)
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             キャンセル待ちリストにいる競技参加者を繰り上げ承認できる期限。もし返金にも期限を設けていれば、返金期限が先、繰り上げ期限はそれと同時か後の関係とする。
           #original_hash: 75e6c1f
           event_change_deadline_date: >-
             参加種目や同伴者の人数など、いったん承認済みの参加申し込み内容でも実行委員に問い合わせることで変更を受け付けることができます。この期限は参加申し込み期間の終了時と同じか、あるいは終了後も一定の猶予を設けることが可能。このフィールドを空欄にした場合、大会当日に実際に試技をする直前まで変更可能なことになる。もし飛び込み参加可能な大会を企画する場合は空欄となるが、日本での前例はほとんどありません。
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             競技参加者 1
@@ -2504,29 +2364,17 @@ ja:
           #original_hash: 3de153b
           extra_requirements: >-
             支払い方法など、「大会申し込み要領」で不足する内容はこちらに入力してください。<br/>必ず<b>英語を併記して</b>記入してください。<br/>入力内容は大会情報ページと参加申し込みページに表示されます。
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: 初参加者の参加を拒否する理由を英語で詳細に記載してください。
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: パズル提出を早く設定する理由を英語で詳しく説明してください。
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: 過去の記録の適用の理由および詳細を英語で記載してください。
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: 特定種目への同時参加を制限する理由および詳細を英語で記載してください。
             #original_hash: d09af8f
@@ -2536,9 +2384,6 @@ ja:
           main_event_id: この種目の優勝者が本大会の優勝者として表示されます。
         #original_hash: 9ea6021
         remarks: WCATに伝達する追加情報（例：何か不安がある場合や、要望がある場合に記入）。必ず英語で記入してください。
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -3230,11 +3075,6 @@ ja:
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: WCA ID をアカウントに連携しましょう！
-  payments:
-    payment_setup:
-      connect_account_warning:
-        #original_hash: da39a3e
-        manual: ''
   persons:
     index:
       #original_hash: 5934b4c

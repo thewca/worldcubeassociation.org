@@ -89,7 +89,9 @@ class TimeLimit
       if round.can_change_time_limit?
         time_str
       else
-        I18n.t "time_limit.#{round.event.id}"
+        # Not every unchangeable-limit event has wording for it (333mbo has
+        # none), so render nothing rather than "Translation missing: ...".
+        I18n.t("time_limit.#{round.event.id}", default: "")
       end
     when 1
       I18n.t("time_limit.cumulative.one_round", time: time_str)
