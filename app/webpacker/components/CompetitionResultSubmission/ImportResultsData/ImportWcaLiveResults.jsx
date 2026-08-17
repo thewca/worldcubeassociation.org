@@ -49,7 +49,8 @@ export default function ImportWcaLiveResults({
           )}
           {scoretakingSoftware === 'internal' && (
             <Message.Item>
-              Make sure that every competitor has a result, then press &#39;Import Live Results&#39;
+              Make sure that every competitor has a result, then press
+              &quot;Import Live Results&quot;
             </Message.Item>
           )}
           <Message.Item>
