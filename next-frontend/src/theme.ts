@@ -631,6 +631,21 @@ const customConfig = defineConfig({
                 bg: "colorPalette.subtle",
               },
             },
+            // Outline button for a `card.pastel` surface, whose background is
+            // the palette's own `1A`. Border and label follow the card's
+            // `pastelContrast` through `currentColor`, because every other
+            // outline treatment paints a tint of the card's own hue: both
+            // `pastelOutline` (`colorPalette.border` / `.fg`) and the built-in
+            // `outline` variant's `colorPalette.subtle` hover vanish into the
+            // background and leave the label unreadable.
+            pastelContrastOutline: {
+              borderWidth: "1px",
+              borderColor: "currentColor",
+              color: "currentColor",
+              _hover: {
+                bg: "colorPalette.pastelContrast/15",
+              },
+            },
           },
         },
       },

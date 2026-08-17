@@ -39,7 +39,10 @@ export function AnnouncementCard({
         </AnnouncementMarkdown>
       </Card.Body>
       <Card.Footer>
-        <AnnouncementDialog announcement={announcement} />
+        <AnnouncementDialog
+          announcement={announcement}
+          colorPalette={colorPalette}
+        />
       </Card.Footer>
     </Card.Root>
   );

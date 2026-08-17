@@ -15,7 +15,7 @@ import {
   announcementByline,
   announcementRoute,
 } from "@/components/announcements/announcement";
-import { Announcement } from "@/types/payload";
+import { Announcement, ColorPaletteSelect } from "@/types/payload";
 
 /// The announcement's own page is no longer linked from anywhere, so this is
 /// how a reader hands the announcement to someone else. It only renders inside
@@ -30,7 +30,7 @@ function ShareButton({ announcement }: { announcement: Announcement }) {
   return (
     <Clipboard.Root value={shareUrl}>
       <Clipboard.Trigger asChild>
-        <Button variant="outline">
+        <Button variant="pastelContrastOutline">
           <Clipboard.Indicator copied={<LuCheck />}>
             <LuShare2 />
           </Clipboard.Indicator>
@@ -44,31 +44,24 @@ function ShareButton({ announcement }: { announcement: Announcement }) {
 /// "Read More" opens the full announcement here rather than navigating, so a
 /// reader never loses their place in the list. `lazyMount` keeps every
 /// announcement's full content out of the list page's HTML.
+///
+/// The dialog is a `card.pastel` surface in the palette of the card it was
+/// opened from. The portal renders it outside that card, so the palette has to
+/// be passed in rather than inherited.
 export default function AnnouncementDialog({
   announcement,
+  colorPalette,
 }: {
   announcement: Announcement;
+  colorPalette: ColorPaletteSelect;
 }) {
   return (
     <Dialog.Root size="xl" scrollBehavior="inside" lazyMount>
-      {/*
-        Announcement cards are `card.pastel`, so their background is the card's
-        own `1A` and the palette varies per card. `pastelSolid` is locked to
-        blue and paints `blue.1A`, which is exactly the blue card's background —
-        so the button vanishes into it. Border and label follow the card's
-        contrast colour instead, which works on every palette. The hover veil
-        has to come from `pastelContrast` rather than the built-in `outline`
-        variant's `colorPalette.subtle`: a pale tint of the card's own hue would
-        leave the `currentColor` label unreadable.
-      */}
       <Dialog.Trigger asChild>
         <Button
-          variant="outline"
+          variant="pastelContrastOutline"
           size="sm"
           alignSelf="flex-start"
-          color="currentColor"
-          borderColor="currentColor"
-          _hover={{ bg: "colorPalette.pastelContrast/15" }}
         >
           Read More
         </Button>
@@ -76,7 +69,7 @@ export default function AnnouncementDialog({
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content>
+          <Dialog.Content colorPalette={colorPalette} layerStyle="card.pastel">
             <Dialog.Header>
               <Stack gap={1}>
                 <Dialog.Title textStyle="h2">{announcement.title}</Dialog.Title>
@@ -91,11 +84,11 @@ export default function AnnouncementDialog({
             <Dialog.Footer>
               <ShareButton announcement={announcement} />
               <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Close</Button>
+                <Button variant="pastelContrastOutline">Close</Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
-              <CloseButton size="sm" />
+              <CloseButton size="sm" color="currentColor" />
             </Dialog.CloseTrigger>
           </Dialog.Content>
         </Dialog.Positioner>

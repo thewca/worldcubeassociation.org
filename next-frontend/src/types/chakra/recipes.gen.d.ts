@@ -20,7 +20,7 @@ export interface ButtonVariant {
   /** @default "md" */
   size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined
   /** @default "solid" */
-  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | "pastelSolid" | "pastelOutline" | undefined
+  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | "pastelSolid" | "pastelOutline" | "pastelContrastOutline" | undefined
 }
 
 export type ButtonVariantProps = {

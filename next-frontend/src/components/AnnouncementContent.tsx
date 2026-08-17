@@ -2,12 +2,14 @@ import { Accordion } from "@chakra-ui/react";
 import AnnouncementMarkdown from "@/components/announcements/AnnouncementMarkdown";
 import { announcementSummary } from "@/components/announcements/announcement";
 import AnnouncementDialog from "@/components/announcements/AnnouncementDialog";
-import { Announcement } from "@/types/payload";
+import { Announcement, ColorPaletteSelect } from "@/types/payload";
 
 export default function AnnouncementContent({
   announcement,
+  colorPalette,
 }: {
   announcement: Announcement;
+  colorPalette: ColorPaletteSelect;
 }) {
   return (
     <>
@@ -18,7 +20,10 @@ export default function AnnouncementContent({
       </Accordion.ItemBody>
 
       <Accordion.ItemBody>
-        <AnnouncementDialog announcement={announcement} />
+        <AnnouncementDialog
+          announcement={announcement}
+          colorPalette={colorPalette}
+        />
       </Accordion.ItemBody>
     </>
   );
