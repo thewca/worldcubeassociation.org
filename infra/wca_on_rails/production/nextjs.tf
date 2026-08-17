@@ -145,7 +145,7 @@ resource "aws_ecs_task_definition" "nextjs" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-group         = aws_cloudwatch_log_group.nextjs.name
           awslogs-region        = var.region
           awslogs-stream-prefix = var.name_prefix
         }
@@ -196,7 +196,7 @@ resource "aws_ecs_task_definition" "nextjs_live_results" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-group         = aws_cloudwatch_log_group.nextjs.name
           awslogs-region        = var.region
           awslogs-stream-prefix = var.name_prefix
         }
