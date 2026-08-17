@@ -325,7 +325,12 @@ function AttemptFieldsNav({
       const from = e.target as HTMLElement;
       flushSync(() => from.blur());
       // Moving back from the first attempt lands on the competitor field.
-      if (!focusManager?.focusPrevious({ wrap: false, from })) {
+      const didFocusPrevious = focusManager?.focusPrevious({
+        wrap: false,
+        from,
+      });
+
+      if (!didFocusPrevious) {
         onFocusCompetitor();
       }
     }
