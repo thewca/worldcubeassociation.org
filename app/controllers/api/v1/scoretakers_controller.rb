@@ -15,10 +15,10 @@ class Api::V1::ScoretakersController < Api::V1::ApiController
   # Managers are left out because they are allowed to take scores anyway.
   def candidates
     require_manage!(@competition)
-    manager_ids = @competition.organizer_ids + @competition.delegate_ids
+    manager_ids = @competition.organizer_ids | @competition.delegate_ids
     registrations = @competition.registrations
     attendees = registrations.accepted.or(registrations.non_competing).where.not(user_id: manager_ids)
-    render json: attendees.includes(:user).map { { user_id: it.user_id, name: it.user.name } }
+    render json: attendees.includes(:user).as_json(SCORETAKER_JSON)
   end
 
   def create

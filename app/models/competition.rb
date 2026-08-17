@@ -2165,10 +2165,7 @@ class Competition < ApplicationRecord
     # People that the patch doesn't mention keep whatever they had.
     return if patched_roles_user_ids.empty?
 
-    scoretaker_user_ids.uniq!
-    competition_scoretakers.where(user_id: patched_roles_user_ids - scoretaker_user_ids).delete_all
-    new_scoretaker_ids = scoretaker_user_ids - competition_scoretakers.where(user_id: scoretaker_user_ids).pluck(:user_id)
-    CompetitionScoretaker.insert_all(new_scoretaker_ids.map { { competition_id: id, user_id: it } }) if new_scoretaker_ids.any?
+    self.scoretaker_ids = (scoretaker_ids - patched_roles_user_ids) | scoretaker_user_ids
   end
 
   def set_wcif_schedule!(wcif_schedule)
