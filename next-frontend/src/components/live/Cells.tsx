@@ -1,5 +1,5 @@
 import { Format } from "@/lib/wca/data/formats";
-import { Box, Link, Table } from "@chakra-ui/react";
+import { Box, HStack, Icon, Link, Table } from "@chakra-ui/react";
 import { Stat, statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
@@ -8,6 +8,7 @@ import { WithRecordTag } from "@/components/results/TableCells";
 import { Tooltip } from "@/components/ui/tooltip";
 import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 import { TFunction } from "i18next";
+import { LuPersonStanding } from "react-icons/lu";
 
 export function LiveTableHeader({
   isLinked = false,
@@ -122,25 +123,40 @@ export function LiveCompetitorCell({
   rowSpan,
   competitionId,
   competitor,
+  showFirstTimer = false,
+  t,
 }: {
   link?: boolean;
   rowSpan?: number;
   competitionId: string;
-  competitor: Pick<LiveCompetitor, "id" | "name">;
+  competitor: Pick<LiveCompetitor, "id" | "name" | "wca_id">;
+  showFirstTimer?: boolean;
+  t: TFunction;
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
-      {link && (
-        <Link
-          href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
-          hideBelow="md"
-        >
+      <HStack gap={1}>
+        {link && (
+          <Link
+            href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
+            hideBelow="md"
+          >
+            {competitor.name}
+          </Link>
+        )}
+        <Box as="span" hideFrom={link ? "md" : undefined}>
           {competitor.name}
-        </Link>
-      )}
-      <Box as="span" hideFrom={link ? "md" : undefined}>
-        {competitor.name}
-      </Box>
+        </Box>
+        {showFirstTimer && !competitor.wca_id && (
+          <Tooltip
+            content={t("competitions.live.admin.first_timer")}
+            showArrow
+            openDelay={200}
+          >
+            <Icon as={LuPersonStanding} size="md" />
+          </Tooltip>
+        )}
+      </HStack>
     </Table.Cell>
   );
 }
