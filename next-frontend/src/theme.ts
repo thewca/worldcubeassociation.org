@@ -16,31 +16,26 @@ type LuminanceKey =
   | "900"
   | "950";
 
-type BrandRole = "1A" | "2A" | "2B" | "2C";
+type BrandRole = "1A" | "2A";
 
 type RoleRungs = Readonly<Record<BrandRole, LuminanceKey>>;
 
-// Each brand role is a *position on the scale*, not a free-standing colour.
-// The default assignment is Deep 800 / Solid 600 / Bright 300 / Pastel 200;
-//   families whose Solid cannot sit at 600 shift the lighter roles up to keep
-//   every role on its own rung.
-// Bright stays in the light half because `card.bright` pairs it as a background
-//   for Deep-toned text, which needs it to hold ~4.5:1 against the Deep tone.
-// Exported so the theme documentation on /dashboard can state which rung each
-//   role resolves to without restating the mapping and letting it drift.
-export const slateRoleRungs = {
+// The two brand colours are *positions on the scale*, not free-standing
+//   colours: `deriveLuminanceScale` bends the generated ladder to pass through
+//   them. Solid normally lands on 600 and Deep on 800; families whose Solid
+//   cannot sit at 600 name their own rung, and their `solid` semantic token is
+//   repointed to match so `colorPalette.solid` stays the brand colour.
+const slateRoleRungs = {
   // Gamut exception: the Solid is a near-white, so it can only sit at 100.
-  wcaWhite: { "2A": "800", "1A": "100", "2C": "50", "2B": "200" },
-  green: { "2A": "800", "1A": "600", "2C": "300", "2B": "200" },
-  red: { "2A": "800", "1A": "600", "2C": "300", "2B": "200" },
+  wcaWhite: { "2A": "800", "1A": "100" },
+  green: { "2A": "800", "1A": "600" },
+  red: { "2A": "800", "1A": "600" },
   // Gamut exception: no screen can show a yellow this vivid below L≈0.80,
-  //   so the Solid sits at 400 and Bright moves up to 300.
-  yellow: { "2A": "800", "1A": "400", "2C": "300", "2B": "200" },
-  blue: { "2A": "800", "1A": "700", "2C": "300", "2B": "200" },
-  orange: { "2A": "800", "1A": "500", "2C": "300", "2B": "200" },
+  //   so the Solid sits at 400.
+  yellow: { "2A": "800", "1A": "400" },
+  blue: { "2A": "800", "1A": "700" },
+  orange: { "2A": "800", "1A": "500" },
 } as const satisfies Readonly<Record<string, RoleRungs>>;
-
-export type SlatePalette = keyof typeof slateRoleRungs;
 
 interface WcaPaletteInput {
   primary: string; // 1A (Solid / Top Face)
@@ -48,7 +43,6 @@ interface WcaPaletteInput {
   secondaryDark: string; // 2A (Deep)
   cubeLight: string; // Left Face
   cubeDark: string; // Right Face
-  pastelContrast: "white" | "black";
   rungs: RoleRungs;
 }
 
@@ -62,7 +56,6 @@ const slateColors = {
     secondaryDark: "#1B4D3E",
     cubeLight: "#1AB55C",
     cubeDark: "#04632D",
-    pastelContrast: "white",
     rungs: slateRoleRungs.green,
   } satisfies WcaPaletteInput,
   white: {
@@ -71,7 +64,6 @@ const slateColors = {
     secondaryDark: "#3B3B3B",
     cubeLight: "#FFFFFF",
     cubeDark: "#CCCCCC",
-    pastelContrast: "black",
     rungs: slateRoleRungs.wcaWhite,
   } satisfies WcaPaletteInput,
   red: {
@@ -80,7 +72,6 @@ const slateColors = {
     secondaryDark: "#7A1220",
     cubeLight: "#E53841",
     cubeDark: "#A3131A",
-    pastelContrast: "white",
     rungs: slateRoleRungs.red,
   } satisfies WcaPaletteInput,
   yellow: {
@@ -89,7 +80,6 @@ const slateColors = {
     secondaryDark: "#664D00",
     cubeLight: "#FFDE55",
     cubeDark: "#CEA705",
-    pastelContrast: "black",
     rungs: slateRoleRungs.yellow,
   } satisfies WcaPaletteInput,
   blue: {
@@ -98,7 +88,6 @@ const slateColors = {
     secondaryDark: "#003366",
     cubeLight: "#066AC4",
     cubeDark: "#03458C",
-    pastelContrast: "white",
     rungs: slateRoleRungs.blue,
   } satisfies WcaPaletteInput,
   orange: {
@@ -107,7 +96,6 @@ const slateColors = {
     secondaryDark: "#7A2B00",
     cubeLight: "#F96E32",
     cubeDark: "#D34405",
-    pastelContrast: "white",
     rungs: slateRoleRungs.orange,
   } satisfies WcaPaletteInput,
 } as const;
@@ -256,49 +244,26 @@ const deriveLuminanceScale = (
   return _.mapValues(scale, (rgbHex) => ({ value: rgbHex }));
 };
 
-const compileColorScheme = (
-  baseColor: string,
-  solidShade: number = 600,
-  darkDeep: number | string = solidShade + 100,
-  lightDeep: number | string = solidShade,
-) => ({
-  cubeShades: {
-    left: { value: `{colors.${baseColor}.lighter}` },
-    top: { value: `{colors.${baseColor}.1A}` },
-    right: { value: `{colors.${baseColor}.darker}` },
-  },
-  deep: {
-    value: {
-      _light: `{colors.${baseColor}.${lightDeep.toString()}}`,
-      _dark: `{colors.${baseColor}.${darkDeep.toString()}}`,
-    },
-  },
-});
-
-// The brand names stay in the theme, but they now resolve to rungs of the
-//   generated scale rather than standing beside it as a second set of colours.
+// Everything a palette needs beyond the generated ladder: the three cube faces,
+//   which are brand artwork rather than a rung of any scale.
 const buildPalette = (
   chakraRefScheme: string,
   colorPalette: WcaPaletteInput,
-) => {
-  const scale = deriveLuminanceScale(chakraRefScheme, colorPalette);
-  const atRung = (role: BrandRole) => ({
-    value: scale[colorPalette.rungs[role]].value,
-  });
+) => ({
+  ...deriveLuminanceScale(chakraRefScheme, colorPalette),
+  cubeShades: {
+    left: { value: colorPalette.cubeLight },
+    top: { value: colorPalette.primary },
+    right: { value: colorPalette.cubeDark },
+  },
+});
 
-  return {
-    ...scale,
-    "1A": atRung("1A"),
-    "2A": atRung("2A"),
-    "2B": atRung("2B"),
-    "2C": atRung("2C"),
-    pastelContrast: {
-      value: colorPalette.pastelContrast === "white" ? "#FCFCFC" : "#1E1E1E",
-    },
-    lighter: { value: colorPalette.cubeLight },
-    darker: { value: colorPalette.cubeDark },
-  };
-};
+// Chakra aims each palette's `solid` token at rung 600. Families whose brand
+//   Solid sits elsewhere on the ladder need it repointed, or `colorPalette.solid`
+//   would render a generated neighbour instead of the Pantone-matched colour.
+const brandSolid = (baseColor: keyof typeof slateRoleRungs) => ({
+  solid: { value: `{colors.${baseColor}.${slateRoleRungs[baseColor]["1A"]}}` },
+});
 
 const customConfig = defineConfig({
   theme: {
@@ -361,12 +326,11 @@ const customConfig = defineConfig({
           fg: { value: "{colors.link}" },
         },
         recordMarkers: {
-          personal: { value: "{colors.orange.1A}" },
-          national: { value: "{colors.green.1A}" },
-          continental: { value: "{colors.red.1A}" },
-          world: { value: "{colors.blue.1A}" },
+          personal: { value: "{colors.orange.solid}" },
+          national: { value: "{colors.green.solid}" },
+          continental: { value: "{colors.red.solid}" },
+          world: { value: "{colors.blue.solid}" },
         },
-        green: compileColorScheme("green"),
         wcaWhite: {
           // values mostly stolen from Chakra's `gray` scale,
           // with a minor adjustment for the `solid` entry.
@@ -415,12 +379,18 @@ const customConfig = defineConfig({
               _dark: "{colors.wcaWhite.800}",
             },
           },
-          ...compileColorScheme("wcaWhite", 600, 400, 300),
         },
-        red: compileColorScheme("red"),
-        yellow: compileColorScheme("yellow", 300),
-        blue: compileColorScheme("blue"),
-        orange: compileColorScheme("orange", 600, 600),
+        // green and red already have their brand Solid on rung 600, so Chakra's
+        //   own `solid` token points at the right colour without help.
+        yellow: brandSolid("yellow"),
+        blue: brandSolid("blue"),
+        orange: {
+          ...brandSolid("orange"),
+          // Chakra pairs orange with white in light mode, which only reaches
+          //   3.16:1 on the brand orange. Black clears AA at 6.65:1, and is
+          //   already what Chakra does for yellow in both modes.
+          contrast: { value: "black" },
+        },
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
@@ -537,34 +507,13 @@ const customConfig = defineConfig({
       },
     },
     layerStyles: {
+      // Chakra ships fill.subtle / fill.muted / fill.solid / fill.surface and
+      //   outline.*, which is everything we were hand-rolling. `fill.emphasized`
+      //   is the one rung Chakra leaves out.
       "fill.emphasized": {
         value: {
           background: "colorPalette.emphasized",
-          color: "colorPalette.contrast",
-        },
-      },
-      "fill.deep": {
-        value: {
-          background: "colorPalette.deep",
-          color: "colorPalette.contrast",
-        },
-      },
-      "card.dark": {
-        value: {
-          background: "colorPalette.2A",
-          color: "colorPalette.2B",
-        },
-      },
-      "card.pastel": {
-        value: {
-          background: "colorPalette.1A",
-          color: "colorPalette.pastelContrast",
-        },
-      },
-      "card.bright": {
-        value: {
-          background: "colorPalette.2C",
-          color: "colorPalette.2A",
+          color: "colorPalette.fg",
         },
       },
     },
@@ -602,12 +551,12 @@ const customConfig = defineConfig({
       button: {
         variants: {
           variant: {
-            // Solid button locked to the blue palette, using the pastel `1A`
-            // background. Used on homepage cards when a button should not
-            // inherit its surrounding card's color scheme.
+            // Solid button locked to the blue palette. Used on homepage cards
+            // when a button should not inherit its surrounding card's color
+            // scheme.
             pastelSolid: {
               colorPalette: "blue",
-              bg: "colorPalette.1A",
+              bg: "colorPalette.solid",
               color: "colorPalette.contrast",
               borderColor: "transparent",
               _hover: {
@@ -629,6 +578,24 @@ const customConfig = defineConfig({
               },
               _expanded: {
                 bg: "colorPalette.subtle",
+              },
+            },
+            // Outline button for a `fill.solid` surface. Chakra's `outline`
+            // variant colours itself from `colorPalette.fg` and
+            // `colorPalette.border`, which are rungs of the same hue as
+            // `colorPalette.solid` — on blue, `fg` resolves to the *same* value
+            // as the background, so the button disappears entirely. Inheriting
+            // `currentColor` picks up the surface's `contrast` foreground
+            // instead, which reads on every palette and in both colour modes.
+            onSolid: {
+              borderWidth: "1px",
+              borderColor: "currentColor",
+              color: "currentColor",
+              _hover: {
+                bg: "colorPalette.contrast/15",
+              },
+              _expanded: {
+                bg: "colorPalette.contrast/15",
               },
             },
           },
@@ -736,19 +703,19 @@ const customConfig = defineConfig({
             deep: {
               root: {
                 colorPalette: "wcaWhite",
-                layerStyle: "fill.deep",
+                layerStyle: "fill.solid",
               },
               description: {
-                layerStyle: "fill.deep",
+                layerStyle: "fill.solid",
               },
             },
             slatePastel: {
               root: {
                 colorPalette: "wcaWhite",
-                layerStyle: "card.pastel",
+                layerStyle: "fill.solid",
               },
               description: {
-                layerStyle: "card.pastel",
+                layerStyle: "fill.solid",
               },
             },
           },

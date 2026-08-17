@@ -106,7 +106,7 @@ export function LivePositionCell({
   return (
     <Table.Cell
       width={1}
-      layerStyle={showAdvancing ? "fill.deep" : undefined}
+      layerStyle={showAdvancing ? "fill.solid" : undefined}
       textAlign="right"
       rowSpan={rowSpan}
       colorPalette={
