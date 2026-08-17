@@ -4780,14 +4780,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/form-core@npm:1.33.4":
-  version: 1.33.4
-  resolution: "@tanstack/form-core@npm:1.33.4"
+"@tanstack/form-core@npm:1.33.5":
+  version: 1.33.5
+  resolution: "@tanstack/form-core@npm:1.33.5"
   dependencies:
     "@tanstack/devtools-event-client": "npm:^0.4.1"
     "@tanstack/pacer-lite": "npm:^0.1.1"
     "@tanstack/store": "npm:^0.11.0"
-  checksum: 10c0/19121b03c4da1b3f8581a0340eaba037339a8eb37300582f82e8f30a770293785e8f777e6ee308fa3fba9eaf8f0a94654444c7bb25feadebbad7fafa1ac152ad
+  checksum: 10c0/626bb5555e1c654bba8eb3ea38a415de52ebdfcd2e8189f2e7c91cb4d8355d81194276bece3067ca0709acfb2d02bdca4393550d84ecfde11378ad57f2b60f5f
   languageName: node
   linkType: hard
 
@@ -4805,18 +4805,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-form@npm:^1.33.4":
-  version: 1.33.4
-  resolution: "@tanstack/react-form@npm:1.33.4"
+"@tanstack/react-form@npm:^1.33.5":
+  version: 1.33.5
+  resolution: "@tanstack/react-form@npm:1.33.5"
   dependencies:
-    "@tanstack/form-core": "npm:1.33.4"
+    "@tanstack/form-core": "npm:1.33.5"
     "@tanstack/react-store": "npm:^0.11.0"
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     "@tanstack/react-start":
       optional: true
-  checksum: 10c0/0f60928cca72a7822e2e368aa1a1fa862c84d9996568a754f518716526f6acbdbf2aad3be21ea98c8e976fca34e4bc2d43b7f1b1875d5b24af91dc8c690a671c
+  checksum: 10c0/035991b6589000f763dedcdf99a216d7eef2d58e7c98d9f6106738b14fe13e0141c4f515809f171107c80c432ba68d16ec72e9ebc8ad31dba8150db9fdc22a95
   languageName: node
   linkType: hard
 
@@ -11902,7 +11902,7 @@ __metadata:
     "@redocly/cli": "npm:2.46.0"
     "@stylistic/eslint-plugin": "npm:^5.10.0"
     "@tanstack/eslint-plugin-query": "npm:^5.101.4"
-    "@tanstack/react-form": "npm:^1.33.4"
+    "@tanstack/react-form": "npm:^1.33.5"
     "@tanstack/react-query": "npm:^5.101.4"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:^7.0.0"
