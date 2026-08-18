@@ -7,6 +7,10 @@ class RegistrationsController < ApplicationController
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
+  rescue_from JSON::Schema::ValidationError do |_e|
+    render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.invalid_wcif") }
+  end
+
   private def competition_from_params
     competition = if params[:competition_id].present?
                     Competition.find(params.require(:competition_id))
@@ -69,9 +73,15 @@ class RegistrationsController < ApplicationController
   before_action :validate_and_parse_registration_preview, only: %i[validate_and_convert_registrations]
   private def validate_and_parse_registration_preview
     @competition = competition_from_params
-    file = params.require(:csv_registration_file)
+    file = params.require(:registration_file)
 
-    @converted_registrations = parse_csv_to_registration_data(file.path, @competition)
+    if file.content_type == "application/json"
+      @converted_registrations = parse_json_to_registration_data(file.path)
+    elsif file.content_type == "text/csv"
+      @converted_registrations = parse_csv_to_registration_data(file.path, @competition)
+    else
+      render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.unsupported_file_format") }
+    end
   end
 
   def validate_and_convert_registrations
@@ -124,6 +134,16 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  private def parse_json_to_registration_data(file_path)
+    wcif = JSON.parse(File.read(file_path))
+
+    Competition.validate_wcif_schema!(wcif)
+
+    wcif["persons"].select do |person|
+      person.dig("registration", "status") == "accepted"
+    end
+  end
+
   private def build_wcif_data(name:, country:, gender:, birth_date:, email:, event_ids:, wca_id: nil, comments: nil, status: nil, is_competing: nil, registered_at: nil)
     {
       name: name,
@@ -170,7 +190,10 @@ class RegistrationsController < ApplicationController
       end
     end
 
+    invalid_countries = csv_rows.pluck(:country).uniq - Country::WCA_COUNTRY_IDS
+
     [
+      invalid_countries.map { |c| I18n.t("registrations.import.errors.invalid_country", country: c) },
       event_column_errors,
       validate_dob_formats(csv_rows.pluck(:birth_date)),
       validate_no_duplicates(csv_rows.pluck(:email), 'email_duplicates', :emails),
@@ -180,7 +203,7 @@ class RegistrationsController < ApplicationController
 
   private def validate_registrations(registration_rows, competition)
     # Validate country codes
-    invalid_countries = registration_rows.filter_map { |e| e[:countryIso2] }.uniq.reject { |iso2| Country.c_find_by_iso2(iso2) }
+    invalid_countries = registration_rows.pluck(:countryIso2).compact_blank.uniq - Country::WCA_COUNTRY_ISO_CODES
 
     # Validate event IDs against competition events
     valid_event_ids = competition.competition_events.pluck(:event_id)
@@ -188,7 +211,7 @@ class RegistrationsController < ApplicationController
     invalid_event_ids = all_event_ids - valid_event_ids
 
     [
-      invalid_countries.any? && "Invalid country codes: #{invalid_countries.join(', ')}",
+      invalid_countries.map { |c| I18n.t("registrations.import.errors.invalid_country", country: c) },
       invalid_event_ids.any? && "Invalid event IDs for this competition: #{invalid_event_ids.join(', ')}",
       validate_dob_formats(registration_rows.filter_map { |e| e[:birthdate] }),
       validate_no_duplicates(registration_rows.filter_map { |e| e[:email]&.downcase }, 'email_duplicates', :emails),

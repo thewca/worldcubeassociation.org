@@ -14,8 +14,8 @@ import { Metadata } from "next";
 import { LuArrowLeft } from "react-icons/lu";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
-import { ChakraMarkdown } from "@/components/Markdown";
 import IncidentAdminButtons from "@/components/incidents/IncidentAdminButtons";
+import IncidentMarkdown from "@/components/incidents/IncidentMarkdown";
 import { CompetitionTag, IncidentTags } from "@/components/incidents/Tags";
 import { getIncident } from "@/lib/wca/incidents/getIncident";
 import getPermissions from "@/lib/wca/permissions";
@@ -106,7 +106,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
                 <Heading textStyle="h2" mb="4">
                   {t("incidents_log.public_summary")}
                 </Heading>
-                <ChakraMarkdown>{incident.public_summary}</ChakraMarkdown>
+                <IncidentMarkdown>{incident.public_summary}</IncidentMarkdown>
               </Box>
 
               {/* The API only returns the private fields to users who may read them. */}
@@ -115,9 +115,9 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
                   <Heading textStyle="h2" mb="4">
                     {t("incidents_log.private_description")}
                   </Heading>
-                  <ChakraMarkdown>
+                  <IncidentMarkdown>
                     {incident.private_description}
-                  </ChakraMarkdown>
+                  </IncidentMarkdown>
                 </Box>
               )}
 
@@ -126,9 +126,9 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
                   <Heading textStyle="h2" mb="4">
                     {t("incidents_log.private_wrc_decision")}
                   </Heading>
-                  <ChakraMarkdown>
+                  <IncidentMarkdown>
                     {incident.private_wrc_decision}
-                  </ChakraMarkdown>
+                  </IncidentMarkdown>
                 </Box>
               )}
 

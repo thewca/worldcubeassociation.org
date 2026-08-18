@@ -19,6 +19,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import Loading from "@/components/ui/loading";
 import { RegistrationData } from "@/types/registrations";
 import { hasNotPassedOrNull } from "@/lib/wca/dates";
+import { normalizeForSearch } from "@/lib/live/normalizeForSearch";
 
 export default function AddPersonModal({
   competitionId,
@@ -151,9 +152,9 @@ function AddPersonCombobox({
       .filter(
         (competitor) =>
           !filterText ||
-          competitor.user.name
-            .toLowerCase()
-            .includes(filterText.toLowerCase()) ||
+          normalizeForSearch(competitor.user.name).includes(
+            normalizeForSearch(filterText),
+          ) ||
           parseInt(filterText, 10) === competitor.registrant_id,
       );
 

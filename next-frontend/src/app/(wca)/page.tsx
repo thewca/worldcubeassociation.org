@@ -102,7 +102,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
                 }
               >
                 <ChakraLink
-                  color="colorPalette.pastelContrast"
+                  color="colorPalette.contrast"
                   textStyle={undefined}
                   href={button.hyperlink}
                   target={button.newTab ? "_blank" : undefined}
@@ -181,7 +181,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       {block.imagePosition === "left" && (
         <BannerImageWithGradient
           mainImage={block.mainImage as Media}
-          targetColor="colorPalette.1A"
+          targetColor="colorPalette.solid"
           gradientDirection="right"
           boxWidth={block.heading ? "50%" : "100%"}
         />
@@ -220,7 +220,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       {block.imagePosition === "right" && (
         <BannerImageWithGradient
           mainImage={block.mainImage as Media}
-          targetColor="colorPalette.1A"
+          targetColor="colorPalette.solid"
           gradientDirection="left"
           boxWidth={block.heading ? "50%" : "100%"}
         />

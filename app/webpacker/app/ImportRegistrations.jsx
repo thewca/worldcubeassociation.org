@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Message, Tab } from 'semantic-ui-react';
 import I18n from '../lib/i18n';
 import RegistrationPreview from '../components/ImportRegistrations/RegistrationPreview';
-import UploadRegistrationCsv from '../components/ImportRegistrations/UploadRegistrationCsv';
+import UploadRegistrationFile from '../components/ImportRegistrations/UploadRegistrationFile';
 import WCAQueryClientProvider from '../lib/providers/WCAQueryClientProvider';
 
 export default function Wrapper({ competitionId }) {
@@ -18,10 +18,10 @@ function ImportRegistrations({ competitionId }) {
   const [registrationsToPreview, setRegistrationsToPreview] = useState();
   const panes = [
     {
-      menuItem: 'Upload Registration CSV',
+      menuItem: 'Upload Registration File',
       render: () => (
         <Tab.Pane>
-          <UploadRegistrationCsv
+          <UploadRegistrationFile
             competitionId={competitionId}
             setRegistrationsToPreview={setRegistrationsToPreview}
           />

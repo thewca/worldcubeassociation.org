@@ -1957,7 +1957,7 @@ class Competition < ApplicationRecord
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
-    persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
+    persons_wcif + managers.map { it.to_wcif(self, authorized: authorized, version: version) }
   end
 
   def events_wcif(version: WCIF_STABLE_VERSION, include_results: true)
@@ -1993,21 +1993,20 @@ class Competition < ApplicationRecord
     }
   end
 
-  def self.json_validation_options(is_strict: true)
-    { noAdditionalProperties: is_strict }
+  def self.json_validation_options
+    { noAdditionalProperties: true }
   end
 
-  def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION, is_strict: true)
+  def self.validate_wcif_schema!(wcif, version: WCIF_STABLE_VERSION)
     expected_schema = self.wcif_json_schema(version: version)
-    validation_opts = self.json_validation_options(is_strict: is_strict)
 
-    JSON::Validator.validate!(expected_schema, wcif, **validation_opts)
+    JSON::Validator.validate!(expected_schema, wcif, **self.json_validation_options)
   end
 
-  def set_wcif!(wcif, current_user, strict_schema_checks: true)
+  def set_wcif!(wcif, current_user)
     import_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
 
-    Competition.validate_wcif_schema!(wcif, version: import_version, is_strict: strict_schema_checks)
+    Competition.validate_wcif_schema!(wcif, version: import_version)
 
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]

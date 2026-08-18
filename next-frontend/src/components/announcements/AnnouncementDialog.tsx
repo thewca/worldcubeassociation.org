@@ -30,7 +30,7 @@ function ShareButton({ announcement }: { announcement: Announcement }) {
   return (
     <Clipboard.Root value={shareUrl}>
       <Clipboard.Trigger asChild>
-        <Button variant="pastelContrastOutline">
+        <Button variant="onSolid">
           <Clipboard.Indicator copied={<LuCheck />}>
             <LuShare2 />
           </Clipboard.Indicator>
@@ -45,9 +45,9 @@ function ShareButton({ announcement }: { announcement: Announcement }) {
 /// reader never loses their place in the list. `lazyMount` keeps every
 /// announcement's full content out of the list page's HTML.
 ///
-/// The dialog is a `card.pastel` surface in the palette of the card it was
-/// opened from. The portal renders it outside that card, so the palette has to
-/// be passed in rather than inherited.
+/// The dialog carries the same surface as the card it was opened from, in that
+/// card's palette. The portal renders it outside that card, so the palette has
+/// to be passed in rather than inherited.
 export default function AnnouncementDialog({
   announcement,
   colorPalette,
@@ -58,18 +58,17 @@ export default function AnnouncementDialog({
   return (
     <Dialog.Root size="xl" scrollBehavior="inside" lazyMount>
       <Dialog.Trigger asChild>
-        <Button
-          variant="pastelContrastOutline"
-          size="sm"
-          alignSelf="flex-start"
-        >
+        <Button variant="onSolid" size="sm" alignSelf="flex-start">
           Read More
         </Button>
       </Dialog.Trigger>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content colorPalette={colorPalette} layerStyle="card.pastel">
+          <Dialog.Content
+            colorPalette={colorPalette}
+            layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
+          >
             <Dialog.Header>
               <Stack gap={1}>
                 <Dialog.Title textStyle="h2">{announcement.title}</Dialog.Title>
@@ -84,7 +83,7 @@ export default function AnnouncementDialog({
             <Dialog.Footer>
               <ShareButton announcement={announcement} />
               <Dialog.ActionTrigger asChild>
-                <Button variant="pastelContrastOutline">Close</Button>
+                <Button variant="onSolid">Close</Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
