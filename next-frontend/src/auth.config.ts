@@ -19,6 +19,11 @@ const baseWcaProvider: Provider = {
   issuer: WCA_OIDC_ISSUER,
   clientId: WCA_OIDC_CLIENT_ID,
   clientSecret: WCA_OIDC_CLIENT_SECRET,
+  // `manage_registrations` is what lets this frontend submit and edit registrations on the
+  //   signed-in user's behalf; without it the registration endpoints answer 403.
+  authorization: {
+    params: { scope: "openid profile email manage_registrations" },
+  },
   profile: (profile) => {
     return {
       id: profile.sub,
