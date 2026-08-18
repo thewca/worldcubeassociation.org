@@ -48,7 +48,11 @@ function isKnownStatus(status?: string): status is keyof typeof STATUS_ALERTS {
   return status !== undefined && status in STATUS_ALERTS;
 }
 
-function RegistrationStatus({ registration }: { registration: Registration }) {
+export function RegistrationStatus({
+  registration,
+}: {
+  registration: Registration;
+}) {
   const { t } = useT();
 
   const status = registration.competing.registration_status;
@@ -127,10 +131,6 @@ export default function RegistrationOverview({
   }
 
   const status = registration.competing.registration_status;
-
-  // Someone who withdrew is not editing a registration so much as signing up again, which is what
-  //   the form they are about to open will say on its own button too.
-  const hasWithdrawn = status === "cancelled";
 
   const mayCancelWithoutAsking =
     competitionInfo.competitor_can_cancel === "always" ||
@@ -236,9 +236,7 @@ export default function RegistrationOverview({
         {!isEditing && canEdit && (
           <Button colorPalette="blue" onClick={() => onEditingChange(true)}>
             <LuPencil />
-            {t(
-              hasWithdrawn ? "registrations.register" : "registrations.update",
-            )}
+            {t("registrations.update")}
           </Button>
         )}
         {CANCELLABLE_STATUSES.includes(status ?? "") && (

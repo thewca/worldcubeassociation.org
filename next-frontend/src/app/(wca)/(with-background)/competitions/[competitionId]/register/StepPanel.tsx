@@ -7,7 +7,9 @@ import CompetingStep, {
   type RegistrationFormValues,
 } from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
-import RegistrationOverview from "@/components/competitions/Registration/RegistrationOverview";
+import RegistrationOverview, {
+  RegistrationStatus,
+} from "@/components/competitions/Registration/RegistrationOverview";
 import { useT } from "@/lib/i18n/useI18n";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -97,6 +99,8 @@ export default function StepPanel({
       onSuccess: (data) => {
         queryClient.setQueryData(registrationQueryKey, data.registration);
         setIsEditing(false);
+        // Signing up again starts at the requirements, not where the competitor left off.
+        setHasStartedRegistering(false);
         toaster.create({
           id: "registration-cancelled",
           type: "success",
@@ -205,10 +209,16 @@ export default function StepPanel({
     />
   );
 
-  // Registering is the only thing the stepper is for. Once there is a registration - even a
-  //   withdrawn or rejected one - the overview takes over, and everything still outstanding is
-  //   said there rather than by a strip of circles.
-  if (registration !== null || createRegistration.isSuccess) {
+  // Withdrawing puts the competitor back at the start: signing up again means going through the
+  //   requirements and, where there is a fee, paying it - so they get the whole flow back rather
+  //   than a summary of a registration that no longer stands.
+  const hasWithdrawn =
+    registration?.competing.registration_status === "cancelled";
+
+  // Registering is the only thing the stepper is for. Once there is a registration that stands -
+  //   even a rejected one - the overview takes over, and everything still outstanding is said
+  //   there rather than by a strip of circles.
+  if ((registration !== null && !hasWithdrawn) || isAwaitingCreation) {
     // Only a registration still waiting for approval has a fee to chase: organizers accepting or
     //   waitlisting someone settles the question - their fee has been waived, or is being
     //   collected some other way - and a withdrawn or rejected competitor owes nothing at all.
@@ -264,47 +274,54 @@ export default function StepPanel({
   const competingStep = steps.findIndex((step) => step.key === "competing");
 
   return (
-    <Steps.Root
-      count={steps.length}
-      colorPalette="blue"
-      step={hasStartedRegistering ? competingStep : requirementsStep}
-      // Four labelled steps do not fit side by side on a phone, so there they become one step per
-      //   row. `flexDirection` because the vertical variant otherwise puts the strip beside the
-      //   panel rather than above it, which is even narrower.
-      orientation={{ base: "vertical", lg: "horizontal" }}
-      flexDirection="column"
-      gap="8"
-    >
-      {/* Purely a map of what is coming: payment and approval are reached by registering, not by
+    <VStack width="full" gap="4" align="stretch">
+      {registration !== null && (
+        <RegistrationStatus registration={registration} />
+      )}
+      <Steps.Root
+        count={steps.length}
+        colorPalette="blue"
+        step={hasStartedRegistering ? competingStep : requirementsStep}
+        // Four labelled steps do not fit side by side on a phone, so there they become one step per
+        //   row. `flexDirection` because the vertical variant otherwise puts the strip beside the
+        //   panel rather than above it, which is even narrower.
+        orientation={{ base: "vertical", lg: "horizontal" }}
+        flexDirection="column"
+        gap="8"
+      >
+        {/* Purely a map of what is coming: payment and approval are reached by registering, not by
           clicking ahead, so the steps are shown rather than offered as navigation. */}
-      <Steps.List>
-        {steps.map((step, index) => {
-          const translationKey = `competitions.registration_v2.register.panel.${step.key}`;
+        <Steps.List>
+          {steps.map((step, index) => {
+            const translationKey = `competitions.registration_v2.register.panel.${step.key}`;
 
-          return (
-            <Steps.Item key={step.key} index={index}>
-              <Steps.Indicator />
-              <VStack gap="0" alignItems="start" minWidth="0">
-                <Steps.Title>{t(`${translationKey}.title`)}</Steps.Title>
-                <Steps.Description>
-                  {t(`${translationKey}.description`)}
-                </Steps.Description>
-              </VStack>
-              <Steps.Separator />
-            </Steps.Item>
-          );
-        })}
-      </Steps.List>
+            return (
+              <Steps.Item key={step.key} index={index}>
+                <Steps.Indicator />
+                <VStack gap="0" alignItems="start" minWidth="0">
+                  <Steps.Title>{t(`${translationKey}.title`)}</Steps.Title>
+                  <Steps.Description>
+                    {t(`${translationKey}.description`)}
+                  </Steps.Description>
+                </VStack>
+                <Steps.Separator />
+              </Steps.Item>
+            );
+          })}
+        </Steps.List>
 
-      <Steps.Content index={requirementsStep}>
-        <RequirementsStep
-          hasAcknowledged={hasAcknowledgedRequirements}
-          onAcknowledgedChange={setHasAcknowledgedRequirements}
-          onContinue={() => setHasStartedRegistering(true)}
-        />
-      </Steps.Content>
+        <Steps.Content index={requirementsStep}>
+          <RequirementsStep
+            hasAcknowledged={hasAcknowledgedRequirements}
+            onAcknowledgedChange={setHasAcknowledgedRequirements}
+            onContinue={() => setHasStartedRegistering(true)}
+          />
+        </Steps.Content>
 
-      <Steps.Content index={competingStep}>{registrationForm()}</Steps.Content>
-    </Steps.Root>
+        <Steps.Content index={competingStep}>
+          {registrationForm()}
+        </Steps.Content>
+      </Steps.Root>
+    </VStack>
   );
 }
