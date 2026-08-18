@@ -709,6 +709,7 @@ en:
         dob: 'Access your date of birth'
         email: 'Access your email address'
         manage_competitions: 'Manage any upcoming competitions you are organizing'
+        manage_registrations: 'Register you for competitions, and change or cancel your registrations'
 
     #context: Key used for sign in/sign up
     devise:

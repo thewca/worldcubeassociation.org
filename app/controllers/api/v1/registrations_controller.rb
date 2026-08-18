@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 class Api::V1::RegistrationsController < Api::V1::ApiController
+  # Third-party OAuth clients have to be granted this explicitly before they may put anything
+  # into the registration queue on a user's behalf.
+  MANAGE_REGISTRATIONS_SCOPE = 'manage_registrations'
+
   skip_before_action :require_user!, only: [:index]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
+  before_action :require_registration_scope!, only: %i[create update bulk_update bulk_auto_accept payment_ticket]
   before_action :user_can_create_registration, only: [:create]
   before_action :validate_create_request, only: [:create]
   before_action :ensure_registration_exists, only: [:show_by_user]
@@ -273,6 +278,11 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   private
+
+    def require_registration_scope!
+      raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+        token_has_scope?(MANAGE_REGISTRATIONS_SCOPE)
+    end
 
     def action_type(request)
       self_updating = request[:user_id] == authenticated_user.id
