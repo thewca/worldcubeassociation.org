@@ -1449,6 +1449,8 @@ en:
         close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
+        #context: tooltip on an icon next to competitors who don't have a WCA ID yet
+        first_timer: "First-timer"
         edit: "Edit"
         results: "Results"
         registration: "Registration"
@@ -2644,6 +2646,9 @@ en:
     determination_letter: "IRS Determination Letter"
     bylaws: "Bylaws"
     motions: "Motions"
+    #context: Shown when a permalink points at a motion number that no longer exists, usually because the motion was repealed
+    motion_not_found: "Motion Not Found"
+    motion_not_found_action: "We couldn't find a motion numbered \"%{motion_id}\". It may have been repealed."
     minutes: "Minutes"
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"

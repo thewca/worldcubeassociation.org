@@ -35,6 +35,7 @@ export default function ImportResultsData({
             uploadedScrambleFilesCount={uploadedScrambleFilesCount}
             isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
+            scoretakingSoftware={scoretakingSoftware}
           />
         </Tab.Pane>
       ),

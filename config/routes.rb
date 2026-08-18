@@ -269,6 +269,7 @@ Rails.application.routes.draw do
 
   get 'about' => 'static_pages#about'
   get 'documents' => 'static_pages#documents'
+  get 'documents/motions/:id' => 'static_pages#motion', as: :motion, constraints: { id: /\d+\.\d+/ }, format: false
   get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'

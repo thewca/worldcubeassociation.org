@@ -26,6 +26,7 @@ import {
 import { flushSync } from "react-dom";
 import type { KeyboardEvent, ReactNode, Ref } from "react";
 import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
+import { normalizeForSearch } from "@/lib/live/normalizeForSearch";
 import { average, best } from "@/lib/wca/results/attempts";
 import { formatAttemptResult, SKIPPED_VALUE } from "@/lib/wca/wcif/attempts";
 import { useT } from "@/lib/i18n/useI18n";
@@ -80,9 +81,9 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
       .filter(
         (competitor) =>
           !filterText ||
-          toCompetitorString(competitor)
-            .toLowerCase()
-            .includes(filterText.toLowerCase()) ||
+          normalizeForSearch(toCompetitorString(competitor)).includes(
+            normalizeForSearch(filterText),
+          ) ||
           parseInt(filterText, 10) === competitor.registrant_id,
       );
 
