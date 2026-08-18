@@ -18,19 +18,45 @@ import {
   DEFAULT_GUEST_LIMIT,
 } from "@/lib/wca/data/wca";
 import { useT } from "@/lib/i18n/useI18n";
-import { disabledEventIds } from "@/lib/wca/registrations/eventSelection";
+import {
+  disabledEventIds,
+  preselectedEventIds,
+} from "@/lib/wca/registrations/eventSelection";
+import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { qualificationToString } from "@/lib/wca/wcif/rounds";
 import type { components } from "@/types/openapi";
-import type {
-  RegistrationForm,
-  RegistrationFormValues,
-} from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
-import { LuSend } from "react-icons/lu";
+import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import { LuSend, LuUndo2 } from "react-icons/lu";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type CompetingStepParameters =
   components["schemas"]["CompetingStepConfig"]["parameters"];
 type Registration = components["schemas"]["RegistrationDataV2"];
+
+const { fieldContext, formContext } = createFormHookContexts();
+
+const { useAppForm } = createFormHook({
+  fieldComponents: {},
+  formComponents: {},
+  fieldContext,
+  formContext,
+});
+
+export interface RegistrationFormValues {
+  comment: string;
+  guests: number;
+  eventIds: string[];
+}
+
+const defaultFormValues = (
+  registration: Registration | null,
+  parameters: CompetingStepParameters,
+): RegistrationFormValues => ({
+  comment: registration?.competing.comment ?? "",
+  guests: registration?.guests ?? 0,
+  eventIds:
+    registration?.competing.event_ids ?? preselectedEventIds(parameters),
+});
 
 const toggleEvent = (eventId: string, selectedEventIds: string[]) => {
   if (selectedEventIds.includes(eventId)) {
@@ -42,21 +68,29 @@ const toggleEvent = (eventId: string, selectedEventIds: string[]) => {
 };
 
 export default function CompetingStep({
-  form,
   competitionInfo,
   parameters,
   registration,
   isSubmitting,
   onSubmit,
+  onClose,
 }: {
-  form: RegistrationForm;
   competitionInfo: CompetitionInfo;
   parameters: CompetingStepParameters;
   registration: Registration | null;
   isSubmitting: boolean;
   onSubmit: (values: RegistrationFormValues) => void;
+  // Only set when the form is opened from the registration overview, which is the one place the
+  //   competitor can leave it again without submitting anything.
+  onClose?: () => void;
 }) {
   const { t } = useT();
+
+  // Defaults only apply on mount, which is what we want: this component is mounted afresh every
+  //   time the competitor opens the form, so it always starts from what is currently saved.
+  const form = useAppForm({
+    defaultValues: defaultFormValues(registration, parameters),
+  });
 
   const maxEvents = parameters.events_per_registration_limit ?? Infinity;
 
@@ -69,18 +103,11 @@ export default function CompetingStep({
     ? (parameters.guests_per_registration_limit ?? DEFAULT_GUEST_LIMIT)
     : DEFAULT_GUEST_LIMIT;
 
-  const competingStatus = registration?.competing.registration_status;
-  const hasWithdrawn = competingStatus === "cancelled";
-
-  // Organizers keep editing open for pending and waitlisted competitors even when the competition
-  //   as a whole no longer allows changes.
-  const canEditRegistration =
-    parameters.allow_registration_edits ||
-    competingStatus === "pending" ||
-    competingStatus === "waiting_list";
+  const hasWithdrawn =
+    registration?.competing.registration_status === "cancelled";
 
   const isEditingLocked =
-    registration !== null && !hasWithdrawn && !canEditRegistration;
+    registration !== null && !canEditRegistration(parameters, registration);
 
   const warnings = [
     parameters.events_per_registration_limit &&
@@ -257,19 +284,41 @@ export default function CompetingStep({
           </Alert.Root>
         )}
 
-        <form.Subscribe selector={(state) => isSubmittable(state.values)}>
-          {(canSubmit) => (
-            <Button
-              type="submit"
-              width="full"
-              colorPalette="green"
-              loading={isSubmitting}
-              disabled={!canSubmit || isEditingLocked}
-            >
-              <LuSend />
-              {submitLabel}
-            </Button>
-          )}
+        {/* Opened from the overview with nothing changed there is nothing to submit, so the same
+            button takes the competitor back to their summary instead of saving. */}
+        <form.Subscribe
+          selector={(state) =>
+            onClose && state.isDefaultValue
+              ? "close"
+              : isSubmittable(state.values)
+                ? "submit"
+                : "incomplete"
+          }
+        >
+          {(buttonAction) =>
+            buttonAction === "close" ? (
+              <Button
+                width="full"
+                variant="outline"
+                colorPalette="blue"
+                onClick={onClose}
+              >
+                <LuUndo2 />
+                {t("competitions.registration_v2.register.view_registration")}
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                width="full"
+                colorPalette="green"
+                loading={isSubmitting}
+                disabled={buttonAction === "incomplete" || isEditingLocked}
+              >
+                <LuSend />
+                {submitLabel}
+              </Button>
+            )
+          }
         </form.Subscribe>
       </Fieldset.Root>
     </form>

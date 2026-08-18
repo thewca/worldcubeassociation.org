@@ -1,11 +1,11 @@
 "use client";
 
-import { Steps } from "@chakra-ui/react";
+import { Steps, VStack } from "@chakra-ui/react";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
-import StepList from "@/components/competitions/Registration/StepList";
 import type { components } from "@/types/openapi";
-import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
-import CompetingStep from "@/components/competitions/Registration/CompetingStep";
+import CompetingStep, {
+  type RegistrationFormValues,
+} from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
 import RegistrationOverview from "@/components/competitions/Registration/RegistrationOverview";
 import { useT } from "@/lib/i18n/useI18n";
@@ -14,50 +14,16 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
 import pollRegistrationQueue from "@/lib/wca/registrations/pollRegistrationQueue";
-import { preselectedEventIds } from "@/lib/wca/registrations/eventSelection";
+import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
-type StepKey = StepConfig["key"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
 // How often we ask the queue whether it has worked off our submission yet.
 const QUEUE_POLL_INTERVAL_MS = 3000;
 // Once the queue says it is done, how often we ask Rails for the registration it produced.
 const REGISTRATION_REFETCH_INTERVAL_MS = 1000;
-
-export const { fieldContext, formContext } = createFormHookContexts();
-
-const { useAppForm } = createFormHook({
-  fieldComponents: {},
-  formComponents: {},
-  fieldContext,
-  formContext,
-});
-
-export interface RegistrationFormValues {
-  comment: string;
-  guests: number;
-  eventIds: string[];
-}
-
-// The only reason why we have this custom hook is that we can infer its return type.
-// Tanstack-Form is pretty powerful, but the price for this power is a nightmare in generics,
-//   so type-casting the `form` component prop by ourselves is not an option.
-// See also https://github.com/TanStack/form/discussions/1804 for reference.
-const useRegistrationForm = (defaultValues: RegistrationFormValues) =>
-  useAppForm({ defaultValues });
-
-export type RegistrationForm = ReturnType<typeof useRegistrationForm>;
-
-const registrationFormValues = (
-  registration: Registration | null,
-  defaultEventIds: string[],
-): RegistrationFormValues => ({
-  comment: registration?.competing.comment ?? "",
-  guests: registration?.guests ?? 0,
-  eventIds: registration?.competing.event_ids ?? defaultEventIds,
-});
 
 export default function StepPanel({
   steps,
@@ -81,9 +47,11 @@ export default function StepPanel({
   const [hasAcknowledgedRequirements, setHasAcknowledgedRequirements] =
     useState(false);
 
-  // `undefined` means "show whatever step the registration still needs". Picking a step from the
-  //   stepper pins it, until the next successful submission hands control back to the registration.
-  const [pinnedStep, setPinnedStep] = useState<number>();
+  // Kept apart from the acknowledgement itself: ticking the box would otherwise swap the panel out
+  //   from under the competitor before they ever reach the Continue button.
+  const [hasStartedRegistering, setHasStartedRegistering] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(false);
 
   const registrationQueryKey = ["registration", competitionInfo.id, userId];
 
@@ -99,12 +67,7 @@ export default function StepPanel({
   const createRegistration = api.useMutation(
     "post",
     "/v1/competitions/{competitionId}/registrations",
-    {
-      onError: showRegistrationError,
-      // Creation is queued, so there is no registration to store yet - the queue poll below
-      //   takes over from here.
-      onSuccess: () => setPinnedStep(undefined),
-    },
+    { onError: showRegistrationError },
   );
 
   const updateRegistration = api.useMutation(
@@ -114,11 +77,32 @@ export default function StepPanel({
       onError: showRegistrationError,
       onSuccess: (data) => {
         queryClient.setQueryData(registrationQueryKey, data.registration);
-        setPinnedStep(undefined);
+        setIsEditing(false);
         toaster.create({
           id: "registration-updated",
           type: "success",
           description: t("registrations.flash.updated"),
+        });
+      },
+    },
+  );
+
+  // Withdrawing goes through the same endpoint as any other change, but it is its own action with
+  //   its own outcome to report, so it gets its own handle on the mutation.
+  const cancelRegistration = api.useMutation(
+    "patch",
+    "/v1/registrations/{registrationId}",
+    {
+      onError: showRegistrationError,
+      onSuccess: (data) => {
+        queryClient.setQueryData(registrationQueryKey, data.registration);
+        setIsEditing(false);
+        toaster.create({
+          id: "registration-cancelled",
+          type: "success",
+          description: t(
+            "competitions.registration_v2.register.registration_status.cancelled",
+          ),
         });
       },
     },
@@ -169,76 +153,10 @@ export default function StepPanel({
     createRegistration.isSuccess && registration === null;
 
   // `flatMap` rather than `find`, because returning `[]` from the non-matching branch is what lets
-  //   TypeScript narrow the step union down to the competing step and reach its parameters.
-  const preferredEventIds = steps.flatMap((step) =>
-    step.key === "competing" ? preselectedEventIds(step.parameters) : [],
-  );
-
-  const form = useRegistrationForm(
-    registrationFormValues(registration, preferredEventIds),
-  );
-
-  const competingStatus = registration?.competing.registration_status;
-  const isRejected = competingStatus === "rejected";
-  const isAccepted = competingStatus === "accepted";
-  const isWaitlisted = competingStatus === "waiting_list";
-  const isRegistered = registration !== null && competingStatus !== "cancelled";
-
-  const isStepComplete: Record<StepKey, boolean> = {
-    requirements: hasAcknowledgedRequirements || isRegistered,
-    competing: isRegistered,
-    // Organizers accepting or waitlisting someone settles the payment question for the purposes
-    //   of navigation: their fee has been waived, or is being collected some other way.
-    payment:
-      (registration?.payment?.has_paid ?? false) || isAccepted || isWaitlisted,
-    approval: isAccepted,
-  };
-
-  const firstIncompleteStep = steps.findIndex(
-    (step) => !isStepComplete[step.key],
-  );
-  // Once every step is done there is no incomplete one to show, and `Steps` treats an index of
-  //   `count` as "the whole flow is completed".
-  const furthestOpenStep =
-    firstIncompleteStep === -1 ? steps.length : firstIncompleteStep;
-
-  // A rejected competitor is sent straight to the outcome, since it is the only step they may see.
-  const approvalStep = steps.findIndex((step) => step.key === "approval");
-  const defaultStep =
-    isRejected && approvalStep !== -1 ? approvalStep : furthestOpenStep;
-
-  const activeStep = pinnedStep ?? defaultStep;
-
-  const isStepDisabled = (step: StepConfig, index: number) => {
-    // A rejected competitor has nothing left to do but read the outcome.
-    if (isRejected) {
-      return step.key !== "approval";
-    }
-
-    // Approval doubles as the registration summary, so it is reachable as soon as there is a
-    //   registration to summarise - including before paying, so that competitors can check and
-    //   correct their events first.
-    if (step.key === "approval") {
-      return !isRegistered;
-    }
-
-    if (index === activeStep) {
-      return false;
-    }
-
-    if (index < activeStep) {
-      const earlierStepIncomplete = steps
-        .slice(0, index)
-        .some((earlier) => !isStepComplete[earlier.key]);
-
-      return (
-        (isStepComplete[step.key] && !step.isEditable) || earlierStepIncomplete
-      );
-    }
-
-    // Still ahead of the competitor: only reachable if they are done with it and may revise it.
-    return !(isStepComplete[step.key] && step.isEditable);
-  };
+  //   TypeScript narrow the step union down to the step we asked for.
+  const competingParameters = steps.flatMap((step) =>
+    step.key === "competing" ? [step.parameters] : [],
+  )[0];
 
   const submitRegistration = ({
     comment,
@@ -262,7 +180,7 @@ export default function StepPanel({
         competing: {
           ...competing,
           // Registering again after withdrawing means moving back to `pending` for approval.
-          ...(competingStatus === "cancelled" && {
+          ...(registration.competing.registration_status === "cancelled" && {
             status: "pending" as const,
           }),
         },
@@ -270,87 +188,123 @@ export default function StepPanel({
     });
   };
 
-  const stepContent = (step: StepConfig) => {
-    switch (step.key) {
-      case "requirements":
-        return (
-          <RequirementsStep
-            hasAcknowledged={hasAcknowledgedRequirements}
-            // Ticking the box completes this step, which would otherwise move `activeStep` on by
-            //   itself and swap this panel out before the competitor ever reaches the button.
-            //   Pinning the step keeps them here until they press Continue.
-            onAcknowledgedChange={(acknowledged) => {
-              setHasAcknowledgedRequirements(acknowledged);
-              setPinnedStep(activeStep);
-            }}
-            onContinue={() => setPinnedStep(activeStep + 1)}
-          />
-        );
-      case "competing":
-        return (
-          <CompetingStep
-            form={form}
-            competitionInfo={competitionInfo}
-            parameters={step.parameters}
-            registration={registration}
-            isSubmitting={
-              createRegistration.isPending ||
-              updateRegistration.isPending ||
-              isAwaitingCreation
-            }
-            onSubmit={submitRegistration}
-          />
-        );
-      case "payment":
-        return (
-          <PaymentStep
-            competitionInfo={competitionInfo}
-            registration={registration}
-            deadline={step.deadline}
-          />
-        );
-      case "approval":
-        return (
-          <RegistrationOverview
-            competitionInfo={competitionInfo}
-            registration={registration}
-            queueCount={queueStatus?.queue_count}
-          />
-        );
-    }
-  };
+  // `onClose` only where there is a summary to go back to, which is what tells the form it may
+  //   offer a way out of itself.
+  const registrationForm = (onClose?: () => void) => (
+    <CompetingStep
+      competitionInfo={competitionInfo}
+      parameters={competingParameters}
+      registration={registration}
+      isSubmitting={
+        createRegistration.isPending ||
+        updateRegistration.isPending ||
+        isAwaitingCreation
+      }
+      onSubmit={submitRegistration}
+      onClose={onClose}
+    />
+  );
 
-  return (
-    // `Steps` is kept only for switching panels: it decides which `Content` is visible from
-    //   `step`, and shows `CompletedContent` once that reaches `count`. Navigation and the step
-    //   strip itself are ours, because the machine's notion of "complete" is positional.
-    <Steps.Root
-      count={steps.length}
-      colorPalette="blue"
-      step={activeStep}
-      gap="8"
-    >
-      <StepList
-        steps={steps}
-        activeStep={activeStep}
-        isStepComplete={isStepComplete}
-        isStepDisabled={isStepDisabled}
-        onStepSelect={setPinnedStep}
-      />
+  // Registering is the only thing the stepper is for. Once there is a registration - even a
+  //   withdrawn or rejected one - the overview takes over, and everything still outstanding is
+  //   said there rather than by a strip of circles.
+  if (registration !== null || createRegistration.isSuccess) {
+    // Only a registration still waiting for approval has a fee to chase: organizers accepting or
+    //   waitlisting someone settles the question - their fee has been waived, or is being
+    //   collected some other way - and a withdrawn or rejected competitor owes nothing at all.
+    const isPaymentOutstanding =
+      registration !== null &&
+      registration.competing.registration_status === "pending" &&
+      !registration.payment?.has_paid;
 
-      {steps.map((step, index) => (
-        <Steps.Content key={step.key} index={index}>
-          {stepContent(step)}
-        </Steps.Content>
-      ))}
-
-      <Steps.CompletedContent>
+    return (
+      <VStack width="full" gap="4" align="stretch">
+        {isPaymentOutstanding &&
+          steps.flatMap((step) =>
+            step.key === "payment"
+              ? [
+                  <PaymentStep
+                    key={step.key}
+                    competitionInfo={competitionInfo}
+                    registration={registration}
+                    deadline={step.deadline}
+                  />,
+                ]
+              : [],
+          )}
         <RegistrationOverview
           competitionInfo={competitionInfo}
           registration={registration}
           queueCount={queueStatus?.queue_count}
+          canEdit={
+            registration !== null &&
+            canEditRegistration(competingParameters, registration)
+          }
+          isEditing={isEditing}
+          onEditingChange={setIsEditing}
+          isCancelling={cancelRegistration.isPending}
+          onCancel={(registrationId) =>
+            cancelRegistration.mutate({
+              params: { path: { registrationId } },
+              body: { competing: { status: "cancelled" } },
+            })
+          }
+        >
+          {registrationForm(() => setIsEditing(false))}
+        </RegistrationOverview>
+      </VStack>
+    );
+  }
+
+  // Before there is a registration the flow is strictly linear, so `Steps` can derive everything
+  //   it shows from the position of the step the competitor is on.
+  const requirementsStep = steps.findIndex(
+    (step) => step.key === "requirements",
+  );
+  const competingStep = steps.findIndex((step) => step.key === "competing");
+
+  return (
+    <Steps.Root
+      count={steps.length}
+      colorPalette="blue"
+      step={hasStartedRegistering ? competingStep : requirementsStep}
+      // Four labelled steps do not fit side by side on a phone, so there they become one step per
+      //   row. `flexDirection` because the vertical variant otherwise puts the strip beside the
+      //   panel rather than above it, which is even narrower.
+      orientation={{ base: "vertical", lg: "horizontal" }}
+      flexDirection="column"
+      gap="8"
+    >
+      {/* Purely a map of what is coming: payment and approval are reached by registering, not by
+          clicking ahead, so the steps are shown rather than offered as navigation. */}
+      <Steps.List>
+        {steps.map((step, index) => {
+          const translationKey = `competitions.registration_v2.register.panel.${step.key}`;
+
+          return (
+            <Steps.Item key={step.key} index={index}>
+              <Steps.Indicator />
+              <VStack gap="0" alignItems="start" minWidth="0">
+                <Steps.Title>{t(`${translationKey}.title`)}</Steps.Title>
+                <Steps.Description>
+                  {t(`${translationKey}.description`)}
+                </Steps.Description>
+              </VStack>
+              <Steps.Separator />
+            </Steps.Item>
+          );
+        })}
+      </Steps.List>
+
+      <Steps.Content index={requirementsStep}>
+        <RequirementsStep
+          hasAcknowledged={hasAcknowledgedRequirements}
+          onAcknowledgedChange={setHasAcknowledgedRequirements}
+          onContinue={() => setHasStartedRegistering(true)}
         />
-      </Steps.CompletedContent>
+      </Steps.Content>
+
+      <Steps.Content index={competingStep}>{registrationForm()}</Steps.Content>
     </Steps.Root>
   );
 }
