@@ -14,7 +14,7 @@ import {
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
-import { auth } from "@/auth";
+import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuMenu } from "react-icons/lu";
@@ -92,7 +92,7 @@ export default async function Navbar() {
     payload.findGlobal({ slug: "social-links" }),
   ]);
 
-  const session = await auth();
+  const session = await getSession();
   const socialLinks = socialLinksGlobal.links ?? [];
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages

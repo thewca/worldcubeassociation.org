@@ -1,6 +1,7 @@
 import React from "react";
 
-import { getPermissions, PermissionFunctions } from "@/lib/wca/permissions";
+import { getPermissions } from "@/lib/wca/permissions.server";
+import { PermissionFunctions } from "@/lib/wca/permissions";
 
 export default async function PermissionCheck({
   children,

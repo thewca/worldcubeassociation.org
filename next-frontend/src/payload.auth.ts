@@ -1,13 +1,41 @@
-import NextAuth from "next-auth";
-import { withPayloadAuthjs } from "payload-authjs";
-import { getPayload } from "payload";
-import payloadConfig from "@payload-config";
-import { payloadAuthConfig } from "@/auth.config";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
+import { genericOAuth } from "better-auth/plugins";
+import {
+  payloadAdapter,
+  type CreateAuthFunction,
+} from "@delmaredigital/payload-better-auth";
+import { cmsWcaProvider, wcaUserAdditionalFields } from "@/auth.config";
 
-export const { handlers } = NextAuth(async () =>
-  withPayloadAuthjs({
-    payload: await getPayload({ config: payloadConfig }),
-    config: payloadAuthConfig,
-    collectionSlug: "users",
-  }),
-);
+/**
+ * Payload serves the plugin's endpoints under `routes.api` + `authBasePath`. Our Payload config
+ * sets `routes.api` to `/api/payload`, and Better Auth's router 404s anything outside its own
+ * `basePath`, so the two have to be spelled out to agree.
+ */
+const CMS_AUTH_BASE_PATH = "/api/payload/auth";
+
+/**
+ * Shared between the collection generator (which reads the schema to build the `sessions`,
+ * `accounts` and `verifications` collections) and the auth instance itself.
+ */
+export const cmsBetterAuthOptions: BetterAuthOptions = {
+  appName: "wca-cms",
+  user: { additionalFields: wcaUserAdditionalFields },
+  plugins: [genericOAuth({ config: [cmsWcaProvider] })],
+};
+
+/**
+ * The CMS auth instance. Unlike the public-site instance in `auth.ts`, this one **is** backed by
+ * a database — logging in here provisions a Payload user. That is the point: only people who
+ * come through the `cms`-scoped provider get a record in Payload, so the `users` collection
+ * stays limited to CMS operators rather than mirroring every WCA account.
+ */
+export const createCmsAuth: CreateAuthFunction = (payload) =>
+  betterAuth({
+    ...cmsBetterAuthOptions,
+    database: payloadAdapter({ payloadClient: payload }),
+    basePath: CMS_AUTH_BASE_PATH,
+    secret: process.env.AUTH_SECRET,
+    // Keeps the admin session cookie distinct from the public-site one, so a CMS-scoped token
+    //   can never be picked up as an ordinary site session (and vice versa).
+    advanced: { cookiePrefix: "wca-cms" },
+  });

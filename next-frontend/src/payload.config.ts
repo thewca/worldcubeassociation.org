@@ -3,9 +3,12 @@ import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
-import { authjsPlugin } from "payload-authjs";
+import {
+  betterAuthCollections,
+  createBetterAuthPlugin,
+} from "@delmaredigital/payload-better-auth";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { payloadAuthConfig } from "@/auth.config";
+import { cmsBetterAuthOptions, createCmsAuth } from "@/payload.auth";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
@@ -46,8 +49,17 @@ function plugins() {
   const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
-    authjsPlugin({
-      authjsConfig: payloadAuthConfig,
+    betterAuthCollections({
+      betterAuthOptions: cmsBetterAuthOptions,
+      // `users` is defined by hand in `@/collections/Users`; the rest (sessions, accounts,
+      //   verifications) are generated from the Better Auth schema.
+      skipCollections: ["user"],
+      // Roles come from the WCA OIDC provider, so nobody should be promoted to admin just for
+      //   being the first to log in.
+      firstUserAdmin: false,
+    }),
+    createBetterAuthPlugin({
+      createAuth: createCmsAuth,
     }),
     s3Storage({
       enabled: isProduction,

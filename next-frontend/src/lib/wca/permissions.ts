@@ -1,7 +1,4 @@
 import { components } from "@/types/openapi";
-import { cache } from "react";
-import { serverClientWithToken } from "@/lib/wca/wcaAPI";
-import { auth } from "@/auth";
 
 export interface PermissionFunctions {
   canAccessPanel: (panel: string) => boolean;
@@ -128,26 +125,3 @@ export const hydrateUserPermissions = (
     ),
   canManageIncidents: () => rawPermissions?.can_manage_incidents.scope === "*",
 });
-
-const fetchPermissions = cache(async (authToken: string) => {
-  const client = serverClientWithToken(authToken);
-
-  return await client.GET("/v0/users/me/permissions");
-});
-
-export const getPermissions = async () => {
-  const session = await auth();
-
-  if (!session) {
-    return null;
-  }
-
-  const { data: rawPermissions } = await fetchPermissions(session.accessToken);
-
-  return {
-    permissions: rawPermissions,
-    ...hydrateUserPermissions(rawPermissions),
-  } as PermissionContext;
-};
-
-export default getPermissions;
