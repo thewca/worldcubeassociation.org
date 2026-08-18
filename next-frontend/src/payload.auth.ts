@@ -4,7 +4,11 @@ import {
   payloadAdapter,
   type CreateAuthFunction,
 } from "@delmaredigital/payload-better-auth";
-import { cmsWcaProvider, wcaUserAdditionalFields } from "@/auth.config";
+import {
+  cmsWcaProvider,
+  wcaUserAdditionalFields,
+  WCA_CMS_PROVIDER_ID,
+} from "@/auth.config";
 
 /**
  * Payload serves the plugin's endpoints under `routes.api` + `authBasePath`. Our Payload config
@@ -20,6 +24,16 @@ const CMS_AUTH_BASE_PATH = "/api/payload/auth";
 export const cmsBetterAuthOptions: BetterAuthOptions = {
   appName: "wca-cms",
   user: { additionalFields: wcaUserAdditionalFields },
+  account: {
+    accountLinking: {
+      enabled: true,
+      // Lets a CMS login attach to an existing Payload user with the same address instead of
+      //   being rejected. Everyone here comes from the same WCA OIDC provider, which is the
+      //   case AuthJS documented as safe for its `allowDangerousEmailAccountLinking`
+      //   equivalent: the provider is one we control and it verifies the address.
+      trustedProviders: [WCA_CMS_PROVIDER_ID],
+    },
+  },
   plugins: [genericOAuth({ config: [cmsWcaProvider] })],
 };
 
