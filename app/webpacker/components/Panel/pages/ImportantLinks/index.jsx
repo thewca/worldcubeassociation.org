@@ -24,7 +24,7 @@ const IMPORTANT_LINKS = [
       {
         title: "Edit Profile Request",
         link: "https://www.worldcubeassociation.org/contact/edit_profile?editOthersProfile=true"
-      }
+      },
     ],
   },
   {
