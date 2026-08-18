@@ -1,8 +1,8 @@
-import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
+import { Accordion, Stack, Text } from "@chakra-ui/react";
 import AnnouncementContent from "@/components/AnnouncementContent";
 import { Announcement } from "@/types/payload";
-import { LuChevronsRight } from "react-icons/lu";
 import { announcementByline } from "@/components/announcements/announcement";
+import SeeAllAnnouncementsItem from "@/components/announcements/SeeAllAnnouncementsItem";
 
 function AnnouncementItem({ announcement }: { announcement: Announcement }) {
   return (
@@ -51,18 +51,7 @@ export default function AnnouncementsCard({
         <AnnouncementItem key={announcement.id} announcement={announcement} />
       ))}
 
-      {showSeeAll && (
-        <Accordion.Item value="see-all" layerStyle="fill.subtle">
-          <Accordion.ItemTrigger textStyle="s1" asChild>
-            <ChakraLink href="/posts" color="currentColor">
-              <Accordion.ItemIndicator transition={undefined}>
-                <LuChevronsRight />
-              </Accordion.ItemIndicator>
-              See all announcements
-            </ChakraLink>
-          </Accordion.ItemTrigger>
-        </Accordion.Item>
-      )}
+      {showSeeAll && <SeeAllAnnouncementsItem />}
     </Accordion.Root>
   );
 }
