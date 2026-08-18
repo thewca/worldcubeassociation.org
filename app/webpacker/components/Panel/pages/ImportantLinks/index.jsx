@@ -22,8 +22,8 @@ const IMPORTANT_LINKS = [
         link: 'https://drive.google.com/file/d/15XszaCGNvy3Dk6X6qERzZWZaDH1RH04z/view',
       },
       {
-        title: "Edit Profile Request",
-        link: "https://www.worldcubeassociation.org/contact/edit_profile?editOthersProfile=true"
+        title: 'Edit Profile Request',
+        link: 'https://www.worldcubeassociation.org/contact/edit_profile?editOthersProfile=true',
       },
     ],
   },
