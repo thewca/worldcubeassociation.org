@@ -126,6 +126,7 @@ Rails.application.routes.draw do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
     end
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
+    post 'upload-wcif' => 'results_submission#upload_wcif', as: :upload_results_wcif
     post 'import-from-live' => 'results_submission#import_from_live', as: :import_from_live
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
