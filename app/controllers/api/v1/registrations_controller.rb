@@ -277,7 +277,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     @registration = Registration.find(params_id)
 
     render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
-      @current_user.id == @registration.user_id || @current_user.can_manage_competition?(@registration.competition)
+      authenticated_user.id == @registration.user_id || authenticated_user.can_manage_competition?(@registration.competition)
   end
 
   # What a payment attempt would charge, in every denomination the frontend needs: the payment
