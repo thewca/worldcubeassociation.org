@@ -1338,6 +1338,7 @@ export interface components {
             user_id: number;
             name: string;
             country_iso2: string;
+            wca_id: string | null;
         };
         LiveRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["RoundLiveResult"][];

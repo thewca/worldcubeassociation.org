@@ -1342,7 +1342,7 @@ en:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times. Changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
-      registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event."
+      registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event, or JSON file containing WCIF data."
       preview: "Preview Registration Data"
       import: "Import"
       cancel: "Cancel"
@@ -1357,7 +1357,10 @@ en:
         email_duplicates: "Email must be unique, found the following duplicates: %{emails}."
         wca_id_duplicates: "WCA ID must be unique, found the following duplicates: %{wca_ids}."
         wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
+        invalid_country: "Invalid country: %{country}."
+        invalid_wcif: "The JSON file does not contain valid WCIF data."
         empty_file: "The file is empty."
+        unsupported_file_format: "Unsupported file format. Please upload a JSON or CSV file."
     add:
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
@@ -1447,6 +1450,8 @@ en:
         close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
+        #context: tooltip on an icon next to competitors who don't have a WCA ID yet
+        first_timer: "First-timer"
         edit: "Edit"
         results: "Results"
         registration: "Registration"
@@ -2644,6 +2649,9 @@ en:
     determination_letter: "IRS Determination Letter"
     bylaws: "Bylaws"
     motions: "Motions"
+    #context: Shown when a permalink points at a motion number that no longer exists, usually because the motion was repealed
+    motion_not_found: "Motion Not Found"
+    motion_not_found_action: "We couldn't find a motion numbered \"%{motion_id}\". It may have been repealed."
     minutes: "Minutes"
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"
@@ -2807,7 +2815,7 @@ en:
     #context: shown when no incident exists for the requested ID
     not_found: "Incident Not Found"
     #context: link leading from a single incident back to the list of all incidents
-    back_to_log: "Back to the incidents log"
+    back_to_log: "Back to the Incidents Log"
     search_placeholder: "Search"
     status: "Status"
     #context: an incident which has been resolved and is therefore publicly visible

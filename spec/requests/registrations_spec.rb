@@ -40,7 +40,7 @@ RSpec.describe "registrations" do
           post competition_registrations_do_import_path(competition), params: { registrations: registrations }, as: :json
         end.not_to(change { competition.registrations.count })
         expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to include "Invalid country codes: XX"
+        expect(response.body).to include I18n.t("registrations.import.errors.invalid_country", country: "XX")
       end
 
       it "renders an error when there are invalid event IDs" do
@@ -482,7 +482,7 @@ RSpec.describe "registrations" do
           ["Status", "Name", "WCA ID", "Birth date", "Gender", "Email", "444"],
           ["a", "Sherlock Holmes", "", "2000-01-01", "m", "sherlock@example.com", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Missing columns: country, 333."
       end
@@ -494,7 +494,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "1", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "The given file includes 2 accepted registrations, which is more than the competitor limit of 1."
       end
@@ -505,7 +505,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Email must be unique, found the following duplicates: sherlock@example.com."
       end
@@ -516,7 +516,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "2019HOLM01", "2000-01-01", "m", "watson@example.com", "1", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "WCA ID must be unique, found the following duplicates: 2019HOLM01."
       end
@@ -528,7 +528,7 @@ RSpec.describe "registrations" do
           ["a", "John Watson", "United Kingdom", "2019WATS01", "2000-01-01", "m", "watson@example.com", "1", "1"],
           ["a", "James Moriarty", "United Kingdom", "2019MORI01", "Jan 01 2000", "m", "moriarty@example.com", "0", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: 01.01.2000, Jan 01 2000."
       end
@@ -537,7 +537,7 @@ RSpec.describe "registrations" do
         file = csv_file [
           ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "The file is empty."
       end
@@ -548,7 +548,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["a", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "0", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:ok)
         json = response.parsed_body
         expect(json).to match [
@@ -589,7 +589,7 @@ RSpec.describe "registrations" do
           ["a", "Sherlock Holmes", "United Kingdom", "", "2000-01-01", "m", "sherlock@example.com", "1", "0"],
           ["p", "John Watson", "United Kingdom", "", "2000-01-01", "m", "watson@example.com", "0", "1"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:ok)
         json = response.parsed_body
         expect(json.length).to eq 1
@@ -601,11 +601,61 @@ RSpec.describe "registrations" do
           ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
           ["a", "Sherlock Holmes", "United Kingdom", "2019holm01", "2000-01-01", "m", "Sherlock@Example.COM", "1", "0"],
         ]
-        post competition_registrations_validate_and_convert_path(competition), params: { csv_registration_file: file }
+        post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
         expect(response).to have_http_status(:ok)
         json = response.parsed_body
         expect(json[0]["wcaId"]).to eq "2019HOLM01"
         expect(json[0]["email"]).to eq "sherlock@example.com"
+      end
+
+      context "with an unsupported file format" do
+        it "renders an error" do
+          file = text_file("some content")
+
+          post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response.body).to include I18n.t("registrations.import.errors.unsupported_file_format")
+        end
+      end
+
+      context "with a JSON file" do
+        it "renders an error when the WCIF is invalid" do
+          schema = Struct.new(:uri, :schema).new("fake_uri", {})
+          allow(Competition).to receive(:validate_wcif_schema!).and_raise(JSON::Schema::ValidationError.new("Invalid", [], "fake", schema))
+          file = json_file({ "persons" => [] })
+
+          post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(response.body).to include I18n.t("registrations.import.errors.invalid_wcif")
+        end
+
+        it "successfully converts valid JSON to registration data and only includes accepted registrations" do
+          allow(Competition).to receive(:validate_wcif_schema!).and_return(true)
+          file = json_file(
+            {
+              "persons" => [
+                {
+                  "name" => "Sherlock Holmes",
+                  "registration" => { "status" => "accepted", "eventIds" => ["333"] },
+                },
+                {
+                  "name" => "John Watson",
+                  "registration" => { "status" => "pending", "eventIds" => ["333"] },
+                },
+              ],
+            },
+          )
+
+          post competition_registrations_validate_and_convert_path(competition), params: { registration_file: file }
+
+          expect(response).to have_http_status(:ok)
+          json = response.parsed_body
+          expect(json.length).to eq 1
+          expect(json[0]["name"]).to eq "Sherlock Holmes"
+          expect(json[0].dig("registration", "status")).to eq "accepted"
+        end
       end
     end
   end
@@ -1505,6 +1555,20 @@ def csv_file(lines)
     lines.each { |line| csv << line }
   end
   Rack::Test::UploadedFile.new(temp_file.path, "text/csv")
+end
+
+def text_file(content)
+  temp_file = Tempfile.new(["registrations", ".txt"])
+  temp_file.write(content)
+  temp_file.close
+  Rack::Test::UploadedFile.new(temp_file.path, "text/plain")
+end
+
+def json_file(hash)
+  temp_file = Tempfile.new(["registrations", ".json"])
+  temp_file.write(hash.to_json)
+  temp_file.close
+  Rack::Test::UploadedFile.new(temp_file.path, "application/json")
 end
 
 def expect_error_to_be(response, message)

@@ -16,7 +16,7 @@ import Link from "next/link";
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
 import AttemptResultField from "./AttemptResultField";
-import SlateRoleExamples from "./SlateRoleExamples";
+import LayerStyleDoc from "./LayerStyleDoc";
 import {
   ColorSemanticTokenDoc,
   ColorTokenDoc,
@@ -93,7 +93,12 @@ export default async function Dashboard() {
           </SimpleGrid>
         </Card.Body>
       </Card.Root>
-      <SlateRoleExamples />
+      <Card.Root width="full">
+        <Card.Body>
+          <Card.Title>Layer Styles</Card.Title>
+          <LayerStyleDoc />
+        </Card.Body>
+      </Card.Root>
       <Card.Root width="full">
         <Card.Body>
           <Card.Title>Theme Explorer</Card.Title>

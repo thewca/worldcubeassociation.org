@@ -87,6 +87,7 @@ type MarkdownBaseProps = {
   children: Options["children"];
   linkProps?: ComponentPropsWithoutRef<typeof ChakraLink>;
   imageProps?: ComponentPropsWithoutRef<typeof ChakraImage>;
+  listProps?: ComponentPropsWithoutRef<typeof List.Root>;
   headingAs?: ComponentType<{ as?: ElementType }>;
 };
 
@@ -105,6 +106,7 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
   children,
   linkProps = {},
   imageProps = {},
+  listProps = {},
   headingAs: HeadingRenderAs = Heading,
   paragraphAs: ParagraphRenderAs = Text,
   ...paragraphProps
@@ -137,8 +139,8 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
         // Chakra's reset drops the browser's default list padding and its list recipe does not
         //   put any back, so without this the markers have nowhere to sit and the list reads
         //   as flush body text.
-        ul: (ulTag) => <List.Root {...ulTag} as="ul" ps="6" />,
-        ol: (olTag) => <List.Root {...olTag} as="ol" ps="6" />,
+        ul: (ulTag) => <List.Root {...ulTag} ps="6" {...listProps} as="ul" />,
+        ol: (olTag) => <List.Root {...olTag} ps="6" {...listProps} as="ol" />,
         li: List.Item,
         blockquote: (blockquoteTag) => (
           <Blockquote.Root>
