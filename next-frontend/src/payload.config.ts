@@ -60,6 +60,18 @@ function plugins() {
     }),
     createBetterAuthPlugin({
       createAuth: createCmsAuth,
+      admin: {
+        // The bundled login view drives `signIn.social`, which only covers Better Auth's
+        //   built-in providers — our WCA provider comes from `genericOAuth` and needs
+        //   `signIn.oauth2`, so the view is replaced wholesale.
+        loginViewComponent: "/components/payload/CmsLoginView#default",
+        login: {
+          // Team membership is what grants CMS access, and it is enforced by `access.admin`
+          //   on the users collection. The plugin's own gate looks for a singular `role`
+          //   field we do not have, so leave it out of the decision.
+          requiredRole: null,
+        },
+      },
     }),
     s3Storage({
       enabled: isProduction,
