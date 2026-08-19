@@ -1,17 +1,30 @@
-import React from "react";
-import { Box, SimpleGrid } from "@chakra-ui/react";
+"use client";
 
-const RandomBackground = ({
-  numRows,
-  numCols,
-  density = 3,
-  bias = 3,
-}: {
+import React from "react";
+import { Box, ClientOnly, SimpleGrid } from "@chakra-ui/react";
+
+type RandomBackgroundProps = {
   numRows: number;
   numCols: number;
   density?: number;
   bias?: number;
-}) => {
+};
+
+// `Math.random()` throws while prerendering under Cache Components, and this grid is decorative
+// only, so it is generated on the client after mount rather than being cached or forcing every
+// route under `(with-background)` to render at request time.
+const RandomBackground = (props: RandomBackgroundProps) => (
+  <ClientOnly>
+    <BackgroundGrid {...props} />
+  </ClientOnly>
+);
+
+const BackgroundGrid = ({
+  numRows,
+  numCols,
+  density = 3,
+  bias = 3,
+}: RandomBackgroundProps) => {
   // Function to determine color based on probability
   const getColor = (probValue: number): string => {
     if (probValue <= 1 / 6) return "green"; // 0.0 - 0.166
