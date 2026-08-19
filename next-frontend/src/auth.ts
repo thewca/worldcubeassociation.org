@@ -45,12 +45,28 @@ export const auth = betterAuth({
       // Re-reads the account cookie and transparently refreshes the Rails access token when
       //   it is within seconds of expiring, so call sites can keep treating `accessToken` as
       //   a plain synchronous field on the session.
-      const tokens = await getAccessToken({
+      const result = await getAccessToken({
         ...ctx,
         method: "POST",
         body: { providerId: WCA_PROVIDER_ID, userId: user.id },
         asResponse: false,
-      }).catch(() => null);
+        returnHeaders: false,
+      }).catch((error) => {
+        console.error("[auth] could not resolve a WCA access token", {
+          userId: user.id,
+          error,
+        });
+        return null;
+      });
+
+      // Spreading `ctx` carries over the response-shaping flags `customSession` set for its own
+      //   inner `getSession` call, and they win over the ones passed above — so the endpoint
+      //   hands back a `{ response }` envelope rather than the payload. Unwrapping on the
+      //   presence of the key covers both shapes, instead of depending on flags we do not
+      //   actually control from here.
+      const tokens = (
+        result && "response" in result ? result.response : result
+      ) as { accessToken?: string } | null;
 
       return {
         user,
