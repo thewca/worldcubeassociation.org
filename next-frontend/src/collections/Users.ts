@@ -10,9 +10,23 @@ export const Users: CollectionConfig = {
     // Nobody signs in to Payload with a password — the only way in is the `cms`-scoped WCA
     //   OIDC provider, which is what keeps this collection limited to CMS operators.
     disableLocalStrategy: true,
-    strategies: [betterAuthStrategy()],
+    // `idType: "text"` is what the adapter expects on MongoDB, where ids are ObjectId strings.
+    //   The default assumes Postgres SERIAL and coerces ids to numbers.
+    strategies: [betterAuthStrategy({ idType: "text" })],
   },
   fields: [
+    // A custom text ID rather than Mongo's default ObjectId, because the rows this collection
+    //   already holds were written by payload-authjs with string UUID ids. Keeping the same
+    //   shape means existing CMS users (and anything pointing at them, like an announcement's
+    //   author) survive the move to Better Auth.
+    //
+    // The adapter hardcodes `disableIdGeneration: true`, so Better Auth never supplies an id
+    //   and Payload will not invent one for a custom ID field — hence the explicit default.
+    {
+      name: "id",
+      type: "text",
+      defaultValue: () => crypto.randomUUID(),
+    },
     // Better Auth's core user fields. They live here rather than being generated because
     //   `betterAuthCollections` is told to skip `user` so this hand-written config wins.
     {

@@ -898,6 +898,7 @@ export interface FaqQuestionsSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  id?: T;
   email?: T;
   emailVerified?: T;
   name?: T;
