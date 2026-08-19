@@ -33,6 +33,11 @@ const baseWcaProvider: GenericOAuthConfig = {
     return {
       name: wcaProfile.name,
       email: wcaProfile.email,
+      // Our OIDC provider issues no `email_verified` claim, so Better Auth would treat every
+      //   address as unverified and refuse to link a returning user to their existing row.
+      //   These addresses are minted by the WCA backend itself rather than typed in by the
+      //   user, so treating them as verified states what is already true.
+      emailVerified: true,
       image: wcaProfile.picture,
       roles: wcaProfile.roles,
       wcaId: wcaProfile.preferred_username,
