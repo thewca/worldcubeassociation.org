@@ -14,9 +14,6 @@ import {
 //   `basePath`, and our Payload config moves the API to `/api/payload`.
 const CMS_AUTH_BASE_PATH = "/api/payload/auth";
 
-/** Derived so a field added to the OIDC profile is covered without touching the guard below. */
-const providerOwned = new Set<string>(Object.keys(wcaUserAdditionalFields));
-
 export const cmsBetterAuthOptions: BetterAuthOptions = {
   appName: "wca-cms",
   user: { additionalFields: wcaUserAdditionalFields },
@@ -36,20 +33,15 @@ export const cmsBetterAuthOptions: BetterAuthOptions = {
   databaseHooks: {
     user: {
       update: {
-        before: async (user, context) => {
-          // `/update-user` is the endpoint a signed-in user can call for themselves, and
-          //   `roles` is what `access.admin` reads to decide who gets into Payload — so a CMS
-          //   operator could otherwise promote themselves. The provider's own updates arrive
-          //   through the sign-in flow rather than this path, so they are unaffected.
-          if (context?.path !== "/update-user") {
-            return;
+        before: async (_user, context) => {
+          // A CMS user is a projection of the WCA account: `overrideUserInfo` rewrites every
+          //   field from the OIDC profile on each sign-in, so an edit made here would be
+          //   reverted at the next login anyway. Refusing outright also closes `/update-user`
+          //   as a way for a CMS operator to award themselves a role, which is what
+          //   `access.admin` reads. The provider's own writes arrive on the callback path.
+          if (context?.path === "/update-user") {
+            return false;
           }
-
-          const allowed = Object.fromEntries(
-            Object.entries(user).filter(([field]) => !providerOwned.has(field)),
-          );
-
-          return { data: allowed };
         },
       },
     },

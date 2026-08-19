@@ -80,9 +80,10 @@ export const Users: CollectionConfig = {
     },
   ],
   access: {
-    // Users only ever come from the `cms`-scoped login, which bypasses access control. Denying
-    //   `create` closes `POST /api/payload/users` as a way to mint one unauthenticated.
+    // Don't allow any creation or updates to users in Payload. Rails should stay
+    // the source of truth
     create: () => false,
+    update: () => false,
     admin: ({ req: { user } }) => {
       return ["wst", "wct", "wat", "wmt", "board"].some((team) =>
         user?.roles?.includes(team),
