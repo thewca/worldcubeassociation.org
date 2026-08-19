@@ -23,6 +23,11 @@ export const cmsBetterAuthOptions: BetterAuthOptions = {
       // Attaches a CMS login to an existing Payload user with the same address. Safe because
       //   the provider is one we control — this replaces `allowDangerousEmailAccountLinking`.
       trustedProviders: [WCA_CMS_PROVIDER_ID],
+      // Transitional: every row payload-authjs wrote has `emailVerified` unset, and the default
+      //   gate would refuse to link them, locking existing CMS users out. Better Auth promotes
+      //   such a row to verified as it links, so this heals each account on its owner's next
+      //   login and is redundant once they have all signed in.
+      requireLocalEmailVerified: false,
     },
   },
   plugins: [genericOAuth({ config: [cmsWcaProvider] })],
