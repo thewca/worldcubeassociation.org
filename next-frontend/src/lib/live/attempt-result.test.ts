@@ -13,47 +13,51 @@ import { defaultNamespace } from "@/lib/i18n/settings";
 
 describe("autocompleteMbldDecodedValue", () => {
   test("sets attempted to solved when attempted is 0", () => {
-    const decoded = { solved: 2, attempted: 0, centiseconds: 6000 };
+    const decoded = { solved: 2, attempted: 0, timeCentiseconds: 6000 };
     expect(autocompleteMbldDecodedValue(decoded)).toEqual({
       solved: 2,
       attempted: 2,
-      centiseconds: 6000,
+      timeCentiseconds: 6000,
     });
   });
 
   test("sets attempted to solved when more cubes are solved than attempted", () => {
-    const decoded = { solved: 3, attempted: 2, centiseconds: 6000 };
+    const decoded = { solved: 3, attempted: 2, timeCentiseconds: 6000 };
     expect(autocompleteMbldDecodedValue(decoded)).toEqual({
       solved: 3,
       attempted: 3,
-      centiseconds: 6000,
+      timeCentiseconds: 6000,
     });
   });
 
   test("returns DNF if the number of points is less than 0", () => {
-    const decoded = { solved: 2, attempted: 5, centiseconds: 6000 };
+    const decoded = { solved: 2, attempted: 5, timeCentiseconds: 6000 };
     expect(autocompleteMbldDecodedValue(decoded)).toEqual({
       solved: 0,
       attempted: 0,
-      centiseconds: -1,
+      timeCentiseconds: -1,
     });
   });
 
   test("returns DNF when 1 of 2 cubes is solved", () => {
-    const decoded = { solved: 1, attempted: 2, centiseconds: 6000 };
+    const decoded = { solved: 1, attempted: 2, timeCentiseconds: 6000 };
     expect(autocompleteMbldDecodedValue(decoded)).toEqual({
       solved: 0,
       attempted: 0,
-      centiseconds: -1,
+      timeCentiseconds: -1,
     });
   });
 
   test("returns DNF if the time limit is exceeded", () => {
-    const decoded = { solved: 2, attempted: 3, centiseconds: 40 * 60 * 100 };
+    const decoded = {
+      solved: 2,
+      attempted: 3,
+      timeCentiseconds: 40 * 60 * 100,
+    };
     expect(autocompleteMbldDecodedValue(decoded)).toEqual({
       solved: 0,
       attempted: 0,
-      centiseconds: -1,
+      timeCentiseconds: -1,
     });
   });
 
@@ -61,21 +65,25 @@ describe("autocompleteMbldDecodedValue", () => {
     const decoded = {
       solved: 2,
       attempted: 3,
-      centiseconds: 30 * 60 * 100 + 12 * 100,
+      timeCentiseconds: 30 * 60 * 100 + 12 * 100,
     };
     expect(autocompleteMbldDecodedValue(decoded)).toEqual({
       solved: 2,
       attempted: 3,
-      centiseconds: 30 * 60 * 100 + 12 * 100,
+      timeCentiseconds: 30 * 60 * 100 + 12 * 100,
     });
   });
 
   test("returns the same value if everything is ok", () => {
-    const decoded = { solved: 11, attempted: 12, centiseconds: 60 * 60 * 100 };
+    const decoded = {
+      solved: 11,
+      attempted: 12,
+      timeCentiseconds: 60 * 60 * 100,
+    };
     expect(autocompleteMbldDecodedValue(decoded)).toEqual({
       solved: 11,
       attempted: 12,
-      centiseconds: 60 * 60 * 100,
+      timeCentiseconds: 60 * 60 * 100,
     });
   });
 });
