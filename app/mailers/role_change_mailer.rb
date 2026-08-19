@@ -18,6 +18,7 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:delegate_regions]
       metadata[:region_name] = group.name
       metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
+      metadata[:location] = role.metadata.location
       metadata[:delegated_competitions_count] = role.metadata.total_delegated
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
@@ -33,6 +34,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[@role.group.group_type.to_sym]
     @metadata = role_metadata(role)
+    @metadata[:wca_id] = role.user.wca_id if role.group.group_type == UserGroup.group_types[:delegate_regions] && role.metadata.trainee_delegate? && role.user.wca_id.present?
     @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
@@ -154,6 +156,11 @@ class RoleChangeMailer < ApplicationMailer
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
     @metadata = role_metadata(role)
     @today_date = Date.today
+    if role.group_type == UserGroup.group_types[:delegate_regions]
+      trainee_promoted = role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] &&
+                         @changes.any? { |change| change['changed_parameter'] == 'Status' }
+      @metadata[:email] = role.user.email if trainee_promoted && role.user.email.present?
+    end
     @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
