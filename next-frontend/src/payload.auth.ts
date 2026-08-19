@@ -14,6 +14,9 @@ import {
 //   `basePath`, and our Payload config moves the API to `/api/payload`.
 const CMS_AUTH_BASE_PATH = "/api/payload/auth";
 
+/** Derived so a field added to the OIDC profile is covered without touching the guard below. */
+const providerOwned = new Set<string>(Object.keys(wcaUserAdditionalFields));
+
 export const cmsBetterAuthOptions: BetterAuthOptions = {
   appName: "wca-cms",
   user: { additionalFields: wcaUserAdditionalFields },
@@ -28,6 +31,27 @@ export const cmsBetterAuthOptions: BetterAuthOptions = {
       //   such a row to verified as it links, so this heals each account on its owner's next
       //   login and is redundant once they have all signed in.
       requireLocalEmailVerified: false,
+    },
+  },
+  databaseHooks: {
+    user: {
+      update: {
+        before: async (user, context) => {
+          // `/update-user` is the endpoint a signed-in user can call for themselves, and
+          //   `roles` is what `access.admin` reads to decide who gets into Payload — so a CMS
+          //   operator could otherwise promote themselves. The provider's own updates arrive
+          //   through the sign-in flow rather than this path, so they are unaffected.
+          if (context?.path !== "/update-user") {
+            return;
+          }
+
+          const allowed = Object.fromEntries(
+            Object.entries(user).filter(([field]) => !providerOwned.has(field)),
+          );
+
+          return { data: allowed };
+        },
+      },
     },
   },
   plugins: [genericOAuth({ config: [cmsWcaProvider] })],

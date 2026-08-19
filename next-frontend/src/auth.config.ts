@@ -60,9 +60,13 @@ export const cmsWcaProvider: GenericOAuthConfig = {
   overrideUserInfo: true,
 };
 
-/** `input: false` keeps these server-only: set from the OIDC profile, never by a client. */
+/**
+ * Deliberately not `input: false`, tempting as that looks for provider-owned fields: Better Auth
+ * drops anything marked that way while mapping the OIDC profile, so these would never be
+ * populated at all. `payload.auth.ts` blocks client writes instead, where it matters.
+ */
 export const wcaUserAdditionalFields = {
-  roles: { type: "string[]", required: false, input: false },
-  wcaId: { type: "string", required: false, input: false },
-  wcaUserId: { type: "number", required: false, input: false },
+  roles: { type: "string[]", required: false },
+  wcaId: { type: "string", required: false },
+  wcaUserId: { type: "number", required: false },
 } as const;
