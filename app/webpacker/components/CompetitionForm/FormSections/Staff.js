@@ -9,7 +9,7 @@ export default function Staff() {
   return (
     <SubSection section="staff">
       <InputUsers id="staffDelegateIds" delegateOnly required ignoreDisabled />
-      {appointedDelegateIds.length > 0 && (
+      {appointedDelegateIds.length > 1 && (
         <InputRadioUser id="leadDelegateId" required options={appointedDelegateIds} />
       )}
       <InputUsers id="traineeDelegateIds" traineeOnly ignoreDisabled />

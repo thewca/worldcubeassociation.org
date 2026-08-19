@@ -694,6 +694,41 @@ RSpec.describe Competition do
     expect(competition.delegates.sort_by(&:name)).to eq delegates.sort_by(&:name)
   end
 
+  describe "implicit lead Delegate" do
+    it "assigns the only staff Delegate as lead Delegate" do
+      delegate = create(:delegate)
+      competition = create(:competition, delegates: [delegate])
+
+      expect(competition.lead_delegate_id).to eq delegate.id
+    end
+
+    it "does not pick a lead Delegate when there are several staff Delegates" do
+      competition = create(:competition, delegates: [create(:delegate), create(:delegate)])
+
+      expect(competition.lead_delegate_id).to be_nil
+    end
+
+    it "keeps the explicitly chosen lead Delegate when there are several staff Delegates" do
+      delegate1 = create(:delegate)
+      delegate2 = create(:delegate)
+      competition = create(:competition, delegates: [delegate1, delegate2], lead_delegate: delegate2)
+
+      competition.valid?
+
+      expect(competition.lead_delegate_id).to eq delegate2.id
+    end
+
+    it "re-assigns the lead Delegate when the previous one is removed and one staff Delegate remains" do
+      delegate1 = create(:delegate)
+      delegate2 = create(:delegate)
+      competition = create(:competition, delegates: [delegate1, delegate2], lead_delegate: delegate1)
+
+      competition.update!(staff_delegate_ids: [delegate2.id])
+
+      expect(competition.reload.lead_delegate_id).to eq delegate2.id
+    end
+  end
+
   it "saves organizer_ids" do
     organizer1 = create(:user, name: "Bob", email: "bob@b.com")
     organizer2 = create(:user, name: "Jane", email: "jane@j.com")

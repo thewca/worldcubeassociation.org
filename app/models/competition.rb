@@ -758,6 +758,10 @@ class Competition < ApplicationRecord
   #   but we need to map them down to just the general `competition_delegates` association.
   before_validation :unpack_staff_delegate_ids
   before_validation :unpack_trainee_delegate_ids
+  # A competition with exactly one staff Delegate has no choice to make: that Delegate _is_ the lead.
+  # The competition form hides the "lead Delegate" radio in that case, so we fill the value in here to
+  # keep the website, the API and any other client consistent (and to satisfy `lead_delegate_required?`).
+  before_validation :assign_implicit_lead_delegate
   # After the cloned competition is created, clone other associations which cannot just be copied.
   after_create :clone_associations
   private def clone_associations
@@ -818,6 +822,11 @@ class Competition < ApplicationRecord
 
     # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
     self.delegate_ids = self.staff_delegate_ids | @trainee_delegate_ids
+  end
+
+  def assign_implicit_lead_delegate
+    solo_delegate_id = self.staff_delegate_ids
+    self.lead_delegate_id = solo_delegate_id.first if solo_delegate_id.one?
   end
 
   def staff_delegates
