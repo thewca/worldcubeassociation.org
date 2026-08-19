@@ -8,6 +8,9 @@ import {
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
 
+/** Shared so the middleware looks for the same cookie the site instance writes. */
+export const WCA_COOKIE_PREFIX = "wca";
+
 const WCA_DISCOVERY_URL = `${WCA_OIDC_ISSUER}/.well-known/openid-configuration`;
 
 interface WcaProfile {
