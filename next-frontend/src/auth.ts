@@ -8,32 +8,23 @@ import {
   WCA_PROVIDER_ID,
 } from "@/auth.config";
 
-/**
- * Split out from the `betterAuth()` call because `customSession` needs the very same options
- * object to infer the session type it is wrapping — without it, the WCA fields on `user` come
- * back untyped.
- */
+// Split out because `customSession` needs the same options object to infer the session type it
+//   wraps; without it the WCA fields on `user` come back untyped.
 const siteAuthOptions = {
   appName: "wca",
   secret: process.env.AUTH_SECRET,
-  // Pinned explicitly rather than left to derive from `appName`, so it can never drift into
-  //   the CMS instance's cookie namespace (see `payload.auth.ts`).
+  // Pinned so it cannot drift into the CMS instance's namespace (see `payload.auth.ts`).
   advanced: { cookiePrefix: "wca" },
-  // `baseURL` is intentionally unset so Better Auth infers the origin from the incoming
-  //   request, which keeps dev (localhost) and Docker (wca_on_rails) working without extra
-  //   config. Deployments behind a proxy set BETTER_AUTH_URL instead.
+  // `baseURL` is deliberately unset: Better Auth then infers it per request, which is what
+  //   makes dev and Docker work unconfigured. Behind a proxy, set BETTER_AUTH_URL.
   user: { additionalFields: wcaUserAdditionalFields },
   plugins: [genericOAuth({ config: [siteWcaProvider] })],
 } satisfies BetterAuthOptions;
 
 /**
- * The public-site auth instance.
- *
- * Deliberately configured **without** a `database`, which puts Better Auth in stateless mode:
- * the session and the linked OAuth account (including the Rails access/refresh tokens) live
- * only in signed cookies. Rails stays the single source of truth for who a user is, and
- * ordinary WCA users are never written into Payload's Mongo — only CMS logins are, via the
- * separate instance in `payload.config.ts`.
+ * Omitting `database` is what puts Better Auth in stateless mode: session and linked account
+ * (including the Rails tokens) live only in signed cookies. That is how ordinary WCA users stay
+ * out of Payload's Mongo — only CMS logins get a row, via the instance in `payload.auth.ts`.
  */
 export const auth = betterAuth({
   ...siteAuthOptions,
@@ -42,9 +33,8 @@ export const auth = betterAuth({
     // Must stay last: `customSession` overrides `/get-session`, and it should wrap whatever
     //   the plugins above have already contributed to the session.
     customSession(async ({ user, session }, ctx) => {
-      // Re-reads the account cookie and transparently refreshes the Rails access token when
-      //   it is within seconds of expiring, so call sites can keep treating `accessToken` as
-      //   a plain synchronous field on the session.
+      // Refreshes the Rails token when it is close to expiring, so `accessToken` can stay a
+      //   plain field on the session.
       const result = await getAccessToken({
         ...ctx,
         method: "POST",
@@ -59,11 +49,9 @@ export const auth = betterAuth({
         return null;
       });
 
-      // Spreading `ctx` carries over the response-shaping flags `customSession` set for its own
-      //   inner `getSession` call, and they win over the ones passed above — so the endpoint
-      //   hands back a `{ response }` envelope rather than the payload. Unwrapping on the
-      //   presence of the key covers both shapes, instead of depending on flags we do not
-      //   actually control from here.
+      // Spreading `ctx` inherits the response-shaping flags `customSession` set for its own
+      //   `getSession` call, and they beat the ones passed above, so this comes back as a
+      //   `{ response }` envelope. Unwrap on the key rather than on flags we do not control.
       const tokens = (
         result && "response" in result ? result.response : result
       ) as { accessToken?: string } | null;
@@ -79,16 +67,12 @@ export const auth = betterAuth({
 
 type RawSession = Awaited<ReturnType<typeof auth.api.getSession>>;
 
-/** A session we can actually call the Rails API with. */
 export type Session = NonNullable<RawSession> & { accessToken: string };
 
 /**
- * Server-side session accessor, replacing the AuthJS `auth()` helper.
- *
- * A session whose access token could not be refreshed is reported as no session at all: the
- * refresh token has been spent and Rails will reject anything we send, so the only way forward
- * is a fresh login. Collapsing the two cases here means call sites keep their single
- * `if (!session)` guard and can treat `accessToken` as always present.
+ * A session whose token could not be refreshed is reported as no session: the refresh token is
+ * spent and Rails will reject us, so a fresh login is the only way on. Collapsing the two cases
+ * lets call sites keep one `if (!session)` guard and treat `accessToken` as always present.
  */
 export async function getSession(): Promise<Session | null> {
   const session = await auth.api.getSession({ headers: await headers() });

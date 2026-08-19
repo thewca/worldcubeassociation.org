@@ -51,24 +51,20 @@ function plugins() {
   return [
     betterAuthCollections({
       betterAuthOptions: cmsBetterAuthOptions,
-      // `users` is defined by hand in `@/collections/Users`; the rest (sessions, accounts,
-      //   verifications) are generated from the Better Auth schema.
+      // `users` is hand-written; sessions/accounts/verifications come from the schema.
       skipCollections: ["user"],
-      // Roles come from the WCA OIDC provider, so nobody should be promoted to admin just for
-      //   being the first to log in.
+      // Roles come from OIDC; nobody is promoted for being first to log in.
       firstUserAdmin: false,
     }),
     createBetterAuthPlugin({
       createAuth: createCmsAuth,
       admin: {
-        // The bundled login view drives `signIn.social`, which only covers Better Auth's
-        //   built-in providers — our WCA provider comes from `genericOAuth` and needs
-        //   `signIn.oauth2`, so the view is replaced wholesale.
+        // The bundled view drives `signIn.social`, which cannot reach a `genericOAuth`
+        //   provider, so it is replaced wholesale.
         loginViewComponent: "/components/payload/CmsLoginView#default",
         login: {
-          // Team membership is what grants CMS access, and it is enforced by `access.admin`
-          //   on the users collection. The plugin's own gate looks for a singular `role`
-          //   field we do not have, so leave it out of the decision.
+          // The plugin's gate looks for a singular `role` we do not have; `access.admin` on
+          //   the users collection enforces team membership instead.
           requiredRole: null,
         },
       },

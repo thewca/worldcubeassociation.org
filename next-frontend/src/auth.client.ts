@@ -11,21 +11,16 @@ import { WCA_PROVIDER_ID } from "@/auth.config";
 export const authClient = createAuthClient({
   plugins: [
     genericOAuthClient(),
-    // Carries the server's `customSession` return type through to `useSession`, so call sites
-    //   get `session.accessToken` (and the WCA fields on `user`) typed rather than `any`.
+    // Carries the server's `customSession` return type through to `useSession`.
     customSessionClient<typeof auth>(),
   ],
 });
 
 export const { useSession, signOut } = authClient;
 
-/** The session shape as returned by our `customSession` callback, inferred from the server. */
 export type Session = typeof authClient.$Infer.Session;
 
-/**
- * Kicks off the WCA OIDC flow. Wrapped rather than re-exported because `signIn.oauth2` needs
- * the provider id, and every call site wants the same one.
- */
+/** Wrapped rather than re-exported so call sites do not repeat the provider id. */
 export function signIn(callbackURL?: string) {
   return authClient.signIn.oauth2({
     providerId: WCA_PROVIDER_ID,

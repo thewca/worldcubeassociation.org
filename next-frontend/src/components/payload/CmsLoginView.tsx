@@ -5,11 +5,8 @@ import { Button } from "@payloadcms/ui";
 import { signInToCms } from "@/payload.auth.client";
 
 /**
- * Replaces the plugin's bundled Payload login view.
- *
- * The bundled one offers email/password, passkeys and Better Auth's built-in `socialProviders`.
- * None of those apply here: the only way into the CMS is the `cms`-scoped WCA OIDC provider,
- * which is registered through the `genericOAuth` plugin and so needs `signIn.oauth2`.
+ * Replaces the plugin's bundled login view, which offers email/password, passkeys and built-in
+ * social providers — none of which can reach our `genericOAuth` provider.
  */
 export default function CmsLoginView() {
   const [error, setError] = useState<string | null>(null);

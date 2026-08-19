@@ -7,9 +7,8 @@ import {
 } from "@/lib/wca/permissions";
 
 /**
- * Kept apart from `permissions.ts` because this half reaches for the session, and therefore the
- * auth instance and its secrets. `permissions.ts` is imported by client hooks, so anything that
- * must not reach the browser bundle lives here instead.
+ * Split from `permissions.ts` because this half reaches the session, and so the auth instance and
+ * its secrets. `permissions.ts` is imported by client hooks and must stay bundle-safe.
  */
 const fetchPermissions = cache(async (authToken: string) => {
   const client = serverClientWithToken(authToken);

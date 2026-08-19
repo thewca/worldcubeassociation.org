@@ -7,9 +7,7 @@ export function useAPIClient() {
   const { data: session } = useSession();
 
   return useMemo(() => {
-    // A session without an access token means the refresh token is spent, so there is nothing
-    //   to authenticate with — fall back to the unauthenticated client rather than sending a
-    //   `Bearer undefined` the backend would reject.
+    // No access token means the refresh token is spent; there is nothing to authenticate with.
     if (session?.accessToken) {
       const client = authenticatedClient(session.accessToken);
 

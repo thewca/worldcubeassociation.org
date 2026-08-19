@@ -33,17 +33,15 @@ const baseWcaProvider: GenericOAuthConfig = {
     return {
       name: wcaProfile.name,
       email: wcaProfile.email,
-      // Our OIDC provider issues no `email_verified` claim, so Better Auth would treat every
-      //   address as unverified and refuse to link a returning user to their existing row.
-      //   These addresses are minted by the WCA backend itself rather than typed in by the
-      //   user, so treating them as verified states what is already true.
+      // Our provider issues no `email_verified` claim, so Better Auth would treat every address
+      //   as unverified and refuse to link a returning user. These are minted by the backend,
+      //   not typed in, so calling them verified states what is already true.
       emailVerified: true,
       image: wcaProfile.picture,
       roles: wcaProfile.roles,
       wcaId: wcaProfile.preferred_username,
-      // The OIDC subject is the numeric `User#id` in the Rails backend. Better Auth keeps it
-      //   verbatim on the linked account as `accountId`, but carrying it on the user too means
-      //   call sites can read it straight off the session.
+      // The OIDC subject is the numeric `User#id` in Rails. Also on the account as `accountId`,
+      //   but carrying it here lets call sites read it straight off the session.
       wcaUserId: Number(wcaProfile.sub),
     };
   },
@@ -55,15 +53,11 @@ export const cmsWcaProvider: GenericOAuthConfig = {
   ...baseWcaProvider,
   providerId: WCA_CMS_PROVIDER_ID,
   scopes: ["openid", "profile", "email", "cms"],
-  // Refresh the stored roles on every CMS login, so a user who gains or loses a team
-  //   membership in Rails has that reflected in Payload the next time they sign in.
+  // Re-sync roles on every CMS login, so team changes in Rails reach Payload.
   overrideUserInfo: true,
 };
 
-/**
- * Extra columns the WCA OIDC provider supplies on top of Better Auth's built-in user fields.
- * `input: false` keeps them server-only — they are set from the OIDC profile, never by a client.
- */
+/** `input: false` keeps these server-only: set from the OIDC profile, never by a client. */
 export const wcaUserAdditionalFields = {
   roles: { type: "string[]", required: false, input: false },
   wcaId: { type: "string", required: false, input: false },

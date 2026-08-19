@@ -2,15 +2,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { auth } from "@/auth";
 
 /**
- * Touches the session on every page navigation.
- *
- * This is load-bearing, not a leftover. Reading the session runs our `customSession` callback,
- * which rotates the Rails access token once it is close to expiring — and Doorkeeper only lets
- * a refresh token be spent once. Next.js allows cookie writes in middleware but *not* in server
- * components, so if the rotation happened during a page render the new tokens would be computed,
- * dropped, and the spent refresh token replayed on the next request until the session broke.
- * Doing it here means the rotated cookies are both sent to the browser and threaded back into
- * the request, so server components further down render against the fresh token.
+ * Load-bearing, not a leftover. Reading the session rotates the Rails access token, and
+ * Doorkeeper lets a refresh token be spent only once. Next.js allows cookie writes in middleware
+ * but not in server components, so rotating during a render would drop the new tokens and replay
+ * the spent one until the session broke.
  */
 export async function proxy(request: NextRequest) {
   const { headers } = await auth.api.getSession({
@@ -24,9 +19,8 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // `NextResponse.next({ request })` is the only way to make the rotated cookies visible to
-  //   the server components rendering this same request; without it they would keep reading
-  //   the stale `cookie` header and rotate all over again.
+  // Passing `request` is the only way the server components rendering this same request see the
+  //   rotated cookies; otherwise they read the stale header and rotate again.
   const requestCookies = new Map(
     (request.headers.get("cookie") ?? "")
       .split(";")
