@@ -7,7 +7,7 @@ class Round < ApplicationRecord
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
 
-  has_many :h2h_matches
+  has_many :h2h_matches, -> { order(:match_number) }, inverse_of: :round
 
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
@@ -945,6 +945,35 @@ class Round < ApplicationRecord
                         })
     end
     json
+  end
+
+  def to_h2h_json
+    final_pos_by_user_id = h2h_final_positions_by_user_id
+
+    {
+      id: wcif_id,
+      event_id: event_id,
+      round_type_id: round_type_id,
+      matches: h2h_matches.map { it.to_h2h_json(final_pos_by_user_id) },
+    }
+  end
+
+  # H2H rounds store their final standings either as posted results or, before
+  # posting, as live results. Results are keyed by WCA ID (hence the hop through
+  # Person to reach the user) and live results by registration. Both walk
+  # associations that the caller is expected to preload, so that serializing many
+  # rounds costs a constant number of queries.
+  private def h2h_final_positions_by_user_id
+    return live_results.to_h { |live_result| [live_result.registration.user_id, live_result.global_pos] } if results.none?
+
+    # `person` is optional and scoped to current Persons, and a Person need not
+    # have a WCA account, so a posted result may not map to a user at all.
+    positions = results.filter_map do |result|
+      user = result.person&.user
+      [user.id, result.pos] if user
+    end
+
+    positions.to_h
   end
 
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)

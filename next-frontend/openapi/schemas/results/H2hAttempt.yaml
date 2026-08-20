@@ -1,0 +1,13 @@
+type: object
+required:
+  - user_id
+  - set_attempt_number
+  - value
+properties:
+  user_id:
+    type: integer
+  set_attempt_number:
+    type: integer
+  value:
+    type: integer
+    nullable: true
