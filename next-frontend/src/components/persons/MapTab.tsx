@@ -4,6 +4,7 @@ import React from "react";
 import { Text } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import Map from "@/components/map/Map";
+import Loading from "@/components/ui/loading";
 
 interface MapTabProps {
   wcaId: string;
@@ -21,7 +22,7 @@ const MapTab: React.FC<MapTabProps> = ({ wcaId }) => {
   );
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
 
   if (!competitionQuery) {
