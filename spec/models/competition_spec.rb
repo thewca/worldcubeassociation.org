@@ -703,7 +703,7 @@ RSpec.describe Competition do
     end
 
     it "does not pick a lead Delegate when there are several staff Delegates" do
-      competition = create(:competition, delegates: [create(:delegate), create(:delegate)])
+      competition = create_list(:competition, delegates: [create(:delegate), create(:delegate)])
 
       expect(competition.lead_delegate_id).to be_nil
     end
@@ -711,7 +711,7 @@ RSpec.describe Competition do
     it "keeps the explicitly chosen lead Delegate when there are several staff Delegates" do
       delegate1 = create(:delegate)
       delegate2 = create(:delegate)
-      competition = create(:competition, delegates: [delegate1, delegate2], lead_delegate: delegate2)
+      competition = create_list(:competition, delegates: [delegate1, delegate2], lead_delegate: delegate2)
 
       competition.valid?
 
@@ -721,7 +721,7 @@ RSpec.describe Competition do
     it "re-assigns the lead Delegate when the previous one is removed and one staff Delegate remains" do
       delegate1 = create(:delegate)
       delegate2 = create(:delegate)
-      competition = create(:competition, delegates: [delegate1, delegate2], lead_delegate: delegate1)
+      competition = create_list(:competition, delegates: [delegate1, delegate2], lead_delegate: delegate1)
 
       competition.update!(staff_delegate_ids: [delegate2.id])
 
