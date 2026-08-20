@@ -64,27 +64,6 @@ export interface paths {
         patch: operations["updateRegistration"];
         trace?: never;
     };
-    "/v1/registrations/{registrationId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Update an existing registration
-         * @description Only the properties present in the payload are changed. Competitors may only set `status` to
-         *     `cancelled` (to withdraw) or `pending` (to re-register after withdrawing).
-         */
-        patch: operations["updateRegistration"];
-        trace?: never;
-    };
     "/v1/competitions/{competitionId}/registration_config": {
         parameters: {
             query?: never;
@@ -2118,18 +2097,6 @@ export interface components {
         };
     };
     responses: {
-        /** @description The registration request was rejected */
-        RegistrationError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": {
-                    /** @description Numeric registration error code */
-                    error: number;
-                };
-            };
-        };
         /** @description The registration request was rejected */
         RegistrationError: {
             headers: {
