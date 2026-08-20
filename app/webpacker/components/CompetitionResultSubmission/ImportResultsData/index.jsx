@@ -1,6 +1,7 @@
 import React from 'react';
 import { Message, Tab } from 'semantic-ui-react';
 import UploadResultsJson from './UploadResultsJson';
+import UploadWcifResults from './UploadWcifResults';
 import ImportWcaLiveResults from './ImportWcaLiveResults';
 
 export default function ImportResultsData({
@@ -10,6 +11,7 @@ export default function ImportResultsData({
   onImportSuccess,
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
+  useWcaRegistration = false,
 }) {
   const panes = [
     // JSON exports carry the merged (global) ranking for Dual Rounds, so competitions
@@ -22,6 +24,19 @@ export default function ImportResultsData({
             competitionId={competitionId}
             isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
+          />
+        </Tab.Pane>
+      ),
+    }] : []),
+    ...((isAdminView || scoretakingSoftware !== 'internal') ? [{
+      menuItem: 'Upload WCIF results',
+      render: () => (
+        <Tab.Pane>
+          <UploadWcifResults
+            competitionId={competitionId}
+            isAdminView={isAdminView}
+            onImportSuccess={onImportSuccess}
+            useWcaRegistration={useWcaRegistration}
           />
         </Tab.Pane>
       ),

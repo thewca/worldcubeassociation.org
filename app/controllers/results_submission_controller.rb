@@ -4,7 +4,7 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, only: %i[new upload_scrambles upload_json import_from_live create unfinished_persons]
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, only: %i[new upload_scrambles upload_json upload_wcif import_from_live create unfinished_persons]
   before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
   before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wrt) }, only: %i[pending_results_submissions]
@@ -104,6 +104,52 @@ class ResultsSubmissionController < ApplicationController
       mark_result_submitted: mark_result_submitted,
       store_uploaded_json: store_uploaded_json,
       results_json_str: upload_json.results_json_str,
+    )
+
+    return render status: :unprocessable_content, json: { error: errors } if errors.any?
+
+    render status: :ok, json: { success: true }
+  end
+
+  def upload_wcif
+    competition = competition_from_params
+
+    # Only admins can upload results for the competitions where results are already submitted.
+    if competition.results_submitted? && !current_user.can_admin_results?
+      return render status: :unprocessable_content, json: {
+        error: "Results have already been submitted for this competition.",
+      }
+    end
+
+    upload_wcif = UploadWcif.new({
+                                   results_file: params.require(:results_file),
+                                   competition_id: competition.id,
+                                 })
+
+    mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
+    store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
+
+    import_registrations = ActiveRecord::Type::Boolean.new.cast(params[:import_registrations])
+
+    return render status: :unprocessable_content, json: { error: upload_wcif.errors.full_messages } unless upload_wcif.valid?
+
+    if import_registrations || !competition.use_wca_registration?
+      begin
+        competition.import_registrations!(upload_wcif.registrations_data, current_user)
+      rescue StandardError => e
+        return render status: :unprocessable_content, json: { error: "Failed to import registrations: #{e.message}" }
+      end
+    end
+
+    temporary_results_data = upload_wcif.temporary_results_data
+
+    errors = CompetitionResultsImport.import_temporary_results(
+      competition,
+      temporary_results_data,
+      UploadedJson.upload_types[:wca_live], # We can treat it like Live import since it's WCIF format
+      mark_result_submitted: mark_result_submitted,
+      store_uploaded_json: store_uploaded_json,
+      results_json_str: upload_wcif.results_file_str,
     )
 
     return render status: :unprocessable_content, json: { error: errors } if errors.any?
