@@ -1074,6 +1074,14 @@ class User < ApplicationRecord
     end
   end
 
+  REGISTRATION_PROFILE_FIELDS = %w[name gender dob country_iso2].freeze
+
+  # The same conditions as `cannot_register_for_competition_reasons`, but as data rather than
+  # translated sentences, so that API clients can render (and translate) them themselves.
+  def missing_registration_profile_fields
+    REGISTRATION_PROFILE_FIELDS.select { self.public_send(it).blank? }
+  end
+
   def cannot_organize_competition_reasons
     [].tap do |reasons|
       reasons << I18n.t('registrations.errors.need_name') if name.blank?
