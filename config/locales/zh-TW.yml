@@ -2316,8 +2316,8 @@ zh-TW:
       schedule_locked_after_results_submitted: 在成績提交後，賽程將無法再進行編輯。
       #original_hash: 1877b69
       spots_left:
-        zero: 比賽已額滿
         other: '剩%{count}個名額'
+      no_spots_left: 比賽已額滿
     live:
       #original_hash: 10d1a3c
       title: 即時成績
@@ -2409,7 +2409,6 @@ zh-TW:
           advance: 晉級下一位參賽者
           #original_hash: aa59a26
           quit_confirm:
-            zero: 從這一輪移除參賽者
             other: 從這一輪移除參賽者
           bulk:
             #original_hash: e0981de
