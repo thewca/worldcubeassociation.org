@@ -2,6 +2,17 @@
 
 unless Rails.env.production?
   require 'i18n/tasks/scanners/file_scanner'
+  require 'i18n/tasks/scanners/ruby_ast_scanner'
+
+  # `I18nUtils.optional_t` wraps `I18n.t`, which the built-in matchers only
+  # recognise when it is called as `t`/`I18n.t`. Without this the wrapped keys
+  # would look unused.
+  class OptionalTMatcher < I18n::Tasks::Scanners::AstMatchers::MessageReceiversMatcher
+    def initialize(scanner:)
+      super(scanner: scanner, receivers: [::AST::Node.new(:const, [nil, :I18nUtils])], message: :optional_t)
+    end
+  end
+
   class CustomWcaI18nScanner < I18n::Tasks::Scanners::FileScanner
     include I18n::Tasks::Scanners::RelativeKeys
     include I18n::Tasks::Scanners::OccurrenceFromPosition

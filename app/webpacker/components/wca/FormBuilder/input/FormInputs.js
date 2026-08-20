@@ -41,17 +41,13 @@ function getFieldLabel(id, section = []) {
 function getFieldHint(id, section = [], isMarkdown = false) {
   const yamlId = snakifyId(id, section);
 
-  // Most fields have no hint. Without defaultValue, a missing key renders as
-  // `[missing "en...." translation]` in the form, which is why the locale files
-  // used to carry an empty entry for every hint-less field.
   if (isMarkdown) {
-    return I18n.t(`competitions.competition_form.hints.${yamlId}_html`, {
-      defaultValue: '',
+    return I18n.tOptional(`competitions.competition_form.hints.${yamlId}_html`, {
       md: I18n.t('competitions.competition_form.supports_md_html'),
     });
   }
 
-  return I18n.t(`competitions.competition_form.hints.${yamlId}`, { defaultValue: '' });
+  return I18n.tOptional(`competitions.competition_form.hints.${yamlId}`);
 }
 
 function getHtmlId(id, section = []) {

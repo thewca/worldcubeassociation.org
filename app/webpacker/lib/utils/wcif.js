@@ -146,10 +146,8 @@ export function timeLimitToString(wcifRound, wcifEvents) {
 
   // From WCIF specification:
   // For events with unchangeable time limit (3x3x3 MBLD, 3x3x3 FM) the value is null.
-  // Not every such event has wording for it, so fall back to showing nothing
-  // rather than `[missing "en.time_limit.333mbo" translation]`.
   if (wcifTimeLimit === null) {
-    return I18n.t(`time_limit.${eventId}`, { defaultValue: '' });
+    return I18n.tOptional(`time_limit.${eventId}`);
   }
 
   const timeStr = centisecondsToClockFormat(wcifTimeLimit.centiseconds);
