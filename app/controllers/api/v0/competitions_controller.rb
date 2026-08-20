@@ -11,11 +11,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       managed_by_user = current_api_user || current_user
     end
 
-    competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user)
-    # The delegates and organizers get run through `User#serializable_hash`, so eager load the
-    # associations it touches to avoid an N+1 explosion (one set of queries per delegate/organizer
-    # per competition). See `User::SERIALIZATION_INCLUDES`.
-    competitions = competitions.includes(delegates: User::SERIALIZATION_INCLUDES, organizers: User::SERIALIZATION_INCLUDES)
+    competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user).with_serialization_preloads
 
     paginate json: competitions
   end
