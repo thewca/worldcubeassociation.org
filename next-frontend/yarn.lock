@@ -5406,7 +5406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/geojson@npm:*, @types/geojson@npm:^7946.0.16":
+"@types/geojson@npm:^7946.0.16":
   version: 7946.0.16
   resolution: "@types/geojson@npm:7946.0.16"
   checksum: 10c0/1ff24a288bd5860b766b073ead337d31d73bdc715e5b50a2cee5cb0af57a1ed02cc04ef295f5fa68dc40fe3e4f104dd31282b2b818a5ba3231bc1001ba084e3c
@@ -5475,15 +5475,6 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 10c0/6bf5337bc447b706bb5b4431d37686aa2ea6d07cfd6f79cc31de80170d6ff9b1c7384a9c0ccbc45b3f512bae9e9f75c2e12109806a15331dc94e8a8db6dbb4ac
-  languageName: node
-  linkType: hard
-
-"@types/leaflet@npm:^1":
-  version: 1.9.22
-  resolution: "@types/leaflet@npm:1.9.22"
-  dependencies:
-    "@types/geojson": "npm:*"
-  checksum: 10c0/ce2e09d0f208244478c6103ba64726b33a474f89f303860c7b0494ca1bb44f1744285d93c90093c95669497c7dbdc7c206495af0b741fe6e251bf106b0415593
   languageName: node
   linkType: hard
 
@@ -12435,7 +12426,6 @@ __metadata:
     "@types/culori": "npm:^4.0.1"
     "@types/jest": "npm:^30.0.0"
     "@types/js-cookie": "npm:^3"
-    "@types/leaflet": "npm:^1"
     "@types/newrelic": "npm:^9.14.8"
     "@types/node": "npm:^26"
     "@types/rails__actioncable": "npm:^8"

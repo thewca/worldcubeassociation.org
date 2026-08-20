@@ -147,6 +147,10 @@ export default function CompetitionsPage() {
     );
   }, [location, distanceFilter, rawCompetitionData]);
 
+  const loadedCompetitionCount =
+    rawCompetitionData?.pages.reduce((total, page) => total + page.length, 0) ??
+    0;
+
   if (!competitionsDistanceFiltered) {
     return "Error";
   }
@@ -321,9 +325,10 @@ export default function CompetitionsPage() {
                   t={t}
                 />
               </Tabs.Content>
-              <Tabs.Content value="map" h="1024px">
+              <Tabs.Content value="map">
                 <TabMap
                   competitions={competitionsDistanceFiltered}
+                  loadedCompetitionCount={loadedCompetitionCount}
                   isLoading={competitionsIsFetching}
                   fetchMoreCompetitions={competitionsFetchNextPage}
                   hasMoreCompsToLoad={hasMoreCompsToLoad}
