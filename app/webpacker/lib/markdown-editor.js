@@ -47,6 +47,7 @@ $(() => {
   }).trigger('change');
 
   $('.markdown-editor').each(function toggleInput() {
+    const maxLength = parseInt(this.dataset.maxLength, 10) || null;
     const textFormattings = ['bold', 'italic', 'heading'];
     const textStructures = ['quote', 'unordered-list', 'ordered-list', 'table'];
     const allowImageUploads = this.classList.contains('markdown-editor-image-upload');
@@ -96,11 +97,29 @@ $(() => {
       '|', ...previews,
       '|', ...helps,
     ];
-    const editor = new EasyMDE({
+    let editor;
+    const status = ['upload-image'];
+    if (maxLength) {
+      status.push({
+        className: 'markdown-editor-character-count',
+        defaultValue: (el) => {
+          const target = el;
+          target.innerHTML = `${this.value.length} / ${maxLength} characters`;
+        },
+        onUpdate: (el) => {
+          const target = el;
+          const { length } = editor.value();
+          target.innerHTML = `${length} / ${maxLength} characters`;
+          target.classList.toggle('markdown-editor-character-count-warning', length >= maxLength * 0.9);
+        },
+      });
+    }
+    editor = new EasyMDE({
       element: this,
       spellChecker: false,
       promptURLs: true,
       toolbar,
+      status,
       previewRender(plainText, preview) {
         const previewTarget = preview;
         if (this.markdownReqest) {
@@ -116,7 +135,6 @@ $(() => {
         return 'Waiting...';
       },
 
-      status: ['upload-image'],
       uploadImage: true,
       async imageUploadFunction(file, onSuccess, onError) {
         const formData = new FormData();
@@ -136,6 +154,25 @@ $(() => {
       this.value = editor.value();
       $(this).trigger('change');
     });
+
+    if (maxLength) {
+      // Prevent typing/pasting past the character limit, rather than letting the user
+      // hit a validation error only after submitting the form.
+      editor.codemirror.on('beforeChange', (instance, changeObj) => {
+        if (changeObj.origin === 'setValue') {
+          return;
+        }
+
+        const currentLength = instance.getValue().length;
+        const removedLength = instance.getRange(changeObj.from, changeObj.to).length;
+        const addedLength = changeObj.text.join('\n').length;
+        const newLength = currentLength - removedLength + addedLength;
+
+        if (newLength > maxLength) {
+          changeObj.cancel();
+        }
+      });
+    }
     // So edited value does not persist on refresh
     editor.value(this.defaultValue);
 

@@ -2,6 +2,10 @@
 
 class DelegateReport < ApplicationRecord
   REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
+  # MySQL `TEXT` columns can hold at most 65,535 characters. `summary`, `equipment`, `venue`,
+  #   `organization`, `incidents`, and `remarks` are all `TEXT` columns (see AVAILABLE_SECTIONS),
+  #   so this is a hard database-level cap we must also validate against before saving.
+  MAX_SECTION_LENGTH = 65_535
   # Any potentially available section, regardless of versioning.
   #   Use with care, some sections may not be available for some versions!
   AVAILABLE_SECTIONS = %i[
@@ -73,6 +77,8 @@ class DelegateReport < ApplicationRecord
   validates :discussion_url, url: true
   validates :wrc_incidents, presence: true, if: :wrc_feedback_requested
   validates :wic_incidents, presence: true, if: :wic_feedback_requested
+
+  validates(*AVAILABLE_SECTIONS, length: { maximum: MAX_SECTION_LENGTH })
 
   validates :setup_images, blob: { content_type: :web_image },
                            length: { minimum: :required_setup_images_count, if: %i[posted? requires_setup_images?] }
