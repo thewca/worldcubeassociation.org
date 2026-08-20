@@ -259,17 +259,14 @@ es-ES:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} intentos para bajar de %{time}'
       one: 'Un intento para bajar de %{time}'
       other: '%{count} intentos para bajar de %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} intentos para bajar de %{moves} movimientos'
       one: 'Un intento para bajar de %{moves} movimientos'
       other: '%{count} intentos para bajar de %{moves} movimientos'
     #original_hash: eba1b97
     points:
-      zero: '%{count} intentos para superar los %{points} puntos'
       one: 'Un intento para superar los %{points} puntos'
       other: '%{count} intentos para superar los %{points} puntos'
   time_limit:
@@ -384,7 +381,6 @@ es-ES:
       invalid: inválido
     #original_hash: 49d0140
     days:
-      zero: '%{count} días'
       one: un día
       other: '%{count} días'
     #original_hash: 51ef7d4
@@ -1248,7 +1244,6 @@ es-ES:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: El formulario no contiene errores.
           one: 'El formulario contiene un error:'
           other: 'El formulario contiene %{count} errores:'
       error_pages:
@@ -2351,7 +2346,6 @@ es-ES:
       must_register: Tienes que registrarte al menos en una categoría.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Tienes que registrarte en ninguna categoría.
         one: Tienes que registrarte en una sola categoría.
         other: 'Tienes que registrarte entre una y %{count} categorías.'
       #original_hash: 87f7c12
@@ -2375,17 +2369,14 @@ es-ES:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nuevos
         one: nuevo
         other: nuevos
       #original_hash: bc010e3
       returner:
-        zero: repetidores
         one: repetidor
         other: repetidores
       #original_hash: b7da17a
       person:
-        zero: personas
         one: persona
         other: personas
     flash:
@@ -2497,7 +2488,6 @@ es-ES:
       edit: Editar
       #original_hash: beffc45
       country_plural:
-        zero: Ninguna región
         one: Una región
         other: '%{count} regiones'
       #original_hash: 1feee0e
@@ -2938,9 +2928,9 @@ es-ES:
       schedule_locked_after_results_submitted: El horario no se puede editar tras haber subido los resultados.
       #original_hash: 1877b69
       spots_left:
-        zero: Competición llena
         one: Una plaza libre
         other: '%{count} plazas libres'
+      no_spots_left: Competición llena
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
@@ -3052,14 +3042,12 @@ es-ES:
           title: Eliminar competidor
           #original_hash: c25b336
           next_to_advance:
-            zero: 'El próximo competidor en clasificarse es %{competitors}'
             one: 'El próximo competidor en clasificarse es %{competitors}'
             other: 'Los próximos competidores en clasificarse son %{competitors}'
           #original_hash: c87ca67
           advance: Clasificar al próximo competidor
           #original_hash: aa59a26
           quit_confirm:
-            zero: Eliminar competidores de la ronda
             one: Eliminar competidor de la ronda
             other: Eliminar competidores de la ronda
           bulk:
@@ -3096,7 +3084,6 @@ es-ES:
           single_round: Añadir competidor a la ronda
           #original_hash: bf3b670
           multiple_rounds:
-            zero: No añadir al competidor a ninguna ronda.
             one: Añadir competidor a ambas rondas de las Rondas Duales.
             other: >-
               Añadir competidor a la ronda, ya que la segunda ronda de las
@@ -3187,14 +3174,12 @@ es-ES:
       display_name: '[Cancelada] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizadores
         one: Organizador
         other: Organizadores
       #original_hash: 53a9522
       organization_team: Equipo organizador
       #original_hash: 6afa61e
       delegate:
-        zero: Delegados de la WCA
         one: Delegado de la WCA
         other: Delegados de la WCA
       #original_hash: b37456c
@@ -3292,12 +3277,10 @@ es-ES:
         restricted: Los espectadores solo se permiten como acompañantes de competidores.
       #original_hash: 35f892a
       guest_limit:
-        zero: Los competidores no pueden traer ningún acompañante.
         one: Los competidores pueden traer como mucho un acompañante.
         other: 'Los competidores pueden traer como mucho %{count} acompanates.'
       #original_hash: bad09c8
       event_limit:
-        zero: Los competidores no se pueden registrar en ninguna categoría.
         one: Los competidores se pueden registrar en exactamente una categoría.
         other: 'Los competidores se pueden registrar en como mucho {count} categorías.'
       #original_hash: 64e0ddd
@@ -4172,9 +4155,9 @@ es-ES:
         empty: Ninguno
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: no quedan plazas
           one: queda una plaza
           other: 'quedan %{count} plazas'
+        no_spots_remaining: no quedan plazas
         pending:
           #original_hash: 4210670
           title: Registros pendientes
@@ -4293,9 +4276,9 @@ es-ES:
         email_message: Copiado al portapapeles. ¡Recuerda usar CCO (con copia oculta)!
         #original_hash: beedd53
         move_to:
-          zero: Mover a
           one: 'Mover %{count} a'
           other: 'Mover %{count} a'
+        move_to_none_selected: Mover a
         #original_hash: 96f608c
         pending: Pendiente
         #original_hash: 92d40dc
@@ -4856,9 +4839,6 @@ es-ES:
       room_in_venue: '%{room} en %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Estás viendo el horario en %{venue_name}, uno de %{count} recintos de
-          esta competición.
         one: >-
           Estás viendo el horario en %{venue_name}, el único recinto de esta
           competición.

@@ -259,15 +259,12 @@ vi:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} lượt để đạt < %{time}'
       other: '%{count} lượt để đạt < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} lượt để đạt < %{moves} bước'
       other: '%{count} lượt để đạt < %{moves} bước'
     #original_hash: eba1b97
     points:
-      zero: '%{count} lượt để đạt > %{points} điểm'
       other: '%{count} lượt để đạt > %{points} điểm'
   time_limit:
     cumulative:
@@ -381,7 +378,6 @@ vi:
       invalid: không hợp lệ
     #original_hash: 49d0140
     days:
-      zero: '%{count} ngày'
       other: '%{count} ngày'
     #original_hash: 51ef7d4
     search_site: Tim kiếm
@@ -1208,7 +1204,6 @@ vi:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Đơn chứa %{count} lỗi:'
           other: 'Đơn chứa %{count} lỗi:'
       error_pages:
         #original_hash: 1042478
@@ -2263,7 +2258,6 @@ vi:
       must_register: Bạn phải đăng ký ít nhất một nội dung.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: Bạn phải đăng ký chỉ một nội dung.
         other: 'Bạn phải đăng ký từ 1 đến %{count} nội dung.'
       #original_hash: 87f7c12
       banned_html: >-
@@ -2288,15 +2282,12 @@ vi:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: thí sinh mới
         other: thí sinh mới
       #original_hash: bc010e3
       returner:
-        zero: thí sinh cũ
         other: thí sinh cũ
       #original_hash: b7da17a
       person:
-        zero: người
         other: người
     flash:
       #original_hash: da7ec53
@@ -2394,7 +2385,6 @@ vi:
       edit: Sửa
       #original_hash: beffc45
       country_plural:
-        zero: '%{count} khu vực'
         other: '%{count} khu vực'
       #original_hash: 1feee0e
       export_csv: Xuất ra CSV
@@ -2801,8 +2791,8 @@ vi:
       schedule_locked_after_results_submitted: Không thể sửa đổi lịch trình sau khi đã nộp kết quả.
       #original_hash: 1877b69
       spots_left:
-        zero: Giải đấu đã đầy
         other: 'Còn %{count} chỗ'
+      no_spots_left: Giải đấu đã đầy
     live:
       #original_hash: 10d1a3c
       title: Kết quả Trực tiếp
@@ -2911,13 +2901,11 @@ vi:
           title: Lược bỏ thí sinh
           #original_hash: c25b336
           next_to_advance:
-            zero: 'Thí sinh tiếp theo vào vòng sau là %{competitors}'
             other: 'Các thí sinh tiếp theo vào vòng sau là %{competitors}'
           #original_hash: c87ca67
           advance: Cho thí sinh tiếp theo vào vòng sau
           #original_hash: aa59a26
           quit_confirm:
-            zero: Bỏ thí sinh khỏi vòng thi
             other: Bỏ thí sinh khỏi vòng thi
           bulk:
             #original_hash: e0981de
@@ -2947,7 +2935,6 @@ vi:
           single_round: Thêm thí sinh vào vòng thi
           #original_hash: bf3b670
           multiple_rounds:
-            zero: Thêm thí sinh vào cả hai vòng của vòng thi kép.
             other: >-
               Thêm thí sinh vào vòng thi, bạn sẽ phải thêm thí sinh vào vòng thi
               thứ hai của vòng thi kép sau vì vòng thi này chưa mở.
@@ -3035,13 +3022,11 @@ vi:
       display_name: '[Đã bị hủy] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Người tổ chức
         other: Người tổ chức
       #original_hash: 53a9522
       organization_team: Ban tổ chức
       #original_hash: 6afa61e
       delegate:
-        zero: WCA Delegate
         other: WCA Delegate
       #original_hash: b37456c
       contact: Liên lạc
@@ -3128,11 +3113,9 @@ vi:
         restricted: Khán giả phải đi cùng với thí sinh.
       #original_hash: 35f892a
       guest_limit:
-        zero: Thí sinh chỉ được đi cùng 1 khách mời.
         other: 'Thí sinh được phép đi cùng nhiều nhất %{count} khách mời.'
       #original_hash: bad09c8
       event_limit:
-        zero: Thí sinh chỉ được đăng ký 1 nội dung thi.
         other: 'Thí sinh được phép đăng ký nhiều nhất %{count} nội dung thi.'
       #original_hash: 64e0ddd
       require_qualification: Thí sinh chỉ được đăng ký thi các nội dung đã đủ điều kiện.
@@ -3956,8 +3939,8 @@ vi:
         empty: Không có
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: Hết chỗ
           other: 'Còn %{count} chỗ'
+        no_spots_remaining: Hết chỗ
         pending:
           #original_hash: 4210670
           title: Đơn đăng ký Đang chờ
@@ -4072,8 +4055,8 @@ vi:
         email_message: Đã lưu vào bảng nhớ tạm. Hãy nhớ gửi bằng Bcc!
         #original_hash: beedd53
         move_to:
-          zero: Di chuyển đến
           other: 'Di chuyển %{count} đơn đến'
+        move_to_none_selected: Di chuyển đến
         #original_hash: 96f608c
         pending: Đang chờ
         #original_hash: 92d40dc
@@ -4598,9 +4581,6 @@ vi:
       room_in_venue: '%{room} trong %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Bạn đang xem lịch trình của hội trường %{venue_name}, hội trường duy
-          nhất của giải đấu này.
         other: >-
           Bạn đang xem lịch trình của hội trường %{venue_name}, một trong
           %{count} hội trường của giải đấu này.
