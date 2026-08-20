@@ -259,6 +259,8 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     @registration = Registration.find(params_id)
     @competition = @registration.competition
 
+    return render_error(:forbidden, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @registration.user_id == authenticated_user.id
+
     return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
     return render_error(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if @competition.registration_past?
 
