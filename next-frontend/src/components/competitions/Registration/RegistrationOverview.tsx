@@ -225,22 +225,23 @@ export default function RegistrationOverview({
       )}
 
       {/* Under the summary rather than beside the heading, so that the actions sit where the
-          form's own button sits and stay reachable on a phone - stacked, so each one spans the
-          panel like the form's does. Editing has no button of its own here: the form's button
+          form's own button sits and stay reachable on a phone - side by side, sharing the width
+          the form's own button spans. Editing has no button of its own here: the form's button
           doubles as the way back out of it. */}
-      <ButtonGroup
-        orientation="vertical"
-        alignItems="stretch"
-        variant="outline"
-      >
+      <ButtonGroup variant="outline" width="full">
         {!isEditing && canEdit && (
-          <Button colorPalette="blue" onClick={() => onEditingChange(true)}>
+          <Button
+            flex="1"
+            colorPalette="blue"
+            onClick={() => onEditingChange(true)}
+          >
             <LuPencil />
             {t("registrations.update")}
           </Button>
         )}
         {CANCELLABLE_STATUSES.includes(status ?? "") && (
           <Button
+            flex="1"
             colorPalette="red"
             loading={isCancelling}
             onClick={requestCancellation}

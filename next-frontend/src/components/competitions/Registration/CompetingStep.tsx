@@ -202,42 +202,42 @@ export default function CompetingStep({
           )}
         </form.Field>
 
-        <form.Field
-          name="comment"
-          validators={{
-            onChange: ({ value }) =>
-              parameters.force_comment_in_registration && value.trim() === ""
-                ? t("registrations.errors.cannot_register_without_comment")
-                : undefined,
+        {/* A required comment is derived from the value rather than validated on change, so that
+            the competitor is told about it before they have typed anything. */}
+        <form.Field name="comment">
+          {(field) => {
+            const commentMissing =
+              parameters.force_comment_in_registration &&
+              field.state.value.trim() === "";
+
+            return (
+              <Field.Root
+                invalid={commentMissing}
+                required={parameters.force_comment_in_registration}
+              >
+                <Field.Label width="full" asChild>
+                  <HStack justify="space-between">
+                    <Text>
+                      {t("competitions.registration_v2.register.comment")}
+                      <Field.RequiredIndicator />
+                    </Text>
+                    <Text fontStyle="italic">
+                      ({field.state.value.length}/{COMMENT_CHARACTER_LIMIT})
+                    </Text>
+                  </HStack>
+                </Field.Label>
+                <Textarea
+                  autoresize
+                  maxLength={COMMENT_CHARACTER_LIMIT}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <Field.ErrorText>
+                  {t("registrations.errors.cannot_register_without_comment")}
+                </Field.ErrorText>
+              </Field.Root>
+            );
           }}
-        >
-          {(field) => (
-            <Field.Root
-              invalid={!field.state.meta.isValid}
-              required={parameters.force_comment_in_registration}
-            >
-              <Field.Label width="full" asChild>
-                <HStack justify="space-between">
-                  <Text>
-                    {t("competitions.registration_v2.register.comment")}
-                    <Field.RequiredIndicator />
-                  </Text>
-                  <Text fontStyle="italic">
-                    ({field.state.value.length}/{COMMENT_CHARACTER_LIMIT})
-                  </Text>
-                </HStack>
-              </Field.Label>
-              <Textarea
-                autoresize
-                maxLength={COMMENT_CHARACTER_LIMIT}
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-              <Field.ErrorText>
-                {field.state.meta.errors.join(", ")}
-              </Field.ErrorText>
-            </Field.Root>
-          )}
         </form.Field>
 
         {parameters.guests_enabled && (

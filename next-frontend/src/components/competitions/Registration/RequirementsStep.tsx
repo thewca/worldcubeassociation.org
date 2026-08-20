@@ -19,6 +19,7 @@ export default function RequirementsStep({
       <Checkbox.Root
         variant="solid"
         width="full"
+        cursor="pointer"
         checked={hasAcknowledged}
         onCheckedChange={(e) => onAcknowledgedChange(!!e.checked)}
       >
