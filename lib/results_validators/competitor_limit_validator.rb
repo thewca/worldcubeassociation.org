@@ -21,7 +21,7 @@ module ResultsValidators
         competition = competition_data.competition
 
         competitor_limit = competition.competitor_limit
-        total_competitors = competition_data.persons.count
+        total_competitors = competition_data.persons.length
 
         next unless competition.competitor_limit_enabled && total_competitors > competitor_limit
 

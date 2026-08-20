@@ -2,6 +2,7 @@
   - critical
   - default
   - wca_jobs
+  - sanity_checks
   - mailers
 development:
   :concurrency: 5

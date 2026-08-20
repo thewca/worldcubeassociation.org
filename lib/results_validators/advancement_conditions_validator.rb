@@ -28,10 +28,17 @@ module ResultsValidators
       false
     end
 
-    def competition_associations
+    def competition_associations(check_real_results: false)
       {
-        rounds: [],
+        rounds: [:competition_event],
       }
+    end
+
+    # Sort key matching Result.merged_dual_rounds: primary score (average or best per format,
+    # with DNF/<=0 ranked worst), then best, then id. Lower sorts first (better).
+    private def dual_round_sort_key(result)
+      primary = result.format.sort_by == "average" ? result.average : result.best
+      [primary <= 0 ? 1 : 0, primary, result.best <= 0 ? 1 : 0, result.best, result.id]
     end
 
     def run_validation(validator_data)
@@ -43,9 +50,12 @@ module ResultsValidators
         results_by_event_id.each do |event_id, results_for_event|
           results_by_round_id = results_for_event.group_by(&:round_id)
 
+          # We are filtering out H2H finals as their results are loaded via a different process until we transition
+          # all results to be loaded via the live_results/live_attempts pipeline. See #13200 for more information.
           rounds_without_deprecated_types = competition.rounds
                                                        .filter { it.event_id == event_id }
                                                        .reject { IGNORE_ROUND_TYPES.include?(it.round_type_id) }
+                                                       .reject(&:is_h2h_mock?)
 
           previous_round = nil
 
@@ -54,31 +64,36 @@ module ResultsValidators
             number_of_people_in_round = results.size
             remaining_number_of_rounds = round.total_number_of_rounds - round.number
 
-            round_id = "#{round.event_id}-#{round.round_type_id}"
-
             if number_of_people_in_round <= 7 && remaining_number_of_rounds.positive?
               # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
               @errors << ValidationError.new(REGULATION_9M3_ERROR,
                                              :rounds, competition.id,
-                                             round_id: round_id)
+                                             round_id: round.human_id)
             end
 
             if number_of_people_in_round <= 15 && remaining_number_of_rounds > 1
               # https://www.worldcubeassociation.org/regulations/#9m2: Rounds with 15 or fewer competitors must have at most one subsequent round.
               @errors << ValidationError.new(REGULATION_9M2_ERROR,
                                              :rounds, competition.id,
-                                             round_id: round_id)
+                                             round_id: round.human_id)
             end
 
             if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2
               # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most two subsequent rounds.
               @errors << ValidationError.new(REGULATION_9M1_ERROR,
                                              :rounds, competition.id,
-                                             round_id: round_id)
+                                             round_id: round.human_id)
             end
 
             if previous_round.present?
-              previous_results = results_by_round_id[previous_round.id]
+              # Linked (dual) rounds are run as a single combined round, so the previous results
+              # are the union of the previous round and any of its colinked rounds, keeping only
+              # each competitor's best result (mirrors Result.merged_dual_rounds).
+              previous_round_ids = [previous_round.id, *previous_round.colinked_rounds.ids]
+              previous_results = previous_round_ids
+                                 .flat_map { |id| results_by_round_id[id] || [] }
+                                 .group_by(&:person_id)
+                                 .map { |_, person_results| person_results.min_by { |r| dual_round_sort_key(r) } }
               number_of_people_in_previous_round = previous_results.size
               condition = previous_round.advancement_condition
 
@@ -94,34 +109,38 @@ module ResultsValidators
                 if people_over_condition.any?
                   @errors << ValidationError.new(COMPETED_NOT_QUALIFIED_ERROR,
                                                  :rounds, competition.id,
-                                                 round_id: round_id,
+                                                 round_id: round.human_id,
                                                  ids: people_over_condition.join(","),
                                                  condition: condition.to_s(previous_round))
                 end
               end
+
+              # Dual Rounds per https://www.worldcubeassociation.org/regulations/#9v5 do not need checks
+              #   on their advancement criteria, because everyone will advance anyways (and that's fine)
+              is_within_dual_round = round.linked_round.present? && previous_round.linked_round.present?
 
               # Article 9p, since July 20, 2006 until April 13, 2010
               if comp_start_date.between?(Date.new(2006, 7, 20), Date.new(2010, 4, 13))
                 if number_of_people_in_round >= number_of_people_in_previous_round
                   @errors << ValidationError.new(OLD_REGULATION_9P_ERROR,
                                                  :rounds, competition.id,
-                                                 round_id: round_id)
+                                                 round_id: round.human_id)
                 end
-              else
+              elsif !is_within_dual_round
                 max_advancing = 3 * number_of_people_in_previous_round / 4
                 # Article 9p1, since April 14, 2010
                 # https://www.worldcubeassociation.org/regulations/#9p1: At least 25% of competitors must be eliminated between consecutive rounds of the same event.
                 if number_of_people_in_round > max_advancing
                   @errors << ValidationError.new(REGULATION_9P1_ERROR,
                                                  :rounds, competition.id,
-                                                 round_id: round_id)
+                                                 round_id: round.human_id)
                 end
                 if condition
                   theoretical_number_of_people = condition.max_advancing(previous_results)
                   if number_of_people_in_round > theoretical_number_of_people
                     @warnings << ValidationWarning.new(TOO_MANY_QUALIFIED_WARNING,
                                                        :rounds, competition.id,
-                                                       round_id: round_id,
+                                                       round_id: round.human_id,
                                                        actual: number_of_people_in_round,
                                                        expected: theoretical_number_of_people,
                                                        condition: condition.to_s(previous_round))
@@ -129,7 +148,7 @@ module ResultsValidators
                   if theoretical_number_of_people > max_advancing
                     @errors << ValidationError.new(ROUND_9P1_ERROR,
                                                    :rounds, competition.id,
-                                                   round_id: round_id,
+                                                   round_id: round.human_id,
                                                    condition: condition.to_s(previous_round))
                   end
                   # This comes from https://github.com/thewca/worldcubeassociation.org/issues/5587
@@ -137,7 +156,7 @@ module ResultsValidators
                      (number_of_people_in_round / theoretical_number_of_people) <= 0.8
                     @warnings << ValidationWarning.new(NOT_ENOUGH_QUALIFIED_WARNING,
                                                        :rounds, competition.id,
-                                                       round_id: round_id,
+                                                       round_id: round.human_id,
                                                        expected: theoretical_number_of_people,
                                                        actual: number_of_people_in_round)
                   end

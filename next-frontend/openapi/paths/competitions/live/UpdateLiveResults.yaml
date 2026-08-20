@@ -1,0 +1,28 @@
+summary: Updates a live result for a given round
+parameters:
+  - name: competitionId
+    in: path
+    required: true
+    schema:
+      type: string
+  - name: roundId
+    in: path
+    required: true
+    schema:
+      type: string
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../../schemas/live/SubmitLiveResult.yaml'
+responses:
+  '200':
+    description: Result Updated
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string

@@ -16,3 +16,5 @@ get:
         application/json:
           schema:
             $ref: '../../schemas/competitions/CompetitionInfo.yaml'
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'

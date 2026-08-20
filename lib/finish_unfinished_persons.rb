@@ -18,21 +18,21 @@ module FinishUnfinishedPersons
 
     results_scope = results_scope.where(competition_id: competition_ids) if competition_ids.present?
 
-    results_scope.where("(person_id = '' OR person_id REGEXP '^[0-9]+$')")
+    results_scope.merge(Result.where(person_id: '').or(Result.unmerged_newcomers))
                  .group(:person_id, :person_name, :competition_id, :country_id)
                  .order(:person_name)
   end
 
-  def self.search_persons(competition_ids = nil)
+  def self.search_persons(competition_ids = nil, compute_similar: true)
     unfinished_person_results = self.unfinished_results_scope(competition_ids)
 
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other
 
-    persons_cache = Person.select(:id, :wca_id, :name, :dob, :country_id)
+    persons_cache = Person.select(:id, :wca_id, :name, :dob, :country_id) if compute_similar
 
     unfinished_person_results.each do |res|
-      next if unfinished_persons.length >= MAX_PER_BATCH
+      next if compute_similar && unfinished_persons.length >= MAX_PER_BATCH
 
       competition_year = res.competition.start_date.year
       person_name = res.person_name
@@ -41,7 +41,7 @@ module FinishUnfinishedPersons
 
       inbox_dob = res.inbox_person&.dob
 
-      similar_persons = compute_similar_persons(res.person_name, res.country_id, persons_cache)
+      similar_persons = compute_similar ? compute_similar_persons(res.person_name, res.country_id, persons_cache) : []
 
       unfinished_persons.push({
                                 person_id: res.person_id,
@@ -104,15 +104,33 @@ module FinishUnfinishedPersons
     JaroWinkler.similarity(string_a, string_b, ignore_case: true)
   end
 
-  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+  def self.name_parts(person_name)
     roman_name = self.extract_roman_name person_name
     sanitized_roman_name = self.remove_accents roman_name
-    name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
+    sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').split
+  end
 
-    last_name_index = name_parts.length > 1 && GENERATIONAL_SUFFIXES.include?(name_parts[-1]) ? -2 : -1
+  def self.generational_suffix?(parts)
+    parts.length > 1 && GENERATIONAL_SUFFIXES.include?(parts[-1].upcase)
+  end
 
-    last_name = name_parts[last_name_index]
-    rest_of_name = name_parts[...last_name_index].join
+  def self.name_parts_without_suffix(person_name)
+    parts = self.name_parts(person_name)
+
+    self.generational_suffix?(parts) ? parts[...-1] : parts
+  end
+
+  def self.last_name_with_suffix(person_name)
+    parts = self.name_parts(person_name)
+
+    self.generational_suffix?(parts) ? parts[-2..].join(' ') : parts[-1]
+  end
+
+  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+    name_parts = self.name_parts_without_suffix(person_name)
+
+    last_name = name_parts[-1]
+    rest_of_name = name_parts[...-1].join
 
     padded_rest_of_name = rest_of_name.ljust WCA_QUARTER_ID_LENGTH, WCA_ID_PADDING
     letters_to_shift = [0, WCA_QUARTER_ID_LENGTH - last_name.length].max
@@ -121,7 +139,7 @@ module FinishUnfinishedPersons
     cleared_id = false
 
     until cleared_id || letters_to_shift > WCA_QUARTER_ID_LENGTH
-      quarter_id = last_name[...(WCA_QUARTER_ID_LENGTH - letters_to_shift)] + padded_rest_of_name[...letters_to_shift]
+      quarter_id = (last_name[...(WCA_QUARTER_ID_LENGTH - letters_to_shift)] + padded_rest_of_name[...letters_to_shift]).upcase
       semi_id = competition_year.to_s + quarter_id
 
       unless available_per_semi.key?(semi_id)
@@ -152,7 +170,7 @@ module FinishUnfinishedPersons
     [semi_id, available_per_semi]
   end
 
-  def self.complete_wca_id(semi_id, used_ids = nil)
+  def self.next_available_wca_id(semi_id, used_ids = nil)
     used_ids ||= Person.where("wca_id LIKE ?", "#{semi_id}%").pluck(:wca_id)
 
     (1..99).each do |i|
@@ -164,18 +182,22 @@ module FinishUnfinishedPersons
       end
     end
 
-    raise "Could not compute a WCA ID suffix for #{semi_id}"
+    [nil, used_ids]
   end
 
-  def self.insert_person(inbox_person, new_name, new_country, new_wca_id)
+  def self.complete_wca_id(semi_id, used_ids = nil)
+    new_id, used_ids = next_available_wca_id(semi_id, used_ids)
+    raise "Could not compute a WCA ID suffix for #{semi_id}" if new_id.nil?
+
+    [new_id, used_ids]
+  end
+
+  def self.insert_person(gender: :o, **attrs)
     Person.create!(
-      wca_id: new_wca_id,
+      gender: gender,
       sub_id: 1,
-      name: new_name,
-      country_id: new_country,
-      gender: inbox_person&.gender || :o,
-      dob: inbox_person&.dob,
       comments: '',
+      **attrs,
     )
   end
 

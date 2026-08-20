@@ -303,6 +303,23 @@ RSpec.describe Api::V0::CompetitionsController do
       expect(parsed_body["error"]).to eq "Competition with id #{competition.id} not found"
     end
 
+    context 'not signed in' do
+      it '404s on hidden competition' do
+        get :show_wcif, params: { competition_id: hidden_competition.id }
+        expect(response).to have_http_status :not_found
+      end
+
+      it 'get wcif' do
+        get :show_wcif, params: { competition_id: "TestComp2014" }
+        expect(response).to have_http_status :ok
+        parsed_body = response.parsed_body
+        expect(parsed_body["id"]).to eq "TestComp2014"
+        expect(parsed_body["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
+        expect(parsed_body["persons"][0].keys).not_to include "email"
+        expect(parsed_body["persons"][0].keys).not_to include "birthdate"
+      end
+    end
+
     context 'signed in without manage_competitions scope' do
       let(:delegate) { competition.delegates.first }
 
@@ -317,7 +334,12 @@ RSpec.describe Api::V0::CompetitionsController do
 
       it 'get wcif' do
         get :show_wcif, params: { competition_id: "TestComp2014" }
-        expect(response).to have_http_status :forbidden
+        expect(response).to have_http_status :ok
+        parsed_body = response.parsed_body
+        expect(parsed_body["id"]).to eq "TestComp2014"
+        expect(parsed_body["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
+        expect(parsed_body["persons"][0].keys).not_to include "email"
+        expect(parsed_body["persons"][0].keys).not_to include "birthdate"
       end
     end
 
@@ -342,6 +364,9 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
         expect(parsed_body["id"]).to eq "TestComp2014"
+        expect(parsed_body["formatVersion"]).to eq Competition::WCIF_STABLE_VERSION
+        expect(parsed_body["persons"][0].keys).to include "email"
+        expect(parsed_body["persons"][0].keys).to include "birthdate"
       end
 
       it 'gets wcif with consistent competitor_id' do
@@ -375,10 +400,60 @@ RSpec.describe Api::V0::CompetitionsController do
 
     context 'accessing public endpoint' do
       it 'gets only announced series competitions ids' do
-        get :show_wcif_public, params: { competition_id: 'TestComp2014' }
+        get :show_wcif_by_lifecycle, params: { competition_id: 'TestComp2014', lifecycle_name: 'public' }
         expect(response).to have_http_status :ok
         parsed_body = response.parsed_body
         expect(parsed_body['series']['competitionIds']).to eq ['TestComp2014']
+      end
+    end
+
+    context 'schema checks' do
+      let(:wcif_version) { '2.1.1' }
+      let(:competition_wcif) { competition.to_wcif(version: wcif_version) }
+
+      context 'legacy v1' do
+        let(:wcif_version) { '1.1' }
+
+        it 'validates a compliant schema' do
+          put :check_wcif, params: competition_wcif, as: :json
+          expect(response).to have_http_status :ok
+        end
+      end
+
+      it 'validates a compliant schema' do
+        put :check_wcif, params: competition_wcif, as: :json
+        expect(response).to have_http_status :ok
+      end
+
+      it 'complains about missing keys' do
+        put :check_wcif, params: competition_wcif.except("formatVersion"), as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body).to contain_exactly("The property '#/' did not contain a required property of 'formatVersion' in schema WCIFv#{Competition::WCIF_STABLE_VERSION}")
+      end
+
+      it 'complains about extraneous keys' do
+        extraneous_wcif = { **competition_wcif, "extraProperty" => "yippie" }
+
+        put :check_wcif, params: extraneous_wcif, as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body).to contain_exactly("The property '#/' contained undefined properties: 'extraProperty' in schema WCIFv2.1.1")
+      end
+
+      it 'complains about values in the wrong format' do
+        wrong_format_wcif = { **competition_wcif, "id" => 123 }
+
+        put :check_wcif, params: wrong_format_wcif, as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body).to contain_exactly("The property '#/id' of type integer did not match the following type: string in schema WCIFv2.1.1")
+      end
+
+      it 'reports multiple errors at once' do
+        put :check_wcif, params: { id: 123 }, as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body).to contain_exactly(
+          "The property '#/id' of type integer did not match the following type: string in schema WCIFv#{Competition::WCIF_STABLE_VERSION}",
+          "The property '#/' did not contain a required property of 'formatVersion' in schema WCIFv#{Competition::WCIF_STABLE_VERSION}",
+        )
       end
     end
   end

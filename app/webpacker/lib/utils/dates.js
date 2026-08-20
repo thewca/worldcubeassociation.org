@@ -119,6 +119,8 @@ export const getDatesBetweenInclusive = (
   endDateTime,
   timeZone,
 ) => {
+  if (!timeZone) return [];
+
   // avoid infinite loop on invalid params
   if (startDateTime > endDateTime) return [];
 

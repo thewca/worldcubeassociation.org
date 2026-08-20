@@ -7,7 +7,7 @@ get:
     - name: include_cancelled
       in: query
       schema:
-        type: string
+        type: boolean
     - name: continent
       in: query
       schema:
@@ -20,7 +20,7 @@ get:
       in: query
       schema:
         type: string
-    - name: event_ids
+    - name: event_ids[]
       in: query
       schema:
         type: array
@@ -30,14 +30,29 @@ get:
       in: query
       schema:
         type: string
+        format: datetime
     - name: end
       in: query
       schema:
         type: string
+        format: datetime
     - name: admin_status
       in: query
       schema:
         type: string
+    - name: q
+      in: query
+      schema:
+        type: string
+    - name: sort
+      in: query
+      schema:
+        type: string
+    - name: ongoing_and_future
+      in: query
+      schema:
+        type: string
+        format: datetime
   responses:
     '200':
       description: Successful response

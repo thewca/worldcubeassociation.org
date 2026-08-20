@@ -6,7 +6,7 @@ import PulseLoader from 'react-spinners/PulseLoader';
 
 import I18n from '../../lib/i18n';
 import {
-  competitionConstants, nonFutureCompetitionYears,
+  competitionConstants, nonFutureCompetitionYears, WCA_EVENT_IDS_WITH_FUTURE,
 } from '../../lib/wca-data.js.erb';
 
 import useDelegatesData from './useDelegatesData';
@@ -24,6 +24,7 @@ function CompetitionsFilters({
     <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
       <Form.Field>
         <EventSelector
+          eventList={WCA_EVENT_IDS_WITH_FUTURE}
           selectedEvents={filterState.selectedEvents}
           onEventClick={(eventId) => dispatchFilter({ type: 'toggle_event', eventId })}
           onAllClick={() => dispatchFilter({ type: 'select_all_events' })}

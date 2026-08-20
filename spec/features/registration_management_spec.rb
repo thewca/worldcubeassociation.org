@@ -18,5 +18,15 @@ RSpec.feature "Registration management", :js do
       visit competition_edit_registrations_path(competition)
       expect(page).to have_text("Johnny Bravo")
     end
+
+    scenario "shows administrative notes when a registration has them" do
+      registration1.update!(administrative_notes: "😎")
+
+      visit competition_edit_registrations_path(competition)
+
+      expect(page).to have_text(I18n.t('competitions.registration_v2.list.pending.title'))
+      expect(page).to have_text(I18n.t('activerecord.attributes.registration.administrative_notes'))
+      expect(page).to have_text("😎")
+    end
   end
 end

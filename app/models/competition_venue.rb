@@ -5,18 +5,16 @@ class CompetitionVenue < ApplicationRecord
   has_many :venue_rooms, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
-  belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2
+  belongs_to :country, foreign_key: :country_iso2, primary_key: :iso2, inverse_of: :competition_venues
   has_one :continent, through: :country
 
   delegate :continent, to: :country, allow_nil: true
-
-  VALID_TIMEZONES = TZInfo::Timezone.all_identifiers.freeze
 
   validates :name, presence: true
   validates :wcif_id, numericality: { only_integer: true }
   validates :latitude_microdegrees, presence: true
   validates :longitude_microdegrees, presence: true
-  validates :timezone_id, inclusion: { in: VALID_TIMEZONES }
+  validates :timezone_id, inclusion: { in: Country::SUPPORTED_TIMEZONES }
 
   def country
     Country.c_find_by_iso2(self.country_iso2)
@@ -71,7 +69,7 @@ class CompetitionVenue < ApplicationRecord
         "latitudeMicrodegrees" => { "type" => "integer" },
         "longitudeMicrodegrees" => { "type" => "integer" },
         "countryIso2" => { "type" => "string" },
-        "timezone" => { "type" => "string", "enum" => VALID_TIMEZONES },
+        "timezone" => { "type" => "string", "enum" => Country::SUPPORTED_TIMEZONES },
         "rooms" => { "type" => "array", "items" => VenueRoom.wcif_json_schema },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },

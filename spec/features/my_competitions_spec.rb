@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "My competitions page", :clean_db_with_truncation do
+RSpec.feature "My competitions page", :js do
   context "when signed in as user" do
     let!(:user) { create(:user) }
 
@@ -15,8 +15,11 @@ RSpec.feature "My competitions page", :clean_db_with_truncation do
       let!(:registration) { create(:registration, :accepted, competition: competition, user: user) }
 
       scenario "the user visits his competitions page" do
-        pending("Pending until we find a way to test React components signed icklerf 10-12-2024")
         visit "/competitions/mine"
+
+        # The MyCompetitions React on Rails component renders the registered
+        # competition into the upcoming competitions table, so seeing its name
+        # proves the component rendered the data passed from the controller.
         expect(page).to have_text(competition.name)
       end
     end

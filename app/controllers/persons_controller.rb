@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 class PersonsController < ApplicationController
+  before_action :authenticate_user!, only: [:pending_claims]
+  before_action :can_edit_any_user!, only: [:pending_claims]
+
+  private def can_edit_any_user!
+    return if current_user&.can_edit_any_user?
+
+    render status: :unauthorized, json: { error: "You are not allowed to view pending claims." }
+  end
+
   def index
     respond_to do |format|
       format.html
@@ -27,14 +36,21 @@ class PersonsController < ApplicationController
   end
 
   def show
-    @person = Person.current.includes(:user, :ranks_single, :ranks_average, :competitions).find_by!(wca_id: params[:id])
+    @person = Person.current.includes(:user, :ranks_single, :ranks_average, :competitions).find_by!(wca_id: params.require(:id))
     @previous_persons = Person.where(wca_id: params[:id]).where.not(sub_id: 1).order(:sub_id)
     @ranks_single = @person.ranks_single.select { |r| r.event.official? }
     @ranks_average = @person.ranks_average.select { |r| r.event.official? }
     @medals = @person.medals
     @records = @person.records
-    @results = @person.results.includes(:competition, :event, :format, :round_type).order("events.rank, competitions.start_date DESC, competitions.id, round_types.rank DESC")
+    @results = @person.results.includes(:competition, :event, :format, :round_type, :round, :result_attempts).order("events.rank, competitions.start_date DESC, competitions.id, round_types.rank DESC")
     @championship_podiums = @person.championship_podiums
     params[:event] ||= @results.first.event.id
+  end
+
+  def pending_claims
+    wca_id = params.require(:wca_id)
+    users = User.where(unconfirmed_wca_id: wca_id)
+
+    render status: :ok, json: users.as_json(only: %w[id name], private_attributes: %w[email])
   end
 end

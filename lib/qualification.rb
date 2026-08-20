@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class Qualification
+  include ActiveModel::API
   include ActiveModel::Validations
+  include ActiveModel::Attributes
 
   attr_accessor :when_date, :level, :wcif_type, :result_type
 
@@ -27,10 +29,11 @@ class Qualification
       json
     else
       json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
-      out = Qualification.new
-      out.wcif_type = json_obj['type']
-      out.result_type = json_obj['resultType']
-      out.level = json_obj['level']
+      out = Qualification.new(
+        wcif_type: json_obj['type'],
+        result_type: json_obj['resultType'],
+        level: json_obj['level'],
+      )
       begin
         out.when_date = Date.iso8601(json_obj['whenDate'])
       rescue ArgumentError

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, Header } from 'semantic-ui-react';
 import _ from 'lodash';
-import StatusView from './StatusView';
 import { ticketTypes } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 import { personUrl, competitionUrl } from '../../../lib/requests/routes.js.erb';
@@ -10,8 +9,8 @@ import { personUrl, competitionUrl } from '../../../lib/requests/routes.js.erb';
 // i18n-tasks-use t('tickets.type.edit_person')
 // i18n-tasks-use t('tickets.type.competition_result')
 
-export default function TicketHeader({ ticketDetails, currentStakeholder, updateStatus }) {
-  const { ticket: { id, metadata_type: ticketType } } = ticketDetails;
+export default function TicketHeader({ ticketDetails }) {
+  const { ticket: { id, metadata_type: ticketType, metadata: { status } } } = ticketDetails;
 
   return (
     <Card fluid>
@@ -24,11 +23,7 @@ export default function TicketHeader({ ticketDetails, currentStakeholder, update
         <Header as="h3">
           <SubHeading ticketDetails={ticketDetails} />
         </Header>
-        <StatusView
-          ticketDetails={ticketDetails}
-          currentStakeholder={currentStakeholder}
-          updateStatus={updateStatus}
-        />
+        <span>{`Status: ${status}`}</span>
       </Card.Content>
     </Card>
   );

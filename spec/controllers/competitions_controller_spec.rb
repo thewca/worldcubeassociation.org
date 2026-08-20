@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { create(:competition, :with_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
+  let(:competition) { create(:competition, :with_lead_delegate, :with_organizer, :registration_open, :with_valid_schedule, :with_guest_limit, :with_meaningless_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #show' do
@@ -100,7 +100,7 @@ RSpec.describe CompetitionsController do
     let!(:my_competition) { create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
     let!(:other_competition) do
       create(
-        :competition, :with_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
+        :competition, :with_lead_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
       )
     end
 
@@ -281,7 +281,7 @@ RSpec.describe CompetitionsController do
       it 'saves staff_delegate_ids' do
         staff_delegates = create_list(:delegate, 2)
         staff_delegate_ids = staff_delegates.map(&:id)
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: staff_delegate_ids })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: staff_delegate_ids, leadDelegateId: staff_delegates.first.id })
         patch :update, params: update_params, as: :json
         expect(competition.reload.delegates).to eq staff_delegates
       end
@@ -352,7 +352,7 @@ RSpec.describe CompetitionsController do
 
       it 'can change the delegate' do
         new_delegate = create(:delegate)
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [new_delegate.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [new_delegate.id], leadDelegateId: new_delegate.id })
         post :update, params: update_params, as: :json
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
@@ -371,7 +371,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [organizer.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], leadDelegateId: nil, organizerIds: [organizer.id] })
         patch :update, params: update_params, as: :json
         expect(response).to be_successful
         expect(competition.reload.delegates).to eq []
@@ -429,7 +429,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [] }, userSettings: { receiveRegistrationEmails: true })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], leadDelegateId: nil, organizerIds: [] }, userSettings: { receiveRegistrationEmails: true })
         patch :update, params: update_params, as: :json
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []
@@ -517,12 +517,14 @@ RSpec.describe CompetitionsController do
           number: 1,
           advancement_condition: AdvancementConditions::RankingCondition.new(4),
           total_number_of_rounds: 2,
+          participation_source: competition.competition_events[0],
         )
         round_two = competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 2,
           total_number_of_rounds: 2,
           scramble_set_count: 1,
+          participation_source: round_one,
         )
         start_time = Time.zone.local_to_utc(competition.start_time)
         end_time = start_time
@@ -550,16 +552,18 @@ RSpec.describe CompetitionsController do
 
       it "cannot confirm a competition that is not having advancement conditions" do
         competition.competition_events[0].rounds.destroy_all!
-        competition.competition_events[0].rounds.create!(
+        round_one = competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 1,
           total_number_of_rounds: 2,
+          participation_source: competition.competition_events[0],
         )
         competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 2,
           total_number_of_rounds: 2,
           scramble_set_count: 1,
+          participation_source: round_one,
         )
         put :confirm, params: { competition_id: competition }
         expect(competition.reload.confirmed?).to be false
@@ -1193,6 +1197,36 @@ RSpec.describe CompetitionsController do
         get :edit_schedule, params: { id: competition }
         expect(response).to have_http_status :ok
         expect(assigns(:competition)).to eq competition
+      end
+
+      context 'when results are submitted' do
+        before do
+          competition.update!(results_submitted_at: Time.now)
+        end
+
+        it 'redirects with an error message' do
+          get :edit_schedule, params: { id: competition }
+          expect(response).to redirect_to competition_path(competition)
+          expect(flash[:danger]).to eq "The schedule cannot be edited after results have been submitted."
+        end
+      end
+    end
+
+    context 'when signed in as a competition admin' do
+      before do
+        sign_in create(:admin)
+      end
+
+      context 'when results are submitted' do
+        before do
+          competition.update!(results_submitted_at: Time.now)
+        end
+
+        it 'allows access to the page' do
+          get :edit_schedule, params: { id: competition }
+          expect(response).to have_http_status :ok
+          expect(assigns(:competition)).to eq competition
+        end
       end
     end
   end

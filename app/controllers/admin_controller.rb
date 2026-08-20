@@ -14,6 +14,30 @@ class AdminController < ApplicationController
     @merge_people = MergePeople.new
   end
 
+  def sanity_check
+    @categories = SanityCheckCategory.all
+  end
+
+  def run_sanity_check
+    sanity_check_category = SanityCheckCategory.find(params.require(:sanity_check_category_id))
+    SanityCheckCategoryJob.perform_later(sanity_check_category)
+    flash[:success] = "Sanity check job enqueued for category #{sanity_check_category.name}."
+    redirect_to sanity_check_path
+  end
+
+  def add_exclusion
+    sanity_check_id = params.require(:sanity_check_id)
+    exclusion = params.require(:exclusion_json)
+
+    created = SanityCheckExclusion.create(exclusion: exclusion, sanity_check_id: sanity_check_id)
+    if created
+      flash[:success] = "Added exclusion."
+    else
+      flash[:danger] = "Failed to add exclusion."
+    end
+    redirect_to sanity_check_path
+  end
+
   def do_merge_people
     merge_params = params.expect(merge_people: %i[person1_wca_id person2_wca_id])
     @merge_people = MergePeople.new(merge_params)
@@ -88,7 +112,7 @@ class AdminController < ApplicationController
   end
 
   def person_data
-    @person = Person.current.find_by!(wca_id: params[:person_wca_id])
+    @person = Person.current.find_by!(wca_id: params.require(:person_wca_id))
 
     render json: {
       name: @person.name,
@@ -156,7 +180,7 @@ class AdminController < ApplicationController
   end
 
   private def competition_from_params(associations: {})
-    Competition.includes(associations).find(params[:competition_id])
+    Competition.includes(associations).find(params.require(:competition_id))
   end
 
   private def competition_list_from_string(competition_ids_string)
@@ -205,7 +229,13 @@ class AdminController < ApplicationController
             old_country = inbox_person.country_id
           end
 
-          FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
+          FinishUnfinishedPersons.insert_person(
+            wca_id: new_id,
+            name: new_name,
+            country_id: new_country,
+            gender: inbox_person&.gender,
+            dob: inbox_person&.dob,
+          )
           FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_id, new_name, new_country, pending_competition_id)
         else
           action, merge_id = procedure[:action].split '-'

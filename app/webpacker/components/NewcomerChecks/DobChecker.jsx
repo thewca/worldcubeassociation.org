@@ -10,7 +10,7 @@ export default function DobChecker({ competitionId }) {
   const {
     data: dobChecks, isLoading, isError, error,
   } = useQuery({
-    queryKey: ['newcomer-name-format-checks', competitionId],
+    queryKey: ['newcomer-dob-checks', competitionId],
     queryFn: () => newcomerDobCheck({ competitionId }),
   });
 

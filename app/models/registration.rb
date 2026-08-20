@@ -9,6 +9,10 @@ class Registration < ApplicationRecord
   SYSTEM_ENTITY_ID = 'system'
   USER_ENTITY_ID = 'user'
 
+  CSV_IMPORT = "CSV Import"
+  OTS_FORM = "OTS Form"
+  SOURCES = [CSV_IMPORT, OTS_FORM].freeze
+
   scope :pending, -> { where(competing_status: 'pending') }
   scope :accepted, -> { where(competing_status: 'accepted') }
   scope :cancelled, -> { where(competing_status: 'cancelled') }
@@ -23,8 +27,9 @@ class Registration < ApplicationRecord
 
   belongs_to :competition
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
-  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy
-  has_many :registration_competition_events
+
+  has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy, inverse_of: :registration
+  has_many :registration_competition_events, dependent: :destroy
   has_many :registration_payments
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
@@ -32,6 +37,9 @@ class Registration < ApplicationRecord
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :payment_intents, as: :holder, dependent: :delete_all
+
+  has_one :inbox_person, foreign_key: %i[competition_id id], primary_key: %i[competition_id registrant_id], inverse_of: :registration
+  has_many :newcomer_results, -> { unmerged_newcomers }, class_name: "Result", foreign_key: %i[competition_id person_id], primary_key: %i[competition_id registrant_id], inverse_of: :newcomer_registration
 
   enum :competing_status, {
     pending: Registrations::Helper::STATUS_PENDING,
@@ -59,14 +67,22 @@ class Registration < ApplicationRecord
     self.registered_at = current_time_from_proper_timezone
   end
 
+  # rubocop:disable Rails/ActiveRecordCallbacksOrder
+  before_save :mark_accepted_at, if: :trying_to_accept?
+  private def mark_accepted_at
+    self.accepted_at = current_time_from_proper_timezone
+  end
+
   validates :registrant_id, presence: true, uniqueness: { scope: :competition_id }
 
   # Run the hook twice so that even if you try to skip validations, it still persists a non-null value to the DB
   before_validation :ensure_registrant_id, on: :create
   before_create :ensure_registrant_id
+  # rubocop:enable Rails/ActiveRecordCallbacksOrder
 
   private def ensure_registrant_id
-    self.registrant_id ||= competition.registrations.count + 1
+    max_registrant_id = competition.registrations.maximum(:registrant_id) || 0
+    self.registrant_id ||= max_registrant_id + 1
   end
 
   validates :guests, numericality: { greater_than_or_equal_to: 0 }
@@ -145,7 +161,7 @@ class Registration < ApplicationRecord
     new_record? || cancelled? || !is_competing?
   end
 
-  delegate :name, :gender, :country, :email, :dob, :wca_id, to: :user
+  delegate :name, :gender, :country, :country_iso2, :email, :dob, :wca_id, to: :user
 
   alias_method :birthday, :dob
 
@@ -215,7 +231,8 @@ class Registration < ApplicationRecord
     amount_lowest_denomination,
     currency_code,
     receipt,
-    user_id
+    user_id,
+    paid_at: nil
   )
     add_history_entry({ payment_status: receipt.determine_wca_status, iso_amount: amount_lowest_denomination }, "user", user_id, 'Payment')
     registration_payments.create!(
@@ -223,6 +240,7 @@ class Registration < ApplicationRecord
       currency_code: currency_code,
       receipt: receipt,
       user_id: user_id,
+      paid_at: paid_at,
     )
   end
 
@@ -258,6 +276,26 @@ class Registration < ApplicationRecord
     end
   end
 
+  def save_registration_data!(registration_data:, creator:, source:)
+    raise ArgumentError.new("Invalid source: #{source}") unless SOURCES.include?(source)
+
+    formatted_payload = {
+      "competing" => {
+        "event_ids" => registration_data.dig(:registration, :eventIds) || [],
+        "comment" => registration_data[:comments].presence,
+        "status" => (Registrations::Helper::STATUS_ACCEPTED unless accepted?),
+      }.compact,
+    }
+
+    Registrations::Lanes::Competing.update!(
+      formatted_payload,
+      self,
+      creator.id,
+      history_action_type: source,
+      send_emails: (source != CSV_IMPORT),
+    )
+  end
+
   def wcif_status
     # Non-competing staff are treated as accepted.
     # TODO: WCIF spec needs to be updated - and possibly versioned - to include new statuses
@@ -282,6 +320,10 @@ class Registration < ApplicationRecord
         action: r.action,
       }
     end
+  end
+
+  def to_live_json
+    as_json(methods: %i[name country_iso2 wca_id], only: %i[id user_id registrant_id])
   end
 
   def to_v2_json(admin: false, pii: false)
@@ -417,14 +459,6 @@ class Registration < ApplicationRecord
 
   def force_comment?
     competition&.force_comment_in_registration?
-  end
-
-  # For associated_events_picker
-  def events_to_associated_events(events)
-    events.map do |event|
-      competition_event = competition.competition_events.find_by!(event: event)
-      registration_competition_events.find_by(competition_event_id: competition_event.id) || registration_competition_events.build(competition_event: competition_event)
-    end
   end
 
   def permit_user_cancellation?

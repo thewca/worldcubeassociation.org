@@ -122,6 +122,20 @@ RSpec.describe ResultsValidators::PositionsValidator do
       end
     end
 
+    context "h2h rounds" do
+      it "does not check or fix positions of h2h results" do
+        round = create(:round, competition: competition1, event_id: "333oh", is_h2h_mock: true)
+        # H2H positions come from match outcomes, so they may contradict the times.
+        create(:result, competition: competition1, pos: 1, best: 2000, average: 4000, event_id: "333oh", round: round)
+        create(:result, competition: competition1, pos: 2, best: 1000, average: 2000, event_id: "333oh", round: round)
+
+        pv = ResultsValidators::PositionsValidator.new(apply_fixes: true).validate(competition_ids: competition1.id, model: Result)
+        expect(pv.any_errors?).to be false
+        expect(pv.infos).to be_empty
+        expect(Result.where(round_id: round.id).order(:best).pluck(:pos)).to eq [2, 1]
+      end
+    end
+
     context "bo3 results with a mean" do
       # NOTE: I assume the previous sets of tests validates that the validator works
       # on either Result/InboxResult and on any given results input.
@@ -129,19 +143,19 @@ RSpec.describe ResultsValidators::PositionsValidator do
       it "validates correctly tied results" do
         # In a BoX format, results with the same best should have the same position,
         # even if one has a mean.
-        round = create(:round, competition: competition1, event_id: "333bf", format_id: "3")
-        create(:result, :blind_dnf_mo3, competition: competition1, pos: 1, best: 1000, round: round)
-        create(:result, :blind_mo3, competition: competition1, pos: 1, best: 1000, round: round)
-        create(:result, :blind_mo3, competition: competition1, pos: 3, best: 2000, round: round)
+        round = create(:round, competition: competition1, event_id: "333bf", format_id: "5")
+        create(:result, :blind_dnf_bo5, competition: competition1, pos: 1, best: 1000, round: round)
+        create(:result, :blind_bo5, competition: competition1, pos: 1, best: 1000, round: round)
+        create(:result, :blind_bo5, competition: competition1, pos: 3, best: 2000, round: round)
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
         expect(pv.any_errors?).to be false
       end
 
       it "invalidates incorrectly ordered results" do
         # In a BoX format, results should be ordered by best, not mean.
-        round = create(:round, competition: competition1, event_id: "333bf", format_id: "3")
-        r1 = create(:result, :blind_mo3, competition: competition1, pos: 1, best: 2000, round: round)
-        r2 = create(:result, :blind_dnf_mo3, competition: competition1, pos: 2, best: 1000, round: round)
+        round = create(:round, competition: competition1, event_id: "333bf", format_id: "5")
+        r1 = create(:result, :blind_bo5, competition: competition1, pos: 1, best: 2000, round: round)
+        r2 = create(:result, :blind_dnf_bo5, competition: competition1, pos: 2, best: 1000, round: round)
         expected_errors = [
           create_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
           create_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),

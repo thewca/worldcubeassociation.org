@@ -31,9 +31,9 @@ RSpec.describe "DatabaseDumper" do
     it "defines a sanitizer of table '#{table_name}'" do
       unless table_sanitizer == :skip_all_rows
         where_clause = table_sanitizer[:where_clause]
-        expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+        expect(where_clause).to be_nil.or(include('WHERE')).or(include('JOIN'))
         where_clause = table_sanitizer[:order_by_clause]
-        expect(where_clause).to be_nil.or(match(/ORDER BY/))
+        expect(where_clause).to be_nil.or(include('ORDER BY'))
         column_sanitizers = table_sanitizer[:column_sanitizers]
         column_names = ActiveRecord::Base.connection.columns(table_name).map(&:name)
         expect(column_sanitizers.keys).to match_array(column_names)
@@ -90,14 +90,14 @@ RSpec.describe "DatabaseDumper" do
         all_live = {
           v1: {
             metadata: {
-              export_format_version: '1.0.0',
+              export_format_version: 'v1.0.0',
               version_label: 'deprecated',
               end_of_life_date: '3026-01-01',
             },
           },
           v2: {
             metadata: {
-              export_format_version: '2.0.0',
+              export_format_version: 'v2.0.2',
               version_label: 'current',
               end_of_life_date: nil,
             },
@@ -112,14 +112,14 @@ RSpec.describe "DatabaseDumper" do
         v1_dead = {
           v1: {
             metadata: {
-              export_format_version: '1.0.0',
+              export_format_version: 'v1.0.0',
               version_label: 'deprecated',
               end_of_life_date: '1026-01-01',
             },
           },
           v2: {
             metadata: {
-              export_format_version: '2.0.0',
+              export_format_version: 'v2.0.2',
               version_label: 'current',
               end_of_life_date: nil,
             },
@@ -153,9 +153,9 @@ RSpec.describe "DatabaseDumper" do
         it "defines a sanitizer of table '#{table_name}'" do
           unless table_sanitizer == :skip_all_rows
             where_clause = table_sanitizer[:where_clause]
-            expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+            expect(where_clause).to be_nil.or(include('WHERE')).or(include('JOIN'))
             where_clause = table_sanitizer[:order_by_clause]
-            expect(where_clause).to be_nil.or(match(/ORDER BY/))
+            expect(where_clause).to be_nil.or(include('ORDER BY'))
             column_sanitizers = table_sanitizer[:column_sanitizers]
             column_names = with_database(:results_dump) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
             expect(column_sanitizers.keys).to match_array(column_names)
@@ -171,7 +171,7 @@ RSpec.describe "DatabaseDumper" do
         end
       end
 
-      it "defines sanitizers that match the expected output schema (backwards compatibility)" do
+      it "defines sanitizers that match the expected output schema" do
         with_database :results_dump_v2 do
           # Rails *always* includes a `schema_migrations` table when loading any pre-defined schema file.
           #   You can _change_ the name in the database configuration file, but you cannot turn it off / disable the table entirely.
@@ -186,9 +186,9 @@ RSpec.describe "DatabaseDumper" do
         it "defines a sanitizer of table '#{table_name}'" do
           unless table_sanitizer == :skip_all_rows
             where_clause = table_sanitizer[:where_clause]
-            expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+            expect(where_clause).to be_nil.or(include('WHERE')).or(include('JOIN'))
             where_clause = table_sanitizer[:order_by_clause]
-            expect(where_clause).to be_nil.or(match(/ORDER BY/))
+            expect(where_clause).to be_nil.or(include('ORDER BY'))
             column_sanitizers = table_sanitizer[:column_sanitizers]
             column_names = with_database(:results_dump_v2) { ActiveRecord::Base.connection.columns(table_name).map(&:name) }
             expect(column_sanitizers.keys).to match_array(column_names)

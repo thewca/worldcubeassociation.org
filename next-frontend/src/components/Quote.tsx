@@ -1,7 +1,7 @@
 "use client";
 
 import { Blockquote } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 
 export default function Quote({
   content,
@@ -13,7 +13,7 @@ export default function Quote({
   return (
     <Blockquote.Root>
       <Blockquote.Content cite={author}>
-        <MarkdownProse content={content} />
+        <ChakraMarkdown>{content}</ChakraMarkdown>
       </Blockquote.Content>
       <Blockquote.Caption>
         — <cite>{author}</cite>

@@ -128,10 +128,7 @@ export const useFormUpdateAction = () => {
 };
 
 export const useFormObjectState = (key, sections = []) => {
-  const formObject = useFormObject();
-
-  const formSection = readValueRecursive(formObject, sections);
-  const formValue = formSection[key];
+  const formValue = useFormValue(key, sections);
 
   const formUpdater = useFormUpdateAction();
 

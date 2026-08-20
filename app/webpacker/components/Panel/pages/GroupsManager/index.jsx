@@ -37,7 +37,9 @@ function GroupTable({ group }) {
   const [newMemberUser, setNewMemberUser] = useInputState(null);
 
   const promoteRoleHandler = (role) => {
-    confirm().then(() => {
+    confirm({
+      content: `Are you sure that you want to promote ${role.user.name} from ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)} to ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${statusObjectOfGroupType(role.group.group_type).senior_member}`)}?`,
+    }).then(() => {
       save(apiV0Urls.userRoles.update(role.id), {
         status: statusObjectOfGroupType(role.group.group_type).senior_member,
       }, sync, { method: 'PATCH' });
@@ -45,7 +47,9 @@ function GroupTable({ group }) {
   };
 
   const demoteRoleHandler = (role) => {
-    confirm().then(() => {
+    confirm({
+      content: `Are you sure that you want to demote ${role.user.name} from ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)} to ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${statusObjectOfGroupType(role.group.group_type).member}`)}?`,
+    }).then(() => {
       save(apiV0Urls.userRoles.update(role.id), {
         status: statusObjectOfGroupType(role.group.group_type).member,
       }, sync, { method: 'PATCH' });
@@ -53,7 +57,9 @@ function GroupTable({ group }) {
   };
 
   const endRoleHandler = (role) => {
-    confirm().then(() => {
+    confirm({
+      content: `Are you sure that you want to end the role for ${role.user.name} (${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)})?`,
+    }).then(() => {
       save(apiV0Urls.userRoles.delete(role.id), null, sync, { method: 'DELETE' });
     });
   };

@@ -1,0 +1,50 @@
+<div class="container">
+  <h1>
+    Sanity Check Results
+  </h1>
+  <% @categories.each do |category| %>
+    <% latest_results = category.latest_results %>
+    <h2>Category: <%= category.name %> <button><a href="<%= sanity_check_run_path(sanity_check_category_id: category.id) %>"> Run all Checks in Category</a></button></h2>
+      <% latest_results.each do |result| %>
+      <h3><%= result.topic %></h3>
+      <h5><%= result.comments %></h5>
+      <h4> Query results:</h4>
+      <% if result.results_without_exclusions.empty? %>
+         No results
+      <% else %>
+        <div style="overflow-x: auto;">
+          <table style="border: 1px solid black; padding: 2px;">
+            <thead>
+            <tr style="background-color: #f2f2f2;">
+              <% headers = result.query_results.first.keys %>
+              <% headers.each do |header| %>
+                <th scope="col" style="border: 1px solid black; padding: 2px;">
+                  <%= header %>
+                </th>
+              <% end %>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <% result.results_without_exclusions.each do |item| %>
+              <tr>
+                <% headers.each do |header| %>
+                  <td style="border: 1px solid black; padding: 2px">
+                    <%= item.key?(header) ? item[header] : "-" %>
+                  </td>
+                <% end %>
+                <td>
+                  <button><a href="<%= add_exclusion_path(sanity_check_id: result.sanity_check_id, exclusion_json: item) %>">Add exclusion</a></button>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+      <h4> Exclusions: <%= result.sanity_check_exclusions.count %></h4>
+      <h5> Last run: <%= result.cronjob_statistic.in_progress? ? "Running" : result.cronjob_statistic.run_end %> </h5>
+    <% end %>
+  <% end %>
+</div>

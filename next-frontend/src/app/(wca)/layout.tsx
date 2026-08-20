@@ -4,27 +4,26 @@ import AuthProvider from "@/providers/SessionProvider";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
-import Footer from "@/components/Footer";
-import RandomBackground from "@/components/RandomBackground";
-import { Rubik } from "next/font/google";
+import Footer from "./footer";
+import { ThemeProvider } from "@wrksz/themes/next";
+import { appFont } from "@/styles/fonts";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
   title: {
     template: "%s | World Cube Association",
-    default: "",
+    default: "World Cube Association",
   },
 };
 
-const devFont = Rubik({ subsets: ["latin"] });
-
 const computeFont = async () => {
   if (process.env.PROPRIETARY_FONT === "TTNormsPro") {
-    const { ttNormsPro } = await import("@/styles/fonts");
+    const { appFont } = await import("@/styles/fonts.proprietary");
 
-    return ttNormsPro;
+    return appFont;
   }
 
-  return devFont;
+  return appFont;
 };
 
 export const dynamic = "force-dynamic";
@@ -39,16 +38,18 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body className={appFont.className}>
-        <WCAQueryClientProvider>
-          <AuthProvider>
-            <UiProvider>
-              <Navbar />
-              <RandomBackground numRows={8} numCols={18} />
-              {children}
-              <Footer />
-            </UiProvider>
-          </AuthProvider>
-        </WCAQueryClientProvider>
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          <WCAQueryClientProvider>
+            <AuthProvider>
+              <UiProvider>
+                <Navbar />
+                <NextTopLoader height={5} />
+                {children}
+                <Footer />
+              </UiProvider>
+            </AuthProvider>
+          </WCAQueryClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

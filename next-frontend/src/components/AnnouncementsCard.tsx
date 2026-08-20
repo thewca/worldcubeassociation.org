@@ -1,24 +1,25 @@
-import { Text, Accordion } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
-import { Announcement, User } from "@/types/payload";
+import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
+import AnnouncementContent from "@/components/AnnouncementContent";
+import { Announcement } from "@/types/payload";
+import { LuChevronsRight } from "react-icons/lu";
+import { announcementByline } from "@/components/announcements/announcement";
 
 function AnnouncementItem({ announcement }: { announcement: Announcement }) {
-  const publishedByUser = announcement.publishedBy as User;
-
   return (
-    <Accordion.Item value={announcement.id} layerStyle="fill.deep">
+    <Accordion.Item
+      value={announcement.id}
+      layerStyle="fill.subtle"
+      _open={{ layerStyle: { _light: "fill.solid", _dark: "fill.muted" } }}
+    >
       <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
-        {announcement.title}
+        <Accordion.ItemIndicator _open={{ display: "none" }} />
+        <Stack gap={1} alignItems="flex-start">
+          <Text textStyle="s1">{announcement.title}</Text>
+          <Text>{announcementByline(announcement)}</Text>
+        </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
-        <Text textStyle="s2">
-          Posted by {publishedByUser.name} · {announcement.publishedAt}
-        </Text>
-        <MarkdownProse
-          as={Accordion.ItemBody}
-          content={announcement.contentMarkdown!}
-          textStyle="body"
-        />
+        <AnnouncementContent announcement={announcement} />
       </Accordion.ItemContent>
     </Accordion.Item>
   );
@@ -28,22 +29,40 @@ export default function AnnouncementsCard({
   hero,
   others = [],
   colorPalette,
+  showSeeAll = true,
 }: {
   hero: Announcement;
   others: Announcement[];
   colorPalette: string;
+  showSeeAll?: boolean;
 }) {
   return (
     <Accordion.Root
       variant="card"
       defaultValue={[hero.id]}
       colorPalette={colorPalette}
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
     >
       <AnnouncementItem announcement={hero} />
 
       {others.map((announcement) => (
         <AnnouncementItem key={announcement.id} announcement={announcement} />
       ))}
+
+      {showSeeAll && (
+        <Accordion.Item value="see-all" layerStyle="fill.subtle">
+          <Accordion.ItemTrigger textStyle="s1" asChild>
+            <ChakraLink href="/posts" color="currentColor">
+              <Accordion.ItemIndicator transition={undefined}>
+                <LuChevronsRight />
+              </Accordion.ItemIndicator>
+              See all announcements
+            </ChakraLink>
+          </Accordion.ItemTrigger>
+        </Accordion.Item>
+      )}
     </Accordion.Root>
   );
 }

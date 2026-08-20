@@ -3,17 +3,20 @@
 class PotentialDuplicatePerson < ApplicationRecord
   self.table_name = 'potential_duplicate_persons'
 
+  belongs_to :duplicate_checker_job_run
   belongs_to :original_user, class_name: 'User'
   belongs_to :duplicate_person, class_name: 'Person'
 
   enum :name_matching_algorithm, {
     jarowinkler: 'jarowinkler',
+    exact_first_last_dob: 'exact_first_last_dob',
   }
 
   DEFAULT_SERIALIZE_OPTIONS = {
     include: {
       original_user: {
         private_attributes: %w[dob],
+        only: User::DEFAULT_SERIALIZE_OPTIONS[:only] | %w[unconfirmed_wca_id],
       },
       duplicate_person: {
         private_attributes: %w[dob],

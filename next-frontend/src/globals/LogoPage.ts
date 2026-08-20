@@ -11,7 +11,6 @@ const paragraph: Block = {
     {
       name: "title",
       type: "text",
-      required: true,
     },
     {
       name: "content",
@@ -53,6 +52,11 @@ const logoVariant: Block = {
       name: "caption",
       type: "text",
       required: true,
+    },
+    {
+      name: "logoOnly",
+      type: "checkbox",
+      label: "Logo only (render images at 150px)",
     },
     {
       name: "images",

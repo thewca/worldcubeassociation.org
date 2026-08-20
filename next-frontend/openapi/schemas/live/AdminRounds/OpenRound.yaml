@@ -1,0 +1,11 @@
+allOf:
+  - $ref: './BaseAdminRound.yaml'
+  - type: object
+    required:
+      - total_competitors
+      - completed_competitors
+    properties:
+      total_competitors:
+        type: number
+      completed_competitors:
+        type: number

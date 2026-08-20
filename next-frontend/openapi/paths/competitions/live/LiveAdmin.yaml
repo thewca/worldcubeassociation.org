@@ -1,0 +1,25 @@
+get:
+  summary: Gets Live Admin Information
+  tags:
+    - live
+  operationId: liveAdmin
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Returns Live Admin Information with Rounds
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - rounds
+            properties:
+              rounds:
+                type: array
+                items:
+                  $ref: "../../../schemas/live/LiveRoundAdmin.yaml"

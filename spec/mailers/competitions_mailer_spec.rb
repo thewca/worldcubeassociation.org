@@ -174,8 +174,8 @@ RSpec.describe CompetitionsMailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match(/Peculiar Comp 2016 took place 3 days ago/)
-      expect(mail.body.encoded).to match(/Delegate report/)
+      expect(mail.body.encoded).to include('Peculiar Comp 2016 took place 3 days ago')
+      expect(mail.body.encoded).to include('Delegate report')
     end
   end
 
@@ -214,9 +214,9 @@ RSpec.describe CompetitionsMailer do
       end
 
       it "renders the body" do
-        expect(mail.body.encoded).to match(/@WRC: Feedback requested on incidents: 1, 2, 3/)
-        expect(mail.body.encoded).to match(/@WIC: Feedback requested on incidents: 4, 5, 6/)
-        expect(mail.body.encoded).to match(/This was a great competition/)
+        expect(mail.body.encoded).to include('@WRC: Feedback requested on incidents: 1, 2, 3')
+        expect(mail.body.encoded).to include('@WIC: Feedback requested on incidents: 4, 5, 6')
+        expect(mail.body.encoded).to include('This was a great competition')
       end
     end
 
@@ -234,9 +234,9 @@ RSpec.describe CompetitionsMailer do
       end
 
       it "renders the body" do
-        expect(mail.body.encoded).not_to match(/@WRC/)
-        expect(mail.body.encoded).to match(/@WIC: Feedback requested on incidents: 4, 5, 6/)
-        expect(mail.body.encoded).to match(/This was a great competition/)
+        expect(mail.body.encoded).not_to include('@WRC')
+        expect(mail.body.encoded).to include('@WIC: Feedback requested on incidents: 4, 5, 6')
+        expect(mail.body.encoded).to include('This was a great competition')
       end
     end
 
@@ -254,9 +254,9 @@ RSpec.describe CompetitionsMailer do
       end
 
       it "renders the body" do
-        expect(mail.body.encoded).to match(/@WRC: Feedback requested on incidents: 1, 2, 3/)
-        expect(mail.body.encoded).not_to match(/@WIC/)
-        expect(mail.body.encoded).to match(/This was a great competition/)
+        expect(mail.body.encoded).to include('@WRC: Feedback requested on incidents: 1, 2, 3')
+        expect(mail.body.encoded).not_to include('@WIC')
+        expect(mail.body.encoded).to include('This was a great competition')
       end
     end
 
@@ -270,9 +270,9 @@ RSpec.describe CompetitionsMailer do
       end
 
       it "renders the body" do
-        expect(mail.body.encoded).not_to match(/@WRC/)
-        expect(mail.body.encoded).not_to match(/@WIC/)
-        expect(mail.body.encoded).to match(/This was a great competition/)
+        expect(mail.body.encoded).not_to include('@WRC')
+        expect(mail.body.encoded).not_to include('@WIC')
+        expect(mail.body.encoded).to include('This was a great competition')
       end
     end
 
@@ -335,7 +335,7 @@ RSpec.describe CompetitionsMailer do
 
     it "is sent in English" do
       # Will fail if the date is localized, in French it will be "fév. 1"
-      expect(mail.body.encoded).to match(/Feb 1/)
+      expect(mail.body.encoded).to include('Feb 1')
     end
   end
 
@@ -360,7 +360,7 @@ RSpec.describe CompetitionsMailer do
       expect(followup_mail.subject).to eq(main_mail.subject)
 
       # Check content
-      expect(followup_mail.body.encoded).to match(/Hello WRC members/)
+      expect(followup_mail.body.encoded).to include('Hello WRC members')
       expect(followup_mail.body.encoded).to match(competition.delegate_report.wrc_primary_user.name)
       expect(followup_mail.body.encoded).to match(competition.delegate_report.wrc_secondary_user.name)
     end
@@ -388,7 +388,7 @@ RSpec.describe CompetitionsMailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match(/Hello, here are the results/)
+      expect(mail.body.encoded).to include('Hello, here are the results')
       expect(mail.body.encoded).to include(link_to_competition_schedule_tab(competition))
     end
   end
@@ -407,8 +407,8 @@ RSpec.describe CompetitionsMailer do
       end
 
       it "renders the body" do
-        expect(mail.body.encoded).to match(/This is a reminder that registration/)
-        expect(mail.body.encoded).not_to match(/You have registered/)
+        expect(mail.body.encoded).to include('This is a reminder that registration')
+        expect(mail.body.encoded).not_to include('You have registered')
         expect(mail.body.encoded).to include(competition_url(competition))
       end
     end
@@ -417,8 +417,8 @@ RSpec.describe CompetitionsMailer do
       let(:mail) { CompetitionsMailer.registration_reminder(competition, competitor, true) }
 
       it "says the user is registered" do
-        expect(mail.body.encoded).to match(/This is a reminder that registration/)
-        expect(mail.body.encoded).to match(/You have registered/)
+        expect(mail.body.encoded).to include('This is a reminder that registration')
+        expect(mail.body.encoded).to include('You have registered')
         expect(mail.body.encoded).to include(competition_url(competition))
       end
     end

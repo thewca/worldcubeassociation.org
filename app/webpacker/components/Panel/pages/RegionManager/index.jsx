@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  Button, ButtonGroup, Confirm, Form, Header, Icon, List, Modal, Table,
+  Button, ButtonGroup, Form, Header, Icon, List, Modal, Table,
 } from 'semantic-ui-react';
 import useLoadedData from '../../../../lib/hooks/useLoadedData';
 import {
-  fetchUserGroupsUrl, addUserGroupsUrl, userGroupsUpdateUrl, apiV0Urls,
+  fetchUserGroupsUrl, addUserGroupsUrl,
 } from '../../../../lib/requests/routes.js.erb';
 import { delegateRegionsStatus } from '../../../../lib/wca-data.js.erb';
 import Errored from '../../../Requests/Errored';
 import Loading from '../../../Requests/Loading';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
-import WcaSearch from '../../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import CreateModal from '../../views/UserRoles/CreateModal';
+import UpdateModal from '../../views/UserGroups/UpdateModal';
 
 const defaultRegion = {
   name: '',
@@ -22,52 +22,19 @@ const defaultRegion = {
   friendlyId: '',
 };
 
-function UserGroupVisibility({
-  userGroup, save, sync, setSaveError,
-}) {
-  const [open, setOpen] = React.useState(false);
-  const iconName = userGroup.is_active ? 'eye' : 'eye slash';
-  return (
-    <>
-      <List.Icon
-        name={iconName}
-        link
-        onClick={() => setOpen(true)}
-      />
-      <Confirm
-        open={open}
-        content={`Are you sure you want to ${userGroup.is_active ? 'deactivate' : 'activate'} ${userGroup.name}?`}
-        onCancel={() => setOpen(false)}
-        onConfirm={() => {
-          setOpen(false);
-          save(
-            userGroupsUpdateUrl(userGroup.id),
-            { is_active: !userGroup.is_active, is_hidden: userGroup.is_hidden },
-            sync,
-            {},
-            setSaveError,
-          );
-        }}
-      />
-    </>
-  );
-}
-
 export default function RegionManager() {
   const {
-    data, loading: fetchLoading, error, sync,
+    data, loading, error, sync,
   } = useLoadedData(fetchUserGroupsUrl('delegate_regions'));
   const { save, saving } = useSaveAction();
   const [openModalType, setOpenModalType] = React.useState();
   const [newRegion, setNewRegion] = React.useState(defaultRegion);
   const [saveError, setSaveError] = React.useState();
   const [selectedGroup, setSelectedGroup] = React.useState();
-  const [newLeadDelegate, setNewLeadDelegate] = React.useState();
-  const [loading, setLoading] = React.useState(false);
 
-  const selectedGroupAndShowModal = (group) => {
+  const selectedGroupAndShowModal = (group, modalType) => {
     setSelectedGroup(group);
-    setOpenModalType('newLeadDelegate');
+    setOpenModalType(modalType);
   };
 
   const closeModal = () => setOpenModalType(null);
@@ -79,7 +46,7 @@ export default function RegionManager() {
     return Object.groupBy(subRegionsList, (group) => group.parent_group_id);
   }, [data]);
 
-  if (loading || fetchLoading || saving) return <Loading />;
+  if (loading || saving) return <Loading />;
   if (error || saveError) return <Errored error={error || saveError} />;
 
   return (
@@ -96,6 +63,7 @@ export default function RegionManager() {
             <Table.HeaderCell>Sub-Regions</Table.HeaderCell>
             <Table.HeaderCell>Regional Delegate</Table.HeaderCell>
             <Table.HeaderCell>Visibility</Table.HeaderCell>
+            <Table.HeaderCell>Edit</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -112,7 +80,7 @@ export default function RegionManager() {
                         <Icon
                           name="edit"
                           link
-                          onClick={() => selectedGroupAndShowModal(region)}
+                          onClick={() => selectedGroupAndShowModal(region, 'newLeadDelegate')}
                         />
                         {region.lead_user.name}
                       </>
@@ -120,19 +88,17 @@ export default function RegionManager() {
                       <Icon
                         name="plus"
                         link
-                        onClick={() => selectedGroupAndShowModal(region)}
+                        onClick={() => selectedGroupAndShowModal(region, 'newLeadDelegate')}
                       />
                     )}
                 </Table.Cell>
                 <Table.Cell />
                 <Table.Cell />
                 <Table.Cell>
-                  <UserGroupVisibility
-                    userGroup={region}
-                    save={save}
-                    sync={sync}
-                    setSaveError={setSaveError}
-                  />
+                  <List.Icon name={region.is_active ? 'eye' : 'eye slash'} />
+                </Table.Cell>
+                <Table.Cell>
+                  <Button onClick={() => selectedGroupAndShowModal(region, 'edit')}>Edit</Button>
                 </Table.Cell>
               </Table.Row>
               {subRegions[region.id]?.map((subRegion) => (
@@ -149,7 +115,7 @@ export default function RegionManager() {
                           <Icon
                             name="edit"
                             link
-                            onClick={() => selectedGroupAndShowModal(subRegion)}
+                            onClick={() => selectedGroupAndShowModal(subRegion, 'newLeadDelegate')}
                           />
                           {subRegion.lead_user.name}
                         </>
@@ -157,17 +123,15 @@ export default function RegionManager() {
                         <Icon
                           name="plus"
                           link
-                          onClick={() => selectedGroupAndShowModal(subRegion)}
+                          onClick={() => selectedGroupAndShowModal(subRegion, 'newLeadDelegate')}
                         />
                       )}
                   </Table.Cell>
                   <Table.Cell>
-                    <UserGroupVisibility
-                      userGroup={subRegion}
-                      save={save}
-                      sync={sync}
-                      setSaveError={setSaveError}
-                    />
+                    <List.Icon name={subRegion.is_active ? 'eye' : 'eye slash'} />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Button onClick={() => selectedGroupAndShowModal(subRegion, 'edit')}>Edit</Button>
                   </Table.Cell>
                 </Table.Row>
               ))}
@@ -247,62 +211,29 @@ export default function RegionManager() {
           </Form>
         </Modal.Content>
       </Modal>
-      <Modal
+      <CreateModal
+        open={openModalType === 'newLeadDelegate'}
         onClose={() => {
           closeModal();
           setSelectedGroup(null);
-          setNewLeadDelegate(null);
+          sync();
         }}
-        open={openModalType === 'newLeadDelegate'}
-      >
-        <Modal.Content>
-          <Form>
-            <Form.Field
-              label="New Lead Delegate"
-              control={WcaSearch}
-              value={newLeadDelegate}
-              onChange={(e, { value }) => setNewLeadDelegate(value)}
-              model={SEARCH_MODELS.user}
-              multiple={false}
-            />
-            <Form.Button onClick={() => {
-              closeModal();
-              setSelectedGroup(null);
-              setNewLeadDelegate(null);
-            }}
-            >
-              Cancel
-            </Form.Button>
-            <Form.Button
-              disabled={!newLeadDelegate}
-              onClick={() => {
-                closeModal();
-                setLoading(true);
-                save(
-                  apiV0Urls.userRoles.create(),
-                  {
-                    userId: newLeadDelegate.id,
-                    groupId: selectedGroup.id,
-                    status: (selectedGroup.parent_group_id
-                      ? delegateRegionsStatus.regional_delegate
-                      : delegateRegionsStatus.senior_delegate),
-                    location: selectedGroup.name,
-                  },
-                  () => {
-                    sync();
-                    setSelectedGroup(null);
-                    setNewLeadDelegate(null);
-                    setLoading(false);
-                  },
-                  { method: 'POST' },
-                );
-              }}
-            >
-              Save
-            </Form.Button>
-          </Form>
-        </Modal.Content>
-      </Modal>
+        title="New Lead Delegate"
+        groupId={selectedGroup?.id}
+        status={(selectedGroup?.parent_group_id
+          ? delegateRegionsStatus.regional_delegate
+          : delegateRegionsStatus.senior_delegate)}
+      />
+      <UpdateModal
+        open={openModalType === 'edit'}
+        onClose={() => {
+          closeModal();
+          setSelectedGroup(null);
+          sync();
+        }}
+        title="Edit Region"
+        userGroupId={selectedGroup?.id}
+      />
     </>
   );
 }

@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 export interface PermissionFunctions {
   canAccessPanel: (panel: string) => boolean;
   canAdministerCompetition: (competition: string) => boolean;
+  canScoretakeCompetition: (competition: string) => boolean;
   canAttendCompetition: (competition: string) => boolean;
   canOrganizeCompetitions: (competition: string) => boolean;
   canEditDelegateReport: (competition: string) => boolean;
@@ -16,6 +17,9 @@ export interface PermissionFunctions {
   canReadGroupCurrent: (group: string) => boolean;
   canReadGroupPast: (group: string) => boolean;
   canRequestToEditProfile: (profile: string) => boolean;
+  // `can_manage_incidents` is granted to WRC and admins for every incident or none, so unlike its
+  // siblings its scope is never a list of ids and there is nothing to pass in.
+  canManageIncidents: () => boolean;
 }
 
 export type UserPermissions = components["schemas"]["UserPermissions"];
@@ -44,6 +48,14 @@ export const hydrateUserPermissions = (
       allOrSpecificScope(
         competition,
         rawPermissions.can_administer_competitions.scope,
+      ),
+    ),
+  canScoretakeCompetition: (competition) =>
+    Boolean(
+      rawPermissions &&
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_scoretake_competitions.scope,
       ),
     ),
   canAttendCompetition: (competition) =>
@@ -114,6 +126,7 @@ export const hydrateUserPermissions = (
         rawPermissions.can_request_to_edit_others_profile.scope,
       ),
     ),
+  canManageIncidents: () => rawPermissions?.can_manage_incidents.scope === "*",
 });
 
 const fetchPermissions = cache(async (authToken: string) => {

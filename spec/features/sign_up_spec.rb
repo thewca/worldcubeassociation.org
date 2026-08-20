@@ -54,7 +54,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -70,7 +70,7 @@ RSpec.feature "Sign up" do
 
       # Make sure we inform the user of the incorrect birthdate they just
       # entered.
-      expect(page.find(".alert.alert-danger")).to have_content("Birthdate does not match our database.")
+      expect(page.find(".alert.alert-danger")).to have_text("Birthdate does not match our database.")
       # Now enter the correct birthdate and submit the form!
       fill_in "Birthdate", with: "1988-02-03"
       # We also have to re-fill in the password and password confirmation
@@ -110,7 +110,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -133,7 +133,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -178,7 +178,7 @@ RSpec.feature "Sign up" do
 
       click_button "Sign up"
 
-      expect(page).to have_content "A message with a confirmation link has been sent to your email address."
+      expect(page).to have_text "A message with a confirmation link has been sent to your email address."
 
       u = User.find_by!(email: "jack@example.com")
       expect(u.gender).to eq "m"
@@ -218,7 +218,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_content "In order to assign you your WCA ID"
+      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
       expect(page).to have_css("div.user_dob_verification", visible: :visible)
@@ -233,7 +233,7 @@ RSpec.feature "Sign up" do
       click_on "I have never competed in a WCA competition."
       click_button "Sign up"
       expect(page).to have_css(".alert.alert-danger li", count: 1)
-      expect(page.find(".user_name span.help-block")).to have_content "can't be blank"
+      expect(page.find(".user_name span.help-block")).to have_text "can't be blank"
 
       fill_in "Full name", with: "Jackson John"
       fill_in "user[password]", with: "wca"
@@ -253,9 +253,9 @@ RSpec.feature "Sign up" do
       click_on "I have competed in a WCA competition."
       click_button "Sign up"
       expect(page).to have_css(".alert.alert-danger li", count: 3)
-      expect(page.find(".alert.alert-danger")).to have_content "Delegate id to handle wca id claim required"
-      expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID required"
-      expect(page.find(".alert.alert-danger")).to have_content "Unconfirmed WCA ID is invalid"
+      expect(page.find(".alert.alert-danger")).to have_text "Delegate id to handle wca id claim required"
+      expect(page.find(".alert.alert-danger")).to have_text "Unconfirmed WCA ID required"
+      expect(page.find(".alert.alert-danger")).to have_text "Unconfirmed WCA ID is invalid"
     end
   end
 

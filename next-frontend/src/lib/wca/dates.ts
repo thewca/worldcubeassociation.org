@@ -60,6 +60,13 @@ export function hasPassed(dateTime: string, timeZone?: string | Zone) {
   return DateTime.fromISO(dateTime, { zone: timeZone }) < DateTime.now();
 }
 
+// for date-only strings, which would otherwise parse as midnight
+export function hasPassedEndOfDay(date: string, timeZone?: string | Zone) {
+  return (
+    DateTime.fromISO(date, { zone: timeZone }).endOf("day") < DateTime.now()
+  );
+}
+
 export function hasNotPassed(dateTime: string, timeZone?: string | Zone) {
   return DateTime.now() < DateTime.fromISO(dateTime, { zone: timeZone });
 }
@@ -124,6 +131,14 @@ export const getRegistrationTimestamp = (
   dateTime: string,
   timeZone: string | Zone = "local",
 ) => DateTime.fromISO(dateTime).setZone(timeZone).toFormat("D TT.u ZZZZ");
+
+export const getFullDateTimeStringNoSeconds = (
+  dateTime: string,
+  timeZone: string | Zone = "local",
+) =>
+  DateTime.fromISO(dateTime)
+    .setZone(timeZone)
+    .toLocaleString(DateTime.DATETIME_FULL);
 
 export const getFullDateTimeString = (
   dateTime: string,

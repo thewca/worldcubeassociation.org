@@ -31,7 +31,7 @@ module Resultable
       Format.c_find(format_id)
     end
 
-    delegate :competition_id, :round_type_id, :event_id, :format_id, to: :round, prefix: true
+    delegate :competition_id, :round_type_id, :event_id, :format_id, :human_id, to: :round, prefix: true
     validates :competition_id, comparison: { equal_to: :round_competition_id }
     validates :round_type_id, comparison: { equal_to: :round_round_type_id }
     validates :event_id, comparison: { equal_to: :round_event_id }
@@ -49,19 +49,8 @@ module Resultable
       errors.add(:base, invalid_solve_count_reason) if invalid_solve_count_reason
     end
 
-    validate :validate_average
-    def validate_average
-      return if average_is_not_computable_reason
-
-      correct_average = compute_correct_average
-      errors.add(:average, "should be #{correct_average}") if correct_average != average
-    end
-
-    validate :validate_best, if: :event
-    def validate_best
-      correct_best = compute_correct_best
-      errors.add(:best, "should be #{correct_best}") if correct_best != best
-    end
+    validates :average, comparison: { equal_to: :compute_correct_average, if: :event, unless: :invalid_solve_count_reason }
+    validates :best, comparison: { equal_to: :compute_correct_best, if: :event }
   end
 
   def invalid_solve_count_reason
@@ -74,7 +63,7 @@ module Resultable
     unskipped_count = solve_times.count(&:unskipped?)
     if round_type.combined?
       "Expected at most #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}." if unskipped_count > format.expected_solve_count
-    elsif unskipped_count != format.expected_solve_count
+    elsif unskipped_count != format.expected_solve_count && format.id != "h"
       "Expected #{hlp.pluralize(format.expected_solve_count, 'solve')}, but found #{unskipped_count}."
     end
   end
@@ -176,11 +165,11 @@ module Resultable
   end
 
   private def sorted_solves
-    @sorted_solves ||= solve_times.reject(&:skipped?).sort.freeze
+    sorted_solves_with_index.map(&:first).sort
   end
 
   private def sorted_solves_with_index
-    @sorted_solves_with_index ||= solve_times.each_with_index.reject { |s, _| s.skipped? }.sort.freeze
+    solve_times.each_with_index.reject { |s, _| s.skipped? }.sort
   end
 
   def tied_with?(other_result)
@@ -195,37 +184,27 @@ module Resultable
     end
   end
 
+  def result_attempts_hash
+    # We could use a `result_attempts.pluck(:attempt_number, :value)` here,
+    #   but that would unfortunately fire a database call every single time.
+    # With the `to_h` approach (which is just an implicit `map`), we leverage caching and includes.
+    self.result_attempts.to_h { [it.attempt_number, it.value] }
+  end
+
+  def attempts
+    # This is a compromise with the legacy behavior where we had `value1..5` hard-coded as columns
+    #   and every result had at least 5 attempts.
+    # Feel free to revisit this assumption in the future and optimize our model for more generic counts
+    #   after the migration to `result_attempts` succeeded.
+    num_of_results = [result_attempts_hash.keys.max || 0, 5].max
+
+    self.result_attempts_hash
+        .values_at(*1..num_of_results) # turn { 1: 123, 4: 456 } into [123, nil, nil, 456]
+        .map { it || SolveTime::SKIPPED_VALUE } # fill gaps with 0
+  end
+
   def solve_times
-    @solve_times ||= [SolveTime.new(event_id, :single, value1),
-                      SolveTime.new(event_id, :single, value2),
-                      SolveTime.new(event_id, :single, value3),
-                      SolveTime.new(event_id, :single, value4),
-                      SolveTime.new(event_id, :single, value5)].freeze
-  end
-
-  private def valid_attempts_partition
-    self.attempts
-        .map
-        .with_index(1)
-        .partition { |value, _n| value != SolveTime::SKIPPED_VALUE }
-  end
-
-  def valid_attempts
-    self.valid_attempts_partition[0]
-  end
-
-  def skipped_attempts
-    self.valid_attempts_partition[1]
-  end
-
-  def result_attempts_attributes(**kwargs)
-    self.valid_attempts.map do |value, n|
-      { value: value, attempt_number: n, **kwargs }
-    end
-  end
-
-  def skipped_attempt_numbers
-    self.skipped_attempts.map { |_value, n| n }
+    attempts.map { SolveTime.new(event_id, :single, it) }
   end
 
   def worst_index
@@ -246,16 +225,8 @@ module Resultable
   end
 
   def counting_solve_times
-    @counting_solve_times ||= solve_times.each_with_index.filter_map do |solve_time, i|
+    solve_times.each_with_index.filter_map do |solve_time, i|
       solve_time if i < format.expected_solve_count && trimmed_indices.exclude?(i)
     end
-  end
-
-  # When someone changes an attribute, clear our cached values.
-  def _write_attribute(attr, value)
-    @sorted_solves_with_index = nil
-    @solve_times = nil
-    @counting_solve_times = nil
-    super
   end
 end

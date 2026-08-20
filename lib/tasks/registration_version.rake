@@ -187,14 +187,14 @@ namespace :registration_version do
                 .where(accepted_at: nil)
                 .where(created_at: 2.weeks.ago..)
                 .find_each do |registration|
-      if v3_competitions_ids.include?(registration.competition_id)
-        registration.recompute_timestamps
+                  if v3_competitions_ids.include?(registration.competition_id)
+                    registration.recompute_timestamps
 
-        earliest_registration_action = registration.registration_history_entries.minimum(:created_at)
-        registration.created_at = earliest_registration_action
+                    earliest_registration_action = registration.registration_history_entries.minimum(:created_at)
+                    registration.created_at = earliest_registration_action
 
-        registration.save!
-      end
+                    registration.save!
+                  end
     end
   end
 
@@ -202,16 +202,16 @@ namespace :registration_version do
     RegistrationPayment.joins(registration: :competition)
                        .merge(Competition.registration_version_v3)
                        .find_each do |reg_payment|
-      # Cannot eagerly preload these because of polymorphic association :/
-      receipt = reg_payment.receipt
-      next unless receipt.is_a? StripeRecord
+                         # Cannot eagerly preload these because of polymorphic association :/
+                         receipt = reg_payment.receipt
+                         next unless receipt.is_a? StripeRecord
 
-      # The method `succeeded?` is defined through the scope `stripe_status` on the AR model
-      receipt_invalid = !reg_payment.receipt.succeeded?
+                         # The method `succeeded?` is defined through the scope `stripe_status` on the AR model
+                         receipt_invalid = !reg_payment.receipt.succeeded?
 
-      # The `destroy` method takes all refunded RegPayments to the grave as well
-      #   through the `dependent: destroy` on the `has_many` association
-      reg_payment.destroy if receipt_invalid
+                         # The `destroy` method takes all refunded RegPayments to the grave as well
+                         #   through the `dependent: destroy` on the `has_many` association
+                         reg_payment.destroy if receipt_invalid
     end
   end
 end

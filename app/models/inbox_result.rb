@@ -3,8 +3,8 @@
 class InboxResult < ApplicationRecord
   include Resultable
 
-  # see result.rb for explanation of the scope
-  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true
+  # see result.rb for explanation of the composite key
+  belongs_to :inbox_person, foreign_key: %i[competition_id person_id], optional: true, inverse_of: :inbox_results
 
   delegate :country_iso2, to: :inbox_person
   delegate :wca_id, to: :inbox_person

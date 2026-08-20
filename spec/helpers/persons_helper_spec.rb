@@ -19,7 +19,7 @@ RSpec.describe PersonsHelper do
 
       it "when country rank is greater than continent rank" do
         rank_single = create(:ranks_single, continent_rank: 10, country_rank: 1)
-        rank_average = create(:ranks_single, continent_rank: 10, country_rank: 50)
+        rank_average = create(:ranks_average, continent_rank: 10, country_rank: 50)
         expect(odd_rank_reason_needed?(rank_single, rank_average)).to be true
       end
     end

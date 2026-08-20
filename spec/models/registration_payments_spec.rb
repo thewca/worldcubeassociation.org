@@ -73,4 +73,29 @@ RSpec.describe RegistrationPayment do
       end
     end
   end
+
+  describe 'over-refund validations' do
+    let(:competition) { create(:competition, :stripe_connected) }
+    let(:registration) { create(:registration, competition: competition) }
+    let!(:registration_payment) { create(:registration_payment, registration: registration) }
+
+    it 'complains when trying to create a refund that would go over the available amount' do
+      base_amount = registration_payment.amount_lowest_denomination
+      refunding_payment = build(:registration_payment, :refund, registration: registration, amount_lowest_denomination: base_amount * 2)
+
+      expect(refunding_payment).to be_invalid_with_errors(
+        amount_lowest_denomination_abs: ["must be less than or equal to #{base_amount}"],
+      )
+    end
+
+    it 'does not complain when trying to update a previously issued refund that would go over the available amount' do
+      full_refund = create(:registration_payment, :refund, registration: registration)
+
+      # Manually override the value to something negative, by some admin in the UI who really knows what they're doing
+      update_successful = full_refund.update(amount_lowest_denomination: registration_payment.amount_lowest_denomination * -2)
+
+      expect(update_successful).to be_truthy
+      expect(registration_payment.amount_available_for_refund).to be_negative
+    end
+  end
 end

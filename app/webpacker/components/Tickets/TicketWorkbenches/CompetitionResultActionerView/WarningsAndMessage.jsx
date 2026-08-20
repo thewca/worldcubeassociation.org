@@ -4,6 +4,7 @@ import { Header, Segment } from 'semantic-ui-react';
 import ValidationOutput from '../../../Panel/pages/RunValidatorsPage/ValidationOutput';
 import runValidatorsForCompetitionList from '../../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
 import { ALL_VALIDATORS } from '../../../../lib/wca-data.js.erb';
+import Markdown from '../../../Markdown';
 
 export default function WarningsAndMessage({ ticketDetails }) {
   const { ticket: { id, metadata } } = ticketDetails;
@@ -28,7 +29,9 @@ export default function WarningsAndMessage({ ticketDetails }) {
         error={error}
       />
       <Header>Delegate&apos;s message</Header>
-      <Segment>{ticketDetails.ticket.metadata.delegate_message}</Segment>
+      <Segment>
+        <Markdown md={ticketDetails.ticket.metadata.delegate_message} id={`delegate-message-${id}`} />
+      </Segment>
     </>
   );
 }

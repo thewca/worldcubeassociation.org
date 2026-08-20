@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 class ContactsController < ApplicationController
-  private def maybe_send_contact_email(contact)
+  CONTACT_DEFAULT_LOCALE = :en
+
+  private def maybe_send_contact_email(contact, force_locale: nil, ticket: nil)
     if !contact.valid?
-      render status: :bad_request, json: { error: "Invalid contact object created" }
-    elsif contact.deliver
-      render status: :ok, json: { message: "Mail sent successfully" }
+      error_msg = contact.errors.full_messages.presence&.join(". ") || "Invalid contact object created"
+      render status: :bad_request, json: { error: error_msg }
+    elsif I18n.with_locale(force_locale) { contact.deliver }
+      render status: :ok, json: { message: "Mail sent successfully", ticket_id: ticket&.id }.compact
     else
       render status: :internal_server_error, json: { error: "Mail delivery failed" }
     end
@@ -33,6 +36,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -48,6 +52,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -61,6 +66,7 @@ class ContactsController < ApplicationController
         request: request,
         logged_in_email: current_user&.email || 'None',
       ),
+      force_locale: CONTACT_DEFAULT_LOCALE,
     )
   end
 
@@ -87,42 +93,9 @@ class ContactsController < ApplicationController
     end
   end
 
-  private def value_humanized(value, field)
-    case field
-    when :country_iso2
-      Country.c_find_by_iso2(value).name_in(:en)
-    when :gender
-      User::GENDER_LABEL_METHOD.call(value.to_sym)
-    else
-      value
-    end
-  end
-
-  private def changes_requested_humanized(changes_requested)
-    changes_requested.map do |change|
-      ContactEditProfile::EditProfileChange.new(
-        field: change[:field].to_s.humanize,
-        from: value_humanized(change[:from], change[:field]),
-        to: value_humanized(change[:to], change[:field]),
-      )
-    end
-  end
-
-  private def requestor_info(user, edit_others_profile_mode)
-    requestor_role = if !edit_others_profile_mode
-                       "Self"
-                     elsif user.any_kind_of_delegate?
-                       "Delegate"
-                     else
-                       "Unknown"
-                     end
-    "#{user.name} (#{requestor_role})"
-  end
-
   def edit_profile_action
     form_values = JSON.parse(params.require(:formValues), symbolize_names: true)
-    edited_profile_details = form_values[:editedProfileDetails]
-    edit_profile_reason = form_values[:editProfileReason]
+    edited_profile_details_from_form = form_values[:editedProfileDetails]
     attachment = params[:attachment]
     wca_id = form_values[:wcaId]
     person = Person.find_by(wca_id: wca_id)
@@ -140,6 +113,9 @@ class ContactsController < ApplicationController
       gender: person.gender,
       dob: person.dob,
     }
+
+    edited_profile_details = edited_profile_details_from_form.transform_values { |v| v[:newValue] }
+
     changes_requested = Person.fields_edit_requestable
                               .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }
                               .map do |field|
@@ -147,23 +123,31 @@ class ContactsController < ApplicationController
                                   field: field,
                                   from: profile_to_edit[field],
                                   to: edited_profile_details[field],
+                                  reason: edited_profile_details_from_form[field][:editReason],
                                 )
                               end
 
+    contact_form = ContactEditProfile.new(
+      your_email: current_user&.email,
+      name: profile_to_edit[:name],
+      wca_id: wca_id,
+      changes_requested: changes_requested,
+      requestor_user: current_user,
+      document: attachment,
+      request: request,
+    )
+
+    if (attachment_reasons = contact_form.attachment_requirement_reasons).present?
+      return render status: :bad_request, json: { error: attachment_reasons.join("\n") }
+    end
+
     ticket = TicketsEditPerson.create_ticket(wca_id, changes_requested, current_user)
+    contact_form.ticket = ticket
 
     maybe_send_contact_email(
-      ContactEditProfile.new(
-        your_email: current_user&.email,
-        name: profile_to_edit[:name],
-        wca_id: wca_id,
-        changes_requested: changes_requested_humanized(changes_requested),
-        edit_profile_reason: edit_profile_reason,
-        requestor: requestor_info(current_user, edit_others_profile_mode),
-        ticket: ticket,
-        document: attachment,
-        request: request,
-      ),
+      contact_form,
+      force_locale: CONTACT_DEFAULT_LOCALE,
+      ticket: ticket,
     )
   end
 
@@ -176,17 +160,17 @@ class ContactsController < ApplicationController
     @contact.request = request
     @contact.to_email = "results@worldcubeassociation.org"
     @contact.subject = "WCA DOB change request by #{@contact.name}"
-    maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob
+    maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob, force_locale: CONTACT_DEFAULT_LOCALE
   end
 
-  private def maybe_send_dob_email(success_url: nil, fail_view: nil)
+  private def maybe_send_dob_email(success_url: nil, fail_view: nil, force_locale: nil)
     if !@contact.valid?
       render fail_view
     elsif !verify_recaptcha
       # Convert flash to a flash.now, since we're about to render, not redirect.
       flash.now[:recaptcha_error] = flash[:recaptcha_error]
       render fail_view
-    elsif @contact.deliver
+    elsif I18n.with_locale(force_locale) { @contact.deliver }
       flash[:success] = I18n.t('contacts.messages.success')
       redirect_to success_url
     else

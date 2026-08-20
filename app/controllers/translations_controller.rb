@@ -4,7 +4,7 @@ class TranslationsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
 
   def self.compute_bad_i18n_keys
-    base_locales = Locales::AVAILABLE.transform_values { it[:base_locale] || 'en' }
+    base_locales = AvailableLocales::ALL.transform_values { it[:base_locale] || 'en' }
 
     (I18n.available_locales - [:en]).index_with do |locale|
       base_locale = base_locales[locale]

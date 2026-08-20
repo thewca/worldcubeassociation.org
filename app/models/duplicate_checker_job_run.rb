@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DuplicateCheckerJobRun < ApplicationRecord
-  has_many :potential_duplicate_persons, -> { order(score: :desc) }, dependent: :destroy
+  has_many :potential_duplicate_persons, -> { order(score: :desc) }, dependent: :destroy, inverse_of: :duplicate_checker_job_run
   belongs_to :competition
 
   default_scope -> { order(start_time: :desc) }

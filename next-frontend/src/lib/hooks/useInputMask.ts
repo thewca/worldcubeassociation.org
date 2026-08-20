@@ -21,6 +21,7 @@ interface InputMaskOptions<T, M extends string = string> {
   parse: (input: M) => T;
   format: (value: T) => M;
   applyMask: (input: string) => M;
+  cleanup?: (parsed: T) => T;
   shortcuts?: KeyShortcut<M>[];
 }
 
@@ -97,6 +98,7 @@ export default function useInputMask<T, M extends string = string>({
   parse,
   format,
   applyMask,
+  cleanup = (t) => t,
   shortcuts = [],
 }: InputMaskOptions<T, M>): InputMaskReturn {
   const [dataValue, setDataValue] = useControllableState({
@@ -134,12 +136,13 @@ export default function useInputMask<T, M extends string = string>({
     setIsValid(isDraftValid);
 
     if (isDraftValid) {
-      setDataValue(parsed);
+      const cleanedValue = cleanup(parsed);
+      setDataValue(cleanedValue);
     } else {
       const defaultDraft = format(defaultValue);
       setDraft(defaultDraft);
     }
-  }, [draft, parse, format, defaultValue, setDataValue, setDraft]);
+  }, [draft, parse, format, cleanup, defaultValue, setDataValue, setDraft]);
 
   const bindDraft = useMemo(
     () => ({

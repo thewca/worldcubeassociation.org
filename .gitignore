@@ -27,6 +27,9 @@ public/assets/**
 # Ignore js-specific generated locales (they are rebuilt whenever we compile assets)
 app/webpacker/rails_translations/*.json
 
+# Ignore the packs React on Rails generates for auto-bundled components
+app/webpacker/packs/generated/
+
 # Environment configuration
 .env*
 !.env.development
@@ -63,3 +66,16 @@ yarn-debug.log*
 
 # Ignore Font files in accordance to Licensing Agreement
 next-frontend/src/app/(wca)/fonts/TTNormsPro/*
+
+# Local database exports
+WCA_export_*
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# AI coding assistants
+.claude/
+.agents/

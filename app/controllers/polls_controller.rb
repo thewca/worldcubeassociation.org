@@ -15,11 +15,11 @@ class PollsController < ApplicationController
   end
 
   def results
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.require(:id))
   end
 
   def edit
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.require(:id))
   end
 
   def create
@@ -36,7 +36,7 @@ class PollsController < ApplicationController
   end
 
   def update
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.require(:id))
     if @poll.update(poll_params)
       flash[:success] = if params[:commit] == "Confirm"
                           "Poll confirmed and open to voting"
@@ -50,7 +50,7 @@ class PollsController < ApplicationController
   end
 
   def destroy
-    @poll = Poll.find(params[:id])
+    @poll = Poll.find(params.require(:id))
 
     if !@poll.confirmed? && @poll.destroy
       flash[:success] = "Deleted poll"

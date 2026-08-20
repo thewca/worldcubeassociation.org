@@ -20,7 +20,7 @@ RSpec.describe CompetitionSeries do
 
   it "does not delete the competition upon deleting the association" do
     other_competition = create(:competition)
-    series.competition_ids = [other_competition]
+    series.competitions = [other_competition]
 
     previous_competition_id = competition.id
     competition.reload

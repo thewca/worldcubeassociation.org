@@ -9,12 +9,17 @@ FactoryBot.define do
     average { 5000 }
     last_attempt_entered_at { Time.now.utc }
 
+    locked_by_id { nil }
+    quit_by_id { nil }
+
     transient do
       attempts_count { 5 }
     end
 
     before(:create) do |live_result, evaluator|
-      live_result.live_attempts = build_list(:live_attempt, evaluator.attempts_count, live_result: live_result)
+      live_result.live_attempts = build_list(:live_attempt, evaluator.attempts_count, live_result: live_result) do |live_attempt, i|
+        live_attempt.attempt_number = i + 1
+      end
     end
 
     trait :mo3 do

@@ -13,5 +13,6 @@ FactoryBot.define do
     number { 1 }
     total_number_of_rounds { number }
     linked_round { nil }
+    participation_source { competition_event }
   end
 end

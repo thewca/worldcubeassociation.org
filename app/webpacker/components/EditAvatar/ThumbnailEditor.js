@@ -16,7 +16,7 @@ import ReactCrop, {
   makeAspectCrop,
 } from 'react-image-crop';
 import I18n from '../../lib/i18n';
-import CroppedImage from './CroppedImage';
+import CroppedImage from '../CroppedImage';
 
 // Crop starts as 33% of the original image size
 const SUGGESTED_IMG_RATIO = 33;
@@ -70,7 +70,7 @@ function ThumbnailEditor({
 
     disableThumbnailCrop();
 
-    if (!thumbnail) {
+    if (!thumbnail && width && height) {
       const aspectCrop = makeAspectCrop(
         {
           unit: '%',

@@ -6,7 +6,27 @@ import type { ElementType } from "react";
 
 type ImageRawProps = {
   src?: string;
+  srcSet?: string;
   alt: string;
+};
+
+// Builds a width-descriptor srcSet (e.g. "/card.jpg 768w, /full.jpg 1920w")
+// from the generated image sizes plus the main upload, so the browser can pick
+// the smallest sufficient variant. Entries without a url or width are skipped.
+const buildSrcSet = (media: Media): string | undefined => {
+  const candidates = [
+    media.sizes?.thumbnail,
+    media.sizes?.card,
+    { url: media.url, width: media.width },
+  ];
+
+  const entries = candidates
+    .filter((c): c is { url: string; width: number } =>
+      Boolean(c?.url && c?.width),
+    )
+    .map(({ url, width }) => `${url} ${width}w`);
+
+  return entries.length > 0 ? entries.join(", ") : undefined;
 };
 
 type LinkRawProps = {
@@ -35,6 +55,7 @@ export const MediaImage: PolymorphicComponent<
   const pureImage = (
     <RenderImage
       src={media.url ?? srcFallback}
+      srcSet={buildSrcSet(media)}
       alt={media.alt ?? altFallback}
       {...imageProps}
     />

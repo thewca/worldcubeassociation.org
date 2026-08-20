@@ -55,7 +55,9 @@ export default function DuplicateCheckerHeader({
   if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.not_started) {
     return (
       <Message info>
-        Duplicate Checker will start soon. Please check after sometime.
+        The computation has been triggered, but we&apos;re waiting for free server capacity.
+        {' '}
+        Please check back later.
         <Button onClick={refetch}>Refresh</Button>
       </Message>
     );
@@ -64,7 +66,7 @@ export default function DuplicateCheckerHeader({
   if (lastDuplicateCheckerJobRun.run_status === duplicateCheckerJobRunStatuses.in_progress) {
     return (
       <Message info>
-        Duplicate Checker is currently running. Please check after sometime.
+        Computing Duplicates right now, please check back later.
         <Button onClick={refetch}>Refresh</Button>
       </Message>
     );

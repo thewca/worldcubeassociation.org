@@ -45,6 +45,11 @@ class RoleChangeMailer < ApplicationMailer
           message: 'Informing as a Delegate has been put in probation.',
         ),
         UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_weat.name,
+          email: UserGroup.teams_committees_group_weat.metadata.email,
+          message: 'Informing as a Delegate has been put in probation.',
+        ),
+        UserRole::UserRoleEmailRecipient.new(
           name: 'Senior Delegates',
           email: role.user.senior_delegates.map(&:email),
           message: 'Informing as one of the Delegates under you has been put in probation.',
@@ -158,6 +163,11 @@ class RoleChangeMailer < ApplicationMailer
         UserRole::UserRoleEmailRecipient.new(
           name: UserGroup.board_group.name,
           email: GroupsMetadataBoard.email,
+          message: 'Informing as there was a change in Delegate probations.',
+        ),
+        UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_weat.name,
+          email: UserGroup.teams_committees_group_weat.metadata.email,
           message: 'Informing as there was a change in Delegate probations.',
         ),
         UserRole::UserRoleEmailRecipient.new(
