@@ -374,7 +374,7 @@ class RegistrationsController < ApplicationController
     user_id = params[:user_id]
     registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
     iso_donation_amount = params[:iso_donation_amount].to_i
-    ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
+    ruby_money = registration.outstanding_entry_fees_with_donation(iso_donation_amount)
     human_amount = helpers.format_money(ruby_money)
 
     api_amounts = {

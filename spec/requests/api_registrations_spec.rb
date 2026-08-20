@@ -1375,7 +1375,57 @@ RSpec.describe 'API Registrations' do
       expect(payment_record.currency_code).to eq("usd")
     end
 
+    it 'ignores a negative donation instead of charging less than the entry fee' do
+      api_sign_in_as(reg.user)
+      get payment_ticket_api_v1_registration_path(reg), params: { iso_donation_amount: -400 }
+
+      payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
+      expect(payment_record.amount_stripe_denomination).to be(1000)
+    end
+
+    it 'only charges the fees which are still outstanding' do
+      create(:registration_payment, registration: reg, amount_lowest_denomination: 400)
+
+      api_sign_in_as(reg.user)
+      get payment_ticket_api_v1_registration_path(reg)
+
+      payment_record = PaymentIntent.where(holder_type: "Registration", holder_id: reg.id).last.payment_record
+      expect(payment_record.amount_stripe_denomination).to be(600)
+    end
+
     describe 'refuse ticket create request' do
+      it 'if the registration belongs to another user' do
+        api_sign_in_as(create(:user))
+        get payment_ticket_api_v1_registration_path(reg)
+
+        body = response.parsed_body
+        expect(response).to have_http_status(:forbidden)
+        expect(body).to eq({ error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS }.with_indifferent_access)
+      end
+
+      it 'if the requester organises the competition but does not own the registration' do
+        api_sign_in_as(competition.organizers.first)
+        get payment_ticket_api_v1_registration_path(reg)
+
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'does not create a payment intent for another user\'s registration' do
+        api_sign_in_as(create(:user))
+        get payment_ticket_api_v1_registration_path(reg)
+
+        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).not_to be_present
+      end
+
+      it 'if the registration does not exist' do
+        api_sign_in_as(reg.user)
+        get payment_ticket_api_v1_registration_path(id: reg.id + 1)
+
+        body = response.parsed_body
+        expect(response).to have_http_status(:not_found)
+        expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_NOT_FOUND }.with_indifferent_access)
+      end
+
       it 'if registration already paid' do
         create(:registration_payment, registration: reg)
         api_sign_in_as(reg.user)
