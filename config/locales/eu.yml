@@ -2836,7 +2836,7 @@ eu:
       spots_left:
         one: Toki bat libre
         other: '%{count} toki libre'
-      spots_left_none: Lehiaketa beteta
+      no_spots_left: Lehiaketa beteta
     live:
       #original_hash: 10d1a3c
       title: Zuzenezko emaitzak
@@ -4022,7 +4022,7 @@ eu:
         spots_remaining_plural:
           one: '%{count} gelditzen da'
           other: '%{count} gelditzen dira'
-        spots_remaining_none: ez da tokirik gelditzen
+        no_spots_remaining: ez da tokirik gelditzen
         pending:
           #original_hash: 4210670
           title: Zain dauden erregistroak
@@ -4141,7 +4141,7 @@ eu:
         move_to:
           one: 'Mugitu %{count} hona:'
           other: 'Mugitu %{count} hona:'
-        move_to_none: 'Mugitu hona:'
+        move_to_none_selected: 'Mugitu hona:'
         #original_hash: 96f608c
         pending: Zain
         #original_hash: 92d40dc

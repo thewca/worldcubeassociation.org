@@ -47,7 +47,7 @@ export default function CompetitionShortlist({
             </DataList.ItemLabel>
             <DataList.ItemValue>
               {comp.spots_left === 0
-                ? t("competitions.messages.spots_left_none")
+                ? t("competitions.messages.no_spots_left")
                 : t("competitions.messages.spots_left", {
                     count: comp.spots_left,
                   })}

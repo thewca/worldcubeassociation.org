@@ -165,7 +165,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   // than putting this in the table headers which scroll out of sight
   const spotsRemaining = (competitionInfo.competitor_limit || Infinity) - accepted.length;
   const spotsRemainingText = spotsRemaining === 0
-    ? I18n.t('competitions.registration_v2.list.spots_remaining_none')
+    ? I18n.t('competitions.registration_v2.list.no_spots_remaining')
     : I18n.t(
       'competitions.registration_v2.list.spots_remaining_plural',
       { count: spotsRemaining },

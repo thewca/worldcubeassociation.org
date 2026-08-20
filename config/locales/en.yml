@@ -1418,7 +1418,7 @@ en:
       spots_left:
         one: "One spot left"
         other: "%{count} spots left"
-      spots_left_none: "Competition full"
+      no_spots_left: "Competition full"
     live:
       title: "Live Results"
       manage_rounds: "Manage Rounds"
@@ -1968,7 +1968,7 @@ en:
         spots_remaining_plural:
           one: "%{count} spot remaining"
           other: "%{count} spots remaining"
-        spots_remaining_none: "no spots remaining"
+        no_spots_remaining: "no spots remaining"
         pending:
           title: "Pending Registrations"
           information: "Pending should only be used for incomplete (eg, unpaid) registrations - please use the Waiting List if your competition is too full to accept new competitors."
@@ -2021,7 +2021,7 @@ en:
         move_to:
           one: "Move %{count} to"
           other: "Move %{count} to"
-        move_to_none: "Move to"
+        move_to_none_selected: "Move to"
         pending: "Pending"
         waitlist: "Waiting List"
         approved: "Approved"

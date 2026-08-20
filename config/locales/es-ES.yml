@@ -2930,7 +2930,7 @@ es-ES:
       spots_left:
         one: Una plaza libre
         other: '%{count} plazas libres'
-      spots_left_none: Competición llena
+      no_spots_left: Competición llena
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
@@ -4157,7 +4157,7 @@ es-ES:
         spots_remaining_plural:
           one: queda una plaza
           other: 'quedan %{count} plazas'
-        spots_remaining_none: no quedan plazas
+        no_spots_remaining: no quedan plazas
         pending:
           #original_hash: 4210670
           title: Registros pendientes
@@ -4278,7 +4278,7 @@ es-ES:
         move_to:
           one: 'Mover %{count} a'
           other: 'Mover %{count} a'
-        move_to_none: Mover a
+        move_to_none_selected: Mover a
         #original_hash: 96f608c
         pending: Pendiente
         #original_hash: 92d40dc

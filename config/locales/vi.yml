@@ -2792,7 +2792,7 @@ vi:
       #original_hash: 1877b69
       spots_left:
         other: 'Còn %{count} chỗ'
-      spots_left_none: Giải đấu đã đầy
+      no_spots_left: Giải đấu đã đầy
     live:
       #original_hash: 10d1a3c
       title: Kết quả Trực tiếp
@@ -3940,7 +3940,7 @@ vi:
         #original_hash: 627422a
         spots_remaining_plural:
           other: 'Còn %{count} chỗ'
-        spots_remaining_none: Hết chỗ
+        no_spots_remaining: Hết chỗ
         pending:
           #original_hash: 4210670
           title: Đơn đăng ký Đang chờ
@@ -4056,7 +4056,7 @@ vi:
         #original_hash: beedd53
         move_to:
           other: 'Di chuyển %{count} đơn đến'
-        move_to_none: Di chuyển đến
+        move_to_none_selected: Di chuyển đến
         #original_hash: 96f608c
         pending: Đang chờ
         #original_hash: 92d40dc

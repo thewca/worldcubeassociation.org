@@ -3736,7 +3736,7 @@ fi:
         spots_remaining_plural:
           one: '%{count} paikka jäljellä'
           other: '%{count} paikkaa jäljellä'
-        spots_remaining_none: ei paikkoja jäljellä
+        no_spots_remaining: ei paikkoja jäljellä
         pending:
           #original_hash: 4210670
           title: Vireillä olevat rekisteröitymiset
@@ -3857,7 +3857,7 @@ fi:
         move_to:
           one: 'Move %{count} to'
           other: 'Move %{count} to'
-        move_to_none: Move to
+        move_to_none_selected: Move to
         #original_hash: 96f608c
         pending: Pending
         #original_hash: 92d40dc

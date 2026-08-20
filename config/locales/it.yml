@@ -2880,7 +2880,7 @@ it:
       spots_left:
         one: Un posto rimasto
         other: '%{count} posti rimasti'
-      spots_left_none: Competizione al completo
+      no_spots_left: Competizione al completo
     live:
       #original_hash: 10d1a3c
       title: Risultati in diretta
@@ -4060,7 +4060,7 @@ it:
         spots_remaining_plural:
           one: '%{count} posto rimanente'
           other: '%{count} posti rimanenti'
-        spots_remaining_none: Nessun posto rimanente
+        no_spots_remaining: Nessun posto rimanente
         pending:
           #original_hash: 4210670
           title: Iscrizioni in attesa
@@ -4179,7 +4179,7 @@ it:
         move_to:
           one: 'Sposta %{count} in'
           other: 'Sposta %{count} in'
-        move_to_none: Sposta in
+        move_to_none_selected: Sposta in
         #original_hash: 96f608c
         pending: In attesa
         #original_hash: 92d40dc

@@ -2945,7 +2945,7 @@ fr-CA:
       spots_left:
         one: Une place restante
         other: '%{count} places restantes'
-      spots_left_none: Compétition pleine
+      no_spots_left: Compétition pleine
     live:
       #original_hash: 20bdee1
       title: Résultats en direct
@@ -4189,7 +4189,7 @@ fr-CA:
         spots_remaining_plural:
           one: '%{count} place disponible'
           other: '%{count} places disponibles'
-        spots_remaining_none: Aucune place disponible
+        no_spots_remaining: Aucune place disponible
         pending:
           #original_hash: 6cd48ad
           title: Inscriptions en suspens
@@ -4317,7 +4317,7 @@ fr-CA:
         move_to:
           one: 'Déplacer %{count} vers'
           other: 'Déplacer %{count} vers'
-        move_to_none: Déplacer vers
+        move_to_none_selected: Déplacer vers
         #original_hash: a9eed29
         pending: En suspens
         #original_hash: a5fba54

@@ -3698,7 +3698,7 @@ eo:
         spots_remaining_plural:
           one: '%{count} registriĝloko disponebla'
           other: '%{count} registriĝlokoj disponeblaj'
-        spots_remaining_none: neniu registriĝloko disponebla
+        no_spots_remaining: neniu registriĝloko disponebla
         pending:
           #original_hash: 4210670
           title: Pritraktotaj registriĝoj
@@ -3817,7 +3817,7 @@ eo:
         move_to:
           one: 'Movi %{count} al'
           other: 'Movi %{count} al'
-        move_to_none: Movi al
+        move_to_none_selected: Movi al
         #original_hash: 96f608c
         pending: Pritraktota
         #original_hash: 92d40dc

@@ -2883,7 +2883,7 @@ es-419:
       spots_left:
         one: Queda un solo cupo
         other: 'Quedan %{count} cupos'
-      spots_left_none: Sin cupos libres
+      no_spots_left: Sin cupos libres
     live:
       #original_hash: 10d1a3c
       title: Resultados en vivo
@@ -4088,7 +4088,7 @@ es-419:
         spots_remaining_plural:
           one: '%{count} lugar restante'
           other: '%{count} lugares restantes'
-        spots_remaining_none: Sin lugares restantes
+        no_spots_remaining: Sin lugares restantes
         pending:
           #original_hash: 4210670
           title: Registros pendientes
@@ -4210,7 +4210,7 @@ es-419:
         move_to:
           one: 'Mover %{count} a'
           other: 'Mover %{count} a'
-        move_to_none: Mover a
+        move_to_none_selected: Mover a
         #original_hash: 96f608c
         pending: Pendiente
         #original_hash: 92d40dc

@@ -2694,7 +2694,7 @@ th:
       #original_hash: 1877b69
       spots_left:
         other: 'เหลืออีก %{count} คน'
-      spots_left_none: ผู้สมัครเต็มแล้ว
+      no_spots_left: ผู้สมัครเต็มแล้ว
     live:
       #original_hash: 10d1a3c
       title: ผลการแข่งขัน
@@ -3828,7 +3828,7 @@ th:
         #original_hash: 627422a
         spots_remaining_plural:
           other: 'เหลืออีก %{count} คน'
-        spots_remaining_none: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
+        no_spots_remaining: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
         pending:
           #original_hash: 4210670
           title: การสมัครการแข่งขันที่รอดำเนินการ
@@ -3943,7 +3943,7 @@ th:
         #original_hash: beedd53
         move_to:
           other: 'ย้าย %{count} ไปยัง'
-        move_to_none: ย้ายไปยัง
+        move_to_none_selected: ย้ายไปยัง
         #original_hash: 96f608c
         pending: รอดำเนินการ
         #original_hash: 92d40dc

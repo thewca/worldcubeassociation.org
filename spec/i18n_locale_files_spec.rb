@@ -23,21 +23,21 @@ RSpec.describe "Non-CLDR plural forms" do
   # grammar needs one (Arabic, Welsh, Latvian), and none of ours do — so
   # tooling that normalises plurals to the target language's CLDR forms drops
   # these silently. When a string needs different wording at zero, give it its
-  # own key (see `spots_left_none`) and branch on the count at the call site.
+  # own key (see `no_spots_left`) and branch on the count at the call site.
+  def zero_plural_keys(node, path = [])
+    return [] unless node.is_a?(Hash)
+
+    node.flat_map do |key, value|
+      key_path = path + [key]
+      here = key == "zero" ? [key_path.join(".")] : []
+
+      here + zero_plural_keys(value, key_path)
+    end
+  end
+
   Rails.root.glob("config/locales/*.yml").each do |locale_file|
     it "#{locale_file.basename} has no `zero` plural entries" do
-      offenders = []
-
-      collect = lambda do |node, path|
-        return unless node.is_a?(Hash)
-
-        node.each do |key, value|
-          offenders << (path + [key]).join(".") if key == "zero"
-          collect.call(value, path + [key])
-        end
-      end
-
-      collect.call(YAML.unsafe_load_file(locale_file), [])
+      offenders = zero_plural_keys(YAML.unsafe_load_file(locale_file))
 
       expect(offenders).to be_empty
     end

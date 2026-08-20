@@ -3719,7 +3719,7 @@ sv:
         spots_remaining_plural:
           one: '%{count} plats kvar'
           other: '%{count} platser kvar'
-        spots_remaining_none: '%{count} platser kvar'
+        no_spots_remaining: '%{count} platser kvar'
         pending:
           #original_hash: 4210670
           title: Ohanterade anmälningar
@@ -3837,7 +3837,7 @@ sv:
         move_to:
           one: 'Flytta %{count} till'
           other: 'Flytta %{count} till'
-        move_to_none: Flytta till
+        move_to_none_selected: Flytta till
         #original_hash: 96f608c
         pending: Väntande
         #original_hash: 92d40dc

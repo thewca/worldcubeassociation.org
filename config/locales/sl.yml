@@ -2801,7 +2801,7 @@ sl:
         two: Še dve prosti mesti.
         few: 'Še %{count} prosta mesta.'
         other: 'Še %{count} prostih mest.'
-      spots_left_none: Vsa mesta so zapolnjena.
+      no_spots_left: Vsa mesta so zapolnjena.
     live:
       #original_hash: 10d1a3c
       title: Rezultati v živo
@@ -3980,7 +3980,7 @@ sl:
           two: dve prosti mesti
           few: '%{count} prosta mesta'
           other: '%{count} prostih mest'
-        spots_remaining_none: ni prostih mest
+        no_spots_remaining: ni prostih mest
         pending:
           #original_hash: 4210670
           title: Čakajoče prijave
@@ -4099,7 +4099,7 @@ sl:
           two: 'Premakni %{count} v'
           few: 'Premakni %{count} v'
           other: 'Premakni %{count} v'
-        move_to_none: Premakni
+        move_to_none_selected: Premakni
         #original_hash: 96f608c
         pending: Čakajoče
         #original_hash: 92d40dc

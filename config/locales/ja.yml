@@ -2588,7 +2588,7 @@ ja:
         #original_hash: 627422a
         spots_remaining_plural:
           other: '参加者定員の空きは%{count}人です'
-        spots_remaining_none: 参加者定員の空きはありません
+        no_spots_remaining: 参加者定員の空きはありません
         pending:
           #original_hash: 5e16c6d
           information: 承認待ちは、参加費支払未了などの不完全な申し込みのみに使用してください。参加者定員に達している場合は、キャンセル待ちを使用してください。

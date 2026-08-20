@@ -4370,7 +4370,7 @@ kk:
         spots_remaining_plural:
           one: 'Қалған орын саны: %{count}'
           other: 'Қалған орындар саны: %{count}'
-        spots_remaining_none: Бос орын жоқ
+        no_spots_remaining: Бос орын жоқ
         pending:
           #original_hash: 4210670
           title: Күтудегі тіркелулер
@@ -4487,7 +4487,7 @@ kk:
         move_to:
           one: '%{count} санын келесіге жылжытыңыз'
           other: '%{count} санын келесіге жылжытыңыз'
-        move_to_none: Келесіге жылжыту
+        move_to_none_selected: Келесіге жылжыту
         #original_hash: 96f608c
         pending: Күтуде
         #original_hash: 92d40dc

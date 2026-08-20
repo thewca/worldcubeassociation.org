@@ -2448,7 +2448,7 @@ ko:
       #original_hash: 1877b69
       spots_left:
         other: '%{count}자리 남음'
-      spots_left_none: 정원 마감
+      no_spots_left: 정원 마감
     live:
       #original_hash: 10d1a3c
       title: 실시간 결과
@@ -3468,7 +3468,7 @@ ko:
         #original_hash: 627422a
         spots_remaining_plural:
           other: '%{count}자리 남음'
-        spots_remaining_none: 남은 자리 없음
+        no_spots_remaining: 남은 자리 없음
         pending:
           #original_hash: 4210670
           title: 승인 보류자 명단
@@ -3565,7 +3565,7 @@ ko:
         #original_hash: beedd53
         move_to:
           other: '%{count}을(를) 다음으로 이동'
-        move_to_none: 다음으로 이동
+        move_to_none_selected: 다음으로 이동
         #original_hash: 96f608c
         pending: 보류
         #original_hash: 92d40dc

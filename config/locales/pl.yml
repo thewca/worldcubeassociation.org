@@ -2881,7 +2881,7 @@ pl:
         few: 'Zostało %{count} miejsc'
         many: 'Zostało %{count} miejsc'
         other: 'Zostało %{count} miejsc'
-      spots_left_none: Zawody są pełne
+      no_spots_left: Zawody są pełne
     live:
       #original_hash: 10d1a3c
       title: Wyniki Live
@@ -4105,7 +4105,7 @@ pl:
           few: 'pozostały %{count} miejsca'
           many: 'pozostało %{count} miejsc'
           other: 'pozostało %{count} miejsc'
-        spots_remaining_none: nie ma już miejsc
+        no_spots_remaining: nie ma już miejsc
         pending:
           #original_hash: 4210670
           title: Oczekujące Rejestracje
@@ -4230,7 +4230,7 @@ pl:
           few: 'Przenieś %{count} do'
           many: 'Przenieś %{count} do'
           other: 'Przenieś %{count} do'
-        move_to_none: Przenieś do
+        move_to_none_selected: Przenieś do
         #original_hash: 96f608c
         pending: Oczekujące
         #original_hash: 92d40dc
