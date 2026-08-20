@@ -2,7 +2,7 @@
 
 class DelegateReport < ApplicationRecord
   REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
-  # MySQL `TEXT` columns can hold at most 65,535 characters. `summary`, `equipment`, `venue`,
+  # MySQL `TEXT` columns can hold at most 65,535 bytes. `summary`, `equipment`, `venue`,
   #   `organization`, `incidents`, and `remarks` are all `TEXT` columns (see AVAILABLE_SECTIONS),
   #   so this is a hard database-level cap we must also validate against before saving.
   MAX_SECTION_LENGTH = 65_535
