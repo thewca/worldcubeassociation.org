@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 class Api::V1::RegistrationsController < Api::V1::ApiController
+  # Third-party OAuth clients have to be granted this explicitly before they may put anything
+  # into the registration queue on a user's behalf.
+  MANAGE_REGISTRATIONS_SCOPE = 'manage_registrations'
+
   skip_before_action :require_user!, only: [:index]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
+  before_action :require_registration_scope!, only: %i[create update bulk_update bulk_auto_accept payment_ticket]
   before_action :user_can_create_registration, only: [:create]
   before_action :validate_create_request, only: [:create]
   before_action :ensure_registration_exists, only: [:show_by_user]
@@ -54,7 +59,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     @competition_id = @registration.competition_id
     @competition = @registration.competition
     @user_id = @registration.user_id
-    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id || @current_user.can_manage_competition?(@competition)
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.id == @user_id || authenticated_user.can_manage_competition?(@competition)
   end
 
   def show
@@ -69,7 +74,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def validate_show_registration_by_user
     @competition = Competition.find(@competition_id)
-    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @user_id || @current_user.can_manage_competition?(@competition)
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.id == @user_id || authenticated_user.can_manage_competition?(@competition)
   end
 
   def show_by_user
@@ -78,7 +83,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def registration_config
     competition = Competition.find(params.require(:id))
-    render json: competition.available_registration_lanes(@current_user)
+    render json: competition.available_registration_lanes(authenticated_user)
   end
 
   def create
@@ -106,10 +111,10 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       Registration.exists?(competition: @competition, user: @target_user)
 
     # Only the user themselves can create a registration for the user
-    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.id == @target_user.id
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.id == @target_user.id
 
     # Only organizers can register when registration is closed
-    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || @current_user.can_manage_competition?(@competition)
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || authenticated_user.can_manage_competition?(@competition)
 
     # Users must have the necessary permissions to compete - eg, they cannot be banned or have incomplete profiles
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_CANNOT_COMPETE) unless @target_user.cannot_register_for_competition_reasons(@competition).empty?
@@ -121,7 +126,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def update
     if params[:competing]
-      @registration.update_lanes!(@request, @current_user.id)
+      @registration.update_lanes!(@request, authenticated_user.id)
       return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
@@ -141,21 +146,21 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     target_user = @registration.user
 
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
-      can_administer_or_current_user?(@competition, @current_user, target_user)
+      can_administer_or_current_user?(@competition, authenticated_user, target_user)
 
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_EDITS_NOT_ALLOWED) unless
-      @competition.registration_edits_currently_permitted? || @current_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status)
+      @competition.registration_edits_currently_permitted? || authenticated_user.can_manage_competition?(@competition) || user_uncancelling_registration?(@registration, new_status)
 
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::REGISTRATION_IS_REJECTED) if
-      user_is_rejected?(@current_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, @current_user, target_user)
+      user_is_rejected?(authenticated_user, target_user, @registration) && !organizer_modifying_own_registration?(@competition, authenticated_user, target_user)
 
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::ALREADY_REGISTERED_IN_SERIES) if
-      existing_registration_in_series?(@competition, target_user) && !@current_user.can_manage_competition?(@competition)
+      existing_registration_in_series?(@competition, target_user) && !authenticated_user.can_manage_competition?(@competition)
 
-    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_admin_fields?(@request) && !@current_user.can_manage_competition?(@competition)
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if contains_admin_fields?(@request) && !authenticated_user.can_manage_competition?(@competition)
 
     # The rest of these are status + normal user related
-    return if @current_user.can_manage_competition?(@competition)
+    return if authenticated_user.can_manage_competition?(@competition)
     return if new_status.nil?
 
     # A competitor (ie, these restrictions don't apply to organizers) is only allowed to:
@@ -195,7 +200,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
       will_exceed_competitor_limit?(@update_requests, @competition)
 
     raise WcaExceptions::BulkUpdateError.new(:unauthorized, [Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS]) unless
-      @current_user.can_manage_competition?(@competition)
+      authenticated_user.can_manage_competition?(@competition)
   end
 
   def validate_bulk_update_request
@@ -220,7 +225,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     updated_registrations = {}
 
     @update_requests.each do |update|
-      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update_raw!(update, @competition, @current_user.id)
+      updated_registrations[update['user_id']] = Registrations::Lanes::Competing.update_raw!(update, @competition, authenticated_user.id)
     end
 
     render json: { status: 'ok', updated_registrations: updated_registrations }
@@ -231,7 +236,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     competition_id = params_competition_id
     @competition = Competition.find(competition_id)
 
-    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @current_user.can_manage_competition?(@competition)
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.can_manage_competition?(@competition)
   end
 
   def index_admin
@@ -268,14 +273,19 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
     ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
     payment_account = @competition.payment_account_for(:stripe)
-    payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, @current_user)
+    payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, authenticated_user)
     render json: { client_secret: payment_intent.client_secret }
   end
 
   private
 
+    def require_registration_scope!
+      raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+        token_has_scope?(MANAGE_REGISTRATIONS_SCOPE)
+    end
+
     def action_type(request)
-      self_updating = request[:user_id] == @current_user
+      self_updating = request[:user_id] == authenticated_user.id
       status = request.dig('competing', 'status')
       if status == 'cancelled'
         return self_updating ? 'Competitor delete' : 'Admin delete'

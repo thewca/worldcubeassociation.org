@@ -14,11 +14,54 @@ export interface paths {
         /** Get competition registrations */
         get: operations["competitionRegistrationsV2"];
         put?: never;
+        /**
+         * Register the given user for a competition
+         * @description Registrations are created asynchronously, so a successful response only means the request was
+         *     queued. Poll `registrationByUser` until the registration shows up.
+         */
+        post: operations["createRegistration"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/registrations/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a user's registration for a competition */
+        get: operations["registrationByUser"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/registrations/{registrationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update an existing registration
+         * @description Only the properties present in the payload are changed. Competitors may only set `status` to
+         *     `cancelled` (to withdraw) or `pending` (to re-register after withdrawing).
+         */
+        patch: operations["updateRegistration"];
         trace?: never;
     };
     "/v1/competitions/{competitionId}/registration_config": {
@@ -959,16 +1002,19 @@ export interface components {
                 registered_on?: string;
                 comment?: string;
                 admin_comment?: string;
+                waiting_list_position?: number;
             };
             payment?: {
-                has_paid?: boolean;
+                has_paid: boolean;
                 payment_status?: string;
-                paid_amount_iso?: number;
-                currency_code?: string;
+                paid_amount_iso: number;
+                currency_code: string;
                 /** Format: datetime */
                 updated_at?: string;
             };
         };
+        /** @enum {string} */
+        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         BaseRegistrationConfig: {
             key: string;
             isEditable: boolean;
@@ -1058,6 +1104,8 @@ export interface components {
             key: "competing";
         };
         PaymentStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
+            /** Format: datetime */
+            deadline?: string;
             parameters: {
                 stripePublishableKey: string;
                 connectedAccountId: string;
@@ -1239,6 +1287,7 @@ export interface components {
             user_id: number;
             name: string;
             country_iso2: string;
+            wca_id: string | null;
         };
         LiveRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["RoundLiveResult"][];
@@ -1485,6 +1534,8 @@ export interface components {
             /** @example 123 */
             number_of_bookmarks: number;
             "uses_qualification?": boolean;
+            "using_payment_integrations?": boolean;
+            "part_of_competition_series?": boolean;
             /** @example true */
             "registration_full?": boolean;
             /** @example true */
@@ -1650,8 +1701,6 @@ export interface components {
             championships: string[];
             registration_status?: string;
         };
-        /** @enum {string} */
-        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         Results: components["schemas"]["Result"][];
         Scramble: {
             id: number;
@@ -2011,6 +2060,18 @@ export interface components {
         };
     };
     responses: {
+        /** @description The registration request was rejected */
+        RegistrationError: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @description Numeric registration error code */
+                    error: number;
+                };
+            };
+        };
         /** @description Not logged in */
         NotLoggedIn: {
             headers: {
@@ -2079,6 +2140,104 @@ export interface operations {
                     "application/json": components["schemas"]["RegistrationDataV2"][];
                 };
             };
+        };
+    };
+    createRegistration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    user_id: number;
+                    guests?: number;
+                    competing: {
+                        event_ids: string[];
+                        comment?: string;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description The registration was queued for processing */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        message: string;
+                    };
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
+        };
+    };
+    registrationByUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationDataV2"];
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
+        };
+    };
+    updateRegistration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    guests?: number;
+                    competing: {
+                        event_ids?: string[];
+                        comment?: string;
+                        status?: components["schemas"]["CompetingStatus"];
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description The updated registration */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        registration: components["schemas"]["RegistrationDataV2"];
+                    };
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
         };
     };
     competitionRegistrationConfig: {
