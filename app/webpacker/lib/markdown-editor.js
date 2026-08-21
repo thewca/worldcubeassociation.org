@@ -93,19 +93,24 @@ $(() => {
       '|', ...previews,
       '|', ...helps,
     ];
+    // `editor` is referenced inside the status bar callbacks below, but can only be
+    // assigned once EasyMDE has been constructed, which itself needs `status` as input.
+    let editor;
     const characterCountStatus = maxLength ? [{
       className: 'markdown-editor-character-count',
       defaultValue: (el) => {
-        el.innerHTML = `${this.value.length} / ${maxLength} characters`;
+        const target = el;
+        target.innerHTML = `${this.value.length} / ${maxLength} characters`;
       },
       onUpdate: (el) => {
+        const target = el;
         const { length } = editor.value();
-        el.innerHTML = `${length} / ${maxLength} characters`;
-        el.classList.toggle('markdown-editor-character-count-warning', length >= maxLength * 0.9);
+        target.innerHTML = `${length} / ${maxLength} characters`;
+        target.classList.toggle('markdown-editor-character-count-warning', length >= maxLength * 0.9);
       },
     }] : [];
     const status = ['upload-image', ...characterCountStatus];
-    const editor = new EasyMDE({
+    editor = new EasyMDE({
       element: this,
       spellChecker: false,
       promptURLs: true,
