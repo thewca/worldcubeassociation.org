@@ -77,7 +77,7 @@ RSpec.describe DelegateReport do
     expect(dr).to be_valid
 
     dr.remarks = "a" * (DelegateReport::MAX_SECTION_LENGTH + 1)
-    expect(dr).to be_invalid_with_errors remarks: ["is too long (maximum is 65535 characters)"]
+    expect(dr).to be_invalid_with_errors remarks: ["is too long (maximum is #{DelegateReport::MAX_SECTION_LENGTH} characters)"]
   end
 
   context "can_view_delegate_report?" do
