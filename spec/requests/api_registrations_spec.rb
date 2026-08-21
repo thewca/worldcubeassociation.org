@@ -1375,12 +1375,13 @@ RSpec.describe 'API Registrations' do
       expect(payment_record.currency_code).to eq("usd")
     end
 
-    it 'ignores a negative donation instead of charging less than the entry fee' do
+    it 'rejects a negative donation instead of charging less than the entry fee' do
       api_sign_in_as(reg.user)
       get payment_ticket_api_v1_registration_path(reg), params: { iso_donation_amount: -400 }
 
-      payment_record = PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id).payment_record
-      expect(payment_record.amount_stripe_denomination).to be(1000)
+      expect(response).to have_http_status(:bad_request)
+      expect(response.parsed_body['error']).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+      expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_nil
     end
 
     it 'only charges the fees which are still outstanding' do
@@ -1477,6 +1478,13 @@ RSpec.describe 'API Registrations' do
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)
+    end
+
+    it 'rejects a negative donation' do
+      api_sign_in_as(reg.user)
+      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), params: { iso_donation_amount: -400 }
+
+      expect(response).to have_http_status(:bad_request)
     end
   end
 

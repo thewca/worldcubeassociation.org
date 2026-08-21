@@ -264,7 +264,9 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
     return render_error(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if @competition.registration_past?
 
-    render_error(:forbidden, Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT) if @registration.outstanding_entry_fees.zero?
+    return render_error(:forbidden, Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT) if @registration.outstanding_entry_fees.zero?
+
+    render_error(:bad_request, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if params[:iso_donation_amount].to_i.negative?
   end
 
   def payment_ticket

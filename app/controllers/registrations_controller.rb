@@ -374,6 +374,9 @@ class RegistrationsController < ApplicationController
     user_id = params[:user_id]
     registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
     iso_donation_amount = params[:iso_donation_amount].to_i
+
+    return render status: :bad_request, json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } } if iso_donation_amount.negative?
+
     ruby_money = registration.outstanding_entry_fees_with_donation(iso_donation_amount)
     human_amount = helpers.format_money(ruby_money)
 

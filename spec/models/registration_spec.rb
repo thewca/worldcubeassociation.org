@@ -1427,10 +1427,6 @@ RSpec.describe Registration do
       create(:registration_payment, registration: registration, amount_lowest_denomination: 400)
       expect(registration.outstanding_entry_fees_with_donation(1500)).to eq(Money.new(2100, "USD"))
     end
-
-    it 'ignores a negative donation' do
-      expect(registration.outstanding_entry_fees_with_donation(-400)).to eq(Money.new(1000, "USD"))
-    end
   end
 
   describe 'registrant_id' do
