@@ -161,8 +161,8 @@ class Api::V0::ApiController < ApplicationController
   # These results are rendered through each model's default `as_json`, so preload whatever that
   # serialization walks. `Regulation` is not an ActiveRecord model and has no associations at all.
   private def search_scope_for(model, query)
-    scope = model.search(query, params: params)
-    scope.try(:with_serialization_preloads) || scope
+    scope = model.try(:with_serialization_preloads) || model
+    scope.search(query, params: params)
   end
 
   def posts_search
