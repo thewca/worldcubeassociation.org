@@ -130,7 +130,16 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">
                 {/* TODO: Only Show register button/link if registration is not full */}
-                <Button variant="outline">Register Now</Button>
+                <Button variant="outline" asChild>
+                  <Link
+                    href={route({
+                      pathname: "/competitions/[competitionId]/register",
+                      query: { competitionId: comp.id },
+                    })}
+                  >
+                    {t("competitions.index.register_now")}
+                  </Link>
+                </Button>
                 <Button variant="solid" asChild>
                   <Link
                     href={route({
@@ -138,7 +147,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                       query: { competitionId: comp.id },
                     })}
                   >
-                    View Competition
+                    {t("competitions.index.view_competition")}
                   </Link>
                 </Button>
               </Drawer.Footer>
