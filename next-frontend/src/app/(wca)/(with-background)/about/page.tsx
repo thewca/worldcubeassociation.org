@@ -2,6 +2,7 @@
 
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { Container, Heading, VStack } from "@chakra-ui/react";
 import { CallToActionBlock } from "@/components/about/CallToAction";
 import Quote from "@/components/Quote";
@@ -18,6 +19,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function About() {
+  await connection();
+
   const payload = await getPayload({ config });
 
   const aboutPage = await payload.findGlobal({ slug: "about-us-page" });
