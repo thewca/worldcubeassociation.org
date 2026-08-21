@@ -11,7 +11,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       managed_by_user = current_api_user || current_user
     end
 
-    competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user).with_serialization_preloads
+    competitions = Competition.with_serialization_preloads.search(params[:q], params: params, managed_by_user: managed_by_user)
 
     paginate json: competitions
   end

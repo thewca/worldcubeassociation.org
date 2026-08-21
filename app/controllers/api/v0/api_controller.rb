@@ -162,7 +162,7 @@ class Api::V0::ApiController < ApplicationController
   # serialization walks. `Regulation` is not an ActiveRecord model and has no associations at all.
   private def search_scope_for(model, query)
     scope = model.search(query, params: params)
-    scope.respond_to?(:with_serialization_preloads) ? scope.with_serialization_preloads : scope
+    scope.try(:with_serialization_preloads) || scope
   end
 
   def posts_search
