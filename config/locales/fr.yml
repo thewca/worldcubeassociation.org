@@ -2568,7 +2568,7 @@ fr:
     #original_hash: 34eb009
     will_close_html: 'Les inscriptions ferment dans <strong>%{days}</strong> le %{time}.'
     #original_hash: dc8a520
-    closed_html: 'Les inscriptions ont fermées il y a <strong>%{days}</strong> le %{time}.'
+    closed_html: 'Les inscriptions ont fermé il y a <strong>%{days}</strong> le %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez
