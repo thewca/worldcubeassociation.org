@@ -3284,7 +3284,7 @@ export interface operations {
                 /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
                 sort?: string;
                 /** @description Number of results per page */
-                perPage?: number;
+                per_page?: number;
             };
             header?: never;
             path?: never;
