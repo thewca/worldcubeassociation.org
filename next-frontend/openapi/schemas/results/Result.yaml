@@ -16,6 +16,7 @@ required:
   - worst_index
   - regional_single_record
   - regional_average_record
+  - global_pos
 properties:
   id:
     type: integer
@@ -52,4 +53,9 @@ properties:
     nullable: true
   regional_average_record:
     type: string
+    nullable: true
+  global_pos:
+    type: integer
+  linked_round_id:
+    type: integer
     nullable: true
