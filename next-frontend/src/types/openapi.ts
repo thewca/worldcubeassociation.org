@@ -99,6 +99,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/scoretakers/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the users that can be made scoretakers of a competition
+         * @description Everybody who will attend the competition, including non-competing staff, but excluding the competition's delegates and organizers, who can take scores anyway.
+         */
+        get: operations["listScoretakerCandidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/scoretakers/{id}": {
         parameters: {
             query?: never;
@@ -2308,6 +2328,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Scoretaker"];
+                };
+            };
+        };
+    };
+    listScoretakerCandidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The users that can be made scoretakers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScoretakerList"];
                 };
             };
         };

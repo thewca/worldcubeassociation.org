@@ -1339,10 +1339,14 @@ class User < ApplicationRecord
   end
 
   def to_wcif(competition, registration = nil, authorized: false, version: Competition::WCIF_STABLE_VERSION)
-    roles = registration&.roles || []
+    # The scoretaker role lives in its own table, so it is added on the fly like the manager roles
+    # below and never read back from the persisted registration roles.
+    roles = (registration&.roles || []) - [Registration::SCORETAKER_ROLE]
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
     roles << "organizer" if competition.organizers.include?(self)
+    # NOTE: scoretaker_ids plucks once and memoizes, so this stays a single query for the whole WCIF.
+    roles << Registration::SCORETAKER_ROLE if competition.scoretaker_ids.include?(id)
     authorized_fields = {
       "birthdate" => dob.to_fs,
       "email" => email,

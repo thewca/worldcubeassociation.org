@@ -1,0 +1,20 @@
+summary: List the users that can be made scoretakers of a competition
+description: >-
+  Everybody who will attend the competition, including non-competing staff, but excluding
+  the competition's delegates and organizers, who can take scores anyway.
+tags:
+  - scoretakers
+operationId: listScoretakerCandidates
+parameters:
+  - name: competitionId
+    in: path
+    required: true
+    schema:
+      type: string
+responses:
+  '200':
+    description: The users that can be made scoretakers
+    content:
+      application/json:
+        schema:
+          $ref: '../../../schemas/competitions/ScoretakerList.yaml'
