@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook payment_denomination]
+  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -23,9 +23,9 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook payment_denomination capture_paypal_payment]
+                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook capture_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index psych_sheet psych_sheet_event stripe_webhook]
   private def competition_must_be_using_wca_registration!
     return if competition_from_params.use_wca_registration?
 
@@ -367,22 +367,6 @@ class RegistrationsController < ApplicationController
     @registration = Registration.find_by(competition: @competition, user: current_user) if current_user.present?
 
     @is_processing = current_user.present? && Rails.cache.read(CacheAccess.registration_processing_cache_key(@competition.id, current_user.id)).present?
-  end
-
-  def payment_denomination
-    competition_id = params[:competition_id]
-    user_id = params[:user_id]
-    registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
-    iso_donation_amount = params[:iso_donation_amount].to_i
-    ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
-    human_amount = helpers.format_money(ruby_money)
-
-    api_amounts = {
-      stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),
-      paypal: PaypalRecord.amount_to_paypal(ruby_money.cents, ruby_money.currency.iso_code),
-    }
-
-    render json: { api_amounts: api_amounts, human_amount: human_amount }
   end
 
   # Respond to asynchronous payment updates from Stripe.
