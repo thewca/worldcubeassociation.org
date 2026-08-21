@@ -136,11 +136,8 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
         em: Em,
         hr: Separator,
         code: Code,
-        // Chakra's reset drops the browser's default list padding and its list recipe does not
-        //   put any back, so without this the markers have nowhere to sit and the list reads
-        //   as flush body text.
-        ul: (ulTag) => <List.Root {...ulTag} ps="6" {...listProps} as="ul" />,
-        ol: (olTag) => <List.Root {...olTag} ps="6" {...listProps} as="ol" />,
+        ul: (ulTag) => <List.Root {...ulTag} indented {...listProps} as="ul" />,
+        ol: (olTag) => <List.Root {...olTag} indented {...listProps} as="ol" />,
         li: List.Item,
         blockquote: (blockquoteTag) => (
           <Blockquote.Root>
