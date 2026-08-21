@@ -5,7 +5,9 @@ class DelegateReport < ApplicationRecord
   # MySQL `TEXT` columns can hold at most 65,535 bytes. `summary`, `equipment`, `venue`,
   #   `organization`, `incidents`, and `remarks` are all `TEXT` columns (see AVAILABLE_SECTIONS),
   #   so this is a hard database-level cap we must also validate against before saving.
-  MAX_SECTION_LENGTH = 65_535
+  # MySQL TEXT columns store 65,535 bytes. With utf8mb4 encoding, characters can use up to 4 bytes each.
+  # To safely avoid database errors with multibyte characters (e.g., emoji), limit to 16,383 characters.
+  MAX_SECTION_LENGTH = 16_383
   # Any potentially available section, regardless of versioning.
   #   Use with care, some sections may not be available for some versions!
   AVAILABLE_SECTIONS = %i[

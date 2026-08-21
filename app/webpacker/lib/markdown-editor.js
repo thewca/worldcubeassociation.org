@@ -51,14 +51,9 @@ $(() => {
     const textFormattings = ['bold', 'italic', 'heading'];
     const textStructures = ['quote', 'unordered-list', 'ordered-list', 'table'];
     const allowImageUploads = this.classList.contains('markdown-editor-image-upload');
-    let uploadsAndInserts = [
-      'link',
-    ];
-    if (allowImageUploads) {
-      uploadsAndInserts.push('upload-image');
-    }
-    uploadsAndInserts = [
-      ...uploadsAndInserts,
+    const baseInserts = ['link'];
+    const imageInserts = allowImageUploads ? ['upload-image'] : [];
+    const customInserts = [
       {
         name: 'map',
         action: function insertMap(editor) {
@@ -88,6 +83,7 @@ $(() => {
         title: 'Insert YouTube Video',
       },
     ];
+    const uploadsAndInserts = [...baseInserts, ...imageInserts, ...customInserts];
     const previews = ['preview', 'side-by-side', 'fullscreen'];
     const helps = ['guide'];
     const toolbar = [
@@ -97,24 +93,19 @@ $(() => {
       '|', ...previews,
       '|', ...helps,
     ];
-    let editor;
-    const status = ['upload-image'];
-    if (maxLength) {
-      status.push({
-        className: 'markdown-editor-character-count',
-        defaultValue: (el) => {
-          const target = el;
-          target.innerHTML = `${this.value.length} / ${maxLength} characters`;
-        },
-        onUpdate: (el) => {
-          const target = el;
-          const { length } = editor.value();
-          target.innerHTML = `${length} / ${maxLength} characters`;
-          target.classList.toggle('markdown-editor-character-count-warning', length >= maxLength * 0.9);
-        },
-      });
-    }
-    editor = new EasyMDE({
+    const characterCountStatus = maxLength ? [{
+      className: 'markdown-editor-character-count',
+      defaultValue: (el) => {
+        el.innerHTML = `${this.value.length} / ${maxLength} characters`;
+      },
+      onUpdate: (el) => {
+        const { length } = editor.value();
+        el.innerHTML = `${length} / ${maxLength} characters`;
+        el.classList.toggle('markdown-editor-character-count-warning', length >= maxLength * 0.9);
+      },
+    }] : [];
+    const status = ['upload-image', ...characterCountStatus];
+    const editor = new EasyMDE({
       element: this,
       spellChecker: false,
       promptURLs: true,
