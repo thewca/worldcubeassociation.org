@@ -3,9 +3,12 @@ import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
-import { authjsPlugin } from "payload-authjs";
+import {
+  betterAuthCollections,
+  createBetterAuthPlugin,
+} from "@delmaredigital/payload-better-auth";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { payloadAuthConfig } from "@/auth.config";
+import { cmsBetterAuthOptions, createCmsAuth } from "@/payload.auth";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
@@ -46,8 +49,25 @@ function plugins() {
   const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
-    authjsPlugin({
-      authjsConfig: payloadAuthConfig,
+    betterAuthCollections({
+      betterAuthOptions: cmsBetterAuthOptions,
+      // `users` is hand-written; sessions/accounts/verifications come from the schema.
+      skipCollections: ["user"],
+      // Roles come from OIDC; nobody is promoted for being first to log in.
+      firstUserAdmin: false,
+    }),
+    createBetterAuthPlugin({
+      createAuth: createCmsAuth,
+      admin: {
+        // The bundled view drives `signIn.social`, which cannot reach a `genericOAuth`
+        //   provider, so it is replaced wholesale.
+        loginViewComponent: "/components/payload/CmsLoginView#default",
+        login: {
+          // The plugin's gate looks for a singular `role` we do not have; `access.admin` on
+          //   the users collection enforces team membership instead.
+          requiredRole: null,
+        },
+      },
     }),
     s3Storage({
       enabled: isProduction,

@@ -18,7 +18,7 @@ import IncidentAdminButtons from "@/components/incidents/IncidentAdminButtons";
 import IncidentMarkdown from "@/components/incidents/IncidentMarkdown";
 import { CompetitionTag, IncidentTags } from "@/components/incidents/Tags";
 import { getIncident } from "@/lib/wca/incidents/getIncident";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
 import { getT } from "@/lib/i18n/get18n";
 

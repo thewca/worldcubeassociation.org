@@ -1,5 +1,5 @@
-import { auth } from "@/auth";
-import getPermissions from "@/lib/wca/permissions";
+import { getSession } from "@/auth";
+import getPermissions from "@/lib/wca/permissions.server";
 import {
   Button,
   Code,
@@ -23,7 +23,7 @@ import {
 } from "@/app/(wca)/(with-background)/dashboard/ThemeExplorer";
 
 export default async function Dashboard() {
-  const session = await auth();
+  const session = await getSession();
   const permissions = await getPermissions();
 
   return (
