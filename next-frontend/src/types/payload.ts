@@ -510,10 +510,6 @@ export interface Announcement {
     [k: string]: unknown;
   };
   contentMarkdown?: string | null;
-  /**
-   * Optional. When set, the 'Read More' button links to this URL instead of expanding the content.
-   */
-  url?: string | null;
   publishedAt: string;
   publishedBy: string | User;
   updatedAt: string;
@@ -800,7 +796,6 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   summary?: T;
   content?: T;
   contentMarkdown?: T;
-  url?: T;
   publishedAt?: T;
   publishedBy?: T;
   updatedAt?: T;

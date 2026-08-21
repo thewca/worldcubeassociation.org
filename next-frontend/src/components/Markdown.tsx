@@ -55,6 +55,11 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
         a: ({ children, ...aTag }) => (
           <ChakraLink
             {...aTag}
+            // Chakra's link recipe is `inline-flex`, which strips whitespace at
+            // the edges of the link text. Markdown authors regularly write
+            // `the[ Policy](url)`, where that space is the only thing
+            // separating the link from the word before it.
+            display="inline"
             {...linkProps}
             target="_blank"
             rel="noopener noreferrer"
