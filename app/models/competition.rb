@@ -587,7 +587,9 @@ class Competition < ApplicationRecord
 
       warnings[:name] = I18n.t('competitions.messages.name_too_long') if self.name.length > 32
 
-      warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
+      warnings[:id] = I18n.t('competitions.messages.id_must_match_short_name') if !self.id.match?(create_id_from_cell_name)
+
+      warnings[:id_casing] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
 
       warnings[:events] = I18n.t('competitions.messages.must_have_events') if no_events?
 
@@ -806,12 +808,13 @@ class Competition < ApplicationRecord
     year = " #{m[2]}"
     safe_cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
 
+    if cell_name.blank? || force_override
+      self.cell_name = safe_cell_name
+    end
+
     if id.blank? || force_override
       self.id = create_id_from_cell_name
     end
-
-    return unless cell_name.blank? || force_override
-    self.cell_name = safe_cell_name
   end
 
   attr_writer :staff_delegate_ids, :trainee_delegate_ids
