@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "yarn build:static-data && next dev",
+    "dev": "yarn build:static-data && yarn build:translations && next dev",
     "check:types": "tsc --noEmit",
     "build": "next build",
     "start": "next start",

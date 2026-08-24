@@ -31,6 +31,11 @@ jobs:
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: yarn install
+      - name: Build translations
+        # src/lib/i18n/locales/*.json is generated, not committed. Turbopack
+        # resolves the dynamic import in src/lib/i18n/i18n.ts at build time, so
+        # the build fails outright if the directory is empty.
+        run: yarn run build:translations
       - name: Build OpenAPI types
         # Fails if a $ref points at a schema file that was never committed, and
         # (via the diff) if the committed types are stale.
