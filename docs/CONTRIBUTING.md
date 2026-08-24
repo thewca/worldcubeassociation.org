@@ -86,5 +86,5 @@ at review time costs you a round trip.
   Rounds"), get community/WCT/WQAC input before it lands in `en.yml` — don't invent public vocabulary
   in a PR.
 - **Unreleased features.** Don't advertise features that aren't publicly released yet.
-- **One-off data fixes.** These ship as rake tasks rather than migrations (STYLE_GUIDE §3.9), and a
+- **One-off data fixes.** These ship as rake tasks rather than migrations ([STYLE_GUIDE §3.10](STYLE_GUIDE.md#310-jobs-and-rake-tasks)), and a
   WST senior member runs them after deploy — say so in your description so the run gets scheduled.

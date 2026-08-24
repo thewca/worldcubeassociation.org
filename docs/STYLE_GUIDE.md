@@ -92,8 +92,13 @@ Code comments are required when:
   `map` because you need the original index).
 - You ported logic from another codebase (WCA Live, a Ruby equivalent) — say so and name the source.
 
-Comments are *not* wanted for things a reader can infer, and code that says "delete this when X
-happens" is usually noise: if the code will naturally become unnecessary, it doesn't need a note.
+Comments are *not* wanted for things a reader can infer.
+
+A note about future removal is welcome when it's *actionable*. Mark it so it's greppable (`TODO`,
+`XXX`) and name the condition that makes it removable — "TODO: drop once WCA Live is sunset" tells
+the next reader what to wait for. What doesn't help is an unmarked aside saying the code is temporary
+without saying temporary until when. A `TODO` you're leaving deliberately still needs to be called
+out in review; see [CONTRIBUTING.md §4](CONTRIBUTING.md#4-responding-to-review).
 
 ### 1.5 Don't paper over errors
 
@@ -106,7 +111,7 @@ happens" is usually noise: if the code will naturally become unnecessary, it doe
 - A `rescue` inside a method body is rejected. In a controller, catch the exception at the top with
   `rescue_from` (`rescue_from JSON::Schema::ValidationError`) — the happy path stays readable and
   every action gets the same handling.
-- Don't swallow failed writes. See [3.4](#34-bang-methods-and-failed-writes).
+- Don't swallow failed writes. See [§3.5](#35-bang-methods-and-failed-writes).
 
 ### 1.6 Reuse existing code before writing new code
 
@@ -167,7 +172,11 @@ If one flag is quietly carrying two questions — "is this competition on the WC
 *and* "does it already have registrations stored?" — that's two flags. Pass both and let the UI
 branch on the combination, including to warn about the case where both are true.
 
-### 2.6 Ruby-specific naming
+---
+
+## 3. Ruby and Rails
+
+### 3.1 Ruby-specific naming
 
 - Boolean methods end in `?`. Drop `should_` / `is_` prefixes — the `?` carries that meaning.
 - Methods that mutate or can raise end in `!` (a method calling `insert_all!` should be
@@ -178,11 +187,9 @@ branch on the combination, including to warn about the case where both are true.
 - Use `prefix: true` on `delegate` when the bare name would be misleading on the receiving model.
 - Name users by their role, not by Devise defaults: `locking_user`, `quitting_user` — not `user`.
 
----
+The general naming rules in [§2](#2-naming) apply on top of these.
 
-## 3. Ruby and Rails
-
-### 3.1 Reach for the Rails idiom
+### 3.2 Reach for the Rails idiom
 
 You are expected to know these. Reviewers will suggest them by name:
 
@@ -204,7 +211,7 @@ You are expected to know these. Reviewers will suggest them by name:
 
 `belongs_to` implies `presence: true` since Rails 5 — don't add a redundant validation.
 
-### 3.2 Query performance is reviewed, always
+### 3.3 Query performance is reviewed, always
 
 - **Never fire a query inside a loop.** `exists?` per row, `Registration.find(...)` per row,
   `Model.count` per row — all rejected. `pluck` the ids once and compare in memory, or `includes`.
@@ -225,7 +232,7 @@ You are expected to know these. Reviewers will suggest them by name:
 - Counter caches (`counter_cache: true`) beat nested `COUNT` subqueries. Rails infers the column name
   from the association.
 
-### 3.3 Model associations over hand-rolled queries
+### 3.4 Model associations over hand-rolled queries
 
 If you're writing a query that walks from one model to another, it probably wants to be an
 association — associations can be `includes`d, they give you `_ids` helpers for free, and they can
@@ -248,7 +255,7 @@ has_many :competitions, -> { distinct }, through: :rounds
 - Rails `has_many` associations expose `after_add` / `after_remove` callbacks on the parent. Use them
   instead of calling `reload` from a child's callback — `reload` inside a hook is a red flag.
 
-### 3.4 Bang methods and failed writes
+### 3.5 Bang methods and failed writes
 
 `update`, `create`, `save`, `update_columns` return a boolean and **fail silently**. Either check the
 return value and act on it, or use the `!` variant so a failure raises.
@@ -258,7 +265,7 @@ means you're asserting against data you never actually wrote.
 
 Related: don't send an email and *then* persist the state change. Confirm the write succeeded first.
 
-### 3.5 `delete_all` vs `destroy_all`
+### 3.6 `delete_all` vs `destroy_all`
 
 - `delete_all` — one SQL statement, fast, **skips** validations, callbacks, and `dependent:` options.
 - `destroy_all` — one `DELETE` per row, slow, respects your model layer.
@@ -270,14 +277,14 @@ Prefer `dependent: :destroy` / `dependent: :delete_all` on the association over 
 deletes in a migration or job. Note that `dependent:` on a `belongs_to` is unorthodox — put it on the
 `has_many` / `has_one` side.
 
-### 3.6 Polymorphism over type checks
+### 3.7 Polymorphism over type checks
 
 `while` loops with `is_a?` checks to walk a polymorphic hierarchy are rejected. Define the same
 method on each possible class (returning an empty array where it doesn't apply) and let dispatch do
 the work. Where a method may legitimately be missing, `try(:page_title)` with a sensible default is
 an acceptable compromise.
 
-### 3.7 Transactions
+### 3.8 Transactions
 
 Any operation that issues multiple dependent writes — `destroy_all` followed by `insert_all`,
 quitting several competitors, opening a round while locking the previous one — belongs in a
@@ -285,7 +292,7 @@ transaction. You can call `transaction` on an instance (`self.transaction do`), 
 
 For "do this only after the transaction commits", see Rails' per-transaction callbacks.
 
-### 3.8 Controllers
+### 3.9 Controllers
 
 - Guard clauses belong in `before_action`. Rails halts the chain when a `before_action` renders or
   redirects. Declare the `before_action` immediately above the action it protects so the reader sees
@@ -303,7 +310,7 @@ For "do this only after the transaction commits", see Rails' per-transaction cal
   (`User::DEFAULT_SERIALIZE_OPTIONS[:only] | %w[unconfirmed_wca_id]`) rather than restating the list.
   Pass those options to `as_json` instead of hand-writing a `map` that builds hashes.
 
-### 3.9 Jobs and rake tasks
+### 3.10 Jobs and rake tasks
 
 - Job class names end in `Job`. "Run" is implied — `AllSanityChecksJob`, not `RunAllSanityChecks`.
 - ActiveJob serializes ActiveRecord models for you (it stores the ID and re-finds on execution) and
@@ -313,7 +320,7 @@ For "do this only after the transaction commits", see Rails' per-transaction cal
 - **One-off data fixes are rake tasks, not migrations.** Put them in `lib/tasks/` and have a WST
   senior member run them after deploy. Migrations are for schema.
 
-### 3.10 Put procedural logic in `lib/`, not in a model
+### 3.11 Put procedural logic in `lib/`, not in a model
 
 A model is for a record and its behaviour. A multi-step procedure — importing results, computing
 dues, reconciling an uploaded file — belongs in a module under `lib/` (`CompetitionResultsImport`,
@@ -471,7 +478,22 @@ apply to `app/webpacker/` — see [`style/legacy-frontend.md`](style/legacy-fron
 
 Chakra v3 is the design system. The recurring review theme is: *use the framework, don't fight it.*
 
-### 7.1 Style props and the theme, not raw CSS
+### 7.1 Mobile first
+
+Design for the smallest screen first and widen from there. Competitors read this site on a phone, in
+a venue, on bad wifi — that's the common case, not the edge case. Retrofitting a desktop layout to
+mobile afterwards is where our layout bugs come from, so treat this as a starting constraint rather
+than a polish step.
+
+- Write responsive props smallest-first: `w={{ base: "full", md: "50%" }}`. Never a fixed desktop
+  value with a mobile override bolted on after review.
+- **Never leave `base` unspecified** in a responsive prop — it's the case most of our users get.
+- Prefer components that reflow on their own (`SimpleGrid` with `minChildWidth`, `Stack` that
+  switches direction) over breakpoint branching you maintain by hand.
+- Look at a narrow viewport before you open the PR. Tables, dialogs and toolbars are the usual
+  casualties.
+
+### 7.2 Style props and the theme, not raw CSS
 
 - **No `style={{ ... }}`.** Nearly everything has a Chakra prop equivalent — `fontWeight`,
   `position`, `w`, `h`. Use it.
@@ -485,7 +507,7 @@ Chakra v3 is the design system. The recurring review theme is: *use the framewor
 - Chakra ships `fade-in` / `fade-out` keyframes and animation style props out of the box. Check
   before writing custom keyframes or a self-toggling boolean.
 
-### 7.2 Use the component that exists
+### 7.3 Use the component that exists
 
 Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`), `Stack`/`HStack`
 (with `justifyContent="space-between"` instead of a `Spacer`), `List`, `Table.ColumnGroup`, `Float`,
@@ -495,8 +517,8 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
 - Use `asChild` to merge wrappers instead of nesting redundant DOM nodes.
 - Use compound dot-notation consistently (`Popover.Trigger`, not an imported `PopoverTrigger`).
 - Prefer the component's own `disabled` prop over simulating a disabled look with colour overrides.
-- Use responsive shorthands: `base` for the smallest breakpoint (never under-specify it), `mdOnly`,
-  `hideBelow`.
+- Use the responsive shorthands where they fit: `mdOnly`, `hideBelow`, `hideFrom` (see
+  [§7.1](#71-mobile-first) for the `base`-first rule itself).
 - Don't apply a fix at a lower level than the problem. Changing `IconDisplay` to constrain every icon
   everywhere, or teaching `Markdown.tsx` a global `maxWidth`, is too blunt — fix it at the call site
   or add a prop.
