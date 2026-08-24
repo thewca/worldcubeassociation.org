@@ -27,8 +27,8 @@ understand is a rule you can apply to a case this document didn't anticipate.
 5. [API design](#5-api-design)
 6. [Next.js frontend](#6-nextjs-frontend)
 7. [Chakra UI and styling](#7-chakra-ui-and-styling)
-8. [Legacy React (Webpacker / Semantic UI)](#8-legacy-react-webpacker--semantic-ui)
-9. [Tests](#9-tests)
+8. [Legacy React (Webpacker / Semantic UI)](style/legacy-frontend.md)
+9. [Tests](style/tests.md)
 10. [i18n and user-facing copy](#10-i18n-and-user-facing-copy)
 
 ---
@@ -410,7 +410,7 @@ instead of silently drifting. The same applies to Payload types — regenerate t
 ### 6.3 React Compiler is enabled — delete your memos
 
 `useMemo` and `useCallback` in `next-frontend/` are redundant and will be flagged. (This does **not**
-apply to `app/webpacker/` — see [§8](#8-legacy-react-webpacker--semantic-ui).)
+apply to `app/webpacker/` — see [`style/legacy-frontend.md`](style/legacy-frontend.md).)
 
 ### 6.4 Data fetching with Tanstack Query
 
@@ -498,57 +498,16 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
 
 ## 8. Legacy React (Webpacker / Semantic UI)
 
-`app/webpacker/` is on Semantic UI and **has no React Compiler**. Rules differ from `next-frontend/`.
-
-- You *do* need `useCallback` / `useMemo` here to keep references stable.
-- **No custom CSS here either.** No `style={{ marginBottom: ... }}`, no `className`s that SemUI
-  doesn't define — the framework has props for spacing and layout. The one researched exception is
-  horizontal table overflow (`overflowX`), which SemUI genuinely doesn't support.
-- Use Semantic UI dot-notation (`Table.Header`, `Table.HeaderCell`) — it removes a pile of imports.
-- Use our own hooks: `useInputState` / `useInputUpdater` wrap `useState` so the setter can be passed
-  straight to a SemUI `Input`'s `onChange`. `useLoadedData` returns response `headers`, which carry
-  total-count information for pagination (see `IncidentsLog/index.jsx`).
-- Use `fetchJsonOrError` as-is. It has error handling built into its name; don't wrap it in your own.
-- Build URLs with the helpers in `lib/requests/routes.js.erb` (`competitionUrl(...)`), not string
-  concatenation.
-- `mutationFn` must not close over component state. Pass the values in as parameters — it keeps
-  renders stable.
-- `useMutation` has `onError` alongside `onSuccess`. Use it rather than hand-rolling error handling.
-- Beware `onSuccess` argument shadowing: `onSuccess={setSuccess}` passes the *server response* as the
-  new state. Write `() => setSuccess(true)` if that's what you mean.
-- Use `Message` components for user-facing errors — not bare `className`s that don't exist in SemUI.
-- Prefer early returns for loading states (`if (isFetching) return <Loader />`) so `data` is
-  implicitly defined afterwards, then a ternary for the empty-vs-populated case.
-- Use `<Ref>` when you need to attach a ref to a SemUI component that doesn't forward one. Don't add
-  a wrapper `<div>` to hold the ref, and don't hand-roll a replacement for a component we already
-  have — wrap the existing one.
+Moved to **[`style/legacy-frontend.md`](style/legacy-frontend.md)**, because it only applies to
+`app/webpacker/` and its rules are the *opposite* of §6–§7. Also available to Claude Code as the
+`wca-legacy-frontend` skill.
 
 ---
 
 ## 9. Tests
 
-- **Never delete a test without a replacement.** This will block a PR on its own.
-- Test data must be *visibly* invalid. If a "duplicate results" test creates two results for the same
-  round, that isn't inherently wrong — a real round has hundreds. Make explicit what makes the
-  fixture a duplicate, rather than relying on an implementation detail of a factory.
-- Use values that make the assertion obvious (`100, 200, 300, 400, 500` rather than repeated `100`s
-  that muddle "duplicate attempt" with "duplicate result").
-- Test both edges. "Wrong number of results" needs a too-few *and* a too-many case. If a check has a
-  regional dimension, assert the positive cases too, not just the negative one.
-- If the test title says "within the whole competition", the test must cover cross-round cases.
-- Use `update!` in tests. A silent `false` from `update` invalidates everything downstream.
-- Factories:
-  - Prefer `association :user_with_wca_id` over `FactoryBot.create(...)` inside factory attributes.
-    Direct `create`/`build` calls belong in `after_build` / `after_create` hooks only.
-  - Create the object in its final state instead of creating and then immediately updating it.
-  - Use existing traits (`create(:competition, :with_delegate)`) instead of assembling by hand.
-- Use `let!` when you need the block to run eagerly; it's the clean version of a `before` block.
-- Consider RSpec shared examples instead of looping with `each` over cases.
-- Hard-coded English strings in tests are fine, even when the code under test is localised.
-- `expect { ... }.to raise_error(SomeError) do |err| ... end` lets you assert on the error object.
-- Keep spec code boring. If a reviewer has to ask what a piece of notation does and why it was
-  necessary, write it out plainly instead.
-- Seed data belongs in `db/seeds`, not in the spec.
+Moved to **[`style/tests.md`](style/tests.md)**. Also available to Claude Code as the `wca-testing`
+skill.
 
 ---
 
