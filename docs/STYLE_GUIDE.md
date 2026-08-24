@@ -16,6 +16,13 @@ how to respond to review, which changes need sign-off outside the PR — lives i
 **How to read it:** rules are stated as imperatives. Each one has a short *why*, because a rule you
 understand is a rule you can apply to a case this document didn't anticipate.
 
+**Topic guides:** sections that only apply to one corner of the codebase live in their own file under
+[`style/`](style/), each opening with the condition that makes it relevant. Read a topic guide when
+you're in that corner and skip it otherwise — that goes for people and for coding agents, which
+should load them on demand rather than carrying every rule at once. If your editor or agent supports
+"load this file when working on X" rules, point it at these files; keep that config personal
+(`.claude/` and `.agents/` are gitignored) so we don't have to agree on a tool.
+
 ---
 
 ## Table of contents
@@ -498,16 +505,20 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
 
 ## 8. Legacy React (Webpacker / Semantic UI)
 
-Moved to **[`style/legacy-frontend.md`](style/legacy-frontend.md)**, because it only applies to
-`app/webpacker/` and its rules are the *opposite* of §6–§7. Also available to Claude Code as the
-`wca-legacy-frontend` skill.
+→ **[`style/legacy-frontend.md`](style/legacy-frontend.md)**
+
+**Read it when:** you are creating or editing any `.jsx` / `.js` file under `app/webpacker/`, or
+reviewing a diff that touches one. Its rules are the *opposite* of §6–§7 in places — most of all,
+`useCallback` / `useMemo` are required there and forbidden in `next-frontend/`.
 
 ---
 
 ## 9. Tests
 
-Moved to **[`style/tests.md`](style/tests.md)**. Also available to Claude Code as the `wca-testing`
-skill.
+→ **[`style/tests.md`](style/tests.md)**
+
+**Read it when:** you are adding or changing a test or a factory — RSpec under `spec/`, Vitest in
+`next-frontend/`, Playwright in `system-tests/`.
 
 ---
 

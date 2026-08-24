@@ -1,9 +1,9 @@
 # Tests
 
-Part of the [WCA style guide](../STYLE_GUIDE.md). Read this before writing or changing specs.
+**Applies to:** any test or factory you add or change — RSpec with FactoryBot under `spec/`, Vitest
+in `next-frontend/`, Playwright in `system-tests/`.
 
-Rails uses RSpec with FactoryBot (`spec/factories/`); `next-frontend/` uses Vitest; end-to-end tests
-are Playwright under `system-tests/`.
+Part of the [WCA style guide](../STYLE_GUIDE.md).
 
 - **Never delete a test without a replacement.** This will block a PR on its own.
 - Test data must be *visibly* invalid. If a "duplicate results" test creates two results for the same

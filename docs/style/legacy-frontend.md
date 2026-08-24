@@ -1,11 +1,12 @@
 # Legacy React (`app/webpacker/`)
 
-Part of the [WCA style guide](../STYLE_GUIDE.md). Read this before writing or reviewing React in
-`app/webpacker/`.
+**Applies to:** any `.jsx` / `.js` file under `app/webpacker/`, and reviews of diffs that touch one.
+Not `next-frontend/`, whose rules are the opposite.
 
-`app/webpacker/` is on Semantic UI and **has no React Compiler**. Its rules are deliberately
-different from `next-frontend/` — in places, the opposite. If you're working in `next-frontend/`,
-this file does not apply to you.
+Part of the [WCA style guide](../STYLE_GUIDE.md); §1–§2 there (immutability, no magic values, naming)
+still apply on top of this.
+
+`app/webpacker/` is on Semantic UI and **has no React Compiler**.
 
 - You *do* need `useCallback` / `useMemo` here to keep references stable.
 - **No custom CSS here either.** No `style={{ marginBottom: ... }}`, no `className`s that SemUI
@@ -29,6 +30,3 @@ this file does not apply to you.
 - Use `<Ref>` when you need to attach a ref to a SemUI component that doesn't forward one. Don't add
   a wrapper `<div>` to hold the ref, and don't hand-roll a replacement for a component we already
   have — wrap the existing one.
-
-The universal rules in [STYLE_GUIDE.md](../STYLE_GUIDE.md) §1–§2 (immutability, no magic values,
-naming) still apply here.
