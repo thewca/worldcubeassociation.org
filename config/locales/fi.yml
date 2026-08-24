@@ -244,17 +244,14 @@ fi:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} yritystä < %{time}'
       one: '%{count} yritys < %{time}'
       other: '%{count} yritystä < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} yritystä < %{moves} siirtoa'
       one: '%{count} yritys < %{moves} siirtoa'
       other: '%{count} yritystä < %{moves} siirtoa'
     #original_hash: eba1b97
     points:
-      zero: '%{count} yritystä > %{points} pistettä'
       one: '%{count} yritys > %{points} pistettä'
       other: '%{count} yritystä > %{points} pistettä'
   time_limit:
@@ -369,7 +366,6 @@ fi:
       invalid: epäkelpo
     #original_hash: 49d0140
     days:
-      zero: '%{count} päivää'
       one: 1 päivä
       other: '%{count} päivää'
     #original_hash: 51ef7d4
@@ -1180,7 +1176,6 @@ fi:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Lomakkeessa ei ole virheitä.
           one: 'Lomakkeessa on virhe:'
           other: 'Lomakkeessa on %{count} virhettä:'
       error_pages:
@@ -2194,7 +2189,6 @@ fi:
       must_register: Sinun täytyy rekisteröityä ainakin yhteen lajiin.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 'Saat rekisteröityä enintään %{count} lajiin.'
         one: Sinun täytyy rekisteröityä täsmälleen yhteen (1) lajiin.
         other: 'Saat rekisteröityä enintään %{count} lajiin.'
       #original_hash: 87f7c12
@@ -2218,17 +2212,14 @@ fi:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: ensikertalaista
         one: ensikertalainen
         other: ensikertalaista
       #original_hash: bc010e3
       returner:
-        zero: aikaisemmin kilpaillutta
         one: aikaisemmin kilpaillut
         other: aikaisemmin kilpaillutta
       #original_hash: b7da17a
       person:
-        zero: henkilöä
         one: henkilö
         other: henkilöä
     flash:
@@ -2332,7 +2323,6 @@ fi:
       edit: Muokkaa
       #original_hash: beffc45
       country_plural:
-        zero: '%{count} aluetta'
         one: 1 alue
         other: '%{count} aluetta'
       #original_hash: 1feee0e
@@ -2818,14 +2808,12 @@ fi:
       display_name: '[Peruttu] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Järjestäjät
         one: Järjestäjä
         other: Järjestäjät
       #original_hash: 53a9522
       organization_team: Järjestäjäryhmä
       #original_hash: 6afa61e
       delegate:
-        zero: WCA-delegaatit
         one: WCA-delegaatti
         other: WCA-delegaatit
       #original_hash: b37456c
@@ -2920,12 +2908,10 @@ fi:
         restricted: Katsojat pääsevät paikalle ainoastaan kilpailijoiden seurassa.
       #original_hash: 35f892a
       guest_limit:
-        zero: Kilpailijat eivät saa tuoda mukanaan vieraita.
         one: Kilpailijat voivat tuoda mukanaan enintään yhden (1) vieraan.
         other: 'Kilpailijat voivat tuoda mukanaan enintään %{count} vierasta.'
       #original_hash: bad09c8
       event_limit:
-        zero: Kilpailijat eivät saa rekisteröityä yhteenkään lajiin.
         one: Kilpailijat voivat rekisteröityä täsmälleen yhteen (1) lajiin.
         other: 'Kilpailijat voivat rekisteröityä enintään %{count} lajiin.'
       #original_hash: 64e0ddd
@@ -3748,9 +3734,9 @@ fi:
         empty: None
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: ei paikkoja jäljellä
           one: '%{count} paikka jäljellä'
           other: '%{count} paikkaa jäljellä'
+        no_spots_remaining: ei paikkoja jäljellä
         pending:
           #original_hash: 4210670
           title: Vireillä olevat rekisteröitymiset
@@ -3869,9 +3855,9 @@ fi:
         email_message: Copied to clipboard. Remember to use bcc!
         #original_hash: beedd53
         move_to:
-          zero: Move to
           one: 'Move %{count} to'
           other: 'Move %{count} to'
+        move_to_none_selected: Move to
         #original_hash: 96f608c
         pending: Pending
         #original_hash: 92d40dc
@@ -4381,7 +4367,6 @@ fi:
       room_in_venue: 'Huone %{room} (%{venue})'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: nolla
         one: >-
           Tarkastelet kilpailupaikan %{venue_name} aikataulua (kilpailun ainoa
           kilpailupaikka).

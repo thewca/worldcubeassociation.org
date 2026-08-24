@@ -236,15 +236,12 @@ ja:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '最初の %{count} 試技までに %{time} 未満'
       other: '最初の %{count} 試技までに %{time} 未満'
     #original_hash: b49d930
     moves:
-      zero: '最初の %{count} 試技までに %{moves} 手未満'
       other: '最初の %{count} 試技までに %{moves} 手未満'
     #original_hash: eba1b97
     points:
-      zero: '最初の %{count} 試技までに %{points} ポイント超'
       other: '最初の %{count} 試技までに %{points} ポイント超'
   time_limit:
     cumulative:
@@ -290,7 +287,6 @@ ja:
       invalid: 無効
     #original_hash: 49d0140
     days:
-      zero: 0 日
       other: '%{count} 日'
     #original_hash: 51ef7d4
     search_site: 検索
@@ -895,7 +891,6 @@ ja:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: エラーはありません。
           other: '%{count} 件のエラーがあります。'
     doorkeeper:
       applications:
@@ -1564,15 +1559,12 @@ ja:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: 人 (初参加者)
         other: 人 (初参加者)
       #original_hash: bc010e3
       returner:
-        zero: 人 (大会経験者)
         other: 人 (大会経験者)
       #original_hash: b7da17a
       person:
-        zero: 人
         other: 人
     flash:
       #original_hash: da7ec53
@@ -1891,13 +1883,11 @@ ja:
       display_name: '[開催中止] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: 主催者
         other: 主催者
       #original_hash: 53a9522
       organization_team: 実行委員会
       #original_hash: 6afa61e
       delegate:
-        zero: WCA 代理人
         other: WCA 代理人
       #original_hash: b37456c
       contact: お問い合わせ
@@ -1966,11 +1956,9 @@ ja:
         restricted: 見学者は、競技参加者の同伴としてのみ受け付けます。
       #original_hash: 35f892a
       guest_limit:
-        zero: 同伴者は、競技者 1 人につき 1 人まで入場できます。
         other: '同伴者は、競技者 1 人につき %{count} 人まで入場できます。'
       #original_hash: bad09c8
       event_limit:
-        zero: 競技者は 1 種目のみ参加できます。
         other: '競技者は %{count} 種目まで参加できます。'
       #original_hash: 64e0ddd
       require_qualification: 競技者はすでに参加資格のある種目のみに申し込むことができます。
@@ -2599,8 +2587,8 @@ ja:
         empty: なし
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: 参加者定員の空きはありません
           other: '参加者定員の空きは%{count}人です'
+        no_spots_remaining: 参加者定員の空きはありません
         pending:
           #original_hash: 5e16c6d
           information: 承認待ちは、参加費支払未了などの不完全な申し込みのみに使用してください。参加者定員に達している場合は、キャンセル待ちを使用してください。
@@ -3032,7 +3020,6 @@ ja:
       room_in_venue: '%{room} (%{venue})'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: '%{venue_name} のスケジュールを表示しています (ほかに会場はありません)。'
         other: '%{venue_name} のスケジュールを表示しています (%{count} 個の会場のうちの 1 つです)。'
       #original_hash: 8d175ad
       venue_selection_all: '%{venueCount} 個の会場のスケジュールをすべて表示しています。'

@@ -257,17 +257,14 @@ fr-CA:
   cutoff:
     #original_hash: 0a2d9ca
     time:
-      zero: 'Aucun essai pour obtenir un résultat < %{time}'
       one: '%{count} essai pour obtenir un résultat < %{time}'
       other: '%{count} essais pour obtenir un résultat < %{time}'
     #original_hash: 40d8c2b
     moves:
-      zero: 'Aucun essai pour obtenir un résultat < %{moves} mouvements'
       one: '%{count} essai pour obtenir un résultat < %{moves} mouvements'
       other: '%{count} essais pour obtenir un résultat < %{moves} mouvements'
     #original_hash: 106e89d
     points:
-      zero: 'Aucun essai pour obtenir un résultat > %{points} points'
       one: '%{count} essai pour obtenir un résultat > %{points} points'
       other: '%{count} essais pour obtenir un résultat > %{points} points'
   time_limit:
@@ -382,7 +379,6 @@ fr-CA:
       invalid: invalide
     #original_hash: a4cfd07
     days:
-      zero: 0 jour
       one: 1 jour
       other: '%{count} jours'
     #original_hash: a614126
@@ -1246,7 +1242,6 @@ fr-CA:
       messages:
         #original_hash: db82025
         form_error:
-          zero: Le formulaire ne contient pas d'erreur
           one: 'Le formulaire contient une erreur :'
           other: 'Le formulaire contient %{count} erreurs :'
       error_pages:
@@ -2368,7 +2363,6 @@ fr-CA:
       must_register: Vous devez vous inscrire au moins à une épreuve.
       #original_hash: fce1d14
       exceeds_event_limit:
-        zero: Vous ne devez vous inscrire à aucune épreuve.
         one: Vous devez vous inscrire à 1 épreuve.
         other: 'Vous devez vous inscrire dans au plus à %{count} épreuves.'
       #original_hash: 81ffd23
@@ -2399,17 +2393,14 @@ fr-CA:
     registration_info_people:
       #original_hash: c862293
       newcomer:
-        zero: nouveau
         one: nouveau
         other: nouveaux
       #original_hash: a91582f
       returner:
-        zero: de retour
         one: de retour
         other: de retour
       #original_hash: 5307005
       person:
-        zero: personne
         one: personne
         other: personnes
     flash:
@@ -2520,7 +2511,6 @@ fr-CA:
       edit: Éditer
       #original_hash: a870fd2
       country_plural:
-        zero: Aucune région
         one: 1 région
         other: '%{count} régions'
       #original_hash: 332ba25
@@ -2953,9 +2943,9 @@ fr-CA:
       schedule_locked_after_results_submitted: L'horaire ne peut plus être modifié une fois les résultats soumis.
       #original_hash: 08ae543
       spots_left:
-        zero: Compétition pleine
         one: Une place restante
         other: '%{count} places restantes'
+      no_spots_left: Compétition pleine
     live:
       #original_hash: 20bdee1
       title: Résultats en direct
@@ -3060,14 +3050,12 @@ fr-CA:
           title: Retirer compétiteur
           #original_hash: ab59a03
           next_to_advance:
-            zero: Il n'y a pas de prochain compétiteur pouvant se qualifier
             one: 'Le prochain compétiteur à se qualifier est %{competitors}'
             other: 'Les prochains compétiteurs à se qualifier sont %{competitors}'
           #original_hash: b3b27d2
           advance: Qualifier le prochain compétiteur
           #original_hash: 6309b0a
           quit_confirm:
-            zero: Il n'y a pas de compétiteur à retirer
             one: Retrait d'un compétiteur du tour
             other: Retrait de compétiteurs du tour
           bulk:
@@ -3102,7 +3090,6 @@ fr-CA:
           single_round: Ajouter un compétiteur au tour
           #original_hash: ef59790
           multiple_rounds:
-            zero: Aucune ronde ouverte pour cette double confrontation
             one: >-
               Ajouter un compétiteur aux deux manches de la double
               confrontation.
@@ -3190,14 +3177,12 @@ fr-CA:
       display_name: '[Annulée] %{name}'
       #original_hash: d3e0e16
       organizer_plural:
-        zero: Organisateur
         one: Organisateur
         other: Organisateurs
       #original_hash: 4b7f1df
       organization_team: Équipe organisatrice
       #original_hash: fc1b1a6
       delegate:
-        zero: Délégué WCA
         one: Délégué WCA
         other: Délégués WCA
       #original_hash: b37456c
@@ -3298,12 +3283,10 @@ fr-CA:
           compétiteurs.
       #original_hash: efb8ab2
       guest_limit:
-        zero: Les accompagnateurs ne sont pas acceptés.
         one: Les compétiteurs peuvent venir avec 1 seul accompagnateur.
         other: 'Les compétiteurs peuvent venir au plus avec %{count} accompagnateurs.'
       #original_hash: a9f0049
       event_limit:
-        zero: Les compétiteurs ne peuvent pas s'inscrires aux épreuves.
         one: Les compétiteurs ne peuvent s'inscrire qu'à 1 seule épreuve.
         other: 'Les compétiteurs peuvent s''inscrire au plus à %{count} épreuves.'
       #original_hash: 407547e
@@ -4204,9 +4187,9 @@ fr-CA:
         empty: Aucun
         #original_hash: c15d545
         spots_remaining_plural:
-          zero: Aucune place disponible
           one: '%{count} place disponible'
           other: '%{count} places disponibles'
+        no_spots_remaining: Aucune place disponible
         pending:
           #original_hash: 6cd48ad
           title: Inscriptions en suspens
@@ -4332,9 +4315,9 @@ fr-CA:
         email_message: 'Copié dans le presse-papiers. N’oubliez pas d’utiliser le cci: !'
         #original_hash: 6783f30
         move_to:
-          zero: Déplacer vers
           one: 'Déplacer %{count} vers'
           other: 'Déplacer %{count} vers'
+        move_to_none_selected: Déplacer vers
         #original_hash: a9eed29
         pending: En suspens
         #original_hash: a5fba54
@@ -4908,7 +4891,6 @@ fr-CA:
       room_in_venue: '%{room} - %{venue}'
       #original_hash: a2ebc16
       venue_selection_html:
-        zero: Vous ne consultez actuellement aucun horaire.
         one: >-
           Vous consultez l'horaire de la salle %{venue_name}, seule salle pour
           cette compétition.

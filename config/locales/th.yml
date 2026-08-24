@@ -259,15 +259,12 @@ th:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} ครั้ง เพื่อให้ได้เวลา < %{time}'
       other: '%{count} ครั้ง เพื่อให้ได้เวลา < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} ครั้ง เพื่อให้ได้การบิดน้อยกว่า < %{moves} ครั้ง'
       other: '%{count} ครั้ง เพื่อให้ได้การบิดน้อยกว่า < %{moves} ครั้ง'
     #original_hash: eba1b97
     points:
-      zero: '%{count} ครั้ง เพื่อให้ได้คะแนน > %{points} คะแนน'
       other: '%{count} ครั้ง เพื่อให้ได้คะแนน > %{points} คะแนน'
   time_limit:
     cumulative:
@@ -381,7 +378,6 @@ th:
       invalid: ผิด
     #original_hash: 49d0140
     days:
-      zero: '%{count} วัน'
       other: '%{count} วัน'
     #original_hash: 51ef7d4
     search_site: ค้นหาในเว็บ
@@ -1186,7 +1182,6 @@ th:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
           other: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
       error_pages:
         #original_hash: 1042478
@@ -2192,7 +2187,6 @@ th:
       must_register: คุณต้องสมัครการแข่งขันอย่างน้อยหนึ่งประเภท
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: คุณสามารถสมัครการแข่งขันได้แค่ 1 ประเภทเท่านั้น
         other: >-
           คุณต้องสมัครการแข่งขันโดยมีประเภทการแข่งขันระหว่าง 1 ถึง %{count}
           ประเภท
@@ -2217,15 +2211,12 @@ th:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: ผู้เข้าแข่งขันใหม่
         other: ผู้เข้าแข่งขันใหม่
       #original_hash: bc010e3
       returner:
-        zero: ผู้เข้าแข่งขันเก่า
         other: ผู้เข้าแข่งขันเก่า
       #original_hash: b7da17a
       person:
-        zero: คน
         other: คน
     flash:
       #original_hash: da7ec53
@@ -2322,7 +2313,6 @@ th:
       edit: แก้ไข
       #original_hash: beffc45
       country_plural:
-        zero: '%{count} ภูมิภาค'
         other: '%{count} ภูมิภาค'
       #original_hash: 1feee0e
       export_csv: Export to CSV
@@ -2703,8 +2693,8 @@ th:
       schedule_locked_after_results_submitted: ไม่สามารถแก้ไขตารางการแข่งขันได้หลังจากส่งผลการแข่งขันแล้ว
       #original_hash: 1877b69
       spots_left:
-        zero: ผู้สมัครเต็มแล้ว
         other: 'เหลืออีก %{count} คน'
+      no_spots_left: ผู้สมัครเต็มแล้ว
     live:
       #original_hash: 10d1a3c
       title: ผลการแข่งขัน
@@ -2806,13 +2796,11 @@ th:
           title: ลบผู้เข้าแข่งขัน
           #original_hash: c25b336
           next_to_advance:
-            zero: 'ผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบคือ %{competitors}'
             other: 'ผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบคือ %{competitors}'
           #original_hash: c87ca67
           advance: ให้ผู้เข้าแข่งขันคนถัดไปเข้ารอบ
           #original_hash: aa59a26
           quit_confirm:
-            zero: ถอนผู้เข้าแข่งขันออกจากรอบ
             other: ถอนผู้เข้าแข่งขันออกจากรอบ
           bulk:
             #original_hash: e0981de
@@ -2842,7 +2830,6 @@ th:
           single_round: เพิ่มผู้เข้าแข่งขันในรอบ
           #original_hash: bf3b670
           multiple_rounds:
-            zero: เพิ่มผู้เข้าแข่งขันในทั้งรอบปกติและ Dual Rond
             other: >-
               เพิ่มผู้เข้าแข่งขันเข้าสู่รอบ เนื่องจากรอบที่สองของการแข่งขันแบบ
               Dual Round ยังไม่เปิดให้ใช้งาน
@@ -2925,13 +2912,11 @@ th:
       display_name: '[Cancelled] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: ผู้จัดการแข่งขัน
         other: ผู้จัดการแข่งขัน
       #original_hash: 53a9522
       organization_team: ผู้จัดการแข่งขัน
       #original_hash: 6afa61e
       delegate:
-        zero: WCA Delegate
         other: WCA Delegate
       #original_hash: b37456c
       contact: ติดต่อ
@@ -3023,11 +3008,9 @@ th:
           เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นจึงจะสามารถรับชมการแข่งขันได้
       #original_hash: 35f892a
       guest_limit:
-        zero: ผู้เข้าแข่งขันสามารถพาผู้ติดตามมาได้สูงสุด 1 คน
         other: 'ผู้เข้าแข่งขันสามารถพาผู้ติดตามมาได้สูงสุด %{count} คน'
       #original_hash: bad09c8
       event_limit:
-        zero: ผู้เข้าแข่งขันสามารถสมัครได้แค่ 1 ประเภทการแข่งขัน
         other: 'ผู้เข้าแข่งขันสามารถสมัครได้สูงสุด %{count} ประเภทการแข่งขัน'
       #original_hash: 64e0ddd
       require_qualification: >-
@@ -3844,8 +3827,8 @@ th:
         empty: ไม่พบ
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
           other: 'เหลืออีก %{count} คน'
+        no_spots_remaining: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
         pending:
           #original_hash: 4210670
           title: การสมัครการแข่งขันที่รอดำเนินการ
@@ -3959,8 +3942,8 @@ th:
         email_message: คัดลอกไปยังคลิปบอร์ดแล้ว อย่าลืมส่งด้วย BCC!
         #original_hash: beedd53
         move_to:
-          zero: ย้ายไปยัง
           other: 'ย้าย %{count} ไปยัง'
+        move_to_none_selected: ย้ายไปยัง
         #original_hash: 96f608c
         pending: รอดำเนินการ
         #original_hash: 92d40dc
@@ -4465,9 +4448,6 @@ th:
       room_in_venue: '%{room} ที่ %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name}
-          ซึ่งเป็นสถานที่แห่งเดียวสำหรับการแข่งขันครั้งนี้
         other: >-
           คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name} ซึ่งเป็นหนึ่งใน
           %{count} แห่งสำหรับการแข่งขันครั้งนี้
