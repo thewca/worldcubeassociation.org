@@ -581,6 +581,10 @@ class Competition < ApplicationRecord
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
+      warnings[:year] = I18n.t('competitions.messages.name_must_end_with_year') if !self.name.end_with?(self.start_date.year.to_s) ||
+        !self.id.end_with?(self.start_date.year.to_s) ||
+        !self.cell_name.end_with?(self.start_date.year.to_s)
+
       warnings[:name] = I18n.t('competitions.messages.name_too_long') if self.name.length > 32
 
       warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
@@ -781,23 +785,33 @@ class Competition < ApplicationRecord
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
 
+  def create_id_from_cell_name
+    m = VALID_NAME_RE.match(cell_name)
+
+    cell_name_without_year = m[1]
+    year = m[2]
+
+    # Generate competition id from name
+    # By replacing accented chars with their ascii equivalents, and then
+    # removing everything that isn't a digit or a character.
+    safe_cell_name_without_year = ActiveSupport::Inflector.transliterate(cell_name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
+    return safe_cell_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+  end
+
   def create_id_and_cell_name(force_override: false)
     m = VALID_NAME_RE.match(name)
     return unless m
 
     name_without_year = m[1]
-    year = m[2]
-    if id.blank? || force_override
-      # Generate competition id from name
-      # By replacing accented chars with their ascii equivalents, and then
-      # removing everything that isn't a digit or a character.
-      safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
-      self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
-    end
-    return unless cell_name.blank? || force_override
+    year = " #{m[2]}"
+    safe_cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
 
-    year = " #{year}"
-    self.cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
+    if id.blank? || force_override
+      self.id = create_id_from_cell_name
+    end
+
+    return unless cell_name.blank? || force_override
+    self.cell_name = safe_cell_name
   end
 
   attr_writer :staff_delegate_ids, :trainee_delegate_ids
