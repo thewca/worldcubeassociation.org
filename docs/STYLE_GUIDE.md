@@ -2,7 +2,8 @@
 
 This guide captures the conventions that WCA maintainers actually apply in code review. It was
 derived from ~1,800 review comments on this repository, so every rule here is something that has
-been asked for repeatedly on real pull requests.
+been asked for repeatedly on real pull requests. It is current through review comments up to
+2026-08-24.
 
 **Scope:** this guide covers things a linter *cannot* catch. RuboCop (`.rubocop.yml`), ESLint
 (`next-frontend/eslint.config.mjs`) and Prettier are the source of truth for formatting and for
@@ -42,6 +43,8 @@ Unrelated diff is the single most common review complaint. It hides the real cha
 - If a generated file (`src/types/openapi.ts`, `importMap.js`, `yarn.lock`, `schema.rb`) shows
   changes you didn't intend, delete and regenerate it, or merge `main` first. If the noise persists
   on `main`, push a separate hotfix PR that *only* fixes the generated file.
+- Tooling config (`.eslintrc.json`, `.rubocop.yml`) counts as unrelated too. Improvements there are
+  welcome, but as their own PR — a lint-rule change buried in a feature diff will be asked out.
 - Notice unrelated dead code? Mention it in a comment. Don't delete it in this PR.
 
 ### 1.2 Extract on the second occurrence, not the first
@@ -65,6 +68,10 @@ In-place mutation is treated as a defect unless justified in a comment.
 | `map.set(k, v)` in a `forEach` | build a new object via spread / `Object.fromEntries` |
 | `array.pop()`, `arr.tap(&:pop)` | `take_while` / `drop_while` / slicing |
 | `let x = ...` then reassign in a loop | build a new collection with `map` / `reduce` |
+
+In JavaScript, `let` is itself the smell: it tells the reader "something below reassigns this", and
+reviewers will ask for a `const` built from a `map`, a `reduce`, or a ternary. Mutating an object you
+were handed is a last-resort exception and has to be argued for in the PR — assume your PR isn't one.
 
 If you genuinely must recompute values in place, produce *new* entries rather than mutating existing
 ones.
@@ -101,6 +108,9 @@ happens" is usually noise: if the code will naturally become unnecessary, it doe
   If you can't name the case, the guard is hiding a bug — or it's dead code.
 - If you branch on format ("if it parses as JSON do X, else treat it as CSV"), validate the else
   branch too and return a real error when it's neither.
+- A `rescue` inside a method body is rejected. In a controller, catch the exception at the top with
+  `rescue_from` (`rescue_from JSON::Schema::ValidationError`) — the happy path stays readable and
+  every action gets the same handling.
 - Don't swallow failed writes. See [3.4](#34-bang-methods-and-failed-writes).
 
 ### 1.7 Reuse existing code before writing new code
@@ -108,9 +118,14 @@ happens" is usually noise: if the code will naturally become unnecessary, it doe
 Before introducing a helper, search for one. Core results logic in particular must live in exactly
 one place so that a bug fix fixes every caller. Concretely, the codebase already has:
 `SolveTime` parsers, `ScheduleActivity.parse_activity_code`, `Registrations::Lanes::Competing`,
-`RegistrationChecker#apply_payload`, `Competition.wcif_json_schema`, `useInputState`,
-`fetchJsonOrError`, `routes.js.erb` link helpers, the OpenAPI error component. Ask before
-re-implementing any of them.
+`RegistrationChecker#apply_payload`, `Competition.wcif_json_schema`,
+`Competition.validate_wcif_schema!`, `useInputState`, `fetchJsonOrError`, `routes.js.erb` link
+helpers, the OpenAPI error component. Ask before re-implementing any of them — in particular, don't
+call a validation library directly when a model method already wraps it.
+
+The same goes for the libraries we depend on. Before hand-coding something commonplace — a character
+limit on an editor, a debounce, a flag icon — read that package's documentation and check whether
+it's already a prop or an option. Reviewers will ask whether you looked.
 
 ---
 
@@ -146,7 +161,18 @@ Within one PR, one file, or one API payload: pick a convention and hold it.
 - If you rename a concept, rename the related variables (`rolesLoading`, `rolesError`, `rolesSync`),
   not just the one line you were looking at.
 
-### 2.5 Ruby-specific naming
+### 2.5 Booleans read as assertions, not commands
+
+`useWcaRegistration` reads as an instruction — "use WCA registration!". `usesWcaRegistration` reads as
+the question the flag actually answers. Name the value behind a condition after what makes it true
+(`self_updating = request[:user_id] == authenticated_user.id`), not after what you intend to do about
+it.
+
+If one flag is quietly carrying two questions — "is this competition on the WCA registration system?"
+*and* "does it already have registrations stored?" — that's two flags. Pass both and let the UI
+branch on the combination, including to warn about the case where both are true.
+
+### 2.6 Ruby-specific naming
 
 - Boolean methods end in `?`. Drop `should_` / `is_` prefixes — the `?` carries that meaning.
 - Methods that mutate or can raise end in `!` (a method calling `insert_all!` should be
@@ -175,6 +201,8 @@ You are expected to know these. Reviewers will suggest them by name:
 | `find_or_create_by` under concurrency | `create_or_find_by` (catches the unique-constraint race) |
 | `params.require(...).permit(...)` | `params.expect(...)` (Rails 8) |
 | a hand-rolled forwarding method | `delegate` |
+| `x.respond_to?(:m) ? x.m : x` | `x.try(:m) \|\| x` — `try` has the check baked in |
+| `(a + b).uniq` | `a \| b` (array set union) |
 | `unless x.nil?` on a column | `x?` — Rails generates `column?` as `column.present?` |
 | a block param named `|x|` used once | `it` |
 | `Time.now` inside a model | `self.current_time_from_proper_timezone` |
@@ -193,6 +221,11 @@ You are expected to know these. Reviewers will suggest them by name:
 - Prefer `pluck(:id)` / `.ids` over loading models when you only need identifiers.
 - Push work into SQL where it's cheap: `.distinct` before `pluck`, `maximum(:col)` (returns `nil`
   cleanly on an empty set) instead of `any?` + `maximum`, `.or(...)` for SQL `OR`.
+- **Don't load a record just to ask whether it exists.** Hydrating a whole `Country` to use it as a
+  boolean is backwards: `pluck` the ids once and intersect the sets, or use `exists?` — outside a loop.
+- Chain in the order a reader would expect: apply the scope and the preloads first, *then* the
+  terminal call (`Competition.with_preloads.search(...)`). Code that only works in the other order is
+  usually relying on an accident.
 - Use `find_each` for large batches.
 - Counter caches (`counter_cache: true`) beat nested `COUNT` subqueries. Rails infers the column name
   from the association.
@@ -213,6 +246,10 @@ has_many :competitions, -> { distinct }, through: :rounds
 - Add `-> { distinct }` when joining through a many-to-many.
 - Use a `scope` for any `where` clause you write twice. Scopes are for *filtering* — never put
   side effects or non-query logic in one.
+- Set collection membership through the generated `_ids=` writer
+  (`self.competition_scoretaker_ids = new_ids`). Rails diffs the old and new sets and issues exactly
+  the inserts and deletes needed; a hand-written "delete all, then re-add" does more work and loses
+  the callbacks.
 - Rails `has_many` associations expose `after_add` / `after_remove` callbacks on the parent. Use them
   instead of calling `reload` from a child's callback — `reload` inside a hook is a red flag.
 
@@ -263,8 +300,13 @@ For "do this only after the transaction commits", see Rails' per-transaction cal
 - Handle errors through the shared machinery: `rescue_from WcaExceptions::ApiException` and friends.
   Don't invent a per-controller error shape.
 - After a mutation, return the entity you changed — not the whole collection re-serialized.
+- **The controller owns input validation.** Clamping, range checks, and 4XX responses for nonsense
+  values belong where the request payload is parsed. A model method asked to calculate with a negative
+  amount should calculate with a negative amount — don't make every caller pay for one caller's bad
+  input.
 - Serialize via the model's `*_SERIALIZE_OPTIONS` constants; combine them with set union
   (`User::DEFAULT_SERIALIZE_OPTIONS[:only] | %w[unconfirmed_wca_id]`) rather than restating the list.
+  Pass those options to `as_json` instead of hand-writing a `map` that builds hashes.
 
 ### 3.9 Jobs and rake tasks
 
@@ -275,6 +317,16 @@ For "do this only after the transaction commits", see Rails' per-transaction cal
 - Put the primary entity first in the argument list, then the values being applied to it.
 - **One-off data fixes are rake tasks, not migrations.** Put them in `lib/tasks/` and have a WST
   senior member run them after deploy. Migrations are for schema.
+
+### 3.10 Put procedural logic in `lib/`, not in a model
+
+A model is for a record and its behaviour. A multi-step procedure — importing results, computing
+dues, reconciling an uploaded file — belongs in a module under `lib/` (`CompetitionResultsImport`,
+`DuesCalculator`, `FinishUnfinishedPersons`). Look for an existing module that is the right home
+before adding another one.
+
+For the same reason, be slow to introduce a new ActiveRecord model. If a feature has worked for years
+without its own table, be ready to say what changed that now requires one.
 
 ---
 
@@ -318,6 +370,9 @@ The OpenAPI YAML under `next-frontend/openapi/` is the **single source of truth*
   return a distinguishable JSON payload so the client can react to *this* 401 rather than any 401.
 - Keep per-competition data out of per-round endpoints and vice versa. Put a property at the level it
   logically belongs to.
+- Don't silently drop parts of a payload. If a request carries fields the endpoint won't apply,
+  choose deliberately between rejecting it with a 4XX and documenting that the field is ignored.
+  Answering `200 OK` to a change you didn't make is the one option that isn't on the table.
 - Design for concurrency. At a large competition, requests interleave — prefer transactional payloads
   ("advance competitor #123, and verify they're still the eligible one") over stateful booleans
   ("advance the next one").
@@ -358,6 +413,10 @@ instead of silently drifting. The same applies to Payload types — regenerate t
 - Use library-provided types (`TFunction` from i18next, Next's `instrumentation` types) instead of
   writing your own structural equivalents. Spend five minutes in the library's source before
   declaring a 20-line interface.
+- Type a wrapper from the component it wraps: intersect your own props with
+  `ComponentPropsWithoutRef<typeof Icon>` so the wrapper accepts everything the wrapped component
+  does. Anything built through Chakra's `createIcon` takes `Icon`'s props.
+- Pass real types across props. A boolean prop receives `true`, not `"true"`.
 - Use `as const` for lookup objects that should narrow.
 
 ### 6.3 React Compiler is enabled — delete your memos
@@ -382,6 +441,9 @@ apply to `app/webpacker/` — see [§8](#8-legacy-react-webpacker--semantic-ui).
   told you the new state; it saves a round trip.
 - Don't fetch data incidentally deep in a helper "because it's cached anyway". Fetch it explicitly
   where it's needed, so the next developer can find and reuse it.
+- Keep `lazyMount` on dialogs, tabs, and accordions. Without it every panel's queries fire on page
+  load — including the "list every Delegate region in the database" request behind a tab the user
+  never opened.
 - Give toasts stable IDs to prevent duplicates across re-renders.
 
 ### 6.5 Component structure
@@ -389,6 +451,8 @@ apply to `app/webpacker/` — see [§8](#8-legacy-react-webpacker--semantic-ui).
 - **Nothing complex inside JSX.** Inline arrow callbacks are fine only for trivial one-liners
   (`onClick={() => setOpen(true)}`) and boolean comparisons. Anything with an `if`, a `map` that
   reshapes data, or more than one statement moves to a named const in the component preamble.
+- **Nothing complex inside `if (...)` either.** Assign the call's result to a named variable and test
+  the variable — the name is what tells the next reader what the condition means.
 - Extract a dialog or a repeated block into its own component file once it's more than incidental.
 - Prefer `children` over a `text?: string | ReactNode` prop with `typeof` checks. `children` handles
   strings natively.
@@ -449,6 +513,9 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
 `app/webpacker/` is on Semantic UI and **has no React Compiler**. Rules differ from `next-frontend/`.
 
 - You *do* need `useCallback` / `useMemo` here to keep references stable.
+- **No custom CSS here either.** No `style={{ marginBottom: ... }}`, no `className`s that SemUI
+  doesn't define — the framework has props for spacing and layout. The one researched exception is
+  horizontal table overflow (`overflowX`), which SemUI genuinely doesn't support.
 - Use Semantic UI dot-notation (`Table.Header`, `Table.HeaderCell`) — it removes a pile of imports.
 - Use our own hooks: `useInputState` / `useInputUpdater` wrap `useState` so the setter can be passed
   straight to a SemUI `Input`'s `onChange`. `useLoadedData` returns response `headers`, which carry
@@ -464,7 +531,9 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
 - Use `Message` components for user-facing errors — not bare `className`s that don't exist in SemUI.
 - Prefer early returns for loading states (`if (isFetching) return <Loader />`) so `data` is
   implicitly defined afterwards, then a ternary for the empty-vs-populated case.
-- Use `<Ref>` when you need to attach a ref to a SemUI component that doesn't forward one.
+- Use `<Ref>` when you need to attach a ref to a SemUI component that doesn't forward one. Don't add
+  a wrapper `<div>` to hold the ref, and don't hand-roll a replacement for a component we already
+  have — wrap the existing one.
 
 ---
 
@@ -489,6 +558,8 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
 - Consider RSpec shared examples instead of looping with `each` over cases.
 - Hard-coded English strings in tests are fine, even when the code under test is localised.
 - `expect { ... }.to raise_error(SomeError) do |err| ... end` lets you assert on the error object.
+- Keep spec code boring. If a reviewer has to ask what a piece of notation does and why it was
+  necessary, write it out plainly instead.
 - Seed data belongs in `db/seeds`, not in the spec.
 
 ---
@@ -504,6 +575,9 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
   recurring review rejection. If a WRT/WST insider wrote the text, simplify it.
 - **Status labels are not action labels.** A backend status `locked_for_posting` means it *is*
   locked; the button that gets you there says "Lock for posting". Don't reuse one string for both.
+- Don't leak internal state names into copy. "Move to none" is the enum talking; the user reads
+  "Remove from waitlist". "0 spots" is a number; the user reads "no spots left".
+- Match the escaping conventions of the strings around you — we write quotes as `&quot;` in `en.yml`.
 - Watch singular/plural agreement between the API and the UI, and use proper punctuation characters
   (`…`, not `...`).
 - Don't advertise features that aren't publicly released yet.
@@ -515,7 +589,8 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
 ## 11. Pull request hygiene
 
 - **Respond to every review comment.** Resolving a thread without a code change *and* without a reply
-  is the fastest way to stall a PR. If you disagree, say why.
+  is the fastest way to stall a PR. Marking a thread resolved is not the same as addressing it: if you
+  left the concern untouched, say so and say why. If you disagree, say why.
 - Unresolved `TODO`s in the diff need a decision: either fix it in this PR or say explicitly that
   it's a note for later.
 - Keep PRs scoped. "Seems best not to do too much in one PR" — split refactors from features, and
