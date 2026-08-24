@@ -12153,6 +12153,7 @@ __metadata:
     "@aws-sdk/credential-providers": "npm:^3.1116.0"
     "@chakra-ui/cli": "npm:^3.36.1"
     "@chakra-ui/react": "npm:^3.36.1"
+    "@emotion/cache": "npm:^11.14.0"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@fullcalendar/format-luxon3": "npm:^7.0.2"

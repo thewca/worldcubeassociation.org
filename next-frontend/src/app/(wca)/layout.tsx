@@ -8,6 +8,7 @@ import Footer from "./footer";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
+import { EmotionRegistry } from "@/components/ui/emotion-registry";
 
 export const metadata: Metadata = {
   title: {
@@ -41,12 +42,14 @@ export default async function RootLayout({
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <WCAQueryClientProvider>
             <AuthProvider>
-              <UiProvider>
-                <Navbar />
-                <NextTopLoader height={5} />
-                {children}
-                <Footer />
-              </UiProvider>
+              <EmotionRegistry>
+                <UiProvider>
+                  <Navbar />
+                  <NextTopLoader height={5} />
+                  {children}
+                  <Footer />
+                </UiProvider>
+              </EmotionRegistry>
             </AuthProvider>
           </WCAQueryClientProvider>
         </ThemeProvider>
