@@ -7,7 +7,11 @@ been asked for repeatedly on real pull requests. It is current through review co
 
 **Scope:** this guide covers things a linter *cannot* catch. RuboCop (`.rubocop.yml`), ESLint
 (`next-frontend/eslint.config.mjs`) and Prettier are the source of truth for formatting and for
-mechanical rules — run them before pushing and don't argue with them here.
+mechanical rules — this guide doesn't restate them.
+
+It covers the *code*. The process around a change — how to scope a PR, what goes in the description,
+how to respond to review, which changes need sign-off outside the PR — lives in
+[`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 **How to read it:** rules are stated as imperatives. Each one has a short *why*, because a rule you
 understand is a rule you can apply to a case this document didn't anticipate.
@@ -26,28 +30,12 @@ understand is a rule you can apply to a case this document didn't anticipate.
 8. [Legacy React (Webpacker / Semantic UI)](#8-legacy-react-webpacker--semantic-ui)
 9. [Tests](#9-tests)
 10. [i18n and user-facing copy](#10-i18n-and-user-facing-copy)
-11. [Pull request hygiene](#11-pull-request-hygiene)
 
 ---
 
 ## 1. Universal principles
 
-### 1.1 Every changed line must trace to the stated purpose of the PR
-
-Unrelated diff is the single most common review complaint. It hides the real change and makes
-`git blame` useless.
-
-- Don't rename variables, reformat, or "improve" adjacent code you happen to be touching.
-- Don't shorten `result` to `r` (or lengthen it) mid-refactor — the diff noise costs more than the
-  readability gain.
-- If a generated file (`src/types/openapi.ts`, `importMap.js`, `yarn.lock`, `schema.rb`) shows
-  changes you didn't intend, delete and regenerate it, or merge `main` first. If the noise persists
-  on `main`, push a separate hotfix PR that *only* fixes the generated file.
-- Tooling config (`.eslintrc.json`, `.rubocop.yml`) counts as unrelated too. Improvements there are
-  welcome, but as their own PR — a lint-rule change buried in a feature diff will be asked out.
-- Notice unrelated dead code? Mention it in a comment. Don't delete it in this PR.
-
-### 1.2 Extract on the second occurrence, not the first
+### 1.1 Extract on the second occurrence, not the first
 
 Two rules pulling in opposite directions, both enforced:
 
@@ -58,7 +46,7 @@ Two rules pulling in opposite directions, both enforced:
   updater, a "name + registrant ID in brackets" string, a "given an old ticket, update this field"
   block — it becomes a helper. This applies within a file *and* across files.
 
-### 1.3 Prefer immutable operations
+### 1.2 Prefer immutable operations
 
 In-place mutation is treated as a defect unless justified in a comment.
 
@@ -76,7 +64,7 @@ were handed is a last-resort exception and has to be argued for in the PR — as
 If you genuinely must recompute values in place, produce *new* entries rather than mutating existing
 ones.
 
-### 1.4 No magic values
+### 1.3 No magic values
 
 Every literal that isn't self-evidently meaningful gets a name.
 
@@ -87,7 +75,7 @@ Every literal that isn't self-evidently meaningful gets a name.
 - If a constant comes from an external protocol (an AnyCable message key, a keyboard code), document
   where it comes from in a comment next to the declaration.
 
-### 1.5 Comment the *why*, not the *what*
+### 1.4 Comment the *why*, not the *what*
 
 Code comments are required when:
 
@@ -100,7 +88,7 @@ Code comments are required when:
 Comments are *not* wanted for things a reader can infer, and code that says "delete this when X
 happens" is usually noise: if the code will naturally become unnecessary, it doesn't need a note.
 
-### 1.6 Don't paper over errors
+### 1.5 Don't paper over errors
 
 - `try`/`catch` (or `rescue`) around something that "sometimes explodes" is not acceptable. Find out
   *what* throws and prevent that input from reaching the call.
@@ -113,7 +101,7 @@ happens" is usually noise: if the code will naturally become unnecessary, it doe
   every action gets the same handling.
 - Don't swallow failed writes. See [3.4](#34-bang-methods-and-failed-writes).
 
-### 1.7 Reuse existing code before writing new code
+### 1.6 Reuse existing code before writing new code
 
 Before introducing a helper, search for one. Core results logic in particular must live in exactly
 one place so that a bug fix fixes every caller. Concretely, the codebase already has:
@@ -580,27 +568,6 @@ Before hand-rolling layout, check Chakra for: `SimpleGrid` (with `column-span`),
 - Match the escaping conventions of the strings around you — we write quotes as `&quot;` in `en.yml`.
 - Watch singular/plural agreement between the API and the UI, and use proper punctuation characters
   (`…`, not `...`).
-- Don't advertise features that aren't publicly released yet.
-- When introducing new terminology to competitors ("locked", "Dual Rounds"), get community/WCT/WQAC
-  input before it lands in `en.yml` — don't invent public vocabulary in a PR.
 
----
-
-## 11. Pull request hygiene
-
-- **Respond to every review comment.** Resolving a thread without a code change *and* without a reply
-  is the fastest way to stall a PR. Marking a thread resolved is not the same as addressing it: if you
-  left the concern untouched, say so and say why. If you disagree, say why.
-- Unresolved `TODO`s in the diff need a decision: either fix it in this PR or say explicitly that
-  it's a note for later.
-- Keep PRs scoped. "Seems best not to do too much in one PR" — split refactors from features, and
-  split a hotfix to a shared generated file into its own PR.
-- If your description and your diff disagree ("comment-only fix" that changes display logic), the
-  reviewer will trust the diff and ask. Keep the description accurate.
-- If a file move wasn't detected as a rename, leave a comment on the diff saying where it came from.
-- Merge `main` to clear unrelated changes from your diff.
-- Explain non-obvious decisions proactively. "If it doesn't work out, explain in two or three
-  sentences why this is the cleanest code you could come up with" is an accepted answer — silence
-  is not.
-- If you used an LLM to produce a solution, you still own it: be able to justify why it's the right
-  approach.
+Introducing new public vocabulary, or copy for an unreleased feature, needs agreement outside the PR —
+see [CONTRIBUTING.md §5](CONTRIBUTING.md#5-changes-that-need-more-than-a-reviewer).
