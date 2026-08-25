@@ -581,13 +581,13 @@ class Competition < ApplicationRecord
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
-      warnings[:year] = I18n.t('competitions.messages.name_must_end_with_year') if !self.name.end_with?(self.start_date.year.to_s) ||
-        !self.id.end_with?(self.start_date.year.to_s) ||
-        !self.cell_name.end_with?(self.start_date.year.to_s)
+      warnings[:year] = I18n.t('competitions.messages.name_must_end_with_year') unless self.name.end_with?(self.start_date.year.to_s) &&
+        self.id.end_with?(self.start_date.year.to_s) &&
+        self.cell_name.end_with?(self.start_date.year.to_s)
 
       warnings[:name] = I18n.t('competitions.messages.name_too_long') if self.name.length > 32
 
-      warnings[:id] = I18n.t('competitions.messages.id_must_match_short_name') if !self.id.match?(create_id_from_cell_name)
+      warnings[:id] = I18n.t('competitions.messages.id_must_match_short_name') unless self.id.match?(create_id_from_cell_name)
 
       warnings[:id_casing] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
 
