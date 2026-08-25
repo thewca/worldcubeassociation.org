@@ -349,7 +349,12 @@ class User < ApplicationRecord
 
     # Transfer organizer roles held by the dummy account, so the competitions
     # it organized don't end up pointing at a deleted user id.
-    self.competition_organizers.concat(dummy_user.competition_organizers)
+    dummy_user.competition_organizers.each do |co|
+      competition_organizers
+        .find_or_initialize_by(competition_id: co.competition_id)
+        .tap { |record| record.receive_registration_emails ||= co.receive_registration_emails }
+    end
+    dummy_user.competition_organizers.delete_all
 
     # The `reload` is necessary because otherwise, the old pre-reload `user_avatars`
     # association on `dummy_user` would pull the avatars to the grave.
