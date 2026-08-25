@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "yarn build:static-data && yarn build:translations && next dev",
     "check:types": "tsc --noEmit",
+    "check:emotion": "./check-emotion-instances.cjs",
     "build": "next build",
     "start": "next start",
     "types:openapi": "redocly bundle openapi/wcaCore.yaml -o openapi/wcaAPI.yaml && openapi-typescript openapi/wcaAPI.yaml -o src/types/openapi.ts && redocly build-docs openapi/wcaAPI.yaml -o public/api.html",
