@@ -591,6 +591,10 @@ class Competition < ApplicationRecord
 
       warnings[:id_casing] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
 
+      warnings[:venue_coordinates] = I18n.t('competitions.messages.venue_coordinates_too_far_away') if competition_venues.any? do |venue|
+        kilometers_to(venue) > 0.1
+      end
+
       warnings[:events] = I18n.t('competitions.messages.must_have_events') if no_events?
 
       warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified') unless self.waiting_list_deadline_date
@@ -1295,11 +1299,13 @@ class Competition < ApplicationRecord
   end
 
   # Source http://www.movable-type.co.uk/scripts/latlong.html
-  def kilometers_to(competition)
+  def kilometers_to(other)
+    return nil unless latitude_radians && longitude_radians && other&.latitude_radians && other&.longitude_radians
+
     6371 *
       Math.sqrt(
-        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians) / 2))**2) +
-        ((competition.latitude_radians - latitude_radians)**2),
+        (((other.longitude_radians - longitude_radians) * Math.cos((other.latitude_radians + latitude_radians) / 2))**2) +
+        ((other.latitude_radians - latitude_radians)**2),
       )
   end
 

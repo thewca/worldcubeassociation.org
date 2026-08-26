@@ -31,12 +31,24 @@ class CompetitionVenue < ApplicationRecord
     self
   end
 
+  private def to_radians(degrees)
+    degrees * Math::PI / 180
+  end
+
   def latitude_degrees
     latitude_microdegrees / 1e6
   end
 
+  def latitude_radians
+    to_radians latitude_degrees
+  end
+
   def longitude_degrees
     longitude_microdegrees / 1e6
+  end
+
+  def longitude_radians
+    to_radians longitude_degrees
   end
 
   def all_activities
