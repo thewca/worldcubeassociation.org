@@ -1801,7 +1801,7 @@ class Competition < ApplicationRecord
         single: current_user.ranks_single&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
         average: current_user.ranks_average&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
       },
-      qualification_wcif: v2_qualification_wcif,
+      qualification_wcif: qualification_wcif(version: WCIF_VERSION_CATALOGUE[:latest]),
     }
     competition_params.merge(user_params)
   end
@@ -1924,24 +1924,23 @@ class Competition < ApplicationRecord
     series_sibling_competitions.ids
   end
 
-  def qualification_wcif
+  def qualification_wcif(version: WCIF_STABLE_VERSION)
     return {} unless uses_qualification?
 
-    competition_events
-      .where.not(qualification: nil)
-      .index_by(&:event_id)
-      .transform_values(&:qualification)
-      .transform_values(&:to_wcif)
-  end
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
 
-  def v2_qualification_wcif
-    return {} unless uses_qualification?
-
-    competition_events
-      .where.not(qualification: nil)
-      .index_by(&:event_id)
-      .transform_values(&:v2_qualification_wcif)
-      .compact
+    if at_least_v2
+      competition_events
+        .where.not(qualification_condition: nil)
+        .index_by(&:event_id)
+        .transform_values(&:v2_qualification_wcif)
+    else
+      competition_events
+        .where.not(qualification: nil)
+        .index_by(&:event_id)
+        .transform_values(&:qualification)
+        .transform_values(&:to_wcif)
+    end
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
