@@ -1793,7 +1793,7 @@ class Competition < ApplicationRecord
                                                     uses_qualification?
                                                     allow_registration_without_qualification
                                                     force_comment_in_registration],
-                                           methods: %i[qualification_wcif event_ids],
+                                           methods: %i[event_ids],
                                            include: [])
     user_params = {
       preferredEvents: current_user.preferred_events.pluck(:id),
@@ -1801,6 +1801,7 @@ class Competition < ApplicationRecord
         single: current_user.ranks_single&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
         average: current_user.ranks_average&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
       },
+      qualification_wcif: v2_qualification_wcif,
     }
     competition_params.merge(user_params)
   end
@@ -1931,6 +1932,16 @@ class Competition < ApplicationRecord
       .index_by(&:event_id)
       .transform_values(&:qualification)
       .transform_values(&:to_wcif)
+  end
+
+  def v2_qualification_wcif
+    return {} unless uses_qualification?
+
+    competition_events
+      .where.not(qualification: nil)
+      .index_by(&:event_id)
+      .transform_values(&:v2_qualification_wcif)
+      .compact
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)

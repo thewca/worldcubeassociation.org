@@ -981,44 +981,19 @@ export interface components {
              */
             key: "requirements";
         };
+        WcifResultCondition: {
+            /** @enum {string} */
+            type: "resultAchieved" | "ranking" | "percent";
+            /** @enum {string} */
+            scope: "single" | "average";
+            value?: number | null;
+        } | null;
+        WcifQualification: {
+            earliestResultDate?: string;
+            latestResultDate: string;
+            resultCondition: components["schemas"]["WcifResultCondition"];
+        };
         WcifAttemptResult: number;
-        WcifQualificationAttemptResult: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "attemptResult";
-            /** @enum {string} */
-            resultType: "single" | "average";
-            level: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifRanking: number;
-        WcifQualificationRanking: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "ranking";
-            /** @enum {string} */
-            resultType: "single" | "average";
-            level: components["schemas"]["WcifRanking"];
-        };
-        WcifQualificationAnyResult: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "anyResult";
-            /** @enum {string} */
-            resultType: "single" | "average";
-        };
-        WcifQualification: components["schemas"]["WcifQualificationAttemptResult"] | components["schemas"]["WcifQualificationRanking"] | components["schemas"]["WcifQualificationAnyResult"];
         WcifPersonalBest: {
             /** @example 333 */
             eventId: string;
@@ -1093,18 +1068,11 @@ export interface components {
             centiseconds: number;
             cumulativeRoundIds: string[];
         };
-        WcifCutoffV2: {
+        WcifCutoff: {
             /** @example 2 */
             numberOfAttempts: number;
             resultValue: components["schemas"]["WcifAttemptResult"];
         };
-        WcifResultCondition: {
-            /** @enum {string} */
-            type: "resultAchieved" | "ranking" | "percent";
-            /** @enum {string} */
-            scope: "single" | "average";
-            value?: number;
-        } | null;
         WcifParticipationSource: {
             /** @enum {string} */
             type: "registrations";
@@ -1133,13 +1101,13 @@ export interface components {
             scrambles: components["schemas"]["WcifScramble"][];
             extraScrambles: components["schemas"]["WcifScramble"][];
         };
-        BaseWcifRoundV2: {
+        BaseWcifRound: {
             /** @example 333-r1 */
             id: string;
             /** @enum {string} */
             format: "1" | "2" | "3" | "a" | "m";
             timeLimit?: components["schemas"]["WcifTimeLimit"];
-            cutoff?: components["schemas"]["WcifCutoffV2"];
+            cutoff?: components["schemas"]["WcifCutoff"];
             linkedRounds?: string[];
             participationRuleset?: components["schemas"]["WcifParticipationRuleset"];
             scrambleSetCount?: number;
@@ -1148,7 +1116,7 @@ export interface components {
         };
         /** @enum {string} */
         RoundState: "open" | "locked" | "pending" | "ready" | "blocked";
-        BaseAdminRound: components["schemas"]["BaseWcifRoundV2"] & {
+        BaseAdminRound: components["schemas"]["BaseWcifRound"] & {
             state: components["schemas"]["RoundState"];
             min_competitors_to_open?: number;
         };
@@ -1228,7 +1196,7 @@ export interface components {
             name: string;
             country_iso2: string;
         };
-        LiveRound: components["schemas"]["BaseWcifRoundV2"] & {
+        LiveRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["RoundLiveResult"][];
             competitors: components["schemas"]["LiveCompetitor"][];
             round_id: number;
@@ -1483,33 +1451,28 @@ export interface components {
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
         };
-        WcifAttemptV2: {
+        WcifAttempt: {
             value: components["schemas"]["WcifAttemptResult"];
             reconstruction?: string;
         };
-        WcifResultV2: {
+        WcifResult: {
             /** @example 1 */
             personId: number;
             /** @example 10 */
             ranking?: number;
-            attempts: components["schemas"]["WcifAttemptV2"][];
+            attempts: components["schemas"]["WcifAttempt"][];
             best: components["schemas"]["WcifAttemptResult"];
             average: components["schemas"]["WcifAttemptResult"];
         };
-        WcifRoundV2: components["schemas"]["BaseWcifRoundV2"] & {
-            results: components["schemas"]["WcifResultV2"][];
-        };
-        WcifQualificationV2: {
-            earliestResultDate?: string;
-            latestResultDate: string;
-            resultCondition: components["schemas"]["WcifResultCondition"];
+        WcifRound: components["schemas"]["BaseWcifRound"] & {
+            results: components["schemas"]["WcifResult"][];
         };
         WcifEvent: {
             /** @example 333 */
             id: string;
-            rounds: components["schemas"]["WcifRoundV2"][];
+            rounds: components["schemas"]["WcifRound"][];
             competitorLimit?: number;
-            qualification?: components["schemas"]["WcifQualificationV2"];
+            qualification?: components["schemas"]["WcifQualification"];
             extensions: unknown[];
         };
         /** @example US */

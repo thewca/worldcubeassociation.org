@@ -9,7 +9,7 @@ properties:
   timeLimit:
     $ref: '../wcif/WcifTimeLimit.yaml'
   cutoff:
-    $ref: '../wcif/WcifCutoffV2.yaml'
+    $ref: '../wcif/WcifCutoff.yaml'
   linkedRounds:
     type: array
     items:

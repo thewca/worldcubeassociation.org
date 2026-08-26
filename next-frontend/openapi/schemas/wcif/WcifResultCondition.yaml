@@ -7,7 +7,7 @@ properties:
     type: string
     enum: [single, average]
   value:
-    type: integer
+    type: [integer, "null"]
 required:
   - type
   - scope

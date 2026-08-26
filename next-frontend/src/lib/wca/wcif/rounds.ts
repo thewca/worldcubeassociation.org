@@ -7,19 +7,18 @@ import {
 import type { components } from "@/types/openapi";
 import type { TFunction } from "i18next";
 
-// The frontend speaks WCIF v2 everywhere, hence the unsuffixed aliases
 export type WcifEvent = components["schemas"]["WcifEvent"];
-export type WcifRound = components["schemas"]["WcifRoundV2"];
+export type WcifRound = components["schemas"]["WcifRound"];
 export type WcifTimeLimit = components["schemas"]["WcifTimeLimit"];
-export type WcifCutoff = components["schemas"]["WcifCutoffV2"];
-export type WcifQualification = components["schemas"]["WcifQualificationV2"];
+export type WcifCutoff = components["schemas"]["WcifCutoff"];
+export type WcifQualification = components["schemas"]["WcifQualification"];
 export type WcifResultCondition = NonNullable<
   components["schemas"]["WcifResultCondition"]
 >;
 
 // A round as rendered without its results, which is what the live admin
 //   endpoints return
-export type WcifRoundBase = components["schemas"]["BaseWcifRoundV2"];
+export type WcifRoundBase = components["schemas"]["BaseWcifRound"];
 
 export type RoundTypeId = "1" | "2" | "3" | "c" | "d" | "e" | "f" | "g";
 
