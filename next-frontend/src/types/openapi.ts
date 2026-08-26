@@ -1093,37 +1093,39 @@ export interface components {
             centiseconds: number;
             cumulativeRoundIds: string[];
         };
-        WcifCutoff: {
+        WcifCutoffV2: {
             /** @example 2 */
             numberOfAttempts: number;
-            attemptResult: components["schemas"]["WcifAttemptResult"];
+            resultValue: components["schemas"]["WcifAttemptResult"];
         };
-        WcifAdvancementConditionRanking: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "ranking";
-            level: components["schemas"]["WcifRanking"];
+        WcifResultCondition: {
+            /** @enum {string} */
+            type: "resultAchieved" | "ranking" | "percent";
+            /** @enum {string} */
+            scope: "single" | "average";
+            value?: number;
         };
-        WcifPercent: number;
-        WcifAdvancementConditionPercent: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "percent";
-            level: components["schemas"]["WcifPercent"];
+        WcifParticipationSource: {
+            /** @enum {string} */
+            type: "registrations";
+        } | {
+            /** @enum {string} */
+            type: "round";
+            roundId: string;
+            resultCondition?: components["schemas"]["WcifResultCondition"];
+        } | {
+            /** @enum {string} */
+            type: "linkedRounds";
+            roundIds: string[];
+            resultCondition?: components["schemas"]["WcifResultCondition"];
         };
-        WcifAdvancementConditionAttemptResult: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "attemptResult";
-            level: components["schemas"]["WcifAttemptResult"];
+        WcifParticipationRuleset: {
+            participationSource: components["schemas"]["WcifParticipationSource"];
+            reservedPlaces?: {
+                nationalities?: string[];
+                reservations?: number;
+            };
         };
-        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
         WcifScramble: string;
         WcifScrambleSet: {
             /** @example 1 */
@@ -1131,38 +1133,24 @@ export interface components {
             scrambles: components["schemas"]["WcifScramble"][];
             extraScrambles: components["schemas"]["WcifScramble"][];
         };
-        BaseWcifRound: {
+        BaseWcifRoundV2: {
             /** @example 333-r1 */
             id: string;
             /** @enum {string} */
             format: "1" | "2" | "3" | "a" | "m";
             timeLimit?: components["schemas"]["WcifTimeLimit"];
-            cutoff?: components["schemas"]["WcifCutoff"];
-            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
-            scrambleSetCount: number;
-            scrambleSets: components["schemas"]["WcifScrambleSet"][];
-            extensions: unknown[];
-        };
-        WcifAttempt: {
-            result: components["schemas"]["WcifAttemptResult"];
-            reconstruction?: string;
-        };
-        WcifResult: {
-            /** @example 1 */
-            personId: number;
-            /** @example 10 */
-            ranking?: number;
-            attempts: components["schemas"]["WcifAttempt"][];
-            best: components["schemas"]["WcifAttemptResult"];
-            average: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifRound: components["schemas"]["BaseWcifRound"] & {
-            results: components["schemas"]["WcifResult"][];
+            cutoff?: components["schemas"]["WcifCutoffV2"];
+            linkedRounds?: string[];
+            participationRuleset?: components["schemas"]["WcifParticipationRuleset"];
+            scrambleSetCount?: number;
+            scrambleSets?: components["schemas"]["WcifScrambleSet"][];
+            extensions?: unknown[];
         };
         /** @enum {string} */
         RoundState: "open" | "locked" | "pending" | "ready" | "blocked";
-        BaseAdminRound: components["schemas"]["WcifRound"] & {
+        BaseAdminRound: components["schemas"]["BaseWcifRoundV2"] & {
             state: components["schemas"]["RoundState"];
+            min_competitors_to_open?: number;
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
@@ -1207,6 +1195,49 @@ export interface components {
             state: "blocked";
         };
         LiveRoundAdmin: components["schemas"]["OpenRound"] | components["schemas"]["LockedRound"] | components["schemas"]["PendingRound"] | components["schemas"]["ReadyRound"] | components["schemas"]["BlockedRound"];
+        WcifCutoff: {
+            /** @example 2 */
+            numberOfAttempts: number;
+            attemptResult: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifAdvancementConditionRanking: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ranking";
+            level: components["schemas"]["WcifRanking"];
+        };
+        WcifPercent: number;
+        WcifAdvancementConditionPercent: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "percent";
+            level: components["schemas"]["WcifPercent"];
+        };
+        WcifAdvancementConditionAttemptResult: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "attemptResult";
+            level: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
+        BaseWcifRound: {
+            /** @example 333-r1 */
+            id: string;
+            /** @enum {string} */
+            format: "1" | "2" | "3" | "a" | "m";
+            timeLimit?: components["schemas"]["WcifTimeLimit"];
+            cutoff?: components["schemas"]["WcifCutoff"];
+            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
+            scrambleSetCount: number;
+            scrambleSets: components["schemas"]["WcifScrambleSet"][];
+            extensions: unknown[];
+        };
         LiveAttempt: {
             value: number;
             attempt_number: number;
@@ -1494,6 +1525,22 @@ export interface components {
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
+        };
+        WcifAttempt: {
+            result: components["schemas"]["WcifAttemptResult"];
+            reconstruction?: string;
+        };
+        WcifResult: {
+            /** @example 1 */
+            personId: number;
+            /** @example 10 */
+            ranking?: number;
+            attempts: components["schemas"]["WcifAttempt"][];
+            best: components["schemas"]["WcifAttemptResult"];
+            average: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifRound: components["schemas"]["BaseWcifRound"] & {
+            results: components["schemas"]["WcifResult"][];
         };
         WcifEvent: {
             /** @example 333 */

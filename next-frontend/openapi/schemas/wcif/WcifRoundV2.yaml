@@ -1,0 +1,10 @@
+allOf:
+  - $ref: '../competitions/BaseWcifRoundV2.yaml'
+  - type: object
+    properties:
+      results:
+        type: array
+        items:
+          $ref: './WcifResultV2.yaml'
+    required:
+      - results
