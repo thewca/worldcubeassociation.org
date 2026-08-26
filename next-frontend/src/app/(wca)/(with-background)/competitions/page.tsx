@@ -19,6 +19,7 @@ import {
   IconButton,
   ClientOnly,
   Icon,
+  Heading,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -33,7 +34,7 @@ import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { useSession } from "next-auth/react";
-import { useMemo, useReducer, useState } from "react";
+import { ReactNode, useMemo, useReducer, useState } from "react";
 import {
   competitionFilterReducer,
   createFilterState,
@@ -54,8 +55,17 @@ import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
 import { LuMapPin, LuSettings2 } from "react-icons/lu";
 import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
+import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
+import _ from "lodash";
 
 const DEBOUNCE_MS = 600;
+
+type CompetitionIndex = components["schemas"]["CompetitionIndex"];
+
+const isInProgress = (comp: CompetitionIndex) =>
+  hasPassed(comp.start_date) &&
+  !hasPassedEndOfDay(comp.end_date) &&
+  !comp.results_posted_at;
 
 export default function CompetitionsPage() {
   const session = useSession();
@@ -145,6 +155,13 @@ export default function CompetitionsPage() {
         }) <= distanceFilter,
     );
   }, [location, distanceFilter, rawCompetitionData]);
+
+  const showInProgressSection = debouncedFilterState.timeOrder === "present";
+
+  const [inProgressComps, upcomingComps]: CompetitionIndex[][] =
+    showInProgressSection
+      ? _.partition(competitionsDistanceFiltered, isInProgress)
+      : [[], competitionsDistanceFiltered];
 
   if (!competitionsDistanceFiltered) {
     return "Error";
@@ -314,13 +331,26 @@ export default function CompetitionsPage() {
                     competitions
                   </Text>
                 </HStack>
-                <CompetitionTable
-                  competitions={competitionsDistanceFiltered}
-                  isLoading={competitionsIsFetching}
-                  hasMoreCompsToLoad={hasMoreCompsToLoad}
-                  bottomRef={bottomRef}
-                  t={t}
-                />
+                {inProgressComps.length > 0 && (
+                  <>
+                    <Heading size="md" paddingY="2">
+                      {t("competitions.index.titles.in_progress")}
+                    </Heading>
+                    <CompetitionTable competitions={inProgressComps} />
+                    <Heading size="md" paddingY="2">
+                      {t("competitions.index.titles.upcoming")}
+                    </Heading>
+                  </>
+                )}
+                <CompetitionTable competitions={upcomingComps}>
+                  <ListViewFooter
+                    isLoading={competitionsIsFetching}
+                    hasMoreCompsToLoad={hasMoreCompsToLoad}
+                    numCompetitions={upcomingComps.length}
+                    bottomRef={bottomRef}
+                    t={t}
+                  />
+                </CompetitionTable>
               </Tabs.Content>
               <Tabs.Content value="map">TBD</Tabs.Content>
             </Card.Body>
@@ -333,16 +363,10 @@ export default function CompetitionsPage() {
 
 function CompetitionTable({
   competitions,
-  isLoading,
-  hasMoreCompsToLoad,
-  bottomRef,
-  t,
+  children,
 }: {
-  competitions: components["schemas"]["CompetitionIndex"][];
-  isLoading: boolean;
-  hasMoreCompsToLoad: boolean;
-  t: TFunction;
-  bottomRef: (node?: Element | null) => void;
+  competitions: CompetitionIndex[];
+  children?: ReactNode;
 }) {
   return (
     <Table.Root size="xs" variant="competitions" borderWidth="2px">
@@ -350,13 +374,7 @@ function CompetitionTable({
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />
         ))}
-        <ListViewFooter
-          isLoading={isLoading}
-          hasMoreCompsToLoad={hasMoreCompsToLoad}
-          numCompetitions={competitions.length}
-          bottomRef={bottomRef}
-          t={t}
-        />
+        {children}
       </Table.Body>
     </Table.Root>
   );
