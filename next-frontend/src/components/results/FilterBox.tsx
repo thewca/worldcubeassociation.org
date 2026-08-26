@@ -50,7 +50,10 @@ export function RecordsFilterBox({
             size="md"
           >
             <SegmentGroup.Indicator />
-            <SegmentGroup.Items items={["All", "Male", "Female"]} />
+            <SegmentGroup.Items
+              cursor="pointer"
+              items={["All", "Male", "Female"]}
+            />
           </SegmentGroup.Root>
         </Field.Root>
         <Field.Root>
@@ -62,6 +65,7 @@ export function RecordsFilterBox({
           >
             <SegmentGroup.Indicator />
             <SegmentGroup.Items
+              cursor="pointer"
               items={["mixed", "slim", "separate", "history", "mixed history"]}
             />
           </SegmentGroup.Root>
@@ -90,6 +94,7 @@ export function RankingsFilterBox({
           >
             <SegmentGroup.Indicator />
             <SegmentGroup.Items
+              cursor="pointer"
               items={[valueLabelMap["single"], valueLabelMap["average"]]}
             />
           </SegmentGroup.Root>
@@ -105,6 +110,7 @@ export function RankingsFilterBox({
           >
             <SegmentGroup.Indicator />
             <SegmentGroup.Items
+              cursor="pointer"
               items={[
                 valueLabelMap["All"],
                 valueLabelMap["Male"],
@@ -124,6 +130,7 @@ export function RankingsFilterBox({
           >
             <SegmentGroup.Indicator />
             <SegmentGroup.Items
+              cursor="pointer"
               items={[
                 valueLabelMap["100 persons"],
                 valueLabelMap["100 results"],

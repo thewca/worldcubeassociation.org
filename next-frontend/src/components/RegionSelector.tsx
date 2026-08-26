@@ -136,10 +136,10 @@ export default function RegionSelector({
         selectionBehavior={nullable ? "clear" : "replace"}
       >
         <Combobox.Control>
-          <Combobox.Input placeholder={name} />
+          <Combobox.Input placeholder={name} cursor="pointer" />
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />
-            <Combobox.Trigger />
+            <Combobox.Trigger cursor="pointer" />
           </Combobox.IndicatorGroup>
         </Combobox.Control>
         <Portal>
@@ -151,6 +151,7 @@ export default function RegionSelector({
                   item={item}
                   key={item.key}
                   justifyContent={item.centered ? "center" : "start"}
+                  cursor={item.disabled ? undefined : "pointer"}
                 >
                   {item.flag}
                   {item.content ?? item.label}

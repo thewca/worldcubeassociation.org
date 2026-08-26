@@ -1,8 +1,11 @@
+"use client";
+
 import WcaFlag from "@/components/WcaFlag";
 import EventIcon from "@/components/EventIcon";
 import events from "@/lib/wca/data/events";
 import { HStack, Icon, Link, Table } from "@chakra-ui/react";
 import countries from "@/lib/wca/data/countries";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type CountryCellProps = (
   | {
@@ -16,6 +19,8 @@ type CountryCellProps = (
 ) & {
   rowSpan?: number;
   hideBelow?: string;
+  // Renders the region as a link that adds a region filter to the current query
+  filterable?: boolean;
 };
 
 export function CountryCell({
@@ -23,6 +28,7 @@ export function CountryCell({
   countryIso2,
   rowSpan,
   hideBelow,
+  filterable = false,
 }: CountryCellProps) {
   const country =
     // Explicitly check for undefined so TypeScript knows which branch it is
@@ -36,9 +42,29 @@ export function CountryCell({
           <WcaFlag code={country.iso2} />
         </Icon>
       )}{" "}
-      {country.name}
+      {filterable ? (
+        <RegionFilterLink iso2={country.iso2}>{country.name}</RegionFilterLink>
+      ) : (
+        country.name
+      )}
     </Table.Cell>
   );
+}
+
+function RegionFilterLink({
+  iso2,
+  children,
+}: {
+  iso2: string;
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const params = new URLSearchParams(searchParams);
+  params.set("region", iso2);
+
+  return <Link href={`${pathname}?${params}`}>{children}</Link>;
 }
 
 interface CompetitionCellProps {
