@@ -738,6 +738,21 @@ class Round < ApplicationRecord
     MIN_COMPETITORS_PER_CLAUSE.keys.reverse[binding_cap[:subsequent_rounds_allowed]]
   end
 
+  # The co-linked round directly before this one inside a Dual Round, if any.
+  #   `linked_round.rounds` is ordered, so it is simply the entry before ours.
+  def previous_linked_round
+    index = linked_round&.rounds&.index(self)
+    linked_round.rounds[index - 1] if index&.positive?
+  end
+
+  # How many competitors `previous_linked_round` needs for this round to be allowed
+  #   under https://www.worldcubeassociation.org/regulations/#9m. Only linked rounds
+  #   can be opened while violating 9m, every other round is STATE_BLOCKED instead.
+  def min_competitors_to_open
+    previous = previous_linked_round
+    MIN_COMPETITORS_PER_CLAUSE.values.reverse[number - previous.number - 1] if previous.present?
+  end
+
   def open?
     live_results.any?
   end
@@ -924,7 +939,8 @@ class Round < ApplicationRecord
   def to_live_info_json
     state = lifecycle_state
     json = {
-      **self.to_wcif(include_results: false).compact_blank,
+      # WCIF v2 so that the frontend knows about linked rounds
+      **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "state" => state,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)
@@ -936,6 +952,12 @@ class Round < ApplicationRecord
     if state == STATE_OPEN
       json = json.merge({
                           "completed_competitors" => completed_competitors,
+                        })
+    end
+
+    if previous_linked_round.present?
+      json = json.merge({
+                          "min_competitors_to_open" => min_competitors_to_open,
                         })
     end
 
