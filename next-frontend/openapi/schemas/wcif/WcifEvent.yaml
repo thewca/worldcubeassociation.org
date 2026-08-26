@@ -6,11 +6,11 @@ properties:
   rounds:
     type: array
     items:
-      $ref: './WcifRound.yaml'
+      $ref: './WcifRoundV2.yaml'
   competitorLimit:
     type: integer
   qualification:
-    $ref: './WcifQualification.yaml'
+    $ref: './WcifQualificationV2.yaml'
   extensions:
     type: array
 required:

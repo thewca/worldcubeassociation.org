@@ -1,8 +1,0 @@
-type: object
-properties:
-  result:
-    $ref: './WcifAttemptResult.yaml'
-  reconstruction:
-    type: string
-required:
-  - result
