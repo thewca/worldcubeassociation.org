@@ -40,7 +40,7 @@ const STATUS_ALERTS = {
   pending: { status: "info", message: "needs_approval" },
   waiting_list: { status: "warning", message: "is_waitlisted" },
   accepted: { status: "success", message: "is_accepted" },
-  cancelled: { status: "neutral", message: "is_cancelled" },
+  cancelled: { status: "warning", message: "is_cancelled" },
   rejected: { status: "error", message: "is_rejected" },
 } as const;
 

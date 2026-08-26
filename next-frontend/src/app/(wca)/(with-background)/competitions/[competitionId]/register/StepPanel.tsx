@@ -13,10 +13,13 @@ import RegistrationOverview, {
 import { useT } from "@/lib/i18n/useI18n";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
+import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
 import pollRegistrationQueue from "@/lib/wca/registrations/pollRegistrationQueue";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
+import useRegistration, {
+  registrationQueryKey,
+} from "@/lib/wca/registrations/useRegistration";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -36,14 +39,11 @@ export default function StepPanel({
   steps: StepConfig[];
   competitionInfo: CompetitionInfo;
   userId: number;
-  // `null` rather than `undefined` for "not registered": react-query reads `initialData:
-  //   undefined` as "no initial data" and refetches on mount, throwing away the server fetch.
   initialRegistration: Registration | null;
 }) {
   const { t } = useT();
 
   const api = useAPI();
-  const apiClient = useAPIClient();
   const queryClient = useQueryClient();
 
   const [hasAcknowledgedRequirements, setHasAcknowledgedRequirements] =
@@ -54,8 +54,6 @@ export default function StepPanel({
   const [hasStartedRegistering, setHasStartedRegistering] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
-
-  const registrationQueryKey = ["registration", competitionInfo.id, userId];
 
   const showRegistrationError = (payload: { error: number }) =>
     toaster.create({
@@ -78,7 +76,10 @@ export default function StepPanel({
     {
       onError: showRegistrationError,
       onSuccess: (data) => {
-        queryClient.setQueryData(registrationQueryKey, data.registration);
+        queryClient.setQueryData(
+          registrationQueryKey(competitionInfo.id, userId),
+          data.registration,
+        );
         setIsEditing(false);
         toaster.create({
           id: "registration-updated",
@@ -97,7 +98,10 @@ export default function StepPanel({
     {
       onError: showRegistrationError,
       onSuccess: (data) => {
-        queryClient.setQueryData(registrationQueryKey, data.registration);
+        queryClient.setQueryData(
+          registrationQueryKey(competitionInfo.id, userId),
+          data.registration,
+        );
         setIsEditing(false);
         // Signing up again starts at the requirements, not where the competitor left off.
         setHasStartedRegistering(false);
@@ -124,29 +128,13 @@ export default function StepPanel({
 
   const isQueueDone = queueStatus?.processing === false;
 
-  const { data: registration } = useQuery({
-    queryKey: registrationQueryKey,
-    queryFn: async () => {
-      const { data, error, response } = await apiClient.GET(
-        "/v1/competitions/{competitionId}/registrations/{userId}",
-        { params: { path: { competitionId: competitionInfo.id, userId } } },
-      );
-
-      // Not being registered is a normal answer rather than a failure, so it must not reject.
-      if (response.status === 404) {
-        return null;
-      }
-
-      if (error) {
-        throw error;
-      }
-
-      return data;
-    },
-    initialData: initialRegistration,
+  const registration = useRegistration({
+    competitionId: competitionInfo.id,
+    userId,
+    initialRegistration,
     // Only once the queue reports it is finished do we go and collect the registration itself.
-    refetchInterval: (query) =>
-      createRegistration.isSuccess && isQueueDone && query.state.data === null
+    refetchInterval: (current) =>
+      createRegistration.isSuccess && isQueueDone && current === null
         ? REGISTRATION_REFETCH_INTERVAL_MS
         : false,
   });

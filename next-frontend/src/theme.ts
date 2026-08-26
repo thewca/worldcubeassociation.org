@@ -603,6 +603,46 @@ const customConfig = defineConfig({
       },
     },
     slotRecipes: {
+      steps: {
+        slots: [],
+        variants: {
+          orientation: {
+            vertical: {
+              // Chakra hangs the connector inside the step it leads out of and sizes it against
+              //   that step's own height, so a step no taller than its label leaves the connector
+              //   nothing to run in and it collapses to nothing.
+              item: {
+                _notLast: {
+                  minHeight:
+                    "calc(var(--steps-size) + var(--steps-gutter) * 4)",
+                },
+              },
+              separator: {
+                marginX: "0",
+              },
+            },
+            horizontal: {
+              // Responsive variants merge property by property, so anything the vertical branch
+              //   sets and this one leaves alone survives into the wider breakpoint - which is
+              //   what left the horizontal connector absolutely positioned, and so invisible.
+              root: {
+                height: "auto",
+              },
+              item: {
+                _notLast: {
+                  minHeight: "auto",
+                },
+              },
+              separator: {
+                position: "static",
+                top: "auto",
+                insetStart: "auto",
+                maxHeight: "none",
+              },
+            },
+          },
+        },
+      },
       dataList: {
         slots: [],
         variants: {
