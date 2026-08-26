@@ -581,9 +581,14 @@ class Competition < ApplicationRecord
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
-      warnings[:year] = I18n.t('competitions.messages.name_must_end_with_year') unless self.name.end_with?(self.start_date.year.to_s) &&
-        self.id.end_with?(self.start_date.year.to_s) &&
-        self.cell_name.end_with?(self.start_date.year.to_s)
+      if self.start_date.present?
+        year = self.start_date.year.to_s
+        unless self.name.to_s.end_with?(year) &&
+               self.id.to_s.end_with?(year) &&
+               self.cell_name.to_s.end_with?(year)
+          warnings[:year] = I18n.t('competitions.messages.name_must_end_with_year')
+        end
+      end
 
       warnings[:name] = I18n.t('competitions.messages.name_too_long') if self.name.length > 32
 
