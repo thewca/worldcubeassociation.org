@@ -926,7 +926,7 @@ class Round < ApplicationRecord
     #   back together when it needs the combined set.
     competitors = only_podiums ? (linked_round&.live_competitors || live_competitors) : live_competitors
     {
-      **self.to_wcif(include_results: false).compact_blank,
+      **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "round_id" => id,
       "competitors" => competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,

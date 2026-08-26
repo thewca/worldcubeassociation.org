@@ -111,19 +111,19 @@ describe("meetsCutoff", () => {
 
   it("returns true if one of attempt results before cutoff is better than cutoff value", () => {
     const attemptResults = [1000, 850, 0, 0, 0];
-    const cutoff = { numberOfAttempts: 2, attemptResult: 900 };
+    const cutoff = { numberOfAttempts: 2, resultValue: 900 };
     expect(meetsCutoff(attemptResults, cutoff)).toEqual(true);
   });
 
   it("returns false if one of further attempt results is better than cutoff", () => {
     const attemptResults = [1000, 950, 800, 0, 0];
-    const cutoff = { numberOfAttempts: 2, attemptResult: 900 };
+    const cutoff = { numberOfAttempts: 2, resultValue: 900 };
     expect(meetsCutoff(attemptResults, cutoff)).toEqual(false);
   });
 
   it("requires attempt results better than the cutoff", () => {
     const attemptResults = [900, 700, 0];
-    const cutoff = { numberOfAttempts: 2, attemptResult: 700 };
+    const cutoff = { numberOfAttempts: 2, resultValue: 700 };
     expect(meetsCutoff(attemptResults, cutoff)).toEqual(false);
   });
 });
@@ -209,7 +209,7 @@ describe("applyCutoff", () => {
     const attempts = [1000, 800, 1200, 0, 0];
     const cutoff = {
       numberOfAttempts: 2,
-      attemptResult: 800,
+      resultValue: 800,
     };
     expect(applyCutoff(attempts, cutoff)).toEqual([1000, 800, 0, 0, 0]);
   });
@@ -218,7 +218,7 @@ describe("applyCutoff", () => {
     const attempts = [1000, 799, 1200, 1000, 900];
     const cutoff = {
       numberOfAttempts: 2,
-      attemptResult: 800,
+      resultValue: 800,
     };
     expect(applyCutoff(attempts, cutoff)).toEqual([1000, 799, 1200, 1000, 900]);
   });

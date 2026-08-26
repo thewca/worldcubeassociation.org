@@ -64,7 +64,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def events
     competition = competition_from_params
-    render json: competition.events_wcif
+
+    lifecycle_name = params[:wcif_version]&.to_sym || :stable
+
+    unless Competition::WCIF_VERSION_CATALOGUE.key?(lifecycle_name)
+      return render json: {
+        message: "invalid lifecycle name '#{lifecycle_name}'",
+        valid_lifecycle_names: Competition::WCIF_VERSION_CATALOGUE.keys,
+      }, status: :bad_request
+    end
+
+    render json: competition.events_wcif(version: Competition::WCIF_VERSION_CATALOGUE.fetch(lifecycle_name))
   end
 
   def schedule

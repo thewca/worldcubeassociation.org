@@ -1798,8 +1798,8 @@ class Competition < ApplicationRecord
     user_params = {
       preferredEvents: current_user.preferred_events.pluck(:id),
       personalRecords: {
-        single: current_user.ranks_single&.map(&:to_wcif) || [],
-        average: current_user.ranks_average&.map(&:to_wcif) || [],
+        single: current_user.ranks_single&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
+        average: current_user.ranks_average&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
       },
     }
     competition_params.merge(user_params)
