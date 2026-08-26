@@ -806,7 +806,7 @@ class Competition < ApplicationRecord
     # By replacing accented chars with their ascii equivalents, and then
     # removing everything that isn't a digit or a character.
     safe_cell_name_without_year = ActiveSupport::Inflector.transliterate(cell_name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
-    return safe_cell_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+    safe_cell_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
   end
 
   def create_id_and_cell_name(force_override: false)
@@ -817,13 +817,8 @@ class Competition < ApplicationRecord
     year = " #{m[2]}"
     safe_cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
 
-    if cell_name.blank? || force_override
-      self.cell_name = safe_cell_name
-    end
-
-    if id.blank? || force_override
-      self.id = create_id_from_cell_name
-    end
+    self.cell_name = safe_cell_name if cell_name.blank? || force_override
+    self.id = create_id_from_cell_name if id.blank? || force_override
   end
 
   attr_writer :staff_delegate_ids, :trainee_delegate_ids
@@ -1305,7 +1300,7 @@ class Competition < ApplicationRecord
 
   # Source http://www.movable-type.co.uk/scripts/latlong.html
   def kilometers_to(other)
-    return nil unless latitude_radians && longitude_radians && other&.latitude_radians && other&.longitude_radians
+    return nil unless latitude_radians && longitude_radians && other&.latitude_radians && other.longitude_radians
 
     6371 *
       Math.sqrt(
