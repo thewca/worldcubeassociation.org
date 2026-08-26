@@ -9,9 +9,6 @@ import {
 } from "@/lib/wca/wcif/rounds";
 import { useT } from "@/lib/i18n/useI18n";
 import { useRoundInfo, useAllRoundsInfo } from "@/providers/RoundInfoProvider";
-import type { components } from "@/types/openapi";
-
-type WcifEvent = components["schemas"]["WcifEvent"];
 
 export default function RoundLimits() {
   const round = useRoundInfo();
@@ -22,9 +19,9 @@ export default function RoundLimits() {
 
   // timeLimitToString needs the surrounding events to render cumulative time
   // limits that span multiple rounds, so reconstruct them from all rounds.
-  const siblingEvents: WcifEvent[] = Object.entries(
+  const siblingEvents = Object.entries(
     _.groupBy(rounds, (r) => parseActivityCode(r.id).eventId),
-  ).map(([id, eventRounds]) => ({ id, rounds: eventRounds, extensions: [] }));
+  ).map(([id, eventRounds]) => ({ id, rounds: eventRounds }));
 
   return (
     <Stack gap={1}>

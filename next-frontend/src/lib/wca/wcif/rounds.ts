@@ -11,9 +11,18 @@ export type WcifEvent = components["schemas"]["WcifEvent"];
 export type WcifRound = components["schemas"]["WcifRound"];
 export type WcifTimeLimit = components["schemas"]["WcifTimeLimit"];
 export type WcifCutoff = components["schemas"]["WcifCutoff"];
+export type WcifCutoffV2 = components["schemas"]["WcifCutoffV2"];
 export type WcifAdvancementCondition =
   components["schemas"]["WcifAdvancementCondition"];
 export type WcifQualification = components["schemas"]["WcifQualification"];
+
+// Structural shapes, so that both WCIF v1 and v2 rounds can be passed
+type RoundLike = { id: string; cutoff?: object | null };
+type EventLike = { id: string; rounds: RoundLike[] };
+
+// WCIF v2 renamed the cutoff value from `attemptResult` to `resultValue`
+export const cutoffValue = (cutoff: WcifCutoff | WcifCutoffV2) =>
+  "resultValue" in cutoff ? cutoff.resultValue : cutoff.attemptResult;
 
 export type RoundTypeId = "1" | "2" | "3" | "c" | "d" | "e" | "f" | "g";
 
@@ -113,8 +122,8 @@ export const localizeRoundInformation = (
 export const localizeActivityCode = (
   t: TFunction,
   activityCode: string,
-  wcifRound: WcifRound,
-  wcifEvent: WcifEvent,
+  wcifRound: RoundLike,
+  wcifEvent: EventLike,
 ) => {
   const { eventId, roundNumber, attemptNumber } =
     parseActivityCode(activityCode);
@@ -136,7 +145,7 @@ export const timeLimitToString = (
   t: TFunction,
   wcifTimeLimit: WcifTimeLimit | undefined,
   eventId: string,
-  siblingEvents: WcifEvent[],
+  siblingEvents: EventLike[],
 ) => {
   // From WCIF specification:
   // For events with unchangeable time limit (3x3x3 MBLD, 3x3x3 FM) the value is null.
@@ -196,27 +205,28 @@ export const timeLimitToString = (
 
 export const cutoffToString = (
   t: TFunction,
-  wcifCutoff: WcifCutoff,
+  wcifCutoff: WcifCutoff | WcifCutoffV2,
   eventId: string,
 ) => {
   const wcaEvent = events.byId[eventId];
+  const cutoffResult = cutoffValue(wcifCutoff);
 
   if (wcaEvent.is_timed_event) {
     return t("cutoff.time", {
       count: wcifCutoff.numberOfAttempts,
-      time: centisecondsToClockFormat(wcifCutoff.attemptResult),
+      time: centisecondsToClockFormat(cutoffResult),
     });
   }
   if (wcaEvent.is_fewest_moves) {
     return t("cutoff.moves", {
       count: wcifCutoff.numberOfAttempts,
-      moves: wcifCutoff.attemptResult,
+      moves: cutoffResult,
     });
   }
   if (wcaEvent.is_multiple_blindfolded) {
     return t("cutoff.points", {
       count: wcifCutoff.numberOfAttempts,
-      points: attemptResultToMbldPoints(wcifCutoff.attemptResult),
+      points: attemptResultToMbldPoints(cutoffResult),
     });
   }
 

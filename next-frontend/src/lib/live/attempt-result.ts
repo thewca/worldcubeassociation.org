@@ -5,7 +5,12 @@ import {
   formatAttemptResult,
   SKIPPED_VALUE,
 } from "@/lib/wca/wcif/attempts";
-import { WcifCutoff, WcifTimeLimit } from "@/lib/wca/wcif/rounds";
+import {
+  cutoffValue,
+  WcifCutoff,
+  WcifCutoffV2,
+  WcifTimeLimit,
+} from "@/lib/wca/wcif/rounds";
 import { TFunction } from "i18next";
 
 /**
@@ -162,7 +167,10 @@ export function applyTimeLimit(
 /**
  * Alters the given attempt results, so that they conform to the given cutoff.
  */
-export function applyCutoff(attemptResults: number[], cutoff?: WcifCutoff) {
+export function applyCutoff(
+  attemptResults: number[],
+  cutoff?: WcifCutoff | WcifCutoffV2,
+) {
   if (meetsCutoff(attemptResults, cutoff)) {
     return attemptResults;
   }
@@ -175,12 +183,15 @@ export function applyCutoff(attemptResults: number[], cutoff?: WcifCutoff) {
 /**
  * Checks if the given attempt results meet the given cutoff.
  */
-export function meetsCutoff(attemptResults: number[], cutoff?: WcifCutoff) {
+export function meetsCutoff(
+  attemptResults: number[],
+  cutoff?: WcifCutoff | WcifCutoffV2,
+) {
   if (!cutoff) return true;
-  const { numberOfAttempts, attemptResult } = cutoff;
+  const cutoffResult = cutoffValue(cutoff);
   return attemptResults
-    .slice(0, numberOfAttempts)
-    .some((attempt) => attempt > 0 && attempt < attemptResult);
+    .slice(0, cutoff.numberOfAttempts)
+    .some((attempt) => attempt > 0 && attempt < cutoffResult);
 }
 
 function checkForDnsFollowedByValidResult(attemptResults: number[]) {
