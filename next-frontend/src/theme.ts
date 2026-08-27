@@ -312,6 +312,9 @@ const customConfig = defineConfig({
       },
       cursor: {
         menuitem: { value: "pointer" },
+        checkbox: { value: "pointer" },
+        radio: { value: "pointer" },
+        option: { value: "pointer" },
       },
     },
     semanticTokens: {
@@ -730,6 +733,12 @@ const customConfig = defineConfig({
           root: {
             "--accordion-radius": "{radii.wca}",
           },
+          itemTrigger: {
+            cursor: "pointer",
+            _disabled: {
+              cursor: "disabled",
+            },
+          },
         },
         variants: {
           variant: {
@@ -810,6 +819,101 @@ const customConfig = defineConfig({
                 },
               },
             },
+          },
+        },
+      },
+      // Chakra styles these trigger slots without ever setting `cursor`, so
+      // they fall back to the browser default and read as non-interactive.
+      menu: {
+        slots: [],
+        base: {
+          trigger: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      select: {
+        slots: [],
+        base: {
+          trigger: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      combobox: {
+        slots: [],
+        base: {
+          trigger: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      popover: {
+        slots: [],
+        base: {
+          trigger: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      collapsible: {
+        slots: [],
+        base: {
+          trigger: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      steps: {
+        slots: [],
+        base: {
+          trigger: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      checkboxCard: {
+        slots: [],
+        base: {
+          root: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      radioCard: {
+        slots: [],
+        base: {
+          item: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      segmentGroup: {
+        slots: [],
+        base: {
+          item: {
+            cursor: "pointer",
+            _disabled: { cursor: "disabled" },
+          },
+        },
+      },
+      // The `cursor.slider` token exists but the slider recipe never consumes
+      // it, so the thumb needs its own rule.
+      slider: {
+        slots: [],
+        base: {
+          thumb: {
+            cursor: "grab",
+            _dragging: { cursor: "grabbing" },
+            _disabled: { cursor: "disabled" },
           },
         },
       },
