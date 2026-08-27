@@ -738,19 +738,11 @@ class Round < ApplicationRecord
     MIN_COMPETITORS_PER_CLAUSE.keys.reverse[binding_cap[:subsequent_rounds_allowed]]
   end
 
-  # The co-linked round directly before this one inside a Dual Round, if any.
-  #   `linked_round.rounds` is ordered, so it is simply the entry before ours.
-  def previous_linked_round
-    index = linked_round&.rounds&.index(self)
-    linked_round.rounds[index - 1] if index&.positive?
-  end
-
-  # How many competitors `previous_linked_round` needs for this round to be allowed
-  #   under https://www.worldcubeassociation.org/regulations/#9m. Only linked rounds
-  #   can be opened while violating 9m, every other round is STATE_BLOCKED instead.
+  # How many competitors the round needs to be allowed under
+  # https://www.worldcubeassociation.org/regulations/#9m. Only linked
+  # rounds can be opened while violating 9m, every other round is STATE_BLOCKED instead.
   def min_competitors_to_open
-    previous = previous_linked_round
-    MIN_COMPETITORS_PER_CLAUSE.values.reverse[number - previous.number - 1] if previous.present?
+    MIN_COMPETITORS_PER_CLAUSE.values.reverse[number - 2] if number > 1
   end
 
   def open?
@@ -955,7 +947,7 @@ class Round < ApplicationRecord
                         })
     end
 
-    if previous_linked_round.present?
+    if min_competitors_to_open.present?
       json = json.merge({
                           "min_competitors_to_open" => min_competitors_to_open,
                         })
