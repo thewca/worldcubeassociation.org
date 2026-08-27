@@ -55,8 +55,10 @@ export default function SearchResultContent({
     case "incident":
       return (
         <Text>
-          <Text textStyle="bodyEmphasis">{t("incidents_log.incident")}</Text>
-          {`${result.title}`}
+          <Text as="span" textStyle="bodyEmphasis">
+            {t("incidents_log.incident")}
+          </Text>
+          {` ${result.title}`}
         </Text>
       );
   }
