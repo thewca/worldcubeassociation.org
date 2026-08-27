@@ -2794,6 +2794,8 @@ en:
       regulations_and_guidelines: "Regulations"
       #context: Used in the homepage's omnisearch
       search_for: "Search for <b>%{search_string}</b>"
+      #context: Shown on the search results page when no search term was given
+      empty_query: "Try searching for something!"
       #context: Used when there are no search results. E.g. "No people found for *Sherlock Holmes*".
       not_found:
         generic: "No results found"
