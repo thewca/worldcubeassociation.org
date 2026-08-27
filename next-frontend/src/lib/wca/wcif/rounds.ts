@@ -16,6 +16,15 @@ export type WcifResultCondition = NonNullable<
   components["schemas"]["WcifResultCondition"]
 >;
 
+type WcifParticipationSource = components["schemas"]["WcifParticipationSource"];
+
+// The participation sources competitors can advance from, i.e. everything
+//   except "registrations", which is the only one without a result condition
+type WcifAdvancementSource = Extract<
+  WcifParticipationSource,
+  { type: "round" | "linkedRounds" }
+>;
+
 // A round as rendered without its results, which is what the live admin
 //   endpoints return
 export type WcifRoundBase = components["schemas"]["BaseWcifRound"];
@@ -236,20 +245,20 @@ export const advancementResultCondition = (
 ) => {
   const source = rounds
     .map((round) => round.participationRuleset?.participationSource)
-    .find((participationSource) => {
-      switch (participationSource?.type) {
+    .find((source): source is WcifAdvancementSource => {
+      switch (source?.type) {
         case "round":
-          return participationSource.roundId === roundId;
+          return source.roundId === roundId;
         // Competitors advance out of a linked round as a whole, so only its last
         //   round leads into the next one
         case "linkedRounds":
-          return participationSource.roundIds.at(-1) === roundId;
+          return source.roundIds.at(-1) === roundId;
         default:
           return false;
       }
     });
 
-  return source && "resultCondition" in source ? source.resultCondition : null;
+  return source?.resultCondition ?? null;
 };
 
 export const resultConditionToString = (
