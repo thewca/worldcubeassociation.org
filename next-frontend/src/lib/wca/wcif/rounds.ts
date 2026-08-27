@@ -137,11 +137,13 @@ export const localizeActivityCode = (
   return localizeRoundInformation(t, eventId, roundTypeId, attemptNumber);
 };
 
+// `competitionRounds` must contain every round of the competition, not just the
+//   rounds of `eventId`: cumulative time limits may span several events.
 export const timeLimitToString = (
   t: TFunction,
   wcifTimeLimit: WcifTimeLimit | undefined,
   eventId: string,
-  siblingRounds: WcifRoundBase[],
+  competitionRounds: WcifRoundBase[],
 ) => {
   // From WCIF specification:
   // For events with unchangeable time limit (3x3x3 MBLD, 3x3x3 FM) the value is null.
@@ -160,7 +162,7 @@ export const timeLimitToString = (
   }
 
   const roundStrs = wcifTimeLimit.cumulativeRoundIds.map((cumulativeId) => {
-    const cumulativeRound = siblingRounds.find(
+    const cumulativeRound = competitionRounds.find(
       (round) => round.id === cumulativeId,
     );
 
@@ -172,7 +174,7 @@ export const timeLimitToString = (
 
     const { eventId: cumulativeEventId } = parseActivityCode(cumulativeId);
 
-    const cumulativeEventRounds = siblingRounds.filter(
+    const cumulativeEventRounds = competitionRounds.filter(
       (round) => parseActivityCode(round.id).eventId === cumulativeEventId,
     );
 
