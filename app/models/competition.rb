@@ -597,7 +597,7 @@ class Competition < ApplicationRecord
       warnings[:id_casing] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
 
       warnings[:venue_coordinates] = I18n.t('competitions.messages.venue_coordinates_too_far_away') if competition_venues.any? do |venue|
-        kilometers_to(venue) > 0.1
+        venue.kilometers_to(self) > 0.1
       end
 
       warnings[:events] = I18n.t('competitions.messages.must_have_events') if no_events?
@@ -1066,7 +1066,7 @@ class Competition < ApplicationRecord
   end
 
   def longitude_radians
-    to_radians longitude_degrees
+    GeoCalculation.to_radians longitude_degrees
   end
 
   def latitude_degrees
@@ -1078,7 +1078,7 @@ class Competition < ApplicationRecord
   end
 
   def latitude_radians
-    to_radians latitude_degrees
+    GeoCalculation.to_radians latitude_degrees
   end
 
   def country_zones
@@ -1294,19 +1294,14 @@ class Competition < ApplicationRecord
                .order(:registration_open)
   end
 
-  private def to_radians(degrees)
-    degrees * Math::PI / 180
-  end
-
   # Source http://www.movable-type.co.uk/scripts/latlong.html
-  def kilometers_to(other)
-    return nil unless latitude_radians && longitude_radians && other&.latitude_radians && other.longitude_radians
-
-    6371 *
-      Math.sqrt(
-        (((other.longitude_radians - longitude_radians) * Math.cos((other.latitude_radians + latitude_radians) / 2))**2) +
-        ((other.latitude_radians - latitude_radians)**2),
-      )
+  def kilometers_to(competition)
+    GeoCalculation.haversine_distance(
+      self.latitude_radians,
+      self.longitude_radians,
+      competition.latitude_radians,
+      competition.longitude_radians
+    )
   end
 
   def registration_start_date_present?
