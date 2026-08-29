@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { FaPause, FaPlay, FaTimes } from "react-icons/fa";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordTagBadge } from "@/components/results/TableCells";
 import formats from "@/lib/wca/data/formats";
@@ -230,7 +230,7 @@ function ResultsProjector({
                             )}
                             {showText && (
                               <Table.Cell textAlign="center" rowSpan={rowSpan}>
-                                <Flag code={competitor.country_iso2} />
+                                <WcaFlag code={competitor.country_iso2} />
                               </Table.Cell>
                             )}
                             {isLinkedRound && (

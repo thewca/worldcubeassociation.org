@@ -98,7 +98,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell minWidth="4em">
-        <Icon size="lg">
+        <Icon asChild size="lg">
           <WcaFlag code={comp.country_iso2} fallback={comp.country_iso2} />
         </Icon>
       </Table.Cell>
