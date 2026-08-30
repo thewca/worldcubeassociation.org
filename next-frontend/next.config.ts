@@ -47,23 +47,33 @@ const withRoutes = nextRoutes({ outDir: "src/types" });
 
 const shouldUseProprietaryFont = process.env.PROPRIETARY_FONT === "TTNormsPro";
 
+// The proprietary font files are not in version control, so `fonts.proprietary`
+// must not be resolved at all unless they have actually been supplied. We swap
+// it in for the default font module instead of conditionally importing it,
+// because bundlers resolve `import()` regardless of the runtime condition.
+const PROPRIETARY_FONT_MODULE = "src/styles/fonts.proprietary.ts";
+
 const nextConfig: NextConfig = {
   serverExternalPackages: ["newrelic"],
-  webpack: (config, { isServer, webpack }) => {
-    if (!shouldUseProprietaryFont) {
-      config.plugins = [
-        ...config.plugins,
-        new webpack.IgnorePlugin({
-          resourceRegExp: /fonts\.proprietary$/,
-          contextRegExp: /\(wca\)/,
-        }),
-      ];
+  webpack: (config, { isServer }) => {
+    if (shouldUseProprietaryFont) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        "@/styles/fonts": path.join(__dirname, PROPRIETARY_FONT_MODULE),
+      };
     }
 
     if (isServer && process.env.NODE_ENV === "production") {
       nrExternals(config);
     }
     return config;
+  },
+  turbopack: {
+    // Turbopack resolves alias targets relative to the project root, webpack
+    // needs them absolute.
+    resolveAlias: shouldUseProprietaryFont
+      ? { "@/styles/fonts": `./${PROPRIETARY_FONT_MODULE}` }
+      : {},
   },
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
@@ -83,6 +93,7 @@ const nextConfig: NextConfig = {
       new URL("https://avatars.worldcubeassociation.org/**"),
     ],
   },
+  agentRules: false,
   output: "standalone",
   // Explicitly include newrelic and every transitive dependency in the
   // standalone output. Next.js's file tracer misses packages loaded via

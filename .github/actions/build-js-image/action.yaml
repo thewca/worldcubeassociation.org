@@ -17,10 +17,11 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Copy over symlinked data
+    - name: Copy over data owned by the Rails app
+      # The Docker build context is ./next-frontend, so anything it needs from
+      # outside that directory has to be copied in first.
       shell: bash
       run: |
-        rm -rf ./next-frontend/src/lib/staticData
         cp -rT ./lib/static_data ./next-frontend/src/lib/staticData
         cp ./config/locales/*.yml ./next-frontend/src/lib/i18n/locales
     - name: Download proprietary assets from protected bucket

@@ -8,22 +8,13 @@ import Footer from "./footer";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
+import { EmotionRegistry } from "@/components/ui/emotion-registry";
 
 export const metadata: Metadata = {
   title: {
     template: "%s | World Cube Association",
     default: "World Cube Association",
   },
-};
-
-const computeFont = async () => {
-  if (process.env.PROPRIETARY_FONT === "TTNormsPro") {
-    const { appFont } = await import("@/styles/fonts.proprietary");
-
-    return appFont;
-  }
-
-  return appFont;
 };
 
 export const dynamic = "force-dynamic";
@@ -33,20 +24,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const appFont = await computeFont();
-
   return (
     <html suppressHydrationWarning>
       <body className={appFont.className}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <WCAQueryClientProvider>
             <AuthProvider>
-              <UiProvider>
-                <Navbar />
-                <NextTopLoader height={5} />
-                {children}
-                <Footer />
-              </UiProvider>
+              <EmotionRegistry>
+                <UiProvider>
+                  <Navbar />
+                  <NextTopLoader height={5} />
+                  {children}
+                  <Footer />
+                </UiProvider>
+              </EmotionRegistry>
             </AuthProvider>
           </WCAQueryClientProvider>
         </ThemeProvider>

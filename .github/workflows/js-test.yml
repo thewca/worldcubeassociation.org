@@ -31,6 +31,11 @@ jobs:
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: yarn install
+      - name: Build translations
+        # src/lib/i18n/locales/*.json is generated, not committed. Turbopack
+        # resolves the dynamic import in src/lib/i18n/i18n.ts at build time, so
+        # the build fails outright if the directory is empty.
+        run: yarn run build:translations
       - name: Build OpenAPI types
         # Fails if a $ref points at a schema file that was never committed, and
         # (via the diff) if the committed types are stale.
@@ -61,6 +66,13 @@ jobs:
         run: yarn vitest run
       - name: Run build
         run: yarn run build
+      - name: Verify a single Emotion instance
+        # Turbopack can resolve @emotion/react to two live copies within one
+        # graph (vercel/next.js#91411), which silently breaks Chakra's SSR
+        # styling: an unstyled first paint and a hydration mismatch, with no
+        # build error to notice. Reads the built source maps, so it has to run
+        # after the build.
+        run: yarn run check:emotion
       - name: Verify newrelic loads from standalone output
         # Simulates the production container startup: NODE_OPTIONS='-r newrelic'.
         # If any transitive dep is missing from the standalone node_modules

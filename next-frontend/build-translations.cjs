@@ -50,6 +50,13 @@ const localeDir = process.env.LOCALE_DIR || "../config/locales/";
 const inputDir = path.resolve(__dirname, localeDir);
 const outputDir = path.resolve(__dirname, "./src/lib/i18n/locales");
 
+// Docker builds and the compose dev container have no config/locales to read
+// from; they get their translations by other means, so this is not an error.
+if (!fs.existsSync(inputDir)) {
+  console.log(`↷ Skipped translations: ${inputDir} does not exist`);
+  process.exit(0);
+}
+
 if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir, { recursive: true });
 }
