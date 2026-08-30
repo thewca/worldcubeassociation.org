@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { AnnouncementFullCard } from "@/components/announcements/AnnouncementCard";
+import { randomAnnouncementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 
 const findAnnouncement = async (
@@ -48,7 +49,10 @@ export default async function AnnouncementPage({
   return (
     <Container>
       <VStack align="stretch" py={8}>
-        <AnnouncementFullCard announcement={announcement} colorPalette="blue" />
+        <AnnouncementFullCard
+          announcement={announcement}
+          colorPalette={randomAnnouncementColorPalette()}
+        />
       </VStack>
     </Container>
   );

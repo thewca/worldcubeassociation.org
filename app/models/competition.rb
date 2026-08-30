@@ -110,6 +110,10 @@ class Competition < ApplicationRecord
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
   scope :results_posted, -> { where.not(results_posted_at: nil).where.not(results_posted_by: nil) }
+  # `DEFAULT_SERIALIZE_OPTIONS` renders delegates and organizers through `User#serializable_hash`,
+  # which reads every association in `User::SERIALIZATION_INCLUDES`. Callers that serialize with
+  # those defaults need this, or each competition fires one set of queries per delegate/organizer.
+  scope :with_serialization_preloads, -> { includes(delegates: User::SERIALIZATION_INCLUDES, organizers: User::SERIALIZATION_INCLUDES) }
   scope :pending_results_submission, -> { not_cancelled.visible.where(results_submitted_at: nil, end_date: ..Date.today) }
 
   enum :guest_entry_status, {
@@ -1773,13 +1777,8 @@ class Competition < ApplicationRecord
     # Respect other `includes` associations that might have been specified ahead of time
     previous_includes = competitions.includes_values
 
-    # The delegates and organizers get run through `User#serializable_hash`, so eager load the
-    # associations it touches to avoid an N+1 explosion (one set of queries per delegate/organizer
-    # per competition). See `User::SERIALIZATION_INCLUDES`.
     competitions.includes(
       :events, # serialized via the `event_ids` method, one query per competition otherwise
-      { delegates: User::SERIALIZATION_INCLUDES },
-      { organizers: User::SERIALIZATION_INCLUDES },
       *previous_includes,
     ).order(**order)
   end
@@ -1957,7 +1956,7 @@ class Competition < ApplicationRecord
     end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
-    persons_wcif + managers.map { it.to_wcif(self, authorized: authorized) }
+    persons_wcif + managers.map { it.to_wcif(self, authorized: authorized, version: version) }
   end
 
   def events_wcif(version: WCIF_STABLE_VERSION, include_results: true)

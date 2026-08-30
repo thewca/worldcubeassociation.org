@@ -298,7 +298,7 @@ export function EventCard({
               boxSize="8"
               color={
                 event_id === competitionInfo.main_event_id && event_id !== "333"
-                  ? "green.1A"
+                  ? "green.solid"
                   : "currentColor"
               }
             />

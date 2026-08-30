@@ -709,6 +709,7 @@ en:
         dob: 'Access your date of birth'
         email: 'Access your email address'
         manage_competitions: 'Manage any upcoming competitions you are organizing'
+        manage_registrations: 'Register you for competitions, and change or cancel your registrations'
 
     #context: Key used for sign in/sign up
     devise:
@@ -1356,6 +1357,7 @@ en:
         email_duplicates: "Email must be unique, found the following duplicates: %{emails}."
         wca_id_duplicates: "WCA ID must be unique, found the following duplicates: %{wca_ids}."
         wrong_dob_format: "Birthdate must follow the YYYY-mm-dd format (year-month-day, for example 1944-07-13), found the following dates which cannot be parsed: %{raw_dobs}."
+        invalid_country: "Invalid country: %{country}."
         invalid_wcif: "The JSON file does not contain valid WCIF data."
         empty_file: "The file is empty."
         unsupported_file_format: "Unsupported file format. Please upload a JSON or CSV file."
@@ -1448,6 +1450,8 @@ en:
         close: "Close"
         competitors_entered: "%{competitors_live_results_entered}/%{total_competitors} entered"
         round_locked: "locked"
+        #context: tooltip on an icon next to competitors who don't have a WCA ID yet
+        first_timer: "First-timer"
         edit: "Edit"
         results: "Results"
         registration: "Registration"
@@ -2643,6 +2647,9 @@ en:
     determination_letter: "IRS Determination Letter"
     bylaws: "Bylaws"
     motions: "Motions"
+    #context: Shown when a permalink points at a motion number that no longer exists, usually because the motion was repealed
+    motion_not_found: "Motion Not Found"
+    motion_not_found_action: "We couldn't find a motion numbered \"%{motion_id}\". It may have been repealed."
     minutes: "Minutes"
     policies: "WCA Policies"
     codeofethics: "Code of Ethics"
@@ -2787,6 +2794,8 @@ en:
       regulations_and_guidelines: "Regulations"
       #context: Used in the homepage's omnisearch
       search_for: "Search for <b>%{search_string}</b>"
+      #context: Shown on the search results page when no search term was given
+      empty_query: "Try searching for something!"
       #context: Used when there are no search results. E.g. "No people found for *Sherlock Holmes*".
       not_found:
         generic: "No results found"

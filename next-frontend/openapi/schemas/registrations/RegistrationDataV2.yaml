@@ -52,9 +52,19 @@ properties:
         type: string
       admin_comment:
         type: string
+      # only when the registration is on the waiting list
+      waiting_list_position:
+        type: integer
   # only when authenticated
   payment:
     type: object
+    # The whole object is only serialized for competitions using a payment integration, but when
+    #   it is, these three are always set together. `payment_status` and `updated_at` depend on a
+    #   payment having actually been made.
+    required:
+      - has_paid
+      - paid_amount_iso
+      - currency_code
     properties:
       has_paid:
         type: boolean
