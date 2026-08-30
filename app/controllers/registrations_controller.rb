@@ -282,30 +282,7 @@ class RegistrationsController < ApplicationController
   end
 
   def do_import
-    new_locked_users = []
-    # registered_at stores millisecond precision, but we want all registrations
-    #   from CSV import to be considered as one "batch". So we mark a timestamp
-    #   once, and then reuse it throughout the loop.
-    import_time = Time.now.utc
-    emails = @registrations.pluck(:email)
-    ActiveRecord::Base.transaction do
-      @competition.registrations.accepted.each do |registration|
-        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
-      end
-      @registrations.each do |registration_data|
-        user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
-        new_locked_users << user if locked_account_created
-        registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
-          reg.registered_at = import_time
-        end
-        registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::CSV_IMPORT)
-      rescue StandardError => e
-        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_data[:name], error: e))
-      end
-    end
-    new_locked_users.each do |user|
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
-    end
+    Registrations::Helper.import_registrations!(@competition, @registrations, current_user)
     render status: :ok, json: { success: true }
   rescue StandardError => e
     render status: :unprocessable_content, json: { error: e.to_s }
@@ -346,14 +323,13 @@ class RegistrationsController < ApplicationController
         ],
       ).to_h.symbolize_keys
       registration_data = build_wcif_data(**registration_params)
-      user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
+      user = Registrations::Helper.user_for_registration!(registration_data)
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
         reg.registered_at = Time.now.utc
       end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
 
       registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::OTS_FORM)
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later if locked_account_created
     end
     flash[:success] = I18n.t("registrations.flash.added")
     redirect_to competition_registrations_add_url(@competition)

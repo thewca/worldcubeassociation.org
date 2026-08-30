@@ -138,7 +138,13 @@ module CompetitionResultsImport
       # It's important to clearout the 'posting_by' here to make sure
       # another WRT member can start posting other results.
       comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id, posting_by: nil)
-      comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
+      comp.competitor_users.each do |user|
+        if user.locked_account?
+          RegistrationsMailer.notify_registrant_of_locked_account_creation(user, comp).deliver_later
+        else
+          user.notify_of_results_posted(comp)
+        end
+      end
       comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
       comp.tickets_competition_result.presence&.update!(status: TicketsCompetitionResult.statuses[:posted])
     end
