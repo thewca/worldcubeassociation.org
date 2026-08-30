@@ -45,7 +45,7 @@
     <p>
       <%= t("competitions.events.time_limit_information.qualification_html") %>
       <% date_to_events = competition.qualification_date_to_events %>
-      <% if (date_to_events.length() > 1) %>
+      <% if date_to_events.length > 1 %>
         <% date_to_events.each do |date, events| %>
           <%= t("competitions.events.time_limit_information.qualification_some_events_html",
                 date: wca_date_range(date, date), events: events.map{ |e| e.event.name }.join(", ")) %>
