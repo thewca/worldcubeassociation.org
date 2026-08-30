@@ -10,11 +10,11 @@ export default function UploadWcifResults({
   competitionId,
   isAdminView,
   onImportSuccess,
-  useWcaRegistration,
+  usesWcaRegistration,
 }) {
   const [resultFile, setResultFile] = useState();
   const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
-  const [importRegistrations, setImportRegistrations] = useCheckboxState(!useWcaRegistration);
+  const [importRegistrations, setImportRegistrations] = useCheckboxState(!usesWcaRegistration);
 
   const {
     mutate: uploadWcifResultsMutate, isPending, error, isError,
@@ -48,7 +48,7 @@ export default function UploadWcifResults({
       <Form.Checkbox
         checked={importRegistrations}
         onChange={setImportRegistrations}
-        disabled={!useWcaRegistration}
+        disabled={!usesWcaRegistration}
         label="Also import registrations from this WCIF file"
       />
       <Form.Button

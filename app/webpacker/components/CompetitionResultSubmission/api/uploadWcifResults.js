@@ -14,9 +14,10 @@ export default async function uploadWcifResults({
   formData.append('mark_result_submitted', markResultSubmitted);
   formData.append('store_uploaded_json', storeUploadedJson);
   formData.append('import_registrations', importRegistrations);
+  formData.append('is_wcif', true);
 
   const { data } = await fetchJsonOrError(
-    actionUrls.competitionResultSubmission.uploadWcifResults(competitionId),
+    actionUrls.competitionResultSubmission.uploadResultsJson(competitionId),
     {
       method: 'POST',
       body: formData,

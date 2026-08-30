@@ -9,7 +9,7 @@ export default function Wrapper({
   hasTemporaryResults,
   uploadedScrambleFilesCount,
   ticketId,
-  useWcaRegistration,
+  usesWcaRegistration,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -18,7 +18,7 @@ export default function Wrapper({
         hasTemporaryResults={hasTemporaryResults}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         ticketId={ticketId}
-        useWcaRegistration={useWcaRegistration}
+        usesWcaRegistration={usesWcaRegistration}
       />
     </WCAQueryClientProvider>
   );
@@ -29,7 +29,7 @@ function CompetitionResultSubmissionAdmin({
   hasTemporaryResults,
   uploadedScrambleFilesCount,
   ticketId,
-  useWcaRegistration,
+  usesWcaRegistration,
 }) {
   if (!ticketId) {
     return (
@@ -55,7 +55,7 @@ function CompetitionResultSubmissionAdmin({
         onImportSuccess={() => window.location.reload()}
         uploadedScrambleFilesCount={uploadedScrambleFilesCount}
         isAdminView
-        useWcaRegistration={useWcaRegistration}
+        usesWcaRegistration={usesWcaRegistration}
       />
     </>
   );
