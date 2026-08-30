@@ -4,7 +4,7 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, only: %i[new upload_scrambles upload_json upload_wcif import_from_live create unfinished_persons]
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, only: %i[new upload_scrambles upload_json import_from_live create unfinished_persons]
   before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
   before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
   before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wrt) }, only: %i[pending_results_submissions]
@@ -90,7 +90,7 @@ class ResultsSubmissionController < ApplicationController
     upload_json = UploadJson.new({
                                    results_file: params.require(:results_file),
                                    competition_id: competition.id,
-                                   is_wcif: is_wcif
+                                   is_wcif: is_wcif,
                                  })
 
     mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))

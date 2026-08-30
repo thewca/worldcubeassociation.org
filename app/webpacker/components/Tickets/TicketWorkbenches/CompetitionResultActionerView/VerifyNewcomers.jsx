@@ -16,12 +16,12 @@ export default function VerifyNewcomers({ ticketDetails, currentStakeholder }) {
       metadata: {
         competition: {
           id: competitionId,
-          use_wca_registration: usesWcaRegistration,
+          use_wca_registration: useWcaRegistration,
         },
       },
     },
   } = ticketDetails;
-  const [newUi, setNewUi] = useState(usesWcaRegistration);
+  const [newUi, setNewUi] = useState(useWcaRegistration);
 
   const queryClient = useQueryClient();
   const {
@@ -69,7 +69,7 @@ export default function VerifyNewcomers({ ticketDetails, currentStakeholder }) {
       )}
       {!newUi && (
         <>
-          {usesWcaRegistration && (
+          {useWcaRegistration && (
             <Message info>
               Currently using old UI for competitions that use WCA registrations.
               <Button onClick={() => setNewUi(true)}>

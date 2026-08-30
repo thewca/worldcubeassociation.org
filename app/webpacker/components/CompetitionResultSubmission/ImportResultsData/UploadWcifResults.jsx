@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
-import uploadWcifResults from '../api/uploadWcifResults';
+import uploadResultsJson from '../api/uploadResultsJson';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
@@ -19,12 +19,13 @@ export default function UploadWcifResults({
   const {
     mutate: uploadWcifResultsMutate, isPending, error, isError,
   } = useMutation({
-    mutationFn: () => uploadWcifResults({
+    mutationFn: () => uploadResultsJson({
       competitionId,
       resultFile,
       markResultSubmitted,
       storeUploadedJson: !isAdminView, // The JSON will be uploaded to database only for Delegates.
       importRegistrations,
+      isWcif: true,
     }),
     onSuccess: onImportSuccess,
   });
