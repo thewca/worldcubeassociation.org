@@ -1295,6 +1295,8 @@ es-419:
         email: Acceso a tu dirección de correo electrónico
         #original_hash: e0d0654
         manage_competitions: Administra las próximas competiciones que vas a organizar
+        #original_hash: 357ccbf
+        manage_registrations: 'Registrarte a competencias, y modificar o cancelar tus registros.'
     devise:
       #original_hash: 06184f5
       no_account: ¿No tienes cuenta?
@@ -2672,7 +2674,7 @@ es-419:
         actualizará la base de datos de acuerdo a los mismos.
       #original_hash: 779b272
       registrations_file_label: Fichero de registros
-      #original_hash: 224f3a6
+      #original_hash: d428219
       registrations_file_hint: >-
         Fichero CSV con columnas: Estado, Nombre, Región, WCA ID, Fecha de
         nacimiento, Género, Correo electrónico y una columna por cada evento.
@@ -2718,8 +2720,14 @@ es-419:
           La fecha de nacimiento debe seguir el formato AAAA-mm-dd (año-mes-día,
           por ejemplo 2000-10-14), se encontraron las siguientes fechas que no
           pueden ser procesadas: %{raw_dobs}.
+        #original_hash: ea3421b
+        invalid_country: 'País inválido: %{country}.'
+        #original_hash: b8fe3a3
+        invalid_wcif: El archivo JSON provisto no contiene un WCIF válido.
         #original_hash: 6d8e34b
         empty_file: El archivo está vacío.
+        #original_hash: 631e8d0
+        unsupported_file_format: 'Tipo de archivo no soportado. Por favor, utiliza JSON o CSV.'
     add:
       #original_hash: 975275e
       title: 'Añadir registros para %{comp}'
@@ -2946,6 +2954,8 @@ es-419:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} ingresados'
         #original_hash: adec79f
         round_locked: bloqueado
+        #original_hash: eb48b34
+        first_timer: Primerizo
         #original_hash: 5301648
         edit: Editar
         #original_hash: 612e12d
@@ -5621,6 +5631,12 @@ es-419:
     bylaws: Estatutos
     #original_hash: fdceb44
     motions: Mociones
+    #original_hash: 8a212e4
+    motion_not_found: Moción inexistente
+    #original_hash: 58219c7
+    motion_not_found_action: >-
+      No pudimos encontrar una moción con el número "%{motion_id}". Puede
+      haberse derogado.
     #original_hash: 092f99e
     minutes: Actas
     #original_hash: 6db524a
@@ -5949,6 +5965,8 @@ es-419:
       regulations_and_guidelines: Reglamento
       #original_hash: db683b3
       search_for: 'Buscar  <b>%{search_string}</b>'
+      #original_hash: b861dd5
+      empty_query: Buscar...
       not_found:
         #original_hash: 658e79f
         generic: No se han encontrado resultados
@@ -5975,7 +5993,7 @@ es-419:
     page_title: 'Incidente: %{title}'
     #original_hash: 70c5337
     not_found: No se ha encontrado el incidente
-    #original_hash: 251a7bb
+    #original_hash: b7eed0f
     back_to_log: Regresar al Registro de Incidentes
     #original_hash: bce0641
     search_placeholder: Buscar
