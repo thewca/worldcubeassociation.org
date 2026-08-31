@@ -100,7 +100,7 @@ class ResultsSubmissionController < ApplicationController
     return render status: :unprocessable_content, json: { error: upload_json.errors.full_messages } unless upload_json.valid?
 
     if is_wcif && import_registrations
-      begin
+      ActiveRecord::Base.transaction do
         competition.import_registrations!(upload_json.registrations_data, current_user)
       rescue StandardError => e
         return render status: :unprocessable_content, json: { error: "Failed to import registrations: #{e.message}" }
