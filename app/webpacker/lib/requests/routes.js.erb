@@ -298,7 +298,6 @@ export const viewUrls = {
     lastDuplicateCheckerJobRun: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_last_duplicate_checker_job_run_path(competition_id: "${competitionId}")) %>`,
     newcomerNameFormatCheck: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_newcomer_name_format_check_path(competition_id: "${competitionId}")) %>`,
     newcomerDobFormatCheck: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_newcomer_dob_check_path(competition_id: "${competitionId}")) %>`,
-    adminDoComputeAuxiliaryData: `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_do_compute_auxiliary_data_path) %>`,
     unfinishedPersons: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_unfinished_persons_path(competition_id: "${competitionId}")) %>`,
     pendingResultsSubmissions: `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_results_submissions_path) %>`,
   },
