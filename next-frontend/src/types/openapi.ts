@@ -1166,6 +1166,7 @@ export interface components {
         RoundState: "open" | "locked" | "pending" | "ready" | "blocked";
         BaseAdminRound: components["schemas"]["BaseWcifRound"] & {
             state: components["schemas"]["RoundState"];
+            min_competitors_to_open?: number;
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;

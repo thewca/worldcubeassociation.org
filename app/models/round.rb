@@ -738,6 +738,13 @@ class Round < ApplicationRecord
     MIN_COMPETITORS_PER_CLAUSE.keys.reverse[binding_cap[:subsequent_rounds_allowed]]
   end
 
+  # How many competitors the round needs to be allowed under
+  # https://www.worldcubeassociation.org/regulations/#9m. Only linked
+  # rounds can be opened while violating 9m, every other round is STATE_BLOCKED instead.
+  def min_competitors_to_open
+    MIN_COMPETITORS_PER_CLAUSE.values.reverse[number - 2] if number > 1
+  end
+
   def open?
     live_results.any?
   end
@@ -927,6 +934,7 @@ class Round < ApplicationRecord
       # WCIF v2 so that the frontend knows about linked rounds
       **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "state" => state,
+      "min_competitors_to_open" => min_competitors_to_open,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)
       json = json.merge({
