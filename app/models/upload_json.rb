@@ -22,7 +22,7 @@ class UploadJson
         json_competition_id = is_wcif ? parsed_json['id'] : parsed_json['competitionId']
         errors.add(:results_file, "is not for this competition but for #{json_competition_id}!") if json_competition_id != competition_id
       rescue JSON::ParserError
-        errors.add(:results_file, is_wcif ? "must be a valid JSON file" : "must be a JSON file from the Workbook Assistant")
+        errors.add(:results_file, is_wcif ? "must be a JSON file containing WCIF" : "must be a JSON file from the Workbook Assistant")
       rescue JSON::Schema::ValidationError => e
         errors.add(:results_file, "has errors: #{e.message}")
       end
@@ -119,29 +119,30 @@ class UploadJson
           results_to_import << new_res
         end
 
-        unless is_wcif
-          # Import scrambles for round
-          # I am too lazy to write actual parsing logic for A->1, B->2, ..., AA->27 etc.
-          #   so this snippet is just "faking" the parse by using length-adjusted lexicographic sorting
-          sorted_groups = round["groups"].sort_by { [it["group"].length, it["group"]] }
-          sorted_groups.each_with_index do |group, group_idx|
-            new_scramble_set_attributes = {
-              ordered_index: group_idx,
-            }
-            new_scr_set = MatchedScrambleSet.new(new_scramble_set_attributes)
-            new_scr_set.round = competition_round
-            %w[scrambles extraScrambles].each do |scramble_type|
-              group[scramble_type]&.each_with_index do |scramble, scr_index|
-                new_scramble_attributes = {
-                  scramble_string: scramble,
-                  is_extra: scramble_type == "extraScrambles",
-                  ordered_index: scr_index,
-                }
-                new_scr_set.matched_scrambles.build(new_scramble_attributes)
-              end
+        # We do not import scrambles from WCIF files currently
+        next if is_wcif
+
+        # Import scrambles for round
+        # I am too lazy to write actual parsing logic for A->1, B->2, ..., AA->27 etc.
+        #   so this snippet is just "faking" the parse by using length-adjusted lexicographic sorting
+        sorted_groups = round["groups"].sort_by { [it["group"].length, it["group"]] }
+        sorted_groups.each_with_index do |group, group_idx|
+          new_scramble_set_attributes = {
+            ordered_index: group_idx,
+          }
+          new_scr_set = MatchedScrambleSet.new(new_scramble_set_attributes)
+          new_scr_set.round = competition_round
+          %w[scrambles extraScrambles].each do |scramble_type|
+            group[scramble_type]&.each_with_index do |scramble, scr_index|
+              new_scramble_attributes = {
+                scramble_string: scramble,
+                is_extra: scramble_type == "extraScrambles",
+                ordered_index: scr_index,
+              }
+              new_scr_set.matched_scrambles.build(new_scramble_attributes)
             end
-            scramble_sets_to_import << new_scr_set
           end
+          scramble_sets_to_import << new_scr_set
         end
       end
     end
