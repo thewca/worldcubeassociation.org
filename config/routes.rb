@@ -323,7 +323,6 @@ Rails.application.routes.draw do
   get '/admin/regional-voters' => 'admin#regional_voters', as: :regional_voters
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
   get '/admin/person_data' => 'admin#person_data'
-  get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
