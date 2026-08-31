@@ -7,21 +7,43 @@ module CompetitionResultsImport
     result_submission_method,
     mark_result_submitted: false,
     store_uploaded_json: false,
+    import_matched_scrambles: true,
     results_json_str: nil
   )
     errors = []
 
     results_to_import = temporary_results_data[:results_to_import]
-    scrambles_to_import = temporary_results_data[:scrambles_to_import]
     persons_to_import = temporary_results_data[:persons_to_import]
 
     ActiveRecord::Base.transaction do
       InboxPerson.where(competition_id: competition.id).delete_all
       InboxResult.where(competition_id: competition.id).delete_all
-      Scramble.where(competition_id: competition.id).delete_all
       InboxPerson.import!(persons_to_import)
-      Scramble.import!(scrambles_to_import)
       InboxResult.import!(results_to_import)
+
+      # Compute global_pos for inbox results with linked_rounds
+      competition.rounds.includes(:linked_round).where.not(linked_round_id: nil).find_each(&:recompute_inbox_results_global_pos)
+
+      if import_matched_scrambles
+        # Foreign Key handles transitive deletion of individual scrambles
+        competition.rounds.each { it.matched_scramble_sets.delete_all }
+
+        scramble_sets_to_import = temporary_results_data[:scramble_sets_to_import]
+        MatchedScrambleSet.import!(scramble_sets_to_import)
+
+        scramble_set_lookup = competition.reload
+                                         .matched_scramble_sets
+                                         .index_by(&:import_index)
+
+        scrambles_to_import = scramble_sets_to_import.flat_map(&:matched_scrambles)
+
+        scrambles_to_import.each do |scramble|
+          inserted_scramble_set = scramble_set_lookup.fetch(scramble.matched_scramble_set.import_index)
+          scramble.matched_scramble_set = inserted_scramble_set
+        end
+
+        MatchedScramble.import!(scrambles_to_import)
+      end
 
       competition.touch(:results_submitted_at) if mark_result_submitted && !competition.results_submitted?
 
@@ -30,8 +52,10 @@ module CompetitionResultsImport
       errors << "Duplicate record found while uploading results. Maybe there is a duplicate personId in the JSON?"
     rescue ActiveRecord::RecordInvalid => e
       object = e.record
-      errors << if object.instance_of?(Scramble)
-                  "Scramble in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
+      errors << if object.instance_of?(MatchedScrambleSet)
+                  "Scramble Set in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
+                elsif object.instance_of?(MatchedScramble)
+                  "Scramble ##{object.scramble_num} in set '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(InboxPerson)
                   "Person #{object.name} is invalid (#{e.message}), please fix it!"
                 elsif object.instance_of?(InboxResult)
@@ -56,6 +80,7 @@ module CompetitionResultsImport
 
                                  {
                                    pos: inbox_res.pos,
+                                   global_pos: inbox_res.global_pos,
                                    person_id: person_id,
                                    person_name: inbox_res.person_name,
                                    country_id: person_country.id,
@@ -82,6 +107,19 @@ module CompetitionResultsImport
       ResultAttempt.insert_all!(attempt_rows)
 
       competition.inbox_results.destroy_all
+    end
+  end
+
+  def self.merge_inbox_scrambles(competition)
+    ActiveRecord::Base.transaction do
+      scramble_rows = competition.matched_scrambles
+                                 .includes(**MatchedScramble::POSTING_INCLUDES)
+                                 .map(&:scramble_attrs)
+
+      Scramble.insert_all!(scramble_rows)
+      # Not deleting the MatchedScrambles so that the Delegate can go back
+      #   and upload "more stuff" later and add it to existing matchings.
+      # WRT can action these based on `external_scramble_id` above.
     end
   end
 

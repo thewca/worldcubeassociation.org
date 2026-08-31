@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class DatabaseController < ApplicationController
+  if Rails.env.production?
+    rate_limit to: 5, within: 1.day, name: "results_export", only: %i[sql_permalink tsv_permalink results_permalink]
+    rate_limit to: 5, within: 1.day, name: "dev_export",     only: %i[dev_export_permalink]
+  end
+
   RESULTS_EXPORT_FILE_TYPES = %w[sql tsv].freeze
 
   def results_export
@@ -62,6 +67,10 @@ class DatabaseController < ApplicationController
 
     url, = DbDumpHelper.cached_results_export_info(file_type, version)
     redirect_to url, status: :moved_permanently, allow_other_host: true
+  end
+
+  def dev_export_permalink
+    redirect_to DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK), status: :moved_permanently, allow_other_host: true
   end
 
   def developer_export

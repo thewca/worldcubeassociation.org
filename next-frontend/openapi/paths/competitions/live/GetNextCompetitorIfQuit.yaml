@@ -25,6 +25,14 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: "../../../schemas/live/LiveCompetitor.yaml"
+            type: object
+            properties:
+              status:
+                type: string
+              next_advancing:
+                type: array
+                items:
+                  $ref: "../../../schemas/live/LiveCompetitor.yaml"
+            required:
+              - status
+              - next_advancing

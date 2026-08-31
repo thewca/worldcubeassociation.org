@@ -13,11 +13,14 @@ class User < ApplicationRecord
   has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
+  has_many :competition_scoretakers
+  has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
+  has_many :newcomer_results, through: :registrations, source: :newcomer_results
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
-  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
+  belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true, inverse_of: :unconfirmed_user
   belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true, inverse_of: :users_claiming_wca_id
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
@@ -43,6 +46,7 @@ class User < ApplicationRecord
   has_many :board_metadata, through: :active_groups, source: :metadata, source_type: "GroupsMetadataBoard"
   has_many :users_claiming_wca_id, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", inverse_of: :delegate_to_handle_wca_id_claim
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", inverse_of: :delegate_to_handle_wca_id_claim
+  has_many :officer_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataOfficers"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
   has_many :oauth_access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id, inverse_of: false
   has_many :user_preferred_events, dependent: :destroy
@@ -50,6 +54,8 @@ class User < ApplicationRecord
   has_many :bookmarked_competitions, dependent: :destroy
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
   has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition", inverse_of: :announced_by_user
+  has_many :competitions_cancelled, foreign_key: "cancelled_by", class_name: "Competition", inverse_of: :cancelled_by_user
+  has_many :competitions_posting, foreign_key: "posting_by", class_name: "Competition", inverse_of: :posting_user
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition", inverse_of: :posted_user
   has_many :confirmed_payment_intents, class_name: "PaymentIntent", as: :confirmation_source
   has_many :canceled_payment_intents, class_name: "PaymentIntent", as: :cancellation_source
@@ -60,7 +66,10 @@ class User < ApplicationRecord
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
   has_many :user_avatars, dependent: :destroy, inverse_of: :user
+  has_many :approved_user_avatars, class_name: "UserAvatar", inverse_of: :approved_by_user
+  has_many :revoked_user_avatars, class_name: "UserAvatar", inverse_of: :revoked_by_user
   has_many :potential_duplicate_persons, dependent: :destroy, foreign_key: :original_user_id, class_name: "PotentialDuplicatePerson", inverse_of: :original_user
+  has_many :scramble_file_uploads, foreign_key: :uploaded_by, inverse_of: :uploaded_by_user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
   scope :newcomers, -> { where(wca_id: nil) }
@@ -462,7 +471,7 @@ class User < ApplicationRecord
   end
 
   def can_administrate_livestream?
-    software_team? || board_member? || communication_team?
+    software_team? || board_member? || higher_permission_officer? || communication_team?
   end
 
   def any_kind_of_delegate?
@@ -479,6 +488,10 @@ class User < ApplicationRecord
     else
       delegate_role_metadata.trainee_delegate.any?
     end
+  end
+
+  def higher_permission_officer?
+    officer_role_metadata.higher_permission.any?
   end
 
   private def staff_delegate?
@@ -534,7 +547,7 @@ class User < ApplicationRecord
   end
 
   private def can_edit_any_groups?
-    admin? || board_member? || results_team?
+    admin? || board_member? || higher_permission_officer? || results_team?
   end
 
   private def groups_with_create_access
@@ -559,7 +572,11 @@ class User < ApplicationRecord
   end
 
   private def can_view_past_banned_competitors?
-    wic_team? || board_member? || weat_team? || results_team? || admin?
+    wic_team? || board_member? || higher_permission_officer? || weat_team? || results_team? || admin?
+  end
+
+  def can_request_to_edit_others_profile?
+    any_kind_of_delegate? || results_team?
   end
 
   private def groups_with_read_access_for_current
@@ -765,6 +782,7 @@ class User < ApplicationRecord
         pages: [
           panel_pages[:bannedCompetitors],
           panel_pages[:delegateProbations],
+          panel_pages[:helpfulQueries],
         ],
       },
       wqac: {
@@ -791,6 +809,9 @@ class User < ApplicationRecord
       can_administer_competitions: {
         scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
+      can_scoretake_competitions: {
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id) + scoretaking_competition_ids,
+      },
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
@@ -816,7 +837,10 @@ class User < ApplicationRecord
         scope: panels_with_access,
       },
       can_request_to_edit_others_profile: {
-        scope: any_kind_of_delegate? ? "*" : [],
+        scope: can_request_to_edit_others_profile? ? "*" : [],
+      },
+      can_manage_incidents: {
+        scope: can_manage_incidents? ? "*" : [],
       },
     }
     if banned?
@@ -832,7 +856,7 @@ class User < ApplicationRecord
   end
 
   def can_view_all_users?
-    admin? || board_member? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team? || appeals_committee?
+    admin? || board_member? || higher_permission_officer? || results_team? || communication_team? || wic_team? || any_kind_of_delegate? || weat_team? || wrc_team? || appeals_committee?
   end
 
   def can_edit_user?(user)
@@ -863,7 +887,7 @@ class User < ApplicationRecord
   end
 
   def can_admin_results?
-    admin? || board_member? || results_team?
+    admin? || board_member? || higher_permission_officer? || results_team?
   end
 
   def can_admin_finances?
@@ -875,7 +899,7 @@ class User < ApplicationRecord
   end
 
   def can_manage_regional_organizations?
-    admin? || board_member? || weat_team?
+    admin? || board_member? || higher_permission_officer? || weat_team?
   end
 
   def can_create_competitions?
@@ -905,6 +929,10 @@ class User < ApplicationRecord
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
+  end
+
+  def can_scoretake_competition?(competition)
+    can_manage_competition?(competition) || competition.scoretakers.include?(self)
   end
 
   def can_manage_any_not_over_competitions?
@@ -957,7 +985,7 @@ class User < ApplicationRecord
   end
 
   def can_create_poll?
-    admin? || board_member? || wrc_team? || wic_team? || quality_assurance_committee?
+    admin? || board_member? || higher_permission_officer? || wrc_team? || wic_team? || quality_assurance_committee?
   end
 
   def can_vote_in_poll?
@@ -1015,7 +1043,7 @@ class User < ApplicationRecord
   end
 
   def can_approve_media?
-    admin? || communication_team? || board_member?
+    admin? || communication_team? || board_member? || higher_permission_officer?
   end
 
   def can_see_eligible_voters?
@@ -1116,12 +1144,7 @@ class User < ApplicationRecord
     fields += %i[name dob gender country_iso2] unless cannot_edit_data_reason_html(user)
     fields += CLAIM_WCA_ID_PARAMS if user == self || can_edit_any_user?
     fields << :name if user.wca_id.blank? && organizer_for?(user)
-    if can_edit_any_user?
-      fields += %i[
-        unconfirmed_wca_id
-      ]
-      fields += %i[wca_id] unless user.special_account?
-    end
+    fields << :wca_id if can_edit_any_user? && !user.special_account?
     fields
   end
 
@@ -1216,10 +1239,10 @@ class User < ApplicationRecord
     return User.where(email: query) if admin_search && search_by_email
 
     if searching_persons_table
-      users = Person.includes(:user).current
+      users = Person.includes(user: SERIALIZATION_INCLUDES).current
       search_by_email = false # We can't search by email on the 'Person' table
     else
-      users = User.confirmed_email.not_dummy_account
+      users = User.confirmed_email.not_dummy_account.includes(SERIALIZATION_INCLUDES)
 
       users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 
@@ -1244,8 +1267,12 @@ class User < ApplicationRecord
   end
 
   private def deprecated_team_roles
-    active_roles
-      .includes(:metadata, group: [:metadata])
+    # Reuse the already-loaded association (with its metadata/group preloaded) when the
+    # caller eager loaded it; otherwise build the query with the includes we need. Calling
+    # `.includes` unconditionally would discard any preloaded `active_roles` and re-query.
+    roles = active_roles.loaded? ? active_roles : active_roles.includes(:metadata, group: [:metadata])
+
+    roles
       .select do |role|
         [
           UserGroup.group_types[:teams_committees],
@@ -1263,6 +1290,16 @@ class User < ApplicationRecord
     methods: %w[url country],
     include: %w[avatar],
   }.freeze
+
+  # Associations that `serializable_hash` touches: `staff_delegate?` (delegate role metadata),
+  # `deprecated_team_roles` (active roles + their metadata/group) and `avatar` (current_avatar).
+  # Eager load these whenever many users are serialized to avoid an N+1 explosion.
+  SERIALIZATION_INCLUDES = [
+    :current_avatar,
+    :delegate_role_metadata,
+    :delegate_roles,
+    { active_roles: [:metadata, { group: :metadata }] },
+  ].freeze
 
   def serializable_hash(options = nil)
     # NOTE: doing deep_dup is necessary here to avoid changing the inner values
@@ -1301,7 +1338,7 @@ class User < ApplicationRecord
     json
   end
 
-  def to_wcif(competition, registration = nil, authorized: false)
+  def to_wcif(competition, registration = nil, authorized: false, version: Competition::WCIF_STABLE_VERSION)
     roles = registration&.roles || []
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
@@ -1321,12 +1358,12 @@ class User < ApplicationRecord
       "avatar" => current_avatar&.to_wcif,
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
-      "personalBests" => person&.personal_records&.map(&:to_wcif) || [],
+      "personalBests" => person&.personal_records&.map { it.to_wcif(version: version) } || [],
       "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => "object",
       "properties" => {
@@ -1342,7 +1379,7 @@ class User < ApplicationRecord
         "roles" => { "type" => "array", "items" => { "type" => "string" } },
         "registration" => Registration.wcif_json_schema,
         "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
-        "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
+        "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema(version: version) },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
@@ -1414,7 +1451,7 @@ class User < ApplicationRecord
   end
 
   private def can_manage_delegate_probation?
-    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic) || weat_team?
+    admin? || board_member? || higher_permission_officer? || senior_delegate? || can_access_wfc_senior_matters? || group_leader?(UserGroup.teams_committees_group_wic) || weat_team?
   end
 
   def senior_delegates
@@ -1426,7 +1463,7 @@ class User < ApplicationRecord
   end
 
   def can_access_senior_delegate_panel?
-    admin? || board_member? || senior_delegate?
+    admin? || board_member? || higher_permission_officer? || senior_delegate?
   end
 
   private def can_access_panel?(panel_id)
@@ -1444,7 +1481,7 @@ class User < ApplicationRecord
     when :wst
       software_team?
     when :board
-      board_member?
+      board_member? || higher_permission_officer?
     when :leader
       active_roles.any? { |role| role.lead? && (role.group.teams_committees? || role.group.councils?) }
     when :senior_delegate
@@ -1567,6 +1604,9 @@ class User < ApplicationRecord
       roles.update_all(user_id: new_user.id)
       registrations.update_all(user_id: new_user.id)
 
+      final_wca_id = new_user.wca_id.presence || self.wca_id.presence
+      new_user.newcomer_results.update_all(person_id: final_wca_id) if final_wca_id.present?
+
       return if wca_id.blank?
 
       wca_id_to_be_transferred = self.wca_id
@@ -1594,6 +1634,8 @@ class User < ApplicationRecord
       update!(wca_id: wca_id)
       stale_claims.update_all(**CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
       potential_duplicate_persons.delete_all
+
+      newcomer_results.update_all(person_id: wca_id)
     end
 
     stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }

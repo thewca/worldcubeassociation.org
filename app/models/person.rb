@@ -5,11 +5,15 @@ class Person < ApplicationRecord
   self.table_name = 'persons'
 
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
+  has_one :unconfirmed_user, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "User", inverse_of: :unconfirmed_person
   has_many :results, primary_key: "wca_id"
   has_many :result_attempts, through: :results
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
   has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
+  has_many :inbox_persons, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
+  has_many :tickets_edit_person, primary_key: "wca_id", foreign_key: "wca_id", class_name: "TicketsEditPerson", inverse_of: :person
+  has_many :potential_duplicate_persons, foreign_key: :duplicate_person_id, class_name: "PotentialDuplicatePerson", dependent: :destroy, inverse_of: :duplicate_person
 
   enum :gender, User::ALLOWABLE_GENDERS.index_with(&:to_s)
 
@@ -228,7 +232,7 @@ class Person < ApplicationRecord
   end
 
   def medals
-    positions = results.podium.pluck(:pos)
+    positions = results.podium.pluck(:global_pos)
     {
       gold: positions.count(1),
       silver: positions.count(2),
@@ -256,7 +260,9 @@ class Person < ApplicationRecord
   end
 
   def self.search(query, params: {})
-    persons = Person.current.includes(:user)
+    # `serializable_hash` serializes the associated user, so eager load the associations
+    # `User#serializable_hash` touches to avoid an N+1 per person.
+    persons = Person.current.includes(user: User::SERIALIZATION_INCLUDES)
     query.split.each do |part|
       persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
     end

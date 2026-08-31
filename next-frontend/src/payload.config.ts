@@ -19,6 +19,8 @@ import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
 import { Documents } from "@/collections/Documents";
 import { Nav } from "@/globals/Nav";
+import { Footer } from "@/globals/Footer";
+import { SocialLinks } from "@/globals/SocialLinks";
 import { Home } from "@/globals/Home";
 import { AboutRegulations } from "@/globals/AboutRegulations";
 import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
@@ -41,6 +43,7 @@ const dirname = path.dirname(filename);
 
 function plugins() {
   const isProduction = process.env.NODE_ENV === "production";
+  const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
     authjsPlugin({
@@ -50,7 +53,7 @@ function plugins() {
       enabled: isProduction,
       collections: {
         media: {
-          prefix: "media",
+          prefix: isLiveSite ? "media" : "media-staging",
           generateFileURL: ({ prefix, filename }) => {
             return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
           },
@@ -121,6 +124,8 @@ export default buildConfig({
   ],
   globals: [
     Nav,
+    Footer,
+    SocialLinks,
     Home,
     AboutUsPage,
     Privacy,

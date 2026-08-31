@@ -1,3 +1,3 @@
 SELECT *
 FROM persons
-WHERE gender = ''
+WHERE gender = '';

@@ -3,6 +3,9 @@ import { markdownConvertedField } from "@/collections/helpers";
 
 export const Announcements: CollectionConfig = {
   slug: "announcements",
+  admin: {
+    useAsTitle: "title",
+  },
   fields: [
     {
       name: "image",
@@ -13,6 +16,15 @@ export const Announcements: CollectionConfig = {
       name: "title",
       type: "text",
       required: true,
+    },
+    {
+      name: "summary",
+      type: "textarea",
+      maxLength: 400,
+      admin: {
+        description:
+          "Shown on the announcements list before 'Read More'. Falls back to the beginning of the content when empty.",
+      },
     },
     {
       name: "content",

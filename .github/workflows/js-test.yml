@@ -22,25 +22,54 @@ jobs:
       run:
         working-directory: next-frontend
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Corepack/Yarn
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_MAJOR }}
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: yarn install
+      - name: Build OpenAPI types
+        # Fails if a $ref points at a schema file that was never committed, and
+        # (via the diff) if the committed types are stale.
+        run: |
+          yarn run types:openapi
+          git diff --exit-code -- src/types/openapi.ts
+      - name: Build Chakra types
+        # Fails if the theme can no longer be loaded by the Chakra CLI, and
+        # (via the diff) if the committed types are stale. --intent-to-add makes
+        # newly generated files show up in the diff as well.
+        run: |
+          yarn run types:chakra
+          git add --intent-to-add src/types/chakra
+          git diff --exit-code -- src/types/chakra
+      - name: Build Payload types
+        # Fails if a collection/global config no longer loads, and (via the
+        # diff) if the committed types are stale. Needs no database: Payload
+        # builds the config without connecting to Mongo.
+        run: |
+          yarn run types:payload
+          git diff --exit-code -- src/types/payload.ts
       - name: Check types
         run: yarn run check:types
       - name: Run Lint
         run: yarn run lint
-      - name: Create dummy fonts
-        shell: bash
-        run: |
-          mkdir ./src/styles/fonts/TTNormsPro
-          for style in Light Light_Italic Regular Medium Bold Condensed_ExtraBold; do
-            touch "./src/styles/fonts/TTNormsPro/TT_Norms_Pro_${style}.woff2"
-          done
+      - name: Run unit tests
+        # `yarn test` is bare `vitest`, which watches. Invoke the run-once form.
+        run: yarn vitest run
       - name: Run build
         run: yarn run build
+      - name: Verify newrelic loads from standalone output
+        # Simulates the production container startup: NODE_OPTIONS='-r newrelic'.
+        # If any transitive dep is missing from the standalone node_modules
+        # (e.g. meriyah via @apm-js-collab/code-transformer), this step fails
+        # before the image is built or deployed.
+        working-directory: next-frontend/.next/standalone
+        env:
+          NODE_ENV: production
+          NEW_RELIC_LICENSE_KEY: ci-test-not-real
+          NEW_RELIC_APP_NAME: ci-test
+          NEW_RELIC_LOG_LEVEL: error
+        run: node -e "require('./node_modules/newrelic')"

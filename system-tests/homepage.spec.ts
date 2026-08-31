@@ -4,5 +4,5 @@ test('displays WCA Logo in header', async ({ page }) => {
   await page.goto('/');
 
   const navbar = page.getByTestId('header-navbar');
-  await expect(navbar.getByAltText('WCA Logo')).toBeVisible();
+  await expect(navbar.getByAltText('WCA Logo Light')).toBeVisible();
 });

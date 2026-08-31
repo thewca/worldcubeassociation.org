@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_log_group" "this" {
-  name = var.name_prefix
+  name              = var.name_prefix
+  retention_in_days = 30
 }
 
 locals {
@@ -34,7 +35,7 @@ locals {
     },
     {
       name  = "DUMP_HOST"
-      value = "https://assets.worldcubeassociation.org"
+      value = "https://exports.worldcubeassociation.org"
     },
     {
       name  = "SHAKAPACKER_ASSET_HOST"
@@ -54,6 +55,10 @@ locals {
     },
     {
       name = "SIDEKIQ_REDIS_URL"
+      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+    },
+    {
+      name = "ANYCABLE_REDIS_URL",
       value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
     },
     {
@@ -105,8 +110,8 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
-      name = "CDN_ASSETS_DISTRIBUTION_ID"
-      value = "E3AXWQVI864TGL"
+      name = "CDN_EXPORTS_DISTRIBUTION_ID"
+      value = "E1752JAESQHVEE"
     },
     {
       name = "DATABASE_WRT_USER"
@@ -155,6 +160,7 @@ locals {
           dump_replica_host: "staging-v2-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"}))
     }
   ]
+  rails_internal_dns = "rails-staging.local"
 }
 
 data "aws_iam_policy_document" "task_assume_role_policy" {
@@ -263,11 +269,13 @@ resource "aws_ecs_task_definition" "api" {
       memory = 2048
       portMappings = [
         {
-          # The hostPort is automatically set for awsvpc network mode,
-          # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
+          name = "rails-staging-port"
+          # Set hostport for service discovery
+          hostPort = 3000
           containerPort = 3000
           protocol      = "tcp"
-        },
+          appProtocol = "http"
+        }
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -293,6 +301,11 @@ resource "aws_ecs_task_definition" "api" {
   }
 }
 
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name = local.rails_internal_dns
+  vpc  = var.shared.vpc_id
+}
+
 resource "aws_ecs_task_definition" "this" {
   family = var.name_prefix
 
@@ -305,14 +318,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3900"
+  memory = "3850"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1024
-      memory = 3900
+      memory = 3850
 
       portMappings = [
         {
@@ -409,7 +422,6 @@ resource "aws_ecs_service" "rails" {
   tags = {
     Name = var.name_prefix
   }
-
 }
 
 resource "aws_ecs_service" "api" {
@@ -464,6 +476,22 @@ resource "aws_ecs_service" "api" {
 
   tags = {
     Name = var.name_prefix
+  }
+
+  service_connect_configuration {
+    enabled = true
+    namespace = aws_service_discovery_private_dns_namespace.this.name
+    service {
+      port_name = "rails-staging-port"
+      discovery_name = "rails-cluster"
+      timeout {
+        per_request_timeout_seconds = 60
+      }
+      client_alias {
+        port = 3000
+        dns_name = local.rails_internal_dns
+      }
+    }
   }
 
 }

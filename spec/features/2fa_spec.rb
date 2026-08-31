@@ -11,7 +11,7 @@ RSpec.feature "Sign in with 2FA" do
       fill_in "Email", with: fool.email
       fill_in "user[password]", with: "wca"
       click_button "Sign in"
-      expect(page).to have_content "Signed in successfully"
+      expect(page).to have_text "Signed in successfully"
     end
   end
 
@@ -23,10 +23,10 @@ RSpec.feature "Sign in with 2FA" do
       fill_in "Email", with: user.email
       fill_in "user[password]", with: "wca"
       click_button "Sign in"
-      expect(page).to have_content "Enter your two-factor authentication code"
+      expect(page).to have_text "Enter your two-factor authentication code"
       fill_in "user[otp_attempt]", with: user.current_otp
       click_button "Confirm code"
-      expect(page).to have_content "Signed in successfully"
+      expect(page).to have_text "Signed in successfully"
     end
 
     it 'works with a backup codes' do
@@ -36,10 +36,10 @@ RSpec.feature "Sign in with 2FA" do
       fill_in "Email", with: user.email
       fill_in "user[password]", with: "wca"
       click_button "Sign in"
-      expect(page).to have_content "Enter your two-factor authentication code"
+      expect(page).to have_text "Enter your two-factor authentication code"
       fill_in "user[otp_attempt]", with: codes.first
       click_button "Confirm code"
-      expect(page).to have_content "Signed in successfully"
+      expect(page).to have_text "Signed in successfully"
     end
 
     it 'can send a OTP by email', :js do
@@ -47,7 +47,7 @@ RSpec.feature "Sign in with 2FA" do
       fill_in "Email", with: user.email
       fill_in "user[password]", with: "wca"
       click_button "Sign in"
-      expect(page).to have_content "Enter your two-factor authentication code"
+      expect(page).to have_text "Enter your two-factor authentication code"
       expect(TwoFactorMailer).to receive(:send_otp_to_user).with(user).and_call_original
       accept_alert("You have been sent a code by email. The code is valid for 2 minutes. You may ask for a new code in 2 minutes.") do
         click_on "Get a code by email"

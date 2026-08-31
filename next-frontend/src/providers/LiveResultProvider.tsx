@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import {
+  LiveAttempt,
   LiveCompetitor,
   LiveResult,
   LiveRound,
@@ -16,6 +17,7 @@ import {
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
   ConnectionState,
+  DiffedLiveResult,
   DiffProtocolResponse,
 } from "@/lib/hooks/useResultsSubscription";
 import { applyDiffToLiveResults } from "@/lib/live/applyDiffToLiveResults";
@@ -25,6 +27,8 @@ import {
   decompressFullResult,
   decompressPartialResult,
 } from "@/lib/live/decompressDiff";
+import { countCompletedResults } from "@/lib/live/countCompletedResults";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 interface LiveResultContextType {
@@ -33,7 +37,7 @@ interface LiveResultContextType {
     liveResult: PendingLiveResult,
     roundWcifId: string,
   ) => void;
-  pendingLiveResults: LiveResult[];
+  pendingLiveResults: PendingLiveResult[];
   addPendingQuitCompetitor: (registrationId: number) => void;
   pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
@@ -43,6 +47,27 @@ interface LiveResultContextType {
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
   undefined,
 );
+
+const compareAttempts = (
+  attemptsA: LiveAttempt[],
+  attemptsB: LiveAttempt[],
+) => {
+  const sortedA = attemptsA.toSorted(
+    (a, b) => a.attempt_number - b.attempt_number,
+  );
+  const sortedB = attemptsB.toSorted(
+    (a, b) => a.attempt_number - b.attempt_number,
+  );
+
+  return (
+    sortedA.length === sortedB.length &&
+    sortedA.every(
+      (a, i) =>
+        a.value === sortedB[i].value &&
+        a.attempt_number === sortedB[i].attempt_number,
+    )
+  );
+};
 
 export function LiveResultProvider({
   initialRound,
@@ -72,30 +97,42 @@ export function MultiRoundResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
-  const [pendingResults, updatePendingResults] = useState<LiveResult[]>([]);
+  const [pendingResults, updatePendingResults] = useState<PendingLiveResult[]>(
+    [],
+  );
   const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
     Set<number>
   >(new Set());
-  const [competitors, setCompetitors] = useState<Map<number, LiveCompetitor>>(
-    new Map(initialRounds.flatMap((r) => r.competitors.map((r) => [r.id, r]))),
-  );
 
   const api = useAPI();
   const queryClient = useQueryClient();
+  const { setCompletedCount, setTotalCompetitors } = useAllRoundsInfo();
+
+  const roundQueryOptions = useCallback(
+    (roundId: string) => {
+      return api.queryOptions(
+        "get",
+        "/v1/competitions/{competitionId}/live/rounds/{roundId}",
+        {
+          params: { path: { roundId, competitionId } },
+        },
+      );
+    },
+    [api, competitionId],
+  );
 
   // One query per round
   const queries = initialRounds.map((round) => ({
-    ...api.queryOptions(
-      "get",
-      "/v1/competitions/{competitionId}/live/rounds/{roundId}",
-      {
-        params: { path: { roundId: round.id, competitionId } },
-      },
-    ),
+    ...roundQueryOptions(round.id),
     initialData: round,
   }));
 
-  const { liveResultsByRegistrationId, stateHashesByRoundId } = useQueries({
+  const {
+    liveResultsByRegistrationId,
+    stateHashesByRoundId,
+    competitors,
+    refetchRound,
+  } = useQueries({
     queries,
     combine: (queryResults) => ({
       liveResultsByRegistrationId: _.groupBy(
@@ -105,8 +142,33 @@ export function MultiRoundResultProvider({
       stateHashesByRoundId: Object.fromEntries(
         queryResults.map((r) => [r.data.id, r.data.state_hash]),
       ),
+      competitors: new Map(
+        queryResults.flatMap((r) => r.data.competitors.map((c) => [c.id, c])),
+      ),
+      refetchRound: async (roundId: string) => {
+        return queryResults.find((r) => r.data.id === roundId)!.refetch();
+      },
     }),
   });
+
+  const diffPendingResults = useCallback(
+    <T extends DiffedLiveResult>(
+      incomingResults: T[],
+      comparisonFn: (pending: PendingLiveResult, incoming: T) => boolean,
+    ) => {
+      updatePendingResults((prevPendingResults) =>
+        prevPendingResults.filter(
+          (pr) =>
+            !incomingResults.some(
+              (ir) =>
+                ir.registration_id === pr.registration_id &&
+                comparisonFn(pr, ir),
+            ),
+        ),
+      );
+    },
+    [],
+  );
 
   const onReceived = (roundId: string, diff: DiffProtocolResponse) => {
     const {
@@ -117,47 +179,78 @@ export function MultiRoundResultProvider({
       after_hash,
     } = diff;
 
-    const queryIndex = initialRounds.findIndex((r) => r.id === roundId);
-    if (queryIndex === -1) return;
-
-    const query = queries[queryIndex];
-
     if (before_hash !== stateHashesByRoundId[roundId]) {
-      queryClient.refetchQueries({ queryKey: query.queryKey, exact: true });
+      refetchRound(roundId).then((res) => {
+        if (!res.isSuccess) {
+          return;
+        }
+
+        const newData = res.data;
+        const newResults = newData.results;
+        const newCompetitors = newData.competitors;
+
+        setCompletedCount(roundId, newData.completed_competitors);
+        setTotalCompetitors(roundId, newCompetitors.length);
+
+        // We just made a full refetch. Only keep those results as "pending"
+        //   which are NOT contained exactly in the refetched round.
+        // In other words, if we find a competitor with the updated attempts
+        //   in the refetched round, then their result is not pending anymore.
+        diffPendingResults(newResults, (pr, ir) =>
+          compareAttempts(pr.attempts, ir.attempts),
+        );
+
+        updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+          // Only keep pending quit markers if they are _still_ in the refetched round
+          //   (ie the "quit" has not been executed yet)
+          currentlyQuitCompetitors.intersection(
+            new Set(newCompetitors.map((r) => r.id)),
+          ),
+        );
+      });
     } else {
-      const decompressedUpdated = updated.map((r) =>
-        decompressPartialResult(r),
-      );
+      const decompressedUpdated = updated.map(decompressPartialResult);
+      const decompressedCreated = created.map(decompressFullResult);
 
-      const decompressedCreated = created.map((r) => decompressFullResult(r));
+      const deletedSet = new Set(deleted);
+      const roundQuery = roundQueryOptions(roundId);
 
-      queryClient.setQueryData(query.queryKey, (oldData: LiveRound) => ({
-        ...oldData,
-        results: applyDiffToLiveResults({
-          previousResults: oldData.results,
-          updated: decompressedUpdated,
-          created: decompressedCreated,
-          deleted,
-          roundWcifId: roundId,
+      queryClient.setQueryData(
+        roundQuery.queryKey,
+        (oldData: LiveRound): LiveRound => ({
+          ...oldData,
+          results: applyDiffToLiveResults({
+            previousResults: oldData.results,
+            updated: decompressedUpdated,
+            created: decompressedCreated,
+            deleted,
+            roundWcifId: roundId,
+          }),
+          state_hash: after_hash,
+          competitors: [
+            ...oldData.competitors,
+            ...created.map((c) => c.user),
+          ].filter((c) => !deletedSet.has(c.id)),
         }),
-        state_hash: after_hash,
-      }));
-
-      updatePendingResults((pendingResults) =>
-        pendingResults.filter(
-          (r) => !updated.map((u) => u.r).includes(r.registration_id),
-        ),
       );
+
+      const newRound = queryClient.getQueryData<LiveRound>(roundQuery.queryKey);
+      if (newRound) {
+        setCompletedCount(roundId, countCompletedResults(newRound));
+        setTotalCompetitors(roundId, newRound.results.length);
+      }
+
+      diffPendingResults(decompressedUpdated, (pr, ir) => {
+        // The incoming values are diffs, meaning (type-wise)
+        //   they might not actually contain attempts. For example when only advancing is updated
+        return (
+          ir.attempts !== undefined && compareAttempts(pr.attempts, ir.attempts)
+        );
+      });
+
       updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+        // If a competitor is listed as "deleted", then consider that our pending quit was executed by the backend
         currentlyQuitCompetitors.difference(new Set(deleted)),
-      );
-
-      setCompetitors(
-        (previous) =>
-          new Map([
-            ...previous,
-            ...created.map((r) => [r.user.id, r.user] as const),
-          ]),
       );
     }
   };
@@ -183,8 +276,24 @@ export function MultiRoundResultProvider({
     );
   }, []);
 
+  const refetchAndClearPending = (roundId: string) => {
+    refetchRound(roundId).then((res) => {
+      if (!res.isSuccess) {
+        return;
+      }
+      diffPendingResults(res.data.results, (pr, ir) =>
+        compareAttempts(pr.attempts, ir.attempts),
+      );
+    });
+  };
+
   const roundIds = initialRounds.map((r) => r.id);
-  const connectionState = useResultsSubscriptions(roundIds, onReceived);
+  const connectionState = useResultsSubscriptions(
+    roundIds,
+    competitionId,
+    onReceived,
+    refetchAndClearPending,
+  );
 
   return (
     <LiveResultContext.Provider

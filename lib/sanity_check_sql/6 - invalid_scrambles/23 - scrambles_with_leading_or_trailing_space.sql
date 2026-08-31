@@ -1,3 +1,3 @@
 SELECT *
 FROM scrambles
-WHERE LENGTH(scramble) != LENGTH(TRIM(scramble))
+WHERE LENGTH(scramble) != LENGTH(TRIM(scramble));

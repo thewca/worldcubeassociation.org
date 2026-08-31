@@ -73,19 +73,19 @@ variable "rails_startup_time" {
 variable "rds_iam_identifier" {
   type = string
   description = "The identifier of the RDS Instance used for IAM Auth"
-  default = "db-VFBCC2563NK74KYKEYEC32YXHA"
+  default = "db-NZVYXOAX7ZKU6653EPB3WBBG5A"
 }
 
 variable "rds_dev_dump_identifier" {
   type = string
   description = "The identifier of the dev dump"
-  default = "db-CLQZYYW5FGHVA6IGWTN64N24PI"
+  default = "db-4ZUWHEVFALJVU6DUKZE47ZCQBM"
 }
 
 variable "rds_read_replica_identifier" {
   type = string
   description = "The identifier of the read replica"
-  default = "db-YF7CCUEQCJOJXD5KU3ASUPYBSE"
+  default = "db-CQQGFRT25NXTZCSBLVAKJU7LWM"
 }
 
 variable "shared" {
@@ -116,7 +116,13 @@ variable "shared" {
     https_listener: object({
       arn: string
     })
+    anycable_production: object({
+      arn: string
+    })
     nextjs-production: object({
+      arn: string
+    })
+    nextjs-production-results: object({
       arn: string
     })
     pma_production: object({
@@ -138,4 +144,9 @@ variable "shared" {
 variable "WRC_WEBHOOK_URL" {
   description = "The URL to send delegate report webhook notifications for WRC to"
   type = string
+}
+
+variable "anycable_path" {
+  type = string
+  description = "The Path where anycable is mounted"
 }

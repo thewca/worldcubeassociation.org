@@ -1,3 +1,3 @@
-SELECT distinct group_id
+SELECT DISTINCT group_id
 FROM scrambles
-WHERE CAST(group_id AS BINARY) NOT REGEXP BINARY '^[A-Z]+$'
+WHERE CAST(group_id AS BINARY) NOT REGEXP BINARY '^[A-Z]+$';

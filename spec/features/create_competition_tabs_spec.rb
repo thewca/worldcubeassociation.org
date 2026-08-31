@@ -17,8 +17,8 @@ RSpec.feature "create competition tabs" do
     click_on "Create"
 
     visit competition_path(competition)
-    expect(page).to have_content "Accomodation"
-    expect(page).to have_content "On your own."
+    expect(page).to have_text "Accomodation"
+    expect(page).to have_text "On your own."
   end
 
   it "editing an existing tab" do
@@ -27,7 +27,7 @@ RSpec.feature "create competition tabs" do
     sign_in organizer
     visit competition_path(competition)
     click_on "Manage tabs"
-    expect(page).to have_content "New tab" # Wait for the page to fully load
+    expect(page).to have_text "New tab" # Wait for the page to fully load
     within("#competition-tabs tbody tr:first") { click_on "Edit" }
 
     fill_in "Name", with: "Travel!"
@@ -35,9 +35,9 @@ RSpec.feature "create competition tabs" do
     click_on "Update"
 
     visit competition_path(competition)
-    expect(page).to have_content "Travel!"
-    expect(page).to have_content "Travel informations."
-    expect(page).to have_no_content "Accomodation"
-    expect(page).to have_no_content "On your own."
+    expect(page).to have_text "Travel!"
+    expect(page).to have_text "Travel informations."
+    expect(page).to have_no_text "Accomodation"
+    expect(page).to have_no_text "On your own."
   end
 end

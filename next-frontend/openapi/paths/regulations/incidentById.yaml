@@ -1,0 +1,49 @@
+get:
+  summary: Get a single incident
+  tags:
+    - regulations
+  operationId: incidentById
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/regulations/Incident.yaml'
+    '404':
+      $ref: '../../errorResponses/IncidentNotFound.yaml'
+delete:
+  summary: Delete an incident
+  tags:
+    - regulations
+  operationId: deleteIncident
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              status:
+                type: string
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'
+    '403':
+      $ref: '../../errorResponses/NotPermitted.yaml'
+    '404':
+      $ref: '../../errorResponses/IncidentNotFound.yaml'

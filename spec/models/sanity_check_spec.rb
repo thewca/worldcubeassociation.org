@@ -365,6 +365,7 @@ RSpec.describe SanityCheck do
     context "Wrong names" do
       RSpec.shared_examples 'correct sanity check' do |sanity_check_id, irregular_people, valid_people|
         let(:sanity_check) { SanityCheck.find(sanity_check_id) }
+
         context "Sanity Check #{sanity_check_id}:" do
           it "correctly finds all irregular names" do
             irregular_people = irregular_people.map do |name|
@@ -508,7 +509,7 @@ RSpec.describe SanityCheck do
     end
   end
 
-  # rubocop:disable Layout/LineLength
+  # rubocop:disable-next Layout/LineLength
   context "incorrect record assignments", :clean_db_with_truncation do
     let(:sanity_check) { SanityCheck.find(66) }
 
@@ -627,5 +628,4 @@ RSpec.describe SanityCheck do
       end
     end
   end
-  # rubocop:enable Layout/LineLength
 end

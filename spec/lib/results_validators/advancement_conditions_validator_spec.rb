@@ -215,6 +215,27 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       expect(acv.errors).to be_empty
     end
 
+    it "merges linked (dual) rounds when checking advancement to the next round" do
+      # Dual round (9v5): rounds 1 and 2 are run as a single combined round, then round 3 follows.
+      # 60 competitors in round 1 and 40 (different) in round 2 => 100 combined. 70 advance to
+      # round 3. Checked against round 2 alone (40 people) this would falsely trip 9P1
+      # (max 30 may advance); checked against the merged 100 it is fine (max 75).
+      linked_round = create(:linked_round)
+      round_333_1 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 1)
+      round_333_2 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 2)
+      round_333_3 = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 3, number: 3)
+
+      results = []
+      results += build_list(:result, 60, competition: competition3, event_id: "333", round_type_id: "1", round: round_333_1)
+      results += build_list(:result, 40, competition: competition3, event_id: "333", round_type_id: "2", round: round_333_2)
+      results += build_list(:result, 70, competition: competition3, event_id: "333", round_type_id: "f", round: round_333_3)
+      Result.import(results, validate: false)
+
+      acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to be_empty
+    end
+
     # Triggers:
     # REGULATION_9M1_ERROR
     # REGULATION_9M2_ERROR

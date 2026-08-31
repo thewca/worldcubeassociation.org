@@ -221,6 +221,16 @@ RSpec.describe User do
         .to change { user.potential_duplicate_persons.count }.from(1).to(0)
     end
 
+    it "updates corresponding result records for the user's registrations" do
+      comp = create(:competition, :past)
+      reg = create(:registration, :accepted, user: user, competition: comp)
+      result = create(:result, competition: comp, person_id: reg.registrant_id.to_s)
+
+      user.assign_wca_id(person.wca_id)
+
+      expect(result.reload.person_id).to eq person.wca_id
+    end
+
     context "when other users have pending claims for the same WCA ID" do
       let(:delegate_role) { create(:delegate_role) }
       let!(:claimant1) do
@@ -620,6 +630,14 @@ RSpec.describe User do
       expect(board_member.can_view_all_users?).to be true
     end
 
+    it "returns true for higher permission officer" do
+      executive_director = create(:executive_director_role).user
+      expect(executive_director.can_view_all_users?).to be true
+
+      chief_operating_officer = create(:chief_operating_officer_role).user
+      expect(chief_operating_officer.can_view_all_users?).to be true
+    end
+
     it "returns false for normal user" do
       normal_user = create(:user)
       expect(normal_user.can_view_all_users?).to be false
@@ -632,6 +650,14 @@ RSpec.describe User do
     it "returns true for board" do
       board_member = create(:user, :board_member)
       expect(board_member.can_edit_user?(user)).to be true
+    end
+
+    it "returns true for higher permission officer" do
+      executive_director = create(:executive_director_role).user
+      expect(executive_director.can_edit_user?(user)).to be true
+
+      chief_operating_officer = create(:chief_operating_officer_role).user
+      expect(chief_operating_officer.can_edit_user?(user)).to be true
     end
 
     it "returns false for normal user" do
@@ -804,12 +830,14 @@ RSpec.describe User do
 
     it "returns true for Officer roles" do
       executive_director = create(:executive_director_role)
+      chief_operating_officer = create(:chief_operating_officer_role)
       chair = create(:chair_role)
       vice_chair = create(:vice_chair_role)
       secretary = create(:secretary_role)
       treasurer = create(:treasurer_role)
 
       expect(executive_director.user.staff?).to be true
+      expect(chief_operating_officer.user.staff?).to be true
       expect(chair.user.staff?).to be true
       expect(vice_chair.user.staff?).to be true
       expect(secretary.user.staff?).to be true

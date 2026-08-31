@@ -1,6 +1,6 @@
 const webpackConfig = require('./serverClientOrBoth');
 
-const { inliningCss } = require('shakapacker');
+const { inliningCss } = require('shakapacker-webpack');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const developmentEnvOnly = (_clientWebpackConfig, _serverWebpackConfig) => {

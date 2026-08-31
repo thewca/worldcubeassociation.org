@@ -19,19 +19,11 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 
 const WCA_SEARCH_QUERY_CLIENT = new QueryClient();
 
-export function IdWcaSearch({
-  name,
-  value,
-  onChange,
-  multiple = true,
-  disabled = false,
+export function useIdQueries({
   model,
-  params,
-  label,
-  removeNoResultsMessage,
+  idsToFetch,
+  proxyFn = (result) => result,
 }) {
-  const idsToFetch = multiple ? value : [value].filter(Boolean);
-
   const fetchUrlFn = useCallback((id) => {
     switch (model) {
       case SEARCH_MODELS.user:
@@ -61,12 +53,12 @@ export function IdWcaSearch({
     }
   }, [model]);
 
-  const { data: fetchedOptions, isPending: anyLoading } = useQueries({
+  return useQueries({
     queries: idsToFetch.map((id) => (
       {
-        queryKey: [model, id],
+        queryKey: ['wca-search', model, id],
         queryFn: () => fetchJsonOrError(fetchUrlFn(id)),
-        select: (result) => itemToOption(convertModelFn(result.data)),
+        select: (result) => proxyFn(convertModelFn(result.data)),
       }
     )),
     combine: (results) => ({
@@ -74,6 +66,26 @@ export function IdWcaSearch({
       isPending: results.some((result) => result.isPending),
     }),
   }, WCA_SEARCH_QUERY_CLIENT);
+}
+
+export function IdWcaSearch({
+  name,
+  value,
+  onChange,
+  multiple = true,
+  disabled = false,
+  model,
+  params,
+  label,
+  removeNoResultsMessage,
+}) {
+  const idsToFetch = multiple ? value : [value].filter(Boolean);
+
+  const { data: fetchedOptions, isPending: anyLoading } = useIdQueries({
+    model,
+    idsToFetch,
+    proxyFn: itemToOption,
+  });
 
   const valueOptions = multiple ? fetchedOptions : fetchedOptions[0];
 

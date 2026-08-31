@@ -10,7 +10,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
     params[:show] ||= SHOW_100_PERSONS
     params[:gender] ||= GENDER_ALL
 
-    params[:show] = params[:show].gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
+    params[:show] = params[:show]&.gsub(/\d+/, "100") # FIXME: this is disabling anything except show 100 for now
 
     shared_constants_and_conditions
 
@@ -22,7 +22,7 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
     type_param = params[:type]
 
     is_by_region = params[:show] == "by region"
-    splitted_show_param = params[:show].split
+    splitted_show_param = params[:show]&.split
     show = splitted_show_param[0].to_i
     is_persons = splitted_show_param[1] == "persons"
     is_results = splitted_show_param[1] == "results"

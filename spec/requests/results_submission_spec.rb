@@ -53,6 +53,27 @@ RSpec.describe ResultsSubmissionController do
       end
     end
 
+    describe "Uploading a Results JSON" do
+      it "is refused when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+
+        post competition_upload_results_json_path(internal_comp.id)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("internal scoretaking")
+      end
+
+      it "is allowed for admins even when the competition uses internal scoretaking" do
+        internal_comp = create(:competition, :announced, delegates: [user], scoretaking_software: :internal)
+        sign_in create(:user, :wrt_member)
+
+        # Getting past the scoretaking guard means the action demands the actual file params.
+        expect do
+          post competition_upload_results_json_path(internal_comp.id)
+        end.to raise_error(ActionController::ParameterMissing)
+      end
+    end
+
     describe "Posting results" do
       let(:results_submission_params) do
         { message: submission_message, competition_id: comp.id }
@@ -66,7 +87,8 @@ RSpec.describe ResultsSubmissionController do
         expect do
           post competition_submit_results_path(comp.id), params: results_submission_params
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
-        assert_enqueued_jobs 0
+        # Newcomer checks will be triggered along with results submission.
+        assert_enqueued_jobs 1
       end
 
       it "throw error if empty message is provided" do
@@ -87,6 +109,31 @@ RSpec.describe ResultsSubmissionController do
         comp.update!(announced_at: nil)
         post competition_submit_results_path(comp.id), params: results_submission_params
         expect(response).to redirect_to(root_url)
+      end
+    end
+
+    describe "Importing results from WCA Live" do
+      let(:live_comp) { create(:competition, :announced, event_ids: ["333"], delegates: [user]) }
+      let(:round) { create(:round, competition: live_comp, event_id: "333") }
+      let(:registration) { create(:registration, :accepted, competition: live_comp) }
+
+      it "is refused when some results are still outstanding" do
+        create(:live_result, round: round, registration: registration, best: 0, average: 0, attempts_count: 0)
+
+        post competition_import_from_live_path(live_comp.id)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.parsed_body["error"]).to include("outstanding")
+        expect(response.parsed_body["error"]).to include(registration.registrant_id.to_s)
+      end
+
+      it "gets past the outstanding-results guard when all results are entered" do
+        create(:live_result, round: round, registration: registration, best: 500, average: 600)
+
+        # Getting past the outstanding-results guard means the action demands the import params.
+        expect do
+          post competition_import_from_live_path(live_comp.id)
+        end.to raise_error(ActionController::ParameterMissing)
       end
     end
   end
@@ -139,13 +186,69 @@ RSpec.describe ResultsSubmissionController do
     context "when competition has results submitted" do
       let(:results_submitted_comp) { create(:competition, :announced, :with_valid_submitted_results) }
 
-      it "returns bad_request for WRT user" do
+      it "allows access for WRT user" do
         sign_in wrt_user
 
         get competition_newcomer_name_format_check_path(results_submitted_comp.id)
 
-        expect(response).to have_http_status(:bad_request)
-        expect(response.parsed_body["error"]).to eq("The newcomer check dashboard can only be used before the results are submitted.")
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
+  describe "GET #pending_results_submissions" do
+    let(:wrt_member) { create(:user, :wrt_member) }
+    let(:regular_user) { create(:user) }
+
+    context "when not logged in" do
+      it "redirects to sign in" do
+        get pending_results_submissions_path
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when logged in as regular user" do
+      before { sign_in regular_user }
+
+      it "redirects to root" do
+        get pending_results_submissions_path
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context "when logged in as WRT member" do
+      before { sign_in wrt_member }
+
+      it "returns a list of competitions with unsubmitted results whose end date is past or today" do
+        past_unsubmitted = create(
+          :competition,
+          :visible,
+          starts: 2.days.ago,
+          ends: 1.day.ago,
+          results_submitted_at: nil,
+          results_posted_at: nil,
+        )
+        create(
+          :competition,
+          :visible,
+          starts: 3.days.ago,
+          ends: 2.days.ago,
+          results_submitted_at: 1.day.ago,
+          results_posted_at: nil,
+        )
+        create(
+          :competition,
+          :visible,
+          starts: 1.day.from_now,
+          ends: 2.days.from_now,
+          results_submitted_at: nil,
+          results_posted_at: nil,
+        )
+
+        get pending_results_submissions_path
+        expect(response).to be_successful
+        response_json = response.parsed_body
+        expect(response_json.pluck("id")).to eq([past_unsubmitted.id])
       end
     end
   end

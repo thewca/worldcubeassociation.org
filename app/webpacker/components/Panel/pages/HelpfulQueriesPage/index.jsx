@@ -116,30 +116,54 @@ function DelegatedPane({ userId }) {
     queryFn: () => fetchDelegated(userId),
   });
 
+  const stats = useMemo(() => ({
+    total: data.length,
+    leadDelegated: data.filter((c) => c.lead_delegate_id === userId).length,
+  }), [data, userId]);
+
   if (isFetching) return <Loader active inline />;
 
-  return data.length > 0 ? (
-    <Table celled compact striped>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Competition</Table.HeaderCell>
-          <Table.HeaderCell>City</Table.HeaderCell>
-          <Table.HeaderCell>Country</Table.HeaderCell>
-          <Table.HeaderCell>Date</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {data.map((row) => (
-          <Table.Row key={row.id}>
-            <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
-            <Table.Cell>{row.city_name}</Table.Cell>
-            <Table.Cell>{row.country_id}</Table.Cell>
-            <Table.Cell>{row.start_date}</Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
-  ) : <Message content="No delegated competitions found." />;
+  return (
+    <>
+      {data.length > 0 && (
+        <Segment padded>
+          <Header as="h4">Delegate Statistics</Header>
+          <p>
+            <strong>Total delegated competitions:</strong>
+            {' '}
+            {stats.total}
+          </p>
+          <p>
+            <strong>Lead delegated competitions:</strong>
+            {' '}
+            {stats.leadDelegated}
+          </p>
+        </Segment>
+      )}
+      {data.length > 0 ? (
+        <Table celled compact striped>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Competition</Table.HeaderCell>
+              <Table.HeaderCell>City</Table.HeaderCell>
+              <Table.HeaderCell>Country</Table.HeaderCell>
+              <Table.HeaderCell>Date</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {data.map((row) => (
+              <Table.Row key={row.id}>
+                <Table.Cell><a href={competitionUrl(row.id)}>{row.name}</a></Table.Cell>
+                <Table.Cell>{row.city_name}</Table.Cell>
+                <Table.Cell>{row.country_id}</Table.Cell>
+                <Table.Cell>{row.start_date}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      ) : <Message content="No delegated competitions found." />}
+    </>
+  );
 }
 
 function PastCompetitionsPane({ userId }) {

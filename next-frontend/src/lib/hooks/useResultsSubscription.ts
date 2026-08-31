@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import _ from "lodash";
-import useEffectEvent from "@/lib/hooks/useEffectEvent";
 import type { PartialExcept } from "@/lib/types/objects";
 import { LiveCompetitor, LiveResult } from "@/types/live";
+import { anycableConnection } from "@/lib/websocket/anycable";
 
 export const CONNECTION_STATE_INITIALIZED = 1;
 export const CONNECTION_STATE_CONNECTED = 2;
@@ -39,6 +39,11 @@ export type CompressedLiveResult = {
     v: number;
     an: number;
   }[];
+  at: string;
+  // Forecast stats (only present on incomplete `updated` results).
+  bpa?: number;
+  wpa?: number;
+  pra?: number;
 };
 
 type CompressedLiveResultWithUser = CompressedLiveResult & {
@@ -62,7 +67,9 @@ export type DiffProtocolResponse = {
 
 export default function useResultsSubscriptions(
   roundIds: string[],
+  competitionId: string,
   onReceived: (roundId: string, data: DiffProtocolResponse) => void,
+  onReconnect: (roundId: string) => void,
 ) {
   const [connectionStates, setConnectionStates] = useState<
     Record<string, ConnectionState>
@@ -72,39 +79,38 @@ export default function useResultsSubscriptions(
     ),
   );
 
-  const changeConnectionState = useCallback(
-    (roundId: string, connectionState: ConnectionState) => {
-      setConnectionStates((prev) => ({
-        ...prev,
-        [roundId]: connectionState,
-      }));
-    },
-    [],
-  );
-
   const onReceivedEvent = useEffectEvent(onReceived);
 
+  const changeConnectionState = useEffectEvent(
+    (roundId: string, newState: ConnectionState) => {
+      if (
+        connectionStates[roundId] === CONNECTION_STATE_DISCONNECTED &&
+        newState === CONNECTION_STATE_CONNECTED
+      ) {
+        onReconnect(roundId);
+      }
+      setConnectionStates((prev) => ({ ...prev, [roundId]: newState }));
+    },
+  );
+
   useEffect(() => {
-    const cable = createConsumer("http://localhost:3000/cable");
+    const cable = createConsumer(process.env.NEXT_PUBLIC_WEBSOCKET_URL);
 
     const subscriptions = roundIds.map((roundId) =>
-      cable.subscriptions.create(
-        { channel: "LiveResultsChannel", round_id: roundId },
-        {
-          received: (data: DiffProtocolResponse) =>
-            onReceivedEvent(roundId, data),
-          initialized: () =>
-            changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
-          connected: () =>
-            changeConnectionState(roundId, CONNECTION_STATE_CONNECTED),
-          disconnected: () =>
-            changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED),
-        },
-      ),
+      cable.subscriptions.create(anycableConnection(competitionId, roundId), {
+        received: (data: DiffProtocolResponse) =>
+          onReceivedEvent(roundId, data),
+        initialized: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_INITIALIZED),
+        connected: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_CONNECTED),
+        disconnected: () =>
+          changeConnectionState(roundId, CONNECTION_STATE_DISCONNECTED),
+      }),
     );
 
     return () => subscriptions.forEach((s) => s.unsubscribe());
-  }, [changeConnectionState, onReceivedEvent, roundIds]);
+  }, [competitionId, roundIds]);
 
   // Aggregate: worst state wins
   const values = Object.values(connectionStates);

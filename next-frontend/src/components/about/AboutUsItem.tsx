@@ -1,5 +1,5 @@
 import { Box, Heading, Image as ChakraImage, Stack } from "@chakra-ui/react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 import type { Media } from "@/types/payload";
 import Image from "next/image";
 
@@ -22,7 +22,7 @@ export default function AboutUsItem({
     >
       <Stack direction="column">
         <Heading size="lg">{title}</Heading>
-        <MarkdownProse content={contentMarkdown} />
+        <ChakraMarkdown>{contentMarkdown}</ChakraMarkdown>
       </Stack>
 
       {image?.url && (

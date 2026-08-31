@@ -4,7 +4,7 @@ import { HStack, Icon, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
-import { AttemptsCells, recordTagBadge } from "@/components/results/TableCells";
+import { AttemptsCells, WithRecordTag } from "@/components/results/TableCells";
 import { resultAttempts } from "@/lib/wca/results/attempts";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
@@ -62,14 +62,20 @@ export function ResultsTable({
                     {competitorResult.name}
                   </Link>
                 </Table.Cell>
-                <Table.Cell style={{ position: "relative" }}>
-                  {formatAttemptResult(competitorResult.best, eventId)}{" "}
-                  {recordTagBadge(competitorResult.regional_single_record)}
+                <Table.Cell>
+                  <WithRecordTag
+                    recordTag={competitorResult.regional_single_record}
+                  >
+                    {formatAttemptResult(competitorResult.best, eventId)}
+                  </WithRecordTag>
                 </Table.Cell>
                 {anyAverages && (
-                  <Table.Cell style={{ position: "relative" }}>
-                    {formatAttemptResult(competitorResult.average, eventId)}{" "}
-                    {recordTagBadge(competitorResult.regional_average_record)}
+                  <Table.Cell>
+                    <WithRecordTag
+                      recordTag={competitorResult.regional_average_record}
+                    >
+                      {formatAttemptResult(competitorResult.average, eventId)}
+                    </WithRecordTag>
                   </Table.Cell>
                 )}
                 <Table.Cell>
@@ -135,13 +141,19 @@ export function ByPersonTable({
                 {t(`rounds.${competitorResult.round_type_id}.name`)}
               </Table.Cell>
               <Table.Cell>{competitorResult.pos}</Table.Cell>
-              <Table.Cell style={{ position: "relative" }}>
-                {formatAttemptResult(competitorResult.best, eventId)}{" "}
-                {recordTagBadge(competitorResult.regional_single_record)}
+              <Table.Cell>
+                <WithRecordTag
+                  recordTag={competitorResult.regional_single_record}
+                >
+                  {formatAttemptResult(competitorResult.best, eventId)}
+                </WithRecordTag>
               </Table.Cell>
-              <Table.Cell style={{ position: "relative" }}>
-                {formatAttemptResult(competitorResult.average, eventId)}{" "}
-                {recordTagBadge(competitorResult.regional_average_record)}
+              <Table.Cell>
+                <WithRecordTag
+                  recordTag={competitorResult.regional_average_record}
+                >
+                  {formatAttemptResult(competitorResult.average, eventId)}
+                </WithRecordTag>
               </Table.Cell>
               <Table.Cell>
                 <HStack>
@@ -222,13 +234,19 @@ export function ByCompetitionTable({
                   {t(`rounds.${competitorResult.round_type_id}.name`)}
                 </Table.Cell>
                 <Table.Cell>{competitorResult.pos}</Table.Cell>
-                <Table.Cell style={{ position: "relative" }}>
-                  {formatAttemptResult(competitorResult.best, eventId)}{" "}
-                  {recordTagBadge(competitorResult.regional_single_record)}
+                <Table.Cell>
+                  <WithRecordTag
+                    recordTag={competitorResult.regional_single_record}
+                  >
+                    {formatAttemptResult(competitorResult.best, eventId)}
+                  </WithRecordTag>
                 </Table.Cell>
-                <Table.Cell style={{ position: "relative" }}>
-                  {formatAttemptResult(competitorResult.average, eventId)}{" "}
-                  {recordTagBadge(competitorResult.regional_average_record)}
+                <Table.Cell>
+                  <WithRecordTag
+                    recordTag={competitorResult.regional_average_record}
+                  >
+                    {formatAttemptResult(competitorResult.average, eventId)}
+                  </WithRecordTag>
                 </Table.Cell>
                 <AttemptsCells
                   attempts={definedAttempts}

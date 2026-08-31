@@ -441,7 +441,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
         'sql_filesize_bytes' => 123_456,
         'tsv_url' => "#{root_url}export/results/v2/tsv",
         'tsv_filesize_bytes' => 123_456,
-        'developer_url' => "#{ENV.fetch('DUMP_HOST', nil)}/export/developer/wca-developer-database-dump.zip",
+        'developer_url' => "#{ENV.fetch('DUMP_HOST', nil)}/developer/wca-developer-database-dump.zip",
         'readme' => "",
       )
     end

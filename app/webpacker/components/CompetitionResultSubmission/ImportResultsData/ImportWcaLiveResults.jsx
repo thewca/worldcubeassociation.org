@@ -12,6 +12,7 @@ export default function ImportWcaLiveResults({
   uploadedScrambleFilesCount,
   isAdminView,
   onImportSuccess,
+  scoretakingSoftware,
 }) {
   const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
 
@@ -35,12 +36,23 @@ export default function ImportWcaLiveResults({
         <Message.Header>Please Note</Message.Header>
         <Message.List>
           <Message.Item>
-            Make sure to hit
-            {' '}
-            <b>&quot;Synchronize&quot;</b>
-            {' '}
-            in WCA Live first. This button can only use results which have been synchronized!
+            You may use this feature to import results from WCA Live or Integrated Live Results.
           </Message.Item>
+          {scoretakingSoftware === 'wca_live' && (
+            <Message.Item>
+              If you are using WCA Live, make sure to hit
+              {' '}
+              <b>&quot;Synchronize&quot;</b>
+              {' '}
+              first. This button can only use results which have been synchronized!
+            </Message.Item>
+          )}
+          {scoretakingSoftware === 'internal' && (
+            <Message.Item>
+              Make sure that every competitor has a result, then press
+              &quot;Import Live Results&quot;
+            </Message.Item>
+          )}
           <Message.Item>
             Don&apos;t forget to also
             {' '}
@@ -72,7 +84,7 @@ export default function ImportWcaLiveResults({
           type="submit"
           disabled={uploadedScrambleFilesCount === 0}
         >
-          Use WCA Live Results
+          Import Live Results
         </Form.Button>
       </Form>
     </>

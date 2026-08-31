@@ -1,29 +1,28 @@
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
-import { iconMap } from "@/components/icons/iconMap";
-import { LuCalendar } from "react-icons/lu";
+import type { IconName } from "@/components/icons/iconMap";
 import type { RouteLiteral } from "nextjs-routes";
-import type { ComponentType } from "react";
 import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import { EventId } from "@/lib/wca/data/events";
-import { EventIconId, eventIconMap } from "@/components/EventIcon";
 
 interface TabBase {
   i18nKey: string;
+  i18nKeyAdmin?: string;
   menuKey: string;
-  icon?: ComponentType;
+  icon?: IconName;
   disabled?: boolean;
 }
 
 export interface TabWithChildren extends TabBase {
-  icon: ComponentType;
+  icon: IconName;
   children: TabWithLink[];
 }
 
 interface TabWithLink extends TabBase {
-  badge?: string;
+  badgeI18nKey?: string;
   href: RouteLiteral;
+  hrefAdmin?: RouteLiteral;
 }
 
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
@@ -39,7 +38,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "general",
-      icon: iconMap["Information"],
+      icon: "Information",
     },
     {
       i18nKey: "competitions.nav.menu.register",
@@ -48,7 +47,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "register",
-      icon: iconMap["Register"],
+      icon: "Register",
       disabled: process.env.NODE_ENV === "production",
     },
     {
@@ -58,7 +57,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "competitors",
-      icon: iconMap["Competitors"],
+      icon: "Competitors",
     },
     {
       i18nKey: "competitions.show.events",
@@ -67,7 +66,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "events",
-      icon: iconMap["333Icon"],
+      icon: "333Icon",
     },
     {
       i18nKey: "competitions.show.schedule",
@@ -76,7 +75,7 @@ export const beforeCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "schedule",
-      icon: LuCalendar,
+      icon: "Registration Open Date",
     },
   ];
 };
@@ -93,12 +92,17 @@ export const duringCompetitionTabs = (
   return [
     {
       i18nKey: "competitions.show.schedule",
+      i18nKeyAdmin: "competitions.live.manage_rounds",
       href: route({
         pathname: "/competitions/[competitionId]/live",
         query: { competitionId: competitionInfo.id },
       }),
+      hrefAdmin: route({
+        pathname: "/competitions/[competitionId]/live/admin",
+        query: { competitionId: competitionInfo.id },
+      }),
       menuKey: "live",
-      icon: iconMap["Information"],
+      icon: "Information",
     },
     {
       i18nKey: "competitions.nav.menu.podiums",
@@ -107,7 +111,7 @@ export const duringCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "podiums",
-      icon: iconMap["Records"],
+      icon: "Records",
     },
     {
       i18nKey: "competitions.nav.menu.competitors",
@@ -116,12 +120,12 @@ export const duringCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "competitors",
-      icon: iconMap["Competitors"],
+      icon: "Competitors",
     },
     ..._.map(roundsByEventId, (rounds, eventId: EventId) => ({
       i18nKey: `events.${eventId}`,
       menuKey: eventId,
-      icon: eventIconMap[eventId as EventIconId],
+      icon: `${_.capitalize(eventId)}Icon` as IconName,
       children: rounds.map((round) => {
         const { roundNumber } = parseActivityCode(round.id);
 
@@ -130,13 +134,25 @@ export const duringCompetitionTabs = (
           rounds.length,
           Boolean(round.cutoff),
         );
+
+        const roundDone =
+          round.state === "locked" ||
+          (round.state === "open" &&
+            round.completed_competitors === round.total_competitors);
         return {
           i18nKey: `rounds.${roundTypeId}.name`,
           menuKey: round.id,
-          badge: round.state === "locked" ? "Done" : "live",
+          badgeI18nKey: roundDone
+            ? "competitions.live.round_state.done"
+            : "competitions.live.round_state.ongoing",
           disabled: round.state === "pending" || round.state === "ready",
           href: route({
             pathname: "/competitions/[competitionId]/live/rounds/[roundId]",
+            query: { competitionId: competitionInfo.id, roundId: round.id },
+          }),
+          hrefAdmin: route({
+            pathname:
+              "/competitions/[competitionId]/live/rounds/[roundId]/admin",
             query: { competitionId: competitionInfo.id, roundId: round.id },
           }),
         };
@@ -155,7 +171,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "general",
-      icon: iconMap["Information"],
+      icon: "Information",
     },
     {
       i18nKey: "competitions.nav.menu.podiums",
@@ -164,7 +180,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "podiums",
-      icon: iconMap["Records"],
+      icon: "Records",
     },
     {
       i18nKey: "competitions.nav.menu.results",
@@ -173,7 +189,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "all",
-      icon: iconMap["List"],
+      icon: "List",
     },
     {
       i18nKey: "competitions.nav.menu.by_person",
@@ -182,7 +198,7 @@ export const afterCompetitionTabs = (
         query: { competitionId: competitionInfo.id },
       }),
       menuKey: "byPerson",
-      icon: iconMap["Competitors"],
+      icon: "Competitors",
     },
   ];
 };

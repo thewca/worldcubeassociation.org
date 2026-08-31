@@ -9,13 +9,14 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import React from "react";
-import { MarkdownProse } from "@/components/Markdown";
+import { ChakraMarkdown } from "@/components/Markdown";
 
 type CallToActionBlockProps = {
   content: string;
   buttons: {
     label: string;
     url: string;
+    newTab?: boolean | null;
   }[];
 };
 
@@ -33,14 +34,18 @@ export function CallToActionBlock({
     >
       <Stack direction="column">
         <Box color="gray.700" fontSize="lg">
-          <MarkdownProse content={content} />
+          <ChakraMarkdown>{content}</ChakraMarkdown>
         </Box>
 
         <Stack direction={{ base: "column", sm: "row" }}>
           <ButtonGroup colorScheme="blue" size="lg">
             {buttons.map((button, i) => (
               <Button key={i} variant={i === 0 ? "solid" : "outline"} asChild>
-                <Link href={button.url} target="_blank" rel="noopener">
+                <Link
+                  href={button.url}
+                  target={button.newTab ? "_blank" : undefined}
+                  rel={button.newTab ? "noopener noreferrer" : undefined}
+                >
                   {button.label}
                 </Link>
               </Button>

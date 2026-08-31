@@ -67,6 +67,8 @@ class Country < ApplicationRecord
 
   belongs_to :continent
   has_many :competitions
+  has_many :competition_venues
+  has_many :inbox_persons
   has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand", inverse_of: :country
 
   def continent

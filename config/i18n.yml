@@ -42,6 +42,7 @@ translations:
       - "*.delegates_page.*"
       - "*.enums.*"
       - "*.events.*"
+      - "*.scramble_set.*"
       - "*.formats.*"
       - "*.incidents_log.*"
       - "*.logo.*"

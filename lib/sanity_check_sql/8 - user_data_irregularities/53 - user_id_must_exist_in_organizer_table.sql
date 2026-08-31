@@ -1,3 +1,8 @@
-SELECT id, organizer_id, competition_id
-FROM competition_organizers
-WHERE organizer_id NOT in (SELECT id FROM users);
+SELECT
+  co.id,
+  co.organizer_id,
+  co.competition_id
+FROM competition_organizers AS co
+LEFT JOIN users AS u
+ON co.organizer_id = u.id
+WHERE u.id IS NULL;

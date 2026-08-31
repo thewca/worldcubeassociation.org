@@ -25,6 +25,7 @@ put:
               - status
               - created_rows
               - locked_rows
+              - state
             properties:
               status:
                 type: string
@@ -32,3 +33,28 @@ put:
                 type: number
               locked_rows:
                 type: number
+              state:
+                $ref: '../../../schemas/live/AdminRounds/RoundState.yaml'
+    '400':
+      description: Round cannot be opened
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+            properties:
+              status:
+                type: string
+                enum:
+                  - score taking is not finished in the previous round
+                  - round already open
+                  - 'regulation 9m3: a round with 7 or fewer competitors must not have subsequent rounds'
+                  - 'regulation 9m2: a round with 15 or fewer competitors must have at most one subsequent round'
+                  - 'regulation 9m1: a round with 99 or fewer competitors must have at most two subsequent rounds'
+    '401':
+      $ref: '../../../errorResponses/NotLoggedIn.yaml'
+    '403':
+      $ref: '../../../errorResponses/NotPermitted.yaml'
+    '404':
+      $ref: '../../../errorResponses/CompetitionNotFound.yaml'

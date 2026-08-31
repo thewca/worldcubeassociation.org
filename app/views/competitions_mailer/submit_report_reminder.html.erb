@@ -8,11 +8,20 @@
   within one week of the end of the competition according to the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">WCA Competition Requirements Policy</a>. The report can be submitted <%= link_to("here", delegate_report_url(@competition)) %>.
 </p>
 
+<% if @competition.lead_delegate.present? %>
 <p>
-  <b>
-    As a reminder, according to the <a href="https://documents.worldcubeassociation.org/documents/policies/internal/Delegate%20Probationary%20Status.pdf">WCA Delegate Probationary Status Policy</a>, Delegates who are listed on late reports for two consecutive competitions without an approved exception prior to the report due date will be put on probation.
-  </b>
+    <b>
+        As a reminder, according to the <a href="https://documents.worldcubeassociation.org/documents/policies/internal/Delegate%20Probationary%20Status.pdf">WCA Delegate Probationary Status Policy</a>, a Lead Delegate who is listed on late reports for two consecutive competitions without an approved exception prior to the report due date will be put on probation. The Lead Delegate of this competition is <%= @competition.lead_delegate.name %>.
+    </b>
 </p>
+<p>
+    <% else %>
+<p>
+    <b>
+        As a reminder, according to the <a href="https://documents.worldcubeassociation.org/documents/policies/internal/Delegate%20Probationary%20Status.pdf">WCA Delegate Probationary Status Policy</a>, Delegates who are listed on late reports for two consecutive competitions without an approved exception prior to the report due date will be put on probation.
+    </b>
+</p>
+<% end %>
 
 <p>
   Regards,

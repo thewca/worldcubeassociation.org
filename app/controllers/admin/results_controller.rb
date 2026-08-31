@@ -54,8 +54,8 @@ module Admin
     end
 
     def new
-      competition = Competition.find(params[:competition_id])
-      round = Round.find(params[:round_id])
+      competition = Competition.find(params.require(:competition_id))
+      round = Round.find(params.require(:round_id))
       # Create some basic attributes for that empty result.
       # Using Result.new wouldn't work here: we have no idea what the country
       # could be and so on, so serialization would fail.
@@ -69,7 +69,7 @@ module Admin
     end
 
     def show_events_data
-      competition = Competition.find(params[:competition_id])
+      competition = Competition.find(params.require(:competition_id))
       events_data = competition.competition_events.to_h do |ce|
         [ce.event_id, {
           eventId: ce.event_id,
@@ -89,7 +89,7 @@ module Admin
     end
 
     def edit
-      @result = Result.includes(:competition).find(params[:id])
+      @result = Result.includes(:competition).find(params.require(:id))
     end
 
     def create

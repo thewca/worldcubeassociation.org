@@ -1,3 +1,3 @@
 SELECT *
 FROM persons
-WHERE name REGEXP '["0-9_@#`$^&*\\\\|}{\\[\\]+=?><,~]'
+WHERE name REGEXP '["0-9_@#`$^&*\\\\|}{\\[\\]+=?><,~]';

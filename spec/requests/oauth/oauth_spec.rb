@@ -81,7 +81,7 @@ RSpec.describe "oauth api" do
       fill_in "user_password", with: user.password
       click_button "Sign in"
       #  2. Expect to see a complain about the redirect uri being incorrect
-      expect(page).to have_text "The requested redirect uri is malformed or doesn't match client redirect URI."
+      expect(page).to have_text "The requested redirect URI is malformed or doesn't match the client redirect URI."
     end
 
     it 'can use refresh token' do

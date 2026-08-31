@@ -12,9 +12,8 @@ RSpec.describe "import:h2h_data", type: :task do
   end
 
   let!(:competition) { create(:competition, :with_valid_schedule, h2h_finals_event_ids: ['333']) }
-  # rubocop:disable FactoryBot/ExcessiveCreateList
+  # rubocop:disable-next FactoryBot/ExcessiveCreateList
   let!(:registrations) { create_list(:registration, 12, competition: competition) }
-  # rubocop:enable FactoryBot/ExcessiveCreateList
   let!(:round) { competition.competition_events.where(event_id: "333").first.rounds.first }
   let!(:registration_ids) { Registration.pluck(:id) }
 
@@ -200,8 +199,8 @@ RSpec.describe "import:h2h_data", type: :task do
       expect(H2hAttempt.count).to be(148)
       expect(H2hAttempt.where(live_attempt_id: nil).count).to be(0)
       expect(H2hAttempt.where(result_attempt_id: nil).count).to be(148)
-      expect(InboxScrambleSet.count).to be(18)
-      expect(InboxScramble.count).to be(74)
+      expect(MatchedScrambleSet.count).to be(18)
+      expect(MatchedScramble.count).to be(74)
       expect(Scramble.count).to be(0)
     end
 
@@ -235,8 +234,8 @@ RSpec.describe "import:h2h_data", type: :task do
       expect(H2hAttempt.count).to be(148)
       expect(H2hAttempt.where(live_attempt_id: nil).count).to be(148)
       expect(H2hAttempt.where(result_attempt_id: nil).count).to be(0)
-      expect(InboxScrambleSet.count).to be(0)
-      expect(InboxScramble.count).to be(0)
+      expect(MatchedScrambleSet.count).to be(0)
+      expect(MatchedScramble.count).to be(0)
       expect(Scramble.count).to be(74)
 
       # Assigns the correct pos placements

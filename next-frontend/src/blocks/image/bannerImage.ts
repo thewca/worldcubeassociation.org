@@ -10,12 +10,12 @@ export const BannerImageBlock: Block = {
     {
       name: "heading",
       type: "text",
-      required: true,
+      localized: true,
     },
     {
       name: "body",
       type: "richText",
-      required: true,
+      localized: true,
     },
     markdownConvertedField("body"),
     {
@@ -23,6 +23,16 @@ export const BannerImageBlock: Block = {
       type: "upload",
       relationTo: "media",
       required: true,
+    },
+    {
+      name: "imagePosition",
+      type: "radio",
+      options: ["left", "right"],
+      defaultValue: "left",
+      required: true,
+      admin: {
+        layout: "horizontal",
+      },
     },
     colorPaletteSelect,
     colorPaletteToneToggle,

@@ -35,7 +35,7 @@
       <%= competition.competitors.count %>
     <% elsif competition.results_submitted? %>
       <% inbox_count = competition.inbox_persons.count %>
-      <% wca_live_count = competition.rounds.flat_map(&:round_results).map(&:person_id).uniq.count %>
+      <% wca_live_count = competition.live_results.distinct.count(:registration_id) %>
 
       <% if inbox_count > 0 %>
         <%= inbox_count %> (tentative)
@@ -54,7 +54,12 @@
     (<%= competition.events.count %>)
     <%= competition.events.map(&:name).join(", ") %>
   </div>
-
+  <% if competition.lead_delegate.present? %>
+    <div>
+      <strong>Lead Delegate</strong>
+      <%= competition.lead_delegate.name %>
+    </div>
+  <% end %>
   <div>
     <strong>Delegates</strong>
     <%= competition.staff_delegates.pluck(:name).to_sentence %>

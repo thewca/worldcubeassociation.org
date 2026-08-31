@@ -2,7 +2,7 @@
 
 class Round < ApplicationRecord
   belongs_to :competition_event
-  belongs_to :linked_round, optional: true
+  belongs_to :linked_round, optional: true, validate: true, touch: true
 
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
@@ -15,7 +15,7 @@ class Round < ApplicationRecord
 
   has_many :registrations, through: :competition_event
 
-  has_many :matched_scramble_sets, -> { order(:ordered_index) }, class_name: 'InboxScrambleSet', foreign_key: "matched_round_id", inverse_of: :matched_round, dependent: :nullify
+  has_many :matched_scramble_sets, dependent: :delete_all
 
   # For the following association, we want to keep it to be able to do some joins,
   # but we definitely want to use cached values when directly using the method.
@@ -28,6 +28,12 @@ class Round < ApplicationRecord
 
   scope :ordered, -> { order(:number) }
   scope :h2h, -> { where(is_h2h_mock: true) }
+  # A round is final when it's the last round (mirrors #final_round?), or when it's
+  # co-linked with the final round (a linked round marks both rounds as final).
+  scope :final, lambda {
+    finals = where("number = total_number_of_rounds")
+    finals.or(where(linked_round_id: finals.where.not(linked_round_id: nil).select(:linked_round_id)))
+  }
 
   serialize :time_limit, coder: TimeLimit
   validates_associated :time_limit
@@ -38,8 +44,11 @@ class Round < ApplicationRecord
   serialize :advancement_condition, coder: AdvancementConditions::AdvancementCondition
   validates_associated :advancement_condition
 
-  serialize :round_results, coder: RoundResults
-  validates_associated :round_results
+  serialize :participation_condition, coder: ResultConditions::ResultCondition
+  validates_associated :participation_condition
+
+  belongs_to :participation_source, polymorphic: true
+  has_many :target_rounds, class_name: "Round", as: :participation_source
 
   has_many :schedule_activities, -> { root_activities }, dependent: :destroy, inverse_of: :round
 
@@ -47,6 +56,8 @@ class Round < ApplicationRecord
 
   has_many :live_results, -> { order(:global_pos) }, inverse_of: :round
   has_many :live_competitors, through: :live_results, source: :registration
+  has_many :colinked_rounds, ->(rd) { where.not(id: rd.id) }, through: :linked_round, source: :rounds
+  has_many :colinked_results, through: :colinked_rounds, source: :live_results
   has_many :results
   has_many :scrambles
 
@@ -69,7 +80,15 @@ class Round < ApplicationRecord
   delegate :formats, :format_ids, to: :event, prefix: :allowed
   validates :format, inclusion: { in: :allowed_formats, message: ->(round, _args) { "'#{round.format_id}' is not allowed for '#{round.event_id}'" } }
 
+  validates :advancement_condition, presence: { if: :advancement_condition_changed?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
   validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
+
+  validates :participation_source_type, comparison: { equal_to: LinkedRound.model_name, if: :participation_source_linked?, message: "must be the linked round group when the previous rounds are linked" }
+
+  after_save :reset_linked_round_information, if: :linked_round_previously_changed?
+  private def reset_linked_round_information
+    self.linked_round&.reset_round_information
+  end
 
   def initialize(attributes = nil)
     # Overrides the default constructor to setup the default time limit if not
@@ -130,6 +149,14 @@ class Round < ApplicationRecord
     number == total_number_of_rounds
   end
 
+  def linked_round?
+    self.linked_round.present?
+  end
+
+  def participation_source_linked?
+    self.participation_source&.try(:linked_round?)
+  end
+
   def name
     Round.name_from_attributes(event, round_type)
   end
@@ -147,29 +174,11 @@ class Round < ApplicationRecord
   end
 
   def live_podium
-    live_results.where(global_pos: 1..3)
+    linked_round&.live_podium || live_results.advancing.where(global_pos: LiveResult::PODIUM_RANGE)
   end
 
-  def previous_round
-    return nil if number == 1
-
-    Round.joins(:competition_event).find_by(competition_event: competition_event, number: number - 1)
-  end
-
-  def consider_previous_round_results?
-    # All linked rounds except the first one in a chain of linked rounds
-    linked_round.present? && linked_round.first_round_in_link.id != id
-  end
-
-  def advancing_registrations
-    if number == 1
-      registrations.accepted
-    elsif consider_previous_round_results?
-      linked_round.first_round_in_link.advancing_registrations
-    else
-      advancing = previous_round.live_results.where(advancing: true).pluck(:registration_id)
-      Registration.where(id: advancing)
-    end
+  def advancing_competitor_ids
+    live_results.advancing.pluck(:registration_id)
   end
 
   private def bulk_insert_history(live_ids_to_insert, entered_by_user, **attributes)
@@ -183,26 +192,35 @@ class Round < ApplicationRecord
     open_count = open_round!(locking_user)
     return [open_count, 0] if first_round?
 
-    round_to_lock = linked_round.present? ? linked_round.first_round_in_link.previous_round : previous_round
-
-    [open_count, round_to_lock.lock_results(locking_user)]
+    [open_count, participation_source.lock_results(locking_user)]
   end
 
   def clear_round!(clearing_user)
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
+    # We have to use update_all here because live_attempts_count is write protected
+    live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
+    # live_results were changed via raw SQL, refresh the loaded association so lifecycle_state is accurate
+    live_results.reset
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
+  def close_round!
+    live_results.destroy_all.count
+  end
+
   def open_round!(opening_user)
-    advancing_reg_ids = advancing_registrations.ids
+    advancing_reg_ids = participation_source.advancing_competitor_ids
 
     empty_results = advancing_reg_ids.map do |reg_id|
       LiveResult.empty_result_attributes(reg_id, self.id)
     end
     LiveResult.insert_all!(empty_results)
+    # live_results were inserted via raw SQL, refresh the loaded association so lifecycle_state is accurate
+    live_results.reset
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
+    inserted_ids.count
   end
 
   def create_empty_live_result(registration_id)
@@ -212,73 +230,63 @@ class Round < ApplicationRecord
   end
 
   def total_competitors
-    live_competitors.count
+    live_results.size
   end
 
   def recompute_live_columns(skip_advancing: false)
-    recompute_local_pos
-    recompute_global_pos
-    recompute_advancing unless skip_advancing
+    with_lock do
+      recompute_local_pos
+      recompute_global_pos
+      recompute_advancing unless skip_advancing
+    end
+
     # We need to reset because live results are changed directly on SQL level for more optimized queries
     live_results.reset
+    linked_round&.live_results&.reset
+  end
+
+  def target_participation_condition
+    self.linked_round&.target_participation_condition || self.target_rounds.first&.participation_condition
+  end
+
+  def ranking_format
+    self.format
   end
 
   def recompute_advancing
-    advancement_determining_results = relevant_results.where.not(global_pos: nil).where(locked_by_id: nil)
-    advancement_determining_results.update_all(advancing: false, advancing_questionable: false)
+    if linked_round.present?
+      colinked_done = colinked_rounds.all?(&:score_taking_done?)
+      return linked_round.recompute_advancing(colinked_done)
+    end
 
-    missing_attempts = total_competitors - advancement_determining_results.count
-    potential_results = Array.new(missing_attempts) { LiveResult.build(round: self) }
-
-    # Determine which results would advance if everyone achieved their best possible attempt.
-    loaded_results = advancement_determining_results.includes(:live_attempts).to_a
-    results_with_potential = (loaded_results + potential_results).sort_by(&:potential_solve_time)
-
-    advancement_determining_condition = final_round? ? AdvancementConditions::RankingCondition.new(3) : advancement_condition
-
-    advancing_ids = advancement_determining_condition.apply(results_with_potential)
-    max_advancing = advancement_determining_condition.max_qualifying(results_with_potential)
-
-    advancement_determining_results.update_all(
-      "advancing_questionable = (global_pos < #{max_advancing})",
-    )
-
-    LiveResult.where(id: advancing_ids).update_all(advancing: true)
+    Live::Advancing.recompute_advancing(self)
   end
 
   def recompute_global_pos
     return if format_id == "h"
 
-    # For non-linked rounds, just set the global_pos to local_pos
-    return live_results.update_all("global_pos = local_pos") if linked_round.blank?
+    # For non-linked rounds, global_pos was already set equal to local_pos in recompute_local_pos
+    return if linked_round.blank?
 
-    rank_by = format.rank_by_column
-    secondary_rank_by = format.secondary_rank_by_column
-    round_ids = linked_round.round_ids.join(",")
+    query = Live::Advancing.recompute_global_pos_query(format, linked_round, "registration_id", "live_results")
 
-    # Similar to the query that recomputes local_pos, but
-    # at first it computes the best result of a person over all linked rounds
-    # by using the same ORDER BY <=0 trick
-    query = <<~SQL.squish
-      UPDATE live_results r
-      LEFT JOIN
-        (SELECT id,
-                RANK() OVER (ORDER BY person_best.#{rank_by} <= 0,
-                             person_best.#{rank_by} ASC #{", person_best.#{secondary_rank_by} <= 0, person_best.#{secondary_rank_by} ASC" if secondary_rank_by}) AS ranking
-         FROM
-           (SELECT *
-            FROM
-              (SELECT lr.*,
-                      ROW_NUMBER() OVER (PARTITION BY lr.registration_id
-                                         ORDER BY (lr.#{rank_by} <= 0) ASC,
-                                         lr.#{rank_by} ASC #{", lr.#{secondary_rank_by} <= 0, lr.#{secondary_rank_by} ASC" if secondary_rank_by}) AS rownum
-               FROM live_results lr
-               WHERE lr.round_id IN (#{round_ids})
-                 AND lr.best != 0) x
-            WHERE rownum = 1) AS person_best) ranked ON r.id = ranked.id
-      SET r.global_pos = ranked.ranking
-      WHERE r.round_id IN (#{round_ids});
-    SQL
+    ActiveRecord::Base.connection.exec_query query
+  end
+
+  def recompute_results_global_pos
+    return if format_id == "h"
+    return if linked_round.blank?
+
+    query = Live::Advancing.recompute_global_pos_query(format, linked_round, "person_id", "results")
+
+    ActiveRecord::Base.connection.exec_query query
+  end
+
+  def recompute_inbox_results_global_pos
+    return if format_id == "h"
+    return if linked_round.blank?
+
+    query = Live::Advancing.recompute_global_pos_query(format, linked_round, "person_id", "inbox_results")
 
     ActiveRecord::Base.connection.exec_query query
   end
@@ -297,19 +305,33 @@ class Round < ApplicationRecord
     #   2. The attempts are then sorted among themselves using their normal numeric value.
     #     This works in particular because sorting in MySQL is stable, i.e. the sorting
     #     based on the second part won't destroy the order established by the first part.
+    #
+    # For non-linked rounds global_pos equals local_pos, so we set both here to avoid
+    # a second UPDATE in recompute_global_pos.
+
+    # For average-ranked formats, within the invalid-average group we further separate results
+    # by whether their best single is also invalid (all DNF/DNS), pushing those to the very bottom.
+    # Then sort by best single so e.g. incomplete (average=0, best=39) ranks above DNF mean
+    # (average=-1, best=40), and both rank above all-DNF (average=-1, best=-1).
+    order_clause = if secondary_rank_by
+                     primary_sort = "IF(#{rank_by} > 0, #{rank_by}, #{secondary_rank_by})"
+                     "#{rank_by} <= 0, #{secondary_rank_by} <= 0, #{primary_sort} ASC, #{secondary_rank_by} ASC"
+                   else
+                     "#{rank_by} <= 0, #{rank_by} ASC"
+                   end
+
     ActiveRecord::Base.connection.exec_query <<~SQL.squish
       UPDATE live_results r
       LEFT JOIN (
           SELECT id,
                  RANK() OVER (
-                     ORDER BY #{rank_by} <= 0, #{rank_by} ASC
-                       #{", #{secondary_rank_by} <= 0, #{secondary_rank_by} ASC" if secondary_rank_by}
+                     ORDER BY #{order_clause}
                  ) AS `rank`
           FROM live_results
           WHERE round_id = #{id} AND best != 0
       ) ranked
       ON r.id = ranked.id
-      SET r.local_pos = ranked.rank
+      SET r.local_pos = ranked.rank#{', r.global_pos = ranked.rank' if linked_round.blank?}
       WHERE r.round_id = #{id};
     SQL
   end
@@ -318,12 +340,26 @@ class Round < ApplicationRecord
     live_results.includes(:live_attempts).map(&:to_live_state)
   end
 
-  def competitors_live_results_entered
-    live_results.not_empty.count
+  def completed_competitors
+    if live_results.loaded?
+      live_results.count(&:complete?)
+    else
+      fully_done = live_results.where(live_attempts_count: format.expected_solve_count)
+
+      if cutoff.present?
+        only_done_cutoff_attempts = live_results
+                                    .where(live_attempts_count: cutoff.number_of_attempts)
+        didnt_meet_cutoff = only_done_cutoff_attempts.where(best: cutoff.attempt_result..)
+                                                     .or(only_done_cutoff_attempts.where(best: ...0))
+        return fully_done.or(didnt_meet_cutoff).count
+      end
+
+      fully_done.count
+    end
   end
 
   def score_taking_done?
-    open? && competitors_live_results_entered == total_competitors
+    open? && completed_competitors == total_competitors
   end
 
   def time_limit_undefined?
@@ -370,39 +406,336 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def self.wcif_to_round_attributes(event, wcif, round_number, total_rounds)
+  def load_live_results!(round_results_wcif, current_user, version: Competition::WCIF_STABLE_VERSION)
+    person_id_to_registration_id = self.competition.registrations
+                                       .to_h { [it.registrant_id, it.id] }
+
+    results_by_registration_id = self.live_results.index_by(&:registration_id)
+    recorded_registration_ids = results_by_registration_id.keys
+
+    database_now = self.current_time_from_proper_timezone
+
+    self.transaction do
+      incoming_registration_ids = round_results_wcif.map { person_id_to_registration_id[it["personId"]] }
+      recorded_not_incoming = results_by_registration_id.except(*incoming_registration_ids)
+
+      round_already_had_results = !results_by_registration_id.empty?
+
+      result_ids_to_delete = recorded_not_incoming.values.pluck(:id)
+      # Hard-deleting the current round matches our ILR quitting behavior.
+      #   TODO: Think it over whether that's really the best idea.
+      LiveResult.where(id: result_ids_to_delete).delete_all
+
+      unless self.first_round?
+        registrations_who_were_deleted = recorded_not_incoming.values.pluck(:registration_id)
+
+        # Mark everyone from previous rounds as quit
+        previous_round_results = self.participation_source
+                                     .live_results
+                                     .where(registration_id: registrations_who_were_deleted)
+
+        previous_round_results.update_all(quit_by_id: current_user)
+
+        quit_history_items = previous_round_results.ids.map do |result_id|
+          {
+            live_result_id: result_id,
+            entered_by_id: current_user.id,
+            entered_at: database_now,
+            action_type: :quit,
+            action_source: :api_sync,
+          }
+        end
+
+        LiveResultHistoryEntry.insert_all!(quit_history_items)
+      end
+
+      result_data_to_load = round_results_wcif.map do |round_result_wcif|
+        registration_db_id = person_id_to_registration_id[round_result_wcif["personId"]]
+
+        # The REAL `last_attempt_entered_at` is being set below at the very end,
+        #   because only at that point can we compute which results _actually_ changed.
+        # But MySQL upserting needs a "default value" to assume for the INSERT INTO part,
+        #   so we just copy over the one which we already have
+        last_attempt_entered_at = results_by_registration_id[registration_db_id]&.last_attempt_entered_at || database_now
+
+        # Normally, this column is computed by a Rails `counter_cache`, but because we're using a bulk operation,
+        #   we have to manually assign the value instead.
+        attempts_count = round_result_wcif["attempts"]&.length || 0
+
+        {
+          registration_id: registration_db_id,
+          round_id: self.id,
+          best: round_result_wcif["best"],
+          average: round_result_wcif["average"],
+          global_pos: round_result_wcif["ranking"],
+          local_pos: round_result_wcif["ranking"],
+          last_attempt_entered_at: last_attempt_entered_at,
+          live_attempts_count: attempts_count,
+        }
+      end
+
+      LiveResult.upsert_all(result_data_to_load)
+
+      # Reload to get the generated IDs
+      results_by_registration_id = self.live_results.reload
+                                       .includes(:live_attempts)
+                                       .index_by(&:registration_id)
+
+      result_wcif_by_id = round_results_wcif.index_by do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
+        results_by_registration_id[registration_id].id
+      end
+
+      result_field = LiveAttempt.wcif_result_field(version)
+      attempts_to_load = result_wcif_by_id.flat_map do |live_result_id, round_result_wcif|
+        round_result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
+          {
+            live_result_id: live_result_id,
+            attempt_number: attempt_number,
+            value: attempt[result_field],
+          }
+        end
+      end
+
+      LiveAttempt.upsert_all(attempts_to_load) if attempts_to_load.any?
+
+      # Every synced result needs its stale attempts pruned down to the incoming count.
+      #   This MUST be driven by all incoming results, not just `attempts_to_load`, so that
+      #   results whose attempts were cleared (count 0) also get pruned. Otherwise their
+      #   previously-synced attempts get orphaned and `live_results` diverges from `round_results`.
+      attempt_count_by_result_id = result_wcif_by_id.transform_values do |round_result_wcif|
+        round_result_wcif["attempts"]&.length || 0
+      end
+
+      # Group by count so we clean up "once per number of attempts", which in reality is
+      #   only a handful of queries because barely any results have an unusual attempt count.
+      results_grouped_by_attempt_count = attempt_count_by_result_id.group_by { |_result_id, count| count }
+
+      results_grouped_by_attempt_count.each do |valid_count, results|
+        result_ids = results.map { |result_id, _count| result_id }
+
+        LiveAttempt.where(live_result_id: result_ids)
+                   .where.not(attempt_number: ..valid_count)
+                   .delete_all
+      end
+
+      histories_to_generate = round_results_wcif.filter_map do |round_result_wcif|
+        registration_id = person_id_to_registration_id[round_result_wcif["personId"]]
+        live_result = results_by_registration_id[registration_id]
+        result_already_existed = recorded_registration_ids.include?(registration_id)
+
+        build_history_entry(round_result_wcif, live_result, current_user, database_now,
+                            result_already_existed: result_already_existed,
+                            round_already_had_results: round_already_had_results)
+      end
+
+      LiveResultHistoryEntry.insert_all!(histories_to_generate) if histories_to_generate.any?
+
+      results_which_changed = histories_to_generate.pluck(:live_result_id)
+      LiveResult.where(id: results_which_changed).update_all(last_attempt_entered_at: database_now)
+    end
+
+    # Sync up all internal results columns not covered by the sync payload
+    #   This also resets the corresponding `live_results` associations
+    self.recompute_live_columns
+  end
+
+  private def build_history_entry(round_result_wcif, live_result, current_user, database_now,
+                                  result_already_existed:, round_already_had_results:)
+    recorded_attempts = live_result.live_attempts.pluck(:value)
+    imported_attempts = round_result_wcif["attempts"].pluck("result")
+
+    result_has_attempts = !imported_attempts.empty?
+    attempts_have_changed = recorded_attempts != imported_attempts
+
+    return if result_has_attempts && !attempts_have_changed
+
+    action_type = if result_has_attempts
+                    :scoretaking
+                  elsif result_already_existed
+                    :cleared
+                  elsif round_already_had_results
+                    :advanced_next
+                  else
+                    :opened
+                  end
+
+    attempts = imported_attempts if action_type == :scoretaking
+
     {
-      number: round_number,
-      total_number_of_rounds: total_rounds,
-      format_id: wcif["format"],
-      time_limit: event.can_change_time_limit? ? TimeLimit.load(wcif["timeLimit"]) : nil,
-      cutoff: Cutoff.load(wcif["cutoff"]),
-      advancement_condition: AdvancementConditions::AdvancementCondition.load(wcif["advancementCondition"]),
-      scramble_set_count: wcif["scrambleSetCount"],
-      round_results: RoundResults.load(wcif["results"]),
+      live_result_id: live_result.id,
+      entered_by_id: current_user.id,
+      entered_at: database_now,
+      attempt_details: attempts,
+      action_type: action_type,
+      action_source: :api_sync,
+    }
+  end
+
+  def self.load_wcif_advancement_condition(wcif_round, all_wcif_rounds, version: Competition::WCIF_STABLE_VERSION)
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      round_number = self.parse_wcif_id(wcif_round["id"])[:round_number]
+
+      return nil if round_number == all_wcif_rounds.size
+
+      if wcif_round["linkedRounds"].present?
+        last_round_id = wcif_round["linkedRounds"].max_by { self.parse_wcif_id(it)[:round_number] }
+
+        if wcif_round["id"] != last_round_id
+          # Basically faking because our current V1 store does not support dual round advancement.
+          # These will be skipped when re-serializing into WCIF v2
+          return AdvancementConditions::PercentCondition.new(100)
+        end
+      end
+
+      # This call is safe because we have an "if this is last round" guard clause above already
+      next_wcif_round = all_wcif_rounds[round_number] # WCIF numbers are 1-based, so no +1 necessary
+      next_participation_condition = next_wcif_round.dig("participationRuleset", "participationSource", "resultCondition")
+
+      # We know that `next_wcif_round` definitely exists, but historical records (cf. Worlds 2003)
+      #   may not have any advancement data present in our records.
+      return nil if next_participation_condition.nil?
+
+      backported_wcif_v1 = {
+        "type" => next_participation_condition["type"].gsub('resultAchieved', 'attemptResult'),
+        "level" => next_participation_condition["value"],
+      }
+
+      AdvancementConditions::AdvancementCondition.load(backported_wcif_v1)
+    else
+      AdvancementConditions::AdvancementCondition.load(wcif_round["advancementCondition"])
+    end
+  end
+
+  def self.wcif_to_round_attributes(event, round_wcif, all_rounds_wcif, version: Competition::WCIF_STABLE_VERSION)
+    {
+      number: self.parse_wcif_id(round_wcif["id"])[:round_number],
+      total_number_of_rounds: all_rounds_wcif.size,
+      format_id: round_wcif["format"],
+      time_limit: event.can_change_time_limit? ? TimeLimit.load(round_wcif["timeLimit"]) : nil,
+      cutoff: Cutoff.load(round_wcif["cutoff"]),
+      advancement_condition: self.load_wcif_advancement_condition(round_wcif, all_rounds_wcif, version: version),
+      scramble_set_count: round_wcif["scrambleSetCount"],
+    }
+  end
+
+  def self.backport_participation_source(round_model, all_rounds_model)
+    return round_model.competition_event if round_model.number == 1
+
+    if round_model.linked_round.present?
+      first_round_in_link = round_model.linked_round.first_round_in_link
+
+      if round_model != first_round_in_link
+        return self.backport_participation_source(
+          first_round_in_link,
+          all_rounds_model,
+        )
+      end
+    end
+
+    # If we reached this point, we implicitly know that round_number > 1
+    #   so looking back in the all_rounds array is fine.
+    # Note that we calculate -1 for "previous round" AND -1 because round numbers are 1-based,
+    #   which gives -2 in total.
+    previous_round = all_rounds_model[round_model.number - 2]
+
+    previous_round.linked_round || previous_round
+  end
+
+  def self.backport_participation_condition(participation_source)
+    case participation_source
+    when CompetitionEvent
+      nil
+    when Round
+      adv_condition = participation_source.advancement_condition
+      ResultConditions::Utils.upcycle_advancement_condition(adv_condition, participation_source)
+    when LinkedRound
+      self.backport_participation_condition(participation_source.last_round_in_link)
+    end
+  end
+
+  def self.compute_linked_round(round_wcif, round_model, all_rounds_model)
+    linked_round_ids = round_wcif["linkedRounds"]&.sort_by { self.parse_wcif_id(it)[:round_number] }
+
+    return nil if linked_round_ids.blank?
+
+    existing_linked_round = all_rounds_model.filter { linked_round_ids.include? it.wcif_id }
+                                            .filter { it.number < round_model.number } # always start building links in-order
+                                            .filter_map(&:linked_round)
+                                            .first
+
+    existing_linked_round || round_model.build_linked_round
+  end
+
+  def self.backport_participation_ruleset(round_model, all_rounds_model)
+    participation_source = self.backport_participation_source(round_model, all_rounds_model)
+
+    {
+      participation_source: participation_source,
+      participation_condition: self.backport_participation_condition(participation_source),
     }
   end
 
   def lock_results(locking_user)
-    # Don't double lock results if we are in a R1 (R2 R3) R4 linked round situation and we are opening rounds
-    # separately
-    return 0 if relevant_results.first.locked_by.present?
-
-    relevant_results.update_all(locked_by_id: locking_user.id)
-    self.bulk_insert_history(relevant_results.ids, locking_user, action_type: :locked)
+    count = live_results.update_all(locked_by_id: locking_user.id)
+    self.bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
+    count
   end
 
   STATE_LOCKED = "locked"
   STATE_OPEN = "open"
   STATE_READY = "ready"
   STATE_PENDING = "pending"
+  STATE_BLOCKED = "blocked"
+
+  # Keyed by the clause of https://www.worldcubeassociation.org/regulations/#9m each message describes
+  INSUFFICIENT_COMPETITORS_MESSAGES = {
+    "9m1" => "a round with 99 or fewer competitors must have at most two subsequent rounds",
+    "9m2" => "a round with 15 or fewer competitors must have at most one subsequent round",
+    "9m3" => "a round with 7 or fewer competitors must not have subsequent rounds",
+  }.freeze
+
+  # Minimum number of competitors a previous round needs to satisfy each clause
+  MIN_COMPETITORS_PER_CLAUSE = {
+    "9m1" => 100,
+    "9m2" => 16,
+    "9m3" => 8,
+  }.freeze
 
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if number == 1 || previous_round.score_taking_done?
+    return STATE_PENDING unless participation_source.score_taking_done?
+    return STATE_BLOCKED if insufficient_competitors_violation.present?
 
-    STATE_PENDING
+    STATE_READY
+  end
+
+  # Returns the violated regulation clause ("9m1"/"9m2"/"9m3") if opening this round
+  # would violate https://www.worldcubeassociation.org/regulations/#9m, which limits
+  # how many rounds an event may hold based on the competitor counts of earlier rounds.
+  def insufficient_competitors_violation
+    # We allow opening all linked rounds even if that would break the rule for a better user experience
+    return nil if linked_round.present?
+
+    # Each earlier round caps the number of the last round the event may hold,
+    #   based on how many competitors it had; the tightest (lowest) cap binds us.
+    binding_cap = participation_source.previous_rounds.map do |previous|
+      subsequent_rounds_allowed = MIN_COMPETITORS_PER_CLAUSE.values.count { previous.total_competitors >= it }
+
+      {
+        max_round_number: previous.number + subsequent_rounds_allowed,
+        subsequent_rounds_allowed: subsequent_rounds_allowed,
+      }
+    end.min_by { it[:max_round_number] }
+
+    return nil if binding_cap.nil?
+
+    enforced_max_round = [binding_cap[:max_round_number], 4].min # 9m: events may have at most four rounds
+    return nil if enforced_max_round >= number
+
+    # The fewer subsequent rounds a previous round allows, the stricter the clause it violates
+    MIN_COMPETITORS_PER_CLAUSE.keys.reverse[binding_cap[:subsequent_rounds_allowed]]
   end
 
   def open?
@@ -410,48 +743,70 @@ class Round < ApplicationRecord
   end
 
   def locked?
-    score_taking_done? && live_results.locked.count == total_competitors
+    return false unless score_taking_done?
+
+    if live_results.loaded?
+      live_results.count(&:locked?) == total_competitors
+    else
+      live_results.locked.count == total_competitors
+    end
   end
 
   def first_round?
     number == 1 || (linked_round.present? && linked_round.first_round_in_link.number == 1)
   end
 
-  def relevant_results
-    linked_round.present? ? linked_round.live_results : live_results
-  end
+  alias_method :advancement_results, :live_results
 
   # Port from https://github.com/thewca/wca-live/blob/main/lib/wca_live/scoretaking/advancing.ex#L143
   # Basically this just removes the number one placed competitor and then sees who of the non-advancing
   # competitors would make it if that competitor got dnf
-  def next_advancing_without(competitor_being_quit)
-    already_quit_ids = relevant_results.quit.pluck(:id)
+  def next_participating_without(competitors_being_quit)
+    live_results = self.participation_source.advancement_results.to_a
 
-    first_advancing = relevant_results.advancing.first
+    already_quit_ids = live_results.select(&:quit?).pluck(:id)
 
-    candidate_ids = relevant_results.not_advancing.not_quit.pluck(:id)
+    first_advancing = live_results.find(&:advancing?)
+
+    candidate_ids = live_results.reject(&:advancing?).reject(&:quit?).pluck(:id)
 
     return [] if candidate_ids.empty?
 
-    ignored_ids = [first_advancing.id, competitor_being_quit] | already_quit_ids
+    quit_result_ids = live_results.select { Array(competitors_being_quit).include?(it.registration_id) }.pluck(:id)
+    ignored_ids = [first_advancing&.id].compact | quit_result_ids | already_quit_ids
 
-    advancement_determining = relevant_results
-                              .where.not(id: ignored_ids)
-
-    # Eager load associations to avoid N+1 on potential_solve_time
-    loaded_results = advancement_determining.includes(:live_attempts).to_a
+    advancement_determining = live_results.reject { ignored_ids.include? it.id }
 
     # Assume that everyone who quit got dnf
-    worst_results = Array.new(ignored_ids.length) { LiveResult.build(round: self, best: LiveResult::WORST_POSSIBLE_SCORE, average: LiveResult::WORST_POSSIBLE_SCORE) }
-    results_with_worst = (loaded_results + worst_results).sort_by(&:values_for_sorting)
+    worst_results = ignored_ids.map do |ignored_id|
+      LiveResult.build(
+        id: ignored_id,
+        round: self.participation_source.rounds.first,
+        best: LiveResult::WORST_POSSIBLE_SCORE,
+        average: LiveResult::WORST_POSSIBLE_SCORE,
+      )
+    end
 
-    hypothetically_advancing_ids = advancement_condition.apply(results_with_worst)
+    results_with_worst = (advancement_determining + worst_results).sort_by(&:values_for_sorting)
 
-    relevant_results.where(id: hypothetically_advancing_ids & candidate_ids)
+    hypothetically_advancing_ids = self.participation_condition.apply(results_with_worst).pluck(:id)
+    next_advancing_ids = hypothetically_advancing_ids & candidate_ids
+
+    live_results.select { next_advancing_ids.include? it.id }
+  end
+
+  def rounds
+    [self]
+  end
+
+  # The round-like ancestors that feed into this one, walking back through
+  #   `participation_source` until it bottoms out at the CompetitionEvent.
+  def previous_rounds
+    [self, *participation_source.previous_rounds]
   end
 
   def quit_from_round!(registration_id, quitting_user, to_advance: nil)
-    transaction do
+    with_lock do
       Live::DiffHelper.broadcast_changes(self) do
         result = live_results.find_by!(registration_id: registration_id)
         result.destroy!
@@ -462,16 +817,34 @@ class Round < ApplicationRecord
 
       return 1 if first_round?
 
-      1 + Live::DiffHelper.broadcast_changes(previous_round) do
-        to_advance&.update!(advancing: true)
-        quit_from_previous_round(registration_id, quitting_user)
+      participation_source.rounds.count do |round|
+        1 + Live::DiffHelper.broadcast_changes(round) do
+          round.live_results.where(id: to_advance&.pluck(:id)).update!(advancing: true)
+          round.live_results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
+        end
       end
     end
   end
 
-  def quit_from_previous_round(registration_id, quitting_user)
-    results = previous_round.relevant_results
-    results.where(registration_id: registration_id).count { |r| r.mark_as_quit!(quitting_user) }
+  def bulk_quit_from_round!(registration_ids, quitting_user, to_advance: nil)
+    with_lock do
+      Live::DiffHelper.broadcast_changes(self) do
+        live_results.where(registration_id: registration_ids).find_each(&:destroy!)
+        live_results.create(to_advance.map { { **LiveResult.empty_result_attributes(it.registration_id, self.id) } }) if to_advance.present?
+        recompute_advancing
+        live_results.reset
+      end
+
+      return registration_ids.length if first_round?
+
+      participation_source.rounds.sum do |round|
+        Live::DiffHelper.broadcast_changes(round) do
+          round.live_results.where(id: to_advance&.pluck(:id)).update!(advancing: true)
+          round.live_results.where(registration_id: registration_ids).find_each { |r| r.mark_as_quit!(quitting_user) }
+        end
+        registration_ids.length
+      end
+    end
   end
 
   def wcif_id
@@ -495,34 +868,64 @@ class Round < ApplicationRecord
     }
   end
 
-  def to_wcif
+  def as_wcif_participation_source(target_round)
     {
-      "id" => wcif_id,
-      "format" => self.format_id,
-      "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
-      "cutoff" => cutoff&.to_wcif,
-      "advancementCondition" => advancement_condition&.to_wcif,
-      "scrambleSetCount" => self.scramble_set_count,
-      "results" => round_results.map(&:to_wcif),
-      "extensions" => wcif_extensions.map(&:to_wcif),
+      "type" => "round",
+      "roundId" => self.wcif_id,
+      "resultCondition" => target_round.participation_condition&.to_wcif,
     }
   end
 
+  def to_wcif(include_results: true, version: Competition::WCIF_STABLE_VERSION)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+
+    base_wcif = {
+      "id" => wcif_id,
+      "format" => self.format_id,
+      "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
+      "cutoff" => cutoff&.to_wcif(version: version),
+      "scrambleSetCount" => self.scramble_set_count,
+      "results" => include_results ? live_results.map { it.to_wcif(version: version) } : nil,
+      "extensions" => wcif_extensions.map(&:to_wcif),
+    }
+
+    if at_least_v2
+      base_wcif.merge(
+        "linkedRounds" => linked_round&.wcif_ids,
+        "participationRuleset" => {
+          "participationSource" => participation_source.as_wcif_participation_source(self),
+          "reservedPlaces" => nil,
+        },
+      )
+    else
+      base_wcif.merge(
+        "advancementCondition" => advancement_condition&.to_wcif,
+      )
+    end
+  end
+
   def to_live_results_json(only_podiums: false)
+    # For podiums we need the combined competitor set of the whole linked round
+    #   (live_podium spans every linked round). For regular round views we only
+    #   want this round's own competitors; the frontend merges the linked rounds
+    #   back together when it needs the combined set.
+    competitors = only_podiums ? (linked_round&.live_competitors || live_competitors) : live_competitors
     {
-      **self.to_wcif,
+      **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "round_id" => id,
-      "competitors" => live_competitors.includes(:user).map(&:to_live_json),
+      "competitors" => competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
+      "completed_competitors" => completed_competitors,
     }
   end
 
   def to_live_info_json
     state = lifecycle_state
     json = {
-      **self.to_wcif,
+      # WCIF v2 so that the frontend knows about linked rounds
+      **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "state" => state,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)
@@ -533,27 +936,93 @@ class Round < ApplicationRecord
 
     if state == STATE_OPEN
       json = json.merge({
-                          "competitors_live_results_entered" => competitors_live_results_entered,
+                          "completed_competitors" => completed_competitors,
+                        })
+    end
+
+    if state == STATE_BLOCKED
+      json = json.merge({
+                          "competitor_count_needed" => MIN_COMPETITORS_PER_CLAUSE[insufficient_competitors_violation],
                         })
     end
     json
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => "object",
-      "properties" => {
-        "id" => { "type" => "string" },
-        "format" => { "type" => "string", "enum" => Format.ids },
-        "timeLimit" => TimeLimit.wcif_json_schema,
-        "cutoff" => Cutoff.wcif_json_schema,
-        "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
-        "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
-        "scrambleSets" => { "type" => "array" }, # TODO: expand on this
-        "scrambleSetCount" => { "type" => "integer" },
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
-      },
+      "properties" => self.wcif_json_schema_properties(version: version),
     }
+  end
+
+  def self.wcif_json_schema_properties(version: Competition::WCIF_STABLE_VERSION)
+    base_properties = {
+      "id" => { "type" => "string" },
+      "format" => { "type" => "string", "enum" => Format.ids },
+      "timeLimit" => TimeLimit.wcif_json_schema,
+      "cutoff" => Cutoff.wcif_json_schema(version: version),
+      "results" => { "type" => "array", "items" => LiveResult.wcif_json_schema(version: version) },
+      "scrambleSets" => { "type" => "array" }, # TODO: expand on this
+      "scrambleSetCount" => { "type" => "integer" },
+      "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+    }
+
+    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+      base_properties.merge(
+        "linkedRounds" => {
+          "type" => %w[array null],
+          "items" => { "type" => "string" },
+        },
+        "participationRuleset" => {
+          "type" => "object",
+          "properties" => {
+            "participationSource" => {
+              "oneOf" => [
+                {
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "const" => "registrations" },
+                  },
+                },
+                {
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "const" => "round" },
+                    "roundId" => { "type" => "string" },
+                    "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+                  },
+                },
+                {
+                  "type" => "object",
+                  "properties" => {
+                    "type" => { "const" => "linkedRounds" },
+                    "roundIds" => {
+                      "type" => "array",
+                      "items" => { "type" => "string" },
+                    },
+                    "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
+                  },
+                },
+              ],
+            },
+            "reservedPlaces" => {
+              "type" => %w[object null],
+              "properties" => {
+                "nationalities" => {
+                  "type" => "array",
+                  "items" => { "type" => "string" },
+                },
+                "reservations" => { "type" => "integer" },
+              },
+            },
+          },
+        },
+      )
+    else
+      base_properties.merge(
+        "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
+      )
+    end
   end
 
   def self.name_from_attributes_id(event_id, round_type_id)

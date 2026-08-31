@@ -1,1 +1,6 @@
-SELECT id FROM competitions WHERE results_posted_by IS NULL AND announced_at IS NOT NULL AND id IN (SELECT competition_id FROM results)
+SELECT DISTINCT c.id
+FROM competitions AS c
+INNER JOIN results AS r
+ON c.id = r.competition_id
+WHERE c.results_posted_by IS NULL
+  AND c.announced_at IS NOT NULL;

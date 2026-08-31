@@ -10,6 +10,7 @@ import assignWcaIdToUser from '../../../NewcomerChecks/api/assignWcaIdToUser';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import WcaIdClaimCancelWarning from '../../../NewcomerChecks/WcaIdClaimCancelWarning';
 
 export default function AssignWcaIdToUser({
   user, prefilledWcaId, onSuccess, requireConfirmation,
@@ -72,6 +73,7 @@ export default function AssignWcaIdToUser({
         />
         <Button primary onClick={assignHandler}>Assign</Button>
       </Form>
+      <WcaIdClaimCancelWarning wcaId={wcaId} userId={user.id} />
     </>
   );
 }

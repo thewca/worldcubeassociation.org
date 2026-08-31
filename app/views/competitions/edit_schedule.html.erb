@@ -15,15 +15,14 @@
       <%= link_to "here", edit_competition_path(@competition, anchor: "competition_countryId") %>.
     </div>
   <% else %>
-    <%= react_component("EditSchedule", {
+    <%= react_component("EditSchedule", props: {
       competitionId: @competition.id,
       wcifEvents: @competition.events_wcif,
       wcifSchedule: @competition.schedule_wcif,
       countryZones: @competition.country_zones,
       referenceTime: @competition.start_date.to_fs,
+      competitionCoordinates: @competition.coordinates,
       calendarLocale: I18n.locale,
-    }, {
-      id: 'edit-schedule-area'
-    }) %>
+    }, id: 'edit-schedule-area') %>
   <% end %>
 <% end %>

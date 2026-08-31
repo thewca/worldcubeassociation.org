@@ -6,7 +6,7 @@ module ResultsValidators
 
     BACKOFF_INT_MAX = 2_147_483_648
 
-    attr_accessor :competition, :results, :persons
+    attr_accessor :competition, :results, :persons, :scrambles
 
     def self.from_competitions(validator, competition_ids, check_real_results, batch_size: nil)
       associations = self.load_associations(validator, check_real_results: check_real_results)
@@ -44,9 +44,18 @@ module ResultsValidators
 
       if validator.include_persons?
         persons_assoc = check_real_results ? :competitors : :inbox_persons
-        assoc_models = check_real_results ? [] : [:person]
+        person_assoc_models = check_real_results ? [] : [:person]
 
-        associations.deep_merge!({ persons_assoc => assoc_models })
+        associations.deep_merge!({ persons_assoc => person_assoc_models })
+      end
+
+      if validator.include_scrambles?
+        scrambles_assoc = check_real_results ? :scrambles : :matched_scrambles
+
+        round_assoc_models = { round: [:competition_event] }
+        scrambles_assoc_models = check_real_results ? round_assoc_models : { matched_scramble_set: round_assoc_models }
+
+        associations.deep_merge!({ scrambles_assoc => scrambles_assoc_models })
       end
 
       associations
@@ -75,6 +84,7 @@ module ResultsValidators
           r.round_type.rank,
           valid_average ? r.average : BACKOFF_INT_MAX,
           valid_best ? r.best : BACKOFF_INT_MAX,
+          r.id, # tie-breaker for the rare case that two persons in the same round achieved the same single and average
         ]
       end
 
@@ -85,6 +95,10 @@ module ResultsValidators
 
       if validator.include_persons?
         data.persons = check_real_results ? competition.competitors : competition.inbox_persons
+      end
+
+      if validator.include_scrambles?
+        data.scrambles = check_real_results ? competition.scrambles : competition.matched_scrambles
       end
 
       data

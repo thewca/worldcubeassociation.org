@@ -15,12 +15,14 @@ type CountryCellProps = (
     }
 ) & {
   rowSpan?: number;
+  hideBelow?: string;
 };
 
 export function CountryCell({
   countryId,
   countryIso2,
   rowSpan,
+  hideBelow,
 }: CountryCellProps) {
   const country =
     // Explicitly check for undefined so TypeScript knows which branch it is
@@ -28,7 +30,7 @@ export function CountryCell({
       ? countries.byId[countryId]
       : countries.byIso2[countryIso2];
   return (
-    <Table.Cell rowSpan={rowSpan}>
+    <Table.Cell rowSpan={rowSpan} hideBelow={hideBelow}>
       {country && (
         <Icon asChild size="sm">
           <WcaFlag code={country.iso2} />

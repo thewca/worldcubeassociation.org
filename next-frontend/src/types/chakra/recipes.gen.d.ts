@@ -20,7 +20,7 @@ export interface ButtonVariant {
   /** @default "md" */
   size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined
   /** @default "solid" */
-  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | undefined
+  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | "pastelSolid" | "pastelOutline" | "onSolid" | undefined
 }
 
 export type ButtonVariantProps = {
@@ -433,7 +433,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
-  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | undefined
+  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | "slatePastel" | undefined
 }
 
 export type CardVariantProps = {
@@ -578,6 +578,72 @@ export type DataListVariantProps = {
 
 export type DataListVariantMap = {
   [K in keyof DataListVariant]: Array<DataListVariant[K]>
+}
+
+// DateInput
+
+export type DateInputSlot = "root" | "label" | "control" | "segmentGroup" | "segment" | "hiddenInput"
+
+export interface DateInputVariant {
+  /** @default "md" */
+  size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined
+  /** @default "outline" */
+  variant?: "outline" | "subtle" | "flushed" | undefined
+}
+
+export type DateInputVariantProps = {
+  [K in keyof DateInputVariant]?: ConditionalValue<DateInputVariant[K]> | undefined
+}
+
+export type DateInputVariantMap = {
+  [K in keyof DateInputVariant]: Array<DateInputVariant[K]>
+}
+
+// DatePicker
+
+export type DatePickerSlot =
+  | "clearTrigger"
+  | "content"
+  | "control"
+  | "input"
+  | "label"
+  | "monthSelect"
+  | "nextTrigger"
+  | "positioner"
+  | "presetTrigger"
+  | "prevTrigger"
+  | "rangeText"
+  | "root"
+  | "table"
+  | "tableBody"
+  | "tableCell"
+  | "tableCellTrigger"
+  | "tableHead"
+  | "tableHeader"
+  | "tableRow"
+  | "trigger"
+  | "view"
+  | "viewControl"
+  | "viewTrigger"
+  | "yearSelect"
+  | "view"
+  | "valueText"
+  | "indicatorGroup"
+
+export interface DatePickerVariant {
+  /** @default "md" */
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | undefined
+  hideOutsideDays?: boolean | undefined
+  /** @default "outline" */
+  variant?: "outline" | "subtle" | "flushed" | undefined
+}
+
+export type DatePickerVariantProps = {
+  [K in keyof DatePickerVariant]?: ConditionalValue<DatePickerVariant[K]> | undefined
+}
+
+export type DatePickerVariantMap = {
+  [K in keyof DatePickerVariant]: Array<DatePickerVariant[K]>
 }
 
 // Dialog
@@ -1521,6 +1587,31 @@ export type MarqueeVariantMap = {
   [K in keyof MarqueeVariant]: Array<MarqueeVariant[K]>
 }
 
+// FloatingPanel
+
+export type FloatingPanelSlot =
+  | "trigger"
+  | "positioner"
+  | "content"
+  | "header"
+  | "body"
+  | "title"
+  | "resizeTrigger"
+  | "dragTrigger"
+  | "stageTrigger"
+  | "closeTrigger"
+  | "control"
+
+export interface FloatingPanelVariant {}
+
+export type FloatingPanelVariantProps = {
+  [K in keyof FloatingPanelVariant]?: ConditionalValue<FloatingPanelVariant[K]> | undefined
+}
+
+export type FloatingPanelVariantMap = {
+  [K in keyof FloatingPanelVariant]: Array<FloatingPanelVariant[K]>
+}
+
 export interface ConfigSlotRecipes {
   accordion: SystemSlotRecipeFn<AccordionSlot, AccordionVariantProps, AccordionVariantMap>
   actionBar: SystemSlotRecipeFn<ActionBarSlot, ActionBarVariantProps, ActionBarVariantMap>
@@ -1535,6 +1626,8 @@ export interface ConfigSlotRecipes {
   codeBlock: SystemSlotRecipeFn<CodeBlockSlot, CodeBlockVariantProps, CodeBlockVariantMap>
   collapsible: SystemSlotRecipeFn<CollapsibleSlot, CollapsibleVariantProps, CollapsibleVariantMap>
   dataList: SystemSlotRecipeFn<DataListSlot, DataListVariantProps, DataListVariantMap>
+  dateInput: SystemSlotRecipeFn<DateInputSlot, DateInputVariantProps, DateInputVariantMap>
+  datePicker: SystemSlotRecipeFn<DatePickerSlot, DatePickerVariantProps, DatePickerVariantMap>
   dialog: SystemSlotRecipeFn<DialogSlot, DialogVariantProps, DialogVariantMap>
   drawer: SystemSlotRecipeFn<DrawerSlot, DrawerVariantProps, DrawerVariantMap>
   editable: SystemSlotRecipeFn<EditableSlot, EditableVariantProps, EditableVariantMap>
@@ -1576,6 +1669,7 @@ export interface ConfigSlotRecipes {
   qrCode: SystemSlotRecipeFn<QrCodeSlot, QrCodeVariantProps, QrCodeVariantMap>
   treeView: SystemSlotRecipeFn<TreeViewSlot, TreeViewVariantProps, TreeViewVariantMap>
   marquee: SystemSlotRecipeFn<MarqueeSlot, MarqueeVariantProps, MarqueeVariantMap>
+  floatingPanel: SystemSlotRecipeFn<FloatingPanelSlot, FloatingPanelVariantProps, FloatingPanelVariantMap>
 }
 
 export interface ConfigRecipeSlots {
@@ -1592,6 +1686,8 @@ export interface ConfigRecipeSlots {
   codeBlock: CodeBlockSlot
   collapsible: CollapsibleSlot
   dataList: DataListSlot
+  dateInput: DateInputSlot
+  datePicker: DatePickerSlot
   dialog: DialogSlot
   drawer: DrawerSlot
   editable: EditableSlot
@@ -1633,6 +1729,7 @@ export interface ConfigRecipeSlots {
   qrCode: QrCodeSlot
   treeView: TreeViewSlot
   marquee: MarqueeSlot
+  floatingPanel: FloatingPanelSlot
 }
 
 export type SlotRecipeRecord<T, K> = T extends keyof ConfigRecipeSlots ? Record<ConfigRecipeSlots[T], K> : Record<string, K>

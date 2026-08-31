@@ -1,7 +1,7 @@
 type: object
 required:
   - eventId
-  - best
+  - value
   - worldRanking
   - continentalRanking
   - nationalRanking
@@ -10,7 +10,7 @@ properties:
   eventId:
     type: string
     example: '333'
-  best:
+  value:
     $ref: './WcifAttemptResult.yaml'
   worldRanking:
     type: integer

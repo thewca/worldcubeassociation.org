@@ -92,6 +92,7 @@ module DatabaseDumper
           results_posted_by
           posting_by
           main_event_id
+          lead_delegate_id
           cancelled_at
           cancelled_by
           waiting_list_deadline_date
@@ -99,7 +100,7 @@ module DatabaseDumper
           force_comment_in_registration
           allow_registration_edits
           competition_series_id
-          use_wca_live_for_scoretaking
+          scoretaking_software
           allow_registration_without_qualification
           forbid_newcomers
           forbid_newcomers_reason
@@ -175,6 +176,10 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "external_scramble_sets" => :skip_all_rows,
+    "external_scrambles" => :skip_all_rows,
+    "matched_scramble_sets" => :skip_all_rows,
+    "matched_scrambles" => :skip_all_rows,
     "formats" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -237,8 +242,6 @@ module DatabaseDumper
     }.freeze,
     "inbox_persons" => :skip_all_rows,
     "inbox_results" => :skip_all_rows,
-    "inbox_scramble_sets" => :skip_all_rows,
-    "inbox_scrambles" => :skip_all_rows,
     "persons" => {
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
@@ -274,6 +277,7 @@ module DatabaseDumper
           person_id
           person_name
           pos
+          global_pos
           regional_average_record
           regional_single_record
           round_type_id
@@ -294,6 +298,9 @@ module DatabaseDumper
           time_limit
           cutoff
           advancement_condition
+          participation_condition
+          participation_source_id
+          participation_source_type
           scramble_set_count
           created_at
           updated_at
@@ -310,7 +317,6 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
-          wcif_id
           created_at
           updated_at
         ],
@@ -339,6 +345,7 @@ module DatabaseDumper
           scramble
           id
           scramble_num
+          external_scramble_id
         ],
       ),
     }.freeze,
@@ -380,6 +387,8 @@ module DatabaseDumper
           event_id
           fee_lowest_denomination
           qualification
+          qualification_latest_date
+          qualification_condition
         ],
       ),
     }.freeze,
@@ -396,6 +405,7 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "competition_scoretakers" => :skip_all_rows,
     "competition_series" => {
       # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
       where_clause: "LEFT JOIN competitions ON competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
@@ -812,7 +822,6 @@ module DatabaseDumper
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
-      where_clause: "WHERE name NOT IN (#{ServerSetting::HIDDEN_SETTINGS.map { "'#{it}'" }.join(',')})",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           name
@@ -907,6 +916,7 @@ module DatabaseDumper
           first_delegated
           last_delegated
           total_delegated
+          lead_delegated
           created_at
           updated_at
         ],

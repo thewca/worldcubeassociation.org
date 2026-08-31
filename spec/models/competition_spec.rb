@@ -36,6 +36,37 @@ RSpec.describe Competition do
     expect(build(:competition, country_id: "USA", city_name: city)).to be_valid
   end
 
+  context "with Face Turning Octahedron" do
+    let(:fto_error) { "Face Turning Octahedron cannot be held at competitions starting before January 02, 2027." }
+
+    it "rejects a competition starting before the introduction date" do
+      competition = build(:competition, starts: Date.new(2027, 1, 1), event_ids: %w[333 fto])
+      expect(competition).to be_invalid_with_errors(competition_events: [fto_error])
+    end
+
+    it "accepts a competition starting on the introduction date" do
+      competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto])
+      expect(competition).to be_valid
+    end
+
+    it "accepts a competition starting before the introduction date without the event" do
+      competition = build(:competition, starts: Date.new(2027, 1, 1), event_ids: %w[333])
+      expect(competition).to be_valid
+    end
+
+    it "rejects adding the event to an early competition through the WCIF" do
+      competition = create(:competition, starts: Date.new(2027, 1, 1), event_ids: %w[333])
+      admin = create(:admin)
+
+      wcif = competition.to_wcif
+      wcif['events'] += [{ 'id' => 'fto', 'rounds' => [] }]
+
+      expect { competition.set_wcif!(wcif, admin) }
+        .to raise_error(ActiveRecord::RecordInvalid, /#{Regexp.escape(fto_error)}/)
+      expect(competition.reload.event_ids).not_to include('fto')
+    end
+  end
+
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
       competition = build(:competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10)
@@ -572,7 +603,7 @@ RSpec.describe Competition do
       expect(competition.in_progress?).to be true
       expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. Come back after #{I18n.l(competition.end_date, format: :long)} to see the results!"
 
-      competition.use_wca_live_for_scoretaking = true
+      competition.scoretaking_software = :wca_live
       expect(competition.info_messages[:in_progress]).to eq "This competition is ongoing. You can check the live results <a href='https://live.worldcubeassociation.org/link/competitions/#{competition.id}'>here</a>!"
 
       competition.results_posted_at = Time.now
@@ -774,7 +805,7 @@ RSpec.describe Competition do
   end
 
   describe "when confirming or making visible" do
-    let(:competition_with_delegate) { build(:competition, :with_delegate, :with_organizer, generate_website: false) }
+    let(:competition_with_delegate) { build(:competition, :with_lead_delegate, :with_organizer, generate_website: false) }
     let(:competition_without_delegate) { build(:competition) }
 
     %i[confirmed show_at_all].each do |action|
@@ -807,7 +838,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = create(:competition, :future, :with_delegate, :with_organizer, :with_valid_schedule)
+      competition = create(:competition, :future, :with_lead_delegate, :with_organizer, :with_valid_schedule)
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)

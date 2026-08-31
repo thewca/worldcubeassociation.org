@@ -172,6 +172,8 @@ export default function Subregion({ group }) {
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>Location</Table.HeaderCell>
+            <Table.HeaderCell>Delegated competitions</Table.HeaderCell>
+            <Table.HeaderCell>Lead delegated competitions</Table.HeaderCell>
             <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -181,6 +183,8 @@ export default function Subregion({ group }) {
               <Table.Cell>{delegate.user.name}</Table.Cell>
               <Table.Cell>{I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)}</Table.Cell>
               <Table.Cell>{delegate.metadata.location}</Table.Cell>
+              <Table.Cell>{delegate.metadata.total_delegated}</Table.Cell>
+              <Table.Cell>{delegate.metadata.lead_delegated}</Table.Cell>
               <Table.Cell>
                 {canPromote(delegate)
                   && <Button onClick={() => promoteDelegateAction(delegate)}>Promote</Button>}
@@ -207,7 +211,6 @@ export default function Subregion({ group }) {
         status={(group.parent_group_id
           ? delegateRegionsStatus.regional_delegate
           : delegateRegionsStatus.senior_delegate)}
-        location={group.name}
       />
       <Modal
         size="fullscreen"

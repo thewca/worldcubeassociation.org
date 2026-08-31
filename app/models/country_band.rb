@@ -2,7 +2,7 @@
 
 class CountryBand < ApplicationRecord
   belongs_to :country, foreign_key: :iso2, primary_key: :iso2, inverse_of: :band
-  has_many :country_band_details, foreign_key: :number, primary_key: :number
+  has_many :country_band_details, foreign_key: :number, primary_key: :number, inverse_of: :country_band
   validates :iso2, inclusion: { in: Country::WCA_COUNTRY_ISO_CODES }
   validates :number, numericality: {
     only_integer: true,

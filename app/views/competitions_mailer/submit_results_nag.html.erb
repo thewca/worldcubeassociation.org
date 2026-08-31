@@ -21,6 +21,9 @@
       <li><%= link_to "#{delegate.name}", competitions_url(display: "admin", years: "all", state: "past", delegate: delegate.id), target: "_blank" %></li>
     <% end %>
   </ul>
+  <% if @competition.lead_delegate.present? %>
+    Lead Delegate for this competition is <%= @competition.lead_delegate.name %>.
+  <% end %>
 </p>
 
 <p>
