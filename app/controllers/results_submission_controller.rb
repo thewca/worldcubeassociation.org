@@ -99,7 +99,7 @@ class ResultsSubmissionController < ApplicationController
 
     return render status: :unprocessable_content, json: { error: upload_json.errors.full_messages } unless upload_json.valid?
 
-    if is_wcif && (import_registrations || !competition.use_wca_registration?)
+    if is_wcif && import_registrations
       begin
         competition.import_registrations!(upload_json.registrations_data, current_user)
       rescue StandardError => e
