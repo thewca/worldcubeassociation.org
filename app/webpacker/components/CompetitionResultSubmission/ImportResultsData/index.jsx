@@ -28,7 +28,7 @@ export default function ImportResultsData({
         </Tab.Pane>
       ),
     }] : []),
-    ...((isAdminView || scoretakingSoftware !== 'external') ? [{
+    ...((isAdminView || scoretakingSoftware === 'external') ? [{
       menuItem: 'Upload WCIF results',
       render: () => (
         <Tab.Pane>
