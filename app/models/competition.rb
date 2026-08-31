@@ -2102,33 +2102,6 @@ class Competition < ApplicationRecord
     reload
   end
 
-  def import_registrations!(registrations_data, current_user)
-    new_locked_users = []
-    # registered_at stores millisecond precision, but we want all registrations
-    #   from CSV/WCIF import to be considered as one "batch". So we mark a timestamp
-    #   once, and then reuse it throughout the loop.
-    import_time = Time.now.utc
-    emails = registrations_data.pluck(:email)
-    ActiveRecord::Base.transaction do
-      registrations.accepted.each do |registration|
-        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
-      end
-      registrations_data.each do |registration_data|
-        user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
-        new_locked_users << user if locked_account_created
-        registration = registrations.find_or_initialize_by(user_id: user.id) do |reg|
-          reg.registered_at = import_time
-        end
-        registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::CSV_IMPORT)
-      rescue StandardError => e
-        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_data[:name], error: e))
-      end
-    end
-    new_locked_users.each do |user|
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, self).deliver_later
-    end
-  end
-
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
   def update_persons_wcif!(wcif_persons)
     registration_includes = [
