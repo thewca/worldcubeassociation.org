@@ -11961,7 +11961,7 @@ __metadata:
     react-hotkeys-hook: "npm:^5.3.3"
     react-i18next: "npm:^17.0.12"
     react-icons: "npm:^5.7.0"
-    react-intersection-observer: "npm:^11.0.0"
+    react-intersection-observer: "npm:^11.0.1"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
     temporal-polyfill: "npm:^1.0.4"
@@ -13057,16 +13057,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intersection-observer@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "react-intersection-observer@npm:11.0.0"
+"react-intersection-observer@npm:^11.0.1":
+  version: 11.0.1
+  resolution: "react-intersection-observer@npm:11.0.1"
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/cecfdc1b2d939749d6fbc27ac0957515529bff5d0fbba751bb6b4473961636d9bb7f663e8d7d8afff476e06ac8d6627fd19bc022320916d286aae96017ea57e8
+  checksum: 10c0/06abc4291457d0535834ef6f25164817a9196ad6b1fb90f033fca4905c1424c497254f11d84ded5dde83811cd45c33ec7f2fbb11f2ccd2463c6f267041105327
   languageName: node
   linkType: hard
 
