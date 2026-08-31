@@ -10,8 +10,8 @@ export default function ImportResultsData({
   onImportSuccess,
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
-  usesWcaRegistration = false,
-  hasAcceptedRegistrations = false,
+  usesWcaRegistration = true,
+  hasAcceptedRegistrations = true,
 }) {
   const panes = [
     // JSON exports carry the merged (global) ranking for Dual Rounds, so competitions
