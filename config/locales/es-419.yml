@@ -3307,14 +3307,16 @@ es-419:
       #original_hash: 6c3b236
       winner: '%{winner} ganó %{result_sentence} en el evento %{event_name}.'
       #original_hash: ec7f18a
-      first_runner_up: '%{first_runner_up} acabó en segundo puesto (%{first_runner_up_result})'
+      first_runner_up: >-
+        %{first_runner_up} consiguió el segundo puesto
+        (%{first_runner_up_result})
       #original_hash: 2926d10
       h2h_first_runner_up: '%{first_runner_up} terminó en segundo lugar'
       #original_hash: cffa50a
       and: 'y'
       #original_hash: 67d285c
       second_runner_up: >-
-        %{second_runner_up} acabó en  tercer puesto
+        %{second_runner_up} consiguió el tercer puesto
         (%{second_runner_up_result}).
       #original_hash: 157b649
       h2h_second_runner_up: '%{second_runner_up} terminó en tercer lugar.'
