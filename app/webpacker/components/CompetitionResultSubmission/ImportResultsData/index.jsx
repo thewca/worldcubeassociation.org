@@ -1,7 +1,6 @@
 import React from 'react';
 import { Message, Tab } from 'semantic-ui-react';
 import UploadResultsJson from './UploadResultsJson';
-import UploadWcifResults from './UploadWcifResults';
 import ImportWcaLiveResults from './ImportWcaLiveResults';
 
 export default function ImportResultsData({
@@ -24,6 +23,9 @@ export default function ImportResultsData({
             competitionId={competitionId}
             isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
+            // Old Result JSONs get uploaded to inbox_persons,
+            //   we never need them to toggle registration import
+            usesWcaRegistration={false}
           />
         </Tab.Pane>
       ),
@@ -32,11 +34,12 @@ export default function ImportResultsData({
       menuItem: 'Upload WCIF results',
       render: () => (
         <Tab.Pane>
-          <UploadWcifResults
+          <UploadResultsJson
             competitionId={competitionId}
             isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
             usesWcaRegistration={usesWcaRegistration}
+            isWcifFormat
           />
         </Tab.Pane>
       ),
