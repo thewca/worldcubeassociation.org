@@ -17,9 +17,8 @@ export default function UploadResultsJson({
   const [resultFile, setResultFile] = useState();
   const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
 
-  const [importRegistrations, setImportRegistrations] = useCheckboxState(
-    !hasAcceptedRegistrations && !usesWcaRegistration,
-  );
+  const defaultRegImport = !hasAcceptedRegistrations || !usesWcaRegistration;
+  const [importRegistrations, setImportRegistrations] = useCheckboxState(defaultRegImport);
 
   const {
     mutate: uploadResultsJsonMutate, isPending, error, isError,
@@ -51,11 +50,15 @@ export default function UploadResultsJson({
           label="If results are not marked as submitted, mark it as submitted (this is only visible to WRT)"
         />
       )}
-      {!hasAcceptedRegistrations && isWcifFormat && (
+      {/* Only WCIF files actually contain everything necessary to import registrations,
+            and the backend only reacts to this checkbox flag if the format is WCIF.
+          So there is no risk of the user "accidentally" importing anything through a
+            hidden checkbox in the old legacy Results JSON view. */}
+      {isWcifFormat && (
         <Form.Checkbox
           checked={importRegistrations}
           onChange={setImportRegistrations}
-          disabled={!usesWcaRegistration}
+          disabled={!usesWcaRegistration && !isAdminView}
           label="Also import registrations from this WCIF file"
         />
       )}
