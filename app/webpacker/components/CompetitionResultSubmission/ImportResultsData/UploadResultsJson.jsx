@@ -16,7 +16,10 @@ export default function UploadResultsJson({
 }) {
   const [resultFile, setResultFile] = useState();
   const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
-  const [importRegistrations, setImportRegistrations] = useCheckboxState(!usesWcaRegistration);
+
+  const [importRegistrations, setImportRegistrations] = useCheckboxState(
+    !hasAcceptedRegistrations && !usesWcaRegistration,
+  );
 
   const {
     mutate: uploadResultsJsonMutate, isPending, error, isError,
