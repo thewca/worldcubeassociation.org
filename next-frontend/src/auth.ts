@@ -6,7 +6,6 @@ import {
   siteWcaProvider,
   wcaUserAdditionalFields,
   WCA_COOKIE_PREFIX,
-  WCA_PROVIDER_ID,
 } from "@/auth.config";
 
 // Split out because `customSession` needs the same options object to infer the session type it
@@ -39,7 +38,9 @@ export const auth = betterAuth({
       const result = await getAccessToken({
         ...ctx,
         method: "POST",
-        body: { providerId: WCA_PROVIDER_ID, userId: user.id },
+        // `providerId` selection was dropped in Better Auth 1.7; a stateless instance has no
+        //   account row to address by id, so the signed account cookie is the only source.
+        body: { useAccountCookie: true, userId: user.id },
         asResponse: false,
         returnHeaders: false,
       }).catch((error) => {

@@ -21,7 +21,7 @@
   "dependencies": {
     "@aws-sdk/credential-providers": "^3.1111.0",
     "@chakra-ui/react": "^3.36.1",
-    "@delmaredigital/payload-better-auth": "0.10.0",
+    "@delmaredigital/payload-better-auth": "0.11.2",
     "@emotion/react": "^11.14.0",
     "@fullcalendar/format-luxon3": "^7.0.2",
     "@fullcalendar/react": "^7.0.2",
@@ -39,7 +39,7 @@
     "@wrksz/themes": "^1.2.0",
     "accept-language-parser": "^1.5.0",
     "aws4": "^1.13.2",
-    "better-auth": "1.6.30",
+    "better-auth": "1.7.2",
     "culori": "^4.0.2",
     "graphql": "^17.0.2",
     "i18next": "^26.3.6",

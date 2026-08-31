@@ -5,8 +5,9 @@ import { Button } from "@payloadcms/ui";
 import { signInToCms } from "@/payload.auth.client";
 
 /**
- * Replaces the plugin's bundled login view, which offers email/password, passkeys and built-in
- * social providers — none of which can reach our `genericOAuth` provider.
+ * Replaces the plugin's bundled login view. Its social buttons come from the keys of Better
+ * Auth's `socialProviders` config, and `genericOAuth` providers are deliberately excluded from
+ * that list, so there is no way to offer the WCA provider through it.
  */
 export default function CmsLoginView() {
   const [error, setError] = useState<string | null>(null);

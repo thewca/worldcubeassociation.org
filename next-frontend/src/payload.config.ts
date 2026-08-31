@@ -59,8 +59,9 @@ function plugins() {
     createBetterAuthPlugin({
       createAuth: createCmsAuth,
       admin: {
-        // The bundled view drives `signIn.social`, which cannot reach a `genericOAuth`
-        //   provider, so it is replaced wholesale.
+        // The bundled view can show social buttons (`login.enableSocial`), but it builds them
+        //   from the keys of Better Auth's `socialProviders` config, which `genericOAuth`
+        //   providers are deliberately kept out of. So it is replaced wholesale.
         loginViewComponent: "/components/payload/CmsLoginView#default",
         login: {
           // The plugin's gate looks for a singular `role` we do not have; `access.admin` on
