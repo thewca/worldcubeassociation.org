@@ -102,7 +102,7 @@
     "@types/react-dom": "^19",
     "@types/react-world-flags": "^1",
     "@types/swagger-ui-react": "^5.18.0",
-    "@vitejs/plugin-react": "^6.1.0",
+    "@vitejs/plugin-react": "^6.1.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^10",
     "eslint-config-next": "16.3.2",
