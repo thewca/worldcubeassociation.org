@@ -911,7 +911,7 @@ class Round < ApplicationRecord
     #   back together when it needs the combined set.
     competitors = only_podiums ? (linked_round&.live_competitors || live_competitors) : live_competitors
     {
-      **self.to_wcif(include_results: false).compact_blank,
+      **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "round_id" => id,
       "competitors" => competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
@@ -924,7 +924,8 @@ class Round < ApplicationRecord
   def to_live_info_json
     state = lifecycle_state
     json = {
-      **self.to_wcif(include_results: false).compact_blank,
+      # WCIF v2 so that the frontend knows about linked rounds
+      **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "state" => state,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)

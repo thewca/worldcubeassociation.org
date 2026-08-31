@@ -451,7 +451,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get competition events in WCIF v0 format */
+        /** Get competition events in WCIF format */
         get: operations["competitionEvents"];
         put?: never;
         post?: never;
@@ -1027,48 +1027,23 @@ export interface components {
              */
             key: "requirements";
         };
+        WcifResultCondition: {
+            /** @enum {string} */
+            type: "resultAchieved" | "ranking" | "percent";
+            /** @enum {string} */
+            scope: "single" | "average";
+            value?: number | null;
+        } | null;
+        WcifQualification: {
+            earliestResultDate?: string;
+            latestResultDate: string;
+            resultCondition: components["schemas"]["WcifResultCondition"];
+        };
         WcifAttemptResult: number;
-        WcifQualificationAttemptResult: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "attemptResult";
-            /** @enum {string} */
-            resultType: "single" | "average";
-            level: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifRanking: number;
-        WcifQualificationRanking: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "ranking";
-            /** @enum {string} */
-            resultType: "single" | "average";
-            level: components["schemas"]["WcifRanking"];
-        };
-        WcifQualificationAnyResult: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "anyResult";
-            /** @enum {string} */
-            resultType: "single" | "average";
-        };
-        WcifQualification: components["schemas"]["WcifQualificationAttemptResult"] | components["schemas"]["WcifQualificationRanking"] | components["schemas"]["WcifQualificationAnyResult"];
         WcifPersonalBest: {
             /** @example 333 */
             eventId: string;
-            best: components["schemas"]["WcifAttemptResult"];
+            value: components["schemas"]["WcifAttemptResult"];
             worldRanking: number;
             continentalRanking: number;
             nationalRanking: number;
@@ -1144,34 +1119,29 @@ export interface components {
         WcifCutoff: {
             /** @example 2 */
             numberOfAttempts: number;
-            attemptResult: components["schemas"]["WcifAttemptResult"];
+            resultValue: components["schemas"]["WcifAttemptResult"];
         };
-        WcifAdvancementConditionRanking: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "ranking";
-            level: components["schemas"]["WcifRanking"];
+        WcifParticipationSource: {
+            /** @enum {string} */
+            type: "registrations";
+        } | {
+            /** @enum {string} */
+            type: "round";
+            roundId: string;
+            resultCondition?: components["schemas"]["WcifResultCondition"];
+        } | {
+            /** @enum {string} */
+            type: "linkedRounds";
+            roundIds: string[];
+            resultCondition?: components["schemas"]["WcifResultCondition"];
         };
-        WcifPercent: number;
-        WcifAdvancementConditionPercent: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "percent";
-            level: components["schemas"]["WcifPercent"];
+        WcifParticipationRuleset: {
+            participationSource: components["schemas"]["WcifParticipationSource"];
+            reservedPlaces?: {
+                nationalities?: string[];
+                reservations?: number;
+            };
         };
-        WcifAdvancementConditionAttemptResult: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "attemptResult";
-            level: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
         WcifScramble: string;
         WcifScrambleSet: {
             /** @example 1 */
@@ -1186,30 +1156,15 @@ export interface components {
             format: "1" | "2" | "3" | "a" | "m";
             timeLimit?: components["schemas"]["WcifTimeLimit"];
             cutoff?: components["schemas"]["WcifCutoff"];
-            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
-            scrambleSetCount: number;
-            scrambleSets: components["schemas"]["WcifScrambleSet"][];
-            extensions: unknown[];
-        };
-        WcifAttempt: {
-            result: components["schemas"]["WcifAttemptResult"];
-            reconstruction?: string;
-        };
-        WcifResult: {
-            /** @example 1 */
-            personId: number;
-            /** @example 10 */
-            ranking?: number;
-            attempts: components["schemas"]["WcifAttempt"][];
-            best: components["schemas"]["WcifAttemptResult"];
-            average: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifRound: components["schemas"]["BaseWcifRound"] & {
-            results: components["schemas"]["WcifResult"][];
+            linkedRounds?: string[];
+            participationRuleset?: components["schemas"]["WcifParticipationRuleset"];
+            scrambleSetCount?: number;
+            scrambleSets?: components["schemas"]["WcifScrambleSet"][];
+            extensions?: unknown[];
         };
         /** @enum {string} */
         RoundState: "open" | "locked" | "pending" | "ready" | "blocked";
-        BaseAdminRound: components["schemas"]["WcifRound"] & {
+        BaseAdminRound: components["schemas"]["BaseWcifRound"] & {
             state: components["schemas"]["RoundState"];
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
@@ -1545,6 +1500,22 @@ export interface components {
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
+        };
+        WcifAttempt: {
+            value: components["schemas"]["WcifAttemptResult"];
+            reconstruction?: string;
+        };
+        WcifResult: {
+            /** @example 1 */
+            personId: number;
+            /** @example 10 */
+            ranking?: number;
+            attempts: components["schemas"]["WcifAttempt"][];
+            best: components["schemas"]["WcifAttemptResult"];
+            average: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifRound: components["schemas"]["BaseWcifRound"] & {
+            results: components["schemas"]["WcifResult"][];
         };
         WcifEvent: {
             /** @example 333 */
@@ -2719,7 +2690,10 @@ export interface operations {
     };
     competitionEvents: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Which WCIF version to render, by lifecycle name. Defaults to the stable version, the response schema documents the latest one. */
+                wcif_version?: "stable" | "latest";
+            };
             header?: never;
             path: {
                 competitionId: string;
