@@ -143,7 +143,7 @@ class Api::V0::ApiController < ApplicationController
     # instead should be private to the corresponding microservice.
     result = Rails.cache.fetch(cache_key, force: current_user&.results_team?) do
       ActiveRecord::Base.connected_to(role: :read_replica) do
-        models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
+        models.flat_map { |model| search_scope_for(model, query).limit(DEFAULT_API_RESULT_LIMIT) }
       end
     end
 
@@ -156,6 +156,13 @@ class Api::V0::ApiController < ApplicationController
               end
 
     render status: :ok, json: { result: result.as_json(options) }
+  end
+
+  # These results are rendered through each model's default `as_json`, so preload whatever that
+  # serialization walks. `Regulation` is not an ActiveRecord model and has no associations at all.
+  private def search_scope_for(model, query)
+    scope = model.try(:with_serialization_preloads) || model
+    scope.search(query, params: params)
   end
 
   def posts_search

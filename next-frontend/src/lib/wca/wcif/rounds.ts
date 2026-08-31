@@ -11,18 +11,23 @@ export type WcifEvent = components["schemas"]["WcifEvent"];
 export type WcifRound = components["schemas"]["WcifRound"];
 export type WcifTimeLimit = components["schemas"]["WcifTimeLimit"];
 export type WcifCutoff = components["schemas"]["WcifCutoff"];
-export type WcifCutoffV2 = components["schemas"]["WcifCutoffV2"];
-export type WcifAdvancementCondition =
-  components["schemas"]["WcifAdvancementCondition"];
 export type WcifQualification = components["schemas"]["WcifQualification"];
+export type WcifResultCondition = NonNullable<
+  components["schemas"]["WcifResultCondition"]
+>;
 
-// Structural shapes, so that both WCIF v1 and v2 rounds can be passed
-type RoundLike = { id: string; cutoff?: object | null };
-type EventLike = { id: string; rounds: RoundLike[] };
+type WcifParticipationSource = components["schemas"]["WcifParticipationSource"];
 
-// WCIF v2 renamed the cutoff value from `attemptResult` to `resultValue`
-export const cutoffValue = (cutoff: WcifCutoff | WcifCutoffV2) =>
-  "resultValue" in cutoff ? cutoff.resultValue : cutoff.attemptResult;
+// The participation sources competitors can advance from, i.e. everything
+//   except "registrations", which is the only one without a result condition
+type WcifAdvancementSource = Extract<
+  WcifParticipationSource,
+  { type: "round" | "linkedRounds" }
+>;
+
+// A round as rendered without its results, which is what the live admin
+//   endpoints return
+export type WcifRoundBase = components["schemas"]["BaseWcifRound"];
 
 export type RoundTypeId = "1" | "2" | "3" | "c" | "d" | "e" | "f" | "g";
 
@@ -122,8 +127,8 @@ export const localizeRoundInformation = (
 export const localizeActivityCode = (
   t: TFunction,
   activityCode: string,
-  wcifRound: RoundLike,
-  wcifEvent: EventLike,
+  wcifRound: WcifRoundBase,
+  eventRounds: WcifRoundBase[],
 ) => {
   const { eventId, roundNumber, attemptNumber } =
     parseActivityCode(activityCode);
@@ -134,18 +139,20 @@ export const localizeActivityCode = (
 
   const roundTypeId = getRoundTypeId(
     roundNumber,
-    wcifEvent.rounds.length,
+    eventRounds.length,
     Boolean(wcifRound.cutoff),
   );
 
   return localizeRoundInformation(t, eventId, roundTypeId, attemptNumber);
 };
 
+// `competitionRounds` must contain every round of the competition, not just the
+//   rounds of `eventId`: cumulative time limits may span several events.
 export const timeLimitToString = (
   t: TFunction,
   wcifTimeLimit: WcifTimeLimit | undefined,
   eventId: string,
-  siblingEvents: EventLike[],
+  competitionRounds: WcifRoundBase[],
 ) => {
   // From WCIF specification:
   // For events with unchangeable time limit (3x3x3 MBLD, 3x3x3 FM) the value is null.
@@ -163,32 +170,28 @@ export const timeLimitToString = (
     return t("time_limit.cumulative.one_round", { time: timeStr });
   }
 
-  const allWcifRounds = siblingEvents.flatMap((event) => event.rounds);
-
   const roundStrs = wcifTimeLimit.cumulativeRoundIds.map((cumulativeId) => {
-    const cumulativeRound = allWcifRounds.find(
+    const cumulativeRound = competitionRounds.find(
       (round) => round.id === cumulativeId,
-    )!;
-
-    const { eventId: cumulativeEventId } = parseActivityCode(
-      cumulativeRound.id,
     );
 
-    const cumulativeEvent = siblingEvents.find(
-      (event) => event.id === cumulativeEventId,
-    );
-
-    if (cumulativeEvent === undefined) {
+    if (cumulativeRound === undefined) {
       throw new Error(
-        `Cannot localize cumulative timeLimit that specifies non-existing event ID ${cumulativeEventId}`,
+        `Cannot localize cumulative timeLimit that specifies non-existing round ID ${cumulativeId}`,
       );
     }
+
+    const { eventId: cumulativeEventId } = parseActivityCode(cumulativeId);
+
+    const cumulativeEventRounds = competitionRounds.filter(
+      (round) => parseActivityCode(round.id).eventId === cumulativeEventId,
+    );
 
     return localizeActivityCode(
       t,
       cumulativeRound.id,
       cumulativeRound,
-      cumulativeEvent,
+      cumulativeEventRounds,
     );
   });
 
@@ -205,11 +208,11 @@ export const timeLimitToString = (
 
 export const cutoffToString = (
   t: TFunction,
-  wcifCutoff: WcifCutoff | WcifCutoffV2,
+  wcifCutoff: WcifCutoff,
   eventId: string,
 ) => {
   const wcaEvent = events.byId[eventId];
-  const cutoffResult = cutoffValue(wcifCutoff);
+  const cutoffResult = wcifCutoff.resultValue;
 
   if (wcaEvent.is_timed_event) {
     return t("cutoff.time", {
@@ -233,41 +236,66 @@ export const cutoffToString = (
   return "?";
 };
 
-export const advancementConditionToString = (
+// WCIF v2 no longer stores an advancement condition on the round competitors
+//   advance FROM: it is the result condition of the participation source of the
+//   round they advance INTO.
+export const advancementResultCondition = (
+  roundId: string,
+  rounds: Pick<WcifRound, "participationRuleset">[],
+) => {
+  const source = rounds
+    .map((round) => round.participationRuleset?.participationSource)
+    .find((source): source is WcifAdvancementSource => {
+      switch (source?.type) {
+        case "round":
+          return source.roundId === roundId;
+        // Competitors advance out of a linked round as a whole, so only its last
+        //   round leads into the next one
+        case "linkedRounds":
+          return source.roundIds.at(-1) === roundId;
+        default:
+          return false;
+      }
+    });
+
+  return source?.resultCondition ?? null;
+};
+
+export const resultConditionToString = (
   t: TFunction,
-  wcifAdvancementCondition: WcifAdvancementCondition,
+  wcifResultCondition: WcifResultCondition,
   eventId: string,
   roundFormat: string,
 ) => {
-  switch (wcifAdvancementCondition.type) {
+  switch (wcifResultCondition.type) {
     case "ranking":
       return t(`advancement_condition.ranking`, {
-        ranking: wcifAdvancementCondition.level,
+        ranking: wcifResultCondition.value,
       });
     case "percent":
       return t(`advancement_condition.percent`, {
-        percent: wcifAdvancementCondition.level,
+        percent: wcifResultCondition.value,
       });
-    case "attemptResult":
+    case "resultAchieved":
       const roundName = t(`formats.${roundFormat}`);
       const wcaEvent = events.byId[eventId];
 
       if (wcaEvent.is_timed_event) {
         return t(`advancement_condition.attempt_result.time`, {
           round_format: roundName,
-          time: centisecondsToClockFormat(wcifAdvancementCondition.level),
+          time: centisecondsToClockFormat(wcifResultCondition.value!),
         });
       }
       if (wcaEvent.is_fewest_moves) {
         return t(`advancement_condition.attempt_result.moves`, {
           round_format: roundName,
-          moves: wcifAdvancementCondition.level,
+          moves: wcifResultCondition.value,
         });
       }
       if (wcaEvent.is_multiple_blindfolded) {
         return t(`advancement_condition.attempt_result.points`, {
           round_format: roundName,
-          points: attemptResultToMbldPoints(wcifAdvancementCondition.level),
+          points: attemptResultToMbldPoints(wcifResultCondition.value!),
         });
       }
 
@@ -280,39 +308,40 @@ export const qualificationToString = (
   wcifQualification: WcifQualification,
   eventId: string,
 ) => {
-  const dateString = `${wcifQualification.whenDate} in your local TZ`;
+  const dateString = `${wcifQualification.latestResultDate} in your local TZ`;
 
   const deadlineString = t("qualification.deadline.by_date", {
     date: dateString,
   });
 
   const wcaEvent = events.byId[eventId];
+  const resultCondition = wcifQualification.resultCondition;
 
-  switch (wcifQualification.type) {
+  if (!resultCondition) return "?";
+
+  const { scope, value } = resultCondition;
+
+  switch (resultCondition.type) {
     case "ranking":
-      const rankingMessage = `qualification.${wcifQualification.resultType}.ranking`;
-      return `${t(rankingMessage, { ranking: wcifQualification.level })} ${deadlineString}`;
-    case "anyResult":
-      const anyResultMessage = `qualification.${wcifQualification.resultType}.any_result`;
-      return `${t(anyResultMessage)} ${deadlineString}`;
-    case "attemptResult":
+      return `${t(`qualification.${scope}.ranking`, { ranking: value })} ${deadlineString}`;
+    case "resultAchieved":
+      // WCIF v2 folded "any result" into a result condition without a value
+      if (value === undefined || value === null) {
+        return `${t(`qualification.${scope}.any_result`)} ${deadlineString}`;
+      }
       if (wcaEvent.is_timed_event) {
-        const attemptResultTimeMessage = `qualification.${wcifQualification.resultType}.time`;
-        return `${t(attemptResultTimeMessage, { time: centisecondsToClockFormat(wcifQualification.level) })} ${deadlineString}`;
+        return `${t(`qualification.${scope}.time`, { time: centisecondsToClockFormat(value) })} ${deadlineString}`;
       }
       if (wcaEvent.is_fewest_moves) {
-        const messageName = `qualification.${wcifQualification.resultType}.moves`;
-        const moves =
-          wcifQualification.resultType === "average"
-            ? wcifQualification.level / 100
-            : wcifQualification.level;
+        const moves = scope === "average" ? value / 100 : value;
 
-        return `${t(messageName, { moves })} ${deadlineString}`;
+        return `${t(`qualification.${scope}.moves`, { moves })} ${deadlineString}`;
       }
       if (wcaEvent.is_multiple_blindfolded) {
-        const messageName = `qualification.${wcifQualification.resultType}.points`;
-        return `${t(messageName, { points: attemptResultToMbldPoints(wcifQualification.level) })} ${deadlineString}`;
+        return `${t(`qualification.${scope}.points`, { points: attemptResultToMbldPoints(value) })} ${deadlineString}`;
       }
+      return `?`;
+    default:
       return `?`;
   }
 };

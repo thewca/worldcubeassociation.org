@@ -25,6 +25,7 @@ type MarkdownBaseProps = {
   children: Options["children"];
   linkProps?: ComponentPropsWithoutRef<typeof ChakraLink>;
   imageProps?: ComponentPropsWithoutRef<typeof ChakraImage>;
+  listProps?: ComponentPropsWithoutRef<typeof List.Root>;
   headingAs?: ComponentType<{ as?: ElementType }>;
 };
 
@@ -43,6 +44,7 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
   children,
   linkProps = {},
   imageProps = {},
+  listProps = {},
   headingAs: HeadingRenderAs = Heading,
   paragraphAs: ParagraphRenderAs = Text,
   ...paragraphProps
@@ -53,6 +55,11 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
         a: ({ children, ...aTag }) => (
           <ChakraLink
             {...aTag}
+            // Chakra's link recipe is `inline-flex`, which strips whitespace at
+            // the edges of the link text. Markdown authors regularly write
+            // `the[ Policy](url)`, where that space is the only thing
+            // separating the link from the word before it.
+            display="inline"
             {...linkProps}
             target="_blank"
             rel="noopener noreferrer"
@@ -71,8 +78,8 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
         em: Em,
         hr: Separator,
         code: Code,
-        ul: (ulTag) => <List.Root {...ulTag} as="ul" />,
-        ol: (olTag) => <List.Root {...olTag} as="ol" />,
+        ul: (ulTag) => <List.Root {...ulTag} {...listProps} as="ul" />,
+        ol: (olTag) => <List.Root {...olTag} {...listProps} as="ol" />,
         li: List.Item,
         blockquote: (blockquoteTag) => (
           <Blockquote.Root>
