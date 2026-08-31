@@ -934,6 +934,7 @@ class Round < ApplicationRecord
       # WCIF v2 so that the frontend knows about linked rounds
       **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "state" => state,
+      "min_competitors_to_open" => min_competitors_to_open,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)
       json = json.merge({
@@ -944,12 +945,6 @@ class Round < ApplicationRecord
     if state == STATE_OPEN
       json = json.merge({
                           "completed_competitors" => completed_competitors,
-                        })
-    end
-
-    if min_competitors_to_open.present?
-      json = json.merge({
-                          "min_competitors_to_open" => min_competitors_to_open,
                         })
     end
 
