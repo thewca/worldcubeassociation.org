@@ -4163,7 +4163,7 @@ zh-TW:
           #original_hash: 576c3b8
           '4': >-
             更多資訊請參考<a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA比賽主辦團隊指導方針</a>。
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA比賽主辦團隊指導方針</a>。
       '6':
         #original_hash: 8005a61
         title: WCA帳號的用途是什麼？WCA帳號和WCA個人頁面的差異何在？
@@ -4633,7 +4633,7 @@ zh-TW:
       #original_hash: ad5f6e7
       title: 主辦團隊指導方針
       #original_hash: 9bbdf16
-      content1_html: 如果您有興趣主辦比賽或是已經在準備當中，請閱讀我們的<a href="/organizer-guidelines">主辦團隊指導方針</a>。
+      content1_html: 如果您有興趣主辦比賽或是已經在準備當中，請閱讀我們的<a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">主辦團隊指導方針</a>。
       #original_hash: 5016669
       content2_html: 此文件包含重要資訊，所有比賽主辦團隊應詳閱。
   regulations_translations:

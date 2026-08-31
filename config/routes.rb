@@ -276,7 +276,7 @@ Rails.application.routes.draw do
   get 'logo' => 'static_pages#logo'
   get 'media-instagram' => 'static_pages#media_instagram'
   get 'merch', to: redirect('https://shop.worldcubeassociation.org/')
-  get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
+  get 'organizer-handbook' => 'static_pages#organizer_guidelines', to: redirect('https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf', status: 302)
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
