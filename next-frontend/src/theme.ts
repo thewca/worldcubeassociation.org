@@ -51,6 +51,8 @@ type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 
 // Chakra styles these trigger slots without ever setting `cursor`, so
 // they fall back to the browser default and read as non-interactive.
+// We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
+// https://github.com/chakra-ui/chakra-ui/issues/10960
 const INTERACTIVITY_OVERRIDES = {
   menu: {
     slots: [],
