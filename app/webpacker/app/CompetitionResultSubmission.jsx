@@ -13,6 +13,7 @@ export default function Wrapper({
   canSubmitResults,
   scoretakingSoftware,
   usesWcaRegistration,
+  hasAcceptedRegistrations,
 }) {
   return (
     <WCAQueryClientProvider>
@@ -24,6 +25,7 @@ export default function Wrapper({
         canSubmitResults={canSubmitResults}
         scoretakingSoftware={scoretakingSoftware}
         usesWcaRegistration={usesWcaRegistration}
+        hasAcceptedRegistrations={hasAcceptedRegistrations}
       />
     </WCAQueryClientProvider>
   );
@@ -37,6 +39,7 @@ function CompetitionResultSubmission({
   canSubmitResults,
   scoretakingSoftware,
   usesWcaRegistration,
+  hasAcceptedRegistrations,
 }) {
   const [hasTemporaryResults, setHasTemporaryResults] = useState(hasTemporaryResultsInitial);
   const [accordionIndex, setAccordionIndex] = useState(hasTemporaryResultsInitial ? 1 : 0);
@@ -67,6 +70,7 @@ function CompetitionResultSubmission({
             hasTemporaryResults={hasTemporaryResults}
             scoretakingSoftware={scoretakingSoftware}
             usesWcaRegistration={usesWcaRegistration}
+            hasAcceptedRegistrations={hasAcceptedRegistrations}
           />
         ),
       },
@@ -95,6 +99,7 @@ function CompetitionResultSubmission({
     hasTemporaryResults,
     scoretakingSoftware,
     usesWcaRegistration,
+    hasAcceptedRegistrations,
     canSubmitResults,
   ]);
 

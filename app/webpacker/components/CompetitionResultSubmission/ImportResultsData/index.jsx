@@ -11,6 +11,7 @@ export default function ImportResultsData({
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
   usesWcaRegistration = false,
+  hasAcceptedRegistrations = false,
 }) {
   const panes = [
     // JSON exports carry the merged (global) ranking for Dual Rounds, so competitions
@@ -23,9 +24,8 @@ export default function ImportResultsData({
             competitionId={competitionId}
             isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
-            // Old Result JSONs get uploaded to inbox_persons,
-            //   we never need them to toggle registration import
-            usesWcaRegistration={false}
+            usesWcaRegistration={usesWcaRegistration}
+            hasAcceptedRegistrations={hasAcceptedRegistrations}
           />
         </Tab.Pane>
       ),
@@ -39,6 +39,7 @@ export default function ImportResultsData({
             isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
             usesWcaRegistration={usesWcaRegistration}
+            hasAcceptedRegistrations={hasAcceptedRegistrations}
             isWcifFormat
           />
         </Tab.Pane>

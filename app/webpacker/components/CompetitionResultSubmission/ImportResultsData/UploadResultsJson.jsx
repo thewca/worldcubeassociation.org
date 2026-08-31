@@ -11,6 +11,7 @@ export default function UploadResultsJson({
   isAdminView,
   onImportSuccess,
   usesWcaRegistration = true,
+  hasAcceptedRegistrations = true,
   isWcifFormat = false,
 }) {
   const [resultFile, setResultFile] = useState();
@@ -47,7 +48,7 @@ export default function UploadResultsJson({
           label="If results are not marked as submitted, mark it as submitted (this is only visible to WRT)"
         />
       )}
-      {isWcifFormat && (
+      {!hasAcceptedRegistrations && isWcifFormat && (
         <Form.Checkbox
           checked={importRegistrations}
           onChange={setImportRegistrations}

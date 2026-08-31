@@ -7,5 +7,6 @@
     uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
     ticketId: @competition.result_ticket&.id,
     usesWcaRegistration: @competition.use_wca_registration?,
+    hasAcceptedRegistrations: @competition.accepted_registrations.any?,
   }) %>
 <% end %>
