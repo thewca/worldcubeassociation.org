@@ -282,7 +282,7 @@ class RegistrationsController < ApplicationController
   end
 
   def do_import
-    @competition.import_registrations!(@registrations, current_user)
+    Registrations::Helper.import_registrations!(@competition, @registrations, current_user)
     render status: :ok, json: { success: true }
   rescue StandardError => e
     render status: :unprocessable_content, json: { error: e.to_s }
@@ -323,14 +323,13 @@ class RegistrationsController < ApplicationController
         ],
       ).to_h.symbolize_keys
       registration_data = build_wcif_data(**registration_params)
-      user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
+      user = Registrations::Helper.user_for_registration!(registration_data)
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
         reg.registered_at = Time.now.utc
       end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
 
       registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::OTS_FORM)
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later if locked_account_created
     end
     flash[:success] = I18n.t("registrations.flash.added")
     redirect_to competition_registrations_add_url(@competition)
