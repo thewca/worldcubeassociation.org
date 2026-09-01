@@ -23,3 +23,17 @@ s3_avatars_public:
 s3_avatars_private:
   <<: *s3_default
   bucket: <%= EnvConfig.S3_AVATARS_PRIVATE_BUCKET %>
+
+# Deliberately not `public: true`: the bucket blocks public ACLs and is only
+# readable through CloudFront via OAC. URLs are built against
+# S3_UPLOADS_ASSET_HOST instead.
+s3_uploads_public:
+  <<: *s3_default
+  bucket: <%= EnvConfig.S3_UPLOADS_PUBLIC_BUCKET %>
+
+# Markdown images belonging to private records - delegate reports, mostly.
+# Never fronted by the CDN; served through MarkdownImagesController, which
+# authorises the viewer before handing out a short-lived presigned URL.
+s3_uploads_private:
+  <<: *s3_default
+  bucket: <%= EnvConfig.S3_UPLOADS_PRIVATE_BUCKET %>

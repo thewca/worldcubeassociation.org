@@ -30,7 +30,7 @@ function insertText(editor, markup, promptText) {
   cm.focus();
 }
 
-function getOptions(imageUploadEnabled) {
+function getOptions(imageUploadEnabled, imageVisibility) {
   const table = {
     name: 'table-custom',
     action: '\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n',
@@ -108,6 +108,7 @@ function getOptions(imageUploadEnabled) {
     async imageUploadFunction(file, onSuccess, onError) {
       const formData = new FormData();
       formData.append('image', file);
+      formData.append('visibility', imageVisibility);
       try {
         const response = await fetchWithAuthenticityToken('/upload/image', { method: 'POST', body: formData });
         const data = await response.json();
@@ -124,8 +125,15 @@ export default function MarkdownEditor({
   value,
   onChange,
   imageUploadEnabled = true,
+  // Everything mounted through this component is world-readable. Private
+  // markdown (delegate reports) uses the legacy editor, which reads the
+  // visibility off the textarea.
+  imageVisibility = 'public',
 }) {
-  const options = useMemo(() => getOptions(imageUploadEnabled), [imageUploadEnabled]);
+  const options = useMemo(
+    () => getOptions(imageUploadEnabled, imageVisibility),
+    [imageUploadEnabled, imageVisibility],
+  );
   const mdChange = useCallback((text) => onChange(null, { value: text }), [onChange]);
 
   return (

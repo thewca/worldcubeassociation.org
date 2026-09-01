@@ -254,6 +254,7 @@ Rails.application.routes.draw do
   get 'rss' => 'posts#rss'
 
   post 'upload/image', to: 'upload#image'
+  get 'markdown-images/:id', to: 'markdown_images#show', as: :markdown_image
 
   get 'robots' => 'static_pages#robots'
 
