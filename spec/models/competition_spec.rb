@@ -102,6 +102,18 @@ RSpec.describe Competition do
     expect(competition.guests_entry_fee_required?).to be false
   end
 
+  it "allows a blank guest entry fee even when guest entry fees are required" do
+    competition = create(:competition)
+    competition.confirmed = true
+    competition.country_id = "USA"
+    competition.guests_entry_fee_lowest_denomination = nil
+
+    expect(competition.guests_entry_fee_required?).to be true
+
+    competition.validate
+    expect(competition.errors[:guests_entry_fee_lowest_denomination]).to be_empty
+  end
+
   it "handles free guest entry status" do
     competition = create(:competition)
 
