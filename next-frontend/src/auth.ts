@@ -5,16 +5,16 @@ import { headers } from "next/headers";
 import {
   siteWcaProvider,
   wcaUserAdditionalFields,
-  WCA_COOKIE_PREFIX,
+  WCA_APP_NAME,
 } from "@/auth.config";
 
 // Split out because `customSession` needs the same options object to infer the session type it
 //   wraps; without it the WCA fields on `user` come back untyped.
 const siteAuthOptions = {
-  appName: "wca",
+  appName: WCA_APP_NAME,
   secret: process.env.AUTH_SECRET,
   // Pinned so it cannot drift into the CMS instance's namespace (see `payload.auth.ts`).
-  advanced: { cookiePrefix: WCA_COOKIE_PREFIX },
+  advanced: { cookiePrefix: WCA_APP_NAME },
   // `baseURL` is deliberately unset: Better Auth then infers it per request, which is what
   //   makes dev and Docker work unconfigured. Behind a proxy, set BETTER_AUTH_URL.
   user: { additionalFields: wcaUserAdditionalFields },

@@ -7,15 +7,13 @@ import {
 import {
   cmsWcaProvider,
   wcaUserAdditionalFields,
+  CMS_AUTH_BASE_PATH,
+  WCA_CMS_APP_NAME,
   WCA_CMS_PROVIDER_ID,
 } from "@/auth.config";
 
-// Must equal `routes.api` + `authBasePath`: Better Auth's router 404s anything outside its own
-//   `basePath`, and our Payload config moves the API to `/api/payload`.
-const CMS_AUTH_BASE_PATH = "/api/payload/auth";
-
 export const cmsBetterAuthOptions: BetterAuthOptions = {
-  appName: "wca-cms",
+  appName: WCA_CMS_APP_NAME,
   user: { additionalFields: wcaUserAdditionalFields },
   account: {
     accountLinking: {
@@ -60,5 +58,5 @@ export const createCmsAuth: CreateAuthFunction = (payload) =>
     basePath: CMS_AUTH_BASE_PATH,
     secret: process.env.AUTH_SECRET,
     // Keeps the admin cookie distinct, so a CMS-scoped session is never read as a site one.
-    advanced: { cookiePrefix: "wca-cms" },
+    advanced: { cookiePrefix: WCA_CMS_APP_NAME },
   });

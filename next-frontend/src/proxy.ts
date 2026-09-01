@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { applySetCookies, getSessionCookie } from "better-auth/cookies";
 import { auth } from "@/auth";
-import { WCA_COOKIE_PREFIX } from "@/auth.config";
+import { WCA_APP_NAME } from "@/auth.config";
 
 /**
  * Load-bearing, not a leftover. Reading the session rotates the Rails access token, and
@@ -14,7 +14,7 @@ import { WCA_COOKIE_PREFIX } from "@/auth.config";
  */
 export async function proxy(request: NextRequest) {
   // Most traffic on a public site is signed out, and there is nothing to rotate for it.
-  if (!getSessionCookie(request, { cookiePrefix: WCA_COOKIE_PREFIX })) {
+  if (!getSessionCookie(request, { cookiePrefix: WCA_APP_NAME })) {
     return NextResponse.next();
   }
 

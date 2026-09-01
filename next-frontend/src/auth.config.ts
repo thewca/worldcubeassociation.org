@@ -8,8 +8,14 @@ import {
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
 
-/** Shared so the middleware looks for the same cookie the site instance writes. */
-export const WCA_COOKIE_PREFIX = "wca";
+/** Names each instance and its cookie jar; shared so the middleware looks for the same
+ *  cookie the site instance writes. */
+export const WCA_APP_NAME = "wca";
+export const WCA_CMS_APP_NAME = `${WCA_APP_NAME}-cms`;
+
+// Must equal `routes.api` + `authBasePath`: Better Auth's router 404s anything outside its own
+//   `basePath`, and our Payload config moves the API to `/api/payload`.
+export const CMS_AUTH_BASE_PATH = "/api/payload/auth";
 
 const WCA_DISCOVERY_URL = `${WCA_OIDC_ISSUER}/.well-known/openid-configuration`;
 
