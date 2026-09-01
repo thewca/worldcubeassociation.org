@@ -33,8 +33,13 @@ export const auth = betterAuth({
     // Must stay last: `customSession` overrides `/get-session`, and it should wrap whatever
     //   the plugins above have already contributed to the session.
     customSession(async ({ user, session }, ctx) => {
-      // Refreshes the Rails token when it is close to expiring, so `accessToken` can stay a
-      //   plain field on the session.
+      // This is NOT a second OAuth handshake, and despite the HTTP-shaped signature it is not
+      // a request either: `getAccessToken` is declared with `createAuthEndpoint`, so `method`
+      // and `body` below are the route metadata the router would otherwise supply, while the
+      // exported value is a plain function we call in-process. The token from the initial
+      // handshake is already stored in the signed account cookie, since this instance has no
+      // database, and this reads it back, reaching Rails only when that token is within 5s of
+      // expiring.
       const result = await getAccessToken({
         ...ctx,
         method: "POST",

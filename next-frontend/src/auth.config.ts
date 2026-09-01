@@ -67,9 +67,15 @@ export const cmsWcaProvider: GenericOAuthConfig = {
 };
 
 /**
- * Deliberately not `input: false`, tempting as that looks for provider-owned fields: Better Auth
- * drops anything marked that way while mapping the OIDC profile, so these would never be
- * populated at all. `payload.auth.ts` blocks client writes instead, where it matters.
+ * These are provider-owned, so `input: false` looks like the obvious way to stop a client
+ * writing them. It is the wrong tool: Better Auth applies that flag to *all* input, including
+ * the object `mapProfileToUser` returns, so the fields would be stripped on the way in and
+ * never populated at all. Concretely, a WST member would sign in with `roles: undefined` and
+ * `access.admin` in `collections/Users.ts` would then lock them out of the Payload admin panel.
+ *
+ * Client writes are blocked where it actually matters instead: `payload.auth.ts` refuses
+ * `/update-user` outright, and `roles` carries `create`/`update` field access of `false` in
+ * `collections/Users.ts`, closing the Payload REST/GraphQL path.
  */
 export const wcaUserAdditionalFields = {
   roles: { type: "string[]", required: false },
