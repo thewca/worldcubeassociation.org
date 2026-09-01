@@ -18,7 +18,6 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 export default function RegistrationPayments({
   registrationId,
-  competitionId,
 }) {
   const {
     data: payments,
@@ -56,7 +55,6 @@ export default function RegistrationPayments({
       <PaymentsMainBody
         registrationId={registrationId}
         payments={payments}
-        competitionId={competitionId}
         userInfo={userInfo}
       />
     </>
@@ -66,7 +64,6 @@ export default function RegistrationPayments({
 function PaymentsMainBody({
   registrationId,
   payments,
-  competitionId,
   userInfo,
 }) {
   const dispatch = useDispatch();
@@ -133,7 +130,7 @@ function PaymentsMainBody({
               payment={refund}
               refundMutation={refundMutation}
               isMutating={isMutating}
-              competitionId={competitionId}
+              registrationId={registrationId}
               key={refund.payment_id}
               userInfo={userInfo}
             />
@@ -145,7 +142,7 @@ function PaymentsMainBody({
 }
 
 function PaymentRow({
-  payment, refundMutation, isMutating, competitionId, userInfo,
+  payment, refundMutation, isMutating, registrationId, userInfo,
 }) {
   const [amountToRefund, setAmountToRefund] = useInputState(payment.iso_amount_refundable);
 
@@ -155,7 +152,7 @@ function PaymentRow({
     content: I18n.t('registrations.refund_confirmation'),
   }).then(() => {
     refundMutation({
-      competitionId,
+      registrationId,
       paymentId: payment.payment_id,
       paymentProvider: payment.payment_provider,
       amount: amountToRefund,

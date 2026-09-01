@@ -81,6 +81,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/registrations/{registrationId}/payments/{payment_integration}/{payment_id}/refund": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refund part or all of a charge against a registration
+         * @description Issues a refund with the competition's payment provider and records it against the
+         *     registration. Organizers of the competition only. The refund is capped at what is still
+         *     refundable on the charge.
+         */
+        post: operations["refundRegistrationPayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/scoretakers": {
         parameters: {
             query?: never;
@@ -1106,6 +1128,24 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
+        /**
+         * @description One charge against a registration. `refunding_payments` and `iso_amount_refundable` are only
+         *     serialized for root charges - a refund does not itself carry refunds.
+         */
+        RegistrationPayment: {
+            user_id: number;
+            /** @description The id of the provider-specific receipt record, not of the payment itself */
+            payment_id: number;
+            /** @enum {string} */
+            payment_provider: "stripe" | "paypal" | "manual";
+            /** @description The amount charged, in the currency's lowest denomination, always positive */
+            iso_amount_payment: number;
+            currency_code: string;
+            /** @description How much of this charge has not been refunded yet */
+            iso_amount_refundable?: number;
+            /** @description The refunds already issued against this charge */
+            refunding_payments?: components["schemas"]["RegistrationPayment"][];
+        };
         Scoretaker: {
             user_id: number;
             name: string;
@@ -2230,6 +2270,69 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RegistrationConfig"][];
+                };
+            };
+        };
+    };
+    refundRegistrationPayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                registrationId: number;
+                /** @description Which provider holds the charge */
+                payment_integration: "stripe" | "paypal" | "manual";
+                /** @description The id of the provider-specific receipt record */
+                payment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    payment: {
+                        /** @description How much to refund, in the currency's lowest denomination */
+                        refund_amount: number;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        message: string;
+                        refunded_charge: components["schemas"]["RegistrationPayment"];
+                    };
+                };
+            };
+            /** @description The requested amount is negative, or higher than what is still refundable */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        error: "refund_amount_too_high" | "refund_amount_too_low";
+                    };
+                };
+            };
+            /** @description The competition has no such provider connected, or the charge is not this registration's */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        error?: "provider_disconnected";
+                    };
                 };
             };
         };
