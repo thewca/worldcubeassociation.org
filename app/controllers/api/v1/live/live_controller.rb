@@ -69,19 +69,11 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     # which lets us answer those polls with an empty 304.
     # Competitor names and the WCIF part of the payload are not covered by the hash and
     # would be served stale until the next result comes in, which we can live with.
-    state_hash = Live::DiffHelper.state_hash(round.to_live_state)
+    state_hash = Live::DiffHelper.state_hash(round.to_live_state(reload: false))
 
     return unless stale?(etag: state_hash, public: true)
 
-    # A client without that ETag (a fresh page load, a projector that just restarted)
-    # still has to be served the whole thing, and on a popular round that is the same
-    # render over and over. The state hash doubles as a content-addressed cache key,
-    # `cache_key_with_version` covers the round configuration on top of it.
-    cached_json = Rails.cache.fetch(["live_round_results", round.cache_key_with_version, state_hash], expires_in: 1.hour) do
-      round.to_live_results_json(state_hash: state_hash).to_json
-    end
-
-    render json: cached_json
+    render json: round.to_live_results_json(state_hash: state_hash)
   end
 
   def rounds

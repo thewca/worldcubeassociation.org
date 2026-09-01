@@ -336,8 +336,13 @@ class Round < ApplicationRecord
     SQL
   end
 
-  def to_live_state
-    live_results.includes(:live_attempts).map(&:to_live_state)
+  # The results are deliberately re-`includes`d even when the caller has already loaded
+  # them: DiffHelper diffs this before and after a mutation, so the second call has to go
+  # back to the database to see it. Read-only callers that preloaded the attempts
+  # themselves can skip the extra queries with `reload: false`.
+  def to_live_state(reload: true)
+    results = reload ? live_results.includes(:live_attempts) : live_results
+    results.map(&:to_live_state)
   end
 
   def completed_competitors

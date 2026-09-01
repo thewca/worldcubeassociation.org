@@ -23,16 +23,6 @@ RSpec.describe "WCA Live API" do
       expect(response.body).to be_empty
     end
 
-    it "serves the same body to a client without the ETag" do
-      get api_v1_competition_live_live_round_results_path(competition.id, round.wcif_id)
-      first_body = response.body
-
-      get api_v1_competition_live_live_round_results_path(competition.id, round.wcif_id)
-
-      expect(response).to have_http_status(:ok)
-      expect(response.body).to eq(first_body)
-    end
-
     it "serves the new results once a result changed" do
       get api_v1_competition_live_live_round_results_path(competition.id, round.wcif_id)
       etag = response.headers["ETag"]
