@@ -5,6 +5,9 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
+  useEffectEvent,
+  useRef,
   useState,
 } from "react";
 import {
@@ -13,9 +16,11 @@ import {
   LiveResult,
   LiveRound,
   PendingLiveResult,
+  StagedLiveResult,
 } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import useResultsSubscriptions, {
+  CONNECTION_STATE_CONNECTED,
   ConnectionState,
   DiffedLiveResult,
   DiffProtocolResponse,
@@ -37,7 +42,7 @@ interface LiveResultContextType {
     liveResult: PendingLiveResult,
     roundWcifId: string,
   ) => void;
-  pendingLiveResults: PendingLiveResult[];
+  pendingLiveResults: StagedLiveResult[];
   addPendingQuitCompetitor: (registrationId: number) => void;
   pendingQuitCompetitors: Set<number>;
   connectionState: ConnectionState;
@@ -47,6 +52,17 @@ interface LiveResultContextType {
 const LiveResultContext = createContext<LiveResultContextType | undefined>(
   undefined,
 );
+
+// The websocket is the primary channel. These polls are the fallback for when it
+// stops delivering without telling us: a sleeping tab, a captive portal, or a
+// broadcast dropped between two heartbeats. Results waiting to be confirmed are
+// polled for aggressively, an idle round is only checked occasionally.
+// They double as the quiet period: a broadcast that arrived within the last
+// interval is proof enough that the socket works, so we skip that poll. A dropped
+// diff doesn't need one either, the `before_hash` check resyncs us as soon as the
+// next broadcast arrives.
+const POLL_INTERVAL_WAITING_MS = 5_000;
+const POLL_INTERVAL_IDLE_MS = 60_000;
 
 const compareAttempts = (
   attemptsA: LiveAttempt[],
@@ -97,7 +113,7 @@ export function MultiRoundResultProvider({
   competitionId: string;
   children: ReactNode;
 }) {
-  const [pendingResults, updatePendingResults] = useState<PendingLiveResult[]>(
+  const [pendingResults, updatePendingResults] = useState<StagedLiveResult[]>(
     [],
   );
   const [pendingQuitCompetitors, updatePendingQuitCompetitors] = useState<
@@ -106,7 +122,7 @@ export function MultiRoundResultProvider({
 
   const api = useAPI();
   const queryClient = useQueryClient();
-  const { setCompletedCount, setTotalCompetitors } = useAllRoundsInfo();
+  const { rounds, setCompletedCount, setTotalCompetitors } = useAllRoundsInfo();
 
   const roundQueryOptions = useCallback(
     (roundId: string) => {
@@ -154,7 +170,7 @@ export function MultiRoundResultProvider({
   const diffPendingResults = useCallback(
     <T extends DiffedLiveResult>(
       incomingResults: T[],
-      comparisonFn: (pending: PendingLiveResult, incoming: T) => boolean,
+      comparisonFn: (pending: StagedLiveResult, incoming: T) => boolean,
     ) => {
       updatePendingResults((prevPendingResults) =>
         prevPendingResults.filter(
@@ -170,7 +186,46 @@ export function MultiRoundResultProvider({
     [],
   );
 
+  // Full refetch: used whenever we can't trust our incremental state, either
+  // because a diff didn't line up with what we have, or because we polled.
+  const resyncRound = (roundId: string) => {
+    refetchRound(roundId).then((res) => {
+      if (!res.isSuccess) {
+        return;
+      }
+
+      const newData = res.data;
+      const newResults = newData.results;
+      const newCompetitors = newData.competitors;
+
+      setCompletedCount(roundId, newData.completed_competitors);
+      setTotalCompetitors(roundId, newCompetitors.length);
+
+      // We just made a full refetch. Only keep those results as "pending"
+      //   which are NOT contained exactly in the refetched round.
+      // In other words, if we find a competitor with the updated attempts
+      //   in the refetched round, then their result is not pending anymore.
+      diffPendingResults(newResults, (pr, ir) =>
+        compareAttempts(pr.attempts, ir.attempts),
+      );
+
+      updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
+        // Only keep pending quit markers if they are _still_ in the refetched round
+        //   (ie the "quit" has not been executed yet)
+        currentlyQuitCompetitors.intersection(
+          new Set(newCompetitors.map((r) => r.id)),
+        ),
+      );
+    });
+  };
+
+  // Not state: this only ever gates a timer, re-rendering on every broadcast for it
+  // would be wasteful.
+  const lastMessageAt = useRef(0);
+
   const onReceived = (roundId: string, diff: DiffProtocolResponse) => {
+    lastMessageAt.current = Date.now();
+
     const {
       updated = [],
       created = [],
@@ -180,34 +235,7 @@ export function MultiRoundResultProvider({
     } = diff;
 
     if (before_hash !== stateHashesByRoundId[roundId]) {
-      refetchRound(roundId).then((res) => {
-        if (!res.isSuccess) {
-          return;
-        }
-
-        const newData = res.data;
-        const newResults = newData.results;
-        const newCompetitors = newData.competitors;
-
-        setCompletedCount(roundId, newData.completed_competitors);
-        setTotalCompetitors(roundId, newCompetitors.length);
-
-        // We just made a full refetch. Only keep those results as "pending"
-        //   which are NOT contained exactly in the refetched round.
-        // In other words, if we find a competitor with the updated attempts
-        //   in the refetched round, then their result is not pending anymore.
-        diffPendingResults(newResults, (pr, ir) =>
-          compareAttempts(pr.attempts, ir.attempts),
-        );
-
-        updatePendingQuitCompetitors((currentlyQuitCompetitors) =>
-          // Only keep pending quit markers if they are _still_ in the refetched round
-          //   (ie the "quit" has not been executed yet)
-          currentlyQuitCompetitors.intersection(
-            new Set(newCompetitors.map((r) => r.id)),
-          ),
-        );
-      });
+      resyncRound(roundId);
     } else {
       const decompressedUpdated = updated.map(decompressPartialResult);
       const decompressedCreated = created.map(decompressFullResult);
@@ -264,7 +292,7 @@ export function MultiRoundResultProvider({
             liveResultsByRegistrationId[liveResult.registration_id],
           updated: [liveResult],
           roundWcifId: roundWcifId,
-        }),
+        }).map((result) => ({ ...result, staged_at: Date.now() })),
       ]);
     },
     [liveResultsByRegistrationId],
@@ -276,24 +304,53 @@ export function MultiRoundResultProvider({
     );
   }, []);
 
-  const refetchAndClearPending = (roundId: string) => {
-    refetchRound(roundId).then((res) => {
-      if (!res.isSuccess) {
-        return;
-      }
-      diffPendingResults(res.data.results, (pr, ir) =>
-        compareAttempts(pr.attempts, ir.attempts),
-      );
-    });
-  };
-
   const roundIds = initialRounds.map((r) => r.id);
   const connectionState = useResultsSubscriptions(
     roundIds,
     competitionId,
     onReceived,
-    refetchAndClearPending,
+    resyncRound,
   );
+
+  const waitingForConfirmation =
+    pendingResults.length > 0 ||
+    pendingQuitCompetitors.size > 0 ||
+    connectionState !== CONNECTION_STATE_CONNECTED;
+
+  const resyncAllRounds = useEffectEvent((quietPeriodMs: number) => {
+    if (Date.now() - lastMessageAt.current < quietPeriodMs) {
+      return;
+    }
+
+    roundIds
+      // A locked round is final, there is nothing left to poll for.
+      .filter(
+        (roundId) => rounds.find((r) => r.id === roundId)?.state !== "locked",
+      )
+      .forEach((roundId) => resyncRound(roundId));
+  });
+
+  useEffect(() => {
+    const pollInterval = waitingForConfirmation
+      ? POLL_INTERVAL_WAITING_MS
+      : POLL_INTERVAL_IDLE_MS;
+
+    const poll = () => resyncAllRounds(pollInterval);
+    // Coming back from a locked screen or a dead network is exactly when our
+    // state is most likely to be stale, so resync unconditionally and don't wait
+    // for the next tick.
+    const resyncNow = () => resyncAllRounds(0);
+
+    const interval = setInterval(poll, pollInterval);
+    window.addEventListener("focus", resyncNow);
+    window.addEventListener("online", resyncNow);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", resyncNow);
+      window.removeEventListener("online", resyncNow);
+    };
+  }, [waitingForConfirmation]);
 
   return (
     <LiveResultContext.Provider
