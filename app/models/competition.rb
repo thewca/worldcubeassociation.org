@@ -262,7 +262,7 @@ class Competition < ApplicationRecord
            as: "on_the_spot_base_entry_fee",
            allow_nil: true,
            with_model_currency: :currency_code
-  validates :guests_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, allow_nil: true, if: :guests_entry_fee_required? }
+  validates :guests_entry_fee_lowest_denomination, numericality: { greater_than_or_equal_to: 0, if: :guests_entry_fee_required? }
   monetize :guests_entry_fee_lowest_denomination,
            as: "guests_base_fee",
            allow_nil: true,
@@ -1132,7 +1132,8 @@ class Competition < ApplicationRecord
   end
 
   def guests_entry_fee_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+    guests_enabled? &&
+      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
