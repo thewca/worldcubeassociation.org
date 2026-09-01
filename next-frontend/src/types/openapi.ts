@@ -81,6 +81,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/registrations/{registrationId}/payment_denomination": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Convert a registration's fee into the denominations a payment needs
+         * @description What a payment attempt would charge, expressed in every denomination the frontend needs. The
+         *     payment providers each want their own integer format - Stripe has special-case currencies that
+         *     are not simple subunits - so the conversion stays on the server rather than being reimplemented
+         *     per client.
+         */
+        get: operations["registrationPaymentDenomination"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/scoretakers": {
         parameters: {
             query?: never;
@@ -2230,6 +2253,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RegistrationConfig"][];
+                };
+            };
+        };
+    };
+    registrationPaymentDenomination: {
+        parameters: {
+            query?: {
+                /** @description Optional donation on top of the entry fee, in the currency's lowest denomination */
+                iso_donation_amount?: number;
+            };
+            header?: never;
+            path: {
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        api_amounts: {
+                            /** @description The amount as the Stripe API wants it */
+                            stripe: number;
+                            /** @description The amount as the PayPal API wants it, which is a decimal string */
+                            paypal: string;
+                        };
+                        /** @description The amount formatted for display, including the currency's name */
+                        human_amount: string;
+                    };
                 };
             };
         };
