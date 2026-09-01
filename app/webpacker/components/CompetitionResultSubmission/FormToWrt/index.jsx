@@ -10,7 +10,6 @@ import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import submitToWrt from '../api/submitToWrt';
 import Loading from '../../Requests/Loading';
 import runValidatorsForCompetitionList from '../../Panel/pages/RunValidatorsPage/api/runValidatorsForCompetitionList';
-import { ALL_VALIDATORS } from '../../../lib/wca-data.js.erb';
 import ValidationOutput from '../../Panel/pages/RunValidatorsPage/ValidationOutput';
 
 export const IMPORT_STEP_TITLE = 'Import Results Data';
@@ -36,7 +35,7 @@ export default function FormToWrt({
     queryKey: ['competition-validation-output', competitionId],
     queryFn: () => runValidatorsForCompetitionList(
       competitionId,
-      ALL_VALIDATORS,
+      null,
       false,
       false,
     ),
