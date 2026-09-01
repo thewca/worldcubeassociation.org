@@ -1090,7 +1090,7 @@ ja:
       #original_hash: ea20be0
       success_message: お問い合わせメールが送信されました。返信までしばらくお待ちください。
       #original_hash: 8fa6b95
-      prefilled: >-
+      to_update_registration_prefilled: >-
         大会申込情報を更新するには、大会の運営に連絡してください。リクエストされた変更内容はフォームに事前入力されているため、このフォームを送信してください。
       form:
         user_data:

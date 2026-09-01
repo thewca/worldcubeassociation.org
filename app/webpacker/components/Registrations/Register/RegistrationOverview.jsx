@@ -93,7 +93,7 @@ export default function RegistrationOverview({
       // eslint-disable-next-line no-return-assign
       .then(() => (deleteAllowed
         ? deleteRegistrationMutation()
-        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.delete_contact_message')))));
+        : window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.delete_contact_message')), true)));
   };
 
   if (isRejected) {
