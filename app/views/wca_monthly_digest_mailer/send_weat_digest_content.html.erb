@@ -8,11 +8,12 @@
 
 <div><b>Delegate Milestones</b></div>
 
-<% if @delegate_milestones.empty? %>
+<% delegate_milestones = User.delegate_milestones_for_digest %>
+<% if delegate_milestones.empty? %>
   <p>There are no delegate milestones to show.</p>
 <% else %>
   <p>
-    <% @delegate_milestones.each do |milestone, delegates| %>
+    <% delegate_milestones.each do |milestone, delegates| %>
       <br><b><%= milestone %> competitions</b><br>
       <%= delegates.map(&:name).join("<br>").html_safe %>
     <% end %>
