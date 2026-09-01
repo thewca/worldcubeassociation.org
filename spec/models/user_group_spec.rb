@@ -188,7 +188,7 @@ RSpec.describe UserGroup do
     it "does not include changes from the current month" do
       role6 = create(:wrc_member_role, user_id: users[6].id, start_date: last_month)
       role6.update_columns(updated_at: last_month)
-      create(:wrc_member_role, user_id: users[7].id, start_date: Time.now)
+      create(:wrc_member_role, user_id: users[7].id, start_date: Time.current)
 
       expected_output = [
         "<br><b>Changes in WCA Regulations Committee</b>",

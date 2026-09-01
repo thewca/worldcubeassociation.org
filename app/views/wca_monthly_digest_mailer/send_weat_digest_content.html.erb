@@ -15,7 +15,7 @@
   <p>
     <% delegate_milestones.each do |milestone, delegates| %>
       <br><b><%= milestone %> competitions</b><br>
-      <%= delegates.map(&:name).join("<br>").html_safe %>
+      <%= safe_join(delegates.map(&:name), tag.br) %>
     <% end %>
   </p>
 <% end %>

@@ -200,8 +200,8 @@ class UserGroup < ApplicationRecord
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def changes_in_group_for_digest
-    duration_start_date = Time.now.beginning_of_month - 1.month
-    duration_end_date = Time.now.beginning_of_month
+    duration_end_date = Time.current.beginning_of_month
+    duration_start_date = duration_end_date - 1.month
     sorted_users = []
     team_member_changes = {}
 

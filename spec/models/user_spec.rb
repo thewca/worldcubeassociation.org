@@ -386,8 +386,9 @@ RSpec.describe User do
         starts: end_date,
         ends: end_date,
         delegates: [delegate],
+        organizers: [delegate],
         show_at_all: true,
-        cancelled_at: (Time.now if cancelled),
+        cancelled_at: (Time.current if cancelled),
       )
     end
 
