@@ -21,39 +21,15 @@ export const Users: CollectionConfig = {
       type: "text",
       defaultValue: () => crypto.randomUUID(),
     },
-    // Better Auth's core fields, hand-written because `betterAuthCollections` skips `user`.
-    {
-      name: "email",
-      type: "email",
-      required: true,
-      unique: true,
-    },
-    {
-      name: "emailVerified",
-      type: "checkbox",
-      defaultValue: false,
-    },
+    // `email`, `emailVerified`, `image`, `wcaId` and `wcaUserId` are deliberately absent:
+    //   `betterAuthCollections` augments this collection with every schema field it does not
+    //   already find here, so declaring them again would only duplicate the generated shape.
+    //   The two below stay hand-written because augmentation cannot express them.
+    // Better Auth marks `name` required, but rows written by payload-authjs may have none, and
+    //   a required field would fail validation on their next write.
     {
       name: "name",
       type: "text",
-    },
-    {
-      name: "image",
-      type: "text",
-    },
-    {
-      name: "wcaId",
-      type: "text",
-      admin: {
-        hidden: true,
-      },
-    },
-    {
-      name: "wcaUserId",
-      type: "number",
-      admin: {
-        hidden: true,
-      },
     },
     {
       name: "roles",

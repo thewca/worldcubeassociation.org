@@ -51,7 +51,8 @@ function plugins() {
   return [
     betterAuthCollections({
       betterAuthOptions: cmsBetterAuthOptions,
-      // `users` is hand-written; sessions/accounts/verifications come from the schema.
+      // `users` exists already, so it is augmented with the schema fields rather than
+      //   generated; `skip` only covers the case where it is missing entirely.
       skipCollections: ["user"],
       // Roles come from OIDC; nobody is promoted for being first to log in.
       firstUserAdmin: false,
