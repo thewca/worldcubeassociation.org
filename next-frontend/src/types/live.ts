@@ -13,3 +13,6 @@ export type PendingLiveResult = PartialExcept<
   LiveResult,
   "registration_id" | "attempts"
 >;
+// A pending result we sent, stamped with when we sent it, so the UI can flag
+// results the backend hasn't confirmed back to us in a reasonable time.
+export type StagedLiveResult = PendingLiveResult & { staged_at: number };
