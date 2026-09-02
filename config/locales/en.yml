@@ -1632,14 +1632,32 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
+      all_competitions: "All Competitions"
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
       select_hint: "Please select events"
       list: "List"
       map: "Map"
+      event: "Event"
       region: "Region"
       search: "Search"
+      #context: filters competitions by their name
+      name: "Name"
+      #context: label of the field holding the place that competitions are searched around
+      location: "Location"
+      #context: placeholder of the location field, where a competitor types a street address, city or postcode
+      location_placeholder: "Enter an address"
+      #context: button that fills the location field in with the device's own position
+      use_my_location: "Use my location"
+      #context: label of the field limiting how far away a competition may be from the chosen location
+      distance: "Distance"
+      distance_units:
+        #context: abbreviation for kilometres
+        km: "km"
+        #context: abbreviation for miles
+        mi: "mi"
+      advanced_filters: "Advanced Filters"
       state: "When"
       present: "Present"
       recent: "Recent"
@@ -1696,6 +1714,20 @@ en:
           closed: "Registration has closed. Competition will start %{relativeDate}."
           open: "Registration is open!"
           full: "Competitor limit reached, new registrations will go to the waiting list."
+      #context: introduces the legend explaining the registration status icons
+      registration_key: "Registration Key:"
+      #context: short labels for the registration status icons
+      registration_status:
+        full: "Full"
+        open: "Open"
+        not_open: "Not Open"
+        closed: "Closed"
+      currently_displaying:
+        one: "Currently Displaying: %{count} competition"
+        other: "Currently Displaying: %{count} competitions"
+      #context: actions in the drawer that opens when clicking a competition in the list
+      register_now: "Register Now"
+      view_competition: "View Competition"
       no_more_comps: "No more competitions."
       no_comp_found: "No competitions found."
     #context: on the "My competitions" page
@@ -2549,7 +2581,7 @@ en:
           '1': "If you are interested in organizing a competition, it's highly recommended to attend at least one or two competitions as a competitor to learn from the experience."
           '2': "WCA Competitions must follow the <a target='_blank' href='https://www.worldcubeassociation.org/regulations/'>WCA Regulations</a>. The organization team doesn't have to know the regulations by heart, however, a deep knowledge of the basics of the regulations would definitely help in correctly organizing the competition."
           '3': "After that, the organization team must contact a nearby <a target='_blank' href='https://www.worldcubeassociation.org/delegates'>WCA Delegate</a>. The supervision of a WCA Delegate is required in order to make a competition officially sanctioned by the WCA. The WCA Delegate will help guide the organization on how to host a successful competition."
-          '4': "Visit the <a target='_blank' href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA Competition Organizer Guidelines</a> for further information."
+          '4': "Visit the <a target='_blank' href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA Competition Organizer Handbook</a> for further information."
       '6':
         title: "What are the WCA accounts for? What is the difference between WCA accounts and WCA profiles?"
         #context: Paragraph of the answer to "What are the WCA accounts for? ..."
@@ -2666,7 +2698,7 @@ en:
     judge_tutorial: "Judging tutorial for newcomers"
     competition_templates: "Competition templates"
     certificates: "WCT's certificate templates"
-    orga_guidelines: "Organizer guidelines"
+    orga_handbook: "Organizer handbook"
   #context: Delegates page
   delegates_page:
     title: "WCA Delegates"
@@ -2797,6 +2829,8 @@ en:
       regulations_and_guidelines: "Regulations"
       #context: Used in the homepage's omnisearch
       search_for: "Search for <b>%{search_string}</b>"
+      #context: Shown on the search results page when no search term was given
+      empty_query: "Try searching for something!"
       #context: Used when there are no search results. E.g. "No people found for *Sherlock Holmes*".
       not_found:
         generic: "No results found"
@@ -2873,8 +2907,8 @@ en:
       title: "Regulations FAQ"
       content1_html: 'The <a href="/faq">FAQ section</a> answers several frequently asked questions about the WCA Regulations.'
     panel4:
-      title: "Organizer Guidelines"
-      content1_html: 'If you are interested in organizing a competition or already planning to organize one, please read our <a href="/organizer-guidelines">Organizer Guidelines</a>.'
+      title: "Organizer Handbook"
+      content1_html: 'If you are interested in organizing a competition or already planning to organize one, please read our <a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Organizer Handbook</a>.'
       content2_html: 'This document contains important information and should be read by every competition organizer.'
   #context: Translations of the regulations
   regulations_translations:
@@ -2889,95 +2923,6 @@ en:
       language: 'Language'
     translating: 'Translating the Regulations'
     paragraph3_html: 'If you are interested in adding/updating a translation, please view <a href="https://github.com/thewca/wca-regulations-translations#translation-instructions">the instructions on the GitHub repository for translations</a>.'
-  #context: Organizer Guidelines
-  full_organizer_guidelines:
-    description: "Welcome to the WQAC’s collection of Organizer Guidelines. If you’re considering being an organizer then it is highly recommended that you read these documents. They have been divided into essential and highly recommended documents. Make sure you are familiar with the information given as this will allow you to run a high-quality and enjoyable competition!"
-    disclaimer_html: "<strong>Disclaimer</strong>: The WCA does not organize competitions. As an organizer of a WCA sanctioned competition you <strong>must not</strong> sign anything on behalf of the WCA. You should try reaching out to a relevant regional or national cubing association who do organize or assist with organizing competitions."
-    essential:
-      description: "Essential documents"
-      finding-venue: "Finding a venue"
-      orga-team-delegate: "Creating your organization team and approaching a Delegate"
-      budget: "Budgeting a competition"
-      schedule: "Scheduling"
-      checklist: "Competition checklist"
-      registration: "Handling registration"
-      venue-setup: "Venue setup"
-      work-during-comp: "Organizer work during the competition"
-    recommended:
-      title: "Recommended documents"
-      staff: "Assigning volunteers"
-      emails: "Emails"
-      running-systems: "Running and judging systems"
-      new-competitors: "Attitude to new competitors"
-      enhancing-experience: "Enhancing competitor and volunteer experience"
-      reflection: "Organizer reflection"
-  organizer_guidelines:
-    title: "WCA Competition Organizer Guidelines"
-    paragraph0:
-      title: "Short version"
-      content: "Below you can find a short summary of key points for getting an idea of how to organize a competition. If you think this is something for you, please take a look at the documents above!"
-    paragraph1:
-      title: "How to organize a competition"
-      content: "All WCA competitions must be attended and overseen by a WCA Delegate. If you are interested in organizing your own competition, please contact your nearest WCA Delegate. They will be able to give you more information on the local practices and can
-      help you with finding a suitable date as they know if there are any other competitions planned in the same time frame. If there is no WCA Delegate near your area, please get in touch with the Senior Delegate for your region."
-    paragraph2:
-      title: "Expected expenses for organizing a competition"
-      content: "The expected expenses differ greatly from country to country and are determined by several factors like the size of the venue and other general conditions. Recouping all expenses with registration fees is possible. However, to keep these as low as possible,
-      it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
-    paragraph3:
-      title: "Deadlines for the announcement of the competition"
-      content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
-    paragraph4:
-      title: "Proximity policy"
-      content1: "WCA competitions will be accepted if they are at least 30 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 30 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
-      olist1:
-        '1': "The two competitions don't have events in common."
-        '2': "The two competitions take place in different regions."
-      content2: '"3x3x3 Fewest Moves simultaneous competitions" are WCA competitions having only the 3x3x3 Fewest Moves event and taking place simultaneously in different locations.'
-      olist2:
-        '1':
-          content1: "3x3x3 Fewest Moves simultaneous competitions cannot be part of any other regular competition."
-          alist1:
-            '1a': "Time frames when both are celebrated can’t overlap."
-        '2':
-          content1: "If any location of such competitions is closer than 10 km to any other regular competition, then"
-          alist1:
-            '2a': "both competitions should be at least 5 days apart, or"
-            '2b': "the other competition must not have the 3x3x3 Fewest Moves event."
-    paragraph-events:
-      title: "Announcing events"
-      content: 'All events that are going to be held at the competition must be specified by the Delegate when requesting the competition approval. Further additions must be approved by the WCAT.'
-    paragraph5:
-      title: "Competitor limits"
-      content_html: "The number of competitors may be limited per event or per competition (see <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). The Delegate of the competition must get an approval of the competitor limit by the WCAT. Competitor limits should be
-        chosen wisely and in accordance with the expected competitor interest. The limit should not set to a lower number for minor reasons. The intended limit should already be taken into consideration when searching for a suitable venue. The competitors
-        limit must be clearly stated on the competition page on the WCA website."
-    paragraph6:
-      title: "Handling registrations"
-      content: "Registrations must be processed on a first come first served basis, which means that the earliest complete registration must be treated first. If registration fees are prepaid, a registration is considered complete when the registration fee has been paid. This
-      should be clearly stated in the paying instructions on the competition website."
-    paragraph7:
-      title: "Managing the waiting list"
-      content1: "Once the competitor limit for a competition is reached, a waiting list should be opened. When registered and approved competitors cancel their registration, they can be replaced with the next competitors on the waiting list."
-      content2: "If competition registration fees are prepaid, it is an efficient approach to offer the free spot to the next competitor on the waiting list and set a deadline until when the registration fee should be paid to complete the registration (e.g. 48 hours). In case the payment is not
-      received in time or the competitor denies, the free spot should be offered to the next person on the waiting list. This process should be continued until the free spots are filled. There are no exceptions for competitors to bypass the waiting list."
-      content3: "If competitors did not go through the regular registration process but competed, their results will be removed retroactively (assuming the competitors limit existed and was reached)."
-    paragraph8:
-      title: "Tasks before the competition"
-      list:
-        '1': "Before announcing the competition, a schedule is required to be published on the competition website. This schedule can be adjusted later."
-        '2': "Competitors should be split into groups, score sheets must be printed and should be split according to the groups' distribution. It is also recommended to plan who will scramble for every group of every event, at least for the first rounds.
-        Scramblers should be reliable."
-    paragraph9:
-      title: "Tasks during the competition"
-      content: "The tasks an organizer has to do during a competition should be discussed with the WCA Delegate. The typical tasks are (they can be delegated to other reliable people):"
-      list:
-        '1': "Managing the registration desk"
-        '2': "Making announcements"
-        '3': "Calling groups and laying out score sheets"
-        '4': "Score-taking and printing results"
-        '5': "Looking for scramblers and judges"
-        '6': "Dealing with all organizational issues regarding the venue (e.g. keys or WiFi)"
   #context: Media pages
   media:
     common:

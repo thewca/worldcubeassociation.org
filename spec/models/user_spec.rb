@@ -384,6 +384,53 @@ RSpec.describe User do
     expect(avatar.private_image.attached?).to be true
   end
 
+  describe ".delegate_milestones_for_digest" do
+    let(:delegate) { create(:delegate) }
+    let(:last_month_end) { 1.month.ago.end_of_month.to_date }
+    let(:two_years_ago) { 2.years.ago.to_date }
+
+    def create_delegated_competitions(count, end_date, cancelled: false)
+      create_list(
+        :competition,
+        count,
+        starts: end_date,
+        ends: end_date,
+        delegates: [delegate],
+        organizers: [delegate],
+        show_at_all: true,
+        cancelled_at: (Time.current if cancelled),
+      )
+    end
+
+    it "returns empty hash when no delegate crosses a milestone" do
+      create_delegated_competitions(49, two_years_ago)
+      expect(User.delegate_milestones_for_digest).to be_empty
+    end
+
+    it "returns delegate who reaches the 50 milestone during last month" do
+      create_delegated_competitions(49, two_years_ago)
+      create_delegated_competitions(1, last_month_end)
+      expect(User.delegate_milestones_for_digest).to eq({ 50 => [delegate] })
+    end
+
+    it "does not include a delegate who reached the milestone before last month" do
+      create_delegated_competitions(50, two_years_ago)
+      expect(User.delegate_milestones_for_digest).to be_empty
+    end
+
+    it "does not count cancelled competitions toward milestones" do
+      create_delegated_competitions(49, two_years_ago)
+      create_delegated_competitions(1, last_month_end, cancelled: true)
+      expect(User.delegate_milestones_for_digest).to be_empty
+    end
+
+    it "does not count competitions from future months" do
+      create_delegated_competitions(49, two_years_ago)
+      create_delegated_competitions(1, 1.month.from_now.to_date)
+      expect(User.delegate_milestones_for_digest).to be_empty
+    end
+  end
+
   describe "#delegated_competitions" do
     let(:delegate) { create(:delegate) }
     let(:other_delegate) { create(:delegate) }

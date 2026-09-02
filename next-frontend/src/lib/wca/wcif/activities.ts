@@ -171,7 +171,7 @@ export const localizeActivityName = (
     t,
     activity.activityCode,
     activityRound,
-    activityEvent,
+    activityEvent.rounds,
   );
 };
 

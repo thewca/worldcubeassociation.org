@@ -49,6 +49,106 @@ interface WcaPaletteInput {
 type ColorScale = Readonly<Record<LuminanceKey, string>>;
 type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 
+// Chakra styles these trigger slots without ever setting `cursor`, so
+// they fall back to the browser default and read as non-interactive.
+// We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
+// https://github.com/chakra-ui/chakra-ui/issues/10960
+const INTERACTIVITY_OVERRIDES = {
+  menu: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  select: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  combobox: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  popover: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  collapsible: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  steps: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  checkboxCard: {
+    slots: [],
+    base: {
+      root: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  radioCard: {
+    slots: [],
+    base: {
+      item: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  segmentGroup: {
+    slots: [],
+    base: {
+      item: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  // The `cursor.slider` token exists but the slider recipe never consumes
+  // it, so the thumb needs its own rule.
+  slider: {
+    slots: [],
+    base: {
+      thumb: {
+        cursor: "grab",
+        _dragging: { cursor: "grabbing" },
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+};
+
 const slateColors = {
   green: {
     primary: "#029347",
@@ -312,6 +412,9 @@ const customConfig = defineConfig({
       },
       cursor: {
         menuitem: { value: "pointer" },
+        checkbox: { value: "pointer" },
+        radio: { value: "pointer" },
+        option: { value: "pointer" },
       },
     },
     semanticTokens: {
@@ -603,8 +706,9 @@ const customConfig = defineConfig({
       },
     },
     slotRecipes: {
+      ...INTERACTIVITY_OVERRIDES,
       steps: {
-        slots: [],
+        ...INTERACTIVITY_OVERRIDES.steps,
         variants: {
           orientation: {
             vertical: {
@@ -770,6 +874,12 @@ const customConfig = defineConfig({
           root: {
             "--accordion-radius": "{radii.wca}",
           },
+          itemTrigger: {
+            cursor: "pointer",
+            _disabled: {
+              cursor: "disabled",
+            },
+          },
         },
         variants: {
           variant: {
@@ -848,6 +958,21 @@ const customConfig = defineConfig({
                 _selected: {
                   color: "colorPalette.contrast",
                 },
+              },
+            },
+          },
+        },
+      },
+      list: {
+        slots: [],
+        variants: {
+          // Chakra's reset drops the browser's default list padding and its list recipe
+          //   does not put any back, so without this the markers have nowhere to sit and
+          //   the list reads as flush body text.
+          indented: {
+            true: {
+              root: {
+                ps: "6",
               },
             },
           },
