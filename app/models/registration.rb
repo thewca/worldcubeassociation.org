@@ -187,7 +187,8 @@ class Registration < ApplicationRecord
   end
 
   def outstanding_entry_fees_with_donation(iso_donation_amount = 0)
-    outstanding_entry_fees + Money.new(iso_donation_amount, competition.currency_code)
+    outstanding_fees = outstanding_entry_fees
+    outstanding_entry_fees + Money.new(iso_donation_amount, outstanding_fees.currency)
   end
 
   def paid_entry_fees
