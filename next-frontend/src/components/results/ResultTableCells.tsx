@@ -1,11 +1,9 @@
-"use client";
-
 import WcaFlag from "@/components/WcaFlag";
 import EventIcon from "@/components/EventIcon";
 import events from "@/lib/wca/data/events";
 import { HStack, Icon, Link, Table } from "@chakra-ui/react";
 import countries from "@/lib/wca/data/countries";
-import { usePathname, useSearchParams } from "next/navigation";
+import RegionFilterLink from "@/components/results/RegionFilterLink";
 
 type CountryCellProps = (
   | {
@@ -49,22 +47,6 @@ export function CountryCell({
       )}
     </Table.Cell>
   );
-}
-
-function RegionFilterLink({
-  iso2,
-  children,
-}: {
-  iso2: string;
-  children: React.ReactNode;
-}) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const params = new URLSearchParams(searchParams);
-  params.set("region", iso2);
-
-  return <Link href={`${pathname}?${params}`}>{children}</Link>;
 }
 
 interface CompetitionCellProps {
