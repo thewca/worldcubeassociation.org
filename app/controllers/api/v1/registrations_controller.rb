@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 class Api::V1::RegistrationsController < Api::V1::ApiController
+  # Third-party OAuth clients have to be granted this explicitly before they may put anything
+  # into the registration queue on a user's behalf.
+  MANAGE_REGISTRATIONS_SCOPE = 'manage_registrations'
+
   skip_before_action :require_user!, only: [:index]
   # The order of the validations is important to not leak any non public info via the API
   # That's why we should always validate a request first, before taking any other before action
   # before_actions are triggered in the order they are defined
+  before_action :require_registration_scope!, only: %i[create update bulk_update bulk_auto_accept payment_ticket]
   before_action :user_can_create_registration, only: [:create]
   before_action :validate_create_request, only: [:create]
   before_action :ensure_registration_exists, only: [:show_by_user]
@@ -17,6 +22,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   before_action :user_can_bulk_modify_registrations, only: [:bulk_update]
   before_action :validate_bulk_update_request, only: [:bulk_update]
   before_action :validate_payment_ticket_request, only: [:payment_ticket]
+  before_action :validate_payment_denomination_request, only: [:payment_denomination]
 
   rescue_from ActiveRecord::RecordNotFound do
     render_error(:not_found, Registrations::ErrorCodes::REGISTRATION_NOT_FOUND)
@@ -254,6 +260,8 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     @registration = Registration.find(params_id)
     @competition = @registration.competition
 
+    return render_error(:forbidden, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless @registration.user_id == authenticated_user.id
+
     return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
     return render_error(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if @competition.registration_past?
 
@@ -272,7 +280,34 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     render json: { client_secret: payment_intent.client_secret }
   end
 
+  def validate_payment_denomination_request
+    @registration = Registration.find(params_id)
+
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+      authenticated_user.id == @registration.user_id || authenticated_user.can_manage_competition?(@registration.competition)
+  end
+
+  # What a payment attempt would charge, in every denomination the frontend needs: the payment
+  # providers want their own integer formats, and the user wants a formatted string. Keeping the
+  # currency rules here means clients never have to know about Stripe's special-case currencies.
+  def payment_denomination
+    iso_donation_amount = params[:iso_donation_amount].to_i
+    ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
+
+    api_amounts = {
+      stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),
+      paypal: PaypalRecord.amount_to_paypal(ruby_money.cents, ruby_money.currency.iso_code),
+    }
+
+    render json: { api_amounts: api_amounts, human_amount: helpers.format_money(ruby_money) }
+  end
+
   private
+
+    def require_registration_scope!
+      raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+        token_has_scope?(MANAGE_REGISTRATIONS_SCOPE)
+    end
 
     def action_type(request)
       self_updating = request[:user_id] == authenticated_user.id

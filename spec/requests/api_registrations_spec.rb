@@ -8,6 +8,53 @@ WEBHOOK_REFUND_MOCK_ID = 're_3RiDX8I8ds2wj1dZ0RDaaCQg'
 RSpec.describe 'API Registrations' do
   include ActiveJob::TestHelper
 
+  # Writing to the registration endpoints requires the `manage_registrations` scope. These specs
+  # are about the registration logic rather than about scopes, so grant it by default and let the
+  # scope specs below opt out by passing their own scopes.
+  def api_sign_in_as(user, scopes: nil)
+    super(
+      user,
+      scopes: scopes || Doorkeeper::OAuth::Scopes.from_string(Api::V1::RegistrationsController::MANAGE_REGISTRATIONS_SCOPE),
+    )
+  end
+
+  describe 'OAuth scopes' do
+    let(:user) { create(:user) }
+    let(:competition) { create(:competition, :registration_open) }
+    let(:registration_request) { build(:registration_request, competition_id: competition.id, user_id: user.id) }
+
+    it 'rejects a token without the manage_registrations scope' do
+      api_sign_in_as(user, scopes: Doorkeeper::OAuth::Scopes.new)
+      post api_v1_competition_registrations_path(competition), params: registration_request
+
+      expect(response).to have_http_status(:forbidden)
+      expect(response.parsed_body['error']).to eq Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS
+    end
+
+    it 'does not enqueue a registration for a token without the scope' do
+      expect do
+        api_sign_in_as(user, scopes: Doorkeeper::OAuth::Scopes.new)
+        post api_v1_competition_registrations_path(competition), params: registration_request
+      end.not_to have_enqueued_job(AddRegistrationJob)
+    end
+
+    it 'accepts a token carrying the manage_registrations scope' do
+      api_sign_in_as(user)
+      post api_v1_competition_registrations_path(competition), params: registration_request
+
+      expect(response).to have_http_status(:accepted)
+    end
+
+    it 'does not require the scope for reading a registration' do
+      registration = create(:registration, competition: competition, user: user)
+
+      api_sign_in_as(user, scopes: Doorkeeper::OAuth::Scopes.new)
+      get api_v1_registration_path(registration)
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe 'POST #create' do
     context 'when creating a registration' do
       let(:user) { create(:user) }
@@ -1367,19 +1414,37 @@ RSpec.describe 'API Registrations' do
     it 'returns a hash of amounts/currencies formatted for payment providers' do
       expected_response = { api_amounts: { stripe: 1500, paypal: "15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
       api_sign_in_as(reg.user)
-      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id)
+      get payment_denomination_api_v1_registration_path(reg)
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)
     end
 
     it 'allows a donation to be specified' do
-      expected_response = { api_amounts: { stripe: 2500, paypal: "25.00" }, human_amount: "25 kr (Swedish Krona)" }.with_indifferent_access
       api_sign_in_as(reg.user)
-      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), params: { iso_donation_amount: 1000 }
+      get payment_denomination_api_v1_registration_path(reg), params: { iso_donation_amount: 1000 }
+
+      expect(response.parsed_body.dig('api_amounts', 'stripe')).to be(2500)
+    end
+
+    it 'lets the organizers look at it' do
+      api_sign_in_as(competition.organizers.first)
+      get payment_denomination_api_v1_registration_path(reg)
 
       expect(response).to be_successful
-      expect(response.parsed_body).to eq(expected_response)
+    end
+
+    it 'refuses an unrelated user' do
+      api_sign_in_as(create(:user))
+      get payment_denomination_api_v1_registration_path(reg)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'requires a signed in user' do
+      get payment_denomination_api_v1_registration_path(reg)
+
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 

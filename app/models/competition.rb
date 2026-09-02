@@ -110,6 +110,10 @@ class Competition < ApplicationRecord
   scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
   scope :pending_report_or_results_posting, -> { includes(:delegate_report).where(delegate_report: { posted_at: nil }).or(where(results_posted_at: nil)) }
   scope :results_posted, -> { where.not(results_posted_at: nil).where.not(results_posted_by: nil) }
+  # `DEFAULT_SERIALIZE_OPTIONS` renders delegates and organizers through `User#serializable_hash`,
+  # which reads every association in `User::SERIALIZATION_INCLUDES`. Callers that serialize with
+  # those defaults need this, or each competition fires one set of queries per delegate/organizer.
+  scope :with_serialization_preloads, -> { includes(delegates: User::SERIALIZATION_INCLUDES, organizers: User::SERIALIZATION_INCLUDES) }
   scope :pending_results_submission, -> { not_cancelled.visible.where(results_submitted_at: nil, end_date: ..Date.today) }
 
   enum :guest_entry_status, {
@@ -1773,13 +1777,8 @@ class Competition < ApplicationRecord
     # Respect other `includes` associations that might have been specified ahead of time
     previous_includes = competitions.includes_values
 
-    # The delegates and organizers get run through `User#serializable_hash`, so eager load the
-    # associations it touches to avoid an N+1 explosion (one set of queries per delegate/organizer
-    # per competition). See `User::SERIALIZATION_INCLUDES`.
     competitions.includes(
       :events, # serialized via the `event_ids` method, one query per competition otherwise
-      { delegates: User::SERIALIZATION_INCLUDES },
-      { organizers: User::SERIALIZATION_INCLUDES },
       *previous_includes,
     ).order(**order)
   end
@@ -1793,14 +1792,15 @@ class Competition < ApplicationRecord
                                                     uses_qualification?
                                                     allow_registration_without_qualification
                                                     force_comment_in_registration],
-                                           methods: %i[qualification_wcif event_ids],
+                                           methods: %i[event_ids],
                                            include: [])
     user_params = {
       preferredEvents: current_user.preferred_events.pluck(:id),
       personalRecords: {
-        single: current_user.ranks_single&.map(&:to_wcif) || [],
-        average: current_user.ranks_average&.map(&:to_wcif) || [],
+        single: current_user.ranks_single&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
+        average: current_user.ranks_average&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
       },
+      qualification_wcif: qualification_wcif(version: WCIF_VERSION_CATALOGUE[:latest]),
     }
     competition_params.merge(user_params)
   end
@@ -1923,14 +1923,23 @@ class Competition < ApplicationRecord
     series_sibling_competitions.ids
   end
 
-  def qualification_wcif
+  def qualification_wcif(version: WCIF_STABLE_VERSION)
     return {} unless uses_qualification?
 
-    competition_events
-      .where.not(qualification: nil)
-      .index_by(&:event_id)
-      .transform_values(&:qualification)
-      .transform_values(&:to_wcif)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+
+    if at_least_v2
+      competition_events
+        .where.not(qualification_condition: nil)
+        .index_by(&:event_id)
+        .transform_values(&:v2_qualification_wcif)
+    else
+      competition_events
+        .where.not(qualification: nil)
+        .index_by(&:event_id)
+        .transform_values(&:qualification)
+        .transform_values(&:to_wcif)
+    end
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
