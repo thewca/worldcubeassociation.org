@@ -4702,7 +4702,7 @@ zh-CN:
           #original_hash: 576c3b8
           '4': >-
             可以参考  <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
             比赛主办指南</a>和<a target='_blank'
             href='https://www.cubingusa.com/cguide.php'>CubingUSA比赛指南</a>获取更多信息。（任何
             WCA 规则和这个补充教程有冲突的地方，以规则为准。）
@@ -5005,8 +5005,6 @@ zh-CN:
     competition_templates: 比赛模板
     #original_hash: 5ca0558
     certificates: WCA传播组的奖状范本
-    #original_hash: f580987
-    orga_guidelines: 主办团队指导方针
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -5410,7 +5408,7 @@ zh-CN:
       #original_hash: ad5f6e7
       title: 组织者指南
       #original_hash: 9bbdf16
-      content1_html: 如果您有兴趣组织比赛或已计划组织比赛，请阅读我们的<a href="/organizer-guidelines">组织者指南</a>。
+      content1_html: 如果您有兴趣组织比赛或已计划组织比赛，请阅读我们的<a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">组织者指南</a>。
       #original_hash: 5016669
       content2_html: 本文件包含重要信息，应由每个比赛组织者阅读。
   regulations_translations:
@@ -5438,157 +5436,6 @@ zh-CN:
       如果您对添加/更新翻译感兴趣，请查看<a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">GitHub
       仓库中的翻译说明</a>。
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: 欢迎阅读WCA质量保证委员会编写的主办团队指南。如果您正在考虑组建主办团队，强烈建议阅读这些文件。文件分为必读和推荐两类。请确保熟悉其中内容，以便举办更愉快、更高质量的比赛。
-    #original_hash: e6f7d36
-    disclaimer_html: <strong>免责声明</strong>：WCA不直接主办比赛。WCA认可比赛的主办方<strong>不得</strong>代表WCA签署任何协议。您可以联系能够协助主办比赛或处理相关事宜的区域组织。
-    essential:
-      #original_hash: 44bd0ba
-      description: 必读文件
-      #original_hash: 1cf87ad
-      finding-venue: 寻找场地
-      #original_hash: 3ce0d9c
-      orga-team-delegate: 成立您的主办团队并接洽一位WCA代表
-      #original_hash: d3c693b
-      budget: 做比赛成本计算
-      #original_hash: b1429a7
-      schedule: 安排时间表
-      #original_hash: beea57d
-      checklist: 比赛确认清单
-      #original_hash: 9defcf1
-      registration: 处理报名
-      #original_hash: e298a56
-      venue-setup: 比赛布置
-      #original_hash: 2b6a5dd
-      work-during-comp: 主办团队在比赛中的工作
-    recommended:
-      #original_hash: 6b843f3
-      title: 推荐文件
-      #original_hash: 6e4fb29
-      staff: 指定志愿者
-      #original_hash: 4735583
-      emails: 电子邮件
-      #original_hash: 8e7ca09
-      running-systems: 比赛流动与裁判系统
-      #original_hash: 2b31c89
-      new-competitors: 对于新参赛者的态度
-      #original_hash: 00c4f78
-      enhancing-experience: 增进参赛者及志愿者的比赛体验
-      #original_hash: 2345aaa
-      reflection: 比赛借镜
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: WCA 比赛组织者指南
-    paragraph0:
-      #original_hash: ee36904
-      title: 简易版本
-      #original_hash: 60d9532
-      content: 下方整理了举办比赛时需要关注的要点。如果这正是您需要的信息，请阅读页面上方列出的参考文件。
-    paragraph1:
-      #original_hash: e5f5329
-      title: 如何组织一场比赛
-      #original_hash: 3dbbbee
-      content: >-
-        所有WCA比赛必须由WCA代表参加并监督。如果你有兴趣组织自己的比赛，请联系离您最近的WCA代表。他们将能够为您提供更多有关当地实践的信息，并可以帮助您找到合适的日期，因为他们知道在同一时间范围内是否有其他比赛计划。如果您所在地区附近没有WCA代表，请联系您所在地区的高级代表。
-    paragraph2:
-      #original_hash: f20dd3b
-      title: 预计组织比赛的费用
-      #original_hash: f16a06f
-      content: >-
-        每个国家的预期费用差别很大，取决于场地的大小和其他条件。通过报名费收回所有的支出。但是，为了尽可能降低这些费用，强烈建议寻找赞助商。虽然WCA代表是志愿者，并且没有工作收入，组织者应考虑支付他们的旅行费用。
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: 比赛公告的截止日期
-      #original_hash: 66bf437
-      content_html: >-
-        比赛至少应在比赛开始前一个月公布（见<a
-        href='https://www.worldcubeassociation.org/regulations/guidelines.html#8a4++'>指南8a4
-        ++
-        </a>）。如果有特殊的原因错过了这个截止日期，比赛也应该提前至少两周公布，由WCA董事会决定。强烈建议尽快通知WCA董事会这些原因，以避免比赛被拒绝。
-    paragraph4:
-      #original_hash: b6dca56
-      title: 临近政策
-      #original_hash: 79ed06e
-      content1: >-
-        WCA比赛如果距离其他比赛至少10公里或时间间隔超过5天，它将被接受。如果有另外一场比赛的距离小于10公里，且他们之间的时间间隔少于5天，则WCA董事会应特别审查拟议的比赛。要求批准这样比赛的代表必须提供进一步的信息为什么仍然需要办这个比赛。支持此类比赛的可能的论据包括：
-      olist1:
-        #original_hash: de00462
-        '1': 这两场比赛没有共同的项目
-        #original_hash: f7bacc5
-        '2': 这两场比赛在不同的国家或地区举办
-      #original_hash: 5c5cf04
-      content2: “最少步联考”是只有最少步还原项目，且同时在不同地方举办的WCA比赛。
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: 最少步联考禁止成为任何其他常规比赛的一部分
-          alist1:
-            #original_hash: 75aa0c7
-            1a: 两者的持续时段不能重叠。
-        '2':
-          #original_hash: 8d9c548
-          content1: 如果该比赛的任何位置比任何其他常规比赛更接近100公里，那么
-          alist1:
-            #original_hash: 8f532bb
-            2a: 这两场比赛需要至少相隔5天，或者
-            #original_hash: e14e11e
-            2b: 另一场比赛不能含有最少步还原项目。
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: 宣布项目
-      #original_hash: 7ad62c7
-      content: 所有在比赛中要举行的项目必须由代表在比赛申请时指定。这也包括“暂定”项目（即可能根据赛程另外举行的项目）。进一步的项目增加必须得到董事会的批准。
-    paragraph5:
-      #original_hash: 17d01de
-      title: 参赛限制
-      #original_hash: bd8e6ee
-      content_html: >-
-        每场比赛或每个项目的参赛人数可能有限（请参阅<a
-        href='https://www.worldcubeassociation.org/regulations/#Z4'>规则Z4
-        </a>）。如条例Z中的规定，比赛的代表必须得到董事会对人数限制的许可。应该根据预期参赛选手的兴趣明智地选择参赛人数限制。如果只有次要因素，参赛人数限制不应设置地过小。这一预期的限制应该在在寻找合适场地的时候就考虑到。参赛人数限制必须在WCA网站的比赛页面上明确说明。
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: 处理报名
-      #original_hash: bd669a1
-      content: >-
-        报名必须按照先到先得的原则处理，即最早完成的报名应优先处理。如果需要预付报名费，则付款完成后报名才视为完成。比赛网站的付款说明中应明确说明这一点。
-    paragraph7:
-      #original_hash: e4f1c62
-      title: 管理候补名单
-      #original_hash: 81ca3f3
-      content1: 比赛达到人数上限后，应开启候补名单。已获批准的参赛者取消报名时，可以由候补名单中的下一位参赛者补上。
-      #original_hash: 802b34f
-      content2: >-
-        如果比赛需要预付报名费，可以将空出的名额依次提供给候补名单中的下一位选手，并设置付款截止时间（例如48小时）。如果在规定时间内未收到付款，则将名额提供给下一位候补选手。该流程应持续至所有名额都已确定。不得允许任何选手绕过候补名单。
-      #original_hash: 37bcbd6
-      content3: 如果选手未经正常报名流程就直接参加比赛，且比赛已达到设置的参赛人数上限，则应事后删除其成绩。
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: 赛前事务
-      list:
-        #original_hash: c8abb5e
-        '1': 在宣布比赛之前，比赛的赛程需要在比赛网站上公布。该赛程可以在后续调整。
-        #original_hash: e93d043
-        '2': 应将选手分为若干组并打印成绩单，建议根据分组整理成绩单。还建议至少为第一轮的每个项目和每个分组安排可靠的打乱员。
-    paragraph9:
-      #original_hash: ead44f5
-      title: 赛间事务
-      #original_hash: ee2e9c6
-      content: 组织者在比赛期间需要做的事情应该和 WCA 代表讨论。典型的事务包括（它们可以被委托给其他靠谱的人）：
-      list:
-        #original_hash: 03aea46
-        '1': 管理报到处
-        #original_hash: c4388f3
-        '2': 发布公告
-        #original_hash: 45c78ae
-        '3': 叫号及放置成绩单
-        #original_hash: 0b31986
-        '4': 录入和打印结果
-        #original_hash: 7ab2d4c
-        '5': 寻找打乱员和裁判员
-        #original_hash: 52e8316
-        '6': 处理与场地有关的所有组织问题（例如钥匙或WiFi）
   media:
     common:
       #original_hash: f9b7a97
