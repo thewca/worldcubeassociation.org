@@ -25,6 +25,7 @@ import {
   Icon,
   Stack,
   Wrap,
+  Badge,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -352,30 +353,22 @@ export default function CompetitionsPage() {
                 >
                   <Wrap gapX="3" gapY="1" align="center">
                     <Text>{t("competitions.index.registration_key")}</Text>
-                    <HStack gap="1">
+                    <Badge size="md" variant="surface">
                       <CompRegoFullButOpenOrangeIcon />
-                      <Text>
-                        {t("competitions.index.registration_status.full")}
-                      </Text>
-                    </HStack>
-                    <HStack gap="1">
+                      {t("competitions.index.registration_status.full")}
+                    </Badge>
+                    <Badge size="md" variant="surface">
                       <CompRegoNotFullOpenGreenIcon />
-                      <Text>
-                        {t("competitions.index.registration_status.open")}
-                      </Text>
-                    </HStack>
-                    <HStack gap="1">
+                      {t("competitions.index.registration_status.open")}
+                    </Badge>
+                    <Badge size="md" variant="surface">
                       <CompRegoNotOpenYetGreyIcon />
-                      <Text>
-                        {t("competitions.index.registration_status.not_open")}
-                      </Text>
-                    </HStack>
-                    <HStack gap="1">
+                      {t("competitions.index.registration_status.not_open")}
+                    </Badge>
+                    <Badge size="md" variant="surface">
                       <CompRegoClosedRedIcon />
-                      <Text>
-                        {t("competitions.index.registration_status.closed")}
-                      </Text>
-                    </HStack>
+                      {t("competitions.index.registration_status.closed")}
+                    </Badge>
                   </Wrap>
                   <Text>
                     {t("competitions.index.currently_displaying", {
