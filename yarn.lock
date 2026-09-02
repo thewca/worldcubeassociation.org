@@ -10609,8 +10609,8 @@ __metadata:
     sass: "npm:^1.103.1"
     sass-loader: "npm:^17.0.0"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:10.3.1"
-    shakapacker-webpack: "npm:10.3.1"
+    shakapacker: "npm:10.3.2"
+    shakapacker-webpack: "npm:10.3.2"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^17.14.1"
     stylelint-config-recommended-scss: "npm:^17.0.1"
@@ -10933,11 +10933,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker-webpack@npm:10.3.1":
-  version: 10.3.1
-  resolution: "shakapacker-webpack@npm:10.3.1"
+"shakapacker-webpack@npm:10.3.2":
+  version: 10.3.2
+  resolution: "shakapacker-webpack@npm:10.3.2"
   dependencies:
-    shakapacker: "npm:~10.3.1"
+    shakapacker: "npm:~10.3.2"
     terser-webpack-plugin: "npm:^5.3.1"
   peerDependencies:
     "@babel/core": ^7.17.9 || ^8.0.0
@@ -10983,13 +10983,13 @@ __metadata:
       optional: true
     webpack-subresource-integrity:
       optional: true
-  checksum: 10c0/82e66b1b1b6a3a401f8cd54eacea0627bee1124693cf874fd2f6d62fbedb6b6564e04847946c3defe58641c80546c41463e4287d6ff5db67d1969d9b08895286
+  checksum: 10c0/d008d5596aff80b9e9dac7553d582b9da1c2657cdf9b63c2ce903e0887af2e44227c4586fbd5fbf164ca07bc754d4e105956512a0e8dd6bf9894c9a77df40c00
   languageName: node
   linkType: hard
 
-"shakapacker@npm:10.3.1, shakapacker@npm:~10.3.1":
-  version: 10.3.1
-  resolution: "shakapacker@npm:10.3.1"
+"shakapacker@npm:10.3.2, shakapacker@npm:~10.3.2":
+  version: 10.3.2
+  resolution: "shakapacker@npm:10.3.2"
   dependencies:
     js-yaml: "npm:^4.1.0"
     pack-config-diff: "npm:^0.1.0"
@@ -11082,7 +11082,7 @@ __metadata:
   bin:
     diff-bundler-config: package/bin/diff-bundler-config.cjs
     shakapacker-config: package/bin/shakapacker-config.cjs
-  checksum: 10c0/0c7acd5022b0ab7aa694e94ae0d1dcac5734d6f5a574ffa0c9f72661a351b963f967c026ca769f0b73a8bfb512aa0e7c9f9bac1022b3bd6571329e20fb5483e6
+  checksum: 10c0/4d1641c0074bf1f0d37965f8ac886c42bf24d4ff1ac7011348cb84da08eceeef2b5be9c10244762d54036dbd3071fc288c7c6d4cb841b8bdfe24bcd98a462ba1
   languageName: node
   linkType: hard
 
