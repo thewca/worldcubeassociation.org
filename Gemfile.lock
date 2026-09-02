@@ -182,7 +182,7 @@ GEM
     bootstrap3-datetimepicker-rails (4.17.47)
       momentjs-rails (>= 2.8.1)
     builder (3.3.0)
-    bullet (8.1.3)
+    bullet (8.2.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (13.0.0)
@@ -614,7 +614,7 @@ GEM
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
-    rack-proxy (1.0.1)
+    rack-proxy (1.0.2)
       rack (>= 2.0, < 4)
     rack-session (2.1.2)
       base64 (>= 0.1.0)
@@ -668,7 +668,7 @@ GEM
       ffi (~> 1.0)
     rb_sys (0.9.124)
       rake-compiler-dock (= 1.11.0)
-    rbs (4.1.3)
+    rbs (4.2.0)
       logger
       prism (>= 1.6.0)
       tsort
@@ -843,7 +843,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.1.1)
-    shakapacker (10.3.1)
+    shakapacker (10.3.2)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -958,7 +958,7 @@ GEM
       actionview (>= 8.0.0)
       bindex (>= 0.4.0)
       railties (>= 8.0.0)
-    webmock (3.26.3)
+    webmock (3.26.4)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -1104,7 +1104,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 10.3.1)
+  shakapacker (= 10.3.2)
   shoryuken
   sidekiq
   sidekiq-cron
@@ -1179,7 +1179,7 @@ CHECKSUMS
   bootstrap-table-rails (1.11.1.1) sha256=444daf5ba9d8b642e377372beba2924ee2cbfa09559abb0ddf2e8bffb1bafc35
   bootstrap3-datetimepicker-rails (4.17.47) sha256=ee87a9bad74c140729f6a1ea2a7f3f2d9aaefa7e9defbe31b4edd27ff64689a2
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
-  bullet (8.1.3) sha256=c8163c527324fe1180775be48719875726891622f0a73784658b2992acf3c7cb
+  bullet (8.2.0) sha256=921ed8cde81c939e4eda041345f44f0d0d72c6fbb63aec07d11e5bf653bbe473
   bundler (4.0.14) sha256=d09a0a965cf772266a7e49e83610be7c2f4e49e61134c42a56804bb383cc24b8
   byebug (13.0.0) sha256=d2263efe751941ca520fa29744b71972d39cbc41839496706f5d9b22e92ae05d
   camertron-eprun (1.1.1) sha256=9a8e337916445e62648f6a4f35d229302fc44c50549cc881bff1e296ccf9ce4b
@@ -1374,7 +1374,7 @@ CHECKSUMS
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.2.7) sha256=93e13e1c24f93556671d85d2d79fa228c3485815c50d7e2f265b5330c6528fb7
   rack-cors (3.0.0) sha256=7b95be61db39606906b61b83bd7203fa802b0ceaaad8fcb2fef39e097bf53f68
-  rack-proxy (1.0.1) sha256=cd742611dc3517b6ac60c04d93b2ea7f8a83b1799f109081771ce0f5b8d6e3d7
+  rack-proxy (1.0.2) sha256=9f57da746be62ec3fed46646dbae2d50f7f4ddc39307d693affff9ffd431865b
   rack-session (2.1.2) sha256=595434f8c0c3473ae7d7ac56ecda6cc6dfd9d37c0b2b5255330aa1576967ffe8
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
   rackup (2.3.1) sha256=6c79c26753778e90983761d677a48937ee3192b3ffef6bc963c0950f94688868
@@ -1390,7 +1390,7 @@ CHECKSUMS
   rb-fsevent (0.11.0) sha256=3a02b6360c856cc16e7f62382573b238f5cfb61a48169dd4c83b842c094b5de3
   rb-inotify (0.10.1) sha256=050062d4f31d307cca52c3f6a7f4b946df8de25fc4bd373e1a5142e41034a7ca
   rb_sys (0.9.124) sha256=513476557b12eaf73764b3da9f8746024558fe8699bda785fb548c9aa3877ae7
-  rbs (4.1.3) sha256=0c4474a9751cdc14364bfad0b3e53678323bbdc2c31683b0445932867dbab8c4
+  rbs (4.2.0) sha256=51f7b886dcc05bc09e10b901daa6a81829f6adc03101d6ca9ea4aac6103e0674
   rdoc (8.0.0) sha256=03bf8c08a9639658855a0cfd77c0abca8325c227693f7f33f82957811348c469
   react_on_rails (17.0.1) sha256=fec671b8f93201892f0dd32ab0cc34961eb3de4d1d4a4f273b817eb701277b64
   recaptcha (5.21.2) sha256=8f7bb6cc9f04c523fff3f38126b7c5f1314c35fcb3691fc8e70d2b464533c12a
@@ -1455,7 +1455,7 @@ CHECKSUMS
   seedbank (0.5.0) sha256=9840c0bf3427ac9ac0815feceeceeeac76dc89039503d393a7e220184855f437
   selectize-rails (0.12.1)
   semantic_range (3.1.1) sha256=508333196ef0c7ba33e79579d4df7eb0a41080595e6a655c2515b03d634ec4a9
-  shakapacker (10.3.1) sha256=39647dfccfdc6365ca717629bea43aacd582752be552e77e8eeae495647678c4
+  shakapacker (10.3.2) sha256=cfc8fa328d39b5321912376faa13710bd1ac10bc3eab3c95e6d71eb28f9ba0e0
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoryuken (7.0.3) sha256=622f52ed2bad66bb8679c5878aa714a75db4a411f19738bbbc49608b3a08a8cd
   sidekiq (8.1.7) sha256=91ad48c7e6c32e1846bf1d5b74c27948758049b93fed0cb539f8d586c7de3415
@@ -1508,7 +1508,7 @@ CHECKSUMS
   warden (1.2.9) sha256=46684f885d35a69dbb883deabf85a222c8e427a957804719e143005df7a1efd0
   wca_i18n (0.4.4) sha256=33830f157616a33d10918d4f9e9c1c17e4311731832f19153c3cfcbb51233461
   web-console (4.3.0) sha256=e13b71301cdfc2093f155b5aa3a622db80b4672d1f2f713119cc7ec7ac6a6da4
-  webmock (3.26.3) sha256=77c612816bdcb2fc43db0e42fd98b19be7d4770fd708816fdde65a006664ddec
+  webmock (3.26.4) sha256=8d8da206d217ebe6968cfb09c77f4533c23074e1432bad865f3994eacbaad50d
   websocket-driver (0.8.2) sha256=97c556b019bf3410b4961002ac501621e9322d3f8a7bc02161a09301cc4c4146
   websocket-extensions (0.1.5) sha256=1c6ba63092cda343eb53fc657110c71c754c56484aad42578495227d717a8241
   xpath (3.2.0) sha256=6dfda79d91bb3b949b947ecc5919f042ef2f399b904013eb3ef6d20dd3a4082e
