@@ -76,7 +76,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
         <Text>{formatDateRange(comp.start_date, comp.end_date)}</Text>
       </Table.Cell>
 
-      <Table.Cell>
+      <Table.Cell whiteSpace={{ base: "normal", md: "nowrap" }}>
         <ChakraLink asChild>
           <Link
             href={route({
@@ -89,11 +89,11 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
         </ChakraLink>
       </Table.Cell>
 
-      <Table.Cell width="100%">
+      <Table.Cell width="100%" hideBelow="md">
         <Text>{comp.city}</Text>
       </Table.Cell>
 
-      <Table.Cell textAlign="right">
+      <Table.Cell textAlign="right" hideBelow="md">
         <CountryMap code={comp.country_iso2} fontWeight="bold" t={t} />
       </Table.Cell>
 
