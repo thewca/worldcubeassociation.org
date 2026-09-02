@@ -57,7 +57,6 @@ export function SingleEventSelector({
               disabled={disabled}
               value={eventId}
               maxW="16"
-              cursor="pointer"
             >
               <RadioCard.ItemHiddenInput />
               <RadioCard.ItemControl>
