@@ -116,7 +116,7 @@ export const registrationHistoryUrl = (registrationId) => `<%= CGI.unescape(Rail
 
 export const refundPaymentUrl = (competitionId, paymentIntegration, paymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_refund_path("${competitionId}", "${paymentIntegration}", "${paymentId}")) %>`
 
-export const paymentDenominationUrl = (competitionId, userId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_denomination_path("${competitionId}" , "${userId}")) %>?iso_donation_amount=${isoDonationAmount}`
+export const paymentDenominationUrl = (registrationId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.payment_denomination_api_v1_registration_path("${registrationId}", iso_donation_amount: "${isoDonationAmount}")) %>`
 
 export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_new_id_path) %>`;
 
@@ -298,7 +298,6 @@ export const viewUrls = {
     lastDuplicateCheckerJobRun: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_last_duplicate_checker_job_run_path(competition_id: "${competitionId}")) %>`,
     newcomerNameFormatCheck: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_newcomer_name_format_check_path(competition_id: "${competitionId}")) %>`,
     newcomerDobFormatCheck: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_newcomer_dob_check_path(competition_id: "${competitionId}")) %>`,
-    adminDoComputeAuxiliaryData: `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_do_compute_auxiliary_data_path) %>`,
     unfinishedPersons: (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_unfinished_persons_path(competition_id: "${competitionId}")) %>`,
     pendingResultsSubmissions: `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_results_submissions_path) %>`,
   },

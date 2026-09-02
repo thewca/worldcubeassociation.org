@@ -66,6 +66,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/results/rankings">
     | StaticRoute<"/results/records">
     | StaticRoute<"/score-tools">
+    | StaticRoute<"/search">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
     | StaticRoute<"/translators">;
