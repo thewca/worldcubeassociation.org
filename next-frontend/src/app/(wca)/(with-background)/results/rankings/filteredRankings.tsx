@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { Heading, VStack } from "@chakra-ui/react";
+import React, { useMemo, useTransition } from "react";
+import { Box, Center, Heading, Spinner, VStack } from "@chakra-ui/react";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
 import RankingsTable from "@/components/results/RankingsTable";
@@ -37,77 +37,31 @@ export default function FilteredRecords({
   searchParams,
 }: FilteredRecordsProps) {
   const router = useRouter();
+  // Navigating inside a transition lets us show a spinner while the server
+  // re-renders the table with the new filters
+  const [isPending, startTransition] = useTransition();
 
   const { event, region, gender, show, rankingType } = searchParams;
 
-  const filterActions = useMemo(
-    () => ({
-      setEvent: (event: string) => {
-        if (event === "333mbf") {
-          router.replace(
-            createUrl({
-              event,
-              region,
-              gender,
-              show,
-              rankingType: "single",
-            }),
-          );
-        } else {
-          router.replace(
-            createUrl({
-              event,
-              region,
-              gender,
-              show,
-              rankingType,
-            }),
-          );
-        }
-      },
-      setRegion: (region: string) =>
+  const filterActions = useMemo(() => {
+    const navigate = (params: Partial<FilterParams>) =>
+      startTransition(() =>
         router.replace(
-          createUrl({
-            event,
-            region,
-            gender,
-            show,
-            rankingType,
-          }),
+          createUrl({ event, region, gender, show, rankingType, ...params }),
         ),
-      setGender: (gender: string) =>
-        router.replace(
-          createUrl({
-            event,
-            region,
-            gender,
-            show,
-            rankingType,
-          }),
+      );
+
+    return {
+      setEvent: (event: string) =>
+        navigate(
+          event === "333mbf" ? { event, rankingType: "single" } : { event },
         ),
-      setShow: (show: string) =>
-        router.replace(
-          createUrl({
-            event,
-            region,
-            gender,
-            show,
-            rankingType,
-          }),
-        ),
-      setType: (rankingType: string) =>
-        router.replace(
-          createUrl({
-            event,
-            region,
-            gender,
-            show,
-            rankingType,
-          }),
-        ),
-    }),
-    [event, gender, rankingType, region, router, show],
-  );
+      setRegion: (region: string) => navigate({ region }),
+      setGender: (gender: string) => navigate({ gender }),
+      setShow: (show: string) => navigate({ show }),
+      setType: (rankingType: string) => navigate({ rankingType }),
+    };
+  }, [event, gender, rankingType, region, router, show]);
 
   const { t } = useT();
 
@@ -129,11 +83,18 @@ export default function FilteredRecords({
           "by region": t("results.selector_elements.show_selector.by_region"),
         }}
       />
-      <RankingsTable
-        rankings={rankings}
-        isAverage={rankingType === "average"}
-        isByRegion={show === "by region"}
-      />
+      <Box position="relative" opacity={isPending ? 0.4 : 1}>
+        {isPending && (
+          <Center position="absolute" inset={0} zIndex={1}>
+            <Spinner size="xl" position="sticky" top="50%" />
+          </Center>
+        )}
+        <RankingsTable
+          rankings={rankings}
+          isAverage={rankingType === "average"}
+          isByRegion={show === "by region"}
+        />
+      </Box>
     </VStack>
   );
 }

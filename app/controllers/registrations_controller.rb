@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook payment_denomination]
+  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -23,9 +23,9 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook payment_denomination capture_paypal_payment]
+                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook capture_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index psych_sheet psych_sheet_event stripe_webhook]
   private def competition_must_be_using_wca_registration!
     return if competition_from_params.use_wca_registration?
 
@@ -282,30 +282,7 @@ class RegistrationsController < ApplicationController
   end
 
   def do_import
-    new_locked_users = []
-    # registered_at stores millisecond precision, but we want all registrations
-    #   from CSV import to be considered as one "batch". So we mark a timestamp
-    #   once, and then reuse it throughout the loop.
-    import_time = Time.now.utc
-    emails = @registrations.pluck(:email)
-    ActiveRecord::Base.transaction do
-      @competition.registrations.accepted.each do |registration|
-        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
-      end
-      @registrations.each do |registration_data|
-        user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
-        new_locked_users << user if locked_account_created
-        registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
-          reg.registered_at = import_time
-        end
-        registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::CSV_IMPORT)
-      rescue StandardError => e
-        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_data[:name], error: e))
-      end
-    end
-    new_locked_users.each do |user|
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
-    end
+    Registrations::Helper.import_registrations!(@competition, @registrations, current_user)
     render status: :ok, json: { success: true }
   rescue StandardError => e
     render status: :unprocessable_content, json: { error: e.to_s }
@@ -346,14 +323,13 @@ class RegistrationsController < ApplicationController
         ],
       ).to_h.symbolize_keys
       registration_data = build_wcif_data(**registration_params)
-      user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
+      user = Registrations::Helper.user_for_registration!(registration_data)
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
         reg.registered_at = Time.now.utc
       end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
 
       registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::OTS_FORM)
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later if locked_account_created
     end
     flash[:success] = I18n.t("registrations.flash.added")
     redirect_to competition_registrations_add_url(@competition)
@@ -367,25 +343,6 @@ class RegistrationsController < ApplicationController
     @registration = Registration.find_by(competition: @competition, user: current_user) if current_user.present?
 
     @is_processing = current_user.present? && Rails.cache.read(CacheAccess.registration_processing_cache_key(@competition.id, current_user.id)).present?
-  end
-
-  def payment_denomination
-    competition_id = params[:competition_id]
-    user_id = params[:user_id]
-    registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
-    iso_donation_amount = params[:iso_donation_amount].to_i
-
-    return render status: :bad_request, json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } } if iso_donation_amount.negative?
-
-    ruby_money = registration.outstanding_entry_fees_with_donation(iso_donation_amount)
-    human_amount = helpers.format_money(ruby_money)
-
-    api_amounts = {
-      stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),
-      paypal: PaypalRecord.amount_to_paypal(ruby_money.cents, ruby_money.currency.iso_code),
-    }
-
-    render json: { api_amounts: api_amounts, human_amount: human_amount }
   end
 
   # Respond to asynchronous payment updates from Stripe.
