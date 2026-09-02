@@ -14,19 +14,22 @@ export default function InsufficientCompetitorAlert() {
   const previousRoundId = linkedRoundIds[linkedRoundIds.indexOf(round.id) - 1];
   const previousRound = rounds.find((r) => r.id === previousRoundId);
 
+  const competitorCountNeeded = round.min_competitors_to_open;
+
   const violates9m =
     round.state === "open" &&
+    competitorCountNeeded !== undefined &&
     previousRound !== undefined &&
     // Locked or Open
     "total_competitors" in previousRound &&
-    previousRound.total_competitors < 8;
+    previousRound.total_competitors < competitorCountNeeded;
 
   if (violates9m) {
     return (
       <ClosableAlert
         status="warning"
         title={t("competitions.live.admin.warnings.9m_violated", {
-          competitor_count_needed: 8,
+          competitor_count_needed: competitorCountNeeded,
         })}
       />
     );

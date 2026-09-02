@@ -49,6 +49,7 @@ RSpec.describe ResultsSubmissionController do
       expect { post upload_image_path, params: { image: pdf } }.not_to change(MarkdownImage, :count)
 
       expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body['error']).to be_present
     end
   end
 end

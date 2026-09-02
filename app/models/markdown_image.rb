@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# An image uploaded through a markdown editor. Wrapping the blob in a record is
+# what lets us validate it: UploadController used to create bare blobs, which
+# ActiveStorage has no way to run validations on, so any file at all could be
+# uploaded and then linked to under our own domain.
 class MarkdownImage < ApplicationRecord
   # No usages until a record that embeds this image is saved: the image is
   # uploaded before the parent record exists. See HasMarkdownImages.

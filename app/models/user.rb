@@ -1193,7 +1193,11 @@ class User < ApplicationRecord
   end
 
   def notify_of_results_posted(competition)
-    CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later if results_notifications_enabled?
+    if results_notifications_enabled?
+      CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later
+    elsif locked_account?
+      RegistrationsMailer.notify_registrant_of_locked_account_creation(self, competition).deliver_later
+    end
   end
 
   def maybe_assign_wca_id_by_results(competition, notify: true)
@@ -1240,6 +1244,48 @@ class User < ApplicationRecord
       .flat_map(&:active_roles)
       .select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
       .map(&:user_id)
+  end
+
+  DELEGATE_MILESTONES = [50, 100, 200, 300].freeze
+
+  def self.delegate_milestones_for_digest
+    last_month_start = 1.month.ago.beginning_of_month.to_date
+    last_month_end = 1.month.ago.end_of_month.to_date
+
+    active_delegate_ids = UserRole.active
+                                  .where(group: UserGroup.delegate_regions)
+                                  .pluck(:user_id)
+                                  .uniq
+
+    return {} if active_delegate_ids.empty?
+
+    base_scope = User.joins(:actually_delegated_competitions).where(id: active_delegate_ids)
+
+    before_counts = base_scope
+                    .where(competitions: { end_date: ...last_month_start })
+                    .group("users.id")
+                    .count
+
+    through_counts = base_scope
+                     .where(competitions: { end_date: ..last_month_end })
+                     .group("users.id")
+                     .count
+
+    milestone_achievers = DELEGATE_MILESTONES.index_with do |milestone|
+      through_counts.filter_map do |user_id, through_count|
+        before_count = before_counts.fetch(user_id, 0)
+        user_id if before_count < milestone && through_count >= milestone
+      end
+    end.select { |_milestone, user_ids| user_ids.any? }
+
+    all_ids = milestone_achievers.values.flatten.uniq
+    return {} if all_ids.empty?
+
+    users_by_id = User.where(id: all_ids).index_by(&:id)
+
+    milestone_achievers.transform_values do |user_ids|
+      user_ids.filter_map { |id| users_by_id[id] }.sort_by(&:name)
+    end
   end
 
   def self.search(query, params: {})

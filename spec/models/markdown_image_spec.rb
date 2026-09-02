@@ -44,6 +44,19 @@ RSpec.describe MarkdownImage do
     expect(markdown_image).not_to be_valid
   end
 
+  # The content type the client declares is attacker-controlled, so it is not
+  # what the validation may go on.
+  it "rejects a file that only claims to be a web image" do
+    markdown_image = MarkdownImage.new(uploaded_by: user, visibility: :public)
+    markdown_image.attach_image(io: File.open('spec/support/bylaws.pdf'), filename: 'bylaws.pdf', content_type: 'image/png')
+
+    expect(markdown_image).not_to be_valid
+  end
+
+  it "rejects a record with no file at all" do
+    expect(MarkdownImage.new(uploaded_by: user)).not_to be_valid
+  end
+
   it "is used by the post whose body references it" do
     markdown_image = upload_image
 
@@ -110,6 +123,7 @@ RSpec.describe MarkdownImage do
 
     expect(MarkdownImage.unused).to eq [markdown_image]
   end
+
   describe "visibility" do
     it "defaults to private, so a form that forgets to say cannot leak" do
       expect(MarkdownImage.new.visibility).to eq "private"

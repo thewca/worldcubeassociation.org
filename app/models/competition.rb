@@ -1139,7 +1139,8 @@ class Competition < ApplicationRecord
   end
 
   def guests_entry_fee_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+    guests_enabled? &&
+      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.

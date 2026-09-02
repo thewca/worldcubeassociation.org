@@ -136,7 +136,7 @@ export default function RegionSelector({
         selectionBehavior={nullable ? "clear" : "replace"}
       >
         <Combobox.Control>
-          <Combobox.Input placeholder={name} />
+          <Combobox.Input placeholder={name} cursor="pointer" />
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />
             <Combobox.Trigger />
