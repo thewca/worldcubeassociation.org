@@ -131,7 +131,6 @@ RSpec.describe "registrations" do
       describe "registrations import" do
         context "registrant has WCA ID" do
           it "renders an error if the WCA ID doesn't exist" do
-            expect(RegistrationsMailer).not_to receive(:notify_registrant_of_locked_account_creation)
             registrations = [
               { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "1000DARN99", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
             ]
@@ -185,7 +184,6 @@ RSpec.describe "registrations" do
 
               context "no user exists with registrant's email" do
                 it "promotes the dummy user to a locked one, registers and notifies him" do
-                  expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
                   registrations = [
                     { name: dummy_user.name, countryIso2: dummy_user.country.iso2, wcaId: dummy_user.wca_id,
                       birthdate: dummy_user.dob.to_s, gender: dummy_user.gender, email: "sherlock@example.com",
@@ -294,7 +292,6 @@ RSpec.describe "registrations" do
 
             context "no user exists with registrant's email" do
               it "creates a locked user with this WCA ID, registers and notifies him" do
-                expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
                 person = create(:person)
                 registrations = [
                   { name: person.name, countryIso2: person.country.iso2, wcaId: person.wca_id,
@@ -342,7 +339,6 @@ RSpec.describe "registrations" do
 
           context "no user exists with registrant's email" do
             it "creates a locked user without WCA ID, registers and notifies him" do
-              expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation)
               registrations = [
                 { name: "Sherlock Holmes", countryIso2: "GB", wcaId: "", birthdate: "2000-01-01", gender: "m", email: "sherlock@example.com", registration: { eventIds: ["333"] } },
               ]

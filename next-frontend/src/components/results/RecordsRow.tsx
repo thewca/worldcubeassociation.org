@@ -47,7 +47,7 @@ export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
       <Table.Cell>
         {formatAttemptResult(record.value, record.event_id)}
       </Table.Cell>
-      <CountryCell countryId={record.country_id} />
+      <CountryCell countryId={record.country_id} filterable />
       <CompetitionCell
         competitionId={record.competition_id}
         competitionName={record.competition_name}
@@ -87,7 +87,7 @@ export function HistoryRow({ record, mixed = false }: HistoryRowProps) {
       ) : (
         <Table.Cell />
       )}
-      <CountryCell countryId={record.country_id} />
+      <CountryCell countryId={record.country_id} filterable />
       <CompetitionCell
         competitionId={record.competition_id}
         competitionName={record.competition_name}
@@ -117,7 +117,7 @@ export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
         {formatAttemptResult(record.value, record.event_id)}
       </Table.Cell>
       <PersonCell personId={record.person_id} personName={record.person_name} />
-      <CountryCell countryId={record.country_id} />
+      <CountryCell countryId={record.country_id} filterable />
       <CompetitionCell
         competitionId={record.competition_id}
         competitionName={record.competition_name}

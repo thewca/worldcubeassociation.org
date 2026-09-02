@@ -123,11 +123,6 @@ class AdminController < ApplicationController
     }
   end
 
-  def do_compute_auxiliary_data
-    ComputeAuxiliaryData.perform_later
-    redirect_to panel_page_path(id: User.panel_pages[:computeAuxiliaryData])
-  end
-
   def override_regional_records
     action_params = params
                     .expect(check_regional_records_form: %i[competition_id event_id refresh_index])

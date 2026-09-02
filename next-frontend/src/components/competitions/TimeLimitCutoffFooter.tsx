@@ -85,7 +85,7 @@ export const TimeLimitCutoffFooter: React.FC<
   const qualificationDatesToEvents = events
     .filter((event): event is Required<WcifEvent> => !!event.qualification)
     .reduce((acc, event) => {
-      const date = event.qualification.whenDate;
+      const date = event.qualification.latestResultDate;
 
       return {
         ...acc,
