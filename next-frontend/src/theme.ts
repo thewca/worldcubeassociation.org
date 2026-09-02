@@ -923,6 +923,21 @@ const customConfig = defineConfig({
         },
       },
       ...INTERACTIVITY_OVERRIDES,
+      list: {
+        slots: [],
+        variants: {
+          // Chakra's reset drops the browser's default list padding and its list recipe
+          //   does not put any back, so without this the markers have nowhere to sit and
+          //   the list reads as flush body text.
+          indented: {
+            true: {
+              root: {
+                ps: "6",
+              },
+            },
+          },
+        },
+      },
     },
   },
 });
