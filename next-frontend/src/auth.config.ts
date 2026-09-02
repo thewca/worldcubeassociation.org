@@ -61,6 +61,7 @@ export const siteWcaProvider = baseWcaProvider;
 export const cmsWcaProvider: GenericOAuthConfig = {
   ...baseWcaProvider,
   providerId: WCA_CMS_PROVIDER_ID,
+  name: WCA_APP_NAME,
   scopes: ["openid", "profile", "email", "cms"],
   // Re-sync roles on every CMS login, so team changes in Rails reach Payload.
   overrideUserInfo: true,

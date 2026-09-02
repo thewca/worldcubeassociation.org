@@ -40,6 +40,7 @@ import {
   Args,
 } from "@payloadcms/db-mongodb";
 import { fromContainerMetadata } from "@aws-sdk/credential-providers";
+import { WCA_CMS_PROVIDER_ID } from "@/auth.config";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -60,14 +61,11 @@ function plugins() {
     createBetterAuthPlugin({
       createAuth: createCmsAuth,
       admin: {
-        // The bundled view can show social buttons (`login.enableSocial`), but it builds them
-        //   from the keys of Better Auth's `socialProviders` config, which `genericOAuth`
-        //   providers are deliberately kept out of. So it is replaced wholesale.
-        loginViewComponent: "/components/payload/CmsLoginView#default",
         login: {
           // The plugin's gate looks for a singular `role` we do not have; `access.admin` on
           //   the users collection enforces team membership instead.
           requiredRole: null,
+          enableSocial: [WCA_CMS_PROVIDER_ID],
         },
       },
     }),
