@@ -13,5 +13,4 @@ class MarkdownImage < ApplicationRecord
 
   validates :image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
   validates :image, presence: true
-
 end
