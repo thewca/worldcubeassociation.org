@@ -1,10 +1,16 @@
 import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
 import AnnouncementContent from "@/components/AnnouncementContent";
-import { Announcement } from "@/types/payload";
+import { Announcement, ColorPaletteSelect } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
 import { announcementByline } from "@/components/announcements/announcement";
 
-function AnnouncementItem({ announcement }: { announcement: Announcement }) {
+function AnnouncementItem({
+  announcement,
+  colorPalette,
+}: {
+  announcement: Announcement;
+  colorPalette: ColorPaletteSelect;
+}) {
   return (
     <Accordion.Item
       value={announcement.id}
@@ -19,7 +25,10 @@ function AnnouncementItem({ announcement }: { announcement: Announcement }) {
         </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
-        <AnnouncementContent announcement={announcement} />
+        <AnnouncementContent
+          announcement={announcement}
+          colorPalette={colorPalette}
+        />
       </Accordion.ItemContent>
     </Accordion.Item>
   );
@@ -33,7 +42,7 @@ export default function AnnouncementsCard({
 }: {
   hero: Announcement;
   others: Announcement[];
-  colorPalette: string;
+  colorPalette: ColorPaletteSelect;
   showSeeAll?: boolean;
 }) {
   return (
@@ -45,10 +54,14 @@ export default function AnnouncementsCard({
       flexDirection="column"
       justifyContent="space-between"
     >
-      <AnnouncementItem announcement={hero} />
+      <AnnouncementItem announcement={hero} colorPalette={colorPalette} />
 
       {others.map((announcement) => (
-        <AnnouncementItem key={announcement.id} announcement={announcement} />
+        <AnnouncementItem
+          key={announcement.id}
+          announcement={announcement}
+          colorPalette={colorPalette}
+        />
       ))}
 
       {showSeeAll && (
