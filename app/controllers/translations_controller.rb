@@ -5,11 +5,35 @@ class TranslationsController < ApplicationController
 
   def self.compute_bad_i18n_keys
     base_locales = AvailableLocales::ALL.transform_values { it[:base_locale] || 'en' }
+    memo = {}
 
     (I18n.available_locales - [:en]).index_with do |locale|
-      base_locale = base_locales[locale]
-      base_translation = locale_to_translation(base_locale)
-      locale_to_translation(locale).compare_to(base_translation)
+      effective_bad_i18n_keys(locale, base_locales, memo)
+    end
+  end
+
+  # Bad keys for `locale` relative to its base, unioned with the base locale's
+  # own (chain-resolved) bad keys. This way e.g. fr-CA inherits anything fr is
+  # still missing/outdated against en, instead of stopping at the direct fr diff.
+  def self.effective_bad_i18n_keys(locale, base_locales, memo)
+    locale = locale.to_sym
+    memo[locale] ||= begin
+      base_locale = (base_locales[locale] || 'en').to_sym
+      direct = locale_to_translation(locale).compare_to(locale_to_translation(base_locale))
+
+      if base_locale == :en
+        direct
+      else
+        merge_bad_i18n_keys(direct, effective_bad_i18n_keys(base_locale, base_locales, memo))
+      end
+    end
+  end
+
+  # Union per type (:missing / :unused / :outdated). Values are arrays of
+  # path-segment arrays; Array#| dedups them by value.
+  def self.merge_bad_i18n_keys(*key_hashes)
+    key_hashes.each_with_object({}) do |key_hash, merged|
+      key_hash.each { |type, keys| merged[type] = (merged[type] || []) | keys }
     end
   end
 
