@@ -8,6 +8,7 @@ const _TwFlag = createIcon({
   viewBox: "0 0 640 480",
   path: (
     <>
+      <rect width="640" height="480" fill="#fff" />
       <g>
         <path
           fill="#fff"
@@ -138,11 +139,6 @@ const _TwFlag = createIcon({
       </g>
     </>
   ),
-  defaultProps: {
-    bg: "white",
-    aspectRatio: "landscape",
-    height: "auto",
-  },
 });
 
 export default _TwFlag;
