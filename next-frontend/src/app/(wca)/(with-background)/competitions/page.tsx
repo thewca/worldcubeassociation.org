@@ -59,17 +59,10 @@ import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
 import { LuMapPin, LuSettings2 } from "react-icons/lu";
 import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
-import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
+import { isInProgress } from "@/lib/wca/competitions/statusUtils";
 import _ from "lodash";
 
 const DEBOUNCE_MS = 600;
-
-type CompetitionIndex = components["schemas"]["CompetitionIndex"];
-
-const isInProgress = (comp: CompetitionIndex) =>
-  hasPassed(comp.start_date) &&
-  !hasPassedEndOfDay(comp.end_date) &&
-  !comp.results_posted_at;
 
 // Units offered by the "within X of me" filter. `toKm` converts a radius in that unit to the
 // kilometres the distance calculation works in, and each unit carries its own default and step
@@ -189,10 +182,25 @@ export default function CompetitionsPage() {
 
   const showInProgressSection = debouncedFilterState.timeOrder === "present";
 
-  const [inProgressComps, upcomingComps]: CompetitionIndex[][] =
-    showInProgressSection
-      ? _.partition(competitionsDistanceFiltered, isInProgress)
-      : [[], competitionsDistanceFiltered];
+  const [inProgressComps, upcomingComps] = _.partition(
+    competitionsDistanceFiltered,
+    (competition) => showInProgressSection && isInProgress(competition),
+  );
+
+  // The upcoming table doubles as the placeholder while the first page loads, so it stays
+  // rendered unless the in-progress section has taken every competition.
+  const showUpcomingTable =
+    upcomingComps.length > 0 || inProgressComps.length === 0;
+
+  const listViewFooter = (
+    <ListViewFooter
+      isLoading={competitionsIsFetching}
+      hasMoreCompsToLoad={hasMoreCompsToLoad}
+      numCompetitions={competitionsDistanceFiltered.length}
+      bottomRef={bottomRef}
+      t={t}
+    />
+  );
 
   return (
     <Container>
@@ -374,21 +382,21 @@ export default function CompetitionsPage() {
                     <Heading size="md" paddingY="2">
                       {t("competitions.index.titles.in_progress")}
                     </Heading>
-                    <CompetitionTable competitions={inProgressComps} />
-                    <Heading size="md" paddingY="2">
-                      {t("competitions.index.titles.upcoming")}
-                    </Heading>
+                    <CompetitionTable competitions={inProgressComps}>
+                      {!showUpcomingTable && listViewFooter}
+                    </CompetitionTable>
+                    {showUpcomingTable && (
+                      <Heading size="md" paddingY="2">
+                        {t("competitions.index.titles.upcoming")}
+                      </Heading>
+                    )}
                   </>
                 )}
-                <CompetitionTable competitions={upcomingComps}>
-                  <ListViewFooter
-                    isLoading={competitionsIsFetching}
-                    hasMoreCompsToLoad={hasMoreCompsToLoad}
-                    numCompetitions={upcomingComps.length}
-                    bottomRef={bottomRef}
-                    t={t}
-                  />
-                </CompetitionTable>
+                {showUpcomingTable && (
+                  <CompetitionTable competitions={upcomingComps}>
+                    {listViewFooter}
+                  </CompetitionTable>
+                )}
               </Tabs.Content>
               <Tabs.Content value="map">TBD</Tabs.Content>
             </Card.Body>
@@ -553,7 +561,7 @@ function CompetitionTable({
   competitions,
   children,
 }: {
-  competitions: CompetitionIndex[];
+  competitions: components["schemas"]["CompetitionIndex"][];
   children?: ReactNode;
 }) {
   return (
