@@ -2889,27 +2889,6 @@ en:
     translating: 'Translating the Regulations'
     paragraph3_html: 'If you are interested in adding/updating a translation, please view <a href="https://github.com/thewca/wca-regulations-translations#translation-instructions">the instructions on the GitHub repository for translations</a>.'
   #context: Organizer Guidelines
-  full_organizer_guidelines:
-    description: "Welcome to the WQAC’s collection of Organizer Guidelines. If you’re considering being an organizer then it is highly recommended that you read these documents. They have been divided into essential and highly recommended documents. Make sure you are familiar with the information given as this will allow you to run a high-quality and enjoyable competition!"
-    disclaimer_html: "<strong>Disclaimer</strong>: The WCA does not organize competitions. As an organizer of a WCA sanctioned competition you <strong>must not</strong> sign anything on behalf of the WCA. You should try reaching out to a relevant regional or national cubing association who do organize or assist with organizing competitions."
-    essential:
-      description: "Essential documents"
-      finding-venue: "Finding a venue"
-      orga-team-delegate: "Creating your organization team and approaching a Delegate"
-      budget: "Budgeting a competition"
-      schedule: "Scheduling"
-      checklist: "Competition checklist"
-      registration: "Handling registration"
-      venue-setup: "Venue setup"
-      work-during-comp: "Organizer work during the competition"
-    recommended:
-      title: "Recommended documents"
-      staff: "Assigning volunteers"
-      emails: "Emails"
-      running-systems: "Running and judging systems"
-      new-competitors: "Attitude to new competitors"
-      enhancing-experience: "Enhancing competitor and volunteer experience"
-      reflection: "Organizer reflection"
   organizer_guidelines:
     title: "WCA Competition Organizer Guidelines"
     paragraph0:
