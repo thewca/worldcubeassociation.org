@@ -1643,10 +1643,19 @@ en:
       search: "Search"
       #context: filters competitions by their name
       name: "Name"
-      #context: label of a slider limiting how far away a competition may be, in kilometres
-      distance: "Distance (km)"
-      #context: the setting of the distance slider that applies no limit at all
-      distance_any: "Any"
+      #context: label of the field holding the place that competitions are searched around
+      location: "Location"
+      #context: placeholder of the location field, where a competitor types a street address, city or postcode
+      location_placeholder: "Enter an address"
+      #context: button that fills the location field in with the device's own position
+      use_my_location: "Use my location"
+      #context: label of the field limiting how far away a competition may be from the chosen location
+      distance: "Distance"
+      distance_units:
+        #context: abbreviation for kilometres
+        km: "km"
+        #context: abbreviation for miles
+        mi: "mi"
       advanced_filters: "Advanced Filters"
       state: "When"
       present: "Present"
