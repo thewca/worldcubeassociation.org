@@ -124,6 +124,10 @@ $(() => {
         try {
           const response = await fetchWithAuthenticityToken('/upload/image', { method: 'POST', body: formData });
           const data = await response.json();
+          if (!response.ok) {
+            onError(data.error);
+            return;
+          }
           onSuccess(data.filePath);
         } catch (e) {
           onError(e);
