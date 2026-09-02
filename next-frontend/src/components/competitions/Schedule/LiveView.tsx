@@ -3,6 +3,8 @@
 import { useState } from "react";
 import {
   Card,
+  ClientOnly,
+  Skeleton,
   HStack,
   SimpleGrid,
   Link,
@@ -34,6 +36,7 @@ import { LuLock } from "react-icons/lu";
 import _ from "lodash";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
+import { currentTimeZone } from "@/lib/wca/data/timezones";
 
 interface LiveViewProps {
   timeZones: string[];
@@ -42,7 +45,29 @@ interface LiveViewProps {
   canManage?: boolean;
 }
 
-export default function LiveView({
+export default function LiveView(props: LiveViewProps) {
+  return (
+    <ClientOnly fallback={<LiveScheduleSkeleton />}>
+      <LiveSchedule {...props} />
+    </ClientOnly>
+  );
+}
+
+function LiveScheduleSkeleton() {
+  return (
+    <VStack align="left">
+      <Skeleton width={{ base: "full", md: "3/12" }} height="16" />
+      <Skeleton height="10" />
+      <SimpleGrid columns={{ base: 1, md: 3 }} gap={2}>
+        {_.range(6).map((index) => (
+          <Skeleton key={index} height="28" rounded="md" />
+        ))}
+      </SimpleGrid>
+    </VStack>
+  );
+}
+
+function LiveSchedule({
   timeZones,
   competitionId,
   activities,
@@ -56,13 +81,12 @@ export default function LiveView({
   );
   const firstStartTime = eventActivities[0].startTime;
   const lastStartTime = eventActivities[eventActivities.length - 1].startTime;
-  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const [timeZone, setTimeZone] = useState(browserTimezone);
+  const [timeZone, setTimeZone] = useState(currentTimeZone);
 
   const collection = createListCollection({
-    items: [...timeZones, browserTimezone].map((t) => ({
-      value: t,
-      label: t,
+    items: _.uniq([...timeZones, currentTimeZone]).map((tz) => ({
+      value: tz,
+      label: tz,
     })),
   });
 

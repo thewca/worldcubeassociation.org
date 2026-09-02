@@ -1132,7 +1132,8 @@ class Competition < ApplicationRecord
   end
 
   def guests_entry_fee_required?
-    confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
+    guests_enabled? &&
+      confirmed? && created_at.present? && created_at > Date.new(2018, 8, 22) &&
 
       # The different venues may have different entry fees. It's better for
       # people to leave this blank than to set an incorrect value here.
@@ -1792,14 +1793,15 @@ class Competition < ApplicationRecord
                                                     uses_qualification?
                                                     allow_registration_without_qualification
                                                     force_comment_in_registration],
-                                           methods: %i[qualification_wcif event_ids],
+                                           methods: %i[event_ids],
                                            include: [])
     user_params = {
       preferredEvents: current_user.preferred_events.pluck(:id),
       personalRecords: {
-        single: current_user.ranks_single&.map(&:to_wcif) || [],
-        average: current_user.ranks_average&.map(&:to_wcif) || [],
+        single: current_user.ranks_single&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
+        average: current_user.ranks_average&.map { it.to_wcif(version: WCIF_VERSION_CATALOGUE[:latest]) } || [],
       },
+      qualification_wcif: qualification_wcif(version: WCIF_VERSION_CATALOGUE[:latest]),
     }
     competition_params.merge(user_params)
   end
@@ -1922,14 +1924,23 @@ class Competition < ApplicationRecord
     series_sibling_competitions.ids
   end
 
-  def qualification_wcif
+  def qualification_wcif(version: WCIF_STABLE_VERSION)
     return {} unless uses_qualification?
 
-    competition_events
-      .where.not(qualification: nil)
-      .index_by(&:event_id)
-      .transform_values(&:qualification)
-      .transform_values(&:to_wcif)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+
+    if at_least_v2
+      competition_events
+        .where.not(qualification_condition: nil)
+        .index_by(&:event_id)
+        .transform_values(&:v2_qualification_wcif)
+    else
+      competition_events
+        .where.not(qualification: nil)
+        .index_by(&:event_id)
+        .transform_values(&:qualification)
+        .transform_values(&:to_wcif)
+    end
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)

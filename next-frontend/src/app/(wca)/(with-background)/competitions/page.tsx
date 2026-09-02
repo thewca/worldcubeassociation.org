@@ -7,14 +7,18 @@ import {
   Table,
   Text,
   Card,
+  DatePicker,
   HStack,
-  Slider,
+  parseDate,
+  Portal,
   Input,
   CloseButton,
   InputGroup,
   SimpleGrid,
   Field,
-  ButtonGroup,
+  Group,
+  NumberInput,
+  SegmentGroup,
   Tabs,
   IconButton,
   ClientOnly,
@@ -34,7 +38,7 @@ import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { useSession } from "next-auth/react";
-import { ReactNode, useMemo, useReducer, useState } from "react";
+import { ReactNode, useReducer, useState } from "react";
 import {
   competitionFilterReducer,
   createFilterState,
@@ -67,10 +71,33 @@ const isInProgress = (comp: CompetitionIndex) =>
   !hasPassedEndOfDay(comp.end_date) &&
   !comp.results_posted_at;
 
+// Units offered by the "within X of me" filter. `toKm` converts a radius in that unit to the
+// kilometres the distance calculation works in, and each unit carries its own default and step
+// so that the two can be tuned independently.
+const DISTANCE_UNITS = {
+  km: { toKm: 1, defaultRadius: 100, step: 50 },
+  mi: { toKm: 1.609344, defaultRadius: 100, step: 50 },
+} as const;
+
+type DistanceUnit = keyof typeof DISTANCE_UNITS;
+
+const DEFAULT_DISTANCE_UNIT: DistanceUnit = "km";
+
+const isDistanceUnit = (value: string | null): value is DistanceUnit =>
+  value !== null && value in DISTANCE_UNITS;
+
+// Decimal places shown for the resolved coordinates, roughly street-level precision.
+const COORDINATE_PRECISION = 4;
+
 export default function CompetitionsPage() {
   const session = useSession();
   const [location, setLocation] = useState<GeoCoordinates>();
-  const [distanceFilter, setDistanceFilter] = useState<number>(100);
+  const [distanceUnit, setDistanceUnit] = useState(DEFAULT_DISTANCE_UNIT);
+  // Held as a string because that is what NumberInput controls, and it lets the field go
+  // empty while the competitor is typing.
+  const [radius, setRadius] = useState(
+    DISTANCE_UNITS[DEFAULT_DISTANCE_UNIT].defaultRadius.toString(),
+  );
 
   const api = useAPI();
 
@@ -124,7 +151,8 @@ export default function CompetitionsPage() {
     }
   });
 
-  const geolocationSupported = "geolocation" in navigator;
+  const geolocationSupported =
+    typeof navigator !== "undefined" && "geolocation" in navigator;
 
   const requestGeolocationPermission = () => {
     return navigator.geolocation.getCurrentPosition((position) => {
@@ -132,29 +160,32 @@ export default function CompetitionsPage() {
     });
   };
 
-  const marks = [
-    { value: 0, label: "closest" },
-    { value: 25, label: "close" },
-    { value: 50, label: "far" },
-    { value: 75, label: "furthest" },
-    { value: 100, label: "all" },
-  ];
+  // Switching unit falls back to that unit's default rather than converting, so that each
+  // unit lands on a round number.
+  const changeDistanceUnit = (value: string | null) => {
+    if (!isDistanceUnit(value)) return;
 
-  const competitionsDistanceFiltered = useMemo(() => {
-    if (!rawCompetitionData) return [];
+    setDistanceUnit(value);
+    setRadius(DISTANCE_UNITS[value].defaultRadius.toString());
+  };
 
-    const flatPages = rawCompetitionData.pages.flatMap((page) => page);
+  const loadedCompetitions =
+    rawCompetitionData?.pages.flatMap((page) => page) ?? [];
 
-    if (location === undefined || distanceFilter === 100) return flatPages;
+  // An empty or half-typed radius means "no limit yet" rather than "everything is too far away".
+  const maxDistanceKm = Number(radius) * DISTANCE_UNITS[distanceUnit].toKm;
+  const hasDistanceLimit = maxDistanceKm > 0;
 
-    return flatPages.filter(
-      (competition) =>
-        getDistanceInKm(location, {
-          longitude: competition.longitude_degrees,
-          latitude: competition.latitude_degrees,
-        }) <= distanceFilter,
-    );
-  }, [location, distanceFilter, rawCompetitionData]);
+  const competitionsDistanceFiltered =
+    location !== undefined && hasDistanceLimit
+      ? loadedCompetitions.filter(
+          (competition) =>
+            getDistanceInKm(location, {
+              longitude: competition.longitude_degrees,
+              latitude: competition.latitude_degrees,
+            }) <= maxDistanceKm,
+        )
+      : loadedCompetitions;
 
   const showInProgressSection = debouncedFilterState.timeOrder === "present";
 
@@ -162,10 +193,6 @@ export default function CompetitionsPage() {
     showInProgressSection
       ? _.partition(competitionsDistanceFiltered, isInProgress)
       : [[], competitionsDistanceFiltered];
-
-  if (!competitionsDistanceFiltered) {
-    return "Error";
-  }
 
   return (
     <Container>
@@ -188,18 +215,20 @@ export default function CompetitionsPage() {
                 <Card.Title>
                   <HStack gap={3}>
                     <AllCompsIcon fontSize="5xl" marginTop="-2" />
-                    <Text textStyle="h1">All Competitions</Text>
+                    <Text textStyle="h1">
+                      {t("competitions.index.all_competitions")}
+                    </Text>
                   </HStack>
                 </Card.Title>
                 <Tabs.List>
                   <Tabs.Trigger value="list">
                     <ListIcon />
-                    List
+                    {t("competitions.index.list")}
                   </Tabs.Trigger>
                   <BetaDisabledTooltip>
                     <Tabs.Trigger value="map" disabled>
                       <MapIcon />
-                      Map
+                      {t("competitions.index.map")}
                     </Tabs.Trigger>
                   </BetaDisabledTooltip>
                 </Tabs.List>
@@ -209,7 +238,7 @@ export default function CompetitionsPage() {
               <VStack gap="3" borderBottom="black">
                 <FormEventSelector
                   selectedEvents={filterState.selectedEvents}
-                  title="Event"
+                  title={t("competitions.index.event")}
                   onEventClick={(eventId) =>
                     dispatchFilter({ type: "toggle_event", eventId })
                   }
@@ -231,7 +260,7 @@ export default function CompetitionsPage() {
                     }
                   />
                   <Field.Root>
-                    <Field.Label>Name</Field.Label>
+                    <Field.Label>{t("competitions.index.name")}</Field.Label>
                     <InputGroup
                       endElement={
                         <CloseButton
@@ -246,7 +275,7 @@ export default function CompetitionsPage() {
                       }
                     >
                       <Input
-                        placeholder="Search"
+                        placeholder={t("competitions.index.search")}
                         value={filterState.search}
                         onChange={(e) => {
                           dispatchFilter({
@@ -258,55 +287,55 @@ export default function CompetitionsPage() {
                     </InputGroup>
                   </Field.Root>
                 </SimpleGrid>
-                <HStack gap="2" width="full" justify="space-between">
-                  <Slider.Root
-                    width="250px"
-                    colorPalette="blue"
-                    value={[distanceFilter]}
-                    onValueChange={(e) => setDistanceFilter(e.value[0])}
-                    step={25}
-                    disabled={location === undefined}
-                  >
-                    <Slider.Label asChild>
-                      <HStack justifyContent="space-between">
-                        Distance
-                        {geolocationSupported && location === undefined && (
-                          <IconButton
-                            size="xs"
-                            variant="outline"
-                            colorPalette="blue"
-                            onClick={() => requestGeolocationPermission()}
-                          >
-                            <LuMapPin />
-                          </IconButton>
-                        )}
-                      </HStack>
-                    </Slider.Label>
-                    <Slider.Control>
-                      <Slider.Track>
-                        <Slider.Range />
-                      </Slider.Track>
-                      <Slider.Thumbs />
-                      <Slider.Marks marks={marks} />
-                    </Slider.Control>
-                  </Slider.Root>
-                  <ButtonGroup variant="outline">
-                    {/* TODO: replace these buttons with DatePicker (Chakra does not have one by default) */}
-                    <Button>
-                      <CompRegoOpenDateIcon /> Date From
-                    </Button>
-                    <Button>
-                      <CompRegoCloseDateIcon />
-                      Date To{" "}
-                    </Button>
-                  </ButtonGroup>
+                <HStack
+                  gap="2"
+                  width="full"
+                  justify="space-between"
+                  align="flex-start"
+                >
+                  <LocationFilter
+                    location={location}
+                    geolocationSupported={geolocationSupported}
+                    onLocateClick={requestGeolocationPermission}
+                    radius={radius}
+                    onRadiusChange={setRadius}
+                    distanceUnit={distanceUnit}
+                    onDistanceUnitChange={changeDistanceUnit}
+                    t={t}
+                  />
+                  <HStack gap="2">
+                    <DateFilter
+                      label={t("competitions.index.from_date")}
+                      icon={<CompRegoOpenDateIcon />}
+                      isoDate={filterState.customStartDate}
+                      max={filterState.customEndDate}
+                      onDateChange={(customStartDate) =>
+                        dispatchFilter({
+                          type: "set_custom_start_date",
+                          customStartDate,
+                        })
+                      }
+                    />
+                    <DateFilter
+                      label={t("competitions.index.to_date")}
+                      icon={<CompRegoCloseDateIcon />}
+                      isoDate={filterState.customEndDate}
+                      min={filterState.customStartDate}
+                      onDateChange={(customEndDate) =>
+                        dispatchFilter({
+                          type: "set_custom_end_date",
+                          customEndDate,
+                        })
+                      }
+                    />
+                  </HStack>
                   {/* TODO: add "accordion" functionality to this button */}
                   <BetaDisabledTooltip>
                     <Button variant="outline" disabled>
                       <Icon>
                         <LuSettings2 />
                       </Icon>{" "}
-                      Advanced Filters
+                      {t("competitions.index.advanced_filters")}
                     </Button>
                   </BetaDisabledTooltip>
                 </HStack>
@@ -316,19 +345,28 @@ export default function CompetitionsPage() {
               <Tabs.Content value="list">
                 <HStack justify="space-between">
                   <HStack>
-                    <Text>Registration Key:</Text>
+                    <Text>{t("competitions.index.registration_key")}</Text>
                     <CompRegoFullButOpenOrangeIcon />
-                    <Text>Full</Text>
+                    <Text>
+                      {t("competitions.index.registration_status.full")}
+                    </Text>
                     <CompRegoNotFullOpenGreenIcon />
-                    <Text>Open</Text>
+                    <Text>
+                      {t("competitions.index.registration_status.open")}
+                    </Text>
                     <CompRegoNotOpenYetGreyIcon />
-                    <Text>Not Open</Text>
+                    <Text>
+                      {t("competitions.index.registration_status.not_open")}
+                    </Text>
                     <CompRegoClosedRedIcon />
-                    <Text>Closed</Text>
+                    <Text>
+                      {t("competitions.index.registration_status.closed")}
+                    </Text>
                   </HStack>
                   <Text>
-                    Currently Displaying: {competitionsDistanceFiltered.length}{" "}
-                    competitions
+                    {t("competitions.index.currently_displaying", {
+                      count: competitionsDistanceFiltered.length,
+                    })}
                   </Text>
                 </HStack>
                 {inProgressComps.length > 0 && (
@@ -358,6 +396,156 @@ export default function CompetitionsPage() {
         </Card.Root>
       </VStack>
     </Container>
+  );
+}
+
+function LocationFilter({
+  location,
+  geolocationSupported,
+  onLocateClick,
+  radius,
+  onRadiusChange,
+  distanceUnit,
+  onDistanceUnitChange,
+  t,
+}: {
+  location: GeoCoordinates | undefined;
+  geolocationSupported: boolean;
+  onLocateClick: () => void;
+  radius: string;
+  onRadiusChange: (radius: string) => void;
+  distanceUnit: DistanceUnit;
+  onDistanceUnitChange: (distanceUnit: string | null) => void;
+  t: TFunction;
+}) {
+  const { step } = DISTANCE_UNITS[distanceUnit];
+
+  const formattedLocation = location
+    ? `${location.latitude.toFixed(COORDINATE_PRECISION)}, ${location.longitude.toFixed(COORDINATE_PRECISION)}`
+    : "";
+
+  const distanceUnitItems = [
+    { value: "km", label: t("competitions.index.distance_units.km") },
+    { value: "mi", label: t("competitions.index.distance_units.mi") },
+  ];
+
+  return (
+    <VStack gap="2" width={{ base: "full", md: "sm" }} align="stretch">
+      <Field.Root>
+        <Field.Label>{t("competitions.index.location")}</Field.Label>
+        <Group attached width="full">
+          {/* Typing an address needs a geocoder, which the beta does not have yet. */}
+          <BetaDisabledTooltip>
+            <Input
+              disabled
+              placeholder={t("competitions.index.location_placeholder")}
+              value={formattedLocation}
+            />
+          </BetaDisabledTooltip>
+          <ClientOnly>
+            {geolocationSupported && (
+              <IconButton
+                variant="outline"
+                colorPalette="blue"
+                aria-label={t("competitions.index.use_my_location")}
+                onClick={onLocateClick}
+              >
+                <LuMapPin />
+              </IconButton>
+            )}
+          </ClientOnly>
+        </Group>
+      </Field.Root>
+      <Field.Root>
+        <Field.Label>{t("competitions.index.distance")}</Field.Label>
+        <HStack gap="2" width="full">
+          <NumberInput.Root
+            width="full"
+            value={radius}
+            onValueChange={(e) => onRadiusChange(e.value)}
+            min={step}
+            step={step}
+            disabled={location === undefined}
+          >
+            <Group attached width="full">
+              <NumberInput.DecrementTrigger asChild>
+                <Button variant="outline">−{step}</Button>
+              </NumberInput.DecrementTrigger>
+              <NumberInput.Input textAlign="center" />
+              <NumberInput.IncrementTrigger asChild>
+                <Button variant="outline">+{step}</Button>
+              </NumberInput.IncrementTrigger>
+            </Group>
+          </NumberInput.Root>
+          <SegmentGroup.Root
+            value={distanceUnit}
+            onValueChange={(e) => onDistanceUnitChange(e.value)}
+            disabled={location === undefined}
+          >
+            <SegmentGroup.Indicator />
+            <SegmentGroup.Items items={distanceUnitItems} />
+          </SegmentGroup.Root>
+        </HStack>
+      </Field.Root>
+    </VStack>
+  );
+}
+
+function DateFilter({
+  label,
+  icon,
+  isoDate,
+  onDateChange,
+  min,
+  max,
+}: {
+  label: string;
+  icon: ReactNode;
+  isoDate: string | null;
+  onDateChange: (isoDate: string | null) => void;
+  min?: string | null;
+  max?: string | null;
+}) {
+  return (
+    <DatePicker.Root
+      width="3xs"
+      colorPalette="blue"
+      positioning={{ sameWidth: false }}
+      value={isoDate ? [parseDate(isoDate)] : []}
+      min={min ? parseDate(min) : undefined}
+      max={max ? parseDate(max) : undefined}
+      // `valueAsString` is localised for display; the DateValue stringifies to ISO 8601.
+      onValueChange={(details) =>
+        onDateChange(details.value[0]?.toString() ?? null)
+      }
+    >
+      <DatePicker.Label>{label}</DatePicker.Label>
+      <DatePicker.Control>
+        <DatePicker.Input />
+        <DatePicker.IndicatorGroup>
+          <DatePicker.ClearTrigger />
+          <DatePicker.Trigger>{icon}</DatePicker.Trigger>
+        </DatePicker.IndicatorGroup>
+      </DatePicker.Control>
+      <Portal>
+        <DatePicker.Positioner>
+          <DatePicker.Content>
+            <DatePicker.View view="day">
+              <DatePicker.Header />
+              <DatePicker.DayTable />
+            </DatePicker.View>
+            <DatePicker.View view="month">
+              <DatePicker.Header />
+              <DatePicker.MonthTable />
+            </DatePicker.View>
+            <DatePicker.View view="year">
+              <DatePicker.Header />
+              <DatePicker.YearTable />
+            </DatePicker.View>
+          </DatePicker.Content>
+        </DatePicker.Positioner>
+      </Portal>
+    </DatePicker.Root>
   );
 }
 

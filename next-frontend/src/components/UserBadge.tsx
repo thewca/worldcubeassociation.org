@@ -18,6 +18,7 @@ interface UserBadgeData {
   profilePicture?: components["schemas"]["UserAvatar"];
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
   wcaId: string;
+  action?: React.ReactNode;
 }
 
 const UserBadge: React.FC<UserBadgeData> = ({
@@ -25,6 +26,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
   profilePicture,
   roles,
   wcaId,
+  action,
 }) => {
   return (
     <LinkBox asChild>
@@ -81,6 +83,11 @@ const UserBadge: React.FC<UserBadgeData> = ({
             )}
           </Card.Body>
         </Center>
+        {action && (
+          <Center marginLeft="auto" paddingRight="3">
+            {action}
+          </Center>
+        )}
       </Card.Root>
     </LinkBox>
   );
