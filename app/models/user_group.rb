@@ -200,8 +200,9 @@ class UserGroup < ApplicationRecord
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def changes_in_group_for_digest
-    duration_end_date = Time.current.beginning_of_month
-    duration_start_date = duration_end_date - 1.month
+    last_month = 1.month.ago
+    duration_start_date = last_month.beginning_of_month
+    duration_end_date = last_month.end_of_month
     sorted_users = []
     team_member_changes = {}
 
@@ -215,7 +216,7 @@ class UserGroup < ApplicationRecord
     no_more_members = []
 
     roles
-      .select { |role| role.updated_at >= duration_start_date && role.updated_at < duration_end_date }
+      .select { |role| role.updated_at.between?(duration_start_date, duration_end_date) }
       .sort_by { |role| [role.user.name, role.updated_at] } # Sorts the members alphabetically.
       .each do |role|
         user = role.user

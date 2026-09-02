@@ -1248,9 +1248,8 @@ class User < ApplicationRecord
         before_count = before_counts.fetch(user_id, 0)
         user_id if before_count < milestone && through_count >= milestone
       end
-    end
+    end.select { |_milestone, user_ids| user_ids.any? }
 
-    milestone_achievers.select! { |_milestone, user_ids| user_ids.any? }
     all_ids = milestone_achievers.values.flatten.uniq
     return {} if all_ids.empty?
 
