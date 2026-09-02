@@ -12,9 +12,6 @@ class MarkdownImage < ApplicationRecord
   MAX_UPLOAD_SIZE = 5.megabytes
 
   validates :image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
-  validate :image_must_be_attached
+  validates :image, presence: true
 
-  private def image_must_be_attached
-    errors.add(:image, :blank) unless self.image.attached?
-  end
 end
