@@ -1264,6 +1264,7 @@ en:
       payment_requested_on: "Payment requested on: %{date}"
       #context: Counts how many parallel registrations in the same Series there are. Will display a number behind this label.
       series_registrations: "Series registrations"
+      search_by_name: "Search by name"
       total: "Total"
     new_registration:
       title: "Register for %{comp}"
