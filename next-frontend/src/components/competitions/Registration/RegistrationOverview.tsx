@@ -86,8 +86,9 @@ export function RegistrationStatus({
 
 /**
  * What a competitor sees once they have registered. The summary and the form they edit it with
- * take the same place in the card, so that switching between them keeps the status alert and the
- * heading the competitor is reading in place - `children` is the form.
+ * take the same place in the card, so that switching between them keeps the heading the competitor
+ * is reading in place - `children` is the form. The registration's standing is said by the approval
+ * step above rather than here.
  */
 export default function RegistrationOverview({
   competitionInfo,
@@ -158,7 +159,6 @@ export default function RegistrationOverview({
 
   return (
     <VStack gap={4} alignItems="stretch" width="full">
-      <RegistrationStatus registration={registration} />
       <Heading textStyle="h3">
         {t("competitions.nav.menu.registration")}
       </Heading>

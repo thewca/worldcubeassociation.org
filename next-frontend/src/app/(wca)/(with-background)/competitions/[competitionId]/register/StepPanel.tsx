@@ -1,13 +1,17 @@
 "use client";
 
 import { Steps, VStack } from "@chakra-ui/react";
-import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import type { components } from "@/types/openapi";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
-import PaymentStep from "@/components/competitions/Registration/PaymentStep";
 import RegistrationOverview, {
   RegistrationStatus,
 } from "@/components/competitions/Registration/RegistrationOverview";
+import {
+  activeStepIndex,
+  isGatingStep,
+  StepContent,
+  type StepContext,
+} from "@/components/competitions/Registration/steps";
 import { useT } from "@/lib/i18n/useI18n";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -46,8 +50,8 @@ export default function StepPanel({
 }) {
   const { t } = useT();
 
-  // Every lane the backend builds is a lane for registering, so it always carries a competing step -
-  //   the panel has nothing to show without one.
+  // Which steps there are, and in which order, is the server's business - but what this lane is
+  //   for is registering, so the competing step is the one thing it is built around.
   const competingParameters = steps.find(
     (step) => step.key === "competing",
   )!.parameters;
@@ -60,7 +64,7 @@ export default function StepPanel({
 
   // Kept apart from the acknowledgement itself: ticking the box would otherwise swap the panel out
   //   from under the competitor before they ever reach the Continue button.
-  const [hasStartedRegistering, setHasStartedRegistering] = useState(false);
+  const [hasAcceptedRequirements, setHasAcceptedRequirements] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -134,7 +138,7 @@ export default function StepPanel({
       {
         onSuccess: () => {
           // Signing up again starts at the requirements, not where the competitor left off.
-          setHasStartedRegistering(false);
+          setHasAcceptedRequirements(false);
           toaster.create({
             id: "registration-cancelled",
             type: "success",
@@ -215,91 +219,62 @@ export default function StepPanel({
     setIsEditing(editing);
   };
 
-  // `onClose` only where there is a summary to go back to, which is what tells the form it may
-  //   offer a way out of itself.
-  const registrationForm = (onClose?: () => void) => (
-    <CompetingStep
-      competitionInfo={competitionInfo}
-      parameters={competingParameters}
-      registration={registration}
-      form={form}
-      isSubmitting={
-        createRegistration.isPending ||
-        (patchRegistration.isPending && !isCancelling) ||
-        isAwaitingCreation
-      }
-      onClose={onClose}
-    />
-  );
-
   // Withdrawing puts the competitor back at the start: signing up again means going through the
   //   requirements and, where there is a fee, paying it - so they get the whole flow back rather
   //   than a summary of a registration that no longer stands.
-  const hasWithdrawn =
-    registration?.competing.registration_status === "cancelled";
+  const hasRegistration =
+    (registration !== null &&
+      registration.competing.registration_status !== "cancelled") ||
+    isAwaitingCreation;
 
-  // Registering is the only thing the stepper is for. Once there is a registration that stands -
-  //   even a rejected one - the overview takes over, and everything still outstanding is said
-  //   there rather than by a strip of circles.
-  if ((registration !== null && !hasWithdrawn) || isAwaitingCreation) {
-    // Only a registration still waiting for approval has a fee to chase: organizers accepting or
-    //   waitlisting someone settles the question - their fee has been waived, or is being
-    //   collected some other way - and a withdrawn or rejected competitor owes nothing at all.
-    const paymentStep = steps.find((step) => step.key === "payment");
+  // Only a registration still waiting for approval has a fee to chase: organizers accepting or
+  //   waitlisting someone settles the question - their fee has been waived, or is being collected
+  //   some other way - and a withdrawn or rejected competitor owes nothing at all.
+  const isPaymentOutstanding =
+    registration !== null &&
+    registration.competing.registration_status === "pending" &&
+    !registration.payment?.has_paid;
 
-    const isPaymentOutstanding =
-      registration !== null &&
-      registration.competing.registration_status === "pending" &&
-      !registration.payment?.has_paid;
+  const context: StepContext = {
+    competitionInfo,
+    registration,
+    hasRegistration,
+    hasAcknowledgedRequirements,
+    onAcknowledgedChange: setHasAcknowledgedRequirements,
+    hasAcceptedRequirements,
+    onAcceptRequirements: () => setHasAcceptedRequirements(true),
+    isPaymentOutstanding,
+    // `onClose` only where there is a summary to go back to, which is what tells the form it may
+    //   offer a way out of itself.
+    registrationForm: (onClose?: () => void) => (
+      <CompetingStep
+        competitionInfo={competitionInfo}
+        parameters={competingParameters}
+        registration={registration}
+        form={form}
+        isSubmitting={
+          createRegistration.isPending ||
+          (patchRegistration.isPending && !isCancelling) ||
+          isAwaitingCreation
+        }
+        onClose={onClose}
+      />
+    ),
+  };
 
-    return (
-      <VStack width="full" gap="4" align="stretch">
-        {isPaymentOutstanding && paymentStep && (
-          <PaymentStep
-            competitionInfo={competitionInfo}
-            registration={registration}
-            deadline={paymentStep.deadline}
-          />
-        )}
-        <RegistrationOverview
-          competitionInfo={competitionInfo}
-          registration={registration}
-          queueCount={queueStatus?.queue_count}
-          canEdit={
-            registration !== null &&
-            canEditRegistration(competingParameters, registration)
-          }
-          isEditing={isEditing}
-          onEditingChange={startEditing}
-          isCancelling={isCancelling}
-          onCancel={cancelRegistration}
-        >
-          {registrationForm(() => setIsEditing(false))}
-        </RegistrationOverview>
-      </VStack>
-    );
-  }
-
-  // Before there is a registration the flow is strictly linear, so `Steps` can derive everything
-  //   it shows from the position of the step the competitor is on.
-  const requirementsStepIndex = steps.findIndex(
-    (step) => step.key === "requirements",
-  );
-  const competingStepIndex = steps.findIndex(
-    (step) => step.key === "competing",
-  );
+  const currentStep = activeStepIndex(steps, context);
 
   return (
     <VStack width="full" gap="4" align="stretch">
-      {registration !== null && (
+      {/* Withdrawing hands the competitor back to the start of the flow, and this is what tells
+          them why the panel they were looking at has reset. */}
+      {registration !== null && currentStep < steps.length && (
         <RegistrationStatus registration={registration} />
       )}
       <Steps.Root
         count={steps.length}
+        step={currentStep}
         colorPalette="blue"
-        step={
-          hasStartedRegistering ? competingStepIndex : requirementsStepIndex
-        }
         // Four labelled steps do not fit side by side on a phone, so there they become one step per
         //   row. `flexDirection` because the vertical variant otherwise puts the strip beside the
         //   panel rather than above it, which is even narrower.
@@ -307,7 +282,7 @@ export default function StepPanel({
         flexDirection="column"
         gap="8"
       >
-        {/* Purely a map of what is coming: payment and approval are reached by registering, not by
+        {/* Purely a map of what is coming: a step is reached by finishing the one before it, not by
           clicking ahead, so the steps are shown rather than offered as navigation. */}
         <Steps.List>
           {steps.map((step, index) => {
@@ -328,17 +303,42 @@ export default function StepPanel({
           })}
         </Steps.List>
 
-        <Steps.Content index={requirementsStepIndex}>
-          <RequirementsStep
-            hasAcknowledged={hasAcknowledgedRequirements}
-            onAcknowledgedChange={setHasAcknowledgedRequirements}
-            onContinue={() => setHasStartedRegistering(true)}
-          />
-        </Steps.Content>
+        {/* Only the steps that ask something of the competitor are walked through one at a time. */}
+        {steps.map(
+          (step, index) =>
+            isGatingStep(step) && (
+              <Steps.Content key={step.key} index={index}>
+                <StepContent step={step} context={context} />
+              </Steps.Content>
+            ),
+        )}
 
-        <Steps.Content index={competingStepIndex}>
-          {registrationForm()}
-        </Steps.Content>
+        <Steps.CompletedContent>
+          <VStack width="full" gap="4" align="stretch">
+            {/* The steps the competitor only watches say their piece together, in the order the
+                server listed them, above the registration they are all about. */}
+            {steps
+              .filter((step) => !isGatingStep(step))
+              .map((step) => (
+                <StepContent key={step.key} step={step} context={context} />
+              ))}
+            <RegistrationOverview
+              competitionInfo={competitionInfo}
+              registration={registration}
+              queueCount={queueStatus?.queue_count}
+              canEdit={
+                registration !== null &&
+                canEditRegistration(competingParameters, registration)
+              }
+              isEditing={isEditing}
+              onEditingChange={startEditing}
+              isCancelling={isCancelling}
+              onCancel={cancelRegistration}
+            >
+              {context.registrationForm(() => setIsEditing(false))}
+            </RegistrationOverview>
+          </VStack>
+        </Steps.CompletedContent>
       </Steps.Root>
     </VStack>
   );
