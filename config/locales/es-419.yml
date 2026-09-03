@@ -3348,6 +3348,8 @@ es-419:
     index:
       #original_hash: db98a68
       title: Competiciones
+      #original_hash: 6e2eb0a
+      all_competitions: Todas las competiciones
       #original_hash: 6a72085
       all_events: Todos
       #original_hash: 6d76b81
@@ -3360,10 +3362,29 @@ es-419:
       list: Listado
       #original_hash: ab478f3
       map: Mapa
+      #original_hash: ad8919a
+      event: Evento
       #original_hash: 0f21717
       region: Región
       #original_hash: bce0641
       search: Buscar
+      #original_hash: 709a232
+      name: Nombre
+      #original_hash: d219c68
+      location: Ubicación
+      #original_hash: d98bf85
+      location_placeholder: Ingresa una dirección
+      #original_hash: 0132375
+      use_my_location: Usar mi ubicación
+      #original_hash: 4232080
+      distance: Distancia
+      distance_units:
+        #original_hash: 08ec69f
+        km: km
+        #original_hash: 9c51ad8
+        mi: mi
+      #original_hash: cf963e5
+      advanced_filters: Filtros avanzados
       #original_hash: 769bb19
       state: Cuándo
       #original_hash: 4e9f7a3
@@ -3457,6 +3478,26 @@ es-419:
           full: >-
             Se ha alcanzado el límite de competidores, los nuevos registros irán
             a la lista de espera.
+      #original_hash: 1cab715
+      registration_key: 'Clave de registro:'
+      registration_status:
+        #original_hash: 10b28a8
+        full: Completo
+        #original_hash: cf9b770
+        open: Abierto
+        #original_hash: 44bb7df
+        not_open: Sin abrir
+        #original_hash: 88d86b7
+        closed: Cerrado
+      #original_hash: 184f3ab
+      currently_displaying:
+        zero: 'Se muestran %{count} competiciones'
+        one: 'Se muestra %{count} competición'
+        other: 'Se muestran %{count} competiciones'
+      #original_hash: 74d8290
+      register_now: Registrarse ahora
+      #original_hash: fd9d092
+      view_competition: Ver competición
       #original_hash: 28531af
       no_more_comps: Sin más competiciones.
       #original_hash: 8b09d74
@@ -5362,12 +5403,11 @@ es-419:
             WCA</a> cercano. La supervisión de un Delegado es necesaria para
             sancionar la competición oficialmente. El Delegado guiará a los
             organizadores para conseguir una competición exitosa.
-          #original_hash: 576c3b8
+          #original_hash: de18a9f
           '4': >-
             Hay más información disponible en inglés en <a target='_blank'
-            href='https://www.cubingusa.com/cguide.php'>esta guía</a>. (Ante
-            cualquier conflicto entre este recurso externo y el Reglamento de la
-            WCA, prevalece nuestro Reglamento.)
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>esta
+            guía</a>.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -5666,6 +5706,8 @@ es-419:
     competition_templates: Plantillas de competición
     #original_hash: 5ca0558
     certificates: Plantillas de certificados del WCT
+    #original_hash: 16d7bab
+    orga_handbook: Manual para organizadores
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
@@ -6101,13 +6143,14 @@ es-419:
         La <a href="/faq">sección de preguntas frecuentes</a> responde a
         múltiples preguntas frecuentes sobre el Reglamento de la WCA.
     panel4:
-      #original_hash: ad5f6e7
-      title: Directrices para los Organizadores
-      #original_hash: 9bbdf16
+      #original_hash: d0e369e
+      title: Manual para organizadores
+      #original_hash: d619471
       content1_html: >-
         Si estás interesado en organizar una competición o ya has planeado
-        organizar una, por favor, lee nuestras <a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Directrices para Organizadores</a>.
+        organizar una, por favor, lee el <a
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Manual
+        para organizadores</a>.
       #original_hash: 5016669
       content2_html: >-
         Este documento contiene información importante y debería ser leído por
