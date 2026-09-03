@@ -2106,6 +2106,9 @@ en:
         processing_longer: "Your registration has been received, and will be processed soon - this can take a moment if our servers are busy."
         processing_queue: "Lots of Registrations being processed, %{queueCount} in the queue."
         event_limit: "This competition limits the amount of events you can register for to %{max_events}."
+        waiting_list_count:
+          one: "There is %{count} competitor on the waiting list."
+          other: "There are %{count} competitors on the waiting list."
       errors:
         events: "Loading Events failed, please try again"
         #context: These are error codes coming from the registration service

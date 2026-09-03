@@ -41,8 +41,9 @@ function RegistrationFullMessage({
           {t(message, { competitor_limit: competitionInfo.competitor_limit })}
         </Alert.Title>
         <Alert.Description>
-          {t("competitions.registration_v2.update.waitlist")}:{" "}
-          {waitingListCount}
+          {t("competitions.registration_v2.register.waiting_list_count", {
+            count: waitingListCount,
+          })}
         </Alert.Description>
       </Alert.Content>
     </Alert.Root>
