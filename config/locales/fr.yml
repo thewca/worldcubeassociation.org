@@ -119,6 +119,8 @@ fr:
     555bf: Cube 5x5x5 à l'aveugle
     #original_hash: cedbf87
     333mbf: 3x3x3 résolutions multiples à l'aveugle
+    #original_hash: a103de4
+    fto: Octaminx (FTO)
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
@@ -2566,7 +2568,7 @@ fr:
     #original_hash: 34eb009
     will_close_html: 'Les inscriptions ferment dans <strong>%{days}</strong> le %{time}.'
     #original_hash: dc8a520
-    closed_html: 'Les inscriptions ont fermées il y a <strong>%{days}</strong> le %{time}.'
+    closed_html: 'Les inscriptions ont fermé il y a <strong>%{days}</strong> le %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} pour vérifier le statut de votre inscription. Si vous n'avez
@@ -2747,8 +2749,12 @@ fr:
       registrations_file_hint: >-
         Fichier CSV avec les colonnes suivantes : Status, Name, Region, WCA ID,
         Birth Date, Gender, Email et une colonne pour chaque épreuve.
+      #original_hash: 01beb54
+      preview: Aperçu des données d'inscription
       #original_hash: d6fbc9d
       import: Importer
+      #original_hash: 77dfd21
+      cancel: Annuler
       errors:
         #original_hash: 0ef547d
         error: 'Erreur lors de l''importation de %{registration} : %{error}.'
@@ -2798,6 +2804,10 @@ fr:
       ots_not_enabled: >-
         Les inscriptions sont terminées et l'inscription sur place n'est pas
         activée - vous devez d'abord modifier la compétition pour l'activer.
+      #original_hash: ed9d329
+      ots_before_registration_open: >-
+        L'inscription sur place ne sera possible qu'une fois que les
+        inscriptions auront été ouvertes.
       #original_hash: 61125b5
       competition_over: >-
         Il n'est pas possible d'ajouter des inscriptions sur place après la fin
@@ -3055,6 +3065,13 @@ fr:
           round_locked: >-
             Le prochain tour a déjà commencé, les modifications éventuelles
             n'auront aucune incidence sur celui-ci !
+          #original_hash: 3380184
+          9m_violated: >-
+            Le tour précédent ne comporte pas suffisamment de résultats
+            enregistrés pour satisfaire aux exigences de la règle 9m3. Si, au
+            moment de la soumission des résultats, le tour précédent ne compte
+            pas au moins %{competitor_count_needed} résultats enregistrés, les
+            résultats de ce tour ne seront pas validés.
         quit:
           #original_hash: de62de1
           title: Retirer compétiteur
@@ -3110,6 +3127,12 @@ fr:
               Ajoutez un compétiteur au tour ; comme le deuxième tour de la
               double confrontation n'est pas ouvert, vous devrez l'ajouter
               séparément.
+          #original_hash: b3bdfaa
+          event_edit_warning: >-
+            Ce compétiteur n'est pas inscrit à cette épreuve, et le règlement de
+            la compétition n'autorise plus la modification des inscriptions.
+            Vous pouvez tout de même l'ajouter, mais assurez-vous que c'est bien
+            ce que vous souhaitez faire.
       results:
         #original_hash: 4705687
         competitor: Compétiteur
@@ -4593,6 +4616,10 @@ fr:
       cannot_delete_confirmed: Impossible de supprimer une compétition confirmée.
       #original_hash: 191df37
       must_contain_event: doit contenir au moins une épreuve pour cette compétition
+      #original_hash: d01c9f5
+      fto_not_yet_allowed: >-
+        L'Octaminx (FTO) ne peut pas être utilisé lors des compétitions débutant
+        avant le %{date}.
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
         doit avoir au moins un tour et tous les tours doivent être inclus dans
@@ -6122,6 +6149,86 @@ fr:
       contenu ci-dessous n'est pas traduit.
     #original_hash: 2c23c1a
     incident: 'Incident :'
+    #original_hash: 42edeaa
+    title: Registre des incidents
+    #original_hash: c387a75
+    page_title: 'Incident : %{title}'
+    #original_hash: 70c5337
+    not_found: Incident introuvable
+    #original_hash: 251a7bb
+    back_to_log: Retour au journal des incidents
+    #original_hash: bce0641
+    search_placeholder: Rechercher
+    #original_hash: bae7d5b
+    status: Statut
+    #original_hash: d999aeb
+    resolved: Résolu
+    #original_hash: 96f608c
+    pending: En attente
+    #original_hash: 4a0e607
+    sent_in_digest: Envoyé dans un résumé
+    #original_hash: 35f49dc
+    sent: Envoyé
+    #original_hash: 93934ad
+    showing_entries: >-
+      Affichage des éléments %{first} à %{last} sur %{total} avec
+      <select></select> par page
+    #original_hash: 329a7c2
+    not_public_warning: >-
+      Cet incident n'a pas encore été résolu ; il n'est donc pas accessible au
+      public.
+    #original_hash: 0d96264
+    public_summary: Description et résolution de l'incident
+    #original_hash: 47f8842
+    private_description: Description (réservée aux délégués)
+    #original_hash: 504b671
+    private_wrc_decision: Décision du WRC (réservée aux délégués)
+    tags:
+      #original_hash: 0fd2d3d
+      regulation: Règlement
+      #original_hash: 3f63aa0
+      guideline: Recommandation
+      #original_hash: 180b14c
+      search_with_tag: Rechercher les incidents associés à ce tag
+      #original_hash: d25382e
+      filter_by_tag: Filtrer par ce tag
+      #original_hash: 491db57
+      competition_page: Page de la compétition
+      #original_hash: a2bfe4c
+      delegate_report: Rapport des délégués
+    admin:
+      #original_hash: 5656400
+      publish: Publier
+      #original_hash: 1ac0a74
+      unpublish: Retirer de la vue du public
+      #original_hash: 5301648
+      edit: Modifier
+      #original_hash: 577ef7d
+      destroy: Supprimer
+      #original_hash: 77dfd21
+      cancel: Annuler
+      #original_hash: 04a2122
+      confirm: Confirmer
+      #original_hash: 6fc0529
+      change_status: Modifier le statut
+      #original_hash: a926b77
+      destroy_title: Supprimer l'incident
+      #original_hash: b9bea79
+      confirm_publish: >-
+        Vous êtes sur le point de rendre public ce rapport d'incident, êtes-vous
+        sûr ?
+      #original_hash: f683adb
+      confirm_unpublish: >-
+        Vous êtes sur le point de retirer ce rapport d'incident de la vue du
+        public. Êtes-vous sûr de vouloir le faire ?
+      #original_hash: 02e27c6
+      confirm_destroy: Êtes-vous sûr de vouloir supprimer cet incident ?
+      #original_hash: 8fa3ce7
+      publish_error: Impossible de publier cet incident.
+      #original_hash: 229c8ce
+      unpublish_error: Impossible de retirer cet incident de la vue du public.
+      #original_hash: e332db5
+      destroy_error: Impossible de supprimer cet incident.
   about_regulations:
     #original_hash: 6bce1b5
     title: À propos du Règlement
