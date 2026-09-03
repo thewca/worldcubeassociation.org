@@ -171,7 +171,7 @@ export default function RegistrationOverview({
               {t("competitions.competition_form.events")}
             </DataList.ItemLabel>
             <DataList.ItemValue>
-              <HStack>
+              <HStack wrap="wrap">
                 {registration.competing.event_ids.map((eventId) => (
                   <EventIcon key={eventId} eventId={eventId} size="lg" />
                 ))}
