@@ -236,7 +236,10 @@ export default function RegistrationOverview({
             onClick={() => onEditingChange(true)}
           >
             <LuPencil />
-            {t("registrations.update")}
+            <Text hideBelow="md">{t("registrations.update")}</Text>
+            <Text hideFrom="md">
+              {t("competition_tabs.form_elements.update")}
+            </Text>
           </Button>
         )}
         {CANCELLABLE_STATUSES.includes(status ?? "") && (
@@ -247,7 +250,10 @@ export default function RegistrationOverview({
             onClick={requestCancellation}
           >
             <LuTrash2 />
-            {t("registrations.delete_registration")}
+            <Text hideBelow="md">{t("registrations.delete_registration")}</Text>
+            <Text hideFrom="md">
+              {t("competition_tabs.form_elements.delete")}
+            </Text>
           </Button>
         )}
       </ButtonGroup>
