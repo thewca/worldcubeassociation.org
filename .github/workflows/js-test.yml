@@ -66,13 +66,14 @@ jobs:
         run: yarn vitest run
       - name: Run build
         run: yarn run build
-      - name: Verify a single Emotion instance
-        # Turbopack can resolve @emotion/react to two live copies within one
-        # graph (vercel/next.js#91411), which silently breaks Chakra's SSR
-        # styling: an unstyled first paint and a hydration mismatch, with no
-        # build error to notice. Reads the built source maps, so it has to run
-        # after the build.
-        run: yarn run check:emotion
+
+      - name: Verify no externalized package reaches Emotion
+        # The other half of #91411, which check:emotion cannot see. A package in
+        # serverExternalPackages is loaded by Node, which resolves
+        # @emotion/react to a different build than Turbopack does, so a second
+        # live copy appears without ever entering the bundle. Reads the config
+        # Next.js resolved (plugins add to it), so it has to run after the build.
+        run: yarn run check:externals
       - name: Verify newrelic loads from standalone output
         # Simulates the production container startup: NODE_OPTIONS='-r newrelic'.
         # If any transitive dep is missing from the standalone node_modules
