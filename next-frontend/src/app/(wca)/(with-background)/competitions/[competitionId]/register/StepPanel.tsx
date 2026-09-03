@@ -3,9 +3,7 @@
 import { Steps, VStack } from "@chakra-ui/react";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import type { components } from "@/types/openapi";
-import CompetingStep, {
-  type RegistrationFormValues,
-} from "@/components/competitions/Registration/CompetingStep";
+import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
 import RegistrationOverview, {
   RegistrationStatus,
@@ -20,6 +18,11 @@ import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import useRegistration, {
   registrationQueryKey,
 } from "@/lib/wca/registrations/useRegistration";
+import {
+  registrationFormValues,
+  useRegistrationForm,
+  type RegistrationFormValues,
+} from "@/lib/wca/registrations/registrationForm";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -42,6 +45,12 @@ export default function StepPanel({
   initialRegistration: Registration | null;
 }) {
   const { t } = useT();
+
+  // Every lane the backend builds is a lane for registering, so it always carries a competing step -
+  //   the panel has nothing to show without one.
+  const competingParameters = steps.find(
+    (step) => step.key === "competing",
+  )!.parameters;
 
   const api = useAPI();
   const queryClient = useQueryClient();
@@ -70,7 +79,9 @@ export default function StepPanel({
     { onError: showRegistrationError },
   );
 
-  const updateRegistration = api.useMutation(
+  // Editing a registration and withdrawing from one are the same PATCH, so they share the mutation:
+  //   what they have in common lives here, and each action adds its own outcome where it is called.
+  const patchRegistration = api.useMutation(
     "patch",
     "/v1/registrations/{registrationId}",
     {
@@ -81,40 +92,65 @@ export default function StepPanel({
           data.registration,
         );
         setIsEditing(false);
-        toaster.create({
-          id: "registration-updated",
-          type: "success",
-          description: t("registrations.flash.updated"),
-        });
       },
     },
   );
 
-  // Withdrawing goes through the same endpoint as any other change, but it is its own action with
-  //   its own outcome to report, so it gets its own handle on the mutation.
-  const cancelRegistration = api.useMutation(
-    "patch",
-    "/v1/registrations/{registrationId}",
-    {
-      onError: showRegistrationError,
-      onSuccess: (data) => {
-        queryClient.setQueryData(
-          registrationQueryKey(competitionInfo.id, userId),
-          data.registration,
-        );
-        setIsEditing(false);
-        // Signing up again starts at the requirements, not where the competitor left off.
-        setHasStartedRegistering(false);
-        toaster.create({
-          id: "registration-cancelled",
-          type: "success",
-          description: t(
-            "competitions.registration_v2.register.registration_status.cancelled",
-          ),
-        });
+  const updateRegistration = (
+    current: Registration,
+    { comment, guests, eventIds }: RegistrationFormValues,
+  ) =>
+    patchRegistration.mutate(
+      {
+        params: { path: { registrationId: current.id } },
+        body: {
+          guests,
+          competing: {
+            event_ids: eventIds,
+            comment,
+            // Registering again after withdrawing means moving back to `pending` for approval.
+            ...(current.competing.registration_status === "cancelled" && {
+              status: "pending",
+            }),
+          },
+        },
       },
-    },
-  );
+      {
+        onSuccess: () =>
+          toaster.create({
+            id: "registration-updated",
+            type: "success",
+            description: t("registrations.flash.updated"),
+          }),
+      },
+    );
+
+  const cancelRegistration = (registrationId: number) =>
+    patchRegistration.mutate(
+      {
+        params: { path: { registrationId } },
+        body: { competing: { status: "cancelled" } },
+      },
+      {
+        onSuccess: () => {
+          // Signing up again starts at the requirements, not where the competitor left off.
+          setHasStartedRegistering(false);
+          toaster.create({
+            id: "registration-cancelled",
+            type: "success",
+            description: t(
+              "competitions.registration_v2.register.registration_status.cancelled",
+            ),
+          });
+        },
+      },
+    );
+
+  // One mutation serves both actions, so which of the two is in flight is told by what is being
+  //   sent - and each button only spins for its own action.
+  const isCancelling =
+    patchRegistration.isPending &&
+    patchRegistration.variables?.body.competing?.status === "cancelled";
 
   // Creating a registration only puts it on a queue, and the queue - not Rails - is what knows
   //   whether it has been worked off yet, so that is what we wait on.
@@ -144,40 +180,39 @@ export default function StepPanel({
   const isAwaitingCreation =
     createRegistration.isSuccess && registration === null;
 
-  // `flatMap` rather than `find`, because returning `[]` from the non-matching branch is what lets
-  //   TypeScript narrow the step union down to the step we asked for.
-  const competingParameters = steps.flatMap((step) =>
-    step.key === "competing" ? [step.parameters] : [],
-  )[0];
-
   const submitRegistration = ({
     comment,
     guests,
     eventIds,
   }: RegistrationFormValues) => {
-    const competing = { event_ids: eventIds, comment };
-
     if (registration === null) {
       createRegistration.mutate({
         params: { path: { competitionId: competitionInfo.id } },
-        body: { user_id: userId, guests, competing },
+        body: {
+          user_id: userId,
+          guests,
+          competing: { event_ids: eventIds, comment },
+        },
       });
-      return;
+    } else {
+      updateRegistration(registration, { comment, guests, eventIds });
+    }
+  };
+
+  const form = useRegistrationForm({
+    registration,
+    parameters: competingParameters,
+    onSubmit: submitRegistration,
+  });
+
+  // Reset on the way in rather than on the way out, so that the form the competitor opens always
+  //   starts from what is currently saved - and `isDefaultValue` means "nothing changed yet".
+  const startEditing = (editing: boolean) => {
+    if (editing) {
+      form.reset(registrationFormValues(registration, competingParameters));
     }
 
-    updateRegistration.mutate({
-      params: { path: { registrationId: registration.id } },
-      body: {
-        guests,
-        competing: {
-          ...competing,
-          // Registering again after withdrawing means moving back to `pending` for approval.
-          ...(registration.competing.registration_status === "cancelled" && {
-            status: "pending" as const,
-          }),
-        },
-      },
-    });
+    setIsEditing(editing);
   };
 
   // `onClose` only where there is a summary to go back to, which is what tells the form it may
@@ -187,12 +222,12 @@ export default function StepPanel({
       competitionInfo={competitionInfo}
       parameters={competingParameters}
       registration={registration}
+      form={form}
       isSubmitting={
         createRegistration.isPending ||
-        updateRegistration.isPending ||
+        (patchRegistration.isPending && !isCancelling) ||
         isAwaitingCreation
       }
-      onSubmit={submitRegistration}
       onClose={onClose}
     />
   );
@@ -210,6 +245,8 @@ export default function StepPanel({
     // Only a registration still waiting for approval has a fee to chase: organizers accepting or
     //   waitlisting someone settles the question - their fee has been waived, or is being
     //   collected some other way - and a withdrawn or rejected competitor owes nothing at all.
+    const paymentStep = steps.find((step) => step.key === "payment");
+
     const isPaymentOutstanding =
       registration !== null &&
       registration.competing.registration_status === "pending" &&
@@ -217,19 +254,13 @@ export default function StepPanel({
 
     return (
       <VStack width="full" gap="4" align="stretch">
-        {isPaymentOutstanding &&
-          steps.flatMap((step) =>
-            step.key === "payment"
-              ? [
-                  <PaymentStep
-                    key={step.key}
-                    competitionInfo={competitionInfo}
-                    registration={registration}
-                    deadline={step.deadline}
-                  />,
-                ]
-              : [],
-          )}
+        {isPaymentOutstanding && paymentStep && (
+          <PaymentStep
+            competitionInfo={competitionInfo}
+            registration={registration}
+            deadline={paymentStep.deadline}
+          />
+        )}
         <RegistrationOverview
           competitionInfo={competitionInfo}
           registration={registration}
@@ -239,14 +270,9 @@ export default function StepPanel({
             canEditRegistration(competingParameters, registration)
           }
           isEditing={isEditing}
-          onEditingChange={setIsEditing}
-          isCancelling={cancelRegistration.isPending}
-          onCancel={(registrationId) =>
-            cancelRegistration.mutate({
-              params: { path: { registrationId } },
-              body: { competing: { status: "cancelled" } },
-            })
-          }
+          onEditingChange={startEditing}
+          isCancelling={isCancelling}
+          onCancel={cancelRegistration}
         >
           {registrationForm(() => setIsEditing(false))}
         </RegistrationOverview>
@@ -256,10 +282,12 @@ export default function StepPanel({
 
   // Before there is a registration the flow is strictly linear, so `Steps` can derive everything
   //   it shows from the position of the step the competitor is on.
-  const requirementsStep = steps.findIndex(
+  const requirementsStepIndex = steps.findIndex(
     (step) => step.key === "requirements",
   );
-  const competingStep = steps.findIndex((step) => step.key === "competing");
+  const competingStepIndex = steps.findIndex(
+    (step) => step.key === "competing",
+  );
 
   return (
     <VStack width="full" gap="4" align="stretch">
@@ -269,7 +297,9 @@ export default function StepPanel({
       <Steps.Root
         count={steps.length}
         colorPalette="blue"
-        step={hasStartedRegistering ? competingStep : requirementsStep}
+        step={
+          hasStartedRegistering ? competingStepIndex : requirementsStepIndex
+        }
         // Four labelled steps do not fit side by side on a phone, so there they become one step per
         //   row. `flexDirection` because the vertical variant otherwise puts the strip beside the
         //   panel rather than above it, which is even narrower.
@@ -298,7 +328,7 @@ export default function StepPanel({
           })}
         </Steps.List>
 
-        <Steps.Content index={requirementsStep}>
+        <Steps.Content index={requirementsStepIndex}>
           <RequirementsStep
             hasAcknowledged={hasAcknowledgedRequirements}
             onAcknowledgedChange={setHasAcknowledgedRequirements}
@@ -306,7 +336,7 @@ export default function StepPanel({
           />
         </Steps.Content>
 
-        <Steps.Content index={competingStep}>
+        <Steps.Content index={competingStepIndex}>
           {registrationForm()}
         </Steps.Content>
       </Steps.Root>
