@@ -79,7 +79,19 @@ export default async function RegisterPage({
 
   const competitionId = (await params).competitionId;
 
-  const competitionInfoResponse = await getCompetitionInfo(competitionId);
+  // None of the four depends on the answer to any of the others, so they go out together rather
+  //   than making the competitor wait for four round trips in a row.
+  const [
+    competitionInfoResponse,
+    stepConfig,
+    registrationResponse,
+    eligibility,
+  ] = await Promise.all([
+    getCompetitionInfo(competitionId),
+    fetchConfig(session.accessToken, competitionId),
+    fetchRegistration(session.accessToken, competitionId, session.wcaUserId),
+    fetchEligibility(session.accessToken, competitionId),
+  ]);
 
   if (competitionInfoResponse.error) {
     return <OpenapiError t={t} response={competitionInfoResponse.response} />;
@@ -87,17 +99,9 @@ export default async function RegisterPage({
 
   const competitionInfo = competitionInfoResponse.data;
 
-  const stepConfig = await fetchConfig(session.accessToken, competitionId);
-
   if (stepConfig.error) {
     return <OpenapiError t={t} response={stepConfig.response} />;
   }
-
-  const registrationResponse = await fetchRegistration(
-    session.accessToken,
-    competitionId,
-    session.wcaUserId,
-  );
 
   // A 404 is how the backend says "this user has not registered yet", which is a normal state here.
   if (
@@ -106,11 +110,6 @@ export default async function RegisterPage({
   ) {
     return <OpenapiError t={t} response={registrationResponse.response} />;
   }
-
-  const eligibility = await fetchEligibility(
-    session.accessToken,
-    competitionId,
-  );
 
   if (eligibility.error) {
     return <OpenapiError t={t} response={eligibility.response} />;
