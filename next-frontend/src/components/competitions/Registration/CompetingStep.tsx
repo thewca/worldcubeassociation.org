@@ -18,45 +18,20 @@ import {
   DEFAULT_GUEST_LIMIT,
 } from "@/lib/wca/data/wca";
 import { useT } from "@/lib/i18n/useI18n";
-import {
-  disabledEventIds,
-  preselectedEventIds,
-} from "@/lib/wca/registrations/eventSelection";
+import { disabledEventIds } from "@/lib/wca/registrations/eventSelection";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { qualificationToString } from "@/lib/wca/wcif/rounds";
 import type { components } from "@/types/openapi";
-import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import type {
+  RegistrationForm,
+  RegistrationFormValues,
+} from "@/lib/wca/registrations/registrationForm";
 import { LuSend, LuUndo2 } from "react-icons/lu";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type CompetingStepParameters =
   components["schemas"]["CompetingStepConfig"]["parameters"];
 type Registration = components["schemas"]["RegistrationDataV2"];
-
-const { fieldContext, formContext } = createFormHookContexts();
-
-const { useAppForm } = createFormHook({
-  fieldComponents: {},
-  formComponents: {},
-  fieldContext,
-  formContext,
-});
-
-export interface RegistrationFormValues {
-  comment: string;
-  guests: number;
-  eventIds: string[];
-}
-
-const defaultFormValues = (
-  registration: Registration | null,
-  parameters: CompetingStepParameters,
-): RegistrationFormValues => ({
-  comment: registration?.competing.comment ?? "",
-  guests: registration?.guests ?? 0,
-  eventIds:
-    registration?.competing.event_ids ?? preselectedEventIds(parameters),
-});
 
 const toggleEvent = (eventId: string, selectedEventIds: string[]) => {
   if (selectedEventIds.includes(eventId)) {
@@ -71,26 +46,20 @@ export default function CompetingStep({
   competitionInfo,
   parameters,
   registration,
+  form,
   isSubmitting,
-  onSubmit,
   onClose,
 }: {
   competitionInfo: CompetitionInfo;
   parameters: CompetingStepParameters;
   registration: Registration | null;
+  form: RegistrationForm;
   isSubmitting: boolean;
-  onSubmit: (values: RegistrationFormValues) => void;
   // Only set when the form is opened from the registration overview, which is the one place the
   //   competitor can leave it again without submitting anything.
   onClose?: () => void;
 }) {
   const { t } = useT();
-
-  // Defaults only apply on mount, which is what we want: this component is mounted afresh every
-  //   time the competitor opens the form, so it always starts from what is currently saved.
-  const form = useAppForm({
-    defaultValues: defaultFormValues(registration, parameters),
-  });
 
   const maxEvents = parameters.events_per_registration_limit ?? Infinity;
 
@@ -142,7 +111,7 @@ export default function CompetingStep({
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        onSubmit(form.state.values);
+        form.handleSubmit();
       }}
     >
       <Fieldset.Root disabled={isEditingLocked}>
