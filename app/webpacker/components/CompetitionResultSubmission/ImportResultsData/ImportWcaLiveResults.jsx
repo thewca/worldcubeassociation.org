@@ -4,7 +4,7 @@ import { Button, Form, Message } from 'semantic-ui-react';
 import Errored from '../../Requests/Errored';
 import importWcaLiveResults from '../api/importWcaLiveResults';
 import Loading from '../../Requests/Loading';
-import { contactRecipientUrl, uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
+import { uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import LiveResultsPreview from './LiveResultsPreview';
 
@@ -34,15 +34,17 @@ export default function ImportWcaLiveResults({
 
   return (
     <>
+      <p>
+        You may use this feature to import results which have been synchronized
+        to the WCA website already.
+        Common use cases include WCA Live or Integrated Live Results.
+      </p>
       <Message warning>
         <Message.Header>Please Note</Message.Header>
         <Message.List>
-          <Message.Item>
-            You may use this feature to import results from WCA Live or Integrated Live Results.
-          </Message.Item>
           {scoretakingSoftware === 'wca_live' && (
             <Message.Item>
-              If you are using WCA Live, make sure to hit
+              Within WCA Live, make sure to hit
               {' '}
               <b>&quot;Synchronize&quot;</b>
               {' '}
@@ -55,6 +57,13 @@ export default function ImportWcaLiveResults({
               &quot;Import Live Results&quot;
             </Message.Item>
           )}
+          {scoretakingSoftware === 'external' && (
+            <Message.Item>
+              It is your responsibility to make sure that the external tool
+              has written the results to our API. Consult with the developers
+              of your external scoretaking tool if necessary.
+            </Message.Item>
+          )}
           <Message.Item>
             Don&apos;t forget to also
             {' '}
@@ -65,11 +74,13 @@ export default function ImportWcaLiveResults({
             <code>{uploadedScrambleFilesCount}</code>
           </Message.Item>
           <Message.Item>
-            This feature is still in Beta.
-            Please report any errors or issues to the
+            You can use the &quot;Preview&quot; button below to show a
             {' '}
-            <a href={contactRecipientUrl('wst')}>WCA Software Team</a>
-            .
+            <b>temporary, unofficial preview</b>
+            {' '}
+            of the results which are currently stored on our website.
+            This is only meant as a basic, simple sanity check
+            and the final posting will be handled by WRT!
           </Message.Item>
         </Message.List>
       </Message>
