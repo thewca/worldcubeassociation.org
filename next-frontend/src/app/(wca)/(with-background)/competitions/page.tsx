@@ -143,8 +143,8 @@ export default function CompetitionsPage() {
     },
   );
 
-  const bottomRef = useOnInView(() => {
-    if (hasMoreCompsToLoad && !competitionsIsFetching) {
+  const bottomRef = useOnInView((inView) => {
+    if (inView && hasMoreCompsToLoad && !competitionsIsFetching) {
       competitionsFetchNextPage();
     }
   });
@@ -211,7 +211,13 @@ export default function CompetitionsPage() {
           )}
         </ClientOnly>
         <Card.Root size={{ base: "sm", md: "md" }} width="full">
-          <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
+          <Tabs.Root
+            variant="subtle"
+            colorPalette="blue"
+            defaultValue="list"
+            lazyMount
+            unmountOnExit
+          >
             <Card.Header asChild>
               <Stack
                 direction={{ base: "column", md: "row" }}
