@@ -3,9 +3,12 @@ import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
-import { authjsPlugin } from "payload-authjs";
+import {
+  betterAuthCollections,
+  createBetterAuthPlugin,
+} from "@delmaredigital/payload-better-auth";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { payloadAuthConfig } from "@/auth.config";
+import { cmsBetterAuthOptions, createCmsAuth } from "@/payload.auth";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
@@ -37,6 +40,7 @@ import {
   Args,
 } from "@payloadcms/db-mongodb";
 import { fromContainerMetadata } from "@aws-sdk/credential-providers";
+import { WCA_CMS_PROVIDER_ID } from "@/auth.config";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -46,8 +50,30 @@ function plugins() {
   const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
-    authjsPlugin({
-      authjsConfig: payloadAuthConfig,
+    betterAuthCollections({
+      betterAuthOptions: cmsBetterAuthOptions,
+      // `users` exists already, so it is augmented with the schema fields rather than
+      //   generated; `skip` only covers the case where it is missing entirely.
+      skipCollections: ["user"],
+      // Roles come from OIDC; nobody is promoted for being first to log in.
+      firstUserAdmin: false,
+    }),
+    createBetterAuthPlugin({
+      createAuth: createCmsAuth,
+      admin: {
+        login: {
+          // The plugin's gate looks for a singular `role` we do not have; `access.admin` on
+          //   the users collection enforces team membership instead.
+          requiredRole: null,
+          // The plugin defaults to `/admin`; our admin route is `/payload` (see `routes` below).
+          afterLoginPath: "/payload",
+          enableSocial: [WCA_CMS_PROVIDER_ID],
+          // WCA OIDC is the only way in: no local passwords, no self-registration.
+          enablePassword: false,
+          enableSignUp: false,
+          enableForgotPassword: false,
+        },
+      },
     }),
     s3Storage({
       enabled: isProduction,

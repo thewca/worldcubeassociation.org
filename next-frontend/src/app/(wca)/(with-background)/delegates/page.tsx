@@ -21,7 +21,7 @@ import _ from "lodash";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { LuPencil } from "react-icons/lu";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 import AdminModeToggle from "@/app/(wca)/(with-background)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
 import { Metadata } from "next";

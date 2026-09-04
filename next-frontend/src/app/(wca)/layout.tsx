@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import React from "react";
-import AuthProvider from "@/providers/SessionProvider";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
@@ -40,14 +39,12 @@ export default async function RootLayout({
       <body className={appFont.className}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <WCAQueryClientProvider>
-            <AuthProvider>
-              <UiProvider>
-                <Navbar />
-                <NextTopLoader height={5} />
-                {children}
-                <Footer />
-              </UiProvider>
-            </AuthProvider>
+            <UiProvider>
+              <Navbar />
+              <NextTopLoader height={5} />
+              {children}
+              <Footer />
+            </UiProvider>
           </WCAQueryClientProvider>
         </ThemeProvider>
       </body>

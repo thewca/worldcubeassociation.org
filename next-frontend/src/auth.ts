@@ -1,4 +1,92 @@
-import NextAuth from "next-auth";
-import { authConfig } from "@/auth.config";
+import { betterAuth, type BetterAuthOptions } from "better-auth";
+import { customSession, genericOAuth } from "better-auth/plugins";
+import { getAccessToken } from "better-auth/api";
+import { headers } from "next/headers";
+import {
+  siteWcaProvider,
+  wcaUserAdditionalFields,
+  WCA_APP_NAME,
+} from "@/auth.config";
 
-export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
+// Split out because `customSession` needs the same options object to infer the session type it
+//   wraps; without it the WCA fields on `user` come back untyped.
+const siteAuthOptions = {
+  appName: WCA_APP_NAME,
+  secret: process.env.AUTH_SECRET,
+  // Pinned so it cannot drift into the CMS instance's namespace (see `payload.auth.ts`).
+  advanced: { cookiePrefix: WCA_APP_NAME },
+  // `baseURL` is deliberately unset: Better Auth then infers it per request, which is what
+  //   makes dev and Docker work unconfigured. Behind a proxy, set BETTER_AUTH_URL.
+  user: { additionalFields: wcaUserAdditionalFields },
+  plugins: [genericOAuth({ config: [siteWcaProvider] })],
+} satisfies BetterAuthOptions;
+
+/**
+ * Omitting `database` is what puts Better Auth in stateless mode: session and linked account
+ * (including the Rails tokens) live only in signed cookies. That is how ordinary WCA users stay
+ * out of Payload's Mongo — only CMS logins get a row, via the instance in `payload.auth.ts`.
+ */
+export const auth = betterAuth({
+  ...siteAuthOptions,
+  plugins: [
+    ...siteAuthOptions.plugins,
+    // Must stay last: `customSession` overrides `/get-session`, and it should wrap whatever
+    //   the plugins above have already contributed to the session.
+    customSession(async ({ user, session }, ctx) => {
+      // This is NOT a second OAuth handshake, and despite the HTTP-shaped signature it is not
+      // a request either: `getAccessToken` is declared with `createAuthEndpoint`, so `method`
+      // and `body` below are the route metadata the router would otherwise supply, while the
+      // exported value is a plain function we call in-process. The token from the initial
+      // handshake is already stored in the signed account cookie, since this instance has no
+      // database, and this reads it back, reaching Rails only when that token is within 5s of
+      // expiring.
+      const result = await getAccessToken({
+        ...ctx,
+        method: "POST",
+        // `providerId` selection was dropped in Better Auth 1.7; a stateless instance has no
+        //   account row to address by id, so the signed account cookie is the only source.
+        body: { useAccountCookie: true, userId: user.id },
+        asResponse: false,
+        returnHeaders: false,
+      }).catch((error) => {
+        console.error("[auth] could not resolve a WCA access token", {
+          userId: user.id,
+          error,
+        });
+        return null;
+      });
+
+      // Spreading `ctx` inherits the response-shaping flags `customSession` set for its own
+      //   `getSession` call, and they beat the ones passed above, so this comes back as a
+      //   `{ response }` envelope. Unwrap on the key rather than on flags we do not control.
+      const tokens = (
+        result && "response" in result ? result.response : result
+      ) as { accessToken?: string } | null;
+
+      return {
+        user,
+        session,
+        accessToken: tokens?.accessToken,
+      };
+    }, siteAuthOptions),
+  ],
+});
+
+type RawSession = Awaited<ReturnType<typeof auth.api.getSession>>;
+
+export type Session = NonNullable<RawSession> & { accessToken: string };
+
+/**
+ * A session whose token could not be refreshed is reported as no session: the refresh token is
+ * spent and Rails will reject us, so a fresh login is the only way on. Collapsing the two cases
+ * lets call sites keep one `if (!session)` guard and treat `accessToken` as always present.
+ */
+export async function getSession(): Promise<Session | null> {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session?.accessToken) {
+    return null;
+  }
+
+  return session as Session;
+}

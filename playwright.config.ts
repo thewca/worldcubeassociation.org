@@ -71,7 +71,16 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
+  // Rails first: these start in order, and NextJS' health check renders a page, which discovers
+  //   the OIDC provider from Rails at boot.
   webServer: [
+    {
+      command: 'bin/rails server',
+      env: { RAILS_ENV: 'test' },
+      name: 'Rails',
+      url: process.env.PW_TEST_BACKEND_HEALTH_URL,
+      reuseExistingServer: !process.env.CI,
+    },
     {
       cwd: 'next-frontend',
       // Ideally we would want this to be `yarn start`
@@ -82,13 +91,6 @@ export default defineConfig({
       env: { NODE_ENV: 'test', PORT: '3001' },
       name: 'NextJS',
       url: process.env.PW_TEST_FRONTEND_HEALTH_URL,
-      reuseExistingServer: !process.env.CI,
-    },
-    {
-      command: 'bin/rails server',
-      env: { RAILS_ENV: 'test' },
-      name: 'Rails',
-      url: process.env.PW_TEST_BACKEND_HEALTH_URL,
       reuseExistingServer: !process.env.CI,
     },
   ],

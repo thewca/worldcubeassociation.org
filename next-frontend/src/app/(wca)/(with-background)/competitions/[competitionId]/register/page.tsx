@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getSession } from "@/auth";
 import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
@@ -23,7 +23,7 @@ export default async function RegisterPage({
 }: {
   params: Promise<{ competitionId: string }>;
 }) {
-  const session = await auth();
+  const session = await getSession();
 
   if (session === null) {
     return (
