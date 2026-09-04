@@ -527,13 +527,28 @@ export interface Announcement {
  */
 export interface User {
   id: string;
-  email: string;
-  emailVerified?: boolean | null;
   name?: string | null;
-  image?: string | null;
-  wcaId?: string | null;
-  wcaUserId?: number | null;
   roles?: string[];
+  /**
+   * Auto-added by Better Auth (email)
+   */
+  email: string;
+  /**
+   * Auto-added by Better Auth (emailVerified)
+   */
+  emailVerified: boolean;
+  /**
+   * Auto-added by Better Auth (image)
+   */
+  image?: string | null;
+  /**
+   * Auto-added by Better Auth (wcaId)
+   */
+  wcaId?: string | null;
+  /**
+   * Auto-added by Better Auth (wcaUserId)
+   */
+  wcaUserId?: number | null;
   updatedAt: string;
   createdAt: string;
   collection: 'users';
@@ -895,13 +910,13 @@ export interface FaqQuestionsSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   id?: T;
+  name?: T;
+  roles?: T;
   email?: T;
   emailVerified?: T;
-  name?: T;
   image?: T;
   wcaId?: T;
   wcaUserId?: T;
-  roles?: T;
   updatedAt?: T;
   createdAt?: T;
 }
