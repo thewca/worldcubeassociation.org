@@ -1,35 +1,26 @@
-"use client";
-
 import React from "react";
-import { Text } from "@chakra-ui/react";
-import useAPI from "@/lib/wca/useAPI";
 import Map from "@/components/map/Map";
-import Loading from "@/components/ui/loading";
+import OpenapiError from "@/components/ui/openapiError";
+import { getPersonCompetitions } from "@/lib/wca/persons/getPersonCompetitions";
+import { getT } from "@/lib/i18n/get18n";
 
 interface MapTabProps {
   wcaId: string;
 }
 
-const MapTab: React.FC<MapTabProps> = ({ wcaId }) => {
-  const api = useAPI();
+const MapTab = async ({ wcaId }: MapTabProps) => {
+  const { t } = await getT();
+  const {
+    data: competitions,
+    error,
+    response,
+  } = await getPersonCompetitions(wcaId);
 
-  const { data: competitionQuery, isLoading } = api.useQuery(
-    "get",
-    "/v0/persons/{wca_id}/competitions",
-    {
-      params: { path: { wca_id: wcaId } },
-    },
-  );
-
-  if (isLoading) {
-    return <Loading />;
+  if (error) {
+    return <OpenapiError response={response} t={t} />;
   }
 
-  if (!competitionQuery) {
-    return <Text>Failed fetching competitions</Text>;
-  }
-
-  return <Map competitions={competitionQuery} />;
+  return <Map competitions={competitions} />;
 };
 
 export default MapTab;
