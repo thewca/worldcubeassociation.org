@@ -25,6 +25,9 @@ import {
   ClientOnly,
   Icon,
   Heading,
+  Stack,
+  Wrap,
+  Badge,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -58,6 +61,7 @@ import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
+import TabMap from "@/components/competitions/TabMap";
 import { LuMapPin, LuSettings2 } from "react-icons/lu";
 import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
 import { isInProgress } from "@/lib/wca/competitions/statusUtils";
@@ -188,6 +192,10 @@ export default function CompetitionsPage() {
     (competition) => showInProgressSection && isInProgress(competition),
   );
 
+  const loadedCompetitionCount =
+    rawCompetitionData?.pages.reduce((total, page) => total + page.length, 0) ??
+    0;
+
   return (
     <Container>
       <VStack gap="8" width="full" pt="8">
@@ -202,14 +210,21 @@ export default function CompetitionsPage() {
             />
           )}
         </ClientOnly>
-        <Card.Root size="md">
+        <Card.Root size={{ base: "sm", md: "md" }} width="full">
           <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
             <Card.Header asChild>
-              <HStack justify="space-between">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                justify="space-between"
+                align={{ base: "stretch", md: "center" }}
+              >
                 <Card.Title>
                   <HStack gap={3}>
-                    <AllCompsIcon fontSize="5xl" marginTop="-2" />
-                    <Text textStyle="h1">
+                    <AllCompsIcon
+                      fontSize={{ base: "3xl", md: "5xl" }}
+                      marginTop="-2"
+                    />
+                    <Text textStyle={{ base: "h3", md: "h1" }}>
                       {t("competitions.index.all_competitions")}
                     </Text>
                   </HStack>
@@ -219,18 +234,17 @@ export default function CompetitionsPage() {
                     <ListIcon />
                     {t("competitions.index.list")}
                   </Tabs.Trigger>
-                  <BetaDisabledTooltip>
-                    <Tabs.Trigger value="map" disabled>
-                      <MapIcon />
-                      {t("competitions.index.map")}
-                    </Tabs.Trigger>
-                  </BetaDisabledTooltip>
+                  <Tabs.Trigger value="map">
+                    <MapIcon />
+                    {t("competitions.index.map")}
+                  </Tabs.Trigger>
                 </Tabs.List>
-              </HStack>
+              </Stack>
             </Card.Header>
             <Card.Body asChild>
               <VStack gap="3" borderBottom="black">
                 <FormEventSelector
+                  wrap
                   selectedEvents={filterState.selectedEvents}
                   title={t("competitions.index.event")}
                   onEventClick={(eventId) =>
@@ -241,7 +255,7 @@ export default function CompetitionsPage() {
                     dispatchFilter({ type: "select_all_events" })
                   }
                 />
-                <SimpleGrid gap="2" width="full" columns={2}>
+                <SimpleGrid gap="2" width="full" columns={{ base: 1, md: 2 }}>
                   <RegionSelector
                     t={t}
                     label={t("activerecord.attributes.user.region")}
@@ -281,11 +295,12 @@ export default function CompetitionsPage() {
                     </InputGroup>
                   </Field.Root>
                 </SimpleGrid>
-                <HStack
-                  gap="2"
+                <Stack
+                  direction={{ base: "column", lg: "row" }}
+                  gap="4"
                   width="full"
                   justify="space-between"
-                  align="flex-start"
+                  align={{ base: "stretch", lg: "flex-start" }}
                 >
                   <LocationFilter
                     location={location}
@@ -297,7 +312,11 @@ export default function CompetitionsPage() {
                     onDistanceUnitChange={changeDistanceUnit}
                     t={t}
                   />
-                  <HStack gap="2">
+                  <Stack
+                    direction={{ base: "column", md: "row" }}
+                    gap="2"
+                    width={{ base: "full", lg: "auto" }}
+                  >
                     <DateFilter
                       label={t("competitions.index.from_date")}
                       icon={<CompRegoOpenDateIcon />}
@@ -322,47 +341,55 @@ export default function CompetitionsPage() {
                         })
                       }
                     />
-                  </HStack>
+                  </Stack>
                   {/* TODO: add "accordion" functionality to this button */}
                   <BetaDisabledTooltip>
-                    <Button variant="outline" disabled>
+                    <Button
+                      variant="outline"
+                      disabled
+                      width={{ base: "full", lg: "auto" }}
+                    >
                       <Icon>
                         <LuSettings2 />
                       </Icon>{" "}
                       {t("competitions.index.advanced_filters")}
                     </Button>
                   </BetaDisabledTooltip>
-                </HStack>
+                </Stack>
               </VStack>
             </Card.Body>
             <Card.Body>
               <Tabs.Content value="list">
-                <HStack justify="space-between">
-                  <HStack>
+                <Stack
+                  direction={{ base: "column", lg: "row" }}
+                  justify="space-between"
+                  align={{ base: "start", lg: "center" }}
+                >
+                  <Wrap gapX="3" gapY="1" align="center">
                     <Text>{t("competitions.index.registration_key")}</Text>
-                    <CompRegoFullButOpenOrangeIcon />
-                    <Text>
+                    <Badge size="md" variant="surface">
+                      <CompRegoFullButOpenOrangeIcon />
                       {t("competitions.index.registration_status.full")}
-                    </Text>
-                    <CompRegoNotFullOpenGreenIcon />
-                    <Text>
+                    </Badge>
+                    <Badge size="md" variant="surface">
+                      <CompRegoNotFullOpenGreenIcon />
                       {t("competitions.index.registration_status.open")}
-                    </Text>
-                    <CompRegoNotOpenYetGreyIcon />
-                    <Text>
+                    </Badge>
+                    <Badge size="md" variant="surface">
+                      <CompRegoNotOpenYetGreyIcon />
                       {t("competitions.index.registration_status.not_open")}
-                    </Text>
-                    <CompRegoClosedRedIcon />
-                    <Text>
+                    </Badge>
+                    <Badge size="md" variant="surface">
+                      <CompRegoClosedRedIcon />
                       {t("competitions.index.registration_status.closed")}
-                    </Text>
-                  </HStack>
+                    </Badge>
+                  </Wrap>
                   <Text>
                     {t("competitions.index.currently_displaying", {
                       count: competitionsDistanceFiltered.length,
                     })}
                   </Text>
-                </HStack>
+                </Stack>
                 {inProgressComps.length > 0 && (
                   <>
                     <Heading size="md" paddingY="2">
@@ -383,7 +410,15 @@ export default function CompetitionsPage() {
                   t={t}
                 />
               </Tabs.Content>
-              <Tabs.Content value="map">TBD</Tabs.Content>
+              <Tabs.Content value="map">
+                <TabMap
+                  competitions={competitionsDistanceFiltered}
+                  loadedCompetitionCount={loadedCompetitionCount}
+                  isLoading={competitionsIsFetching}
+                  fetchMoreCompetitions={competitionsFetchNextPage}
+                  hasMoreCompsToLoad={hasMoreCompsToLoad}
+                />
+              </Tabs.Content>
             </Card.Body>
           </Tabs.Root>
         </Card.Root>
@@ -501,7 +536,7 @@ function DateFilter({
 }) {
   return (
     <DatePicker.Root
-      width="3xs"
+      width={{ base: "full", md: "3xs" }}
       colorPalette="blue"
       positioning={{ sameWidth: false }}
       value={isoDate ? [parseDate(isoDate)] : []}
