@@ -5,11 +5,11 @@ import { Box, SimpleGrid } from "@chakra-ui/react";
 //   rejects it, and deferring to the client makes the background pop in after load.
 //   A seeded PRNG keeps the grid random-looking but reproducible - it stays put for the
 //   lifetime of a build and reshuffles on the next deploy, or per page via `seed`.
-const hashSeed = (seed: string): number => {
-  let hash = 2166136261;
+const fnv1aHash = (seed: string): number => {
+  let hash = 0x811c9dc5;
 
   for (let i = 0; i < seed.length; i += 1) {
-    hash = Math.imul(hash ^ seed.charCodeAt(i), 16777619);
+    hash = Math.imul(hash ^ seed.charCodeAt(i), 0x01000193);
   }
 
   return hash >>> 0;
@@ -38,7 +38,7 @@ const RandomBackground = ({
   bias?: number;
   seed?: string;
 }) => {
-  const nextRandom = mulberry32(hashSeed(seed ?? "wca"));
+  const nextRandom = mulberry32(fnv1aHash(seed ?? "wca"));
   // Function to determine color based on probability
   const getColor = (probValue: number): string => {
     if (probValue <= 1 / 6) return "green"; // 0.0 - 0.166
