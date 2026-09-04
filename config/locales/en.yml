@@ -1902,7 +1902,7 @@ en:
           external_website: "The website of the competition. Must be a valid http(s) url."
           external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
           uses_wca_registration: ""
-          scoretaking_software: "Select '%{choice_ilr}' if you want to use Dual Rounds"
+          scoretaking_software: "Select '%{choice_ilr}' or an external tool, if you want to use Dual Rounds"
         user_settings:
           receive_registration_emails: ""
         entry_fees:
