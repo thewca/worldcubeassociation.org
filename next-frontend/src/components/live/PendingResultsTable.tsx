@@ -2,8 +2,14 @@ import { Collapsible, Heading, Table, VStack } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import formats from "@/lib/wca/data/formats";
 import { padSkipped } from "@/lib/live/padSkipped";
-import { LiveCompetitor, PendingLiveResult } from "@/types/live";
+import { LiveCompetitor, StagedLiveResult } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
+import usePerpetualState from "@/lib/hooks/usePerpetualState";
+
+// A result normally clears within a second or two. Anything still here after
+// this long means our submit or the confirmation didn't make it through.
+const STUCK_AFTER_MS = 30_000;
+const STUCK_CHECK_INTERVAL_MS = 5_000;
 
 export default function PendingResultsTable({
   pendingLiveResults,
@@ -11,12 +17,15 @@ export default function PendingResultsTable({
   eventId,
   competitors,
 }: {
-  pendingLiveResults: PendingLiveResult[];
+  pendingLiveResults: StagedLiveResult[];
   formatId: string;
   eventId: string;
   competitors: Map<number, LiveCompetitor>;
 }) {
   const { t } = useT();
+
+  // Ticks so rows that never get confirmed start showing as stuck on their own.
+  const now = usePerpetualState(() => Date.now(), STUCK_CHECK_INTERVAL_MS);
 
   const format = formats.byId[formatId];
   const solveCount = format.expected_solve_count;
@@ -51,8 +60,18 @@ export default function PendingResultsTable({
                   pendingResult.registration_id,
                 )!;
 
+                const isStuck = now - pendingResult.staged_at > STUCK_AFTER_MS;
+
                 return (
-                  <Table.Row key={`${pendingResult.registration_id}`}>
+                  <Table.Row
+                    key={`${pendingResult.registration_id}`}
+                    bg={isStuck ? "red.subtle" : undefined}
+                    title={
+                      isStuck
+                        ? "Not confirmed by the server yet - check your connection"
+                        : undefined
+                    }
+                  >
                     <Table.Cell>{competitor.registrant_id}</Table.Cell>
                     <Table.Cell>{competitor.name}</Table.Cell>
                     {padSkipped(
