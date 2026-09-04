@@ -58,7 +58,7 @@ function PaymentStatus({
 }
 
 export default function PaymentOverview({
-  payments, competitionInfo, connectedAccountId, stripePublishableKey, user, nextStep,
+  payments, competitionInfo, connectedAccountId, stripePublishableKey, nextStep,
 }) {
   const { hasPaid } = useRegistration();
   const totalPaid = _.sumBy(payments, 'iso_amount_refundable');
@@ -89,7 +89,6 @@ export default function PaymentOverview({
             connectedAccountId={connectedAccountId}
             nextStep={nextStep}
             stripePublishableKey={stripePublishableKey}
-            user={user}
           />
         </Accordion.Content>
       </Accordion>

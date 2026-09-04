@@ -116,7 +116,7 @@ export const registrationHistoryUrl = (registrationId) => `<%= CGI.unescape(Rail
 
 export const refundPaymentUrl = (competitionId, paymentIntegration, paymentId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_refund_path("${competitionId}", "${paymentIntegration}", "${paymentId}")) %>`
 
-export const paymentDenominationUrl = (competitionId, userId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_payment_denomination_path("${competitionId}" , "${userId}")) %>?iso_donation_amount=${isoDonationAmount}`
+export const paymentDenominationUrl = (registrationId, isoDonationAmount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.payment_denomination_api_v1_registration_path("${registrationId}", iso_donation_amount: "${isoDonationAmount}")) %>`
 
 export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_new_id_path) %>`;
 

@@ -40,7 +40,6 @@ Rails.application.routes.draw do
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
-  get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   get '/users/admin_search' => 'users#admin_search'
   resources :users, only: %i[index edit update]
   get 'users/show_for_edit' => 'users#show_for_edit', as: :user_show_for_edit
@@ -276,7 +275,8 @@ Rails.application.routes.draw do
   get 'logo' => 'static_pages#logo'
   get 'media-instagram' => 'static_pages#media_instagram'
   get 'merch', to: redirect('https://shop.worldcubeassociation.org/')
-  get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
+  get 'organizer-guidelines', to: redirect('https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf', status: 302)
+  get 'organizer-handbook', to: redirect('https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf', status: 302)
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
@@ -396,6 +396,7 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
+            get 'payment_denomination', to: 'registrations#payment_denomination'
           end
 
           collection do

@@ -23,22 +23,30 @@ runs:
           echo "ASSET_BUCKET=assets.worldcubeassociation.org" >> $GITHUB_ENV
           echo "MONOLITH_TAG=latest" >> $GITHUB_ENV
         fi
-    - name: Build and Push Sidekiq image
+    - name: Build and push Image
       uses: ./.github/actions/build-ruby-image
       id: build
+      with:
+        target: monolith
+        registry: ${{ inputs.registry }}
+        tag: ${{ env.MONOLITH_TAG }}
+        build_tag: ${{ inputs.build_tag }}
+        environment: ${{ inputs.environment }}
+        load: true
+    - name: Copy assets out of the container and push to S3
+      shell: bash
+      run: | # Must come from the monolith image: it serves the HTML referencing these digests
+        id=$(docker create ${{ steps.build.outputs.imageid }})
+        docker cp $id:/rails/public/ ./assets
+        aws s3 sync ./assets s3://${{ env.ASSET_BUCKET }}/assets/${{ inputs.build_tag }} --cache-control "public, max-age=31536000, immutable"
+    - name: Build and Push Sidekiq image
+      uses: ./.github/actions/build-ruby-image
       with:
         target: sidekiq
         registry: ${{ inputs.registry }}
         tag: sidekiq-${{inputs.environment}}
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}
-        load: true
-    - name: Copy assets out of the container and push to S3
-      shell: bash
-      run: | # We do this once the first image is build so it will be definitely available
-        id=$(docker create ${{ steps.build.outputs.imageid }})
-        docker cp $id:/rails/public/ ./assets
-        aws s3 sync ./assets s3://${{ env.ASSET_BUCKET }}/assets/${{ inputs.build_tag }} --cache-control "public, max-age=31536000, immutable"
     - name: Build and push API Image
       uses: ./.github/actions/build-ruby-image
       with:
@@ -53,13 +61,5 @@ runs:
         target: shoryuken
         registry: ${{ inputs.registry }}
         tag: ${{inputs.environment}}-sqs-worker
-        build_tag: ${{ inputs.build_tag }}
-        environment: ${{ inputs.environment }}
-    - name: Build and push Image
-      uses: ./.github/actions/build-ruby-image
-      with:
-        target: monolith
-        registry: ${{ inputs.registry }}
-        tag: ${{ env.MONOLITH_TAG }}
         build_tag: ${{ inputs.build_tag }}
         environment: ${{ inputs.environment }}

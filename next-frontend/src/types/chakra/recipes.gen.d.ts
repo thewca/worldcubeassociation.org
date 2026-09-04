@@ -833,6 +833,7 @@ export interface ListVariant {
   /** @default "marker" */
   variant?: "marker" | "plain" | undefined
   align?: "center" | "start" | "end" | undefined
+  indented?: boolean | undefined
 }
 
 export type ListVariantProps = {

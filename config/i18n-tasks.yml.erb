@@ -110,7 +110,6 @@ ignore_unused:
   - 'score_tools.tools.*'
   - 'wca.doorkeeper.scopes.*'
   - 'contact.*.info'
-  - 'organizer_guidelines.*'
   - 'merch.paragraphs.*'
   - 'activity.*'
   # Mark all events/continents/countries as used.
@@ -144,7 +143,11 @@ ignore_unused:
   - 'errors.next_frontend.*'
   # The incident pages live in next-frontend, which is not searched by i18n-tasks
   - 'incidents_log.*'
-  # Same for the search results page
+  - 'competitions.index.{all_competitions,event,name,distance,advanced_filters}'
+  - 'competitions.index.{location,location_placeholder,use_my_location}'
+  - 'competitions.index.distance_units.*'
+  - 'competitions.index.{registration_key,register_now,view_competition}'
+  - 'competitions.index.{registration_status,currently_displaying}.*'
   - 'search_results.index.empty_query'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
