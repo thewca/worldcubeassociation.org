@@ -58,7 +58,7 @@ export default function UploadResultsJson({
         <Form.Checkbox
           checked={importRegistrations}
           onChange={setImportRegistrations}
-          disabled={!usesWcaRegistration && !isAdminView}
+          disabled={!hasAcceptedRegistrations && !isAdminView}
           label="Also import registrations from this WCIF file"
         />
       )}
