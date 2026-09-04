@@ -32,10 +32,17 @@ export default async function LiveOverview({
   const canManage =
     !!permissions && permissions.canScoretakeCompetition(competitionId);
 
-  const allActivitiesSorted = wcifSchedule.venues
+  const eventActivitiesSorted = wcifSchedule.venues
     .flatMap((venue) => venue.rooms)
     .flatMap((room) => room.activities)
-    .toSorted(earliestWithLongestTieBreaker);
+    .filter((activity) => !activity.activityCode.startsWith("other"))
+    .toSorted(earliestWithLongestTieBreaker)
+    .map(({ id, activityCode, startTime, endTime }) => ({
+      id,
+      activityCode,
+      startTime,
+      endTime,
+    }));
 
   const uniqueTimeZones = [
     ...new Set(wcifSchedule.venues.map((venue) => venue.timezone)),
@@ -45,7 +52,7 @@ export default async function LiveOverview({
     <Container bg="bg">
       <LiveView
         competitionId={competitionId}
-        activities={allActivitiesSorted}
+        activities={eventActivitiesSorted}
         timeZones={uniqueTimeZones}
         canManage={canManage}
       />
