@@ -65,6 +65,14 @@ class LiveResult < ApplicationRecord
   delegate :event_id, :format_id, :round_type_id, :competition_id, to: :round
   delegate :registrant_id, to: :registration
 
+  def event
+    Event.c_find(self.event_id)
+  end
+
+  def format
+    Format.c_find(self.format_id)
+  end
+
   def to_solve_time(field)
     SolveTime.new(event_id, field, send(field))
   end
