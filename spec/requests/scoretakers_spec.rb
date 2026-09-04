@@ -7,6 +7,42 @@ RSpec.describe "Scoretakers API" do
   let!(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate]) }
   let!(:competitor) { create(:user) }
 
+  describe "listing scoretaker candidates" do
+    let(:candidate_user_ids) { response.parsed_body.pluck("user_id") }
+
+    it "lists accepted and non-competing registrations" do
+      accepted = create(:registration, :accepted, competition: competition)
+      # Staff that are added through the WCIF are non-competing without ever being accepted
+      non_competing = create(:registration, :non_competing, competing_status: 'pending', competition: competition)
+      pending_registration = create(:registration, :pending, competition: competition)
+      sign_in delegate
+
+      get candidates_api_v1_competition_scoretakers_path(competition.id)
+      expect(response).to be_successful
+      expect(candidate_user_ids).to contain_exactly(accepted.user_id, non_competing.user_id)
+      expect(candidate_user_ids).not_to include(pending_registration.user_id)
+    end
+
+    it "leaves out delegates and organizers, who can take scores anyway" do
+      organizer = create(:user)
+      competition.organizers << organizer
+      create(:registration, :accepted, competition: competition, user: organizer)
+      create(:registration, :accepted, competition: competition, user: delegate)
+      sign_in delegate
+
+      get candidates_api_v1_competition_scoretakers_path(competition.id)
+      expect(response).to be_successful
+      expect(candidate_user_ids).to be_empty
+    end
+
+    it "does not let a random user list candidates" do
+      sign_in create(:user)
+
+      get candidates_api_v1_competition_scoretakers_path(competition.id)
+      expect(response).not_to be_successful
+    end
+  end
+
   describe "managing scoretakers" do
     it "lets a manager add and remove a scoretaker" do
       sign_in delegate
