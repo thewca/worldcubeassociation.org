@@ -34,6 +34,15 @@ export const Users: CollectionConfig = {
     {
       name: "roles",
       type: "json",
+      // Better Auth 1.7 split `supportsArrays` out of `supportsJSON` @delmaredigital/payload-better-auth is at 0.11.3 (latest)
+      // and hardcodes supportsArrays: false so a `string[]` field arrives here JSON-encoded and the `json` field's
+      // schema rejects it. Decode it back into the array the rest of the app expects.
+      hooks: {
+        beforeValidate: [
+          ({ value }) =>
+            typeof value === "string" ? JSON.parse(value) : value,
+        ],
+      },
       // The adapter writes with `overrideAccess: true`, so denying ordinary writes stops a
       //   user granting themselves a team through Payload's REST/GraphQL API.
       access: {
