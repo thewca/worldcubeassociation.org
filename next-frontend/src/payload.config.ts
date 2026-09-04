@@ -66,6 +66,10 @@ function plugins() {
           //   the users collection enforces team membership instead.
           requiredRole: null,
           enableSocial: [WCA_CMS_PROVIDER_ID],
+          // WCA OIDC is the only way in: no local passwords, no self-registration.
+          enablePassword: false,
+          enableSignUp: false,
+          enableForgotPassword: false,
         },
       },
     }),
