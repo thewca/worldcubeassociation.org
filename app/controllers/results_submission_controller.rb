@@ -101,7 +101,7 @@ class ResultsSubmissionController < ApplicationController
 
     if is_wcif && import_registrations
       ActiveRecord::Base.transaction do
-        indifferent_registrations_data = upload_json.registrations.data.map(&:with_indifferent_access)
+        indifferent_registrations_data = upload_json.registrations_data.map(&:with_indifferent_access)
         Registrations::Helper.import_registrations!(competition, indifferent_registrations_data, current_user)
       rescue StandardError => e
         return render status: :unprocessable_content, json: { error: "Failed to import registrations: #{e.message}" }
