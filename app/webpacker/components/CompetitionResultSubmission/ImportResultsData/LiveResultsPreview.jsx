@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Header, Table } from 'semantic-ui-react';
+import { Header, Icon, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
@@ -10,6 +10,7 @@ import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityTok
 import { competitionPreviewLiveResultsUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
 import { parseActivityCode } from '../../../lib/utils/wcif';
+import EventIcon from '../../wca/EventIcon';
 
 async function getLiveResultsPreview({ competitionId }) {
   const { data } = await fetchJsonOrError(
@@ -44,9 +45,10 @@ export default function LiveResultsPreview({
         return (
           <Fragment key={roundId}>
             <Header>
+              <EventIcon id={eventId} baseComponent={Icon} />
               {I18n.t(`events.${eventId}`)}
               {' '}
-              Round
+              {I18n.t('competitions.results_table.round')}
               {' '}
               {roundNumber}
             </Header>
