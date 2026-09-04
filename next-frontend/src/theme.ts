@@ -884,7 +884,7 @@ const customConfig = defineConfig({
                   bg: "bg.subtle",
                 },
                 "&:hover td": {
-                  bg: "colorPalette.fg/60",
+                  bg: "colorPalette.muted",
                 },
               },
             },
