@@ -59,6 +59,7 @@ import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
+import TabMap from "@/components/competitions/TabMap";
 import { LuMapPin, LuSettings2 } from "react-icons/lu";
 import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
 
@@ -180,6 +181,10 @@ export default function CompetitionsPage() {
         )
       : loadedCompetitions;
 
+  const loadedCompetitionCount =
+    rawCompetitionData?.pages.reduce((total, page) => total + page.length, 0) ??
+    0;
+
   return (
     <Container>
       <VStack gap="8" width="full" pt="8">
@@ -218,12 +223,10 @@ export default function CompetitionsPage() {
                     <ListIcon />
                     {t("competitions.index.list")}
                   </Tabs.Trigger>
-                  <BetaDisabledTooltip>
-                    <Tabs.Trigger value="map" disabled>
-                      <MapIcon />
-                      {t("competitions.index.map")}
-                    </Tabs.Trigger>
-                  </BetaDisabledTooltip>
+                  <Tabs.Trigger value="map">
+                    <MapIcon />
+                    {t("competitions.index.map")}
+                  </Tabs.Trigger>
                 </Tabs.List>
               </Stack>
             </Card.Header>
@@ -384,7 +387,15 @@ export default function CompetitionsPage() {
                   t={t}
                 />
               </Tabs.Content>
-              <Tabs.Content value="map">TBD</Tabs.Content>
+              <Tabs.Content value="map">
+                <TabMap
+                  competitions={competitionsDistanceFiltered}
+                  loadedCompetitionCount={loadedCompetitionCount}
+                  isLoading={competitionsIsFetching}
+                  fetchMoreCompetitions={competitionsFetchNextPage}
+                  hasMoreCompsToLoad={hasMoreCompsToLoad}
+                />
+              </Tabs.Content>
             </Card.Body>
           </Tabs.Root>
         </Card.Root>
