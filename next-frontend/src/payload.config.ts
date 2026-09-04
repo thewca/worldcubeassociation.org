@@ -65,6 +65,8 @@ function plugins() {
           // The plugin's gate looks for a singular `role` we do not have; `access.admin` on
           //   the users collection enforces team membership instead.
           requiredRole: null,
+          // The plugin defaults to `/admin`; our admin route is `/payload` (see `routes` below).
+          afterLoginPath: "/payload",
           enableSocial: [WCA_CMS_PROVIDER_ID],
           // WCA OIDC is the only way in: no local passwords, no self-registration.
           enablePassword: false,
