@@ -195,7 +195,7 @@ class LiveResult < ApplicationRecord
   def to_inbox_compat
     self.as_json(
       only: %w[best average global_pos],
-      methods: %w[round_wcif_id wca_id name country_iso2 event_id],
+      methods: %w[wca_id name country_iso2 event_id round_type_id],
     ).merge(
       # renaming properties that the old frontend still expects in legacy nomenclature
       pos: self.local_pos,

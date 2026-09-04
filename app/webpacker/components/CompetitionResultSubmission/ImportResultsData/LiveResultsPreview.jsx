@@ -9,7 +9,6 @@ import ResultRowBody from '../../ResultsData/Results/ResultRowBody';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { competitionPreviewLiveResultsUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
-import { parseActivityCode } from '../../../lib/utils/wcif';
 import EventIcon from '../../wca/EventIcon';
 
 async function getLiveResultsPreview({ competitionId }) {
@@ -35,12 +34,12 @@ export default function LiveResultsPreview({
   if (isPending) return (<Loading />);
   if (isError) return (<Errored error={error} />);
 
-  const liveResultsByRound = _.groupBy(liveResults, 'round_wcif_id');
+  const liveResultsByRound = _.groupBy(liveResults, (res) => `${res.event_id}-${res.round_type_id}`);
 
   return (
     <>
       {_.map(liveResultsByRound, (results, roundId) => {
-        const { eventId, roundNumber } = parseActivityCode(roundId);
+        const [eventId, roundTypeId] = roundId.split('-');
 
         return (
           <Fragment key={roundId}>
@@ -48,9 +47,7 @@ export default function LiveResultsPreview({
               <EventIcon id={eventId} baseComponent={Icon} />
               {I18n.t(`events.${eventId}`)}
               {' '}
-              {I18n.t('competitions.results_table.round')}
-              {' '}
-              {roundNumber}
+              {I18n.t(`rounds.${roundTypeId}.name`)}
             </Header>
             <Table
               striped
