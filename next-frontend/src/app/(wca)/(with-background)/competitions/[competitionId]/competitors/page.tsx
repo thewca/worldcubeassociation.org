@@ -27,6 +27,7 @@ export default async function Competitors({
   return (
     <TabCompetitors
       id={competitionId}
+      eventIds={competitionInfo.event_ids}
       isLive={isLive}
       canAddOnTheSpot={
         isLive &&

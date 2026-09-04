@@ -540,7 +540,7 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    sort_by?: string;
+                    sort_by?: "average" | "single";
                 };
                 header?: never;
                 path: {
@@ -1625,19 +1625,21 @@ export interface components {
             regional_average_record: string | null;
         };
         PsychSheet: {
-            sort_by: string;
-            sort_by_second: string;
+            /** @enum {string} */
+            sort_by: "average" | "single";
+            /** @enum {string} */
+            sort_by_second: "average" | "single";
             sorted_rankings: {
                 name: string;
                 user_id: number;
-                wca_id: string;
+                wca_id: string | null;
                 country_iso2: string;
                 average_best: number;
-                average_rank: number;
+                average_rank: number | null;
                 single_best: number;
-                single_rank: number;
-                tied_previous: boolean;
-                pos: number;
+                single_rank: number | null;
+                tied_previous: boolean | null;
+                pos: number | null;
             }[];
         };
         CompetitionIndex: {
