@@ -1314,6 +1314,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dinero.js/calculator-number@npm:2.0.0-alpha.14":
+  version: 2.0.0-alpha.14
+  resolution: "@dinero.js/calculator-number@npm:2.0.0-alpha.14"
+  dependencies:
+    "@dinero.js/core": "npm:2.0.0-alpha.14"
+  checksum: 10c0/159fcd3318dffc7770451ccc9907e31445840973f697be50eb2dc69da1fe1878dc1fdda59b6468273d046fbfacbfb9af7f0be705e1ca1226a15bd26b8ca19407
+  languageName: node
+  linkType: hard
+
+"@dinero.js/core@npm:2.0.0-alpha.14":
+  version: 2.0.0-alpha.14
+  resolution: "@dinero.js/core@npm:2.0.0-alpha.14"
+  dependencies:
+    "@dinero.js/currencies": "npm:2.0.0-alpha.14"
+  checksum: 10c0/038044b214b5c0c008606df67dc804fa9a0ad8c8cb01a4efc6f1c20832566084a240fd8b2e5f77d6d96657ee4676bfedb496a523ebd54b326502acc97c88aafc
+  languageName: node
+  linkType: hard
+
+"@dinero.js/currencies@npm:2.0.0-alpha.14":
+  version: 2.0.0-alpha.14
+  resolution: "@dinero.js/currencies@npm:2.0.0-alpha.14"
+  checksum: 10c0/ce43a403de3b78ef7347c2574cbbc042ccac4d9f4933c586d43be16a050491ff829c0aa940317adbb86cefa649f9bad8a9d06c941cf69d3d290c25817d89993c
+  languageName: node
+  linkType: hard
+
 "@dnd-kit/accessibility@npm:^3.1.1":
   version: 3.1.1
   resolution: "@dnd-kit/accessibility@npm:3.1.1"
@@ -7817,6 +7842,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dinero.js@npm:2.0.0-alpha.14":
+  version: 2.0.0-alpha.14
+  resolution: "dinero.js@npm:2.0.0-alpha.14"
+  dependencies:
+    "@dinero.js/calculator-number": "npm:2.0.0-alpha.14"
+    "@dinero.js/core": "npm:2.0.0-alpha.14"
+    "@dinero.js/currencies": "npm:2.0.0-alpha.14"
+  checksum: 10c0/be7f6e2d7d423c4463dc8dee84c4366dd9aa8c54d315ab5a1aaf149fd85cd017edfbda840f606f92bac4e9acece7a5a384cb557a9066bcfec04f19e17cacac51
+  languageName: node
+  linkType: hard
+
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0"
@@ -11911,6 +11947,7 @@ __metadata:
     "@aws-sdk/credential-providers": "npm:^3.1121.0"
     "@chakra-ui/cli": "npm:^3.37.0"
     "@chakra-ui/react": "npm:^3.37.0"
+    "@dinero.js/currencies": "npm:2.0.0-alpha.14"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@fullcalendar/format-luxon3": "npm:^7.0.2"
@@ -11949,6 +11986,7 @@ __metadata:
     aws4: "npm:^1.13.2"
     babel-plugin-react-compiler: "npm:^1.0.0"
     culori: "npm:^4.0.2"
+    dinero.js: "npm:2.0.0-alpha.14"
     eslint: "npm:^10"
     eslint-config-next: "npm:16.3.3"
     eslint-config-prettier: "npm:^10.1.8"
