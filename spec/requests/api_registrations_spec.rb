@@ -1375,7 +1375,58 @@ RSpec.describe 'API Registrations' do
       expect(payment_record.currency_code).to eq("usd")
     end
 
+    it 'rejects a negative donation instead of charging less than the entry fee' do
+      api_sign_in_as(reg.user)
+      get payment_ticket_api_v1_registration_path(reg), params: { iso_donation_amount: -400 }
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response.parsed_body['error']).to eq(Registrations::ErrorCodes::INVALID_REQUEST_DATA)
+      expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).to be_nil
+    end
+
+    it 'only charges the fees which are still outstanding' do
+      create(:registration_payment, registration: reg, amount_lowest_denomination: 400)
+
+      api_sign_in_as(reg.user)
+      get payment_ticket_api_v1_registration_path(reg)
+
+      payment_record = PaymentIntent.where(holder_type: "Registration", holder_id: reg.id).last.payment_record
+      expect(payment_record.amount_stripe_denomination).to be(600)
+    end
+
     describe 'refuse ticket create request' do
+      it 'if the registration belongs to another user' do
+        api_sign_in_as(create(:user))
+        get payment_ticket_api_v1_registration_path(reg)
+
+        body = response.parsed_body
+        expect(response).to have_http_status(:forbidden)
+        expect(body).to eq({ error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS }.with_indifferent_access)
+      end
+
+      it 'if the requester organises the competition but does not own the registration' do
+        api_sign_in_as(competition.organizers.first)
+        get payment_ticket_api_v1_registration_path(reg)
+
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'does not create a payment intent for another user\'s registration' do
+        api_sign_in_as(create(:user))
+        get payment_ticket_api_v1_registration_path(reg)
+
+        expect(PaymentIntent.find_by(holder_type: "Registration", holder_id: reg.id)).not_to be_present
+      end
+
+      it 'if the registration does not exist' do
+        api_sign_in_as(reg.user)
+        get payment_ticket_api_v1_registration_path(id: reg.id + 1)
+
+        body = response.parsed_body
+        expect(response).to have_http_status(:not_found)
+        expect(body).to eq({ error: Registrations::ErrorCodes::REGISTRATION_NOT_FOUND }.with_indifferent_access)
+      end
+
       it 'if registration already paid' do
         create(:registration_payment, registration: reg)
         api_sign_in_as(reg.user)
@@ -1414,19 +1465,44 @@ RSpec.describe 'API Registrations' do
     it 'returns a hash of amounts/currencies formatted for payment providers' do
       expected_response = { api_amounts: { stripe: 1500, paypal: "15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
       api_sign_in_as(reg.user)
-      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id)
+      get payment_denomination_api_v1_registration_path(reg)
 
       expect(response).to be_successful
       expect(response.parsed_body).to eq(expected_response)
     end
 
     it 'allows a donation to be specified' do
-      expected_response = { api_amounts: { stripe: 2500, paypal: "25.00" }, human_amount: "25 kr (Swedish Krona)" }.with_indifferent_access
       api_sign_in_as(reg.user)
-      get registration_payment_denomination_path(competition_id: competition.id, user_id: reg.user_id), params: { iso_donation_amount: 1000 }
+      get payment_denomination_api_v1_registration_path(reg), params: { iso_donation_amount: 1000 }
+
+      expect(response.parsed_body.dig('api_amounts', 'stripe')).to be(2500)
+    end
+
+    it 'lets the organizers look at it' do
+      api_sign_in_as(competition.organizers.first)
+      get payment_denomination_api_v1_registration_path(reg)
 
       expect(response).to be_successful
-      expect(response.parsed_body).to eq(expected_response)
+    end
+
+    it 'refuses an unrelated user' do
+      api_sign_in_as(create(:user))
+      get payment_denomination_api_v1_registration_path(reg)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'requires a signed in user' do
+      get payment_denomination_api_v1_registration_path(reg)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'rejects a negative donation' do
+      api_sign_in_as(reg.user)
+      get payment_denomination_api_v1_registration_path(reg), params: { iso_donation_amount: -400 }
+
+      expect(response).to have_http_status(:bad_request)
     end
   end
 

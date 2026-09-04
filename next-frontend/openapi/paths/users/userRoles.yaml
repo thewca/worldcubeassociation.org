@@ -49,7 +49,7 @@ get:
       schema:
         type: string
       description: Sort by a specific field (e.g., "start_date", "-created_at")
-    - name: perPage
+    - name: per_page
       in: query
       schema:
         type: integer

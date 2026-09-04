@@ -12,9 +12,8 @@ RSpec.describe "import:h2h_data", type: :task do
   end
 
   let!(:competition) { create(:competition, :with_valid_schedule, h2h_finals_event_ids: ['333']) }
-  # rubocop:disable FactoryBot/ExcessiveCreateList
+  # rubocop:disable-next FactoryBot/ExcessiveCreateList
   let!(:registrations) { create_list(:registration, 12, competition: competition) }
-  # rubocop:enable FactoryBot/ExcessiveCreateList
   let!(:round) { competition.competition_events.where(event_id: "333").first.rounds.first }
   let!(:registration_ids) { Registration.pluck(:id) }
 

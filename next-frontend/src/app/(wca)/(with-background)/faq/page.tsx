@@ -124,7 +124,10 @@ export default async function FAQ() {
                           </Accordion.ItemTrigger>
                           <Accordion.ItemContent textStyle="body">
                             <Accordion.ItemBody>
-                              {question.answer}
+                              <ChakraMarkdown>
+                                {question.answerRichtextMarkdown ||
+                                  question.answer}
+                              </ChakraMarkdown>
                             </Accordion.ItemBody>
                           </Accordion.ItemContent>
                         </Accordion.Item>

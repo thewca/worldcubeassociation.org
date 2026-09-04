@@ -4,7 +4,8 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { connection } from "next/server";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
-import { Announcement, ColorPaletteSelect } from "@/types/payload";
+import { announcementColorPalette } from "@/components/announcements/announcement";
+import { Announcement } from "@/types/payload";
 import AnnouncementsPagination from "@/app/(wca)/(with-background)/posts/announcementsPagination";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
@@ -16,15 +17,6 @@ export const metadata: Metadata = {
 };
 
 const ANNOUNCEMENTS_PER_PAGE = 10;
-
-// Announcement cards alternate through the WCA primary colors.
-const CARD_COLOR_PALETTES: ColorPaletteSelect[] = [
-  "blue",
-  "red",
-  "green",
-  "orange",
-  "yellow",
-];
 
 export default async function AnnouncementsPage({
   searchParams,
@@ -61,11 +53,9 @@ export default async function AnnouncementsPage({
                 <AnnouncementCard
                   key={announcement.id}
                   announcement={announcement}
-                  colorPalette={
-                    CARD_COLOR_PALETTES[
-                      (firstIndexOnPage + index) % CARD_COLOR_PALETTES.length
-                    ]
-                  }
+                  colorPalette={announcementColorPalette(
+                    firstIndexOnPage + index,
+                  )}
                 />
               ))
             )}
