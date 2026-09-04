@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Form, Message } from 'semantic-ui-react';
+import { Button, Form, Message } from 'semantic-ui-react';
 import Errored from '../../Requests/Errored';
 import importWcaLiveResults from '../api/importWcaLiveResults';
 import Loading from '../../Requests/Loading';
 import { contactRecipientUrl, uploadScramblesUrl } from '../../../lib/requests/routes.js.erb';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import LiveResultsPreview from './LiveResultsPreview';
 
 export default function ImportWcaLiveResults({
   competitionId,
@@ -14,6 +15,7 @@ export default function ImportWcaLiveResults({
   onImportSuccess,
   scoretakingSoftware,
 }) {
+  const [showPreview, setShowPreview] = useState(false);
   const [markResultSubmitted, setMarkResultSubmitted] = useCheckboxState(isAdminView);
 
   const {
@@ -79,14 +81,26 @@ export default function ImportWcaLiveResults({
             label="If results are not marked as submitted, mark it as submitted (this is only visible to WRT)"
           />
         )}
-        <Form.Button
-          primary
-          type="submit"
-          disabled={uploadedScrambleFilesCount === 0}
-        >
-          Import Live Results
-        </Form.Button>
+        <Form.Group inline>
+          <Form.Button
+            primary
+            type="submit"
+            disabled={uploadedScrambleFilesCount === 0}
+          >
+            Import Live Results
+          </Form.Button>
+          <Button
+            basic
+            type="button"
+            onClick={() => setShowPreview(true)}
+          >
+            Show Results Preview
+          </Button>
+        </Form.Group>
       </Form>
+      {showPreview && (
+        <LiveResultsPreview competitionId={competitionId} />
+      )}
     </>
   );
 }

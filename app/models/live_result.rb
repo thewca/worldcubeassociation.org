@@ -14,6 +14,9 @@ class LiveResult < ApplicationRecord
   after_save :trigger_recompute, if: :should_recompute?
 
   belongs_to :registration
+  has_one :user, through: :registration
+
+  delegate :wca_id, :name, :country_iso2, to: :user
 
   belongs_to :round
 
@@ -128,9 +131,11 @@ class LiveResult < ApplicationRecord
     end
   end
 
-  def to_inbox_result
-    attempt_values = live_attempts.pluck(:value)
+  def attempt_values
+    self.live_attempts.pluck(:value)
+  end
 
+  def to_inbox_result
     InboxResult.new(
       round: self.round,
       competition_id: self.competition_id,
@@ -178,6 +183,17 @@ class LiveResult < ApplicationRecord
     methods: %w[],
     include: [{ live_attempts: { only: %i[value attempt_number] } }],
   }.freeze
+
+  def to_inbox_compat
+    self.as_json(
+      only: %w[best average global_pos],
+      methods: %w[round_wcif_id wca_id name country_iso2 event_id],
+    ).merge(
+      # renaming properties that the old frontend still expects in legacy nomenclature
+      pos: self.local_pos,
+      attempts: self.attempt_values,
+    )
+  end
 
   def to_live_state
     serializable_hash(LIVE_STATE_SERIALIZE_OPTIONS)
