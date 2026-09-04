@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Box,
   Container,
   VStack,
   Button,
@@ -187,21 +188,6 @@ export default function CompetitionsPage() {
     (competition) => showInProgressSection && isInProgress(competition),
   );
 
-  // The upcoming table doubles as the placeholder while the first page loads, so it stays
-  // rendered unless the in-progress section has taken every competition.
-  const showUpcomingTable =
-    upcomingComps.length > 0 || inProgressComps.length === 0;
-
-  const listViewFooter = (
-    <ListViewFooter
-      isLoading={competitionsIsFetching}
-      hasMoreCompsToLoad={hasMoreCompsToLoad}
-      numCompetitions={competitionsDistanceFiltered.length}
-      bottomRef={bottomRef}
-      t={t}
-    />
-  );
-
   return (
     <Container>
       <VStack gap="8" width="full" pt="8">
@@ -382,21 +368,20 @@ export default function CompetitionsPage() {
                     <Heading size="md" paddingY="2">
                       {t("competitions.index.titles.in_progress")}
                     </Heading>
-                    <CompetitionTable competitions={inProgressComps}>
-                      {!showUpcomingTable && listViewFooter}
-                    </CompetitionTable>
-                    {showUpcomingTable && (
-                      <Heading size="md" paddingY="2">
-                        {t("competitions.index.titles.upcoming")}
-                      </Heading>
-                    )}
+                    <CompetitionTable competitions={inProgressComps} />
+                    <Heading size="md" paddingY="2">
+                      {t("competitions.index.titles.upcoming")}
+                    </Heading>
                   </>
                 )}
-                {showUpcomingTable && (
-                  <CompetitionTable competitions={upcomingComps}>
-                    {listViewFooter}
-                  </CompetitionTable>
-                )}
+                <CompetitionTable competitions={upcomingComps} />
+                <ListViewFooter
+                  isLoading={competitionsIsFetching}
+                  hasMoreCompsToLoad={hasMoreCompsToLoad}
+                  numCompetitions={competitionsDistanceFiltered.length}
+                  bottomRef={bottomRef}
+                  t={t}
+                />
               </Tabs.Content>
               <Tabs.Content value="map">TBD</Tabs.Content>
             </Card.Body>
@@ -559,10 +544,8 @@ function DateFilter({
 
 function CompetitionTable({
   competitions,
-  children,
 }: {
   competitions: components["schemas"]["CompetitionIndex"][];
-  children?: ReactNode;
 }) {
   return (
     <Table.Root size="xs" variant="competitions" borderWidth="2px">
@@ -570,7 +553,6 @@ function CompetitionTable({
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />
         ))}
-        {children}
       </Table.Body>
     </Table.Root>
   );
@@ -591,25 +573,21 @@ function ListViewFooter({
 }) {
   if (isLoading) {
     return (
-      <Table.Row textAlign="center">
-        <Table.Cell colSpan={6}>
-          <Loading />
-        </Table.Cell>
-      </Table.Row>
+      <Box textAlign="center" width="full">
+        <Loading />
+      </Box>
     );
   }
 
-  if (!isLoading && !hasMoreCompsToLoad) {
+  if (!hasMoreCompsToLoad) {
     return (
       numCompetitions > 0 && (
-        <Table.Row textAlign="center">
-          <Table.Cell colSpan={6}>
-            {t("competitions.index.no_more_comps")}
-          </Table.Cell>
-        </Table.Row>
+        <Box textAlign="center" width="full">
+          {t("competitions.index.no_more_comps")}
+        </Box>
       )
     );
   }
 
-  return <Table.Row ref={bottomRef} />;
+  return <Box ref={bottomRef} />;
 }
