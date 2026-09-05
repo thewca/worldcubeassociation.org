@@ -34,6 +34,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ARG WCA_SITE
+ARG NEXT_ASSET_PREFIX
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -45,10 +46,19 @@ RUN corepack enable
 ENV NEXT_PUBLIC_WCA_FRONTEND_API_URL="https://$WCA_SITE/api/"
 ENV NEXT_PUBLIC_WEBSOCKET_URL="https://$WCA_SITE/api/v1/live/cable"
 ENV PROPRIETARY_FONT="TTNormsPro"
+# Baked into the client bundle at build time, so it cannot be set per task definition
+ENV NEXT_ASSET_PREFIX=$NEXT_ASSET_PREFIX
 # Create the types and build
 RUN LOCALE_DIR="./src/lib/i18n/locales" yarn run build:translations
 RUN yarn types:openapi
 RUN NODE_ENV=production yarn run build
+
+# Export-only stage. Building with `--target assets --output type=local` writes the
+# client bundle to the local filesystem for the S3 sync. It shares the `builder` stage
+# with the runner image, so the digests S3 serves and the digests the app links to
+# cannot drift apart.
+FROM scratch AS assets
+COPY --from=builder /app/.next/static /_next/static
 
 # Production image, copy all the files and run next
 FROM base AS runner
