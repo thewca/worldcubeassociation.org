@@ -70,7 +70,8 @@ declare module "nextjs-routes" {
     | StaticRoute<"/search">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
-    | StaticRoute<"/translators">;
+    | StaticRoute<"/translators">
+    | DynamicRoute<"/widgets/[competitionId]/headToHead", { "competitionId": string }>;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;
