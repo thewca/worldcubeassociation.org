@@ -114,8 +114,13 @@ export default async function PersonOverview({
   return (
     <Container centerContent>
       {/* Profile Section */}
-      <SimpleGrid gap={8} columns={24} paddingY={8}>
-        <GridItem colSpan={7}>
+      <SimpleGrid
+        gap={8}
+        columns={{ base: 1, lg: 24 }}
+        paddingY={8}
+        width="full"
+      >
+        <GridItem colSpan={{ base: 1, lg: 7 }}>
           <ProfileCard
             name={personDetails.person.name}
             profilePicture={personDetails.person.avatar.url}
@@ -131,11 +136,11 @@ export default async function PersonOverview({
           />
         </GridItem>
         {/* Records and Medals */}
-        <GridItem colSpan={17}>
+        <GridItem colSpan={{ base: 1, lg: 17 }}>
           <PersonalRecordsTable records={personDetails.personal_records} />
-          <SimpleGrid gap={8} columns={6} padding={0} pt={8}>
+          <SimpleGrid gap={8} columns={{ base: 1, md: 6 }} padding={0} pt={8}>
             {hasMedals && (
-              <GridItem colSpan={hasRecords ? 3 : 6}>
+              <GridItem colSpan={{ base: 1, md: hasRecords ? 3 : 6 }}>
                 <MedalSummaryCard
                   gold={personDetails.medals.gold}
                   silver={personDetails.medals.silver}
@@ -144,7 +149,7 @@ export default async function PersonOverview({
               </GridItem>
             )}
             {hasRecords && (
-              <GridItem colSpan={hasMedals ? 3 : 6}>
+              <GridItem colSpan={{ base: 1, md: hasMedals ? 3 : 6 }}>
                 <RecordSummaryCard
                   world={personDetails.records.world}
                   continental={personDetails.records.continental}
@@ -154,31 +159,40 @@ export default async function PersonOverview({
             )}
 
             {/* Tabs */}
-            <GridItem colSpan={6}>
+            <GridItem colSpan={{ base: 1, md: 6 }}>
               <Card.Root>
                 <Tabs.Root
                   defaultValue="results"
-                  fitted
+                  fitted={{ base: false, md: true }}
                   variant="plain"
                   lazyMount
                   colorPalette="blue"
                   highContrast
                 >
                   <Card.Header padding={0}>
-                    <Tabs.List>
-                      <Tabs.Trigger value="results">Results</Tabs.Trigger>
-                      <Tabs.Trigger value="competitions">
+                    <Tabs.List maxWidth="full" overflowX="auto">
+                      <Tabs.Trigger value="results" flexShrink="0">
+                        Results
+                      </Tabs.Trigger>
+                      <Tabs.Trigger value="competitions" flexShrink="0">
                         Competitions
                       </Tabs.Trigger>
                       {hasRecords && (
-                        <Tabs.Trigger value="records">Records</Tabs.Trigger>
+                        <Tabs.Trigger value="records" flexShrink="0">
+                          Records
+                        </Tabs.Trigger>
                       )}
                       {hasChampionshipPodiums && (
-                        <Tabs.Trigger value="championship-podiums">
+                        <Tabs.Trigger
+                          value="championship-podiums"
+                          flexShrink="0"
+                        >
                           Championship Podiums
                         </Tabs.Trigger>
                       )}
-                      <Tabs.Trigger value="map">Map</Tabs.Trigger>
+                      <Tabs.Trigger value="map" flexShrink="0">
+                        Map
+                      </Tabs.Trigger>
                       <Tabs.Indicator
                         bg="colorPalette.solid"
                         borderBottomRadius={0}

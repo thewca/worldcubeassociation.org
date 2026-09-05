@@ -25,48 +25,50 @@ const CompetitionsTab = async ({ wcaId }: CompetitionsTabProps) => {
   }
 
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>#</Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {t("persons.show.competition")}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {t("competitions.competition_info.city")}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {t("competitions.competition_info.date")}
-          </Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {competitions.map((c, index) => (
-          <Table.Row key={c.id}>
-            <Table.Cell>{index + 1}</Table.Cell>
-            <Table.Cell>
-              <Link asChild>
-                <NextLink
-                  href={route({
-                    pathname: "/competitions/[competitionId]",
-                    query: { competitionId: c.id },
-                  })}
-                >
-                  {c.name}
-                </NextLink>
-              </Link>
-            </Table.Cell>
-            <Table.Cell>
-              {c.city}
-              {`, ${countries.byIso2[c.country_iso2].name}`}
-            </Table.Cell>
-            <Table.Cell>
-              <Text>{formatDateRange(c.start_date, c.end_date)}</Text>
-            </Table.Cell>
+    <Table.ScrollArea maxW="full">
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>#</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("persons.show.competition")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("competitions.competition_info.city")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("competitions.competition_info.date")}
+            </Table.ColumnHeader>
           </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
+        </Table.Header>
+        <Table.Body>
+          {competitions.map((c, index) => (
+            <Table.Row key={c.id}>
+              <Table.Cell>{index + 1}</Table.Cell>
+              <Table.Cell>
+                <Link asChild>
+                  <NextLink
+                    href={route({
+                      pathname: "/competitions/[competitionId]",
+                      query: { competitionId: c.id },
+                    })}
+                  >
+                    {c.name}
+                  </NextLink>
+                </Link>
+              </Table.Cell>
+              <Table.Cell>
+                {c.city}
+                {`, ${countries.byIso2[c.country_iso2].name}`}
+              </Table.Cell>
+              <Table.Cell>
+                <Text>{formatDateRange(c.start_date, c.end_date)}</Text>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 };
 

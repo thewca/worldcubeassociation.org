@@ -60,14 +60,14 @@ const ProfileCard: React.FC<ProfileData> = async ({
   const { t } = await getT();
 
   return (
-    <Card.Root size="sm" position="sticky" top={4}>
+    <Card.Root size="sm" position={{ base: "static", lg: "sticky" }} top={4}>
       <Card.Header>
         <Center>
           <Image
             src={profilePicture}
             rounded="md"
             alt="Profile Photo"
-            boxSize="sm"
+            boxSize={{ base: "3xs", md: "sm" }}
             objectFit="cover"
           />
         </Center>
