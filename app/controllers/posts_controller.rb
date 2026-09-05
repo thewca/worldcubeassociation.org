@@ -3,8 +3,8 @@
 class PostsController < ApplicationController
   include TagsHelper
 
-  before_action :authenticate_user!, except: %i[homepage index rss show]
-  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: %i[homepage index rss show]
+  before_action :authenticate_user!, except: %i[homepage index rss show try_new_frontend]
+  before_action -> { redirect_to_root_unless_user(:can_create_posts?) }, except: %i[homepage index rss show try_new_frontend]
   before_action -> { redirect_to_root_unless_user(:can_administrate_livestream?) }, only: %i[livestream_management update_test_link promote_test_link]
   POSTS_PER_PAGE = 10
 
@@ -45,6 +45,15 @@ class PostsController < ApplicationController
                 else
                   ServerSetting.find_by(name: ServerSetting::LIVE_VIDEO_ID_NAME)&.value
                 end
+  end
+
+  def try_new_frontend
+    cookies[:wca_frontend] = { value: "next", expires: 1.year.from_now, path: "/" }
+    if Rails.env.production?
+      redirect_to root_url, allow_other_host: false
+    else
+      redirect_to "http://localhost:3001", allow_other_host: true
+    end
   end
 
   def livestream_management
