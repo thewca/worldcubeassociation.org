@@ -8005,6 +8005,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dinero.js@npm:2.0.2":
+  version: 2.0.2
+  resolution: "dinero.js@npm:2.0.2"
+  checksum: 10c0/e23bf810d33438afff958610f983023bda4d390b5144864006ff15ac27778da2f3e0978f04235fcef405f732e232a4b370fc5b2180ceb6801368a62909b307d9
+  languageName: node
+  linkType: hard
+
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0"
@@ -12248,6 +12255,7 @@ __metadata:
     aws4: "npm:^1.13.2"
     babel-plugin-react-compiler: "npm:^1.0.0"
     culori: "npm:^4.0.2"
+    dinero.js: "npm:2.0.2"
     eslint: "npm:^10"
     eslint-config-next: "npm:16.3.3"
     eslint-config-prettier: "npm:^10.1.8"
