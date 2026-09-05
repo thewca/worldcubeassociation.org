@@ -66,6 +66,7 @@ const STEP_DEFINITIONS: { [K in StepKey]: StepDefinition<K> } = {
         <PaymentStep
           competitionInfo={context.competitionInfo}
           registration={context.registration}
+          parameters={step.parameters}
           deadline={step.deadline}
         />
       ),
