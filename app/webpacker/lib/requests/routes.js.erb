@@ -76,6 +76,8 @@ export const competitionEventResultsApiUrl = (id, eventId) => `<%= CGI.unescape(
 
 export const competitionAllResultsUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_results_all_path("${id}", event: "${eventId}")) %>`;
 
+export const competitionPreviewLiveResultsUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_live_results_preview_path("${id}")) %>`
+
 export const omnisearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?q=${query}`;
 
 export const competitionSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_competitions_path %>?q=${query}`;
