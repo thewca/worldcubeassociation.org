@@ -24,9 +24,8 @@ RSpec.describe Registrations::Helper do
       end
 
       it 'creates a new locked user account' do
-        user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
-
-        expect(locked_account_created).to be(true)
+        user = Registrations::Helper.user_for_registration!(registration_data)
+        expect(user.locked_account?).to be(true)
         expect(user.name).to eq('Test Person')
         expect(user.email).to eq('testperson@example.com')
         expect(user.access_locked?).to be(true) if user.respond_to?(:access_locked?)
@@ -51,9 +50,8 @@ RSpec.describe Registrations::Helper do
 
       it 'uses the existing user' do
         expect do
-          user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
-
-          expect(locked_account_created).to be(false)
+          user = Registrations::Helper.user_for_registration!(registration_data)
+          expect(user.locked_account?).to be(false)
           expect(user.id).to eq(existing_user.id)
         end.to change(User, :count).by(0)
       end
@@ -80,9 +78,8 @@ RSpec.describe Registrations::Helper do
       end
 
       it 'returns the user normallly since this method does not check for registrations' do
-        user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
-
-        expect(locked_account_created).to be(false)
+        user = Registrations::Helper.user_for_registration!(registration_data)
+        expect(user.locked_account?).to be(false)
         expect(user.id).to eq(existing_user.id)
       end
     end

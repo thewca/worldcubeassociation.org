@@ -34,6 +34,9 @@ const baseWcaProvider: Provider = {
       image: profile.picture,
       roles: profile.roles,
       wcaId: profile.preferred_username,
+      // AuthJS overwrites `id` with a random UUID of its own, so the numeric WCA user id that
+      //   our provider issues as the OIDC subject needs a name AuthJS will leave alone.
+      wcaUserId: Number(profile.sub),
     };
   },
 };
@@ -66,6 +69,7 @@ export const authConfig: NextAuthConfig = {
         return {
           ...token,
           wcaId: user?.wcaId,
+          wcaUserId: user?.wcaUserId,
           access_token: account.access_token!,
           expires_at: account.expires_at!,
           refresh_token: account.refresh_token,
@@ -99,6 +103,7 @@ export const authConfig: NextAuthConfig = {
     async session({ session, token }) {
       session.accessToken = token.access_token;
       session.user.wcaId = token.wcaId;
+      session.wcaUserId = token.wcaUserId;
       return session;
     },
   },

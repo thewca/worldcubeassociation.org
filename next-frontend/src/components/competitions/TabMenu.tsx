@@ -204,7 +204,6 @@ function CollapsibleTabGroup({
         py="2"
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
-        cursor="pointer"
       >
         <Text textStyle="bodyEmphasis">
           <IconComponent /> {t(i18nKey)}
