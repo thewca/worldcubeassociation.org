@@ -581,9 +581,24 @@ class Competition < ApplicationRecord
     else
       warnings[:invisible] = I18n.t('competitions.messages.not_visible')
 
+      if self.start_date.present?
+        year = self.start_date.year.to_s
+        unless self.name.to_s.end_with?(year) &&
+               self.id.to_s.end_with?(year) &&
+               self.cell_name.to_s.end_with?(year)
+          warnings[:year] = I18n.t('competitions.messages.name_must_end_with_year')
+        end
+      end
+
       warnings[:name] = I18n.t('competitions.messages.name_too_long') if self.name.length > 32
 
-      warnings[:id] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
+      warnings[:id] = I18n.t('competitions.messages.id_must_match_short_name') unless self.id.match?(create_id_from_cell_name)
+
+      warnings[:id_casing] = I18n.t('competitions.messages.id_starts_with_lowercase') unless /^[[:upper:]]|^\d/.match?(self.id)
+
+      warnings[:venue_coordinates] = I18n.t('competitions.messages.venue_coordinates_too_far_away') if competition_venues.any? do |venue|
+        venue.kilometers_to(self) > 0.1
+      end
 
       warnings[:events] = I18n.t('competitions.messages.must_have_events') if no_events?
 
@@ -781,23 +796,29 @@ class Competition < ApplicationRecord
   alias_attribute :latitude_microdegrees, :latitude
   alias_attribute :longitude_microdegrees, :longitude
 
+  def create_id_from_cell_name
+    m = VALID_NAME_RE.match(cell_name)
+
+    cell_name_without_year = m[1]
+    year = m[2]
+
+    # Generate competition id from name
+    # By replacing accented chars with their ascii equivalents, and then
+    # removing everything that isn't a digit or a character.
+    safe_cell_name_without_year = ActiveSupport::Inflector.transliterate(cell_name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
+    safe_cell_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+  end
+
   def create_id_and_cell_name(force_override: false)
     m = VALID_NAME_RE.match(name)
     return unless m
 
     name_without_year = m[1]
-    year = m[2]
-    if id.blank? || force_override
-      # Generate competition id from name
-      # By replacing accented chars with their ascii equivalents, and then
-      # removing everything that isn't a digit or a character.
-      safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
-      self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
-    end
-    return unless cell_name.blank? || force_override
+    year = " #{m[2]}"
+    safe_cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
 
-    year = " #{year}"
-    self.cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
+    self.cell_name = safe_cell_name if cell_name.blank? || force_override
+    self.id = create_id_from_cell_name if id.blank? || force_override
   end
 
   attr_writer :staff_delegate_ids, :trainee_delegate_ids
@@ -1045,7 +1066,7 @@ class Competition < ApplicationRecord
   end
 
   def longitude_radians
-    to_radians longitude_degrees
+    GeoCalculation.to_radians longitude_degrees
   end
 
   def latitude_degrees
@@ -1057,7 +1078,7 @@ class Competition < ApplicationRecord
   end
 
   def latitude_radians
-    to_radians latitude_degrees
+    GeoCalculation.to_radians latitude_degrees
   end
 
   def country_zones
@@ -1274,17 +1295,14 @@ class Competition < ApplicationRecord
                .order(:registration_open)
   end
 
-  private def to_radians(degrees)
-    degrees * Math::PI / 180
-  end
-
   # Source http://www.movable-type.co.uk/scripts/latlong.html
   def kilometers_to(competition)
-    6371 *
-      Math.sqrt(
-        (((competition.longitude_radians - longitude_radians) * Math.cos((competition.latitude_radians + latitude_radians) / 2))**2) +
-        ((competition.latitude_radians - latitude_radians)**2),
-      )
+    GeoCalculation.haversine_distance(
+      self.latitude_radians,
+      self.longitude_radians,
+      competition.latitude_radians,
+      competition.longitude_radians
+    )
   end
 
   def registration_start_date_present?

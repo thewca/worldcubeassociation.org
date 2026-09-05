@@ -35,8 +35,16 @@ class CompetitionVenue < ApplicationRecord
     latitude_microdegrees / 1e6
   end
 
+  def latitude_radians
+    GeoCalculation.to_radians latitude_degrees
+  end
+
   def longitude_degrees
     longitude_microdegrees / 1e6
+  end
+
+  def longitude_radians
+    GeoCalculation.to_radians longitude_degrees
   end
 
   def all_activities
@@ -45,6 +53,15 @@ class CompetitionVenue < ApplicationRecord
 
   def top_level_activities
     venue_rooms.flat_map(&:schedule_activities)
+  end
+
+  def kilometers_to(competition)
+    GeoCalculation.haversine_distance(
+      self.latitude_radians,
+      self.longitude_radians,
+      competition.latitude_radians,
+      competition.longitude_radians,
+    )
   end
 
   def to_wcif
