@@ -2,10 +2,15 @@ import { Card, Container, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { announcementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 import AnnouncementsPagination from "@/app/(wca)/(with-background)/posts/announcementsPagination";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Announcements",
@@ -20,6 +25,8 @@ export default async function AnnouncementsPage({
 }) {
   const { page = "1" } = await searchParams;
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
+
+  await connection();
 
   const payload = await getPayload({ config });
   const announcements = await payload.find({

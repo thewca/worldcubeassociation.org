@@ -10,6 +10,10 @@ import OpenapiError from "@/components/ui/openapiError";
 import { Toaster } from "@/components/ui/toaster";
 import { getT } from "@/lib/i18n/get18n";
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 const fetchConfig = cache(async (authToken: string, competitionId: string) => {
   const client = serverClientWithToken(authToken);
 

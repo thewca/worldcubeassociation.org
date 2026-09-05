@@ -26,6 +26,10 @@ import AdminModeToggle from "@/app/(wca)/(with-background)/delegates/adminModeTo
 import OpenapiError from "@/components/ui/openapiError";
 import { Metadata } from "next";
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 // Editing a user is still served by Rails, which sits at the root of the public API host.
 const RAILS_ROOT_URL = new URL(process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL!)
   .origin;

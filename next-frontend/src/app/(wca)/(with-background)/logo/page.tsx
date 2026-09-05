@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import {
   Container,
   Heading,
@@ -15,6 +16,10 @@ import LogoDownload from "@/app/(wca)/(with-background)/logo/download";
 import { Fragment } from "react";
 import { Metadata } from "next";
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
 
@@ -24,6 +29,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LogoPage() {
+  await connection();
+
   const payload = await getPayload({ config });
 
   const logoPage = await payload.findGlobal({

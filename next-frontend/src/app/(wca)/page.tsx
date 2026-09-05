@@ -26,6 +26,7 @@ import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 
 import type {
   TextCardBlock,
@@ -52,6 +53,10 @@ import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 import OpenapiError from "@/components/ui/openapiError";
+
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 type TwoBlocksUnion =
   TwoBlocksLevel0Block | TwoBlocksLevel1Block | TwoBlocksLevel2Block;
@@ -500,6 +505,8 @@ const renderBlock = (
 };
 
 export default async function Homepage() {
+  await connection();
+
   const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
   const { lng } = await getT();

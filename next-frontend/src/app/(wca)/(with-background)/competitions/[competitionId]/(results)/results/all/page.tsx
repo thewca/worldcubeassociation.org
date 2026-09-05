@@ -6,6 +6,10 @@ import FilteredResults from "@/app/(wca)/(with-background)/competitions/[competi
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 
+// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export default async function PodiumsPage({
   params,
 }: {

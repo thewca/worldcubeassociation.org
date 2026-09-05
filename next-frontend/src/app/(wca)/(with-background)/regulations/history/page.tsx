@@ -3,6 +3,7 @@
 import { Container, Heading, VStack, Text, Link, List } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
 
@@ -15,6 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 export default async function RegulationsHistory() {
   const { i18n } = await getT();
+
+  await connection();
 
   const payload = await getPayload({ config });
 
