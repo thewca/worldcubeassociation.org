@@ -1,5 +1,9 @@
 import { Badge, FormatNumber, HStack } from "@chakra-ui/react";
-import { LOWEST_DENOMINATION_PER_UNIT } from "@/lib/wca/data/wca";
+import { dinero, toDecimal } from "dinero.js";
+import * as currencies from "dinero.js/currencies";
+import type { DineroCurrency } from "dinero.js";
+
+const currencyTable: Record<string, DineroCurrency<number>> = currencies;
 
 export default function CurrencyValue({
   lowestDenomination,
@@ -8,10 +12,18 @@ export default function CurrencyValue({
   lowestDenomination: number;
   currencyCode: string;
 }) {
+  const currency = currencyTable[currencyCode];
+
   return (
     <HStack>
       <FormatNumber
-        value={lowestDenomination / LOWEST_DENOMINATION_PER_UNIT}
+        value={
+          currency
+            ? Number(
+                toDecimal(dinero({ amount: lowestDenomination, currency })),
+              )
+            : lowestDenomination
+        }
         style="currency"
         currency={currencyCode}
       />

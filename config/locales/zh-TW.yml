@@ -1324,9 +1324,9 @@ zh-TW:
         wcat: >-
           WCA比賽公告組 (WCAT)
           負責審核和公告由WCA代表所提出的比賽申請，並確保此類公告符合WCA品質標準。這個團隊也負責維持良好的比賽申請用的協定文件，例如「WCA比賽要求政策」。WCA比賽公告組並不負責組織或是監督各個比賽。
-        #original_hash: 5007698
+        #original_hash: 58daf5b
         wic: >-
-          WCA廉正委員會（WIC）負責組成獨立的調查團隊。調查內容為在WCA比賽中已註冊玩家、WCA比賽的意外事件或是官方的WCA網路平台。這些意外事件是被指控違反WCA精神、WCA行為準則、WCA倫理規範或/和WCA競賽規則。
+          WCA廉正委員會（WIC）負責組成獨立的調查團隊。調查內容為在WCA比賽中已註冊玩家、WCA比賽的意外事件或是官方的WCA網路平台。這些意外事件是被指控違反WCA價值、WCA行為準則、WCA倫理規範或/和WCA競賽規則。
         #original_hash: be491ec
         weat: WCA董事會助理團隊 (WEAT)是負責執行處理WCA董事會的行政事務。
         #original_hash: fc67562
@@ -2186,8 +2186,8 @@ zh-TW:
       info: 您可以多次載入報名資料，變更的內容資料庫將自動做更新。
       #original_hash: 779b272
       registrations_file_label: 報名資料檔案
-      #original_hash: 224f3a6
-      registrations_file_hint: CSV檔需有以下欄位：狀態、姓名、區域、WCA ID、生日、性別、電子郵件和各項目之欄位。
+      #original_hash: d428219
+      registrations_file_hint: 需有以下欄位：狀態、姓名、區域、WCA ID、生日、性別、電子郵件和各項目之欄位的CSV檔，或是含有WCIF資料的JSON檔案。
       #original_hash: d6fbc9d
       import: 載入
       errors:
@@ -2324,26 +2324,53 @@ zh-TW:
       no_waiting_list_specified: 這場比沒有接受候補名單的截止時間。如果您要使用候補名單功能，請指定一個截止日期。如果您沒有要使用候補名單功能，請記得在報名條件中指定。
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: 在成績提交後，賽程將無法再進行編輯。
+      #original_hash: 1877b69
+      spots_left:
+        zero: 比賽已額滿
+        other: '剩%{count}個名額'
     live:
       #original_hash: 10d1a3c
       title: 即時成績
+      #original_hash: ef1c23b
+      manage_rounds: 管理輪數
+      incompatible:
+        #original_hash: 4e41690
+        external: 本次競賽使用外部記分系統——請查看競賽資訊來確認直播計分的觀看位置。
+        #original_hash: 92b3341
+        wca_live: 本次競賽使用WCA Live進行成績記錄——請點擊此連結查看即時成績：
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: 正在進行
+        #original_hash: e5fd9cf
+        done: 完成
       connection:
         #original_hash: f92b311
         initialized: 正在初始化連線
-        #original_hash: 66d44d4
-        connected: 連線完成，正在更新成績
+        #original_hash: b574812
+        connected: 連線完成，正在更新即時成績
         #original_hash: 53abaa2
         disconnected: 失去連結，成績沒有被更新
+        status:
+          #original_hash: 3ec2f2a
+          initialized: 準備開始
+          #original_hash: c2f9b7b
+          connected: 連線完成
+          #original_hash: 771e05f
+          disconnected: 斷線
       podiums:
         #original_hash: 02ae2bd
         title: 頒獎台
-        #original_hash: d7297a7
-        undetermined: 頒獎台名次尚未決定
+        #original_hash: 69c4270
+        undetermined: 尚未決定
+        #original_hash: 61e88df
+        none: 還未出現前三名！
       admin:
         #original_hash: cf9b770
         open: 開啟
         #original_hash: 719ea39
         clear: 清除
+        #original_hash: bbfa773
+        close: 關閉
         #original_hash: 42faad9
         competitors_entered: '已輸入%{competitors_live_results_entered}/%{total_competitors}'
         #original_hash: adec79f
@@ -2352,6 +2379,22 @@ zh-TW:
         edit: 編輯
         #original_hash: 612e12d
         results: 成績
+        #original_hash: b233e77
+        registration: 註冊
+        #original_hash: 1e0d934
+        admin_view: 管理員檢視模式
+        #original_hash: 530a71b
+        results_view: 成績檢視模式
+        #original_hash: 1dadee2
+        double_check: 再次確認
+        #original_hash: a5be381
+        submit_results: 送出成績
+        #original_hash: 0ed766a
+        add_to_batch: 加入批次
+        #original_hash: 8b6d8cb
+        batch_mode: 批次模式
+        #original_hash: a577fa2
+        submit_batch: '提交批次（%{count}）'
         warnings:
           #original_hash: 9198c71
           omitted: '您遺漏第 %{attempt_number} 次還原。請確認這是正確的。'
@@ -2368,23 +2411,38 @@ zh-TW:
           round_locked: 下一輪已經開啟，任何變更將不會影響該輪！
         quit:
           #original_hash: de62de1
-          title: 退出參賽者
+          title: 移除參賽者
           #original_hash: c25b336
           next_to_advance:
             zero: '接下來晉級的選手是 %{competitors}'
             other: '接下來晉級的選手是 %{competitors}'
           #original_hash: c87ca67
           advance: 晉級下一位參賽者
-          #original_hash: e85b311
-          quit_confirm: 從這一輪退出參賽者
+          #original_hash: aa59a26
+          quit_confirm:
+            zero: 從這一輪移除參賽者
+            other: 從這一輪移除參賽者
+          bulk:
+            #original_hash: e0981de
+            success: '已成功移除 %{count} 位參賽者'
+            #original_hash: 98fe723
+            failure: 批次移除參賽者失敗
+            #original_hash: 774050e
+            menu: 批次移除
+            #original_hash: 89f89c0
+            id: ID
+            #original_hash: 709a232
+            name: 名字
           #original_hash: 1a2285d
-          quit_menu: 退出
+          quit_menu: 移除
           #original_hash: 70835a0
           no_next: 沒有下一位可晉級的選手。
           #original_hash: 77dfd21
           cancel: 取消
           #original_hash: 79d6737
           failed_to_fetch: 無法取得下一位晉級的選手
+          #original_hash: d4dcd86
+          still_processing: 在部分成績仍在處理時，無法執行「移除選手」的操作
       results:
         #original_hash: 4705687
         competitor: 參賽者
@@ -2879,8 +2937,6 @@ zh-TW:
           external_registration_page: 報名頁面
           #original_hash: 87b7d5f
           uses_wca_registration: 我要使用WCA網站的報名系統
-          #original_hash: ebe8c47
-          uses_wca_live: 我將使用 WCA Live 作成績計入
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: 貨幣代碼
@@ -3037,8 +3093,6 @@ zh-TW:
           external_registration_page: 參賽者報名比賽的頁面，必須為有效的http(s)網址。
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3682,10 +3736,10 @@ zh-TW:
       venue_selection_all: '您正在閱覽所有%{venueCount}個比賽會場的賽程。'
       #original_hash: 97df911
       timezone_message: '比賽場地的時區為%{timezone}。'
-      #original_hash: 94b2570
+      #original_hash: f948a0e
       timezone_setting: 您閱覽中賽程的時區：
-      #original_hash: 75194fd
-      multiple_timezones_available: 請注意不是所有比賽會場都是相同的時區 - 請小心！
+      #original_hash: ca4f078
+      multiple_timezones_available: 有些比賽會場是不同的時區 - 請注意！
       #original_hash: d94a371
       timezone_set_local: 設成本地
       #original_hash: 17ab650
@@ -4109,7 +4163,7 @@ zh-TW:
           #original_hash: 576c3b8
           '4': >-
             更多資訊請參考<a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA比賽主辦團隊指導方針</a>。
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA比賽主辦團隊指導方針</a>。
       '6':
         #original_hash: 8005a61
         title: WCA帳號的用途是什麼？WCA帳號和WCA個人頁面的差異何在？
@@ -4210,10 +4264,10 @@ zh-TW:
       <p>世界方塊協會掌管方塊比賽，這些方塊是透過轉動一部份的零件來操控，通常稱之為「魔術方塊」（twisty
       puzzles）。其中最著名的就是由匈牙利的魯比克教授（professor Rubik）發明的3x3x3魔術方塊（Rubik's
       Cube）。這些方塊中選出了一系列被當成是WCA的正式比賽項目。</p><p>WCA已經在過去的十年來已成長很多，超過245,000名參賽者已經參加過我們的比賽。儘管有如此的成長，我們的組織仍然幾乎都是志願者來經營，從最基本的當地團體，往上的WCA代表甚至是最上層的WCA董事會也不例外。我們非常感謝每一位貢獻自己的時間來讓WCA得以運作的人。有著更多的經濟上的支持後，我們希望在認可全球各地的比賽的同時，能夠把我們的比賽提升到更專業的層級。</p>
-    #original_hash: bccd8c5
-    spirit: 我們的精神是，全世界的人們可以在一個友善的環境下一起玩得開心，互相幫助並保持著運動家風度。
-    #original_hash: 69131cc
-    spirit_footer: WCA精神
+    #original_hash: 1076bcb
+    spirit: 我們的價值觀是社群、公平、樂趣、卓越與志願服務精神。
+    #original_hash: 9679c23
+    spirit_footer: WCA價值觀
     #original_hash: c1781ee
     our_goals_title: 我們的目標
     #original_hash: c1144d4
@@ -4265,9 +4319,9 @@ zh-TW:
       operations_html: 'WCA的日常事務由 %{committees_and_teams}來處理。'
       #original_hash: 0e7a036
       teams_committees: 團隊與委員會
-      #original_hash: 7e849d2
+      #original_hash: c319cc2
       delegates_html: >-
-        <p><strong>WCA代表</strong>是WCA動議中定義的腳色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>高級代表</strong>、<strong>地區代表</strong>、<strong>一般代表</strong>、<strong>初級代表</strong>和<strong>實習代表</strong>%{see_link}。</p>
+        <p><strong>WCA代表</strong>是WCA動議中定義的腳色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的宗旨、價值觀和規則。WCA將代表區別成<strong>高級代表</strong>、<strong>地區代表</strong>、<strong>一般代表</strong>、<strong>初級代表</strong>和<strong>實習代表</strong>%{see_link}。</p>
         <p>跟一般代表職責不同的是，高級代表或是地區代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p>
         <p>新上任的代表會先列為初級代表，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為一般代表。</p><p>實習代表是用來訓練成WCA代表的職位，在有其他WCA代表同時在場的時候才能監督一場比賽。</p>
       #original_hash: 27d18ac
@@ -4311,8 +4365,6 @@ zh-TW:
     competition_templates: 比賽模板
     #original_hash: 5ca0558
     certificates: WCA傳播組的獎狀範本
-    #original_hash: f580987
-    orga_guidelines: 主辦團隊指導方針
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA代表
@@ -4464,7 +4516,7 @@ zh-TW:
           json檔案來載入轉亂內容。輸出適當的成績檔案格式來作為成績上傳。
       groups:
         #original_hash: 311a3f6
-        title: 比賽組別
+        title: CompetitionGroups (比賽組別)
         #original_hash: 74a0926
         description: 查看所有進行中的比賽組別
   logo:
@@ -4579,7 +4631,7 @@ zh-TW:
       #original_hash: ad5f6e7
       title: 主辦團隊指導方針
       #original_hash: 9bbdf16
-      content1_html: 如果您有興趣主辦比賽或是已經在準備當中，請閱讀我們的<a href="/organizer-guidelines">主辦團隊指導方針</a>。
+      content1_html: 如果您有興趣主辦比賽或是已經在準備當中，請閱讀我們的<a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">主辦團隊指導方針</a>。
       #original_hash: 5016669
       content2_html: 此文件包含重要資訊，所有比賽主辦團隊應詳閱。
   regulations_translations:
@@ -4606,158 +4658,6 @@ zh-TW:
     paragraph3_html: >-
       如果您有興趣新增或是更新翻譯版本，請到<a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">GitHub倉庫上的翻譯說明</a>。
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      歡迎來到WCA品質保證委員會所彙編的主辦團隊指導方針。如果您正在考慮成為主辦團隊，那非常建議要閱讀這些文件。這些文件被分成必讀文件和推薦文件。確保您對於這些資訊都熟悉，因為這些內容能使比賽令人愈快並保有高品質。
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>免責聲明</strong>：WCA不主辦比賽。身為WCA認證比賽的主辦人<strong>禁止</strong>代替WCA簽訂任何事物。您應該試著聯絡能協助主辦或比賽相關事宜的區域組織
-      。
-    essential:
-      #original_hash: 44bd0ba
-      description: 必讀文件
-      #original_hash: 1cf87ad
-      finding-venue: 尋找場地
-      #original_hash: 3ce0d9c
-      orga-team-delegate: 成立您的主辦團隊並接洽一位WCA代表
-      #original_hash: d3c693b
-      budget: 做比賽成本計算
-      #original_hash: b1429a7
-      schedule: 安排時間表
-      #original_hash: beea57d
-      checklist: 比賽確認清單
-      #original_hash: 9defcf1
-      registration: 處理報名
-      #original_hash: e298a56
-      venue-setup: 比賽佈置
-      #original_hash: 2b6a5dd
-      work-during-comp: 主辦團隊在比賽中的工作
-    recommended:
-      #original_hash: 6b843f3
-      title: 推薦文件
-      #original_hash: 6e4fb29
-      staff: 指定志願者
-      #original_hash: 4735583
-      emails: 電子郵件
-      #original_hash: 8e7ca09
-      running-systems: 比賽流動與裁判系統
-      #original_hash: 2b31c89
-      new-competitors: 對於新參賽者的態度
-      #original_hash: 00c4f78
-      enhancing-experience: 增進參賽者及志願者的比賽體驗
-      #original_hash: 2345aaa
-      reflection: 比賽借鏡
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: WCA比賽主辦團隊指導方針
-    paragraph0:
-      #original_hash: ee36904
-      title: 簡易版本
-      #original_hash: 60d9532
-      content: 底下可以找到簡易的整理重點讓您有想法如何舉辦一場比賽。如果您認為這是您想要找資訊的，請看參考網頁上方的文件內容！
-    paragraph1:
-      #original_hash: e5f5329
-      title: 如何主辦比賽
-      #original_hash: 3dbbbee
-      content: >-
-        所有的WCA比賽必須有WCA代表出席並監督。如果您有興趣主辦比賽，請聯絡離您最近的WCA代表。他們會給您一些指導並幫助您挑選適合的日子，因為他們會知道同一段時間是否有其他比賽正在規劃中。如果您附近沒有WCA代表，請聯絡您所在地區的高級代表。
-    paragraph2:
-      #original_hash: f20dd3b
-      title: 主辦比賽的預計開銷
-      #original_hash: f16a06f
-      content: >-
-        比賽預計開銷在每個國家的情況不大相同，且會受到很多因素影響，例如比賽場地大小或其他常見狀況。基本上所有開銷由報名費來支付是可行的，不過為了盡可能降低開銷，強烈建議您尋找贊助商。儘管WCA代表為自願性性質且不會為工作收取酬勞，主辦團隊仍應補貼WCA代表的交通費用。
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: 公告比賽的截止期限
-      #original_hash: 477a672
-      content_html: >-
-        比賽必須要在比賽開始前的28天公告（參見 <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>比賽要求政策</a>）。但是，這幾乎都不夠時間。您應該考慮所有跟籌辦比賽有關的事物，並給自己足夠的時間準備。還有，在比賽公告前，WCA比賽公告組需要時間來審查比賽申請內容。關於需要預留多少時間，可以跟您的WCA代表諮詢。
-    paragraph4:
-      #original_hash: b6dca56
-      title: 鄰近比賽政策
-      #original_hash: 0574d31
-      content1: >-
-        WCA比賽必須與其他比賽間隔30公里或5天以上才會通過申請。若申請中的比賽與其他比賽的距離小於30公里且日期小於5天，WCAT應仔細審核。當WCA代表申請這類型的比賽時，必須提供額外的資訊來說明為什麼這場比賽應該通過申請。可能讓比賽申請通過的理由如下：
-      olist1:
-        #original_hash: de00462
-        '1': 兩場比賽沒有相同的項目。
-        #original_hash: b8ff462
-        '2': 兩場比賽在不同區域舉行。
-      #original_hash: 5c5cf04
-      content2: 「多地同時的3x3x3最少步數解比賽」為僅有3x3x3最少步數解項目且同時在多個不同場地舉行的WCA比賽。
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: 多地同時的3x3x3最少步數解比賽不得為其他場次比賽的一部份。
-          alist1:
-            #original_hash: 75aa0c7
-            1a: 兩者舉辦的時段不得重疊。
-        '2':
-          #original_hash: b2b8004
-          content1: 如果這種比賽所在地10公里之內有其他場次比賽，則
-          alist1:
-            #original_hash: 8f532bb
-            2a: 兩場比賽之間應至少間隔5天以上，或
-            #original_hash: e14e11e
-            2b: 其他比賽不能有3x3x3最少步數解項目。
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: 公告比賽項目
-      #original_hash: 7ad62c7
-      content: 在申請比賽時，所有在比賽中會舉行的比賽項目必須要由WCA代表列出。之後再新增的項目必須要由WCAT核准。
-    paragraph5:
-      #original_hash: 17d01de
-      title: 參賽者上限
-      #original_hash: 6bfef2c
-      content_html: >-
-        每場比賽或每個比賽項目可以有參賽者上限（參見<a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>比賽要求政策</a>）。WCA代表必須要從WCAT取得參賽者上限的許可。參賽者上限應該要謹慎決定，並根據有興趣參加的參賽者來做考量。上限不應該因為次要原因而設太低。當在尋找適合的比賽場地時，就應該設想到想要設定的參賽者上限。參賽者上限必須要清楚地在WCA網站上的比賽頁面中公告。
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: 處理報名資訊
-      #original_hash: bd669a1
-      content: >-
-        報名必須以先到者優先處理為原則，也就是說第一個報名必須要第一個受理。如果報名費採用預付制度，當報名費支付完成後才視為報名成功，這個資訊應該清楚地公告在比賽網站上的付費說明中。
-    paragraph7:
-      #original_hash: e4f1c62
-      title: 管理候補名單
-      #original_hash: 81ca3f3
-      content1: 一旦參賽者人數達到上限，應該要開放候補名單。當已報名且通過審核的參賽者取消其報名，其位置可以會被下一位候補參賽者取代。
-      #original_hash: 802b34f
-      content2: >-
-        如果比賽報名費採用預付制度，比較有效的辦法是，下一個候補名單中的參賽者自動補位，但其報名費應在截止時間前繳清才能完成報名（例如：48小時）。萬一候補的參賽者沒有及時繳清或是取消報名，則該位置應該再補位給下一名在候補名單中的參賽者。此程序應該要一直持續直到位置都被補滿為止，任何參賽者一律不得略過候補程序。
-      #original_hash: 37bcbd6
-      content3: 如果參賽者沒有透過正常程序報名卻參加比賽，該參賽者的成績將會在事後被刪除（假設有報名上限且達到上限）。
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: 比賽之前的工作
-      list:
-        #original_hash: c8abb5e
-        '1': 在公告比賽之前，賽程需要發布在比賽網站上。賽程隨後還可以進行調整。
-        #original_hash: e93d043
-        '2': >-
-          參賽者應該被分成若干組別，成績單必須列印且需根據分組分類。建議您提早規劃負責每個項目每個組別的轉亂員，至少第一輪要先規劃。轉亂員應該要找可靠度高的人。
-    paragraph9:
-      #original_hash: ead44f5
-      title: 比賽當中的工作
-      #original_hash: ee2e9c6
-      content: 主辦團隊在比賽當中的工作項目應該與WCA代表討論。常見的工作如下（可以委託給其他可靠的人）：
-      list:
-        #original_hash: 03aea46
-        '1': 負責報到處
-        #original_hash: c4388f3
-        '2': 做廣播或公告
-        #original_hash: 45c78ae
-        '3': 呼叫組別並發放成績單
-        #original_hash: 0b31986
-        '4': 輸入成績並列印成績
-        #original_hash: 7ab2d4c
-        '5': 尋找轉亂員和裁判
-        #original_hash: 52e8316
-        '6': 處理所有有關場地的問題（例如：鑰匙或無線網路）
   media:
     common:
       #original_hash: f9b7a97

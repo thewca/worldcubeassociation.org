@@ -48,7 +48,3 @@ get:
               human_amount:
                 type: string
                 description: The amount formatted for display, including the currency's name
-    '401':
-      $ref: '../../errorResponses/NotLoggedIn.yaml'
-    '4XX':
-      $ref: '../../errorResponses/RegistrationError.yaml'

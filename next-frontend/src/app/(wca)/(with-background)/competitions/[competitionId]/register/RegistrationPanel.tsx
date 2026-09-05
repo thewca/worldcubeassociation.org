@@ -9,6 +9,7 @@ import StepPanel from "@/app/(wca)/(with-background)/competitions/[competitionId
 import RegistrationNotAllowedMessage from "@/components/competitions/Registration/RegistrationNotAllowedMessage";
 import RegistrationOpeningMessage from "@/components/competitions/Registration/RegistrationOpeningMessage";
 import RegistrationClosingMessage from "@/components/competitions/Registration/RegistrationClosingMessage";
+import useRegistration from "@/lib/wca/registrations/useRegistration";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -40,8 +41,9 @@ function RegistrationFullMessage({
           {t(message, { competitor_limit: competitionInfo.competitor_limit })}
         </Alert.Title>
         <Alert.Description>
-          {t("competitions.registration_v2.update.waitlist")}:{" "}
-          {waitingListCount}
+          {t("competitions.registration_v2.register.waiting_list_count", {
+            count: waitingListCount,
+          })}
         </Alert.Description>
       </Alert.Content>
     </Alert.Root>
@@ -62,6 +64,15 @@ export default function RegistrationPanel({
   initialRegistration: Registration | null;
 }) {
   const { t } = useT();
+
+  // The competitor can withdraw from inside the panel, and once registration has closed that is
+  //   what decides whether the panel is still theirs to see - so the live registration, not the
+  //   one the page was rendered with.
+  const registration = useRegistration({
+    competitionId: competitionInfo.id,
+    userId,
+    initialRegistration,
+  });
 
   // Ticking rather than computed once, so that the countdown below turns into the panel the
   //   moment registration opens, without the competitor having to reload.
@@ -85,10 +96,9 @@ export default function RegistrationPanel({
   const isPreRegistering =
     eligibility.can_pre_register && !registrationHasOpened;
 
-  const initialStatus = initialRegistration?.competing.registration_status;
+  const status = registration?.competing.registration_status;
   const hasViewableRegistration =
-    initialStatus !== undefined &&
-    VIEWABLE_REGISTRATION_STATES.includes(initialStatus);
+    status !== undefined && VIEWABLE_REGISTRATION_STATES.includes(status);
 
   const showPanel =
     (registrationHasOpened && registrationHasNotClosed) ||

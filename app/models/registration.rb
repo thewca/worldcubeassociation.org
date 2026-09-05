@@ -186,8 +186,9 @@ class Registration < ApplicationRecord
     )
   end
 
-  def entry_fee_with_donation(iso_donation_amount = 0)
-    entry_fee + Money.new(iso_donation_amount, entry_fee.currency)
+  def outstanding_entry_fees_with_donation(iso_donation_amount = 0)
+    outstanding_fees = outstanding_entry_fees
+    outstanding_fees + Money.new(iso_donation_amount, outstanding_fees.currency)
   end
 
   def paid_entry_fees
@@ -323,7 +324,7 @@ class Registration < ApplicationRecord
   end
 
   def to_live_json
-    as_json(methods: %i[name country_iso2], only: %i[id user_id registrant_id])
+    as_json(methods: %i[name country_iso2 wca_id], only: %i[id user_id registrant_id])
   end
 
   def to_v2_json(admin: false, pii: false)

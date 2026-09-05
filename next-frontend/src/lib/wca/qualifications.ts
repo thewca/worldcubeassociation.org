@@ -11,11 +11,13 @@ function isQualifiedForEvent(
   qualification: WcifQualification | undefined,
   personalRecords: PersonalRecords,
 ) {
-  if (!qualification) {
+  if (!qualification?.resultCondition) {
     return true;
   }
 
-  const personalRecord = personalRecords[qualification.resultType].find(
+  const { type, scope, value } = qualification.resultCondition;
+
+  const personalRecord = personalRecords[scope].find(
     (record) => record.eventId === eventId,
   );
 
@@ -25,12 +27,16 @@ function isQualifiedForEvent(
     return false;
   }
 
-  switch (qualification.type) {
-    case "anyResult":
+  switch (type) {
     case "ranking":
       return true;
-    case "attemptResult":
-      return personalRecord.best < qualification.level;
+    case "resultAchieved":
+      // WCIF v2 expresses "any result" as a result condition without a value
+      return (
+        value === null || value === undefined || personalRecord.value < value
+      );
+    default:
+      return false;
   }
 }
 

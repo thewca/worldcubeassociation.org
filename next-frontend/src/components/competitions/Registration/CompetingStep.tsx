@@ -19,13 +19,14 @@ import {
 } from "@/lib/wca/data/wca";
 import { useT } from "@/lib/i18n/useI18n";
 import { disabledEventIds } from "@/lib/wca/registrations/eventSelection";
+import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { qualificationToString } from "@/lib/wca/wcif/rounds";
 import type { components } from "@/types/openapi";
 import type {
   RegistrationForm,
   RegistrationFormValues,
-} from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
-import { LuSend } from "react-icons/lu";
+} from "@/lib/wca/registrations/registrationForm";
+import { LuSend, LuUndo2 } from "react-icons/lu";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type CompetingStepParameters =
@@ -42,19 +43,21 @@ const toggleEvent = (eventId: string, selectedEventIds: string[]) => {
 };
 
 export default function CompetingStep({
-  form,
   competitionInfo,
   parameters,
   registration,
+  form,
   isSubmitting,
-  onSubmit,
+  onClose,
 }: {
-  form: RegistrationForm;
   competitionInfo: CompetitionInfo;
   parameters: CompetingStepParameters;
   registration: Registration | null;
+  form: RegistrationForm;
   isSubmitting: boolean;
-  onSubmit: (values: RegistrationFormValues) => void;
+  // Only set when the form is opened from the registration overview, which is the one place the
+  //   competitor can leave it again without submitting anything.
+  onClose?: () => void;
 }) {
   const { t } = useT();
 
@@ -69,18 +72,11 @@ export default function CompetingStep({
     ? (parameters.guests_per_registration_limit ?? DEFAULT_GUEST_LIMIT)
     : DEFAULT_GUEST_LIMIT;
 
-  const competingStatus = registration?.competing.registration_status;
-  const hasWithdrawn = competingStatus === "cancelled";
-
-  // Organizers keep editing open for pending and waitlisted competitors even when the competition
-  //   as a whole no longer allows changes.
-  const canEditRegistration =
-    parameters.allow_registration_edits ||
-    competingStatus === "pending" ||
-    competingStatus === "waiting_list";
+  const hasWithdrawn =
+    registration?.competing.registration_status === "cancelled";
 
   const isEditingLocked =
-    registration !== null && !hasWithdrawn && !canEditRegistration;
+    registration !== null && !canEditRegistration(parameters, registration);
 
   const warnings = [
     parameters.events_per_registration_limit &&
@@ -115,7 +111,7 @@ export default function CompetingStep({
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        onSubmit(form.state.values);
+        form.handleSubmit();
       }}
     >
       <Fieldset.Root disabled={isEditingLocked}>
@@ -175,42 +171,42 @@ export default function CompetingStep({
           )}
         </form.Field>
 
-        <form.Field
-          name="comment"
-          validators={{
-            onChange: ({ value }) =>
-              parameters.force_comment_in_registration && value.trim() === ""
-                ? t("registrations.errors.cannot_register_without_comment")
-                : undefined,
+        {/* A required comment is derived from the value rather than validated on change, so that
+            the competitor is told about it before they have typed anything. */}
+        <form.Field name="comment">
+          {(field) => {
+            const commentMissing =
+              parameters.force_comment_in_registration &&
+              field.state.value.trim() === "";
+
+            return (
+              <Field.Root
+                invalid={commentMissing}
+                required={parameters.force_comment_in_registration}
+              >
+                <Field.Label width="full" asChild>
+                  <HStack justify="space-between">
+                    <Text>
+                      {t("competitions.registration_v2.register.comment")}
+                      <Field.RequiredIndicator />
+                    </Text>
+                    <Text fontStyle="italic">
+                      ({field.state.value.length}/{COMMENT_CHARACTER_LIMIT})
+                    </Text>
+                  </HStack>
+                </Field.Label>
+                <Textarea
+                  autoresize
+                  maxLength={COMMENT_CHARACTER_LIMIT}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                <Field.ErrorText>
+                  {t("registrations.errors.cannot_register_without_comment")}
+                </Field.ErrorText>
+              </Field.Root>
+            );
           }}
-        >
-          {(field) => (
-            <Field.Root
-              invalid={!field.state.meta.isValid}
-              required={parameters.force_comment_in_registration}
-            >
-              <Field.Label width="full" asChild>
-                <HStack justify="space-between">
-                  <Text>
-                    {t("competitions.registration_v2.register.comment")}
-                    <Field.RequiredIndicator />
-                  </Text>
-                  <Text fontStyle="italic">
-                    ({field.state.value.length}/{COMMENT_CHARACTER_LIMIT})
-                  </Text>
-                </HStack>
-              </Field.Label>
-              <Textarea
-                autoresize
-                maxLength={COMMENT_CHARACTER_LIMIT}
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-              <Field.ErrorText>
-                {field.state.meta.errors.join(", ")}
-              </Field.ErrorText>
-            </Field.Root>
-          )}
         </form.Field>
 
         {parameters.guests_enabled && (
@@ -257,19 +253,41 @@ export default function CompetingStep({
           </Alert.Root>
         )}
 
-        <form.Subscribe selector={(state) => isSubmittable(state.values)}>
-          {(canSubmit) => (
-            <Button
-              type="submit"
-              width="full"
-              colorPalette="green"
-              loading={isSubmitting}
-              disabled={!canSubmit || isEditingLocked}
-            >
-              <LuSend />
-              {submitLabel}
-            </Button>
-          )}
+        {/* Opened from the overview with nothing changed there is nothing to submit, so the same
+            button takes the competitor back to their summary instead of saving. */}
+        <form.Subscribe
+          selector={(state) =>
+            onClose && state.isDefaultValue
+              ? "close"
+              : isSubmittable(state.values)
+                ? "submit"
+                : "incomplete"
+          }
+        >
+          {(buttonAction) =>
+            buttonAction === "close" ? (
+              <Button
+                width="full"
+                variant="outline"
+                colorPalette="blue"
+                onClick={onClose}
+              >
+                <LuUndo2 />
+                {t("competitions.registration_v2.register.view_registration")}
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                width="full"
+                colorPalette="green"
+                loading={isSubmitting}
+                disabled={buttonAction === "incomplete" || isEditingLocked}
+              >
+                <LuSend />
+                {submitLabel}
+              </Button>
+            )
+          }
         </form.Subscribe>
       </Fieldset.Root>
     </form>

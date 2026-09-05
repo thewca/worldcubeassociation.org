@@ -100,6 +100,12 @@ RUN cp -r node_modules/playwright* "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
 
 RUN rm -rf node_modules
 
+# Export-only stage. `docker buildx bake assets` writes this to the local filesystem
+# for the S3 sync. It shares the `build` stage with every image below, so the digests
+# S3 serves and the digests the app links to cannot drift apart.
+FROM scratch AS assets
+COPY --from=build /rails/public /
+
 FROM base AS runtime
 
 # Install fonts for rendering PDFs (mostly competition summary PDFs)

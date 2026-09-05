@@ -26,7 +26,7 @@ import {
 import NextLink from "next/link";
 import ResultsProjector from "@/components/live/ResultsProjector";
 import { route } from "nextjs-routes";
-import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { useAllRoundsInfo, useRoundInfo } from "@/providers/RoundInfoProvider";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
 import { forecastViewSupported } from "@/lib/live/forecastviewSupported";
@@ -62,6 +62,7 @@ export default function LiveUpdatingResultsTable({
   } = useLiveResults();
 
   const round = useRoundInfo();
+  const { rounds } = useAllRoundsInfo();
 
   const { id: roundWcifId, format: formatId, state } = round;
 
@@ -111,7 +112,7 @@ export default function LiveUpdatingResultsTable({
             checked={forecastView}
             onCheckedChange={(e) => setForecastView(e.checked)}
             colorPalette="green"
-            disabled={!forecastViewSupported(round, roundFinished)}
+            disabled={!forecastViewSupported(round, rounds, roundFinished)}
           >
             <Switch.HiddenInput />
             <Switch.Control>

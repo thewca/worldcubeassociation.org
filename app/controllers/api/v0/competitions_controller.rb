@@ -11,8 +11,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       managed_by_user = current_api_user || current_user
     end
 
-    competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user)
-    competitions = competitions.includes(:delegates, :organizers, :events)
+    competitions = Competition.with_serialization_preloads.search(params[:q], params: params, managed_by_user: managed_by_user)
 
     paginate json: competitions
   end
@@ -64,7 +63,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def events
     competition = competition_from_params
-    render json: competition.events_wcif
+
+    lifecycle_name = params[:wcif_version]&.to_sym || :stable
+
+    unless Competition::WCIF_VERSION_CATALOGUE.key?(lifecycle_name)
+      return render json: {
+        message: "invalid lifecycle name '#{lifecycle_name}'",
+        valid_lifecycle_names: Competition::WCIF_VERSION_CATALOGUE.keys,
+      }, status: :bad_request
+    end
+
+    render json: competition.events_wcif(version: Competition::WCIF_VERSION_CATALOGUE.fetch(lifecycle_name))
   end
 
   def schedule
@@ -289,14 +298,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     wcif = wcif["_json"] || wcif
 
-    # If the user specified a "strictness" param, then use it.
-    # If not, then fall back to a default behavior where:
-    #  - local environments (dev, test) are strict
-    #  - other environments (most notably prod) are NOT strict right now
-    # Strictness will be enforced at some time in May 2026. Signed GB 2026-05-01
-    strict_schema_checks = params.key?(:strict) ? ActiveRecord::Type::Boolean.new.cast(params[:strict]) : Rails.env.local?
-
-    competition.set_wcif!(wcif, require_user!, strict_schema_checks: strict_schema_checks)
+    competition.set_wcif!(wcif, require_user!)
     render json: {
       status: "Successfully saved WCIF",
     }

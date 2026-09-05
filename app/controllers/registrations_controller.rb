@@ -3,9 +3,13 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook payment_denomination]
+  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
+
+  rescue_from JSON::Schema::ValidationError do |_e|
+    render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.invalid_wcif") }
+  end
 
   private def competition_from_params
     competition = if params[:competition_id].present?
@@ -19,9 +23,9 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook payment_denomination capture_paypal_payment]
+                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook capture_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index psych_sheet psych_sheet_event stripe_webhook payment_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index psych_sheet psych_sheet_event stripe_webhook]
   private def competition_must_be_using_wca_registration!
     return if competition_from_params.use_wca_registration?
 
@@ -69,9 +73,15 @@ class RegistrationsController < ApplicationController
   before_action :validate_and_parse_registration_preview, only: %i[validate_and_convert_registrations]
   private def validate_and_parse_registration_preview
     @competition = competition_from_params
-    file = params.require(:csv_registration_file)
+    file = params.require(:registration_file)
 
-    @converted_registrations = parse_csv_to_registration_data(file.path, @competition)
+    if file.content_type == "application/json"
+      @converted_registrations = parse_json_to_registration_data(file.path)
+    elsif file.content_type == "text/csv"
+      @converted_registrations = parse_csv_to_registration_data(file.path, @competition)
+    else
+      render status: :unprocessable_content, json: { error: I18n.t("registrations.import.errors.unsupported_file_format") }
+    end
   end
 
   def validate_and_convert_registrations
@@ -124,6 +134,16 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  private def parse_json_to_registration_data(file_path)
+    wcif = JSON.parse(File.read(file_path))
+
+    Competition.validate_wcif_schema!(wcif)
+
+    wcif["persons"].select do |person|
+      person.dig("registration", "status") == "accepted"
+    end
+  end
+
   private def build_wcif_data(name:, country:, gender:, birth_date:, email:, event_ids:, wca_id: nil, comments: nil, status: nil, is_competing: nil, registered_at: nil)
     {
       name: name,
@@ -170,7 +190,10 @@ class RegistrationsController < ApplicationController
       end
     end
 
+    invalid_countries = csv_rows.pluck(:country).uniq - Country::WCA_COUNTRY_IDS
+
     [
+      invalid_countries.map { |c| I18n.t("registrations.import.errors.invalid_country", country: c) },
       event_column_errors,
       validate_dob_formats(csv_rows.pluck(:birth_date)),
       validate_no_duplicates(csv_rows.pluck(:email), 'email_duplicates', :emails),
@@ -180,7 +203,7 @@ class RegistrationsController < ApplicationController
 
   private def validate_registrations(registration_rows, competition)
     # Validate country codes
-    invalid_countries = registration_rows.filter_map { |e| e[:countryIso2] }.uniq.reject { |iso2| Country.c_find_by_iso2(iso2) }
+    invalid_countries = registration_rows.pluck(:countryIso2).compact_blank.uniq - Country::WCA_COUNTRY_ISO_CODES
 
     # Validate event IDs against competition events
     valid_event_ids = competition.competition_events.pluck(:event_id)
@@ -188,7 +211,7 @@ class RegistrationsController < ApplicationController
     invalid_event_ids = all_event_ids - valid_event_ids
 
     [
-      invalid_countries.any? && "Invalid country codes: #{invalid_countries.join(', ')}",
+      invalid_countries.map { |c| I18n.t("registrations.import.errors.invalid_country", country: c) },
       invalid_event_ids.any? && "Invalid event IDs for this competition: #{invalid_event_ids.join(', ')}",
       validate_dob_formats(registration_rows.filter_map { |e| e[:birthdate] }),
       validate_no_duplicates(registration_rows.filter_map { |e| e[:email]&.downcase }, 'email_duplicates', :emails),
@@ -259,30 +282,7 @@ class RegistrationsController < ApplicationController
   end
 
   def do_import
-    new_locked_users = []
-    # registered_at stores millisecond precision, but we want all registrations
-    #   from CSV import to be considered as one "batch". So we mark a timestamp
-    #   once, and then reuse it throughout the loop.
-    import_time = Time.now.utc
-    emails = @registrations.pluck(:email)
-    ActiveRecord::Base.transaction do
-      @competition.registrations.accepted.each do |registration|
-        registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED) unless emails.include?(registration.user.email)
-      end
-      @registrations.each do |registration_data|
-        user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
-        new_locked_users << user if locked_account_created
-        registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
-          reg.registered_at = import_time
-        end
-        registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::CSV_IMPORT)
-      rescue StandardError => e
-        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_data[:name], error: e))
-      end
-    end
-    new_locked_users.each do |user|
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
-    end
+    Registrations::Helper.import_registrations!(@competition, @registrations, current_user)
     render status: :ok, json: { success: true }
   rescue StandardError => e
     render status: :unprocessable_content, json: { error: e.to_s }
@@ -323,14 +323,13 @@ class RegistrationsController < ApplicationController
         ],
       ).to_h.symbolize_keys
       registration_data = build_wcif_data(**registration_params)
-      user, locked_account_created = Registrations::Helper.user_for_registration!(registration_data)
+      user = Registrations::Helper.user_for_registration!(registration_data)
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
         reg.registered_at = Time.now.utc
       end
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
 
       registration.save_registration_data!(registration_data: registration_data, creator: current_user, source: Registration::OTS_FORM)
-      RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later if locked_account_created
     end
     flash[:success] = I18n.t("registrations.flash.added")
     redirect_to competition_registrations_add_url(@competition)
@@ -344,22 +343,6 @@ class RegistrationsController < ApplicationController
     @registration = Registration.find_by(competition: @competition, user: current_user) if current_user.present?
 
     @is_processing = current_user.present? && Rails.cache.read(CacheAccess.registration_processing_cache_key(@competition.id, current_user.id)).present?
-  end
-
-  def payment_denomination
-    competition_id = params[:competition_id]
-    user_id = params[:user_id]
-    registration = Registration.find_by(competition_id: competition_id, user_id: user_id)
-    iso_donation_amount = params[:iso_donation_amount].to_i
-    ruby_money = registration.entry_fee_with_donation(iso_donation_amount)
-    human_amount = helpers.format_money(ruby_money)
-
-    api_amounts = {
-      stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),
-      paypal: PaypalRecord.amount_to_paypal(ruby_money.cents, ruby_money.currency.iso_code),
-    }
-
-    render json: { api_amounts: api_amounts, human_amount: human_amount }
   end
 
   # Respond to asynchronous payment updates from Stripe.

@@ -23,9 +23,9 @@ import { useState } from "react";
 import { LuCreditCard } from "react-icons/lu";
 import { useT } from "@/lib/i18n/useI18n";
 import CurrencyValue from "@/components/CurrencyValue";
-import { LOWEST_DENOMINATION_PER_UNIT } from "@/lib/wca/data/wca";
 import { hasPassed } from "@/lib/wca/dates";
 import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
+import { lowestDenominationsPerUnit } from "@/lib/wca/payments/currency";
 import { paymentCompletionUrl } from "@/lib/wca/payments/stripe";
 import { toaster } from "@/components/ui/toaster";
 import type { components } from "@/types/openapi";
@@ -57,6 +57,8 @@ function PaymentForm({
 
   const [isPaying, setIsPaying] = useState(false);
   const [isDonating, setIsDonating] = useState(false);
+
+  const perUnit = lowestDenominationsPerUnit(competitionInfo.currency_code);
 
   const showError = (messageKey: string) =>
     toaster.create({
@@ -150,16 +152,12 @@ function PaymentForm({
                 <NumberInput.Root
                   min={0}
                   width="full"
-                  value={(
-                    donationIso / LOWEST_DENOMINATION_PER_UNIT
-                  ).toString()}
+                  value={(donationIso / perUnit).toString()}
                   onValueChange={(e) =>
                     onDonationChange(
                       Number.isNaN(e.valueAsNumber)
                         ? 0
-                        : Math.round(
-                            e.valueAsNumber * LOWEST_DENOMINATION_PER_UNIT,
-                          ),
+                        : Math.round(e.valueAsNumber * perUnit),
                     )
                   }
                 >
@@ -226,8 +224,8 @@ function StripePayment({
     }),
   );
 
-  // The entry fee includes per-event fees, and Stripe wants its own denomination, so the amount is
-  //   the backend's to compute rather than ours to reconstruct.
+  // The outstanding fee includes per-event fees, and Stripe wants its own denomination, so the
+  //   amount is the backend's to compute rather than ours to reconstruct.
   const { data: denomination, isError } = api.useQuery(
     "get",
     "/v1/registrations/{registrationId}/payment_denomination",
