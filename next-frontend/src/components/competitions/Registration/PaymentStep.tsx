@@ -127,6 +127,10 @@ function PaymentForm({
         {competitionInfo.enable_donations && (
           <Stack gap="2">
             <Checkbox.Root
+              width="full"
+              // The label runs to a sentence, so on a narrow screen it wraps and the box belongs
+              //   beside its first line rather than centred against the whole paragraph.
+              alignItems="start"
               checked={isDonating}
               onCheckedChange={(e) => {
                 setIsDonating(!!e.checked);
@@ -177,11 +181,13 @@ function PaymentForm({
           </Alert.Root>
         )}
 
-        <HStack justify="space-between">
+        {/* The amount carries its currency's full name, so on a phone it is too long to sit beside
+            the label and drops onto its own line instead of breaking mid-word. */}
+        <HStack justify="space-between" flexWrap="wrap">
           <Text fontWeight="medium">
             {t("registrations.payment_form.labels.subtotal")}
           </Text>
-          <Text>{humanAmount}</Text>
+          <Text textAlign="end">{humanAmount}</Text>
         </HStack>
 
         <Button
