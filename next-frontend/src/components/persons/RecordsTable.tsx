@@ -10,7 +10,7 @@ export default function RecordsTable({
   recordResults,
   t,
 }: {
-  recordResults: components["schemas"]["Results"];
+  recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
   const recordsByType = _.groupBy(
@@ -52,7 +52,7 @@ function RecordsByEvent({
   recordResults,
   t,
 }: {
-  recordResults: components["schemas"]["Results"];
+  recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
   const resultsByEvent = _.groupBy(recordResults, "event_id");

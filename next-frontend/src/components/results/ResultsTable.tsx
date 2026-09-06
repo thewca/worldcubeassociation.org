@@ -182,11 +182,13 @@ export function ByCompetitionTable({
   results,
   t,
 }: {
-  results: components["schemas"]["Result"][];
+  results: components["schemas"]["V1Result"][];
   t: TFunction;
 }) {
+  // Newest competition first. Ordering explicitly rather than reversing the payload keeps this
+  // independent of whatever order the API happens to return rows in.
   const resultsByCompetition = _.groupBy(
-    results.toReversed(),
+    _.orderBy(results, ["competition_start_date", "id"], ["desc", "asc"]),
     "competition_id",
   );
 
@@ -207,7 +209,7 @@ export function ByCompetitionTable({
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {_.map(resultsByCompetition, (competitorResults, competition_id) => {
+        {_.map(resultsByCompetition, (competitorResults) => {
           return competitorResults.map((competitorResult, index) => {
             const eventId = competitorResult.event_id;
             const { definedAttempts, bestResultIndex, worstResultIndex } =
@@ -225,7 +227,7 @@ export function ByCompetitionTable({
                           },
                         })}
                       >
-                        {competition_id}
+                        {competitorResult.competition_name}
                       </NextLink>
                     </Link>
                   )}

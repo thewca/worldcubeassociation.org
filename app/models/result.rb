@@ -58,12 +58,31 @@ class Result < ApplicationRecord
   alias_attribute :wca_id, :person_id
 
   delegate :iso2, to: :country, prefix: true
+  delegate :start_date, to: :competition, prefix: true
+
+  # `cell_name` is the competition's short display name, sized for table cells. It is exposed as
+  # `competition_name` because "cell" is internal vocabulary that shouldn't leak into the API.
+  def competition_name
+    competition.cell_name
+  end
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id round_id pos best best_index worst_index average],
     methods: %w[name country_iso2 competition_id event_id
                 round_type_id format_id wca_id attempts best_index
                 worst_index regional_single_record regional_average_record],
+  }.freeze
+
+  # Serialization for the v1 API. Unlike DEFAULT_SERIALIZE_OPTIONS, which every `Result` payload
+  # falls back to, this is opted into explicitly — so it can name fields with the vocabulary the
+  # rest of the API uses (`wca_id`, `country_iso2`) instead of the database's column names, and
+  # can carry the competition context a results table needs without widening every other payload.
+  # `best_index` / `worst_index` are deliberately absent: they are derivable from `attempts`.
+  V1_SERIALIZE_OPTIONS = {
+    only: %w[id pos best average],
+    methods: %w[wca_id name country_iso2 competition_id competition_name competition_start_date
+                event_id round_type_id format_id attempts
+                regional_single_record regional_average_record],
   }.freeze
 
   def serializable_hash(options = nil)
