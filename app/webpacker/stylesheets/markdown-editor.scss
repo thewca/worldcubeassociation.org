@@ -4,3 +4,8 @@
 .editor-preview-active-side {
   z-index: 1001; // on top of navbar
 }
+
+.markdown-editor-character-count-warning {
+  color: #a94442; // matches Bootstrap's has-error text color
+  font-weight: bold;
+}
