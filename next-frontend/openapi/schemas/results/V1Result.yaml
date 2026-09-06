@@ -1,0 +1,80 @@
+type: object
+description: >-
+  A single competitor's result in one round, carrying the competition context needed to render it
+  on its own. This is the result shape for the v1 API; the v0 `Result` and `ExtendedResult`
+  schemas name several of the same fields after database columns and are not interchangeable
+  with it.
+required:
+  - id
+  - pos
+  - best
+  - average
+  - attempts
+  - wca_id
+  - name
+  - country_iso2
+  - competition_id
+  - competition_name
+  - competition_start_date
+  - event_id
+  - round_type_id
+  - format_id
+properties:
+  id:
+    type: integer
+    example: 6709306
+  pos:
+    type: integer
+    description: The competitor's position within this round.
+    example: 1
+  best:
+    type: integer
+    example: 84
+  average:
+    type: integer
+    description: Zero when the round's format does not produce an average.
+    example: 88
+  attempts:
+    type: array
+    description: >-
+      Attempt values in solve order. Skipped solves are 0 and DNF/DNS are negative, so the best
+      and worst attempt are derived from this list rather than sent as separate indices.
+    items:
+      type: integer
+      example: 566
+  wca_id:
+    type: string
+    example: "2019WANY36"
+  name:
+    type: string
+    example: "Yiheng Wang (王艺衡)"
+  country_iso2:
+    type: string
+    description: ISO 3166-1 alpha-2 code of the country the competitor represented.
+    example: "CN"
+  competition_id:
+    type: string
+    example: "HangzhouOpen2024"
+  competition_name:
+    type: string
+    description: The competition's short display name.
+    example: "Hangzhou Open 2024"
+  competition_start_date:
+    type: string
+    format: date
+    example: "2024-11-16"
+  event_id:
+    type: string
+    example: "222"
+  round_type_id:
+    type: string
+    example: "f"
+  format_id:
+    type: string
+    example: "a"
+  regional_single_record:
+    type: string
+    example: "WR"
+  regional_average_record:
+    type: string
+    example: "NR"
