@@ -9,7 +9,6 @@ import {
   VStack,
   Image,
   List,
-  Icon,
   Float,
   LinkBox,
   LinkOverlay,
@@ -59,9 +58,7 @@ export default async function RegionalOrganizations() {
               _hover={{ cursor: org.website ? "pointer" : "default" }}
             >
               <Float offsetX={6}>
-                <Icon asChild size="sm">
-                  <WcaFlag code={org.country_iso2} />
-                </Icon>
+                <WcaFlag code={org.country_iso2} size="sm" />
               </Float>
               {org.logo_url && (
                 <Image

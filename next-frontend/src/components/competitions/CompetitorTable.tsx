@@ -1,4 +1,4 @@
-import { HStack, Icon, Link, Table, Text } from "@chakra-ui/react";
+import { HStack, Link, Table, Text } from "@chakra-ui/react";
 import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import WcaFlag from "@/components/WcaFlag";
@@ -82,9 +82,7 @@ export default function CompetitorTable({
                 )}
                 <Table.Cell>
                   <HStack>
-                    <Icon asChild size="sm">
-                      <WcaFlag code={registration.user.country_iso2} />
-                    </Icon>
+                    <WcaFlag code={registration.user.country_iso2} size="sm" />
                     <CountryMap
                       code={registration.user.country_iso2}
                       t={t}

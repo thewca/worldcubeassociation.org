@@ -1,4 +1,4 @@
-import { HStack, Icon, Link, Table, Text } from "@chakra-ui/react";
+import { HStack, Link, Table, Text } from "@chakra-ui/react";
 import { route } from "nextjs-routes";
 import WcaFlag from "@/components/WcaFlag";
 import CountryMap from "@/components/CountryMap";
@@ -59,9 +59,7 @@ export default function PsychsheetTable({
                     </Table.Cell>
                     <Table.Cell>
                       <HStack>
-                        <Icon asChild size="sm">
-                          <WcaFlag code={registration.country_iso2} />
-                        </Icon>
+                        <WcaFlag code={registration.country_iso2} size="sm" />
                         <CountryMap
                           code={registration.country_iso2}
                           t={t}
