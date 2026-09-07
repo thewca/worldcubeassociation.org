@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Header, Icon, Message, Table } from 'semantic-ui-react';
+import {
+  Header, Icon, Message, Table,
+} from 'semantic-ui-react';
 import _ from 'lodash';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
