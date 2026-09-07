@@ -57,7 +57,7 @@ export default async function OfficersAndBoard() {
         <Heading size="5xl">{t("page.officers_and_board.title")}</Heading>
         <Heading size="2xl">{t("user_groups.group_types.officers")}</Heading>
         <Text>{t("page.officers_and_board.officers_description")}</Text>
-        <SimpleGrid columns={3} gap="16px">
+        <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
           {officers.map((officer) => (
             <UserBadge
               key={officer.id}
@@ -81,7 +81,7 @@ export default async function OfficersAndBoard() {
           </Link>
         </Heading>
         <Text>{t("page.officers_and_board.board_description")}</Text>
-        <SimpleGrid columns={3} gap="16px">
+        <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
           {boardRoles.map((board) => (
             <UserBadge
               key={board.id}
