@@ -1364,6 +1364,7 @@ export interface TabsVariant {
   variant?: "line" | "subtle" | "enclosed" | "outline" | "plain" | undefined
   fitContent?: boolean | undefined
   highContrast?: boolean | undefined
+  sideNav?: boolean | undefined
 }
 
 export type TabsVariantProps = {
