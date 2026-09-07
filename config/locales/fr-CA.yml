@@ -3452,8 +3452,8 @@ fr-CA:
       list: Liste
       #original_hash: 8bb6835
       map: Carte
-      #original_hash: 6b38300
-      event: Catégorie
+      #original_hash: 6858354
+      event: Épreuve
       #original_hash: 357f27d
       region: Région
       #original_hash: 91f7d3e
@@ -3577,8 +3577,8 @@ fr-CA:
       registration_status:
         #original_hash: 26275eb
         full: Complet
-        #original_hash: cf9b770
-        open: Open
+        #original_hash: 0201d81
+        open: Ouvert
         #original_hash: 92ea9e6
         not_open: Non ouvert
         #original_hash: 79516c4
@@ -5579,10 +5579,10 @@ fr-CA:
             à la compétition d'être reconnue par la WCA. Le Délégué WCA fournira
             de l'aide à l'équipe d'organisation pour assurer le succès de
             l'organisation de la compétition.
-          #original_hash: 3f6899f
+          #original_hash: 540c09e
           '4': >-
-            Pour plus d'informations, consultez le <a target=“_blank”
-            href=“https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf”>Guide
+            Pour plus d'informations, consultez le <a target='_blank'
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>Guide
             de l'organisateur des compétitions WCA</a>.
       '6':
         #original_hash: 89f80eb
