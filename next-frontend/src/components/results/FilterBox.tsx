@@ -50,7 +50,12 @@ interface SegmentedFieldProps {
 }
 
 // Segmented control on desktop, native select on mobile where it doesn't fit
-function SegmentedField({ label, value, items, onChange }: SegmentedFieldProps) {
+function SegmentedField({
+  label,
+  value,
+  items,
+  onChange,
+}: SegmentedFieldProps) {
   return (
     <Field.Root minW="0">
       <Field.Label>{label}</Field.Label>
