@@ -48,7 +48,7 @@ export default async function RegionalOrganizations() {
       <VStack align="left">
         <Heading size="5xl">{t("regional_organizations.title")}</Heading>
         <Text>{t("regional_organizations.content")}</Text>
-        <SimpleGrid columns={3} columnGap={4} rowGap={6}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} columnGap={4} rowGap={6}>
           {organizations.map((org) => (
             <LinkBox
               key={org.name}

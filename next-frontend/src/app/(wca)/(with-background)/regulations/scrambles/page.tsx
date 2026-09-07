@@ -43,7 +43,7 @@ export default async function ScramblesPage() {
           </VStack>
         </Center>
         <Heading size="2xl">Important Notes for Delegates</Heading>
-        <List.Root>
+        <List.Root indented>
           <List.Item>
             Official competitions must always use a current version of the
             official scramble program (see{" "}
@@ -64,7 +64,7 @@ export default async function ScramblesPage() {
           </List.Item>
         </List.Root>
         <Heading size="2xl">Scramble Secrecy</Heading>
-        <List.Root>
+        <List.Root indented>
           <List.Item>
             <b>Always</b> encrypt your scrambles in TNoodle with an unguessable
             password. The password must have nothing to do with the competition
@@ -74,7 +74,7 @@ export default async function ScramblesPage() {
             If you are displaying scrambles on a digital device, only share{" "}
             <Code>[Competition Name] - Computer Display PDFs.zip</Code>.
           </List.Item>
-          <List.Root>
+          <List.Root indented>
             <List.Item>
               Make sure that only Delegates have access to any other files.
             </List.Item>
@@ -108,7 +108,7 @@ export default async function ScramblesPage() {
           TNoodle requires <Link href="https://www.java.com/en/">Java</Link> to
           be installed on your computer.
         </Text>
-        <List.Root>
+        <List.Root indented>
           <List.Item>
             Run the <Code>{LATEST_JARFILE}</Code> file on your computer.
             <br />
@@ -131,7 +131,7 @@ export default async function ScramblesPage() {
           </List.Item>
         </List.Root>
         <Heading size="2xl">Notes</Heading>
-        <List.Root>
+        <List.Root indented>
           <List.Item>
             4x4x4 scramble sequences <strong>may take a few minutes</strong> to
             initialize and generate. If you are generating 4x4x4 scramble
@@ -168,7 +168,7 @@ export default async function ScramblesPage() {
           Old versions must not be used. These are provided in case you want to
           check the behaviour of an older version.
         </Text>
-        <List.Root>
+        <List.Root indented>
           <List.Item>
             <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.4/TNoodle-0.7.4.jar">
               TNoodle-0.7.4

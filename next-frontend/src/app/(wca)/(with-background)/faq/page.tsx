@@ -67,7 +67,7 @@ export default async function FAQ() {
           <Card.Body paddingX={0}>
             <Tabs.Root
               variant="subtle"
-              fitted
+              fitContent
               defaultValue={faqCategories[0].id.toString()}
               width="full"
             >

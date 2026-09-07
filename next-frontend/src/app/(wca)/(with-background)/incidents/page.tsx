@@ -10,7 +10,7 @@ import {
   VStack,
   Heading,
   Input,
-  HStack,
+  Stack,
   Text,
   Select,
   createListCollection,
@@ -117,7 +117,7 @@ function IncidentsLog() {
 
   return (
     <Container bg="bg">
-      <VStack align="left">
+      <VStack align="left" gap={3}>
         <Heading textStyle="h1">{t("incidents_log.title")}</Heading>
         <Input
           placeholder={t("incidents_log.search_placeholder")}
@@ -125,74 +125,80 @@ function IncidentsLog() {
           onChange={(e) => setQuery(e.target.value)}
         />
         {isFetching && <Loading />}
-        <Table.Root size="sm" variant="outline" striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>
-                {t("activerecord.attributes.incident.title")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("activerecord.attributes.incident.tags")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("activerecord.attributes.incident.competition_id")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("incidents_log.status")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("incidents_log.sent_in_digest")}
-              </Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {incidents.map((item) => (
-              <Table.Row key={item.id}>
-                <Table.Cell>
-                  <Link asChild>
-                    <NextLink
-                      href={route({
-                        pathname: "/incidents/[id]",
-                        query: { id: item.id },
-                      })}
-                    >
-                      {item.title}
-                    </NextLink>
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <IncidentTags tags={item.tags} action={tagAction} />
-                </Table.Cell>
-                <Table.Cell>
-                  {item.competitions.map((competition) => (
-                    <CompetitionTag
-                      key={competition.id}
-                      name={competition.name}
-                      id={competition.id}
-                      comments={competition.comments}
-                    />
-                  ))}
-                </Table.Cell>
-                <Table.Cell>
-                  {t(
-                    item.resolved_at
-                      ? "incidents_log.resolved"
-                      : "incidents_log.pending",
-                  )}
-                </Table.Cell>
-                <Table.Cell>
-                  {t(
-                    item.digest_worthy && item.digest_sent_at
-                      ? "incidents_log.sent"
-                      : "incidents_log.pending",
-                  )}
-                </Table.Cell>
+        <Table.ScrollArea maxW="full">
+          <Table.Root size="sm" variant="outline" striped>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader>
+                  {t("activerecord.attributes.incident.title")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("activerecord.attributes.incident.tags")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader hideBelow="md">
+                  {t("activerecord.attributes.incident.competition_id")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("incidents_log.status")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader hideBelow="md">
+                  {t("incidents_log.sent_in_digest")}
+                </Table.ColumnHeader>
               </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
+            </Table.Header>
+            <Table.Body>
+              {incidents.map((item) => (
+                <Table.Row key={item.id}>
+                  <Table.Cell>
+                    <Link asChild>
+                      <NextLink
+                        href={route({
+                          pathname: "/incidents/[id]",
+                          query: { id: item.id },
+                        })}
+                      >
+                        {item.title}
+                      </NextLink>
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <IncidentTags tags={item.tags} action={tagAction} />
+                  </Table.Cell>
+                  <Table.Cell hideBelow="md">
+                    {item.competitions.map((competition) => (
+                      <CompetitionTag
+                        key={competition.id}
+                        name={competition.name}
+                        id={competition.id}
+                        comments={competition.comments}
+                      />
+                    ))}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {t(
+                      item.resolved_at
+                        ? "incidents_log.resolved"
+                        : "incidents_log.pending",
+                    )}
+                  </Table.Cell>
+                  <Table.Cell hideBelow="md">
+                    {t(
+                      item.digest_worthy && item.digest_sent_at
+                        ? "incidents_log.sent"
+                        : "incidents_log.pending",
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </Table.ScrollArea>
 
-        <HStack justify="space-between">
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          justify="space-between"
+          align={{ base: "stretch", md: "center" }}
+        >
           <Trans
             parent={Text}
             t={t}
@@ -244,7 +250,11 @@ function IncidentsLog() {
             pageSize={totalPages}
             page={page}
           >
-            <ButtonGroup variant="ghost" size="sm" wrap="wrap">
+            <ButtonGroup
+              variant="ghost"
+              size={{ base: "xs", md: "sm" }}
+              wrap="wrap"
+            >
               <Pagination.PrevTrigger asChild>
                 <IconButton
                   onClick={() => setPage(page - 1)}
@@ -272,7 +282,7 @@ function IncidentsLog() {
               </Pagination.NextTrigger>
             </ButtonGroup>
           </Pagination.Root>
-        </HStack>
+        </Stack>
       </VStack>
     </Container>
   );

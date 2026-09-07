@@ -2329,6 +2329,8 @@ es-419:
         Tienes denegado el acceso. Si crees que se trata de un error, por favor
         contacta con el <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WIC</a>.
+      #original_hash: d4ca89d
+      banned_until: 'Tu ban termina el %{date}.'
       #original_hash: 8d07e7f
       undelete_banned: es un competidor baneado y no se puede volver a añadir
       #original_hash: 3de7c86
@@ -4245,6 +4247,8 @@ es-419:
           requerimiento que se enumere.
         #original_hash: 80d2933
         next_step: Continuar al siguiente paso
+        #original_hash: bb54db5
+        accept: Aceptar
       update:
         #original_hash: ebf417d
         being_updated: Actualizando registro...
@@ -4339,6 +4343,8 @@ es-419:
           organizador o Delegado
         #original_hash: 6b76fab
         comment: Comentarios adicionales para los organizadores
+        #original_hash: f3d85ec
+        comment_overview: Tus comentarios
         #original_hash: 8eae30c
         until: 'Puedes actualizar tu registro hasta el día %{date}'
         #original_hash: fc8bc84
@@ -4378,6 +4384,11 @@ es-419:
         event_limit: >-
           Esta competición limita la cantidad de eventos a la que puedes
           anotarte a un máximo de %{max_events}.
+        #original_hash: 1e4c43f
+        waiting_list_count:
+          zero: No hay competidores en la lista de espera.
+          one: 'Hay %{count} competidor en la lista de espera.'
+          other: 'Hay %{count} competidores en la lista de espera.'
       errors:
         #original_hash: 3890616
         events: 'Falló la carga de eventos, por favor intenta nuevamente'
