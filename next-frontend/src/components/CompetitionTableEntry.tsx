@@ -10,7 +10,6 @@ import {
   Portal,
   Heading,
   Float,
-  Icon,
 } from "@chakra-ui/react";
 
 import WcaFlag from "@/components/WcaFlag";
@@ -98,9 +97,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell minWidth="4em">
-        <Icon size="lg">
-          <WcaFlag code={comp.country_iso2} fallback={comp.country_iso2} />
-        </Icon>
+        <WcaFlag code={comp.country_iso2} size="lg" />
       </Table.Cell>
 
       <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="xl">

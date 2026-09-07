@@ -1,6 +1,6 @@
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
-import { HStack, Icon, Link, Table } from "@chakra-ui/react";
+import { HStack, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
@@ -80,9 +80,7 @@ export function ResultsTable({
                 )}
                 <Table.Cell>
                   <HStack>
-                    <Icon asChild size="sm">
-                      <WcaFlag code={competitorResult.country_iso2} />
-                    </Icon>
+                    <WcaFlag code={competitorResult.country_iso2} size="sm" />
                     <CountryMap code={competitorResult.country_iso2} t={t} />
                   </HStack>
                 </Table.Cell>
@@ -157,9 +155,7 @@ export function ByPersonTable({
               </Table.Cell>
               <Table.Cell>
                 <HStack>
-                  <Icon asChild size="sm">
-                    <WcaFlag code={competitorResult.country_iso2} />
-                  </Icon>
+                  <WcaFlag code={competitorResult.country_iso2} size="sm" />
                   <CountryMap code={competitorResult.country_iso2} t={t} />
                 </HStack>
               </Table.Cell>

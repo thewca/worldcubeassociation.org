@@ -76,9 +76,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
       <Card.Body>
         <Card.Title>
           <HStack>
-            <Icon asChild size="2xl">
-              <WcaFlag code={regionIso2} />
-            </Icon>
+            <WcaFlag code={regionIso2} size="2xl" />
             <Text textStyle="h2">{name}</Text>
           </HStack>
           <Flex direction="row" wrap="wrap" align="start" gap="4px 8px">
