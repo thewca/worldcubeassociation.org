@@ -22,10 +22,16 @@ export default function PsychsheetTable({
           <Table.ColumnHeader>Name</Table.ColumnHeader>
           <Table.ColumnHeader>Representing</Table.ColumnHeader>
           <Table.ColumnHeader>WR</Table.ColumnHeader>
-          <Table.ColumnHeader onClick={() => setSortBy("single")}>
+          <Table.ColumnHeader
+            cursor="pointer"
+            onClick={() => setSortBy("single")}
+          >
             Single
           </Table.ColumnHeader>
-          <Table.ColumnHeader onClick={() => setSortBy("average")}>
+          <Table.ColumnHeader
+            cursor="pointer"
+            onClick={() => setSortBy("average")}
+          >
             Average
           </Table.ColumnHeader>
           <Table.ColumnHeader>WR</Table.ColumnHeader>

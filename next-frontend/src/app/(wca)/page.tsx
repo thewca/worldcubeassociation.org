@@ -54,9 +54,7 @@ import CompetitionShortlist from "@/components/competitions/CompetitionShortlist
 import OpenapiError from "@/components/ui/openapiError";
 
 type TwoBlocksUnion =
-  | TwoBlocksLevel0Block
-  | TwoBlocksLevel1Block
-  | TwoBlocksLevel2Block;
+  TwoBlocksLevel0Block | TwoBlocksLevel1Block | TwoBlocksLevel2Block;
 
 type TwoBlocksRatio = TwoBlocksUnion["ratio"];
 type TwoBlocksSpanConfig = { left: number; right: number };
@@ -104,7 +102,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
                 }
               >
                 <ChakraLink
-                  color="colorPalette.pastelContrast"
+                  color="colorPalette.contrast"
                   textStyle={undefined}
                   href={button.hyperlink}
                   target={button.newTab ? "_blank" : undefined}
@@ -183,7 +181,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       {block.imagePosition === "left" && (
         <BannerImageWithGradient
           mainImage={block.mainImage as Media}
-          targetColor="colorPalette.1A"
+          targetColor="colorPalette.solid"
           gradientDirection="right"
           boxWidth={block.heading ? "50%" : "100%"}
         />
@@ -222,7 +220,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
       {block.imagePosition === "right" && (
         <BannerImageWithGradient
           mainImage={block.mainImage as Media}
-          targetColor="colorPalette.1A"
+          targetColor="colorPalette.solid"
           gradientDirection="left"
           boxWidth={block.heading ? "50%" : "100%"}
         />
@@ -391,9 +389,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
 };
 
 type VerticalLayout =
-  | Home["layout"]
-  | TwoBlocksUnion["left"]
-  | TwoBlocksUnion["right"];
+  Home["layout"] | TwoBlocksUnion["left"] | TwoBlocksUnion["right"];
 
 const renderVerticalLayout = (
   verticalLayout: VerticalLayout,
@@ -506,9 +502,12 @@ const renderBlock = (
 export default async function Homepage() {
   const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
+  const { lng } = await getT();
   const homepage = await payload.findGlobal({
     slug: "home",
     draft: isDraftMode,
+    locale: lng,
+    fallbackLocale: "en",
   });
 
   const homepageEntries = homepage.layout;

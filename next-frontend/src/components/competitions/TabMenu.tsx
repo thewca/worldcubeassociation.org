@@ -65,7 +65,7 @@ export default function TabMenu({
         position="sticky"
         width="fit-content"
         min-width="3xs"
-        textAlign="center"
+        textAlign="start"
         hideBelow="md"
         gap="3"
       >
@@ -199,12 +199,11 @@ function CollapsibleTabGroup({
       <Collapsible.Trigger
         width="full"
         display="flex"
-        justifyContent="space-between"
+        textAlign="start"
         px="3"
         py="2"
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
-        cursor="pointer"
       >
         <Text textStyle="bodyEmphasis">
           <IconComponent /> {t(i18nKey)}

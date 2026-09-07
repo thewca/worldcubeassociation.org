@@ -22,8 +22,11 @@ class Cutoff
     !meets?(attempts)
   end
 
-  def to_wcif
-    { "numberOfAttempts" => self.number_of_attempts, "attemptResult" => self.attempt_result }
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    result_key = at_least_v2 ? "resultValue" : "attemptResult"
+
+    { "numberOfAttempts" => self.number_of_attempts, result_key => self.attempt_result }
   end
 
   def ==(other)
@@ -41,7 +44,7 @@ class Cutoff
       self.new.tap do |cutoff|
         json_obj = json.is_a?(Hash) ? json : JSON.parse(json)
         cutoff.number_of_attempts = json_obj['numberOfAttempts']
-        cutoff.attempt_result = json_obj['attemptResult']
+        cutoff.attempt_result = json_obj['attemptResult'] || json_obj['resultValue']
       end
     end
   end
@@ -50,12 +53,15 @@ class Cutoff
     cutoff ? JSON.dump(cutoff.to_wcif) : nil
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    result_key = at_least_v2 ? "resultValue" : "attemptResult"
+
     {
       "type" => %w[object null],
       "properties" => {
         "numberOfAttempts" => { "type" => "integer" },
-        "attemptResult" => { "type" => "integer" },
+        result_key => { "type" => "integer" },
       },
     }
   end

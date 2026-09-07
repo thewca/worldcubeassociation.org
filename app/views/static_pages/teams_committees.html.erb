@@ -1,5 +1,5 @@
 <% provide(:title, t("page.teams_committees_councils.title")) %>
 
-<%= react_on_rails_component("TeamsCommitteesCouncils", props: {
+<%= react_component("TeamsCommitteesCouncils", props: {
   canViewPastRoles: current_user&.staff?
 }) %>

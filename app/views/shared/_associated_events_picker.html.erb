@@ -15,12 +15,11 @@ Note: form_builder.object is the object having associated events.
   disabled ||= false
   hint ||= false
   show_select_hint ||= false
-  allowed_events ||= Event.official
+  allowed_events ||= Event.official_with_future
   disabled_events ||= []
   disabled_tooltip ||= false
 
   label = I18n.t("activerecord.attributes.#{form_builder.object.class.name.underscore}.#{events_association_name}")
-  using_competition_events = events_association_name == :registration_competition_events
   all_events = form_builder.object.events_to_associated_events(allowed_events)
   errors = form_builder.object.errors.messages[events_association_name] || []
 
@@ -47,11 +46,7 @@ Note: form_builder.object is the object having associated events.
       <% event = f.object.event %>
       <% e_disabled = disabled_events.include?(event) %>
       <span class="event-checkbox <%= "disabled" if disabled || e_disabled %>">
-        <% if using_competition_events %>
-          <%= f.hidden_field :competition_event_id %>
-        <% else %>
-          <%= f.hidden_field :event_id %>
-        <% end %>
+        <%= f.hidden_field :event_id %>
         <% if e_disabled %>
           <%= f.hidden_field "_destroy", { value: "1" } %>
           <%= cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: disabled_tooltip, style: "color: #FFBBBB" ) %>

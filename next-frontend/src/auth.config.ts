@@ -19,6 +19,11 @@ const baseWcaProvider: Provider = {
   issuer: WCA_OIDC_ISSUER,
   clientId: WCA_OIDC_CLIENT_ID,
   clientSecret: WCA_OIDC_CLIENT_SECRET,
+  // `manage_registrations` is what lets this frontend submit and edit registrations on the
+  //   signed-in user's behalf; without it the registration endpoints answer 403.
+  authorization: {
+    params: { scope: "openid profile email manage_registrations" },
+  },
   profile: (profile) => {
     return {
       id: profile.sub,
@@ -29,6 +34,9 @@ const baseWcaProvider: Provider = {
       image: profile.picture,
       roles: profile.roles,
       wcaId: profile.preferred_username,
+      // AuthJS overwrites `id` with a random UUID of its own, so the numeric WCA user id that
+      //   our provider issues as the OIDC subject needs a name AuthJS will leave alone.
+      wcaUserId: Number(profile.sub),
     };
   },
 };
@@ -61,6 +69,7 @@ export const authConfig: NextAuthConfig = {
         return {
           ...token,
           wcaId: user?.wcaId,
+          wcaUserId: user?.wcaUserId,
           access_token: account.access_token!,
           expires_at: account.expires_at!,
           refresh_token: account.refresh_token,
@@ -94,6 +103,7 @@ export const authConfig: NextAuthConfig = {
     async session({ session, token }) {
       session.accessToken = token.access_token;
       session.user.wcaId = token.wcaId;
+      session.wcaUserId = token.wcaUserId;
       return session;
     },
   },

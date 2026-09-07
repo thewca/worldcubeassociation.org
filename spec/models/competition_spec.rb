@@ -36,6 +36,37 @@ RSpec.describe Competition do
     expect(build(:competition, country_id: "USA", city_name: city)).to be_valid
   end
 
+  context "with Face Turning Octahedron" do
+    let(:fto_error) { "Face Turning Octahedron cannot be held at competitions starting before January 02, 2027." }
+
+    it "rejects a competition starting before the introduction date" do
+      competition = build(:competition, starts: Date.new(2027, 1, 1), event_ids: %w[333 fto])
+      expect(competition).to be_invalid_with_errors(competition_events: [fto_error])
+    end
+
+    it "accepts a competition starting on the introduction date" do
+      competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto])
+      expect(competition).to be_valid
+    end
+
+    it "accepts a competition starting before the introduction date without the event" do
+      competition = build(:competition, starts: Date.new(2027, 1, 1), event_ids: %w[333])
+      expect(competition).to be_valid
+    end
+
+    it "rejects adding the event to an early competition through the WCIF" do
+      competition = create(:competition, starts: Date.new(2027, 1, 1), event_ids: %w[333])
+      admin = create(:admin)
+
+      wcif = competition.to_wcif
+      wcif['events'] += [{ 'id' => 'fto', 'rounds' => [] }]
+
+      expect { competition.set_wcif!(wcif, admin) }
+        .to raise_error(ActiveRecord::RecordInvalid, /#{Regexp.escape(fto_error)}/)
+      expect(competition.reload.event_ids).not_to include('fto')
+    end
+  end
+
   context "when there is an entry fee" do
     it "correctly identifies there is a fee when there is only a base fee" do
       competition = build(:competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10)
@@ -69,6 +100,14 @@ RSpec.describe Competition do
     competition.country_id = nil
     expect(competition.entry_fee_required?).to be false
     expect(competition.guests_entry_fee_required?).to be false
+  end
+
+  it "does not require a guest entry fee when guests are not enabled" do
+    competition = create(:competition, :confirmed, country_id: "USA", guests_enabled: false, guests_entry_fee_lowest_denomination: nil)
+
+    expect(competition.guests_entry_fee_required?).to be false
+
+    expect(competition).to be_valid
   end
 
   it "handles free guest entry status" do

@@ -26,6 +26,14 @@ module ResultConditions
       self.attributes.reverse_merge("type" => self.class.wcif_type)
     end
 
+    def ==(other)
+      other.class == self.class && other.to_wcif == self.to_wcif
+    end
+
+    def hash
+      self.to_wcif.hash
+    end
+
     def self.wcif_json_schema
       {
         "oneOf" => [

@@ -1,0 +1,13 @@
+description: The registration request was rejected
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: integer
+          # see `Registrations::ErrorCodes`. Rendered to the user via the
+          #   `competitions.registration_v2.errors.<code>` translation keys.
+          description: Numeric registration error code

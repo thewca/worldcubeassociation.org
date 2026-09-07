@@ -12,29 +12,14 @@ import {
 import Loading from "@/components/ui/loading";
 import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import formats from "@/lib/wca/data/formats";
 import { LiveResult } from "@/types/live";
 import AttemptsForm from "@/components/live/AttemptsForm";
-import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { useRoundName } from "@/lib/wca/live/getRoundName";
 
-export default function DoubleCheck({
-  results,
-  roundWcifId,
-  formatId,
-  roundName,
-}: {
-  results: LiveResult[];
-  roundWcifId: string;
-  competitionId: string;
-  formatId: string;
-  roundName: string;
-}) {
-  const format = formats.byId[formatId];
-  const solveCount = format.expected_solve_count;
-
-  const { eventId } = parseActivityCode(roundWcifId);
+export default function DoubleCheck({ results }: { results: LiveResult[] }) {
+  const roundName = useRoundName();
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -86,11 +71,7 @@ export default function DoubleCheck({
             {isPending ? (
               <Loading />
             ) : (
-              <AttemptsForm
-                header="Double Check Result"
-                solveCount={solveCount}
-                eventId={eventId}
-              />
+              <AttemptsForm header="Double Check Result" />
             )}
           </GridItem>
 

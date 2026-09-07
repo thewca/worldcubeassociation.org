@@ -48,11 +48,22 @@ export default function ResultMenu({
   const { t } = useT();
   const { pendingLiveResults } = useLiveResults();
 
-  const { handleRegistrationIdChange, clearCompetitorsResults, isPending } =
-    useResultsAdmin();
+  const {
+    handleRegistrationIdChange,
+    clearCompetitorsResults,
+    batchAttemptsByRegistrationId,
+    removeFromBatch,
+    isPending,
+  } = useResultsAdmin();
+
+  const inBatch = batchAttemptsByRegistrationId.has(competitor.id);
 
   function handleEditClick() {
     handleRegistrationIdChange(competitor.id);
+    onOpenChange(false);
+  }
+  function handleRemoveFromBatchClick() {
+    removeFromBatch(competitor.id);
     onOpenChange(false);
   }
   function handleClearClick() {
@@ -117,6 +128,15 @@ export default function ResultMenu({
                       {t("competitions.live.admin.results")}
                     </Link>
                   </Menu.Item>
+                  {inBatch && (
+                    <Menu.Item
+                      value="remove-from-batch"
+                      onClick={handleRemoveFromBatchClick}
+                      disabled={isPending}
+                    >
+                      {t("competitions.live.admin.remove_from_batch")}
+                    </Menu.Item>
+                  )}
                   {result.attempts.length > 0 ? (
                     <Menu.Item
                       value="clear"
@@ -127,15 +147,19 @@ export default function ResultMenu({
                     </Menu.Item>
                   ) : (
                     <Tooltip
-                      content={t(
-                        "competitions.live.admin.quit.still_processing",
-                      )}
-                      disabled={pendingLiveResults.length === 0}
+                      content={
+                        inBatch
+                          ? t("competitions.live.admin.quit.in_batch")
+                          : t("competitions.live.admin.quit.still_processing")
+                      }
+                      disabled={pendingLiveResults.length === 0 && !inBatch}
                     >
                       <Menu.Item
                         value="quit"
                         onClick={() => setIsQuitting(true)}
-                        disabled={isPending || pendingLiveResults.length > 0}
+                        disabled={
+                          isPending || pendingLiveResults.length > 0 || inBatch
+                        }
                       >
                         {t("competitions.live.admin.quit.quit_menu")}
                       </Menu.Item>

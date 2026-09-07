@@ -41,6 +41,68 @@ type ConfirmFn = (options?: ConfirmOptions) => Promise<void>;
 
 const ConfirmationContext = createContext<ConfirmFn | null>(null);
 
+interface ConfirmDialogProps {
+  open: boolean;
+  title: ReactNode;
+  onCancel: voidFunction;
+  onConfirm: voidFunction;
+  cancelButton: ReactNode;
+  confirmButton: ReactNode;
+  confirmDisabled?: boolean;
+  children: ReactNode;
+  size?: Dialog.RootProps["size"];
+  lazyMount?: boolean;
+}
+
+export function ConfirmDialog({
+  open,
+  title,
+  onCancel,
+  onConfirm,
+  cancelButton,
+  confirmButton,
+  confirmDisabled = false,
+  children,
+  size,
+  lazyMount = false,
+}: ConfirmDialogProps) {
+  return (
+    <Dialog.Root
+      open={open}
+      onOpenChange={({ open: stillOpen }) => !stillOpen && onCancel()}
+      size={size}
+      lazyMount={lazyMount}
+    >
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>
+              <Dialog.Title>{title}</Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>{children}</Dialog.Body>
+            <Dialog.Footer>
+              <Button variant="outline" onClick={onCancel}>
+                {cancelButton}
+              </Button>
+              <Button
+                colorPalette="red"
+                onClick={onConfirm}
+                disabled={confirmDisabled}
+              >
+                {confirmButton}
+              </Button>
+            </Dialog.Footer>
+            <Dialog.CloseTrigger asChild>
+              <CloseButton size="sm" />
+            </Dialog.CloseTrigger>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
+  );
+}
+
 export default function ConfirmProvider({ children }: { children: ReactNode }) {
   const [options, setOptions] =
     useState<Required<ConfirmOptions>>(DEFAULT_OPTIONS);
@@ -102,57 +164,35 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
       <ConfirmationContext.Provider value={confirm}>
         {children}
       </ConfirmationContext.Provider>
-      <Dialog.Root
+      <ConfirmDialog
         open={isOpen}
-        onOpenChange={({ open }) => !open && handleCancel()}
+        title="Confirm Action"
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+        cancelButton={options.cancelButton}
+        confirmButton={options.confirmButton}
+        confirmDisabled={!!options.requireInput && !inputValue}
       >
-        <Portal>
-          <Dialog.Backdrop />
-          <Dialog.Positioner>
-            <Dialog.Content>
-              <Dialog.Header>
-                <Dialog.Title>Confirm Action</Dialog.Title>
-              </Dialog.Header>
-              <Dialog.Body>
-                {options.content}
-                {options.requireInput && (
-                  <Field.Root invalid={inputError} mt={3}>
-                    <Text mb={1}>
-                      Type <code>{options.requireInput}</code> to confirm
-                    </Text>
-                    <Input
-                      placeholder={options.requireInput}
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      // Disable pasting to force the user to type the exact string
-                      onPaste={(e) => e.preventDefault()}
-                      autoFocus
-                    />
-                    <Field.ErrorText>
-                      Input does not match. Please try again.
-                    </Field.ErrorText>
-                  </Field.Root>
-                )}
-              </Dialog.Body>
-              <Dialog.Footer>
-                <Button variant="outline" onClick={handleCancel}>
-                  {options.cancelButton}
-                </Button>
-                <Button
-                  colorPalette="red"
-                  onClick={handleConfirm}
-                  disabled={!!options.requireInput && !inputValue}
-                >
-                  {options.confirmButton}
-                </Button>
-              </Dialog.Footer>
-              <Dialog.CloseTrigger asChild>
-                <CloseButton size="sm" />
-              </Dialog.CloseTrigger>
-            </Dialog.Content>
-          </Dialog.Positioner>
-        </Portal>
-      </Dialog.Root>
+        {options.content}
+        {options.requireInput && (
+          <Field.Root invalid={inputError} mt={3}>
+            <Text mb={1}>
+              Type <code>{options.requireInput}</code> to confirm
+            </Text>
+            <Input
+              placeholder={options.requireInput}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              // Disable pasting to force the user to type the exact string
+              onPaste={(e) => e.preventDefault()}
+              autoFocus
+            />
+            <Field.ErrorText>
+              Input does not match. Please try again.
+            </Field.ErrorText>
+          </Field.Root>
+        )}
+      </ConfirmDialog>
     </>
   );
 }

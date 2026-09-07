@@ -3,6 +3,7 @@ import EventIcon from "@/components/EventIcon";
 import events from "@/lib/wca/data/events";
 import { HStack, Icon, Link, Table } from "@chakra-ui/react";
 import countries from "@/lib/wca/data/countries";
+import RegionFilterLink from "@/components/results/RegionFilterLink";
 
 type CountryCellProps = (
   | {
@@ -16,6 +17,8 @@ type CountryCellProps = (
 ) & {
   rowSpan?: number;
   hideBelow?: string;
+  // Renders the region as a link that adds a region filter to the current query
+  filterable?: boolean;
 };
 
 export function CountryCell({
@@ -23,6 +26,7 @@ export function CountryCell({
   countryIso2,
   rowSpan,
   hideBelow,
+  filterable = false,
 }: CountryCellProps) {
   const country =
     // Explicitly check for undefined so TypeScript knows which branch it is
@@ -36,7 +40,11 @@ export function CountryCell({
           <WcaFlag code={country.iso2} />
         </Icon>
       )}{" "}
-      {country.name}
+      {filterable ? (
+        <RegionFilterLink iso2={country.iso2}>{country.name}</RegionFilterLink>
+      ) : (
+        country.name
+      )}
     </Table.Cell>
   );
 }

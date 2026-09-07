@@ -123,6 +123,7 @@ export default function RegionSelector({
     <Field.Root alignItems="start">
       <Field.Label textStyle="label">{label}</Field.Label>
       <Combobox.Root
+        lazyMount
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
         onValueChange={(e) => onRegionChange(e.value[0])}
@@ -135,7 +136,7 @@ export default function RegionSelector({
         selectionBehavior={nullable ? "clear" : "replace"}
       >
         <Combobox.Control>
-          <Combobox.Input placeholder={name} />
+          <Combobox.Input placeholder={name} cursor="pointer" />
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />
             <Combobox.Trigger />

@@ -44,13 +44,10 @@ class Round < ApplicationRecord
   serialize :advancement_condition, coder: AdvancementConditions::AdvancementCondition
   validates_associated :advancement_condition
 
-  serialize :round_results, coder: RoundResults
-  validates_associated :round_results
-
   serialize :participation_condition, coder: ResultConditions::ResultCondition
   validates_associated :participation_condition
 
-  belongs_to :participation_source, polymorphic: true, optional: true
+  belongs_to :participation_source, polymorphic: true
   has_many :target_rounds, class_name: "Round", as: :participation_source
 
   has_many :schedule_activities, -> { root_activities }, dependent: :destroy, inverse_of: :round
@@ -202,6 +199,8 @@ class Round < ApplicationRecord
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
     # We have to use update_all here because live_attempts_count is write protected
     live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
+    # live_results were changed via raw SQL, refresh the loaded association so lifecycle_state is accurate
+    live_results.reset
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
@@ -216,6 +215,8 @@ class Round < ApplicationRecord
       LiveResult.empty_result_attributes(reg_id, self.id)
     end
     LiveResult.insert_all!(empty_results)
+    # live_results were inserted via raw SQL, refresh the loaded association so lifecycle_state is accurate
+    live_results.reset
 
     inserted_ids = self.live_results.where(registration_id: advancing_reg_ids).ids
     self.bulk_insert_history(inserted_ids, opening_user, action_type: :opened)
@@ -339,7 +340,7 @@ class Round < ApplicationRecord
     live_results.includes(:live_attempts).map(&:to_live_state)
   end
 
-  def competitors_live_results_entered
+  def completed_competitors
     if live_results.loaded?
       live_results.count(&:complete?)
     else
@@ -358,7 +359,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done?
-    open? && competitors_live_results_entered == total_competitors
+    open? && completed_competitors == total_competitors
   end
 
   def time_limit_undefined?
@@ -405,7 +406,7 @@ class Round < ApplicationRecord
     ScheduleActivity.parse_activity_code(wcif_id)
   end
 
-  def load_live_results!(round_results_wcif, current_user)
+  def load_live_results!(round_results_wcif, current_user, version: Competition::WCIF_STABLE_VERSION)
     person_id_to_registration_id = self.competition.registrations
                                        .to_h { [it.registrant_id, it.id] }
 
@@ -485,12 +486,13 @@ class Round < ApplicationRecord
         results_by_registration_id[registration_id].id
       end
 
+      result_field = LiveAttempt.wcif_result_field(version)
       attempts_to_load = result_wcif_by_id.flat_map do |live_result_id, round_result_wcif|
         round_result_wcif["attempts"].map.with_index(1) do |attempt, attempt_number|
           {
             live_result_id: live_result_id,
             attempt_number: attempt_number,
-            value: attempt["result"],
+            value: attempt[result_field],
           }
         end
       end
@@ -614,7 +616,6 @@ class Round < ApplicationRecord
       cutoff: Cutoff.load(round_wcif["cutoff"]),
       advancement_condition: self.load_wcif_advancement_condition(round_wcif, all_rounds_wcif, version: version),
       scramble_set_count: round_wcif["scrambleSetCount"],
-      round_results: RoundResults.load(round_wcif["results"]),
     }
   end
 
@@ -685,13 +686,63 @@ class Round < ApplicationRecord
   STATE_OPEN = "open"
   STATE_READY = "ready"
   STATE_PENDING = "pending"
+  STATE_BLOCKED = "blocked"
+
+  # Keyed by the clause of https://www.worldcubeassociation.org/regulations/#9m each message describes
+  INSUFFICIENT_COMPETITORS_MESSAGES = {
+    "9m1" => "a round with 99 or fewer competitors must have at most two subsequent rounds",
+    "9m2" => "a round with 15 or fewer competitors must have at most one subsequent round",
+    "9m3" => "a round with 7 or fewer competitors must not have subsequent rounds",
+  }.freeze
+
+  # Minimum number of competitors a previous round needs to satisfy each clause
+  MIN_COMPETITORS_PER_CLAUSE = {
+    "9m1" => 100,
+    "9m2" => 16,
+    "9m3" => 8,
+  }.freeze
 
   def lifecycle_state
     return STATE_LOCKED if locked?
     return STATE_OPEN if open?
-    return STATE_READY if participation_source.score_taking_done?
+    return STATE_PENDING unless participation_source.score_taking_done?
+    return STATE_BLOCKED if insufficient_competitors_violation.present?
 
-    STATE_PENDING
+    STATE_READY
+  end
+
+  # Returns the violated regulation clause ("9m1"/"9m2"/"9m3") if opening this round
+  # would violate https://www.worldcubeassociation.org/regulations/#9m, which limits
+  # how many rounds an event may hold based on the competitor counts of earlier rounds.
+  def insufficient_competitors_violation
+    # We allow opening all linked rounds even if that would break the rule for a better user experience
+    return nil if linked_round.present?
+
+    # Each earlier round caps the number of the last round the event may hold,
+    #   based on how many competitors it had; the tightest (lowest) cap binds us.
+    binding_cap = participation_source.previous_rounds.map do |previous|
+      subsequent_rounds_allowed = MIN_COMPETITORS_PER_CLAUSE.values.count { previous.total_competitors >= it }
+
+      {
+        max_round_number: previous.number + subsequent_rounds_allowed,
+        subsequent_rounds_allowed: subsequent_rounds_allowed,
+      }
+    end.min_by { it[:max_round_number] }
+
+    return nil if binding_cap.nil?
+
+    enforced_max_round = [binding_cap[:max_round_number], 4].min # 9m: events may have at most four rounds
+    return nil if enforced_max_round >= number
+
+    # The fewer subsequent rounds a previous round allows, the stricter the clause it violates
+    MIN_COMPETITORS_PER_CLAUSE.keys.reverse[binding_cap[:subsequent_rounds_allowed]]
+  end
+
+  # How many competitors the round needs to be allowed under
+  # https://www.worldcubeassociation.org/regulations/#9m. Only linked
+  # rounds can be opened while violating 9m, every other round is STATE_BLOCKED instead.
+  def min_competitors_to_open
+    MIN_COMPETITORS_PER_CLAUSE.values.reverse[number - 2] if number > 1
   end
 
   def open?
@@ -753,6 +804,12 @@ class Round < ApplicationRecord
 
   def rounds
     [self]
+  end
+
+  # The round-like ancestors that feed into this one, walking back through
+  #   `participation_source` until it bottoms out at the CompetitionEvent.
+  def previous_rounds
+    [self, *participation_source.previous_rounds]
   end
 
   def quit_from_round!(registration_id, quitting_user, to_advance: nil)
@@ -828,15 +885,14 @@ class Round < ApplicationRecord
 
   def to_wcif(include_results: true, version: Competition::WCIF_STABLE_VERSION)
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
-    results = at_least_v2 || competition.scoretaking_software_internal? ? live_results : round_results
 
     base_wcif = {
       "id" => wcif_id,
       "format" => self.format_id,
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
-      "cutoff" => cutoff&.to_wcif,
+      "cutoff" => cutoff&.to_wcif(version: version),
       "scrambleSetCount" => self.scramble_set_count,
-      "results" => include_results ? results.map(&:to_wcif) : nil,
+      "results" => include_results ? live_results.map { it.to_wcif(version: version) } : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
     }
 
@@ -862,20 +918,23 @@ class Round < ApplicationRecord
     #   back together when it needs the combined set.
     competitors = only_podiums ? (linked_round&.live_competitors || live_competitors) : live_competitors
     {
-      **self.to_wcif(include_results: false).compact_blank,
+      **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "round_id" => id,
       "competitors" => competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
+      "completed_competitors" => completed_competitors,
     }
   end
 
   def to_live_info_json
     state = lifecycle_state
     json = {
-      **self.to_wcif(include_results: false).compact_blank,
+      # WCIF v2 so that the frontend knows about linked rounds
+      **self.to_wcif(include_results: false, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).compact_blank,
       "state" => state,
+      "min_competitors_to_open" => min_competitors_to_open,
     }
     if [STATE_OPEN, STATE_LOCKED].include?(state)
       json = json.merge({
@@ -885,7 +944,13 @@ class Round < ApplicationRecord
 
     if state == STATE_OPEN
       json = json.merge({
-                          "competitors_live_results_entered" => competitors_live_results_entered,
+                          "completed_competitors" => completed_competitors,
+                        })
+    end
+
+    if state == STATE_BLOCKED
+      json = json.merge({
+                          "competitor_count_needed" => MIN_COMPETITORS_PER_CLAUSE[insufficient_competitors_violation],
                         })
     end
     json
@@ -903,8 +968,8 @@ class Round < ApplicationRecord
       "id" => { "type" => "string" },
       "format" => { "type" => "string", "enum" => Format.ids },
       "timeLimit" => TimeLimit.wcif_json_schema,
-      "cutoff" => Cutoff.wcif_json_schema,
-      "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
+      "cutoff" => Cutoff.wcif_json_schema(version: version),
+      "results" => { "type" => "array", "items" => LiveResult.wcif_json_schema(version: version) },
       "scrambleSets" => { "type" => "array" }, # TODO: expand on this
       "scrambleSetCount" => { "type" => "integer" },
       "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },

@@ -12,6 +12,9 @@ default: &default
   ensure_consistent_versioning: true
   nested_entries: true
 
+  # Regenerate the auto-bundled React on Rails packs before webpack runs.
+  precompile_hook: 'bin/rake react_on_rails:generate_packs'
+
   # Additional paths webpack should look up modules
   # ['app/assets', 'engine/foo/app/assets']
   additional_paths: []

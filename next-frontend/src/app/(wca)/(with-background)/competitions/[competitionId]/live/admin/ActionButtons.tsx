@@ -3,35 +3,41 @@
 import { Button } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
+import { Tooltip } from "@/components/ui/tooltip";
 import { LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 
 export default function ActionButtons({
   state,
-  setState,
   roundId,
   competitionId,
   hasResultsEntered,
+  blockedCompetitorCount,
 }: {
   state: LiveRoundState;
-  setState: (state: LiveRoundState) => void;
   roundId: string;
   competitionId: string;
   hasResultsEntered: boolean;
+  blockedCompetitorCount?: number;
 }) {
   const api = useAPI();
+  const { setRoundState } = useAllRoundsInfo();
 
   const { isPending: isPendingOpen, mutate: openRound } = api.useMutation(
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/open",
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toaster.create({
           description: "Round Opened",
           type: "success",
         });
-        setState("open");
+        setRoundState(roundId, data.state, {
+          total_competitors: data.created_rows,
+          completed_competitors: 0,
+        });
       },
       onError: (error) => {
         toaster.create({
@@ -47,10 +53,13 @@ export default function ActionButtons({
     "put",
     "/v1/competitions/{competitionId}/live/rounds/{roundId}/clear",
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toaster.create({
           description: "Round Cleared",
           type: "success",
+        });
+        setRoundState(roundId, data.state, {
+          completed_competitors: 0,
         });
       },
       onError: () => {
@@ -71,7 +80,7 @@ export default function ActionButtons({
           description: "Round Closed",
           type: "success",
         });
-        setState("ready");
+        setRoundState(roundId, "ready");
       },
       onError: () => {
         toaster.create({
@@ -85,6 +94,24 @@ export default function ActionButtons({
   const { t } = useT();
 
   const confirm = useConfirm();
+
+  if (state == "blocked") {
+    return (
+      <Tooltip
+        showArrow
+        content={t("competitions.live.admin.warnings.9m_violated", {
+          competitor_count_needed: blockedCompetitorCount,
+        })}
+      >
+        {/* span wrapper so the tooltip still opens over the disabled button */}
+        <span>
+          <Button variant="outline" size="sm" disabled>
+            {t("competitions.live.admin.open")}
+          </Button>
+        </span>
+      </Tooltip>
+    );
+  }
 
   if (state == "ready") {
     return (

@@ -13,7 +13,7 @@ FactoryBot.define do
       competition_id { nil }
     end
 
-    id { [ref_id, competition_id] }
+    id { [competition_id, ref_id] }
     wca_id { "" }
     name { Faker::Name.name }
     country_iso2 { Country.real.sample.iso2 }

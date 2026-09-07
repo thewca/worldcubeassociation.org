@@ -21,6 +21,13 @@ function makeQueryClient() {
   });
 }
 
+// Queries that a server component seeds with `initialData` should opt out of
+// the `refetchOnMount: "always"` default by passing `refetchOnMount: true` and
+// this staleTime: the server fetched that data for this very render, so
+// refetching on mount only duplicates the request. A remount after this window
+// still refreshes, which `refetchOnMount: false` would not.
+export const SERVER_SEEDED_STALE_TIME = 30 * 1000;
+
 // Lazily initialized: this module is also evaluated on the server during SSR,
 // and an eager `const` would construct a throwaway client on every server render.
 // The `??=` defers construction until we're actually in the browser.

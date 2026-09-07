@@ -9,6 +9,7 @@ module ResultsValidators
       IndividualResultsValidator,
       PersonsValidator,
       PositionsValidator,
+      ScheduleActivitiesValidator,
       ScramblesValidator,
     ].freeze
 

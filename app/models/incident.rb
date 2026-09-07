@@ -59,7 +59,7 @@ class Incident < ApplicationRecord
 
   DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS = {
     only: DEFAULT_PUBLIC_SERIALIZE_OPTIONS[:only] +
-          %i[private_description digest_worthy digest_sent_at],
+          %i[private_description private_wrc_decision digest_worthy digest_sent_at],
     methods: DEFAULT_PUBLIC_SERIALIZE_OPTIONS[:methods],
   }.freeze
 

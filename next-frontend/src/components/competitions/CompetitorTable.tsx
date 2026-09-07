@@ -31,6 +31,7 @@ export default function CompetitorTable({
             <Table.ColumnHeader
               key={eventId}
               onClick={() => setPsychSheetEvent(eventId)}
+              cursor="pointer"
               _hover={{ bg: "grey.solid", color: "wcawhite.contrast" }}
             >
               <EventIcon eventId={eventId} />

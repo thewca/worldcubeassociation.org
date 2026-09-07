@@ -1,29 +1,33 @@
 import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
 import AnnouncementContent from "@/components/AnnouncementContent";
-import { Announcement } from "@/types/payload";
+import { Announcement, ColorPaletteSelect } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
-import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
+import { announcementByline } from "@/components/announcements/announcement";
 
-function AnnouncementItem({ announcement }: { announcement: Announcement }) {
+function AnnouncementItem({
+  announcement,
+  colorPalette,
+}: {
+  announcement: Announcement;
+  colorPalette: ColorPaletteSelect;
+}) {
   return (
     <Accordion.Item
       value={announcement.id}
       layerStyle="fill.subtle"
-      _open={{ layerStyle: "card.pastel" }}
+      _open={{ layerStyle: { _light: "fill.solid", _dark: "fill.muted" } }}
     >
       <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
         <Accordion.ItemIndicator _open={{ display: "none" }} />
         <Stack gap={1} alignItems="flex-start">
           <Text textStyle="s1">{announcement.title}</Text>
-          <Text>
-            {getFullDateTimeStringNoSeconds(announcement.publishedAt)}
-          </Text>
+          <Text>{announcementByline(announcement)}</Text>
         </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
         <AnnouncementContent
-          contentMarkdown={announcement.contentMarkdown}
-          url={announcement.url}
+          announcement={announcement}
+          colorPalette={colorPalette}
         />
       </Accordion.ItemContent>
     </Accordion.Item>
@@ -38,7 +42,7 @@ export default function AnnouncementsCard({
 }: {
   hero: Announcement;
   others: Announcement[];
-  colorPalette: string;
+  colorPalette: ColorPaletteSelect;
   showSeeAll?: boolean;
 }) {
   return (
@@ -50,10 +54,14 @@ export default function AnnouncementsCard({
       flexDirection="column"
       justifyContent="space-between"
     >
-      <AnnouncementItem announcement={hero} />
+      <AnnouncementItem announcement={hero} colorPalette={colorPalette} />
 
       {others.map((announcement) => (
-        <AnnouncementItem key={announcement.id} announcement={announcement} />
+        <AnnouncementItem
+          key={announcement.id}
+          announcement={announcement}
+          colorPalette={colorPalette}
+        />
       ))}
 
       {showSeeAll && (

@@ -496,7 +496,7 @@ RSpec.describe "Competition WCIF" do
                 },
                 "cutoff" => {
                   "numberOfAttempts" => 2,
-                  "attemptResult" => 1.minute.in_centiseconds,
+                  "resultValue" => 1.minute.in_centiseconds,
                 },
                 "participationRuleset" => {
                   "participationSource" => {
@@ -930,6 +930,29 @@ RSpec.describe "Competition WCIF" do
         end.not_to raise_error
       end
 
+      it "passes when an unregistered manager has personal bests" do
+        create(:ranks_single, person_id: delegate.wca_id)
+
+        wcif = competition.to_wcif(version: '2.0.0')
+        manager_wcif = wcif["persons"].find { it["wcaUserId"] == delegate.id }
+
+        expect(manager_wcif["registration"]).to be_nil
+        expect(manager_wcif["personalBests"].first).to include("value")
+
+        expect do
+          Competition.validate_wcif_schema!(wcif, version: '2.0.0')
+        end.not_to raise_error
+      end
+
+      it "passes when activities carry a scrambleSetId" do
+        wcif = competition.to_wcif
+        wcif["schedule"]["venues"].first["rooms"].first["activities"].first["scrambleSetId"] = nil
+
+        expect do
+          Competition.validate_wcif_schema!(wcif)
+        end.not_to raise_error
+      end
+
       it "does not pass on cross-version schema" do
         expect do
           Competition.validate_wcif_schema!(
@@ -1262,14 +1285,14 @@ RSpec.describe "Competition WCIF" do
         wcif_333_event["rounds"][0]["results"] = [
           {
             "personId" => competitors[0].registrant_id,
-            "ranking" => 10,
+            "ranking" => 1,
             "attempts" => [{ "result" => 456, "reconstruction" => nil }] * 5,
             "best" => 456,
             "average" => 456,
           },
           {
             "personId" => competitors[1].registrant_id,
-            "ranking" => 5,
+            "ranking" => 2,
             "attempts" => [{ "result" => 784, "reconstruction" => nil }] * 5,
             "best" => 784,
             "average" => 784,
@@ -1281,27 +1304,6 @@ RSpec.describe "Competition WCIF" do
         competition.set_wcif_events!(wcif["events"], delegate)
 
         expect(competition.to_wcif["events"]).to eq(wcif["events"])
-      end
-
-      it "does not persist round_results for internal-scoretaking competitions" do
-        competition.update!(scoretaking_software: :internal)
-
-        competition.set_wcif_events!(wcif["events"], delegate)
-
-        # live_results are still populated from the sync, but round_results stays empty
-        #   since live_results is the source of truth for internal scoretaking.
-        expect(LiveResult.count).to eq(2)
-        expect(competition.rounds.flat_map(&:round_results)).to be_empty
-      end
-
-      it "clears previously-stored round_results once a comp switches to internal scoretaking" do
-        competition.set_wcif_events!(wcif["events"], delegate)
-        expect(competition.rounds.flat_map(&:round_results)).not_to be_empty
-
-        competition.update!(scoretaking_software: :internal)
-        competition.set_wcif_events!(wcif["events"], delegate)
-
-        expect(competition.rounds.reload.flat_map(&:round_results)).to be_empty
       end
 
       it "cleans up orphaned attempts upon syncing" do
@@ -1336,6 +1338,9 @@ RSpec.describe "Competition WCIF" do
         wcif_333_event["rounds"][0]["results"][0]["attempts"] = []
         wcif_333_event["rounds"][0]["results"][0]["best"] = 0
         wcif_333_event["rounds"][0]["results"][0]["average"] = 0
+        # Rankings are recomputed from live_results: the cleared result loses its rank
+        wcif_333_event["rounds"][0]["results"][0]["ranking"] = nil
+        wcif_333_event["rounds"][0]["results"][1]["ranking"] = 1
 
         competition.set_wcif_events!(wcif["events"], delegate)
 

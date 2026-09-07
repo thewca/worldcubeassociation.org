@@ -1,0 +1,9 @@
+type: object
+required:
+  - user_id
+  - name
+properties:
+  user_id:
+    type: integer
+  name:
+    type: string

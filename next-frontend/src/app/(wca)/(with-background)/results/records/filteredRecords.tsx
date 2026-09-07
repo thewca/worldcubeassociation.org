@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useTransition } from "react";
 import { EventId } from "@/lib/wca/data/events";
-import { Heading, VStack } from "@chakra-ui/react";
+import { Box, Center, Heading, Spinner, VStack } from "@chakra-ui/react";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
@@ -29,36 +29,34 @@ export default function FilteredRecords({
   records,
 }: filteredRecordsProps) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   // We are fetching all events at once so switching events doesn't fire another request
   const [event, setEvent] = useState(searchParams.event);
 
-  const filterActions = useMemo(
-    () => ({
-      setEvent: (event: string) => setEvent(event),
-      setRegion: (region: string) =>
+  const filterActions = useMemo(() => {
+    const navigate = (params: Partial<FilterParams>) =>
+      startTransition(() =>
         router.push(
           route({
             pathname: "/results/records",
-            query: { ...searchParams, region },
+            query: { ...searchParams, event, ...params },
           }),
         ),
-      setGender: (gender: string) =>
-        router.push(
-          route({
-            pathname: "/results/records",
-            query: { ...searchParams, gender },
-          }),
-        ),
-      setShow: (show: string) =>
-        router.push(
-          route({
-            pathname: "/results/records",
-            query: { ...searchParams, show },
-          }),
-        ),
-    }),
-    [router, searchParams],
-  );
+      );
+
+    return {
+      setEvent: (event: string) => {
+        setEvent(event as FilterParams["event"]);
+        // Keep the URL in sync without refetching, so links that only change
+        // another filter (e.g. clicking a region) keep the selected event
+        const params = new URLSearchParams({ ...searchParams, event });
+        window.history.replaceState(null, "", `?${params}`);
+      },
+      setRegion: (region: string) => navigate({ region }),
+      setGender: (gender: string) => navigate({ gender }),
+      setShow: (show: string) => navigate({ show }),
+    };
+  }, [router, searchParams, event]);
 
   const { show } = searchParams;
 
@@ -76,10 +74,17 @@ export default function FilteredRecords({
       <Heading size="5xl">{t("results.records.title")}</Heading>
       {t("results.last_updated_html", { timestamp })}
       <RecordsFilterBox
-        filterState={searchParams}
+        filterState={{ ...searchParams, event }}
         filterActions={filterActions}
       />
-      <RecordsTable records={filteredRecords} show={show} />
+      <Box position="relative" opacity={isPending ? 0.4 : 1}>
+        {isPending && (
+          <Center position="absolute" inset={0} zIndex={1}>
+            <Spinner size="xl" position="sticky" top="50%" />
+          </Center>
+        )}
+        <RecordsTable records={filteredRecords} show={show} />
+      </Box>
     </VStack>
   );
 }

@@ -28,6 +28,7 @@ const LEGACY_ADMIN_STATUS = "status";
 
 const DEFAULT_DISPLAY_MODE = "list";
 const DEFAULT_TIME_ORDER = "present";
+const CUSTOM_TIME_ORDER = "custom";
 const DEFAULT_YEAR = "all_years";
 const DEFAULT_DATE = null;
 const DEFAULT_REGION_ALL = ALL_REGIONS_VALUE;
@@ -119,32 +120,50 @@ const sanitizeRegion = (region: string | null) => {
 const sanitizeEvents = (values: string[]) =>
   (values || []).filter((value) => WCA_EVENT_IDS.includes(value));
 
+// The custom from/to dates are only read by the query builder when the time order is
+// "custom", so picking a date has to switch the time order over (and clearing both has
+// to switch it back).
+const withCustomDatesApplied = (
+  timeOrder: string,
+  customStartDate: string | null,
+  customEndDate: string | null,
+) => {
+  if (customStartDate || customEndDate) return CUSTOM_TIME_ORDER;
+  return timeOrder === CUSTOM_TIME_ORDER ? DEFAULT_TIME_ORDER : timeOrder;
+};
+
 // filter state
 
 export const getDisplayMode = (searchParams: URLSearchParams) =>
   sanitizeMode(searchParams.get(DISPLAY_MODE));
 
-export const createFilterState = (searchParams: URLSearchParams) => ({
-  timeOrder: sanitizeTimeOrder(
-    searchParams.get(TIME_ORDER),
-    searchParams.get(YEAR),
-  ),
-  selectedYear: sanitizeYear(searchParams.get(YEAR)),
-  customStartDate: sanitizeDate(searchParams.get(START_DATE)),
-  customEndDate: sanitizeDate(searchParams.get(END_DATE)),
-  region: sanitizeRegion(searchParams.get(REGION)),
-  delegate: Number(searchParams.get(DELEGATE)) || DEFAULT_DELEGATE,
-  search: searchParams.get(SEARCH) || DEFAULT_SEARCH,
-  selectedEvents: sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
-  shouldIncludeCancelled:
-    searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
-  shouldShowAdminDetails:
-    searchParams.get(SHOW_ADMIN_DETAILS) === SHOW_ADMIN_DETAILS_TRUE ||
-    searchParams.get(DISPLAY_MODE) === LEGACY_DISPLAY_MODE_ADMIN,
-  adminStatus: sanitizeAdminStatus(
-    searchParams.get(ADMIN_STATUS) || searchParams.get(LEGACY_ADMIN_STATUS),
-  ),
-});
+export const createFilterState = (searchParams: URLSearchParams) => {
+  const customStartDate = sanitizeDate(searchParams.get(START_DATE));
+  const customEndDate = sanitizeDate(searchParams.get(END_DATE));
+
+  return {
+    timeOrder: withCustomDatesApplied(
+      sanitizeTimeOrder(searchParams.get(TIME_ORDER), searchParams.get(YEAR)),
+      customStartDate,
+      customEndDate,
+    ),
+    selectedYear: sanitizeYear(searchParams.get(YEAR)),
+    customStartDate,
+    customEndDate,
+    region: sanitizeRegion(searchParams.get(REGION)),
+    delegate: Number(searchParams.get(DELEGATE)) || DEFAULT_DELEGATE,
+    search: searchParams.get(SEARCH) || DEFAULT_SEARCH,
+    selectedEvents: sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
+    shouldIncludeCancelled:
+      searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
+    shouldShowAdminDetails:
+      searchParams.get(SHOW_ADMIN_DETAILS) === SHOW_ADMIN_DETAILS_TRUE ||
+      searchParams.get(DISPLAY_MODE) === LEGACY_DISPLAY_MODE_ADMIN,
+    adminStatus: sanitizeAdminStatus(
+      searchParams.get(ADMIN_STATUS) || searchParams.get(LEGACY_ADMIN_STATUS),
+    ),
+  };
+};
 
 export const updateSearchParams = (
   searchParams: URLSearchParams,
@@ -265,6 +284,28 @@ export const competitionFilterReducer = (
       return { ...state, selectedEvents: WCA_EVENT_IDS };
     case "clear_events":
       return { ...state, selectedEvents: [] };
+    case "set_custom_start_date":
+    case "set_custom_end_date": {
+      const customStartDate =
+        action.type === "set_custom_start_date"
+          ? action.customStartDate
+          : state.customStartDate;
+      const customEndDate =
+        action.type === "set_custom_end_date"
+          ? action.customEndDate
+          : state.customEndDate;
+
+      return {
+        ...state,
+        customStartDate,
+        customEndDate,
+        timeOrder: withCustomDatesApplied(
+          state.timeOrder,
+          customStartDate,
+          customEndDate,
+        ),
+      };
+    }
     default:
       return { ...state, ...action };
   }

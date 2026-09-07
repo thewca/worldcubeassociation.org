@@ -13,9 +13,29 @@ servers:
     description: The production API server
 paths:
   /v1/competitions/{competitionId}/registrations:
-    $ref: 'paths/registrations/registrationsByCompetition.yaml'
+    get:
+      $ref: 'paths/registrations/registrationsByCompetition.yaml#/get'
+    post:
+      $ref: 'paths/registrations/createRegistration.yaml'
+  /v1/competitions/{competitionId}/registrations/{userId}:
+    $ref: 'paths/registrations/registrationByUser.yaml'
+  /v1/registrations/{registrationId}:
+    $ref: 'paths/registrations/updateRegistration.yaml'
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
+  /v1/competitions/{competitionId}/registration_eligibility:
+    $ref: 'paths/registrations/registrationEligibility.yaml'
+  /v1/registrations/{registrationId}/payment_denomination:
+    $ref: 'paths/registrations/paymentDenomination.yaml'
+
+  /v1/competitions/{competitionId}/scoretakers:
+    get:
+      $ref: 'paths/competitions/scoretakers/ListScoretakers.yaml'
+    post:
+      $ref: 'paths/competitions/scoretakers/AddScoretaker.yaml'
+  /v1/competitions/{competitionId}/scoretakers/{id}:
+    delete:
+      $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
 
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
@@ -83,6 +103,12 @@ paths:
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
 
+  /v0/incidents/{id}:
+    $ref: 'paths/regulations/incidentById.yaml'
+
+  /v0/incidents/{incident_id}/mark_as/{kind}:
+    $ref: 'paths/regulations/incidentMarkAs.yaml'
+
   /v0/search:
     $ref: 'paths/search/omniSearch.yaml'
 
@@ -105,8 +131,17 @@ paths:
   /v0/users/me/permissions:
     $ref: 'paths/users/userPermissions.yaml'
 
+  /v0/regulations:
+    $ref: 'paths/regulations/regulations.yaml'
+
+  /v0/regulations/history/official/{version}:
+    $ref: 'paths/regulations/historicalRegulations.yaml'
+
   /v0/regulations/translations:
     $ref: 'paths/regulations/regulationTranslations.yaml'
+
+  /v0/regulations/translations/{language}:
+    $ref: 'paths/regulations/translatedRegulations.yaml'
 
   /v0/export/public:
     $ref: 'paths/results/publicExports.yaml'

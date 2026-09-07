@@ -3,7 +3,8 @@
 class Api::V1::Live::LiveController < Api::V1::ApiController
   protect_from_forgery with: :null_session
   skip_before_action :require_user!, only: %i[round_results by_person podiums rounds]
-  before_action :require_score_taking_internal
+  before_action :competition_from_params
+  before_action :require_scoretaking_internal, except: :round_results
 
   def add_or_update_result
     results = params.expect(attempts: [%i[value attempt_number]])
@@ -12,7 +13,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(round_id, @competition.id, includes: [:live_results])
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     # We create empty results when a round is open
     live_result = round.live_results.find_by(registration_id: registration_id)
@@ -25,7 +26,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "Values cannot be 0, please omit them instead" }, status: :unprocessable_content if results.any? { it[:value].to_i.zero? }
 
-    UpdateLiveResultJob.perform_later(live_result, results, @current_user.id)
+    UpdateLiveResultJob.perform_later(live_result, results, authenticated_user.id)
 
     render json: { status: "ok" }
   end
@@ -36,7 +37,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(round_id, @competition.id, includes: [:live_results])
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     return render json: { status: "round is not open" }, status: :unprocessable_content unless round.live_results.any?
 
@@ -53,7 +54,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
       { live_result: live_result, results: results }
     end
 
-    BatchUpdateLiveResultJob.perform_later(round, job_entries, @current_user.id)
+    BatchUpdateLiveResultJob.perform_later(round, job_entries, authenticated_user.id)
 
     render json: { status: "ok" }
   end
@@ -80,7 +81,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     results = registration.live_results.includes(:live_attempts)
 
-    user_wcif = registration.user.to_wcif(@competition, registration)
+    user_wcif = registration.user.to_wcif(@competition, registration, version: Competition::WCIF_VERSION_CATALOGUE[:latest])
     user_wcif["results"] = results
 
     render json: user_wcif
@@ -98,17 +99,17 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(wcif_id, @competition.id)
 
     # TODO: Move these to actual error codes at one point
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     state = round.lifecycle_state
 
     return render json: { status: "round is locked" }, status: :bad_request if state == Round::STATE_LOCKED
 
-    return render json: { status: "round is not open" }, status: :bad_request if [Round::STATE_READY, Round::STATE_PENDING].include?(state)
+    return render json: { status: "round is not open" }, status: :bad_request if state != Round::STATE_OPEN
 
-    recreated_rows = round.clear_round!(@current_user)
+    recreated_rows = round.clear_round!(authenticated_user)
 
-    render json: { status: "ok", recreated_rows: recreated_rows }
+    render json: { status: "ok", recreated_rows: recreated_rows, state: round.lifecycle_state }
   end
 
   def close_round
@@ -117,15 +118,15 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, competition.id)
 
-    require_manage!(competition)
+    require_scoretake!(competition)
 
     state = round.lifecycle_state
 
     return render json: { status: "round is locked" }, status: :bad_request if state == Round::STATE_LOCKED
 
-    return render json: { status: "round is not open" }, status: :bad_request if [Round::STATE_READY, Round::STATE_PENDING].include?(state)
+    return render json: { status: "round is not open" }, status: :bad_request if state != Round::STATE_OPEN
 
-    return render json: { status: "round has results entered" }, status: :bad_request if round.competitors_live_results_entered.positive?
+    return render json: { status: "round has results entered" }, status: :bad_request if round.completed_competitors.positive?
 
     deleted_count = round.close_round!
 
@@ -138,7 +139,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     round = Round.find_by_wcif_id!(wcif_id, @competition.id)
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     result = round.live_results.find_by!(registration_id: registration_id)
 
@@ -149,7 +150,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
       deleted
     end
 
-    result.live_result_history_entries.create(action_source: "live_results", action_type: "cleared", entered_by: @current_user)
+    result.live_result_history_entries.create(action_source: "live_results", action_type: "cleared", entered_by: authenticated_user)
 
     render json: { status: "ok", deleted_attempts: delete_count }
   end
@@ -160,7 +161,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(wcif_id, @competition.id, includes: [:live_results])
 
     # TODO: Move these to actual error codes at one point
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     state = round.lifecycle_state
 
@@ -168,25 +169,14 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round already open" }, status: :bad_request if [Round::STATE_OPEN, Round::STATE_LOCKED].include?(state)
 
-    remaining = round.total_number_of_rounds - round.number
-    if remaining.positive?
-      num_competitors = round.participation_source.advancing_competitor_ids.size
-
-      # https://www.worldcubeassociation.org/regulations/#9m3
-      if num_competitors <= 7
-        return render json: { status: "regulation 9m3: a round with 7 or fewer competitors must not have subsequent rounds" }, status: :bad_request
-      # https://www.worldcubeassociation.org/regulations/#9m2
-      elsif num_competitors <= 15 && remaining > 1
-        return render json: { status: "regulation 9m2: a round with 15 or fewer competitors must have at most one subsequent round" }, status: :bad_request
-      # https://www.worldcubeassociation.org/regulations/#9m1
-      elsif num_competitors <= 99 && remaining > 2
-        return render json: { status: "regulation 9m1: a round with 99 or fewer competitors must have at most two subsequent rounds" }, status: :bad_request
-      end
+    if state == Round::STATE_BLOCKED
+      violation = round.insufficient_competitors_violation
+      return render json: { status: "regulation #{violation}: #{Round::INSUFFICIENT_COMPETITORS_MESSAGES[violation]}" }, status: :bad_request
     end
 
-    created_rows, locked_rows = round.open_and_lock_previous(@current_user)
+    created_rows, locked_rows = round.open_and_lock_previous(authenticated_user)
 
-    render json: { status: "ok", locked_rows: locked_rows, created_rows: created_rows }
+    render json: { status: "ok", locked_rows: locked_rows, created_rows: created_rows, state: round.lifecycle_state }
   end
 
   def quit_competitor
@@ -194,7 +184,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     registration_id = params.require(:registration_id)
     advancing_ids = params[:advancing_ids]
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     round = Round.find_by_wcif_id!(wcif_id, @competition.id, includes: [:live_results])
     result = round.live_results.find_by!(registration_id: registration_id)
@@ -207,7 +197,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "The advancing competitor doesn't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids.present? && advancing_ids.map(&:to_i) != to_advance&.pluck(:registration_id)
 
-    quit_count = round.quit_from_round!(registration_id, @current_user, to_advance: to_advance)
+    quit_count = round.quit_from_round!(registration_id, authenticated_user, to_advance: to_advance)
 
     render json: { status: "ok", quit: quit_count }
   end
@@ -217,7 +207,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     registration_ids = params.require(:registration_ids).map(&:to_i)
     advancing_ids = params[:advancing_ids]
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     round = Round.find_by_wcif_id!(wcif_id, @competition.id, includes: [:live_results])
     results = round.live_results.where(registration_id: registration_ids).includes(:live_attempts)
@@ -229,7 +219,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "The advancing competitors don't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids.present? && advancing_ids.map(&:to_i) != to_advance&.pluck(:registration_id)
 
-    quit_count = round.bulk_quit_from_round!(registration_ids, @current_user, to_advance: to_advance)
+    quit_count = round.bulk_quit_from_round!(registration_ids, authenticated_user, to_advance: to_advance)
 
     render json: { status: "ok", quit: quit_count }
   end
@@ -238,7 +228,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     wcif_id = params.require(:round_id)
     registration_id = params.require(:registration_id)
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     round = Round.find_by_wcif_id!(wcif_id, @competition.id, includes: [:live_results])
 
@@ -253,18 +243,24 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     round = Round.find_by_wcif_id!(params.require(:round_id), @competition.id)
     colinked_rounds = round.colinked_rounds
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
-    registrations = round.participation_source.live_competitors.includes(:events, user: :delegate_role_metadata)
+    # For a first round (incl. linked first rounds), anyone registered for the
+    #   competition can be added on-site, even if they didn't register for the event
+    registrations = round.first_round? ? @competition.registrations.accepted.competing : round.participation_source.live_competitors
+    registrations = registrations.includes(:events, user: :delegate_role_metadata)
 
-    render json: { registrations: registrations.map(&:to_v2_json), colinked_status: colinked_rounds.map(&:lifecycle_state) }
+    render json: {
+      registrations: registrations.map(&:to_v2_json),
+      colinked_status: colinked_rounds.map(&:lifecycle_state),
+    }
   end
 
   def add_competitor_to_round
     registration = Registration.find(params.require(:registration_id))
     round = Round.find_by_wcif_id!(params.require(:round_id), @competition.id)
 
-    require_manage!(@competition)
+    require_scoretake!(@competition)
 
     rounds = round.linked_round.present? ? round.linked_round.rounds : round.rounds
 
@@ -281,8 +277,12 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   private
 
-    def require_score_taking_internal
+    def competition_from_params
       @competition = Competition.find(params.require(:competition_id))
-      raise WcaExceptions::NotPermitted.new("Score Taking Software needs to be set to Internal") unless @competition.scoretaking_software_internal?
+    end
+
+    def require_scoretaking_internal
+      @competition ||= competition_from_params
+      raise WcaExceptions::NotPermitted.new("Scoretaking software needs to be set to Internal") unless @competition.scoretaking_software_internal?
     end
 end

@@ -139,11 +139,7 @@ Rails.application.configure do
 
   # Error pages for production
   config.exceptions_app = lambda { |env|
-    if EnvConfig.API_ONLY?
-      ApiErrorsController.action(:show).call(env)
-    else
-      ErrorsController.action(:show).call(env)
-    end
+    ErrorsController.action(:show).call(env)
   }
 
   # Inserts middleware to perform automatic connection switching.

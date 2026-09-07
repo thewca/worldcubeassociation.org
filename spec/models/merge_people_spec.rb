@@ -68,4 +68,19 @@ RSpec.describe MergePeople do
     expect(result2.reload.person_id).to eq person1.wca_id
     expect(decoy_result.reload.person_id).to eq old_decoy_person_id
   end
+
+  it "destroys potential duplicate persons associated with the merged person" do
+    job_run = DuplicateCheckerJobRun.create!(competition: create(:competition), run_status: :not_started)
+    user = create(:user)
+    pdp = PotentialDuplicatePerson.create!(
+      duplicate_checker_job_run_id: job_run.id,
+      original_user: user,
+      duplicate_person: person2,
+      name_matching_algorithm: :jarowinkler,
+      score: 90,
+    )
+
+    expect(merge_people.do_merge).to be true
+    expect(PotentialDuplicatePerson.exists?(pdp.id)).to be false
+  end
 end

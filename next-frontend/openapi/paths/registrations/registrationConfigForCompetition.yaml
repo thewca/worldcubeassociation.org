@@ -19,3 +19,7 @@ get:
             type: array
             items:
               $ref: '../../schemas/registrations/RegistrationConfig.yaml'
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'
