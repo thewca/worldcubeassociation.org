@@ -3453,7 +3453,7 @@ fr:
       #original_hash: ab478f3
       map: Carte
       #original_hash: ad8919a
-      event: Catégorie
+      event: Épreuve
       #original_hash: 0f21717
       region: Région
       #original_hash: bce0641
@@ -3578,7 +3578,7 @@ fr:
         #original_hash: 10b28a8
         full: Complet
         #original_hash: cf9b770
-        open: Open
+        open: Ouvert
         #original_hash: 44bb7df
         not_open: Non ouvert
         #original_hash: 88d86b7
