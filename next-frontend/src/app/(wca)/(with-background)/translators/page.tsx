@@ -31,7 +31,7 @@ export default async function TranslatorsPage() {
             <Heading size="2xl" marginY={2}>
               {language}
             </Heading>
-            <SimpleGrid columns={3} gap="16px">
+            <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
               {translators.map((translator) => (
                 <UserBadge
                   key={translator.id}
