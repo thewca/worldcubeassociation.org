@@ -1300,6 +1300,10 @@ fr-CA:
         email: Accéder à votre adresse courriel
         #original_hash: 0d4dff1
         manage_competitions: Administrer n'importe quelle compétition que vous organisez
+        #original_hash: 2a6fa9f
+        manage_registrations: >-
+          Vous inscrire à des compétitions, et modifier ou annuler vos
+          inscriptions
     devise:
       #original_hash: 59cc9bd
       no_account: Pas de compte ?
@@ -2378,6 +2382,8 @@ fr-CA:
         Vous êtes banni·e. Si vous pensez que c'est une erreur, merci de
         contacter le <a href='mailto:integrity@worldcubeassociation.org'
         target='_blank'>le comité d'intégrité de la WCA (WIC)</a>.
+      #original_hash: 2f83c30
+      banned_until: 'Votre bannissement prendra fin le %{date}.'
       #original_hash: 93941f2
       undelete_banned: est une personne actuellement bannie et ne peut pas être acceptée
       #original_hash: fe63f00
@@ -2745,10 +2751,11 @@ fr-CA:
         seront détectés et la base de données sera mise à jour en conséquence.
       #original_hash: 1e8229b
       registrations_file_label: Fichier des inscriptions
-      #original_hash: 9b68a23
+      #original_hash: 657d6e3
       registrations_file_hint: >-
         Fichier CSV avec les colonnes suivantes : Status, Name, Region, WCA ID,
-        Birth Date, Gender, Email et une colonne pour chaque épreuve.
+        Birth Date, Gender, Email et une colonne pour chaque épreuve, ou fichier
+        JSON contenant les données WCIF.
       #original_hash: fc25109
       preview: Aperçu des données d'inscription
       #original_hash: f54cfe9
@@ -2789,8 +2796,16 @@ fr-CA:
           %{wca_ids}.
         #original_hash: bf1ebec
         wrong_dob_format: "La date de naissance doit suivre le format AAAA-mm-jj (année-mois-jour, par exemple 1944-07-13). Les dates suivantes qui ne peuvent pas être analysées\_: %{raw_dobs}."
+        #original_hash: b9a8834
+        invalid_country: 'Pays non valide : %{country}.'
+        #original_hash: 49464b6
+        invalid_wcif: Le fichier JSON ne contient pas de données WCIF valides.
         #original_hash: 7f34a23
         empty_file: Le fichier est vide.
+        #original_hash: 078eff9
+        unsupported_file_format: >-
+          Format de fichier non pris en charge. Veuillez téléverser un fichier
+          JSON ou CSV.
     add:
       #original_hash: e7212ce
       title: 'Ajouter une inscription à %{comp}'
@@ -3018,6 +3033,8 @@ fr-CA:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} saisis'
         #original_hash: eacca7b
         round_locked: Verrouillé
+        #original_hash: f3ed87a
+        first_timer: Nouveau venu
         #original_hash: f260e75
         edit: Modifier
         #original_hash: 0f766b4
@@ -3421,6 +3438,8 @@ fr-CA:
     index:
       #original_hash: 6cf9b8c
       title: Compétitions
+      #original_hash: fc507c2
+      all_competitions: Toutes les compétitions
       #original_hash: c5f641e
       all_events: Toutes
       #original_hash: 1a5f0b8
@@ -3433,10 +3452,29 @@ fr-CA:
       list: Liste
       #original_hash: 8bb6835
       map: Carte
+      #original_hash: 6b38300
+      event: Catégorie
       #original_hash: 357f27d
       region: Région
       #original_hash: 91f7d3e
       search: Rechercher
+      #original_hash: 7ff2037
+      name: Nom
+      #original_hash: 84e3d48
+      location: Localisation
+      #original_hash: e2aad93
+      location_placeholder: Saisissez une adresse
+      #original_hash: 08d4606
+      use_my_location: Utiliser ma localisation
+      #original_hash: 4232080
+      distance: Distance
+      distance_units:
+        #original_hash: 08ec69f
+        km: km
+        #original_hash: 9c51ad8
+        mi: mi
+      #original_hash: e550a8f
+      advanced_filters: Filtres avancés
       #original_hash: eb9a4bc
       state: Date
       #original_hash: 08c2820
@@ -3534,6 +3572,26 @@ fr-CA:
           full: >-
             Limite de compétiteurs atteinte, les nouvelles inscriptions seront
             inscrites sur la liste d'attente.
+      #original_hash: 65a7981
+      registration_key: 'Clef d''inscription :'
+      registration_status:
+        #original_hash: 26275eb
+        full: Complet
+        #original_hash: cf9b770
+        open: Open
+        #original_hash: 92ea9e6
+        not_open: Non ouvert
+        #original_hash: 79516c4
+        closed: Fermé
+      #original_hash: b106c14
+      currently_displaying:
+        zero: Pas de compétition à afficher
+        one: 'Affichage actuel : %{count} compétition'
+        other: 'Affichage actuel : %{count} compétitions'
+      #original_hash: cb7ce04
+      register_now: Inscrivez-vous dès maintenant
+      #original_hash: 5de3ef4
+      view_competition: Voir la compétition
       #original_hash: 418a176
       no_more_comps: Plus aucune compétition.
       #original_hash: e115823
@@ -4320,6 +4378,8 @@ fr-CA:
           remboursement et toute exigence supplémentaire énumérée ci-dessus.
         #original_hash: 992dbd5
         next_step: Étape suivante
+        #original_hash: f8b9b80
+        accept: Accepter
       update:
         #original_hash: 63af327
         being_updated: L'inscription est en cours de mise à jour...
@@ -4418,6 +4478,8 @@ fr-CA:
           vous pré-inscrire comme organisateur·rice ou Délégué·e
         #original_hash: 7789d81
         comment: Commentaires supplémentaires pour l'équipe organisatrice
+        #original_hash: 82c8636
+        comment_overview: Vos commentaires
         #original_hash: 2e4a93b
         until: 'Vous pouvez mettre à jour votre inscription jusqu’au %{date}'
         #original_hash: cc009dc
@@ -4459,6 +4521,11 @@ fr-CA:
         event_limit: >-
           Cette compétition limite le nombre d’épreuves auxquelles vous pouvez
           vous inscrire à %{max_events}.
+        #original_hash: 9e7c619
+        waiting_list_count:
+          zero: Il n'y a aucun compétiteur en file d'attente.
+          one: 'Il y a %{count} compétiteur en file d''attente.'
+          other: 'Il y a %{count} compétiteurs en file d''attente.'
       errors:
         #original_hash: b8debb3
         events: 'Le chargement de épreuve a échoué, veuillez réessayer'
@@ -5512,12 +5579,11 @@ fr-CA:
             à la compétition d'être reconnue par la WCA. Le Délégué WCA fournira
             de l'aide à l'équipe d'organisation pour assurer le succès de
             l'organisation de la compétition.
-          #original_hash: cab2d4c
+          #original_hash: 3f6899f
           '4': >-
-            Visitez les <a target='_blank'
-            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>recommandations
-            à destination des organisateurs de compétitions WCA</a> pour plus
-            d'informations.
+            Pour plus d'informations, consultez le <a target=“_blank”
+            href=“https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf”>Guide
+            de l'organisateur des compétitions WCA</a>.
       '6':
         #original_hash: 89f80eb
         title: >-
@@ -5800,6 +5866,12 @@ fr-CA:
     bylaws: Statuts
     #original_hash: fdceb44
     motions: Motions
+    #original_hash: 77d9f77
+    motion_not_found: Motion introuvable
+    #original_hash: 9933577
+    motion_not_found_action: >-
+      Nous n'avons pas trouvé de motion portant le numéro « %{motion_id} ». Elle
+      a peut-être été abrogée.
     #original_hash: fee09cd
     minutes: Compte-rendus
     #original_hash: 5f20fc3
@@ -5827,6 +5899,8 @@ fr-CA:
     competition_templates: Patrons pour matériel de compétition
     #original_hash: f552999
     certificates: Modèles de diplômes de l'équipe communication de la WCA (WCT)
+    #original_hash: 2e614c3
+    orga_handbook: Guide de l'organisateur
   delegates_page:
     #original_hash: 0532b1b
     title: Délégués WCA
@@ -6130,6 +6204,8 @@ fr-CA:
       regulations_and_guidelines: Règlement
       #original_hash: be89802
       search_for: 'Recherche pour <b>%{search_string}</b>'
+      #original_hash: 372ae78
+      empty_query: Essayez de faire une recherche !
       not_found:
         #original_hash: 85807b0
         generic: Aucun résultat trouvé
@@ -6156,8 +6232,8 @@ fr-CA:
     page_title: 'Incident : %{title}'
     #original_hash: 9a18c89
     not_found: Incident introuvable
-    #original_hash: cb7b05a
-    back_to_log: Retour au journal des incidents
+    #original_hash: 5e4a462
+    back_to_log: Retour au Registre des Incidents
     #original_hash: 91f7d3e
     search_placeholder: Rechercher
     #original_hash: 659499f
@@ -6268,13 +6344,14 @@ fr-CA:
         La <a href="/faq">section FAQ</a> répond à plusieurs questions
         fréquemment posées à propos du Règlement WCA.
     panel4:
-      #original_hash: 71f56bc
-      title: Recommandations pour les organisateurs
-      #original_hash: 25bb9c4
+      #original_hash: 2e614c3
+      title: Guide de l'organisateur
+      #original_hash: def9922
       content1_html: >-
-        Si vous êtes intéressés pour organiser une compétition, ou que vous avez
-        déjà prévu d'en organiser une, merci de lire nos <a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Recommandations pour les organisateurs</a>.
+        Si vous souhaitez organiser une compétition ou si vous envisagez déjà
+        d'en organiser une, veuillez consulter notre <a
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Guide
+        de l'organisateur</a>.
       #original_hash: fc184be
       content2_html: >-
         Ce document contient des informations importantes et devrait être lu par
