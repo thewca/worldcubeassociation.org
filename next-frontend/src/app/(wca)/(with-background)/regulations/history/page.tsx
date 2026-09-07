@@ -56,7 +56,7 @@ export default async function RegulationsHistory() {
           and the WCA Guidelines. The former contents of both documents were
           combined into the WCA Regulations for the July 17th, 2025 release.
         </Text>
-        <List.Root>
+        <List.Root indented>
           {regulationsHistoryItems.map((item) => (
             <List.Item key={item.id}>
               <Link href={item.url}>{item.version}</Link>{" "}
