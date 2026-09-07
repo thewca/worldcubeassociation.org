@@ -83,10 +83,15 @@ export default async function DelegatesPage({
         <Tabs.Root
           variant="enclosed"
           orientation="vertical"
+          flexDirection={{ base: "column", md: "row" }}
           fitted
           value={activeFriendlyId}
         >
-          <Tabs.List height="fit-content" position="sticky" top="3">
+          <Tabs.List
+            height="fit-content"
+            position={{ base: "static", md: "sticky" }}
+            top="3"
+          >
             {rootGroups.map((group) => {
               const friendlyId = group.metadata!.friendly_id!;
 
@@ -198,7 +203,7 @@ async function DelegateGrid({
   const { t } = await getT();
 
   return (
-    <SimpleGrid columns={2} gap={2}>
+    <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
       {delegates.map((role) => (
         <UserBadge
           key={role.id}
