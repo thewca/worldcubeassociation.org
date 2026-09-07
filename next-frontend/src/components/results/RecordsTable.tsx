@@ -99,43 +99,41 @@ function MixedHistoryTable({ records }: MixedHistoryTableProps) {
 
   return (
     <Table.ScrollArea rounded="md" maxW="full">
-      <Table.ScrollArea rounded="md" maxW="full">
-        <Table.Root>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>
-                {t("results.table_elements.date_circa")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.event")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.name")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.selector_elements.type_selector.single")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.selector_elements.type_selector.average")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.region")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.competition")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader colSpan={5}>
-                {t("results.table_elements.solves")}
-              </Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {records.map((record, index) => (
-              <HistoryRow key={`${record.id}-${index}`} record={record} mixed />
-            ))}
-          </Table.Body>
-        </Table.Root>
-      </Table.ScrollArea>
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>
+              {t("results.table_elements.date_circa")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.event")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.selector_elements.type_selector.single")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.selector_elements.type_selector.average")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.region")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.competition")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader colSpan={5}>
+              {t("results.table_elements.solves")}
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {records.map((record, index) => (
+            <HistoryRow key={`${record.id}-${index}`} record={record} mixed />
+          ))}
+        </Table.Body>
+      </Table.Root>
     </Table.ScrollArea>
   );
 }
@@ -161,43 +159,41 @@ function HistoryTable({ records }: HistoryTableProps) {
               <EventIcon eventId={eventId} /> {events.byId[eventId].name}
             </Heading>
             <Table.ScrollArea rounded="md" maxW="full">
-              <Table.ScrollArea rounded="md" maxW="full">
-                <Table.Root>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.ColumnHeader>
-                        {t("results.table_elements.date_circa")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader>
-                        {t("results.table_elements.name")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader>
-                        {t("results.selector_elements.type_selector.single")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader>
-                        {t("results.selector_elements.type_selector.average")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader>
-                        {t("results.table_elements.region")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader>
-                        {t("results.table_elements.competition")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader colSpan={5}>
-                        {t("results.table_elements.solves")}
-                      </Table.ColumnHeader>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {single?.map((record) => (
-                      <HistoryRow key={record.id} record={record} />
-                    ))}
-                    {average?.map((record) => (
-                      <HistoryRow key={record.id} record={record} />
-                    ))}
-                  </Table.Body>
-                </Table.Root>
-              </Table.ScrollArea>
+              <Table.Root>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeader>
+                      {t("results.table_elements.date_circa")}
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader>
+                      {t("results.table_elements.name")}
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader>
+                      {t("results.selector_elements.type_selector.single")}
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader>
+                      {t("results.selector_elements.type_selector.average")}
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader>
+                      {t("results.table_elements.region")}
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader>
+                      {t("results.table_elements.competition")}
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader colSpan={5}>
+                      {t("results.table_elements.solves")}
+                    </Table.ColumnHeader>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {single?.map((record) => (
+                    <HistoryRow key={record.id} record={record} />
+                  ))}
+                  {average?.map((record) => (
+                    <HistoryRow key={record.id} record={record} />
+                  ))}
+                </Table.Body>
+              </Table.Root>
             </Table.ScrollArea>
           </VStack>
         );
@@ -211,54 +207,52 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
 
   return (
     <Table.ScrollArea rounded="md" maxW="full">
-      <Table.ScrollArea rounded="md" maxW="full">
-        <Table.Root>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>
-                {t("results.selector_elements.type_selector.type")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.name")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.result")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.region")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.competition")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader colSpan={5}>
-                {t("results.table_elements.solves")}
-              </Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {WCA_EVENT_IDS.map((eventId) => {
-              const eventRecords = records[eventId as EventId];
-              if (!eventRecords) {
-                return null;
-              }
-              const single = eventRecords.filter(
-                (record) => record.type === "single",
-              );
-              const average = eventRecords.filter(
-                (record) => record.type === "average",
-              );
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>
+              {t("results.selector_elements.type_selector.type")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.result")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.region")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.competition")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader colSpan={5}>
+              {t("results.table_elements.solves")}
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {WCA_EVENT_IDS.map((eventId) => {
+            const eventRecords = records[eventId as EventId];
+            if (!eventRecords) {
+              return null;
+            }
+            const single = eventRecords.filter(
+              (record) => record.type === "single",
+            );
+            const average = eventRecords.filter(
+              (record) => record.type === "average",
+            );
 
-              return (
-                <SlimRecordsRow
-                  key={eventId}
-                  singles={single}
-                  averages={average}
-                />
-              );
-            })}
-          </Table.Body>
-        </Table.Root>
-      </Table.ScrollArea>
+            return (
+              <SlimRecordsRow
+                key={eventId}
+                singles={single}
+                averages={average}
+              />
+            );
+          })}
+        </Table.Body>
+      </Table.Root>
     </Table.ScrollArea>
   );
 }
@@ -274,39 +268,37 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
             {t(`results.selector_elements.type_selector.${type}`)}
           </Heading>
           <Table.ScrollArea rounded="md" maxW="full">
-            <Table.ScrollArea rounded="md" maxW="full">
-              <Table.Root>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.event")}
+            <Table.Root>
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeader>
+                    {t("results.table_elements.event")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("results.table_elements.result")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("results.table_elements.name")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("results.table_elements.region")}
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("results.table_elements.competition")}
+                  </Table.ColumnHeader>
+                  {type === "average" && (
+                    <Table.ColumnHeader colSpan={5}>
+                      {t("results.table_elements.solves")}
                     </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.result")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.name")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.region")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.competition")}
-                    </Table.ColumnHeader>
-                    {type === "average" && (
-                      <Table.ColumnHeader colSpan={5}>
-                        {t("results.table_elements.solves")}
-                      </Table.ColumnHeader>
-                    )}
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {recordsByType[type as "single" | "average"].map((record) => (
-                    <SeparateRecordsRow key={record.id} record={record} />
-                  ))}
-                </Table.Body>
-              </Table.Root>
-            </Table.ScrollArea>
+                  )}
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {recordsByType[type as "single" | "average"].map((record) => (
+                  <SeparateRecordsRow key={record.id} record={record} />
+                ))}
+              </Table.Body>
+            </Table.Root>
           </Table.ScrollArea>
         </VStack>
       ))}
@@ -323,40 +315,38 @@ function MixedRecordsTable({ records }: RecordsTableProps) {
 
   return (
     <Table.ScrollArea rounded="md" maxW="full">
-      <Table.ScrollArea rounded="md" maxW="full">
-        <Table.Root>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>
-                {t("results.selector_elements.type_selector.type")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.name")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.result")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.region")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("results.table_elements.competition")}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader colSpan={5}>
-                {t("results.table_elements.solves")}
-              </Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {single.map((record) => (
-              <MixedRecordsRow key={record.id} record={record} t={t} />
-            ))}
-            {average?.map((record) => (
-              <MixedRecordsRow key={record.id} record={record} t={t} />
-            ))}
-          </Table.Body>
-        </Table.Root>
-      </Table.ScrollArea>
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>
+              {t("results.selector_elements.type_selector.type")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.result")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.region")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.competition")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader colSpan={5}>
+              {t("results.table_elements.solves")}
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {single.map((record) => (
+            <MixedRecordsRow key={record.id} record={record} t={t} />
+          ))}
+          {average?.map((record) => (
+            <MixedRecordsRow key={record.id} record={record} t={t} />
+          ))}
+        </Table.Body>
+      </Table.Root>
     </Table.ScrollArea>
   );
 }
