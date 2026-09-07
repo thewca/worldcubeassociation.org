@@ -48,6 +48,7 @@ export default async function TeamsCommitteesPage() {
           lazyMount
           fitted
           unmountOnExit
+          gap={8}
         >
           <Tabs.List
             height="fit-content"

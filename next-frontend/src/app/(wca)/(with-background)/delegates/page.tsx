@@ -86,6 +86,7 @@ export default async function DelegatesPage({
           sideNav
           fitted
           value={activeFriendlyId}
+          gap={8}
         >
           <Tabs.List>
             {rootGroups.map((group) => {
