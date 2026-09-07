@@ -163,36 +163,27 @@ export default async function PersonOverview({
               <Card.Root>
                 <Tabs.Root
                   defaultValue="results"
-                  fitted={{ base: false, md: true }}
+                  fitContent
                   variant="plain"
                   lazyMount
                   colorPalette="blue"
                   highContrast
                 >
                   <Card.Header padding={0}>
-                    <Tabs.List maxWidth="full" overflowX="auto">
-                      <Tabs.Trigger value="results" flexShrink="0">
-                        Results
-                      </Tabs.Trigger>
-                      <Tabs.Trigger value="competitions" flexShrink="0">
+                    <Tabs.List>
+                      <Tabs.Trigger value="results">Results</Tabs.Trigger>
+                      <Tabs.Trigger value="competitions">
                         Competitions
                       </Tabs.Trigger>
                       {hasRecords && (
-                        <Tabs.Trigger value="records" flexShrink="0">
-                          Records
-                        </Tabs.Trigger>
+                        <Tabs.Trigger value="records">Records</Tabs.Trigger>
                       )}
                       {hasChampionshipPodiums && (
-                        <Tabs.Trigger
-                          value="championship-podiums"
-                          flexShrink="0"
-                        >
+                        <Tabs.Trigger value="championship-podiums">
                           Championship Podiums
                         </Tabs.Trigger>
                       )}
-                      <Tabs.Trigger value="map" flexShrink="0">
-                        Map
-                      </Tabs.Trigger>
+                      <Tabs.Trigger value="map">Map</Tabs.Trigger>
                       <Tabs.Indicator
                         bg="colorPalette.solid"
                         borderBottomRadius={0}

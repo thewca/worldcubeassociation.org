@@ -952,6 +952,19 @@ const customConfig = defineConfig({
       tabs: {
         slots: [],
         variants: {
+          // Grows the triggers to fill the row when they fit, and lets the list
+          //   scroll instead of squashing them when they don't.
+          fitContent: {
+            true: {
+              list: {
+                maxWidth: "full",
+                overflowX: "auto",
+              },
+              trigger: {
+                flex: "1 0 auto",
+              },
+            },
+          },
           highContrast: {
             true: {
               trigger: {
