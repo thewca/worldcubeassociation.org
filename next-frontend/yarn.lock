@@ -1461,9 +1461,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@delmaredigital/payload-better-auth@npm:0.11.3":
-  version: 0.11.3
-  resolution: "@delmaredigital/payload-better-auth@npm:0.11.3"
+"@delmaredigital/payload-better-auth@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@delmaredigital/payload-better-auth@npm:0.13.0"
   dependencies:
     qrcode.react: "npm:^4.2.0"
   peerDependencies:
@@ -1480,7 +1480,7 @@ __metadata:
       optional: true
     "@better-auth/passkey":
       optional: true
-  checksum: 10c0/d2bbd4e7bc53ab40e668f6a339fa1dbeb3f343476e94a7ce706d888a37992fe4cb188c5a0f5261b0e1ab9d5994019bb3e1b2bc2ab336a9fee22a718c9d7de022
+  checksum: 10c0/b5eef35f0f6a18c22592faec6d88d502b0fbd9fc9a5cf5bd1ef286bfe12040d14deaef83bb172024d2550ba48a322e2acd2b343d373e80efbc83d0d58004b940
   languageName: node
   linkType: hard
 
@@ -12568,7 +12568,7 @@ __metadata:
     "@aws-sdk/credential-providers": "npm:^3.1127.0"
     "@chakra-ui/cli": "npm:^3.37.0"
     "@chakra-ui/react": "npm:^3.37.0"
-    "@delmaredigital/payload-better-auth": "npm:0.11.3"
+    "@delmaredigital/payload-better-auth": "npm:0.13.0"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@fullcalendar/format-luxon3": "npm:^7.1.0"
