@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Header, Icon, Table } from 'semantic-ui-react';
+import { Header, Icon, Message, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
@@ -33,6 +33,17 @@ export default function LiveResultsPreview({
 
   if (isPending) return (<Loading />);
   if (isError) return (<Errored error={error} />);
+
+  if (liveResults.length === 0) {
+    return (
+      <Message
+        warning
+        icon="warning sign"
+        header="No results available to be posted"
+        content="Please make sure that your scoretaking tool has synchronized the results. If you are sure but your results are still not showing up, please contact WST."
+      />
+    );
+  }
 
   const liveResultsByRound = _.groupBy(liveResults, (res) => `${res.event_id}-${res.round_type_id}`);
 

@@ -39,7 +39,7 @@ export default function ImportWcaLiveResults({
         to the WCA website already.
         Common use cases include WCA Live or Integrated Live Results.
       </p>
-      <Message warning>
+      <Message>
         <Message.Header>Please Note</Message.Header>
         <Message.List>
           {scoretakingSoftware === 'wca_live' && (
