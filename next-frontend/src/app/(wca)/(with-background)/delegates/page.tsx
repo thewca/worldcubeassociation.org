@@ -83,15 +83,11 @@ export default async function DelegatesPage({
         <Tabs.Root
           variant="enclosed"
           orientation="vertical"
-          flexDirection={{ base: "column", md: "row" }}
+          sideNav
           fitted
           value={activeFriendlyId}
         >
-          <Tabs.List
-            height="fit-content"
-            position={{ base: "static", md: "sticky" }}
-            top="3"
-          >
+          <Tabs.List>
             {rootGroups.map((group) => {
               const friendlyId = group.metadata!.friendly_id!;
 
