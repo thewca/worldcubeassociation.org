@@ -9,7 +9,7 @@ import {
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
 import { RoundInfoProvider } from "@/providers/RoundInfoProvider";
 import RoundResults from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/RoundResults";

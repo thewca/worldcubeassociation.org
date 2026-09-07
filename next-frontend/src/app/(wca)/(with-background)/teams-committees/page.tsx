@@ -16,7 +16,7 @@ import {
   getTeamsCommittees,
 } from "@/lib/wca/roles/teamsCommittees";
 import OpenapiError from "@/components/ui/openapiError";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
