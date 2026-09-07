@@ -57,7 +57,7 @@ function SegmentedField({
   onChange,
 }: SegmentedFieldProps) {
   return (
-    <Field.Root minW="0">
+    <Field.Root>
       <Field.Label>{label}</Field.Label>
       <SegmentGroup.Root
         hideBelow="md"
