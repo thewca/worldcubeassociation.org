@@ -98,7 +98,7 @@ function MixedHistoryTable({ records }: MixedHistoryTableProps) {
   const { t } = useT();
 
   return (
-    <Table.ScrollArea rounded="md" maxW="full">
+    <Table.ScrollArea rounded="md">
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -158,7 +158,7 @@ function HistoryTable({ records }: HistoryTableProps) {
             <Heading size="2xl">
               <EventIcon eventId={eventId} /> {events.byId[eventId].name}
             </Heading>
-            <Table.ScrollArea rounded="md" maxW="full">
+            <Table.ScrollArea rounded="md">
               <Table.Root>
                 <Table.Header>
                   <Table.Row>
@@ -206,7 +206,7 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
   const { t } = useT();
 
   return (
-    <Table.ScrollArea rounded="md" maxW="full">
+    <Table.ScrollArea rounded="md">
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -267,7 +267,7 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
           <Heading size="2xl">
             {t(`results.selector_elements.type_selector.${type}`)}
           </Heading>
-          <Table.ScrollArea rounded="md" maxW="full">
+          <Table.ScrollArea rounded="md">
             <Table.Root>
               <Table.Header>
                 <Table.Row>
@@ -314,7 +314,7 @@ function MixedRecordsTable({ records }: RecordsTableProps) {
   const average = groupedByType["average"];
 
   return (
-    <Table.ScrollArea rounded="md" maxW="full">
+    <Table.ScrollArea rounded="md">
       <Table.Root>
         <Table.Header>
           <Table.Row>

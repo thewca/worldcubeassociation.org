@@ -19,7 +19,7 @@ export default function RankingsTable({
   const { t } = useT();
 
   return (
-    <Table.ScrollArea rounded="md" maxW="full">
+    <Table.ScrollArea rounded="md">
       <Table.Root>
         <Table.Header>
           <Table.Row>
