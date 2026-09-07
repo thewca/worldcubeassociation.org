@@ -83,7 +83,7 @@ export default function FilteredRecords({
           "by region": t("results.selector_elements.show_selector.by_region"),
         }}
       />
-      <Box position="relative" opacity={isPending ? 0.4 : 1}>
+      <Box position="relative" w="full" opacity={isPending ? 0.4 : 1}>
         {isPending && (
           <Center position="absolute" inset={0} zIndex={1}>
             <Spinner size="xl" position="sticky" top="50%" />

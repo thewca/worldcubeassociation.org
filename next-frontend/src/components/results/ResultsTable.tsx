@@ -28,7 +28,7 @@ export function ResultsTable({
   const anyAverages = results.some((r) => r.average !== 0);
 
   return (
-    <Table.ScrollArea rounded="md" maxW="full">
+    <Table.ScrollArea rounded="md">
       <Table.Root>
         <Table.Header>
           <Table.Row>
