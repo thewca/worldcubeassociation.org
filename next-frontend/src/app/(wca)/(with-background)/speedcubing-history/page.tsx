@@ -5,15 +5,14 @@ import {
   Heading,
   VStack,
   Text,
-  Box,
+  Card,
   Image,
-  Center,
 } from "@chakra-ui/react";
 import Quote from "@/components/Quote";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { Media } from "@/types/payload";
-import { ChakraMarkdown } from "@/components/Markdown";
+import MarkdownCard from "@/components/MarkdownCard";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
 
@@ -57,20 +56,20 @@ export default async function SpeedcubingHistory() {
             }
             case "paragraph": {
               return (
-                <ChakraMarkdown key={item.id}>
+                <MarkdownCard key={item.id}>
                   {item.contentMarkdown!}
-                </ChakraMarkdown>
+                </MarkdownCard>
               );
             }
             case "captionedImage": {
               const image = item.image as Media;
               return (
-                <Center key={item.id}>
-                  <Box>
+                <Card.Root key={item.id}>
+                  <Card.Body alignItems="center">
                     <Image src={image.url!} alt={item.caption} />
                     <Text>{item.caption}</Text>
-                  </Box>
-                </Center>
+                  </Card.Body>
+                </Card.Root>
               );
             }
           }

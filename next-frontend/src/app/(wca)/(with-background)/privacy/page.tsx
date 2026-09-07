@@ -1,7 +1,7 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { Container, Heading, VStack, Box } from "@chakra-ui/react";
-import { ChakraMarkdown } from "@/components/Markdown";
+import { Container, Heading, VStack } from "@chakra-ui/react";
+import MarkdownCard from "@/components/MarkdownCard";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 
@@ -30,12 +30,11 @@ export default async function Privacy() {
     <Container bg="bg">
       <VStack gap="8" width="full" pt="8" alignItems="left">
         <Heading size="5xl">WCA Privacy Statement</Heading>
-        <ChakraMarkdown>{privacyPage.preambleMarkdown}</ChakraMarkdown>
+        <MarkdownCard>{privacyPage.preambleMarkdown}</MarkdownCard>
         {privacyItems.map((item) => (
-          <Box key={item.id}>
-            <Heading size="xl">{item.title}</Heading>
-            <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
-          </Box>
+          <MarkdownCard key={item.id} title={item.title}>
+            {item.contentMarkdown}
+          </MarkdownCard>
         ))}
       </VStack>
     </Container>
