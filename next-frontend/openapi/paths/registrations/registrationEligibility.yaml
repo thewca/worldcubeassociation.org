@@ -1,9 +1,13 @@
 get:
-  summary: Get registration config for a competition
+  summary: Get the current user's eligibility to register for a competition
+  description: |
+    Whether the calling user may be shown the registration form at all, and which blocker to
+    explain to them if not. Complements `registrationConfig`, which describes the steps
+    themselves.
   tags:
     - competitions
     - registrations
-  operationId: competitionRegistrationConfig
+  operationId: registrationEligibility
   parameters:
     - name: competitionId
       in: path
@@ -16,9 +20,7 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '../../schemas/registrations/RegistrationConfig.yaml'
+            $ref: '../../schemas/registrations/RegistrationEligibility.yaml'
     '401':
       $ref: '../../errorResponses/NotLoggedIn.yaml'
     '404':

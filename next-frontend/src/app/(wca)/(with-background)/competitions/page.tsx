@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Box,
   Container,
   VStack,
   Button,
@@ -23,6 +24,7 @@ import {
   IconButton,
   ClientOnly,
   Icon,
+  Heading,
   Stack,
   Wrap,
   Badge,
@@ -62,6 +64,8 @@ import { FormEventSelector } from "@/components/EventSelector";
 import TabMap from "@/components/competitions/TabMap";
 import { LuMapPin, LuSettings2 } from "react-icons/lu";
 import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
+import { isInProgress } from "@/lib/wca/competitions/statusUtils";
+import _ from "lodash";
 
 const DEBOUNCE_MS = 600;
 
@@ -139,8 +143,8 @@ export default function CompetitionsPage() {
     },
   );
 
-  const bottomRef = useOnInView(() => {
-    if (hasMoreCompsToLoad && !competitionsIsFetching) {
+  const bottomRef = useOnInView((inView) => {
+    if (inView && hasMoreCompsToLoad && !competitionsIsFetching) {
       competitionsFetchNextPage();
     }
   });
@@ -181,6 +185,13 @@ export default function CompetitionsPage() {
         )
       : loadedCompetitions;
 
+  const showInProgressSection = debouncedFilterState.timeOrder === "present";
+
+  const [inProgressComps, upcomingComps] = _.partition(
+    competitionsDistanceFiltered,
+    (competition) => showInProgressSection && isInProgress(competition),
+  );
+
   const loadedCompetitionCount =
     rawCompetitionData?.pages.reduce((total, page) => total + page.length, 0) ??
     0;
@@ -200,7 +211,13 @@ export default function CompetitionsPage() {
           )}
         </ClientOnly>
         <Card.Root size={{ base: "sm", md: "md" }} width="full">
-          <Tabs.Root variant="subtle" colorPalette="blue" defaultValue="list">
+          <Tabs.Root
+            variant="subtle"
+            colorPalette="blue"
+            defaultValue="list"
+            lazyMount
+            unmountOnExit
+          >
             <Card.Header asChild>
               <Stack
                 direction={{ base: "column", md: "row" }}
@@ -379,10 +396,22 @@ export default function CompetitionsPage() {
                     })}
                   </Text>
                 </Stack>
-                <CompetitionTable
-                  competitions={competitionsDistanceFiltered}
+                {inProgressComps.length > 0 && (
+                  <>
+                    <Heading size="md" paddingY="2">
+                      {t("competitions.index.titles.in_progress")}
+                    </Heading>
+                    <CompetitionTable competitions={inProgressComps} />
+                    <Heading size="md" paddingY="2">
+                      {t("competitions.index.titles.upcoming")}
+                    </Heading>
+                  </>
+                )}
+                <CompetitionTable competitions={upcomingComps} />
+                <ListViewFooter
                   isLoading={competitionsIsFetching}
                   hasMoreCompsToLoad={hasMoreCompsToLoad}
+                  numCompetitions={competitionsDistanceFiltered.length}
                   bottomRef={bottomRef}
                   t={t}
                 />
@@ -556,16 +585,8 @@ function DateFilter({
 
 function CompetitionTable({
   competitions,
-  isLoading,
-  hasMoreCompsToLoad,
-  bottomRef,
-  t,
 }: {
   competitions: components["schemas"]["CompetitionIndex"][];
-  isLoading: boolean;
-  hasMoreCompsToLoad: boolean;
-  t: TFunction;
-  bottomRef: (node?: Element | null) => void;
 }) {
   return (
     <Table.Root size="xs" variant="competitions" borderWidth="2px">
@@ -573,13 +594,6 @@ function CompetitionTable({
         {competitions.map((comp) => (
           <CompetitionTableEntry comp={comp} key={comp.id} />
         ))}
-        <ListViewFooter
-          isLoading={isLoading}
-          hasMoreCompsToLoad={hasMoreCompsToLoad}
-          numCompetitions={competitions.length}
-          bottomRef={bottomRef}
-          t={t}
-        />
       </Table.Body>
     </Table.Root>
   );
@@ -600,25 +614,21 @@ function ListViewFooter({
 }) {
   if (isLoading) {
     return (
-      <Table.Row textAlign="center">
-        <Table.Cell colSpan={6}>
-          <Loading />
-        </Table.Cell>
-      </Table.Row>
+      <Box textAlign="center" width="full">
+        <Loading />
+      </Box>
     );
   }
 
-  if (!isLoading && !hasMoreCompsToLoad) {
+  if (!hasMoreCompsToLoad) {
     return (
       numCompetitions > 0 && (
-        <Table.Row textAlign="center">
-          <Table.Cell colSpan={6}>
-            {t("competitions.index.no_more_comps")}
-          </Table.Cell>
-        </Table.Row>
+        <Box textAlign="center" width="full">
+          {t("competitions.index.no_more_comps")}
+        </Box>
       )
     );
   }
 
-  return <Table.Row ref={bottomRef} />;
+  return <Box ref={bottomRef} />;
 }
