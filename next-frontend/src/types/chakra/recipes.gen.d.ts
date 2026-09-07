@@ -1362,6 +1362,7 @@ export interface TabsVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "line" */
   variant?: "line" | "subtle" | "enclosed" | "outline" | "plain" | undefined
+  fitContent?: boolean | undefined
   highContrast?: boolean | undefined
 }
 

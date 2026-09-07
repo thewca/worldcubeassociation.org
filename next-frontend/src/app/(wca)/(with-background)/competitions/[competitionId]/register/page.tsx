@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getSession } from "@/auth";
 import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
@@ -53,7 +53,7 @@ export default async function RegisterPage({
   params: Promise<{ competitionId: string }>;
 }) {
   const { t } = await getT();
-  const session = await auth();
+  const session = await getSession();
 
   if (session === null) {
     return (
@@ -66,7 +66,7 @@ export default async function RegisterPage({
 
   // Sessions minted before the WCA user id was carried through the token cannot address the
   //   user-scoped registration API, and signing in again is what mints a token that can.
-  if (session.wcaUserId === undefined || Number.isNaN(session.wcaUserId)) {
+  if (!session.user.wcaUserId || Number.isNaN(session.user.wcaUserId)) {
     return (
       <Alert.Root status="warning">
         <Alert.Indicator />
@@ -89,7 +89,11 @@ export default async function RegisterPage({
   ] = await Promise.all([
     getCompetitionInfo(competitionId),
     fetchConfig(session.accessToken, competitionId),
-    fetchRegistration(session.accessToken, competitionId, session.wcaUserId),
+    fetchRegistration(
+      session.accessToken,
+      competitionId,
+      session.user.wcaUserId,
+    ),
     fetchEligibility(session.accessToken, competitionId),
   ]);
 
@@ -138,7 +142,7 @@ export default async function RegisterPage({
             steps={stepConfig.data}
             competitionInfo={competitionInfo}
             eligibility={eligibility.data}
-            userId={session.wcaUserId}
+            userId={session.user.wcaUserId}
             initialRegistration={registrationResponse.data ?? null}
           />
         </Card.Body>
