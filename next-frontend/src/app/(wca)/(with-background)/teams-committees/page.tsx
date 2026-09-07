@@ -44,11 +44,16 @@ export default async function TeamsCommitteesPage() {
         <Tabs.Root
           variant="enclosed"
           orientation="vertical"
+          flexDirection={{ base: "column", md: "row" }}
           lazyMount
           fitted
           unmountOnExit
         >
-          <Tabs.List height="fit-content" position="sticky" top="3">
+          <Tabs.List
+            height="fit-content"
+            position={{ base: "static", md: "sticky" }}
+            top="3"
+          >
             {teamsCommittees.map((group) => (
               <Tabs.Trigger value={group.name} key={group.id}>
                 {group.name}
