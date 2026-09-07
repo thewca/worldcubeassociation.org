@@ -45,7 +45,7 @@ export default function FilteredScrambles({
               {events.byId[activeEventId].name}{" "}
               {t(`rounds.${roundFormat}.name`)}
             </Heading>
-            <Table.ScrollArea maxW="full">
+            <Table.ScrollArea>
               <Table.Root>
                 <Table.Header>
                   <Table.Row>

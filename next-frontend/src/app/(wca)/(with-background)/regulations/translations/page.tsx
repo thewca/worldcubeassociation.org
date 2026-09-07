@@ -67,7 +67,7 @@ function TranslationList({
   translations: components["schemas"]["Translation"][];
 }) {
   return (
-    <Table.ScrollArea maxW="full">
+    <Table.ScrollArea>
       <Table.Root size="sm" striped>
         <Table.Header>
           <Table.Row>

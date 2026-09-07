@@ -15,7 +15,7 @@ export default function PsychsheetTable({
   setSortBy: (sortBy: string) => void;
 }) {
   return (
-    <Table.ScrollArea maxW="full">
+    <Table.ScrollArea>
       <Table.Root width="100%">
         <Table.Header>
           <Table.Row>

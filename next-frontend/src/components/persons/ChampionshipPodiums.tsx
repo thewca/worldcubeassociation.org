@@ -14,7 +14,7 @@ const ChampionshipPodiumsTab: React.FC<{
   return (
     <>
       <Heading>Championship Podiums</Heading>
-      <Table.ScrollArea maxW="full">
+      <Table.ScrollArea>
         <Table.Root>
           <Table.Header>
             <Table.Row>

@@ -22,7 +22,7 @@ export default function CompetitorTable({
   competitionId: string;
 }) {
   return (
-    <Table.ScrollArea maxW="full">
+    <Table.ScrollArea>
       <Table.Root width="100%">
         <Table.Header>
           <Table.Row>

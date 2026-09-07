@@ -589,7 +589,7 @@ function CompetitionTable({
   competitions: components["schemas"]["CompetitionIndex"][];
 }) {
   return (
-    <Table.ScrollArea maxW="full">
+    <Table.ScrollArea>
       <Table.Root size="xs" variant="competitions" borderWidth="2px">
         <Table.Body>
           {competitions.map((comp) => (
