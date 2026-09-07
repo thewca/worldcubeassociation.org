@@ -5580,8 +5580,8 @@ fr:
             l'organisation de la compétition.
           #original_hash: de18a9f
           '4': >-
-            Pour plus d'informations, consultez le <a target=“_blank”
-            href=“https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf”>Guide
+            Pour plus d'informations, consultez le <a target='_blank'
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>Guide
             de l'organisateur des compétitions WCA</a>.
       '6':
         #original_hash: 8005a61
