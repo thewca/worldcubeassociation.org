@@ -589,13 +589,15 @@ function CompetitionTable({
   competitions: components["schemas"]["CompetitionIndex"][];
 }) {
   return (
-    <Table.Root size="xs" variant="competitions" borderWidth="2px">
-      <Table.Body>
-        {competitions.map((comp) => (
-          <CompetitionTableEntry comp={comp} key={comp.id} />
-        ))}
-      </Table.Body>
-    </Table.Root>
+    <Table.ScrollArea maxW="full">
+      <Table.Root size="xs" variant="competitions" borderWidth="2px">
+        <Table.Body>
+          {competitions.map((comp) => (
+            <CompetitionTableEntry comp={comp} key={comp.id} />
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }
 

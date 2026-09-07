@@ -67,24 +67,26 @@ function TranslationList({
   translations: components["schemas"]["Translation"][];
 }) {
   return (
-    <Table.Root size="sm" striped>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>Version</Table.ColumnHeader>
-          <Table.ColumnHeader>Language</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {translations.map((item) => (
-          <Table.Row key={item.version}>
-            <Table.Cell>{item.version}</Table.Cell>
-            <Table.Cell>
-              <Link href={item.url}>{item.language}</Link> (
-              {item.language_english})
-            </Table.Cell>
+    <Table.ScrollArea maxW="full">
+      <Table.Root size="sm" striped>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>Version</Table.ColumnHeader>
+            <Table.ColumnHeader>Language</Table.ColumnHeader>
           </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
+        </Table.Header>
+        <Table.Body>
+          {translations.map((item) => (
+            <Table.Row key={item.version}>
+              <Table.Cell>{item.version}</Table.Cell>
+              <Table.Cell>
+                <Link href={item.url}>{item.language}</Link> (
+                {item.language_english})
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }
