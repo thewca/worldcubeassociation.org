@@ -117,7 +117,7 @@
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.5",
     "typescript": "^6",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "scarfSettings": {
     "enabled": false
