@@ -1,33 +1,32 @@
 "use client";
 
 import {
+  Badge,
   Box,
-  Container,
-  VStack,
   Button,
-  Table,
-  Text,
   Card,
-  DatePicker,
-  HStack,
-  parseDate,
-  Portal,
-  Input,
+  ClientOnly,
   CloseButton,
-  InputGroup,
-  SimpleGrid,
+  DatePicker,
   Field,
   Group,
-  NumberInput,
-  SegmentGroup,
-  Tabs,
-  IconButton,
-  ClientOnly,
-  Icon,
   Heading,
+  HStack,
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  NumberInput,
+  parseDate,
+  Portal,
+  SegmentGroup,
+  SimpleGrid,
   Stack,
+  Table,
+  Tabs,
+  Text,
+  VStack,
   Wrap,
-  Badge,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -197,239 +196,235 @@ export default function CompetitionsPage() {
     0;
 
   return (
-    <Container>
-      <VStack gap="8" width="full" pt="8">
-        <ClientOnly>
-          {!session.isPending && !session.data && (
-            <RemovableCard
-              imageUrl="newcomer.png"
-              heading="Why Compete?"
-              description="This section will only be visible to new visitors..."
-              buttonText="Learn More"
-              buttonUrl="/"
-            />
-          )}
-        </ClientOnly>
-        <Card.Root size={{ base: "sm", md: "md" }} width="full">
-          <Tabs.Root
-            variant="subtle"
-            colorPalette="blue"
-            defaultValue="list"
-            lazyMount
-            unmountOnExit
-          >
-            <Card.Header asChild>
-              <Stack
-                direction={{ base: "column", md: "row" }}
-                justify="space-between"
-                align={{ base: "stretch", md: "center" }}
-              >
-                <Card.Title>
-                  <HStack gap={3}>
-                    <AllCompsIcon
-                      fontSize={{ base: "3xl", md: "5xl" }}
-                      marginTop="-2"
-                    />
-                    <Text textStyle={{ base: "h3", md: "h1" }}>
-                      {t("competitions.index.all_competitions")}
-                    </Text>
-                  </HStack>
-                </Card.Title>
-                <Tabs.List>
-                  <Tabs.Trigger value="list">
-                    <ListIcon />
-                    {t("competitions.index.list")}
-                  </Tabs.Trigger>
-                  <Tabs.Trigger value="map">
-                    <MapIcon />
-                    {t("competitions.index.map")}
-                  </Tabs.Trigger>
-                </Tabs.List>
-              </Stack>
-            </Card.Header>
-            <Card.Body asChild>
-              <VStack gap="3" borderBottom="black">
-                <FormEventSelector
-                  wrap
-                  selectedEvents={filterState.selectedEvents}
-                  title={t("competitions.index.event")}
-                  onEventClick={(eventId) =>
-                    dispatchFilter({ type: "toggle_event", eventId })
-                  }
-                  onClearClick={() => dispatchFilter({ type: "clear_events" })}
-                  onAllClick={() =>
-                    dispatchFilter({ type: "select_all_events" })
+    <VStack gap="8" width="full" pt="8">
+      <ClientOnly>
+        {!session.isPending && !session.data && (
+          <RemovableCard
+            imageUrl="newcomer.png"
+            heading="Why Compete?"
+            description="This section will only be visible to new visitors..."
+            buttonText="Learn More"
+            buttonUrl="/"
+          />
+        )}
+      </ClientOnly>
+      <Card.Root size={{ base: "sm", md: "md" }} width="full">
+        <Tabs.Root
+          variant="subtle"
+          colorPalette="blue"
+          defaultValue="list"
+          lazyMount
+          unmountOnExit
+        >
+          <Card.Header asChild>
+            <Stack
+              direction={{ base: "column", md: "row" }}
+              justify="space-between"
+              align={{ base: "stretch", md: "center" }}
+            >
+              <Card.Title>
+                <HStack gap={3}>
+                  <AllCompsIcon
+                    fontSize={{ base: "3xl", md: "5xl" }}
+                    marginTop="-2"
+                  />
+                  <Text textStyle={{ base: "h3", md: "h1" }}>
+                    {t("competitions.index.all_competitions")}
+                  </Text>
+                </HStack>
+              </Card.Title>
+              <Tabs.List>
+                <Tabs.Trigger value="list">
+                  <ListIcon />
+                  {t("competitions.index.list")}
+                </Tabs.Trigger>
+                <Tabs.Trigger value="map">
+                  <MapIcon />
+                  {t("competitions.index.map")}
+                </Tabs.Trigger>
+              </Tabs.List>
+            </Stack>
+          </Card.Header>
+          <Card.Body asChild>
+            <VStack gap="3" borderBottom="black">
+              <FormEventSelector
+                wrap
+                selectedEvents={filterState.selectedEvents}
+                title={t("competitions.index.event")}
+                onEventClick={(eventId) =>
+                  dispatchFilter({ type: "toggle_event", eventId })
+                }
+                onClearClick={() => dispatchFilter({ type: "clear_events" })}
+                onAllClick={() => dispatchFilter({ type: "select_all_events" })}
+              />
+              <SimpleGrid gap="2" width="full" columns={{ base: 1, md: 2 }}>
+                <RegionSelector
+                  t={t}
+                  label={t("activerecord.attributes.user.region")}
+                  region={filterState.region}
+                  onRegionChange={(region) =>
+                    dispatchFilter({
+                      type: "set_region",
+                      region,
+                    })
                   }
                 />
-                <SimpleGrid gap="2" width="full" columns={{ base: 1, md: 2 }}>
-                  <RegionSelector
-                    t={t}
-                    label={t("activerecord.attributes.user.region")}
-                    region={filterState.region}
-                    onRegionChange={(region) =>
-                      dispatchFilter({
-                        type: "set_region",
-                        region,
-                      })
-                    }
-                  />
-                  <Field.Root>
-                    <Field.Label>{t("competitions.index.name")}</Field.Label>
-                    <InputGroup
-                      endElement={
-                        <CloseButton
-                          size="xs"
-                          onClick={() => {
-                            dispatchFilter({
-                              type: "set_search",
-                              search: "",
-                            });
-                          }}
-                        />
-                      }
-                    >
-                      <Input
-                        placeholder={t("competitions.index.search")}
-                        value={filterState.search}
-                        onChange={(e) => {
+                <Field.Root>
+                  <Field.Label>{t("competitions.index.name")}</Field.Label>
+                  <InputGroup
+                    endElement={
+                      <CloseButton
+                        size="xs"
+                        onClick={() => {
                           dispatchFilter({
                             type: "set_search",
-                            search: e.target.value,
+                            search: "",
                           });
                         }}
                       />
-                    </InputGroup>
-                  </Field.Root>
-                </SimpleGrid>
-                <Stack
-                  direction={{ base: "column", lg: "row" }}
-                  gap="4"
-                  width="full"
-                  justify="space-between"
-                  align={{ base: "stretch", lg: "flex-start" }}
-                >
-                  <LocationFilter
-                    location={location}
-                    geolocationSupported={geolocationSupported}
-                    onLocateClick={requestGeolocationPermission}
-                    radius={radius}
-                    onRadiusChange={setRadius}
-                    distanceUnit={distanceUnit}
-                    onDistanceUnitChange={changeDistanceUnit}
-                    t={t}
-                  />
-                  <Stack
-                    direction={{ base: "column", md: "row" }}
-                    gap="2"
-                    width={{ base: "full", lg: "auto" }}
+                    }
                   >
-                    <DateFilter
-                      label={t("competitions.index.from_date")}
-                      icon={<CompRegoOpenDateIcon />}
-                      isoDate={filterState.customStartDate}
-                      max={filterState.customEndDate}
-                      onDateChange={(customStartDate) =>
+                    <Input
+                      placeholder={t("competitions.index.search")}
+                      value={filterState.search}
+                      onChange={(e) => {
                         dispatchFilter({
-                          type: "set_custom_start_date",
-                          customStartDate,
-                        })
-                      }
+                          type: "set_search",
+                          search: e.target.value,
+                        });
+                      }}
                     />
-                    <DateFilter
-                      label={t("competitions.index.to_date")}
-                      icon={<CompRegoCloseDateIcon />}
-                      isoDate={filterState.customEndDate}
-                      min={filterState.customStartDate}
-                      onDateChange={(customEndDate) =>
-                        dispatchFilter({
-                          type: "set_custom_end_date",
-                          customEndDate,
-                        })
-                      }
-                    />
-                  </Stack>
-                  {/* TODO: add "accordion" functionality to this button */}
-                  <BetaDisabledTooltip>
-                    <Button
-                      variant="outline"
-                      disabled
-                      width={{ base: "full", lg: "auto" }}
-                    >
-                      <Icon>
-                        <LuSettings2 />
-                      </Icon>{" "}
-                      {t("competitions.index.advanced_filters")}
-                    </Button>
-                  </BetaDisabledTooltip>
-                </Stack>
-              </VStack>
-            </Card.Body>
-            <Card.Body>
-              <Tabs.Content value="list">
-                <Stack
-                  direction={{ base: "column", lg: "row" }}
-                  justify="space-between"
-                  align={{ base: "start", lg: "center" }}
-                >
-                  <Wrap gapX="3" gapY="1" align="center">
-                    <Text>{t("competitions.index.registration_key")}</Text>
-                    <Badge size="md" variant="surface">
-                      <CompRegoFullButOpenOrangeIcon />
-                      {t("competitions.index.registration_status.full")}
-                    </Badge>
-                    <Badge size="md" variant="surface">
-                      <CompRegoNotFullOpenGreenIcon />
-                      {t("competitions.index.registration_status.open")}
-                    </Badge>
-                    <Badge size="md" variant="surface">
-                      <CompRegoNotOpenYetGreyIcon />
-                      {t("competitions.index.registration_status.not_open")}
-                    </Badge>
-                    <Badge size="md" variant="surface">
-                      <CompRegoClosedRedIcon />
-                      {t("competitions.index.registration_status.closed")}
-                    </Badge>
-                  </Wrap>
-                  <Text>
-                    {t("competitions.index.currently_displaying", {
-                      count: competitionsDistanceFiltered.length,
-                    })}
-                  </Text>
-                </Stack>
-                {inProgressComps.length > 0 && (
-                  <>
-                    <Heading size="md" paddingY="2">
-                      {t("competitions.index.titles.in_progress")}
-                    </Heading>
-                    <CompetitionTable competitions={inProgressComps} />
-                    <Heading size="md" paddingY="2">
-                      {t("competitions.index.titles.upcoming")}
-                    </Heading>
-                  </>
-                )}
-                <CompetitionTable competitions={upcomingComps} />
-                <ListViewFooter
-                  isLoading={competitionsIsFetching}
-                  hasMoreCompsToLoad={hasMoreCompsToLoad}
-                  numCompetitions={competitionsDistanceFiltered.length}
-                  bottomRef={bottomRef}
+                  </InputGroup>
+                </Field.Root>
+              </SimpleGrid>
+              <Stack
+                direction={{ base: "column", lg: "row" }}
+                gap="4"
+                width="full"
+                justify="space-between"
+                align={{ base: "stretch", lg: "flex-start" }}
+              >
+                <LocationFilter
+                  location={location}
+                  geolocationSupported={geolocationSupported}
+                  onLocateClick={requestGeolocationPermission}
+                  radius={radius}
+                  onRadiusChange={setRadius}
+                  distanceUnit={distanceUnit}
+                  onDistanceUnitChange={changeDistanceUnit}
                   t={t}
                 />
-              </Tabs.Content>
-              <Tabs.Content value="map">
-                <TabMap
-                  competitions={competitionsDistanceFiltered}
-                  loadedCompetitionCount={loadedCompetitionCount}
-                  isLoading={competitionsIsFetching}
-                  fetchMoreCompetitions={competitionsFetchNextPage}
-                  hasMoreCompsToLoad={hasMoreCompsToLoad}
-                />
-              </Tabs.Content>
-            </Card.Body>
-          </Tabs.Root>
-        </Card.Root>
-      </VStack>
-    </Container>
+                <Stack
+                  direction={{ base: "column", md: "row" }}
+                  gap="2"
+                  width={{ base: "full", lg: "auto" }}
+                >
+                  <DateFilter
+                    label={t("competitions.index.from_date")}
+                    icon={<CompRegoOpenDateIcon />}
+                    isoDate={filterState.customStartDate}
+                    max={filterState.customEndDate}
+                    onDateChange={(customStartDate) =>
+                      dispatchFilter({
+                        type: "set_custom_start_date",
+                        customStartDate,
+                      })
+                    }
+                  />
+                  <DateFilter
+                    label={t("competitions.index.to_date")}
+                    icon={<CompRegoCloseDateIcon />}
+                    isoDate={filterState.customEndDate}
+                    min={filterState.customStartDate}
+                    onDateChange={(customEndDate) =>
+                      dispatchFilter({
+                        type: "set_custom_end_date",
+                        customEndDate,
+                      })
+                    }
+                  />
+                </Stack>
+                {/* TODO: add "accordion" functionality to this button */}
+                <BetaDisabledTooltip>
+                  <Button
+                    variant="outline"
+                    disabled
+                    width={{ base: "full", lg: "auto" }}
+                  >
+                    <Icon>
+                      <LuSettings2 />
+                    </Icon>{" "}
+                    {t("competitions.index.advanced_filters")}
+                  </Button>
+                </BetaDisabledTooltip>
+              </Stack>
+            </VStack>
+          </Card.Body>
+          <Card.Body>
+            <Tabs.Content value="list">
+              <Stack
+                direction={{ base: "column", lg: "row" }}
+                justify="space-between"
+                align={{ base: "start", lg: "center" }}
+              >
+                <Wrap gapX="3" gapY="1" align="center">
+                  <Text>{t("competitions.index.registration_key")}</Text>
+                  <Badge size="md" variant="surface">
+                    <CompRegoFullButOpenOrangeIcon />
+                    {t("competitions.index.registration_status.full")}
+                  </Badge>
+                  <Badge size="md" variant="surface">
+                    <CompRegoNotFullOpenGreenIcon />
+                    {t("competitions.index.registration_status.open")}
+                  </Badge>
+                  <Badge size="md" variant="surface">
+                    <CompRegoNotOpenYetGreyIcon />
+                    {t("competitions.index.registration_status.not_open")}
+                  </Badge>
+                  <Badge size="md" variant="surface">
+                    <CompRegoClosedRedIcon />
+                    {t("competitions.index.registration_status.closed")}
+                  </Badge>
+                </Wrap>
+                <Text>
+                  {t("competitions.index.currently_displaying", {
+                    count: competitionsDistanceFiltered.length,
+                  })}
+                </Text>
+              </Stack>
+              {inProgressComps.length > 0 && (
+                <>
+                  <Heading size="md" paddingY="2">
+                    {t("competitions.index.titles.in_progress")}
+                  </Heading>
+                  <CompetitionTable competitions={inProgressComps} />
+                  <Heading size="md" paddingY="2">
+                    {t("competitions.index.titles.upcoming")}
+                  </Heading>
+                </>
+              )}
+              <CompetitionTable competitions={upcomingComps} />
+              <ListViewFooter
+                isLoading={competitionsIsFetching}
+                hasMoreCompsToLoad={hasMoreCompsToLoad}
+                numCompetitions={competitionsDistanceFiltered.length}
+                bottomRef={bottomRef}
+                t={t}
+              />
+            </Tabs.Content>
+            <Tabs.Content value="map">
+              <TabMap
+                competitions={competitionsDistanceFiltered}
+                loadedCompetitionCount={loadedCompetitionCount}
+                isLoading={competitionsIsFetching}
+                fetchMoreCompetitions={competitionsFetchNextPage}
+                hasMoreCompsToLoad={hasMoreCompsToLoad}
+              />
+            </Tabs.Content>
+          </Card.Body>
+        </Tabs.Root>
+      </Card.Root>
+    </VStack>
   );
 }
 

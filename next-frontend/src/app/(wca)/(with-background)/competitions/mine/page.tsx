@@ -1,10 +1,4 @@
-import {
-  Accordion,
-  Button,
-  Container,
-  Heading,
-  VStack,
-} from "@chakra-ui/react";
+import { Accordion, Button, Heading, VStack } from "@chakra-ui/react";
 import { getSession } from "@/auth";
 import { getT } from "@/lib/i18n/get18n";
 import UpcomingCompetitionTable from "@/components/competitions/Mine/UpcomingCompetitionTable";
@@ -40,63 +34,61 @@ export default async function MyCompetitions() {
   const myCompetitions = myCompetitionsRequest.data;
 
   return (
-    <Container bg="bg">
-      <VStack gap="8" pt="8" alignItems="left">
-        <Heading size="5xl">
-          {session.user?.wcaId && (
-            <Button asChild>
-              <a href={`/persons/${session.user.wcaId}`}>
-                {t("layouts.navigation.my_results")}
-              </a>
-            </Button>
-          )}
-          {t("competitions.my_competitions.title")}
-        </Heading>
-        <p>{t("competitions.my_competitions.disclaimer")}</p>
-        <UpcomingCompetitionTable
-          competitions={myCompetitions.future_competitions}
-          registrationStatusByCompetition={
-            myCompetitions.registrations_by_competition
-          }
-          fallbackMessage={{
-            key: "competitions.my_competitions_table.no_upcoming_competitions_html",
-            options: {
-              link: `<a href="/competitions">${t("competitions.my_competitions_table.competitions_list")}</a>`,
-            },
-          }}
-        />
-        <Accordion.Root collapsible>
-          <Accordion.Item value="past_competitions">
-            <Accordion.ItemTrigger>
-              <Accordion.ItemIndicator />
-              {`${t("competitions.my_competitions.past_competitions")} (${myCompetitions.past_competitions?.length ?? 0})`}
-            </Accordion.ItemTrigger>
-            <Accordion.ItemContent>
-              <Accordion.ItemBody>
-                <PastCompetitionsTable
-                  competitions={myCompetitions.past_competitions}
-                  fallbackMessage={{
-                    key: "competitions.my_competitions_table.no_past_competitions",
-                  }}
-                />
-              </Accordion.ItemBody>
-            </Accordion.ItemContent>
-          </Accordion.Item>
-        </Accordion.Root>
-        <Heading>
-          <BookmarkIcon /> {t("competitions.my_competitions.bookmarked_title")}
-        </Heading>
-        <p>{t("competitions.my_competitions.bookmarked_explanation")}</p>
-        <UpcomingCompetitionTable
-          competitions={myCompetitions.bookmarked_competitions}
-          registrationStatusByCompetition={
-            myCompetitions.registrations_by_competition
-          }
-          fallbackMessage={{
-            key: "competitions.my_competitions_table.no_bookmarked_competitions",
-          }}
-        />
-      </VStack>
-    </Container>
+    <VStack gap="8" pt="8" alignItems="left">
+      <Heading size="5xl">
+        {session.user?.wcaId && (
+          <Button asChild>
+            <a href={`/persons/${session.user.wcaId}`}>
+              {t("layouts.navigation.my_results")}
+            </a>
+          </Button>
+        )}
+        {t("competitions.my_competitions.title")}
+      </Heading>
+      <p>{t("competitions.my_competitions.disclaimer")}</p>
+      <UpcomingCompetitionTable
+        competitions={myCompetitions.future_competitions}
+        registrationStatusByCompetition={
+          myCompetitions.registrations_by_competition
+        }
+        fallbackMessage={{
+          key: "competitions.my_competitions_table.no_upcoming_competitions_html",
+          options: {
+            link: `<a href="/competitions">${t("competitions.my_competitions_table.competitions_list")}</a>`,
+          },
+        }}
+      />
+      <Accordion.Root collapsible>
+        <Accordion.Item value="past_competitions">
+          <Accordion.ItemTrigger>
+            <Accordion.ItemIndicator />
+            {`${t("competitions.my_competitions.past_competitions")} (${myCompetitions.past_competitions?.length ?? 0})`}
+          </Accordion.ItemTrigger>
+          <Accordion.ItemContent>
+            <Accordion.ItemBody>
+              <PastCompetitionsTable
+                competitions={myCompetitions.past_competitions}
+                fallbackMessage={{
+                  key: "competitions.my_competitions_table.no_past_competitions",
+                }}
+              />
+            </Accordion.ItemBody>
+          </Accordion.ItemContent>
+        </Accordion.Item>
+      </Accordion.Root>
+      <Heading>
+        <BookmarkIcon /> {t("competitions.my_competitions.bookmarked_title")}
+      </Heading>
+      <p>{t("competitions.my_competitions.bookmarked_explanation")}</p>
+      <UpcomingCompetitionTable
+        competitions={myCompetitions.bookmarked_competitions}
+        registrationStatusByCompetition={
+          myCompetitions.registrations_by_competition
+        }
+        fallbackMessage={{
+          key: "competitions.my_competitions_table.no_bookmarked_competitions",
+        }}
+      />
+    </VStack>
   );
 }

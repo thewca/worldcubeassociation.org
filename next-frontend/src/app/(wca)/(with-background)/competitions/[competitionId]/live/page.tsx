@@ -4,7 +4,6 @@ import LiveView from "@/components/competitions/Schedule/LiveView";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import getPermissions from "@/lib/wca/permissions.server";
-import { Box } from "@chakra-ui/react";
 
 export default async function LiveOverview({
   params,
@@ -49,13 +48,13 @@ export default async function LiveOverview({
   ];
 
   return (
-    <Box bg="bg">
+    <>
       <LiveView
         competitionId={competitionId}
         activities={eventActivitiesSorted}
         timeZones={uniqueTimeZones}
         canManage={canManage}
       />
-    </Box>
+    </>
   );
 }

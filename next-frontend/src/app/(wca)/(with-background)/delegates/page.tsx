@@ -1,5 +1,4 @@
 import {
-  Container,
   Heading,
   IconButton,
   Link as ChakraLink,
@@ -64,56 +63,51 @@ export default async function DelegatesPage({
   const activeFriendlyId = activeGroup.metadata!.friendly_id!;
 
   return (
-    <Container bg="bg">
-      <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">{t("delegates_page.title")}</Heading>
-        <Trans
-          parent={Prose}
-          t={t}
-          i18nKey="about.structure.delegates_html"
-          values={{ see_link: "" }}
-        />
-        <Prose>{t("delegates_page.acknowledges")}</Prose>
-        {canViewAdminPage && (
-          <AdminModeToggle
-            region={activeFriendlyId}
-            isAdminMode={isAdminMode}
-          />
-        )}
-        <Tabs.Root
-          variant="enclosed"
-          orientation="vertical"
-          sideNav
-          fitted
-          value={activeFriendlyId}
-          gap={8}
-        >
-          <Tabs.List>
-            {rootGroups.map((group) => {
-              const friendlyId = group.metadata!.friendly_id!;
+    <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
+      <Heading size="5xl">{t("delegates_page.title")}</Heading>
+      <Trans
+        parent={Prose}
+        t={t}
+        i18nKey="about.structure.delegates_html"
+        values={{ see_link: "" }}
+      />
+      <Prose>{t("delegates_page.acknowledges")}</Prose>
+      {canViewAdminPage && (
+        <AdminModeToggle region={activeFriendlyId} isAdminMode={isAdminMode} />
+      )}
+      <Tabs.Root
+        variant="enclosed"
+        orientation="vertical"
+        sideNav
+        fitted
+        value={activeFriendlyId}
+        gap={8}
+      >
+        <Tabs.List>
+          {rootGroups.map((group) => {
+            const friendlyId = group.metadata!.friendly_id!;
 
-              return (
-                <Tabs.Trigger value={friendlyId} key={group.id} asChild>
-                  <Link
-                    href={route({
-                      pathname: "/delegates",
-                      query: isAdminMode
-                        ? { region: friendlyId, admin: "true" }
-                        : { region: friendlyId },
-                    })}
-                  >
-                    {group.name}
-                  </Link>
-                </Tabs.Trigger>
-              );
-            })}
-          </Tabs.List>
-          <Tabs.Content value={activeFriendlyId} w="full">
-            <DelegateTab group={activeGroup} isAdminMode={isAdminMode} />
-          </Tabs.Content>
-        </Tabs.Root>
-      </VStack>
-    </Container>
+            return (
+              <Tabs.Trigger value={friendlyId} key={group.id} asChild>
+                <Link
+                  href={route({
+                    pathname: "/delegates",
+                    query: isAdminMode
+                      ? { region: friendlyId, admin: "true" }
+                      : { region: friendlyId },
+                  })}
+                >
+                  {group.name}
+                </Link>
+              </Tabs.Trigger>
+            );
+          })}
+        </Tabs.List>
+        <Tabs.Content value={activeFriendlyId} w="full">
+          <DelegateTab group={activeGroup} isAdminMode={isAdminMode} />
+        </Tabs.Content>
+      </Tabs.Root>
+    </VStack>
   );
 }
 

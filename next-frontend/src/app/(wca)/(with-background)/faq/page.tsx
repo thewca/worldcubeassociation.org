@@ -1,13 +1,6 @@
 "use server";
 
-import {
-  VStack,
-  Container,
-  Card,
-  Heading,
-  Tabs,
-  Accordion,
-} from "@chakra-ui/react";
+import { Accordion, Box, Card, Heading, Tabs, VStack } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { FaqCategory, FaqQuestion } from "@/types/payload";
@@ -45,7 +38,7 @@ export default async function FAQ() {
   const faqCategories = uniqBy(allCategories, "id");
 
   return (
-    <Container paddingTop="8" bg="bg">
+    <Box paddingTop="8">
       <VStack gap="8" width="full" alignItems="left">
         <Card.Root maxW="40em">
           <Card.Body>
@@ -137,6 +130,6 @@ export default async function FAQ() {
           </Card.Body>
         </Card.Root>
       </VStack>
-    </Container>
+    </Box>
   );
 }

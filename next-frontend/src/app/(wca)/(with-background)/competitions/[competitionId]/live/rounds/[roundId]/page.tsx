@@ -1,6 +1,6 @@
 "use server";
 
-import { Box, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import {
   LiveResultProvider,
@@ -56,45 +56,35 @@ export default async function ResultPage({
     }
 
     return (
-      <Box bg="bg">
-        <VStack align="left">
-          <RoundInfoProvider roundId={id}>
-            <RoundOpenCheck>
-              <MultiRoundResultProvider
-                initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
+      <VStack align="left">
+        <RoundInfoProvider roundId={id}>
+          <RoundOpenCheck>
+            <MultiRoundResultProvider
+              initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
+              competitionId={competitionId}
+            >
+              <LiveUpdatingResultsTable
                 competitionId={competitionId}
-              >
-                <LiveUpdatingResultsTable
-                  competitionId={competitionId}
-                  title={`${eventName} - Combined Dual Rounds`}
-                  isLinkedRound
-                  canManage={canManage}
-                />
-              </MultiRoundResultProvider>
-            </RoundOpenCheck>
-          </RoundInfoProvider>
-        </VStack>
-      </Box>
+                title={`${eventName} - Combined Dual Rounds`}
+                isLinkedRound
+                canManage={canManage}
+              />
+            </MultiRoundResultProvider>
+          </RoundOpenCheck>
+        </RoundInfoProvider>
+      </VStack>
     );
   }
 
   return (
-    <Box bg="bg">
-      <VStack align="left">
-        <RoundInfoProvider roundId={id}>
-          <RoundOpenCheck>
-            <LiveResultProvider
-              initialRound={data}
-              competitionId={competitionId}
-            >
-              <RoundResults
-                competitionId={competitionId}
-                canManage={canManage}
-              />
-            </LiveResultProvider>
-          </RoundOpenCheck>
-        </RoundInfoProvider>
-      </VStack>
-    </Box>
+    <VStack align="left">
+      <RoundInfoProvider roundId={id}>
+        <RoundOpenCheck>
+          <LiveResultProvider initialRound={data} competitionId={competitionId}>
+            <RoundResults competitionId={competitionId} canManage={canManage} />
+          </LiveResultProvider>
+        </RoundOpenCheck>
+      </RoundInfoProvider>
+    </VStack>
   );
 }

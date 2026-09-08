@@ -1,4 +1,4 @@
-import { Container, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPayload } from "payload";
@@ -47,13 +47,11 @@ export default async function AnnouncementPage({
   }
 
   return (
-    <Container>
-      <VStack align="stretch" py={8}>
-        <AnnouncementFullCard
-          announcement={announcement}
-          colorPalette={randomAnnouncementColorPalette()}
-        />
-      </VStack>
-    </Container>
+    <VStack align="stretch" py={8}>
+      <AnnouncementFullCard
+        announcement={announcement}
+        colorPalette={randomAnnouncementColorPalette()}
+      />
+    </VStack>
   );
 }

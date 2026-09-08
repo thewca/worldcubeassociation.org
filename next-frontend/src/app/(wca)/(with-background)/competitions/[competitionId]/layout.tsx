@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { Metadata } from "next";
 import ConfirmProvider from "@/providers/ConfirmProvider";
@@ -28,8 +28,8 @@ export default function CompetitionLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Container pt="8">
+    <Box pt="8">
       <ConfirmProvider>{children}</ConfirmProvider>
-    </Container>
+    </Box>
   );
 }
