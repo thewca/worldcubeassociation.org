@@ -25,7 +25,7 @@ import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
-import NavCollapsible from "@/components/NavCollapsible";
+import { MobileNavLink, MobileNavRoot } from "@/components/MobileNav";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -108,7 +108,7 @@ export default async function Navbar() {
       data-testid="header-navbar"
     >
       <RefreshRouteOnSave />
-      <NavCollapsible>
+      <MobileNavRoot>
         <HStack padding="3" justifyContent="space-between">
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
@@ -299,30 +299,20 @@ export default async function Navbar() {
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
                   {navbarEntry.blockType === "LinkItem" && (
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      justifyContent="flex-start"
-                    >
+                    <MobileNavLink>
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent={Link}
                       />
-                    </Button>
+                    </MobileNavLink>
                   )}
                   {navbarEntry.blockType === "ExternalLinkItem" && (
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      justifyContent="flex-start"
-                    >
+                    <MobileNavLink>
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent="a"
                       />
-                    </Button>
+                    </MobileNavLink>
                   )}
                   {navbarEntry.blockType === "NavDropdown" && (
                     <Collapsible.Root>
@@ -347,30 +337,20 @@ export default async function Navbar() {
                           {navbarEntry.entries.map((subEntry) => (
                             <React.Fragment key={subEntry.id}>
                               {subEntry.blockType === "LinkItem" && (
-                                <Button
-                                  asChild
-                                  variant="ghost"
-                                  size="sm"
-                                  justifyContent="flex-start"
-                                >
+                                <MobileNavLink>
                                   <LinkWrapper
                                     navbarEntry={subEntry}
                                     linkComponent={Link}
                                   />
-                                </Button>
+                                </MobileNavLink>
                               )}
                               {subEntry.blockType === "ExternalLinkItem" && (
-                                <Button
-                                  asChild
-                                  variant="ghost"
-                                  size="sm"
-                                  justifyContent="flex-start"
-                                >
+                                <MobileNavLink>
                                   <LinkWrapper
                                     navbarEntry={subEntry}
                                     linkComponent="a"
                                   />
-                                </Button>
+                                </MobileNavLink>
                               )}
                               {subEntry.blockType === "VisualDivider" && (
                                 <Separator />
@@ -401,31 +381,21 @@ export default async function Navbar() {
                                         <React.Fragment key={nestedEntry.id}>
                                           {nestedEntry.blockType ===
                                             "LinkItem" && (
-                                            <Button
-                                              asChild
-                                              variant="ghost"
-                                              size="sm"
-                                              justifyContent="flex-start"
-                                            >
+                                            <MobileNavLink>
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
                                                 linkComponent={Link}
                                               />
-                                            </Button>
+                                            </MobileNavLink>
                                           )}
                                           {nestedEntry.blockType ===
                                             "ExternalLinkItem" && (
-                                            <Button
-                                              asChild
-                                              variant="ghost"
-                                              size="sm"
-                                              justifyContent="flex-start"
-                                            >
+                                            <MobileNavLink>
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
                                                 linkComponent="a"
                                               />
-                                            </Button>
+                                            </MobileNavLink>
                                           )}
                                         </React.Fragment>
                                       ))}
@@ -464,20 +434,14 @@ export default async function Navbar() {
                         <Collapsible.Content>
                           <VStack align="stretch" pl={4} gap={1} py={1}>
                             {socialLinks.map((item) => (
-                              <Button
-                                key={item.id}
-                                asChild
-                                variant="ghost"
-                                size="sm"
-                                justifyContent="flex-start"
-                              >
+                              <MobileNavLink key={item.id}>
                                 <LinkWrapper
                                   navbarEntry={item}
                                   linkComponent="a"
                                   target="_blank"
                                   rel="noreferrer"
                                 />
-                              </Button>
+                              </MobileNavLink>
                             ))}
                           </VStack>
                         </Collapsible.Content>
@@ -493,7 +457,7 @@ export default async function Navbar() {
             </VStack>
           </Collapsible.Content>
         </Box>
-      </NavCollapsible>
+      </MobileNavRoot>
     </Box>
   );
 }
