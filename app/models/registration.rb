@@ -9,6 +9,10 @@ class Registration < ApplicationRecord
   SYSTEM_ENTITY_ID = 'system'
   USER_ENTITY_ID = 'user'
 
+  # WCIF person role that designates somebody as data entry staff, as written by Groupifier
+  # and the Delegate Dashboard.
+  SCORETAKER_ROLE = "staff-dataentry"
+
   CSV_IMPORT = "CSV Import"
   OTS_FORM = "OTS Form"
   SOURCES = [CSV_IMPORT, OTS_FORM].freeze

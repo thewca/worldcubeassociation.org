@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { Button, Card, Container, Table, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Button, Card, Container, Input, Table, Text } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
 import { toaster } from "@/components/ui/toaster";
@@ -12,10 +12,11 @@ export default function ScoretakerManager({
   competitionId: string;
 }) {
   const api = useAPI();
+  const [nameFilter, setNameFilter] = useState("");
 
-  const { data: registrations, isFetching } = api.useQuery(
+  const { data: candidates, isFetching } = api.useQuery(
     "get",
-    "/v1/competitions/{competitionId}/registrations",
+    "/v1/competitions/{competitionId}/scoretakers/candidates",
     { params: { path: { competitionId } } },
   );
 
@@ -25,10 +26,7 @@ export default function ScoretakerManager({
     { params: { path: { competitionId } } },
   );
 
-  const scoretakerIds = useMemo(
-    () => new Set((scoretakers ?? []).map((s) => s.user_id)),
-    [scoretakers],
-  );
+  const scoretakerIds = new Set((scoretakers ?? []).map((s) => s.user_id));
 
   const onError = () =>
     toaster.create({ description: "Something went wrong", type: "error" });
@@ -49,17 +47,28 @@ export default function ScoretakerManager({
     return <Loading />;
   }
 
-  if (!registrations) {
+  if (!candidates) {
     return <Text>No registrations found.</Text>;
   }
 
   const pending = isAdding || isRemoving;
+
+  const visibleCandidates = candidates
+    .filter((candidate) =>
+      candidate.name.toLowerCase().includes(nameFilter.toLowerCase()),
+    )
+    .toSorted((a, b) => a.name.localeCompare(b.name));
 
   return (
     <Container>
       <Card.Root>
         <Card.Body>
           <Card.Title>Scoretakers</Card.Title>
+          <Input
+            placeholder="Search by name"
+            value={nameFilter}
+            onChange={(e) => setNameFilter(e.target.value)}
+          />
           <Table.Root>
             <Table.Header>
               <Table.Row>
@@ -68,50 +77,48 @@ export default function ScoretakerManager({
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {registrations
-                .toSorted((a, b) => a.user.name.localeCompare(b.user.name))
-                .map((registration) => {
-                  const isScoretaker = scoretakerIds.has(registration.user.id);
-                  return (
-                    <Table.Row key={registration.id}>
-                      <Table.Cell>{registration.user.name}</Table.Cell>
-                      <Table.Cell textAlign="end">
-                        {isScoretaker ? (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={pending}
-                            onClick={() =>
-                              remove({
-                                params: {
-                                  path: {
-                                    competitionId,
-                                    id: registration.user.id,
-                                  },
+              {visibleCandidates.map((candidate) => {
+                const isScoretaker = scoretakerIds.has(candidate.user_id);
+                return (
+                  <Table.Row key={candidate.user_id}>
+                    <Table.Cell>{candidate.name}</Table.Cell>
+                    <Table.Cell textAlign="end">
+                      {isScoretaker ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled={pending}
+                          onClick={() =>
+                            remove({
+                              params: {
+                                path: {
+                                  competitionId,
+                                  id: candidate.user_id,
                                 },
-                              })
-                            }
-                          >
-                            Remove
-                          </Button>
-                        ) : (
-                          <Button
-                            size="sm"
-                            disabled={pending}
-                            onClick={() =>
-                              add({
-                                params: { path: { competitionId } },
-                                body: { user_id: registration.user.id },
-                              })
-                            }
-                          >
-                            Add as scoretaker
-                          </Button>
-                        )}
-                      </Table.Cell>
-                    </Table.Row>
-                  );
-                })}
+                              },
+                            })
+                          }
+                        >
+                          Remove
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          disabled={pending}
+                          onClick={() =>
+                            add({
+                              params: { path: { competitionId } },
+                              body: { user_id: candidate.user_id },
+                            })
+                          }
+                        >
+                          Add as scoretaker
+                        </Button>
+                      )}
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
             </Table.Body>
           </Table.Root>
         </Card.Body>
