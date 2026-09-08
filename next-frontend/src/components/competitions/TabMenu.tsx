@@ -57,6 +57,7 @@ export default function TabMenu({
       width="full"
       value={currentPath}
       orientation="vertical"
+      sideNav
       lazyMount
       unmountOnExit
     >
