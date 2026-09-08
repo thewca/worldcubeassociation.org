@@ -75,7 +75,9 @@ interface PersonCellProps {
 
 export function PersonCell({ personId, personName }: PersonCellProps) {
   return (
-    <Table.Cell>
+    // The ScrollArea sets `white-space: nowrap` on everything; names are the one
+    //   column we let wrap, so the result column stays on screen on narrow phones.
+    <Table.Cell whiteSpace="normal" minW="2xs">
       <Link href={`/persons/${personId}`}>{personName}</Link>
     </Table.Cell>
   );

@@ -44,7 +44,7 @@ interface SeparateRecordsTableProps {
 export default function RecordsTable({ records, show }: WrapperTableProps) {
   if (show === "mixed") {
     return (
-      <VStack align="stretch" gap={10}>
+      <VStack align="stretch" gap={6}>
         {WCA_EVENT_IDS.map((event) => {
           const recordsByEvent = records[event as EventId];
 
@@ -99,7 +99,7 @@ function MixedHistoryTable({ records }: MixedHistoryTableProps) {
 
   return (
     <Table.ScrollArea rounded="md">
-      <Table.Root>
+      <Table.Root size="xs" striped>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
@@ -142,7 +142,7 @@ function HistoryTable({ records }: HistoryTableProps) {
   const { t } = useT();
 
   return (
-    <VStack align="stretch" gap={10}>
+    <VStack align="stretch" gap={6}>
       {WCA_EVENT_IDS.map((eventId) => {
         if (!records[eventId as EventId]) return;
 
@@ -159,7 +159,7 @@ function HistoryTable({ records }: HistoryTableProps) {
               <EventIcon eventId={eventId} /> {events.byId[eventId].name}
             </Heading>
             <Table.ScrollArea rounded="md">
-              <Table.Root>
+              <Table.Root size="xs" striped>
                 <Table.Header>
                   <Table.Row>
                     <Table.ColumnHeader>
@@ -207,7 +207,7 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
 
   return (
     <Table.ScrollArea rounded="md">
-      <Table.Root>
+      <Table.Root size="xs" striped>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
@@ -261,14 +261,14 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
   const { t } = useT();
 
   return (
-    <VStack align="stretch" gap={10}>
+    <VStack align="stretch" gap={6}>
       {["single", "average"].map((type) => (
         <VStack align="stretch" key={type}>
           <Heading size="2xl">
             {t(`results.selector_elements.type_selector.${type}`)}
           </Heading>
           <Table.ScrollArea rounded="md">
-            <Table.Root>
+            <Table.Root size="xs" striped>
               <Table.Header>
                 <Table.Row>
                   <Table.ColumnHeader>
@@ -315,7 +315,7 @@ function MixedRecordsTable({ records }: RecordsTableProps) {
 
   return (
     <Table.ScrollArea rounded="md">
-      <Table.Root>
+      <Table.Root size="xs" striped>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>

@@ -70,8 +70,10 @@ export default function FilteredRecords({
         };
 
   return (
-    <VStack align="left" gap={4}>
-      <Heading size="5xl">{t("results.records.title")}</Heading>
+    <VStack align="left" gap={2}>
+      <Heading size={{ base: "3xl", md: "5xl" }}>
+        {t("results.records.title")}
+      </Heading>
       {t("results.last_updated_html", { timestamp })}
       <RecordsFilterBox
         filterState={{ ...searchParams, event }}
