@@ -1,4 +1,4 @@
-import { Container, VStack } from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 import PermissionCheck from "@/components/PermissionCheck";
 import AddResults from "./AddResults";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
@@ -26,7 +26,7 @@ export default async function ResultPage({
   if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <Container bg="bg">
+    <Box bg="bg">
       <RoundInfoProvider roundId={roundId}>
         <RoundOpenCheck>
           <PermissionCheck
@@ -46,6 +46,6 @@ export default async function ResultPage({
           </PermissionCheck>
         </RoundOpenCheck>
       </RoundInfoProvider>
-    </Container>
+    </Box>
   );
 }

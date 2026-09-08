@@ -3,7 +3,6 @@
 import {
   Button,
   Card,
-  Container,
   HStack,
   Link,
   SimpleGrid,
@@ -28,7 +27,7 @@ export default function RoundAdmin({
   const roundsById = _.groupBy(rounds, (d) => parseActivityCode(d.id).eventId);
 
   return (
-    <Container>
+    <>
       <Button asChild mb={4} variant="outline" size="sm">
         <Link
           href={route({
@@ -68,6 +67,6 @@ export default function RoundAdmin({
           );
         })}
       </SimpleGrid>
-    </Container>
+    </>
   );
 }

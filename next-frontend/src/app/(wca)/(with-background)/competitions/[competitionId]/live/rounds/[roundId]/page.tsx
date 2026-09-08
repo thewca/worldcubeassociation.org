@@ -1,6 +1,6 @@
 "use server";
 
-import { Container, VStack } from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import {
   LiveResultProvider,
@@ -56,7 +56,7 @@ export default async function ResultPage({
     }
 
     return (
-      <Container bg="bg">
+      <Box bg="bg">
         <VStack align="left">
           <RoundInfoProvider roundId={id}>
             <RoundOpenCheck>
@@ -74,12 +74,12 @@ export default async function ResultPage({
             </RoundOpenCheck>
           </RoundInfoProvider>
         </VStack>
-      </Container>
+      </Box>
     );
   }
 
   return (
-    <Container bg="bg">
+    <Box bg="bg">
       <VStack align="left">
         <RoundInfoProvider roundId={id}>
           <RoundOpenCheck>
@@ -95,6 +95,6 @@ export default async function ResultPage({
           </RoundOpenCheck>
         </RoundInfoProvider>
       </VStack>
-    </Container>
+    </Box>
   );
 }
