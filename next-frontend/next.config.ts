@@ -79,6 +79,10 @@ const shouldUseProprietaryFont = process.env.PROPRIETARY_FONT === "TTNormsPro";
 // because bundlers resolve `import()` regardless of the runtime condition.
 const PROPRIETARY_FONT_MODULE = "src/styles/fonts.proprietary.ts";
 
+// Evaluated once per build and inlined, so anything seeded off it (the RandomBackground
+//   grid) is stable within a deploy and reshuffles on the next one.
+const buildSeed = Date.now().toString(36);
+
 const nextConfig: NextConfig = {
   serverExternalPackages: ["newrelic", ...newrelicInstrumented],
   turbopack: {
@@ -86,6 +90,9 @@ const nextConfig: NextConfig = {
     resolveAlias: shouldUseProprietaryFont
       ? { "@/styles/fonts": `./${PROPRIETARY_FONT_MODULE}` }
       : {},
+  },
+  env: {
+    NEXT_PUBLIC_BUILD_SEED: buildSeed,
   },
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],

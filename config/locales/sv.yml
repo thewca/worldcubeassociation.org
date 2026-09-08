@@ -4919,8 +4919,8 @@ sv:
           #original_hash: 576c3b8
           '4': >-
             Se <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
-            Competition Organizer Guidelines</a> för mer detaljerad information.
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
+            Competition Organizer Handbook</a> för mer detaljerad information.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -5206,8 +5206,6 @@ sv:
     competition_templates: Tävlingsmallar
     #original_hash: 5ca0558
     certificates: 'WCT:s certifikatmallar'
-    #original_hash: f580987
-    orga_guidelines: Riktlinjer för arrangörer
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegater
@@ -5554,7 +5552,7 @@ sv:
       #original_hash: 9bbdf16
       content1_html: >-
         Om du är intresserad av att arrangera en tävling eller redan planerar
-        att arrangera en, läs våra <a href="/organizer-guidelines">Riktlinjer
+        att arrangera en, läs våra <a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Riktlinjer
         för arrangörer</a>.
       #original_hash: 5016669
       content2_html: >-
@@ -5592,237 +5590,6 @@ sv:
       läs <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">instruktionerna
       i GitHub-repot för översättningar</a>.
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      Welcome to the WQAC’s collection of Organizer Guidelines. If you’re
-      considering being an organizer then it is highly recommended that you read
-      these documents. They have been divided into essential and highly
-      recommended documents. Make sure you are familiar with the information
-      given as this will allow you to run a high-quality and enjoyable
-      competition!
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>Disclaimer</strong>: The WCA does not organize competitions. As an
-      organizer of a WCA sanctioned competition you <strong>must not</strong>
-      sign anything on behalf of the WCA. You should try reaching out to a
-      relevant regional or national cubing association who do organize or assist
-      with organizing competitions.
-    essential:
-      #original_hash: 44bd0ba
-      description: Essential documents
-      #original_hash: 1cf87ad
-      finding-venue: Finding a venue
-      #original_hash: 3ce0d9c
-      orga-team-delegate: Bilda arrangörsteam och kontakta en delegat
-      #original_hash: d3c693b
-      budget: Budgeting a competition
-      #original_hash: b1429a7
-      schedule: Scheduling
-      #original_hash: beea57d
-      checklist: Competition checklist
-      #original_hash: 9defcf1
-      registration: Handling registration
-      #original_hash: e298a56
-      venue-setup: Venue setup
-      #original_hash: 2b6a5dd
-      work-during-comp: Organizer work during the competition
-    recommended:
-      #original_hash: 6b843f3
-      title: Recommended documents
-      #original_hash: 6e4fb29
-      staff: Assigning volunteers
-      #original_hash: 4735583
-      emails: Emails
-      #original_hash: 8e7ca09
-      running-systems: Running and judging systems
-      #original_hash: 2b31c89
-      new-competitors: Attitude to new competitors
-      #original_hash: 00c4f78
-      enhancing-experience: Enhancing competitor and volunteer experience
-      #original_hash: 2345aaa
-      reflection: Organizer reflection
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: WCA Competition Organizer Guidelines
-    paragraph0:
-      #original_hash: ee36904
-      title: Short version
-      #original_hash: 60d9532
-      content: >-
-        Below you can find a short summary of key points for getting an idea of
-        how to organize a competition. If you think this is something for you,
-        please take a look at the documents above!
-    paragraph1:
-      #original_hash: e5f5329
-      title: How to organize a competition
-      #original_hash: 3dbbbee
-      content: >-
-        Alla WCA-tävlingar måste övervakas av en WCA-delegat. Om du är
-        intresserad av att arrangera din egen tävling, vänligen kontakta din
-        närmaste WCA-delegat. De kommer att kunna ge dig mer information om de
-        lokala metoderna och kan hjälpa dig att hitta ett lämpligt datum, då de
-        vet när det finns andra tävlingar planerade. Om det inte finns någon
-        WCA-delegat i närheten av dig kan du kontakta den seniora delegaten för
-        din region.
-    paragraph2:
-      #original_hash: f20dd3b
-      title: Expected expenses for organizing a competition
-      #original_hash: f16a06f
-      content: >-
-        De förväntade kostnaderna varierar kraftigt från land till land och
-        bestäms av flera faktorer, t.ex. lokalens storlek och andra allmänna
-        förhållanden. Det är möjligt att täcka alla kostnader med
-        anmälningsavgifter. För att hålla dessa så låga som möjligt
-        rekommenderas dock starkt att söka efter sponsorer. WCA-delegaterna är
-        volontärer och får inte någon lön för sitt arbete, men arrangörerna bär
-        överväga att betala ersättning för deras resekostnader.
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: Deadlines for the announcement of the competition
-      #original_hash: 477a672
-      content_html: >-
-        Tävlingen måste publiceras minst 28 dagar innan den börjar (se <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
-        Detta är dock sällan tillräckligt med tid. Du bör överväga allt som
-        kommer att ingå i att arrangera din tävling och ge dig själv
-        tillräckligt med tid att förbereda dig. WCAT kommer också att behöva tid
-        för att granska din tävling innan den publiceras. Rådgör med din delegat
-        om du är osäker på hur mycket tid som kommer att behövas.
-    paragraph4:
-      #original_hash: b6dca56
-      title: Proximity policy
-      #original_hash: f5eeb95
-      content1: >-
-        WCA-tävlingar godkänns om de ligger minst 10 km eller 5 dagar från andra
-        tävlingar. WCAT bör särskilt granska en föreslagen tävling om det finns
-        en annan tävling där avståndet mellan dem är mindre än 10 km och tiden
-        mellan dem är mindre än 5 dagar. En delegat som begär godkännande för en
-        sådan tävling måste lämna ytterligare information om varför tävlingen
-        ändå bör godkännas. Möjliga argument för att en sådan tävling ska
-        godkännas inkluderar:
-      olist1:
-        #original_hash: de00462
-        '1': The two competitions don't have events in common.
-        #original_hash: b8ff462
-        '2': De två tävlingarna hålls i olika regioner.
-      #original_hash: 5c5cf04
-      content2: >-
-        "3x3x3 Fewest Moves simultaneous competitions" are WCA competitions
-        having only the 3x3x3 Fewest Moves event and taking place simultaneously
-        in different locations.
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: >-
-            3x3x3 Fewest Moves simultaneous competitions cannot be part of any
-            other regular competition.
-          alist1:
-            #original_hash: 75aa0c7
-            1a: Time frames when both are celebrated can’t overlap.
-        '2':
-          #original_hash: b2b8004
-          content1: >-
-            Om någon plats för en sådan tävling är närmre än 10 km från någon
-            annan tävling, så
-          alist1:
-            #original_hash: 8f532bb
-            2a: 'both competitions should be at least 5 days apart, or'
-            #original_hash: e14e11e
-            2b: the other competition must not have the 3x3x3 Fewest Moves event.
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: Announcing events
-      #original_hash: 7ad62c7
-      content: >-
-        Alla grenar som kommer att hållas vid tävlingen måste specificeras av
-        delegaten när tävlingen skickas in. Ytterligare tillägg måste godkännas
-        av WCAT.
-    paragraph5:
-      #original_hash: 17d01de
-      title: Competitor limits
-      #original_hash: 6bfef2c
-      content_html: >-
-        Antalet tävlande kan begränsas per gren eller per tävling (se <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
-        Delegaten för tävlingen måste få gränsen godkänd av WCAT. Gränser för
-        antal tävlande bör noga övervägas, i enlighet med det förväntade
-        tävlingsintresset. Om gränsen sätts till ett lägre antal bör det finnas
-        bra skäl till det. Den avsedda gränsen bör tas i beaktning redan när man
-        söker efter en lämplig lokal. Gränsen för antal tävlande måste tydligt
-        anges på tävlingssidan på WCA:s webbplats.
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: Handling registrations
-      #original_hash: bd669a1
-      content: >-
-        Registrations must be processed on a first come first served basis,
-        which means that the earliest complete registration must be treated
-        first. If registration fees are prepaid, a registration is considered
-        complete when the registration fee has been paid. This should be clearly
-        stated in the paying instructions on the competition website.
-    paragraph7:
-      #original_hash: e4f1c62
-      title: Managing the waiting list
-      #original_hash: 81ca3f3
-      content1: >-
-        Once the competitor limit for a competition is reached, a waiting list
-        should be opened. When registered and approved competitors cancel their
-        registration, they can be replaced with the next competitors on the
-        waiting list.
-      #original_hash: 802b34f
-      content2: >-
-        If competition registration fees are prepaid, it is an efficient
-        approach to offer the free spot to the next competitor on the waiting
-        list and set a deadline until when the registration fee should be paid
-        to complete the registration (e.g. 48 hours). In case the payment is not
-        received in time or the competitor denies, the free spot should be
-        offered to the next person on the waiting list. This process should be
-        continued until the free spots are filled. There are no exceptions for
-        competitors to bypass the waiting list.
-      #original_hash: 37bcbd6
-      content3: >-
-        If competitors did not go through the regular registration process but
-        competed, their results will be removed retroactively (assuming the
-        competitors limit existed and was reached).
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: Tasks before the competition
-      list:
-        #original_hash: c8abb5e
-        '1': >-
-          Before announcing the competition, a schedule is required to be
-          published on the competition website. This schedule can be adjusted
-          later.
-        #original_hash: e93d043
-        '2': >-
-          Competitors should be split into groups, score sheets must be printed
-          and should be split according to the groups' distribution. It is also
-          recommended to plan who will scramble for every group of every event,
-          at least for the first rounds. Scramblers should be reliable.
-    paragraph9:
-      #original_hash: ead44f5
-      title: Tasks during the competition
-      #original_hash: ee2e9c6
-      content: >-
-        De uppgifter som en arrangör måste utföra under en tävling bör
-        diskuteras med WCA-delegaten. De typiska uppgifterna är (de kan
-        delegeras till andra pålitliga personer):
-      list:
-        #original_hash: 03aea46
-        '1': Managing the registration desk
-        #original_hash: c4388f3
-        '2': Making announcements
-        #original_hash: 45c78ae
-        '3': Calling groups and laying out score sheets
-        #original_hash: 0b31986
-        '4': Score-taking and printing results
-        #original_hash: 7ab2d4c
-        '5': Looking for scramblers and judges
-        #original_hash: 52e8316
-        '6': >-
-          Dealing with all organizational issues regarding the venue (e.g. keys
-          or WiFi)
   media:
     common:
       #original_hash: f9b7a97

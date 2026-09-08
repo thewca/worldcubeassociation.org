@@ -10,7 +10,6 @@ import {
   Portal,
   Heading,
   Float,
-  Icon,
 } from "@chakra-ui/react";
 
 import WcaFlag from "@/components/WcaFlag";
@@ -76,7 +75,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
         <Text>{formatDateRange(comp.start_date, comp.end_date)}</Text>
       </Table.Cell>
 
-      <Table.Cell>
+      <Table.Cell whiteSpace={{ base: "normal", md: "nowrap" }}>
         <ChakraLink asChild>
           <Link
             href={route({
@@ -89,18 +88,16 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
         </ChakraLink>
       </Table.Cell>
 
-      <Table.Cell width="100%">
+      <Table.Cell width="100%" hideBelow="md">
         <Text>{comp.city}</Text>
       </Table.Cell>
 
-      <Table.Cell textAlign="right">
+      <Table.Cell textAlign="right" hideBelow="md">
         <CountryMap code={comp.country_iso2} fontWeight="bold" t={t} />
       </Table.Cell>
 
       <Table.Cell minWidth="4em">
-        <Icon size="lg">
-          <WcaFlag code={comp.country_iso2} fallback={comp.country_iso2} />
-        </Icon>
+        <WcaFlag code={comp.country_iso2} size="lg" />
       </Table.Cell>
 
       <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="xl">
@@ -130,7 +127,16 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">
                 {/* TODO: Only Show register button/link if registration is not full */}
-                <Button variant="outline">Register Now</Button>
+                <Button variant="outline" asChild>
+                  <Link
+                    href={route({
+                      pathname: "/competitions/[competitionId]/register",
+                      query: { competitionId: comp.id },
+                    })}
+                  >
+                    {t("competitions.index.register_now")}
+                  </Link>
+                </Button>
                 <Button variant="solid" asChild>
                   <Link
                     href={route({
@@ -138,7 +144,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                       query: { competitionId: comp.id },
                     })}
                   >
-                    View Competition
+                    {t("competitions.index.view_competition")}
                   </Link>
                 </Button>
               </Drawer.Footer>

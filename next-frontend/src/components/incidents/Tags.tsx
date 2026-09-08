@@ -200,7 +200,6 @@ function Tag({
         <ChakraTag.Root
           size="md"
           colorScheme={colorSchemeMap[labelClass]}
-          cursor="pointer"
           mr={2}
         >
           {label}

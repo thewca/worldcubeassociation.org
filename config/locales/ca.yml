@@ -3884,7 +3884,7 @@ ca:
           #original_hash: 576c3b8
           '4': >-
             Visita <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>Guies
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>Guies
             de l'Organitzador de Competicions de la WCA</a> per a més
             informació.
       '6':
@@ -4363,8 +4363,6 @@ ca:
     competition_templates: Plantilles de Competició
     #original_hash: 5ca0558
     certificates: Plantilles de Certificats de WCT
-    #original_hash: f580987
-    orga_guidelines: Guies de l'Organitzador
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegats de la WCA
@@ -4816,7 +4814,7 @@ ca:
       content1_html: >-
         Si estàs interessat a organitzar una competició o ja estàs planejant-ne
         una, si us plau, llegeix les nostres <a
-        href="/organizer-guidelines">Guies d'Organitzador</a>.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Guies d'Organitzador</a>.
       #original_hash: 5016669
       content2_html: >-
         Aquest document conté informació important i hauria de ser llegida per
@@ -4852,247 +4850,6 @@ ca:
       Si estàs interessat a afegir/actualitzar una traducció, comprova <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">les
       instruccions sobre traduccions al repositori GitHub</a>.
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      Benvingut a la col·lecció de Guies d'Organitzador de WQAC. Si estàs
-      considerant ser un organitzador, llavors és altament recomanat que
-      llegeixis aquests documents. Han estat dividits en documents essencials i
-      documents altament recomanats. Estigues segur que estàs familiaritzat amb
-      la informació, ja que et permetrà acollir una competició divertida i
-      d'alta qualitat!
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>Atenció</strong>: La WCA no organitza competicions. Com un
-      organitzador d'una competició avalada per la WCA <strong>no pots</strong>
-      signar res en nom de la WCA. Hauries de provar de contactar amb
-      l'organització regional rellevant o l'organització de speedcubing nacional
-      que organitza o ajuda a organitzar competicions.
-    essential:
-      #original_hash: 44bd0ba
-      description: Documents essencials
-      #original_hash: 1cf87ad
-      finding-venue: Trobar un local
-      #original_hash: 3ce0d9c
-      orga-team-delegate: Crear el teu equip organitzador i contactar amb un Delegat
-      #original_hash: d3c693b
-      budget: Pressupostar una competició
-      #original_hash: b1429a7
-      schedule: Fer l'horari
-      #original_hash: beea57d
-      checklist: Llista d'ítems de la competició
-      #original_hash: 9defcf1
-      registration: Administrar les inscripcions
-      #original_hash: e298a56
-      venue-setup: Organitzar el local
-      #original_hash: 2b6a5dd
-      work-during-comp: Feina de l'organitzador durant la competició
-    recommended:
-      #original_hash: 6b843f3
-      title: Documents recomanats
-      #original_hash: bfbd4bb
-      staff: Assignar staff
-      #original_hash: 4735583
-      emails: Correus electrònics
-      #original_hash: 8e7ca09
-      running-systems: Sistema de jutges i runners
-      #original_hash: 2b31c89
-      new-competitors: Actitud cap als nous competidors
-      #original_hash: 3408054
-      enhancing-experience: Millorar l'experiència dels competidors i staff
-      #original_hash: 2345aaa
-      reflection: Reflexió de l'organitzador
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: Guies de l'Organitzador de Competicions de la WCA
-    paragraph0:
-      #original_hash: ee36904
-      title: Versió curta
-      #original_hash: 60d9532
-      content: >-
-        Aquí sota pots trobar un petit resum dels punts clau per tenir una idea
-        de com organitzar una competició. Si penses que fa per tu, si us plau,
-        dona una ullada als documents de sobre!
-    paragraph1:
-      #original_hash: e5f5329
-      title: Com organitzar una competició
-      #original_hash: 3dbbbee
-      content: >-
-        Totes les competicions WCA han de ser assistides i supervisades per un
-        Delegat de la WCA. Si estàs interessat a organitzar la teva pròpia
-        competició, posa't en contacte amb el teu Delegat de la WCA més proper.
-        Podran donar-te més informació sobre les pràctiques locals i t'ajudaran
-        a trobar una data adequada, ja que saben si hi ha altres competicions
-        previstes en el mateix període de temps. Si no hi ha cap delegat WCA a
-        prop de la teva zona, posa't en contacte amb el Delegat Sènior de la
-        teva regió.
-    paragraph2:
-      #original_hash: f20dd3b
-      title: Despeses previstes per a l'organització d'una competició
-      #original_hash: f16a06f
-      content: >-
-        Les despeses previstes difereixen molt d'un país a un altre i estan
-        determinades per diversos factors com la mida del lloc i altres
-        condicions generals. És possible recuperar totes les despeses amb les
-        quotes d'inscripció. Tanmateix, per mantenir-los el més baix possible,
-        és molt recomanable buscar patrocinadors. Tot i que els Delegats de la
-        WCA són voluntaris i no reben un sou pel seu treball, els organitzadors
-        haurien de considerar pagar una compensació per les seves despeses de
-        viatge.
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: Dates límit per anunciar una competició
-      #original_hash: 66bf437
-      content_html: >-
-        La competició ha de ser anunciada com a mínim 28 dies abans de l'inici
-        d'aquesta (mira <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
-        de Competició</a>). Tanmateix, aquest període és rarament suficient.
-        Hauries de considerar tot el que necessitaràs per preparar la competició
-        i deixar-te suficient temps per preparar-ho. WCAT també necessitarà
-        temps per revisar la teva competició abans que s'anunciï. Consulta amb
-        el teu Delegat si no estàs segur de quant temps necessitaràs.
-    paragraph4:
-      #original_hash: b6dca56
-      title: Política de proximitat
-      #original_hash: 79ed06e
-      content1: >-
-        S'acceptaran competicions de la WCA si es troben a almenys 100 km o 19
-        dies de distància de qualsevol altra competició.WCAT hauria de revisar
-        especialment una competició proposada si hi ha una altra competició per
-        a la qual la distància entre elles és inferior a 100 km i el temps entre
-        elles és inferior a 19 dies. Un Delegat que sol·liciti l'aprovació d'una
-        competició d'aquest tipus ha de proporcionar més informació sobre per
-        què la competició encara s'ha d'acceptar. Els possibles arguments que
-        donen suport a l'acceptació d'aquesta competició inclouen:
-      olist1:
-        #original_hash: de00462
-        '1': Les dues competicions no tenen categories en comú.
-        #original_hash: f7bacc5
-        '2': Les dues competicions tenen lloc a diferents països.
-      #original_hash: 5c5cf04
-      content2: >-
-        "Competicions simultànies 3x3x3 Menys Moviments" són competicions de la
-        WCA que només tenen 3x3x3 Menys Movimets com única categoria i tenen
-        lloc simultàniament a diferents llocs.
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: >-
-            Competicions simultànies de 3x3x3 Menys Moviments no poden formar
-            part de qualsevol altra competició regular.
-          alist1:
-            #original_hash: 75aa0c7
-            1a: Els períodes de temps en què tenen lloc no es poden superposar.
-        '2':
-          #original_hash: 8d9c548
-          content1: >-
-            Si qualsevol lloc de les competicions és menys de 100 km a qualsevol
-            altra competició regular, llavors
-          alist1:
-            #original_hash: 8f532bb
-            2a: les dues competicions han d'estar separades per 5 dies o
-            #original_hash: e14e11e
-            2b: >-
-              l'altra competició no pot tenir la categoria de 3x3x3 Menys
-              Moviments.
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: Anunciar categories
-      #original_hash: 7ad62c7
-      content: >-
-        Totes les categories que es duran a terme a la competició han de ser
-        especificades pel Delegat en el moment de demanar l'aprovació de la
-        competició. Futures addiccions han de ser aprovades per WCAT.
-    paragraph5:
-      #original_hash: 17d01de
-      title: Límits de competidors
-      #original_hash: bd8e6ee
-      content_html: >-
-        El nombre de competidors pot ser limitat per categoria o per competició
-        (mira <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
-        de Competició</a>). El Delegat de la competició ha d'obtenir l'aprovació
-        del límit de competidors per part de WCAT. Els límits dels competidors
-        s'han de triar amb prudència i d'acord amb l'interès esperat del
-        competidor. El límit no s'ha de fixar en un nombre inferior per motius
-        menors. El límit previst ja s'ha de tenir en compte a l'hora de cercar
-        un lloc adequat. El límit de competidors s'ha d'indicar clarament a la
-        pàgina de la competició del lloc web de la WCA.
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: Administrar els registres
-      #original_hash: bd669a1
-      content: >-
-        Les inscripcions s'han de processar per ordre d'arribada, el que
-        significa que s'ha de tractar primer el registre complet més aviat. Si
-        les quotes de registre es paguen per avançat, un registre es considera
-        completat quan s'hagi pagat la quota d'inscripció. Això s'ha d'indicar
-        clarament a les instruccions de pagament al lloc web de la competició.
-    paragraph7:
-      #original_hash: e4f1c62
-      title: Administrar la llista d'espera
-      #original_hash: 81ca3f3
-      content1: >-
-        Un cop s'arriba al límit de competidors per a una competició, s'ha
-        d'obrir una llista d'espera. Quan els competidors registrats i aprovats
-        cancel·len la seva inscripció, poden ser substituïts pels següents
-        competidors a la llista d'espera.
-      #original_hash: 802b34f
-      content2: >-
-        Si les quotes d'inscripció a la competició es paguen per endavant, és un
-        enfocament eficient oferir la plaça lliure al següent competidor de la
-        llista d'espera i establir un termini fins al moment en què s'ha de
-        pagar la quota d'inscripció per completar la inscripció (per exemple, 48
-        hores). En cas que el pagament no s'hagi rebut a temps o el competidor
-        ho nega, la plaça lliure s'ha d'oferir a la següent persona de la llista
-        d'espera. Aquest procés s'ha de continuar fins que s'omplin les places
-        lliures. No hi ha excepcions perquè els competidors saltin la llista
-        d'espera.
-      #original_hash: 37bcbd6
-      content3: >-
-        Si els competidors no van passar pel procés de registre habitual però
-        van competir, els seus resultats s'eliminaran de manera retroactiva
-        (suposant que el límit de competidors existís i s'hagi assolit).
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: Tasques abans de la competició
-      list:
-        #original_hash: c8abb5e
-        '1': >-
-          Abans d'anunciar la competició, és requerit que es publiqui un horari
-          a la pàgina web de la competició. Aquest pot ser ajustat
-          posteriorment.
-        #original_hash: e93d043
-        '2': >-
-          Els competidors han de ser dividits en grups i els fulls de resultats
-          han de ser impresos d'acord amb la distribució de grups. També és
-          recomanat planificar qui farà de scrambler per cada grup de cada
-          categoria, com a mínim per les primeres rondes. Els scramblers han de
-          ser fiables.
-    paragraph9:
-      #original_hash: ead44f5
-      title: Tasques durant la competició
-      #original_hash: ee2e9c6
-      content: >-
-        Les tasques que l'organitzador ha de fer durant la competició han de ser
-        acordades amb el Delegat de la WCA. Les tasques típiques són (poden ser
-        delegades a altres persones fiables):
-      list:
-        #original_hash: 03aea46
-        '1': Administrar la taula de registre
-        #original_hash: c4388f3
-        '2': Fer anuncis
-        #original_hash: 45c78ae
-        '3': Cridar als grups i distribuir els fulls de resultats
-        #original_hash: 0b31986
-        '4': Passar els temps i imprimir els resultats
-        #original_hash: 7ab2d4c
-        '5': Buscar scramblers i jutges
-        #original_hash: 52e8316
-        '6': >-
-          Tractar tots els problemes organitzatius relacionats amb el local (per
-          exemple, claus o WiFi)
   media:
     common:
       #original_hash: f9b7a97

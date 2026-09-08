@@ -1,12 +1,5 @@
 import _ from "lodash";
-import {
-  Container,
-  Heading,
-  Link,
-  SimpleGrid,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, Link, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import UserBadge from "@/components/UserBadge";
 import { MdMarkEmailUnread } from "react-icons/md";
 import OpenapiError from "@/components/ui/openapiError";
@@ -52,46 +45,44 @@ export default async function OfficersAndBoard() {
   const officers = _.uniqBy(officerRoles, "user.wca_id");
 
   return (
-    <Container bg="bg">
-      <VStack align="left">
-        <Heading size="5xl">{t("page.officers_and_board.title")}</Heading>
-        <Heading size="2xl">{t("user_groups.group_types.officers")}</Heading>
-        <Text>{t("page.officers_and_board.officers_description")}</Text>
-        <SimpleGrid columns={3} gap="16px">
-          {officers.map((officer) => (
-            <UserBadge
-              key={officer.id}
-              profilePicture={officer.user.avatar}
-              name={officer.user.name}
-              roles={groupedOfficerRoles[officer.user.id].map((role) => ({
-                teamRole: t(
-                  `enums.user_roles.status.officers.${role.metadata.status}`,
-                ),
-                staffColor: "blue",
-              }))}
-              wcaId={officer.user.wca_id}
-            />
-          ))}
-        </SimpleGrid>
-        <Heading size="2xl">
-          {t("user_groups.group_types.board")}{" "}
-          <Link href={boardRoles[0].group.metadata!.email}>
-            <MdMarkEmailUnread />
-            {boardRoles[0].group.metadata!.email}
-          </Link>
-        </Heading>
-        <Text>{t("page.officers_and_board.board_description")}</Text>
-        <SimpleGrid columns={3} gap="16px">
-          {boardRoles.map((board) => (
-            <UserBadge
-              key={board.id}
-              profilePicture={board.user.avatar}
-              name={board.user.name}
-              wcaId={board.user.wca_id}
-            />
-          ))}
-        </SimpleGrid>
-      </VStack>
-    </Container>
+    <VStack align="left">
+      <Heading size="5xl">{t("page.officers_and_board.title")}</Heading>
+      <Heading size="2xl">{t("user_groups.group_types.officers")}</Heading>
+      <Text>{t("page.officers_and_board.officers_description")}</Text>
+      <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
+        {officers.map((officer) => (
+          <UserBadge
+            key={officer.id}
+            profilePicture={officer.user.avatar}
+            name={officer.user.name}
+            roles={groupedOfficerRoles[officer.user.id].map((role) => ({
+              teamRole: t(
+                `enums.user_roles.status.officers.${role.metadata.status}`,
+              ),
+              staffColor: "blue",
+            }))}
+            wcaId={officer.user.wca_id}
+          />
+        ))}
+      </SimpleGrid>
+      <Heading size="2xl">
+        {t("user_groups.group_types.board")}{" "}
+        <Link href={boardRoles[0].group.metadata!.email}>
+          <MdMarkEmailUnread />
+          {boardRoles[0].group.metadata!.email}
+        </Link>
+      </Heading>
+      <Text>{t("page.officers_and_board.board_description")}</Text>
+      <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
+        {boardRoles.map((board) => (
+          <UserBadge
+            key={board.id}
+            profilePicture={board.user.avatar}
+            name={board.user.name}
+            wcaId={board.user.wca_id}
+          />
+        ))}
+      </SimpleGrid>
+    </VStack>
   );
 }

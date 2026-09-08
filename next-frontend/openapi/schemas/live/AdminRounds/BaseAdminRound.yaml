@@ -1,8 +1,10 @@
 allOf:
-  - $ref: '../../wcif/WcifRound.yaml'
+  - $ref: '../../competitions/BaseWcifRound.yaml'
   - type: object
     required:
       - state
     properties:
       state:
         $ref: './RoundState.yaml'
+      min_competitors_to_open:
+        type: number

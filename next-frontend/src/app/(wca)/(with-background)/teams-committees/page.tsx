@@ -1,5 +1,4 @@
 import {
-  Container,
   Heading,
   Link,
   SimpleGrid,
@@ -16,7 +15,7 @@ import {
   getTeamsCommittees,
 } from "@/lib/wca/roles/teamsCommittees";
 import OpenapiError from "@/components/ui/openapiError";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -35,34 +34,32 @@ export default async function TeamsCommitteesPage() {
   if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <Container bg="bg">
-      <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">
-          {t("page.teams_committees_councils.title")}
-        </Heading>
-        <Prose>{t("page.teams_committees_councils.description")}</Prose>
-        <Tabs.Root
-          variant="enclosed"
-          orientation="vertical"
-          lazyMount
-          fitted
-          unmountOnExit
-        >
-          <Tabs.List height="fit-content" position="sticky" top="3">
-            {teamsCommittees.map((group) => (
-              <Tabs.Trigger value={group.name} key={group.id}>
-                {group.name}
-              </Tabs.Trigger>
-            ))}
-          </Tabs.List>
+    <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
+      <Heading size="5xl">{t("page.teams_committees_councils.title")}</Heading>
+      <Prose>{t("page.teams_committees_councils.description")}</Prose>
+      <Tabs.Root
+        variant="enclosed"
+        orientation="vertical"
+        sideNav
+        lazyMount
+        fitted
+        unmountOnExit
+        gap={8}
+      >
+        <Tabs.List>
           {teamsCommittees.map((group) => (
-            <Tabs.Content value={group.name} key={group.id} w="full">
-              <TeamTab group={group} />
-            </Tabs.Content>
+            <Tabs.Trigger value={group.name} key={group.id}>
+              {group.name}
+            </Tabs.Trigger>
           ))}
-        </Tabs.Root>
-      </VStack>
-    </Container>
+        </Tabs.List>
+        {teamsCommittees.map((group) => (
+          <Tabs.Content value={group.name} key={group.id} w="full">
+            <TeamTab group={group} />
+          </Tabs.Content>
+        ))}
+      </Tabs.Root>
+    </VStack>
   );
 }
 

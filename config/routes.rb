@@ -40,7 +40,6 @@ Rails.application.routes.draw do
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
-  get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   get '/users/admin_search' => 'users#admin_search'
   resources :users, only: %i[index edit update]
   get 'users/show_for_edit' => 'users#show_for_edit', as: :user_show_for_edit
@@ -119,6 +118,9 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    # TODO: This should use `live-results-preview` ideally, but as of September 26 we have an ELB rule
+    #   that grabs /live* for ILR redirects which conflicts with this route. Feel free to clean up after full ILR launch.
+    get 'synced-results-preview' => 'results_submission#live_results_preview', as: :live_results_preview
     get 'unfinished-persons' => 'results_submission#unfinished_persons', as: :unfinished_persons
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
@@ -276,7 +278,8 @@ Rails.application.routes.draw do
   get 'logo' => 'static_pages#logo'
   get 'media-instagram' => 'static_pages#media_instagram'
   get 'merch', to: redirect('https://shop.worldcubeassociation.org/')
-  get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
+  get 'organizer-guidelines', to: redirect('https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf', status: 302)
+  get 'organizer-handbook', to: redirect('https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf', status: 302)
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
@@ -324,7 +327,6 @@ Rails.application.routes.draw do
   get '/admin/regional-voters' => 'admin#regional_voters', as: :regional_voters
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
   get '/admin/person_data' => 'admin#person_data'
-  get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
@@ -367,9 +369,10 @@ Rails.application.routes.draw do
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
 
-    # While this is the start of a v1 API, this is currently not usable by outside developers as
-    # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
+      get '/persons/:wca_id/results' => 'persons#results', as: :person_results
+      get '/persons/:wca_id/records' => 'persons#records', as: :person_records
+
       resources :competitions, only: [] do
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         namespace :live do
@@ -397,6 +400,7 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
+            get 'payment_denomination', to: 'registrations#payment_denomination'
           end
 
           collection do
@@ -409,6 +413,7 @@ Rails.application.routes.draw do
 
         member do
           get 'registration_config', to: 'registrations#registration_config', as: :registration_config
+          get 'registration_eligibility', to: 'registrations#registration_eligibility', as: :registration_eligibility
         end
       end
     end

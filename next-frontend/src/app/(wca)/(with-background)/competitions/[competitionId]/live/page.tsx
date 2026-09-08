@@ -3,8 +3,7 @@ import { earliestWithLongestTieBreaker } from "@/lib/wca/wcif/activities";
 import LiveView from "@/components/competitions/Schedule/LiveView";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import getPermissions from "@/lib/wca/permissions";
-import { Container } from "@chakra-ui/react";
+import getPermissions from "@/lib/wca/permissions.server";
 
 export default async function LiveOverview({
   params,
@@ -32,23 +31,30 @@ export default async function LiveOverview({
   const canManage =
     !!permissions && permissions.canScoretakeCompetition(competitionId);
 
-  const allActivitiesSorted = wcifSchedule.venues
+  const eventActivitiesSorted = wcifSchedule.venues
     .flatMap((venue) => venue.rooms)
     .flatMap((room) => room.activities)
-    .toSorted(earliestWithLongestTieBreaker);
+    .filter((activity) => !activity.activityCode.startsWith("other"))
+    .toSorted(earliestWithLongestTieBreaker)
+    .map(({ id, activityCode, startTime, endTime }) => ({
+      id,
+      activityCode,
+      startTime,
+      endTime,
+    }));
 
   const uniqueTimeZones = [
     ...new Set(wcifSchedule.venues.map((venue) => venue.timezone)),
   ];
 
   return (
-    <Container bg="bg">
+    <>
       <LiveView
         competitionId={competitionId}
-        activities={allActivitiesSorted}
+        activities={eventActivitiesSorted}
         timeZones={uniqueTimeZones}
         canManage={canManage}
       />
-    </Container>
+    </>
   );
 }

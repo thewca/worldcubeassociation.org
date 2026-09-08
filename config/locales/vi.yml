@@ -5156,7 +5156,7 @@ vi:
           #original_hash: 576c3b8
           '4': >-
             Xem trang <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>Hướng
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>Hướng
             dẫn tổ chức giải đấu WCA</a> để đọc thêm thông tin chi tiết.
       '6':
         #original_hash: 8005a61
@@ -5450,8 +5450,6 @@ vi:
     competition_templates: Bản mẫu dùng cho giải đấu
     #original_hash: 5ca0558
     certificates: Mẫu giấy chứng nhận của WCT
-    #original_hash: f580987
-    orga_guidelines: Hướng dẫn cho người tổ chức
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegate
@@ -5868,7 +5866,7 @@ vi:
       #original_hash: 9bbdf16
       content1_html: >-
         Nếu bạn có hứng thú tổ chức một giải đấu hoặc đang có kế hoạch tổ chức,
-        vui lòng đọc <a href="/organizer-guidelines">Hướng dẫn cho người tổ
+        vui lòng đọc <a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Hướng dẫn cho người tổ
         chức</a>.
       #original_hash: 5016669
       content2_html: >-
@@ -5904,226 +5902,6 @@ vi:
       Nếu bạn muốn tạo/cập nhật bản dịch, hãy xem <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">hướng
       dẫn trên repository GitHub của các bản dịch</a>.
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      Chào mừng đến với bộ Hướng dẫn cho Người tổ chức của WQAC. Nếu bạn mong
-      muốn tổ chức giải đấu, bạn rất nên đọc qua các tài liệu này. Các tài liệu
-      đã được chia thành hai mục là tài liệu thiết yếu và khuyến cáo. Hãy làm
-      quen với thông tin trong các tài liệu này để có thể tổ chức được một giải
-      đấu chất lượng cao và thú vị!
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>Miễn trừ trách nhiệm</strong>: WCA không tổ chức giải đấu. Dưới tư
-      cách người tổ chức một giải đấu được WCA tổ chức, bạn <strong>không được
-      phép</strong> thay mặt WCA ký hợp đồng hay tài liệu. Bạn có thể liên hệ
-      các hiệp hội khu vực hoặc quốc gia sẵn sàng tổ chức hoặc hỗ trợ việc tổ
-      chức giải đấu.
-    essential:
-      #original_hash: 44bd0ba
-      description: Tài liệu thiết yếu
-      #original_hash: 1cf87ad
-      finding-venue: Tìm hội trường thích hợp
-      #original_hash: 3ce0d9c
-      orga-team-delegate: Thành lập ban tổ chức và liên hệ Delegate
-      #original_hash: d3c693b
-      budget: Tạo dự trù kinh phí cho giải đấu
-      #original_hash: b1429a7
-      schedule: Sắp xếp lịch trình
-      #original_hash: beea57d
-      checklist: Danh sách những mục cần chuẩn bị cho giải đấu
-      #original_hash: 9defcf1
-      registration: Xử lý đơn đăng ký
-      #original_hash: e298a56
-      venue-setup: Sắp đặt hội trường
-      #original_hash: 2b6a5dd
-      work-during-comp: Công việc của người tổ chức trong giải đấu
-    recommended:
-      #original_hash: 6b843f3
-      title: Tài liệu khuyến cáo
-      #original_hash: 6e4fb29
-      staff: Phân công nhiệm vụ tình nguyện viên
-      #original_hash: 4735583
-      emails: Gửi email
-      #original_hash: 8e7ca09
-      running-systems: Hệ thống trọng tài và runner
-      #original_hash: 2b31c89
-      new-competitors: Thái độ đối với thí sinh mới
-      #original_hash: 00c4f78
-      enhancing-experience: Cải thiện trải nghiệm của thí sinh và tình nguyện viên
-      #original_hash: 2345aaa
-      reflection: Đánh giá sau giải đấu
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: Hướng dẫn cho người tổ chức giải đấu WCA
-    paragraph0:
-      #original_hash: ee36904
-      title: Bản tóm tắt
-      #original_hash: 60d9532
-      content: >-
-        Sau đây là tóm tắt những điều cần biết để tổ chức giải đấu. Nếu bạn thấy
-        việc tổ chức giải đấu phù hợp với mình, hãy đọc các tài liệu trên!
-    paragraph1:
-      #original_hash: e5f5329
-      title: Làm thế nào để tổ chức một giải đấu
-      #original_hash: 3dbbbee
-      content: >-
-        Tất cả các giải đấu WCA phải có sự góp mặt và quan sát của WCA Delegate.
-        Nếu bạn có hứng thú tổ chức một giải đấu, vui lòng liên hệ delegate gần
-        nhất. Họ có thể cung cấp thêm thông tin cho bạn về cách làm và giúp đỡ
-        bạn lựa chọn một ngày phù hợp vì họ nắm chắc có những giải đấu nào được
-        dự tính trong khoảng thời gian lân cận. Nếu không có WCA Delegate nào
-        trong khu vực của bạn, vui lòng liên hệ Senior Delegate của khu vực.
-    paragraph2:
-      #original_hash: f20dd3b
-      title: Chi phí dự tính để tổ chức một giải đấu
-      #original_hash: f16a06f
-      content: >-
-        Chi phí dự tính có sự khác biệt rõ rệt ở từng quốc gia và được đánh giá
-        bằng một vài nguyên tố như kích thước của địa điểm và một vài điều kiện
-        chung khác. Có thể bù lại chi phí bằng lệ phí thi đấu. Tuy nhiên, để giữ
-        chi phí và lệ phí thấp, chúng tôi rất khuyến khích việc tìm tài trợ. Mặc
-        dù WCA Delegate là tình nguyện và không nhận lương cho công việc của họ,
-        ban tổ chức nên cân nhắc đền bù chi phí đi lại giúp họ.
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: Hạn chót để thông báo giải đấu
-      #original_hash: 477a672
-      content_html: >-
-        Giải đấu phải được công bố ít nhất 28 ngày trước khi giải đấu bắt đầu
-        (xem<a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Yêu
-        cầu Giải đấu</a>). Tuy nhiên, ít khi 28 ngày là đủ thời gian. Bạn cần
-        cân nhắc tất cả những điều liên quan đến việc tổ chức giải đấu, và tự
-        cho mình đủ thời gian để chuẩn bị. WCAT cũng sẽ cần thời gian xét duyệt
-        giải đầu trước khi công bố. Thảo luận với Delegate nếu không chắc chắn
-        bao nhiêu thời gian là cần thiết.
-    paragraph4:
-      #original_hash: b6dca56
-      title: Chính sách về vùng lân cận
-      #original_hash: 0574d31
-      content1: >-
-        Giải đấu WCA sẽ được phê duyệt nếu cách ít nhất 30 km hoặc 5 ngày so với
-        các giải đấu khác. WCAT nên cân nhắc kỹ lưỡng yêu cầu giải đấu nếu có
-        giải đấu khác cách ít hơn 30 km và 5 ngày. Delegate phải cung cấp lý do
-        vì sao giải đấu trên nên được phê duyệt. Các lý do phù hợp bao gồm:
-      olist1:
-        #original_hash: de00462
-        '1': Hai giải đấu không có nội dung giống nhau.
-        #original_hash: b8ff462
-        '2': Hai giải đấu ở hai khu vực khác nhau.
-      #original_hash: 5c5cf04
-      content2: >-
-        "Giải Tối ưu 3x3x3 tại nhiều địa điểm" là giải đấu WCA duy nhất chỉ có
-        nội dung Giải Tối ưu 3x3x3 và diễn ra ở nhiều địa điểm khác nhau.
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: >-
-            Giải Tối ưu 3x3x3 nhiều địa điểm không thể là một phần của một giải
-            đấu khác.
-          alist1:
-            #original_hash: 75aa0c7
-            1a: Thời gian trao thưởng của hai giải đấu không thể trùng nhau.
-        '2':
-          #original_hash: b2b8004
-          content1: >-
-            Nếu địa điểm của các giải đấu này ít hơn 10km so với các giải đấu
-            khác, thì
-          alist1:
-            #original_hash: 8f532bb
-            2a: 'hai giải đấu phải cách nhau ít nhất 5 ngày, hoặc'
-            #original_hash: e14e11e
-            2b: chỉ có một giải đấu có thể có nội dung Giải Tối ưu 3x3x3.
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: Thông báo nội dung
-      #original_hash: 7ad62c7
-      content: >-
-        Tất cả các nội dung của một giải đấu phải được chỉ rõ bởi delegate khi
-        gửi đơn đăng ký giải đấu. Bất kỳ phần bổ sung nào phải được thông qua
-        bởi WCAT.
-    paragraph5:
-      #original_hash: 17d01de
-      title: Giới hạn thí sinh
-      #original_hash: 6bfef2c
-      content_html: >-
-        Giới hạn thí sinh có thể được đặt cho mỗi nội dung hoặc cả giải đấu
-        (xem<a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Yêu
-        cầu Giải đấu</a>). Delegate phải được WCAT phê duyệt mức giới hạn thí
-        sinh. Mức giới hạn nên được chọn một cách phù hợp, tùy theo độ quan tâm
-        của thí sinh. Giới hạn không nên được đặt thấp vì các lý do không quan
-        trọng. Việc tìm hội trường thích hợp nên cân nhắc tới giới hạn thí sinh
-        cần thiết. Giới hạn thí sinh phải được ghi rõ trên trang của giải đấu
-        trên website WCA.
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: Xử lý đơn đăng ký
-      #original_hash: bd669a1
-      content: >-
-        Đơn đăng ký phải được thông qua theo trình tự thời gian (đơn đăng ký
-        hoàn thành trước cần được xem xét trước). Nếu lệ phí đăng ký cần phải
-        đóng trước, một đơn đăng ký được coi là hoàn tất khi lệ phí đã được
-        thanh toán. Phần này cần được ghi rõ trong mục hướng dẫn thanh toán trên
-        trang web của giải.
-    paragraph7:
-      #original_hash: e4f1c62
-      title: Quản lý danh sách chờ
-      #original_hash: 81ca3f3
-      content1: >-
-        Một khi đã đạt đến giới hạn số lượng thí sinh, cần phải mở một danh sách
-        chờ. Khi những thí sinh đã được thông qua huỷ bỏ đơn đăng ký, có thể đưa
-        thí sinh từ danh sách chờ vào xem xét.
-      #original_hash: 802b34f
-      content2: >-
-        Nếu cần đóng trước lệ phí thi, bạn có thể đặt một hạn chót để đóng lệ
-        phí thi trước giải đấu. Trong trường hợp các thí sinh đã đăng ký không
-        đóng lệ phí thi đúng hạn, họ sẽ bị gạch tên khỏi danh sách đăng ký và vị
-        trí trống sẽ được nhường cho một thí sinh trong danh sách chờ. Quá trình
-        này có thể được lặp lại cho đến khi hết chỗ trống. Không nên có một
-        ngoại lệ nào cho các thí sinh trong danh sách chờ.
-      #original_hash: 37bcbd6
-      content3: >-
-        Nếu thí sinh không đăng ký mà vẫn tham gia thi đấu, kết quả của thí sinh
-        sẽ bị xoá sau đó (giả sử đã đạt đến số lượng giới hạn nếu có).
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: Công việc trước giải đấu
-      list:
-        #original_hash: c8abb5e
-        '1': >-
-          Trước khi thông báo một giải đấu, cần có thời gian biểu trên trang web
-          của giải đấu. Thời gian biểu này có thể được thay đổi sau đó.
-        #original_hash: e93d043
-        '2': >-
-          Thí sinh cần được chia thành các nhóm nhỏ, phiếu ghi kết quả phải được
-          in trước và được phân chia theo nhóm. Chúng tôi khuyến khích việc chọn
-          trước người tráo cho từng nhóm của từng nội dung, ít nhất cho vòng đầu
-          tiên. Người tráo phải đáng tin cậy.
-    paragraph9:
-      #original_hash: ead44f5
-      title: Công việc trong giải đấu
-      #original_hash: ee2e9c6
-      content: >-
-        Công việc ban tổ chức cần làm trong giải đấu cần được thảo luận với WCA
-        Delegate. Công việc thường có là (có thể được giao cho những người khác
-        đáng tin cậy):
-      list:
-        #original_hash: 03aea46
-        '1': Quản lý bàn đăng ký
-        #original_hash: c4388f3
-        '2': Thông báo
-        #original_hash: 45c78ae
-        '3': Gọi các nhóm và phân chia phiếu ghi kết quả
-        #original_hash: 0b31986
-        '4': Nhập liệu và in kết quả
-        #original_hash: 7ab2d4c
-        '5': Tìm kiếm người tráo và trọng tài
-        #original_hash: 52e8316
-        '6': >-
-          Xử lý các vấn đề trong khâu tổ chức liên quan đến địa điểm (v.d. chìa
-          khoá hoặc WiFi)
   media:
     common:
       #original_hash: f9b7a97

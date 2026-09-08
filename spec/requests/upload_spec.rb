@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ResultsSubmissionController do
   let(:image) { Rack::Test::UploadedFile.new('spec/support/logo.png', 'image/png') }
+  let(:pdf) { Rack::Test::UploadedFile.new('spec/support/bylaws.pdf', 'application/pdf') }
 
   context "not signed in" do
     sign_out
@@ -18,9 +19,16 @@ RSpec.describe ResultsSubmissionController do
     before { sign_in create :delegate }
 
     it "can upload an image" do
-      post upload_image_path, params: { image: image }
-      json = response.parsed_body
-      expect(json['filePath']).not_to be_nil
+      expect { post upload_image_path, params: { image: image } }.to change(MarkdownImage, :count).by(1)
+
+      expect(response.parsed_body['filePath']).not_to be_nil
+    end
+
+    it "rejects a file that is not a web image" do
+      expect { post upload_image_path, params: { image: pdf } }.not_to change(MarkdownImage, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body['error']).to be_present
     end
   end
 end

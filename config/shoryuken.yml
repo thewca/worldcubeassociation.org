@@ -1,7 +1,6 @@
 groups:
   registrations:
     concurrency: 2
-    delay: 1
     queues:
       - <%= EnvConfig.REGISTRATION_QUEUE %>
   live_results:

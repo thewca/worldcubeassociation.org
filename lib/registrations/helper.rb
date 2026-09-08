@@ -54,14 +54,36 @@ module Registrations
       }
     end
 
+    def self.import_registrations!(competition, registrations_data, creator)
+      # registered_at stores millisecond precision, but we want all registrations
+      #   from CSV import to be considered as one "batch". So we mark a timestamp
+      #   once, and then reuse it throughout the loop.
+      import_time = Time.now.utc
+      emails = registrations_data.pluck(:email)
+
+      ActiveRecord::Base.transaction do
+        competition.registrations.accepted.each do |registration|
+          registration.update!(competing_status: STATUS_CANCELLED) unless emails.include?(registration.user.email)
+        end
+        registrations_data.each do |registration_data|
+          user = user_for_registration!(registration_data)
+          registration = competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+            reg.registered_at = import_time
+          end
+          registration.save_registration_data!(registration_data: registration_data, creator: creator, source: Registration::CSV_IMPORT)
+        rescue StandardError => e
+          raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_data[:name], error: e))
+        end
+      end
+    end
+
     def self.user_for_registration!(registration_row)
       wca_id = registration_row[:wcaId]&.upcase
       email = registration_row[:email]&.downcase
-      country_iso2 = registration_row[:countryIso2]
 
       person_details = {
         name: registration_row[:name],
-        country_iso2: country_iso2,
+        country_iso2: registration_row[:countryIso2],
         gender: registration_row[:gender],
         dob: registration_row[:birthdate],
       }
@@ -81,15 +103,15 @@ module Registrations
               else
                 # User hooks will also remove the dummy user account.
                 email_user.update!(wca_id: wca_id, **person_details)
-                [email_user, false]
+                email_user
               end
             else
               user.skip_reconfirmation!
               user.update!(dummy_account: false, **person_details, email: email)
-              [user, true]
+              user
             end
           else
-            [user, false] # Use this account.
+            user # Use this account.
           end
         else
           email_user = User.find_by(email: email)
@@ -100,11 +122,11 @@ module Registrations
                            registration_wca_id: wca_id)
             else
               email_user.update!(wca_id: wca_id, **person_details)
-              [email_user, false]
+              email_user
             end
           else
             # Create a locked account with confirmed WCA ID.
-            [create_locked_account!(registration_row), true]
+            create_locked_account!(registration_row)
           end
         end
       else
@@ -116,9 +138,9 @@ module Registrations
             # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
             email_user.update!(person_details)
           end
-          [email_user, false]
+          email_user
         else
-          [create_locked_account!(registration_row), true]
+          create_locked_account!(registration_row)
         end
       end
     end

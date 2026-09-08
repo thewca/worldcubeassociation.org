@@ -1,0 +1,15 @@
+type: object
+properties:
+  participationSource:
+    $ref: './WcifParticipationSource.yaml'
+  reservedPlaces:
+    type: object
+    properties:
+      nationalities:
+        type: array
+        items:
+          type: string
+      reservations:
+        type: integer
+required:
+  - participationSource

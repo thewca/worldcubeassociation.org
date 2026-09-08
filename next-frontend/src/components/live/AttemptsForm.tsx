@@ -165,7 +165,27 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
             <Heading size="2xl">{header}</Heading>
           </Combobox.Label>
           <Combobox.Control>
-            <Combobox.Input ref={inputRef} placeholder="Type to search" />
+            <Combobox.Context>
+              {(api) => (
+                <Combobox.Input
+                  ref={inputRef}
+                  placeholder="Type to search"
+                  onKeyDown={(e) => {
+                    // Backspace at the end of the field clears the whole name,
+                    // so double-checking can move on to the next competitor.
+                    const input = e.currentTarget;
+                    const atEnd =
+                      input.selectionStart === input.value.length &&
+                      input.selectionEnd === input.value.length;
+
+                    if (e.key === "Backspace" && atEnd && input.value !== "") {
+                      e.preventDefault();
+                      api.clearValue();
+                    }
+                  }}
+                />
+              )}
+            </Combobox.Context>
             <Combobox.IndicatorGroup>
               <Combobox.ClearTrigger />
               <Combobox.Trigger />
@@ -305,7 +325,15 @@ function AttemptFieldsNav({
       e.preventDefault();
       const from = e.target as HTMLElement;
       flushSync(() => from.blur());
-      focusManager?.focusPrevious({ wrap: false, from });
+      // Moving back from the first attempt lands on the competitor field.
+      const didFocusPrevious = focusManager?.focusPrevious({
+        wrap: false,
+        from,
+      });
+
+      if (!didFocusPrevious) {
+        onFocusCompetitor();
+      }
     }
   };
 

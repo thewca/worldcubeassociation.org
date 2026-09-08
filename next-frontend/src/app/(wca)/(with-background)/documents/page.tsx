@@ -1,12 +1,11 @@
 import {
-  VStack,
-  Container,
-  Heading,
   Accordion,
+  Heading,
   Link,
-  List,
   LinkBox,
   LinkOverlay,
+  List,
+  VStack,
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -44,47 +43,45 @@ export default async function Documents() {
   const categorized = _.groupBy(categorizedRaw, "category");
 
   return (
-    <Container bg="bg">
-      <VStack gap="8" pt="8" alignItems="left">
-        <Heading size="5xl">Documents</Heading>
-        <Accordion.Root variant="enclosed" multiple>
-          {uncategorized.map((doc) => (
-            <Accordion.Item key={doc.title} value={doc.title}>
-              <LinkBox asChild>
-                <Accordion.ItemTrigger>
-                  <LinkOverlay asChild>
-                    <Link href={doc.link} variant="underline">
-                      <IconDisplay name={doc.icon} /> {doc.title}
-                    </Link>
-                  </LinkOverlay>
-                </Accordion.ItemTrigger>
-              </LinkBox>
-            </Accordion.Item>
-          ))}
-          {Object.entries(categorized).map(([category, docs]) => (
-            <Accordion.Item key={category} value={category}>
+    <VStack gap="8" pt="8" alignItems="left">
+      <Heading size="5xl">Documents</Heading>
+      <Accordion.Root variant="enclosed" multiple>
+        {uncategorized.map((doc) => (
+          <Accordion.Item key={doc.title} value={doc.title}>
+            <LinkBox asChild>
               <Accordion.ItemTrigger>
-                <IconDisplay name="List" /> {category}
+                <LinkOverlay asChild>
+                  <Link href={doc.link} variant="underline">
+                    <IconDisplay name={doc.icon} /> {doc.title}
+                  </Link>
+                </LinkOverlay>
               </Accordion.ItemTrigger>
-              <Accordion.ItemContent>
-                <Accordion.ItemBody>
-                  <List.Root pl="10">
-                    {docs
-                      .toSorted((a, b) => a.title.localeCompare(b.title))
-                      .map((doc) => (
-                        <List.Item key={doc.id}>
-                          <Link href={doc.link} variant="underline">
-                            {doc.title}
-                          </Link>
-                        </List.Item>
-                      ))}
-                  </List.Root>
-                </Accordion.ItemBody>
-              </Accordion.ItemContent>
-            </Accordion.Item>
-          ))}
-        </Accordion.Root>
-      </VStack>
-    </Container>
+            </LinkBox>
+          </Accordion.Item>
+        ))}
+        {Object.entries(categorized).map(([category, docs]) => (
+          <Accordion.Item key={category} value={category}>
+            <Accordion.ItemTrigger>
+              <IconDisplay name="List" /> {category}
+            </Accordion.ItemTrigger>
+            <Accordion.ItemContent>
+              <Accordion.ItemBody>
+                <List.Root pl="10">
+                  {docs
+                    .toSorted((a, b) => a.title.localeCompare(b.title))
+                    .map((doc) => (
+                      <List.Item key={doc.id}>
+                        <Link href={doc.link} variant="underline">
+                          {doc.title}
+                        </Link>
+                      </List.Item>
+                    ))}
+                </List.Root>
+              </Accordion.ItemBody>
+            </Accordion.ItemContent>
+          </Accordion.Item>
+        ))}
+      </Accordion.Root>
+    </VStack>
   );
 }

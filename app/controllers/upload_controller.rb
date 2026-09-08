@@ -5,18 +5,13 @@ class UploadController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_upload_images?) }
 
   def image
-    upload_image = params.require(:image)
+    markdown_image = MarkdownImage.new(uploaded_by: current_user)
+    markdown_image.image.attach(params.require(:image))
 
-    # Unfortunately, there doesn't seem to be any good way to add validations
-    # on file type/content type/etc. See
-    # https://github.com/thewca/worldcubeassociation.org/issues/4380 for more
-    # information.
-    blob = ActiveStorage::Blob.create_and_upload!(
-      io: upload_image,
-      filename: upload_image.original_filename,
-      content_type: upload_image.content_type,
-    )
+    # The image is not associated with anything yet: the record it is being typed
+    # into may not even exist.
+    return render json: { error: markdown_image.errors.full_messages.to_sentence }, status: :unprocessable_content unless markdown_image.save
 
-    render json: { filePath: url_for(blob) }
+    render json: { filePath: url_for(markdown_image.image.blob) }
   end
 end
