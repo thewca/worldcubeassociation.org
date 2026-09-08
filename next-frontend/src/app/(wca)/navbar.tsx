@@ -25,6 +25,7 @@ import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
+import NavCollapsible from "@/components/NavCollapsible";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -107,7 +108,7 @@ export default async function Navbar() {
       data-testid="header-navbar"
     >
       <RefreshRouteOnSave />
-      <Collapsible.Root>
+      <NavCollapsible>
         <HStack padding="3" justifyContent="space-between">
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
@@ -492,7 +493,7 @@ export default async function Navbar() {
             </VStack>
           </Collapsible.Content>
         </Box>
-      </Collapsible.Root>
+      </NavCollapsible>
     </Box>
   );
 }
