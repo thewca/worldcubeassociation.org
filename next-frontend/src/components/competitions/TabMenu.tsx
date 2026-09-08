@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   Badge,
   Box,
+  Button,
   CloseButton,
   Collapsible,
   Drawer,
@@ -22,7 +23,8 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
 import { TFunction } from "i18next";
-import { LuAlignJustify } from "react-icons/lu";
+import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
+import type { RouteLiteral } from "nextjs-routes";
 import { iconMap } from "@/components/icons/iconMap";
 
 function activityCodeFromPath(path: string) {
@@ -34,10 +36,12 @@ export default function TabMenu({
   competitionInfo,
   children,
   tabs,
+  backHref,
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
+  backHref?: RouteLiteral;
 }) {
   const pathName = usePathname();
   const { t } = useT();
@@ -110,6 +114,13 @@ export default function TabMenu({
               </Drawer.Header>
 
               <Drawer.Body>
+                {backHref && (
+                  <Button asChild variant="ghost" justifyContent="left" mb="2">
+                    <Link href={backHref} onClick={() => setDrawerOpen(false)}>
+                      <LuArrowLeft /> {competitionInfo.name}
+                    </Link>
+                  </Button>
+                )}
                 <Tabs.List
                   flexDirection="column"
                   gap="1"

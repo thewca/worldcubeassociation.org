@@ -3,9 +3,9 @@ import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import {
   afterCompetitionTabs,
   beforeCompetitionTabs,
+  liveTab,
 } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
-import LiveMenu from "@/components/competitions/LiveMenu";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
@@ -16,29 +16,18 @@ export default function CompetitionMenu({
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  const { scoretaking_software } = competitionInfo;
+  const isOngoing =
+    !hasPassedEndOfDay(competitionInfo.end_date) || LIVE_RESULT_BETA;
 
-  if (!hasPassed(competitionInfo.start_date)) {
-    const tabs = beforeCompetitionTabs(competitionInfo);
-    return (
-      <TabMenu competitionInfo={competitionInfo} tabs={tabs}>
-        {children}
-      </TabMenu>
-    );
-  }
-
-  if (!hasPassedEndOfDay(competitionInfo.end_date) || LIVE_RESULT_BETA) {
-    return (
-      <LiveMenu
-        competitionInfo={competitionInfo}
-        scoretakingSoftware={scoretaking_software}
-      >
-        {children}
-      </LiveMenu>
-    );
-  }
   // TODO: Differentiate if the results have been posted
-  const tabs = afterCompetitionTabs(competitionInfo);
+  const tabs = isOngoing
+    ? beforeCompetitionTabs(competitionInfo)
+    : afterCompetitionTabs(competitionInfo);
+
+  if (isOngoing && hasPassed(competitionInfo.start_date)) {
+    tabs.push(liveTab(competitionInfo));
+  }
+
   return (
     <TabMenu competitionInfo={competitionInfo} tabs={tabs}>
       {children}

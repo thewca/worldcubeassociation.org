@@ -80,6 +80,18 @@ export const beforeCompetitionTabs = (
   ];
 };
 
+export const liveTab = (
+  competitionInfo: components["schemas"]["CompetitionInfo"],
+): TabWithLink => ({
+  i18nKey: "competitions.live.title",
+  href: route({
+    pathname: "/competitions/[competitionId]/live",
+    query: { competitionId: competitionInfo.id },
+  }),
+  menuKey: "live",
+  icon: "Records",
+});
+
 export const duringCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
   rounds: components["schemas"]["LiveRoundAdmin"][],
