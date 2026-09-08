@@ -5,7 +5,7 @@ import type { components } from "@/types/openapi";
 import { useT } from "@/lib/i18n/useI18n";
 import { hasNotPassed, hasPassed } from "@/lib/wca/dates";
 import usePerpetualState from "@/lib/hooks/usePerpetualState";
-import StepPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
+import StepPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/(competition)/register/StepPanel";
 import RegistrationNotAllowedMessage from "@/components/competitions/Registration/RegistrationNotAllowedMessage";
 import RegistrationOpeningMessage from "@/components/competitions/Registration/RegistrationOpeningMessage";
 import RegistrationClosingMessage from "@/components/competitions/Registration/RegistrationClosingMessage";
