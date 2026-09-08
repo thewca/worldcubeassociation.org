@@ -82,7 +82,7 @@ export function VenueDetailsCard({
     <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
-        <SimpleGrid columns={2} gap="4">
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <VenueIcon />
@@ -328,7 +328,7 @@ export function InfoCard({
           </Button>
         </Heading>
 
-        <SimpleGrid columns={2} gap="4">
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoOpenDateIcon />

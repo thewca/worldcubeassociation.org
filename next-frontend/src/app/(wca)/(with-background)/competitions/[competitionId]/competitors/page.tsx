@@ -3,7 +3,7 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 
 export default async function Competitors({
   params,

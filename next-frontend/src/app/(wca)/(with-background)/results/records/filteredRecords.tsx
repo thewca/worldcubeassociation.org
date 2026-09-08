@@ -77,7 +77,7 @@ export default function FilteredRecords({
         filterState={{ ...searchParams, event }}
         filterActions={filterActions}
       />
-      <Box position="relative" opacity={isPending ? 0.4 : 1}>
+      <Box position="relative" w="full" opacity={isPending ? 0.4 : 1}>
         {isPending && (
           <Center position="absolute" inset={0} zIndex={1}>
             <Spinner size="xl" position="sticky" top="50%" />

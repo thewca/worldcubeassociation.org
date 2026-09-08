@@ -24,12 +24,12 @@ export default async function CompetitionLayout({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <SimpleGrid columns={3} gap="8">
-      <GridItem colSpan={2} asChild>
+    <SimpleGrid columns={{ base: 1, md: 3 }} gap="8">
+      <GridItem colSpan={{ base: 1, md: 2 }} asChild>
         <InfoCard competitionInfo={competitionInfo} t={t} />
       </GridItem>
       <MarkdownFirstImage content={competitionInfo.information} />
-      <GridItem colSpan={3}>{children}</GridItem>
+      <GridItem colSpan={{ base: 1, md: 3 }}>{children}</GridItem>
     </SimpleGrid>
   );
 }

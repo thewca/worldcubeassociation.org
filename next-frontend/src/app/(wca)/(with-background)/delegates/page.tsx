@@ -21,7 +21,7 @@ import _ from "lodash";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { LuPencil } from "react-icons/lu";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 import AdminModeToggle from "@/app/(wca)/(with-background)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
 import { Metadata } from "next";
@@ -83,10 +83,12 @@ export default async function DelegatesPage({
         <Tabs.Root
           variant="enclosed"
           orientation="vertical"
+          sideNav
           fitted
           value={activeFriendlyId}
+          gap={8}
         >
-          <Tabs.List height="fit-content" position="sticky" top="3">
+          <Tabs.List>
             {rootGroups.map((group) => {
               const friendlyId = group.metadata!.friendly_id!;
 
@@ -198,7 +200,7 @@ async function DelegateGrid({
   const { t } = await getT();
 
   return (
-    <SimpleGrid columns={2} gap={2}>
+    <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
       {delegates.map((role) => (
         <UserBadge
           key={role.id}

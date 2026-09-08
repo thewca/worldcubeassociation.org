@@ -118,6 +118,9 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    # TODO: This should use `live-results-preview` ideally, but as of September 26 we have an ELB rule
+    #   that grabs /live* for ILR redirects which conflicts with this route. Feel free to clean up after full ILR launch.
+    get 'synced-results-preview' => 'results_submission#live_results_preview', as: :live_results_preview
     get 'unfinished-persons' => 'results_submission#unfinished_persons', as: :unfinished_persons
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection

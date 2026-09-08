@@ -1,6 +1,6 @@
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
-import { HStack, Icon, Link, Table } from "@chakra-ui/react";
+import { HStack, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
@@ -28,7 +28,7 @@ export function ResultsTable({
   const anyAverages = results.some((r) => r.average !== 0);
 
   return (
-    <Table.ScrollArea rounded="md" maxW="full">
+    <Table.ScrollArea rounded="md">
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -80,9 +80,7 @@ export function ResultsTable({
                 )}
                 <Table.Cell>
                   <HStack>
-                    <Icon asChild size="sm">
-                      <WcaFlag code={competitorResult.country_iso2} />
-                    </Icon>
+                    <WcaFlag code={competitorResult.country_iso2} size="sm" />
                     <CountryMap code={competitorResult.country_iso2} t={t} />
                   </HStack>
                 </Table.Cell>
@@ -157,9 +155,7 @@ export function ByPersonTable({
               </Table.Cell>
               <Table.Cell>
                 <HStack>
-                  <Icon asChild size="sm">
-                    <WcaFlag code={competitorResult.country_iso2} />
-                  </Icon>
+                  <WcaFlag code={competitorResult.country_iso2} size="sm" />
                   <CountryMap code={competitorResult.country_iso2} t={t} />
                 </HStack>
               </Table.Cell>
@@ -193,75 +189,77 @@ export function ByCompetitionTable({
   );
 
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>
-            {t("persons.show.competition")}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>Round</Table.ColumnHeader>
-          <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
-          <Table.ColumnHeader>Single</Table.ColumnHeader>
-          <Table.ColumnHeader>Average</Table.ColumnHeader>
-          <Table.ColumnHeader colSpan={5} textAlign="left">
-            Solves
-          </Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {_.map(resultsByCompetition, (competitorResults) => {
-          return competitorResults.map((competitorResult, index) => {
-            const eventId = competitorResult.event_id;
-            const { definedAttempts, bestResultIndex, worstResultIndex } =
-              resultAttempts(competitorResult);
-            return (
-              <Table.Row key={competitorResult.id}>
-                <Table.Cell>
-                  {index === 0 && (
-                    <Link asChild>
-                      <NextLink
-                        href={route({
-                          pathname: "/competitions/[competitionId]",
-                          query: {
-                            competitionId: competitorResult.competition_id,
-                          },
-                        })}
-                      >
-                        {competitorResult.competition_name}
-                      </NextLink>
-                    </Link>
-                  )}
-                </Table.Cell>
-                <Table.Cell>
-                  {t(`rounds.${competitorResult.round_type_id}.name`)}
-                </Table.Cell>
-                <Table.Cell>{competitorResult.pos}</Table.Cell>
-                <Table.Cell>
-                  <WithRecordTag
+    <Table.ScrollArea rounded="md" maxW="full">
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>
+              {t("persons.show.competition")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
+            <Table.ColumnHeader>Single</Table.ColumnHeader>
+            <Table.ColumnHeader>Average</Table.ColumnHeader>
+            <Table.ColumnHeader colSpan={5} textAlign="left">
+              Solves
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {_.map(resultsByCompetition, (competitorResults) => {
+            return competitorResults.map((competitorResult, index) => {
+              const eventId = competitorResult.event_id;
+              const { definedAttempts, bestResultIndex, worstResultIndex } =
+                resultAttempts(competitorResult);
+              return (
+                <Table.Row key={competitorResult.id}>
+                  <Table.Cell>
+                    {index === 0 && (
+                      <Link asChild>
+                        <NextLink
+                          href={route({
+                            pathname: "/competitions/[competitionId]",
+                            query: {
+                              competitionId: competitorResult.competition_id,
+                            },
+                          })}
+                        >
+                          {competitorResult.competition_name}
+                        </NextLink>
+                      </Link>
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {t(`rounds.${competitorResult.round_type_id}.name`)}
+                  </Table.Cell>
+                  <Table.Cell>{competitorResult.pos}</Table.Cell>
+                  <Table.Cell>
+                    <WithRecordTag
+                      recordTag={competitorResult.regional_single_record}
+                    >
+                      {formatAttemptResult(competitorResult.best, eventId)}
+                    </WithRecordTag>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <WithRecordTag
+                      recordTag={competitorResult.regional_average_record}
+                    >
+                      {formatAttemptResult(competitorResult.average, eventId)}
+                    </WithRecordTag>
+                  </Table.Cell>
+                  <AttemptsCells
+                    attempts={definedAttempts}
+                    bestResultIndex={bestResultIndex}
+                    worstResultIndex={worstResultIndex}
+                    eventId={eventId}
                     recordTag={competitorResult.regional_single_record}
-                  >
-                    {formatAttemptResult(competitorResult.best, eventId)}
-                  </WithRecordTag>
-                </Table.Cell>
-                <Table.Cell>
-                  <WithRecordTag
-                    recordTag={competitorResult.regional_average_record}
-                  >
-                    {formatAttemptResult(competitorResult.average, eventId)}
-                  </WithRecordTag>
-                </Table.Cell>
-                <AttemptsCells
-                  attempts={definedAttempts}
-                  bestResultIndex={bestResultIndex}
-                  worstResultIndex={worstResultIndex}
-                  eventId={eventId}
-                  recordTag={competitorResult.regional_single_record}
-                />
-              </Table.Row>
-            );
-          });
-        })}
-      </Table.Body>
-    </Table.Root>
+                  />
+                </Table.Row>
+              );
+            });
+          })}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }

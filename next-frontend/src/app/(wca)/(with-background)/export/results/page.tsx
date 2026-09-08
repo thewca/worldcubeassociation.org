@@ -56,7 +56,13 @@ export default async function ResultExportPage() {
             readme_filename: "README.md",
           })}
         </Text>
-        <Code display="block" whiteSpace="pre" fontSize="sm">
+        <Code
+          display="block"
+          whiteSpace="pre"
+          overflowX="auto"
+          maxW="full"
+          fontSize="sm"
+        >
           {exports.readme}
         </Code>
       </VStack>

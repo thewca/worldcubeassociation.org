@@ -5,7 +5,7 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import { auth } from "@/auth";
+import { getSession } from "@/auth";
 import { getT } from "@/lib/i18n/get18n";
 import UpcomingCompetitionTable from "@/components/competitions/Mine/UpcomingCompetitionTable";
 import PastCompetitionsTable from "@/components/competitions/Mine/PastCompetitionTable";
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function MyCompetitions() {
-  const session = await auth();
+  const session = await getSession();
   const { t } = await getT();
 
   if (!session) {
@@ -43,9 +43,9 @@ export default async function MyCompetitions() {
     <Container bg="bg">
       <VStack gap="8" pt="8" alignItems="left">
         <Heading size="5xl">
-          {session.user?.id && (
+          {session.user?.wcaId && (
             <Button asChild>
-              <a href={`/persons/${session.user.id}`}>
+              <a href={`/persons/${session.user.wcaId}`}>
                 {t("layouts.navigation.my_results")}
               </a>
             </Button>

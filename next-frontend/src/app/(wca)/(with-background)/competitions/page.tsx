@@ -41,7 +41,7 @@ import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
-import { useSession } from "next-auth/react";
+import { useSession } from "@/auth.client";
 import { ReactNode, useReducer, useState } from "react";
 import {
   competitionFilterReducer,
@@ -200,7 +200,7 @@ export default function CompetitionsPage() {
     <Container>
       <VStack gap="8" width="full" pt="8">
         <ClientOnly>
-          {session.status === "unauthenticated" && (
+          {!session.isPending && !session.data && (
             <RemovableCard
               imageUrl="newcomer.png"
               heading="Why Compete?"
@@ -589,13 +589,15 @@ function CompetitionTable({
   competitions: components["schemas"]["CompetitionIndex"][];
 }) {
   return (
-    <Table.Root size="xs" variant="competitions" borderWidth="2px">
-      <Table.Body>
-        {competitions.map((comp) => (
-          <CompetitionTableEntry comp={comp} key={comp.id} />
-        ))}
-      </Table.Body>
-    </Table.Root>
+    <Table.ScrollArea>
+      <Table.Root size="xs" variant="competitions" borderWidth="2px">
+        <Table.Body>
+          {competitions.map((comp) => (
+            <CompetitionTableEntry comp={comp} key={comp.id} />
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }
 

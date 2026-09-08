@@ -9,7 +9,6 @@ import {
   VStack,
   Image,
   List,
-  Icon,
   Float,
   LinkBox,
   LinkOverlay,
@@ -48,7 +47,7 @@ export default async function RegionalOrganizations() {
       <VStack align="left">
         <Heading size="5xl">{t("regional_organizations.title")}</Heading>
         <Text>{t("regional_organizations.content")}</Text>
-        <SimpleGrid columns={3} columnGap={4} rowGap={6}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} columnGap={4} rowGap={6}>
           {organizations.map((org) => (
             <LinkBox
               key={org.name}
@@ -59,9 +58,7 @@ export default async function RegionalOrganizations() {
               _hover={{ cursor: org.website ? "pointer" : "default" }}
             >
               <Float offsetX={6}>
-                <Icon asChild size="sm">
-                  <WcaFlag code={org.country_iso2} />
-                </Icon>
+                <WcaFlag code={org.country_iso2} size="sm" />
               </Float>
               {org.logo_url && (
                 <Image

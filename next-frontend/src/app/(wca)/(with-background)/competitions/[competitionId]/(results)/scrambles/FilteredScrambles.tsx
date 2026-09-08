@@ -45,43 +45,45 @@ export default function FilteredScrambles({
               {events.byId[activeEventId].name}{" "}
               {t(`rounds.${roundFormat}.name`)}
             </Heading>
-            <Table.Root>
-              <Table.Header>
-                <Table.Row>
-                  {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-                  <Table.ColumnHeader>Group</Table.ColumnHeader>
-                  <Table.ColumnHeader>#</Table.ColumnHeader>
-                  <Table.ColumnHeader>Scramble</Table.ColumnHeader>
-                </Table.Row>
-              </Table.Header>
+            <Table.ScrollArea>
+              <Table.Root>
+                <Table.Header>
+                  <Table.Row>
+                    {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
+                    <Table.ColumnHeader>Group</Table.ColumnHeader>
+                    <Table.ColumnHeader>#</Table.ColumnHeader>
+                    <Table.ColumnHeader>Scramble</Table.ColumnHeader>
+                  </Table.Row>
+                </Table.Header>
 
-              <Table.Body>
-                {Object.entries(scramblesByGroup).map(
-                  ([groupId, groupScrambles]) =>
-                    groupScrambles.map((scramble, index) => (
-                      <Table.Row key={scramble.id}>
-                        {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                <Table.Body>
+                  {Object.entries(scramblesByGroup).map(
+                    ([groupId, groupScrambles]) =>
+                      groupScrambles.map((scramble, index) => (
+                        <Table.Row key={scramble.id}>
+                          {isAdmin && <Table.Cell>EDIT</Table.Cell>}
 
-                        {/* Only show group_id in the first row of the group */}
-                        {index === 0 && (
-                          <Table.Cell
-                            rowSpan={groupScrambles.length}
-                            verticalAlign="top"
-                          >
-                            {groupId}
+                          {/* Only show group_id in the first row of the group */}
+                          {index === 0 && (
+                            <Table.Cell
+                              rowSpan={groupScrambles.length}
+                              verticalAlign="top"
+                            >
+                              {groupId}
+                            </Table.Cell>
+                          )}
+                          <Table.Cell>
+                            {scramble.is_extra
+                              ? `Extra ${scramble.scramble_num}`
+                              : scramble.scramble_num}
                           </Table.Cell>
-                        )}
-                        <Table.Cell>
-                          {scramble.is_extra
-                            ? `Extra ${scramble.scramble_num}`
-                            : scramble.scramble_num}
-                        </Table.Cell>
-                        <Table.Cell>{scramble.scramble}</Table.Cell>
-                      </Table.Row>
-                    )),
-                )}
-              </Table.Body>
-            </Table.Root>
+                          <Table.Cell>{scramble.scramble}</Table.Cell>
+                        </Table.Row>
+                      )),
+                  )}
+                </Table.Body>
+              </Table.Root>
+            </Table.ScrollArea>
           </Fragment>
         );
       })}
