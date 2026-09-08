@@ -99,7 +99,7 @@ export default function LiveUpdatingResultsTable({
           {title}
         </Heading>
         {isAdminView && <ConnectionPulse connectionState={connectionState} />}
-        <Spacer flex={1} />
+        <Spacer flex={1} hideBelow="md" />
         {!isAdminView && <ConnectionPulse connectionState={connectionState} />}
         {isLinkedRound && (
           <Switch.Root
