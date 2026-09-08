@@ -20,12 +20,14 @@ import { useT } from "@/lib/i18n/useI18n";
 import {
   CompetitionNavTab,
   TabWithChildren,
+  TabWithLink,
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
 import { TFunction } from "i18next";
 import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import { iconMap } from "@/components/icons/iconMap";
+import { Tooltip } from "@/components/ui/tooltip";
 
 function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
@@ -167,15 +169,7 @@ function TabList({
 }) {
   return tabs.map((tab) =>
     "href" in tab ? (
-      <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
-        <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-          <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
-            {t(
-              isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
-            )}
-          </Link>
-        </Text>
-      </Tabs.Trigger>
+      <TabLink key={tab.menuKey} tab={tab} t={t} isAdminRoute={isAdminRoute} />
     ) : (
       <CollapsibleTabGroup
         key={tab.menuKey}
@@ -186,6 +180,46 @@ function TabList({
         onToggle={() => onToggle(tab)}
       />
     ),
+  );
+}
+
+function TabLink({
+  tab,
+  t,
+  isAdminRoute,
+}: {
+  tab: TabWithLink;
+  t: TFunction;
+  isAdminRoute: boolean;
+}) {
+  const label = t(
+    isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
+  );
+
+  const trigger = (
+    <Tabs.Trigger value={tab.menuKey} asChild disabled={tab.disabled}>
+      <Text asChild textStyle="bodyEmphasis" justifyContent="left">
+        {tab.disabled ? (
+          <Text>{label}</Text>
+        ) : tab.externalHref ? (
+          <a href={tab.externalHref} target="_blank" rel="noopener noreferrer">
+            {label}
+          </a>
+        ) : (
+          <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
+            {label}
+          </Link>
+        )}
+      </Text>
+    </Tabs.Trigger>
+  );
+
+  if (!tab.tooltipI18nKey) return trigger;
+
+  return (
+    <Tooltip content={t(tab.tooltipI18nKey)} showArrow openDelay={200}>
+      {trigger}
+    </Tooltip>
   );
 }
 
