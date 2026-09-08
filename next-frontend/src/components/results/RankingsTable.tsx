@@ -20,7 +20,7 @@ export default function RankingsTable({
 
   return (
     <Table.ScrollArea rounded="md">
-      <Table.Root>
+      <Table.Root size="xs" striped>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>

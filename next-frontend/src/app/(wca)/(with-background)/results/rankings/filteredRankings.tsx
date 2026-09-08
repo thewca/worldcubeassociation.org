@@ -66,8 +66,10 @@ export default function FilteredRecords({
   const { t } = useT();
 
   return (
-    <VStack align="left" gap={4}>
-      <Heading size="5xl">{t("results.rankings.title")}</Heading>
+    <VStack align="left" gap={2}>
+      <Heading size={{ base: "3xl", md: "5xl" }}>
+        {t("results.rankings.title")}
+      </Heading>
       {t("results.last_updated_html", { timestamp })}
       <RankingsFilterBox
         filterState={searchParams}
