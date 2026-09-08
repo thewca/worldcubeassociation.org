@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   Badge,
   Box,
-  Button,
   CloseButton,
   Collapsible,
   Drawer,
@@ -12,6 +11,7 @@ import {
   Spacer,
   Tabs,
   Text,
+  TextProps,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
@@ -77,6 +77,14 @@ export default function TabMenu({
         gap="3"
         mb={{ base: "4", md: "0" }}
       >
+        {backHref && (
+          <BackLink
+            href={backHref}
+            label={competitionInfo.name}
+            px="3"
+            py="2"
+          />
+        )}
         <TabList
           tabs={tabs}
           t={t}
@@ -112,28 +120,23 @@ export default function TabMenu({
             <Drawer.Positioner>
               <Drawer.Content>
                 <Drawer.Header>
-                  <Drawer.Title>{competitionInfo.name}</Drawer.Title>
+                  <Drawer.Title>
+                    {backHref ? (
+                      <BackLink
+                        href={backHref}
+                        label={competitionInfo.name}
+                        onClick={() => setDrawerOpen(false)}
+                      />
+                    ) : (
+                      competitionInfo.name
+                    )}
+                  </Drawer.Title>
                   <Drawer.CloseTrigger asChild>
                     <CloseButton />
                   </Drawer.CloseTrigger>
                 </Drawer.Header>
 
                 <Drawer.Body>
-                  {backHref && (
-                    <Button
-                      asChild
-                      variant="ghost"
-                      justifyContent="left"
-                      mb="2"
-                    >
-                      <Link
-                        href={backHref}
-                        onClick={() => setDrawerOpen(false)}
-                      >
-                        <LuArrowLeft /> {competitionInfo.name}
-                      </Link>
-                    </Button>
-                  )}
                   <Tabs.List
                     flexDirection="column"
                     gap="1"
@@ -192,6 +195,33 @@ function TabList({
         onToggle={() => onToggle(tab)}
       />
     ),
+  );
+}
+
+function BackLink({
+  href,
+  label,
+  onClick,
+  ...rest
+}: TextProps & {
+  href: RouteLiteral;
+  label: string;
+  onClick?: () => void;
+}) {
+  return (
+    <Text
+      asChild
+      display="inline-flex"
+      alignItems="center"
+      gap="2"
+      textStyle="bodyEmphasis"
+      {...rest}
+    >
+      <Link href={href} onClick={onClick}>
+        <LuArrowLeft />
+        {label}
+      </Link>
+    </Text>
   );
 }
 
