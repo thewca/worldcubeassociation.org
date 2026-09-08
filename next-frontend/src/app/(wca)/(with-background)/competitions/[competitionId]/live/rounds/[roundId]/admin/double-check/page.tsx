@@ -3,7 +3,7 @@ import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import DoubleCheck from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check/DoubleCheck";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
-import { Container } from "@chakra-ui/react";
+import {} from "@chakra-ui/react";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { DateTime } from "luxon";
@@ -37,7 +37,7 @@ export default async function DoubleCheckPage({
   );
 
   return (
-    <Container>
+    <>
       <RoundInfoProvider roundId={id}>
         <RoundOpenCheck>
           <PermissionCheck
@@ -59,6 +59,6 @@ export default async function DoubleCheckPage({
           </PermissionCheck>
         </RoundOpenCheck>
       </RoundInfoProvider>
-    </Container>
+    </>
   );
 }

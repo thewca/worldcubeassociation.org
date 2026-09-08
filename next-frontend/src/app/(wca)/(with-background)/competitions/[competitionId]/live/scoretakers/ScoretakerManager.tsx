@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Button, Card, Container, Table, Text } from "@chakra-ui/react";
+import { Button, Card, Table, Text } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
 import { toaster } from "@/components/ui/toaster";
@@ -56,7 +56,7 @@ export default function ScoretakerManager({
   const pending = isAdding || isRemoving;
 
   return (
-    <Container>
+    <>
       <Card.Root>
         <Card.Body>
           <Card.Title>Scoretakers</Card.Title>
@@ -116,6 +116,6 @@ export default function ScoretakerManager({
           </Table.Root>
         </Card.Body>
       </Card.Root>
-    </Container>
+    </>
   );
 }

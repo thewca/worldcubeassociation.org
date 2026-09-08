@@ -1,5 +1,4 @@
-import { Heading, Text, Link as ChakraLink } from "@chakra-ui/react";
-import { Container } from "@chakra-ui/react";
+import { Heading, Link as ChakraLink, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
@@ -27,7 +26,7 @@ export default async function CompetitionOverview({
   }
 
   return (
-    <Container centerContent>
+    <VStack align="center">
       <Heading>{competitionInfo.name}</Heading>
       <PermissionCheck
         requiredPermission="canAdministerCompetition"
@@ -48,6 +47,6 @@ export default async function CompetitionOverview({
           </ChakraLink>
         </Text>
       </PermissionCheck>
-    </Container>
+    </VStack>
   );
 }
