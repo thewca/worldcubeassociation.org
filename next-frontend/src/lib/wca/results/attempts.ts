@@ -125,7 +125,9 @@ function cleanAttempts(attempts: number[]) {
   };
 }
 
-export function resultAttempts(result: components["schemas"]["Result"]) {
+export function resultAttempts(
+  result: components["schemas"]["Result"] | components["schemas"]["V1Result"],
+) {
   return cleanAttempts(result.attempts);
 }
 

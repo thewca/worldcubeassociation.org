@@ -472,6 +472,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/persons/{wca_id}/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get results for a person
+         * @description Every result the person has ever earned, optionally narrowed to one event. Public: no authentication required.
+         */
+        get: operations["v1PersonResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/persons/{wca_id}/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get record-setting results for a person
+         * @description The subset of the person's results that set a national, continental or world record, for either single or average. Public: no authentication required.
+         */
+        get: operations["v1PersonRecords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/": {
         parameters: {
             query?: never;
@@ -1384,6 +1424,57 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
+        /** @description A single competitor's result in one round, carrying the competition context needed to render it on its own. This is the result shape for the v1 API; the v0 `Result` and `ExtendedResult` schemas name several of the same fields after database columns and are not interchangeable with it. */
+        V1Result: {
+            /** @example 6709306 */
+            id: number;
+            /**
+             * @description The competitor's position within this round.
+             * @example 1
+             */
+            pos: number;
+            /** @example 84 */
+            best: number;
+            /**
+             * @description Zero when the round's format does not produce an average.
+             * @example 88
+             */
+            average: number;
+            /** @description Attempt values in solve order. Skipped solves are 0 and DNF/DNS are negative, so the best and worst attempt are derived from this list rather than sent as separate indices. */
+            attempts: number[];
+            /** @example 2019WANY36 */
+            wca_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            name: string;
+            /**
+             * @description ISO 3166-1 alpha-2 code of the country the competitor represented.
+             * @example CN
+             */
+            country_iso2: string;
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /**
+             * @description The competition's short name, as used in table cells. Distinct from its full name, which this endpoint does not carry.
+             * @example Hangzhou Open 2024
+             */
+            competition_short_name: string;
+            /**
+             * Format: date
+             * @example 2024-11-16
+             */
+            competition_start_date: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example f */
+            round_type_id: string;
+            /** @example a */
+            format_id: string;
+            /** @example WR */
+            regional_single_record?: string;
+            /** @example NR */
+            regional_average_record?: string;
+        };
+        V1Results: components["schemas"]["V1Result"][];
         TeamMembership: {
             id: number;
             /** @example wst */
@@ -2783,6 +2874,66 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["LivePerson"];
                 };
+            };
+        };
+    };
+    v1PersonResults: {
+        parameters: {
+            query?: {
+                event_id?: string;
+            };
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1Results"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    v1PersonRecords: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1Results"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
