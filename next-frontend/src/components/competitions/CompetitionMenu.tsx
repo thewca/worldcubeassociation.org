@@ -29,7 +29,11 @@ export default function CompetitionMenu({
   }
 
   return (
-    <TabMenu competitionInfo={competitionInfo} tabs={tabs}>
+    <TabMenu
+      competitionInfo={competitionInfo}
+      tabs={tabs}
+      customTabs={competitionInfo.tab_names}
+    >
       {children}
     </TabMenu>
   );

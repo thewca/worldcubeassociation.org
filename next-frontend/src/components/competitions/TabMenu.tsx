@@ -8,6 +8,7 @@ import {
   Collapsible,
   Drawer,
   IconButton,
+  Separator,
   Spacer,
   Tabs,
   Text,
@@ -27,6 +28,7 @@ import { TFunction } from "i18next";
 import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import { iconMap } from "@/components/icons/iconMap";
+import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 
 function activityCodeFromPath(path: string) {
@@ -39,11 +41,13 @@ export default function TabMenu({
   children,
   tabs,
   backHref,
+  customTabs = [],
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
   backHref?: RouteLiteral;
+  customTabs?: string[];
 }) {
   const pathName = usePathname();
   const { t } = useT();
@@ -90,6 +94,8 @@ export default function TabMenu({
           onToggle={(tab: CompetitionNavTab) =>
             setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
           }
+          customTabs={customTabs}
+          competitionId={competitionInfo.id}
         />
       </Tabs.List>
       <Box hideFrom="md" mb="4">
@@ -151,6 +157,8 @@ export default function TabMenu({
                         prev === tab.menuKey ? null : tab.menuKey,
                       )
                     }
+                    customTabs={customTabs}
+                    competitionId={competitionInfo.id}
                   />
                 </Tabs.List>
               </Drawer.Body>
@@ -171,26 +179,62 @@ function TabList({
   isAdminRoute,
   onToggle,
   openGroup,
+  customTabs,
+  competitionId,
 }: {
   tabs: CompetitionNavTab[];
   t: TFunction;
   isAdminRoute: boolean;
   openGroup: string | null;
   onToggle: (tab: CompetitionNavTab) => void;
+  customTabs: string[];
+  competitionId: string;
 }) {
-  return tabs.map((tab) =>
-    "href" in tab ? (
-      <TabLink key={tab.menuKey} tab={tab} t={t} isAdminRoute={isAdminRoute} />
-    ) : (
-      <CollapsibleTabGroup
-        key={tab.menuKey}
-        tab={tab}
-        t={t}
-        isAdminRoute={isAdminRoute}
-        isOpen={openGroup === tab.menuKey}
-        onToggle={() => onToggle(tab)}
-      />
-    ),
+  return (
+    <>
+      {tabs.map((tab) =>
+        "href" in tab ? (
+          <TabLink
+            key={tab.menuKey}
+            tab={tab}
+            t={t}
+            isAdminRoute={isAdminRoute}
+          />
+        ) : (
+          <CollapsibleTabGroup
+            key={tab.menuKey}
+            tab={tab}
+            t={t}
+            isAdminRoute={isAdminRoute}
+            isOpen={openGroup === tab.menuKey}
+            onToggle={() => onToggle(tab)}
+          />
+        ),
+      )}
+      {customTabs.length > 0 && <Separator />}
+      {customTabs.map((tabName) => (
+        <Tabs.Trigger
+          key={tabName}
+          value={encodeURIComponent(tabName)}
+          minHeight="fit-content"
+          asChild
+        >
+          <Text textStyle="bodyEmphasis" asChild justifyContent="left">
+            <Link
+              href={route({
+                pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                query: {
+                  competitionId,
+                  tabName: encodeURIComponent(tabName),
+                },
+              })}
+            >
+              {tabName}
+            </Link>
+          </Text>
+        </Tabs.Trigger>
+      ))}
+    </>
   );
 }
 
