@@ -16,17 +16,17 @@ export default function CompetitionMenu({
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  const isOngoing =
-    !hasPassedEndOfDay(competitionInfo.end_date) || LIVE_RESULT_BETA;
+  const hasEnded =
+    hasPassedEndOfDay(competitionInfo.end_date) && !LIVE_RESULT_BETA;
+
+  const isOngoing = !hasEnded && hasPassed(competitionInfo.start_date);
 
   // TODO: Differentiate if the results have been posted
-  const tabs = isOngoing
-    ? beforeCompetitionTabs(competitionInfo)
-    : afterCompetitionTabs(competitionInfo);
+  const baseTabs = hasEnded
+    ? afterCompetitionTabs(competitionInfo)
+    : beforeCompetitionTabs(competitionInfo);
 
-  if (isOngoing && hasPassed(competitionInfo.start_date)) {
-    tabs.push(liveTab(competitionInfo));
-  }
+  const tabs = isOngoing ? [...baseTabs, liveTab(competitionInfo)] : baseTabs;
 
   return (
     <TabMenu
