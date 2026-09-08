@@ -1,15 +1,14 @@
 // Sanitizes a mongodump `users.bson` file in place before it is published to S3.
 //
-// The Payload `users` collection is augmented by payload-authjs, which embeds
-// auth state directly in each user document:
-//   - `email`                — the user's real email address (PII)
-//   - `accounts`             — OAuth accounts incl. access_token/refresh_token/id_token
-//   - `sessions`             — active session tokens
-//   - `verificationTokens`   — email verification tokens
+// Better Auth stores sessions, accounts and verification tokens in their own collections,
+// which export-dump.sh deletes from the dump outright. What is left in `users` is:
+//   - `email`    — the user's real email address (PII)
+//   - `accounts` / `sessions` — embedded auth state on rows written by the old
+//                  payload-authjs setup, which survive until their owner next signs in
 //
-// This script replaces every email with `<user_id>@worldcubeassociation.org`
-// and strips the embedded credential fields, so the public dump consumed by
-// next-frontend/import-dump.sh contains no real emails or secrets.
+// This script replaces every email with `<user_id>@worldcubeassociation.org` and strips
+// those legacy embedded fields, so the public dump consumed by next-frontend/import-dump.sh
+// contains no real emails or secrets.
 //
 // Usage: node sanitize-dump.mjs path/to/users.bson
 
@@ -22,18 +21,8 @@ if (!usersPath) {
   process.exit(1);
 }
 
-// Fields that hold credentials/PII and must never leave the production VPC.
-const SECRET_FIELDS = [
-  "accounts",
-  // These are currently not saved in payload, but still listing them if they ever are
-  "sessions",
-  "verificationTokens",
-  // Local-strategy fields, in case auth is ever switched on:
-  "hash",
-  "salt",
-  "resetPasswordToken",
-  "resetPasswordExpiration",
-];
+// Legacy payload-authjs fields that hold credentials and must never leave the production VPC.
+const SECRET_FIELDS = ["accounts", "sessions", "verificationTokens"];
 
 const buf = readFileSync(usersPath);
 
