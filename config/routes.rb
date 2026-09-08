@@ -369,9 +369,10 @@ Rails.application.routes.draw do
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
 
-    # While this is the start of a v1 API, this is currently not usable by outside developers as
-    # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
+      get '/persons/:wca_id/results' => 'persons#results', as: :person_results
+      get '/persons/:wca_id/records' => 'persons#records', as: :person_records
+
       resources :competitions, only: [] do
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         namespace :live do

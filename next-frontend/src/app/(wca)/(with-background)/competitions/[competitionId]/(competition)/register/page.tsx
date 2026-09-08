@@ -2,7 +2,7 @@ import { getSession } from "@/auth";
 import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
-import RegistrationPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/RegistrationPanel";
+import RegistrationPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/(competition)/register/RegistrationPanel";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { RegistrationCard } from "@/components/competitions/Cards";
 import { ChakraMarkdown } from "@/components/Markdown";

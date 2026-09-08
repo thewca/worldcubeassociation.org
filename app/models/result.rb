@@ -58,12 +58,21 @@ class Result < ApplicationRecord
   alias_attribute :wca_id, :person_id
 
   delegate :iso2, to: :country, prefix: true
+  delegate :short_name, :start_date, to: :competition, prefix: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id round_id pos best best_index worst_index average],
     methods: %w[name country_iso2 competition_id event_id
                 round_type_id format_id wca_id attempts best_index
                 worst_index regional_single_record regional_average_record],
+  }.freeze
+
+  # `best_index` / `worst_index` are omitted deliberately: they are derivable from `attempts`.
+  V1_SERIALIZE_OPTIONS = {
+    only: %w[id pos best average],
+    methods: %w[wca_id name country_iso2 competition_id competition_short_name competition_start_date
+                event_id round_type_id format_id attempts
+                regional_single_record regional_average_record],
   }.freeze
 
   def serializable_hash(options = nil)
