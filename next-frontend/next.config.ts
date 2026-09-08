@@ -90,6 +90,10 @@ const nextConfig: NextConfig = {
       new URL("https://avatars.worldcubeassociation.org/**"),
     ],
   },
+  // Set at build time by .github/actions/build-js-image; the matching files are synced
+  //   to the assets bucket in the same step. Unset in development, where the Next server
+  //   serves /_next/static itself.
+  assetPrefix: process.env.NEXT_ASSET_PREFIX,
   output: "standalone",
   // Explicitly include newrelic and every transitive dependency in the
   // standalone output. Next.js's file tracer misses packages loaded via
