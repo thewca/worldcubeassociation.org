@@ -110,67 +110,69 @@ export function ByPersonTable({
   isAdmin?: boolean;
 }) {
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-          <Table.ColumnHeader>Event</Table.ColumnHeader>
-          <Table.ColumnHeader>Round</Table.ColumnHeader>
-          <Table.ColumnHeader>#</Table.ColumnHeader>
-          <Table.ColumnHeader>Best</Table.ColumnHeader>
-          <Table.ColumnHeader>Average</Table.ColumnHeader>
-          <Table.ColumnHeader>Representing</Table.ColumnHeader>
-          <Table.ColumnHeader colSpan={5} textAlign="left">
-            Solves
-          </Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
+    <Table.ScrollArea rounded="md">
+      <Table.Root>
+        <Table.Header>
+          <Table.Row>
+            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
+            <Table.ColumnHeader>Event</Table.ColumnHeader>
+            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            <Table.ColumnHeader>#</Table.ColumnHeader>
+            <Table.ColumnHeader>Best</Table.ColumnHeader>
+            <Table.ColumnHeader>Average</Table.ColumnHeader>
+            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            <Table.ColumnHeader colSpan={5} textAlign="left">
+              Solves
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
 
-      <Table.Body>
-        {results.map((competitorResult) => {
-          const eventId = competitorResult.event_id;
-          const { definedAttempts, bestResultIndex, worstResultIndex } =
-            resultAttempts(competitorResult);
-          return (
-            <Table.Row key={competitorResult.id}>
-              {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-              <Table.Cell>{events.byId[eventId].name}</Table.Cell>
-              <Table.Cell>
-                {t(`rounds.${competitorResult.round_type_id}.name`)}
-              </Table.Cell>
-              <Table.Cell>{competitorResult.pos}</Table.Cell>
-              <Table.Cell>
-                <WithRecordTag
+        <Table.Body>
+          {results.map((competitorResult) => {
+            const eventId = competitorResult.event_id;
+            const { definedAttempts, bestResultIndex, worstResultIndex } =
+              resultAttempts(competitorResult);
+            return (
+              <Table.Row key={competitorResult.id}>
+                {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                <Table.Cell>{events.byId[eventId].name}</Table.Cell>
+                <Table.Cell>
+                  {t(`rounds.${competitorResult.round_type_id}.name`)}
+                </Table.Cell>
+                <Table.Cell>{competitorResult.pos}</Table.Cell>
+                <Table.Cell>
+                  <WithRecordTag
+                    recordTag={competitorResult.regional_single_record}
+                  >
+                    {formatAttemptResult(competitorResult.best, eventId)}
+                  </WithRecordTag>
+                </Table.Cell>
+                <Table.Cell>
+                  <WithRecordTag
+                    recordTag={competitorResult.regional_average_record}
+                  >
+                    {formatAttemptResult(competitorResult.average, eventId)}
+                  </WithRecordTag>
+                </Table.Cell>
+                <Table.Cell>
+                  <HStack>
+                    <WcaFlag code={competitorResult.country_iso2} size="sm" />
+                    <CountryMap code={competitorResult.country_iso2} t={t} />
+                  </HStack>
+                </Table.Cell>
+                <AttemptsCells
+                  attempts={definedAttempts}
+                  bestResultIndex={bestResultIndex}
+                  worstResultIndex={worstResultIndex}
+                  eventId={eventId}
                   recordTag={competitorResult.regional_single_record}
-                >
-                  {formatAttemptResult(competitorResult.best, eventId)}
-                </WithRecordTag>
-              </Table.Cell>
-              <Table.Cell>
-                <WithRecordTag
-                  recordTag={competitorResult.regional_average_record}
-                >
-                  {formatAttemptResult(competitorResult.average, eventId)}
-                </WithRecordTag>
-              </Table.Cell>
-              <Table.Cell>
-                <HStack>
-                  <WcaFlag code={competitorResult.country_iso2} size="sm" />
-                  <CountryMap code={competitorResult.country_iso2} t={t} />
-                </HStack>
-              </Table.Cell>
-              <AttemptsCells
-                attempts={definedAttempts}
-                bestResultIndex={bestResultIndex}
-                worstResultIndex={worstResultIndex}
-                eventId={eventId}
-                recordTag={competitorResult.regional_single_record}
-              />
-            </Table.Row>
-          );
-        })}
-      </Table.Body>
-    </Table.Root>
+                />
+              </Table.Row>
+            );
+          })}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }
 
@@ -189,7 +191,7 @@ export function ByCompetitionTable({
   );
 
   return (
-    <Table.ScrollArea rounded="md" maxW="full">
+    <Table.ScrollArea rounded="md">
       <Table.Root>
         <Table.Header>
           <Table.Row>
