@@ -278,8 +278,12 @@ end
 Warden::Manager.after_set_user except: :fetch do |user, warden, _opts|
   user.update_attribute(:session_validity_token, Devise.friendly_token) if user.session_validity_token.nil?
   warden.raw_session["validity_token"] = user.session_validity_token
+  warden.raw_session["session_started_at"] = (user.remembered_session_started_at || Time.current).to_f
 end
 
 Warden::Manager.after_fetch do |user, warden, _opts|
-  warden.logout unless user.session_validity_token == warden.raw_session["validity_token"]
+  # Existing sessions start their absolute timeout on their first request after deployment.
+  session_started_at = warden.raw_session["session_started_at"] ||= Time.current.to_f
+  session_expired = Time.zone.at(session_started_at.to_f) <= User::ABSOLUTE_SESSION_TIMEOUT.ago
+  warden.logout if user.session_validity_token != warden.raw_session["validity_token"] || session_expired
 end
