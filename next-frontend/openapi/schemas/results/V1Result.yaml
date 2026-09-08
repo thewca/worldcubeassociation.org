@@ -14,7 +14,7 @@ required:
   - name
   - country_iso2
   - competition_id
-  - competition_name
+  - competition_short_name
   - competition_start_date
   - event_id
   - round_type_id
@@ -55,9 +55,11 @@ properties:
   competition_id:
     type: string
     example: "HangzhouOpen2024"
-  competition_name:
+  competition_short_name:
     type: string
-    description: The competition's short display name.
+    description: >-
+      The competition's short name, as used in table cells. Distinct from its full name, which
+      this endpoint does not carry.
     example: "Hangzhou Open 2024"
   competition_start_date:
     type: string

@@ -224,7 +224,7 @@ export function ByCompetitionTable({
                             },
                           })}
                         >
-                          {competitorResult.competition_name}
+                          {competitorResult.competition_short_name}
                         </NextLink>
                       </Link>
                     )}

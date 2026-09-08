@@ -25,7 +25,7 @@ RSpec.describe "API v1 Persons" do
         "name" => person.name,
         "country_iso2" => result.country_iso2,
         "competition_id" => result.competition_id,
-        "competition_name" => result.competition.cell_name,
+        "competition_short_name" => result.competition.short_name,
         "competition_start_date" => result.competition.start_date.to_s,
       )
     end

@@ -1454,10 +1454,10 @@ export interface components {
             /** @example HangzhouOpen2024 */
             competition_id: string;
             /**
-             * @description The competition's short display name.
+             * @description The competition's short name, as used in table cells. Distinct from its full name, which this endpoint does not carry.
              * @example Hangzhou Open 2024
              */
-            competition_name: string;
+            competition_short_name: string;
             /**
              * Format: date
              * @example 2024-11-16
