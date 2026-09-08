@@ -39,13 +39,11 @@ export default function TabMenu({
   children,
   tabs,
   backHref,
-  mobileDrawer = false,
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
   backHref?: RouteLiteral;
-  mobileDrawer?: boolean;
 }) {
   const pathName = usePathname();
   const { t } = useT();
@@ -70,12 +68,11 @@ export default function TabMenu({
       unmountOnExit
     >
       <Tabs.List
-        width={{ base: "full", md: "fit-content" }}
+        width="fit-content"
         min-width="3xs"
         textAlign="start"
-        hideBelow={mobileDrawer ? "md" : undefined}
+        hideBelow="md"
         gap="3"
-        mb={{ base: "4", md: "0" }}
       >
         {backHref && (
           <BackLink
@@ -95,74 +92,72 @@ export default function TabMenu({
           }
         />
       </Tabs.List>
-      {mobileDrawer && (
-        <Box hideFrom="md" mb="4">
-          <Drawer.Root
-            open={drawerOpen}
-            onOpenChange={(e) => setDrawerOpen(e.open)}
-            placement="start"
-          >
-            <Drawer.Trigger asChild>
-              <IconButton
-                aria-label="Open menu"
-                size="lg"
-                position="fixed"
-                right="4"
-                bottom="4"
-                zIndex="docked"
-                rounded="full"
-                shadow="lg"
-              >
-                <LuAlignJustify />
-              </IconButton>
-            </Drawer.Trigger>
+      <Box hideFrom="md" mb="4">
+        <Drawer.Root
+          open={drawerOpen}
+          onOpenChange={(e) => setDrawerOpen(e.open)}
+          placement="start"
+        >
+          <Drawer.Trigger asChild>
+            <IconButton
+              aria-label="Open menu"
+              size="lg"
+              position="fixed"
+              right="4"
+              bottom="4"
+              zIndex="docked"
+              rounded="full"
+              shadow="lg"
+            >
+              <LuAlignJustify />
+            </IconButton>
+          </Drawer.Trigger>
 
-            <Drawer.Backdrop />
-            <Drawer.Positioner>
-              <Drawer.Content>
-                <Drawer.Header>
-                  <Drawer.Title>
-                    {backHref ? (
-                      <BackLink
-                        href={backHref}
-                        label={competitionInfo.name}
-                        onClick={() => setDrawerOpen(false)}
-                      />
-                    ) : (
-                      competitionInfo.name
-                    )}
-                  </Drawer.Title>
-                  <Drawer.CloseTrigger asChild>
-                    <CloseButton />
-                  </Drawer.CloseTrigger>
-                </Drawer.Header>
-
-                <Drawer.Body>
-                  <Tabs.List
-                    flexDirection="column"
-                    gap="1"
-                    borderInlineEnd="none"
-                    w="100%"
-                    bg="none"
-                  >
-                    <TabList
-                      tabs={tabs}
-                      t={t}
-                      isAdminRoute={isAdminRoute}
-                      openGroup={openGroup}
-                      onToggle={(tab: CompetitionNavTab) =>
-                        setOpenGroup((prev) =>
-                          prev === tab.menuKey ? null : tab.menuKey,
-                        )
-                      }
+          <Drawer.Backdrop />
+          <Drawer.Positioner>
+            <Drawer.Content>
+              <Drawer.Header>
+                <Drawer.Title>
+                  {backHref ? (
+                    <BackLink
+                      href={backHref}
+                      label={competitionInfo.name}
+                      onClick={() => setDrawerOpen(false)}
                     />
-                  </Tabs.List>
-                </Drawer.Body>
-              </Drawer.Content>
-            </Drawer.Positioner>
-          </Drawer.Root>
-        </Box>
-      )}
+                  ) : (
+                    competitionInfo.name
+                  )}
+                </Drawer.Title>
+                <Drawer.CloseTrigger asChild>
+                  <CloseButton />
+                </Drawer.CloseTrigger>
+              </Drawer.Header>
+
+              <Drawer.Body>
+                <Tabs.List
+                  flexDirection="column"
+                  gap="1"
+                  borderInlineEnd="none"
+                  w="100%"
+                  bg="none"
+                >
+                  <TabList
+                    tabs={tabs}
+                    t={t}
+                    isAdminRoute={isAdminRoute}
+                    openGroup={openGroup}
+                    onToggle={(tab: CompetitionNavTab) =>
+                      setOpenGroup((prev) =>
+                        prev === tab.menuKey ? null : tab.menuKey,
+                      )
+                    }
+                  />
+                </Tabs.List>
+              </Drawer.Body>
+            </Drawer.Content>
+          </Drawer.Positioner>
+        </Drawer.Root>
+      </Box>
       <Tabs.Content width="full" value={currentPath!}>
         {children}
       </Tabs.Content>

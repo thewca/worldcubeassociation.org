@@ -21,7 +21,6 @@ export default function LiveTabs({
     <TabMenu
       tabs={tabs}
       competitionInfo={competitionInfo}
-      mobileDrawer
       backHref={route({
         pathname: "/competitions/[competitionId]",
         query: { competitionId: competitionInfo.id },

@@ -986,11 +986,6 @@ const customConfig = defineConfig({
                 position: { base: "static", md: "sticky" },
                 top: "3",
               },
-              content: {
-                _vertical: {
-                  ps: { base: "0", md: "var(--tabs-content-padding)" },
-                },
-              },
             },
           },
         },
