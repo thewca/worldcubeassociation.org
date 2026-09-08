@@ -105,12 +105,13 @@ export default function TabMenu({
             <Drawer.Trigger asChild>
               <IconButton
                 aria-label="Open menu"
-                size="sm"
+                size="lg"
                 position="fixed"
-                left="3"
-                top="3"
-                colorPalette="bg"
-                variant="ghost"
+                right="4"
+                bottom="4"
+                zIndex="docked"
+                rounded="full"
+                shadow="lg"
               >
                 <LuAlignJustify />
               </IconButton>
