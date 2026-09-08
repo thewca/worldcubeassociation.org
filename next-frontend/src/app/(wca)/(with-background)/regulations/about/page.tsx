@@ -1,6 +1,6 @@
 "use server";
 
-import { Container, Heading, VStack, Card } from "@chakra-ui/react";
+import { Card, Heading, VStack } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { ChakraMarkdown } from "@/components/Markdown";
@@ -31,20 +31,18 @@ export default async function AboutTheRegulations() {
   const { t } = await getT();
 
   return (
-    <Container bg="bg">
-      <VStack gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">{t("about_regulations.title")}</Heading>
-        {aboutRegulationsItems.map((item) => (
-          <Card.Root key={item.id}>
-            <Card.Body>
-              <Card.Title>{item.title}</Card.Title>
-              <ChakraMarkdown paragraphAs={Card.Description}>
-                {item.contentMarkdown}
-              </ChakraMarkdown>
-            </Card.Body>
-          </Card.Root>
-        ))}
-      </VStack>
-    </Container>
+    <VStack gap="8" width="full" pt="8" alignItems="left">
+      <Heading size="5xl">{t("about_regulations.title")}</Heading>
+      {aboutRegulationsItems.map((item) => (
+        <Card.Root key={item.id}>
+          <Card.Body>
+            <Card.Title>{item.title}</Card.Title>
+            <ChakraMarkdown paragraphAs={Card.Description}>
+              {item.contentMarkdown}
+            </ChakraMarkdown>
+          </Card.Body>
+        </Card.Root>
+      ))}
+    </VStack>
   );
 }

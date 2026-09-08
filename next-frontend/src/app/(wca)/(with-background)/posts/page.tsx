@@ -1,4 +1,4 @@
-import { Card, Container, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Card, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getPayload } from "payload";
 import config from "@payload-config";
@@ -32,7 +32,7 @@ export default async function AnnouncementsPage({
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
 
   return (
-    <Container py={8}>
+    <Box py={8}>
       <Card.Root size="md">
         <Card.Header>
           <Heading textStyle="h1">Announcements</Heading>
@@ -61,6 +61,6 @@ export default async function AnnouncementsPage({
           </VStack>
         </Card.Body>
       </Card.Root>
-    </Container>
+    </Box>
   );
 }

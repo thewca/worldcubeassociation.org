@@ -1,15 +1,15 @@
 import { getSession } from "@/auth";
 import getPermissions from "@/lib/wca/permissions.server";
 import {
-  Button,
-  Code,
-  Container,
-  Text,
-  Link as ChakraLink,
-  HStack,
-  Card,
-  SimpleGrid,
   Box,
+  Button,
+  Card,
+  Code,
+  HStack,
+  Link as ChakraLink,
+  SimpleGrid,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
 
@@ -27,7 +27,7 @@ export default async function Dashboard() {
   const permissions = await getPermissions();
 
   return (
-    <Container centerContent gap="3">
+    <VStack align="center" gap="3">
       {session && (
         <>
           <Text>Welcome, {session.user?.name}</Text>
@@ -108,6 +108,6 @@ export default async function Dashboard() {
           </Box>
         </Card.Body>
       </Card.Root>
-    </Container>
+    </VStack>
   );
 }

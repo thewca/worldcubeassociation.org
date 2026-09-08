@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
@@ -43,12 +43,12 @@ export default async function CompetitionLayout({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Container pt="8">
+    <Box pt="8">
       <ConfirmProvider>
         <CompetitionMenu competitionInfo={competitionInfo}>
           {children}
         </CompetitionMenu>
       </ConfirmProvider>
-    </Container>
+    </Box>
   );
 }

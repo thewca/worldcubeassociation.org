@@ -1,4 +1,4 @@
-import { Container, Tabs, Text, Card } from "@chakra-ui/react";
+import { Card, Tabs, Text, VStack } from "@chakra-ui/react";
 import { getPersonInfo } from "@/lib/wca/persons/getPersonInfo";
 import ProfileCard from "@/components/persons/ProfileCard";
 import { GridItem, SimpleGrid } from "@chakra-ui/react";
@@ -112,7 +112,7 @@ export default async function PersonOverview({
   );
 
   return (
-    <Container centerContent>
+    <VStack align="center">
       {/* Profile Section */}
       <SimpleGrid
         gap={8}
@@ -224,6 +224,6 @@ export default async function PersonOverview({
           </SimpleGrid>
         </GridItem>
       </SimpleGrid>
-    </Container>
+    </VStack>
   );
 }
