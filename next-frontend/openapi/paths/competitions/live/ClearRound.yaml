@@ -24,8 +24,11 @@ put:
             required:
               - status
               - recreated_rows
+              - state
             properties:
               status:
                 type: string
               recreated_rows:
                 type: number
+              state:
+                $ref: '../../../schemas/live/AdminRounds/RoundState.yaml'

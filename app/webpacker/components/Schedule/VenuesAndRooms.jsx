@@ -9,9 +9,10 @@ import I18n from '../../lib/i18n';
 
 export default function VenuesAndRooms({
   venues,
+  anyVenueIsActive,
   activeVenueOrNull,
   activeVenueIndex,
-  setActiveVenueIndex,
+  onVenueClick,
   timeZoneCount,
   rooms,
   activeRoomIds,
@@ -21,12 +22,12 @@ export default function VenuesAndRooms({
 }) {
   const venueCount = venues.length;
 
-  const setActiveVenueIndexAndResetRooms = (newVenueIndex) => {
+  const selectVenueAndResetRooms = (newVenueIndex) => {
     const newVenues = newVenueIndex > -1 ? [venues[newVenueIndex]] : venues;
     const ids = newVenues.flatMap((venue) => venue.rooms).map((room) => room.id);
     updateRooms(ids);
 
-    setActiveVenueIndex(newVenueIndex);
+    onVenueClick(newVenueIndex);
   };
 
   const setTimeZoneForRoom = (roomId) => {
@@ -39,7 +40,7 @@ export default function VenuesAndRooms({
     }
   };
 
-  const [showTimeZoneButton, setShowTimeZoneButton] = useState(false);
+  const [showTimeZoneButton, setShowTimeZoneButton] = useState(timeZoneCount > 1);
 
   return (
     <>
@@ -53,26 +54,28 @@ export default function VenuesAndRooms({
           <Menu.Item
             name={I18n.t('competitions.schedule.all_venues')}
             active={activeVenueIndex === -1}
-            onClick={() => setActiveVenueIndexAndResetRooms(-1)}
+            onClick={() => selectVenueAndResetRooms(-1)}
           />
           {venues.map((venue, index) => (
             <Menu.Item
               key={venue.id}
               name={venue.name}
               active={index === activeVenueIndex}
-              onClick={() => setActiveVenueIndexAndResetRooms(index)}
+              onClick={() => selectVenueAndResetRooms(index)}
             />
           ))}
         </Menu>
       )}
 
-      <VenueInfo
-        activeVenueOrNull={activeVenueOrNull}
-        venueCount={venueCount}
-        timeZoneCount={timeZoneCount}
-      />
+      {anyVenueIsActive && (
+        <VenueInfo
+          activeVenueOrNull={activeVenueOrNull}
+          venueCount={venueCount}
+          timeZoneCount={timeZoneCount}
+        />
+      )}
 
-      {rooms.length > 1 && (
+      {anyVenueIsActive && rooms.length > 1 && (
         <Segment>
           <Header size="small">
             {I18n.t('competitions.schedule.rooms_panel.title')}
@@ -91,7 +94,11 @@ export default function VenuesAndRooms({
             <Button
               toggle
               size="mini"
-              content={I18n.t('competitions.schedule.rooms_panel.show_buttons')}
+              content={
+                I18n.t(
+                  showTimeZoneButton ? 'competitions.schedule.rooms_panel.hide_buttons' : 'competitions.schedule.rooms_panel.show_buttons',
+                )
+              }
               active={showTimeZoneButton}
               onClick={() => setShowTimeZoneButton((buttonState) => !buttonState)}
             />

@@ -28,7 +28,8 @@ class Event < ApplicationRecord
 
   # Pay special attention to the difference between .. (two dots) and ... (three dots)
   # which map to different operators < and <= in SQL (inclusive VS exclusive range)
-  scope :official, -> { where(rank: ...990) }
+  scope :official, -> { where(rank: ...800) }
+  scope :official_with_future, -> { where(rank: ...990) }
   scope :deprecated, -> { where(rank: 990..999) }
 
   def recommended_format

@@ -19,7 +19,9 @@ module Taggable
     attr_writer :tags
 
     def tags
-      @tags ||= item_tags.pluck(:tag).join(",")
+      # Reuse the loaded association when the caller eager loaded the tags (e.g. when
+      # serializing many records); `pluck` would otherwise issue a query per record.
+      @tags ||= (item_tags.loaded? ? item_tags.map(&:tag) : item_tags.pluck(:tag)).join(",")
     end
 
     def tags_array

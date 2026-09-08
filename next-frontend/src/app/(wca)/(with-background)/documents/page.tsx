@@ -53,7 +53,7 @@ export default async function Documents() {
               <LinkBox asChild>
                 <Accordion.ItemTrigger>
                   <LinkOverlay asChild>
-                    <Link href={doc.link} color="blue.600" variant="underline">
+                    <Link href={doc.link} variant="underline">
                       <IconDisplay name={doc.icon} /> {doc.title}
                     </Link>
                   </LinkOverlay>
@@ -73,11 +73,7 @@ export default async function Documents() {
                       .toSorted((a, b) => a.title.localeCompare(b.title))
                       .map((doc) => (
                         <List.Item key={doc.id}>
-                          <Link
-                            href={doc.link}
-                            color="blue.600"
-                            variant="underline"
-                          >
+                          <Link href={doc.link} variant="underline">
                             {doc.title}
                           </Link>
                         </List.Item>

@@ -4,12 +4,13 @@ import {
   ButtonGroup,
   Container,
   IconButton,
+  Link,
   Pagination,
   Table,
   VStack,
   Heading,
   Input,
-  HStack,
+  Stack,
   Text,
   Select,
   createListCollection,
@@ -17,14 +18,19 @@ import {
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { useAPIClient } from "@/lib/wca/useAPI";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { useCallback, useMemo, useState } from "react";
+import { Suspense, useState } from "react";
+import NextLink from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { route } from "nextjs-routes";
 import Loading from "@/components/ui/loading";
 import _ from "lodash";
+import { Trans } from "react-i18next";
 import {
   CompetitionTag,
-  MiscTag,
-  RegulationTag,
+  IncidentTags,
+  type TagAction,
 } from "@/components/incidents/Tags";
+import { useT } from "@/lib/i18n/useI18n";
 
 const itemsPerPageChoices = createListCollection({
   items: [5, 10, 15, 20, 30, 40],
@@ -32,12 +38,34 @@ const itemsPerPageChoices = createListCollection({
   itemToString: (n) => n.toString(),
 });
 
+const filterRoute = (tags: string[]) =>
+  route({
+    pathname: "/incidents",
+    query: tags.length > 0 ? { tags: tags.join(",") } : {},
+  });
+
+// `useSearchParams` opts the tree into client-side rendering, which Next requires a Suspense
+// boundary for.
 export default function IncidentsPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <IncidentsLog />
+    </Suspense>
+  );
+}
+
+function IncidentsLog() {
+  const { t } = useT();
   const api = useAPIClient();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [query, setQuery] = useState<string | undefined>(undefined);
-  const [searchTags, setSearchTags] = useState<string[]>([]);
+
+  // The tag filter lives in the URL so that it stays shareable and so that linking to
+  // `/incidents?tags=...` from a single incident actually applies the filter.
+  const searchTags = searchParams.get("tags")?.split(",").filter(Boolean) ?? [];
 
   // TODO GB: Use "proper" pagination for this endpoint (inifinite?) like in competition_index
   //   or at least fall back to API-typed queryOptions
@@ -61,43 +89,27 @@ export default function IncidentsPage() {
     placeholderData: keepPreviousData,
   });
 
-  const { totalEntries, totalPages } = useMemo(() => {
-    if (!incidentQuery) {
-      return {
-        totalPages: 0,
-        totalEntries: 0,
-        entriesPerPage: 0,
-      };
-    } else {
-      const headers = incidentQuery.response.headers;
-      const totalEntries = parseInt(headers.get("total") ?? "0", 10);
-      const entriesPerPage = parseInt(
-        headers.get("per-page") ?? `${itemsPerPage}`,
-        10,
-      );
-      const totalPages = Math.ceil(totalEntries / entriesPerPage);
-
-      return {
-        totalEntries,
-        entriesPerPage,
-        totalPages,
-      };
-    }
-  }, [incidentQuery, itemsPerPage]);
+  // Rails::Pagination reports the totals in the response headers rather than the body.
+  const headers = incidentQuery?.response.headers;
+  const totalEntries = parseInt(headers?.get("total") ?? "0", 10);
+  const entriesPerPage = parseInt(
+    headers?.get("per-page") ?? `${itemsPerPage}`,
+    10,
+  );
+  const totalPages = Math.ceil(totalEntries / entriesPerPage);
 
   const [topEntryIndex, bottomEntryIndex] = [
     (page - 1) * itemsPerPage,
     Math.min(page * itemsPerPage, totalEntries) - 1,
   ];
 
-  const addTagToSearch = useCallback(
-    (tag: string) => {
-      setSearchTags(_.xor(searchTags, [tag]));
-    },
-    [searchTags],
-  );
+  const tagAction: TagAction = {
+    kind: "toggleFilter",
+    onToggle: (tag) =>
+      router.replace(filterRoute(_.xor(searchTags, [tag])), { scroll: false }),
+  };
 
-  const incidents = useMemo(() => incidentQuery?.data ?? [], [incidentQuery]);
+  const incidents = incidentQuery?.data ?? [];
 
   if (isLoading) {
     return <Loading />;
@@ -105,121 +117,144 @@ export default function IncidentsPage() {
 
   return (
     <Container bg="bg">
-      <VStack align="left">
-        <Heading size="5xl">Incidents Log</Heading>
+      <VStack align="left" gap={3}>
+        <Heading textStyle="h1">{t("incidents_log.title")}</Heading>
         <Input
-          placeholder="Search"
+          placeholder={t("incidents_log.search_placeholder")}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         {isFetching && <Loading />}
-        <Table.Root size="sm" variant="outline" striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>Title</Table.ColumnHeader>
-              <Table.ColumnHeader>Tags</Table.ColumnHeader>
-              <Table.ColumnHeader>Happened during</Table.ColumnHeader>
-              <Table.ColumnHeader>Status</Table.ColumnHeader>
-              <Table.ColumnHeader>Sent in digest</Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {incidents.map((item) => (
-              <Table.Row key={item.id}>
-                <Table.Cell>{item.title}</Table.Cell>
-                <Table.Cell>
-                  {item.tags.map(
-                    ({ name, id: tagId, url, content_html: contentHtml }) =>
-                      // non-regulation/guideline tags will only have a name
-                      tagId !== undefined ? (
-                        <RegulationTag
-                          key={tagId}
-                          id={tagId.toString()}
-                          type={
-                            url.indexOf("guideline") === -1
-                              ? "Regulation"
-                              : "Guideline"
-                          }
-                          link={url}
-                          description={contentHtml}
-                          addToSearch={addTagToSearch}
-                        />
-                      ) : (
-                        <MiscTag
-                          key={name}
-                          tag={name}
-                          addToSearch={addTagToSearch}
-                        />
-                      ),
-                  )}
-                </Table.Cell>
-                <Table.Cell>
-                  {item.competitions.map((competition) => (
-                    <CompetitionTag
-                      key={competition.id}
-                      name={competition.name}
-                      id={competition.id}
-                      comments={competition.comments}
-                    />
-                  ))}
-                </Table.Cell>
-                <Table.Cell>
-                  {item.resolved_at ? "Resolved" : "Pending"}
-                </Table.Cell>
-                <Table.Cell>
-                  {item.digest_worthy && item.digest_sent_at
-                    ? "Sent"
-                    : "Pending"}
-                </Table.Cell>
+        <Table.ScrollArea maxW="full">
+          <Table.Root size="sm" variant="outline" striped>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader>
+                  {t("activerecord.attributes.incident.title")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("activerecord.attributes.incident.tags")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader hideBelow="md">
+                  {t("activerecord.attributes.incident.competition_id")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("incidents_log.status")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader hideBelow="md">
+                  {t("incidents_log.sent_in_digest")}
+                </Table.ColumnHeader>
               </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
+            </Table.Header>
+            <Table.Body>
+              {incidents.map((item) => (
+                <Table.Row key={item.id}>
+                  <Table.Cell>
+                    <Link asChild>
+                      <NextLink
+                        href={route({
+                          pathname: "/incidents/[id]",
+                          query: { id: item.id },
+                        })}
+                      >
+                        {item.title}
+                      </NextLink>
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <IncidentTags tags={item.tags} action={tagAction} />
+                  </Table.Cell>
+                  <Table.Cell hideBelow="md">
+                    {item.competitions.map((competition) => (
+                      <CompetitionTag
+                        key={competition.id}
+                        name={competition.name}
+                        id={competition.id}
+                        comments={competition.comments}
+                      />
+                    ))}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {t(
+                      item.resolved_at
+                        ? "incidents_log.resolved"
+                        : "incidents_log.pending",
+                    )}
+                  </Table.Cell>
+                  <Table.Cell hideBelow="md">
+                    {t(
+                      item.digest_worthy && item.digest_sent_at
+                        ? "incidents_log.sent"
+                        : "incidents_log.pending",
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </Table.ScrollArea>
 
-        <HStack justify="space-between">
-          <Text as="span">
-            Showing entries {topEntryIndex + 1} to {bottomEntryIndex + 1} of{" "}
-            {totalEntries} entries with{" "}
-            <Select.Root
-              collection={itemsPerPageChoices}
-              value={[itemsPerPage.toString()]}
-              onValueChange={(e) => setItemsPerPage(parseInt(e.value[0]))}
-              width="5rem"
-              display="inline-block"
-            >
-              <Select.HiddenSelect />
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          justify="space-between"
+          align={{ base: "stretch", md: "center" }}
+        >
+          <Trans
+            parent={Text}
+            t={t}
+            i18nKey="incidents_log.showing_entries"
+            values={{
+              first: topEntryIndex + 1,
+              last: bottomEntryIndex + 1,
+              total: totalEntries,
+            }}
+            components={{
+              select: (
+                <Select.Root
+                  collection={itemsPerPageChoices}
+                  value={[itemsPerPage.toString()]}
+                  onValueChange={(e) => setItemsPerPage(parseInt(e.value[0]))}
+                  width="5rem"
+                  display="inline-block"
+                >
+                  <Select.HiddenSelect />
 
-              <Select.Control>
-                <Select.Trigger>
-                  <Select.ValueText />
-                </Select.Trigger>
-                <Select.IndicatorGroup>
-                  <Select.Indicator />
-                </Select.IndicatorGroup>
-              </Select.Control>
+                  <Select.Control>
+                    <Select.Trigger>
+                      <Select.ValueText />
+                    </Select.Trigger>
+                    <Select.IndicatorGroup>
+                      <Select.Indicator />
+                    </Select.IndicatorGroup>
+                  </Select.Control>
 
-              <Select.Positioner>
-                <Select.Content>
-                  {itemsPerPageChoices.items.map((perPageChoice) => (
-                    <Select.Item
-                      key={perPageChoice.toString()}
-                      item={perPageChoice.toString()}
-                    >
-                      {perPageChoice}
-                    </Select.Item>
-                  ))}
-                </Select.Content>
-              </Select.Positioner>
-            </Select.Root>
-            per page
-          </Text>
+                  <Select.Positioner>
+                    <Select.Content>
+                      {itemsPerPageChoices.items.map((perPageChoice) => (
+                        <Select.Item
+                          key={perPageChoice.toString()}
+                          item={perPageChoice.toString()}
+                        >
+                          {perPageChoice}
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Positioner>
+                </Select.Root>
+              ),
+            }}
+          />
 
           <Pagination.Root
             count={totalEntries}
             pageSize={totalPages}
             page={page}
           >
-            <ButtonGroup variant="ghost" size="sm" wrap="wrap">
+            <ButtonGroup
+              variant="ghost"
+              size={{ base: "xs", md: "sm" }}
+              wrap="wrap"
+            >
               <Pagination.PrevTrigger asChild>
                 <IconButton
                   onClick={() => setPage(page - 1)}
@@ -247,7 +282,7 @@ export default function IncidentsPage() {
               </Pagination.NextTrigger>
             </ButtonGroup>
           </Pagination.Root>
-        </HStack>
+        </Stack>
       </VStack>
     </Container>
   );

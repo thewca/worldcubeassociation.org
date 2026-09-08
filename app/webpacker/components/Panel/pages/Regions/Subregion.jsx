@@ -211,7 +211,6 @@ export default function Subregion({ group }) {
         status={(group.parent_group_id
           ? delegateRegionsStatus.regional_delegate
           : delegateRegionsStatus.senior_delegate)}
-        location={group.name}
       />
       <Modal
         size="fullscreen"

@@ -3,17 +3,6 @@ import { oklch, toGamut, formatHex, parseHex, lerp } from "culori";
 import _ from "lodash";
 import type { Rgb, Oklch } from "culori";
 
-interface WcaPaletteInput {
-  primary: string; // 1A (Solid / Top Face)
-  pantoneDescription: string;
-  secondaryLight: string; // 2B (Pastel)
-  secondaryMedium: string; // 2C (Bright)
-  secondaryDark: string; // 2A (Deep)
-  cubeLight: string; // Left Face
-  cubeDark: string; // Right Face
-  pastelContrast: "white" | "black";
-}
-
 type LuminanceKey =
   | "50"
   | "100"
@@ -27,71 +16,187 @@ type LuminanceKey =
   | "900"
   | "950";
 
+type BrandRole = "1A" | "2A";
+
+type RoleRungs = Readonly<Record<BrandRole, LuminanceKey>>;
+
+// The two brand colours are *positions on the scale*, not free-standing
+//   colours: `deriveLuminanceScale` bends the generated ladder to pass through
+//   them. Solid normally lands on 600 and Deep on 800; families whose Solid
+//   cannot sit at 600 name their own rung, and their `solid` semantic token is
+//   repointed to match so `colorPalette.solid` stays the brand colour.
+const slateRoleRungs = {
+  // Gamut exception: the Solid is a near-white, so it can only sit at 100.
+  wcaWhite: { "2A": "800", "1A": "100" },
+  green: { "2A": "800", "1A": "600" },
+  red: { "2A": "800", "1A": "600" },
+  // Gamut exception: no screen can show a yellow this vivid below L≈0.80,
+  //   so the Solid sits at 400.
+  yellow: { "2A": "800", "1A": "400" },
+  blue: { "2A": "800", "1A": "700" },
+  orange: { "2A": "800", "1A": "500" },
+} as const satisfies Readonly<Record<string, RoleRungs>>;
+
+interface WcaPaletteInput {
+  primary: string; // 1A (Solid / Top Face)
+  pantoneDescription: string;
+  secondaryDark: string; // 2A (Deep)
+  cubeLight: string; // Left Face
+  cubeDark: string; // Right Face
+  rungs: RoleRungs;
+}
+
 type ColorScale = Readonly<Record<LuminanceKey, string>>;
 type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 
-type ColorDelta = Readonly<Oklch> & { h: number };
+// Chakra styles these trigger slots without ever setting `cursor`, so
+// they fall back to the browser default and read as non-interactive.
+// We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
+// https://github.com/chakra-ui/chakra-ui/issues/10960
+const INTERACTIVITY_OVERRIDES = {
+  menu: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  select: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  combobox: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  popover: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  collapsible: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  steps: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  checkboxCard: {
+    slots: [],
+    base: {
+      root: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  radioCard: {
+    slots: [],
+    base: {
+      item: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  segmentGroup: {
+    slots: [],
+    base: {
+      item: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  // The `cursor.slider` token exists but the slider recipe never consumes
+  // it, so the thumb needs its own rule.
+  slider: {
+    slots: [],
+    base: {
+      thumb: {
+        cursor: "grab",
+        _dragging: { cursor: "grabbing" },
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+};
 
 const slateColors = {
   green: {
     primary: "#029347",
     pantoneDescription: "Pantone 348 C",
-    secondaryLight: "#C1E6CD",
-    secondaryMedium: "#00FF7F",
     secondaryDark: "#1B4D3E",
     cubeLight: "#1AB55C",
     cubeDark: "#04632D",
-    pastelContrast: "white",
+    rungs: slateRoleRungs.green,
   } satisfies WcaPaletteInput,
   white: {
     primary: "#EEEEEE",
     pantoneDescription: "Pantone Cool Gray 1 C",
-    secondaryLight: "#E0DDD5",
-    secondaryMedium: "#F4F1ED",
     secondaryDark: "#3B3B3B",
     cubeLight: "#FFFFFF",
     cubeDark: "#CCCCCC",
-    pastelContrast: "black",
+    rungs: slateRoleRungs.wcaWhite,
   } satisfies WcaPaletteInput,
   red: {
     primary: "#C62535",
     pantoneDescription: "Pantone 1797 C",
-    secondaryLight: "#F6C5C5",
-    secondaryMedium: "#FF6B6B",
     secondaryDark: "#7A1220",
     cubeLight: "#E53841",
     cubeDark: "#A3131A",
-    pastelContrast: "white",
+    rungs: slateRoleRungs.red,
   } satisfies WcaPaletteInput,
   yellow: {
     primary: "#FFD313",
     pantoneDescription: "Pantone 116 C",
-    secondaryLight: "#FFF5B8",
-    secondaryMedium: "#FFF5AA",
     secondaryDark: "#664D00",
     cubeLight: "#FFDE55",
     cubeDark: "#CEA705",
-    pastelContrast: "black",
+    rungs: slateRoleRungs.yellow,
   } satisfies WcaPaletteInput,
   blue: {
     primary: "#0051BA",
     pantoneDescription: "Pantone 293 C",
-    secondaryLight: "#99C7FF",
-    secondaryMedium: "#42D0FF",
     secondaryDark: "#003366",
     cubeLight: "#066AC4",
     cubeDark: "#03458C",
-    pastelContrast: "white",
+    rungs: slateRoleRungs.blue,
   } satisfies WcaPaletteInput,
   orange: {
     primary: "#FF5800",
     pantoneDescription: "Pantone Orange 021 C",
-    secondaryLight: "#FFD5BD",
-    secondaryMedium: "#FFD59E",
     secondaryDark: "#7A2B00",
     cubeLight: "#F96E32",
     cubeDark: "#D34405",
-    pastelContrast: "white",
+    rungs: slateRoleRungs.orange,
   } satisfies WcaPaletteInput,
 } as const;
 
@@ -102,303 +207,174 @@ const rgbToHex = (rgb: Rgb) => formatHex(rgb).toUpperCase();
 const rgbToOklch = (rgb: Rgb): Oklch => oklch(rgb);
 const oklchToRgb = toGamut("rgb", "oklch");
 
-const getHueDelta = (sourceH: number = 0, targetH: number = 0): number =>
-  ((targetH - sourceH + 540) % 360) - 180;
+const SCALE_KEYS = [
+  "50",
+  "100",
+  "200",
+  "300",
+  "400",
+  "500",
+  "600",
+  "700",
+  "800",
+  "900",
+  "950",
+] as const satisfies ReadonlyArray<LuminanceKey>;
 
-const calculateDelta = (source: Oklch, target: Oklch): ColorDelta => ({
-  mode: "oklch",
-  l: target.l - source.l,
-  c: target.c - source.c,
-  h: getHueDelta(source.h, target.h),
-});
+type Anchor = { readonly idx: number; readonly color: Oklch };
 
-const typedKeys = <K extends string, V>(object: Record<K, V>): K[] =>
-  Object.keys(object).filter((k): k is K => k in object);
+// Chakra is not very friendly about exporting its pre-defined schemes and tokens…
+const readChakraScale = (chakraRefScheme: string): ReadonlyArray<Oklch> => {
+  const modelScheme = defaultConfig.theme?.tokens?.colors?.[
+    chakraRefScheme
+  ] as unknown as ChakraColorScale;
 
-const getSortedKeys = (scale: ColorScale): ReadonlyArray<LuminanceKey> =>
-  typedKeys(scale).toSorted((a, b) => parseInt(a) - parseInt(b));
-
-const findNearestSlotKey = (
-  scale: ColorScale,
-  targetOklch: Oklch,
-): LuminanceKey => {
-  const keys = typedKeys(scale);
-
-  const bestKey = _.minBy(keys, (key) => {
-    const currentOklch = rgbToOklch(hexToRgb(scale[key]));
-    return Math.abs(currentOklch.l - targetOklch.l);
-  });
-
-  // ColorScale is never empty, so the `minBy` above is safe
-  return bestKey!;
+  return SCALE_KEYS.map((key) => rgbToOklch(hexToRgb(modelScheme[key].value)));
 };
 
-const generateSequence = (
-  start: number,
-  end: number,
-): ReadonlyArray<number> => {
-  const length = Math.abs(end - start);
-  const step = end > start ? 1 : -1;
+// Locates the two anchors bracketing `idx`, together with how far between them
+//   it sits. Positions outside the anchored range clamp onto the nearest one,
+//   so a scale never extrapolates past a colour we were actually given.
+const findSegment = (anchors: ReadonlyArray<Anchor>, idx: number) => {
+  const upperPtr = anchors.findIndex((anchor) => anchor.idx >= idx);
+  const upper = upperPtr < 1 ? 1 : upperPtr;
 
-  return Array.from({ length }, (_, i) => start + i * step);
+  const [lighter, darker] = [anchors[upper - 1], anchors[upper]];
+  const span = darker.idx - lighter.idx;
+
+  return {
+    lighter,
+    darker,
+    position: span === 0 ? 0 : _.clamp((idx - lighter.idx) / span, 0, 1),
+  };
 };
 
-const createAnchorMap = (
-  baseScale: ColorScale,
-  colors: ReadonlyArray<string>,
-): Readonly<Record<LuminanceKey, string>> => {
-  const sortedScaleKeys = getSortedKeys(baseScale);
-  const maxIdx = sortedScaleKeys.length;
+// Rescales the reference ladder so it passes exactly through the brand anchors,
+//   preserving the relative spacing Chakra tuned between them.
+const remapLightness = (
+  reference: ReadonlyArray<Oklch>,
+  anchors: ReadonlyArray<Anchor>,
+  idx: number,
+): number => {
+  const { lighter, darker } = findSegment(anchors, idx);
 
-  const sortedInputs = colors.toSorted((a, b) => {
-    const lA = rgbToOklch(hexToRgb(a)).l;
-    const lB = rgbToOklch(hexToRgb(b)).l;
+  const refSpan = reference[lighter.idx].l - reference[darker.idx].l;
+  const position =
+    refSpan === 0
+      ? 0
+      : _.clamp((reference[idx].l - reference[darker.idx].l) / refSpan, 0, 1);
 
-    return lB - lA; // Descending Lightness
-  });
-
-  return sortedInputs.reduce(
-    (assignments, color) => {
-      const colorOklch = rgbToOklch(hexToRgb(color));
-      const idealKey = findNearestSlotKey(baseScale, colorOklch);
-      const idealIdx = sortedScaleKeys.indexOf(idealKey);
-
-      const searchPath = [
-        idealIdx,
-        ...generateSequence(idealIdx + 1, maxIdx),
-        ...generateSequence(idealIdx - 1, -1),
-      ];
-
-      const foundIdx = searchPath.find((idx) => {
-        const key = sortedScaleKeys[idx];
-        return !(key in assignments);
-      });
-
-      if (foundIdx === undefined) return assignments;
-
-      const foundKey = sortedScaleKeys[foundIdx];
-      return { ...assignments, [foundKey]: color };
-    },
-    {} as Record<LuminanceKey, string>,
-  );
+  return lerp(darker.color.l, lighter.color.l, position);
 };
 
-const getInterpolatedDelta = (
-  currentIdx: number,
-  sortedKeys: ReadonlyArray<string>,
-  anchorIndices: ReadonlyArray<number>,
-  anchorDeltas: Readonly<Record<string, ColorDelta>>,
-): { delta: ColorDelta; distanceToAnchor: number } => {
-  const nextAnchorPtr = anchorIndices.findIndex((idx) => idx >= currentIdx);
+// Chroma keeps the reference curve's shape (it peaks mid-scale rather than
+//   running monotonically), scaled to meet the brand anchors' colourfulness.
+const remapChroma = (
+  reference: ReadonlyArray<Oklch>,
+  anchors: ReadonlyArray<Anchor>,
+  idx: number,
+): number => {
+  const { lighter, darker, position } = findSegment(anchors, idx);
 
-  if (nextAnchorPtr === 0) {
-    const anchorIdx = anchorIndices[0];
+  const ratioAt = (anchor: Anchor) =>
+    reference[anchor.idx].c === 0
+      ? 0
+      : anchor.color.c / reference[anchor.idx].c;
 
-    return {
-      delta: anchorDeltas[sortedKeys[anchorIdx]],
-      distanceToAnchor: Math.abs(currentIdx - anchorIdx),
-    };
-  }
-
-  if (nextAnchorPtr === -1) {
-    const anchorIdx = anchorIndices[anchorIndices.length - 1];
-
-    return {
-      delta: anchorDeltas[sortedKeys[anchorIdx]],
-      distanceToAnchor: Math.abs(currentIdx - anchorIdx),
-    };
-  }
-
-  const idxPrev = anchorIndices[nextAnchorPtr - 1];
-  const idxNext = anchorIndices[nextAnchorPtr];
-
-  const deltaPrev = anchorDeltas[sortedKeys[idxPrev]];
-  const deltaNext = anchorDeltas[sortedKeys[idxNext]];
-
-  const t = (currentIdx - idxPrev) / (idxNext - idxPrev);
-
-  const interpolatedDelta = {
-    mode: "oklch",
-    l: lerp(deltaPrev.l, deltaNext.l, t),
-    c: lerp(deltaPrev.c, deltaNext.c, t),
-    h: lerp(deltaPrev.h, deltaNext.h, t),
-  } as const;
-
-  const distanceToAnchor = Math.min(
-    Math.abs(currentIdx - idxPrev),
-    Math.abs(currentIdx - idxNext),
-  );
-
-  return { delta: interpolatedDelta, distanceToAnchor };
+  return reference[idx].c * lerp(ratioAt(lighter), ratioAt(darker), position);
 };
 
-type AdjustmentConfig = {
-  readonly strength?: number;
-  readonly baseInfluence?: number;
-  readonly sigma?: number;
-};
+// Hue travels the shortest arc between the anchors, so the family holds the
+//   Solid's hue across the light half and settles onto the Deep tone's own hue
+//   at the bottom, instead of wandering wherever the reference scale went.
+const remapHue = (anchors: ReadonlyArray<Anchor>, idx: number): number => {
+  const { lighter, darker, position } = findSegment(anchors, idx);
 
-const adjustScale = (
-  baseScale: ColorScale,
-  anchors: Readonly<Record<LuminanceKey, string>>,
-  config: AdjustmentConfig = {},
-): ColorScale => {
-  const sortedKeys = getSortedKeys(baseScale);
+  const from = lighter.color.h ?? darker.color.h ?? 0;
+  const to = darker.color.h ?? from;
+  const arc = ((to - from + 540) % 360) - 180;
 
-  const anchorData = Object.entries(anchors)
-    .map(([key, targetHex]) => {
-      const sourceHex = baseScale[key as LuminanceKey];
-
-      const src = rgbToOklch(hexToRgb(sourceHex));
-      const tgt = rgbToOklch(hexToRgb(targetHex));
-
-      return {
-        key,
-        idx: sortedKeys.indexOf(key as LuminanceKey),
-        delta: calculateDelta(src, tgt),
-      };
-    })
-    .sort((a, b) => a.idx - b.idx);
-
-  if (anchorData.length === 0) return baseScale;
-
-  const anchorIndices = anchorData.map((d) => d.idx);
-  const anchorDeltas = Object.fromEntries(
-    anchorData.map((d) => [d.key, d.delta]),
-  );
-
-  return _.mapValues(baseScale, (hex, key) => {
-    const currentIdx = sortedKeys.indexOf(key as LuminanceKey);
-    const sourceOklch = rgbToOklch(hexToRgb(hex));
-
-    const { delta: rawDelta, distanceToAnchor } = getInterpolatedDelta(
-      currentIdx,
-      sortedKeys,
-      anchorIndices,
-      anchorDeltas,
-    );
-
-    const {
-      strength = 1.0 / Object.entries(anchors).length,
-      baseInfluence = 0,
-      sigma,
-    } = config;
-
-    const decayFactor =
-      sigma !== undefined
-        ? Math.exp(-(distanceToAnchor * distanceToAnchor) / (2 * sigma * sigma))
-        : 1.0;
-    const effectiveStrength = lerp(baseInfluence, strength, decayFactor);
-
-    const newOklch = {
-      mode: "oklch",
-      l: Math.max(
-        0,
-        Math.min(1, sourceOklch.l + rawDelta.l * effectiveStrength),
-      ),
-      c: Math.max(0, sourceOklch.c + rawDelta.c * effectiveStrength),
-      h: (sourceOklch.h || 0) + rawDelta.h * effectiveStrength,
-    } as const;
-
-    return rgbToHex(oklchToRgb(newOklch));
-  });
+  return from + arc * position;
 };
 
 const deriveLuminanceScale = (
   chakraRefScheme: string,
   colorScheme: WcaPaletteInput,
-  config: AdjustmentConfig = {},
 ): ChakraColorScale => {
-  // Chakra is not very friendly about exporting its pre-defined schemes and tokens…
-  const modelScheme = defaultConfig.theme?.tokens?.colors?.[
-    chakraRefScheme
-  ] as unknown as ChakraColorScale;
-  const baseScale = _.mapValues(
-    modelScheme,
-    (chakraToken) => chakraToken.value,
+  const reference = readChakraScale(chakraRefScheme);
+  const lastIdx = SCALE_KEYS.length - 1;
+
+  const solid = rgbToOklch(hexToRgb(colorScheme.primary));
+  const deep = rgbToOklch(hexToRgb(colorScheme.secondaryDark));
+
+  const solidIdx = SCALE_KEYS.indexOf(colorScheme.rungs["1A"]);
+  const deepIdx = SCALE_KEYS.indexOf(colorScheme.rungs["2A"]);
+
+  // The two brand colours we keep verbatim pin hue and chroma. Lightness gets
+  //   the endpoints as extra anchors, so the extremes stay where Chakra put
+  //   them and remain usable as page surfaces.
+  const brandAnchors: ReadonlyArray<Anchor> = [
+    { idx: solidIdx, color: solid },
+    { idx: deepIdx, color: deep },
+  ];
+
+  const lightnessAnchors: ReadonlyArray<Anchor> = _.sortBy(
+    [
+      { idx: 0, color: reference[0] },
+      ...brandAnchors,
+      { idx: lastIdx, color: reference[lastIdx] },
+    ],
+    "idx",
   );
 
-  const secondaryAnchors = createAnchorMap(baseScale, [
-    colorScheme.secondaryDark,
-    colorScheme.secondaryMedium,
-    colorScheme.secondaryLight,
-  ]);
+  const scale = Object.fromEntries(
+    SCALE_KEYS.map((key, idx) => [
+      key,
+      rgbToHex(
+        oklchToRgb({
+          mode: "oklch",
+          l: remapLightness(reference, lightnessAnchors, idx),
+          c: remapChroma(reference, brandAnchors, idx),
+          h: remapHue(brandAnchors, idx),
+        }),
+      ),
+    ]),
+  ) as ColorScale;
 
-  const ambientScale = adjustScale(baseScale, secondaryAnchors, {
-    ...config,
-    sigma: 1.5,
-  });
-
-  const primaryAnchors = createAnchorMap(baseScale, [colorScheme.primary]);
-  const heroScale = adjustScale(ambientScale, primaryAnchors, {
-    ...config,
-    sigma: 2.5,
-  });
-
-  return _.mapValues(heroScale, (rgbHex) => ({ value: rgbHex }));
+  return _.mapValues(scale, (rgbHex) => ({ value: rgbHex }));
 };
 
-const compileColorScheme = (
-  baseColor: string,
-  solidShade: number = 600,
-  darkDeep: number | string = solidShade + 100,
-  lightDeep: number | string = solidShade,
+// Everything a palette needs beyond the generated ladder: the three cube faces,
+//   which are brand artwork rather than a rung of any scale.
+const buildPalette = (
+  chakraRefScheme: string,
+  colorPalette: WcaPaletteInput,
 ) => ({
+  ...deriveLuminanceScale(chakraRefScheme, colorPalette),
   cubeShades: {
-    left: { value: `{colors.${baseColor}.lighter}` },
-    top: { value: `{colors.${baseColor}.1A}` },
-    right: { value: `{colors.${baseColor}.darker}` },
-  },
-  deep: {
-    value: {
-      _light: `{colors.${baseColor}.${lightDeep.toString()}}`,
-      _dark: `{colors.${baseColor}.${darkDeep.toString()}}`,
-    },
+    left: { value: colorPalette.cubeLight },
+    top: { value: colorPalette.primary },
+    right: { value: colorPalette.cubeDark },
   },
 });
 
-const defineColorAliases = (colorPalette: WcaPaletteInput) => ({
-  "1A": { value: colorPalette.primary },
-  "2A": { value: colorPalette.secondaryDark },
-  "2B": { value: colorPalette.secondaryLight },
-  "2C": { value: colorPalette.secondaryMedium },
-  pastelContrast: {
-    value: colorPalette.pastelContrast === "white" ? "#FCFCFC" : "#1E1E1E",
-  },
-  lighter: { value: colorPalette.cubeLight },
-  darker: { value: colorPalette.cubeDark },
+// Chakra aims each palette's `solid` token at rung 600. Families whose brand
+//   Solid sits elsewhere on the ladder need it repointed, or `colorPalette.solid`
+//   would render a generated neighbour instead of the Pantone-matched colour.
+const brandSolid = (baseColor: keyof typeof slateRoleRungs) => ({
+  solid: { value: `{colors.${baseColor}.${slateRoleRungs[baseColor]["1A"]}}` },
 });
 
 const customConfig = defineConfig({
   theme: {
     tokens: {
       colors: {
-        wcaWhite: {
-          ...defineColorAliases(slateColors.white),
-          ...deriveLuminanceScale("gray", slateColors.white, {
-            baseInfluence: 1,
-          }),
-        },
-        green: {
-          ...defineColorAliases(slateColors.green),
-          ...deriveLuminanceScale("green", slateColors.green),
-        },
-        red: {
-          ...defineColorAliases(slateColors.red),
-          ...deriveLuminanceScale("red", slateColors.red),
-        },
-        yellow: {
-          ...defineColorAliases(slateColors.yellow),
-          ...deriveLuminanceScale("yellow", slateColors.yellow),
-        },
-        blue: {
-          ...defineColorAliases(slateColors.blue),
-          ...deriveLuminanceScale("blue", slateColors.blue),
-        },
-        orange: {
-          ...defineColorAliases(slateColors.orange),
-          ...deriveLuminanceScale("orange", slateColors.orange),
-        },
+        wcaWhite: buildPalette("gray", slateColors.white),
+        green: buildPalette("green", slateColors.green),
+        red: buildPalette("red", slateColors.red),
+        yellow: buildPalette("yellow", slateColors.yellow),
+        blue: buildPalette("blue", slateColors.blue),
+        orange: buildPalette("orange", slateColors.orange),
         // Interpolated gray scale, anchored at the `supplementary.bg` values.
         // There is an additional added "zinc" nudge on the blue channel,
         //   which it seems most modern UI frameworks do.
@@ -434,6 +410,12 @@ const customConfig = defineConfig({
           },
         },
       },
+      cursor: {
+        menuitem: { value: "pointer" },
+        checkbox: { value: "pointer" },
+        radio: { value: "pointer" },
+        option: { value: "pointer" },
+      },
     },
     semanticTokens: {
       colors: {
@@ -447,12 +429,11 @@ const customConfig = defineConfig({
           fg: { value: "{colors.link}" },
         },
         recordMarkers: {
-          personal: { value: "{colors.orange.1A}" },
-          national: { value: "{colors.green.1A}" },
-          continental: { value: "{colors.red.1A}" },
-          world: { value: "{colors.blue.1A}" },
+          personal: { value: "{colors.orange.solid}" },
+          national: { value: "{colors.green.solid}" },
+          continental: { value: "{colors.red.solid}" },
+          world: { value: "{colors.blue.solid}" },
         },
-        green: compileColorScheme("green"),
         wcaWhite: {
           // values mostly stolen from Chakra's `gray` scale,
           // with a minor adjustment for the `solid` entry.
@@ -501,12 +482,18 @@ const customConfig = defineConfig({
               _dark: "{colors.wcaWhite.800}",
             },
           },
-          ...compileColorScheme("wcaWhite", 600, 400, 300),
         },
-        red: compileColorScheme("red"),
-        yellow: compileColorScheme("yellow", 300),
-        blue: compileColorScheme("blue"),
-        orange: compileColorScheme("orange", 600, 600),
+        // green and red already have their brand Solid on rung 600, so Chakra's
+        //   own `solid` token points at the right colour without help.
+        yellow: brandSolid("yellow"),
+        blue: brandSolid("blue"),
+        orange: {
+          ...brandSolid("orange"),
+          // Chakra pairs orange with white in light mode, which only reaches
+          //   3.16:1 on the brand orange. Black clears AA at 6.65:1, and is
+          //   already what Chakra does for yellow in both modes.
+          contrast: { value: "black" },
+        },
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
@@ -579,7 +566,7 @@ const customConfig = defineConfig({
         value: {
           fontSize: "0.875rem",
           lineHeight: "1.5",
-          fontWeight: "light",
+          fontWeight: "normal",
         },
       },
       bodyEmphasis: {
@@ -623,34 +610,13 @@ const customConfig = defineConfig({
       },
     },
     layerStyles: {
+      // Chakra ships fill.subtle / fill.muted / fill.solid / fill.surface and
+      //   outline.*, which is everything we were hand-rolling. `fill.emphasized`
+      //   is the one rung Chakra leaves out.
       "fill.emphasized": {
         value: {
           background: "colorPalette.emphasized",
-          color: "colorPalette.contrast",
-        },
-      },
-      "fill.deep": {
-        value: {
-          background: "colorPalette.deep",
-          color: "colorPalette.contrast",
-        },
-      },
-      "card.dark": {
-        value: {
-          background: "colorPalette.2A",
-          color: "colorPalette.2B",
-        },
-      },
-      "card.pastel": {
-        value: {
-          background: "colorPalette.1A",
-          color: "colorPalette.pastelContrast",
-        },
-      },
-      "card.bright": {
-        value: {
-          background: "colorPalette.2C",
-          color: "colorPalette.2A",
+          color: "colorPalette.fg",
         },
       },
     },
@@ -685,8 +651,102 @@ const customConfig = defineConfig({
           },
         },
       },
+      button: {
+        variants: {
+          variant: {
+            // Solid button locked to the blue palette. Used on homepage cards
+            // when a button should not inherit its surrounding card's color
+            // scheme.
+            pastelSolid: {
+              colorPalette: "blue",
+              bg: "colorPalette.solid",
+              color: "colorPalette.contrast",
+              borderColor: "transparent",
+              _hover: {
+                bg: "colorPalette.solid/90",
+              },
+              _expanded: {
+                bg: "colorPalette.solid/90",
+              },
+            },
+            // Copy of Chakra's built-in `outline` variant, but with a stronger
+            // `_hover` background. Used on homepage cards when a button should
+            // inherit its surrounding card's color scheme.
+            pastelOutline: {
+              borderWidth: "1px",
+              borderColor: "colorPalette.border",
+              color: "colorPalette.fg",
+              _hover: {
+                bg: "colorPalette.emphasized",
+              },
+              _expanded: {
+                bg: "colorPalette.subtle",
+              },
+            },
+            // Outline button for a `fill.solid` surface. Chakra's `outline`
+            // variant colours itself from `colorPalette.fg` and
+            // `colorPalette.border`, which are rungs of the same hue as
+            // `colorPalette.solid` — on blue, `fg` resolves to the *same* value
+            // as the background, so the button disappears entirely. Inheriting
+            // `currentColor` picks up the surface's `contrast` foreground
+            // instead, which reads on every palette and in both colour modes.
+            onSolid: {
+              borderWidth: "1px",
+              borderColor: "currentColor",
+              color: "currentColor",
+              _hover: {
+                bg: "colorPalette.contrast/15",
+              },
+              _expanded: {
+                bg: "colorPalette.contrast/15",
+              },
+            },
+          },
+        },
+      },
     },
     slotRecipes: {
+      ...INTERACTIVITY_OVERRIDES,
+      steps: {
+        ...INTERACTIVITY_OVERRIDES.steps,
+        variants: {
+          orientation: {
+            vertical: {
+              // Chakra hangs the connector inside the step it leads out of and sizes it against
+              //   that step's own height, so a step no taller than its label leaves the connector
+              //   nothing to run in and it collapses to nothing.
+              item: {
+                _notLast: {
+                  minHeight:
+                    "calc(var(--steps-size) + var(--steps-gutter) * 4)",
+                },
+              },
+              separator: {
+                marginX: "0",
+              },
+            },
+            horizontal: {
+              // Responsive variants merge property by property, so anything the vertical branch
+              //   sets and this one leaves alone survives into the wider breakpoint - which is
+              //   what left the horizontal connector absolutely positioned, and so invisible.
+              root: {
+                height: "auto",
+              },
+              item: {
+                _notLast: {
+                  minHeight: "auto",
+                },
+              },
+              separator: {
+                position: "static",
+                top: "auto",
+                insetStart: "auto",
+                maxHeight: "none",
+              },
+            },
+          },
+        },
+      },
       dataList: {
         slots: [],
         variants: {
@@ -787,25 +847,24 @@ const customConfig = defineConfig({
             deep: {
               root: {
                 colorPalette: "wcaWhite",
-                layerStyle: "fill.deep",
+                layerStyle: "fill.solid",
               },
               description: {
-                layerStyle: "fill.deep",
+                layerStyle: "fill.solid",
               },
             },
             slatePastel: {
               root: {
                 colorPalette: "wcaWhite",
-                layerStyle: "card.pastel",
+                layerStyle: "fill.solid",
               },
               description: {
-                layerStyle: "card.pastel",
+                layerStyle: "fill.solid",
               },
             },
           },
         },
         defaultVariants: {
-          // @ts-expect-error TypeScript does not know about the new variant before compiling the theme further down below
           variant: "info",
         },
       },
@@ -814,6 +873,12 @@ const customConfig = defineConfig({
         base: {
           root: {
             "--accordion-radius": "{radii.wca}",
+          },
+          itemTrigger: {
+            cursor: "pointer",
+            _disabled: {
+              cursor: "disabled",
+            },
           },
         },
         variants: {
@@ -860,7 +925,7 @@ const customConfig = defineConfig({
                   bg: "bg.subtle",
                 },
                 "&:hover td": {
-                  bg: "colorPalette.fg/60",
+                  bg: "colorPalette.muted",
                 },
               },
             },
@@ -887,12 +952,54 @@ const customConfig = defineConfig({
       tabs: {
         slots: [],
         variants: {
+          // Grows the triggers to fill the row when they fit, and lets the list
+          //   scroll instead of squashing them when they don't.
+          fitContent: {
+            true: {
+              list: {
+                maxWidth: "full",
+                overflowX: "auto",
+              },
+              trigger: {
+                flex: "1 0 auto",
+              },
+            },
+          },
           highContrast: {
             true: {
               trigger: {
                 _selected: {
                   color: "colorPalette.contrast",
                 },
+              },
+            },
+          },
+          // Vertical tab list that sticks alongside the content on desktop and
+          //   collapses above it on mobile.
+          sideNav: {
+            true: {
+              root: {
+                flexDirection: { base: "column", md: "row" },
+              },
+              list: {
+                height: "fit-content",
+                position: { base: "static", md: "sticky" },
+                top: "3",
+              },
+            },
+          },
+        },
+      },
+      list: {
+        slots: [],
+        variants: {
+          // Chakra's reset drops the browser's default list padding and its list recipe
+          //   does not put any back, so without this the markers have nowhere to sit and
+          //   the list reads as flush body text.
+          indented: {
+            true: {
+              root: {
+                ps: "6",
               },
             },
           },

@@ -32,7 +32,8 @@ locals {
 }
 
 resource "aws_cloudwatch_log_group" "anycable" {
-  name = "${var.name_prefix}-anycable"
+  name              = "${var.name_prefix}-anycable"
+  retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "anycable" {
@@ -65,7 +66,7 @@ resource "aws_ecs_task_definition" "anycable" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-group         = aws_cloudwatch_log_group.anycable.name
           awslogs-region        = var.region
           awslogs-stream-prefix = var.name_prefix
         }

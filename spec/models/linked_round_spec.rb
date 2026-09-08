@@ -76,6 +76,15 @@ RSpec.describe LinkedRound do
 
         expect(linked_round).to be_invalid_with_errors(round_time_limits: ["all rounds must have the same time limit"])
       end
+
+      it "that have different participation sources" do
+        other_event = competition.competition_events.find_or_create_by(event_id: "444")
+
+        create(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 3, number: 1)
+        create(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 3, number: 2, participation_source: other_event)
+
+        expect(linked_round).to be_invalid_with_errors(participation_sources: ["all rounds must have the same participation source"])
+      end
     end
 
     context "when linking rounds of a championship" do

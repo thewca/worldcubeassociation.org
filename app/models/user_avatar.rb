@@ -35,6 +35,11 @@ class UserAvatar < ApplicationRecord
   validates :public_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
   validates :private_image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
 
+  # Only active_storage avatars go through the crop pipeline (see `can_edit_thumbnail?`).
+  # Legacy backends never set valid crops and many have nil/garbage crop columns, so validating
+  # them would make existing legacy rows invalid and break any later save/touch on them.
+  validates :thumbnail_crop_w, :thumbnail_crop_h, numericality: { greater_than: 0 }, if: :active_storage?
+
   private def linked_user
     # Make sure that we're traversing back the correct association (using `inverse_of`)
     #   when accessing current profile pictures. Marked as `private` because this is a pure

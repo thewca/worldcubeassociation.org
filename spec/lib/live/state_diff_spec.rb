@@ -108,6 +108,7 @@ RSpec.describe Live::DiffHelper do
                                                    "live_attempts" => attempts.map { it.serializable_hash({ only: %i[value attempt_number] }) },
                                                    "best_possible_average" => 200,
                                                    "worst_possible_average" => 300,
+                                                   "projected_average" => 250,
                                                  })
       expect(diff["deleted"]).to be_nil
       expect(diff["created"]).to be_nil

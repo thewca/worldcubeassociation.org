@@ -1,0 +1,12 @@
+get:
+  summary: Gets the current WCA Regulations as a rendered HTML fragment
+  tags:
+    - regulations
+  operationId: regulations
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/regulations/RegulationsContent.yaml'

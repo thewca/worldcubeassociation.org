@@ -4034,8 +4034,8 @@ cs:
           #original_hash: 576c3b8
           '4': >-
             Navštivte <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
-            Competition Organizer Guidelines</a> pro více informací.
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
+            Competition Organizer Handbook</a> pro více informací.
       '6':
         #original_hash: 8005a61
         title: K čemu jsou WCA účty? Jaký je rozdíl mezi WCA účtem a WCA profilem?
@@ -4470,8 +4470,6 @@ cs:
     competition_templates: Předlohy soutěží
     #original_hash: 5ca0558
     certificates: Předlohy certifikátů od WCT.
-    #original_hash: f580987
-    orga_guidelines: Organizační směrnice
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegáti WCA
@@ -4890,7 +4888,7 @@ cs:
       content1_html: >-
         Pokud byste chtěli zorganizovat soutěž nebo již plánujete nějakou
         zorganizovat, prosíme, přečtěte si <a
-        href="/organizer-guidelines">Pokyny k organizaci</a>.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Pokyny k organizaci</a>.
       #original_hash: 5016669
       content2_html: >-
         Tento dokument obsahuje důležité informace a měl by si ho přečíst každý
@@ -4926,229 +4924,6 @@ cs:
       Pokud máte zájem přidat/aktualizovat překlad, podívejte se prosím na <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">instrukce
       pro překlady na Githubu</a>.
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      Vítejte u sbírky organizačních směrnic od WQAC. Pokud zvažujete stát se
-      organizátorem, vysoce doporučujeme přečíst tyto dokumenty. Byly rozděleny
-      na základní a vysoce doporučené dokumenty. Ujistěte se, že rozumíte všem
-      informacím, protože toto Vám dovolí zorganizovat velmi kvalitní a zábavnou
-      soutěž!
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>Varování</strong>: WCA neorganizuje soutěže. Jako organizátor WCA
-      soutěže <strong>nesmíte</strong> podepsat nic za WCA Měli byste zkusit
-      kontaktovat regionální nebo národní speedcuberské asociace, které se na
-      organizaci soutěží podílejí.
-    essential:
-      #original_hash: 44bd0ba
-      description: Základní dokumenty
-      #original_hash: 1cf87ad
-      finding-venue: Hledání prostoru
-      #original_hash: 3ce0d9c
-      orga-team-delegate: Tvorba organizačního týmu a kontaktování delegáta
-      #original_hash: d3c693b
-      budget: Správa financí
-      #original_hash: b1429a7
-      schedule: Harmonogram
-      #original_hash: beea57d
-      checklist: Checklist soutěže
-      #original_hash: 9defcf1
-      registration: Správa registrace
-      #original_hash: e298a56
-      venue-setup: Příprava prostoru
-      #original_hash: 2b6a5dd
-      work-during-comp: Práce organizátora během soutěže
-    recommended:
-      #original_hash: 6b843f3
-      title: Doporučené dokumenty
-      #original_hash: bfbd4bb
-      staff: Přiřazení rolí
-      #original_hash: 4735583
-      emails: Emaily
-      #original_hash: 8e7ca09
-      running-systems: Running a judging systémy
-      #original_hash: 2b31c89
-      new-competitors: Postoj k nováčkům
-      #original_hash: 3408054
-      enhancing-experience: Zlepšení zážitků soutěžících i ostatních
-      #original_hash: 2345aaa
-      reflection: Sebereflexe organizátorů
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: Pokyny k organizaci WCA soutěže
-    paragraph0:
-      #original_hash: ee36904
-      title: Krátká verze
-      #original_hash: 60d9532
-      content: >-
-        Níže můžete najít krátké shrnutí klíčových bodů, abyste lépe pochopili,
-        co to znamená, zorganizovat soutěž. Pokud si myslíte, že to je něco pro
-        Vás, podívejte se na dokumenty výše!
-    paragraph1:
-      #original_hash: e5f5329
-      title: Jak zorganizovat soutěž
-      #original_hash: 3dbbbee
-      content: >-
-        Na každé WCA soutěži musí být přítomen Delegát WCA, který na ni bude
-        dohlížet. Pokud máte zájem zorganizovat svou vlastní soutěž, obraťte se
-        na nejbližšího Delegáta WCA. Bude vám schopen poskytnout více informací
-        o místních praktikách a může vám pomoci najít vhodný termín, jelikož ví,
-        zda jsou plánovány jiné soutěže ve stejném časovém rozmezí. Pokud ve
-        vašem okolí není žádný Delegát WCA, obraťte se na Vyššího Delegáta pro
-        váš region.
-    paragraph2:
-      #original_hash: f20dd3b
-      title: Očekávané náklady na pořádání soutěže
-      #original_hash: f16a06f
-      content: >-
-        Očekávané náklady se v jednotlivých zemích značně liší a jsou určeny
-        několika faktory, jako jsou velikost venue a další obecné podmínky. Je
-        reálné pokrýt veškeré výdaje registračními poplatky. Doporučujeme
-        vyhledat sponzory, pokud je chcete udržet co nejnižší. Vzhledem k tomu,
-        že jsou Delegáti WCA dobrovolníci a nedostávají za svou práci plat, měli
-        by organizátoři zvážit zaplacení náhrady za jejich cestovní výdaje.
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: Termín pro ohlášení soutěže
-      #original_hash: 66bf437
-      content_html: >-
-        Soutěž musí být ohlášená alespoň 28 dní před jejím začátkem (podívejte
-        se na <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
-        Requirements</a>). Nicméně tento čas většinou nestačí. Měli byste zvážit
-        co všechno musíte udělat při organizaci soutěže a dát si na to dostatek
-        času. WCAT také bude muset zkontrolovat Vaši soutěž než bude ohlášena.
-        Zkonzultujte to se svým delegátem, pokud si nejste jisti, kolik času je
-        zapotřebí.
-    paragraph4:
-      #original_hash: b6dca56
-      title: Proximity policy
-      #original_hash: f5eeb95
-      content1: >-
-        Soutěže WCA budou schváleny, pokud jsou nejméně 10 km nebo 5 dnů od
-        jakékoli jiné soutěže. WCAT by měl přezkoumat navrhovanou soutěž
-        zejména, pokud existuje další soutěž vzdálená méně než 10 km a jsou-li
-        od sebe časově méně než 5 dnů. Delegát, který žádá o schválení takové
-        soutěže, musí poskytnout další informace o tom, proč by tato soutěž měla
-        být schválena. Možné argumenty, které podporují takovou soutěž, jsou:
-      olist1:
-        #original_hash: de00462
-        '1': Tyto soutěže nemají společné eventy.
-        #original_hash: f7bacc5
-        '2': Tyto soutěže probíhají v různých zemích.
-      #original_hash: 5c5cf04
-      content2: >-
-        "3x3x3 Fewest Moves simultaneous competitions" jsou soutěže, na kterých
-        je pouze 3x3x3 Fewest Moves a probíhají zároveň na různých místech.
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: >-
-            3x3x3 Fewest Moves simultaneous competitions nemohou být součástí
-            žádné další normální soutěže.
-          alist1:
-            #original_hash: 75aa0c7
-            1a: 'Časové rámce, kdy obě soutěže probíhají, se nemohou překrývat.'
-        '2':
-          #original_hash: b2b8004
-          content1: >-
-            Pokud se koná taková soutěž v dosahu bližším než 10 km od další
-            normální soutěže, pak
-          alist1:
-            #original_hash: 8f532bb
-            2a: 'by obě soutěže měly být alespoň 5 dní od sebe, nebo'
-            #original_hash: e14e11e
-            2b: na té další soutěži nesmí probíhat 3x3x3 Fewest Moves.
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: Ohlašování eventů
-      #original_hash: 7ad62c7
-      content: >-
-        Všechny eventy soutěže musí být specifikovány, když delegát žádá o
-        povolení soutěže. Později přidané eventy musí být schváleny WCAT.
-    paragraph5:
-      #original_hash: 17d01de
-      title: Limit pro soutěžící
-      #original_hash: bd8e6ee
-      content_html: >-
-        Počet soutěžících na jedné soutěži může být limitován (podívejte se na
-        <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
-        Requirements</a>). WCAT musí delegátovi schválit daný limit. Limity pro
-        soutěžící musí být zvoleny rozumně a s ohledem na očekávaný zájem. Limit
-        by neměl být nastaven na nižší hodnotu kvůli menším důvodům. Požadovaný
-        limit by se měl zvážit už při hledání vhodných prostor. Limit pro
-        soutěžící musí být jasně uveden na stránce soutěže na WCA webu.
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: Vyřizování registrací
-      #original_hash: bd669a1
-      content: >-
-        Registrace musí být zpracovány na základě "kdo dřív přijde, ten dřív
-        mele", to znamená, že nejprve se řeší registrace, která byla dokončena
-        nejdříve. Pokud se registrační poplatek platí předem, registrace se
-        považuje za dokončenou až po provedení platby. To by mělo být jasně
-        uvedeno v platebních pokynech na internetových stránkách soutěže.
-    paragraph7:
-      #original_hash: e4f1c62
-      title: Správa waiting listu
-      #original_hash: 81ca3f3
-      content1: >-
-        Jakmile se naplní limit pro soutěžící, měl by se otevřít waiting list.
-        Pokud zaregistrovaný a schválený soutěžící svoji registraci zruší, může
-        být nahrazen dalším soutěžícím z waiting listu.
-      #original_hash: 802b34f
-      content2: >-
-        Pokud se registrační poplatek platí předem, je efektivní nabídnout volné
-        místo člověku, který je další v pořadí na waiting listu a určit lhůtu
-        pro zaplacení startovného pro dokončení registrace (např. 48 hodin). V
-        případě, že není provedena platba nebo další soutěžící odřeknou, volné
-        místo by mělo být nabídnuto dalšímu člověku na waiting listu. Tento
-        postup by se měl opakovat, dokud se nezaplní všechna volná místa. Není
-        možné, aby soutěžící obcházeli waiting list.
-      #original_hash: 37bcbd6
-      content3: >-
-        Pokud soutěžící neprošli obvyklou registrací, ale soutěžili, jejich
-        výsledky budou odstraněny zpětně (za předpokladu, že byl nastaven limit
-        pro soutěžící a byl naplněn).
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: Úkoly před soutěží
-      list:
-        #original_hash: c8abb5e
-        '1': >-
-          Před ohlášením soutěže musí být zveřejněn harmonogram na stránkách
-          soutěže. Tento harmonogram může být později upraven.
-        #original_hash: e93d043
-        '2': >-
-          Soutěžící by měli být rozděleni do skupin, score sheety musí být
-          vytištěny a měly by být rozděleny dle skupin. Doporučujeme také
-          naplánovat, kdo bude scramblovat jednotlivé skupiny každých eventů,
-          přinejmenším v prvních kolech. Scrambleři by měli být spolehliví.
-    paragraph9:
-      #original_hash: ead44f5
-      title: Úkoly během soutěže
-      #original_hash: ee2e9c6
-      content: >-
-        Úkoly, které má organizátor dělat během soutěže, by měly být projednány
-        s Delegátem WCA. Typické úkoly jsou (mohou jimi být pověřeny jiné
-        spolehlivé osoby):
-      list:
-        #original_hash: 03aea46
-        '1': Správa registračního stolu
-        #original_hash: c4388f3
-        '2': Udělat oznámení
-        #original_hash: 45c78ae
-        '3': Vyhlašovat skupiny a rozložit score sheety
-        #original_hash: 0b31986
-        '4': Score-taking a tisk výsledků
-        #original_hash: 7ab2d4c
-        '5': Sehnat scramblery a judge
-        #original_hash: 52e8316
-        '6': >-
-          Řešit všechny organizační záležitosti, které se týkají místa konání
-          (např. klíče nebo WiFi)
   media:
     common:
       #original_hash: f9b7a97

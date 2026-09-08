@@ -27,6 +27,9 @@ import {
   decompressFullResult,
   decompressPartialResult,
 } from "@/lib/live/decompressDiff";
+import { countCompletedResults } from "@/lib/live/countCompletedResults";
+import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
+import { SERVER_SEEDED_STALE_TIME } from "@/providers/WCAQueryClientProvider";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 interface LiveResultContextType {
@@ -104,6 +107,7 @@ export function MultiRoundResultProvider({
 
   const api = useAPI();
   const queryClient = useQueryClient();
+  const { setCompletedCount, setTotalCompetitors } = useAllRoundsInfo();
 
   const roundQueryOptions = useCallback(
     (roundId: string) => {
@@ -122,6 +126,8 @@ export function MultiRoundResultProvider({
   const queries = initialRounds.map((round) => ({
     ...roundQueryOptions(round.id),
     initialData: round,
+    refetchOnMount: true,
+    staleTime: SERVER_SEEDED_STALE_TIME,
   }));
 
   const {
@@ -186,6 +192,9 @@ export function MultiRoundResultProvider({
         const newResults = newData.results;
         const newCompetitors = newData.competitors;
 
+        setCompletedCount(roundId, newData.completed_competitors);
+        setTotalCompetitors(roundId, newCompetitors.length);
+
         // We just made a full refetch. Only keep those results as "pending"
         //   which are NOT contained exactly in the refetched round.
         // In other words, if we find a competitor with the updated attempts
@@ -206,6 +215,7 @@ export function MultiRoundResultProvider({
       const decompressedUpdated = updated.map(decompressPartialResult);
       const decompressedCreated = created.map(decompressFullResult);
 
+      const deletedSet = new Set(deleted);
       const roundQuery = roundQueryOptions(roundId);
 
       queryClient.setQueryData(
@@ -220,9 +230,18 @@ export function MultiRoundResultProvider({
             roundWcifId: roundId,
           }),
           state_hash: after_hash,
-          competitors: [...oldData.competitors, ...created.map((c) => c.user)],
+          competitors: [
+            ...oldData.competitors,
+            ...created.map((c) => c.user),
+          ].filter((c) => !deletedSet.has(c.id)),
         }),
       );
+
+      const newRound = queryClient.getQueryData<LiveRound>(roundQuery.queryKey);
+      if (newRound) {
+        setCompletedCount(roundId, countCompletedResults(newRound));
+        setTotalCompetitors(roundId, newRound.results.length);
+      }
 
       diffPendingResults(decompressedUpdated, (pr, ir) => {
         // The incoming values are diffs, meaning (type-wise)

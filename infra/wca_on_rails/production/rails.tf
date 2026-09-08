@@ -285,14 +285,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3900"
+  memory = "3850"
 
   container_definitions = jsonencode([
     {
       name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
       cpu    = 1024
-      memory = 3900
+      memory = 3850
       portMappings = [
         {
           name = "rails-port"

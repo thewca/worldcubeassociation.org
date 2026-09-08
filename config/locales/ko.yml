@@ -119,6 +119,8 @@ ko:
     555bf: 5x5x5 블라인드
     #original_hash: cedbf87
     333mbf: 3x3x3 멀티 블라인드
+    #original_hash: a103de4
+    fto: FTO
     #original_hash: e6791be
     magic: 매직
     #original_hash: c962425
@@ -232,6 +234,8 @@ ko:
       ranking: '상위 %{ranking}'
       #original_hash: 0664a83
       percent: '상위 %{percent}%'
+      #original_hash: 023a81e
+      all_advance: 모두 진출
       attempt_result:
         #original_hash: ac6a282
         time: '%{round_format} < %{time}'
@@ -239,6 +243,8 @@ ko:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+    #original_hash: ba6fa8b
+    all_advance: 모든 선수가 진출
     #original_hash: 6e55337
     ranking: '상위 %{ranking}명이 다음 라운드로 진출'
     #original_hash: 7ee969c
@@ -1375,10 +1381,10 @@ ko:
           WCA 대회 발표 팀(WCAT)은 WCA 파견위원이 제출한 WCA 대회를 승인하고 발표하며, 이러한 발표가 WCA 품질 기준을
           준수하도록 합니다. 이 팀은 또한 WCA 대회 요건 정책과 같은 문서에서 적절한 대회 제출 프로토콜을 유지할 책임이 있습니다.
           WCAT는 개별 대회의 조직 및 감독에 대해 책임을 지지 않습니다.
-        #original_hash: 5007698
+        #original_hash: 58daf5b
         wic: >-
           WCA 청렴성 위원회(WIC)는 WCA 대회 기간 중 또는 공식 온라인 WCA 플랫폼에서 발생한 사건에 대해 독립적인 조사를
-          수행합니다. 이때 사건은 WCA의 정신, 행동 강령, 윤리 강령 및/또는 규정을 위반한 혐의가 있는 사건입니다.
+          수행합니다. 이때 사건은 WCA의 가치관, 행동강령, 윤리강령 및/또는 규정을 위반한 혐의가 있는 사건입니다.
         #original_hash: be491ec
         weat: WCA 행정지원팀(WEAT)은 WCA 이사회의 행정 업무를 수행합니다.
         #original_hash: fc67562
@@ -1545,6 +1551,9 @@ ko:
         edit_reason:
           #original_hash: fdfcccf
           label: 변경 사유
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: '%{attribute} 변경 사유'
         proof_attach:
           #original_hash: a9645b1
           label: 증거 자료 첨부
@@ -1554,8 +1563,13 @@ ko:
         captcha:
           #original_hash: 58c1271
           validation_error: 귀하께서 로봇이 아닌지 확인해 주십시오.
+        verified_checkbox:
+          #original_hash: 54f118d
+          label: '이 양식을 제출함으로써, 귀하는 해당 법률 문서를 이미 검토했으며 제공된 정보를 확인했음을 인정하는 것입니다.'
       #original_hash: 126541e
       success_message: 요청이 제출되었습니다. 곧 답변드리겠습니다.
+      #original_hash: bb6a0cf
+      success_message_with_ticket_link_html: '요청이 접수되었습니다. 곧 연락드리겠습니다. 요청 상태를 확인하려면 <a href="%{link}">이 링크</a>를 방문하세요.'
   homepage:
     #original_hash: 824d76b
     learn_more: 더 알아보기
@@ -1921,7 +1935,7 @@ ko:
         이 WCA ID에 대한 생년월일이 기록되어 있지 않습니다. 이 <a href="%{dob_form_path}">전용 양식</a>을
         사용하여 WCA 결과 팀에게 문의하십시오.
       #original_hash: f7dde6e
-      wca_id_no_gender_html: "이 WCA ID에 대한 성별 정보가 기록되어 있지 않습니다.  <a href='%{wrt_contact_path}'='%{wrt_contact_path}' target='_blank'>WCA \b결과 팀</a>에 연락하여 이 문제를 해결하십시오."
+      wca_id_no_gender_html: "이 WCA ID에 대한 성별 정보가 기록되어 있지 않습니다.  <a href='%{wrt_contact_path}' target='_blank'>WCA 결과 팀</a>에 연락하여 이 문제를 해결하십시오."
       #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
         이 WCA ID에 대한 국적 정보가 기록되어 있지 않습니다.  <a
@@ -2287,8 +2301,12 @@ ko:
       registrations_file_label: 참가자 명단 파일
       #original_hash: 224f3a6
       registrations_file_hint: '상태, 이름, 지역, WCA ID, 생년월일, 성별, 이메일 및 각 종목에 대한 열이 있는 CSV 파일입니다.'
+      #original_hash: 01beb54
+      preview: 참가 신청 데이터 미리 보기
       #original_hash: d6fbc9d
       import: 가져오기
+      #original_hash: 77dfd21
+      cancel: 취소
       errors:
         #original_hash: 0ef547d
         error: '%{registration}을 가져오는 중 오류가 발생했습니다: %{error}.'
@@ -2329,6 +2347,8 @@ ko:
       add: 참가 신청 추가하기
       #original_hash: fd52980
       ots_not_enabled: 참가 신청이 마감되었으며 현장 참가 신청이 활성화되지 않았습니다 - 먼저 대회를 수정하여 활성화해야 합니다.
+      #original_hash: ed9d329
+      ots_before_registration_open: 현장 참가 신청은 참가 신청이 시작되기 전까지는 이용할 수 없습니다.
       #original_hash: 61125b5
       competition_over: 대회가 종료된 후에는 현장 참가 신청을 추가할 수 없습니다.
       errors:
@@ -2435,26 +2455,53 @@ ko:
         사용하지 않는 경우 참가 신청 요건에 이를 명시하는 것을 잊지 마십시오.
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: 결과 제출 후에는 일정을 수정할 수 없습니다.
+      #original_hash: 1877b69
+      spots_left:
+        zero: 정원 마감
+        other: '%{count}자리 남음'
     live:
       #original_hash: 10d1a3c
       title: 실시간 결과
+      #original_hash: ef1c23b
+      manage_rounds: 라운드 관리
+      incompatible:
+        #original_hash: 4e41690
+        external: 본 대회는 외부 기록 입력 소프트웨어를 사용합니다. 실시간 결과를 확인하는 방법은 대회 정보를 참조하십시오.
+        #original_hash: 92b3341
+        wca_live: 본 대회는 WCA Live를 사용하여 결과를 집계합니다. 실시간 결과를 보시려면 다음 링크를 클릭하세요.
+      round_state:
+        #original_hash: 98aadb3
+        ongoing: 진행 중
+        #original_hash: e5fd9cf
+        done: 완료
       connection:
         #original_hash: f92b311
         initialized: 연결이 초기화됩니다
-        #original_hash: 66d44d4
-        connected: '연결됨, 결과가 업데이트 중입니다.'
+        #original_hash: b574812
+        connected: '연결됨, 실시간 결과 업데이트 수신 중입니다.'
         #original_hash: 53abaa2
         disconnected: '연결이 끊어짐, 결과가 업데이트되지 않습니다.'
+        status:
+          #original_hash: 3ec2f2a
+          initialized: 초기 설정 중
+          #original_hash: c2f9b7b
+          connected: 연결됨
+          #original_hash: 771e05f
+          disconnected: 연결 끊김
       podiums:
         #original_hash: 02ae2bd
         title: 입상자
-        #original_hash: d7297a7
-        undetermined: 입상자는 추후 결정됩니다
+        #original_hash: 69c4270
+        undetermined: 추후 결정 예정
+        #original_hash: 61e88df
+        none: 아직 입상자가 없습니다!
       admin:
         #original_hash: cf9b770
         open: 개시
         #original_hash: 719ea39
         clear: 초기화
+        #original_hash: bbfa773
+        close: 닫기
         #original_hash: 42faad9
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors} 입력됨'
         #original_hash: adec79f
@@ -2463,6 +2510,24 @@ ko:
         edit: 수정
         #original_hash: 612e12d
         results: 결과
+        #original_hash: b233e77
+        registration: 참가 신청
+        #original_hash: 1e0d934
+        admin_view: 관리자 보기
+        #original_hash: 530a71b
+        results_view: 결과 보기
+        #original_hash: 1dadee2
+        double_check: 교차 검증
+        #original_hash: a5be381
+        submit_results: 결과 제출하기
+        #original_hash: 0ed766a
+        add_to_batch: 일괄 처리에 추가
+        #original_hash: 1a2e4ff
+        remove_from_batch: 일괄 처리에서 제거하기
+        #original_hash: 8b6d8cb
+        batch_mode: 일괄 처리 모드
+        #original_hash: a577fa2
+        submit_batch: '일괄 제출 (%{count})'
         warnings:
           #original_hash: 9198c71
           omitted: '%{attempt_number}회차 시도를 누락하였습니다. 의도한 것인지 확인해 주세요.'
@@ -2478,6 +2543,10 @@ ko:
             사이에 큰 차이가 있습니다. 결과가 정확한지 확인해 주세요.
           #original_hash: 0be6543
           round_locked: 다음 라운드는 이미 시작되었으므로 변경 사항은 다음 라운드에 영향을 미치지 않습니다!
+          #original_hash: 3380184
+          9m_violated: >-
+            이전 라운드에 제출된 결과가 규정 9m3을 충족하기에 충분하지 않습니다. 이전 라운드의 결과 제출 시점에 최소
+            %{competitor_count_needed}개의 결과가 제출되지 않으면 이번 라운드의 결과는 허용되지 않습니다.
         quit:
           #original_hash: de62de1
           title: 선수 내보내기
@@ -2487,8 +2556,21 @@ ko:
             other: '다음으로 진출할 선수는 %{competitors}입니다'
           #original_hash: c87ca67
           advance: 다음 선수 진출시키기
-          #original_hash: e85b311
-          quit_confirm: 라운드에서 선수 내보내기
+          #original_hash: aa59a26
+          quit_confirm:
+            zero: 라운드에서 선수 내보내기
+            other: 라운드에서 선수 내보내기
+          bulk:
+            #original_hash: e0981de
+            success: '%{count}명의 선수를 성공적으로 퇴출시켰습니다.'
+            #original_hash: 98fe723
+            failure: 선수들을 일괄적으로 내보내는 데 실패했습니다
+            #original_hash: 774050e
+            menu: 일괄 내보내기
+            #original_hash: 89f89c0
+            id: ID
+            #original_hash: 709a232
+            name: 성명
           #original_hash: 1a2285d
           quit_menu: 나가기
           #original_hash: 70835a0
@@ -2497,6 +2579,21 @@ ko:
           cancel: 취소
           #original_hash: 79d6737
           failed_to_fetch: 다음으로 진출할 선수를 가져오는 데 실패했습니다.
+          #original_hash: d4dcd86
+          still_processing: 일부 결과가 처리 중인 동안에는 '선수 내보내기' 작업을 실행할 수 없습니다
+          #original_hash: ecb0dd4
+          in_batch: 제출되지 않은 일괄 처리에 속한 선수를 내보낼 수 없습니다
+        add_competitor:
+          #original_hash: 9dcb50d
+          single_round: 라운드에 선수 추가하기
+          #original_hash: bf3b670
+          multiple_rounds:
+            zero: 듀얼 라운드의 두 라운드 모두에 선수 추가하기.
+            other: 듀얼 라운드의 두 번째 라운드가 아직 개시되지 않았으므로 선수를 라운드에 추가하려면 별도로 추가해야 합니다.
+          #original_hash: b3bdfaa
+          event_edit_warning: >-
+            이 선수는 해당 대회에 참가 신청되어 있지 않으며, 이 대회는 참가 종목 변경을 더 이상 허용하지 않습니다. 선수를
+            추가하는 것은 가능하지만, 의도된 변경인지 반드시 확인하십시오.
       results:
         #original_hash: 4705687
         competitor: 선수
@@ -3013,8 +3110,8 @@ ko:
           external_registration_page: 참가 신청 페이지
           #original_hash: 87b7d5f
           uses_wca_registration: 참가 신청을 위해 WCA 홈페이지 사용
-          #original_hash: ebe8c47
-          uses_wca_live: 기록 입력을 위해 WCA 라이브를 사용할 것입니다
+          #original_hash: 0611f2d
+          scoretaking_software: 기록 입력에 사용되는 소프트웨어
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: 통화 코드
@@ -3195,8 +3292,8 @@ ko:
           external_registration_page: 선수들이 참가 신청을 진행해야 하는 페이지입니다. 유효한 http(s) url이어야 합니다.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
+          #original_hash: cc7d557
+          scoretaking_software: '듀얼 라운드를 사용하려면 ''%{choice_ilr}''을 선택하세요'
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -3312,6 +3409,14 @@ ko:
             bulk: 참가 신청 메뉴에서 '대량 자동 승인' 버튼 활성화
             #original_hash: 490ed83
             live: 결제 시 자동으로 참가 신청을 승인합니다.
+        website:
+          scoretaking_software:
+            #original_hash: 1c88388
+            external: WCA에서 관리하지 않는 외부 도구
+            #original_hash: 4b175c3
+            wca_live: live.worldcubassociation.org에서 호스팅되는 WCA Live
+            #original_hash: 1ee034d
+            internal: 통합 실시간 결과
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3675,6 +3780,8 @@ ko:
       cannot_delete_confirmed: 확정된 대회는 삭제할 수 없습니다.
       #original_hash: 191df37
       must_contain_event: 대회에는 최소한 하나의 종목이 포함되어야 합니다
+      #original_hash: d01c9f5
+      fto_not_yet_allowed: 'FTO는 %{date} 이전에 시작하는 대회에서는 개최될 수 없습니다.'
       #original_hash: 54fe619
       schedule_must_match_rounds: '적어도 하나의 라운드가 있어야 하며, 모든 라운드는 일정에 포함되어 있어야 합니다.'
       #original_hash: 6e228b7
@@ -3867,6 +3974,10 @@ ko:
         qualification_all_events_html: '참가 자격 요건 기록을 <b>%{date}</b> 또는 그 이전에 충족해야 합니다.'
         #original_hash: b701c2a
         qualification_some_events_html: '%{events}의 참가 자격 요건 기록을 <b>%{date}</b> 또는 그 이전에 충족해야 합니다.'
+        #original_hash: ce9b21b
+        advancement_condition_html: >-
+          다음 라운드에 진출하는 선수 인원은 계획된 최대 인원입니다. 실제 참가자 수는 예상보다 적을 수 있으며, 동점자가 발생할
+          경우에도 더 적을 수 있습니다.
       #original_hash: 041a5de
       format: 형식
       #original_hash: 0d1fcc3
@@ -3877,6 +3988,8 @@ ko:
       proceed: 후속 라운드 진출 인원
       #original_hash: 2ffe44e
       qualification: 참가 자격
+      #original_hash: 5289f93
+      advancement_condition: 진출 조건
     schedule:
       display_as:
         #original_hash: 0424f6e
@@ -3915,6 +4028,8 @@ ko:
         none: 없음
         #original_hash: 9b9a6aa
         show_buttons: 시간대 버튼 보기
+        #original_hash: dd3c440
+        hide_buttons: 시간대 버튼 숨기기
         #original_hash: d2ac826
         use_time_zone: 이 시간대 사용하기
       #original_hash: 73acb7f
@@ -3927,10 +4042,14 @@ ko:
       venue_selection_all: '%{venueCount}개의 모든 장소의 일정을 한 번에 보고 있습니다.'
       #original_hash: 97df911
       timezone_message: '이 장소의 시간대는 %{timezone}입니다.'
-      #original_hash: 94b2570
-      timezone_setting: '다음 시간대 설정으로 이 일정을 보고 있습니다:'
-      #original_hash: 75194fd
-      multiple_timezones_available: 모든 장소가 동일한 시간대에 있는 것은 아니라는 점을 주의하십시오!
+      #original_hash: f948a0e
+      timezone_setting: '다음 시간대로 이 일정을 보고 있습니다:'
+      #original_hash: ca4f078
+      multiple_timezones_available: 일부 장소는 다른 시간대에 있으므로 주의하시기 바랍니다!
+      #original_hash: 459e545
+      select_a_timezone: 시간대 선택
+      #original_hash: 80e8704
+      select_a_venue_to_view: 일정을 보려면 위에서 장소를 선택하세요.
       #original_hash: d94a371
       timezone_set_local: 현재 위치로 설정
       #original_hash: 17ab650
@@ -4279,6 +4398,8 @@ ko:
         greater_china: 중화권 대회 입상
       #original_hash: c32a014
       place: 순위
+      #original_hash: 89e4fa7
+      dual: 듀얼
       #original_hash: ddb18c1
       medal_collection: 입상 내역
       #original_hash: 9e69e13
@@ -4410,7 +4531,7 @@ ko:
           #original_hash: 576c3b8
           '4': >-
             자세한 내용은 <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
             대회 주최자 지침</a>을 참고해주십시오.
       '6':
         #original_hash: 8005a61
@@ -4524,10 +4645,10 @@ ko:
       참가했습니다. 이러한 성장에도 불구하고 우리는 여전히 현지 주최자부터 WCA 파견위원, 심지어 WCA 이사회에 이르기까지 거의
       전적으로 자원봉사자에 의해 운영되는 조직입니다. WCA가 기능할 수 있도록 삶의 시간을 내어준 모든 분께 매우 감사드립니다. 더 많은
       재정 지원을 통해 전 세계적으로 더 많은 행사를 허용하면서 대회에 더 높은 수준의 전문성을 제공하기를 바랍니다.</p>
-    #original_hash: bccd8c5
-    spirit: '우리의 정신은 전 세계 사람들이 친근한 분위기 속에서 함께 즐거운 시간을 보내고, 서로 돕고 스포츠맨다운 태도로 행동하는 것입니다.'
-    #original_hash: 69131cc
-    spirit_footer: WCA 정신
+    #original_hash: 1076bcb
+    spirit: '우리의 가치는 공동체, 공정성, 즐거움, 탁월함, 그리고 자원봉사입니다.'
+    #original_hash: 9679c23
+    spirit_footer: WCA 가치
     #original_hash: c1781ee
     our_goals_title: 우리의 목표
     #original_hash: c1144d4
@@ -4589,11 +4710,11 @@ ko:
       operations_html: '일상 업무는 WCA의 %{committees_and_teams}에서 수행합니다.'
       #original_hash: 0e7a036
       teams_committees: 팀과 위원회
-      #original_hash: 7e849d2
+      #original_hash: c319cc2
       delegates_html: >-
         <p><strong>WCA 파견위원</strong>은 WCA 발의에서 정의되고 WCA 규정에 설명된 역할입니다. 파견위원의 주요
-        임무는 WCA를 대신하여 대회를 감독하는 것입니다. WCA 파견위원은 모든 WCA 대표가 WCA의 사명, 정신 및 규정에 따라
-        운영되도록 할 책임이 있습니다. WCA는 <strong>수석 파견위원</strong>, <strong>지역
+        임무는 WCA를 대신하여 대회를 감독하는 것입니다. WCA 파견위원은 모든 WCA 대표가 WCA의 목적, 핵심 가치 및 규정에
+        따라 운영되도록 할 책임이 있습니다. WCA는 <strong>수석 파견위원</strong>, <strong>지역
         파견위원</strong>, <strong>파견위원</strong>, <strong>준 파견위원</strong> 및
         <strong>수습 파견위원</strong>%{see_link}을 구분합니다.</p> <p>WCA 파견위원의 임무 외에도 수석
         파견위원 또는 지역 파견위원은 해당 지역의 WCA 파견위원을 관리할 책임이 있으며, 지역 문제에 대해 커뮤니티에서 연락을 받을
@@ -4641,8 +4762,6 @@ ko:
     competition_templates: 대회 템플릿
     #original_hash: 5ca0558
     certificates: WCT의 상장 템플릿
-    #original_hash: f580987
-    orga_guidelines: 주최자 지침
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA 파견위원
@@ -4665,6 +4784,8 @@ ko:
       last_delegated: 마지막 파견
       #original_hash: 5ab4a17
       total_delegated: 총 파견 횟수
+      #original_hash: cec62d6
+      lead_delegated: 대표 파견위원을 수행한 대회
       #original_hash: 90ccd64
       history: 이력
   regional_organizations:
@@ -4936,7 +5057,7 @@ ko:
       #original_hash: 9bbdf16
       content1_html: >-
         대회를 주최하는 데 관심이 있거나 이미 대회를 주최할 계획이 있다면 <a
-        href="/organizer-guidelines">주최자 지침</a>을 읽어보십시오.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">주최자 지침</a>을 읽어보십시오.
       #original_hash: 5016669
       content2_html: 본 문서에는 중요한 정보가 포함되어 있으므로 모든 대회 주최자가 꼭 읽어야 합니다.
   regulations_translations:
@@ -4966,188 +5087,6 @@ ko:
       번역본을 추가/업데이트하는 데 관심이 있으시면 <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">번역에
       대한 GitHub 리포지토리의 지침</a>을 참조하십시오.
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      WQAC의 주최자 지침 모음집에 오신 것을 환영합니다. 주최자가 되는 것을 고려하고 있다면 이 문서를 읽는 것이 좋습니다. 이 문서는
-      필수 문서와 강력히 권장하는 문서로 구분되어 있습니다. 제공된 정보를 잘 알고 있어야 높은 수준의 즐거운 대회를 운영할 수 있습니다!
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>면책 조항</strong>: WCA는 대회를 주최하지 않습니다. WCA가 승인한 대회의 주최자는 WCA를 대신하여 어떤
-      것에도 서명해서는 <strong>안 됩니다</strong>. 대회를 주최하거나 주최를 지원하는 관련 지역 또는 국가 큐빙 협회에
-      연락해 보십시오.
-    essential:
-      #original_hash: 44bd0ba
-      description: 필수 문서
-      #original_hash: 1cf87ad
-      finding-venue: 장소 찾기
-      #original_hash: 3ce0d9c
-      orga-team-delegate: 주최 팀을 결성하고 파견위원과 접선하기
-      #original_hash: d3c693b
-      budget: 대회 예산 책정
-      #original_hash: b1429a7
-      schedule: 일정 관리
-      #original_hash: beea57d
-      checklist: 대회 체크 리스트
-      #original_hash: 9defcf1
-      registration: 참가 신청 관리
-      #original_hash: e298a56
-      venue-setup: 대회장 배치
-      #original_hash: 2b6a5dd
-      work-during-comp: 대회 중 주최자의 업무
-    recommended:
-      #original_hash: 6b843f3
-      title: 추천 문서
-      #original_hash: 6e4fb29
-      staff: 자원봉사자 배정하기
-      #original_hash: 4735583
-      emails: 이메일
-      #original_hash: 8e7ca09
-      running-systems: 러닝 및 심판 시스템
-      #original_hash: 2b31c89
-      new-competitors: 첫 참가자에 대한 태도
-      #original_hash: 00c4f78
-      enhancing-experience: 선수와 자원봉사자 경험 향상
-      #original_hash: 2345aaa
-      reflection: 주최자의 회고
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: WCA 대회 주최자 지침
-    paragraph0:
-      #original_hash: ee36904
-      title: 짧은 버전
-      #original_hash: 60d9532
-      content: >-
-        아래에서 대회를 주최하는 방법에 대한 아이디어를 얻기 위한 핵심 요점에 대한 간략한 요약을 찾아볼 수 있습니다. 이것이 당신에게
-        맞는 것이라고 생각되면 위의 문서를 살펴보십시오!
-    paragraph1:
-      #original_hash: e5f5329
-      title: 대회를 주최하는 방법
-      #original_hash: 3dbbbee
-      content: >-
-        모든 WCA 대회는 WCA 파견위원이 참석하고 감독해야 합니다. 직접 대회를 주최하는 데 관심이 있다면 가장 가까운 WCA
-        파견위원에게 연락하십시오. 그들은 지역의 관행에 대한 자세한 정보를 제공할 수 있으며, 같은 기간에 계획된 다른 대회가 있는지
-        알고 있으므로 적합한 날짜를 찾는 데 도움을 줄 수 있습니다. 귀하의 지역 근처에 WCA 파견위원이 없는 경우, 지역의 수석
-        파견위원에게 연락하십시오.
-    paragraph2:
-      #original_hash: f20dd3b
-      title: 대회 개최에 따른 예상 비용
-      #original_hash: f16a06f
-      content: >-
-        예상 비용은 국가마다 크게 다르며 대회장 규모 및 기타 일반 조건과 같은 여러 요인에 따라 결정됩니다. 참가비로 모든 비용을
-        충당하는 것은 가능합니다. 그러나 참가비를 가능한 한 낮게 유지하려면 후원사를 찾는 것이 좋습니다. WCA 파견위원이
-        자원봉사자이며 업무에 대한 급여를 받지 않지만, 주최자는 그들의 여행 경비에 대한 보상을 지불하는 것을 고려해야 합니다.
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: 대회 발표 마감일
-      #original_hash: 477a672
-      content_html: >-
-        대회는 대회 시작 최소 28일 전에 발표되어야 합니다(자세한 사항은 <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>대회
-        요건</a> 참고). 그러나 이 시간으로는 충분하지 않습니다. 대회를 주최하는 데 필요한 모든 것을 고려하고 준비할 충분한 시간을
-        가져야 합니다. 또한 WCAT는 대회가 발표되기 전에 대회를 검토할 시간이 필요합니다. 얼마나 많은 시간이 필요한지 확신이 서지
-        않으면 파견위원과 상의하십시오.
-    paragraph4:
-      #original_hash: b6dca56
-      title: 거리 정책
-      #original_hash: 0574d31
-      content1: >-
-        WCA 대회는 다른 대회와 최소 30 km 또는 5일 이상 떨어져 있는 경우 허용됩니다. WCAT는 특히 두 대회 사이의 거리가
-        30 km 미만이고 두 대회 사이의 시간이 5일 미만인 다른 대회가 있는 경우 제안된 대회를 검토해야 합니다. 이러한 대회에 대한
-        승인을 요청하는 파견위원은 대회가 허용되어야 하는 이유에 대한 추가 정보를 제공해야 합니다. 이러한 대회가 허용되어야 한다는 것을
-        뒷받침하는 가능한 주장은 다음과 같습니다:
-      olist1:
-        #original_hash: de00462
-        '1': 두 대회에는 공통된 종목이 없습니다.
-        #original_hash: b8ff462
-        '2': 두 대회는 서로 다른 지역에서 개최됩니다.
-      #original_hash: 5c5cf04
-      content2: '"3x3x3 최소회전 동시 대회"는 3x3x3 최소회전 종목만 있으며, 다양한 장소에서 동시에 진행되는 WCA 대회입니다.'
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: 3x3x3 최소회전 동시 대회는 다른 정규 대회의 일부가 될 수 없습니다.
-          alist1:
-            #original_hash: 75aa0c7
-            1a: 두 대회의 시상식 시간이 겹치면 안 됩니다.
-        '2':
-          #original_hash: b2b8004
-          content1: '대회 장소 중 다른 정규 대회로부터 10km 이내에 있는 장소가 있는 경우,'
-          alist1:
-            #original_hash: 8f532bb
-            2a: '두 대회는 최소 5일 이상 떨어져 있거나,'
-            #original_hash: e14e11e
-            2b: 다른 정규 대회에 3x3x3 최소회전 종목이 있어서는 안 됩니다.
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: 종목 발표
-      #original_hash: 7ad62c7
-      content: 대회에서 개최되는 모든 종목은 대회 승인을 요청할 때 파견위원이 지정해야 합니다. 추가 사항은 WCAT에 의해 승인되어야 합니다.
-    paragraph5:
-      #original_hash: 17d01de
-      title: 참가자 정원
-      #original_hash: 6bfef2c
-      content_html: >-
-        참가자 수는 종목 또는 대회당 제한될 수 있습니다(자세한 사항은 <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>대회
-        요건</a> 참고). 참가자 정원은 현명하게 선택해야 하며 예상되는 참가 관심도에 따라 선택해야 합니다. 사소한 이유로 정원을
-        낮추어서는 안 됩니다. 적절한 장소를 탐색할 때부터 참가자 정원은 고려되어야 합니다. 참가자 정원은 WCA 웹사이트의 대회
-        페이지에 명확히 기재되어야 합니다.
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: 참가 신청 관리
-      #original_hash: bd669a1
-      content: >-
-        참가 신청은 선착순으로 처리해야 합니다. 즉, 가장 먼저 완료된 신청이 먼저 처리되어야 합니다. 참가비 지불 방식이 선불이라면,
-        대회의 참가 신청은 참가비가 완납되었을 때 완료된 것으로 간주합니다. 이는 대회 웹사이트의 참가비 지불 안내에 명확히 기재되어야
-        합니다.
-    paragraph7:
-      #original_hash: e4f1c62
-      title: 대기 명단 관리
-      #original_hash: 81ca3f3
-      content1: >-
-        대회의 참가자 정원에 도달하면 대기 명단이 열려야 합니다. 참가 신청 및 승인된 선수가 신청을 취소하면, 대기 명단에 있는 다음
-        선수로 대체될 수 있습니다.
-      #original_hash: 802b34f
-      content2: >-
-        대회 참가비를 선불로 지불하는 경우, 대기 명단에서 참가자 명단으로 올라갈 선수가 참가비를 납부할 수 있는 기한(예: 48시간)을
-        설정하는 것이 효율적인 접근 방식입니다. 제시간 내에 참가비를 지불하지 않거나 선수가 참가자 명단으로 올라가는 것을 거부하는
-        경우, 대기 명단에 있는 다음 선수가 참가자 명단으로 대신하여 올라갈 수 있습니다. 이 과정은 참가자 정원이 모두 채워질 때까지
-        계속되어야 합니다. 선수가 대기 명단의 순번을 무시하고 참가자 명단으로 올라가는 예외가 있어서는 안 됩니다.
-      #original_hash: 37bcbd6
-      content3: >-
-        선수가 정규 신청 절차를 거치지 않고 대회에 참가한 경우, 해당 선수의 결과는 소급하여 삭제됩니다(참가자 정원이 존재했으며 제한에
-        도달하였다고 가정).
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: 대회 전에 해야 할 일
-      list:
-        #original_hash: c8abb5e
-        '1': 대회를 발표하기 전에 대회 웹사이트에 일정을 게시해야 합니다. 이 일정은 나중에 조정될 수도 있습니다.
-        #original_hash: e93d043
-        '2': >-
-          선수는 여러 그룹으로 나뉘어야 하며, 기록지를 인쇄하여 그룹의 분배에 따라 나눠야 합니다. 또한 적어도 1라운드에 대해서는
-          모든 종목의 모든 그룹에서 누가 스크램블을 할지 계획하는 것이 좋습니다. 스크램블러는 신뢰할 수 있는 사람이어야 합니다.
-    paragraph9:
-      #original_hash: ead44f5
-      title: 대회 중에 해야 할 일
-      #original_hash: ee2e9c6
-      content: >-
-        대회 기간 동안 주최자가 해야 할 업무는 WCA 파견위원과 논의해야 합니다. 일반적인 업무는 다음과 같습니다(신뢰할 수 있는 다른
-        사람에게 위임할 수 있음):
-      list:
-        #original_hash: 03aea46
-        '1': 접수처 관리
-        #original_hash: c4388f3
-        '2': 안내 방송
-        #original_hash: 45c78ae
-        '3': 그룹 호출 및 기록지 나열
-        #original_hash: 0b31986
-        '4': 기록 입력 및 결과 출력
-        #original_hash: 7ab2d4c
-        '5': 스크램블러와 심판 물색
-        #original_hash: 52e8316
-        '6': '대회 장소에 관한 모든 운영 측면에서의 문제 처리(예: 열쇠 또는 WiFi)'
   media:
     common:
       #original_hash: f9b7a97
@@ -5553,15 +5492,24 @@ ko:
       missing_scrambles_for_multi_error: >-
         [%{round_id}] 3x3x3 멀티 블라인드에는 여러 그룹이 있을 수 있지만,  최소 하나의 그룹에는 모든 시도에 대한
         스크램블이 포함되어야 합니다.
+      #original_hash: 2757334
+      mbld_scrambles_warning: >-
+        [%{round_id}] 이번 라운드는 3x3x3 멀티 블라인드 결과를 포함합니다. WRT에서 사용되지 않은 스크램블을 제거할 수
+        있도록, 제출 코멘트에 각 스크램블 세트에서 참가자가 실제로 사용한 스크램블의 개수를 명시해 주세요.
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] 여러 FMC 그룹이 사용되었습니다. 한 그룹의 FMC가 사용된 경우 Scrambles Matcher를
         사용하여 사용되지 않은 스크램블을 선택 취소하십시오. 그렇지 않은 경우 여러 그룹의 FMC가 사용된 이유를 설명하는 WRT에
         주석을 포함하십시오.
-      #original_hash: d6830c0
+      #original_hash: ce201ef
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] 이 라운드에는 종목 관리 탭에 지정된 스크램블 세트 수와 다른 수의 스크램블 세트 수가 있습니다. 종목
-        관리 탭에서 스크램블 세트 수를 사용된 세트 수로 조정하십시오.
+        [%{round_id}] 이 라운드의 스크램블 세트 수(%{actual})는 '종목 관리' 탭에 지정된
+        수(%{expected})와 다릅니다. '종목 관리' 탭에서 스크램블 세트 개수를 실제 사용된 세트 개수로 조정해 주세요.
+    schedule:
+      #original_hash: 7a12424
+      activity_outside_competition_dates_warning: >-
+        '%{activity_name}' 활동(코드: %{activity_code})은 개최지의 현지 시간대를 기준으로 대회 일정 기간
+        외에 편성되어 있습니다. 대회 일정을 실제 대회 날짜로 업데이트해 주시기 바랍니다.
   tickets:
     type:
       #original_hash: e43f273

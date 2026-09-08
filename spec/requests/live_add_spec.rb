@@ -9,7 +9,7 @@ RSpec.describe "WCA Live API" do
     it "Adds the Live Result Correctly" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
       round.open_round!(User.first)
@@ -39,7 +39,7 @@ RSpec.describe "WCA Live API" do
     it 'broadcasts diff to ActionCable' do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
       round.open_round!(User.first)
@@ -59,7 +59,7 @@ RSpec.describe "WCA Live API" do
     it "Can't add result if round isn't open yet" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: ["333"], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       registration = create(:registration, :accepted, competition: competition)
 
@@ -75,7 +75,7 @@ RSpec.describe "WCA Live API" do
     it "Can't add result for a competitor that isn't in that round" do
       sign_in delegate
 
-      competition = create(:competition, event_ids: %w[333 444], delegates: [delegate])
+      competition = create(:competition, scoretaking_software: :internal, event_ids: %w[333 444], delegates: [delegate])
       round = create(:round, competition: competition, event_id: "333")
       create(:registration, :accepted, competition: competition)
       registration = create(:registration, :accepted, competition: competition, event_ids: ["444"])

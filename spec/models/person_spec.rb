@@ -322,4 +322,84 @@ RSpec.describe Person do
       end
     end
   end
+
+  describe "#medals" do
+    context "with a dual final round" do
+      let!(:competition) { create(:competition, event_ids: ["333"]) }
+      let!(:round_one) { create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2) }
+      let!(:round_two) { create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2) }
+
+      let!(:gold_person) { create(:person) }
+      let!(:silver_person) { create(:person) }
+      let!(:bronze_person) { create(:person) }
+      let!(:fourth_person) { create(:person) }
+
+      before do
+        create(:linked_round, rounds: [round_one, round_two])
+
+        create(:result, person: gold_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 50, average: 100, pos: 1, global_pos: 1)
+        create(:result, person: silver_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 150, average: 200, pos: 2, global_pos: 2)
+      end
+
+      context "when the bronze medalist's better average was in the second round" do
+        before do
+          # Third in round one, but only fourth across the linked rounds.
+          create(:result, person: fourth_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 350, average: 400, pos: 3, global_pos: 4)
+          # Competed in both rounds, so both results carry the same global_pos.
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 450, average: 500, pos: 4, global_pos: 3)
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 250, average: 300, pos: 1, global_pos: 3)
+        end
+
+        it "awards the bronze medal to the person with global_pos 3" do
+          expect(bronze_person.medals).to eq(gold: 0, silver: 0, bronze: 1, total: 1)
+        end
+
+        it "does not award a medal to the person who was third in only one of the linked rounds" do
+          expect(fourth_person.medals).to eq(gold: 0, silver: 0, bronze: 0, total: 0)
+        end
+
+        it "awards gold and silver by global_pos" do
+          expect(gold_person.medals).to eq(gold: 1, silver: 0, bronze: 0, total: 1)
+          expect(silver_person.medals).to eq(gold: 0, silver: 1, bronze: 0, total: 1)
+        end
+      end
+
+      context "when the bronze medalist's better average was in the first round" do
+        before do
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 250, average: 300, pos: 3, global_pos: 3)
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 450, average: 500, pos: 1, global_pos: 3)
+          create(:result, person: fourth_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 350, average: 400, pos: 4, global_pos: 4)
+        end
+
+        it "awards the bronze medal only once" do
+          expect(bronze_person.medals).to eq(gold: 0, silver: 0, bronze: 1, total: 1)
+        end
+
+        it "does not award a medal to the person with global_pos 4" do
+          expect(fourth_person.medals).to eq(gold: 0, silver: 0, bronze: 0, total: 0)
+        end
+      end
+
+      context "when everyone competes in both rounds" do
+        before do
+          create(:result, person: gold_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 100, average: 150, pos: 1, global_pos: 1)
+          create(:result, person: silver_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 130, average: 180, pos: 2, global_pos: 2)
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 250, average: 300, pos: 3, global_pos: 3)
+          create(:result, person: bronze_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 300, average: 350, pos: 3, global_pos: 3)
+          create(:result, person: fourth_person, competition: competition, event_id: "333", round: round_one, round_type_id: "1", best: 400, average: 450, pos: 4, global_pos: 4)
+          create(:result, person: fourth_person, competition: competition, event_id: "333", round: round_two, round_type_id: "f", best: 350, average: 400, pos: 4, global_pos: 4)
+        end
+
+        it "awards each medal exactly once" do
+          expect(gold_person.medals).to eq(gold: 1, silver: 0, bronze: 0, total: 1)
+          expect(silver_person.medals).to eq(gold: 0, silver: 1, bronze: 0, total: 1)
+          expect(bronze_person.medals).to eq(gold: 0, silver: 0, bronze: 1, total: 1)
+        end
+
+        it "does not award a medal to the person with global_pos 4" do
+          expect(fourth_person.medals).to eq(gold: 0, silver: 0, bronze: 0, total: 0)
+        end
+      end
+    end
+  end
 end

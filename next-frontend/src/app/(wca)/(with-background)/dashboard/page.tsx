@@ -1,5 +1,5 @@
-import { auth } from "@/auth";
-import getPermissions from "@/lib/wca/permissions";
+import { getSession } from "@/auth";
+import getPermissions from "@/lib/wca/permissions.server";
 import {
   Button,
   Code,
@@ -16,13 +16,14 @@ import Link from "next/link";
 import { iconMap } from "@/components/icons/iconMap";
 import { route } from "nextjs-routes";
 import AttemptResultField from "./AttemptResultField";
+import LayerStyleDoc from "./LayerStyleDoc";
 import {
   ColorSemanticTokenDoc,
   ColorTokenDoc,
 } from "@/app/(wca)/(with-background)/dashboard/ThemeExplorer";
 
 export default async function Dashboard() {
-  const session = await auth();
+  const session = await getSession();
   const permissions = await getPermissions();
 
   return (
@@ -90,6 +91,12 @@ export default async function Dashboard() {
               </Box>
             ))}
           </SimpleGrid>
+        </Card.Body>
+      </Card.Root>
+      <Card.Root width="full">
+        <Card.Body>
+          <Card.Title>Layer Styles</Card.Title>
+          <LayerStyleDoc />
         </Card.Body>
       </Card.Root>
       <Card.Root width="full">

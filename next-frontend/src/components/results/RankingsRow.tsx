@@ -31,7 +31,7 @@ export function RankingsRow({
   return (
     <Table.Row>
       {isByRegion ? (
-        <CountryCell countryId={ranking.country_id} />
+        <CountryCell countryId={ranking.country_id} filterable />
       ) : (
         <Table.Cell>{index + 1}</Table.Cell>
       )}
@@ -42,7 +42,7 @@ export function RankingsRow({
       <Table.Cell>
         {formatAttemptResult(ranking.value, ranking.event_id)}
       </Table.Cell>
-      {!isByRegion && <CountryCell countryId={ranking.country_id} />}
+      {!isByRegion && <CountryCell countryId={ranking.country_id} filterable />}
       <CompetitionCell
         competitionId={ranking.competition_id}
         competitionName={ranking.competition_name}

@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_log_group" "nextjs" {
   name = "${var.name_prefix}-next"
+  retention_in_days = 30
 }
 
 locals {
@@ -53,7 +54,7 @@ locals {
       value = "TTNormsPro"
     },
     {
-      name = "NEXTAUTH_URL"
+      name = "BETTER_AUTH_URL"
       value = "https://${var.shared.next_url}"
     },
     {
@@ -68,7 +69,7 @@ locals {
       value = "1"
     },
     {
-      name = "NEXTAUTH_URL"
+      name = "BETTER_AUTH_URL"
       value = "https://www.worldcubeassociation.org"
     },
   ]
@@ -147,7 +148,7 @@ resource "aws_ecs_task_definition" "nextjs" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-group         = aws_cloudwatch_log_group.nextjs.name
           awslogs-region        = var.region
           awslogs-stream-prefix = var.name_prefix
         }
@@ -198,7 +199,7 @@ resource "aws_ecs_task_definition" "nextjs_live_results" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-group         = aws_cloudwatch_log_group.nextjs.name
           awslogs-region        = var.region
           awslogs-stream-prefix = var.name_prefix
         }

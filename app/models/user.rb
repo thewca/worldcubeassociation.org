@@ -13,8 +13,11 @@ class User < ApplicationRecord
   has_many :actually_delegated_competitions, -> { over.visible.not_cancelled }, through: :competition_delegates, source: "competition"
   has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
+  has_many :competition_scoretakers
+  has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
+  has_many :newcomer_results, through: :registrations, source: :newcomer_results
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
   belongs_to :unconfirmed_person, -> { current }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true, inverse_of: :unconfirmed_user
@@ -806,6 +809,9 @@ class User < ApplicationRecord
       can_administer_competitions: {
         scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
+      can_scoretake_competitions: {
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id) + scoretaking_competition_ids,
+      },
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
@@ -832,6 +838,9 @@ class User < ApplicationRecord
       },
       can_request_to_edit_others_profile: {
         scope: can_request_to_edit_others_profile? ? "*" : [],
+      },
+      can_manage_incidents: {
+        scope: can_manage_incidents? ? "*" : [],
       },
     }
     if banned?
@@ -920,6 +929,10 @@ class User < ApplicationRecord
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
       wic_team?
+  end
+
+  def can_scoretake_competition?(competition)
+    can_manage_competition?(competition) || competition.scoretakers.include?(self)
   end
 
   def can_manage_any_not_over_competitions?
@@ -1061,6 +1074,14 @@ class User < ApplicationRecord
     end
   end
 
+  REGISTRATION_PROFILE_FIELDS = %w[name gender dob country_iso2].freeze
+
+  # The same conditions as `cannot_register_for_competition_reasons`, but as data rather than
+  # translated sentences, so that API clients can render (and translate) them themselves.
+  def missing_registration_profile_fields
+    REGISTRATION_PROFILE_FIELDS.select { self.public_send(it).blank? }
+  end
+
   def cannot_organize_competition_reasons
     [].tap do |reasons|
       reasons << I18n.t('registrations.errors.need_name') if name.blank?
@@ -1169,7 +1190,11 @@ class User < ApplicationRecord
   end
 
   def notify_of_results_posted(competition)
-    CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later if results_notifications_enabled?
+    if results_notifications_enabled?
+      CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later
+    elsif locked_account?
+      RegistrationsMailer.notify_registrant_of_locked_account_creation(self, competition).deliver_later
+    end
   end
 
   def maybe_assign_wca_id_by_results(competition, notify: true)
@@ -1218,6 +1243,48 @@ class User < ApplicationRecord
       .map(&:user_id)
   end
 
+  DELEGATE_MILESTONES = [50, 100, 200, 300].freeze
+
+  def self.delegate_milestones_for_digest
+    last_month_start = 1.month.ago.beginning_of_month.to_date
+    last_month_end = 1.month.ago.end_of_month.to_date
+
+    active_delegate_ids = UserRole.active
+                                  .where(group: UserGroup.delegate_regions)
+                                  .pluck(:user_id)
+                                  .uniq
+
+    return {} if active_delegate_ids.empty?
+
+    base_scope = User.joins(:actually_delegated_competitions).where(id: active_delegate_ids)
+
+    before_counts = base_scope
+                    .where(competitions: { end_date: ...last_month_start })
+                    .group("users.id")
+                    .count
+
+    through_counts = base_scope
+                     .where(competitions: { end_date: ..last_month_end })
+                     .group("users.id")
+                     .count
+
+    milestone_achievers = DELEGATE_MILESTONES.index_with do |milestone|
+      through_counts.filter_map do |user_id, through_count|
+        before_count = before_counts.fetch(user_id, 0)
+        user_id if before_count < milestone && through_count >= milestone
+      end
+    end.select { |_milestone, user_ids| user_ids.any? }
+
+    all_ids = milestone_achievers.values.flatten.uniq
+    return {} if all_ids.empty?
+
+    users_by_id = User.where(id: all_ids).index_by(&:id)
+
+    milestone_achievers.transform_values do |user_ids|
+      user_ids.filter_map { |id| users_by_id[id] }.sort_by(&:name)
+    end
+  end
+
   def self.search(query, params: {})
     search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
     admin_search = ActiveRecord::Type::Boolean.new.cast(params[:adminSearch])
@@ -1226,10 +1293,10 @@ class User < ApplicationRecord
     return User.where(email: query) if admin_search && search_by_email
 
     if searching_persons_table
-      users = Person.includes(:user).current
+      users = Person.includes(user: SERIALIZATION_INCLUDES).current
       search_by_email = false # We can't search by email on the 'Person' table
     else
-      users = User.confirmed_email.not_dummy_account
+      users = User.confirmed_email.not_dummy_account.includes(SERIALIZATION_INCLUDES)
 
       users = users.where(id: self.staff_delegate_ids) if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
 
@@ -1254,8 +1321,12 @@ class User < ApplicationRecord
   end
 
   private def deprecated_team_roles
-    active_roles
-      .includes(:metadata, group: [:metadata])
+    # Reuse the already-loaded association (with its metadata/group preloaded) when the
+    # caller eager loaded it; otherwise build the query with the includes we need. Calling
+    # `.includes` unconditionally would discard any preloaded `active_roles` and re-query.
+    roles = active_roles.loaded? ? active_roles : active_roles.includes(:metadata, group: [:metadata])
+
+    roles
       .select do |role|
         [
           UserGroup.group_types[:teams_committees],
@@ -1273,6 +1344,16 @@ class User < ApplicationRecord
     methods: %w[url country],
     include: %w[avatar],
   }.freeze
+
+  # Associations that `serializable_hash` touches: `staff_delegate?` (delegate role metadata),
+  # `deprecated_team_roles` (active roles + their metadata/group) and `avatar` (current_avatar).
+  # Eager load these whenever many users are serialized to avoid an N+1 explosion.
+  SERIALIZATION_INCLUDES = [
+    :current_avatar,
+    :delegate_role_metadata,
+    :delegate_roles,
+    { active_roles: [:metadata, { group: :metadata }] },
+  ].freeze
 
   def serializable_hash(options = nil)
     # NOTE: doing deep_dup is necessary here to avoid changing the inner values
@@ -1577,6 +1658,9 @@ class User < ApplicationRecord
       roles.update_all(user_id: new_user.id)
       registrations.update_all(user_id: new_user.id)
 
+      final_wca_id = new_user.wca_id.presence || self.wca_id.presence
+      new_user.newcomer_results.update_all(person_id: final_wca_id) if final_wca_id.present?
+
       return if wca_id.blank?
 
       wca_id_to_be_transferred = self.wca_id
@@ -1604,6 +1688,8 @@ class User < ApplicationRecord
       update!(wca_id: wca_id)
       stale_claims.update_all(**CLEAR_WCA_ID_CLAIM_ATTRIBUTES)
       potential_duplicate_persons.delete_all
+
+      newcomer_results.update_all(person_id: wca_id)
     end
 
     stale_claims_before_update.each { |user| WcaIdClaimMailer.notify_user_of_claim_cancelled(user, wca_id).deliver_later }

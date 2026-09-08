@@ -59,7 +59,7 @@ class IncidentsController < ApplicationController
   end
 
   def mark_as
-    @incident = Incident.find(params[:incident_id])
+    @incident = Incident.find(params.require(:incident_id))
     updated_attrs = {}
     case params[:kind]
     when "sent"
@@ -107,7 +107,7 @@ class IncidentsController < ApplicationController
   private
 
     def set_incident
-      @incident = Incident.find(params[:id])
+      @incident = Incident.find(params.require(:id))
     end
 
     def incident_params

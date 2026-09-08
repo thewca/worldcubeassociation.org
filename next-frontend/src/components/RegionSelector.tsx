@@ -56,14 +56,7 @@ const countryOptions = (t: TFunction) =>
     .map((country) => ({
       key: country.id,
       label: t(`countries.${country.iso2}`),
-      flag: (
-        <WcaFlag
-          code={country.iso2}
-          fallback={country.id}
-          width={32}
-          height={25}
-        />
-      ),
+      flag: <WcaFlag code={country.iso2} size="lg" />,
       value: country.iso2,
     }))
     .toSorted((a, b) => a.label.localeCompare(b.label));
@@ -123,6 +116,7 @@ export default function RegionSelector({
     <Field.Root alignItems="start">
       <Field.Label textStyle="label">{label}</Field.Label>
       <Combobox.Root
+        lazyMount
         collection={collection}
         onInputValueChange={(e) => filter(e.inputValue)}
         onValueChange={(e) => onRegionChange(e.value[0])}
@@ -135,7 +129,7 @@ export default function RegionSelector({
         selectionBehavior={nullable ? "clear" : "replace"}
       >
         <Combobox.Control>
-          <Combobox.Input placeholder={name} />
+          <Combobox.Input placeholder={name} cursor="pointer" />
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />
             <Combobox.Trigger />

@@ -7,7 +7,7 @@ resource "aws_sqs_queue" "this" {
   delay_seconds              = 0
   max_message_size           = 262144
   message_retention_seconds  = 345600
-  receive_wait_time_seconds  = 0
+  receive_wait_time_seconds  = 20
   visibility_timeout_seconds = 60
   tags = {
     Env = "Production"
@@ -19,7 +19,7 @@ resource "aws_sqs_queue" "results" {
   delay_seconds              = 0
   max_message_size           = 262144
   message_retention_seconds  = 345600
-  receive_wait_time_seconds  = 0
+  receive_wait_time_seconds  = 20
   visibility_timeout_seconds = 60
   tags = {
     Env = "Production"

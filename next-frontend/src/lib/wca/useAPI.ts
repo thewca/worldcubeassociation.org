@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "@/auth.client";
 import { useMemo } from "react";
 import { authenticatedClient, unauthenticatedClient } from "@/lib/wca/wcaAPI";
 import createQueryClient from "openapi-react-query";
@@ -7,8 +7,24 @@ export function useAPIClient() {
   const { data: session } = useSession();
 
   return useMemo(() => {
-    if (session) {
-      return authenticatedClient(session.accessToken);
+    // No access token means the refresh token is spent; there is nothing to authenticate with.
+    if (session?.accessToken) {
+      const client = authenticatedClient(session.accessToken);
+
+      // If the backend rejects our access_token (revoked, expired, etc.),
+      // the session is no longer usable —
+      // drop it so the user is forced through a fresh login rather than
+      // continuing to fire requests that 401.
+      client.use({
+        onResponse({ response }) {
+          if (response.status === 401) {
+            signOut();
+          }
+          return response;
+        },
+      });
+
+      return client;
     } else {
       return unauthenticatedClient;
     }

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import {
-  continents, countries, nonFutureCompetitionYears, WCA_EVENT_IDS,
+  continents, countries, nonFutureCompetitionYears, WCA_EVENT_IDS_WITH_FUTURE,
 } from '../../lib/wca-data.js.erb';
 import { ALL_REGIONS_VALUE } from '../wca/RegionSelector';
 
@@ -100,7 +100,7 @@ const sanitizeRegion = (region) => {
 };
 
 const sanitizeEvents = (values) => (values || []).filter(
-  (value) => WCA_EVENT_IDS.includes(value),
+  (value) => WCA_EVENT_IDS_WITH_FUTURE.includes(value),
 );
 
 // filter state
@@ -215,7 +215,7 @@ export const filterReducer = (state, action) => {
           : [...state.selectedEvents, action.eventId],
       };
     case 'select_all_events':
-      return { ...state, selectedEvents: WCA_EVENT_IDS };
+      return { ...state, selectedEvents: WCA_EVENT_IDS_WITH_FUTURE };
     case 'clear_events':
       return { ...state, selectedEvents: [] };
     default:

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 
-type StoredState<T> = [T, (newState: T) => void];
+type StoredState<T> = [T, Dispatch<SetStateAction<T>>];
 
 /**
  * This functions like the useState hook, but it fetches the state stored in
@@ -29,10 +29,16 @@ export default function useStoredState<T>(
     return storedState;
   });
 
-  function setAndStoreState(newState: T) {
-    setState(newState);
-    localStorage.setItem(key, JSON.stringify(newState));
-  }
+  const setAndStoreState: Dispatch<SetStateAction<T>> = (newState) => {
+    setState((prev) => {
+      const resolved =
+        typeof newState === "function"
+          ? (newState as (prev: T) => T)(prev)
+          : newState;
+      localStorage.setItem(key, JSON.stringify(resolved));
+      return resolved;
+    });
+  };
 
   return [state, setAndStoreState];
 }

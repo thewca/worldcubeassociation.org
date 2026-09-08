@@ -37,12 +37,12 @@ RSpec.describe CompetitionEvent do
   end
 
   def build_rounds(round_numbers)
-    competition_event.rounds_attributes = round_numbers.map { |n| { number: n, format_id: "a", total_number_of_rounds: round_numbers.size } }
+    competition_event.rounds_attributes = round_numbers.map { |n| attributes_for(:round, competition_event: competition_event, number: n, total_number_of_rounds: round_numbers.size) }
   end
 
   def mark_rounds_for_destruction(round_numbers)
     competition_event.rounds_attributes = competition_event.rounds.map do |round|
-      { id: round.id, _destroy: round_numbers.include?(round.number) ? "1" : "0" }
+      { id: round.id, _destroy: round_numbers.include?(round.number) }
     end
   end
 end

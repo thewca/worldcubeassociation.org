@@ -1,0 +1,24 @@
+type: object
+required:
+  - class
+  - id
+  - name
+  - url
+properties:
+  class:
+    type: string
+    enum:
+      - person
+  id:
+    type: string
+  wca_id:
+    type: string
+  name:
+    type: string
+  country_iso2:
+    type: string
+  url:
+    type: string
+    format: uri
+  avatar:
+    $ref: '../users/UserAvatar.yaml'

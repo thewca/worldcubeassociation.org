@@ -1,4 +1,4 @@
-import { DataList, Icon, Text, VStack } from "@chakra-ui/react";
+import { DataList, Text, VStack } from "@chakra-ui/react";
 import WcaFlag from "@/components/WcaFlag";
 import CountryMap from "@/components/CountryMap";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
@@ -23,9 +23,7 @@ export default function CompetitionShortlist({
       <DataList.Root orientation="horizontal" size="lg" iconLabel>
         <DataList.Item>
           <DataList.ItemLabel>
-            <Icon size="xl">
-              <WcaFlag code={comp.country_iso2} fallback={comp.country_iso2} />
-            </Icon>
+            <WcaFlag code={comp.country_iso2} size="xl" />
           </DataList.ItemLabel>
           <DataList.ItemValue gap="2">
             <CountryMap code={comp.country_iso2} t={t} fontWeight="bold" />

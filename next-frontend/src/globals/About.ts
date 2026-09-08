@@ -1,6 +1,7 @@
 import { Block, GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
 import { QuoteBlock } from "@/blocks/text/quote";
+import { newTabCheckbox } from "@/blocks/utils";
 
 const callToActionBlock: Block = {
   slug: "callToAction",
@@ -30,6 +31,7 @@ const callToActionBlock: Block = {
           type: "text",
           required: true,
         },
+        newTabCheckbox,
       ],
     },
   ],

@@ -8,6 +8,6 @@ class ForumsController < ApplicationController
   end
 
   def show
-    @forum = Forum.includes(:forum_topics).find(params[:id])
+    @forum = Forum.includes(:forum_topics).find(params.require(:id))
   end
 end

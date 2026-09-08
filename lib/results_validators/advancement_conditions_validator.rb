@@ -34,6 +34,13 @@ module ResultsValidators
       }
     end
 
+    # Sort key matching Result.merged_dual_rounds: primary score (average or best per format,
+    # with DNF/<=0 ranked worst), then best, then id. Lower sorts first (better).
+    private def dual_round_sort_key(result)
+      primary = result.format.sort_by == "average" ? result.average : result.best
+      [primary <= 0 ? 1 : 0, primary, result.best <= 0 ? 1 : 0, result.best, result.id]
+    end
+
     def run_validation(validator_data)
       validator_data.each do |competition_data|
         competition = competition_data.competition
@@ -79,7 +86,14 @@ module ResultsValidators
             end
 
             if previous_round.present?
-              previous_results = results_by_round_id[previous_round.id]
+              # Linked (dual) rounds are run as a single combined round, so the previous results
+              # are the union of the previous round and any of its colinked rounds, keeping only
+              # each competitor's best result (mirrors Result.merged_dual_rounds).
+              previous_round_ids = [previous_round.id, *previous_round.colinked_rounds.ids]
+              previous_results = previous_round_ids
+                                 .flat_map { |id| results_by_round_id[id] || [] }
+                                 .group_by(&:person_id)
+                                 .map { |_, person_results| person_results.min_by { |r| dual_round_sort_key(r) } }
               number_of_people_in_previous_round = previous_results.size
               condition = previous_round.advancement_condition
 

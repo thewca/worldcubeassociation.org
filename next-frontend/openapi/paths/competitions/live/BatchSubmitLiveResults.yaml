@@ -1,0 +1,28 @@
+summary: Adds multiple live results for a given round in a single request
+parameters:
+  - name: competitionId
+    in: path
+    required: true
+    schema:
+      type: string
+  - name: roundId
+    in: path
+    required: true
+    schema:
+      type: string
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../../schemas/live/BatchSubmitLiveResult.yaml'
+responses:
+  '202':
+    description: Batch Accepted
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string

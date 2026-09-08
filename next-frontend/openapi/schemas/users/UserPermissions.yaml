@@ -2,6 +2,7 @@ type: object
 required:
   - can_access_panels
   - can_administer_competitions
+  - can_scoretake_competitions
   - can_attend_competitions
   - can_create_groups
   - can_edit_delegate_report
@@ -12,6 +13,7 @@ required:
   - can_request_to_edit_others_profile
   - can_view_delegate_admin_page
   - can_view_delegate_report
+  - can_manage_incidents
 properties:
   can_attend_competitions:
     type: object
@@ -32,6 +34,13 @@ properties:
       scope:
         $ref: "./CompetitionPermissions.yaml"
   can_administer_competitions:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_scoretake_competitions:
     type: object
     required:
       - scope
@@ -104,6 +113,13 @@ properties:
         type: array
         items:
           type: string
+  can_manage_incidents:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
   can_request_to_edit_others_profile:
     type: object
     required:

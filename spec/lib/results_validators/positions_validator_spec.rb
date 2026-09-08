@@ -122,6 +122,20 @@ RSpec.describe ResultsValidators::PositionsValidator do
       end
     end
 
+    context "h2h rounds" do
+      it "does not check or fix positions of h2h results" do
+        round = create(:round, competition: competition1, event_id: "333oh", is_h2h_mock: true)
+        # H2H positions come from match outcomes, so they may contradict the times.
+        create(:result, competition: competition1, pos: 1, best: 2000, average: 4000, event_id: "333oh", round: round)
+        create(:result, competition: competition1, pos: 2, best: 1000, average: 2000, event_id: "333oh", round: round)
+
+        pv = ResultsValidators::PositionsValidator.new(apply_fixes: true).validate(competition_ids: competition1.id, model: Result)
+        expect(pv.any_errors?).to be false
+        expect(pv.infos).to be_empty
+        expect(Result.where(round_id: round.id).order(:best).pluck(:pos)).to eq [2, 1]
+      end
+    end
+
     context "bo3 results with a mean" do
       # NOTE: I assume the previous sets of tests validates that the validator works
       # on either Result/InboxResult and on any given results input.

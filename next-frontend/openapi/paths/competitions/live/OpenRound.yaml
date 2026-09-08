@@ -25,6 +25,7 @@ put:
               - status
               - created_rows
               - locked_rows
+              - state
             properties:
               status:
                 type: string
@@ -32,6 +33,8 @@ put:
                 type: number
               locked_rows:
                 type: number
+              state:
+                $ref: '../../../schemas/live/AdminRounds/RoundState.yaml'
     '400':
       description: Round cannot be opened
       content:

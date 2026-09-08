@@ -3,7 +3,6 @@
 class ContactEditProfile < ContactForm
   attribute :wca_id
   attribute :changes_requested
-  attribute :edit_profile_reason
   attribute :requestor_user
   attribute :ticket
   attribute :document, attachment: true
@@ -12,6 +11,7 @@ class ContactEditProfile < ContactForm
     :field,
     :from,
     :to,
+    :reason,
   )
 
   def value_humanized(value, field)

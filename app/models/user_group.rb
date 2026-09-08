@@ -29,6 +29,8 @@ class UserGroup < ApplicationRecord
   has_many :direct_child_users, through: :direct_child_roles, source: :user
   has_many :active_direct_child_users, through: :active_direct_child_roles, source: :user
 
+  before_validation :end_active_lead_roles, if: -> { is_active_changed? && !is_active }
+
   # The `touch` is important because we generally access "semantic" UserGroups
   #   (ie T/Cs, DelegateRegions, Translators, etc.) through their metadata.
   #   This metadata however is cached, because we don't want to fire a SELECT call every time the code wants to know
@@ -200,7 +202,9 @@ class UserGroup < ApplicationRecord
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def changes_in_group_for_digest
-    duration_start_date = Time.now.beginning_of_month - 1.month
+    last_month = 1.month.ago
+    duration_start_date = last_month.beginning_of_month
+    duration_end_date = last_month.end_of_month
     sorted_users = []
     team_member_changes = {}
 
@@ -214,7 +218,7 @@ class UserGroup < ApplicationRecord
     no_more_members = []
 
     roles
-      .select { |role| role.updated_at >= duration_start_date } # Filters members who have change in the duration.
+      .select { |role| role.updated_at.between?(duration_start_date, duration_end_date) }
       .sort_by { |role| [role.user.name, role.updated_at] } # Sorts the members alphabetically.
       .each do |role|
         user = role.user
@@ -330,11 +334,29 @@ class UserGroup < ApplicationRecord
     metadata&.email
   end
 
+  def readable_by?(user)
+    return true unless is_hidden
+
+    return false if user.nil?
+
+    permission = is_active ? :can_read_groups_current : :can_read_groups_past
+    user.has_permission?(permission, id)
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[metadata],
   }.freeze
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  private def end_active_lead_roles
+    active_roles.select(&:lead?).each { |role| role.update!(end_date: Date.today) }
+    # Since `active_roles` is loading the data based on timestamps, the
+    # association may currently be loaded based on older timestamps. We have
+    # just changed some of the timestamps in the update calls above, so
+    # force-reset the association to ensure time-accurate data.
+    active_roles.reset
   end
 end

@@ -1,5 +1,5 @@
 import { components } from "@/types/openapi";
-import { hasPassed } from "@/lib/wca/dates";
+import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import {
   afterCompetitionTabs,
   beforeCompetitionTabs,
@@ -16,6 +16,8 @@ export default function CompetitionMenu({
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
+  const { scoretaking_software } = competitionInfo;
+
   if (!hasPassed(competitionInfo.start_date)) {
     const tabs = beforeCompetitionTabs(competitionInfo);
     return (
@@ -25,8 +27,15 @@ export default function CompetitionMenu({
     );
   }
 
-  if (!hasPassed(competitionInfo.end_date) || LIVE_RESULT_BETA) {
-    return <LiveMenu competitionInfo={competitionInfo}>{children}</LiveMenu>;
+  if (!hasPassedEndOfDay(competitionInfo.end_date) || LIVE_RESULT_BETA) {
+    return (
+      <LiveMenu
+        competitionInfo={competitionInfo}
+        scoretakingSoftware={scoretaking_software}
+      >
+        {children}
+      </LiveMenu>
+    );
   }
   // TODO: Differentiate if the results have been posted
   const tabs = afterCompetitionTabs(competitionInfo);
