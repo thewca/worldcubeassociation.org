@@ -39,11 +39,13 @@ export default function TabMenu({
   children,
   tabs,
   backHref,
+  mobileDrawer = false,
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
   backHref?: RouteLiteral;
+  mobileDrawer?: boolean;
 }) {
   const pathName = usePathname();
   const { t } = useT();
@@ -63,17 +65,17 @@ export default function TabMenu({
       width="full"
       value={currentPath}
       orientation="vertical"
+      sideNav
       lazyMount
       unmountOnExit
     >
       <Tabs.List
-        height="fit-content"
-        position="sticky"
-        width="fit-content"
+        width={{ base: "full", md: "fit-content" }}
         min-width="3xs"
         textAlign="start"
-        hideBelow="md"
+        hideBelow={mobileDrawer ? "md" : undefined}
         gap="3"
+        mb={{ base: "4", md: "0" }}
       >
         <TabList
           tabs={tabs}
@@ -85,68 +87,78 @@ export default function TabMenu({
           }
         />
       </Tabs.List>
-      <Box hideFrom="md" mb="4">
-        <Drawer.Root
-          open={drawerOpen}
-          onOpenChange={(e) => setDrawerOpen(e.open)}
-          placement="start"
-        >
-          <Drawer.Trigger asChild>
-            <IconButton
-              aria-label="Open menu"
-              size="sm"
-              position="fixed"
-              left="3"
-              top="3"
-              colorPalette="bg"
-              variant="ghost"
-            >
-              <LuAlignJustify />
-            </IconButton>
-          </Drawer.Trigger>
+      {mobileDrawer && (
+        <Box hideFrom="md" mb="4">
+          <Drawer.Root
+            open={drawerOpen}
+            onOpenChange={(e) => setDrawerOpen(e.open)}
+            placement="start"
+          >
+            <Drawer.Trigger asChild>
+              <IconButton
+                aria-label="Open menu"
+                size="sm"
+                position="fixed"
+                left="3"
+                top="3"
+                colorPalette="bg"
+                variant="ghost"
+              >
+                <LuAlignJustify />
+              </IconButton>
+            </Drawer.Trigger>
 
-          <Drawer.Backdrop />
-          <Drawer.Positioner>
-            <Drawer.Content>
-              <Drawer.Header>
-                <Drawer.Title>{competitionInfo.name}</Drawer.Title>
-                <Drawer.CloseTrigger asChild>
-                  <CloseButton />
-                </Drawer.CloseTrigger>
-              </Drawer.Header>
+            <Drawer.Backdrop />
+            <Drawer.Positioner>
+              <Drawer.Content>
+                <Drawer.Header>
+                  <Drawer.Title>{competitionInfo.name}</Drawer.Title>
+                  <Drawer.CloseTrigger asChild>
+                    <CloseButton />
+                  </Drawer.CloseTrigger>
+                </Drawer.Header>
 
-              <Drawer.Body>
-                {backHref && (
-                  <Button asChild variant="ghost" justifyContent="left" mb="2">
-                    <Link href={backHref} onClick={() => setDrawerOpen(false)}>
-                      <LuArrowLeft /> {competitionInfo.name}
-                    </Link>
-                  </Button>
-                )}
-                <Tabs.List
-                  flexDirection="column"
-                  gap="1"
-                  borderInlineEnd="none"
-                  w="100%"
-                  bg="none"
-                >
-                  <TabList
-                    tabs={tabs}
-                    t={t}
-                    isAdminRoute={isAdminRoute}
-                    openGroup={openGroup}
-                    onToggle={(tab: CompetitionNavTab) =>
-                      setOpenGroup((prev) =>
-                        prev === tab.menuKey ? null : tab.menuKey,
-                      )
-                    }
-                  />
-                </Tabs.List>
-              </Drawer.Body>
-            </Drawer.Content>
-          </Drawer.Positioner>
-        </Drawer.Root>
-      </Box>
+                <Drawer.Body>
+                  {backHref && (
+                    <Button
+                      asChild
+                      variant="ghost"
+                      justifyContent="left"
+                      mb="2"
+                    >
+                      <Link
+                        href={backHref}
+                        onClick={() => setDrawerOpen(false)}
+                      >
+                        <LuArrowLeft /> {competitionInfo.name}
+                      </Link>
+                    </Button>
+                  )}
+                  <Tabs.List
+                    flexDirection="column"
+                    gap="1"
+                    borderInlineEnd="none"
+                    w="100%"
+                    bg="none"
+                  >
+                    <TabList
+                      tabs={tabs}
+                      t={t}
+                      isAdminRoute={isAdminRoute}
+                      openGroup={openGroup}
+                      onToggle={(tab: CompetitionNavTab) =>
+                        setOpenGroup((prev) =>
+                          prev === tab.menuKey ? null : tab.menuKey,
+                        )
+                      }
+                    />
+                  </Tabs.List>
+                </Drawer.Body>
+              </Drawer.Content>
+            </Drawer.Positioner>
+          </Drawer.Root>
+        </Box>
+      )}
       <Tabs.Content width="full" value={currentPath!}>
         {children}
       </Tabs.Content>
