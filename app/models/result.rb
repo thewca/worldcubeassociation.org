@@ -59,6 +59,7 @@ class Result < ApplicationRecord
 
   delegate :iso2, to: :country, prefix: true
   delegate :short_name, :start_date, to: :competition, prefix: true
+  delegate :ranking, to: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id round_id pos best best_index worst_index average],
@@ -68,11 +69,19 @@ class Result < ApplicationRecord
   }.freeze
 
   # `best_index` / `worst_index` are omitted deliberately: they are derivable from `attempts`.
+  # A result rendered inside a round, which already carries the competition, event and format
+  # context, so this shape holds only what is specific to the competitor.
+  V1_ROUND_SERIALIZE_OPTIONS = {
+    only: %w[id pos global_pos best average],
+    methods: %w[wca_id name country_iso2 attempts regional_single_record regional_average_record],
+  }.freeze
+
+  # The same result rendered on its own, which has to repeat the context a round would carry.
   V1_SERIALIZE_OPTIONS = {
-    only: %w[id pos best average],
-    methods: %w[wca_id name country_iso2 competition_id competition_short_name competition_start_date
-                event_id round_type_id format_id attempts
-                regional_single_record regional_average_record],
+    only: V1_ROUND_SERIALIZE_OPTIONS[:only],
+    methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] +
+             %w[competition_id competition_short_name competition_start_date
+                event_id round_type_id format_id ranking],
   }.freeze
 
   def serializable_hash(options = nil)

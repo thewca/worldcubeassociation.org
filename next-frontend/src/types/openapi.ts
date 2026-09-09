@@ -126,6 +126,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the posted results of a competition
+         * @description Every round of the competition with its results nested, ordered by event and then by round number. Public: no authentication required. Returns an empty array while results have not been posted.
+         */
+        get: operations["v1CompetitionResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/podiums": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the podiums of a competition
+         * @description The first three placed competitors of every event, by `global_pos`. Public: no authentication required. Returns an empty array while results have not been posted.
+         */
+        get: operations["v1CompetitionPodiums"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/scoretakers": {
         parameters: {
             query?: never;
@@ -1220,6 +1260,77 @@ export interface components {
             /** @description How many competitors are currently on the waiting list */
             waiting_list_count: number;
         };
+        /**
+         * @description What decides a competitor's final position. `round` ranks them within the round by their time. `dual_round` ranks them across every round of a Dual Round on their better result, which is what `global_pos` reports. `head_to_head` positions come from match outcomes and not from comparing times, so they may contradict the times shown.
+         * @example dual_round
+         * @enum {string}
+         */
+        Ranking: "round" | "dual_round" | "head_to_head";
+        /** @description One competitor's result in a single round. Rendered inside a round or a podium, both of which already name the competition, event and format, so this shape carries only what is specific to the competitor. `V1Result` is the same result rendered on its own. */
+        V1RoundResult: {
+            /** @example 6709306 */
+            id: number;
+            /**
+             * @description The competitor's position within this round alone.
+             * @example 1
+             */
+            pos: number;
+            /**
+             * @description The competitor's position across every round the round is ranked against. Equal to `pos` unless the round is part of a Dual Round, where a competitor holds one result per round but is ranked once, on their better one — so both of their results carry the same `global_pos`. This is the position that decides medals.
+             * @example 1
+             */
+            global_pos: number;
+            /** @example 84 */
+            best: number;
+            /**
+             * @description Zero when the round's format does not produce an average.
+             * @example 88
+             */
+            average: number;
+            /** @description Attempt values in solve order. Skipped solves are 0 and DNF/DNS are negative, so the best and worst attempt are derived from this list rather than sent as separate indices. */
+            attempts: number[];
+            /** @example 2019WANY36 */
+            wca_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            name: string;
+            /**
+             * @description ISO 3166-1 alpha-2 code of the country the competitor represented.
+             * @example CN
+             */
+            country_iso2: string;
+            /** @example WR */
+            regional_single_record?: string;
+            /** @example NR */
+            regional_average_record?: string;
+        };
+        /** @description One round of a competition together with its results, ordered by `pos`. The rounds of a Dual Round each appear on their own and name the whole link in `linked_round_wcif_ids`; their competitors hold one result in each, ranked once between them by `global_pos`. */
+        V1CompetitionRound: {
+            /**
+             * @description The round's WCIF id, unique within the competition.
+             * @example 333fm-r2
+             */
+            wcif_id: string;
+            /** @example 333fm */
+            event_id: string;
+            /** @example f */
+            round_type_id: string;
+            /** @example m */
+            format_id: string;
+            ranking: components["schemas"]["Ranking"];
+            /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking` is `dual_round`. */
+            linked_round_wcif_ids?: string[];
+            results: components["schemas"]["V1RoundResult"][];
+        };
+        /** @description One event's podium, ordered by `global_pos`. Grouped by event rather than by round because a Dual Round podium spans both of its rounds, keeping only each competitor's better result — every round of a link shares an event and a format, so those sit here. */
+        V1CompetitionPodium: {
+            /** @example 333fm */
+            event_id: string;
+            /** @example m */
+            format_id: string;
+            ranking: components["schemas"]["Ranking"];
+            /** @description The competitors placed first to third by `global_pos`, ties included, so this can hold more or fewer than three results. `pos` is the position within whichever round holds the competitor's better result and does not order this list. */
+            results: components["schemas"]["V1RoundResult"][];
+        };
         Scoretaker: {
             user_id: number;
             name: string;
@@ -1424,33 +1535,7 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
-        /** @description A single competitor's result in one round, carrying the competition context needed to render it on its own. This is the result shape for the v1 API; the v0 `Result` and `ExtendedResult` schemas name several of the same fields after database columns and are not interchangeable with it. */
-        V1Result: {
-            /** @example 6709306 */
-            id: number;
-            /**
-             * @description The competitor's position within this round.
-             * @example 1
-             */
-            pos: number;
-            /** @example 84 */
-            best: number;
-            /**
-             * @description Zero when the round's format does not produce an average.
-             * @example 88
-             */
-            average: number;
-            /** @description Attempt values in solve order. Skipped solves are 0 and DNF/DNS are negative, so the best and worst attempt are derived from this list rather than sent as separate indices. */
-            attempts: number[];
-            /** @example 2019WANY36 */
-            wca_id: string;
-            /** @example Yiheng Wang (王艺衡) */
-            name: string;
-            /**
-             * @description ISO 3166-1 alpha-2 code of the country the competitor represented.
-             * @example CN
-             */
-            country_iso2: string;
+        V1Result: components["schemas"]["V1RoundResult"] & {
             /** @example HangzhouOpen2024 */
             competition_id: string;
             /**
@@ -1469,10 +1554,7 @@ export interface components {
             round_type_id: string;
             /** @example a */
             format_id: string;
-            /** @example WR */
-            regional_single_record?: string;
-            /** @example NR */
-            regional_average_record?: string;
+            ranking: components["schemas"]["Ranking"];
         };
         V1Results: components["schemas"]["V1Result"][];
         TeamMembership: {
@@ -2443,6 +2525,52 @@ export interface operations {
                     };
                 };
             };
+        };
+    };
+    v1CompetitionResults: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1CompetitionRound"][];
+                };
+            };
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    v1CompetitionPodiums: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1CompetitionPodium"][];
+                };
+            };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     listScoretakers: {

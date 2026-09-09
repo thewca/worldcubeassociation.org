@@ -911,6 +911,34 @@ class Round < ApplicationRecord
     end
   end
 
+  RANKINGS = {
+    within_round: "round",
+    dual_round: "dual_round",
+    head_to_head: "head_to_head",
+  }.freeze
+
+  # What decides a competitor's final position in this round. `pos` always ranks them within the
+  # round itself; in a Dual Round `global_pos` additionally spans every round of the link, and in
+  # a Head-to-Head round both come from match outcomes rather than from comparing times.
+  def ranking
+    return RANKINGS[:head_to_head] if is_h2h_mock?
+    return RANKINGS[:dual_round] if linked_round_id?
+
+    RANKINGS[:within_round]
+  end
+
+  def to_v1_results_json
+    {
+      "wcif_id" => wcif_id,
+      "event_id" => event_id,
+      "round_type_id" => round_type_id,
+      "format_id" => format_id,
+      "ranking" => ranking,
+      "linked_round_wcif_ids" => linked_round&.wcif_ids,
+      "results" => results.sort_by { [it.pos, it.person_name] }.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS),
+    }.compact
+  end
+
   def to_live_results_json(only_podiums: false)
     # For podiums we need the combined competitor set of the whole linked round
     #   (live_podium spans every linked round). For regular round views we only
