@@ -54,10 +54,6 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 import OpenapiError from "@/components/ui/openapiError";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 type TwoBlocksUnion =
   TwoBlocksLevel0Block | TwoBlocksLevel1Block | TwoBlocksLevel2Block;
 

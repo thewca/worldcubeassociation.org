@@ -75,7 +75,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },
-  cacheComponents: true,
   reactCompiler: true,
   logging: {
     fetches: {

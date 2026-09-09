@@ -1,4 +1,4 @@
-import React, { Suspense, cache } from "react";
+import React from "react";
 import {
   Center,
   HStack,
@@ -47,10 +47,10 @@ function FooterLink({ item }: { item: FooterNavItem | FooterSocialItem }) {
   );
 }
 
-// `connection()` has to come before the Payload queries: it defers everything below it to request
-// time, so the build-time prerender stops here instead of trying to reach MongoDB, which is not
-// available while building. `cache` keeps the three consumers below down to one round trip.
-const getFooterData = cache(async () => {
+export default async function Footer() {
+  // `connection()` has to come before the Payload queries: it defers everything below it to
+  // request time, so the build-time prerender stops here instead of trying to reach MongoDB,
+  // which is not available while building.
   await connection();
 
   const payload = await getPayload({ config });
@@ -59,53 +59,29 @@ const getFooterData = cache(async () => {
     payload.findGlobal({ slug: "social-links" }),
   ]);
 
-  return {
-    navigationLinks: footer.navigationLinks ?? [],
-    socialLinks: socialLinksGlobal.links ?? [],
-    legalLinks: footer.legalLinks ?? [],
-  };
-});
+  const navigationLinks = footer.navigationLinks ?? [];
+  const socialLinks = socialLinksGlobal.links ?? [];
+  const legalLinks = footer.legalLinks ?? [];
 
-async function FooterNavigationLinks() {
-  const { navigationLinks } = await getFooterData();
-
-  return navigationLinks.map((item) => (
-    <FooterLink key={item.id} item={item} />
-  ));
-}
-
-async function FooterSocialLinks() {
-  const { socialLinks } = await getFooterData();
-
-  return socialLinks.map((item) => <FooterLink key={item.id} item={item} />);
-}
-
-async function FooterLegalLinks() {
-  const { legalLinks } = await getFooterData();
-
-  return legalLinks.map((item) => <FooterLink key={item.id} item={item} />);
-}
-
-export default function Footer() {
   return (
     <Center borderTop="md" borderColor="border" padding={3} mt={5} bg="bg">
       <Stack align="center" gap={5} direction={{ base: "column", lg: "row" }}>
-        <Suspense fallback={null}>
-          <FooterNavigationLinks />
-        </Suspense>
+        {navigationLinks.map((item) => (
+          <FooterLink key={item.id} item={item} />
+        ))}
 
         <WCALogo />
 
         <HStack wrap="wrap">
-          <Suspense fallback={null}>
-            <FooterSocialLinks />
-          </Suspense>
+          {socialLinks.map((item) => (
+            <FooterLink key={item.id} item={item} />
+          ))}
         </HStack>
 
         <HStack>
-          <Suspense fallback={null}>
-            <FooterLegalLinks />
-          </Suspense>
+          {legalLinks.map((item) => (
+            <FooterLink key={item.id} item={item} />
+          ))}
         </HStack>
       </Stack>
     </Center>

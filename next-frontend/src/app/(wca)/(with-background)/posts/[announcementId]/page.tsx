@@ -8,10 +8,6 @@ import { AnnouncementFullCard } from "@/components/announcements/AnnouncementCar
 import { randomAnnouncementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 const findAnnouncement = async (
   announcementId: string,
 ): Promise<Announcement | null> => {
