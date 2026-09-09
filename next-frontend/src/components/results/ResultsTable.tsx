@@ -4,8 +4,14 @@ import { HStack, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
-import { AttemptsCells, WithRecordTag } from "@/components/results/TableCells";
+import {
+  AttemptsCells,
+  PositionCell,
+  RoundNameCell,
+  WithRecordTag,
+} from "@/components/results/TableCells";
 import { resultAttempts } from "@/lib/wca/results/attempts";
+import { CompetitionResultRow } from "@/lib/wca/results/competitionResults";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
@@ -14,13 +20,17 @@ import _ from "lodash";
 export function ResultsTable({
   results,
   eventId,
+  ranking,
   t,
   isAdmin = false,
+  variant = "round",
 }: {
-  results: components["schemas"]["Result"][];
+  results: components["schemas"]["V1RoundResult"][];
   eventId: string;
+  ranking: components["schemas"]["Ranking"];
   t: TFunction;
   isAdmin?: boolean;
+  variant?: "round" | "standings";
 }) {
   const event = events.byId[eventId];
 
@@ -51,7 +61,11 @@ export function ResultsTable({
             return (
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-                <Table.Cell>{competitorResult.pos}</Table.Cell>
+                <PositionCell
+                  result={competitorResult}
+                  ranking={ranking}
+                  variant={variant}
+                />
                 <Table.Cell>
                   <Link
                     href={route({
@@ -105,7 +119,7 @@ export function ByPersonTable({
   t,
   isAdmin = false,
 }: {
-  results: components["schemas"]["Result"][];
+  results: CompetitionResultRow[];
   t: TFunction;
   isAdmin?: boolean;
 }) {
@@ -136,10 +150,15 @@ export function ByPersonTable({
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
                 <Table.Cell>{events.byId[eventId].name}</Table.Cell>
-                <Table.Cell>
-                  {t(`rounds.${competitorResult.round_type_id}.name`)}
-                </Table.Cell>
-                <Table.Cell>{competitorResult.pos}</Table.Cell>
+                <RoundNameCell
+                  roundTypeId={competitorResult.round_type_id}
+                  ranking={competitorResult.ranking}
+                  t={t}
+                />
+                <PositionCell
+                  result={competitorResult}
+                  ranking={competitorResult.ranking}
+                />
                 <Table.Cell>
                   <WithRecordTag
                     recordTag={competitorResult.regional_single_record}
@@ -231,10 +250,15 @@ export function ByCompetitionTable({
                       </Link>
                     )}
                   </Table.Cell>
-                  <Table.Cell>
-                    {t(`rounds.${competitorResult.round_type_id}.name`)}
-                  </Table.Cell>
-                  <Table.Cell>{competitorResult.pos}</Table.Cell>
+                  <RoundNameCell
+                    roundTypeId={competitorResult.round_type_id}
+                    ranking={competitorResult.ranking}
+                    t={t}
+                  />
+                  <PositionCell
+                    result={competitorResult}
+                    ranking={competitorResult.ranking}
+                  />
                   <Table.Cell>
                     <WithRecordTag
                       recordTag={competitorResult.regional_single_record}

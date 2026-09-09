@@ -4,6 +4,7 @@ import { getT } from "@/lib/i18n/get18n";
 import { getCompetitionResults } from "@/lib/wca/competitions/getCompetitionResults";
 import { Fragment } from "react";
 import { ByPersonTable } from "@/components/results/ResultsTable";
+import { roundResultRows } from "@/lib/wca/results/competitionResults";
 import { route } from "nextjs-routes";
 
 export default async function PodiumsPage({
@@ -23,7 +24,9 @@ export default async function PodiumsPage({
   }
 
   const resultsByPerson = _.groupBy(
-    competitionResults.toSorted((a, b) => a.name.localeCompare(b.name)),
+    roundResultRows(competitionResults).toSorted((a, b) =>
+      a.name.localeCompare(b.name),
+    ),
     "wca_id",
   );
 

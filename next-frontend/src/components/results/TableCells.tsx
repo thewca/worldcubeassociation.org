@@ -3,6 +3,61 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import events from "@/lib/wca/data/events";
 import _ from "lodash";
 import type { ReactNode } from "react";
+import { components } from "@/types/openapi";
+import { TFunction } from "i18next";
+
+/**
+ * Which ranking a table is listing: the results of one round, or the final standing a competitor
+ * reached. They only differ for a Dual Round, where a competitor holds a result in each round but
+ * is ranked once between them.
+ */
+type RankingVariant = "round" | "standings";
+
+export function PositionCell({
+  result,
+  ranking,
+  variant = "round",
+}: {
+  result: Pick<components["schemas"]["V1RoundResult"], "pos" | "global_pos">;
+  ranking: components["schemas"]["Ranking"];
+  variant?: RankingVariant;
+}) {
+  // A standings row is already merged across the Dual Round, keeping only the competitor's better
+  // result, so the position within whichever round that came from would be meaningless here.
+  if (variant === "standings") {
+    return <Table.Cell>{result.global_pos}</Table.Cell>;
+  }
+
+  if (ranking !== "dual_round") {
+    return <Table.Cell>{result.pos}</Table.Cell>;
+  }
+
+  return (
+    <Table.Cell>
+      {result.pos} ({result.global_pos})
+    </Table.Cell>
+  );
+}
+
+export function RoundNameCell({
+  roundTypeId,
+  ranking,
+  t,
+}: {
+  roundTypeId: string;
+  ranking: components["schemas"]["Ranking"];
+  t: TFunction;
+}) {
+  const roundName = t(`rounds.${roundTypeId}.name`);
+
+  return (
+    <Table.Cell>
+      {ranking === "dual_round"
+        ? `${roundName} (${t("persons.show.dual")})`
+        : roundName}
+    </Table.Cell>
+  );
+}
 
 export const recordTagBadge = (tag?: string | null) => {
   switch (tag) {

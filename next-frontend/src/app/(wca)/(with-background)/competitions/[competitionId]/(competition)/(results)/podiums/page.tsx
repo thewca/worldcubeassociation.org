@@ -1,9 +1,8 @@
 import { Card, Heading, Text, VStack } from "@chakra-ui/react";
 import { ResultsTable } from "@/components/results/ResultsTable";
-import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
+import events from "@/lib/wca/data/events";
 import { getPodiums } from "@/lib/wca/competitions/getPodiums";
 import { Fragment } from "react";
-import _ from "lodash";
 import { getT } from "@/lib/i18n/get18n";
 
 export default async function PodiumsPage({
@@ -22,8 +21,6 @@ export default async function PodiumsPage({
     return <Text>Error fetching Podiums</Text>;
   }
 
-  const resultsByEvent = _.groupBy(podiumResults, "event_id");
-
   return (
     <Card.Root>
       <Card.Body>
@@ -38,23 +35,20 @@ export default async function PodiumsPage({
           </Text>
         </Card.Title>
         <VStack align="left" gap={4}>
-          {WCA_EVENT_IDS.map((eventId) => {
-            const results = resultsByEvent[eventId];
-            if (!results) {
-              return null;
-            }
-            return (
-              <Fragment key={eventId}>
-                <Heading size="2xl">{events.byId[eventId].name}</Heading>
-                <ResultsTable
-                  results={results.toSorted((a, b) => a.pos - b.pos)}
-                  t={t}
-                  eventId={eventId}
-                  isAdmin={false}
-                />
-              </Fragment>
-            );
-          })}
+          {podiumResults.map((podium) => (
+            <Fragment key={podium.event_id}>
+              <Heading size="2xl">{events.byId[podium.event_id].name}</Heading>
+              {/* Already ordered by `global_pos`, which is the position a podium is decided on. */}
+              <ResultsTable
+                results={podium.results}
+                t={t}
+                eventId={podium.event_id}
+                ranking={podium.ranking}
+                variant="standings"
+                isAdmin={false}
+              />
+            </Fragment>
+          ))}
         </VStack>
       </Card.Body>
     </Card.Root>
