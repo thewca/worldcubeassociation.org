@@ -30,13 +30,15 @@ function renderCell(props: Parameters<typeof PositionCell>[0]) {
 
 describe("PositionCell", () => {
   it("shows the round position for a normal round", () => {
-    expect(renderCell({ result, rankingMode: "round" })).toHaveTextContent(/^1$/);
+    expect(renderCell({ result, rankingMode: "round" })).toHaveTextContent(
+      /^1$/,
+    );
   });
 
   it("shows the round position for a head-to-head round", () => {
-    expect(renderCell({ result, rankingMode: "head_to_head" })).toHaveTextContent(
-      /^1$/,
-    );
+    expect(
+      renderCell({ result, rankingMode: "head_to_head" }),
+    ).toHaveTextContent(/^1$/);
   });
 
   it("shows both positions for a Dual Round", () => {
