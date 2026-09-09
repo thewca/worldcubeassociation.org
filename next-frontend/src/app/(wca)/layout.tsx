@@ -7,6 +7,10 @@ import Footer from "./footer";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
+import { cookies } from "next/headers";
+import BetaDisclaimer, {
+  BETA_DISCLAIMER_COOKIE,
+} from "@/components/BetaDisclaimer";
 
 export const metadata: Metadata = {
   title: {
@@ -34,12 +38,16 @@ export default async function RootLayout({
 }>) {
   const appFont = await computeFont();
 
+  const cookieList = await cookies();
+  const hasAcceptedDisclaimer = cookieList.has(BETA_DISCLAIMER_COOKIE);
+
   return (
     <html suppressHydrationWarning>
       <body className={appFont.className}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <WCAQueryClientProvider>
             <UiProvider>
+              {!hasAcceptedDisclaimer && <BetaDisclaimer />}
               <Navbar />
               <NextTopLoader height={5} />
               {children}
