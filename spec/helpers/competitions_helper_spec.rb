@@ -177,6 +177,27 @@ RSpec.describe CompetitionsHelper do
                            "[Dan](#{person_url('2006YOYO02')}) finished second (27.67) and " \
                            "[Steven](#{person_url('2006YOYO03')}) finished third (with a single solve of 24 moves)."
       end
+
+      it "announces dual-round winners by combined ranking, not per-round place" do
+        round_one = create(:round, competition: competition, format_id: "m", event_id: "333fm", number: 1, total_number_of_rounds: 2)
+        round_two = create(:round, competition: competition, format_id: "m", event_id: "333fm", number: 2, total_number_of_rounds: 2)
+        create(:linked_round, rounds: [round_one, round_two])
+
+        alice = create(:person, wca_id: "2006ALIC01", name: "Alice", country_id: "USA")
+        carol = create(:person, wca_id: "2006CARO01", name: "Carol", country_id: "USA")
+        bob = create(:person, wca_id: "2006BOBB01", name: "Bob", country_id: "USA")
+
+        create(:result, :fm, competition: competition, round: round_one, round_type_id: "1", person: alice,
+                             pos: 1, global_pos: 1, best: 18, average: 2067, value1: 18, value2: 22, value3: 22)
+        create(:result, :fm, competition: competition, round: round_two, round_type_id: "f", person: carol,
+                             pos: 1, global_pos: 2, best: 19, average: 2100, value1: 19, value2: 21, value3: 23)
+        create(:result, :fm, competition: competition, round: round_one, round_type_id: "1", person: bob,
+                             pos: 2, global_pos: 2, best: 19, average: 2100, value1: 19, value2: 23, value3: 21)
+
+        text = helper.winners(competition, Event.c_find("333fm"))
+        expect(text).to eq "[Alice](#{person_url('2006ALIC01')}) won with a mean of 20.67 moves in the 3x3x3 Fewest Moves event. " \
+                           "[Bob](#{person_url('2006BOBB01')}) and [Carol](#{person_url('2006CARO01')}) finished second (21.00)."
+      end
     end
 
     context "333mbf" do

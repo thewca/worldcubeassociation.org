@@ -2,6 +2,7 @@ type: object
 required:
   - id
   - pos
+  - global_pos
   - best
   - average
   - name
@@ -21,6 +22,12 @@ properties:
     type: integer
   pos:
     type: integer
+    description: The competitor's position within this round.
+  global_pos:
+    type: integer
+    description: >-
+      Combined ranking across linked (dual) rounds. Equal to `pos` for ordinary
+      rounds. Podiums and event winners use this field.
   best:
     type: integer
   average:

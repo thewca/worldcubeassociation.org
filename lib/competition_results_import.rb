@@ -107,6 +107,10 @@ module CompetitionResultsImport
       ResultAttempt.insert_all!(attempt_rows)
 
       competition.inbox_results.destroy_all
+
+      # Inbox global_pos may have been copied from per-round ranking. Recompute
+      # the merged dual-round ranking after the official rows exist.
+      competition.rounds.includes(:linked_round).where.not(linked_round_id: nil).find_each(&:recompute_results_global_pos)
     end
   end
 

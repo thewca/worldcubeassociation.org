@@ -16,11 +16,13 @@ export function ResultsTable({
   eventId,
   t,
   isAdmin = false,
+  positionKey = "pos",
 }: {
   results: components["schemas"]["Result"][];
   eventId: string;
   t: TFunction;
   isAdmin?: boolean;
+  positionKey?: "pos" | "global_pos";
 }) {
   const event = events.byId[eventId];
 
@@ -51,7 +53,7 @@ export function ResultsTable({
             return (
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-                <Table.Cell>{competitorResult.pos}</Table.Cell>
+                <Table.Cell>{competitorResult[positionKey]}</Table.Cell>
                 <Table.Cell>
                   <Link
                     href={route({

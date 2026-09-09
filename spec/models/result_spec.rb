@@ -517,6 +517,64 @@ RSpec.describe Result do
       end
     end
   end
+
+  describe "dual-round podium ranking" do
+    # Two linked FMC means: the event ranking uses each person's better mean.
+    # Local `pos` is per-round, so two people with different means can both be
+    # "1st" in their own round if that field is shown on the podium.
+    let(:competition) { create(:competition, event_ids: ["333fm"]) }
+    let(:round_one) { create(:round, competition: competition, event_id: "333fm", format_id: "m", number: 1, total_number_of_rounds: 2) }
+    let(:round_two) { create(:round, competition: competition, event_id: "333fm", format_id: "m", number: 2, total_number_of_rounds: 2) }
+
+    let(:alice) { create(:person, name: "Alice") }
+    let(:carol) { create(:person, name: "Carol") }
+    let(:bob) { create(:person, name: "Bob") }
+    let(:dana) { create(:person, name: "Dana") }
+
+    before do
+      create(:linked_round, rounds: [round_one, round_two])
+
+      # First round local ranking (pos copied onto global_pos, as import used to do)
+      create(:result, :fm, competition: competition, round: round_one, round_type_id: "1", person: alice,
+                           pos: 1, global_pos: 1, best: 18, average: 2067, value1: 18, value2: 22, value3: 22)
+      create(:result, :fm, competition: competition, round: round_one, round_type_id: "1", person: bob,
+                           pos: 2, global_pos: 2, best: 19, average: 2100, value1: 19, value2: 23, value3: 21)
+      create(:result, :fm, competition: competition, round: round_one, round_type_id: "1", person: carol,
+                           pos: 3, global_pos: 3, best: 20, average: 2167, value1: 20, value2: 22, value3: 23)
+      create(:result, :fm, competition: competition, round: round_one, round_type_id: "1", person: dana,
+                           pos: 7, global_pos: 7, best: 24, average: 2433, value1: 25, value2: 24, value3: 24)
+
+      # Final local ranking
+      create(:result, :fm, competition: competition, round: round_two, round_type_id: "f", person: carol,
+                           pos: 1, global_pos: 1, best: 19, average: 2100, value1: 19, value2: 21, value3: 23)
+      create(:result, :fm, competition: competition, round: round_two, round_type_id: "f", person: bob,
+                           pos: 2, global_pos: 2, best: 21, average: 2267, value1: 21, value2: 23, value3: 24)
+      create(:result, :fm, competition: competition, round: round_two, round_type_id: "f", person: dana,
+                           pos: 2, global_pos: 2, best: 21, average: 2267, value1: 23, value2: 21, value3: 24)
+      create(:result, :fm, competition: competition, round: round_two, round_type_id: "f", person: alice,
+                           pos: 14, global_pos: 14, best: 25, average: SolveTime::DNF_VALUE, value1: 25, value2: SolveTime::DNF_VALUE, value3: 26)
+
+      round_one.reload.recompute_results_global_pos
+    end
+
+    it "assigns global_pos from the better mean across both rounds" do
+      expect(alice.results.find_by(round: round_one).reload.global_pos).to eq 1
+      expect(carol.results.find_by(round: round_two).reload.global_pos).to eq 2
+      expect(bob.results.find_by(round: round_one).reload.global_pos).to eq 2
+      expect(dana.results.find_by(round: round_two).reload.global_pos).to eq 4
+    end
+
+    it "keeps only the top three combined places on the podium" do
+      podium = Result.where(competition: competition).podium.order(:global_pos, :person_name)
+      expect(podium.map(&:person_id)).to eq [alice.wca_id, bob.wca_id, carol.wca_id]
+      expect(podium.map(&:global_pos)).to eq [1, 2, 2]
+      expect(podium.map(&:average)).to eq [2067, 2100, 2100]
+    end
+
+    it "does not put a 4th-place combined result on the podium" do
+      expect(Result.where(competition: competition).podium.map(&:person_id)).not_to include(dana.wca_id)
+    end
+  end
 end
 
 def build_result(attrs)

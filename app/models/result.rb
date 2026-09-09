@@ -61,7 +61,7 @@ class Result < ApplicationRecord
   delegate :short_name, :start_date, to: :competition, prefix: true
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[id round_id pos best best_index worst_index average],
+    only: %w[id round_id pos global_pos best best_index worst_index average],
     methods: %w[name country_iso2 competition_id event_id
                 round_type_id format_id wca_id attempts best_index
                 worst_index regional_single_record regional_average_record],

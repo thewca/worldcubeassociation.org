@@ -1732,6 +1732,11 @@ export interface components {
         Result: {
             id: number;
             pos: number;
+            /**
+             * @description Combined ranking across linked (dual) rounds. Equal to `pos` for ordinary
+             *     rounds. Podiums and event winners use this field.
+             */
+            global_pos: number;
             best: number;
             average: number;
             name: string;

@@ -3,6 +3,7 @@
 <% hide_pos = defined?(hide_pos) && hide_pos %>
 <% hide_name = defined?(hide_name) && hide_name %>
 <% hide_solves = defined?(hide_solves) && hide_solves %>
+<% use_global_pos = defined?(use_global_pos) && use_global_pos %>
 
 <%= wca_table table_class: "wca-results", float_thead: false do %>
   <thead>
@@ -63,14 +64,17 @@
         <% if !hide_pos %>
           <% classes = "pos" %>
           <% previous_result = i > 0 ? results[i - 1] : nil %>
-          <% if previous_result && previous_result.event_id == result.event_id && previous_result.round_type_id == result.round_type_id && previous_result.pos == result.pos %>
+          <% position = use_global_pos ? result.global_pos : result.pos %>
+          <% previous_position = previous_result && (use_global_pos ? previous_result.global_pos : previous_result.pos) %>
+          <% same_grouping = previous_result && previous_result.event_id == result.event_id && (use_global_pos || previous_result.round_type_id == result.round_type_id) %>
+          <% if same_grouping && previous_position == position %>
             <% classes << " tied-previous" %>
           <% end %>
           <td class="<%= classes %>">
             <% if current_user&.can_admin_results? %>
               <%= link_to(ui_icon("pencil alt"), edit_result_path(result.id)) %>
             <% end %>
-            <%= result.pos %>
+            <%= position %>
           </td>
         <% end %>
 

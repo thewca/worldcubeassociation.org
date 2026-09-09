@@ -47,10 +47,11 @@ export default async function PodiumsPage({
               <Fragment key={eventId}>
                 <Heading size="2xl">{events.byId[eventId].name}</Heading>
                 <ResultsTable
-                  results={results.toSorted((a, b) => a.pos - b.pos)}
+                  results={results.toSorted((a, b) => a.global_pos - b.global_pos)}
                   t={t}
                   eventId={eventId}
                   isAdmin={false}
+                  positionKey="global_pos"
                 />
               </Fragment>
             );
