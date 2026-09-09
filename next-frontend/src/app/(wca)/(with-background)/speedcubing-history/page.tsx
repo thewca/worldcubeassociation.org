@@ -33,7 +33,7 @@ export default async function SpeedcubingHistory() {
   const { t } = await getT();
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">{t("speedcubing_history.title")}</Heading>
       {historyItems.map((item) => {
         switch (item.blockType) {

@@ -10,7 +10,9 @@ export default function WithBackgroundLayout({
   return (
     <>
       <RandomBackground numRows={8} numCols={18} />
-      <Container bg="bg">{children}</Container>
+      <Container bg="bg" paddingTop="8">
+        {children}
+      </Container>
     </>
   );
 }

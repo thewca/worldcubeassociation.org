@@ -43,7 +43,7 @@ export default async function Documents() {
   const categorized = _.groupBy(categorizedRaw, "category");
 
   return (
-    <VStack gap="8" pt="8" alignItems="left">
+    <VStack gap="8" alignItems="left">
       <Heading size="5xl">Documents</Heading>
       <Accordion.Root variant="enclosed" multiple>
         {uncategorized.map((doc) => (

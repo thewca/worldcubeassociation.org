@@ -31,7 +31,7 @@ export default async function AboutTheRegulations() {
   const { t } = await getT();
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">{t("about_regulations.title")}</Heading>
       {aboutRegulationsItems.map((item) => (
         <Card.Root key={item.id}>

@@ -77,7 +77,7 @@ export default async function SearchResults({ searchParams }: SearchPageProps) {
   const resultsByClass = _.groupBy(data.result, "class");
 
   return (
-    <VStack align="stretch" gap="8" py="8">
+    <VStack align="stretch" gap="8" pb="8">
       <Heading textStyle="h2">
         <Trans
           t={t}

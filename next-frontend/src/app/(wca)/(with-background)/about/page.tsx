@@ -29,7 +29,7 @@ export default async function About() {
   }
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">About Us</Heading>
       {aboutItems.map((item) => {
         switch (item.blockType) {

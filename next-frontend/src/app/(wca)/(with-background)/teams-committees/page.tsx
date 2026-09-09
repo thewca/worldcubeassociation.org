@@ -34,7 +34,7 @@ export default async function TeamsCommitteesPage() {
   if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
+    <VStack align="left" gap="8" width="full" alignItems="left">
       <Heading size="5xl">{t("page.teams_committees_councils.title")}</Heading>
       <Prose>{t("page.teams_committees_councils.description")}</Prose>
       <Tabs.Root
