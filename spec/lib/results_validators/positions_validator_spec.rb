@@ -114,11 +114,11 @@ RSpec.describe ResultsValidators::PositionsValidator do
         expected_errors = {
           "Result" => [
             create_result_error(competition1.id, "222-f", results1[1].person_name, 1, 2),
-            create_global_result_error(competition1.id, "222-f", results1[1].person_name, 1, 2),
+            create_result_error(competition1.id, "222-f", results1[1].person_name, 1, 2, kind: :global_pos),
           ],
           "InboxResult" => [
             create_result_error(competition1.id, "222-f", results2[1].person_name, 1, 2),
-            create_global_result_error(competition1.id, "222-f", results2[1].person_name, 1, 2),
+            create_result_error(competition1.id, "222-f", results2[1].person_name, 1, 2, kind: :global_pos),
           ],
         }
         validator_args.each do |arg|
@@ -165,8 +165,8 @@ RSpec.describe ResultsValidators::PositionsValidator do
         expected_errors = [
           create_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
           create_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),
-          create_global_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
-          create_global_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),
+          create_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1, kind: :global_pos),
+          create_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2, kind: :global_pos),
         ]
 
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
@@ -207,11 +207,11 @@ RSpec.describe ResultsValidators::PositionsValidator do
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
 
         expect(pv.errors).to contain_exactly(
-          create_global_result_error(competition1.id, "333-1", bob.name, 3, 2),
-          create_global_result_error(competition1.id, "333-1", carol.name, 2, 3),
-          create_global_result_error(competition1.id, "333-f", carol.name, 2, 1),
-          create_global_result_error(competition1.id, "333-f", bob.name, 3, 2),
-          create_global_result_error(competition1.id, "333-f", alice.name, 1, 3),
+          create_result_error(competition1.id, "333-1", bob.name, 3, 2, kind: :global_pos),
+          create_result_error(competition1.id, "333-1", carol.name, 2, 3, kind: :global_pos),
+          create_result_error(competition1.id, "333-f", carol.name, 2, 1, kind: :global_pos),
+          create_result_error(competition1.id, "333-f", bob.name, 3, 2, kind: :global_pos),
+          create_result_error(competition1.id, "333-f", alice.name, 1, 3, kind: :global_pos),
         )
       end
 
@@ -255,10 +255,7 @@ def create_incorrect_tied_results(competition, event_id, round, kind: :result)
   ]
 end
 
-def create_result_error(competition_id, round_id, name, expected_pos, actual_pos)
-  ResultsValidators::ValidationError.new(ResultsValidators::PositionsValidator::WRONG_POSITION_IN_RESULTS_ERROR, :results, competition_id, round_id: round_id, person_name: name, expected_pos: expected_pos, pos: actual_pos)
-end
-
-def create_global_result_error(competition_id, round_id, name, expected_pos, actual_pos)
-  ResultsValidators::ValidationError.new(ResultsValidators::PositionsValidator::WRONG_GLOBAL_POSITION_IN_RESULTS_ERROR, :results, competition_id, round_id: round_id, person_name: name, expected_pos: expected_pos, pos: actual_pos)
+def create_result_error(competition_id, round_id, name, expected_pos, actual_pos, kind: :pos)
+  error = kind == :pos ? ResultsValidators::PositionsValidator::WRONG_POSITION_IN_RESULTS_ERROR : ResultsValidators::PositionsValidator::WRONG_GLOBAL_POSITION_IN_RESULTS_ERROR
+  ResultsValidators::ValidationError.new(error, :results, competition_id, round_id: round_id, person_name: name, expected_pos: expected_pos, pos: actual_pos)
 end
