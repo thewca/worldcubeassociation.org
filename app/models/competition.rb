@@ -1490,6 +1490,21 @@ class Competition < ApplicationRecord
     results.includes(:result_attempts).winners
   end
 
+  # A Dual Round podium merges both linked rounds, so the podium is grouped by event rather than
+  # by round. Every round of a link shares an event and a format, which lets those sit here.
+  def to_v1_podiums_json
+    events_with_podium_results.map do |event, podium_results|
+      podium_round = podium_results.first.round
+
+      {
+        "event_id" => event.id,
+        "format_id" => podium_round.format_id,
+        "ranking" => podium_round.ranking,
+        "results" => podium_results.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS),
+      }
+    end
+  end
+
   def person_ids_with_results
     results.includes(:result_attempts).group_by(&:person_id)
            .sort_by { |_person_id, results| results.first.person_name }
