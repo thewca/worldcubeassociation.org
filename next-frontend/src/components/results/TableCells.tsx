@@ -15,11 +15,11 @@ type RankingVariant = "round" | "standings";
 
 export function PositionCell({
   result,
-  ranking,
+  rankingMode,
   variant = "round",
 }: {
   result: Pick<components["schemas"]["V1RoundResult"], "pos" | "global_pos">;
-  ranking: components["schemas"]["Ranking"];
+  rankingMode: components["schemas"]["RankingMode"];
   variant?: RankingVariant;
 }) {
   // A standings row is already merged across the Dual Round, keeping only the competitor's better
@@ -28,7 +28,7 @@ export function PositionCell({
     return <Table.Cell>{result.global_pos}</Table.Cell>;
   }
 
-  if (ranking !== "dual_round") {
+  if (rankingMode !== "dual_round") {
     return <Table.Cell>{result.pos}</Table.Cell>;
   }
 
@@ -41,18 +41,18 @@ export function PositionCell({
 
 export function RoundNameCell({
   roundTypeId,
-  ranking,
+  rankingMode,
   t,
 }: {
   roundTypeId: string;
-  ranking: components["schemas"]["Ranking"];
+  rankingMode: components["schemas"]["RankingMode"];
   t: TFunction;
 }) {
   const roundName = t(`rounds.${roundTypeId}.name`);
 
   return (
     <Table.Cell>
-      {ranking === "dual_round"
+      {rankingMode === "dual_round"
         ? `${roundName} (${t("persons.show.dual")})`
         : roundName}
     </Table.Cell>

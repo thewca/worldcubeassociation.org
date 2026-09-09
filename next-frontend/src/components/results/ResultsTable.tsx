@@ -20,14 +20,14 @@ import _ from "lodash";
 export function ResultsTable({
   results,
   eventId,
-  ranking,
+  rankingMode,
   t,
   isAdmin = false,
   variant = "round",
 }: {
   results: components["schemas"]["V1RoundResult"][];
   eventId: string;
-  ranking: components["schemas"]["Ranking"];
+  rankingMode: components["schemas"]["RankingMode"];
   t: TFunction;
   isAdmin?: boolean;
   variant?: "round" | "standings";
@@ -63,7 +63,7 @@ export function ResultsTable({
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
                 <PositionCell
                   result={competitorResult}
-                  ranking={ranking}
+                  rankingMode={rankingMode}
                   variant={variant}
                 />
                 <Table.Cell>
@@ -152,12 +152,12 @@ export function ByPersonTable({
                 <Table.Cell>{events.byId[eventId].name}</Table.Cell>
                 <RoundNameCell
                   roundTypeId={competitorResult.round_type_id}
-                  ranking={competitorResult.ranking}
+                  rankingMode={competitorResult.rankingMode}
                   t={t}
                 />
                 <PositionCell
                   result={competitorResult}
-                  ranking={competitorResult.ranking}
+                  rankingMode={competitorResult.rankingMode}
                 />
                 <Table.Cell>
                   <WithRecordTag
@@ -252,12 +252,12 @@ export function ByCompetitionTable({
                   </Table.Cell>
                   <RoundNameCell
                     roundTypeId={competitorResult.round_type_id}
-                    ranking={competitorResult.ranking}
+                    rankingMode={competitorResult.ranking_mode}
                     t={t}
                   />
                   <PositionCell
                     result={competitorResult}
-                    ranking={competitorResult.ranking}
+                    rankingMode={competitorResult.ranking_mode}
                   />
                   <Table.Cell>
                     <WithRecordTag

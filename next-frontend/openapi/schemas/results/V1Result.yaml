@@ -13,7 +13,7 @@ allOf:
       - event_id
       - round_type_id
       - format_id
-      - ranking
+      - ranking_mode
     properties:
       competition_id:
         type: string
@@ -37,5 +37,5 @@ allOf:
       format_id:
         type: string
         example: "a"
-      ranking:
-        $ref: './Ranking.yaml'
+      ranking_mode:
+        $ref: './RankingMode.yaml'

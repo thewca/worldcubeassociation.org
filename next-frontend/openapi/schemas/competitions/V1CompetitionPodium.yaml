@@ -6,7 +6,7 @@ description: >-
 required:
   - event_id
   - format_id
-  - ranking
+  - ranking_mode
   - results
 properties:
   event_id:
@@ -15,8 +15,8 @@ properties:
   format_id:
     type: string
     example: "m"
-  ranking:
-    $ref: '../results/Ranking.yaml'
+  ranking_mode:
+    $ref: '../results/RankingMode.yaml'
   results:
     type: array
     description: >-

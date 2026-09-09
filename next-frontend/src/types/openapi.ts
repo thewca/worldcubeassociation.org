@@ -1265,7 +1265,7 @@ export interface components {
          * @example dual_round
          * @enum {string}
          */
-        Ranking: "round" | "dual_round" | "head_to_head";
+        RankingMode: "round" | "dual_round" | "head_to_head";
         /** @description One competitor's result in a single round. Rendered inside a round or a podium, both of which already name the competition, event and format, so this shape carries only what is specific to the competitor. `V1Result` is the same result rendered on its own. */
         V1RoundResult: {
             /** @example 6709306 */
@@ -1316,8 +1316,8 @@ export interface components {
             round_type_id: string;
             /** @example m */
             format_id: string;
-            ranking: components["schemas"]["Ranking"];
-            /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking` is `dual_round`. */
+            ranking_mode: components["schemas"]["RankingMode"];
+            /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking_mode` is `dual_round`. */
             linked_round_wcif_ids?: string[];
             results: components["schemas"]["V1RoundResult"][];
         };
@@ -1327,7 +1327,7 @@ export interface components {
             event_id: string;
             /** @example m */
             format_id: string;
-            ranking: components["schemas"]["Ranking"];
+            ranking_mode: components["schemas"]["RankingMode"];
             /** @description The competitors placed first to third by `global_pos`, ties included, so this can hold more or fewer than three results. `pos` is the position within whichever round holds the competitor's better result and does not order this list. */
             results: components["schemas"]["V1RoundResult"][];
         };
@@ -1554,7 +1554,7 @@ export interface components {
             round_type_id: string;
             /** @example a */
             format_id: string;
-            ranking: components["schemas"]["Ranking"];
+            ranking_mode: components["schemas"]["RankingMode"];
         };
         V1Results: components["schemas"]["V1Result"][];
         TeamMembership: {

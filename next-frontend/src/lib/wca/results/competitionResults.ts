@@ -8,7 +8,7 @@ import { components } from "@/types/openapi";
 export type CompetitionResultRow = components["schemas"]["V1RoundResult"] & {
   event_id: string;
   round_type_id: string;
-  ranking: components["schemas"]["Ranking"];
+  rankingMode: components["schemas"]["RankingMode"];
 };
 
 export function roundResultRows(
@@ -19,7 +19,7 @@ export function roundResultRows(
       ...result,
       event_id: round.event_id,
       round_type_id: round.round_type_id,
-      ranking: round.ranking,
+      rankingMode: round.ranking_mode,
     })),
   );
 }

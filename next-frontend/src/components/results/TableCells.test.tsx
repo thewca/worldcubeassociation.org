@@ -30,24 +30,24 @@ function renderCell(props: Parameters<typeof PositionCell>[0]) {
 
 describe("PositionCell", () => {
   it("shows the round position for a normal round", () => {
-    expect(renderCell({ result, ranking: "round" })).toHaveTextContent(/^1$/);
+    expect(renderCell({ result, rankingMode: "round" })).toHaveTextContent(/^1$/);
   });
 
   it("shows the round position for a head-to-head round", () => {
-    expect(renderCell({ result, ranking: "head_to_head" })).toHaveTextContent(
+    expect(renderCell({ result, rankingMode: "head_to_head" })).toHaveTextContent(
       /^1$/,
     );
   });
 
   it("shows both positions for a Dual Round", () => {
-    expect(renderCell({ result, ranking: "dual_round" })).toHaveTextContent(
+    expect(renderCell({ result, rankingMode: "dual_round" })).toHaveTextContent(
       "1 (3)",
     );
   });
 
   it("shows only the position across both rounds in the standings of a Dual Round", () => {
     expect(
-      renderCell({ result, ranking: "dual_round", variant: "standings" }),
+      renderCell({ result, rankingMode: "dual_round", variant: "standings" }),
     ).toHaveTextContent(/^3$/);
   });
 
@@ -56,7 +56,7 @@ describe("PositionCell", () => {
     expect(
       renderCell({
         result: { pos: 2, global_pos: 2 },
-        ranking: "round",
+        rankingMode: "round",
         variant: "standings",
       }),
     ).toHaveTextContent(/^2$/);

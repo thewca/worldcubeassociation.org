@@ -1499,7 +1499,7 @@ class Competition < ApplicationRecord
       {
         "event_id" => event.id,
         "format_id" => podium_round.format_id,
-        "ranking" => podium_round.ranking,
+        "ranking_mode" => podium_round.ranking_mode,
         "results" => podium_results.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS),
       }
     end

@@ -911,7 +911,7 @@ class Round < ApplicationRecord
     end
   end
 
-  RANKINGS = {
+  RANKING_MODES = {
     within_round: "round",
     dual_round: "dual_round",
     head_to_head: "head_to_head",
@@ -920,11 +920,11 @@ class Round < ApplicationRecord
   # What decides a competitor's final position in this round. `pos` always ranks them within the
   # round itself; in a Dual Round `global_pos` additionally spans every round of the link, and in
   # a Head-to-Head round both come from match outcomes rather than from comparing times.
-  def ranking
-    return RANKINGS[:head_to_head] if is_h2h_mock?
-    return RANKINGS[:dual_round] if linked_round_id?
+  def ranking_mode
+    return RANKING_MODES[:head_to_head] if is_h2h_mock?
+    return RANKING_MODES[:dual_round] if linked_round_id?
 
-    RANKINGS[:within_round]
+    RANKING_MODES[:within_round]
   end
 
   def to_v1_results_json
@@ -933,7 +933,7 @@ class Round < ApplicationRecord
       "event_id" => event_id,
       "round_type_id" => round_type_id,
       "format_id" => format_id,
-      "ranking" => ranking,
+      "ranking_mode" => ranking_mode,
       "linked_round_wcif_ids" => linked_round&.wcif_ids,
       "results" => results.sort_by { [it.pos, it.person_name] }.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS),
     }.compact

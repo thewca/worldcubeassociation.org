@@ -39,7 +39,7 @@ export default function FilteredResults({
           <ResultsTable
             results={round.results}
             eventId={activeEventId}
-            ranking={round.ranking}
+            rankingMode={round.ranking_mode}
             t={t}
             isAdmin={false}
           />

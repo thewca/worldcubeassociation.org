@@ -43,7 +43,7 @@ export default async function PodiumsPage({
                 results={podium.results}
                 t={t}
                 eventId={podium.event_id}
-                ranking={podium.ranking}
+                rankingMode={podium.ranking_mode}
                 variant="standings"
                 isAdmin={false}
               />

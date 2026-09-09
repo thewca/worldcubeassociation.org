@@ -8,7 +8,7 @@ required:
   - event_id
   - round_type_id
   - format_id
-  - ranking
+  - ranking_mode
   - results
 properties:
   wcif_id:
@@ -24,13 +24,13 @@ properties:
   format_id:
     type: string
     example: "m"
-  ranking:
-    $ref: '../results/Ranking.yaml'
+  ranking_mode:
+    $ref: '../results/RankingMode.yaml'
   linked_round_wcif_ids:
     type: array
     description: >-
       Every round of the Dual Round this round belongs to, this one included. Absent unless
-      `ranking` is `dual_round`.
+      `ranking_mode` is `dual_round`.
     items:
       type: string
       example: "333fm-r1"
