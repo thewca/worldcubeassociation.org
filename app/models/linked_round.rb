@@ -108,6 +108,16 @@ class LinkedRound < ApplicationRecord
     Live::Advancing.recompute_advancing(self, can_update_advancing: can_update_advancing)
   end
 
+  # Rank official (and inbox) results across both halves of this dual round.
+  # Safe to call when no result rows exist yet — the UPDATE simply matches nothing.
+  def recompute_stored_global_pos
+    round = first_round_in_link
+    return if round.blank?
+
+    round.recompute_results_global_pos
+    round.recompute_inbox_results_global_pos
+  end
+
   def lock_results(locking_user)
     rounds.sum { it.lock_results(locking_user) }
   end

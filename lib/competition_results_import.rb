@@ -21,8 +21,8 @@ module CompetitionResultsImport
       InboxPerson.import!(persons_to_import)
       InboxResult.import!(results_to_import)
 
-      # Compute global_pos for inbox results with linked_rounds
-      competition.rounds.includes(:linked_round).where.not(linked_round_id: nil).find_each(&:recompute_inbox_results_global_pos)
+      # Compute global_pos for inbox results with linked_rounds (once per dual round)
+      competition.rounds.includes(:linked_round).filter_map(&:linked_round).uniq.each(&:recompute_stored_global_pos)
 
       if import_matched_scrambles
         # Foreign Key handles transitive deletion of individual scrambles
@@ -109,8 +109,8 @@ module CompetitionResultsImport
       competition.inbox_results.destroy_all
 
       # Inbox global_pos may have been copied from per-round ranking. Recompute
-      # the merged dual-round ranking after the official rows exist.
-      competition.rounds.includes(:linked_round).where.not(linked_round_id: nil).find_each(&:recompute_results_global_pos)
+      # the merged dual-round ranking after the official rows exist (once per dual round).
+      competition.rounds.includes(:linked_round).filter_map(&:linked_round).uniq.each(&:recompute_stored_global_pos)
     end
   end
 

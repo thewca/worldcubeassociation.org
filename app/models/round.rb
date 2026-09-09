@@ -85,9 +85,14 @@ class Round < ApplicationRecord
 
   validates :participation_source_type, comparison: { equal_to: LinkedRound.model_name, if: :participation_source_linked?, message: "must be the linked round group when the previous rounds are linked" }
 
-  after_save :reset_linked_round_information, if: :linked_round_previously_changed?
-  private def reset_linked_round_information
-    self.linked_round&.reset_round_information
+  after_save :sync_linked_round_after_link_change, if: :saved_change_to_linked_round_id?
+  private def sync_linked_round_after_link_change
+    return if linked_round.blank?
+
+    linked_round.reset_round_information
+    # Wait until both halves of the dual round are attached so we rank complete
+    # data once. Covers converting an already-posted competition into a dual round.
+    linked_round.recompute_stored_global_pos if linked_round.rounds.size >= 2
   end
 
   def initialize(attributes = nil)

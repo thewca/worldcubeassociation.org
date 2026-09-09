@@ -575,6 +575,31 @@ RSpec.describe Result do
       expect(Result.where(competition: competition).podium.map(&:person_id)).not_to include(dana.wca_id)
     end
   end
+
+  describe "converting posted results into a dual round" do
+    # After a competition is over, WRT can still link two independently-ranked
+    # rounds. Saving that link should recompute global_pos without a migration.
+    let(:competition) { create(:competition, event_ids: ["333fm"]) }
+    let(:round_one) { create(:round, competition: competition, event_id: "333fm", format_id: "m", number: 1, total_number_of_rounds: 2) }
+    let(:round_two) { create(:round, competition: competition, event_id: "333fm", format_id: "m", number: 2, total_number_of_rounds: 2) }
+    let(:alice) { create(:person, name: "Alice") }
+    let(:carol) { create(:person, name: "Carol") }
+
+    it "recomputes global_pos on save when already-posted rounds are later linked" do
+      create(:result, :fm, competition: competition, round: round_one, round_type_id: "1", person: alice,
+                           pos: 1, global_pos: 1, best: 18, average: 2067, value1: 18, value2: 22, value3: 22)
+      create(:result, :fm, competition: competition, round: round_two, round_type_id: "f", person: carol,
+                           pos: 1, global_pos: 1, best: 19, average: 2100, value1: 19, value2: 21, value3: 23)
+
+      expect(alice.results.find_by(round: round_one).global_pos).to eq 1
+      expect(carol.results.find_by(round: round_two).global_pos).to eq 1
+
+      create(:linked_round, rounds: [round_one, round_two])
+
+      expect(alice.results.find_by(round: round_one).reload.global_pos).to eq 1
+      expect(carol.results.find_by(round: round_two).reload.global_pos).to eq 2
+    end
+  end
 end
 
 def build_result(attrs)
