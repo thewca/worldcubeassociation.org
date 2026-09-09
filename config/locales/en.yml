@@ -258,6 +258,8 @@ en:
       one: "1 day"
       other: "%{count} days"
     search_site: "Search site"
+    #context: Label of a button that scrolls the user back to the top of a long page.
+    back_to_top: "Back to top"
     filter: Filter
     delete: Delete
     date_placeholder: "YYYY-MM-DD"
