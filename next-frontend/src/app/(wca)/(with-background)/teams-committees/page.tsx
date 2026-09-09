@@ -40,6 +40,7 @@ export default async function TeamsCommitteesPage() {
       <Tabs.Root
         variant="enclosed"
         orientation="vertical"
+        defaultValue={teamsCommittees[0].name}
         sideNav
         lazyMount
         fitted
