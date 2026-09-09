@@ -3,7 +3,7 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { connection } from "next/server";
-import { Container, Heading, VStack } from "@chakra-ui/react";
+import { Heading, VStack } from "@chakra-ui/react";
 import { CallToActionBlock } from "@/components/about/CallToAction";
 import Quote from "@/components/Quote";
 import AboutUsItem from "@/components/about/AboutUsItem";
@@ -32,41 +32,39 @@ export default async function About() {
   }
 
   return (
-    <Container bg="bg">
-      <VStack gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">About Us</Heading>
-        {aboutItems.map((item) => {
-          switch (item.blockType) {
-            case "callToAction":
-              return (
-                <CallToActionBlock
-                  key={item.id}
-                  content={item.contentMarkdown!}
-                  buttons={item.buttons}
-                />
-              );
-            case "quote": {
-              return (
-                <Quote
-                  key={item.id}
-                  content={item.contentMarkdown!}
-                  author={item.quotedPerson}
-                />
-              );
-            }
-            case "simpleItem": {
-              return (
-                <AboutUsItem
-                  key={item.id}
-                  title={item.title}
-                  contentMarkdown={item.contentMarkdown!}
-                  image={item.image! as Media}
-                />
-              );
-            }
+    <VStack gap="8" width="full" pt="8" alignItems="left">
+      <Heading size="5xl">About Us</Heading>
+      {aboutItems.map((item) => {
+        switch (item.blockType) {
+          case "callToAction":
+            return (
+              <CallToActionBlock
+                key={item.id}
+                content={item.contentMarkdown!}
+                buttons={item.buttons}
+              />
+            );
+          case "quote": {
+            return (
+              <Quote
+                key={item.id}
+                content={item.contentMarkdown!}
+                author={item.quotedPerson}
+              />
+            );
           }
-        })}
-      </VStack>
-    </Container>
+          case "simpleItem": {
+            return (
+              <AboutUsItem
+                key={item.id}
+                title={item.title}
+                contentMarkdown={item.contentMarkdown!}
+                image={item.image! as Media}
+              />
+            );
+          }
+        }
+      })}
+    </VStack>
   );
 }

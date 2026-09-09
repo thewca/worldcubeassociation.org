@@ -1,4 +1,4 @@
-import { Container, Heading, HStack, Separator, Text } from "@chakra-ui/react";
+import { Heading, HStack, Separator, Text } from "@chakra-ui/react";
 import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import { getLivePodiums } from "@/lib/wca/live/getLivePodiums";
@@ -48,7 +48,7 @@ export default async function PodiumsPage({
   const noPodiums = eventsFinished.length === 0;
 
   return (
-    <Container bg="bg">
+    <>
       <Heading textStyle="h1">{t("competitions.live.podiums.title")}</Heading>
       {noPodiums ? (
         <Text>{t("competitions.live.podiums.none")}</Text>
@@ -105,6 +105,6 @@ export default async function PodiumsPage({
           </Fragment>
         );
       })}
-    </Container>
+    </>
   );
 }

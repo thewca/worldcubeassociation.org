@@ -54,7 +54,7 @@ locals {
       value = "TTNormsPro"
     },
     {
-      name = "NEXTAUTH_URL"
+      name = "BETTER_AUTH_URL"
       value = "https://${var.shared.next_url}"
     },
     {
@@ -69,7 +69,7 @@ locals {
       value = "1"
     },
     {
-      name = "NEXTAUTH_URL"
+      name = "BETTER_AUTH_URL"
       value = "https://www.worldcubeassociation.org"
     },
   ]

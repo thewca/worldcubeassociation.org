@@ -1,7 +1,7 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { connection } from "next/server";
-import { Container, Heading, VStack, Box } from "@chakra-ui/react";
+import { Box, Heading, VStack } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
@@ -33,16 +33,14 @@ export default async function Disclaimer() {
   }
 
   return (
-    <Container bg="bg">
-      <VStack gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">Disclaimer</Heading>
-        {disclaimerItems.map((item) => (
-          <Box key={item.id}>
-            {item.title && <Heading size="xl">{item.title}</Heading>}
-            <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
-          </Box>
-        ))}
-      </VStack>
-    </Container>
+    <VStack gap="8" width="full" pt="8" alignItems="left">
+      <Heading size="5xl">Disclaimer</Heading>
+      {disclaimerItems.map((item) => (
+        <Box key={item.id}>
+          {item.title && <Heading size="xl">{item.title}</Heading>}
+          <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
+        </Box>
+      ))}
+    </VStack>
   );
 }

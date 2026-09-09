@@ -1,11 +1,4 @@
-import {
-  Container,
-  EmptyState,
-  Heading,
-  List,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { EmptyState, Heading, List, Text, VStack } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 import _ from "lodash";
 import { Trans } from "react-i18next/TransWithoutContext";
@@ -63,18 +56,16 @@ export default async function SearchResults({ searchParams }: SearchPageProps) {
 
   if (query === "") {
     return (
-      <Container bg="bg">
-        <EmptyState.Root>
-          <EmptyState.Content>
-            <EmptyState.Indicator>
-              <LuSearch />
-            </EmptyState.Indicator>
-            <EmptyState.Title>
-              {t("search_results.index.empty_query")}
-            </EmptyState.Title>
-          </EmptyState.Content>
-        </EmptyState.Root>
-      </Container>
+      <EmptyState.Root>
+        <EmptyState.Content>
+          <EmptyState.Indicator>
+            <LuSearch />
+          </EmptyState.Indicator>
+          <EmptyState.Title>
+            {t("search_results.index.empty_query")}
+          </EmptyState.Title>
+        </EmptyState.Content>
+      </EmptyState.Root>
     );
   }
 
@@ -86,44 +77,42 @@ export default async function SearchResults({ searchParams }: SearchPageProps) {
   const resultsByClass = _.groupBy(data.result, "class");
 
   return (
-    <Container bg="bg">
-      <VStack align="stretch" gap="8" py="8">
-        <Heading textStyle="h2">
-          <Trans
-            t={t}
-            i18nKey="search_results.index.search_for"
-            values={{ search_string: query }}
-            components={{ b: <b /> }}
-          />
-        </Heading>
-        {SEARCH_SECTIONS.map(({ resultClass, titleKey, notFoundKey }) => {
-          const sectionResults = resultsByClass[resultClass] ?? [];
+    <VStack align="stretch" gap="8" py="8">
+      <Heading textStyle="h2">
+        <Trans
+          t={t}
+          i18nKey="search_results.index.search_for"
+          values={{ search_string: query }}
+          components={{ b: <b /> }}
+        />
+      </Heading>
+      {SEARCH_SECTIONS.map(({ resultClass, titleKey, notFoundKey }) => {
+        const sectionResults = resultsByClass[resultClass] ?? [];
 
-          return (
-            <VStack key={resultClass} align="stretch" gap="3">
-              <Heading textStyle="h3">{t(titleKey)}</Heading>
-              {sectionResults.length === 0 ? (
-                <Text>
-                  {`${t(notFoundKey)} `}
-                  <Text as="span" textStyle="bodyEmphasis">
-                    {query}
-                  </Text>
+        return (
+          <VStack key={resultClass} align="stretch" gap="3">
+            <Heading textStyle="h3">{t(titleKey)}</Heading>
+            {sectionResults.length === 0 ? (
+              <Text>
+                {`${t(notFoundKey)} `}
+                <Text as="span" textStyle="bodyEmphasis">
+                  {query}
                 </Text>
-              ) : (
-                <List.Root variant="plain" gap="3">
-                  {sectionResults.map((result) => (
-                    <List.Item key={result.id}>
-                      <SearchResultLink result={result}>
-                        <SearchResultContent result={result} t={t} />
-                      </SearchResultLink>
-                    </List.Item>
-                  ))}
-                </List.Root>
-              )}
-            </VStack>
-          );
-        })}
-      </VStack>
-    </Container>
+              </Text>
+            ) : (
+              <List.Root variant="plain" gap="3">
+                {sectionResults.map((result) => (
+                  <List.Item key={result.id}>
+                    <SearchResultLink result={result}>
+                      <SearchResultContent result={result} t={t} />
+                    </SearchResultLink>
+                  </List.Item>
+                ))}
+              </List.Root>
+            )}
+          </VStack>
+        );
+      })}
+    </VStack>
   );
 }

@@ -1,5 +1,5 @@
 import { getRankings } from "@/lib/wca/results/rankings";
-import { Container } from "@chakra-ui/react";
+
 import React from "react";
 import FilteredRankings from "@/app/(wca)/(with-background)/results/rankings/filteredRankings";
 import { Metadata } from "next";
@@ -48,7 +48,7 @@ export default async function RecordsPage({
   if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <Container bg="bg">
+    <>
       <FilteredRankings
         searchParams={{
           gender,
@@ -60,6 +60,6 @@ export default async function RecordsPage({
         rankings={data.rankings}
         timestamp={data.timestamp}
       />
-    </Container>
+    </>
   );
 }

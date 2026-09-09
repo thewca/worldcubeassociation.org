@@ -3,8 +3,7 @@ import { earliestWithLongestTieBreaker } from "@/lib/wca/wcif/activities";
 import LiveView from "@/components/competitions/Schedule/LiveView";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import getPermissions from "@/lib/wca/permissions";
-import { Container } from "@chakra-ui/react";
+import getPermissions from "@/lib/wca/permissions.server";
 
 // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
 // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
@@ -53,13 +52,13 @@ export default async function LiveOverview({
   ];
 
   return (
-    <Container bg="bg">
+    <>
       <LiveView
         competitionId={competitionId}
         activities={eventActivitiesSorted}
         timeZones={uniqueTimeZones}
         canManage={canManage}
       />
-    </Container>
+    </>
   );
 }

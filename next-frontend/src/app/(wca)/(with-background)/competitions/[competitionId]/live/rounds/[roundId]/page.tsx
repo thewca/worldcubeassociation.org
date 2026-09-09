@@ -1,6 +1,6 @@
 "use server";
 
-import { Container, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import {
   LiveResultProvider,
@@ -9,7 +9,7 @@ import {
 import LiveUpdatingResultsTable from "@/components/live/LiveUpdatingResultsTable";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 import RoundOpenCheck from "@/components/live/RoundOpenCheck";
 import { RoundInfoProvider } from "@/providers/RoundInfoProvider";
 import RoundResults from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/RoundResults";
@@ -56,45 +56,35 @@ export default async function ResultPage({
     }
 
     return (
-      <Container bg="bg">
-        <VStack align="left">
-          <RoundInfoProvider roundId={id}>
-            <RoundOpenCheck>
-              <MultiRoundResultProvider
-                initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
+      <VStack align="left">
+        <RoundInfoProvider roundId={id}>
+          <RoundOpenCheck>
+            <MultiRoundResultProvider
+              initialRounds={[data, ...linkedRounds.map((d) => d.data!)]}
+              competitionId={competitionId}
+            >
+              <LiveUpdatingResultsTable
                 competitionId={competitionId}
-              >
-                <LiveUpdatingResultsTable
-                  competitionId={competitionId}
-                  title={`${eventName} - Combined Dual Rounds`}
-                  isLinkedRound
-                  canManage={canManage}
-                />
-              </MultiRoundResultProvider>
-            </RoundOpenCheck>
-          </RoundInfoProvider>
-        </VStack>
-      </Container>
+                title={`${eventName} - Combined Dual Rounds`}
+                isLinkedRound
+                canManage={canManage}
+              />
+            </MultiRoundResultProvider>
+          </RoundOpenCheck>
+        </RoundInfoProvider>
+      </VStack>
     );
   }
 
   return (
-    <Container bg="bg">
-      <VStack align="left">
-        <RoundInfoProvider roundId={id}>
-          <RoundOpenCheck>
-            <LiveResultProvider
-              initialRound={data}
-              competitionId={competitionId}
-            >
-              <RoundResults
-                competitionId={competitionId}
-                canManage={canManage}
-              />
-            </LiveResultProvider>
-          </RoundOpenCheck>
-        </RoundInfoProvider>
-      </VStack>
-    </Container>
+    <VStack align="left">
+      <RoundInfoProvider roundId={id}>
+        <RoundOpenCheck>
+          <LiveResultProvider initialRound={data} competitionId={competitionId}>
+            <RoundResults competitionId={competitionId} canManage={canManage} />
+          </LiveResultProvider>
+        </RoundOpenCheck>
+      </RoundInfoProvider>
+    </VStack>
   );
 }

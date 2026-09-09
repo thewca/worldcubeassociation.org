@@ -1,12 +1,5 @@
 import { getT } from "@/lib/i18n/get18n";
-import {
-  Container,
-  Heading,
-  VStack,
-  Text,
-  Table,
-  Link,
-} from "@chakra-ui/react";
+import { Heading, Link, Table, Text, VStack } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import { Trans } from "react-i18next/TransWithoutContext";
 import { getRegulationsTranslations } from "@/lib/wca/regulations/getRegulationsTranslations";
@@ -39,29 +32,23 @@ export default async function RegulationsTranslations() {
   const { current, outdated } = translationRequest;
 
   return (
-    <Container bg="bg">
-      <VStack align="left">
-        <Heading size="5xl">{t("regulations_translations.title")}</Heading>
-        <Text>{t("regulations_translations.paragraph1")}</Text>
-        <Text>{t("regulations_translations.paragraph2")}</Text>
+    <VStack align="left">
+      <Heading size="5xl">{t("regulations_translations.title")}</Heading>
+      <Text>{t("regulations_translations.paragraph1")}</Text>
+      <Text>{t("regulations_translations.paragraph2")}</Text>
 
-        <Heading size="2xl">
-          {t("regulations_translations.translations")}
-        </Heading>
-        <Heading size="xl">{t("regulations_translations.current")}</Heading>
-        <TranslationList translations={current} />
-        <Heading size="xl">{t("regulations_translations.old")}</Heading>
-        <Heading size="2xl">
-          {t("regulations_translations.translating")}
-        </Heading>
-        <TranslationList translations={outdated} />
-        <Trans
-          t={t}
-          i18nKey="regulations_translations.paragraph3_html"
-          components={{ a: <Link /> }}
-        />
-      </VStack>
-    </Container>
+      <Heading size="2xl">{t("regulations_translations.translations")}</Heading>
+      <Heading size="xl">{t("regulations_translations.current")}</Heading>
+      <TranslationList translations={current} />
+      <Heading size="xl">{t("regulations_translations.old")}</Heading>
+      <Heading size="2xl">{t("regulations_translations.translating")}</Heading>
+      <TranslationList translations={outdated} />
+      <Trans
+        t={t}
+        i18nKey="regulations_translations.paragraph3_html"
+        components={{ a: <Link /> }}
+      />
+    </VStack>
   );
 }
 
@@ -71,24 +58,26 @@ function TranslationList({
   translations: components["schemas"]["Translation"][];
 }) {
   return (
-    <Table.Root size="sm" striped>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>Version</Table.ColumnHeader>
-          <Table.ColumnHeader>Language</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {translations.map((item) => (
-          <Table.Row key={item.version}>
-            <Table.Cell>{item.version}</Table.Cell>
-            <Table.Cell>
-              <Link href={item.url}>{item.language}</Link> (
-              {item.language_english})
-            </Table.Cell>
+    <Table.ScrollArea>
+      <Table.Root size="sm" striped>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>Version</Table.ColumnHeader>
+            <Table.ColumnHeader>Language</Table.ColumnHeader>
           </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
+        </Table.Header>
+        <Table.Body>
+          {translations.map((item) => (
+            <Table.Row key={item.version}>
+              <Table.Cell>{item.version}</Table.Cell>
+              <Table.Cell>
+                <Link href={item.url}>{item.language}</Link> (
+                {item.language_english})
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }

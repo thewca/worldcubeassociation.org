@@ -1,8 +1,4 @@
-import type { NextAuthConfig } from "next-auth";
-import type { EnrichedAuthConfig } from "payload-authjs";
-import type { Provider } from "@auth/core/providers";
-
-import { refreshToken } from "@/lib/wca/oauth/tokenRefresh";
+import type { GenericOAuthConfig } from "better-auth/plugins";
 import {
   WCA_OIDC_CLIENT_ID,
   WCA_OIDC_CLIENT_SECRET,
@@ -12,127 +8,78 @@ import {
 export const WCA_PROVIDER_ID = "WCA";
 export const WCA_CMS_PROVIDER_ID = `${WCA_PROVIDER_ID}-CMS`;
 
-const baseWcaProvider: Provider = {
-  id: WCA_PROVIDER_ID,
-  name: "WCA-OIDC-Provider",
-  type: "oidc",
-  issuer: WCA_OIDC_ISSUER,
+/** Names each instance and its cookie jar; shared so the middleware looks for the same
+ *  cookie the site instance writes. */
+export const WCA_APP_NAME = "wca";
+export const WCA_CMS_APP_NAME = `${WCA_APP_NAME}-cms`;
+
+// Must equal `routes.api` + `authBasePath`: Better Auth's router 404s anything outside its own
+//   `basePath`, and our Payload config moves the API to `/api/payload`.
+export const CMS_AUTH_BASE_PATH = "/api/payload/auth";
+
+const WCA_DISCOVERY_URL = `${WCA_OIDC_ISSUER}/.well-known/openid-configuration`;
+
+interface WcaProfile {
+  sub: string;
+  name?: string;
+  email?: string;
+  picture?: string;
+  roles?: string[];
+  preferred_username?: string;
+}
+
+const baseWcaProvider: GenericOAuthConfig = {
+  providerId: WCA_PROVIDER_ID,
   clientId: WCA_OIDC_CLIENT_ID,
   clientSecret: WCA_OIDC_CLIENT_SECRET,
+  discoveryUrl: WCA_DISCOVERY_URL,
   // `manage_registrations` is what lets this frontend submit and edit registrations on the
   //   signed-in user's behalf; without it the registration endpoints answer 403.
-  authorization: {
-    params: { scope: "openid profile email manage_registrations" },
-  },
-  profile: (profile) => {
+  scopes: ["openid", "profile", "email", "manage_registrations"],
+  mapProfileToUser: (profile) => {
+    const wcaProfile = profile as unknown as WcaProfile;
+
     return {
-      id: profile.sub,
-      name: profile.name,
-      email: profile.email,
-      // The OIDC claim standard calls it `picture`,
-      //   but for unknown reasons AuthJS v5 calls it `image`
-      image: profile.picture,
-      roles: profile.roles,
-      wcaId: profile.preferred_username,
+      name: wcaProfile.name,
+      email: wcaProfile.email,
+      // Our provider issues no `email_verified` claim, so Better Auth would treat every address
+      //   as unverified and refuse to link a returning user. These are minted by the backend,
+      //   not typed in, so calling them verified states what is already true.
+      emailVerified: true,
+      image: wcaProfile.picture,
+      roles: wcaProfile.roles,
+      wcaId: wcaProfile.preferred_username,
+      // The OIDC subject is the numeric `User#id` in Rails. Also on the account as `accountId`,
+      //   but carrying it here lets call sites read it straight off the session.
+      wcaUserId: Number(wcaProfile.sub),
     };
   },
 };
 
-const cmsWcaProvider: Provider = {
+export const siteWcaProvider = baseWcaProvider;
+
+export const cmsWcaProvider: GenericOAuthConfig = {
   ...baseWcaProvider,
-  id: WCA_CMS_PROVIDER_ID,
-  name: "WCA-OIDC-Provider with CMS access",
-  authorization: {
-    params: { scope: "openid profile email cms" },
-  },
-  // Hit the user_info endpoint separately for roles computation
-  idToken: false,
-  // allow re-linking of accounts that have the same email.
-  //   This happens when a user who is allowed to use Payload
-  //   First logs in via the "normal" provider, and later wants to "switch"
-  //   to using Payload via the CMS provider.
-  // See https://authjs.dev/concepts#security for details. Quote:
-  //   > Examples of scenarios where this is secure include an OAuth provider you control [...]
-  allowDangerousEmailAccountLinking: true,
+  providerId: WCA_CMS_PROVIDER_ID,
+  name: WCA_APP_NAME,
+  scopes: ["openid", "profile", "email", "cms"],
+  // Re-sync roles on every CMS login, so team changes in Rails reach Payload.
+  overrideUserInfo: true,
 };
 
-export const authConfig: NextAuthConfig = {
-  secret: process.env.AUTH_SECRET,
-  providers: [baseWcaProvider],
-  callbacks: {
-    async jwt({ token, account, user }) {
-      if (account) {
-        // First-time login, save the `access_token`, its expiry and the `refresh_token`
-        return {
-          ...token,
-          wcaId: user?.wcaId,
-          access_token: account.access_token!,
-          expires_at: account.expires_at!,
-          refresh_token: account.refresh_token,
-        };
-      } else if (Date.now() < token.expires_at * 1000) {
-        // Subsequent logins, but the `access_token` is still valid
-        return token;
-      } else {
-        // as per https://authjs.dev/guides/refresh-token-rotation
-        if (!token.refresh_token) throw new TypeError("Missing refresh_token");
-
-        const { data: newTokens, error } = await refreshToken(
-          token.refresh_token,
-        );
-
-        if (error) {
-          return {
-            ...token,
-            error: "RefreshTokenError",
-          };
-        }
-
-        return {
-          ...token,
-          access_token: newTokens.access_token,
-          expires_at: Math.floor(Date.now() / 1000 + newTokens.expires_in),
-          refresh_token: newTokens.refresh_token,
-        };
-      }
-    },
-    async session({ session, token }) {
-      session.accessToken = token.access_token;
-      session.user.wcaId = token.wcaId;
-      return session;
-    },
-  },
-};
-
-export const payloadAuthConfig: EnrichedAuthConfig = {
-  ...authConfig,
-  providers: [cmsWcaProvider],
-  basePath: "/api/auth/payload",
-  cookies: {
-    sessionToken: {
-      name: "authjs.admin.session-token",
-    },
-    csrfToken: {
-      name: "authjs.admin.csrf-token",
-    },
-    callbackUrl: {
-      name: "authjs.admin.callback-url",
-    },
-  },
-  events: {
-    signIn: async ({ user, payload }) => {
-      if (!user.id || !payload) {
-        return;
-      }
-
-      await payload.update({
-        collection: "users",
-        id: user.id,
-        data: {
-          roles: user.roles,
-          image: user.image,
-        },
-      });
-    },
-  },
-};
+/**
+ * These are provider-owned, so `input: false` looks like the obvious way to stop a client
+ * writing them. It is the wrong tool: Better Auth applies that flag to *all* input, including
+ * the object `mapProfileToUser` returns, so the fields would be stripped on the way in and
+ * never populated at all. Concretely, a WST member would sign in with `roles: undefined` and
+ * `access.admin` in `collections/Users.ts` would then lock them out of the Payload admin panel.
+ *
+ * Client writes are blocked where it actually matters instead: `payload.auth.ts` refuses
+ * `/update-user` outright, and `roles` carries `create`/`update` field access of `false` in
+ * `collections/Users.ts`, closing the Payload REST/GraphQL path.
+ */
+export const wcaUserAdditionalFields = {
+  roles: { type: "string[]", required: false },
+  wcaId: { type: "string", required: false },
+  wcaUserId: { type: "number", required: false },
+} as const;

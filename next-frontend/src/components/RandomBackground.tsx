@@ -55,6 +55,7 @@ const RandomBackground = ({
       right={0}
       top={0}
       zIndex="hide" // Places it underneath other elements
+      opacity="0.25"
       pointerEvents="none" // Prevents interaction with the grid
     >
       <SimpleGrid columns={numCols}>

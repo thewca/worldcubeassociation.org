@@ -16,7 +16,7 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
 import { connection } from "next/server";
-import { auth } from "@/auth";
+import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuMenu } from "react-icons/lu";
@@ -110,7 +110,7 @@ const getNavbarData = cache(async () => {
 });
 
 async function NavbarAvatar() {
-  const session = await auth();
+  const session = await getSession();
 
   return <AvatarMenu session={session} />;
 }

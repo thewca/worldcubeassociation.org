@@ -68,6 +68,13 @@ services:
     command: >
       bash -c './package-install.dev.sh packages.runtime.txt &&
       bin/dev -b 0.0.0.0'
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://localhost:3000/api/v0/healthcheck" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      # Booting Rails also installs packages, so give it room before failing
+      start_period: 5m
     depends_on:
       wca_environment:
         condition: service_completed_successfully
@@ -94,6 +101,11 @@ services:
       - wca-main
     depends_on:
       wca_payload_db:
+        condition: service_healthy
+      # Better Auth discovers the WCA OIDC provider once, when the auth instance is first
+      #   created, and caches the failure: if Rails is not answering by then, every page render
+      #   errors until this container is restarted. So wait for Rails to be healthy.
+      wca_on_rails:
         condition: service_healthy
 
   wca_payload_db:

@@ -706,6 +706,47 @@ const customConfig = defineConfig({
       },
     },
     slotRecipes: {
+      ...INTERACTIVITY_OVERRIDES,
+      steps: {
+        ...INTERACTIVITY_OVERRIDES.steps,
+        variants: {
+          orientation: {
+            vertical: {
+              // Chakra hangs the connector inside the step it leads out of and sizes it against
+              //   that step's own height, so a step no taller than its label leaves the connector
+              //   nothing to run in and it collapses to nothing.
+              item: {
+                _notLast: {
+                  minHeight:
+                    "calc(var(--steps-size) + var(--steps-gutter) * 4)",
+                },
+              },
+              separator: {
+                marginX: "0",
+              },
+            },
+            horizontal: {
+              // Responsive variants merge property by property, so anything the vertical branch
+              //   sets and this one leaves alone survives into the wider breakpoint - which is
+              //   what left the horizontal connector absolutely positioned, and so invisible.
+              root: {
+                height: "auto",
+              },
+              item: {
+                _notLast: {
+                  minHeight: "auto",
+                },
+              },
+              separator: {
+                position: "static",
+                top: "auto",
+                insetStart: "auto",
+                maxHeight: "none",
+              },
+            },
+          },
+        },
+      },
       dataList: {
         slots: [],
         variants: {
@@ -884,7 +925,7 @@ const customConfig = defineConfig({
                   bg: "bg.subtle",
                 },
                 "&:hover td": {
-                  bg: "colorPalette.fg/60",
+                  bg: "colorPalette.muted",
                 },
               },
             },
@@ -911,6 +952,19 @@ const customConfig = defineConfig({
       tabs: {
         slots: [],
         variants: {
+          // Grows the triggers to fill the row when they fit, and lets the list
+          //   scroll instead of squashing them when they don't.
+          fitContent: {
+            true: {
+              list: {
+                maxWidth: "full",
+                overflowX: "auto",
+              },
+              trigger: {
+                flex: "1 0 auto",
+              },
+            },
+          },
           highContrast: {
             true: {
               trigger: {
@@ -920,9 +974,27 @@ const customConfig = defineConfig({
               },
             },
           },
+          // Vertical tab list that sticks alongside the content on desktop and
+          //   collapses above it on mobile.
+          sideNav: {
+            true: {
+              root: {
+                flexDirection: { base: "column", md: "row" },
+              },
+              list: {
+                height: "fit-content",
+                position: { base: "static", md: "sticky" },
+                top: "3",
+              },
+              content: {
+                _vertical: {
+                  ps: { base: "0", md: "var(--tabs-content-padding)" },
+                },
+              },
+            },
+          },
         },
       },
-      ...INTERACTIVITY_OVERRIDES,
       list: {
         slots: [],
         variants: {

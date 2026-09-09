@@ -2363,6 +2363,8 @@ es-ES:
         Estás baneado. Si crees que se trata de un error, por favor ponte en
         contacto con el <a href='mailto:integrity@worldcubeassociation.org'
         target='_blank'>WIC</a>.
+      #original_hash: d4ca89d
+      banned_until: 'Tu ban termina el %{date}.'
       #original_hash: 8d07e7f
       undelete_banned: es un competidor baneado y no se le puede volver a añadir
       #original_hash: 3de7c86
@@ -2777,7 +2779,9 @@ es-ES:
         #original_hash: 6d8e34b
         empty_file: El archivo está vacío.
         #original_hash: 631e8d0
-        unsupported_file_format: Formato de archivo no soportado. Por favor sube un archivo JSON o CSV.
+        unsupported_file_format: >-
+          Formato de archivo no soportado. Por favor, sube un archivo JSON o
+          CSV.
     add:
       #original_hash: 975275e
       title: 'Añadir registros para %{comp}'
@@ -3403,6 +3407,8 @@ es-ES:
     index:
       #original_hash: db98a68
       title: Competiciones
+      #original_hash: 6e2eb0a
+      all_competitions: Todas las competiciones
       #original_hash: 6a72085
       all_events: Todas
       #original_hash: 6d76b81
@@ -3415,10 +3421,29 @@ es-ES:
       list: Lista
       #original_hash: ab478f3
       map: Mapa
+      #original_hash: ad8919a
+      event: Categoría
       #original_hash: 0f21717
       region: Región
       #original_hash: bce0641
       search: Buscar
+      #original_hash: 709a232
+      name: Nombre
+      #original_hash: d219c68
+      location: Ubicación
+      #original_hash: d98bf85
+      location_placeholder: Introduce una dirección
+      #original_hash: 0132375
+      use_my_location: Usar mi ubicación
+      #original_hash: 4232080
+      distance: Distancia
+      distance_units:
+        #original_hash: 08ec69f
+        km: km
+        #original_hash: 9c51ad8
+        mi: mi
+      #original_hash: cf963e5
+      advanced_filters: Filtros avanzados
       #original_hash: 769bb19
       state: Cuándo
       #original_hash: 4e9f7a3
@@ -3514,6 +3539,26 @@ es-ES:
           full: >-
             Se ha alcanzado el límite de competidores, los nuevos registros irán
             a la lista de espera.
+      #original_hash: 1cab715
+      registration_key: 'Leyenda del registro:'
+      registration_status:
+        #original_hash: 10b28a8
+        full: Lleno
+        #original_hash: cf9b770
+        open: Abierto
+        #original_hash: 44bb7df
+        not_open: No abierto
+        #original_hash: 88d86b7
+        closed: Cerrado
+      #original_hash: 184f3ab
+      currently_displaying:
+        zero: 'Mostrando %{count} competiciones'
+        one: Mostrando una competición
+        other: 'Mostrando %{count} competiciones'
+      #original_hash: 74d8290
+      register_now: Regístrate ahora
+      #original_hash: fd9d092
+      view_competition: Ver competición
       #original_hash: 28531af
       no_more_comps: No hay más competiciones.
       #original_hash: 8b09d74
@@ -4271,6 +4316,8 @@ es-ES:
           cualquier otro requerimiento que se enumerado antes.
         #original_hash: 80d2933
         next_step: Continuar al siguiente paso
+        #original_hash: bb54db5
+        accept: Aceptar
       update:
         #original_hash: ebf417d
         being_updated: El registro se está actualizando...
@@ -4368,6 +4415,8 @@ es-ES:
           organizador o delegado
         #original_hash: 6b76fab
         comment: Comentario adicional para los organizadores
+        #original_hash: f3d85ec
+        comment_overview: Tus comentarios
         #original_hash: 8eae30c
         until: 'Puedes actualizar tu registro hasta el día %{date}'
         #original_hash: fc8bc84
@@ -4407,6 +4456,11 @@ es-ES:
         event_limit: >-
           Esta competición limita la cantidad de categorías a la que puedes
           registrarte a un máximo de %{max_events}.
+        #original_hash: 1e4c43f
+        waiting_list_count:
+          zero: No hay competidores en la lista de espera.
+          one: Hay un competidor en la lista de espera.
+          other: 'Hay %{count} competidores en la lista de espera.'
       errors:
         #original_hash: 3890616
         events: 'Ha fallado la carga de categorías, por favor inténtalo de nuevo'
@@ -5440,11 +5494,11 @@ es-ES:
             necesaria para sancionar la competición oficialmente. El Delegado de
             la WCA guiará a los organizadores para conseguir una competición
             exitosa.
-          #original_hash: 576c3b8
+          #original_hash: de18a9f
           '4': >-
             Visita las <a target='_blank'
-            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>Directrices
-            para los Organizadores de Competiciones de la WCA</a> para más
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>Manual
+            para Organizadores de Competiciones de la WCA</a> para más
             información.
       '6':
         #original_hash: 8005a61
@@ -5748,6 +5802,8 @@ es-ES:
     competition_templates: Plantillas de competición
     #original_hash: 5ca0558
     certificates: Plantillas de certificados del WCT
+    #original_hash: 16d7bab
+    orga_handbook: Manual para Organizadores
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
@@ -6050,6 +6106,8 @@ es-ES:
       regulations_and_guidelines: Reglamento
       #original_hash: db683b3
       search_for: 'Buscar <b>%{search_string}</b>'
+      #original_hash: b861dd5
+      empty_query: ¡Busca algo!
       not_found:
         #original_hash: 658e79f
         generic: No se han encontrado resultados
@@ -6182,13 +6240,14 @@ es-ES:
         La <a href="/faq">sección de Preguntas frecuentes</a> responde a
         múltiples preguntas frecuentes sobre el Reglamento de la WCA.
     panel4:
-      #original_hash: ad5f6e7
-      title: Directrices para los Organizadores
-      #original_hash: 9bbdf16
+      #original_hash: d0e369e
+      title: Manual para Organizadores
+      #original_hash: d619471
       content1_html: >-
         Si estás interesado en organizar una competición o ya has planeado
         organizar una, por favor, lee nuestras <a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Directrices para Organizadores</a>.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Manual
+        para Organizadores</a>.
       #original_hash: 5016669
       content2_html: >-
         Este documento contiene información importante y debería ser leído por
