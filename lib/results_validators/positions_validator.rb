@@ -21,18 +21,29 @@ module ResultsValidators
         # H2H positions are determined by match outcomes, not by comparing times.
         results_for_comp = competition_data.results.reject { it.round.is_h2h_mock? }
 
+        dual_rounds, standalone_rounds = results_for_comp.group_by(&:round_human_id)
+                                                         .values
+                                                         .partition { it.first.round.linked_round_id.present? }
+
         # The validator data already sorts by average then best via ValidatorData#load_data,
-        # so we simply need to check that the position stored matched the expected one
-        results_for_comp.group_by(&:round_human_id).each_value do |results_for_round|
+        # so we simply need to check that the position stored matched the expected one.
+        # A round outside a Dual Round is ranked on its own, which makes `global_pos` equal `pos`.
+        standalone_rounds.each do |results_for_round|
+          expected_positions(results_for_round).each do |result, expected_pos|
+            check_position(competition, result, :pos, expected_pos)
+            check_position(competition, result, :global_pos, expected_pos)
+          end
+        end
+
+        dual_rounds.each do |results_for_round|
           expected_positions(results_for_round).each do |result, expected_pos|
             check_position(competition, result, :pos, expected_pos)
           end
         end
 
         # A Dual Round ranks each competitor once across all of its rounds, counting only their
-        # better solve, so `global_pos` spans the whole link. Every other round is ranked on its
-        # own, which makes `global_pos` there the same as `pos`.
-        results_for_comp.group_by { ranking_group_key(it) }.each_value do |results_for_group|
+        # better solve, so `global_pos` spans the whole link.
+        dual_rounds.flatten.group_by { it.round.linked_round_id }.each_value do |results_for_group|
           expected_pos_by_person = expected_positions(best_result_per_person(results_for_group))
                                    .transform_keys(&:person_id)
 
@@ -41,13 +52,6 @@ module ResultsValidators
           end
         end
       end
-    end
-
-    # A Dual Round is ranked as a whole, every other round on its own.
-    private def ranking_group_key(result)
-      linked_round_id = result.round.linked_round_id
-
-      linked_round_id.present? ? [:linked_round, linked_round_id] : [:round, result.round_id]
     end
 
     # Within a Dual Round a competitor holds one result per round but is ranked on their better
