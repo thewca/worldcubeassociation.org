@@ -26,7 +26,7 @@ export default async function Disclaimer() {
   }
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">Disclaimer</Heading>
       {disclaimerItems.map((item) => (
         <Box key={item.id}>

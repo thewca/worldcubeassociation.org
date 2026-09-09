@@ -38,7 +38,7 @@ export default async function RegulationsHistory() {
   }
 
   return (
-    <VStack gap="8" pt="8" alignItems="left">
+    <VStack gap="8" alignItems="left">
       <Heading size="5xl">WCA Regulations</Heading>
       <Heading size="2xl">Older Versions of the Regulations</Heading>
       <Text>

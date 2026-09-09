@@ -27,7 +27,7 @@ export default async function Privacy() {
   }
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">WCA Privacy Statement</Heading>
       <ChakraMarkdown>{privacyPage.preambleMarkdown}</ChakraMarkdown>
       {privacyItems.map((item) => (

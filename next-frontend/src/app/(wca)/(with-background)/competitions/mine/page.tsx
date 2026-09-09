@@ -34,7 +34,7 @@ export default async function MyCompetitions() {
   const myCompetitions = myCompetitionsRequest.data;
 
   return (
-    <VStack gap="8" pt="8" alignItems="left">
+    <VStack gap="8" alignItems="left">
       <Heading size="5xl">
         {session.user?.wcaId && (
           <Button asChild>
