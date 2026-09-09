@@ -927,16 +927,23 @@ class Round < ApplicationRecord
     RANKING_MODES[:within_round]
   end
 
+  V1_RESULTS_SERIALIZE_OPTIONS = {
+    only: %w[format_id],
+    methods: %w[wcif_id event_id round_type_id ranking_mode linked_round_wcif_ids],
+  }.freeze
+
+  def linked_round_wcif_ids
+    linked_round&.wcif_ids
+  end
+
   def to_v1_results_json
-    {
-      "wcif_id" => wcif_id,
-      "event_id" => event_id,
-      "round_type_id" => round_type_id,
-      "format_id" => format_id,
-      "ranking_mode" => ranking_mode,
-      "linked_round_wcif_ids" => linked_round&.wcif_ids,
-      "results" => results.sort_by { [it.pos, it.person_name] }.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS),
-    }.compact
+    # The results are sorted here rather than by the association so that the ordering is not
+    # something every caller of `round.results` pays for.
+    sorted_results = results.sort_by { [it.pos, it.person_name] }
+
+    self.as_json(V1_RESULTS_SERIALIZE_OPTIONS)
+        .merge("results" => sorted_results.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS))
+        .compact
   end
 
   def to_live_results_json(only_podiums: false)

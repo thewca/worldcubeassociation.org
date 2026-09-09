@@ -25,7 +25,7 @@ RSpec.describe "API v1 Competitions" do
         "event_id" => "333",
         "round_type_id" => "f",
         "format_id" => "a",
-        "ranking" => "round",
+        "ranking_mode" => "round",
       )
       expect(json.first["results"].pluck("id")).to eq [result.id]
     end
@@ -71,7 +71,7 @@ RSpec.describe "API v1 Competitions" do
 
       json = response.parsed_body
       expect(json.pluck("wcif_id")).to eq %w[333-r1 333-r2]
-      expect(json.pluck("ranking")).to eq %w[dual_round dual_round]
+      expect(json.pluck("ranking_mode")).to eq %w[dual_round dual_round]
       expect(json.pluck("linked_round_wcif_ids")).to eq [%w[333-r1 333-r2], %w[333-r1 333-r2]]
     end
 
@@ -91,7 +91,7 @@ RSpec.describe "API v1 Competitions" do
 
       json = response.parsed_body
       expect(json.length).to eq 1
-      expect(json.first).to include("event_id" => "333", "format_id" => "a", "ranking" => "dual_round")
+      expect(json.first).to include("event_id" => "333", "format_id" => "a", "ranking_mode" => "dual_round")
       expect(json.first["results"].map { [it["name"], it["global_pos"], it["average"]] }).to eq [
         [alice.name, 1, 1000],
         [carol.name, 2, 1500],
