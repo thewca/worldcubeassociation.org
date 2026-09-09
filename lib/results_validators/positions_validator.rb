@@ -21,7 +21,7 @@ module ResultsValidators
         # H2H positions are determined by match outcomes, not by comparing times.
         results_for_comp = competition_data.results.reject { it.round.is_h2h_mock? }
 
-        dual_rounds, standalone_rounds = results_for_comp.group_by(&:round_human_id)
+        linked_rounds, standalone_rounds = results_for_comp.group_by(&:round_human_id)
                                                          .values
                                                          .partition { it.first.round.linked_round_id.present? }
 
