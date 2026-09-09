@@ -34,8 +34,8 @@ module ResultsValidators
         # A Dual Round ranks each competitor once across all of its rounds, counting only their
         # better solve, so `global_pos` spans the whole link.
         results_for_comp.group_by { it.round.linked_round_id }.except(nil).each_value do |results_for_group|
-          expected_pos_by_person = expected_positions(best_result_per_person(results_for_group))
-                                   .transform_keys(&:person_id)
+          merged_ranking = best_result_per_person(results_for_group)
+          expected_pos_by_person = expected_positions(merged_ranking).transform_keys(&:person_id)
 
           results_for_group.each do |result|
             check_position(competition, result, :global_pos, expected_pos_by_person.fetch(result.person_id))
