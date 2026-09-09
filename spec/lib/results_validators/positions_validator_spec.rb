@@ -112,8 +112,14 @@ RSpec.describe ResultsValidators::PositionsValidator do
         results1 = create_incorrect_tied_results(competition1, "222", round)
         results2 = create_incorrect_tied_results(competition1, "222", round, kind: :inbox_result)
         expected_errors = {
-          "Result" => create_result_error(competition1.id, "222-f", results1[1].person_name, 1, 2),
-          "InboxResult" => create_result_error(competition1.id, "222-f", results2[1].person_name, 1, 2),
+          "Result" => [
+            create_result_error(competition1.id, "222-f", results1[1].person_name, 1, 2),
+            create_global_result_error(competition1.id, "222-f", results1[1].person_name, 1, 2),
+          ],
+          "InboxResult" => [
+            create_result_error(competition1.id, "222-f", results2[1].person_name, 1, 2),
+            create_global_result_error(competition1.id, "222-f", results2[1].person_name, 1, 2),
+          ],
         }
         validator_args.each do |arg|
           pv = ResultsValidators::PositionsValidator.new.validate(**arg)
@@ -159,10 +165,65 @@ RSpec.describe ResultsValidators::PositionsValidator do
         expected_errors = [
           create_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
           create_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),
+          create_global_result_error(competition1.id, "333bf-f", r1.person_name, 2, 1),
+          create_global_result_error(competition1.id, "333bf-f", r2.person_name, 1, 2),
         ]
 
         pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
         expect(pv.errors).to match_array(expected_errors)
+      end
+    end
+
+    context "dual rounds" do
+      let!(:first_round) { create(:round, competition: competition1, event_id: "333", number: 1, total_number_of_rounds: 2) }
+      let!(:final_round) { create(:round, competition: competition1, event_id: "333", number: 2, total_number_of_rounds: 2) }
+      let!(:alice) { create(:person) }
+      let!(:bob) { create(:person) }
+      let!(:carol) { create(:person) }
+
+      before do
+        create(:linked_round, rounds: [first_round, final_round])
+
+        # Each competitor counts with their better average, which is 10.00 for alice, 15.00 for
+        # carol and 20.00 for bob. The merged ranking is therefore alice, carol, bob, which is
+        # the ranking of neither round on its own.
+        create(:result, person: alice, competition: competition1, event_id: "333", round: first_round, round_type_id: "1", best: 500, average: 1000, pos: 1, global_pos: 1)
+        create(:result, person: bob, competition: competition1, event_id: "333", round: first_round, round_type_id: "1", best: 1500, average: 3000, pos: 2, global_pos: 3)
+        create(:result, person: carol, competition: competition1, event_id: "333", round: first_round, round_type_id: "1", best: 2500, average: 5000, pos: 3, global_pos: 2)
+        create(:result, person: carol, competition: competition1, event_id: "333", round: final_round, round_type_id: "f", best: 750, average: 1500, pos: 1, global_pos: 2)
+        create(:result, person: bob, competition: competition1, event_id: "333", round: final_round, round_type_id: "f", best: 1000, average: 2000, pos: 2, global_pos: 3)
+        create(:result, person: alice, competition: competition1, event_id: "333", round: final_round, round_type_id: "f", best: 2000, average: 4000, pos: 3, global_pos: 1)
+      end
+
+      it "validates a ranking spanning both linked rounds" do
+        pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
+        expect(pv.any_errors?).to be false
+      end
+
+      it "invalidates global positions that only rank within a single round" do
+        # This is what a scoretaking system that does not know about Dual Rounds produces.
+        Result.where(competition_id: competition1.id).find_each { it.update!(global_pos: it.pos) }
+
+        pv = ResultsValidators::PositionsValidator.new.validate(competition_ids: competition1.id, model: Result)
+
+        expect(pv.errors).to contain_exactly(
+          create_global_result_error(competition1.id, "333-1", bob.name, 3, 2),
+          create_global_result_error(competition1.id, "333-1", carol.name, 2, 3),
+          create_global_result_error(competition1.id, "333-f", carol.name, 2, 1),
+          create_global_result_error(competition1.id, "333-f", bob.name, 3, 2),
+          create_global_result_error(competition1.id, "333-f", alice.name, 1, 3),
+        )
+      end
+
+      it "fixes global positions across both linked rounds when requested to" do
+        Result.where(competition_id: competition1.id).find_each { it.update!(global_pos: it.pos) }
+
+        pv = ResultsValidators::PositionsValidator.new(apply_fixes: true).validate(competition_ids: competition1.id, model: Result)
+
+        expect(pv.any_errors?).to be false
+        expect(Result.where(person_id: alice.wca_id).pluck(:global_pos)).to eq [1, 1]
+        expect(Result.where(person_id: carol.wca_id).pluck(:global_pos)).to eq [2, 2]
+        expect(Result.where(person_id: bob.wca_id).pluck(:global_pos)).to eq [3, 3]
       end
     end
   end
@@ -196,4 +257,8 @@ end
 
 def create_result_error(competition_id, round_id, name, expected_pos, actual_pos)
   ResultsValidators::ValidationError.new(ResultsValidators::PositionsValidator::WRONG_POSITION_IN_RESULTS_ERROR, :results, competition_id, round_id: round_id, person_name: name, expected_pos: expected_pos, pos: actual_pos)
+end
+
+def create_global_result_error(competition_id, round_id, name, expected_pos, actual_pos)
+  ResultsValidators::ValidationError.new(ResultsValidators::PositionsValidator::WRONG_GLOBAL_POSITION_IN_RESULTS_ERROR, :results, competition_id, round_id: round_id, person_name: name, expected_pos: expected_pos, pos: actual_pos)
 end
