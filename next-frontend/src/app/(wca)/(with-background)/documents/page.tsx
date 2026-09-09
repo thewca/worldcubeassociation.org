@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import _ from "lodash";
 import IconDisplay from "@/components/IconDisplay";
 import { Document } from "@/types/payload";
@@ -23,6 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function Documents() {
+  await connection();
+
   const payload = await getPayload({ config });
 
   const documentsResult = await payload.findGlobal({

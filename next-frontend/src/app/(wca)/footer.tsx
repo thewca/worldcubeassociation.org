@@ -9,6 +9,7 @@ import {
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
+import { connection } from "next/server";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/components/icons/iconMap";
 import type { Footer, SocialLink } from "@/types/payload";
@@ -47,6 +48,11 @@ function FooterLink({ item }: { item: FooterNavItem | FooterSocialItem }) {
 }
 
 export default async function Footer() {
+  // `connection()` has to come before the Payload queries: it defers everything below it to
+  // request time, so the build-time prerender stops here instead of trying to reach MongoDB,
+  // which is not available while building.
+  await connection();
+
   const payload = await getPayload({ config });
   const [footer, socialLinksGlobal] = await Promise.all([
     payload.findGlobal({ slug: "footer" }),

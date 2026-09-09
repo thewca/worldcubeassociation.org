@@ -14,6 +14,7 @@ import {
 import { getPayload } from "payload";
 import config from "@payload-config";
 import Link from "next/link";
+import { connection } from "next/server";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
@@ -86,6 +87,11 @@ function LinkWrapper<T extends string>({
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
 export default async function Navbar() {
+  // `connection()` has to come before the Payload queries: it defers everything below it to
+  // request time, so the build-time prerender stops here instead of trying to reach MongoDB,
+  // which is not available while building.
+  await connection();
+
   const payload = await getPayload({ config });
   const [navbar, socialLinksGlobal] = await Promise.all([
     payload.findGlobal({ slug: "nav" }),

@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { Box, Heading, VStack } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Metadata } from "next";
@@ -14,6 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Privacy() {
+  await connection();
+
   const payload = await getPayload({ config });
 
   const privacyPage = await payload.findGlobal({

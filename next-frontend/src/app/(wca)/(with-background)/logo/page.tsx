@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { Heading, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { ChakraMarkdown } from "@/components/Markdown";
@@ -17,6 +18,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LogoPage() {
+  await connection();
+
   const payload = await getPayload({ config });
 
   const logoPage = await payload.findGlobal({

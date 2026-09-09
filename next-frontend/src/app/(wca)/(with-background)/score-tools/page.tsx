@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import {
   Badge,
   Card,
@@ -32,6 +33,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ScoreTools() {
   const { t, lng } = await getT();
+
+  await connection();
 
   const payload = await getPayload({ config });
 
