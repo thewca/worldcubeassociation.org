@@ -85,6 +85,8 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    // Avatar URLs are timestamped per upload, so an optimized variant is never stale.
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       new URL("https://worldcubeassociation.org/**"),
       new URL("https://avatars.worldcubeassociation.org/**"),

@@ -50,6 +50,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
               }
               alt="Profile Picture"
               fill
+              sizes="75px"
               style={{ objectFit: "cover" }}
             />
           </Box>
