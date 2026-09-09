@@ -1,0 +1,11 @@
+type: string
+description: >-
+  What decides a competitor's final position. `round` ranks them within the round by their time.
+  `dual_round` ranks them across every round of a Dual Round on their better result, which is what
+  `global_pos` reports. `head_to_head` positions come from match outcomes and not from comparing
+  times, so they may contradict the times shown.
+enum:
+  - round
+  - dual_round
+  - head_to_head
+example: dual_round
