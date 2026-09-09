@@ -6,7 +6,33 @@ import path from "path";
 
 // New Relic is CommonJS
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const nrExternals = require("newrelic/load-externals");
+const nrExternals = require("newrelic/load-externals") as (config: {
+  target: string[];
+  externals: string[];
+}) => { externals: string[] };
+
+// New Relic instruments third-party libraries by hooking `require`, so a
+// library is only instrumented if Node loads it rather than the bundler
+// inlining it. `newrelic/load-externals` is New Relic's own list of those
+// libraries, written against webpack's `externals`; `serverExternalPackages` is
+// the Turbopack equivalent. Reading the list from New Relic rather than hard-
+// coding it keeps it correct as they add instrumentations.
+const newrelicInstrumented = [
+  ...new Set(
+    nrExternals({ target: ["node"], externals: [] }).externals.map((entry) =>
+      // Some entries name a subpath (`amqplib/callback_api`); externals are
+      // matched per package.
+      entry.startsWith("@")
+        ? entry.split("/").slice(0, 2).join("/")
+        : entry.split("/")[0],
+    ),
+  ),
+].filter(
+  (pkg) =>
+    // `next` is the framework itself, and listing packages we do not depend on
+    // would just be noise.
+    pkg !== "next" && existsSync(path.join(__dirname, "node_modules", pkg)),
+);
 
 // Recursively collect the transitive dependencies of a package so that
 // outputFileTracingIncludes can ensure they all land in the standalone output.
@@ -47,27 +73,23 @@ const withRoutes = nextRoutes({ outDir: "src/types" });
 
 const shouldUseProprietaryFont = process.env.PROPRIETARY_FONT === "TTNormsPro";
 
+// The proprietary font files are not in version control, so `fonts.proprietary`
+// must not be resolved at all unless they have actually been supplied. We swap
+// it in for the default font module instead of conditionally importing it,
+// because bundlers resolve `import()` regardless of the runtime condition.
+const PROPRIETARY_FONT_MODULE = "src/styles/fonts.proprietary.ts";
+
 // Evaluated once per build and inlined, so anything seeded off it (the RandomBackground
 //   grid) is stable within a deploy and reshuffles on the next one.
 const buildSeed = Date.now().toString(36);
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["newrelic"],
-  webpack: (config, { isServer, webpack }) => {
-    if (!shouldUseProprietaryFont) {
-      config.plugins = [
-        ...config.plugins,
-        new webpack.IgnorePlugin({
-          resourceRegExp: /fonts\.proprietary$/,
-          contextRegExp: /\(wca\)/,
-        }),
-      ];
-    }
-
-    if (isServer && process.env.NODE_ENV === "production") {
-      nrExternals(config);
-    }
-    return config;
+  serverExternalPackages: ["newrelic", ...newrelicInstrumented],
+  turbopack: {
+    // Turbopack resolves alias targets relative to the project root.
+    resolveAlias: shouldUseProprietaryFont
+      ? { "@/styles/fonts": `./${PROPRIETARY_FONT_MODULE}` }
+      : {},
   },
   env: {
     NEXT_PUBLIC_BUILD_SEED: buildSeed,
@@ -90,6 +112,7 @@ const nextConfig: NextConfig = {
       new URL("https://avatars.worldcubeassociation.org/**"),
     ],
   },
+  agentRules: false,
   // Set at build time by .github/actions/build-js-image; the matching files are synced
   //   to the assets bucket in the same step. Unset in development, where the Next server
   //   serves /_next/static itself.
