@@ -73,7 +73,7 @@ export default function TabMenu({
     >
       <Tabs.List
         width="fit-content"
-        min-width="3xs"
+        minW="3xs"
         textAlign="start"
         hideBelow="md"
         gap="3"
