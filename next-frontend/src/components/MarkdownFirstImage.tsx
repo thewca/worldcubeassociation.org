@@ -8,7 +8,8 @@ type MarkdownFirstImageProps = {
   alt?: string;
 } & CardRootProps;
 
-export const extractMarkdownImage = (content: string) => content.match(/!\[.*?\]\((.*?)\)/);
+export const extractMarkdownImage = (content: string) =>
+  content.match(/!\[.*?\]\((.*?)\)/);
 
 export const MarkdownFirstImage = ({
   content,

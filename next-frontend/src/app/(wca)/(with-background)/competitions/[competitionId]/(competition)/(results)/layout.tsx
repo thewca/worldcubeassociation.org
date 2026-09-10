@@ -1,5 +1,5 @@
 import { GridItem, SimpleGrid } from "@chakra-ui/react";
-import {InfoCard, SubPageCard} from "@/components/competitions/Cards";
+import { SubPageCard } from "@/components/competitions/Cards";
 import MarkdownFirstImage, {
   extractMarkdownImage,
 } from "@/components/MarkdownFirstImage";

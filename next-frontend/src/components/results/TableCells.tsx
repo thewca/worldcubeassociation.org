@@ -1,6 +1,5 @@
 import { Badge, Box, Float, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import events from "@/lib/wca/data/events";
 import _ from "lodash";
 import type { ReactNode } from "react";
 
