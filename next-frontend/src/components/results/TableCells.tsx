@@ -1,6 +1,5 @@
 import { Badge, Box, Float, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import events from "@/lib/wca/data/events";
 import _ from "lodash";
 import type { ReactNode } from "react";
 
@@ -73,6 +72,7 @@ interface AttemptsCellProps {
   worstResultIndex: number;
   eventId: string;
   recordTag?: string | null;
+  attemptCount: number;
 }
 
 export function AttemptsCells({
@@ -81,10 +81,8 @@ export function AttemptsCells({
   worstResultIndex,
   eventId,
   recordTag,
+  attemptCount,
 }: AttemptsCellProps) {
-  const attemptCount =
-    events.byId[eventId].recommendedFormat.expected_solve_count;
-
   return _.times(attemptCount).map((a) => {
     const attempt = attempts[a];
     const key = `attempt-${attempt}-${a}`;

@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RecordsPage({
+export default async function RankingsPage({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
