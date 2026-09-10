@@ -33,15 +33,20 @@ const computeFont = async () => {
   return appFont;
 };
 
+async function BetaDisclaimerGate() {
+  const cookieList = await cookies();
+
+  if (cookieList.has(BETA_DISCLAIMER_COOKIE)) return null;
+
+  return <BetaDisclaimer />;
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const appFont = await computeFont();
-
-  const cookieList = await cookies();
-  const hasAcceptedDisclaimer = cookieList.has(BETA_DISCLAIMER_COOKIE);
 
   return (
     <html suppressHydrationWarning>
@@ -50,7 +55,9 @@ export default async function RootLayout({
           <WCAQueryClientProvider>
             <EmotionRegistry>
               <UiProvider>
-                {!hasAcceptedDisclaimer && <BetaDisclaimer />}
+                <Suspense fallback={null}>
+                  <BetaDisclaimerGate />
+                </Suspense>
                 <Suspense fallback={<NavbarSkeleton />}>
                   <Navbar />
                 </Suspense>

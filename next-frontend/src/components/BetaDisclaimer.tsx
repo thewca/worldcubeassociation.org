@@ -18,7 +18,7 @@ export default function BetaDisclaimer() {
   // Deliberately uncontrolled by `onOpenChange`: the dialog must not close on
   // Escape or a backdrop click, only on the acknowledgement button.
   return (
-    <Dialog.Root open={open} size="cover" role="alertdialog">
+    <Dialog.Root open={open} size="lg" role="alertdialog">
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -32,9 +32,9 @@ export default function BetaDisclaimer() {
               <Text textStyle="s2">
                 You are viewing the beta version of the redesigned WCA Website.
                 This is intended to give the community a sneak peek at the
-                website, for feedback and discussion. You should expect to find
-                glitches and issues when browsing the website - when you do,
-                please report them to{" "}
+                website, for feedback and discussion. <br /> You should expect
+                to find glitches and issues when browsing the website - when you
+                do, please report them to{" "}
                 <Link href="mailto:software@worldcubeassociation.org">
                   software@worldcubeassociation.org
                 </Link>
