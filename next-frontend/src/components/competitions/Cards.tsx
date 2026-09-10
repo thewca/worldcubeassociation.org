@@ -82,7 +82,7 @@ export function VenueDetailsCard({
     <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
-        <SimpleGrid columns={2} gap="4">
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <VenueIcon />
@@ -129,7 +129,7 @@ export function AdditionalInformationCard({
         <Card.Title textStyle="s4">Information</Card.Title>
         <ChakraMarkdown
           paragraphAs={Card.Description}
-          imageProps={{ maxW: "sm" }}
+          imageProps={{ maxW: { base: "full", md: "sm" } }}
           textStyle="body"
         >
           {competitionInfo.information}
@@ -328,7 +328,7 @@ export function InfoCard({
           </Button>
         </Heading>
 
-        <SimpleGrid columns={2} gap="4">
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoOpenDateIcon />
@@ -374,6 +374,56 @@ export function InfoCard({
             </Stat.Label>
             <Stat.ValueText>
               <FormatNumber value={competitionInfo.number_of_bookmarks} /> Times
+            </Stat.ValueText>
+          </Stat.Root>
+        </SimpleGrid>
+      </Card.Body>
+    </Card.Root>
+  );
+}
+
+export function SubPageCard({
+  competitionInfo,
+  t,
+}: {
+  competitionInfo: components["schemas"]["CompetitionInfo"];
+  t: TFunction;
+}) {
+  return (
+    <Card.Root>
+      <Card.Body>
+        <Card.Title asChild>
+          <Heading textStyle="h2" display="flex" alignItems="center">
+            {competitionInfo.name}
+          </Heading>
+        </Card.Title>
+
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
+          <Stat.Root variant="competition">
+            <Stat.Label>
+              <CompRegoOpenDateIcon />
+              Date
+            </Stat.Label>
+            <Stat.ValueText>
+              {formatDateRange(
+                new Date(competitionInfo.start_date),
+                new Date(competitionInfo.end_date),
+              )}
+            </Stat.ValueText>
+          </Stat.Root>
+
+          <Stat.Root variant="competition">
+            <Stat.Label>
+              <LocationIcon />
+              {t("competitions.competition_info.location")}
+            </Stat.Label>
+            <Stat.ValueText>
+              <Text>{competitionInfo.city}, </Text>
+              <CountryMap
+                code={competitionInfo.country_iso2}
+                t={t}
+                fontWeight="bold"
+              />
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>

@@ -925,7 +925,7 @@ const customConfig = defineConfig({
                   bg: "bg.subtle",
                 },
                 "&:hover td": {
-                  bg: "colorPalette.fg/60",
+                  bg: "colorPalette.muted",
                 },
               },
             },
@@ -952,11 +952,44 @@ const customConfig = defineConfig({
       tabs: {
         slots: [],
         variants: {
+          // Grows the triggers to fill the row when they fit, and lets the list
+          //   scroll instead of squashing them when they don't.
+          fitContent: {
+            true: {
+              list: {
+                maxWidth: "full",
+                overflowX: "auto",
+              },
+              trigger: {
+                flex: "1 0 auto",
+                flexDirection: "column",
+              },
+            },
+          },
           highContrast: {
             true: {
               trigger: {
                 _selected: {
                   color: "colorPalette.contrast",
+                },
+              },
+            },
+          },
+          // Vertical tab list that sticks alongside the content on desktop and
+          //   collapses above it on mobile.
+          sideNav: {
+            true: {
+              root: {
+                flexDirection: { base: "column", md: "row" },
+              },
+              list: {
+                height: "fit-content",
+                position: { base: "static", md: "sticky" },
+                top: "3",
+              },
+              content: {
+                _vertical: {
+                  ps: { base: "0", md: "var(--tabs-content-padding)" },
                 },
               },
             },

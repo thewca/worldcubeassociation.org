@@ -66,8 +66,10 @@ export default function FilteredRecords({
   const { t } = useT();
 
   return (
-    <VStack align="left" gap={4}>
-      <Heading size="5xl">{t("results.rankings.title")}</Heading>
+    <VStack align="left" gap={2}>
+      <Heading size={{ base: "3xl", md: "5xl" }}>
+        {t("results.rankings.title")}
+      </Heading>
       {t("results.last_updated_html", { timestamp })}
       <RankingsFilterBox
         filterState={searchParams}
@@ -83,7 +85,7 @@ export default function FilteredRecords({
           "by region": t("results.selector_elements.show_selector.by_region"),
         }}
       />
-      <Box position="relative" opacity={isPending ? 0.4 : 1}>
+      <Box position="relative" w="full" opacity={isPending ? 0.4 : 1}>
         {isPending && (
           <Center position="absolute" inset={0} zIndex={1}>
             <Spinner size="xl" position="sticky" top="50%" />

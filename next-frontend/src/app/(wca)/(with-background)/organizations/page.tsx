@@ -1,18 +1,14 @@
-"use server";
-
 import {
-  Container,
+  Float,
   Heading,
+  Image,
   Link,
+  LinkBox,
+  LinkOverlay,
+  List,
   SimpleGrid,
   Text,
   VStack,
-  Image,
-  List,
-  Icon,
-  Float,
-  LinkBox,
-  LinkOverlay,
 } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import { getRegionalOrganizations } from "@/lib/wca/organizations/getRegionalOrganizations";
@@ -44,88 +40,84 @@ export default async function RegionalOrganizations() {
   if (!organizations) return <Loading />;
 
   return (
-    <Container bg="bg">
-      <VStack align="left">
-        <Heading size="5xl">{t("regional_organizations.title")}</Heading>
-        <Text>{t("regional_organizations.content")}</Text>
-        <SimpleGrid columns={3} columnGap={4} rowGap={6}>
-          {organizations.map((org) => (
-            <LinkBox
-              key={org.name}
-              position="relative"
-              role="group"
-              borderRadius="md"
-              boxShadow="md"
-              _hover={{ cursor: org.website ? "pointer" : "default" }}
-            >
-              <Float offsetX={6}>
-                <Icon asChild size="sm">
-                  <WcaFlag code={org.country_iso2} />
-                </Icon>
-              </Float>
-              {org.logo_url && (
-                <Image
-                  src={org.logo_url}
-                  alt={org.name}
-                  objectFit="cover"
-                  width="100%"
-                  height="auto"
-                  transition="opacity 0.3s"
-                  _hover={{ opacity: 0.2 }}
-                />
-              )}
-              <VStack
-                position={org.logo_url ? "absolute" : "relative"}
-                top={0}
-                left={0}
-                right={0}
-                bottom={0}
-                justify="center"
-                align="center"
-                bg={org.logo_url ? "rgba(255,255,255,0.9)" : "transparent"}
-                opacity={org.logo_url ? 0 : 1}
-                _hover={{ opacity: 1 }}
+    <VStack align="left">
+      <Heading size="5xl">{t("regional_organizations.title")}</Heading>
+      <Text>{t("regional_organizations.content")}</Text>
+      <SimpleGrid columns={{ base: 1, md: 3 }} columnGap={4} rowGap={6}>
+        {organizations.map((org) => (
+          <LinkBox
+            key={org.name}
+            position="relative"
+            role="group"
+            borderRadius="md"
+            boxShadow="md"
+            _hover={{ cursor: org.website ? "pointer" : "default" }}
+          >
+            <Float offsetX={6}>
+              <WcaFlag code={org.country_iso2} size="sm" />
+            </Float>
+            {org.logo_url && (
+              <Image
+                src={org.logo_url}
+                alt={org.name}
+                objectFit="cover"
+                width="100%"
+                height="auto"
                 transition="opacity 0.3s"
-                p={4}
-              >
-                <LinkOverlay asChild>
-                  <Link
-                    href={org.website}
-                    textStyle="headerLink"
-                    textAlign="center"
-                  >
-                    {org.name}
-                  </Link>
-                </LinkOverlay>
-              </VStack>
-            </LinkBox>
-          ))}
-        </SimpleGrid>
-        <Heading size="2xl">{t("regional_organizations.how_to.title")}</Heading>
-        <Text>{t("regional_organizations.how_to.description")}</Text>
-
-        <Heading size="xl">
-          {t("regional_organizations.requirements.title")}
-        </Heading>
-        <List.Root>
-          {_.times(6).map((requirement) => (
-            <List.Item
-              key={`regional_organizations.requirements.list.${requirement}`}
+                _hover={{ opacity: 0.2 }}
+              />
+            )}
+            <VStack
+              position={org.logo_url ? "absolute" : "relative"}
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              justify="center"
+              align="center"
+              bg={org.logo_url ? "rgba(255,255,255,0.9)" : "transparent"}
+              opacity={org.logo_url ? 0 : 1}
+              _hover={{ opacity: 1 }}
+              transition="opacity 0.3s"
+              p={4}
             >
-              {t(`regional_organizations.requirements.list.${requirement + 1}`)}
-            </List.Item>
-          ))}
-        </List.Root>
+              <LinkOverlay asChild>
+                <Link
+                  href={org.website}
+                  textStyle="headerLink"
+                  textAlign="center"
+                >
+                  {org.name}
+                </Link>
+              </LinkOverlay>
+            </VStack>
+          </LinkBox>
+        ))}
+      </SimpleGrid>
+      <Heading size="2xl">{t("regional_organizations.how_to.title")}</Heading>
+      <Text>{t("regional_organizations.how_to.description")}</Text>
 
-        <Heading size="xl">
-          {t("regional_organizations.application_instructions.title")}
-        </Heading>
-        <Trans
-          t={t}
-          i18nKey="regional_organizations.application_instructions.description_html"
-          components={{ a: <Link /> }}
-        />
-      </VStack>
-    </Container>
+      <Heading size="xl">
+        {t("regional_organizations.requirements.title")}
+      </Heading>
+      <List.Root>
+        {_.times(6).map((requirement) => (
+          <List.Item
+            key={`regional_organizations.requirements.list.${requirement}`}
+          >
+            {t(`regional_organizations.requirements.list.${requirement + 1}`)}
+          </List.Item>
+        ))}
+      </List.Root>
+
+      <Heading size="xl">
+        {t("regional_organizations.application_instructions.title")}
+      </Heading>
+      <Trans
+        t={t}
+        i18nKey="regional_organizations.application_instructions.description_html"
+        components={{ a: <Link /> }}
+      />
+    </VStack>
   );
 }

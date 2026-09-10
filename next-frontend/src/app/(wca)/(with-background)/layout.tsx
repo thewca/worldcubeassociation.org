@@ -1,4 +1,5 @@
 import React from "react";
+import { Container } from "@chakra-ui/react";
 import RandomBackground from "@/components/RandomBackground";
 
 export default function WithBackgroundLayout({
@@ -9,7 +10,9 @@ export default function WithBackgroundLayout({
   return (
     <>
       <RandomBackground numRows={8} numCols={18} />
-      {children}
+      <Container bg="bg" paddingTop="8">
+        {children}
+      </Container>
     </>
   );
 }

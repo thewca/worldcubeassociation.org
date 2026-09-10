@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import React from "react";
-import AuthProvider from "@/providers/SessionProvider";
+import React, { Suspense } from "react";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import Navbar from "./navbar";
@@ -8,6 +7,14 @@ import Footer from "./footer";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
+import { cookies } from "next/headers";
+import BetaDisclaimer, {
+  BETA_DISCLAIMER_COOKIE,
+} from "@/components/BetaDisclaimer";
+import Loading from "@/components/ui/loading";
+import NavbarSkeleton from "./navbar-skeleton";
+import FooterSkeleton from "./footer-skeleton";
+import { EmotionRegistry } from "@/components/ui/emotion-registry";
 
 export const metadata: Metadata = {
   title: {
@@ -26,7 +33,14 @@ const computeFont = async () => {
   return appFont;
 };
 
-export const dynamic = "force-dynamic";
+async function BetaDisclaimerGate() {
+  const cookieList = await cookies();
+
+  if (cookieList.has(BETA_DISCLAIMER_COOKIE) || !!process.env.LIVE_RESULT_BETA)
+    return null;
+
+  return <BetaDisclaimer />;
+}
 
 export default async function RootLayout({
   children,
@@ -40,14 +54,21 @@ export default async function RootLayout({
       <body className={appFont.className}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <WCAQueryClientProvider>
-            <AuthProvider>
+            <EmotionRegistry>
               <UiProvider>
-                <Navbar />
+                <Suspense fallback={null}>
+                  <BetaDisclaimerGate />
+                </Suspense>
+                <Suspense fallback={<NavbarSkeleton />}>
+                  <Navbar />
+                </Suspense>
                 <NextTopLoader height={5} />
-                {children}
-                <Footer />
+                <Suspense fallback={<Loading />}>{children}</Suspense>
+                <Suspense fallback={<FooterSkeleton />}>
+                  <Footer />
+                </Suspense>
               </UiProvider>
-            </AuthProvider>
+            </EmotionRegistry>
           </WCAQueryClientProvider>
         </ThemeProvider>
       </body>

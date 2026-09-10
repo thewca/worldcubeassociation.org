@@ -1,13 +1,6 @@
-import { getPayload } from "payload";
-import config from "@payload-config";
-import {
-  Container,
-  Heading,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { io } from "next/cache";
+import { getCachedGlobal } from "@/lib/payload/globals";
+import { Heading, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Media } from "@/types/payload";
@@ -24,11 +17,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LogoPage() {
-  const payload = await getPayload({ config });
+  // `io()` marks the boundary the build-time prerender stops at, so the Payload read below
+  // never runs while building, where MongoDB is unreachable. It has to stay out here rather
+  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
+  await io();
 
-  const logoPage = await payload.findGlobal({
-    slug: "logo-page",
-  });
+  const logoPage = await getCachedGlobal("logo-page");
 
   const logoItems = logoPage.blocks;
 
@@ -39,54 +33,52 @@ export default async function LogoPage() {
   const { t } = await getT();
 
   return (
-    <Container bg="bg">
-      <VStack gap="4" alignItems="left">
-        <Heading size="5xl">{t("logo.title")}</Heading>
-        {logoItems.map((item) => {
-          switch (item.blockType) {
-            case "paragraph": {
-              return (
-                <Fragment key={item.id}>
-                  {item.title && (
-                    <Heading size="2xl" mt="8">
-                      {item.title}
-                    </Heading>
-                  )}
-                  <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
-                </Fragment>
-              );
-            }
-            case "logoDownload": {
-              return <LogoDownload key={item.id} logoDownloadLink={item.url} />;
-            }
-            case "logoVariant": {
-              return (
-                <Fragment key={item.id}>
+    <VStack gap="4" alignItems="left">
+      <Heading size="5xl">{t("logo.title")}</Heading>
+      {logoItems.map((item) => {
+        switch (item.blockType) {
+          case "paragraph": {
+            return (
+              <Fragment key={item.id}>
+                {item.title && (
                   <Heading size="2xl" mt="8">
                     {item.title}
                   </Heading>
-                  <Text>{item.caption}</Text>
-                  <HStack w="full" mt="4">
-                    {item.images.map((value) => {
-                      const image = value.image as Media;
-                      return (
-                        <Image
-                          src={image.url!}
-                          alt={item.caption}
-                          key={image.id}
-                          w="100%"
-                          maxW={item.logoOnly ? "150px" : "400px"}
-                          bg={value.darkBackground ? "black" : "white"}
-                        />
-                      );
-                    })}
-                  </HStack>
-                </Fragment>
-              );
-            }
+                )}
+                <ChakraMarkdown>{item.contentMarkdown}</ChakraMarkdown>
+              </Fragment>
+            );
           }
-        })}
-      </VStack>
-    </Container>
+          case "logoDownload": {
+            return <LogoDownload key={item.id} logoDownloadLink={item.url} />;
+          }
+          case "logoVariant": {
+            return (
+              <Fragment key={item.id}>
+                <Heading size="2xl" mt="8">
+                  {item.title}
+                </Heading>
+                <Text>{item.caption}</Text>
+                <HStack w="full" mt="4">
+                  {item.images.map((value) => {
+                    const image = value.image as Media;
+                    return (
+                      <Image
+                        src={image.url!}
+                        alt={item.caption}
+                        key={image.id}
+                        w="100%"
+                        maxW={item.logoOnly ? "150px" : "400px"}
+                        bg={value.darkBackground ? "black" : "white"}
+                      />
+                    );
+                  })}
+                </HStack>
+              </Fragment>
+            );
+          }
+        }
+      })}
+    </VStack>
   );
 }

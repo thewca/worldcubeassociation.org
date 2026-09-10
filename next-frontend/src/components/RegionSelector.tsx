@@ -56,14 +56,7 @@ const countryOptions = (t: TFunction) =>
     .map((country) => ({
       key: country.id,
       label: t(`countries.${country.iso2}`),
-      flag: (
-        <WcaFlag
-          code={country.iso2}
-          fallback={country.id}
-          width={32}
-          height={25}
-        />
-      ),
+      flag: <WcaFlag code={country.iso2} size="lg" />,
       value: country.iso2,
     }))
     .toSorted((a, b) => a.label.localeCompare(b.label));

@@ -3,7 +3,7 @@ import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import DoubleCheck from "@/app/(wca)/(with-background)/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check/DoubleCheck";
 import { LiveResultProvider } from "@/providers/LiveResultProvider";
 import { LiveResultAdminProvider } from "@/providers/LiveResultAdminProvider";
-import { Container } from "@chakra-ui/react";
+
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { DateTime } from "luxon";
@@ -37,28 +37,23 @@ export default async function DoubleCheckPage({
   );
 
   return (
-    <Container>
-      <RoundInfoProvider roundId={id}>
-        <RoundOpenCheck>
-          <PermissionCheck
-            requiredPermission="canScoretakeCompetition"
-            item={competitionId}
-          >
-            <LiveResultProvider
-              initialRound={data}
+    <RoundInfoProvider roundId={id}>
+      <RoundOpenCheck>
+        <PermissionCheck
+          requiredPermission="canScoretakeCompetition"
+          item={competitionId}
+        >
+          <LiveResultProvider initialRound={data} competitionId={competitionId}>
+            <LiveResultAdminProvider
               competitionId={competitionId}
+              initialRegistrationId={sortedResults[0].registration_id}
+              clearOnSubmit={false}
             >
-              <LiveResultAdminProvider
-                competitionId={competitionId}
-                initialRegistrationId={sortedResults[0].registration_id}
-                clearOnSubmit={false}
-              >
-                <DoubleCheck results={sortedResults} />
-              </LiveResultAdminProvider>
-            </LiveResultProvider>
-          </PermissionCheck>
-        </RoundOpenCheck>
-      </RoundInfoProvider>
-    </Container>
+              <DoubleCheck results={sortedResults} />
+            </LiveResultAdminProvider>
+          </LiveResultProvider>
+        </PermissionCheck>
+      </RoundOpenCheck>
+    </RoundInfoProvider>
   );
 }

@@ -1,9 +1,9 @@
-import { auth } from "@/auth";
+import { getSession } from "@/auth";
 import { serverClient, serverClientWithToken } from "@/lib/wca/wcaAPI";
 import { cache } from "react";
 
 export const getIncident = cache(async (id: string) => {
-  const session = await auth();
+  const session = await getSession();
   const client = session
     ? serverClientWithToken(session.accessToken)
     : serverClient;

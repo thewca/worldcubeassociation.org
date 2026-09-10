@@ -8,9 +8,11 @@ import {
   Collapsible,
   Drawer,
   IconButton,
+  Separator,
   Spacer,
   Tabs,
   Text,
+  TextProps,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
@@ -19,11 +21,15 @@ import { useT } from "@/lib/i18n/useI18n";
 import {
   CompetitionNavTab,
   TabWithChildren,
+  TabWithLink,
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
 import { TFunction } from "i18next";
-import { LuAlignJustify } from "react-icons/lu";
+import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
+import type { RouteLiteral } from "nextjs-routes";
 import { iconMap } from "@/components/icons/iconMap";
+import { route } from "nextjs-routes";
+import { Tooltip } from "@/components/ui/tooltip";
 
 function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
@@ -34,10 +40,14 @@ export default function TabMenu({
   competitionInfo,
   children,
   tabs,
+  backHref,
+  customTabs = [],
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
+  backHref?: RouteLiteral;
+  customTabs?: string[];
 }) {
   const pathName = usePathname();
   const { t } = useT();
@@ -57,18 +67,25 @@ export default function TabMenu({
       width="full"
       value={currentPath}
       orientation="vertical"
+      sideNav
       lazyMount
       unmountOnExit
     >
       <Tabs.List
-        height="fit-content"
-        position="sticky"
         width="fit-content"
-        min-width="3xs"
+        minW="3xs"
         textAlign="start"
         hideBelow="md"
         gap="3"
       >
+        {backHref && (
+          <BackLink
+            href={backHref}
+            label={competitionInfo.name}
+            px="3"
+            py="2"
+          />
+        )}
         <TabList
           tabs={tabs}
           t={t}
@@ -77,9 +94,11 @@ export default function TabMenu({
           onToggle={(tab: CompetitionNavTab) =>
             setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
           }
+          customTabs={customTabs}
+          competitionId={competitionInfo.id}
         />
       </Tabs.List>
-      <Box hideFrom="md" mb="4">
+      <Box hideFrom="md">
         <Drawer.Root
           open={drawerOpen}
           onOpenChange={(e) => setDrawerOpen(e.open)}
@@ -88,12 +107,13 @@ export default function TabMenu({
           <Drawer.Trigger asChild>
             <IconButton
               aria-label="Open menu"
-              size="sm"
+              size="lg"
               position="fixed"
-              left="3"
-              top="3"
-              colorPalette="bg"
-              variant="ghost"
+              right="4"
+              bottom="4"
+              zIndex="docked"
+              rounded="full"
+              shadow="lg"
             >
               <LuAlignJustify />
             </IconButton>
@@ -103,7 +123,17 @@ export default function TabMenu({
           <Drawer.Positioner>
             <Drawer.Content>
               <Drawer.Header>
-                <Drawer.Title>{competitionInfo.name}</Drawer.Title>
+                <Drawer.Title>
+                  {backHref ? (
+                    <BackLink
+                      href={backHref}
+                      label={competitionInfo.name}
+                      onClick={() => setDrawerOpen(false)}
+                    />
+                  ) : (
+                    competitionInfo.name
+                  )}
+                </Drawer.Title>
                 <Drawer.CloseTrigger asChild>
                   <CloseButton />
                 </Drawer.CloseTrigger>
@@ -127,6 +157,8 @@ export default function TabMenu({
                         prev === tab.menuKey ? null : tab.menuKey,
                       )
                     }
+                    customTabs={customTabs}
+                    competitionId={competitionInfo.id}
                   />
                 </Tabs.List>
               </Drawer.Body>
@@ -147,34 +179,135 @@ function TabList({
   isAdminRoute,
   onToggle,
   openGroup,
+  customTabs,
+  competitionId,
 }: {
   tabs: CompetitionNavTab[];
   t: TFunction;
   isAdminRoute: boolean;
   openGroup: string | null;
   onToggle: (tab: CompetitionNavTab) => void;
+  customTabs: string[];
+  competitionId: string;
 }) {
-  return tabs.map((tab) =>
-    "href" in tab ? (
-      <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
-        <Text asChild textStyle="bodyEmphasis" justifyContent="left">
+  return (
+    <>
+      {tabs.map((tab) =>
+        "href" in tab ? (
+          <TabLink
+            key={tab.menuKey}
+            tab={tab}
+            t={t}
+            isAdminRoute={isAdminRoute}
+          />
+        ) : (
+          <CollapsibleTabGroup
+            key={tab.menuKey}
+            tab={tab}
+            t={t}
+            isAdminRoute={isAdminRoute}
+            isOpen={openGroup === tab.menuKey}
+            onToggle={() => onToggle(tab)}
+          />
+        ),
+      )}
+      {customTabs.length > 0 && <Separator />}
+      {customTabs.map((tabName) => (
+        <Tabs.Trigger
+          key={tabName}
+          value={encodeURIComponent(tabName)}
+          minHeight="fit-content"
+          maxWidth="xs"
+          asChild
+        >
+          <Text textStyle="bodyEmphasis" asChild justifyContent="left">
+            <Link
+              href={route({
+                pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                query: {
+                  competitionId,
+                  tabName: encodeURIComponent(tabName),
+                },
+              })}
+            >
+              {tabName}
+            </Link>
+          </Text>
+        </Tabs.Trigger>
+      ))}
+    </>
+  );
+}
+
+function BackLink({
+  href,
+  label,
+  onClick,
+  ...rest
+}: TextProps & {
+  href: RouteLiteral;
+  label: string;
+  onClick?: () => void;
+}) {
+  return (
+    <Text
+      asChild
+      display="inline-flex"
+      alignItems="center"
+      gap="2"
+      textStyle="bodyEmphasis"
+      {...rest}
+    >
+      <Link href={href} onClick={onClick}>
+        <LuArrowLeft />
+        {label}
+      </Link>
+    </Text>
+  );
+}
+
+function TabLink({
+  tab,
+  t,
+  isAdminRoute,
+}: {
+  tab: TabWithLink;
+  t: TFunction;
+  isAdminRoute: boolean;
+}) {
+  const label = t(
+    isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
+  );
+
+  const trigger = (
+    <Tabs.Trigger
+      value={tab.menuKey}
+      asChild
+      disabled={tab.disabled}
+      minHeight="fit-content"
+    >
+      <Text asChild textStyle="bodyEmphasis" justifyContent="left">
+        {tab.disabled ? (
+          <Text>{label}</Text>
+        ) : tab.externalHref ? (
+          <a href={tab.externalHref} target="_blank" rel="noopener noreferrer">
+            {label}
+          </a>
+        ) : (
           <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
-            {t(
-              isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
-            )}
+            {label}
           </Link>
-        </Text>
-      </Tabs.Trigger>
-    ) : (
-      <CollapsibleTabGroup
-        key={tab.menuKey}
-        tab={tab}
-        t={t}
-        isAdminRoute={isAdminRoute}
-        isOpen={openGroup === tab.menuKey}
-        onToggle={() => onToggle(tab)}
-      />
-    ),
+        )}
+      </Text>
+    </Tabs.Trigger>
+  );
+
+  if (!tab.tooltipI18nKey) return trigger;
+
+  return (
+    <Tooltip content={t(tab.tooltipI18nKey)} showArrow openDelay={200}>
+      {trigger}
+    </Tooltip>
   );
 }
 
@@ -200,6 +333,7 @@ function CollapsibleTabGroup({
         width="full"
         display="flex"
         textAlign="start"
+        minHeight="fit-content"
         px="3"
         py="2"
         borderRadius="md"

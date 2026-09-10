@@ -1,42 +1,25 @@
 import { Badge, Box, Float, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import events from "@/lib/wca/data/events";
 import _ from "lodash";
 import type { ReactNode } from "react";
 
-export const recordTagBadge = (tag?: string | null) => {
+const recordTagBadge = (tag?: string | null) => {
   switch (tag) {
     case "WR": {
-      return (
-        <Badge size="xs" variant="solid" colorPalette="red">
-          WR
-        </Badge>
-      );
+      return { color: "red", label: "WR" };
     }
     case "ER":
     case "NAR":
     case "SAR":
     case "ASR":
     case "OCR": {
-      return (
-        <Badge size="xs" variant="solid" colorPalette="yellow">
-          CR
-        </Badge>
-      );
+      return { color: "yellow", label: "CR" };
     }
     case "NR": {
-      return (
-        <Badge size="xs" variant="solid" colorPalette="green">
-          NR
-        </Badge>
-      );
+      return { color: "green", label: "NR" };
     }
     case "PR": {
-      return (
-        <Badge size="xs" variant="solid" colorPalette="blue">
-          PR
-        </Badge>
-      );
+      return { color: "blue", label: "PR" };
     }
     default: {
       return null;
@@ -60,8 +43,15 @@ export function WithRecordTag({
   return (
     <Box as="span" position="relative" display="inline-block">
       {children}
-      <Float placement="top-end" offsetX="-1.5">
-        {badge}
+      <Float placement="top-end" offsetX="-3.5" offsetY="1">
+        <Badge
+          size="xs"
+          variant="solid"
+          colorPalette={badge.color}
+          minHeight="3.5"
+        >
+          {badge.label}
+        </Badge>
       </Float>
     </Box>
   );
@@ -73,6 +63,7 @@ interface AttemptsCellProps {
   worstResultIndex: number;
   eventId: string;
   recordTag?: string | null;
+  attemptCount: number;
 }
 
 export function AttemptsCells({
@@ -81,10 +72,8 @@ export function AttemptsCells({
   worstResultIndex,
   eventId,
   recordTag,
+  attemptCount,
 }: AttemptsCellProps) {
-  const attemptCount =
-    events.byId[eventId].recommendedFormat.expected_solve_count;
-
   return _.times(attemptCount).map((a) => {
     const attempt = attempts[a];
     const key = `attempt-${attempt}-${a}`;

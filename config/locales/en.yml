@@ -258,6 +258,8 @@ en:
       one: "1 day"
       other: "%{count} days"
     search_site: "Search site"
+    #context: Label of a button that scrolls the user back to the top of a long page.
+    back_to_top: "Back to top"
     filter: Filter
     delete: Delete
     date_placeholder: "YYYY-MM-DD"
@@ -1903,7 +1905,7 @@ en:
           external_website: "The website of the competition. Must be a valid http(s) url."
           external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
           uses_wca_registration: ""
-          scoretaking_software: "Select '%{choice_ilr}' if you want to use Dual Rounds"
+          scoretaking_software: "Select '%{choice_ilr}' or an external tool, if you want to use Dual Rounds"
         user_settings:
           receive_registration_emails: ""
         entry_fees:
@@ -3049,6 +3051,7 @@ en:
       unaccepted_registration_with_results_warning: "Person %{name} has results in the competition, but the registration is not marked as 'accepted'."
     results:
       automatically_position_fixed_info: "[%{round_id}] Automatically fixed the position of %{person_name} from %{pos} to %{expected_pos}."
+      automatically_global_position_fixed_info: "[%{round_id}] Automatically fixed the overall position of %{person_name} from %{pos} to %{expected_pos}."
       mbf_result_over_time_limit_warning: "[%{round_id}] Result '%{result}' for %{person_name} is over the time limit. Please ensure this is due to time penalties before sending the results, or fix the result to DNF."
       result_after_dns_warning: "[%{round_id}] %{person_name} has at least one DNS result followed by a valid result. Please ensure it is indeed a DNS and if so, explain what happened to WRT."
       similar_results_warning: "[%{round_id}] Results for %{person_name} are similar to the results for %{similar_person_name}. Please ensure that these results are correctly recorded for both competitors."
@@ -3061,6 +3064,7 @@ en:
       suspicious_dnf_warning: "[%{round_ids}] The round has a cumulative time limit, and extrapolating based on %{person_name}'s successful solves, they would have had very little time left for at least one of their DNFs. Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
       missing_cumulative_round_id_error: "[%{original_round_id}] Unable to find the round %{wcif_id} for the cumulative time limit specified in the WCIF. Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
       wrong_position_in_results_error: "[%{round_id}] %{person_name} is in the wrong position: expected %{expected_pos}, but got %{pos}."
+      wrong_global_position_in_results_error: "[%{round_id}] %{person_name} is in the wrong overall position: expected %{expected_pos}, but got %{pos}."
     rounds:
       too_many_qualified_warning: "Round %{round_id}: more competitors qualified than what the advancement condition planned (%{actual} instead of %{expected}, the condition was: %{condition}). Please update the round information in the manage events page."
       regulation_9m1_error: "Round %{round_id} has 99 or fewer competitors but has more than two subsequent rounds, which is not permitted as per Regulation 9m1."

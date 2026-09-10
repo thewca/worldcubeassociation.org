@@ -1,5 +1,6 @@
 import { GlobalConfig } from "payload";
 import { ParagraphBlock } from "@/blocks/text/paragraph";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 
 export const AboutRegulations: GlobalConfig = {
   slug: "about-regulations-page",
@@ -12,4 +13,7 @@ export const AboutRegulations: GlobalConfig = {
       blocks: [ParagraphBlock],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };

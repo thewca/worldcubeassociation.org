@@ -121,6 +121,8 @@ th:
     555bf: 5x5x5 Blindfolded
     #original_hash: cedbf87
     333mbf: 3x3x3 Multi-Blind
+    #original_hash: a103de4
+    fto: Face Turning Octahedron
     #original_hash: e6791be
     magic: Magic
     #original_hash: c962425
@@ -1232,6 +1234,8 @@ th:
         email: เข้าถึงที่อยู่อีเมลของคุณ
         #original_hash: e0d0654
         manage_competitions: จัดการการแข่งขันใด ๆ ที่คุณเป็นผู้จัดการและกำลังจะจัดขึ้น
+        #original_hash: 357ccbf
+        manage_registrations: สมัครเข้าร่วมการแข่งขัน และแก้ไขหรือยกเลิกการสมัครของคุณ
     devise:
       #original_hash: 06184f5
       no_account: ไม่มี accout?
@@ -1459,12 +1463,12 @@ th:
           ยังรับผิดชอบในการรักษาระเบียบการส่งการแข่งขันที่เหมาะสมจากเอกสารต่าง ๆ
           เช่น นโยบายข้อกำหนดการแข่งขัน WCA โดย WCAT
           จะไม่รับผิดชอบต่อการจัดองค์กรและการมอบหมายการแข่งขันรายบุคคล
-        #original_hash: 5007698
+        #original_hash: 58daf5b
         wic: >-
           WCA Integrity Committee (WIC) ดำเนินการสอบสวนอิสระเกี่ยวกับสมาชิกใน
           WCA และ incident ที่เกิดขึ้นระหว่างการแข่งขัน WCA
           หรือบนแพลตฟอร์มออนไลน์อย่างเป็นทางการของ WCA. Incidents
-          เหล่านี้ถือเป็นการละเมิดเจตนารมณ์ จรรยาบรรณ จรรยาบรรณ
+          เหล่านี้ถือเป็นการละเมิดค่านิยม, จรรยาบรรณ, จริยธรรม
           และ/หรือระเบียบของ WCA
         #original_hash: be491ec
         weat: >-
@@ -1672,6 +1676,9 @@ th:
         edit_reason:
           #original_hash: fdfcccf
           label: เหตุผลในการแก้ไข
+        edit_reason_for:
+          #original_hash: df3a70f
+          label: 'เหตุผลสำหรับการเปลี่ยนแปลง %{attribute}'
         proof_attach:
           #original_hash: a9645b1
           label: แนบหลักฐาน
@@ -1681,6 +1688,12 @@ th:
         captcha:
           #original_hash: 58c1271
           validation_error: กรุณายืนยันว่าคุณไม่ใช่หุ่นยนต์
+        verified_checkbox:
+          #original_hash: 54f118d
+          label: >-
+            การส่งแบบฟอร์มนี้
+            ถือเป็นการยืนยันว่าคุณได้ตรวจสอบเอกสารทางกฎหมายของพวกเขาแล้ว
+            และได้ตรวจสอบข้อมูลที่ให้ไว้เรียบร้อยแล้ว
       #original_hash: 126541e
       success_message: ส่งคำขอแล้ว - เราจะติดต่อคุณกลับเร็วๆ นี้
       #original_hash: bb6a0cf
@@ -2200,6 +2213,8 @@ th:
       banned_html: >-
         คุณถูกแบน ถ้าคุณเชื่อว่านี่คือข้อผิดพลาด กรุณาติดต่อ <a
         href='mailto:integrity@worldcubeassociation.org' target='_blank'>WIC</a>
+      #original_hash: d4ca89d
+      banned_until: 'โทษแบนของคุณจะสิ้นสุดในวันที่ %{date}'
       #original_hash: 8d07e7f
       undelete_banned: เป็นผู้เข้าแข่งขันที่ถูกแบนและไม่สามารถยกเลิกการลบได้
       #original_hash: 3de7c86
@@ -2518,12 +2533,16 @@ th:
         การเปลี่ยนแปลงจะถูกตรวจสอบและฐานข้อมูลจะได้รับการปรับปรุงตาม
       #original_hash: 779b272
       registrations_file_label: ไฟล์การสมัคร
-      #original_hash: 224f3a6
+      #original_hash: d428219
       registrations_file_hint: >-
         ไฟล์ CSV มีคอลัมน์ สถานะ, ชื่อ, ภูมิภาค, WCA ID, วันเกิด, เพศ, email,
-        และแต่ละคอลัมน์ของประเภทการแข่งขัน
+        และแต่ละคอลัมน์ของประเภทการแข่งขัน หรือไฟล์ JSON ที่มีข้อมูล WCIF
+      #original_hash: 01beb54
+      preview: แสดงข้อมูลการสมัครการแข่งขัน
       #original_hash: d6fbc9d
       import: นำเข้า
+      #original_hash: 77dfd21
+      cancel: ยกเลิก
       errors:
         #original_hash: 0ef547d
         error: 'มีข้อผิดพลาดในการนำเข้า %{registration}: %{error}'
@@ -2553,8 +2572,14 @@ th:
         wrong_dob_format: >-
           วันเกิดต้องอยู่ในรูปแบบ YYYY-mm-dd (year-month-day เป็นคริสต์ศักราช,
           เช่น 1944-07-13), ดูตัวอย่างของวันที่ไม่ถูกต้อง: %{raw_dobs}.
+        #original_hash: ea3421b
+        invalid_country: 'ประเทศไม่ถูกต้อง: %{country}'
+        #original_hash: b8fe3a3
+        invalid_wcif: ไฟล์ JSON นี้ไม่มีข้อมูล WCIF ที่ถูกต้อง
         #original_hash: 6d8e34b
         empty_file: ไฟล์ว่างเปล่า
+        #original_hash: 631e8d0
+        unsupported_file_format: รูปแบบไฟล์ไม่รองรับ โปรดอัปโหลดไฟล์ JSON หรือ CSV
     add:
       #original_hash: 975275e
       title: 'เพิ่มการสมัครของ %{comp}'
@@ -2568,6 +2593,8 @@ th:
       ots_not_enabled: >-
         การสมัครการแข่งขันปิดแล้วและไม่สามารถเปิดใช้งานการสมัครการแข่งขันที่การแข่งขันได้
         - คุณต้องแก้ไขการแข่งขันเพื่อเปิดใช้งานก่อน
+      #original_hash: ed9d329
+      ots_before_registration_open: ไม่สามารถสมัครหน้างานได้จนกว่าจะเปิดให้สมัครการแข่งขัน
       #original_hash: 61125b5
       competition_over: >-
         คุณไม่สามารถเพิ่มการสมัครการแข่งขันที่การแข่งขันได้หลังการแข่งขันสิ้นสุดลงได้
@@ -2741,8 +2768,8 @@ th:
       podiums:
         #original_hash: 02ae2bd
         title: Podiums
-        #original_hash: d7297a7
-        undetermined: จะกำหนดผู้ได้รับรางวัลในภายหลัง
+        #original_hash: 69c4270
+        undetermined: ยังอยู่ระหว่างการพิจารณา
         #original_hash: 61e88df
         none: ยังไม่มีการมอบรางวัล!
       admin:
@@ -2758,6 +2785,8 @@ th:
           %{competitors_live_results_entered}/%{total_competitors}
         #original_hash: adec79f
         round_locked: locked
+        #original_hash: eb48b34
+        first_timer: ผู้เข้าแข่งขันใหม่
         #original_hash: 5301648
         edit: Edit
         #original_hash: 612e12d
@@ -2774,6 +2803,8 @@ th:
         submit_results: ส่งผลการแข่งขัน
         #original_hash: 0ed766a
         add_to_batch: Add to Batch
+        #original_hash: 1a2e4ff
+        remove_from_batch: นำออกจาก Batch
         #original_hash: 8b6d8cb
         batch_mode: Batch Mode
         #original_hash: a577fa2
@@ -2801,6 +2832,12 @@ th:
             โปรดตรวจสอบให้แน่ใจว่าผลการแข่งขันถูกต้อง
           #original_hash: 0be6543
           round_locked: รอบต่อไปเปิดแล้ว การเปลี่ยนแปลงใด ๆ จะไม่มีผลกระทบต่อรอบนั้น!
+          #original_hash: 3380184
+          9m_violated: >-
+            รอบที่แล้วมีจำนวนผลการแข่งขันที่ส่งเข้ามาไม่เพียงพอที่จะเป็นไปตามกติกา
+            9m3 หากรอบที่แล้วไม่มีผลการแข่งขันที่ส่งเข้ามาอย่างน้อย
+            %{competitor_count_needed} ครั้ง ณ เวลาที่ส่งผลการแข่งขัน
+            ผลการแข่งขันในรอบนี้จะไม่ได้รับการยอมรับ
         quit:
           #original_hash: de62de1
           title: ลบผู้เข้าแข่งขัน
@@ -2837,6 +2874,10 @@ th:
           still_processing: >-
             ไม่สามารถดำเนินการ "ถอนผู้เข้าแข่งขัน"
             ได้ในขณะที่ผลการแข่งขันบางส่วนยังอยู่ระหว่างการประมวลผล
+          #original_hash: ecb0dd4
+          in_batch: >-
+            ไม่สามารถยกเลิกผู้เข้าแข่งขันที่มีผลการแข่งขันอยู่ใน Batch
+            ที่ยังไม่ได้ส่ง
         add_competitor:
           #original_hash: 9dcb50d
           single_round: เพิ่มผู้เข้าแข่งขันในรอบ
@@ -2847,6 +2888,12 @@ th:
               เพิ่มผู้เข้าแข่งขันเข้าสู่รอบ เนื่องจากรอบที่สองของการแข่งขันแบบ
               Dual Round ยังไม่เปิดให้ใช้งาน
               คุณจึงต้องเพิ่มผู้เข้าแข่งขันแยกต่างหาก
+          #original_hash: b3bdfaa
+          event_edit_warning: >-
+            ผู้เข้าแข่งขันรายนี้ไม่ได้ลงสมัครสำหรับการแข่งขันประเภทนี้
+            และทางการแข่งขันไม่อนุญาตให้เปลี่ยนแปลงประเภทการแข่งขันอีกต่อไป
+            การเพิ่มผู้เข้าแข่งขันรายนี้ยังคงทำได้
+            แต่โปรดตรวจสอบให้แน่ใจว่าเป็นสิ่งที่ตั้งใจไว้
       results:
         #original_hash: 4705687
         competitor: ผู้เข้าแข่งขัน
@@ -3117,6 +3164,8 @@ th:
     index:
       #original_hash: db98a68
       title: การแข่งขัน
+      #original_hash: 6e2eb0a
+      all_competitions: ผู้เข้าแข่งขันทั้งหมด
       #original_hash: 6a72085
       all_events: ทั้งหมด
       #original_hash: 6d76b81
@@ -3129,10 +3178,29 @@ th:
       list: รายชื่อ
       #original_hash: ab478f3
       map: แผนที่
+      #original_hash: ad8919a
+      event: ปรพเภทการแข่งขัน
       #original_hash: 0f21717
       region: ภูมิภาค
       #original_hash: bce0641
       search: ค้นหา
+      #original_hash: 709a232
+      name: ชื่อ
+      #original_hash: d219c68
+      location: สถานที่
+      #original_hash: d98bf85
+      location_placeholder: ใส่ที่อยู่
+      #original_hash: 0132375
+      use_my_location: ใช้ที่อยู่ของฉัน
+      #original_hash: 4232080
+      distance: ระยะห่าง
+      distance_units:
+        #original_hash: 08ec69f
+        km: km
+        #original_hash: 9c51ad8
+        mi: mi
+      #original_hash: cf963e5
+      advanced_filters: ตัวกรองขั้นสูง
       #original_hash: 769bb19
       state: เมื่อ
       #original_hash: 4e9f7a3
@@ -3226,6 +3294,25 @@ th:
           full: >-
             ผู้เข้าแข่งขันถึงจำนวนที่กำหนดแล้ว
             การสมัครการแข่งขันหลังจากนี้จะไปอยู่ใน waiting list
+      #original_hash: 1cab715
+      registration_key: 'Registration Key:'
+      registration_status:
+        #original_hash: 10b28a8
+        full: เต็ม
+        #original_hash: cf9b770
+        open: เปิด
+        #original_hash: 44bb7df
+        not_open: ไม่เปิด
+        #original_hash: 88d86b7
+        closed: ปิด
+      #original_hash: 184f3ab
+      currently_displaying:
+        zero: 'กำลังแสดงผล: %{count} การแข่งขัน'
+        other: 'กำลังแสดงผล: %{count} การแข่งขัน'
+      #original_hash: 74d8290
+      register_now: สมัครการแข่งขันตอนนี้
+      #original_hash: fd9d092
+      view_competition: ดูการแข่งขัน
       #original_hash: 28531af
       no_more_comps: ไม่มีการแข่งขัน
       #original_hash: 8b09d74
@@ -3928,6 +4015,8 @@ th:
           และเงื่อนไขเพิ่มเติมที่แสดงไว้แล้ว
         #original_hash: 80d2933
         next_step: ดำเนินการต่อไปยังขั้นตอนถัดไป
+        #original_hash: bb54db5
+        accept: ยอมรับ
       update:
         #original_hash: ebf417d
         being_updated: กำลังอัปเดตการสมัคร...
@@ -4019,6 +4108,8 @@ th:
           คุณสมัครการแข่งขันล่วงหน้ามในฐานะผู้จัดการแข่งขัน หรือ delegate -
         #original_hash: 6b76fab
         comment: ความเห็นเพิ่มเติมถึงผู้จัดการแข่งขัน
+        #original_hash: f3d85ec
+        comment_overview: คอมเมนต์ของคุณ
         #original_hash: 8eae30c
         until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
         #original_hash: fc8bc84
@@ -4052,6 +4143,10 @@ th:
         event_limit: >-
           การแข่งขันนี้จำกัดจำนวนประเภทการแข่งขันที่คุณสามารถสมัครได้ไว้ที่
           %{max_events} ประเภท
+        #original_hash: 1e4c43f
+        waiting_list_count:
+          zero: 'มีผู้เข้าแข่งขัน %{count} รายอยู่ในรายชื่อผู้รอคิว'
+          other: 'มีผู้เข้าแข่งขัน %{count} รายอยู่ในรายชื่อผู้รอคิว'
       errors:
         #original_hash: 3890616
         events: การโหลดประเภทการแข่งขันล้มเหลว โปรดลองอีกครั้ง
@@ -4187,6 +4282,10 @@ th:
       cannot_delete_confirmed: ไม่สามารถลบการแข่งขันที่ได้รับการยืนยันแล้วได้
       #original_hash: 191df37
       must_contain_event: ต้องมีประเภทการแข่งขันอย่างน้อยหนึ่งประเภทสำหรับการแข่งขันนี้
+      #original_hash: d01c9f5
+      fto_not_yet_allowed: >-
+        การแข่งขัน Face Turning Octahedron
+        ไม่สามารถจัดขึ้นได้ในการแข่งขันที่เริ่มต้นก่อนวันที่ %{date}
       #original_hash: 54fe619
       schedule_must_match_rounds: ต้องมีอย่างน้อยหนึ่งรอบ และทุกรอบต้องถูกรวมอยู่ในตารางการแข่งขัน
       #original_hash: 6e228b7
@@ -4459,6 +4558,8 @@ th:
         none: ไม่มี
         #original_hash: 9b9a6aa
         show_buttons: แสดงปุ่ม time zone
+        #original_hash: dd3c440
+        hide_buttons: ซ่อนปุ่ม time zone
         #original_hash: d2ac826
         use_time_zone: ใช้ time zone นี้
       #original_hash: 73acb7f
@@ -4475,12 +4576,16 @@ th:
       venue_selection_all: 'คุณกำลังดูตารางการแข่งขันสำหรับสถานที่ทั้ง %{venueCount} แห่งพร้อมกัน'
       #original_hash: 97df911
       timezone_message: 'ตารางการแข่งขันของสถานที่นี้แสดงในเวลา %{timezone}'
-      #original_hash: 94b2570
-      timezone_setting: 'คุณกำลังดูตารางการแข่งขันนี้ในการตั้ง timezone ต่อไปนี้:'
-      #original_hash: 75194fd
+      #original_hash: f948a0e
+      timezone_setting: 'คุณกำลังดูตารางการแข่งขันนี้ใน timezone ต่อไปนี้:'
+      #original_hash: ca4f078
       multiple_timezones_available: >-
-        โปรดทราบว่าสถานที่จัดการแข่งขันบางแห่งอาจไม่อยู่ใน time zone เดียวกัน --
-        โปรดใช้ความระมัดระวัง!
+        โปรดทราบว่าสถานที่บางแห่งอยู่ในเขตเวลาที่แตกต่างกัน --
+        โปรดระมัดระวังด้วย!
+      #original_hash: 459e545
+      select_a_timezone: เลือก time zone
+      #original_hash: 80e8704
+      select_a_venue_to_view: กรุณาเลือกสถานที่ด้านบนเพื่อดูตารางการแข่งขัน
       #original_hash: d94a371
       timezone_set_local: ตั้งเป็นเวลาท้องถิ่น
       #original_hash: 17ab650
@@ -4856,6 +4961,8 @@ th:
         greater_china: ผู้ชนะการแข่งขันชิงแชมป์จีนแผ่นดินใหญ่
       #original_hash: c32a014
       place: อันดับ
+      #original_hash: 89e4fa7
+      dual: Dual
       #original_hash: ddb18c1
       medal_collection: เหรียญรางวัลสะสม
       #original_hash: 9e69e13
@@ -4999,10 +5106,10 @@ th:
             Delegate</a> การแข่งขันต้องอยู่ในการดูแลของ WCA Delegate
             จึงจะได้รับการยอมรับให้เป็นส่วนหนึ่งของ WCA อย่างเป็นทางการ WCA
             Delegate สามารถช่วยแนะนำและการจัดการการแข่งขันไปได้ด้วยดี
-          #original_hash: 576c3b8
+          #original_hash: de18a9f
           '4': >-
             ดูที่ <a target='_blank'
-            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>แนวปฏิบัติการเป็นผู้จัดการแข่งขันของ
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>คู่มือผู้จัดงานแข่งขัน
             WCA</a> สำหรับข้อมูลเพื่มเติม
       '6':
         #original_hash: 8005a61
@@ -5141,12 +5248,12 @@ th:
       WCA ด้วยการสนับสนุนทางการเงินที่มากขึ้น
       เราหวังว่าจะนำระดับความเป็นมืออาชีพมาสู่การแข่งขันของเรามากขึ้น
       ในขณะที่เรายังคงอนุมัติการแข่งขันต่าง ๆ ทั่วโลก</p>
-    #original_hash: bccd8c5
+    #original_hash: 1076bcb
     spirit: >-
-      จิตวิญญาณของเราคือผู้คนจากทั่วโลกมาสนุกด้วยกันในบรรยากาศที่เป็นมิตร
-      ช่วยเหลือซึ่งกันและกันและมีน้ำใจนักกีฬา
-    #original_hash: 69131cc
-    spirit_footer: จิตวิญญาณของ WCA
+      ค่านิยมของเราได้แก่ ชุมชน, ความยุติธรรม, ความสนุกสนาน, ความเป็นเลิศ
+      และการทำงานอาสาสมัคร
+    #original_hash: 9679c23
+    spirit_footer: ค่านิยมของ WCA
     #original_hash: c1781ee
     our_goals_title: เป้าหมายของเรา
     #original_hash: c1144d4
@@ -5220,18 +5327,18 @@ th:
       operations_html: 'การดำเนินงานแบบวันต่อวันดำเนินการโดย %{committees_and_teams} ของ WCA'
       #original_hash: 0e7a036
       teams_committees: ทีมและคณะกรรมการ
-      #original_hash: 7e849d2
+      #original_hash: c319cc2
       delegates_html: >-
         <p><strong>WCA Delegate</strong>
         เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ WCA หน้าที่หลักของ Delegate
         คือดูแลการแข่งขันในนามของ WCA โดย WCA Delegate
-        รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA
-        ทั้งหมดดำเนินการตามภารกิจ, จิตวิญญาณและกติกาของ WCA โดย WCA
-        ได้แยกบทบาทดังนี้ <strong>Senior Delegates</strong>,  <strong>Regional
-        Delegates</strong>, <strong>Full Delegates </strong>, <strong>Junior
-        Delegates</strong>, และ <strong>Trainee
-        Delegates</strong>%{see_link}</p> <p>นอกเหนือจากการทำหน้าที่ของ WCA
-        Delegate แล้ว WCA Senior Delegates ยังมีหน้าที่ในการจัดการ WCA Delegates
+        รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA ทั้งหมดดำเนินการค่านิยม
+        และข้อบังคับของ WCA โดย WCA ได้แยกบทบาทดังนี้ <strong>Senior
+        Delegates</strong>,  <strong>Regional Delegates</strong>, <strong>Full
+        Delegates </strong>, <strong>Junior Delegates</strong>, และ
+        <strong>Trainee Delegates</strong>%{see_link}</p>
+        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates
+        ยังมีหน้าที่ในการจัดการ WCA Delegates
         ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
         <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น WCA Candidate Delegates ก่อน
         หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน WCA
@@ -5256,6 +5363,10 @@ th:
     bylaws: Bylaws
     #original_hash: fdceb44
     motions: ญัตติ
+    #original_hash: 8a212e4
+    motion_not_found: ไม่เจอญัตติ
+    #original_hash: 58219c7
+    motion_not_found_action: 'เราไม่พบญัตติที่มีหมายเลข "%{motion_id}" ซึ่งอาจมีการยกเลิกไปแล้ว'
     #original_hash: 092f99e
     minutes: Minutes
     #original_hash: 6db524a
@@ -5283,6 +5394,8 @@ th:
     competition_templates: แม่แบบการแข่งขัน
     #original_hash: 5ca0558
     certificates: แม่แบบประกาศนียบัตรของ WCT
+    #original_hash: 16d7bab
+    orga_handbook: คู่มือผู้จัดการแข่งขัน
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA Delegates
@@ -5562,6 +5675,8 @@ th:
       regulations_and_guidelines: กติกา
       #original_hash: db683b3
       search_for: 'ผลการค้นหาสำหรับ <b>%{search_string}</b>'
+      #original_hash: b861dd5
+      empty_query: ลองค้นหาดูสิ!
       not_found:
         #original_hash: 658e79f
         generic: ไม่พบผลการค้นหา
@@ -5582,6 +5697,82 @@ th:
       เนื้อหาด้านล่างนี้ไม่ได้มีการแปล
     #original_hash: 2c23c1a
     incident: 'Incident:'
+    #original_hash: 42edeaa
+    title: Incidents Log
+    #original_hash: c387a75
+    page_title: 'Incident: %{title}'
+    #original_hash: 70c5337
+    not_found: ไม่พบ  Incident
+    #original_hash: b7eed0f
+    back_to_log: กลับไปที่ Incidents Log
+    #original_hash: bce0641
+    search_placeholder: ค้นหา
+    #original_hash: bae7d5b
+    status: สถานะ
+    #original_hash: d999aeb
+    resolved: แก้ไขแล้ว
+    #original_hash: 96f608c
+    pending: กำลังแก้ไข
+    #original_hash: 4a0e607
+    sent_in_digest: ส่งในรูปแบบย่อ
+    #original_hash: 35f49dc
+    sent: ส่งแล้ว
+    #original_hash: 93934ad
+    showing_entries: >-
+      แสดงรายการที่ %{first} ถึง %{last} จากทั้งหมด %{total} รายการ
+      พร้อมตัวเลือก <select></select> ต่อหน้า
+    #original_hash: 329a7c2
+    not_public_warning: >-
+      หมายเหตุ: บันทึกนี้ยังไม่ได้รับการแก้ไข
+      ดังนั้นจึงไม่สามารถเปิดเผยต่อสาธารณะได้
+    #original_hash: 0d96264
+    public_summary: รายละเอียดและการแก้ไขของ incident
+    #original_hash: 47f8842
+    private_description: ีรายละเอีด (เป็นความลับกับ Delegate)
+    #original_hash: 504b671
+    private_wrc_decision: คำตัดสินของ WRC (เป็นความลับกับ Delegate)
+    tags:
+      #original_hash: 0fd2d3d
+      regulation: กติกา
+      #original_hash: 3f63aa0
+      guideline: แนวทาง
+      #original_hash: 180b14c
+      search_with_tag: ค้นหา incidents ที่มีแท็กนี้
+      #original_hash: d25382e
+      filter_by_tag: กรองตามแท็กนี้
+      #original_hash: 491db57
+      competition_page: หน้าการแข่งขัน
+      #original_hash: a2bfe4c
+      delegate_report: Delegate Report
+    admin:
+      #original_hash: 5656400
+      publish: เผยแพร่
+      #original_hash: 1ac0a74
+      unpublish: ยกเลิกการเผยแพร่
+      #original_hash: 5301648
+      edit: แก้ไข
+      #original_hash: 577ef7d
+      destroy: ทำลาย
+      #original_hash: 77dfd21
+      cancel: ยกเลิก
+      #original_hash: 04a2122
+      confirm: ยืนยัน
+      #original_hash: 6fc0529
+      change_status: เปลี่ยนสถานะ
+      #original_hash: a926b77
+      destroy_title: ทำลาย incident
+      #original_hash: b9bea79
+      confirm_publish: คุณกำลังจะเปิดเผย incident นี้สู่สาธารณะ คุณแน่ใจหรือเปล่า?
+      #original_hash: f683adb
+      confirm_unpublish: คุณกำลังจะยกเลิกการเผยแพร่ incident นี้ คุณแน่ใจหรือไม่?
+      #original_hash: 02e27c6
+      confirm_destroy: คุณแน่ใจหรือไม่ว่าต้องการลบ incident นี้?
+      #original_hash: 8fa3ce7
+      publish_error: ไม่สามารถเผยแพร่ incident นี้ได้
+      #original_hash: 229c8ce
+      unpublish_error: ไม่สามารถยกเลิกการเผยแพร่ incident นี้ได้
+      #original_hash: e332db5
+      destroy_error: ไม่สามารถลบ incident นี้ได้
   about_regulations:
     #original_hash: 6bce1b5
     title: เกี่ยวกับกติกา
@@ -5616,12 +5807,12 @@ th:
         <a
         href="/faq">คำถามที่พบบ่อย</a>ตอบบางคำถามที่พบบ่อยเกี่ยวกับกติกาไว้แล้ว
     panel4:
-      #original_hash: ad5f6e7
-      title: แนวทางการเป็นผู้จัดการแข่งขัน
-      #original_hash: 9bbdf16
+      #original_hash: d0e369e
+      title: คู่มือผู้จัดการแข่งขัน
+      #original_hash: d619471
       content1_html: >-
         หากคุณสนใจจะเป็นผู้จัดการแข่งขัน หรือมีแผนที่จะจัดการแข่งขัน กรุณาอ่าน<a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">แนวทางการเป็นผู้จัดการแข่งขัน</a>
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">คู่มือผู้จัดการแข่งขัน</a>
       #original_hash: 5016669
       content2_html: เอกสารฉบับนี้รวมข้อมูลที่จำเป็นและผู้จัดการแข่งขันทุกคนควรอ่าน
   regulations_translations:
@@ -6165,6 +6356,12 @@ th:
         [%{round_id}] รอบนี้มีจำนวนชุดของโจทย์ (%{actual})
         แตกต่างจากที่ระบุไว้ในแท็บ event (%{expected}) โปรดปรับจำนวนโจทย์ในแท็บ
         event ให้ตรงกับจำนวนชุดที่ใช้
+    schedule:
+      #original_hash: 7a12424
+      activity_outside_competition_dates_warning: >-
+        กิจกรรม '%{activity_name}' (code: %{activity_code})
+        ถูกกำหนดไว้นอกช่วงวันที่ของการแข่งขันในเขตเวลาท้องถิ่นของสถานที่จัดการแข่งขัน
+        โปรดอัปเดตตารางการแข่งขันเพื่อให้ตรงกับวันที่แข่งขันจริง
   tickets:
     type:
       #original_hash: e43f273

@@ -1,4 +1,4 @@
-import { Container, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import PermissionCheck from "@/components/PermissionCheck";
 import AddResults from "./AddResults";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
@@ -26,26 +26,24 @@ export default async function ResultPage({
   if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <Container bg="bg">
-      <RoundInfoProvider roundId={roundId}>
-        <RoundOpenCheck>
-          <PermissionCheck
-            requiredPermission="canScoretakeCompetition"
-            item={competitionId}
-          >
-            <VStack align="left">
-              <LiveResultProvider
-                initialRound={data}
-                competitionId={competitionId}
-              >
-                <LiveResultAdminProvider competitionId={competitionId}>
-                  <AddResults competitionId={competitionId} />
-                </LiveResultAdminProvider>
-              </LiveResultProvider>
-            </VStack>
-          </PermissionCheck>
-        </RoundOpenCheck>
-      </RoundInfoProvider>
-    </Container>
+    <RoundInfoProvider roundId={roundId}>
+      <RoundOpenCheck>
+        <PermissionCheck
+          requiredPermission="canScoretakeCompetition"
+          item={competitionId}
+        >
+          <VStack align="left">
+            <LiveResultProvider
+              initialRound={data}
+              competitionId={competitionId}
+            >
+              <LiveResultAdminProvider competitionId={competitionId}>
+                <AddResults competitionId={competitionId} />
+              </LiveResultAdminProvider>
+            </LiveResultProvider>
+          </VStack>
+        </PermissionCheck>
+      </RoundOpenCheck>
+    </RoundInfoProvider>
   );
 }

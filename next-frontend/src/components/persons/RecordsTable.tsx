@@ -10,7 +10,7 @@ export default function RecordsTable({
   recordResults,
   t,
 }: {
-  recordResults: components["schemas"]["Results"];
+  recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
   const recordsByType = _.groupBy(
@@ -52,16 +52,16 @@ function RecordsByEvent({
   recordResults,
   t,
 }: {
-  recordResults: components["schemas"]["Results"];
+  recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
   const resultsByEvent = _.groupBy(recordResults, "event_id");
   return _.map(resultsByEvent, (results, eventId) => {
     return (
-      <>
+      <Fragment key={eventId}>
         <Heading textStyle="h3">{events.byId[eventId].name}</Heading>
         <ByCompetitionTable results={results} t={t} />
-      </>
+      </Fragment>
     );
   });
 }
