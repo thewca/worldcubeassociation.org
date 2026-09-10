@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
 import { components } from "@/types/openapi";
 import { Heading, VStack } from "@chakra-ui/react";
 import _ from "lodash";
@@ -8,6 +8,7 @@ import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
+import roundTypes from "@/lib/wca/data/roundTypes";
 
 export default function FilteredResults({
   competitionInfo,
@@ -22,9 +23,14 @@ export default function FilteredResults({
 
   const { t } = useT();
 
-  const results = useMemo(
-    () => _.groupBy(resultsByEvent[activeEventId], "round_type_id"),
-    [activeEventId, resultsByEvent],
+  const groupedResults = _.groupBy(
+    resultsByEvent[activeEventId],
+    "round_type_id",
+  );
+
+  const orderedRounds = _.sortBy(
+    _.keys(groupedResults),
+    (roundType) => roundTypes.byId[roundType].rank,
   );
 
   return (
@@ -35,16 +41,19 @@ export default function FilteredResults({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
-      {_.map(results, (results, roundFormat) => (
+      {_.map(orderedRounds, (roundFormat) => (
         <Fragment key={`${activeEventId}-${roundFormat}`}>
           <Heading textStyle="h3">
             {events.byId[activeEventId].name} {t(`rounds.${roundFormat}.name`)}
           </Heading>
           <ResultsTable
-            results={results.toSorted((a, b) => a.pos - b.pos)}
+            results={groupedResults[roundFormat].toSorted(
+              (a, b) => a.pos - b.pos,
+            )}
             eventId={activeEventId}
             t={t}
             isAdmin={false}
+            solveTextAlign="center"
           />
         </Fragment>
       ))}
