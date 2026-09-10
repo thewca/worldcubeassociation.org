@@ -1,4 +1,3 @@
-import { components } from "@/types/openapi";
 import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import {
   afterCompetitionTabs,
@@ -6,16 +5,27 @@ import {
   liveTab,
 } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
+import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
+import { getT } from "@/lib/i18n/get18n";
+import OpenapiError from "@/components/ui/openapiError";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
-export default function CompetitionMenu({
-  competitionInfo,
-  children,
+export default async function CompetitionMenu({
+  params,
 }: {
-  children: React.ReactNode;
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  params: Promise<{ competitionId: string }>;
 }) {
+  const { competitionId } = await params;
+  const { t } = await getT();
+  const {
+    data: competitionInfo,
+    error,
+    response,
+  } = await getCompetitionInfo(competitionId);
+
+  if (error) return <OpenapiError t={t} response={response} />;
+
   const hasEnded =
     hasPassedEndOfDay(competitionInfo.end_date) && !LIVE_RESULT_BETA;
 
@@ -33,8 +43,6 @@ export default function CompetitionMenu({
       competitionInfo={competitionInfo}
       tabs={tabs}
       customTabs={competitionInfo.tab_names}
-    >
-      {children}
-    </TabMenu>
+    />
   );
 }
