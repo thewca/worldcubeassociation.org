@@ -302,6 +302,10 @@ function TabLink({
         : renderTab.i18nKey,
     );
 
+  const tabLabel = (
+    <TabText tab={tab} renderFn={renderLabel} textStyle="bodyEmphasis" />
+  );
+
   const trigger = (
     <Tabs.Trigger
       value={tab.menuKey}
@@ -309,9 +313,9 @@ function TabLink({
       disabled={tab.disabled}
       minHeight="fit-content"
     >
-      <Text asChild textStyle="bodyEmphasis" justifyContent="left">
+      <Text asChild justifyContent="left">
         {tab.disabled ? (
-          <TabText tab={tab} renderFn={renderLabel} />
+          tabLabel
         ) : tab.externalHref ? (
           <ChakraLink
             href={tab.externalHref}
@@ -319,15 +323,11 @@ function TabLink({
             rel="noopener noreferrer"
             color="currentColor"
           >
-            <TabText tab={tab} renderFn={renderLabel} />
+            {tabLabel}
           </ChakraLink>
         ) : (
           <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
-            <TabText
-              tab={tab}
-              renderFn={renderLabel}
-              fontVariant="small-caps"
-            />
+            {tabLabel}
           </Link>
         )}
       </Text>
