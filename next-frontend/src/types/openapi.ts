@@ -1261,11 +1261,11 @@ export interface components {
             waiting_list_count: number;
         };
         /**
-         * @description What decides a competitor's final position. `round` ranks them within the round by their time. `dual_round` ranks them across every round of a Dual Round on their better result, which is what `global_pos` reports. `head_to_head` positions come from match outcomes and not from comparing times, so they may contradict the times shown.
-         * @example dual_round
+         * @description What decides a competitor's final position. `round` ranks them within the round by their time. `linked_round` ranks them across every round of a Dual Round on their better result, which is what `global_pos` reports. `head_to_head` positions come from match outcomes and not from comparing times, so they may contradict the times shown.
+         * @example linked_round
          * @enum {string}
          */
-        RankingMode: "round" | "dual_round" | "head_to_head";
+        RankingMode: "round" | "linked_round" | "head_to_head";
         /** @description One competitor's result in a single round. Rendered inside a round or a podium, both of which already name the competition, event and format, so this shape carries only what is specific to the competitor. `V1Result` is the same result rendered on its own. */
         V1RoundResult: {
             /** @example 6709306 */
@@ -1317,7 +1317,7 @@ export interface components {
             /** @example m */
             format_id: string;
             ranking_mode: components["schemas"]["RankingMode"];
-            /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking_mode` is `dual_round`. */
+            /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking_mode` is `linked_round`. */
             linked_round_wcif_ids?: string[];
             results: components["schemas"]["V1RoundResult"][];
         };

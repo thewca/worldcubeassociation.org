@@ -28,7 +28,7 @@ export function PositionCell({
     return <Table.Cell>{result.global_pos}</Table.Cell>;
   }
 
-  if (rankingMode !== "dual_round") {
+  if (rankingMode !== "linked_round") {
     return <Table.Cell>{result.pos}</Table.Cell>;
   }
 
@@ -52,7 +52,7 @@ export function RoundNameCell({
 
   return (
     <Table.Cell>
-      {rankingMode === "dual_round"
+      {rankingMode === "linked_round"
         ? `${roundName} (${t("persons.show.dual")})`
         : roundName}
     </Table.Cell>

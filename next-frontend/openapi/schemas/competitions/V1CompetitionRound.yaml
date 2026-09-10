@@ -30,7 +30,7 @@ properties:
     type: array
     description: >-
       Every round of the Dual Round this round belongs to, this one included. Absent unless
-      `ranking_mode` is `dual_round`.
+      `ranking_mode` is `linked_round`.
     items:
       type: string
       example: "333fm-r1"

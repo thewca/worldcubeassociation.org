@@ -78,6 +78,7 @@ class Round < ApplicationRecord
 
   # The event dictates which formats are even allowed in the first place, hence the prefix
   delegate :formats, :format_ids, to: :event, prefix: :allowed
+  delegate :wcif_ids, to: :linked_round, prefix: true, allow_nil: true
   validates :format, inclusion: { in: :allowed_formats, message: ->(round, _args) { "'#{round.format_id}' is not allowed for '#{round.event_id}'" } }
 
   validates :advancement_condition, presence: { if: :advancement_condition_changed?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
@@ -913,7 +914,7 @@ class Round < ApplicationRecord
 
   RANKING_MODES = {
     within_round: "round",
-    dual_round: "dual_round",
+    linked_round: "linked_round",
     head_to_head: "head_to_head",
   }.freeze
 
@@ -922,7 +923,7 @@ class Round < ApplicationRecord
   # a Head-to-Head round both come from match outcomes rather than from comparing times.
   def ranking_mode
     return RANKING_MODES[:head_to_head] if is_h2h_mock?
-    return RANKING_MODES[:dual_round] if linked_round_id?
+    return RANKING_MODES[:linked_round] if linked_round_id?
 
     RANKING_MODES[:within_round]
   end
@@ -931,10 +932,6 @@ class Round < ApplicationRecord
     only: %w[format_id],
     methods: %w[wcif_id event_id round_type_id ranking_mode linked_round_wcif_ids],
   }.freeze
-
-  def linked_round_wcif_ids
-    linked_round&.wcif_ids
-  end
 
   def to_v1_results_json
     # The results are sorted here rather than by the association so that the ordering is not
