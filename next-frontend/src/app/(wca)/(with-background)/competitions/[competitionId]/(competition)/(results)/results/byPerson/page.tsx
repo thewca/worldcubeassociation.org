@@ -43,7 +43,12 @@ export default async function PodiumsPage({
                 {results[0].name}
               </Link>
             </Heading>
-            <ByPersonTable results={results} isAdmin={false} t={t} />
+            <ByPersonTable
+              results={results}
+              isAdmin={false}
+              t={t}
+              solveTextAlign="center"
+            />
           </Fragment>
         ))}
       </Card.Body>

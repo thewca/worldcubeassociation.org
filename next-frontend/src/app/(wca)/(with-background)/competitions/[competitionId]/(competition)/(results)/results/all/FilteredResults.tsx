@@ -23,13 +23,13 @@ export default function FilteredResults({
 
   const { t } = useT();
 
-  const groupedResults = _.groupBy(
+  const resultsByRound = _.groupBy(
     resultsByEvent[activeEventId],
     "round_type_id",
   );
 
-  const orderedRounds = _.sortBy(
-    _.keys(groupedResults),
+  const orderedRoundTypes = _.sortBy(
+    _.keys(resultsByRound),
     (roundType) => roundTypes.byId[roundType].rank,
   );
 
@@ -41,16 +41,20 @@ export default function FilteredResults({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
-      {_.map(orderedRounds, (roundFormat) => (
-        <Fragment key={`${activeEventId}-${roundFormat}`}>
+      {_.map(orderedRoundTypes, (roundType) => (
+        <Fragment key={`${activeEventId}-${roundType}`}>
           <Heading textStyle="h3">
-            {events.byId[activeEventId].name} {t(`rounds.${roundFormat}.name`)}
+            {events.byId[activeEventId].name} {t(`rounds.${roundType}.name`)}
           </Heading>
           <ResultsTable
-            results={groupedResults[roundFormat].toSorted(
+            results={resultsByRound[roundType].toSorted(
               (a, b) => a.pos - b.pos,
             )}
             eventId={activeEventId}
+            formatId={
+              resultsByRound[roundType][0]
+                .format_id /* anti-pattern because of current prop type restrictions */
+            }
             t={t}
             isAdmin={false}
             solveTextAlign="center"

@@ -52,6 +52,10 @@ export default async function PodiumsPage({
                   results={results.toSorted((a, b) => a.pos - b.pos)}
                   t={t}
                   eventId={eventId}
+                  formatId={
+                    results[0]
+                      .format_id /* anti-pattern because of current API data restrictions */
+                  }
                   isAdmin={false}
                   solveTextAlign="center"
                 />
