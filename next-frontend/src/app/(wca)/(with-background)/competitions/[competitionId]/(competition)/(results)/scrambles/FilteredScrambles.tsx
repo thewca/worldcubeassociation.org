@@ -1,12 +1,13 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
 import { components } from "@/types/openapi";
 import { Heading, Table, VStack } from "@chakra-ui/react";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
+import roundTypes from "@/lib/wca/data/roundTypes";
 
 export default function FilteredScrambles({
   competitionInfo,
@@ -23,9 +24,14 @@ export default function FilteredScrambles({
 
   const { t } = useT();
 
-  const scramblesByEvent = useMemo(
-    () => _.groupBy(resultsByEvent[activeEventId], "round_type_id"),
-    [activeEventId, resultsByEvent],
+  const scramblesByRoundFormat = _.groupBy(
+    resultsByEvent[activeEventId],
+    "round_type_id",
+  );
+
+  const orderedRounds = _.sortBy(
+    _.keys(scramblesByRoundFormat),
+    (roundType) => roundTypes.byId[roundType].rank,
   );
 
   return (
@@ -36,8 +42,9 @@ export default function FilteredScrambles({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
-      {_.map(scramblesByEvent, (scrambles, roundFormat) => {
-        const scramblesByGroup = _.groupBy(scrambles, "group_id");
+      {_.map(orderedRounds, (roundFormat) => {
+        const scramblesForRound = scramblesByRoundFormat[roundFormat];
+        const scramblesByGroup = _.groupBy(scramblesForRound, "group_id");
 
         return (
           <Fragment key={`${activeEventId}-${roundFormat}`}>

@@ -8,6 +8,7 @@ import {
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordAttempts } from "@/lib/wca/results/attempts";
 import { AttemptsCells } from "@/components/results/TableCells";
+import events from "@/lib/wca/data/events";
 
 interface RankingsRowProps {
   ranking: components["schemas"]["ExtendedResult"];
@@ -27,6 +28,9 @@ export function RankingsRow({
     bestResultIndex,
     worstResultIndex,
   } = recordAttempts(ranking);
+
+  const attemptCount =
+    events.byId[ranking.event_id].recommendedFormat.expected_solve_count;
 
   return (
     <Table.Row>
@@ -54,6 +58,7 @@ export function RankingsRow({
           bestResultIndex={bestResultIndex}
           worstResultIndex={worstResultIndex}
           eventId={ranking.event_id}
+          attemptCount={attemptCount}
         />
       )}
     </Table.Row>

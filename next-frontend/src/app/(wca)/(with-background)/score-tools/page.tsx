@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import {
   Badge,
   Card,
@@ -33,6 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ScoreTools() {
   const { t, lng } = await getT();
 
+  await connection();
+
   const payload = await getPayload({ config });
 
   const toolResults = await payload.find({
@@ -50,7 +53,7 @@ export default async function ScoreTools() {
   const toolsByCategory = _.groupBy(tools, "category");
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">Software tools for WCA competitions</Heading>
       <Text>{t("score_tools.intro.desc")}</Text>
       <Text>{t("score_tools.intro.disclaimer")}</Text>

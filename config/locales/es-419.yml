@@ -3911,8 +3911,10 @@ es-419:
             competición. Debe ser una URL http o https válida.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: cc7d557
-          scoretaking_software: 'Selecciona "%{choice_ilr}" si deseas usar Rondas Duales'
+          #original_hash: 08df794
+          scoretaking_software: >-
+            Selecciona "%{choice_ilr}" o una herramienta externa si deseas usar
+            Rondas Duales
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''

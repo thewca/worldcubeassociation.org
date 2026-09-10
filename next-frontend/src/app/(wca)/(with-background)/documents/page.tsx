@@ -7,8 +7,8 @@ import {
   List,
   VStack,
 } from "@chakra-ui/react";
-import { getPayload } from "payload";
-import config from "@payload-config";
+import { io } from "next/cache";
+import { getCachedGlobal } from "@/lib/payload/globals";
 import _ from "lodash";
 import IconDisplay from "@/components/IconDisplay";
 import { Document } from "@/types/payload";
@@ -23,11 +23,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function Documents() {
-  const payload = await getPayload({ config });
+  // `io()` marks the boundary the build-time prerender stops at, so the Payload read below
+  // never runs while building, where MongoDB is unreachable. It has to stay out here rather
+  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
+  await io();
 
-  const documentsResult = await payload.findGlobal({
-    slug: "documents-page",
-  });
+  const documentsResult = await getCachedGlobal("documents-page");
 
   const documentRelation = documentsResult.documents;
 
@@ -43,7 +44,7 @@ export default async function Documents() {
   const categorized = _.groupBy(categorizedRaw, "category");
 
   return (
-    <VStack gap="8" pt="8" alignItems="left">
+    <VStack gap="8" alignItems="left">
       <Heading size="5xl">Documents</Heading>
       <Accordion.Root variant="enclosed" multiple>
         {uncategorized.map((doc) => (

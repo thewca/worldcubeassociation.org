@@ -50,7 +50,6 @@ export const beforeCompetitionTabs = (
       }),
       menuKey: "register",
       icon: "Register",
-      disabled: process.env.NODE_ENV === "production",
     },
     {
       i18nKey: "competitions.nav.menu.competitors",
@@ -232,6 +231,15 @@ export const afterCompetitionTabs = (
       }),
       menuKey: "all",
       icon: "List",
+    },
+    {
+      i18nKey: "competitions.nav.menu.scrambles",
+      href: route({
+        pathname: "/competitions/[competitionId]/scrambles",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "scrambles",
+      icon: "Scrambles",
     },
     {
       i18nKey: "competitions.nav.menu.by_person",

@@ -1,9 +1,7 @@
-"use server";
-
 import { Box, Center, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import Quote from "@/components/Quote";
-import { getPayload } from "payload";
-import config from "@payload-config";
+import { io } from "next/cache";
+import { getCachedGlobal } from "@/lib/payload/globals";
 import { Media } from "@/types/payload";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
@@ -18,11 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SpeedcubingHistory() {
-  const payload = await getPayload({ config });
+  // `io()` marks the boundary the build-time prerender stops at, so the Payload read below
+  // never runs while building, where MongoDB is unreachable. It has to stay out here rather
+  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
+  await io();
 
-  const historyPage = await payload.findGlobal({
-    slug: "speedcubing-history-page",
-  });
+  const historyPage = await getCachedGlobal("speedcubing-history-page");
 
   const historyItems = historyPage.blocks;
 
@@ -33,7 +32,7 @@ export default async function SpeedcubingHistory() {
   const { t } = await getT();
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">{t("speedcubing_history.title")}</Heading>
       {historyItems.map((item) => {
         switch (item.blockType) {

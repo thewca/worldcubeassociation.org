@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { AnnouncementFullCard } from "@/components/announcements/AnnouncementCard";
 import { randomAnnouncementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
@@ -10,6 +11,8 @@ import { Announcement } from "@/types/payload";
 const findAnnouncement = async (
   announcementId: string,
 ): Promise<Announcement | null> => {
+  await connection();
+
   const payload = await getPayload({ config });
 
   // `findByID` throws on unknown IDs, and MongoDB additionally throws on IDs

@@ -39,9 +39,11 @@ export default function FilteredResults({
           <ResultsTable
             results={round.results}
             eventId={activeEventId}
+            formatId={round.format_id}
             rankingMode={round.ranking_mode}
             t={t}
             isAdmin={false}
+            solveTextAlign="center"
           />
         </Fragment>
       ))}

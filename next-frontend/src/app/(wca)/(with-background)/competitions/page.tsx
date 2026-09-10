@@ -196,7 +196,7 @@ export default function CompetitionsPage() {
     0;
 
   return (
-    <VStack gap="8" width="full" pt="8">
+    <VStack gap="8" width="full">
       <ClientOnly>
         {!session.isPending && !session.data && (
           <RemovableCard
