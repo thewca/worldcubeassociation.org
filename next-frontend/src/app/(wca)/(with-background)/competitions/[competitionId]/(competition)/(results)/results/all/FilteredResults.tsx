@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
 import { components } from "@/types/openapi";
 import { Heading, VStack } from "@chakra-ui/react";
 import _ from "lodash";
@@ -8,6 +8,7 @@ import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
+import roundTypes from "@/lib/wca/data/roundTypes";
 
 export default function FilteredResults({
   competitionInfo,
@@ -22,9 +23,14 @@ export default function FilteredResults({
 
   const { t } = useT();
 
-  const results = useMemo(
-    () => _.groupBy(resultsByEvent[activeEventId], "round_type_id"),
-    [activeEventId, resultsByEvent],
+  const resultsByRound = _.groupBy(
+    resultsByEvent[activeEventId],
+    "round_type_id",
+  );
+
+  const orderedRoundTypes = _.sortBy(
+    _.keys(resultsByRound),
+    (roundType) => roundTypes.byId[roundType].rank,
   );
 
   return (
@@ -35,16 +41,23 @@ export default function FilteredResults({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
-      {_.map(results, (results, roundFormat) => (
-        <Fragment key={`${activeEventId}-${roundFormat}`}>
+      {_.map(orderedRoundTypes, (roundType) => (
+        <Fragment key={`${activeEventId}-${roundType}`}>
           <Heading textStyle="h3">
-            {events.byId[activeEventId].name} {t(`rounds.${roundFormat}.name`)}
+            {events.byId[activeEventId].name} {t(`rounds.${roundType}.name`)}
           </Heading>
           <ResultsTable
-            results={results.toSorted((a, b) => a.pos - b.pos)}
+            results={resultsByRound[roundType].toSorted(
+              (a, b) => a.pos - b.pos,
+            )}
             eventId={activeEventId}
+            formatId={
+              resultsByRound[roundType][0]
+                .format_id /* anti-pattern because of current prop type restrictions */
+            }
             t={t}
             isAdmin={false}
+            solveTextAlign="center"
           />
         </Fragment>
       ))}

@@ -4,12 +4,15 @@ import { getPayload, type GlobalSlug } from "payload";
 
 export const globalCacheTag = (slug: GlobalSlug) => `payload-global:${slug}`;
 
-export async function getCachedGlobal<TSlug extends GlobalSlug>(slug: TSlug) {
+export async function getCachedGlobal<TSlug extends GlobalSlug>(
+  slug: TSlug,
+  depth?: number,
+) {
   "use cache";
   cacheTag(globalCacheTag(slug));
   cacheLife("max");
 
   const payload = await getPayload({ config });
 
-  return payload.findGlobal({ slug });
+  return payload.findGlobal({ slug, depth });
 }

@@ -11,6 +11,7 @@ import _ from "lodash";
 import { TFunction } from "i18next";
 import { recordAttempts } from "@/lib/wca/results/attempts";
 import { AttemptsCells } from "@/components/results/TableCells";
+import events from "@/lib/wca/data/events";
 
 interface MixedRecordsRowProp {
   record: components["schemas"]["Record"];
@@ -30,6 +31,14 @@ interface SlimRecordsRowProp {
   singles: components["schemas"]["Record"][];
   averages: components["schemas"]["Record"][];
 }
+
+const maxAttemptCountForEvent = (eventId: string) => {
+  const formatSolveCounts = events.byId[eventId].formats.map(
+    (fmt) => fmt.expected_solve_count,
+  );
+
+  return _.max(formatSolveCounts)!;
+};
 
 export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
   const {
@@ -58,6 +67,7 @@ export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
         bestResultIndex={bestResultIndex}
         worstResultIndex={worstResultIndex}
         eventId={record.event_id}
+        attemptCount={maxAttemptCountForEvent(record.event_id)}
       />
     </Table.Row>
   );
@@ -98,6 +108,7 @@ export function HistoryRow({ record, mixed = false }: HistoryRowProps) {
         bestResultIndex={bestResultIndex}
         worstResultIndex={worstResultIndex}
         eventId={record.event_id}
+        attemptCount={maxAttemptCountForEvent(record.event_id)}
       />
     </Table.Row>
   );
@@ -129,6 +140,7 @@ export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
           bestResultIndex={bestResultIndex}
           worstResultIndex={worstResultIndex}
           eventId={record.event_id}
+          attemptCount={maxAttemptCountForEvent(record.event_id)}
         />
       )}
     </Table.Row>
@@ -176,6 +188,7 @@ export function SlimRecordsRow({ singles, averages }: SlimRecordsRowProp) {
               bestResultIndex={bestResultIndex}
               worstResultIndex={worstResultIndex}
               eventId={average.event_id}
+              attemptCount={maxAttemptCountForEvent(average.event_id)}
             />
           </>
         )}

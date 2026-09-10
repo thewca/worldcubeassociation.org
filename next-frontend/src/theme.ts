@@ -962,6 +962,7 @@ const customConfig = defineConfig({
               },
               trigger: {
                 flex: "1 0 auto",
+                flexDirection: "column",
               },
             },
           },

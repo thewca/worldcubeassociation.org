@@ -1,30 +1,36 @@
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
-import { HStack, Link, Table } from "@chakra-ui/react";
+import { CssProperties, HStack, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
 import { AttemptsCells, WithRecordTag } from "@/components/results/TableCells";
-import { resultAttempts } from "@/lib/wca/results/attempts";
+import { isSkipped, resultAttempts } from "@/lib/wca/results/attempts";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
 import _ from "lodash";
+import roundTypes from "@/lib/wca/data/roundTypes";
+import formats from "@/lib/wca/data/formats";
 
 export function ResultsTable({
   results,
   eventId,
+  formatId,
   t,
   isAdmin = false,
+  solveTextAlign = "left",
 }: {
   results: components["schemas"]["Result"][];
   eventId: string;
+  formatId: string;
   t: TFunction;
   isAdmin?: boolean;
+  solveTextAlign?: CssProperties["textAlign"];
 }) {
-  const event = events.byId[eventId];
+  const format = formats.byId[formatId];
 
-  const solveCount = event.recommendedFormat.expected_solve_count;
+  const solveCount = format.expected_solve_count;
   const anyAverages = results.some((r) => r.average !== 0);
 
   return (
@@ -38,7 +44,7 @@ export function ResultsTable({
             <Table.ColumnHeader>Best</Table.ColumnHeader>
             {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
             <Table.ColumnHeader>Representing</Table.ColumnHeader>
-            <Table.ColumnHeader colSpan={solveCount} textAlign="left">
+            <Table.ColumnHeader colSpan={solveCount} textAlign={solveTextAlign}>
               Solves
             </Table.ColumnHeader>
           </Table.Row>
@@ -48,6 +54,10 @@ export function ResultsTable({
           {results.map((competitorResult) => {
             const { definedAttempts, bestResultIndex, worstResultIndex } =
               resultAttempts(competitorResult);
+
+            const attemptCount =
+              formats.byId[competitorResult.format_id].expected_solve_count;
+
             return (
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
@@ -90,6 +100,7 @@ export function ResultsTable({
                   worstResultIndex={worstResultIndex}
                   eventId={eventId}
                   recordTag={competitorResult.regional_single_record}
+                  attemptCount={attemptCount}
                 />
               </Table.Row>
             );
@@ -104,11 +115,27 @@ export function ByPersonTable({
   results,
   t,
   isAdmin = false,
+  solveTextAlign = "left",
+  showNationalityColumn = false,
 }: {
   results: components["schemas"]["Result"][];
   t: TFunction;
   isAdmin?: boolean;
+  solveTextAlign?: CssProperties["textAlign"];
+  showNationalityColumn?: boolean;
 }) {
+  // The backend always pads with zeros at the end, which we need to manually kick out again
+  const validAttemptCounts = results.map(
+    (res) => _.dropRightWhile(res.attempts, (att) => isSkipped(att)).length,
+  );
+
+  const maxAttemptCount = _.max(validAttemptCounts) || 0;
+
+  const orderedResults = _.sortBy(results, [
+    (res) => events.byId[res.event_id].rank,
+    (res) => roundTypes.byId[res.round_type_id].rank,
+  ]);
+
   return (
     <Table.ScrollArea rounded="md">
       <Table.Root>
@@ -120,15 +147,20 @@ export function ByPersonTable({
             <Table.ColumnHeader>#</Table.ColumnHeader>
             <Table.ColumnHeader>Best</Table.ColumnHeader>
             <Table.ColumnHeader>Average</Table.ColumnHeader>
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
-            <Table.ColumnHeader colSpan={5} textAlign="left">
+            {showNationalityColumn && (
+              <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader
+              colSpan={maxAttemptCount}
+              textAlign={solveTextAlign}
+            >
               Solves
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
 
         <Table.Body>
-          {results.map((competitorResult) => {
+          {orderedResults.map((competitorResult) => {
             const eventId = competitorResult.event_id;
             const { definedAttempts, bestResultIndex, worstResultIndex } =
               resultAttempts(competitorResult);
@@ -154,18 +186,21 @@ export function ByPersonTable({
                     {formatAttemptResult(competitorResult.average, eventId)}
                   </WithRecordTag>
                 </Table.Cell>
-                <Table.Cell>
-                  <HStack>
-                    <WcaFlag code={competitorResult.country_iso2} size="sm" />
-                    <CountryMap code={competitorResult.country_iso2} t={t} />
-                  </HStack>
-                </Table.Cell>
+                {showNationalityColumn && (
+                  <Table.Cell>
+                    <HStack>
+                      <WcaFlag code={competitorResult.country_iso2} size="sm" />
+                      <CountryMap code={competitorResult.country_iso2} t={t} />
+                    </HStack>
+                  </Table.Cell>
+                )}
                 <AttemptsCells
                   attempts={definedAttempts}
                   bestResultIndex={bestResultIndex}
                   worstResultIndex={worstResultIndex}
                   eventId={eventId}
                   recordTag={competitorResult.regional_single_record}
+                  attemptCount={maxAttemptCount}
                 />
               </Table.Row>
             );
@@ -208,11 +243,14 @@ export function ByCompetitionTable({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {_.map(resultsByCompetition, (competitorResults) => {
-            return competitorResults.map((competitorResult, index) => {
+          {_.flatMap(resultsByCompetition, (competitionResults) => {
+            return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
+              const resultFormat = formats.byId[competitorResult.format_id];
+
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
+
               return (
                 <Table.Row key={competitorResult.id}>
                   <Table.Cell>
@@ -255,6 +293,7 @@ export function ByCompetitionTable({
                     worstResultIndex={worstResultIndex}
                     eventId={eventId}
                     recordTag={competitorResult.regional_single_record}
+                    attemptCount={resultFormat.expected_solve_count}
                   />
                 </Table.Row>
               );

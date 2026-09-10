@@ -58,10 +58,10 @@ function RecordsByEvent({
   const resultsByEvent = _.groupBy(recordResults, "event_id");
   return _.map(resultsByEvent, (results, eventId) => {
     return (
-      <>
+      <Fragment key={eventId}>
         <Heading textStyle="h3">{events.byId[eventId].name}</Heading>
         <ByCompetitionTable results={results} t={t} />
-      </>
+      </Fragment>
     );
   });
 }
