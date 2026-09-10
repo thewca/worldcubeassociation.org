@@ -1,5 +1,3 @@
-"use server";
-
 import { Accordion, Card, Heading, Tabs, VStack } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
