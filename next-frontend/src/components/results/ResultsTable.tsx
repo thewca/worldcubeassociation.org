@@ -1,6 +1,6 @@
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
-import { HStack, Link, Table } from "@chakra-ui/react";
+import { CssProperties, HStack, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
@@ -16,11 +16,13 @@ export function ResultsTable({
   eventId,
   t,
   isAdmin = false,
+  solveTextAlign = "left",
 }: {
   results: components["schemas"]["Result"][];
   eventId: string;
   t: TFunction;
   isAdmin?: boolean;
+  solveTextAlign?: CssProperties["textAlign"];
 }) {
   const event = events.byId[eventId];
 
@@ -38,7 +40,7 @@ export function ResultsTable({
             <Table.ColumnHeader>Best</Table.ColumnHeader>
             {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
             <Table.ColumnHeader>Representing</Table.ColumnHeader>
-            <Table.ColumnHeader colSpan={solveCount} textAlign="left">
+            <Table.ColumnHeader colSpan={solveCount} textAlign={solveTextAlign}>
               Solves
             </Table.ColumnHeader>
           </Table.Row>

@@ -5,6 +5,7 @@ import { getPodiums } from "@/lib/wca/competitions/getPodiums";
 import { Fragment } from "react";
 import _ from "lodash";
 import { getT } from "@/lib/i18n/get18n";
+import EventIcon from "@/components/EventIcon";
 
 export default async function PodiumsPage({
   params,
@@ -27,15 +28,8 @@ export default async function PodiumsPage({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title>
-          <Text
-            fontSize="md"
-            textTransform="uppercase"
-            fontWeight="medium"
-            letterSpacing="wider"
-          >
-            Podiums
-          </Text>
+        <Card.Title asChild>
+          <Text textStyle="s3">Podiums</Text>
         </Card.Title>
         <VStack align="left" gap={4}>
           {WCA_EVENT_IDS.map((eventId) => {
@@ -45,12 +39,21 @@ export default async function PodiumsPage({
             }
             return (
               <Fragment key={eventId}>
-                <Heading size="2xl">{events.byId[eventId].name}</Heading>
+                <Heading
+                  size="2xl"
+                  display="inline-flex"
+                  alignItems="center"
+                  gap="2"
+                >
+                  <EventIcon eventId={eventId} />
+                  {events.byId[eventId].name}
+                </Heading>
                 <ResultsTable
                   results={results.toSorted((a, b) => a.pos - b.pos)}
                   t={t}
                   eventId={eventId}
                   isAdmin={false}
+                  solveTextAlign="center"
                 />
               </Fragment>
             );
