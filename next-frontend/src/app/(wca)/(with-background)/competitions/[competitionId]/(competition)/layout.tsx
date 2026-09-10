@@ -2,6 +2,7 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import CompetitionMenu from "@/components/competitions/CompetitionMenu";
+import {Box} from "@chakra-ui/react";
 
 export default async function CompetitionTabsLayout({
   children,
@@ -20,9 +21,13 @@ export default async function CompetitionTabsLayout({
 
   if (error) return <OpenapiError t={t} response={response} />;
 
+  // The competition page layout is very card-heave, and Chakra cards bring their own padding.
+  //   So we subtract a little bit of the global padding that we had previously applied to shared pages.
   return (
-    <CompetitionMenu competitionInfo={competitionInfo}>
-      {children}
-    </CompetitionMenu>
+    <Box marginTop="-3">
+      <CompetitionMenu competitionInfo={competitionInfo}>
+        {children}
+      </CompetitionMenu>
+    </Box>
   );
 }
