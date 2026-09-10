@@ -1,5 +1,3 @@
-"use server";
-
 import { Card, Heading, VStack } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";

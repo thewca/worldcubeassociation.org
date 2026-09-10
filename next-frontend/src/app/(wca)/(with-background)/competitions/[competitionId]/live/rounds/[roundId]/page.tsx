@@ -1,5 +1,3 @@
-"use server";
-
 import { VStack } from "@chakra-ui/react";
 import { getResultByRound } from "@/lib/wca/live/getResultsByRound";
 import {

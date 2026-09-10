@@ -1,5 +1,3 @@
-"use server";
-
 import { Box, Center, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import Quote from "@/components/Quote";
 import { getPayload } from "payload";

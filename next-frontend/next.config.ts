@@ -72,6 +72,7 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BUILD_SEED: buildSeed,
   },
+  cacheComponents: true,
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },

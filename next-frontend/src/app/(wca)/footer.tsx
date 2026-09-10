@@ -6,14 +6,13 @@ import {
   Link as ChakraLink,
   Stack,
 } from "@chakra-ui/react";
-import { getPayload } from "payload";
-import config from "@payload-config";
 import Link from "next/link";
-import { connection } from "next/server";
+import { io } from "next/cache";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/components/icons/iconMap";
 import type { Footer, SocialLink } from "@/types/payload";
 import WCALogo from "@/components/WCALogo";
+import { getCachedGlobal } from "@/lib/payload/globals";
 
 type FooterNavItem = NonNullable<Footer["navigationLinks"]>[number];
 type FooterSocialItem = NonNullable<SocialLink["links"]>[number];
@@ -48,15 +47,14 @@ function FooterLink({ item }: { item: FooterNavItem | FooterSocialItem }) {
 }
 
 export default async function Footer() {
-  // `connection()` has to come before the Payload queries: it defers everything below it to
-  // request time, so the build-time prerender stops here instead of trying to reach MongoDB,
-  // which is not available while building.
-  await connection();
+  // `io()` marks the boundary the build-time prerender stops at, so the Payload reads below
+  // never run while building, where MongoDB is unreachable. It has to stay out here rather
+  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
+  await io();
 
-  const payload = await getPayload({ config });
   const [footer, socialLinksGlobal] = await Promise.all([
-    payload.findGlobal({ slug: "footer" }),
-    payload.findGlobal({ slug: "social-links" }),
+    getCachedGlobal("footer"),
+    getCachedGlobal("social-links"),
   ]);
 
   const navigationLinks = footer.navigationLinks ?? [];
