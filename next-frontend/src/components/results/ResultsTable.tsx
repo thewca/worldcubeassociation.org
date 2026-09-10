@@ -116,11 +116,13 @@ export function ByPersonTable({
   t,
   isAdmin = false,
   solveTextAlign = "left",
+  showNationalityColumn = false,
 }: {
   results: components["schemas"]["Result"][];
   t: TFunction;
   isAdmin?: boolean;
   solveTextAlign?: CssProperties["textAlign"];
+  showNationalityColumn?: boolean;
 }) {
   const resWithMostAttempts = _.maxBy(results, (res) => res.attempts.length);
   const maxAttemptCount = resWithMostAttempts?.attempts.length;
@@ -141,7 +143,9 @@ export function ByPersonTable({
             <Table.ColumnHeader>#</Table.ColumnHeader>
             <Table.ColumnHeader>Best</Table.ColumnHeader>
             <Table.ColumnHeader>Average</Table.ColumnHeader>
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            {showNationalityColumn && (
+              <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            )}
             <Table.ColumnHeader
               colSpan={maxAttemptCount}
               textAlign={solveTextAlign}
@@ -178,12 +182,14 @@ export function ByPersonTable({
                     {formatAttemptResult(competitorResult.average, eventId)}
                   </WithRecordTag>
                 </Table.Cell>
-                <Table.Cell>
-                  <HStack>
-                    <WcaFlag code={competitorResult.country_iso2} size="sm" />
-                    <CountryMap code={competitorResult.country_iso2} t={t} />
-                  </HStack>
-                </Table.Cell>
+                {showNationalityColumn && (
+                  <Table.Cell>
+                    <HStack>
+                      <WcaFlag code={competitorResult.country_iso2} size="sm" />
+                      <CountryMap code={competitorResult.country_iso2} t={t} />
+                    </HStack>
+                  </Table.Cell>
+                )}
                 <AttemptsCells
                   attempts={definedAttempts}
                   bestResultIndex={bestResultIndex}
