@@ -14,9 +14,9 @@ export default async function Tab({
   const { competitionId, tabName } = await params;
   const { t } = await getT();
 
-  const { tabs, errorDetails } = await getTabs(competitionId);
+  const { data: tabs, error, response } = await getTabs(competitionId);
 
-  if (errorDetails) return <OpenapiError t={t} response={errorDetails} />;
+  if (error) return <OpenapiError t={t} response={response} />;
 
   if (!tabs) {
     return <Text>Competition does not exist</Text>;
