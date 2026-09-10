@@ -5,7 +5,7 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
 import { AttemptsCells, WithRecordTag } from "@/components/results/TableCells";
-import { resultAttempts } from "@/lib/wca/results/attempts";
+import { isSkipped, resultAttempts } from "@/lib/wca/results/attempts";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
@@ -126,7 +126,7 @@ export function ByPersonTable({
 }) {
   // The backend always pads with zeros at the end, which we need to manually kick out again
   const validAttemptCounts = results.map(
-    (res) => _.dropRightWhile(res.attempts, (att) => att === 0).length,
+    (res) => _.dropRightWhile(res.attempts, (att) => isSkipped(att)).length,
   );
 
   const maxAttemptCount = _.max(validAttemptCounts) || 0;
