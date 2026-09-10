@@ -4,7 +4,7 @@ import events from "@/lib/wca/data/events";
 import _ from "lodash";
 import type { ReactNode } from "react";
 
-export const recordTagBadge = (tag?: string | null) => {
+const recordTagBadge = (tag?: string | null) => {
   switch (tag) {
     case "WR": {
       return { color: "red", label: "WR" };
