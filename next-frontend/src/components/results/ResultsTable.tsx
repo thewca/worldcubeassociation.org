@@ -124,8 +124,12 @@ export function ByPersonTable({
   solveTextAlign?: CssProperties["textAlign"];
   showNationalityColumn?: boolean;
 }) {
-  const resWithMostAttempts = _.maxBy(results, (res) => res.attempts.length)!;
-  const maxAttemptCount = resWithMostAttempts.attempts.length;
+  // The backend always pads with zeros at the end, which we need to manually kick out again
+  const validAttemptCounts = results.map(
+    (res) => _.dropRightWhile(res.attempts, (att) => att === 0).length,
+  );
+
+  const maxAttemptCount = _.max(validAttemptCounts) || 0;
 
   const orderedResults = _.sortBy(results, [
     (res) => events.byId[res.event_id].rank,
