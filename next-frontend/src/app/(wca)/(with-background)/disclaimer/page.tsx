@@ -4,10 +4,10 @@ import { connection } from "next/server";
 import { Box, Heading, VStack } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Metadata } from "next";
-import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("layouts.navigation.disclaimer"),

@@ -3,6 +3,7 @@ import config from "@payload-config";
 import { connection } from "next/server";
 import { Heading, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Media } from "@/types/payload";
 import LogoDownload from "@/app/(wca)/(with-background)/logo/download";
@@ -10,7 +11,7 @@ import { Fragment } from "react";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("logo.title"),

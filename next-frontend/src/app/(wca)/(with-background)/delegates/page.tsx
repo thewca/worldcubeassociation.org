@@ -7,6 +7,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 import {
   getDelegateRegions,
   getDelegatesInGroup,
@@ -30,7 +31,7 @@ const RAILS_ROOT_URL = new URL(process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL!)
   .origin;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("delegates_page.title"),

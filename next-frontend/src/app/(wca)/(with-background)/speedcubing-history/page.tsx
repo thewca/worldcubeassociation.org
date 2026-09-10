@@ -6,10 +6,11 @@ import { connection } from "next/server";
 import { Media } from "@/types/payload";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("layouts.navigation.speedcubing_history"),
