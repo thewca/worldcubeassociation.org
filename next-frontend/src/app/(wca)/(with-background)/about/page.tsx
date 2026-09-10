@@ -1,7 +1,6 @@
-"use server";
-
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { Heading, VStack } from "@chakra-ui/react";
 import { CallToActionBlock } from "@/components/about/CallToAction";
 import Quote from "@/components/Quote";
@@ -18,6 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function About() {
+  await connection();
+
   const payload = await getPayload({ config });
 
   const aboutPage = await payload.findGlobal({ slug: "about-us-page" });
@@ -29,7 +30,7 @@ export default async function About() {
   }
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">About Us</Heading>
       {aboutItems.map((item) => {
         switch (item.blockType) {

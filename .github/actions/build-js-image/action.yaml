@@ -10,6 +10,9 @@ inputs:
   base_url:
     description: 'The Base URL of the Rails APP'
     required: true
+  asset_bucket:
+    description: 'S3 bucket that serves the client bundle'
+    required: true
 outputs:
   imageid:
     description: 'The Docker image id build'
@@ -26,6 +29,11 @@ runs:
     - name: Download proprietary assets from protected bucket
       shell: bash
       run: aws s3 cp s3://wca-fonts ./next-frontend/src/styles/fonts/ --recursive
+    - name: Set asset prefix
+      shell: bash
+      # Assets live under a per-commit prefix, so a deploy never overwrites the bundle
+      #   that clients on the previous build are still fetching.
+      run: echo "NEXT_ASSET_PREFIX=https://${{ inputs.asset_bucket }}/nextjs/${{ github.sha }}" >> $GITHUB_ENV
     - name: Build and push JS Docker image
       uses: docker/build-push-action@v7
       id: build-js-image
@@ -38,3 +46,18 @@ runs:
         cache-to: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.tag }},mode=max,image-manifest=true,oci-mediatypes=true
         build-args: |
           WCA_SITE=${{ inputs.base_url }}
+          NEXT_ASSET_PREFIX=${{ env.NEXT_ASSET_PREFIX }}
+    - name: Extract client bundle
+      uses: docker/build-push-action@v7
+      with:
+        context: ./next-frontend
+        target: assets
+        outputs: type=local,dest=./nextjs-assets
+        cache-from: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.tag }}
+        build-args: |
+          WCA_SITE=${{ inputs.base_url }}
+          NEXT_ASSET_PREFIX=${{ env.NEXT_ASSET_PREFIX }}
+    - name: Push assets to S3
+      shell: bash
+      # ./nextjs-assets comes from the same `builder` stage as the image just pushed
+      run: aws s3 sync ./nextjs-assets s3://${{ inputs.asset_bucket }}/nextjs/${{ github.sha }} --cache-control "public, max-age=31536000, immutable"

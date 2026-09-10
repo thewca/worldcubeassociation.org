@@ -26,6 +26,7 @@ import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 
 import type {
   TextCardBlock,
@@ -500,6 +501,8 @@ const renderBlock = (
 };
 
 export default async function Homepage() {
+  await connection();
+
   const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
   const { lng } = await getT();
