@@ -21,6 +21,7 @@ import { components } from "@/types/openapi";
 import { useT } from "@/lib/i18n/useI18n";
 import {
   CompetitionNavTab,
+  TabBase,
   TabWithChildren,
   TabWithLink,
 } from "@/lib/wca/competitions/tabs";
@@ -28,7 +29,7 @@ import { useState } from "react";
 import { TFunction } from "i18next";
 import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
-import { iconMap } from "@/components/icons/iconMap";
+import IconDisplay from "@/components/IconDisplay";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 
@@ -267,6 +268,24 @@ function BackLink({
   );
 }
 
+function TabText<T extends TabBase>({
+  tab,
+  showIcon = true,
+  renderFn,
+  ...textProps
+}: {
+  tab: T;
+  renderFn: (tab: T) => string;
+  showIcon?: boolean;
+} & TextProps) {
+  return (
+    <>
+      {showIcon && tab.icon !== undefined && <IconDisplay name={tab.icon} />}
+      <Text {...textProps}>{renderFn(tab)}</Text>
+    </>
+  );
+}
+
 function TabLink({
   tab,
   t,
@@ -276,9 +295,12 @@ function TabLink({
   t: TFunction;
   isAdminRoute: boolean;
 }) {
-  const label = t(
-    isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
-  );
+  const renderLabel = (renderTab: TabWithLink) =>
+    t(
+      isAdminRoute && renderTab.i18nKeyAdmin
+        ? renderTab.i18nKeyAdmin
+        : renderTab.i18nKey,
+    );
 
   const trigger = (
     <Tabs.Trigger
@@ -289,7 +311,7 @@ function TabLink({
     >
       <Text asChild textStyle="bodyEmphasis" justifyContent="left">
         {tab.disabled ? (
-          <Text>{label}</Text>
+          <TabText tab={tab} renderFn={renderLabel} />
         ) : tab.externalHref ? (
           <ChakraLink
             href={tab.externalHref}
@@ -297,11 +319,15 @@ function TabLink({
             rel="noopener noreferrer"
             color="currentColor"
           >
-            {label}
+            <TabText tab={tab} renderFn={renderLabel} />
           </ChakraLink>
         ) : (
           <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
-            {label}
+            <TabText
+              tab={tab}
+              renderFn={renderLabel}
+              fontVariant="small-caps"
+            />
           </Link>
         )}
       </Text>
@@ -330,8 +356,7 @@ function CollapsibleTabGroup({
   isOpen: boolean;
   onToggle: () => void;
 }) {
-  const { i18nKey, icon, children } = tab;
-  const IconComponent = iconMap[icon];
+  const { children } = tab;
 
   return (
     <Collapsible.Root open={isOpen} onOpenChange={onToggle}>
@@ -345,9 +370,11 @@ function CollapsibleTabGroup({
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
       >
-        <Text textStyle="bodyEmphasis">
-          <IconComponent /> {t(i18nKey)}
-        </Text>
+        <TabText
+          tab={tab}
+          renderFn={(render) => t(render.i18nKey)}
+          textStyle="bodyEmphasis"
+        />
       </Collapsible.Trigger>
 
       <Collapsible.Content>
