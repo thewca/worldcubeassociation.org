@@ -12516,6 +12516,7 @@ __metadata:
     "@chakra-ui/cli": "npm:^3.37.0"
     "@chakra-ui/react": "npm:^3.37.0"
     "@delmaredigital/payload-better-auth": "npm:0.13.0"
+    "@emotion/cache": "npm:^11.14.0"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
     "@fullcalendar/format-luxon3": "npm:^7.1.0"
