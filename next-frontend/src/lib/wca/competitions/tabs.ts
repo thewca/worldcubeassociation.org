@@ -50,7 +50,6 @@ export const beforeCompetitionTabs = (
       }),
       menuKey: "register",
       icon: "Register",
-      disabled: process.env.NODE_ENV === "production",
     },
     {
       i18nKey: "competitions.nav.menu.competitors",

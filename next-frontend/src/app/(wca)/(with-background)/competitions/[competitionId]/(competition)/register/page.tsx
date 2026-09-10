@@ -1,5 +1,5 @@
 import { getSession } from "@/auth";
-import { Alert, Box, Card, VStack } from "@chakra-ui/react";
+import { Alert, Box, Card, Link, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import RegistrationPanel from "@/app/(wca)/(with-background)/competitions/[competitionId]/(competition)/register/RegistrationPanel";
@@ -136,6 +136,19 @@ export default async function RegisterPage({
           </Card.Body>
         </Card.Root>
       )}
+      <Alert.Root status="warning">
+        <Alert.Indicator />
+        <Alert.Content>
+          This is a preview. We recommend registering via the regular panel{" "}
+          <Link
+            href={`https://www.worldcubeassociation.org/competitions/${competitionInfo.id}/register`}
+            variant="underline"
+            target="_blank"
+          >
+            on the current registration page
+          </Link>
+        </Alert.Content>
+      </Alert.Root>
       <Card.Root width="full">
         <Card.Body>
           <RegistrationPanel
