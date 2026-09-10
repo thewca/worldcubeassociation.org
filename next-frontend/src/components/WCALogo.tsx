@@ -11,7 +11,7 @@ export default function WCALogo() {
         {/* Both logos are rendered and toggled by CSS: picking one from the color
             mode at render time mismatches between server and client. */}
         <ChakraImage asChild maxW={10} _dark={{ display: "none" }}>
-          <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
+          <Image src="/logo.png" alt="WCA Logo Light" height={50} width={50} />
         </ChakraImage>
         <ChakraImage
           asChild
@@ -19,7 +19,12 @@ export default function WCALogo() {
           display="none"
           _dark={{ display: "block" }}
         >
-          <Image src="/logo_dark.png" alt="WCA Logo" height={50} width={50} />
+          <Image
+            src="/logo_dark.png"
+            alt="WCA Logo Dark"
+            height={50}
+            width={50}
+          />
         </ChakraImage>
       </Link>
     </IconButton>
