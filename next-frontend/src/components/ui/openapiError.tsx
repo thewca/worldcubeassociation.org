@@ -15,6 +15,13 @@ export interface ErrorDetails {
   requestId: string | null;
 }
 
+export const toErrorDetails = (response: Response): ErrorDetails => ({
+  status: response.status,
+  url: response.url,
+  statusText: response.statusText,
+  requestId: response.headers.get("x-request-id"),
+});
+
 export default function OpenapiError({
   t,
   response,

@@ -1,8 +1,17 @@
 import { serverClient } from "@/lib/wca/wcaAPI";
-import { cache } from "react";
+import { toErrorDetails } from "@/components/ui/openapiError";
 
-export const getCompetitionInfo = cache(async (competitionId: string) => {
-  return await serverClient.GET("/v0/competitions/{competitionId}/", {
+import { cacheLife } from "next/cache";
+
+export async function getCompetitionInfo(competitionId: string) {
+  "use cache";
+  cacheLife("minutes");
+
+  // `Response` cannot cross a `"use cache"` boundary, so we only keep the parts
+  //   that `OpenapiError` renders.
+  const result = await serverClient.GET("/v0/competitions/{competitionId}/", {
     params: { path: { competitionId } },
   });
-});
+
+  return { ...result, response: toErrorDetails(result.response) };
+}
