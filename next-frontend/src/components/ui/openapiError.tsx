@@ -7,11 +7,19 @@ import {
 } from "@chakra-ui/react";
 import { TFunction } from "i18next";
 
+// Serializable stand-in for `Response`, which cannot cross a `"use cache"` boundary.
+export interface ErrorDetails {
+  status: number;
+  url: string;
+  statusText: string;
+  requestId: string | null;
+}
+
 export default function OpenapiError({
   t,
   response,
 }: {
-  response: Response;
+  response: Response | ErrorDetails;
   t: TFunction;
 }) {
   return (
@@ -37,7 +45,10 @@ export default function OpenapiError({
                         error_code: response.status,
                         url: response.url,
                         errorText: response.statusText,
-                        requestId: response.headers.get("x-request-id"),
+                        requestId:
+                          "requestId" in response
+                            ? response.requestId
+                            : response.headers.get("x-request-id"),
                       },
                       null,
                       2,
