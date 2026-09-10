@@ -7,6 +7,10 @@ import Footer from "./footer";
 import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
+import { cookies } from "next/headers";
+import BetaDisclaimer, {
+  BETA_DISCLAIMER_COOKIE,
+} from "@/components/BetaDisclaimer";
 import Loading from "@/components/ui/loading";
 import NavbarSkeleton from "./navbar-skeleton";
 import FooterSkeleton from "./footer-skeleton";
@@ -29,6 +33,15 @@ const computeFont = async () => {
   return appFont;
 };
 
+async function BetaDisclaimerGate() {
+  const cookieList = await cookies();
+
+  if (cookieList.has(BETA_DISCLAIMER_COOKIE) || !!process.env.LIVE_RESULT_BETA)
+    return null;
+
+  return <BetaDisclaimer />;
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -43,6 +56,9 @@ export default async function RootLayout({
           <WCAQueryClientProvider>
             <EmotionRegistry>
               <UiProvider>
+                <Suspense fallback={null}>
+                  <BetaDisclaimerGate />
+                </Suspense>
                 <Suspense fallback={<NavbarSkeleton />}>
                   <Navbar />
                 </Suspense>
