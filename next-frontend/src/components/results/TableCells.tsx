@@ -72,7 +72,7 @@ interface AttemptsCellProps {
   worstResultIndex: number;
   eventId: string;
   recordTag?: string | null;
-  attemptCount?: number;
+  attemptCount: number;
 }
 
 export function AttemptsCells({
@@ -81,7 +81,7 @@ export function AttemptsCells({
   worstResultIndex,
   eventId,
   recordTag,
-  attemptCount = attempts.length,
+  attemptCount,
 }: AttemptsCellProps) {
   return _.times(attemptCount).map((a) => {
     const attempt = attempts[a];

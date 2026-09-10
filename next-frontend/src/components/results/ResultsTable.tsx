@@ -124,8 +124,8 @@ export function ByPersonTable({
   solveTextAlign?: CssProperties["textAlign"];
   showNationalityColumn?: boolean;
 }) {
-  const resWithMostAttempts = _.maxBy(results, (res) => res.attempts.length);
-  const maxAttemptCount = resWithMostAttempts?.attempts.length;
+  const resWithMostAttempts = _.maxBy(results, (res) => res.attempts.length)!;
+  const maxAttemptCount = resWithMostAttempts.attempts.length;
 
   const orderedResults = _.sortBy(results, [
     (res) => events.byId[res.event_id].rank,
@@ -242,8 +242,11 @@ export function ByCompetitionTable({
           {_.flatMap(resultsByCompetition, (competitionResults) => {
             return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
+              const resultFormat = formats.byId[competitorResult.format_id];
+
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
+
               return (
                 <Table.Row key={competitorResult.id}>
                   <Table.Cell>
@@ -286,6 +289,7 @@ export function ByCompetitionTable({
                     worstResultIndex={worstResultIndex}
                     eventId={eventId}
                     recordTag={competitorResult.regional_single_record}
+                    attemptCount={resultFormat.expected_solve_count}
                   />
                 </Table.Row>
               );
