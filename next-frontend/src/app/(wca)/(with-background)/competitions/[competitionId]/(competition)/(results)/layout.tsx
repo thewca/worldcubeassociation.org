@@ -1,5 +1,5 @@
 import { GridItem, SimpleGrid } from "@chakra-ui/react";
-import { InfoCard } from "@/components/competitions/Cards";
+import {InfoCard, SubPageCard} from "@/components/competitions/Cards";
 import MarkdownFirstImage, {
   extractMarkdownImage,
 } from "@/components/MarkdownFirstImage";
@@ -30,7 +30,7 @@ export default async function CompetitionLayout({
   return (
     <SimpleGrid columns={{ base: 1, md: 3 }} gap="8">
       <GridItem colSpan={{ base: 1, md: mainColSpan }} asChild>
-        <InfoCard competitionInfo={competitionInfo} t={t} />
+        <SubPageCard competitionInfo={competitionInfo} t={t} />
       </GridItem>
       <MarkdownFirstImage content={competitionInfo.information} />
       <GridItem colSpan={{ base: 1, md: 3 }}>{children}</GridItem>
