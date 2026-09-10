@@ -98,7 +98,7 @@ export default function TabMenu({
           competitionId={competitionInfo.id}
         />
       </Tabs.List>
-      <Box hideFrom="md" mb="4">
+      <Box hideFrom="md">
         <Drawer.Root
           open={drawerOpen}
           onOpenChange={(e) => setDrawerOpen(e.open)}
@@ -217,6 +217,7 @@ function TabList({
           key={tabName}
           value={encodeURIComponent(tabName)}
           minHeight="fit-content"
+          maxWidth="xs"
           asChild
         >
           <Text textStyle="bodyEmphasis" asChild justifyContent="left">
@@ -279,7 +280,12 @@ function TabLink({
   );
 
   const trigger = (
-    <Tabs.Trigger value={tab.menuKey} asChild disabled={tab.disabled}>
+    <Tabs.Trigger
+      value={tab.menuKey}
+      asChild
+      disabled={tab.disabled}
+      minHeight="fit-content"
+    >
       <Text asChild textStyle="bodyEmphasis" justifyContent="left">
         {tab.disabled ? (
           <Text>{label}</Text>
@@ -327,6 +333,7 @@ function CollapsibleTabGroup({
         width="full"
         display="flex"
         textAlign="start"
+        minHeight="fit-content"
         px="3"
         py="2"
         borderRadius="md"
