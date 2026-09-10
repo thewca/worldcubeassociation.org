@@ -35,9 +35,9 @@ export default function PsychsheetTable({
           <Table.ColumnHeader>Representing</Table.ColumnHeader>
           <Table.ColumnHeader>WR</Table.ColumnHeader>
           <Table.ColumnHeader
-            cursor={showAverage ? "pointer" : undefined}
+            cursor="pointer"
             aria-sort={sortBy === "single" ? "ascending" : "none"}
-            onClick={showAverage ? () => setSortBy("single") : undefined}
+            onClick={() => setSortBy("single")}
           >
             Single
           </Table.ColumnHeader>
