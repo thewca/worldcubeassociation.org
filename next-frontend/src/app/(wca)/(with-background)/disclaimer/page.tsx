@@ -1,6 +1,5 @@
-import { getPayload } from "payload";
-import config from "@payload-config";
-import { connection } from "next/server";
+import { io } from "next/cache";
+import { getCachedGlobal } from "@/lib/payload/globals";
 import { Box, Heading, VStack } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Metadata } from "next";
@@ -14,13 +13,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function Disclaimer() {
-  await connection();
+  // `io()` marks the boundary the build-time prerender stops at, so the Payload read below
+  // never runs while building, where MongoDB is unreachable. It has to stay out here rather
+  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
+  await io();
 
-  const payload = await getPayload({ config });
-
-  const disclaimerPage = await payload.findGlobal({
-    slug: "disclaimer-page",
-  });
+  const disclaimerPage = await getCachedGlobal("disclaimer-page");
 
   const disclaimerItems = disclaimerPage.blocks;
 
