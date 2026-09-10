@@ -1,23 +1,25 @@
-"use client";
-
 import Link from "next/link";
 import { Image as ChakraImage } from "@chakra-ui/react";
 import Image from "next/image";
 import { IconButton } from "@chakra-ui/react";
 import React from "react";
-import { useColorModeValue } from "@/components/ui/color-mode";
 
 export default function WCALogo() {
-  const { src, alt } = useColorModeValue(
-    { src: "/logo.png", alt: "Wca Logo Light" },
-    { src: "/logo_dark.png", alt: "Wca Logo Dark" },
-  );
-
   return (
     <IconButton asChild variant="ghost">
       <Link href="/">
-        <ChakraImage asChild maxW={10}>
-          <Image src={src} alt={alt} height={50} width={50} />
+        {/* Both logos are rendered and toggled by CSS: picking one from the color
+            mode at render time mismatches between server and client. */}
+        <ChakraImage asChild maxW={10} _dark={{ display: "none" }}>
+          <Image src="/logo.png" alt="WCA Logo" height={50} width={50} />
+        </ChakraImage>
+        <ChakraImage
+          asChild
+          maxW={10}
+          display="none"
+          _dark={{ display: "block" }}
+        >
+          <Image src="/logo_dark.png" alt="WCA Logo" height={50} width={50} />
         </ChakraImage>
       </Link>
     </IconButton>
