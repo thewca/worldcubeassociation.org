@@ -36,7 +36,8 @@ const computeFont = async () => {
 async function BetaDisclaimerGate() {
   const cookieList = await cookies();
 
-  if (cookieList.has(BETA_DISCLAIMER_COOKIE)) return null;
+  if (cookieList.has(BETA_DISCLAIMER_COOKIE) || !!process.env.LIVE_RESULT_BETA)
+    return null;
 
   return <BetaDisclaimer />;
 }
