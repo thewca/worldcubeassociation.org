@@ -8,6 +8,7 @@ import {
   Collapsible,
   Drawer,
   IconButton,
+  Link as ChakraLink,
   Separator,
   Spacer,
   Tabs,
@@ -290,9 +291,14 @@ function TabLink({
         {tab.disabled ? (
           <Text>{label}</Text>
         ) : tab.externalHref ? (
-          <a href={tab.externalHref} target="_blank" rel="noopener noreferrer">
+          <ChakraLink
+            href={tab.externalHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="currentColor"
+          >
             {label}
-          </a>
+          </ChakraLink>
         ) : (
           <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
             {label}
