@@ -42,9 +42,9 @@ describe("PositionCell", () => {
   });
 
   it("shows both positions for a Dual Round", () => {
-    expect(renderCell({ result, rankingMode: "linked_round" })).toHaveTextContent(
-      "1 (3)",
-    );
+    expect(
+      renderCell({ result, rankingMode: "linked_round" }),
+    ).toHaveTextContent("1 (3)");
   });
 
   it("shows only the position across both rounds in the standings of a Dual Round", () => {
