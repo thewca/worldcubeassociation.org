@@ -2,7 +2,7 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import CompetitionMenu from "@/components/competitions/CompetitionMenu";
-import {Box} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export default async function CompetitionTabsLayout({
   children,
