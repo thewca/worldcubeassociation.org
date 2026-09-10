@@ -17,6 +17,7 @@ export default function OtherQuery() {
     <Form.TextArea
       label={I18n.t('page.contacts.form.wrt.message.label')}
       name="message"
+      required
       value={message}
       onChange={handleFormChange}
       style={{ whiteSpace: 'pre-wrap' }}
