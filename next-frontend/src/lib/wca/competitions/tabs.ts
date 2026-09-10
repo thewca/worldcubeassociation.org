@@ -234,6 +234,15 @@ export const afterCompetitionTabs = (
       icon: "List",
     },
     {
+      i18nKey: "competitions.nav.menu.scrambles",
+      href: route({
+        pathname: "/competitions/[competitionId]/scrambles",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "scrambles",
+      icon: "Scrambles",
+    },
+    {
       i18nKey: "competitions.nav.menu.by_person",
       href: route({
         pathname: "/competitions/[competitionId]/results/byPerson",
