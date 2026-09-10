@@ -1,8 +1,7 @@
-"use server";
-
 import { Card, Heading, VStack } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
@@ -16,6 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutTheRegulations() {
+  await connection();
+
   const payload = await getPayload({ config });
 
   const aboutRegulations = await payload.findGlobal({
@@ -31,7 +32,7 @@ export default async function AboutTheRegulations() {
   const { t } = await getT();
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">{t("about_regulations.title")}</Heading>
       {aboutRegulationsItems.map((item) => (
         <Card.Root key={item.id}>

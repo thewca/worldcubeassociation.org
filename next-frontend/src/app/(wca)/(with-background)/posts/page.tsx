@@ -2,6 +2,7 @@ import { Box, Card, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { announcementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
@@ -20,6 +21,8 @@ export default async function AnnouncementsPage({
 }) {
   const { page = "1" } = await searchParams;
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
+
+  await connection();
 
   const payload = await getPayload({ config });
   const announcements = await payload.find({

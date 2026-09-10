@@ -51,7 +51,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
   const resolved = Boolean(incident.resolved_at);
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="stretch">
+    <VStack gap="8" width="full" alignItems="stretch">
       <Link asChild>
         <NextLink href="/incidents">
           <LuArrowLeft />

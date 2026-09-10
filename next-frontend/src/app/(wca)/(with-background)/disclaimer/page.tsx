@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { Box, Heading, VStack } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import { Metadata } from "next";
@@ -13,6 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function Disclaimer() {
+  await connection();
+
   const payload = await getPayload({ config });
 
   const disclaimerPage = await payload.findGlobal({
@@ -26,7 +29,7 @@ export default async function Disclaimer() {
   }
 
   return (
-    <VStack gap="8" width="full" pt="8" alignItems="left">
+    <VStack gap="8" width="full" alignItems="left">
       <Heading size="5xl">Disclaimer</Heading>
       {disclaimerItems.map((item) => (
         <Box key={item.id}>

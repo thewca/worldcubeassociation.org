@@ -1,8 +1,7 @@
-"use server";
-
 import { Heading, Link, List, Text, VStack } from "@chakra-ui/react";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
 
@@ -15,6 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 export default async function RegulationsHistory() {
   const { i18n } = await getT();
+
+  await connection();
 
   const payload = await getPayload({ config });
 
@@ -38,7 +39,7 @@ export default async function RegulationsHistory() {
   }
 
   return (
-    <VStack gap="8" pt="8" alignItems="left">
+    <VStack gap="8" alignItems="left">
       <Heading size="5xl">WCA Regulations</Heading>
       <Heading size="2xl">Older Versions of the Regulations</Heading>
       <Text>
