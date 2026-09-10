@@ -1,5 +1,6 @@
 import type { Block, GlobalConfig } from "payload";
 import type { Route } from "nextjs-routes";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 
 type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
 
@@ -82,5 +83,8 @@ export const Footer: GlobalConfig = {
     livePreview: {
       url: "/",
     },
+  },
+  hooks: {
+    afterChange: [revalidateGlobal],
   },
 };

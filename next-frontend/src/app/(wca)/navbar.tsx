@@ -11,10 +11,8 @@ import {
   VStack,
   Icon,
 } from "@chakra-ui/react";
-import { getPayload } from "payload";
-import config from "@payload-config";
 import Link from "next/link";
-import { connection } from "next/server";
+import { io } from "next/cache";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
@@ -26,6 +24,7 @@ import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
+import { getCachedGlobal } from "@/lib/payload/globals";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -87,15 +86,14 @@ function LinkWrapper<T extends string>({
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
 export default async function Navbar() {
-  // `connection()` has to come before the Payload queries: it defers everything below it to
-  // request time, so the build-time prerender stops here instead of trying to reach MongoDB,
-  // which is not available while building.
-  await connection();
+  // `io()` marks the boundary the build-time prerender stops at, so the Payload reads below
+  // never run while building, where MongoDB is unreachable. It has to stay out here rather
+  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
+  await io();
 
-  const payload = await getPayload({ config });
   const [navbar, socialLinksGlobal] = await Promise.all([
-    payload.findGlobal({ slug: "nav" }),
-    payload.findGlobal({ slug: "social-links" }),
+    getCachedGlobal("nav"),
+    getCachedGlobal("social-links"),
   ]);
 
   const session = await getSession();
