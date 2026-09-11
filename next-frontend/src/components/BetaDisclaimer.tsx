@@ -2,16 +2,22 @@
 
 import { useState } from "react";
 import { Button, Dialog, Link, Portal, Text } from "@chakra-ui/react";
+import Cookies from "js-cookie";
 
-export const BETA_DISCLAIMER_COOKIE = "beta_disclaimer_accepted";
+const BETA_DISCLAIMER_COOKIE = "beta_disclaimer_accepted";
 
-const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
+const ONE_YEAR_IN_DAYS = 365;
 
 export default function BetaDisclaimer() {
-  const [open, setOpen] = useState(true);
+  // Rendered inside <ClientOnly>, so the cookie is readable on first render.
+  const [open, setOpen] = useState(() => !Cookies.get(BETA_DISCLAIMER_COOKIE));
 
   const acceptDisclaimer = () => {
-    document.cookie = `${BETA_DISCLAIMER_COOKIE}=true; path=/; max-age=${ONE_YEAR_IN_SECONDS}; SameSite=Lax`;
+    Cookies.set(BETA_DISCLAIMER_COOKIE, "true", {
+      path: "/",
+      expires: ONE_YEAR_IN_DAYS,
+      sameSite: "Lax",
+    });
     setOpen(false);
   };
 
