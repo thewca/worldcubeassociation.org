@@ -1787,6 +1787,7 @@ export interface components {
             event_ids: string[];
             main_event_id: string;
             competitor_limit: number;
+            accepted_registrations_count: number;
             championship_types: string[];
             /** Format: date-time */
             results_submitted_at?: string;

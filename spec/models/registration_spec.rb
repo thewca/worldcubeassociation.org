@@ -1583,4 +1583,36 @@ RSpec.describe Registration do
       end
     end
   end
+
+  describe "accepted_registrations_count counter cache" do
+    let(:competition) { create(:competition, :registration_open) }
+
+    def counter
+      competition.reload.accepted_registrations_count
+    end
+
+    it "only counts accepted, competing registrations" do
+      create(:registration, :pending, competition: competition)
+      create(:registration, :cancelled, competition: competition)
+      create(:registration, :non_competing, competition: competition)
+      expect(counter).to eq 0
+
+      create(:registration, :accepted, competition: competition)
+      expect(counter).to eq 1
+    end
+
+    it "follows status changes in both directions" do
+      registration = create(:registration, :accepted, competition: competition)
+      expect(counter).to eq 1
+
+      registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED)
+      expect(counter).to eq 0
+
+      registration.update!(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+      expect(counter).to eq 1
+
+      registration.destroy!
+      expect(counter).to eq 0
+    end
+  end
 end
