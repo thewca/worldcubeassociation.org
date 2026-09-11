@@ -385,7 +385,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
     def will_exceed_competitor_limit?(update_requests, competition)
       registrations_to_be_accepted = update_requests.count { |r| r.dig('competing', 'status') == Registrations::Helper::STATUS_ACCEPTED }
-      total_accepted_registrations_after_update = competition.registrations.accepted_and_competing_count + registrations_to_be_accepted
+      total_accepted_registrations_after_update = competition.accepted_registrations_count + registrations_to_be_accepted
 
       competition.competitor_limit_enabled &&
         registrations_to_be_accepted.positive? &&
