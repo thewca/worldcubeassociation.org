@@ -400,22 +400,14 @@ class Registration < ApplicationRecord
     }
   end
 
-  def self.accepted_count
-    accepted.count
-  end
-
   # Must stay in sync with the `Registration.accepted.competing` scope backing
   # `Competition#accepted_registrations_count`.
   def counted_as_competitor?
     competing_status_accepted? && is_competing?
   end
 
-  def self.accepted_and_paid_pending_count
-    accepted_count + pending.with_payments.count
-  end
-
   def self.newcomer_month_eligible_competitors_count
-    joins(:user).merge(User.newcomer_month_eligible).accepted_count
+    joins(:user).merge(User.newcomer_month_eligible).accepted.competing.count
   end
 
   # Only run the validations when creating the registration as we don't want user changes

@@ -1172,6 +1172,13 @@ RSpec.describe Competition do
       create(:registration, :paid_pending, competition: competition)
       expect(competition.registration_full?).to be true
     end
+
+    it "does not count non-competing registrations towards the limit" do
+      create_list(:registration, 10, :non_competing, competition: competition)
+
+      expect(competition.registration_full?).to be false
+      expect(competition.registration_full_and_accepted?).to be false
+    end
   end
 
   describe '#registration_full_message' do

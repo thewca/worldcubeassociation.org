@@ -352,17 +352,6 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#accepted_and_paid_pending_count' do
-    it 'returns count of registrations which are accepted and which are paid and pending' do
-      accepted_registrations_count = described_class.accepted.count
-      paid_pending_registrations_count = described_class.pending.with_payments.count
-
-      total_count = accepted_registrations_count + paid_pending_registrations_count
-
-      expect(described_class.accepted_and_paid_pending_count).to eq(total_count)
-    end
-  end
-
   describe '#to_wcif' do
     it 'deleted state returns deleted status' do
       registration = create(:registration, :cancelled)
