@@ -300,7 +300,7 @@ const FeaturedCompetition = async ({
         <CompetitionShortlist
           comp={competition}
           t={t}
-          items={["location", "date", "spots_left"]}
+          items={["city", "start_date", "spots_left"]}
         />
       </Card.Body>
     </Card.Root>

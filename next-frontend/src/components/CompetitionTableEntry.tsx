@@ -139,7 +139,13 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                 <CompetitionShortlist
                   comp={comp}
                   t={t}
-                  items={["location", "address", "date", "events", "entry_fee"]}
+                  items={[
+                    "city",
+                    "venue_address",
+                    "start_date",
+                    "event_ids",
+                    "base_entry_fee_lowest_denomination",
+                  ]}
                 />
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">

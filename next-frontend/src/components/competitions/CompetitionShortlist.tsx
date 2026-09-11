@@ -15,20 +15,20 @@ import CurrencyValue from "@/components/CurrencyValue";
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 
-type DataListItem =
-  "location" | "date" | "events" | "spots_left" | "address" | "entry_fee";
+type DataCompetition = CompetitionIndex | CompetitionInfo;
+type DataListItem<T extends DataCompetition> = keyof T & string;
 
-function ShortlistItem({
+function ShortlistItem<T extends DataCompetition>({
   comp,
   t,
   item,
 }: {
-  comp: CompetitionIndex | CompetitionInfo;
+  comp: T;
   t: TFunction;
-  item: DataListItem;
+  item: DataListItem<T>;
 }) {
   switch (item) {
-    case "events":
+    case "event_ids":
       return (
         <DataList.Item>
           <DataList.ItemLabel>Events</DataList.ItemLabel>
@@ -50,7 +50,8 @@ function ShortlistItem({
           </DataList.ItemValue>
         </DataList.Item>
       );
-    case "date":
+    case "start_date":
+    case "end_date":
       return (
         <DataList.Item>
           <DataList.ItemLabel asChild>
@@ -61,7 +62,7 @@ function ShortlistItem({
           </DataList.ItemValue>
         </DataList.Item>
       );
-    case "location":
+    case "city":
       return (
         <DataList.Item>
           <DataList.ItemLabel asChild>
@@ -73,7 +74,7 @@ function ShortlistItem({
           </DataList.ItemValue>
         </DataList.Item>
       );
-    case "address":
+    case "venue_address":
       return (
         <DataList.Item>
           <DataList.ItemLabel asChild>
@@ -84,7 +85,7 @@ function ShortlistItem({
           </DataList.ItemValue>
         </DataList.Item>
       );
-    case "entry_fee":
+    case "base_entry_fee_lowest_denomination":
       return (
         <DataList.Item>
           <DataList.ItemLabel asChild>
@@ -99,34 +100,33 @@ function ShortlistItem({
         </DataList.Item>
       );
     case "spots_left": {
-      if ("spots_left" in comp && comp.spots_left != null) {
-        return (
-          <DataList.Item>
-            <DataList.ItemLabel>
-              <RegisterIcon />
-            </DataList.ItemLabel>
-            <DataList.ItemValue>
-              {t("competitions.messages.spots_left", {
-                count: comp.spots_left,
-              })}
-            </DataList.ItemValue>
-          </DataList.Item>
-        );
-      }
+      // Not sure why this is needed here despite generics…
+      if (!("spots_left" in comp)) return null;
 
-      return null;
+      return (
+        <DataList.Item>
+          <DataList.ItemLabel>
+            <RegisterIcon />
+          </DataList.ItemLabel>
+          <DataList.ItemValue>
+            {t("competitions.messages.spots_left", {
+              count: comp.spots_left,
+            })}
+          </DataList.ItemValue>
+        </DataList.Item>
+      );
     }
   }
 }
 
-export default function CompetitionShortlist({
+export default function CompetitionShortlist<T extends DataCompetition>({
   comp,
   t,
   items,
 }: {
-  comp: CompetitionIndex | CompetitionInfo;
+  comp: T;
   t: TFunction;
-  items: DataListItem[];
+  items: DataListItem<T>[];
 }) {
   return (
     <VStack alignItems="start" gap="4">
