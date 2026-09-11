@@ -443,32 +443,32 @@ const customConfig = defineConfig({
           },
           fg: {
             value: {
-              _light: "{colors.wcaWhite.300}",
-              _dark: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.700}",
+              _dark: "{colors.wcaWhite.400}",
             },
           },
           subtle: {
             value: {
-              _light: "{colors.wcaWhite.900}",
+              _light: "{colors.wcaWhite.50}",
               _dark: "{colors.wcaWhite.900}",
             },
           },
           muted: {
             value: {
-              _light: "{colors.wcaWhite.900}",
+              _light: "{colors.wcaWhite.100}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
           emphasized: {
             value: {
-              _light: "{colors.wcaWhite.900}",
+              _light: "{colors.wcaWhite.200}",
               _dark: "{colors.wcaWhite.700}",
             },
           },
           solid: {
             value: {
               _light: "{colors.wcaWhite.200}",
-              _dark: "{colors.wcaWhite.100}",
+              _dark: "{colors.wcaWhite.200}",
             },
           },
           focusRing: {
@@ -479,7 +479,7 @@ const customConfig = defineConfig({
           },
           border: {
             value: {
-              _light: "{colors.wcaWhite.600}",
+              _light: "{colors.wcaWhite.700}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
