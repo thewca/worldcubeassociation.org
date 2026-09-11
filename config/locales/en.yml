@@ -1732,6 +1732,11 @@ en:
       view_competition: "View Competition"
       no_more_comps: "No more competitions."
       no_comp_found: "No competitions found."
+      #context: introduction shown to logged-out visitors on the competitions page
+      why_compete_description_html: >-
+        <p>Competitions are not just about finding out who is the fastest - they're social events! Anyone who can solve a cube is welcome to come and set a new personal record for themselves. Making friends is easy because everyone works together to make the competition run.</p>
+
+        <p>Use the tool below to find a competition near you and start your cubing journey!</p>
     #context: on the "My competitions" page
     my_competitions_table:
       edit: "Edit"
