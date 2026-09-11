@@ -1780,6 +1780,7 @@ export interface components {
             country_iso2: string;
             city: string;
             venue: string;
+            venue_address: string;
             /** Format: float */
             latitude_degrees: number;
             /** Format: float */

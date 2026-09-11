@@ -11,6 +11,7 @@ required:
   - country_iso2
   - city
   - venue
+  - venue_address
   - latitude_degrees
   - longitude_degrees
   - event_ids
@@ -44,6 +45,8 @@ properties:
   city:
     type: string
   venue:
+    type: string
+  venue_address:
     type: string
   latitude_degrees:
     type: number

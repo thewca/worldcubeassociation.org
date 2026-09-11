@@ -8,11 +8,12 @@ import React from "react";
 import type { components } from "@/types/openapi";
 import { TFunction } from "i18next";
 import EventIcon from "@/components/EventIcon";
+import MapIcon from "@/components/icons/MapIcon";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 
-type DataListItem = "location" | "date" | "events" | "spots_left";
+type DataListItem = "location" | "date" | "events" | "spots_left" | "address";
 
 function ShortlistItem({
   comp,
@@ -49,7 +50,7 @@ function ShortlistItem({
     case "date":
       return (
         <DataList.Item>
-          <DataList.ItemLabel>
+          <DataList.ItemLabel asChild>
             <CompRegoCloseDateIcon size="2xl" />
           </DataList.ItemLabel>
           <DataList.ItemValue>
@@ -60,7 +61,7 @@ function ShortlistItem({
     case "location":
       return (
         <DataList.Item>
-          <DataList.ItemLabel>
+          <DataList.ItemLabel asChild>
             <WcaFlag code={comp.country_iso2} size="xl" />
           </DataList.ItemLabel>
           <DataList.ItemValue gap="2">
@@ -69,6 +70,18 @@ function ShortlistItem({
           </DataList.ItemValue>
         </DataList.Item>
       );
+    case "address": {
+      return (
+        <DataList.Item>
+          <DataList.ItemLabel asChild>
+            <MapIcon size="2xl" />
+          </DataList.ItemLabel>
+          <DataList.ItemValue gap="2">
+            <Text>{comp.venue_address}</Text>
+          </DataList.ItemValue>
+        </DataList.Item>
+      );
+    }
     case "spots_left": {
       if ("spots_left" in comp && comp.spots_left != null) {
         return (
