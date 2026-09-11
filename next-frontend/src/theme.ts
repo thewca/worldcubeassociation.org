@@ -435,39 +435,40 @@ const customConfig = defineConfig({
           world: { value: "{colors.blue.solid}" },
         },
         wcaWhite: {
-          // values mostly stolen from Chakra's `gray` scale,
-          // with a minor adjustment for the `solid` entry.
+          // values different from Chakra's `gray` scale: They use an "almost-white" palette in dark mode
+          //   and an "almost black" palette in light mode. By contrast, our schema is designed around
+          //   the idea of letting the palette appear "soft gray" in both light and dark mode.
           contrast: {
-            value: { _light: "{colors.white}", _dark: "{colors.black}" },
+            value: "{colors.black}",
           },
           fg: {
             value: {
-              _light: "{colors.wcaWhite.800}",
+              _light: "{colors.wcaWhite.300}",
               _dark: "{colors.wcaWhite.200}",
             },
           },
           subtle: {
             value: {
-              _light: "{colors.wcaWhite.100}",
+              _light: "{colors.wcaWhite.900}",
               _dark: "{colors.wcaWhite.900}",
             },
           },
           muted: {
             value: {
-              _light: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.900}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
           emphasized: {
             value: {
-              _light: "{colors.wcaWhite.300}",
+              _light: "{colors.wcaWhite.900}",
               _dark: "{colors.wcaWhite.700}",
             },
           },
           solid: {
             value: {
-              _light: "{colors.wcaWhite.900}",
-              _dark: "{colors.wcaWhite.50}",
+              _light: "{colors.wcaWhite.200}",
+              _dark: "{colors.wcaWhite.100}",
             },
           },
           focusRing: {
@@ -478,7 +479,7 @@ const customConfig = defineConfig({
           },
           border: {
             value: {
-              _light: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.600}",
               _dark: "{colors.wcaWhite.800}",
             },
           },

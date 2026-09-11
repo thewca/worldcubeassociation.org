@@ -37,6 +37,7 @@ export default function RemovableCard({
       size="lg"
       overflow="hidden"
       colorVariant="solid"
+      colorPalette="wcaWhite"
     >
       <Image src={imageUrl} alt="removable card image" maxW="1/3" />
       <Box width="2/3">
