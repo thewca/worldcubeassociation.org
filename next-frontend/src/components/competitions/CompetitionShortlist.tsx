@@ -9,11 +9,14 @@ import type { components } from "@/types/openapi";
 import { TFunction } from "i18next";
 import EventIcon from "@/components/EventIcon";
 import MapIcon from "@/components/icons/MapIcon";
+import PaymentIcon from "@/components/icons/PaymentIcon";
+import CurrencyValue from "@/components/CurrencyValue";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 
-type DataListItem = "location" | "date" | "events" | "spots_left" | "address";
+type DataListItem =
+  "location" | "date" | "events" | "spots_left" | "address" | "entry_fee";
 
 function ShortlistItem({
   comp,
@@ -29,7 +32,7 @@ function ShortlistItem({
       return (
         <DataList.Item>
           <DataList.ItemLabel>Events</DataList.ItemLabel>
-          <DataList.ItemValue gap="2">
+          <DataList.ItemValue asChild>
             <Wrap gap="4">
               {comp.event_ids.map((event_id) => (
                 <EventIcon
@@ -70,18 +73,31 @@ function ShortlistItem({
           </DataList.ItemValue>
         </DataList.Item>
       );
-    case "address": {
+    case "address":
       return (
         <DataList.Item>
           <DataList.ItemLabel asChild>
             <MapIcon size="2xl" />
           </DataList.ItemLabel>
-          <DataList.ItemValue gap="2">
+          <DataList.ItemValue>
             <Text>{comp.venue_address}</Text>
           </DataList.ItemValue>
         </DataList.Item>
       );
-    }
+    case "entry_fee":
+      return (
+        <DataList.Item>
+          <DataList.ItemLabel asChild>
+            <PaymentIcon size="2xl" />
+          </DataList.ItemLabel>
+          <DataList.ItemValue>
+            <CurrencyValue
+              lowestDenomination={comp.base_entry_fee_lowest_denomination}
+              currencyCode={comp.currency_code}
+            />
+          </DataList.ItemValue>
+        </DataList.Item>
+      );
     case "spots_left": {
       if ("spots_left" in comp && comp.spots_left != null) {
         return (

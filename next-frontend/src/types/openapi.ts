@@ -1787,6 +1787,9 @@ export interface components {
             longitude_degrees: number;
             event_ids: string[];
             main_event_id: string;
+            base_entry_fee_lowest_denomination: number;
+            /** @example USD */
+            currency_code: string;
             competitor_limit: number;
             championship_types: string[];
             /** Format: date-time */
