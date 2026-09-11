@@ -721,14 +721,18 @@ function AdvancedFilters({
 
 function TableHeaderRow({
   children,
-  colSpan = 6,
+  colSpan = 7,
 }: {
   children: ReactNode;
   colSpan?: number;
 }) {
   return (
     <Table.Row cursor="default">
-      <Table.Cell colSpan={colSpan}>
+      <Table.Cell
+        colSpan={colSpan}
+        // overrides the default highlighting behavior
+        _hover={{ bg: "bg", _odd: { bg: "bg.subtle" } }}
+      >
         <Heading textStyle="s4" textAlign="center">
           {children}
         </Heading>

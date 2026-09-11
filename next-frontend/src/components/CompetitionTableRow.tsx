@@ -10,6 +10,7 @@ import {
   Portal,
   Heading,
   Float,
+  IconButton,
 } from "@chakra-ui/react";
 
 import WcaFlag from "@/components/WcaFlag";
@@ -29,6 +30,7 @@ import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
+import { LuInfo } from "react-icons/lu";
 
 // Raw competition type from WCA API
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
@@ -68,7 +70,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
 
   const { t } = useT();
   return (
-    <Table.Row onClick={() => setOpen(true)} key={comp.id}>
+    <Table.Row key={comp.id}>
       <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
 
       <Table.Cell>
@@ -86,6 +88,18 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
             {comp.name}
           </Link>
         </ChakraLink>
+      </Table.Cell>
+
+      <Table.Cell>
+        <IconButton
+          size="2xs"
+          variant="ghost"
+          color="currentColor"
+          marginX="2"
+          onClick={() => setOpen(true)}
+        >
+          <LuInfo />
+        </IconButton>
       </Table.Cell>
 
       <Table.Cell width="100%" hideBelow="md">
@@ -123,7 +137,17 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
                 <Heading size="3xl">{comp.name}</Heading>
               </Drawer.Header>
               <Drawer.Body>
-                <CompetitionShortlist comp={comp} t={t} />
+                <CompetitionShortlist
+                  comp={comp}
+                  t={t}
+                  items={[
+                    "city",
+                    "venue_address",
+                    "start_date",
+                    "event_ids",
+                    "base_entry_fee_lowest_denomination",
+                  ]}
+                />
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">
                 {/* TODO: Only Show register button/link if registration is not full */}

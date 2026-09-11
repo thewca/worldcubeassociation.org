@@ -898,7 +898,6 @@ const customConfig = defineConfig({
                 whiteSpace: "noWrap",
               },
               row: {
-                cursor: "pointer",
                 "& td": {
                   transitionProperty: "background-color",
                   transitionTimingFunction: "ease",
