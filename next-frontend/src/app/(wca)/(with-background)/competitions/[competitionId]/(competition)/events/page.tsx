@@ -12,7 +12,7 @@ export default async function Events({
 
   return (
     <TabEvents
-      competitionId={competitionInfo.data!.id}
+      competitionId={competitionId}
       forceQualifications={competitionInfo.data!["uses_qualification?"]}
     />
   );
