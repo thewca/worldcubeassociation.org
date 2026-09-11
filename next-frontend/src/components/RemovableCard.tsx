@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import {
   Card,
   HStack,
@@ -15,7 +15,8 @@ import {
 interface RemovableCardProps {
   imageUrl: string;
   heading: string;
-  description: string;
+  description: ReactNode;
+  descriptionAs?: Card.DescriptionProps["as"];
   buttonText: string;
   buttonUrl: string;
 }
@@ -24,6 +25,7 @@ export default function RemovableCard({
   imageUrl,
   heading,
   description,
+  descriptionAs,
   buttonText,
   buttonUrl,
 }: RemovableCardProps) {
@@ -46,7 +48,7 @@ export default function RemovableCard({
             <CloseButton variant="subtle" onClick={() => setVisible(false)} />
           </HStack>
           <Separator size="md" />
-          <Card.Description>{description}</Card.Description>
+          <Card.Description as={descriptionAs}>{description}</Card.Description>
         </Card.Body>
         <Card.Footer>
           <Button asChild variant="outline">

@@ -43,6 +43,7 @@ import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
+import { Trans } from "react-i18next";
 import { useSession } from "@/auth.client";
 import { Dispatch, ReactNode, useReducer, useState } from "react";
 import {
@@ -207,9 +208,15 @@ export default function CompetitionsPage() {
           <RemovableCard
             imageUrl="newcomer.png"
             heading="Why Compete?"
-            description="This section will only be visible to new visitors..."
+            descriptionAs="div"
+            description={
+              <Trans
+                t={t}
+                i18nKey="competitions.index.why_compete_description_html"
+              />
+            }
             buttonText="Learn More"
-            buttonUrl="/"
+            buttonUrl="/faq"
           />
         )}
       </ClientOnly>
