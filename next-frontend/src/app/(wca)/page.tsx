@@ -72,7 +72,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
+      colorVariant="solid"
       width="full"
     >
       {block.headerImage && (
@@ -174,7 +174,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
     <Card.Root
       flexDirection="row"
       colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
+      colorVariant="solid"
       width="full"
       maxHeight="xs" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
@@ -249,7 +249,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       <Card.Root
         overflow="hidden"
         colorPalette={block.colorPalette}
-        colorVariant="slatePastel"
+        colorVariant="solid"
         width="full"
       >
         <LinkOverlay
@@ -288,11 +288,7 @@ const FeaturedCompetition = async ({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root
-      colorPalette={colorPalette}
-      colorVariant="slatePastel"
-      height="full"
-    >
+    <Card.Root colorPalette={colorPalette} colorVariant="solid" height="full">
       <Card.Body>
         <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
           {competition.name}
@@ -352,7 +348,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
           return (
             <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
-                colorVariant="slatePastel"
+                colorVariant="solid"
                 flexDirection={{ base: "column", md: "row" }}
                 overflow="hidden"
                 colorPalette={slide.colorPalette}

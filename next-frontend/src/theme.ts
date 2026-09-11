@@ -844,24 +844,6 @@ const customConfig = defineConfig({
                 layerStyle: "fill.emphasized",
               },
             },
-            deep: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "fill.solid",
-              },
-              description: {
-                layerStyle: "fill.solid",
-              },
-            },
-            slatePastel: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "fill.solid",
-              },
-              description: {
-                layerStyle: "fill.solid",
-              },
-            },
           },
         },
         defaultVariants: {
