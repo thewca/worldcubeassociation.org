@@ -215,6 +215,9 @@ GEM
     connection_pool (3.0.2)
     cookies_eu (1.7.8)
       js_cookie_rails (~> 2.2.0)
+    counter_culture (3.14.0)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
     crack (1.0.1)
       bigdecimal
       rexml
@@ -1021,6 +1024,7 @@ DEPENDENCIES
   capybara-screenshot
   cocoon
   cookies_eu
+  counter_culture
   csv
   daemons
   database_cleaner
@@ -1195,6 +1199,7 @@ CHECKSUMS
   concurrent-ruby (1.3.8) sha256=b2f1be836e968ccc78ccfce277ea79c72a88633f22306782c16ff23fb415d1e1
   connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
   cookies_eu (1.7.8) sha256=ed40607d1d79a824c87ffe59855d744cf54ca734e674d585246d4d52cd53e66e
+  counter_culture (3.14.0) sha256=386f10ba78837123443597212284f166a498abf36af4b6e85e2f280b908760f3
   crack (1.0.1) sha256=ff4a10390cd31d66440b7524eb1841874db86201d5b70032028553130b6d4c7e
   crass (1.0.7) sha256=94868719948664c89ddcaf0a37c65048413dfcb1c869470a5f7a7ceb5390b295
   cronex (0.15.0) sha256=21c794e085fad2951c4f2e279f440340a35ba2297e0b738f22f263f69fbe2186

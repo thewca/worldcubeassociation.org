@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_11_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -399,6 +399,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
   end
 
   create_table "competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "accepted_registrations_count", default: 0, null: false
     t.boolean "allow_registration_edits", default: false, null: false
     t.boolean "allow_registration_without_qualification", default: false
     t.datetime "announced_at", precision: nil
