@@ -35,7 +35,6 @@ type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 
 interface Props {
   comp: CompetitionIndex;
-  showRegistrationStatus: boolean;
 }
 
 // Map registration status
@@ -63,19 +62,14 @@ const registrationStatusIcons: Record<string, JSX.Element> = {
   full: <CompRegoFullButOpenOrangeIcon />,
 };
 
-const CompetitionTableEntry: React.FC<Props> = ({
-  comp,
-  showRegistrationStatus,
-}) => {
+const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   const regoStatus = getRegistrationStatus(comp);
 
   const { t } = useT();
   return (
     <Table.Row onClick={() => setOpen(true)} key={comp.id}>
-      {showRegistrationStatus && (
-        <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
-      )}
+      <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
 
       <Table.Cell>
         <Text>{formatDateRange(comp.start_date, comp.end_date)}</Text>

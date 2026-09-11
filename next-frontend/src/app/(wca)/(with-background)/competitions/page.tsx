@@ -96,7 +96,6 @@ export default function CompetitionsPage() {
   const session = useSession();
   const [location, setLocation] = useState<GeoCoordinates>();
   const [distanceUnit, setDistanceUnit] = useState(DEFAULT_DISTANCE_UNIT);
-  const [showRegistrationStatus, setShowRegistrationStatus] = useState(true);
   // Held as a string because that is what NumberInput controls, and it lets the field go
   // empty while the competitor is typing.
   const [radius, setRadius] = useState(
@@ -370,8 +369,6 @@ export default function CompetitionsPage() {
                   <AdvancedFilters
                     filterState={filterState}
                     dispatchFilter={dispatchFilter}
-                    showRegistrationStatus={showRegistrationStatus}
-                    onShowRegistrationStatusChange={setShowRegistrationStatus}
                     t={t}
                   />
                 </Collapsible.Content>
@@ -385,12 +382,7 @@ export default function CompetitionsPage() {
                 justify="space-between"
                 align={{ base: "start", lg: "center" }}
               >
-                <Wrap
-                  gapX="3"
-                  gapY="1"
-                  align="center"
-                  hidden={!showRegistrationStatus}
-                >
+                <Wrap gapX="3" gapY="1" align="center">
                   <Text>{t("competitions.index.registration_key")}</Text>
                   <Badge size="md" variant="surface">
                     <CompRegoFullButOpenOrangeIcon />
@@ -420,19 +412,13 @@ export default function CompetitionsPage() {
                   <Heading size="md" paddingY="2">
                     {t("competitions.index.titles.in_progress")}
                   </Heading>
-                  <CompetitionTable
-                    competitions={inProgressComps}
-                    showRegistrationStatus={showRegistrationStatus}
-                  />
+                  <CompetitionTable competitions={inProgressComps} />
                   <Heading size="md" paddingY="2">
                     {t("competitions.index.titles.upcoming")}
                   </Heading>
                 </>
               )}
-              <CompetitionTable
-                competitions={upcomingComps}
-                showRegistrationStatus={showRegistrationStatus}
-              />
+              <CompetitionTable competitions={upcomingComps} />
               <ListViewFooter
                 isLoading={competitionsIsFetching}
                 hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -610,14 +596,10 @@ function DateFilter({
 function AdvancedFilters({
   filterState,
   dispatchFilter,
-  showRegistrationStatus,
-  onShowRegistrationStatusChange,
   t,
 }: {
   filterState: CompetitionFilterState;
   dispatchFilter: Dispatch<CompetitionFilterAction>;
-  showRegistrationStatus: boolean;
-  onShowRegistrationStatusChange: (showRegistrationStatus: boolean) => void;
   t: TFunction;
 }) {
   const timeOrderItems = [
@@ -699,56 +681,38 @@ function AdvancedFilters({
         </Field.Root>
       )}
 
-      <Stack gap="2">
-        <Checkbox.Root
-          checked={filterState.shouldIncludeCancelled}
-          onCheckedChange={(e) =>
-            dispatchFilter({
-              type: "set_should_include_cancelled",
-              shouldIncludeCancelled: Boolean(e.checked),
-            })
-          }
-        >
-          <Checkbox.HiddenInput />
-          <Checkbox.Control />
-          <Checkbox.Label>
-            {t("competitions.index.show_cancelled")}
-          </Checkbox.Label>
-        </Checkbox.Root>
-        <Checkbox.Root
-          checked={showRegistrationStatus}
-          onCheckedChange={(e) =>
-            onShowRegistrationStatusChange(Boolean(e.checked))
-          }
-        >
-          <Checkbox.HiddenInput />
-          <Checkbox.Control />
-          <Checkbox.Label>
-            {t("competitions.index.show_registration_status")}
-          </Checkbox.Label>
-        </Checkbox.Root>
-      </Stack>
+      <Checkbox.Root
+        width="auto"
+        minHeight="10"
+        checked={filterState.shouldIncludeCancelled}
+        onCheckedChange={(e) =>
+          dispatchFilter({
+            type: "set_should_include_cancelled",
+            shouldIncludeCancelled: Boolean(e.checked),
+          })
+        }
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>
+          {t("competitions.index.show_cancelled")}
+        </Checkbox.Label>
+      </Checkbox.Root>
     </Stack>
   );
 }
 
 function CompetitionTable({
   competitions,
-  showRegistrationStatus,
 }: {
   competitions: components["schemas"]["CompetitionIndex"][];
-  showRegistrationStatus: boolean;
 }) {
   return (
     <Table.ScrollArea>
       <Table.Root size="xs" variant="competitions" borderWidth="2px">
         <Table.Body>
           {competitions.map((comp) => (
-            <CompetitionTableEntry
-              comp={comp}
-              key={comp.id}
-              showRegistrationStatus={showRegistrationStatus}
-            />
+            <CompetitionTableEntry comp={comp} key={comp.id} />
           ))}
         </Table.Body>
       </Table.Root>
