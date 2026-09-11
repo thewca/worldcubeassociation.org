@@ -352,17 +352,6 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#accepted_and_paid_pending_count' do
-    it 'returns count of registrations which are accepted and which are paid and pending' do
-      accepted_registrations_count = described_class.accepted.count
-      paid_pending_registrations_count = described_class.pending.with_payments.count
-
-      total_count = accepted_registrations_count + paid_pending_registrations_count
-
-      expect(described_class.accepted_and_paid_pending_count).to eq(total_count)
-    end
-  end
-
   describe '#to_wcif' do
     it 'deleted state returns deleted status' do
       registration = create(:registration, :cancelled)
@@ -1581,6 +1570,38 @@ RSpec.describe Registration do
         create(:registration_payment, is_completed: false, registration: registration)
         expect(registration.last_positive_payment).to eq(@expected_pmt)
       end
+    end
+  end
+
+  describe "accepted_registrations_count counter cache" do
+    let(:competition) { create(:competition, :registration_open) }
+
+    def counter
+      competition.reload.accepted_registrations_count
+    end
+
+    it "only counts accepted, competing registrations" do
+      create(:registration, :pending, competition: competition)
+      create(:registration, :cancelled, competition: competition)
+      create(:registration, :non_competing, competition: competition)
+      expect(counter).to eq 0
+
+      create(:registration, :accepted, competition: competition)
+      expect(counter).to eq 1
+    end
+
+    it "follows status changes in both directions" do
+      registration = create(:registration, :accepted, competition: competition)
+      expect(counter).to eq 1
+
+      registration.update!(competing_status: Registrations::Helper::STATUS_CANCELLED)
+      expect(counter).to eq 0
+
+      registration.update!(competing_status: Registrations::Helper::STATUS_ACCEPTED)
+      expect(counter).to eq 1
+
+      registration.destroy!
+      expect(counter).to eq 0
     end
   end
 end

@@ -16,6 +16,7 @@ required:
   - event_ids
   - main_event_id
   - competitor_limit
+  - accepted_registrations_count
   - championship_types
 properties:
   id:
@@ -58,6 +59,8 @@ properties:
   main_event_id:
     type: string
   competitor_limit:
+    type: integer
+  accepted_registrations_count:
     type: integer
   championship_types:
     type: array

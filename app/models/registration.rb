@@ -26,6 +26,11 @@ class Registration < ApplicationRecord
   scope :might_attend, -> { where(competing_status: %w[accepted waiting_list]) }
 
   belongs_to :competition
+  # Cancelled/rejected/pending registrations and non-competing staff must not show up in the
+  # public competitor count, so this is conditional rather than a plain `counter_cache`.
+  counter_culture :competition,
+                  column_name: proc { |reg| reg.counted_as_competitor? ? 'accepted_registrations_count' : nil },
+                  column_names: -> { { Registration.accepted.competing => 'accepted_registrations_count' } }
   belongs_to :user, optional: true # A user may be deleted later. We only enforce validation directly on creation further down below.
 
   has_many :registration_history_entries, -> { order(:created_at) }, dependent: :destroy, inverse_of: :registration
@@ -395,20 +400,14 @@ class Registration < ApplicationRecord
     }
   end
 
-  def self.accepted_count
-    accepted.count
-  end
-
-  def self.accepted_and_competing_count
-    accepted.competing.count
-  end
-
-  def self.accepted_and_paid_pending_count
-    accepted_count + pending.with_payments.count
+  # Must stay in sync with the `Registration.accepted.competing` scope backing
+  # `Competition#accepted_registrations_count`.
+  def counted_as_competitor?
+    competing_status_accepted? && is_competing?
   end
 
   def self.newcomer_month_eligible_competitors_count
-    joins(:user).merge(User.newcomer_month_eligible).accepted_count
+    joins(:user).merge(User.newcomer_month_eligible).accepted.competing.count
   end
 
   # Only run the validations when creating the registration as we don't want user changes
@@ -490,7 +489,7 @@ class Registration < ApplicationRecord
   ], unless: :newcomer_month_eligible?
 
   private def cannot_exceed_newcomer_limit
-    available_spots = competition.competitor_limit - competition.registrations.accepted_and_competing_count
+    available_spots = competition.competitor_limit - competition.accepted_registrations_count
 
     # There are a limited number of "reserved" spots for newcomer_month_eligible competitions
     # We know that there are _some_ available_spots in the comp available, because we passed the competitor_limit check above
@@ -505,7 +504,7 @@ class Registration < ApplicationRecord
 
   validate :cannot_exceed_competitor_limit, if: %i[trying_to_accept? competitor_limit_enabled?]
   private def cannot_exceed_competitor_limit
-    return unless competition.registrations.accepted_and_competing_count >= competition.competitor_limit
+    return unless competition.accepted_registrations_count >= competition.competitor_limit
 
     errors.add(
       :competing_status,

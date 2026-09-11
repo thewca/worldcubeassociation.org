@@ -166,6 +166,7 @@ class Competition < ApplicationRecord
   ].freeze
   UNCLONEABLE_ATTRIBUTES = %w[
     id
+    accepted_registrations_count
     start_date
     end_date
     name
@@ -299,7 +300,7 @@ class Competition < ApplicationRecord
   end
 
   def newcomer_month_spots_reservable
-    competitor_limit - (registrations.accepted_count - registrations.newcomer_month_eligible_competitors_count)
+    competitor_limit - (accepted_registrations_count - registrations.newcomer_month_eligible_competitors_count)
   end
 
   def newcomer_month_reserved_spots_remaining
@@ -507,25 +508,27 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    competitor_count = registrations.accepted_and_paid_pending_count
-    competitor_limit_enabled? && competitor_count >= competitor_limit
+    competitor_limit_enabled? && accepted_and_paid_pending_count >= competitor_limit
   end
 
   def registration_full_and_accepted?
-    competitor_count = registrations.accepted_count
-    competitor_limit_enabled? && competitor_count >= competitor_limit
+    competitor_limit_enabled? && accepted_registrations_count >= competitor_limit
+  end
+
+  def accepted_and_paid_pending_count
+    accepted_registrations_count + registrations.pending.with_payments.count
   end
 
   def spots_left
     return nil unless competitor_limit_enabled?
 
-    competitor_limit - registrations.accepted_and_paid_pending_count
+    competitor_limit - accepted_and_paid_pending_count
   end
 
   def auto_accept_threshold_reached?
     return false if auto_accept_disable_threshold.blank?
 
-    auto_accept_disable_threshold.positive? && auto_accept_disable_threshold <= registrations.competing_status_accepted.count
+    auto_accept_disable_threshold.positive? && auto_accept_disable_threshold <= accepted_registrations_count
   end
 
   def number_of_bookmarks
