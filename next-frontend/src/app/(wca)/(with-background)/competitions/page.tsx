@@ -203,23 +203,21 @@ export default function CompetitionsPage() {
 
   return (
     <VStack gap="8" width="full">
-      <ClientOnly>
-        {!session.isPending && !session.data && (
-          <RemovableCard
-            imageUrl="newcomer.png"
-            heading="Why Compete?"
-            descriptionAs="div"
-            description={
-              <Trans
-                t={t}
-                i18nKey="competitions.index.why_compete_description_html"
-              />
-            }
-            buttonText="Learn More"
-            buttonUrl="/faq"
-          />
-        )}
-      </ClientOnly>
+      {!session.isPending && !session.data && (
+        <RemovableCard
+          imageUrl="newcomer.png"
+          heading="Why Compete?"
+          descriptionAs="div"
+          description={
+            <Trans
+              t={t}
+              i18nKey="competitions.index.why_compete_description_html"
+            />
+          }
+          buttonText="Learn More"
+          buttonUrl="/faq"
+        />
+      )}
       <Card.Root size={{ base: "sm", md: "md" }} width="full">
         <Tabs.Root
           variant="subtle"
