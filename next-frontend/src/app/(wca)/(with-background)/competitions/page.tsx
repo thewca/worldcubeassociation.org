@@ -383,10 +383,11 @@ export default function CompetitionsPage() {
               >
                 <Wrap gapX="3" gapY="1" align="center">
                   <Text>{t("competitions.index.registration_key")}</Text>
-                  <Badge size="md" variant="surface">
-                    <CompRegoFullButOpenOrangeIcon />
-                    {t("competitions.index.registration_status.full")}
-                  </Badge>
+                  {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
+                  {/* <Badge size="md" variant="surface"> */}
+                  {/*  <CompRegoFullButOpenOrangeIcon /> */}
+                  {/*  {t("competitions.index.registration_status.full")} */}
+                  {/* </Badge> */}
                   <Badge size="md" variant="surface">
                     <CompRegoNotFullOpenGreenIcon />
                     {t("competitions.index.registration_status.open")}
