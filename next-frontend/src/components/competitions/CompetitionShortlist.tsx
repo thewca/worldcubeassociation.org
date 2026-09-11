@@ -1,4 +1,4 @@
-import { DataList, Text, VStack } from "@chakra-ui/react";
+import { DataList, Text, VStack, Wrap } from "@chakra-ui/react";
 import WcaFlag from "@/components/WcaFlag";
 import CountryMap from "@/components/CountryMap";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
@@ -7,20 +7,58 @@ import RegisterIcon from "@/components/icons/RegisterIcon";
 import React from "react";
 import type { components } from "@/types/openapi";
 import { TFunction } from "i18next";
+import EventIcon from "@/components/EventIcon";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 
-export default function CompetitionShortlist({
+type DataListItem = "location" | "date" | "events" | "spots_left";
+
+function ShortlistItem({
   comp,
   t,
+  item,
 }: {
   comp: CompetitionIndex | CompetitionInfo;
   t: TFunction;
+  item: DataListItem;
 }) {
-  return (
-    <VStack alignItems="start" gap="4">
-      <DataList.Root orientation="horizontal" size="lg" iconLabel>
+  switch (item) {
+    case "events":
+      return (
+        <DataList.Item>
+          <DataList.ItemLabel>Events</DataList.ItemLabel>
+          <DataList.ItemValue gap="2">
+            <Wrap gap="4">
+              {comp.event_ids.map((event_id) => (
+                <EventIcon
+                  key={event_id}
+                  eventId={event_id}
+                  boxSize="6"
+                  color={
+                    event_id === comp.main_event_id && event_id !== "333"
+                      ? "green.solid"
+                      : "currentColor"
+                  }
+                />
+              ))}
+            </Wrap>
+          </DataList.ItemValue>
+        </DataList.Item>
+      );
+    case "date":
+      return (
+        <DataList.Item>
+          <DataList.ItemLabel>
+            <CompRegoCloseDateIcon size="2xl" />
+          </DataList.ItemLabel>
+          <DataList.ItemValue>
+            {formatDateRange(comp.start_date, comp.end_date)}
+          </DataList.ItemValue>
+        </DataList.Item>
+      );
+    case "location":
+      return (
         <DataList.Item>
           <DataList.ItemLabel>
             <WcaFlag code={comp.country_iso2} size="xl" />
@@ -30,15 +68,10 @@ export default function CompetitionShortlist({
             <Text>{comp.city}</Text>
           </DataList.ItemValue>
         </DataList.Item>
-        <DataList.Item>
-          <DataList.ItemLabel>
-            <CompRegoCloseDateIcon size="2xl" />
-          </DataList.ItemLabel>
-          <DataList.ItemValue>
-            {formatDateRange(comp.start_date, comp.end_date)}
-          </DataList.ItemValue>
-        </DataList.Item>
-        {"spots_left" in comp && comp.spots_left != null && (
+      );
+    case "spots_left": {
+      if ("spots_left" in comp && comp.spots_left != null) {
+        return (
           <DataList.Item>
             <DataList.ItemLabel>
               <RegisterIcon />
@@ -49,7 +82,29 @@ export default function CompetitionShortlist({
               })}
             </DataList.ItemValue>
           </DataList.Item>
-        )}
+        );
+      }
+
+      return null;
+    }
+  }
+}
+
+export default function CompetitionShortlist({
+  comp,
+  t,
+  items,
+}: {
+  comp: CompetitionIndex | CompetitionInfo;
+  t: TFunction;
+  items: DataListItem[];
+}) {
+  return (
+    <VStack alignItems="start" gap="4">
+      <DataList.Root orientation="horizontal" size="lg" iconLabel>
+        {items.map((dataItem) => (
+          <ShortlistItem key={dataItem} comp={comp} t={t} item={dataItem} />
+        ))}
       </DataList.Root>
     </VStack>
   );

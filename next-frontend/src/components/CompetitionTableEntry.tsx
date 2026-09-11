@@ -123,7 +123,11 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
                 <Heading size="3xl">{comp.name}</Heading>
               </Drawer.Header>
               <Drawer.Body>
-                <CompetitionShortlist comp={comp} t={t} />
+                <CompetitionShortlist
+                  comp={comp}
+                  t={t}
+                  items={["location", "date", "events"]}
+                />
               </Drawer.Body>
               <Drawer.Footer justifyContent="space-between" width="full">
                 {/* TODO: Only Show register button/link if registration is not full */}

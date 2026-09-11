@@ -297,7 +297,11 @@ const FeaturedCompetition = async ({
         <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
           {competition.name}
         </Card.Title>
-        <CompetitionShortlist comp={competition} t={t} />
+        <CompetitionShortlist
+          comp={competition}
+          t={t}
+          items={["location", "date", "spots_left"]}
+        />
       </Card.Body>
     </Card.Root>
   );
