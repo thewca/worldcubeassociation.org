@@ -36,7 +36,7 @@ import MapIcon from "@/components/icons/MapIcon";
 import ListIcon from "@/components/icons/ListIcon";
 import CompetitionTableRow from "@/components/CompetitionTableRow";
 import RemovableCard from "@/components/RemovableCard";
-import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
+// import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
