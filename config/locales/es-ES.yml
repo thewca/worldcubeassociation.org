@@ -389,6 +389,8 @@ es-ES:
       other: '%{count} días'
     #original_hash: 51ef7d4
     search_site: Buscar en la página
+    #original_hash: d9c883a
+    back_to_top: Volver arriba
     #original_hash: d7decf1
     filter: Filtrar
     #original_hash: f6fdbe4
@@ -3977,8 +3979,10 @@ es-ES:
             competición. Tiene que ser una URL http(s) válida.
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: cc7d557
-          scoretaking_software: 'Selecciona «%{choice_ilr}» si quieres utilizar Rondas Duales'
+          #original_hash: 08df794
+          scoretaking_software: >-
+            Selecciona «%{choice_ilr}» o una herramienta externa si quieres
+            utilizar Rondas Duales
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -5498,8 +5502,7 @@ es-ES:
           '4': >-
             Visita las <a target='_blank'
             href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>Manual
-            para Organizadores de Competiciones de la WCA</a> para más
-            información.
+            del Organizador de Competiciones de la WCA</a> para más información.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -5803,7 +5806,7 @@ es-ES:
     #original_hash: 5ca0558
     certificates: Plantillas de certificados del WCT
     #original_hash: 16d7bab
-    orga_handbook: Manual para Organizadores
+    orga_handbook: Manual del Organizador
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados de la WCA
@@ -6241,13 +6244,13 @@ es-ES:
         múltiples preguntas frecuentes sobre el Reglamento de la WCA.
     panel4:
       #original_hash: d0e369e
-      title: Manual para Organizadores
+      title: Manual del Organizador
       #original_hash: d619471
       content1_html: >-
         Si estás interesado en organizar una competición o ya has planeado
-        organizar una, por favor, lee nuestras <a
+        organizar una, por favor, lee nuestro <a
         href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Manual
-        para Organizadores</a>.
+        del Organizador</a>.
       #original_hash: 5016669
       content2_html: >-
         Este documento contiene información importante y debería ser leído por
@@ -6663,6 +6666,10 @@ es-ES:
       automatically_position_fixed_info: >-
         [%{round_id}] Se ha corregido la posición de %{person_name} de %{pos} a
         %{expected_pos} automáticamente.
+      #original_hash: fae77ce
+      automatically_global_position_fixed_info: >-
+        [%{round_id}] Se ha corregido automáticamente la posición general de
+        %{person_name}, que ha pasado de %{pos} a %{expected_pos}.
       #original_hash: e895bf5
       mbf_result_over_time_limit_warning: >-
         [%{round_id}] El resultado «%{result}» de %{person_name} supera el
@@ -6725,6 +6732,10 @@ es-ES:
       wrong_position_in_results_error: >-
         %{round_id}] %{person_name} está en la posición incorrecta: se esperó
         %{expected_pos} pero se encontró %{pos}.
+      #original_hash: 678c05b
+      wrong_global_position_in_results_error: >-
+        [%{round_id}] %{person_name} está una posición general incorrecta: se
+        esperaba %{expected_pos}, pero se ha obtenido %{pos}.
     rounds:
       #original_hash: 517fd54
       too_many_qualified_warning: >-
