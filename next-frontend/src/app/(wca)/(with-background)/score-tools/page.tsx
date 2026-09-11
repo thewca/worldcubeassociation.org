@@ -7,7 +7,6 @@ import {
   Heading,
   HoverCard,
   IconButton,
-  Image as ChakraImage,
   Link,
   Portal,
   Text,
@@ -17,9 +16,9 @@ import { getT } from "@/lib/i18n/get18n";
 import type { Tool } from "@/types/payload";
 import ExternalLinkIcon from "@/components/icons/ExternalLinkIcon";
 import GithubIcon from "@/components/icons/GithubIcon";
+import WcaLogoIcon from "@/components/icons/WcaLogoIcon";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import { CgWebsite } from "react-icons/cg";
-import Image from "next/image";
 import _ from "lodash";
 import { Metadata } from "next";
 
@@ -85,16 +84,9 @@ function ToolCard({ tool }: { tool: Tool }) {
           {tool.name} <Badge>{tool.author}</Badge>
           {tool.isOfficial && (
             <HoverCard.Root openDelay={0} closeDelay={500}>
-              <HoverCard.Trigger>
-                <IconButton asChild variant="ghost">
-                  <ChakraImage asChild maxW={10}>
-                    <Image
-                      src="/logo.png"
-                      alt="WCA Logo"
-                      height={50}
-                      width={50}
-                    />
-                  </ChakraImage>
+              <HoverCard.Trigger asChild>
+                <IconButton variant="ghost" aria-label="WCA Logo">
+                  <WcaLogoIcon boxSize={10} color="fg" />
                 </IconButton>
               </HoverCard.Trigger>
               <Portal>
