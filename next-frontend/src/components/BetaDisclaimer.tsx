@@ -36,16 +36,16 @@ export default function BetaDisclaimer() {
             </Dialog.Header>
             <Dialog.Body display="flex" alignItems="center">
               <Text textStyle="s2">
-                You are viewing the beta version of the redesigned WCA Website.
-                This is intended to give the community a sneak peek at the
-                website, for feedback and discussion. <br /> You should expect
-                to find glitches and issues when browsing the website - when you
-                do, please report them to{" "}
+                You are viewing the English-only beta version of the redesigned
+                WCA Website. This is intended to give the community a sneak peek
+                at the website, for feedback and discussion. <br /> You should
+                expect to find glitches and issues when browsing the website -
+                when you do, please report them via{" "}
                 <Link
-                  href="mailto:software@worldcubeassociation.org"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfBIy3E8cpqa6QTg9SG5r6ELyV1FhNMF89fwxPrr1aafgw2Ig/viewform"
                   textStyle="s2"
                 >
-                  software@worldcubeassociation.org
+                  the feedback form
                 </Link>
                 .
               </Text>
