@@ -34,7 +34,7 @@ import {
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import ListIcon from "@/components/icons/ListIcon";
-import CompetitionTableEntry from "@/components/CompetitionTableEntry";
+import CompetitionTableRow from "@/components/CompetitionTableRow";
 import RemovableCard from "@/components/RemovableCard";
 import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
@@ -61,7 +61,6 @@ import { useOnInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
-import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
@@ -407,18 +406,28 @@ export default function CompetitionsPage() {
                   })}
                 </Text>
               </Stack>
-              {inProgressComps.length > 0 && (
-                <>
-                  <Heading size="md" paddingY="2">
-                    {t("competitions.index.titles.in_progress")}
-                  </Heading>
-                  <CompetitionTable competitions={inProgressComps} />
-                  <Heading size="md" paddingY="2">
-                    {t("competitions.index.titles.upcoming")}
-                  </Heading>
-                </>
-              )}
-              <CompetitionTable competitions={upcomingComps} />
+              <Table.ScrollArea>
+                <Table.Root size="xs" variant="competitions" borderWidth="2px">
+                  <Table.Body>
+                    {inProgressComps.length > 0 && (
+                      <>
+                        <TableHeaderRow>
+                          {t("competitions.index.titles.in_progress")}
+                        </TableHeaderRow>
+                        {inProgressComps.map((comp) => (
+                          <CompetitionTableRow comp={comp} key={comp.id} />
+                        ))}
+                        <TableHeaderRow>
+                          {t("competitions.index.titles.upcoming")}
+                        </TableHeaderRow>
+                      </>
+                    )}
+                    {upcomingComps.map((comp) => (
+                      <CompetitionTableRow comp={comp} key={comp.id} />
+                    ))}
+                  </Table.Body>
+                </Table.Root>
+              </Table.ScrollArea>
               <ListViewFooter
                 isLoading={competitionsIsFetching}
                 hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -702,21 +711,21 @@ function AdvancedFilters({
   );
 }
 
-function CompetitionTable({
-  competitions,
+function TableHeaderRow({
+  children,
+  colSpan = 6,
 }: {
-  competitions: components["schemas"]["CompetitionIndex"][];
+  children: ReactNode;
+  colSpan?: number;
 }) {
   return (
-    <Table.ScrollArea>
-      <Table.Root size="xs" variant="competitions" borderWidth="2px">
-        <Table.Body>
-          {competitions.map((comp) => (
-            <CompetitionTableEntry comp={comp} key={comp.id} />
-          ))}
-        </Table.Body>
-      </Table.Root>
-    </Table.ScrollArea>
+    <Table.Row cursor="default">
+      <Table.Cell colSpan={colSpan}>
+        <Heading textStyle="s4" textAlign="center">
+          {children}
+        </Heading>
+      </Table.Cell>
+    </Table.Row>
   );
 }
 
