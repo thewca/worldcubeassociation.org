@@ -64,7 +64,7 @@ const registrationStatusIcons: Record<string, JSX.Element> = {
   full: <CompRegoFullButOpenOrangeIcon />,
 };
 
-const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
+const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   const regoStatus = getRegistrationStatus(comp);
 
@@ -182,4 +182,4 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
   );
 };
 
-export default CompetitionTableEntry;
+export default CompetitionTableRow;

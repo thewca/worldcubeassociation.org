@@ -5,7 +5,9 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   ClientOnly,
+  Collapsible,
   CloseButton,
   DatePicker,
   Field,
@@ -16,6 +18,7 @@ import {
   IconButton,
   Input,
   InputGroup,
+  NativeSelect,
   NumberInput,
   parseDate,
   Portal,
@@ -31,7 +34,7 @@ import {
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import ListIcon from "@/components/icons/ListIcon";
-import CompetitionTableEntry from "@/components/CompetitionTableEntry";
+import CompetitionTableRow from "@/components/CompetitionTableRow";
 import RemovableCard from "@/components/RemovableCard";
 import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
@@ -41,10 +44,12 @@ import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { useSession } from "@/auth.client";
-import { ReactNode, useReducer, useState } from "react";
+import { Dispatch, ReactNode, useReducer, useState } from "react";
 import {
   competitionFilterReducer,
   createFilterState,
+  type CompetitionFilterAction,
+  type CompetitionFilterState,
 } from "@/lib/wca/competitions/filterUtils";
 import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
@@ -56,7 +61,6 @@ import { useOnInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
-import { components } from "@/types/openapi";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
@@ -64,6 +68,7 @@ import TabMap from "@/components/competitions/TabMap";
 import { LuMapPin, LuSettings2 } from "react-icons/lu";
 import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
 import { isInProgress } from "@/lib/wca/competitions/statusUtils";
+import { nonFutureCompetitionYears } from "@/lib/wca/data/competitions";
 import _ from "lodash";
 
 const DEBOUNCE_MS = 600;
@@ -246,119 +251,128 @@ export default function CompetitionsPage() {
             </Stack>
           </Card.Header>
           <Card.Body asChild>
-            <VStack gap="3" borderBottom="black">
-              <FormEventSelector
-                wrap
-                selectedEvents={filterState.selectedEvents}
-                title={t("competitions.index.event")}
-                onEventClick={(eventId) =>
-                  dispatchFilter({ type: "toggle_event", eventId })
-                }
-                onClearClick={() => dispatchFilter({ type: "clear_events" })}
-                onAllClick={() => dispatchFilter({ type: "select_all_events" })}
-              />
-              <SimpleGrid gap="2" width="full" columns={{ base: 1, md: 2 }}>
-                <RegionSelector
-                  t={t}
-                  label={t("activerecord.attributes.user.region")}
-                  region={filterState.region}
-                  onRegionChange={(region) =>
-                    dispatchFilter({
-                      type: "set_region",
-                      region,
-                    })
+            <Collapsible.Root asChild>
+              <VStack gap="3" borderBottom="black">
+                <FormEventSelector
+                  wrap
+                  selectedEvents={filterState.selectedEvents}
+                  title={t("competitions.index.event")}
+                  onEventClick={(eventId) =>
+                    dispatchFilter({ type: "toggle_event", eventId })
+                  }
+                  onClearClick={() => dispatchFilter({ type: "clear_events" })}
+                  onAllClick={() =>
+                    dispatchFilter({ type: "select_all_events" })
                   }
                 />
-                <Field.Root>
-                  <Field.Label>{t("competitions.index.name")}</Field.Label>
-                  <InputGroup
-                    endElement={
-                      <CloseButton
-                        size="xs"
-                        onClick={() => {
+                <SimpleGrid gap="2" width="full" columns={{ base: 1, md: 2 }}>
+                  <RegionSelector
+                    t={t}
+                    label={t("activerecord.attributes.user.region")}
+                    region={filterState.region}
+                    onRegionChange={(region) =>
+                      dispatchFilter({
+                        type: "set_region",
+                        region,
+                      })
+                    }
+                  />
+                  <Field.Root>
+                    <Field.Label>{t("competitions.index.name")}</Field.Label>
+                    <InputGroup
+                      endElement={
+                        <CloseButton
+                          size="xs"
+                          onClick={() => {
+                            dispatchFilter({
+                              type: "set_search",
+                              search: "",
+                            });
+                          }}
+                        />
+                      }
+                    >
+                      <Input
+                        placeholder={t("competitions.index.search")}
+                        value={filterState.search}
+                        onChange={(e) => {
                           dispatchFilter({
                             type: "set_search",
-                            search: "",
+                            search: e.target.value,
                           });
                         }}
                       />
-                    }
-                  >
-                    <Input
-                      placeholder={t("competitions.index.search")}
-                      value={filterState.search}
-                      onChange={(e) => {
-                        dispatchFilter({
-                          type: "set_search",
-                          search: e.target.value,
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </Field.Root>
-              </SimpleGrid>
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                gap="4"
-                width="full"
-                justify="space-between"
-                align={{ base: "stretch", lg: "flex-start" }}
-              >
-                <LocationFilter
-                  location={location}
-                  geolocationSupported={geolocationSupported}
-                  onLocateClick={requestGeolocationPermission}
-                  radius={radius}
-                  onRadiusChange={setRadius}
-                  distanceUnit={distanceUnit}
-                  onDistanceUnitChange={changeDistanceUnit}
-                  t={t}
-                />
+                    </InputGroup>
+                  </Field.Root>
+                </SimpleGrid>
                 <Stack
-                  direction={{ base: "column", md: "row" }}
-                  gap="2"
-                  width={{ base: "full", lg: "auto" }}
+                  direction={{ base: "column", lg: "row" }}
+                  gap="4"
+                  width="full"
+                  justify="space-between"
+                  align={{ base: "stretch", lg: "flex-start" }}
                 >
-                  <DateFilter
-                    label={t("competitions.index.from_date")}
-                    icon={<CompRegoOpenDateIcon />}
-                    isoDate={filterState.customStartDate}
-                    max={filterState.customEndDate}
-                    onDateChange={(customStartDate) =>
-                      dispatchFilter({
-                        type: "set_custom_start_date",
-                        customStartDate,
-                      })
-                    }
+                  <LocationFilter
+                    location={location}
+                    geolocationSupported={geolocationSupported}
+                    onLocateClick={requestGeolocationPermission}
+                    radius={radius}
+                    onRadiusChange={setRadius}
+                    distanceUnit={distanceUnit}
+                    onDistanceUnitChange={changeDistanceUnit}
+                    t={t}
                   />
-                  <DateFilter
-                    label={t("competitions.index.to_date")}
-                    icon={<CompRegoCloseDateIcon />}
-                    isoDate={filterState.customEndDate}
-                    min={filterState.customStartDate}
-                    onDateChange={(customEndDate) =>
-                      dispatchFilter({
-                        type: "set_custom_end_date",
-                        customEndDate,
-                      })
-                    }
-                  />
-                </Stack>
-                {/* TODO: add "accordion" functionality to this button */}
-                <BetaDisabledTooltip>
-                  <Button
-                    variant="outline"
-                    disabled
+                  <Stack
+                    direction={{ base: "column", md: "row" }}
+                    gap="2"
                     width={{ base: "full", lg: "auto" }}
                   >
-                    <Icon>
-                      <LuSettings2 />
-                    </Icon>{" "}
-                    {t("competitions.index.advanced_filters")}
-                  </Button>
-                </BetaDisabledTooltip>
-              </Stack>
-            </VStack>
+                    <DateFilter
+                      label={t("competitions.index.from_date")}
+                      icon={<CompRegoOpenDateIcon />}
+                      isoDate={filterState.customStartDate}
+                      max={filterState.customEndDate}
+                      onDateChange={(customStartDate) =>
+                        dispatchFilter({
+                          type: "set_custom_start_date",
+                          customStartDate,
+                        })
+                      }
+                    />
+                    <DateFilter
+                      label={t("competitions.index.to_date")}
+                      icon={<CompRegoCloseDateIcon />}
+                      isoDate={filterState.customEndDate}
+                      min={filterState.customStartDate}
+                      onDateChange={(customEndDate) =>
+                        dispatchFilter({
+                          type: "set_custom_end_date",
+                          customEndDate,
+                        })
+                      }
+                    />
+                  </Stack>
+                  <Collapsible.Trigger asChild>
+                    <Button
+                      variant="outline"
+                      width={{ base: "full", lg: "auto" }}
+                    >
+                      <Icon>
+                        <LuSettings2 />
+                      </Icon>{" "}
+                      {t("competitions.index.advanced_filters")}
+                    </Button>
+                  </Collapsible.Trigger>
+                </Stack>
+                <Collapsible.Content width="full">
+                  <AdvancedFilters
+                    filterState={filterState}
+                    dispatchFilter={dispatchFilter}
+                    t={t}
+                  />
+                </Collapsible.Content>
+              </VStack>
+            </Collapsible.Root>
           </Card.Body>
           <Card.Body>
             <Tabs.Content value="list">
@@ -392,18 +406,28 @@ export default function CompetitionsPage() {
                   })}
                 </Text>
               </Stack>
-              {inProgressComps.length > 0 && (
-                <>
-                  <Heading size="md" paddingY="2">
-                    {t("competitions.index.titles.in_progress")}
-                  </Heading>
-                  <CompetitionTable competitions={inProgressComps} />
-                  <Heading size="md" paddingY="2">
-                    {t("competitions.index.titles.upcoming")}
-                  </Heading>
-                </>
-              )}
-              <CompetitionTable competitions={upcomingComps} />
+              <Table.ScrollArea>
+                <Table.Root size="xs" variant="competitions" borderWidth="2px">
+                  <Table.Body>
+                    {inProgressComps.length > 0 && (
+                      <>
+                        <TableHeaderRow>
+                          {t("competitions.index.titles.in_progress")}
+                        </TableHeaderRow>
+                        {inProgressComps.map((comp) => (
+                          <CompetitionTableRow comp={comp} key={comp.id} />
+                        ))}
+                        <TableHeaderRow>
+                          {t("competitions.index.titles.upcoming")}
+                        </TableHeaderRow>
+                      </>
+                    )}
+                    {upcomingComps.map((comp) => (
+                      <CompetitionTableRow comp={comp} key={comp.id} />
+                    ))}
+                  </Table.Body>
+                </Table.Root>
+              </Table.ScrollArea>
               <ListViewFooter
                 isLoading={competitionsIsFetching}
                 hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -578,21 +602,130 @@ function DateFilter({
   );
 }
 
-function CompetitionTable({
-  competitions,
+function AdvancedFilters({
+  filterState,
+  dispatchFilter,
+  t,
 }: {
-  competitions: components["schemas"]["CompetitionIndex"][];
+  filterState: CompetitionFilterState;
+  dispatchFilter: Dispatch<CompetitionFilterAction>;
+  t: TFunction;
+}) {
+  const timeOrderItems = [
+    { value: "present", label: t("competitions.index.present") },
+    {
+      value: "recent",
+      label: t("competitions.index.recent"),
+    },
+    { value: "past", label: t("competitions.index.past") },
+    {
+      value: "by_announcement",
+      label: t("competitions.index.by_announcement"),
+    },
+  ];
+
+  return (
+    <Stack
+      direction={{ base: "column", lg: "row" }}
+      gap="4"
+      width="full"
+      align={{ base: "stretch", lg: "flex-end" }}
+    >
+      <Field.Root width="auto">
+        <Field.Label>{t("competitions.index.state")}</Field.Label>
+        <SegmentGroup.Root
+          hideBelow="md"
+          value={filterState.timeOrder}
+          onValueChange={(e) =>
+            dispatchFilter({ type: "set_time_order", timeOrder: e.value! })
+          }
+        >
+          <SegmentGroup.Indicator />
+          <SegmentGroup.Items items={timeOrderItems} />
+        </SegmentGroup.Root>
+        <NativeSelect.Root hideFrom="md">
+          <NativeSelect.Field
+            value={filterState.timeOrder}
+            onChange={(e) =>
+              dispatchFilter({
+                type: "set_time_order",
+                timeOrder: e.target.value,
+              })
+            }
+          >
+            {timeOrderItems.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </NativeSelect.Field>
+          <NativeSelect.Indicator />
+        </NativeSelect.Root>
+      </Field.Root>
+
+      {filterState.timeOrder === "past" && (
+        <Field.Root width={{ base: "full", lg: "3xs" }}>
+          <Field.Label>{t("media.media_table.year")}</Field.Label>
+          <NativeSelect.Root>
+            <NativeSelect.Field
+              value={filterState.selectedYear.toString()}
+              onChange={(e) =>
+                dispatchFilter({
+                  type: "set_selected_year",
+                  selectedYear: Number(e.target.value) || "all_years",
+                })
+              }
+            >
+              <option value="all_years">
+                {t("competitions.index.all_years")}
+              </option>
+              {nonFutureCompetitionYears.toReversed().map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </NativeSelect.Field>
+            <NativeSelect.Indicator />
+          </NativeSelect.Root>
+        </Field.Root>
+      )}
+
+      <Checkbox.Root
+        width="auto"
+        minHeight="10"
+        checked={filterState.shouldIncludeCancelled}
+        onCheckedChange={(e) =>
+          dispatchFilter({
+            type: "set_should_include_cancelled",
+            shouldIncludeCancelled: Boolean(e.checked),
+          })
+        }
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>
+          {t("competitions.index.show_cancelled")}
+        </Checkbox.Label>
+      </Checkbox.Root>
+    </Stack>
+  );
+}
+
+function TableHeaderRow({
+  children,
+  colSpan = 6,
+}: {
+  children: ReactNode;
+  colSpan?: number;
 }) {
   return (
-    <Table.ScrollArea>
-      <Table.Root size="xs" variant="competitions" borderWidth="2px">
-        <Table.Body>
-          {competitions.map((comp) => (
-            <CompetitionTableEntry comp={comp} key={comp.id} />
-          ))}
-        </Table.Body>
-      </Table.Root>
-    </Table.ScrollArea>
+    <Table.Row cursor="default">
+      <Table.Cell colSpan={colSpan}>
+        <Heading textStyle="s4" textAlign="center">
+          {children}
+        </Heading>
+      </Table.Cell>
+    </Table.Row>
   );
 }
 
