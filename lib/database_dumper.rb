@@ -62,6 +62,7 @@ module DatabaseDumper
           competitor_limit_enabled
           competitor_limit
           competitor_limit_reason
+          accepted_registrations_count
           guests_enabled
           guests_per_registration_limit
           events_per_registration_limit
