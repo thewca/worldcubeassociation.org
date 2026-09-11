@@ -95,6 +95,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
           size="2xs"
           variant="ghost"
           color="currentColor"
+          marginEnd="5"
           onClick={() => setOpen(true)}
         >
           <LuInfo />
