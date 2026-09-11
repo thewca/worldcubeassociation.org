@@ -10,6 +10,7 @@ import {
   Portal,
   Heading,
   Float,
+  IconButton,
 } from "@chakra-ui/react";
 
 import WcaFlag from "@/components/WcaFlag";
@@ -29,6 +30,7 @@ import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
+import { LuInfo } from "react-icons/lu";
 
 // Raw competition type from WCA API
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
@@ -68,7 +70,7 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
 
   const { t } = useT();
   return (
-    <Table.Row onClick={() => setOpen(true)} key={comp.id}>
+    <Table.Row key={comp.id}>
       <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
 
       <Table.Cell>
@@ -86,6 +88,17 @@ const CompetitionTableEntry: React.FC<Props> = ({ comp }) => {
             {comp.name}
           </Link>
         </ChakraLink>
+      </Table.Cell>
+
+      <Table.Cell>
+        <IconButton
+          size="2xs"
+          variant="ghost"
+          color="currentColor"
+          onClick={() => setOpen(true)}
+        >
+          <LuInfo />
+        </IconButton>
       </Table.Cell>
 
       <Table.Cell width="100%" hideBelow="md">
