@@ -1722,7 +1722,7 @@ en:
       registration_status:
         full: "Full"
         open: "Open"
-        not_open: "Not Open"
+        not_open: "Not yet Open"
         closed: "Closed"
       currently_displaying:
         one: "Currently Displaying: %{count} competition"

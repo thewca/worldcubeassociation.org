@@ -36,7 +36,7 @@ import MapIcon from "@/components/icons/MapIcon";
 import ListIcon from "@/components/icons/ListIcon";
 import CompetitionTableRow from "@/components/CompetitionTableRow";
 import RemovableCard from "@/components/RemovableCard";
-import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
+// import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
@@ -383,10 +383,11 @@ export default function CompetitionsPage() {
               >
                 <Wrap gapX="3" gapY="1" align="center">
                   <Text>{t("competitions.index.registration_key")}</Text>
-                  <Badge size="md" variant="surface">
-                    <CompRegoFullButOpenOrangeIcon />
-                    {t("competitions.index.registration_status.full")}
-                  </Badge>
+                  {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
+                  {/* <Badge size="md" variant="surface"> */}
+                  {/*  <CompRegoFullButOpenOrangeIcon /> */}
+                  {/*  {t("competitions.index.registration_status.full")} */}
+                  {/* </Badge> */}
                   <Badge size="md" variant="surface">
                     <CompRegoNotFullOpenGreenIcon />
                     {t("competitions.index.registration_status.open")}
