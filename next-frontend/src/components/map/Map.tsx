@@ -9,6 +9,7 @@ import { dateRange, hasPassedEndOfDay } from "@/lib/wca/dates";
 import MapContainer, { Layer, Popup, Source } from "react-map-gl/maplibre";
 import type { MapEvent, MapLayerMouseEvent } from "react-map-gl/maplibre";
 import type { FeatureCollection, Point } from "geojson";
+import { setWorkerUrl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useState } from "react";
 
@@ -30,6 +31,8 @@ interface MapProps {
 
 // Limit number of markers on map, especially for "All Past Competitions"
 export const MAP_DISPLAY_LIMIT = 500;
+
+setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
 
 const TILE_STYLE = "https://tiles.openfreemap.org/styles/bright";
 
