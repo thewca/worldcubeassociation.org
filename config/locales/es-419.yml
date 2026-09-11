@@ -389,6 +389,8 @@ es-419:
       other: '%{count} días'
     #original_hash: 51ef7d4
     search_site: Buscar en la página
+    #original_hash: d9c883a
+    back_to_top: Volver arriba
     #original_hash: d7decf1
     filter: Filtrar
     #original_hash: f6fdbe4
@@ -6573,6 +6575,10 @@ es-419:
       automatically_position_fixed_info: >-
         [%{round_id}] Se corrigió la posición de %{person_name} de %{pos} a
         %{expected_pos} automáticamente.
+      #original_hash: fae77ce
+      automatically_global_position_fixed_info: >-
+        [%{round_id}] Se corrigió automáticamente la posición de %{person_name}
+        de %{pos} a %{expected_pos}.
       #original_hash: e895bf5
       mbf_result_over_time_limit_warning: >-
         [%{round_id}] El resultado "%{result}" de %{person_name} supera el
@@ -6634,6 +6640,10 @@ es-419:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} está en la posición incorrecta: se esperó
         %{expected_pos} pero se encontró %{pos}.
+      #original_hash: 678c05b
+      wrong_global_position_in_results_error: >-
+        [%{round_id}] %{person_name} está en una posición incorrecta: se esperó
+        %{expected_pos} pero se halló %{pos}.
     rounds:
       #original_hash: 517fd54
       too_many_qualified_warning: >-
