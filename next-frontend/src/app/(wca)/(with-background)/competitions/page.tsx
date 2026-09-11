@@ -713,7 +713,7 @@ function AdvancedFilters({
 
 function TableHeaderRow({
   children,
-  colSpan = 6,
+  colSpan = 7,
 }: {
   children: ReactNode;
   colSpan?: number;
