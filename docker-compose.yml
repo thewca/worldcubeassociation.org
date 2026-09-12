@@ -127,6 +127,8 @@ services:
       MONGO_INITDB_DATABASE: payload
     ports:
       - "27017:27017"
+    volumes:
+      - payload_db_volume:/data/db
     networks:
       - wca-main
     healthcheck:
@@ -293,6 +295,8 @@ volumes:
   next_yarn_volume:
     driver: local
   pdf_fonts_volume:
+    driver: local
+  payload_db_volume:
     driver: local
 
 networks:
