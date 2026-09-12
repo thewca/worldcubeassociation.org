@@ -51,10 +51,10 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
       return render json: { status: "Values cannot be 0, please omit them instead", registration_id: registration_id }, status: :unprocessable_content if results.any? { it[:value].to_i.zero? }
 
-      { live_result: live_result, results: results }
+      { live_result_id: live_result.id, results: results }
     end
 
-    BatchUpdateLiveResultJob.perform_later(round, job_entries, authenticated_user.id)
+    BatchUpdateLiveResultJob.perform_later(round.id, job_entries, authenticated_user.id)
 
     render json: { status: "ok" }
   end
