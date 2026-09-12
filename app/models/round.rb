@@ -78,6 +78,7 @@ class Round < ApplicationRecord
 
   # The event dictates which formats are even allowed in the first place, hence the prefix
   delegate :formats, :format_ids, to: :event, prefix: :allowed
+  delegate :wcif_ids, to: :linked_round, prefix: true, allow_nil: true
   validates :format, inclusion: { in: :allowed_formats, message: ->(round, _args) { "'#{round.format_id}' is not allowed for '#{round.event_id}'" } }
 
   validates :advancement_condition, presence: { if: :advancement_condition_changed?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
@@ -909,6 +910,37 @@ class Round < ApplicationRecord
         "advancementCondition" => advancement_condition&.to_wcif,
       )
     end
+  end
+
+  RANKING_MODES = {
+    within_round: "round",
+    linked_round: "linked_round",
+    head_to_head: "head_to_head",
+  }.freeze
+
+  # What decides a competitor's final position in this round. `pos` always ranks them within the
+  # round itself; in a Dual Round `global_pos` additionally spans every round of the link, and in
+  # a Head-to-Head round both come from match outcomes rather than from comparing times.
+  def ranking_mode
+    return RANKING_MODES[:head_to_head] if is_h2h_mock?
+    return RANKING_MODES[:linked_round] if linked_round_id?
+
+    RANKING_MODES[:within_round]
+  end
+
+  V1_RESULTS_SERIALIZE_OPTIONS = {
+    only: %w[format_id],
+    methods: %w[wcif_id event_id round_type_id ranking_mode linked_round_wcif_ids],
+  }.freeze
+
+  def to_v1_results_json
+    # The results are sorted here rather than by the association so that the ordering is not
+    # something every caller of `round.results` pays for.
+    sorted_results = results.sort_by { [it.pos, it.person_name] }
+
+    self.as_json(V1_RESULTS_SERIALIZE_OPTIONS)
+        .merge("results" => sorted_results.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS))
+        .compact
   end
 
   def to_live_results_json(only_podiums: false)

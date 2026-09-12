@@ -374,6 +374,9 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/records' => 'persons#records', as: :person_records
 
       resources :competitions, only: [] do
+        get '/results' => 'competitions#results', as: :results
+        get '/podiums' => 'competitions#podiums', as: :podiums
+
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
