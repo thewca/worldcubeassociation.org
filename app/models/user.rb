@@ -1012,6 +1012,17 @@ class User < ApplicationRecord
     end
   end
 
+  # Whether a private markdown image embedded in this record may be served to
+  # this user. Only records with restricted markdown need a rule; everything else
+  # is world-readable, so an image reachable through it is too.
+  def can_view_markdown_image_owner?(attachable)
+    case attachable
+    when DelegateReport then can_view_delegate_report?(attachable)
+    when Incident then can_view_incident_private_sections?(attachable)
+    else true
+    end
+  end
+
   def can_view_delegate_report?(delegate_report)
     if delegate_report.posted?
       can_view_delegate_matters?

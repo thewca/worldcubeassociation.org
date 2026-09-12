@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DelegateReport < ApplicationRecord
+  include HasMarkdownImages
+
   REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
   # Any potentially available section, regardless of versioning.
   #   Use with care, some sections may not be available for some versions!
@@ -12,6 +14,8 @@ class DelegateReport < ApplicationRecord
     incidents
     remarks
   ].freeze
+
+  MARKDOWN_IMAGE_COLUMNS = AVAILABLE_SECTIONS
 
   belongs_to :competition
   belongs_to :posted_by_user, class_name: "User", optional: true
