@@ -336,8 +336,13 @@ class Round < ApplicationRecord
     SQL
   end
 
-  def to_live_state
-    live_results.includes(:live_attempts).map(&:to_live_state)
+  # The results are deliberately re-`includes`d even when the caller has already loaded
+  # them: DiffHelper diffs this before and after a mutation, so the second call has to go
+  # back to the database to see it. Read-only callers that preloaded the attempts
+  # themselves can skip the extra queries with `reload: false`.
+  def to_live_state(reload: true)
+    results = reload ? live_results.includes(:live_attempts) : live_results
+    results.map(&:to_live_state)
   end
 
   def completed_competitors
@@ -911,7 +916,7 @@ class Round < ApplicationRecord
     end
   end
 
-  def to_live_results_json(only_podiums: false)
+  def to_live_results_json(only_podiums: false, state_hash: nil)
     # For podiums we need the combined competitor set of the whole linked round
     #   (live_podium spans every linked round). For regular round views we only
     #   want this round's own competitors; the frontend merges the linked rounds
@@ -922,7 +927,7 @@ class Round < ApplicationRecord
       "round_id" => id,
       "competitors" => competitors.includes(:user).map(&:to_live_json),
       "results" => only_podiums ? live_podium : live_results,
-      "state_hash" => Live::DiffHelper.state_hash(to_live_state),
+      "state_hash" => state_hash || Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
       "completed_competitors" => completed_competitors,
     }
