@@ -353,7 +353,7 @@
     "id": "51",
     "sanity_check_category_id": "13",
     "topic": "Banned competitors registered for upcoming competitions during their ban period",
-    "comments": null,
+    "comments": "Covers both accepted and waiting list registrations.",
     "query_file": "banned_competitor_registered.sql"
   },
   {
