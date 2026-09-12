@@ -110,6 +110,26 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
+      name = "S3_UPLOADS_PUBLIC_BUCKET"
+      value = aws_s3_bucket.uploads_public.id
+    },
+    {
+      name = "S3_UPLOADS_PRIVATE_BUCKET"
+      value = aws_s3_bucket.uploads_private.id
+    },
+    {
+      name = "S3_UPLOADS_ASSET_HOST"
+      value = "https://${local.uploads_public_domain}"
+    },
+    {
+      name = "UPLOADS_PUBLIC_STORAGE"
+      value = "s3_uploads_public"
+    },
+    {
+      name = "UPLOADS_PRIVATE_STORAGE"
+      value = "s3_uploads_private"
+    },
+    {
       name = "CDN_EXPORTS_DISTRIBUTION_ID"
       value = "E1752JAESQHVEE"
     },
