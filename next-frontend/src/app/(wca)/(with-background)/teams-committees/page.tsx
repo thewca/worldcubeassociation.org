@@ -7,6 +7,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
 import UserBadge from "@/components/UserBadge";
@@ -19,7 +20,7 @@ import getPermissions from "@/lib/wca/permissions.server";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("page.teams_committees_councils.title"),
