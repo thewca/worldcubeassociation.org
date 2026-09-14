@@ -410,6 +410,9 @@ const customConfig = defineConfig({
           },
         },
       },
+      sizes: {
+        avatarThumb: { value: "75px" },
+      },
       cursor: {
         menuitem: { value: "pointer" },
         checkbox: { value: "pointer" },
