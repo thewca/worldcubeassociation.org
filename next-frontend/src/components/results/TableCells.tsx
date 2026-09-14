@@ -27,6 +27,11 @@ const recordTagBadge = (tag?: string | null) => {
   }
 };
 
+// Width reserved at the end of the value for the floating badge: `Float` is
+// absolutely positioned and contributes no width of its own, so without it the
+// badge overlaps whatever sits in the next column.
+const RECORD_TAG_SLOT = "7";
+
 // Renders the record badge as a superscript floating off the top-right corner
 // of its content, without overflowing the surrounding text's line box.
 export function WithRecordTag({
@@ -41,9 +46,14 @@ export function WithRecordTag({
   if (!badge) return children;
 
   return (
-    <Box as="span" position="relative" display="inline-block">
+    <Box
+      as="span"
+      position="relative"
+      display="inline-block"
+      paddingEnd={RECORD_TAG_SLOT}
+    >
       {children}
-      <Float placement="top-end" offsetX="-3.5" offsetY="1">
+      <Float placement="top-end" offsetX="3.5" offsetY="1">
         <Badge
           size="xs"
           variant="solid"
