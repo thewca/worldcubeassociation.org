@@ -113,7 +113,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "jshint": "^2.13.6",
-    "react-refresh": "^0.18.0",
+    "react-refresh": "^0.19.0",
     "shakapacker": "10.3.2",
     "shakapacker-webpack": "10.3.2",
     "stylelint": "^17.15.0",
