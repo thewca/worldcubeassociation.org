@@ -1,6 +1,7 @@
 import React from "react";
 import { Heading, List, Stack, Text } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
+import { Trans } from "react-i18next";
 
 import type { components } from "@/types/openapi";
 
@@ -27,10 +28,11 @@ const QualificationDateEventsList: React.FC<
 
     return (
       <Text>
-        {t(
-          "competitions.events.time_limit_information.qualification_all_events_html",
-          { date: onlyDate },
-        )}
+        <Trans
+          t={t}
+          i18nKey="competitions.events.time_limit_information.qualification_all_events_html"
+          values={{ date: onlyDate }}
+        />
       </Text>
     );
   }
@@ -42,10 +44,11 @@ const QualificationDateEventsList: React.FC<
 
         return (
           <List.Item key={date}>
-            {t(
-              "competitions.events.time_limit_information.qualification_some_events_html",
-              { date, events: eventNames.join(", ") },
-            )}
+            <Trans
+              t={t}
+              i18nKey="competitions.events.time_limit_information.qualification_some_events_html"
+              values={{ date, events: eventNames.join(", ") }}
+            />
           </List.Item>
         );
       })}
