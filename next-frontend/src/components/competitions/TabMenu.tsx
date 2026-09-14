@@ -290,6 +290,7 @@ function TabLink({
   // The tab you are already on is not a link: linking to the current page is
   //   pointless, and Chakra's tabs machine clicks the selected trigger whenever
   //   `value` changes, which on an anchor would trigger a full page navigation.
+  // See https://github.com/chakra-ui/chakra-ui/issues/11003
   const isCurrent = tab.menuKey === currentPath;
 
   const trigger = (
