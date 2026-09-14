@@ -14,6 +14,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import React from "react";
 import { signIn, signOut, type Session } from "@/auth.client";
@@ -31,6 +32,14 @@ export default function Wrapper({ session }: { session: Session | null }) {
 }
 
 function AvatarMenu({ session }: { session: Session | null }) {
+  const router = useRouter();
+
+  // Better Auth's `signOut` only clears the cookies and resolves; unlike NextAuth's, it does not
+  // navigate. `session` here is a prop from a server component, so without a refresh the navbar
+  // keeps rendering the signed-in state and the button looks like it did nothing.
+  const handleSignOut = () =>
+    signOut({ fetchOptions: { onSuccess: () => router.refresh() } });
+
   if (!session) {
     return (
       <Button onClick={() => signIn()} variant="ghost" size="sm">
@@ -88,7 +97,7 @@ function AvatarMenu({ session }: { session: Session | null }) {
                 </Menu.Item>
               )}
               <Menu.Separator />
-              <Menu.Item value="logout" onSelect={() => signOut()}>
+              <Menu.Item value="logout" onSelect={handleSignOut}>
                 Log Out
               </Menu.Item>
             </Menu.Content>
@@ -173,7 +182,7 @@ function AvatarMenu({ session }: { session: Session | null }) {
                 variant="ghost"
                 size="sm"
                 justifyContent="flex-start"
-                onClick={() => signOut()}
+                onClick={handleSignOut}
               >
                 Log Out
               </Button>
