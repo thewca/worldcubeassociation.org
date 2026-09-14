@@ -11,6 +11,7 @@ import EventIcon from "@/components/EventIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import PaymentIcon from "@/components/icons/PaymentIcon";
 import CurrencyValue from "@/components/CurrencyValue";
+import { hasPassed } from "@/lib/wca/dates";
 
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
@@ -109,9 +110,11 @@ function ShortlistItem<T extends DataCompetition>({
             <RegisterIcon />
           </DataList.ItemLabel>
           <DataList.ItemValue>
-            {t("competitions.messages.spots_left", {
-              count: comp.spots_left,
-            })}
+            {hasPassed(comp.registration_close)
+              ? t("competitions.registration_v2.errors.-4008")
+              : t("competitions.messages.spots_left", {
+                  count: comp.spots_left,
+                })}
           </DataList.ItemValue>
         </DataList.Item>
       );

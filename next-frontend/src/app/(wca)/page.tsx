@@ -291,7 +291,14 @@ const FeaturedCompetition = async ({
     <Card.Root colorPalette={colorPalette} colorVariant="solid" height="full">
       <Card.Body>
         <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
-          {competition.name}
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: competition.id },
+            })}
+          >
+            {competition.name}
+          </Link>
         </Card.Title>
         <CompetitionShortlist
           comp={competition}
