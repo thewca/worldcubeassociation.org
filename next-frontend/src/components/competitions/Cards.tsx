@@ -28,6 +28,7 @@ import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
 import LocalDateTime from "@/components/LocalDateTime";
+import RefundPolicyText from "@/components/competitions/RefundPolicyText";
 
 function formatDateRange(start: Date, end: Date): string {
   const sameDay = start.toDateString() === end.toDateString();
@@ -61,10 +62,6 @@ function formatDateRange(start: Date, end: Date): string {
 
   return `${fullFormatter.format(start)} - ${fullFormatter.format(end)}`;
 }
-
-// Sentinel so we can splice a client-rendered, viewer-local timestamp into the
-// translated sentence.
-const DATE_PLACEHOLDER = "\u0000";
 
 export function VenueDetailsCard({
   competitionInfo,
@@ -134,37 +131,18 @@ export function AdditionalInformationCard({
 
 export function RefundPolicyCard({
   competitionInfo,
-  t,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
-  t: TFunction;
 }) {
-  const refundPolicyPercent = competitionInfo.refund_policy_percent;
-
-  const [textBeforeDate, textAfterDate] = t(
-    "competitions.competition_info.refund_policy_html",
-    {
-      refund_policy_percent: `${refundPolicyPercent}%`,
-      limit_date_and_time: DATE_PLACEHOLDER,
-    },
-  ).split(DATE_PLACEHOLDER);
-
   return (
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Refund Policy</Card.Title>
         <Card.Description>
-          {refundPolicyPercent > 0 ? (
-            <>
-              {textBeforeDate}
-              <LocalDateTime
-                isoDateTime={competitionInfo.refund_policy_limit_date}
-              />
-              {textAfterDate}
-            </>
-          ) : (
-            t("competitions.competition_info.no_refunds")
-          )}
+          <RefundPolicyText
+            refundPolicyPercent={competitionInfo.refund_policy_percent}
+            refundPolicyLimitDate={competitionInfo.refund_policy_limit_date}
+          />
         </Card.Description>
       </Card.Body>
     </Card.Root>
