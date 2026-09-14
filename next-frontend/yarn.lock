@@ -12760,7 +12760,7 @@ __metadata:
     react-map-gl: "npm:^8.1.3"
     react-markdown: "npm:^10.1.0"
     react-world-flags: "npm:^1.6.0"
-    temporal-polyfill: "npm:^1.0.4"
+    temporal-polyfill: "npm:^1.0.5"
     typescript: "npm:^6"
     vitest: "npm:^4.1.11"
   dependenciesMeta:
@@ -15341,13 +15341,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"temporal-polyfill@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "temporal-polyfill@npm:1.0.4"
+"temporal-polyfill@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "temporal-polyfill@npm:1.0.5"
   dependencies:
     temporal-spec: "npm:1.0.1"
-    temporal-utils: "npm:1.0.2"
-  checksum: 10c0/b93905805462090e94069841bfa99d162aaec07766a2fa4a8aed28159e3c3296c03a3224b5c6ea14cc65890f299094b21d1702ee6d3cd15cdaae967c22809b33
+    temporal-utils: "npm:1.0.3"
+  checksum: 10c0/88928e40e60d0da0c998af2b8da09768ee2c8784fec7526317fde83f55eb69926209a6bbc4360792cac7ace7371949718bc1f12edac1df0fe42eba5d55a43451
   languageName: node
   linkType: hard
 
@@ -15358,10 +15358,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"temporal-utils@npm:1.0.2":
-  version: 1.0.2
-  resolution: "temporal-utils@npm:1.0.2"
-  checksum: 10c0/062cacb33662e4e2547e1ebea98e994d3835d98bf528744256714cd0c4219d43ffd526a500bbce12392468f802a01de058885e8d73453c11ed7ca67fa6e327fb
+"temporal-utils@npm:1.0.3":
+  version: 1.0.3
+  resolution: "temporal-utils@npm:1.0.3"
+  checksum: 10c0/185928a75aba0496ebbbdecbbbbd55cc817756bc39e099424e86477da01042a84ed27482bfc2168b6802fed2f01f004739f174f907e2e125b2fa060a978024b6
   languageName: node
   linkType: hard
 
