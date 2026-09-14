@@ -160,14 +160,18 @@ export function ByPersonTable({
         </Table.Header>
 
         <Table.Body>
-          {orderedResults.map((competitorResult) => {
+          {orderedResults.map((competitorResult, index) => {
             const eventId = competitorResult.event_id;
+            const isFirstRoundOfEvent =
+              index === 0 || orderedResults[index - 1].event_id !== eventId;
             const { definedAttempts, bestResultIndex, worstResultIndex } =
               resultAttempts(competitorResult);
             return (
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-                <Table.Cell>{events.byId[eventId].name}</Table.Cell>
+                <Table.Cell>
+                  {isFirstRoundOfEvent && events.byId[eventId].name}
+                </Table.Cell>
                 <Table.Cell>
                   {t(`rounds.${competitorResult.round_type_id}.name`)}
                 </Table.Cell>

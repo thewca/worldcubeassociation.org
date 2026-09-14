@@ -52,7 +52,7 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
           <VenueDetailsCard competitionInfo={competitionInfo} />
           <MarkdownFirstImage content={competitionInfo.information} />
         </Stack>
-        <RefundPolicyCard competitionInfo={competitionInfo} />
+        <RefundPolicyCard competitionInfo={competitionInfo} t={t} />
       </VStack>
       <GridItem colSpan={{ base: 1, md: 2 }}>
         <AdditionalInformationCard competitionInfo={competitionInfo} />

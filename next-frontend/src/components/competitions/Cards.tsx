@@ -141,9 +141,13 @@ export function AdditionalInformationCard({
 
 export function RefundPolicyCard({
   competitionInfo,
+  t,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
+  t: TFunction;
 }) {
+  const refundPolicyPercent = competitionInfo.refund_policy_percent;
+
   const refundDate = new Date(competitionInfo.refund_policy_limit_date);
   const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
 
@@ -152,16 +156,12 @@ export function RefundPolicyCard({
       <Card.Body>
         <Card.Title textStyle="s4">Refund Policy</Card.Title>
         <Card.Description>
-          If your registration is cancelled before {formattedRefundDate} you
-          will be refunded
-          <Text as="span" fontWeight="bold">
-            {" "}
-            <FormatNumber
-              value={competitionInfo.refund_policy_percent / 100}
-              style="percent"
-            />{" "}
-          </Text>
-          of your registration fee.
+          {refundPolicyPercent > 0
+            ? t("competitions.competition_info.refund_policy_html", {
+                refund_policy_percent: `${refundPolicyPercent}%`,
+                limit_date_and_time: formattedRefundDate,
+              })
+            : t("competitions.competition_info.no_refunds")}
         </Card.Description>
       </Card.Body>
     </Card.Root>
