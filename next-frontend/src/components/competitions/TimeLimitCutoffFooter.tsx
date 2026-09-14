@@ -1,7 +1,7 @@
 import React from "react";
 import { Heading, List, Stack, Text } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
-import { Trans } from "react-i18next";
+import { Trans } from "react-i18next/TransWithoutContext";
 
 import type { components } from "@/types/openapi";
 
