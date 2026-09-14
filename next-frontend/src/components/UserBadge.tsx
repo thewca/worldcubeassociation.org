@@ -48,8 +48,13 @@ const UserBadge: React.FC<UserBadgeData> = ({
             }
             alt="Profile Picture"
             objectFit="cover"
-            width="75px"
-            minH="75px"
+            // The badge needs a fixed-width column, so a non-square photo has to
+            //   be cropped; anchor the crop at the top so heads survive it.
+            objectPosition="top"
+            width="avatarThumb"
+            // Fixed width, but only a *minimum* height, so the picture stretches
+            //   to the card whenever the roles wrap it taller than the thumb.
+            minH="avatarThumb"
           />
         )}
         <Center>
