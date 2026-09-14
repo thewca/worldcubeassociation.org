@@ -432,10 +432,10 @@ const customConfig = defineConfig({
           fg: { value: "{colors.link}" },
         },
         recordMarkers: {
-          personal: { value: "{colors.orange.solid}" },
-          national: { value: "{colors.green.solid}" },
-          continental: { value: "{colors.red.solid}" },
-          world: { value: "{colors.blue.solid}" },
+          personal: { value: "{colors.orange.fg}" },
+          national: { value: "{colors.green.fg}" },
+          continental: { value: "{colors.red.fg}" },
+          world: { value: "{colors.blue.fg}" },
         },
         wcaWhite: {
           // values different from Chakra's `gray` scale: They use an "almost-white" palette in dark mode

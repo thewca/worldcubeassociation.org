@@ -4,7 +4,11 @@ import { CssProperties, HStack, Link, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
-import { AttemptsCells, WithRecordTag } from "@/components/results/TableCells";
+import {
+  AttemptsCells,
+  personalBestColor,
+  WithRecordTag,
+} from "@/components/results/TableCells";
 import { isSkipped, resultAttempts } from "@/lib/wca/results/attempts";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
@@ -215,13 +219,53 @@ export function ByPersonTable({
   );
 }
 
+// Ids of the results that tied or beat every earlier one, scanning oldest-first.
+// Ports the old Rails `historical_pb_markers`, which coloured a result that was
+// a personal best at the time it was set.
+function personalBestIds(
+  chronologicalResults: components["schemas"]["V1Result"][],
+  value: (result: components["schemas"]["V1Result"]) => number,
+) {
+  const { ids } = chronologicalResults.reduce<{
+    best: number;
+    ids: number[];
+  }>(
+    ({ best, ids }, result) =>
+      value(result) > 0 && value(result) <= best
+        ? { best: value(result), ids: [...ids, result.id] }
+        : { best, ids },
+    { best: Infinity, ids: [] },
+  );
+
+  return new Set(ids);
+}
+
+function historicalPbMarkers(results: components["schemas"]["V1Result"][]) {
+  const chronological = _.orderBy(
+    results,
+    ["competition_start_date", "id"],
+    ["asc", "asc"],
+  );
+
+  return {
+    single: personalBestIds(chronological, (result) => result.best),
+    average: personalBestIds(chronological, (result) => result.average),
+  };
+}
+
 export function ByCompetitionTable({
   results,
   t,
+  highlightPersonalBests = false,
 }: {
   results: components["schemas"]["V1Result"][];
   t: TFunction;
+  highlightPersonalBests?: boolean;
 }) {
+  const pbMarkers = highlightPersonalBests
+    ? historicalPbMarkers(results)
+    : null;
+
   // Newest competition first. Ordering explicitly rather than reversing the payload keeps this
   // independent of whatever order the API happens to return rows in.
   const resultsByCompetition = _.groupBy(
@@ -277,14 +321,30 @@ export function ByCompetitionTable({
                     {t(`rounds.${competitorResult.round_type_id}.name`)}
                   </Table.Cell>
                   <Table.Cell>{competitorResult.pos}</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell
+                    color={
+                      pbMarkers?.single.has(competitorResult.id)
+                        ? personalBestColor(
+                            competitorResult.regional_single_record,
+                          )
+                        : undefined
+                    }
+                  >
                     <WithRecordTag
                       recordTag={competitorResult.regional_single_record}
                     >
                       {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell
+                    color={
+                      pbMarkers?.average.has(competitorResult.id)
+                        ? personalBestColor(
+                            competitorResult.regional_average_record,
+                          )
+                        : undefined
+                    }
+                  >
                     <WithRecordTag
                       recordTag={competitorResult.regional_average_record}
                     >
