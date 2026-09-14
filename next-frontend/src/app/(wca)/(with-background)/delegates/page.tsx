@@ -87,6 +87,22 @@ export default async function DelegatesPage({
           {rootGroups.map((group) => {
             const friendlyId = group.metadata!.friendly_id!;
 
+            // The region you are already on is not a link: Chakra's tabs machine
+            //   clicks the selected trigger whenever `value` changes, which on an
+            //   anchor would trigger a full page navigation.
+            // See https://github.com/chakra-ui/chakra-ui/issues/11003
+            if (friendlyId === activeFriendlyId) {
+              return (
+                <Tabs.Trigger
+                  value={friendlyId}
+                  key={group.id}
+                  aria-current="page"
+                >
+                  {group.name}
+                </Tabs.Trigger>
+              );
+            }
+
             return (
               <Tabs.Trigger value={friendlyId} key={group.id} asChild>
                 <Link
@@ -119,8 +135,7 @@ async function DelegateTab({
   isAdminMode: boolean;
 }) {
   const { t } = await getT();
-  const { metadata, name, id, lead_user } = group;
-  const { email } = metadata!;
+  const { name, id, lead_user } = group;
 
   const [regionResult, subregionResult] = await Promise.all([
     getDelegatesInGroup(id),
@@ -151,12 +166,19 @@ async function DelegateTab({
   return (
     <VStack align="left">
       <Heading textStyle="h2">{name}</Heading>
-      <ChakraLink href={`mailto:${email}`}>{email}</ChakraLink>
       <UserBadge
         key={lead_user!.id}
         profilePicture={lead_user!.avatar}
         name={lead_user!.name}
         wcaId={lead_user!.wca_id}
+        roles={[
+          {
+            teamRole: t(
+              "enums.user_roles.status.delegate_regions.senior_delegate",
+            ),
+            staffColor: "yellow",
+          },
+        ]}
       />
       {regionDelegates.length > 0 && (
         <DelegateGrid delegates={regionDelegates} isAdminMode={isAdminMode} />
@@ -206,6 +228,7 @@ async function DelegateGrid({
               teamRole: t(
                 `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
               ),
+              teamText: role.metadata.location,
               staffColor: "yellow",
             },
           ]}
