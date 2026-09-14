@@ -1,13 +1,12 @@
 import React from "react";
 import {
-  Box,
   Card,
   Center,
   HStack,
+  Image,
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -41,18 +40,17 @@ const UserBadge: React.FC<UserBadgeData> = ({
         maxW="xl"
       >
         {profilePicture && (
-          <Box objectFit="cover" width="75px" minH="75px" position="relative">
-            <Image
-              src={
-                profilePicture.is_default
-                  ? "/missing_avatar_thumb.png"
-                  : profilePicture.url
-              }
-              alt="Profile Picture"
-              fill
-              style={{ objectFit: "cover" }}
-            />
-          </Box>
+          <Image
+            src={
+              profilePicture.is_default
+                ? "/missing_avatar_thumb.png"
+                : (profilePicture.thumb_url ?? profilePicture.url)
+            }
+            alt="Profile Picture"
+            objectFit="cover"
+            width="75px"
+            minH="75px"
+          />
         )}
         <Center>
           <Card.Body>
