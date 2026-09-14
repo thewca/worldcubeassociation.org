@@ -3,7 +3,7 @@ import { Alert } from "@chakra-ui/react";
 import React from "react";
 import FilteredRecords from "@/app/(wca)/(with-background)/results/records/filteredRecords";
 import { Metadata } from "next";
-import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 
 const GENDER_ALL = "All";
 const EVENTS_ALL = "all events";
@@ -11,7 +11,7 @@ const SHOW_MIXED = "mixed";
 const REGION_WORLD = "world";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("results.records.title"),

@@ -13,6 +13,7 @@ import {
 import Loading from "@/components/ui/loading";
 import { getRegionalOrganizations } from "@/lib/wca/organizations/getRegionalOrganizations";
 import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 import OpenapiError from "@/components/ui/openapiError";
 import { Trans } from "react-i18next/TransWithoutContext";
 import _ from "lodash";
@@ -20,7 +21,7 @@ import WcaFlag from "@/components/WcaFlag";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("regional_organizations.title"),

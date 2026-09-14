@@ -1,4 +1,5 @@
 import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 import { Heading, Link, Table, Text, VStack } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import { Trans } from "react-i18next/TransWithoutContext";
@@ -7,7 +8,7 @@ import OpenapiError from "@/components/ui/openapiError";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("regulations_translations.title"),
