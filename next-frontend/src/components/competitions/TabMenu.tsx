@@ -59,7 +59,12 @@ export default function TabMenu({
   const eventId = activityCodeFromPath(currentPath!);
 
   const [openGroup, setOpenGroup] = useState<string | null>(eventId);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  // The drawer stays open only while the route it was opened on is still current, so any
+  //   navigation closes it. Until tab navigation became client-side the page reload did that
+  //   for us; hanging an onClick on the links instead would mean threading a callback three
+  //   components down, past two `asChild` merges that are known to drop handlers.
+  const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
+  const drawerOpen = drawerOpenedAt === pathName;
 
   return (
     <Tabs.Root
@@ -102,7 +107,7 @@ export default function TabMenu({
       <Box hideFrom="md">
         <Drawer.Root
           open={drawerOpen}
-          onOpenChange={(e) => setDrawerOpen(e.open)}
+          onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
           placement="start"
         >
           <Drawer.Trigger asChild>
@@ -129,7 +134,7 @@ export default function TabMenu({
                     <BackLink
                       href={backHref}
                       label={competitionInfo.name}
-                      onClick={() => setDrawerOpen(false)}
+                      onClick={() => setDrawerOpenedAt(null)}
                     />
                   ) : (
                     competitionInfo.name
