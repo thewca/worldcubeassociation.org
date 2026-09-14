@@ -12631,9 +12631,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^14.3.10":
-  version: 14.3.10
-  resolution: "newrelic@npm:14.3.10"
+"newrelic@npm:^14.4.0":
+  version: 14.4.0
+  resolution: "newrelic@npm:14.4.0"
   dependencies:
     "@apm-js-collab/tracing-hooks": "npm:^0.13.0"
     "@datadog/pprof": "npm:^5.14.2"
@@ -12674,7 +12674,7 @@ __metadata:
       optional: true
   bin:
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 10c0/061ac0d622e57f65e91b5b290ed238eb02042c928357accab6b20e50dd83c45b067e4c3d6e07932dc05e2762206d4ed78d869710726b850dd08a3963d47d4102
+  checksum: 10c0/8f0af797e24b4654b5d3064223d59817d61a8d5fccf60c7341518fb7b68838f1266739636278c7b16d79021f804a51f88dc7508b0736bbd3af1ebc3b2a1579ba
   languageName: node
   linkType: hard
 
@@ -12742,7 +12742,7 @@ __metadata:
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
     maplibre-gl: "npm:^6.7.0"
-    newrelic: "npm:^14.3.10"
+    newrelic: "npm:^14.4.0"
     next: "npm:16.3.4"
     nextjs-routes: "npm:^2.2.5"
     nextjs-toploader: "npm:^3.9.17"
