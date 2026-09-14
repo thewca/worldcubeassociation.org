@@ -96,6 +96,7 @@ export default function TabMenu({
           }
           customTabs={customTabs}
           competitionId={competitionInfo.id}
+          currentPath={currentPath}
         />
       </Tabs.List>
       <Box hideFrom="md">
@@ -159,6 +160,7 @@ export default function TabMenu({
                     }
                     customTabs={customTabs}
                     competitionId={competitionInfo.id}
+                    currentPath={currentPath}
                   />
                 </Tabs.List>
               </Drawer.Body>
@@ -181,6 +183,7 @@ function TabList({
   openGroup,
   customTabs,
   competitionId,
+  currentPath,
 }: {
   tabs: CompetitionNavTab[];
   t: TFunction;
@@ -189,6 +192,7 @@ function TabList({
   onToggle: (tab: CompetitionNavTab) => void;
   customTabs: string[];
   competitionId: string;
+  currentPath?: string;
 }) {
   return (
     <>
@@ -199,6 +203,7 @@ function TabList({
             tab={tab}
             t={t}
             isAdminRoute={isAdminRoute}
+            currentPath={currentPath}
           />
         ) : (
           <CollapsibleTabGroup
@@ -208,6 +213,7 @@ function TabList({
             isAdminRoute={isAdminRoute}
             isOpen={openGroup === tab.menuKey}
             onToggle={() => onToggle(tab)}
+            currentPath={currentPath}
           />
         ),
       )}
@@ -270,14 +276,22 @@ function TabLink({
   tab,
   t,
   isAdminRoute,
+  currentPath,
 }: {
   tab: TabWithLink;
   t: TFunction;
   isAdminRoute: boolean;
+  currentPath?: string;
 }) {
   const label = t(
     isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
   );
+
+  // The tab you are already on is not a link: linking to the current page is
+  //   pointless, and Chakra's tabs machine clicks the selected trigger whenever
+  //   `value` changes, which on an anchor would trigger a full page navigation.
+  // See https://github.com/chakra-ui/chakra-ui/issues/11003
+  const isCurrent = tab.menuKey === currentPath;
 
   const trigger = (
     <Tabs.Trigger
@@ -287,8 +301,8 @@ function TabLink({
       minHeight="fit-content"
     >
       <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-        {tab.disabled ? (
-          <Text>{label}</Text>
+        {tab.disabled || isCurrent ? (
+          <Text aria-current={isCurrent ? "page" : undefined}>{label}</Text>
         ) : tab.externalHref ? (
           <a href={tab.externalHref} target="_blank" rel="noopener noreferrer">
             {label}
@@ -317,12 +331,14 @@ function CollapsibleTabGroup({
   isAdminRoute,
   isOpen,
   onToggle,
+  currentPath,
 }: {
   tab: TabWithChildren;
   t: TFunction;
   isAdminRoute: boolean;
   isOpen: boolean;
   onToggle: () => void;
+  currentPath?: string;
 }) {
   const { i18nKey, icon, children } = tab;
   const IconComponent = iconMap[icon];
@@ -355,8 +371,16 @@ function CollapsibleTabGroup({
                 disabled={disabled}
               >
                 <Text asChild justifyContent="left">
-                  {disabled ? (
-                    <Text>{t(i18nKey)}</Text>
+                  {disabled || menuKey === currentPath ? (
+                    <Text
+                      aria-current={
+                        menuKey === currentPath ? "page" : undefined
+                      }
+                      display="flex"
+                    >
+                      {t(i18nKey)} <Spacer />
+                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                    </Text>
                   ) : (
                     <Link href={isAdminRoute && hrefAdmin ? hrefAdmin : href}>
                       {t(i18nKey)} <Spacer />
