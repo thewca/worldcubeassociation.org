@@ -218,29 +218,32 @@ function TabList({
         ),
       )}
       {customTabs.length > 0 && <Separator />}
-      {customTabs.map((tabName) => (
-        <Tabs.Trigger
-          key={tabName}
-          value={encodeURIComponent(tabName)}
-          minHeight="fit-content"
-          maxWidth="xs"
-          asChild
-        >
-          <Text textStyle="bodyEmphasis" asChild justifyContent="left">
-            <Link
-              href={route({
-                pathname: "/competitions/[competitionId]/tabs/[tabName]",
-                query: {
-                  competitionId,
-                  tabName: encodeURIComponent(tabName),
-                },
-              })}
-            >
-              {tabName}
-            </Link>
-          </Text>
-        </Tabs.Trigger>
-      ))}
+      {customTabs.map((tabName) => {
+        const tabKey = encodeURIComponent(tabName);
+
+        return (
+          <Tabs.Trigger
+            key={tabName}
+            value={tabKey}
+            minHeight="fit-content"
+            maxWidth="xs"
+            asChild
+          >
+            <Text textStyle="bodyEmphasis" asChild justifyContent="left">
+              <TabTarget
+                tabKey={tabKey}
+                currentPath={currentPath}
+                href={route({
+                  pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                  query: { competitionId, tabName: tabKey },
+                })}
+              >
+                {tabName}
+              </TabTarget>
+            </Text>
+          </Tabs.Trigger>
+        );
+      })}
     </>
   );
 }
@@ -272,6 +275,42 @@ function BackLink({
   );
 }
 
+/**
+ * A tab's target: a link, unless it points at the page you are already on.
+ *
+ * Linking to the current page is pointless, and Chakra's tabs machine clicks the selected
+ * trigger whenever `value` changes — on an anchor that triggers a full page navigation.
+ * See https://github.com/chakra-ui/chakra-ui/issues/11003
+ *
+ * Every tab trigger in this menu must go through here, or that bug comes back for it.
+ */
+function TabTarget({
+  tabKey,
+  currentPath,
+  href,
+  disabled,
+  children,
+  ...textProps
+}: TextProps & {
+  tabKey: string;
+  currentPath?: string;
+  href: RouteLiteral;
+  disabled?: boolean;
+  children: React.ReactNode;
+}) {
+  const isCurrent = tabKey === currentPath;
+
+  if (disabled || isCurrent) {
+    return (
+      <Text aria-current={isCurrent ? "page" : undefined} {...textProps}>
+        {children}
+      </Text>
+    );
+  }
+
+  return <Link href={href}>{children}</Link>;
+}
+
 function TabLink({
   tab,
   t,
@@ -287,12 +326,6 @@ function TabLink({
     isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
   );
 
-  // The tab you are already on is not a link: linking to the current page is
-  //   pointless, and Chakra's tabs machine clicks the selected trigger whenever
-  //   `value` changes, which on an anchor would trigger a full page navigation.
-  // See https://github.com/chakra-ui/chakra-ui/issues/11003
-  const isCurrent = tab.menuKey === currentPath;
-
   const trigger = (
     <Tabs.Trigger
       value={tab.menuKey}
@@ -301,16 +334,19 @@ function TabLink({
       minHeight="fit-content"
     >
       <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-        {tab.disabled || isCurrent ? (
-          <Text aria-current={isCurrent ? "page" : undefined}>{label}</Text>
-        ) : tab.externalHref ? (
+        {tab.externalHref && !tab.disabled ? (
           <a href={tab.externalHref} target="_blank" rel="noopener noreferrer">
             {label}
           </a>
         ) : (
-          <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
+          <TabTarget
+            tabKey={tab.menuKey}
+            currentPath={currentPath}
+            href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}
+            disabled={tab.disabled}
+          >
             {label}
-          </Link>
+          </TabTarget>
         )}
       </Text>
     </Tabs.Trigger>
@@ -371,22 +407,16 @@ function CollapsibleTabGroup({
                 disabled={disabled}
               >
                 <Text asChild justifyContent="left">
-                  {disabled || menuKey === currentPath ? (
-                    <Text
-                      aria-current={
-                        menuKey === currentPath ? "page" : undefined
-                      }
-                      display="flex"
-                    >
-                      {t(i18nKey)} <Spacer />
-                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                    </Text>
-                  ) : (
-                    <Link href={isAdminRoute && hrefAdmin ? hrefAdmin : href}>
-                      {t(i18nKey)} <Spacer />
-                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                    </Link>
-                  )}
+                  <TabTarget
+                    tabKey={menuKey}
+                    currentPath={currentPath}
+                    href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
+                    disabled={disabled}
+                    display="flex"
+                  >
+                    {t(i18nKey)} <Spacer />
+                    {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                  </TabTarget>
                 </Text>
               </Tabs.Trigger>
             ),
