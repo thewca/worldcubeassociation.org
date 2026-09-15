@@ -17,7 +17,6 @@ import {
 
 import WcaFlag from "@/components/WcaFlag";
 
-import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
 import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
@@ -34,6 +33,10 @@ import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 import { LuInfo } from "react-icons/lu";
+import {
+  getRegistrationStatus,
+  type RegistrationStatus,
+} from "@/lib/wca/competitions/statusUtils";
 
 // Raw competition type from WCA API
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
@@ -42,29 +45,10 @@ interface Props {
   comp: CompetitionIndex;
 }
 
-// Map registration status
-const getRegistrationStatus = (comp: CompetitionIndex): string => {
-  const alreadyOpened = new Date(comp.registration_open) <= new Date();
-  const notYetClosed = new Date(comp.registration_close) > new Date();
-
-  const currentlyOpen = alreadyOpened && notYetClosed;
-
-  if (currentlyOpen) {
-    return "open";
-  }
-
-  if (!alreadyOpened) {
-    return "notOpen";
-  }
-
-  return "closed";
-};
-
-const registrationStatusIcons: Record<string, JSX.Element> = {
+const registrationStatusIcons: Record<RegistrationStatus, JSX.Element> = {
   open: <CompRegoNotFullOpenGreenIcon />,
   notOpen: <CompRegoNotOpenYetGreyIcon />,
   closed: <CompRegoClosedRedIcon />,
-  full: <CompRegoFullButOpenOrangeIcon />,
 };
 
 const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
@@ -74,7 +58,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
   const { t } = useT();
   return (
     <Table.Row key={comp.id}>
-      <Table.Cell>{registrationStatusIcons[regoStatus] || null}</Table.Cell>
+      <Table.Cell>{registrationStatusIcons[regoStatus]}</Table.Cell>
 
       <Table.Cell>
         <Text>{formatDateRange(comp.start_date, comp.end_date)}</Text>
