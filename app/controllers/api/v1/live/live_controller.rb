@@ -81,7 +81,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     results = registration.live_results.includes(:live_attempts)
 
-    user_wcif = registration.user.to_wcif(@competition, registration)
+    user_wcif = registration.user.to_wcif(@competition, registration, version: Competition::WCIF_VERSION_CATALOGUE[:latest])
     user_wcif["results"] = results
 
     render json: user_wcif

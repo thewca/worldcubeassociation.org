@@ -23,6 +23,10 @@ paths:
     $ref: 'paths/registrations/updateRegistration.yaml'
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
+  /v1/competitions/{competitionId}/registration_eligibility:
+    $ref: 'paths/registrations/registrationEligibility.yaml'
+  /v1/registrations/{registrationId}/payment_denomination:
+    $ref: 'paths/registrations/paymentDenomination.yaml'
 
   /v1/competitions/{competitionId}/scoretakers:
     get:
@@ -69,6 +73,11 @@ paths:
     $ref: 'paths/competitions/live/LivePodiums.yaml'
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:
     $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
+
+  /v1/persons/{wca_id}/results:
+    $ref: 'paths/persons/personResults.yaml'
+  /v1/persons/{wca_id}/records:
+    $ref: 'paths/persons/personRecords.yaml'
 
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'

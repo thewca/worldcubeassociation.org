@@ -1,5 +1,5 @@
 import { getRecords } from "@/lib/wca/results/records";
-import { Alert, Container } from "@chakra-ui/react";
+import { Alert } from "@chakra-ui/react";
 import React from "react";
 import FilteredRecords from "@/app/(wca)/(with-background)/results/records/filteredRecords";
 import { Metadata } from "next";
@@ -46,12 +46,12 @@ export default async function RecordsPage({
   }
 
   return (
-    <Container bg="bg">
+    <>
       <FilteredRecords
         searchParams={{ gender, region, show, event }}
         records={recordRequest.data.records}
         timestamp={recordRequest.data.timestamp}
       />
-    </Container>
+    </>
   );
 }

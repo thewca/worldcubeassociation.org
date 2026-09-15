@@ -56,6 +56,9 @@ jobs:
         run: yarn run check:types
       - name: Run Lint
         run: yarn run lint
+      - name: Run unit tests
+        # `yarn test` is bare `vitest`, which watches. Invoke the run-once form.
+        run: yarn vitest run
       - name: Run build
         run: yarn run build
       - name: Verify newrelic loads from standalone output

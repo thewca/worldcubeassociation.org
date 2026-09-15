@@ -1,0 +1,23 @@
+get:
+  summary: Get record-setting results for a person
+  description: >-
+    The subset of the person's results that set a national, continental or world record, for
+    either single or average. Public: no authentication required.
+  tags:
+    - persons
+  operationId: v1PersonRecords
+  parameters:
+    - name: wca_id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/results/V1Results.yaml'
+    '404':
+      description: No person with this WCA ID

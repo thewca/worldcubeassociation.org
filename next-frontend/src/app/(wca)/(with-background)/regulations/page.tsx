@@ -1,4 +1,3 @@
-import { Container } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getRegulations } from "@/lib/wca/regulations/getRegulations";
 import RegulationsViewer from "@/components/regulations/RegulationsViewer";
@@ -14,8 +13,8 @@ export default async function Regulations() {
   if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <Container bg="bg">
+    <>
       <RegulationsViewer contentHtml={data.content_html} />
-    </Container>
+    </>
   );
 }

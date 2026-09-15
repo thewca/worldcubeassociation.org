@@ -3,10 +3,11 @@ import { Card, Table, Text } from "@chakra-ui/react";
 import { TimeLimitCutoffFooter } from "@/components/competitions/TimeLimitCutoffFooter";
 import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
 import {
-  advancementConditionToString,
+  advancementResultCondition,
   cutoffToString,
   getRoundTypeId,
   qualificationToString,
+  resultConditionToString,
   timeLimitToString,
 } from "@/lib/wca/wcif/rounds";
 import { getT } from "@/lib/i18n/get18n";
@@ -29,6 +30,8 @@ export default async function TabEvents({
   if (!events) {
     return <Text>Competition does not exist</Text>;
   }
+
+  const allRounds = events.flatMap((event) => event.rounds);
 
   const showCutoff = events.some((event) =>
     event.rounds.some((round) => Boolean(round.cutoff)),
@@ -57,58 +60,70 @@ export default async function TabEvents({
             </Table.Header>
             <Table.Body>
               {events.map((event) =>
-                event.rounds.map((round, idx) => (
-                  <Table.Row key={round.id}>
-                    {idx === 0 && (
-                      <Table.Cell rowSpan={event.rounds.length}>
-                        {t(`events.${event.id}`)}
-                      </Table.Cell>
-                    )}
-                    <Table.Cell>
-                      {t(
-                        `rounds.${getRoundTypeId(idx + 1, event.rounds.length, Boolean(round.cutoff))}.cell_name`,
+                event.rounds.map((round, idx) => {
+                  const resultCondition = advancementResultCondition(
+                    round.id,
+                    event.rounds,
+                  );
+
+                  return (
+                    <Table.Row key={round.id}>
+                      {idx === 0 && (
+                        <Table.Cell rowSpan={event.rounds.length}>
+                          {t(`events.${event.id}`)}
+                        </Table.Cell>
                       )}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {round.cutoff &&
-                        `${t(`formats.short.${round.cutoff.numberOfAttempts}`)} / `}
-                      {t(`formats.short.${round.format}`)}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {timeLimitToString(t, round.timeLimit, event.id, events)}
-                    </Table.Cell>
-                    {showCutoff && (
+                      <Table.Cell>
+                        {t(
+                          `rounds.${getRoundTypeId(idx + 1, event.rounds.length, Boolean(round.cutoff))}.cell_name`,
+                        )}
+                      </Table.Cell>
                       <Table.Cell>
                         {round.cutoff &&
-                          cutoffToString(t, round.cutoff, event.id)}
+                          `${t(`formats.short.${round.cutoff.numberOfAttempts}`)} / `}
+                        {t(`formats.short.${round.format}`)}
                       </Table.Cell>
-                    )}
-                    <Table.Cell>
-                      {round.advancementCondition &&
-                        advancementConditionToString(
-                          t,
-                          round.advancementCondition,
-                          event.id,
-                          round.format,
-                        )}
-                    </Table.Cell>
-                    {showQualifications && (
                       <Table.Cell>
-                        {idx === 0 && (
-                          <>
-                            {event.qualification
-                              ? qualificationToString(
-                                  t,
-                                  event.qualification,
-                                  event.id,
-                                )
-                              : "-"}
-                          </>
+                        {timeLimitToString(
+                          t,
+                          round.timeLimit,
+                          event.id,
+                          allRounds,
                         )}
                       </Table.Cell>
-                    )}
-                  </Table.Row>
-                )),
+                      {showCutoff && (
+                        <Table.Cell>
+                          {round.cutoff &&
+                            cutoffToString(t, round.cutoff, event.id)}
+                        </Table.Cell>
+                      )}
+                      <Table.Cell>
+                        {resultCondition &&
+                          resultConditionToString(
+                            t,
+                            resultCondition,
+                            event.id,
+                            round.format,
+                          )}
+                      </Table.Cell>
+                      {showQualifications && (
+                        <Table.Cell>
+                          {idx === 0 && (
+                            <>
+                              {event.qualification
+                                ? qualificationToString(
+                                    t,
+                                    event.qualification,
+                                    event.id,
+                                  )
+                                : "-"}
+                            </>
+                          )}
+                        </Table.Cell>
+                      )}
+                    </Table.Row>
+                  );
+                }),
               )}
             </Table.Body>
           </Table.Root>

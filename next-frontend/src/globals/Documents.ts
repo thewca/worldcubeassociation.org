@@ -1,4 +1,5 @@
 import { GlobalConfig } from "payload";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 
 export const DocumentsPage: GlobalConfig = {
   slug: "documents-page",
@@ -19,4 +20,7 @@ export const DocumentsPage: GlobalConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };

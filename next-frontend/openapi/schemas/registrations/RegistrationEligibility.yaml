@@ -1,0 +1,31 @@
+type: object
+required:
+  - can_pre_register
+  - banned
+  - missing_profile_fields
+  - waiting_list_count
+properties:
+  can_pre_register:
+    type: boolean
+    description: Whether the user may register before registration opens, i.e. is a delegate or organizer of this competition
+  banned:
+    type: boolean
+    description: Whether the user is still banned on the day the competition starts
+  banned_until:
+    type: string
+    format: date
+    nullable: true
+    description: When the ban lapses, or null for an indefinite ban
+  missing_profile_fields:
+    type: array
+    description: Profile fields the user has to fill in before they can register
+    items:
+      type: string
+      enum:
+        - name
+        - gender
+        - dob
+        - country_iso2
+  waiting_list_count:
+    type: integer
+    description: How many competitors are currently on the waiting list

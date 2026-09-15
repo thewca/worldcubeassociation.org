@@ -31,18 +31,14 @@ const timeDuration = (timestamp1, timestamp2) => (
   DateTime.fromISO(timestamp2).diff(DateTime.fromISO(timestamp1)).rescale().toHuman());
 
 function getCronjobMessage(cronjobDetails) {
-  const isScheduled = !!cronjobDetails.enqueued_at;
-  const isInProgress = cronjobDetails.run_start && !cronjobDetails.run_end;
-  const isFinished = !!cronjobDetails.run_end;
-
-  if (isScheduled) {
+  if (cronjobDetails.is_scheduled) {
     return [
       `The job has been scheduled ${timeSince(cronjobDetails.enqueued_at)}, but it hasn't been picked up by the job handler yet. Please come back later.`,
       'info',
     ];
   }
 
-  if (isInProgress) {
+  if (cronjobDetails.is_in_progress) {
     if (cronjobDetails.recently_errored) {
       return [
         `The job started to run but crashed :O The error message was: ${cronjobDetails.last_error_message}`,
@@ -56,13 +52,14 @@ function getCronjobMessage(cronjobDetails) {
     ];
   }
 
-  if (isFinished) {
+  if (cronjobDetails.is_finished) {
     if (cronjobDetails.last_run_successful) {
       return [
         `Job was last completed ${timeSince(cronjobDetails.run_end)} and took ${timeDuration(cronjobDetails.run_start, cronjobDetails.run_end)}.`,
         'success',
       ];
     }
+
     return [
       `Job was last completed ${timeSince(cronjobDetails.run_end)} but it raised an error: ${cronjobDetails.last_error_message}. Note that our job handler has an automatic retry mechanism. The more times a job fails, the longer it waits to try again. If this problem persists for several hours, feel free to contact the Software Team.`,
       'error',

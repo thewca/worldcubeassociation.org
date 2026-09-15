@@ -49,6 +49,106 @@ interface WcaPaletteInput {
 type ColorScale = Readonly<Record<LuminanceKey, string>>;
 type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 
+// Chakra styles these trigger slots without ever setting `cursor`, so
+// they fall back to the browser default and read as non-interactive.
+// We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
+// https://github.com/chakra-ui/chakra-ui/issues/10960
+const INTERACTIVITY_OVERRIDES = {
+  menu: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  select: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  combobox: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  popover: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  collapsible: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  steps: {
+    slots: [],
+    base: {
+      trigger: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  checkboxCard: {
+    slots: [],
+    base: {
+      root: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  radioCard: {
+    slots: [],
+    base: {
+      item: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  segmentGroup: {
+    slots: [],
+    base: {
+      item: {
+        cursor: "pointer",
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+  // The `cursor.slider` token exists but the slider recipe never consumes
+  // it, so the thumb needs its own rule.
+  slider: {
+    slots: [],
+    base: {
+      thumb: {
+        cursor: "grab",
+        _dragging: { cursor: "grabbing" },
+        _disabled: { cursor: "disabled" },
+      },
+    },
+  },
+};
+
 const slateColors = {
   green: {
     primary: "#029347",
@@ -310,8 +410,14 @@ const customConfig = defineConfig({
           },
         },
       },
+      sizes: {
+        avatarThumb: { value: "75px" },
+      },
       cursor: {
         menuitem: { value: "pointer" },
+        checkbox: { value: "pointer" },
+        radio: { value: "pointer" },
+        option: { value: "pointer" },
       },
     },
     semanticTokens: {
@@ -332,39 +438,40 @@ const customConfig = defineConfig({
           world: { value: "{colors.blue.solid}" },
         },
         wcaWhite: {
-          // values mostly stolen from Chakra's `gray` scale,
-          // with a minor adjustment for the `solid` entry.
+          // values different from Chakra's `gray` scale: They use an "almost-white" palette in dark mode
+          //   and an "almost black" palette in light mode. By contrast, our schema is designed around
+          //   the idea of letting the palette appear "soft gray" in both light and dark mode.
           contrast: {
-            value: { _light: "{colors.white}", _dark: "{colors.black}" },
+            value: "{colors.black}",
           },
           fg: {
             value: {
-              _light: "{colors.wcaWhite.800}",
-              _dark: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.700}",
+              _dark: "{colors.wcaWhite.400}",
             },
           },
           subtle: {
             value: {
-              _light: "{colors.wcaWhite.100}",
+              _light: "{colors.wcaWhite.50}",
               _dark: "{colors.wcaWhite.900}",
             },
           },
           muted: {
             value: {
-              _light: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.100}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
           emphasized: {
             value: {
-              _light: "{colors.wcaWhite.300}",
+              _light: "{colors.wcaWhite.200}",
               _dark: "{colors.wcaWhite.700}",
             },
           },
           solid: {
             value: {
-              _light: "{colors.wcaWhite.900}",
-              _dark: "{colors.wcaWhite.50}",
+              _light: "{colors.wcaWhite.200}",
+              _dark: "{colors.wcaWhite.200}",
             },
           },
           focusRing: {
@@ -375,7 +482,7 @@ const customConfig = defineConfig({
           },
           border: {
             value: {
-              _light: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.700}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
@@ -394,6 +501,9 @@ const customConfig = defineConfig({
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
+          // `subtle` is a dark grey in both modes, so without an explicit `fg` the badge
+          //   text inherits the page colour and becomes unreadable in light mode.
+          fg: { value: "{colors.supplementary.text.white}" },
           cubeShades: {
             left: { value: "#282828" },
             top: { value: "#3B3B3B" },
@@ -603,6 +713,47 @@ const customConfig = defineConfig({
       },
     },
     slotRecipes: {
+      ...INTERACTIVITY_OVERRIDES,
+      steps: {
+        ...INTERACTIVITY_OVERRIDES.steps,
+        variants: {
+          orientation: {
+            vertical: {
+              // Chakra hangs the connector inside the step it leads out of and sizes it against
+              //   that step's own height, so a step no taller than its label leaves the connector
+              //   nothing to run in and it collapses to nothing.
+              item: {
+                _notLast: {
+                  minHeight:
+                    "calc(var(--steps-size) + var(--steps-gutter) * 4)",
+                },
+              },
+              separator: {
+                marginX: "0",
+              },
+            },
+            horizontal: {
+              // Responsive variants merge property by property, so anything the vertical branch
+              //   sets and this one leaves alone survives into the wider breakpoint - which is
+              //   what left the horizontal connector absolutely positioned, and so invisible.
+              root: {
+                height: "auto",
+              },
+              item: {
+                _notLast: {
+                  minHeight: "auto",
+                },
+              },
+              separator: {
+                position: "static",
+                top: "auto",
+                insetStart: "auto",
+                maxHeight: "none",
+              },
+            },
+          },
+        },
+      },
       dataList: {
         slots: [],
         variants: {
@@ -700,24 +851,6 @@ const customConfig = defineConfig({
                 layerStyle: "fill.emphasized",
               },
             },
-            deep: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "fill.solid",
-              },
-              description: {
-                layerStyle: "fill.solid",
-              },
-            },
-            slatePastel: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "fill.solid",
-              },
-              description: {
-                layerStyle: "fill.solid",
-              },
-            },
           },
         },
         defaultVariants: {
@@ -729,6 +862,12 @@ const customConfig = defineConfig({
         base: {
           root: {
             "--accordion-radius": "{radii.wca}",
+          },
+          itemTrigger: {
+            cursor: "pointer",
+            _disabled: {
+              cursor: "disabled",
+            },
           },
         },
         variants: {
@@ -765,7 +904,6 @@ const customConfig = defineConfig({
                 whiteSpace: "noWrap",
               },
               row: {
-                cursor: "pointer",
                 "& td": {
                   transitionProperty: "background-color",
                   transitionTimingFunction: "ease",
@@ -775,7 +913,7 @@ const customConfig = defineConfig({
                   bg: "bg.subtle",
                 },
                 "&:hover td": {
-                  bg: "colorPalette.fg/60",
+                  bg: "colorPalette.muted",
                 },
               },
             },
@@ -802,12 +940,60 @@ const customConfig = defineConfig({
       tabs: {
         slots: [],
         variants: {
+          // Grows the triggers to fill the row when they fit, and lets the list
+          //   scroll instead of squashing them when they don't.
+          fitContent: {
+            true: {
+              list: {
+                maxWidth: "full",
+                overflowX: "auto",
+              },
+              trigger: {
+                flex: "1 0 auto",
+                flexDirection: "column",
+              },
+            },
+          },
           highContrast: {
             true: {
               trigger: {
                 _selected: {
                   color: "colorPalette.contrast",
                 },
+              },
+            },
+          },
+          // Vertical tab list that sticks alongside the content on desktop and
+          //   collapses above it on mobile.
+          sideNav: {
+            true: {
+              root: {
+                flexDirection: { base: "column", md: "row" },
+              },
+              list: {
+                height: "fit-content",
+                position: { base: "static", md: "sticky" },
+                top: "3",
+              },
+              content: {
+                _vertical: {
+                  ps: { base: "0", md: "var(--tabs-content-padding)" },
+                },
+              },
+            },
+          },
+        },
+      },
+      list: {
+        slots: [],
+        variants: {
+          // Chakra's reset drops the browser's default list padding and its list recipe
+          //   does not put any back, so without this the markers have nowhere to sit and
+          //   the list reads as flush body text.
+          indented: {
+            true: {
+              root: {
+                ps: "6",
               },
             },
           },

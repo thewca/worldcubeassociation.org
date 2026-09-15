@@ -12,7 +12,6 @@ import Loading from '../../Requests/Loading';
 
 export default function PaymentStepWrapper({
   competitionInfo,
-  user,
 }) {
   const { registrationId } = useRegistration();
 
@@ -40,7 +39,6 @@ export default function PaymentStepWrapper({
         competitionInfo={competitionInfo}
         connectedAccountId={connectedAccountId}
         stripePublishableKey={stripePublishableKey}
-        user={user}
       />
     );
   }
@@ -57,7 +55,6 @@ export default function PaymentStepWrapper({
       competitionInfo={competitionInfo}
       connectedAccountId={connectedAccountId}
       stripePublishableKey={stripePublishableKey}
-      user={user}
     />
   );
 }

@@ -12,7 +12,7 @@ import { FaPause, FaPlay, FaTimes } from "react-icons/fa";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import Flag from "react-world-flags";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { recordTagBadge } from "@/components/results/TableCells";
+import { WithRecordTag } from "@/components/results/TableCells";
 import formats from "@/lib/wca/data/formats";
 import { LiveCompetitor } from "@/types/live";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
@@ -262,8 +262,14 @@ function ResultsProjector({
                                   textAlign="right"
                                   fontWeight={statIndex === 0 ? 600 : 400}
                                 >
-                                  {formatAttemptResult(result[field], eventId)}{" "}
-                                  {recordTagBadge(result[recordTagField])}
+                                  <WithRecordTag
+                                    recordTag={result[recordTagField]}
+                                  >
+                                    {formatAttemptResult(
+                                      result[field],
+                                      eventId,
+                                    )}
+                                  </WithRecordTag>
                                 </Table.Cell>
                               ),
                             )}

@@ -123,11 +123,6 @@ class AdminController < ApplicationController
     }
   end
 
-  def do_compute_auxiliary_data
-    ComputeAuxiliaryData.perform_later
-    redirect_to panel_page_path(id: User.panel_pages[:computeAuxiliaryData])
-  end
-
   def override_regional_records
     action_params = params
                     .expect(check_regional_records_form: %i[competition_id event_id refresh_index])
@@ -270,6 +265,7 @@ class AdminController < ApplicationController
 
     all_results = Result.select("results.*, FALSE AS `muted`")
                         .joins(:event, :round_type)
+                        .includes(:round)
                         .where(
                           person_name: @person_name,
                           country_id: @country_id,
