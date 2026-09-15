@@ -1,4 +1,4 @@
-FROM ruby:3.4.6 AS base
+FROM ruby:4.0.6 AS base
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
