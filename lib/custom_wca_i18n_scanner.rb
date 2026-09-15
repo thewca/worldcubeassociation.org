@@ -2,7 +2,7 @@
 
 unless Rails.env.production?
   require 'i18n/tasks/scanners/file_scanner'
-  require 'i18n/tasks/scanners/ruby_ast_scanner'
+  require 'i18n/tasks/scanners/ast_matchers/message_receivers_matcher'
 
   # `I18nUtils.optional_t` wraps `I18n.t`, which the built-in matchers only
   # recognise when it is called as `t`/`I18n.t`. Without this the wrapped keys
