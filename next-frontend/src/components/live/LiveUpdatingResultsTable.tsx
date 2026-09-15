@@ -9,6 +9,7 @@ import {
   Switch,
   VStack,
   Link,
+  Box,
 } from "@chakra-ui/react";
 import ConnectionPulse from "@/components/live/ConnectionPulse";
 import { useLiveResults } from "@/providers/LiveResultProvider";
@@ -22,11 +23,12 @@ import {
   LuEye,
   LuPencil,
   LuGalleryVertical,
+  LuChartLine,
 } from "react-icons/lu";
 import NextLink from "next/link";
 import ResultsProjector from "@/components/live/ResultsProjector";
 import { route } from "nextjs-routes";
-import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { useAllRoundsInfo, useRoundInfo } from "@/providers/RoundInfoProvider";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
 import { forecastViewSupported } from "@/lib/live/forecastviewSupported";
@@ -62,6 +64,7 @@ export default function LiveUpdatingResultsTable({
   } = useLiveResults();
 
   const round = useRoundInfo();
+  const { rounds } = useAllRoundsInfo();
 
   const { id: roundWcifId, format: formatId, state } = round;
 
@@ -88,10 +91,15 @@ export default function LiveUpdatingResultsTable({
 
   return (
     <VStack align="left">
-      <HStack>
-        <Heading textStyle={{ sm: "h3", md: "h2", lg: "h1" }}>{title}</Heading>
+      <HStack wrap="wrap">
+        <Heading
+          textStyle={{ sm: "h3", md: "h2", lg: "h1" }}
+          w={{ base: "full", md: "auto" }}
+        >
+          {title}
+        </Heading>
         {isAdminView && <ConnectionPulse connectionState={connectionState} />}
-        <Spacer flex={1} />
+        <Spacer flex={1} hideBelow="md" />
         {!isAdminView && <ConnectionPulse connectionState={connectionState} />}
         {isLinkedRound && (
           <Switch.Root
@@ -106,20 +114,27 @@ export default function LiveUpdatingResultsTable({
             <Switch.Label>Show combined Results</Switch.Label>
           </Switch.Root>
         )}
-        {!isAdminView && (
-          <Switch.Root
-            checked={forecastView}
-            onCheckedChange={(e) => setForecastView(e.checked)}
-            colorPalette="green"
-            disabled={!forecastViewSupported(round, roundFinished)}
-          >
-            <Switch.HiddenInput />
-            <Switch.Control>
-              <Switch.Thumb />
-            </Switch.Control>
-            <Switch.Label>Forecast view</Switch.Label>
-          </Switch.Root>
-        )}
+        {!isAdminView &&
+          forecastViewSupported(round, rounds, roundFinished) && (
+            <Tooltip content="Forecast view" showArrow openDelay={200}>
+              <Switch.Root
+                checked={forecastView}
+                onCheckedChange={(e) => setForecastView(e.checked)}
+                colorPalette="green"
+              >
+                <Switch.HiddenInput />
+                <Switch.Control>
+                  <Switch.Thumb />
+                </Switch.Control>
+                <Switch.Label>
+                  <Box hideFrom="md" aria-label="Forecast view">
+                    <LuChartLine />
+                  </Box>
+                  <Box hideBelow="md">Forecast view</Box>
+                </Switch.Label>
+              </Switch.Root>
+            </Tooltip>
+          )}
         {!isAdminView && (
           <Tooltip content="Projector Mode" showArrow openDelay={200}>
             <IconButton variant="ghost" onClick={enableProjectorView}>

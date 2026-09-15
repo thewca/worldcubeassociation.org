@@ -10,5 +10,7 @@
     uploadedScrambleFilesCount: @competition.scramble_file_uploads.count,
     scoretakingSoftware: @competition.scoretaking_software,
     canSubmitResults: @current_user.can_submit_competition_results?(@competition),
+    usesWcaRegistration: @competition.use_wca_registration?,
+    hasAcceptedRegistrations: @competition.accepted_registrations.any?,
   }) %>
 <% end %>

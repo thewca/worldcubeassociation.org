@@ -4,9 +4,10 @@ require 'fileutils'
 
 class ResultsSubmissionController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, except: %i[newcomer_checks last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
+  before_action -> { redirect_to_root_unless_user(:can_upload_competition_results?, competition_from_params) }, only: %i[new upload_scrambles upload_json import_from_live create unfinished_persons]
   before_action -> { redirect_to_root_unless_user(:can_check_newcomers_data?, competition_from_params) }, only: %i[newcomer_checks]
   before_action :check_newcomers_data_access, only: %i[last_duplicate_checker_job_run compute_potential_duplicates newcomer_name_format_check newcomer_dob_check]
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wrt) }, only: %i[pending_results_submissions]
 
   def new
     @competition = competition_from_params
@@ -82,24 +83,38 @@ class ResultsSubmissionController < ApplicationController
       }
     end
 
+    is_wcif = ActiveRecord::Type::Boolean.new.cast(params[:is_wcif])
+
     # Do json analysis + insert record in db, then redirect to check inbox
     # (and delete existing record if any)
     upload_json = UploadJson.new({
                                    results_file: params.require(:results_file),
                                    competition_id: competition.id,
+                                   is_wcif: is_wcif,
                                  })
 
     mark_result_submitted = ActiveRecord::Type::Boolean.new.cast(params.require(:mark_result_submitted))
     store_uploaded_json = ActiveRecord::Type::Boolean.new.cast(params.require(:store_uploaded_json))
+    import_registrations = ActiveRecord::Type::Boolean.new.cast(params[:import_registrations])
 
     return render status: :unprocessable_content, json: { error: upload_json.errors.full_messages } unless upload_json.valid?
 
+    if is_wcif && import_registrations
+      ActiveRecord::Base.transaction do
+        indifferent_registrations_data = upload_json.registrations_data.map(&:with_indifferent_access)
+        Registrations::Helper.import_registrations!(competition, indifferent_registrations_data, current_user)
+      rescue StandardError => e
+        return render status: :unprocessable_content, json: { error: "Failed to import registrations: #{e.message}" }
+      end
+    end
+
     temporary_results_data = upload_json.temporary_results_data
+    upload_type = is_wcif ? UploadedJson.upload_types[:wca_live] : UploadedJson.upload_types[:results_json]
 
     errors = CompetitionResultsImport.import_temporary_results(
       competition,
       temporary_results_data,
-      UploadedJson.upload_types[:results_json],
+      upload_type,
       mark_result_submitted: mark_result_submitted,
       store_uploaded_json: store_uploaded_json,
       results_json_str: upload_json.results_json_str,
@@ -214,6 +229,25 @@ class ResultsSubmissionController < ApplicationController
     trigger_compute_potential_duplicates(competition.id)
 
     render status: :ok, json: { success: true }
+  end
+
+  def live_results_preview
+    render json: competition_from_params
+                 .live_results
+                 .includes(:live_attempts, :user, round: [:competition_event])
+                 .order(:global_pos)
+                 .sort_by { [it.event.rank, it.round.number] }
+                 .map(&:to_inbox_compat)
+  end
+
+  def pending_results_submissions
+    competitions = Competition.pending_results_submission.order_by_date
+
+    render json: competitions.as_json(
+      only: %i[id name end_date],
+      methods: [],
+      include: [],
+    )
   end
 
   private def competition_from_params

@@ -5323,8 +5323,8 @@ it:
           #original_hash: 576c3b8
           '4': >-
             Visita <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
-            Competition Organizer Guidelines</a> per ulteriori informazioni.
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
+            Competition Organizer Handbook</a> per ulteriori informazioni.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -5623,8 +5623,6 @@ it:
     competition_templates: Template per competizioni
     #original_hash: 5ca0558
     certificates: Template del WCT per gli attestati
-    #original_hash: f580987
-    orga_guidelines: Linee guida per gli organizzatori
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegati WCA
@@ -5984,7 +5982,7 @@ it:
       content1_html: >-
         Se ti interessa organizzare una competizione o se stai già pianificando
         di organizzarne una, leggi le nostre <a
-        href="/organizer-guidelines">linee guida per organizzatori</a>.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">linee guida per organizzatori</a>.
       #original_hash: 5016669
       content2_html: >-
         Questo documento contiene informazioni importanti e dovrebbe essere
@@ -6021,252 +6019,6 @@ it:
       Se sei interessato ad aggiungere/aggiornare una traduzione, consulta <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">le
       istruzioni sulla repository GitHub per le traduzioni</a>.
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      Benvenuto nella raccolta di Linee guida per gli Organizzatori del WQAC
-      (WCA Quality Assurance Committee). Se stai pensando di fare da
-      organizzatore, ti consigliamo fortemente di leggere questi documenti,
-      suddivisi in fondamentali e raccomandati. Assicurati di imparare il più
-      possibile da queste informazioni e sarai in grado di creare una
-      competizione divertente e di alta qualità!
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>Dichiarazione di non responsabilità</strong>: La WCA non organizza
-      personalmente competizioni. Quando organizzi una competizione WCA
-      <strong>non devi</strong> firmare nulla a nome della WCA. Rivolgiti sempre
-      alla tua associazione regionale/nazionale di riferimento che organizza o
-      assiste l'organizzazione di gare.
-    essential:
-      #original_hash: 44bd0ba
-      description: Documenti fondamentali
-      #original_hash: 1cf87ad
-      finding-venue: Trovare una sede
-      #original_hash: 3ce0d9c
-      orga-team-delegate: Creare un team organizzativo e contattare un Delegato
-      #original_hash: d3c693b
-      budget: Preventivare le spese di una competizione
-      #original_hash: b1429a7
-      schedule: Creare il programma
-      #original_hash: beea57d
-      checklist: Checklist per una competizione
-      #original_hash: 9defcf1
-      registration: Gestire le iscrizioni
-      #original_hash: e298a56
-      venue-setup: Sistemazione della sede
-      #original_hash: 2b6a5dd
-      work-during-comp: Compiti dell'organizzatore durante la competizione
-    recommended:
-      #original_hash: 6b843f3
-      title: Documenti raccomandati
-      #original_hash: 6e4fb29
-      staff: Assegnare i ruoli
-      #original_hash: 4735583
-      emails: Email
-      #original_hash: 8e7ca09
-      running-systems: Gestione di runner e giudici
-      #original_hash: 2b31c89
-      new-competitors: Accogliere partecipanti alla prima gara
-      #original_hash: 00c4f78
-      enhancing-experience: Migliorare l'esperienza per partecipanti e volontari
-      #original_hash: 2345aaa
-      reflection: Riflessioni degli organizzatori
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: Linee Guida WCA per gli Organizzatori
-    paragraph0:
-      #original_hash: ee36904
-      title: Versione breve
-      #original_hash: 60d9532
-      content: >-
-        A seguire troverai un breve riepilogo per avere un'idea dei punti chiave
-        necessari per organizzare una competizione. Se sei fortemente
-        interessato all'organizzazione, ti consigliamo di leggere i documenti
-        qui sopra.
-    paragraph1:
-      #original_hash: e5f5329
-      title: Come organizzare una competizione
-      #original_hash: 3dbbbee
-      content: >-
-        Ogni competizione WCA prevede che sia presente un Delegato WCA e che
-        questo faccia da supervisore. Se sei interessato a organizzare una
-        competizione, contatta il Delegato WCA più vicino a te. Questo sarà in
-        grado di fornirti maggiori informazioni sulle procedure e puoi aiutarti
-        a trovare una data disponibile con la competizione, in modo che non ci
-        siano sovrapposizioni con altre già pianificate nello stesso periodo. Se
-        nessun Delegato WCA è disponibile nella tua area, contatta il Delegato
-        Senior della regione.
-    paragraph2:
-      #original_hash: f20dd3b
-      title: Spese previste per organizzare una competizione
-      #original_hash: f16a06f
-      content: >-
-        Le spese previste differiscono da paese a paese e sono determinate da
-        diversi fattori, tra cui la dimensione della sede e il costo dei
-        materiali. È possibile coprire tutte le spese grazie alle tasse di
-        iscrizione; anche se, per tenerle il più basso possibile, è consigliato
-        cercare patrocini e sponsor. Anche se i Delegati WCA sono volontari e
-        non ricevono alcun compenso per il loro lavoro, gli organizzatori
-        dovrebbero prendere in considerazione un rimborso spese per il loro
-        viaggio.
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: Termine massimo per l'annuncio di una competizione
-      #original_hash: 477a672
-      content_html: >-
-        La competizione deve essere annunciata almeno 28 giorni prima
-        dell'inizio della stessa (vedi <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisiti
-        Competizione</a>). Un preavviso di soli 30 giorni è spesso
-        insufficiente. Prendi in considerazione tutte le operazioni necessarie
-        per una buona organizzazione, e calcola il giusto tempo per portarle a
-        termine. Inoltre il WCAT avrà bisogno di tempo per valutare la tua
-        competizione prima di annunciarla. Rivolgiti al tuo delegato se non sei
-        sicuro di quanto tempo sia necessario per la tua competizione.
-    paragraph4:
-      #original_hash: b6dca56
-      title: Criterio di prossimità
-      #original_hash: 0574d31
-      content1: >-
-        Le competizioni WCA saranno approvate solamente nel caso in cui si
-        trovino ad almeno 30 km o a 5 giorni di distanza da qualsiasi altra
-        competizione. In caso di conflitti con la regola, il WCAT dovrà decidere
-        se approvarla o meno. Un Delegato WCA che richieda l'approvazione di una
-        competizione con problemi di prossimità geografica o temporale, dovrà
-        fornire ulteriori informazioni e motivazioni sul perché la competizione
-        dovrebbe essere accettata. Possibili argomentazioni possono essere:
-      olist1:
-        #original_hash: de00462
-        '1': Le due competizioni non hanno eventi in comune.
-        #original_hash: b8ff462
-        '2': Le due competizioni si svolgono in due paesi differenti.
-      #original_hash: 5c5cf04
-      content2: >-
-        "FMC simultaneous competitions" sono competizioni WCA il cui unico
-        evento è FMC e che si svolgono contemporaneamente in diverse sedi.
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: >-
-            Le FMC simultaneous competitions non possono essere parte di
-            un'altra competizione.
-          alist1:
-            #original_hash: 75aa0c7
-            1a: >-
-              I periodi di tempo in cui entrambe si svolgono non possono
-              sovrapporsi.
-        '2':
-          #original_hash: b2b8004
-          content1: >-
-            Se una sede di tali competizioni dista meno di 10 km da qualsiasi
-            altra normale competizione, allora
-          alist1:
-            #original_hash: 8f532bb
-            2a: 'le competizioni dovrebbero distare 5 giorni, o'
-            #original_hash: e14e11e
-            2b: l'altra competizione non può avere l'evento FMC.
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: Annuncio degli eventi
-      #original_hash: 7ad62c7
-      content: >-
-        Tutti gli eventi che saranno svolti alla competizione devono essere
-        specificati dal Delegato in fase di richiesta di approvazione della
-        competizione. Aggiunte successive dovranno essere approvate dal WCAT.
-    paragraph5:
-      #original_hash: 17d01de
-      title: Limite di partecipanti
-      #original_hash: 6bfef2c
-      content_html: >-
-        Il numero di partecipanti può essere limitato per evento o per
-        competizione (vedi <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisiti
-        Competizione</a>). Il Delegato della competizione deve ricevere dal WCAT
-        un'approvazione del limite di partecipanti. Il limite di partecipanti
-        deve essere scelto accuratamente e congruentemente con l'aspettativa di
-        partecipazione. Il limite non deve essere impostato a un valore più
-        basso per motivi secondari. Tale limite deve essere tenuto in
-        considerazione già in fase di ricerca di una sede adeguata. Il limite di
-        partecipanti deve essere chiaramente comunicato nella pagina della
-        competizione sul sito WCA.
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: Gestione delle iscrizioni
-      #original_hash: bd669a1
-      content: >-
-        Le iscrizioni devono essere gestite secondo il criterio "chi prima
-        arriva prima viene servito". Ciò implica che le iscrizioni più vecchie
-        dovrebbero essere gestite per prime. In caso l'iscrizione preveda
-        pagamento anticipato, un'iscrizione viene considerata completa quando la
-        tassa di iscrizione è stata pagata. Tale requisito deve essere
-        specificato chiaramente nella pagina dedicata alle informazioni
-        sull'iscrizione.
-    paragraph7:
-      #original_hash: e4f1c62
-      title: Gestione della lista d'attesa
-      #original_hash: 81ca3f3
-      content1: >-
-        Una volta che il limite di partecipanti per una competizione viene
-        raggiunto, viene creata una lista d'attesa. Quando una delle iscrizioni
-        approvate viene cancellata, può essere rimpiazzata dalla prima in lista
-        d'attesa.
-      #original_hash: 802b34f
-      content2: >-
-        In caso di pagamento anticipato delle tasse di iscrizione, il modo
-        migliore per gestire un posto che si è liberato è quello di offrirlo al
-        primo partecipante in lista d'attesa e scegliere una scadenza entro la
-        quale questo debba effettuare il pagamento (es. 48h). Nel caso in cui il
-        pagamento non venga effettuato o il partecipante scelga di annullare
-        l'iscrizione, il posto libero dovrebbe essere offerto alla persona
-        successiva in lista d'attesa. Questo processo dovrebbe essere ripetuto
-        fino all'assegnazione di tutti i posti liberi. Non sono previste
-        eccezioni che permettano ad qualcuno di bypassare la lista d'attesa.
-      #original_hash: 37bcbd6
-      content3: >-
-        In caso sia permesso a una persona di competere alla competizione anche
-        in caso questo non abbia rispettato il processo di iscrizione, i suoi
-        risultati verranno cancellati (assumendo che fosse presente una lista
-        d'attesa).
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: Compiti prima della competizione
-      list:
-        #original_hash: c8abb5e
-        '1': >-
-          Prima di annunciare la competizione, è richiesta la creazione e la
-          pubblicazione di un programma sul sito web della competizione. Questo
-          programma non deve essere per forza definitivo e potrà subire
-          variazioni in seguito.
-        #original_hash: e93d043
-        '2': >-
-          I partecipanti dovrebbero essere divisi in gruppi, i foglietti per i
-          risultati dovrebbero essere stampati e divisi rispettando la
-          distribuzione in gruppi. Suggeriamo inoltre di pianificare in anticipo
-          gli scrambler per ogni gruppo di ogni evento, almeno per i primi
-          turni. È consigliabile scegliere scrambler affidabili.
-    paragraph9:
-      #original_hash: ead44f5
-      title: Compiti durante la competizione
-      #original_hash: ee2e9c6
-      content: >-
-        I compiti di un organizzatore durante lo svolgimento di una competizione
-        dovrebbero essere discussi con il Delegato WCA. I compiti tipici sono
-        (possono essere delegati ad altre persone):
-      list:
-        #original_hash: 03aea46
-        '1': Gestione del tavolo delle iscrizioni
-        #original_hash: c4388f3
-        '2': Annunci
-        #original_hash: 45c78ae
-        '3': Chiamate dei gruppi e disposizione dei foglietti per i risultati
-        #original_hash: 0b31986
-        '4': Raccolta e stampa dei risultati
-        #original_hash: 7ab2d4c
-        '5': Ricerca di giudici e scrambler
-        #original_hash: 52e8316
-        '6': >-
-          Gestione di tutti i problemi organizzativi relativi alla sede (es.
-          connessione internet)
   media:
     common:
       #original_hash: f9b7a97

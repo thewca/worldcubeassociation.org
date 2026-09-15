@@ -1,5 +1,7 @@
 import countries from "@/lib/wca/data/countries";
-import { HStack, IconButton, Table } from "@chakra-ui/react";
+import { HStack, IconButton, Link, Table } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { route } from "nextjs-routes";
 import { AiFillFileImage, AiFillTrophy } from "react-icons/ai";
 import { useT } from "@/lib/i18n/useI18n";
 import EditIcon from "@/components/icons/EditIcon";
@@ -17,7 +19,16 @@ export function NameTableCell({ competition }: TableCellProps) {
   return (
     <Table.Cell>
       <HStack>
-        <a href={competition.url}>{competition.short_display_name}</a>
+        <Link asChild>
+          <NextLink
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: competition.id },
+            })}
+          >
+            {competition.short_display_name}
+          </NextLink>
+        </Link>
         {(competition.championships?.length ?? 0) > 0 && <AiFillTrophy />}
       </HStack>
     </Table.Cell>

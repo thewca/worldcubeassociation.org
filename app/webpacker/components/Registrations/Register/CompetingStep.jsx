@@ -389,7 +389,7 @@ export default function CompetingStep({
             disabledText={(event) => eventQualificationToString(
               { id: event },
               currentStepParameters.qualification_wcif[event],
-              { short: true },
+              { short: true, isV2: true },
             )}
               // Don't error if the user hasn't interacted with the form yet
             shouldErrorOnEmpty={hasInteracted}

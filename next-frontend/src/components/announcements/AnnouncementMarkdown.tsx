@@ -6,9 +6,9 @@ import { ChakraMarkdown } from "@/components/Markdown";
 /// otherwise mute it on /posts only.
 ///
 /// Links inherit too, for the same reason: the `link` recipe pins
-/// `colorPalette: "link"`, which would paint them fixed WCA blue on top of a
-/// `card.pastel` background drawn from the card's own `1A` — invisible on the
-/// blue card. Inheriting costs the colour cue, so underline them instead.
+/// `colorPalette: "link"`, which would paint them fixed WCA blue regardless of
+/// the card's own palette. Inheriting costs the colour cue, so underline them
+/// instead.
 export default function AnnouncementMarkdown({
   children,
 }: {

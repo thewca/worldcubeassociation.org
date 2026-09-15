@@ -31,7 +31,8 @@ import formats from "@/lib/wca/data/formats";
 import {
   parseActivityCode,
   timeLimitToString,
-  advancementConditionToString,
+  advancementResultCondition,
+  resultConditionToString,
   cutoffToString,
   type WcifEvent,
   type WcifRound,
@@ -281,7 +282,12 @@ function ActivityRow({
   const activityIds = activityGroup.map((activity) => activity.id);
 
   // note: round may be undefined for custom activities like lunch
-  const { format, timeLimit, cutoff, advancementCondition } = round || {};
+  const { format, timeLimit, cutoff } = round || {};
+
+  const allRounds = wcifEvents.flatMap((event) => event.rounds);
+
+  const resultCondition =
+    round && advancementResultCondition(round.id, allRounds);
 
   const roomsUsed = rooms.filter((room) =>
     room.activities.some((activity) => activityIds.includes(activity.id)),
@@ -312,7 +318,7 @@ function ActivityRow({
               )}
             </GridItem>
             <GridItem colSpan={2}>
-              {round && timeLimitToString(t, timeLimit, eventId, wcifEvents)}
+              {round && timeLimitToString(t, timeLimit, eventId, allRounds)}
               {timeLimit && (
                 <>
                   {timeLimit.cumulativeRoundIds.length === 1 && (
@@ -328,13 +334,8 @@ function ActivityRow({
               {cutoff && cutoffToString(t, cutoff, eventId)}
             </GridItem>
             <GridItem colSpan={2}>
-              {advancementCondition &&
-                advancementConditionToString(
-                  t,
-                  advancementCondition,
-                  eventId,
-                  format,
-                )}
+              {resultCondition &&
+                resultConditionToString(t, resultCondition, eventId, format)}
             </GridItem>
           </>
         )}
@@ -383,7 +384,7 @@ function ActivityRow({
                 <GridItem textAlign="right" colSpan={[10, 4]}>
                   <b>
                     {round &&
-                      timeLimitToString(t, timeLimit, eventId, wcifEvents)}
+                      timeLimitToString(t, timeLimit, eventId, allRounds)}
                     {timeLimit.cumulativeRoundIds.length === 1 && (
                       <a href="#cumulative-time-limit">*</a>
                     )}
@@ -404,16 +405,16 @@ function ActivityRow({
                 </GridItem>
               </>
             )}
-            {advancementCondition && (
+            {resultCondition && (
               <>
                 <GridItem textAlign="left" colSpan={[6, 4]}>
                   {t("competitions.events.proceed")}
                 </GridItem>
                 <GridItem textAlign="right" colSpan={[10, 4]}>
                   <b>
-                    {advancementConditionToString(
+                    {resultConditionToString(
                       t,
-                      advancementCondition,
+                      resultCondition,
                       eventId,
                       format,
                     )}

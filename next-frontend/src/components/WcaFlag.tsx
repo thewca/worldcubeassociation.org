@@ -1,16 +1,24 @@
 import _TwFlag from "@/components/icons/flags/_TwFlag";
 
 import type { ComponentPropsWithoutRef } from "react";
+import { Icon } from "@chakra-ui/react";
 import Flag from "react-world-flags";
 
 type FlagProps = ComponentPropsWithoutRef<typeof Flag>;
+type IconProps = ComponentPropsWithoutRef<typeof Icon>;
 
-const WcaFlag = ({ code, ...restProps }: FlagProps) => {
+type WcaFlagProps = IconProps & Pick<FlagProps, "code">;
+
+const WcaFlag = ({ code, ...restProps }: WcaFlagProps) => {
   if (code?.toUpperCase() === "TW") {
-    return <_TwFlag />;
+    return <_TwFlag {...restProps} />;
   }
 
-  return <Flag code={code} {...restProps} />;
+  return (
+    <Icon asChild {...restProps}>
+      <Flag code={code} fallback={code} />
+    </Icon>
+  );
 };
 
 export default WcaFlag;

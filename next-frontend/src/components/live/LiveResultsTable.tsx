@@ -177,6 +177,8 @@ export default function LiveResultsTable({
                       competitor={competitorAndTheirResults}
                       rowSpan={rowSpan}
                       link={!isAdmin}
+                      showFirstTimer={isAdmin}
+                      t={t}
                     />
                   )}
                   {showText && (

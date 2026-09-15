@@ -47,6 +47,10 @@ const withRoutes = nextRoutes({ outDir: "src/types" });
 
 const shouldUseProprietaryFont = process.env.PROPRIETARY_FONT === "TTNormsPro";
 
+// Evaluated once per build and inlined, so anything seeded off it (the RandomBackground
+//   grid) is stable within a deploy and reshuffles on the next one.
+const buildSeed = Date.now().toString(36);
+
 const nextConfig: NextConfig = {
   serverExternalPackages: ["newrelic"],
   webpack: (config, { isServer, webpack }) => {
@@ -65,6 +69,10 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
+  env: {
+    NEXT_PUBLIC_BUILD_SEED: buildSeed,
+  },
+  cacheComponents: true,
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },
@@ -83,6 +91,10 @@ const nextConfig: NextConfig = {
       new URL("https://avatars.worldcubeassociation.org/**"),
     ],
   },
+  // Set at build time by .github/actions/build-js-image; the matching files are synced
+  //   to the assets bucket in the same step. Unset in development, where the Next server
+  //   serves /_next/static itself.
+  assetPrefix: process.env.NEXT_ASSET_PREFIX,
   output: "standalone",
   // Explicitly include newrelic and every transitive dependency in the
   // standalone output. Next.js's file tracer misses packages loaded via

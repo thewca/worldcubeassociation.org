@@ -4,16 +4,19 @@ import { Image, Card } from "@chakra-ui/react";
 type CardRootProps = ComponentPropsWithoutRef<typeof Card.Root>;
 
 type MarkdownFirstImageProps = {
-  content: string;
+  content: string | null;
   alt?: string;
 } & CardRootProps;
+
+export const extractMarkdownImage = (content: string | null) =>
+  content?.match(/!\[.*?\]\((.*?)\)/);
 
 export const MarkdownFirstImage = ({
   content,
   alt = "Image",
   ...cardRootProps
 }: MarkdownFirstImageProps) => {
-  const match = content.match(/!\[.*?\]\((.*?)\)/);
+  const match = extractMarkdownImage(content);
 
   if (!match) return null;
 
@@ -27,3 +30,5 @@ export const MarkdownFirstImage = ({
     </Card.Root>
   );
 };
+
+export default MarkdownFirstImage;

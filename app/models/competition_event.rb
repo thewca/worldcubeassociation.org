@@ -180,10 +180,13 @@ class CompetitionEvent < ApplicationRecord
       round
     end
     previously_linked_rounds.each(&:destroy_if_orphaned)
-    # This is not techincally a third pass, because we're not updating the round itself.
-    #   But for the advancement through rounds, the whole CE already needs to be fully linked up
-    new_rounds.zip(wcif["rounds"]).each do |round, round_wcif|
-      round.load_live_results!(round_wcif["results"], current_user, version: version) if round_wcif["results"].present?
+    # ILR is always the source of truth for results if it is set
+    unless competition.scoretaking_software_internal?
+      # This is not technically a third pass, because we're not updating the round itself.
+      #   But for the advancement through rounds, the whole CE already needs to be fully linked up
+      new_rounds.zip(wcif["rounds"]).each do |round, round_wcif|
+        round.load_live_results!(round_wcif["results"], current_user, version: version) if round_wcif["results"].present?
+      end
     end
     wcif_qualification = CompetitionEvent.load_wcif_qualification(wcif, version: version)
     self.update!(
