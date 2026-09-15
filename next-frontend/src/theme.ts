@@ -410,6 +410,9 @@ const customConfig = defineConfig({
           },
         },
       },
+      sizes: {
+        avatarThumb: { value: "75px" },
+      },
       cursor: {
         menuitem: { value: "pointer" },
         checkbox: { value: "pointer" },
@@ -429,10 +432,10 @@ const customConfig = defineConfig({
           fg: { value: "{colors.link}" },
         },
         recordMarkers: {
-          personal: { value: "{colors.orange.solid}" },
-          national: { value: "{colors.green.solid}" },
-          continental: { value: "{colors.red.solid}" },
-          world: { value: "{colors.blue.solid}" },
+          personal: { value: "{colors.orange.fg}" },
+          national: { value: "{colors.green.fg}" },
+          continental: { value: "{colors.red.fg}" },
+          world: { value: "{colors.blue.fg}" },
         },
         wcaWhite: {
           // values different from Chakra's `gray` scale: They use an "almost-white" palette in dark mode
@@ -498,6 +501,9 @@ const customConfig = defineConfig({
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
+          // `subtle` is a dark grey in both modes, so without an explicit `fg` the badge
+          //   text inherits the page colour and becomes unreadable in light mode.
+          fg: { value: "{colors.supplementary.text.white}" },
           cubeShades: {
             left: { value: "#282828" },
             top: { value: "#3B3B3B" },

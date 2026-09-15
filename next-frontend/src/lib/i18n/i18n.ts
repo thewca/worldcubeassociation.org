@@ -40,6 +40,11 @@ i18next
     // This isn't exactly hard to program but can be hard to maintain (and cover all edge cases)
     // so for now we pretend that plurals are demarcated just as normal nesting items.
     pluralSeparator: ".",
+    react: {
+      // i18next only keeps <br>, <strong>, <i> and <p> by default, but our Rails locale
+      //   strings also use <b> and <u>.
+      transKeepBasicHtmlNodesFor: ["br", "strong", "i", "p", "b", "u"],
+    },
     detection: {
       order: ["cookie", "navigator"],
       lookupCookie: storageKey,

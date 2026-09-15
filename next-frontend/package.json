@@ -52,14 +52,14 @@
     "luxon": "^3.7.2",
     "maplibre-gl": "^6.7.0",
     "newrelic": "^14.4.0",
-    "next": "16.3.4",
+    "next": "16.3.5",
     "nextjs-routes": "^2.2.5",
     "nextjs-toploader": "^3.9.17",
     "openapi-fetch": "^0.16.0",
     "openapi-react-query": "^0.5.4",
     "payload": "3.89.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "react-hotkeys-hook": "^5.3.3",
     "react-i18next": "^17.0.13",
     "react-icons": "^5.7.0",
@@ -110,7 +110,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^10",
-    "eslint-config-next": "16.3.4",
+    "eslint-config-next": "16.3.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
     "i18n-iso-countries": "^7.14.0",
@@ -123,5 +123,8 @@
   "scarfSettings": {
     "enabled": false
   },
-  "packageManager": "yarn@4.17.0"
+  "packageManager": "yarn@4.18.0",
+  "engines": {
+    "node": ">=26"
+  }
 }

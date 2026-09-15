@@ -54,7 +54,9 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
     return <Text>Failed fetching results</Text>;
   }
 
-  return <ByCompetitionTable results={resultsQuery} t={t} />;
+  return (
+    <ByCompetitionTable results={resultsQuery} t={t} highlightPersonalBests />
+  );
 };
 
 export default ResultsTab;

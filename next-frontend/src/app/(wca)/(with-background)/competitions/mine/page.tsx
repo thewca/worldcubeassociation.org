@@ -6,6 +6,8 @@ import PastCompetitionsTable from "@/components/competitions/Mine/PastCompetitio
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import { Metadata } from "next";
+import Link from "next/link";
+import { route } from "nextjs-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -38,9 +40,14 @@ export default async function MyCompetitions() {
       <Heading size="5xl">
         {session.user?.wcaId && (
           <Button asChild>
-            <a href={`/persons/${session.user.wcaId}`}>
+            <Link
+              href={route({
+                pathname: "/persons/[wcaId]",
+                query: { wcaId: session.user.wcaId },
+              })}
+            >
               {t("layouts.navigation.my_results")}
-            </a>
+            </Link>
           </Button>
         )}
         {t("competitions.my_competitions.title")}

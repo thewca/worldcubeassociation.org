@@ -8,11 +8,12 @@ const recordTagBadge = (tag?: string | null) => {
     case "WR": {
       return { color: "red", label: "WR" };
     }
+    case "AfR":
+    case "AsR":
     case "ER":
     case "NAR":
-    case "SAR":
-    case "ASR":
-    case "OCR": {
+    case "OcR":
+    case "SAR": {
       return { color: "yellow", label: "CR" };
     }
     case "NR": {
@@ -93,4 +94,22 @@ export function AttemptsCells({
       </Table.Cell>
     );
   });
+}
+
+// Mirrors the old Rails `pb_type_class_for_result`: a result that was a personal
+// best at the time it was achieved is coloured, upgraded to the record's own
+// colour when it was also a regional record.
+export function personalBestColor(regionalRecord?: string | null) {
+  switch (regionalRecord) {
+    case "WR":
+      return "recordMarkers.world";
+    case "NR":
+      return "recordMarkers.national";
+    case "":
+    case null:
+    case undefined:
+      return "recordMarkers.personal";
+    default:
+      return "recordMarkers.continental";
+  }
 }

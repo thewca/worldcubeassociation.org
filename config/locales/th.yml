@@ -387,6 +387,8 @@ th:
       other: '%{count} วัน'
     #original_hash: 51ef7d4
     search_site: ค้นหาในเว็บ
+    #original_hash: d9c883a
+    back_to_top: กลับขึ้นไปด้านบน
     #original_hash: d7decf1
     filter: คัดกรอง
     #original_hash: f6fdbe4
@@ -3165,7 +3167,7 @@ th:
       #original_hash: db98a68
       title: การแข่งขัน
       #original_hash: 6e2eb0a
-      all_competitions: ผู้เข้าแข่งขันทั้งหมด
+      all_competitions: การแข่งขันทั้งหมด
       #original_hash: 6a72085
       all_events: ทั้งหมด
       #original_hash: 6d76b81
@@ -3301,8 +3303,8 @@ th:
         full: เต็ม
         #original_hash: cf9b770
         open: เปิด
-        #original_hash: 44bb7df
-        not_open: ไม่เปิด
+        #original_hash: 9c46019
+        not_open: ยังไม่เปิด
         #original_hash: 88d86b7
         closed: ปิด
       #original_hash: 184f3ab
@@ -3317,6 +3319,15 @@ th:
       no_more_comps: ไม่มีการแข่งขัน
       #original_hash: 8b09d74
       no_comp_found: ไม่พบการแข่งขัน
+      #original_hash: 9937970
+      why_compete_description_html: >-
+        <p>การแข่งขันไม่ได้เป็นเพียงแค่การเฟ้นหาผู้ที่ทำเวลาได้เร็วที่สุดเท่านั้น
+        แต่ยังเป็นกิจกรรมทางสังคมอีกด้วย!
+        ใครก็ตามที่สามารถแก้รูบิกได้สามารถมาร่วมงานและสร้างสถิติใหม่ให้กับตัวเองได้เลย
+        การทำความรู้จักเพื่อนใหม่ก็เป็นเรื่องง่าย
+        เพราะทุกคนต่างร่วมมือกันเพื่อให้การแข่งขันดำเนินไปได้อย่างราบรื่น</p>
+        <p>ใช้เครื่องมือด้านล่างนี้เพื่อค้นหาการแข่งขันที่จัดขึ้นใกล้คุณ
+        แล้วเริ่มต้นเส้นทางแห่งการเล่นรูบิกของคุณได้เลย!</p>
     my_competitions_table:
       #original_hash: 5301648
       edit: แก้ไข
@@ -3694,8 +3705,10 @@ th:
           external_registration_page: หน้าเว็บที่ผู้เข้าแข่งขันต้องสมัครการแข่งขัน ต้องเป็น URL ที่ถูกต้อง
           #original_hash: da39a3e
           uses_wca_registration: ''
-          #original_hash: cc7d557
-          scoretaking_software: 'เลือก ''%{choice_ilr}'' หากคุณต้องการใช้ Dual Rounds'
+          #original_hash: 08df794
+          scoretaking_software: >-
+            เลือก '%{choice_ilr}' หรือ external tool หากคุณต้องการใช้ Dual
+            Rounds
         user_settings:
           #original_hash: da39a3e
           receive_registration_emails: ''
@@ -6194,6 +6207,10 @@ th:
       automatically_position_fixed_info: >-
         [%{round_id}] แก้ไขตำแหน่งของ %{person_name} จาก %{pos} เป็น
         %{expected_pos} โดยอัตโนมัติ
+      #original_hash: fae77ce
+      automatically_global_position_fixed_info: >-
+        [%{round_id}] แก้ไขตำแหน่งโดยรวมของ %{person_name} จาก %{pos} เป็น
+        %{expected_pos} โดยอัตโนมัติ
       #original_hash: e895bf5
       mbf_result_over_time_limit_warning: >-
         [%{round_id}] ผลลัพธ์ '%{result}' สำหรับ %{person_name} เกินเวลาที่กำหนด
@@ -6255,6 +6272,10 @@ th:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} อยู่ในลำดับที่ผิด: คาดหวัง %{expected_pos}
         แต่กลับได้รับ %{pos}
+      #original_hash: 678c05b
+      wrong_global_position_in_results_error: >-
+        [%{round_id}] %{person_name} อยู่ในอันดับรวมที่ไม่ถูกต้อง:
+        คาดว่าจะเป็นอันดับ %{expected_pos} แต่ได้อันดับ %{pos}
     rounds:
       #original_hash: 517fd54
       too_many_qualified_warning: >-
