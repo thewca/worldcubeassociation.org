@@ -45,7 +45,10 @@ jobs:
       - name: Install fresh Bundler packages
         run: bin/bundle install
       - name: Set up Corepack/Yarn
-        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        run: |
+          npm install -g corepack
+          corepack enable
       - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
@@ -90,7 +93,10 @@ jobs:
       - name: Install fresh Bundler packages
         run: bin/bundle install
       - name: Set up Corepack/Yarn
-        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        run: |
+          npm install -g corepack
+          corepack enable
       - uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
