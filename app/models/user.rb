@@ -125,6 +125,30 @@ class User < ApplicationRecord
   devise :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
+
+  ABSOLUTE_SESSION_TIMEOUT = 90.days
+  attr_accessor :remembered_session_started_at
+
+  class << self
+    def serialize_into_cookie(record)
+      super << (record.remembered_session_started_at || Time.current).to_f.to_s
+    end
+
+    def serialize_from_cookie(*args)
+      record = super(*args.first(3))
+      return unless record
+
+      remembered_session_started_at = args.fourth
+      # Existing three-part cookies start their absolute timeout when first used.
+      return record unless remembered_session_started_at
+
+      record.remembered_session_started_at = Time.zone.at(remembered_session_started_at.to_f)
+      return if record.remembered_session_started_at <= ABSOLUTE_SESSION_TIMEOUT.ago
+
+      record
+    end
+  end
+
   devise :two_factor_authenticatable,
          otp_secret_encryption_key: AppSecrets.OTP_ENCRYPTION_KEY
   BACKUP_CODES_LENGTH = 8
