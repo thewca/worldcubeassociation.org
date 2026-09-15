@@ -22,7 +22,7 @@ RUN apt-get update -qq && \
       curl \
       gnupg
 
-ARG NODE_MAJOR=24
+ARG NODE_MAJOR=26
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
 
@@ -37,6 +37,7 @@ RUN apt-get update -qq && \
 FROM base AS build
 
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
+RUN npm install -g corepack
 RUN corepack enable
 
 # Install native dependencies for Ruby:
