@@ -73,10 +73,12 @@ type RegistrySource = {
   globals: { slug: string; fields: Field[] }[];
 };
 
-function labelOf(field: Extract<Field, { name: string }>): string {
-  const { label } = field;
-  if (typeof label === "string") return label;
-  return field.name;
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value != null && typeof value === "object";
+}
+
+function isBlock(row: unknown, blockSlug: string): boolean {
+  return isRecord(row) && row.blockType === blockSlug;
 }
 
 function segmentToString(seg: PathSegment): string {
@@ -105,33 +107,28 @@ function walk(
   parent: LocalizedField["parent"],
   basePath: PathSegment[],
   parentIsLocalized: boolean,
-  out: LocalizedField[],
-): void {
-  for (const field of fields) {
+): LocalizedField[] {
+  return fields.flatMap((field): LocalizedField[] => {
     switch (field.type) {
       // Named object containers (unnamed ones were collapsed by flattening).
       case "group":
       case "tab":
-        walk(
+        return walk(
           field.flattenedFields,
           parent,
           [...basePath, { kind: "field", name: field.name }],
           parentIsLocalized ||
             fieldShouldBeLocalized({ field, parentIsLocalized }),
-          out,
         );
-        break;
 
       case "array":
-        walk(
+        return walk(
           field.flattenedFields,
           parent,
           [...basePath, { kind: "array", name: field.name }],
           parentIsLocalized ||
             fieldShouldBeLocalized({ field, parentIsLocalized }),
-          out,
         );
-        break;
 
       case "blocks": {
         const childIsLocalized =
@@ -142,48 +139,44 @@ function walk(
         // flattenAllFields resolves inline blocks and object references to
         // FlattenedBlock; bare string references (defined in `config.blocks`)
         // can't be resolved without the config and are skipped.
-        const blocks = (field.blockReferences ?? field.blocks).filter(
-          (block): block is FlattenedBlock => typeof block !== "string",
-        );
-        for (const block of blocks) {
-          walk(
-            block.flattenedFields,
-            parent,
-            [
-              ...basePath,
-              { kind: "block", name: field.name, blockSlug: block.slug },
-            ],
-            childIsLocalized,
-            out,
+        return (field.blockReferences ?? field.blocks)
+          .filter((block): block is FlattenedBlock => typeof block !== "string")
+          .flatMap((block) =>
+            walk(
+              block.flattenedFields,
+              parent,
+              [
+                ...basePath,
+                { kind: "block", name: field.name, blockSlug: block.slug },
+              ],
+              childIsLocalized,
+            ),
           );
-        }
-        break;
       }
 
       case "text":
       case "textarea":
       case "richText": {
-        const isLocalized = fieldShouldBeLocalized({
-          field,
-          parentIsLocalized,
-        });
-        if (isLocalized || parentIsLocalized) {
-          const path: PathSegment[] = [
-            ...basePath,
-            { kind: "field", name: field.name },
-          ];
-          out.push({
+        const isLocalized =
+          fieldShouldBeLocalized({ field, parentIsLocalized }) ||
+          parentIsLocalized;
+        if (!isLocalized) return [];
+        const path: PathSegment[] = [
+          ...basePath,
+          { kind: "field", name: field.name },
+        ];
+        return [
+          {
             parent,
             path,
             pathString: `${parent.slug}.${path.map(segmentToString).join(".")}`,
             fieldType: field.type,
             widget: field.type === "richText" ? "lexical" : "plain",
-            label: labelOf(field),
+            label: typeof field.label === "string" ? field.label : field.name,
             required: field.required === true,
             inheritedLocalization: !field.localized && parentIsLocalized,
-          });
-        }
-        break;
+          },
+        ];
       }
 
       // Everything else (number, checkbox, select, upload, relationship, ...)
@@ -205,9 +198,9 @@ function walk(
               `nested localized fields would be silently missed. Add a case to walk().`,
           );
         }
-        break;
+        return [];
     }
-  }
+  });
 }
 
 /**
@@ -217,26 +210,24 @@ function walk(
 export function buildTranslationRegistry(
   config: RegistrySource,
 ): LocalizedField[] {
-  const out: LocalizedField[] = [];
-  for (const collection of config.collections) {
-    walk(
-      flattenAllFields({ fields: collection.fields }),
-      { type: "collection", slug: collection.slug },
-      [],
-      false,
-      out,
-    );
-  }
-  for (const global of config.globals) {
-    walk(
-      flattenAllFields({ fields: global.fields }),
-      { type: "global", slug: global.slug },
-      [],
-      false,
-      out,
-    );
-  }
-  return out;
+  return [
+    ...config.collections.flatMap((collection) =>
+      walk(
+        flattenAllFields({ fields: collection.fields }),
+        { type: "collection", slug: collection.slug },
+        [],
+        false,
+      ),
+    ),
+    ...config.globals.flatMap((global) =>
+      walk(
+        flattenAllFields({ fields: global.fields }),
+        { type: "global", slug: global.slug },
+        [],
+        false,
+      ),
+    ),
+  ];
 }
 
 /**
@@ -247,60 +238,50 @@ export function resolveStrings(
   field: LocalizedField,
   doc: Record<string, unknown>,
 ): TranslatableString[] {
-  const out: TranslatableString[] = [];
-
   const recurse = (
     segs: PathSegment[],
     node: unknown,
     dataPath: (string | number)[],
     keyParts: string[],
-  ): void => {
-    if (node == null || typeof node !== "object") return;
-    const record = node as Record<string, unknown>;
+  ): TranslatableString[] => {
+    if (!isRecord(node)) return [];
     const [seg, ...rest] = segs;
 
     if (seg.kind === "field") {
-      if (rest.length === 0) {
-        out.push({
-          field,
-          dataPath: [...dataPath, seg.name],
-          key: `${field.parent.slug}:${[...keyParts, seg.name].join(".")}`,
-          value: record[seg.name] ?? null,
-        });
-      } else {
-        recurse(
+      if (rest.length > 0) {
+        return recurse(
           rest,
-          record[seg.name],
+          node[seg.name],
           [...dataPath, seg.name],
           [...keyParts, seg.name],
         );
       }
-      return;
+      return [
+        {
+          field,
+          dataPath: [...dataPath, seg.name],
+          key: `${field.parent.slug}:${[...keyParts, seg.name].join(".")}`,
+          value: node[seg.name] ?? null,
+        },
+      ];
     }
 
     // array | block: iterate rows, preferring a stable `id` for the key.
-    const rows = record[seg.name];
-    if (!Array.isArray(rows)) return;
-    rows.forEach((row, index) => {
-      if (
-        seg.kind === "block" &&
-        (row as Record<string, unknown>)?.blockType !== seg.blockSlug
-      ) {
-        return;
-      }
-      const id = (row as Record<string, unknown>)?.id;
-      const keyPart = `${seg.name}[${id ?? index}]`;
-      recurse(
+    const rows = node[seg.name];
+    if (!Array.isArray(rows)) return [];
+    return rows.flatMap((row, index) => {
+      if (seg.kind === "block" && !isBlock(row, seg.blockSlug)) return [];
+      const id = isRecord(row) ? row.id : undefined;
+      return recurse(
         rest,
         row,
         [...dataPath, seg.name, index],
-        [...keyParts, keyPart],
+        [...keyParts, `${seg.name}[${id ?? index}]`],
       );
     });
   };
 
-  recurse(field.path, doc, [], []);
-  return out;
+  return recurse(field.path, doc, [], []);
 }
 
 /**
@@ -316,42 +297,33 @@ export function resolveLeaf(
   field: LocalizedField,
   dataPath: (string | number)[],
 ): { container: Record<string, unknown>; key: string } | null {
-  let node: Record<string, unknown> = doc;
-  let i = 0;
-  for (let s = 0; s < field.path.length; s += 1) {
-    const seg = field.path[s];
-    const isLast = s === field.path.length - 1;
+  const step = (
+    node: Record<string, unknown>,
+    segs: PathSegment[],
+    path: (string | number)[],
+  ): { container: Record<string, unknown>; key: string } | null => {
+    // A path that runs out mid-walk never reached a leaf. `walk` only ever
+    // ends a path on a `field` segment, so this is a malformed descriptor.
+    if (segs.length === 0) return null;
+    const [seg, ...rest] = segs;
+    if (path[0] !== seg.name) return null;
 
     if (seg.kind === "field") {
-      if (dataPath[i] !== seg.name) return null;
-      if (isLast) return { container: node, key: seg.name };
+      if (rest.length === 0) return { container: node, key: seg.name };
       const next = node[seg.name];
-      if (next == null || typeof next !== "object") return null;
-      node = next as Record<string, unknown>;
-      i += 1;
-      continue;
+      return isRecord(next) ? step(next, rest, path.slice(1)) : null;
     }
 
-    // array | block: data path must be [name, index, ...]
+    // array | block: the data path must read [name, index, ...]
     const rows = node[seg.name];
-    const index = dataPath[i + 1];
-    if (
-      dataPath[i] !== seg.name ||
-      !Array.isArray(rows) ||
-      typeof index !== "number"
-    ) {
-      return null;
-    }
+    const index = path[1];
+    if (!Array.isArray(rows) || typeof index !== "number") return null;
+
     const row = rows[index];
-    if (!row || typeof row !== "object") return null;
-    if (
-      seg.kind === "block" &&
-      (row as Record<string, unknown>).blockType !== seg.blockSlug
-    ) {
-      return null;
-    }
-    node = row as Record<string, unknown>;
-    i += 2;
-  }
-  return null;
+    if (!isRecord(row)) return null;
+    if (seg.kind === "block" && !isBlock(row, seg.blockSlug)) return null;
+    return step(row, rest, path.slice(2));
+  };
+
+  return step(doc, field.path, dataPath);
 }

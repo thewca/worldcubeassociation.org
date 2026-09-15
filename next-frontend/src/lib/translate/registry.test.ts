@@ -74,6 +74,32 @@ describe("buildTranslationRegistry", () => {
     expect(paths).not.toContain("home.links[].url");
   });
 
+  it("inherits localization from a localized container", () => {
+    // Payload stores the whole subtree of a localized group per-locale, and
+    // `fieldShouldBeLocalized` returns false for the leaves inside it (the
+    // "no localized-within-localized" rule). They are still translatable, so
+    // the walk has to fall back to the parent's localization.
+    const inherited = buildTranslationRegistry({
+      collections: [],
+      globals: [
+        {
+          slug: "footer",
+          fields: [
+            {
+              name: "legal",
+              type: "group",
+              localized: true,
+              fields: [{ name: "notice", type: "text" }],
+            },
+          ] as Field[],
+        },
+      ],
+    });
+
+    expect(inherited.map((f) => f.pathString)).toEqual(["footer.legal.notice"]);
+    expect(inherited[0].inheritedLocalization).toBe(true);
+  });
+
   it("throws on an unhandled container type instead of silently dropping it", () => {
     // Simulates a future/custom Payload container type carrying sub-fields:
     // it must fail loudly rather than skip the localized field nested beneath.
