@@ -11,6 +11,8 @@ import {
   Heading,
   Float,
   IconButton,
+  HStack,
+  Box,
 } from "@chakra-ui/react";
 
 import WcaFlag from "@/components/WcaFlag";
@@ -22,7 +24,8 @@ import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 
-import CountryMap from "@/components/CountryMap";
+import { countryName } from "@/components/CountryMap";
+import { ChakraMarkdown } from "@/components/Markdown";
 
 import type { components } from "@/types/openapi";
 import Link from "next/link";
@@ -78,16 +81,25 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
       </Table.Cell>
 
       <Table.Cell whiteSpace={{ base: "normal", md: "nowrap" }}>
-        <ChakraLink asChild>
-          <Link
-            href={route({
-              pathname: "/competitions/[competitionId]",
-              query: { competitionId: comp.id },
-            })}
+        <HStack gap="2">
+          <Box
+            as="span"
+            title={countryName(comp.country_iso2, t)}
+            lineHeight="0"
           >
-            {comp.name}
-          </Link>
-        </ChakraLink>
+            <WcaFlag code={comp.country_iso2} size="lg" />
+          </Box>
+          <ChakraLink asChild>
+            <Link
+              href={route({
+                pathname: "/competitions/[competitionId]",
+                query: { competitionId: comp.id },
+              })}
+            >
+              {comp.name}
+            </Link>
+          </ChakraLink>
+        </HStack>
       </Table.Cell>
 
       <Table.Cell>
@@ -102,16 +114,17 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
         </IconButton>
       </Table.Cell>
 
+      <Table.Cell hideBelow="md" whiteSpace="nowrap">
+        <Text>
+          <strong>{countryName(comp.country_iso2, t)}</strong>
+          {`, ${comp.city}`}
+        </Text>
+      </Table.Cell>
+
       <Table.Cell width="100%" hideBelow="md">
-        <Text>{comp.city}</Text>
-      </Table.Cell>
-
-      <Table.Cell textAlign="right" hideBelow="md">
-        <CountryMap code={comp.country_iso2} fontWeight="bold" t={t} />
-      </Table.Cell>
-
-      <Table.Cell minWidth="4em">
-        <WcaFlag code={comp.country_iso2} size="lg" />
+        <Box lineClamp="1">
+          <ChakraMarkdown paragraphAs={Text}>{comp.venue}</ChakraMarkdown>
+        </Box>
       </Table.Cell>
 
       <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="xl">
