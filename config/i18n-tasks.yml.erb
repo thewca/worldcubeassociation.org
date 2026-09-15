@@ -98,6 +98,10 @@ ignore_missing:
   # We don't want to translate these.
   - 'simple_form.hints.translation.*'
   - 'activerecord.attributes.translation.*'
+  # The new i18n-tasks v1.1 Prism parser mis-interprets the `content.1` paragraph notation as plurals
+  #   and complains that CLDR also requires other plural rules. We're moving FAQ to Payload
+  #   as part of the redesign anyways so I won't bother fixing this in the old FAQ page.
+  - 'faq.answers.*'
 
 ## Consider these keys used:
 ignore_unused:
