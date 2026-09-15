@@ -18,6 +18,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/payload/draft">
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
+    | StaticRoute<"/api/translate/sync">
     | StaticRoute<"/competitions">
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
