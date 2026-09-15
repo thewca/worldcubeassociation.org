@@ -2101,6 +2101,7 @@ export interface components {
                 updated_at?: string;
                 /** Format: email */
                 email?: string;
+                location?: string;
             };
             class?: string;
         };
