@@ -1,4 +1,4 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import ByPersonResults from "./ByPersonResults";
 export default async function PersonResults({
@@ -20,9 +20,9 @@ export default async function PersonResults({
   const { name, results } = personResultRequest.data;
 
   return (
-    <Container>
+    <>
       <Heading textStyle="h1">{name}</Heading>
       <ByPersonResults competitionId={competitionId} results={results} />
-    </Container>
+    </>
   );
 }

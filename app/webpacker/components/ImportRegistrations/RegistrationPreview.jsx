@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Modal } from 'semantic-ui-react';
 import RegistrationsAdministrationTable from '../Registrations/Administration/RegistrationsAdministrationTable';
@@ -39,11 +39,16 @@ const COLUMNS_EXPANDED = {
 export default function RegistrationPreview({
   registrations, competitionId, onClose, onImportSuccess,
 }) {
+  const errorRef = useRef(null);
+
   const {
     mutate: importMutate, isPending, isError, error,
   } = useMutation({
     mutationFn: importRegistrations,
     onSuccess: onImportSuccess,
+    onError: () => {
+      errorRef.current?.scrollIntoView({ behavior: 'smooth' });
+    },
   });
 
   const tableRegistrations = useMemo(
@@ -72,6 +77,7 @@ export default function RegistrationPreview({
     >
       <Modal.Header>Preview Registration Data</Modal.Header>
       <Modal.Content scrolling>
+        <div ref={errorRef} />
         {isError && <Errored error={error} />}
         <RegistrationsAdministrationTable
           columnsExpanded={COLUMNS_EXPANDED}

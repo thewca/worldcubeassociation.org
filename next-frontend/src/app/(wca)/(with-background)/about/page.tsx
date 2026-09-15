@@ -1,8 +1,6 @@
-"use server";
-
-import { getPayload } from "payload";
-import config from "@payload-config";
-import { Container, Heading, VStack } from "@chakra-ui/react";
+import { io } from "next/cache";
+import { getCachedGlobal } from "@/lib/payload/globals";
+import { Heading, VStack } from "@chakra-ui/react";
 import { CallToActionBlock } from "@/components/about/CallToAction";
 import Quote from "@/components/Quote";
 import AboutUsItem from "@/components/about/AboutUsItem";
@@ -18,9 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function About() {
-  const payload = await getPayload({ config });
+  // `io()` marks the boundary the build-time prerender stops at, so the Payload read below
+  // never runs while building, where MongoDB is unreachable. It has to stay out here rather
+  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
+  await io();
 
-  const aboutPage = await payload.findGlobal({ slug: "about-us-page" });
+  const aboutPage = await getCachedGlobal("about-us-page");
 
   const aboutItems = aboutPage.blocks;
 
@@ -29,41 +30,39 @@ export default async function About() {
   }
 
   return (
-    <Container bg="bg">
-      <VStack gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">About Us</Heading>
-        {aboutItems.map((item) => {
-          switch (item.blockType) {
-            case "callToAction":
-              return (
-                <CallToActionBlock
-                  key={item.id}
-                  content={item.contentMarkdown!}
-                  buttons={item.buttons}
-                />
-              );
-            case "quote": {
-              return (
-                <Quote
-                  key={item.id}
-                  content={item.contentMarkdown!}
-                  author={item.quotedPerson}
-                />
-              );
-            }
-            case "simpleItem": {
-              return (
-                <AboutUsItem
-                  key={item.id}
-                  title={item.title}
-                  contentMarkdown={item.contentMarkdown!}
-                  image={item.image! as Media}
-                />
-              );
-            }
+    <VStack gap="8" width="full" alignItems="left">
+      <Heading size="5xl">About Us</Heading>
+      {aboutItems.map((item) => {
+        switch (item.blockType) {
+          case "callToAction":
+            return (
+              <CallToActionBlock
+                key={item.id}
+                content={item.contentMarkdown!}
+                buttons={item.buttons}
+              />
+            );
+          case "quote": {
+            return (
+              <Quote
+                key={item.id}
+                content={item.contentMarkdown!}
+                author={item.quotedPerson}
+              />
+            );
           }
-        })}
-      </VStack>
-    </Container>
+          case "simpleItem": {
+            return (
+              <AboutUsItem
+                key={item.id}
+                title={item.title}
+                contentMarkdown={item.contentMarkdown!}
+                image={item.image! as Media}
+              />
+            );
+          }
+        }
+      })}
+    </VStack>
   );
 }

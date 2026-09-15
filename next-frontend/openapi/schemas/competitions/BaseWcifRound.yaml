@@ -10,8 +10,12 @@ properties:
     $ref: '../wcif/WcifTimeLimit.yaml'
   cutoff:
     $ref: '../wcif/WcifCutoff.yaml'
-  advancementCondition:
-    $ref: '../wcif/WcifAdvancementCondition.yaml'
+  linkedRounds:
+    type: array
+    items:
+      type: string
+  participationRuleset:
+    $ref: '../wcif/WcifParticipationRuleset.yaml'
   scrambleSetCount:
     type: integer
   scrambleSets:
@@ -23,7 +27,3 @@ properties:
 required:
   - id
   - format
-  - results
-  - scrambleSetCount
-  - scrambleSets
-  - extensions

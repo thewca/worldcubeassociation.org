@@ -2,6 +2,9 @@ allOf:
   - $ref: './BaseRegistrationConfig.yaml'
   - type: object
     properties:
+      deadline:
+        type: string
+        format: datetime
       parameters:
         type: object
         properties:

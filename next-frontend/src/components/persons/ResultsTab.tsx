@@ -40,7 +40,7 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
 
   const { data: resultsQuery, isLoading } = api.useQuery(
     "get",
-    "/v0/persons/{wca_id}/results",
+    "/v1/persons/{wca_id}/results",
     {
       params: { path: { wca_id: wcaId }, query: { event_id: eventId } },
     },

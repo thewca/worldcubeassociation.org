@@ -535,18 +535,6 @@ sk:
         pending_avatar: >-
           Po tom, ako nahráte svojho nového Avatara, budete musieť počkať,
           pokiaľ ho Výsledkový Tím WCA schváli.
-        #original_hash: da39a3e
-        current_password: ''
-        #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
-        region: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -577,14 +565,6 @@ sk:
         external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
         #original_hash: 9965635
         registration_open: 'Poznámka: Otvorenie a zatvorenie súťaže sú v čase UTC.'
-        #original_hash: da39a3e
-        clone_tabs: ''
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        end_date: ''
-        #original_hash: da39a3e
-        generate_website: ''
         #original_hash: 950a7ea
         base_entry_fee_lowest_denomination: >-
           Základný vstupný poplatok pre súťaž. Vstupný poplatok bude ukázaný na
@@ -592,24 +572,6 @@ sk:
           použitá).
         #original_hash: 866bc05
         currency_code: Kód meny pre vstupné poplatky.
-        #original_hash: da39a3e
-        guests_enabled: ''
-        #original_hash: da39a3e
-        enable_donations: ''
-        #original_hash: da39a3e
-        id: ''
-        #original_hash: da39a3e
-        isConfirmed: ''
-        #original_hash: da39a3e
-        receive_registration_emails: ''
-        #original_hash: da39a3e
-        registration_close: ''
-        #original_hash: da39a3e
-        show_at_all: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        use_wca_registration: ''
         #original_hash: c0ab502
         competitor_limit_enabled: >-
           Pre teraz je toto číslo iba pre informačné použitie a nepreventuje
@@ -621,17 +583,7 @@ sk:
         competitor_limit_reason: >-
           Aký je dôvod na takýto limit súťažiacich? Vyplňte toto prosím v
           angličtine.
-        #original_hash: da39a3e
-        venue_address: ''
-        #original_hash: da39a3e
-        championship_type: ''
       website_contact:
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
         #original_hash: 8723825
         dob: Váš správny deň narodenia vo formáte YYYY-MM-DD
@@ -649,12 +601,6 @@ sk:
           Použite &lt;!-- break --&gt; aby ste ukázali ukážku domácej stránky.
           Hocijaký post na domovskej stránke ukáže celý text pred deličom.
           Skutočný príspevok ukáže celý text.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Pozor! Toto nie je bezpečné pre súkromné dáta. Toto je iba na
@@ -704,24 +650,8 @@ sk:
       person:
         #original_hash: 498f4c5
         dob: Dátum narodenia by mal mať formát YYYY-MM-DD.
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        wca_id: ''
       registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
       team:
-        #original_hash: da39a3e
-        friendly_id: ''
     options:
       registration:
         status:
@@ -1726,7 +1656,6 @@ sk:
             organizátormi)
           contact_html: 'Voliteľné informácie o kontakte. Ak toto nevyplníte, emaily
             organizátorov budú publikované verejnosti. %{md}. Príklad: [Text na ukážku](mailto:some@email.com)'
-        championships: ''
         website:
           external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
           external_registration_page:
@@ -1765,7 +1694,6 @@ sk:
             per_registration_limit:
           main_event_id:
         remarks:
-        clone_tabs: ''
       choices:
         competitor_limit:
           enabled:
@@ -2149,7 +2077,7 @@ sk:
           #original_hash: 576c3b8
           '4': >-
             Navštívte <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>Súťažné
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>Súťažné
             Organizačné Pokyny WCA</a> pre viac informácii.
       '6':
         #original_hash: 8005a61

@@ -1,5 +1,5 @@
 get:
-  summary: Get competition events in WCIF v0 format
+  summary: Get competition events in WCIF format
   tags:
     - competitions
   operationId: competitionEvents
@@ -9,6 +9,13 @@ get:
       required: true
       schema:
         type: string
+    - name: wcif_version
+      in: query
+      description: Which WCIF version to render, by lifecycle name. Defaults to the stable version, the response schema documents the latest one.
+      required: false
+      schema:
+        type: string
+        enum: [stable, latest]
   responses:
     '200':
       description: Successful response

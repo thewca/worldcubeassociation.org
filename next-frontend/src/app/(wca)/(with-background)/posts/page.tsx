@@ -1,9 +1,11 @@
-import { Card, Container, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Card, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
-import { Announcement, ColorPaletteSelect } from "@/types/payload";
+import { announcementColorPalette } from "@/components/announcements/announcement";
+import { Announcement } from "@/types/payload";
 import AnnouncementsPagination from "@/app/(wca)/(with-background)/posts/announcementsPagination";
 
 export const metadata: Metadata = {
@@ -12,15 +14,6 @@ export const metadata: Metadata = {
 
 const ANNOUNCEMENTS_PER_PAGE = 10;
 
-// Announcement cards alternate through the WCA primary colors.
-const CARD_COLOR_PALETTES: ColorPaletteSelect[] = [
-  "blue",
-  "red",
-  "green",
-  "orange",
-  "yellow",
-];
-
 export default async function AnnouncementsPage({
   searchParams,
 }: {
@@ -28,6 +21,8 @@ export default async function AnnouncementsPage({
 }) {
   const { page = "1" } = await searchParams;
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
+
+  await connection();
 
   const payload = await getPayload({ config });
   const announcements = await payload.find({
@@ -40,7 +35,7 @@ export default async function AnnouncementsPage({
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
 
   return (
-    <Container py={8}>
+    <Box py={8}>
       <Card.Root size="md">
         <Card.Header>
           <Heading textStyle="h1">Announcements</Heading>
@@ -54,11 +49,9 @@ export default async function AnnouncementsPage({
                 <AnnouncementCard
                   key={announcement.id}
                   announcement={announcement}
-                  colorPalette={
-                    CARD_COLOR_PALETTES[
-                      (firstIndexOnPage + index) % CARD_COLOR_PALETTES.length
-                    ]
-                  }
+                  colorPalette={announcementColorPalette(
+                    firstIndexOnPage + index,
+                  )}
                 />
               ))
             )}
@@ -71,6 +64,6 @@ export default async function AnnouncementsPage({
           </VStack>
         </Card.Body>
       </Card.Root>
-    </Container>
+    </Box>
   );
 }

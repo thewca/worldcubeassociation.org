@@ -121,6 +121,7 @@ export function MultiEventSelector({
             checked={currentEventSelected}
             onCheckedChange={() => onEventClick(eventId)}
             maxW="16"
+            cursor={isDisabled ? "not-allowed" : "pointer"}
           >
             <CheckboxCard.HiddenInput />
             <CheckboxCard.Control>

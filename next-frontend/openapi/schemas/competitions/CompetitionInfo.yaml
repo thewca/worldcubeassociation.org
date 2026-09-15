@@ -192,6 +192,10 @@ properties:
     example: 123
   uses_qualification?:
     type: boolean
+  using_payment_integrations?:
+    type: boolean
+  part_of_competition_series?:
+    type: boolean
   registration_full?:
     type: boolean
     example: true
