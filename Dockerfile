@@ -37,6 +37,7 @@ RUN apt-get update -qq && \
 FROM base AS build
 
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
+RUN npm install -g corepack
 RUN corepack enable
 
 # Install native dependencies for Ruby:

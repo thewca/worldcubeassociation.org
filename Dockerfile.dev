@@ -17,6 +17,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install nodejs
 
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
+RUN npm install -g corepack
 RUN corepack enable
 
 # Copy a file of our development runtime dependencies into the image for initial install
