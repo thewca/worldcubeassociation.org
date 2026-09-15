@@ -3489,7 +3489,7 @@ es-419:
         full: Completo
         #original_hash: cf9b770
         open: Abierto
-        #original_hash: 44bb7df
+        #original_hash: 9c46019
         not_open: Sin abrir
         #original_hash: 88d86b7
         closed: Cerrado
@@ -3506,6 +3506,14 @@ es-419:
       no_more_comps: Sin más competiciones.
       #original_hash: 8b09d74
       no_comp_found: Ninguna competición reúne los requisitos de búsqueda.
+      #original_hash: 9937970
+      why_compete_description_html: >-
+        <p>Las competiciones no son solo un lugar para ver quién es más rápido;
+        son eventos sociales. Cualquiera que sepa resolver un cubo es bienvenido
+        a sumarse y establecer récords personales. Hacer amigos es muy fácil
+        porque todos trabajamos juntos para que la competición funcione.</p>
+        <p>¡Usa la herramienta de abajo para encontrar una competencia cerca de
+        tí y comienza tu carrera cubera!</p>
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
