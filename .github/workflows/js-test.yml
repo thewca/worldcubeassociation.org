@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
-      NODE_MAJOR: 24
     defaults:
       run:
         working-directory: next-frontend
@@ -27,7 +26,7 @@ jobs:
         run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
       - uses: actions/setup-node@v7
         with:
-          node-version: ${{ env.NODE_MAJOR }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: yarn install
