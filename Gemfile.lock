@@ -1016,7 +1016,7 @@ DEPENDENCIES
   bootstrap-table-rails
   bootstrap3-datetimepicker-rails
   bullet
-  bundler (= 4.0.14)
+  bundler (= 4.0.20)
   byebug
   capybara
   capybara-playwright-driver
@@ -1183,7 +1183,7 @@ CHECKSUMS
   bootstrap3-datetimepicker-rails (4.17.47) sha256=ee87a9bad74c140729f6a1ea2a7f3f2d9aaefa7e9defbe31b4edd27ff64689a2
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
   bullet (8.2.0) sha256=921ed8cde81c939e4eda041345f44f0d0d72c6fbb63aec07d11e5bf653bbe473
-  bundler (4.0.14) sha256=d09a0a965cf772266a7e49e83610be7c2f4e49e61134c42a56804bb383cc24b8
+  bundler (4.0.20) sha256=7978a8ac648767f5e635bc522445b79e80a52b907a39a36c2d8085ed6bc762ae
   byebug (13.0.0) sha256=d2263efe751941ca520fa29744b71972d39cbc41839496706f5d9b22e92ae05d
   camertron-eprun (1.1.1) sha256=9a8e337916445e62648f6a4f35d229302fc44c50549cc881bff1e296ccf9ce4b
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
@@ -1518,4 +1518,4 @@ CHECKSUMS
   zeitwerk (2.8.3) sha256=2c85125a8467ce069e20123d1e709a08955c9d29c118c25b46b7b7fafdbb92e5
 
 BUNDLED WITH
-  4.0.14
+  4.0.20
