@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyLexicalTexts, lexicalTextNodes } from "./sync";
+import { applyLexicalTexts, lexicalTextNodes } from "./lexical";
 
 /**
  * These cover the contract that removes the need for a rich text editor:

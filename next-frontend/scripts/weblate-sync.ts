@@ -19,11 +19,11 @@
  */
 import { getPayload } from "payload";
 import config from "../src/payload.config";
+import { runSync } from "../src/lib/translate/sync";
 import {
   collectSourceDocs,
-  runSync,
   unitsFromDocs,
-} from "../src/lib/translate/sync";
+} from "../src/lib/translate/documents";
 import { weblateConfigured } from "../src/lib/translate/weblate";
 
 const seed = process.argv.includes("seed");
