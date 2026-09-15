@@ -28,6 +28,7 @@ import { TFunction } from "i18next";
 import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import { iconMap } from "@/components/icons/iconMap";
+import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 
@@ -278,42 +279,6 @@ function BackLink({
       </Link>
     </Text>
   );
-}
-
-/**
- * A tab's target: a link, unless it points at the page you are already on.
- *
- * Linking to the current page is pointless, and Chakra's tabs machine clicks the selected
- * trigger whenever `value` changes — on an anchor that triggers a full page navigation.
- * See https://github.com/chakra-ui/chakra-ui/issues/11003
- *
- * Every tab trigger in this menu must go through here, or that bug comes back for it.
- */
-function TabTarget({
-  tabKey,
-  currentPath,
-  href,
-  disabled,
-  children,
-  ...textProps
-}: TextProps & {
-  tabKey: string;
-  currentPath?: string;
-  href: RouteLiteral;
-  disabled?: boolean;
-  children: React.ReactNode;
-}) {
-  const isCurrent = tabKey === currentPath;
-
-  if (disabled || isCurrent) {
-    return (
-      <Text aria-current={isCurrent ? "page" : undefined} {...textProps}>
-        {children}
-      </Text>
-    );
-  }
-
-  return <Link href={href}>{children}</Link>;
 }
 
 function TabLink({
