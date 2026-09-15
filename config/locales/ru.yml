@@ -236,21 +236,18 @@ ru:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} попыток, чтобы достичь < %{time}'
       one: '%{count} попытка, чтобы достичь < %{time}'
       few: '%{count} попытки, чтобы достичь < %{time}'
       many: '%{count} попыток, чтобы достичь < %{time}'
       other: '%{count} WTF %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} попыток, чтобы достичь < %{moves} ходов'
       one: '%{count} попытка, чтобы достичь < %{moves} ходов'
       few: '%{count} попытки, чтобы достичь < %{moves} ходов'
       many: '%{count} попыток, чтобы достичь < %{moves} ходов'
       other: '%{count} WTF %{moves}'
     #original_hash: eba1b97
     points:
-      zero: '%{count} попыток, чтобы достичь > %{points} очков'
       one: '%{count} попытка, чтобы достичь > %{points} очков'
       few: '%{count} попытки, чтобы достичь > %{points} очков'
       many: '%{count} попыток, чтобы достичь > %{points} очков'
@@ -344,14 +341,12 @@ ru:
       invalid: invalid
     #original_hash: 49d0140
     days:
-      zero: 0 дней
       one: '%{count} день'
       few: '%{count} дня'
       many: '%{count} дней'
       other: '%{count} WTF'
     #original_hash: 203e1b3
     these_events:
-      zero: 0 дисциплинами
       one: 'этой %{count} дисциплиной'
       few: 'этими %{count} дисциплинами'
       many: 'этими %{count} дисциплинами'
@@ -1522,7 +1517,6 @@ ru:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Ошибок нет.
           one: 'Форма содержит %{count} ошибку:'
           few: 'Форма содержит %{count} ошибки:'
           many: 'Форма содержит %{count} ошибок:'
@@ -2174,7 +2168,6 @@ ru:
       must_register: нужно выбрать хотя бы одну дисциплину
       #original_hash: abdc718
       exceeds_event_limit:
-        zero: 'Вы можете зарегистрироваться только на %{count} дисциплин'
         one: 'Вы можете зарегистрироваться только на %{count} дисциплину'
         few: 'Вы можете зарегистрироваться только на %{count} дисциплины'
         many: 'Вы можете зарегистрироваться только на %{count} дисциплин'
@@ -2199,21 +2192,18 @@ ru:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: новичков
         one: новичок
         few: новичка
         many: новичков
         other: WTF
       #original_hash: bc010e3
       returner:
-        zero: ветеранов
         one: ветеран
         few: ветерана
         many: ветеранов
         other: WTF
       #original_hash: b7da17a
       person:
-        zero: участников
         one: участника
         few: участников
         many: участников
@@ -2223,21 +2213,18 @@ ru:
       not_using_wca: Для этого соревнования не используется регистрация на WCA
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Регистрации приняты! Участники уведомлены по email.
         one: Регистрация принята! Участник уведомлён по email.
         few: Регистрации приняты! Участники уведомлены по email.
         many: Регистрации приняты! Участники уведомлены по email.
         other: WTF
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Участники отправлены в список ожидания
         one: Участник отправлен в список ожидания
         few: Участники отправлены в список ожидания
         many: Участники отправлены в список ожидания
         other: WTF
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Регистрации удалены
         one: Регистрация удалена
         few: Регистрации удалены
         many: Регистрации удалены
@@ -2330,7 +2317,6 @@ ru:
       edit: Редактировать
       #original_hash: 0ab725c
       country_plural:
-        zero: ноль стран
         one: '%{count} страна'
         few: '%{count} страны'
         many: '%{count} стран'
@@ -2741,7 +2727,6 @@ ru:
       display_name: '[Отменено] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Организаторов
         one: Организатор
         few: Организаторы
         many: Организаторы
@@ -2750,7 +2735,6 @@ ru:
       organization_team: Команда организаторов
       #original_hash: 6afa61e
       delegate:
-        zero: WCA Делегаты
         one: WCA Делегат
         few: WCA Делегаты
         many: WCA Делегаты
@@ -2840,14 +2824,12 @@ ru:
         restricted: 'Разрешено приходить только гостям, сопровождающим участников.'
       #original_hash: 35f892a
       guest_limit:
-        zero: Участники не могут взять с собой гостей.
         one: Участники могут взять с собой одного гостя.
         few: 'Участники могут взять с собой %{count} гостей.'
         many: 'Участники могут взять с собой %{count} гостей.'
         other: 'Участники могут взять с собой %{count} гостей.'
       #original_hash: bad09c8
       event_limit:
-        zero: 'Участники могут принять участие в %{count} дисцилин'
         one: 'Участники могут принять участие в %{count} дисцилине'
         few: 'Участники могут принять участие в %{count} дисцилинах'
         many: 'Участники могут принять участие в %{count} дисцилинах'
@@ -3498,7 +3480,6 @@ ru:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Нет соревнований
         one: '%{count} соревнование'
         few: '%{count} соревнования'
         many: '%{count} соревнований'

@@ -236,19 +236,16 @@ ro:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} încercări pentru a obține < %{time}'
       one: '%{count} încercare pentru a obține < %{time}'
       few: '%{count} încercări pentru a obține < %{time}'
       other: '%{count} încercări pentru a obține < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} încercări pentru a obține < %{moves} mutări'
       one: '%{count} încercare pentru a obține < %{moves} mutări'
       few: '%{count} încercări pentru a obține < %{moves} mutări'
       other: '%{count} încercări pentru a obține < %{moves} mutări'
     #original_hash: eba1b97
     points:
-      zero: '%{count} încercări pentru a obține > %{points} puncte'
       one: '%{count} încercare pentru a obține > %{points} puncte'
       few: '%{count} încercări pentru a obține > %{points} puncte'
       other: '%{count} încercări pentru a obține > %{points} puncte'
@@ -341,13 +338,11 @@ ro:
       invalid: invalid
     #original_hash: 49d0140
     days:
-      zero: astăzi
       one: o zi
       few: câteva
       other: '%{count} zile'
     #original_hash: 203e1b3
     these_events:
-      zero: 'aceste %{count} evenimente'
       one: acest eveniment
       few: 'aceste %{count} evenimente'
       other: 'aceste %{count} evenimente'
@@ -1523,7 +1518,6 @@ ro:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Formularul nu conține erori.
           one: 'Formularul conține o eroare:'
           few: 'Formularul conține %{count} erori:'
           other: 'Formularul conține %{count} erori:'
@@ -2202,7 +2196,6 @@ ro:
       must_register: trebuie să te înscrii la cel puțin un eveniment
       #original_hash: abdc718
       exceeds_event_limit:
-        zero: nu te poți înscrie la nicio probă
         one: trebuie să te înscrii la o singură probă
         few: trebuie să te înscrii la mai puține probe
         other: 'trebuie să te înscrii la cel mult %{count} probe'
@@ -2225,19 +2218,16 @@ ro:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: concurenți noi
         one: concurent nou
         few: concurenți noi
         other: concurenți noi
       #original_hash: bc010e3
       returner:
-        zero: concurenți vechi
         one: concurent vechi
         few: concurenți vechi
         other: concurenți vechi
       #original_hash: b7da17a
       person:
-        zero: persoane
         one: persoană
         few: persoane
         other: persoane
@@ -2248,19 +2238,16 @@ ro:
         WCA.
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Înregistrări acceptate! E-mailuri de notificare trimise.
         one: Înregistrare acceptată! E-mail de notificare trimis.
         few: Înregistrări acceptate! E-mailuri de notificare trimise.
         other: Înregistrări acceptate! E-mailuri de notificare trimise.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Înregistrări transferate pe lista de așteptare.
         one: Înregistrare transferată pe lista de așteptare.
         few: Înregistrări transferate pe lista de așteptare.
         other: Înregistrări transferate pe lista de așteptare.
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Înregistrări șterse.
         one: Înregistrare ștearsă.
         few: Înregistrări șterse.
         other: Înregistrări șterse.
@@ -2360,7 +2347,6 @@ ro:
       edit: Editează
       #original_hash: 0ab725c
       country_plural:
-        zero: țări
         one: o țară
         few: '%{count} țări'
         other: '%{count} țări'
@@ -2834,7 +2820,6 @@ ro:
       display_name: '[Anulat] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizatori
         one: Organizator
         few: Organizatori
         other: Organizatori
@@ -2842,7 +2827,6 @@ ro:
       organization_team: Echipa de organizare
       #original_hash: 6afa61e
       delegate:
-        zero: Delegați WCA
         one: Delegat WCA
         few: Delegați WCA
         other: Delegați WCA
@@ -2936,13 +2920,11 @@ ro:
         restricted: Spectatorii pot fi doar însoțitori ai concurenților.
       #original_hash: 35f892a
       guest_limit:
-        zero: Concurenții nu pot veni însoțiți de niciun spectator.
         one: Concurenții pot veni însoțiți un singur spectator.
         few: 'Concurenții pot veni însoțiți de cel mult %{count} spectatori.'
         other: 'Concurenții pot veni însoțiți de cel mult %{count} spectatori.'
       #original_hash: bad09c8
       event_limit:
-        zero: Concurenții nu se pot înscrie la nicio probă.
         one: Concurenții se pot înscrie la o singură probă.
         few: 'Concurenții se pot înscrie la cel mult %{count}  probe.'
         other: 'Concurenții se pot înscrie la cel mult %{count} probe.'
@@ -3590,7 +3572,6 @@ ro:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Nicio competiție
         one: O competiție
         few: '%{count} competiții'
         other: '%{count} competiții'

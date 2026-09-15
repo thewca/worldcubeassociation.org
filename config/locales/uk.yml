@@ -238,21 +238,18 @@ uk:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} спроби < %{time}'
       one: '%{count} спроба < %{time}'
       few: '%{count} спроби < %{time}'
       many: '%{count} спроби < %{time}'
       other: '%{count} спроби < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} спроби < %{moves} рухів'
       one: '%{count} спроба < %{moves} рухів'
       few: '%{count} спроби < %{moves} рухів'
       many: '%{count} спроби < %{moves} рухів'
       other: '%{count} спроби < %{moves} рухів'
     #original_hash: eba1b97
     points:
-      zero: '%{count} спроби > %{points} балів'
       one: '%{count} спроба > %{points} балів'
       few: '%{count} спроби > %{points} балів'
       many: '%{count} спроби > %{points} балів'
@@ -301,14 +298,12 @@ uk:
       invalid: невірно
     #original_hash: 49d0140
     days:
-      zero: '%{count} днів'
       one: 1 день
       few: '%{count} днів'
       many: '%{count} днів'
       other: '%{count} днів'
     #original_hash: 203e1b3
     these_events:
-      zero: 'такими %{count} дисциплінами'
       one: такою дисципліною
       few: 'такими %{count} дисциплінами'
       many: 'такими %{count} дисциплінами'
@@ -1337,7 +1332,6 @@ uk:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Форма містить %{count} помилок:'
           one: 'Форма містить одну помилку:'
           few: 'Форма містить %{count} помилок:'
           many: 'Форма містить %{count} помилок:'
@@ -1844,21 +1838,18 @@ uk:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: новачків
         one: новачок
         few: новачків
         many: новачків
         other: новачків
       #original_hash: bc010e3
       returner:
-        zero: ветеранів
         one: ветеран
         few: ветеранів
         many: ветеранів
         other: ветеранів
       #original_hash: b7da17a
       person:
-        zero: осіб
         one: особа
         few: осіб
         many: осіб
@@ -1868,21 +1859,18 @@ uk:
       not_using_wca: Ці змагання не використовують реєстрацію через сайт WCA
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Реєстрації прийняті! Сповіщення надіслані на e-mail.
         one: Реєстрацію прийнято! Сповіщення надіслано на e-mail.
         few: Реєстрації прийняті! Сповіщення надіслані на e-mail.
         many: Реєстрації прийняті! Сповіщення надіслані на e-mail.
         other: Реєстрації прийняті! Сповіщення надіслані на e-mail.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Реєстрації переміщені в список очікування
         one: Реєстрацію переміщено в список очікування
         few: Реєстрації переміщені в список очікування
         many: Реєстрації переміщені в список очікування
         other: Реєстрації переміщені в список очікування
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Реєстрації видалені
         one: Реєстрацію видалено
         few: Реєстрації видалені
         many: Реєстрації видалені
@@ -1975,7 +1963,6 @@ uk:
       edit: Редагувати
       #original_hash: 0ab725c
       country_plural:
-        zero: '%{count} країн'
         one: 1 країна
         few: '%{count} країн'
         many: '%{count} країн'
@@ -2305,14 +2292,12 @@ uk:
       website: Веб-сторінка
       #original_hash: 680567f
       organizer_plural:
-        zero: Організатори
         one: Організатор
         few: Організатори
         many: Організатори
         other: Організатори
       #original_hash: 6afa61e
       delegate:
-        zero: Делегати WCA
         one: Делегат WCA
         few: Делегати WCA
         many: Делегати WCA
@@ -2836,7 +2821,6 @@ uk:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Немає змагань
         one: 1 змагання
         few: '%{count} змагань'
         many: '%{count} змагань'

@@ -236,17 +236,14 @@ de:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} Versuche um < %{time} zu erreichen'
       one: '%{count} Versuch um < %{time} zu erreichen'
       other: '%{count} Versuche um < %{time} zu erreichen'
     #original_hash: b49d930
     moves:
-      zero: '%{count} Versuche um < %{moves} Züge zu erreichen'
       one: '%{count} Versuch um < %{moves} Züge zu erreichen'
       other: '%{count} Versuche um < %{moves} Züge zu erreichen'
     #original_hash: eba1b97
     points:
-      zero: '%{count} Versuche um > %{points} Punkte zu erreichen'
       one: '%{count} Versuch um > %{points} Punkte zu erreichen'
       other: '%{count} Versuche um > %{points} Punkte zu erreichen'
   time_limit:
@@ -338,12 +335,10 @@ de:
       invalid: ungültig
     #original_hash: 49d0140
     days:
-      zero: kein Tag
       one: 1 Tag
       other: '%{count} Tagen'
     #original_hash: 203e1b3
     these_events:
-      zero: Keine Disziplin
       one: Diese Disziplin
       other: 'Diese %{count} Disziplinen'
     #original_hash: 51ef7d4
@@ -1492,7 +1487,6 @@ de:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Das Formular enthält %{count} Fehler:'
           one: 'Das Formular enthält einen Fehler:'
           other: 'Das Formular enthält %{count} Fehler:'
       error_pages:
@@ -2193,7 +2187,6 @@ de:
       must_register: muss sich für mindestens eine Disziplin anmelden
       #original_hash: abdc718
       exceeds_event_limit:
-        zero: Du darfst dich in keinem Event anmelden
         one: Du darfst dich in genau einem Event anmelden
         other: 'Du darfst dich maximal %{count} Events anmelden'
       #original_hash: e78eec3
@@ -2218,17 +2211,14 @@ de:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: Neulinge
         one: Neuling
         other: Neulinge
       #original_hash: bc010e3
       returner:
-        zero: Wiederkehrer
         one: Wiederkehrer
         other: Wiederkehrer
       #original_hash: b7da17a
       person:
-        zero: Personen
         one: Person
         other: Personen
     flash:
@@ -2236,17 +2226,14 @@ de:
       not_using_wca: Dieser Wettbewerb nutzt die Anmeldung auf der WCA-Website nicht
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Anmeldungen akzeptiert! E-Mail-Benachrichtigung gesendet.
         one: Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet.
         other: Anmeldungen akzeptiert! E-Mail-Benachrichtigung gesendet.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Anmeldungen auf Warteliste gesetzt!
         one: Anmeldung auf Warteliste gesetzt!
         other: Anmeldungen auf Warteliste gesetzt!
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Anmeldungen gelöscht
         one: Anmeldung gelöscht
         other: Anmeldungen gelöscht
       #original_hash: c3aa289
@@ -2351,7 +2338,6 @@ de:
       edit: Bearbeiten
       #original_hash: beffc45
       country_plural:
-        zero: '%{count} Regionen'
         one: 1 Region
         other: '%{count} Regionen'
       #original_hash: 1feee0e
@@ -2837,14 +2823,12 @@ de:
       display_name: '[Abgesagt] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organisatoren
         one: Organisator
         other: Organisatoren
       #original_hash: 53a9522
       organization_team: Organisations-Team
       #original_hash: 6afa61e
       delegate:
-        zero: WCA-Delegierte
         one: WCA-Delegierter
         other: WCA-Delegierte
       #original_hash: b37456c
@@ -2941,12 +2925,10 @@ de:
         restricted: Gäste werden nur als Begleitpersonen von Teilnehmern zugelassen.
       #original_hash: 35f892a
       guest_limit:
-        zero: Teilnehmer dürfen keine Gäste mitbringen.
         one: Teilnehmer dürfen maximal einen Gast mitbringen.
         other: 'Teilnehmer dürfen maximal %{count} Gäste mitbringen.'
       #original_hash: bad09c8
       event_limit:
-        zero: Teilnehmer dürfen sich bei keinem Event anmelden.
         one: Teilnehmer dürfen sich in genau einem Event anmelden.
         other: 'Teilnehmer dürfen sich bei maximal %{count} Events anmelden.'
       #original_hash: 64e0ddd
@@ -3607,7 +3589,6 @@ de:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Keine Wettbewerbe
         one: 1 Wettbewerb
         other: '%{count} Wettbewerbe'
       #original_hash: 3446062

@@ -236,19 +236,16 @@ cs:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} pokus dosáhnout < %{time}'
       one: '%{count} pokus dosáhnout < %{time}'
       few: '%{count} pokusy dosáhnout < %{time}'
       other: '%{count} pokusů dosáhnout < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} pokus dosáhnout < %{moves} tahů'
       one: '%{count} pokus dosáhnout < %{moves} tahů'
       few: '%{count} pokusy dosáhnout < %{moves} tahů'
       other: '%{count} pokusů dosáhnout < %{moves} tahů'
     #original_hash: eba1b97
     points:
-      zero: '%{count} pokus dosáhnout > %{points} bodů'
       one: '%{count} pokus dosáhnout > %{points} bodů'
       few: '%{count} pokusy dosáhnout > %{points} bodů'
       other: '%{count} pokusů dosáhnout > %{points} bodů'
@@ -341,13 +338,11 @@ cs:
       invalid: neplatný
     #original_hash: 49d0140
     days:
-      zero: dní
       one: den
       few: dny
       other: dní
     #original_hash: 203e1b3
     these_events:
-      zero: event
       one: event
       few: eventy
       other: eventů
@@ -1446,7 +1441,6 @@ cs:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: chyba
           one: chyba
           few: chyby
           other: chyb
@@ -2106,7 +2100,6 @@ cs:
       must_register: musíte se zaregistrovat alespoň na jeden event
       #original_hash: abdc718
       exceeds_event_limit:
-        zero: nesmíte se zaregistrovat na žádný event
         one: musíte se zaregistrovat na právě 1 event
         few: 'musíte se zaregistrovat na %{count} nebo méně'
         other: 'musíte se zaregistrovat na %{count} nebo méně eventů'
@@ -2129,19 +2122,16 @@ cs:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nováček
         one: nováček
         few: nováčci
         other: nováčků
       #original_hash: bc010e3
       returner:
-        zero: již soutěžilo
         one: již soutěžil
         few: již soutěžili
         other: již soutěžilo
       #original_hash: b7da17a
       person:
-        zero: člověk
         one: člověk
         few: lidi
         other: lidí
@@ -2150,19 +2140,16 @@ cs:
       not_using_wca: Tato soutěž nevyužívá pro registraci stránky WCA.
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Registrace přijata! Upozornění posláno na e-mail.
         one: Registrace přijata! Upozornění posláno na e-mail.
         few: Registrace přijaty! Upozornění poslána na e-mail.
         other: Registrací přijato! Upozornění poslána na e-mail.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Registrace přesunuta na waiting list
         one: Registrace přesunuta na waiting list
         few: Registrace přesunuty na waiting list
         other: Registrací přesunuto na waiting list
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Registrace smazána
         one: Registrace smazána
         few: Registrace smazány
         other: Registrací smazáno
@@ -2256,7 +2243,6 @@ cs:
       edit: Upravit
       #original_hash: 0ab725c
       country_plural:
-        zero: zemí
         one: země
         few: země
         other: zemí
@@ -2702,7 +2688,6 @@ cs:
       display_name: '[Zrušené] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizátor
         one: Organizátor
         few: Organizátoři
         other: Organizátoři
@@ -2710,7 +2695,6 @@ cs:
       organization_team: Organizační tým
       #original_hash: 6afa61e
       delegate:
-        zero: Delegát WCA
         one: Delegát WCA
         few: Delegáti WCA
         other: Delegátů WCA
@@ -2799,13 +2783,11 @@ cs:
         restricted: Diváci se smí účastnit jen jako doprovod soutěžících.
       #original_hash: 35f892a
       guest_limit:
-        zero: Soutěžící nemohou mít žádného hosta.
         one: Soutěžící mohou mít maximálně jednoho hosta.
         few: 'Soutěžící mohou mít nejvýše %{count} hosty.'
         other: 'Soutěžící mohou mít nejvýše %{count} hostů.'
       #original_hash: bad09c8
       event_limit:
-        zero: Soutěžící se nemohou zaregistrovat na žádný event.
         one: Soutěžící se mohou zaregistrovat na právě 1 event.
         few: 'Soutěžící se mohou zaregistrovat na nejvýše %{count} eventů'
         other: 'Soutěžící se mohou zaregistrovat na nejvýše %{count} eventů'
@@ -3429,7 +3411,6 @@ cs:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: soutěž
         one: soutěž
         few: soutěže
         other: soutěží

@@ -259,15 +259,12 @@ zh-CN:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count}次尝试 < %{time}'
       other: '%{count}次尝试 < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count}次尝试 < %{moves}步'
       other: '%{count}次尝试 < %{moves}步'
     #original_hash: eba1b97
     points:
-      zero: '%{count}次尝试 > %{points}分'
       other: '%{count}次尝试 > %{points}分'
   time_limit:
     cumulative:
@@ -381,7 +378,6 @@ zh-CN:
       invalid: 不正确
     #original_hash: 49d0140
     days:
-      zero: 0 天
       other: '%{count} 天'
     #original_hash: 51ef7d4
     search_site: 搜索本站
@@ -1089,7 +1085,6 @@ zh-CN:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 没有错误
           other: '表单有 %{count} 项错误：'
       error_pages:
         #original_hash: 1042478
@@ -1924,7 +1919,6 @@ zh-CN:
       must_register: 至少选择一个项目
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 您必须只能报名一个项目。
         other: '您必须报名介于1个到%{count}个项目。'
       #original_hash: 87f7c12
       banned_html: >-
@@ -1946,15 +1940,12 @@ zh-CN:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: 新人
         other: 新人
       #original_hash: bc010e3
       returner:
-        zero: 老手
         other: 老手
       #original_hash: b7da17a
       person:
-        zero: 选手
         other: 选手
     flash:
       #original_hash: da7ec53
@@ -2028,7 +2019,6 @@ zh-CN:
       edit: 编辑
       #original_hash: beffc45
       country_plural:
-        zero: '0'
         other: '%{count}个国家/地区'
       #original_hash: 1feee0e
       export_csv: 导出到 CSV
@@ -2343,7 +2333,6 @@ zh-CN:
       schedule_locked_after_results_submitted: 在成绩提交后，赛程将无法再进行编辑。
       #original_hash: 1877b69
       spots_left:
-        zero: 比赛已满员
         other: '剩%{count}个名额'
     live:
       #original_hash: 10d1a3c
@@ -2439,13 +2428,11 @@ zh-CN:
           title: 移除参赛者
           #original_hash: c25b336
           next_to_advance:
-            zero: '接下来晋级的参赛者是 %{competitors}'
             other: '接下来晋级的参赛者是 %{competitors}'
           #original_hash: c87ca67
           advance: 晋级下一位参赛者
           #original_hash: aa59a26
           quit_confirm:
-            zero: 从这一轮移除参赛者
             other: 从这一轮移除参赛者
           bulk:
             #original_hash: e0981de
@@ -2475,7 +2462,6 @@ zh-CN:
           single_round: 将参赛者添加到本轮
           #original_hash: bf3b670
           multiple_rounds:
-            zero: 将参赛者添加到双重轮的两个轮次中。
             other: 将参赛者添加到本轮；由于双重轮的第二轮尚未开放，你需要稍后单独添加。
           #original_hash: b3bdfaa
           event_edit_warning: 该参赛者未报名此项目，且比赛已不允许修改报名项目。仍可将其添加，但请确认这是有意操作。
@@ -2553,13 +2539,11 @@ zh-CN:
       display_name: '[已取消] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: 主办方
         other: 主办方
       #original_hash: 53a9522
       organization_team: 主办团队
       #original_hash: 6afa61e
       delegate:
-        zero: WCA代表
         other: WCA代表
       #original_hash: b37456c
       contact: 联系方式
@@ -2626,11 +2610,9 @@ zh-CN:
         restricted: 只有参赛者的陪同者才能入场当观众
       #original_hash: 35f892a
       guest_limit:
-        zero: 比赛可以最多1位陪同者。
         other: '比赛最多可以有%{count}位陪同者。'
       #original_hash: bad09c8
       event_limit:
-        zero: 参赛者可以报名最多一个比赛项目。
         other: '参赛者可以报名最多%{count}个比赛项目。'
       #original_hash: 64e0ddd
       require_qualification: 参赛者只能报名他们已经获取资格的比赛项目。
@@ -2848,7 +2830,6 @@ zh-CN:
         closed: 报名已结束
       #original_hash: 184f3ab
       currently_displaying:
-        zero: '当前显示：%{count} 场比赛'
         other: '当前显示：%{count} 场比赛'
       #original_hash: 74d8290
       register_now: 立即报名
@@ -3353,7 +3334,6 @@ zh-CN:
         empty: 无
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: 已无报名名额
           other: '还剩%{count}个报名名额'
         pending:
           #original_hash: 4210670
@@ -3447,7 +3427,6 @@ zh-CN:
         email_message: 已复制到剪贴板。请记得使用密送（BCC）！
         #original_hash: beedd53
         move_to:
-          zero: 移动
           other: '移动%{count}个到'
         #original_hash: 96f608c
         pending: 待批准
@@ -3532,7 +3511,6 @@ zh-CN:
         event_limit: '这场比赛有比赛项目的上限：%{max_events}个。'
         #original_hash: 1e4c43f
         waiting_list_count:
-          zero: '候补名单上有 %{count} 名参赛者。'
           other: '候补名单上有 %{count} 名参赛者。'
       errors:
         #original_hash: 3890616
@@ -3893,7 +3871,6 @@ zh-CN:
       room_in_venue: '在%{venue}的%{room}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: '您正在浏览这场比赛唯一的比赛场地%{venue_name}的赛程。'
         other: '您正在浏览比赛场地%{venue_name}的赛程。这场比赛有%{count}个比赛场地。'
       #original_hash: 8d175ad
       venue_selection_all: '您正在查看所有%{venueCount}个比赛场地的赛程。'

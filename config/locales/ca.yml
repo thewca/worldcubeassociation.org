@@ -234,17 +234,14 @@ ca:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} intents per obtenir < %{time}'
       one: '%{count} intent per obtenir < %{time}'
       other: '%{count} intents per obtenir < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} intents per obtenir < %{moves} moviments'
       one: '%{count} intent per obtenir < %{moves} moviments'
       other: '%{count} intents per obtenir < %{moves} moviments'
     #original_hash: eba1b97
     points:
-      zero: '%{count} intents per obtenir > %{points} punts'
       one: '%{count} intent per obtenir > %{points} punts'
       other: '%{count} intents per obtenir > %{points} punts'
   time_limit:
@@ -336,12 +333,10 @@ ca:
       invalid: invàlid
     #original_hash: 49d0140
     days:
-      zero: '%{count} dies'
       one: 1 dia
       other: '%{count} dies'
     #original_hash: 203e1b3
     these_events:
-      zero: 'aquestes %{count} categories'
       one: aquesta categoria
       other: 'aquestes %{count} categories'
     #original_hash: 51ef7d4
@@ -1432,7 +1427,6 @@ ca:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'El formulari conté  %{count} errors:'
           one: 'El formulari conté un error:'
           other: 'El formulari conté  %{count} errors:'
     doorkeeper:
@@ -2086,17 +2080,14 @@ ca:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: Novells
         one: Novell
         other: Novells
       #original_hash: bc010e3
       returner:
-        zero: Repetidors
         one: Repetidor
         other: Repetidors
       #original_hash: b7da17a
       person:
-        zero: Persones
         one: Persona
         other: Persones
     flash:
@@ -2104,17 +2095,14 @@ ca:
       not_using_wca: Aquesta competició no utilitza el registre WCA
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Registres acceptats! S'han enviat les notificacions per correu.
         one: Registre acceptat! S'ha enviat la notificació per correu.
         other: Registres acceptats! S'han enviat les notificacions per correu.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Registres desplaçats a la llista d'espera.
         one: Registre desplaçat a la llista d'espera.
         other: Registres desplaçats a la llista d'espera.
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Registres eliminats
         one: Registre eliminat
         other: Registres eliminats
       #original_hash: c3aa289
@@ -2213,7 +2201,6 @@ ca:
       edit: Editar
       #original_hash: 0ab725c
       country_plural:
-        zero: '%{count} països'
         one: 1 país
         other: '%{count} països'
       #original_hash: 1feee0e
@@ -2620,14 +2607,12 @@ ca:
       display_name: '[Cancel·lat] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organitzadors
         one: Organitzador
         other: Organitzadors
       #original_hash: 53a9522
       organization_team: Equip organitzador
       #original_hash: 6afa61e
       delegate:
-        zero: Delegats de la WCA
         one: Delegat de la WCA
         other: Delegats de la WCA
       #original_hash: b37456c
@@ -3306,7 +3291,6 @@ ca:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: '%{count} competicions'
         one: 1 competició
         other: '%{count} competicions'
       #original_hash: e3528ec
