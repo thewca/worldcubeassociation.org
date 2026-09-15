@@ -84,6 +84,15 @@ try {
         );
       }
     }
+    // A leaf whose schema path no longer resolves can be translated in Weblate
+    // but never written back, so it has to be visible somewhere.
+    for (const r of report.applied) {
+      for (const u of r.unresolved) {
+        log(
+          `  ${r.locale}: ${u.key} in ${u.document} no longer matches the stored document`,
+        );
+      }
+    }
   }
 } finally {
   // Payload keeps the Mongo connection open, which would hang the process.
