@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'bundler', '4.0.14'
+gem 'bundler', '4.0.20'
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
@@ -53,6 +53,8 @@ gem 'eu_central_bank'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
 gem 'csv'
+# HOTFIX until https://github.com/rails/rails/pull/58601 lands
+gem 'json', '~> 2'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
