@@ -279,8 +279,6 @@ ko:
     333fm: 1시간
     #original_hash: cc7d8bb
     333mbf: '큐브 당 10분, 최대 60분'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: 참가 자격 유형
@@ -720,8 +718,6 @@ ko:
       text: 필수
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 아래 문제를 검토하십시오.
@@ -735,12 +731,6 @@ ko:
         private_wrc_decision: 비공개 정보를 포함한 WRC 최종 판단. 영어로 작성해 주십시오.
         #original_hash: 3de5729
         public_summary: 공개적으로 표시될 사건에 대한 전반적인 설명과 판단. 영어로 작성해 주십시오.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: 선수의 생년월일을 YYYY-MM-DD 형식으로 입력하십시오.
@@ -749,32 +739,10 @@ ko:
           선수의 성명을 정확히 입력하십시오. 예: <strong>Gildong Hong</strong>. 잘못된 예:
           <strong>GILDONG HONG</strong>, <strong>홍길동</strong>, <strong>G
           Hong</strong>
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: '새로운 아바타를 업로드한 후, WCA 결과 팀의 승인을 기다려야 합니다.'
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: '이는 귀하가 주최하거나 파견위원 역할을 수행하는 대회에만 적용되며, 대회별로 재정의될 수 있습니다.'
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           이 기능은 데이터 내보내기, WCIF 스키마, 공개 API 등 리소스의 주요 버전 변경에 대한 알림으로만 제한됩니다. 이러한
@@ -790,12 +758,6 @@ ko:
         #original_hash: 0627e5c
         otp_attempt: 구성된 모바일 애플리케이션에서 일회용 비밀번호를 확인하거나 복구 코드 중 하나를 입력하십시오.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: 생년월일의 올바른 형식은 YYYY-MM-DD입니다.
         #original_hash: 49ee4af
@@ -843,12 +805,8 @@ ko:
           선택할 수 있습니다. 다른 이미지가 충분히 업로드된 경우에만 이미지를 삭제할 수 있습니다(이미지를 교체하려면 먼저 새 이미지를
           업로드한 다음 이전 이미지를 삭제해야 합니다). 기록 측정 구역 및 스크램블 구역의 현재 사진이 없는 경우, 그 이유를 설명해
           주십시오.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: WRC의 피드백을 받고 싶은 사건을 참조하는 번호 나열입니다.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           WIC의 피드백을 받고 싶은 사건을 참조하는 번호 목록입니다. <br>
@@ -863,76 +821,20 @@ ko:
         remarks: >-
           공유하고 싶은 다른 세부 사항에 대해 이야기하십시오(예: 커뮤니티 내 발전/퇴보, 이 지역의 미래 계획). 간결함을 위해 이전
           섹션에서 언급하지 않은 내용이 있다면 여기에 자유롭게 의견을 남겨주십시오.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: '예: 여행 경비, 참가비, 상금, 숙박 비용'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: 유효한 http(s) url이어야 합니다. HTTPS를 권장합니다
         #original_hash: 2ace571
         logo: 'PNG 형식이어야 하며, 해상도가 좋고 배경이 투명해야 합니다'
         #original_hash: da54ab5
         email: 모든 이사 및 임원을 포함하는 메일링 리스트이어야 합니다.
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: PDF 형식이어야 합니다
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: 'PDF 형식이어야 합니다. 더 많은 파일을 추가해야 하는 경우, 하나로 병합해 주십시오.'
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -3186,16 +3088,10 @@ ko:
           clone_tabs: 추가 정보가 있는 모든 탭을 복제하고 싶습니다
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             이것이 비활성화될 경우 참가 신청 시스템을 변경하면 기술적인 문제가 발생합니다. 여전히 참가 신청 시스템을 변경해야 하는
             경우 WST에 문의하여 도움을 받으십시오.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           대회의 전체 이름(연도 포함)(예: Seoul Summer 2025). 어절의 첫 글자는 대문자로 시작해야 합니다. 이름에는
@@ -3210,8 +3106,6 @@ ko:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           대회 요건 정책</a>을 준수해야 합니다.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: '대회가 이루어지는 도시와 도(해당되는 경우)의 이름. 국가명을 포함하지 마십시오(예: 서울특별시, 강원도 춘천시).'
           #original_hash: 9d9126e
@@ -3220,20 +3114,7 @@ ko:
             Center)](https://4gbw.org/main/main.php)
           #original_hash: 2651d1a
           details_html: '장소에 대한 세부 정보 (예: 1층 맨 뒤편에서 표지판을 따라가십시오). %{md}'
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             시리즈 대회의 풀네임(마지막에 연도 포함)(예: Korea Newcomers 2025). 어절의 첫 글자는 대문자로
@@ -3284,19 +3165,12 @@ ko:
           #original_hash: 7a51d00
           lead_delegate_id: '대표 파견위원은 대회 운영의 행정적인 측면(결과, 보고서, 참가비 청구서)을 담당합니다'
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: 대회 웹사이트. 유효한 http(s) url이어야 합니다.
           #original_hash: b2af5f5
           external_registration_page: 선수들이 참가 신청을 진행해야 하는 페이지입니다. 유효한 http(s) url이어야 합니다.
-          #original_hash: da39a3e
-          uses_wca_registration: ''
           #original_hash: cc7d557
           scoretaking_software: '듀얼 라운드를 사용하려면 ''%{choice_ilr}''을 선택하세요'
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: 참가비에 대한 통화 코드입니다.
@@ -3311,8 +3185,6 @@ ko:
           guest_entry_fee: >-
             현재 이 숫자는 정보 제공용일 뿐이며, 이 웹사이트를 통해 관람료를 관리할 수 없습니다. 이 값을 0으로 설정하면 관람객
             정책에 대해 선택한 문장이 표시됩니다.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             현재 이 숫자는 정보 제공용일 뿐이며, 환불은 수동으로 이루어져야 합니다. 이 값을 0으로 설정하면 어떠한 상황에서도
@@ -3322,8 +3194,6 @@ ko:
         registration:
           #original_hash: 9965635
           opening_date_time: '참고: 참가 신청 시작 및 마감은 UTC 시간입니다'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             대기 명단에 있는 선수가 더 이상 수락되지 않는 날짜입니다. 환불 마감일이 있는 경우 수락 마감일은 환불 마감일
@@ -3333,16 +3203,6 @@ ko:
             참가 신청된 선수는 주최 팀에 연락하여 이 시점까지 신청한 종목을 업데이트할 권리가 있습니다. 이 마감일은 참가 신청이
             마감되기 전의 시간으로 설정해서는 안 됩니다. 이 영역을 비워두면 선수는 해당 종목이 시작될 때까지 신청된 종목에 해당
             종목을 추가할 수 있습니다. 현장 참가 신청이 있는 경우 대회가 진행되는 날과 같은 날로 설정해야 합니다.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             이 대회에서 허용되는 참가 신청 당 관람객 수입니다. 관람객이 너무 많은 등록은 차단됩니다. 관람객 제한이 없으면
@@ -3352,29 +3212,17 @@ ko:
             위에 언급되지 않은 참가 신청 추가 요건(예: 결제 방법)이 있으면 여기에 명시하십시오. <br/>이 내용은
             <b>영어</b>로 작성하고 선수가 사용하는 언어로도 작성하십시오. 이 내용은 대회 정보 페이지에 표시되고, WCA
             웹사이트 참가 신청을 사용하는 경우 참가 신청 페이지에도 표시됩니다.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: 첫 참가자가 대회에 참가 신청하는 것을 원하지 않는 이유를 여기에 자세히 설명해 주십시오. 영어로 작성해야 합니다!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: 선수들이 퍼즐을 일찍 제출하도록 요구받는 이유를 여기에 자세히 설명해 주십시오. 영어로 작성해야 합니다!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: 참가 자격 요건 기록을 사용하고 싶은 이유를 여기에 자세히 설명해 주십시오. 영어로 작성해야 합니다!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: 특정 종목 조합을 제한하려는 이유를 여기에 자세히 설명해 주십시오. 영어로 작성해야 합니다!
             #original_hash: d09af8f
@@ -3387,9 +3235,6 @@ ko:
         remarks: >-
           WCAT에 전달하고 싶은 추가 정보. 예를 들어, 불확실한 점이 있거나 WCAT에 대한 특별 요청이 있는 경우. 영어로 작성해
           주십시오!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4329,8 +4174,6 @@ ko:
         paypal: >-
           PayPal 계정을 연결하면 WCA 웹사이트에서 결제를 사용자 계정으로 전달하고, PayPal 계정에서 직접 환불을 처리할 수
           있습니다.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         이 대회는 %{provider}를 통해 결제를 받도록 설정되었습니다. 대회의 파견위원은 연결된 계정을 변경하려면 WCAT에

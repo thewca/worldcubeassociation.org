@@ -257,8 +257,6 @@ ca:
     333fm: 1 hora
     #original_hash: cc7d8bb
     333mbf: '10:00.00 per cub, fins a 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Tipus de qualificació
@@ -766,8 +764,6 @@ ca:
       text: requerit
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Si us plau revisa els següents problemes:'
@@ -787,12 +783,6 @@ ca:
         public_summary: >-
           Una descripció general de l'incident i la decisió presa, serà públic.
           Si us plau, omple-ho en anglès.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Introdueix la teva data de naixement en aquest format YYYY-MM-DD.
@@ -802,40 +792,14 @@ ca:
           <strong>Stefan Pochmann</strong>. Sense abreviacions com  <strong>s
           pochman</strong>. <br/>Cognoms (ja siguin complets o inicials) són
           opcionals.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Després d'enviar un nou avatar, hauràs d'esperar que l'equip de
           resultats de la WCA l'aprovi.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        region: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Això només s'aplica a les competicions que organitzis o deleguis, i
           pot ser anul·lat a escala de competició.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 81a76a3
         receive_delegate_reports: >-
           Si ets un delegat en pràctiques, delegat junior, delegat sènior o
@@ -882,14 +846,6 @@ ca:
           Alguna informació addicional que vulguis mencionar a WCAT. Per
           exemple, si hi ha alguna cosa que no acabes de tenir clara o si tens
           una proposta especial per WCAT. Si us plau, omple-ho en anglès!
-        #original_hash: da39a3e
-        clone_tabs: ''
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        end_date: ''
-        #original_hash: da39a3e
-        generate_website: ''
         #original_hash: b2af5f5
         external_registration_page: >-
           La pàgina on els competidors s'han de registrar per la competició. Ha
@@ -907,24 +863,6 @@ ca:
           conversió disponible per la moneda seleccionada, no es mostrarà res.
         #original_hash: 9735ddf
         currency_code: El codi de moneda per les quotes.
-        #original_hash: da39a3e
-        guests_enabled: ''
-        #original_hash: da39a3e
-        enable_donations: ''
-        #original_hash: da39a3e
-        id: ''
-        #original_hash: da39a3e
-        confirmed: ''
-        #original_hash: da39a3e
-        receive_registration_emails: ''
-        #original_hash: da39a3e
-        registration_close: ''
-        #original_hash: da39a3e
-        show_at_all: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        use_wca_registration: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Tot i que no és requerit per les Regulacions d'establir un límit de
@@ -939,10 +877,6 @@ ca:
         competitor_limit_reason: >-
           Quina és la raó del límit de competidors? Si us plau, omple-ho en
           anglès!
-        #original_hash: da39a3e
-        venue_address: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Si us plau, indica aquí qualsevol requisit extra pel registre que
@@ -951,16 +885,10 @@ ca:
           que els competidors puguin parlar; es mostrarà a la pàgina
           d'informació sobre la competició així com la pàgina de registre a la
           competició si és que s'utilitza la pàgina web de la WCA per fer-les.
-        #original_hash: da39a3e
-        on_the_spot_registration: ''
         #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
           Si s'introdueix un 0 aquí, es mostrarà una frase dient que els
           registres al lloc seran acceptats gratuïtament.
-        #original_hash: da39a3e
-        allow_registration_edits: ''
-        #original_hash: da39a3e
-        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Per ara aquest nombre es només informatiu, els retorns s'han de fer
@@ -988,22 +916,14 @@ ca:
           poden ser administrades per aquesta pàgina web. Si s'introdueix un 0,
           es mostrarà una frase que escullis referent a la política pels
           espectadors.
-        #original_hash: da39a3e
-        free_guest_entry_status: ''
-        #original_hash: da39a3e
-        early_puzzle_submission: ''
         #original_hash: 4e8488b
         early_puzzle_submission_reason: >-
           Si us plau, explica perquè voldries requerir als competidors que
           entriguin els cubs més aviat. Omple-ho en anglès!
-        #original_hash: da39a3e
-        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Si us plau, explica aquí perquè voldries utilitzar temps de
           qualificació. Omple-ho en anglès!
-        #original_hash: da39a3e
-        event_restrictions: ''
         #original_hash: d3329d7
         event_restrictions_reason: >-
           Si us plau, explica aquí perquè voldries limitar una combinació
@@ -1011,23 +931,7 @@ ca:
         #original_hash: 1067798
         main_event_id: El guanyador d'aquesta categoria serà el guanyador de la competició.
       website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: La teva data de naixement en el format YYYY-MM-DD
         #original_hash: 49ee4af
@@ -1047,14 +951,6 @@ ca:
           prèvia de la pàgina d'inici. Qualsevol publicació a la pàgina d'inici
           mostrarà tot el text abans d'aquest divisor. La publicació real
           mostrarà el cos sencer.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Vigila! No és lloc segur per dades privades. Això és només per evitar
@@ -1087,14 +983,10 @@ ca:
           fer cometaris referint-se a ells pels nombres. Fins i tot si semblen
           genèrics, menciona com a mínim els casos més notables. Marca la
           casella apropiada si vols rebre feedback activament.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Llista dels números d'incidències de les quals t'agradaria rebre
           feedback de WRC.
-        #original_hash: da39a3e
-        wdc_feedback_requested: ''
         #original_hash: 38a95e5
         wdc_incidents: >-
           Llista dels números d'incidències de les quals t'agradaria rebre
@@ -1105,78 +997,15 @@ ca:
           exemple una millora/regressió de la comunitat local, plans de futur
           per la regió). Si no has dit alguna cosa a les seccions anteriors, ara
           és el moment de comentar-ho.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Exemples: Viatge, Pagaments, Premis, Estància'
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: 498f4c5
         dob: La data de naixement ha de tenir el format YYY-MM-DD.
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Ha de ser un enllaç http(s) vàlid. Recomanem que sigui HTTPS.
         #original_hash: 2ace571
@@ -1185,33 +1014,13 @@ ca:
         email: >-
           Hauria de ser una llista de correu electrònic que contingués tots els
           Directors i Oficials.
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Ha de ser en format PDF.
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Ha de ser en format PDF. Si necessites afegir més d'un fitxer, si us
           plau ajunta'ls.
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
       wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -3064,10 +2873,6 @@ ca:
         remarks: Observacions
         clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació addicional
       hints:
-        admin:
-          is_confirmed: ''
-          is_visible: ''
-        competition_id: ''
         name: 'El nom complet de la competició incloent l''any al final (exemple:
           Danish Open 2016). Revisa les majúscules. El nom ha de contenir només caràcters
           alfanumèrics, guions(-), ampersands(&), punts(.), dos punts(:), apòstrofs('')
@@ -3078,17 +2883,13 @@ ca:
           de complir amb <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>.
         venue:
-          country_id: ''
           city_name: 'Nom de la ciutat i estat (si és possible) on hi haurà la competició.
             No incloguis el país (exemple: París o San Francisco, Califòrnia).'
           name_html: 'El local on tindrà lloc la competició. %{md}. Per exemple: [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
           details_html: Detalls sobre el local (per exemple, Al fons de la primera
             planta, segueix els signes). %{md}
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         information: Informació important que els competidors haurien de saber. Sortirà
           a la pàgina principal de la competició. <br/>Si us plau, emplena-ho <b>en
           anglès</b> i qualsevol altre idioma que els competidors puguin parlar.
@@ -3109,17 +2910,12 @@ ca:
           contact_html: 'Dades de contacte opcional. Si no ho omples, el contacte
             es farà a través d''un formulari sense revelar les adreces de correu electrònic
             dels organitzadors. %{md}. Exemple: [Text to display](mailto:some@email.com)'
-        championships: ''
         website:
-          generate_website: ''
           external_website: Pàgina web de la competició. Ha de tenir un enllaç http(s)
             vàlid.
           external_registration_page: La pàgina on els competidors s'han de registrar
             per la competició. Ha de ser un enllaç http(s) vàlid.
-          uses_wca_registration: ''
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: El codi de moneda per les quotes.
           base_entry_fee: 'La quota de registre bàsica per la competició. Es mostrarà
@@ -3136,7 +2932,6 @@ ca:
           guest_entry_fee: Per ara aquest nombre és només informatiu, les quotes d'espectador
             no poden ser administrades per aquesta pàgina web. Si s'introdueix un
             0, es mostrarà una frase que escullis referent a la política pels espectadors.
-          donations_enabled: ''
           refund_policy_percent: Per ara aquest nombre es només informatiu, els retorns
             s'han de fer manualment. Si s'introdueix 0, es mostrarà una frase dient
             que les quotes de registre mai seran retornades sota cap circumstància.
@@ -3145,7 +2940,6 @@ ca:
         registration:
           opening_date_time: 'Important: L''obertura i clausura del registre està
             en horari UTC'
-          closing_date_time: ''
           waiting_list_deadline_date: La data a partir de la qual no s'acceptaran
             més persones de la llista d'espera. Si tens una data límit pels retorns
             de quota, la data per ser acceptat no hauria de ser abans de la data límit
@@ -3157,11 +2951,6 @@ ca:
             poden afegir una categoria més per competir fins al mateix moment de la
             competició. Si acceptes registres al lloc, aquesta data ha de ser la mateixa
             que l'inici de la competició.
-          allow_on_the_spot: ''
-          allow_self_delete_after_acceptance: ''
-          allow_self_edits: ''
-          guests_enabled: ''
-          guest_entry_status: ''
           guests_per_registration:
           extra_requirements: Si us plau, indica aquí qualsevol requisit extra pel
             registre que encara no s'hagi indicat, com per exemple instruccions de
@@ -3172,16 +2961,13 @@ ca:
           force_comment:
         event_restrictions:
           early_puzzle_submission:
-            enabled: ''
             reason: Si us plau, explica perquè voldries requerir als competidors que
               entriguin els cubs més aviat. Omple-ho en anglès!
           qualification_results:
-            enabled: ''
             reason: Si us plau, explica aquí perquè voldries utilitzar temps de qualificació.
               Omple-ho en anglès!
             allow_registration_without:
           event_limitation:
-            enabled: ''
             reason: Si us plau, explica aquí perquè voldries limitar una combinació
               especifica de categories. Omple-ho en anglès!
             per_registration_limit:
@@ -3190,7 +2976,6 @@ ca:
         remarks: Alguna informació addicional que vulguis mencionar a WCAT. Per exemple,
           si hi ha alguna cosa que no acabes de tenir clara o si tens una proposta
           especial per WCAT. Si us plau, omple-ho en anglès!
-        clone_tabs: ''
       choices:
         guests_enabled:
           'true': Pregunta sobre els acompanyants

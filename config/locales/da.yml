@@ -259,8 +259,6 @@ da:
     333fm: 1 time
     #original_hash: cc7d8bb
     333mbf: '10:00.00 pr. terning op til 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: Verden
@@ -718,8 +716,6 @@ da:
       text: behøvet
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Gennemgå venligst problemerne nedenfor:'
@@ -739,12 +735,6 @@ da:
         public_summary: >-
           En beskrivelse af hændelsen og afgørelsen. Det vises offentligt.
           Udfyld det her på engelsk.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Skriv din Fødselsdag in denne format ÅÅÅÅ-MM-DD
@@ -753,36 +743,10 @@ da:
           Skriv dit fulde navn korrekt, for eksempel <strong>Stefan
           Pochmann</strong>. Ikke sjusket som <strong>s pochman</strong>.
           <br/>Mellem navne (enten fulde eller som initialer) er valgfrie.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Efter at du har uploadet en ny avatar, bliver du nødt til at vente på
           at WCA's Resultathold accepterer den.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        region: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 81a76a3
         receive_delegate_reports: >-
           If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or
@@ -830,14 +794,6 @@ da:
           Ekstra information som du vil fortælle WCAT. For eksempel, hvis der er
           noget som du er usikker på, eller hvis der er en speciel forespørgsel
           til WCAT. Udfyld det her på engelsk!
-        #original_hash: da39a3e
-        clone_tabs: ''
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        end_date: ''
-        #original_hash: da39a3e
-        generate_website: ''
         #original_hash: b2af5f5
         external_registration_page: >-
           Siden hvor deltagerne skal tilmelde for konkurrencen. Det skal være en
@@ -850,24 +806,6 @@ da:
           fortæller at tilmeldingen for konkurrencen er gratis.
         #original_hash: 9735ddf
         currency_code: Valutakoden for deltagergebyret.
-        #original_hash: da39a3e
-        guests_enabled: ''
-        #original_hash: da39a3e
-        enable_donations: ''
-        #original_hash: da39a3e
-        id: ''
-        #original_hash: da39a3e
-        confirmed: ''
-        #original_hash: da39a3e
-        receive_registration_emails: ''
-        #original_hash: da39a3e
-        registration_close: ''
-        #original_hash: da39a3e
-        show_at_all: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        use_wca_registration: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Selvom at det ikke er nødvendigt ifølge Regelsættet, så er det
@@ -879,10 +817,6 @@ da:
           konkurrencen. Der arbejdes på sagen.
         #original_hash: 4bd7102
         competitor_limit_reason: Hvad er grunden til deltagergrænsen? Udfyld det her på engelsk!
-        #original_hash: da39a3e
-        venue_address: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Indikere venligst her ekstra tilmeldingskrav, som ikke er nævnt oven
@@ -890,14 +824,10 @@ da:
           her <b>på engelsk</b> og hvilke andre sprog som dine deltagere taler.
           Det her vil blive vist på konkurrencens forside, og på
           tilmeldingssiden, hvis der bruges WCA's tilmeldingssystem.
-        #original_hash: da39a3e
-        on_the_spot_registration: ''
         #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
           Hvis den bliver sat til 0, så vil en sætning blive vist, der siger at
           tilmelding i lokalet vil være gratis.
-        #original_hash: da39a3e
-        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           For nu, er dette tal kun for information. Refunderinger skal stadig
@@ -926,22 +856,14 @@ da:
           For now this number is informational only, guest fees cannot be
           managed through this website. If this is set to 0, a sentence of your
           choice will be displayed about the spectator policy.
-        #original_hash: da39a3e
-        guest_entry_status: ''
-        #original_hash: da39a3e
-        early_puzzle_submission: ''
         #original_hash: 4e8488b
         early_puzzle_submission_reason: >-
           Uddyb hvorfor du gerne vil have at deltagerne skal aflevere deres
           terninger tidligt. Udfyld det på engelsk!
-        #original_hash: da39a3e
-        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Uddyb hvorfor du gerne vil bruge kvalifikationsresultater. Udfyld det
           på engelsk!
-        #original_hash: da39a3e
-        event_restrictions: ''
         #original_hash: d3329d7
         event_restrictions_reason: >-
           Uddyb hvorfor du gerne vil begrænse kombinationen af bestemte
@@ -951,23 +873,7 @@ da:
           Vinderen af denne disciplin vil blive erklæret vinderen af
           konkurrencen.
       website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Din korrekte fødselsdag i formatet ÅÅÅÅ-MM-DD
         #original_hash: 49ee4af
@@ -986,14 +892,6 @@ da:
           Brug &lt;!-- break --&gt; for at vise en fremtidig version af
           hjemmesiden. Alle opslag på hjemmesiden vil vise alt tekst før denne
           opdeling. Det rigtige post vil vise den fulde tekst.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Forsigtig! Dette er ikke sikkert for privat data. Det er kun for at
@@ -1023,12 +921,8 @@ da:
           til dem ved deres numre. Selv hvis alt virkede normalt, så nævn bare
           det mest specielle situationer. Klik på de relevante bokse nedenfor
           hvis der er nogle situationer du aktivt søger hjælp for.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: Numrene af de hændelser du gerne vil have WRC feedback på.
-        #original_hash: da39a3e
-        wdc_feedback_requested: ''
         #original_hash: 38a95e5
         wdc_incidents: Numrene af de hændelser du gerne vil have WDC feedback på.
         #original_hash: f30abdc
@@ -1037,78 +931,15 @@ da:
           forbedring/tilbagegang indenfor samfundet/fællesskabet, fremtidige
           planer for denne region). Hvis du mener du mangler at få nævnt noget
           som du ikke fik nævnt tidligere, så kan du tilføje dem her.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Eksempler: Transport, Betaling, Priser, Husly'
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: 498f4c5
         dob: Fødselsdatoer skal have formatet ÅÅÅÅ-MM-DD
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Skal være en gyldig http(s) url. HTTPS er foreslået.
         #original_hash: 2ace571
@@ -1117,33 +948,13 @@ da:
         email: >-
           Burde være en mail adresse som indeholder alle Direktører og
           Officerer.
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Skal være i PDF format
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Skal være i en PDF format. Hvis du har brug for flere filer, så sæt
           dem sammen i en
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
       wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -2927,10 +2738,6 @@ da:
         remarks: Bemærkninger
         clone_tabs: Jeg vil gerne kopiere alle faner med yderligere informationer
       hints:
-        admin:
-          is_confirmed: ''
-          is_visible: ''
-        competition_id: ''
         name: Konkurrencens fulde navn inklusiv året i slutningen (eksempel, Danish
           Open 2016). Husk at lave store bogstaver. Navnet må kun indeholde alfanumeriske
           tegn, streger(-), og-tegn(&), punktummer(.), kolonner(:), apostroffer(')
@@ -2941,17 +2748,13 @@ da:
           <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Konkurrence Kravs Politikken</a>.
         venue:
-          country_id: ''
           city_name: Byens navn og stat (hvis det er relevant) hvor konkurrencen bliver
             afholdt. Inkluder ikke land (eksempel, Paris eller San Francisco, California).
           name_html: 'Lokalet som konkurrencen vil blive afholdt. %{md}. For eksempel:  [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
           details_html: Detaljer om lokalet (eksempel, På første sal lagt bagved,
             følg skiltene). %{md}
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         information: Vigtig information som deltagerne burde vide. Det vil blive vist
           på konkurrencens forside. <br/>Udfyld venligst det her på engelsk</b> og
           andre sprog som dine deltagere snakker.
@@ -2970,17 +2773,12 @@ da:
           contact_html: 'Optional contact information. If you do not fill this in,
             contact inquiries will be submitted through a form without revealing organizers''
             emails. %{md}. Example: [Text to display](mailto:some@email.com)'
-        championships: ''
         website:
-          generate_website: ''
           external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s)
             url.
           external_registration_page: Siden hvor deltagerne skal tilmelde for konkurrencen.
             Det skal være en http(s) url.
-          uses_wca_registration: ''
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: Valutakoden for deltagergebyret.
           base_entry_fee: Basis deltagergebyret for konkurrencen. Deltagergebyret
@@ -2992,7 +2790,6 @@ da:
           guest_entry_fee: For now this number is informational only, guest fees cannot
             be managed through this website. If this is set to 0, a sentence of your
             choice will be displayed about the spectator policy.
-          donations_enabled: ''
           refund_policy_percent: For nu, er dette tal kun for information. Refunderinger
             skal stadig tilbagebetales manuelt. Hvis dette bliver sat til 0, så vil
             en sætning blive vist, der vil sige, at det ikke vil være nogle refunderinger.
@@ -3001,7 +2798,6 @@ da:
         registration:
           opening_date_time: 'Note: Registreringens åbningstider og lukketider er
             i UTC-tid'
-          closing_date_time: ''
           waiting_list_deadline_date: The date when waitlisted registrants will no
             longer be accepted. If you have a deadline for refunds, the deadline for
             being accepted should not be before the deadline for refunds.
@@ -3011,11 +2807,7 @@ da:
             to close. Leaving this field blank means that competitors may add an event
             to their registered events up until that event is held. If you have on
             the spot registration, this must be set to the same day as the competition.
-          allow_on_the_spot: ''
           allow_self_delete_after_acceptance:
-          allow_self_edits: ''
-          guests_enabled: ''
-          guest_entry_status: ''
           guests_per_registration:
           extra_requirements: Indikere venligst her ekstra tilmeldingskrav, som ikke
             er nævnt oven over. Det kan være eksempler på hvordan man betaler. <br/>Udfyld
@@ -3025,16 +2817,13 @@ da:
           force_comment:
         event_restrictions:
           early_puzzle_submission:
-            enabled: ''
             reason: Uddyb hvorfor du gerne vil have at deltagerne skal aflevere deres
               terninger tidligt. Udfyld det på engelsk!
           qualification_results:
-            enabled: ''
             reason: Uddyb hvorfor du gerne vil bruge kvalifikationsresultater. Udfyld
               det på engelsk!
             allow_registration_without:
           event_limitation:
-            enabled: ''
             reason: Uddyb hvorfor du gerne vil begrænse kombinationen af bestemte
               discipliner. Udfyld det på engelsk!
             per_registration_limit:
@@ -3043,7 +2832,6 @@ da:
         remarks: Ekstra information som du vil fortælle WCAT. For eksempel, hvis der
           er noget som du er usikker på, eller hvis der er en speciel forespørgsel
           til WCAT. Udfyld det her på engelsk!
-        clone_tabs: ''
       choices:
         guests_enabled:
           'true': Spørg om gæster
