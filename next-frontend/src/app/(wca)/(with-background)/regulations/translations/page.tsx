@@ -1,9 +1,9 @@
 import { getT } from "@/lib/i18n/get18n";
 import { Heading, Link, Table, Text, VStack } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
-import { Trans } from "react-i18next/TransWithoutContext";
 import { getRegulationsTranslations } from "@/lib/wca/regulations/getRegulationsTranslations";
 import OpenapiError from "@/components/ui/openapiError";
+import TransWithLinks from "@/components/TransWithLinks";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -39,11 +39,7 @@ export default async function RegulationsTranslations() {
       <Heading size="xl">{t("regulations_translations.old")}</Heading>
       <Heading size="2xl">{t("regulations_translations.translating")}</Heading>
       <TranslationList translations={outdated} />
-      <Trans
-        t={t}
-        i18nKey="regulations_translations.paragraph3_html"
-        components={{ a: <Link /> }}
-      />
+      <TransWithLinks i18nKey="regulations_translations.paragraph3_html" />
     </VStack>
   );
 }

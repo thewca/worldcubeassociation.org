@@ -16,8 +16,8 @@ import Loading from "@/components/ui/loading";
 import { getRegionalOrganizations } from "@/lib/wca/organizations/getRegionalOrganizations";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import { Trans } from "react-i18next/TransWithoutContext";
 import _ from "lodash";
+import TransWithLinks from "@/components/TransWithLinks";
 import WcaFlag from "@/components/WcaFlag";
 import { Metadata } from "next";
 
@@ -127,11 +127,7 @@ export default async function RegionalOrganizations() {
       <Heading size="xl">
         {t("regional_organizations.application_instructions.title")}
       </Heading>
-      <Trans
-        t={t}
-        i18nKey="regional_organizations.application_instructions.description_html"
-        components={{ a: <Link /> }}
-      />
+      <TransWithLinks i18nKey="regional_organizations.application_instructions.description_html" />
     </VStack>
   );
 }
