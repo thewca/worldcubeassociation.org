@@ -21,6 +21,8 @@ import _333ohIcon from "@/components/icons/events/_333ohIcon";
 import _444bfIcon from "@/components/icons/events/_444bfIcon";
 import _555bfIcon from "@/components/icons/events/_555bfIcon";
 
+import events from "@/lib/wca/data/events";
+
 import type { ComponentPropsWithoutRef } from "react";
 
 const eventIconMap = {
@@ -61,7 +63,16 @@ const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
   const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
 
-  return <IconComponent {...iconIntrinsicProps} />;
+  // Chakra hides icons from assistive tech by default, which is right for decoration but wrong
+  //   here: in a results table the icon *is* the event, so it carries the event's name.
+  return (
+    <IconComponent
+      role="img"
+      aria-hidden={false}
+      aria-label={events.byId[eventId]?.name}
+      {...iconIntrinsicProps}
+    />
+  );
 };
 
 export default EventIcon;
