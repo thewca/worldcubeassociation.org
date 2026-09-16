@@ -216,8 +216,8 @@ export default function UpcomingCompetitionTable({
                 <Table.Row
                   color={
                     competition["confirmed?"] && !competition["cancelled?"]
-                      ? "green"
-                      : "red"
+                      ? undefined
+                      : "fg.error"
                   }
                 >
                   <Tooltip
