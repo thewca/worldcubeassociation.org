@@ -1,5 +1,5 @@
 import countries from "@/lib/wca/data/countries";
-import { HStack, IconButton, Link, Table } from "@chakra-ui/react";
+import { HStack, Link, Table } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import { AiFillFileImage, AiFillTrophy } from "react-icons/ai";
@@ -96,11 +96,9 @@ export function ReportTableCell({
           <Tooltip
             content={t("competitions.my_competitions_table.edit_report")}
           >
-            <IconButton asChild variant="ghost">
-              <a href={`/competitions/${competitionId}/report/edit`}>
-                <EditIcon />
-              </a>
-            </IconButton>
+            <a href={`/competitions/${competitionId}/report/edit`}>
+              <EditIcon />
+            </a>
           </Tooltip>
         )}
 
