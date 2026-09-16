@@ -16,7 +16,7 @@ import { io } from "next/cache";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { LuChevronDown, LuMenu } from "react-icons/lu";
+import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
 
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
@@ -73,13 +73,28 @@ function LinkWrapper<T extends string>({
   linkComponent: React.ComponentType<{ href: T }> | "a";
   hideResponsive?: boolean;
 } & React.ComponentPropsWithoutRef<"a">) {
+  // Rendering as a plain `a` is what marks an entry as leaving the site: it opens in its own
+  //   tab and carries an icon saying so. Call sites that set their own `target` still win,
+  //   because `extraProps` is spread last.
+  const isExternal = LinkComponent === "a";
+
   return (
-    <LinkComponent {...extraProps} href={navbarEntry.targetLink}>
+    <LinkComponent
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+      {...extraProps}
+      href={navbarEntry.targetLink}
+    >
       <TextWrapper
         navbarEntry={navbarEntry}
         entryKey="displayText"
         hideResponsive={hideResponsive}
       />
+      {isExternal && (
+        <Icon size="xs" asChild>
+          <LuExternalLink />
+        </Icon>
+      )}
     </LinkComponent>
   );
 }
