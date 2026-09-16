@@ -20,6 +20,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { components } from "@/types/openapi";
 import Loading from "@/components/ui/loading";
 import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
+import RailsLink from "@/components/RailsLink";
 
 const competingStatusIcon = (competingStatus: string) => {
   switch (competingStatus) {
@@ -243,16 +244,18 @@ export default function UpcomingCompetitionTable({
                   </Table.Cell>
                   {canAdminThisComp && (
                     <Table.Cell>
-                      <a href={`/competitions/${competition.id}/edit`}>
+                      <RailsLink href={`/competitions/${competition.id}/edit`}>
                         {t("competitions.my_competitions_table.edit")}
-                      </a>
+                      </RailsLink>
                     </Table.Cell>
                   )}
                   {canAdminThisComp ? (
                     <Table.Cell>
-                      <a href={`/competitions/${competition.id}/registrations`}>
+                      <RailsLink
+                        href={`/competitions/${competition.id}/registrations`}
+                      >
                         {t("competitions.my_competitions_table.registrations")}
-                      </a>
+                      </RailsLink>
                     </Table.Cell>
                   ) : (
                     canAdminAVisibleComp && (

@@ -10,6 +10,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { dateRange } from "@/lib/wca/dates";
 import { components } from "@/types/openapi";
 import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
+import RailsLink from "@/components/RailsLink";
 
 interface TableCellProps {
   competition: components["schemas"]["MyCompetition"];
@@ -87,18 +88,18 @@ export function ReportTableCell({
     <Table.Cell>
       <HStack>
         <Tooltip content={t("competitions.my_competitions_table.report")}>
-          <a href={`/competitions/${competitionId}/report`}>
+          <RailsLink href={`/competitions/${competitionId}/report`}>
             <AiFillFileImage />
-          </a>
+          </RailsLink>
         </Tooltip>
 
         {!isReportPosted && canEditDelegateReport(competitionId) && (
           <Tooltip
             content={t("competitions.my_competitions_table.edit_report")}
           >
-            <a href={`/competitions/${competitionId}/report/edit`}>
+            <RailsLink href={`/competitions/${competitionId}/report/edit`}>
               <EditIcon />
-            </a>
+            </RailsLink>
           </Tooltip>
         )}
 
