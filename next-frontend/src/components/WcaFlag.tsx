@@ -13,9 +13,7 @@ const WcaFlag = ({ code, ...restProps }: WcaFlagProps) => {
   }
 
   // `flag-icons` puts the flag in a background image addressed by class name, so a table full of
-  //   flags costs one class per cell. The previous library inlined every flag as a data URI,
-  //   which on the records history page alone repeated 48 distinct SVGs across 2405 `img` tags
-  //   for 8MB of the 10.4MB document.
+  //   flags costs one class per cell.
   return (
     <Icon asChild {...restProps}>
       <span className={`fi fi-${code?.toLowerCase()}`} />
