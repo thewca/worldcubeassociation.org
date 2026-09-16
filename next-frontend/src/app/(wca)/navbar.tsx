@@ -20,7 +20,7 @@ import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
 
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
-import type { IconName } from "@/types/payload";
+import type { IconName, StaticTargetLink } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
@@ -63,28 +63,26 @@ type LinkNavbarEntry<T> = NavbarEntry & {
   targetLink: T;
 };
 
-function LinkWrapper<T extends string>({
-  navbarEntry,
-  linkComponent: LinkComponent,
-  hideResponsive = false,
-  ...extraProps
-}: {
-  navbarEntry: LinkNavbarEntry<T>;
-  linkComponent: React.ComponentType<{ href: T }> | "a";
+// Only external entries may carry a free-form URL: `next/link` is typed to the routes that
+//   actually exist in this app, so anything leaving the site has to be a plain `a`.
+type LinkWrapperProps = {
   hideResponsive?: boolean;
-} & React.ComponentPropsWithoutRef<"a">) {
-  // Rendering as a plain `a` is what marks an entry as leaving the site: it opens in its own
-  //   tab and carries an icon saying so. Call sites that set their own `target` still win,
-  //   because `extraProps` is spread last.
-  const isExternal = LinkComponent === "a";
+} & React.ComponentPropsWithoutRef<"a"> &
+  (
+    | { isExternal: true; navbarEntry: LinkNavbarEntry<string> }
+    | { isExternal?: false; navbarEntry: LinkNavbarEntry<StaticTargetLink> }
+  );
 
-  return (
-    <LinkComponent
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noopener noreferrer" : undefined}
-      {...extraProps}
-      href={navbarEntry.targetLink}
-    >
+function LinkWrapper(props: LinkWrapperProps) {
+  const {
+    navbarEntry,
+    isExternal,
+    hideResponsive = false,
+    ...extraProps
+  } = props;
+
+  const content = (
+    <>
       <TextWrapper
         navbarEntry={navbarEntry}
         entryKey="displayText"
@@ -95,7 +93,28 @@ function LinkWrapper<T extends string>({
           <LuExternalLink />
         </Icon>
       )}
-    </LinkComponent>
+    </>
+  );
+
+  // Narrowing has to go through `props`: the destructured `navbarEntry` above already
+  //   widened to the union of both branches.
+  if (props.isExternal) {
+    return (
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        {...extraProps}
+        href={props.navbarEntry.targetLink}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link {...extraProps} href={props.navbarEntry.targetLink}>
+      {content}
+    </Link>
   );
 }
 
@@ -145,18 +164,14 @@ export default async function Navbar() {
                 <React.Fragment key={navbarEntry.id}>
                   {navbarEntry.blockType === "LinkItem" && (
                     <Button asChild variant="ghost" size="sm" px="2">
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent={Link}
-                        hideResponsive
-                      />
+                      <LinkWrapper navbarEntry={navbarEntry} hideResponsive />
                     </Button>
                   )}
                   {navbarEntry.blockType === "ExternalLinkItem" && (
                     <Button asChild variant="ghost" size="sm" px="2">
                       <LinkWrapper
                         navbarEntry={navbarEntry}
-                        linkComponent="a"
+                        isExternal
                         hideResponsive
                       />
                     </Button>
@@ -182,10 +197,7 @@ export default async function Navbar() {
                                   value={`${navbarEntry.id}/${subEntry.id}`}
                                   asChild
                                 >
-                                  <LinkWrapper
-                                    navbarEntry={subEntry}
-                                    linkComponent={Link}
-                                  />
+                                  <LinkWrapper navbarEntry={subEntry} />
                                 </Menu.Item>
                               )}
                               {subEntry.blockType === "ExternalLinkItem" && (
@@ -195,7 +207,7 @@ export default async function Navbar() {
                                 >
                                   <LinkWrapper
                                     navbarEntry={subEntry}
-                                    linkComponent="a"
+                                    isExternal
                                   />
                                 </Menu.Item>
                               )}
@@ -224,7 +236,6 @@ export default async function Navbar() {
                                             >
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
-                                                linkComponent={Link}
                                               />
                                             </Menu.Item>
                                           )}
@@ -236,7 +247,7 @@ export default async function Navbar() {
                                             >
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
-                                                linkComponent="a"
+                                                isExternal
                                               />
                                             </Menu.Item>
                                           )}
@@ -276,12 +287,7 @@ export default async function Navbar() {
                                 value={item.id ?? item.targetLink}
                                 asChild
                               >
-                                <LinkWrapper
-                                  navbarEntry={item}
-                                  linkComponent="a"
-                                  target="_blank"
-                                  rel="noreferrer"
-                                />
+                                <LinkWrapper navbarEntry={item} isExternal />
                               </Menu.Item>
                             ))}
                           </Menu.Content>
@@ -319,18 +325,12 @@ export default async function Navbar() {
                 <React.Fragment key={navbarEntry.id}>
                   {navbarEntry.blockType === "LinkItem" && (
                     <MobileNavLink>
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent={Link}
-                      />
+                      <LinkWrapper navbarEntry={navbarEntry} />
                     </MobileNavLink>
                   )}
                   {navbarEntry.blockType === "ExternalLinkItem" && (
                     <MobileNavLink>
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent="a"
-                      />
+                      <LinkWrapper navbarEntry={navbarEntry} isExternal />
                     </MobileNavLink>
                   )}
                   {navbarEntry.blockType === "NavDropdown" && (
@@ -357,17 +357,14 @@ export default async function Navbar() {
                             <React.Fragment key={subEntry.id}>
                               {subEntry.blockType === "LinkItem" && (
                                 <MobileNavLink>
-                                  <LinkWrapper
-                                    navbarEntry={subEntry}
-                                    linkComponent={Link}
-                                  />
+                                  <LinkWrapper navbarEntry={subEntry} />
                                 </MobileNavLink>
                               )}
                               {subEntry.blockType === "ExternalLinkItem" && (
                                 <MobileNavLink>
                                   <LinkWrapper
                                     navbarEntry={subEntry}
-                                    linkComponent="a"
+                                    isExternal
                                   />
                                 </MobileNavLink>
                               )}
@@ -403,7 +400,6 @@ export default async function Navbar() {
                                             <MobileNavLink>
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
-                                                linkComponent={Link}
                                               />
                                             </MobileNavLink>
                                           )}
@@ -412,7 +408,7 @@ export default async function Navbar() {
                                             <MobileNavLink>
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
-                                                linkComponent="a"
+                                                isExternal
                                               />
                                             </MobileNavLink>
                                           )}
@@ -454,12 +450,7 @@ export default async function Navbar() {
                           <VStack align="stretch" pl={4} gap={1} py={1}>
                             {socialLinks.map((item) => (
                               <MobileNavLink key={item.id}>
-                                <LinkWrapper
-                                  navbarEntry={item}
-                                  linkComponent="a"
-                                  target="_blank"
-                                  rel="noreferrer"
-                                />
+                                <LinkWrapper navbarEntry={item} isExternal />
                               </MobileNavLink>
                             ))}
                           </VStack>
