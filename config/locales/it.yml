@@ -125,6 +125,7 @@ it:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 3x3x3 Multi-Blind Vecchio Formato
+    fto: Face Turning Octahedron
   formats:
     #original_hash: e4b3c11
     '1': Best of 1
@@ -239,6 +240,7 @@ it:
         moves: '%{round_format} < %{moves}'
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
+      all_advance: Tutti avanzano
     #original_hash: 6e55337
     ranking: 'I migliori %{ranking} avanzano al turno successivo'
     #original_hash: 7ee969c
@@ -250,6 +252,7 @@ it:
       moves: '%{round_format} < %{moves} mosse per passare al turno successivo'
       #original_hash: e9f0c92
       points: '%{round_format} > %{points} punti per passare al turno successivo'
+    all_advance: Tutti i partecipanti avanzano
   cutoff:
     #original_hash: cf458e7
     time:
@@ -1653,6 +1656,11 @@ it:
         captcha:
           #original_hash: 58c1271
           validation_error: 'Per favore, conferma di non essere un robot.'
+        edit_reason_for:
+          label: Motivazione per modifiche a %{attribute}
+        verified_checkbox:
+          label: Inviando questo modulo, confermi di aver letto integralmente il
+            documento legale e aver verificato le informazioni fornite.
       #original_hash: 126541e
       success_message: Richiesta inviata. Ti risponderemo al più presto.
       #original_hash: bb6a0cf
@@ -2126,9 +2134,8 @@ it:
         risolvere il problema.
       #original_hash: 6890de8
       wca_id_no_name_html: >-
-        Nessun nome è stato assegnato a questo WCA ID.  Contatta il <a
-        href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> per
-        risolvere il problema.
+        Nessun nome è stato assegnato a questo WCA ID. Contatta il <a href='%{wrt_contact_path}'
+        target='_blank'>WCA Results Team</a> per risolvere il problema.
       #original_hash: d2f4856
       email_used_by_locked_account_html: >-
         è già utilizzato da un altro account. È stato creato automaticamente
@@ -2627,6 +2634,8 @@ it:
           possono essere analizzate: %{raw_dobs}.
         #original_hash: 6d8e34b
         empty_file: Il file è vuoto.
+      preview: Anteprima dati di iscrizione
+      cancel: Annulla
     add:
       #original_hash: 975275e
       title: 'Aggiungi iscrizione per %{comp}'
@@ -2645,6 +2654,8 @@ it:
       errors:
         #original_hash: d6dcf5c
         already_registered: Questa persona è già iscritta.
+      ots_before_registration_open: Le iscrizioni in loco non saranno
+        disponibili finché non saranno aperte le iscrizioni.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2854,11 +2865,10 @@ it:
             effettivamente un DNS e non un DNF.
           #original_hash: 6becd6c
           impossible: >-
-            Il risultato che stai cercando di inserire sembra impossibile: il
-            tentativo %{attempt_number} è stato completato in meno di 30 secondi
-            per ogni cubo provato. Se vuoi inserire i minuti, non dimenticare di
-            aggiungere due zeri  alla fine del risultato per i centesimi di
-            secondo.
+            Il risultato che stai cercando di inserire sembra impossibile: il tentativo
+            %{attempt_number} è stato completato in meno di 30 secondi per ogni cubo
+            provato. Se vuoi inserire i minuti, non dimenticare di aggiungere due
+            zeri alla fine del risultato per i centesimi di secondo.
           #original_hash: a03301d
           inconsistent: >-
             Il risultato che stai cercando di inviare sembra incoerente: c'è una
@@ -2869,6 +2879,10 @@ it:
           round_locked: >-
             Il prossimo turno è stato già aperto, e non verrà influenzato da
             modifiche successive!
+          9m_violated: Per il turno precedente non sono stati inseriti
+            abbastanza risultati per soddisfare la Regola 9m3. Se il turno
+            precedente non ha almeno %{competitor_count_needed} risultati
+            inseriti, i risultati dell'intero turno non saranno validi.
         quit:
           #original_hash: de62de1
           title: Elimina Partecipante
@@ -2891,6 +2905,8 @@ it:
             failure: Impossibile eliminare in blocco i partecipanti
             #original_hash: 774050e
             menu: Elimina in blocco
+            id: ID
+            name: Nome
           #original_hash: 1a2285d
           quit_menu: Elimina
           #original_hash: 70835a0
@@ -2903,17 +2919,29 @@ it:
           still_processing: >-
             Impossibile eseguire l'azione "Elimina partecipante" mentre i
             risultati sono ancora in elaborazione
+          in_batch: Non è possibile rimuovere un partecipante i cui risultati
+            fanno parte di un batch non inviato
         add_competitor:
           #original_hash: 9dcb50d
           single_round: Aggiungi partecipante al turno
           #original_hash: bf3b670
           multiple_rounds:
             zero: '-'
-            one: Aggiungi il partecipante a entrambi i turni del doppio turno
+            one: Aggiungi il partecipante a entrambi i turni del doppio turno.
             other: >-
               Aggiungi il partecipante a questo turno. Poiché il secondo turno
               del doppio turno è ancora chiuso, dovrai aggiungerlo
               successivamente.
+          event_edit_warning: Questo partecipante non è iscritto a questo
+            evento, e la competizione non consente ulteriori modifiche
+            all'iscrizione agli eventi. L'aggiunta sarà comunque possibile, ma
+            assicurati di voler procedere.
+        close: Chiudi
+        submit_results: Invia risultati
+        add_to_batch: Aggiungi al batch
+        remove_from_batch: Rimuovi dal batch
+        batch_mode: Modalità batch
+        submit_batch: Invia batch (%{count})
       results:
         #original_hash: 4705687
         competitor: Partecipante
@@ -2922,6 +2950,13 @@ it:
       errors:
         #original_hash: f522c26
         round_closed: Il turno non è ancora aperto
+      manage_rounds: Gestisci turni
+      incompatible:
+        external: Questa competizione utilizza software di terze parti per
+          l'immissione dei risultati. Controlla le informazioni della
+          competizione per sapere dove consultare i risultati in diretta.
+        wca_live: "Questa competizione utilizza WCA Live per l'immissione dei risultati.
+          Clicca su questo link per vedere i risultati in diretta:"
     my_competitions:
       #original_hash: 5c6d3ea
       title: Le mie competizioni
@@ -3436,9 +3471,9 @@ it:
           #original_hash: 67cd406
           name: Sede
           #original_hash: 08767af
-          details: Dettagli
+          details: Dettagli della sede
           #original_hash: 486f8fb
-          address: Indirizzo
+          address: Indirizzo della sede
           #original_hash: 8ebebca
           coordinates: Coordinate
         #original_hash: ff99f5b
@@ -4378,6 +4413,8 @@ it:
       edited_deadline_not_in_future: >-
         Puoi aggiungere solo date di scadenza nel futuro. %{new_timestamp} non è
         nel futuro.
+      fto_not_yet_allowed: Il Face Turning Octahedron non può essere svolto in
+        competizioni che iniziano prima del %{date}.
     new:
       #original_hash: 1208df7
       create_competition: Crea competizione
@@ -4601,6 +4638,7 @@ it:
         show_buttons: Mostra pulsanti fuso orario
         #original_hash: d2ac826
         use_time_zone: Usa questo fuso orario
+        hide_buttons: Nascondi pulsanti fuso orario
       #original_hash: 73acb7f
       room_in_venue: '%{room} in %{venue}'
       #original_hash: f7fd979
@@ -4639,6 +4677,9 @@ it:
         I programmi sono soggetti a modifiche, specialmente una volta che le
         iscrizioni sono terminate. Gli iscritti verranno informati via mail di
         cambiamenti importanti al programma.
+      select_a_timezone: Seleziona fuso orario
+      select_a_venue_to_view: Per vedere il programma, seleziona una sede qui
+        sopra.
     nav:
       menu:
         #original_hash: 612e12d
@@ -5038,6 +5079,7 @@ it:
       continental_records: Cronologia dei Record Continentali
       #original_hash: 3ce631e
       national_records: Cronologia dei Record Nazionali
+      dual: Doppio
   posts:
     #original_hash: 2a7da42
     confirm_delete_post: Sei sicuro di voler eliminare questo post? L'azione non è reversibile.
@@ -5192,9 +5234,8 @@ it:
         content:
           #original_hash: e619524
           '1': >-
-            Prima di tutto, devi <a
-            href='#how-do-i-connect-my-wca-account-with-my-wca-id'>creare un
-            account WCA  e connetterlo con il tuo WCA ID.</a>
+            Prima di tutto, devi <a href='#how-do-i-connect-my-wca-account-with-my-wca-id'>creare
+            un account WCA e connetterlo con il tuo WCA ID.</a>
           #original_hash: 56a8f26
           '2': >-
             Successivamente potrai andare sulle <a
@@ -5301,20 +5342,19 @@ it:
     who_we_are_title: Chi siamo
     #original_hash: 303f17a
     who_we_are_content_html: >-
-      <p>La World Cube Association gestisce le competizioni per i puzzle
-      meccanici comunemente noti come  'twisty puzzles', ovvero che funzionano
-      tramite la rotazione di gruppi di pezzi. Il più famoso di questi puzzle è
-      il Cubo di Rubik, inventato dal professore ungherese Ernő Rubik. Questo ed
-      altri puzzle simili rientrano tra gli eventi ufficiali della WCA.</p>
-      <p>Con l'evolversi della WCA durante l'ultimo decennio, più di 245.000
-      persone hanno partecipato alle nostre competizioni. Nonostante questa
-      crescita, rimaniamo un'organizzazione gestita quasi esclusivamente da
-      volontari, a partire dagli organizzatori delle competizioni, fino ai
-      Delegati e il Board WCA. Siamo sinceramente grati a tutti coloro che
-      impiegano parte del proprio tempo per garantire il corretto funzionamento
-      della WCA. Con un maggiore supporto economico ci auguriamo di garantire
-      alle nostre competizioni un livello di professionalità sempre crescente,
-      mentre continuiamo ad organizzare sempre più eventi in tutto il mondo.</p>
+      <p>La World Cube Association gestisce le competizioni per i puzzle meccanici
+      comunemente noti come 'twisty puzzles', ovvero che funzionano tramite la rotazione
+      di gruppi di pezzi. Il più famoso di questi puzzle è il Cubo di Rubik, inventato
+      dal professore ungherese Ernő Rubik. Questo ed altri puzzle simili rientrano
+      tra gli eventi ufficiali della WCA.</p> <p>Con l'evolversi della WCA durante
+      l'ultimo decennio, più di 245.000 persone hanno partecipato alle nostre competizioni.
+      Nonostante questa crescita, rimaniamo un'organizzazione gestita quasi esclusivamente
+      da volontari, a partire dagli organizzatori delle competizioni, fino ai Delegati
+      e il Board WCA. Siamo sinceramente grati a tutti coloro che impiegano parte
+      del proprio tempo per garantire il corretto funzionamento della WCA. Con un
+      maggiore supporto economico ci auguriamo di garantire alle nostre competizioni
+      un livello di professionalità sempre crescente, mentre continuiamo ad organizzare
+      sempre più eventi in tutto il mondo.</p>
     #original_hash: bccd8c5
     spirit: >-
       Il nostro spirito è che persone da tutto il mondo si divertano insieme in
@@ -5781,6 +5821,47 @@ it:
       contenuto sottostante non è tradotto.
     #original_hash: 2c23c1a
     incident: 'Incidente:'
+    title: Registro incidenti
+    page_title: 'Incidente: %{title}'
+    not_found: Nessun incidente trovato
+    back_to_log: Torna al registro incidenti
+    search_placeholder: Cerca
+    status: Stato
+    resolved: Risolto
+    pending: In corso
+    sent_in_digest: Inviato in Digest
+    sent: Inviato
+    showing_entries: Stai visualizzando i risultati da %{first} a %{last} su
+      %{total} totali con <select></select> per pagina
+    not_public_warning: 'Nota: Questo incidente non è stato ancora risolto, pertanto
+      non è visibile al pubblico.'
+    public_summary: Descrizione e risoluzione dell'incidente
+    private_description: Descrizione (privata per i Delegati)
+    private_wrc_decision: Decisione del WRC (privata per i Delegati)
+    tags:
+      regulation: Regolamento
+      guideline: Linee guida
+      search_with_tag: Cerca incidenti con questo tag
+      filter_by_tag: Filtra con questo tag
+      competition_page: Pagina della competizione
+      delegate_report: Report del Delegato
+    admin:
+      publish: Pubblica
+      unpublish: Annulla pubblicazione
+      edit: Modifica
+      destroy: Elimina
+      cancel: Annulla
+      confirm: Conferma
+      change_status: Cambia stato
+      destroy_title: Elimina incidente
+      confirm_publish: Stai per rendere pubblico il registro di questo
+        incidente. Sei sicuro?
+      confirm_unpublish: Stai per annullare la pubblicazione del registro di
+        questo incidente. Sei sicuro?
+      confirm_destroy: Sei sicuro di voler eliminare questo incidente?
+      publish_error: Impossibile pubblicare l'incidente.
+      unpublish_error: Impossibile annullare la pubblicazione dell'incidente.
+      destroy_error: Impossibile eliminare l'incidente.
   about_regulations:
     #original_hash: 6bce1b5
     title: Riguardo il Regolamento
@@ -5820,7 +5901,7 @@ it:
         riguardo al Regolamento WCA.
     panel4:
       #original_hash: ad5f6e7
-      title: Linee guida per  organizzatori
+      title: Linee guida per organizzatori
       #original_hash: 9bbdf16
       content1_html: >-
         Se ti interessa organizzare una competizione o se stai già pianificando
@@ -6322,10 +6403,9 @@ it:
         richiesto dalla Regola 9p (competizioni prima di aprile 2010).
       #original_hash: b868019
       less_than_twenty_five_percent_eliminated_error: >-
-        Turno %{round_id}: stando alle condizioni di avanzamento (%{condition}),
-        verrebbero eliminati meno del 25% dei partecipanti,  che non è
-        consentito secondo la Regola 9p1. Modifica le informazioni del turno
-        nella pagina di gestione eventi.
+        Turno %{round_id}: stando alle condizioni di avanzamento (%{condition}), verrebbero
+        eliminati meno del 25% dei partecipanti, che non è consentito secondo la Regola
+        9p1. Modifica le informazioni del turno nella pagina di gestione eventi.
       #original_hash: d6fc805
       not_enough_qualified_warning: >-
         Turno %{round_id}: stando ai dati dell'evento, avrebbe potuto accedere
@@ -6350,14 +6430,13 @@ it:
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
-        L'evento principale selezionato è %{main_event_id}. Sebbene questo sia
-        stato approvato dal WCAT PRIMA della competizione, il WRT ha la
-        responsabilità di assicurarsi DOPO la competizione che siano state
-        rispettate le linee guida per l'evento principale previste dalla WCA
-        Competition Requirements Policy. Indica una o più azioni intraprese
-        DURANTE la competizione per considerare %{main_event_id} come evento
-        principale (esempi validi: dichiarazione del vincitore della
-        competizione, maggior numero di round, premio più grande).
+        L'evento principale selezionato è %{main_event_id}. Sebbene questo sia stato
+        approvato dal WCAT PRIMA della competizione, il WRT ha la responsabilità di
+        assicurarsi DOPO la competizione che siano state rispettate le linee guida
+        per l'evento principale previste dalla WCA Competition Requirements Policy.
+        Indica una o più azioni intraprese DURANTE la competizione per considerare
+        %{main_event_id} come evento principale (esempi validi: dichiarazione del
+        vincitore della competizione, maggior numero di turni, premio più grande).
       #original_hash: 1d4e297
       no_main_event_warning: >-
         Non è stato selezionato alcun evento principale per questa competizione.
@@ -6397,6 +6476,15 @@ it:
         [%{round_id}] Questo turno ha un numero di set di scramble (%{actual})
         diverso da quello specificato nella pagina di gestione eventi
         (%{expected}). Correggi con il numero di set che sono stati utilizzati.
+      mbld_scrambles_warning: '[%{round_id}] Questo turno include risultati di 3x3x3
+        Multi-Blind. In fase di immissione, specifica nei commenti quanti scramble
+        per ciascun set sono stati usati, in modo che il WRT possa rimuovere quelli
+        non utilizzati.'
+    schedule:
+      activity_outside_competition_dates_warning: "L'attività '%{activity_name}' (codice:
+        %{activity_code}) è programmata al di fuori delle date previste per la competizione,
+        secondo il fuso orario locale della sede. Aggiorna il programma della competizione
+        in modo che rispecchi le date effettive della competizione."
   tickets:
     type:
       #original_hash: e43f273

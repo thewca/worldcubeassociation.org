@@ -125,6 +125,7 @@ eo:
     mmagic: Majstra Maĝiko
     #original_hash: 1843dc4
     333mbo: 3x3x3 Pluraj kuboj blinde (malnova stilo)
+    fto: Oktaminkso
   formats:
     #original_hash: e4b3c11
     '1': Plej bona el 1
@@ -147,6 +148,8 @@ eo:
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      '5': Bo5
+    '5': Plej bona el 5
   rounds:
     '0':
       #original_hash: 4d618bb
