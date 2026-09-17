@@ -43,6 +43,13 @@ RSpec.feature "Redesigned authentication pages" do
     expect(page).to have_no_css ".navbar"
   end
 
+  it "renders the resend confirmation page in the redesigned shell" do
+    visit "/users/confirmation/new"
+    expect(page).to have_button "Resend confirmation instructions"
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_no_css ".navbar"
+  end
+
   it "renders the change password page in the redesigned shell" do
     visit "/users/password/edit?reset_password_token=#{user.send_reset_password_instructions}"
     expect(page).to have_button "Change my password"
