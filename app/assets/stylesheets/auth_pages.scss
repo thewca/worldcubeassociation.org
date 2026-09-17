@@ -6,6 +6,9 @@
 // next-frontend/src/theme.ts, which is what these pages are meant to stop
 // clashing with.
 
+// Sizes are in px rather than rem on purpose: Semantic UI sets
+// `html { font-size: 14px }` site-wide, so a rem here would render 12.5% smaller
+// than the Chakra token it is copied from.
 $auth-font: "Rubik", "Helvetica Neue", helvetica, arial, sans-serif;
 $auth-surface: #fcfcfc;
 $auth-input-bg: #fff;
@@ -21,9 +24,9 @@ $auth-card-radius: 10px;
 $auth-control-radius: 6px;
 
 .auth-page {
-  max-width: 30rem;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  max-width: 480px;
+  padding-top: 48px;
+  padding-bottom: 48px;
   margin-right: auto;
   margin-left: auto;
   color: $auth-text;
@@ -45,92 +48,141 @@ $auth-control-radius: 6px;
   // way back to the site.
   .auth-page-logo {
     display: block;
-    width: 4.5rem;
-    margin: 0 auto 2rem;
+    width: 72px;
+    margin: 0 auto 32px;
   }
 
   .alert {
-    padding: 0.75rem 1rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.875rem;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 14px;
     border-radius: $auth-card-radius;
   }
 
-  .panel {
-    margin-bottom: 1rem;
+  // Scoped to the outermost panel throughout: the sign up page nests a Bootstrap
+  // accordion of .panel elements inside its card, and those must not pick up the
+  // card's own border, radius, shadow and heading size.
+  > .panel {
+    margin-bottom: 16px;
     background-color: $auth-surface;
     border: 1px solid $auth-border;
     border-radius: $auth-card-radius;
     box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
   }
 
-  .panel-heading {
-    padding: 1.5rem 1.5rem 0;
+  > .panel > .panel-heading {
+    padding: 24px 24px 0;
     background: none;
     border-bottom: 0;
   }
 
-  .panel-heading h4,
-  .panel-heading .panel-title {
+  > .panel > .panel-heading h4,
+  > .panel > .panel-heading .panel-title {
     margin: 0;
-    font-size: 1.6875rem;
+    font-size: 27px;
     font-weight: 800;
     line-height: 1.25;
   }
 
-  .panel-body {
-    padding: 1.5rem;
+  > .panel > .panel-body {
+    padding: 24px;
   }
 
-  .panel-body h3 {
-    margin: 1.75rem 0 0.5rem;
-    font-size: 1.125rem;
+  > .panel > .panel-body h3 {
+    margin: 28px 0 8px;
+    font-size: 18px;
     font-weight: 700;
+  }
+
+  // The "have you competed before?" accordion on the sign up page. It reads as a
+  // pair of choices inside the card, not as two more cards.
+  .panel-group {
+    margin-bottom: 20px;
+
+    .panel {
+      background-color: $auth-input-bg;
+      border: 1px solid $auth-border-strong;
+      border-radius: $auth-control-radius;
+      box-shadow: none;
+    }
+
+    .panel + .panel {
+      margin-top: 8px;
+    }
+
+    // `overflow: hidden` stops the trigger's margins collapsing out of the
+    // padding-less heading, which pulls the opened body up over the trigger.
+    .panel-heading {
+      padding: 0;
+      overflow: hidden;
+      background: none;
+      border-bottom: 0;
+    }
+
+    .panel-title a {
+      display: block;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: $auth-text;
+      text-decoration: none;
+    }
+
+    .panel-body {
+      padding: 16px;
+      border-top: 1px solid $auth-border;
+    }
+  }
+
+  .g-recaptcha {
+    margin-bottom: 20px;
   }
 
   p,
   li {
-    font-size: 0.875rem;
+    font-size: 14px;
   }
 
   // The scope list is the only list on these pages. Browsers indent it by 40px
   // by default, which pushes it out of line with everything else in the card.
   #oauth-permissions ul {
-    padding-left: 1.25rem;
+    padding-left: 20px;
   }
 
   .actions {
-    margin-top: 1.5rem;
+    margin-top: 24px;
   }
 
   .form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 20px;
   }
 
-  .form-group > label,
+  label,
   .control-label {
     display: inline-block;
-    margin-bottom: 0.375rem;
-    font-size: 0.875rem;
+    margin-bottom: 6px;
+    font-size: 14px;
     font-weight: 500;
   }
 
   // The password group puts the "forgot your password" link between the label
-  // and the field; pull it onto the label's line instead.
-  .form-group > a {
+  // and the field; pull it onto the label's line instead. Scoped to that group
+  // rather than to `.form-group`, because Devise's own `shared/links` partial is
+  // a `.form-group` of links separated by the `<br>`s this hides.
+  .password-group > a {
     float: right;
-    font-size: 0.875rem;
+    font-size: 14px;
   }
 
-  .form-group br {
+  .password-group br {
     display: none;
   }
 
   .form-control {
     clear: both;
-    height: 2.5rem;
-    padding: 0 0.75rem;
-    font-size: 0.875rem;
+    height: 40px;
+    padding: 0 12px;
+    font-size: 14px;
     color: $auth-text;
     background-color: $auth-input-bg;
     border: 1px solid $auth-border-strong;
@@ -147,16 +199,16 @@ $auth-control-radius: 6px;
   // two up as a row instead.
   .checkbox label {
     display: inline-flex;
-    gap: 0.5rem;
+    gap: 8px;
     align-items: center;
     padding-left: 0;
     margin: 0;
-    font-size: 0.875rem;
+    font-size: 14px;
     font-weight: 500;
   }
 
   .checkbox {
-    margin: 0 0 1.25rem;
+    margin: 0 0 20px;
 
     input[type="checkbox"] {
       position: static;
@@ -166,7 +218,7 @@ $auth-control-radius: 6px;
   }
 
   .help-block {
-    font-size: 0.6875rem;
+    font-size: 11px;
     line-height: 1.4;
     color: $auth-text-muted;
   }
@@ -174,9 +226,9 @@ $auth-control-radius: 6px;
   .btn {
     display: block;
     width: 100%;
-    padding: 0.5rem 1rem;
-    margin-bottom: 0.75rem;
-    font-size: 1rem;
+    padding: 8px 16px;
+    margin-bottom: 12px;
+    font-size: 16px;
     font-weight: 500;
     color: $auth-contrast;
     background-color: $auth-solid;
