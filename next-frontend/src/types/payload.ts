@@ -668,7 +668,6 @@ export interface Session {
  */
 export interface Account {
   id: string;
-  issuer: string;
   accountId: string;
   providerId: string;
   user: string | User;
@@ -979,7 +978,6 @@ export interface SessionsSelect<T extends boolean = true> {
  * via the `definition` "accounts_select".
  */
 export interface AccountsSelect<T extends boolean = true> {
-  issuer?: T;
   accountId?: T;
   providerId?: T;
   user?: T;
