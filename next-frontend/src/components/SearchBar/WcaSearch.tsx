@@ -92,6 +92,7 @@ export default function WcaSearch() {
   const router = useRouter();
 
   const [query, setQuery] = useState("");
+  const [highlightedValue, setHighlightedValue] = useState<string | null>(null);
 
   const debouncedQuery = useDebounce(query, DEBOUNCE_MS);
   const hasQuery = debouncedQuery.length >= MIN_QUERY_LENGTH;
@@ -135,13 +136,9 @@ export default function WcaSearch() {
   //   has typed is a good enough query for the full search page, so send them there.
   //   `isComposing` leaves Enter alone while an IME candidate is being confirmed.
   const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const hasHighlightedOption = Boolean(
-      event.currentTarget.getAttribute("aria-activedescendant"),
-    );
-
     if (
       event.key === "Enter" &&
-      !hasHighlightedOption &&
+      highlightedValue === null &&
       !event.nativeEvent.isComposing &&
       query.length > 0
     ) {
@@ -173,6 +170,8 @@ export default function WcaSearch() {
       // Highlighting the first option (which is always "Search for ...") makes
       // pressing enter open the full search page.
       inputBehavior="autohighlight"
+      highlightedValue={highlightedValue}
+      onHighlightChange={(e) => setHighlightedValue(e.highlightedValue)}
       onInputValueChange={(e) => setQuery(e.inputValue)}
       onValueChange={(e) => handleSelect(e.value[0])}
       selectionBehavior="clear"
