@@ -1,0 +1,22 @@
+sw:
+  time_will_tell:
+    distance_in_words:
+      special:
+        and_a_half: na nusu
+        half_an_hour: Nusu saa
+      template: '%{count} %{unit}'
+      template_long: '%{rest} and %{last}'
+      units:
+        second: Pili
+        minute: Dakika
+        hour: Saa
+        day: Siku
+        month: Mwezi
+        year: Mwaka
+    date_range:
+      different_months_same_year: '%{from_month} %{from_day} %{sep} %{to_month} %{to_day}'
+      different_years: '%{from_month} %{from_day}, %{from_year} %{sep} %{to_month} %{to_day},
+        %{to_year}'
+      same_month: '%{month} %{from_day} %{sep} %{to_day}'
+      same_date: '%{month} %{from_day}'
+      with_year: '%{date_range}, %{year}'
