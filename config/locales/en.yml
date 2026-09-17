@@ -658,6 +658,7 @@ en:
         email: 'Access your email address'
         manage_competitions: 'Manage any upcoming competitions you are organizing'
         manage_registrations: 'Register you for competitions, and change or cancel your registrations'
+        translations: 'Access the list of languages you are a WCA translator for'
 
     #context: Key used for sign in/sign up
     devise:
