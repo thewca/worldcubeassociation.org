@@ -9763,13 +9763,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flag-icons@npm:^7.5.0":
-  version: 7.5.0
-  resolution: "flag-icons@npm:7.5.0"
-  checksum: 10c0/c81e20c1751833882c95633349ba7e76e74d7d86c317e4ac2bac86589325430a3181913453fa3824edabaa1a84469f7ae4fd50c388027079048a5c3be438874a
-  languageName: node
-  linkType: hard
-
 "flat-cache@npm:^6.1.23":
   version: 6.1.23
   resolution: "flat-cache@npm:6.1.23"
@@ -12618,7 +12611,6 @@ __metadata:
     eslint-config-next: "npm:16.3.5"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-prettier: "npm:^5.5.6"
-    flag-icons: "npm:^7.5.0"
     graphql: "npm:^17.0.2"
     i18n-iso-countries: "npm:^7.14.0"
     i18next: "npm:^26.4.2"
@@ -12639,6 +12631,7 @@ __metadata:
     payload: "npm:3.89.0"
     prettier: "npm:^3.9.5"
     react: "npm:^19.3.0"
+    react-country-flag: "npm:^3.1.0"
     react-dom: "npm:^19.3.0"
     react-hotkeys-hook: "npm:^5.3.3"
     react-i18next: "npm:^17.0.14"
@@ -13647,6 +13640,15 @@ __metadata:
     react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
     react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
   checksum: 10c0/22c4e468f2a4ecf62910ac7910a3c08dbcdbea3febc3f3b412e02373f6bdab7bcc1c12c912bbf28b00d1d58338b59c08f6a288a9c3777832d446ddf968356b88
+  languageName: node
+  linkType: hard
+
+"react-country-flag@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "react-country-flag@npm:3.1.0"
+  peerDependencies:
+    react: ">=16"
+  checksum: 10c0/6271cde6cf355c66e2b669c74e98596d771534154210bbb84cd84788f46710c7ee14671229cb92203d09aeb4c30206bb882b73d63d95a73f96cdaca09ed2bd0d
   languageName: node
   linkType: hard
 

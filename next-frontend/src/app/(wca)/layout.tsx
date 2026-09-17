@@ -13,7 +13,6 @@ import Loading from "@/components/ui/loading";
 import NavbarSkeleton from "./navbar-skeleton";
 import FooterSkeleton from "./footer-skeleton";
 import { EmotionRegistry } from "@/components/ui/emotion-registry";
-import "flag-icons/css/flag-icons.min.css";
 
 export const metadata: Metadata = {
   title: {
