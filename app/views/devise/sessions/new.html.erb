@@ -11,7 +11,7 @@
     <% end %>
   <% end %>
   <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
-    <% if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? %>
+    <% if staging_oauth_login? %>
         <%= render 'staging_login' %>
     <% else %>
         <%= render 'live_login' %>

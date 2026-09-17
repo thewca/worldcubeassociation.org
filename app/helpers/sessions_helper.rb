@@ -13,4 +13,8 @@ module SessionsHelper
   def classic_sign_in_path
     new_user_session_path(request.query_parameters.merge(classic: true))
   end
+
+  def staging_oauth_login?
+    Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? && ServerSetting.staging_oauth_login_enabled?
+  end
 end
