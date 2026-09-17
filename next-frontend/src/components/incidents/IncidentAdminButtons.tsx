@@ -1,12 +1,13 @@
 "use client";
 
-import { Button, ButtonGroup, Link, Text } from "@chakra-ui/react";
+import { Button, ButtonGroup, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ConfirmDialog } from "@/providers/ConfirmProvider";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
+import RailsLink from "@/components/RailsLink";
 
 interface IncidentAdminButtonsProps {
   incidentId: string;
@@ -108,10 +109,9 @@ export default function IncidentAdminButtons({
           )}
         </Button>
         <Button asChild colorPalette="blue">
-          {/* The incident editor still lives in the monolith. */}
-          <Link href={`/incidents/${incidentId}/edit`}>
+          <RailsLink href={`/incidents/${incidentId}/edit`}>
             {t("incidents_log.admin.edit")}
-          </Link>
+          </RailsLink>
         </Button>
         <Button
           colorPalette="red"

@@ -1,4 +1,4 @@
-import { Accordion, Button, Heading, VStack } from "@chakra-ui/react";
+import { Accordion, Button, Heading, Stack, VStack } from "@chakra-ui/react";
 import { getSession } from "@/auth";
 import { getT } from "@/lib/i18n/get18n";
 import UpcomingCompetitionTable from "@/components/competitions/Mine/UpcomingCompetitionTable";
@@ -37,7 +37,13 @@ export default async function MyCompetitions() {
 
   return (
     <VStack gap="8" alignItems="left">
-      <Heading size="5xl">
+      <Stack
+        direction={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        alignItems={{ base: "flex-start", md: "center" }}
+        gap="4"
+      >
+        <Heading size="5xl">{t("competitions.my_competitions.title")}</Heading>
         {session.user?.wcaId && (
           <Button asChild>
             <Link
@@ -50,8 +56,7 @@ export default async function MyCompetitions() {
             </Link>
           </Button>
         )}
-        {t("competitions.my_competitions.title")}
-      </Heading>
+      </Stack>
       <p>{t("competitions.my_competitions.disclaimer")}</p>
       <UpcomingCompetitionTable
         competitions={myCompetitions.future_competitions}
