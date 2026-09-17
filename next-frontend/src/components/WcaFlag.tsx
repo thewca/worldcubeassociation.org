@@ -27,9 +27,10 @@ const WcaFlag = ({ code, size = "md", ...restProps }: WcaFlagProps) => {
         svg
         countryCode={code}
         cdnUrl={FLAG_CDN_URL}
-        // `react-country-flag` hardcodes a 1em square inline, which beats the class that `Icon`
-        //   sizes the flag with. Hand the box back to `Icon` and letterbox the 4:3 flag in it.
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        // `react-country-flag` hardcodes a 1em square as an inline style, which would beat the
+        //   class `Icon` sizes the flag with. Undefined values are dropped from the style
+        //   attribute, so this hands the box back to `Icon` and letterboxes the 4:3 flag in it.
+        style={{ width: undefined, height: undefined, objectFit: "contain" }}
       />
     </Icon>
   );
