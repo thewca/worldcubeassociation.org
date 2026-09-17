@@ -561,7 +561,7 @@ en:
       new:
         sign_in: "Sign in"
         #context: shown on the redesigned sign in page, above a link to the old one
-        redesign_notice: "You are viewing the new sign in page. It will replace the old one in by the end of the year."
+        redesign_notice: "You are viewing the new sign in page. It will replace the old one by the end of the year."
         use_classic: "Switch to the old sign in page"
         #context: used when handling two-factor authentication for a user
         2fa:

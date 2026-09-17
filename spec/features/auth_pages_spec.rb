@@ -23,6 +23,34 @@ RSpec.feature "Redesigned authentication pages" do
     expect(page).to have_css ".navbar"
   end
 
+  it "renders the sign up page in the redesigned shell, with the accordion hooks intact" do
+    visit "/users/sign_up"
+    # The button stays disabled until the page's JS sees a panel opened.
+    expect(page).to have_button "Sign up", disabled: true
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_no_css ".navbar"
+
+    # The page's inline jQuery drives the two panels by id; restyling must not
+    # disturb what it queries.
+    expect(page).to have_css "#have-you-competed-accordion #have-competed.panel-collapse"
+    expect(page).to have_css "#have-you-competed-accordion #never-competed.panel-collapse"
+  end
+
+  it "renders the forgotten password page in the redesigned shell" do
+    visit "/users/password/new"
+    expect(page).to have_button "Send me reset password instructions"
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_no_css ".navbar"
+  end
+
+  it "renders the change password page in the redesigned shell" do
+    visit "/users/password/edit?reset_password_token=#{user.send_reset_password_instructions}"
+    expect(page).to have_button "Change my password"
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_link "Sign in"
+    expect(page).to have_link "Sign up"
+  end
+
   it "shows the OAuth authorization request in the redesigned shell" do
     oauth_application = create(:oauth_application)
     sign_in user
