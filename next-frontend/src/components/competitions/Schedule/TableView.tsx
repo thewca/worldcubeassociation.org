@@ -347,7 +347,7 @@ function ActivityRow({
           <b>{getSimpleTimeString(startTime, timeZone)}</b>
         </GridItem>
         <GridItem textAlign="center" colSpan={[4, 8]}>
-          <EventIcon eventId={eventId} size="2xl" />
+          <EventIcon eventId={eventId} labelled size="2xl" />
         </GridItem>
         <GridItem textAlign="right" colSpan={[6, 4]}>
           {t("competitions.schedule.range.to")}

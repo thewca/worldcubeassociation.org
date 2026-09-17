@@ -39,6 +39,7 @@ function ShortlistItem<T extends DataCompetition>({
                 <EventIcon
                   key={event_id}
                   eventId={event_id}
+                  labelled
                   boxSize="6"
                   color={
                     event_id === comp.main_event_id && event_id !== "333"

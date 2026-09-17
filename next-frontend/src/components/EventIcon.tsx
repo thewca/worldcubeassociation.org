@@ -57,22 +57,29 @@ type EventIconIntrinsicProps = ComponentPropsWithoutRef<EventIconIntrinsic>;
 
 type EventIconProps = {
   eventId: string;
+  labelled?: boolean;
 } & EventIconIntrinsicProps;
 
-const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
+const EventIcon = ({
+  eventId,
+  labelled = false,
+  ...iconIntrinsicProps
+}: EventIconProps) => {
   const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
 
-  // Chakra hides icons from assistive tech by default, which is right for decoration but wrong
-  //   here: in a results table the icon *is* the event, so it carries the event's name.
-  return (
-    <IconComponent
-      role="img"
-      aria-hidden={false}
-      aria-label={events.byId[eventId]?.name}
-      {...iconIntrinsicProps}
-    />
-  );
+  // Chakra hides icons from assistive tech by default, which is right for most of our call sites:
+  //   they put the event's name next to the icon, and a label here would announce it twice.
+  //   `labelled` is for the icons that stand alone and have to carry the name themselves.
+  const labelProps = labelled
+    ? {
+        role: "img" as const,
+        "aria-hidden": false,
+        "aria-label": events.byId[eventId]?.name,
+      }
+    : {};
+
+  return <IconComponent {...labelProps} {...iconIntrinsicProps} />;
 };
 
 export default EventIcon;

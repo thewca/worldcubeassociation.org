@@ -297,6 +297,7 @@ export function EventCard({
             <EventIcon
               key={event_id}
               eventId={event_id}
+              labelled
               boxSize="8"
               color={
                 event_id === competitionInfo.main_event_id && event_id !== "333"

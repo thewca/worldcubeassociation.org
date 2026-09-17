@@ -173,7 +173,12 @@ export default function RegistrationOverview({
             <DataList.ItemValue>
               <HStack wrap="wrap">
                 {registration.competing.event_ids.map((eventId) => (
-                  <EventIcon key={eventId} eventId={eventId} size="lg" />
+                  <EventIcon
+                    key={eventId}
+                    eventId={eventId}
+                    labelled
+                    size="lg"
+                  />
                 ))}
               </HStack>
             </DataList.ItemValue>

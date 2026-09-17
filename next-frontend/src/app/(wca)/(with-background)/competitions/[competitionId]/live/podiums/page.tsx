@@ -57,7 +57,13 @@ export default async function PodiumsPage({
                 <HStack gap="2" wrap="wrap">
                   {eventsNotFinished.map((finalRound) => {
                     const { eventId } = parseActivityCode(finalRound.id);
-                    return <EventIcon key={finalRound.id} eventId={eventId} />;
+                    return (
+                      <EventIcon
+                        key={finalRound.id}
+                        eventId={eventId}
+                        labelled
+                      />
+                    );
                   })}
                 </HStack>
               </Heading>

@@ -60,7 +60,7 @@ export function SingleEventSelector({
             >
               <RadioCard.ItemHiddenInput />
               <RadioCard.ItemControl>
-                <EventIcon fontSize="2xl" eventId={eventId} />
+                <EventIcon fontSize="2xl" eventId={eventId} labelled />
               </RadioCard.ItemControl>
             </RadioCard.Item>
           );
