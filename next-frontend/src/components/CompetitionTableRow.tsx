@@ -70,6 +70,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
             as="span"
             title={countryName(comp.country_iso2, t)}
             lineHeight="0"
+            flexShrink="0"
           >
             <WcaFlag code={comp.country_iso2} size="lg" />
           </Box>
