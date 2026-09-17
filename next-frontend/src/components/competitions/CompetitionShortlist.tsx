@@ -7,7 +7,7 @@ import RegisterIcon from "@/components/icons/RegisterIcon";
 import React from "react";
 import type { components } from "@/types/openapi";
 import { TFunction } from "i18next";
-import EventIcon from "@/components/EventIcon";
+import { LabelledEventIcon } from "@/components/EventIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import PaymentIcon from "@/components/icons/PaymentIcon";
 import CurrencyValue from "@/components/CurrencyValue";
@@ -36,10 +36,9 @@ function ShortlistItem<T extends DataCompetition>({
           <DataList.ItemValue asChild>
             <Wrap gap="4">
               {comp.event_ids.map((event_id) => (
-                <EventIcon
+                <LabelledEventIcon
                   key={event_id}
                   eventId={event_id}
-                  labelled
                   boxSize="6"
                   color={
                     event_id === comp.main_event_id && event_id !== "333"

@@ -23,7 +23,7 @@ import SpotsLeftIcon from "@/components/icons/SpotsLeftIcon";
 import SpectatorsIcon from "@/components/icons/SpectatorsIcon";
 import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import EventIcon from "@/components/EventIcon";
+import { LabelledEventIcon } from "@/components/EventIcon";
 import { ChakraMarkdown } from "@/components/Markdown";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -294,10 +294,9 @@ export function EventCard({
         <Card.Title textStyle="s4">Events List</Card.Title>
         <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
-            <EventIcon
+            <LabelledEventIcon
               key={event_id}
               eventId={event_id}
-              labelled
               boxSize="8"
               color={
                 event_id === competitionInfo.main_event_id && event_id !== "333"

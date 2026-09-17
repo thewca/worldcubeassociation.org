@@ -3,7 +3,7 @@ import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Fragment } from "react";
 import { getLivePodiums } from "@/lib/wca/live/getLivePodiums";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import EventIcon from "@/components/EventIcon";
+import EventIcon, { LabelledEventIcon } from "@/components/EventIcon";
 import LiveResultsTable from "@/components/live/LiveResultsTable";
 import _ from "lodash";
 import OpenapiError from "@/components/ui/openapiError";
@@ -58,10 +58,9 @@ export default async function PodiumsPage({
                   {eventsNotFinished.map((finalRound) => {
                     const { eventId } = parseActivityCode(finalRound.id);
                     return (
-                      <EventIcon
+                      <LabelledEventIcon
                         key={finalRound.id}
                         eventId={eventId}
-                        labelled
                       />
                     );
                   })}
