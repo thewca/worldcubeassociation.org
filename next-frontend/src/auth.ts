@@ -1,6 +1,7 @@
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { customSession, genericOAuth } from "better-auth/plugins";
 import { getAccessToken } from "better-auth/api";
+import { parseSetCookieHeader, toCookieOptions } from "better-auth/cookies";
 import { headers } from "next/headers";
 import {
   siteWcaProvider,
@@ -47,7 +48,13 @@ export const auth = betterAuth({
         //   account row to address by id, so the signed account cookie is the only source.
         body: { useAccountCookie: true, userId: user.id },
         asResponse: false,
-        returnHeaders: false,
+        // `true` is load-bearing. When this refreshes, it re-encodes the rotated Rails tokens
+        //   into the account cookie on a `Headers` object of its own; with `false` that object
+        //   is discarded, the browser keeps the spent refresh token and replays it until
+        //   Doorkeeper's one-generation grace runs out and every refresh 400s for good.
+        //   Better Auth documents this contract for stateless setups, see
+        //   https://www.better-auth.com/docs/concepts/session-management
+        returnHeaders: true,
       }).catch((error) => {
         console.error("[auth] could not resolve a WCA access token", {
           userId: user.id,
@@ -55,6 +62,14 @@ export const auth = betterAuth({
         });
         return null;
       });
+
+      // Same replay `customSession` does for its own inner `getSession` call, so the rotated
+      //   account cookie reaches the response the middleware persists.
+      for (const setCookie of result?.headers?.getSetCookie() ?? []) {
+        parseSetCookieHeader(setCookie).forEach((attrs, name) => {
+          ctx.setCookie(name, attrs.value, toCookieOptions(attrs));
+        });
+      }
 
       // Spreading `ctx` inherits the response-shaping flags `customSession` set for its own
       //   `getSession` call, and they beat the ones passed above, so this comes back as a
