@@ -229,7 +229,7 @@ function TabList({
           <Text textStyle="bodyEmphasis" asChild justifyContent="left">
             <Link
               href={route({
-                pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                pathname: "/competitions/[competitionId]/tab/[tabName]",
                 query: {
                   competitionId,
                   tabName: encodeURIComponent(tabName),
