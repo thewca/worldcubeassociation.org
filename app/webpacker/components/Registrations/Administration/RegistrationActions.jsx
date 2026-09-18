@@ -31,19 +31,31 @@ function V3csvExport(selected, registrations, competition) {
   registrations
     .filter((r) => selected.length === 0 || selected.includes(r.user_id))
     .forEach((registration) => {
-      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${registration.user.name
-        }","${countries.byIso2[registration.user.country?.iso2]?.name}",${registration.user.wca_id
-        },${registration.user.dob},${registration.user.gender
-        },${competition.event_ids.map((evt) => (registration.competing.event_ids.includes(evt) ? '1' : '0'))},${registration.user.email
-        },${registration.guests // IP feel always blank
-        },"",${DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
-        },${registration.payment?.has_paid ? DateTime.fromISO(registration.payment.updated_at).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ') : ''
-        },${registration.user_id
-        },${registration.competing.registration_status
-        },${registration.registrant_id
-        },${registration.competing.waiting_list_position || ''
-        },${escapeCsv(registration.competing.comments)
-        }\n`;
+      csvContent += `${registration.competing.registration_status === 'accepted' ? 'a' : 'p'},"${
+        registration.user.name
+      }","${countries.byIso2[registration.user.country?.iso2]?.name}",${
+        registration.user.wca_id
+      },${registration.user.dob},${
+        registration.user.gender
+      },${competition.event_ids.map((evt) => (registration.competing.event_ids.includes(evt) ? '1' : '0'))},${
+        registration.user.email
+      },${
+        registration.guests // IP feel always blank
+      },"",${
+        DateTime.fromISO(registration.competing.registered_on).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ')
+      },${
+        registration.payment?.has_paid ? DateTime.fromISO(registration.payment.updated_at).setZone('UTC').toFormat('yyyy-MM-dd HH:mm:ss ZZZZ') : ''
+      },${
+        registration.user_id
+      },${
+        registration.competing.registration_status
+      },${
+        registration.registrant_id
+      },${
+        registration.competing.waiting_list_position || ''
+      },${
+        escapeCsv(registration.competing.comments)
+      }\n`;
     });
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
