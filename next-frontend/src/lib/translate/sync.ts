@@ -272,8 +272,9 @@ async function syncLocale(
 /**
  * One full sync: push the source strings up, then pull each language back down.
  *
- * Shared by the HTTP route and `scripts/weblate-sync.ts`, so the CLI and the
- * endpoint can never drift apart on ordering or on the seeding rule.
+ * Shared by the `afterChange` hook and `scripts/weblate-sync.ts`, so the
+ * automatic and manual runs can never drift apart on ordering or on the
+ * seeding rule.
  */
 export async function runSync(
   payload: Payload,

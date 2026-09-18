@@ -43,41 +43,6 @@ async function call(path: string, init?: RequestInit): Promise<Response> {
   return res;
 }
 
-export interface LanguageStats {
-  code: string;
-  total: number;
-  translated: number;
-  percent: number;
-}
-
-/** Languages that already exist in the component, with their progress. */
-export async function listLanguages(): Promise<LanguageStats[]> {
-  const out: LanguageStats[] = [];
-  let next: string | null = `/components/${project}/${component}/translations/`;
-  while (next) {
-    const page: {
-      next: string | null;
-      results: {
-        language_code: string;
-        total: number;
-        translated: number;
-        translated_percent: number;
-      }[];
-    } = await (await call(next)).json();
-    for (const t of page.results) {
-      out.push({
-        code: t.language_code,
-        total: t.total,
-        translated: t.translated,
-        percent: t.translated_percent,
-      });
-    }
-    // Weblate returns an absolute URL for `next`; strip back to the API path.
-    next = page.next ? new URL(page.next).pathname.replace(/^\/api/, "") : null;
-  }
-  return out;
-}
-
 /**
  * Payload locale -> the language code Weblate expects in an API path.
  *

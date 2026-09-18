@@ -9,9 +9,9 @@
  * parses argv with minimist and passes only the positional remainder through;
  * a `--flag` would be swallowed and silently ignored.
  *
- * Same code path as POST /api/translate/sync — both call `runSync` — but with
- * no HTTP session to arrange, which is what makes this the practical way to run
- * it from cron or against a local stack.
+ * Same code path as the `afterChange` hook — both call `runSync` — but runnable
+ * on a schedule, which is what covers translations finished in Weblate while
+ * nobody edits Payload.
  *
  * `payload run` imports this module and nothing else: it does not call an
  * export or hand us a payload instance, so the work happens at module scope and
