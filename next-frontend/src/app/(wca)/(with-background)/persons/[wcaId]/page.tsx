@@ -1,4 +1,4 @@
-import { Container, Tabs, Text, Card } from "@chakra-ui/react";
+import { Card, Tabs, Text, VStack } from "@chakra-ui/react";
 import { getPersonInfo } from "@/lib/wca/persons/getPersonInfo";
 import ProfileCard from "@/components/persons/ProfileCard";
 import { GridItem, SimpleGrid } from "@chakra-ui/react";
@@ -112,10 +112,15 @@ export default async function PersonOverview({
   );
 
   return (
-    <Container centerContent>
+    <VStack align="center">
       {/* Profile Section */}
-      <SimpleGrid gap={8} columns={24} paddingY={8}>
-        <GridItem colSpan={7}>
+      <SimpleGrid
+        gap={8}
+        columns={{ base: 1, lg: 24 }}
+        paddingY={8}
+        width="full"
+      >
+        <GridItem colSpan={{ base: 1, lg: 7 }}>
           <ProfileCard
             name={personDetails.person.name}
             profilePicture={personDetails.person.avatar.url}
@@ -131,11 +136,11 @@ export default async function PersonOverview({
           />
         </GridItem>
         {/* Records and Medals */}
-        <GridItem colSpan={17}>
+        <GridItem colSpan={{ base: 1, lg: 17 }}>
           <PersonalRecordsTable records={personDetails.personal_records} />
-          <SimpleGrid gap={8} columns={6} padding={0} pt={8}>
+          <SimpleGrid gap={8} columns={{ base: 1, md: 6 }} padding={0} pt={8}>
             {hasMedals && (
-              <GridItem colSpan={hasRecords ? 3 : 6}>
+              <GridItem colSpan={{ base: 1, md: hasRecords ? 3 : 6 }}>
                 <MedalSummaryCard
                   gold={personDetails.medals.gold}
                   silver={personDetails.medals.silver}
@@ -144,7 +149,7 @@ export default async function PersonOverview({
               </GridItem>
             )}
             {hasRecords && (
-              <GridItem colSpan={hasMedals ? 3 : 6}>
+              <GridItem colSpan={{ base: 1, md: hasMedals ? 3 : 6 }}>
                 <RecordSummaryCard
                   world={personDetails.records.world}
                   continental={personDetails.records.continental}
@@ -154,11 +159,11 @@ export default async function PersonOverview({
             )}
 
             {/* Tabs */}
-            <GridItem colSpan={6}>
+            <GridItem colSpan={{ base: 1, md: 6 }}>
               <Card.Root>
                 <Tabs.Root
                   defaultValue="results"
-                  fitted
+                  fitContent
                   variant="plain"
                   lazyMount
                   colorPalette="blue"
@@ -219,6 +224,6 @@ export default async function PersonOverview({
           </SimpleGrid>
         </GridItem>
       </SimpleGrid>
-    </Container>
+    </VStack>
   );
 }

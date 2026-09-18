@@ -20,6 +20,7 @@ export const getTeamCommitteeMembers = cache(
         query: {
           groupId,
           isActive: pastMembers,
+          sort: "status:desc,name:asc",
         },
       },
     });

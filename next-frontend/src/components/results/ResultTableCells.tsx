@@ -1,7 +1,7 @@
 import WcaFlag from "@/components/WcaFlag";
 import EventIcon from "@/components/EventIcon";
 import events from "@/lib/wca/data/events";
-import { HStack, Icon, Link, Table } from "@chakra-ui/react";
+import { HStack, Link, Table } from "@chakra-ui/react";
 import countries from "@/lib/wca/data/countries";
 import RegionFilterLink from "@/components/results/RegionFilterLink";
 
@@ -35,11 +35,7 @@ export function CountryCell({
       : countries.byIso2[countryIso2];
   return (
     <Table.Cell rowSpan={rowSpan} hideBelow={hideBelow}>
-      {country && (
-        <Icon asChild size="sm">
-          <WcaFlag code={country.iso2} />
-        </Icon>
-      )}{" "}
+      {country && <WcaFlag code={country.iso2} size="sm" />}{" "}
       {filterable ? (
         <RegionFilterLink iso2={country.iso2}>{country.name}</RegionFilterLink>
       ) : (
@@ -65,9 +61,7 @@ export function CompetitionCell({
   return (
     <Table.Cell>
       <HStack>
-        <Icon asChild size="sm">
-          <WcaFlag code={country.iso2} />
-        </Icon>
+        <WcaFlag code={country.iso2} size="sm" />
         <Link href={`/competitions/${competitionId}`}>{competitionName}</Link>
       </HStack>
     </Table.Cell>
@@ -81,7 +75,9 @@ interface PersonCellProps {
 
 export function PersonCell({ personId, personName }: PersonCellProps) {
   return (
-    <Table.Cell>
+    // The ScrollArea sets `white-space: nowrap` on everything; names are the one
+    //   column we let wrap, so the result column stays on screen on narrow phones.
+    <Table.Cell whiteSpace="normal" minW="2xs">
       <Link href={`/persons/${personId}`}>{personName}</Link>
     </Table.Cell>
   );

@@ -259,17 +259,14 @@ es-419:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} intentos para bajar de %{time}'
       one: '%{count} intento para bajar de %{time}'
       other: '%{count} intentos para bajar de %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} intentos para bajar de %{moves} movimientos'
       one: '%{count} intento para bajar de %{moves} movimientos'
       other: '%{count} intentos para bajar de %{moves} movimientos'
     #original_hash: eba1b97
     points:
-      zero: '%{count} intentos para obtener al menos %{points} puntos'
       one: '%{count} intento para obtener al menos %{points} puntos'
       other: '%{count} intentos para obtener al menos %{points} puntos'
   time_limit:
@@ -282,8 +279,6 @@ es-419:
     333fm: 1 hora
     #original_hash: cc7d8bb
     333mbf: '10:00.00 por cubo, hasta 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Tipo de calificación
@@ -384,11 +379,12 @@ es-419:
       invalid: no válido
     #original_hash: 49d0140
     days:
-      zero: 0 días
       one: 1 día
       other: '%{count} días'
     #original_hash: 51ef7d4
     search_site: Buscar en la página
+    #original_hash: d9c883a
+    back_to_top: Volver arriba
     #original_hash: d7decf1
     filter: Filtrar
     #original_hash: f6fdbe4
@@ -738,8 +734,6 @@ es-419:
       text: Requerido
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Por favor, revisa los siguientes errores:'
@@ -761,12 +755,6 @@ es-419:
         public_summary: >-
           Una descripción general del incidente y su decisión asociada, para
           mostrar públicamente. Por favor, rellénalo en inglés.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: >-
@@ -776,36 +764,14 @@ es-419:
         name: >-
           Introduce el nombre completo del competidor correctamente, por ejemplo
           <strong>Martín López</strong> y no <strong>martin lopez</strong>.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Después de subir un nuevo avatar, tendrás que esperar que el Equipo de
           Resultados lo apruebe.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Esto sólo aplica en competiciones que organizas o delegas, y puede ser
           anulado en cada competición.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           Esto se limita a notificaciones para cambios de versiones mayores de
@@ -828,12 +794,6 @@ es-419:
           Comprueba tu aplicación de móvil configurada para una contraseña de un
           sólo uso, o introduce uno de los códigos de recuperación.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Tu fecha de nacimiento correcta en formato AAAA-MM-DD
         #original_hash: 49ee4af
@@ -898,14 +858,10 @@ es-419:
           hayan subido (si quieres reemplazar una imagen, necesitas subir la
           nueva primero, y luego eliminar la antigua). Si no tienes imágenes de
           estas zonas en uso, por favor explica la razón.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Lista de números que referenciando a algún incidente sobre el que te
           gustaría obtener feedback del WRC.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           Lista de números haciendo referencia a los incidentes en los cuales
@@ -928,50 +884,14 @@ es-419:
           progreso / regresión dentro de la comunidad o planes futuros para la
           región). Si por ser conciso dejaste algo sin decir en las secciones
           anteriores, ahora puedes hacerlo.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Ejemplos: Cómo llegar, Pagos, Premios, Dónde dormir'
-        #original_hash: da39a3e
-        content: ''
       person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
       poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       vote:
-        #original_hash: da39a3e
-        comment: ''
       competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Debe ser una URL http(s) válida. Se recomienda HTTPS
         #original_hash: 2ace571
@@ -982,28 +902,12 @@ es-419:
         email: >-
           Debería ser una lista de correo conteniendo todos los cargos de la
           Junta directiva
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Debe estar en formato PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Debe estar en formato PDF.  Si necesitas  añadir más ficheros, por
           favor únelos en uno solo
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -1242,7 +1146,6 @@ es-419:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: El formulario no contiene errores
           one: 'El formulario contiene un error:'
           other: 'El formulario contiene %{count} errores:'
       error_pages:
@@ -2321,7 +2224,6 @@ es-419:
       must_register: debes registrarte al menos para un evento
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: No hay límite de eventos a los que puedes inscribirte
         one: Debes inscribirte en sólo un evento
         other: 'Debes inscribirte en como mucho %{count} eventos'
       #original_hash: 87f7c12
@@ -2329,6 +2231,8 @@ es-419:
         Tienes denegado el acceso. Si crees que se trata de un error, por favor
         contacta con el <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WIC</a>.
+      #original_hash: d4ca89d
+      banned_until: 'Tu ban termina el %{date}.'
       #original_hash: 8d07e7f
       undelete_banned: es un competidor baneado y no se puede volver a añadir
       #original_hash: 3de7c86
@@ -2345,17 +2249,14 @@ es-419:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nuevos
         one: nuevo
         other: nuevos
       #original_hash: bc010e3
       returner:
-        zero: repetidores
         one: repetidor
         other: repetidores
       #original_hash: b7da17a
       person:
-        zero: personas
         one: persona
         other: personas
     flash:
@@ -2458,7 +2359,6 @@ es-419:
       edit: Editar
       #original_hash: beffc45
       country_plural:
-        zero: Ninguna región
         one: 1 región
         other: '%{count} regiones'
       #original_hash: 1feee0e
@@ -2899,9 +2799,9 @@ es-419:
       schedule_locked_after_results_submitted: El horario no puede ser editado luego de enviar los resultados.
       #original_hash: 1877b69
       spots_left:
-        zero: Sin cupos libres
         one: Queda un solo cupo
         other: 'Quedan %{count} cupos'
+      no_spots_left: Sin cupos libres
     live:
       #original_hash: 10d1a3c
       title: Resultados en vivo
@@ -3013,14 +2913,12 @@ es-419:
           title: Eliminar competidor
           #original_hash: c25b336
           next_to_advance:
-            zero: No hay más competidores que avanzarían de ronda
             one: 'El siguiente competidor en pasar de ronda es %{competitors}'
             other: 'Los siguientes competidores en pasar de ronda son %{competitors}'
           #original_hash: c87ca67
           advance: Siguiente competidor pasa
           #original_hash: aa59a26
           quit_confirm:
-            zero: Eliminar competidores de la ronda
             one: Eliminar competidor de la ronda
             other: Eliminar competidores de la ronda
           bulk:
@@ -3055,7 +2953,6 @@ es-419:
           single_round: Agregar competidor a la ronda
           #original_hash: bf3b670
           multiple_rounds:
-            zero: Agregar competidor a la ronda.
             one: Agregar competidor a ambas rondas en la ronda dual.
             other: >-
               Agregar competidor a la ronda. La segunda ronda de la ronda dual
@@ -3144,14 +3041,12 @@ es-419:
       display_name: '[Cancelada] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizadores
         one: Organizador
         other: Organizadores
       #original_hash: 53a9522
       organization_team: Equipo organizador
       #original_hash: 6afa61e
       delegate:
-        zero: Delegados de la WCA
         one: Delegado de la WCA
         other: Delegados de la WCA
       #original_hash: b37456c
@@ -3248,12 +3143,10 @@ es-419:
         restricted: Los espectadores sólo se permiten como acompañantes de competidores.
       #original_hash: 35f892a
       guest_limit:
-        zero: No hay límite de invitados.
         one: Los competidores pueden traer un invitado como mucho.
         other: 'Los competidores pueden traer %{count} invitados como mucho.'
       #original_hash: bad09c8
       event_limit:
-        zero: No hay límite de eventos.
         one: Los competidores puedn registrarse en exactamente un evento.
         other: 'Los competidores pueden registrarse en como mucho %{count} eventos.'
       #original_hash: 64e0ddd
@@ -3485,13 +3378,12 @@ es-419:
         full: Completo
         #original_hash: cf9b770
         open: Abierto
-        #original_hash: 44bb7df
+        #original_hash: 9c46019
         not_open: Sin abrir
         #original_hash: 88d86b7
         closed: Cerrado
       #original_hash: 184f3ab
       currently_displaying:
-        zero: 'Se muestran %{count} competiciones'
         one: 'Se muestra %{count} competición'
         other: 'Se muestran %{count} competiciones'
       #original_hash: 74d8290
@@ -3502,6 +3394,14 @@ es-419:
       no_more_comps: Sin más competiciones.
       #original_hash: 8b09d74
       no_comp_found: Ninguna competición reúne los requisitos de búsqueda.
+      #original_hash: 9937970
+      why_compete_description_html: >-
+        <p>Las competiciones no son solo un lugar para ver quién es más rápido;
+        son eventos sociales. Cualquiera que sepa resolver un cubo es bienvenido
+        a sumarse y establecer récords personales. Hacer amigos es muy fácil
+        porque todos trabajamos juntos para que la competición funcione.</p>
+        <p>¡Usa la herramienta de abajo para encontrar una competencia cerca de
+        tí y comienza tu carrera cubera!</p>
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
@@ -3764,17 +3664,11 @@ es-419:
             también
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Si esto se deshabilita, cambiar el sistema de registro causará
             problemas técnicos. Por favor, contacta al WST para recibir
             asistencia si aún así necesitas cambiar el sistema de registro.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Nombre completo de la competición incluyendo el año al final (ejemplo,
@@ -3795,8 +3689,6 @@ es-419:
           de Requisitos de Competiciones de la WCA</a>. ¡Por favor, <b>rellena
           este campo en inglés</b>!
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Nombre de la ciudad y provincia donde tendrá lugar la competición.
@@ -3809,20 +3701,8 @@ es-419:
           details_html: >-
             Detalles sobre el local (por ejemplo, "primera planta" o "sigue los
             carteles"). %{md}
-          #original_hash: da39a3e
-          address: ''
           coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             El nombre completo de la serie de competiciones incluyendo el año al
@@ -3899,21 +3779,17 @@ es-419:
             El Delegado principal es responsable de los aspectos administrativos
             de la competición (resultados, reporte, pago de la cuota)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Sitio web de la competición. Tiene que ser una URL http(s) válida.
           #original_hash: b2af5f5
           external_registration_page: >-
             La página donde los competidores deben hacer el registro para la
             competición. Debe ser una URL http o https válida.
-          #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: cc7d557
-          scoretaking_software: 'Selecciona "%{choice_ilr}" si deseas usar Rondas Duales'
+          #original_hash: 08df794
+          scoretaking_software: >-
+            Selecciona "%{choice_ilr}" o una herramienta externa si deseas usar
+            Rondas Duales
         user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Moneda en que se especifican los pagos.
@@ -3936,8 +3812,6 @@ es-419:
             espectadores no se pueden gestionar desde este sitio web. Si se pone
             en $0, se mostrará la frase seleccionada en "Mostrar mensaje para
             acceso gratuito de invitados".
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Por ahora esta cifra es informativa, los reembolsos deberán
@@ -3949,8 +3823,6 @@ es-419:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Nota: la apertura y cierre se registra según la hora UTC.'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Fecha a partir de la cual los competidores en lista de espera
@@ -3966,16 +3838,6 @@ es-419:
             blanco quiere decir que los competidores pueden añadir eventos hasta
             que empiecen. Si hay registro in situ, se debe poner la fecha en la
             que ocurra la competición.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             El número de invitados por inscripción permitidos en esta
@@ -3989,36 +3851,24 @@ es-419:
             adicional que hablen tus competidores; será mostrado en la página de
             registro de la competición si estás usando el registro de la web de
             la WCA.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Por favor elabora a continuación por qué no te gustaría que se
               registren primerizos en tu torneo. ¡Por favor, en inglés!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Por favor explica aquí por que te gustaría requerir que los
               competidores entreguen sus puzzles con anelación. Por favor
               rellena esto en inglés
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Por favor explica aquí por que te gustaría requerir usar tiempos
               de calificación. Por favor rellena esto en inglés
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Por favor explica aquí por que te gustaría restringir ciertas
@@ -4037,8 +3887,6 @@ es-419:
           si hay algo de lo que no estés seguro o si hay alguna petición para el
           WCAT. Por favor rellénalo en inglés.
         cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4156,9 +4004,9 @@ es-419:
         empty: Ninguno
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: Sin lugares restantes
           one: '%{count} lugar restante'
           other: '%{count} lugares restantes'
+        no_spots_remaining: Sin lugares restantes
         pending:
           #original_hash: 4210670
           title: Registros pendientes
@@ -4245,6 +4093,8 @@ es-419:
           requerimiento que se enumere.
         #original_hash: 80d2933
         next_step: Continuar al siguiente paso
+        #original_hash: bb54db5
+        accept: Aceptar
       update:
         #original_hash: ebf417d
         being_updated: Actualizando registro...
@@ -4278,9 +4128,9 @@ es-419:
         email_message: Copiado al portapapeles. ¡Recuerda usar CCO (con copia oculta)!
         #original_hash: beedd53
         move_to:
-          zero: Mover a
           one: 'Mover %{count} a'
           other: 'Mover %{count} a'
+        move_to_none_selected: Mover a
         #original_hash: 96f608c
         pending: Pendiente
         #original_hash: 92d40dc
@@ -4339,6 +4189,8 @@ es-419:
           organizador o Delegado
         #original_hash: 6b76fab
         comment: Comentarios adicionales para los organizadores
+        #original_hash: f3d85ec
+        comment_overview: Tus comentarios
         #original_hash: 8eae30c
         until: 'Puedes actualizar tu registro hasta el día %{date}'
         #original_hash: fc8bc84
@@ -4378,6 +4230,10 @@ es-419:
         event_limit: >-
           Esta competición limita la cantidad de eventos a la que puedes
           anotarte a un máximo de %{max_events}.
+        #original_hash: 1e4c43f
+        waiting_list_count:
+          one: 'Hay %{count} competidor en la lista de espera.'
+          other: 'Hay %{count} competidores en la lista de espera.'
       errors:
         #original_hash: 3890616
         events: 'Falló la carga de eventos, por favor intenta nuevamente'
@@ -4837,9 +4693,6 @@ es-419:
       room_in_venue: '%{room} en %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Estás viendo el horario para "%{venue_name}", uno de %{count} lugares
-          para esta competición.
         one: >-
           Estás viendo el horario para "%{venue_name}", el único lugar para esta
           competición.
@@ -5163,8 +5016,6 @@ es-419:
         paypal: >-
           Conectar tu cuenta de PayPal permite al sitio web de la WCA rutear
           pagos a tí y emitir reembolsos directamente a tu cuenta.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Esta competición ha sido configurada para recibir pagos a través de
@@ -6560,6 +6411,10 @@ es-419:
       automatically_position_fixed_info: >-
         [%{round_id}] Se corrigió la posición de %{person_name} de %{pos} a
         %{expected_pos} automáticamente.
+      #original_hash: fae77ce
+      automatically_global_position_fixed_info: >-
+        [%{round_id}] Se corrigió automáticamente la posición de %{person_name}
+        de %{pos} a %{expected_pos}.
       #original_hash: e895bf5
       mbf_result_over_time_limit_warning: >-
         [%{round_id}] El resultado "%{result}" de %{person_name} supera el
@@ -6621,6 +6476,10 @@ es-419:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} está en la posición incorrecta: se esperó
         %{expected_pos} pero se encontró %{pos}.
+      #original_hash: 678c05b
+      wrong_global_position_in_results_error: >-
+        [%{round_id}] %{person_name} está en una posición incorrecta: se esperó
+        %{expected_pos} pero se halló %{pos}.
     rounds:
       #original_hash: 517fd54
       too_many_qualified_warning: >-

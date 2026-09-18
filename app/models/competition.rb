@@ -1482,7 +1482,7 @@ class Competition < ApplicationRecord
   end
 
   def events_with_podium_results
-    results.includes(:result_attempts).podium.order(:global_pos).group_by(&:event)
+    results.includes(:result_attempts, :round).podium.order(:global_pos).group_by(&:event)
            .sort_by { |event, _results| event.rank }
   end
 
@@ -1491,7 +1491,7 @@ class Competition < ApplicationRecord
   end
 
   def person_ids_with_results
-    results.includes(:result_attempts).group_by(&:person_id)
+    results.includes(:result_attempts, :round).group_by(&:person_id)
            .sort_by { |_person_id, results| results.first.person_name }
            .map do |person_id, results|
              results.sort_by! { |r| [r.event.rank, -r.round_type.rank] }

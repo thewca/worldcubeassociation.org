@@ -19,8 +19,10 @@ export interface TabWithChildren extends TabBase {
   children: TabWithLink[];
 }
 
-interface TabWithLink extends TabBase {
+export interface TabWithLink extends TabBase {
   badgeI18nKey?: string;
+  tooltipI18nKey?: string;
+  externalHref?: string;
   href: RouteLiteral;
   hrefAdmin?: RouteLiteral;
 }
@@ -48,7 +50,6 @@ export const beforeCompetitionTabs = (
       }),
       menuKey: "register",
       icon: "Register",
-      disabled: process.env.NODE_ENV === "production",
     },
     {
       i18nKey: "competitions.nav.menu.competitors",
@@ -78,6 +79,46 @@ export const beforeCompetitionTabs = (
       icon: "Registration Open Date",
     },
   ];
+};
+
+export const liveTab = (
+  competitionInfo: components["schemas"]["CompetitionInfo"],
+): TabWithLink => {
+  const base = {
+    i18nKey: "competitions.live.title",
+    menuKey: "live",
+    icon: "Records" as const,
+  };
+
+  switch (competitionInfo.scoretaking_software) {
+    case "internal":
+      return {
+        ...base,
+        href: route({
+          pathname: "/competitions/[competitionId]/live",
+          query: { competitionId: competitionInfo.id },
+        }),
+      };
+    case "wca_live":
+      return {
+        ...base,
+        href: route({
+          pathname: "/competitions/[competitionId]/live",
+          query: { competitionId: competitionInfo.id },
+        }),
+        externalHref: `https://live.worldcubeassociation.org/link/competitions/${competitionInfo.id}`,
+      };
+    default:
+      return {
+        ...base,
+        href: route({
+          pathname: "/competitions/[competitionId]/live",
+          query: { competitionId: competitionInfo.id },
+        }),
+        disabled: true,
+        tooltipI18nKey: "competitions.live.incompatible.external",
+      };
+  }
 };
 
 export const duringCompetitionTabs = (
@@ -190,6 +231,15 @@ export const afterCompetitionTabs = (
       }),
       menuKey: "all",
       icon: "List",
+    },
+    {
+      i18nKey: "competitions.nav.menu.scrambles",
+      href: route({
+        pathname: "/competitions/[competitionId]/scrambles",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "scrambles",
+      icon: "Scrambles",
     },
     {
       i18nKey: "competitions.nav.menu.by_person",

@@ -265,6 +265,7 @@ class AdminController < ApplicationController
 
     all_results = Result.select("results.*, FALSE AS `muted`")
                         .joins(:event, :round_type)
+                        .includes(:round)
                         .where(
                           person_name: @person_name,
                           country_id: @country_id,

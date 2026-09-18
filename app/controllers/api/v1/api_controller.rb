@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 class Api::V1::ApiController < ApplicationController
+  include ApiRateLimiting
+
   protect_from_forgery with: :null_session
 
+  # Authentication is deny-by-default: endpoints that serve public data opt out with
+  # `skip_before_action :require_user!`. Keep it this way round — an endpoint that forgets to
+  # declare itself should 401, not leak.
   prepend_before_action :require_user!
 
   # Deliberately not memoised into `@current_user`: Devise memoises its own session-based user

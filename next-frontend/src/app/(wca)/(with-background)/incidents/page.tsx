@@ -2,18 +2,17 @@
 
 import {
   ButtonGroup,
-  Container,
+  createListCollection,
+  Heading,
   IconButton,
+  Input,
   Link,
   Pagination,
-  Table,
-  VStack,
-  Heading,
-  Input,
-  HStack,
-  Text,
   Select,
-  createListCollection,
+  Stack,
+  Table,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { useAPIClient } from "@/lib/wca/useAPI";
@@ -116,15 +115,15 @@ function IncidentsLog() {
   }
 
   return (
-    <Container bg="bg">
-      <VStack align="left">
-        <Heading textStyle="h1">{t("incidents_log.title")}</Heading>
-        <Input
-          placeholder={t("incidents_log.search_placeholder")}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        {isFetching && <Loading />}
+    <VStack align="left" gap={3}>
+      <Heading textStyle="h1">{t("incidents_log.title")}</Heading>
+      <Input
+        placeholder={t("incidents_log.search_placeholder")}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      {isFetching && <Loading />}
+      <Table.ScrollArea maxW="full">
         <Table.Root size="sm" variant="outline" striped>
           <Table.Header>
             <Table.Row>
@@ -134,13 +133,13 @@ function IncidentsLog() {
               <Table.ColumnHeader>
                 {t("activerecord.attributes.incident.tags")}
               </Table.ColumnHeader>
-              <Table.ColumnHeader>
+              <Table.ColumnHeader hideBelow="md">
                 {t("activerecord.attributes.incident.competition_id")}
               </Table.ColumnHeader>
               <Table.ColumnHeader>
                 {t("incidents_log.status")}
               </Table.ColumnHeader>
-              <Table.ColumnHeader>
+              <Table.ColumnHeader hideBelow="md">
                 {t("incidents_log.sent_in_digest")}
               </Table.ColumnHeader>
             </Table.Row>
@@ -163,7 +162,7 @@ function IncidentsLog() {
                 <Table.Cell>
                   <IncidentTags tags={item.tags} action={tagAction} />
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell hideBelow="md">
                   {item.competitions.map((competition) => (
                     <CompetitionTag
                       key={competition.id}
@@ -180,7 +179,7 @@ function IncidentsLog() {
                       : "incidents_log.pending",
                   )}
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell hideBelow="md">
                   {t(
                     item.digest_worthy && item.digest_sent_at
                       ? "incidents_log.sent"
@@ -191,89 +190,93 @@ function IncidentsLog() {
             ))}
           </Table.Body>
         </Table.Root>
+      </Table.ScrollArea>
 
-        <HStack justify="space-between">
-          <Trans
-            parent={Text}
-            t={t}
-            i18nKey="incidents_log.showing_entries"
-            values={{
-              first: topEntryIndex + 1,
-              last: bottomEntryIndex + 1,
-              total: totalEntries,
-            }}
-            components={{
-              select: (
-                <Select.Root
-                  collection={itemsPerPageChoices}
-                  value={[itemsPerPage.toString()]}
-                  onValueChange={(e) => setItemsPerPage(parseInt(e.value[0]))}
-                  width="5rem"
-                  display="inline-block"
-                >
-                  <Select.HiddenSelect />
+      <Stack
+        direction={{ base: "column", md: "row" }}
+        justify="space-between"
+        align={{ base: "stretch", md: "center" }}
+      >
+        <Trans
+          parent={Text}
+          t={t}
+          i18nKey="incidents_log.showing_entries"
+          values={{
+            first: topEntryIndex + 1,
+            last: bottomEntryIndex + 1,
+            total: totalEntries,
+          }}
+          components={{
+            select: (
+              <Select.Root
+                collection={itemsPerPageChoices}
+                value={[itemsPerPage.toString()]}
+                onValueChange={(e) => setItemsPerPage(parseInt(e.value[0]))}
+                width="5rem"
+                display="inline-block"
+              >
+                <Select.HiddenSelect />
 
-                  <Select.Control>
-                    <Select.Trigger>
-                      <Select.ValueText />
-                    </Select.Trigger>
-                    <Select.IndicatorGroup>
-                      <Select.Indicator />
-                    </Select.IndicatorGroup>
-                  </Select.Control>
+                <Select.Control>
+                  <Select.Trigger>
+                    <Select.ValueText />
+                  </Select.Trigger>
+                  <Select.IndicatorGroup>
+                    <Select.Indicator />
+                  </Select.IndicatorGroup>
+                </Select.Control>
 
-                  <Select.Positioner>
-                    <Select.Content>
-                      {itemsPerPageChoices.items.map((perPageChoice) => (
-                        <Select.Item
-                          key={perPageChoice.toString()}
-                          item={perPageChoice.toString()}
-                        >
-                          {perPageChoice}
-                        </Select.Item>
-                      ))}
-                    </Select.Content>
-                  </Select.Positioner>
-                </Select.Root>
-              ),
-            }}
-          />
+                <Select.Positioner>
+                  <Select.Content>
+                    {itemsPerPageChoices.items.map((perPageChoice) => (
+                      <Select.Item
+                        key={perPageChoice.toString()}
+                        item={perPageChoice.toString()}
+                      >
+                        {perPageChoice}
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Positioner>
+              </Select.Root>
+            ),
+          }}
+        />
 
-          <Pagination.Root
-            count={totalEntries}
-            pageSize={totalPages}
-            page={page}
+        <Pagination.Root count={totalEntries} pageSize={totalPages} page={page}>
+          <ButtonGroup
+            variant="ghost"
+            size={{ base: "xs", md: "sm" }}
+            wrap="wrap"
           >
-            <ButtonGroup variant="ghost" size="sm" wrap="wrap">
-              <Pagination.PrevTrigger asChild>
+            <Pagination.PrevTrigger asChild>
+              <IconButton
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
+              >
+                <LuChevronLeft />
+              </IconButton>
+            </Pagination.PrevTrigger>
+
+            <Pagination.Items
+              render={(page) => (
                 <IconButton
-                  onClick={() => setPage(page - 1)}
-                  disabled={page === 1}
+                  variant={{ base: "ghost", _selected: "outline" }}
+                  onClick={() => setPage(page.value)}
                 >
-                  <LuChevronLeft />
+                  {page.value}
                 </IconButton>
-              </Pagination.PrevTrigger>
+              )}
+            />
 
-              <Pagination.Items
-                render={(page) => (
-                  <IconButton
-                    variant={{ base: "ghost", _selected: "outline" }}
-                    onClick={() => setPage(page.value)}
-                  >
-                    {page.value}
-                  </IconButton>
-                )}
-              />
-
-              <Pagination.NextTrigger asChild>
-                <IconButton onClick={() => setPage(page + 1)}>
-                  <LuChevronRight />
-                </IconButton>
-              </Pagination.NextTrigger>
-            </ButtonGroup>
-          </Pagination.Root>
-        </HStack>
-      </VStack>
-    </Container>
+            <Pagination.NextTrigger asChild>
+              <IconButton onClick={() => setPage(page + 1)}>
+                <LuChevronRight />
+              </IconButton>
+            </Pagination.NextTrigger>
+          </ButtonGroup>
+        </Pagination.Root>
+      </Stack>
+    </VStack>
   );
 }

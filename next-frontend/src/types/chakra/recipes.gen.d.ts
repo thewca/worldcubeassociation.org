@@ -433,7 +433,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
-  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | "slatePastel" | undefined
+  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | undefined
 }
 
 export type CardVariantProps = {
@@ -1362,7 +1362,9 @@ export interface TabsVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "line" */
   variant?: "line" | "subtle" | "enclosed" | "outline" | "plain" | undefined
+  fitContent?: boolean | undefined
   highContrast?: boolean | undefined
+  sideNav?: boolean | undefined
 }
 
 export type TabsVariantProps = {

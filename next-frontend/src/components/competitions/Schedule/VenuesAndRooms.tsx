@@ -6,6 +6,7 @@ import {
   Heading,
   Alert,
   Box,
+  HStack,
   Tabs,
   CheckboxGroup,
   CheckboxCard,
@@ -99,8 +100,10 @@ export default function VenuesAndRooms({
 
       {rooms.length > 1 && (
         <Box>
-          <Heading size="sm">
-            {t("competitions.schedule.rooms_panel.title")}{" "}
+          <HStack gap="2" marginBottom="2" wrap="wrap">
+            <Heading size="sm">
+              {t("competitions.schedule.rooms_panel.title")}
+            </Heading>
             <Button onClick={() => updateRooms(rooms.map((room) => room.id))}>
               {t("competitions.schedule.rooms_panel.all")}
             </Button>
@@ -114,7 +117,7 @@ export default function VenuesAndRooms({
             >
               {t("competitions.schedule.rooms_panel.show_buttons")}
             </Button>
-          </Heading>
+          </HStack>
           <RoomSelector
             rooms={rooms}
             activeRoomIds={activeRoomIds}

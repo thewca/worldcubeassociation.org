@@ -10,7 +10,7 @@ import WcaFlag from "@/components/WcaFlag";
 import countries from "@/lib/wca/data/countries";
 import { TFunction } from "i18next";
 import continents from "@/lib/wca/data/continents";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 
 interface RegionSelectorProps {
   onlyCountries?: boolean;
@@ -56,14 +56,7 @@ const countryOptions = (t: TFunction) =>
     .map((country) => ({
       key: country.id,
       label: t(`countries.${country.iso2}`),
-      flag: (
-        <WcaFlag
-          code={country.iso2}
-          fallback={country.id}
-          width={32}
-          height={25}
-        />
-      ),
+      flag: <WcaFlag code={country.iso2} size="lg" />,
       value: country.iso2,
     }))
     .toSorted((a, b) => a.label.localeCompare(b.label));
@@ -109,6 +102,7 @@ export default function RegionSelector({
   t,
 }: RegionSelectorProps) {
   const { contains } = useFilter({ sensitivity: "base" });
+  const [inputValue, setInputValue] = useState("");
 
   const items: RegionSelectorOption[] = onlyCountries
     ? countryOptions(t)
@@ -125,7 +119,11 @@ export default function RegionSelector({
       <Combobox.Root
         lazyMount
         collection={collection}
-        onInputValueChange={(e) => filter(e.inputValue)}
+        onInputValueChange={(e) => {
+          setInputValue(e.inputValue);
+          filter(e.inputValue);
+        }}
+        inputBehavior="autohighlight"
         onValueChange={(e) => onRegionChange(e.value[0])}
         width="100%"
         openOnClick
@@ -136,7 +134,21 @@ export default function RegionSelector({
         selectionBehavior={nullable ? "clear" : "replace"}
       >
         <Combobox.Control>
-          <Combobox.Input placeholder={name} cursor="pointer" />
+          <Combobox.Input
+            placeholder={name}
+            cursor="pointer"
+            // Tabbing away otherwise discards what was typed and snaps back to the
+            // current selection, so commit the highlighted (first) match instead.
+            onKeyDown={(e) => {
+              if (e.key !== "Tab" || inputValue === "") return;
+
+              const firstMatch = collection.items.find(
+                (item) => !item.disabled,
+              );
+
+              if (firstMatch) onRegionChange(firstMatch.value);
+            }}
+          />
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />
             <Combobox.Trigger />

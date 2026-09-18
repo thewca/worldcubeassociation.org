@@ -9,6 +9,7 @@ import { dateRange, hasPassedEndOfDay } from "@/lib/wca/dates";
 import MapContainer, { Layer, Popup, Source } from "react-map-gl/maplibre";
 import type { MapEvent, MapLayerMouseEvent } from "react-map-gl/maplibre";
 import type { FeatureCollection, Point } from "geojson";
+import { setWorkerUrl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useState } from "react";
 
@@ -31,18 +32,23 @@ interface MapProps {
 // Limit number of markers on map, especially for "All Past Competitions"
 export const MAP_DISPLAY_LIMIT = 500;
 
+setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+
 const TILE_STYLE = "https://tiles.openfreemap.org/styles/bright";
 
 const PIN_LAYER_ID = "competition-pins";
-const PIN_ICON_ID = "competition-pin";
-const PIN_ICON_PIXEL_RATIO = 2;
-const PIN_ICON_SIZE = 64;
+const UPCOMING_PIN_ICON_ID = "competition-pin-upcoming";
+const PAST_PIN_ICON_ID = "competition-pin-past";
+const PIN_ICON_PIXEL_RATIO = 4;
+const PIN_ICON_SIZE = 128;
 const PIN_DISPLAY_SIZE = PIN_ICON_SIZE / PIN_ICON_PIXEL_RATIO;
 
 // Lucide's `map-pin` as a filled silhouette, with the centre hole cut out by
-//   `evenodd`. maplibre loads it as an SDF, which is what lets one image be
-//   recoloured per competition by the `icon-color` expression below.
-const PIN_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="${PIN_ICON_SIZE}" height="${PIN_ICON_SIZE}" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0Zm-5 0a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z"/></svg>`;
+//   `evenodd`. One raster per pin colour: maplibre's `icon-color` needs an SDF
+//   image, and an SDF re-derived from a rasterised glyph has visibly ragged
+//   edges at this size.
+const pinIconSvg = (color: string, halo: string) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${PIN_ICON_SIZE}" height="${PIN_ICON_SIZE}" viewBox="0 0 24 24"><path fill="${color}" stroke="${halo}" stroke-width="0.75" fill-rule="evenodd" d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0Zm-5 0a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z"/></svg>`;
 
 export default function Map({ competitions, isLoading = false }: MapProps) {
   const router = useRouter();
@@ -90,19 +96,21 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
   const registerPinIcon = (event: MapEvent) => {
     const map = event.target;
 
-    if (map.hasImage(PIN_ICON_ID)) {
-      return;
-    }
+    const addPin = (id: string, color: string) => {
+      if (map.hasImage(id)) {
+        return;
+      }
 
-    const pinIcon = new window.Image(PIN_ICON_SIZE, PIN_ICON_SIZE);
+      const pinIcon = new window.Image(PIN_ICON_SIZE, PIN_ICON_SIZE);
 
-    pinIcon.onload = () =>
-      map.addImage(PIN_ICON_ID, pinIcon, {
-        pixelRatio: PIN_ICON_PIXEL_RATIO,
-        sdf: true,
-      });
+      pinIcon.onload = () =>
+        map.addImage(id, pinIcon, { pixelRatio: PIN_ICON_PIXEL_RATIO });
 
-    pinIcon.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(PIN_ICON_SVG)}`;
+      pinIcon.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(pinIconSvg(color, haloColor))}`;
+    };
+
+    addPin(UPCOMING_PIN_ICON_ID, upcomingColor);
+    addPin(PAST_PIN_ICON_ID, pastColor);
   };
 
   const trackHoveredPin = (event: MapLayerMouseEvent) =>
@@ -131,7 +139,6 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
         </Box>
       )}
       <MapContainer
-        reuseMaps
         initialViewState={{ longitude: 0, latitude: 0, zoom: 2 }}
         mapStyle={TILE_STYLE}
         onLoad={registerPinIcon}
@@ -145,19 +152,14 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
             id={PIN_LAYER_ID}
             type="symbol"
             layout={{
-              "icon-image": PIN_ICON_ID,
-              "icon-anchor": "bottom",
-              "icon-allow-overlap": true,
-            }}
-            paint={{
-              "icon-color": [
+              "icon-image": [
                 "case",
                 ["get", "isOver"],
-                pastColor,
-                upcomingColor,
+                PAST_PIN_ICON_ID,
+                UPCOMING_PIN_ICON_ID,
               ],
-              "icon-halo-color": haloColor,
-              "icon-halo-width": 1,
+              "icon-anchor": "bottom",
+              "icon-allow-overlap": true,
             }}
           />
         </Source>
@@ -170,8 +172,10 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
             closeButton={false}
             closeOnClick={false}
           >
-            <Heading textStyle="headerLink">{hoveredCompetition.name}</Heading>
-            <Text>
+            <Heading textStyle="headerLink" color="black">
+              {hoveredCompetition.name}
+            </Heading>
+            <Text color="black">
               {`${dateRange(hoveredCompetition.start_date, hoveredCompetition.end_date)} - ${hoveredCompetition.city}`}
             </Text>
           </Popup>

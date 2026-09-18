@@ -74,6 +74,11 @@ paths:
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:
     $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
 
+  /v1/persons/{wca_id}/results:
+    $ref: 'paths/persons/personResults.yaml'
+  /v1/persons/{wca_id}/records:
+    $ref: 'paths/persons/personRecords.yaml'
+
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'
   /v0/competitions/{competitionId}/events:

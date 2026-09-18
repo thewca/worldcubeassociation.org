@@ -70,14 +70,16 @@ export default function FilteredRecords({
         };
 
   return (
-    <VStack align="left" gap={4}>
-      <Heading size="5xl">{t("results.records.title")}</Heading>
+    <VStack align="left" gap={2}>
+      <Heading size={{ base: "3xl", md: "5xl" }}>
+        {t("results.records.title")}
+      </Heading>
       {t("results.last_updated_html", { timestamp })}
       <RecordsFilterBox
         filterState={{ ...searchParams, event }}
         filterActions={filterActions}
       />
-      <Box position="relative" opacity={isPending ? 0.4 : 1}>
+      <Box position="relative" w="full" opacity={isPending ? 0.4 : 1}>
         {isPending && (
           <Center position="absolute" inset={0} zIndex={1}>
             <Spinner size="xl" position="sticky" top="50%" />

@@ -7,7 +7,7 @@ const yaml = require("js-yaml");
 const languages = Object.keys(
   require("./src/lib/staticData/available_locales.json"),
 );
-const countries = require("i18n-iso-countries");
+const countryData = require("./src/lib/staticData/countries.real.json");
 
 // Recursively flatten a nested object using dot notation
 function flattenObject(obj, prefix = "") {
@@ -22,23 +22,24 @@ function flattenObject(obj, prefix = "") {
   }, {});
 }
 
-// Add Country Names if not translated already
+// Add Country Names if not translated already. `Intl` gives the CLDR name, which is the short
+// everyday one ("Nederland", not "Koninkrijk der Nederlanden"); WCA-specific names such as
+// "Chinese Taipei" live in the locale files and take precedence.
 function addCountryNames(translation, lang) {
-  const supportedLanguages = countries.getSupportedLanguages();
-  const iso639LanguageCode = lang.slice(0, 2);
+  const displayNames = new Intl.DisplayNames([lang], {
+    type: "region",
+    fallback: "none",
+  });
 
-  if (!supportedLanguages.includes(iso639LanguageCode)) {
-    return translation;
-  }
-  const iso3166CountryCodes = Object.keys(countries.getAlpha2Codes());
+  countryData.states_lists[0].states.forEach(({ iso2 }) => {
+    const languageKey = `countries.${iso2}`;
 
-  iso3166CountryCodes.forEach((iso3166CountryCode) => {
-    const languageKey = `countries.${iso3166CountryCode}`;
     if (!translation[languageKey]) {
-      translation[languageKey] = countries.getName(
-        iso3166CountryCode,
-        iso639LanguageCode,
-      );
+      const countryName = displayNames.of(iso2);
+
+      if (countryName) {
+        translation[languageKey] = countryName;
+      }
     }
   });
 

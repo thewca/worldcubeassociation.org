@@ -1,42 +1,26 @@
 import { Badge, Box, Float, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import events from "@/lib/wca/data/events";
 import _ from "lodash";
 import type { ReactNode } from "react";
 
-export const recordTagBadge = (tag?: string | null) => {
+const recordTagBadge = (tag?: string | null) => {
   switch (tag) {
     case "WR": {
-      return (
-        <Badge size="xs" variant="solid" colorPalette="red">
-          WR
-        </Badge>
-      );
+      return { color: "red", label: "WR" };
     }
+    case "AfR":
+    case "AsR":
     case "ER":
     case "NAR":
-    case "SAR":
-    case "ASR":
-    case "OCR": {
-      return (
-        <Badge size="xs" variant="solid" colorPalette="yellow">
-          CR
-        </Badge>
-      );
+    case "OcR":
+    case "SAR": {
+      return { color: "yellow", label: "CR" };
     }
     case "NR": {
-      return (
-        <Badge size="xs" variant="solid" colorPalette="green">
-          NR
-        </Badge>
-      );
+      return { color: "green", label: "NR" };
     }
     case "PR": {
-      return (
-        <Badge size="xs" variant="solid" colorPalette="blue">
-          PR
-        </Badge>
-      );
+      return { color: "blue", label: "PR" };
     }
     default: {
       return null;
@@ -60,8 +44,15 @@ export function WithRecordTag({
   return (
     <Box as="span" position="relative" display="inline-block">
       {children}
-      <Float placement="top-end" offsetX="-1.5">
-        {badge}
+      <Float placement="top-end" offsetX="-3.5" offsetY="1">
+        <Badge
+          size="xs"
+          variant="solid"
+          colorPalette={badge.color}
+          minHeight="3.5"
+        >
+          {badge.label}
+        </Badge>
       </Float>
     </Box>
   );
@@ -73,6 +64,7 @@ interface AttemptsCellProps {
   worstResultIndex: number;
   eventId: string;
   recordTag?: string | null;
+  attemptCount: number;
 }
 
 export function AttemptsCells({
@@ -81,10 +73,8 @@ export function AttemptsCells({
   worstResultIndex,
   eventId,
   recordTag,
+  attemptCount,
 }: AttemptsCellProps) {
-  const attemptCount =
-    events.byId[eventId].recommendedFormat.expected_solve_count;
-
   return _.times(attemptCount).map((a) => {
     const attempt = attempts[a];
     const key = `attempt-${attempt}-${a}`;
@@ -104,4 +94,22 @@ export function AttemptsCells({
       </Table.Cell>
     );
   });
+}
+
+// Mirrors the old Rails `pb_type_class_for_result`: a result that was a personal
+// best at the time it was achieved is coloured, upgraded to the record's own
+// colour when it was also a regional record.
+export function personalBestColor(regionalRecord?: string | null) {
+  switch (regionalRecord) {
+    case "WR":
+      return "recordMarkers.world";
+    case "NR":
+      return "recordMarkers.national";
+    case "":
+    case null:
+    case undefined:
+      return "recordMarkers.personal";
+    default:
+      return "recordMarkers.continental";
+  }
 }

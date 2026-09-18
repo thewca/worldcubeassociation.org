@@ -1,5 +1,4 @@
 import {
-  Container,
   Heading,
   IconButton,
   Link as ChakraLink,
@@ -18,12 +17,12 @@ import { components } from "@/types/openapi";
 import UserBadge from "@/components/UserBadge";
 import { Trans } from "react-i18next/TransWithoutContext";
 import _ from "lodash";
-import Link from "next/link";
 import { route } from "nextjs-routes";
 import { LuPencil } from "react-icons/lu";
-import getPermissions from "@/lib/wca/permissions";
+import getPermissions from "@/lib/wca/permissions.server";
 import AdminModeToggle from "@/app/(wca)/(with-background)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
+import TabTarget from "@/components/ui/tabTarget";
 import { Metadata } from "next";
 
 // Editing a user is still served by Rails, which sits at the root of the public API host.
@@ -64,54 +63,53 @@ export default async function DelegatesPage({
   const activeFriendlyId = activeGroup.metadata!.friendly_id!;
 
   return (
-    <Container bg="bg">
-      <VStack align="left" gap="8" width="full" pt="8" alignItems="left">
-        <Heading size="5xl">{t("delegates_page.title")}</Heading>
-        <Trans
-          parent={Prose}
-          t={t}
-          i18nKey="about.structure.delegates_html"
-          values={{ see_link: "" }}
-        />
-        <Prose>{t("delegates_page.acknowledges")}</Prose>
-        {canViewAdminPage && (
-          <AdminModeToggle
-            region={activeFriendlyId}
-            isAdminMode={isAdminMode}
-          />
-        )}
-        <Tabs.Root
-          variant="enclosed"
-          orientation="vertical"
-          fitted
-          value={activeFriendlyId}
-        >
-          <Tabs.List height="fit-content" position="sticky" top="3">
-            {rootGroups.map((group) => {
-              const friendlyId = group.metadata!.friendly_id!;
+    <VStack align="left" gap="8" width="full" alignItems="left">
+      <Heading size="5xl">{t("delegates_page.title")}</Heading>
+      <Trans
+        parent={Prose}
+        t={t}
+        i18nKey="about.structure.delegates_html"
+        values={{ see_link: "" }}
+      />
+      <Prose>{t("delegates_page.acknowledges")}</Prose>
+      {canViewAdminPage && (
+        <AdminModeToggle region={activeFriendlyId} isAdminMode={isAdminMode} />
+      )}
+      <Tabs.Root
+        variant="enclosed"
+        orientation="vertical"
+        sideNav
+        fitted
+        value={activeFriendlyId}
+        gap={8}
+      >
+        <Tabs.List>
+          {rootGroups.map((group) => {
+            const friendlyId = group.metadata!.friendly_id!;
 
-              return (
-                <Tabs.Trigger value={friendlyId} key={group.id} asChild>
-                  <Link
-                    href={route({
-                      pathname: "/delegates",
-                      query: isAdminMode
-                        ? { region: friendlyId, admin: "true" }
-                        : { region: friendlyId },
-                    })}
-                  >
-                    {group.name}
-                  </Link>
-                </Tabs.Trigger>
-              );
-            })}
-          </Tabs.List>
-          <Tabs.Content value={activeFriendlyId} w="full">
-            <DelegateTab group={activeGroup} isAdminMode={isAdminMode} />
-          </Tabs.Content>
-        </Tabs.Root>
-      </VStack>
-    </Container>
+            return (
+              <Tabs.Trigger value={friendlyId} key={group.id} asChild>
+                <TabTarget
+                  tabKey={friendlyId}
+                  currentPath={activeFriendlyId}
+                  href={route({
+                    pathname: "/delegates",
+                    query: isAdminMode
+                      ? { region: friendlyId, admin: "true" }
+                      : { region: friendlyId },
+                  })}
+                >
+                  {group.name}
+                </TabTarget>
+              </Tabs.Trigger>
+            );
+          })}
+        </Tabs.List>
+        <Tabs.Content value={activeFriendlyId} w="full">
+          <DelegateTab group={activeGroup} isAdminMode={isAdminMode} />
+        </Tabs.Content>
+      </Tabs.Root>
+    </VStack>
   );
 }
 
@@ -123,8 +121,7 @@ async function DelegateTab({
   isAdminMode: boolean;
 }) {
   const { t } = await getT();
-  const { metadata, name, id, lead_user } = group;
-  const { email } = metadata!;
+  const { name, id, lead_user } = group;
 
   const [regionResult, subregionResult] = await Promise.all([
     getDelegatesInGroup(id),
@@ -155,12 +152,19 @@ async function DelegateTab({
   return (
     <VStack align="left">
       <Heading textStyle="h2">{name}</Heading>
-      <ChakraLink href={`mailto:${email}`}>{email}</ChakraLink>
       <UserBadge
         key={lead_user!.id}
         profilePicture={lead_user!.avatar}
         name={lead_user!.name}
         wcaId={lead_user!.wca_id}
+        roles={[
+          {
+            teamRole: t(
+              "enums.user_roles.status.delegate_regions.senior_delegate",
+            ),
+            staffColor: "yellow",
+          },
+        ]}
       />
       {regionDelegates.length > 0 && (
         <DelegateGrid delegates={regionDelegates} isAdminMode={isAdminMode} />
@@ -198,7 +202,7 @@ async function DelegateGrid({
   const { t } = await getT();
 
   return (
-    <SimpleGrid columns={2} gap={2}>
+    <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
       {delegates.map((role) => (
         <UserBadge
           key={role.id}
@@ -210,6 +214,7 @@ async function DelegateGrid({
               teamRole: t(
                 `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
               ),
+              teamText: role.metadata.location,
               staffColor: "yellow",
             },
           ]}

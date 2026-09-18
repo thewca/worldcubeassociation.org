@@ -231,6 +231,15 @@ class ResultsSubmissionController < ApplicationController
     render status: :ok, json: { success: true }
   end
 
+  def live_results_preview
+    render json: competition_from_params
+                 .live_results
+                 .includes(:live_attempts, :user, round: [:competition_event])
+                 .order(:global_pos)
+                 .sort_by { [it.event.rank, it.round.number] }
+                 .map(&:to_inbox_compat)
+  end
+
   def pending_results_submissions
     competitions = Competition.pending_results_submission.order_by_date
 

@@ -19,7 +19,7 @@ export default function SearchResultContent({
           <Text textStyle="bodyEmphasis">{result.name}</Text>
           <HStack gap={1} fontSize="sm">
             {result.country_iso2 && (
-              <WcaFlag code={result.country_iso2} width={18} />
+              <WcaFlag code={result.country_iso2} size="md" />
             )}
             <Text>{`${result.city} (${result.id})`}</Text>
           </HStack>

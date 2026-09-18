@@ -10,9 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { FaPause, FaPlay, FaTimes } from "react-icons/fa";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { recordTagBadge } from "@/components/results/TableCells";
+import { WithRecordTag } from "@/components/results/TableCells";
 import formats from "@/lib/wca/data/formats";
 import { LiveCompetitor } from "@/types/live";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
@@ -230,7 +230,7 @@ function ResultsProjector({
                             )}
                             {showText && (
                               <Table.Cell textAlign="center" rowSpan={rowSpan}>
-                                <Flag code={competitor.country_iso2} />
+                                <WcaFlag code={competitor.country_iso2} />
                               </Table.Cell>
                             )}
                             {isLinkedRound && (
@@ -262,8 +262,14 @@ function ResultsProjector({
                                   textAlign="right"
                                   fontWeight={statIndex === 0 ? 600 : 400}
                                 >
-                                  {formatAttemptResult(result[field], eventId)}{" "}
-                                  {recordTagBadge(result[recordTagField])}
+                                  <WithRecordTag
+                                    recordTag={result[recordTagField]}
+                                  >
+                                    {formatAttemptResult(
+                                      result[field],
+                                      eventId,
+                                    )}
+                                  </WithRecordTag>
                                 </Table.Cell>
                               ),
                             )}
