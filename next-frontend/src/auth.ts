@@ -52,6 +52,8 @@ export const auth = betterAuth({
         //   into the account cookie on a `Headers` object of its own; with `false` that object
         //   is discarded, the browser keeps the spent refresh token and replays it until
         //   Doorkeeper's one-generation grace runs out and every refresh 400s for good.
+        //   Better Auth documents this contract for stateless setups, see
+        //   https://www.better-auth.com/docs/concepts/session-management
         returnHeaders: true,
       }).catch((error) => {
         console.error("[auth] could not resolve a WCA access token", {
