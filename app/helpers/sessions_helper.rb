@@ -14,6 +14,13 @@ module SessionsHelper
     new_user_session_path(request.query_parameters.merge(classic: true))
   end
 
+  # Someone who opted back into the classic sign in page should stay in the old
+  # experience end to end, so links out of it keep pointing at Rails. The
+  # redesigned pages hand off to the Next frontend instead.
+  def auth_page_url(path)
+    classic_sign_in? ? path : next_frontend_url(path)
+  end
+
   def staging_oauth_login?
     Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? && ServerSetting.staging_oauth_login_enabled?
   end

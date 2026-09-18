@@ -43,6 +43,29 @@ RSpec.feature "Redesigned authentication pages" do
     expect(page).to have_no_css ".navbar"
   end
 
+  context "when signing in with a WCA ID that has no account yet" do
+    let(:person) { create(:person) }
+
+    before { allow(EnvConfig).to receive(:NEXT_FRONTEND_URL).and_return("https://next.example.com") }
+
+    def attempt_sign_in(path)
+      visit path
+      fill_in "Email or WCA ID", with: person.wca_id
+      fill_in "Password", with: "wca"
+      click_button "Sign in"
+    end
+
+    it "points the redesigned page's profile link at the Next frontend" do
+      attempt_sign_in "/users/sign_in"
+      expect(page).to have_link person.wca_id, href: "https://next.example.com/persons/#{person.wca_id}"
+    end
+
+    it "keeps the classic page's profile link on Rails" do
+      attempt_sign_in "/users/sign_in?classic=true"
+      expect(page).to have_link person.wca_id, href: "/persons/#{person.wca_id}"
+    end
+  end
+
   it "renders the resend confirmation page in the redesigned shell" do
     visit "/users/confirmation/new"
     expect(page).to have_button "Resend confirmation instructions"
