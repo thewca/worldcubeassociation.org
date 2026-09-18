@@ -25,6 +25,7 @@ RSpec.feature "Redesigned authentication pages" do
 
   it "renders the sign up page in the redesigned shell, with the accordion hooks intact" do
     visit "/users/sign_up"
+    expect(page).to have_text "You are viewing the new sign up page"
     # The button stays disabled until the page's JS sees a panel opened.
     expect(page).to have_button "Sign up", disabled: true
     expect(page).to have_css ".auth-page"

@@ -1,6 +1,9 @@
 <% provide(:hide_wca_navbars, true) %>
 <div class="container auth-page">
   <%= render 'shared/auth_page_header' %>
+  <%= alert :info do %>
+    <%= t('.redesign_notice') %>
+  <% end %>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4><%= t '.sign_up' %></h4>

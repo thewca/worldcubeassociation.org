@@ -557,6 +557,11 @@ en:
       edit:
         new_password_confirmation: 'Re-enter new password'
 
+    registrations:
+      new:
+        #context: shown on the redesigned sign up page
+        redesign_notice: "You are viewing the new sign up page. It will replace the old one by the end of the year."
+
     sessions:
       new:
         sign_in: "Sign in"
@@ -1086,6 +1091,8 @@ en:
         wca_id_claimed: "Successfully claimed WCA ID %{wca_id}. Check your email, and wait for %{user} to approve it!"
         account_updated_confirm: "Account updated, emailed %{email} to confirm your new email address."
     select_nearby_delegate:
+      #context: label above the box used to search for a Delegate by name
+      search_for_delegate: "Search for Delegate"
       select_delegate_html: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA Delegate</a> to confirm your identify. Please enter your birthdate and select the Delegate you think knows you best."
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
