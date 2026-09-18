@@ -20,7 +20,10 @@ import type { LocalizedField } from "./registry";
 export interface Leaf {
   field: LocalizedField;
   dataPath: (string | number)[];
-  /** Unit key for a plain field; the prefix before `#` for rich text. */
+  /**
+   * Unit key for a plain field; the prefix before `#` for rich text. Reads
+   * `slug:path` for a global and `slug#docId:path` for a collection row.
+   */
   baseKey: string;
   source: unknown;
 }
@@ -125,20 +128,15 @@ export async function collectSourceDocs(
         ...head,
         slug,
         leaves: fields.flatMap((field) =>
-          resolveStrings(field, head.doc).map((string) => {
-            // resolveStrings keys look like `slug:path`; re-compose so the
-            // document id sits between them for collections.
-            const path = string.key.slice(slug.length + 1);
-            return {
-              field,
-              dataPath: string.dataPath,
-              baseKey:
-                head.type === "global"
-                  ? `${slug}:${path}`
-                  : `${slug}#${head.docId}:${path}`,
-              source: string.value,
-            };
-          }),
+          resolveStrings(field, head.doc).map((string) => ({
+            field,
+            dataPath: string.dataPath,
+            baseKey:
+              head.type === "global"
+                ? `${slug}:${string.keyPath}`
+                : `${slug}#${head.docId}:${string.keyPath}`,
+            source: string.value,
+          })),
         ),
       }));
     }),

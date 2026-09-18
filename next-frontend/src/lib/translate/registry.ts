@@ -3,6 +3,7 @@ import {
   type Field,
   type FlattenedBlock,
   type FlattenedField,
+  type Tab,
 } from "payload";
 import { fieldShouldBeLocalized } from "payload/shared";
 
@@ -44,27 +45,25 @@ export interface LocalizedField {
   path: PathSegment[];
   /** Stable, human-readable id, e.g. `home.blocks(TextCard)[].body`. */
   pathString: string;
-  /** Raw Payload field type, e.g. "text" | "textarea" | "richText". */
-  fieldType: "text" | "textarea" | "richText";
   widget: Widget;
-  label: string;
   /**
    * Payload enforces `required` per locale on write, so a document cannot be
    * saved in a target locale until every required localized field has a value.
    * The sync uses this to decide whether a document is writable yet.
    */
   required: boolean;
-  /** True when localization is inherited from a localized ancestor container. */
-  inheritedLocalization: boolean;
 }
 
 /** A concrete translatable string, resolved against a specific document. */
 export interface TranslatableString {
-  field: LocalizedField;
   /** Concrete data path including array/block indices, e.g. ["blocks", 0, "body"]. */
   dataPath: (string | number)[];
-  /** Stable key for this exact string (uses block/array `id` when present). */
-  key: string;
+  /**
+   * Path to this exact string within its document, e.g. `blocks[a1].heading`
+   * (uses a block/array row's `id` when it has one, so the path survives
+   * reordering). `documents.ts` prefixes the document to make a unit key.
+   */
+  keyPath: string;
   value: unknown;
 }
 
@@ -79,6 +78,17 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isBlock(row: unknown, blockSlug: string): boolean {
   return isRecord(row) && row.blockType === blockSlug;
+}
+
+/**
+ * `fieldShouldBeLocalized` implements Payload's "no localized-within-localized"
+ * rule, so it returns false for a field inside a localized container: the
+ * container's own answer has to be carried down separately.
+ */
+function isLocalized(field: Field | Tab, parentIsLocalized: boolean): boolean {
+  return (
+    parentIsLocalized || fieldShouldBeLocalized({ field, parentIsLocalized })
+  );
 }
 
 function segmentToString(seg: PathSegment): string {
@@ -117,8 +127,7 @@ function walk(
           field.flattenedFields,
           parent,
           [...basePath, { kind: "field", name: field.name }],
-          parentIsLocalized ||
-            fieldShouldBeLocalized({ field, parentIsLocalized }),
+          isLocalized(field, parentIsLocalized),
         );
 
       case "array":
@@ -126,16 +135,13 @@ function walk(
           field.flattenedFields,
           parent,
           [...basePath, { kind: "array", name: field.name }],
-          parentIsLocalized ||
-            fieldShouldBeLocalized({ field, parentIsLocalized }),
+          isLocalized(field, parentIsLocalized),
         );
 
       case "blocks": {
-        const childIsLocalized =
-          parentIsLocalized ||
-          // FlattenedBlocksField narrows `blocks` to FlattenedBlock[], so it
-          // isn't structurally a Field; the helper only reads `.localized`.
-          fieldShouldBeLocalized({ field: field as Field, parentIsLocalized });
+        // FlattenedBlocksField narrows `blocks` to FlattenedBlock[], so it isn't
+        // structurally a Field; the helper only reads `.localized`.
+        const childIsLocalized = isLocalized(field as Field, parentIsLocalized);
         // flattenAllFields resolves inline blocks and object references to
         // FlattenedBlock; bare string references (defined in `config.blocks`)
         // can't be resolved without the config and are skipped.
@@ -157,10 +163,7 @@ function walk(
       case "text":
       case "textarea":
       case "richText": {
-        const isLocalized =
-          fieldShouldBeLocalized({ field, parentIsLocalized }) ||
-          parentIsLocalized;
-        if (!isLocalized) return [];
+        if (!isLocalized(field, parentIsLocalized)) return [];
         const path: PathSegment[] = [
           ...basePath,
           { kind: "field", name: field.name },
@@ -170,11 +173,8 @@ function walk(
             parent,
             path,
             pathString: `${parent.slug}.${path.map(segmentToString).join(".")}`,
-            fieldType: field.type,
             widget: field.type === "richText" ? "lexical" : "plain",
-            label: typeof field.label === "string" ? field.label : field.name,
             required: field.required === true,
-            inheritedLocalization: !field.localized && parentIsLocalized,
           },
         ];
       }
@@ -258,15 +258,14 @@ export function resolveStrings(
       }
       return [
         {
-          field,
           dataPath: [...dataPath, seg.name],
-          key: `${field.parent.slug}:${[...keyParts, seg.name].join(".")}`,
+          keyPath: [...keyParts, seg.name].join("."),
           value: node[seg.name] ?? null,
         },
       ];
     }
 
-    // array | block: iterate rows, preferring a stable `id` for the key.
+    // array | block: iterate rows, preferring a stable `id` for the path.
     const rows = node[seg.name];
     if (!Array.isArray(rows)) return [];
     return rows.flatMap((row, index) => {

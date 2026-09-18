@@ -40,13 +40,12 @@ function translatedValue(
   }
   const nodes = lexicalTextNodes(leaf.source);
   if (nodes.length === 0) return undefined;
-  const texts = new Map<string, string>();
-  for (const node of nodes) {
-    const value = translations[`${leaf.baseKey}#${node.path}`];
-    if (value === undefined) return undefined;
-    texts.set(node.path, value);
-  }
-  return applyLexicalTexts(leaf.source, texts);
+  const texts = nodes.flatMap((node): [string, string][] => {
+    const text = translations[`${leaf.baseKey}#${node.path}`];
+    return text === undefined ? [] : [[node.path, text]];
+  });
+  if (texts.length < nodes.length) return undefined;
+  return applyLexicalTexts(leaf.source, new Map(texts));
 }
 
 export interface ApplyResult {
@@ -80,14 +79,16 @@ function fillDocument(
   next: Record<string, unknown>,
   existing: Record<string, unknown> | null,
   resolved: ResolvedLeaf[],
-): { written: ResolvedLeaf[]; unresolved: Leaf[] } {
+): { written: number; unresolved: Leaf[] } {
   const located = resolved.map((entry) => ({
     entry,
     target: resolveLeaf(next, entry.leaf.field, entry.leaf.dataPath),
   }));
+  const writable = located.flatMap(({ entry, target }) =>
+    target ? [{ entry, target }] : [],
+  );
 
-  located.forEach(({ entry, target }) => {
-    if (!target) return;
+  writable.forEach(({ entry, target }) => {
     if (entry.value !== undefined) {
       target.container[target.key] = entry.value;
       return;
@@ -102,9 +103,7 @@ function fillDocument(
   });
 
   return {
-    written: located
-      .filter(({ entry, target }) => target && entry.value !== undefined)
-      .map(({ entry }) => entry),
+    written: writable.filter(({ entry }) => entry.value !== undefined).length,
     unresolved: located
       .filter(({ target }) => !target)
       .map(({ entry }) => entry.leaf),
@@ -113,12 +112,12 @@ function fillDocument(
 
 /** What one document contributed to the locale's result. */
 interface DocumentResult {
-  written: ResolvedLeaf[];
+  written: number;
   pending: ApplyResult["pending"];
   unresolved: ApplyResult["unresolved"];
 }
 
-const NOTHING: DocumentResult = { written: [], pending: [], unresolved: [] };
+const NOTHING: DocumentResult = { written: 0, pending: [], unresolved: [] };
 
 /**
  * Write Weblate's translations for one document in `locale`.
@@ -181,7 +180,7 @@ async function applyDocument(
     key: leaf.baseKey,
   }));
 
-  if (filled.written.length === 0) return { ...NOTHING, unresolved };
+  if (filled.written === 0) return { ...NOTHING, unresolved };
 
   // Payload replaces arrays wholesale, so send whole top-level fields.
   const topLevel = _.uniq(
@@ -210,7 +209,7 @@ async function applyDocument(
 }
 
 /** Write Weblate's translations for `locale` into Payload, document by document. */
-export async function applyLocale(
+async function applyLocale(
   payload: Payload,
   locale: TypedLocale,
   docs: SourceDoc[],
@@ -225,9 +224,8 @@ export async function applyLocale(
 
   return {
     locale,
-    documentsUpdated: results.filter(({ written }) => written.length > 0)
-      .length,
-    stringsWritten: _.sumBy(results, ({ written }) => written.length),
+    documentsUpdated: results.filter(({ written }) => written > 0).length,
+    stringsWritten: _.sumBy(results, ({ written }) => written),
     pending: results.flatMap(({ pending }) => pending),
     unresolved: results.flatMap(({ unresolved }) => unresolved),
   };

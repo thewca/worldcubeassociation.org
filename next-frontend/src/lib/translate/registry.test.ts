@@ -97,7 +97,6 @@ describe("buildTranslationRegistry", () => {
     });
 
     expect(inherited.map((f) => f.pathString)).toEqual(["footer.legal.notice"]);
-    expect(inherited[0].inheritedLocalization).toBe(true);
   });
 
   it("throws on an unhandled container type instead of silently dropping it", () => {
@@ -145,10 +144,10 @@ describe("resolveStrings", () => {
       ["blocks", 1, "heading"],
     ]);
     expect(strings.map((s) => s.value)).toEqual(["Welcome", "Goodbye"]);
-    // Keys use the row id, so they survive reordering.
-    expect(strings.map((s) => s.key)).toEqual([
-      "home:blocks[a1].heading",
-      "home:blocks[a2].heading",
+    // Key paths use the row id, so they survive reordering.
+    expect(strings.map((s) => s.keyPath)).toEqual([
+      "blocks[a1].heading",
+      "blocks[a2].heading",
     ]);
   });
 
