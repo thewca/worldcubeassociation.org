@@ -70,7 +70,7 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
   if (show === "separate") {
     // Make sure we don't include any unofficial events and keep the right order
     const allRecords = WCA_EVENT_IDS.reduce(
-      (acc, event) => [...records[event as EventId]!, ...acc],
+      (acc, event) => [...(records[event as EventId] ?? []), ...acc],
       [] as components["schemas"]["Record"][],
     ).toReversed();
 
@@ -86,7 +86,7 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
 
   if (show === "mixed history") {
     const allRecords = WCA_EVENT_IDS.reduce(
-      (acc, event) => [...records[event as EventId]!, ...acc],
+      (acc, event) => [...(records[event as EventId] ?? []), ...acc],
       [] as components["schemas"]["Record"][],
     ).sort((a, b) => b.start_date.localeCompare(a.start_date));
 

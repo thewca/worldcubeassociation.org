@@ -68,7 +68,11 @@ import { FormEventSelector } from "@/components/EventSelector";
 import TabMap from "@/components/competitions/TabMap";
 import { LuMapPin, LuSettings2 } from "react-icons/lu";
 import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
-import { isInProgress } from "@/lib/wca/competitions/statusUtils";
+import {
+  getRegistrationStatus,
+  isInProgress,
+  type RegistrationStatus,
+} from "@/lib/wca/competitions/statusUtils";
 import { nonFutureCompetitionYears } from "@/lib/wca/data/competitions";
 import _ from "lodash";
 
@@ -92,9 +96,34 @@ const isDistanceUnit = (value: string | null): value is DistanceUnit =>
 // Decimal places shown for the resolved coordinates, roughly street-level precision.
 const COORDINATE_PRECISION = 4;
 
+const REGISTRATION_STATUS_KEY = [
+  {
+    status: "open",
+    icon: <CompRegoNotFullOpenGreenIcon />,
+    labelKey: "competitions.index.registration_status.open",
+  },
+  {
+    status: "notOpen",
+    icon: <CompRegoNotOpenYetGreyIcon />,
+    labelKey: "competitions.index.registration_status.not_open",
+  },
+  {
+    status: "closed",
+    icon: <CompRegoClosedRedIcon />,
+    labelKey: "competitions.index.registration_status.closed",
+  },
+] as const satisfies {
+  status: RegistrationStatus;
+  icon: ReactNode;
+  labelKey: string;
+}[];
+
 export default function CompetitionsPage() {
   const session = useSession();
   const [location, setLocation] = useState<GeoCoordinates>();
+  // Purely client side: the registration key doubles as a filter over what is already loaded.
+  const [registrationStatus, setRegistrationStatus] =
+    useState<RegistrationStatus | null>(null);
   const [distanceUnit, setDistanceUnit] = useState(DEFAULT_DISTANCE_UNIT);
   // Held as a string because that is what NumberInput controls, and it lets the field go
   // empty while the competitor is typing.
@@ -190,10 +219,18 @@ export default function CompetitionsPage() {
         )
       : loadedCompetitions;
 
+  const competitionsFiltered =
+    registrationStatus === null
+      ? competitionsDistanceFiltered
+      : competitionsDistanceFiltered.filter(
+          (competition) =>
+            getRegistrationStatus(competition) === registrationStatus,
+        );
+
   const showInProgressSection = debouncedFilterState.timeOrder === "present";
 
   const [inProgressComps, upcomingComps] = _.partition(
-    competitionsDistanceFiltered,
+    competitionsFiltered,
     (competition) => showInProgressSection && isInProgress(competition),
   );
 
@@ -312,71 +349,72 @@ export default function CompetitionsPage() {
                     </InputGroup>
                   </Field.Root>
                 </SimpleGrid>
-                <Stack
-                  direction={{ base: "column", lg: "row" }}
-                  gap="4"
-                  width="full"
-                  justify="space-between"
-                  align={{ base: "stretch", lg: "flex-start" }}
-                >
-                  <LocationFilter
-                    location={location}
-                    geolocationSupported={geolocationSupported}
-                    onLocateClick={requestGeolocationPermission}
-                    radius={radius}
-                    onRadiusChange={setRadius}
-                    distanceUnit={distanceUnit}
-                    onDistanceUnitChange={changeDistanceUnit}
-                    t={t}
-                  />
-                  <Stack
-                    direction={{ base: "column", md: "row" }}
-                    gap="2"
+                <Collapsible.Trigger asChild alignSelf="flex-end">
+                  <Button
+                    variant="outline"
                     width={{ base: "full", lg: "auto" }}
                   >
-                    <DateFilter
-                      label={t("competitions.index.from_date")}
-                      icon={<CompRegoOpenDateIcon />}
-                      isoDate={filterState.customStartDate}
-                      max={filterState.customEndDate}
-                      onDateChange={(customStartDate) =>
-                        dispatchFilter({
-                          type: "set_custom_start_date",
-                          customStartDate,
-                        })
-                      }
-                    />
-                    <DateFilter
-                      label={t("competitions.index.to_date")}
-                      icon={<CompRegoCloseDateIcon />}
-                      isoDate={filterState.customEndDate}
-                      min={filterState.customStartDate}
-                      onDateChange={(customEndDate) =>
-                        dispatchFilter({
-                          type: "set_custom_end_date",
-                          customEndDate,
-                        })
-                      }
-                    />
-                  </Stack>
-                  <Collapsible.Trigger asChild>
-                    <Button
-                      variant="outline"
-                      width={{ base: "full", lg: "auto" }}
-                    >
-                      <Icon>
-                        <LuSettings2 />
-                      </Icon>{" "}
-                      {t("competitions.index.advanced_filters")}
-                    </Button>
-                  </Collapsible.Trigger>
-                </Stack>
+                    <Icon>
+                      <LuSettings2 />
+                    </Icon>{" "}
+                    {t("competitions.index.advanced_filters")}
+                  </Button>
+                </Collapsible.Trigger>
                 <Collapsible.Content width="full">
-                  <AdvancedFilters
-                    filterState={filterState}
-                    dispatchFilter={dispatchFilter}
-                    t={t}
-                  />
+                  <VStack gap="4" width="full" align="stretch">
+                    <Stack
+                      direction={{ base: "column", lg: "row" }}
+                      gap="4"
+                      width="full"
+                      align={{ base: "stretch", lg: "flex-start" }}
+                    >
+                      <LocationFilter
+                        location={location}
+                        geolocationSupported={geolocationSupported}
+                        onLocateClick={requestGeolocationPermission}
+                        radius={radius}
+                        onRadiusChange={setRadius}
+                        distanceUnit={distanceUnit}
+                        onDistanceUnitChange={changeDistanceUnit}
+                        t={t}
+                      />
+                      <Stack
+                        direction={{ base: "column", md: "row" }}
+                        gap="2"
+                        width={{ base: "full", lg: "auto" }}
+                      >
+                        <DateFilter
+                          label={t("competitions.index.from_date")}
+                          icon={<CompRegoOpenDateIcon />}
+                          isoDate={filterState.customStartDate}
+                          max={filterState.customEndDate}
+                          onDateChange={(customStartDate) =>
+                            dispatchFilter({
+                              type: "set_custom_start_date",
+                              customStartDate,
+                            })
+                          }
+                        />
+                        <DateFilter
+                          label={t("competitions.index.to_date")}
+                          icon={<CompRegoCloseDateIcon />}
+                          isoDate={filterState.customEndDate}
+                          min={filterState.customStartDate}
+                          onDateChange={(customEndDate) =>
+                            dispatchFilter({
+                              type: "set_custom_end_date",
+                              customEndDate,
+                            })
+                          }
+                        />
+                      </Stack>
+                    </Stack>
+                    <AdvancedFilters
+                      filterState={filterState}
+                      dispatchFilter={dispatchFilter}
+                      t={t}
+                    />
+                  </VStack>
                 </Collapsible.Content>
               </VStack>
             </Collapsible.Root>
@@ -391,26 +429,30 @@ export default function CompetitionsPage() {
                 <Wrap gapX="3" gapY="1" align="center">
                   <Text>{t("competitions.index.registration_key")}</Text>
                   {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
-                  {/* <Badge size="md" variant="surface"> */}
-                  {/*  <CompRegoFullButOpenOrangeIcon /> */}
-                  {/*  {t("competitions.index.registration_status.full")} */}
-                  {/* </Badge> */}
-                  <Badge size="md" variant="surface">
-                    <CompRegoNotFullOpenGreenIcon />
-                    {t("competitions.index.registration_status.open")}
-                  </Badge>
-                  <Badge size="md" variant="surface">
-                    <CompRegoNotOpenYetGreyIcon />
-                    {t("competitions.index.registration_status.not_open")}
-                  </Badge>
-                  <Badge size="md" variant="surface">
-                    <CompRegoClosedRedIcon />
-                    {t("competitions.index.registration_status.closed")}
-                  </Badge>
+                  {/* full: <CompRegoFullButOpenOrangeIcon /> */}
+                  {REGISTRATION_STATUS_KEY.map(({ status, icon, labelKey }) => (
+                    <Badge
+                      key={status}
+                      as="button"
+                      size="md"
+                      variant={
+                        registrationStatus === status ? "solid" : "surface"
+                      }
+                      cursor="pointer"
+                      onClick={() =>
+                        setRegistrationStatus(
+                          registrationStatus === status ? null : status,
+                        )
+                      }
+                    >
+                      {icon}
+                      {t(labelKey)}
+                    </Badge>
+                  ))}
                 </Wrap>
                 <Text>
                   {t("competitions.index.currently_displaying", {
-                    count: competitionsDistanceFiltered.length,
+                    count: competitionsFiltered.length,
                   })}
                 </Text>
               </Stack>
@@ -439,14 +481,14 @@ export default function CompetitionsPage() {
               <ListViewFooter
                 isLoading={competitionsIsFetching}
                 hasMoreCompsToLoad={hasMoreCompsToLoad}
-                numCompetitions={competitionsDistanceFiltered.length}
+                numCompetitions={competitionsFiltered.length}
                 bottomRef={bottomRef}
                 t={t}
               />
             </Tabs.Content>
             <Tabs.Content value="map">
               <TabMap
-                competitions={competitionsDistanceFiltered}
+                competitions={competitionsFiltered}
                 loadedCompetitionCount={loadedCompetitionCount}
                 isLoading={competitionsIsFetching}
                 fetchMoreCompetitions={competitionsFetchNextPage}
@@ -721,7 +763,7 @@ function AdvancedFilters({
 
 function TableHeaderRow({
   children,
-  colSpan = 7,
+  colSpan = 6,
 }: {
   children: ReactNode;
   colSpan?: number;

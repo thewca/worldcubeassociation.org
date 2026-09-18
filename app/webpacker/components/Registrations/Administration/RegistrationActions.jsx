@@ -282,7 +282,9 @@ export default function RegistrationActions({
         pointing
         className="icon brown"
         labeled
-        text={I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
+        text={selectedCount === 0
+          ? I18n.t('competitions.registration_v2.update.move_to_none_selected')
+          : I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
         icon="arrow right"
         button
         disabled={!anySelected}

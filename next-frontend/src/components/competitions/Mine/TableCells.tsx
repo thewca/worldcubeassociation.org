@@ -1,5 +1,5 @@
 import countries from "@/lib/wca/data/countries";
-import { HStack, IconButton, Link, Table } from "@chakra-ui/react";
+import { HStack, Link, Table } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
 import { AiFillFileImage, AiFillTrophy } from "react-icons/ai";
@@ -10,6 +10,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { dateRange } from "@/lib/wca/dates";
 import { components } from "@/types/openapi";
 import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
+import RailsLink from "@/components/RailsLink";
 
 interface TableCellProps {
   competition: components["schemas"]["MyCompetition"];
@@ -87,20 +88,18 @@ export function ReportTableCell({
     <Table.Cell>
       <HStack>
         <Tooltip content={t("competitions.my_competitions_table.report")}>
-          <a href={`/competitions/${competitionId}/report`}>
+          <RailsLink href={`/competitions/${competitionId}/report`}>
             <AiFillFileImage />
-          </a>
+          </RailsLink>
         </Tooltip>
 
         {!isReportPosted && canEditDelegateReport(competitionId) && (
           <Tooltip
             content={t("competitions.my_competitions_table.edit_report")}
           >
-            <IconButton asChild variant="ghost">
-              <a href={`/competitions/${competitionId}/report/edit`}>
-                <EditIcon />
-              </a>
-            </IconButton>
+            <RailsLink href={`/competitions/${competitionId}/report/edit`}>
+              <EditIcon />
+            </RailsLink>
           </Tooltip>
         )}
 

@@ -17,12 +17,12 @@ import { components } from "@/types/openapi";
 import UserBadge from "@/components/UserBadge";
 import { Trans } from "react-i18next/TransWithoutContext";
 import _ from "lodash";
-import Link from "next/link";
 import { route } from "nextjs-routes";
 import { LuPencil } from "react-icons/lu";
 import getPermissions from "@/lib/wca/permissions.server";
 import AdminModeToggle from "@/app/(wca)/(with-background)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
+import TabTarget from "@/components/ui/tabTarget";
 import { Metadata } from "next";
 
 // Editing a user is still served by Rails, which sits at the root of the public API host.
@@ -87,25 +87,11 @@ export default async function DelegatesPage({
           {rootGroups.map((group) => {
             const friendlyId = group.metadata!.friendly_id!;
 
-            // The region you are already on is not a link: Chakra's tabs machine
-            //   clicks the selected trigger whenever `value` changes, which on an
-            //   anchor would trigger a full page navigation.
-            // See https://github.com/chakra-ui/chakra-ui/issues/11003
-            if (friendlyId === activeFriendlyId) {
-              return (
-                <Tabs.Trigger
-                  value={friendlyId}
-                  key={group.id}
-                  aria-current="page"
-                >
-                  {group.name}
-                </Tabs.Trigger>
-              );
-            }
-
             return (
               <Tabs.Trigger value={friendlyId} key={group.id} asChild>
-                <Link
+                <TabTarget
+                  tabKey={friendlyId}
+                  currentPath={activeFriendlyId}
                   href={route({
                     pathname: "/delegates",
                     query: isAdminMode
@@ -114,7 +100,7 @@ export default async function DelegatesPage({
                   })}
                 >
                   {group.name}
-                </Link>
+                </TabTarget>
               </Tabs.Trigger>
             );
           })}

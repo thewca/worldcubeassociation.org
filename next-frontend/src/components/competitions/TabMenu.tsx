@@ -28,6 +28,7 @@ import { TFunction } from "i18next";
 import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import { iconMap } from "@/components/icons/iconMap";
+import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 
@@ -59,7 +60,12 @@ export default function TabMenu({
   const eventId = activityCodeFromPath(currentPath!);
 
   const [openGroup, setOpenGroup] = useState<string | null>(eventId);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  // The drawer stays open only while the route it was opened on is still current, so any
+  //   navigation closes it. Until tab navigation became client-side the page reload did that
+  //   for us; hanging an onClick on the links instead would mean threading a callback three
+  //   components down, past two `asChild` merges that are known to drop handlers.
+  const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
+  const drawerOpen = drawerOpenedAt === pathName;
 
   return (
     <Tabs.Root
@@ -102,7 +108,7 @@ export default function TabMenu({
       <Box hideFrom="md">
         <Drawer.Root
           open={drawerOpen}
-          onOpenChange={(e) => setDrawerOpen(e.open)}
+          onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
           placement="start"
         >
           <Drawer.Trigger asChild>
@@ -129,7 +135,7 @@ export default function TabMenu({
                     <BackLink
                       href={backHref}
                       label={competitionInfo.name}
-                      onClick={() => setDrawerOpen(false)}
+                      onClick={() => setDrawerOpenedAt(null)}
                     />
                   ) : (
                     competitionInfo.name
@@ -218,29 +224,32 @@ function TabList({
         ),
       )}
       {customTabs.length > 0 && <Separator />}
-      {customTabs.map((tabName) => (
-        <Tabs.Trigger
-          key={tabName}
-          value={encodeURIComponent(tabName)}
-          minHeight="fit-content"
-          maxWidth="xs"
-          asChild
-        >
-          <Text textStyle="bodyEmphasis" asChild justifyContent="left">
-            <Link
-              href={route({
-                pathname: "/competitions/[competitionId]/tab/[tabName]",
-                query: {
-                  competitionId,
-                  tabName: encodeURIComponent(tabName),
-                },
-              })}
-            >
-              {tabName}
-            </Link>
-          </Text>
-        </Tabs.Trigger>
-      ))}
+      {customTabs.map((tabName) => {
+        const tabKey = encodeURIComponent(tabName);
+
+        return (
+          <Tabs.Trigger
+            key={tabName}
+            value={tabKey}
+            minHeight="fit-content"
+            maxWidth="xs"
+            asChild
+          >
+            <Text textStyle="bodyEmphasis" asChild justifyContent="left">
+              <TabTarget
+                tabKey={tabKey}
+                currentPath={currentPath}
+                href={route({
+                  pathname: "/competitions/[competitionId]/tab/[tabName]",
+                  query: { competitionId, tabName: tabKey },
+                })}
+              >
+                {tabName}
+              </TabTarget>
+            </Text>
+          </Tabs.Trigger>
+        );
+      })}
     </>
   );
 }
@@ -287,12 +296,6 @@ function TabLink({
     isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
   );
 
-  // The tab you are already on is not a link: linking to the current page is
-  //   pointless, and Chakra's tabs machine clicks the selected trigger whenever
-  //   `value` changes, which on an anchor would trigger a full page navigation.
-  // See https://github.com/chakra-ui/chakra-ui/issues/11003
-  const isCurrent = tab.menuKey === currentPath;
-
   const trigger = (
     <Tabs.Trigger
       value={tab.menuKey}
@@ -301,16 +304,19 @@ function TabLink({
       minHeight="fit-content"
     >
       <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-        {tab.disabled || isCurrent ? (
-          <Text aria-current={isCurrent ? "page" : undefined}>{label}</Text>
-        ) : tab.externalHref ? (
+        {tab.externalHref && !tab.disabled ? (
           <a href={tab.externalHref} target="_blank" rel="noopener noreferrer">
             {label}
           </a>
         ) : (
-          <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
+          <TabTarget
+            tabKey={tab.menuKey}
+            currentPath={currentPath}
+            href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}
+            disabled={tab.disabled}
+          >
             {label}
-          </Link>
+          </TabTarget>
         )}
       </Text>
     </Tabs.Trigger>
@@ -371,22 +377,16 @@ function CollapsibleTabGroup({
                 disabled={disabled}
               >
                 <Text asChild justifyContent="left">
-                  {disabled || menuKey === currentPath ? (
-                    <Text
-                      aria-current={
-                        menuKey === currentPath ? "page" : undefined
-                      }
-                      display="flex"
-                    >
-                      {t(i18nKey)} <Spacer />
-                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                    </Text>
-                  ) : (
-                    <Link href={isAdminRoute && hrefAdmin ? hrefAdmin : href}>
-                      {t(i18nKey)} <Spacer />
-                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                    </Link>
-                  )}
+                  <TabTarget
+                    tabKey={menuKey}
+                    currentPath={currentPath}
+                    href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
+                    disabled={disabled}
+                    display="flex"
+                  >
+                    {t(i18nKey)} <Spacer />
+                    {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                  </TabTarget>
                 </Text>
               </Tabs.Trigger>
             ),
