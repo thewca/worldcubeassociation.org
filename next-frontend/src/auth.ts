@@ -1,6 +1,7 @@
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { customSession, genericOAuth } from "better-auth/plugins";
 import { getAccessToken } from "better-auth/api";
+import { parseSetCookieHeader, toCookieOptions } from "better-auth/cookies";
 import { headers } from "next/headers";
 import {
   siteWcaProvider,
@@ -63,7 +64,9 @@ export const auth = betterAuth({
       // Same replay `customSession` does for its own inner `getSession` call, so the rotated
       //   account cookie reaches the response the middleware persists.
       for (const setCookie of result?.headers?.getSetCookie() ?? []) {
-        ctx.responseHeaders?.append("set-cookie", setCookie);
+        parseSetCookieHeader(setCookie).forEach((attrs, name) => {
+          ctx.setCookie(name, attrs.value, toCookieOptions(attrs));
+        });
       }
 
       // Spreading `ctx` inherits the response-shaping flags `customSession` set for its own
