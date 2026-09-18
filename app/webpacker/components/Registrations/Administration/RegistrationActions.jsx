@@ -400,7 +400,9 @@ export default function RegistrationActions({
             </Dropdown.Menu>
           </Dropdown>
         )}
-        content={I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
+        content={selectedCount === 0
+          ? I18n.t('competitions.registration_v2.update.move_to_none_selected')
+          : I18n.t('competitions.registration_v2.update.move_to', { count: selectedCount })}
       />
     </>
   );

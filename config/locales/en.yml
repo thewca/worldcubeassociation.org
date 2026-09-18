@@ -2070,6 +2070,7 @@ en:
         move_to:
           one: "Move %{count} registration to"
           other: "Move %{count} registrations to"
+        move_to_none_selected: "Move registrations to"
         pending: "Pending"
         waitlist: "Waiting List"
         approved: "Approved"
