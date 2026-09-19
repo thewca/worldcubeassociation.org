@@ -10,6 +10,14 @@ RSpec.describe ApplicationHelper do
     end
   end
 
+  describe "#next_frontend_url" do
+    it "keeps our own path and swaps the host for the Next frontend" do
+      allow(EnvConfig).to receive(:NEXT_FRONTEND_URL).and_return("https://next.example.com")
+      expect(helper.next_frontend_url(delegates_path)).to eq "https://next.example.com/delegates"
+      expect(helper.next_frontend_url(person_path("2005FLEI01"))).to eq "https://next.example.com/persons/2005FLEI01"
+    end
+  end
+
   describe "#users_to_sentence" do
     it "escapes name" do
       users = []
@@ -77,6 +85,11 @@ RSpec.describe ApplicationHelper do
   describe "#wca_id_link" do
     it "links to a person's WCA profile page" do
       expect(wca_id_link("2005FLEI01")).to eq "<span class=\"wca-id\"><a href=\"#{person_url '2005FLEI01'}\">2005FLEI01</a></span>"
+    end
+
+    it "links to an explicit url when the caller hands off to another frontend" do
+      link = wca_id_link("2005FLEI01", url: "https://next.example.com/persons/2005FLEI01")
+      expect(link).to eq "<span class=\"wca-id\"><a href=\"https://next.example.com/persons/2005FLEI01\">2005FLEI01</a></span>"
     end
   end
 

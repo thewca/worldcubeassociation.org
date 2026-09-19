@@ -178,12 +178,20 @@ module ApplicationHelper
     [hours.positive? ? "#{hours}h " : '', minutes.positive? ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
   end
 
-  def wca_id_link(wca_id, **options)
+  def wca_id_link(wca_id, url: nil, **options)
     return if wca_id.blank?
 
     content_tag :span, class: "wca-id" do
-      link_to wca_id, person_url(wca_id), options
+      link_to wca_id, url || person_url(wca_id), options
     end
+  end
+
+  # Swaps the host on one of our own paths for the Next frontend, which mirrors
+  # them while the migration is under way — pass it a route helper rather than a
+  # literal. Only the pages that deliberately hand off should use this;
+  # everywhere else on the Rails site keeps linking to Rails.
+  def next_frontend_url(path)
+    "#{EnvConfig.NEXT_FRONTEND_URL}#{path}"
   end
 
   def cubing_icon(event, **html_options)

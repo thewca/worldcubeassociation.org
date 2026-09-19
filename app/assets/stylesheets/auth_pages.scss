@@ -1,0 +1,358 @@
+// Shell for the pages a signed-out visitor is sent through: sign in, the 2FA
+// prompt, and the OAuth authorization request. It restyles the Bootstrap markup
+// those pages already use rather than replacing it, so the redesigned sign in
+// page cannot drift away from the classic one it still shares a form with. The
+// values below mirror the tokens of the Next.js theme in
+// next-frontend/src/theme.ts, which is what these pages are meant to stop
+// clashing with.
+
+// Sizes are in px rather than rem on purpose: Semantic UI sets
+// `html { font-size: 14px }` site-wide, so a rem here would render 12.5% smaller
+// than the Chakra token it is copied from.
+$auth-font: "Rubik", "Helvetica Neue", helvetica, arial, sans-serif;
+$auth-surface: #fcfcfc;
+$auth-input-bg: #fff;
+$auth-border: #edede9;
+$auth-border-strong: #dcdcd6;
+$auth-text: #1e1e1e;
+$auth-text-muted: #6b6b6b;
+$auth-link: #0051ba;
+$auth-solid: #029347;
+$auth-deny: #c62535;
+$auth-contrast: #fff;
+$auth-card-radius: 10px;
+$auth-control-radius: 6px;
+
+.auth-page {
+  max-width: 480px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  margin-right: auto;
+  margin-left: auto;
+  color: $auth-text;
+
+  // Semantic UI sets the font on `body` and on the heading tags directly, and a
+  // directly matched rule beats an inherited one whatever the specificity, so
+  // the font cannot simply be inherited from this wrapper.
+  &,
+  * {
+    font-family: $auth-font;
+  }
+
+  a {
+    color: $auth-link;
+    font-weight: 500;
+  }
+
+  // These pages hide the navbar, so the logo has to carry the branding and the
+  // way back to the site.
+  .auth-page-logo {
+    display: block;
+    width: 72px;
+    margin: 0 auto 32px;
+  }
+
+  // The blanket font rule above outranks Bootstrap's own `.glyphicon` rule, which
+  // renders every icon it owns — the date picker's arrows — as tofu.
+  .glyphicon {
+    font-family: 'Glyphicons Halflings';
+  }
+
+  .alert {
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    border-radius: $auth-card-radius;
+  }
+
+  // Scoped to the outermost panel throughout: the sign up page nests a Bootstrap
+  // accordion of .panel elements inside its card, and those must not pick up the
+  // card's own border, radius, shadow and heading size.
+  > .panel {
+    margin-bottom: 16px;
+    background-color: $auth-surface;
+    border: 1px solid $auth-border;
+    border-radius: $auth-card-radius;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+  }
+
+  > .panel > .panel-heading {
+    padding: 24px 24px 0;
+    background: none;
+    border-bottom: 0;
+  }
+
+  > .panel > .panel-heading h4,
+  > .panel > .panel-heading .panel-title {
+    margin: 0;
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  > .panel > .panel-body {
+    padding: 24px;
+  }
+
+  > .panel > .panel-body h3 {
+    margin: 28px 0 8px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  // The "have you competed before?" accordion on the sign up page. It reads as a
+  // pair of choices inside the card, not as two more cards.
+  .panel-group {
+    margin-bottom: 20px;
+
+    .panel {
+      background-color: $auth-input-bg;
+      border: 1px solid $auth-border-strong;
+      border-radius: $auth-control-radius;
+      box-shadow: none;
+    }
+
+    .panel + .panel {
+      margin-top: 8px;
+    }
+
+    // `overflow: hidden` stops the trigger's margins collapsing out of the
+    // padding-less heading, which pulls the opened body up over the trigger.
+    .panel-heading {
+      padding: 0;
+      overflow: hidden;
+      background: none;
+      border-bottom: 0;
+    }
+
+    .panel-title a {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 16px 16px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: $auth-text;
+      text-decoration: none;
+    }
+
+    // The two options are mutually exclusive, so they get a radio's affordance.
+    // Keyed off the open panel rather than the trigger's `.collapsed` class,
+    // which Bootstrap only sets once a trigger has actually been clicked — on
+    // first load neither trigger carries it and both would read as chosen.
+    .panel-title a::before {
+      content: "";
+      flex: none;
+      width: 16px;
+      height: 16px;
+      background-color: $auth-input-bg;
+      border: 1px solid $auth-border-strong;
+      border-radius: 50%;
+    }
+
+    .panel:has(> .panel-collapse.in) {
+      border-color: $auth-solid;
+    }
+
+    .panel:has(> .panel-collapse.in) .panel-title a {
+      background-color: rgba($auth-solid, 0.08);
+    }
+
+    .panel:has(> .panel-collapse.in) .panel-title a::before {
+      background-color: $auth-solid;
+      border-color: $auth-solid;
+      box-shadow: inset 0 0 0 3px $auth-input-bg;
+    }
+
+    .panel-body {
+      padding: 16px;
+      border-top: 1px solid $auth-border;
+    }
+  }
+
+  .g-recaptcha {
+    margin-bottom: 20px;
+  }
+
+  p,
+  li {
+    font-size: 14px;
+  }
+
+  // The scope list is the only list on these pages. Browsers indent it by 40px
+  // by default, which pushes it out of line with everything else in the card.
+  #oauth-permissions ul {
+    padding-left: 20px;
+  }
+
+  .actions {
+    margin-top: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label,
+  .control-label {
+    display: inline-block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  // The password group puts the "forgot your password" link between the label
+  // and the field; pull it onto the label's line instead. Scoped to that group
+  // rather than to `.form-group`, because Devise's own `shared/links` partial is
+  // a `.form-group` of links separated by the `<br>`s this hides.
+  .password-group > a {
+    float: right;
+    font-size: 14px;
+  }
+
+  .password-group br {
+    display: none;
+  }
+
+  .form-control {
+    clear: both;
+    height: 40px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: $auth-text;
+    background-color: $auth-input-bg;
+    border: 1px solid $auth-border-strong;
+    border-radius: $auth-control-radius;
+    box-shadow: none;
+
+    &:focus {
+      border-color: $auth-solid;
+      box-shadow: 0 0 0 1px $auth-solid;
+    }
+  }
+
+  // Bootstrap hangs the box outside the label with a negative margin; line the
+  // two up as a row instead.
+  .checkbox label {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding-left: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  // Selectize copies the original input's classes onto the wrapper and the
+  // dropdown it builds, so `.form-control` lands on both. On the wrapper that
+  // draws a second box around the real control and crops the selected person out
+  // of it; on the dropdown the fixed height clamps the list to a single row,
+  // which is what left the suggestions sitting on no background at all.
+  .selectize-control.form-control {
+    height: auto;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .selectize-dropdown.form-control {
+    height: auto;
+    padding: 0;
+  }
+
+  .selectize-input {
+    min-height: 40px;
+    border-color: $auth-border-strong;
+    border-radius: $auth-control-radius;
+    box-shadow: none;
+
+    &.focus {
+      border-color: $auth-solid;
+      box-shadow: 0 0 0 1px $auth-solid;
+    }
+  }
+
+  .checkbox {
+    margin: 0 0 20px;
+
+    input[type="checkbox"] {
+      position: static;
+      margin: 0;
+      accent-color: $auth-solid;
+    }
+  }
+
+  // The Delegate search box ticks this radio itself when it takes focus, so
+  // showing it only adds noise. It stays in the DOM: removing it would drop the
+  // search box out of the radio group, and with it the chosen Delegate.
+  .radio label.full-width > input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  // ...which also means the search box no longer needs the room Bootstrap
+  // reserves for a radio it is sitting next to.
+  .radio label.full-width {
+    padding-left: 0;
+  }
+
+  #claim-wca-id-explanation p {
+    margin-bottom: 16px;
+  }
+
+  .help-block {
+    font-size: 11px;
+    line-height: 1.4;
+    color: $auth-text-muted;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: $auth-contrast;
+    background-color: $auth-solid;
+    border: 0;
+    border-radius: $auth-control-radius;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $auth-contrast;
+      background-color: rgba($auth-solid, 0.9);
+    }
+  }
+
+  // The fallback actions must not read as the primary green button they sit
+  // directly below: asking for a code by email, and declining authorization.
+  #request_2fa_email {
+    color: $auth-text;
+    background-color: transparent;
+    border: 1px solid $auth-border-strong;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $auth-text;
+      background-color: $auth-border;
+    }
+  }
+
+  .btn-danger {
+    color: $auth-deny;
+    background-color: transparent;
+    border: 1px solid $auth-deny;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $auth-deny;
+      background-color: rgba($auth-deny, 0.08);
+    }
+  }
+}

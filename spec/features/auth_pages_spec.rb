@@ -1,0 +1,125 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+RSpec.feature "Redesigned authentication pages" do
+  let(:user) { create(:user) }
+
+  it "offers the classic page from the redesigned one, keeping the query parameters" do
+    visit "/users/sign_in?redirect_uri=https%3A%2F%2Fexample.com%2Fcallback"
+    expect(page).to have_text "You are viewing the new sign in page"
+
+    click_link "Switch to the old sign in page"
+    expect(page).to have_current_path "/users/sign_in?classic=true&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback"
+    expect(page).to have_no_text "You are viewing the new sign in page"
+  end
+
+  it "hides the navigation on the redesigned page but keeps it on the classic one" do
+    visit "/users/sign_in"
+    expect(page).to have_button "Sign in"
+    expect(page).to have_no_css ".navbar"
+
+    visit "/users/sign_in?classic=true"
+    expect(page).to have_css ".navbar"
+  end
+
+  it "renders the sign up page in the redesigned shell, with the accordion hooks intact" do
+    visit "/users/sign_up"
+    expect(page).to have_text "You are viewing the new sign up page"
+    # The button stays disabled until the page's JS sees a panel opened.
+    expect(page).to have_button "Sign up", disabled: true
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_no_css ".navbar"
+
+    # The page's inline jQuery drives the two panels by id; restyling must not
+    # disturb what it queries.
+    expect(page).to have_css "#have-you-competed-accordion #have-competed.panel-collapse"
+    expect(page).to have_css "#have-you-competed-accordion #never-competed.panel-collapse"
+  end
+
+  it "renders the forgotten password page in the redesigned shell" do
+    visit "/users/password/new"
+    expect(page).to have_button "Send me reset password instructions"
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_no_css ".navbar"
+  end
+
+  context "when signing in with a WCA ID that has no account yet" do
+    let(:person) { create(:person) }
+
+    before { allow(EnvConfig).to receive(:NEXT_FRONTEND_URL).and_return("https://next.example.com") }
+
+    def attempt_sign_in(path)
+      visit path
+      fill_in "Email or WCA ID", with: person.wca_id
+      fill_in "Password", with: "wca"
+      click_button "Sign in"
+    end
+
+    it "points the redesigned page's profile link at the Next frontend" do
+      attempt_sign_in "/users/sign_in"
+      expect(page).to have_link person.wca_id, href: "https://next.example.com/persons/#{person.wca_id}"
+    end
+
+    it "keeps the classic page's profile link on Rails" do
+      attempt_sign_in "/users/sign_in?classic=true"
+      expect(page).to have_link person.wca_id, href: "/persons/#{person.wca_id}"
+    end
+  end
+
+  it "renders the resend confirmation page in the redesigned shell" do
+    visit "/users/confirmation/new"
+    expect(page).to have_button "Resend confirmation instructions"
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_no_css ".navbar"
+  end
+
+  it "renders the change password page in the redesigned shell" do
+    visit "/users/password/edit?reset_password_token=#{user.send_reset_password_instructions}"
+    expect(page).to have_button "Change my password"
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_link "Sign in"
+    expect(page).to have_link "Sign up"
+  end
+
+  it "shows the OAuth authorization request in the redesigned shell" do
+    oauth_application = create(:oauth_application)
+    sign_in user
+
+    visit "/oauth/authorize?client_id=#{oauth_application.uid}" \
+          "&redirect_uri=#{CGI.escape(oauth_application.redirect_uri)}" \
+          "&response_type=code&scope=public+email"
+
+    expect(page).to have_text "Authorize samurai app to use your account?"
+    expect(page).to have_text "Access your email address"
+    expect(page).to have_button "Authorize"
+    expect(page).to have_css ".auth-page"
+    expect(page).to have_no_css ".navbar"
+  end
+
+  it "signs in from the classic page" do
+    visit "/users/sign_in?classic=true"
+    fill_in "Email", with: user.email
+    fill_in "user[password]", with: "wca"
+    click_button "Sign in"
+    expect(page).to have_text "Signed in successfully"
+  end
+
+  it "stays on the classic page after a failed sign in" do
+    visit "/users/sign_in?classic=true"
+    fill_in "Email", with: user.email
+    fill_in "user[password]", with: "definitely not the password"
+    click_button "Sign in"
+    expect(page).to have_text "Invalid email, WCA ID, or password."
+    expect(page).to have_no_text "You are viewing the new sign in page"
+  end
+
+  it "stays on the redesigned page after a failed sign in" do
+    visit "/users/sign_in"
+    fill_in "Email", with: user.email
+    fill_in "user[password]", with: "definitely not the password"
+    click_button "Sign in"
+    expect(page).to have_text "Invalid email, WCA ID, or password."
+    expect(page).to have_text "You are viewing the new sign in page"
+  end
+end
