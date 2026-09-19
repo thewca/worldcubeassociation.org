@@ -1204,9 +1204,9 @@ en:
         one: "1 region"
         other: "%{count} regions"
       export_to_csv:
-        zero: "Export all registrations to CSV"
         one: "Export %{count} registration to CSV"
         other: "Export %{count} registrations to CSV"
+      export_all_to_csv: "Export all registrations to CSV"
       email: "Email"
       non_competing: "Non-competing registrations"
       not_paid: "Not paid"

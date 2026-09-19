@@ -341,7 +341,11 @@ export default function RegistrationActions({
             }}
           />
         )}
-        content={I18n.t('registrations.list.export_to_csv', { count: selectedCount })}
+        content={
+          selectedCount === 0
+            ? I18n.t('registrations.list.export_all_to_csv')
+            : I18n.t('registrations.list.export_to_csv', { count: selectedCount })
+        }
       />
 
       <Popup
