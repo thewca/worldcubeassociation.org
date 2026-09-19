@@ -478,6 +478,14 @@ resource "aws_lb_listener_rule" "rails_forward_staging" {
   }
 }
 
+# The rules below forward every path the Next frontend serves on staging;
+# anything else falls through to Rails at priority 60. They are split across
+# several rules only because an ALB rule accepts at most 5 condition values and
+# the host header spends one of them, leaving 4 patterns each.
+#
+# Every pattern is anchored, and the id-shaped ones are deliberately narrow: a
+# looser `[^/]+` would also swallow Rails-only pages that sit at the same shape,
+# such as /competitions/new, /persons/new_id and /persons/results.
 resource "aws_lb_listener_rule" "rails_forward_next_staging" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 36
@@ -495,7 +503,120 @@ resource "aws_lb_listener_rule" "rails_forward_next_staging" {
 
   condition {
     path_pattern {
-      regex_values = ["^/competitions/[^/]+/(live|register)$", "^/_next/.*$", "^/api/auth/.*$", "^/posts.*$"]
+      # `/posts` is broader than the two routes Next has, but it is what staging
+      # has always forwarded, so leave it be: posts are addressed by slug, and a
+      # tighter pattern risks sending real post URLs to the wrong backend.
+      regex_values = ["^/_next/.*$", "^/api/(auth|payload)/.*$", "^/payload(/.*)?$", "^/posts.*$"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "rails_forward_next_staging_pages" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 37
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-staging.arn
+  }
+
+  condition {
+    host_header {
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      regex_values = [
+        "^/(about|dashboard|delegates|disclaimer|documents|faq|logo|privacy|search|translators)$",
+        "^/(officers-and-board|organizations|score-tools|speedcubing-history|teams-committees)$",
+        "^/results/(rankings|records)$",
+        "^/export/(developer|results)$",
+      ]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "rails_forward_next_staging_records" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 38
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-staging.arn
+  }
+
+  condition {
+    host_header {
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      regex_values = [
+        "^/regulations(/(about|history|scrambles|translations))?$",
+        "^/regulations/(history/official|translations)/[^/]+$",
+        "^/persons/[0-9]{4}[A-Z]{4}[0-9]{2}$",
+        "^/incidents(/[0-9]+)?$",
+      ]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "rails_forward_next_staging_competitions" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 39
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-staging.arn
+  }
+
+  condition {
+    host_header {
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      # Competition ids all end in a four digit year, which keeps /competitions/new
+      # and /competitions/for_senior on Rails.
+      regex_values = [
+        "^/competitions(/mine)?$",
+        "^/competitions/[A-Za-z0-9]+[0-9]{4}$",
+        "^/competitions/[^/]+/(admin|competitors|events|podiums|register|schedule|scrambles)$",
+        "^/competitions/[^/]+/results/(all|byPerson)$",
+      ]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "rails_forward_next_staging_live" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 30
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-staging.arn
+  }
+
+  condition {
+    host_header {
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      # Next serves competition tabs under the singular /tab/ so that this cannot
+      # collide with Rails' /tabs/new, which creates one.
+      regex_values = [
+        "^/competitions/[^/]+/live(/.*)?$",
+        "^/competitions/[^/]+/tab/[^/]+$",
+      ]
     }
   }
 }
