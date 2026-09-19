@@ -887,10 +887,6 @@ es-419:
       competition_tab:
         #original_hash: e396d28
         name: 'Ejemplos: Cómo llegar, Pagos, Premios, Dónde dormir'
-      person:
-      poll:
-      vote:
-      competition_medium:
       regional_organization:
         #original_hash: 72448d6
         website: Debe ser una URL http(s) válida. Se recomienda HTTPS
@@ -1200,6 +1196,8 @@ es-419:
         manage_competitions: Administra las próximas competiciones que vas a organizar
         #original_hash: 357ccbf
         manage_registrations: 'Registrarte a competencias, y modificar o cancelar tus registros.'
+        #original_hash: cd9ad06
+        translations: Acceder la lista de idiomas para la cual eres un traductor de la WCA
     devise:
       #original_hash: 06184f5
       no_account: ¿No tienes cuenta?
@@ -2797,10 +2795,12 @@ es-419:
         recuerda especificar esto en los requisitos de las inscripciones.
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: El horario no puede ser editado luego de enviar los resultados.
-      #original_hash: 1877b69
+      #original_hash: d1241c1
       spots_left:
+        zero: Sin cupos libres
         one: Queda un solo cupo
         other: 'Quedan %{count} cupos'
+      #original_hash: 7e21d77
       no_spots_left: Sin cupos libres
     live:
       #original_hash: 10d1a3c
@@ -3701,7 +3701,6 @@ es-419:
           details_html: >-
             Detalles sobre el local (por ejemplo, "primera planta" o "sigue los
             carteles"). %{md}
-          coordinates:
         series:
           #original_hash: 77811b5
           name: >-
@@ -3789,7 +3788,6 @@ es-419:
           scoretaking_software: >-
             Selecciona "%{choice_ilr}" o una herramienta externa si deseas usar
             Rondas Duales
-        user_settings:
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Moneda en que se especifican los pagos.
@@ -3886,7 +3884,6 @@ es-419:
           Alguna información adicional que quieras pasar al WCAT. Por ejemplo,
           si hay algo de lo que no estés seguro o si hay alguna petición para el
           WCAT. Por favor rellénalo en inglés.
-        cloning:
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4002,10 +3999,12 @@ es-419:
       list:
         #original_hash: 6eef664
         empty: Ninguno
-        #original_hash: 627422a
+        #original_hash: 579c1e2
         spots_remaining_plural:
+          zero: Sin lugares restantes
           one: '%{count} lugar restante'
           other: '%{count} lugares restantes'
+        #original_hash: 3483b37
         no_spots_remaining: Sin lugares restantes
         pending:
           #original_hash: 4210670
@@ -4126,10 +4125,12 @@ es-419:
         email_copy: Copiar correos
         #original_hash: b83b663
         email_message: Copiado al portapapeles. ¡Recuerda usar CCO (con copia oculta)!
-        #original_hash: beedd53
+        #original_hash: 01f7c02
         move_to:
+          zero: Mover a
           one: 'Mover %{count} a'
           other: 'Mover %{count} a'
+        #original_hash: 349f807
         move_to_none_selected: Mover a
         #original_hash: 96f608c
         pending: Pendiente
