@@ -50,14 +50,18 @@ export default function buildAvatarMenuEntries(
   const panels = permissions?.can_access_panels.scope ?? [];
 
   return [
-    {
-      kind: "link",
-      label: "Payload CMS",
-      href: route({ pathname: "/payload/[[...segments]]", query: {} }),
-      newTab: true,
-    },
-    { kind: "link", label: "Developer Dashboard", href: "/dashboard" },
-    { kind: "separator" },
+    ...(can.canAccessCms()
+      ? ([
+          {
+            kind: "link",
+            label: "Payload CMS",
+            href: route({ pathname: "/payload/[[...segments]]", query: {} }),
+            newTab: true,
+          },
+          { kind: "link", label: "Developer Dashboard", href: "/dashboard" },
+          { kind: "separator" },
+        ] as MenuEntry[])
+      : []),
     rails("Notifications", "/notifications"),
     rails("Edit profile", "/profile/edit"),
     { kind: "separator" },

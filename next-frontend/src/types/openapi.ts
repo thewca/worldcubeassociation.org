@@ -2148,6 +2148,24 @@ export interface components {
             can_manage_incidents: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
+            can_view_polls: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_view_all_users: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_admin_results: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_create_posts: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_manage_regional_organizations: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_access_cms: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
             can_request_to_edit_others_profile: {
                 scope: string[] | string;
             };

@@ -22,6 +22,7 @@ import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
+import getPermissions from "@/lib/wca/permissions.server";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
 import { MobileNavLink, MobileNavRoot } from "@/components/MobileNav";
@@ -116,6 +117,7 @@ export default async function Navbar() {
   ]);
 
   const session = await getSession();
+  const permissions = (await getPermissions())?.permissions;
   const socialLinks = socialLinksGlobal.links ?? [];
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages
@@ -305,7 +307,7 @@ export default async function Navbar() {
               <LanguageSelector />
             </Box>
             <Box hideBelow="md">
-              <AvatarMenu session={session} />
+              <AvatarMenu session={session} permissions={permissions} />
             </Box>
           </HStack>
         </HStack>
@@ -472,7 +474,7 @@ export default async function Navbar() {
               <Separator hideFrom="md" />
               <VStack align="start" hideFrom="md">
                 <LanguageSelector />
-                <AvatarMenu session={session} />
+                <AvatarMenu session={session} permissions={permissions} />
               </VStack>
             </VStack>
           </Collapsible.Content>
