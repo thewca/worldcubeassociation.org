@@ -71,7 +71,7 @@ const LINK_EXTERNAL_PROPS: React.ComponentPropsWithoutRef<"a"> = {
 function LinkWrapper<T extends string>({
   navbarEntry,
   linkComponent: LinkComponent,
-  isExternal = false,
+  isExternal = LinkComponent === "a",
   hideResponsive = false,
   ...extraProps
 }: {
@@ -160,7 +160,6 @@ export default async function Navbar() {
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent="a"
-                        isExternal
                         hideResponsive
                       />
                     </Button>
@@ -200,7 +199,6 @@ export default async function Navbar() {
                                   <LinkWrapper
                                     navbarEntry={subEntry}
                                     linkComponent="a"
-                                    isExternal
                                   />
                                 </Menu.Item>
                               )}
@@ -242,7 +240,6 @@ export default async function Navbar() {
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
                                                 linkComponent="a"
-                                                isExternal
                                               />
                                             </Menu.Item>
                                           )}
@@ -285,7 +282,6 @@ export default async function Navbar() {
                                 <LinkWrapper
                                   navbarEntry={item}
                                   linkComponent="a"
-                                  isExternal
                                 />
                               </Menu.Item>
                             ))}
@@ -335,7 +331,6 @@ export default async function Navbar() {
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent="a"
-                        isExternal
                       />
                     </MobileNavLink>
                   )}
@@ -374,7 +369,6 @@ export default async function Navbar() {
                                   <LinkWrapper
                                     navbarEntry={subEntry}
                                     linkComponent="a"
-                                    isExternal
                                   />
                                 </MobileNavLink>
                               )}
@@ -420,7 +414,6 @@ export default async function Navbar() {
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
                                                 linkComponent="a"
-                                                isExternal
                                               />
                                             </MobileNavLink>
                                           )}
@@ -465,7 +458,6 @@ export default async function Navbar() {
                                 <LinkWrapper
                                   navbarEntry={item}
                                   linkComponent="a"
-                                  isExternal
                                 />
                               </MobileNavLink>
                             ))}
