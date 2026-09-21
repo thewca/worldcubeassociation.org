@@ -1,6 +1,7 @@
 import {
-  Float,
+  Box,
   Heading,
+  Icon,
   Image,
   Link,
   LinkBox,
@@ -10,12 +11,13 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { LuExternalLink } from "react-icons/lu";
 import Loading from "@/components/ui/loading";
 import { getRegionalOrganizations } from "@/lib/wca/organizations/getRegionalOrganizations";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
-import { Trans } from "react-i18next/TransWithoutContext";
 import _ from "lodash";
+import TransWithLinks from "@/components/TransWithLinks";
 import WcaFlag from "@/components/WcaFlag";
 import { Metadata } from "next";
 
@@ -51,18 +53,24 @@ export default async function RegionalOrganizations() {
             role="group"
             borderRadius="md"
             boxShadow="md"
+            overflow="hidden"
             _hover={{ cursor: org.website ? "pointer" : "default" }}
           >
-            <Float offsetX={6}>
-              <WcaFlag code={org.country_iso2} size="sm" />
-            </Float>
+            {/* Positioned inside the card rather than floating on its corner, where half the
+                flag hung outside the box. */}
+            <Box position="absolute" top="2" insetEnd="2" zIndex="1">
+              <WcaFlag code={org.country_iso2} size="md" />
+            </Box>
             {org.logo_url && (
               <Image
                 src={org.logo_url}
                 alt={org.name}
-                objectFit="cover"
+                objectFit="contain"
                 width="100%"
-                height="auto"
+                // Organisations submit logos at whatever size and ratio they like, so the box
+                //   is fixed and the logo sits inside it, rather than the logo setting the height.
+                height="32"
+                padding="6"
                 transition="opacity 0.3s"
                 _hover={{ opacity: 0.2 }}
               />
@@ -73,6 +81,7 @@ export default async function RegionalOrganizations() {
               left={0}
               right={0}
               bottom={0}
+              minHeight="32"
               justify="center"
               align="center"
               bg={org.logo_url ? "rgba(255,255,255,0.9)" : "transparent"}
@@ -86,8 +95,13 @@ export default async function RegionalOrganizations() {
                   href={org.website}
                   textStyle="headerLink"
                   textAlign="center"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {org.name}
+                  <Icon size="xs" asChild>
+                    <LuExternalLink />
+                  </Icon>
                 </Link>
               </LinkOverlay>
             </VStack>
@@ -113,11 +127,7 @@ export default async function RegionalOrganizations() {
       <Heading size="xl">
         {t("regional_organizations.application_instructions.title")}
       </Heading>
-      <Trans
-        t={t}
-        i18nKey="regional_organizations.application_instructions.description_html"
-        components={{ a: <Link /> }}
-      />
+      <TransWithLinks i18nKey="regional_organizations.application_instructions.description_html" />
     </VStack>
   );
 }
