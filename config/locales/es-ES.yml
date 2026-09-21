@@ -2404,8 +2404,12 @@ es-ES:
       country_plural:
         one: Una región
         other: '%{count} regiones'
-      #original_hash: 1feee0e
-      export_csv: Exportar a CSV
+      #original_hash: c8e4278
+      export_to_csv:
+        one: Exportar registro en CSV
+        other: 'Exportar %{count} registros en CSV'
+      #original_hash: 2352f3f
+      export_all_to_csv: Exportar todos los registros en CSV
       #original_hash: 84add5b
       email: Correo electrónico
       #original_hash: e86b1e1
@@ -2814,7 +2818,7 @@ es-ES:
         para que sea en el futuro.
       #original_hash: 3322400
       tooltip_registered: Estás registrado.
-      #original_hash: b10c8d6
+      #original_hash: cb23443
       tooltip_pending: >-
         Tu registro está pendiente de aprobación manual. Por favor, asegúrate de
         que has seguido todas las instrucciones (por ejemplo, pago) listadas en
@@ -4080,7 +4084,7 @@ es-ES:
         pending:
           #original_hash: 4210670
           title: Registros pendientes
-          #original_hash: 5e16c6d
+          #original_hash: 7b71730
           information: >-
             La lista de pendientes solo debería usarse para registros
             incompletos (por ejemplo, sin pagar). Por favor, usa la lista de
@@ -4112,6 +4116,10 @@ es-ES:
         approved:
           #original_hash: a59612c
           title: Registros aprobados
+          #original_hash: 910da91
+          information: >-
+            Los competidores aprobados pueden participar en la competición en
+            las categorías en las que se hayan registrado.
           #original_hash: bbdee7d
           pending_waitlist_combined_skipped_warning: >-
             Has omitido %{count} registro(s) más tempranos en la lista de
@@ -4189,18 +4197,26 @@ es-ES:
         delete_contact_message: Quiero eliminar mi registro
         #original_hash: 65bbb07
         no_changes: No hay cambios
-        #original_hash: be4e8e2
-        email_send: Enviar correo electrónico
-        #original_hash: b4bac52
-        email_copy: Copiar correos electrónicos
+        #original_hash: ae7fcf6
+        send_email:
+          one: Enviar correo electrónico a una dirección de correo electrónico
+          other: >-
+            Enviar correo electrónico a %{count} direcciones de correo
+            electrónico
+        #original_hash: 85bb534
+        copy_emails:
+          one: Copiar una dirección de correo electrónico
+          other: 'Copiar %{count} direcciones de correo electrónico'
         #original_hash: b83b663
         email_message: Copiado al portapapeles. ¡Recuerda usar CCO (con copia oculta)!
-        #original_hash: 01f7c02
+        #original_hash: db52725
+        scroll_to: Desplazarse hasta
+        #original_hash: 25888d4
         move_to:
           one: 'Mover %{count} a'
           other: 'Mover %{count} a'
-        #original_hash: 349f807
-        move_to_none_selected: Mover a
+        #original_hash: 91ae9f9
+        move_to_none_selected: Mover registros a
         #original_hash: 96f608c
         pending: Pendiente
         #original_hash: 92d40dc
@@ -4211,6 +4227,8 @@ es-ES:
         cancelled: Cancelado
         #original_hash: 27eeb7a
         rejected: Rechazado
+        #original_hash: 8d83078
+        non_competing: No competidores
         #original_hash: 43dc853
         amount: Cantidad
         #original_hash: d7e4497
@@ -4408,7 +4426,7 @@ es-ES:
       must_use_wca_registration: >-
         La aceptación automática de registros solo se puede utilizar si estás
         usando la página web de la WCA para los registros
-      #original_hash: 693d47d
+      #original_hash: 1cc37ba
       must_use_payment_integration: >-
         Tienes que activar una integración de pagos (por ejemplo, Stripe) para
         utilizar la aceptación automática de registros
@@ -5131,7 +5149,7 @@ es-ES:
         manual:
           #original_hash: e5f0dfd
           payment_instructions: Instrucciones de pago (se mostrarán en la página de la competición)
-          #original_hash: 5e7242c
+          #original_hash: 9751a31
           payment_reference_label: >-
             ¿Qué información debería proporcionar el usuario para que puedas
             identificar su pago? (por ejemplo, número de referencia del pago, ID
