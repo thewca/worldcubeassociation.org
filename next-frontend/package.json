@@ -19,7 +19,7 @@
     "postinstall": "chakra typegen ./src/theme.ts"
   },
   "dependencies": {
-    "@aws-sdk/credential-providers": "^3.1131.0",
+    "@aws-sdk/credential-providers": "^3.1136.0",
     "@chakra-ui/react": "^3.37.0",
     "@delmaredigital/payload-better-auth": "0.13.0",
     "@emotion/cache": "^11.14.0",

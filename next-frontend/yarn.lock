@@ -603,9 +603,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/credential-providers@npm:^3.1131.0":
-  version: 3.1131.0
-  resolution: "@aws-sdk/credential-providers@npm:3.1131.0"
+"@aws-sdk/credential-providers@npm:^3.1136.0":
+  version: 3.1136.0
+  resolution: "@aws-sdk/credential-providers@npm:3.1136.0"
   dependencies:
     "@aws-sdk/core": "npm:^3.978.0"
     "@aws-sdk/credential-provider-cognito-identity": "npm:^3.972.70"
@@ -623,7 +623,7 @@ __metadata:
     "@smithy/credential-provider-imds": "npm:^4.4.16"
     "@smithy/types": "npm:^4.17.2"
     tslib: "npm:^2.6.2"
-  checksum: 10c0/acffacd89ccaeb9882d68c15ec75dea6f930bf1055ef53fed15f5cc890f2123c560eb5563375343f343ca5bd62208bfdd7012ba81f3cefcd34e75bca9531da70
+  checksum: 10c0/02c3bf893ce031dfac10cf504b12f6c41e268ad384313224908af0e79a2194b3bcfd143fe8e594748b6155f21e8d36c8fe5e2666c65e4d5d85150470a34e10f4
   languageName: node
   linkType: hard
 
@@ -12776,7 +12776,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "next-frontend@workspace:."
   dependencies:
-    "@aws-sdk/credential-providers": "npm:^3.1131.0"
+    "@aws-sdk/credential-providers": "npm:^3.1136.0"
     "@chakra-ui/cli": "npm:^3.37.0"
     "@chakra-ui/react": "npm:^3.37.0"
     "@delmaredigital/payload-better-auth": "npm:0.13.0"
