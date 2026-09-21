@@ -3,11 +3,12 @@ import { Heading, SimpleGrid, VStack } from "@chakra-ui/react";
 import UserBadge from "@/components/UserBadge";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 import { getTranslatorRoles } from "@/lib/wca/roles/activeRoles";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("page.translators.title"),

@@ -4,6 +4,7 @@ import React from "react";
 import FilteredRankings from "@/app/(wca)/(with-background)/results/rankings/filteredRankings";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 import OpenapiError from "@/components/ui/openapiError";
 
 const GENDER_ALL = "All";
@@ -11,7 +12,7 @@ const SHOW_100_PERSONS = "100 persons";
 const REGION_WORLD = "world";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("results.rankings.title"),

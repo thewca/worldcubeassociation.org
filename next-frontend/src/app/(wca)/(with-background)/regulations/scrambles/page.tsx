@@ -8,14 +8,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Metadata } from "next";
-import { getT } from "@/lib/i18n/get18n";
+import { getStaticT } from "@/lib/i18n/getStaticT";
 
 const LATEST_VERSION = "TNoodle-WCA-1.2.3";
 const LATEST_JARFILE =
   "https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getT();
+  const t = await getStaticT();
 
   return {
     title: t("layouts.navigation.scrambles"),
