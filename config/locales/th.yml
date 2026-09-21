@@ -261,12 +261,15 @@ th:
   cutoff:
     #original_hash: cf458e7
     time:
+      one: '%{count} ครั้ง เพื่อให้ได้เวลา < %{time}'
       other: '%{count} ครั้ง เพื่อให้ได้เวลา < %{time}'
     #original_hash: b49d930
     moves:
+      one: '%{count} ครั้ง เพื่อให้ได้การบิดน้อยกว่า < %{moves} ครั้ง'
       other: '%{count} ครั้ง เพื่อให้ได้การบิดน้อยกว่า < %{moves} ครั้ง'
     #original_hash: eba1b97
     points:
+      one: '%{count} ครั้ง เพื่อให้ได้คะแนน > %{points} คะแนน'
       other: '%{count} ครั้ง เพื่อให้ได้คะแนน > %{points} คะแนน'
   time_limit:
     cumulative:
@@ -378,6 +381,7 @@ th:
       invalid: ผิด
     #original_hash: 49d0140
     days:
+      one: 1 วัน
       other: '%{count} วัน'
     #original_hash: 51ef7d4
     search_site: ค้นหาในเว็บ
@@ -862,10 +866,6 @@ th:
       competition_tab:
         #original_hash: e396d28
         name: เช่น การเดินทาง การชำระเงิน รางวัล ที่พัก
-      person:
-      poll:
-      vote:
-      competition_medium:
       regional_organization:
         #original_hash: 72448d6
         website: 'ต้องเป็น http(s) url ที่ถูกต้อง, แนะนำ HTTPS'
@@ -1092,6 +1092,7 @@ th:
       messages:
         #original_hash: e88f903
         form_error:
+          one: แบบฟอร์มมีข้อผิดพลาด 1 ข้อผิดพลาด
           other: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
       error_pages:
         #original_hash: 1042478
@@ -1139,6 +1140,8 @@ th:
         manage_competitions: จัดการการแข่งขันใด ๆ ที่คุณเป็นผู้จัดการและกำลังจะจัดขึ้น
         #original_hash: 357ccbf
         manage_registrations: สมัครเข้าร่วมการแข่งขัน และแก้ไขหรือยกเลิกการสมัครของคุณ
+        #original_hash: cd9ad06
+        translations: เข้าถึงรายชื่อภาษาที่คุณเป็นนักแปลที่ได้รับการรับรองจาก WCA
     devise:
       #original_hash: 06184f5
       no_account: ไม่มี accout?
@@ -2108,6 +2111,7 @@ th:
       must_register: คุณต้องสมัครการแข่งขันอย่างน้อยหนึ่งประเภท
       #original_hash: ef9b4ad
       exceeds_event_limit:
+        one: คุณต้องสมัครการแข่งขัน 1 ประเภทเท่านั้น
         other: >-
           คุณต้องสมัครการแข่งขันโดยมีประเภทการแข่งขันระหว่าง 1 ถึง %{count}
           ประเภท
@@ -2134,12 +2138,15 @@ th:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
+        one: ผู้เข้าแข่งขันใหม่
         other: ผู้เข้าแข่งขันใหม่
       #original_hash: bc010e3
       returner:
+        one: ผู้เข้าแข่งขันเก่า
         other: ผู้เข้าแข่งขันเก่า
       #original_hash: b7da17a
       person:
+        one: คน
         other: คน
     flash:
       #original_hash: da7ec53
@@ -2236,9 +2243,14 @@ th:
       edit: แก้ไข
       #original_hash: beffc45
       country_plural:
+        one: 1 ภูมิภาค
         other: '%{count} ภูมิภาค'
-      #original_hash: 1feee0e
-      export_csv: Export to CSV
+      #original_hash: c8e4278
+      export_to_csv:
+        one: 'ส่งออกข้อมูลการสมัคร %{count} รายการไปยังไฟล์ CSV'
+        other: 'ส่งออกข้อมูลการสมัคร %{count} รายการไปยังไฟล์ CSV'
+      #original_hash: 2352f3f
+      export_all_to_csv: ส่งออกข้อมูลการสมัครทั้งหมดเป็นไฟล์ CSV
       #original_hash: 84add5b
       email: Email
       #original_hash: e86b1e1
@@ -2594,7 +2606,7 @@ th:
       registration_already_closed: กำหนดเวลาในการสมัครการแข่งขันได้ผ่านไปแล้ว โปรดตั้งค่าให้เป็นเวลาในอนาคต
       #original_hash: 3322400
       tooltip_registered: คุณได้สมัครแล้ว
-      #original_hash: b10c8d6
+      #original_hash: cb23443
       tooltip_pending: >-
         การสมัครของคุณกำลังรอการอนุมัติ
         โปรดตรวจสอบให้แน่ใจว่าคุณได้ปฏิบัติตามคำแนะนำทั้งหมด (เช่น การชำระเงิน)
@@ -2626,9 +2638,11 @@ th:
         list โปรดอย่าลืมระบุสิ่งนี้ในข้อกำหนดการสมัครการแข่งขัน
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: ไม่สามารถแก้ไขตารางการแข่งขันได้หลังจากส่งผลการแข่งขันแล้ว
-      #original_hash: 1877b69
+      #original_hash: d1241c1
       spots_left:
+        one: เหลืออีก 1 คน
         other: 'เหลืออีก %{count} คน'
+      #original_hash: 7e21d77
       no_spots_left: ผู้สมัครเต็มแล้ว
     live:
       #original_hash: 10d1a3c
@@ -2741,11 +2755,13 @@ th:
           title: ลบผู้เข้าแข่งขัน
           #original_hash: c25b336
           next_to_advance:
+            one: 'ผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบคือ %{competitors}'
             other: 'ผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบคือ %{competitors}'
           #original_hash: c87ca67
           advance: ให้ผู้เข้าแข่งขันคนถัดไปเข้ารอบ
           #original_hash: aa59a26
           quit_confirm:
+            one: ถอนผู้เข้าแข่งขันออกจากรอบ
             other: ถอนผู้เข้าแข่งขันออกจากรอบ
           bulk:
             #original_hash: e0981de
@@ -2779,6 +2795,7 @@ th:
           single_round: เพิ่มผู้เข้าแข่งขันในรอบ
           #original_hash: bf3b670
           multiple_rounds:
+            one: เพิ่มผู้เข้าแข่งขันในทั้งสองรอบของ Dual Round
             other: >-
               เพิ่มผู้เข้าแข่งขันเข้าสู่รอบ เนื่องจากรอบที่สองของการแข่งขันแบบ
               Dual Round ยังไม่เปิดให้ใช้งาน
@@ -2867,12 +2884,14 @@ th:
       display_name: '[Cancelled] %{name}'
       #original_hash: 680567f
       organizer_plural:
+        one: ผู้จัดการแข่งขัน
         other: ผู้จัดการแข่งขัน
       #original_hash: 53a9522
       organization_team: ผู้จัดการแข่งขัน
       #original_hash: 6afa61e
       delegate:
-        other: WCA Delegate
+        one: WCA Delegate
+        other: WCA Delegates
       #original_hash: b37456c
       contact: ติดต่อ
       #original_hash: 0eb5ed5
@@ -2963,9 +2982,11 @@ th:
           เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นจึงจะสามารถรับชมการแข่งขันได้
       #original_hash: 35f892a
       guest_limit:
+        one: ผู้เข้าแข่งขันสามารถพาผู้ติดตามมาได้สูงสุด 1 คน
         other: 'ผู้เข้าแข่งขันสามารถพาผู้ติดตามมาได้สูงสุด %{count} คน'
       #original_hash: bad09c8
       event_limit:
+        one: ผู้เข้าแข่งขันสามารถสมัครได้ 1 ประเภทการแข่งขัน
         other: 'ผู้เข้าแข่งขันสามารถสมัครได้สูงสุด %{count} ประเภทการแข่งขัน'
       #original_hash: 64e0ddd
       require_qualification: >-
@@ -3198,6 +3219,7 @@ th:
         closed: ปิด
       #original_hash: 184f3ab
       currently_displaying:
+        one: 'กำลังแสดงผล: %{count} การแข่งขัน'
         other: 'กำลังแสดงผล: %{count} การแข่งขัน'
       #original_hash: 74d8290
       register_now: สมัครการแข่งขันตอนนี้
@@ -3497,7 +3519,6 @@ th:
             de l'Industrie](http://www.cite-sciences.fr)
           #original_hash: 2651d1a
           details_html: 'รายละเอียดเกี่ยวกับสถานที่ (เช่น ชั้นที่ 1 ด้านหลัง ตามป้าย) %{md}'
-          coordinates:
         series:
           #original_hash: 77811b5
           name: >-
@@ -3573,7 +3594,6 @@ th:
           scoretaking_software: >-
             เลือก '%{choice_ilr}' หรือ external tool หากคุณต้องการใช้ Dual
             Rounds
-        user_settings:
         entry_fees:
           #original_hash: 9735ddf
           currency_code: สกลุเงินสำหรับต่าสมัคร
@@ -3663,7 +3683,6 @@ th:
         remarks: >-
           ข้อมูลบางอย่างที่คุณอยากส่งให้ WCAT เช่น บางอย่างที่คุณไม่มั่นใจกับมัน
           หรือคำขอพิเศษที่จะส่งไปให้ WCAT กรุณากรอกเป็นภาษาอังกฤษ!
-        cloning:
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -3776,14 +3795,16 @@ th:
       list:
         #original_hash: 6eef664
         empty: ไม่พบ
-        #original_hash: 627422a
+        #original_hash: 579c1e2
         spots_remaining_plural:
+          one: 'เหลืออีก %{count} คน'
           other: 'เหลืออีก %{count} คน'
+        #original_hash: 3483b37
         no_spots_remaining: ผู้เข้าแข่งขันเต็มจำนวนแล้ว
         pending:
           #original_hash: 4210670
           title: การสมัครการแข่งขันที่รอดำเนินการ
-          #original_hash: 5e16c6d
+          #original_hash: 7b71730
           information: >-
             ควรใช้สถานะรอดำเนินการสำหรับการสมัครที่ไม่สมบูรณ์ (เช่น
             ไม่ได้ชำระเงิน) เท่านั้น - โปรดใช้ Waiting List
@@ -3813,6 +3834,9 @@ th:
         approved:
           #original_hash: a59612c
           title: การสมัครที่ได้รับการยอมรับแล้ว
+          #original_hash: 910da91
+          information: >-
+            ผู้เข้าแข่งขันที่ผ่านการอนุมัติได้รับการยืนยันแล้วว่าสามารถเข้าร่วมการแข่งขันในประเภทที่สมัครไว้ได้
           #original_hash: bbdee7d
           pending_waitlist_combined_skipped_warning: >-
             คุณได้ข้ามการสมัครที่รอดำเนินการ/อยู่ในรายการรอก่อนหน้านี้ไปแล้ว
@@ -3887,15 +3911,23 @@ th:
         delete_contact_message: ฉันต้องการลบการสมัครของฉัน
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
-        #original_hash: be4e8e2
-        email_send: ส่ง email
-        #original_hash: b4bac52
-        email_copy: Copy Emails
+        #original_hash: ae7fcf6
+        send_email:
+          one: 'ส่งอีเมลไปยังที่อยู่อีเมล %{count} แห่ง'
+          other: 'ส่งอีเมลไปยังที่อยู่อีเมล %{count} แห่ง'
+        #original_hash: 85bb534
+        copy_emails:
+          one: 'คัดลอกที่อยู่อีเมล %{count} รายการ'
+          other: 'คัดลอกที่อยู่อีเมล %{count} รายการ'
         #original_hash: b83b663
         email_message: คัดลอกไปยังคลิปบอร์ดแล้ว อย่าลืมส่งด้วย BCC!
-        #original_hash: beedd53
+        #original_hash: db52725
+        scroll_to: เลื่อนไปที่
+        #original_hash: 25888d4
         move_to:
-          other: 'ย้าย %{count} ไปยัง'
+          one: 'ย้ายการสมัคร %{count} คน ไปยัง'
+          other: 'ย้ายการสมัคร %{count} คน ไปยัง'
+        #original_hash: 91ae9f9
         move_to_none_selected: ย้ายไปยัง
         #original_hash: 96f608c
         pending: รอดำเนินการ
@@ -3907,6 +3939,8 @@ th:
         cancelled: ยกเลิกแล้ว
         #original_hash: 27eeb7a
         rejected: ถูกปฏิเสธ
+        #original_hash: 8d83078
+        non_competing: ไม่ใช่ผู้เข้าแข่งขัน
         #original_hash: 43dc853
         amount: Amount
         #original_hash: d7e4497
@@ -3992,7 +4026,8 @@ th:
           %{max_events} ประเภท
         #original_hash: 1e4c43f
         waiting_list_count:
-          other: 'มีผู้เข้าแข่งขัน %{count} รายอยู่ในรายชื่อผู้รอคิว'
+          one: 'มีผู้เข้าแข่งขัน %{count} รายอยู่ในรายชื่อรอ'
+          other: 'มีผู้เข้าแข่งขัน %{count} รายอยู่ในรายชื่อรอ'
       errors:
         #original_hash: 3890616
         events: การโหลดประเภทการแข่งขันล้มเหลว โปรดลองอีกครั้ง
@@ -4083,7 +4118,7 @@ th:
       must_use_wca_registration: >-
         ระบบยอมรับการสมัครอัตโนมัติสามารถใช้ได้เฉพาะกรณีที่คุณใช้เว็บไซต์ WCA
         ในการรับสมัครการแข่งขันเท่านั้น
-      #original_hash: 693d47d
+      #original_hash: 1cc37ba
       must_use_payment_integration: >-
         คุณต้องเปิดใช้งานการชำระค่าสมัคร (เช่น Stripe)
         เพื่อใช้การยอมรับอัตโนมัติ
@@ -4412,6 +4447,9 @@ th:
       room_in_venue: '%{room} ที่ %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
+        one: >-
+          คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name}
+          ซึ่งเป็นสถานที่จัดการแข่งขันเพียงแห่งเดียวสำหรับการแข่งขันนี้
         other: >-
           คุณกำลังดูตารางการแข่งขันของสถานที่ %{venue_name} ซึ่งเป็นหนึ่งใน
           %{count} แห่งสำหรับการแข่งขันครั้งนี้
@@ -4760,7 +4798,7 @@ th:
         manual:
           #original_hash: e5f0dfd
           payment_instructions: คำแนะนำการชำระค่าสมัคร (จะแสดงในหน้าการแข่งขัน)
-          #original_hash: 5e7242c
+          #original_hash: 9751a31
           payment_reference_label: >-
             ผู้ใช้ควรให้ข้อมูลอะไรแก่คุณเพื่อระบุการชำระเงินของตน (เช่น
             หมายเลขอ้างอิงการชำระเงิน / รหัสบัญชี / ฯลฯ)
