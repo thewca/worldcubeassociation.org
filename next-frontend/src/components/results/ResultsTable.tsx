@@ -17,6 +17,24 @@ import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
 
+// The solve columns push the row past the width of a phone, so the column that says
+// whose row it is stays pinned to the left edge while the rest scrolls under it.
+// Only one column is pinned: a second would need to know the first one's rendered
+// width, which auto table layout decides from the content.
+const STICKY_COLUMN = {
+  position: "sticky" as const,
+  left: "0",
+  // The row already paints `bg` (or the striped rung), so inheriting it keeps the
+  //   pinned cell opaque without naming a colour that could drift from the row's.
+  bg: "inherit",
+  zIndex: "1",
+};
+
+// The ScrollArea sets `white-space: nowrap`, so an unbounded name grows the pinned
+// column until it covers the screen it was pinned to make room on. The name gets a
+// ceiling and ellipsizes; the full name is one tap away on the person's page.
+const STICKY_NAME_WIDTH = { base: "36", md: "2xs" };
+
 export function ResultsTable({
   results,
   eventId,
@@ -44,7 +62,9 @@ export function ResultsTable({
           <Table.Row>
             <Table.ColumnHeader>#</Table.ColumnHeader>
             {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-            <Table.ColumnHeader>Competitor</Table.ColumnHeader>
+            <Table.ColumnHeader {...STICKY_COLUMN}>
+              Competitor
+            </Table.ColumnHeader>
             <Table.ColumnHeader>Best</Table.ColumnHeader>
             {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
             <Table.ColumnHeader>Representing</Table.ColumnHeader>
@@ -66,8 +86,11 @@ export function ResultsTable({
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
                 <Table.Cell>{competitorResult.pos}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell {...STICKY_COLUMN}>
                   <Link
+                    display="block"
+                    maxWidth={STICKY_NAME_WIDTH}
+                    truncate
                     href={route({
                       pathname: "/persons/[wcaId]",
                       query: { wcaId: competitorResult.wca_id },
