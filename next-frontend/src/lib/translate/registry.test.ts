@@ -99,6 +99,25 @@ describe("buildTranslationRegistry", () => {
     expect(inherited.map((f) => f.pathString)).toEqual(["footer.legal.notice"]);
   });
 
+  it("throws on a block referenced by slug instead of silently dropping it", () => {
+    // `config.blocks` references survive flattening as bare strings; the walk
+    // has no config to resolve them against.
+    const byReference = {
+      collections: [
+        {
+          slug: "page",
+          fields: [
+            { name: "blocks", type: "blocks", blockReferences: ["TextCard"] },
+          ] as unknown as Field[],
+        },
+      ],
+      globals: [],
+    };
+    expect(() => buildTranslationRegistry(byReference)).toThrow(
+      /references the slug "TextCard"/,
+    );
+  });
+
   it("throws on an unhandled container type instead of silently dropping it", () => {
     // Simulates a future/custom Payload container type carrying sub-fields:
     // it must fail loudly rather than skip the localized field nested beneath.

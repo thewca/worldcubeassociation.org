@@ -1,7 +1,6 @@
 import {
   flattenAllFields,
   type Field,
-  type FlattenedBlock,
   type FlattenedField,
   type Tab,
 } from "payload";
@@ -142,22 +141,29 @@ function walk(
         // FlattenedBlocksField narrows `blocks` to FlattenedBlock[], so it isn't
         // structurally a Field; the helper only reads `.localized`.
         const childIsLocalized = isLocalized(field as Field, parentIsLocalized);
-        // flattenAllFields resolves inline blocks and object references to
-        // FlattenedBlock; bare string references (defined in `config.blocks`)
-        // can't be resolved without the config and are skipped.
-        return (field.blockReferences ?? field.blocks)
-          .filter((block): block is FlattenedBlock => typeof block !== "string")
-          .flatMap((block) =>
-            walk(
-              block.flattenedFields,
-              parent,
-              [
-                ...basePath,
-                { kind: "block", name: field.name, blockSlug: block.slug },
-              ],
-              childIsLocalized,
-            ),
+        return (field.blockReferences ?? field.blocks).flatMap((block) => {
+          // flattenAllFields resolves inline blocks and object references to
+          // FlattenedBlock, but leaves a bare slug (defined in `config.blocks`)
+          // as a string. Resolving one needs the config this walk isn't given,
+          // so fail loudly instead of dropping every localized string in the
+          // block — same reasoning as the unhandled container type below.
+          if (typeof block === "string") {
+            throw new Error(
+              `translate/registry: block "${field.name}" references the slug "${block}" from ` +
+                "config.blocks; nested localized fields would be silently missed. Resolve it " +
+                "against config.blocks in buildTranslationRegistry().",
+            );
+          }
+          return walk(
+            block.flattenedFields,
+            parent,
+            [
+              ...basePath,
+              { kind: "block", name: field.name, blockSlug: block.slug },
+            ],
+            childIsLocalized,
           );
+        });
       }
 
       case "text":
