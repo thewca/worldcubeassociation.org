@@ -35,7 +35,7 @@ export default async function Competitors({
       isLive={isLive}
       addOnTheSpotSlot={
         isLive && (
-          <Suspense>
+          <Suspense fallback={null}>
             <AddOnTheSpotButton competitionId={competitionId} />
           </Suspense>
         )
