@@ -63,7 +63,15 @@ const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
   const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
 
-  return <IconComponent {...iconIntrinsicProps} />;
+  // An icon on its own doesn't say which event it is, and `createIcon` replaces whatever
+  //   children it is handed with the icon's own paths, so an SVG `<title>` never survives.
+  //   A plain span carries the tooltip instead; it is unstyled so that it takes the icon's
+  //   own box and no call site has to lay out differently because of it.
+  return (
+    <span title={events.byId[eventId]?.name}>
+      <IconComponent {...iconIntrinsicProps} />
+    </span>
+  );
 };
 
 // Chakra hides icons from assistive tech by default, which is right for most of our call sites:
