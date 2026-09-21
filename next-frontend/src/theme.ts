@@ -410,6 +410,9 @@ const customConfig = defineConfig({
           },
         },
       },
+      sizes: {
+        avatarThumb: { value: "75px" },
+      },
       cursor: {
         menuitem: { value: "pointer" },
         checkbox: { value: "pointer" },
@@ -429,45 +432,46 @@ const customConfig = defineConfig({
           fg: { value: "{colors.link}" },
         },
         recordMarkers: {
-          personal: { value: "{colors.orange.solid}" },
-          national: { value: "{colors.green.solid}" },
-          continental: { value: "{colors.red.solid}" },
-          world: { value: "{colors.blue.solid}" },
+          personal: { value: "{colors.orange.fg}" },
+          national: { value: "{colors.green.fg}" },
+          continental: { value: "{colors.red.fg}" },
+          world: { value: "{colors.blue.fg}" },
         },
         wcaWhite: {
-          // values mostly stolen from Chakra's `gray` scale,
-          // with a minor adjustment for the `solid` entry.
+          // values different from Chakra's `gray` scale: They use an "almost-white" palette in dark mode
+          //   and an "almost black" palette in light mode. By contrast, our schema is designed around
+          //   the idea of letting the palette appear "soft gray" in both light and dark mode.
           contrast: {
-            value: { _light: "{colors.white}", _dark: "{colors.black}" },
+            value: "{colors.black}",
           },
           fg: {
             value: {
-              _light: "{colors.wcaWhite.800}",
-              _dark: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.700}",
+              _dark: "{colors.wcaWhite.400}",
             },
           },
           subtle: {
             value: {
-              _light: "{colors.wcaWhite.100}",
+              _light: "{colors.wcaWhite.50}",
               _dark: "{colors.wcaWhite.900}",
             },
           },
           muted: {
             value: {
-              _light: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.100}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
           emphasized: {
             value: {
-              _light: "{colors.wcaWhite.300}",
+              _light: "{colors.wcaWhite.200}",
               _dark: "{colors.wcaWhite.700}",
             },
           },
           solid: {
             value: {
-              _light: "{colors.wcaWhite.900}",
-              _dark: "{colors.wcaWhite.50}",
+              _light: "{colors.wcaWhite.200}",
+              _dark: "{colors.wcaWhite.200}",
             },
           },
           focusRing: {
@@ -478,7 +482,7 @@ const customConfig = defineConfig({
           },
           border: {
             value: {
-              _light: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.700}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
@@ -497,6 +501,9 @@ const customConfig = defineConfig({
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
+          // `subtle` is a dark grey in both modes, so without an explicit `fg` the badge
+          //   text inherits the page colour and becomes unreadable in light mode.
+          fg: { value: "{colors.supplementary.text.white}" },
           cubeShades: {
             left: { value: "#282828" },
             top: { value: "#3B3B3B" },
@@ -707,6 +714,17 @@ const customConfig = defineConfig({
     },
     slotRecipes: {
       ...INTERACTIVITY_OVERRIDES,
+      segmentGroup: {
+        ...INTERACTIVITY_OVERRIDES.segmentGroup,
+        base: {
+          ...INTERACTIVITY_OVERRIDES.segmentGroup.base,
+          // Zag animates the indicator with `var(--transition-timing-function)`,
+          //   which nothing defines, so it silently falls back to `ease`.
+          root: {
+            "--transition-timing-function": "{easings.ease-in-smooth}",
+          },
+        },
+      },
       steps: {
         ...INTERACTIVITY_OVERRIDES.steps,
         variants: {
@@ -844,24 +862,6 @@ const customConfig = defineConfig({
                 layerStyle: "fill.emphasized",
               },
             },
-            deep: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "fill.solid",
-              },
-              description: {
-                layerStyle: "fill.solid",
-              },
-            },
-            slatePastel: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "fill.solid",
-              },
-              description: {
-                layerStyle: "fill.solid",
-              },
-            },
           },
         },
         defaultVariants: {
@@ -897,7 +897,7 @@ const customConfig = defineConfig({
                 px: "var(--accordion-padding-x)",
               },
               item: {
-                borderRadius: "l3",
+                borderRadius: "wca",
               },
             },
           },
@@ -915,7 +915,6 @@ const customConfig = defineConfig({
                 whiteSpace: "noWrap",
               },
               row: {
-                cursor: "pointer",
                 "& td": {
                   transitionProperty: "background-color",
                   transitionTimingFunction: "ease",
@@ -986,6 +985,13 @@ const customConfig = defineConfig({
                 height: "fit-content",
                 position: { base: "static", md: "sticky" },
                 top: "3",
+              },
+              // Matching the hover the collapsible groups in the same list already have.
+              //   The selected trigger is excluded so hovering it doesn't drop its own background.
+              trigger: {
+                "&:not([data-selected]):hover": {
+                  bg: "bg.subtle",
+                },
               },
               content: {
                 _vertical: {

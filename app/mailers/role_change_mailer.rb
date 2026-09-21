@@ -77,6 +77,11 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_wic.metadata.email,
           message: 'Informing as there is a new Delegate appointment.',
         ),
+        UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_wqac.name,
+          email: UserGroup.teams_committees_group_wqac.metadata.email,
+          message: 'Informing as there is a new Delegate appointment.',
+        ),
       )
     when UserGroup.group_types[:translators]
       @to_list.push(
@@ -193,6 +198,11 @@ class RoleChangeMailer < ApplicationMailer
           email: UserGroup.teams_committees_group_weat.metadata.email,
           message: 'Please add this to monthly digest and if necessary create a GSuite account.',
         ),
+        UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_wqac.name,
+          email: UserGroup.teams_committees_group_wqac.metadata.email,
+          message: 'Informing as there was a change in Delegates.',
+        ),
       )
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
       @to_list.push(
@@ -257,6 +267,11 @@ class RoleChangeMailer < ApplicationMailer
           name: UserGroup.teams_committees_group_wfc.name,
           email: UserGroup.teams_committees_group_wfc.metadata.email,
           message: 'Please take necessary action if there is a pending dues for the Delegate whose role is ended.',
+        ),
+        UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_wqac.name,
+          email: UserGroup.teams_committees_group_wqac.metadata.email,
+          message: "Please suspend the Delegate's Moodle account if necessary.",
         ),
       )
     when UserGroup.group_types[:translators]

@@ -62,6 +62,40 @@ RSpec.describe RoleChangeMailer do
     end
   end
 
+  describe 'notify_role_start for delegate regions' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:role) { create(:delegate_role) }
+    let(:mail) { described_class.notify_role_start(role, user_who_made_the_change) }
+
+    it 'renders the headers' do
+      expect(mail.to).to contain_exactly(
+        user_who_made_the_change.email,
+        GroupsMetadataBoard.email,
+        UserGroup.teams_committees_group_weat.metadata.email,
+        UserGroup.teams_committees_group_wic.metadata.email,
+        UserGroup.teams_committees_group_wqac.metadata.email,
+        UserGroup.teams_committees_group_wrt.metadata.email,
+      )
+    end
+  end
+
+  describe 'notify_role_change for delegate regions' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:role) { create(:delegate_role) }
+    let(:changes) { [UserRole::UserRoleChange.new(changed_parameter: 'Delegate Region', previous_value: 'Africa', new_value: 'Asia')] }
+    let(:mail) { described_class.notify_role_change(role, user_who_made_the_change, changes.to_json) }
+
+    it 'renders the headers' do
+      expect(mail.to).to contain_exactly(
+        user_who_made_the_change.email,
+        GroupsMetadataBoard.email,
+        UserGroup.teams_committees_group_weat.metadata.email,
+        UserGroup.teams_committees_group_wqac.metadata.email,
+        UserGroup.teams_committees_group_wrt.metadata.email,
+      )
+    end
+  end
+
   describe 'notify_role_end' do
     let(:translator) { create(:regional_delegate_role) }
     let(:user_who_made_the_change) { create(:user, name: 'Sherlock Holmes') }
@@ -69,7 +103,7 @@ RSpec.describe RoleChangeMailer do
 
     it 'renders the headers' do
       expect(mail.to).to contain_exactly(user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, UserGroup.teams_committees_group_wfc.metadata.email,
-                                         UserGroup.teams_committees_group_wrt.metadata.email)
+                                         UserGroup.teams_committees_group_wqac.metadata.email, UserGroup.teams_committees_group_wrt.metadata.email)
       expect(mail.reply_to).to contain_exactly(user_who_made_the_change.email)
       expect(mail.subject).to eq "Role removed for #{translator.user.name} in Delegate Regions"
     end

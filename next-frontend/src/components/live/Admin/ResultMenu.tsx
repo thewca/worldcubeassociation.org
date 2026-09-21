@@ -20,6 +20,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { Tooltip } from "@/components/ui/tooltip";
+import RailsLink from "@/components/RailsLink";
 
 export type ClickPosition = {
   x: number;
@@ -106,12 +107,12 @@ export default function ResultMenu({
                     {t("competitions.live.admin.edit")}
                   </Menu.Item>
                   <Menu.Item value="registration" asChild disabled={isPending}>
-                    <Link
+                    <RailsLink
                       href={`/registrations/${competitor.id}/edit`}
                       fontWeight="normal"
                     >
                       {t("competitions.live.admin.registration")}
-                    </Link>
+                    </RailsLink>
                   </Menu.Item>
                   <Menu.Item value="results" asChild disabled={isPending}>
                     <Link

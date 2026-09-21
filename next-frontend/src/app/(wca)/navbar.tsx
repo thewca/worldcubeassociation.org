@@ -453,8 +453,10 @@ export default async function Navbar() {
                     )}
                 </React.Fragment>
               ))}
-              <Separator />
-              <VStack align="start">
+              {/* From `md` upwards both of these already sit in the top bar, so without this the
+                  open drawer shows a second language selector and a second avatar. */}
+              <Separator hideFrom="md" />
+              <VStack align="start" hideFrom="md">
                 <LanguageSelector />
                 <AvatarMenu session={session} />
               </VStack>
