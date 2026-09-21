@@ -53,6 +53,13 @@ type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 // they fall back to the browser default and read as non-interactive.
 // We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
 // https://github.com/chakra-ui/chakra-ui/issues/10960
+// The dropdown triggers keep the page background while their menu is open, so nothing
+// on screen says the control responded either. `bg.emphasized` is a rung darker in
+// light mode and a rung lighter in dark mode, which reads as pressed in both. It has
+// to be a rung past `bg.muted`: that is what the `ghost` button hovers to, and the
+// pointer is always on the trigger at the moment the menu opens.
+const OPEN_TRIGGER = { _open: { bg: "bg.emphasized" } };
+
 const INTERACTIVITY_OVERRIDES = {
   menu: {
     slots: [],
@@ -60,6 +67,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -69,6 +77,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -87,6 +96,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -628,6 +638,17 @@ const customConfig = defineConfig({
       },
     },
     recipes: {
+      // Chakra's `outline` fields are transparent, which leaves them indistinguishable
+      //   from the grey page background the competition and results pages sit on.
+      input: {
+        variants: {
+          variant: {
+            outline: {
+              bg: "bg",
+            },
+          },
+        },
+      },
       container: {
         base: {
           px: { base: "3.5", md: "6", lg: "8" },
@@ -714,6 +735,39 @@ const customConfig = defineConfig({
     },
     slotRecipes: {
       ...INTERACTIVITY_OVERRIDES,
+      // Each of these carries its own copy of the `outline` variant rather than
+      //   inheriting the `input` recipe's, so the opaque background (see above)
+      //   has to be repeated per component.
+      combobox: {
+        ...INTERACTIVITY_OVERRIDES.combobox,
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      numberInput: {
+        slots: [],
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      datePicker: {
+        slots: [],
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
       segmentGroup: {
         ...INTERACTIVITY_OVERRIDES.segmentGroup,
         base: {
@@ -786,7 +840,8 @@ const customConfig = defineConfig({
             competition: {
               label: {
                 alignItems: "start",
-                textStyle: "annotation",
+                textStyle: "body",
+                color: "fg",
               },
               valueText: {
                 textStyle: "bodyEmphasis",
