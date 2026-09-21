@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import type { ReactNode } from "react";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
-import EventIcon from "@/components/EventIcon";
+import { LabelledEventIcon } from "@/components/EventIcon";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import type { components } from "@/types/openapi";
@@ -173,7 +173,11 @@ export default function RegistrationOverview({
             <DataList.ItemValue>
               <HStack wrap="wrap">
                 {registration.competing.event_ids.map((eventId) => (
-                  <EventIcon key={eventId} eventId={eventId} size="lg" />
+                  <LabelledEventIcon
+                    key={eventId}
+                    eventId={eventId}
+                    size="lg"
+                  />
                 ))}
               </HStack>
             </DataList.ItemValue>
