@@ -40,7 +40,7 @@
     "@wrksz/themes": "^1.2.0",
     "accept-language-parser": "^1.5.0",
     "aws4": "^1.13.2",
-    "better-auth": "1.7.4",
+    "better-auth": "1.7.5",
     "culori": "^4.0.2",
     "dinero.js": "2.0.2",
     "graphql": "^17.0.2",
