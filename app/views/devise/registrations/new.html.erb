@@ -54,7 +54,7 @@
 
                 <%# Copied from app/views/users/edit.html.erb %>
                 <%= f.input :name %>
-                <%= f.input :dob, as: :date_picker %>
+                <%= f.input :dob, as: :date_picker, hint: "#{t('simple_form.hints.user.dob')} #{t('wca.devise.dob_privacy')}" %>
                 <%= f.input :gender %>
                 <%= f.input :country_iso2, collection: Country.all_sorted_by(I18n.locale, real: true), value_method: lambda { |c| c.iso2 }, label_method: lambda { |c| c.name } %>
               </div>
