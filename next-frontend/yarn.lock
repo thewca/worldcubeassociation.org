@@ -5220,9 +5220,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/eslint-plugin-query@npm:^5.102.8":
-  version: 5.102.8
-  resolution: "@tanstack/eslint-plugin-query@npm:5.102.8"
+"@tanstack/eslint-plugin-query@npm:^5.103.1":
+  version: 5.103.1
+  resolution: "@tanstack/eslint-plugin-query@npm:5.103.1"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.58.1"
   peerDependencies:
@@ -5231,7 +5231,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/83210abc99b596c98126eed6ce4d3fc397ee18b4aefa7d7a73f5b127111350797da64a58a7c1b08a527ae5d75a8b226040c9f16f49e413d96b4dabb112011b6d
+  checksum: 10c0/d905c1a95110bf9c933676567d8696abed3d2a1dd6c0ea5e997e46746194ee3b666750f7b6519ce0e510cdc2abee614b0eebd5a311048ce9ca81d13c3b272ae2
   languageName: node
   linkType: hard
 
@@ -5253,10 +5253,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.102.8":
-  version: 5.102.8
-  resolution: "@tanstack/query-core@npm:5.102.8"
-  checksum: 10c0/b8b8413c2372ff26605f63283f2bfe0edc17be1daad858a437d154ca38b30e8b6e47a5b8a0eb5c40b93fd66b8461f1cf2ac6cf5e1c9a03919d0079a0b4ae8bfa
+"@tanstack/query-core@npm:5.103.1":
+  version: 5.103.1
+  resolution: "@tanstack/query-core@npm:5.103.1"
+  checksum: 10c0/5bc359f3101f14c6f98a8409017f19b77049849cb3ee5a80aa8a8e211b516248aa5793c97dc52e9152a8dcf30791bc5711ba24f6f8a07d326ab29677d59e76fd
   languageName: node
   linkType: hard
 
@@ -5275,14 +5275,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.102.8":
-  version: 5.102.8
-  resolution: "@tanstack/react-query@npm:5.102.8"
+"@tanstack/react-query@npm:^5.103.1":
+  version: 5.103.1
+  resolution: "@tanstack/react-query@npm:5.103.1"
   dependencies:
-    "@tanstack/query-core": "npm:5.102.8"
+    "@tanstack/query-core": "npm:5.103.1"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/cae0b1c9eb4b6cce8679ebe58d0391cd247bc26c39105aaa4d2c624db14deb8c051f747f714aaa0dbe6bb3ac94c70e30af6423090e9014aa5c7c6ef6cf5b4af4
+  checksum: 10c0/485b2edc83564943eeb62f32c49b84bc3b268889118ba0badafbd68b5cedb577485d28c19d69e58ef188bf38f4b2cfa7382db626eebe54bc01494f245e6ccc8e
   languageName: node
   linkType: hard
 
@@ -12566,9 +12566,9 @@ __metadata:
     "@react-aria/focus": "npm:^3.22.1"
     "@redocly/cli": "npm:2.53.0"
     "@stylistic/eslint-plugin": "npm:^5.10.0"
-    "@tanstack/eslint-plugin-query": "npm:^5.102.8"
+    "@tanstack/eslint-plugin-query": "npm:^5.103.1"
     "@tanstack/react-form": "npm:^1.33.5"
-    "@tanstack/react-query": "npm:^5.102.8"
+    "@tanstack/react-query": "npm:^5.103.1"
     "@testing-library/dom": "npm:^10.4.2"
     "@testing-library/jest-dom": "npm:^7.0.1"
     "@testing-library/react": "npm:^16.3.3"
