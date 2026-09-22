@@ -11,7 +11,7 @@ import {
   Stat,
   StatGroup,
 } from "@chakra-ui/react";
-import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
+import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
