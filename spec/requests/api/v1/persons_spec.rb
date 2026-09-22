@@ -18,7 +18,7 @@ RSpec.describe "API v1 Persons" do
       get api_v1_person_path(person.wca_id)
 
       json = response.parsed_body
-       expect(json).to include("wca_id" => person.wca_id, "name" => person.name, "competition_count" => 1)
+      expect(json).to include("wca_id" => person.wca_id, "name" => person.name, "competition_count" => 1)
       expect(json["completed_solves_count"]).to eq result.result_attempts.count
       expect(json).not_to include("dob")
     end
