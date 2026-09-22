@@ -17,12 +17,12 @@ import { components } from "@/types/openapi";
 import UserBadge from "@/components/UserBadge";
 import { Trans } from "react-i18next/TransWithoutContext";
 import _ from "lodash";
-import Link from "next/link";
 import { route } from "nextjs-routes";
 import { LuPencil } from "react-icons/lu";
 import getPermissions from "@/lib/wca/permissions.server";
 import AdminModeToggle from "@/app/(wca)/(with-background)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
+import TabTarget from "@/components/ui/tabTarget";
 import { Metadata } from "next";
 
 // Editing a user is still served by Rails, which sits at the root of the public API host.
@@ -89,7 +89,9 @@ export default async function DelegatesPage({
 
             return (
               <Tabs.Trigger value={friendlyId} key={group.id} asChild>
-                <Link
+                <TabTarget
+                  tabKey={friendlyId}
+                  currentPath={activeFriendlyId}
                   href={route({
                     pathname: "/delegates",
                     query: isAdminMode
@@ -98,7 +100,7 @@ export default async function DelegatesPage({
                   })}
                 >
                   {group.name}
-                </Link>
+                </TabTarget>
               </Tabs.Trigger>
             );
           })}
@@ -119,8 +121,7 @@ async function DelegateTab({
   isAdminMode: boolean;
 }) {
   const { t } = await getT();
-  const { metadata, name, id, lead_user } = group;
-  const { email } = metadata!;
+  const { name, id, lead_user } = group;
 
   const [regionResult, subregionResult] = await Promise.all([
     getDelegatesInGroup(id),
@@ -151,12 +152,19 @@ async function DelegateTab({
   return (
     <VStack align="left">
       <Heading textStyle="h2">{name}</Heading>
-      <ChakraLink href={`mailto:${email}`}>{email}</ChakraLink>
       <UserBadge
         key={lead_user!.id}
         profilePicture={lead_user!.avatar}
         name={lead_user!.name}
         wcaId={lead_user!.wca_id}
+        roles={[
+          {
+            teamRole: t(
+              "enums.user_roles.status.delegate_regions.senior_delegate",
+            ),
+            staffColor: "yellow",
+          },
+        ]}
       />
       {regionDelegates.length > 0 && (
         <DelegateGrid delegates={regionDelegates} isAdminMode={isAdminMode} />
@@ -206,6 +214,7 @@ async function DelegateGrid({
               teamRole: t(
                 `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
               ),
+              teamText: role.metadata.location,
               staffColor: "yellow",
             },
           ]}

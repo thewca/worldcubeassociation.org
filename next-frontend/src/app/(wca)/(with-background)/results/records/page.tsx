@@ -8,6 +8,8 @@ import { getT } from "@/lib/i18n/get18n";
 const GENDER_ALL = "All";
 const EVENTS_ALL = "all events";
 const SHOW_MIXED = "mixed";
+const SHOW_HISTORY = "history";
+const SHOW_MIXED_HISTORY = "mixed history";
 const REGION_WORLD = "world";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,7 +31,9 @@ export default async function RecordsPage({
     event = EVENTS_ALL,
   } = await searchParams;
 
-  const isHistory = show === "history";
+  // Both history views read from the history data set; the API only distinguishes history from
+  //   everything else, the same way `@is_histories` does in the Rails controller.
+  const isHistory = show === SHOW_HISTORY || show === SHOW_MIXED_HISTORY;
 
   const recordRequest = await getRecords({
     gender,

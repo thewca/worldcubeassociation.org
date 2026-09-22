@@ -14,6 +14,7 @@ function AnnouncementItem({
   return (
     <Accordion.Item
       value={announcement.id}
+      borderWidth="1px"
       layerStyle="fill.subtle"
       _open={{ layerStyle: { _light: "fill.solid", _dark: "fill.muted" } }}
     >

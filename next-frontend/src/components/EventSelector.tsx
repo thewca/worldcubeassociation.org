@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
-import EventIcon from "@/components/EventIcon";
+import EventIcon, { LabelledEventIcon } from "@/components/EventIcon";
 
 interface SingleEventSelectorProps {
   title: string;
@@ -60,7 +60,7 @@ export function SingleEventSelector({
             >
               <RadioCard.ItemHiddenInput />
               <RadioCard.ItemControl>
-                <EventIcon fontSize="2xl" eventId={eventId} />
+                <LabelledEventIcon fontSize="2xl" eventId={eventId} />
               </RadioCard.ItemControl>
             </RadioCard.Item>
           );

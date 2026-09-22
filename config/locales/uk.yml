@@ -238,21 +238,18 @@ uk:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} спроби < %{time}'
       one: '%{count} спроба < %{time}'
       few: '%{count} спроби < %{time}'
       many: '%{count} спроби < %{time}'
       other: '%{count} спроби < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} спроби < %{moves} рухів'
       one: '%{count} спроба < %{moves} рухів'
       few: '%{count} спроби < %{moves} рухів'
       many: '%{count} спроби < %{moves} рухів'
       other: '%{count} спроби < %{moves} рухів'
     #original_hash: eba1b97
     points:
-      zero: '%{count} спроби > %{points} балів'
       one: '%{count} спроба > %{points} балів'
       few: '%{count} спроби > %{points} балів'
       many: '%{count} спроби > %{points} балів'
@@ -301,14 +298,12 @@ uk:
       invalid: невірно
     #original_hash: 49d0140
     days:
-      zero: '%{count} днів'
       one: 1 день
       few: '%{count} днів'
       many: '%{count} днів'
       other: '%{count} днів'
     #original_hash: 203e1b3
     these_events:
-      zero: 'такими %{count} дисциплінами'
       one: такою дисципліною
       few: 'такими %{count} дисциплінами'
       many: 'такими %{count} дисциплінами'
@@ -703,8 +698,6 @@ uk:
       text: обов’язкове
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Будь ласка, перегляньте проблеми нижче:'
@@ -726,12 +719,6 @@ uk:
         public_summary: >-
           Загальний опис інциденту та його рішення, що будуит опублівані. Будь
           ласка, заповніть це англійською.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Введіть Вашу дату народження в форматі РРРР-ММ-ДД.
@@ -741,44 +728,10 @@ uk:
           Сковорода</strong>. Будь ласка, не скорочуйте імена і не забувайте
           писати прізвище.<br/>По-батькові додаються лише у випадках, коли
           потрібна додаткова ідентифікація учасника.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Після завантаження нового аватару, Ви маєте дочекатись, доки WCA
           Results Team узгодить її.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        current_password: ''
-        #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        region: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
         #original_hash: 8c266ea
         receive_delegate_reports: >-
           Якщо Ви Кандидат в Делегати, Провідний делегат або Член WRC або WQAC,
@@ -822,14 +775,6 @@ uk:
           Додаткова інформація, яку потрібно повідомити WCAT. Наприклад, якщо є
           щось, стосовно чого ви не впевнені, або якщо є окреме прохання до
           WCAT. Будь ласка, заповніть це англійською!
-        #original_hash: da39a3e
-        clone_tabs: ''
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        end_date: ''
-        #original_hash: da39a3e
-        generate_website: ''
         #original_hash: b2af5f5
         external_registration_page: >-
           Сторінка, на якій учасники будуть реєструватись. Це має бути працююче
@@ -841,24 +786,6 @@ uk:
           будуть бачити, що змагання безкоштовні.
         #original_hash: 9735ddf
         currency_code: Валютний код для внесків.
-        #original_hash: da39a3e
-        guests_enabled: ''
-        #original_hash: da39a3e
-        enable_donations: ''
-        #original_hash: da39a3e
-        id: ''
-        #original_hash: da39a3e
-        confirmed: ''
-        #original_hash: da39a3e
-        receive_registration_emails: ''
-        #original_hash: da39a3e
-        registration_close: ''
-        #original_hash: da39a3e
-        show_at_all: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        use_wca_registration: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Хоча Правила WCA не вимагають встановлювати ліміт учасників, дуже
@@ -872,10 +799,6 @@ uk:
         competitor_limit_reason: >-
           Обгрунтування ліміту учасників. Будь ласка, заповніть це поле
           англійською!
-        #original_hash: da39a3e
-        venue_address: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Напишіть тут ті додаткові реєстраційні вимоги, які не описані вище.
@@ -884,8 +807,6 @@ uk:
           <strong>англійською</strong>. Ця інформація буде відображена на
           основній сторінці змагання, а також на сторінці реєстрації, якщо Ви
           обрали сайт WCA для реєстрації.
-        #original_hash: da39a3e
-        on_the_spot_registration: ''
         #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
           Якщо вказати "0", то учасник буде бачити повідомлення, що реєстрація
@@ -902,20 +823,14 @@ uk:
           На даний момент це число носить інформаційний характер; гостьові
           внески не сплачуються через сайт WCA. Якщо вказати 0, то учасники
           будуть бачити повідомлення, що вхід для гостей безкоштовний.
-        #original_hash: da39a3e
-        early_puzzle_submission: ''
         #original_hash: 4e8488b
         early_puzzle_submission_reason: >-
           Будь ласка, опишіть тут, чому Ви просите учасників принести
           головоломки заздалегідь. Будь ласка, заповніть це англійською!
-        #original_hash: da39a3e
-        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Будь ласка, опишіть тут, чому Ви бажаєте використовувати
           кваліфікаційний час. Будь ласка, заповніть це англійською!
-        #original_hash: da39a3e
-        event_restrictions: ''
         #original_hash: d3329d7
         event_restrictions_reason: >-
           Будь ласка, опишіть тут, чому Ви б хотіли обмежити участь у комбінації
@@ -923,23 +838,7 @@ uk:
         #original_hash: 1067798
         main_event_id: Переможець цієї дисципліни буде оголошений переможцем змагання.
       website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Ваша дата народження в форматі РРРР-ММ-ДД
         #original_hash: c6d8a97
@@ -955,14 +854,6 @@ uk:
           головній сторінці. Будь-яка публікація на головній сторінці буде
           відображати текст до цього роздільника. Сама публікація покаже увесь
           текст.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Обережно! Це небезпечно для приватних даних. Це тільки попереджає
@@ -995,12 +886,8 @@ uk:
           Навіть якщо всі інциденти здаються Вам звичайними, опишіть найбільш
           цікаві з них. Будь ласка, поставте відповідні галочки, якщо Вам
           необхідний зворотний зв’язок.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: 'Номери інцидентів, стосовно яких Ви б хотіли почути відгук від WRC.'
-        #original_hash: da39a3e
-        wdc_feedback_requested: ''
         #original_hash: 38a95e5
         wdc_incidents: 'Номери інцидентів, стосовно яких Ви б хотіли почути відгук від WDC.'
         #original_hash: f30abdc
@@ -1008,78 +895,17 @@ uk:
           Розкажіть про будь-які інші подробиці, якими хочете поділитись
           (прогрес/регрес спільноти, майбутні плани в регіоні тощо). Якщо Ви про
           щось не розповіли в попередніх розділах, опишіть все це тут.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: >-
           Приклади: Як дістатись, Призовий фонд, Розміщення, Харчування,
           Контакти
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: 498f4c5
         dob: Дата народження повинна мати формат РРРР-ММ-ДД
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: >-
           Має бути працююче http(s) посилання. Рекомендується використовувати
@@ -1090,33 +916,13 @@ uk:
           фон
         #original_hash: da54ab5
         email: Має бути список електронних адрес всіх директорів та заступників
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Має бути в форматі PDF
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Має бути в форматі PDF. Якщо Вам необхідно додати більше файлів, будь
           ласка, поєднайте їх разом
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
       wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -1337,7 +1143,6 @@ uk:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Форма містить %{count} помилок:'
           one: 'Форма містить одну помилку:'
           few: 'Форма містить %{count} помилок:'
           many: 'Форма містить %{count} помилок:'
@@ -1844,21 +1649,18 @@ uk:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: новачків
         one: новачок
         few: новачків
         many: новачків
         other: новачків
       #original_hash: bc010e3
       returner:
-        zero: ветеранів
         one: ветеран
         few: ветеранів
         many: ветеранів
         other: ветеранів
       #original_hash: b7da17a
       person:
-        zero: осіб
         one: особа
         few: осіб
         many: осіб
@@ -1868,21 +1670,18 @@ uk:
       not_using_wca: Ці змагання не використовують реєстрацію через сайт WCA
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Реєстрації прийняті! Сповіщення надіслані на e-mail.
         one: Реєстрацію прийнято! Сповіщення надіслано на e-mail.
         few: Реєстрації прийняті! Сповіщення надіслані на e-mail.
         many: Реєстрації прийняті! Сповіщення надіслані на e-mail.
         other: Реєстрації прийняті! Сповіщення надіслані на e-mail.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Реєстрації переміщені в список очікування
         one: Реєстрацію переміщено в список очікування
         few: Реєстрації переміщені в список очікування
         many: Реєстрації переміщені в список очікування
         other: Реєстрації переміщені в список очікування
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Реєстрації видалені
         one: Реєстрацію видалено
         few: Реєстрації видалені
         many: Реєстрації видалені
@@ -1975,7 +1774,6 @@ uk:
       edit: Редагувати
       #original_hash: 0ab725c
       country_plural:
-        zero: '%{count} країн'
         one: 1 країна
         few: '%{count} країн'
         many: '%{count} країн'
@@ -2305,14 +2103,12 @@ uk:
       website: Веб-сторінка
       #original_hash: 680567f
       organizer_plural:
-        zero: Організатори
         one: Організатор
         few: Організатори
         many: Організатори
         other: Організатори
       #original_hash: 6afa61e
       delegate:
-        zero: Делегати WCA
         one: Делегат WCA
         few: Делегати WCA
         many: Делегати WCA
@@ -2647,10 +2443,6 @@ uk:
         remarks: Примітки
         clone_tabs: Клонувати також всі вкладки з додатковою інформацією
       hints:
-        admin:
-          is_confirmed: ''
-          is_visible: ''
-        competition_id: ''
         name: Повна назва змагання включно з роком (наприклад, Kyiv Open 2011). Переконайтесь,
           що всі слова починаються з великої літери. Ім’я має містити лише букви,
           цифри, дефіси(-), амперсанди(&), крапки(.), двокрапки(:), апострофи(') та
@@ -2661,7 +2453,6 @@ uk:
           <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Вимогам
           до Змагань WCA</a>.
         venue:
-          country_id: ''
           city_name: Назва міста та району/області (якщо треба) де буде відбуватись
             змагання (наприклад, Sultan-Sarai, Bilogirs'kyi, Crimea). Країну вказувати
             не потрібно.
@@ -2669,10 +2460,7 @@ uk:
             [Верховна Рада України](https://rada.gov.ua/)'
           details_html: Детальний опис приміщення (розташування під’їзду, на якому
             поверсі знаходиться зал тощо). %{md}
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         information: Важлива інформація, яку мають знати учасники. Вона буде відображена
           на основній сторінці змагання. <br/>Будь ласка, заповніть її як <strong>українською</strong>,
           так і <strong>англійською</strong>.
@@ -2691,16 +2479,11 @@ uk:
           contact_html: 'Додаткова контактна інформація. Якщо не заповнювати це поле,
             користувачі будуть бачити електронні адреси організаторів. %{md}. Наприклад:
             [Олег Ляшко](mailto:some@email.com)'
-        championships: ''
         website:
-          generate_website: ''
           external_website: Веб-сторінка змагання. Це має бути працююче http(s) посилання.
           external_registration_page: Сторінка, на якій учасники будуть реєструватись.
             Це має бути працююче http(s) посилання.
-          uses_wca_registration: ''
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: Валютний код для внесків.
           base_entry_fee: Базовий реєстраційний внесок. Буде відображатись на основній
@@ -2711,7 +2494,6 @@ uk:
           guest_entry_fee: На даний момент це число носить інформаційний характер;
             гостьові внески не сплачуються через сайт WCA. Якщо вказати 0, то учасники
             будуть бачити повідомлення, що вхід для гостей безкоштовний.
-          donations_enabled: ''
           refund_policy_percent: Це число носить лише інформаційний характер. Якщо
             встановити "0", то учасник буде бачити повідомлення, що реєстраційні внески
             не будуть повертатись ні за яких обставин.
@@ -2719,13 +2501,10 @@ uk:
         registration:
           opening_date_time: 'Примітка: Реєстрація відкриється і закриється за часом
             UTC.'
-          closing_date_time: ''
           waiting_list_deadline_date:
           event_change_deadline_date:
-          allow_on_the_spot: ''
           allow_self_delete_after_acceptance:
           allow_self_edits:
-          guests_enabled: ''
           guest_entry_status:
           guests_per_registration:
           extra_requirements: Напишіть тут ті додаткові реєстраційні вимоги, які не
@@ -2736,16 +2515,13 @@ uk:
           force_comment:
         event_restrictions:
           early_puzzle_submission:
-            enabled: ''
             reason: Будь ласка, опишіть тут, чому Ви просите учасників принести головоломки
               заздалегідь. Будь ласка, заповніть це англійською!
           qualification_results:
-            enabled: ''
             reason: Будь ласка, опишіть тут, чому Ви бажаєте використовувати кваліфікаційний
               час. Будь ласка, заповніть це англійською!
             allow_registration_without:
           event_limitation:
-            enabled: ''
             reason: Будь ласка, опишіть тут, чому Ви б хотіли обмежити участь у комбінації
               деяких дисциплін. Будь ласка, заповніть це англійською!
             per_registration_limit:
@@ -2753,7 +2529,6 @@ uk:
         remarks: Додаткова інформація, яку потрібно повідомити WCAT. Наприклад, якщо
           є щось, стосовно чого ви не впевнені, або якщо є окреме прохання до WCAT.
           Будь ласка, заповніть це англійською!
-        clone_tabs: ''
       choices:
         competitor_limit:
           enabled:
@@ -2836,7 +2611,6 @@ uk:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Немає змагань
         one: 1 змагання
         few: '%{count} змагань'
         many: '%{count} змагань'

@@ -8,6 +8,7 @@ import {
   AttemptsCells,
   PositionCell,
   RoundNameCell,
+  personalBestColor,
   WithRecordTag,
 } from "@/components/results/TableCells";
 import { isSkipped, resultAttempts } from "@/lib/wca/results/attempts";
@@ -83,7 +84,7 @@ export function ResultsTable({
                     {competitorResult.name}
                   </Link>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell fontWeight="bold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_single_record}
                   >
@@ -91,7 +92,7 @@ export function ResultsTable({
                   </WithRecordTag>
                 </Table.Cell>
                 {anyAverages && (
-                  <Table.Cell>
+                  <Table.Cell fontWeight="bold">
                     <WithRecordTag
                       recordTag={competitorResult.regional_average_record}
                     >
@@ -171,14 +172,18 @@ export function ByPersonTable({
         </Table.Header>
 
         <Table.Body>
-          {orderedResults.map((competitorResult) => {
+          {orderedResults.map((competitorResult, index) => {
             const eventId = competitorResult.event_id;
+            const isFirstRoundOfEvent =
+              index === 0 || orderedResults[index - 1].event_id !== eventId;
             const { definedAttempts, bestResultIndex, worstResultIndex } =
               resultAttempts(competitorResult);
             return (
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-                <Table.Cell>{events.byId[eventId].name}</Table.Cell>
+                <Table.Cell>
+                  {isFirstRoundOfEvent && events.byId[eventId].name}
+                </Table.Cell>
                 <RoundNameCell
                   roundTypeId={competitorResult.round_type_id}
                   rankingMode={competitorResult.rankingMode}
@@ -188,14 +193,14 @@ export function ByPersonTable({
                   result={competitorResult}
                   rankingMode={competitorResult.rankingMode}
                 />
-                <Table.Cell>
+                <Table.Cell fontWeight="bold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_single_record}
                   >
                     {formatAttemptResult(competitorResult.best, eventId)}
                   </WithRecordTag>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell fontWeight="bold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_average_record}
                   >
@@ -227,13 +232,53 @@ export function ByPersonTable({
   );
 }
 
+// Ids of the results that tied or beat every earlier one, scanning oldest-first.
+// Ports the old Rails `historical_pb_markers`, which coloured a result that was
+// a personal best at the time it was set.
+function personalBestIds(
+  chronologicalResults: components["schemas"]["V1Result"][],
+  value: (result: components["schemas"]["V1Result"]) => number,
+) {
+  const { ids } = chronologicalResults.reduce<{
+    best: number;
+    ids: number[];
+  }>(
+    ({ best, ids }, result) =>
+      value(result) > 0 && value(result) <= best
+        ? { best: value(result), ids: [...ids, result.id] }
+        : { best, ids },
+    { best: Infinity, ids: [] },
+  );
+
+  return new Set(ids);
+}
+
+function historicalPbMarkers(results: components["schemas"]["V1Result"][]) {
+  const chronological = _.orderBy(
+    results,
+    ["competition_start_date", "id"],
+    ["asc", "asc"],
+  );
+
+  return {
+    single: personalBestIds(chronological, (result) => result.best),
+    average: personalBestIds(chronological, (result) => result.average),
+  };
+}
+
 export function ByCompetitionTable({
   results,
   t,
+  highlightPersonalBests = false,
 }: {
   results: components["schemas"]["V1Result"][];
   t: TFunction;
+  highlightPersonalBests?: boolean;
 }) {
+  const pbMarkers = highlightPersonalBests
+    ? historicalPbMarkers(results)
+    : null;
+
   // Newest competition first. Ordering explicitly rather than reversing the payload keeps this
   // independent of whatever order the API happens to return rows in.
   const resultsByCompetition = _.groupBy(
@@ -294,14 +339,30 @@ export function ByCompetitionTable({
                     result={competitorResult}
                     rankingMode={competitorResult.ranking_mode}
                   />
-                  <Table.Cell>
+                  <Table.Cell
+                    color={
+                      pbMarkers?.single.has(competitorResult.id)
+                        ? personalBestColor(
+                            competitorResult.regional_single_record,
+                          )
+                        : undefined
+                    }
+                  >
                     <WithRecordTag
                       recordTag={competitorResult.regional_single_record}
                     >
                       {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell
+                    color={
+                      pbMarkers?.average.has(competitorResult.id)
+                        ? personalBestColor(
+                            competitorResult.regional_average_record,
+                          )
+                        : undefined
+                    }
+                  >
                     <WithRecordTag
                       recordTag={competitorResult.regional_average_record}
                     >

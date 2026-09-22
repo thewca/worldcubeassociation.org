@@ -6,6 +6,7 @@ import { Box, Center, Heading, Spinner, VStack } from "@chakra-ui/react";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
+import { getMediumDateString } from "@/lib/wca/dates";
 import { components } from "@/types/openapi";
 import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
@@ -74,7 +75,9 @@ export default function FilteredRecords({
       <Heading size={{ base: "3xl", md: "5xl" }}>
         {t("results.records.title")}
       </Heading>
-      {t("results.last_updated_html", { timestamp })}
+      {t("results.last_updated_html", {
+        timestamp: getMediumDateString(timestamp),
+      })}
       <RecordsFilterBox
         filterState={{ ...searchParams, event }}
         filterActions={filterActions}

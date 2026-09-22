@@ -6,7 +6,7 @@ module Overcommit::Hook::PreCommit
       errors = []
 
       illegal_strs = {
-        ("<" * 3) => "conflict marker",
+        ("<" * 7) => "conflict marker",
         "\t" => "tab",
         "\r" => "carriage return",
         "\uFEFF" => "byte order marker (BOM)",
