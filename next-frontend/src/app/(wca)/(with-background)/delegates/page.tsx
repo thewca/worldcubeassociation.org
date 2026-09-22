@@ -1,7 +1,6 @@
 import {
   Heading,
   IconButton,
-  Link as ChakraLink,
   SimpleGrid,
   Tabs,
   VStack,
@@ -23,11 +22,8 @@ import getPermissions from "@/lib/wca/permissions.server";
 import AdminModeToggle from "@/app/(wca)/(with-background)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
 import TabTarget from "@/components/ui/tabTarget";
+import RailsLink from "@/components/RailsLink";
 import { Metadata } from "next";
-
-// Editing a user is still served by Rails, which sits at the root of the public API host.
-const RAILS_ROOT_URL = new URL(process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL!)
-  .origin;
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -226,11 +222,9 @@ async function DelegateGrid({
                 size="sm"
                 aria-label={`Edit ${role.user.name}`}
               >
-                <ChakraLink
-                  href={`${RAILS_ROOT_URL}/users/${role.user.id}/edit`}
-                >
+                <RailsLink href={`/users/${role.user.id}/edit`}>
                   <LuPencil />
-                </ChakraLink>
+                </RailsLink>
               </IconButton>
             )
           }
