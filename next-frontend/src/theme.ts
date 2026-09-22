@@ -53,11 +53,6 @@ type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 // they fall back to the browser default and read as non-interactive.
 // We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
 // https://github.com/chakra-ui/chakra-ui/issues/10960
-// The dropdown triggers keep the page background while their menu is open, so nothing
-// on screen says the control responded either. `bg.emphasized` is a rung darker in
-// light mode and a rung lighter in dark mode, which reads as pressed in both. It has
-// to be a rung past `bg.muted`: that is what the `ghost` button hovers to, and the
-// pointer is always on the trigger at the moment the menu opens.
 const OPEN_TRIGGER = { _open: { bg: "bg.emphasized" } };
 
 const INTERACTIVITY_OVERRIDES = {
