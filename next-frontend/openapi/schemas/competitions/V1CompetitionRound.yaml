@@ -1,0 +1,40 @@
+type: object
+description: >-
+  One round of a competition together with its results, ordered by `pos`. The rounds of a Dual
+  Round each appear on their own and name the whole link in `linked_round_wcif_ids`; their
+  competitors hold one result in each, ranked once between them by `global_pos`.
+required:
+  - wcif_id
+  - event_id
+  - round_type_id
+  - format_id
+  - ranking_mode
+  - results
+properties:
+  wcif_id:
+    type: string
+    description: The round's WCIF id, unique within the competition.
+    example: "333fm-r2"
+  event_id:
+    type: string
+    example: "333fm"
+  round_type_id:
+    type: string
+    example: "f"
+  format_id:
+    type: string
+    example: "m"
+  ranking_mode:
+    $ref: '../results/RankingMode.yaml'
+  linked_round_wcif_ids:
+    type: array
+    description: >-
+      Every round of the Dual Round this round belongs to, this one included. Absent unless
+      `ranking_mode` is `linked_round`.
+    items:
+      type: string
+      example: "333fm-r1"
+  results:
+    type: array
+    items:
+      $ref: '../results/V1RoundResult.yaml'
