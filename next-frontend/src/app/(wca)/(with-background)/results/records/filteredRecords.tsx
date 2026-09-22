@@ -2,7 +2,8 @@
 
 import React, { useMemo, useState, useTransition } from "react";
 import { EventId } from "@/lib/wca/data/events";
-import { Box, Center, Heading, Spinner, VStack } from "@chakra-ui/react";
+import { Heading, VStack } from "@chakra-ui/react";
+import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
@@ -82,14 +83,10 @@ export default function FilteredRecords({
         filterState={{ ...searchParams, event }}
         filterActions={filterActions}
       />
-      <Box position="relative" w="full" opacity={isPending ? 0.4 : 1}>
-        {isPending && (
-          <Center position="absolute" inset={0} zIndex={1}>
-            <Spinner size="xl" position="sticky" top="50%" />
-          </Center>
-        )}
-        <RecordsTable records={filteredRecords} show={show} />
-      </Box>
+      {/* The same indeterminate bar the router shows for a normal navigation, so
+          filtering here feels like filtering anywhere else on the site. */}
+      {isPending && <Loading />}
+      <RecordsTable records={filteredRecords} show={show} />
     </VStack>
   );
 }

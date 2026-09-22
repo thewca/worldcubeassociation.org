@@ -72,7 +72,11 @@ export function VenueDetailsCard({
     <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
+        {/* Sized against the card rather than the viewport: the card is narrow on a phone,
+            but also in a narrow desktop column, and both want one column. The `min(…, 100%)`
+            is ours because Chakra drops the child width straight into `minmax()`, where a
+            card narrower than the track would overflow it. */}
+        <SimpleGrid minChildWidth="min({sizes.3xs}, 100%)" gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <VenueIcon />
@@ -325,7 +329,9 @@ export function InfoCard({
               <LocationIcon />
               {t("competitions.competition_info.location")}
             </Stat.Label>
-            <Stat.ValueText>
+            {/* City and country overflowed a narrow card on one line; wrapping drops the
+                country onto its own row exactly when it no longer fits. */}
+            <Stat.ValueText flexWrap="wrap">
               <Text>{competitionInfo.city}, </Text>
               <CountryMap
                 code={competitionInfo.country_iso2}
@@ -395,7 +401,9 @@ export function SubPageCard({
               <LocationIcon />
               {t("competitions.competition_info.location")}
             </Stat.Label>
-            <Stat.ValueText>
+            {/* City and country overflowed a narrow card on one line; wrapping drops the
+                country onto its own row exactly when it no longer fits. */}
+            <Stat.ValueText flexWrap="wrap">
               <Text>{competitionInfo.city}, </Text>
               <CountryMap
                 code={competitionInfo.country_iso2}

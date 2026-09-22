@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useMemo, useTransition } from "react";
-import { Box, Center, Heading, Spinner, VStack } from "@chakra-ui/react";
+import { Heading, VStack } from "@chakra-ui/react";
+import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
 import { getMediumDateString } from "@/lib/wca/dates";
@@ -38,7 +39,7 @@ export default function FilteredRecords({
   searchParams,
 }: FilteredRecordsProps) {
   const router = useRouter();
-  // Navigating inside a transition lets us show a spinner while the server
+  // Navigating inside a transition lets us show a progress bar while the server
   // re-renders the table with the new filters
   const [isPending, startTransition] = useTransition();
 
@@ -88,18 +89,14 @@ export default function FilteredRecords({
           "by region": t("results.selector_elements.show_selector.by_region"),
         }}
       />
-      <Box position="relative" w="full" opacity={isPending ? 0.4 : 1}>
-        {isPending && (
-          <Center position="absolute" inset={0} zIndex={1}>
-            <Spinner size="xl" position="sticky" top="50%" />
-          </Center>
-        )}
-        <RankingsTable
-          rankings={rankings}
-          isAverage={rankingType === "average"}
-          isByRegion={show === "by region"}
-        />
-      </Box>
+      {/* The same indeterminate bar the router shows for a normal navigation, so
+          filtering here feels like filtering anywhere else on the site. */}
+      {isPending && <Loading />}
+      <RankingsTable
+        rankings={rankings}
+        isAverage={rankingType === "average"}
+        isByRegion={show === "by region"}
+      />
     </VStack>
   );
 }

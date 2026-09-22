@@ -114,7 +114,8 @@ export default function TabMenu({
           <Drawer.Trigger asChild>
             <IconButton
               aria-label="Open menu"
-              size="lg"
+              colorPalette="blue"
+              size="xl"
               position="fixed"
               right="4"
               bottom="4"
