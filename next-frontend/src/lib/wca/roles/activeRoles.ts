@@ -11,5 +11,6 @@ const getActiveRolesOfType = cache(
 
 export const getOfficersRoles = () => getActiveRolesOfType("officers");
 export const getBoardRoles = () => getActiveRolesOfType("board");
+// This will break again if we ever get over 100 translators
 export const getTranslatorRoles = () =>
   getActiveRolesOfType("translators", 100);
