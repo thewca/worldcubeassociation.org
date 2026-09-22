@@ -21,6 +21,8 @@ import _333ohIcon from "@/components/icons/events/_333ohIcon";
 import _444bfIcon from "@/components/icons/events/_444bfIcon";
 import _555bfIcon from "@/components/icons/events/_555bfIcon";
 
+import events from "@/lib/wca/data/events";
+
 import type { ComponentPropsWithoutRef } from "react";
 
 const eventIconMap = {
@@ -63,5 +65,21 @@ const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
 
   return <IconComponent {...iconIntrinsicProps} />;
 };
+
+// Chakra hides icons from assistive tech by default, which is right for most of our call sites:
+//   they put the event's name next to the icon, and a label here would announce it twice.
+//   This is for the icons that stand alone and have to carry the name themselves.
+export const LabelledEventIcon = ({
+  eventId,
+  ...iconIntrinsicProps
+}: EventIconProps) => (
+  <EventIcon
+    eventId={eventId}
+    role="img"
+    aria-hidden={false}
+    aria-label={events.byId[eventId]?.name}
+    {...iconIntrinsicProps}
+  />
+);
 
 export default EventIcon;
