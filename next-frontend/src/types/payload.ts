@@ -715,7 +715,7 @@ export interface RegulationsHistoryItem {
 export interface Tool {
   id: string;
   /**
-   * Name of the tool, as its authors spell it.
+   * Name of the tool.
    */
   name: string;
   /**
@@ -773,7 +773,6 @@ export interface Session {
  */
 export interface Account {
   id: string;
-  issuer: string;
   accountId: string;
   providerId: string;
   user: string | User;
@@ -1084,7 +1083,6 @@ export interface SessionsSelect<T extends boolean = true> {
  * via the `definition` "accounts_select".
  */
 export interface AccountsSelect<T extends boolean = true> {
-  issuer?: T;
   accountId?: T;
   providerId?: T;
   user?: T;
