@@ -18,10 +18,19 @@ RSpec.describe "API v1 Persons" do
       get api_v1_person_path(person.wca_id)
 
       json = response.parsed_body
-      expect(json["person"]).to include("wca_id" => person.wca_id, "name" => person.name)
-      expect(json["person"]).not_to include("dob")
-      expect(json["competition_count"]).to eq 1
-      expect(json["total_solves"]).to eq result.result_attempts.count
+       expect(json).to include("wca_id" => person.wca_id, "name" => person.name, "competition_count" => 1)
+      expect(json["completed_solves_count"]).to eq result.result_attempts.count
+      expect(json).not_to include("dob")
+    end
+
+    it "serializes a rank per event the person has a single for" do
+      create(:ranks_single, person_id: person.wca_id, event_id: "333")
+
+      get api_v1_person_path(person.wca_id)
+
+      ranks = response.parsed_body["ranks_by_event"]
+      expect(ranks.keys).to contain_exactly("333")
+      expect(ranks["333"].keys).to contain_exactly("single")
     end
 
     it "serializes championship podiums as v1 results" do
@@ -30,7 +39,7 @@ RSpec.describe "API v1 Persons" do
 
       get api_v1_person_path(person.wca_id)
 
-      podiums = response.parsed_body["championship_podiums"]
+      podiums = response.parsed_body["championship_podium_results"]
       expect(podiums["world"].pluck("id")).to contain_exactly(podium_result.id)
       expect(podiums["world"].first).to include("pos" => 2, "attempts" => podium_result.attempts)
       expect(podiums["national"]).to be_empty
