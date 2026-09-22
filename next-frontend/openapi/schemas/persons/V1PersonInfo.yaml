@@ -1,0 +1,32 @@
+type: object
+description: >-
+  Everything the profile page renders above its tabs, for one person. This is the person shape for
+  the v1 API; the v0 `PersonInfo` schema is not interchangeable with it.
+required:
+  - person
+  - competition_count
+  - personal_records
+  - medals
+  - records
+  - total_solves
+  - championship_podiums
+properties:
+  person:
+    $ref: '../users/Person.yaml'
+  competition_count:
+    type: integer
+    example: 42
+  personal_records:
+    type: object
+    description: Keyed by event id. An event the person has no single for is absent.
+    additionalProperties:
+      $ref: '../results/SingleAndAverageRank.yaml'
+  medals:
+    $ref: '../results/Medals.yaml'
+  records:
+    $ref: '../results/Records.yaml'
+  total_solves:
+    type: integer
+    example: 1337
+  championship_podiums:
+    $ref: './V1ChampionshipPodiums.yaml'

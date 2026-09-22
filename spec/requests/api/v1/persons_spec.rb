@@ -5,6 +5,44 @@ require "rails_helper"
 RSpec.describe "API v1 Persons" do
   let(:person) { create(:person) }
 
+  describe "GET #show" do
+    let!(:result) { create(:result, person: person) }
+
+    it "is reachable without logging in" do
+      get api_v1_person_path(person.wca_id)
+
+      expect(response).to be_successful
+    end
+
+    it "serializes the person's public profile" do
+      get api_v1_person_path(person.wca_id)
+
+      json = response.parsed_body
+      expect(json["person"]).to include("wca_id" => person.wca_id, "name" => person.name)
+      expect(json["person"]).not_to include("dob")
+      expect(json["competition_count"]).to eq 1
+      expect(json["total_solves"]).to eq result.result_attempts.count
+    end
+
+    it "serializes championship podiums as v1 results" do
+      world_championship = create(:competition, championship_types: ["world"])
+      podium_result = create(:result, person: person, competition: world_championship, pos: 2)
+
+      get api_v1_person_path(person.wca_id)
+
+      podiums = response.parsed_body["championship_podiums"]
+      expect(podiums["world"].pluck("id")).to contain_exactly(podium_result.id)
+      expect(podiums["world"].first).to include("pos" => 2, "attempts" => podium_result.attempts)
+      expect(podiums["national"]).to be_empty
+    end
+
+    it "404s for an unknown WCA ID" do
+      get api_v1_person_path("1000AAAA01")
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "GET #results" do
     let!(:result) { create(:result, person: person) }
 
