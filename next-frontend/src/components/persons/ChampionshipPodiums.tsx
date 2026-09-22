@@ -11,7 +11,8 @@ import { AttemptsCells, WithRecordTag } from "@/components/results/TableCells";
 import { resultAttempts } from "@/lib/wca/results/attempts";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 
-type ChampionshipPodiums = components["schemas"]["V1ChampionshipPodiums"];
+type ChampionshipPodiums =
+  components["schemas"]["V1PersonInfo"]["championship_podium_results"];
 type ChampionshipLevel = keyof ChampionshipPodiums;
 
 const ChampionshipPodiumsTab = async ({

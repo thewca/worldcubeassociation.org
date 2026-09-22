@@ -1454,27 +1454,6 @@ export interface components {
             wca_id?: string;
             avatar?: components["schemas"]["UserAvatar"];
         };
-        Person: {
-            /** @example 267 */
-            id: number;
-            /** @example Tim Reynolds */
-            name: string;
-            /** @example m */
-            gender?: string;
-            /** @example 2005REYN01 */
-            wca_id: string;
-            /** @example US */
-            country_iso2: string;
-            /** @example delegate */
-            delegate_status: string;
-            teams: components["schemas"]["TeamMembership"][];
-            /**
-             * Format: uri
-             * @example https://www.worldcubeassociation.org/persons/2005REYN01
-             */
-            url: string;
-            avatar: components["schemas"]["UserAvatar"];
-        };
         Rank: {
             id: number;
             person_id: string;
@@ -1557,22 +1536,62 @@ export interface components {
             national: components["schemas"]["V1Result"][];
             greater_china?: components["schemas"]["V1Result"][];
         };
-        /** @description Everything the profile page renders above its tabs, for one person. This is the person shape for the v1 API; the v0 `PersonInfo` schema is not interchangeable with it. */
+        /** @description Everything the profile page renders above its tabs, for one person. This is the person shape for the v1 API; the v0 `PersonInfo` schema nests the person's own fields under `person` and is not interchangeable with it. */
         V1PersonInfo: {
-            person: components["schemas"]["Person"];
+            /** @example 2005REYN01 */
+            wca_id: string;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender?: string;
+            /** @example US */
+            country_iso2: string;
+            /**
+             * @description Absent for a person who is not a delegate, or who has no WCA account at all.
+             * @example delegate
+             */
+            delegate_status?: string;
+            teams: components["schemas"]["TeamMembership"][];
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
             /** @example 42 */
             competition_count: number;
             /** @description Keyed by event id. An event the person has no single for is absent. */
-            personal_records: {
+            ranks_by_event: {
                 [key: string]: components["schemas"]["SingleAndAverageRank"];
             };
             medals: components["schemas"]["Medals"];
             records: components["schemas"]["Records"];
             /** @example 1337 */
-            total_solves: number;
-            championship_podiums: components["schemas"]["V1ChampionshipPodiums"];
+            completed_solves_count: number;
+            championship_podium_results: components["schemas"]["V1ChampionshipPodiums"];
         };
         V1Results: components["schemas"]["V1Result"][];
+        Person: {
+            /** @example 267 */
+            id: number;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender?: string;
+            /** @example 2005REYN01 */
+            wca_id: string;
+            /** @example US */
+            country_iso2: string;
+            /** @example delegate */
+            delegate_status: string;
+            teams: components["schemas"]["TeamMembership"][];
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
+        };
         Organizer: components["schemas"]["Person"] & {
             /** @example regional_delegate */
             delegate_status?: string;

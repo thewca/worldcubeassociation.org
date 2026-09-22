@@ -1,22 +1,52 @@
 type: object
 description: >-
   Everything the profile page renders above its tabs, for one person. This is the person shape for
-  the v1 API; the v0 `PersonInfo` schema is not interchangeable with it.
+  the v1 API; the v0 `PersonInfo` schema nests the person's own fields under `person` and is not
+  interchangeable with it.
 required:
-  - person
+  - wca_id
+  - name
+  - country_iso2
+  - url
+  - teams
+  - avatar
   - competition_count
-  - personal_records
+  - ranks_by_event
   - medals
   - records
-  - total_solves
-  - championship_podiums
+  - completed_solves_count
+  - championship_podium_results
 properties:
-  person:
-    $ref: '../users/Person.yaml'
+  wca_id:
+    type: string
+    example: "2005REYN01"
+  name:
+    type: string
+    example: "Tim Reynolds"
+  gender:
+    type: string
+    example: "m"
+  country_iso2:
+    type: string
+    example: "US"
+  delegate_status:
+    type: string
+    description: Absent for a person who is not a delegate, or who has no WCA account at all.
+    example: "delegate"
+  teams:
+    type: array
+    items:
+      $ref: '../users/TeamMembership.yaml'
+  url:
+    type: string
+    format: uri
+    example: "https://www.worldcubeassociation.org/persons/2005REYN01"
+  avatar:
+    $ref: '../users/UserAvatar.yaml'
   competition_count:
     type: integer
     example: 42
-  personal_records:
+  ranks_by_event:
     type: object
     description: Keyed by event id. An event the person has no single for is absent.
     additionalProperties:
@@ -25,8 +55,8 @@ properties:
     $ref: '../results/Medals.yaml'
   records:
     $ref: '../results/Records.yaml'
-  total_solves:
+  completed_solves_count:
     type: integer
     example: 1337
-  championship_podiums:
+  championship_podium_results:
     $ref: './V1ChampionshipPodiums.yaml'
