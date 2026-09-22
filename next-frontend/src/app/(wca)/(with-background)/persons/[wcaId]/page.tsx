@@ -95,12 +95,10 @@ export default async function PersonOverview({
     personDetails.records.continental +
     personDetails.records.world;
 
-  const podiums = personDetails.championship_podiums;
-
-  const championshipPodiumCount =
-    (podiums?.continental?.length ?? 0) +
-    (podiums?.national?.length ?? 0) +
-    (podiums?.world?.length ?? 0);
+  const championshipPodiumCount = _.sumBy(
+    Object.values(personDetails.championship_podiums),
+    "length",
+  );
 
   const hasRecords = recordCount > 0;
   const hasMedals = medalCount > 0;
@@ -205,15 +203,15 @@ export default async function PersonOverview({
                         <RecordsTab wcaId={wcaId} />
                       </Tabs.Content>
                     )}
-                    <Tabs.Content value="championship-podiums">
-                      {hasChampionshipPodiums && (
+                    {hasChampionshipPodiums && (
+                      <Tabs.Content value="championship-podiums">
                         <ChampionshipPodiumsTab
                           championshipPodiums={
                             personDetails.championship_podiums
                           }
                         />
-                      )}
-                    </Tabs.Content>
+                      </Tabs.Content>
+                    )}
                     <Tabs.Content value="map">
                       <MapTab wcaId={wcaId} />
                     </Tabs.Content>
