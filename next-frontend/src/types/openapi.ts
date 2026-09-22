@@ -1560,6 +1560,15 @@ export interface components {
             avatar: components["schemas"]["UserAvatar"];
             /** @example 42 */
             competition_count: number;
+            /**
+             * @description Every event the person has a result in, ordered by event rank. Wider than the keys of `ranks_by_event`, which only covers events the person has a successful solve in.
+             * @example [
+             *       "333",
+             *       "222",
+             *       "444"
+             *     ]
+             */
+            event_ids_with_results: string[];
             /** @description Keyed by event id. An event the person has no single for is absent. */
             ranks_by_event: {
                 [key: string]: components["schemas"]["SingleAndAverageRank"];

@@ -15,7 +15,7 @@ const ResultsTab: React.FC<ResultsTabProps> = ({
   wcaId,
   eventsWithResults,
 }) => {
-  const [eventId, setEventId] = useState("333");
+  const [eventId, setEventId] = useState(eventsWithResults[0]);
 
   return (
     <VStack>

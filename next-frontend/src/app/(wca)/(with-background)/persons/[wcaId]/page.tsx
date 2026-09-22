@@ -12,7 +12,6 @@ import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import { StaffColor } from "@/components/RoleBadge";
 import _ from "lodash";
-import { FULL_EVENT_IDS } from "@/lib/wca/data/events";
 import { Metadata } from "next";
 
 type TitleProps = {
@@ -104,11 +103,6 @@ export default async function PersonOverview({
   const hasMedals = medalCount > 0;
   const hasChampionshipPodiums = championshipPodiumCount !== 0;
 
-  const eventsWithResults = _.intersection(
-    FULL_EVENT_IDS,
-    Object.keys(personDetails.ranks_by_event),
-  );
-
   return (
     <VStack align="center">
       {/* Profile Section */}
@@ -192,7 +186,7 @@ export default async function PersonOverview({
                     <Tabs.Content value="results">
                       <ResultsTab
                         wcaId={wcaId}
-                        eventsWithResults={eventsWithResults}
+                        eventsWithResults={personDetails.event_ids_with_results}
                       />
                     </Tabs.Content>
                     <Tabs.Content value="competitions">

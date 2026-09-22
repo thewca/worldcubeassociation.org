@@ -33,6 +33,14 @@ RSpec.describe "API v1 Persons" do
       expect(ranks["333"].keys).to contain_exactly("single")
     end
 
+    it "serializes every event the person has a result in, even without a rank" do
+      create(:result, person: person, event_id: "222", format_id: "a")
+
+      get api_v1_person_path(person.wca_id)
+
+      expect(response.parsed_body["event_ids_with_results"]).to eq %w[222 333]
+    end
+
     it "serializes championship podiums as v1 results" do
       world_championship = create(:competition, championship_types: ["world"])
       podium_result = create(:result, person: person, competition: world_championship, pos: 2)

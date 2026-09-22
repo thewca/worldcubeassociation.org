@@ -11,6 +11,7 @@ required:
   - teams
   - avatar
   - competition_count
+  - event_ids_with_results
   - ranks_by_event
   - medals
   - records
@@ -46,6 +47,14 @@ properties:
   competition_count:
     type: integer
     example: 42
+  event_ids_with_results:
+    type: array
+    description: >-
+      Every event the person has a result in, ordered by event rank. Wider than the keys of
+      `ranks_by_event`, which only covers events the person has a successful solve in.
+    items:
+      type: string
+    example: ["333", "222", "444"]
   ranks_by_event:
     type: object
     description: Keyed by event id. An event the person has no single for is absent.

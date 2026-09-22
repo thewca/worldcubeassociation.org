@@ -279,6 +279,12 @@ class Person < ApplicationRecord
     end
   end
 
+  # An event only earns a rank once the person has a successful solve in it, so `ranks_by_event`
+  # is not a stand-in for the events they competed in: it drops every event they only ever DNFed.
+  def event_ids_with_results
+    Event.where(id: results.select(:event_id)).ids
+  end
+
   # `championship_podiums` hands back `Result` records, which serialize in the v0 shape unless
   # they are told otherwise, so the v1 shape has to be spelled out here.
   def championship_podium_results
@@ -314,7 +320,7 @@ class Person < ApplicationRecord
 
   V1_SERIALIZE_OPTIONS = {
     only: %w[wca_id name gender teams avatar],
-    methods: %w[url country_iso2 delegate_status competition_count ranks_by_event medals records completed_solves_count championship_podium_results],
+    methods: %w[url country_iso2 delegate_status competition_count event_ids_with_results ranks_by_event medals records completed_solves_count championship_podium_results],
   }.freeze
 
   USER_COMMON_SERIALIZE_OPTIONS = {
