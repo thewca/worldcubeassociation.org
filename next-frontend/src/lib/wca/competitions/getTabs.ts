@@ -1,9 +1,12 @@
-import { serverClient } from "@/lib/wca/wcaAPI";
+import { cachedServerClient } from "@/lib/wca/wcaAPI";
 
-import { cache } from "react";
+import { cacheLife } from "next/cache";
 
-export const getTabs = cache(async (competitionId: string) => {
-  return await serverClient.GET("/v0/competitions/{competitionId}/tabs", {
+export async function getTabs(competitionId: string) {
+  "use cache";
+  cacheLife("minutes");
+
+  return cachedServerClient.GET("/v0/competitions/{competitionId}/tabs", {
     params: { path: { competitionId } },
   });
-});
+}

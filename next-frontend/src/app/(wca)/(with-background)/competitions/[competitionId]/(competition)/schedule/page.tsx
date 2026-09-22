@@ -12,7 +12,7 @@ export default async function SchedulePage({
 
   return (
     <TabSchedule
-      competitionId={competitionInfo.data!.id}
+      competitionId={competitionId}
       competitionName={competitionInfo.data!.name}
     />
   );
