@@ -10,12 +10,19 @@ export const DocumentsPage: GlobalConfig = {
       label: "documents",
       name: "documents",
       required: true,
+      admin: {
+        description:
+          "The documents listed on the Documents page, in the order they appear.",
+      },
       fields: [
         {
           name: "document",
           relationTo: "documents",
           type: "relationship",
           required: true,
+          admin: {
+            description: "The document to list here.",
+          },
         },
       ],
     },

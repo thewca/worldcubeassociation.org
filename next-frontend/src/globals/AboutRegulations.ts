@@ -11,6 +11,10 @@ export const AboutRegulations: GlobalConfig = {
       type: "blocks",
       required: true,
       blocks: [ParagraphBlock],
+      admin: {
+        description:
+          "The paragraphs making up the About Regulations page, top to bottom.",
+      },
     },
   ],
   hooks: {

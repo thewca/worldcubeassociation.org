@@ -11,11 +11,17 @@ export const ImageCardBlock: Block = {
       type: "upload",
       relationTo: "media",
       required: true,
+      admin: {
+        description: "The image filling the card.",
+      },
     },
     {
       name: "heading",
       type: "text",
       localized: true,
+      admin: {
+        description: "Optional caption shown over the image.",
+      },
     },
     {
       name: "url",
@@ -33,6 +39,7 @@ export const ImageCardBlock: Block = {
       defaultValue: "top",
       admin: {
         layout: "horizontal",
+        description: "Whether the caption sits above or below the image",
       },
     },
     colorPaletteSelect,
