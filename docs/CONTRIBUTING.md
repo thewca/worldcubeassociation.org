@@ -4,9 +4,11 @@ This document covers the *process* around a change: how to scope a pull request,
 description, how to respond to review, and which changes need agreement from outside the PR.
 
 It is the companion to [`STYLE_GUIDE.md`](STYLE_GUIDE.md), which covers how the code itself should be
-written. Both were derived from the review history on this repository, so every rule here is
-something that has been asked for repeatedly on real pull requests. Current through review comments
-up to 2026-08-24.
+written. The rules in this file were derived by an LLM based on the real, human review history
+on this repository, so every rule here is something that has been asked for repeatedly
+on real pull requests.
+The rules has been further revised and refined by Senior Members of WST.
+Current through review comments up to 2026-08-24 have been ingested.
 
 For getting the app running locally, see the
 [quickstart](https://docs.worldcubeassociation.org/contributing/quickstart) and the
@@ -26,24 +28,28 @@ For getting the app running locally, see the
 
 ## 1. One PR, one purpose
 
-Every changed line must trace to the stated purpose of the PR. Unrelated diff is the single most
-common review complaint: it hides the real change and makes `git blame` useless.
+Every changed line must trace to the stated purpose of the PR. Unrelated diff hides the real change,
+distracts the focus of the reviewer and makes `git blame` useless.
 
-- Don't rename variables, reformat, or "improve" adjacent code you happen to be touching.
+- Don't rename variables, reformat, or "improve" adjacent code just because you happen to be touching
+  the same file.
 - Don't shorten `result` to `r` (or lengthen it) mid-refactor — the diff noise costs more than the
   readability gain.
 - Notice unrelated dead code? Mention it in a comment. Don't delete it in this PR.
-- Split refactors from features. "Seems best not to do too much in one PR."
+- Split refactors from features where possible. "Seems best not to do too much in one PR."
 - Tooling config (`.eslintrc.json`, `.rubocop.yml`) counts as unrelated too. Improvements there are
   welcome, but as their own PR — a lint-rule change buried in a feature diff will be asked out.
+  - When changing lint rules, you are expected to run the linter over the whole codebase and apply the
+    changed/updated rule throughout. This creates too much "noise" in the diff of an existing feature PR.
 
 ### 1.1 Generated files and noisy diffs
 
 - If a generated file (`src/types/openapi.ts`, `importMap.js`, `yarn.lock`, `schema.rb`) shows changes
   you didn't intend, delete and regenerate it, or merge `main` first.
 - If the noise persists on `main`, push a separate hotfix PR that *only* fixes the generated file.
-- Merge `main` to clear unrelated changes from your diff.
-- If a file move wasn't detected as a rename, leave a comment on the diff saying where it came from.
+- In general, merge `main` to clear unrelated changes from your diff.
+- If a file move wasn't detected as a rename (for example, because you also made substantial edits during the move),
+  leave a review comment on the diff saying where it came from.
 
 ---
 
@@ -59,18 +65,23 @@ review — if a rule is wrong, that's a separate PR against the config (see [§1
 
 - If your description and your diff disagree ("comment-only fix" that changes display logic), the
   reviewer will trust the diff and ask. Keep the description accurate.
-- Explain non-obvious decisions proactively. "If it doesn't work out, explain in two or three
+- Explain non-obvious decisions proactively. "If it isn't straight-forward, explain in two or three
   sentences why this is the cleanest code you could come up with" is an accepted answer — silence
   is not.
+  - Adding review comments to your own PR can be helpful for reviewers, but it is not required for every
+    single PR in general. Only do so when it adds a substantial, helpful context for reviewers and
+    otherwise make sure you're not polluting your own PR.
+  - Comments about specific design choices or architectural solutions belong inside the committed code directly,
+    see the [style guide](STYLE_GUIDE.md) for details.
 - If you used an LLM to produce a solution, you still own it: be able to justify why it's the right
-  approach.
+  approach. See the LLM rules in our [README](../README.md#llm-policy) for more details.
 
 ---
 
 ## 4. Responding to review
 
 - **Respond to every review comment.** Resolving a thread without a code change *and* without a reply
-  is the fastest way to stall a PR. Marking a thread resolved is not the same as addressing it: if you
+  is generally useless: Marking a thread resolved is not the same as addressing it. If you
   left the concern untouched, say so and say why. If you disagree, say why.
 - Unresolved `TODO`s in the diff need a decision: either fix it in this PR or say explicitly that
   it's a note for later.
