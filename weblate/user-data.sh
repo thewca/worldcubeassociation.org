@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Instance bootstrap for the Weblate deployment. See DEPLOYMENT.md.
+# Instance bootstrap for the Weblate deployment. See README.md.
 #
 # `@BRANCH@` is substituted before launch:
 #   sed "s|@BRANCH@|$BRANCH|" weblate/user-data.sh > /tmp/weblate-user-data.sh

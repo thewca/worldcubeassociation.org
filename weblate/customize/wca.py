@@ -2,7 +2,7 @@
 
 Mounted into the container at /app/data/python/customize/, which Weblate has
 already installed as a Django application, and hooked into the authentication
-pipeline by settings-override.py. See DEPLOYMENT.md.
+pipeline by settings-override.py. See README.md.
 
 Weblate has no built-in claim-to-team mapping — its only no-code automatic
 assignment is a regex on e-mail address, and nothing in

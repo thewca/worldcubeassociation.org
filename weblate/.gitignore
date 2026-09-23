@@ -1,4 +1,4 @@
-# Rendered on the instance at boot from SSM Parameter Store (see DEPLOYMENT.md).
+# Rendered on the instance at boot from SSM Parameter Store (see README.md).
 # Contains the OIDC client secret, database and admin passwords, and the GitHub
 # token — never commit it.
 environment.prod

@@ -3,7 +3,7 @@
 # Renders environment.prod from environment.prod.template, filling the ${...}
 # placeholders with secrets from SSM Parameter Store.
 #
-# Run at every boot by the instance user-data (see DEPLOYMENT.md), before the
+# Run at every boot by the instance user-data (see README.md), before the
 # Weblate stack starts. Safe to re-run: the output is rewritten
 # atomically each time.
 #

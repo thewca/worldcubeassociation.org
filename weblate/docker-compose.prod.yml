@@ -1,5 +1,5 @@
 # Production Weblate stack. Runs on the single EC2 instance described in
-# DEPLOYMENT.md, behind the wca-on-rails ALB on translate.worldcubeassociation.org.
+# README.md, behind the wca-on-rails ALB on translate.worldcubeassociation.org.
 #
 #   docker compose -f /opt/wca/weblate/docker-compose.prod.yml up -d
 #
@@ -67,7 +67,7 @@ services:
       - weblate-cache:/app/cache
       # Translator permissions come from the WCA `translations` OIDC claim via a
       # custom pipeline step; neither the extra scope nor the pipeline entry is
-      # reachable through a WEBLATE_* variable. See DEPLOYMENT.md.
+      # reachable through a WEBLATE_* variable. See README.md.
       - ./customize:/app/data/python/customize:ro
       - ./settings-override.py:/app/data/settings-override.py:ro
     env_file:
@@ -87,7 +87,7 @@ services:
       start_period: 5m
 
 # Named volumes live under /var/lib/docker on the instance's root volume, which
-# is created with DeleteOnTermination=false (see DEPLOYMENT.md). All Weblate
+# is created with DeleteOnTermination=false (see README.md). All Weblate
 # state — database, repo checkouts, search index — is in here.
 volumes:
   weblate-data:
