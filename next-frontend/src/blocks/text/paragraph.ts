@@ -12,11 +12,19 @@ export const ParagraphBlock: Block = {
       name: "title",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description: "Heading shown above the paragraph.",
+      },
     },
     {
       name: "content",
       type: "richText",
       required: true,
+      localized: true,
+      admin: {
+        description: "Body text of the paragraph.",
+      },
     },
     markdownConvertedField("content"),
   ],

@@ -36,6 +36,10 @@ export const Documents: CollectionConfig = {
       name: "title",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description: "Name of the document, shown as the link text.",
+      },
     },
     {
       name: "icon",
@@ -51,6 +55,9 @@ export const Documents: CollectionConfig = {
       name: "link",
       type: "text",
       required: true,
+      admin: {
+        description: "URL the document links to.",
+      },
     },
     {
       name: "category",
