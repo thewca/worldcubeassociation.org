@@ -244,20 +244,34 @@ This is the case for many folder directories in our repo, because it was histori
 ## 4. Database and migrations
 
 - Column naming: booleans use an `is_` / `has_` prefix (MySQL can't take Rails' `?` suffix). Match
-  the conventions of sibling tables — if `total_delegated` has no suffix, don't add one to the column
-  next to it.
-- Use `after:` to place new columns sensibly. `schema.rb` sorts alphabetically, but the production
-  table doesn't, and humans read it in PMA.
+  the conventions of sibling tables — if `total_delegated` has no suffix, don't add one adjacent columns
+  like `total_organized`.
+- Use `after:` to place new columns sensibly. `schema.rb` sorts alphabetically in the developer dump,
+  but the production table doesn't, and humans read it in PMA.
 - Declare indexes inside `create_table` (`t.index %i[a b], unique: true`) or with `index: true` on
   the column, rather than as a separate statement.
 - Let Rails infer foreign key columns and table names when they follow convention. `t.references`
   takes `type:` and `index:`; use `foreign_key: { to_table: ... }` only when inference fails.
-- Wrap data backfills in `up_only do ... end`.
-- Don't set arbitrary `limit:` on strings without a reason.
+- Wrap necessary data backfills in `up_only do ... end`. In general, data migrations should be Rake tasks
+  (see [Rails guide](style/rails.md#10-jobs-and-rake-tasks)) but exceptions can be made if data *must* be there
+  immediately upon executing the migration.
+- Don't set arbitrary `limit:` on strings without a reason. We should rather strive to remove existing `limit`s
+  than arbitrarily mimicking them, because more often than not they are tech debt from ye olden days.
 - For a state machine with a natural order, use an integer-backed enum
   (`enum :lifecycle_state, [:pending, :open, :locked, :done]`) — the numbering encodes the progression.
 - The `version` at the top of `schema.rb` must match the migration you're adding. A mismatch means
   you committed a stale schema.
+  - Exception: If you are merging/rebasing your PR to the tip of `main`, somebody else
+    might have merged another migration file with a newer timestamp
+  - In case of doubt during merge conflicts: The `version` stamp should *always* represent the newest timestamp
+    among all migration files in the `migrate` folder.
+- When deleting columns (because you've established a newer format, or they are genuinely not needed anymore)
+  always follow a two-step process **in two separate deployments**:
+  1. Write a migration that adds the new column(s). Migrate the data (most likely via Rake task) and migrate
+     the code to work with the new column(s). Treat the database as if the old column didn't exist anymore,
+     but DO NOT physically delete it
+  2. After you have **fully deployed** the first migration, and you are confident that the code is working well
+     and all legacy data has been fully migrated: Open a second, **separate** PR that migrates the physical deletion
 
 ---
 
@@ -265,28 +279,32 @@ This is the case for many folder directories in our repo, because it was histori
 
 The OpenAPI YAML under `next-frontend/openapi/` is the **single source of truth** for payload shapes.
 
+Our API from v1 and onwards fully commits to `snake_case`. Even in frontend (TypeScript), access these fields
+in their snake case notation. This makes it very clear which fields/properties of an object are fetched data
+and which are genuinely newly computed within the frontend logic.
+
 - Field naming rules from [§2.4](#24-be-internally-consistent) apply doubly here. Pick one
   prefix/suffix convention across a schema family.
 - Move shared fields up into the base schema instead of repeating them in every descendant.
 - Model variants with a `discriminator` on a single enum rather than a bag of mutually-dependent
-  booleans. A `lifecycle_state` string beats `open` + `locked` + `clearable` + `openable`.
-- Omitting a field from `required` already makes it nullable — don't also mark it `nullable`.
+  booleans. A `lifecycle_state` string beats `is_open` + `is_locked` + `is_clearable` + `is_openable`.
+- Omitting a field from `required` already makes it nullable via `undefined` — don't also mark it `nullable`.
 - Don't serialize fields "just in case". Extra serialized properties are cheap to add, invisible to
   find, and expensive on the database. If you add one temporarily, comment that it's temporary.
 - Return arrays as arrays. Don't join error messages with `", "` on the backend — the frontend can
-  render a bullet list if you give it a list.
+  do that if it really, really has to (but a bullet list by looping over the messages would be preferable).
 - An endpoint must return the same shape regardless of who calls it. "Admins get extra keys" is a
-  documentation nightmare; make a separate endpoint.
+  documentation (and nullability) nightmare; make a separate endpoint.
 - Error responses should carry a meaningful, *specific* body. A bare 401 tells the frontend nothing —
   return a distinguishable JSON payload so the client can react to *this* 401 rather than any 401.
 - Keep per-competition data out of per-round endpoints and vice versa. Put a property at the level it
-  logically belongs to.
+  logically belongs to. If you need to cross-reference a competition within results, use its ID and nothing else.
 - Don't silently drop parts of a payload. If a request carries fields the endpoint won't apply,
   choose deliberately between rejecting it with a 4XX and documenting that the field is ignored.
-  Answering `200 OK` to a change you didn't make is the one option that isn't on the table.
+  Answering `200 OK` to a change you didn't make is not an option.
 - Design for concurrency. At a large competition, requests interleave — prefer transactional payloads
-  ("advance competitor #123, and verify they're still the eligible one") over stateful booleans
-  ("advance the next one").
+  ("advance competitor #123, while verifying they are actually the next eligible one") over stateful booleans
+  ("advance the next competitor").
 
 ---
 
