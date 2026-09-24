@@ -4,7 +4,7 @@ import { Button, Card, Link, Text, Table } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
-import Psychsheet from "@/components/competitions/Psychsheet";
+import PsychSheet from "@/components/competitions/PsychSheet";
 import { FormEventSelector } from "@/components/EventSelector";
 import Loading from "@/components/ui/loading";
 
@@ -26,19 +26,19 @@ const TabCompetitors: React.FC<CompetitorData> = ({
   const api = useAPI();
   const { t } = useT();
 
-  const { data: registrationsQuery, isError } = api.useQuery(
-    "get",
-    "/v1/competitions/{competitionId}/registrations",
-    {
-      params: { path: { competitionId: id } },
-    },
-  );
+  const {
+    data: registrationsQuery,
+    isPending,
+    isError,
+  } = api.useQuery("get", "/v1/competitions/{competitionId}/registrations", {
+    params: { path: { competitionId: id } },
+  });
 
   if (isError) {
     return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
   }
 
-  if (!registrationsQuery) {
+  if (isPending) {
     return <Loading />;
   }
 
@@ -69,7 +69,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
           {psychSheetEvent ? (
             // Remounting per event keeps one event's rows from ever being
             // rendered with another event's result formatting.
-            <Psychsheet
+            <PsychSheet
               key={psychSheetEvent}
               competitionId={id}
               eventId={psychSheetEvent}

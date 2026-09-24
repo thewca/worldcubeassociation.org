@@ -10,7 +10,7 @@ import type { components } from "@/types/openapi";
 
 type PsychSheetSortBy = components["schemas"]["PsychSheet"]["sort_by"];
 
-export default function Psychsheet({
+export default function PsychSheet({
   competitionId,
   eventId,
   t,
