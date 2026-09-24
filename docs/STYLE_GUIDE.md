@@ -170,44 +170,64 @@ moving it to a shared helper function that others can benefit from.
 
 ### 2.1 Names describe what something *means*, not how it was computed
 
-`hash` → `state_hash` or `round_checksum`. `Errored` → `OpenapiError`. `last_event` that returns an
-ID → either return the event or rename to `last_event_id`.
+Variable naming across all frameworks and all programming languages should always be meaningful.
+The flow of the code (to reach the variable declaration) already tells you how it was computed.
+So the name of the variable should instead tell you what its _purpose_ is, and how it fits into
+the logic of the function or the component.
+
+| Bad                           | Good                                                                               |
+|-------------------------------|------------------------------------------------------------------------------------|
+| `hash`                        | `state_hash` or `round_checksum`                                                   |
+| `Errored`                     | `OpenapiError`                                                                     |
+| `last_event` that holds an ID | `last_event_id`, or change the value of the variable to actually be the full event |
 
 ### 2.2 Shape must match the name
 
-- A `*ByX` suffix means it's a map keyed by X. If it's an array, rename it or turn it into a map.
-- `statMap` should be an object, not an array you `find!` through.
-- Singular method name, plural arguments → pick one.
-- `withResults` reads as "definitely has results". If you mean "a tuple of competitor and result",
-  say so.
+- A `*ByX` suffix means it's a map keyed by X. If it's an array, rename it (or turn it into a map keyed by X).
+- `statMap` should actually be an object/map, not an array of objects.
+- Plural variable names imply an array of values/objects. Singular variable names imply that it's just one object.
+- `withResults` reads as "definitely has results". If you mean "a tuple of competitor and result", name it accordingly.
 
 ### 2.3 Use established WCA vocabulary
 
-`roundTypeId`, `wcif_id`, `registrant_id`, `competition_event`, `skipped`. Don't invent a synonym for
-a term the codebase and the community already use. Conversely, don't overload a term that already
-means something else — "results" in a Tanstack context should be `queryResults`, because *results*
-means something very specific at the WCA.
+The WCA has established terminology for a lot of things relevant to cubing. For example: `roundTypeId`,
+`wcif_id`, `registrant_id`, `competition_event`, `skipped`.
+
+- Don't invent a synonym for a term which is already well-established within the codebase and the community.
+- Conversely, don't overload a term that already means something else
+  - `results` as a general term for "something returned by an API call" should be `queryResults`,
+    because *results* means something very specific at the WCA.
+  - Exception for React frontend: `Event` subclasses for `onClick` and similar listeners can still be
+    called `event` or `evt` as a callback parameter when writing event handlers.
 
 ### 2.4 Be internally consistent
 
 Within one PR, one file, or one API payload: pick a convention and hold it.
 
-- Not `competitors_x` in one field and `y_competitors` in the next.
+- Not `competitors_x` in one field and `x_competitors` in the next.
 - Not `snake_case` keys in one method and `camelCase` in a sibling method producing the same shape.
-- If a method is `orderResults`, the variable is `ordered` — not `sorted`.
+- If a method is called `orderResults`, the resulting variable is called `ordered`, and not `sorted`.
 - If you rename a concept, rename the related variables (`rolesLoading`, `rolesError`, `rolesSync`),
   not just the one line you were looking at.
 
 ### 2.5 Booleans read as assertions, not commands
 
-`useWcaRegistration` reads as an instruction — "use WCA registration!". `usesWcaRegistration` reads as
-the question the flag actually answers. Name the value behind a condition after what makes it true
-(`self_updating = request[:user_id] == authenticated_user.id`), not after what you intend to do about
-it.
+Boolean flags that indicate whether something is on or off, or whether something was enabled or not,
+should generally use the English language "he/she/it" case, including the `-s` grammar suffix:
+- `useWcaRegistration` reads as an instruction — "use the WCA registration!"
+- `usesWcaRegistration` reads as the question to the answer "does it use WCA registration?"
+
+Name the value behind a condition according to what makes it true, not after what you intend to do with the result:
+- When a registration update is received, and the backend checks whether the request payload was sent
+  by the same user that the registration is for (as opposed to an admin updating someone else's registration),
+  then the variable should be named based on `isSelfUpdating` (or similar).
+- If you later decide whether an email notification about the update should be sent based on this self-updating
+  flag, you can name the parameter to the email sendout method as `shouldSendEmail`. But at the callsite, the
+  variable you pass into that method should still be called `isSelfUpdating` as explained previously.
 
 If one flag is quietly carrying two questions — "is this competition on the WCA registration system?"
-*and* "does it already have registrations stored?" — that's two flags. Pass both and let the UI
-branch on the combination, including to warn about the case where both are true.
+*and* "does it already have registrations stored?" — that's two flags. Pass both and let the consumer
+branch on the combination, including to warn/error about the case where the truth values are conflicting.
 
 ---
 
