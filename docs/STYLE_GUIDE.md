@@ -1,17 +1,17 @@
 # WCA Codebase Style Guide
 
 This guide captures the conventions that WCA maintainers actually apply in code review. It was
-derived from ~1,800 review comments on this repository, so every rule here is something that has
-been asked for repeatedly on real pull requests. It is current through review comments up to
-2026-08-24.
+derived by an LLM from ~1,800 review comments on this repository, so every rule here is something
+that has been asked for repeatedly on real pull requests. It is current through review comments up to
+2026-08-24 and has been revised by Senior Members of WST.
 
-**Scope:** this guide covers things a linter *cannot* catch. RuboCop (`.rubocop.yml`), ESLint
+**Scope:** This guide covers things a linter *cannot* catch. RuboCop (`.rubocop.yml`), ESLint
 (`next-frontend/eslint.config.mjs`) and Prettier are the source of truth for formatting and for
-mechanical rules — this guide doesn't restate them.
+mechanical rules — this guide won't repeat them.
 
-It covers the *code*. The process around a change — how to scope a PR, what goes in the description,
-how to respond to review, which changes need sign-off outside the PR — lives in
-[`CONTRIBUTING.md`](CONTRIBUTING.md).
+This guide covers the *code* itself. The process around changing code — how to scope a PR,
+what goes in the description, how to respond to review, which changes need sign-off
+outside the PR — lives in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 **How to read it:** rules are stated as imperatives. Each one has a short *why*, because a rule you
 understand is a rule you can apply to a case this document didn't anticipate.
@@ -42,57 +42,74 @@ should load them on demand rather than carrying every rule at once. If your edit
 
 ## 1. Universal principles
 
-### 1.1 Extract on the second occurrence, not the first
+### 1.1 Prefer immutable operations
 
-Two rules pulling in opposite directions, both enforced:
+In-place mutation is treated as a defect. Use immutable, functional-style data flow throughout.
+This applies to any area of the code, regardless of programming language or framework.
 
-- **Don't extract single-use things.** A variable or helper function referenced exactly once should
-  be inlined at its point of use. Reviewers will `CTRL+F` for the second usage; if it isn't there,
-  they will ask why the indirection exists.
-- **Do extract on repetition.** The moment a snippet appears two or three times — a `setQueryData`
-  updater, a "name + registrant ID in brackets" string, a "given an old ticket, update this field"
-  block — it becomes a helper. This applies within a file *and* across files.
-
-### 1.2 Prefer immutable operations
-
-In-place mutation is treated as a defect unless justified in a comment.
-
-| Don't | Do |
-| --- | --- |
-| `array.sort(...)` | `array.toSorted(...)` |
-| `map.set(k, v)` in a `forEach` | build a new object via spread / `Object.fromEntries` |
-| `array.pop()`, `arr.tap(&:pop)` | `take_while` / `drop_while` / slicing |
-| `let x = ...` then reassign in a loop | build a new collection with `map` / `reduce` |
+| Don't                                 | Do                                                   |
+|---------------------------------------|------------------------------------------------------|
+| `array.sort(...)`                     | `array.toSorted(...)`                                |
+| `map.set(k, v)` in a `forEach`        | build a new object via spread / `Object.fromEntries` |
+| `array.pop()`, `arr.tap(&:pop)`       | `take_while` / `drop_while` / slicing                |
+| `let x = ...` then reassign in a loop | build a new collection with `map` / `reduce`         |
 
 In JavaScript, `let` is itself the smell: it tells the reader "something below reassigns this", and
-reviewers will ask for a `const` built from a `map`, a `reduce`, or a ternary. Mutating an object you
-were handed is a last-resort exception and has to be argued for in the PR — assume your PR isn't one.
+reviewers will ask for a `const` built from a `map`, a `reduce`, or a ternary.
+
+In Ruby, variables are declared "on the fly" without designated keywords, so you need to be extra-careful.
+In-place mutation is hard to spot at first glance, and for this reason, you will find some places
+in our backend which still do it. It does not give you an excuse to copy that behavior, however.
 
 If you genuinely must recompute values in place, produce *new* entries rather than mutating existing
-ones.
+ones. **Exception**: The Ruby backend may mutate attributes of database entities in-place. Do not create
+a copy of a `ScheduleActivity` row just to change the name from "Lunch" to "Lunch break".
 
-### 1.3 No magic values
+Mutating an object you were handed is only the very last resort and has to be argued for _very strongly_
+in the PR description — assume your PR isn't granted any exceptions.
+
+### 1.2 No magic values
 
 Every literal that isn't self-evidently meaningful gets a name.
 
-- Backend: a module-level or class-level constant. Even for values that are "obviously 2 today" —
-  derive them (`linked_round.rounds.size`) so the code survives a Regulations change.
-- Frontend: a design token (`fontSize="2xl"`, `w="full"`) or a named `const`. Raw `44`, `1`, `#3B82F6`
-  will be questioned.
+- Backend: a module-level or class-level constant. Even for values that are "obviously 2 today"
+  because the _current_ Regulations only support linking 2 rounds into a "Dual Round": Derive them
+  cleanly (`linked_round.rounds.size`), so the code survives the 2031 Regulations change
+  introducing Triple Rounds.
+- Frontend: a design token (`fontSize="2xl"`, `w="full"`, see [Chakra](style/next-frontend.md))
+  or a named `const`. Raw `44`, `1`, `#3B82F6` will be questioned.
 - If a constant comes from an external protocol (an AnyCable message key, a keyboard code), document
   where it comes from in a comment next to the declaration.
 
-### 1.4 Comment the *why*, not the *what*
+### 1.3 Comment the *why*, not the *what*
 
-Code comments are required when:
+If your comment needs to explain _what_ the code is doing in the first place, then it's a pretty strong
+indicator you should consider a refactor. We value hand-crafted code with variable names and control flow
+that is self-explanatory.
+
+The core purpose of a comment should be to explain the **Why** or the **How** of your code: It is already
+clear what the code is doing, but it might not be clear _why_ you're doing it or _how_ this self-explanatory
+code snippet solves the bigger problem and ties back into the bigger picture. In particular, code comments
+are required when:
 
 - You worked around a library bug or quirk (`initialData` type inference through `api.queryOptions`,
   Redocly `allOf` handling, the `use client` directive needed for icon functions).
+  - If you feel that the library quirk you just worked around clearly is a bug in the original library,
+    report it to their issue tracker (mostly GitHub Issues) and add a code comment referencing your issue.
+  - If you feel that your workaround "should be useful" for the library, still consider reporting it
+    as a feature suggestion or open-ended discussion. Most open source projects value constructive feedback.
 - Your code depends on non-obvious ordering, indexing, or a business rule (e.g. filtering after a
   `map` because you need the original index).
 - You ported logic from another codebase (WCA Live, a Ruby equivalent) — say so and name the source.
 
-Comments are *not* wanted for things a reader can infer.
+Some LLMs have a particular tendency to be very verbose about the "Why": They explain stuff in great detail,
+often down to "This works because in the third-party library code line 336, the fooBar() function does so-and-so,
+leading to this-and-that result, and the subsequent processor cycles run the calculations in exactly
+oh-so-many seconds thanks to the way modern NAND gates are structured, so it produces the desired outcome".
+This level of detail is not helpful! Rather than a blanket "Why this works", you should strive for:
+- "Why this works **for us**"
+- "Why this solution is adequate to the problem"
+- "How this ties neatly into the conventions of our framework/this third-party library"
 
 A note about future removal is welcome when it's *actionable*. Mark it so it's greppable (`TODO`,
 `XXX`) and name the condition that makes it removable — "TODO: drop once WCA Live is sunset" tells
@@ -100,32 +117,52 @@ the next reader what to wait for. What doesn't help is an unmarked aside saying 
 without saying temporary until when. A `TODO` you're leaving deliberately still needs to be called
 out in review; see [CONTRIBUTING.md §4](CONTRIBUTING.md#4-responding-to-review).
 
-### 1.5 Don't paper over errors
+### 1.4 Don't paper over errors
+
+We generally do not catch errors (JS `try`/`catch`, Ruby `rescue`), and we also try to avoid throwing errors
+apart from some very specific use-cases.
 
 - `try`/`catch` (or `rescue`) around something that "sometimes explodes" is not acceptable. Find out
   *what* throws and prevent that input from reaching the call.
 - Don't null-guard defensively (`?.`, `&.`, `!`, `?? 0`) without knowing which case you're guarding.
   If you can't name the case, the guard is hiding a bug — or it's dead code.
 - If you branch on format ("if it parses as JSON do X, else treat it as CSV"), validate the else
-  branch too and return a real error when it's neither.
+  branch too and react meaningfully when it's neither.
+- Don't swallow failures silently. See also [§3.5](#35-bang-methods-and-failed-writes).
+
+A notable exception where we do work with errors are Controllers in the Ruby on Rails framework
+(i.e. the HTTP layer of our API). The following rules there apply:
 - A `rescue` inside a method body is rejected. In a controller, catch the exception at the top with
   `rescue_from` (`rescue_from JSON::Schema::ValidationError`) — the happy path stays readable and
   every action gets the same handling.
-- Don't swallow failed writes. See [§3.5](#35-bang-methods-and-failed-writes).
+- You can `raise` an error/exception when you know that it's handled further up in the controller hierarchy.
+  For example, one common pattern you will see is `raise WcaExceptions::NotPermitted` to stipulate a 403.
 
-### 1.6 Reuse existing code before writing new code
+### 1.5 Reuse existing code before writing new code
 
 Before introducing a helper, search for one. Core results logic in particular must live in exactly
 one place so that a bug fix fixes every caller. Concretely, the codebase already has:
-`SolveTime` parsers, `ScheduleActivity.parse_activity_code`, `Registrations::Lanes::Competing`,
-`RegistrationChecker#apply_payload`, `Competition.wcif_json_schema`,
-`Competition.validate_wcif_schema!`, `useInputState`, `fetchJsonOrError`, `routes.js.erb` link
-helpers, the OpenAPI error component. Ask before re-implementing any of them — in particular, don't
-call a validation library directly when a model method already wraps it.
+- `SolveTime` parsers
+- `ScheduleActivity.parse_activity_code`
+- `Registrations::Lanes::Competing`
+- `RegistrationChecker#apply_payload`
+- `Competition.wcif_json_schema`
+- `Competition.validate_wcif_schema!`
+- `useInputState`
+- `fetchJsonOrError`
+- `routes.js.erb` link helpers
+- the OpenAPI error component.
 
-The same goes for the libraries we depend on. Before hand-coding something commonplace — a character
-limit on an editor, a debounce, a flag icon — read that package's documentation and check whether
-it's already a prop or an option. Reviewers will ask whether you looked.
+Ask around before re-implementing any of them — if you feel like it should be a common, extracted method
+then chances are that it already is one and your colleagues know where the code can be found.
+
+This is particularly important for the libraries we depend on. Before hand-coding something commonplace like
+a character limit on an editor, a debounce, a flag icon — read that package's documentation and check
+whether it's already a prop or an option. Chances are, you can find a pre-packaged solution for whatever
+you're trying to accomplish.
+
+If you're writing some new business logic, and you're sure it's not available elsewhere yet, consider
+moving it to a shared helper function that others can benefit from.
 
 ---
 
