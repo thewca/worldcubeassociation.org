@@ -9,19 +9,30 @@ that has been asked for repeatedly on real pull requests. It is current through 
 (`next-frontend/eslint.config.mjs`) and Prettier are the source of truth for formatting and for
 mechanical rules — this guide won't repeat them.
 
-This guide covers the *code* itself. The process around changing code — how to scope a PR,
+This guide covers the *code itself*. The process around changing code — how to scope a PR,
 what goes in the description, how to respond to review, which changes need sign-off
 outside the PR — lives in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-**How to read it:** rules are stated as imperatives. Each one has a short *why*, because a rule you
-understand is a rule you can apply to a case this document didn't anticipate.
+You are expected to make yourself familiar with the contents of this file tree early on in your WST journey.
+We are a volunteer team, so we try our best to be nice and accommodating about enforcing rules. There won't
+be a dedicated quiz that you have to "pass" like a university exam, and there won't be any punishment if you
+don't apply all rules absolutely correctly right from the start. In fact, we believe that learning by doing
+is the most healthy approach for writing good code!
 
-**Topic guides:** sections that only apply to one corner of the codebase live in their own file under
-[`style/`](style/), each opening with the condition that makes it relevant. Read a topic guide when
-you're in that corner and skip it otherwise — that goes for people and for coding agents, which
-should load them on demand rather than carrying every rule at once. If your editor or agent supports
-"load this file when working on X" rules, point it at these files; keep that config personal
-(`.claude/` and `.agents/` are gitignored) so we don't have to agree on a tool.
+Nonetheless, for such a big production codebase as ours, certain standards need to be enforced. So you should
+read the sections of the guide that concern you attentively, to get an overall feeling for how we like
+to write code. See it as an opportunity to grow into your role and hopefully learn something new!
+- Sections [§1](#1-universal-principles) and [§2](#2-naming) are pretty universal. You should read these
+  no matter whether you're working with frontend, backend, or somewhere in between.
+- Sections [§5](#5-api-design) and [§10](#10-i18n-and-user-facing-copy) are also generally useful,
+  but not as common-place as the first two. Read them when you dive deeper into the code.
+- All other guides after that are for specific areas or use-cases. Glance over the table of contents
+  and the section headings to get a feeling for what might apply to you. Every section opens with
+  the condition(s) that makes it relevant. You are also free to read them just as a learning or out of interest :)
+
+If you are using coding agents, it should support some form of "load this file when working on X" rules.
+Point it at these files but keep that config personal (`.claude/` and `.agents/` are gitignored)
+so we don't have to agree on a specific tool team-wide.
 
 ---
 
@@ -34,8 +45,8 @@ should load them on demand rather than carrying every rule at once. If your edit
 5. [API design](#5-api-design)
 6. [Next.js frontend](#6-nextjs-frontend)
 7. [Chakra UI and styling](#7-chakra-ui-and-styling)
-8. [Legacy React (Webpacker / Semantic UI)](style/legacy-frontend.md)
-9. [Tests](style/tests.md)
+8. [Legacy React (Shakapacker / Semantic UI)](#8-legacy-react-shakapacker--semantic-ui)
+9. [Tests](#9-tests)
 10. [i18n and user-facing copy](#10-i18n-and-user-facing-copy)
 
 ---
@@ -320,7 +331,7 @@ the guide on [Chakra UI](style/chakra-ui.md).
 
 ---
 
-## 7. Chakra UI
+## 7. Chakra UI and styling
 
 → **[`style/chakra-ui.md`](style/chakra-ui.md)**
 
