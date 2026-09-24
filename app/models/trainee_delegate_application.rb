@@ -113,9 +113,7 @@ class TraineeDelegateApplication
     self.class.reviewer_for(delegate_region)
   end
 
-  def senior_delegate
-    delegate_region.senior_delegate
-  end
+  delegate :senior_delegate, to: :delegate_region
 
   def junior_and_full_delegates
     return [] if delegate_region.blank?
@@ -141,10 +139,11 @@ class TraineeDelegateApplication
         root_id: root_region.id,
         root_name: root_region.name,
         reviewer_name: self.class.reviewer_for(region)&.name,
-        junior_and_full_delegates: self.class.junior_and_full_delegate_roles(region)
-                                             .map { { id: it.user.id, name: it.user.name, status: it.metadata.status } }
-                                             .uniq { it[:id] }
-                                             .sort_by { it[:name] },
+        junior_and_full_delegates: self.class
+                                       .junior_and_full_delegate_roles(region)
+                                       .map { { id: it.user.id, name: it.user.name, status: it.metadata.status } }
+                                       .uniq { it[:id] }
+                                       .sort_by { it[:name] },
       }
     end.sort_by { [it[:root_name], it[:name]] }
   end

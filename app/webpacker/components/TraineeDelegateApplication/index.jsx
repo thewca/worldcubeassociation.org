@@ -141,7 +141,10 @@ export default function TraineeDelegateApplication({
     }));
   }, []);
 
-  const submit = useCallback(() => submitApplication(application), [submitApplication, application]);
+  const submit = useCallback(
+    () => submitApplication(application),
+    [submitApplication, application],
+  );
 
   if (eligibilityIssues.length > 0) {
     return (
@@ -201,7 +204,7 @@ export default function TraineeDelegateApplication({
       </Segment>
 
       {isError && (
-        // Errors that don't come from our own validation (e.g. a network failure) have no `errors` list.
+        // Failures outside our own validation (e.g. network errors) have no `errors` list.
         <Message negative list={error.json?.errors ?? [error.message]} />
       )}
 
@@ -220,19 +223,20 @@ export default function TraineeDelegateApplication({
           label={I18n.t('trainee_delegate_application.form.declaration_proficient_in_english')}
           onChange={updateDeclaration}
         />
+        {/* i18n-tasks-use t('trainee_delegate_application.form.declaration_read_regulations_html') */}
         <Form.Checkbox
           required
           id="read_regulations"
           name="read_regulations"
           checked={application.declarations.read_regulations}
-          label={(
-            <label htmlFor="read_regulations">
+          label={{
+            children: (
               <I18nHTMLTranslate
                 i18nKey="trainee_delegate_application.form.declaration_read_regulations_html"
                 options={{ regulations_url: regulationsUrl }}
               />
-            </label>
-          )}
+            ),
+          }}
           onChange={updateDeclaration}
         />
         <p>{I18n.t('trainee_delegate_application.form.regulations_note')}</p>
