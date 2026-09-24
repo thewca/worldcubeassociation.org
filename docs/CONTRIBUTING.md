@@ -1,14 +1,14 @@
 # Contributing to worldcubeassociation.org
 
-This document covers the *process* around a change: how to scope a pull request, what belongs in the
-description, how to respond to review, and which changes need agreement from outside the PR.
+This guide captures the process of submitting a code change to our repository, from opening a PR
+up to getting the feature merged and deployed. It was derived by an LLM based on the real,
+human review history on this repository, so every rule here is something that has been asked for
+repeatedly on real pull requests. It is current through review comments up to 2026-08-24
+and has been further revised and refined by Senior Members of WST.
 
-It is the companion to [`STYLE_GUIDE.md`](STYLE_GUIDE.md), which covers how the code itself should be
-written. The rules in this file were derived by an LLM based on the real, human review history
-on this repository, so every rule here is something that has been asked for repeatedly
-on real pull requests.
-The rules has been further revised and refined by Senior Members of WST.
-Current through review comments up to 2026-08-24 have been ingested.
+**Scope**: This guide covers the *process* around a change: how to scope a pull request, what belongs in the
+description, how to respond to review, and which changes need agreement from outside the PR.
+It is the companion to [`STYLE_GUIDE.md`](STYLE_GUIDE.md), which covers how the code itself should be written.
 
 For getting the app running locally, see the
 [quickstart](https://docs.worldcubeassociation.org/contributing/quickstart) and the
@@ -33,9 +33,12 @@ distracts the focus of the reviewer and makes `git blame` useless.
 
 - Don't rename variables, reformat, or "improve" adjacent code just because you happen to be touching
   the same file.
-- Don't shorten `result` to `r` (or lengthen it) mid-refactor — the diff noise costs more than the
-  readability gain.
-- Notice unrelated dead code? Mention it in a comment. Don't delete it in this PR.
+  - Don't shorten `result` to `r` (or lengthen it) mid-refactor — the diff noise costs more than the
+    readability gain.
+  - Notice unrelated dead code? Mention it in a comment. Don't delete it in this PR.
+  - If you catch a typo in a code comment, you may change it at your discretion as an exception to this rule.
+    If the typo is in a variable name that would have a lot of trailing refactoring changes, mention it
+    in a comment and let someone else handle it in a subsequent PR.
 - Split refactors from features where possible. "Seems best not to do too much in one PR."
 - Tooling config (`.eslintrc.json`, `.rubocop.yml`) counts as unrelated too. Improvements there are
   welcome, but as their own PR — a lint-rule change buried in a feature diff will be asked out.
@@ -46,6 +49,8 @@ distracts the focus of the reviewer and makes `git blame` useless.
 
 - If a generated file (`src/types/openapi.ts`, `importMap.js`, `yarn.lock`, `schema.rb`) shows changes
   you didn't intend, delete and regenerate it, or merge `main` first.
+  - Our CI re-runs codegen on relevant files like OpenAPI types, Payload types and Chakra types for the frontend.
+    It will fail the whole CI run if there is a diff in these files which is not committed to your PR.
 - If the noise persists on `main`, push a separate hotfix PR that *only* fixes the generated file.
 - In general, merge `main` to clear unrelated changes from your diff.
 - If a file move wasn't detected as a rename (for example, because you also made substantial edits during the move),
@@ -63,10 +68,10 @@ review — if a rule is wrong, that's a separate PR against the config (see [§1
 
 ## 3. The PR description
 
-- If your description and your diff disagree ("comment-only fix" that changes display logic), the
-  reviewer will trust the diff and ask. Keep the description accurate.
+- If your description and your diff disagree (you claim it's a "comment-only fix" but it changes display logic),
+  the reviewer will refer to the diff and ask. Keep the description accurate.
 - Explain non-obvious decisions proactively. "If it isn't straight-forward, explain in two or three
-  sentences why this is the cleanest code you could come up with" is an accepted answer — silence
+  sentences why this is the cleanest code you could come up with" is an accepted solution — silence
   is not.
   - Adding review comments to your own PR can be helpful for reviewers, but it is not required for every
     single PR in general. Only do so when it adds a substantial, helpful context for reviewers and
@@ -94,8 +99,12 @@ Some changes can't be settled inside the PR, however good the code is. Raise the
 at review time costs you a round trip.
 
 - **New public vocabulary.** When introducing new terminology to competitors ("locked", "Dual
-  Rounds"), get community/WCT/WQAC input before it lands in `en.yml` — don't invent public vocabulary
+  Rounds"), get community/WCT/WQAC/WRC input before it lands in `en.yml` — don't invent public vocabulary
   in a PR.
 - **Unreleased features.** Don't advertise features that aren't publicly released yet.
-- **One-off data fixes.** These ship as rake tasks rather than migrations ([STYLE_GUIDE §3.10](STYLE_GUIDE.md#310-jobs-and-rake-tasks)), and a
+- **One-off data fixes.** These ship as Rake tasks rather than migrations ([STYLE_GUIDE §3.10](STYLE_GUIDE.md#310-jobs-and-rake-tasks)), and a
   WST senior member runs them after deploy — say so in your description so the run gets scheduled.
+  - At present (2026-09-24) we do not have a cleanly established process around running Rake tasks. It's really
+    a matter of ad-hoc scheduling and coordinating with Senior Members who have the required privileges
+    to do stuff on our live production servers. "Discuss on Slack" is the best guidance we can give
+    at the moment.
