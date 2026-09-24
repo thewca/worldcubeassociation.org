@@ -221,6 +221,14 @@ export const contactRecipientUrl = (contactRecipient) => `<%= CGI.unescape(Rails
 
 export const contactCompetitionUrl = (competitionId, message) => `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path(competitionId: "${competitionId}", contactRecipient: "competition", message: "${message}")) %>`
 
+export const traineeDelegateApplicationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.trainee_delegate_application_path) %>`;
+
+export const regulationsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.regulations_path) %>`;
+
+export const claimWcaIdUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_claim_wca_id_path) %>`;
+
+export const profileEditUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_edit_path) %>`;
+
 export const apiV0Urls = {
   users: {
     me: {

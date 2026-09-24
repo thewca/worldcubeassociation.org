@@ -1,0 +1,71 @@
+<h1>New Trainee Delegate application</h1>
+
+<h2>Applicant</h2>
+<ul>
+  <li><strong>Name:</strong> <%= @applicant.name %></li>
+  <li><strong>WCA ID:</strong> <%= @applicant.wca_id %></li>
+  <li><strong>Email:</strong> <%= mail_to @applicant.email %></li>
+  <li><strong>Age:</strong> <%= @application.applicant_age %></li>
+  <li><strong>Number of competitions:</strong> <%= @application.competition_count %></li>
+  <li><strong>Target region:</strong> <%= @application.delegate_region_name %></li>
+  <li><strong>Reviewing Delegate:</strong> <%= @application.reviewer.name %></li>
+</ul>
+
+<h2>Junior or Full Delegates spoken to</h2>
+<ul>
+  <% @application.spoken_to_delegates.each do |delegate| %>
+    <li><%= delegate.name %><%= " (#{delegate.wca_id})" if delegate.wca_id.present? %></li>
+  <% end %>
+</ul>
+
+<h2>Recommending Delegates</h2>
+<ul>
+  <% @application.recommenders.each do |recommender| %>
+    <li><%= recommender.name %><%= " (#{recommender.wca_id})" if recommender.wca_id.present? %></li>
+  <% end %>
+</ul>
+
+<h2>Declarations</h2>
+<ul>
+  <li>The applicant understands this form is for Registered Speedcubers who are applying to become a Trainee Delegate.</li>
+  <li>The applicant confirms that a qualified Delegate in the target region supports their candidacy.</li>
+  <li>The applicant acknowledges proficiency in reading and writing English.</li>
+  <li>The applicant acknowledges having read the WCA Regulations.</li>
+  <li>
+    The applicant is involved with a cubing-related business:
+    <%= @application.cubing_business_involvement ? "Yes" : "No" %>
+  </li>
+</ul>
+
+<% if @application.cubing_business_involvement %>
+  <h2>Cubing-related business involvement</h2>
+  <%= simple_format(h(@application.cubing_business_involvement_details)) %>
+<% end %>
+
+<h2>Introduction</h2>
+<%= simple_format(h(@application.introduction)) %>
+
+<h2>Contributions to local competitions</h2>
+<%= simple_format(h(@application.competition_contributions)) %>
+
+<h2>Website WCA volunteer role history</h2>
+<% if @volunteer_role_history.any? %>
+  <ul>
+    <% @volunteer_role_history.each do |role| %>
+      <li><%= role[:title] %>: <%= role[:start_date].iso8601 %> - <%= role[:end_date]&.iso8601 || "present" %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No relevant roles were found in the website history.</p>
+<% end %>
+
+<% if @application.volunteer_history.present? %>
+  <h2>Additional WCA volunteer history or corrections</h2>
+  <%= simple_format(h(@application.volunteer_history)) %>
+<% end %>
+
+<h2>Motivation</h2>
+<%= simple_format(h(@application.motivation)) %>
+
+<h2>Relevant skills and experience</h2>
+<%= simple_format(h(@application.relevant_skills)) %>
