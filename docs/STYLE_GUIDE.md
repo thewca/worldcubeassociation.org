@@ -332,13 +332,17 @@ many PRs on the Next website (even when it's not about design in the stricter se
 
 ---
 
-## 8. Legacy React (Webpacker / Semantic UI)
+## 8. Legacy React (Shakapacker / Semantic UI)
 
 → **[`style/legacy-frontend.md`](style/legacy-frontend.md)**
 
-**Read it when:** you are creating or editing any `.jsx` / `.js` file under `app/webpacker/`, or
-reviewing a diff that touches one. Its rules are the *opposite* of §6–§7 in places — most of all,
-`useCallback` / `useMemo` are required there and forbidden in `next-frontend/`.
+**Read it when:** you are creating or editing any `.jsx` / `.js` file under `app/webpacker/`.
+
+_NOTE_: You should **not** be creating any new files (let alone whole features) under the legacy
+Webpacker frontend. Touching existing files is acceptable when fixing bugs or augmenting existing
+features with functionality that is deemed _immediately necessary_.
+
+Before you dive deep into your work in Shakapacker, double-check that you are _really_ sure what you're doing!!
 
 ---
 
