@@ -89,10 +89,10 @@ export default function ContactForm({
   if (saveError) return <Errored error={saveError} />;
   return (
     <>
-      { contactFormState.formValues?.competition?.message && (
+      { contactFormState.formValues?.competition?.toUpdateRegistration && (
       <Message
         warning
-        content={I18n.t('page.contacts.prefilled')}
+        content={I18n.t('page.contacts.to_update_registration_prefilled')}
       />
       )}
       {contactSuccess && (
