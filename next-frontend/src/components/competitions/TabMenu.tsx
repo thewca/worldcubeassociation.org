@@ -240,7 +240,7 @@ function TabList({
                 tabKey={tabKey}
                 currentPath={currentPath}
                 href={route({
-                  pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                  pathname: "/competitions/[competitionId]/tab/[tabName]",
                   query: { competitionId, tabName: tabKey },
                 })}
               >
