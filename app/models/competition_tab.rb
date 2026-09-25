@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class CompetitionTab < ApplicationRecord
+  include HasMarkdownImages
+
   belongs_to :competition
+
+  MARKDOWN_IMAGE_COLUMNS = %i[content].freeze
 
   validates :name, presence: true
   validates :display_order, uniqueness: { scope: :competition_id, case_sensitive: false }
