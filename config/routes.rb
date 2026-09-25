@@ -287,6 +287,8 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'volunteer-positions', to: redirect('https://docs.google.com/spreadsheets/d/13JhGJWDfJR96MYgPpxkSaV2E3bMIdIWjWLuYO83vOls/edit?gid=0#gid=0', status: 302)
+  get 'trainee-delegate-application' => 'trainee_delegate_applications#new', as: :trainee_delegate_application
+  post 'trainee-delegate-application' => 'trainee_delegate_applications#create'
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
   resources :regional_organizations, only: %i[new create update edit destroy], path: '/regional-organizations'
