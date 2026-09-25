@@ -74,6 +74,13 @@ module ResultConditions
       (results.count * 0.75).floor
     end
 
+    # Competitors without any successful attempt must not advance, so the
+    # condition's nominal allowance is additionally capped by the number of
+    # competitors holding a valid result.
+    def max_advancing(results)
+      [nominal_max_advancing(results), results.count { it.best.positive? }].min
+    end
+
     def max_qualifying(results)
       [max_advancing(results), regulations_boundary(results)].min
     end
