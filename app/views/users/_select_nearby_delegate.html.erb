@@ -1,4 +1,6 @@
-<% link_id = wca_id_link(@user.unconfirmed_wca_id, target: "_blank") %>
+<% unconfirmed_wca_id = @user.unconfirmed_wca_id %>
+<%# `wca_id_link` returns nil for a blank id, but the url argument is built first, so guard here too. %>
+<% link_id = unconfirmed_wca_id.presence && wca_id_link(unconfirmed_wca_id, url: auth_page_url(person_path(unconfirmed_wca_id)), target: "_blank") %>
 <% if !@user.unconfirmed_person %>
   <p>
     <% if @user.unconfirmed_wca_id.present? %>
@@ -7,7 +9,7 @@
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
-    <%= t '.already_assigned_html', link_id: link_id, link_delegate: delegates_path %>
+    <%= t '.already_assigned_html', link_id: link_id, link_delegate: auth_page_url(delegates_path) %>
   </p>
 <% elsif !@user.unconfirmed_person.dob %>
   <p>
@@ -15,7 +17,7 @@
   </p>
 <% else %>
   <p>
-    <%= t '.select_delegate_html', link_delegate: delegates_path %>
+    <%= t '.select_delegate_html', link_delegate: auth_page_url(delegates_path) %>
   </p>
 
   <div class="form-group radio_buttons optional">
@@ -44,6 +46,7 @@
       </span>
     <% end %>
 
+    <label><%= t '.search_for_delegate' %></label>
     <span class="radio">
       <!-- We don't want focusing the autocomplete to focus the radio button, so we
            make sure it doesn't focus anything by setting the wrapping label to
