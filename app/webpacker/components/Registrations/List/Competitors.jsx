@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useMemo, useReducer } from 'react';
-import { Segment, Table } from 'semantic-ui-react';
+import React, { useMemo, useReducer, useState } from 'react';
+import {
+  Icon, Input, Segment, Table,
+} from 'semantic-ui-react';
 import _ from 'lodash';
 import {
   getConfirmedRegistrations,
@@ -32,6 +34,8 @@ export default function Competitors({
     retry: false,
   });
 
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [sortState, sortDispatch] = useReducer(sortReducer, {
     sortColumn: 'name',
     sortDirection: 'ascending',
@@ -39,9 +43,15 @@ export default function Competitors({
   const { sortColumn: sortedColumn, sortDirection: sortedDirection } = sortState;
   const changeSortColumn = (name) => sortDispatch({ type: 'CHANGE_SORT', sortColumn: name });
 
-  // TODO: use react table (future PR)
   const data = useMemo(() => {
     if (registrations) {
+      let filtered = registrations;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = registrations.filter(
+          (r) => r.user.name.toLowerCase().includes(q),
+        );
+      }
       let orderBy = [];
       switch (sortedColumn) {
         case 'country':
@@ -61,10 +71,10 @@ export default function Competitors({
       orderBy.push((item) => item.user.name.toLowerCase());
       const direction = sortedDirection === 'descending' ? 'desc' : 'asc';
 
-      return _.orderBy(registrations, orderBy, [direction]);
+      return _.orderBy(filtered, orderBy, [direction]);
     }
     return [];
-  }, [registrations, sortedColumn, sortedDirection]);
+  }, [registrations, searchQuery, sortedColumn, sortedDirection]);
 
   if (isError) {
     return (
@@ -96,6 +106,16 @@ export default function Competitors({
         returnerCount={returnerCount}
         onScrollToMeClick={onScrollToMeClick}
       />
+      <Segment basic>
+        <Input
+          fluid
+          icon={<Icon name="search" />}
+          iconPosition="left"
+          placeholder={I18n.t('registrations.list.search_by_name')}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </Segment>
       <div style={{ overflowX: 'auto' }}>
         <Table striped sortable unstackable compact singleLine textAlign="left">
           <CompetitorsHeader
