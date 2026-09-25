@@ -7,9 +7,8 @@ RSpec.describe TraineeDelegateApplicationsMailer do
   let(:region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: "africa").user_group }
   let(:senior_delegate) { create(:user_with_wca_id) }
   let(:recommender) { create(:user_with_wca_id) }
-  let(:application) do
-    TraineeDelegateApplication.new(
-      applicant: applicant,
+  let(:application_attributes) do
+    {
       delegate_region_id: region.id,
       spoken_to_delegate_user_ids: [recommender.id],
       recommender_user_ids: [recommender.id],
@@ -19,7 +18,7 @@ RSpec.describe TraineeDelegateApplicationsMailer do
       relevant_skills: "My relevant skills",
       cubing_business_involvement: false,
       declarations: TraineeDelegateApplication::DECLARATIONS.index_with(true),
-    )
+    }
   end
 
   before do
@@ -29,7 +28,7 @@ RSpec.describe TraineeDelegateApplicationsMailer do
 
   it "renders in English" do
     mail = I18n.with_locale(:'es-ES') do
-      described_class.new_application(application)
+      described_class.new_application(applicant, application_attributes)
     end
 
     expect(mail.to).to eq([senior_delegate.email])

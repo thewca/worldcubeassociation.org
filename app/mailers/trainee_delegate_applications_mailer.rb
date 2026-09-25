@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class TraineeDelegateApplicationsMailer < ApplicationMailer
-  def new_application(application)
+  # Takes the attributes rather than the application itself, because ActiveJob cannot serialize a non-persisted model.
+  def new_application(applicant, application_attributes)
     I18n.with_locale :en do
+      application = TraineeDelegateApplication.new(**application_attributes, applicant: applicant)
       @application = application
-      @applicant = application.applicant
+      @applicant = applicant
       @volunteer_role_history = application.volunteer_role_history
 
       reviewer_email = application.reviewer.email

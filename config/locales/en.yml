@@ -985,7 +985,6 @@ en:
       declarations_required: "All declarations must be acknowledged."
       business_involvement_required: "Select whether you are involved with a cubing-related business."
       business_involvement_explanation_required: "Explain your involvement with a cubing-related business."
-      delivery_failed: "The application could not be emailed. Your answers have been kept on this page; please try again."
     form:
       declaration_and_basic_information: "Declaration and Basic Information"
       name: "Name"

@@ -3,12 +3,6 @@
 class TraineeDelegateApplicationsController < ApplicationController
   before_action :authenticate_user!
 
-  # The application is not stored anywhere, so the applicant's answers are only kept in their browser.
-  # Tell them that delivery failed instead of showing a generic error page, so that they can retry.
-  rescue_from Net::SMTPError do
-    render json: { errors: [I18n.t("trainee_delegate_application.errors.delivery_failed")] }, status: :service_unavailable
-  end
-
   def new
     application = TraineeDelegateApplication.new(applicant: current_user)
 
@@ -32,7 +26,7 @@ class TraineeDelegateApplicationsController < ApplicationController
 
     return render json: { errors: application.errors.full_messages }, status: :unprocessable_content if application.invalid?
 
-    TraineeDelegateApplicationsMailer.new_application(application).deliver_now
+    TraineeDelegateApplicationsMailer.new_application(current_user, application.attributes).deliver_later
     render json: { message: I18n.t("trainee_delegate_application.success") }
   end
 

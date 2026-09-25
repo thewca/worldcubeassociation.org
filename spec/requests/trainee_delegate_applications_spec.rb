@@ -41,7 +41,9 @@ RSpec.describe "Trainee Delegate applications" do
     before { sign_in applicant }
 
     it "emails the Regional Delegate and copies the Senior Delegate" do
-      post trainee_delegate_application_path, params: { trainee_delegate_application: valid_application }, as: :json
+      perform_enqueued_jobs do
+        post trainee_delegate_application_path, params: { trainee_delegate_application: valid_application }, as: :json
+      end
 
       expect(response).to be_successful
       mail = ActionMailer::Base.deliveries.last
@@ -52,7 +54,9 @@ RSpec.describe "Trainee Delegate applications" do
     it "falls back to the Senior Delegate when the region has no Regional Delegate" do
       regional_role.update!(end_date: Date.today)
 
-      post trainee_delegate_application_path, params: { trainee_delegate_application: valid_application }, as: :json
+      perform_enqueued_jobs do
+        post trainee_delegate_application_path, params: { trainee_delegate_application: valid_application }, as: :json
+      end
 
       expect(ActionMailer::Base.deliveries.last.to).to eq([senior_delegate.email])
     end
@@ -78,15 +82,7 @@ RSpec.describe "Trainee Delegate applications" do
            as: :json
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(ActionMailer::Base.deliveries).to be_empty
-    end
-
-    it "returns a recoverable error when email delivery fails" do
-      allow(TraineeDelegateApplicationsMailer).to receive(:new_application).and_raise(Net::SMTPFatalError.new("delivery failed"))
-
-      post trainee_delegate_application_path, params: { trainee_delegate_application: valid_application }, as: :json
-
-      expect(response).to have_http_status(:service_unavailable)
+      expect(enqueued_jobs).to be_empty
     end
   end
 end
