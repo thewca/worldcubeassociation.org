@@ -3,12 +3,13 @@ import _ from 'lodash';
 import {
   Button, Icon, List, Popup, Table,
 } from 'semantic-ui-react';
-import { personUrl } from '../../lib/requests/routes.js.erb';
+import { personUrl, liveCompetitorUrl } from '../../lib/requests/routes.js.erb';
 
 export default function SimilarPersonTable({
-  potentialDuplicates, editUser, mergePotentialDuplicate,
+  potentialDuplicates, editUser, mergePotentialDuplicate, competitionId,
 }) {
   const originalUser = potentialDuplicates[0].original_user;
+  const registrationId = potentialDuplicates[0].registration?.id;
 
   const displayDuplicates = _.chain(potentialDuplicates)
     .groupBy('duplicate_person.id')
@@ -41,7 +42,11 @@ export default function SimilarPersonTable({
           <Table.Cell>{originalUser.name}</Table.Cell>
           <Table.Cell>{originalUser.country.name}</Table.Cell>
           <Table.Cell>{originalUser.dob}</Table.Cell>
-          <Table.Cell />
+          <Table.Cell>
+            <a href={liveCompetitorUrl(competitionId, registrationId)} target="_blank" rel="noreferrer">
+              Live Results
+            </a>
+          </Table.Cell>
           <Table.Cell />
           <Table.Cell>
             <Button onClick={() => editUser(originalUser.id)}>
