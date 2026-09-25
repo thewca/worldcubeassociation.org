@@ -16,6 +16,8 @@ import { regulationsUrl } from '../../lib/requests/routes.js.erb';
 import EligibilityMessage from './EligibilityMessage';
 import submitTraineeDelegateApplication from './api/submitTraineeDelegateApplication';
 
+// i18n-tasks-use t('trainee_delegate_application.form.declaration_read_regulations_html')
+
 const DECLARATIONS = [
   'understands_application',
   'has_delegate_support',
@@ -223,7 +225,6 @@ export default function TraineeDelegateApplication({
           label={I18n.t('trainee_delegate_application.form.declaration_proficient_in_english')}
           onChange={updateDeclaration}
         />
-        {/* i18n-tasks-use t('trainee_delegate_application.form.declaration_read_regulations_html') */}
         <Form.Checkbox
           required
           id="read_regulations"
