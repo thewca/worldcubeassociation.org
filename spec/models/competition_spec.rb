@@ -262,7 +262,7 @@ RSpec.describe Competition do
   it "truncates name as necessary to produce id and cell_name" do
     competition = build(:competition, name: "Alexander and the Terrible Horrible No Good 2015")
     expect(competition).to be_valid
-    expect(competition.id).to eq "AlexanderandtheTerribleHorri2015"
+    expect(competition.id).to eq "AlexanderandtheTerrib2015"
     expect(competition.name).to eq "Alexander and the Terrible Horrible No Good 2015"
     expect(competition.cell_name).to eq "Alexander and the Terrib... 2015"
   end
@@ -535,13 +535,13 @@ RSpec.describe Competition do
     it "warns if competition id starts with a lowercase" do
       competition = build(:competition, id: "lowercase2021")
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:id]).to eq I18n.t('competitions.messages.id_starts_with_lowercase')
+      expect(competition.warnings_for(nil)[:id_casing]).to eq I18n.t('competitions.messages.id_starts_with_lowercase')
     end
 
     it "do not warn if competition id starts with a number" do
       competition = build(:competition, id: "1stNumberedComp2021")
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:id]).to be_nil
+      expect(competition.warnings_for(nil)[:id_casing]).to be_nil
     end
 
     it "warns if advancement condition isn't present for a non final round" do
