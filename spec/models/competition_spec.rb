@@ -544,6 +544,85 @@ RSpec.describe Competition do
       expect(competition.warnings_for(nil)[:id_casing]).to be_nil
     end
 
+    it "warns if competition id does not match the short name" do
+      competition = build(:competition, name: "Foo Comp 2015", id: "FooCompetition2015")
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:id]).to eq I18n.t('competitions.messages.id_must_match_short_name')
+    end
+
+    it "does not warn if competition id is generated from the short name" do
+      competition = build(:competition, name: "Foo Comp 2015")
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:id]).to be_nil
+    end
+
+    it "does not warn if competition id matches a custom short name" do
+      competition = build(:competition, name: "Foo Competition 2015", cell_name: "Foo Comp 2015", id: "FooComp2015")
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:id]).to be_nil
+    end
+
+    it "warns if competition name does not end with the year of the start date" do
+      competition = build(:competition, name: "Foo Comp 2015", starts: Date.new(2016, 1, 1))
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:year]).to eq I18n.t('competitions.messages.name_must_end_with_year')
+    end
+
+    it "warns if competition id does not end with the year of the start date" do
+      competition = build(:competition, name: "Foo Comp 2015", id: "FooComp2016", starts: Date.new(2015, 1, 1))
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:year]).to eq I18n.t('competitions.messages.name_must_end_with_year')
+    end
+
+    it "does not warn if name, id and short name all end with the year of the start date" do
+      competition = build(:competition, name: "Foo Comp 2015", starts: Date.new(2015, 1, 1))
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:year]).to be_nil
+    end
+
+    it "does not check the year if competition has no start date" do
+      competition = build(:competition, name: "Foo Comp 2015", starts: nil)
+      expect(competition.warnings_for(nil)[:year]).to be_nil
+    end
+
+    context "with venues" do
+      let(:competition) { create(:competition, latitude: 59_910_000, longitude: 10_750_000) }
+
+      def create_venue(latitude_microdegrees, longitude_microdegrees)
+        competition.competition_venues.create!(
+          name: "Venue",
+          wcif_id: competition.competition_venues.count + 1,
+          country_iso2: competition.country.iso2,
+          latitude_microdegrees: latitude_microdegrees,
+          longitude_microdegrees: longitude_microdegrees,
+          timezone_id: "Europe/Paris",
+        )
+      end
+
+      it "warns if a venue is more than 100 meters from the competition" do
+        # 0.001 degrees of latitude is roughly 111 meters
+        create_venue(59_911_000, 10_750_000)
+        expect(competition.reload.warnings_for(nil)[:venue_coordinates]).to eq I18n.t('competitions.messages.venue_coordinates_too_far_away')
+      end
+
+      it "warns if only one of several venues is far away" do
+        create_venue(59_910_000, 10_750_000)
+        create_venue(60_390_000, 5_320_000)
+        expect(competition.reload.warnings_for(nil)[:venue_coordinates]).to eq I18n.t('competitions.messages.venue_coordinates_too_far_away')
+      end
+
+      it "does not warn if venues are within 100 meters of the competition" do
+        create_venue(59_910_000, 10_750_000)
+        # 0.0005 degrees of latitude is roughly 56 meters
+        create_venue(59_910_500, 10_750_000)
+        expect(competition.reload.warnings_for(nil)[:venue_coordinates]).to be_nil
+      end
+
+      it "does not warn if competition has no venues" do
+        expect(competition.warnings_for(nil)[:venue_coordinates]).to be_nil
+      end
+    end
+
     it "warns if advancement condition isn't present for a non final round" do
       create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
       create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2)
