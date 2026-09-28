@@ -2,7 +2,7 @@ import config from "@payload-config";
 import { cacheLife, cacheTag } from "next/cache";
 import { getPayload, type CollectionSlug } from "payload";
 
-export const documentCacheTag = (slug: CollectionSlug) =>
+export const collectionCacheTag = (slug: CollectionSlug) =>
   `payload-collection:${slug}`;
 
 export async function getCachedCollection<TSlug extends CollectionSlug>(
@@ -12,7 +12,7 @@ export async function getCachedCollection<TSlug extends CollectionSlug>(
   sort = "_order",
 ) {
   "use cache";
-  cacheTag(documentCacheTag(slug));
+  cacheTag(collectionCacheTag(slug));
   cacheLife("max");
 
   const payload = await getPayload({ config });

@@ -1,8 +1,7 @@
-import { revalidateTag } from "next/cache";
 import type { Access, CollectionConfig } from "payload";
 import type { PermissionFunctions } from "@/lib/wca/permissions";
-import { AVATAR_MENU_ENTRIES_CACHE_TAG } from "@/lib/payload/avatarMenuEntries";
 import { newTabCheckbox } from "@/blocks/utils";
+import { revalidateCollection } from "@/collections/revalidateCollection";
 
 type UnscopedPermission = {
   [K in keyof PermissionFunctions]: PermissionFunctions[K] extends () => boolean
@@ -24,9 +23,6 @@ const permissionOptions = [
 const isWstAdmin: Access = ({ req: { user } }) =>
   Boolean(user?.roles?.includes("wst_admin"));
 
-const revalidateAvatarMenuEntries = () =>
-  revalidateTag(AVATAR_MENU_ENTRIES_CACHE_TAG, { expire: 0 });
-
 export const AvatarMenuEntries: CollectionConfig = {
   slug: "avatarMenuEntries",
   admin: {
@@ -39,8 +35,8 @@ export const AvatarMenuEntries: CollectionConfig = {
     delete: isWstAdmin,
   },
   hooks: {
-    afterChange: [revalidateAvatarMenuEntries],
-    afterDelete: [revalidateAvatarMenuEntries],
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
   },
   fields: [
     {
