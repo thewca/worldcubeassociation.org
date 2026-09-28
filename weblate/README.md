@@ -137,7 +137,8 @@ On the instance, as root
 Log in at `https://translate.worldcubeassociation.org/` with a **WCA account**;
 confirm the Weblate username is the numeric WCA user id (that is
 `USERNAME_KEY=sub` working) and that the display name came through.
-Only after a real WCA login has worked, consider setting `WEBLATE_NO_EMAIL_AUTH=1`.
+`WEBLATE_NO_EMAIL_AUTH=1` disables password login, including for the admin, so
+keep it commented out in `environment.prod.template` until a real WCA login has worked.
 
 ### Translator permissions
 
