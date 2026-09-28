@@ -3,6 +3,19 @@ import { Header, List } from 'semantic-ui-react';
 
 const IMPORTANT_LINKS = [
   {
+    section: 'Learning Management System (LMS)',
+    links: [
+      {
+        title: 'Moodle',
+        link: 'https://moodle.worldcubeassociation.org/',
+      }
+      {
+        title: 'Moodle Login Instructions',
+        link: 'https://docs.google.com/document/d/19AC9YKLhYArVLFU9rhdh_uPyxt5iRT0B_b0VSqAvRrk/',
+      }
+    ],
+  },
+  {
     section: 'Guides',
     links: [
       {
