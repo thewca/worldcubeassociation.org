@@ -8,7 +8,7 @@
     "@fullcalendar/react": "^6.1.21",
     "@fullcalendar/timegrid": "^6.1.21",
     "@hello-pangea/dnd": "^18.0.1",
-    "@rails/actioncable": "^8.1.301",
+    "@rails/actioncable": "^8.1.400",
     "@rails/ujs": "^7.1.600",
     "@stripe/react-stripe-js": "^6.10.0",
     "@stripe/stripe-js": "^9.17.0",
