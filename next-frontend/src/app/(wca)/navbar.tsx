@@ -17,7 +17,6 @@ import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
-
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
@@ -27,7 +26,7 @@ import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
 import { MobileNavLink, MobileNavRoot } from "@/components/MobileNav";
 import { getCachedGlobal } from "@/lib/payload/globals";
-import { getCachedAvatarMenuEntries } from "@/lib/payload/avatarMenuEntries";
+import { getCachedCollection } from "@/lib/payload/collections";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -115,7 +114,7 @@ export default async function Navbar() {
   const [navbar, socialLinksGlobal, avatarMenuEntries] = await Promise.all([
     getCachedGlobal("nav"),
     getCachedGlobal("social-links"),
-    getCachedAvatarMenuEntries(),
+    getCachedCollection("avatarMenuEntries"),
   ]);
 
   const session = await getSession();
