@@ -6402,18 +6402,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wrksz/themes@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@wrksz/themes@npm:1.2.0"
+"@wrksz/themes@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@wrksz/themes@npm:2.0.2"
   peerDependencies:
     next: ">=16.0.0"
     react: ^18.0.0 || ^19.0.0
     react-dom: ^18.0.0 || ^19.0.0
-    typescript: ">=4.5.0"
+    typescript: ">=5.9"
   peerDependenciesMeta:
     next:
       optional: true
-  checksum: 10c0/913e62d6e2a6ae26bd94d3771b94b9c2f7ef3a8f1b9c90e56ae85a76976ee5f60ee87ed417bbb7fbe1147714d154aa5e0e662e848dc7958fa1c2ead58840ada5
+  checksum: 10c0/00edfcfe635f003c0ac74c11d79e049f7f702a1986c09cfeb68f7b36ef7eab77ea74150809612b8af8f54ec49f4e0c5f4ad9006bb24d3e4532ac4548b3cccd5f
   languageName: node
   linkType: hard
 
@@ -12931,7 +12931,7 @@ __metadata:
     "@types/react-dom": "npm:^19"
     "@types/swagger-ui-react": "npm:^5.18.0"
     "@vitejs/plugin-react": "npm:^6.1.1"
-    "@wrksz/themes": "npm:^1.2.0"
+    "@wrksz/themes": "npm:^2.0.2"
     accept-language-parser: "npm:^1.5.0"
     aws4: "npm:^1.13.2"
     babel-plugin-react-compiler: "npm:^1.0.0"
