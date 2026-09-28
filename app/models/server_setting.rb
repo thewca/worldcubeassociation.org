@@ -3,7 +3,6 @@
 class ServerSetting < ApplicationRecord
   self.primary_key = "name"
 
-  BASE_LOCALE_HASH = 'en_translation_modification'
   TEST_VIDEO_ID_NAME = 'TEST_wc2025_video_url'
   LIVE_VIDEO_ID_NAME = 'wc2025_video_url'
 
