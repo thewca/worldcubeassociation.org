@@ -11661,9 +11661,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"maplibre-gl@npm:^6.10.0":
-  version: 6.10.0
-  resolution: "maplibre-gl@npm:6.10.0"
+"maplibre-gl@npm:^6.11.2":
+  version: 6.11.2
+  resolution: "maplibre-gl@npm:6.11.2"
   dependencies:
     "@mapbox/point-geometry": "npm:^1.1.0"
     "@mapbox/tiny-sdf": "npm:^2.2.0"
@@ -11683,7 +11683,7 @@ __metadata:
     potpack: "npm:^2.1.0"
     quickselect: "npm:^3.0.0"
     tinyqueue: "npm:^3.0.0"
-  checksum: 10c0/ddeb811c63603cfa257c13b55f759d0fc2b2506d08d77e5f363de8e9dd0d20a5cd3c723703ad60e2e6957e28b485a662f8c526f488e9572b59944d30ce9c3a61
+  checksum: 10c0/c1fea2904b23ff42b5c4802547c460de40f0ea34eabee8291a922b653de0deffdcafc29862f7834481b5805ab91726382a9892134c752839c6f84bd95886a6d4
   languageName: node
   linkType: hard
 
@@ -12595,7 +12595,7 @@ __metadata:
     jsdom: "npm:^30.1.0"
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
-    maplibre-gl: "npm:^6.10.0"
+    maplibre-gl: "npm:^6.11.2"
     newrelic: "npm:^14.5.0"
     next: "npm:16.3.5"
     nextjs-routes: "npm:^2.2.5"
