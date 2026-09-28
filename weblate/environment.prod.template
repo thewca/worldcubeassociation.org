@@ -1,0 +1,114 @@
+# Template for the production Weblate environment file.
+#
+# render-env.sh substitutes the ${...} placeholders from SSM Parameter Store and
+# writes environment.prod (mode 0600, gitignored). Everything NOT a placeholder
+# is plain configuration and is meant to be reviewed in git — keep it that way.
+#
+# Full reference: https://docs.weblate.org/en/latest/admin/install/docker.html
+
+WEBLATE_SITE_DOMAIN=translate.worldcubeassociation.org
+WEBLATE_SITE_TITLE=WCA Translation
+WEBLATE_DEBUG=0
+WEBLATE_LOGLEVEL=INFO
+
+# Sized for the 2 vCPU instance types in the ASG's mixed-instances policy.
+WEBLATE_WORKERS=4
+
+# --- Running behind the wca-on-rails ALB ------------------------------------
+# ENABLE_HTTPS makes Django emit https:// URLs and set Secure cookies. TLS is
+# terminated at the load balancer; Weblate itself only ever speaks plain HTTP.
+WEBLATE_ENABLE_HTTPS=1
+
+# REQUIRED whenever ENABLE_HTTPS is on behind a TLS-terminating proxy, and the
+# cause of an infinite redirect loop if it is missing.
+#
+# ENABLE_HTTPS turns on Django's SECURE_SSL_REDIRECT (settings_docker.py:1143)
+# but does NOT set SECURE_PROXY_SSL_HEADER — that is only applied if this
+# variable is present (settings_docker.py:1214). Without it Django sees the
+# ALB's plain-HTTP forward, decides the request is insecure, and 301s to
+# https://, which the ALB terminates and forwards as HTTP again, forever:
+#
+#   "GET / HTTP/1.1" 301 5    x N
+#
+# The ALB always sends X-Forwarded-Proto, so this makes Django trust it.
+WEBLATE_SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO,https
+
+# Without this every request looks like it came from the load balancer, so
+# Weblate's brute-force protection treats all users as one client and a handful
+# of failed logins rate-limits everybody at once.
+WEBLATE_IP_PROXY_HEADER=HTTP_X_FORWARDED_FOR
+
+# The private IP is REQUIRED here, not decorative. ALB health checks send
+# `Host: <target-ip>:8080`, and Django returns 400 for any Host not in this list
+# — including on /healthz/ — which leaves the target permanently unhealthy while
+# the application logs look completely normal. The IP changes with every ASG
+# replacement, so render-env.sh injects it from IMDS at boot.
+WEBLATE_ALLOWED_HOSTS=translate.worldcubeassociation.org,${WEBLATE_PRIVATE_IP}
+# ----------------------------------------------------------------------------
+
+# Fallback superuser if SSO breaks. The password comes from SSM; see the note on
+# WEBLATE_NO_EMAIL_AUTH at the bottom before you consider disabling it.
+WEBLATE_ADMIN_NAME=WCA Admin
+WEBLATE_ADMIN_EMAIL=software@worldcubeassociation.org
+WEBLATE_ADMIN_PASSWORD=${WEBLATE_ADMIN_PASSWORD}
+
+# Registration must be open for SSO to create accounts on first login, but
+# ALLOW_BACKENDS restricts it to OIDC — there is no password signup form.
+WEBLATE_REGISTRATION_OPEN=1
+WEBLATE_REGISTRATION_ALLOW_BACKENDS=oidc
+
+# --- Email (SES) ------------------------------------------------------------
+# notifications@ is the Rails app's default_from_address (config/application.rb),
+# so it is already a verified SES identity. The account must be out of the SES
+# sandbox to reach arbitrary translators.
+WEBLATE_EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+WEBLATE_EMAIL_HOST=email-smtp.us-west-2.amazonaws.com
+WEBLATE_EMAIL_PORT=587
+WEBLATE_EMAIL_USE_TLS=1
+WEBLATE_EMAIL_HOST_USER=${WEBLATE_EMAIL_HOST_USER}
+WEBLATE_EMAIL_HOST_PASSWORD=${WEBLATE_EMAIL_HOST_PASSWORD}
+WEBLATE_SERVER_EMAIL=notifications@worldcubeassociation.org
+WEBLATE_DEFAULT_FROM_EMAIL=notifications@worldcubeassociation.org
+
+# --- WCA SSO ----------------------------------------------------------------
+# A real confidential application registered at
+# https://www.worldcubeassociation.org/oauth/applications/new with redirect URI
+# https://translate.worldcubeassociation.org/accounts/complete/oidc/
+# (trailing slash required — Doorkeeper matches redirect URIs exactly).
+WEBLATE_SOCIAL_AUTH_OIDC_OIDC_ENDPOINT=https://www.worldcubeassociation.org
+WEBLATE_SOCIAL_AUTH_OIDC_KEY=${WEBLATE_SOCIAL_AUTH_OIDC_KEY}
+WEBLATE_SOCIAL_AUTH_OIDC_SECRET=${WEBLATE_SOCIAL_AUTH_OIDC_SECRET}
+WEBLATE_SOCIAL_AUTH_OIDC_TITLE=WCA account
+
+# REQUIRED, and the one setting that silently breaks logins if skipped.
+# python-social-auth defaults USERNAME_KEY to `preferred_username`, which WCA
+# maps to `wca_id` (config/initializers/doorkeeper_openid_connect.rb) — and
+# users.wca_id is nullable, so every translator without a WCA ID fails to get a
+# username. `sub` is the WCA user id and is always present; the display name
+# still comes from the `name` claim.
+WEBLATE_SOCIAL_AUTH_OIDC_USERNAME_KEY=sub
+# ----------------------------------------------------------------------------
+
+# --- Pushing translations back to GitHub ------------------------------------
+# Machine user that opens the translation pull requests. The username must match
+# the owner of the PAT stored at /weblate/github_token.
+WEBLATE_GITHUB_USERNAME=wca-translations-bot
+WEBLATE_GITHUB_TOKEN=${WEBLATE_GITHUB_TOKEN}
+WEBLATE_GITHUB_HOST=api.github.com
+# ----------------------------------------------------------------------------
+
+# PostgreSQL (the `database` service in docker-compose.prod.yml)
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+POSTGRES_USER=weblate
+POSTGRES_DB=weblate
+POSTGRES_HOST=database
+POSTGRES_PORT=
+
+# Valkey (the `cache` service)
+REDIS_HOST=cache
+REDIS_PORT=6379
+
+# Leave commented until a real WCA login has been confirmed working — this
+# disables password auth for EVERY account including the admin above, so
+# enabling it before verifying SSO locks you out of the instance entirely.
+#WEBLATE_NO_EMAIL_AUTH=1
