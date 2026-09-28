@@ -21,6 +21,7 @@ import { LuChevronDown } from "react-icons/lu";
 import _ from "lodash";
 import RailsLink from "@/components/RailsLink";
 import { type UserPermissions } from "@/lib/wca/permissions";
+import type { AvatarMenuEntry } from "@/types/payload";
 import buildAvatarMenuEntries, {
   type MenuEntry,
 } from "@/lib/wca/avatarMenuEntries";
@@ -55,23 +56,31 @@ function EntryLink({
 
 export default function Wrapper({
   session,
+  cmsEntries,
   permissions,
 }: {
   session: Session | null;
+  cmsEntries: AvatarMenuEntry[];
   permissions?: UserPermissions;
 }) {
   return (
     <ClientOnly fallback={<Skeleton boxSize={8} />}>
-      <AvatarMenu session={session} permissions={permissions} />
+      <AvatarMenu
+        session={session}
+        cmsEntries={cmsEntries}
+        permissions={permissions}
+      />
     </ClientOnly>
   );
 }
 
 function AvatarMenu({
   session,
+  cmsEntries,
   permissions,
 }: {
   session: Session | null;
+  cmsEntries: AvatarMenuEntry[];
   permissions?: UserPermissions;
 }) {
   const router = useRouter();
@@ -99,7 +108,7 @@ function AvatarMenu({
     </Avatar.Root>
   );
 
-  const entries = buildAvatarMenuEntries(session, permissions);
+  const entries = buildAvatarMenuEntries(session, cmsEntries, permissions);
 
   return (
     <>

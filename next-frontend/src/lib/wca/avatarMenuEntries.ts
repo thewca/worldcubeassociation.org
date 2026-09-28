@@ -1,11 +1,12 @@
 import type Link from "next/link";
 import React from "react";
-import { route } from "nextjs-routes";
+import { route, type RouteLiteral } from "nextjs-routes";
 import type { Session } from "@/auth.client";
 import {
   hydrateUserPermissions,
   type UserPermissions,
 } from "@/lib/wca/permissions";
+import type { AvatarMenuEntry } from "@/types/payload";
 
 // Mirrors the names in `User.panel_list`; the permissions endpoint only hands us the ids.
 const PANEL_NAMES: Record<string, string> = {
@@ -31,13 +32,14 @@ export type MenuEntry =
       kind: "link";
       label: string;
       href: React.ComponentProps<typeof Link>["href"];
-      newTab?: boolean;
+      newTab?: boolean | null;
     }
   // Rails owns most of these pages, so they need a full page load rather than a client transition.
   | { kind: "rails"; label: string; href: string };
 
 export default function buildAvatarMenuEntries(
   session: Session,
+  cmsEntries: AvatarMenuEntry[],
   permissions?: UserPermissions,
 ): MenuEntry[] {
   const can = hydrateUserPermissions(permissions);
@@ -50,24 +52,19 @@ export default function buildAvatarMenuEntries(
   const panels = permissions?.can_access_panels.scope ?? [];
 
   return [
-    ...(can.canAccessCms()
-      ? ([
-          {
-            kind: "link",
-            label: "Payload CMS",
-            href: route({ pathname: "/payload/[[...segments]]", query: {} }),
-            newTab: true,
-          },
-          { kind: "link", label: "Developer Dashboard", href: "/dashboard" },
-          { kind: "separator" },
-        ] as MenuEntry[])
-      : []),
-    rails("Notifications", "/notifications"),
-    rails("Edit profile", "/profile/edit"),
-    { kind: "separator" },
-    { kind: "link", label: "My Competitions", href: "/competitions/mine" },
+    ...cmsEntries
+      .filter(
+        ({ requiredPermission }) =>
+          requiredPermission === "none" || can[requiredPermission](),
+      )
+      .map(({ label, href, isRailsPage, newTab }): MenuEntry =>
+        isRailsPage
+          ? rails(label, href)
+          : { kind: "link", label, href: href as RouteLiteral, newTab },
+      ),
     ...(session.user?.wcaId
       ? ([
+          { kind: "separator" },
           {
             kind: "link",
             label: "My Results",
@@ -87,16 +84,6 @@ export default function buildAvatarMenuEntries(
           ),
         ] as MenuEntry[])
       : []),
-    ...(can.canViewPolls()
-      ? ([{ kind: "separator" }, rails("Polls", "/polls")] as MenuEntry[])
-      : []),
-    ...(can.canViewAllUsers()
-      ? ([
-          { kind: "separator" },
-          { kind: "header", label: "Administration" },
-          rails("Manage users", "/users"),
-        ] as MenuEntry[])
-      : []),
     ...(can.canViewDelegateAdminPage() && can.canOrganizeCompetitions("*")
       ? ([
           { kind: "separator" },
@@ -104,34 +91,5 @@ export default function buildAvatarMenuEntries(
           rails("New competition", "/competitions/new"),
         ] as MenuEntry[])
       : []),
-    ...(can.canAdminResults()
-      ? ([
-          { kind: "separator" },
-          { kind: "header", label: "Results Team" },
-          rails("Competitions", "/competitions"),
-          rails("Sidekiq", "/sidekiq/"),
-        ] as MenuEntry[])
-      : []),
-    ...(can.canCreatePosts()
-      ? ([
-          { kind: "separator" },
-          rails("New post", "/posts/new"),
-        ] as MenuEntry[])
-      : []),
-    ...(can.canManageRegionalOrganizations()
-      ? ([
-          { kind: "separator" },
-          { kind: "header", label: "Regional Organizations" },
-          rails(
-            "Manage regional organizations",
-            "/admin/regional-organizations",
-          ),
-          rails("New regional organization", "/regional-organizations/new"),
-        ] as MenuEntry[])
-      : []),
-    { kind: "separator" },
-    rails("API", "/api"),
-    rails("Manage your applications", "/oauth/applications"),
-    rails("Authorized applications", "/oauth/authorized_applications"),
   ];
 }
