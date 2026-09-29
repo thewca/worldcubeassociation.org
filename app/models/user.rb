@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :competition_scoretakers
+  has_many :trainee_delegate_applications, foreign_key: :applicant_id, inverse_of: :applicant, dependent: :restrict_with_exception
   has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
@@ -1613,6 +1614,7 @@ class User < ApplicationRecord
       competitions_announced.update_all(announced_by: new_user.id)
       roles.update_all(user_id: new_user.id)
       registrations.update_all(user_id: new_user.id)
+      trainee_delegate_applications.update_all(applicant_id: new_user.id)
 
       final_wca_id = new_user.wca_id.presence || self.wca_id.presence
       new_user.newcomer_results.update_all(person_id: final_wca_id) if final_wca_id.present?

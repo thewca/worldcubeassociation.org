@@ -46,14 +46,14 @@ const REQUIRED_ANSWERS = [
 
 const EMPTY_APPLICATION = {
   delegate_region_id: null,
-  spoken_to_delegate_user_ids: [],
-  recommender_user_ids: [],
+  spoken_to_delegate_ids: [],
+  recommender_ids: [],
   introduction: '',
   competition_contributions: '',
   volunteer_history: '',
   motivation: '',
   relevant_skills: '',
-  cubing_business_involvement: null,
+  is_involved_in_cubing_business: null,
   cubing_business_involvement_details: '',
   declarations: Object.fromEntries(DECLARATIONS.map((declaration) => [declaration, false])),
 };
@@ -155,7 +155,7 @@ function TraineeDelegateApplication({
   const [rootRegionId, setRootRegionId] = useState(null);
 
   const [isInvolvedInBusiness, setIsInvolvedInBusinessRaw] = useFormObjectState(
-    'cubing_business_involvement',
+    'is_involved_in_cubing_business',
   );
   const setIsInvolvedInBusiness = useInputUpdater(setIsInvolvedInBusinessRaw);
 
@@ -204,19 +204,19 @@ function TraineeDelegateApplication({
   );
 
   const isApplicationComplete = selectedRegion
-    && application.spoken_to_delegate_user_ids.length > 0
-    && application.recommender_user_ids.length > 0
+    && application.spoken_to_delegate_ids.length > 0
+    && application.recommender_ids.length > 0
     && REQUIRED_ANSWERS.every((answer) => application[answer].trim())
     && DECLARATIONS.every((declaration) => application.declarations[declaration])
-    && application.cubing_business_involvement !== null
-    && (!application.cubing_business_involvement
+    && application.is_involved_in_cubing_business !== null
+    && (!application.is_involved_in_cubing_business
       || application.cubing_business_involvement_details.trim());
 
   // The selected Delegates belong to the previous region, so they have to be picked again.
   const selectRegion = useCallback((regionId) => {
     updateFormValue('delegate_region_id', regionId);
-    updateFormValue('spoken_to_delegate_user_ids', []);
-    updateFormValue('recommender_user_ids', []);
+    updateFormValue('spoken_to_delegate_ids', []);
+    updateFormValue('recommender_ids', []);
   }, [updateFormValue]);
 
   const updateRootRegion = useCallback((_event, { value }) => {
@@ -351,7 +351,7 @@ function TraineeDelegateApplication({
           </Message>
         )}
         <DelegateDropdown
-          field="spoken_to_delegate_user_ids"
+          field="spoken_to_delegate_ids"
           label={I18n.t('trainee_delegate_application.form.spoken_delegates')}
           options={delegateOptions}
           disabled={!selectedRegion}
@@ -361,7 +361,7 @@ function TraineeDelegateApplication({
           label={I18n.t('trainee_delegate_application.form.declaration_has_delegate_support')}
         />
         <DelegateDropdown
-          field="recommender_user_ids"
+          field="recommender_ids"
           label={I18n.t('trainee_delegate_application.form.recommenders')}
           options={delegateOptions}
           disabled={!selectedRegion || !application.declarations.has_delegate_support}
@@ -416,21 +416,21 @@ function TraineeDelegateApplication({
         />
 
         <Form.Field required>
-          <label htmlFor="cubing_business_involvement_yes">
+          <label htmlFor="is_involved_in_cubing_business_yes">
             {I18n.t('trainee_delegate_application.form.cubing_business_involvement')}
           </label>
           <Form.Group inline>
             <Form.Radio
-              id="cubing_business_involvement_yes"
-              name="cubing_business_involvement"
+              id="is_involved_in_cubing_business_yes"
+              name="is_involved_in_cubing_business"
               value
               checked={isInvolvedInBusiness === true}
               label={I18n.t('trainee_delegate_application.form.yes')}
               onChange={setIsInvolvedInBusiness}
             />
             <Form.Radio
-              id="cubing_business_involvement_no"
-              name="cubing_business_involvement"
+              id="is_involved_in_cubing_business_no"
+              name="is_involved_in_cubing_business"
               value={false}
               checked={isInvolvedInBusiness === false}
               label={I18n.t('trainee_delegate_application.form.no')}

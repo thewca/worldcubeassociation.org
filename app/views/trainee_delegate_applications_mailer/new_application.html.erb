@@ -33,11 +33,11 @@
   <li>The applicant acknowledges having read the WCA Regulations.</li>
   <li>
     The applicant is involved with a cubing-related business:
-    <%= @application.cubing_business_involvement ? "Yes" : "No" %>
+    <%= @application.is_involved_in_cubing_business? ? "Yes" : "No" %>
   </li>
 </ul>
 
-<% if @application.cubing_business_involvement %>
+<% if @application.is_involved_in_cubing_business? %>
   <h2>Cubing-related business involvement</h2>
   <%= simple_format(h(@application.cubing_business_involvement_details)) %>
 <% end %>

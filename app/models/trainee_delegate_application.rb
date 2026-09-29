@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-class TraineeDelegateApplication
-  include ActiveModel::Model
-  include ActiveModel::Attributes
-
+class TraineeDelegateApplication < ApplicationRecord
   MINIMUM_APPLICANT_AGE = 17
 
   # Regional and Senior Delegates review the application, so they cannot also recommend the applicant.
@@ -25,19 +22,18 @@ class TraineeDelegateApplication
     read_regulations
   ].freeze
 
-  attr_accessor :applicant
+  belongs_to :applicant, class_name: "User", inverse_of: :trainee_delegate_applications
+  belongs_to :delegate_region, class_name: "UserGroup"
 
-  attribute :delegate_region_id, :integer
-  attribute :spoken_to_delegate_user_ids, default: -> { [] }
-  attribute :recommender_user_ids, default: -> { [] }
+  has_many :conversations, class_name: "TraineeDelegateConversation", foreign_key: :application_id,
+                           inverse_of: :application, dependent: :delete_all
+  has_many :spoken_to_delegates, through: :conversations, source: :user
+  has_many :recommendations, class_name: "TraineeDelegateRecommendation", foreign_key: :application_id,
+                             inverse_of: :application, dependent: :delete_all
+  has_many :recommenders, through: :recommendations, source: :user
+
+  # Every declaration has to be acknowledged before submitting, so storing them would only ever store `true`.
   attribute :declarations, default: -> { {} }
-  attribute :introduction, :string
-  attribute :competition_contributions, :string
-  attribute :volunteer_history, :string
-  attribute :motivation, :string
-  attribute :relevant_skills, :string
-  attribute :cubing_business_involvement, :boolean
-  attribute :cubing_business_involvement_details, :string
 
   validates :introduction, :competition_contributions, :motivation, :relevant_skills, presence: true
   validate :validate_applicant_eligibility
@@ -93,10 +89,6 @@ class TraineeDelegateApplication
     end
   end
 
-  def delegate_region
-    @delegate_region ||= self.class.leaf_regions.find { it.id == delegate_region_id }
-  end
-
   def delegate_region_name
     self.class.region_path_names(delegate_region).join(": ")
   end
@@ -111,14 +103,6 @@ class TraineeDelegateApplication
     return [] if delegate_region.blank?
 
     self.class.junior_and_full_delegate_roles(delegate_region).map(&:user).uniq
-  end
-
-  def spoken_to_delegates
-    junior_and_full_delegates.filter { spoken_to_delegate_user_ids.include?(it.id) }
-  end
-
-  def recommenders
-    junior_and_full_delegates.filter { recommender_user_ids.include?(it.id) }
   end
 
   def delegate_region_options
@@ -173,27 +157,30 @@ class TraineeDelegateApplication
     end
   end
 
+  # A missing region is already reported by `belongs_to`.
   private def validate_delegate_region
-    if delegate_region.blank?
-      errors.add(:delegate_region_id, I18n.t("trainee_delegate_application.errors.invalid_region"))
+    return if delegate_region.blank?
+
+    if self.class.leaf_regions.exclude?(delegate_region)
+      errors.add(:delegate_region, I18n.t("trainee_delegate_application.errors.invalid_region"))
     elsif reviewer.blank?
-      errors.add(:delegate_region_id, I18n.t("trainee_delegate_application.errors.missing_reviewer"))
+      errors.add(:delegate_region, I18n.t("trainee_delegate_application.errors.missing_reviewer"))
     end
   end
 
   private def validate_spoken_to_delegates
-    if spoken_to_delegate_user_ids.empty?
-      errors.add(:spoken_to_delegate_user_ids, I18n.t("trainee_delegate_application.errors.spoken_delegate_required"))
-    elsif (spoken_to_delegate_user_ids - junior_and_full_delegates.map(&:id)).any?
-      errors.add(:spoken_to_delegate_user_ids, I18n.t("trainee_delegate_application.errors.invalid_spoken_delegate"))
+    if spoken_to_delegates.empty?
+      errors.add(:spoken_to_delegates, I18n.t("trainee_delegate_application.errors.spoken_delegate_required"))
+    elsif (spoken_to_delegates - junior_and_full_delegates).any?
+      errors.add(:spoken_to_delegates, I18n.t("trainee_delegate_application.errors.invalid_spoken_delegate"))
     end
   end
 
   private def validate_recommenders
-    if recommender_user_ids.empty?
-      errors.add(:recommender_user_ids, I18n.t("trainee_delegate_application.errors.recommender_required"))
-    elsif (recommender_user_ids - junior_and_full_delegates.map(&:id)).any?
-      errors.add(:recommender_user_ids, I18n.t("trainee_delegate_application.errors.invalid_recommender"))
+    if recommenders.empty?
+      errors.add(:recommenders, I18n.t("trainee_delegate_application.errors.recommender_required"))
+    elsif (recommenders - junior_and_full_delegates).any?
+      errors.add(:recommenders, I18n.t("trainee_delegate_application.errors.invalid_recommender"))
     end
   end
 
@@ -204,9 +191,9 @@ class TraineeDelegateApplication
   end
 
   private def validate_cubing_business_involvement
-    if cubing_business_involvement.nil?
-      errors.add(:cubing_business_involvement, I18n.t("trainee_delegate_application.errors.business_involvement_required"))
-    elsif cubing_business_involvement && cubing_business_involvement_details.blank?
+    if is_involved_in_cubing_business.nil?
+      errors.add(:is_involved_in_cubing_business, I18n.t("trainee_delegate_application.errors.business_involvement_required"))
+    elsif is_involved_in_cubing_business? && cubing_business_involvement_details.blank?
       errors.add(:cubing_business_involvement_details, I18n.t("trainee_delegate_application.errors.business_involvement_explanation_required"))
     end
   end

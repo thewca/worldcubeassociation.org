@@ -24,9 +24,9 @@ class TraineeDelegateApplicationsController < ApplicationController
   def create
     application = TraineeDelegateApplication.new(**trainee_delegate_application_params, applicant: current_user)
 
-    return render json: application.errors, status: :unprocessable_content if application.invalid?
+    return render json: application.errors, status: :unprocessable_content unless application.save
 
-    TraineeDelegateApplicationsMailer.new_application(current_user, application.attributes).deliver_later
+    TraineeDelegateApplicationsMailer.new_application(application).deliver_later
     render json: { message: I18n.t("trainee_delegate_application.success") }
   end
 
@@ -39,10 +39,10 @@ class TraineeDelegateApplicationsController < ApplicationController
         :volunteer_history,
         :motivation,
         :relevant_skills,
-        :cubing_business_involvement,
+        :is_involved_in_cubing_business,
         :cubing_business_involvement_details,
-        { spoken_to_delegate_user_ids: [],
-          recommender_user_ids: [],
+        { spoken_to_delegate_ids: [],
+          recommender_ids: [],
           declarations: TraineeDelegateApplication::DECLARATIONS },
       ],
     )

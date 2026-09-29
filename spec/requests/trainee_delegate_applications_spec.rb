@@ -15,13 +15,13 @@ RSpec.describe "Trainee Delegate applications" do
   let(:valid_application) do
     {
       delegate_region_id: target_region.id,
-      spoken_to_delegate_user_ids: [recommender.id],
-      recommender_user_ids: [recommender.id],
+      spoken_to_delegate_ids: [recommender.id],
+      recommender_ids: [recommender.id],
       introduction: "I am an experienced organizer.",
       competition_contributions: "I regularly help with setup and scoretaking.",
       motivation: "I want to support competitions in my region.",
       relevant_skills: "Communication and organization.",
-      cubing_business_involvement: false,
+      is_involved_in_cubing_business: false,
       declarations: TraineeDelegateApplication::DECLARATIONS.index_with(true),
     }
   end
@@ -40,12 +40,20 @@ RSpec.describe "Trainee Delegate applications" do
   context "when signed in" do
     before { sign_in applicant }
 
-    it "emails the Regional Delegate and copies the Senior Delegate" do
-      perform_enqueued_jobs do
-        post trainee_delegate_application_path, params: { trainee_delegate_application: valid_application }, as: :json
-      end
+    it "stores the application and emails the Regional Delegate, copying the Senior Delegate" do
+      expect do
+        perform_enqueued_jobs do
+          post trainee_delegate_application_path, params: { trainee_delegate_application: valid_application }, as: :json
+        end
+      end.to change(TraineeDelegateApplication, :count).by(1)
 
       expect(response).to be_successful
+      expect(TraineeDelegateApplication.last).to have_attributes(
+        applicant: applicant,
+        delegate_region: target_region,
+        recommenders: [recommender],
+        spoken_to_delegates: [recommender],
+      )
       mail = ActionMailer::Base.deliveries.last
       expect(mail.to).to eq([regional_delegate.email])
       expect(mail.cc).to eq([senior_delegate.email, applicant.email, "assistants@worldcubeassociation.org"])
@@ -78,10 +86,11 @@ RSpec.describe "Trainee Delegate applications" do
       create(:delegate_role, user: other_recommender, group: other_region)
 
       post trainee_delegate_application_path,
-           params: { trainee_delegate_application: valid_application.merge(recommender_user_ids: [other_recommender.id]) },
+           params: { trainee_delegate_application: valid_application.merge(recommender_ids: [other_recommender.id]) },
            as: :json
 
       expect(response).to have_http_status(:unprocessable_content)
+      expect(TraineeDelegateApplication.count).to eq(0)
       expect(enqueued_jobs).to be_empty
     end
   end
