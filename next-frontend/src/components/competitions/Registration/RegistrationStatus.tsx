@@ -14,10 +14,6 @@ const STATUS_ALERTS = {
   rejected: { status: "error", message: "is_rejected" },
 } as const;
 
-function isKnownStatus(status?: string): status is keyof typeof STATUS_ALERTS {
-  return status !== undefined && status in STATUS_ALERTS;
-}
-
 export default function RegistrationStatus({
   registration,
 }: {
@@ -27,7 +23,7 @@ export default function RegistrationStatus({
 
   const status = registration.competing.registration_status;
 
-  if (!isKnownStatus(status)) {
+  if (status === undefined) {
     return null;
   }
 

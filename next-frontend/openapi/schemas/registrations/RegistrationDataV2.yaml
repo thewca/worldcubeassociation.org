@@ -44,7 +44,7 @@ properties:
           type: string
       # only when authenticated
       registration_status:
-        type: string
+        $ref: "./CompetingStatus.yaml"
       registered_on:
         type: string
         format: datetime
