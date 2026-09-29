@@ -127,6 +127,7 @@ class User < ApplicationRecord
          :confirmable
 
   ABSOLUTE_SESSION_TIMEOUT = 90.days
+  # The start time of the remembered session, stored in its cookie.
   attr_accessor :remembered_session_started_at
 
   class << self

@@ -68,7 +68,8 @@ RSpec.describe "sessions" do
 
     travel_to(signed_in_at + User::ABSOLUTE_SESSION_TIMEOUT + 1.second) do
       browser.get(profile_edit_path)
-      expect(browser.response).to redirect_to(new_user_session_path)
+      expect(browser.response).to have_http_status(:redirect)
+      expect(browser.response.location).to end_with(new_user_session_path)
     end
   end
 
@@ -92,7 +93,8 @@ RSpec.describe "sessions" do
 
     travel_to(signed_in_at + 13.weeks) do
       browser.get(profile_edit_path)
-      expect(browser.response).to redirect_to(new_user_session_path)
+      expect(browser.response).to have_http_status(:redirect)
+      expect(browser.response.location).to end_with(new_user_session_path)
     end
   end
 end
