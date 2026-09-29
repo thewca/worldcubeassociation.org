@@ -13,13 +13,15 @@ export default function CronjobActions({ cronjobName, cronjobDetails }) {
 
   // Usually, we want to reset if we can clearly establish that
   //   the cronjob halted because of an error (i.e. it halted AND an error state was recorded)
-  const terminatedAndErrored = !cronjobDetails?.in_progress && cronjobDetails?.recently_errored;
+  const terminatedAndErrored = !cronjobDetails?.is_in_progress && cronjobDetails?.recently_errored;
   // However, due to deployment chokes, we manually override the button to be enabled
   //   when the debug information is shown (there is still an extra confirmation warning)
   const isResetDisabled = !(terminatedAndErrored || showDebugInfo);
 
+  const reasonNotToRun = cronjobDetails?.reason_not_to_run;
+
   const isDoItDisabled = (
-    cronjobDetails?.reason_not_to_run || cronjobDetails?.scheduled || cronjobDetails?.in_progress
+    reasonNotToRun || cronjobDetails?.is_scheduled || cronjobDetails?.is_in_progress
   );
 
   const confirm = useConfirm();
@@ -37,6 +39,7 @@ export default function CronjobActions({ cronjobName, cronjobDetails }) {
       updatedCronjobDetails,
     ),
   });
+
   const {
     mutate: resetCronjobMutation,
     isLoading: isResetLoading,
@@ -60,7 +63,8 @@ export default function CronjobActions({ cronjobName, cronjobDetails }) {
   };
 
   if (isRunLoading || isResetLoading) return <Loading />;
-  if (isRunError || isResetError) return <Errored error={runError || resetError} />;
+  if (isRunError) return <Errored error={runError} />;
+  if (isResetError) return <Errored error={resetError} />;
 
   return (
     <>
@@ -70,12 +74,20 @@ export default function CronjobActions({ cronjobName, cronjobDetails }) {
       >
         Reset
       </Button>
-      <Button
-        disabled={isDoItDisabled}
-        onClick={() => runCronjobMutation({ cronjobName })}
-      >
-        Do it!
-      </Button>
+      {reasonNotToRun ? (
+        <>
+          This cronjob cannot be run currently because:
+          {' '}
+          {reasonNotToRun}
+        </>
+      ) : (
+        <Button
+          disabled={isDoItDisabled}
+          onClick={() => runCronjobMutation({ cronjobName })}
+        >
+          Do it!
+        </Button>
+      )}
       <Button
         toggle
         active={showDebugInfo}

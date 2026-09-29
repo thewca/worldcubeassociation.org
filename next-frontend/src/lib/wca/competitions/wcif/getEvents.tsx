@@ -3,6 +3,6 @@ import { cache } from "react";
 
 export const getEvents = cache(async (competitionId: string) => {
   return await serverClient.GET("/v0/competitions/{competitionId}/events", {
-    params: { path: { competitionId } },
+    params: { path: { competitionId }, query: { wcif_version: "latest" } },
   });
 });

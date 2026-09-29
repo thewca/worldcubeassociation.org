@@ -1,0 +1,13 @@
+type: [object, "null"]
+properties:
+  type:
+    type: string
+    enum: [resultAchieved, ranking, percent]
+  scope:
+    type: string
+    enum: [single, average]
+  value:
+    type: [integer, "null"]
+required:
+  - type
+  - scope

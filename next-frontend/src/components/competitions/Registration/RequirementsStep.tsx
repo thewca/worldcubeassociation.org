@@ -1,76 +1,48 @@
 "use client";
 
-import { Alert, Checkbox, VStack } from "@chakra-ui/react";
+import { Alert, Button, Checkbox, VStack } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
-import { PanelProps } from "@/app/(wca)/(with-background)/competitions/[competitionId]/register/StepPanel";
-
-function RegistrationFullMessage({
-  competitionInfo,
-}: Pick<PanelProps, "competitionInfo">) {
-  const { t } = useT();
-
-  if (competitionInfo["registration_full_and_accepted?"]) {
-    return (
-      <Alert.Root status="warning">
-        <Alert.Indicator />
-        <Alert.Title>
-          {t("registrations.registration_full", {
-            competitor_limit: competitionInfo.competitor_limit,
-          })}
-        </Alert.Title>
-      </Alert.Root>
-    );
-  }
-
-  if (competitionInfo["registration_full?"]) {
-    return (
-      <Alert.Root status="warning">
-        <Alert.Indicator />
-        <Alert.Title>
-          {t("registrations.registration_full_include_waiting_list", {
-            competitor_limit: competitionInfo.competitor_limit,
-          })}
-        </Alert.Title>
-      </Alert.Root>
-    );
-  }
-
-  return null;
-}
 
 export default function RequirementsStep({
-  form,
-  competitionInfo,
-}: PanelProps) {
+  hasAcknowledged,
+  onAcknowledgedChange,
+  onContinue,
+}: {
+  hasAcknowledged: boolean;
+  onAcknowledgedChange: (acknowledged: boolean) => void;
+  onContinue: () => void;
+}) {
   const { t } = useT();
 
   return (
-    <VStack gap={3}>
-      <RegistrationFullMessage competitionInfo={competitionInfo} />
-      <form.Field name="hasAcceptedTerms">
-        {(field) => (
-          <Checkbox.Root
-            variant="solid"
-            width="full"
-            checked={field.state.value}
-            onCheckedChange={(e) => field.handleChange(!!e.checked)}
-          >
-            <Checkbox.HiddenInput />
-            <Alert.Root status="success">
-              <Alert.Indicator>
-                <Checkbox.Control />
-              </Alert.Indicator>
-              <Alert.Title asChild>
-                <Checkbox.Label>
-                  {t(
-                    "competitions.registration_v2.requirements.acknowledgement",
-                  )}
-                </Checkbox.Label>
-              </Alert.Title>
-            </Alert.Root>
-          </Checkbox.Root>
-        )}
-      </form.Field>
+    <VStack gap="3">
+      <Checkbox.Root
+        variant="solid"
+        width="full"
+        cursor="pointer"
+        checked={hasAcknowledged}
+        onCheckedChange={(e) => onAcknowledgedChange(!!e.checked)}
+      >
+        <Checkbox.HiddenInput />
+        <Alert.Root status="success">
+          <Alert.Indicator>
+            <Checkbox.Control />
+          </Alert.Indicator>
+          <Alert.Title asChild>
+            <Checkbox.Label>
+              {t("competitions.registration_v2.requirements.acknowledgement")}
+            </Checkbox.Label>
+          </Alert.Title>
+        </Alert.Root>
+      </Checkbox.Root>
+      <Button
+        width="full"
+        disabled={!hasAcknowledged}
+        onClick={onContinue}
+        colorPalette="blue"
+      >
+        {t("competitions.registration_v2.requirements.accept")}
+      </Button>
     </VStack>
   );
 }

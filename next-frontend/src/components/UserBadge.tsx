@@ -1,13 +1,12 @@
 import React from "react";
 import {
-  Box,
   Card,
   Center,
   HStack,
+  Image,
   LinkBox,
   LinkOverlay,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
 import { route } from "nextjs-routes";
@@ -18,6 +17,7 @@ interface UserBadgeData {
   profilePicture?: components["schemas"]["UserAvatar"];
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
   wcaId: string;
+  action?: React.ReactNode;
 }
 
 const UserBadge: React.FC<UserBadgeData> = ({
@@ -25,6 +25,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
   profilePicture,
   roles,
   wcaId,
+  action,
 }) => {
   return (
     <LinkBox asChild>
@@ -39,18 +40,22 @@ const UserBadge: React.FC<UserBadgeData> = ({
         maxW="xl"
       >
         {profilePicture && (
-          <Box objectFit="cover" width="75px" minH="75px" position="relative">
-            <Image
-              src={
-                profilePicture.is_default
-                  ? "/missing_avatar_thumb.png"
-                  : profilePicture.url
-              }
-              alt="Profile Picture"
-              fill
-              style={{ objectFit: "cover" }}
-            />
-          </Box>
+          <Image
+            src={
+              profilePicture.is_default
+                ? "/missing_avatar_thumb.png"
+                : (profilePicture.thumb_url ?? profilePicture.url)
+            }
+            alt="Profile Picture"
+            objectFit="cover"
+            // The badge needs a fixed-width column, so a non-square photo has to
+            //   be cropped; anchor the crop at the top so heads survive it.
+            objectPosition="top"
+            width="avatarThumb"
+            // Fixed width, but only a *minimum* height, so the picture stretches
+            //   to the card whenever the roles wrap it taller than the thumb.
+            minH="avatarThumb"
+          />
         )}
         <Center>
           <Card.Body>
@@ -81,6 +86,11 @@ const UserBadge: React.FC<UserBadgeData> = ({
             )}
           </Card.Body>
         </Center>
+        {action && (
+          <Center marginLeft="auto" paddingRight="3">
+            {action}
+          </Center>
+        )}
       </Card.Root>
     </LinkBox>
   );

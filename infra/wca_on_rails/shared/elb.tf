@@ -90,7 +90,7 @@ resource "aws_lb_target_group" "rails-production" {
   deregistration_delay = 10
   health_check {
     interval            = 10
-    path                = "/"
+    path                = "/api/v0/healthcheck"
     port                = "traffic-port"
     protocol            = "HTTP"
     timeout             = 5
@@ -210,7 +210,7 @@ resource "aws_lb_target_group" "rails-staging" {
   deregistration_delay = 10
   health_check {
     interval            = 5
-    path                = "/"
+    path                = "/api/v0/healthcheck"
     port                = "traffic-port"
     protocol            = "HTTP"
     timeout             = 2
@@ -495,7 +495,7 @@ resource "aws_lb_listener_rule" "rails_forward_next_staging" {
 
   condition {
     path_pattern {
-      values = ["/competitions/*/live*", "/_next/*", "/api/auth/*", "/competitions/*/competitors"]
+      regex_values = ["^/competitions/[^/]+/(live|register)$", "^/_next/.*$", "^/api/auth/.*$", "^/posts.*$"]
     }
   }
 }

@@ -177,10 +177,10 @@ export function applyCutoff(attemptResults: number[], cutoff?: WcifCutoff) {
  */
 export function meetsCutoff(attemptResults: number[], cutoff?: WcifCutoff) {
   if (!cutoff) return true;
-  const { numberOfAttempts, attemptResult } = cutoff;
+  const { numberOfAttempts, resultValue } = cutoff;
   return attemptResults
     .slice(0, numberOfAttempts)
-    .some((attempt) => attempt > 0 && attempt < attemptResult);
+    .some((attempt) => attempt > 0 && attempt < resultValue);
 }
 
 function checkForDnsFollowedByValidResult(attemptResults: number[]) {

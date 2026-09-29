@@ -238,17 +238,14 @@ sv:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} försök att få < %{time}'
       one: '%{count} försök att få < %{time}'
       other: '%{count} försök att få < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '%{count} försök att få < %{moves} drag'
       one: '%{count} försök att få < %{moves} drag'
       other: '%{count} försök att få < %{moves} drag'
     #original_hash: eba1b97
     points:
-      zero: '%{count} försök att få > %{points} poäng'
       one: '%{count} försök att få > %{points} poäng'
       other: '%{count} försök att få > %{points} poäng'
   time_limit:
@@ -261,8 +258,6 @@ sv:
     333fm: 1 timme
     #original_hash: cc7d8bb
     333mbf: '10:00.00 per kub, upp till 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Kvalificeringstyp
@@ -363,7 +358,6 @@ sv:
       invalid: ogiltig
     #original_hash: 49d0140
     days:
-      zero: '%{count} dagar'
       one: 1 dag
       other: '%{count} dagar'
     #original_hash: 51ef7d4
@@ -701,8 +695,6 @@ sv:
       text: krävs
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Var vänlig granska problemen nedan:'
@@ -724,12 +716,6 @@ sv:
         public_summary: >-
           En övergripande beskrivning av händelsen och dess beslut som visas
           offentligt. Fyll i detta på engelska.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Ange den tävlandes födelsedatum i formatet ÅÅÅÅ-MM-DD.
@@ -739,36 +725,14 @@ sv:
           <strong>Stefan Pochmann</strong>. Inte slarvigt som <strong>s
           pochman</strong>.<br/>Mellannamn (antingen hela eller som initialer)
           är valfria.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           När du har laddat upp en ny profilbild behöver du vänta på att WCA
           Results Team godkänner den.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Detta gäller endast tävlingar som du är arrangör eller delegat för,
           och kan ändras för varje enskild tävling.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: c564b74
         receive_delegate_reports: >-
           Om du är senior-delegat eller medlem i WRC eller WQAC, får du
@@ -784,12 +748,6 @@ sv:
           Se din konfigurerade mobilapplikation för ett engångslösenord eller
           ange en av dina återställningskoder.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Din korrekta födelsedag i formatet ÅÅÅÅ-MM-DD
         #original_hash: 49ee4af
@@ -852,14 +810,10 @@ sv:
           flera filer samtidigt. Du kan ta bort bilder först när tillräckligt
           många andra bilder har laddats upp (om du vill byta ut en bild måste
           du först ladda upp den nya bilden och sedan ta bort den gamla).
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Lista över nummer på alla incidenter som du vill ha feedback från WRC
           på.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           Lista med incidentnummer som du vill ha WIC-feedbacken på. <br>
@@ -880,50 +834,10 @@ sv:
           förbättring/försämring inom communityt, framtida planer för regionen).
           Om du för korthetens skull lämnade något osagt i de föregående
           avsnitten, är du välkommen att kommentera dem här.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Exempel: Resor, betalningar, priser, boende'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Måste vara en giltig http(s)-url. HTTPS rekommenderas
         #original_hash: 2ace571
@@ -932,28 +846,12 @@ sv:
           bakgrund
         #original_hash: da54ab5
         email: Bör vara en e-postlista som innehåller alla i organisationens ledning
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Måste vara i PDF-format
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Måste vara i PDF-format. Om du behöver lägga till fler filer, vänligen
           lägg ihop dem till en
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -1172,7 +1070,6 @@ sv:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Formuläret innehåller %{count} fel:'
           one: 'Formuläret innehåller ett fel:'
           other: 'Formuläret innehåller %{count} fel:'
       error_pages:
@@ -2195,7 +2092,6 @@ sv:
       must_register: Du måste anmäla dig till minst en gren.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 'Du måste anmäla dig till %{count} grenar.'
         one: Du måste anmäla dig till exakt 1 gren.
         other: 'Du måste anmäla dig till mellan 1 och %{count} grenar.'
       #original_hash: 87f7c12
@@ -2220,17 +2116,14 @@ sv:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: nya tävlande
         one: ny tävlande
         other: nya tävlande
       #original_hash: bc010e3
       returner:
-        zero: återkommande tävlande
         one: återkommande tävlande
         other: återkommande tävlande
       #original_hash: b7da17a
       person:
-        zero: personer
         one: person
         other: personer
     flash:
@@ -2333,7 +2226,6 @@ sv:
       edit: Redigera
       #original_hash: beffc45
       country_plural:
-        zero: '%{count} länder'
         one: 1 region
         other: '%{count} regioner'
       #original_hash: 1feee0e
@@ -2807,14 +2699,12 @@ sv:
       display_name: '[Inställd] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Arrangörer
         one: Arrangör
         other: Arrangörer
       #original_hash: 53a9522
       organization_team: Arrangörsteam
       #original_hash: 6afa61e
       delegate:
-        zero: WCA-delegater
         one: WCA-delegat
         other: WCA-delegater
       #original_hash: b37456c
@@ -2902,12 +2792,10 @@ sv:
         restricted: Åskådare är endast tillåtna tillsammans med tävlande.
       #original_hash: 35f892a
       guest_limit:
-        zero: Tävlande får inte ha med några gäster.
         one: 'Tävlande får ha med max %{count} gäster.'
         other: 'Tävlande får ha med max %{count} gäster.'
       #original_hash: bad09c8
       event_limit:
-        zero: 'Tävlande får som mest anmäla sig till %{count} grenar.'
         one: Tävlande måste anmäla sig till exakt 1 gren.
         other: 'Tävlande får som mest anmäla sig till %{count} grenar.'
       #original_hash: 64e0ddd
@@ -3362,17 +3250,11 @@ sv:
           clone_tabs: Jag vill även klona alla flikar med ytterligare information
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Om detta är inaktiverat kommer byte av anmälningssystem att orsaka
             tekniska problem. Kontakta WST för att få hjälp om du fortfarande
             behöver byta anmälningssystem.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Tävlingens fullständiga namn inklusive årtalet i slutet (t.ex. Danish
@@ -3390,8 +3272,6 @@ sv:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Namn på staden och delstaten (om tillämpligt) som tävlingen äger rum
@@ -3405,20 +3285,7 @@ sv:
           details_html: >-
             Detaljer för lokalen (t.ex. På första våningen längst in, följ
             skyltarna). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             Tävlingsseriens fulla namn, inklusive årtalet på slutet (t.ex.
@@ -3492,21 +3359,12 @@ sv:
             arrangörernas e-postadresser. %{md}. Exempel: [Text att
             visa](mailto:some@email.com)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Tävlingens hemsida. Måste vara en giltig http(s)-url.
           #original_hash: b2af5f5
           external_registration_page: >-
             Sida där de tävlande behöver anmäla sig till tävlingen. Måste vara
             en giltig http(s)-url.
-          #original_hash: da39a3e
-          uses_wca_registration: ''
-          #original_hash: da39a3e
-          uses_wca_live: ''
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Valutakoden för avgifterna.
@@ -3525,8 +3383,6 @@ sv:
             För närvarande är detta nummer endast informativt, gästavgifter kan
             inte hanteras via denna webbplats. Om detta är satt till 0, kommer
             en valfri mening att visas om åskådarpolicyn.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             För närvarande är detta nummer endast informativt, återbetalningar
@@ -3538,8 +3394,6 @@ sv:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Notera: Start- och sluttider för anmälan anges i UTC-tid.'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Det datum då personer på väntelistan inte längre kommer att
@@ -3554,16 +3408,6 @@ sv:
             tävlande kan lägga till ett grenar till sina registrerade grenar
             fram till dess att grenen hålls. Om anmälan på plats används måste
             detta sättas till samma dag som tävlingen.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             Antal gäster per anmälan som tillåts för denna tävling. Anmälningar
@@ -3576,35 +3420,23 @@ sv:
             detta på <b>engelska</b> och eventuella språk som de tävlande talar;
             detta kommer att visas på tävlingens informationssida, samt på
             anmälningssidan om du använder WCAs hemsida för anmälningar.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Vänligen förklara här varför du inte vill att nykomlingar ska
               anmäla sig till din tävling. Vänligen fyll i detta på engelska!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Vänligen utveckla här varför du vill att tävlande ska lämna in
               sina pussel tidigt. Vänligen fyll i detta på engelska!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Vänligen utveckla här varför du vill använda kvalgränser. Vänligen
               fyll i detta på engelska.
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Vänligen utveckla här varför du vill begränsa vissa kombinationer
@@ -3623,9 +3455,6 @@ sv:
           Ytterligare information du vill skicka med till WCAT. Till exempel om
           det är något du är osäker på , eller om det finns speciella önskemål
           till WCAT. Vänligen fyll i detta på engelska!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -3731,9 +3560,9 @@ sv:
         empty: Inga
         #original_hash: 627422a
         spots_remaining_plural:
-          zero: '%{count} platser kvar'
           one: '%{count} plats kvar'
           other: '%{count} platser kvar'
+        no_spots_remaining: '%{count} platser kvar'
         pending:
           #original_hash: 4210670
           title: Ohanterade anmälningar
@@ -3849,9 +3678,9 @@ sv:
         email_message: Kopierad till urklipp. Kom ihåg att använda "hemlig kopia" (bcc)!
         #original_hash: beedd53
         move_to:
-          zero: Flytta till
           one: 'Flytta %{count} till'
           other: 'Flytta %{count} till'
+        move_to_none_selected: Flytta till
         #original_hash: 96f608c
         pending: Väntande
         #original_hash: 92d40dc
@@ -4368,9 +4197,6 @@ sv:
       room_in_venue: '%{room} i %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: >-
-          Du tittar på schemat för lokalen %{venue_name}, som är den enda
-          lokalen för denna tävling.
         one: >-
           Du tittar på schemat för lokalen %{venue_name}, som är den enda
           lokalen för denna tävling.
@@ -4688,8 +4514,6 @@ sv:
           Genom att ansluta ditt PayPal-konto får WCA:s webbplats möjlighet att
           dirigera betalningar till dig och utfärda återbetalningar direkt på
           ditt PayPal-konto.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Denna tävling är inställd på att acceptera betalningar via %{provider}.
@@ -4919,8 +4743,8 @@ sv:
           #original_hash: 576c3b8
           '4': >-
             Se <a target='_blank'
-            href='https://www.worldcubeassociation.org/organizer-guidelines'>WCA
-            Competition Organizer Guidelines</a> för mer detaljerad information.
+            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
+            Competition Organizer Handbook</a> för mer detaljerad information.
       '6':
         #original_hash: 8005a61
         title: >-
@@ -5206,8 +5030,6 @@ sv:
     competition_templates: Tävlingsmallar
     #original_hash: 5ca0558
     certificates: 'WCT:s certifikatmallar'
-    #original_hash: f580987
-    orga_guidelines: Riktlinjer för arrangörer
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA-delegater
@@ -5554,7 +5376,7 @@ sv:
       #original_hash: 9bbdf16
       content1_html: >-
         Om du är intresserad av att arrangera en tävling eller redan planerar
-        att arrangera en, läs våra <a href="/organizer-guidelines">Riktlinjer
+        att arrangera en, läs våra <a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Riktlinjer
         för arrangörer</a>.
       #original_hash: 5016669
       content2_html: >-
@@ -5592,237 +5414,6 @@ sv:
       läs <a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">instruktionerna
       i GitHub-repot för översättningar</a>.
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      Welcome to the WQAC’s collection of Organizer Guidelines. If you’re
-      considering being an organizer then it is highly recommended that you read
-      these documents. They have been divided into essential and highly
-      recommended documents. Make sure you are familiar with the information
-      given as this will allow you to run a high-quality and enjoyable
-      competition!
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>Disclaimer</strong>: The WCA does not organize competitions. As an
-      organizer of a WCA sanctioned competition you <strong>must not</strong>
-      sign anything on behalf of the WCA. You should try reaching out to a
-      relevant regional or national cubing association who do organize or assist
-      with organizing competitions.
-    essential:
-      #original_hash: 44bd0ba
-      description: Essential documents
-      #original_hash: 1cf87ad
-      finding-venue: Finding a venue
-      #original_hash: 3ce0d9c
-      orga-team-delegate: Bilda arrangörsteam och kontakta en delegat
-      #original_hash: d3c693b
-      budget: Budgeting a competition
-      #original_hash: b1429a7
-      schedule: Scheduling
-      #original_hash: beea57d
-      checklist: Competition checklist
-      #original_hash: 9defcf1
-      registration: Handling registration
-      #original_hash: e298a56
-      venue-setup: Venue setup
-      #original_hash: 2b6a5dd
-      work-during-comp: Organizer work during the competition
-    recommended:
-      #original_hash: 6b843f3
-      title: Recommended documents
-      #original_hash: 6e4fb29
-      staff: Assigning volunteers
-      #original_hash: 4735583
-      emails: Emails
-      #original_hash: 8e7ca09
-      running-systems: Running and judging systems
-      #original_hash: 2b31c89
-      new-competitors: Attitude to new competitors
-      #original_hash: 00c4f78
-      enhancing-experience: Enhancing competitor and volunteer experience
-      #original_hash: 2345aaa
-      reflection: Organizer reflection
-  organizer_guidelines:
-    #original_hash: 7486ac4
-    title: WCA Competition Organizer Guidelines
-    paragraph0:
-      #original_hash: ee36904
-      title: Short version
-      #original_hash: 60d9532
-      content: >-
-        Below you can find a short summary of key points for getting an idea of
-        how to organize a competition. If you think this is something for you,
-        please take a look at the documents above!
-    paragraph1:
-      #original_hash: e5f5329
-      title: How to organize a competition
-      #original_hash: 3dbbbee
-      content: >-
-        Alla WCA-tävlingar måste övervakas av en WCA-delegat. Om du är
-        intresserad av att arrangera din egen tävling, vänligen kontakta din
-        närmaste WCA-delegat. De kommer att kunna ge dig mer information om de
-        lokala metoderna och kan hjälpa dig att hitta ett lämpligt datum, då de
-        vet när det finns andra tävlingar planerade. Om det inte finns någon
-        WCA-delegat i närheten av dig kan du kontakta den seniora delegaten för
-        din region.
-    paragraph2:
-      #original_hash: f20dd3b
-      title: Expected expenses for organizing a competition
-      #original_hash: f16a06f
-      content: >-
-        De förväntade kostnaderna varierar kraftigt från land till land och
-        bestäms av flera faktorer, t.ex. lokalens storlek och andra allmänna
-        förhållanden. Det är möjligt att täcka alla kostnader med
-        anmälningsavgifter. För att hålla dessa så låga som möjligt
-        rekommenderas dock starkt att söka efter sponsorer. WCA-delegaterna är
-        volontärer och får inte någon lön för sitt arbete, men arrangörerna bär
-        överväga att betala ersättning för deras resekostnader.
-    paragraph3:
-      #original_hash: 00d3bf8
-      title: Deadlines for the announcement of the competition
-      #original_hash: 477a672
-      content_html: >-
-        Tävlingen måste publiceras minst 28 dagar innan den börjar (se <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
-        Detta är dock sällan tillräckligt med tid. Du bör överväga allt som
-        kommer att ingå i att arrangera din tävling och ge dig själv
-        tillräckligt med tid att förbereda dig. WCAT kommer också att behöva tid
-        för att granska din tävling innan den publiceras. Rådgör med din delegat
-        om du är osäker på hur mycket tid som kommer att behövas.
-    paragraph4:
-      #original_hash: b6dca56
-      title: Proximity policy
-      #original_hash: f5eeb95
-      content1: >-
-        WCA-tävlingar godkänns om de ligger minst 10 km eller 5 dagar från andra
-        tävlingar. WCAT bör särskilt granska en föreslagen tävling om det finns
-        en annan tävling där avståndet mellan dem är mindre än 10 km och tiden
-        mellan dem är mindre än 5 dagar. En delegat som begär godkännande för en
-        sådan tävling måste lämna ytterligare information om varför tävlingen
-        ändå bör godkännas. Möjliga argument för att en sådan tävling ska
-        godkännas inkluderar:
-      olist1:
-        #original_hash: de00462
-        '1': The two competitions don't have events in common.
-        #original_hash: b8ff462
-        '2': De två tävlingarna hålls i olika regioner.
-      #original_hash: 5c5cf04
-      content2: >-
-        "3x3x3 Fewest Moves simultaneous competitions" are WCA competitions
-        having only the 3x3x3 Fewest Moves event and taking place simultaneously
-        in different locations.
-      olist2:
-        '1':
-          #original_hash: 316fd13
-          content1: >-
-            3x3x3 Fewest Moves simultaneous competitions cannot be part of any
-            other regular competition.
-          alist1:
-            #original_hash: 75aa0c7
-            1a: Time frames when both are celebrated can’t overlap.
-        '2':
-          #original_hash: b2b8004
-          content1: >-
-            Om någon plats för en sådan tävling är närmre än 10 km från någon
-            annan tävling, så
-          alist1:
-            #original_hash: 8f532bb
-            2a: 'both competitions should be at least 5 days apart, or'
-            #original_hash: e14e11e
-            2b: the other competition must not have the 3x3x3 Fewest Moves event.
-    paragraph-events:
-      #original_hash: b16c5f1
-      title: Announcing events
-      #original_hash: 7ad62c7
-      content: >-
-        Alla grenar som kommer att hållas vid tävlingen måste specificeras av
-        delegaten när tävlingen skickas in. Ytterligare tillägg måste godkännas
-        av WCAT.
-    paragraph5:
-      #original_hash: 17d01de
-      title: Competitor limits
-      #original_hash: 6bfef2c
-      content_html: >-
-        Antalet tävlande kan begränsas per gren eller per tävling (se <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
-        Delegaten för tävlingen måste få gränsen godkänd av WCAT. Gränser för
-        antal tävlande bör noga övervägas, i enlighet med det förväntade
-        tävlingsintresset. Om gränsen sätts till ett lägre antal bör det finnas
-        bra skäl till det. Den avsedda gränsen bör tas i beaktning redan när man
-        söker efter en lämplig lokal. Gränsen för antal tävlande måste tydligt
-        anges på tävlingssidan på WCA:s webbplats.
-    paragraph6:
-      #original_hash: ce4c3d0
-      title: Handling registrations
-      #original_hash: bd669a1
-      content: >-
-        Registrations must be processed on a first come first served basis,
-        which means that the earliest complete registration must be treated
-        first. If registration fees are prepaid, a registration is considered
-        complete when the registration fee has been paid. This should be clearly
-        stated in the paying instructions on the competition website.
-    paragraph7:
-      #original_hash: e4f1c62
-      title: Managing the waiting list
-      #original_hash: 81ca3f3
-      content1: >-
-        Once the competitor limit for a competition is reached, a waiting list
-        should be opened. When registered and approved competitors cancel their
-        registration, they can be replaced with the next competitors on the
-        waiting list.
-      #original_hash: 802b34f
-      content2: >-
-        If competition registration fees are prepaid, it is an efficient
-        approach to offer the free spot to the next competitor on the waiting
-        list and set a deadline until when the registration fee should be paid
-        to complete the registration (e.g. 48 hours). In case the payment is not
-        received in time or the competitor denies, the free spot should be
-        offered to the next person on the waiting list. This process should be
-        continued until the free spots are filled. There are no exceptions for
-        competitors to bypass the waiting list.
-      #original_hash: 37bcbd6
-      content3: >-
-        If competitors did not go through the regular registration process but
-        competed, their results will be removed retroactively (assuming the
-        competitors limit existed and was reached).
-    paragraph8:
-      #original_hash: c8ad8e6
-      title: Tasks before the competition
-      list:
-        #original_hash: c8abb5e
-        '1': >-
-          Before announcing the competition, a schedule is required to be
-          published on the competition website. This schedule can be adjusted
-          later.
-        #original_hash: e93d043
-        '2': >-
-          Competitors should be split into groups, score sheets must be printed
-          and should be split according to the groups' distribution. It is also
-          recommended to plan who will scramble for every group of every event,
-          at least for the first rounds. Scramblers should be reliable.
-    paragraph9:
-      #original_hash: ead44f5
-      title: Tasks during the competition
-      #original_hash: ee2e9c6
-      content: >-
-        De uppgifter som en arrangör måste utföra under en tävling bör
-        diskuteras med WCA-delegaten. De typiska uppgifterna är (de kan
-        delegeras till andra pålitliga personer):
-      list:
-        #original_hash: 03aea46
-        '1': Managing the registration desk
-        #original_hash: c4388f3
-        '2': Making announcements
-        #original_hash: 45c78ae
-        '3': Calling groups and laying out score sheets
-        #original_hash: 0b31986
-        '4': Score-taking and printing results
-        #original_hash: 7ab2d4c
-        '5': Looking for scramblers and judges
-        #original_hash: 52e8316
-        '6': >-
-          Dealing with all organizational issues regarding the venue (e.g. keys
-          or WiFi)
   media:
     common:
       #original_hash: f9b7a97

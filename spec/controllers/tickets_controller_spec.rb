@@ -117,6 +117,31 @@ RSpec.describe TicketsController do
         expect(competition.results_posted_by).to eq wrt_member.id
       end
 
+      it "sends notifications of locked account creation to locked users" do
+        competition = results_ticket.competition
+        round = create(:round, competition: competition, number: 2)
+
+        person = create(:person)
+        locked_user = User.new_locked_account(
+          name: person.name,
+          email: "test@example.com",
+          wca_id: person.wca_id,
+          country_iso2: person.country_iso2,
+          gender: person.gender,
+          dob: person.dob,
+        )
+        locked_user.save!
+
+        # Add result so they show up in comp.competitor_users
+        create(:result, person: locked_user.person, competition_id: competition.id, event_id: "333", round: round)
+
+        expect(RegistrationsMailer).to receive(:notify_registrant_of_locked_account_creation).with(locked_user, competition).and_call_original
+
+        expect do
+          post :post_results, params: { ticket_id: results_ticket.ticket.id }
+        end.to change(enqueued_jobs, :size).by(1)
+      end
+
       it "sends notifications of id claim possibility to newcomers" do
         competition = results_ticket.competition
         create_list(:registration, 2, :accepted, :newcomer, competition: competition)

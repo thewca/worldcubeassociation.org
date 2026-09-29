@@ -41,14 +41,13 @@ function getFieldLabel(id, section = []) {
 function getFieldHint(id, section = [], isMarkdown = false) {
   const yamlId = snakifyId(id, section);
 
-  // TODO: Maybe this should be forced within the translation file?
   if (isMarkdown) {
-    return I18n.t(`competitions.competition_form.hints.${yamlId}_html`, {
+    return I18n.tOptional(`competitions.competition_form.hints.${yamlId}_html`, {
       md: I18n.t('competitions.competition_form.supports_md_html'),
     });
   }
 
-  return I18n.t(`competitions.competition_form.hints.${yamlId}`);
+  return I18n.tOptional(`competitions.competition_form.hints.${yamlId}`);
 }
 
 function getHtmlId(id, section = []) {

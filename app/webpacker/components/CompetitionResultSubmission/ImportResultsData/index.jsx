@@ -10,6 +10,8 @@ export default function ImportResultsData({
   onImportSuccess,
   isAdminView = false,
   uploadedScrambleFilesCount = 0,
+  usesWcaRegistration = true,
+  hasAcceptedRegistrations = true,
 }) {
   const panes = [
     // JSON exports carry the merged (global) ranking for Dual Rounds, so competitions
@@ -22,11 +24,28 @@ export default function ImportResultsData({
             competitionId={competitionId}
             isAdminView={isAdminView}
             onImportSuccess={onImportSuccess}
+            usesWcaRegistration={usesWcaRegistration}
+            hasAcceptedRegistrations={hasAcceptedRegistrations}
           />
         </Tab.Pane>
       ),
     }] : []),
-    ...((isAdminView || scoretakingSoftware !== 'external') ? [{
+    ...((isAdminView || scoretakingSoftware === 'external') ? [{
+      menuItem: 'Upload WCIF results',
+      render: () => (
+        <Tab.Pane>
+          <UploadResultsJson
+            competitionId={competitionId}
+            isAdminView={isAdminView}
+            onImportSuccess={onImportSuccess}
+            usesWcaRegistration={usesWcaRegistration}
+            hasAcceptedRegistrations={hasAcceptedRegistrations}
+            isWcifFormat
+          />
+        </Tab.Pane>
+      ),
+    }] : []),
+    {
       menuItem: 'Use Live Results',
       render: () => (
         <Tab.Pane>
@@ -39,7 +58,7 @@ export default function ImportResultsData({
           />
         </Tab.Pane>
       ),
-    }] : []),
+    },
   ];
 
   return (
