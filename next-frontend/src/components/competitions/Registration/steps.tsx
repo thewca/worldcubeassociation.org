@@ -10,6 +10,7 @@ import RegistrationStatus from "@/components/competitions/Registration/Registrat
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { useT } from "@/lib/i18n/useI18n";
+import type { RegistrationForm } from "@/lib/wca/registrations/registrationForm";
 import type { components } from "@/types/openapi";
 
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -42,7 +43,8 @@ export function StepContent({
   step,
   competitionInfo,
   registration,
-  userId,
+  form,
+  isSubmitting,
   onNext,
   leadsToOverview,
   onClose,
@@ -50,7 +52,8 @@ export function StepContent({
   step: StepConfig;
   competitionInfo: CompetitionInfo;
   registration: Registration | null;
-  userId: number;
+  form: RegistrationForm;
+  isSubmitting: boolean;
   onNext: () => void;
   leadsToOverview: boolean;
   // Only set when the step is opened from the overview, which is the one place the competitor can
@@ -66,7 +69,8 @@ export function StepContent({
           competitionInfo={competitionInfo}
           parameters={step.parameters}
           registration={registration}
-          userId={userId}
+          form={form}
+          isSubmitting={isSubmitting}
           onSubmitted={onNext}
           onClose={onClose}
         />

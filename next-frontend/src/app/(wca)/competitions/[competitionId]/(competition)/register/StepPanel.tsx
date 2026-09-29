@@ -4,10 +4,22 @@ import { Steps, VStack } from "@chakra-ui/react";
 import type { components } from "@/types/openapi";
 import RegistrationOverview from "@/components/competitions/Registration/RegistrationOverview";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
+import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
 import { StepContent } from "@/components/competitions/Registration/steps";
+import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
 import { useState } from "react";
-import useRegistration from "@/lib/wca/registrations/useRegistration";
+import { useQueryClient } from "@tanstack/react-query";
+import useAPI from "@/lib/wca/useAPI";
+import useRegistration, {
+  registrationQueryKey,
+} from "@/lib/wca/registrations/useRegistration";
+import showRegistrationError from "@/lib/wca/registrations/showRegistrationError";
+import {
+  registrationFormValues,
+  useRegistrationForm,
+  type RegistrationFormValues,
+} from "@/lib/wca/registrations/registrationForm";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -26,11 +38,89 @@ export default function StepPanel({
 }) {
   const { t } = useT();
 
+  // Which steps there are, and in which order, is the server's business - but what this lane is
+  //   for is registering, so the competing step is the one thing it is built around.
+  const competingParameters = steps.find(
+    (step) => step.key === "competing",
+  )!.parameters;
+
+  const api = useAPI();
+  const queryClient = useQueryClient();
+
   const registration = useRegistration({
     competitionId: competitionInfo.id,
     userId,
     initialRegistration,
   });
+
+  const createRegistration = api.useMutation(
+    "post",
+    "/v1/competitions/{competitionId}/registrations",
+    { onError: (payload) => showRegistrationError(t, payload) },
+  );
+
+  const updateRegistration = api.useMutation(
+    "patch",
+    "/v1/registrations/{registrationId}",
+    {
+      onError: (payload) => showRegistrationError(t, payload),
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          registrationQueryKey(competitionInfo.id, userId),
+          data.registration,
+        );
+        toaster.create({
+          id: "registration-updated",
+          type: "success",
+          description: t("registrations.flash.updated"),
+        });
+      },
+    },
+  );
+
+  const submitRegistration = (
+    { comment, guests, eventIds }: RegistrationFormValues,
+    onSubmitted: () => void,
+  ) => {
+    if (registration === null) {
+      // Creating only puts the registration on a queue - the step is done once
+      //   `RegistrationProcessing` has seen it come out the other end.
+      createRegistration.mutate({
+        params: { path: { competitionId: competitionInfo.id } },
+        body: {
+          user_id: userId,
+          guests,
+          competing: { event_ids: eventIds, comment },
+        },
+      });
+    } else {
+      updateRegistration.mutate(
+        {
+          params: { path: { registrationId: registration.id } },
+          body: {
+            guests,
+            competing: {
+              event_ids: eventIds,
+              comment,
+              // Registering again after withdrawing means moving back to `pending` for approval.
+              ...(registration.competing.registration_status ===
+                "cancelled" && { status: "pending" }),
+            },
+          },
+        },
+        { onSuccess: onSubmitted },
+      );
+    }
+  };
+
+  const form = useRegistrationForm({
+    registration,
+    parameters: competingParameters,
+    onSubmit: submitRegistration,
+  });
+
+  const isSubmitting =
+    createRegistration.isPending || updateRegistration.isPending;
 
   // Withdrawing puts the competitor back at the start: signing up again means going through the
   //   steps again, rather than looking at a summary of a registration that no longer stands.
@@ -44,6 +134,11 @@ export default function StepPanel({
   );
 
   const goToNextStep = () => setCurrentStep((step) => step + 1);
+
+  const finishCreation = () => {
+    createRegistration.reset();
+    goToNextStep();
+  };
 
   return (
     <VStack width="full" gap="4" align="stretch">
@@ -90,14 +185,23 @@ export default function StepPanel({
           (step, index) =>
             index === currentStep && (
               <Steps.Content key={step.key} index={index}>
-                <StepContent
-                  step={step}
-                  competitionInfo={competitionInfo}
-                  registration={registration}
-                  userId={userId}
-                  onNext={goToNextStep}
-                  leadsToOverview={index === steps.length - 1}
-                />
+                {createRegistration.isSuccess ? (
+                  <RegistrationProcessing
+                    competitionId={competitionInfo.id}
+                    userId={userId}
+                    onCreated={finishCreation}
+                  />
+                ) : (
+                  <StepContent
+                    step={step}
+                    competitionInfo={competitionInfo}
+                    registration={registration}
+                    form={form}
+                    isSubmitting={isSubmitting}
+                    onNext={goToNextStep}
+                    leadsToOverview={index === steps.length - 1}
+                  />
+                )}
               </Steps.Content>
             ),
         )}
@@ -109,6 +213,15 @@ export default function StepPanel({
               competitionInfo={competitionInfo}
               registration={registration}
               userId={userId}
+              form={form}
+              isSubmitting={isSubmitting}
+              // Reset on the way in rather than on the way out, so that the form the competitor
+              //   opens always starts from what is currently saved.
+              onStartEditing={() =>
+                form.reset(
+                  registrationFormValues(registration, competingParameters),
+                )
+              }
               onWithdrawn={() => setCurrentStep(0)}
             />
           )}

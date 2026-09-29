@@ -22,17 +22,11 @@ import { disabledEventIds } from "@/lib/wca/registrations/eventSelection";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { qualificationToString } from "@/lib/wca/wcif/rounds";
 import type { components } from "@/types/openapi";
-import {
-  useRegistrationForm,
-  type RegistrationFormValues,
+import type {
+  RegistrationForm,
+  RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
 import { LuSend, LuUndo2 } from "react-icons/lu";
-import { useQueryClient } from "@tanstack/react-query";
-import useAPI from "@/lib/wca/useAPI";
-import { toaster } from "@/components/ui/toaster";
-import { registrationQueryKey } from "@/lib/wca/registrations/useRegistration";
-import showRegistrationError from "@/lib/wca/registrations/showRegistrationError";
-import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type CompetingStepParameters =
@@ -52,87 +46,22 @@ export default function CompetingStep({
   competitionInfo,
   parameters,
   registration,
-  userId,
+  form,
+  isSubmitting,
   onSubmitted,
   onClose,
 }: {
   competitionInfo: CompetitionInfo;
   parameters: CompetingStepParameters;
   registration: Registration | null;
-  userId: number;
+  form: RegistrationForm;
+  isSubmitting: boolean;
   onSubmitted: () => void;
   // Only set when the form is opened from the registration overview, which is the one place the
   //   competitor can leave it again without submitting anything.
   onClose?: () => void;
 }) {
   const { t } = useT();
-
-  const api = useAPI();
-  const queryClient = useQueryClient();
-
-  const createRegistration = api.useMutation(
-    "post",
-    "/v1/competitions/{competitionId}/registrations",
-    { onError: (payload) => showRegistrationError(t, payload) },
-  );
-
-  const updateRegistration = api.useMutation(
-    "patch",
-    "/v1/registrations/{registrationId}",
-    {
-      onError: (payload) => showRegistrationError(t, payload),
-      onSuccess: (data) => {
-        queryClient.setQueryData(
-          registrationQueryKey(competitionInfo.id, userId),
-          data.registration,
-        );
-        toaster.create({
-          id: "registration-updated",
-          type: "success",
-          description: t("registrations.flash.updated"),
-        });
-        onSubmitted();
-      },
-    },
-  );
-
-  const submitRegistration = ({
-    comment,
-    guests,
-    eventIds,
-  }: RegistrationFormValues) => {
-    if (registration === null) {
-      createRegistration.mutate({
-        params: { path: { competitionId: competitionInfo.id } },
-        body: {
-          user_id: userId,
-          guests,
-          competing: { event_ids: eventIds, comment },
-        },
-      });
-    } else {
-      updateRegistration.mutate({
-        params: { path: { registrationId: registration.id } },
-        body: {
-          guests,
-          competing: {
-            event_ids: eventIds,
-            comment,
-            // Registering again after withdrawing means moving back to `pending` for approval.
-            ...(registration.competing.registration_status === "cancelled" && {
-              status: "pending",
-            }),
-          },
-        },
-      });
-    }
-  };
-
-  const form = useRegistrationForm({
-    registration,
-    parameters,
-    onSubmit: submitRegistration,
-  });
 
   const maxEvents = parameters.events_per_registration_limit ?? Infinity;
 
@@ -180,21 +109,11 @@ export default function CompetingStep({
     values.guests <= guestLimit &&
     (!parameters.force_comment_in_registration || values.comment.trim() !== "");
 
-  if (createRegistration.isSuccess) {
-    return (
-      <RegistrationProcessing
-        competitionId={competitionInfo.id}
-        userId={userId}
-        onCreated={onSubmitted}
-      />
-    );
-  }
-
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        form.handleSubmit();
+        form.handleSubmit({ onSubmitted });
       }}
     >
       <Fieldset.Root disabled={isEditingLocked}>
@@ -363,9 +282,7 @@ export default function CompetingStep({
                 type="submit"
                 width="full"
                 colorPalette="green"
-                loading={
-                  createRegistration.isPending || updateRegistration.isPending
-                }
+                loading={isSubmitting}
                 disabled={buttonAction === "incomplete" || isEditingLocked}
               >
                 <LuSend />

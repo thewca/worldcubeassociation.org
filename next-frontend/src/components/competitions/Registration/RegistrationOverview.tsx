@@ -14,6 +14,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import useAPI from "@/lib/wca/useAPI";
 import { registrationQueryKey } from "@/lib/wca/registrations/useRegistration";
 import showRegistrationError from "@/lib/wca/registrations/showRegistrationError";
+import type { RegistrationForm } from "@/lib/wca/registrations/registrationForm";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import type { components } from "@/types/openapi";
 
@@ -46,12 +47,18 @@ export default function RegistrationOverview({
   competitionInfo,
   registration,
   userId,
+  form,
+  isSubmitting,
+  onStartEditing,
   onWithdrawn,
 }: {
   steps: StepConfig[];
   competitionInfo: CompetitionInfo;
   registration: Registration;
   userId: number;
+  form: RegistrationForm;
+  isSubmitting: boolean;
+  onStartEditing: () => void;
   onWithdrawn: () => void;
 }) {
   const { t } = useT();
@@ -131,7 +138,8 @@ export default function RegistrationOverview({
                 step={step}
                 competitionInfo={competitionInfo}
                 registration={registration}
-                userId={userId}
+                form={form}
+                isSubmitting={isSubmitting}
                 onNext={stopEditing}
                 leadsToOverview
                 onClose={stopEditing}
@@ -148,7 +156,10 @@ export default function RegistrationOverview({
                 width="full"
                 variant="outline"
                 colorPalette="blue"
-                onClick={() => setEditingStepKey(step.key)}
+                onClick={() => {
+                  onStartEditing();
+                  setEditingStepKey(step.key);
+                }}
               >
                 <LuPencil />
                 {t("competition_tabs.form_elements.update")}

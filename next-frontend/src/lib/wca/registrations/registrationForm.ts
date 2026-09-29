@@ -12,7 +12,7 @@ export interface RegistrationFormValues {
   eventIds: string[];
 }
 
-const registrationFormValues = (
+export const registrationFormValues = (
   registration: Registration | null,
   parameters: CompetingStepParameters,
 ): RegistrationFormValues => ({
@@ -22,6 +22,12 @@ const registrationFormValues = (
     registration?.competing.event_ids ?? preselectedEventIds(parameters),
 });
 
+/**
+ * The form belongs to the lane rather than to the step that draws it: the competing step is mounted
+ * and unmounted as the competitor moves between their registration summary and the form, and what
+ * they have typed has to outlive that. Callers reset it to `registrationFormValues` whenever they
+ * hand the form back to the competitor.
+ */
 export function useRegistrationForm({
   registration,
   parameters,
@@ -29,10 +35,14 @@ export function useRegistrationForm({
 }: {
   registration: Registration | null;
   parameters: CompetingStepParameters;
-  onSubmit: (values: RegistrationFormValues) => void;
+  onSubmit: (values: RegistrationFormValues, onSubmitted: () => void) => void;
 }) {
   return useForm({
     defaultValues: registrationFormValues(registration, parameters),
-    onSubmit: ({ value }) => onSubmit(value),
+    // Where the competitor goes once the submission went through is up to whoever drew the form.
+    onSubmitMeta: { onSubmitted: () => {} },
+    onSubmit: ({ value, meta }) => onSubmit(value, meta.onSubmitted),
   });
 }
+
+export type RegistrationForm = ReturnType<typeof useRegistrationForm>;
