@@ -12,7 +12,7 @@ const IMPORTANT_LINKS = [
       {
         title: 'Moodle Login Instructions',
         link: 'https://docs.google.com/document/d/19AC9YKLhYArVLFU9rhdh_uPyxt5iRT0B_b0VSqAvRrk/',
-      }
+      },
     ],
   },
   {
