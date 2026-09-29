@@ -58,6 +58,7 @@ ca:
     XS: Països Múltiples (Amèrica del Sud)
     #original_hash: 9027fe6
     XW: Països Múltiples (Món)
+    TW: Xina Taipei
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Continents Múltiples
@@ -235,15 +236,16 @@ ca:
     #original_hash: cf458e7
     time:
       one: '%{count} intent per obtenir < %{time}'
-      other: '%{count} intents per obtenir < %{time}'
-    #original_hash: b49d930
+      many: '%{count} intents per obtenir < %{time}'
+      other:
     moves:
       one: '%{count} intent per obtenir < %{moves} moviments'
-      other: '%{count} intents per obtenir < %{moves} moviments'
-    #original_hash: eba1b97
+      many: '%{count} intents per obtenir < %{moves} moviments'
+      other:
     points:
       one: '%{count} intent per obtenir > %{points} punts'
-      other: '%{count} intents per obtenir > %{points} punts'
+      many: '%{count} intents per obtenir > %{points} punts'
+      other:
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -332,12 +334,12 @@ ca:
     #original_hash: 49d0140
     days:
       one: 1 dia
-      other: '%{count} dies'
-    #original_hash: 203e1b3
+      many: '%{count} dies'
+      other:
     these_events:
       one: aquesta categoria
-      other: 'aquestes %{count} categories'
-    #original_hash: 51ef7d4
+      many: aquestes %{count} categories
+      other:
     search_site: Cerca
     #original_hash: d7decf1
     filter: Filtra
@@ -415,7 +417,8 @@ ca:
         #original_hash: 58e0c56
         remove_avatar: Elimina l'avatar
         #original_hash: 9af9099
-        results_notifications_enabled: Envia'm un correu quan es pengin els resultats.
+        results_notifications_enabled: Envia'm un correu quan es pengin els 
+          resultats.
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
           Quan organitzi o delegui una competició, envia'm un correu quan hi
@@ -480,7 +483,8 @@ ca:
         #original_hash: 0eb5ed5
         information: Informació
         #original_hash: 87b7d5f
-        use_wca_registration: M'agradaria utilitzar la pàgina web de la WCA pel registre
+        use_wca_registration: M'agradaria utilitzar la pàgina web de la WCA pel 
+          registre
         #original_hash: 8020e88
         external_registration_page: Pàgina del registre
         #original_hash: 9bb1965
@@ -502,11 +506,13 @@ ca:
         #original_hash: d7020f4
         remarks: Observacions
         #original_hash: c305010
-        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació addicional
+        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació 
+          addicional
         #original_hash: c5497bc
         competition_events: Categories
         #original_hash: 71c8461
-        enable_donations: Vull activar les donacions addicionalment a les quotes d'inscripció
+        enable_donations: Vull activar les donacions addicionalment a les quotes
+          d'inscripció
         #original_hash: 4baf44b
         championship_type: Tipus de campionat
         #original_hash: 556fda0
@@ -514,41 +520,49 @@ ca:
         #original_hash: 2529d04
         on_the_spot_registration: Registres al lloc
         #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: Quota d'inscripció bàsica al lloc
+        on_the_spot_entry_fee_lowest_denomination: Quota d'inscripció bàsica al 
+          lloc
         #original_hash: 7e53b96
         allow_registration_edits: Edicions dels registres
         #original_hash: 3d47eca
-        allow_registration_self_delete_after_acceptance: Cancel·lacions de registres
+        allow_registration_self_delete_after_acceptance: Cancel·lacions de 
+          registres
         #original_hash: efbdbab
         refund_policy_percent: Percentatge de reemborsament
         #original_hash: b332299
         refund_policy_limit_date: Data límit pels retorns
         #original_hash: 16cf9a4
-        waiting_list_deadline_date: Data límit per acceptar competidors de la llista d'espera
+        waiting_list_deadline_date: Data límit per acceptar competidors de la 
+          llista d'espera
         #original_hash: 99a9169
-        event_change_deadline_date: Data límit pels competidors per actualitzar les categories
+        event_change_deadline_date: Data límit pels competidors per actualitzar 
+          les categories
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Quota d'entrada pels espectadors
         #original_hash: bb16247
-        free_guest_entry_status: Mostra missatge per entrada gratuïta dels espectadors
+        free_guest_entry_status: Mostra missatge per entrada gratuïta dels 
+          espectadors
         #original_hash: 723cad9
         early_puzzle_submission: >-
           M'agradaria sol·licitar als competidors que facin entrega dels seus cubs
           en una hora específica abans que comenci la categoria
         #original_hash: 78308cc
-        early_puzzle_submission_reason: Raó i detalls per l'entrega abans d'hora dels cubs
+        early_puzzle_submission_reason: Raó i detalls per l'entrega abans d'hora
+          dels cubs
         #original_hash: 88da0ef
         qualification_results: >-
           M'agradaria utilitzar els resultats de qualificació per limitar qui
           pot competir en certes categories
         #original_hash: 1ec6dd4
-        qualification_results_reason: Raó i detalls pels resultats de qualificació
+        qualification_results_reason: Raó i detalls pels resultats de 
+          qualificació
         #original_hash: ac30de9
         event_restrictions: >-
           M'agradaria limitar als competidors de registrar-se a una combinació
           específica de categories
         #original_hash: 4bf194c
-        event_restrictions_reason: Raó i detalls per les limitacions de categories
+        event_restrictions_reason: Raó i detalls per les limitacions de 
+          categories
         #original_hash: 3c24bd2
         main_event_id: Categoria principal
       registration:
@@ -587,11 +601,13 @@ ca:
         #original_hash: 5e326b1
         incidents: Incidents
         #original_hash: 1362470
-        wrc_feedback_requested: M'agradaria rebre el feedback de WRC en alguns dels incidents mencionats.
+        wrc_feedback_requested: M'agradaria rebre el feedback de WRC en alguns 
+          dels incidents mencionats.
         #original_hash: 0c7191d
         wrc_incidents: Incidents que necessiten feedback de WRC
         #original_hash: 5a92b25
-        wdc_feedback_requested: M'agradaria rebre feedback de WDC en alguns dels incidents mencionats.
+        wdc_feedback_requested: M'agradaria rebre feedback de WDC en alguns dels
+          incidents mencionats.
         #original_hash: 06a0568
         wdc_incidents: Incidents que necessiten feedback de WDC
         #original_hash: d7020f4
@@ -683,7 +699,8 @@ ca:
         #original_hash: 9855f80
         bylaws: Estatuts
         #original_hash: 405201b
-        directors_and_officers: Llista de Directors principals i Oficials amb els seus títols
+        directors_and_officers: Llista de Directors principals i Oficials amb 
+          els seus títols
         #original_hash: 719db2d
         area_description: Descripció clara de l'àrea coberta
         #original_hash: 0cdb036
@@ -691,7 +708,8 @@ ca:
           Informe d'activitats passades i presents relacionades amb activitats de
           la WCA
         #original_hash: 0faebcf
-        future_plans: Plans de futur com a Organització Regional reconeguda per la WCA
+        future_plans: Plans de futur com a Organització Regional reconeguda per 
+          la WCA
         #original_hash: f5ad34a
         extra_information: Alguna informació extra?
         #original_hash: bc07619
@@ -748,7 +766,8 @@ ca:
         #original_hash: 694bce4
         anyone: Qualsevol espectador pot assistir gratuïtament
         #original_hash: 762c509
-        restricted: Els espectadors només són permesos com acompanyants de competidors
+        restricted: Els espectadors només són permesos com acompanyants de 
+          competidors
   simple_form:
     #original_hash: 5397e05
     'yes': Sí
@@ -809,7 +828,8 @@ ca:
         name: >-
           El nom complet de la competició incloent l'any al final (exemple:
           Danish Open 2016). Revisa les majúscules. El nom ha de contenir només
-          caràcters alfanumèrics, guions(-), ampersands(&), punts(.), dos punts(:), apòstrofs(') i espais().
+          caràcters alfanumèrics, guions(-), ampersands(&), punts(.), dos punts(:),
+          apòstrofs(') i espais().
         #original_hash: 525fcc8
         cell_name: >-
           Un nom curt per mostrar. Si el nom de la competició ja és curt, pots
@@ -827,15 +847,18 @@ ca:
         #original_hash: b4d020f
         delegate_ids: Delegats de la WCA per la competició.
         #original_hash: cb9882c
-        trainee_delegate_ids: Delegats en pràctiques de la WCA per la competició.
+        trainee_delegate_ids: Delegats en pràctiques de la WCA per la 
+          competició.
         #original_hash: 517d376
         organizer_ids: >-
           Organitzadors de la competició (han de tenir un compte per sortir
           aquí).
         #original_hash: cabe7fb
-        external_website: Pàgina web de la competició. Ha de tenir un enllaç http(s) vàlid.
+        external_website: Pàgina web de la competició. Ha de tenir un enllaç 
+          http(s) vàlid.
         #original_hash: 9965635
-        registration_open: 'Important: L''obertura i clausura del registre està en horari UTC'
+        registration_open: 'Important: L''obertura i clausura del registre està en
+          horari UTC'
         #original_hash: 9ea6021
         remarks: >-
           Alguna informació addicional que vulguis mencionar a WCAT. Per
@@ -890,7 +913,8 @@ ca:
           manualment. Si s'introdueix 0, es mostrarà una frase dient que les
           quotes de registre mai seran retornades sota cap circumstància.
         #original_hash: f64d853
-        refund_policy_limit_date: Data límit a partir de la qual no es retornarà cap més quota.
+        refund_policy_limit_date: Data límit a partir de la qual no es retornarà
+          cap més quota.
         #original_hash: 664db64
         waiting_list_deadline_date: >-
           La data a partir de la qual no s'acceptaran més persones de la llista
@@ -924,7 +948,8 @@ ca:
           Si us plau, explica aquí perquè voldries limitar una combinació
           especifica de categories. Omple-ho en anglès!
         #original_hash: 1067798
-        main_event_id: El guanyador d'aquesta categoria serà el guanyador de la competició.
+        main_event_id: El guanyador d'aquesta categoria serà el guanyador de la 
+          competició.
       website_contact:
       dob_contact:
         #original_hash: 8723825
@@ -1073,9 +1098,11 @@ ca:
           #original_hash: ec44d52
           confirm: Confirma el codi
           #original_hash: 912516c
-          regenerated_secret: El doble factor d'autentificació s'ha regenerat correctament.
+          regenerated_secret: El doble factor d'autentificació s'ha regenerat 
+            correctament.
           #original_hash: 1b0c44f
-          enabled_success: S'ha activat el doble factor d'autentificació correctament.
+          enabled_success: S'ha activat el doble factor d'autentificació 
+            correctament.
           #original_hash: 9515157
           email_auth: Autentificació per correu electrònic
           #original_hash: d305ccb
@@ -1092,7 +1119,8 @@ ca:
             minuts. Pots tornar a demanar el nou codi d'aquí a 2 minuts.
           errors:
             #original_hash: e70dc49
-            cant_send_email: No pots generar un correu electrònic en aquest moment
+            cant_send_email: No pots generar un correu electrònic en aquest 
+              moment
             #original_hash: c0d4fc2
             invalid_otp: Codi de doble autentificació invàlid.
             #original_hash: c2f5347
@@ -1148,7 +1176,8 @@ ca:
             anul·lar l'accés dels teus dispositius, pots reiniciar el codi de
             doble autentificació aquí sota:
           #original_hash: 69100a3
-          reset_warning: Necessitaràs reconfigurar tots els teus dispositius amb 2FA.
+          reset_warning: Necessitaràs reconfigurar tots els teus dispositius amb
+            2FA.
           #original_hash: a8d11db
           methods: Mètodes de doble autentificació
           #original_hash: 0fd248d
@@ -1156,7 +1185,8 @@ ca:
             Pots utilitzar diferents mètodes per obtenir una contrasenya d'un
             sol ús al moment d'iniciar sessió, estan descrits aquí sota.
           #original_hash: 4442f0e
-          dedicated_app: Utilitzant una aplicació dedicada al doble factor d'autentificació
+          dedicated_app: Utilitzant una aplicació dedicada al doble factor 
+            d'autentificació
           #original_hash: a61c7d2
           dedicated_app_desc_html: >-
             WST recomana utilitzar %{authy} als teus dispositius mòbils
@@ -1204,7 +1234,8 @@ ca:
             a activar-lo hauràs de tornar a fer la configuració als teus
             dispositius.
           #original_hash: ab1b77d
-          disabled_success: S'ha desactivat el doble factor d'autentificació correctament.
+          disabled_success: S'ha desactivat el doble factor d'autentificació 
+            correctament.
           #original_hash: c36d556
           disabled_failed: >-
             No s'ha pogut desactivar 2FA correctament, si us plau, comprova els
@@ -1237,7 +1268,8 @@ ca:
         #original_hash: e88f903
         form_error:
           one: 'El formulari conté un error:'
-          other: 'El formulari conté  %{count} errors:'
+          many: 'El formulari conté  %{count} errors:'
+          other:
     doorkeeper:
       applications:
         help:
@@ -1260,7 +1292,8 @@ ca:
         #original_hash: 17aa24f
         email: Accedeix a la teva adreça de correu electrònic
         #original_hash: e0d0654
-        manage_competitions: Administra qualsevol de les competicions que estic organitzant
+        manage_competitions: Administra qualsevol de les competicions que estic 
+          organitzant
     devise:
       #original_hash: 06184f5
       no_account: Sense compte?
@@ -1423,7 +1456,8 @@ ca:
       ad_new: Nou
       #original_hash: 9ad68ce
       text_html: >-
-        Fes una ullada al nostre merxandatge, que acaba de ser llançat i inclou una selecció de peces de roba, des de samarretes fins a dessuadores.
+        Fes una ullada al nostre merxandatge, que acaba de ser llançat i inclou una
+        selecció de peces de roba, des de samarretes fins a dessuadores.
       #original_hash: b0fc6c4
       link_title: Enllaç a la botiga
     records:
@@ -1525,7 +1559,8 @@ ca:
         #original_hash: 87f1f49
         header: 'WCAT ha anunciat %{competition}'
         #original_hash: 0d3d10c
-        announced: WCAT ha aprovat la teva competició i s'ha fet l'anunci públic.
+        announced: WCAT ha aprovat la teva competició i s'ha fet l'anunci 
+          públic.
       id_claim_possibility_email:
         #original_hash: 20e9d09
         header: 'Si us plau, enllaça el teu WCA ID amb el teu compte'
@@ -1644,7 +1679,8 @@ ca:
       #original_hash: 7b2c7f1
       approve: Aprovar
       #original_hash: 85de4b8
-      unconfirmed_email: 'El correu electrònic per aquest compte (%{email}) no està confirmat.'
+      unconfirmed_email: 'El correu electrònic per aquest compte (%{email}) no està
+        confirmat.'
       #original_hash: 7069007
       confirm_new_email: >-
         Canviar el correu electrònic requerirà una nova confirmació abans de ser
@@ -1654,7 +1690,8 @@ ca:
         Aquest compte està pendent de confirmació de la nova l'adreça de correu
         electrònic %{email}.
       #original_hash: 0340b0b
-      pending_avatar_confirmation: Aquest compte està pendent de confirmar el nou avatar.
+      pending_avatar_confirmation: Aquest compte està pendent de confirmar el 
+        nou avatar.
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Aquest compte està esperant %{delegate} per confirmar que s'ha reclamat
@@ -1672,7 +1709,8 @@ ca:
       manage_pending: Administrar avatars pendents
       #original_hash: 2d2ae5d
       have_no_wca_id_html: >-
-        No tens cap WCA ID assignat. Si has competit abans, demana enllaçar el teu WCA ID
+        No tens cap WCA ID assignat. Si has competit abans, demana enllaçar el teu
+        WCA ID
         connectat al teu compte %{here}!
       #original_hash: 29e25b5
       have_wca_id_html: 'El teu WCA ID és %{link_id}.'
@@ -1694,7 +1732,8 @@ ca:
           #original_hash: 1c4670f
           registered: t'has registrat a una competició
       #original_hash: fe7122d
-      guidelines_confirmation: Confirmo que l'avatar compleix totes les directrius.
+      guidelines_confirmation: Confirmo que l'avatar compleix totes les 
+        directrius.
       #original_hash: d677ceb
       confirm_guidelines: >-
         Assegura't que has llegit les directrius per avatars i envies una imatge
@@ -1794,11 +1833,13 @@ ca:
         No es pot canviar el país a un altre país que hagi sigut representat per
         la persona al passat.
       #original_hash: b589014
-      must_have_a_change: El nom o el país ha de ser diferent per actualitzar la persona.
+      must_have_a_change: El nom o el país ha de ser diferent per actualitzar la
+        persona.
       #original_hash: 2e582eb
       must_not_be_present: no pot ser present
       #original_hash: 5b4eac9
-      senior_has_delegate: no es pot degradar Delegat Sènior amb Delegats subordinats
+      senior_has_delegate: no es pot degradar Delegat Sènior amb Delegats 
+        subordinats
       #original_hash: 48653a9
       already_have_id: 'no es pot reclmar un WCA ID perquè ja en tens un %{wca_id}'
       #original_hash: ec5db95
@@ -1831,7 +1872,8 @@ ca:
         després de crear una nova contrasenya <a
         href='/users/password/new'>aquí</a>.
       #original_hash: 50897d4
-      must_match_person: han de coincidir els detalls personals al WCA ID corresponent
+      must_match_person: han de coincidir els detalls personals al WCA ID 
+        corresponent
     successes:
       messages:
         #original_hash: 31bd401
@@ -1876,7 +1918,8 @@ ca:
       #original_hash: cec28a0
       comp_not_found: No s'ha trobat la competició
       #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Un registre no pot ser eliminat i acceptat al mateix moment.
+      cannot_be_deleted_and_accepted: Un registre no pot ser eliminat i acceptat
+        al mateix moment.
       #original_hash: a38d024
       must_register: t'has de registrar com a mínim a una categoria
       #original_hash: e78eec3
@@ -1890,31 +1933,32 @@ ca:
       #original_hash: bdf1f11
       newcomer:
         one: Novell
-        other: Novells
-      #original_hash: bc010e3
+        many: Novells
+        other:
       returner:
         one: Repetidor
-        other: Repetidors
-      #original_hash: b7da17a
+        many: Repetidors
+        other:
       person:
         one: Persona
-        other: Persones
+        many: Persones
+        other:
     flash:
       #original_hash: da7ec53
       not_using_wca: Aquesta competició no utilitza el registre WCA
       #original_hash: d528030
       accepted_and_mailed:
         one: Registre acceptat! S'ha enviat la notificació per correu.
-        other: Registres acceptats! S'han enviat les notificacions per correu.
-      #original_hash: 42ea8de
+        many: Registres acceptats! S'han enviat les notificacions per correu.
+        other:
       rejected_and_mailed:
         one: Registre desplaçat a la llista d'espera.
-        other: Registres desplaçats a la llista d'espera.
-      #original_hash: a360b31
+        many: Registres desplaçats a la llista d'espera.
+        other:
       deleted_and_mailed:
         one: Registre eliminat
-        other: Registres eliminats
-      #original_hash: c3aa289
+        many: Registres eliminats
+        other:
       single_deletion_and_mail: 'Registre eliminat i s''ha enviat un correu %{mail}'
       #original_hash: d8f067f
       cannot_delete: No pots eliminar el teu registre.
@@ -2011,8 +2055,8 @@ ca:
       #original_hash: 0ab725c
       country_plural:
         one: 1 país
-        other: '%{count} països'
-      #original_hash: 1feee0e
+        many: '%{count} països'
+        other:
       export_csv: Exportar a CSV
       #original_hash: 84add5b
       email: Correu electrònic
@@ -2307,7 +2351,8 @@ ca:
         servir un mètode de pagament extern, si us plau, recorda d'afegir els
         detalls rellevants als requisits de registre.
       #original_hash: ba067f0
-      not_announced: 'Aquesta competició és visible al públic, però encara no s''ha anunciat.'
+      not_announced: 'Aquesta competició és visible al públic, però encara no s''ha
+        anunciat.'
       #original_hash: ab61991
       announced_success: Competició anunciada exitosament!
       #original_hash: a582c89
@@ -2331,13 +2376,15 @@ ca:
       #original_hash: 376f461
       results_posted: Resultats publicats exitosament!
       #original_hash: afe3a23
-      results_preview_alert: Estàs visualitzant resultats que encara no s'han publicat.
+      results_preview_alert: Estàs visualitzant resultats que encara no s'han 
+        publicat.
       #original_hash: 07de612
       upload_results: >-
         Aquesta competició ja s'ha acabat, estem treballant per penjar els
         resultats com més aviat millor!
       #original_hash: 68dd436
-      computing_auxiliary_data: 'Si us plau, espera que les dades auxiliars s''hagin computat. =)'
+      computing_auxiliary_data: 'Si us plau, espera que les dades auxiliars s''hagin
+        computat. =)'
       #original_hash: 8ebe272
       no_results: No hi ha resultats.
       #original_hash: 79e8b95
@@ -2359,15 +2406,18 @@ ca:
       #original_hash: fa186a9
       confirmed_not_visible: Aquesta competició està confirmada però no visible.
       #original_hash: a66bbe3
-      not_confirmed_visible: Aquesta competició no està confirmada però si visible.
+      not_confirmed_visible: Aquesta competició no està confirmada però si 
+        visible.
       #original_hash: 0f44e45
-      not_confirmed_not_visible: Aquesta competició no està confirmada i no és visible.
+      not_confirmed_not_visible: Aquesta competició no està confirmada i no és 
+        visible.
       #original_hash: a821396
       stripe_connected: >-
         Has connectat exitosament el teu compte Stripe i ja pots rebre els
         pagaments d'aquesta competició.
       #original_hash: 0a4bb53
-      stripe_not_connected: Hi ha hagut un problema i no podem connectar el teu compte Stripe.
+      stripe_not_connected: Hi ha hagut un problema i no podem connectar el teu 
+        compte Stripe.
       #original_hash: 724cf0d
       championship_exists: 'Ja hi ha un %{championship_type} al %{year}'
     my_competitions:
@@ -2417,14 +2467,14 @@ ca:
       #original_hash: 680567f
       organizer_plural:
         one: Organitzador
-        other: Organitzadors
-      #original_hash: 53a9522
+        many: Organitzadors
+        other:
       organization_team: Equip organitzador
       #original_hash: 6afa61e
       delegate:
         one: Delegat de la WCA
-        other: Delegats de la WCA
-      #original_hash: b37456c
+        many: Delegats de la WCA
+        other:
       contact: Contacte
       #original_hash: 0eb5ed5
       information: Informació
@@ -2465,7 +2515,8 @@ ca:
         Si el registre és cancel·lat abans de %{limit_date_and_time} se't
         retornarà %{refund_policy_percent} de la quota d'inscripció.
       #original_hash: 4aca553
-      no_refunds: Les quotes de registre no seran retornades sota cap circumstància.
+      no_refunds: Les quotes de registre no seran retornades sota cap 
+        circumstància.
       #original_hash: b016d2f
       waiting_list_deadline_html: >-
         Les persones de la llista d'espera podran ser acceptades a la llista de
@@ -2488,7 +2539,8 @@ ca:
         Registres al lloc seran acceptades amb una quota bàsica de registre de
         %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
-      on_the_spot_registration_free: Registres al lloc seran acceptats gratuïtament.
+      on_the_spot_registration_free: Registres al lloc seran acceptats 
+        gratuïtament.
       #original_hash: f5f687d
       no_on_the_spot_registration: No s'acceptaran registres al lloc.
       #original_hash: 4df139d
@@ -2526,7 +2578,8 @@ ca:
       #original_hash: 1f9c9c4
       highlights: Destacats
       #original_hash: 945f917
-      click_to_display_highlights_html: 'Prem %{link_here} per mostrar els destacats de la competició.'
+      click_to_display_highlights_html: 'Prem %{link_here} per mostrar els destacats
+        de la competició.'
       #original_hash: dc5c597
       hide_highlights: Amaga destacats.
       #original_hash: f691bf2
@@ -2631,7 +2684,8 @@ ca:
         #original_hash: 8b57693
         custom: Competicions dins del període de temps seleccionat
         #original_hash: 0933739
-        by_announcement: 'Competicions ordenades per data d''anunci, les més noves a dalt'
+        by_announcement: 'Competicions ordenades per data d''anunci, les més noves
+          a dalt'
       #original_hash: 6684214
       no_access: No tens accés a aquesta pàgina!
       tooltips:
@@ -2679,7 +2733,8 @@ ca:
       #original_hash: e590657
       missing_report: El teu informe encara no està publicat!
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: 'En aquests moments no tens cap competició pendent! Comprova %{link}.'
+      no_upcoming_competitions_html: 'En aquests moments no tens cap competició pendent!
+        Comprova %{link}.'
       #original_hash: e0f66bb
       competitions_list: llista de competicions
       #original_hash: 9104a03
@@ -2749,7 +2804,8 @@ ca:
         per verificar que l'Equip d'Anunci de Competició de la WCA ha sigut
         notificat.
       #original_hash: 4c7deb7
-      submit_delete: Estàs segur que vols eliminar aquesta competició? No hi ha marxa enrere.
+      submit_delete: Estàs segur que vols eliminar aquesta competició? No hi ha 
+        marxa enrere.
       #original_hash: 8ebebca
       coordinates: Coordenades
       #original_hash: a672984
@@ -2805,58 +2861,61 @@ ca:
           contact: Contacte
         championships: Tipus de campionat
         website:
-          generate_website: M'agradaria utilitzar la pàgina web de la WCA en lloc
-            d'una externa per informació addicional.
+          generate_website: M'agradaria utilitzar la pàgina web de la WCA en 
+            lloc d'una externa per informació addicional.
           external_website: Pàgina web
           external_registration_page: Pàgina del registre
-          uses_wca_registration: M'agradaria utilitzar la pàgina web de la WCA pel
-            registre
+          uses_wca_registration: M'agradaria utilitzar la pàgina web de la WCA 
+            pel registre
           uses_wca_live:
         user_settings:
-          receive_registration_emails: Notifica'm per correu electrònic quan algú
-            es registri a aquesta competició
+          receive_registration_emails: Notifica'm per correu electrònic quan 
+            algú es registri a aquesta competició
         entry_fees:
           currency_code: Codi de divisa
           base_entry_fee: Quota bàsica de registre
           on_the_spot_entry_fee: Quota d'inscripció bàsica al lloc
           guest_entry_fee: Quota d'entrada pels espectadors
-          donations_enabled: Vull activar les donacions addicionalment a les quotes
-            d'inscripció
+          donations_enabled: Vull activar les donacions addicionalment a les 
+            quotes d'inscripció
           refund_policy_percent: Percentatge de reemborsament
           refund_policy_limit_date: Data límit pels retorns
         registration:
           opening_date_time: Registre obert
           closing_date_time: Registre tancat
-          waiting_list_deadline_date: Data límit per acceptar competidors de la llista
-            d'espera
-          event_change_deadline_date: Data límit pels competidors per actualitzar
-            les categories
+          waiting_list_deadline_date: Data límit per acceptar competidors de la 
+            llista d'espera
+          event_change_deadline_date: Data límit pels competidors per 
+            actualitzar les categories
           allow_on_the_spot: Registres al lloc
           allow_self_delete_after_acceptance: Cancel·lacions de registres
           allow_self_edits: Edicions dels registres
           guests_enabled: Espectadors
-          guest_entry_status: Mostra missatge per entrada gratuïta dels espectadors
+          guest_entry_status: Mostra missatge per entrada gratuïta dels 
+            espectadors
           guests_per_registration:
           extra_requirements: Requisits extra de registre
           force_comment:
         event_restrictions:
           early_puzzle_submission:
-            enabled: M'agradaria sol·licitar als competidors que facin entrega dels
-              seus cubs en una hora específica abans que comenci la categoria
+            enabled: M'agradaria sol·licitar als competidors que facin entrega 
+              dels seus cubs en una hora específica abans que comenci la 
+              categoria
             reason: Raó i detalls per l'entrega abans d'hora dels cubs
           qualification_results:
-            enabled: M'agradaria utilitzar els resultats de qualificació per limitar
-              qui pot competir en certes categories
+            enabled: M'agradaria utilitzar els resultats de qualificació per 
+              limitar qui pot competir en certes categories
             reason: Raó i detalls pels resultats de qualificació
             allow_registration_without:
           event_limitation:
-            enabled: M'agradaria limitar als competidors de registrar-se a una combinació
-              específica de categories
+            enabled: M'agradaria limitar als competidors de registrar-se a una 
+              combinació específica de categories
             reason: Raó i detalls per les limitacions de categories
             per_registration_limit:
           main_event_id: Categoria principal
         remarks: Observacions
-        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació addicional
+        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació 
+          addicional
       hints:
         name: 'El nom complet de la competició incloent l''any al final (exemple:
           Danish Open 2016). Revisa les majúscules. El nom ha de contenir només caràcters
@@ -2864,42 +2923,45 @@ ca:
           i espais().'
         short_name: 'Un nom curt per mostrar. Si el nom de la competició ja és curt,
           pots reutilitzar el nom (exemple: Europe 2006).'
-        name_reason_html: Una breu explicació pel nom de la competició. El nom ha
-          de complir amb <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        name_reason_html: Una breu explicació pel nom de la competició. El nom 
+          ha de complir amb <a 
+          href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>.
         venue:
           city_name: 'Nom de la ciutat i estat (si és possible) on hi haurà la competició.
             No incloguis el país (exemple: París o San Francisco, Califòrnia).'
           name_html: 'El local on tindrà lloc la competició. %{md}. Per exemple: [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
-          details_html: Detalls sobre el local (per exemple, Al fons de la primera
-            planta, segueix els signes). %{md}
+          details_html: Detalls sobre el local (per exemple, Al fons de la 
+            primera planta, segueix els signes). %{md}
           coordinates:
-        information: Informació important que els competidors haurien de saber. Sortirà
-          a la pàgina principal de la competició. <br/>Si us plau, emplena-ho <b>en
-          anglès</b> i qualsevol altre idioma que els competidors puguin parlar.
+        information: Informació important que els competidors haurien de saber. 
+          Sortirà a la pàgina principal de la competició. <br/>Si us plau, 
+          emplena-ho <b>en anglès</b> i qualsevol altre idioma que els 
+          competidors puguin parlar.
         competitor_limit:
-          enabled: Tot i que no és requerit per les Regulacions d'establir un límit
-            de competidors, és altament recomanat.
-          count: El nombre de competidors permesos per aquesta competició. Per ara
-            aquest nombre només és informatiu i no impedeix que més gent es registri.
-            Estem treballant per afegir suport explícit per aquest procés d'inscripció,
-            però requereix més feina primer.
-          reason: Quina és la raó del límit de competidors? Si us plau, omple-ho en
-            anglès!
+          enabled: Tot i que no és requerit per les Regulacions d'establir un 
+            límit de competidors, és altament recomanat.
+          count: El nombre de competidors permesos per aquesta competició. Per 
+            ara aquest nombre només és informatiu i no impedeix que més gent es 
+            registri. Estem treballant per afegir suport explícit per aquest 
+            procés d'inscripció, però requereix més feina primer.
+          reason: Quina és la raó del límit de competidors? Si us plau, omple-ho
+            en anglès!
         staff:
           staff_delegate_ids: Delegats de la WCA per la competició.
-          trainee_delegate_ids: Delegats en pràctiques de la WCA per la competició.
-          organizer_ids: Organitzadors de la competició (han de tenir un compte per
-            sortir aquí).
+          trainee_delegate_ids: Delegats en pràctiques de la WCA per la 
+            competició.
+          organizer_ids: Organitzadors de la competició (han de tenir un compte 
+            per sortir aquí).
           contact_html: 'Dades de contacte opcional. Si no ho omples, el contacte
             es farà a través d''un formulari sense revelar les adreces de correu electrònic
             dels organitzadors. %{md}. Exemple: [Text to display](mailto:some@email.com)'
         website:
-          external_website: Pàgina web de la competició. Ha de tenir un enllaç http(s)
-            vàlid.
-          external_registration_page: La pàgina on els competidors s'han de registrar
-            per la competició. Ha de ser un enllaç http(s) vàlid.
+          external_website: Pàgina web de la competició. Ha de tenir un enllaç 
+            http(s) vàlid.
+          external_registration_page: La pàgina on els competidors s'han de 
+            registrar per la competició. Ha de ser un enllaç http(s) vàlid.
           uses_wca_live:
         entry_fees:
           currency_code: El codi de moneda per les quotes.
@@ -2912,55 +2974,59 @@ ca:
             Prem "Actualitza Competició" després de canviar el codi de moneda per
             sincronitzar l''estimació. Si no hi ha cap tipus de conversió disponible
             per la moneda seleccionada, no es mostrarà res.'
-          on_the_spot_entry_fee: Si s'introdueix un 0 aquí, es mostrarà una frase
-            dient que els registres al lloc seran acceptats gratuïtament.
-          guest_entry_fee: Per ara aquest nombre és només informatiu, les quotes d'espectador
-            no poden ser administrades per aquesta pàgina web. Si s'introdueix un
-            0, es mostrarà una frase que escullis referent a la política pels espectadors.
-          refund_policy_percent: Per ara aquest nombre es només informatiu, els retorns
-            s'han de fer manualment. Si s'introdueix 0, es mostrarà una frase dient
-            que les quotes de registre mai seran retornades sota cap circumstància.
-          refund_policy_limit_date: Data límit a partir de la qual no es retornarà
-            cap més quota.
+          on_the_spot_entry_fee: Si s'introdueix un 0 aquí, es mostrarà una 
+            frase dient que els registres al lloc seran acceptats gratuïtament.
+          guest_entry_fee: Per ara aquest nombre és només informatiu, les quotes
+            d'espectador no poden ser administrades per aquesta pàgina web. Si 
+            s'introdueix un 0, es mostrarà una frase que escullis referent a la 
+            política pels espectadors.
+          refund_policy_percent: Per ara aquest nombre es només informatiu, els 
+            retorns s'han de fer manualment. Si s'introdueix 0, es mostrarà una 
+            frase dient que les quotes de registre mai seran retornades sota cap
+            circumstància.
+          refund_policy_limit_date: Data límit a partir de la qual no es 
+            retornarà cap més quota.
         registration:
           opening_date_time: 'Important: L''obertura i clausura del registre està
             en horari UTC'
-          waiting_list_deadline_date: La data a partir de la qual no s'acceptaran
-            més persones de la llista d'espera. Si tens una data límit pels retorns
-            de quota, la data per ser acceptat no hauria de ser abans de la data límit
-            pels retorns.
-          event_change_deadline_date: Els competidors registrats tenen el dret d'actualitzar
-            les seves categories fins aquesta data contactant l'equip organitzador.
-            Aquesta data límit no hauria de ser posada abans del moment que s'ha de
-            tancar els registres. Deixar aquest espai en blanc vol dir que els competidors
-            poden afegir una categoria més per competir fins al mateix moment de la
-            competició. Si acceptes registres al lloc, aquesta data ha de ser la mateixa
-            que l'inici de la competició.
+          waiting_list_deadline_date: La data a partir de la qual no 
+            s'acceptaran més persones de la llista d'espera. Si tens una data 
+            límit pels retorns de quota, la data per ser acceptat no hauria de 
+            ser abans de la data límit pels retorns.
+          event_change_deadline_date: Els competidors registrats tenen el dret 
+            d'actualitzar les seves categories fins aquesta data contactant 
+            l'equip organitzador. Aquesta data límit no hauria de ser posada 
+            abans del moment que s'ha de tancar els registres. Deixar aquest 
+            espai en blanc vol dir que els competidors poden afegir una 
+            categoria més per competir fins al mateix moment de la competició. 
+            Si acceptes registres al lloc, aquesta data ha de ser la mateixa que
+            l'inici de la competició.
           guests_per_registration:
-          extra_requirements: Si us plau, indica aquí qualsevol requisit extra pel
-            registre que encara no s'hagi indicat, com per exemple instruccions de
-            com pagar. <br/>Si us plau, omple-ho <b>en anglès</b> i qualsevol altre
-            idioma que els competidors puguin parlar; es mostrarà a la pàgina d'informació
-            sobre la competició així com la pàgina de registre a la competició si
-            és que s'utilitza la pàgina web de la WCA per fer-les.
+          extra_requirements: Si us plau, indica aquí qualsevol requisit extra 
+            pel registre que encara no s'hagi indicat, com per exemple 
+            instruccions de com pagar. <br/>Si us plau, omple-ho <b>en 
+            anglès</b> i qualsevol altre idioma que els competidors puguin 
+            parlar; es mostrarà a la pàgina d'informació sobre la competició 
+            així com la pàgina de registre a la competició si és que s'utilitza 
+            la pàgina web de la WCA per fer-les.
           force_comment:
         event_restrictions:
           early_puzzle_submission:
-            reason: Si us plau, explica perquè voldries requerir als competidors que
-              entriguin els cubs més aviat. Omple-ho en anglès!
+            reason: Si us plau, explica perquè voldries requerir als competidors
+              que entriguin els cubs més aviat. Omple-ho en anglès!
           qualification_results:
-            reason: Si us plau, explica aquí perquè voldries utilitzar temps de qualificació.
-              Omple-ho en anglès!
+            reason: Si us plau, explica aquí perquè voldries utilitzar temps de 
+              qualificació. Omple-ho en anglès!
             allow_registration_without:
           event_limitation:
-            reason: Si us plau, explica aquí perquè voldries limitar una combinació
-              especifica de categories. Omple-ho en anglès!
+            reason: Si us plau, explica aquí perquè voldries limitar una 
+              combinació especifica de categories. Omple-ho en anglès!
             per_registration_limit:
-          main_event_id: El guanyador d'aquesta categoria serà el guanyador de la
-            competició.
-        remarks: Alguna informació addicional que vulguis mencionar a WCAT. Per exemple,
-          si hi ha alguna cosa que no acabes de tenir clara o si tens una proposta
-          especial per WCAT. Si us plau, omple-ho en anglès!
+          main_event_id: El guanyador d'aquesta categoria serà el guanyador de 
+            la competició.
+        remarks: Alguna informació addicional que vulguis mencionar a WCAT. Per 
+          exemple, si hi ha alguna cosa que no acabes de tenir clara o si tens 
+          una proposta especial per WCAT. Si us plau, omple-ho en anglès!
       choices:
         guests_enabled:
           'true': Pregunta sobre els acompanyants
@@ -2988,10 +3054,11 @@ ca:
               Els competidors NO haurien d'eliminar el seu registre un cop s'hagi
               acceptat
           guest_entry_status:
-            unclear: No mostris res (i potser explica-ho millor a l'apartat "Requeriments
-              extra de registre")
+            unclear: No mostris res (i potser explica-ho millor a l'apartat 
+              "Requeriments extra de registre")
             free: Qualsevol espectador pot assistir gratuïtament
-            restricted: Els espectadors només són permesos com acompanyants de competidors
+            restricted: Els espectadors només són permesos com acompanyants de 
+              competidors
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3001,11 +3068,13 @@ ca:
       #original_hash: 8e8f765
       cannot_manage: No es pot administrar la competició.
       #original_hash: 0acc454
-      cannot_delete_public: No es pot eliminar una competició que és públicament visible.
+      cannot_delete_public: No es pot eliminar una competició que és públicament
+        visible.
       #original_hash: 3935fd6
       cannot_delete_confirmed: No es pot eliminar una competició confirmada.
       #original_hash: 191df37
-      must_contain_event: ha de contenir com a mínim una categoria per aquesta competició
+      must_contain_event: ha de contenir com a mínim una categoria per aquesta 
+        competició
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
         ha de tenir com a mínim una ronda, totes les rondes han de ser incloses
@@ -3015,21 +3084,27 @@ ca:
       #original_hash: 8131fc2
       not_all_delegates: no són Delegats
       #original_hash: 43a23c2
-      registration_close_after_open: el tancament del registre ha de ser després de l'obertura del registre
+      registration_close_after_open: el tancament del registre ha de ser després
+        de l'obertura del registre
       #original_hash: 8a3a4f6
-      start_date_must_be_28_days_in_advance: La data d'inici ha de ser com a mínim d'aquí 28 dies.
+      start_date_must_be_28_days_in_advance: La data d'inici ha de ser com a 
+        mínim d'aquí 28 dies.
       #original_hash: 43a83a9
-      end_date_before_start: La data de finalització no pot ser abans de la data d'inici.
+      end_date_before_start: La data de finalització no pot ser abans de la data
+        d'inici.
       #original_hash: 0c507fa
-      refund_date_after_start: La data del límit del retorn no pot ser abans de la data d'inici.
+      refund_date_after_start: La data del límit del retorn no pot ser abans de 
+        la data d'inici.
       #original_hash: be3933b
       span_too_many_days: 'La competició no pot durar més de %{max_days} dies.'
       #original_hash: cdcd288
       invalid_currency_code: El codi de moneda seleccionat és invàlid
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: ha de tenir una condició per avançar en totes les rondes no finals.
+      advancement_condition_must_be_present_for_all_non_final_rounds: ha de 
+        tenir una condició per avançar en totes les rondes no finals.
       #original_hash: da17c99
-      registration_period_after_start: El període de registre no pot ser després de la data d'inici.
+      registration_period_after_start: El període de registre no pot ser després
+        de la data d'inici.
       #original_hash: f6b244b
       waiting_list_deadline_before_registration_close: >-
         La data límit de la llista d'espera no pot ser abans que la data de
@@ -3039,7 +3114,8 @@ ca:
         La data límit de la llista d'espera no pot ser abans que la data límit
         dels retorns.
       #original_hash: 44d9902
-      waiting_list_deadline_after_start: La data límit de la llista d'espera ha de ser abans de la data d'inici.
+      waiting_list_deadline_after_start: La data límit de la llista d'espera ha 
+        de ser abans de la data d'inici.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         La data límit per actualitzar categories no pot ser abans de la data de
@@ -3077,8 +3153,8 @@ ca:
       #original_hash: 241801a
       competitions:
         one: 1 competició
-        other: '%{count} competicions'
-      #original_hash: e3528ec
+        many: '%{count} competicions'
+        other:
       label: 'Competicions pròximes (entre %{days} dies i %{kms} km)'
       #original_hash: 3446062
       label_admin: 'Els últims %{days} dies'
@@ -3089,7 +3165,8 @@ ca:
       #original_hash: 7e76950
       no_date_yet: Encara no has assignat una data per aquesta competició.
       #original_hash: 82a95d2
-      no_location_yet: Encara no has assignat cap ubicació per aquesta competició.
+      no_location_yet: Encara no has assignat cap ubicació per aquesta 
+        competició.
       #original_hash: 9eb8f46
       within: 'Entre %{days} dies'
       #original_hash: d97d1ee
@@ -3168,7 +3245,8 @@ ca:
         #original_hash: b2a983a
         cumulative_time_limit: temps límit acumulatiu
         #original_hash: d47f11a
-        cumulative_one_round_html: 'Pot ser imposat un %{cumulative_time_limit} (mira %{regulation_link}).'
+        cumulative_one_round_html: 'Pot ser imposat un %{cumulative_time_limit} (mira
+          %{regulation_link}).'
         #original_hash: c6190b6
         cumulative_across_rounds_html: >-
           Pot ser imposat un %{cumulative_time_limit} durant les rondes (mira
@@ -3188,7 +3266,8 @@ ca:
           Els temps de qualificació s'han d'obtenir en altres competicions de la
           WCA per poder competir.
         #original_hash: 3b524fd
-        qualification_all_events_html: 'La data límit per posar temps de qualificació és <b>%{date}</b>.'
+        qualification_all_events_html: 'La data límit per posar temps de qualificació
+          és <b>%{date}</b>.'
         #original_hash: 0d791e9
         qualification_some_events_html: >-
           La data límit per posar temps de qualificació a %{events} és
@@ -3529,7 +3608,8 @@ ca:
           Contacta amb els Organitzadors d'una Competició Específica (si us
           plau, selecciona a sota)
         #original_hash: f0bffb7
-        competitions_in_general: 'Competicions en General (organitzar, normes de competició, etc.)'
+        competitions_in_general: 'Competicions en General (organitzar, normes de competició,
+          etc.)'
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID o Perfil de la WCA
         #original_hash: 0c77aee
@@ -3758,7 +3838,8 @@ ca:
             regulació 3h</a>.
       regulations3:
         #original_hash: c7460a5
-        title: He perdut la tapa del centre del meu cub. Puc continuar utilitzant-lo?
+        title: He perdut la tapa del centre del meu cub. Puc continuar 
+          utilitzant-lo?
         content:
           #original_hash: 0d76323
           '1': >-
@@ -3851,7 +3932,8 @@ ca:
       %{here_credit}, o a través de Paypal %{here_paypal}. Si prefereixes
       escriure un xec, el pots adreçar a:
     #original_hash: 2af9b71
-    tax_deductible_note: Les donacions són deduïbles d'impostos als Estats Units.
+    tax_deductible_note: Les donacions són deduïbles d'impostos als Estats 
+      Units.
     #original_hash: 6026d35
     other_help_title: Altres maneres d'ajudar
     #original_hash: cb228f6
@@ -3951,7 +4033,8 @@ ca:
         #original_hash: 3da1e85
         name: Comitè de Regulacions de la WCA
         #original_hash: 13ada5b
-        description: Aquest comitè és responsable d'administrar les Regulacions de la WCA.
+        description: Aquest comitè és responsable d'administrar les Regulacions 
+          de la WCA.
       wrt:
         #original_hash: 67be768
         name: Equip de Resultats de la WCA
@@ -3981,7 +4064,8 @@ ca:
         #original_hash: 9cb13de
         name: Comitè de Finances de la WCA
         #original_hash: b4ed44b
-        description: Aquest comitè és responsable d'administrar les finances de la WCA.
+        description: Aquest comitè és responsable d'administrar les finances de 
+          la WCA.
       wec:
         #original_hash: 83bd1d0
         name: Comitè d'Ètica de la WCA
@@ -4306,7 +4390,9 @@ ca:
     wfc:
       #original_hash: 3ec8256
       info_html: >-
-        WFC es fa responsable de les finances a la WCA. Ells gestionen les finances i els comptes de la WCA d’acord amb un pressupost anual, que han de proveir normalment.
+        WFC es fa responsable de les finances a la WCA. Ells gestionen les finances
+        i els comptes de la WCA d’acord amb un pressupost anual, que han de proveir
+        normalment.
     wec:
       #original_hash: ec2b9c3
       info_html: >-
@@ -4367,7 +4453,9 @@ ca:
         s'utilitzen per ajudar amb l'organització de competicions WCA.
       #original_hash: 479b542
       disclaimer: >-
-        No totes les eines d’aquesta pàgina són administrades per l’WST: cap problema! No tenim la capacitat de gestionar tot el programari relacionat amb la WCA. :)
+        No totes les eines d’aquesta pàgina són administrades per l’WST: cap problema!
+        No tenim la capacitat de gestionar tot el programari relacionat amb la WCA.
+        :)
       #original_hash: 80f97b9
       used: >-
         Tots els programes d'aquesta llista s'han utilitzat durant competicions
@@ -4411,7 +4499,8 @@ ca:
         #original_hash: b3e4eb0
         title: Certificats
         #original_hash: f1a0731
-        description: Imprimeix certificats per a competicions de la WCA mitjançant WCA Live
+        description: Imprimeix certificats per a competicions de la WCA 
+          mitjançant WCA Live
       groupifier:
         #original_hash: 8f55355
         title: Groupifier
@@ -4427,7 +4516,8 @@ ca:
         #original_hash: aa1b64d
         title: Fulls de resultats
         #original_hash: 2b8e373
-        description: Imprimiu fulls de resultats per a competicions WCA mitjançant WCA Live
+        description: Imprimiu fulls de resultats per a competicions WCA 
+          mitjançant WCA Live
       tnoodle:
         #original_hash: ba336a1
         title: TNoodle (Scrambles)
@@ -4583,7 +4673,8 @@ ca:
       content1_html: >-
         Si estàs interessat a organitzar una competició o ja estàs planejant-ne
         una, si us plau, llegeix les nostres <a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Guies d'Organitzador</a>.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Guies
+        d'Organitzador</a>.
       #original_hash: 5016669
       content2_html: >-
         Aquest document conté informació important i hauria de ser llegida per
@@ -4662,7 +4753,8 @@ ca:
       #original_hash: df43670
       validate_media: Validar contingut multimèdia
       #original_hash: 9f2158f
-      submit_media_html: Pots enviar contingut multimèdia <a href="/media/new">aquí</a>.
+      submit_media_html: Pots enviar contingut multimèdia <a 
+        href="/media/new">aquí</a>.
     validate:
       #original_hash: 1e0eee6
       title: Validar Contingut Multimèdia
