@@ -225,7 +225,7 @@ RSpec.feature "Sign up" do
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
       # Now enter the wrong birthdate.
-      fill_in "Birthdate", with: "1900-02-03"
+      fill_in("Birthdate", with: "1900-02-03").send_keys(:escape)
 
       # We just filled some invalid information as if we were a returning competitor, but
       # now change our minds and fill out the form as if we're a noobie. We should only show
