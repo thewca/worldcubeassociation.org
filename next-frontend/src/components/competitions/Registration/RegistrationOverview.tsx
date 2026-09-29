@@ -1,24 +1,24 @@
 "use client";
 
-import {
-  Alert,
-  Button,
-  ButtonGroup,
-  DataList,
-  Heading,
-  HStack,
-  Spinner,
-  VStack,
-  Text,
-} from "@chakra-ui/react";
-import type { ReactNode } from "react";
+import { Button, Heading, Text, VStack } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
-import { LabelledEventIcon } from "@/components/EventIcon";
+import {
+  isStepEditable,
+  StepContent,
+  StepSummary,
+} from "@/components/competitions/Registration/steps";
+import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
+import useAPI from "@/lib/wca/useAPI";
+import { registrationQueryKey } from "@/lib/wca/registrations/useRegistration";
+import showRegistrationError from "@/lib/wca/registrations/showRegistrationError";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import type { components } from "@/types/openapi";
-import { DateTime } from "luxon";
 
+type StepConfig = components["schemas"]["RegistrationConfig"];
+type StepKey = StepConfig["key"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
@@ -36,100 +36,52 @@ const contactUrl = (competitionId: string, message: string) =>
     message,
   })}`;
 
-const STATUS_ALERTS = {
-  pending: { status: "info", message: "needs_approval" },
-  waiting_list: { status: "warning", message: "is_waitlisted" },
-  accepted: { status: "success", message: "is_accepted" },
-  cancelled: { status: "warning", message: "is_cancelled" },
-  rejected: { status: "error", message: "is_rejected" },
-} as const;
-
-function isKnownStatus(status?: string): status is keyof typeof STATUS_ALERTS {
-  return status !== undefined && status in STATUS_ALERTS;
-}
-
-export function RegistrationStatus({
-  registration,
-}: {
-  registration: Registration;
-}) {
-  const { t } = useT();
-
-  const status = registration.competing.registration_status;
-
-  if (!isKnownStatus(status)) {
-    return null;
-  }
-
-  const { status: alertStatus, message } = STATUS_ALERTS[status];
-
-  return (
-    <Alert.Root status={alertStatus}>
-      <Alert.Indicator />
-      <Alert.Content>
-        <Alert.Title>
-          {t(
-            `competitions.registration_v2.register.registration_status.${status}`,
-            {
-              waiting_list_position:
-                registration.competing.waiting_list_position,
-            },
-          )}
-        </Alert.Title>
-        <Alert.Description>
-          {t(`competitions.registration_v2.info.${message}`)}
-        </Alert.Description>
-      </Alert.Content>
-    </Alert.Root>
-  );
-}
-
 /**
- * What a competitor sees once they have registered. The summary and the form they edit it with
- * take the same place in the card, so that switching between them keeps the heading the competitor
- * is reading in place - `children` is the form. The registration's standing is said by the approval
- * step above rather than here.
+ * What a competitor sees once they have walked all the steps: what they settled in each of them,
+ * in the order the server listed them. A step the server marks as editable can be opened again in
+ * place of its summary, so that the heading the competitor is reading stays where it is.
  */
 export default function RegistrationOverview({
+  steps,
   competitionInfo,
   registration,
-  queueCount,
-  canEdit,
-  isEditing,
-  onEditingChange,
-  isCancelling,
-  onCancel,
-  children,
+  userId,
+  onWithdrawn,
 }: {
+  steps: StepConfig[];
   competitionInfo: CompetitionInfo;
-  registration: Registration | null;
-  queueCount?: number;
-  canEdit: boolean;
-  isEditing: boolean;
-  onEditingChange: (isEditing: boolean) => void;
-  isCancelling: boolean;
-  onCancel: (registrationId: number) => void;
-  children: ReactNode;
+  registration: Registration;
+  userId: number;
+  onWithdrawn: () => void;
 }) {
   const { t } = useT();
   const confirm = useConfirm();
+  const api = useAPI();
+  const queryClient = useQueryClient();
 
-  // The registration is created by a queue worker, so right after submitting there is a window in
-  //   which it does not exist yet. The queue tells us how many submissions are ahead of ours.
-  if (registration === null) {
-    return (
-      <HStack>
-        <Spinner />
-        <Text>
-          {queueCount === undefined
-            ? t("competitions.registration_v2.register.processing")
-            : t("competitions.registration_v2.register.processing_queue", {
-                queueCount,
-              })}
-        </Text>
-      </HStack>
-    );
-  }
+  const [editingStepKey, setEditingStepKey] = useState<StepKey>();
+
+  const cancelRegistration = api.useMutation(
+    "patch",
+    "/v1/registrations/{registrationId}",
+    {
+      onError: (payload) => showRegistrationError(t, payload),
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          registrationQueryKey(competitionInfo.id, userId),
+          data.registration,
+        );
+        toaster.create({
+          id: "registration-cancelled",
+          type: "success",
+          description: t(
+            "competitions.registration_v2.register.registration_status.cancelled",
+          ),
+        });
+        onWithdrawn();
+      },
+    },
+  );
 
   const status = registration.competing.registration_status;
 
@@ -147,7 +99,10 @@ export default function RegistrationOverview({
         : t("competitions.registration_v2.update.delete_confirm_contact"),
     }).then(() => {
       if (mayCancelWithoutAsking) {
-        onCancel(registration.id);
+        cancelRegistration.mutate({
+          params: { path: { registrationId: registration.id } },
+          body: { competing: { status: "cancelled" } },
+        });
         return;
       }
 
@@ -157,110 +112,66 @@ export default function RegistrationOverview({
       );
     });
 
-  return (
-    <VStack gap={4} alignItems="stretch" width="full">
-      <Heading textStyle="h3">
-        {t("competitions.nav.menu.registration")}
-      </Heading>
-      {isEditing ? (
-        children
-      ) : (
-        <DataList.Root orientation="horizontal">
-          <DataList.Item>
-            <DataList.ItemLabel>
-              {t("competitions.competition_form.events")}
-            </DataList.ItemLabel>
-            <DataList.ItemValue>
-              <HStack wrap="wrap">
-                {registration.competing.event_ids.map((eventId) => (
-                  <LabelledEventIcon
-                    key={eventId}
-                    eventId={eventId}
-                    size="lg"
-                  />
-                ))}
-              </HStack>
-            </DataList.ItemValue>
-          </DataList.Item>
-          <DataList.Item>
-            <DataList.ItemLabel>
-              {t("competitions.registration_v2.register.comment_overview")}
-            </DataList.ItemLabel>
-            <DataList.ItemValue>
-              {registration.competing.comment ||
-                t("competitions.registration_v2.list.empty")}
-            </DataList.ItemValue>
-          </DataList.Item>
-          <DataList.Item>
-            <DataList.ItemLabel>
-              {t("activerecord.attributes.registration.guests")}
-            </DataList.ItemLabel>
-            <DataList.ItemValue>
-              {/* `guests` is only serialised on the authenticated variant of this payload, which
-                is the only one this panel is ever handed. */}
-              {registration.guests ?? 0}
-            </DataList.ItemValue>
-          </DataList.Item>
-          {registration.competing.registered_on && (
-            <DataList.Item>
-              <DataList.ItemLabel>
-                {t("competitions.registration_v2.list.timestamp")}
-              </DataList.ItemLabel>
-              <DataList.ItemValue>
-                {DateTime.fromISO(
-                  registration.competing.registered_on,
-                ).toLocaleString(DateTime.DATETIME_FULL)}
-              </DataList.ItemValue>
-            </DataList.Item>
-          )}
-          {competitionInfo["using_payment_integrations?"] && (
-            <DataList.Item>
-              <DataList.ItemLabel>
-                {t("registrations.payment_form.labels.payment_information")}
-              </DataList.ItemLabel>
-              <DataList.ItemValue>
-                {registration.payment?.has_paid
-                  ? t("registrations.payment_form.labels.fees_paid")
-                  : t("registrations.payment_form.labels.fees_remaining")}
-              </DataList.ItemValue>
-            </DataList.Item>
-          )}
-        </DataList.Root>
-      )}
+  const stopEditing = () => setEditingStepKey(undefined);
 
-      {/* Under the summary rather than beside the heading, so that the actions sit where the
-          form's own button sits and stay reachable on a phone - side by side, sharing the width
-          the form's own button spans. Editing has no button of its own here: the form's button
-          doubles as the way back out of it. */}
-      <ButtonGroup variant="outline" width="full">
-        {!isEditing && canEdit && (
-          <Button
-            flex="1"
-            colorPalette="blue"
-            onClick={() => onEditingChange(true)}
-          >
-            <LuPencil />
-            <Text hideBelow="md">{t("registrations.update")}</Text>
-            <Text hideFrom="md">
-              {t("competition_tabs.form_elements.update")}
-            </Text>
-          </Button>
-        )}
-        {CANCELLABLE_STATUSES.includes(status ?? "") && (
-          <Button
-            flex="1"
-            colorPalette="red"
-            loading={isCancelling}
-            onClick={requestCancellation}
-          >
-            <LuTrash2 />
-            <Text hideBelow="md">{t("registrations.delete_registration")}</Text>
-            <Text hideFrom="md">
-              {t("competition_tabs.form_elements.delete")}
-            </Text>
-          </Button>
-        )}
-      </ButtonGroup>
+  return (
+    <VStack gap={6} alignItems="stretch" width="full">
+      {steps.map((step) => {
+        const isEditing = editingStepKey === step.key;
+
+        return (
+          <VStack key={step.key} gap={4} alignItems="stretch">
+            <Heading textStyle="h3">
+              {t(
+                `competitions.registration_v2.register.panel.${step.key}.title`,
+              )}
+            </Heading>
+            {isEditing ? (
+              <StepContent
+                step={step}
+                competitionInfo={competitionInfo}
+                registration={registration}
+                userId={userId}
+                onNext={stopEditing}
+                onClose={stopEditing}
+              />
+            ) : (
+              <StepSummary
+                step={step}
+                competitionInfo={competitionInfo}
+                registration={registration}
+              />
+            )}
+            {!isEditing && isStepEditable(step, registration) && (
+              <Button
+                width="full"
+                variant="outline"
+                colorPalette="blue"
+                onClick={() => setEditingStepKey(step.key)}
+              >
+                <LuPencil />
+                {t("competition_tabs.form_elements.update")}
+              </Button>
+            )}
+          </VStack>
+        );
+      })}
+
+      {CANCELLABLE_STATUSES.includes(status ?? "") && (
+        <Button
+          width="full"
+          variant="outline"
+          colorPalette="red"
+          loading={cancelRegistration.isPending}
+          onClick={requestCancellation}
+        >
+          <LuTrash2 />
+          <Text hideBelow="md">{t("registrations.delete_registration")}</Text>
+          <Text hideFrom="md">
+            {t("competition_tabs.form_elements.delete")}
+          </Text>
+        </Button>
+      )}
     </VStack>
   );
 }

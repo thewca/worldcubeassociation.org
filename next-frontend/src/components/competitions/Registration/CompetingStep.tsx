@@ -8,6 +8,7 @@ import {
   HStack,
   List,
   NumberInput,
+  Spinner,
   Text,
   Textarea,
 } from "@chakra-ui/react";
@@ -22,11 +23,18 @@ import { disabledEventIds } from "@/lib/wca/registrations/eventSelection";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { qualificationToString } from "@/lib/wca/wcif/rounds";
 import type { components } from "@/types/openapi";
-import type {
-  RegistrationForm,
-  RegistrationFormValues,
+import {
+  useRegistrationForm,
+  type RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
 import { LuSend, LuUndo2 } from "react-icons/lu";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
+import { toaster } from "@/components/ui/toaster";
+import { registrationQueryKey } from "@/lib/wca/registrations/useRegistration";
+import showRegistrationError from "@/lib/wca/registrations/showRegistrationError";
+import waitForRegistration from "@/lib/wca/registrations/waitForRegistration";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type CompetingStepParameters =
@@ -46,20 +54,105 @@ export default function CompetingStep({
   competitionInfo,
   parameters,
   registration,
-  form,
-  isSubmitting,
+  userId,
+  onSubmitted,
   onClose,
 }: {
   competitionInfo: CompetitionInfo;
   parameters: CompetingStepParameters;
   registration: Registration | null;
-  form: RegistrationForm;
-  isSubmitting: boolean;
+  userId: number;
+  onSubmitted: () => void;
   // Only set when the form is opened from the registration overview, which is the one place the
   //   competitor can leave it again without submitting anything.
   onClose?: () => void;
 }) {
   const { t } = useT();
+
+  const api = useAPI();
+  const apiClient = useAPIClient();
+  const queryClient = useQueryClient();
+
+  const [queueCount, setQueueCount] = useState<number>();
+
+  const awaitRegistration = useMutation({
+    mutationFn: () =>
+      waitForRegistration(
+        queryClient,
+        apiClient,
+        competitionInfo.id,
+        userId,
+        setQueueCount,
+      ),
+    onSuccess: onSubmitted,
+  });
+
+  const createRegistration = api.useMutation(
+    "post",
+    "/v1/competitions/{competitionId}/registrations",
+    {
+      onError: (payload) => showRegistrationError(t, payload),
+      onSuccess: () => awaitRegistration.mutate(),
+    },
+  );
+
+  const updateRegistration = api.useMutation(
+    "patch",
+    "/v1/registrations/{registrationId}",
+    {
+      onError: (payload) => showRegistrationError(t, payload),
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          registrationQueryKey(competitionInfo.id, userId),
+          data.registration,
+        );
+        toaster.create({
+          id: "registration-updated",
+          type: "success",
+          description: t("registrations.flash.updated"),
+        });
+        onSubmitted();
+      },
+    },
+  );
+
+  const submitRegistration = ({
+    comment,
+    guests,
+    eventIds,
+  }: RegistrationFormValues) => {
+    if (registration === null) {
+      createRegistration.mutate({
+        params: { path: { competitionId: competitionInfo.id } },
+        body: {
+          user_id: userId,
+          guests,
+          competing: { event_ids: eventIds, comment },
+        },
+      });
+    } else {
+      updateRegistration.mutate({
+        params: { path: { registrationId: registration.id } },
+        body: {
+          guests,
+          competing: {
+            event_ids: eventIds,
+            comment,
+            // Registering again after withdrawing means moving back to `pending` for approval.
+            ...(registration.competing.registration_status === "cancelled" && {
+              status: "pending",
+            }),
+          },
+        },
+      });
+    }
+  };
+
+  const form = useRegistrationForm({
+    registration,
+    parameters,
+    onSubmit: submitRegistration,
+  });
 
   const maxEvents = parameters.events_per_registration_limit ?? Infinity;
 
@@ -106,6 +199,21 @@ export default function CompetingStep({
     values.eventIds.length <= maxEvents &&
     values.guests <= guestLimit &&
     (!parameters.force_comment_in_registration || values.comment.trim() !== "");
+
+  if (createRegistration.isSuccess) {
+    return (
+      <HStack>
+        <Spinner />
+        <Text>
+          {queueCount === undefined
+            ? t("competitions.registration_v2.register.processing")
+            : t("competitions.registration_v2.register.processing_queue", {
+                queueCount,
+              })}
+        </Text>
+      </HStack>
+    );
+  }
 
   return (
     <form
@@ -280,7 +388,9 @@ export default function CompetingStep({
                 type="submit"
                 width="full"
                 colorPalette="green"
-                loading={isSubmitting}
+                loading={
+                  createRegistration.isPending || updateRegistration.isPending
+                }
                 disabled={buttonAction === "incomplete" || isEditingLocked}
               >
                 <LuSend />
