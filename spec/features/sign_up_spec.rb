@@ -54,7 +54,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
+      expect(page.find_by_id('claim-wca-id-explanation')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -110,7 +110,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
+      expect(page.find_by_id('claim-wca-id-explanation')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -133,7 +133,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
+      expect(page.find_by_id('claim-wca-id-explanation')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -218,7 +218,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
+      expect(page.find_by_id('claim-wca-id-explanation')).to have_text "In order to assign you your WCA ID"
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
       expect(page).to have_css("div.user_dob_verification", visible: :visible)
