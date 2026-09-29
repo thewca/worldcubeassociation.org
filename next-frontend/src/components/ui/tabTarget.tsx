@@ -31,11 +31,7 @@ export default function TabTarget({
   //   so every branch has to pass it on or the tab renders unstyled.
   if (disabled || isCurrent) {
     return (
-      <Text
-        aria-current={isCurrent ? "page" : undefined}
-        asChild
-        {...textProps}
-      >
+      <Text aria-current={isCurrent ? "page" : undefined} {...textProps}>
         {children}
       </Text>
     );

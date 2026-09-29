@@ -331,7 +331,7 @@ function TabLink({
       minHeight="fit-content"
     >
       <Text asChild justifyContent="left">
-        {tab.externalHref ? (
+        {tab.externalHref && !tab.disabled ? (
           <ChakraLink
             href={tab.externalHref}
             target="_blank"
