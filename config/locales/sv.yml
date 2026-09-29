@@ -125,6 +125,7 @@ sv:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 3x3x3 Multi-Blind Old Style
+    fto: Face Turning Octahedron
   formats:
     #original_hash: e4b3c11
     '1': Bäst av 1
@@ -147,6 +148,9 @@ sv:
       a: Ao5
       #original_hash: 53ba088
       m: Mo3
+      "5": Bo5
+      "h": H2H
+    "5": Bäst av 5
   rounds:
     '0':
       #original_hash: 4d618bb
@@ -211,6 +215,7 @@ sv:
     name: '%{event_name} %{round_name}'
     #original_hash: 747df5a
     round_number: 'Omgång %{round_number}'
+    title: Omgångar
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -225,6 +230,7 @@ sv:
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
     #original_hash: 6e55337
+      all_advance: Alla går vidare
     ranking: 'Topp %{ranking} går vidare till nästa omgång'
     #original_hash: 7ee969c
     percent: 'Topp %{percent}% går vidare till nästa omgång'
@@ -235,6 +241,7 @@ sv:
       moves: '%{round_format} < %{moves} drag går vidare till nästa omgång'
       #original_hash: e9f0c92
       points: '%{round_format} > %{points} poäng går vidare till nästa omgång'
+    all_advance: Alla tävlande går vidare
   cutoff:
     #original_hash: cf458e7
     time:
@@ -377,6 +384,7 @@ sv:
       unit_seconds: sekunder
       #original_hash: 9d86b0d
       unit_moves: drag
+    back_to_top: Tillbaka till toppen
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -452,13 +460,17 @@ sv:
         #original_hash: e3fc6e9
         subRegion: Subregion
         #original_hash: 730db33
-        receive_delegate_reports: Jag vill få delegatrapporter för WCA-tävlingar via e-post
+        receive_delegate_reports: Jag vill få delegatrapporter för WCA-tävlingar
+          via e-post
         #original_hash: 8667157
-        delegate_reports_region: Jag vill bara få delegatrapporter för följande region
+        delegate_reports_region: Jag vill bara få delegatrapporter för följande 
+          region
         #original_hash: 57eaf24
         user_preferred_events: Favoritgrenar
         #original_hash: e632fbf
         otp_attempt: 'Ange din tvåfaktorautentiseringskod:'
+        receive_developer_mails: Jag vill få notiser om ändringar av WCA:s 
+          mjukvaruresurser
       registration:
         #original_hash: 3c23a67
         guests: Gäster
@@ -507,11 +519,13 @@ sv:
         #original_hash: 7106c2d
         setup_images: Bilder på tävlingssetup
         #original_hash: 1362470
-        wrc_feedback_requested: Jag vill ha feedback från WRC om några av incidenterna ovan.
+        wrc_feedback_requested: Jag vill ha feedback från WRC om några av 
+          incidenterna ovan.
         #original_hash: 0c7191d
         wrc_incidents: Incidenter som behöver feedback från WRC
         #original_hash: 1a54a79
-        wic_feedback_requested: Jag vill ha feedback från WIC på några av incidenterna ovan.
+        wic_feedback_requested: Jag vill ha feedback från WIC på några av 
+          incidenterna ovan.
         #original_hash: 000153c
         wic_incidents: Incidenter som kräver feedback från WIC
         #original_hash: d7020f4
@@ -603,13 +617,16 @@ sv:
         #original_hash: 9855f80
         bylaws: Stadgar
         #original_hash: 405201b
-        directors_and_officers: Lista över organisationens ledning och deras titlar
+        directors_and_officers: Lista över organisationens ledning och deras 
+          titlar
         #original_hash: 719db2d
         area_description: Tydlig beskrivning av det täckta området
         #original_hash: 0cdb036
-        past_and_current_activities: Rapport om tidigare och nuvarande WCA-relaterade aktiviteter
+        past_and_current_activities: Rapport om tidigare och nuvarande 
+          WCA-relaterade aktiviteter
         #original_hash: 0faebcf
-        future_plans: Planer för framtiden som en WCA-erkänd regional organisation
+        future_plans: Planer för framtiden som en WCA-erkänd regional 
+          organisation
         #original_hash: f5ad34a
         extra_information: Någon extra information?
         #original_hash: bc07619
@@ -665,6 +682,7 @@ sv:
           vice_chair: 'WCA:s vice ordförande'
           #original_hash: 75e65d9
           treasurer: 'WCA:s kassör'
+          chief_operating_officer: WCA:s operativa chef
       ban_scope:
         #original_hash: 80901da
         competing_only: Enbart tävlande
@@ -747,6 +765,10 @@ sv:
         otp_attempt: >-
           Se din konfigurerade mobilapplikation för ett engångslösenord eller
           ange en av dina återställningskoder.
+        receive_developer_mails: Detta gäller endast notiser om större 
+          versionsändringar av resurser som dataexporter, WCIF-schemat och 
+          offentliga API:er. Rekommenderas för utvecklare som underhåller 
+          programvara som är beroende av dessa verktyg.
       dob_contact:
         #original_hash: 8723825
         dob: Din korrekta födelsedag i formatet ÅÅÅÅ-MM-DD
@@ -845,7 +867,8 @@ sv:
           Måste vara i PNG-format, i bra upplösning och med en transparent
           bakgrund
         #original_hash: da54ab5
-        email: Bör vara en e-postlista som innehåller alla i organisationens ledning
+        email: Bör vara en e-postlista som innehåller alla i organisationens 
+          ledning
         #original_hash: 7d25ff5
         bylaws: Måste vara i PDF-format
         #original_hash: 79555ff
@@ -889,6 +912,8 @@ sv:
       dob_contact:
         #original_hash: 79ccfe2
         dob_invalid: är felformaterad
+    competition_link_html: Klicka <a href='%{url}'>här</a> för att komma till 
+      tävlingssidan
   errors:
     messages:
       #original_hash: dc2367c
@@ -898,7 +923,13 @@ sv:
       #original_hash: a2a43b3
       size_too_big: 'är för stor (bör vara högst %{file_size})'
       #original_hash: de76004
-      no_permission: Du har inte de behörigheter som krävs för att komma åt den här sidan.
+      no_permission: Du har inte de behörigheter som krävs för att komma åt den 
+        här sidan.
+    next_frontend:
+      title: Ett fel inträffade när sidan renderades
+      description: Om felet kvarstår, rapportera det till WST med detaljerna 
+        nedan
+      details: Felmeddelande
   devise:
     passwords:
       edit:
@@ -914,7 +945,8 @@ sv:
           #original_hash: ec44d52
           confirm: Bekräfta kod
           #original_hash: 912516c
-          regenerated_secret: Lyckades generera din tvåfaktorsautentiserings-secret.
+          regenerated_secret: Lyckades generera din 
+            tvåfaktorsautentiserings-secret.
           #original_hash: 1b0c44f
           enabled_success: Lyckades aktivera tvåfaktorsautentisering.
           #original_hash: 9515157
@@ -932,7 +964,8 @@ sv:
             be om en ny kod om 2 minuter.
           errors:
             #original_hash: e70dc49
-            cant_send_email: Du kan inte generera ett e-postmeddelande för stunden
+            cant_send_email: Du kan inte generera ett e-postmeddelande för 
+              stunden
             #original_hash: c0d4fc2
             invalid_otp: Ogiltig tvåfaktorsautentiseringskod.
             #original_hash: c2f5347
@@ -1076,7 +1109,8 @@ sv:
         #original_hash: 1042478
         500_error: 'Vi ber om ursäkt, något gick fel.'
         #original_hash: 3e2364e
-        500_contact_html: '<a href=%{contact_url}>Klicka här</a> för att rapportera det.'
+        500_contact_html: '<a href=%{contact_url}>Klicka här</a> för att rapportera
+          det.'
         #original_hash: b61e305
         400_error: Sidan du letade efter existerar inte.
         #original_hash: c9290b6
@@ -1121,6 +1155,9 @@ sv:
         email: Få tillgång till din e-postadress
         #original_hash: e0d0654
         manage_competitions: Hantera eventuella kommande tävlingar du arrangerar
+        manage_registrations: Anmäl dig till tävlingar, ändra anmälningar, eller
+          avanmäl dig
+        translations: Se listan med språk som du är översättare för
     devise:
       #original_hash: 06184f5
       no_account: Inget konto?
@@ -1701,7 +1738,8 @@ sv:
         #original_hash: 87f1f49
         header: 'WCAT publicerade %{competition}'
         #original_hash: 0d3d10c
-        announced: WCAT godkände din tävling och publicerade den för allmänheten.
+        announced: WCAT godkände din tävling och publicerade den för 
+          allmänheten.
       id_claim_possibility_email:
         #original_hash: 20e9d09
         header: Länka ditt WCA-ID med ditt konto
@@ -1766,9 +1804,11 @@ sv:
           är kopplat till %{user_email}. Inga ändringar har gjorts på ditt konto
           ännu.
         #original_hash: 60fef9e
-        instruction2: 'Du kan återställa ditt lösenord genom att klicka på länken nedan:'
+        instruction2: 'Du kan återställa ditt lösenord genom att klicka på länken
+          nedan:'
         #original_hash: 00850c3
-        instruction3: 'Om du inte begärt ett nytt lösenord, vänligen bortse från detta mejl.'
+        instruction3: 'Om du inte begärt ett nytt lösenord, vänligen bortse från detta
+          mejl.'
         #original_hash: dbc2263
         instruction4: >-
           Har du fler frågor? Vi svarar gärna på dem! Välkommen att höra av dig
@@ -1821,9 +1861,11 @@ sv:
       #original_hash: 8be3c94
       password: Lösenord
       #original_hash: 42619dd
-      preferred_events_desc: Genom att välja favoritgrenar kan anmälan till tävlingar göras snabbare.
+      preferred_events_desc: Genom att välja favoritgrenar kan anmälan till 
+        tävlingar göras snabbare.
       #original_hash: b402e03
-      please_fix_profile: 'För att anmäla dig till tävlingar måste du åtgärda följande problem:'
+      please_fix_profile: 'För att anmäla dig till tävlingar måste du åtgärda följande
+        problem:'
       #original_hash: ff4fc02
       profile: Profil
       #original_hash: 7b2c7f1
@@ -1835,9 +1877,11 @@ sv:
         För att ändra din e-postadress måste du bekräfta den nya e-postadressen
         innan den träder i kraft.
       #original_hash: ff43ee2
-      pending_mail_confirmation: 'Detta konto väntar på att den nya e-postadressen %{email} ska bekräftas.'
+      pending_mail_confirmation: 'Detta konto väntar på att den nya e-postadressen
+        %{email} ska bekräftas.'
       #original_hash: 0340b0b
-      pending_avatar_confirmation: Detta konto väntar på att en ny profilbild ska bekräftas.
+      pending_avatar_confirmation: Detta konto väntar på att en ny profilbild 
+        ska bekräftas.
       #original_hash: 81fa5f9
       pending_avatar_edit_action: 'Klicka här om du vill redigera istället:'
       #original_hash: 73cebb8
@@ -2102,11 +2146,14 @@ sv:
       #original_hash: 8d07e7f
       undelete_banned: är en avstängd tävlande och kan inte återställas
       #original_hash: 3de7c86
-      series_more_than_one_accepted: Du kan bara vara anmäld till en tävling i tävlingsserien.
+      series_more_than_one_accepted: Du kan bara vara anmäld till en tävling i 
+        tävlingsserien.
       #original_hash: 13bfcd6
-      can_only_register_for_qualified_events: Du kan inte anmäla dig till grenar du inte kvalificerat dig för.
+      can_only_register_for_qualified_events: Du kan inte anmäla dig till grenar
+        du inte kvalificerat dig för.
       #original_hash: 93ed20e
-      cannot_change_events_when_cancelling: Du kan inte ändra dina grenar samtidigt som du avanmäler dig.
+      cannot_change_events_when_cancelling: Du kan inte ändra dina grenar 
+        samtidigt som du avanmäler dig.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Du måste lämna en kommentar. Vänligen läs anmälningskraven ovan för
@@ -2184,14 +2231,17 @@ sv:
           att du ska kunna delta. Kontrollera din position på väntelistan
           %{here}.
         #original_hash: 8f7358f
-        email_if_error: 'Om du tror att detta är ett fel, vänligen svara på detta mejl.'
+        email_if_error: 'Om du tror att detta är ett fel, vänligen svara på detta
+          mejl.'
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Anmälan raderad: %{comp_name}'
         #original_hash: f66ae63
-        message_html: 'Din anmälan till %{comp_name} har raderats. Möjliga orsaker är:'
+        message_html: 'Din anmälan till %{comp_name} har raderats. Möjliga orsaker
+          är:'
         #original_hash: 8f7358f
-        email_if_error: 'Om du tror att detta är ett fel, vänligen svara på detta mejl.'
+        email_if_error: 'Om du tror att detta är ett fel, vänligen svara på detta
+          mejl.'
         causes:
           #original_hash: 978944c
           missing_info: Du har inte skickat in alla nödvändiga uppgifter
@@ -2321,9 +2371,11 @@ sv:
         refund_amount: Att återbetala
     payment_form:
       #original_hash: 8897f02
-      payment_successful: Din betalning lyckades och din anmälan bör stå som betald nedan.
+      payment_successful: Din betalning lyckades och din anmälan bör stå som 
+        betald nedan.
       #original_hash: 92dde77
-      payment_processing: 'Din betalning har bekräftats, men transaktionen är fortfarande pågående.'
+      payment_processing: 'Din betalning har bekräftats, men transaktionen är fortfarande
+        pågående.'
       #original_hash: a8f253d
       payment_partial: >-
         Din betalning har bekräftats, men den täcker inte hela beloppet.
@@ -2370,9 +2422,11 @@ sv:
           anmälan.
       errors:
         #original_hash: c80ec45
-        registration_closed: Anmälan har stängt - inga ytterligare betalningar är tillåtna.
+        registration_closed: Anmälan har stängt - inga ytterligare betalningar 
+          är tillåtna.
         #original_hash: 166d48c
-        already_paid: Avgiften drogs inte eftersom anmälningsavgiften redan har betalats.
+        already_paid: Avgiften drogs inte eftersom anmälningsavgiften redan har 
+          betalats.
         #original_hash: f10c80c
         not_allowed: Du kan inte betala för den anmälan.
         #original_hash: 967eaed
@@ -2399,7 +2453,8 @@ sv:
             %{provider} rapporterade tillbaka en transaction secret som inte
             stämmer överens med våra uppgifter.
         #original_hash: df1a70e
-        paypal_canceled: PayPal rapporterade att ordern avbröts manuellt. Vänligen försök igen.
+        paypal_canceled: PayPal rapporterade att ordern avbröts manuellt. 
+          Vänligen försök igen.
         #original_hash: 8d1a199
         payment_reset: Betalningen avvisades av Stripe.
         #original_hash: bcf6a93
@@ -2415,7 +2470,8 @@ sv:
       För att göra anmälan snabbare i framtiden kan du välja dina favoritgrenar
       %{link}.
     #original_hash: 67d8734
-    preferred_events_populated_html: 'Vi har fyllt i detta med dina favoritgrenar, som du kan redigera %{link}.'
+    preferred_events_populated_html: 'Vi har fyllt i detta med dina favoritgrenar,
+      som du kan redigera %{link}.'
     #original_hash: ee89a3e
     registration_requirements: 'Anmälningskrav för tävlingen:'
     registration_history:
@@ -2471,7 +2527,8 @@ sv:
           E-postadresser måste vara unika, hittade följande dubbletter:
           %{emails}.
         #original_hash: bcd8e78
-        wca_id_duplicates: 'WCA-ID:n måste vara unika, hittade följande dubbletter: %{wca_ids}.'
+        wca_id_duplicates: 'WCA-ID:n måste vara unika, hittade följande dubbletter:
+          %{wca_ids}.'
         #original_hash: a0fd4c5
         wrong_dob_format: >-
           Födelsedatum måste följa formatet YYYY-mm-dd (år-månad-dag, t.ex.
@@ -2548,11 +2605,13 @@ sv:
         via WCAs hemsida. Om du använder ett externt betalningssystem, kom ihåg
         att ange all relevant information i anmälningskraven.
       #original_hash: ba067f0
-      not_announced: Tävlingen är synlig för allmänheten men har inte publicerats ännu.
+      not_announced: Tävlingen är synlig för allmänheten men har inte 
+        publicerats ännu.
       #original_hash: ab61991
       announced_success: Tävlingen publicerades!
       #original_hash: cbff8ce
-      cancelled: Tävlingen har ställts in. Se tävlingens information för mer detaljer.
+      cancelled: Tävlingen har ställts in. Se tävlingens information för mer 
+        detaljer.
       #original_hash: b4aa5ee
       cancel_success: Tävlingen har ställts in!
       #original_hash: d0478cf
@@ -2562,7 +2621,8 @@ sv:
       #original_hash: ead4a9e
       uncancel_failure: Det går inte att återkalla inställandet av tävlingen.
       #original_hash: 8ad5e67
-      results_not_posted: Tävlingens resultat är synliga men har inte publicerats ännu.
+      results_not_posted: Tävlingens resultat är synliga men har inte 
+        publicerats ännu.
       #original_hash: 5c24cd8
       results_still_processing: >-
         Vi håller på att bearbeta resultaten från den här tävlingen - de kommer
@@ -2749,15 +2809,18 @@ sv:
       #original_hash: 5390a91
       no_entry_fee: Anmälan till denna tävling är gratis.
       #original_hash: 29af5c2
-      use_stripe_link_html: 'Anmälningsavgiften måste betalas via Stripe %{here} när du anmält dig.'
+      use_stripe_link_html: 'Anmälningsavgiften måste betalas via Stripe %{here} när
+        du anmält dig.'
       #original_hash: cea0eb4
-      use_stripe_below_html: Anmälningsavgiften måste betalas via Stripe nedan när du anmält dig.
+      use_stripe_below_html: Anmälningsavgiften måste betalas via Stripe nedan 
+        när du anmält dig.
       #original_hash: d6bab8f
       refund_policy_html: >-
         Om du avanmäler dig innan %{limit_date_and_time} kommer du att
         återbetalas %{refund_policy_percent} av din anmälningsavgift.
       #original_hash: 4aca553
-      no_refunds: Anmälningsavgifter återbetalas inte under några omständigheter.
+      no_refunds: Anmälningsavgifter återbetalas inte under några 
+        omständigheter.
       #original_hash: b016d2f
       waiting_list_deadline_html: >-
         Anmälda på väntelistan kan godkännas till listan över tävlande t.o.m.
@@ -2780,7 +2843,8 @@ sv:
         Anmälan på plats accepteras om det finns platser tillgängliga, med en
         basanmälningsavgift på %{on_the_spot_base_entry_fee}.
       #original_hash: 2b4ea65
-      on_the_spot_registration_free: Anmälan på plats accepteras gratis om det finns platser tillgängliga.
+      on_the_spot_registration_free: Anmälan på plats accepteras gratis om det 
+        finns platser tillgängliga.
       #original_hash: f5f687d
       no_on_the_spot_registration: Inga anmälningar på plats accepteras.
       #original_hash: 4df139d
@@ -2826,7 +2890,8 @@ sv:
       #original_hash: 1f9c9c4
       highlights: Höjdpunkter
       #original_hash: 945f917
-      click_to_display_highlights_html: 'Klicka %{link_here} för att visa tävlingens höjdpunkter.'
+      click_to_display_highlights_html: 'Klicka %{link_here} för att visa tävlingens
+        höjdpunkter.'
       #original_hash: dc5c597
       hide_highlights: Dölj höjdpunkter.
       #original_hash: f691bf2
@@ -3006,7 +3071,8 @@ sv:
       #original_hash: e590657
       missing_report: Din rapport är inte publicerad än!
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: 'Du har för närvarande inga kommande tävlingar! Kolla in %{link}.'
+      no_upcoming_competitions_html: 'Du har för närvarande inga kommande tävlingar!
+        Kolla in %{link}.'
       #original_hash: e0f66bb
       competitions_list: listan över tävlingar
       #original_hash: 9104a03
@@ -3060,7 +3126,8 @@ sv:
         e-post efter detta för att verifiera att WCA Competition Announcement
         Team meddelades.
       #original_hash: 4c7deb7
-      submit_delete: Är du säker på att du vill radera den här tävlingen? Det går inte ångra.
+      submit_delete: Är du säker på att du vill radera den här tävlingen? Det 
+        går inte ångra.
       #original_hash: 8ebebca
       coordinates: Koordinater
       #original_hash: a672984
@@ -3139,11 +3206,13 @@ sv:
           #original_hash: e9e5b84
           auto_close_threshold: Gränsvärde för automatisk stängning
           #original_hash: b1d5af4
-          newcomer_month_reserved_spots: Antal platser att reservera för nybörjare
+          newcomer_month_reserved_spots: Antal platser att reservera för 
+            nybörjare
           #original_hash: 26b48e3
           auto_accept_preference: Acceptera anmälningar automatiskt
           #original_hash: 1b8698d
-          auto_accept_disable_threshold: Gräns för autmatiska godkännanden av anmälningar
+          auto_accept_disable_threshold: Gräns för autmatiska godkännanden av 
+            anmälningar
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: WCA-delegat(er)
@@ -3178,7 +3247,8 @@ sv:
           #original_hash: 3542671
           guest_entry_fee: Inträdesavgift för gäster
           #original_hash: 71c8461
-          donations_enabled: Jag vill möjliggöra donationer i tillägg till anmälningsavgifterna
+          donations_enabled: Jag vill möjliggöra donationer i tillägg till 
+            anmälningsavgifterna
           #original_hash: efbdbab
           refund_policy_percent: Procent som återbetalas
           #original_hash: b332299
@@ -3189,9 +3259,11 @@ sv:
           #original_hash: f8153a2
           closing_date_time: Anmälan stänger
           #original_hash: 16cf9a4
-          waiting_list_deadline_date: Deadline för att få anmälan godkänd från väntelistan
+          waiting_list_deadline_date: Deadline för att få anmälan godkänd från 
+            väntelistan
           #original_hash: 99a9169
-          event_change_deadline_date: Deadline för tävlande att uppdatera vilka grenar de är anmälda till
+          event_change_deadline_date: Deadline för tävlande att uppdatera vilka 
+            grenar de är anmälda till
           #original_hash: 2529d04
           allow_on_the_spot: Anmälan på plats
           #original_hash: b6faf84
@@ -3247,7 +3319,8 @@ sv:
         remarks: Kommentarer
         cloning:
           #original_hash: c305010
-          clone_tabs: Jag vill även klona alla flikar med ytterligare information
+          clone_tabs: Jag vill även klona alla flikar med ytterligare 
+            information
       hints:
         admin:
           #original_hash: 68d3cc6
@@ -3360,7 +3433,8 @@ sv:
             visa](mailto:some@email.com)
         website:
           #original_hash: cabe7fb
-          external_website: Tävlingens hemsida. Måste vara en giltig http(s)-url.
+          external_website: Tävlingens hemsida. Måste vara en giltig 
+            http(s)-url.
           #original_hash: b2af5f5
           external_registration_page: >-
             Sida där de tävlande behöver anmäla sig till tävlingen. Måste vara
@@ -3390,7 +3464,8 @@ sv:
             säger att registreringsavgifter inte kommer att återbetalas under
             några omständigheter.
           #original_hash: f64d853
-          refund_policy_limit_date: Efter detta datum kommer inga återbetalningar betalas ut.
+          refund_policy_limit_date: Efter detta datum kommer inga 
+            återbetalningar betalas ut.
         registration:
           #original_hash: 9965635
           opening_date_time: 'Notera: Start- och sluttider för anmälan anges i UTC-tid.'
@@ -3486,7 +3561,8 @@ sv:
               Tävlande får ändra sin anmälan fram till deadlinen för att
               uppdatera grenar
             #original_hash: 2cbb80e
-            'false': Tävlande får INTE redigera sin anmälan efter att den har godkänts
+            'false': Tävlande får INTE redigera sin anmälan efter att den har 
+              godkänts
           competitor_can_cancel:
             #original_hash: a91bcce
             always: Alltid
@@ -3496,7 +3572,8 @@ sv:
             unpaid: Tills de betalar
           guest_entry_status:
             #original_hash: 7e54323
-            unclear: Visa ingenting (utveckla gärna i sektionen "Extra anmälningskrav")
+            unclear: Visa ingenting (utveckla gärna i sektionen "Extra 
+              anmälningskrav")
             #original_hash: 694bce4
             free: '"Åskådare är välkomna utan avgift"'
             #original_hash: 762c509
@@ -3523,7 +3600,8 @@ sv:
         #original_hash: 1897ffb
         bulk_auto_accepted: Bulk auto accept lyckades
         #original_hash: 786d81b
-        nothing_to_accept: Inga anmälningar berättigade för automatiskt godkännande
+        nothing_to_accept: Inga anmälningar berättigade för automatiskt 
+          godkännande
       pdf:
         #original_hash: 5c7d60f
         link: 'Som en <0>%{pdfLink}</0>'
@@ -3540,7 +3618,8 @@ sv:
           Boka inte din resa ännu - arrangörerna måste fortfarande godkänna din
           anmälan manuellt. Detta kan ta lite tid.
         #original_hash: 6071fd9
-        is_accepted: Boka din resa och packa väskorna - du har fått en plats på tävlingen!
+        is_accepted: Boka din resa och packa väskorna - du har fått en plats på 
+          tävlingen!
         #original_hash: 89448a8
         is_cancelled: >-
           Din anmälan har tagits bort och du kommer inte att delta i tävlingen,
@@ -3608,7 +3687,8 @@ sv:
           #original_hash: 9cef5ae
           title: Avslagna anmälningar
           #original_hash: 3fd2e0c
-          information: Tävlande med avslagna anmälningar kan inte anmäla sig igen.
+          information: Tävlande med avslagna anmälningar kan inte anmäla sig 
+            igen.
         non_competing:
           #original_hash: d4e453a
           title: Icke-tävlande anmälningar
@@ -3620,7 +3700,8 @@ sv:
           #original_hash: d6fbc7a
           refunded_status: Återbetalad
           #original_hash: 41248b1
-          initialized: 'Betalningsprocessen startades den %{date}, men avslutades inte.'
+          initialized: 'Betalningsprocessen startades den %{date}, men avslutades
+            inte.'
           #original_hash: 3a16c0d
           refunded: 'Betalningen återbetalades den %{date}.'
         psychsheets:
@@ -3653,7 +3734,8 @@ sv:
         #original_hash: cbf13af
         update_confirm: Är du säker på att du vill uppdatera din anmälan?
         #original_hash: 604da8b
-        organizer_update_confirm: Är du säker på att du vill uppdatera användarens anmälan?
+        organizer_update_confirm: Är du säker på att du vill uppdatera 
+          användarens anmälan?
         #original_hash: 9b92912
         update_confirm_contact: >-
           Du behöver kontakta arrangörerna för att uppdatera din anmälan, klicka
@@ -3675,7 +3757,8 @@ sv:
         #original_hash: b4bac52
         email_copy: Kopiera mejladresser
         #original_hash: b83b663
-        email_message: Kopierad till urklipp. Kom ihåg att använda "hemlig kopia" (bcc)!
+        email_message: Kopierad till urklipp. Kom ihåg att använda "hemlig 
+          kopia" (bcc)!
         #original_hash: beedd53
         move_to:
           one: 'Flytta %{count} till'
@@ -3746,7 +3829,8 @@ sv:
         #original_hash: 05b9f17
         view_registration: Visa anmälan
         #original_hash: 3c8d8b7
-        editing_disabled: Det går inte att redigera anmälningar till den här tävlingen.
+        editing_disabled: Det går inte att redigera anmälningar till den här 
+          tävlingen.
         registration_status:
           #original_hash: b1e97b8
           accepted: Din anmälan har godkänts.
@@ -3853,7 +3937,8 @@ sv:
         #original_hash: 631576f
         '-7001': Den tävlande har fortfarande utestående anmälningsavgifter.
         #original_hash: 2aa350b
-        '-7002': Automatiskt godkännande är inte aktiverat för den här tävlingen.
+        '-7002': Automatiskt godkännande är inte aktiverat för den här 
+          tävlingen.
         #original_hash: d191d2d
         '-7003': >-
           Kan endast automatiskt acceptera ohanterade anmälningar eller första
@@ -3861,7 +3946,8 @@ sv:
         #original_hash: 30fd93d
         '-7004': Tävlingen har nått auto_accept_disable_threshold
         #original_hash: f2bb661
-        '-7005': Kan inte automatiskt acceptera anmälningar när anmälan inte är öppen
+        '-7005': Kan inte automatiskt acceptera anmälningar när anmälan inte är 
+          öppen
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
@@ -3876,7 +3962,8 @@ sv:
         Gränsen för automatiskt godkända anmälningar måste vara lägre än
         deltagargränsen
       #original_hash: 42cd8e6
-      auto_accept_not_negative: Gränsen för automatiskt godkända anmälningar kan inte vara mindre än 0.
+      auto_accept_not_negative: Gränsen för automatiskt godkända anmälningar kan
+        inte vara mindre än 0.
       #original_hash: 181d8d9
       auto_accept_accept_paid_pending: >-
         Kan inte aktivera automatisk godkännande om det finns betalda ohanterade
@@ -3890,7 +3977,8 @@ sv:
         Gränsvärdet för automatisk stängning måste vara större än det nuvarande
         antalet betalda anmälningar
       #original_hash: abee516
-      auto_close_positive_nonzero: Gränsvärdet för automatisk stängning måste vara större än 0
+      auto_close_positive_nonzero: Gränsvärdet för automatisk stängning måste 
+        vara större än 0
       #original_hash: b81ee7e
       must_exceed_competitor_limit: >-
         Gränsvärdet för automatisk stängning måste vara större än
@@ -3898,7 +3986,8 @@ sv:
       #original_hash: 148c1d4
       use_wca_registration: 'Tävlingen måste använda anmälan på WCA:s hemsida'
       #original_hash: 2c41c57
-      newcomer_month_reservations_percentage: kan inte reservera mer än 50% av platserna för nybörjare
+      newcomer_month_reservations_percentage: kan inte reservera mer än 50% av 
+        platserna för nybörjare
       #original_hash: 58d244e
       newcomer_month_reservations_available: >-
         Önskad antal platser att reservera för newcomer month överstiger antalet
@@ -3911,13 +4000,15 @@ sv:
       #original_hash: 8e8f765
       cannot_manage: Kan inte hantera tävlingen.
       #original_hash: 0acc454
-      cannot_delete_public: Kan inte ta bort en tävling som är synlig för allmänheten.
+      cannot_delete_public: Kan inte ta bort en tävling som är synlig för 
+        allmänheten.
       #original_hash: 3935fd6
       cannot_delete_confirmed: Kan inte radera en bekräftad tävling.
       #original_hash: 191df37
       must_contain_event: måste innehålla minst en gren för tävlingen
       #original_hash: 54fe619
-      schedule_must_match_rounds: 'måste ha minst en omgång, och alla omgångar måste ingå i schemat.'
+      schedule_must_match_rounds: 'måste ha minst en omgång, och alla omgångar måste
+        ingå i schemat.'
       #original_hash: 6e228b7
       must_contain_delegate: måste ha minst en WCA-delegat
       #original_hash: b5677c2
@@ -3925,15 +4016,18 @@ sv:
       #original_hash: 8131fc2
       not_all_delegates: är inte alla delegater
       #original_hash: 43a23c2
-      registration_close_after_open: anmälan måste stänga efter att anmälan öppnar
+      registration_close_after_open: anmälan måste stänga efter att anmälan 
+        öppnar
       #original_hash: 2f8765e
       registration_already_closed: anmälan får inte redan vara stängd.
       #original_hash: 8a3a4f6
-      start_date_must_be_28_days_in_advance: Startdatumet måste vara om minst 28 dagar.
+      start_date_must_be_28_days_in_advance: Startdatumet måste vara om minst 28
+        dagar.
       #original_hash: 43a83a9
       end_date_before_start: Slutdatumet kan inte vara före startdatumet.
       #original_hash: 0c507fa
-      refund_date_after_start: Sista datum för återbetalningar kan inte vara efter startdatumet.
+      refund_date_after_start: Sista datum för återbetalningar kan inte vara 
+        efter startdatumet.
       #original_hash: be3933b
       span_too_many_days: 'Tävlingen kan inte pågå i mer än %{max_days} dagar.'
       #original_hash: cdcd288
@@ -3943,7 +4037,8 @@ sv:
         måste ha ett villkor för vilka som går vidare från alla
         icke-finalomgångar.
       #original_hash: da17c99
-      registration_period_after_start: Anmälningsperioden kan inte vara efter startdatumet.
+      registration_period_after_start: Anmälningsperioden kan inte vara efter 
+        startdatumet.
       #original_hash: 2a26c1c
       waiting_list_deadline_before_registration_close: >-
         Deadline för att bli godkänd från väntelistan kan inte vara före anmälan
@@ -3953,11 +4048,14 @@ sv:
         Deadline för att bli godkänd från väntelistan kan inte vara före sista
         datumet för återbetalningar.
       #original_hash: 7324d19
-      waiting_list_deadline_after_end: Deadline för väntelistan måste vara innan tävlingen avslutas.
+      waiting_list_deadline_after_end: Deadline för väntelistan måste vara innan
+        tävlingen avslutas.
       #original_hash: c3eb1be
-      event_change_deadline_before_registration_close: Deadline för uppdatering av grenar kan inte vara före anmälan stänger.
+      event_change_deadline_before_registration_close: Deadline för uppdatering 
+        av grenar kan inte vara före anmälan stänger.
       #original_hash: bc1ca0f
-      event_change_deadline_after_end_date: Deadline för uppdatering av grenar kan inte vara efter tävlingen.
+      event_change_deadline_after_end_date: Deadline för uppdatering av grenar 
+        kan inte vara efter tävlingen.
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
         Deadline för uppdatering av grenar måste vara under tävlingen om anmälan
@@ -3971,7 +4069,8 @@ sv:
       #original_hash: 4a5d7c5
       series_distance_days: 'Tävlingen är för många dagar ifrån %{competition}.'
       #original_hash: 7fc8fba
-      must_ask_about_guests_if_specifying_limit: Måste fråga om antal gäster om det finns en gräns för antalet gäster.
+      must_ask_about_guests_if_specifying_limit: Måste fråga om antal gäster om 
+        det finns en gräns för antalet gäster.
       #original_hash: 000564d
       not_full_url: >-
         Du har en relativ URL (%{url}) i innehållet. Ange fullständiga URL:er
@@ -3999,7 +4098,8 @@ sv:
       #original_hash: 5fb2f57
       save_success: Tävling sparad.
       #original_hash: 5253c86
-      confirm_success: Tävling bekräftad. Kolla din e-post och vänta tills WCAT publicerar den!
+      confirm_success: Tävling bekräftad. Kolla din e-post och vänta tills WCAT 
+        publicerar den!
       #original_hash: 28567f0
       delete_success: 'Tävlingen %{id} har raderats.'
     time_until_competition:
@@ -4086,7 +4186,8 @@ sv:
     #original_hash: b38ee61
     orga_close_reg: Stäng anmälan
     #original_hash: b2bfea9
-    orga_close_reg_confirm: Är du säker på att du vill stänga anmälan? Detta går inte att ångra.
+    orga_close_reg_confirm: Är du säker på att du vill stänga anmälan? Detta går
+      inte att ångra.
     #original_hash: ce5686a
     note_reg_not_full_orga_close_reg: >-
       Notera: du kan endast stänga anmälan när gränsen för antal tävlande har
@@ -4094,7 +4195,8 @@ sv:
     #original_hash: c66488a
     user_preferences: Användarinställningar
     #original_hash: 089cbfd
-    receive_registration_emails: Meddela mig via mejl när någon anmäler sig till den här tävlingen
+    receive_registration_emails: Meddela mig via mejl när någon anmäler sig till
+      den här tävlingen
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Notera: anmälan är redan stängd.'
     show:
@@ -4119,7 +4221,8 @@ sv:
         #original_hash: b2a983a
         cumulative_time_limit: kumulativ tidsgräns
         #original_hash: d47f11a
-        cumulative_one_round_html: 'En %{cumulative_time_limit} kan tillämpas (se %{regulation_link}).'
+        cumulative_one_round_html: 'En %{cumulative_time_limit} kan tillämpas (se
+          %{regulation_link}).'
         #original_hash: c6190b6
         cumulative_across_rounds_html: >-
           En %{cumulative_time_limit} kan tillämpas över flera rundor (se
@@ -4138,7 +4241,8 @@ sv:
           Kvalificeringstider måste uppnås på andra WCA-tävlingar för att få
           tävla.
         #original_hash: 6ab548b
-        qualification_all_events_html: 'Kvalificeringstider måste vara uppnådda på eller före <b>%{date}</b>.'
+        qualification_all_events_html: 'Kvalificeringstider måste vara uppnådda på
+          eller före <b>%{date}</b>.'
         #original_hash: b701c2a
         qualification_some_events_html: >-
           Kvalificeringstider för %{events} måste vara uppnådda på eller före
@@ -4432,7 +4536,8 @@ sv:
           Du kan inte längre utfärda en återbetalning för denna tävling. Använd
           din betalningsleverantörs kontrollpanel för att göra detta.
         #original_hash: 73e93ee
-        refund_amount_too_high: Du får inte återbetala mer än vad den tävlande betalat.
+        refund_amount_too_high: Du får inte återbetala mer än vad den tävlande 
+          betalat.
         #original_hash: 6368ffc
         refund_amount_too_low: Återbetalningsbeloppet måste vara större än noll.
     labels:
@@ -4547,7 +4652,8 @@ sv:
           primary_email: E-post
         manual:
           #original_hash: e5f0dfd
-          payment_instructions: Betalningsinstruktioner (kommer visas på tävlingssidan)
+          payment_instructions: Betalningsinstruktioner (kommer visas på 
+            tävlingssidan)
           #original_hash: 5e7242c
           payment_reference_label: >-
             Vilken information ska användaren ange för att du ska kunna
@@ -4619,7 +4725,8 @@ sv:
       national_records: Historik av Nationella Rekord
   posts:
     #original_hash: 2a7da42
-    confirm_delete_post: Är du säker på att du vill radera det här inlägget? Detta kan inte ångras.
+    confirm_delete_post: Är du säker på att du vill radera det här inlägget? 
+      Detta kan inte ångras.
     #original_hash: 3dcbf6d
     announcement_info_html: 'Publicerades av %{author_name} %{date_time}'
     errors:
@@ -4648,7 +4755,8 @@ sv:
       delivery_error: Fel när meddelandet skickades.
   misc:
     #original_hash: 9a0f1cc
-    forum_age_requirement: Du måste vara 13 år för att få tillgång till WCA-forumet.
+    forum_age_requirement: Du måste vara 13 år för att få tillgång till 
+      WCA-forumet.
     #original_hash: d1f3342
     forum_enter_dob: >-
       Du måste ange ditt födelsedatum för att få tillgång till forumet. Ange
@@ -5109,7 +5217,8 @@ sv:
       #original_hash: a1c6de9
       private_information: Privat information
       #original_hash: 87a1c7e
-      private_information_disclaimer: 'All information nedan kommer endast att vara synlig för WCA:s styrelse'
+      private_information_disclaimer: 'All information nedan kommer endast att vara
+        synlig för WCA:s styrelse'
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: kan inte vara efter Erkänd till
@@ -5465,7 +5574,8 @@ sv:
       #original_hash: bb54db5
       accept: Acceptera
       #original_hash: 66b69a8
-      confirm_accept: Är du säker på att du vill acceptera det här medieobjektet?
+      confirm_accept: Är du säker på att du vill acceptera det här 
+        medieobjektet?
       #original_hash: 5301648
       edit: Redigera
   media_and_instagram:
@@ -5650,19 +5760,24 @@ sv:
         %{name} verkar vara mindre än 3 år gammal, kontrollera att den är
         korrekt.
       #original_hash: b7c88ef
-      dob_is_too_old_warning: '%{name} verkar vara cirka 100 år gammal, se till att det är korrekt.'
+      dob_is_too_old_warning: '%{name} verkar vara cirka 100 år gammal, se till att
+        det är korrekt.'
       #original_hash: 809f305
-      person_doesnt_have_any_results_error: 'Det finns inga resultat för %{person_name} med ID %{person_id}'
+      person_doesnt_have_any_results_error: 'Det finns inga resultat för %{person_name}
+        med ID %{person_id}'
       #original_hash: ebc1b15
-      results_not_associated_with_any_person_error: 'Det finns resultat för en okänd person med ID %{person_id}'
+      results_not_associated_with_any_person_error: 'Det finns resultat för en okänd
+        person med ID %{person_id}'
       #original_hash: c29e35d
       whitespace_in_name_error: >-
         Personen '%{name}' har inledande/avslutande mellanslag eller dubbla
         mellanslag.
       #original_hash: 9b1ae5f
-      person_with_non_existing_wca_id_error: 'Person %{name} har ett WCA-ID som inte existerar: %{wca_id}.'
+      person_with_non_existing_wca_id_error: 'Person %{name} har ett WCA-ID som inte
+        existerar: %{wca_id}.'
       #original_hash: 924d832
-      no_space_before_parenthesis_error: 'Öppningsparentesen i ”%{name}” måste föregås av ett mellanslag.'
+      no_space_before_parenthesis_error: 'Öppningsparentesen i ”%{name}” måste föregås
+        av ett mellanslag.'
       #original_hash: 6daf706
       same_person_name_warning: >-
         Det finns redan minst en person med namnet ”%{name}” i WCA:s databas
@@ -5933,3 +6048,7 @@ sv:
       edit_person: Redigera person
       #original_hash: 5fb2137
       competition_result: Tävlingsresultat
+  scramble_set:
+    name: Blandningsset %{letter_code}
+    group: Grupp %{number}
+    attempt: Försök %{number}
