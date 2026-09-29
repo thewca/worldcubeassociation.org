@@ -1,68 +1,45 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Button, Card, Text, Table } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
-import PsychsheetTable from "@/components/competitions/PsychsheetTable";
+import PsychSheet from "@/components/competitions/PsychSheet";
 import { FormEventSelector } from "@/components/EventSelector";
 import Loading from "@/components/ui/loading";
 import RailsLink from "@/components/RailsLink";
 
 interface CompetitorData {
   id: string;
+  eventIds: string[];
   isLive?: boolean;
   canAddOnTheSpot?: boolean;
 }
 
 const TabCompetitors: React.FC<CompetitorData> = ({
   id,
+  eventIds,
   isLive = false,
   canAddOnTheSpot = false,
 }) => {
   const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<string>("average");
 
   const api = useAPI();
   const { t } = useT();
 
   const {
     data: registrationsQuery,
-    isFetching,
+    isPending,
     isError,
   } = api.useQuery("get", "/v1/competitions/{competitionId}/registrations", {
     params: { path: { competitionId: id } },
   });
 
-  const { data: psychSheetQuery, isFetching: isFetchingPsychsheets } =
-    api.useQuery(
-      "get",
-      "/v0/competitions/{competitionId}/psych-sheet/{eventId}",
-      {
-        params: {
-          path: { competitionId: id, eventId: psychSheetEvent! },
-          query: { sort_by: sortBy },
-        },
-      },
-      {
-        enabled: psychSheetEvent !== null,
-      },
-    );
-
-  const eventIds = useMemo(() => {
-    const flatEventList = registrationsQuery?.flatMap(
-      (reg) => reg.competing.event_ids,
-    );
-
-    const eventSet = new Set(flatEventList);
-    return Array.from(eventSet);
-  }, [registrationsQuery]);
-
   if (isError) {
     return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
   }
 
-  if (isFetching || isFetchingPsychsheets || !registrationsQuery) {
+  if (isPending) {
     return <Loading />;
   }
 
@@ -81,7 +58,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
             title="Events"
             selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
             eventList={eventIds}
-            onEventClick={(event) => setPsychSheetEvent(event)}
+            onEventClick={setPsychSheetEvent}
             onClearClick={
               psychSheetEvent === null
                 ? undefined
@@ -90,14 +67,16 @@ const TabCompetitors: React.FC<CompetitorData> = ({
           />
         </Card.Title>
         <Table.ScrollArea borderWidth="1px" maxW="full">
-          {psychSheetEvent && (
-            <PsychsheetTable
-              pychsheet={psychSheetQuery!}
+          {psychSheetEvent ? (
+            // Remounting per event keeps one event's rows from ever being
+            // rendered with another event's result formatting.
+            <PsychSheet
+              key={psychSheetEvent}
+              competitionId={id}
+              eventId={psychSheetEvent}
               t={t}
-              setSortBy={setSortBy}
             />
-          )}
-          {!psychSheetEvent && (
+          ) : (
             <CompetitorTable
               eventIds={eventIds}
               registrations={registrationsQuery}
