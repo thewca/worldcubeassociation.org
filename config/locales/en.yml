@@ -259,6 +259,8 @@ en:
     search_site: "Search site"
     #context: Label of a button that scrolls the user back to the top of a long page.
     back_to_top: "Back to top"
+    #context: Label of a button on the sign in and sign up pages that returns to the page the user came from.
+    back: "Back"
     filter: Filter
     delete: Delete
     date_placeholder: "YYYY-MM-DD"

@@ -21,6 +21,12 @@ module SessionsHelper
     classic_sign_in? ? path : next_frontend_url(path)
   end
 
+  # The Next frontend stores the chosen colour mode in this cookie. "system", or
+  # no cookie at all, leaves it to the browser's own preference.
+  def auth_page_theme
+    cookies[:theme].presence_in(%w[light dark])
+  end
+
   def staging_oauth_login?
     Rails.env.production? && !EnvConfig.WCA_LIVE_SITE? && ServerSetting.staging_oauth_login_enabled?
   end

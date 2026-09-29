@@ -10,18 +10,71 @@
 // `html { font-size: 14px }` site-wide, so a rem here would render 12.5% smaller
 // than the Chakra token it is copied from.
 $auth-font: "Rubik", "Helvetica Neue", helvetica, arial, sans-serif;
-$auth-surface: #fcfcfc;
-$auth-input-bg: #fff;
-$auth-border: #edede9;
-$auth-border-strong: #dcdcd6;
-$auth-text: #1e1e1e;
-$auth-text-muted: #6b6b6b;
-$auth-link: #0051ba;
 $auth-solid: #029347;
-$auth-deny: #c62535;
 $auth-contrast: #fff;
 $auth-card-radius: 10px;
 $auth-control-radius: 6px;
+
+// The colours that change with the colour mode are custom properties, so the
+// rules below are written once for both. Dark mode follows the `theme` cookie
+// the Next frontend sets (see `auth_page_theme`), and the browser's own
+// preference when that cookie says "system" or is missing.
+$auth-surface: var(--auth-surface);
+$auth-input-bg: var(--auth-input-bg);
+$auth-border: var(--auth-border);
+$auth-border-strong: var(--auth-border-strong);
+$auth-text: var(--auth-text);
+$auth-text-muted: var(--auth-text-muted);
+$auth-link: var(--auth-link);
+$auth-deny: var(--auth-deny);
+$auth-info-bg: var(--auth-info-bg);
+$auth-info-border: var(--auth-info-border);
+
+@mixin auth-dark-tokens {
+  --auth-page-bg: #111;
+  --auth-surface: #181816;
+  --auth-input-bg: #111;
+  --auth-border: #272723;
+  --auth-border-strong: #454540;
+  --auth-text: #fcfcfc;
+  --auth-text-muted: #b8b8b0;
+  --auth-link: #6b93e0;
+  --auth-deny: #e53841;
+  --auth-info-bg: #16213a;
+  --auth-info-border: #24365e;
+
+  color-scheme: dark;
+}
+
+:root:has(.auth-page) {
+  --auth-page-bg: #fff;
+  --auth-surface: #fcfcfc;
+  --auth-input-bg: #fff;
+  --auth-border: #edede9;
+  --auth-border-strong: #dcdcd6;
+  --auth-text: #1e1e1e;
+  --auth-text-muted: #6b6b6b;
+  --auth-link: #0051ba;
+  --auth-deny: #c62535;
+  --auth-info-bg: #d9edf7;
+  --auth-info-border: #bce8f1;
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"]:has(.auth-page) {
+  @include auth-dark-tokens;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):has(.auth-page) {
+    @include auth-dark-tokens;
+  }
+}
+
+body:has(.auth-page) {
+  background-color: var(--auth-page-bg);
+}
 
 .auth-page {
   max-width: 480px;
@@ -42,6 +95,24 @@ $auth-control-radius: 6px;
   a {
     color: $auth-link;
     font-weight: 500;
+  }
+
+  // Semantic UI colours the heading tags directly, which would leave them black
+  // on the dark card.
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: inherit;
+  }
+
+  .auth-page-back {
+    display: inline-block;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: $auth-text-muted;
   }
 
   // These pages hide the navbar, so the logo has to carry the branding and the
@@ -65,6 +136,12 @@ $auth-control-radius: 6px;
     border-radius: $auth-card-radius;
   }
 
+  .alert-info {
+    color: $auth-link;
+    background-color: $auth-info-bg;
+    border-color: $auth-info-border;
+  }
+
   // Scoped to the outermost panel throughout: the sign up page nests a Bootstrap
   // accordion of .panel elements inside its card, and those must not pick up the
   // card's own border, radius, shadow and heading size.
@@ -78,6 +155,7 @@ $auth-control-radius: 6px;
 
   > .panel > .panel-heading {
     padding: 24px 24px 0;
+    color: inherit;
     background: none;
     border-bottom: 0;
   }
@@ -261,6 +339,23 @@ $auth-control-radius: 6px;
     padding: 0;
   }
 
+  .selectize-control .selectize-input,
+  .selectize-control .selectize-input.full,
+  .selectize-control .selectize-input.input-active,
+  .selectize-dropdown {
+    color: $auth-text;
+    background: $auth-input-bg;
+  }
+
+  .selectize-dropdown {
+    border-color: $auth-border-strong;
+  }
+
+  .selectize-dropdown .active {
+    color: $auth-text;
+    background-color: $auth-border;
+  }
+
   .selectize-input {
     min-height: 40px;
     border-color: $auth-border-strong;
@@ -352,7 +447,23 @@ $auth-control-radius: 6px;
     &:focus,
     &:active {
       color: $auth-deny;
-      background-color: rgba($auth-deny, 0.08);
+      background-color: color-mix(in srgb, $auth-deny 8%, transparent);
+    }
+  }
+
+  // The date picker's popup is appended inside the form, so it would otherwise
+  // stay white in dark mode.
+  .bootstrap-datetimepicker-widget.dropdown-menu {
+    color: $auth-text;
+    background-color: $auth-surface;
+    border-color: $auth-border-strong;
+  }
+
+  .bootstrap-datetimepicker-widget table td,
+  .bootstrap-datetimepicker-widget table th {
+    &:not(.active, .disabled):hover,
+    span:not(.active, .disabled):hover {
+      background-color: $auth-border;
     }
   }
 }

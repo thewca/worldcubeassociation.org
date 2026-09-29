@@ -23,6 +23,11 @@ RSpec.feature "Redesigned authentication pages" do
     expect(page).to have_css ".navbar"
   end
 
+  it "offers a way back out of the flow, falling back to the homepage without history" do
+    visit "/users/sign_in"
+    expect(page).to have_link "Back", href: "/"
+  end
+
   it "renders the sign up page in the redesigned shell, with the accordion hooks intact" do
     visit "/users/sign_up"
     expect(page).to have_text "You are viewing the new sign up page"
