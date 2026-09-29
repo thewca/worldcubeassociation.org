@@ -46,6 +46,10 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.teams_committees.pluck(:friendly_id) |
         ["board"].select { resource_owner.board_member? }
     end
+
+    claim :translator_locales, response: %i[id_token user_info], scope: :translations do |resource_owner|
+      resource_owner.translators.pluck(:locale)
+    end
   end
 
   discovery_url_options do

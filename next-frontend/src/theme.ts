@@ -714,6 +714,17 @@ const customConfig = defineConfig({
     },
     slotRecipes: {
       ...INTERACTIVITY_OVERRIDES,
+      segmentGroup: {
+        ...INTERACTIVITY_OVERRIDES.segmentGroup,
+        base: {
+          ...INTERACTIVITY_OVERRIDES.segmentGroup.base,
+          // Zag animates the indicator with `var(--transition-timing-function)`,
+          //   which nothing defines, so it silently falls back to `ease`.
+          root: {
+            "--transition-timing-function": "{easings.ease-in-smooth}",
+          },
+        },
+      },
       steps: {
         ...INTERACTIVITY_OVERRIDES.steps,
         variants: {
@@ -886,7 +897,7 @@ const customConfig = defineConfig({
                 px: "var(--accordion-padding-x)",
               },
               item: {
-                borderRadius: "l3",
+                borderRadius: "wca",
               },
             },
           },
@@ -974,6 +985,13 @@ const customConfig = defineConfig({
                 height: "fit-content",
                 position: { base: "static", md: "sticky" },
                 top: "3",
+              },
+              // Matching the hover the collapsible groups in the same list already have.
+              //   The selected trigger is excluded so hovering it doesn't drop its own background.
+              trigger: {
+                "&:not([data-selected]):hover": {
+                  bg: "bg.subtle",
+                },
               },
               content: {
                 _vertical: {

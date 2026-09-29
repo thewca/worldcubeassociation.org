@@ -76,7 +76,7 @@ export function ResultsTable({
                     {competitorResult.name}
                   </Link>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell fontWeight="bold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_single_record}
                   >
@@ -84,7 +84,7 @@ export function ResultsTable({
                   </WithRecordTag>
                 </Table.Cell>
                 {anyAverages && (
-                  <Table.Cell>
+                  <Table.Cell fontWeight="bold">
                     <WithRecordTag
                       recordTag={competitorResult.regional_average_record}
                     >
@@ -180,14 +180,14 @@ export function ByPersonTable({
                   {t(`rounds.${competitorResult.round_type_id}.name`)}
                 </Table.Cell>
                 <Table.Cell>{competitorResult.pos}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell fontWeight="bold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_single_record}
                   >
                     {formatAttemptResult(competitorResult.best, eventId)}
                   </WithRecordTag>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell fontWeight="bold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_average_record}
                   >
