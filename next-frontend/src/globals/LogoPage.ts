@@ -1,5 +1,6 @@
 import { Block, GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 
 const paragraph: Block = {
   slug: "paragraph",
@@ -89,4 +90,7 @@ export const LogoPage: GlobalConfig = {
       blocks: [paragraph, logoVariant, downloadLink],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };

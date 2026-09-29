@@ -45,7 +45,7 @@ export default function ImportResultsData({
         </Tab.Pane>
       ),
     }] : []),
-    ...((isAdminView || scoretakingSoftware !== 'external') ? [{
+    {
       menuItem: 'Use Live Results',
       render: () => (
         <Tab.Pane>
@@ -58,7 +58,7 @@ export default function ImportResultsData({
           />
         </Tab.Pane>
       ),
-    }] : []),
+    },
   ];
 
   return (

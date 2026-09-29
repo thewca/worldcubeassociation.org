@@ -58,6 +58,7 @@ jobs:
           registry: ${{ steps.login-ecr.outputs.registry }}/wca-nextjs
           tag: nextjs-staging
           base_url: staging.worldcubeassociation.org
+          asset_bucket: assets-staging.worldcubeassociation.org
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |

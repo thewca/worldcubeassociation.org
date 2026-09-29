@@ -48,6 +48,18 @@ function tArray(scope, options) {
   return res.filter(Boolean);
 }
 
+/**
+ * Use for keys that are built from a dynamic value (an event ID, a form field name)
+ * and only exist for some of those values. Absence is the intended state for the
+ * rest, so render nothing instead of `[missing "en...." translation]`.
+ * @param {string | string[]} scope
+ * @param {*} options
+ * @returns {string}
+ */
+function tOptional(scope, options) {
+  return window.I18n.t(scope, { ...options, defaultValue: '' });
+}
+
 window.I18n = window.I18n || new I18n();
 
 // We always load English + the user locale so that we can fallback.
@@ -56,6 +68,7 @@ window.I18n.enableFallback = true;
 // load the actual locale as determined by app/views/layouts/application.html.erb
 window.I18n.locale = window.wca.currentLocale;
 window.I18n.tArray = tArray;
+window.I18n.tOptional = tOptional;
 
 /**
  * The global translation object.
@@ -64,9 +77,11 @@ window.I18n.tArray = tArray;
  *  import I18n from '../../lib/i18n';
  *  I18n.t('regional_organizations.requirements.title'); // -> string
  *  I18n.tArray('regional_organizations.requirements.list'); // -> string[]
+ *  I18n.tOptional(`time_limit.${eventId}`); // -> string, '' if the key is absent
  *
  * @type {I18n & {
- *  tArray: (scope: string | string[], options?: *) => string[]
+ *  tArray: (scope: string | string[], options?: *) => string[],
+ *  tOptional: (scope: string | string[], options?: *) => string
  * }}
  */
 export default window.I18n;

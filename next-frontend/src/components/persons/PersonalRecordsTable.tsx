@@ -57,7 +57,9 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                 <Table.ColumnHeader textAlign="right">
                   Single
                 </Table.ColumnHeader>
-                <Table.ColumnHeader>Average</Table.ColumnHeader>
+                <Table.ColumnHeader paddingStart={3}>
+                  Average
+                </Table.ColumnHeader>
                 <Tooltip content="World Ranking" showArrow openDelay={100}>
                   <Table.ColumnHeader>WR</Table.ColumnHeader>
                 </Tooltip>
@@ -116,7 +118,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                     <Table.Cell fontWeight="medium" textAlign="right">
                       {formatAttemptResult(record.single.best, event)}
                     </Table.Cell>
-                    <Table.Cell fontWeight="medium">
+                    <Table.Cell fontWeight="medium" paddingStart={3}>
                       {record.average &&
                         formatAttemptResult(record.average.best, event)}
                     </Table.Cell>

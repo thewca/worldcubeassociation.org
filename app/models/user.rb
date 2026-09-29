@@ -38,6 +38,8 @@ class User < ApplicationRecord
   has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
   has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :translator_groups, -> { translators }, through: :active_roles, source: :group, class_name: "UserGroup"
+  has_many :translators, through: :translator_groups, source: :metadata, source_type: "GroupsMetadataTranslators"
   has_many :past_bans_metadata, through: :past_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
   has_many :past_bans, through: :past_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_bans_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"

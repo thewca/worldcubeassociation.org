@@ -11,14 +11,12 @@ import {
   VStack,
   Icon,
 } from "@chakra-ui/react";
-import { getPayload } from "payload";
-import config from "@payload-config";
 import Link from "next/link";
-import { connection } from "next/server";
+import { io } from "next/cache";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { LuChevronDown, LuMenu } from "react-icons/lu";
+import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
 
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
@@ -26,6 +24,8 @@ import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
+import { MobileNavLink, MobileNavRoot } from "@/components/MobileNav";
+import { getCachedGlobal } from "@/lib/payload/globals";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -63,23 +63,41 @@ type LinkNavbarEntry<T> = NavbarEntry & {
   targetLink: T;
 };
 
+const LINK_EXTERNAL_PROPS: React.ComponentPropsWithoutRef<"a"> = {
+  target: "_blank",
+  rel: "noopener noreferrer",
+};
+
 function LinkWrapper<T extends string>({
   navbarEntry,
   linkComponent: LinkComponent,
+  isExternal = LinkComponent === "a",
   hideResponsive = false,
   ...extraProps
 }: {
   navbarEntry: LinkNavbarEntry<T>;
   linkComponent: React.ComponentType<{ href: T }> | "a";
+  isExternal?: boolean;
   hideResponsive?: boolean;
 } & React.ComponentPropsWithoutRef<"a">) {
+  const externalProps = isExternal ? LINK_EXTERNAL_PROPS : {};
+
   return (
-    <LinkComponent {...extraProps} href={navbarEntry.targetLink}>
+    <LinkComponent
+      {...extraProps}
+      {...externalProps}
+      href={navbarEntry.targetLink}
+    >
       <TextWrapper
         navbarEntry={navbarEntry}
         entryKey="displayText"
         hideResponsive={hideResponsive}
       />
+      {isExternal && (
+        <Icon size="xs" asChild>
+          <LuExternalLink />
+        </Icon>
+      )}
     </LinkComponent>
   );
 }
@@ -87,15 +105,14 @@ function LinkWrapper<T extends string>({
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
 export default async function Navbar() {
-  // `connection()` has to come before the Payload queries: it defers everything below it to
-  // request time, so the build-time prerender stops here instead of trying to reach MongoDB,
-  // which is not available while building.
-  await connection();
+  // `io()` marks the boundary the build-time prerender stops at, so the Payload reads below
+  // never run while building, where MongoDB is unreachable. It has to stay out here rather
+  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
+  await io();
 
-  const payload = await getPayload({ config });
   const [navbar, socialLinksGlobal] = await Promise.all([
-    payload.findGlobal({ slug: "nav" }),
-    payload.findGlobal({ slug: "social-links" }),
+    getCachedGlobal("nav"),
+    getCachedGlobal("social-links"),
   ]);
 
   const session = await getSession();
@@ -113,7 +130,7 @@ export default async function Navbar() {
       data-testid="header-navbar"
     >
       <RefreshRouteOnSave />
-      <Collapsible.Root>
+      <MobileNavRoot>
         <HStack padding="3" justifyContent="space-between">
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
@@ -265,8 +282,6 @@ export default async function Navbar() {
                                 <LinkWrapper
                                   navbarEntry={item}
                                   linkComponent="a"
-                                  target="_blank"
-                                  rel="noreferrer"
                                 />
                               </Menu.Item>
                             ))}
@@ -304,30 +319,20 @@ export default async function Navbar() {
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
                   {navbarEntry.blockType === "LinkItem" && (
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      justifyContent="flex-start"
-                    >
+                    <MobileNavLink>
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent={Link}
                       />
-                    </Button>
+                    </MobileNavLink>
                   )}
                   {navbarEntry.blockType === "ExternalLinkItem" && (
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      justifyContent="flex-start"
-                    >
+                    <MobileNavLink>
                       <LinkWrapper
                         navbarEntry={navbarEntry}
                         linkComponent="a"
                       />
-                    </Button>
+                    </MobileNavLink>
                   )}
                   {navbarEntry.blockType === "NavDropdown" && (
                     <Collapsible.Root>
@@ -352,30 +357,20 @@ export default async function Navbar() {
                           {navbarEntry.entries.map((subEntry) => (
                             <React.Fragment key={subEntry.id}>
                               {subEntry.blockType === "LinkItem" && (
-                                <Button
-                                  asChild
-                                  variant="ghost"
-                                  size="sm"
-                                  justifyContent="flex-start"
-                                >
+                                <MobileNavLink>
                                   <LinkWrapper
                                     navbarEntry={subEntry}
                                     linkComponent={Link}
                                   />
-                                </Button>
+                                </MobileNavLink>
                               )}
                               {subEntry.blockType === "ExternalLinkItem" && (
-                                <Button
-                                  asChild
-                                  variant="ghost"
-                                  size="sm"
-                                  justifyContent="flex-start"
-                                >
+                                <MobileNavLink>
                                   <LinkWrapper
                                     navbarEntry={subEntry}
                                     linkComponent="a"
                                   />
-                                </Button>
+                                </MobileNavLink>
                               )}
                               {subEntry.blockType === "VisualDivider" && (
                                 <Separator />
@@ -406,31 +401,21 @@ export default async function Navbar() {
                                         <React.Fragment key={nestedEntry.id}>
                                           {nestedEntry.blockType ===
                                             "LinkItem" && (
-                                            <Button
-                                              asChild
-                                              variant="ghost"
-                                              size="sm"
-                                              justifyContent="flex-start"
-                                            >
+                                            <MobileNavLink>
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
                                                 linkComponent={Link}
                                               />
-                                            </Button>
+                                            </MobileNavLink>
                                           )}
                                           {nestedEntry.blockType ===
                                             "ExternalLinkItem" && (
-                                            <Button
-                                              asChild
-                                              variant="ghost"
-                                              size="sm"
-                                              justifyContent="flex-start"
-                                            >
+                                            <MobileNavLink>
                                               <LinkWrapper
                                                 navbarEntry={nestedEntry}
                                                 linkComponent="a"
                                               />
-                                            </Button>
+                                            </MobileNavLink>
                                           )}
                                         </React.Fragment>
                                       ))}
@@ -469,20 +454,12 @@ export default async function Navbar() {
                         <Collapsible.Content>
                           <VStack align="stretch" pl={4} gap={1} py={1}>
                             {socialLinks.map((item) => (
-                              <Button
-                                key={item.id}
-                                asChild
-                                variant="ghost"
-                                size="sm"
-                                justifyContent="flex-start"
-                              >
+                              <MobileNavLink key={item.id}>
                                 <LinkWrapper
                                   navbarEntry={item}
                                   linkComponent="a"
-                                  target="_blank"
-                                  rel="noreferrer"
                                 />
-                              </Button>
+                              </MobileNavLink>
                             ))}
                           </VStack>
                         </Collapsible.Content>
@@ -490,15 +467,17 @@ export default async function Navbar() {
                     )}
                 </React.Fragment>
               ))}
-              <Separator />
-              <VStack align="start">
+              {/* From `md` upwards both of these already sit in the top bar, so without this the
+                  open drawer shows a second language selector and a second avatar. */}
+              <Separator hideFrom="md" />
+              <VStack align="start" hideFrom="md">
                 <LanguageSelector />
                 <AvatarMenu session={session} />
               </VStack>
             </VStack>
           </Collapsible.Content>
         </Box>
-      </Collapsible.Root>
+      </MobileNavRoot>
     </Box>
   );
 }

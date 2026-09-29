@@ -6,7 +6,7 @@ function isComplete(attemptResult: number) {
   return attemptResult > 0;
 }
 
-function isSkipped(attemptResult: number) {
+export function isSkipped(attemptResult: number) {
   return attemptResult === SKIPPED_VALUE;
 }
 

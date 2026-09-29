@@ -2,6 +2,7 @@ import { GlobalConfig } from "payload";
 import { ParagraphBlock } from "@/blocks/text/paragraph";
 import { QuoteBlock } from "@/blocks/text/quote";
 import { CaptionedImageBlock } from "@/blocks/image/captionedImage";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 
 export const SpeedCubingHistoryPage: GlobalConfig = {
   slug: "speedcubing-history-page",
@@ -14,4 +15,7 @@ export const SpeedCubingHistoryPage: GlobalConfig = {
       blocks: [ParagraphBlock, CaptionedImageBlock, QuoteBlock],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };
