@@ -528,7 +528,7 @@ export default async function Homepage() {
 
   if (homepageEntries.length === 0) {
     return (
-      <Center padding={10}>
+      <Center p={HOMEPAGE_SPACING} asChild>
         <Text>
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
@@ -544,8 +544,8 @@ export default async function Homepage() {
   }
 
   return (
-    <Box p={HOMEPAGE_SPACING} asChild>
+    <Center p={HOMEPAGE_SPACING} asChild>
       {renderVerticalLayout(homepageEntries)}
-    </Box>
+    </Center>
   );
 }
