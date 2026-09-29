@@ -97,4 +97,31 @@ RSpec.describe "sessions" do
       expect(browser.response.location).to end_with(new_user_session_path)
     end
   end
+
+  it "requires MFA when reauthenticating an expired remembered session" do
+    user = create(:user, :with_2fa)
+    browser = ActionDispatch::Integration::Session.new(Rails.application)
+    signed_in_at = Time.current
+
+    browser.post(user_session_path, params: sign_in_params(user))
+    expect(browser.response.body).to include("Enter your two-factor authentication code")
+
+    browser.post(user_session_path, params: { user: { otp_attempt: user.current_otp } })
+    expect(browser.response).to have_http_status(:redirect)
+    expect(browser.response.location).to end_with(root_path)
+
+    travel_to(signed_in_at + User::ABSOLUTE_SESSION_TIMEOUT + 1.second) do
+      browser.cookies.delete("_WcaOnRails_session")
+      browser.get(profile_edit_path)
+      expect(browser.response).to have_http_status(:redirect)
+      expect(browser.response.location).to end_with(new_user_session_path)
+
+      browser.post(user_session_path, params: sign_in_params(user))
+      expect(browser.response).to be_successful
+      expect(browser.response.body).to include("Enter your two-factor authentication code")
+
+      browser.post(user_session_path, params: { user: { otp_attempt: user.current_otp } })
+      expect(browser.response).to have_http_status(:redirect)
+    end
+  end
 end
