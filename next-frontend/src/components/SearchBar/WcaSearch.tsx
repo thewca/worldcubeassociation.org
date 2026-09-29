@@ -25,6 +25,21 @@ import { TFunction } from "i18next";
 const DEBOUNCE_MS = 300;
 const MIN_QUERY_LENGTH = 3;
 
+// The API returns every competition before the first person, so a search like "ethan" filled the
+//   dropdown with competitions and looked like it had found no competitors. Grouping by type and
+//   capping each group keeps every kind of match in view; "Search for ..." leads to the full list.
+const MAX_RESULTS_PER_GROUP = 5;
+
+const RESULT_GROUPS = [
+  { resultClass: "person", labelKey: "search_results.index.people" },
+  { resultClass: "competition", labelKey: "search_results.index.competitions" },
+  {
+    resultClass: "regulation",
+    labelKey: "search_results.index.regulations_and_guidelines",
+  },
+  { resultClass: "incident", labelKey: "search_results.index.incidents" },
+] as const;
+
 type SearchResult = components["schemas"]["SearchResult"];
 
 // Synthetic option, added client-side, that links to the full search page.
@@ -77,6 +92,7 @@ export default function WcaSearch() {
   const router = useRouter();
 
   const [query, setQuery] = useState("");
+  const [highlightedValue, setHighlightedValue] = useState<string | null>(null);
 
   const debouncedQuery = useDebounce(query, DEBOUNCE_MS);
   const hasQuery = debouncedQuery.length >= MIN_QUERY_LENGTH;
@@ -98,14 +114,37 @@ export default function WcaSearch() {
   // enough and its fetch resolves.
   const visibleResults = hasQuery ? (data?.result ?? []) : [];
 
+  const resultGroups = RESULT_GROUPS.map(({ resultClass, labelKey }) => ({
+    labelKey,
+    results: visibleResults
+      .filter((result) => result.class === resultClass)
+      .slice(0, MAX_RESULTS_PER_GROUP),
+  })).filter((group) => group.results.length > 0);
+
+  const groupedResults = resultGroups.flatMap((group) => group.results);
+
   const items: ComboItem[] =
-    query.length > 0 ? [searchOption, ...visibleResults] : visibleResults;
+    query.length > 0 ? [searchOption, ...groupedResults] : groupedResults;
 
   const collection = createListCollection({
     items,
     itemToValue: itemValue,
     itemToString: itemLabel,
   });
+
+  // Enter with nothing highlighted used to close the box and go nowhere. Anything the competitor
+  //   has typed is a good enough query for the full search page, so send them there.
+  //   `isComposing` leaves Enter alone while an IME candidate is being confirmed.
+  const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      event.key === "Enter" &&
+      highlightedValue === null &&
+      !event.nativeEvent.isComposing &&
+      query.length > 0
+    ) {
+      router.push(searchPageRoute(query));
+    }
+  };
 
   const handleSelect = (value: string) => {
     const selected = items.find((item) => itemValue(item) === value);
@@ -131,6 +170,8 @@ export default function WcaSearch() {
       // Highlighting the first option (which is always "Search for ...") makes
       // pressing enter open the full search page.
       inputBehavior="autohighlight"
+      highlightedValue={highlightedValue}
+      onHighlightChange={(e) => setHighlightedValue(e.highlightedValue)}
       onInputValueChange={(e) => setQuery(e.inputValue)}
       onValueChange={(e) => handleSelect(e.value[0])}
       selectionBehavior="clear"
@@ -141,7 +182,9 @@ export default function WcaSearch() {
       placeholder={t("common.search_site")}
     >
       <Combobox.Control>
-        <Combobox.Input />
+        {/* The combobox recipe sets `sm` (14px) here, and iOS Safari zooms the whole page when
+            a focused input is under 16px. */}
+        <Combobox.Input onKeyDown={handleEnter} fontSize="md" />
         <Combobox.IndicatorGroup>
           {loading ? <Spinner size="xs" /> : <LuSearch />}
         </Combobox.IndicatorGroup>
@@ -149,11 +192,24 @@ export default function WcaSearch() {
       <Portal>
         <Combobox.Positioner>
           <Combobox.Content>
-            {collection.items.map((item) => (
-              <Combobox.Item item={item} key={itemValue(item)}>
-                <ResultContent item={item} t={t} />
+            {query.length > 0 && (
+              <Combobox.Item item={searchOption} key={itemValue(searchOption)}>
+                <ResultContent item={searchOption} t={t} />
                 <Combobox.ItemIndicator />
               </Combobox.Item>
+            )}
+            {resultGroups.map((group) => (
+              <Combobox.ItemGroup key={group.labelKey}>
+                <Combobox.ItemGroupLabel>
+                  {t(group.labelKey)}
+                </Combobox.ItemGroupLabel>
+                {group.results.map((item) => (
+                  <Combobox.Item item={item} key={itemValue(item)}>
+                    <ResultContent item={item} t={t} />
+                    <Combobox.ItemIndicator />
+                  </Combobox.Item>
+                ))}
+              </Combobox.ItemGroup>
             ))}
           </Combobox.Content>
         </Combobox.Positioner>

@@ -2,16 +2,22 @@
 
 import { useState } from "react";
 import { Button, Dialog, Link, Portal, Text } from "@chakra-ui/react";
+import Cookies from "js-cookie";
 
-export const BETA_DISCLAIMER_COOKIE = "beta_disclaimer_accepted";
+const BETA_DISCLAIMER_COOKIE = "beta_disclaimer_accepted";
 
-const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
+const ONE_YEAR_IN_DAYS = 365;
 
 export default function BetaDisclaimer() {
-  const [open, setOpen] = useState(true);
+  // Rendered inside <ClientOnly>, so the cookie is readable on first render.
+  const [open, setOpen] = useState(() => !Cookies.get(BETA_DISCLAIMER_COOKIE));
 
   const acceptDisclaimer = () => {
-    document.cookie = `${BETA_DISCLAIMER_COOKIE}=true; path=/; max-age=${ONE_YEAR_IN_SECONDS}; SameSite=Lax`;
+    Cookies.set(BETA_DISCLAIMER_COOKIE, "true", {
+      path: "/",
+      expires: ONE_YEAR_IN_DAYS,
+      sameSite: "Lax",
+    });
     setOpen(false);
   };
 
@@ -30,16 +36,16 @@ export default function BetaDisclaimer() {
             </Dialog.Header>
             <Dialog.Body display="flex" alignItems="center">
               <Text textStyle="s2">
-                You are viewing the beta version of the redesigned WCA Website.
-                This is intended to give the community a sneak peek at the
-                website, for feedback and discussion. <br /> You should expect
-                to find glitches and issues when browsing the website - when you
-                do, please report them to{" "}
+                You are viewing the English-only beta version of the redesigned
+                WCA Website. This is intended to give the community a sneak peek
+                at the website, for feedback and discussion. <br /> You should
+                expect to find glitches and issues when browsing the website -
+                when you do, please report them via{" "}
                 <Link
-                  href="mailto:software@worldcubeassociation.org"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfBIy3E8cpqa6QTg9SG5r6ELyV1FhNMF89fwxPrr1aafgw2Ig/viewform"
                   textStyle="s2"
                 >
-                  software@worldcubeassociation.org
+                  the feedback form
                 </Link>
                 .
               </Text>

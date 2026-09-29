@@ -16,7 +16,7 @@ import { io } from "next/cache";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { LuChevronDown, LuMenu } from "react-icons/lu";
+import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
 
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
@@ -63,23 +63,41 @@ type LinkNavbarEntry<T> = NavbarEntry & {
   targetLink: T;
 };
 
+const LINK_EXTERNAL_PROPS: React.ComponentPropsWithoutRef<"a"> = {
+  target: "_blank",
+  rel: "noopener noreferrer",
+};
+
 function LinkWrapper<T extends string>({
   navbarEntry,
   linkComponent: LinkComponent,
+  isExternal = LinkComponent === "a",
   hideResponsive = false,
   ...extraProps
 }: {
   navbarEntry: LinkNavbarEntry<T>;
   linkComponent: React.ComponentType<{ href: T }> | "a";
+  isExternal?: boolean;
   hideResponsive?: boolean;
 } & React.ComponentPropsWithoutRef<"a">) {
+  const externalProps = isExternal ? LINK_EXTERNAL_PROPS : {};
+
   return (
-    <LinkComponent {...extraProps} href={navbarEntry.targetLink}>
+    <LinkComponent
+      {...extraProps}
+      {...externalProps}
+      href={navbarEntry.targetLink}
+    >
       <TextWrapper
         navbarEntry={navbarEntry}
         entryKey="displayText"
         hideResponsive={hideResponsive}
       />
+      {isExternal && (
+        <Icon size="xs" asChild>
+          <LuExternalLink />
+        </Icon>
+      )}
     </LinkComponent>
   );
 }
@@ -264,8 +282,6 @@ export default async function Navbar() {
                                 <LinkWrapper
                                   navbarEntry={item}
                                   linkComponent="a"
-                                  target="_blank"
-                                  rel="noreferrer"
                                 />
                               </Menu.Item>
                             ))}
@@ -442,8 +458,6 @@ export default async function Navbar() {
                                 <LinkWrapper
                                   navbarEntry={item}
                                   linkComponent="a"
-                                  target="_blank"
-                                  rel="noreferrer"
                                 />
                               </MobileNavLink>
                             ))}
@@ -453,8 +467,10 @@ export default async function Navbar() {
                     )}
                 </React.Fragment>
               ))}
-              <Separator />
-              <VStack align="start">
+              {/* From `md` upwards both of these already sit in the top bar, so without this the
+                  open drawer shows a second language selector and a second avatar. */}
+              <Separator hideFrom="md" />
+              <VStack align="start" hideFrom="md">
                 <LanguageSelector />
                 <AvatarMenu session={session} />
               </VStack>

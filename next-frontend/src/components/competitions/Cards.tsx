@@ -16,18 +16,19 @@ import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
 import { components } from "@/types/openapi";
 import { TFunction } from "i18next";
 import { getT } from "@/lib/i18n/get18n";
-import { DateTime } from "luxon";
 import CurrencyValue from "@/components/CurrencyValue";
 import PaymentIcon from "@/components/icons/PaymentIcon";
 import SpotsLeftIcon from "@/components/icons/SpotsLeftIcon";
 import SpectatorsIcon from "@/components/icons/SpectatorsIcon";
 import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import EventIcon from "@/components/EventIcon";
+import { LabelledEventIcon } from "@/components/EventIcon";
 import { ChakraMarkdown } from "@/components/Markdown";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
+import LocalDateTime from "@/components/LocalDateTime";
+import RefundPolicyText from "@/components/competitions/RefundPolicyText";
 
 function formatDateRange(start: Date, end: Date): string {
   const sameDay = start.toDateString() === end.toDateString();
@@ -61,17 +62,6 @@ function formatDateRange(start: Date, end: Date): string {
 
   return `${fullFormatter.format(start)} - ${fullFormatter.format(end)}`;
 }
-
-const dateFormat = {
-  month: "2-digit",
-  day: "2-digit",
-  year: "numeric",
-  hour: "numeric",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: true,
-  timeZoneName: "short",
-} as Intl.DateTimeFormatOptions;
 
 export function VenueDetailsCard({
   competitionInfo,
@@ -144,24 +134,15 @@ export function RefundPolicyCard({
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  const refundDate = new Date(competitionInfo.refund_policy_limit_date);
-  const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
-
   return (
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Refund Policy</Card.Title>
         <Card.Description>
-          If your registration is cancelled before {formattedRefundDate} you
-          will be refunded
-          <Text as="span" fontWeight="bold">
-            {" "}
-            <FormatNumber
-              value={competitionInfo.refund_policy_percent / 100}
-              style="percent"
-            />{" "}
-          </Text>
-          of your registration fee.
+          <RefundPolicyText
+            refundPolicyPercent={competitionInfo.refund_policy_percent}
+            refundPolicyLimitDate={competitionInfo.refund_policy_limit_date}
+          />
         </Card.Description>
       </Card.Body>
     </Card.Root>
@@ -176,9 +157,6 @@ export async function RegistrationCard({
   columns?: number;
 }) {
   const { t } = await getT();
-
-  const formatDateTime = (isoDateTime: string) =>
-    DateTime.fromISO(isoDateTime).toLocaleString(DateTime.DATETIME_FULL);
 
   return (
     <Card.Root>
@@ -262,7 +240,7 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              {formatDateTime(competitionInfo.registration_open)}
+              <LocalDateTime isoDateTime={competitionInfo.registration_open} />
             </Stat.ValueText>
           </Stat.Root>
 
@@ -274,7 +252,7 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              {formatDateTime(competitionInfo.registration_close)}
+              <LocalDateTime isoDateTime={competitionInfo.registration_close} />
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>
@@ -294,7 +272,7 @@ export function EventCard({
         <Card.Title textStyle="s4">Events List</Card.Title>
         <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
-            <EventIcon
+            <LabelledEventIcon
               key={event_id}
               eventId={event_id}
               boxSize="8"

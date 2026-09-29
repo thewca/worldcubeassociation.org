@@ -67,8 +67,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
             src={profilePicture}
             rounded="md"
             alt="Profile Photo"
-            boxSize={{ base: "3xs", md: "sm" }}
-            objectFit="cover"
+            maxW={{ base: "3xs", md: "sm" }}
           />
         </Center>
       </Card.Header>

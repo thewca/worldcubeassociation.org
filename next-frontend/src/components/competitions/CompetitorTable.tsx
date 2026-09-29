@@ -1,5 +1,5 @@
 import { HStack, Link, Table, Text } from "@chakra-ui/react";
-import EventIcon from "@/components/EventIcon";
+import { LabelledEventIcon } from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import WcaFlag from "@/components/WcaFlag";
 import CountryMap from "@/components/CountryMap";
@@ -35,7 +35,7 @@ export default function CompetitorTable({
                 cursor="pointer"
                 _hover={{ bg: "grey.solid", color: "wcawhite.contrast" }}
               >
-                <EventIcon eventId={eventId} />
+                <LabelledEventIcon eventId={eventId} />
               </Table.ColumnHeader>
             ))}
             <Table.ColumnHeader>Total</Table.ColumnHeader>
@@ -94,7 +94,7 @@ export default function CompetitorTable({
                 {eventIds.map((eventId) => (
                   <Table.Cell key={eventId}>
                     {registration.competing.event_ids.includes(eventId) ? (
-                      <EventIcon eventId={eventId} />
+                      <LabelledEventIcon eventId={eventId} />
                     ) : null}
                   </Table.Cell>
                 ))}

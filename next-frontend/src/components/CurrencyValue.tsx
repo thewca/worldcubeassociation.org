@@ -9,20 +9,17 @@ export default function CurrencyValue({
   lowestDenomination,
   currencyCode,
 }: {
-  lowestDenomination: number;
+  lowestDenomination: number | null;
   currencyCode: string;
 }) {
   const currency = currencyTable[currencyCode];
+  const amount = lowestDenomination ?? 0;
 
   return (
     <HStack>
       <FormatNumber
         value={
-          currency
-            ? Number(
-                toDecimal(dinero({ amount: lowestDenomination, currency })),
-              )
-            : lowestDenomination
+          currency ? Number(toDecimal(dinero({ amount, currency }))) : amount
         }
         style="currency"
         currency={currencyCode}

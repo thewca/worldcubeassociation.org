@@ -250,7 +250,7 @@ export const updateSearchParams = (
   );
 };
 
-type ReducerAction =
+export type CompetitionFilterAction =
   | { type: "reset" }
   | { type: "toggle_event"; eventId: string }
   | { type: "select_all_events" }
@@ -268,7 +268,7 @@ type ReducerAction =
 
 export const competitionFilterReducer = (
   state: CompetitionFilterState,
-  action: ReducerAction,
+  action: CompetitionFilterAction,
 ) => {
   switch (action.type) {
     case "reset":

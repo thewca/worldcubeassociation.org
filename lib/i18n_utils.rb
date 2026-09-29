@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module I18nUtils
+  # For keys that are built from a dynamic value (an event ID, a payment provider)
+  # and only exist for some of those values. Absence is the intended state for the
+  # rest, so render nothing instead of "Translation missing: ...".
+  def self.optional_t(key, **)
+    I18n.t(key, **, default: "")
+  end
+
   def self.localized_sort_by!(wca_locale, array, &)
     # Unfortunately, it looks like the set of languages supported by
     # twitter-cldr-rb is not exactly the same as the languages we support, so I

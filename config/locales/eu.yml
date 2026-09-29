@@ -259,19 +259,16 @@ eu:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} saiakera  < %{time} lortzeko'
-      one: 'saiakera %{count}  < %{time} lortzeko'
-      other: '%{count} saiakera  < %{time} lortzeko'
+      one: 'saiakera %{count} < %{time} lortzeko'
+      other: '%{count} saiakera < %{time} lortzeko'
     #original_hash: b49d930
     moves:
-      zero: '%{count} saiakera  < %{moves} lortzeko'
-      one: 'saiakera %{count}  < %{moves} lortzeko'
-      other: '%{count} saiakera  < %{moves} lortzeko'
+      one: 'saiakera %{count} < %{moves} lortzeko'
+      other: '%{count} saiakera < %{moves} lortzeko'
     #original_hash: eba1b97
     points:
-      zero: '%{count} saiakera  < %{points} lortzeko'
-      one: 'saiakera %{count}  < %{points} lortzeko'
-      other: '%{count} saiakera  < %{points} lortzeko'
+      one: 'saiakera %{count} < %{points} lortzeko'
+      other: '%{count} saiakera < %{points} lortzeko'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -282,8 +279,6 @@ eu:
     333fm: Ordu 1
     #original_hash: cc7d8bb
     333mbf: 'Kubo bakoitzeko 10:00.00, 60:00.00-ra arte'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Sailkatze mota
@@ -384,11 +379,12 @@ eu:
       invalid: baliogabea
     #original_hash: 49d0140
     days:
-      zero: 0 egun
       one: egun 1
       other: '%{count} egun'
     #original_hash: 51ef7d4
     search_site: Orrian bilatu
+    #original_hash: d9c883a
+    back_to_top: Gora itzuli
     #original_hash: d7decf1
     filter: Hautatu
     #original_hash: f6fdbe4
@@ -483,7 +479,7 @@ eu:
           WCAko softwarearen baliabide aldaketen inguruko jakinarazpenak jaso
           nahi nituzke
         #original_hash: 730db33
-        receive_delegate_reports: WCAko Lehiaketetako Ordezkari txostenak e-mailez jasotzea nahiko nuke.
+        receive_delegate_reports: WCAko Lehiaketetako Ordezkari txostenak e-mailez jaso nahiko nituzke
         #original_hash: 8667157
         delegate_reports_region: Ordezkari txostenak hurrengo eskualdekoak nahi ditut jaso bakarrik
         #original_hash: 57eaf24
@@ -542,7 +538,7 @@ eu:
         #original_hash: 0c7191d
         wrc_incidents: WRCren feedbacka behar duten gertaerak
         #original_hash: 1a54a79
-        wic_feedback_requested: WICtik goiko gertaera batzuei buruzko feedbacka nahiko nuke
+        wic_feedback_requested: WICtik goiko gertaera batzuei buruzko feedbacka nahiko nuke.
         #original_hash: 000153c
         wic_incidents: WICko feedbacka behar duten gertaerak
         #original_hash: d7020f4
@@ -728,8 +724,6 @@ eu:
       text: beharrezkoa
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Hurrengo arazo hauek azter itzazu mesedez:'
@@ -749,12 +743,6 @@ eu:
         public_summary: >-
           Gertaeraren deskribapen orokorra eta erabakia, publikoki ager dadin.
           Mesedez, bete hau ingelesez.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: Lehiatzailearen jaioteguna UUUU-HH-EE formatuan sartu.
@@ -764,36 +752,14 @@ eu:
           <strong>José Miguel Beguiristain</strong>. Ez erratikotiki <strong>jm
           beguiristain</strong> bezala. <br/>Bigarren izenak (osoak edo
           inizialak) aukerakoak dira.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Irudi berri bat igo ondoren, WCAko Emaitzen Taldeak onartu arte
           itxaron beharko duzu.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Hau antolatzen edo ordezkatzen dituzun lehiaketetan aplikatzen da
           besterik, eta lehiaketa bakoitzean berridatz dezakezu.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           Hau baliabideen bertsio aldaketa nagusietara mugatuta dago, hala nola
@@ -812,14 +778,8 @@ eu:
         #original_hash: 0627e5c
         otp_attempt: >-
           Ikuskatu zure behin-behineko pasahitz bat lortzeko konfiguratutako
-          aplikazio mugikorra  edo sartu zure berreskuratze-kodeetako bat.
+          aplikazio mugikorra edo sartu zure berreskuratze-kodeetako bat.
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: 'Zure jaiotegun zuzena, UUUU-HH-EE formatuan'
         #original_hash: 49ee4af
@@ -885,14 +845,10 @@ eu:
           duzu, eta gero zaharra ezabatu). Ez baduzu lehia-guneko mementuko
           irudirik edota nahas-gunea erabiltzen ari zen bitarteko irudirik
           azaldu zergatik mesedez.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           WRCren feedbacka jasotzea nahi zenukeen edozein gertaeren zenbakien
           zerrenda.
-        #original_hash: da39a3e
-        wic_feedback_requested: ''
         #original_hash: 74a092e
         wic_incidents_html: >-
           WICren feedbacka jasotzea nahi zenukeen edozein gertaeren zenbakien
@@ -914,80 +870,26 @@ eu:
           (adibidez, komunitatearen barruko hobekuntza/erregresioa, eskualde
           honetarako etorkizunerako planak). Aurreko atalak laburragoak izateko
           ezer idatzirik utzi baduzu, hemen apia ditzakezu.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Adibideak: bidaiak, ordainketak, sariak, ostatua'
-        #original_hash: da39a3e
-        content: ''
-      person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Baliozko http(s) helbidea izan behar du. HTTPS gomendatzen da
         #original_hash: 2ace571
-        logo: 'PNG formatuan egon behar du, bereizmen onekoa eta atzealde gardenekoa.'
+        logo: >-
+          Argazkiak PNG formatuan egon behar du, bereizmen onekoa eta atzealde
+          gardenekoa izan behar duelarik
         #original_hash: da54ab5
         email: >-
           Zuzendari eta Ofizial guztiak biltzen dituen posta-zerrenda izan behar
           luke
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: PDF formatuan egon behar du
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           PDF formatuan egon behar du. Fitxategi gehiago gehitu behar badituzu,
           mesedez, bateratu
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -1022,7 +924,7 @@ eu:
         #original_hash: 603a218
         wca_id: WCA IDa
     #original_hash: 687d968
-    competition_link_html: 'Zoaz <a href=''%{url}''>hona</a> lehiakieta orria bisitatzeko.'
+    competition_link_html: 'Zoaz <a href=''%{url}''>hona</a> lehiakieta orria bisitatzeko'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -1223,7 +1125,6 @@ eu:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Formularioak ez dauka akatsik.
           one: 'Formularioak akats bat dauka:'
           other: 'Formularioak %{count} akats dauzka:'
       error_pages:
@@ -1279,13 +1180,15 @@ eu:
         manage_registrations: >-
           lehiaketetarako zure izena eman eta zure erregistroak aldatu edo
           ezeztatu
+        #original_hash: cd9ad06
+        translations: WCAko itzultzaile gisa diharduzun hizkuntza zerrenda atzitu
     devise:
       #original_hash: 06184f5
       no_account: Konturik ez?
       #original_hash: a268696
-      have_competed: WCA lehiaketa batean parte hartu izan dut
+      have_competed: WCAko lehiaketa batean parte hartu izan dut.
       #original_hash: dcd1d70
-      have_never_competed: Ez dut inoiz ere WCA lehiaketa batean parte hartu
+      have_never_competed: Ez dut inoiz ere WCAko lehiaketa batean parte hartu
       #original_hash: 3511bc5
       let_us_know: 'Mesedez, esaguzu inoiz WCAko lehiaketa batean parte hartu al duzun:'
       #original_hash: f9f512b
@@ -1436,7 +1339,7 @@ eu:
       #original_hash: 19d4bbb
       board_description: >-
         WCAko Batzarraren ardura da erakundea bere osotasunean zuzentzea, eta
-        beste Taldeek eta Komiteek betetzen ez dituzten betebeharrak betetzea.
+        beste Taldeek eta Komiteek betetzen ez dituzten betebeharrak betetzea
     teams_committees_councils:
       #original_hash: 1d14e2f
       title: WCAko Talde eta Komiteak
@@ -1709,7 +1612,7 @@ eu:
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">jarri
         gurekin harremanetan</a> mesedez.
       #original_hash: 43f15fd
-      no_permission_error: Ez daukazu beste inoren profila edita dezazun eskatzeko baimena
+      no_permission_error: Ez daukazu beste inoren profila edita dezazun eskatzeko baimena.
       form:
         contact_email:
           #original_hash: 3142970
@@ -1829,9 +1732,9 @@ eu:
   users:
     update_locale:
       #original_hash: 4cde9bc
-      success: Hizkuntza eguneratuta
+      success: Hizkuntza eguneratuta.
       #original_hash: dcc2f49
-      failure: Zure profila ezin da eguneratu
+      failure: Ezin izan da zure profila eguneratu.
       #original_hash: c29870c
       unavailable: Eskatutako hizkuntza ez dago eskuragarri.
     mailer:
@@ -2047,7 +1950,7 @@ eu:
         zain dago.
       #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
-        Erabiltzaile honek %{wca_id} WCA IDa eskatu du.  Bere ordezkariari
+        Erabiltzaile honek %{wca_id} WCA IDa eskatu du. Bere ordezkariari
         %{delegate} kontu honen helbide elektronikoa baieztatu bezain laster
         jakinaraziko zaio eskaera.
       #original_hash: 1cde7e6
@@ -2109,7 +2012,7 @@ eu:
       guidelines: Jarraibideak
       avatar_guidelines:
         #original_hash: 255f28c
-        '1': Abatar guztiek pertsona errealen irudiak izan behar lukete
+        '1': Abatar guztiek pertsona errealen irudiak izan behar lukete.
         #original_hash: b12d293
         '2': Erakusten den pertsona gaur egungo zu izan behar du.
         #original_hash: 8165cf0
@@ -2198,7 +2101,7 @@ eu:
       wca_id_no_birthdate_html: >-
         Ez dugu WCA ID honentzako erregistratutako jaiotza-datarik. Jar zaitez
         harremanetan WCAko Emaitzen Taldearekin <a
-        href="%{dob_form_path}">formulario hau</a> erabiliz
+        href="%{dob_form_path}">formulario hau</a> erabiliz.
       #original_hash: f7dde6e
       wca_id_no_gender_html: >-
         Ez dugu WCA ID honentzako genero-erregistrorik. Jarri harremanetan <a
@@ -2207,8 +2110,8 @@ eu:
       #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
         Ez dugu WCA ID honentzako erregistratutako herritartasunik. Jarri
-        harremanetan <a href='%{wrt_contact_path}' target='_blank'> WCAko
-        Emaitzen Taldearekin</a> hori konpontzeko.
+        harremanetan <a href='%{wrt_contact_path}' target='_blank'>WCAko
+        Emaitzen Taldearekin</a> hau konpontzeko.
       #original_hash: 6890de8
       wca_id_no_name_html: >-
         Ez dugu WCA ID honentzako izen erregistraturik. Jarri harremanetan <a
@@ -2294,7 +2197,6 @@ eu:
       must_register: Gutxienez kategoria batean izena eman behar duzu.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        zero: 0 probetan izena eman behar duzu.
         one: Proba bakar-bakarrean izena eman behar duzu.
         other: '1 eta %{count} proben artean izena eman behar duzu.'
       #original_hash: 87f7c12
@@ -2322,17 +2224,14 @@ eu:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: berri
-        one: berri
-        other: berri
+        one: lehiakide berria
+        other: lehiakide berriak
       #original_hash: bc010e3
       returner:
-        zero: errepikatzaile
         one: errepikatzaile
-        other: errepikatzaile
+        other: errepikatzaileak
       #original_hash: b7da17a
       person:
-        zero: pertsona
         one: pertsona
         other: pertsona
     flash:
@@ -2436,7 +2335,6 @@ eu:
       edit: Editatu
       #original_hash: beffc45
       country_plural:
-        zero: 0 eskualde
         one: Eskualde 1
         other: '%{count} eskualde'
       #original_hash: 1feee0e
@@ -2871,11 +2769,12 @@ eu:
         eskakizunetan hori zehaztea.
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: Ordutegia ezin da aldatu emaitzak bidali ondoren.
-      #original_hash: 1877b69
+      #original_hash: d1241c1
       spots_left:
-        zero: Lehiaketa beteta
         one: Toki bat libre
         other: '%{count} toki libre'
+      #original_hash: 7e21d77
+      no_spots_left: Lehiaketa beteta
     live:
       #original_hash: 10d1a3c
       title: Zuzenezko emaitzak
@@ -2949,11 +2848,11 @@ eu:
         #original_hash: 0ed766a
         add_to_batch: Sortara gehitu
         #original_hash: 1a2e4ff
-        remove_from_batch: Sortatik atera
+        remove_from_batch: Emaitza-sortatik atera
         #original_hash: 8b6d8cb
-        batch_mode: Sorta modua
+        batch_mode: Emaitza-sorta modua
         #original_hash: a577fa2
-        submit_batch: '(%{count}) Sorta bidali'
+        submit_batch: '(%{count}) emaitza-sorta bidali'
         warnings:
           #original_hash: 9198c71
           omitted: >-
@@ -2987,32 +2886,30 @@ eu:
             emaitzak ez dira baimenduko.
         quit:
           #original_hash: de62de1
-          title: Lehiakidea utzi
+          title: Lehiakidea utziarazi
           #original_hash: c25b336
           next_to_advance:
-            zero: Ez dago lehiakiderik aurreratzeko
             one: 'Aurreratuko den hurrengo lehiakidea %{competitors} da'
             other: 'Aurreratuko diren hurrengo lehiakideak %{competitors} dira'
           #original_hash: c87ca67
           advance: Hurrengo lehiakidea aurreratu
           #original_hash: aa59a26
           quit_confirm:
-            zero: Ez utzi lehiakiderik txandatik
             one: Txandatik lehiakidea utzi
             other: Txandatik lehiakideak utzi
           bulk:
             #original_hash: e0981de
-            success: '%{count} lehiakide utzi dira arrakastatsuki'
+            success: '%{count} lehiakide utziarazi dira arrakastatsuki'
             #original_hash: 98fe723
             failure: Ezin izan da lehiakide eskerga utzi
             #original_hash: 774050e
-            menu: Eskerga utzi
+            menu: Eskerga utziarazi
             #original_hash: 89f89c0
             id: IDa
             #original_hash: 709a232
             name: Izena
           #original_hash: 1a2285d
-          quit_menu: Utzi
+          quit_menu: utziarazi
           #original_hash: 70835a0
           no_next: Ez dago hurrengo lehiakiderik aurreratzeko.
           #original_hash: 77dfd21
@@ -3021,8 +2918,8 @@ eu:
           failed_to_fetch: Ezin izan da aurreratzeko hurrengo lehiakidea bilatu
           #original_hash: d4dcd86
           still_processing: >-
-            Ezin da "Lehiakidea utzi" ekintza gauzatu, emaitza batzuk oraindik
-            prozesatzen ari diren bitartean
+            Ezin da "Lehiakidea utziarazi" ekintza gauzatu, emaitza batzuk
+            oraindik prozesatzen ari diren bitartean
           #original_hash: ecb0dd4
           in_batch: >-
             Ezin duzu lehiakide bat utziarazi bere emaitzak bidali gabeko
@@ -3032,7 +2929,6 @@ eu:
           single_round: Txandara lehiakide bat gehitu
           #original_hash: bf3b670
           multiple_rounds:
-            zero: Lehiakidea zero txandatara gehitu.
             one: Lehiakidea txanda bikoitzera gehitu.
             other: >-
               Lehiakidea txandara gehitu, txanda bikoitzaren lehen txanda itxita
@@ -3123,14 +3019,12 @@ eu:
       display_name: '[Bertan bera utzita] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Antolatzaile
         one: Antolatzailea
         other: Antolatzaileak
       #original_hash: 53a9522
       organization_team: Antolakuntza taldea
       #original_hash: 6afa61e
       delegate:
-        zero: WCAko ordezkari
         one: WCAko ordezkaria
         other: WCAko ordezkariak
       #original_hash: b37456c
@@ -3229,12 +3123,10 @@ eu:
         restricted: Ikusleak lehiakideen lagun gisa etorri daiteke besterik.
       #original_hash: 35f892a
       guest_limit:
-        zero: Lehiakideek ezin dute lagunik ekarri.
         one: Lehiakideek lagun bakarra ekar dezakete.
         other: 'Lehiakideek %{count} lagun ekar ditzakete gehienez.'
       #original_hash: bad09c8
       event_limit:
-        zero: Lehiakideek ezin dute inolako probetarako izena eman.
         one: Lehiakideek proba bakarrerako izena eman dezakete.
         other: 'Lehiakideek %{count} probetarako izena eman dezakete.'
       #original_hash: 64e0ddd
@@ -3459,13 +3351,12 @@ eu:
         full: Beteta
         #original_hash: cf9b770
         open: Zabalik
-        #original_hash: 44bb7df
+        #original_hash: 9c46019
         not_open: Zabaldu gabe
         #original_hash: 88d86b7
         closed: Itxita
       #original_hash: 184f3ab
       currently_displaying:
-        zero: 'Une honetan %{count} lehiaketa erakusten'
         one: 'Une honetan lehiaketa %{count} erakusten'
         other: 'Une honetan %{count} lehiaketa erakusten'
       #original_hash: 74d8290
@@ -3476,6 +3367,14 @@ eu:
       no_more_comps: Ez dago lehiaketa gehiagorik
       #original_hash: 8b09d74
       no_comp_found: Ez da lehiaketarik aurkitu.
+      #original_hash: 9937970
+      why_compete_description_html: >-
+        <p>Lehiaketak ez dira bakarrik azkarrena nor den jakiteko,
+        sozializatzeko ekitaldiak dira! Kubo bat ebatz dezaken edonor etortzera
+        eta errekor pertsonal berri bat ezartzera animatzen dugu. Lagunak egitea
+        erraza da denok lan egiten dugulako lehiaketa ongi joan dadin.</p>
+        <p>Erabili azpiko tresna zugandik gertu dagoen lehiaketa bat bilatu eta
+        zure kuboetako ibilbidea hasteko!</p>
     my_competitions_table:
       #original_hash: 5301648
       edit: Editatu
@@ -3738,17 +3637,11 @@ eu:
             batera
       hints:
         admin:
-          #original_hash: da39a3e
-          is_confirmed: ''
-          #original_hash: da39a3e
-          is_visible: ''
           #original_hash: 68d3cc6
           uses_new_registration_system: >-
             Hau desaktibatzen bada, erregistrazio sistema aldatzeak arazo
             teknikoak sortuko ditu. Mesedez, jarri WSTrekin harremanetan
             laguntzarako oraindik erregistrazio sistema aldatu behar baduzu.
-        #original_hash: da39a3e
-        competition_id: ''
         #original_hash: 2c812a0
         name: >-
           Lehiaketaren izen osoa, urtea bukaeran jarriz (adibidez, Basauri Open
@@ -3766,8 +3659,6 @@ eu:
           href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCAko
           Lehiaketen Baldintza Politikarekin</a> bat egin behar du.
         venue:
-          #original_hash: da39a3e
-          country_id: ''
           #original_hash: bce4589
           city_name: >-
             Hiria eta estatuaren izena (aplikagarri bada) non lehiaketa
@@ -3782,20 +3673,7 @@ eu:
           details_html: >-
             Tokiari buruzko zehaztasunak (adibidez, lehenengo pisuko atzealdean,
             ikurrak jarraitu). %{md}
-          #original_hash: da39a3e
-          address: ''
-          coordinates:
-            #original_hash: da39a3e
-            lat: ''
-            #original_hash: da39a3e
-            long: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
         series:
-          #original_hash: da39a3e
-          series_id: ''
           #original_hash: 77811b5
           name: >-
             Lehiaketa seriearen izen osoa, urtea bukaeran jarriz (adibidez,
@@ -3868,21 +3746,14 @@ eu:
             Ordezkari Nagusia lehiaketa baten alde administratiboez arduratzen
             da (emaitzez, txostenez, kuoten fakturez)
         website:
-          #original_hash: da39a3e
-          generate_website: ''
           #original_hash: cabe7fb
           external_website: Lehiaketaren webgunea. Http(s) url baliozko bat izan behar du.
           #original_hash: b2af5f5
           external_registration_page: >-
             Lehiakideek lehiaketarako izena eman behar duten webgunea. Http(s)
             url baliozkoa izan behar du.
-          #original_hash: da39a3e
-          uses_wca_registration: ''
           #original_hash: 08df794
           scoretaking_software: 'Hautatu "%{choice_ilr}" txanda bikoitzak erabili nahi badituzu'
-        user_settings:
-          #original_hash: da39a3e
-          receive_registration_emails: ''
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Kuotentzako moneta kodea
@@ -3903,8 +3774,6 @@ eu:
             Oraingoz zenbaki hau informatiboa baino ez da, ikusle tarifak ezin
             dira webgune honen bidez kudeatu. Hau 0n ezartzen bada, zuk
             aukeratutako esaldi bat erakutsiko da ikusleen politikari buruz.
-          #original_hash: da39a3e
-          donations_enabled: ''
           #original_hash: 180b7b3
           refund_policy_percent: >-
             Izan ere, orain zenbaki hau informatiboa da. Itzulketak eskuz egin
@@ -3917,8 +3786,6 @@ eu:
         registration:
           #original_hash: 9965635
           opening_date_time: 'Oharra: izen ematea zabaldu eta ixten den datak UCT orduan daude.'
-          #original_hash: da39a3e
-          closing_date_time: ''
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Itxaron-zerrendako erregistratuak onartzeko epemuga. Itzulketarako
@@ -3933,16 +3800,6 @@ eu:
             ahal izango dutela esan nahi du, proba hori gauzatzen den arte.
             Unean bertako izena eman ahal bada epea lehiaketaren egun berean
             ezarri beharko duzu.
-          #original_hash: da39a3e
-          allow_on_the_spot: ''
-          #original_hash: da39a3e
-          competitor_can_cancel: ''
-          #original_hash: da39a3e
-          allow_self_edits: ''
-          #original_hash: da39a3e
-          guests_enabled: ''
-          #original_hash: da39a3e
-          guest_entry_status: ''
           #original_hash: 4b51faa
           guests_per_registration: >-
             Erregistro bakoitzeko baimendutako gonbidatu kopurua. Gonbidatu
@@ -3956,35 +3813,23 @@ eu:
             egiten duten beste edozein hizkuntzatan; hau lehiaketaren
             informazio-orrian agertuko da, baita izen-emate orrian ere, WCAko
             webguneko izen-ematea erabiltzen ari bazara.
-          #original_hash: da39a3e
-          force_comment: ''
         event_restrictions:
           forbid_newcomers:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d75332f
             reason: >-
               Mesedez, zehaztu hemen zergatik zure lehiaketan ez zenukeen nahi
               lehiakide berririk izena ematea. Mesedez, bete hau ingelesez!
           early_puzzle_submission:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: 4e8488b
             reason: >-
               Mesedez, zehaztu hemen zergatik eskatu nahi diezun lehiakideei
               puzzleak goiz aurkezteko. Mesedez, bete hau ingelesez!
           qualification_results:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: f859883
             reason: >-
               Zehaztu hemen zergatik erabili nahi dituzun sailkatze-denborak.
               Bete hau ingelesez mesedez!
-            #original_hash: da39a3e
-            allow_registration_without: ''
           event_limitation:
-            #original_hash: da39a3e
-            enabled: ''
             #original_hash: d3329d7
             reason: >-
               Zehaztu hemen zergatik murriztu nahi dituzun proba konbinazio
@@ -4003,9 +3848,6 @@ eu:
           WCATri pasatu nahi diozun informazio gehigarria. Adibidez, zerbaitez
           ziur ez bazaude edota WCATrentzako eskaera berezirik baduzu. Bete hau
           ingelesez mesedez!
-        cloning:
-          #original_hash: da39a3e
-          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -4122,11 +3964,12 @@ eu:
       list:
         #original_hash: 6eef664
         empty: Bat ere ez
-        #original_hash: 627422a
+        #original_hash: 579c1e2
         spots_remaining_plural:
-          zero: ez da tokirik gelditzen
-          one: '%{count} gelditzen da'
-          other: '%{count} gelditzen dira'
+          one: 'Toki %{count} gelditzen da'
+          other: '%{count} toki gelditzen dira'
+        #original_hash: 3483b37
+        no_spots_remaining: ez da tokirik gelditzen
         pending:
           #original_hash: 4210670
           title: Zain dauden erregistroak
@@ -4243,11 +4086,12 @@ eu:
         email_copy: E-mailak kopiatu
         #original_hash: b83b663
         email_message: Arbelera kopiatu da. Gogoratu bcc erabiltzeaz!
-        #original_hash: beedd53
+        #original_hash: 01f7c02
         move_to:
-          zero: 'Mugitu hona:'
-          one: 'Mugitu %{count} hona:'
-          other: 'Mugitu %{count} hona:'
+          one: '%{count} hona mugitu:'
+          other: '%{count} hona mugitu:'
+        #original_hash: 349f807
+        move_to_none_selected: 'Mugitu hona:'
         #original_hash: 96f608c
         pending: Zain
         #original_hash: 92d40dc
@@ -4345,7 +4189,6 @@ eu:
           %{max_events} kopuru handiena izanda.
         #original_hash: 1e4c43f
         waiting_list_count:
-          zero: 'Itxaron-zerrendan %{count} lehiakide daude.'
           one: 'Itxaron-zerrendan lehiakide %{count} dago.'
           other: 'Itxaron-zerrendan %{count} lehiakide daude.'
       errors:
@@ -4643,7 +4486,7 @@ eu:
       #original_hash: 3e1051e
       no_registration_start_date_yet: Lehiaketa honetarako erregistro hasiera data ez duzu jarri oraindik.
       #original_hash: c38824e
-      opens_registration_at: 'erregistroa data honetan zabalduko da:'
+      opens_registration_at: 'erregistro data honetan zabalduko da:'
     #original_hash: 06b01c4
     announcements: Iragarpenak
     #original_hash: a2b80b0
@@ -4792,7 +4635,6 @@ eu:
       room_in_venue: '%{room} %{venue} lekuan'
       #original_hash: f7fd979
       venue_selection_html:
-        zero: .
         one: >-
           %{venue_name} lekurako ordutegia ikusten ari zara, lehiaketako leku
           bakarra.
@@ -5117,8 +4959,6 @@ eu:
         paypal: >-
           PayPal kontua konektatzeak WCAri ordainketak zuri bideratzeko eta
           diru-itzulketak zeure PayPal kontuan jaulkitzeko ahalmena ematen dio.
-        #original_hash: da39a3e
-        manual: ''
       #original_hash: ef7e7f6
       currently_connected_info: >-
         Lehiaketa honetako ordainketak %{provider} hornitzailearen bidez
@@ -5242,7 +5082,7 @@ eu:
         benetazkoa desberdinak badira.
       #original_hash: 0ac13b9
       important_message_html: >-
-        <span class="text-danger">GARRANTZITSUA</span>: <u>dokumentu legal<u>
+        <span class="text-danger">GARRANTZITSUA</span>: <u>dokumentu legal</u>
         (nortadun agiri, gidabaimen, pasaporte...) baten argazkia erantsi, zure
         izena ETA jaiotza-data erakusten; gainontzeko data tapatu/lainotu
         dezakezu.
@@ -5269,7 +5109,7 @@ eu:
     title: Ohiko Galderak
     #original_hash: 3451241
     contact_html: >-
-      Erantzun hauetatik batek ere ez ez badizu zalantza argitu, %{contact_us}
+      Erantzun hauetatik batek ere ez badizu zalantza argitu, %{contact_us}
       faborez!
     #original_hash: 6cf2723
     contact_us: gurekin harremanetan jarri
@@ -5341,12 +5181,12 @@ eu:
             esperientziatik ikas dezazun.
           #original_hash: be305b8
           '2': >-
-            WCAko lehiaketek target='_blank'
+            WCAko lehiaketek <a target='_blank'
             href='https://www.worldcubeassociation.org/regulations/'>WCAko
-            erregulazioak</a> jarraitu behar dituzte. Antolaketa taldeak ez du
-            zertan erregulazio guztiak buruz jakin behar, baina, erregulazioen
-            funtsen ezagutza sakon bat izateak lehiaketa behar den bezala
-            antolatzen dexente lagunduko luke.
+            Araudia</a> jarraitu behar dute. Antolaketa taldeak ez ditu arau
+            guztiak buruz jakin beharrik, baina, araudiaren funtsezko ezagutza
+            sakon bat izateak lehiaketa behar den bezala antolatzen dexente
+            lagunduko luke.
           #original_hash: dbd72c2
           '3': >-
             Horren ondoren, antolatzaile taldeak gertuko <a target='_blank'
@@ -5387,7 +5227,7 @@ eu:
           '1': >-
             Lehendabizi, <a
             href='#how-do-i-connect-my-wca-account-with-my-wca-id'>WCAko kontu
-            bat sortu eta zure WCA IDra lotu</a> behar duzu.
+            bat sortu eta zure WCA IDra lotu behar duzu.</a>
           #original_hash: 56a8f26
           '2': >-
             Zure WCAko kontua WCA IDra lotu ondoren, zoaz <a
@@ -5453,9 +5293,9 @@ eu:
           '1': >-
             Puzzle magnetikoak erabili ditzakezu, <a target='_blank'
             href='https://www.worldcubeassociation.org/regulations/'>WCAko
-            erregulazioak</a> betetzen baditu. Mesedez erreparatu <a
+            araudia</a> betetzen badu. Mesedez erreparatu <a
             href='https://www.worldcubeassociation.org/regulations/#3h'>3h
-            erregulazioari</a> bereziki.
+            arauari</a> bereziki.
       regulations3:
         #original_hash: c7460a5
         title: Nire puzzlearen zentroko tapa bat galdu zait. Oraino erabil dezaket?
@@ -5473,10 +5313,10 @@ eu:
         content:
           #original_hash: 984704a
           '1': >-
-            Ez dago adin minimorik. Hala ere, aurrenik zure gurasoei galdetu
-            behar zenieke (zoaz see <a
+            Ez dago adin minimorik. Hala ere, izena eman aurrenik zure gurasoei
+            galdetu behar zenieke (zoaz <a
             href='https://www.worldcubeassociation.org/regulations/#2b'>2b
-            erregulazioa</a> ikustera).
+            araua</a> ikustera).
   about:
     #original_hash: 9ac918a
     title: WCAri inguruan
@@ -5535,10 +5375,10 @@ eu:
     world_championship_title: Munduko txapelketa
     #original_hash: 57cf7f7
     world_championship_content_html: >-
-      Bi urtetan behin munduko txapelduna zehazten duen lehiaketa bat baiesten
-      dugu. Ekintza hauek bolondres batzuen izugarriko plangintza arduratsua
-      eskatzen dute, baita laguntza finantzario handia lekua erreserbatu eta
-      beharrezko prestaketak egiteko.
+      <p>Bi urtetan behin munduko txapelduna zehazten duen lehiaketa bat
+      baiesten dugu. Ekintza hauek bolondres batzuen izugarriko plangintza
+      arduratsua eskatzen dute, baita laguntza finantzario handia lekua
+      erreserbatu eta beharrezko prestaketak egiteko.</p>
     #original_hash: 1aa5344
     contributing_title: Ale bat jarri
     #original_hash: 538a82f
@@ -5552,8 +5392,9 @@ eu:
     other_help_title: Laguntzeko beste moduak
     #original_hash: cb228f6
     other_help_content_html: >-
-      WCAri finantzetatik kanpo lagundu diezaiokezula uste baduzu, zure
-      proposamena(k) aditzea gustatuko litzaiguke! Jarri harremanetan gurekin <a
+      <p>World Cube Associationi finantzetatik kanpo lagundu diezaiokezula uste
+      baduzu, zure proposamena(k) aditzea gustatuko litzaiguke! Jarri
+      harremanetan gurekin <a
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>
       e-mailaren bidez.</p>
     donation_banner:
@@ -5605,7 +5446,7 @@ eu:
         entrenatzen ari dira eta beste Ordezkariren bat dagoen lehiaketa batean
         gainbegiratu dezake bakarrik.</p>
       #original_hash: 27d18ac
-      see_link_html: '(Zoaz %{link} estekara)'
+      see_link_html: ' (Zoaz %{link} estekara)'
       #original_hash: 5b01fcc
       members_html: >-
         Lehiakide guztiak WCAko <strong>kide</strong> bihurtzen dira
@@ -5735,7 +5576,7 @@ eu:
         href='/regional-organizations/new'>formulario hau</a> mesedez.
     regional_organization_form:
       #original_hash: 134df45
-      filling_instructions_html: Dena <b>ingelesez<b> bete faborez!
+      filling_instructions_html: 'Faborez, bete dena <b>ingelesez!</b>'
       #original_hash: fbd64df
       public_information: Informazio publikoa
       #original_hash: a1c6de9
@@ -5788,7 +5629,7 @@ eu:
       title: Lehiaketa aurrera doan heinean
       #original_hash: 2b0a6f6
       desc: >-
-        Hemen lehiaketa aurrera doan bitartean emaitzak  kudeatzeko tresnak
+        Hemen lehiaketa aurrera doan bitartean emaitzak kudeatzeko tresnak
         topatuko dituzu.
     after:
       #original_hash: d81b949
@@ -5907,7 +5748,7 @@ eu:
             #original_hash: c5c5533
             title: Mono
             #original_hash: 612044c
-            paragraph: Mono aldaera aldaera nagusia aproposa ez denean soilik erabili.
+            paragraph: Aldaera nagusia aproposa ez denean soilik erabili mono aldaera.
         logo_only:
           #original_hash: 9271574
           title: Logoa bakarrik
@@ -5920,8 +5761,8 @@ eu:
         title: Logoaren abantailak deskargatu
         #original_hash: 9aa098d
         paragraph: >-
-          WCAko logoaren bereizmen handiko PNGak eta eta bektore bertsioak
-          deskarga daitezke.
+          WCAko logoaren bereizmen handiko PNGak eta bektore bertsioak deskarga
+          daitezke.
         #original_hash: 9de7d59
         accept_terms_and_conditions: >-
           <a
@@ -6484,6 +6325,10 @@ eu:
       automatically_position_fixed_info: >-
         [%{round_id}] %{person_name}(e)n posizioa %{pos}. postutik
         %{expected_pos}. postura zuzendu da automatikoki.
+      #original_hash: fae77ce
+      automatically_global_position_fixed_info: >-
+        [%{round_id}] %{person_name}-(r)en postu orokorra automatikoki konpondu
+        da %{pos}. postutik %{expected_pos}. postura.
       #original_hash: e895bf5
       mbf_result_over_time_limit_warning: >-
         [%{round_id}] %{person_name}(r)entzako "%{result}" emaitza denbora-muga
@@ -6547,6 +6392,10 @@ eu:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} posizio desegokian dago:
         %{expected_pos}.(e)an behar luke izan, baina %{pos}.(e)an dago.
+      #original_hash: 678c05b
+      wrong_global_position_in_results_error: >-
+        [%{round_id}] %{person_name} postu orokor okerrean dago: %{expected_pos}
+        espero zen, baina %{pos} dago.
     rounds:
       #original_hash: 517fd54
       too_many_qualified_warning: >-

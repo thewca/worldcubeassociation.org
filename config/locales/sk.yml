@@ -133,19 +133,16 @@ sk:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '-'
       one: '%{count} pokus na dostanie < %{time}'
       few: '-'
       other: '%{count} pokusov na dostanie < %{time}'
     #original_hash: b49d930
     moves:
-      zero: '-'
       one: '%{count} pokus na dostanie < %{moves} ťahov'
       few: '-'
       other: '%{count} pokusov na dostanie < %{moves} ťahov'
     #original_hash: eba1b97
     points:
-      zero: '-'
       one: '%{count} pokus na dostanie > %{points} bodov'
       few: '-'
       other: '%{count} pokusov na dostanie > %{points} bodov'
@@ -187,13 +184,11 @@ sk:
       invalid: neplatný
     #original_hash: 49d0140
     days:
-      zero: '-'
       one: Jeden deň
       few: '-'
       other: '%{count} dní'
     #original_hash: 203e1b3
     these_events:
-      zero: '-'
       one: tento event
       few: '-'
       other: 'tieto %{count} eventy'
@@ -504,8 +499,6 @@ sk:
       text: potrebné
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Prosím, pozrite si problémy uvedené nižšie:'
@@ -525,12 +518,6 @@ sk:
         public_summary: >-
           Celkový popis incidentu a jeho rozhodnutia, bude videný verejne.
           Prosím, vyplňte toto v angličtine.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 87e1e6f
         dob: Napíšte váš dátum narodenia vo formáte YYYY-MM-DD
@@ -543,38 +530,6 @@ sk:
         pending_avatar: >-
           Po tom, ako nahráte svojho nového Avatara, budete musieť počkať,
           pokiaľ ho Výsledkový Tím WCA schváli.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        current_password: ''
-        #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        region: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        location_description: ''
-        #original_hash: da39a3e
-        phone_number: ''
-        #original_hash: da39a3e
-        notes: ''
       competition:
         #original_hash: 2c812a0
         name: >-
@@ -605,14 +560,6 @@ sk:
         external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
         #original_hash: 9965635
         registration_open: 'Poznámka: Otvorenie a zatvorenie súťaže sú v čase UTC.'
-        #original_hash: da39a3e
-        clone_tabs: ''
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        end_date: ''
-        #original_hash: da39a3e
-        generate_website: ''
         #original_hash: 950a7ea
         base_entry_fee_lowest_denomination: >-
           Základný vstupný poplatok pre súťaž. Vstupný poplatok bude ukázaný na
@@ -620,24 +567,6 @@ sk:
           použitá).
         #original_hash: 866bc05
         currency_code: Kód meny pre vstupné poplatky.
-        #original_hash: da39a3e
-        guests_enabled: ''
-        #original_hash: da39a3e
-        enable_donations: ''
-        #original_hash: da39a3e
-        id: ''
-        #original_hash: da39a3e
-        isConfirmed: ''
-        #original_hash: da39a3e
-        receive_registration_emails: ''
-        #original_hash: da39a3e
-        registration_close: ''
-        #original_hash: da39a3e
-        show_at_all: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        use_wca_registration: ''
         #original_hash: c0ab502
         competitor_limit_enabled: >-
           Pre teraz je toto číslo iba pre informačné použitie a nepreventuje
@@ -649,24 +578,8 @@ sk:
         competitor_limit_reason: >-
           Aký je dôvod na takýto limit súťažiacich? Vyplňte toto prosím v
           angličtine.
-        #original_hash: da39a3e
-        venue_address: ''
-        #original_hash: da39a3e
-        championship_type: ''
       website_contact:
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Váš správny deň narodenia vo formáte YYYY-MM-DD
         #original_hash: c6d8a97
@@ -683,12 +596,6 @@ sk:
           Použite &lt;!-- break --&gt; aby ste ukázali ukážku domácej stránky.
           Hocijaký post na domovskej stránke ukáže celý text pred deličom.
           Skutočný príspevok ukáže celý text.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Pozor! Toto nie je bezpečné pre súkromné dáta. Toto je iba na
@@ -732,65 +639,14 @@ sk:
           zlepšenie/zhoršenie v komunite, budúce plány pre tento región). Ak ste
           kvôli stručnosti niečo vynechali v predošlých sekciách, nebojte sa ich
           napísať sem.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Príklady:Cestovanie, Platenie, Ceny, Ubytovanie'
-        #original_hash: da39a3e
-        content: ''
       person:
         #original_hash: 498f4c5
         dob: Dátum narodenia by mal mať formát YYYY-MM-DD.
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
       team:
-        #original_hash: da39a3e
-        friendly_id: ''
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
     options:
       registration:
         status:
@@ -852,7 +708,6 @@ sk:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: Nula
           one: 'Forma obsahuje jednu chybu:'
           few: Niekoľko
           other: 'Forma obsahuje %{count} chýb'
@@ -1196,19 +1051,16 @@ sk:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: '-'
         one: začiatočník
         few: '-'
         other: začiatočníci
       #original_hash: bc010e3
       returner:
-        zero: '-'
         one: returner
         few: '-'
         other: returneri
       #original_hash: b7da17a
       person:
-        zero: '-'
         one: osoba
         few: '-'
         other: osoby
@@ -1217,19 +1069,16 @@ sk:
       not_using_wca: Táto súťaž nepoužíva prihlasovanie WCA
       #original_hash: d528030
       accepted_and_mailed:
-        zero: '-'
         one: Registrácia bola akceptovaná! Poslali sme emailovú notifikáciu.
         few: '-'
         other: Registrácie boli akceptované! Poslali sme emailové notifikácie.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: '-'
         one: Registrácia bola posunutá do čakacieho listu.
         few: '-'
         other: Registrácie boli posunuté do čakacieho listu.
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: '-'
         one: Registrácia bola vymazaná
         few: '-'
         other: Registrácie boli vymazané
@@ -1309,7 +1158,6 @@ sk:
       edit: Pozmeniť
       #original_hash: 0ab725c
       country_plural:
-        zero: '-'
         one: 1 krajina
         few: '-'
         other: '%{count} krajín'
@@ -1517,13 +1365,11 @@ sk:
       website: Webová stránka
       #original_hash: 680567f
       organizer_plural:
-        zero: Organizátor
         one: Organizátor
         few: Organizátori
         other: Organizátori
       #original_hash: 6afa61e
       delegate:
-        zero: WCA delegát
         one: WCA delegát
         few: WCA delegáti
         other: WCA delegáti
@@ -1763,8 +1609,6 @@ sk:
       hints:
         admin:
           is_confirmed:
-          is_visible: ''
-        competition_id: ''
         name: Celé meno súťaže aj s rokom na konci(napr. Danish Open 2016).Dávajte
           si pozor, aby meno bolo kapitalizované. Meno musí obsahovať iba alfanumerické
           znaky, pomlčky(-), ampersandy(&), bodky(.), dvojbodky(:), apostrofy(') a
@@ -1773,17 +1617,13 @@ sk:
           krátke, môžete ho znovu použiť(napr. Europe 2006).
         name_reason_html:
         venue:
-          country_id: ''
           city_name: Meno mesta a štátu(ak je), kde sa súťaž bude nachádzať. Nepíšte
             krajinu(napr. Paris ALEBO San Francisco, Kalifornia)
           name_html: 'Miesto, kde sa daná súťaž bude konať. %{md}. Napríklad: [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
           details_html: Detaily o mieste (napr. On the first floor far in the back,
             follow the signs). %{md}
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         information: Informácie o limite súťažiacich, vstupných poplatkoch pre súťažiacich
           a divákov a iné detaily relevantné pre ľudí, ktorí maju záujem v zúčastnení
           sa súťaže.
@@ -1801,15 +1641,10 @@ sk:
             organizátormi)
           contact_html: 'Voliteľné informácie o kontakte. Ak toto nevyplníte, emaily
             organizátorov budú publikované verejnosti. %{md}. Príklad: [Text na ukážku](mailto:some@email.com)'
-        championships: ''
         website:
-          generate_website: ''
           external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
           external_registration_page:
-          uses_wca_registration: ''
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: Kód meny pre vstupné poplatky.
           base_entry_fee: Základný vstupný poplatok pre súťaž. Vstupný poplatok bude
@@ -1817,18 +1652,15 @@ sk:
             je použitá).
           on_the_spot_entry_fee:
           guest_entry_fee:
-          donations_enabled: ''
           refund_policy_percent:
           refund_policy_limit_date:
         registration:
           opening_date_time: 'Poznámka: Otvorenie a zatvorenie súťaže sú v čase UTC.'
-          closing_date_time: ''
           waiting_list_deadline_date:
           event_change_deadline_date:
           allow_on_the_spot:
           allow_self_delete_after_acceptance:
           allow_self_edits:
-          guests_enabled: ''
           guest_entry_status:
           guests_per_registration:
           extra_requirements:
@@ -1847,7 +1679,6 @@ sk:
             per_registration_limit:
           main_event_id:
         remarks:
-        clone_tabs: ''
       choices:
         competitor_limit:
           enabled:
@@ -1924,7 +1755,6 @@ sk:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Žiadne súťaže
         one: 1 súťaž
         few: '-'
         other: '%{count} súťaží'
