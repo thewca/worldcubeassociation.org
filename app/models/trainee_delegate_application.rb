@@ -59,15 +59,7 @@ class TraineeDelegateApplication
     ].compact
   end
 
-  def applicant_age
-    return if applicant.dob.blank?
-
-    today = Date.current
-    years_since_birth_year = today.year - applicant.dob.year
-    had_birthday_this_year = today >= applicant.dob + years_since_birth_year.years
-
-    had_birthday_this_year ? years_since_birth_year : years_since_birth_year - 1
-  end
+  delegate :age, to: :applicant, prefix: true
 
   def competition_count
     # Applicants without a WCA ID have never competed.
