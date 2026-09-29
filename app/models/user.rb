@@ -988,7 +988,7 @@ class User < ApplicationRecord
   end
 
   def can_create_poll?
-    admin? || board_member? || higher_permission_officer? || wrc_team? || wic_team? || quality_assurance_committee? || appeals_committee?
+    admin? || board_member? || higher_permission_officer? || wrc_team? || wic_team? || quality_assurance_committee?
   end
 
   def can_vote_in_poll?
