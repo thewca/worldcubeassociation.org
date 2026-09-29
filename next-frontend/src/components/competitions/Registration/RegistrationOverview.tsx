@@ -133,6 +133,7 @@ export default function RegistrationOverview({
                 registration={registration}
                 userId={userId}
                 onNext={stopEditing}
+                leadsToOverview
                 onClose={stopEditing}
               />
             ) : (

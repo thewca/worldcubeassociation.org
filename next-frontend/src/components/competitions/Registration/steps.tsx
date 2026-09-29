@@ -16,12 +16,20 @@ type StepConfig = components["schemas"]["RegistrationConfig"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
-function NextStepButton({ onNext }: { onNext: () => void }) {
+function NextStepButton({
+  onNext,
+  leadsToOverview,
+}: {
+  onNext: () => void;
+  leadsToOverview: boolean;
+}) {
   const { t } = useT();
 
   return (
     <Button width="full" colorPalette="blue" onClick={onNext}>
-      {t("competitions.registration_v2.requirements.next_step")}
+      {leadsToOverview
+        ? t("competitions.registration_v2.register.view_registration")
+        : t("competitions.registration_v2.requirements.next_step")}
     </Button>
   );
 }
@@ -36,6 +44,7 @@ export function StepContent({
   registration,
   userId,
   onNext,
+  leadsToOverview,
   onClose,
 }: {
   step: StepConfig;
@@ -43,6 +52,7 @@ export function StepContent({
   registration: Registration | null;
   userId: number;
   onNext: () => void;
+  leadsToOverview: boolean;
   // Only set when the step is opened from the overview, which is the one place the competitor can
   //   leave it again without finishing it.
   onClose?: () => void;
@@ -69,14 +79,14 @@ export function StepContent({
             registration={registration}
             deadline={step.deadline}
           />
-          <NextStepButton onNext={onNext} />
+          <NextStepButton onNext={onNext} leadsToOverview={leadsToOverview} />
         </Stack>
       );
     case "approval":
       return (
         <Stack>
           {registration && <RegistrationStatus registration={registration} />}
-          <NextStepButton onNext={onNext} />
+          <NextStepButton onNext={onNext} leadsToOverview={leadsToOverview} />
         </Stack>
       );
   }

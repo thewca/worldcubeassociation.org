@@ -96,6 +96,7 @@ export default function StepPanel({
                   registration={registration}
                   userId={userId}
                   onNext={goToNextStep}
+                  leadsToOverview={index === steps.length - 1}
                 />
               </Steps.Content>
             ),
