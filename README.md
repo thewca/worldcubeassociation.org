@@ -25,6 +25,18 @@ Our code is open-source, and you are free to submit changes without being part o
 
 If you would like to join WST, we currently have open positions on the volunteer team - please feel free to [submit an application](https://docs.google.com/document/d/1_uZzs4r8Rvjvvd9z9-IzxHqnXcpC7FKuUvKJaqVs8DY/edit?tab=t.0#heading=h.e9pxlxygjaql)!
 
+## LLM policy
+
+All repositories and code managed by WST follow a few simple rules of thumb when it comes to AI and the usage of LLMs for contributions:
+
+- You are free and welcome to use LLMs to explore, analyze, answer questions you have about our code, check ideas or suggest improvements.
+- When using LLMs to **create code**, you (the human) still carry full responsibility for the submission you're making. Specifically:
+    1. You fully understand **every single line** of changes in your PR.
+    2. You are fully confident that the solution proposed by the AI/LLM is viable. It does not violate best practices, does not hijack undocumented private methods, and it runs smooth and fast.
+    3. You are ready to debate and explain any part or aspect of your code, your design and justify the choices that were made to solve your problem/improve your feature/address the issue.
+- Usage of LLMs for actively created code must be disclosed in corresponding PRs. Passive usage, for example understanding the existing code before writing new code by hand, does not need to be disclosed.
+- WST reserves the right for this and any other repository to immediately close without discussion any PR which is under strong suspicion of not following the guidelines laid out above. This includes cases where you prompt an LLM very specifically to "cover up" the fact that you used an LLM.
+
 ## Common Queries
 - [Overview of the WCA's software ecosystem](https://docs.worldcubeassociation.org/)
 - [Running the website locally](https://docs.worldcubeassociation.org/contributing/quickstart)
