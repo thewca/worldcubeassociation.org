@@ -54,13 +54,6 @@ locals {
       value = "TTNormsPro"
     },
     {
-      # Next is served from its own subdomain here, so the colour mode cookie
-      # has to be set on the parent domain for the Rails sign in pages to see it.
-      # TODO: Drop this when we launch
-      name  = "THEME_COOKIE_DOMAIN"
-      value = ".worldcubeassociation.org"
-    },
-    {
       name = "BETTER_AUTH_URL"
       value = "https://${var.shared.next_url}"
     },

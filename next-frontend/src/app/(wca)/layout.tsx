@@ -44,7 +44,9 @@ export default async function RootLayout({
         <ThemeProvider
           attribute="class"
           storage="hybrid"
-          cookieOptions={{ domain: process.env.THEME_COOKIE_DOMAIN }}
+          cookieOptions={{
+            domain: process.env.NEXT_PUBLIC_THEME_COOKIE_DOMAIN,
+          }}
           disableTransitionOnChange
         >
           <WCAQueryClientProvider>
