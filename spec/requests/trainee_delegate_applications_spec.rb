@@ -69,7 +69,7 @@ RSpec.describe "Trainee Delegate applications" do
       post trainee_delegate_application_path, params: { trainee_delegate_application: valid_application }, as: :json
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body["errors"]).to include("Applicants must be at least 17 years old.")
+      expect(response.parsed_body["base"]).to include("Applicants must be at least 17 years old.")
     end
 
     it "rejects a recommender from another region" do

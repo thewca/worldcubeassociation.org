@@ -24,7 +24,7 @@ class TraineeDelegateApplicationsController < ApplicationController
   def create
     application = TraineeDelegateApplication.new(**trainee_delegate_application_params, applicant: current_user)
 
-    return render json: { errors: application.errors.full_messages }, status: :unprocessable_content if application.invalid?
+    return render json: application.errors, status: :unprocessable_content if application.invalid?
 
     TraineeDelegateApplicationsMailer.new_application(current_user, application.attributes).deliver_later
     render json: { message: I18n.t("trainee_delegate_application.success") }

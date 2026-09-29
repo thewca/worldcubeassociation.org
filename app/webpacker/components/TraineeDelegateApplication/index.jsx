@@ -13,6 +13,16 @@ import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import { regulationsUrl } from '../../lib/requests/routes.js.erb';
+import { useInputUpdater } from '../../lib/hooks/useInputState';
+import { useCheckboxUpdater } from '../../lib/hooks/useCheckboxState';
+import FormObjectProvider, {
+  useFormContext,
+  useFormErrorHandler,
+  useFormObject,
+  useFormObjectState,
+  useFormUpdateAction,
+} from '../wca/FormBuilder/provider/FormObjectProvider';
+import FormErrors from '../wca/FormBuilder/FormErrors';
 import EligibilityMessage from './EligibilityMessage';
 import submitTraineeDelegateApplication from './api/submitTraineeDelegateApplication';
 
@@ -24,6 +34,8 @@ const DECLARATIONS = [
   'proficient_in_english',
   'read_regulations',
 ];
+
+const DECLARATIONS_SECTION = ['declarations'];
 
 const REQUIRED_ANSWERS = [
   'introduction',
@@ -46,23 +58,112 @@ const EMPTY_APPLICATION = {
   declarations: Object.fromEntries(DECLARATIONS.map((declaration) => [declaration, false])),
 };
 
-export default function TraineeDelegateApplication({
+function DeclarationCheckbox({ declaration, label }) {
+  const [isAcknowledged, setIsAcknowledgedRaw] = useFormObjectState(
+    declaration,
+    DECLARATIONS_SECTION,
+  );
+  const setIsAcknowledged = useCheckboxUpdater(setIsAcknowledgedRaw);
+
+  return (
+    <Form.Checkbox
+      required
+      id={declaration}
+      checked={isAcknowledged}
+      label={label}
+      onChange={setIsAcknowledged}
+    />
+  );
+}
+
+function AnswerTextArea({ answer, label, required = false }) {
+  const [value, setValueRaw] = useFormObjectState(answer);
+  const setValue = useInputUpdater(setValueRaw);
+
+  return (
+    <Form.TextArea
+      required={required}
+      id={answer}
+      name={answer}
+      label={label}
+      value={value}
+      onChange={setValue}
+    />
+  );
+}
+
+function DelegateDropdown({
+  field,
+  label,
+  options,
+  disabled,
+}) {
+  const [delegateIds, setDelegateIdsRaw] = useFormObjectState(field);
+  const setDelegateIds = useInputUpdater(setDelegateIdsRaw);
+
+  return (
+    <Form.Dropdown
+      required
+      fluid
+      multiple
+      selection
+      search
+      disabled={disabled}
+      name={field}
+      label={label}
+      placeholder={I18n.t('trainee_delegate_application.form.delegates_placeholder')}
+      value={delegateIds}
+      options={options}
+      onChange={setDelegateIds}
+    />
+  );
+}
+
+export default function Wrapper({
   applicant,
   eligibilityIssues,
   minimumAge,
   delegateRegions,
   volunteerRoleHistory,
 }) {
-  const [application, setApplication] = useState(EMPTY_APPLICATION);
+  return (
+    <FormObjectProvider initialObject={EMPTY_APPLICATION}>
+      <TraineeDelegateApplication
+        applicant={applicant}
+        eligibilityIssues={eligibilityIssues}
+        minimumAge={minimumAge}
+        delegateRegions={delegateRegions}
+        volunteerRoleHistory={volunteerRoleHistory}
+      />
+    </FormObjectProvider>
+  );
+}
+
+function TraineeDelegateApplication({
+  applicant,
+  eligibilityIssues,
+  minimumAge,
+  delegateRegions,
+  volunteerRoleHistory,
+}) {
+  const application = useFormObject();
+  const updateFormValue = useFormUpdateAction();
+  const { errors } = useFormContext();
+  const onError = useFormErrorHandler();
+
+  // Not submitted: the top-level region only narrows down the subregion choice.
   const [rootRegionId, setRootRegionId] = useState(null);
+
+  const [isInvolvedInBusiness, setIsInvolvedInBusinessRaw] = useFormObjectState(
+    'cubing_business_involvement',
+  );
+  const setIsInvolvedInBusiness = useInputUpdater(setIsInvolvedInBusinessRaw);
 
   const {
     mutate: submitApplication,
     isPending,
     isSuccess,
-    isError,
-    error,
-  } = useMutation({ mutationFn: submitTraineeDelegateApplication });
+  } = useMutation({ mutationFn: submitTraineeDelegateApplication, onError });
 
   const rootRegionOptions = useMemo(
     () => _.uniqBy(delegateRegions, 'root_id').map((region) => ({
@@ -111,37 +212,21 @@ export default function TraineeDelegateApplication({
     && (!application.cubing_business_involvement
       || application.cubing_business_involvement_details.trim());
 
-  const updateField = useCallback((_event, { name, value }) => {
-    setApplication((current) => ({ ...current, [name]: value }));
-  }, []);
-
-  const updateDeclaration = useCallback((_event, { name, checked }) => {
-    setApplication((current) => ({
-      ...current,
-      declarations: { ...current.declarations, [name]: checked },
-    }));
-  }, []);
+  // The selected Delegates belong to the previous region, so they have to be picked again.
+  const selectRegion = useCallback((regionId) => {
+    updateFormValue('delegate_region_id', regionId);
+    updateFormValue('spoken_to_delegate_user_ids', []);
+    updateFormValue('recommender_user_ids', []);
+  }, [updateFormValue]);
 
   const updateRootRegion = useCallback((_event, { value }) => {
     setRootRegionId(value);
     // A top-level region without subregions is directly the region the applicant lives in.
     const isLeafRegion = delegateRegions.some((region) => region.id === value);
-    setApplication((current) => ({
-      ...current,
-      delegate_region_id: isLeafRegion ? value : null,
-      spoken_to_delegate_user_ids: [],
-      recommender_user_ids: [],
-    }));
-  }, [delegateRegions]);
+    selectRegion(isLeafRegion ? value : null);
+  }, [delegateRegions, selectRegion]);
 
-  const updateSubregion = useCallback((_event, { value }) => {
-    setApplication((current) => ({
-      ...current,
-      delegate_region_id: value,
-      spoken_to_delegate_user_ids: [],
-      recommender_user_ids: [],
-    }));
-  }, []);
+  const updateSubregion = useCallback((_event, { value }) => selectRegion(value), [selectRegion]);
 
   const submit = useCallback(
     () => submitApplication(application),
@@ -205,31 +290,19 @@ export default function TraineeDelegateApplication({
         </List>
       </Segment>
 
-      {isError && (
-        // Failures outside our own validation (e.g. network errors) have no `errors` list.
-        <Message negative list={error.json?.errors ?? [error.message]} />
-      )}
+      <FormErrors errors={errors} />
 
       <Form onSubmit={submit} loading={isPending}>
-        <Form.Checkbox
-          required
-          name="understands_application"
-          checked={application.declarations.understands_application}
+        <DeclarationCheckbox
+          declaration="understands_application"
           label={I18n.t('trainee_delegate_application.form.declaration_understands_application')}
-          onChange={updateDeclaration}
         />
-        <Form.Checkbox
-          required
-          name="proficient_in_english"
-          checked={application.declarations.proficient_in_english}
+        <DeclarationCheckbox
+          declaration="proficient_in_english"
           label={I18n.t('trainee_delegate_application.form.declaration_proficient_in_english')}
-          onChange={updateDeclaration}
         />
-        <Form.Checkbox
-          required
-          id="read_regulations"
-          name="read_regulations"
-          checked={application.declarations.read_regulations}
+        <DeclarationCheckbox
+          declaration="read_regulations"
           label={{
             children: (
               <I18nHTMLTranslate
@@ -238,7 +311,6 @@ export default function TraineeDelegateApplication({
               />
             ),
           }}
-          onChange={updateDeclaration}
         />
         <p>{I18n.t('trainee_delegate_application.form.regulations_note')}</p>
 
@@ -278,56 +350,33 @@ export default function TraineeDelegateApplication({
             {selectedRegion.reviewer_name}
           </Message>
         )}
-        <Form.Dropdown
-          required
-          fluid
-          multiple
-          selection
-          search
-          disabled={!selectedRegion}
-          name="spoken_to_delegate_user_ids"
+        <DelegateDropdown
+          field="spoken_to_delegate_user_ids"
           label={I18n.t('trainee_delegate_application.form.spoken_delegates')}
-          placeholder={I18n.t('trainee_delegate_application.form.delegates_placeholder')}
-          value={application.spoken_to_delegate_user_ids}
           options={delegateOptions}
-          onChange={updateField}
+          disabled={!selectedRegion}
         />
-        <Form.Checkbox
-          required
-          name="has_delegate_support"
-          checked={application.declarations.has_delegate_support}
+        <DeclarationCheckbox
+          declaration="has_delegate_support"
           label={I18n.t('trainee_delegate_application.form.declaration_has_delegate_support')}
-          onChange={updateDeclaration}
         />
-        <Form.Dropdown
-          required
-          fluid
-          multiple
-          selection
-          search
-          disabled={!selectedRegion || !application.declarations.has_delegate_support}
-          name="recommender_user_ids"
+        <DelegateDropdown
+          field="recommender_user_ids"
           label={I18n.t('trainee_delegate_application.form.recommenders')}
-          placeholder={I18n.t('trainee_delegate_application.form.delegates_placeholder')}
-          value={application.recommender_user_ids}
           options={delegateOptions}
-          onChange={updateField}
+          disabled={!selectedRegion || !application.declarations.has_delegate_support}
         />
 
         <Header as="h2">{I18n.t('trainee_delegate_application.form.experience_and_motivation')}</Header>
-        <Form.TextArea
+        <AnswerTextArea
           required
-          name="introduction"
+          answer="introduction"
           label={I18n.t('trainee_delegate_application.form.introduction')}
-          value={application.introduction}
-          onChange={updateField}
         />
-        <Form.TextArea
+        <AnswerTextArea
           required
-          name="competition_contributions"
+          answer="competition_contributions"
           label={I18n.t('trainee_delegate_application.form.competition_contributions')}
-          value={application.competition_contributions}
-          onChange={updateField}
         />
 
         <Form.Field>
@@ -352,27 +401,18 @@ export default function TraineeDelegateApplication({
               </List>
             </Segment>
           )}
-          <Form.TextArea
-            id="volunteer_history"
-            name="volunteer_history"
-            value={application.volunteer_history}
-            onChange={updateField}
-          />
+          <AnswerTextArea answer="volunteer_history" />
         </Form.Field>
 
-        <Form.TextArea
+        <AnswerTextArea
           required
-          name="motivation"
+          answer="motivation"
           label={I18n.t('trainee_delegate_application.form.motivation')}
-          value={application.motivation}
-          onChange={updateField}
         />
-        <Form.TextArea
+        <AnswerTextArea
           required
-          name="relevant_skills"
+          answer="relevant_skills"
           label={I18n.t('trainee_delegate_application.form.relevant_skills')}
-          value={application.relevant_skills}
-          onChange={updateField}
         />
 
         <Form.Field required>
@@ -384,27 +424,25 @@ export default function TraineeDelegateApplication({
               id="cubing_business_involvement_yes"
               name="cubing_business_involvement"
               value
-              checked={application.cubing_business_involvement === true}
+              checked={isInvolvedInBusiness === true}
               label={I18n.t('trainee_delegate_application.form.yes')}
-              onChange={updateField}
+              onChange={setIsInvolvedInBusiness}
             />
             <Form.Radio
               id="cubing_business_involvement_no"
               name="cubing_business_involvement"
               value={false}
-              checked={application.cubing_business_involvement === false}
+              checked={isInvolvedInBusiness === false}
               label={I18n.t('trainee_delegate_application.form.no')}
-              onChange={updateField}
+              onChange={setIsInvolvedInBusiness}
             />
           </Form.Group>
         </Form.Field>
-        {application.cubing_business_involvement && (
-          <Form.TextArea
+        {isInvolvedInBusiness && (
+          <AnswerTextArea
             required
-            name="cubing_business_involvement_details"
+            answer="cubing_business_involvement_details"
             label={I18n.t('trainee_delegate_application.form.cubing_business_involvement_details')}
-            value={application.cubing_business_involvement_details}
-            onChange={updateField}
           />
         )}
 

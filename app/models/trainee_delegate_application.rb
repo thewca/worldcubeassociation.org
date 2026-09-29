@@ -175,39 +175,39 @@ class TraineeDelegateApplication
 
   private def validate_delegate_region
     if delegate_region.blank?
-      errors.add(:base, I18n.t("trainee_delegate_application.errors.invalid_region"))
+      errors.add(:delegate_region_id, I18n.t("trainee_delegate_application.errors.invalid_region"))
     elsif reviewer.blank?
-      errors.add(:base, I18n.t("trainee_delegate_application.errors.missing_reviewer"))
+      errors.add(:delegate_region_id, I18n.t("trainee_delegate_application.errors.missing_reviewer"))
     end
   end
 
   private def validate_spoken_to_delegates
     if spoken_to_delegate_user_ids.empty?
-      errors.add(:base, I18n.t("trainee_delegate_application.errors.spoken_delegate_required"))
+      errors.add(:spoken_to_delegate_user_ids, I18n.t("trainee_delegate_application.errors.spoken_delegate_required"))
     elsif (spoken_to_delegate_user_ids - junior_and_full_delegates.map(&:id)).any?
-      errors.add(:base, I18n.t("trainee_delegate_application.errors.invalid_spoken_delegate"))
+      errors.add(:spoken_to_delegate_user_ids, I18n.t("trainee_delegate_application.errors.invalid_spoken_delegate"))
     end
   end
 
   private def validate_recommenders
     if recommender_user_ids.empty?
-      errors.add(:base, I18n.t("trainee_delegate_application.errors.recommender_required"))
+      errors.add(:recommender_user_ids, I18n.t("trainee_delegate_application.errors.recommender_required"))
     elsif (recommender_user_ids - junior_and_full_delegates.map(&:id)).any?
-      errors.add(:base, I18n.t("trainee_delegate_application.errors.invalid_recommender"))
+      errors.add(:recommender_user_ids, I18n.t("trainee_delegate_application.errors.invalid_recommender"))
     end
   end
 
   private def validate_declarations
     return if declarations.values_at(*DECLARATIONS).all?(true)
 
-    errors.add(:base, I18n.t("trainee_delegate_application.errors.declarations_required"))
+    errors.add(:declarations, I18n.t("trainee_delegate_application.errors.declarations_required"))
   end
 
   private def validate_cubing_business_involvement
     if cubing_business_involvement.nil?
-      errors.add(:base, I18n.t("trainee_delegate_application.errors.business_involvement_required"))
+      errors.add(:cubing_business_involvement, I18n.t("trainee_delegate_application.errors.business_involvement_required"))
     elsif cubing_business_involvement && cubing_business_involvement_details.blank?
-      errors.add(:base, I18n.t("trainee_delegate_application.errors.business_involvement_explanation_required"))
+      errors.add(:cubing_business_involvement_details, I18n.t("trainee_delegate_application.errors.business_involvement_explanation_required"))
     end
   end
 end
