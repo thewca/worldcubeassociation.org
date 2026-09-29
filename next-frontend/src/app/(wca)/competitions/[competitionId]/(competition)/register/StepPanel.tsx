@@ -38,12 +38,6 @@ export default function StepPanel({
 }) {
   const { t } = useT();
 
-  // Which steps there are, and in which order, is the server's business - but what this lane is
-  //   for is registering, so the competing step is the one thing it is built around.
-  const competingParameters = steps.find(
-    (step) => step.key === "competing",
-  )!.parameters;
-
   const api = useAPI();
   const queryClient = useQueryClient();
 
@@ -90,6 +84,7 @@ export default function StepPanel({
         body: {
           user_id: userId,
           guests,
+          // This still sends only the competing lane by default
           competing: { event_ids: eventIds, comment },
         },
       });
@@ -115,7 +110,7 @@ export default function StepPanel({
 
   const form = useRegistrationForm({
     registration,
-    parameters: competingParameters,
+    steps,
     onSubmit: submitRegistration,
   });
 
@@ -218,9 +213,7 @@ export default function StepPanel({
               // Reset on the way in rather than on the way out, so that the form the competitor
               //   opens always starts from what is currently saved.
               onStartEditing={() =>
-                form.reset(
-                  registrationFormValues(registration, competingParameters),
-                )
+                form.reset(registrationFormValues(registration, steps))
               }
               onWithdrawn={() => setCurrentStep(0)}
             />
