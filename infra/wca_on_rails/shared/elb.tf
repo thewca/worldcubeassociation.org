@@ -611,11 +611,11 @@ resource "aws_lb_listener_rule" "rails_forward_next_staging_live" {
 
   condition {
     path_pattern {
-      # Next serves competition tabs under the singular /tab/ so that this cannot
+      # Next serves competition tabs under /custom-tabs/ so that this cannot
       # collide with Rails' /tabs/new, which creates one.
       regex_values = [
         "^/competitions/[^/]+/live(/.*)?$",
-        "^/competitions/[^/]+/tab/[^/]+$",
+        "^/competitions/[^/]+/custom-tabs/[^/]+$",
       ]
     }
   }
