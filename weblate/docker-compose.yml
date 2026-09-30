@@ -1,0 +1,68 @@
+# Standalone Weblate instance for local development.
+# Completely separate from the main stack: own compose project, own network,
+# own volumes. See README.md.
+#
+#   docker compose -f weblate/docker-compose.yml up -d
+#
+name: wca-weblate
+
+services:
+  cache:
+    image: valkey/valkey:9.1.1
+    command: [valkey-server, --save, '60', '1', --loglevel, warning]
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    read_only: true
+
+  database:
+    image: postgres:18-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    env_file:
+      - ./environment
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U weblate"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  weblate:
+    # Weblate uses CalVer; 2026.8 tracks patch releases within that series.
+    image: weblate/weblate:2026.8
+    depends_on:
+      database:
+        condition: service_healthy
+      cache:
+        condition: service_started
+    ports:
+      # Weblate listens on 8080 inside the container. 8080 on the host is free
+      # (the main stack uses 3000/3001/3035/3306/6379/8089/1080/27017).
+      - "8080:8080"
+    volumes:
+      - weblate-data:/app/data
+      - weblate-cache:/app/cache
+      # Optional: lets you point a component at file:///wca-repo instead of
+      # cloning ~450 MB from GitHub. See README "Faster: translate a local clone".
+      - ..:/wca-repo:ro
+    env_file:
+      - ./environment
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /run
+      - /tmp
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/healthz/"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      # First boot runs migrations and builds the search index.
+      start_period: 5m
+
+volumes:
+  weblate-data:
+  weblate-cache:
+  postgres-data:
+  redis-data:
