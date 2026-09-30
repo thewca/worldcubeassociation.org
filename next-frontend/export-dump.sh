@@ -7,6 +7,8 @@ apk add mongodb-tools aws-cli zip
 #   `Users` collection, everything else is about sessions which are existing or have existed on production.
 #   Excluding them is safe because after importing a dump, BetterAuth will simply conclude "no sessions existed
 #   for this user thus far", which is perfectly valid and also secure for a public-facing upload.
+# The table (aka collection) names come from https://better-auth.com/docs/concepts/database#core-schema,
+#   except that our Payload <-> BetterAuth adapter pluralizes them
 mongodump \
   --ssl \
   --sslCAFile ./global-bundle.pem \
