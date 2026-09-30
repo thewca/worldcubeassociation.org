@@ -4357,7 +4357,7 @@ fr:
           other: Envoyer un e-mail à %{count} adresses
         copy_emails:
           one: Copier %{count} adresse e-mail
-          many:
+          many: Copier %{count} adresses e-mail
           other: Copier %{count} adresses e-mail
         scroll_to: Faites défiler jusqu'à
         non_competing: Hors compétition
@@ -5321,9 +5321,9 @@ fr:
             de la compétition)
           #original_hash: 5e7242c
           payment_reference_label: >-
-            Quelles informations l'utilisateur doit-il vous fournir pour que
-            vous puissiez identifier son paiement ? (par exemple, numéro de
-            référence du paiement / identifiant du compte / etc.)
+            Quelles informations l'utilisateur doit-il vous fournir pour que vous
+            puissiez identifier son paiement ? (par exemple, numéro de référence du
+            paiement / identifiant du compte / etc.)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
