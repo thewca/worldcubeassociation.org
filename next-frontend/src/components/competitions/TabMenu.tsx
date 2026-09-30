@@ -176,7 +176,8 @@ export default function TabMenu({
           </Drawer.Positioner>
         </Drawer.Root>
       </Box>
-      <Tabs.Content width="full" value={currentPath!}>
+      {/* minWidth=0 is needed so Table.ScrollArea triggers scrolling for Markdown Tables */}
+      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
         {children}
       </Tabs.Content>
     </Tabs.Root>
