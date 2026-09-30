@@ -15,22 +15,36 @@ const callToActionBlock: Block = {
       name: "content",
       type: "richText",
       required: true,
+      localized: true,
+      admin: {
+        description: "Text shown above the buttons.",
+      },
     },
     markdownConvertedField("content"),
     {
       name: "buttons",
       type: "array",
       required: true,
+      admin: {
+        description: "The buttons offered under the text.",
+      },
       fields: [
         {
           name: "label",
           type: "text",
           required: true,
+          localized: true,
+          admin: {
+            description: "Label written on the button.",
+          },
         },
         {
           name: "url",
           type: "text",
           required: true,
+          admin: {
+            description: "URL the button links to.",
+          },
         },
         newTabCheckbox,
       ],
@@ -49,17 +63,28 @@ const simpleItemBlock: Block = {
       name: "title",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description: "Heading of this section of the About Us page.",
+      },
     },
     {
       name: "image",
       type: "upload",
       relationTo: "media",
       required: false,
+      admin: {
+        description: "Optional image shown alongside the text.",
+      },
     },
     {
       name: "content",
       type: "richText",
       required: true,
+      localized: true,
+      admin: {
+        description: "Body text of this section.",
+      },
     },
     markdownConvertedField("content"),
   ],
@@ -74,6 +99,9 @@ export const AboutUsPage: GlobalConfig = {
       type: "blocks",
       required: true,
       blocks: [callToActionBlock, simpleItemBlock, QuoteBlock],
+      admin: {
+        description: "The sections making up the About Us page, top to bottom.",
+      },
     },
   ],
   hooks: {

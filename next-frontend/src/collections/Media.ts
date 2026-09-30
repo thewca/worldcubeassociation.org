@@ -13,11 +13,20 @@ export const Media: CollectionConfig = {
       name: "alt",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description:
+          "Alternative text describing the image, read out by screen readers and shown when the image cannot load.",
+      },
     },
     {
       name: "customLink",
       label: "Custom Link",
       type: "text",
+      admin: {
+        description:
+          "Optional. If set, the image becomes a link to this URL wherever it is rendered.",
+      },
     },
   ],
   upload: {

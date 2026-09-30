@@ -11,12 +11,19 @@ export const CaptionedImageBlock: Block = {
       name: "caption",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description: "Caption shown underneath the image.",
+      },
     },
     {
       name: "image",
       type: "upload",
       relationTo: "media",
       required: true,
+      admin: {
+        description: "The image to show.",
+      },
     },
   ],
 };
