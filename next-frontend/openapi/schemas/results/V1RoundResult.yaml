@@ -1,0 +1,62 @@
+type: object
+description: >-
+  One competitor's result in a single round. Rendered inside a round or a podium, both of which
+  already name the competition, event and format, so this shape carries only what is specific to
+  the competitor. `V1Result` is the same result rendered on its own.
+required:
+  - id
+  - pos
+  - global_pos
+  - best
+  - average
+  - attempts
+  - wca_id
+  - name
+  - country_iso2
+properties:
+  id:
+    type: integer
+    example: 6709306
+  pos:
+    type: integer
+    description: The competitor's position within this round alone.
+    example: 1
+  global_pos:
+    type: integer
+    description: >-
+      The competitor's position across every round the round is ranked against. Equal to `pos`
+      unless the round is part of a Dual Round, where a competitor holds one result per round but
+      is ranked once, on their better one — so both of their results carry the same `global_pos`.
+      This is the position that decides medals.
+    example: 1
+  best:
+    type: integer
+    example: 84
+  average:
+    type: integer
+    description: Zero when the round's format does not produce an average.
+    example: 88
+  attempts:
+    type: array
+    description: >-
+      Attempt values in solve order. Skipped solves are 0 and DNF/DNS are negative, so the best
+      and worst attempt are derived from this list rather than sent as separate indices.
+    items:
+      type: integer
+      example: 566
+  wca_id:
+    type: string
+    example: "2019WANY36"
+  name:
+    type: string
+    example: "Yiheng Wang (王艺衡)"
+  country_iso2:
+    type: string
+    description: ISO 3166-1 alpha-2 code of the country the competitor represented.
+    example: "CN"
+  regional_single_record:
+    type: string
+    example: "WR"
+  regional_average_record:
+    type: string
+    example: "NR"

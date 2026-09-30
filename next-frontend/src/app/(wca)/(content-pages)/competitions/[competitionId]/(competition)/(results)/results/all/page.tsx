@@ -31,7 +31,7 @@ export default async function PodiumsPage({
 
   if (resultsError) return <OpenapiError t={t} response={resultsResponse} />;
 
-  const resultsByEvent = _.groupBy(competitionResults, "event_id");
+  const roundsByEvent = _.groupBy(competitionResults, "event_id");
 
   return (
     <Card.Root>
@@ -39,7 +39,7 @@ export default async function PodiumsPage({
         <Card.Title textStyle="s4">Results</Card.Title>
         <FilteredResults
           competitionInfo={competitionInfo}
-          resultsByEvent={resultsByEvent}
+          roundsByEvent={roundsByEvent}
         />
       </Card.Body>
     </Card.Root>

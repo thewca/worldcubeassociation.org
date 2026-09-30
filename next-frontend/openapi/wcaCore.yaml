@@ -28,6 +28,11 @@ paths:
   /v1/registrations/{registrationId}/payment_denomination:
     $ref: 'paths/registrations/paymentDenomination.yaml'
 
+  /v1/competitions/{competitionId}/results:
+    $ref: 'paths/competitions/v1CompetitionResults.yaml'
+  /v1/competitions/{competitionId}/podiums:
+    $ref: 'paths/competitions/v1CompetitionPodiums.yaml'
+
   /v1/competitions/{competitionId}/scoretakers:
     get:
       $ref: 'paths/competitions/scoretakers/ListScoretakers.yaml'
