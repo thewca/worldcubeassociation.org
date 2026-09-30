@@ -1815,7 +1815,8 @@ fr:
         #original_hash: da39d05
         confirm: >-
           Votre compte est créé et vous devez l'activer avant de pouvoir l'utiliser.
-          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash: 776476a
+          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash:
+          776476a
         confirmation_link: Confirmer mon compte.
         #original_hash: d484f70
         activate: >-
@@ -3762,7 +3763,7 @@ fr:
           allow_on_the_spot: Inscriptions sur place
           #original_hash: b6faf84
           competitor_can_cancel: Quand les compétiteurs peuvent-ils annuler leur
-            inscription ?
+            inscription
           #original_hash: 7e53b96
           allow_self_edits: Modifications d'inscription
           #original_hash: 3c23a67
@@ -3986,8 +3987,8 @@ fr:
         registration:
           #original_hash: 9965635
           opening_date_time: >-
-            Note : Les dates d'ouverture et de fermeture des inscriptions sont
-            au fuseau horaire UTC !
+            Note : Les dates d'ouverture et de fermeture des inscriptions sont au
+            fuseau horaire UTC
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             La date à laquelle les participants en liste d'attente ne sont plus
@@ -5704,15 +5705,13 @@ fr:
     whats_next_title: Le futur pour la WCA ?
     #original_hash: 3312277
     whats_next_content_html: >-
-      <p>La WCA a eu plus de 245 000 compétiteurs uniques dans 158 régions
-      différentes et nous n'avons pas l'intention de ralentir de sitôt! La
-      communauté du cube a connu une croissance constante depuis sa création en
-      2004 et nous voulons l'encourager à continuer à l'avenir en augmentant
-      l'accessibilité des compétitions dans de nouvelles régions. 
-
-      Dans le futur, nous espérons soutenir notre communauté encore plus à
-      travers des collaborations et des contacts avec ceux qui s'intéressent aux
-      casse-têtes.</p>
+      <p>La WCA a eu plus de 245 000 compétiteurs uniques dans 158 régions différentes
+      et nous n'avons pas l'intention de ralentir de sitôt! La communauté du cube
+      a connu une croissance constante depuis sa création en 2004 et nous voulons
+      l'encourager à continuer à l'avenir en augmentant l'accessibilité des compétitions
+      dans de nouvelles régions. Dans le futur, nous espérons soutenir notre communauté
+      encore plus à travers des collaborations et des contacts avec ceux qui s'intéressent
+      aux casse-têtes.</p>
     #original_hash: dc71704
     world_championship_title: Championnats du Monde
     #original_hash: 57cf7f7
@@ -5790,7 +5789,7 @@ fr:
         Délégué WCA and ne peuvent superviser que des compétitions où au moins
         une personne avec le statut de Délégué WCA est présente.</p>
       #original_hash: 27d18ac
-      see_link_html: '(voir %{link})'
+      see_link_html: ' (voir %{link})'
       #original_hash: 5b01fcc
       members_html: >-
         Tous les compétiteurs deviennent automatiquement des
@@ -6013,12 +6012,11 @@ fr:
         title: Groupifier
         #original_hash: 24d4736
         description: >-
-          Outil permettant aux organisateurs de compétition WCA de gérer les
-          tâches et les groupes. Les fonctionnalités principales sont : tri des
-          compétiteurs par classement, affectation des tâches (juges,
-          mélangeurs), choix du nombre de mélanges nécessaire, génération des
-          feuilles de score, planning personnel et résumé général... Rendez-vous
-          sur le site pour le reste !
+          Outil permettant aux organisateurs de compétition WCA de gérer les tâches
+          et les groupes. Les fonctionnalités principales sont : tri des compétiteurs
+          par classement, affectation des tâches (juges, mélangeurs), choix du nombre
+          de mélanges nécessaire, génération des feuilles de score, planning personnel
+          et résumé général... Rendez-vous sur le site pour le reste.
       scorecards:
         #original_hash: aa1b64d
         title: Feuilles de score
@@ -6653,7 +6651,8 @@ fr:
       #original_hash: 050c7e2
       non_matching_name_warning: >-
         Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à l'enregistrement
-        actuel dans la base de données WCA ('%{expected_name}').  #original_hash: 333a035
+        actuel dans la base de données WCA ('%{expected_name}').  #original_hash:
+        333a035
       non_matching_country_warning: >-
         Le pays '%{country}' fourni pour %{name} (%{wca_id}) ne correspond pas à
         l'enregistrement actuel dans la base de données WCA
