@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::RegistrationPaymentsController < Api::V1::ApiController
+  before_action :require_registration_scope!, only: %i[refund]
+
   def show
     registration_id = params.require(:registration_id)
     registration = Registration.includes(:competition, registration_payments: [:refunding_registration_payments]).find(registration_id)
@@ -19,7 +21,7 @@ class Api::V1::RegistrationPaymentsController < Api::V1::ApiController
     registration = Registration.includes(:competition).find(params.require(:id))
     competition = registration.competition
 
-    return head :unauthorized unless @current_user.can_manage_competition?(competition)
+    return head :unauthorized unless authenticated_user.can_manage_competition?(competition)
 
     payment_integration = params.require(:payment_integration).to_sym
     payment_account = competition.payment_account_for(payment_integration)
@@ -60,7 +62,7 @@ class Api::V1::RegistrationPaymentsController < Api::V1::ApiController
           ruby_money.currency.iso_code,
           refund_receipt,
           original_payment.id,
-          @current_user.id,
+          authenticated_user.id,
         )
       end
     end

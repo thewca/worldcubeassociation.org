@@ -33,6 +33,15 @@ RSpec.describe 'API Registration Payments', :clean_db_with_truncation do
       end
       let!(:registration) { create(:registration, competition: competition, user: organizer) }
 
+      it 'rejects a token without the manage_registrations scope' do
+        api_sign_in_as(organizer, scopes: Doorkeeper::OAuth::Scopes.new)
+
+        post payment_refund_api_v1_registration_path(registration, :stripe, registration.id),
+             params: { payment: { refund_amount: 1 } }
+
+        expect(response).to have_http_status(:forbidden)
+      end
+
       context "processes a payment" do
         before do
           sign_in organizer
@@ -68,6 +77,16 @@ RSpec.describe 'API Registration Payments', :clean_db_with_truncation do
           expect(@payment.reload.amount_available_for_refund).to eq 0
           # Check that the website actually records who made the refund
           expect(registration.registration_payments.last.user).to eq organizer
+        end
+
+        it 'issues a refund for a token with the manage_registrations scope' do
+          sign_out organizer
+          api_sign_in_as(organizer, scopes: Doorkeeper::OAuth::Scopes.from_string(Api::V1::ApiController::MANAGE_REGISTRATIONS_SCOPE))
+
+          refund(competition.base_entry_fee.cents)
+
+          expect(response).to be_successful
+          expect(registration.reload.registration_payments.last.user_id).to eq organizer.id
         end
 
         it 'issues a 50% refund' do
