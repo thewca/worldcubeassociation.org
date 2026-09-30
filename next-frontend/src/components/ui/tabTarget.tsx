@@ -27,6 +27,8 @@ export default function TabTarget({
 }) {
   const isCurrent = tabKey === currentPath;
 
+  // `textProps` carries the trigger styling `asChild` merged in from `Tabs.Trigger`,
+  //   so every branch has to pass it on or the tab renders unstyled.
   if (disabled || isCurrent) {
     return (
       <Text aria-current={isCurrent ? "page" : undefined} {...textProps}>
@@ -35,5 +37,9 @@ export default function TabTarget({
     );
   }
 
-  return <Link href={href}>{children}</Link>;
+  return (
+    <Text asChild {...textProps}>
+      <Link href={href}>{children}</Link>
+    </Text>
+  );
 }
