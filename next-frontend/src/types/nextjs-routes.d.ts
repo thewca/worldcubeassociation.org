@@ -13,8 +13,7 @@ declare module "nextjs-routes" {
   export type Route =
     | StaticRoute<"/">
     | StaticRoute<"/about">
-    | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
-    | DynamicRoute<"/api/auth/payload/[...nextauth]", { "nextauth": string[] }>
+    | DynamicRoute<"/api/auth/[...all]", { "all": string[] }>
     | DynamicRoute<"/api/payload/[...slug]", { "slug": string[] }>
     | StaticRoute<"/api/payload/draft">
     | StaticRoute<"/api/payload/graphql">
@@ -23,6 +22,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/competitors", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/custom-tabs/[tabName]", { "competitionId": string; "tabName": string }>
     | DynamicRoute<"/competitions/[competitionId]/events", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live/admin", { "competitionId": string }>
@@ -38,7 +38,6 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/results/byPerson", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/scrambles", { "competitionId": string }>
-    | DynamicRoute<"/competitions/[competitionId]/tabs/[tabName]", { "competitionId": string; "tabName": string }>
     | StaticRoute<"/competitions/mine">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
@@ -67,6 +66,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/results/rankings">
     | StaticRoute<"/results/records">
     | StaticRoute<"/score-tools">
+    | StaticRoute<"/search">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
     | StaticRoute<"/translators">;

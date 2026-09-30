@@ -12,6 +12,7 @@ const makeCompetitor = (registrationId: number): LiveCompetitor => ({
   user_id: registrationId,
   name: `Competitor ${registrationId}`,
   country_iso2: "DE",
+  wca_id: null,
 });
 
 const makeCompetitorsMap = (

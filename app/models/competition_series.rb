@@ -94,13 +94,12 @@ class CompetitionSeries < ApplicationRecord
   end
 
   # Rubocop only flags this method (and not the same method in competition.rb), but they should be named the same
-  # rubocop:disable Naming/AccessorMethodName
+  # rubocop:disable-next Naming/AccessorMethodName
   def set_form_data(form_data_series)
     raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.") if form_data_series["competitionIds"].count <= 1
 
     assign_attributes(CompetitionSeries.form_data_to_attributes(form_data_series))
   end
-  # rubocop:enable Naming/AccessorMethodName
 
   def self.form_data_to_attributes(form_data)
     {

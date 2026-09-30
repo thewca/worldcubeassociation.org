@@ -20,7 +20,7 @@ export interface ButtonVariant {
   /** @default "md" */
   size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined
   /** @default "solid" */
-  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | "pastelSolid" | "pastelOutline" | undefined
+  variant?: "solid" | "subtle" | "surface" | "outline" | "ghost" | "plain" | "pastelSolid" | "pastelOutline" | "onSolid" | undefined
 }
 
 export type ButtonVariantProps = {
@@ -433,7 +433,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
-  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | "slatePastel" | undefined
+  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | undefined
 }
 
 export type CardVariantProps = {
@@ -578,6 +578,25 @@ export type DataListVariantProps = {
 
 export type DataListVariantMap = {
   [K in keyof DataListVariant]: Array<DataListVariant[K]>
+}
+
+// DateInput
+
+export type DateInputSlot = "root" | "label" | "control" | "segmentGroup" | "segment" | "hiddenInput"
+
+export interface DateInputVariant {
+  /** @default "md" */
+  size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | undefined
+  /** @default "outline" */
+  variant?: "outline" | "subtle" | "flushed" | undefined
+}
+
+export type DateInputVariantProps = {
+  [K in keyof DateInputVariant]?: ConditionalValue<DateInputVariant[K]> | undefined
+}
+
+export type DateInputVariantMap = {
+  [K in keyof DateInputVariant]: Array<DateInputVariant[K]>
 }
 
 // DatePicker
@@ -814,6 +833,7 @@ export interface ListVariant {
   /** @default "marker" */
   variant?: "marker" | "plain" | undefined
   align?: "center" | "start" | "end" | undefined
+  indented?: boolean | undefined
 }
 
 export type ListVariantProps = {
@@ -1342,7 +1362,9 @@ export interface TabsVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "line" */
   variant?: "line" | "subtle" | "enclosed" | "outline" | "plain" | undefined
+  fitContent?: boolean | undefined
   highContrast?: boolean | undefined
+  sideNav?: boolean | undefined
 }
 
 export type TabsVariantProps = {
@@ -1607,6 +1629,7 @@ export interface ConfigSlotRecipes {
   codeBlock: SystemSlotRecipeFn<CodeBlockSlot, CodeBlockVariantProps, CodeBlockVariantMap>
   collapsible: SystemSlotRecipeFn<CollapsibleSlot, CollapsibleVariantProps, CollapsibleVariantMap>
   dataList: SystemSlotRecipeFn<DataListSlot, DataListVariantProps, DataListVariantMap>
+  dateInput: SystemSlotRecipeFn<DateInputSlot, DateInputVariantProps, DateInputVariantMap>
   datePicker: SystemSlotRecipeFn<DatePickerSlot, DatePickerVariantProps, DatePickerVariantMap>
   dialog: SystemSlotRecipeFn<DialogSlot, DialogVariantProps, DialogVariantMap>
   drawer: SystemSlotRecipeFn<DrawerSlot, DrawerVariantProps, DrawerVariantMap>
@@ -1666,6 +1689,7 @@ export interface ConfigRecipeSlots {
   codeBlock: CodeBlockSlot
   collapsible: CollapsibleSlot
   dataList: DataListSlot
+  dateInput: DateInputSlot
   datePicker: DatePickerSlot
   dialog: DialogSlot
   drawer: DrawerSlot

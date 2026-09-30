@@ -4,13 +4,14 @@ import { Heading, VStack } from "@chakra-ui/react";
 import _ from "lodash";
 import { ByCompetitionTable } from "@/components/results/ResultsTable";
 import events from "@/lib/wca/data/events";
+import continents from "@/lib/wca/data/continents";
 import { Fragment } from "react";
 
 export default function RecordsTable({
   recordResults,
   t,
 }: {
-  recordResults: components["schemas"]["Results"];
+  recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
   const recordsByType = _.groupBy(
@@ -26,7 +27,7 @@ export default function RecordsTable({
           <RecordsByEvent recordResults={recordsByType["WR"]} t={t} />
         </>
       )}
-      {["ER", "NAR", "SAR", "ASR", "OCR"].map((region) => {
+      {continents.real.map(({ recordName: region }) => {
         return (
           region in recordsByType && (
             <Fragment key={region}>
@@ -52,16 +53,16 @@ function RecordsByEvent({
   recordResults,
   t,
 }: {
-  recordResults: components["schemas"]["Results"];
+  recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
   const resultsByEvent = _.groupBy(recordResults, "event_id");
   return _.map(resultsByEvent, (results, eventId) => {
     return (
-      <>
+      <Fragment key={eventId}>
         <Heading textStyle="h3">{events.byId[eventId].name}</Heading>
         <ByCompetitionTable results={results} t={t} />
-      </>
+      </Fragment>
     );
   });
 }

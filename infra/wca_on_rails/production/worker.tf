@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_log_group" "worker" {
   name = "${var.name_prefix}-sqs-worker"
+  retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "worker" {
@@ -27,7 +28,7 @@ resource "aws_ecs_task_definition" "worker" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-group         = aws_cloudwatch_log_group.worker.name
           awslogs-region        = var.region
           awslogs-stream-prefix = var.name_prefix
         }

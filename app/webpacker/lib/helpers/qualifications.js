@@ -5,20 +5,20 @@ export function isQualifiedForEvent(event, qualificationWCIF, personalRecords) {
     return true;
   }
 
-  const personalRecordForEvent = personalRecords[qualificationForEvent.resultType]
+  const { type, scope, value } = qualificationForEvent.resultCondition;
+
+  const personalRecordForEvent = personalRecords[scope]
     .find((r) => r.eventId === event);
   if (!personalRecordForEvent) {
     return false;
   }
-  switch (qualificationForEvent.type) {
-    case 'anyResult': {
-      return true;
-    }
+  switch (type) {
     case 'ranking': {
       return true;
     }
-    case 'attemptResult': {
-      return personalRecordForEvent.best < qualificationForEvent.level;
+    case 'resultAchieved': {
+      // WCIF v2 expresses "any result" as a result condition without a value
+      return value === null || personalRecordForEvent.value < value;
     }
     default: {
       return false;

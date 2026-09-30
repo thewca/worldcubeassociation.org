@@ -1,4 +1,4 @@
-FROM ruby:3.4.6 AS base
+FROM ruby:4.0.6 AS base
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -22,7 +22,7 @@ RUN apt-get update -qq && \
       curl \
       gnupg
 
-ARG NODE_MAJOR=24
+ARG NODE_MAJOR=26
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
 
@@ -37,6 +37,7 @@ RUN apt-get update -qq && \
 FROM base AS build
 
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
+RUN npm install -g corepack
 RUN corepack enable
 
 # Install native dependencies for Ruby:
@@ -99,6 +100,12 @@ RUN mkdir -p "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
 RUN cp -r node_modules/playwright* "$PLAYWRIGHT_BROWSERS_PATH/node_modules"
 
 RUN rm -rf node_modules
+
+# Export-only stage. `docker buildx bake assets` writes this to the local filesystem
+# for the S3 sync. It shares the `build` stage with every image below, so the digests
+# S3 serves and the digests the app links to cannot drift apart.
+FROM scratch AS assets
+COPY --from=build /rails/public /
 
 FROM base AS runtime
 

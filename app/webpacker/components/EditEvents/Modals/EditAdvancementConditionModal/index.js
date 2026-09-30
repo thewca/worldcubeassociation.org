@@ -176,6 +176,11 @@ export default function EditAdvancementConditionModal({
       <p>
         If you would like to use Dual Rounds, please make sure that
         the scoretaking software is configured as &apos;Internal Live Results&apos;
+        or as an external tool. It is
+        {' '}
+        <b>not</b>
+        {' '}
+        supported by the old WCA Live website!
       </p>
       {!!type && (
         <>

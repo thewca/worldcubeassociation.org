@@ -4,6 +4,7 @@ import TabMenu from "@/components/competitions/TabMenu";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 import { components } from "@/types/openapi";
 import { duringCompetitionTabs } from "@/lib/wca/competitions/tabs";
+import { route } from "nextjs-routes";
 
 export default function LiveTabs({
   competitionInfo,
@@ -17,7 +18,14 @@ export default function LiveTabs({
   const tabs = duringCompetitionTabs(competitionInfo, rounds);
 
   return (
-    <TabMenu tabs={tabs} competitionInfo={competitionInfo}>
+    <TabMenu
+      tabs={tabs}
+      competitionInfo={competitionInfo}
+      backHref={route({
+        pathname: "/competitions/[competitionId]",
+        query: { competitionId: competitionInfo.id },
+      })}
+    >
       {children}
     </TabMenu>
   );

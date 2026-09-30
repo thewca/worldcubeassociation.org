@@ -5,9 +5,7 @@ import {
   Heading,
   SimpleGrid,
   Text,
-  HStack,
   Stat,
-  Badge,
   Wrap,
 } from "@chakra-ui/react";
 import BookmarkIcon from "@/components/icons/BookmarkIcon";
@@ -17,16 +15,20 @@ import CountryMap from "@/components/CountryMap";
 import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
 import { components } from "@/types/openapi";
 import { TFunction } from "i18next";
+import { getT } from "@/lib/i18n/get18n";
+import CurrencyValue from "@/components/CurrencyValue";
 import PaymentIcon from "@/components/icons/PaymentIcon";
 import SpotsLeftIcon from "@/components/icons/SpotsLeftIcon";
 import SpectatorsIcon from "@/components/icons/SpectatorsIcon";
 import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import EventIcon from "@/components/EventIcon";
+import { LabelledEventIcon } from "@/components/EventIcon";
 import { ChakraMarkdown } from "@/components/Markdown";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
+import LocalDateTime from "@/components/LocalDateTime";
+import RefundPolicyText from "@/components/competitions/RefundPolicyText";
 
 function formatDateRange(start: Date, end: Date): string {
   const sameDay = start.toDateString() === end.toDateString();
@@ -61,17 +63,6 @@ function formatDateRange(start: Date, end: Date): string {
   return `${fullFormatter.format(start)} - ${fullFormatter.format(end)}`;
 }
 
-const dateFormat = {
-  month: "2-digit",
-  day: "2-digit",
-  year: "numeric",
-  hour: "numeric",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: true,
-  timeZoneName: "short",
-} as Intl.DateTimeFormatOptions;
-
 export function VenueDetailsCard({
   competitionInfo,
 }: {
@@ -81,7 +72,7 @@ export function VenueDetailsCard({
     <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
-        <SimpleGrid columns={2} gap="4">
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <VenueIcon />
@@ -128,7 +119,7 @@ export function AdditionalInformationCard({
         <Card.Title textStyle="s4">Information</Card.Title>
         <ChakraMarkdown
           paragraphAs={Card.Description}
-          imageProps={{ maxW: "sm" }}
+          imageProps={{ maxW: { base: "full", md: "sm" } }}
           textStyle="body"
         >
           {competitionInfo.information}
@@ -143,137 +134,126 @@ export function RefundPolicyCard({
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  const refundDate = new Date(competitionInfo.refund_policy_limit_date);
-  const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
-
   return (
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Refund Policy</Card.Title>
         <Card.Description>
-          If your registration is cancelled before {formattedRefundDate} you
-          will be refunded
-          <Text as="span" fontWeight="bold">
-            {" "}
-            <FormatNumber
-              value={competitionInfo.refund_policy_percent / 100}
-              style="percent"
-            />{" "}
-          </Text>
-          of your registration fee.
+          <RefundPolicyText
+            refundPolicyPercent={competitionInfo.refund_policy_percent}
+            refundPolicyLimitDate={competitionInfo.refund_policy_limit_date}
+          />
         </Card.Description>
       </Card.Body>
     </Card.Root>
   );
 }
 
-export function RegistrationCard({
+export async function RegistrationCard({
   competitionInfo,
+  columns = 2,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
+  columns?: number;
 }) {
-  const regoOpenDate = new Date(competitionInfo.registration_open);
-  const regoClosedDate = new Date(competitionInfo.registration_close);
-
-  const formattedRegoOpenDate = regoOpenDate.toLocaleString(
-    "en-US",
-    dateFormat,
-  );
-  const formattedRegoClosedDate = regoClosedDate.toLocaleString(
-    "en-US",
-    dateFormat,
-  );
+  const { t } = await getT();
 
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">Registration</Card.Title>
-        <SimpleGrid columns={2} gap="4">
+        <Card.Title textStyle="s4">
+          {t("competitions.nav.menu.registration")}
+        </Card.Title>
+        <SimpleGrid columns={columns} gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <PaymentIcon />
-              Base Registration Fee
-            </Stat.Label>
-            <HStack>
-              <Stat.ValueText>
-                <FormatNumber
-                  value={
-                    competitionInfo.base_entry_fee_lowest_denomination / 100
-                  }
-                  style="currency"
-                  currency={competitionInfo.currency_code}
-                />
-              </Stat.ValueText>
-              <Badge variant="solid">{competitionInfo.currency_code}</Badge>
-            </HStack>
-          </Stat.Root>
-
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <SpotsLeftIcon />
-              Number of Registrations
+              {t(
+                "competitions.competition_form.labels.entry_fees.base_entry_fee",
+              )}
             </Stat.Label>
             <Stat.ValueText>
-              <FormatNumber value={0} />/
-              <FormatNumber value={competitionInfo.competitor_limit} />
+              <CurrencyValue
+                lowestDenomination={
+                  competitionInfo.base_entry_fee_lowest_denomination
+                }
+                currencyCode={competitionInfo.currency_code}
+              />
             </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
-              <SpectatorsIcon />
-              Spectators
+              <SpotsLeftIcon />
+              {t("competitions.competition_info.competitor_limit")}
             </Stat.Label>
             <Stat.ValueText>
-              {competitionInfo.guests_entry_fee_lowest_denomination === 0 ? (
-                "Free"
+              {competitionInfo.spots_left == null ? (
+                t("competitions.competition_info.no_competitor_limit")
               ) : (
-                <HStack>
-                  <FormatNumber
-                    value={
-                      competitionInfo.guests_entry_fee_lowest_denomination / 100
-                    }
-                    style="currency"
-                    currency={competitionInfo.currency_code}
-                  />
-                  <Badge variant="solid">{competitionInfo.currency_code}</Badge>
-                </HStack>
+                <>
+                  <FormatNumber value={competitionInfo.spots_left} />/
+                  <FormatNumber value={competitionInfo.competitor_limit} />
+                </>
               )}
             </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
-              <OnTheSpotRegistrationIcon />
-              On the spot Registration
+              <SpectatorsIcon />
+              {t(
+                "competitions.competition_form.labels.entry_fees.guest_entry_fee",
+              )}
             </Stat.Label>
             <Stat.ValueText>
-              {competitionInfo.on_the_spot_registration ? "Yes" : "No"}
+              {/* A free guest entry formats as a zero amount rather than the word "free",
+                  which has no translation of its own. */}
+              <CurrencyValue
+                lowestDenomination={
+                  competitionInfo.guests_entry_fee_lowest_denomination
+                }
+                currencyCode={competitionInfo.currency_code}
+              />
+            </Stat.ValueText>
+          </Stat.Root>
+
+          <Stat.Root variant="competition">
+            <Stat.Label>
+              <OnTheSpotRegistrationIcon />
+              {t(
+                "competitions.competition_form.labels.registration.allow_on_the_spot",
+              )}
+            </Stat.Label>
+            <Stat.ValueText>
+              {competitionInfo.on_the_spot_registration
+                ? t("simple_form.yes")
+                : t("simple_form.no")}
             </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoOpenDateIcon />
-              Registration Opens
+              {t(
+                "competitions.competition_form.labels.registration.opening_date_time",
+              )}
             </Stat.Label>
-            <Stat.ValueText>{formattedRegoOpenDate}</Stat.ValueText>
+            <Stat.ValueText>
+              <LocalDateTime isoDateTime={competitionInfo.registration_open} />
+            </Stat.ValueText>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoCloseDateIcon />
-              Registration Closes
+              {t(
+                "competitions.competition_form.labels.registration.closing_date_time",
+              )}
             </Stat.Label>
-            <Stat.ValueText>{formattedRegoClosedDate}</Stat.ValueText>
-          </Stat.Root>
-
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <PaymentIcon />
-              Payment
-            </Stat.Label>
-            <Stat.ValueText>API Needed</Stat.ValueText>
+            <Stat.ValueText>
+              <LocalDateTime isoDateTime={competitionInfo.registration_close} />
+            </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>
       </Card.Body>
@@ -292,13 +272,13 @@ export function EventCard({
         <Card.Title textStyle="s4">Events List</Card.Title>
         <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
-            <EventIcon
+            <LabelledEventIcon
               key={event_id}
               eventId={event_id}
               boxSize="8"
               color={
                 event_id === competitionInfo.main_event_id && event_id !== "333"
-                  ? "green.1A"
+                  ? "green.solid"
                   : "currentColor"
               }
             />
@@ -326,7 +306,7 @@ export function InfoCard({
           </Button>
         </Heading>
 
-        <SimpleGrid columns={2} gap="4">
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoOpenDateIcon />
@@ -372,6 +352,56 @@ export function InfoCard({
             </Stat.Label>
             <Stat.ValueText>
               <FormatNumber value={competitionInfo.number_of_bookmarks} /> Times
+            </Stat.ValueText>
+          </Stat.Root>
+        </SimpleGrid>
+      </Card.Body>
+    </Card.Root>
+  );
+}
+
+export function SubPageCard({
+  competitionInfo,
+  t,
+}: {
+  competitionInfo: components["schemas"]["CompetitionInfo"];
+  t: TFunction;
+}) {
+  return (
+    <Card.Root>
+      <Card.Body>
+        <Card.Title asChild>
+          <Heading textStyle="h2" display="flex" alignItems="center">
+            {competitionInfo.name}
+          </Heading>
+        </Card.Title>
+
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
+          <Stat.Root variant="competition">
+            <Stat.Label>
+              <CompRegoOpenDateIcon />
+              Date
+            </Stat.Label>
+            <Stat.ValueText>
+              {formatDateRange(
+                new Date(competitionInfo.start_date),
+                new Date(competitionInfo.end_date),
+              )}
+            </Stat.ValueText>
+          </Stat.Root>
+
+          <Stat.Root variant="competition">
+            <Stat.Label>
+              <LocationIcon />
+              {t("competitions.competition_info.location")}
+            </Stat.Label>
+            <Stat.ValueText>
+              <Text>{competitionInfo.city}, </Text>
+              <CountryMap
+                code={competitionInfo.country_iso2}
+                t={t}
+                fontWeight="bold"
+              />
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>

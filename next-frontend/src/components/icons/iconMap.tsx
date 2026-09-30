@@ -95,6 +95,7 @@ import _555Icon from "@/components/icons/events/_555Icon";
 import _666Icon from "@/components/icons/events/_666Icon";
 import _777Icon from "@/components/icons/events/_777Icon";
 import _ClockIcon from "@/components/icons/events/_ClockIcon";
+import _FtoIcon from "@/components/icons/events/_FtoIcon";
 import _MagicIcon from "@/components/icons/events/_MagicIcon";
 import _MinxIcon from "@/components/icons/events/_MinxIcon";
 import _MmagicIcon from "@/components/icons/events/_MmagicIcon";
@@ -200,6 +201,7 @@ export const iconMap = {
   "666Icon": _666Icon,
   "777Icon": _777Icon,
   ClockIcon: _ClockIcon,
+  FtoIcon: _FtoIcon,
   MagicIcon: _MagicIcon,
   MinxIcon: _MinxIcon,
   MmagicIcon: _MmagicIcon,

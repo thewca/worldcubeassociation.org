@@ -5,6 +5,7 @@ required:
   - name
   - country_iso2
   - user_id
+  - wca_id
 properties:
   id:
     type: number
@@ -16,3 +17,6 @@ properties:
     type: string
   country_iso2:
     type: string
+  wca_id:
+    type: string
+    nullable: true

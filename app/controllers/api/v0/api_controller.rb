@@ -4,7 +4,8 @@ class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
 
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
-  rate_limit to: 60, within: 1.minute, unless: -> { internal_ip?(request.remote_ip) } if Rails.env.production?
+  include ApiRateLimiting
+
   protect_from_forgery with: :null_session
   before_action :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::ApiException do |e|
@@ -17,19 +18,6 @@ class Api::V0::ApiController < ApplicationController
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
-
-  INTERNAL_IP_RANGES = [
-    # Standard loopback range, AWS Internal Load Balancers appear as 127.0.0.1:
-    # Right at the bottom of https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-concepts-deploy.html#service-connect-considerations
-    IPAddr.new('127.0.0.0/8'),
-    IPAddr.new('10.0.0.0/8'), # Private Class A
-    IPAddr.new('172.16.0.0/12'), # Private Class B
-    IPAddr.new('192.168.0.0/16'), # Private Class C
-  ].freeze
-
-  def internal_ip?(remote_ip)
-    INTERNAL_IP_RANGES.any? { it.include?(remote_ip) }
-  end
 
   def me
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
@@ -143,7 +131,7 @@ class Api::V0::ApiController < ApplicationController
     # instead should be private to the corresponding microservice.
     result = Rails.cache.fetch(cache_key, force: current_user&.results_team?) do
       ActiveRecord::Base.connected_to(role: :read_replica) do
-        models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
+        models.flat_map { |model| search_scope_for(model, query).limit(DEFAULT_API_RESULT_LIMIT) }
       end
     end
 
@@ -156,6 +144,13 @@ class Api::V0::ApiController < ApplicationController
               end
 
     render status: :ok, json: { result: result.as_json(options) }
+  end
+
+  # These results are rendered through each model's default `as_json`, so preload whatever that
+  # serialization walks. `Regulation` is not an ActiveRecord model and has no associations at all.
+  private def search_scope_for(model, query)
+    scope = model.try(:with_serialization_preloads) || model
+    scope.search(query, params: params)
   end
 
   def posts_search

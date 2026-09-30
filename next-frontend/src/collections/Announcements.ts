@@ -33,14 +33,6 @@ export const Announcements: CollectionConfig = {
     },
     markdownConvertedField("content"),
     {
-      name: "url",
-      type: "text",
-      admin: {
-        description:
-          "Optional. When set, the 'Read More' button links to this URL instead of expanding the content.",
-      },
-    },
-    {
       name: "publishedAt",
       type: "date",
       required: true,

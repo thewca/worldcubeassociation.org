@@ -11,8 +11,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       managed_by_user = current_api_user || current_user
     end
 
-    competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user)
-    competitions = competitions.includes(:delegates, :organizers, :events)
+    competitions = Competition.with_serialization_preloads.search(params[:q], params: params, managed_by_user: managed_by_user)
 
     paginate json: competitions
   end
@@ -45,7 +44,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user lead_delegate_id] if admin_mode
 
     paginate json: competitions,
-             only: %w[id name start_date end_date registration_open registration_close venue competitor_limit main_event_id],
+             only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
              methods: serial_methods,
              include: serial_includes
   end
@@ -64,7 +63,17 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def events
     competition = competition_from_params
-    render json: competition.events_wcif
+
+    lifecycle_name = params[:wcif_version]&.to_sym || :stable
+
+    unless Competition::WCIF_VERSION_CATALOGUE.key?(lifecycle_name)
+      return render json: {
+        message: "invalid lifecycle name '#{lifecycle_name}'",
+        valid_lifecycle_names: Competition::WCIF_VERSION_CATALOGUE.keys,
+      }, status: :bad_request
+    end
+
+    render json: competition.events_wcif(version: Competition::WCIF_VERSION_CATALOGUE.fetch(lifecycle_name))
   end
 
   def schedule

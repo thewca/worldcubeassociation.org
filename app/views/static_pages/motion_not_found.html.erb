@@ -1,0 +1,7 @@
+<% provide(:title, t('documents.motion_not_found')) %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+  <p><%= t('documents.motion_not_found_action', motion_id: @motion_id) %></p>
+  <p><%= link_to t('documents.title'), documents_path %></p>
+</div>

@@ -11,7 +11,7 @@ export default function LocationEditorForm({
   groupId, setGroupId, location, setLocation,
 }) {
   const { data: delegateRegions, loading, error } = useLoadedData(
-    apiV0Urls.userGroups.list(groupTypes.delegate_regions),
+    apiV0Urls.userGroups.list(groupTypes.delegate_regions, 'name', { isActive: true }),
   );
   const selectedGroup = useMemo(
     () => delegateRegions?.find((region) => region.id === groupId),

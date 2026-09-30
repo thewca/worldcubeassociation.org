@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_25_121610) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -862,6 +862,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_25_121610) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "markdown_images", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "uploaded_by_id"
+    t.index ["uploaded_by_id"], name: "index_markdown_images_on_uploaded_by_id"
+  end
+
   create_table "matched_scramble_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "external_scramble_set_id"
@@ -1681,6 +1688,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_25_121610) do
   add_foreign_key "live_results", "rounds", on_delete: :cascade
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
+  add_foreign_key "markdown_images", "users", column: "uploaded_by_id"
   add_foreign_key "matched_scramble_sets", "external_scramble_sets"
   add_foreign_key "matched_scramble_sets", "rounds"
   add_foreign_key "matched_scrambles", "external_scrambles"

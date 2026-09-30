@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_log_group" "worker" {
-  name = "${var.name_prefix}-sqs-worker"
+  name              = "${var.name_prefix}-sqs-worker"
+  retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "worker" {
@@ -27,7 +28,7 @@ resource "aws_ecs_task_definition" "worker" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-group         = aws_cloudwatch_log_group.worker.name
           awslogs-region        = var.region
           awslogs-stream-prefix = var.name_prefix
         }
@@ -59,7 +60,7 @@ resource "aws_ecs_service" "worker" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.worker.arn
-  desired_count                      = 2
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
