@@ -1,4 +1,5 @@
 import Markdown, { Options } from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   Link as ChakraLink,
   Image as ChakraImage,
@@ -9,6 +10,7 @@ import {
   Blockquote,
   Text,
   Heading,
+  Table,
 } from "@chakra-ui/react";
 
 import type {
@@ -80,6 +82,46 @@ const remarkLooseHeadings = () => (tree: MdastRoot) => {
   );
 };
 
+const TABLE_DELIMITER_ROW = /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/;
+
+const tableCells = (row: string) =>
+  row
+    .trim()
+    .replace(/^\|/, "")
+    .replace(/(?<!\\)\|$/, "")
+    .split(/(?<!\\)\|/)
+    .map((cell) => cell.trim());
+
+const withHeaderCellCount = (delimiterRow: string, headerRow: string) => {
+  const delimiterCells = tableCells(delimiterRow);
+
+  const resized = tableCells(headerRow).map(
+    (_, index) => delimiterCells[index] ?? "---",
+  );
+
+  return `| ${resized.join(" | ")} |`;
+};
+
+// GFM only recognises a table when the delimiter row has exactly as many cells as the header,
+//   but Redcarpet (used by the rest of the WCA website) renders it regardless. Authors write
+//   against Redcarpet, so the delimiter row is resized to the header before parsing. This has
+//   to happen on the raw text because a mismatched table never makes it into the syntax tree.
+const alignTableDelimiters = (markdown: string) => {
+  const lines = markdown.split("\n");
+
+  return lines
+    .map((line, index) => {
+      const headerRow = lines[index - 1];
+
+      return headerRow?.includes("|") &&
+        line.includes("|") &&
+        TABLE_DELIMITER_ROW.test(line)
+        ? withHeaderCellCount(line, headerRow)
+        : line;
+    })
+    .join("\n");
+};
+
 type DefaultParagraph = typeof Text;
 type ParagraphElement = ElementType<ComponentProps<"p">>;
 
@@ -113,7 +155,11 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
 }) => {
   return (
     <Markdown
-      remarkPlugins={[remarkLooseHeadings]}
+      remarkPlugins={[
+        remarkLooseHeadings,
+        // Redcarpet only strikes through on `~~`, so `~5 min` must stay literal here too.
+        [remarkGfm, { singleTilde: false }],
+      ]}
       components={{
         a: ({ children, ...aTag }) => (
           <ChakraLink
@@ -149,9 +195,19 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
             <Blockquote.Content {...blockquoteTag} />
           </Blockquote.Root>
         ),
+        table: (tableTag) => (
+          <Table.ScrollArea>
+            <Table.Root {...tableTag} />
+          </Table.ScrollArea>
+        ),
+        thead: Table.Header,
+        tbody: Table.Body,
+        tr: Table.Row,
+        th: Table.ColumnHeader,
+        td: Table.Cell,
       }}
     >
-      {children}
+      {children && alignTableDelimiters(children)}
     </Markdown>
   );
 };
