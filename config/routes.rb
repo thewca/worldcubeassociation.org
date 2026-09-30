@@ -370,6 +370,7 @@ Rails.application.routes.draw do
     get '/', to: redirect('/help/api', status: 302)
 
     namespace :v1 do
+      get '/persons/:wca_id' => 'persons#show', as: :person
       get '/persons/:wca_id/results' => 'persons#results', as: :person_results
       get '/persons/:wca_id/records' => 'persons#records', as: :person_records
 
