@@ -6,7 +6,7 @@ import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import { EventId } from "@/lib/wca/data/events";
 
-interface TabBase {
+export interface TabBase {
   i18nKey: string;
   i18nKeyAdmin?: string;
   menuKey: string;
