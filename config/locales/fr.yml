@@ -477,8 +477,8 @@ fr:
         subRegion: Sous-région
         #original_hash: a1ba702
         receive_developer_mails: >-
-          Je souhaite recevoir des notifications concernant les modifications
-          apportées aux ressources logicielles de la WCA.
+          Je souhaite recevoir des notifications concernant les modifications apportées
+          aux ressources logicielles de la WCA
         #original_hash: 730db33
         receive_delegate_reports: Je souhaite recevoir les rapports des 
           compétitions WCA par e-mail
@@ -945,7 +945,7 @@ fr:
         wca_id: ID WCA
     #original_hash: 687d968
     competition_link_html: 'Cliquez <a href=''%{url}''>ici</a> pour accéder à la page
-      de la compétition.'
+      de la compétition'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -956,8 +956,8 @@ fr:
       title: Une erreur s'est produite lors du rendu de la page
       #original_hash: 22dfe12
       description: >-
-        Si cette erreur persiste, signalez-la à WST en fournissant les
-        informations détaillées ci-dessous.
+        Si cette erreur persiste, signalez-la à WST en fournissant les informations
+        détaillées ci-dessous
       #original_hash: 20be860
       details: Détails de l'erreur
     messages:
@@ -1095,10 +1095,10 @@ fr:
           backup_codes: Codes de secours
           #original_hash: fa62416
           backup_codes_desc: >-
-            Les codes de secours peuvent être utilisés en lieu et place d'un
-            code à usage unique si vous n'avez pas accès à votre appareil équipé
-            de l'application 2FA. Chaque code ne peut être utilisé qu'une fois.
-            Faites attention à les stocker dans un endroit sûr.
+            Les codes de secours peuvent être utilisés en lieu et place d'un code
+            à usage unique si vous n'avez pas accès à votre appareil équipé de l'application
+            de double authentification. Chaque code ne peut être utilisé qu'une fois.
+            Faites attention à les stocker dans un endroit sûr!
           #original_hash: 087cb72
           no_backup_codes: >-
             Vous n'avez pas encore généré de code de secours. Cliquez sur le
@@ -1381,9 +1381,9 @@ fr:
         Trésorier gère les affaires financières de la WCA.
       #original_hash: 19d4bbb
       board_description: >-
-        Le Conseil d'administration de la WCA est chargé de diriger
-        l'organisation dans son ensemble et de remplir toutes les fonctions qui
-        ne sont pas remplies par d'autres équipes et comités.
+        Le Conseil d'administration de la WCA est chargé de diriger l'organisation
+        dans son ensemble et de remplir toutes les fonctions qui ne sont pas remplies
+        par d'autres équipes et comités
     teams_committees_councils:
       #original_hash: 1d14e2f
       title: Équipes et Comités
@@ -1747,8 +1747,8 @@ fr:
       ad_new: Nouveau
       #original_hash: 9ad68ce
       text_html: >-
-        Allez jeter un œil à nos nouveaux produits dérivés incluant une
-        sélection de vêtements (t-shirts, sweats à capuche...)
+        Allez jeter un œil à nos nouveaux produits dérivés incluant une sélection
+        de vêtements (t-shirts, sweats à capuche...).
       #original_hash: b0fc6c4
       link_title: Lien vers la boutique
     records:
@@ -1814,16 +1814,13 @@ fr:
         welcome: 'Bonjour %{user_email} !'
         #original_hash: da39d05
         confirm: >-
-          Votre compte est créé et vous devez l'activer avant de pouvoir
-          l'utiliser. Merci de confirmer votre compte en cliquant sur le lien
-          ci-dessous :
-        #original_hash: 776476a
+          Votre compte est créé et vous devez l'activer avant de pouvoir l'utiliser.
+          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash: 776476a
         confirmation_link: Confirmer mon compte.
         #original_hash: d484f70
         activate: >-
-          Après l'activation, vous pourrez vous connecter sur le site internet
-          de la World Cube Association :
-        #original_hash: fb02586
+          Après l'activation, vous pourrez vous connecter sur le site internet de
+          la World Cube Association :  #original_hash: fb02586
         login_form: formulaire de connexion
         #original_hash: 333999b
         addendum: >-
@@ -1856,8 +1853,8 @@ fr:
           nouvelle notification.
         #original_hash: dfea09d
         contact: >-
-          Si vous avez d'autres questions, merci de contacter les Délégués de
-          votre compétition par e-mail :
+          Si vous avez d'autres questions, merci de contacter les Délégués de votre
+          compétition par e-mail : ­ 
       competition_announcement_email:
         #original_hash: 87f1f49
         header: 'Le WCAT a annoncé %{competition}'
@@ -2347,7 +2344,7 @@ fr:
         other:
     flash:
       #original_hash: da7ec53
-      not_using_wca: Cette compétition n'utilise pas les inscriptions WCA.
+      not_using_wca: Cette compétition n'utilise pas les inscriptions WCA
       #original_hash: 82b3899
       updated: Inscription mise à jour
       #original_hash: 7707307
@@ -2551,8 +2548,8 @@ fr:
     will_pay_here: Vous les paierez ici après avoir soumis votre inscription
     #original_hash: 86877d4
     wont_pay_here: >-
-      Veuillez consulter les informations relatives à la compétition pour
-      connaître les modalités de paiement.
+      Veuillez consulter les informations relatives à la compétition pour connaître
+      les modalités de paiement
     refund_form:
       labels:
         #original_hash: 1cc5991
@@ -2750,8 +2747,8 @@ fr:
       add: Ajouter l'inscription
       #original_hash: fd52980
       ots_not_enabled: >-
-        Les inscriptions sont terminées et l'inscription sur place n'est pas
-        activée - vous devez d'abord modifier la compétition pour l'activer.
+        Les inscriptions sont terminées et l'inscription sur place n'est pas activée
+        - vous devez d'abord modifier la compétition pour l'activer
       #original_hash: ed9d329
       ots_before_registration_open: >-
         L'inscription sur place ne sera possible qu'une fois que les
@@ -3010,11 +3007,10 @@ fr:
             qu'il s'agit bien d'un DNS et non d'un DNF.
           #original_hash: 6becd6c
           impossible: >-
-            Le résultat que vous essayez de soumettre semble impossible : la
-            %{attempt_number}e tentative a été effectuée en moins de 30 secondes
-            par cube. Si vous souhaitez saisir un temps en minutes, n'oubliez
-            pas d'ajouter deux zéros à la fin du score pour indiquer les
-            centièmes de secondes.
+            Le résultat que vous essayez de soumettre semble impossible : la %{attempt_number}e
+            tentative a été effectuée en moins de 30 secondes par cube. Si vous souhaitez
+            saisir un temps en minutes, n'oubliez pas d'ajouter deux zéros à la fin
+            du score pour indiquer les centièmes de secondes
           #original_hash: a03301d
           inconsistent: >-
             Les résultats que vous essayez de soumettre semblent incohérents. Il
@@ -3059,7 +3055,7 @@ fr:
           #original_hash: 1a2285d
           quit_menu: Supprimer
           #original_hash: 70835a0
-          no_next: Aucun autre compétiteur ne se qualifie
+          no_next: Aucun autre compétiteur ne se qualifie.
           #original_hash: 77dfd21
           cancel: Annuler
           #original_hash: 79d6737
@@ -3249,9 +3245,9 @@ fr:
         %{event_change_deadline} en contactant l'équipe organisatrice.
       #original_hash: c58abdf
       event_change_deadline_edits_allowed_html: >-
-        Si vous êtes un compétiteur inscrit/une compétitrice inscrite, vous
-        pouvez changer les épreuves auxquelles vous êtes inscrit·e jusqu'au
-        %{event_change_deadline} sur l'onglet %{register}
+        Si vous êtes un compétiteur inscrit/une compétitrice inscrite, vous pouvez
+        changer les épreuves auxquelles vous êtes inscrit·e jusqu'au %{event_change_deadline}
+        sur l'onglet %{register}.
       #original_hash: eff3594
       event_change_deadline_default_html: >-
         Nous vous encourageons à vous inscrire aux épreuves auxquelles vous
@@ -3956,7 +3952,7 @@ fr:
           #original_hash: cc7d557
           scoretaking_software: >-
             Sélectionnez « %{choice_ilr} » ou un outil externe, si vous souhaitez
-            utiliser le système de double confrontation.
+            utiliser le système de double confrontation
         entry_fees:
           #original_hash: 9735ddf
           currency_code: La devise utilisée pour les différents frais.
@@ -4075,7 +4071,7 @@ fr:
             #original_hash: d9c05cc
             'true': Je veux spécifier une limite au nombre de compétiteurs
             #original_hash: 53397ec
-            'false': Je ne veux PAS spécifier de limite pour les compétiteurs.
+            'false': Je ne veux PAS spécifier de limite pour les compétiteurs
           auto_accept_preference:
             #original_hash: 5996b1f
             disabled: Désactiver le bouton « Acceptation automatique groupée »
@@ -4145,8 +4141,8 @@ fr:
         bulk_auto_accept: Approuver automatiquement les compétiteurs
         #original_hash: 1a84d92
         cant_bulk_auto_accept: >-
-          Une erreur s'est produite lors de la tentative d'acceptation
-          automatique - contactez le WST pour obtenir de l'aide si nécessaire.
+          Une erreur s'est produite lors de la tentative d'acceptation automatique
+          - contactez le WST pour obtenir de l'aide si nécessaire
         #original_hash: 1897ffb
         bulk_auto_accepted: Acceptation automatique réussie
         #original_hash: 786d81b
@@ -4245,7 +4241,7 @@ fr:
           #original_hash: bd69c74
           title: Inscriptions annulées
           #original_hash: bb5b570
-          information: Les compétiteurs ayant annulé peuvent se réinscrire
+          information: Les compétiteurs ayant annulé peuvent se réinscrire.
         rejected:
           #original_hash: 9cef5ae
           title: Inscriptions rejetées
@@ -4523,8 +4519,8 @@ fr:
           sélectionnées
         #original_hash: fb1d742
         '-4013': >-
-          Ne peut accepter un non-nouveau venu lorsqu'il ne reste que des places
-          réservées aux nouveaux venus.
+          Ne peut accepter un non-nouveau venu lorsqu'il ne reste que des places réservées
+          aux nouveaux venus
         #original_hash: a244fde
         '-4014': Vous êtes déjà inscrit à cette compétition.
         #original_hash: 369db78
@@ -4558,16 +4554,16 @@ fr:
     errors:
       #original_hash: b14d060
       must_use_wca_registration: >-
-        L'acceptation automatique ne peut être utilisée que si vous utilisez le
-        site web de la WCA pour les inscriptions.
+        L'acceptation automatique ne peut être utilisée que si vous utilisez le site
+        web de la WCA pour les inscriptions
       #original_hash: 693d47d
       must_use_payment_integration: >-
-        Vous devez activer une intégration de paiement (par exemple, Stripe)
-        afin d'utiliser l'acceptation automatique.
+        Vous devez activer une intégration de paiement (par exemple, Stripe) afin
+        d'utiliser l'acceptation automatique
       #original_hash: 130c901
       auto_accept_limit: >-
-        La limite d'inscriptions acceptées automatiquement doit être inférieure
-        à la limite de compétiteurs.
+        La limite d'inscriptions acceptées automatiquement doit être inférieure à
+        la limite de compétiteurs
       #original_hash: 42cd8e6
       auto_accept_not_negative: >-
         La limite d'inscriptions acceptées automatiquement ne peut être
@@ -5943,8 +5939,8 @@ fr:
     create:
       #original_hash: 60cdccc
       create_success: >-
-        Demande soumise avec avec succès ! Merci de vérifier vos e-mails et
-        d'attendre que le Conseil d'administration de la WCA l'évalue.
+        Demande soumise avec succès ! Merci de vérifier vos e-mails et d'attendre
+        que le Conseil d'administration de la WCA l'évalue
     delete:
       #original_hash: 6588652
       confirm_delete: >-
@@ -6656,10 +6652,8 @@ fr:
         commentaire au WRT à ce sujet.
       #original_hash: 050c7e2
       non_matching_name_warning: >-
-        Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à
-        l'enregistrement actuel dans la base de données WCA
-        ('%{expected_name}').
-      #original_hash: 333a035
+        Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à l'enregistrement
+        actuel dans la base de données WCA ('%{expected_name}').  #original_hash: 333a035
       non_matching_country_warning: >-
         Le pays '%{country}' fourni pour %{name} (%{wca_id}) ne correspond pas à
         l'enregistrement actuel dans la base de données WCA
