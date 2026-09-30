@@ -106,7 +106,9 @@ const withHeaderCellCount = (delimiterRow: string, headerRow: string) => {
 //   but Redcarpet (used by the rest of the WCA website) renders it regardless. Authors write
 //   against Redcarpet, so the delimiter row is resized to the header before parsing. This has
 //   to happen on the raw text because a mismatched table never makes it into the syntax tree.
-const alignTableDelimiters = (markdown: string) => {
+const alignTableDelimiters = (markdown: Options["children"]) => {
+  if (!markdown) return markdown;
+
   const lines = markdown.split("\n");
 
   return lines
@@ -195,9 +197,9 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
             <Blockquote.Content {...blockquoteTag} />
           </Blockquote.Root>
         ),
-        table: (tableTag) => (
+        table: (tableProps) => (
           <Table.ScrollArea>
-            <Table.Root {...tableTag} />
+            <Table.Root {...tableProps} />
           </Table.ScrollArea>
         ),
         thead: Table.Header,
@@ -207,7 +209,7 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
         td: Table.Cell,
       }}
     >
-      {children && alignTableDelimiters(children)}
+      {alignTableDelimiters(children)}
     </Markdown>
   );
 };
