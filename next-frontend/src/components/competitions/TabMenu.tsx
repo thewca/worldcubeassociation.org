@@ -41,12 +41,10 @@ function activityCodeFromPath(path: string) {
 
 export default function TabMenu({
   competitionInfo,
-  children,
   tabs,
   backHref,
   customTabs = [],
 }: {
-  children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
   backHref?: RouteLiteral;
@@ -70,15 +68,7 @@ export default function TabMenu({
   const drawerOpen = drawerOpenedAt === pathName;
 
   return (
-    <Tabs.Root
-      variant="enclosed"
-      width="full"
-      value={currentPath}
-      orientation="vertical"
-      sideNav
-      lazyMount
-      unmountOnExit
-    >
+    <>
       <Tabs.List
         width="fit-content"
         minW="3xs"
@@ -176,10 +166,7 @@ export default function TabMenu({
           </Drawer.Positioner>
         </Drawer.Root>
       </Box>
-      <Tabs.Content width="full" value={currentPath!}>
-        {children}
-      </Tabs.Content>
-    </Tabs.Root>
+    </>
   );
 }
 
