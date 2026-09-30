@@ -170,6 +170,9 @@ export default function WcaSearch() {
       // Highlighting the first option (which is always "Search for ...") makes
       // pressing enter open the full search page.
       inputBehavior="autohighlight"
+      // The navbar survives client-side navigation, so an uncontrolled value would keep the last
+      //   pick selected, and picking it again wouldn't fire `onValueChange`.
+      value={[]}
       highlightedValue={highlightedValue}
       onHighlightChange={(e) => setHighlightedValue(e.highlightedValue)}
       onInputValueChange={(e) => setQuery(e.inputValue)}
