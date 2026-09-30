@@ -47,10 +47,6 @@ const withRoutes = nextRoutes({ outDir: "src/types" });
 
 const shouldUseProprietaryFont = process.env.PROPRIETARY_FONT === "TTNormsPro";
 
-// Evaluated once per build and inlined, so anything seeded off it (the RandomBackground
-//   grid) is stable within a deploy and reshuffles on the next one.
-const buildSeed = Date.now().toString(36);
-
 const nextConfig: NextConfig = {
   serverExternalPackages: ["newrelic"],
   webpack: (config, { isServer, webpack }) => {
@@ -68,9 +64,6 @@ const nextConfig: NextConfig = {
       nrExternals(config);
     }
     return config;
-  },
-  env: {
-    NEXT_PUBLIC_BUILD_SEED: buildSeed,
   },
   cacheComponents: true,
   experimental: {
