@@ -2475,6 +2475,11 @@ fr-CA:
       series_registrations: Inscriptions à une série
       #original_hash: b25928c
       total: Total
+      export_to_csv:
+        one: Exporter %{count} inscription au format CSV
+        many:
+        other: Exporter %{count} inscriptions au format CSV
+      export_all_to_csv: Exporter toutes les inscriptions au format CSV
     new_registration:
       #original_hash: 104488b
       title: 'S''inscrire pour %{comp}'
@@ -3533,6 +3538,9 @@ fr-CA:
       no_more_comps: Plus aucune compétition.
       #original_hash: e115823
       no_comp_found: Pas de compétition trouvée.
+      why_compete_description_html: |-
+        <p>Les compétitions ne servent pas seulement à déterminer qui est le plus rapide : ce sont aussi des événements conviviaux ! Toute personne capable de résoudre un cube Rubik est la bienvenue pour venir battre son propre record personnel. Il est facile de se faire des amis, car tout le monde travaille main dans la main pour assurer le bon déroulement de la compétition.</p>
+        <p>Utilisez l'outil ci-dessous pour trouver une compétition près de chez vous et vous lancer dans l'aventure du cube Rubik !</p>
     my_competitions_table:
       #original_hash: 429cb14
       edit: Éditer
@@ -3949,8 +3957,8 @@ fr-CA:
             compétition. Doit être une url http(s) valide.
           #original_hash: 89b0eba
           scoretaking_software: >-
-            Sélectionnez « %{choice_ilr} » si vous souhaitez utiliser le système
-            de double confrontation.
+            Sélectionnez « %{choice_ilr} » ou un outil externe, si vous souhaitez
+            utiliser le système de double confrontation
         entry_fees:
           #original_hash: 83dc650
           currency_code: La devise utilisée pour les différents frais.
@@ -4232,6 +4240,9 @@ fr-CA:
             Vous avez ignoré %{count} d'inscription(s) antérieure(s) en
             suspens/en attente. Êtes-vous sûr de vouloir accepter la ou les
             inscriptions sélectionnées ?
+          information: Les compétiteurs approuvés sont autorisés à participer à 
+            la compétition dans les épreuves pour lesquelles ils se sont 
+            inscrits.
         cancelled:
           #original_hash: 36e7464
           title: Inscriptions annulées
@@ -4342,6 +4353,16 @@ fr-CA:
         #original_hash: de54899
         no_self_update: Contactez l’équipe organisatrice pour mettre à jour 
           votre inscription.
+        send_email:
+          one: Envoyer un courriel à %{count} adresse
+          many: Envoyer un courriel à %{count} adresses
+          other: Envoyer un courriel à %{count} adresses
+        copy_emails:
+          one: Copier %{count} adresse courriel
+          many: Copier %{count} adresses courriel
+          other: Copier %{count} adresses courriel
+        scroll_to: Faites défiler jusqu'à
+        non_competing: Hors compétition
       register:
         #original_hash: 800c530
         will_open_countdown: >-
@@ -6783,6 +6804,11 @@ fr-CA:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} est en mauvaise position : attendu
         %{expected_pos}, mais obtenu %{pos}.
+      automatically_global_position_fixed_info: '[%{round_id}] Le classement général
+        de %{person_name} a été automatiquement corrigé, passant de %{pos} à %{expected_pos}.'
+      wrong_global_position_in_results_error: "[%{round_id}] %{person_name} n'occupe
+        pas la bonne place au classement général : on s'attendait à %{expected_pos},
+        mais il se trouve en %{pos}."
     rounds:
       #original_hash: 1ba6b37
       too_many_qualified_warning: >-
