@@ -18,6 +18,11 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     mandatory :AVATARS_PUBLIC_STORAGE, :string
     mandatory :AVATARS_PRIVATE_STORAGE, :string
     mandatory :CDN_AVATARS_DISTRIBUTION_ID, :string
+    mandatory :S3_UPLOADS_PUBLIC_BUCKET, :string
+    mandatory :S3_UPLOADS_PRIVATE_BUCKET, :string
+    mandatory :S3_UPLOADS_ASSET_HOST, :string
+    mandatory :UPLOADS_PUBLIC_STORAGE, :string
+    mandatory :UPLOADS_PRIVATE_STORAGE, :string
     mandatory :AWS_REGION, :string
     mandatory :DATABASE_WRT_USER, :string
     mandatory :DATABASE_WRT_SENIOR_USER, :string
@@ -52,6 +57,11 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
     optional :AVATARS_PUBLIC_STORAGE, :string, ''
     optional :AVATARS_PRIVATE_STORAGE, :string, ''
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
+    optional :S3_UPLOADS_PUBLIC_BUCKET, :string, ''
+    optional :S3_UPLOADS_PRIVATE_BUCKET, :string, ''
+    optional :S3_UPLOADS_ASSET_HOST, :string, ''
+    optional :UPLOADS_PUBLIC_STORAGE, :string, ''
+    optional :UPLOADS_PRIVATE_STORAGE, :string, ''
     optional :DATABASE_WRT_USER, :string, ''
     optional :DATABASE_WRT_SENIOR_USER, :string, ''
     optional :WCA_REGISTRATIONS_URL, :string, ''

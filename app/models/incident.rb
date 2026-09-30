@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class Incident < ApplicationRecord
+  include HasMarkdownImages
+
+  # The markdown editors here have image upload disabled, but URLs still arrive
+  # by copy-paste, so these columns have to be scanned like any other.
+  MARKDOWN_IMAGE_COLUMNS = %i[public_summary private_description private_wrc_decision].freeze
+
   has_many :incident_tags, autosave: true, dependent: :destroy
   has_many :incident_competitions, dependent: :destroy
   has_many :competitions, -> { order("competitions.start_date asc") }, through: :incident_competitions

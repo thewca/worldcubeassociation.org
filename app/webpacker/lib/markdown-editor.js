@@ -50,6 +50,9 @@ $(() => {
     const textFormattings = ['bold', 'italic', 'heading'];
     const textStructures = ['quote', 'unordered-list', 'ordered-list', 'table'];
     const allowImageUploads = this.classList.contains('markdown-editor-image-upload');
+    // Set by the view. Defaults to private so a form that forgets cannot leak
+    // an image into the public bucket.
+    const imageVisibility = this.dataset.imageVisibility || 'private';
     let uploadsAndInserts = [
       'link',
     ];
@@ -121,6 +124,8 @@ $(() => {
       async imageUploadFunction(file, onSuccess, onError) {
         const formData = new FormData();
         formData.append('image', file);
+        // Default to private: a form that does not say gets the safe bucket.
+        formData.append('visibility', imageVisibility);
         try {
           const response = await fetchWithAuthenticityToken('/upload/image', { method: 'POST', body: formData });
           const data = await response.json();

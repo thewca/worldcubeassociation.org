@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_02_160000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -862,10 +862,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "markdown_image_usages", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "attachable_id", null: false
+    t.string "attachable_type", null: false
+    t.datetime "created_at", null: false
+    t.bigint "markdown_image_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachable_type", "attachable_id"], name: "index_markdown_image_usages_on_attachable"
+    t.index ["markdown_image_id", "attachable_type", "attachable_id"], name: "index_markdown_image_usages_uniqueness", unique: true
+    t.index ["markdown_image_id"], name: "index_markdown_image_usages_on_markdown_image_id"
+  end
+
   create_table "markdown_images", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "uploaded_by_id"
+    t.string "visibility", default: "private", null: false
     t.index ["uploaded_by_id"], name: "index_markdown_images_on_uploaded_by_id"
   end
 
@@ -1688,6 +1700,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
   add_foreign_key "live_results", "rounds", on_delete: :cascade
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
+  add_foreign_key "markdown_image_usages", "markdown_images"
   add_foreign_key "markdown_images", "users", column: "uploaded_by_id"
   add_foreign_key "matched_scramble_sets", "external_scramble_sets"
   add_foreign_key "matched_scramble_sets", "rounds"
