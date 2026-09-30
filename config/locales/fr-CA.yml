@@ -1220,6 +1220,8 @@ fr-CA:
         manage_registrations: >-
           Vous inscrire à des compétitions, et modifier ou annuler vos
           inscriptions
+        translations: Accédez à la liste des langues pour lesquelles vous êtes 
+          traducteur WCA
     devise:
       #original_hash: 59cc9bd
       no_account: Pas de compte ?
