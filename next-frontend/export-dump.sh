@@ -1,5 +1,4 @@
 #!/bin/sh
-apk add mongodb-tools aws-cli zip
 
 # The `$DATABASE_URI` comes from the NextJS runtime (it's what the real deal Payload connects to)
 #   and it already contains/specifies a specific DB within the URL. So specifying --db again is not necessary.
