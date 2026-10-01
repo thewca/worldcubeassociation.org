@@ -16,8 +16,7 @@
     "lint:fix": "eslint --fix .",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "postinstall": "chakra typegen ./src/theme.ts",
-    "payload:schema": "tsx -r dotenv/config ./audit-export.ts"
+    "postinstall": "chakra typegen ./src/theme.ts"
   },
   "dependencies": {
     "@aws-sdk/credential-providers": "^3.1141.0",
@@ -116,7 +115,6 @@
     "jsdom": "^30.1.1",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.9",
-    "tsx": "^4.23.15",
     "typescript": "^6",
     "vite": "^8",
     "vitest": "^5.0.2"

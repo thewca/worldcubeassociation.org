@@ -17,7 +17,7 @@ CONFIDENTIAL_EXCLUDE=(
 echo "🔍 Running Payload Schema Audit..."
 
 # Make sure we're not forgetting to filter out any plugin tables
-DUMP_EXCLUDE_FLAGS=$(yarn payload:schema "${CONFIDENTIAL_EXCLUDE[@]}")
+DUMP_EXCLUDE_FLAGS=$(yarn payload run ./audit-export.ts "${CONFIDENTIAL_EXCLUDE[@]}")
 
 echo "✅ Security Audit Passed!"
 echo "🚀 Starting mongodump..."
