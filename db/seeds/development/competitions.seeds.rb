@@ -34,7 +34,7 @@ after "development:users", "development:user_roles" do
     day = i.days.ago
     country = countries.sample
 
-    competition = Competition.new(
+    competition = Competition.create!(
       id: "My#{i}ResultsComp#{day.year}",
       name: "My #{i} Comp With Results #{day.year}",
       cell_name: "My #{i} Comp With Results #{day.year}",
@@ -54,10 +54,8 @@ after "development:users", "development:user_roles" do
       registration_close: 1.week.ago,
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
+      events: random_events,
     )
-    competition.events = random_events
-
-    competition.save!
 
     competition.competition_events.each do |competition_event|
       event = competition_event.event
@@ -67,19 +65,22 @@ after "development:users", "development:user_roles" do
         round_format = event.preferred_formats.first.format
         is_final = j == round_types.length - 1
 
-        round = Round.create!(
-          competition_event: competition_event,
+        round = competition_event.rounds.create!(
           format: round_format,
           number: j + 1,
           total_number_of_rounds: round_types.length,
           time_limit: event.can_change_time_limit? ? TimeLimit.new : nil,
           cutoff: nil,
           advancement_condition: is_final ? nil : AdvancementConditions::RankingCondition.new(16),
+          participation_source: j.zero? ? competition_event : competition_event.rounds.last,
+          participation_condition: ResultConditions::Ranking.new(scope: round_format.sort_by, value: 16),
           scramble_set_count: rand(1..4),
         )
+
         users.each_with_index do |competitor, k|
           person = competitor.person
-          result = Result.new(
+
+          result = round.results.build(
             pos: k + 1,
             person_id: person.wca_id,
             person_name: person.name,
@@ -87,11 +88,11 @@ after "development:users", "development:user_roles" do
             competition_id: competition.id,
             event_id: event.id,
             round_type_id: round_type_id,
-            round_id: round.id,
             format_id: round_format.id,
             regional_single_record: k.zero? ? "WR" : nil,
             regional_average_record: k.zero? ? "WR" : nil,
           )
+
           round_format.expected_solve_count.times do |v|
             result.result_attempts.build(
               attempt_number: v + 1,
@@ -115,7 +116,7 @@ after "development:users", "development:user_roles" do
     day = i.days.ago
     country = countries.sample
 
-    competition = Competition.new(
+    Competition.create!(
       id: "My#{i}Comp#{day.year}",
       name: "My #{i} Best Comp #{day.year}",
       cell_name: "My #{i} Comp #{day.year}",
@@ -135,10 +136,8 @@ after "development:users", "development:user_roles" do
       registration_close: 1.week.before(day),
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
+      events: random_events,
     )
-    competition.events = random_events
-
-    competition.save!
   end
 
   users.each_with_index do |user, i|
@@ -168,7 +167,7 @@ after "development:users", "development:user_roles" do
     end_day = start_day if start_day.year != end_day.year
     country = countries.sample
 
-    competition = Competition.new(
+    competition = Competition.create!(
       id: "MyComp#{i + 1}#{start_day.year}",
       name: "My #{i + 1} Comp #{start_day.year}",
       cell_name: "My #{i + 1} Comp #{start_day.year}",
@@ -188,10 +187,8 @@ after "development:users", "development:user_roles" do
       registration_close: start_day - 1.week,
       latitude_degrees: rand(-90.0..90.0),
       longitude_degrees: rand(-180.0..180.0),
+      events: random_events,
     )
-    competition.events = random_events
-
-    competition.save!
 
     # Create registrations for some competitions taking place far in the future
     next if i < 480
