@@ -834,8 +834,9 @@ const customConfig = defineConfig({
           variant: {
             competition: {
               label: {
-                alignItems: "start",
+                alignItems: "center",
                 textStyle: "body",
+                fontWeight: 300,
                 color: "fg",
               },
               valueText: {
