@@ -174,6 +174,8 @@ function IncidentsLog() {
                 </Table.Cell>
                 <Table.Cell>
                   {t(
+                    // i18n-tasks-use t("incidents_log.resolved")
+                    // i18n-tasks-use t("incidents_log.pending")
                     item.resolved_at
                       ? "incidents_log.resolved"
                       : "incidents_log.pending",
@@ -181,6 +183,7 @@ function IncidentsLog() {
                 </Table.Cell>
                 <Table.Cell hideBelow="md">
                   {t(
+                    // i18n-tasks-use t("incidents_log.sent")
                     item.digest_worthy && item.digest_sent_at
                       ? "incidents_log.sent"
                       : "incidents_log.pending",
