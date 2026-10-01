@@ -391,6 +391,7 @@ vi:
       unit_seconds: giây
       #original_hash: 9d86b0d
       unit_moves: bước
+    back_to_top: Về đầu trang
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1166,6 +1167,10 @@ vi:
         email: Truy cập địa chỉ email của bạn
         #original_hash: e0d0654
         manage_competitions: Quản lý bất kỳ giải đấu nào bạn đang tổ chức
+        manage_registrations: Thay mặt bạn đăng ký tham dự giải đấu và sửa hoặc 
+          hủy đơn đăng ký của bạn
+        translations: Truy cập danh sách các ngôn ngữ mà bạn chịu trách nhiệm 
+          dịch thuật
     devise:
       #original_hash: 06184f5
       no_account: Không có tài khoản?
@@ -2201,6 +2206,7 @@ vi:
         Bạn phải thêm lời nhắn. Xin vui lòng đọc Yêu cầu Đăng ký phía trên để
         xem cần phải thêm gì (VD: địa điểm thi đấu cho giải đấu FMC đồng thời
         tại nhiều địa điểm).
+      banned_until: Bạn bị cấm thi đấu đến ngày %{date}.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2325,6 +2331,9 @@ vi:
       series_registrations: Đơn đăng ký chuỗi
       #original_hash: b25928c
       total: Tổng cộng
+      export_to_csv:
+        other: Xuất danh sách %{count} đơn đăng ký dưới dạng CSV
+      export_all_to_csv: Xuất toàn bộ danh sách đăng ký dưới dạng CSV
     new_registration:
       #original_hash: 8b9f726
       title: 'Đăng ký cho %{comp}'
@@ -2514,8 +2523,8 @@ vi:
       registrations_file_label: File chứa đơn đăng ký
       #original_hash: 224f3a6
       registrations_file_hint: >-
-        File CSV có các cột: Trang thái, Họ tên, Quốc tịch, WCA ID, Ngày sinh,
-        Giới tính, Email và một cột cho mỗi nội dung.
+        File CSV có các cột: Trang thái, Họ tên, Quốc tịch, WCA ID, Ngày sinh, Giới
+        tính, Email và một cột cho mỗi nội dung, hoặc file JSON chứa dữ liệu WCIF.
       #original_hash: 01beb54
       preview: Xem trước Thông tin đăng ký
       #original_hash: d6fbc9d
@@ -2556,6 +2565,10 @@ vi:
           1944-07-13), các ngày sinh sau đây không xử lý đươc: %{raw_dobs}.
         #original_hash: 6d8e34b
         empty_file: Tập tin này trống.
+        invalid_country: 'Quốc tịch không hợp lệ: ${country}.'
+        invalid_wcif: File JSON không chứa dữ liệu WCIF hợp lệ.
+        unsupported_file_format: Định dạng file không được hỗ trợ. Vui lòng tải 
+          lên file JSON hoặc CSV.
     add:
       #original_hash: 975275e
       title: 'Thêm đăng ký cho %{comp}'
@@ -2689,9 +2702,9 @@ vi:
       tooltip_registered: Bạn đã đăng ký.
       #original_hash: b10c8d6
       tooltip_pending: >-
-        Đơn đăng ký của bạn đang được chờ chấp nhận. Hãy đảm bảo rằng bạn đã
-        hoàn thành mọi yêu cầu (VD: thanh toán lệ phí) như đã được ghi trên
-        Trang của Giải đấu.
+        Đơn đăng ký của bạn đang chờ được chấp nhận. Hãy đảm bảo rằng bạn đã hoàn
+        thành mọi yêu cầu (VD: thanh toán lệ phí) được liệt kê trên trang của giải
+        đấu.
       #original_hash: f2d092f
       tooltip_waiting_list: Bạn đang trong danh sách chờ.
       #original_hash: f97246a
@@ -2874,6 +2887,7 @@ vi:
             Thí sinh chưa đăng ký nội dung này và thời gian chỉnh sửa nội dung
             thi đấu đã đóng. Bạn vẫn có thể thêm thí sinh này, nhưng hãy đảm bảo
             bạn chắc chắn muốn làm như vậy.
+        first_timer: Thí sinh mới
       results:
         #original_hash: 4705687
         competitor: Thí sinh
@@ -3251,6 +3265,30 @@ vi:
       no_more_comps: Không còn giải đấu.
       #original_hash: 8b09d74
       no_comp_found: Không tìm thấy giải đấu.
+      all_competitions: Tất cả giải đấu
+      event: Nội dung
+      name: Tên
+      location: Địa điểm
+      location_placeholder: Nhập địa chỉ
+      use_my_location: Sử dụng vị trí của tôi
+      distance: Khoảng cách
+      distance_units:
+        km: km
+        mi: dặm
+      advanced_filters: Bộ lọc nâng cao
+      registration_key: 'Chú thích trạng thái đăng ký:'
+      registration_status:
+        full: Không còn chỗ
+        open: Đang mở
+        not_open: Chưa mở
+        closed: Đã đóng
+      currently_displaying:
+        other: 'Đang hiển thị: %{count} giải đấu'
+      register_now: Đăng ký ngay
+      view_competition: Xem giải đấu
+      why_compete_description_html: |-
+        <p>Các giải đấu không chỉ là nơi thi đấu xem ai nhanh nhất, mà còn là nơi để giao lưu nữa! Bất kì ai có thể giải Rubik đều được chào đón tại các giải đấu và đều có cơ hội phá kỷ lục của chính bản thân mình. Tại giải đấu, mọi người đều cùng hỗ trợ lẫn nhau để giải đấu diễn ra suôn sẻ, vì vậy việc kết bạn cũng vô cùng dễ dàng.</p>
+        <p>Hãy sử dụng công cụ dưới đây để tìm các giải đấu sẽ diễn ra gần bạn và bắt đầu hành trình với khối Rubik nhé!</p>
     my_competitions_table:
       #original_hash: 5301648
       edit: Chỉnh sửa
@@ -3626,7 +3664,8 @@ vi:
             Trang web dành cho thí sinh để đăng ký tham gia giải đấu. Bắt buộc
             phải điền một đường dẫn có hiệu lực.
           #original_hash: cc7d557
-          scoretaking_software: 'Chọn ''%{choice_ilr}'' nếu muốn dùng Vòng thi kép'
+          scoretaking_software: 'Chọn ''%{choice_ilr}'' hoặc công cụ ngoài nếu muốn
+            dùng Vòng thi kép'
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Mã tiền tệ cho lệ phí.
@@ -3834,9 +3873,9 @@ vi:
           title: Đơn đăng ký Đang chờ
           #original_hash: 5e16c6d
           information: >-
-            Mục đang chờ chỉ nên dành cho các đơn đăng ký chưa hoàn thành (VD:
-            chưa nộp lệ phí) - xin vui lòng dùng Danh sách chờ nếu không còn vị
-            trí để chấp nhận đơn của các thí sinh mới.
+            Mục đơn đang chờ chỉ nên dành cho các đơn đăng ký chưa hoàn thành (VD:
+            chưa nộp lệ phí) - xin vui lòng dùng danh sách chờ nếu danh sách đăng
+            ký đã đầy.
           #original_hash: 134e94f
           waitlist_skipped_warning: >-
             Bạn đã bỏ qua %{count} đơn đăng ký xếp trước ở mục Đang xử lý. Bạn
@@ -3867,6 +3906,8 @@ vi:
           pending_waitlist_combined_skipped_warning: >-
             Bạn đã bỏ qua %{count} đơn đăng ký ở mục Đang xử lý/Danh sách chờ.
             Bạn có chắc chắn muốn dutyệt các đơn đăng ký đã chọn không?
+          information: Các thí sinh đã được duyệt đơn được xác nhận sẽ có thể 
+            tham gia thi đấu trong các nội dung đã đăng ký.
         cancelled:
           #original_hash: bd69c74
           title: Đơn đăng ký Đã hủy
@@ -3912,6 +3953,7 @@ vi:
           thi, chính sách hoàn tiền và các yêu cầu khác ở trên.
         #original_hash: 80d2933
         next_step: Tiếp tục đến Bước tiếp theo
+        accept: Chấp nhận
       update:
         #original_hash: ebf417d
         being_updated: Đơn đăng ký đang được cập nhật...
