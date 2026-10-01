@@ -124,6 +124,20 @@ export type IconName =
   | 'Sq1Icon';
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AvatarMenuPermission".
+ */
+export type AvatarMenuPermission =
+  | 'none'
+  | 'canAccessCms'
+  | 'canViewPolls'
+  | 'canViewAllUsers'
+  | 'canAdminResults'
+  | 'canCreatePosts'
+  | 'canManageRegionalOrganizations'
+  | 'canViewDelegateAdminPage'
+  | 'canManageIncidents';
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "StaticTargetLink".
  */
 export type StaticTargetLink =
@@ -226,6 +240,7 @@ export interface Config {
     documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
+    avatarMenuEntries: AvatarMenuEntry;
     sessions: Session;
     accounts: Account;
     verifications: Verification;
@@ -249,6 +264,7 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
+    avatarMenuEntries: AvatarMenuEntriesSelect<false> | AvatarMenuEntriesSelect<true>;
     sessions: SessionsSelect<false> | SessionsSelect<true>;
     accounts: AccountsSelect<false> | AccountsSelect<true>;
     verifications: VerificationsSelect<false> | VerificationsSelect<true>;
@@ -645,6 +661,24 @@ export interface Tool {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "avatarMenuEntries".
+ */
+export interface AvatarMenuEntry {
+  id: string;
+  _order?: string | null;
+  label: string;
+  href: string;
+  isRailsPage?: boolean | null;
+  /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
+  requiredPermission: AvatarMenuPermission;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Auto-generated from Better Auth schema (session)
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -754,6 +788,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tools';
         value: string | Tool;
+      } | null)
+    | ({
+        relationTo: 'avatarMenuEntries';
+        value: string | AvatarMenuEntry;
       } | null)
     | ({
         relationTo: 'sessions';
@@ -957,6 +995,20 @@ export interface ToolsSelect<T extends boolean = true> {
   isOfficial?: T;
   author?: T;
   category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "avatarMenuEntries_select".
+ */
+export interface AvatarMenuEntriesSelect<T extends boolean = true> {
+  _order?: T;
+  label?: T;
+  href?: T;
+  isRailsPage?: T;
+  newTab?: T;
+  requiredPermission?: T;
   updatedAt?: T;
   createdAt?: T;
 }

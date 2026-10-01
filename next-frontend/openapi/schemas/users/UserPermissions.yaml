@@ -14,6 +14,12 @@ required:
   - can_view_delegate_admin_page
   - can_view_delegate_report
   - can_manage_incidents
+  - can_view_polls
+  - can_view_all_users
+  - can_admin_results
+  - can_create_posts
+  - can_manage_regional_organizations
+  - can_access_cms
 properties:
   can_attend_competitions:
     type: object
@@ -114,6 +120,48 @@ properties:
         items:
           type: string
   can_manage_incidents:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_view_polls:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_view_all_users:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_admin_results:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_create_posts:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_manage_regional_organizations:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_access_cms:
     type: object
     required:
       - scope

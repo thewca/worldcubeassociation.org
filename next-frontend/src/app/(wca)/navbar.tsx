@@ -17,15 +17,16 @@ import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
-
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
+import getPermissions from "@/lib/wca/permissions.server";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
 import { MobileNavLink, MobileNavRoot } from "@/components/MobileNav";
 import { getCachedGlobal } from "@/lib/payload/globals";
+import { getCachedCollection } from "@/lib/payload/collections";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -110,12 +111,14 @@ export default async function Navbar() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const [navbar, socialLinksGlobal] = await Promise.all([
+  const [navbar, socialLinksGlobal, avatarMenuEntries] = await Promise.all([
     getCachedGlobal("nav"),
     getCachedGlobal("social-links"),
+    getCachedCollection("avatarMenuEntries"),
   ]);
 
   const session = await getSession();
+  const permissions = (await getPermissions())?.permissions;
   const socialLinks = socialLinksGlobal.links ?? [];
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages
@@ -305,7 +308,11 @@ export default async function Navbar() {
               <LanguageSelector />
             </Box>
             <Box hideBelow="md">
-              <AvatarMenu session={session} />
+              <AvatarMenu
+                session={session}
+                cmsEntries={avatarMenuEntries}
+                permissions={permissions}
+              />
             </Box>
           </HStack>
         </HStack>
@@ -472,7 +479,11 @@ export default async function Navbar() {
               <Separator hideFrom="md" />
               <VStack align="start" hideFrom="md">
                 <LanguageSelector />
-                <AvatarMenu session={session} />
+                <AvatarMenu
+                  session={session}
+                  cmsEntries={avatarMenuEntries}
+                  permissions={permissions}
+                />
               </VStack>
             </VStack>
           </Collapsible.Content>
