@@ -11,6 +11,14 @@ import {
 } from '../lib/requests/routes.js.erb';
 import { groupTypes } from '../lib/wca-data.js.erb';
 
+const GROUP_DISPLAY_ABBREVIATIONS = {
+  wapc: 'WAC',
+};
+
+function groupDisplayAbbreviation(friendlyId) {
+  return GROUP_DISPLAY_ABBREVIATIONS[friendlyId] || friendlyId.toUpperCase();
+}
+
 function badgeParams(role) {
   if (role.group.group_type === groupTypes.delegate_regions) {
     return {
@@ -22,7 +30,7 @@ function badgeParams(role) {
   }
   if ([groupTypes.teams_committees, groupTypes.councils].includes(role.group.group_type)) {
     return {
-      roleTitle: `${role.group.metadata.friendly_id.toUpperCase()} ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`,
+      roleTitle: `${groupDisplayAbbreviation(role.group.metadata.friendly_id)} ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`,
       groupTitle: role.group.name,
       badgeClass: `team-${role.metadata.status.replace('_', '-')}-badge`,
       url: teamsCommitteesPageUrl(role.group.metadata.friendly_id),
