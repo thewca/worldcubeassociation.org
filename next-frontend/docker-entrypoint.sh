@@ -8,6 +8,7 @@ OIDC_CLIENT_SECRET=$(vault read -field=data -format=json kv/data/"$VAULT_APPLICA
 PAYLOAD_SECRET=$(vault read -field=data -format=json kv/data/"$VAULT_APPLICATION"/PAYLOAD_SECRET | jq -r '.value')
 PREVIEW_SECRET=$(vault read -field=data -format=json kv/data/"$VAULT_APPLICATION"/PREVIEW_SECRET | jq -r '.value')
 NEW_RELIC_LICENSE_KEY=$(vault read -field=data -format=json kv/data/"$VAULT_APPLICATION"/NEW_RELIC_LICENSE_KEY | jq -r '.value')
+WEBLATE_TOKEN=$(vault read -field=data -format=json kv/data/"$VAULT_APPLICATION"/WEBLATE_TOKEN | jq -r '.value')
 
 export AUTH_SECRET
 export OIDC_CLIENT_ID
@@ -15,5 +16,6 @@ export OIDC_CLIENT_SECRET
 export PAYLOAD_SECRET
 export PREVIEW_SECRET
 export NEW_RELIC_LICENSE_KEY
+export WEBLATE_TOKEN
 
 exec node server.js
