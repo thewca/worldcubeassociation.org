@@ -1731,7 +1731,6 @@ en:
       registration_key: "Registration Key:"
       #context: short labels for the registration status icons
       registration_status:
-        full: "Full"
         open: "Open"
         not_open: "Not yet Open"
         closed: "Closed"

@@ -34,6 +34,8 @@ export default function IncidentAdminButtons({
         toaster.create({
           id: "incident-mark-as-error",
           description: t(
+            // i18n-tasks-use t("incidents_log.admin.unpublish_error")
+            // i18n-tasks-use t("incidents_log.admin.publish_error")
             resolved
               ? "incidents_log.admin.unpublish_error"
               : "incidents_log.admin.publish_error",
@@ -64,6 +66,8 @@ export default function IncidentAdminButtons({
       title: t("incidents_log.admin.change_status"),
       confirmButton: t("incidents_log.admin.confirm"),
       body: t(
+        // i18n-tasks-use t("incidents_log.admin.confirm_unpublish")
+        // i18n-tasks-use t("incidents_log.admin.confirm_publish")
         resolved
           ? "incidents_log.admin.confirm_unpublish"
           : "incidents_log.admin.confirm_publish",
@@ -103,6 +107,8 @@ export default function IncidentAdminButtons({
           onClick={() => setConfirming("publish")}
         >
           {t(
+            // i18n-tasks-use t("incidents_log.admin.unpublish")
+            // i18n-tasks-use t("incidents_log.admin.publish")
             resolved
               ? "incidents_log.admin.unpublish"
               : "incidents_log.admin.publish",

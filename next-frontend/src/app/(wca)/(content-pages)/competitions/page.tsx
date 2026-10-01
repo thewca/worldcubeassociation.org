@@ -100,16 +100,19 @@ const REGISTRATION_STATUS_KEY = [
   {
     status: "open",
     icon: <CompRegoNotFullOpenGreenIcon />,
+    // i18n-tasks-use t("competitions.index.registration_status.open")
     labelKey: "competitions.index.registration_status.open",
   },
   {
     status: "notOpen",
     icon: <CompRegoNotOpenYetGreyIcon />,
+    // i18n-tasks-use t("competitions.index.registration_status.not_open")
     labelKey: "competitions.index.registration_status.not_open",
   },
   {
     status: "closed",
     icon: <CompRegoClosedRedIcon />,
+    // i18n-tasks-use t("competitions.index.registration_status.closed")
     labelKey: "competitions.index.registration_status.closed",
   },
 ] as const satisfies {
