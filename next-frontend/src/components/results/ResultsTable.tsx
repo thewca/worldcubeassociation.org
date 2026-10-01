@@ -16,6 +16,7 @@ import CountryMap from "@/components/CountryMap";
 import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
+import { DateTime } from "luxon";
 
 export function ResultsTable({
   results,
@@ -240,10 +241,13 @@ function personalBestIds(
   return new Set(ids);
 }
 
+const competitionStartMillis = (result: components["schemas"]["V1Result"]) =>
+  DateTime.fromISO(result.competition_start_date).toMillis();
+
 function historicalPbMarkers(results: components["schemas"]["V1Result"][]) {
   const chronological = _.orderBy(
     results,
-    ["competition_start_date", "id"],
+    [competitionStartMillis, "id"],
     ["asc", "asc"],
   );
 
@@ -266,10 +270,17 @@ export function ByCompetitionTable({
     ? historicalPbMarkers(results)
     : null;
 
-  // Newest competition first. Ordering explicitly rather than reversing the payload keeps this
-  // independent of whatever order the API happens to return rows in.
+  // Newest competition first, and the final before earlier rounds within a competition, matching
+  // the legacy profile page.
   const resultsByCompetition = _.groupBy(
-    _.orderBy(results, ["competition_start_date", "id"], ["desc", "asc"]),
+    _.orderBy(
+      results,
+      [
+        competitionStartMillis,
+        (result) => roundTypes.byId[result.round_type_id].rank,
+      ],
+      ["desc", "desc"],
+    ),
     "competition_id",
   );
 
