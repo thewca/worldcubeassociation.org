@@ -1,6 +1,6 @@
 <% unconfirmed_wca_id = @user.unconfirmed_wca_id %>
 <%# `wca_id_link` returns nil for a blank id, but the url argument is built first, so guard here too. %>
-<% link_id = unconfirmed_wca_id.presence && wca_id_link(unconfirmed_wca_id, url: auth_page_url(person_path(unconfirmed_wca_id)), target: "_blank") %>
+<% link_id = unconfirmed_wca_id.presence && wca_id_link(unconfirmed_wca_id, url: person_url(unconfirmed_wca_id, **auth_page_url_options), target: "_blank") %>
 <% if !@user.unconfirmed_person %>
   <p>
     <% if @user.unconfirmed_wca_id.present? %>
@@ -9,7 +9,7 @@
   </p>
 <% elsif @user.unconfirmed_person.user && !@user.unconfirmed_person.user.dummy_account? %>
   <p>
-    <%= t '.already_assigned_html', link_id: link_id, link_delegate: auth_page_url(delegates_path) %>
+    <%= t '.already_assigned_html', link_id: link_id, link_delegate: delegates_url(**auth_page_url_options) %>
   </p>
 <% elsif !@user.unconfirmed_person.dob %>
   <p>
@@ -17,7 +17,7 @@
   </p>
 <% else %>
   <p>
-    <%= t '.select_delegate_html', link_delegate: auth_page_url(delegates_path) %>
+    <%= t '.select_delegate_html', link_delegate: delegates_url(**auth_page_url_options) %>
   </p>
 
   <div class="form-group radio_buttons optional">

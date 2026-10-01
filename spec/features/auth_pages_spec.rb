@@ -68,7 +68,7 @@ RSpec.feature "Redesigned authentication pages" do
 
     it "keeps the classic page's profile link on Rails" do
       attempt_sign_in "/users/sign_in?classic=true"
-      expect(page).to have_link person.wca_id, href: "/persons/#{person.wca_id}"
+      expect(page).to have_link person.wca_id, href: "#{EnvConfig.ROOT_URL}/persons/#{person.wca_id}"
     end
   end
 

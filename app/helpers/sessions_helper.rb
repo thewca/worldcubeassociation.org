@@ -17,8 +17,9 @@ module SessionsHelper
   # Someone who opted back into the classic sign in page should stay in the old
   # experience end to end, so links out of it keep pointing at Rails. The
   # redesigned pages hand off to the Next frontend instead.
-  def auth_page_url(path)
-    classic_sign_in? ? path : next_frontend_url(path)
+  def auth_page_url_options
+    target_url = URI.parse(classic_sign_in? ? EnvConfig.ROOT_URL : EnvConfig.NEXT_FRONTEND_URL)
+    { protocol: target_url.scheme, host: target_url.host, port: target_url.port }
   end
 
   # The Next frontend stores the chosen colour mode in this cookie. "system", or

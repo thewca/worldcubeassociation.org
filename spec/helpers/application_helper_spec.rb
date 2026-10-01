@@ -10,14 +10,6 @@ RSpec.describe ApplicationHelper do
     end
   end
 
-  describe "#next_frontend_url" do
-    it "keeps our own path and swaps the host for the Next frontend" do
-      allow(EnvConfig).to receive(:NEXT_FRONTEND_URL).and_return("https://next.example.com")
-      expect(helper.next_frontend_url(delegates_path)).to eq "https://next.example.com/delegates"
-      expect(helper.next_frontend_url(person_path("2005FLEI01"))).to eq "https://next.example.com/persons/2005FLEI01"
-    end
-  end
-
   describe "#users_to_sentence" do
     it "escapes name" do
       users = []

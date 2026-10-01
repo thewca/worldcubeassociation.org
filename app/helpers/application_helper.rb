@@ -186,14 +186,6 @@ module ApplicationHelper
     end
   end
 
-  # Swaps the host on one of our own paths for the Next frontend, which mirrors
-  # them while the migration is under way — pass it a route helper rather than a
-  # literal. Only the pages that deliberately hand off should use this;
-  # everywhere else on the Rails site keeps linking to Rails.
-  def next_frontend_url(path)
-    "#{EnvConfig.NEXT_FRONTEND_URL}#{path}"
-  end
-
   def cubing_icon(event, **html_options)
     _cubing_icon_tag "event-#{event}", **html_options
   end
