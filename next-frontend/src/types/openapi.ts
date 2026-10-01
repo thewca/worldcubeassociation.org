@@ -1585,6 +1585,8 @@ export interface components {
             /** @example false */
             event_restrictions: boolean;
             cancelled_at?: string | null;
+            /** Format: date-time */
+            results_posted_at: string | null;
             /**
              * Format: date-time
              * @example 2025-05-29T06:59:00.000Z

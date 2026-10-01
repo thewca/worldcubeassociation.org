@@ -1413,6 +1413,7 @@ en:
       results_already_posted: "The results have already been posted."
       results_preview_alert: "You are viewing results that have not been posted yet."
       upload_results: "This competition is over. We are working to upload the results as soon as possible!"
+      provisional_live_results: "In the meantime, you can view the provisional results here:"
       computing_auxiliary_data: "Please wait until auxiliary data is computed."
       no_results: "There are no results."
       no_main_event_results: "There are no results for the main event (%{event_name})."

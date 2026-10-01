@@ -1502,34 +1502,34 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_170000) do
 
   create_table "trainee_delegate_applications", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "applicant_id", null: false
-    t.text "competition_contributions", null: false
-    t.datetime "created_at", null: false
-    t.text "cubing_business_involvement_details"
     t.bigint "delegate_region_id", null: false
     t.text "introduction", null: false
-    t.boolean "is_involved_in_cubing_business", null: false
+    t.text "competition_contributions", null: false
+    t.text "volunteer_history"
     t.text "motivation", null: false
     t.text "relevant_skills", null: false
+    t.boolean "is_involved_in_cubing_business", null: false
+    t.text "cubing_business_involvement_details"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "volunteer_history"
     t.index ["applicant_id"], name: "index_trainee_delegate_applications_on_applicant_id"
     t.index ["delegate_region_id"], name: "index_trainee_delegate_applications_on_delegate_region_id"
   end
 
   create_table "trainee_delegate_conversations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "application_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
     t.index ["application_id", "user_id"], name: "index_trainee_delegate_conversations_uniqueness", unique: true
     t.index ["user_id"], name: "index_trainee_delegate_conversations_on_user_id"
   end
 
   create_table "trainee_delegate_recommendations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "application_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
     t.index ["application_id", "user_id"], name: "index_trainee_delegate_recommendations_uniqueness", unique: true
     t.index ["user_id"], name: "index_trainee_delegate_recommendations_on_user_id"
   end
