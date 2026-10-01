@@ -1,12 +1,6 @@
-import config from "@payload-config";
-import {
-  getPayload,
-  SanitizedCollectionConfig,
-  SanitizedGlobalConfig,
-} from "payload";
+import config, { wcaConfig } from "@payload-config";
+import { getPayload } from "payload";
 import { pluralize } from "mongoose";
-
-type SanitizedEntityConfig = SanitizedCollectionConfig | SanitizedGlobalConfig;
 
 // this mutes an annoying Payload warning about email providers, that would otherwise
 //   end up in the console.log STDOUT stream
@@ -48,23 +42,6 @@ async function auditSchema() {
     return process.exit(1);
   }
 
-  // This is how Payload internally decides on its table names, see https://github.com/payloadcms/payload/blob/v3.90.2/packages/db-mongodb/src/utilities/getDBName.ts
-  //   Unfortunately, they do not export this function so we have to replicate it. But if they ever change the implementation
-  //   and suddenly decide on other conventions, the set union below will break (because the Payload tables which are actually there
-  //   do not match the tables which _should_ be there by an older convention). So we will have time and opportunity to think
-  //   about refactoring and the export will break in the meantime.
-  const getTableName = (config: SanitizedEntityConfig) => {
-    if (config.dbName) {
-      if (typeof config.dbName === "function") {
-        return config.dbName({});
-      }
-
-      return config.dbName;
-    }
-
-    return config.slug;
-  };
-
   // The table convention that MongoDB adapters use. Payload already sets this,
   //   so we are safe to use `!` assertions here.
   // Interestingly, this is a getter function which returns the pluralization function reference.
@@ -72,12 +49,11 @@ async function auditSchema() {
   //   is the same package as used by @payloadcms/db-mongodb.
   const pluralizer = pluralize()!;
 
-  // Extract user-declared collections & globals from our own Payload config
-  const payloadTableNames = [
-    ...payload.config.collections,
-    ...payload.config.globals,
-  ]
-    .map(getTableName)
+  // Extract user-declared collections & globals from our own Payload config.
+  //   Note that this is NOT using the resolved `payload` instance's exposed config,
+  //   because in there the plugins already had a chance to add their stuff.
+  const payloadTableNames = [...wcaConfig.collections, ...wcaConfig.globals]
+    .map((cfg) => cfg.slug)
     .map(pluralizer);
 
   // Payload has the table "globals" to store global instances.
