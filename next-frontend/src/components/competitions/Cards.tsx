@@ -73,11 +73,10 @@ export function VenueDetailsCard({
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
         {/* Sized against the card rather than the viewport: the card is narrow on a phone,
-            but also in a narrow desktop column, and both want one column. The `min(…, 100%)`
-            is ours because Chakra drops the child width straight into `minmax()`, where a
-            card narrower than the track would overflow it. */}
-        <SimpleGrid minChildWidth="min({sizes.3xs}, 100%)" gap="4">
-          <Stat.Root variant="competition">
+            but also in a narrow desktop column, and both want one column. A flex basis
+            (unlike SimpleGrid's `minmax()` minimum) can still shrink below 3xs. */}
+        <Wrap gap="4">
+          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <VenueIcon />
               Venue
@@ -87,7 +86,7 @@ export function VenueDetailsCard({
             </ChakraMarkdown>
           </Stat.Root>
 
-          <Stat.Root variant="competition">
+          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <MapIcon />
               Address
@@ -96,7 +95,7 @@ export function VenueDetailsCard({
           </Stat.Root>
 
           {competitionInfo.venue_details && (
-            <Stat.Root variant="competition">
+            <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
               <Stat.Label>
                 <DetailsIcon />
                 Details
@@ -106,7 +105,7 @@ export function VenueDetailsCard({
               </ChakraMarkdown>
             </Stat.Root>
           )}
-        </SimpleGrid>
+        </Wrap>
       </Card.Body>
     </Card.Root>
   );
