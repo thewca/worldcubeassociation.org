@@ -3,8 +3,11 @@
 import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { LuPencil, LuTrash2 } from "react-icons/lu";
+import { LuPencil, LuTrash2, LuUndo2 } from "react-icons/lu";
+import NextStepButton from "@/components/competitions/Registration/NextStepButton";
+import SubmitStepButton from "@/components/competitions/Registration/SubmitStepButton";
 import {
+  isStepComplete,
   isStepEditable,
   StepContent,
   StepSummary,
@@ -37,6 +40,61 @@ const contactUrl = (competitionId: string, message: string) =>
     contactRecipient: "competition",
     message,
   })}`;
+
+// A step from before submitting changes the registration itself, so leaving it means saving.
+function EditingStepButton({
+  step,
+  form,
+  isSubmitting,
+  onDone,
+}: {
+  step: StepConfig;
+  form: RegistrationForm;
+  isSubmitting: boolean;
+  onDone: () => void;
+}) {
+  const { t } = useT();
+
+  if (step.is_post_step) {
+    return <NextStepButton leadsToSummary onNext={onDone} />;
+  }
+
+  // With nothing changed there is nothing to submit, so the same button takes the competitor back
+  //   to their summary instead of saving.
+  return (
+    <form.Subscribe
+      selector={(state) =>
+        state.isDefaultValue
+          ? "unchanged"
+          : isStepComplete(step, state.values)
+            ? "complete"
+            : "incomplete"
+      }
+    >
+      {(formStatus) =>
+        formStatus === "unchanged" ? (
+          <Button
+            width="full"
+            variant="outline"
+            colorPalette="blue"
+            onClick={onDone}
+          >
+            <LuUndo2 />
+            {t("competitions.registration_v2.register.view_registration")}
+          </Button>
+        ) : (
+          <SubmitStepButton
+            isSubmitting={isSubmitting}
+            disabled={formStatus === "incomplete"}
+            onSubmit={() => form.handleSubmit({ onSubmitted: onDone })}
+          >
+            {t("registrations.update")}
+          </SubmitStepButton>
+        )
+      }
+    </form.Subscribe>
+  );
+}
 
 /**
  * What a competitor sees once they have walked all the steps: what they settled in each of them,
@@ -135,16 +193,20 @@ export default function RegistrationSummary({
               )}
             </Heading>
             {isEditing ? (
-              <StepContent
-                step={step}
-                competitionInfo={competitionInfo}
-                registration={registration}
-                form={form}
-                isSubmitting={isSubmitting}
-                onNext={stopEditing}
-                leadsToSummary
-                isOpenedFromSummary
-              />
+              <>
+                <StepContent
+                  step={step}
+                  competitionInfo={competitionInfo}
+                  registration={registration}
+                  form={form}
+                />
+                <EditingStepButton
+                  step={step}
+                  form={form}
+                  isSubmitting={isSubmitting}
+                  onDone={stopEditing}
+                />
+              </>
             ) : (
               <StepSummary
                 step={step}
