@@ -1195,7 +1195,7 @@ es-419:
         #original_hash: e0d0654
         manage_competitions: Administra las próximas competiciones que vas a organizar
         #original_hash: 357ccbf
-        manage_registrations: 'Registrarte a competencias, y modificar o cancelar tus registros.'
+        manage_registrations: 'Registrarte a competiciones, y modificar o cancelar tus registros.'
         #original_hash: cd9ad06
         translations: Acceder la lista de idiomas para la cual eres un traductor de la WCA
     devise:
@@ -1723,6 +1723,15 @@ es-419:
       text: >-
         ¡Sé parte! La WCA tiene posiciones voluntarias abiertas en varios
         equipos diferentes. No hace falta que seas un speeecuber para ofrecerte.
+    become_delegate:
+      #original_hash: 9ef02b8
+      title: Conviértete en Delegado
+      #original_hash: 20523ab
+      text: >-
+        Ayuda a tener competiciones justas y de calidad en tu comunidad local
+        postulándote como Delegado en Prácticas.
+      #original_hash: a356cc8
+      link_title: Aplicar ahora
     faq:
       #original_hash: 03688ba
       title: FAQ
@@ -1756,6 +1765,158 @@ es-419:
         ambiente divertido y justo de competición para todos.
       #original_hash: 65c84ec
       button: Saber más sobre como puedes apoyar a la WCA
+  trainee_delegate_application:
+    #original_hash: d2734b3
+    title: Solicitud de Delegado en Prácticas
+    #original_hash: 58a148c
+    introduction: >-
+      Este formulario es para speedcubers registrados que están postulándose
+      como Delegados en Prácticas. Tu solicitud será enviada a los Delegados
+      responsables de tu región seleccionada.
+    #original_hash: c94b599
+    success_title: Solicitud enviada
+    #original_hash: f7ad1df
+    success: >-
+      Tu solicitud fue enviada correctamente. Se te envió una copia a la
+      dirección de correo electrónico en tu cuenta de la WCA.
+    eligibility:
+      #original_hash: 98a3ae1
+      title: No puedes enviar esta solicitud todavía
+      #original_hash: eb5fd53
+      missing_wca_id: Tu cuenta de la WCA debe estar vinculada a un WCA ID.
+      #original_hash: f08a239
+      missing_date_of_birth: Tu cuenta de la WCA debe tener una fecha de nacimiento verificada.
+      #original_hash: d8fa357
+      underage: 'Los solicitantes deben tener al menos %{minimum_age} años.'
+      #original_hash: 51ebe41
+      claim_wca_id: Reclama tu WCA ID.
+      #original_hash: b02fd61
+      edit_profile: Solicitar actualización de perfil.
+    errors:
+      #original_hash: 2a95e90
+      invalid_region: Selecciona una región válida y activa.
+      #original_hash: 47f1b33
+      missing_reviewer: >-
+        La región seleccionada no tiene un Delegado Regional o Senior que pueda
+        recibir la solicitud.
+      #original_hash: 8740d87
+      recommender_required: Selecciona al menos un Delegado recomendador.
+      #original_hash: 721dee6
+      invalid_recommender: >-
+        Uno o más Delegados recomendadores seleccionados ya no son elegibles
+        para la región seleccionada.
+      #original_hash: 5e6c443
+      spoken_delegate_required: >-
+        Selecciona al menos un Delegado Junior o Delegado con quien hayas
+        conversado.
+      #original_hash: 4c2b665
+      invalid_spoken_delegate: >-
+        Uno o más Delegados seleccionados con quienes has conversado ya no son
+        Delegados Junior o Delegados activos en la región seleccionada.
+      #original_hash: 3e44a65
+      declarations_required: Debes confirmar todas las declaraciones.
+      #original_hash: 34f0140
+      business_involvement_required: >-
+        Selecciona si estás involucrado con un negocio relacionado con el
+        speedcubing.
+      #original_hash: 4cfb4f8
+      business_involvement_explanation_required: Explica tu participación en el negocio relacionado con el speedcubing.
+    form:
+      #original_hash: ef94e79
+      declaration_and_basic_information: Declaración e información básica
+      #original_hash: 709a232
+      name: Nombre
+      #original_hash: 603a218
+      wca_id: WCA ID
+      #original_hash: 84add5b
+      email: Correo electrónico
+      #original_hash: ff9f1ff
+      age: Edad
+      #original_hash: c2725d6
+      competition_count: Cantidad de competiciones
+      #original_hash: 5c6117f
+      region_and_references: Región y referencias
+      #original_hash: 34b5d4b
+      region: ¿En qué región vives actualmente?
+      #original_hash: 08c8263
+      region_placeholder: Selecciona tu región
+      #original_hash: 31f12f9
+      subregion: ¿En qué subregión vives actualmente?
+      #original_hash: d61e732
+      subregion_placeholder: Selecciona tu subregión
+      #original_hash: 0cc4129
+      reviewing_delegate: Delegado revisor
+      #original_hash: 9765756
+      spoken_delegates: >-
+        ¿Con qué Delegados Junior o Delegados has hablado sobre convertirte en
+        Delegado en Prácticas?
+      #original_hash: 8b60d11
+      recommenders: >-
+        ¿Qué Delegados Junior o Delegados de tu región han aceptado recomendarte
+        como candidato para el rol de Delegado en Prácticas?
+      #original_hash: 246bbb7
+      delegates_placeholder: Selecciona al menos un Delegado
+      #original_hash: 26ad218
+      experience_and_motivation: Experiencia y motivación
+      #original_hash: a7ac940
+      introduction: Preséntate brevemente en dos a cuatro oraciones.
+      #original_hash: c09588d
+      competition_contributions: >-
+        Proporciona un resumen de cómo has ayudado en las competiciones de tu
+        comunidad local más allá de lo que se espera de todos los competidores.
+      #original_hash: 56eea09
+      volunteer_history: >-
+        Si has ocupado cargos voluntarios en la WCA, proporciona aquí una
+        cronología (opcional).
+      #original_hash: 465b4d0
+      role_history_warning: >-
+        Este historial de roles en el sitio web se incluirá automáticamente en
+        tu solicitud. Los roles más antiguos no se incorporaron por completo,
+        así que agrega a continuación cualquier cargo faltante o corrección.
+      #original_hash: 5064448
+      present: presente
+      #original_hash: 5ba4ac1
+      board_member: Miembro de la Junta Directiva
+      #original_hash: a04a7ed
+      motivation: >-
+        Describe brevemente tus motivaciones para postularte como Delegado en
+        Prácticas en dos a cuatro oraciones.
+      #original_hash: 74efe9b
+      relevant_skills: >-
+        Proporciona una lista de las habilidades y experiencias más importantes
+        que posees y que te ayudarían a desempeñarte con éxito como Delegado en
+        Prácticas.
+      #original_hash: 73ec575
+      declaration_understands_application: >-
+        Entiendo que este formulario está dirigido a speedcubers registrados que
+        solicitan convertirse en Delegados en Prácticas.
+      #original_hash: 6477dae
+      declaration_has_delegate_support: >-
+        Confirmo que he hablado con un Delegado habilitado de mi región que
+        apoya mi candidatura.
+      #original_hash: d26aaba
+      declaration_proficient_in_english: >-
+        Confirmo que tengo un buen dominio de la lectura y la escritura en
+        inglés.
+      #original_hash: ca0945c
+      declaration_read_regulations_html: >-
+        Confirmo que he leído el <a href="%{regulations_url}" target="_blank"
+        rel="noreferrer">Reglamento de la WCA</a>.
+      #original_hash: e06e695
+      regulations_note: >-
+        Nota: No se espera que los Delegados conozcan todo el Reglamento de
+        memoria. Sin embargo, sí se espera que conozcan los aspectos básicos y
+        que consulten el Reglamento cuando tengan dudas.
+      #original_hash: 8cc3f8b
+      cubing_business_involvement: ¿Estás involucrado en un negocio relacionado con el speedcubing?
+      #original_hash: 86654d0
+      cubing_business_involvement_details: Explica tu participación en el negocio relacionado con el speedcubing.
+      #original_hash: 5397e05
+      'yes': Sí
+      #original_hash: 816c52f
+      'no': 'No'
+      #original_hash: 93ff9f7
+      submit: Enviar solicitud
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2359,8 +2520,12 @@ es-419:
       country_plural:
         one: 1 región
         other: '%{count} regiones'
-      #original_hash: 1feee0e
-      export_csv: Exportar a CSV
+      #original_hash: c8e4278
+      export_to_csv:
+        one: 'Exportar %{count} registro a CSV'
+        other: 'Exportar %{count} registros a CSV'
+      #original_hash: 2352f3f
+      export_all_to_csv: Exportar todos los registros a CSV
       #original_hash: 84add5b
       email: Correo
       #original_hash: e86b1e1
@@ -2761,7 +2926,7 @@ es-419:
         configúrala para que sea en el futuro.
       #original_hash: 3322400
       tooltip_registered: Estás registrado.
-      #original_hash: b10c8d6
+      #original_hash: cb23443
       tooltip_pending: >-
         Tu registro está pendiente de aprobación manual. Por favor, asegúrate de
         haber seguido todas las instrucciones (pago, etc.) listadas en la página
@@ -3399,7 +3564,7 @@ es-419:
         son eventos sociales. Cualquiera que sepa resolver un cubo es bienvenido
         a sumarse y establecer récords personales. Hacer amigos es muy fácil
         porque todos trabajamos juntos para que la competición funcione.</p>
-        <p>¡Usa la herramienta de abajo para encontrar una competencia cerca de
+        <p>¡Usa la herramienta de abajo para encontrar una competición cerca de
         tí y comienza tu carrera cubera!</p>
     my_competitions_table:
       #original_hash: 5301648
@@ -4007,7 +4172,7 @@ es-419:
         pending:
           #original_hash: 4210670
           title: Registros pendientes
-          #original_hash: 5e16c6d
+          #original_hash: 7b71730
           information: >-
             La lista de "pendientes" solo debería usarse para registros
             incompletos (por ejemplo, sin pagar). Por favor, usa la lista de
@@ -4037,6 +4202,10 @@ es-419:
         approved:
           #original_hash: a59612c
           title: Registros aprobados
+          #original_hash: 910da91
+          information: >-
+            Se confirma que los competidores aprobados pueden participar en la
+            competición en los eventos en los que se registraron.
           #original_hash: bbdee7d
           pending_waitlist_combined_skipped_warning: >-
             Has omitido %{count} registro(s) pendientes o en lista de espera.
@@ -4117,18 +4286,24 @@ es-419:
         delete_contact_message: Quiero eliminar mi registro
         #original_hash: 65bbb07
         no_changes: No hay cambios
-        #original_hash: be4e8e2
-        email_send: Enviar correo
-        #original_hash: b4bac52
-        email_copy: Copiar correos
+        #original_hash: ae7fcf6
+        send_email:
+          one: 'Enviar correo a %{count} dirección de correo electrónico'
+          other: 'Enviar correo a %{count} direcciones de correo electrónico'
+        #original_hash: 85bb534
+        copy_emails:
+          one: 'Copiar %{count} dirección de correo electrónico'
+          other: 'Copiar %{count} direcciones de correo electrónico'
         #original_hash: b83b663
         email_message: Copiado al portapapeles. ¡Recuerda usar CCO (con copia oculta)!
-        #original_hash: 01f7c02
+        #original_hash: db52725
+        scroll_to: Ir a
+        #original_hash: 25888d4
         move_to:
-          one: 'Mover %{count} a'
-          other: 'Mover %{count} a'
-        #original_hash: 349f807
-        move_to_none_selected: Mover a
+          one: 'Mover %{count} registro a'
+          other: 'Mover %{count} registros a'
+        #original_hash: 91ae9f9
+        move_to_none_selected: Mover registros a
         #original_hash: 96f608c
         pending: Pendiente
         #original_hash: 92d40dc
@@ -4139,6 +4314,8 @@ es-419:
         cancelled: Eliminado
         #original_hash: 27eeb7a
         rejected: Rechazado
+        #original_hash: 8d83078
+        non_competing: Sin participación
         #original_hash: 43dc853
         amount: Cantidad
         #original_hash: d7e4497
@@ -4333,7 +4510,7 @@ es-419:
       must_use_wca_registration: >-
         La opción de auto-aceptar solo puede utilizarse si se está usando el
         sitio web de la WCA para los registros
-      #original_hash: 693d47d
+      #original_hash: 1cc37ba
       must_use_payment_integration: >-
         Debes habilitar una opción de pagos integrados (como Stripe) para
         utilizar auto-aceptar
@@ -5049,7 +5226,7 @@ es-419:
         manual:
           #original_hash: e5f0dfd
           payment_instructions: Instrucciones de pago (se mostrará en la página de la competición)
-          #original_hash: 5e7242c
+          #original_hash: 9751a31
           payment_reference_label: >-
             ¿Qué información precisas para identificar el pago? (ej. número de
             referencia, ID de cuenta, etc.)
