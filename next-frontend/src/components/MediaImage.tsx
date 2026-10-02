@@ -29,6 +29,10 @@ const buildSrcSet = (media: Media): string | undefined => {
   return entries.length > 0 ? entries.join(", ") : undefined;
 };
 
+// Matches the `card` image size, the widest variant we generate. Without it the
+//   browser assumes 100vw and always downloads the original.
+const IMAGE_DISPLAY_WIDTH = "768px";
+
 type LinkRawProps = {
   href: string;
 };
@@ -56,6 +60,7 @@ export const MediaImage: PolymorphicComponent<
     <RenderImage
       src={media.url ?? srcFallback}
       srcSet={buildSrcSet(media)}
+      sizes={IMAGE_DISPLAY_WIDTH}
       alt={media.alt ?? altFallback}
       {...imageProps}
     />
