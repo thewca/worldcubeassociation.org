@@ -133,27 +133,41 @@ export default function RegionSelector({
         invalid={error !== undefined}
         selectionBehavior={nullable ? "clear" : "replace"}
       >
-        <Combobox.Control>
-          <Combobox.Input
-            placeholder={name}
-            cursor="pointer"
-            // Tabbing away otherwise discards what was typed and snaps back to the
-            // current selection, so commit the highlighted (first) match instead.
-            onKeyDown={(e) => {
-              if (e.key !== "Tab" || inputValue === "") return;
+        <Combobox.Context>
+          {(api) => (
+            <Combobox.Control>
+              <Combobox.Input
+                placeholder={name}
+                cursor="pointer"
+                // Focusing an input that already holds a region otherwise shows that one
+                // region filtered down to itself, so you have to clear it by hand before
+                // you can type or browse. The selection itself is untouched, so the list
+                // still opens with the current region checked.
+                onFocus={() => api.setInputValue("")}
+                // Tabbing away otherwise discards what was typed and snaps back to the
+                // current selection, so commit the highlighted (first) match instead.
+                onKeyDown={(e) => {
+                  if (e.key !== "Tab" || inputValue === "") return;
 
-              const firstMatch = collection.items.find(
-                (item) => !item.disabled,
-              );
+                  const firstMatch = collection.items.find(
+                    (item) => !item.disabled,
+                  );
 
-              if (firstMatch) onRegionChange(firstMatch.value);
-            }}
-          />
-          <Combobox.IndicatorGroup>
-            <Combobox.ClearTrigger />
-            <Combobox.Trigger />
-          </Combobox.IndicatorGroup>
-        </Combobox.Control>
+                  if (firstMatch) onRegionChange(firstMatch.value);
+                }}
+              />
+              <Combobox.IndicatorGroup>
+                {/* Clearing is how you start a new search, so reopen the list on the
+                    way out rather than leaving an empty, closed field. */}
+                <Combobox.ClearTrigger
+                  cursor="pointer"
+                  onClick={() => api.setOpen(true)}
+                />
+                <Combobox.Trigger />
+              </Combobox.IndicatorGroup>
+            </Combobox.Control>
+          )}
+        </Combobox.Context>
         <Portal>
           <Combobox.Positioner>
             <Combobox.Content>

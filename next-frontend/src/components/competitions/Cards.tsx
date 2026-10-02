@@ -72,8 +72,11 @@ export function VenueDetailsCard({
     <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
-          <Stat.Root variant="competition">
+        {/* Sized against the card rather than the viewport: the card is narrow on a phone,
+            but also in a narrow desktop column, and both want one column. A flex basis
+            (unlike SimpleGrid's `minmax()` minimum) can still shrink below 3xs. */}
+        <Wrap gap="4">
+          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <VenueIcon />
               Venue
@@ -83,7 +86,7 @@ export function VenueDetailsCard({
             </ChakraMarkdown>
           </Stat.Root>
 
-          <Stat.Root variant="competition">
+          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <MapIcon />
               Address
@@ -92,7 +95,7 @@ export function VenueDetailsCard({
           </Stat.Root>
 
           {competitionInfo.venue_details && (
-            <Stat.Root variant="competition">
+            <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
               <Stat.Label>
                 <DetailsIcon />
                 Details
@@ -102,7 +105,7 @@ export function VenueDetailsCard({
               </ChakraMarkdown>
             </Stat.Root>
           )}
-        </SimpleGrid>
+        </Wrap>
       </Card.Body>
     </Card.Root>
   );
@@ -325,7 +328,9 @@ export function InfoCard({
               <LocationIcon />
               {t("competitions.competition_info.location")}
             </Stat.Label>
-            <Stat.ValueText>
+            {/* City and country overflowed a narrow card on one line; wrapping drops the
+                country onto its own row exactly when it no longer fits. */}
+            <Stat.ValueText flexWrap="wrap">
               <Text>{competitionInfo.city}, </Text>
               <CountryMap
                 code={competitionInfo.country_iso2}
@@ -395,7 +400,9 @@ export function SubPageCard({
               <LocationIcon />
               {t("competitions.competition_info.location")}
             </Stat.Label>
-            <Stat.ValueText>
+            {/* City and country overflowed a narrow card on one line; wrapping drops the
+                country onto its own row exactly when it no longer fits. */}
+            <Stat.ValueText flexWrap="wrap">
               <Text>{competitionInfo.city}, </Text>
               <CountryMap
                 code={competitionInfo.country_iso2}
