@@ -9,6 +9,7 @@ export interface RegistrationFormValues {
   comment: string;
   guests: number;
   eventIds: string[];
+  hasAcknowledgedRequirements: boolean;
 }
 
 // Which steps the lane has is up to the server, so a fresh registration starts out empty and each
@@ -31,12 +32,18 @@ export const registrationFormValues = (
   registration === null
     ? steps.reduce<RegistrationFormValues>(
         (values, step) => ({ ...values, ...stepDefaultValues(step) }),
-        { comment: "", guests: 0, eventIds: [] },
+        {
+          comment: "",
+          guests: 0,
+          eventIds: [],
+          hasAcknowledgedRequirements: false,
+        },
       )
     : {
         comment: registration.competing.comment ?? "",
         guests: registration.guests ?? 0,
         eventIds: registration.competing.event_ids,
+        hasAcknowledgedRequirements: false,
       };
 
 /**
