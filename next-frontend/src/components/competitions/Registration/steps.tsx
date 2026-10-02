@@ -1,12 +1,13 @@
 "use client";
 
-import { DataList, HStack, Stack, Text } from "@chakra-ui/react";
+import { DataList, HStack, Text } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
+import PaymentDue from "@/components/competitions/Registration/PaymentDue";
+import ApprovalStep from "@/components/competitions/Registration/ApprovalStep";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
-import NextStepButton from "@/components/competitions/Registration/NextStepButton";
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { useT } from "@/lib/i18n/useI18n";
@@ -59,21 +60,21 @@ export function StepContent({
       );
     case "payment":
       return (
-        <Stack>
-          <PaymentStep
-            competitionInfo={competitionInfo}
-            registration={registration}
-            deadline={step.deadline}
-          />
-          <NextStepButton leadsToSummary={leadsToSummary} onNext={onNext} />
-        </Stack>
+        <PaymentStep
+          competitionInfo={competitionInfo}
+          registration={registration}
+          deadline={step.deadline}
+          leadsToSummary={leadsToSummary}
+          onNext={onNext}
+        />
       );
     case "approval":
       return (
-        <Stack>
-          {registration && <RegistrationStatus registration={registration} />}
-          <NextStepButton leadsToSummary={leadsToSummary} onNext={onNext} />
-        </Stack>
+        <ApprovalStep
+          registration={registration}
+          leadsToSummary={leadsToSummary}
+          onNext={onNext}
+        />
       );
   }
 }
@@ -156,9 +157,8 @@ export function StepSummary({
         !registration.payment?.has_paid;
 
       return isPaymentOutstanding ? (
-        <PaymentStep
+        <PaymentDue
           competitionInfo={competitionInfo}
-          registration={registration}
           deadline={step.deadline}
         />
       ) : (
