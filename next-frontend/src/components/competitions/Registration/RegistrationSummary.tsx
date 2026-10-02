@@ -43,7 +43,7 @@ const contactUrl = (competitionId: string, message: string) =>
  * with the steps the server marks as priority first. A step the server marks as editable can be opened again in
  * place of its summary, so that the heading the competitor is reading stays where it is.
  */
-export default function RegistrationOverview({
+export default function RegistrationSummary({
   steps,
   competitionInfo,
   registration,
@@ -142,8 +142,8 @@ export default function RegistrationOverview({
                 form={form}
                 isSubmitting={isSubmitting}
                 onNext={stopEditing}
-                leadsToOverview
-                isOpenedFromOverview
+                leadsToSummary
+                isOpenedFromSummary
               />
             ) : (
               <StepSummary

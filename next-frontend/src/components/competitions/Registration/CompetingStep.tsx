@@ -57,7 +57,7 @@ export default function CompetingStep({
   form: RegistrationForm;
   isSubmitting: boolean;
   onSubmitted: () => void;
-  // Only set when the form is opened from the registration overview, which is the one place the
+  // Only set when the form is opened from the registration summary, which is the one place the
   //   competitor can leave it again without submitting anything.
   onClose?: () => void;
 }) {
@@ -255,7 +255,7 @@ export default function CompetingStep({
           </Alert.Root>
         )}
 
-        {/* Opened from the overview with nothing changed there is nothing to submit, so the same
+        {/* Opened from the summary with nothing changed there is nothing to submit, so the same
             button takes the competitor back to their summary instead of saving. */}
         <form.Subscribe
           selector={(state) =>

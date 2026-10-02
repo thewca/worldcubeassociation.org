@@ -2,7 +2,7 @@
 
 import { Steps, VStack } from "@chakra-ui/react";
 import type { components } from "@/types/openapi";
-import RegistrationOverview from "@/components/competitions/Registration/RegistrationOverview";
+import RegistrationSummary from "@/components/competitions/Registration/RegistrationSummary";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
 import {
@@ -191,8 +191,8 @@ export default function StepPanel({
                     form={form}
                     isSubmitting={isSubmitting}
                     onNext={goToNextStep}
-                    leadsToOverview={index === steps.length - 1}
-                    isOpenedFromOverview={false}
+                    leadsToSummary={index === steps.length - 1}
+                    isOpenedFromSummary={false}
                   />
                 )}
               </Steps.Content>
@@ -201,7 +201,7 @@ export default function StepPanel({
 
         <Steps.CompletedContent>
           {registration !== null && (
-            <RegistrationOverview
+            <RegistrationSummary
               steps={steps}
               competitionInfo={competitionInfo}
               registration={registration}

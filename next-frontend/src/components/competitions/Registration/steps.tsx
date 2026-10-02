@@ -17,15 +17,15 @@ type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
 function NextStepButton({
-  leadsToOverview,
+  leadsToSummary,
   onNext,
 }: {
-  leadsToOverview: boolean;
+  leadsToSummary: boolean;
   onNext: () => void;
 }) {
   const { t } = useT();
 
-  const label = leadsToOverview
+  const label = leadsToSummary
     ? t("competitions.registration_v2.register.view_registration")
     : t("competitions.registration_v2.requirements.next_step");
 
@@ -47,8 +47,8 @@ export function StepContent({
   form,
   isSubmitting,
   onNext,
-  leadsToOverview,
-  isOpenedFromOverview,
+  leadsToSummary,
+  isOpenedFromSummary,
 }: {
   step: StepConfig;
   competitionInfo: CompetitionInfo;
@@ -56,8 +56,8 @@ export function StepContent({
   form: RegistrationForm;
   isSubmitting: boolean;
   onNext: () => void;
-  leadsToOverview: boolean;
-  isOpenedFromOverview: boolean;
+  leadsToSummary: boolean;
+  isOpenedFromSummary: boolean;
 }) {
   switch (step.key) {
     case "requirements":
@@ -71,7 +71,7 @@ export function StepContent({
           form={form}
           isSubmitting={isSubmitting}
           onSubmitted={onNext}
-          onClose={isOpenedFromOverview ? onNext : undefined}
+          onClose={isOpenedFromSummary ? onNext : undefined}
         />
       );
     case "payment":
@@ -82,20 +82,20 @@ export function StepContent({
             registration={registration}
             deadline={step.deadline}
           />
-          <NextStepButton leadsToOverview={leadsToOverview} onNext={onNext} />
+          <NextStepButton leadsToSummary={leadsToSummary} onNext={onNext} />
         </Stack>
       );
     case "approval":
       return (
         <Stack>
           {registration && <RegistrationStatus registration={registration} />}
-          <NextStepButton leadsToOverview={leadsToOverview} onNext={onNext} />
+          <NextStepButton leadsToSummary={leadsToSummary} onNext={onNext} />
         </Stack>
       );
   }
 }
 
-/** What the competitor settled in a step, as shown on the overview once they have walked them all. */
+/** What the competitor settled in a step, as shown on the summary once they have walked them all. */
 export function StepSummary({
   step,
   competitionInfo,
@@ -191,7 +191,7 @@ export function StepSummary({
   }
 }
 
-/** Whether the competitor may open this step again from the overview. */
+/** Whether the competitor may open this step again from the summary. */
 export function isStepEditable(step: StepConfig, registration: Registration) {
   switch (step.key) {
     case "competing":
@@ -219,7 +219,7 @@ export function initialStepIndex(
   return hasStandingRegistration ? steps.length : 0;
 }
 
-/** The steps the overview shows, with the ones the server marks as priority first. */
+/** The steps the summary shows, with the ones the server marks as priority first. */
 export function summarySteps(steps: StepConfig[]) {
   return [
     ...steps.filter((step) => step.summary_status === "priority"),
