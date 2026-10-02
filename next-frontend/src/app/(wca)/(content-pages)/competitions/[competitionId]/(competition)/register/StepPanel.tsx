@@ -1,6 +1,6 @@
 "use client";
 
-import { Stack, Steps, VStack } from "@chakra-ui/react";
+import { Stack, Steps, useStepsContext, VStack } from "@chakra-ui/react";
 import type { components } from "@/types/openapi";
 import RegistrationSummary from "@/components/competitions/Registration/RegistrationSummary";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
@@ -35,21 +35,22 @@ type Registration = components["schemas"]["RegistrationDataV2"];
 // Finishing the last step before the registration exists submits it, so that every step after it
 //   has a registration to work with.
 function WizardStepButton({
+  steps,
   step,
   form,
   isSubmitting,
-  submitsRegistration,
-  leadsToSummary,
-  onNext,
 }: {
+  steps: StepConfig[];
   step: StepConfig;
   form: RegistrationForm;
   isSubmitting: boolean;
-  submitsRegistration: boolean;
-  leadsToSummary: boolean;
-  onNext: () => void;
 }) {
   const { t } = useT();
+  const stepsContext = useStepsContext();
+
+  const submitsRegistration =
+    stepsContext.value === steps.findLastIndex((step) => !step.is_post_step);
+  const leadsToSummary = stepsContext.value === stepsContext.count - 1;
 
   return (
     <form.Subscribe selector={(state) => isStepComplete(step, state.values)}>
@@ -58,7 +59,9 @@ function WizardStepButton({
           <SubmitStepButton
             isSubmitting={isSubmitting}
             disabled={!isComplete}
-            onSubmit={() => form.handleSubmit({ onSubmitted: onNext })}
+            onSubmit={() =>
+              form.handleSubmit({ onSubmitted: stepsContext.goToNextStep })
+            }
           >
             {t("registrations.register")}
           </SubmitStepButton>
@@ -66,7 +69,7 @@ function WizardStepButton({
           <NextStepButton
             leadsToSummary={leadsToSummary}
             disabled={!isComplete}
-            onNext={onNext}
+            onNext={stepsContext.goToNextStep}
           />
         )
       }
@@ -170,13 +173,9 @@ export default function StepPanel({
     initialStepIndex(steps, registration),
   );
 
-  const lastPreStepIndex = steps.findLastIndex((step) => !step.is_post_step);
-
-  const goToNextStep = () => setCurrentStep((step) => step + 1);
-
-  const finishCreation = () => {
+  const finishCreation = (continueToNextStep: () => void) => {
     createRegistration.reset();
-    goToNextStep();
+    continueToNextStep();
   };
 
   return (
@@ -226,11 +225,17 @@ export default function StepPanel({
             index === currentStep && (
               <Steps.Content key={step.key} index={index}>
                 {createRegistration.isSuccess ? (
-                  <RegistrationProcessing
-                    competitionId={competitionInfo.id}
-                    userId={userId}
-                    onCreated={finishCreation}
-                  />
+                  <Steps.Context>
+                    {(stepsContext) => (
+                      <RegistrationProcessing
+                        competitionId={competitionInfo.id}
+                        userId={userId}
+                        onCreated={() =>
+                          finishCreation(stepsContext.goToNextStep)
+                        }
+                      />
+                    )}
+                  </Steps.Context>
                 ) : (
                   <Stack gap="3">
                     <StepContent
@@ -240,12 +245,10 @@ export default function StepPanel({
                       form={form}
                     />
                     <WizardStepButton
+                      steps={steps}
                       step={step}
                       form={form}
                       isSubmitting={isSubmitting}
-                      submitsRegistration={index === lastPreStepIndex}
-                      leadsToSummary={index === steps.length - 1}
-                      onNext={goToNextStep}
                     />
                   </Stack>
                 )}
