@@ -5,47 +5,39 @@ import { DateTime } from "luxon";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
-import PaymentDue from "@/components/competitions/Registration/PaymentDue";
-import ApprovalStep from "@/components/competitions/Registration/ApprovalStep";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { useT } from "@/lib/i18n/useI18n";
-import type { RegistrationForm } from "@/lib/wca/registrations/registrationForm";
+import {
+  eventLimit,
+  guestLimit,
+} from "@/lib/wca/registrations/competingLimits";
+import type {
+  RegistrationForm,
+  RegistrationFormValues,
+} from "@/lib/wca/registrations/registrationForm";
 import type { components } from "@/types/openapi";
 
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
-/**
- * What a step asks of the competitor. Steps know nothing about each other - which ones there are
- * and in which order is up to the server - so each one only reports back that it is done.
- */
+/** What a step asks of the competitor. Moving on from it is up to whoever renders it. */
 export function StepContent({
   step,
   competitionInfo,
   registration,
   form,
-  isSubmitting,
-  onNext,
-  leadsToSummary,
-  isOpenedFromSummary,
 }: {
   step: StepConfig;
   competitionInfo: CompetitionInfo;
   registration: Registration | null;
   form: RegistrationForm;
-  isSubmitting: boolean;
-  onNext: () => void;
-  leadsToSummary: boolean;
-  isOpenedFromSummary: boolean;
 }) {
   switch (step.key) {
     case "requirements":
-      return (
-        <RequirementsStep leadsToSummary={leadsToSummary} onNext={onNext} />
-      );
+      return <RequirementsStep form={form} />;
     case "competing":
       return (
         <CompetingStep
@@ -53,9 +45,6 @@ export function StepContent({
           parameters={step.parameters}
           registration={registration}
           form={form}
-          isSubmitting={isSubmitting}
-          onSubmitted={onNext}
-          onClose={isOpenedFromSummary ? onNext : undefined}
         />
       );
     case "payment":
@@ -64,18 +53,36 @@ export function StepContent({
           competitionInfo={competitionInfo}
           registration={registration}
           deadline={step.deadline}
-          leadsToSummary={leadsToSummary}
-          onNext={onNext}
         />
       );
     case "approval":
+      return registration && <RegistrationStatus registration={registration} />;
+  }
+}
+
+/**
+ * Whether the competitor has given everything a step asks of them. Field validators only fire once
+ * a field has been touched, so this is checked on its own - otherwise an untouched form would
+ * submit an empty event list that the backend rejects.
+ */
+export function isStepComplete(
+  step: StepConfig,
+  values: RegistrationFormValues,
+) {
+  switch (step.key) {
+    case "requirements":
+      return values.hasAcknowledgedRequirements;
+    case "competing":
       return (
-        <ApprovalStep
-          registration={registration}
-          leadsToSummary={leadsToSummary}
-          onNext={onNext}
-        />
+        values.eventIds.length > 0 &&
+        values.eventIds.length <= eventLimit(step.parameters) &&
+        values.guests <= guestLimit(step.parameters) &&
+        (!step.parameters.force_comment_in_registration ||
+          values.comment.trim() !== "")
       );
+    case "payment":
+    case "approval":
+      return true;
   }
 }
 
@@ -157,8 +164,9 @@ export function StepSummary({
         !registration.payment?.has_paid;
 
       return isPaymentOutstanding ? (
-        <PaymentDue
+        <PaymentStep
           competitionInfo={competitionInfo}
+          registration={registration}
           deadline={step.deadline}
         />
       ) : (
