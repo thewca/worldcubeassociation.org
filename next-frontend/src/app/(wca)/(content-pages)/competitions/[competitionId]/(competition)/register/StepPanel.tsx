@@ -192,6 +192,7 @@ export default function StepPanel({
                     isSubmitting={isSubmitting}
                     onNext={goToNextStep}
                     leadsToOverview={index === steps.length - 1}
+                    isOpenedFromOverview={false}
                   />
                 )}
               </Steps.Content>

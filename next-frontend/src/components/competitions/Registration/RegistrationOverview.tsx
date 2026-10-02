@@ -143,7 +143,7 @@ export default function RegistrationOverview({
                 isSubmitting={isSubmitting}
                 onNext={stopEditing}
                 leadsToOverview
-                onClose={stopEditing}
+                isOpenedFromOverview
               />
             ) : (
               <StepSummary

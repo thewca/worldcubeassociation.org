@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, DataList, HStack, Stack, Steps, Text } from "@chakra-ui/react";
+import { Button, DataList, HStack, Stack, Text } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
@@ -18,10 +18,10 @@ type Registration = components["schemas"]["RegistrationDataV2"];
 
 function NextStepButton({
   leadsToOverview,
-  onClose,
+  onNext,
 }: {
   leadsToOverview: boolean;
-  onClose?: () => void;
+  onNext: () => void;
 }) {
   const { t } = useT();
 
@@ -29,17 +29,10 @@ function NextStepButton({
     ? t("competitions.registration_v2.register.view_registration")
     : t("competitions.registration_v2.requirements.next_step");
 
-  // `NextTrigger` is disabled once the flow is complete, which is where the overview opens a step.
-  return onClose ? (
-    <Button width="full" colorPalette="blue" onClick={onClose}>
+  return (
+    <Button width="full" colorPalette="blue" onClick={onNext}>
       {label}
     </Button>
-  ) : (
-    <Steps.NextTrigger asChild>
-      <Button width="full" colorPalette="blue">
-        {label}
-      </Button>
-    </Steps.NextTrigger>
   );
 }
 
@@ -55,7 +48,7 @@ export function StepContent({
   isSubmitting,
   onNext,
   leadsToOverview,
-  onClose,
+  isOpenedFromOverview,
 }: {
   step: StepConfig;
   competitionInfo: CompetitionInfo;
@@ -64,9 +57,7 @@ export function StepContent({
   isSubmitting: boolean;
   onNext: () => void;
   leadsToOverview: boolean;
-  // Only set when the step is opened from the overview, which is the one place the competitor can
-  //   leave it again without finishing it.
-  onClose?: () => void;
+  isOpenedFromOverview: boolean;
 }) {
   switch (step.key) {
     case "requirements":
@@ -80,7 +71,7 @@ export function StepContent({
           form={form}
           isSubmitting={isSubmitting}
           onSubmitted={onNext}
-          onClose={onClose}
+          onClose={isOpenedFromOverview ? onNext : undefined}
         />
       );
     case "payment":
@@ -91,14 +82,14 @@ export function StepContent({
             registration={registration}
             deadline={step.deadline}
           />
-          <NextStepButton leadsToOverview={leadsToOverview} onClose={onClose} />
+          <NextStepButton leadsToOverview={leadsToOverview} onNext={onNext} />
         </Stack>
       );
     case "approval":
       return (
         <Stack>
           {registration && <RegistrationStatus registration={registration} />}
-          <NextStepButton leadsToOverview={leadsToOverview} onClose={onClose} />
+          <NextStepButton leadsToOverview={leadsToOverview} onNext={onNext} />
         </Stack>
       );
   }
