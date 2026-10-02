@@ -1,11 +1,12 @@
 "use client";
 
-import { Button, DataList, HStack, Stack, Text } from "@chakra-ui/react";
+import { DataList, HStack, Stack, Text } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
+import NextStepButton from "@/components/competitions/Registration/NextStepButton";
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { useT } from "@/lib/i18n/useI18n";
@@ -15,26 +16,6 @@ import type { components } from "@/types/openapi";
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
-
-function NextStepButton({
-  leadsToSummary,
-  onNext,
-}: {
-  leadsToSummary: boolean;
-  onNext: () => void;
-}) {
-  const { t } = useT();
-
-  const label = leadsToSummary
-    ? t("competitions.registration_v2.register.view_registration")
-    : t("competitions.registration_v2.requirements.next_step");
-
-  return (
-    <Button width="full" colorPalette="blue" onClick={onNext}>
-      {label}
-    </Button>
-  );
-}
 
 /**
  * What a step asks of the competitor. Steps know nothing about each other - which ones there are
@@ -61,7 +42,9 @@ export function StepContent({
 }) {
   switch (step.key) {
     case "requirements":
-      return <RequirementsStep />;
+      return (
+        <RequirementsStep leadsToSummary={leadsToSummary} onNext={onNext} />
+      );
     case "competing":
       return (
         <CompetingStep
