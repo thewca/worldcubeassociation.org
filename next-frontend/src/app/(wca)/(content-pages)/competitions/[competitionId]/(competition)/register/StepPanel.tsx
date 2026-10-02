@@ -141,6 +141,7 @@ export default function StepPanel({
       <Steps.Root
         count={steps.length}
         step={currentStep}
+        onStepChange={(details) => setCurrentStep(details.step)}
         colorPalette="blue"
         // Four labelled steps do not fit side by side on a phone, so there they become one step per
         //   row. `flexDirection` because the vertical variant otherwise puts the strip beside the

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, DataList, HStack, Stack, Text } from "@chakra-ui/react";
+import { Button, DataList, HStack, Stack, Steps, Text } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import { LuCheck } from "react-icons/lu";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
@@ -18,20 +18,29 @@ type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
 function NextStepButton({
-  onNext,
   leadsToOverview,
+  onClose,
 }: {
-  onNext: () => void;
   leadsToOverview: boolean;
+  onClose?: () => void;
 }) {
   const { t } = useT();
 
-  return (
-    <Button width="full" colorPalette="blue" onClick={onNext}>
-      {leadsToOverview
-        ? t("competitions.registration_v2.register.view_registration")
-        : t("competitions.registration_v2.requirements.next_step")}
+  const label = leadsToOverview
+    ? t("competitions.registration_v2.register.view_registration")
+    : t("competitions.registration_v2.requirements.next_step");
+
+  // `NextTrigger` is disabled once the flow is complete, which is where the overview opens a step.
+  return onClose ? (
+    <Button width="full" colorPalette="blue" onClick={onClose}>
+      {label}
     </Button>
+  ) : (
+    <Steps.NextTrigger asChild>
+      <Button width="full" colorPalette="blue">
+        {label}
+      </Button>
+    </Steps.NextTrigger>
   );
 }
 
@@ -62,7 +71,7 @@ export function StepContent({
 }) {
   switch (step.key) {
     case "requirements":
-      return <RequirementsStep onContinue={onNext} />;
+      return <RequirementsStep />;
     case "competing":
       return (
         <CompetingStep
@@ -83,14 +92,14 @@ export function StepContent({
             registration={registration}
             deadline={step.deadline}
           />
-          <NextStepButton onNext={onNext} leadsToOverview={leadsToOverview} />
+          <NextStepButton leadsToOverview={leadsToOverview} onClose={onClose} />
         </Stack>
       );
     case "approval":
       return (
         <Stack>
           {registration && <RegistrationStatus registration={registration} />}
-          <NextStepButton onNext={onNext} leadsToOverview={leadsToOverview} />
+          <NextStepButton leadsToOverview={leadsToOverview} onClose={onClose} />
         </Stack>
       );
   }

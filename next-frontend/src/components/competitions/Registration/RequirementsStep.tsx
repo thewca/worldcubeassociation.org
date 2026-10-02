@@ -1,14 +1,10 @@
 "use client";
 
-import { Alert, Button, Checkbox, VStack } from "@chakra-ui/react";
+import { Alert, Button, Checkbox, Steps, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useT } from "@/lib/i18n/useI18n";
 
-export default function RequirementsStep({
-  onContinue,
-}: {
-  onContinue: () => void;
-}) {
+export default function RequirementsStep() {
   const { t } = useT();
 
   const [hasAcknowledged, setHasAcknowledged] = useState(false);
@@ -34,14 +30,11 @@ export default function RequirementsStep({
           </Alert.Title>
         </Alert.Root>
       </Checkbox.Root>
-      <Button
-        width="full"
-        disabled={!hasAcknowledged}
-        onClick={onContinue}
-        colorPalette="blue"
-      >
-        {t("competitions.registration_v2.requirements.accept")}
-      </Button>
+      <Steps.NextTrigger asChild>
+        <Button width="full" disabled={!hasAcknowledged} colorPalette="blue">
+          {t("competitions.registration_v2.requirements.accept")}
+        </Button>
+      </Steps.NextTrigger>
     </VStack>
   );
 }
