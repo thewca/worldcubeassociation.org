@@ -2,7 +2,6 @@
 
 import { Button, DataList, HStack, Stack, Steps, Text } from "@chakra-ui/react";
 import { DateTime } from "luxon";
-import { LuCheck } from "react-icons/lu";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
