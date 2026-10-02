@@ -1,0 +1,24 @@
+<% provide(:theme, auth_page_theme) %>
+<% content_for :signin_fonts_head do %>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap">
+<% end %>
+
+<%= link_to root_path, id: "auth-page-back", class: "auth-page-back" do %>
+  <span aria-hidden="true">&larr;</span> <%= t('common.back') %>
+<% end %>
+
+<%= link_to root_path do %>
+  <%= image_tag "WCA Logo.svg", class: "auth-page-logo" %>
+<% end %>
+
+<script>
+  // Without earlier history in this tab there is nothing to go back to, so the
+  // link keeps its fallback to the homepage.
+  document.getElementById('auth-page-back').addEventListener('click', function (event) {
+    if (window.history.length > 1) {
+      event.preventDefault();
+      window.history.back();
+    }
+  });
+</script>
