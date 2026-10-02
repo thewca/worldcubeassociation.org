@@ -39,7 +39,7 @@ const contactUrl = (competitionId: string, message: string) =>
 
 /**
  * What a competitor sees once they have walked all the steps: what they settled in each of them,
- * in the order the server listed them. A step the server marks as editable can be opened again in
+ * with the steps the server marks as priority first. A step the server marks as editable can be opened again in
  * place of its summary, so that the heading the competitor is reading stays where it is.
  */
 export default function RegistrationOverview({
@@ -121,9 +121,14 @@ export default function RegistrationOverview({
 
   const stopEditing = () => setEditingStepKey(undefined);
 
+  const summarySteps = [
+    ...steps.filter((step) => step.summary_status === "priority"),
+    ...steps.filter((step) => step.summary_status === "show"),
+  ];
+
   return (
     <VStack gap={6} alignItems="stretch" width="full">
-      {steps.map((step) => {
+      {summarySteps.map((step) => {
         const isEditing = editingStepKey === step.key;
 
         return (
