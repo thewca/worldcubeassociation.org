@@ -1,12 +1,15 @@
 "use client";
 
-import { Steps, VStack } from "@chakra-ui/react";
+import { Stack, Steps, VStack } from "@chakra-ui/react";
 import type { components } from "@/types/openapi";
 import RegistrationSummary from "@/components/competitions/Registration/RegistrationSummary";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
+import NextStepButton from "@/components/competitions/Registration/NextStepButton";
+import SubmitStepButton from "@/components/competitions/Registration/SubmitStepButton";
 import {
   initialStepIndex,
+  isStepComplete,
   StepContent,
 } from "@/components/competitions/Registration/steps";
 import { toaster } from "@/components/ui/toaster";
@@ -21,12 +24,55 @@ import showRegistrationError from "@/lib/wca/registrations/showRegistrationError
 import {
   registrationFormValues,
   useRegistrationForm,
+  type RegistrationForm,
   type RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type Registration = components["schemas"]["RegistrationDataV2"];
+
+// Finishing the last step before the registration exists submits it, so that every step after it
+//   has a registration to work with.
+function WizardStepButton({
+  step,
+  form,
+  isSubmitting,
+  submitsRegistration,
+  leadsToSummary,
+  onNext,
+}: {
+  step: StepConfig;
+  form: RegistrationForm;
+  isSubmitting: boolean;
+  submitsRegistration: boolean;
+  leadsToSummary: boolean;
+  onNext: () => void;
+}) {
+  const { t } = useT();
+
+  return (
+    <form.Subscribe selector={(state) => isStepComplete(step, state.values)}>
+      {(isComplete) =>
+        submitsRegistration ? (
+          <SubmitStepButton
+            isSubmitting={isSubmitting}
+            disabled={!isComplete}
+            onSubmit={() => form.handleSubmit({ onSubmitted: onNext })}
+          >
+            {t("registrations.register")}
+          </SubmitStepButton>
+        ) : (
+          <NextStepButton
+            leadsToSummary={leadsToSummary}
+            disabled={!isComplete}
+            onNext={onNext}
+          />
+        )
+      }
+    </form.Subscribe>
+  );
+}
 
 export default function StepPanel({
   steps,
@@ -124,6 +170,8 @@ export default function StepPanel({
     initialStepIndex(steps, registration),
   );
 
+  const lastPreStepIndex = steps.findLastIndex((step) => !step.is_post_step);
+
   const goToNextStep = () => setCurrentStep((step) => step + 1);
 
   const finishCreation = () => {
@@ -184,16 +232,22 @@ export default function StepPanel({
                     onCreated={finishCreation}
                   />
                 ) : (
-                  <StepContent
-                    step={step}
-                    competitionInfo={competitionInfo}
-                    registration={registration}
-                    form={form}
-                    isSubmitting={isSubmitting}
-                    onNext={goToNextStep}
-                    leadsToSummary={index === steps.length - 1}
-                    isOpenedFromSummary={false}
-                  />
+                  <Stack gap="3">
+                    <StepContent
+                      step={step}
+                      competitionInfo={competitionInfo}
+                      registration={registration}
+                      form={form}
+                    />
+                    <WizardStepButton
+                      step={step}
+                      form={form}
+                      isSubmitting={isSubmitting}
+                      submitsRegistration={index === lastPreStepIndex}
+                      leadsToSummary={index === steps.length - 1}
+                      onNext={goToNextStep}
+                    />
+                  </Stack>
                 )}
               </Steps.Content>
             ),
