@@ -5,7 +5,10 @@ import type { components } from "@/types/openapi";
 import RegistrationOverview from "@/components/competitions/Registration/RegistrationOverview";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
-import { StepContent } from "@/components/competitions/Registration/steps";
+import {
+  initialStepIndex,
+  StepContent,
+} from "@/components/competitions/Registration/steps";
 import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
 import { useState } from "react";
@@ -117,15 +120,8 @@ export default function StepPanel({
   const isSubmitting =
     createRegistration.isPending || updateRegistration.isPending;
 
-  // Withdrawing puts the competitor back at the start: signing up again means going through the
-  //   steps again, rather than looking at a summary of a registration that no longer stands.
-  const hasStandingRegistration =
-    registration !== null &&
-    registration.competing.registration_status !== "cancelled";
-
-  // `Steps` reads the index one past the last step as the flow being complete.
   const [currentStep, setCurrentStep] = useState(
-    hasStandingRegistration ? steps.length : 0,
+    initialStepIndex(steps, registration),
   );
 
   const goToNextStep = () => setCurrentStep((step) => step + 1);

@@ -206,3 +206,27 @@ export function isStepEditable(step: StepConfig, registration: Registration) {
       return step.is_editable;
   }
 }
+
+/**
+ * Where the flow starts. Withdrawing puts the competitor back at the start: signing up again means
+ * going through the steps again, rather than looking at a summary of a registration that no longer
+ * stands. `Steps` reads the index one past the last step as the flow being complete.
+ */
+export function initialStepIndex(
+  steps: StepConfig[],
+  registration: Registration | null,
+) {
+  const hasStandingRegistration =
+    registration !== null &&
+    registration.competing.registration_status !== "cancelled";
+
+  return hasStandingRegistration ? steps.length : 0;
+}
+
+/** The steps the overview shows, with the ones the server marks as priority first. */
+export function summarySteps(steps: StepConfig[]) {
+  return [
+    ...steps.filter((step) => step.summary_status === "priority"),
+    ...steps.filter((step) => step.summary_status === "show"),
+  ];
+}

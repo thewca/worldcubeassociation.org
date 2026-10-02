@@ -8,6 +8,7 @@ import {
   isStepEditable,
   StepContent,
   StepSummary,
+  summarySteps,
 } from "@/components/competitions/Registration/steps";
 import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
@@ -121,14 +122,9 @@ export default function RegistrationOverview({
 
   const stopEditing = () => setEditingStepKey(undefined);
 
-  const summarySteps = [
-    ...steps.filter((step) => step.summary_status === "priority"),
-    ...steps.filter((step) => step.summary_status === "show"),
-  ];
-
   return (
     <VStack gap={6} alignItems="stretch" width="full">
-      {summarySteps.map((step) => {
+      {summarySteps(steps).map((step) => {
         const isEditing = editingStepKey === step.key;
 
         return (
