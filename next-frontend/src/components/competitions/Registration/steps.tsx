@@ -200,9 +200,9 @@ export function isStepEditable(step: StepConfig, registration: Registration) {
   switch (step.key) {
     case "competing":
       return (
-        step.isEditable && canEditRegistration(step.parameters, registration)
+        step.is_editable && canEditRegistration(step.parameters, registration)
       );
     default:
-      return step.isEditable;
+      return step.is_editable;
   }
 }

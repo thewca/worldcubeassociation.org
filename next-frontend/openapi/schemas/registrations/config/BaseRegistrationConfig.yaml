@@ -2,10 +2,17 @@ type: object
 properties:
   key:
     type: string
-  isEditable:
+  is_editable:
     type: boolean
   parameters:
     type: object
+  summary_status:
+    type: string
+    enum:
+      - show
+      - hide
+      - priority
 required:
   - key
-  - isEditable
+  - is_editable
+  - summary_status
