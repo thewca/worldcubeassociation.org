@@ -8,12 +8,14 @@ RSpec.describe TwoFactorMailer do
     let(:mail) { TwoFactorMailer.send_otp_to_user(user) }
 
     it "renders" do
-      expect(mail.to).to eq([user.email])
-      expect(mail.from).to eq(["software@worldcubeassociation.org"])
-      expect(mail.reply_to).to eq(mail.from)
+      freeze_time do
+        expect(mail.to).to eq([user.email])
+        expect(mail.from).to eq(["software@worldcubeassociation.org"])
+        expect(mail.reply_to).to eq(mail.from)
 
-      expect(mail.subject).to eq("Your one-time password for the WCA")
-      expect(mail.body.encoded).to match(user.current_otp)
+        expect(mail.subject).to eq("Your one-time password for the WCA")
+        expect(mail.body.encoded).to match(user.current_otp)
+      end
     end
   end
 end
