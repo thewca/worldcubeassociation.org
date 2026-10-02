@@ -1,6 +1,7 @@
 import { Image as ChakraImage, Link as ChakraLink } from "@chakra-ui/react";
 
 import type { Media } from "@/types/payload";
+import { CARD_IMAGE_WIDTH } from "@/collections/Media";
 import type { PolymorphicComponent } from "@/lib/types/components";
 import type { ElementType } from "react";
 
@@ -29,9 +30,8 @@ const buildSrcSet = (media: Media): string | undefined => {
   return entries.length > 0 ? entries.join(", ") : undefined;
 };
 
-// Matches the `card` image size, the widest variant we generate. Without it the
-//   browser assumes 100vw and always downloads the original.
-const IMAGE_DISPLAY_WIDTH = "768px";
+// Without `sizes` the browser assumes 100vw and always downloads the original.
+const IMAGE_SIZES = `${CARD_IMAGE_WIDTH}px`;
 
 type LinkRawProps = {
   href: string;
@@ -60,7 +60,7 @@ export const MediaImage: PolymorphicComponent<
     <RenderImage
       src={media.url ?? srcFallback}
       srcSet={buildSrcSet(media)}
-      sizes={IMAGE_DISPLAY_WIDTH}
+      sizes={IMAGE_SIZES}
       alt={media.alt ?? altFallback}
       {...imageProps}
     />
