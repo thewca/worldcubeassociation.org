@@ -9,7 +9,7 @@ import {
   personalBestColor,
   WithRecordTag,
 } from "@/components/results/TableCells";
-import { isSkipped, resultAttempts } from "@/lib/wca/results/attempts";
+import { maxAttemptCount, resultAttempts } from "@/lib/wca/results/attempts";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
@@ -152,12 +152,7 @@ export function ByPersonTable({
   solveTextAlign?: CssProperties["textAlign"];
   showNationalityColumn?: boolean;
 }) {
-  // The backend always pads with zeros at the end, which we need to manually kick out again
-  const validAttemptCounts = results.map(
-    (res) => _.dropRightWhile(res.attempts, (att) => isSkipped(att)).length,
-  );
-
-  const maxAttemptCount = _.max(validAttemptCounts) || 0;
+  const attemptCount = maxAttemptCount(results);
 
   const orderedResults = _.sortBy(results, [
     (res) => events.byId[res.event_id].rank,
@@ -179,7 +174,7 @@ export function ByPersonTable({
               <Table.ColumnHeader>Representing</Table.ColumnHeader>
             )}
             <Table.ColumnHeader
-              colSpan={maxAttemptCount}
+              colSpan={attemptCount}
               textAlign={solveTextAlign}
             >
               Solves
@@ -232,7 +227,7 @@ export function ByPersonTable({
                   worstResultIndex={worstResultIndex}
                   eventId={eventId}
                   recordTag={competitorResult.regional_single_record}
-                  attemptCount={maxAttemptCount}
+                  attemptCount={attemptCount}
                 />
               </Table.Row>
             );
@@ -293,6 +288,10 @@ export function ByCompetitionTable({
     ? historicalPbMarkers(results)
     : null;
 
+  const attemptCount = maxAttemptCount(results);
+
+  const anyAverages = results.some((res) => res.average !== 0);
+
   // Newest competition first, and the final before earlier rounds within a competition, matching
   // the legacy profile page.
   const resultsByCompetition = _.groupBy(
@@ -308,7 +307,7 @@ export function ByCompetitionTable({
   );
 
   return (
-    <Table.ScrollArea rounded="md">
+    <Table.ScrollArea rounded="md" width="full">
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -318,8 +317,8 @@ export function ByCompetitionTable({
             <Table.ColumnHeader>Round</Table.ColumnHeader>
             <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
             <Table.ColumnHeader>Single</Table.ColumnHeader>
-            <Table.ColumnHeader>Average</Table.ColumnHeader>
-            <Table.ColumnHeader colSpan={5} textAlign="left">
+            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
+            <Table.ColumnHeader colSpan={attemptCount} textAlign="left">
               Solves
             </Table.ColumnHeader>
           </Table.Row>
@@ -328,7 +327,6 @@ export function ByCompetitionTable({
           {_.flatMap(resultsByCompetition, (competitionResults) => {
             return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
-              const resultFormat = formats.byId[competitorResult.format_id];
 
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
@@ -370,28 +368,30 @@ export function ByCompetitionTable({
                       {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
                   </Table.Cell>
-                  <Table.Cell
-                    color={
-                      pbMarkers?.average.has(competitorResult.id)
-                        ? personalBestColor(
-                            competitorResult.regional_average_record,
-                          )
-                        : undefined
-                    }
-                  >
-                    <WithRecordTag
-                      recordTag={competitorResult.regional_average_record}
+                  {anyAverages && (
+                    <Table.Cell
+                      color={
+                        pbMarkers?.average.has(competitorResult.id)
+                          ? personalBestColor(
+                              competitorResult.regional_average_record,
+                            )
+                          : undefined
+                      }
                     >
-                      {formatAttemptResult(competitorResult.average, eventId)}
-                    </WithRecordTag>
-                  </Table.Cell>
+                      <WithRecordTag
+                        recordTag={competitorResult.regional_average_record}
+                      >
+                        {formatAttemptResult(competitorResult.average, eventId)}
+                      </WithRecordTag>
+                    </Table.Cell>
+                  )}
                   <AttemptsCells
                     attempts={definedAttempts}
                     bestResultIndex={bestResultIndex}
                     worstResultIndex={worstResultIndex}
                     eventId={eventId}
                     recordTag={competitorResult.regional_single_record}
-                    attemptCount={resultFormat.expected_solve_count}
+                    attemptCount={attemptCount}
                   />
                 </Table.Row>
               );
