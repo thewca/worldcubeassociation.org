@@ -4,6 +4,8 @@ properties:
     type: string
   is_editable:
     type: boolean
+  is_post_step:
+    type: boolean
   parameters:
     type: object
   summary_status:
@@ -15,4 +17,5 @@ properties:
 required:
   - key
   - is_editable
+  - is_post_step
   - summary_status

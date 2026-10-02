@@ -202,10 +202,18 @@ export function initialStepIndex(
   return hasStandingRegistration ? steps.length : 0;
 }
 
-/** The steps the summary shows, with the ones the server marks as priority first. */
+const byPriority = (steps: StepConfig[]) => [
+  ...steps.filter((step) => step.summary_status === "priority"),
+  ...steps.filter((step) => step.summary_status === "show"),
+];
+
+/**
+ * The steps the summary shows: the ones after submitting first, as they are what is still going on
+ * with the registration. Within each group, the ones the server marks as priority come first.
+ */
 export function summarySteps(steps: StepConfig[]) {
   return [
-    ...steps.filter((step) => step.summary_status === "priority"),
-    ...steps.filter((step) => step.summary_status === "show"),
+    ...byPriority(steps.filter((step) => step.is_post_step)),
+    ...byPriority(steps.filter((step) => !step.is_post_step)),
   ];
 }

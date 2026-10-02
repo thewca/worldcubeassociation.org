@@ -1103,6 +1103,7 @@ export interface components {
         BaseRegistrationConfig: {
             key: string;
             is_editable: boolean;
+            is_post_step: boolean;
             parameters?: Record<string, never>;
             /** @enum {string} */
             summary_status: "show" | "hide" | "priority";

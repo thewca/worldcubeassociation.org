@@ -12,10 +12,30 @@ type CompetingStatus = components["schemas"]["CompetingStatus"];
 
 // The order the backend sends for a competition that takes payments.
 const steps = [
-  { key: "requirements", is_editable: false, summary_status: "hide" },
-  { key: "competing", is_editable: true, summary_status: "show" },
-  { key: "payment", is_editable: true, summary_status: "show" },
-  { key: "approval", is_editable: false, summary_status: "priority" },
+  {
+    key: "requirements",
+    is_editable: false,
+    is_post_step: false,
+    summary_status: "hide",
+  },
+  {
+    key: "competing",
+    is_editable: true,
+    is_post_step: false,
+    summary_status: "show",
+  },
+  {
+    key: "payment",
+    is_editable: true,
+    is_post_step: true,
+    summary_status: "show",
+  },
+  {
+    key: "approval",
+    is_editable: false,
+    is_post_step: true,
+    summary_status: "priority",
+  },
 ] as StepConfig[];
 
 const START = 0;
@@ -51,12 +71,33 @@ describe("initialStepIndex", () => {
 });
 
 describe("summarySteps", () => {
-  it("puts priority steps first and leaves hidden steps out", () => {
+  it("puts post steps before pre steps, priority first within each, and leaves hidden steps out", () => {
     expect(summarySteps(steps).map((step) => step.key)).toEqual([
       "approval",
-      "competing",
       "payment",
+      "competing",
     ]);
+  });
+
+  it("does not let a priority pre step jump ahead of the post steps", () => {
+    const stepsWithPriorityPreStep = [
+      {
+        key: "competing",
+        is_editable: true,
+        is_post_step: false,
+        summary_status: "priority",
+      },
+      {
+        key: "payment",
+        is_editable: true,
+        is_post_step: true,
+        summary_status: "show",
+      },
+    ] as StepConfig[];
+
+    expect(
+      summarySteps(stepsWithPriorityPreStep).map((step) => step.key),
+    ).toEqual(["payment", "competing"]);
   });
 });
 
