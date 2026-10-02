@@ -1973,7 +1973,6 @@ en:
         acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
         accept: "Accept"
-        accepted: "You have accepted the competition terms."
       update:
         being_updated: "Registration is being updated..."
         being_deleted: "Registration is being deleted..."

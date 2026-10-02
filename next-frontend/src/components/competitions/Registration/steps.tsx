@@ -108,14 +108,11 @@ export function StepSummary({
 }) {
   const { t } = useT();
 
+  if (step.summary_status === "hide") {
+    return;
+  }
+
   switch (step.key) {
-    case "requirements":
-      return (
-        <HStack>
-          <LuCheck />
-          <Text>{t("competitions.registration_v2.requirements.accepted")}</Text>
-        </HStack>
-      );
     case "competing":
       return (
         <DataList.Root orientation="horizontal">
