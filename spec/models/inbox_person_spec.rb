@@ -3,6 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe InboxPerson do
+  describe 'validations' do
+    it 'evaluates the dob cutoff at validation time' do
+      travel_to 1.year.from_now do
+        inbox_person = build(:inbox_person, dob: Date.today - 1.day)
+
+        expect(inbox_person).to be_valid
+      end
+    end
+  end
+
   describe '#registration_mismatches' do
     let(:competition) { create(:competition) }
     let(:user) { create(:user, name: "John Doe", country_iso2: "US", gender: "m", dob: Date.new(1990, 6, 15)) }
