@@ -178,7 +178,11 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
                       input.selectionStart === input.value.length &&
                       input.selectionEnd === input.value.length;
 
-                    if (e.key === "Backspace" && atEnd && input.value !== "") {
+                    if (
+                      e.key === "Backspace" &&
+                      atEnd &&
+                      api.hasSelectedItems
+                    ) {
                       e.preventDefault();
                       api.clearValue();
                     }
