@@ -257,7 +257,7 @@ export default function CompetingStep({
           hasGuestsChanged,
           guests,
         );
-        window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })));
+        window.location = contactCompetitionUrl(competitionInfo.id, encodeURIComponent(I18n.t('competitions.registration_v2.update.update_contact_message', { update_params: updateMessage })), true);
       }
     }).catch(() => {
       nextStep();
