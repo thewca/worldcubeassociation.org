@@ -2902,6 +2902,8 @@ es-419:
       upload_results: >-
         Esta competición ya se ha celebrado. Estamos trabajando para publicar
         sus resultados cuanto antes.
+      #original_hash: 164ced4
+      provisional_live_results: 'Mientras tanto, puedes ver los resultados provisorios aquí:'
       #original_hash: 68dd436
       computing_auxiliary_data: >-
         Por favor espera hasta que los datos complementarios hayan sido
@@ -3538,8 +3540,6 @@ es-419:
       #original_hash: 1cab715
       registration_key: 'Clave de registro:'
       registration_status:
-        #original_hash: 10b28a8
-        full: Completo
         #original_hash: cf9b770
         open: Abierto
         #original_hash: 9c46019
