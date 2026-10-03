@@ -121,6 +121,31 @@ RSpec.describe PV do
         end
       end
 
+      it "detects duplicate names case-insensitively" do
+        # The DB person's name is stored in a different case than the uploaded
+        # newcomer's name; the check should still flag them as the same person.
+        person = create(:person, name: "SHERLOCK HOLMES")
+        dup_name = create(:inbox_person, name: "Sherlock Holmes", competition_id: competition1.id)
+        create(:inbox_result,
+               person: dup_name, competition: competition1,
+               event_id: "333oh")
+
+        expected_warnings = [
+          RV::ValidationWarning.new(PV::SAME_PERSON_NAME_WARNING,
+                                    :persons, competition1.id,
+                                    name: person.name, wca_ids: person.wca_id),
+        ]
+        validator_args = [
+          { competition_ids: [competition1.id], model: InboxResult },
+          { results: InboxResult.where(competition_id: competition1.id), model: InboxResult },
+        ]
+        validator_args.each do |arg|
+          pv = PV.new.validate(**arg)
+          expect(pv.errors).to be_empty
+          expect(pv.warnings).to match_array(expected_warnings)
+        end
+      end
+
       # Triggers:
       # PERSON_WITHOUT_RESULTS_ERROR
       # WRONG_WCA_ID_ERROR
