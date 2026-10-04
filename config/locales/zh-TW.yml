@@ -110,7 +110,7 @@ zh-TW:
     #original_hash: 8216a66
     pyram: 金字塔Pyraminx
     #original_hash: 64a56a2
-    skewb: Skewb
+    skewb: 斜轉方塊Skewb
     #original_hash: 1551a2c
     sq1: Square-1
     #original_hash: 5bae501
@@ -125,7 +125,7 @@ zh-TW:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 3x3x3多顆盲解（舊）
-    fto: FTO 八面體
+    fto: 面轉八面體FTO
   formats:
     #original_hash: e4b3c11
     '1': 1次取最佳
@@ -1039,7 +1039,7 @@ zh-TW:
         manage_competitions: 管理您負責的比賽
     devise:
       #original_hash: 06184f5
-      no_account: 沒有WCA帳號嗎？
+      no_account: 沒有帳號嗎？
       #original_hash: a268696
       have_competed: 我已經參加過WCA比賽了。
       #original_hash: dcd1d70
@@ -2831,7 +2831,7 @@ zh-TW:
           #original_hash: c0ddcd6
           trainee_delegate_ids: WCA 實習代表
           #original_hash: 958562e
-          organizer_ids: 主辦人ID
+          organizer_ids: 主辦人
           #original_hash: b37456c
           contact: 聯絡
           #original_hash: 78ef126
@@ -2973,7 +2973,7 @@ zh-TW:
           #original_hash: cb9882c
           trainee_delegate_ids: 比賽的WCA實習代表。
           #original_hash: 517d376
-          organizer_ids: 比賽的主辦團隊（他們需要建立WCA帳號才能列在這裡）。
+          organizer_ids: 比賽的主辦團隊（他們需要建立帳號才能列在這裡）。
           #original_hash: 447814d
           contact_html: >-
             可任意選擇聯絡資訊。若您未填寫，聯繫請求內容會由表格方式送出，主辦人的電子郵件將不會被顯示。%{md}
@@ -3180,7 +3180,7 @@ zh-TW:
         #original_hash: b4bac52
         email_copy: 複製郵件
         #original_hash: b83b663
-        email_message: 已複製到剪貼簿。記得要使用BCC密件副本！
+        email_message: 已複製到剪貼簿。記得要使用bcc密件副本！
         #original_hash: beedd53
         move_to:
           other: 移動%{count}個報名到
@@ -3517,7 +3517,7 @@ zh-TW:
       #original_hash: 0a8adac
       schedule: 賽程
       #original_hash: 1060ed0
-      no_schedule: 這個比賽沒有賽程，無法自動產生PDF檔案。
+      no_schedule: 這個比賽沒有賽程，無法自動產生pdf檔案。
     events:
       time_limit_information:
         #original_hash: 88c5f1a
@@ -4699,9 +4699,9 @@ zh-TW:
       #original_hash: b7c88ef
       dob_is_too_old_warning: '%{name}似乎快一百歲，請確認是不是正確。'
       #original_hash: 809f305
-      person_doesnt_have_any_results_error: '搜尋不到ID是%{person_id}的%{person_name}'
+      person_doesnt_have_any_results_error: '搜尋不到id是%{person_id}的%{person_name}'
       #original_hash: ebc1b15
-      results_not_associated_with_any_person_error: '有未知名字的人擁有個人ID%{person_id}'
+      results_not_associated_with_any_person_error: '有未知名字的人擁有個人id%{person_id}'
       #original_hash: c29e35d
       whitespace_in_name_error: '名稱是''%{name}''的人有多餘空白或是雙空白'
       #original_hash: 9b1ae5f
