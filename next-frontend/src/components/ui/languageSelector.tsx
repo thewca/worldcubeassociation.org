@@ -77,6 +77,7 @@ const LanguageSelector = () => {
             <Button
               variant="ghost"
               size="sm"
+              px={2}
               justifyContent="flex-start"
               width="full"
             >
@@ -87,12 +88,13 @@ const LanguageSelector = () => {
             </Button>
           </Collapsible.Trigger>
           <Collapsible.Content>
-            <VStack align="stretch" ps={4} gap={1} py={1}>
+            <VStack align="stretch" ps={2} gap={1} py={1}>
               {localeEntries.map(([lang, cfg]) => (
                 <Button
                   key={lang}
                   variant={lang === currentLocale ? "subtle" : "ghost"}
                   size="sm"
+                  px={2}
                   justifyContent="flex-start"
                   onClick={() => handleChangeLocale(lang)}
                 >

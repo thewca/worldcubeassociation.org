@@ -131,9 +131,9 @@ export default async function Navbar() {
     >
       <RefreshRouteOnSave />
       <MobileNavRoot>
-        <HStack padding="3" justifyContent="space-between">
+        <HStack ps={3} pe={1.5} py={3} justifyContent="space-between">
           <HStack>
-            {!LIVE_RESULT_BETA && <WCALogo />}
+            {!LIVE_RESULT_BETA && <WCALogo mr={1} />}
             <Box hideFrom="xl">
               <Collapsible.Trigger asChild>
                 <IconButton variant="ghost" aria-label="Toggle navigation">
@@ -312,7 +312,7 @@ export default async function Navbar() {
 
         <Box hideFrom="xl">
           <Collapsible.Content>
-            <VStack align="stretch" px={3} pb={3} gap={1}>
+            <VStack align="stretch" px={1.5} pt={1} pb={1.5} gap={1}>
               {showEmptyMessage && (
                 <Text>Oh no, there are no navbar items!</Text>
               )}
@@ -340,6 +340,7 @@ export default async function Navbar() {
                         <Button
                           variant="ghost"
                           size="sm"
+                          px={2}
                           justifyContent="flex-start"
                           width="full"
                         >
@@ -353,7 +354,7 @@ export default async function Navbar() {
                         </Button>
                       </Collapsible.Trigger>
                       <Collapsible.Content>
-                        <VStack align="stretch" ps={4} gap={1} py={1}>
+                        <VStack align="stretch" ps={2} gap={1} py={1}>
                           {navbarEntry.entries.map((subEntry) => (
                             <React.Fragment key={subEntry.id}>
                               {subEntry.blockType === "LinkItem" && (
@@ -373,7 +374,7 @@ export default async function Navbar() {
                                 </MobileNavLink>
                               )}
                               {subEntry.blockType === "VisualDivider" && (
-                                <Separator />
+                                <Separator mx={2} />
                               )}
                               {subEntry.blockType === "NestedDropdown" && (
                                 <Collapsible.Root>
@@ -381,6 +382,7 @@ export default async function Navbar() {
                                     <Button
                                       variant="ghost"
                                       size="sm"
+                                      px={2}
                                       justifyContent="flex-start"
                                       width="full"
                                     >
@@ -393,7 +395,7 @@ export default async function Navbar() {
                                   <Collapsible.Content>
                                     <VStack
                                       align="stretch"
-                                      ps={4}
+                                      ps={2}
                                       gap={1}
                                       py={1}
                                     >
@@ -436,6 +438,7 @@ export default async function Navbar() {
                           <Button
                             variant="ghost"
                             size="sm"
+                            px={2}
                             justifyContent="flex-start"
                             width="full"
                           >
@@ -452,7 +455,7 @@ export default async function Navbar() {
                           </Button>
                         </Collapsible.Trigger>
                         <Collapsible.Content>
-                          <VStack align="stretch" ps={4} gap={1} py={1}>
+                          <VStack align="stretch" ps={2} gap={1} py={1}>
                             {socialLinks.map((item) => (
                               <MobileNavLink key={item.id}>
                                 <LinkWrapper
@@ -469,8 +472,8 @@ export default async function Navbar() {
               ))}
               {/* From `md` upwards both of these already sit in the top bar, so without this the
                   open drawer shows a second language selector and a second avatar. */}
-              <Separator hideFrom="md" />
-              <VStack align="start" hideFrom="md">
+              <Separator hideFrom="md" mx={2} />
+              <VStack align="stretch" hideFrom="md" gap={1}>
                 <LanguageSelector />
                 <AvatarMenu session={session} />
               </VStack>

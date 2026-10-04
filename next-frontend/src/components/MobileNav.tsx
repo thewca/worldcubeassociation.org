@@ -29,6 +29,7 @@ export function MobileNavLink({ children }: { children: React.ReactNode }) {
       asChild
       variant="ghost"
       size="sm"
+      px={2}
       justifyContent="flex-start"
       onClick={closeMobileNav}
     >

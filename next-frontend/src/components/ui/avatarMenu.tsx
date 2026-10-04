@@ -42,7 +42,13 @@ function AvatarMenu({ session }: { session: Session | null }) {
 
   if (!session) {
     return (
-      <Button onClick={() => signIn()} variant="ghost" size="sm" px={2}>
+      <Button
+        onClick={() => signIn()}
+        variant="ghost"
+        size="sm"
+        px={2}
+        justifyContent="flex-start"
+      >
         Sign in
       </Button>
     );
@@ -62,7 +68,9 @@ function AvatarMenu({ session }: { session: Session | null }) {
       {/* Desktop: popup dropdown */}
       <Box hideBelow="md">
         <Menu.Root positioning={{ placement: "bottom-end" }}>
-          <Menu.Trigger rounded="full">{avatarNode}</Menu.Trigger>
+          <Menu.Trigger rounded="full" me={1.5}>
+            {avatarNode}
+          </Menu.Trigger>
           <Menu.Positioner>
             <Menu.Content>
               <Menu.Item value="payloadcms" asChild>
@@ -112,6 +120,7 @@ function AvatarMenu({ session }: { session: Session | null }) {
             <Button
               variant="ghost"
               size="sm"
+              px={2}
               justifyContent="flex-start"
               width="full"
             >
@@ -125,11 +134,12 @@ function AvatarMenu({ session }: { session: Session | null }) {
             </Button>
           </Collapsible.Trigger>
           <Collapsible.Content>
-            <VStack align="stretch" ps={4} gap={1} py={1}>
+            <VStack align="stretch" ps={2} gap={1} py={1}>
               <Button
                 asChild
                 variant="ghost"
                 size="sm"
+                px={2}
                 justifyContent="flex-start"
               >
                 <Link
@@ -147,15 +157,17 @@ function AvatarMenu({ session }: { session: Session | null }) {
                 asChild
                 variant="ghost"
                 size="sm"
+                px={2}
                 justifyContent="flex-start"
               >
                 <Link href="/dashboard">Developer Dashboard</Link>
               </Button>
-              <Separator />
+              <Separator mx={2} />
               <Button
                 asChild
                 variant="ghost"
                 size="sm"
+                px={2}
                 justifyContent="flex-start"
               >
                 <Link href="/competitions/mine">My Competitions</Link>
@@ -165,6 +177,7 @@ function AvatarMenu({ session }: { session: Session | null }) {
                   asChild
                   variant="ghost"
                   size="sm"
+                  px={2}
                   justifyContent="flex-start"
                 >
                   <Link
@@ -177,10 +190,11 @@ function AvatarMenu({ session }: { session: Session | null }) {
                   </Link>
                 </Button>
               )}
-              <Separator />
+              <Separator mx={2} />
               <Button
                 variant="ghost"
                 size="sm"
+                px={2}
                 justifyContent="flex-start"
                 onClick={handleSignOut}
               >
