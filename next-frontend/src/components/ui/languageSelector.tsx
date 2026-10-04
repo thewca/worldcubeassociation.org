@@ -47,7 +47,7 @@ const LanguageSelector = () => {
       <Box hideBelow="md">
         <Menu.Root>
           <Menu.Trigger asChild>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" px={2}>
               {currentLanguageLabel}
               <LuChevronDown />
             </Button>

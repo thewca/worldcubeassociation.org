@@ -42,7 +42,7 @@ function AvatarMenu({ session }: { session: Session | null }) {
 
   if (!session) {
     return (
-      <Button onClick={() => signIn()} variant="ghost" size="sm">
+      <Button onClick={() => signIn()} variant="ghost" size="sm" px={2}>
         Sign in
       </Button>
     );
