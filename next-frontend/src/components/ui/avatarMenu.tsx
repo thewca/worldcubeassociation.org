@@ -57,7 +57,12 @@ function AvatarMenu({ session }: { session: Session | null }) {
   const colorPalette = _.sample(AVATAR_COLORS);
 
   const avatarNode = (
-    <Avatar.Root colorPalette={colorPalette} variant="solid">
+    <Avatar.Root
+      colorPalette={colorPalette}
+      variant="solid"
+      size="xs"
+      boxSize={7}
+    >
       <Avatar.Fallback name={session.user?.name ?? undefined} />
       <Avatar.Image src={session.user?.image ?? undefined} />
     </Avatar.Root>
