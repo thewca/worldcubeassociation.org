@@ -1855,7 +1855,7 @@ class Competition < ApplicationRecord
   WCIF_STABLE_VERSION = '1.1'
 
   WCIF_VERSION_CATALOGUE = {
-    latest: '2.1.1',
+    latest: '2.2',
     stable: WCIF_STABLE_VERSION,
   }.freeze
 
@@ -2198,6 +2198,10 @@ class Competition < ApplicationRecord
   end
 
   def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
+    # WCIF v2.2 properly documents the `id` and `version` props as required,
+    #   so enforce this requirement regardless of the additional option param
+    required_props ||= Gem::Version.new(version) >= Gem::Version.new("2.2")
+
     {
       # This $id property is the actual JsonSchema URI
       "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
