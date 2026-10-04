@@ -60,8 +60,8 @@ function AvatarMenu({ session }: { session: Session | null }) {
     <Avatar.Root
       colorPalette={colorPalette}
       variant="solid"
-      size="xs"
-      boxSize={7}
+      size={{ base: "xs", md: "md" }}
+      boxSize={{ base: 7, md: 10 }}
     >
       <Avatar.Fallback name={session.user?.name ?? undefined} />
       <Avatar.Image src={session.user?.image ?? undefined} />
