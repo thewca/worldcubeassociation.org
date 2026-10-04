@@ -15,6 +15,8 @@ const otherDelegatesHeaders = [
   { label: 'WCA ID', key: 'user.wca_id' },
   { label: 'Status', key: 'status' },
   { label: 'Location', key: 'metadata.location' },
+  { label: 'Senior Region', key: 'senior_region' },
+  { label: 'Junior Promotion Date', key: 'junior_delegate_promotion_date' },
   { label: 'First Delegated', key: 'metadata.first_delegated' },
   { label: 'Last Delegated', key: 'metadata.last_delegated' },
   { label: 'Total Delegated', key: 'metadata.total_delegated' },

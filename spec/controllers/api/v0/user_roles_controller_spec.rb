@@ -3,6 +3,32 @@
 require 'rails_helper'
 
 RSpec.describe Api::V0::UserRolesController do
+  describe 'GET #index for delegates' do
+    let!(:role) { create(:delegate_role) }
+
+    it 'includes the senior region and junior promotion date' do
+      create(:junior_delegate_role, user: role.user, start_date: '2020-02-01', end_date: '2021-01-01')
+      create(:junior_delegate_role, user: role.user, start_date: '2021-01-01', end_date: '2022-01-01')
+
+      get :index, params: { groupType: 'delegate_regions', isActive: true }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.sole).to include(
+        'senior_region' => role.group.name,
+        'junior_delegate_promotion_date' => '2020-02-01',
+      )
+    end
+
+    it 'does not add delegate fields to other role lists' do
+      create(:wrc_member_role, user: role.user)
+
+      get :index, params: { groupType: 'teams_committees', userId: role.user_id }
+
+      expect(response.parsed_body.sole).not_to have_key('senior_region')
+      expect(response.parsed_body.sole).not_to have_key('junior_delegate_promotion_date')
+    end
+  end
+
   describe 'GET #list' do
     let!(:user_senior_delegate_role) { create(:senior_delegate_role) }
     let!(:user_whose_delegate_status_changes) { create(:junior_delegate_role, group_id: user_senior_delegate_role.group_id).user }

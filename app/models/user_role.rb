@@ -151,6 +151,20 @@ class UserRole < ApplicationRecord
     end
   end
 
+  def senior_region
+    group.root_group.name
+  end
+
+  # Start date of the latest continuous period as a junior Delegate. A region transfer ends the
+  # old role on the new role's start date, so both roles count as one continuous period.
+  def junior_delegate_promotion_date
+    user.roles
+        .select { |role| role.metadata.is_a?(RolesMetadataDelegateRegions) && role.metadata.junior_delegate? }
+        .sort_by(&:start_date)
+        .slice_when { |previous, current| previous.end_date && current.start_date > previous.end_date }
+        .to_a.last&.first&.start_date
+  end
+
   def can_user_read?(user)
     return true unless group.is_hidden # Roles of non-hidden groups are public
     return false if user.nil? # Roles of hidden groups are visible only to a set of users based on permisssions.
