@@ -41,6 +41,13 @@ RSpec.describe UserRole do
       expect(role.junior_delegate_promotion_date).to eq(Date.new(2021, 1, 2))
     end
 
+    it 'returns nil when the junior period began with a migrated role' do
+      create(:junior_delegate_role, user: user, start_date: UserRole::MIGRATED_DELEGATE_ROLE_START_DATE, end_date: '2021-01-01')
+      create(:junior_delegate_role, user: user, start_date: '2021-01-01', end_date: '2022-01-01')
+
+      expect(role.junior_delegate_promotion_date).to be_nil
+    end
+
     it 'follows multiple consecutive transfers but stops at an earlier gap' do
       create(:junior_delegate_role, user: user, start_date: '2018-01-01', end_date: '2019-01-01')
       create(:junior_delegate_role, user: user, start_date: '2022-01-01', end_date: '2023-01-01')
