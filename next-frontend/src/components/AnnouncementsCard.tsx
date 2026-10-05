@@ -3,6 +3,7 @@ import AnnouncementContent from "@/components/AnnouncementContent";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
 import { announcementByline } from "@/components/announcements/announcement";
+import AnnouncementItemTrigger from "@/components/announcements/AnnouncementItemTrigger";
 
 function AnnouncementItem({
   announcement,
@@ -18,13 +19,13 @@ function AnnouncementItem({
       layerStyle="fill.subtle"
       _open={{ layerStyle: { _light: "fill.solid", _dark: "fill.muted" } }}
     >
-      <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
+      <AnnouncementItemTrigger>
         <Accordion.ItemIndicator _open={{ display: "none" }} />
         <Stack gap={1} alignItems="flex-start">
           <Text textStyle="s1">{announcement.title}</Text>
           <Text>{announcementByline(announcement)}</Text>
         </Stack>
-      </Accordion.ItemTrigger>
+      </AnnouncementItemTrigger>
       <Accordion.ItemContent>
         <AnnouncementContent
           announcement={announcement}
