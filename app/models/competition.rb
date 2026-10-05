@@ -522,6 +522,10 @@ class Competition < ApplicationRecord
     competitor_limit - registrations.accepted_and_paid_pending_count
   end
 
+  def waiting_list_count
+    registrations.waitlisted.count
+  end
+
   def auto_accept_threshold_reached?
     return false if auto_accept_disable_threshold.blank?
 
@@ -1906,7 +1910,7 @@ class Competition < ApplicationRecord
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? spots_left h2h_rounds tab_names],
+                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds tab_names],
       include: %w[delegates organizers],
     }
     self.as_json(options)

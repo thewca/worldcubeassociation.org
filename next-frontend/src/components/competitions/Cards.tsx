@@ -29,6 +29,7 @@ import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
 import LocalDateTime from "@/components/LocalDateTime";
 import RefundPolicyText from "@/components/competitions/RefundPolicyText";
+import { hasNotPassed, hasPassed } from "@/lib/wca/dates";
 
 function formatDateRange(start: Date, end: Date): string {
   const sameDay = start.toDateString() === end.toDateString();
@@ -161,6 +162,16 @@ export async function RegistrationCard({
 }) {
   const { t } = await getT();
 
+  const registrationNotYetOpen = hasNotPassed(
+    competitionInfo.registration_open,
+  );
+  const registrationClosed = hasPassed(competitionInfo.registration_close);
+  const spotsLeft = competitionInfo.spots_left;
+  const showWaitingList =
+    competitionInfo["registration_full?"] &&
+    !registrationNotYetOpen &&
+    !registrationClosed;
+
   return (
     <Card.Root>
       <Card.Body>
@@ -188,15 +199,28 @@ export async function RegistrationCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <SpotsLeftIcon />
-              {t("competitions.competition_info.competitor_limit")}
+              {spotsLeft == null || registrationNotYetOpen
+                ? t("competitions.competition_info.competitor_limit")
+                : registrationClosed
+                  ? t("competitions.nav.menu.competitors")
+                  : t("competitions.my_competitions_table.registrations")}
             </Stat.Label>
             <Stat.ValueText>
-              {competitionInfo.spots_left == null ? (
+              {spotsLeft == null ? (
                 t("competitions.competition_info.no_competitor_limit")
+              ) : registrationNotYetOpen ? (
+                <FormatNumber value={competitionInfo.competitor_limit} />
               ) : (
                 <>
-                  <FormatNumber value={competitionInfo.spots_left} />/
-                  <FormatNumber value={competitionInfo.competitor_limit} />
+                  <FormatNumber
+                    value={competitionInfo.competitor_limit - spotsLeft}
+                  />
+                  {!registrationClosed && (
+                    <>
+                      &sol;
+                      <FormatNumber value={competitionInfo.competitor_limit} />
+                    </>
+                  )}
                 </>
               )}
             </Stat.ValueText>
@@ -221,19 +245,31 @@ export async function RegistrationCard({
             </Stat.ValueText>
           </Stat.Root>
 
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <OnTheSpotRegistrationIcon />
-              {t(
-                "competitions.competition_form.labels.registration.allow_on_the_spot",
-              )}
-            </Stat.Label>
-            <Stat.ValueText>
-              {competitionInfo.on_the_spot_registration
-                ? t("simple_form.yes")
-                : t("simple_form.no")}
-            </Stat.ValueText>
-          </Stat.Root>
+          {showWaitingList ? (
+            <Stat.Root variant="competition">
+              <Stat.Label>
+                <CompetitorsIcon />
+                {t("competitions.competition_info.waiting_list_size")}
+              </Stat.Label>
+              <Stat.ValueText>
+                <FormatNumber value={competitionInfo.waiting_list_count} />
+              </Stat.ValueText>
+            </Stat.Root>
+          ) : (
+            <Stat.Root variant="competition">
+              <Stat.Label>
+                <OnTheSpotRegistrationIcon />
+                {t(
+                  "competitions.competition_form.labels.registration.allow_on_the_spot",
+                )}
+              </Stat.Label>
+              <Stat.ValueText>
+                {competitionInfo.on_the_spot_registration
+                  ? t("simple_form.yes")
+                  : t("simple_form.no")}
+              </Stat.ValueText>
+            </Stat.Root>
+          )}
 
           <Stat.Root variant="competition">
             <Stat.Label>
