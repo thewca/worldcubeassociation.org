@@ -55,7 +55,7 @@ RUN apt-get update -qq && \
       pkg-config \
       libssl-dev \
       libyaml-dev \
-      libvips \
+      libvips
 
 # Configure Rust toolchain to use what's currently stable,
 #   not what our current Debian sources happened to be shipped with
