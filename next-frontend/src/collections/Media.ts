@@ -1,7 +1,7 @@
 import type { CollectionConfig } from "payload";
 
-export const THUMBNAIL_IMAGE_WIDTH = 400;
-export const CARD_IMAGE_WIDTH = 768;
+const THUMBNAIL_IMAGE_WIDTH = 400;
+const CARD_IMAGE_WIDTH = 768;
 
 export const Media: CollectionConfig = {
   admin: {

@@ -1,7 +1,6 @@
 import { Image as ChakraImage, Link as ChakraLink } from "@chakra-ui/react";
 
 import type { Media } from "@/types/payload";
-import { CARD_IMAGE_WIDTH } from "@/collections/Media";
 import type { PolymorphicComponent } from "@/lib/types/components";
 import type { ElementType } from "react";
 
@@ -11,27 +10,41 @@ type ImageRawProps = {
   alt: string;
 };
 
+type ImageVariant = { url: string; width: number };
+
+const isImageVariant = (variant?: {
+  url?: string | null;
+  width?: number | null;
+}): variant is ImageVariant => Boolean(variant?.url && variant?.width);
+
 // Builds a width-descriptor srcSet (e.g. "/card.jpg 768w, /full.jpg 1920w")
 // from the generated image sizes plus the main upload, so the browser can pick
 // the smallest sufficient variant. Entries without a url or width are skipped.
-const buildSrcSet = (media: Media): string | undefined => {
-  const candidates = [
-    media.sizes?.thumbnail,
-    media.sizes?.card,
-    { url: media.url, width: media.width },
-  ];
+// Without `sizes` the browser assumes 100vw and always downloads the original,
+// so we declare full width up to the smallest variant and cap at the largest.
+const buildImageSources = (media: Media) => {
+  const generatedVariants = [media.sizes?.thumbnail, media.sizes?.card]
+    .filter(isImageVariant)
+    .toSorted((a, b) => a.width - b.width);
 
-  const entries = candidates
-    .filter((c): c is { url: string; width: number } =>
-      Boolean(c?.url && c?.width),
-    )
+  const srcSetEntries = [
+    ...generatedVariants,
+    { url: media.url, width: media.width },
+  ]
+    .filter(isImageVariant)
     .map(({ url, width }) => `${url} ${width}w`);
 
-  return entries.length > 0 ? entries.join(", ") : undefined;
-};
+  const smallestVariant = generatedVariants.at(0);
+  const largestVariant = generatedVariants.at(-1);
 
-// Without `sizes` the browser assumes 100vw and always downloads the original.
-const IMAGE_SIZES = `${CARD_IMAGE_WIDTH}px`;
+  return {
+    srcSet: srcSetEntries.length > 0 ? srcSetEntries.join(", ") : undefined,
+    sizes:
+      smallestVariant &&
+      largestVariant &&
+      `(max-width: ${smallestVariant.width}px) 100vw, ${largestVariant.width}px`,
+  };
+};
 
 type LinkRawProps = {
   href: string;
@@ -56,11 +69,13 @@ export const MediaImage: PolymorphicComponent<
   srcFallback,
   ...imageProps
 }) => {
+  const { srcSet, sizes } = buildImageSources(media);
+
   const pureImage = (
     <RenderImage
       src={media.url ?? srcFallback}
-      srcSet={buildSrcSet(media)}
-      sizes={IMAGE_SIZES}
+      srcSet={srcSet}
+      sizes={sizes}
       alt={media.alt ?? altFallback}
       {...imageProps}
     />
