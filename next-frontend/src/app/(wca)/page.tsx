@@ -249,7 +249,15 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   // Payload types an optional parameter as undefined or null, but Chakra only wants undefined
   const href = block.url ?? undefined;
   return (
-    <LinkBox asChild>
+    <LinkBox
+      asChild
+      className={href ? "group" : undefined}
+      _focusWithin={{
+        outline: "{borders.md}",
+        outlineColor: "colorPalette.focusRing",
+        outlineOffset: "{spacing.0.5}",
+      }}
+    >
       <Card.Root
         overflow="hidden"
         colorPalette={block.colorPalette}
@@ -258,14 +266,26 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       >
         <LinkOverlay
           href={href}
+          aria-label={block.heading ?? undefined}
           target={block.newTab ? "_blank" : undefined}
           rel={block.newTab ? "noopener noreferrer" : undefined}
+          borderRadius="inherit"
+          _before={{
+            borderRadius: "inherit",
+            transitionProperty: "background-color",
+            transitionDuration: "moderate",
+          }}
+          _groupHover={{ _before: { bg: "colorPalette.contrast/5" } }}
         />
         {block.textPosition === "bottom" && (
           <ImageOnlyCardImage block={block} />
         )}
         {block.heading && (
-          <Card.Body>
+          <Card.Body
+            transitionProperty="background-color"
+            transitionDuration="moderate"
+            _groupHover={{ bg: "colorPalette.contrast/5" }}
+          >
             <Card.Title textStyle="h2">{block.heading}</Card.Title>
           </Card.Body>
         )}
