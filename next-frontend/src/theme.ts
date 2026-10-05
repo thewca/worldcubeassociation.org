@@ -855,6 +855,9 @@ const customConfig = defineConfig({
           body: {
             gap: "4",
           },
+          description: {
+            color: "fg",
+          },
         },
         variants: {
           variant: {
