@@ -1506,12 +1506,14 @@ en:
           failed_to_fetch: "Failed to fetch next advancing competitor"
           still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
           in_batch: "Cannot quit a competitor whose results are part of an unsubmitted batch"
+          scoresheet_warning: "Make sure to only quit a competitor when you have their empty scoresheet physically in hand. You can not add a competitor back to a closed round."
         add_competitor:
           single_round: "Add Competitor to Round"
           multiple_rounds:
             one: "Add Competitor to both Rounds in the Dual Round."
             other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
           event_edit_warning: "This competitor is not registered for this event, and the competition no longer allows event changes to registrations. Adding them will still work, but make sure this is intended."
+          round_closed: "You cannot add a competitor to a round that is already closed"
       results:
         competitor: "Competitor"
         mean: "Mean"

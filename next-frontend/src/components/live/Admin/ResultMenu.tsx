@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Alert,
   Button,
   Checkbox,
   CloseButton,
@@ -233,6 +234,12 @@ function QuitModal({
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
+              <Alert.Root status="warning" mb="3">
+                <Alert.Indicator />
+                <Alert.Content>
+                  {t("competitions.live.admin.quit.scoresheet_warning")}
+                </Alert.Content>
+              </Alert.Root>
               <Text fontWeight="bold">{competitor.name}</Text>
               {toAdvance.length > 0 ? (
                 <>
