@@ -8,7 +8,7 @@
  * translated files back. See weblate/seed-payload.sh.
  *
  * `file_format: "json"` (flat) is deliberate — our keys are dotted paths like
- * `home:blocks(TextCard)[abc].body#0.1.0`, and `json-nested` would split them
+ * `home:blocks[a1].body#0.1.0`, and `json-nested` would split them
  * on the dots into a tree that no longer round-trips.
  */
 
@@ -129,7 +129,7 @@ export async function pushSource(
 
 /**
  * Seed an existing translation into Weblate. Only used by the one-time
- * `?seed=1` migration — routine syncs must never push translations upward or
+ * `seed` migration — routine syncs must never push translations upward or
  * they would clobber newer work done by translators.
  */
 export async function pushTranslations(

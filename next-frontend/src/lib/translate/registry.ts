@@ -7,16 +7,13 @@ import {
 import { fieldShouldBeLocalized } from "payload/shared";
 
 /**
- * Config-introspection registry for the community translator tool.
+ * Config-introspection registry for the Weblate sync.
  *
  * `buildTranslationRegistry` walks the Payload config and returns a flat list of
  * every `localized: true` field (the "schema" of what can be translated).
  * `resolveStrings` then expands one schema descriptor against an actual document
- * into concrete, addressable strings (arrays/blocks get real indices).
- *
- * Together these are the Payload equivalent of internationalize walking the YAML
- * tree: the registry gives you the denominator for a progress bar, and the
- * resolver gives you the individual strings to render and write back.
+ * into concrete, addressable strings (arrays/blocks get real indices), and
+ * `resolveLeaf` finds a leaf again when a translation is written back.
  *
  * The schema walk leans on Payload's own utilities so it tracks Payload's
  * semantics for free: `flattenAllFields` normalizes the field tree (collapsing
