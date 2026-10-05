@@ -677,7 +677,7 @@ es-ES:
           #original_hash: 621101a
           trainee_delegate: Delegado en prácticas
           #original_hash: 9b97968
-          junior_delegate: Delegado Júnior
+          junior_delegate: Delegado Junior
           #original_hash: 12ab214
           delegate: Delegado
           #original_hash: 45c2317
@@ -991,11 +991,10 @@ es-ES:
           confirm: Confirma el código
           #original_hash: 912516c
           regenerated_secret: >-
-            El secreto de autenticación de dos factores se ha regenerado con
-            éxito.
+            El secreto de autenticación de dos factores se ha regenerado satisfactoriamente.
           #original_hash: 1b0c44f
-          enabled_success: La autenticación de dos factores se ha habilitado con
-            éxito.
+          enabled_success: La autenticación de dos factores se ha habilitado 
+            satisfactoriamente.
           #original_hash: 9515157
           email_auth: Autenticación por correo electrónico
           #original_hash: d305ccb
@@ -1127,15 +1126,15 @@ es-ES:
             cuenta que si reactivas el 2FA, tendrás que reconfigurar tu(s)
             dispositivo(s).
           #original_hash: ab1b77d
-          disabled_success: Autenticación en dos factores deshabilitada con 
-            éxito.
+          disabled_success: Autenticación en dos factores deshabilitada 
+            satisfactoriamente.
           #original_hash: c36d556
           disabled_failed: >-
             No se ha podido desactivar el 2FA. Por favor, mira los errores a
             continuación.
       destroy_other:
         #original_hash: a768ea6
-        success: Desconectado con éxito de otros dispositivos.
+        success: Desconectado satisfactoriamente de otros dispositivos.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1788,6 +1787,11 @@ es-ES:
         mantener un entorno competitivo divertido y justo para todos.
       #original_hash: 65c84ec
       button: Saber más sobre cómo puedes apoyar a la WCA
+    become_delegate:
+      text: Ayuda a tener competiciones justas y de calidad en tu comunidad 
+        local de speedcubing solicitando ser Delegado en prácticas.
+      title: Conviértete en Delegado
+      link_title: Solicitar ahora
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1805,7 +1809,8 @@ es-ES:
         #original_hash: da39d05
         confirm: >-
           Tu cuenta se ha creado y tiene que ser activada antes de que puedas usarla.
-          Por favor, confirma tu cuenta a través del siguiente enlace:  #original_hash: 776476a
+          Por favor, confirma tu cuenta a través del siguiente enlace:  #original_hash:
+          776476a
         confirmation_link: Confirmar mi cuenta.
         #original_hash: d484f70
         activate: >-
@@ -2131,7 +2136,7 @@ es-ES:
           Esta sección te permite editar datos sensibles. Para hacerlo, por
           favor confirma tu identidad a continuación.
         #original_hash: f19af51
-        success: Identidad verificada con éxito
+        success: Identidad verificada satisfactoriamente
         #original_hash: 52ebf9c
         failure: No se ha podido verificar tu identidad
         #original_hash: 4324c73
@@ -2208,8 +2213,8 @@ es-ES:
         account_updated: Cuenta actualizada
         #original_hash: 49e5851
         wca_id_claimed: >-
-          El ID de la WCA %{wca_id} se ha reclamado con éxito. ¡Revisa tu correo
-          electrónico y espera a que %{user} lo apruebe!
+          El ID de la WCA %{wca_id} se ha reclamado satisfactoriamente. ¡Revisa tu
+          correo electrónico y espera a que %{user} lo apruebe!
         #original_hash: dc89669
         account_updated_confirm: >-
           Cuenta actualizada. Se ha enviado un correo electrónico a %{email}
@@ -2325,9 +2330,9 @@ es-ES:
         instrucciones de los Requisitos de Registro que se indican a
         continuación para garantizar que tu registro esté completo.
       #original_hash: 82fed60
-      imported: ¡Registros importados con éxito!
+      imported: ¡Registros importados satisfactoriamente!
       #original_hash: 3614fd1
-      added: ¡Registro añadido con éxito!
+      added: ¡Registro añadido satisfactoriamente!
     edit_registration:
       #original_hash: 2d15eae
       title: '%{person} para %{comp}'
@@ -2526,7 +2531,7 @@ es-ES:
     payment_form:
       #original_hash: 8897f02
       payment_successful: >-
-        Has realizado el pago con éxito y tu registro debería aparecer como
+        Has realizado el pago satisfactoriamente y tu registro debería aparecer como
         pagado a continuación.
       #original_hash: 92dde77
       payment_processing: 'Tu pago ha sido confirmado, pero la transacción sigue pendiente.'
@@ -2777,7 +2782,7 @@ es-ES:
         minutos siendo una categoría rápida. Por favor, asegúrate de que es
         correcto.
       #original_hash: e390250
-      create_success: ¡Nueva competición creada con éxito!
+      create_success: ¡Nueva competición creada satisfactoriamente!
       #original_hash: 5e1ea86
       registration_payment_info: >-
         Esta competición tiene cuota de registro pero no se ha enlazado ninguna
@@ -2790,17 +2795,17 @@ es-ES:
         Esta competición es visible al público pero no ha sido anunciada
         todavía.
       #original_hash: ab61991
-      announced_success: ¡Competición anunciada con éxito!
+      announced_success: ¡Competición anunciada satisfactoriamente!
       #original_hash: cbff8ce
       cancelled: >-
         Esta competición ha sido cancelada. Por favor, revisa la sección de
         información para más detalles.
       #original_hash: b4aa5ee
-      cancel_success: ¡Competición cancelada con éxito!
+      cancel_success: ¡Competición cancelada satisfactoriamente!
       #original_hash: d0478cf
       cancel_failure: No se ha podido cancelar la competición.
       #original_hash: 09df36b
-      uncancel_success: ¡Competición descancelada con éxito!
+      uncancel_success: ¡Competición descancelada satisfactoriamente!
       #original_hash: ead4a9e
       uncancel_failure: No se ha podido descancelar la competición.
       #original_hash: 8ad5e67
@@ -5682,7 +5687,7 @@ es-ES:
         de la WCA es responsable de garantizar que todas las Competiciones de la WCA
         se desarrollen de acuerdo con el Propósito, los Valores y el Reglamento de
         la WCA. La WCA diferencia entre <strong>Delegados Sénior</strong>, <strong>Delegados
-        Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados Júnior</strong>
+        Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados Junior</strong>
         y <strong>Delegados en prácticas</strong> %{see_link}.</p> <p>Además de las
         responsabilidades de un Delegado de la WCA, un Delegado Sénior o un Delegado
         Regional es responsable de gestionar los Delegados de la WCA de su área y
@@ -6815,3 +6820,73 @@ es-ES:
       actioner: Accionador
       #original_hash: bcdf8d3
       requester: Solicitante
+  trainee_delegate_application:
+    title: Solicitud para ser Delegado en prácticas
+    introduction: Este formulario es para Speedcubers Registrados que están 
+      postulándose como Delegados en prácticas. Tu solicitud se enviará a los 
+      Delegados responsables de tu región seleccionada.
+    success_title: Solicitud enviada
+    success: Tu solicitud fue enviada satisfactoriamente. Se te envió una copia 
+      a la dirección de correo electrónico de tu cuenta de la WCA.
+    eligibility:
+      missing_wca_id: Tu cuenta de la WCA tiene que estar vinculada a un ID de 
+        la WCA.
+      missing_date_of_birth: Tu cuenta de la WCA tiene que tener una fecha de 
+        nacimiento verificada.
+      underage: Los solicitantes tienen que tener al menos %{minimum_age} años.
+      claim_wca_id: Reclama tu ID de la WCA.
+      title: No puedes enviar esta solicitud todavía
+      edit_profile: Solicita una actualización de perfil.
+    errors:
+      invalid_region: Selecciona una región válida y activa de Delegados.
+      missing_reviewer: La región seleccionada no tiene un Delegado Regional o 
+        Sénior que pueda recibir la solicitud.
+      recommender_required: Selecciona al menos un Delegado que te recomiende.
+      invalid_recommender: Uno o más Delegados recomendadores seleccionados ya 
+        no son elegibles para la región seleccionada.
+      spoken_delegate_required: Selecciona al menos un Delegado Junior o 
+        Delegado con quien hayas hablado.
+      invalid_spoken_delegate: Uno o más Delegados seleccionados con quienes has
+        hablado ya no son Delegados Junior o Delegados activos en la región 
+        seleccionada.
+      declarations_required: Tienes que confirmar todas las declaraciones.
+      business_involvement_required: Selecciona si estás involucrado con un 
+        negocio relacionado con el speedcubing.
+      business_involvement_explanation_required: Explica cuál es tu renación con
+        el negocio relacionado con el speedcubing.
+    form:
+      spoken_delegates: ¿Con qué Delegados Junior o Delegados has hablado sobre 
+        convertirte en Delegado en prácticas?
+      recommenders: ¿Qué Delegados Junior o Delegados de tu región han aceptado 
+        recomendarte como candidato para el rol de Delegado en prácticas?
+      declaration_and_basic_information: Declaración e información básica
+      name: Nombre
+      wca_id: ID de la WCA
+      email: Correo electrónico
+      age: Edad
+      competition_count: Número de competiciones
+      region_and_references: Región y referencias
+      region: ¿En qué región de Delegados vives actualmente?
+      region_placeholder: Selecciona tu región
+      subregion: ¿En qué subregión de Delegados vives actualmente?
+      introduction: Preséntate brevemente en dos a cuatro oraciones.
+      competition_contributions: Proporciona un resumen de cómo has ayudado en 
+        tus competiciones locales más allá de lo que se espera de todos los 
+        competidores.
+      volunteer_history: Si has ocupado cargos voluntarios en la WCA, 
+        proporciona aquí una cronología (opcional).
+      role_history_warning: Este historial de roles de la página web se incluirá
+        automáticamente en tu solicitud. Los roles más antiguos no se han 
+        incluido por completo, así que añade a continuación cualquier cargo 
+        faltante o corrección.
+      motivation: Describe brevemente tus motivaciones para solicitar 
+        convertirte en Delegado en prácticas en dos a cuatro oraciones.
+      present: presente
+      board_member: Miembro de la Junta Directiva
+      subregion_placeholder: Selecciona tu subregión
+      relevant_skills: Enumera las habilidades y la experiencia más importantes 
+        con las que cuentas y que te ayudarían a tener éxito como Delegado en 
+        prácticas.
+      experience_and_motivation: Experiencia y motivación
+      delegates_placeholder: Selecciona al menos un Delegado
+      reviewing_delegate: Delegado revisor
