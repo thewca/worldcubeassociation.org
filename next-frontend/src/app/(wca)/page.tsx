@@ -160,6 +160,7 @@ const BannerImageWithGradient = ({
     <Box position="relative" width={boxWidth} hideBelow="md">
       <MediaImage
         media={mainImage as Media}
+        sizes="100vw"
         width="full"
         maxHeight="sm"
         bg={targetColor}

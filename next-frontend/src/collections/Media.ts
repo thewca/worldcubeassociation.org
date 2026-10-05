@@ -1,5 +1,8 @@
 import type { CollectionConfig } from "payload";
 
+const THUMBNAIL_IMAGE_WIDTH = 400;
+const CARD_IMAGE_WIDTH = 768;
+
 export const Media: CollectionConfig = {
   admin: {
     useAsTitle: "alt",
@@ -39,12 +42,12 @@ export const Media: CollectionConfig = {
     imageSizes: [
       {
         name: "thumbnail",
-        width: 400,
+        width: THUMBNAIL_IMAGE_WIDTH,
         height: 300,
       },
       {
         name: "card",
-        width: 768,
+        width: CARD_IMAGE_WIDTH,
         height: 512,
       },
     ],
