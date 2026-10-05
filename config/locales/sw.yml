@@ -222,6 +222,7 @@ sw:
     solve_time:
       unit_seconds: sekunde
       unit_moves: hatua
+    back_to_top: Rudi juu
   oauth:
     applications:
       your_apps: Programu zako za OAuth
@@ -705,6 +706,10 @@ sw:
         dob: Fikia tarehe yako ya kuzaliwa
         email: Fikia anwani yako ya barua pepe
         manage_competitions: Simamia mashindano yoyote yajayo unayoandaa
+        manage_registrations: Kukusajili kwa mashindano, na kubadilisha au 
+          kughairi usajili wako
+        translations: Fikia orodha ya lugha ambazo wewe ni mtafsiri wa WCA kwa 
+          ajili yake
     devise:
       no_account: Huna akaunti?
       have_competed: Nimeshiriki katika mashindano ya WCA.
@@ -1157,7 +1162,100 @@ sw:
       new: 'Picha mpya ya wasifu:'
       save: Hifadhi
       reset: Rudisha
+    edit:
+      general: General
+      email: Barua Pepe
+      preferences: Mapendeleo
+      password: Nenosiri
+      preferred_events_desc: Kuchagua matukio unayopendelea hufanya usajili wa 
+        mashindano kuwa wa haraka zaidi.
+      please_fix_profile: 'Ili kujiandikisha kwa mashindano, unahitaji kurekebisha
+        shida zifuatazo:'
+      profile: Wasifu
+      approve: Idhinisha
+      approve_confirm: Una uhakika unataka kuidhinisha Kitambulisho cha WCA 
+        %{wca_id}?
+      clear_claim: Futa ombi la udai
+      clear_claim_confirm: Una uhakika unataka kufuta dai la WCA %{wca_id}?
+      unconfirmed_email: Anwani ya barua pepe ya akaunti hii (%{email}) 
+        haijathibitishwa.
+      confirm_new_email: Kubadilisha barua pepe yako kutahitaji uthibitisho wa 
+        barua pepe mpya kabla ya kuanza kutumika.
+      pending_mail_confirmation: Akaunti hii inasubiri uthibitisho wa anwani 
+        mpya ya barua pepe %{email}.
+      pending_avatar_confirmation: Akaunti hii inasubiri uthibitisho wa picha 
+        mpya ya wasifu.
+      pending_avatar_edit_action: 'Bofya hapa ikiwa unataka kuihariri badala yake:'
+      pending_avatar_edit_warning: Inahariri picha inayousubiri!
+      pending_claim_confirmation_html: Akaunti hii inasubiri %{delegate} 
+        athibitishe Kitambulisho chake cha WCA kilichodaiwa cha %{wca_id}.
+      pending_claim_mail_confirmation_html: Mtumiaji huyu amedai Kitambulisho 
+        cha WCA %{wca_id}. Mwakilishi wake %{delegate} atajulishwa kuhusu ombi 
+        hili mara tu anwani ya barua pepe ya akaunti hii itakapothibitishwa.
+      your_thumbnail: 'Picha ndogo ya akaunti yako:'
+      edit_thumbnail: Bofya ili kuhariri picha ndogo
+      manage_pending: Dhibiti picha ndogo zinazosubiri
+      have_no_wca_id_html: Huna Kitambulisho cha WCA kilichotolewa bado. Ikiwa 
+        umeshindana hapo awali, omba kitambulisho chako cha WCA kiunganishwe na 
+        akaunti yako %{here}!
+      have_wca_id_html: Kitambulisho chako cha WCA ni %{link_id}.
+      account_is_special: Kitambulisho cha WCA na akaunti vimeunganishwa na 
+        majukumu maalum katika WCA (kama vile wajumbe, waandaaji, wanachama wa 
+        timu) na haviwezi kuondolewa. Tafadhali tuma barua pepe kwa Timu ya 
+        Matokeo ya WCA ili kusaidia kubadilisha Kitambulisho cha WCA kwenda 
+        kwenye akaunti nyingine.
+      cannot_edit:
+        msg: "Huwezi kubadilisha jina lako, tarehe ya kuzaliwa, jinsia, au eneo. Sababu:
+          %{reason}. Wasiliana na<a href='%{wrt_contact_path}' target='_blank'> WCA
+          Result Team</a> ama <a href='%{delegate_url}'> kama ungependa kubadilisha."
+        reason:
+          no_access: Huna ufikiaji wa kuhariri mtumiaji huyu
+          assigned: Una Kitambulisho cha WCA kilichotolewa
+          registered: Umejiandikisha kwa ajili ya mashindano
+      guidelines_confirmation: Ninathibitisha kwamba picha yangu inatimiza 
+        miongozo yote ya picha.
+      confirm_guidelines: Hakikisha unasoma miongozo ya picha na uwasilishe 
+        picha halali.
+      save: Hifadhi
+      actions: Vitendo
+      sign_out_of_devices: Ondoka kwenye vifaa vingine
+      remove_avatar: Ondoa picha
+      remove_avatar_confirm: Una uhakika unataka kufuta picha yako?
+      remove_avatar_confirm_button: Thibitisha kuondolewa kwa picha
+      remove_avatar_reason: Tafadhali toa sababu ya kuondolewa
+      guidelines: Miongozo
+      avatar_guidelines:
+        '1': Picha zote za wasifu zinapaswa kuwa za watu halisi.
+        '2': Mtu anayeonekana lazima awe wewe mwenyewe wa sasa.
+        '3': Ikiwa kuna zaidi ya mtu mmoja kwenye picha, inapaswa kuwa wazi ni 
+          nani kati yao ambaye ni wewe.
+        '4': Kichwa chako, lakini sio lazima uso wote, kinapaswa kuonekana.
+        '5': Picha haipaswi kuwa na maandishi yaliyowekwa juu, vibandiko, au 
+          vichujyo visivyo vya asili, pamoja na mipaka.
+        '6': Picha inapaswa kuwasilishwa katika mwelekeo sahihi.
+        '7': Picha haipaswi kuwa na maudhui ya kukera (k.m., ishara za kukera).
+      staff_avatar_guidelines:
+        title: 'Miongozo ya ziada kwa Wajitolea na Wajumbe Wanaofunzwa:'
+        paragraphs:
+          '1': Picha lazima iwe ya wewe wa sasa, ukiwa umeonyeshwa kwa mtindo 
+            ule ule ambao ungeonekana nao kwenye mashindano.
+          '2': Picha lazima iwekwe kwenye fremu, ikatwe, ielekezwe, na iangaziwa
+            vizuri ili mshindani au mtazamaji yeyote kwenye mashindano aweze 
+            kuitumia kukutambua bila utata kwenye ukumbi wa mashindano.
+          '3': Picha ndogo ya wasifu ni sehemu tu ya picha kamili, na itatumika 
+            kuwakilisha picha yako yote. Picha ndogo lazima irekebishwe ili 
+            uweze kutambuliwa kutoka kwayo pekee, na lazima iwe na uso wako.
+      sensitive:
+        info: Sehemu hii inakuwezesha kuhariri data nyeti. Ili kuweza kufanya 
+          hivyo, tafadhali thibitisha utambulisho wako hapa chini.
+        success: Utambulisho wako umethibitishwa kwa mafanikio
+        failure: Hatukuweza kuthibitisha utambulisho wako
+        confirm_proceed: Thibitisha na uendelee
+        identity_error: Huwezi kuhariri data yako. Tafadhali thibitisha 
+          utambulisho wako hapa chini kabla ya kujaribu tena.
     errors:
+      not_found: haipatikani
+      already_assigned: Imeshasajiliwa tayari kwa mtumiaji mwingine
       dob_incorrect_html: Haifai na rekodi zetu za hifadhidata. Ikiwa una hakika
         kwamba unatoa tarehe sahihi katika muundo sahihi (YYYY-MM-DD), tafadhali
         wasiliana na Timu ya Matokeo ya WCA kupitia<a 
