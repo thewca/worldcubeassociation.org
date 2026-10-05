@@ -50,7 +50,6 @@ RUN apt-get update -qq && \
       build-essential \
       git \
       libclang-dev \
-      cargo \
       rustup \
       pkg-config \
       libssl-dev \
