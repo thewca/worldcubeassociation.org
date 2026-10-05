@@ -37,6 +37,9 @@ paths:
     delete:
       $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
 
+  /v1/competitions/{competitionId}/bookmark:
+    $ref: 'paths/competitions/competitionBookmark.yaml'
+
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
