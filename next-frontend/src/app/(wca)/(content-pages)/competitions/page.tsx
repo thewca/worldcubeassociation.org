@@ -66,8 +66,8 @@ import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
 import TabMap from "@/components/competitions/TabMap";
-import { LuMapPin, LuSettings2 } from "react-icons/lu";
-import BetaDisabledTooltip from "@/components/BetaDisabledTooltip";
+import { LuMapPin, LuSearch, LuSettings2 } from "react-icons/lu";
+import { Tooltip } from "@/components/ui/tooltip";
 import {
   getRegistrationStatus,
   isInProgress,
@@ -373,6 +373,8 @@ export default function CompetitionsPage() {
                     >
                       <LocationFilter
                         location={location}
+                        onLocationChange={setLocation}
+                        canSearchAddress={Boolean(session.data)}
                         geolocationSupported={geolocationSupported}
                         onLocateClick={requestGeolocationPermission}
                         radius={radius}
@@ -507,6 +509,8 @@ export default function CompetitionsPage() {
 
 function LocationFilter({
   location,
+  onLocationChange,
+  canSearchAddress,
   geolocationSupported,
   onLocateClick,
   radius,
@@ -516,6 +520,8 @@ function LocationFilter({
   t,
 }: {
   location: GeoCoordinates | undefined;
+  onLocationChange: (location: GeoCoordinates) => void;
+  canSearchAddress: boolean;
   geolocationSupported: boolean;
   onLocateClick: () => void;
   radius: string;
@@ -525,6 +531,45 @@ function LocationFilter({
   t: TFunction;
 }) {
   const { step } = DISTANCE_UNITS[distanceUnit];
+
+  const [addressQuery, setAddressQuery] = useState("");
+
+  const api = useAPI();
+
+  const {
+    mutate: searchAddress,
+    data: foundLocations,
+    isError: addressSearchFailed,
+    isPending: addressSearchIsPending,
+    reset: resetAddressSearch,
+  } = api.useMutation("get", "/v1/geocoding/search", {
+    onSuccess: ([bestMatch]) => {
+      if (bestMatch === undefined) return;
+
+      setAddressQuery(bestMatch.formatted_address);
+      onLocationChange(bestMatch);
+    },
+  });
+
+  const addressNotFound = foundLocations?.length === 0;
+
+  const addressSearchError = addressSearchFailed
+    ? t("competitions.index.location_search_failed")
+    : addressNotFound && t("competitions.index.location_not_found");
+
+  const submitAddressSearch = () => {
+    const trimmedQuery = addressQuery.trim();
+    if (trimmedQuery === "") return;
+
+    searchAddress({ params: { query: { q: trimmedQuery } } });
+  };
+
+  // The coordinates below the field already say where we are, so the old address would only mislead.
+  const locateMe = () => {
+    setAddressQuery("");
+    resetAddressSearch();
+    onLocateClick();
+  };
 
   const formattedLocation = location
     ? `${location.latitude.toFixed(COORDINATE_PRECISION)}, ${location.longitude.toFixed(COORDINATE_PRECISION)}`
@@ -537,30 +582,51 @@ function LocationFilter({
 
   return (
     <VStack gap="2" width={{ base: "full", md: "sm" }} align="stretch">
-      <Field.Root>
+      <Field.Root invalid={Boolean(addressSearchError)}>
         <Field.Label>{t("competitions.index.location")}</Field.Label>
         <Group attached width="full">
-          {/* Typing an address needs a geocoder, which the beta does not have yet. */}
-          <BetaDisabledTooltip>
+          <Tooltip
+            content={t("competitions.index.location_sign_in_required")}
+            showArrow
+            openDelay={200}
+            disabled={canSearchAddress}
+          >
             <Input
-              disabled
+              disabled={!canSearchAddress}
               placeholder={t("competitions.index.location_placeholder")}
-              value={formattedLocation}
+              value={addressQuery}
+              onChange={(e) => setAddressQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && submitAddressSearch()}
             />
-          </BetaDisabledTooltip>
+          </Tooltip>
+          <IconButton
+            variant="outline"
+            colorPalette="blue"
+            aria-label={t("competitions.index.search")}
+            disabled={!canSearchAddress}
+            loading={addressSearchIsPending}
+            onClick={submitAddressSearch}
+          >
+            <LuSearch />
+          </IconButton>
           <ClientOnly>
             {geolocationSupported && (
               <IconButton
                 variant="outline"
                 colorPalette="blue"
                 aria-label={t("competitions.index.use_my_location")}
-                onClick={onLocateClick}
+                onClick={locateMe}
               >
                 <LuMapPin />
               </IconButton>
             )}
           </ClientOnly>
         </Group>
+        {addressSearchError ? (
+          <Field.ErrorText>{addressSearchError}</Field.ErrorText>
+        ) : (
+          <Field.HelperText>{formattedLocation}</Field.HelperText>
+        )}
       </Field.Root>
       <Field.Root>
         <Field.Label>{t("competitions.index.distance")}</Field.Label>
