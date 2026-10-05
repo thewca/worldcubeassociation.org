@@ -20,25 +20,36 @@ import Loading from "@/components/ui/loading";
 import { RegistrationData } from "@/types/registrations";
 import { hasNotPassedOrNull } from "@/lib/wca/dates";
 import { normalizeForSearch } from "@/lib/live/normalizeForSearch";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export default function AddPersonModal({
   competitionId,
   competitors,
   roundId,
+  roundClosed,
 }: {
   competitionId: string;
   roundId: string;
   competitors: Map<number, LiveCompetitor>;
+  roundClosed: boolean;
 }) {
+  const { t } = useT();
   const [open, setOpen] = useState(false);
   const [selectedCompetitor, setSelectedCompetitor] = useState<number>();
   const { addCompetitorToRound, isPending } = useResultsAdmin();
 
   return (
     <Dialog.Root lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
-      <Dialog.Trigger asChild>
-        <Button variant="outline">Add Competitor</Button>
-      </Dialog.Trigger>
+      <Tooltip
+        content={t("competitions.live.admin.add_competitor.round_closed")}
+        disabled={!roundClosed}
+      >
+        <Dialog.Trigger asChild>
+          <Button variant="outline" disabled={roundClosed}>
+            Add Competitor
+          </Button>
+        </Dialog.Trigger>
+      </Tooltip>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
