@@ -1231,6 +1231,20 @@ class User < ApplicationRecord
     BookmarkedCompetition.where(competition: competition, user: self).present?
   end
 
+  def cached_bookmarked_competition_ids
+    Rails.cache.fetch(bookmarked_competitions_cache_key, expires_in: 60.minutes) do
+      competitions_bookmarked.pluck(:competition_id)
+    end
+  end
+
+  def clear_bookmarked_competitions_cache
+    Rails.cache.delete(bookmarked_competitions_cache_key)
+  end
+
+  private def bookmarked_competitions_cache_key
+    "#{id}-competitions-bookmarked"
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     login = conditions.delete(:login)

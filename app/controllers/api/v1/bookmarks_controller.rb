@@ -9,13 +9,13 @@ class Api::V1::BookmarksController < Api::V1::ApiController
 
   def create
     BookmarkedCompetition.find_or_create_by!(competition: @competition, user: authenticated_user)
-    Rails.cache.delete("#{authenticated_user.id}-competitions-bookmarked")
+    authenticated_user.clear_bookmarked_competitions_cache
     render json: { bookmarked: true }
   end
 
   def destroy
     BookmarkedCompetition.where(competition: @competition, user: authenticated_user).destroy_all
-    Rails.cache.delete("#{authenticated_user.id}-competitions-bookmarked")
+    authenticated_user.clear_bookmarked_competitions_cache
     render json: { bookmarked: false }
   end
 
