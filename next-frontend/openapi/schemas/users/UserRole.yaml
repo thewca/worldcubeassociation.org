@@ -36,5 +36,7 @@ properties:
       email:
         type: string
         format: email
+      location:
+        type: string
   class:
     type: string

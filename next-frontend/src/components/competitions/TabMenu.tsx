@@ -8,6 +8,7 @@ import {
   Collapsible,
   Drawer,
   IconButton,
+  Link as ChakraLink,
   Separator,
   Spacer,
   Tabs,
@@ -20,6 +21,7 @@ import { components } from "@/types/openapi";
 import { useT } from "@/lib/i18n/useI18n";
 import {
   CompetitionNavTab,
+  TabBase,
   TabWithChildren,
   TabWithLink,
 } from "@/lib/wca/competitions/tabs";
@@ -27,7 +29,8 @@ import { useState } from "react";
 import { TFunction } from "i18next";
 import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
-import { iconMap } from "@/components/icons/iconMap";
+import IconDisplay from "@/components/IconDisplay";
+import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 
@@ -59,7 +62,12 @@ export default function TabMenu({
   const eventId = activityCodeFromPath(currentPath!);
 
   const [openGroup, setOpenGroup] = useState<string | null>(eventId);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  // The drawer stays open only while the route it was opened on is still current, so any
+  //   navigation closes it. Until tab navigation became client-side the page reload did that
+  //   for us; hanging an onClick on the links instead would mean threading a callback three
+  //   components down, past two `asChild` merges that are known to drop handlers.
+  const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
+  const drawerOpen = drawerOpenedAt === pathName;
 
   return (
     <Tabs.Root
@@ -102,13 +110,14 @@ export default function TabMenu({
       <Box hideFrom="md">
         <Drawer.Root
           open={drawerOpen}
-          onOpenChange={(e) => setDrawerOpen(e.open)}
+          onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
           placement="start"
         >
           <Drawer.Trigger asChild>
             <IconButton
               aria-label="Open menu"
-              size="lg"
+              colorPalette="blue"
+              size="xl"
               position="fixed"
               right="4"
               bottom="4"
@@ -129,7 +138,7 @@ export default function TabMenu({
                     <BackLink
                       href={backHref}
                       label={competitionInfo.name}
-                      onClick={() => setDrawerOpen(false)}
+                      onClick={() => setDrawerOpenedAt(null)}
                     />
                   ) : (
                     competitionInfo.name
@@ -168,7 +177,9 @@ export default function TabMenu({
           </Drawer.Positioner>
         </Drawer.Root>
       </Box>
-      <Tabs.Content width="full" value={currentPath!}>
+      {/* Tabs.Content is a flex item, which has `min-width: auto`.
+       It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
+      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
         {children}
       </Tabs.Content>
     </Tabs.Root>
@@ -218,29 +229,33 @@ function TabList({
         ),
       )}
       {customTabs.length > 0 && <Separator />}
-      {customTabs.map((tabName) => (
-        <Tabs.Trigger
-          key={tabName}
-          value={encodeURIComponent(tabName)}
-          minHeight="fit-content"
-          maxWidth="xs"
-          asChild
-        >
-          <Text textStyle="bodyEmphasis" asChild justifyContent="left">
-            <Link
-              href={route({
-                pathname: "/competitions/[competitionId]/tabs/[tabName]",
-                query: {
-                  competitionId,
-                  tabName: encodeURIComponent(tabName),
-                },
-              })}
-            >
-              {tabName}
-            </Link>
-          </Text>
-        </Tabs.Trigger>
-      ))}
+      {customTabs.map((tabName) => {
+        const tabKey = encodeURIComponent(tabName);
+
+        return (
+          <Tabs.Trigger
+            key={tabName}
+            value={tabKey}
+            minHeight="fit-content"
+            maxWidth="xs"
+            asChild
+          >
+            <Text textStyle="bodyEmphasis" asChild justifyContent="left">
+              <TabTarget
+                tabKey={tabKey}
+                currentPath={currentPath}
+                href={route({
+                  pathname:
+                    "/competitions/[competitionId]/custom-tabs/[tabName]",
+                  query: { competitionId, tabName: tabKey },
+                })}
+              >
+                {tabName}
+              </TabTarget>
+            </Text>
+          </Tabs.Trigger>
+        );
+      })}
     </>
   );
 }
@@ -272,6 +287,24 @@ function BackLink({
   );
 }
 
+function TabText<T extends TabBase>({
+  tab,
+  showIcon = true,
+  renderFn,
+  ...textProps
+}: {
+  tab: T;
+  renderFn: (tab: T) => string;
+  showIcon?: boolean;
+} & TextProps) {
+  return (
+    <>
+      {showIcon && tab.icon !== undefined && <IconDisplay name={tab.icon} />}
+      <Text {...textProps}>{renderFn(tab)}</Text>
+    </>
+  );
+}
+
 function TabLink({
   tab,
   t,
@@ -283,15 +316,16 @@ function TabLink({
   isAdminRoute: boolean;
   currentPath?: string;
 }) {
-  const label = t(
-    isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
-  );
+  const renderLabel = (renderTab: TabWithLink) =>
+    t(
+      isAdminRoute && renderTab.i18nKeyAdmin
+        ? renderTab.i18nKeyAdmin
+        : renderTab.i18nKey,
+    );
 
-  // The tab you are already on is not a link: linking to the current page is
-  //   pointless, and Chakra's tabs machine clicks the selected trigger whenever
-  //   `value` changes, which on an anchor would trigger a full page navigation.
-  // See https://github.com/chakra-ui/chakra-ui/issues/11003
-  const isCurrent = tab.menuKey === currentPath;
+  const tabLabel = (
+    <TabText tab={tab} renderFn={renderLabel} textStyle="bodyEmphasis" />
+  );
 
   const trigger = (
     <Tabs.Trigger
@@ -300,17 +334,25 @@ function TabLink({
       disabled={tab.disabled}
       minHeight="fit-content"
     >
-      <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-        {tab.disabled || isCurrent ? (
-          <Text aria-current={isCurrent ? "page" : undefined}>{label}</Text>
-        ) : tab.externalHref ? (
-          <a href={tab.externalHref} target="_blank" rel="noopener noreferrer">
-            {label}
-          </a>
+      <Text asChild justifyContent="left">
+        {tab.externalHref && !tab.disabled ? (
+          <ChakraLink
+            href={tab.externalHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="currentColor"
+          >
+            {tabLabel}
+          </ChakraLink>
         ) : (
-          <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
-            {label}
-          </Link>
+          <TabTarget
+            tabKey={tab.menuKey}
+            currentPath={currentPath}
+            href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}
+            disabled={tab.disabled}
+          >
+            {tabLabel}
+          </TabTarget>
         )}
       </Text>
     </Tabs.Trigger>
@@ -340,8 +382,7 @@ function CollapsibleTabGroup({
   onToggle: () => void;
   currentPath?: string;
 }) {
-  const { i18nKey, icon, children } = tab;
-  const IconComponent = iconMap[icon];
+  const { children } = tab;
 
   return (
     <Collapsible.Root open={isOpen} onOpenChange={onToggle}>
@@ -355,9 +396,11 @@ function CollapsibleTabGroup({
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
       >
-        <Text textStyle="bodyEmphasis">
-          <IconComponent /> {t(i18nKey)}
-        </Text>
+        <TabText
+          tab={tab}
+          renderFn={(render) => t(render.i18nKey)}
+          textStyle="bodyEmphasis"
+        />
       </Collapsible.Trigger>
 
       <Collapsible.Content>
@@ -371,22 +414,16 @@ function CollapsibleTabGroup({
                 disabled={disabled}
               >
                 <Text asChild justifyContent="left">
-                  {disabled || menuKey === currentPath ? (
-                    <Text
-                      aria-current={
-                        menuKey === currentPath ? "page" : undefined
-                      }
-                      display="flex"
-                    >
-                      {t(i18nKey)} <Spacer />
-                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                    </Text>
-                  ) : (
-                    <Link href={isAdminRoute && hrefAdmin ? hrefAdmin : href}>
-                      {t(i18nKey)} <Spacer />
-                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                    </Link>
-                  )}
+                  <TabTarget
+                    tabKey={menuKey}
+                    currentPath={currentPath}
+                    href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
+                    disabled={disabled}
+                    display="flex"
+                  >
+                    {t(i18nKey)} <Spacer />
+                    {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                  </TabTarget>
                 </Text>
               </Tabs.Trigger>
             ),

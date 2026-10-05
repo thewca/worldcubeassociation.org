@@ -53,6 +53,8 @@ type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 // they fall back to the browser default and read as non-interactive.
 // We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
 // https://github.com/chakra-ui/chakra-ui/issues/10960
+const OPEN_TRIGGER = { _open: { bg: "bg.emphasized" } };
+
 const INTERACTIVITY_OVERRIDES = {
   menu: {
     slots: [],
@@ -60,6 +62,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -69,6 +72,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -87,6 +91,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -432,10 +437,10 @@ const customConfig = defineConfig({
           fg: { value: "{colors.link}" },
         },
         recordMarkers: {
-          personal: { value: "{colors.orange.solid}" },
-          national: { value: "{colors.green.solid}" },
-          continental: { value: "{colors.red.solid}" },
-          world: { value: "{colors.blue.solid}" },
+          personal: { value: "{colors.orange.fg}" },
+          national: { value: "{colors.green.fg}" },
+          continental: { value: "{colors.red.fg}" },
+          world: { value: "{colors.blue.fg}" },
         },
         wcaWhite: {
           // values different from Chakra's `gray` scale: They use an "almost-white" palette in dark mode
@@ -628,6 +633,17 @@ const customConfig = defineConfig({
       },
     },
     recipes: {
+      // Chakra's `outline` fields are transparent, which leaves them indistinguishable
+      //   from the grey page background the competition and results pages sit on.
+      input: {
+        variants: {
+          variant: {
+            outline: {
+              bg: "bg",
+            },
+          },
+        },
+      },
       container: {
         base: {
           px: { base: "3.5", md: "6", lg: "8" },
@@ -714,6 +730,50 @@ const customConfig = defineConfig({
     },
     slotRecipes: {
       ...INTERACTIVITY_OVERRIDES,
+      // Each of these carries its own copy of the `outline` variant rather than
+      //   inheriting the `input` recipe's, so the opaque background (see above)
+      //   has to be repeated per component.
+      combobox: {
+        ...INTERACTIVITY_OVERRIDES.combobox,
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      numberInput: {
+        slots: [],
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      datePicker: {
+        slots: [],
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      segmentGroup: {
+        ...INTERACTIVITY_OVERRIDES.segmentGroup,
+        base: {
+          ...INTERACTIVITY_OVERRIDES.segmentGroup.base,
+          // Zag animates the indicator with `var(--transition-timing-function)`,
+          //   which nothing defines, so it silently falls back to `ease`.
+          root: {
+            "--transition-timing-function": "{easings.ease-in-smooth}",
+          },
+        },
+      },
       steps: {
         ...INTERACTIVITY_OVERRIDES.steps,
         variants: {
@@ -774,8 +834,10 @@ const customConfig = defineConfig({
           variant: {
             competition: {
               label: {
-                alignItems: "start",
-                textStyle: "annotation",
+                alignItems: "center",
+                textStyle: "body",
+                fontWeight: 300,
+                color: "fg",
               },
               valueText: {
                 textStyle: "bodyEmphasis",
@@ -886,7 +948,7 @@ const customConfig = defineConfig({
                 px: "var(--accordion-padding-x)",
               },
               item: {
-                borderRadius: "l3",
+                borderRadius: "wca",
               },
             },
           },
@@ -974,6 +1036,13 @@ const customConfig = defineConfig({
                 height: "fit-content",
                 position: { base: "static", md: "sticky" },
                 top: "3",
+              },
+              // Matching the hover the collapsible groups in the same list already have.
+              //   The selected trigger is excluded so hovering it doesn't drop its own background.
+              trigger: {
+                "&:not([data-selected]):hover": {
+                  bg: "bg.subtle",
+                },
               },
               content: {
                 _vertical: {

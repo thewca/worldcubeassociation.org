@@ -60,6 +60,10 @@ type TwoBlocksUnion =
 type TwoBlocksRatio = TwoBlocksUnion["ratio"];
 type TwoBlocksSpanConfig = { left: number; right: number };
 
+// The gaps between blocks and the padding around them read as one rhythm, so they
+//   share a value rather than drifting apart.
+const HOMEPAGE_SPACING = { base: "3.5", md: "6", lg: "8" };
+
 const RATIO_GRID_MAP: Record<TwoBlocksRatio, TwoBlocksSpanConfig> = {
   "1/3 & 2/3": { left: 1, right: 2 },
   "2/3 & 1/3": { left: 2, right: 1 },
@@ -79,7 +83,7 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
         <MediaImage
           media={block.headerImage as Media}
           aspectRatio="3/1"
-          borderTopRadius="l3"
+          borderTopRadius="wca"
         />
       )}
       <Card.Body>
@@ -291,7 +295,14 @@ const FeaturedCompetition = async ({
     <Card.Root colorPalette={colorPalette} colorVariant="solid" height="full">
       <Card.Body>
         <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
-          {competition.name}
+          <Link
+            href={route({
+              pathname: "/competitions/[competitionId]",
+              query: { competitionId: competition.id },
+            })}
+          >
+            {competition.name}
+          </Link>
         </Card.Title>
         <CompetitionShortlist
           comp={competition}
@@ -399,7 +410,7 @@ const renderVerticalLayout = (
 ) => {
   return (
     <VStack
-      gap={8}
+      gap={HOMEPAGE_SPACING}
       justifyContent={
         growthStrategy === "justify" ? "space-between" : undefined
       }
@@ -443,7 +454,7 @@ const renderHorizontalSplit = (
   return (
     <SimpleGrid
       columns={{ base: 1, md: foldMd ? 1 : totalCols, lg: totalCols }}
-      gap={8}
+      gap={HOMEPAGE_SPACING}
       width="full"
     >
       <GridItem
@@ -517,7 +528,7 @@ export default async function Homepage() {
 
   if (homepageEntries.length === 0) {
     return (
-      <Center padding={10}>
+      <Center p={HOMEPAGE_SPACING} asChild>
         <Text>
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
@@ -533,8 +544,8 @@ export default async function Homepage() {
   }
 
   return (
-    <Box p={{ base: "3.5", md: "6", lg: "8" }} asChild>
+    <Center p={HOMEPAGE_SPACING} asChild>
       {renderVerticalLayout(homepageEntries)}
-    </Box>
+    </Center>
   );
 }

@@ -16,18 +16,19 @@ import CompetitorsIcon from "@/components/icons/CompetitorsIcon";
 import { components } from "@/types/openapi";
 import { TFunction } from "i18next";
 import { getT } from "@/lib/i18n/get18n";
-import { DateTime } from "luxon";
 import CurrencyValue from "@/components/CurrencyValue";
 import PaymentIcon from "@/components/icons/PaymentIcon";
 import SpotsLeftIcon from "@/components/icons/SpotsLeftIcon";
 import SpectatorsIcon from "@/components/icons/SpectatorsIcon";
 import OnTheSpotRegistrationIcon from "@/components/icons/OnTheSpotRegistrationIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
-import EventIcon from "@/components/EventIcon";
+import { LabelledEventIcon } from "@/components/EventIcon";
 import { ChakraMarkdown } from "@/components/Markdown";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
+import LocalDateTime from "@/components/LocalDateTime";
+import RefundPolicyText from "@/components/competitions/RefundPolicyText";
 
 function formatDateRange(start: Date, end: Date): string {
   const sameDay = start.toDateString() === end.toDateString();
@@ -62,17 +63,6 @@ function formatDateRange(start: Date, end: Date): string {
   return `${fullFormatter.format(start)} - ${fullFormatter.format(end)}`;
 }
 
-const dateFormat = {
-  month: "2-digit",
-  day: "2-digit",
-  year: "numeric",
-  hour: "numeric",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: true,
-  timeZoneName: "short",
-} as Intl.DateTimeFormatOptions;
-
 export function VenueDetailsCard({
   competitionInfo,
 }: {
@@ -82,8 +72,11 @@ export function VenueDetailsCard({
     <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
-          <Stat.Root variant="competition">
+        {/* Sized against the card rather than the viewport: the card is narrow on a phone,
+            but also in a narrow desktop column, and both want one column. A flex basis
+            (unlike SimpleGrid's `minmax()` minimum) can still shrink below 3xs. */}
+        <Wrap gap="4">
+          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <VenueIcon />
               Venue
@@ -93,7 +86,7 @@ export function VenueDetailsCard({
             </ChakraMarkdown>
           </Stat.Root>
 
-          <Stat.Root variant="competition">
+          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <MapIcon />
               Address
@@ -102,7 +95,7 @@ export function VenueDetailsCard({
           </Stat.Root>
 
           {competitionInfo.venue_details && (
-            <Stat.Root variant="competition">
+            <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
               <Stat.Label>
                 <DetailsIcon />
                 Details
@@ -112,7 +105,7 @@ export function VenueDetailsCard({
               </ChakraMarkdown>
             </Stat.Root>
           )}
-        </SimpleGrid>
+        </Wrap>
       </Card.Body>
     </Card.Root>
   );
@@ -141,27 +134,18 @@ export function AdditionalInformationCard({
 
 export function RefundPolicyCard({
   competitionInfo,
-  t,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
-  t: TFunction;
 }) {
-  const refundPolicyPercent = competitionInfo.refund_policy_percent;
-
-  const refundDate = new Date(competitionInfo.refund_policy_limit_date);
-  const formattedRefundDate = refundDate.toLocaleString("en-US", dateFormat);
-
   return (
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Refund Policy</Card.Title>
         <Card.Description>
-          {refundPolicyPercent > 0
-            ? t("competitions.competition_info.refund_policy_html", {
-                refund_policy_percent: `${refundPolicyPercent}%`,
-                limit_date_and_time: formattedRefundDate,
-              })
-            : t("competitions.competition_info.no_refunds")}
+          <RefundPolicyText
+            refundPolicyPercent={competitionInfo.refund_policy_percent}
+            refundPolicyLimitDate={competitionInfo.refund_policy_limit_date}
+          />
         </Card.Description>
       </Card.Body>
     </Card.Root>
@@ -176,9 +160,6 @@ export async function RegistrationCard({
   columns?: number;
 }) {
   const { t } = await getT();
-
-  const formatDateTime = (isoDateTime: string) =>
-    DateTime.fromISO(isoDateTime).toLocaleString(DateTime.DATETIME_FULL);
 
   return (
     <Card.Root>
@@ -262,7 +243,7 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              {formatDateTime(competitionInfo.registration_open)}
+              <LocalDateTime isoDateTime={competitionInfo.registration_open} />
             </Stat.ValueText>
           </Stat.Root>
 
@@ -274,7 +255,7 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              {formatDateTime(competitionInfo.registration_close)}
+              <LocalDateTime isoDateTime={competitionInfo.registration_close} />
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>
@@ -294,7 +275,7 @@ export function EventCard({
         <Card.Title textStyle="s4">Events List</Card.Title>
         <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
-            <EventIcon
+            <LabelledEventIcon
               key={event_id}
               eventId={event_id}
               boxSize="8"
@@ -347,7 +328,9 @@ export function InfoCard({
               <LocationIcon />
               {t("competitions.competition_info.location")}
             </Stat.Label>
-            <Stat.ValueText>
+            {/* City and country overflowed a narrow card on one line; wrapping drops the
+                country onto its own row exactly when it no longer fits. */}
+            <Stat.ValueText flexWrap="wrap">
               <Text>{competitionInfo.city}, </Text>
               <CountryMap
                 code={competitionInfo.country_iso2}
@@ -417,7 +400,9 @@ export function SubPageCard({
               <LocationIcon />
               {t("competitions.competition_info.location")}
             </Stat.Label>
-            <Stat.ValueText>
+            {/* City and country overflowed a narrow card on one line; wrapping drops the
+                country onto its own row exactly when it no longer fits. */}
+            <Stat.ValueText flexWrap="wrap">
               <Text>{competitionInfo.city}, </Text>
               <CountryMap
                 code={competitionInfo.country_iso2}

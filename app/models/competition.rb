@@ -1896,7 +1896,7 @@ class Competition < ApplicationRecord
 
   def to_competition_info
     options = {
-      only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
+      only: %w[id name website start_date registration_open registration_close announced_at cancelled_at results_posted_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
                base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel scoretaking_software

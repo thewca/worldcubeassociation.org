@@ -236,17 +236,14 @@ de:
   cutoff:
     #original_hash: cf458e7
     time:
-      zero: '%{count} Versuche um < %{time} zu erreichen'
       one: '%{count} Versuch um < %{time} zu erreichen'
       other: '%{count} Versuche um < %{time} zu erreichen'
     #original_hash: b49d930
     moves:
-      zero: '%{count} Versuche um < %{moves} Züge zu erreichen'
       one: '%{count} Versuch um < %{moves} Züge zu erreichen'
       other: '%{count} Versuche um < %{moves} Züge zu erreichen'
     #original_hash: eba1b97
     points:
-      zero: '%{count} Versuche um > %{points} Punkte zu erreichen'
       one: '%{count} Versuch um > %{points} Punkte zu erreichen'
       other: '%{count} Versuche um > %{points} Punkte zu erreichen'
   time_limit:
@@ -259,8 +256,6 @@ de:
     333fm: 1 Stunde
     #original_hash: cc7d8bb
     333mbf: '10:00.00 Minuten pro Würfel, bis zu 60:00.00'
-    #original_hash: da39a3e
-    333mbo: ''
   qualification:
     #original_hash: a2b25bf
     type_label: Art der Qualifikation
@@ -338,12 +333,10 @@ de:
       invalid: ungültig
     #original_hash: 49d0140
     days:
-      zero: kein Tag
       one: 1 Tag
       other: '%{count} Tagen'
     #original_hash: 203e1b3
     these_events:
-      zero: Keine Disziplin
       one: Diese Disziplin
       other: 'Diese %{count} Disziplinen'
     #original_hash: 51ef7d4
@@ -804,8 +797,6 @@ de:
       text: benötigt
       #original_hash: df58248
       mark: '*'
-      #original_hash: da39a3e
-      html: ''
     error_notification:
       #original_hash: d70e9cb
       default_message: 'Bitte die folgenden Probleme klären:'
@@ -827,12 +818,6 @@ de:
         public_summary: >-
           Eine Gesamtbeschreibung des Incidents und der Entscheidung, die
           öffentlich angezeigt wird. Bitte in Englisch ausfüllen.
-        #original_hash: da39a3e
-        digest_worthy: ''
-        #original_hash: da39a3e
-        tags: ''
-        #original_hash: da39a3e
-        competition_id: ''
       user:
         #original_hash: 7588d71
         dob: >-
@@ -844,36 +829,14 @@ de:
           ein, zum Beispiel <strong>Stefan Pochmann</strong>. Nicht unachtsam
           wie etwa <strong>s pochman</strong>. Zweite Vornamen (entweder ganz
           oder als Initial) sind optional.
-        #original_hash: da39a3e
-        email: ''
         #original_hash: 8a91e53
         pending_avatar: >-
           Nachdem Du ein neues Profilbild hochgeladen hast, muss dieses erst vom
           WCA Results Team bestätigt werden.
-        #original_hash: da39a3e
-        country_iso2: ''
-        #original_hash: da39a3e
-        dob_verification: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        login: ''
-        #original_hash: da39a3e
-        password: ''
-        #original_hash: da39a3e
-        password_confirmation: ''
-        #original_hash: da39a3e
-        remember_me: ''
-        #original_hash: da39a3e
-        results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
           Dies gilt nur für Wettbewerbe, die du organisierst oder delegierst,
           und kann pro Wettbewerb überschrieben werden.
-        #original_hash: da39a3e
-        unconfirmed_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 81a76a3
         receive_delegate_reports: >-
           Wenn du ein Trainee Delegate, Junior Delegate, Senior Delegate oder
@@ -922,14 +885,6 @@ de:
           Zusätzliche Informationen, die du zum WCAT weitergeben willst. Zum
           Beispiel ob es Unklarheiten gibt oder ob es spezielle Anfragen an das
           WCAT gibt. Bitte fülle dies in Englisch aus!
-        #original_hash: da39a3e
-        clone_tabs: ''
-        #original_hash: da39a3e
-        country_id: ''
-        #original_hash: da39a3e
-        end_date: ''
-        #original_hash: da39a3e
-        generate_website: ''
         #original_hash: b2af5f5
         external_registration_page: >-
           Die Seite, auf der Teilnehmer sich für die Competition anmelden
@@ -945,26 +900,6 @@ de:
           für die Zahlung der Gebühren.</b>
         #original_hash: 9735ddf
         currency_code: Der Währungscode für Eintrittsgebühren.
-        #original_hash: da39a3e
-        guests_enabled: ''
-        #original_hash: da39a3e
-        enable_donations: ''
-        #original_hash: da39a3e
-        id: ''
-        #original_hash: da39a3e
-        confirmed: ''
-        #original_hash: da39a3e
-        receive_registration_emails: ''
-        #original_hash: da39a3e
-        registration_close: ''
-        #original_hash: da39a3e
-        show_at_all: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        use_wca_registration: ''
-        #original_hash: da39a3e
-        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Auch wenn die Regeln nicht vorgeben, dass ein Teilnehmerlimit gesetzt
@@ -991,8 +926,6 @@ de:
           verwendet). Du solltest vor Nutzung dieses Feldes Events hinzufügen.
           Anmeldungen mit zu vielen Events werden blockiert. Lasse dies frei,
           wenn es kein Limit gibt.
-        #original_hash: da39a3e
-        venue_address: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Bitte führe hier zusätzliche Registrierungsbedingungen auf, die oben
@@ -1000,16 +933,10 @@ de:
           diese <b>auf Englisch</b> und in jeder anderen Sprache, die die
           Teilnehmer sprechen, aus. Dies wird auf der Seite des Wettbewerbs und
           auf der Registrierungsseite angezeigt.
-        #original_hash: da39a3e
-        on_the_spot_registration: ''
         #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: >-
           Wenn dies auf 0 gesetzt wird, wird ein Satz angezeigt dass
           Vor-Ort-Registrierung kostenlos möglich ist.
-        #original_hash: da39a3e
-        allow_registration_edits: ''
-        #original_hash: da39a3e
-        allow_registration_self_delete_after_acceptance: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           Aktuell dient diese Angabe nur zur Information und Rückerstattungen
@@ -1039,53 +966,23 @@ de:
           für Gäste nicht über die Webseite verwaltet werden können. Wenn dies
           auf 0 gesetzt wird, wird ein im Folgenden auswählbarer Satz bezüglich
           der Registrierung für Gäste angezeigt.
-        #original_hash: da39a3e
-        guest_entry_status: ''
-        #original_hash: da39a3e
-        early_puzzle_submission: ''
         #original_hash: 4e8488b
         early_puzzle_submission_reason: >-
           Bitte führe aus, warum du möchtest, dass Teilnehmer ihre Puzzle früher
           abgeben. Fülle dies in Englisch aus!
-        #original_hash: da39a3e
-        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Bitte erläutere hier, warum du Qualifikationszeiten nutzen möchtest.
           Fülle dies in Englisch aus!
-        #original_hash: da39a3e
-        event_restrictions: ''
         #original_hash: d3329d7
         event_restrictions_reason: >-
           Bitte erläutere hier, warum du die Anmeldung bestimmter
           Eventkombinationen verbieten willst. Bitte fülle dies in Englisch aus!
-        #original_hash: da39a3e
-        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: Der Gewinner dieses Events ist der Gewinner der Competition.
-        #original_hash: da39a3e
-        allow_registration_without_qualification: ''
         championships:
-          #original_hash: da39a3e
-          championship_type: ''
       website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
-        #original_hash: da39a3e
-        wca_id: ''
         #original_hash: 8723825
         dob: Dein korrektes Geburtsdatum im Format YYYY-MM-DD (Jahr - Monat - Tag)
         #original_hash: 49ee4af
@@ -1105,14 +1002,6 @@ de:
           Benutze den &lt;!-- break --&gt;-Tag um eine Vorschau auf der Homepage
           anzuzeigen. Jeder Post auf der Website wird sämtlichen Text vor diesen
           Tag anzeigen. Der tatsächliche Post umfasst dann den vollen Inhalt.
-        #original_hash: da39a3e
-        sticky: ''
-        #original_hash: da39a3e
-        unstick_at: ''
-        #original_hash: da39a3e
-        title: ''
-        #original_hash: da39a3e
-        tags: ''
         #original_hash: 0e3764f
         show_on_homepage: >-
           Achtung! Dies ist nicht sicher für vertrauliche Informationen. Es
@@ -1152,14 +1041,10 @@ de:
           erscheinen, erwähne zumindest die wichtigsten Zwischenfälle. Bitte
           kreuze die entsprechenden Boxen an, wenn du aktiv nach Feedback fragen
           möchtest.
-        #original_hash: da39a3e
-        wrc_feedback_requested: ''
         #original_hash: 98bb5cd
         wrc_incidents: >-
           Liste von Referenznummern der Zwischenfälle, für die du das Feedback
           des WRC möchtest.
-        #original_hash: da39a3e
-        wdc_feedback_requested: ''
         #original_hash: 38a95e5
         wdc_incidents: >-
           Liste der Referenznummern von Zwischenfällen, für die du das Feedback
@@ -1171,70 +1056,17 @@ de:
           Pläne für diese Region). Alles was in den vorherigen Bereichen im
           Sinne der klaren und präzisen Ausdrucksweise ausgelassen wurde, kann
           hier erscheinen.
-        #original_hash: da39a3e
-        discussion_url: ''
       competition_tab:
         #original_hash: e396d28
         name: 'Beispiele: Anreise, Zahlung, Preise/Auszeichnungen, Unterkunft'
-        #original_hash: da39a3e
-        content: ''
       person:
-        #original_hash: da39a3e
-        person1_wca_id: ''
-        #original_hash: da39a3e
-        person2_wca_id: ''
-        #original_hash: da39a3e
-        person_wca_id: ''
-      poll:
-        #original_hash: da39a3e
-        comment: ''
-        #original_hash: da39a3e
-        multiple: ''
-        #original_hash: da39a3e
-        question: ''
       registration:
-        #original_hash: da39a3e
-        comments: ''
-        #original_hash: da39a3e
-        guests: ''
-        #original_hash: da39a3e
-        status: ''
         #original_hash: 34ef763
         administrative_notes: >-
           Zusätzliche Anmerkungen zur Verwaltung dieser Anmeldung. Diese können
           vom Teilnehmer nicht eingesehen werden.
-      vote:
-        #original_hash: da39a3e
-        comment: ''
-      competition_medium:
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        media_type: ''
-        #original_hash: da39a3e
-        text: ''
-        #original_hash: da39a3e
-        uri: ''
-        #original_hash: da39a3e
-        submitter_name: ''
-        #original_hash: da39a3e
-        submitter_email: ''
-        #original_hash: da39a3e
-        submitter_comment: ''
-        #original_hash: da39a3e
-        status: ''
       results_submission:
-        #original_hash: da39a3e
-        schedule_url: ''
-        #original_hash: da39a3e
-        results_file: ''
-        #original_hash: da39a3e
-        message: ''
       regional_organization:
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        country: ''
         #original_hash: 72448d6
         website: Muss eine gültige http(s) Adresse sein. HTTPS ist empfohlen.
         #original_hash: 2ace571
@@ -1243,28 +1075,12 @@ de:
           transparenten Hintergrund.
         #original_hash: da54ab5
         email: Sollte eine Mailingliste mit allen Direktoren und Beauftragten sein.
-        #original_hash: da39a3e
-        address: ''
         #original_hash: 7d25ff5
         bylaws: Muss im PDF-Format sein.
-        #original_hash: da39a3e
-        directors_and_officers: ''
-        #original_hash: da39a3e
-        area_description: ''
-        #original_hash: da39a3e
-        past_and_current_activities: ''
-        #original_hash: da39a3e
-        future_plans: ''
-        #original_hash: da39a3e
-        extra_information: ''
         #original_hash: 79555ff
         extra_file: >-
           Muss im PDF-Format sein. Falls du mehrere Dateien hinzufügen willst,
           fasse diese bitte zu einer zusammen.
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        end_date: ''
     options:
       registration:
         status:
@@ -1492,7 +1308,6 @@ de:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Das Formular enthält %{count} Fehler:'
           one: 'Das Formular enthält einen Fehler:'
           other: 'Das Formular enthält %{count} Fehler:'
       error_pages:
@@ -2193,7 +2008,6 @@ de:
       must_register: muss sich für mindestens eine Disziplin anmelden
       #original_hash: abdc718
       exceeds_event_limit:
-        zero: Du darfst dich in keinem Event anmelden
         one: Du darfst dich in genau einem Event anmelden
         other: 'Du darfst dich maximal %{count} Events anmelden'
       #original_hash: e78eec3
@@ -2218,17 +2032,14 @@ de:
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
-        zero: Neulinge
         one: Neuling
         other: Neulinge
       #original_hash: bc010e3
       returner:
-        zero: Wiederkehrer
         one: Wiederkehrer
         other: Wiederkehrer
       #original_hash: b7da17a
       person:
-        zero: Personen
         one: Person
         other: Personen
     flash:
@@ -2236,17 +2047,14 @@ de:
       not_using_wca: Dieser Wettbewerb nutzt die Anmeldung auf der WCA-Website nicht
       #original_hash: d528030
       accepted_and_mailed:
-        zero: Anmeldungen akzeptiert! E-Mail-Benachrichtigung gesendet.
         one: Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet.
         other: Anmeldungen akzeptiert! E-Mail-Benachrichtigung gesendet.
       #original_hash: 42ea8de
       rejected_and_mailed:
-        zero: Anmeldungen auf Warteliste gesetzt!
         one: Anmeldung auf Warteliste gesetzt!
         other: Anmeldungen auf Warteliste gesetzt!
       #original_hash: a360b31
       deleted_and_mailed:
-        zero: Anmeldungen gelöscht
         one: Anmeldung gelöscht
         other: Anmeldungen gelöscht
       #original_hash: c3aa289
@@ -2351,7 +2159,6 @@ de:
       edit: Bearbeiten
       #original_hash: beffc45
       country_plural:
-        zero: '%{count} Regionen'
         one: 1 Region
         other: '%{count} Regionen'
       #original_hash: 1feee0e
@@ -2837,14 +2644,12 @@ de:
       display_name: '[Abgesagt] %{name}'
       #original_hash: 680567f
       organizer_plural:
-        zero: Organisatoren
         one: Organisator
         other: Organisatoren
       #original_hash: 53a9522
       organization_team: Organisations-Team
       #original_hash: 6afa61e
       delegate:
-        zero: WCA-Delegierte
         one: WCA-Delegierter
         other: WCA-Delegierte
       #original_hash: b37456c
@@ -2941,12 +2746,10 @@ de:
         restricted: Gäste werden nur als Begleitpersonen von Teilnehmern zugelassen.
       #original_hash: 35f892a
       guest_limit:
-        zero: Teilnehmer dürfen keine Gäste mitbringen.
         one: Teilnehmer dürfen maximal einen Gast mitbringen.
         other: 'Teilnehmer dürfen maximal %{count} Gäste mitbringen.'
       #original_hash: bad09c8
       event_limit:
-        zero: Teilnehmer dürfen sich bei keinem Event anmelden.
         one: Teilnehmer dürfen sich in genau einem Event anmelden.
         other: 'Teilnehmer dürfen sich bei maximal %{count} Events anmelden.'
       #original_hash: 64e0ddd
@@ -3323,10 +3126,6 @@ de:
         clone_tabs: Ich möchte auch alle Registerkarten mit zusätzlichen Informationen
           kopieren
       hints:
-        admin:
-          is_confirmed: ''
-          is_visible: ''
-        competition_id: ''
         name: Der volle Name eines Wettbewerbs, inklusive Jahreszahl am Ende (z.B.
           Danish Open 2016). Achte auf Großschreibung. Der Name darf nur alphanumerische
           Zeichen, Bindestriche(-), Und-Zeichen(&), Punkte(.), Doppelpunkte(:), Apostrophe(')
@@ -3337,7 +3136,6 @@ de:
           der <a href='/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
           Competition Requirements Policy</a> entsprechen.
         venue:
-          country_id: ''
           city_name: Name der Stadt und des Verwaltungsbezirks (wenn möglich) in dem
             der Wettbewerb stattfindet. Lasse hierbei das Land aus (z.B. Paris ODER
             San Francisco, Kalifornien).
@@ -3345,12 +3143,8 @@ de:
             Zum Beispiel: [Cité des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
           details_html: Details über den Veranstaltungsort (z.B. Im hinteren Teil
             des ersten Stocks, Beschilderung folgen). %{md}
-          address: ''
           coordinates:
-        start_date: ''
-        end_date: ''
         series:
-          series_id: ''
           name: >-
             Der volle Name der Wettbewerbsserie, inklusive des Jahres am Ende
             (z.B. Southern Australia 2022). Achte auf Großschreibung. Dieselben
@@ -3385,15 +3179,10 @@ de:
             der Organisatoren zu veröffentlichen. %{md}. Beispiel: [Text zum Anzeigen](mailto:some@email.com)'
         championships:
         website:
-          generate_website: ''
           external_website: Die Website des Wettbewerbs. Muss als gültige http(s)-URL
             vorliegen.
           external_registration_page: Die Seite, auf der Teilnehmer sich für die Competition
             anmelden können. Dies muss eine gültige http(s) Adresse sein.
-          uses_wca_registration: ''
-          uses_wca_live: ''
-        user_settings:
-          receive_registration_emails: ''
         entry_fees:
           currency_code: Der Währungscode für Eintrittsgebühren.
           base_entry_fee: 'Eintrittsgebühr für den Wettbewerb. Die Eintrittsgebühr
@@ -3409,7 +3198,6 @@ de:
             für Gäste nicht über die Webseite verwaltet werden können. Wenn dies auf
             0 gesetzt wird, wird ein im Folgenden auswählbarer Satz bezüglich der
             Registrierung für Gäste angezeigt.
-          donations_enabled: ''
           refund_policy_percent: Aktuell dient diese Angabe nur zur Information und
             Rückerstattungen müssen manuell veranlasst werden. Wenn dies auf 0 gesetzt
             wird, wird ein Hinweis angezeigt, dass Eintrittsgebühren unter keinen
@@ -3417,7 +3205,6 @@ de:
           refund_policy_limit_date: Datum, nachdem keine Rückerstattungen mehr erfolgen
         registration:
           opening_date_time: 'Anmerkung: Anmeldebeginn und -schluss sind in UTC anzugeben'
-          closing_date_time: ''
           waiting_list_deadline_date: Der Zeitpunkt, ab welchem Personen auf der Warteliste
             nicht mehr akzeptiert werden. Wenn du eine Deadline für Rückerstattungen
             angegeben hast, sollte die Deadline für das Akzeptieren der Teilnahme
@@ -3429,11 +3216,6 @@ de:
             Events bis zum Stattfinden des jeweiligen Events hinzufügen. Wenn du vor-Ort-Registrierungen
             zulässt, muss dieser Zeitpunkt auf den selben Tag wie die Competition
             gelegt werden.
-          allow_on_the_spot: ''
-          allow_self_delete_after_acceptance: ''
-          allow_self_edits: ''
-          guests_enabled: ''
-          guest_entry_status: ''
           guests_per_registration: Die Anzahl erlaubter Gäste pro Anmeldung bei dieser
             Competition. Eine Anmeldung mit zu vielen Gästen wird blockiert. Lasse
             dies frei, wenn es keine Begrenzung gibt.
@@ -3442,19 +3224,14 @@ de:
             fülle diese <b>auf Englisch</b> und in jeder anderen Sprache, die die
             Teilnehmer sprechen, aus. Dies wird auf der Seite des Wettbewerbs und
             auf der Registrierungsseite angezeigt.
-          force_comment: ''
         event_restrictions:
           early_puzzle_submission:
-            enabled: ''
             reason: Bitte führe aus, warum du möchtest, dass Teilnehmer ihre Puzzle
               früher abgeben. Fülle dies in Englisch aus!
           qualification_results:
-            enabled: ''
             reason: Bitte erläutere hier, warum du Qualifikationszeiten nutzen möchtest.
               Fülle dies in Englisch aus!
-            allow_registration_without: ''
           event_limitation:
-            enabled: ''
             reason: Bitte erläutere hier, warum du die Anmeldung bestimmter Eventkombinationen
               verbieten willst. Bitte fülle dies in Englisch aus!
             per_registration_limit: Lege wahlweise fest, für wie viele Events sich
@@ -3466,7 +3243,6 @@ de:
         remarks: Zusätzliche Informationen, die du zum WCAT weitergeben willst. Zum
           Beispiel ob es Unklarheiten gibt oder ob es spezielle Anfragen an das WCAT
           gibt. Bitte fülle dies in Englisch aus!
-        clone_tabs: ''
       choices:
         guests_enabled:
           'true': Nach Gästen fragen
@@ -3607,7 +3383,6 @@ de:
     nearby_competitions:
       #original_hash: 241801a
       competitions:
-        zero: Keine Wettbewerbe
         one: 1 Wettbewerb
         other: '%{count} Wettbewerbe'
       #original_hash: 3446062

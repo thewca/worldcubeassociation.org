@@ -78,6 +78,8 @@ services:
     depends_on:
       wca_environment:
         condition: service_completed_successfully
+      wca_mailcatcher:
+        condition: service_started
 
   wca_nextjs:
     build:
@@ -156,15 +158,12 @@ services:
         condition: service_completed_successfully
 
   wca_mailcatcher:
-    <<: *app
+    image: "sj26/mailcatcher:v0.11.0"
     container_name: "mailcatcher"
     expose:
       - "1025"
     ports:
       - "1080:1080"
-    command: >
-      bash -c 'gem install mailcatcher &&
-      mailcatcher --foreground --ip=0.0.0.0'
 
   wca_sidekiq:
     <<: *app
@@ -243,7 +242,7 @@ services:
         condition: service_healthy
 
   wca_playwright:
-    image: mcr.microsoft.com/playwright:v1.62.1
+    image: mcr.microsoft.com/playwright:v1.63.0
     container_name: "playwright"
     extra_hosts:
       - "hostmachine:host-gateway"

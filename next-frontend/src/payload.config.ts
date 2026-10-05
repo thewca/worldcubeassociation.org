@@ -120,7 +120,11 @@ function dbOptions(): Args {
   }
 }
 
-export default buildConfig({
+// The default `buildConfig` config further down below already applies plugins directly.
+//   But for the purposes of our own data export/dump, we need to know _strictly our_ collections
+//   and globals, without any plugins potentially adding their own stuff. So we export our config
+//   separately as a named export, and keep the `buildConfig` export further down below as default export.
+export const wcaConfig = {
   admin: {
     user: "users",
     importMap: {
@@ -171,4 +175,6 @@ export default buildConfig({
   db: mongooseAdapter(dbOptions()),
   sharp,
   plugins: plugins(),
-});
+};
+
+export default buildConfig(wcaConfig);

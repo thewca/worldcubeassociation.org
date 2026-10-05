@@ -10,6 +10,7 @@ required:
   - use_wca_registration
   - guests_enabled
   - announced_at
+  - results_posted_at
   - base_entry_fee_lowest_denomination
   - currency_code
   - start_date
@@ -132,6 +133,10 @@ properties:
     example: false
   cancelled_at:
     type: string
+    nullable: true
+  results_posted_at:
+    type: string
+    format: date-time
     nullable: true
   waiting_list_deadline_date:
     type: string

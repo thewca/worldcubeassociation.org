@@ -15,7 +15,7 @@ const ResultsTab: React.FC<ResultsTabProps> = ({
   wcaId,
   eventsWithResults,
 }) => {
-  const [eventId, setEventId] = useState("333");
+  const [eventId, setEventId] = useState(eventsWithResults[0]);
 
   return (
     <VStack>
@@ -54,7 +54,9 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
     return <Text>Failed fetching results</Text>;
   }
 
-  return <ByCompetitionTable results={resultsQuery} t={t} />;
+  return (
+    <ByCompetitionTable results={resultsQuery} t={t} highlightPersonalBests />
+  );
 };
 
 export default ResultsTab;

@@ -44,7 +44,7 @@ const IMPORTANT_LINKS = [
       },
       {
         title: 'WR Submission Form',
-        link: 'https://docs.google.com/forms/d/e/1FAIpQLSeLrkLhFnIy1QNGoWoZT4jsOIibNJ_xc9qTd_YKBpcuMIq-LA/viewform',
+        link: 'https://docs.google.com/forms/d/1SQPe-Q2JVb4xIr38Z2_rcXVUa9fppLsPoCzLjzph-P8/viewform',
       },
     ],
   },

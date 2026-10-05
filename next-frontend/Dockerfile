@@ -1,6 +1,7 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:24-alpine AS base
+FROM node:26-alpine AS base
+RUN npm install -g corepack
 
 FROM base AS deps
 
@@ -46,6 +47,10 @@ RUN corepack enable
 ENV NEXT_PUBLIC_WCA_FRONTEND_API_URL="https://$WCA_SITE/api/"
 ENV NEXT_PUBLIC_WEBSOCKET_URL="https://$WCA_SITE/api/v1/live/cable"
 ENV PROPRIETARY_FONT="TTNormsPro"
+# Next is served from its own subdomain, so the colour mode cookie has to be set
+# on the parent domain for the Rails sign in pages to see it.
+# TODO: Drop this when we launch
+ENV NEXT_PUBLIC_THEME_COOKIE_DOMAIN=".worldcubeassociation.org"
 # Baked into the client bundle at build time, so it cannot be set per task definition
 ENV NEXT_ASSET_PREFIX=$NEXT_ASSET_PREFIX
 # Create the types and build
@@ -83,7 +88,11 @@ COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
 COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
 COPY --from=builder /app/export-dump.sh /app/export-dump.sh
 
-RUN apk add --no-cache jq
+# jq = Reading JSON data transmitted from Vault to extract secrets
+# mongodb-tools = the `mongodump` command to create Payload CMS database copies
+# aws-cli = The S3 sync command to upload the dump to our internal storage
+# zip = Compressing the dump(s) before upload
+RUN apk add --no-cache jq mongodb-tools aws-cli zip
 
 USER nextjs
 

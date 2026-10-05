@@ -1,0 +1,1147 @@
+sw:
+  countries:
+    AG: Antigua na Barbuda
+    BA: Bosnia na Herzegovina
+    CD: Jamuhuri ya Kidemokrasia ya Kongo
+    CG: Jamhuri ya Kongo
+    CI: Jamhuri ya Ivory Coast
+    CV: Kepuvede
+    FM: Mikronesia
+    GW: Guinea Bisau
+    HK: Hong Kong, Uchina
+    KN: Saint Kitts na Nevis
+    KP: Korea Kaskazini
+    KR: Jamhuri ya korea
+    LC: Saint Lucia
+    MK: Masedonia Kaskazini
+    MM: Myanma
+    MO: Macau, Uchina
+    PS: Palestina
+    ST: Sao Tome na Principe
+    SZ: Eswatini
+    TT: Trinidad na Tobago
+    TW: Taipei ya China
+    XM: Nchi mbalimbali (Amerika)
+    XA: Nchi mbalimbali (Asia)
+    XE: Nchi mbalimbali (Ulaya)
+    XN: Nchi Mbalimbali (Amerika kaskazini)
+    XO: Nchi mbalimbali(Ocenia)
+    XS: Nchi Mbalimbali(Amerika Kusini)
+    XW: Nchi Mbalimbali(Dunia)
+    VC: Saint Vincent na Grenadini
+    XF: Nchi nyingi (Afrika)
+  continents:
+    "South America": Amerika ya Kusini
+    "Multiple Continents": Mabara mengi
+    Africa: Afrika
+    Asia: Asia
+    Europe: Ulaya
+    "North America": Amerika Kaskazini
+    Oceania: Oceania
+  country_bands:
+    title: Vikundi vya Nchi vya WCA
+    band_title: Bendi asilimia %{number}
+    due_value: Idadi ya mshidani kwa kila shindano
+  events:
+    "333": Mchemraba wa 3x3x3
+    "222": Mchemraba wa 2x2x2
+    "444": Mchemraba wa 4x4x4
+    "555": Mchemraba wa 5x5x5
+    "666": Mchemraba wa 6x6x6
+    "777": Mchemraba wa 7x7x7
+    333bf: mchemraba wa 3x3x3 ukiwa umefumba macho
+    333fm: hatua chache zaidi za 3x3x3
+    333oh: kutatua mchemraba wa 3x3x3 kwa mkono mmoja
+    333ft: kutatua mchemraba wa 3x3x3 kwa miguu
+    clock: Saa
+    minx: Megaminx
+    pyram: Pyraminx
+    skewb: Skewb
+    sq1: Square-1
+    444bf: kutatua mchemraba wa 4x4x4 ukiwa umefumba macho
+    555bf: kutatua mchemraba wa 5x5x5 ukiwa umefumba macho
+    333mbf: 3x3x3 Multi-Blind
+    fto: Face Turning Octahedron
+    magic: Hirizi
+    mmagic: Master Magic
+    333mbo: Kutatua michemraba mingi ya 3x3x3 kwa kufumba macho mtindo wa zamani
+  formats:
+    "1": ya kwanza bora
+    "2": ya pili bora
+    "3": tatu bora
+    "5": Tano bora
+    "a": wastani wa tano
+    "m": wastani wa tatu
+    short:
+      "1": Bo1
+      "2": B02
+      "3": Bo3
+      "5": Bo5
+      "a": Ao5
+      "m": Mo3
+      "h": H2H
+  rounds:
+    "0":
+      name: raundi ya kufuzu
+      cell_name: raundi ya kufuzu
+    "1":
+      name: raundi ya kwanza
+      cell_name: Raundi ya kwanza
+    "2":
+      cell_name: Raundi ya pili
+      name: Raundi ya pili
+    "3":
+      name: Nusu Fainali
+      cell_name: Nusu fainali
+    "b":
+      name: B Fainali
+      cell_name: B Fainali
+    "c":
+      name: Finali
+      cell_name: Finali
+    "d":
+      name: raundi ya kwanza
+      cell_name: Raundi ya kwanza
+    "e":
+      name: Raundi ya pili
+      cell_name: Raundi ya pili
+    "f":
+      name: Finali
+      cell_name: Fianali
+    "g":
+      name: Nusu Fainali
+      cell_name: nusu Fainali
+    "h":
+      name: raundi ya kufuzu
+      cell_name: raundi ya kufuzu
+  attempts:
+    attempt_name: Jaribio
+  round:
+    title: raundi
+    round_number: Raundi %{round_number}
+    name: '%{event_name} %{round_name}'
+  scramble_set:
+    name: Seti ya mchanganyiko%{letter_code}
+    group: Kikundi%{number}
+    attempt: Jaribio%{number}
+  advancement_condition:
+    short:
+      ranking: Juu %{ranking}
+      percent: Juu%{percent}%
+      all_advance: Wote Wanafaulu
+      attempt_result:
+        time: '%{round_format}<%{time}'
+        moves: '%{round_format}<%{moves}'
+        points: '%{round_format} > %{points}'
+    all_advance: washindani wote wamefaulu
+    ranking: Juu%{ranking}wamefaulu kwa raundi inayofuata
+    percent: Juu%{percent}% wamefaulu kwa raundi inayofuata
+    attempt_result:
+      time: '%{round_format}<%{time}wamefaulu kwa raundi inayofuata'
+      moves: '%{round_format}<%{moves} waenda kwa raundi inayofuata'
+      points: '%{round_format} > %{points} alama zinafuzu kwa raundi inayofuata'
+  cutoff:
+    time:
+      one: '%{count} Jaribu kupata< %{time}'
+      other: '%{count} majaribu ya kupata < %{time}'
+    moves:
+      one: '%{count} jaribio la kupata< %{moves} hatua'
+      other: '%{count} majaribio ya kupata < %{moves} hatua'
+    points:
+      one: '%{count} jaribu kupata> %{points} alama'
+      other: '%{count}majaribio ya kupata > %{points} alama'
+  time_limit:
+    cumulative:
+      one_round: '%{time} mfululizo'
+      across_rounds: '%{time} jumla ya %{rounds}'
+    333fm: saa moja
+    333mbf: 10:00.00 kwa kila mchemraba, hadi 60:00.00
+  qualification:
+    type_label: aina ya kufuzu
+    result_type: aina ya matokeo
+    for_event: Kufuzu kwa %{event}
+    type:
+      none: hakuna kufuzu
+      result: kwa matokeo
+      ranking: juu N
+      any_result: tokeo lolote
+    single:
+      time: Jaribio moja chini ya %{time}
+      moves: Jaribio moja chini ya %{moves} hatua
+      points: Jaribio moja zaidi ya %{points} alama
+      ranking: Juu %{ranking} kwa utatuzi mmoja
+      any_result: jaribio lolote moja
+    average:
+      time: Wastani chini ya %{time}
+      moves: Wastani chini ya %{moves} hatua
+      points: Wastani zaidi ya %{points} alama
+      ranking: Juu %{ranking} kwa wastani
+      any_result: wastani wowote
+    deadline:
+      description: mwisho wa kufuzu
+      by_date: kwa %{date}
+  activity:
+    registration: usajili wa eneo la tukio
+    checkin: kujisajili
+    tutorial: Mafunzo kwa washindani wapya
+    multi: Wasilisho la mchemraba kwa ajili ya 3x3x3 Multi-Blind
+    breakfast: kiamshakinywa
+    lunch: chakula cha mchana
+    dinner: Chakula cha jioni
+    awards: Kupeana Tuzo
+    setup: Matayarisho
+    teardown: Kufunga
+    misc: Shughuli nyingine
+  common:
+    world: Duniani
+    continent: bara
+    country: Eneo
+    here: hapa
+    best: Bora
+    single: Moja
+    average: wastani
+    solves: majaribio
+    hello: hujambo %{name},
+    date:
+      no_date: hakuna tarehe
+    user:
+      wca_id: Kitambulisho cha WCA
+      representing: kuwakilisha
+    all_regions: eneo zote
+    errors:
+      invalid: isiyo sahihi
+    days:
+      one: siku moja
+      other: '%{count} siku'
+    search_site: tovuti ya utafutaji
+    filter: chuja
+    delete: futa
+    date_placeholder: YYYY-MM-DD
+    datetime_placeholder: YYYY-MM-DD HH:MM
+    time_format: 12h
+    solve_time:
+      unit_seconds: sekunde
+      unit_moves: hatua
+  oauth:
+    applications:
+      your_apps: Programu zako za OAuth
+      new: mpya
+      name: jina
+      callback_url: Url ya Kurejesha
+      owner: mwenyewe
+      application_id: kitambulisho cha kujisajili
+      actions: matendo
+      secret: siri
+      scopes: viwangi vya ufikiaji
+      callback_urls: Url za Kurejesha
+  helpers:
+    submit:
+      competition_medium:
+        create: wasilisha picha na video
+        update: sasisha media
+  activerecord:
+    attributes:
+      user:
+        name: Jina kamili
+        wca_id: kitambulisho cha WCA
+        unconfirmed_wca_id: kitambulisho cha WCA ambayo haijathibitishwa
+        login: barua pepe ama kitambulisho cha WCA
+        country_iso2: kuwakilisha
+        dob: siku ya kuzaliwa
+        dob_verification: Siku yako ya kuzaliwa
+        gender: Jinsia
+        email: barua pepe
+        password: nenosiri
+        remember_me: nikumbuke
+        pending_avatar: Weka picha mpya ya wasifu
+        remove_avatar: toa picha ya wasifu
+        password_confirmation: Weka nenosiri lako tena
+        results_notifications_enabled: Nitumie barua pepe matokeo yangu
+          yatakapochapishwa.
+        registration_notifications_enabled: Ninapoandaa au kusimamia mashindano,
+          nitumie barua pepe usajili mpya utakapowasilishwa.
+        delegate_status: Hali ya mwakilishi
+        location: eneo
+        region: eneo
+        receive_developer_mails: Ningependa kupokea taarifa kuhusu mabadiliko ya
+          rasilimali za programu za WCA
+        receive_delegate_reports: Ningependa kupokea Ripoti za Wajumbe wa
+          Mashindano ya WCA kupitia barua pepe
+        delegate_reports_region: Ningependa kupokea Ripoti za Wajumbe kwa ajili ya
+          eneo hili pekee
+        user_preferred_events: Matukio unayopendelea"
+        otp_attempt: 'Weka nsimbo yako ya uthibithatisho wa hatua mbili:'
+        subRegion: Eneo ndogo
+      registration:
+        paid_entry_fees: imelipwa
+        status: hali
+        administrative_notes: Maelezo ya kiutawala
+        name: jina
+        birthday: siku ya kuzaliwa
+        registration_competition_events: matukio
+        email: barua pepe
+        search: tafuta...
+        too_few_chars: Herufi chache mno
+        no_results: hakuna matokeo
+        guests: wageni
+        comments: maoni
+      competition_tab:
+        content: maudhui
+        name: jina
+      delegate_report:
+        discussion_url: Kiungo cha majadiliano kwenye Kundi la Google
+        schedule_url: Kiungo cha ratiba
+        summary: muhtasari
+        venue: ukumbi
+        organization: shirika
+        incidents: matukio
+        setup_images: Picha za mpangilio wa mashindano
+        wrc_feedback_requested: Ningependa kupokea maoni kutoka kwa WRC kuhusu
+          baadhi ya matukio hapo juu.
+        wrc_incidents: Matukio Yanayohitaji Maoni kutoka WRC
+        wic_feedback_requested: Ningependa kupokea maoni kutoka kwa WIC kuhusu
+          baadhi ya matukio hapo juu.
+        wic_incidents: Matukio Yanayohitaji Maoni kutoka WIC
+        remarks: Maoni
+        equipment: vifaa
+      person:
+        wca_id: Mtu
+        country_id: kuwakilisha
+        dob: tarehe ya kuzaliwa
+        gender: jinsia
+        name: jina
+        incorrect_wca_id_claim_count: Idadi ya madai ya kitambulisho cha WCA isiyo
+          sahihi
+      poll:
+        question: Swali
+        deadline: siku ya mwisho
+      post:
+        title: Anwani
+        body: mwili
+        sticky: bandika
+        unstick_at: Ondoa ubandiko kwenye
+        tags: lebo
+        show_on_homepage: Onyesha kwenye ukurasa wa kwanza
+      team:
+        name: jina
+        description: maelezo
+      vote:
+        comment: hoja
+      incident:
+        title: anwani
+        private_description: maelezo(binafsi)
+        private_wrc_decision: uamuzi(binafsi)
+        public_summary: muhtasari(hadhira)
+        digest_worthy: Yenye tija
+        tags: lebo
+        competition_id: ilitokea wakati wa
+      competition_medium:
+        competition_id: shindano
+        media_type: aina
+        text: maandishi
+        uri: kiongo
+        submitter_name: Jina la mtumaji
+        submitter_email: Barua pepe ya mtumaji
+        submitter_comment: Maoni ya mtumaji
+        status: hali
+      regional_organization:
+        name: jina
+        country: mkoa
+        website: tovuti
+        logo: Nembarishi
+        email: barua pepe
+        address: Anwani rasmi
+        bylaws: katiba
+        directors_and_officers: Orodha ya Wakurugenzi Wakuu na Maafisa pamoja na
+          vyeo vyao
+        area_description: Maelezo wazi ya eneo linalohusika
+        past_and_current_activities: Ripoti ya shughuli za zamani na za sasa
+          zinazohusiana na WCA
+        future_plans: Mipango ya siku zijazo kama Shirika la Kikanda
+          linalotambuliwa na WCA
+        extra_information: Miongozo ya Ujanibishaji?
+        extra_file: Miongozo ya Ujanibishaji?
+        start_date: Imetambuliwa tangu
+        end_date: Imetambuliwa hadi
+  enums:
+    user:
+      gender:
+        m: mwanaume
+        f: mwanamke
+        o: mwingine
+    user_roles:
+      status:
+        delegate_regions:
+          trainee_delegate: Mjumbe mtarajiwa
+          junior_delegate: mjumbe mdogo
+          delegate: mjumbe
+          regional_delegate: Mjumbe wa Kikanda
+          senior_delegate: Mjumbe Mkuu
+        teams_committees:
+          member: mwanachama
+          senior_member: mwanachama mkuu
+          leader: kiongozi
+        councils:
+          member: mwanachama
+          senior_member: mwanachama mkuu
+          leader: kiongozi
+        officers:
+          chair: mwenyekitu wa WCA
+          executive_director: Mkurugenzi Mtendaji wa WCA
+          chief_operating_officer: Afisa Mkuu wa Uendeshaji wa WCA
+          secretary: Katibu wa WCA
+          vice_chair: Makamu wa Mwenyekiti wa WCA
+          treasurer: mweka hazina wa WCA
+      ban_scope:
+        competing_only: Kushindana Pekee
+        competing_and_attending: Kushindana na Kuhudhuria
+        competing_and_attending_and_forums: Kushindana, Kuhudhuria na Mijadala
+    competition_medium:
+      status:
+        accepted: Imekubaliwa
+        pending: Inasubiri
+      media_type:
+        report: ripoti
+        article: makala
+        multimedia: Multimedia
+  simple_form:
+    "yes": ndio
+    "no": apana
+    required:
+      text: inahitajika
+      mark: '*'
+    error_notification:
+      default_message: 'Tafadhali kagua matatizo hapa chini:'
+    hints:
+      incident:
+        title: Kumbuka kwamba hii ni ya umma, na kwamba inakupasa ujaze hii kwa
+          Kiingereza!
+        private_description: Maelezo ya tukio ambayo yanaweza kutazamwa tu na
+          Wajumbe. Tafadhali jaza haya kwa Kiingereza.
+        private_wrc_decision: Uamuzi wa mwisho wa WRC, pamoja na maelezo ya siri.
+          Tafadhali jaza haya kwa Kiingereza.
+        public_summary: Maelezo ya jumla ya tukio na uamuzi wake, yatakayoonyeshwa
+          kwa umma. Tafadhali jaza haya kwa Kiingereza.
+      user:
+        dob: Weka tarehe ya kuzaliwa ya mshindani katika muundo wa YYYY-MM-DD.
+        name: Weka jina kamili la mshindani kwa usahihi, kwa mfano <strong>Stefan
+          Pochmann<strong>. Sio ovyoovyo kama <strong>s
+          pochman<strong>.<br/>Majina ya kati (ikiwa ni kamili au herufi za
+          kwanza) ni ya hiari.
+        pending_avatar: Baada ya kupakia picha mpya ya wasifu (avatar), italazimu
+          usubiri Timu ya Matokeo ya WCA iidhinishe.
+        registration_notifications_enabled: Hii inatumika tu kwa mashindani
+          unayoandaa au kuyaongoza kama mjumbe, na inaweza kubatilishwa kwa kila
+          mashindano binafsi.
+        receive_developer_mails: Hii ni maalum kwa ajili ya arifa za mabadiliko
+          makubwa ya toleo kwenye rasilimali kama vile usafirishaji wa data,
+          mpangilio (schema) wa WCIF, na API za umma. Inapendekezwa kwa
+          watengenezaji wa programu wanaotegemea zana hizi.
+        receive_delegate_reports: 'Ikiwa wewe ni Mjumbe Mwandamizi (Senior Delegate)
+          au Mwanachama wa WRC au WQAC, utapokea Ripoti za Wajumbe kwa chaguo-msingi.
+          Kumbuka: mabadiliko yanaweza kuchukua hadi saa 12 kuanza kufanya kazi.'
+        delegate_reports_region: 'Ikiwa unataka kupokea ripoti zote, acha sehemu hii
+          wazi (chaguo la kushuka lililo juu kabisa). Kumbuka: mabadiliko yanaweza kuchukua
+          hadi saa 12 kuanza kufanya kazi.'
+        otp_attempt: Angalia programu yako ya simu iliyowekwa kwa nenosiri la mara
+          moja, au weka mojawapo ya nambari zako za kupona.
+      dob_contact:
+        dob: siku yako sahihi ya kuzaliwa kwa mtindo YY-MM-DD
+        document: Ili kututhibitishia utambulisho wako na tarehe yako sahihi ya
+          kuzaliwa, unapaswa kuambatisha picha ya hati yoyote rasmi ya kisheria
+          (kitambulisho cha taifa, leseni ya udereva, kitambulisho cha mwanafunzi,
+          pasipoti, cheti cha kuzaliwa, ...) ambapo jina lako na tarehe yako ya
+          kuzaliwa vinaonekana na vinaeleweka kwa mtu anayezungumza Kiingereza (au
+          wasiliana na Mwakilishi wako wa WCA wa eneo lako ikiwa huna hati kama
+          hiyo). Kwenye kitambulisho hicho tunahitaji angalau jina lako na tarehe
+          ya kuzaliwa; jisikie huru kuficha/kufifisha data zozote nyingine za
+          kibinafsi kwenye kitambulisho hicho.
+      post:
+        body: Tumia lebo ya &lt;!-- break --&gt; kuonyesha hakikisho kwenye
+          ukurasa wa nyumbani. Chapisho lolote kwenye ukurasa wa nyumbani
+          litaonyesha maandishi yote kabla ya kigawanyaji hiki. Chapisho halisi
+          litaonyesha maudhui kamili.
+        show_on_homepage: Tahadhari! Hii si salama kwa data za siri. Hii ni kwa
+          ajili tu ya kuzuia kurasa za nyumbani kuwa na msongamano. Machapisho
+          ambayo hayaonyeshwa kwenye ukurasa wa nyumbani bado yanapatikana kwa
+          umma kupitia kiungo cha kudumu au kupitia lebo.
+      delegate_report:
+        schedule_url: Kiunga kamili cha ratiba iliyochapishwa(e.g.,
+          https://www.cubingusa.com/usnationals2016/schedule.php)
+        equipment: Nambari na aina ya vipima muda na maonyesho yaliyotumika kwenye
+          mashindano. Tafadhali ondoa mstari/mistari ya vifaa ambavyo huvikutumia.
+        summary: Vidokezo vilivyoorodheshwa hapo juu ni kwa ajili ya mwongozo tu
+          wa ripoti kamili. Vitumie kwa hiari yako kulingana na unavyoona vinafaa.
+          Tafadhali ondoa sehemu ambazo hazikutumika!
+        venue: Vidokezo vilivyoorodheshwa hapo juu ni kwa ajili ya mwongozo tu wa
+          ripoti kamili. Vitumie kwa hiari yako kulingana na unavyoona vinafaa.
+          Tafadhali ondoa sehemu ambazo hazikutumika!
+        organization: Vidokezo vilivyoorodheshwa hapo juu ni kwa ajili ya mwongozo
+          tu wa ripoti kamili. Vitumie kwa hiari yako kulingana na unavyoona
+          vinafaa. Tafadhali ondoa sehemu ambazo hazikutumika!
+        incidents: Tafadhali ripoti matukio yote ambayo si ya kawaida. Nambaza
+          matukio hayo kuanzia 1., ili Wacha wengine waweze kutoa maoni kwa
+          kuyarejelea kwa nambari zao. Hata kama kila kitu kilionekana cha
+          kawaida, tafadhali orodhesha angalau kesi zinazostahili kuzingatiwa
+          zaidi. Tafadhali weka alama kwenye visanduku vinavyofaa hapa chini ikiwa
+          unatafuta maoni kikamilifu.
+        setup_images: Lazima uweke angalau picha %{image_count} zinazoonyesha
+          maeneo ya kuchanganya na ya mashindano kutoka kwa mashindano haya ya
+          sasa, ikiwezekana wakati wa mashindano (picha nyingine pia
+          zinakaribishwa). Unaweza kuchagua faili nyingi kwa wakati mmoja. Unaweza
+          kufuta picha tu wakati picha zingine za kutosha zimewekwa (ikiwa unataka
+          kubadilisha picha, unahitaji kupakia mpya kwanza, kisha ufute ya
+          zamani). Ikiwa huna picha za sasa za eneo la mashindano na/au eneo la
+          kuchanganya wakati linatumika, tafadhali eleza kwanini.
+        wrc_incidents: Orodha ya nambari zinazorejelea matukio yoyote ambayo
+          ungependa kupokea maoni kutoka kwa WRC.
+        wic_incidents_html: Orodha ya nambari zinazorejelea matukio yoyote ambayo
+          ungependa kupokea maoni kutoka kwa WIC. <br>
+          <strong>%{wic_incident_alert}</strong>
+        wic_incident_alert: Kama tukio la WIC ni nyeti (pamoja na lakini sio tu
+          uhalifu, unyanyasaji, shambulio, n.k.), tafadhali ondoa hili kwenye
+          ripoti yako na utume barua pepe kwa WIC kando. Kwa matukio mengine ya
+          WIC, tumia toleo fupi, lisilojulikana jina la mtu (anonymized) la tukio
+          hilo na ufuatilie na WIC kwa faragha kwa maelezo zaidi. WIC bado itatoa
+          maoni kwenye matoleo yasiyojulikana jina kwa ajili ya uelewa wa jumla.
+          Kwa matukio yote ya WIC yanayohusisha Kujitolea kwa WCA Volunteer,
+          tafadhali ondoa maelezo yote kutoka kwenye ripoti, na uwasiliane na WIC
+          kwa faragha.
+        remarks: Zungumzia jambo lingine lolote ambalo ungependa kushiriki (k.m.,
+          maendeleo/kudorora ndani ya jamii, mipango ya siku za usoni kwa ajili ya
+          eneo hili). Ikiwa kwa ajili ya ufupi uliacha jambo fulani bila kutajwa
+          katika sehemu zilizopita, jisikie huru kutoa maoni yako hapa.
+      competition_tab:
+        name: 'Mifano: Usafiri, Malipo, Tuzo, Malazi'
+      regional_organization:
+        website: Lazima iwe url halali ya http(s). HTTPS inashauriwa
+        logo: Lazima iwe katika mfumo wa PNG, yenye ubora mzuri, na yenye asili ya
+          wazi
+        email: Inapaswa kuwa orodha ya barua pepe yenye Wakurugenzi na Maofisa
+          wote
+        bylaws: Lazima iwe katika mfumo wa PDF
+        extra_file: Lazima iwe katika mfumo wa PDF. Ikiwa unahitaji kuongeza faili
+          zaidi, tafadhali ziunganishe pamoja
+    options:
+      registration:
+        status:
+          accepted: imeitikiwa
+          pending: Orodha ya kusubiri
+          deleted: imefutwa
+  mail_form:
+    attributes:
+      contact_form:
+        inquiry: Ni yapi kati ya yafuatayo yanayoeleza vyema uchunguzi wako?
+        competition_id: shindano
+        name: Jina
+        your_email: barua pepe yako
+      website_contact:
+        message: ujumbe
+      dob_contact:
+        wca_id: Kitambulisho chako cha WCA
+        document: Hati
+        dob: Tarehe ya kuzaliwa
+      contact_wrt:
+        wca_id: kitambulisho cha WCA
+    competition_link_html: finya <a href='%{url}'>here</a> kutembelea ukurasa wa
+      mashindano
+    errors:
+      dob_contact:
+        dob_invalid: imeumbizwa vibaya
+  errors:
+    next_frontend:
+      title: Hitilafu imetokea wakati wa kuonyesha ukurasa
+      description: Ikiwa hitilafu hii itaendelea, ripoti kwa WST ukiwa na maelezo
+        yaliyoorodheshwa hapa chini
+      details: Maelezo ya hitilafu
+    messages:
+      wrong_size: ina ukubwa mbaya (should be %{file_size})
+      size_too_small: ni kidogo mno (iwe angalau %{file_size})
+      size_too_big: ni kubwa mno(iwe angalau%{file_size})
+      no_permission: Huna ruhusa inayohitajika kufikia ukurasa huu.
+  devise:
+    passwords:
+      edit:
+        new_password_confirmation: Weka nenosiri jipya tena
+    sessions:
+      new:
+        sign_in: ingia
+        2fa:
+          verify: Ili uingie, thibitisha kuwa ni wewe
+          confirm: Thibitisha msimbo
+          regenerated_secret: Umeunda upya siri yako ya uthibitishaji wa hatua
+            mbili kwa mafanikio.
+          enabled_success: Uthibitishaji wa hatua mbili umewashwa kwa mafanikio.
+          email_auth: Uthibitishaji wa barua pepe
+          get_by_email: Pata msimbo kupitia barua pepe
+          get_by_email_desc: Ikiwa huwezi kupata kifaa chako au misimbo ya
+            ufikiaji, unaweza pia kubonyeza kitufe kilicho hapa chini ili kupata
+            nenosiri la mara moja kupitia barua pepe. Nakili na ubandike kwenye
+            kisanduku kilicho hapo juu ili uingie.
+          email_sent: Umetumiwa msimbo kupitia barua pepe. Msimbo huu ni halali
+            kwa dakika 2. Unaweza kuomba msimbo mpya baada ya dakika 2.
+          errors:
+            cant_send_email: Huwezi kutuma barua pepe kwa sasa
+            invalid_otp: Msimbo wa uthibitishaji wa hatua mbili si sahihi.
+            not_enabled: Uthibitishaji wa hatua mbili haujawashwa
+            unknown: Hitilafu isiyojulikana wakati wa kutuma barua pepe yako.
+              Tafadhali wasiliana na WST.
+          otp_email:
+            subject: Nenosiri lako la mara moja la WCA
+            2fa_attempt: 'Unajaribu kuingia kwenye tovuti ya WCA. Umewasha uthibitishaji
+              wa hatua mbili na ukaomba utumiwe nenosiri la mara moja kupitia barua
+              pepe. Tafadhali ulipate hapa chini:'
+            disclaimer: 'Ikiwa hukuomba msimbo huo wa uthibitishaji, tafadhali wasiliana
+              na WST mara moja kwa kujibu barua pepe hii: huenda una kipindi kilicho
+              wazi mahali fulani au nenosiri lilikotwa.'
+          name: Uthibitishaji wa hatua mbili(2FA)
+          support_desc_html: 'tovuti ya WCA inasaidia %{two_factor_link} kwa kutumia
+            nenosiri la mara moja:'
+          options:
+            app: iliyotengenezwa na programu maalum ya 2FA kwenye simu yako mahiri
+              (kama vile Authy, Google Authenticator, au iOS Passwords).
+            recovery: iliyochukuliwa kutoka kwa misimbo ya kurejesha iliyotolewa
+              wakati wa kuamilisha 2FA.
+            email: iliyotumwa kwako kupitia barua pepe unapoingia.
+          status_html: Uthibitishaji wa hatua mbili ni %{status} kwako.
+          enabled: Imewashwa
+          disabled: haijawashwa
+          enable: imewashwa 2FA
+          disable: Haijawashwa 2FA
+          reset: Weka upya siri ya 2FA
+          reset_if_needed: 'Ikiwa mojawapo ya vifaa vyako vimeathiriwa, au unataka kuondoa
+            ruhusa kwa vifaa vyako, unaweza kuweka upya siri yako ya uthibitishaji wa
+            hatua mbili hapa chini:'
+          reset_warning: Utahitaji kusanidi upya vifaa vyako vyote vya 2FA.
+          methods: Njia za uthibitishaji wa hatua mbili
+          methods_description: Unaweza kutumia mbinu kadhaa kupata nenosiri la
+            mara moja unapoingia, zimeelezewa hapa chini.
+          dedicated_app: Kutumia programu maalum ya uthibitishaji wa hatua mbili
+          dedicated_app_desc_html: WST wanapendekeza kutumia %{authy} kwenye kifaa
+            chako binafsi ili kupata nenosiri lako la mara moja
+            unapoingia.<br/>Other alternatives include %{google}, %{apple}, and
+            %{microsoft}.
+          scan_qrcode_html: Changanua msimbo wa QR ulio hapa chini unapoombwa na
+            programu yako ya 2FA (au bofya %{here} ikiwa uko kwenye simu ya
+            mkononi).
+          backup_codes: Misimbo ya hifadhi
+          backup_codes_desc: Misimbo ya hifadhi inaweza kutumika badala ya
+            nenosiri la mara moja endapo huna ufikiaji wa kifaa chako chenye
+            programu yako ya uthibitishaji wa hatua mbili. Kila msimbo unaweza
+            kutumika mara moja tu. Hakikisha umezihifadhi mahali salama!
+          no_backup_codes: Hujatengeneza misimbo ya hifadhi bado. Bofya kitufe
+            kilicho hapa chini ili kutengeneza misimbo yako ya hifadhi.
+          regenerate_backup_codes: Umetengeneza baadhi ya misimbo ya hifadhi.
+            Ikiwa tayari umetumia au kupoteza misimbo hii, unaweza kutengeneza
+            mpya kwa kutumia kitufe kilicho hapa chini. Fahamu kuwa misimbo yoyote
+            ya hifadhi iliyopo itabatilishwa ukifanya hivi.
+          generate_backup_codes: Tengeneza misimbo ya hifadhi
+          backup_codes_warning: 'Misimbo ya hifadhi itaonyeshwa hapa chini. Hakikisha
+            umeiandika au umezihifadhi mara moja: zimehifadhiwa kwa njia ya usimbaji
+            fiche kwenye hifadhidata yetu na haziwezi kuonyeshwa tena baadaye.'
+          email_auth_desc: Unaweza kuomba nenosiri la mara moja kupitia barua pepe
+            unapojaribu kuingia.
+          disable_section_title: Zima uthibitishaji wa hatua mbili
+          disable_section_content: WST wanakushauri vikali kutozima uthibitishaji
+            wa hatua mbili, lakini unaweza kufanya hivyo kwa kubofya kitufe
+            kilicho hapa chini. Tafadhali kumbuka kuwa ukiwezesha tena
+            uthibitishaji wa hatua mbili utahitaji kusanidi upya kifaa chako au
+            vifaa vyako.
+          disabled_success: Uthibitishaji wa hatua mbili umezimwa kwa mafanikio.
+          disabled_failed: Imeshindwa kuzima uthibitishaji wa hatua mbili,
+            tafadhali angalia hitilafu hapa chini.
+      destroy_other:
+        success: Umetoka kwa mafanikio kwenye vifaa vingine vyote.
+    shared:
+      links:
+        sign_in: ingia
+    failure:
+      invalid: Barua pepe, Kitambulisho cha WCA, au nenosiri si sahihi.
+      not_found_in_database: Barua pepe, Kitambulisho cha WCA, au nenosiri si
+        sahihi.
+      unconfirmed: Lazima uthibitishe anwani yako ya barua pepe kabla ya
+        kuendelea. Hukupokea barua pepe ya uthibitishaji? Nenda
+        kwenyehttps://www.worldcubeassociation.org/users/confirmation/ na itisha
+        mpya.
+    mailer:
+      confirmation_instructions:
+        subject: Tafadhali thibitisha anwani yako mpya ya barua pepe
+  wca:
+    errors:
+      messages:
+        form_error:
+          one: 'Fomu hii ina hitilafu moja:'
+          other: 'Fomu hizi zina %{count} errors:'
+      error_pages:
+        500_error: Tunaomba msamaha, lakini kitu fulani kilienda vibaya.
+        500_contact_html: <a href=%{contact_url}>bofya hapa</a> kuiripoti.
+        400_error: Ukurasa uliokuwa ukitafuta haupo.
+        400_contact_html: Ikiwa unafikiri hii ni aibu tafadhali<a
+          href=%{contact_url}>click here</a> kuiripoti.
+        comp_not_found: shindano Haikupatikana
+        comp_not_found_action: Hatukuweza kupata shindano lenye
+          kitambulisho"%{comp_id}". Tafadhali tafuta tena kwenye baa ya kutafutia.
+        comp_not_found_action_2: Ikiwa umefuata kiungo kutoka tovuti nyingine ili
+          kufika hapa, tafadhali iambie tovuti hiyo kuwa kiungo chao si sahihi.
+        session_expired: Kikao kimekwisha muda wake
+        session_expired_action: Kikao chako kimekwisha muda wake. Tafadhali weka
+          upya ukurasa, jaribu tena kitendo chako, au ingia tena ili uendelee.
+    doorkeeper:
+      applications:
+        help:
+          https_info: HTTPS inahitajika isipokuwa mwenyeji ni"localhost"
+          scopes_html: Tenganisha upeo kwa nafasi. Acha wazi ili kutumia upeo
+            chaguomsingi. Ona <a
+            href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
+            target="_blank">here</a> kwa orodha ya upeo unaoungwa mkono.
+      scopes:
+        public: Fikia data yako ya umma (jina, kitambulisho cha WCA, jinsia,
+          uraia, na picha ya wasifu)
+        dob: Fikia tarehe yako ya kuzaliwa
+        email: Fikia anwani yako ya barua pepe
+        manage_competitions: Simamia mashindano yoyote yajayo unayoandaa
+    devise:
+      no_account: Huna akaunti?
+      have_competed: Nimeshiriki katika mashindano ya WCA.
+      have_never_competed: Sijawahi kushiriki katika mashindano ya WCA.
+      let_us_know: 'Tafadhali tujulishe ikiwa umewahi kushiriki katika mashindano ya
+        WCA hapo awali:'
+      welcome_back: Karibu tena! Ili kuunda akaunti yako ya tovuti ya WCA,
+        tunahitaji kujua kitambulisho cha WCA ulichotumia kushindana.
+      welcome_html: Karibu! Kabla ya kushiriki katika mashindano yako ya kwanza ya
+        WCA, tunahitaji taarifa za ziada kwa ajili ya kuweka kumbukumbu. Tafadhali
+        kumbuka kuwa tarehe yako ya kuzaliwa haitatolewa kamwe bila idhini
+        yako.<br/><br/>Ikiwa unajisajili kwa niaba ya mtu mwingine, tafadhali toa
+        maelezo ya <strong> mshindani <strong>.
+  layouts:
+    navigation:
+      information: Taarifa
+      about: Kuhusu WCA
+      documents: Nyaraka za WCA
+      officers_and_board: Maafisa na Bodi ya WCA
+      delegates: Wajumbe wa WCA
+      organizations: Mashirika ya Kikanda
+      translators: watafsiri
+      faq: Maswali Yanayoulizwa Mara kwa Mara
+      forum: Forum
+      teams: Timu na Kamati
+      education: Rasilimali za elimu
+      wca_live: WCA Live
+      contact: wasiliana nasi
+      speedcubing_history: Historia ya speedcubing
+      tools: zana
+      logo: nembo
+      competitions: mashindano
+      all: zote
+      my_competitions: Mashindano yangu
+      new_competition: shindano mpya
+      results: matokeo
+      rankings: Orodha
+      records: recodi
+      persons: watu
+      my_results: matokeo yangu
+      statistics: takwimu
+      multimedia: Multimedia
+      db_results_export: Hamisha Matokeo
+      db_dev_export: Hamisha ya Wasanidi Programu
+      regulations: kanuni
+      regulations_full: Kanuni
+      about_regulations: kuhusu kanuni
+      scrambles: Scrambles
+      history: Historia
+      translations: Tafsiri
+      disciplinary: Rekodi ya nidhamu
+      incidents: Rekodi ya matukio
+      administration: utawala
+      manage_users: Dhibiti watumiaji
+      delegate: Mjumbe
+      panel: jopo
+      polls: kura
+      results_team: timu ya matokeo
+      results_database: Hifadhidata
+      results_sidekiq: Sidekiq dashibodi
+      new_post: posti mpya
+      regional_organizations: Mashirika ya kikanda
+      manage_regional_organizations: Dhibiti mashirika ya kikanda
+      new_regional_organization: Shirika jipya la kikanda
+      sign_out: toka
+      notifications: Arifa
+      edit_profile: hariri wasifu
+      api: API
+      manage_app: Dhibiti maombi yako
+      manage_auth_app: Dhibiti maombi yaliyoidhinishwa
+      media_submission: Uwasilishaji wa media
+      privacy: faragha
+      disclaimer: kanusho
+      find_us: Tutafute
+  page:
+    translators:
+      title: Watafsiri
+    officers_and_board:
+      title: Maafisa na Bodi ya WCA
+      officers_description: Maafisa wa WCA hushughulikia kazi zinazohusiana na
+        hali ya shirika lisilo la faida la WCA. Maafisa hawa huchaguliwa na Bodi
+        ya WCA. Mkurugenzi Mtendaji ndiye Ofisa Mkuu Mtendaji wa WCA, Mwenyekiti
+        huongoza mikutano yote ya Bodi, Katibu hudumisha nyaraka za shirika, na
+        Mweka Hazina husimamia masuala ya kifedha ya WCA.
+      board_description: Bodi ya WCA ina jukumu la kuongoza shirika kwa ujumla, na
+        kutekeleza majukumu yote ambayo hayatekelezwi na Timu na Kamati nyingine
+    teams_committees_councils:
+      title: Timu na kamati za WCA
+      description: Timu na kamati za WCA ni sehemu muhimu ya shirika na hufanya
+        kazi za kila siku zinazohitajika ili kuliweka likiendelea kufanya kazi.
+        Kamati hizi zinaundwa na wanajamii wa WCA, wakiwemo Wajumbe na washiriki
+        wa WCA. Kila timu ina kiongozi, ambaye jukumu lake ni kuhakikisha utendaji
+        mzuri wa timu na kuwaongoza wanachama wengine wa timu. Pindi kunapokuwa na
+        nafasi za wazi za timu au kamati, taarifa kuhusu jinsi ya kuomba huwekwa
+        kwenye ukurasa wa mbele.
+      contact_button: wasiliana nasi
+      no_contact_description: Maelezo ya mawasiliano ya timu au kamati hii
+        hayapatikani hadharani.
+      groups_name:
+        wat: Timu ya Hifadhi ya WCA
+        wct: Timu ya Mawasiliano ya WCA
+        wcat: Timu ya Kutangaza Mashindano ya WCA
+        wic: Kamati ya Uadilifu ya WCA
+        weat: Timu ya Wasaidizi Wakuu wa WCA
+        wfc: Kamati ya Fedha ya WCA
+        wmt: Timu ya Marketing ya WCA
+        wmct: Timu Kuu ya Mashindano ya WCA
+        wqac: Kamati ya Uhakiki wa Ubora ya WCA
+        wrc: Kamati ya Kanuni za WCA
+        wrt: Timu ya Matokeo ya WCA
+        wst: Timu ya Programu za Kompyuta ya WCA
+        wsot: Timu ya Shirika la Michezo ya WCA
+        wapc: Kamati ya Rufaa ya WCA
+      groups_description:
+        wat: Timu ya Hifadhi ya WCA (WAT) inasimamia uundaji na utunzaji wa
+          kumbukumbu za kihistoria za WCA. Wanadokumenti matukio muhimu ya mchezo
+          wa kusuluhisha speedcubing na hatua kuu za kihistoria za WCA ili
+          kuwasilishwa kama sehemu ya ratiba pana ya matukio ya WCA, kwa lengo la
+          kulinda urithi wa WCA katika ulimwengu wa speedcubing.
+        wct: Timu ya Mawasiliano ya WCA (WCT) inasimamia na kuunga mkono
+          mawasiliano ya WCA na Jamii pamoja na umma kwa ujumla. Mawasiliano ya
+          WCA yanapaswa kuchangia Malengo ya WCA na kukuza utamaduni chanya wa
+          jumla wa urafiki, uwazi, ujumuishaji, uwazi wa mawazo, na wepesi wa
+          kujibu.
+        wcat: Timu ya Kutangaza Mashindano ya WCA (WCAT) ina idhinisha na
+          kutangaza Mashindano ya WCA yaliyowasilishwa na Wajumbe wa WCA, na
+          kuhakikisha kwamba matangazo hayo yanatii viwango vya ubora vya WCA.
+          Timu hii pia ina jukumu la kusimamia taratibu sahihi za kuwasilisha
+          mashindano kutoka kwa nyaraka kama vile Sera ya Masharti ya Mashindano
+          ya WCA. WCAT HAINA jukumu la kuandaa na kusimamia mashindano ya
+          kibinafsi ya mtu mmoja mmoja au ya mashindano maalum.
+        wic: Kamati ya Uadilifu ya WCA (WIC) inafanya uchunguzi huru kuhusu
+          wanachama wa jamii ya WCA na matukio yanayotokea wakati wa Mashindano ya
+          WCA au kwenye majukwaa rasmi ya mtandaoni ya WCA. Matukio haya ni madai
+          ya ukiukaji wa Thamani, Kanuni za Maadili, Maadili ya Kitaalamu, na/au
+          Kanuni za WCA.
+        weat: Timu ya Wasaidizi Wakuu wa WCA (WEAT) inatekeleza majukumu ya
+          kiutawala ya Bodi ya Wakurugenzi ya WCA.
+        wfc: Kamati ya Fedha ya WCA (WFC) inasimamia fedha kwa ujumla za WCA,
+          ikiwemo uandaaji wa bajeti, utoaji wa ripoti, uchambuzi, utunzaji wa
+          kumbukumbu za hesabu, na uwasilishaji wa kodi. Pia wanasimamia chanzo
+          kikuu cha mapato cha WCA, Mfumo wa Ada za WCA, pamoja na programu
+          mbalimbali za ufadhili zinazotoa msaada kwa jamii za mitaa katika hatua
+          mbalimbali za maendeleo, ikiwemo Ufadhili wa Safari, Ufadhili wa Vifaa,
+          na Msaada kwa Mashirika ya Kikanda.
+        wmt: Timu ya Masoko ya WCA (WMT) inasimamia Chapa ya WCA, inatafuta
+          wadhamini, na kutangaza Bidhaa za WCA.
+        wmct: Timu Kuu ya Mashindano ya WCA (WMCT) inasimamia uratibu na
+          uendelezaji wa Mashindano ya Mabara na Dunia ya WCA kupitia uundaji wa
+          miongozo na mipango mikakati, kusimamia uteuzi wa miji itakayokuwa
+          wenyeji, kuunga mkono timu za uandaaji, na kuhakikisha uwepo wa uzoefu
+          thabiti na wa pamoja wa mashindano makuu.
+        wqac: Kamati ya Uhakiki wa Ubora ya WCA (WQAC) inakuza uboreshaji endelevu
+          wa ubora ndani ya WCA, pamoja na utekelezaji wa viwango vya ubora
+          duniani kote ili kuhakikisha uwepo wa ubora wa juu na thabiti katika
+          michakato, Wajojina/Wajitolea wa WCA, Mashirika ya Kikanda, Waandaaji wa
+          Mashindano, na Wajitolea wa Mashindano.
+        wrc: Kamati ya Kanuni za WCA (WRC) inashughulikia masuala yote
+          yanayohusiana na utekelezaji, uboreshaji, na maendeleo ya Kanuni za WCA.
+          Wanasaidia Wajumbe wa WCA kuhusu masuala yoyote ya kiutaratibu
+          yanayotokea kwenye mashindano na kuamua kuhusu matukio yasiyotatuliwa na
+          yasiyofunikwa na kanuni hizo.
+        wrt: Timu ya Matokeo ya WCA (WRT) inasimamia data zote katika hifadhidata
+          za WCA, ikiwemo matokeo ya mashindano na taarifa za watu binafsi.
+        wst: Timu ya Programu za Kompyuta ya WCA (WST) inasimamia programu za WCA
+          (tovuti, mifumo ya kuchanganya, vitabu vya kazi, na zana za kiutawala).
+        wsot: Timu ya Shirika la Michezo ya WCA (WSOT) inasimamia na kuunga mkono
+          utambuzi wa WCA kama shirika la kimataifa la michezo.
+        wapc: Kamati ya Rufaa ya WCA (WAC) inapitia na kutatua rufaa zinazohusu
+          maamuzi yaliyotolewa na Wajitolea wengine wa WCA. WAC hutoa mchakato
+          huru na usio upendeleo wa mapitio ili kuhakikisha kwamba maamuzi
+          yanakuwa ya haki, ya kuridhisha, na yanayotii sera na kanuni za WCA.
+    contacts:
+      title: Fomu ya Mawasiliano ya WCA
+      faq_note_html: Kabla ya kufanya uchunguzi, unaweza kutaka kuangalia <a
+        href="/faq">Maswali Yanayoulizwa Mara kwa Mara. Ikiwa ungependa
+        kuwasiliana na kamati au timu maalum isiyoorodheshwa hapa, unaweza
+        kuangalia maelezo yao kwenye<a href="/faq">ukurasa huu</a>.
+      success_message: Barua pepe imetumwa - tutakujibu hivi karibuni.
+      prefilled: Ili kusasisha usajili wako, unahitaji kuwasiliana na waandaaji wa
+        mashindano hayo. Tumejaza mapema fomu ya mawasiliano na mabadiliko
+        uliyoomba - tafadhali tuma fomu hiyo.
+      form:
+        user_data:
+          name:
+            label: Jina
+          email:
+            label: Barua Pepe
+        contact_recipient:
+          label: Ungependa kuwasiliana na nani?
+          competition:
+            label: Wasiliana na waandaaji/wajumbe wa mashindano (kwa ajili ya
+              kuuliza swali kuhusu mashindano hayo husika, pamoja na matokeo
+              ambayo bado hayajachapishwa kwenye tovuti ya WCA)
+          wct:
+            label: Wasiliana na WCA kwa maswali ya jumla (haya yanaweza kuhusisha
+              chochote kama kitambulisho/wasifu wa WCA, uandaaji wa mashindano,
+              kanuni za mashindano, vyombo vya habari vya mashindano, n.k.)
+          wrt:
+            label: Wasiliana na Timu ya Matokeo (kwa chochote kinachohusiana na
+              matokeo au data ya wasifu kwenye tovuti ya WCA)
+          wst:
+            label: Wasiliana na Timu ya Programu za Kompyuta (kureipoti/kuripoti
+              hitilafu kwenye tovuti ya WCA au kwa maswali yanayohusiana na
+              programu za kompyuta)
+        competition:
+          competition:
+            label: Shindano
+          message:
+            label: ujumbe
+        wct:
+          message:
+            label: ujumbe
+        wrt:
+          query_type:
+            label: Ni yapi kati ya yafuatayo yanayoeleza vizuri zaidi uchunguzi
+              wako?
+            edit_profile:
+              label: Hariri data yako ya wasifu (jina, nchi, jinsia au tarehe ya
+                kuzaliwa)
+            edit_others_profile:
+              label: Hariri data ya wasifu wa mtu mwingine
+            report_result_issue:
+              label: Ripoti hitilafu kwenye matokeo
+            other_query:
+              label: Uchunguzi mwingine
+          message:
+            label: Ujumbe
+          profile_data_to_change:
+            label: Data za wasifu za kubadili
+            options:
+              name: Jina
+              country: Nchi
+              gender: Jinsia
+              dob: DOB
+          new_profile_data_name:
+            label: Jina mpya
+          new_profile_data_country:
+            label: Nchi Mpya
+          new_profile_data_gender:
+            label: Jinsia jipya
+          new_profile_data_dob:
+            label: DOB Mpya
+          edit_profile_reason:
+            label: Sababu ya kufanya mabadiliko haya
+          edit_profile_proof_attach:
+            label: Ambatisha ushahidi
+        wst:
+          message:
+            label: Ujumbe
+        captcha:
+          validation_error: Tafadhali thibitisha kwamba wewe si roboti.
+        next_button: ifuatayo
+        submit_button: Tuma
+    contact_edit_profile:
+      title: Fomu ya Kuhariri Wasifu
+      not_logged_in_error: Inaonekana hujapitia kwenye mfumo (hujaingia akaunti
+        yako). Tafadhali ingia ili uweze kuhariri wasifu wako. Kwa maswali au
+        maombi mengine yoyote, tafadhali<a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">wasiliana
+        nasi</a>.
+      no_profile_error: Inaonekana huna wasifu wa WCA bado kwa sababu hujashiriki
+        katika mashindano yoyote. Kwa maswali au maombi mengine yoyote,
+        tafadhali<a
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">wasiliana
+        nasi</a>.
+      no_permission_error: Huna ruhusa ya kuomba kuhariri wasifu wa mtu mwingine.
+      form:
+        contact_email:
+          label: Barua pepe ya mawasiliano
+        wca_id:
+          label: Weka kitambulisho cha WCA
+        wca_id_search:
+          label: Tafuta kitambulisho cha WCA unachotaka kuhariri.
+        edit_reason:
+          label: Sababu ya kubadilisha
+        edit_reason_for:
+          label: Sababu ya mabadiliko ya %{attribute}
+        proof_attach:
+          label: Ambatisha ushahidi
+        submit_edit_request_button:
+          label: Wasilisha ombi la marekebisho
+        captcha:
+          validation_error: Tafadhali thibitisha kwamba wewe si roboti.
+        verified_checkbox:
+          label: Kwa kuwasilisha fomu hii, unathibitisha kuwa tayari umepitia
+            waraka wao wa kisheria na kuhakiki taarifa zilizotolewa.
+      success_message: Ombi limewasilishwa - tutawasiliana nawe hivi karibuni.
+      success_message_with_ticket_link_html: Ombi limewasilishwa - tutawasiliana
+        nawe hivi karibuni. Ili kutazama hali ya ombi hili, tafadhali tembelea <a
+        href="%{link}">linki hii</a>.
+  homepage:
+    learn_more: Pata maelezo zaidi
+    title: Karibu katika World Cube Association
+    latest_news: Taarifa mpya
+    announcements: Matangazo
+    see_all_announcements: Ona matangazo yote
+    about_us:
+      title: Kuhusu sisi
+      text: Chama cha World Cube Association kinasimamia mashindano ya mafumbo ya
+        kimitambo yanayoendeshwa kwa kupotosha au kugeuza makundi ya vipande,
+        yanayojulikana kama 'mafumbo ya kugeuzwa' (twisty puzzles).
+    competitions:
+      title: Mashindano
+      text_html: Tafuta mashindano yaliyo karibu nawe au matokeo ya mashindano.
+        Uko kwenye mashindano sasa hivi na unataka kuona matokeo? Angalia
+        %{wca_live_link}!
+    merchandise:
+      title: Bidhaa za duka
+      ad_new: Mpya
+      text_html: Angalia bidhaa zetu rasmi zilizozinduliwa mpya ambazo
+        zinajumuisha aina mbalimbali za mavazi kuanzia T-shati hadi Hoodi.
+      link_title: Nenda kwenye duka
+    records:
+      title: Rekodi
+      text: Angalia rekodi za sasa na za zilizopita za matukio yote rasmi ya WCA.
+    volunteer:
+      title: mtu anayejitolea
+      text: Shiriki! WCA ina nafasi za kujitolea zilizowazi katika timu
+        mbalimbali. Si lazima uwe mchezaji wa mafumbo ya Rubik ili uwe mtu
+        anayejitolea.
+    faq:
+      title: FAQ
+      text: Tazama orodha yetu ya Maswali Yanayoulizwa Mara kwa Mara ikiwa
+        unahitaji msaada kwa jambo lolote. Maswali mengi uliyo nayo yanaweza kuwa
+        na jibu huko.
+    contact:
+      title: wasiliana
+      text_html: Ikiwa unataka kuwasiliana nasi, unaweza kufanya hivyo kupitia
+        fomu yetu ya mawasiliano. Ikiwa una maswali yoyote kuhusu michakato
+        mbalimbali ya WCA, hakikisha umepitia %{faq_link} yetu!
+      faq: Maswali ya Mara kwa Mara
+      button: Nipeleke kwenye Fomu ya Mawasiliano ya WCA
+    support:
+      title: Uwaunge Mkono WCA
+      text: World Cube Association ni shirika lisilo la kodi la 501(c)(3). Kama
+        shirika lisilo la faida linaloendeshwa kwa asilimia 100 na watu
+        wanaojitolea, tunakaribisha michango yako ili kutusaidia kuendeleza Lengo
+        letu la kuwawezesha jamii ya kimataifa ya michezo ya kasi ya mafumbo na
+        kudumisha mazingira ya mashindano ya kufurahisha na ya haki kwa wote.
+      button: Jifunze zaidi kuhusu jinsi unavyoweza kuunga mkono WCA
+  users:
+    update_locale:
+      success: Lugha imesasishwa.
+      failure: Imeshindikana kusasisha wasifu wako.
+      unavailable: Eneo uliloliomba halipatikani.
+    mailer:
+      create_new_account:
+        header: Maagizo ya uthibitisho
+        welcome: Karibu %{user_email}!
+        confirm: 'Akaunti yako imeundwa na lazima iwezeshwe kabla ya kuweza kuitumia.
+          Tafadhali thibitisha akaunti yako kupitia kiungo kilicho hapa chini: '
+        confirmation_link: Thibitisha akaunti yangu.
+        activate: 'Baada ya kuwezesha akaunti, unaweza kuingia kwenye tovuti ya World
+          Cube Association: '
+        login_form: Fomu ya Kuingia
+        addendum: Barua pepe hii imetolewa kiotomatiki. Ikiwa hukusajili akaunti
+          kwenye tovuti ya World Cube Association na ukapokea ujumbe huu kwa
+          makosa, tafadhali upuuze na uufute.
+        questions: Je, una maswali zaidi? Tutafurahi kuyajibu! Jisikie huru kutuma
+          ujumbe wa barua pepe kupitia %{contact_link}.
+      reconfirmation_mail:
+        welcome: Habari %{user_email}!
+        confirm: 'Unaweza kuthibitisha anwani ya barua pepe ya akaunti yako mpya kupitia
+          kiungo kilicho hapa chini:'
+        confirmation_link: Thibitisha anwani ya barua pepe.
+      competition_submission_email:
+        header: '%{delegate_name} amethibitisha %{competition}'
+        organizers: Wapendwa waandaaji wa %{competition},
+        confirmed: Mwakilishi wako wa mashindano %{delegate_name} amethibitisha
+          %{competition} na kutuma maombi hayo kwa WCAT. Mara tu WCAT
+          itakapozindua mashindano haya kwa umma, utapokea taarifa nyingine.
+        contact: 'Ikiwa una maswali zaidi, tafadhali wasiliana na Mwakilishi/Wawakilishi
+          wa mashindano kupitia barua pepe: '
+      competition_announcement_email:
+        header: WCAT imetangaza %{competition}
+        announced: WCAT imeyaidhinisha mashindano yako na kuyatangaza rasmi kwa
+          umma.
+      id_claim_possibility_email:
+        header: Tafadhali unganisha kitambulisho chako cha WCA na akaunti yako
+        intro: Mpendwa Cuber
+        information_html: Ulijisajili kwa ajili ya %{competition_link}. Tumesakia
+          matokeo ya mashindano haya, na kuunda vitambulisho vya WCA kwa washiriki
+          wote waliioshiriki kwa mara ya kwanza. Ikiwa ulishiriki kikamilifu
+          katika mashindano haya na ndiyo ilikuwa mara yako ya kwanza, unapaswa
+          kudai kitambulisho chako cha WCA (kukiunganisha na akaunti yako ya WCA).
+          Unaweza kufanya hivyo kupitia %{claim_link}.
+      organizer_addition_email:
+        header: Umeongezwa kwenye %{competition} kama mratibu
+        intro: Habari %{name},
+        information: '%{confirmer} amekuongeza kwenye %{competition} kama mratibu. Unaweza
+          kuhariri mashindano haya hapa:'
+      organizer_removal_email:
+        header: Umeondolewa kwenye %{competition} kama mratibu
+        information: '%{remover} amekuondoa kwenye %{competition} kama mratibu.'
+      registration_reminder_email:
+        header: Usajili wa %{competition} unafunguliwa hivi karibuni
+        intro: Habari %{name},
+        information_html: Hii ni kumbukumbu kwamba usajili wa <a
+          href=%{competition_url}>% %{competition}</a> unafunguliwa chini ya saa
+          24 zijazo.
+        not_accepted_html: Umejisajili lakini usajili wako haujakubaliwa.
+        more_info_html: Tafadhari ona <a href=%{competition_url}>competition WCA
+          page</a> for kwa habari zaidi na mahitaji ya usajili.
+      results_presence_email:
+        header: Matokeo ya %{competition} yamewekwa mtandaoni
+        intro_html: Matokeo ya %{competition_link} yamewekwa mtandaoni.
+        information_html: Angalia matokeo yako yote kupitia %{result_link}.
+        more_info_html: Unaweza kudhibiti mapendeleo yako ya barua pepe kupitia
+          %{preferences_link}.
+        regards_html: Wakati mzuri,<br/>Timu ya Matokeo ya WCA kwa niaba ya
+          %{managers}.
+      reset_password_instructions:
+        subject: Weka upya nenosiri la akaunti yako ya WCA
+        greeting: Habari,
+        instruction1: Tumepokea ombi la kuweka upya nenosiri la akaunti ya WCA
+          inayohusishwa na %{user_email}. Hakuna mabadiliko yoyote yaliyofanywa
+          kwenye akaunti yako bado.
+        instruction2: 'Unaweza kuweka upya nenosiri lako kwa kubofya kiungo hapa chini:'
+        instruction3: Ikiwa hukuomba nenosiri jipya, tafadhali puuza barua pepe
+          hii.
+        instruction4: Una maswali mengine? Tutafurahi kuyajibu! Jisikie huru
+          kutuma barua pepe kupitia %{contact_link}.
+    claim_wca_id:
+      title: Dai Kitambulisho cha WCA
+      competition: shindano
+      already_have_html: Tayari una Kitambulisho cha WCA cha %{wca_id}.
+      already_claimed_html: Umedai Kitambulisho cha WCA cha %{wca_id}. Wasiliana
+        na %{delegate} ikiwa una maswali yoyote.
+      info_competed_before: Ikiwa umewahi kushindana hapo awali, unaweza kuomba
+        kuunganisha Kitambulisho chako cha WCA kwenye akaunti yako.
+      info_never_competed_html: Ikiwa hujawahi kushindana hapo awali, nenda kwenye
+        %{comp}! Kitambulisho cha WCA kitatengenezwa kwa ajili yako pindi matokeo
+        ya mashindano yako ya kwanza yatakapochapishwa.
+      submit_value: Dai Kitambulisho cha WCA
+    edit_avatar_thumbnail:
+      cdn_explanation: Picha zote za wasifu zimo kwenye Cloud, kwa hivyo
+        mabadiliko yoyote kwenye picha ndogo yanaweza kuchukua dakika kadhaa kabla
+        ya kuonekana vizuri.
+      cdn_warning: Tafadhali usichanganyikiwe ikiwa picha yako ndogo haisasishwi
+        mara moja baada ya kuhifadhi!
+      current: 'Picha ya sasa ya wasifu:'
+      new: 'Picha mpya ya wasifu:'
+      save: Hifadhi
+      reset: Rudisha
