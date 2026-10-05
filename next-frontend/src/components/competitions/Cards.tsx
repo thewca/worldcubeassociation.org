@@ -217,7 +217,8 @@ export async function RegistrationCard({
                   />
                   {!registrationClosed && (
                     <>
-                      /<FormatNumber value={competitionInfo.competitor_limit} />
+                      &sol;
+                      <FormatNumber value={competitionInfo.competitor_limit} />
                     </>
                   )}
                 </>
