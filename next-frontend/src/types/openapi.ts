@@ -512,6 +512,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/geocoding/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Look up the locations matching an address
+         * @description Resolves a free-text address, city or postcode to coordinates. Requires authentication, and each user may only search 5 times per minute.
+         */
+        get: operations["v1GeocodingSearch"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/": {
         parameters: {
             query?: never;
@@ -1475,6 +1495,14 @@ export interface components {
             regional_average_record?: string;
         };
         V1Results: components["schemas"]["V1Result"][];
+        GeocodedLocation: {
+            /** @example Berlin, Germany */
+            formatted_address: string;
+            /** @example 52.52 */
+            latitude: number;
+            /** @example 13.405 */
+            longitude: number;
+        };
         TeamMembership: {
             id: number;
             /** @example wst */
@@ -2943,6 +2971,40 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    v1GeocodingSearch: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The matching locations, best match first. Empty if nothing matched. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeocodedLocation"][];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            /** @description The user has exceeded their search rate limit */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                    };
+                };
             };
         };
     };
