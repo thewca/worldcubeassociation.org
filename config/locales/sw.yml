@@ -1256,3 +1256,25 @@ sw:
     errors:
       not_found: haipatikani
       already_assigned: Imeshasajiliwa tayari kwa mtumiaji mwingine
+      dob_incorrect_html: Haifai na rekodi zetu za hifadhidata. Ikiwa una hakika
+        kwamba unatoa tarehe sahihi katika muundo sahihi (YYYY-MM-DD), tafadhali
+        wasiliana na Timu ya Matokeo ya WCA kupitia<a 
+        href="%{dob_form_path}">fomu hii maalum</a>.
+      unique_html: inatumiwa tayari na %{used_name} mwenye %{used_email}. Ili 
+        kuachilia Kitambulisho cha WCA,<a href="%{used_edit_path}" 
+        target="_blank"> hariri akaunti hiyo </a>na uondoe mgawo wa Kitambulisho
+        cha WCA.
+      dob_past: lazima iwe katika wakati uliopita
+      dob_recent: lazima awe na angalau umri wa miaka miwili
+      already_represented_country: Huwezi kubadilisha eneo kuwa eneo ambalo mtu 
+        huyo amewakilisha hapo awali.
+      must_have_a_change: Jina au eneo lazima liwe tofauti ili kusasisha mtu 
+        huyo.
+      already_have_id: huwezi kudai Kitambulisho cha WCA kwa sababu tayari unayo
+        Kitambulisho cha WCA cha %{wca_id}
+      wca_id_no_birthdate_html: Hatuna tarehe ya kuzaliwa iliyorekodiwa kwa 
+        Kitambulisho hiki cha WCA. Tafadhali wasiliana na Timu ya Matokeo ya WCA
+        <a href="%{dob_form_path}"> kupitia fomu hii maalum</a>.
+      wca_id_no_gender_html: Hatuna jinsia iliyorekodiwa kwa Kitambulisho hiki 
+        cha WCA. Tafadhali wasiliana na <a href='%{wrt_contact_path}' 
+        target='_blank'>Timu ya Matokeo ya WCA</a> ili kusuluhisha hili.
