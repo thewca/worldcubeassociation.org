@@ -11,11 +11,17 @@ const actionButtonBlock: Block = {
       type: "text",
       required: true,
       localized: true,
+      admin: {
+        description: "Label written on the button.",
+      },
     },
     {
       name: "hyperlink",
       type: "text",
       required: true,
+      admin: {
+        description: "URL the button links to.",
+      },
     },
     newTabCheckbox,
     {
@@ -41,12 +47,18 @@ export const TextCardBlock: Block = {
       type: "text",
       required: true,
       localized: true,
+      admin: {
+        description: "Heading shown at the top of the card.",
+      },
     },
     {
       name: "body",
       type: "richText",
       required: true,
       localized: true,
+      admin: {
+        description: "Body text of the card, shown under the heading.",
+      },
     },
     markdownConvertedField("body"),
     {
@@ -54,6 +66,9 @@ export const TextCardBlock: Block = {
       type: "checkbox",
       required: true,
       defaultValue: false,
+      admin: {
+        description: "Draw a horizontal line between the heading and the body",
+      },
     },
     {
       name: "buttons",
@@ -61,11 +76,17 @@ export const TextCardBlock: Block = {
       blocks: [actionButtonBlock],
       minRows: 0,
       maxRows: 1,
+      admin: {
+        description: "Optional call-to-action button shown below the body.",
+      },
     },
     {
       name: "headerImage",
       type: "upload",
       relationTo: "media",
+      admin: {
+        description: "Optional image shown above the heading.",
+      },
     },
     colorPaletteSelect,
   ],

@@ -11,6 +11,11 @@ export const Privacy: GlobalConfig = {
       name: "preamble",
       type: "richText",
       required: true,
+      localized: true,
+      admin: {
+        description:
+          "Text shown at the top of the Privacy page, above the numbered paragraphs.",
+      },
     },
     markdownConvertedField("preamble"),
     {
@@ -18,6 +23,10 @@ export const Privacy: GlobalConfig = {
       type: "blocks",
       required: true,
       blocks: [ParagraphBlock],
+      admin: {
+        description:
+          "The paragraphs making up the Privacy page, top to bottom.",
+      },
     },
   ],
   hooks: {
