@@ -11,7 +11,7 @@ module SessionsHelper
   # Signing in is usually the middle of a longer flow (OAuth above all), so the
   # switch must not drop anything the caller put on the sign in URL.
   def classic_sign_in_path
-    new_user_session_path(request.query_parameters.merge(classic: true))
+    new_user_session_path(**request.query_parameters, classic: true)
   end
 
   # Someone who opted back into the classic sign in page should stay in the old
