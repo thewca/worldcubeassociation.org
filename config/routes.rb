@@ -372,6 +372,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get '/persons/:wca_id/results' => 'persons#results', as: :person_results
       get '/persons/:wca_id/records' => 'persons#records', as: :person_records
+      get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
 
       resources :competitions, only: [] do
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'

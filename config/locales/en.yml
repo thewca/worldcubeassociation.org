@@ -1665,6 +1665,12 @@ en:
       location_placeholder: "Enter an address"
       #context: button that fills the location field in with the device's own position
       use_my_location: "Use my location"
+      #context: tooltip on the location field, which only works for competitors who are signed in
+      location_sign_in_required: "Sign in to search for an address"
+      #context: shown below the location field when the typed address could not be found
+      location_not_found: "No location found for this address"
+      #context: shown below the location field when looking up the typed address failed, for example after too many searches in a short time
+      location_search_failed: "The address search failed, please try again in a minute"
       #context: label of the field limiting how far away a competition may be from the chosen location
       distance: "Distance"
       distance_units:
