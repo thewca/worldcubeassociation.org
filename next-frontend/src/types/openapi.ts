@@ -1674,6 +1674,8 @@ export interface components {
             "registration_full_and_accepted?": boolean;
             /** @example 42 */
             spots_left?: number | null;
+            /** @example 7 */
+            waiting_list_count: number;
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];

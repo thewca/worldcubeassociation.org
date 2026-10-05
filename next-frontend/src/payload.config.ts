@@ -57,6 +57,10 @@ function plugins() {
       skipCollections: ["user"],
       // Roles come from OIDC; nobody is promoted for being first to log in.
       firstUserAdmin: false,
+      // Don't spam our logs with warnings about a behavior that is totally intended by us.
+      //   via https://delmaredigital.github.io/payload-better-auth/#better-auth-collections
+      //   and https://github.com/delmaredigital/payload-better-auth/issues/38
+      acknowledgeRoleGuardDisabled: true,
     }),
     createBetterAuthPlugin({
       createAuth: createCmsAuth,

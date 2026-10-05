@@ -103,8 +103,6 @@ ignore_missing:
   # used to hold in all 33 locale files. Only flag hints as unused, never as
   # missing. (Subsumes the old `simple_form.hints.translation.*` entry.)
   - 'simple_form.hints.*'
-  # We don't want to translate these.
-  - 'activerecord.attributes.translation.*'
   # The new i18n-tasks v1.1 Prism parser mis-interprets the `content.1` paragraph notation as plurals
   #   and complains that CLDR also requires other plural rules. We're moving FAQ to Payload
   #   as part of the redesign anyways so I won't bother fixing this in the old FAQ page.

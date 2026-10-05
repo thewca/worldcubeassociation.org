@@ -6,9 +6,5 @@ export default async function ContentLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  return (
-    <Container paddingTop="8" centerContent>
-      {children}
-    </Container>
-  );
+  return <Container paddingTop="8">{children}</Container>;
 }
