@@ -42,21 +42,19 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   </HStack>
                 </Table.ColumnHeader>
                 <Tooltip content="National Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader textAlign="right">NR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">NR</Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip
                   content="Continental Ranking"
                   showArrow
                   openDelay={100}
                 >
-                  <Table.ColumnHeader textAlign="right">CR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">CR</Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip content="World Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader textAlign="right">WR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">WR</Table.ColumnHeader>
                 </Tooltip>
-                <Table.ColumnHeader textAlign="right">
-                  Single
-                </Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="end">Single</Table.ColumnHeader>
                 <Table.ColumnHeader paddingStart={3}>
                   Average
                 </Table.ColumnHeader>
@@ -93,7 +91,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                       fontWeight={
                         record.single.country_rank <= 10 ? "bold" : "light"
                       }
-                      textAlign="right"
+                      textAlign="end"
                     >
                       {record.single.country_rank}
                     </Table.Cell>
@@ -102,7 +100,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                       fontWeight={
                         record.single.continent_rank <= 10 ? "bold" : "light"
                       }
-                      textAlign="right"
+                      textAlign="end"
                     >
                       {record.single.continent_rank}
                     </Table.Cell>
@@ -111,11 +109,11 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                       fontWeight={
                         record.single.world_rank <= 10 ? "bold" : "light"
                       }
-                      textAlign="right"
+                      textAlign="end"
                     >
                       {record.single.world_rank}
                     </Table.Cell>
-                    <Table.Cell fontWeight="medium" textAlign="right">
+                    <Table.Cell fontWeight="medium" textAlign="end">
                       {formatAttemptResult(record.single.best, event)}
                     </Table.Cell>
                     <Table.Cell fontWeight="medium" paddingStart={3}>

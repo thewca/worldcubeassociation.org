@@ -318,7 +318,7 @@ export function ByCompetitionTable({
             <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
             <Table.ColumnHeader>Single</Table.ColumnHeader>
             {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
-            <Table.ColumnHeader colSpan={attemptCount} textAlign="left">
+            <Table.ColumnHeader colSpan={attemptCount} textAlign="start">
               Solves
             </Table.ColumnHeader>
           </Table.Row>

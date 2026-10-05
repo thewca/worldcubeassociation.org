@@ -67,7 +67,7 @@ export default async function Documents() {
             </Accordion.ItemTrigger>
             <Accordion.ItemContent>
               <Accordion.ItemBody>
-                <List.Root pl="10">
+                <List.Root ps="10">
                   {docs
                     .toSorted((a, b) => a.title.localeCompare(b.title))
                     .map((doc) => (

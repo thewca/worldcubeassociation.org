@@ -61,7 +61,7 @@ const contentStyles = {
   "& h2": { fontSize: "2xl", fontWeight: "bold", mt: 6, mb: 2 },
   "& h3": { fontSize: "xl", fontWeight: "bold", mt: 4, mb: 2 },
   "& p": { my: 3 },
-  "& ul": { listStyleType: "none", pl: 6, my: 2 },
+  "& ul": { listStyleType: "none", ps: 6, my: 2 },
   "& a": { color: "blue.500", textDecoration: "underline" },
   "& li[id]": { my: 2, scrollMarginTop: "6rem" },
   "& h2[id], & h3[id]": { scrollMarginTop: "6rem" },
@@ -73,7 +73,7 @@ const contentStyles = {
     fontSize: "xs",
     fontWeight: "bold",
     textTransform: "uppercase",
-    mr: 1,
+    me: 1,
   },
   "& .version": { color: "fg.muted", fontSize: "sm", mb: 4 },
 } as const;
@@ -213,7 +213,7 @@ export default function RegulationsViewer({
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           position="fixed"
           bottom={6}
-          right={6}
+          insetEnd={6}
           zIndex="sticky"
           rounded="full"
           animation="fade-in"
