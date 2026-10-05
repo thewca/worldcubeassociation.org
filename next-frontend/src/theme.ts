@@ -937,7 +937,6 @@ const customConfig = defineConfig({
             card: {
               root: {
                 spaceY: "4",
-                overflow: "hidden",
                 "--accordion-padding-x": "spacing.6",
                 "--accordion-padding-y": "spacing.3",
               },
