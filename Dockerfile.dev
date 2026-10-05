@@ -23,8 +23,10 @@ RUN corepack enable
 # Copy a file of our development runtime dependencies into the image for initial install
 COPY packages.dev.txt /tmp/packages.txt
 COPY package-install.dev.sh /tmp/package-install.sh
+COPY package-config.dev.sh /tmp/package-config.sh
 
 RUN /tmp/package-install.sh /tmp/packages.txt
+RUN /tmp/package-config.sh
 
 RUN gem update --system && gem install bundler
 
