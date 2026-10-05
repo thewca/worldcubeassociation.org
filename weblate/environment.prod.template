@@ -92,7 +92,7 @@ WEBLATE_SOCIAL_AUTH_OIDC_USERNAME_KEY=sub
 # --- Pushing translations back to GitHub ------------------------------------
 # Machine user that opens the translation pull requests. The username must match
 # the owner of the PAT stored at /weblate/github_token.
-WEBLATE_GITHUB_USERNAME=wca-translations-bot
+WEBLATE_GITHUB_USERNAME=thewca-bot
 WEBLATE_GITHUB_TOKEN=${WEBLATE_GITHUB_TOKEN}
 WEBLATE_GITHUB_HOST=api.github.com
 # ----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ POSTGRES_PORT=
 REDIS_HOST=cache
 REDIS_PORT=6379
 
-# Leave commented until a real WCA login has been confirmed working — this
-# disables password auth for EVERY account including the admin above, so
-# enabling it before verifying SSO locks you out of the instance entirely.
-#WEBLATE_NO_EMAIL_AUTH=1
+# Disables password auth for EVERY account including the admin above. On a
+# fresh instance, comment it out until a real WCA login has been confirmed
+# working — enabling it before verifying SSO locks you out entirely.
+WEBLATE_NO_EMAIL_AUTH=1

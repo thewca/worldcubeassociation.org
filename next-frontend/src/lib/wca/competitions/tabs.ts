@@ -6,7 +6,7 @@ import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import { EventId } from "@/lib/wca/data/events";
 
-interface TabBase {
+export interface TabBase {
   i18nKey: string;
   i18nKeyAdmin?: string;
   menuKey: string;
@@ -203,17 +203,24 @@ export const duringCompetitionTabs = (
 };
 export const afterCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
+  isAwaitingResults: boolean,
 ): TabWithLink[] => {
+  const infoTab: TabWithLink = {
+    i18nKey: "competitions.nav.menu.info",
+    href: route({
+      pathname: "/competitions/[competitionId]",
+      query: { competitionId: competitionInfo.id },
+    }),
+    menuKey: "general",
+    icon: "Information",
+  };
+
+  if (isAwaitingResults) {
+    return [infoTab, liveTab(competitionInfo)];
+  }
+
   return [
-    {
-      i18nKey: "competitions.nav.menu.info",
-      href: route({
-        pathname: "/competitions/[competitionId]",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "general",
-      icon: "Information",
-    },
+    infoTab,
     {
       i18nKey: "competitions.nav.menu.podiums",
       href: route({
