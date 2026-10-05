@@ -1,0 +1,35 @@
+type: object
+description: |
+  One charge against a registration. `refunding_payments` and `iso_amount_refundable` are only
+  serialized for root charges - a refund does not itself carry refunds.
+required:
+  - user_id
+  - payment_id
+  - payment_provider
+  - iso_amount_payment
+  - currency_code
+properties:
+  user_id:
+    type: integer
+  payment_id:
+    type: integer
+    description: The id of the provider-specific receipt record, not of the payment itself
+  payment_provider:
+    type: string
+    enum:
+      - stripe
+      - paypal
+      - manual
+  iso_amount_payment:
+    type: integer
+    description: The amount charged, in the currency's lowest denomination, always positive
+  currency_code:
+    type: string
+  iso_amount_refundable:
+    type: integer
+    description: How much of this charge has not been refunded yet
+  refunding_payments:
+    type: array
+    description: The refunds already issued against this charge
+    items:
+      $ref: './RegistrationPayment.yaml'

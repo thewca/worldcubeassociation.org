@@ -37,7 +37,6 @@ Rails.application.routes.draw do
   end
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
-  post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get '/users/admin_search' => 'users#admin_search'
@@ -402,6 +401,7 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
+            post 'payments/:payment_integration/:payment_id/refund', to: 'registration_payments#refund', as: :payment_refund
             get 'payment_denomination', to: 'registrations#payment_denomination'
           end
 
