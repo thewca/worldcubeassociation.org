@@ -7,7 +7,7 @@ class Api::V1::GeocodingController < Api::V1::ApiController
              within: 1.minute,
              name: "geocoding_search",
              by: -> { authenticated_user.id },
-             with: -> { render_error(:too_many_requests, "Too many location searches, please wait a minute and try again") }
+             with: -> { render_error(:too_many_requests, I18n.t("competitions.index.location_search_failed")) }
 
   def search
     query_params = {
