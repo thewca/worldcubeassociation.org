@@ -263,6 +263,8 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
         colorPalette={block.colorPalette}
         colorVariant="solid"
         width="full"
+        // Orange cards default to black text; ensure all the home page cards are consistent
+        css={{ "--chakra-colors-orange-contrast": "{colors.white}" }}
       >
         <LinkOverlay
           href={href}
