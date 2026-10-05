@@ -1723,6 +1723,11 @@ vi:
         người.
       #original_hash: 65c84ec
       button: Biết thêm những cách bạn có thể hỗ trợ WCA
+    become_delegate:
+      title: Trở thành Delegate
+      text: Hãy giúp hỗ trợ tổ chức các giải đấu chuyên nghiệp và công bằng tại 
+        cộng đồng của bạn bằng cách ứng tuyển trở thành Trainee Delegate.
+      link_title: Ứng tuyển ngay
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1745,7 +1750,7 @@ vi:
         #original_hash: d484f70
         activate: >-
           Sau khi kích hoạt thành công, bạn có thể đăng nhập vào trang web của WCA:
-          
+
         login_form: đơn đăng nhập
         #original_hash: 333999b
         addendum: >-
@@ -1788,16 +1793,15 @@ vi:
           khai.
       id_claim_possibility_email:
         #original_hash: 20e9d09
-        header: Xin vui lòng liên kết WCA ID với tài khoản của bạn
+        header: Xin vui lòng liên kết ID WCA với tài khoản của bạn
         #original_hash: 5665910
         intro: 'Cuber thân mến,'
         #original_hash: 61650f4
         information_html: >-
-          Bạn đã đăng ký tham gia giải đấu %{competition_link}. Chúng tôi vừa
-          công bố kết quả cho giải đấu này, và tạo WCA ID cho tất cả các thí
-          sinh tham dự lần đầu. Nếu bạn có tham gia thi tại giải đấu này và đây
-          là giải đấu đầu tiên của bạn, vui lòng liên kết WCA ID với tài khoản
-          của bạn tại %{claim_link}.
+          Bạn đã đăng ký tham gia giải đấu %{competition_link}. Chúng tôi vừa công
+          bố kết quả cho giải đấu này, và tạo ID WCA cho tất cả các thí sinh tham
+          dự lần đầu. Nếu bạn có tham gia thi tại giải đấu này và đây là giải đấu
+          đầu tiên của bạn, vui lòng liên kết ID WCA với tài khoản của bạn tại %{claim_link}.
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Bạn đã được thêm vào %{competition} với tư cách ban tổ chức'
@@ -1915,7 +1919,7 @@ vi:
       #original_hash: 7b2c7f1
       approve: Chấp nhận
       #original_hash: d9455bf
-      approve_confirm: 'Bạn có chắc chắn muốn chấp thuận WCA ID %{wca_id} không?'
+      approve_confirm: 'Bạn có chắc chắn muốn chấp thuận ID WCA %{wca_id} không?'
       #original_hash: 1ada587
       clear_claim: Xóa yêu cầu
       #original_hash: dc39741
@@ -1959,10 +1963,9 @@ vi:
       have_wca_id_html: 'ID WCA của bạn là %{link_id}.'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID và tài khoản này gắn với các vai trò đặc biệt của WCA (VD:
-        Delegate, ban tổ chức, thành viên đội ngũ) và không thể gỡ bỏ. Vui lòng
-        gửi email tới Đội ngũ Kết quả WCA nếu cần chuyển WCA ID này sang tài
-        khoản khác.
+        ID WCA và tài khoản này gắn với các vai trò đặc biệt của WCA (VD: Delegate,
+        ban tổ chức, thành viên đội ngũ) và không thể gỡ bỏ. Vui lòng gửi email tới
+        Đội ngũ Kết quả WCA nếu cần chuyển ID WCA này sang tài khoản khác.
       cannot_edit:
         #original_hash: 3d4d222
         msg: >-
@@ -2070,9 +2073,9 @@ vi:
         Đội ngũ Kết quả của WCA bằng <a href="%{dob_form_path}">mẫu đơn này</a>.
       #original_hash: c3ce070
       unique_html: >-
-        đã được sử dụng bởi %{used_name} với email %{used_email}. Để có thể sử
-        dụng WCA ID này, bạn có thể <a href="%{used_edit_path}"
-        target="_blank">chỉnh sửa tài khoản này</a> và gỡ WCA ID.
+        đã được sử dụng bởi %{used_name} với email %{used_email}. Để có thể sử dụng
+        ID WCA này, bạn có thể <a href="%{used_edit_path}" target="_blank">chỉnh sửa
+        tài khoản này</a> và gỡ ID WCA.
       #original_hash: 26f70ed
       dob_past: phải trong quá khứ
       #original_hash: b320913
@@ -2092,19 +2095,16 @@ vi:
         sau</a>.
       #original_hash: f7dde6e
       wca_id_no_gender_html: >-
-        WCA ID này không có giới tính kèm theo. Xin vui lòng liên hệ <a
-        href='%{wrt_contact_path}' target='_blank'>Đội ngũ Kết quả WCA</a> để
-        giải quyết vấn đề.
+        ID WCA này không có giới tính kèm theo. Xin vui lòng liên hệ <a href='%{wrt_contact_path}'
+        target='_blank'>Đội ngũ Kết quả WCA</a> để giải quyết vấn đề.
       #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
-        WCA ID này không có quốc tịch kèm theo. Xin vui lòng liên hệ <a
-        href='%{wrt_contact_path}' target='_blank'>Đội ngũ Kết quả WCA</a> để
-        khắc phục vấn đề.
+        ID WCA này không có quốc tịch kèm theo. Xin vui lòng liên hệ <a href='%{wrt_contact_path}'
+        target='_blank'>Đội ngũ Kết quả WCA</a> để khắc phục vấn đề.
       #original_hash: 6890de8
       wca_id_no_name_html: >-
-        WCA ID này không có họ tên kèm theo. Xin vui lòng liên hệ <a
-        href='%{wrt_contact_path}' target='_blank'>Đội ngũ Kết quả WCA</a> để
-        khắc phục vấn đề.
+        ID WCA này không có họ tên kèm theo. Xin vui lòng liên hệ <a href='%{wrt_contact_path}'
+        target='_blank'>Đội ngũ Kết quả WCA</a> để khắc phục vấn đề.
       #original_hash: d2f4856
       email_used_by_locked_account_html: >-
         đã được tài khoản khác sử dụng. Tài khoản này đã được tạo tự động do bạn
@@ -2112,7 +2112,7 @@ vi:
         này, bạn có thể sử dụng tài khoản này sau khi đặt lại mật khẩu <a
         href='/users/password/new'>tại đây</a>.
       #original_hash: 50897d4
-      must_match_person: phải có thông tin cá nhân đúng với WCA ID
+      must_match_person: phải có thông tin cá nhân đúng với ID WCA
     successes:
       messages:
         #original_hash: 31bd401
@@ -2138,8 +2138,8 @@ vi:
         Delegate</a> ở khu vực bạn.
       #original_hash: 498dc1e
       missing_dob_html: >-
-        WCA ID %{link_id} không có ngày sinh kèm theo. Xin vui lòng liên hệ Đội
-        ngũ Kết quả WCA thông qua <a href="%{dob_form_path}">đơn này</a>.
+        ID WCA %{link_id} không có ngày sinh kèm theo. Xin vui lòng liên hệ Đội ngũ
+        Kết quả WCA thông qua <a href="%{dob_form_path}">đơn này</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'ID WCA %{link_id} không tồn tại.'
   user_roles:
@@ -2523,7 +2523,7 @@ vi:
       registrations_file_label: File chứa đơn đăng ký
       #original_hash: 224f3a6
       registrations_file_hint: >-
-        File CSV có các cột: Trang thái, Họ tên, Quốc tịch, WCA ID, Ngày sinh, Giới
+        File CSV có các cột: Trang thái, Họ tên, Quốc tịch, ID WCA, Ngày sinh, Giới
         tính, Email và một cột cho mỗi nội dung, hoặc file JSON chứa dữ liệu WCIF.
       #original_hash: 01beb54
       preview: Xem trước Thông tin đăng ký
@@ -2545,20 +2545,20 @@ vi:
           Cột nội dung nên có giá trị 0 hoặc 1, tìm thấy có giá trị %{value} tại
           cột %{column}.
         #original_hash: dcd2f6f
-        non_existent_wca_id: 'WCA ID %{wca_id} không tồn tại.'
+        non_existent_wca_id: 'ID WCA %{wca_id} không tồn tại.'
         #original_hash: b5c8591
         email_user_with_different_wca_id: >-
-          Đã có người dùng với email %{email}, nhưng WCA ID là %{user_wca_id}
-          thay vì %{registration_wca_id}.
+          Đã có người dùng với email %{email}, nhưng ID WCA là %{user_wca_id} thay
+          vì %{registration_wca_id}.
         #original_hash: c9586e9
         email_user_with_different_unconfirmed_wca_id: >-
-          Đã có người dùng với email %{email}, nhưng có WCA ID chưa xác nhận là
-          %{unconfirmed_wca_id} thay vì %{registration_wca_id}.
+          Đã có người dùng với email %{email}, nhưng có ID WCA chưa xác nhận là %{unconfirmed_wca_id}
+          thay vì %{registration_wca_id}.
         #original_hash: 4e32621
         email_duplicates: 'Email phải khác nhau, các email sau đây bị lặp: %{emails}.'
         #original_hash: bcd8e78
-        wca_id_duplicates: 'WCA ID phải khác nhau, phát hiện WCA ID sau đây bị lặp:
-          %{wca_ids}.'
+        wca_id_duplicates: 'ID WCA phải khác nhau, phát hiện ID WCA sau đây bị trùng
+          lặp: %{wca_ids}.'
         #original_hash: a0fd4c5
         wrong_dob_format: >-
           Ngày sinh phải theo định dạng YYYY-mm-dd (năm-tháng-ngày, ví dụ như
@@ -2740,6 +2740,7 @@ vi:
       spots_left:
         other: Còn %{count} chỗ
       no_spots_left: Giải đấu đã đầy
+      provisional_live_results: 'Hiện tại, bạn có thể xem kết quả dự kiến tại đây:'
     live:
       #original_hash: 10d1a3c
       title: Kết quả Trực tiếp
@@ -6342,7 +6343,7 @@ vi:
         Tên của '%{name}' có dấu cách ở cuối hoặc đầu tên hoặc có dấu cách bị
         lặp.
       #original_hash: 9b1ae5f
-      person_with_non_existing_wca_id_error: 'Thí sinh %{name} có WCA ID không tồn
+      person_with_non_existing_wca_id_error: 'Thí sinh %{name} có ID WCA không tồn
         tại: %{wca_id}.'
       #original_hash: 924d832
       no_space_before_parenthesis_error: 'Dấu mở ngoặc đơn trong ''%{name}'' phải
@@ -6351,7 +6352,7 @@ vi:
       same_person_name_warning: >-
         Có ít nhất một người có tên '%{name}' trong cơ sở dữ liệu WCA (%{wca_ids}).
         Xin kiểm tra lại dể đảm bảo rằng '%{name}' khác với các thí sinh trước đây.
-        Nếu không, xin vui lòng gán đúng WCA ID vào tài khoản người dùng và tạo lại
+        Nếu không, xin vui lòng gán đúng ID WCA vào tài khoản người dùng và tạo lại
         file JSON kết quả.
       #original_hash: eeb688a
       non_matching_dob_warning: >-
@@ -6627,3 +6628,92 @@ vi:
       actioner: Người thực hiện
       #original_hash: bcdf8d3
       requester: Người yêu cầu
+  trainee_delegate_application:
+    title: Đơn ứng tuyển Trainee Delegate
+    introduction: Đơn này dành cho các thành viên cộng đồng muốn ứng tuyển trở 
+      thành Trainee Delegate. Đơn ứng tuyển của bạn sẽ được gửi đến các Delegate
+      phụ trách khu vực mà bạn chọn. Vui lòng điền bằng tiếng Anh.
+    success_title: Đơn đã được gửi
+    success: Đơn ứng tuyển của bạn đã được gửi thành công. Một bản sao của đơn 
+      đã được gửi đến email gắn với tài khoản WCA của bạn.
+    eligibility:
+      title: Bạn chưa thể ứng tuyển
+      missing_wca_id: Tài khoản WCA của bạn phải được liên kết với ID WCA.
+      missing_date_of_birth: Tài khoản WCA của bạn phải có ngày sinh đã được xác
+        minh.
+      underage: Ứng viên phải ít nhất %{minimum_age} tuổi.
+      claim_wca_id: Liên kết ID WCA của bạn.
+      edit_profile: Yêu cầu cập nhật hồ sơ.
+    errors:
+      invalid_region: Vui lòng lựa chọn một khu vực Delegate hợp lệ và còn hoạt 
+        động.
+      missing_reviewer: Khu vực đã chọn hiện không có Regional/Senior Delegate 
+        có thể tiếp nhận đơn ứng tuyển.
+      recommender_required: Vui lòng chọn ít nhất một Delegate giới thiệu bạn 
+        cho vị trí này.
+      invalid_recommender: Một hoặc nhiều Delegate đã chọn không còn thuộc khu 
+        vực này.
+      spoken_delegate_required: Chọn ít nhất một Junior/Full Delegate mà bạn đã 
+        thảo luận cùng.
+      invalid_spoken_delegate: Một hoặc nhiều Delegate mà bạn đã thảo luận cùng 
+        không còn là Junior/Full Delegate thuộc khu vực này.
+      declarations_required: Bạn phải công nhận những điều dưới đây.
+      business_involvement_required: Vui lòng nêu rằng bạn có liên quan tới 
+        doanh nghiệp nào liên quan đến Rubik không.
+      business_involvement_explanation_required: Hãy giải thích mối liên hệ của 
+        bạn với doanh nghiệp nêu trên.
+    form:
+      declaration_and_basic_information: Lời khẳng định và thông tin cơ bản
+      name: Họ tên
+      wca_id: ID WCA
+      email: Email
+      age: Tuổi
+      competition_count: Số giải đấu tham dự
+      region_and_references: Khu vực và người giới thiệu
+      region: Bạn hiện đang sống tại khu vực Delegate nào?
+      region_placeholder: Chọn khu vực của bạn
+      subregion: Bạn hiện đang sống ở khu vực Delegate phụ nào?
+      subregion_placeholder: Chọn khu vực phụ của bạn
+      reviewing_delegate: Delegate xem xét đơn ứng tuyển
+      spoken_delegates: Bạn đã thảo luận với những Junior/Full Delegate nào về 
+        việc ứng tuyển trở thành Trainee Delegate?
+      recommenders: Những Junior/Full Delegate nào trong khu vực đã đồng ý giới 
+        thiệu bạn cho vị trí Trainee Delegate?
+      delegates_placeholder: Chọn ít nhất một Delegate
+      experience_and_motivation: Kinh nghiệm và động lực
+      introduction: Vui lòng giới thiệu bản thân trong từ hai đến bốn câu.
+      competition_contributions: Tóm tắt những việc bạn đã làm để hỗ trợ các 
+        giải đấu tại khu vực của bạn, vượt ra ngoài những gì được kỳ vọng ở một 
+        thí sinh thông thường.
+      volunteer_history: Nếu bạn từng giữ vị trí tình nguyện viên WCA, vui lòng 
+        liệt kê các vị trí theo trình tự thời gian (không bắt buộc).
+      role_history_warning: Lịch sử vai trò dưới đây sẽ được tự động đính kèm 
+        trong đơn ứng tuyển của bạn. Các vai trò cũ hơn không được đồng bộ hoàn 
+        toàn, vì vậy xin vui lòng bổ sung hoặc chỉnh sửa ở ô dưới đây.
+      present: hiện tại
+      board_member: Thành viên Ban quản trị
+      motivation: Nêu lý do bạn muốn ứng tuyển trở thành Trainee Delegate trong 
+        từ hai đến bốn câu.
+      relevant_skills: Liệt kê những kĩ năng quan trọng nhất và những kinh 
+        nghiệm bạn đã tích lũy được có thể giúp bạn thành công trong vai trò 
+        Trainee Delegate.
+      declaration_understands_application: Tôi hiểu rằng đơn này dành cho các 
+        thành viên cộng đồng ứng tuyển trở thành Trainee Delegate.
+      declaration_has_delegate_support: Tôi xác nhận rằng tôi đã thảo luận về 
+        việc ứng tuyển với một Delegate trong khu vực của mình, và Delegate này 
+        ủng hộ việc tôi ứng tuyển.
+      declaration_proficient_in_english: Tôi xác nhận rằng tôi thông thạo về 
+        việc đọc và viết tiếng Anh.
+      declaration_read_regulations_html: Tôi xác nhận rằng tôi đã đọc bản <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">Quy định 
+        WCA</a>.
+      regulations_note: 'Lưu ý: Delegate không nhất thiết phải thuộc lòng từng Quy
+        định một. Tuy nhiên, Delegate cần phải biết những quy định cơ bản và có thể
+        tra cứu khi không chắc chắn.'
+      cubing_business_involvement: Bạn có liên quan đến doanh nghiệp nào liên 
+        quan đến lĩnh vực Rubik không?
+      cubing_business_involvement_details: Hãy giải thích mối liên hệ của bạn 
+        với doanh nghiệp nêu trên.
+      "yes": Có
+      "no": Không
+      submit: Nộp đơn
