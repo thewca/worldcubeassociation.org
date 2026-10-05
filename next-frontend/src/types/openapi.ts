@@ -161,6 +161,25 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/bookmark": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Whether the current user has bookmarked a competition */
+        get: operations["getCompetitionBookmark"];
+        put?: never;
+        /** Bookmark a competition for the current user */
+        post: operations["bookmarkCompetition"];
+        /** Remove the current user's bookmark of a competition */
+        delete: operations["unbookmarkCompetition"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds": {
         parameters: {
             query?: never;
@@ -1225,6 +1244,10 @@ export interface components {
             name: string;
         };
         ScoretakerList: components["schemas"]["Scoretaker"][];
+        CompetitionBookmark: {
+            /** @example true */
+            bookmarked: boolean;
+        };
         WcifTimeLimit: {
             /** @example 18000 */
             centiseconds: number;
@@ -2528,6 +2551,78 @@ export interface operations {
                     "application/json": components["schemas"]["Scoretaker"] | null;
                 };
             };
+        };
+    };
+    getCompetitionBookmark: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The current user's bookmark state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    bookmarkCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The competition is bookmarked. Bookmarking twice is a no-op. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    unbookmarkCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The competition is not bookmarked. Removing a missing bookmark is a no-op. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     liveAdmin: {

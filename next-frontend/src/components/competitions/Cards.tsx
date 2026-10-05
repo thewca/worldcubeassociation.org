@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   FormatNumber,
   Heading,
@@ -29,6 +28,7 @@ import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
 import LocalDateTime from "@/components/LocalDateTime";
 import RefundPolicyText from "@/components/competitions/RefundPolicyText";
+import BookmarkButton from "@/components/competitions/BookmarkButton";
 import { hasNotPassed, hasPassed } from "@/lib/wca/dates";
 
 function formatDateRange(start: Date, end: Date): string {
@@ -330,9 +330,11 @@ export function EventCard({
 
 export function InfoCard({
   competitionInfo,
+  bookmark,
   t,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
+  bookmark?: components["schemas"]["CompetitionBookmark"];
   t: TFunction;
 }) {
   return (
@@ -340,9 +342,12 @@ export function InfoCard({
       <Card.Body>
         <Heading textStyle="h2" display="flex" alignItems="center">
           {competitionInfo.name}
-          <Button variant="ghost">
-            <BookmarkIcon boxSize="6" />
-          </Button>
+          {bookmark && (
+            <BookmarkButton
+              competitionId={competitionInfo.id}
+              initialBookmark={bookmark}
+            />
+          )}
         </Heading>
 
         <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">

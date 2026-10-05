@@ -375,6 +375,7 @@ Rails.application.routes.draw do
 
       resources :competitions, only: [] do
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
+        resource :bookmark, only: %i[show create destroy]
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
