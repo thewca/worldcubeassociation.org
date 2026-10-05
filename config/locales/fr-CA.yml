@@ -261,7 +261,7 @@ fr-CA:
     time:
       one: '%{count} essai pour obtenir un résultat < %{time}'
       many: '%{count} essais pour obtenir un résultat < %{time}'
-      other:
+      other: '%{count} essais pour obtenir un résultat < %{time}'
     moves:
       one: '%{count} essai pour obtenir un résultat < %{moves} mouvements'
       many: '%{count} essais pour obtenir un résultat < %{moves} mouvements'
@@ -1096,10 +1096,10 @@ fr-CA:
           backup_codes: Codes de secours
           #original_hash: 082f47c
           backup_codes_desc: >-
-            Les codes de secours peuvent être utilisés en lieu et place d'un
-            code à usage unique si vous n'avez pas accès à votre appareil équipé
-            de l'application 2FA. Chaque code ne peut être utilisé qu'une fois.
-            Faites attention à les stocker dans un endroit sûr.
+            Les codes de secours peuvent être utilisés en lieu et place d'un code
+            à usage unique si vous n'avez pas accès à votre appareil équipé de l'application
+            de double authentification. Chaque code ne peut être utilisé qu'une fois.
+            Faites attention à les stocker dans un endroit sûr!
           #original_hash: c9cc12b
           no_backup_codes: >-
             Vous n'avez pas encore généré de code de secours. Cliquez sur le
@@ -1815,16 +1815,13 @@ fr-CA:
         welcome: 'Bonjour %{user_email} !'
         #original_hash: d738360
         confirm: >-
-          Votre compte est créé et vous devez l'activer avant de pouvoir
-          l'utiliser. Merci de confirmer votre compte en cliquant sur le lien
-          ci-dessous :
-        #original_hash: d60834b
+          Votre compte est créé et vous devez l'activer avant de pouvoir l'utiliser.
+          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash: d60834b
         confirmation_link: Confirmer mon compte.
         #original_hash: f6faaa3
         activate: >-
-          Après l'activation, vous pourrez vous connecter sur le site internet
-          de la World Cube Association :
-        #original_hash: c8dc6a6
+          Après l'activation, vous pourrez vous connecter sur le site internet de
+          la World Cube Association :  #original_hash: c8dc6a6
         login_form: formulaire de connexion
         #original_hash: 20ce5ad
         addendum: >-
@@ -1857,8 +1854,8 @@ fr-CA:
           nouvelle notification.
         #original_hash: c802f93
         contact: >-
-          Si vous avez d'autres questions, merci de contacter les Délégués de
-          votre compétition par courriel :
+          Si vous avez d'autres questions, merci de contacter les Délégués de votre
+          compétition par courriel : ­ 
       competition_announcement_email:
         #original_hash: 76379e1
         header: 'Le WCAT a annoncé %{competition}'
@@ -3767,7 +3764,7 @@ fr-CA:
           allow_on_the_spot: Inscriptions sur place
           #original_hash: 1b75e7d
           competitor_can_cancel: Quand les compétiteurs peuvent-ils annuler leur
-            inscription ?
+            inscription
           #original_hash: 16e1ea1
           allow_self_edits: Modifications d'inscription
           #original_hash: 2e087bd
@@ -3992,8 +3989,8 @@ fr-CA:
         registration:
           #original_hash: 2cba656
           opening_date_time: >-
-            Note : Les dates d'ouverture et de fermeture des inscriptions sont
-            au fuseau horaire UTC !
+            Note : Les dates d'ouverture et de fermeture des inscriptions sont au
+            fuseau horaire UTC
           #original_hash: 1b49f9a
           waiting_list_deadline_date: >-
             La date à laquelle les participants en liste d'attente ne sont plus
@@ -5710,15 +5707,13 @@ fr-CA:
     whats_next_title: Le futur pour la WCA ?
     #original_hash: 5b712be
     whats_next_content_html: >-
-      <p>La WCA a eu plus de 245 000 compétiteurs uniques dans 158 régions
-      différentes et nous n'avons pas l'intention de ralentir de sitôt! La
-      communauté du cube a connu une croissance constante depuis sa création en
-      2004 et nous voulons l'encourager à continuer à l'avenir en augmentant
-      l'accessibilité des compétitions dans de nouvelles régions. 
-
-      Dans le futur, nous espérons soutenir notre communauté encore plus à
-      travers des collaborations et des contacts avec ceux qui s'intéressent aux
-      casse-têtes.</p>
+      <p>La WCA a eu plus de 245 000 compétiteurs uniques dans 158 régions différentes
+      et nous n'avons pas l'intention de ralentir de sitôt! La communauté du cube
+      a connu une croissance constante depuis sa création en 2004 et nous voulons
+      l'encourager à continuer à l'avenir en augmentant l'accessibilité des compétitions
+      dans de nouvelles régions. Dans le futur, nous espérons soutenir notre communauté
+      encore plus à travers des collaborations et des contacts avec ceux qui s'intéressent
+      aux casse-têtes.</p>
     #original_hash: 3987206
     world_championship_title: Championnats Mondiaux
     #original_hash: 412a36c
@@ -5796,7 +5791,7 @@ fr-CA:
         Délégué WCA and ne peuvent superviser que des compétitions où au moins
         une personne avec le statut de Délégué WCA est présente.</p>
       #original_hash: 0e4dafe
-      see_link_html: '(voir %{link})'
+      see_link_html: ' (voir %{link})'
       #original_hash: aff33ae
       members_html: >-
         Tous les compétiteurs deviennent automatiquement des
@@ -5945,8 +5940,8 @@ fr-CA:
     create:
       #original_hash: eb455e0
       create_success: >-
-        Demande soumise avec avec succès ! Merci de vérifier vos courriels et
-        d'attendre que le Conseil d'administration de la WCA l'évalue.
+        Demande soumise avec succès ! Merci de vérifier vos e-mails et d'attendre
+        que le Conseil d'administration de la WCA l'évalue
     delete:
       #original_hash: 11dceba
       confirm_delete: >-
@@ -6019,12 +6014,11 @@ fr-CA:
         title: Groupifier
         #original_hash: f259f59
         description: >-
-          Outil permettant aux organisateurs de compétition WCA de gérer les
-          tâches et les groupes. Les fonctionnalités principales sont : tri des
-          compétiteurs par classement, affectation des tâches (juges,
-          mélangeurs), choix du nombre de mélanges nécessaire, génération des
-          feuilles de temps, horaire personnel et résumé général... Rendez-vous
-          sur le site pour le reste !
+          Outil permettant aux organisateurs de compétition WCA de gérer les tâches
+          et les groupes. Les fonctionnalités principales sont : tri des compétiteurs
+          par classement, affectation des tâches (juges, mélangeurs), choix du nombre
+          de mélanges nécessaire, génération des feuilles de score, planning personnel
+          et résumé général... Rendez-vous sur le site pour le reste.
       scorecards:
         #original_hash: 83a2edb
         title: Feuilles de temps
@@ -6658,10 +6652,8 @@ fr-CA:
         commentaire au WRT à ce sujet.
       #original_hash: ace730d
       non_matching_name_warning: >-
-        Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à
-        l'enregistrement actuel dans la base de données WCA
-        ('%{expected_name}').
-      #original_hash: 9cfb3b5
+        Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à l'enregistrement
+        actuel dans la base de données WCA ('%{expected_name}').  #original_hash: 9cfb3b5
       non_matching_country_warning: >-
         Le pays '%{country}' fourni pour %{name} (%{wca_id}) ne correspond pas à
         l'enregistrement actuel dans la base de données WCA
