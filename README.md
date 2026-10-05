@@ -27,7 +27,10 @@ If you would like to join WST, we currently have open positions on the volunteer
 
 ## LLM policy
 
-All repositories and code managed by WST follow a few simple rules of thumb when it comes to AI and the usage of LLMs for contributions:
+All repositories and code managed by WST follow a few simple rules of thumb when it comes to AI and the usage of LLMs for contributions.
+
+**TL;DR**: Please disclose LLM usage in code contributions, if any. We reserve the right to discard PRs which are not properly understood by the person submitting them (so-called "AI slop").
+For more detailed guidance on how we recommend to use AI in our open-source environment, please refer to the following overview:
 
 - You are free and welcome to use LLMs to explore, analyze, answer questions you have about our code, check ideas or suggest improvements.
 - When using LLMs to **create code**, you (the human) still carry full responsibility for the submission you're making. Specifically:
