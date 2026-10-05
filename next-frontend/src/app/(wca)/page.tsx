@@ -349,7 +349,9 @@ const FeaturedCompetitions = async ({
             Upcoming Competitions
           </Text>
           <Button asChild variant="pastelSolid">
-            <Link href="/competitions">View all Competitions</Link>
+            <ChakraLink asChild textStyle={undefined}>
+              <Link href="/competitions">View all Competitions</Link>
+            </ChakraLink>
           </Button>
         </HStack>
       </Card.Title>
