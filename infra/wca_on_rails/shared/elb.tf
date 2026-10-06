@@ -137,11 +137,11 @@ resource "aws_lb_target_group" "nextjs-production" {
 
   deregistration_delay = 10
   health_check {
-    interval            = 10
-    path                = "/"
+    interval            = 30
+    path                = "/api/health"
     port                = "traffic-port"
     protocol            = "HTTP"
-    timeout             = 5
+    timeout             = 10
     healthy_threshold   = 2
     unhealthy_threshold = 5
     matcher             = 200
@@ -161,11 +161,11 @@ resource "aws_lb_target_group" "nextjs-production-results" {
 
   deregistration_delay = 10
   health_check {
-    interval            = 10
-    path                = "/"
+    interval            = 30
+    path                = "/api/health"
     port                = "traffic-port"
     protocol            = "HTTP"
-    timeout             = 5
+    timeout             = 10
     healthy_threshold   = 2
     unhealthy_threshold = 5
     matcher             = 200
