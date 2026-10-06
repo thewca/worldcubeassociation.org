@@ -2564,8 +2564,9 @@ pt:
       registrations_file_label: Ficheiro de registos
       #original_hash: 224f3a6
       registrations_file_hint: >-
-        Ficheiro CSV com as colunas: Estado, Nome, Região, ID da WCA, Data de
-        Nascimento, Sexo, Email e uma coluna para cada evento.
+        Ficheiro CSV com as colunas: Estado, Nome, Região, ID da WCA, Data de Nascimento,
+        Sexo, Email e uma coluna para cada evento, ou ficheiro JSON contendo dados
+        WCIF.
       #original_hash: d6fbc9d
       import: Importar
       errors:
@@ -2608,6 +2609,9 @@ pt:
         #original_hash: 6d8e34b
         empty_file: O ficheiro está vazio.
         invalid_country: 'País inválido: %{country}.'
+        invalid_wcif: O ficheiro JSON não contém dados WCIF válidos.
+        unsupported_file_format: Formato de ficheiro não suportado. Carregue um 
+          ficheiro JSON ou CSV.
       cancel: Cancelar
     add:
       #original_hash: 975275e
@@ -2629,6 +2633,8 @@ pt:
       errors:
         #original_hash: d6dcf5c
         already_registered: Esta pessoa já tinha um registo.
+      ots_before_registration_open: O registo no local só pode ser utilizado 
+        depois das inscrições abrirem.
   competitions:
     messages:
       #original_hash: 7b80062
@@ -2777,6 +2783,8 @@ pt:
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: O cronograma não poderá ser 
         editado após a submissão dos resultados.
+      provisional_live_results: 'Entretanto, pode consultar aqui os resultados provisórios:'
+      no_spots_left: Competição cheia
     live:
       #original_hash: 10d1a3c
       title: Resultados em direto
@@ -2792,12 +2800,17 @@ pt:
         title: Pódios
         #original_hash: d7297a7
         undetermined: Pódios a determinar
+        none: Ainda não há pódios!
       admin:
         quit:
           bulk:
             menu: Desistência em massa
             id: ID
             name: Nome
+          scoresheet_warning: Certifique-se de que só retira um competidor da 
+            ronda quando tiver em mãos a respetiva folha de resultados em 
+            branco. Não é possível voltar a adicionar um competidor a uma ronda 
+            encerrada.
         edit: Editar
         results: Resultados
         registration: Registo
@@ -2806,6 +2819,15 @@ pt:
         submit_results: Submeter Resultados
       results:
         competitor: Competidor
+      manage_rounds: Gerir Rondas
+      incompatible:
+        external: Esta competição utiliza software externo para o registo dos 
+          resultados. Consulte as informações da competição para saber onde pode
+          acompanhar os resultados em direto.
+        wca_live: 'Esta competição utiliza o WCA Live para o registo dos resultados.
+          Siga esta ligação para consultar os resultados em direto:'
+      round_state:
+        ongoing: a decorrer
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -3193,6 +3215,9 @@ pt:
       event: Evento
       name: Nome
       location: Local
+      distance_units:
+        km: km
+        mi: mi
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
@@ -5318,6 +5343,9 @@ pt:
     finances: Finanças
     #original_hash: c1e8f94
     strategic_plan: Plano Estratégico
+    motion_not_found: Moção Não Encontrada
+    motion_not_found_action: Não foi possível encontrar uma moção com o número 
+      "%{motion_id}". É possível que tenha sido revogada.
   education:
     #original_hash: 746e863
     title: Recursos Educativos da WCA
@@ -5333,6 +5361,7 @@ pt:
     competition_templates: Modelos de competição
     #original_hash: 5ca0558
     certificates: Modelos de Certificados da WCT
+    orga_handbook: Manual do Organizador
   delegates_page:
     #original_hash: d8fd3e4
     title: Delegados da WCA
@@ -5357,6 +5386,7 @@ pt:
       total_delegated: Total como Delegado
       #original_hash: 90ccd64
       history: História
+      lead_delegated: Competições lideradas como Delegado
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organizações Regionais
@@ -5637,6 +5667,7 @@ pt:
         incidents: Nenhum incidente encontrado para
         #original_hash: 3909204
         regulations_and_guidelines: Nenhum Regulamento encontrado para
+      empty_query: Experimente pesquisar alguma coisa!
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -5644,6 +5675,16 @@ pt:
       conteúdo abaixo não está traduzido.
     #original_hash: 2c23c1a
     incident: 'Incidente:'
+    title: Registo de incidentes
+    page_title: 'Incidente: %{title}'
+    not_found: Incidente Não Encontrado
+    back_to_log: Voltar ao Registo de incidentes
+    search_placeholder: Procurar
+    status: Estado
+    admin:
+      publish_error: Não foi possível publicar este incidente.
+      unpublish_error: Não foi possível anular a publicação deste incidente.
+      destroy_error: Não foi possível eliminar este incidente.
   about_regulations:
     #original_hash: 6bce1b5
     title: Sobre os Regulamentos
@@ -5682,7 +5723,7 @@ pt:
         sobre o Regulamento da WCA.
     panel4:
       #original_hash: ad5f6e7
-      title: Orientações para Organizadores
+      title: Manual de Organizador
       #original_hash: 9bbdf16
       content1_html: >-
         Se está interessado em organizar uma competição ou se já está a planear
@@ -6081,6 +6122,17 @@ pt:
         limite de competidores (%{competitor_limit}). Os resultados dos
         competidores registados após o limite de competidores ter sido atingido
         têm que ser removidos.
+      suspicious_last_name_warning: "'%{name}' tem '%{suffix}' como apelido, mas este
+        poderá não ser um apelido verdadeiro (por exemplo, poderá tratar-se de um
+        sufixo geracional escrito por extenso). Confirme se este é o apelido legal
+        da pessoa ou substitua-o/remova-o, conforme adequado."
+      registration_details_mismatch_warning: 'A pessoa com o ID de inscrição %{person_id}
+        (%{name}) tem dados que não correspondem aos da respetiva inscrição: %{mismatches}'
+      missing_matching_registration_warning: Não foi encontrada nenhuma 
+        inscrição correspondente para %{name}.
+      unaccepted_registration_with_results_warning: A pessoa %{name} tem 
+        resultados na competição, mas a respetiva inscrição não está marcada 
+        como 'aceite'.
     results:
       #original_hash: 5685ae8
       automatically_position_fixed_info: >-
@@ -6150,6 +6202,11 @@ pt:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} está na posição errada: esperado
         %{expected_pos}, mas obteve %{pos}.
+      automatically_global_position_fixed_info: '[%{round_id}] A classificação geral
+        de %{person_name} foi corrigida automaticamente de %{pos} para %{expected_pos}.'
+      wrong_global_position_in_results_error: '[%{round_id}] %{person_name} está numa
+        posição incorreta na classificação geral: era esperada a posição %{expected_pos},
+        mas ficou na posição %{pos}.'
     rounds:
       #original_hash: 517fd54
       too_many_qualified_warning: >-
@@ -6259,6 +6316,15 @@ pt:
         embaralhamento do especificado no separador "Gerir Eventos". Ajuste o
         número de conjuntos de embaralhamento no separador "Gerir Eventos" para
         o número de conjuntos que foram utilizados.
+      mbld_scrambles_warning: '[%{round_id}] Esta ronda inclui resultados de 3x3x3
+        Múltiplos Vendados. Indique, no comentário da submissão, quantos embaralhamentos
+        de cada conjunto foram efetivamente utilizados pelos competidores, para que
+        a WRT possa remover os embaralhamentos extra que não foram utilizados.'
+    schedule:
+      activity_outside_competition_dates_warning: "A atividade '%{activity_name}'
+        (código: %{activity_code}) está agendada fora do intervalo de datas da competição,
+        de acordo com o fuso horário local do local da competição. Atualize o horário
+        da competição para refletir as datas reais em que esta decorre."
   tickets:
     type:
       #original_hash: e43f273
