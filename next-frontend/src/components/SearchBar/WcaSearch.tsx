@@ -165,8 +165,6 @@ export default function WcaSearch() {
   return (
     <Combobox.Root
       collection={collection}
-      // We search server-side, so disable Combobox's built-in filtering.
-      openOnClick
       // Highlighting the first option (which is always "Search for ...") makes
       // pressing enter open the full search page.
       inputBehavior="autohighlight"
