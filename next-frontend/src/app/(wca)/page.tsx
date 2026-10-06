@@ -249,16 +249,10 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   // Payload types an optional parameter as undefined or null, but Chakra only wants undefined
   const href = block.url ?? undefined;
   return (
-    <LinkBox
-      asChild
-      className={href ? "group" : undefined}
-      _focusWithin={{
-        outline: "{borders.md}",
-        outlineColor: "colorPalette.focusRing",
-        outlineOffset: "{spacing.0.5}",
-      }}
-    >
+    <LinkBox asChild>
       <Card.Root
+        interactive={!!href}
+        className={href ? "group" : undefined}
         overflow="hidden"
         colorPalette={block.colorPalette}
         colorVariant="solid"
@@ -271,23 +265,12 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
           aria-label={block.heading ?? undefined}
           target={block.newTab ? "_blank" : undefined}
           rel={block.newTab ? "noopener noreferrer" : undefined}
-          borderRadius="inherit"
-          _before={{
-            borderRadius: "inherit",
-            transitionProperty: "background-color",
-            transitionDuration: "moderate",
-          }}
-          _groupHover={{ _before: { bg: "colorPalette.contrast/5" } }}
         />
         {block.textPosition === "bottom" && (
           <ImageOnlyCardImage block={block} />
         )}
         {block.heading && (
-          <Card.Body
-            transitionProperty="background-color"
-            transitionDuration="moderate"
-            _groupHover={{ bg: "colorPalette.contrast/5" }}
-          >
+          <Card.Body>
             <Card.Title textStyle="h2">{block.heading}</Card.Title>
           </Card.Body>
         )}
@@ -316,24 +299,11 @@ const FeaturedCompetition = async ({
   return (
     <Card.Root
       asChild
+      interactive
+      className="group"
       colorPalette={colorPalette}
       colorVariant="solid"
       height="full"
-      _focusVisible={{
-        outline: "{borders.md}",
-        outlineColor: "colorPalette.focusRing",
-        outlineOffset: "{spacing.0.5}",
-      }}
-      _before={{
-        content: '""',
-        position: "absolute",
-        inset: 0,
-        borderRadius: "inherit",
-        pointerEvents: "none",
-        transitionProperty: "background-color",
-        transitionDuration: "moderate",
-      }}
-      _hover={{ _before: { bg: "colorPalette.contrast/5" } }}
     >
       <Link
         href={route({

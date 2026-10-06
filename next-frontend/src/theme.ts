@@ -857,6 +857,36 @@ const customConfig = defineConfig({
           },
         },
         variants: {
+          interactive: {
+            true: {
+              root: {
+                cursor: "pointer",
+                _focusWithin: {
+                  outline: "{borders.md}",
+                  outlineColor: "colorPalette.focusRing",
+                  outlineOffset: "{spacing.0.5}",
+                },
+                _after: {
+                  content: '""',
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: "inherit",
+                  pointerEvents: "none",
+                  zIndex: 1,
+                  transitionProperty: "background-color",
+                  transitionDuration: "moderate",
+                },
+                _hover: {
+                  _after: { bg: "colorPalette.contrast/5" },
+                },
+              },
+              body: {
+                transitionProperty: "background-color",
+                transitionDuration: "moderate",
+                _groupHover: { bg: "colorPalette.contrast/5" },
+              },
+            },
+          },
           variant: {
             info: {
               root: {

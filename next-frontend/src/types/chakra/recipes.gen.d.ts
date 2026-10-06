@@ -433,6 +433,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
+  interactive?: boolean | undefined
   colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | undefined
 }
 
