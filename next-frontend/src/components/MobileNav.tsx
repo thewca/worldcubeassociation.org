@@ -21,13 +21,10 @@ export function MobileNavRoot({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function MobileNavButton({
-  active = false,
-  ...props
-}: React.ComponentProps<typeof Button> & { active?: boolean }) {
+export function MobileNavButton(props: React.ComponentProps<typeof Button>) {
   return (
     <Button
-      variant={active ? "subtle" : "ghost"}
+      variant="ghost"
       size="sm"
       px={2}
       // Optically align leading edge of text

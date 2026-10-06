@@ -87,7 +87,8 @@ const LanguageSelector = () => {
               {localeEntries.map(([lang, cfg]) => (
                 <MobileNavButton
                   key={lang}
-                  active={lang === currentLocale}
+                  aria-current={lang === currentLocale ? true : undefined}
+                  variant={lang === currentLocale ? "subtle" : "ghost"}
                   onClick={() => handleChangeLocale(lang)}
                 >
                   {cfg.name}
