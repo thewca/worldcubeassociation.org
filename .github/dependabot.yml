@@ -35,6 +35,11 @@ updates:
     - dependency-name: "@fullcalendar/*"
       versions:
         - ">= 7"
+    # Version 9 has breaking changes which we're not going to bother about implementing in the legacy frontend.
+    #   As of writing this comment, it is yet unclear whether we will incorporate Tanstack-Table into Next at all.
+    - dependency-name: "@tanstack/react-table"
+      versions:
+        - ">= 9"
   open-pull-requests-limit: 10
   cooldown:
     default-days: 1
