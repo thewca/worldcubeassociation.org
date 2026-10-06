@@ -87,7 +87,7 @@ RSpec.describe "WCA Live API - open_round" do
       sign_in delegate
 
       competition = create(:competition, scoretaking_software: :internal, event_ids: %w[333 444], delegates: [delegate])
-      create_list(:registration, 8, :accepted, competition: competition, event_ids: %w[333 444])
+      create_list(:registration, 16, :accepted, competition: competition, event_ids: %w[333 444]) # rubocop:disable FactoryBot/ExcessiveCreateList
 
       linked_round = create(:linked_round)
       round1_333_1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 3, linked_round: linked_round)
@@ -102,7 +102,7 @@ RSpec.describe "WCA Live API - open_round" do
 
       expect(response).to be_successful
       expect(response.parsed_body["status"]).to eq "ok"
-      expect(round2_333.live_results.count).to eq 8
+      expect(round2_333.live_results.count).to eq 16
       expect(round1_333_1).to be_locked
       expect(round1_333_2).to be_locked
     end
@@ -249,6 +249,30 @@ RSpec.describe "WCA Live API - open_round" do
 
         finish_round!(round1, delegate)
         finish_round!(round2, delegate)
+
+        put api_v1_competition_live_live_round_open_path(competition.id, round3.wcif_id)
+
+        expect(response).not_to be_successful
+        expect(response.parsed_body["status"]).to include("9m2")
+      end
+
+      it "if the first round of a LinkedRound has 15 competitors, even though the second has 16 (9m2 applies)" do
+        sign_in delegate
+
+        competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
+        create_list(:registration, 16, :accepted, competition: competition) # rubocop:disable FactoryBot/ExcessiveCreateList
+
+        linked_round = create(:linked_round)
+        round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 3, linked_round: linked_round)
+        round2 = create(:round, competition: competition, event_id: "333", number: 2, linked_round: linked_round)
+        round3 = create(:round, competition: competition, event_id: "333", number: 3, total_number_of_rounds: 3, participation_source: linked_round)
+
+        finish_round!(round1, delegate)
+        finish_round!(round2, delegate)
+        round1.live_results.first.destroy!
+
+        expect(round1.reload.total_competitors).to eq 15
+        expect(round2.total_competitors).to eq 16
 
         put api_v1_competition_live_live_round_open_path(competition.id, round3.wcif_id)
 
