@@ -265,11 +265,11 @@ fr-CA:
     moves:
       one: '%{count} essai pour obtenir un résultat < %{moves} mouvements'
       many: '%{count} essais pour obtenir un résultat < %{moves} mouvements'
-      other:
+      other: '%{count} essais pour obtenir un résultat < %{moves} mouvements'
     points:
       one: '%{count} essai pour obtenir un résultat > %{points} points'
       many: '%{count} essais pour obtenir un résultat > %{points} points'
-      other:
+      other: '%{count} essais pour obtenir un résultat > %{points} points'
   time_limit:
     cumulative:
       #original_hash: 8356ffc
@@ -382,7 +382,7 @@ fr-CA:
     days:
       one: 1 jour
       many: '%{count} jours'
-      other:
+      other: '%{count} jours'
     search_site: Rechercher sur le site
     #original_hash: a7a02ef
     filter: Filtrer
@@ -1165,7 +1165,7 @@ fr-CA:
         form_error:
           one: 'Le formulaire contient une erreur :'
           many: 'Le formulaire contient %{count} erreurs :'
-          other:
+          other: 'Le formulaire contient %{count} erreurs :'
       error_pages:
         #original_hash: eff50e1
         500_error: Nous sommes désolés mais quelque chose s'est mal passé.
@@ -1816,7 +1816,8 @@ fr-CA:
         #original_hash: d738360
         confirm: >-
           Votre compte est créé et vous devez l'activer avant de pouvoir l'utiliser.
-          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash: d60834b
+          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash:
+          d60834b
         confirmation_link: Confirmer mon compte.
         #original_hash: f6faaa3
         activate: >-
@@ -2300,8 +2301,8 @@ fr-CA:
       #original_hash: fce1d14
       exceeds_event_limit:
         one: Vous devez vous inscrire à 1 épreuve.
-        many: Vous devez vous inscrire dans au plus à %{count} épreuves.
-        other:
+        many: Vous devez vous inscrire au plus à %{count} épreuves.
+        other: Vous devez vous inscrire au plus à %{count} épreuves.
       banned_html: >-
         Vous êtes banni·e. Si vous pensez que c'est une erreur, merci de
         contacter le <a href='mailto:integrity@worldcubeassociation.org'
@@ -2334,15 +2335,15 @@ fr-CA:
       newcomer:
         one: nouveau
         many: nouveaux
-        other:
+        other: nouveaux
       returner:
         one: de retour
         many: de retour
-        other:
+        other: de retour
       person:
         one: personne
         many: personnes
-        other:
+        other: personnes
     flash:
       #original_hash: 0024905
       not_using_wca: Cette compétition n'utilise pas les inscriptions WCA.
@@ -2453,7 +2454,7 @@ fr-CA:
       country_plural:
         one: 1 région
         many: '%{count} régions'
-        other:
+        other: '%{count} régions'
       export_csv: Exporter en CSV
       #original_hash: e0edc01
       email: Adresse courriel
@@ -2474,7 +2475,7 @@ fr-CA:
       total: Total
       export_to_csv:
         one: Exporter %{count} inscription au format CSV
-        many:
+        many: Exporter %{count} inscriptions au format CSV
         other: Exporter %{count} inscriptions au format CSV
       export_all_to_csv: Exporter toutes les inscriptions au format CSV
     new_registration:
@@ -2918,7 +2919,7 @@ fr-CA:
       spots_left:
         one: Une place restante
         many: '%{count} places restantes'
-        other:
+        other: '%{count} places restantes'
       no_spots_left: Compétition pleine
     live:
       #original_hash: 20bdee1
@@ -3036,13 +3037,13 @@ fr-CA:
           next_to_advance:
             one: Le prochain compétiteur à se qualifier est %{competitors}
             many: Les prochains compétiteurs à se qualifier sont %{competitors}
-            other:
+            other: Les prochains compétiteurs à se qualifier sont %{competitors}
           advance: Qualifier le prochain compétiteur
           #original_hash: 6309b0a
           quit_confirm:
             one: Retrait d'un compétiteur du tour
             many: Retrait de compétiteurs du tour
-            other:
+            other: Retrait de compétiteurs du tour
           bulk:
             #original_hash: 3af42e5
             success: '%{count} compétiteurs ont été supprimés avec succès'
@@ -3081,7 +3082,9 @@ fr-CA:
             many: Ajoutez un compétiteur au tour ; comme le deuxième tour de la 
               double confrontation n'est pas ouvert, vous devrez l'ajouter 
               séparément.
-            other:
+            other: Ajoutez un compétiteur au tour ; comme le deuxième tour de la
+              double confrontation n'est pas ouvert, vous devrez l'ajouter 
+              séparément.
           event_edit_warning: >-
             Ce compétiteur n'est pas inscrit à cette épreuve, et le règlement de
             la compétition n'autorise plus la modification des inscriptions.
@@ -3169,13 +3172,13 @@ fr-CA:
       organizer_plural:
         one: Organisateur
         many: Organisateurs
-        other:
+        other: Organisateurs
       organization_team: Équipe organisatrice
       #original_hash: fc1b1a6
       delegate:
         one: Délégué WCA
         many: Délégués WCA
-        other:
+        other: Délégués WCA
       contact: Contact
       #original_hash: 0eb5ed5
       information: Information
@@ -3282,11 +3285,12 @@ fr-CA:
         one: Les compétiteurs peuvent venir avec 1 seul accompagnateur.
         many: Les compétiteurs peuvent venir au plus avec %{count} 
           accompagnateurs.
-        other:
+        other: Les compétiteurs peuvent venir au plus avec %{count} 
+          accompagnateurs.
       event_limit:
         one: Les compétiteurs ne peuvent s'inscrire qu'à 1 seule épreuve.
         many: Les compétiteurs peuvent s'inscrire au plus à %{count} épreuves.
-        other:
+        other: Les compétiteurs peuvent s'inscrire au plus à %{count} épreuves.
       require_qualification: >-
         Les compétiteurs ne peuvent s’inscrire qu’aux épreuves pour lesquelles
         ils sont déjà qualifiés.
@@ -3527,7 +3531,7 @@ fr-CA:
       currently_displaying:
         one: 'Affichage actuel : %{count} compétition'
         many: 'Affichage actuel : %{count} compétitions'
-        other:
+        other: 'Affichage actuel : %{count} compétitions'
       register_now: Inscrivez-vous dès maintenant
       #original_hash: 5de3ef4
       view_competition: Voir la compétition
@@ -4193,7 +4197,7 @@ fr-CA:
         spots_remaining_plural:
           one: '%{count} place disponible'
           many: '%{count} places disponibles'
-          other:
+          other: '%{count} places disponibles'
         no_spots_remaining: Aucune place disponible
         pending:
           #original_hash: 6cd48ad
@@ -4327,9 +4331,9 @@ fr-CA:
           cci: !'
         #original_hash: 6783f30
         move_to:
-          one: Déplacer %{count} vers
-          many: Déplacer %{count} vers
-          other:
+          one: Déplacer %{count} inscription vers
+          many: Déplacer %{count} inscriptions vers
+          other: Déplacer %{count} inscriptions vers
         move_to_none_selected: Déplacer vers
         #original_hash: a9eed29
         pending: En suspens
@@ -4450,7 +4454,7 @@ fr-CA:
         waiting_list_count:
           one: Il y a %{count} compétiteur en file d'attente.
           many: Il y a %{count} compétiteurs en file d'attente.
-          other:
+          other: Il y a %{count} compétiteurs en file d'attente.
       errors:
         #original_hash: b8debb3
         events: 'Le chargement de épreuve a échoué, veuillez réessayer'
@@ -4946,8 +4950,9 @@ fr-CA:
         one: Vous consultez l'horaire de la salle %{venue_name}, seule salle 
           pour cette compétition.
         many: Vous consultez l'horaire de la %{venue_name}, une des %{count} 
-          salle pour cette compétition.
-        other:
+          salles pour cette compétition.
+        other: Vous consultez l'horaire de la %{venue_name}, une des %{count} 
+          salles pour cette compétition.
       venue_selection_all: >-
         Vous consultez l'horaire de l'ensemble des %{venueCount} salles à la
         fois.
@@ -6653,7 +6658,8 @@ fr-CA:
       #original_hash: ace730d
       non_matching_name_warning: >-
         Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à l'enregistrement
-        actuel dans la base de données WCA ('%{expected_name}').  #original_hash: 9cfb3b5
+        actuel dans la base de données WCA ('%{expected_name}').  #original_hash:
+        9cfb3b5
       non_matching_country_warning: >-
         Le pays '%{country}' fourni pour %{name} (%{wca_id}) ne correspond pas à
         l'enregistrement actuel dans la base de données WCA
