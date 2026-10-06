@@ -399,6 +399,8 @@ pl:
       unit_seconds: sekundy
       #original_hash: 9d86b0d
       unit_moves: ruchów
+    back_to_top: Wróć na górę strony
+    back: Powrót
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1118,6 +1120,9 @@ pl:
           disabled_failed: >-
             Nie można było wyłączyć weryfikacji dwuetapowej, prosimy o
             sprawdzenie błędów poniżej.
+        redesign_notice: Widzisz teraz nową stronę logowania. Zastąpi ona starą 
+          pod koniec roku.
+        use_classic: Przełącz się na starą stronę logowania
       destroy_other:
         #original_hash: a768ea6
         success: Wylogowanie z pozostałych urządzeń zakończyło się sukcesem.
@@ -1139,6 +1144,10 @@ pl:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Proszę potwierdzić swój nowy adres email
+    registrations:
+      new:
+        redesign_notice: Widzisz teraz nową stronę rejestracji. Zastąpi ona 
+          starą pod koniec roku.
   wca:
     errors:
       messages:
