@@ -388,6 +388,7 @@ pt:
       #original_hash: 9d86b0d
       unit_moves: movimentos
     back_to_top: Voltar ao topo
+    back: Voltar
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1200,6 +1201,7 @@ pt:
         registos. Note que a sua data de nascimento nunca será divulgada sem a
         sua permissão.<br/><br/>Se se estiver a inscrever em nome de outra
         pessoa, forneça os detalhes do <strong>competidor</strong>.
+      dob_privacy: Esta informação nunca será divulgada sem a sua autorização.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2152,6 +2154,7 @@ pt:
         href="%{dob_form_path}">este formulário</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'ID da WCA %{link_id} não existe.'
+      search_for_delegate: Procurar por Delegado
   user_roles:
     email:
       role_metadata:
@@ -2216,6 +2219,7 @@ pt:
         Tem que fazer um comentário. Por favor leia os Requisitos de Registo
         acima para ver o que deve ser incluído (por exemplo, numa competição
         simultânea de Menos Movimentos, em que local competirá).
+      banned_until: A sua suspensão termina em %{date}.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2597,6 +2601,8 @@ pt:
           submetidas não podem ser processadas: %{raw_dobs}.
         #original_hash: 6d8e34b
         empty_file: O ficheiro está vazio.
+        invalid_country: 'País inválido: %{country}.'
+      cancel: Cancelar
     add:
       #original_hash: 975275e
       title: 'Adicionar registo para %{comp}'
@@ -2780,6 +2786,20 @@ pt:
         title: Pódios
         #original_hash: d7297a7
         undetermined: Pódios a determinar
+      admin:
+        quit:
+          bulk:
+            menu: Desistência em massa
+            id: ID
+            name: Nome
+        edit: Editar
+        results: Resultados
+        registration: Registo
+        admin_view: Vista de Administração
+        results_view: Vista de Resultados
+        submit_results: Submeter Resultados
+      results:
+        competitor: Competidor
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -3163,6 +3183,10 @@ pt:
       no_more_comps: Mais nenhuma competição.
       #original_hash: 8b09d74
       no_comp_found: Nenhuma competição encontrada.
+      all_competitions: Todas as competições
+      event: Evento
+      name: Nome
+      location: Local
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
@@ -6308,3 +6332,26 @@ pt:
       board_member: Membro do Conselho
       motivation: Descreva brevemente, em duas a quatro frases, as suas 
         motivações para se candidatar a Delegado em Treino.
+      relevant_skills: Indique as competências e experiências mais importantes 
+        que possui e que o poderão ajudar a desempenhar com sucesso as funções 
+        de Delegado em Treino.
+      declaration_understands_application: Compreendo que este formulário se 
+        destina a speedcubers registados que pretendem candidatar-se a Delegado 
+        em Treino.
+      declaration_has_delegate_support: Confirmo que falei com um Delegado 
+        qualificado da minha região que apoia a minha candidatura.
+      declaration_proficient_in_english: Confirmo que tenho um bom domínio da 
+        leitura e da escrita em inglês.
+      declaration_read_regulations_html: Confirmo que li o <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">Regulamento 
+        da WCA</a>.
+      regulations_note: 'Nota: não se espera que os Delegados conheçam todas as regras
+        de cor. No entanto, devem conhecer os princípios básicos e consultar o Regulamento
+        sempre que tenham dúvidas.'
+      cubing_business_involvement: Está envolvido num negócio relacionado com 
+        speedcubing?
+      cubing_business_involvement_details: Explique o seu envolvimento nesse 
+        negócio relacionado com speedcubing.
+      "yes": Sim
+      "no": Não
+      submit: Submeter aplicação
