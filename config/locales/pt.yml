@@ -217,6 +217,7 @@ pt:
     name: '%{event_name} %{round_name}'
     #original_hash: 747df5a
     round_number: 'Ronda %{round_number}'
+    title: Rondas
   advancement_condition:
     short:
       #original_hash: 6100c20
@@ -231,6 +232,7 @@ pt:
         #original_hash: 076911b
         points: '%{round_format} > %{points}'
     #original_hash: 6e55337
+      all_advance: Todos avançam
     ranking: 'Top %{ranking} avança para a próxima ronda'
     #original_hash: 7ee969c
     percent: 'Top %{percent}% avança para a próxima ronda'
@@ -241,19 +243,21 @@ pt:
       moves: '%{round_format} < %{moves} movimentos avança para a próxima ronda'
       #original_hash: e9f0c92
       points: '%{round_format} > %{points} pontos avança para a próxima ronda'
+    all_advance: Todos os competidores avançam
   cutoff:
     #original_hash: cf458e7
     time:
       one: '%{count} tentativa para obter < %{time}'
-      other: '%{count} tentativas para obter < %{time}'
-    #original_hash: b49d930
+      many: '%{count} tentativas para obter < %{time}'
+      other:
     moves:
       one: '%{count} tentativa para obter < %{moves} movimentos'
-      other: '%{count} tentativas para obter < %{moves} movimentos'
-    #original_hash: eba1b97
+      many: '%{count} tentativas para obter < %{moves} movimentos'
+      other:
     points:
       one: '%{count} tentativa para obter > %{points} pontos'
-      other: '%{count} tentativas para obter > %{points} pontos'
+      many: '%{count} tentativas para obter > %{points} pontos'
+      other:
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -365,8 +369,8 @@ pt:
     #original_hash: 49d0140
     days:
       one: 1 dia
-      other: '%{count} dias'
-    #original_hash: 51ef7d4
+      many: '%{count} dias'
+      other:
     search_site: Procurar no site
     #original_hash: d7decf1
     filter: Filtro
@@ -383,6 +387,7 @@ pt:
       unit_seconds: segundos
       #original_hash: 9d86b0d
       unit_moves: movimentos
+    back_to_top: Voltar ao topo
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -444,7 +449,8 @@ pt:
         #original_hash: 58e0c56
         remove_avatar: Remover avatar
         #original_hash: 9af9099
-        results_notifications_enabled: Enviar-me um email quando os resultados forem carregados.
+        results_notifications_enabled: Enviar-me um email quando os resultados 
+          forem carregados.
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
           Quando eu organizar ou for delegado de uma competição, envie-me email
@@ -462,9 +468,11 @@ pt:
           Gostaria de receber notificações sobre alterações nas funcionalidades
           de software da WCA.
         #original_hash: 730db33
-        receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
+        receive_delegate_reports: Quero receber Relatórios de Competições da WCA
+          de Delegados por email
         #original_hash: 8667157
-        delegate_reports_region: Apenas quero receber Relatórios de Delegados para a seguinte região
+        delegate_reports_region: Apenas quero receber Relatórios de Delegados 
+          para a seguinte região
         #original_hash: 57eaf24
         user_preferred_events: Eventos preferidos
         #original_hash: e632fbf
@@ -517,7 +525,8 @@ pt:
         #original_hash: 7106c2d
         setup_images: Imagens da configuração do espaço de competição
         #original_hash: 1362470
-        wrc_feedback_requested: Quero obter feedback do WRC em alguns dos incidentes anteriores.
+        wrc_feedback_requested: Quero obter feedback do WRC em alguns dos 
+          incidentes anteriores.
         #original_hash: 0c7191d
         wrc_incidents: Incidentes a necessitar feedback do WRC
         #original_hash: 1a54a79
@@ -540,7 +549,8 @@ pt:
         #original_hash: 709a232
         name: Nome
         #original_hash: c6bc0f4
-        incorrect_wca_id_claim_count: Contagem de reivindicações incorretas do ID da WCA
+        incorrect_wca_id_claim_count: Contagem de reivindicações incorretas do 
+          ID da WCA
       poll:
         #original_hash: 002ff59
         question: Questão
@@ -577,7 +587,8 @@ pt:
         #original_hash: 1c2ed61
         public_summary: Sumário (público)
         #original_hash: 62d6896
-        digest_worthy: Passível de ser colocado em email de resumo para Delegados
+        digest_worthy: Passível de ser colocado em email de resumo para 
+          Delegados
         #original_hash: 848eed0
         tags: Tags
         #original_hash: 861e459
@@ -615,11 +626,13 @@ pt:
         #original_hash: 9855f80
         bylaws: Regulamentos
         #original_hash: 405201b
-        directors_and_officers: Lista de Diretores principais e Oficiais e respetivos títulos
+        directors_and_officers: Lista de Diretores principais e Oficiais e 
+          respetivos títulos
         #original_hash: 719db2d
         area_description: Descrição clara da área abrangida
         #original_hash: 0cdb036
-        past_and_current_activities: Relatório de atividades passadas e presentes relacionadas com a WCA
+        past_and_current_activities: Relatório de atividades passadas e 
+          presentes relacionadas com a WCA
         #original_hash: 0faebcf
         future_plans: >-
           Planos para o futuro enquanto Organização Regional reconhecida pela
@@ -679,6 +692,7 @@ pt:
           vice_chair: Vice-Presidente da WCA
           #original_hash: 75e65d9
           treasurer: Tesoureiro da WCA
+          chief_operating_officer: Diretor de Operações da WCA
       ban_scope:
         #original_hash: 80901da
         competing_only: Apenas Competir
@@ -715,7 +729,8 @@ pt:
     hints:
       incident:
         #original_hash: c54e268
-        title: Lembre-se que isto é público e que tem que ser preenchido em inglês!
+        title: Lembre-se que isto é público e que tem que ser preenchido em 
+          inglês!
         #original_hash: 67f2a1a
         private_description: >-
           Uma descrição do incidente que apenas poderá ser visto por Delegados.
@@ -865,7 +880,8 @@ pt:
         #original_hash: 2ace571
         logo: 'Deve ser em formato PNG, com boa resolução e de fundo transparente'
         #original_hash: da54ab5
-        email: Deve ser uma mailing list que contenha todos os Diretores e Oficiais
+        email: Deve ser uma mailing list que contenha todos os Diretores e 
+          Oficiais
         #original_hash: 7d25ff5
         bylaws: Tem de ser em formato PDF
         #original_hash: 79555ff
@@ -906,7 +922,8 @@ pt:
         #original_hash: 603a218
         wca_id: ID da WCA
     #original_hash: 687d968
-    competition_link_html: 'Clique <a href=''%{url}''>aqui</a> para visitar a página da competição'
+    competition_link_html: 'Clique <a href=''%{url}''>aqui</a> para visitar a página
+      da competição'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -916,7 +933,8 @@ pt:
       #original_hash: f88d866
       title: Ocorreu um erro ao renderizar a página
       #original_hash: 22dfe12
-      description: 'Se o erro persistir, comunique-o à WST com os detalhes listados abaixo'
+      description: 'Se o erro persistir, comunique-o à WST com os detalhes listados
+        abaixo'
       #original_hash: 20be860
       details: Detalhes do erro
     messages:
@@ -943,7 +961,8 @@ pt:
           #original_hash: ec44d52
           confirm: Código de confirmação
           #original_hash: 912516c
-          regenerated_secret: Regenerou com sucesso o seu segredo da autenticação de dois fatores.
+          regenerated_secret: Regenerou com sucesso o seu segredo da 
+            autenticação de dois fatores.
           #original_hash: 1b0c44f
           enabled_success: Autenticação de dois fatores ativada com sucesso.
           #original_hash: 9515157
@@ -995,7 +1014,8 @@ pt:
               gerada por uma aplicação 2FA no seu smartphone (como Authy, Google
               Authenticator ou iOS Passwords).
             #original_hash: 34a7572
-            recovery: tirados dos códigos de recuperação gerados ao ativar o 2FA.
+            recovery: tirados dos códigos de recuperação gerados ao ativar o 
+              2FA.
             #original_hash: eaee403
             email: enviado para si por email ao fazer login.
           #original_hash: 7ae99ae
@@ -1073,9 +1093,11 @@ pt:
             possível, clicando no botão abaixo. Por favor note que se reativar
             2FA terá que reconfigurar o(s) dispositivo(s).
           #original_hash: ab1b77d
-          disabled_success: Desabilitada autenticação de dois fatores com sucesso.
+          disabled_success: Desabilitada autenticação de dois fatores com 
+            sucesso.
           #original_hash: c36d556
-          disabled_failed: 'Não foi possível desabilitar 2FA, por favor veja os erros abaixo.'
+          disabled_failed: 'Não foi possível desabilitar 2FA, por favor veja os erros
+            abaixo.'
       destroy_other:
         #original_hash: a768ea6
         success: Desconectou-se com sucesso de outros dispositivos.
@@ -1104,7 +1126,8 @@ pt:
         #original_hash: e88f903
         form_error:
           one: 'O formulário contém um erro:'
-          other: 'O formulário contém %{count} erros:'
+          many: 'O formulário contém %{count} erros:'
+          other:
       error_pages:
         #original_hash: 1042478
         500_error: 'Lamentamos, mas ocorreu um erro.'
@@ -1154,6 +1177,9 @@ pt:
         email: Aceda ao seu endereço de email
         #original_hash: e0d0654
         manage_competitions: Gerir competições futuras que está a organizar
+        manage_registrations: Registá-lo em competições e alterar ou cancelar as
+          suas inscrições
+        translations: Aceder à lista de idiomas para os quais é tradutor da WCA
     devise:
       #original_hash: 06184f5
       no_account: Não tem conta?
@@ -1586,7 +1612,8 @@ pt:
         competição. Para qualquer outra questão, por favor <a
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contacte-nos</a>.
       #original_hash: 43f15fd
-      no_permission_error: Não tem permissões para solicitar a edição do perfil de outras pessoas.
+      no_permission_error: Não tem permissões para solicitar a edição do perfil 
+        de outras pessoas.
       form:
         contact_email:
           #original_hash: 3142970
@@ -1610,7 +1637,16 @@ pt:
           #original_hash: 58c1271
           validation_error: Por favor verifique que não é um robô.
       #original_hash: 126541e
+        edit_reason_for:
+          label: Razão para alteração de %{attribute}
+        verified_checkbox:
+          label: Ao submeter este formulário, confirma que já verificou o 
+            respetivo documento de identificação e validou as informações 
+            fornecidas.
       success_message: Pedido enviado - entraremos em contacto em breve.
+      success_message_with_ticket_link_html: Pedido submetido - entraremos em 
+        contacto consigo em breve. Para consultar o estado deste pedido, visite 
+        <a href="%{link}">esta ligação</a>.
   homepage:
     #original_hash: 824d76b
     learn_more: Saber mais
@@ -1652,7 +1688,8 @@ pt:
       #original_hash: e51c552
       title: Recordes
       #original_hash: 3681af0
-      text: Veja os recordes atuais e passados de todos os eventos oficiais da WCA.
+      text: Veja os recordes atuais e passados de todos os eventos oficiais da 
+        WCA.
     faq:
       #original_hash: 03688ba
       title: Perguntas Frequentes
@@ -1685,6 +1722,15 @@ pt:
         ambiente competitivo, divertido e justo para todos.
       #original_hash: 65c84ec
       button: Saiba mais sobre como pode ajudar a WCA
+    volunteer:
+      title: Voluntário
+      text: Participe! A WCA tem vagas para voluntários em diversas equipas. Não
+        precisa de ser speedcuber para ser voluntário.
+    become_delegate:
+      title: Tornar-se Delegado
+      text: Ajude a garantir competições justas e bem organizadas na sua 
+        comunidade local de speedcubing, candidatando-se a Delegado em Treino.
+      link_title: Candidate-se agora
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -1889,9 +1935,11 @@ pt:
         Mudar de email requer a confirmação do novo email antes de se tornar
         efetivo.
       #original_hash: ff43ee2
-      pending_mail_confirmation: 'Está pendente a confirmação do novo email (%{email}) para esta conta.'
+      pending_mail_confirmation: 'Está pendente a confirmação do novo email (%{email})
+        para esta conta.'
       #original_hash: 0340b0b
-      pending_avatar_confirmation: Está pendente a confirmação do novo avatar para esta conta.
+      pending_avatar_confirmation: Está pendente a confirmação do novo avatar 
+        para esta conta.
       #original_hash: 81fa5f9
       pending_avatar_edit_action: 'Clique aqui se quiser editá-lo:'
       #original_hash: 73cebb8
@@ -1939,7 +1987,8 @@ pt:
           #original_hash: 1c4670f
           registered: inscreveu-se numa competição
       #original_hash: fe7122d
-      guidelines_confirmation: Confirmo que o meu avatar cumpre todas as indicações para avatares.
+      guidelines_confirmation: Confirmo que o meu avatar cumpre todas as 
+        indicações para avatares.
       #original_hash: 9a85f5e
       confirm_guidelines: >-
         Verifique que leu as indicações para avatares e submeteu uma foto
@@ -1978,7 +2027,8 @@ pt:
         #original_hash: 7f9c9c6
         '6': O avatar deve ser submetido na orientação correta.
         #original_hash: 1a18831
-        '7': O avatar não pode apresentar conteúdo ofensivo (ex. gestos ofensivos).
+        '7': O avatar não pode apresentar conteúdo ofensivo (ex. gestos 
+          ofensivos).
       staff_avatar_guidelines:
         #original_hash: f14a1fd
         title: 'Orientações adicionais para Voluntários e Delegados em Treino:'
@@ -2038,7 +2088,8 @@ pt:
         Não é possível modificar a região para uma que a pessoa já representou
         no passado.
       #original_hash: 5fe15d4
-      must_have_a_change: O nome da região tem que ser diferente para atualizar o competidor.
+      must_have_a_change: O nome da região tem que ser diferente para atualizar 
+        o competidor.
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar um ID da WCA porque já tem o ID %{wca_id}'
       #original_hash: ec5db95
@@ -2068,7 +2119,8 @@ pt:
         dono deste email, pode usar esta conta depois de redefinir a sua
         password <a href='/users/password/new'>aqui</a>.
       #original_hash: 50897d4
-      must_match_person: deve corresponder aos detalhes da pessoa a que diz respeito o ID da WCA
+      must_match_person: deve corresponder aos detalhes da pessoa a que diz 
+        respeito o ID da WCA
     successes:
       messages:
         #original_hash: 31bd401
@@ -2142,8 +2194,8 @@ pt:
       #original_hash: ef9b4ad
       exceeds_event_limit:
         one: Tem que se registar em exatamente 1 evento
-        other: 'Tem que se registar em de 1 a %{count} eventos.'
-      #original_hash: 87f7c12
+        many: Tem que se registar em de 1 a %{count} eventos.
+        other:
       banned_html: >-
         Está banido. Se acreditar que se trata de um erro, por favor contacte o
         <a href='mailto:integrity@worldcubeassociation.org'
@@ -2151,11 +2203,14 @@ pt:
       #original_hash: 8d07e7f
       undelete_banned: é um competidor banido e não pode ser recuperado
       #original_hash: 3de7c86
-      series_more_than_one_accepted: Só pode ser aceite para uma das competições de uma série de competições.
+      series_more_than_one_accepted: Só pode ser aceite para uma das competições
+        de uma série de competições.
       #original_hash: 13bfcd6
-      can_only_register_for_qualified_events: Não se pode registar em eventos para os quais não está qualificado.
+      can_only_register_for_qualified_events: Não se pode registar em eventos 
+        para os quais não está qualificado.
       #original_hash: 93ed20e
-      cannot_change_events_when_cancelling: Não pode alterar as modalidades enquanto cancela a sua inscrição.
+      cannot_change_events_when_cancelling: Não pode alterar as modalidades 
+        enquanto cancela a sua inscrição.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Tem que fazer um comentário. Por favor leia os Requisitos de Registo
@@ -2165,18 +2220,20 @@ pt:
       #original_hash: bdf1f11
       newcomer:
         one: principiante
-        other: principiantes
-      #original_hash: bc010e3
+        many: principiantes
+        other:
       returner:
         one: regressante
-        other: regressantes
-      #original_hash: b7da17a
+        many: regressantes
+        other:
       person:
         one: pessoa
-        other: pessoas
+        many: pessoas
+        other:
     flash:
       #original_hash: da7ec53
-      not_using_wca: Esta competição não está a usar o sistema de inscrição da WCA
+      not_using_wca: Esta competição não está a usar o sistema de inscrição da 
+        WCA
       #original_hash: 82b3899
       updated: Inscrição atualizada
       #original_hash: 7707307
@@ -2237,7 +2294,8 @@ pt:
         #original_hash: 8cbc6c0
         mail_subject: 'Registo Apagado: %{comp_name}'
         #original_hash: f66ae63
-        message_html: 'O seu registo em %{comp_name} foi apagado. Causas possíveis são:'
+        message_html: 'O seu registo em %{comp_name} foi apagado. Causas possíveis
+          são:'
         #original_hash: 8f7358f
         email_if_error: 'Se acha que isto é um erro, responda a este e-mail.'
         causes:
@@ -2274,8 +2332,8 @@ pt:
       #original_hash: beffc45
       country_plural:
         one: 1 região
-        other: '%{count} regiões'
-      #original_hash: 1feee0e
+        many: '%{count} regiões'
+        other:
       export_csv: Exportar para CSV
       #original_hash: 84add5b
       email: Email
@@ -2314,7 +2372,8 @@ pt:
     #original_hash: bbcc3dc
     delete_registration: Apagar Registo
     #original_hash: e9ddc6e
-    will_open_html: 'Inscrições irão abrir em <strong>%{days}</strong> na data/hora: %{time}.'
+    will_open_html: 'Inscrições irão abrir em <strong>%{days}</strong> na data/hora:
+      %{time}.'
     #original_hash: 34eb009
     will_close_html: 'As inscrições terminam daqui por <strong>%{days}, no dia %{time}'
     #original_hash: dc8a520
@@ -2376,7 +2435,8 @@ pt:
         O pagamento foi bem sucedido e no registo, abaixo, deverá constar como
         pago.
       #original_hash: 92dde77
-      payment_processing: 'O seu pagamento foi confirmado, mas a transação ainda está pendente.'
+      payment_processing: 'O seu pagamento foi confirmado, mas a transação ainda está
+        pendente.'
       #original_hash: a8f253d
       payment_partial: >-
         O seu pagamento foi confirmado, mas não cobre o valor total. Por favor,
@@ -2412,7 +2472,8 @@ pt:
         subtotal: Subtotal
       alerts:
         #original_hash: 707b9ca
-        amount_too_low: O montante total deve ser pelo menos o montante da taxa de registo.
+        amount_too_low: O montante total deve ser pelo menos o montante da taxa 
+          de registo.
         #original_hash: b245028
         amount_rather_high: >-
           Está prestes a pagar pelo menos o dobro do valor necessário para que
@@ -2423,7 +2484,8 @@ pt:
           As inscrições encontram-se encerradas - não são permitidos mais
           pagamentos.
         #original_hash: 166d48c
-        already_paid: O pagamento não foi realizado porque a taxa de registo já foi paga.
+        already_paid: O pagamento não foi realizado porque a taxa de registo já 
+          foi paga.
         #original_hash: f10c80c
         not_allowed: Não pode pagar para esse registo
         #original_hash: 967eaed
@@ -2568,7 +2630,8 @@ pt:
         O Identificador da competição começa com letra minúscula. Preferimos que
         comece com uma letra maiúscula.
       #original_hash: 1a20fae
-      must_have_events: Por favor adicione pelo menos um evento antes de confirmar a competição.
+      must_have_events: Por favor adicione pelo menos um evento antes de 
+        confirmar a competição.
       #original_hash: fd91320
       schedule_must_match_rounds: >-
         Por favor garanta que a competição tem pelo menos uma ronda por evento e
@@ -2609,7 +2672,8 @@ pt:
         sistema de pagamento externo, lembre-se de adicionar todos os detalhes
         relevantes aos requisitos de registo.
       #original_hash: ba067f0
-      not_announced: 'Esta competição é visível para o público, mas ainda não foi anunciada.'
+      not_announced: 'Esta competição é visível para o público, mas ainda não foi
+        anunciada.'
       #original_hash: ab61991
       announced_success: Competição anunciada com sucesso!
       #original_hash: cbff8ce
@@ -2635,13 +2699,15 @@ pt:
       #original_hash: e205d73
       results_already_posted: Os resultados já foram publicados.
       #original_hash: afe3a23
-      results_preview_alert: Está a visualizar resultados que ainda não foram publicados.
+      results_preview_alert: Está a visualizar resultados que ainda não foram 
+        publicados.
       #original_hash: 16dd227
       upload_results: >-
         Esta competição já terminou. Estamos a trabalhar para publicar os
         resultados o mais rápido possível!
       #original_hash: 68dd436
-      computing_auxiliary_data: Por favor aguarde enquanto dados auxiliares são processados.
+      computing_auxiliary_data: Por favor aguarde enquanto dados auxiliares são 
+        processados.
       #original_hash: 8ebe272
       no_results: Não há resultados.
       #original_hash: 79e8b95
@@ -2655,7 +2721,8 @@ pt:
         Esta competição está em andamento. Pode consultar resultados em direto
         <a href='%{link_here}'>aqui</a>!
       #original_hash: 8ab1548
-      reg_opens_too_early: Registo está definido começar antes das necessárias 48 horas.
+      reg_opens_too_early: Registo está definido começar antes das necessárias 
+        48 horas.
       #original_hash: a25e7a2
       registration_already_closed: >-
         A data limite para registos já foi ultrapassada. Por favor, defina-a
@@ -2676,9 +2743,11 @@ pt:
       #original_hash: 1b6dc61
       confirmed_visible: Esta competição está confirmada e visível
       #original_hash: abc2f96
-      confirmed_not_visible: Esta competição está confirmada mas não está visível
+      confirmed_not_visible: Esta competição está confirmada mas não está 
+        visível
       #original_hash: 6d6290b
-      not_confirmed_visible: Esta competição não está confirmada mas está visível
+      not_confirmed_visible: Esta competição não está confirmada mas está 
+        visível
       #original_hash: b299b27
       not_confirmed_not_visible: Esta competição não está confirmada nem visível
       #original_hash: 1b92d16
@@ -2694,7 +2763,8 @@ pt:
         um prazo. Se não estiver a usar uma lista de espera, lembre-se de
         especificar isto nos requisitos de inscrição.
       #original_hash: 51376ef
-      schedule_locked_after_results_submitted: O cronograma não poderá ser editado após a submissão dos resultados.
+      schedule_locked_after_results_submitted: O cronograma não poderá ser 
+        editado após a submissão dos resultados.
     live:
       #original_hash: 10d1a3c
       title: Resultados em direto
@@ -2782,14 +2852,14 @@ pt:
       #original_hash: 680567f
       organizer_plural:
         one: Organizador
-        other: Organizadores
-      #original_hash: 53a9522
+        many: Organizadores
+        other:
       organization_team: Equipa de organização
       #original_hash: 6afa61e
       delegate:
         one: Delegado da WCA
-        other: Delegados da WCA
-      #original_hash: b37456c
+        many: Delegados da WCA
+        other:
       contact: Contacto
       #original_hash: 0eb5ed5
       information: Informação
@@ -2831,15 +2901,18 @@ pt:
       #original_hash: 5390a91
       no_entry_fee: O registo para esta competição é grátis.
       #original_hash: 29af5c2
-      use_stripe_link_html: 'Taxas de registo têm que ser pagas via Stripe %{here} após o registo.'
+      use_stripe_link_html: 'Taxas de registo têm que ser pagas via Stripe %{here}
+        após o registo.'
       #original_hash: cea0eb4
-      use_stripe_below_html: A taxa de registo tem que ser paga via Stripe abaixo após o registo.
+      use_stripe_below_html: A taxa de registo tem que ser paga via Stripe 
+        abaixo após o registo.
       #original_hash: d6bab8f
       refund_policy_html: >-
         Se o seu registo for cancelado antes de %{limit_date_and_time} será
         reembolsado %{refund_policy_percent} da sua taxa de registo.
       #original_hash: 4aca553
-      no_refunds: Taxas de registo não serão reembolsadas em nenhuma circunstância.
+      no_refunds: Taxas de registo não serão reembolsadas em nenhuma 
+        circunstância.
       #original_hash: b016d2f
       waiting_list_deadline_html: >-
         Registos na lista de espera poderão ser integrados na lista de
@@ -2868,7 +2941,8 @@ pt:
         Registos no local serão aceites gratuitamente se existirem vagas
         disponíveis.
       #original_hash: f5f687d
-      no_on_the_spot_registration: Não serão aceites registos no local da competição.
+      no_on_the_spot_registration: Não serão aceites registos no local da 
+        competição.
       #original_hash: 4df139d
       guests_pay: >-
         Espetadores podem comparecer pagando uma taxa de entrada de
@@ -2877,16 +2951,17 @@ pt:
         #original_hash: 573eeb7
         free: Qualquer espetador pode assistir gratuitamente.
         #original_hash: f1e6aef
-        restricted: Espectadores só são permitidos como companhia para competidores.
+        restricted: Espectadores só são permitidos como companhia para 
+          competidores.
       #original_hash: 35f892a
       guest_limit:
         one: Competidores podem trazer no máximo 1 convidado.
-        other: 'Competidores podem trazer no máximo %{count} convidados.'
-      #original_hash: bad09c8
+        many: Competidores podem trazer no máximo %{count} convidados.
+        other:
       event_limit:
         one: Competidores podem registar-se em exatamente 1 evento.
-        other: 'Competidores podem registar-se em, no máximo, %{count} eventos.'
-      #original_hash: 64e0ddd
+        many: Competidores podem registar-se em, no máximo, %{count} eventos.
+        other:
       require_qualification: >-
         Competidores apenas se podem registar em eventos para os quais se
         encontram qualificados.
@@ -2914,7 +2989,8 @@ pt:
       #original_hash: 1f9c9c4
       highlights: Momentos altos
       #original_hash: 945f917
-      click_to_display_highlights_html: 'Clique %{link_here} para mostrar os momentos altos da competição.'
+      click_to_display_highlights_html: 'Clique %{link_here} para mostrar os momentos
+        altos da competição.'
       #original_hash: dc5c597
       hide_highlights: Esconder momentos altos.
       #original_hash: f691bf2
@@ -3054,7 +3130,8 @@ pt:
         #original_hash: 8b57693
         custom: Competições no período de tempo selecionado
         #original_hash: 0933739
-        by_announcement: 'Competições ordenadas por data de anúncio, mais recente no topo'
+        by_announcement: 'Competições ordenadas por data de anúncio, mais recente
+          no topo'
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -3100,7 +3177,8 @@ pt:
       #original_hash: e590657
       missing_report: O seu relatório ainda não foi postado!
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: 'Não tem atualmente nenhuma competição futura! Veja %{link}.'
+      no_upcoming_competitions_html: 'Não tem atualmente nenhuma competição futura!
+        Veja %{link}.'
       #original_hash: e0f66bb
       competitions_list: lista de competições
       #original_hash: 9104a03
@@ -3234,11 +3312,13 @@ pt:
           #original_hash: e9e5b84
           auto_close_threshold: Limite de fecho automático
           #original_hash: b1d5af4
-          newcomer_month_reserved_spots: Número de vagas reservadas para novos competidores
+          newcomer_month_reserved_spots: Número de vagas reservadas para novos 
+            competidores
           #original_hash: 26b48e3
           auto_accept_preference: Aceitar inscrições automaticamente
           #original_hash: 1b8698d
-          auto_accept_disable_threshold: Limite para aceitação automática de registos
+          auto_accept_disable_threshold: Limite para aceitação automática de 
+            registos
         staff:
           #original_hash: 2e3ed8b
           staff_delegate_ids: Delegado(s) da WCA
@@ -3273,7 +3353,8 @@ pt:
           #original_hash: 3542671
           guest_entry_fee: Taxa de entrada para convidados
           #original_hash: 71c8461
-          donations_enabled: Quero poder permitir doações além do recebido das taxas de inscrição
+          donations_enabled: Quero poder permitir doações além do recebido das 
+            taxas de inscrição
           #original_hash: efbdbab
           refund_policy_percent: Percentagem a ser reembolsada
           #original_hash: b332299
@@ -3284,7 +3365,8 @@ pt:
           #original_hash: f8153a2
           closing_date_time: Fecho de registos
           #original_hash: 16cf9a4
-          waiting_list_deadline_date: Data limite para aceitação de competidores da lista de espera
+          waiting_list_deadline_date: Data limite para aceitação de competidores
+            da lista de espera
           #original_hash: 99a9169
           event_change_deadline_date: >-
             Data limite para competidores atualizarem os eventos em que se
@@ -3292,25 +3374,29 @@ pt:
           #original_hash: 2529d04
           allow_on_the_spot: Registos no local
           #original_hash: b6faf84
-          competitor_can_cancel: Quando podem os competidores cancelar os seus registos?
+          competitor_can_cancel: Quando podem os competidores cancelar os seus 
+            registos?
           #original_hash: 7e53b96
           allow_self_edits: Edições de registos
           #original_hash: 3c23a67
           guests_enabled: Convidados
           #original_hash: bb16247
-          guest_entry_status: Mensagem a mostrar para entrada gratuita de convidados
+          guest_entry_status: Mensagem a mostrar para entrada gratuita de 
+            convidados
           #original_hash: 7d78478
           guests_per_registration: Número máximo de convidados por registo
           #original_hash: 556fda0
           extra_requirements: Requisitos extra para registos
           #original_hash: 6c8e5bf
-          force_comment: Forçar os competidores a escrever um comentário quando se registam
+          force_comment: Forçar os competidores a escrever um comentário quando 
+            se registam
         event_restrictions:
           forbid_newcomers:
             #original_hash: d0a4ce9
             enabled: Impedir registo de competidores iniciantes
             #original_hash: 40c4b4c
-            reason: Razão e detalhes para impedir o registo a competidores iniciantes
+            reason: Razão e detalhes para impedir o registo a competidores 
+              iniciantes
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: >-
@@ -3342,7 +3428,8 @@ pt:
         remarks: Observações
         cloning:
           #original_hash: c305010
-          clone_tabs: Gostaria de clonar todas as abas com informações adicionais também
+          clone_tabs: Gostaria de clonar todas as abas com informações 
+            adicionais também
       hints:
         admin:
           #original_hash: 68d3cc6
@@ -3455,7 +3542,8 @@ pt:
             ser exibido](mailto:some@email.com)
         website:
           #original_hash: cabe7fb
-          external_website: O website da competição. Tem que ser um URL http(s) válido.
+          external_website: O website da competição. Tem que ser um URL http(s) 
+            válido.
           #original_hash: b2af5f5
           external_registration_page: >-
             A página onde os competidores devem inscrever-se para a competição.
@@ -3489,10 +3577,12 @@ pt:
             uma frase informando que as taxas de inscrição não serão
             reembolsadas em nenhuma circunstância.
           #original_hash: f64d853
-          refund_policy_limit_date: Data após a qual não serão emitidos quaisquer reembolsos.
+          refund_policy_limit_date: Data após a qual não serão emitidos 
+            quaisquer reembolsos.
         registration:
           #original_hash: 9965635
-          opening_date_time: 'Nota: a abertura e o encerramento das inscrições são em horário UTC'
+          opening_date_time: 'Nota: a abertura e o encerramento das inscrições são
+            em horário UTC'
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             A data em que os inscritos em lista de espera não serão mais
@@ -3573,9 +3663,11 @@ pt:
             #original_hash: 5996b1f
             disabled: Desativar botão 'Aceitação Automática em Massa'
             #original_hash: 1c0c289
-            bulk: Ativar o botão 'Aceitação Automática em Massa' no menu Registos
+            bulk: Ativar o botão 'Aceitação Automática em Massa' no menu 
+              Registos
             #original_hash: 490ed83
-            live: Aceitar inscrições automaticamente quando o pagamento é efetuado
+            live: Aceitar inscrições automaticamente quando o pagamento é 
+              efetuado
         registration:
           allow_on_the_spot:
             #original_hash: 0c521ca
@@ -3648,7 +3740,8 @@ pt:
           Não prepare já a sua viagem - os organizadores ainda terão de aprovar
           manualmente a sua inscrição. Isto pode levar algum tempo.
         #original_hash: 6071fd9
-        is_accepted: Reserve a sua viagem e faça as malas - tem um lugar na competição!
+        is_accepted: Reserve a sua viagem e faça as malas - tem um lugar na 
+          competição!
         #original_hash: 89448a8
         is_cancelled: >-
           A sua inscrição foi cancelada e não irá competir, mas poderá
@@ -3669,7 +3762,8 @@ pt:
         #original_hash: 627422a
         spots_remaining_plural:
           one: '%{count} vaga disponível'
-          other: '%{count} vagas disponíveis'
+          many: '%{count} vagas disponíveis'
+          other:
         no_spots_remaining: Sem vagas disponíveis
         pending:
           #original_hash: 4210670
@@ -3765,7 +3859,8 @@ pt:
         #original_hash: cbf13af
         update_confirm: Tem a certeza de que quer atualizar o seu registo?
         #original_hash: 604da8b
-        organizer_update_confirm: Tem a certeza de que pretende atualizar o registo do utilizador?
+        organizer_update_confirm: Tem a certeza de que pretende atualizar o 
+          registo do utilizador?
         #original_hash: 9b92912
         update_confirm_contact: >-
           Tem de entrar em contacto com os organizadores para atualizar o seu
@@ -3789,11 +3884,13 @@ pt:
         #original_hash: b4bac52
         email_copy: Copiar Emails
         #original_hash: b83b663
-        email_message: Copiado para a área de transferência. Lembre-se de usar bcc!
+        email_message: Copiado para a área de transferência. Lembre-se de usar 
+          bcc!
         #original_hash: beedd53
         move_to:
-          one: 'Move %{count} para'
-          other: 'Move %{count} para'
+          one: Move %{count} para
+          many: Move %{count} para
+          other:
         move_to_none_selected: Move para
         #original_hash: 96f608c
         pending: Pendente
@@ -3812,7 +3909,8 @@ pt:
           Aceitar todos estes registos ultrapassaria o limite de competidores
           por %{count}
         #original_hash: 462376a
-        no_self_update: Contacte a Equipa de Organização para atualizar o seu registo.
+        no_self_update: Contacte a Equipa de Organização para atualizar o seu 
+          registo.
       register:
         #original_hash: e8cc296
         will_open_countdown: >-
@@ -3862,7 +3960,8 @@ pt:
         #original_hash: 05b9f17
         view_registration: Ver Registo
         #original_hash: 3c8d8b7
-        editing_disabled: A edição de registo está desativada para esta competição
+        editing_disabled: A edição de registo está desativada para esta 
+          competição
         registration_status:
           #original_hash: b1e97b8
           accepted: O seu registo foi aceite.
@@ -3942,7 +4041,8 @@ pt:
         #original_hash: 020234c
         '-4008': As inscrições estão encerradas
         #original_hash: b30e613
-        '-4009': Apenas Organizadores podem cancelar Registos para esta competição
+        '-4009': Apenas Organizadores podem cancelar Registos para esta 
+          competição
         #original_hash: 3c4cbaa
         '-4010': A posição na lista de espera não é válida
         #original_hash: e489908
@@ -3977,7 +4077,8 @@ pt:
           Só pode aceitar automaticamente inscrições pendentes ou primeira
           posição na lista de espera
         #original_hash: 30fd93d
-        '-7004': A competição atingiu o limite de "auto_accept_disable_threshold"
+        '-7004': A competição atingiu o limite de 
+          "auto_accept_disable_threshold"
         #original_hash: f2bb661
         '-7005': >-
           Não é possível aceitar inscrições automaticamente enquanto o registo
@@ -4012,13 +4113,16 @@ pt:
         O limite de fecho automático deve ser superior ao número de registos
         pagos neste momento
       #original_hash: abee516
-      auto_close_positive_nonzero: O limite de fecho automático deve ser superior a 0
+      auto_close_positive_nonzero: O limite de fecho automático deve ser 
+        superior a 0
       #original_hash: b81ee7e
-      must_exceed_competitor_limit: O limite de fecho automático deve ser superior ao limite de competidores
+      must_exceed_competitor_limit: O limite de fecho automático deve ser 
+        superior ao limite de competidores
       #original_hash: 148c1d4
       use_wca_registration: A competição deve utilizar o sistema de registo WCA
       #original_hash: 2c41c57
-      newcomer_month_reservations_percentage: não é possível reservar mais de 50% dos lugares para novos competidores
+      newcomer_month_reservations_percentage: não é possível reservar mais de 
+        50% dos lugares para novos competidores
       #original_hash: 58d244e
       newcomer_month_reservations_available: >-
         O número de lugares reservados para novos competidores pretendido, no
@@ -4031,7 +4135,8 @@ pt:
       #original_hash: 8e8f765
       cannot_manage: Não pode alterar a competição.
       #original_hash: 0acc454
-      cannot_delete_public: Não pode excluir uma competição que está visível publicamente.
+      cannot_delete_public: Não pode excluir uma competição que está visível 
+        publicamente.
       #original_hash: 3935fd6
       cannot_delete_confirmed: Não pode excluir uma competição confirmada.
       #original_hash: 191df37
@@ -4047,23 +4152,29 @@ pt:
       #original_hash: 8131fc2
       not_all_delegates: não são todos Delegados da WCA
       #original_hash: 43a23c2
-      registration_close_after_open: o fim das inscrições deve ser posterior ao início
+      registration_close_after_open: o fim das inscrições deve ser posterior ao 
+        início
       #original_hash: 2f8765e
       registration_already_closed: inscrições não podem estar já encerradas.
       #original_hash: 8a3a4f6
-      start_date_must_be_28_days_in_advance: Data de início tem de ser pelo menos 28 dias no futuro.
+      start_date_must_be_28_days_in_advance: Data de início tem de ser pelo 
+        menos 28 dias no futuro.
       #original_hash: 43a83a9
-      end_date_before_start: A data de fim não pode ser anterior à data de início.
+      end_date_before_start: A data de fim não pode ser anterior à data de 
+        início.
       #original_hash: 0c507fa
-      refund_date_after_start: Data limite para reembolso não pode ser após a data de início.
+      refund_date_after_start: Data limite para reembolso não pode ser após a 
+        data de início.
       #original_hash: be3933b
       span_too_many_days: 'A competição não pode durar mais que %{max_days} dias.'
       #original_hash: cdcd288
       invalid_currency_code: Código de moeda selecionado é inválido
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: deve ter uma condição de avanço para todas as rondas não finais.
+      advancement_condition_must_be_present_for_all_non_final_rounds: deve ter 
+        uma condição de avanço para todas as rondas não finais.
       #original_hash: da17c99
-      registration_period_after_start: Período de registo não pode ser depois da data de início.
+      registration_period_after_start: Período de registo não pode ser depois da
+        data de início.
       #original_hash: 2a26c1c
       waiting_list_deadline_before_registration_close: >-
         Prazo limite de lista de espera não pode ser antes da data de fecho de
@@ -4081,7 +4192,8 @@ pt:
         Prazo limite para atualizar eventos não pode ser antes da data de fecho
         de registos.
       #original_hash: bc1ca0f
-      event_change_deadline_after_end_date: Prazo limite para atualizar eventos não pode ser depois da competição.
+      event_change_deadline_after_end_date: Prazo limite para atualizar eventos 
+        não pode ser depois da competição.
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
         Prazo limite para atualizar eventos tem que ser durante a competição se
@@ -4224,7 +4336,8 @@ pt:
     #original_hash: c66488a
     user_preferences: Preferências de Utilizador
     #original_hash: 089cbfd
-    receive_registration_emails: Notifique-me por email quando alguém se inscrever nesta competição
+    receive_registration_emails: Notifique-me por email quando alguém se 
+      inscrever nesta competição
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Nota: Inscrições já se encontram encerradas.'
     show:
@@ -4247,7 +4360,8 @@ pt:
         #original_hash: b2a983a
         cumulative_time_limit: tempo limite cumulativo
         #original_hash: d47f11a
-        cumulative_one_round_html: 'Pode ser imposto um %{cumulative_time_limit} (ver %{regulation_link}).'
+        cumulative_one_round_html: 'Pode ser imposto um %{cumulative_time_limit} (ver
+          %{regulation_link}).'
         #original_hash: 44f85f0
         cumulative_across_rounds_html: >-
           Pode ser imposto um %{cumulative_time_limit} em todas as rondas (ver
@@ -4328,20 +4442,19 @@ pt:
       room_in_venue: '%{room} em %{venue}'
       #original_hash: f7fd979
       venue_selection_html:
-        one: >-
-          Está a ver a programação do local %{venue_name}, o único local desta
-          competição.
-        other: >-
-          Está a ver a programação do local %{venue_name}, um de %{count} locais
+        one: Está a ver a programação do local %{venue_name}, o único local 
           desta competição.
-      #original_hash: 8d175ad
+        many: Está a ver a programação do local %{venue_name}, um de %{count} 
+          locais desta competição.
+        other:
       venue_selection_all: >-
         Está a ver a calendarização para todos os %{venueCount} locais ao mesmo
         tempo.
       #original_hash: 97df911
       timezone_message: 'O fuso horário para este local é %{timezone}.'
       #original_hash: 94b2570
-      timezone_setting: 'Está a ver esta calendarização na seguinte configuração de fuso horário:'
+      timezone_setting: 'Está a ver esta calendarização na seguinte configuração de
+        fuso horário:'
       #original_hash: 75194fd
       multiple_timezones_available: >-
         Note que nem todos os locais estão no mesmo fuso horário -- por favor
@@ -4351,7 +4464,8 @@ pt:
       #original_hash: 17ab650
       timezone_set_venue: Definir para local da competição
       #original_hash: 9974a46
-      timezone_follow_venue: Usar automaticamente o fuso horário do local de competição ativo
+      timezone_follow_venue: Usar automaticamente o fuso horário do local de 
+        competição ativo
       #original_hash: 37b1adb
       schedule_for_date: 'Horário para %{day_name} (%{full_date})'
       #original_hash: d58b281
@@ -4571,7 +4685,8 @@ pt:
           Já não pode emitir um reembolso para esta competição. Utilize o painel
           do seu fornecedor de pagamento para o fazer.
         #original_hash: 73e93ee
-        refund_amount_too_high: Não tem permissão para reembolsar mais do que o competidor pagou.
+        refund_amount_too_high: Não tem permissão para reembolsar mais do que o 
+          competidor pagou.
         #original_hash: 6368ffc
         refund_amount_too_low: O valor do reembolso deve ser superior a zero.
     labels:
@@ -4594,11 +4709,13 @@ pt:
         Conectou com sucesso a sua conta %{provider} e pode agora receber
         pagamentos de inscrições para esta competição.
       #original_hash: b83891e
-      account_disconnected_success: 'A sua conta %{provider} foi desconectada com sucesso.'
+      account_disconnected_success: 'A sua conta %{provider} foi desconectada com
+        sucesso.'
       #original_hash: 6b934e2
       account_disconnected_failure: 'Ocorreu um erro ao desconectar a conta %{provider}.'
       #original_hash: 340bba4
-      account_not_connected: 'Ocorreu um problema e não foi possível conectar a sua conta %{provider}.'
+      account_not_connected: 'Ocorreu um problema e não foi possível conectar a sua
+        conta %{provider}.'
       #original_hash: 4218676
       disconnect_account: 'Desconectar conta %{provider}'
       #original_hash: 59c9c9c
@@ -4684,7 +4801,8 @@ pt:
           primary_email: Email
         manual:
           #original_hash: e5f0dfd
-          payment_instructions: Instruções de pagamento (serão apresentadas na Página da Competição)
+          payment_instructions: Instruções de pagamento (serão apresentadas na 
+            Página da Competição)
           #original_hash: 5e7242c
           payment_reference_label: >-
             Que informações deve o competidor fornecer para que possa
@@ -4703,7 +4821,8 @@ pt:
       #original_hash: 02ae2bd
       podiums: Pódios
       #original_hash: 56656a0
-      no_persons_found: Nenhuma pessoa encontrada com os critérios especificados.
+      no_persons_found: Nenhuma pessoa encontrada com os critérios 
+        especificados.
     show:
       #original_hash: 1e43436
       previously: Anteriormente
@@ -4756,7 +4875,8 @@ pt:
       national_records: Histórico de Recordes Nacionais
   posts:
     #original_hash: 2a7da42
-    confirm_delete_post: Tem a certeza que quer apagar este post? Esta ação é irreversível.
+    confirm_delete_post: Tem a certeza que quer apagar este post? Esta ação é 
+      irreversível.
     #original_hash: 3dcbf6d
     announcement_info_html: 'Anunciado por %{author_name} em %{date_time}'
     errors:
@@ -4785,7 +4905,8 @@ pt:
       delivery_error: Erro no envio da mensagem.
   misc:
     #original_hash: 9a0f1cc
-    forum_age_requirement: Tem de ter pelo menos 13 anos para aceder ao Fórum WCA.
+    forum_age_requirement: Tem de ter pelo menos 13 anos para aceder ao Fórum 
+      WCA.
     #original_hash: d1f3342
     forum_enter_dob: >-
       É necessário introduzir a data de nascimento para aceder ao fórum.
@@ -4917,7 +5038,8 @@ pt:
             href='%{profile_edit_path}'>perfil</a> e mude a foto.
       '8':
         #original_hash: 1d61217
-        title: Como posso associar a minha conta do site da WCA com o meu ID da WCA?
+        title: Como posso associar a minha conta do site da WCA com o meu ID da 
+          WCA?
         content:
           #original_hash: 07bb6ec
           '1': '%{current_user_claim}'
@@ -5263,7 +5385,8 @@ pt:
       #original_hash: a1c6de9
       private_information: Informação privada
       #original_hash: 87a1c7e
-      private_information_disclaimer: Toda a informação abaixo apenas será visível pelo Conselho da WCA
+      private_information_disclaimer: Toda a informação abaixo apenas será 
+        visível pelo Conselho da WCA
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: não pode ser após Reconhecida até
@@ -5274,7 +5397,8 @@ pt:
         pela revisão do Conselho da WCA
     delete:
       #original_hash: 6588652
-      confirm_delete: Tem a certeza que quer apagar este pedido de Organização Regional?
+      confirm_delete: Tem a certeza que quer apagar este pedido de Organização 
+        Regional?
   score_tools:
     #original_hash: 4fc2133
     title: Ferramentas de Software para Competições da WCA
@@ -5324,7 +5448,8 @@ pt:
         #original_hash: 4aaae5b
         title: AGE
         #original_hash: 2e4832d
-        description: Ferramenta para gerar e editar grupos/tarefas para competições da WCA
+        description: Ferramenta para gerar e editar grupos/tarefas para 
+          competições da WCA
       certificates:
         #original_hash: b3e4eb0
         title: Certificados
@@ -5345,7 +5470,8 @@ pt:
         #original_hash: aa1b64d
         title: Folhas de resultados
         #original_hash: 2b8e373
-        description: Imprimir folhas de resultados para competições WCA usando WCA Live
+        description: Imprimir folhas de resultados para competições WCA usando 
+          WCA Live
       tnoodle:
         #original_hash: ba336a1
         title: TNoodle (Embaralhamentos)
@@ -5383,7 +5509,8 @@ pt:
         #original_hash: 311a3f6
         title: Grupos de competição
         #original_hash: 74a0926
-        description: Ver grupos de competição para qualquer competição em andamento
+        description: Ver grupos de competição para qualquer competição em 
+          andamento
   logo:
     #original_hash: c72c969
     title: Logótipo da WCA
@@ -5530,7 +5657,8 @@ pt:
       content1_html: >-
         Se está interessado em organizar uma competição ou se já está a planear
         organizar uma, por favor leia as <a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Orientações para Organizadores</a>.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Orientações
+        para Organizadores</a>.
       #original_hash: 5016669
       content2_html: >-
         Este documento contém informação importante e deve ser lido por todos os
@@ -5821,11 +5949,14 @@ pt:
         A data de nascimento de %{name} é 1 de janeiro, certifique-se de que
         está correta.
       #original_hash: b4b736a
-      dob_is_too_young_warning: '%{name} parece ter menos de 3 anos, certifique-se de que está correto.'
+      dob_is_too_young_warning: '%{name} parece ter menos de 3 anos, certifique-se
+        de que está correto.'
       #original_hash: b7c88ef
-      dob_is_too_old_warning: '%{name} parece ter perto de 100 anos, certifique-se de que está correto.'
+      dob_is_too_old_warning: '%{name} parece ter perto de 100 anos, certifique-se
+        de que está correto.'
       #original_hash: 809f305
-      person_doesnt_have_any_results_error: 'Não existem resultados para %{person_name} com ID de pessoa %{person_id}'
+      person_doesnt_have_any_results_error: 'Não existem resultados para %{person_name}
+        com ID de pessoa %{person_id}'
       #original_hash: ebc1b15
       results_not_associated_with_any_person_error: >-
         Existem resultados para uma pessoa desconhecida com ID de pessoa
@@ -5835,9 +5966,11 @@ pt:
         A pessoa '%{name}' tem espaços em branco à esquerda/à direita ou espaços
         em branco duplos.
       #original_hash: 9b1ae5f
-      person_with_non_existing_wca_id_error: 'A pessoa %{name} tem um ID da WCA que não existe: %{wca_id}.'
+      person_with_non_existing_wca_id_error: 'A pessoa %{name} tem um ID da WCA que
+        não existe: %{wca_id}.'
       #original_hash: 924d832
-      no_space_before_parenthesis_error: 'O parêntesis de abertura em ''%{name}'' deve ser precedido por um espaço.'
+      no_space_before_parenthesis_error: 'O parêntesis de abertura em ''%{name}''
+        deve ser precedido por um espaço.'
       #original_hash: 6daf706
       same_person_name_warning: >-
         Já existe pelo menos uma pessoa com o nome '%{name}' na base de dados do
@@ -6107,3 +6240,71 @@ pt:
       actioner: Executor
       #original_hash: bcdf8d3
       requester: Solicitante
+  scramble_set:
+    group: Grupo %{number}
+    attempt: Tentativa %{number}
+  trainee_delegate_application:
+    title: Candidatura a Delegado em Treino
+    introduction: Este formulário destina-se a speedcubers registados que 
+      pretendam candidatar-se a Delegado em Treino. A sua candidatura será 
+      enviada aos Delegados responsáveis pela região selecionada.
+    success_title: Aplicação submetida
+    success: A sua candidatura foi enviada com sucesso. Foi enviada uma cópia 
+      para o endereço de email associado à sua conta WCA.
+    eligibility:
+      title: Ainda não pode submeter esta candidatura
+      missing_wca_id: A sua conta WCA tem de estar associada a um ID da WCA.
+      missing_date_of_birth: A sua conta da WCA tem de ter uma data de 
+        nascimento verificada.
+      underage: Os candidatos têm de ter, pelo menos, %{minimum_age} anos.
+      claim_wca_id: Associe o seu ID da WCA.
+      edit_profile: Solicite uma atualização de perfil.
+    errors:
+      invalid_region: Selecione uma região válida, com Delegado ativo.
+      missing_reviewer: A região selecionada não tem atualmente nenhum Delegado 
+        Regional ou Sénior que possa receber a candidatura.
+      recommender_required: Selecione, pelo menos, um Delegado que recomende a 
+        sua candidatura.
+      invalid_recommender: Um ou mais dos Delegados que selecionou já não podem 
+        recomendar a sua candidatura para esta região.
+      spoken_delegate_required: Selecione, pelo menos, um Delegado Júnior ou 
+        Delegado com que tenha contactado.
+      invalid_spoken_delegate: Um ou mais dos Delegados que selecionou já não 
+        são Delegados Júnior ou Delegados ativos na região selecionada.
+      declarations_required: Tem de confirmar todas as declarações.
+      business_involvement_required: Indique se está envolvido num negócio 
+        relacionado com speedcubing.
+      business_involvement_explanation_required: Explique o seu envolvimento num
+        negócio relacionado com speedcubing.
+    form:
+      declaration_and_basic_information: Declarações e Informações Básicas
+      name: Nome
+      wca_id: ID da WCA
+      email: Email
+      age: Idade
+      competition_count: Número de competições
+      region_and_references: Região e referências
+      region: Em que região de Delegado reside atualmente?
+      region_placeholder: Selecione a sua região
+      subregion: Em que sub-região de Delegado reside atualmente?
+      subregion_placeholder: Selecione a sua sub-região
+      reviewing_delegate: Delegado responsável pela análise
+      spoken_delegates: Com que Delegados Júnior ou Delegados falou sobre a 
+        possibilidade de se tornar Delegado em Treino?
+      recommenders: Que Delegados Júnior ou Delegados da sua região concordaram 
+        em recomendar a sua candidatura a Delegado em Treino?
+      delegates_placeholder: Selecione pelo menos um Delegado
+      experience_and_motivation: Experiência e Motivação
+      introduction: Apresente-se brevemente em duas a quatro frases.
+      competition_contributions: Resuma de que forma tem contribuído para as 
+        competições locais para além do que é esperado de todos os competidores.
+      volunteer_history: Se já desempenhou funções de voluntariado na WCA, 
+        indique aqui o respetivo período (opcional).
+      role_history_warning: O histórico das suas funções no site será incluído 
+        automaticamente na candidatura. Como as funções mais antigas podem não 
+        estar todas registadas, indique abaixo quaisquer funções em falta ou 
+        correções necessárias.
+      present: presente
+      board_member: Membro do Conselho
+      motivation: Descreva brevemente, em duas a quatro frases, as suas 
+        motivações para se candidatar a Delegado em Treino.
