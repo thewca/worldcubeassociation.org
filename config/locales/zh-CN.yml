@@ -457,7 +457,8 @@ zh-CN:
         #original_hash: 9af9099
         results_notifications_enabled: 当我的（参赛）成绩公示时给我发邮件。
         #original_hash: 29ce2ff
-        registration_notifications_enabled: 当我是该场比赛的代表或主办团队成员时，如果有人报名，请通过电子邮件通知我。
+        registration_notifications_enabled: 
+          当我是该场比赛的代表或主办团队成员时，如果有人报名，请通过电子邮件通知我。
         #original_hash: de60ab8
         delegate_status: 代表状态
         #original_hash: d219c68
@@ -743,9 +744,11 @@ zh-CN:
           此通知仅限于与数据导出、WCIF 结构（schema）及公开 API
           等资源的重大版本变更相关。建议提供给维护依赖这些工具之软件的开发者订阅。
         #original_hash: c564b74
-        receive_delegate_reports: 如果您是高级代表、WRC或WQAC成员，将自动收到比赛报告。注：该更改可能需要12小时才会生效。
+        receive_delegate_reports: 
+          如果您是高级代表、WRC或WQAC成员，将自动收到比赛报告。注：该更改可能需要12小时才会生效。
         #original_hash: 0017d38
-        delegate_reports_region: 如果您想收到所有报告，请将此字段留空（选择下拉菜单最上方的选项）。请注意：此更改可能需要12小时才会生效。
+        delegate_reports_region: 
+          如果您想收到所有报告，请将此字段留空（选择下拉菜单最上方的选项）。请注意：此更改可能需要12小时才会生效。
         #original_hash: 0627e5c
         otp_attempt: 请打开移动设备上已配置的应用程序以获取一次性密码，或输入一个备用码。
       dob_contact:
@@ -885,7 +888,8 @@ zh-CN:
           #original_hash: d305ccb
           get_by_email: 通过电子邮件获得代码
           #original_hash: 4e644aa
-          get_by_email_desc: 如果你不能访问你的设备或访问代码，你也可以点击下面的按钮，通过电子邮件获得一个一次性密码。复制并粘贴在上面的输入框中即可登录。
+          get_by_email_desc: 
+            如果你不能访问你的设备或访问代码，你也可以点击下面的按钮，通过电子邮件获得一个一次性密码。复制并粘贴在上面的输入框中即可登录。
           #original_hash: b243ac5
           email_sent: 您已经通过电子邮件收到了一个代码。该代码的有效期为 2 分钟。你可以在 2 分钟内获取一个新的代码。
           errors:
@@ -946,7 +950,8 @@ zh-CN:
           #original_hash: e7cba1a
           backup_codes: 备份代码
           #original_hash: fa62416
-          backup_codes_desc: 备份代码可以作为一次性密码使用，以防你无法使用双因素认证应用程序访问你的设备。每个密码只能使用一次。请确保将它们存放在安全的地方。
+          backup_codes_desc: 
+            备份代码可以作为一次性密码使用，以防你无法使用双因素认证应用程序访问你的设备。每个密码只能使用一次。请确保将它们存放在安全的地方。
           #original_hash: 087cb72
           no_backup_codes: 你还没有生成备份代码。点击下面的按钮来生成你的备份代码。
           #original_hash: b6bc5ec
@@ -961,7 +966,8 @@ zh-CN:
           #original_hash: dd991ab
           disable_section_title: 禁用双因素方法
           #original_hash: 4569d81
-          disable_section_content: WST 强烈建议你不要禁用 2FA，但你仍可点击下方按钮将其禁用。请注意，如果你重新启用 2FA，需要重新配置设备。
+          disable_section_content: WST 强烈建议你不要禁用 2FA，但你仍可点击下方按钮将其禁用。请注意，如果你重新启用 
+            2FA，需要重新配置设备。
           #original_hash: ab1b77d
           disabled_success: 成功地禁用了双因素认证。
           #original_hash: c36d556
@@ -1220,7 +1226,8 @@ zh-CN:
         wapc: WCA申诉委员会 (WAPC)
       groups_description:
         #original_hash: d62001b
-        wat: WCA档案组负责建设和维护WCA历史档案。该组会记录重要的速拧事件和WCA里程碑，并将其整理到WCA时间线中，以保留WCA在速拧领域的历史。
+        wat: 
+          WCA档案组负责建设和维护WCA历史档案。该组会记录重要的速拧事件和WCA里程碑，并将其整理到WCA时间线中，以保留WCA在速拧领域的历史。
         #original_hash: 7803faf
         wct: >-
           该组负责世界魔方协会与魔方爱好者及社会公众之间的联系与沟通。沟通与推广工作有助于实现世界魔方协会的目标，并营造友好、透明、包容、开放且积极响应的魔方文化。
@@ -1243,7 +1250,8 @@ zh-CN:
         wqac: >-
           该委员会负责支持和推动WCA的持续质量改进，并在全球范围内实施质量标准，确保WCA工作人员、区域组织、比赛组织者和工作人员遵循一致的高质量流程。
         #original_hash: 355babe
-        wrc: 该组负责与WCA规则的应用、改进和发展有关的所有问题。他们支持WCA代表处理比赛中发生的任何类型的程序性问题，并决定未解决和未发现的事件。
+        wrc: 
+          该组负责与WCA规则的应用、改进和发展有关的所有问题。他们支持WCA代表处理比赛中发生的任何类型的程序性问题，并决定未解决和未发现的事件。
         #original_hash: 7ca3e6f
         wrt: 该组负责管理WCA数据库中的所有数据，最重要的是比赛成绩和选手个人数据。
         #original_hash: f905744
@@ -1541,7 +1549,8 @@ zh-CN:
         #original_hash: c9d0561
         intro: '你好 %{name}'
         #original_hash: a8f7e72
-        information_html: '提醒您：<a href=%{competition_url}>%{competition}</a>将在不到 24 小时后开放报名。'
+        information_html: '提醒您：<a href=%{competition_url}>%{competition}</a>将在不到 24
+          小时后开放报名。'
         #original_hash: 2b93022
         not_accepted_html: 你已经报名，但报名申请尚未通过审核。
         #original_hash: d4087ee
@@ -1744,7 +1753,8 @@ zh-CN:
       #original_hash: 48653a9
       already_have_id: '因为你已有 WCA ID %{wca_id}，所以无法认领 WCA ID'
       #original_hash: ec5db95
-      wca_id_no_birthdate_html: '我们当前没有该 WCA ID 的生日信息。请使用<a href="%{dob_form_path}">专用表单</a>联系 WCA 成绩组。'
+      wca_id_no_birthdate_html: '我们当前没有该 WCA ID 的生日信息。请使用<a href="%{dob_form_path}">专用表单</a>联系
+        WCA 成绩组。'
       #original_hash: f7dde6e
       wca_id_no_gender_html: >-
         该 WCA ID 没有性别记录。请联系 <a href='%{wrt_contact_path}' target='_blank'>WCA
@@ -1842,7 +1852,8 @@ zh-CN:
       #original_hash: 93ed20e
       cannot_change_events_when_cancelling: 您无法在取消报名的同时变更参加项目。
       #original_hash: 4025877
-      cannot_register_without_comment: 您必须要做注记。请确实阅读报名的需要条件来确认哪些内容一定要注记（例如：在多地区同时举行的最少步数解比赛，注记您会参加哪个场地）。
+      cannot_register_without_comment: 
+        您必须要做注记。请确实阅读报名的需要条件来确认哪些内容一定要注记（例如：在多地区同时举行的最少步数解比赛，注记您会参加哪个场地）。
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1890,7 +1901,8 @@ zh-CN:
         #original_hash: 54c2106
         mail_subject: '您在候补名单：%{comp_name}'
         #original_hash: 2a0c44f
-        waitlisted_html: '比赛已满，但您已被列入候补名单。当有足够的名额空出让您参加比赛时，您会收到电子邮件通知。您可以在 %{here} 查看您的候补名单位置。'
+        waitlisted_html: '比赛已满，但您已被列入候补名单。当有足够的名额空出让您参加比赛时，您会收到电子邮件通知。您可以在 %{here}
+          查看您的候补名单位置。'
         #original_hash: 8f7358f
         email_if_error: 如果您认为这有错误，请回复这封电子邮件。
       deleted:
@@ -2088,7 +2100,8 @@ zh-CN:
       #original_hash: 779b272
       registrations_file_label: 报名文件
       #original_hash: d428219
-      registrations_file_hint: CSV 文件应包含以下列：状态、姓名、国家/地区、WCA ID、出生日期、性别、电子邮件，以及每个比赛项目对应的列。
+      registrations_file_hint: CSV 文件应包含以下列：状态、姓名、国家/地区、WCA 
+        ID、出生日期、性别、电子邮件，以及每个比赛项目对应的列。
       #original_hash: 01beb54
       preview: 预览报名数据
       #original_hash: d6fbc9d
@@ -2157,7 +2170,8 @@ zh-CN:
       #original_hash: fd91320
       schedule_must_match_rounds: 请确保每项比赛至少有一轮，而且你创建的时间表包括你在确认比赛前申报的所有比赛。
       #original_hash: 4fe4dee
-      advancement_condition_must_be_present_for_all_non_final_rounds: 请确保所有非最后一轮的比赛都规定了晋级条件。
+      advancement_condition_must_be_present_for_all_non_final_rounds: 
+        请确保所有非最后一轮的比赛都规定了晋级条件。
       #original_hash: a00f441
       cutoff_is_greater_than_time_limit: '%{event}项目的第%{round_number} 轮的门槛成绩比时间限制还久，请确认门槛成绩没有比时间限制还长。'
       #original_hash: c1580b1
@@ -2234,7 +2248,8 @@ zh-CN:
       #original_hash: 7f197a0
       orga_closed_reg_failure: 无法结束报名。
       #original_hash: 74caf1a
-      no_waiting_list_specified: 该比赛尚未设置候补名单截止时间。如果您要使用候补名单功能，请指定截止日期；如果不使用，请在报名要求中说明。
+      no_waiting_list_specified: 
+        该比赛尚未设置候补名单截止时间。如果您要使用候补名单功能，请指定截止日期；如果不使用，请在报名要求中说明。
       #original_hash: 51376ef
       schedule_locked_after_results_submitted: 在成绩提交后，赛程将无法再进行编辑。
       #original_hash: 1877b69
@@ -2474,7 +2489,8 @@ zh-CN:
       #original_hash: 171e593
       part_of_a_series_list: '这场比赛是%{name}系列赛的一部分。这个系列赛的其他比赛是：'
       #original_hash: 09fa333
-      series_registration_warning_html: 注意：您可以报名系列赛中的每一场比赛，但只有其中一个报名会被许可。<b>您只会被允许参加系列赛中的一场比赛！</b>
+      series_registration_warning_html: 
+        注意：您可以报名系列赛中的每一场比赛，但只有其中一个报名会被许可。<b>您只会被允许参加系列赛中的一场比赛！</b>
       #original_hash: 9bb1965
       competitor_limit: 参赛者人数上限
       #original_hash: 196725e
@@ -2498,9 +2514,11 @@ zh-CN:
       #original_hash: 14c5699
       event_change_deadline_html: '如果您是正式报名参赛者，您可以在 %{event_change_deadline} 之前联系主办团队来更改报名的参赛项目。'
       #original_hash: c58abdf
-      event_change_deadline_edits_allowed_html: '如果您是正式报名参赛者，您可以在 %{event_change_deadline} 之前在%{register}项目中来更改报名的参赛项目。'
+      event_change_deadline_edits_allowed_html: '如果您是正式报名参赛者，您可以在 %{event_change_deadline}
+        之前在%{register}项目中来更改报名的参赛项目。'
       #original_hash: eff3594
-      event_change_deadline_default_html: 我们鼓励所有人线上报名他们想参加的比赛项目，但您可以在该比赛项目开始前增加比赛报名项目。
+      event_change_deadline_default_html: 
+        我们鼓励所有人线上报名他们想参加的比赛项目，但您可以在该比赛项目开始前增加比赛报名项目。
       #original_hash: 51ef4f3
       on_the_spot_registration_fee_html: '如果还有名额的话，将可以现场报名，基本报名费是 %{on_the_spot_base_entry_fee}。'
       #original_hash: 2b4ea65
@@ -2977,7 +2995,8 @@ zh-CN:
       hints:
         admin:
           #original_hash: 68d3cc6
-          uses_new_registration_system: 如果禁用这功能，更改报名系统会生成技术问题。如果您仍要更改报名系统请联系WCA软件组来获取协助。
+          uses_new_registration_system: 
+            如果禁用这功能，更改报名系统会生成技术问题。如果您仍要更改报名系统请联系WCA软件组来获取协助。
         #original_hash: 2c812a0
         name: '比赛全名需在结尾包含年份（例：Danish Open 2016）。注意大小写。名字只能包含字母、数字、标点（-&.:''）和空格。'
         #original_hash: fbcda66
@@ -3000,11 +3019,13 @@ zh-CN:
           coordinates:
         series:
           #original_hash: 77811b5
-          name: 系列赛比赛全名的最后有年份，（例如：Southern Australia 2022）。务必要首字母大写。单独比赛所用的名字规则也适用。
+          name: 系列赛比赛全名的最后有年份，（例如：Southern Australia 
+            2022）。务必要首字母大写。单独比赛所用的名字规则也适用。
           #original_hash: 778c20c
           short_name: 用于显示用的简短名字。单独比赛所用的名字规则也适用。
           #original_hash: 3e27501
-          competition_ids: <b>这个区域不能被编辑！</b><br/>要在系列赛中增加比赛，您需要去想要加入的比赛页面中的「编辑」页面来增加。
+          competition_ids: 
+            <b>这个区域不能被编辑！</b><br/>要在系列赛中增加比赛，您需要去想要加入的比赛页面中的「编辑」页面来增加。
         #original_hash: bb470cc
         information: 关于比赛人数限制、报名费、观众及其他相关细节的信息。
         competitor_limit:
@@ -3015,13 +3036,16 @@ zh-CN:
           #original_hash: 4bd7102
           reason: 为什么要限制比赛人数？请用英文填写！
           #original_hash: 045d250
-          auto_close_threshold: 当已付款人数达到此数字时，报名将自动关闭。留空此字段即不启用该功能。如果您不使用集成支付系统，可忽略此设置。
+          auto_close_threshold: 
+            当已付款人数达到此数字时，报名将自动关闭。留空此字段即不启用该功能。如果您不使用集成支付系统，可忽略此设置。
           #original_hash: e1cf4fc
           newcomer_month_reserved_spots: 只有在Newcomer月间才能使用，保留的名额数不能超过参赛者人数上限的一半。
           #original_hash: 79dcafd
-          auto_accept_preference: 这将在报名菜单中启用“批量自动接受”按钮。该按钮会接受所有已付款的候补和待处理报名，直至达到人数限制或下方设置的限制。请谨慎使用。
+          auto_accept_preference: 
+            这将在报名菜单中启用“批量自动接受”按钮。该按钮会接受所有已付款的候补和待处理报名，直至达到人数限制或下方设置的限制。请谨慎使用。
           #original_hash: b261026
-          auto_accept_disable_threshold: 已接受的报名达到此数量后，自动接受将自行禁用，以便主办方手动批准最后的报名。该数量必须小于人数限制；如不需要，请留空。
+          auto_accept_disable_threshold: 
+            已接受的报名达到此数量后，自动接受将自行禁用，以便主办方手动批准最后的报名。该数量必须小于人数限制；如不需要，请留空。
         staff:
           #original_hash: b4d020f
           staff_delegate_ids: 比赛的WCA代表们。
@@ -3056,19 +3080,22 @@ zh-CN:
           #original_hash: 0419547
           guest_entry_fee: 目前这个数字仅供显示信息用，本网站不处理陪同者入场费。如果此处设为0，可以选择显示一个观众政策的文字。
           #original_hash: 180b7b3
-          refund_policy_percent: 目前这个数字仅供显示信息用，退款还是由人工处理。如果此处设为0，会有一个句子表示报名费在任何情况下皆不退款。
+          refund_policy_percent: 
+            目前这个数字仅供显示信息用，退款还是由人工处理。如果此处设为0，会有一个句子表示报名费在任何情况下皆不退款。
           #original_hash: f64d853
           refund_policy_limit_date: 这个日期以后皆不再退款。
         registration:
           #original_hash: 9965635
           opening_date_time: 注意：报名开放和结束是UTC时间
           #original_hash: 664db64
-          waiting_list_deadline_date: 不再接受候补名单的日期。如果您有退款的截止日期，不受理候补的日期不应该早于退款的截止日期。
+          waiting_list_deadline_date: 
+            不再接受候补名单的日期。如果您有退款的截止日期，不受理候补的日期不应该早于退款的截止日期。
           #original_hash: 75e6c1f
           event_change_deadline_date: >-
             在此时间前，参赛者有权联系主办团队修改报名项目。该截止时间不得早于报名截止时间。如果留空，参赛者在相应项目开始前都可追加该项目。如果允许现场报名，该截止时间必须设为比赛当天。
           #original_hash: 4b51faa
-          guests_per_registration: 这个比赛每个参赛者所允许的陪同者人数。太多陪同者的报名会被挡下来。如果没有人数限制，请留空白。
+          guests_per_registration: 
+            这个比赛每个参赛者所允许的陪同者人数。太多陪同者的报名会被挡下来。如果没有人数限制，请留空白。
           #original_hash: 3de153b
           extra_requirements: >-
             请在此处说明任何以上未提及到的额外报名条件，例如有关如何支付。<br/>请用 <b>英文</b>
@@ -3499,7 +3526,8 @@ zh-CN:
       #original_hash: cdcd288
       invalid_currency_code: 所选货币符号不正确
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: 如果不是最后一轮，必须要设置晋级条件。
+      advancement_condition_must_be_present_for_all_non_final_rounds: 
+        如果不是最后一轮，必须要设置晋级条件。
       #original_hash: da17c99
       registration_period_after_start: 报名阶段不能晚于比赛日期。
       #original_hash: 2a26c1c
@@ -3664,7 +3692,8 @@ zh-CN:
         #original_hash: b701c2a
         qualification_some_events_html: '设置%{events}项目的参赛资格截止时间不能晚于<b>%{date}</b>。'
         #original_hash: ce9b21b
-        advancement_condition_html: 显示的晋级人数是计划的最大值。如果参赛人数少于预期，或晋级边界出现并列，实际人数可能更少。
+        advancement_condition_html: 
+          显示的晋级人数是计划的最大值。如果参赛人数少于预期，或晋级边界出现并列，实际人数可能更少。
       #original_hash: 041a5de
       format: 型式
       #original_hash: 0d1fcc3
@@ -3796,7 +3825,8 @@ zh-CN:
         scrambles: 打乱内容
     results_table:
       #original_hash: bdbfcdc
-      h2h_results_disclaimer: 成绩由Head-to-Head决赛决定。目前仅显示名次顺序与最佳单次成绩，完整的Head-to-Head成绩显示功能仍在开发中。
+      h2h_results_disclaimer: 
+        成绩由Head-to-Head决赛决定。目前仅显示名次顺序与最佳单次成绩，完整的Head-to-Head成绩显示功能仍在开发中。
       #original_hash: 3e9a6b5
       wca_profile: WCA个人资料
       #original_hash: ad8919a
@@ -4307,7 +4337,8 @@ zh-CN:
     #original_hash: dc71704
     world_championship_title: 世界锦标赛
     #original_hash: 57cf7f7
-    world_championship_content_html: <p>每两年，我们都会批准最终决定世界冠军的比赛。这些活动需要大量志愿者进行极其仔细的规划，并需要投入大量资金来预订场地并进行必要的准备。</p>
+    world_championship_content_html: 
+      <p>每两年，我们都会批准最终决定世界冠军的比赛。这些活动需要大量志愿者进行极其仔细的规划，并需要投入大量资金来预订场地并进行必要的准备。</p>
     #original_hash: 1aa5344
     contributing_title: 对我们进行赞助
     #original_hash: 538a82f
@@ -4529,7 +4560,8 @@ zh-CN:
         #original_hash: ba336a1
         title: TNoodle （打乱程序）
         #original_hash: 0a38b22
-        description: TNoodle是用在WCA比赛的官方打乱程序。通常都是由WCA代表在比赛前使用，但它的界面也能够让任何人为所有的WCA比赛项目生成打乱。
+        description: 
+          TNoodle是用在WCA比赛的官方打乱程序。通常都是由WCA代表在比赛前使用，但它的界面也能够让任何人为所有的WCA比赛项目生成打乱。
       live:
         #original_hash: c66444f
         title: WCA Live
@@ -4657,7 +4689,8 @@ zh-CN:
     #original_hash: 35f49dc
     sent: 已发送
     #original_hash: 93934ad
-    showing_entries: '显示第 %{first} 至 %{last} 条，共 %{total} 条；每页显示 <select></select> 条'
+    showing_entries: '显示第 %{first} 至 %{last} 条，共 %{total} 条；每页显示 <select></select>
+      条'
     #original_hash: 329a7c2
     not_public_warning: 注意：此日志尚未解决，因此不会公开显示。
     #original_hash: 0d96264
@@ -4715,7 +4748,8 @@ zh-CN:
       #original_hash: 1fa73f3
       title: 规则
       #original_hash: 557095b
-      content1_html: 所有比赛必须遵循 <a href="/regulations/">WCA 规则</a>。在参加第一场比赛之前，参赛者阅读这些规定是非常重要的。
+      content1_html: 所有比赛必须遵循 <a href="/regulations/">WCA 
+        规则</a>。在参加第一场比赛之前，参赛者阅读这些规定是非常重要的。
       #original_hash: c8e1783
       content2_html: >-
         WCA 规则由 <a href="/regulations/guidelines.html">WCA
@@ -4728,7 +4762,8 @@ zh-CN:
         WCA 规则不仅有英文版，而且 WCA 成员已经将它们翻译成好几种语言：<a
         href="/regulations/translations/">翻译</a>。
       #original_hash: 6add7a3
-      content2_html: <strong>重要</ strong>：尽管翻译非常有帮助，但并不是官方的。在比赛中，最终以 WCA 规则的英文版为准。
+      content2_html: <strong>重要</ strong>：尽管翻译非常有帮助，但并不是官方的。在比赛中，最终以 WCA 
+        规则的英文版为准。
     panel3:
       #original_hash: 234fd4d
       title: 规则 常见问题
@@ -4749,7 +4784,8 @@ zh-CN:
     #original_hash: 386ecc1
     paragraph1: 如果您说的是英语以外的语言，这些翻译应该对您会有帮助。
     #original_hash: 32b1132
-    paragraph2: 请注意翻译版并不视为官方版本，就算他们是在WCA网站获取，翻译版本仍无法保证内容正确。如果翻译版和（最新的）英文版有相异处，必须使用英文版。
+    paragraph2: 
+      请注意翻译版并不视为官方版本，就算他们是在WCA网站获取，翻译版本仍无法保证内容正确。如果翻译版和（最新的）英文版有相异处，必须使用英文版。
     #original_hash: 8ad8302
     translations: 翻译版
     #original_hash: 4fc0e2b
@@ -4924,7 +4960,8 @@ zh-CN:
       #original_hash: 4f59283
       permalink: 永久链接
       #original_hash: 6a9f5e6
-      permalink_note: 注意：永久链接会提供指定版本中的最新成绩导出。例如，v2 永久链接会返回最新的 v2 导出，即使 v3 发布后也仍会停留在 v2。
+      permalink_note: 注意：永久链接会提供指定版本中的最新成绩导出。例如，v2 永久链接会返回最新的 v2 导出，即使 v3 
+        发布后也仍会停留在 v2。
       file_formats:
         #original_hash: b086d79
         sql: SQL 叙述句，用于导入SQL数据库用。
@@ -4970,7 +5007,8 @@ zh-CN:
         为 %{name}（%{wca_id}）提供的性别“%{gender}”与 WCA
         数据库中的当前记录（“%{expected_gender}”）不符。如果信息有误，请修正；否则，请留言向 WRT 说明。
       #original_hash: da398a2
-      empty_gender_warning: '新人 %{name} 的性别为空。有效值为“female”“male”和“other”。请留言向 WRT 说明。'
+      empty_gender_warning: '新人 %{name} 的性别为空。有效值为“female”“male”和“other”。请留言向 WRT
+        说明。'
       #original_hash: 050c7e2
       non_matching_name_warning: '为 %{wca_id} 提供的姓名“%{name}”与 WCA 数据库中的当前记录（“%{expected_name}”）不符。'
       #original_hash: 333a035
@@ -4978,7 +5016,8 @@ zh-CN:
         为 %{name}（%{wca_id}）提供的国家或地区“%{country}”与 WCA
         数据库中的当前记录（“%{expected_country}”）不符。如果信息有误，请修正；否则，请留言向 WRT 说明。
       #original_hash: 6179b35
-      multiple_newcomers_with_same_name_warning: '多名新参赛者使用了完全相同的姓名：%{name}。请确认这些参赛者的所有成绩均正确，并已按各自对应的 ID 正确区分。'
+      multiple_newcomers_with_same_name_warning: '多名新参赛者使用了完全相同的姓名：%{name}。请确认这些参赛者的所有成绩均正确，并已按各自对应的
+        ID 正确区分。'
       #original_hash: 7732038
       wrong_parenthesis_type_error: '“%{name}”中使用了不规范的括号字符，请替换为普通括号“(”或“)”并正确添加空格。'
       #original_hash: fec0347
@@ -5008,7 +5047,8 @@ zh-CN:
       unaccepted_registration_with_results_warning: '%{name} 在比赛中有成绩，但其报名未标记为“已接受”。'
     results:
       #original_hash: 5685ae8
-      automatically_position_fixed_info: '[%{round_id}] 已自动将 %{person_name} 的名次从 %{pos} 修正为 %{expected_pos}。'
+      automatically_position_fixed_info: '[%{round_id}] 已自动将 %{person_name} 的名次从 %{pos}
+        修正为 %{expected_pos}。'
       #original_hash: e895bf5
       mbf_result_over_time_limit_warning: >-
         [%{round_id}] %{person_name}
@@ -5022,9 +5062,11 @@ zh-CN:
         [%{round_id}] %{person_name} 的成绩与 %{similar_person_name}
         的成绩相似。请确认两位参赛者的成绩均记录正确。
       #original_hash: ebbab6f
-      met_cutoff_but_missing_results_error: '[%{round_id}] %{person_name} 达到了及格线，但缺少本轮第二阶段的成绩。及格线为 %{cutoff}。'
+      met_cutoff_but_missing_results_error: '[%{round_id}] %{person_name} 达到了及格线，但缺少本轮第二阶段的成绩。及格线为
+        %{cutoff}。'
       #original_hash: cc0b47b
-      didnt_meet_cutoff_but_has_results_error: '[%{round_id}] %{person_name} 未达到及格线，却至少有一个本轮第二阶段的成绩。及格线为 %{cutoff}。'
+      didnt_meet_cutoff_but_has_results_error: '[%{round_id}] %{person_name} 未达到及格线，却至少有一个本轮第二阶段的成绩。及格线为
+        %{cutoff}。'
       #original_hash: 4fc3fd7
       wrong_attempts_for_cutoff_error: >-
         [%{round_id}] %{person_name}
@@ -5034,7 +5076,8 @@ zh-CN:
         [%{round_id}] %{person_name} 至少有一个成绩超过本轮每次尝试 %{time_limit}
         的时限。所有超时的还原都必须改为 DNF。
       #original_hash: 1678105
-      results_over_cumulative_time_limit_error: '[%{round_ids}] %{person_name} 的成绩总和超过累计时限 %{time_limit}。'
+      results_over_cumulative_time_limit_error: '[%{round_ids}] %{person_name} 的成绩总和超过累计时限
+        %{time_limit}。'
       #original_hash: 76dc4e7
       undefined_time_limit_warning: '[%{round_id}] 本轮时限未定义，因此已跳过时限验证。只有 2013 年以前的比赛才应出现此情况。'
       #original_hash: 10ad25f
@@ -5048,7 +5091,8 @@ zh-CN:
         请前往该比赛的「管理项目」页面，并从 %{original_round_id} 的累积时间限制中移除 %{wcif_id}。WST
         团队已知此错误（GitHub 问题编号 #3254）。
       #original_hash: ad200c1
-      wrong_position_in_results_error: '[%{round_id}] %{person_name} 的名次错误：应为 %{expected_pos}，实际为 %{pos}。'
+      wrong_position_in_results_error: '[%{round_id}] %{person_name} 的名次错误：应为 %{expected_pos}，实际为
+        %{pos}。'
     rounds:
       #original_hash: 517fd54
       too_many_qualified_warning: >-
@@ -5063,7 +5107,8 @@ zh-CN:
       #original_hash: 44fbfde
       regulation_9p1_error: '第 %{round_id} 轮：被淘汰的参赛者少于 25%，规则 9p1 不允许这种情况。'
       #original_hash: f5d8ae9
-      no_competitor_eliminated_error: '第 %{round_id} 轮：必须至少淘汰一名参赛者，这是规则 9p 的要求（适用于 2010 年 4 月以前的比赛）。'
+      no_competitor_eliminated_error: '第 %{round_id} 轮：必须至少淘汰一名参赛者，这是规则 9p 的要求（适用于
+        2010 年 4 月以前的比赛）。'
       #original_hash: b868019
       less_than_twenty_five_percent_eliminated_error: >-
         第 %{round_id} 轮：根据晋级条件（%{condition}），被淘汰的参赛者将少于 25%%，规则 9p1
@@ -5089,18 +5134,21 @@ zh-CN:
       #original_hash: 1d4e297
       no_main_event_warning: 本场比赛未选择主项目。请告知 WRT 这是正确的。
       #original_hash: fde208d
-      missing_results_warning: '%{event_id} 被列为正式项目，但没有成绩。如果举办了该项目，请重新上传包含成绩的 JSON；如果未举办，请留言告知 WRT。'
+      missing_results_warning: '%{event_id} 被列为正式项目，但没有成绩。如果举办了该项目，请重新上传包含成绩的 JSON；如果未举办，请留言告知
+        WRT。'
     scrambles:
       #original_hash: ff7e063
       missing_scrambles_for_round_error: '[%{round_id}] 缺少打乱。请使用打乱匹配器为该轮添加正确的打乱。'
       #original_hash: 340d2f3
       missing_scrambles_for_competition_error: 比赛缺少打乱。请使用打乱匹配器添加打乱。
       #original_hash: 22706c5
-      missing_scrambles_for_group_error: '[%{round_id}] 第 %{group_id} 组缺少打乱：应有 %{expected} 个，仅检测到 %{actual} 个。'
+      missing_scrambles_for_group_error: '[%{round_id}] 第 %{group_id} 组缺少打乱：应有 %{expected}
+        个，仅检测到 %{actual} 个。'
       #original_hash: 665014c
       missing_scrambles_for_multi_error: '[%{round_id}] 三阶多盲可以有多个分组，但至少一个分组必须包含所有尝试所需的打乱。'
       #original_hash: 2757334
-      mbld_scrambles_warning: '[%{round_id}] 本轮包含三阶多盲成绩。请在提交备注中说明参赛者实际使用了每套打乱中的多少个打乱，以便 WRT 删除未使用的额外打乱。'
+      mbld_scrambles_warning: '[%{round_id}] 本轮包含三阶多盲成绩。请在提交备注中说明参赛者实际使用了每套打乱中的多少个打乱，以便
+        WRT 删除未使用的额外打乱。'
       #original_hash: 3d5255d
       multiple_fmc_groups_warning: >-
         [%{round_id}] 使用了多个最少步分组。如果实际只使用了一组，请在打乱匹配器中取消勾选未使用的打乱；否则，请留言向 WRT
