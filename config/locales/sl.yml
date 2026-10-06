@@ -479,11 +479,14 @@ sl:
         #original_hash: e3fc6e9
         subRegion: Podregija
         #original_hash: a1ba702
-        receive_developer_mails: Želim prejemati obvestila o spremembah programske opreme WCA
+        receive_developer_mails: Želim prejemati obvestila o spremembah 
+          programske opreme WCA
         #original_hash: 730db33
-        receive_delegate_reports: Preko e-pošte želim prejemati delegatska poročila z WCA tekmovanj.
+        receive_delegate_reports: Preko e-pošte želim prejemati delegatska 
+          poročila z WCA tekmovanj.
         #original_hash: 8667157
-        delegate_reports_region: Delegatska poročila želim prejemati le za naslednjo regijo
+        delegate_reports_region: Delegatska poročila želim prejemati le za 
+          naslednjo regijo
         #original_hash: 57eaf24
         user_preferred_events: Prednostne discipline
         #original_hash: e632fbf
@@ -536,11 +539,13 @@ sl:
         #original_hash: 7106c2d
         setup_images: Slike postavitve tekmovališča
         #original_hash: 1362470
-        wrc_feedback_requested: Želim povratno informacijo WRC za nekatere izmed zgornjih incidentov.
+        wrc_feedback_requested: Želim povratno informacijo WRC za nekatere izmed
+          zgornjih incidentov.
         #original_hash: 0c7191d
         wrc_incidents: 'Incidenti, ki potrebujejo povratno informacijo WRC'
         #original_hash: 1a54a79
-        wic_feedback_requested: Želim povratno informacijo WIC za nekatere izmed zgornjih incidentov.
+        wic_feedback_requested: Želim povratno informacijo WIC za nekatere izmed
+          zgornjih incidentov.
         #original_hash: 000153c
         wic_incidents: 'Incidenti, ki potrebujejo povratno informacijo WIC'
         #original_hash: d7020f4
@@ -632,11 +637,13 @@ sl:
         #original_hash: 9855f80
         bylaws: Statut
         #original_hash: 405201b
-        directors_and_officers: Seznam glavnih direktorjev in vodstvenih delavcev ter njihovih nazivov
+        directors_and_officers: Seznam glavnih direktorjev in vodstvenih 
+          delavcev ter njihovih nazivov
         #original_hash: 719db2d
         area_description: 'Jasen opis območja, ki ga pokrivate'
         #original_hash: 0cdb036
-        past_and_current_activities: 'Poročilo o preteklih in trenutnih dejavnostih, povezanih z WCA'
+        past_and_current_activities: 'Poročilo o preteklih in trenutnih dejavnostih,
+          povezanih z WCA'
         #original_hash: 0faebcf
         future_plans: >-
           Načrti za prihodnost kot regionalna organizacija, priznana s strani
@@ -702,9 +709,11 @@ sl:
         #original_hash: 80901da
         competing_only: prepoved tekmovanja
         #original_hash: 35a6012
-        competing_and_attending: prepoved tekmovanja in prisotnosti na tekmovanju
+        competing_and_attending: prepoved tekmovanja in prisotnosti na 
+          tekmovanju
         #original_hash: 4f30c10
-        competing_and_attending_and_forums: 'prepoved tekmovanja, prisotnosti na tekmovanjih in razprave na forumu'
+        competing_and_attending_and_forums: 'prepoved tekmovanja, prisotnosti na tekmovanjih
+          in razprave na forumu'
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -924,7 +933,8 @@ sl:
         #original_hash: 603a218
         wca_id: WCA ID
     #original_hash: 687d968
-    competition_link_html: 'Kliknite <a href=''%{url}''>tukaj</a>, da obiščete spletno mesto tekmovanja'
+    competition_link_html: 'Kliknite <a href=''%{url}''>tukaj</a>, da obiščete spletno
+      mesto tekmovanja'
     errors:
       dob_contact:
         #original_hash: 79ccfe2
@@ -967,7 +977,8 @@ sl:
             Vaš tajni ključ za dvostopenjsko preverjanje pristnosti je bil
             uspešno obnovljen
           #original_hash: 1b0c44f
-          enabled_success: Dvostopenjsko preverjanje pristnosti je uspešno omogočeno
+          enabled_success: Dvostopenjsko preverjanje pristnosti je uspešno 
+            omogočeno
           #original_hash: 9515157
           email_auth: Avtentikacija preko e-pošte
           #original_hash: d305ccb
@@ -989,7 +1000,8 @@ sl:
             #original_hash: c2f5347
             not_enabled: Dvostopenjsko preverjanje ni omogočeno
             #original_hash: 14d294b
-            unknown: 'Neznana napaka pri pošiljanju e-pošte. Prosimo, kontaktirajte WST.'
+            unknown: 'Neznana napaka pri pošiljanju e-pošte. Prosimo, kontaktirajte
+              WST.'
           otp_email:
             #original_hash: a20e037
             subject: Vaše enkratno geslo za WCA
@@ -1006,14 +1018,16 @@ sl:
           #original_hash: 8c13694
           name: Dvostopenjsko preverjanje pristnosti (2FA)
           #original_hash: d28c3b6
-          support_desc_html: 'WCA stran podpira %{two_factor_link} z uporabo enkratnega gesla:'
+          support_desc_html: 'WCA stran podpira %{two_factor_link} z uporabo enkratnega
+            gesla:'
           options:
             #original_hash: a4b35b6
             app: >-
               generiranega s strani posebne 2FA aplikacije na vašem pametnem
               telefonu (kot so Authy, Google Authenticator ali iOS Passwords).
             #original_hash: 34a7572
-            recovery: 'vzetega iz obnovitvenih kod, ki so generirane, ko aktivirate 2FA.'
+            recovery: 'vzetega iz obnovitvenih kod, ki so generirane, ko aktivirate
+              2FA.'
             #original_hash: eaee403
             email: poslanega preko e-pošte ob vpisu.
           #original_hash: 7ae99ae
@@ -1042,7 +1056,8 @@ sl:
             Za pridobitev enkratnega gesla ob prijavi lahko uporabite različne
             metode, ki so opisane spodaj.
           #original_hash: 4442f0e
-          dedicated_app: Uporaba namenske aplikacije za dvojno preverjanje pristnosti
+          dedicated_app: Uporaba namenske aplikacije za dvojno preverjanje 
+            pristnosti
           #original_hash: a87f79f
           dedicated_app_desc_html: >-
             Za pridobitev enkratnega gesla ob vpisu WST priporoča uporabo
@@ -1087,7 +1102,8 @@ sl:
             klikom na gumb spodaj. Če boste želeli ponovno aktivirati 2FA, boste
             morali svoje naprave ponovno nastaviti.
           #original_hash: ab1b77d
-          disabled_success: Dvostopenjsko preverjanje pristnosti je bilo uspešno onemogočeno.
+          disabled_success: Dvostopenjsko preverjanje pristnosti je bilo uspešno
+            onemogočeno.
           #original_hash: c36d556
           disabled_failed: '2FA ni bilo možno onemogočiti, napake so navedene spodaj.'
       destroy_other:
@@ -1342,7 +1358,8 @@ sl:
       #original_hash: b37456c
       contact_button: Kontakt
       #original_hash: ae7928f
-      no_contact_description: Kontaktne informacije te ekipe/odbora niso javno dostopni.
+      no_contact_description: Kontaktne informacije te ekipe/odbora niso javno 
+        dostopni.
       groups_name:
         #original_hash: 90a1280
         wat: WCA ekipa za arhiviranje
@@ -1468,7 +1485,8 @@ sl:
         ekipo, ki ni navedena spodaj, lahko njihove kontaktne podatke najdete <a
         href="/teams-committees">na tej strani</a>.
       #original_hash: ea20be0
-      success_message: Sporočilo je bilo poslano - odgovor lahko pričakujete kmalu.
+      success_message: Sporočilo je bilo poslano - odgovor lahko pričakujete 
+        kmalu.
       #original_hash: 8fa6b95
       prefilled: >-
         Če želite posodobiti prijavo, kontaktirajte organizatorje tekmovanja.
@@ -1522,7 +1540,8 @@ sl:
         wrt:
           query_type:
             #original_hash: d31ab65
-            label: Katera izmed naslednjih možnosti najbolje opiše vaše vprašanje?
+            label: Katera izmed naslednjih možnosti najbolje opiše vaše 
+              vprašanje?
             edit_profile:
               #original_hash: 322db6c
               label: >-
@@ -1597,7 +1616,8 @@ sl:
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">nas
         kontakirajte</a>.
       #original_hash: 43f15fd
-      no_permission_error: Nimate dovoljenj za zahtevo po urejanju profila druge osebe.
+      no_permission_error: Nimate dovoljenj za zahtevo po urejanju profila druge
+        osebe.
       form:
         contact_email:
           #original_hash: 3142970
@@ -1768,7 +1788,8 @@ sl:
         #original_hash: 87f1f49
         header: 'WCAT je najavila tekmovanje %{competition}'
         #original_hash: 0d3d10c
-        announced: WCAT je odobrila vaše tekmovanje in ga uradno najavila javnosti.
+        announced: WCAT je odobrila vaše tekmovanje in ga uradno najavila 
+          javnosti.
       id_claim_possibility_email:
         #original_hash: 20e9d09
         header: Povežite svoj WCA ID z svojim računom
@@ -1872,7 +1893,8 @@ sl:
         Vse slike avatarjev so shranjene v oblaku, zato lahko traja nekaj minut,
         preden bodo spremembe vidne.
       #original_hash: cc1d51b
-      cdn_warning: 'Naj vas ne zmede, če se vaša slika po shranjevanju ne posodobi takoj!'
+      cdn_warning: 'Naj vas ne zmede, če se vaša slika po shranjevanju ne posodobi
+        takoj!'
       #original_hash: 79f14eb
       current: 'Trenutna sličica:'
       #original_hash: b42ba27
@@ -1891,9 +1913,11 @@ sl:
       #original_hash: 8be3c94
       password: Geslo
       #original_hash: 42619dd
-      preferred_events_desc: Izbira prednostnih disciplin omogoči hitrejšo prijavo na tekmovanja.
+      preferred_events_desc: Izbira prednostnih disciplin omogoči hitrejšo 
+        prijavo na tekmovanja.
       #original_hash: b402e03
-      please_fix_profile: 'Če se želite prijaviti na tekmovanja, morate popraviti naslednje težave:'
+      please_fix_profile: 'Če se želite prijaviti na tekmovanja, morate popraviti
+        naslednje težave:'
       #original_hash: ff4fc02
       profile: Profil
       #original_hash: 7b2c7f1
@@ -1913,9 +1937,11 @@ sl:
         Preden bo sprememba e-naslova aktivna, boste morali nov e-naslov
         potrditi.
       #original_hash: ff43ee2
-      pending_mail_confirmation: 'Uporabniški račun čaka na potrditev novega e-naslova %{email}.'
+      pending_mail_confirmation: 'Uporabniški račun čaka na potrditev novega e-naslova
+        %{email}.'
       #original_hash: 0340b0b
-      pending_avatar_confirmation: Uporabniški račun čaka na potrditev novega avatarja.
+      pending_avatar_confirmation: Uporabniški račun čaka na potrditev novega 
+        avatarja.
       #original_hash: 81fa5f9
       pending_avatar_edit_action: 'Če ga namesto tega želite urediti, kliknite tu:'
       #original_hash: 73cebb8
@@ -2057,7 +2083,8 @@ sl:
         Ni možna sprememba na regijo, ki jo je oseba v preteklosti že
         predstavljala.
       #original_hash: 5fe15d4
-      must_have_a_change: Za posodobitev osebe je potrebna sprememba imena ali regije.
+      must_have_a_change: Za posodobitev osebe je potrebna sprememba imena ali 
+        regije.
       #original_hash: 48653a9
       already_have_id: 'ni možno dodeliti WCA ID, saj že imate WCA ID %{wca_id}'
       #original_hash: ec5db95
@@ -2174,11 +2201,14 @@ sl:
         je tekmovalec, ki mu je bila izrečena prepoved tekmovanja, zato ga ni
         možno odstraniti izmed izbrisanih.
       #original_hash: 3de7c86
-      series_more_than_one_accepted: Sprejeti ste lahko le na eno izmed tekmovanj v seriji tekmovanj hkrati.
+      series_more_than_one_accepted: Sprejeti ste lahko le na eno izmed 
+        tekmovanj v seriji tekmovanj hkrati.
       #original_hash: 13bfcd6
-      can_only_register_for_qualified_events: 'Prijava na discipline, za katere niste kvalificirani, ni možna.'
+      can_only_register_for_qualified_events: 'Prijava na discipline, za katere niste
+        kvalificirani, ni možna.'
       #original_hash: 93ed20e
-      cannot_change_events_when_cancelling: Spreminjanje disciplin med preklicom prijave ni možno.
+      cannot_change_events_when_cancelling: Spreminjanje disciplin med preklicom
+        prijave ni možno.
       #original_hash: 4025877
       cannot_register_without_comment: >-
         Napisati morate komentar. Prosimo, preberite pogoje za prijavo zgoraj,
@@ -2277,7 +2307,8 @@ sl:
             Niste izpolnili pogojev za prijavo (npr. vnaprejšnje plačilo
             prijavnine ali doseženi kvalifikacijski časi za discipline)
           #original_hash: 1e225f0
-          registrations_full: Zaradi dosežene omejitve števila tekmovalcev ni več prostih mest
+          registrations_full: Zaradi dosežene omejitve števila tekmovalcev ni 
+            več prostih mest
           #original_hash: 238f4ff
           multiple_registrations: Prijavili ste se dvakrat ali večkrat
           #original_hash: 70b1e2c
@@ -2402,7 +2433,8 @@ sl:
         Vaše plačilo je bilo uspešno, spodaj bi sedaj moralo pisati, da je
         prijavnina plačana.
       #original_hash: 92dde77
-      payment_processing: 'Vaše plačilo je bilo potrjeno, a še čakamo na dokončanje transakcije.'
+      payment_processing: 'Vaše plačilo je bilo potrjeno, a še čakamo na dokončanje
+        transakcije.'
       #original_hash: a8f253d
       payment_partial: >-
         Vaše plačilo je bilo potrjeno, a prijavnina še ni pokrita v celoti.
@@ -2411,7 +2443,8 @@ sl:
       button_text: Plačaj zdaj!
       hints:
         #original_hash: bf3a39e
-        donation: 'Prostovoljna donacija, ki bo namenjena izključno organizacijski ekipi.'
+        donation: 'Prostovoljna donacija, ki bo namenjena izključno organizacijski
+          ekipi.'
         #original_hash: 737c228
         payment_button: >-
           Vaši podatki o plačilu nikoli ne dosežejo WCA strani, ampak so varno
@@ -2442,7 +2475,8 @@ sl:
         amount_rather_high: Znesek je vsaj dvakrat večji od prijavnine.
       errors:
         #original_hash: c80ec45
-        registration_closed: Prijave so zaprte - nadaljna plačila niso več mogoča.
+        registration_closed: Prijave so zaprte - nadaljna plačila niso več 
+          mogoča.
         #original_hash: 166d48c
         already_paid: 'Plačilo ni bilo izvedeno, ker je prijavnina že plačana.'
         #original_hash: f10c80c
@@ -2540,7 +2574,8 @@ sl:
           Uporabnik z e-naslovom %{email} že obstaja, a ima nepotrjen WCA ID
           %{unconfirmed_wca_id} namesto %{registration_wca_id}.
         #original_hash: 4e32621
-        email_duplicates: 'E-naslov mora biti unikaten, pojavili so se duplikati: %{emails}.'
+        email_duplicates: 'E-naslov mora biti unikaten, pojavili so se duplikati:
+          %{emails}.'
         #original_hash: bcd8e78
         wca_id_duplicates: 'WCA ID mora biti unikaten, pojavili so se duplikati: %{wca_ids}.'
         #original_hash: a0fd4c5
@@ -2564,7 +2599,8 @@ sl:
         Prijave so zaprte, prijave na samem tekmovanju pa niso omogčene - če jih
         želite omogočiti, morate urediti nastavitve tekmovanja
       #original_hash: 61125b5
-      competition_over: Prijav na samem tekmovanju ne morate dodajati po koncu tekmovanja.
+      competition_over: Prijav na samem tekmovanju ne morate dodajati po koncu 
+        tekmovanja.
       errors:
         #original_hash: d6dcf5c
         already_registered: Za to osebo že obstaja prijava.
@@ -2639,7 +2675,8 @@ sl:
       #original_hash: 8ad5e67
       results_not_posted: 'Rezultati tega tekmovanja so vidni, a še niso bili objavljeni.'
       #original_hash: 5c24cd8
-      results_still_processing: Rezultati tekmovanja so trenutno v obdelavi. Na voljo bodo kmalu.
+      results_still_processing: Rezultati tekmovanja so trenutno v obdelavi. Na 
+        voljo bodo kmalu.
       #original_hash: e205d73
       results_already_posted: Rezultati so že objavljeni.
       #original_hash: afe3a23
@@ -2661,9 +2698,11 @@ sl:
         Tekmovanje je v teku. Rezultate v živo lahko spremljate <a
         href='%{link_here}'>tukaj</a>!
       #original_hash: 8ab1548
-      reg_opens_too_early: Čas odprtja prijav je nastavljen čez manj kot zahtevanih 48 ur.
+      reg_opens_too_early: Čas odprtja prijav je nastavljen čez manj kot 
+        zahtevanih 48 ur.
       #original_hash: a25e7a2
-      registration_already_closed: Rok za prijavo je že mimo. Nastavite ga na čas v prihodnosti.
+      registration_already_closed: Rok za prijavo je že mimo. Nastavite ga na 
+        čas v prihodnosti.
       #original_hash: 3322400
       tooltip_registered: Prijavljeni ste.
       #original_hash: b10c8d6
@@ -2696,7 +2735,8 @@ sl:
         uporabljate čakalni seznam, prosimo, nastavite rok. Če čakalnega seznam
         ne uporabljate, prosimo, to navedite v pogojih za prijavo.
       #original_hash: 51376ef
-      schedule_locked_after_results_submitted: Urnika ni mogoče urejati po objavi rezultatov.
+      schedule_locked_after_results_submitted: Urnika ni mogoče urejati po 
+        objavi rezultatov.
       #original_hash: 1877b69
       spots_left:
         one: Še eno prosto mesto.
@@ -2835,7 +2875,8 @@ sl:
           #original_hash: 77dfd21
           cancel: Prekliči
           #original_hash: 79d6737
-          failed_to_fetch: Iskanje naslednjega napredujočega tekmovalca je spodletelo
+          failed_to_fetch: Iskanje naslednjega napredujočega tekmovalca je 
+            spodletelo
           #original_hash: d4dcd86
           still_processing: >-
             Tekmovalca ni možno izločiti dokler so nekateri rezultati še v
@@ -2884,7 +2925,8 @@ sl:
         #original_hash: a1984e1
         cutoff: 'Odrez: %{short_cutoff}'
         #original_hash: a8b6fe6
-        download_html: 'Vse informacije o tekmovanju v formatu PDF lahko prenesete %{here}.'
+        download_html: 'Vse informacije o tekmovanju v formatu PDF lahko prenesete
+          %{here}.'
       #original_hash: eb9a4bc
       date: Datum
       #original_hash: 4f05cd6
@@ -2974,7 +3016,8 @@ sl:
       #original_hash: 9bb1965
       competitor_limit: Omejitev števila tekmovalcev
       #original_hash: 196725e
-      competitor_limit_is: 'Število tekmovalcev je omejeno na %{competitor_limit} tekmovalcev.'
+      competitor_limit_is: 'Število tekmovalcev je omejeno na %{competitor_limit}
+        tekmovalcev.'
       #original_hash: 5101f65
       no_competitor_limit: Omejitve števila tekmovalcev ni.
       #original_hash: f979d5e
@@ -2982,9 +3025,11 @@ sl:
       #original_hash: 5390a91
       no_entry_fee: Prijava na to tekmovanje je brezplačna.
       #original_hash: 29af5c2
-      use_stripe_link_html: 'Po prijavi morate %{here} plačati prijavnino preko storitve Stripe.'
+      use_stripe_link_html: 'Po prijavi morate %{here} plačati prijavnino preko storitve
+        Stripe.'
       #original_hash: cea0eb4
-      use_stripe_below_html: Po prijavi morate spodaj plačati prijavnino preko storitve Stripe.
+      use_stripe_below_html: Po prijavi morate spodaj plačati prijavnino preko 
+        storitve Stripe.
       #original_hash: d6bab8f
       refund_policy_html: >-
         Če prijavo prekličete pred %{limit_date_and_time}, vam povrnemo
@@ -3071,7 +3116,8 @@ sl:
       #original_hash: 1f9c9c4
       highlights: Poudarki
       #original_hash: 945f917
-      click_to_display_highlights_html: 'Kliknite %{link_here} za prikaz poudarkov s tekmovanja.'
+      click_to_display_highlights_html: 'Kliknite %{link_here} za prikaz poudarkov
+        s tekmovanja.'
       #original_hash: dc5c597
       hide_highlights: Skrij poudarke.
       #original_hash: f691bf2
@@ -3259,7 +3305,8 @@ sl:
       #original_hash: e590657
       missing_report: Vaše poročilo še ni objavljeno!
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: 'Trenutno nimate prihajajočih tekmovanj! Preverite %{link}.'
+      no_upcoming_competitions_html: 'Trenutno nimate prihajajočih tekmovanj! Preverite
+        %{link}.'
       #original_hash: e0f66bb
       competitions_list: seznam tekmovanj
       #original_hash: 9104a03
@@ -3276,7 +3323,8 @@ sl:
         Podpira <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
       #original_hash: 05c66b5
-      series_save_first_hint: 'Opomba: Preden dodate novo serijo tekmovanj, morate tekmovanje shraniti.'
+      series_save_first_hint: 'Opomba: Preden dodate novo serijo tekmovanj, morate
+        tekmovanje shraniti.'
       #original_hash: c5497bc
       events: Discipline
       #original_hash: cafc153
@@ -3289,7 +3337,8 @@ sl:
         To tekmovanje ste potrdili, a še ni javno vidno. Počakajte na
         %{contact}, da ga objavi.
       #original_hash: e94cba8
-      is_visible: Tekmovanje je javno vidno. Kakršnekoli spremembe bodo vidne javnosti!
+      is_visible: Tekmovanje je javno vidno. Kakršnekoli spremembe bodo vidne 
+        javnosti!
       #original_hash: eb98c2c
       pending_confirmation_html: >-
         Izpolnite vsa polja in prosite svojega delegata, da klikne "Potrdi", ko
@@ -3430,7 +3479,8 @@ sl:
           #original_hash: 3542671
           guest_entry_fee: Vstopnina za gledalce
           #original_hash: 71c8461
-          donations_enabled: Želim omogočiti dodatne donacije ob plačilu prijavnine
+          donations_enabled: Želim omogočiti dodatne donacije ob plačilu 
+            prijavnine
           #original_hash: efbdbab
           refund_policy_percent: 'Odstotek, ki se povrne'
           #original_hash: b332299
@@ -3441,9 +3491,11 @@ sl:
           #original_hash: f8153a2
           closing_date_time: Zaprtje prijav
           #original_hash: 16cf9a4
-          waiting_list_deadline_date: Rok za sprejem tekmovalcev s čakalnega seznama
+          waiting_list_deadline_date: Rok za sprejem tekmovalcev s čakalnega 
+            seznama
           #original_hash: 99a9169
-          event_change_deadline_date: 'Rok za spreminjanje disciplin, na katere se tekmovalec prijavi'
+          event_change_deadline_date: 'Rok za spreminjanje disciplin, na katere se
+            tekmovalec prijavi'
           #original_hash: 2529d04
           allow_on_the_spot: Prijave na samem tekmovanju
           #original_hash: b6faf84
@@ -3612,13 +3664,15 @@ sl:
             (rezultati, poročilo, dajatve)
         website:
           #original_hash: cabe7fb
-          external_website: Spletna stran tekmovanja. To mora biti veljaven http(s) URL.
+          external_website: Spletna stran tekmovanja. To mora biti veljaven 
+            http(s) URL.
           #original_hash: b2af5f5
           external_registration_page: >-
             Spletna stran, kjer se tekmovalci prijavijo na tekmovanje. To mora
             biti veljaven http(s) URL.
           #original_hash: cc7d557
-          scoretaking_software: 'Izberite ''%{choice_ilr}'', če želite uporabiti dvojne kroge'
+          scoretaking_software: 'Izberite ''%{choice_ilr}'', če želite uporabiti dvojne
+            kroge'
         entry_fees:
           #original_hash: 9735ddf
           currency_code: Koda valute za vstopnine.
@@ -3644,10 +3698,12 @@ sl:
             opraviti ročno. Če nastavite na 0, bo zapisano, da vračila prijavnin
             niso možna pod nobenimi pogoji.
           #original_hash: f64d853
-          refund_policy_limit_date: 'Datum, po katerem vračila prijavnin niso več možna.'
+          refund_policy_limit_date: 'Datum, po katerem vračila prijavnin niso več
+            možna.'
         registration:
           #original_hash: 9965635
-          opening_date_time: Odprtje in zaprtje prijav v univerzalnem koordiniranem času (UTC)
+          opening_date_time: Odprtje in zaprtje prijav v univerzalnem 
+            koordiniranem času (UTC)
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Datum, po katerem se tekmovalcev s čakalnega seznama več ne
@@ -3724,7 +3780,8 @@ sl:
             #original_hash: 5996b1f
             disabled: Onemogoči gumb "množično samodejno potrjevanje"
             #original_hash: 1c0c289
-            bulk: Omogoči gumb "množično samodejno potrjevanje" v meniju s prijavami
+            bulk: Omogoči gumb "množično samodejno potrjevanje" v meniju s 
+              prijavami
             #original_hash: 490ed83
             live: 'Samodejno sprejmi prijavo, ko je plačilo opravljeno'
         website:
@@ -3743,7 +3800,8 @@ sl:
             'false': Prijav na samem tekmovanju NE sprejemamo
           allow_self_edits:
             #original_hash: 52a2f4a
-            'true': Tekmovalci lahko urejajo prijave do roka za urejanje disciplin
+            'true': Tekmovalci lahko urejajo prijave do roka za urejanje 
+              disciplin
             #original_hash: 2cbb80e
             'false': 'Tekmovalci NE MOREJO urejati prijave po tem, ko je bila potrjena'
           competitor_can_cancel:
@@ -3915,7 +3973,8 @@ sl:
         #original_hash: cbf13af
         update_confirm: 'Ste prepričani, da želite posodobiti prijavo?'
         #original_hash: 604da8b
-        organizer_update_confirm: 'Ste prepričani, da želite posodobiti uporabnikovo prijavo?'
+        organizer_update_confirm: 'Ste prepričani, da želite posodobiti uporabnikovo
+          prijavo?'
         #original_hash: 9b92912
         update_confirm_contact: >-
           Če želite posodobiti prijavo, se obrnite na organizatorje. Kliknte Da
@@ -3962,7 +4021,8 @@ sl:
           Če bi sprejeli vse te prijave, bi presegli omejitev števila
           tekmovalcev za %{count}.
         #original_hash: 462376a
-        no_self_update: Za posodobitev prijave se obrnite na organizacijsko ekipo.
+        no_self_update: Za posodobitev prijave se obrnite na organizacijsko 
+          ekipo.
       register:
         #original_hash: e8cc296
         will_open_countdown: >-
@@ -4023,7 +4083,8 @@ sl:
           #original_hash: a02390c
           waiting_list: 'Ste na čakalnem seznamu na %{waiting_list_position}. mestu.'
         #original_hash: 2d9f36c
-        disclaimer: Oddaja prijave še ne pomeni odobritve za sodelovanje na tekmovanju
+        disclaimer: Oddaja prijave še ne pomeni odobritve za sodelovanje na 
+          tekmovanju
         #original_hash: 8fe68a1
         processing: Vaša prijava je v obdelavi...
         #original_hash: c7f124a
@@ -4143,7 +4204,8 @@ sl:
         Omejitev za samodejno potrjevanje prijav mora biti manjše od omejitve
         števila tekmovalcev
       #original_hash: 42cd8e6
-      auto_accept_not_negative: Omejitev za samodejno potrjevanje prijav ne more biti manjše od 0.
+      auto_accept_not_negative: Omejitev za samodejno potrjevanje prijav ne more
+        biti manjše od 0.
       #original_hash: 181d8d9
       auto_accept_accept_paid_pending: >-
         Samodejnega potrjevanja prijav ni možno omogočiti, če so plačane prijave
@@ -4157,7 +4219,8 @@ sl:
         Prag za samodejno zaprtje mora biti višji od števila trenutno plačanih
         prijavnin
       #original_hash: abee516
-      auto_close_positive_nonzero: Prag za samodejno zaprtje mora biti višji od 0
+      auto_close_positive_nonzero: Prag za samodejno zaprtje mora biti višji od 
+        0
       #original_hash: b81ee7e
       must_exceed_competitor_limit: >-
         Prag za samodejno zaprtje mora biti višji od omejitve števila
@@ -4165,7 +4228,8 @@ sl:
       #original_hash: 148c1d4
       use_wca_registration: Tekmovanje mora uporabljati WCA stran za prijave
       #original_hash: 2c41c57
-      newcomer_month_reservations_percentage: za novince je lahko rezerviranih največ 50% mest
+      newcomer_month_reservations_percentage: za novince je lahko rezerviranih 
+        največ 50% mest
       #original_hash: 58d244e
       newcomer_month_reservations_available: >-
         Število želenih mest za novince je večje od števila mest, ki jih je
@@ -4184,7 +4248,8 @@ sl:
       #original_hash: 191df37
       must_contain_event: mora vsebovati vsaj eno disciplino za to tekmovanje
       #original_hash: 54fe619
-      schedule_must_match_rounds: mora imeti vsaj en krog in vsi krogi morajo biti vključeni v urnik.
+      schedule_must_match_rounds: mora imeti vsaj en krog in vsi krogi morajo 
+        biti vključeni v urnik.
       #original_hash: 6e228b7
       must_contain_delegate: more vsebovati vsaj enega WCA delegata
       #original_hash: b5677c2
@@ -4196,31 +4261,39 @@ sl:
       #original_hash: 2f8765e
       registration_already_closed: prijave še ne smejo biti zaprte.
       #original_hash: 8a3a4f6
-      start_date_must_be_28_days_in_advance: Dan začetka mora biti vsaj 28 dni v prihodnosti.
+      start_date_must_be_28_days_in_advance: Dan začetka mora biti vsaj 28 dni v
+        prihodnosti.
       #original_hash: 43a83a9
       end_date_before_start: Končni datum ne more biti pred začetnim datumom.
       #original_hash: 0c507fa
-      refund_date_after_start: Rok za vračilo prijavnine ne more biti po datumu začetka tekmovanja.
+      refund_date_after_start: Rok za vračilo prijavnine ne more biti po datumu 
+        začetka tekmovanja.
       #original_hash: be3933b
       span_too_many_days: 'Tekmovanje ne more trajati več kot %{max_days} dni.'
       #original_hash: cdcd288
       invalid_currency_code: Izbrana koda valute je neveljavna
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: mora imeti pogoje za napredovanje za nefinalne kroge.
+      advancement_condition_must_be_present_for_all_non_final_rounds: mora imeti
+        pogoje za napredovanje za nefinalne kroge.
       #original_hash: da17c99
-      registration_period_after_start: Obdobje prijav ne more biti po datumu začetka tekmovanja.
+      registration_period_after_start: Obdobje prijav ne more biti po datumu 
+        začetka tekmovanja.
       #original_hash: 2a26c1c
-      waiting_list_deadline_before_registration_close: Rok za sprejem s čakalne vrste ne more biti pred zaprtjem prijav.
+      waiting_list_deadline_before_registration_close: Rok za sprejem s čakalne 
+        vrste ne more biti pred zaprtjem prijav.
       #original_hash: ececa98
       waiting_list_deadline_before_refund_date: >-
         Rok za sprejem s čakalne vrste ne more biti pred rokom za vračilo
         prijavnine.
       #original_hash: 7324d19
-      waiting_list_deadline_after_end: Rok za sprejem s čakalne vrste mora biti pred koncem tekmovanja.
+      waiting_list_deadline_after_end: Rok za sprejem s čakalne vrste mora biti 
+        pred koncem tekmovanja.
       #original_hash: c3eb1be
-      event_change_deadline_before_registration_close: Rok za spreminjanje disciplin ne more biti pred zaprtjem prijav.
+      event_change_deadline_before_registration_close: Rok za spreminjanje 
+        disciplin ne more biti pred zaprtjem prijav.
       #original_hash: bc1ca0f
-      event_change_deadline_after_end_date: Rok za spreminjanje disciplin ne more biti po tekmovanju.
+      event_change_deadline_after_end_date: Rok za spreminjanje disciplin ne 
+        more biti po tekmovanju.
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
         Rok za spreminjanje disciplin mora biti tekom tekmovanja, če so možne
@@ -4321,7 +4394,8 @@ sl:
       #original_hash: f1cecf1
       no_comp_colliding: Ni prekrivajočih obdobij prijav!
       #original_hash: 3e1051e
-      no_registration_start_date_yet: Datum odprtja prijav za to tekmovanje še ni določen.
+      no_registration_start_date_yet: Datum odprtja prijav za to tekmovanje še 
+        ni določen.
       #original_hash: c38824e
       opens_registration_at: prijave se odprejo ob
     #original_hash: 06b01c4
@@ -4349,7 +4423,8 @@ sl:
     #original_hash: b38ee61
     orga_close_reg: Zapri prijave
     #original_hash: b2bfea9
-    orga_close_reg_confirm: 'Ste prepričani, da želite zapreti prijave? Tega ne ni možno razveljaviti.'
+    orga_close_reg_confirm: 'Ste prepričani, da želite zapreti prijave? Tega ne ni
+      možno razveljaviti.'
     #original_hash: ce5686a
     note_reg_not_full_orga_close_reg: >-
       Opomba: prijave lahko zaprete le, ko je dosežena omejitev števila
@@ -4357,7 +4432,8 @@ sl:
     #original_hash: c66488a
     user_preferences: Uporabniške nastavitve
     #original_hash: 089cbfd
-    receive_registration_emails: 'Obvesti me po e-pošti, ko se nekdo prijavi na to tekmovanje'
+    receive_registration_emails: 'Obvesti me po e-pošti, ko se nekdo prijavi na to
+      tekmovanje'
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Opomba: Prijave so že zaprte.'
     show:
@@ -4489,7 +4565,8 @@ sl:
       #original_hash: f948a0e
       timezone_setting: 'Ogledujete si urnik za naslednji časovni pas:'
       #original_hash: ca4f078
-      multiple_timezones_available: 'Pozor: prizorišča ležijo v različnih časovnih pasovih!'
+      multiple_timezones_available: 'Pozor: prizorišča ležijo v različnih časovnih
+        pasovih!'
       #original_hash: 459e545
       select_a_timezone: Izberi časovni pas
       #original_hash: 80e8704
@@ -4629,7 +4706,8 @@ sl:
       #original_hash: 65310e5
       unknown_type: 'Neznan parameter, ta mora biti "posamezno" ali "povprečje"'
       #original_hash: 01e188f
-      unknown_show: 'Neznan parameter, ta mora bit "N oseb", "N rezultatov" ali "po regiji"'
+      unknown_show: 'Neznan parameter, ta mora bit "N oseb", "N rezultatov" ali "po
+        regiji"'
     records:
       #original_hash: e51c552
       title: Rekordi
@@ -4716,7 +4794,8 @@ sl:
           Za to tekmovanje ni več mogoče izvesti vračila. Če to želite storiti,
           se obrnite na nadzorno ploščo ponudnika plačilnih storitev.
         #original_hash: 73e93ee
-        refund_amount_too_high: 'Vračilo ne more biti večje od zneska, ki ga je tekmovalec plačal.'
+        refund_amount_too_high: 'Vračilo ne more biti večje od zneska, ki ga je tekmovalec
+          plačal.'
         #original_hash: 6368ffc
         refund_amount_too_low: Znesek vračila mora biti večji od nič.
     labels:
@@ -4741,9 +4820,11 @@ sl:
       #original_hash: b83891e
       account_disconnected_success: 'Povezava s %{provider} računom uspešno prekinjena.'
       #original_hash: 6b934e2
-      account_disconnected_failure: 'Pri prekinitvi povezave s %{provider} računom je prišlo do napake.'
+      account_disconnected_failure: 'Pri prekinitvi povezave s %{provider} računom
+        je prišlo do napake.'
       #original_hash: 340bba4
-      account_not_connected: 'Povezava s %{provider} računom zaradi napake ni bila vzpostavljena.'
+      account_not_connected: 'Povezava s %{provider} računom zaradi napake ni bila
+        vzpostavljena.'
       #original_hash: 4218676
       disconnect_account: 'Prekliči povezavo s %{provider} računom'
       #original_hash: 59c9c9c
@@ -4826,7 +4907,8 @@ sl:
           primary_email: E-pošta
         manual:
           #original_hash: e5f0dfd
-          payment_instructions: Navodila za plačilo (ki bodo prikazana na strani tekmovanja)
+          payment_instructions: Navodila za plačilo (ki bodo prikazana na strani
+            tekmovanja)
           #original_hash: 5e7242c
           payment_reference_label: >-
             Katere podatke mora uporabnik posredovati, da lahko identificirate
@@ -4924,12 +5006,14 @@ sl:
       submit: Oddaj prošnjo za spremembo
     messages:
       #original_hash: 41948b9
-      success: Hvala za vaše sporočilo. Kmalu boste prejeli povratno informacijo!
+      success: Hvala za vaše sporočilo. Kmalu boste prejeli povratno 
+        informacijo!
       #original_hash: 8e3a9da
       delivery_error: Napaka pri pošiljanju sporočila.
   misc:
     #original_hash: 9a0f1cc
-    forum_age_requirement: Za dostop do WCA foruma morate biti stari vsaj 13 let.
+    forum_age_requirement: Za dostop do WCA foruma morate biti stari vsaj 13 
+      let.
     #original_hash: d1f3342
     forum_enter_dob: >-
       Datum rojstva je obvezen, če želite dostopati do foruma. Vnesite datum
@@ -5076,7 +5160,8 @@ sl:
             nahaja, preverite <a href='/competitions'>seznam tekmovanj</a>.
       results:
         #original_hash: 9aae576
-        title: Kdaj so rezultati z WCA tekmovanja objavljeni na WCA spletno stran?
+        title: Kdaj so rezultati z WCA tekmovanja objavljeni na WCA spletno 
+          stran?
         content:
           #original_hash: 890d879
           '1': >-
@@ -5211,7 +5296,8 @@ sl:
       Donirate lahko s plačilno kartico preko Guidestar %{here_credit} ali prek
       Paypal-a %{here_paypal}. Če želite napisati ček, ga lahko napišete na:
     #original_hash: 2af9b71
-    tax_deductible_note: V Združenih državah Amerike so donacije davčno olajšljive.
+    tax_deductible_note: V Združenih državah Amerike so donacije davčno 
+      olajšljive.
     #original_hash: 6026d35
     other_help_title: Drugi načini za podporo
     #original_hash: cb228f6
@@ -5392,7 +5478,8 @@ sl:
       #original_hash: a1c6de9
       private_information: Zasebni podatki
       #original_hash: 87a1c7e
-      private_information_disclaimer: Vsi spodnji podatki bodo vidni le upravnemu odboru WCA.
+      private_information_disclaimer: Vsi spodnji podatki bodo vidni le 
+        upravnemu odboru WCA.
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: ne more biti priznana do
@@ -5403,7 +5490,8 @@ sl:
         upravni odbor WCA, da jo preveri
     delete:
       #original_hash: 6588652
-      confirm_delete: 'Ste prepričani, da želite izbrisati to vlogo za regionalno organizacijo?'
+      confirm_delete: 'Ste prepričani, da želite izbrisati to vlogo za regionalno
+        organizacijo?'
   score_tools:
     #original_hash: 4fc2133
     title: Programska orodja za tekmovanja WCA
@@ -5491,7 +5579,8 @@ sl:
         #original_hash: c66444f
         title: WCA Live
         #original_hash: f122015
-        description: Platforma za vodenje tekmovanj WCA in deljenje rezultatov v živo.
+        description: Platforma za vodenje tekmovanj WCA in deljenje rezultatov v
+          živo.
       nightmare:
         #original_hash: eebde3b
         title: Preglednice z rezultati
@@ -5658,7 +5747,8 @@ sl:
       #original_hash: 9bbdf16
       content1_html: >-
         Če ste zainteresirani za organiziranje tekmovanja ali ga že načrtujete,
-        preberite <a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">smernice za organizatorje</a>.
+        preberite <a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">smernice
+        za organizatorje</a>.
       #original_hash: 5016669
       content2_html: >-
         Ta dokument vsebuje pomembne informacije, prebrati ga mora vsak
@@ -5731,7 +5821,8 @@ sl:
       #original_hash: df43670
       validate_media: Potrdi vsebino
       #original_hash: 9f2158f
-      submit_media_html: Večpredstavnostno vsebino lahko oddate <a href="/media/new">tukaj</a>.
+      submit_media_html: Večpredstavnostno vsebino lahko oddate <a 
+        href="/media/new">tukaj</a>.
     validate:
       #original_hash: 1e0eee6
       title: Potrdi vsebino
@@ -5938,21 +6029,27 @@ sl:
         Datum rojstva osebe %{name} je 1. januar, prosimo preverite, ali je
         pravilen.
       #original_hash: b4b736a
-      dob_is_too_young_warning: '%{name} je star manj kot 3 leta, preverite, ali je to pravilno.'
+      dob_is_too_young_warning: '%{name} je star manj kot 3 leta, preverite, ali je
+        to pravilno.'
       #original_hash: b7c88ef
       dob_is_too_old_warning: >-
         %{name} je star približno 100 let, prosimo preverite, ali je to
         pravilno.
       #original_hash: 809f305
-      person_doesnt_have_any_results_error: 'Ni rezultatov za %{person_name} z ID-jem %{person_id}.'
+      person_doesnt_have_any_results_error: 'Ni rezultatov za %{person_name} z ID-jem
+        %{person_id}.'
       #original_hash: ebc1b15
-      results_not_associated_with_any_person_error: 'Na voljo so rezultati za neznano osebo z ID-jem %{person_id}'
+      results_not_associated_with_any_person_error: 'Na voljo so rezultati za neznano
+        osebo z ID-jem %{person_id}'
       #original_hash: c29e35d
-      whitespace_in_name_error: 'Oseba ''%{name}'' ima presledke na začetku/na koncu ali dvojne presledke.'
+      whitespace_in_name_error: 'Oseba ''%{name}'' ima presledke na začetku/na koncu
+        ali dvojne presledke.'
       #original_hash: 9b1ae5f
-      person_with_non_existing_wca_id_error: 'Oseba %{name} ima WCA ID, ki ne obstaja: %{wca_id}.'
+      person_with_non_existing_wca_id_error: 'Oseba %{name} ima WCA ID, ki ne obstaja:
+        %{wca_id}.'
       #original_hash: 924d832
-      no_space_before_parenthesis_error: 'Pred odprtim oklepajem v ''%{name}'' mora biti presledek.'
+      no_space_before_parenthesis_error: 'Pred odprtim oklepajem v ''%{name}'' mora
+        biti presledek.'
       #original_hash: 6daf706
       same_person_name_warning: >-
         V podatkovni bazi WCA je že vsaj ena oseba z imenom '%{name}'
