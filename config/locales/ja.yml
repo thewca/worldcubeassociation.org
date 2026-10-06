@@ -366,7 +366,8 @@ ja:
         #original_hash: 9af9099
         results_notifications_enabled: 自分の競技結果が反映されたら電子メールで通知を受け取る。
         #original_hash: 29ce2ff
-        registration_notifications_enabled: 自分が運営または代理人として担当する大会で、新しい参加申し込みがあった場合にメール通知する。
+        registration_notifications_enabled: 
+          自分が運営または代理人として担当する大会で、新しい参加申し込みがあった場合にメール通知する。
         #original_hash: de60ab8
         delegate_status: 代理人ステータス
         #original_hash: 0f21717
@@ -588,7 +589,8 @@ ja:
         #original_hash: 8a91e53
         pending_avatar: プロフィール画像の変更は、 WCA 競技結果チームの承認後に反映されます。
         #original_hash: f62eb10
-        registration_notifications_enabled: 自分が運営または代理人として担当する大会に適用されます。ただし大会ごとに別途設定した場合は、その設定が優先されます。
+        registration_notifications_enabled: 
+          自分が運営または代理人として担当する大会に適用されます。ただし大会ごとに別途設定した場合は、その設定が優先されます。
         #original_hash: 7ea7d12
         receive_developer_mails: >-
           データエクスポート・WCIFスキーマやAPI等の変更といったメジャーバージョン変更のみに対してのみ通知が行われます。これらのツールに依存したソフトウェア開発・保守を行う開発者向けの項目です。
@@ -703,7 +705,8 @@ ja:
           get_by_email_desc: >-
             携帯端末でアクセスコードが取得できない場合は、以下のボタンからメールにてワンタイムパスワードを取得することができます。その場合、ログインするにはワンタイムパスワードを上記欄内にコピー・貼り付けしてください。
           #original_hash: b243ac5
-          email_sent: メールにてワンタイムパスワードを送信しました。パスワードは2分間有効です。2分以内でも、新たにパスワードを発行することはできます。
+          email_sent: 
+            メールにてワンタイムパスワードを送信しました。パスワードは2分間有効です。2分以内でも、新たにパスワードを発行することはできます。
           errors:
             #original_hash: e70dc49
             cant_send_email: 現在メールを送信することができません
@@ -767,7 +770,8 @@ ja:
           #original_hash: 2ee4aca
           generate_backup_codes: バックアップコードを発行する。
           #original_hash: a69dd5b
-          backup_codes_warning: バックアップコードは以下に表示されています。すぐに記録してください。これは暗号化され、再度表示することはできません。
+          backup_codes_warning: 
+            バックアップコードは以下に表示されています。すぐに記録してください。これは暗号化され、再度表示することはできません。
           #original_hash: b5e3ad8
           email_auth_desc: ログイン時にワンタイムパスワードをメールにて発行することができます。
     shared:
@@ -971,7 +975,8 @@ ja:
           WCA Software Team (WST)
           は、WCAウェブサイト・スクランブルプログラム・ワークブック・管理ツールなどのWCAソフトウェアを管理・開発しています。
         #original_hash: 638652c
-        wsot: WCA Sports Organization Team (WSOT) は、国際スポーツ組織としてのWCAの認知度向上を支援・統括します。
+        wsot: WCA Sports Organization Team (WSOT) 
+          は、国際スポーツ組織としてのWCAの認知度向上を支援・統括します。
         #original_hash: 30d6048
         wapc: >-
           WCA Appeals Committee (WAC)
@@ -1010,7 +1015,8 @@ ja:
               ※お問い合わせ本文は英語で記載してください。
           wrt:
             #original_hash: 4dd66f7
-            label: WCA Results Team（WCAウェブサイト上の競技結果や個人プロフィール等） ※お問い合わせ本文は英語で記載してください。
+            label: WCA Results Team（WCAウェブサイト上の競技結果や個人プロフィール等） 
+              ※お問い合わせ本文は英語で記載してください。
           wst:
             #original_hash: 2be6d53
             label: >-
@@ -1200,7 +1206,8 @@ ja:
         #original_hash: fb02586
         login_form: ログインフォーム
         #original_hash: 333999b
-        addendum: このメールは自動配信です。WCA ウェブサイトに登録しておらず、このメールが誤送信と思われる場合は、無視して削除してください。
+        addendum: このメールは自動配信です。WCA 
+          ウェブサイトに登録しておらず、このメールが誤送信と思われる場合は、無視して削除してください。
         #original_hash: dbc2263
         questions: '何かご不明な点がございましたら、%{contact_link}までご連絡ください。'
       reconfirmation_mail:
@@ -1282,12 +1289,14 @@ ja:
       #original_hash: 0660b5d
       info_competed_before: 大会に参加したことがある場合は、WCA ID をアカウントに連携してください。
       #original_hash: 7d605f8
-      info_never_competed_html: '大会に参加したことがない場合、ぜひ %{comp} に参加しましょう！初めて参加した大会結果の公表の際に WCA ID が発行されます。'
+      info_never_competed_html: '大会に参加したことがない場合、ぜひ %{comp} に参加しましょう！初めて参加した大会結果の公表の際に
+        WCA ID が発行されます。'
       #original_hash: f28bf87
       submit_value: WCA ID と連携する
     edit_avatar_thumbnail:
       #original_hash: 4f76899
-      cdn_explanation: WCA プロフィールに登録したアイコン画像はクラウドに保存されるため、正しく反映されるまでにお時間がかかることがあります。
+      cdn_explanation: WCA 
+        プロフィールに登録したアイコン画像はクラウドに保存されるため、正しく反映されるまでにお時間がかかることがあります。
       #original_hash: cc1d51b
       cdn_warning: 登録から実際の反映までお時間を要することがあります。ご了承ください。
       #original_hash: 79f14eb
@@ -1556,7 +1565,8 @@ ja:
       申し込み状況の確認には%{sign_in}が必要です。WCA アカウントを持っていない場合は %{here}
       で作成できますが、この大会の申し込みはまだ開始していません。
     #original_hash: 4f84af0
-    please_sign_in_html: '%{comp} の参加申し込みには%{sign_in}が必要です。WCA アカウントを持っていない場合は %{here} で作成できます。'
+    please_sign_in_html: '%{comp} の参加申し込みには%{sign_in}が必要です。WCA アカウントを持っていない場合は %{here}
+      で作成できます。'
     #original_hash: 322f646
     please_fix_profile_html: '%{comp}の参加登録を完了するには、%{profile}の問題を修正してください。'
     #original_hash: f22ef22
@@ -1638,9 +1648,11 @@ ja:
       #original_hash: 1a20fae
       must_have_events: 大会内容を確定する前に 1 個以上の競技種目を追加してください。
       #original_hash: fd91320
-      schedule_must_match_rounds: 大会を確定する前に、各種目にラウンドが 1 個以上設定されており、スケジュールにすべてのラウンドが含まれていることを確認してください。
+      schedule_must_match_rounds: 大会を確定する前に、各種目にラウンドが 1 
+        個以上設定されており、スケジュールにすべてのラウンドが含まれていることを確認してください。
       #original_hash: 4fe4dee
-      advancement_condition_must_be_present_for_all_non_final_rounds: 決勝以外のすべてのラウンドに次ラウンド進出条件が設定されていることを確認してください。
+      advancement_condition_must_be_present_for_all_non_final_rounds: 
+        決勝以外のすべてのラウンドに次ラウンド進出条件が設定されていることを確認してください。
       #original_hash: a00f441
       cutoff_is_greater_than_time_limit: '%{event}のラウンド %{round_number} で、カットオフが制限タイムより長くなっています。'
       #original_hash: c1580b1
@@ -1689,7 +1701,8 @@ ja:
       #original_hash: a0168ee
       in_progress: 'この大会は開催中です。%{date} より後に結果が表示されます。'
       #original_hash: 8eeeb44
-      in_progress_at_wca_live_html: '大会は進行中です。速報は <a href=''%{link_here}''>こちら</a> から確認できます。'
+      in_progress_at_wca_live_html: '大会は進行中です。速報は <a href=''%{link_here}''>こちら</a>
+        から確認できます。'
       #original_hash: 8ab1548
       reg_opens_too_early: 大会の申し込み開始時刻は48時間後以降でなければいけません。
       #original_hash: a25e7a2
@@ -1697,7 +1710,8 @@ ja:
       #original_hash: 3322400
       tooltip_registered: 既に申し込み済みです。
       #original_hash: b10c8d6
-      tooltip_pending: 参加申し込みは承認待ちです。承認条件（事前支払い・フォーム入力等）を満たしているかを大会ページにてご確認のうえお待ちください。
+      tooltip_pending: 
+        参加申し込みは承認待ちです。承認条件（事前支払い・フォーム入力等）を満たしているかを大会ページにてご確認のうえお待ちください。
       #original_hash: f2d092f
       tooltip_waiting_list: 参加申し込みはキャンセル待ちです。
       #original_hash: f97246a
@@ -1729,7 +1743,8 @@ ja:
       #original_hash: ec7e697
       bookmarked_title: ブックマークした大会
       #original_hash: e5665fb
-      bookmarked_explanation: WCA ウェブサイト上でブックマークした大会です。参加申し込み開始の24時間前にメールが送信されます。
+      bookmarked_explanation: WCA 
+        ウェブサイト上でブックマークした大会です。参加申し込み開始の24時間前にメールが送信されます。
     competition_info:
       pdf:
         #original_hash: 05af803
@@ -1842,11 +1857,14 @@ ja:
         競技参加者が定員に達した場合でも、%{waiting_list_deadline}
         までにキャンセルがあれば、キャンセル待ちから先着順で繰り上げ承認されます。
       #original_hash: 14c5699
-      event_change_deadline_html: 'すでに承認済みの登録内容（参加種目など）の変更を希望する場合、%{event_change_deadline} までに主催者にご連絡ください。'
+      event_change_deadline_html: 'すでに承認済みの登録内容（参加種目など）の変更を希望する場合、%{event_change_deadline}
+        までに主催者にご連絡ください。'
       #original_hash: c58abdf
-      event_change_deadline_edits_allowed_html: 'すでに参加申し込み済みの場合、%{event_change_deadline} までは %{register} タブで参加種目を変更できます。'
+      event_change_deadline_edits_allowed_html: 'すでに参加申し込み済みの場合、%{event_change_deadline}
+        までは %{register} タブで参加種目を変更できます。'
       #original_hash: eff3594
-      event_change_deadline_default_html: 参加種目の追加はWCAウェブサイト上で行うことを推奨しますが、当日その種目が開始するまでは参加種目追加を受け付けます。
+      event_change_deadline_default_html: 
+        参加種目の追加はWCAウェブサイト上で行うことを推奨しますが、当日その種目が開始するまでは参加種目追加を受け付けます。
       #original_hash: f5f687d
       no_on_the_spot_registration: 会場申し込みは受け付けません。
       #original_hash: 4df139d
@@ -1865,18 +1883,22 @@ ja:
       #original_hash: 64e0ddd
       require_qualification: 競技者はすでに参加資格のある種目のみに申し込むことができます。
       #original_hash: 97a31ee
-      click_to_display_requirements_html: 'この大会は終了しています。 参加申し込み要領の表示は %{link_here} 。'
+      click_to_display_requirements_html: 'この大会は終了しています。 参加申し込み要領の表示は %{link_here}
+        。'
       #original_hash: ff19a74
       hide_requirements: 参加申し込み要領を非表示にする。
       registration_period:
         #original_hash: 6888733
         label: 参加申し込み期間
         #original_hash: 0c7c1dc
-        range_future_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time} までです。'
+        range_future_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time}
+          までです。'
         #original_hash: 679222e
-        range_ongoing_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time} までです。'
+        range_ongoing_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time}
+          までです。'
         #original_hash: 7ac8349
-        range_past_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time} までです。'
+        range_past_html: '参加申し込み期間は %{start_date_and_time} から %{end_date_and_time}
+          までです。'
       #original_hash: 1f9c9c4
       highlights: 大会結果ハイライト
       #original_hash: 945f917
@@ -2062,7 +2084,8 @@ ja:
       #original_hash: 9104a03
       no_past_competitions: 過去に参加した大会はありません。
       #original_hash: 43c3543
-      no_bookmarked_competitions: 開催前の大会がブックマークされていません。大会ページのブックマークアイコンをクリックして登録した大会はここに表示されます。
+      no_bookmarked_competitions: 
+        開催前の大会がブックマークされていません。大会ページのブックマークアイコンをクリックして登録した大会はここに表示されます。
     competition_form:
       #original_hash: 2b81984
       wcat: WCA 大会告知チーム
@@ -2075,7 +2098,8 @@ ja:
       #original_hash: c5497bc
       events: 競技種目
       #original_hash: cafc153
-      public_and_locked_html: この大会は公開されており、編集はロックされています。変更する場合は、大会告知メールのスレッドに返信して申請してください。
+      public_and_locked_html: 
+        この大会は公開されており、編集はロックされています。変更する場合は、大会告知メールのスレッドに返信して申請してください。
       #original_hash: e00a339
       confirmed_but_not_visible_html: 'この大会の概要は確定済ですが未公開です。公開するには %{contact} に連絡してください。'
       #original_hash: e94cba8
@@ -2089,7 +2113,8 @@ ja:
       #original_hash: f6fdbe4
       submit_delete_value: 削除
       #original_hash: 22316f1
-      submit_confirm: 確定してよいですか？確定後は、このページのすべての情報は変更できなくなります。確定後、WCAT により通知されたことをメールで確認してください。
+      submit_confirm: 確定してよいですか？確定後は、このページのすべての情報は変更できなくなります。確定後、WCAT 
+        により通知されたことをメールで確認してください。
       #original_hash: 4c7deb7
       submit_delete: この大会を削除してもいいですか？削除は元に戻せません。
       #original_hash: 8ebebca
@@ -2288,7 +2313,8 @@ ja:
           #original_hash: 778c20c
           short_name: シリーズ大会名の略称。大会名略称と同様のルールで設定してください。
           #original_hash: 3e27501
-          competition_ids: この項目は編集できません。<br/>シリーズ大会に大会を追加するには、個別の大会の編集ページで行ってください。
+          competition_ids: 
+            この項目は編集できません。<br/>シリーズ大会に大会を追加するには、個別の大会の編集ページで行ってください。
         #original_hash: bb470cc
         information: >-
           大会の概要 (例 : UT Open 2010 is the first students-organized competition in
@@ -2314,7 +2340,8 @@ ja:
           #original_hash: cabe7fb
           external_website: 大会ウェブサイトの URL
           #original_hash: b2af5f5
-          external_registration_page: 競技者が参加申し込みを行うためのページ。httpまたはhttpsのURLとしてください。
+          external_registration_page: 
+            競技者が参加申し込みを行うためのページ。httpまたはhttpsのURLとしてください。
         entry_fees:
           #original_hash: 9735ddf
           currency_code: 参加費の通貨コード
@@ -2417,7 +2444,8 @@ ja:
         #original_hash: 21891e5
         payment_missing: 参加申し込みは参加費支払いまで承認されません（主催者と調整済、または代替手段で支払い済の場合を除く）
         #original_hash: b15fddc
-        needs_approval: 参加申し込みは主催者による承認待ちで、これには時間がかかる場合があります。旅程の準備を進めすぎないようご注意ください。
+        needs_approval: 
+          参加申し込みは主催者による承認待ちで、これには時間がかかる場合があります。旅程の準備を進めすぎないようご注意ください。
         #original_hash: 6071fd9
         is_accepted: 大会参加が承認されました！旅程の準備をしましょう！
         #original_hash: 2a88d10
@@ -2434,7 +2462,8 @@ ja:
         no_spots_remaining: 参加者定員の空きはありません
         pending:
           #original_hash: 5e16c6d
-          information: 承認待ちは、参加費支払未了などの不完全な申し込みのみに使用してください。参加者定員に達している場合は、キャンセル待ちを使用してください。
+          information: 
+            承認待ちは、参加費支払未了などの不完全な申し込みのみに使用してください。参加者定員に達している場合は、キャンセル待ちを使用してください。
         cancelled:
           #original_hash: bb5b570
           information: 参加申し込みをキャンセルした競技者は再申し込みが可能です。
@@ -2475,7 +2504,8 @@ ja:
         #original_hash: cbf13af
         update_confirm: 参加申し込み内容を更新しますか？
         #original_hash: 9b92912
-        update_confirm_contact: 参加申し込み情報を更新するには主催者への連絡が必要です。問い合わせフォームに移動してもよいですか？
+        update_confirm_contact: 
+          参加申し込み情報を更新するには主催者への連絡が必要です。問い合わせフォームに移動してもよいですか？
         #original_hash: d54056b
         delete_confirm_contact: 参加申し込みを削除するには主催者への連絡が必要です。問い合わせフォームに移動してもよいですか？
         #original_hash: 7fbb20c
@@ -2630,7 +2660,8 @@ ja:
       #original_hash: 191df37
       must_contain_event: 1 個以上の種目を設定する必要があります。
       #original_hash: 54fe619
-      schedule_must_match_rounds: 少なくとも1つのラウンドがあり、すべてのラウンドはスケジュールに含まれていなければなりません。
+      schedule_must_match_rounds: 
+        少なくとも1つのラウンドがあり、すべてのラウンドはスケジュールに含まれていなければなりません。
       #original_hash: 6e228b7
       must_contain_delegate: 1 人以上の WCA 代理人を追加する必要があります。
       #original_hash: b5677c2
@@ -2652,13 +2683,16 @@ ja:
       #original_hash: cdcd288
       invalid_currency_code: 通貨コードが不適切です。
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: 決勝以外のラウンドでは次ラウンド進出条件を設定してください。
+      advancement_condition_must_be_present_for_all_non_final_rounds: 
+        決勝以外のラウンドでは次ラウンド進出条件を設定してください。
       #original_hash: da17c99
       registration_period_after_start: 参加申し込み期間は大会開始日以前にしてください。
       #original_hash: 2a26c1c
-      waiting_list_deadline_before_registration_close: キャンセル待ちの繰り上げ承認期限は、参加申し込み締切より前にはできません。
+      waiting_list_deadline_before_registration_close: 
+        キャンセル待ちの繰り上げ承認期限は、参加申し込み締切より前にはできません。
       #original_hash: ececa98
-      waiting_list_deadline_before_refund_date: キャンセル待ちの繰り上げ承認期限は、キャンセルによる返金期限以後にしてください。
+      waiting_list_deadline_before_refund_date: 
+        キャンセル待ちの繰り上げ承認期限は、キャンセルによる返金期限以後にしてください。
       #original_hash: 7324d19
       waiting_list_deadline_after_end: キャンセル待ちの繰り上げ承認期限は、大会終了以前にしてください。
       #original_hash: c3eb1be
@@ -2672,7 +2706,8 @@ ja:
       #original_hash: 4a5d7c5
       series_distance_days: '大会の日程が %{competition} から離れすぎています。'
       #original_hash: 7fc8fba
-      must_ask_about_guests_if_specifying_limit: 同伴者人数の上限を設定する場合、「同伴者人数を入力させる」に設定してください。
+      must_ask_about_guests_if_specifying_limit: 
+        同伴者人数の上限を設定する場合、「同伴者人数を入力させる」に設定してください。
       #original_hash: 000564d
       not_full_url: 'URL (%{url}) が相対パス指定されています。URLは http(s):// を含む絶対パス指定で記載してください。'
     new:
@@ -2796,7 +2831,8 @@ ja:
         #original_hash: b2a983a
         cumulative_time_limit: 累積制限タイム
         #original_hash: d47f11a
-        cumulative_one_round_html: '%{cumulative_time_limit} が採用される場合があります (%{regulation_link} 参照)。'
+        cumulative_one_round_html: '%{cumulative_time_limit} が採用される場合があります (%{regulation_link}
+          参照)。'
         #original_hash: 44f85f0
         cumulative_across_rounds_html: '%{cumulative_time_limit}がラウンドをまたいで採用される場合があります（%{regulation_link}参照）'
         #original_hash: e8d17df
@@ -2808,7 +2844,8 @@ ja:
           5回の記録のベストとワーストを除く3回の平均<br/>Bo3 / Best of 3 : 3回の記録のベスト<br/>Mo3 (Mean
           of 3) : 3回の記録の平均
         #original_hash: fa50f5c
-        qualification_html: 参加資格タイムの設定された競技に参加するためには、他のWCA大会で参加資格タイムの条件を満たす必要があります。
+        qualification_html: 
+          参加資格タイムの設定された競技に参加するためには、他のWCA大会で参加資格タイムの条件を満たす必要があります。
       #original_hash: 041a5de
       format: 競技形式
       #original_hash: 0d1fcc3
@@ -3000,7 +3037,8 @@ ja:
     #original_hash: e02fccb
     last_updated_html: '最終更新：%{timestamp}'
     #original_hash: 9ca9d89
-    filters_fixes_underway: ※一部の絞り込み機能は現在調整中のため使用できません。ご不便をおかけしますが、ご理解のほどよろしくお願いいたします。
+    filters_fixes_underway: 
+      ※一部の絞り込み機能は現在調整中のため使用できません。ご不便をおかけしますが、ご理解のほどよろしくお願いいたします。
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -3154,7 +3192,8 @@ ja:
     #original_hash: f8c910c
     claim_your_wca_id: 'ここで WCA ID を連携できます: %{here}'
     #original_hash: 4dfb4c7
-    create_an_account_and_claim: 'アカウントを作成してください: %{here}。作成したアカウントにログインした後、WCA ID 連携を申請できます。'
+    create_an_account_and_claim: 'アカウントを作成してください: %{here}。作成したアカウントにログインした後、WCA ID
+      連携を申請できます。'
     answers:
       '1':
         #original_hash: f79b522
@@ -3558,7 +3597,8 @@ ja:
       #original_hash: 65cdb28
       title: メディア投稿
       #original_hash: 35caed2
-      review_warning_html: すべてのメディアは<a href="/media">メディア一覧ページ</a>に掲載される前にチェックされます。
+      review_warning_html: すべてのメディアは<a 
+        href="/media">メディア一覧ページ</a>に掲載される前にチェックされます。
       #original_hash: 141d1d7
       guidelines: ガイドライン
       media_guidelines:
