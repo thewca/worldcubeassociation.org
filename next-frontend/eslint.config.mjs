@@ -26,7 +26,7 @@ const eslintConfig = [
   eslintConfigPrettier,
   globalIgnores(["src/types"]),
   {
-    files: ["src/**/*.{js,jsx,ts,tsx}"],
+    files: ["src/**/*.{ts,tsx}"],
     plugins: {
       wca: {
         rules: { "prefer-logical-properties": preferLogicalProperties },
