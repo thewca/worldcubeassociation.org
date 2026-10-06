@@ -1038,7 +1038,6 @@ pt:
             segredo de autenticação de dois fatores abaixo:
           #original_hash: 69100a3
           reset_warning: |-
-            51/5000
             Precisará reconfigurar todos os seus dispositivos 2FA.
           #original_hash: a8d11db
           methods: Métodos de Dois Fatores
@@ -1476,11 +1475,10 @@ pt:
           o reconhecimento da WCA enquanto organização desportiva internacional.
         #original_hash: 30d6048
         wapc: >-
-          O Comité de Apelos da WCA (WAC) revê e resolve os apelos relativos a
-          decisões tomadas por outros Voluntários da WCA. A WAC fornece um
-          processo de revisão independente e imparcial para garantir que as
-          decisões são justas, razoáveis ​​e de acordo com as políticas e
-          regulamentos da WCA.
+          O Comité de Apelos da WCA (WAC) revê e resolve os apelos relativos a decisões
+          tomadas por outros Voluntários da WCA. A WAC fornece um processo de revisão
+          independente e imparcial para garantir que as decisões são justas, razoáveis
+          e de acordo com as políticas e regulamentos da WCA.
     contacts:
       #original_hash: 4ef2aad
       title: Formulário de Contacto WCA
@@ -1754,9 +1752,8 @@ pt:
         welcome: 'Bem-vindo %{user_email}!'
         #original_hash: da39d05
         confirm: >-
-          A sua conta foi criada e precisa de ser ativada antes de poder ser
-          usada. Por favor confirme a sua conta através do link abaixo:
-        #original_hash: 776476a
+          A sua conta foi criada e precisa de ser ativada antes de poder ser usada.
+          Por favor confirme a sua conta através do link abaixo:  #original_hash: 776476a
         confirmation_link: Confirmar a minha conta.
         #original_hash: d484f70
         activate: >-
@@ -1793,8 +1790,8 @@ pt:
           notificação.
         #original_hash: dfea09d
         contact: >-
-          Se tiver mais questões, por favor entre em contacto com o(s)
-          Delegado(s) da competição via email:
+          Se tiver mais questões, por favor entre em contacto com o(s) Delegado(s)
+          da competição via email: 
       competition_announcement_email:
         #original_hash: 87f1f49
         header: 'A Equipa de Competições da WCA anunciou %{competition}'
@@ -2385,7 +2382,8 @@ pt:
     will_open_html: 'Inscrições irão abrir em <strong>%{days}</strong> na data/hora:
       %{time}.'
     #original_hash: 34eb009
-    will_close_html: 'As inscrições terminam daqui por <strong>%{days}, no dia %{time}'
+    will_close_html: 'As inscrições terminam daqui por <strong>%{days}</strong>, no
+      dia %{time}.'
     #original_hash: dc8a520
     closed_html: 'As inscrições terminaram há <strong>%{days}</strong> atrás: %{time}.'
     #original_hash: 2e7024d
@@ -2613,6 +2611,7 @@ pt:
         unsupported_file_format: Formato de ficheiro não suportado. Carregue um 
           ficheiro JSON ou CSV.
       cancel: Cancelar
+      preview: Pré-visualizar dados de inscrição
     add:
       #original_hash: 975275e
       title: 'Adicionar registo para %{comp}'
@@ -2749,9 +2748,8 @@ pt:
       tooltip_registered: Está registado.
       #original_hash: b10c8d6
       tooltip_pending: >-
-        O seu registo está a aguardar aprovação manual. Certifique-se de que
-        seguiu todas as instruções (ex: pagamento) listadas na Página da
-        Competição.
+        O seu registo está a aguardar aprovação manual. Certifique-se de que seguiu
+        todas as instruções (ex: pagamento) listadas na Página da Competição
       #original_hash: f2d092f
       tooltip_waiting_list: Está na lista de espera.
       #original_hash: f97246a
@@ -2795,6 +2793,10 @@ pt:
         connected: 'Ligado, os resultados estão a ser atualizados.'
         #original_hash: 53abaa2
         disconnected: 'Ligação perdida, os resultados não estão a ser atualizados'
+        status:
+          initialized: A inicializar
+          connected: Ligado
+          disconnected: Desligado
       podiums:
         #original_hash: 02ae2bd
         title: Pódios
@@ -2807,18 +2809,71 @@ pt:
             menu: Desistência em massa
             id: ID
             name: Nome
+            success: '%{count} competidores retirados com sucesso'
+            failure: Não foi possível retirar os competidores em massa
           scoresheet_warning: Certifique-se de que só retira um competidor da 
             ronda quando tiver em mãos a respetiva folha de resultados em 
             branco. Não é possível voltar a adicionar um competidor a uma ronda 
             encerrada.
+          advance: Avançar para o próximo competidor
+          cancel: Cancelar
+          failed_to_fetch: Não foi possível obter o próximo competidor a avançar
+          still_processing: Não é possível executar ações de 'Retirar 
+            competidor' enquanto alguns resultados ainda estão a ser processados
+          in_batch: Não é possível retirar um competidor cujos resultados façam 
+            parte de um lote ainda não submetido
+          title: Retirar Competidor
+          quit_menu: Retirar
+          no_next: Não há nenhum competidor seguinte para avançar.
         edit: Editar
         results: Resultados
         registration: Registo
         admin_view: Vista de Administração
         results_view: Vista de Resultados
         submit_results: Submeter Resultados
+        first_timer: Iniciante
+        warnings:
+          omitted: Omitiu a tentativa %{attempt_number}. Certifique-se de que 
+            foi intencional.
+          DNS: Existe pelo menos um DNS seguido de um resultado válido. Confirme
+            se se trata realmente de um DNS e não de um DNF.
+          impossible: 'O resultado que está a tentar submeter parece ser impossível:
+            a tentativa %{attempt_number} foi concluída em menos de 30 segundos por
+            cubo tentado. Se pretende introduzir o tempo em minutos, não se esqueça
+            de acrescentar dois zeros no final para os centésimos de segundo'
+          inconsistent: O resultado que está a tentar submeter parece ser 
+            inconsistente. Existe uma grande diferença entre o melhor resultado 
+            individual (%{best_single}) e o pior (%{worst_single}). Verifique se
+            os resultados estão corretos.
+          round_locked: A ronda seguinte já foi aberta, pelo que quaisquer 
+            alterações não terão efeito nessa ronda!
+          9m_violated: A ronda anterior ainda não tem resultados introduzidos em
+            número suficiente para cumprir o Regulamento 9m3. Se, no momento da 
+            submissão dos resultados, a ronda anterior não tiver pelo menos 
+            %{competitor_count_needed} resultados introduzidos, os resultados 
+            desta ronda não serão permitidos.
+        clear: Limpar
+        close: Fechar
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors}
+          introduzidos'
+        round_locked: bloqueada
+        double_check: Verificar novamente
+        add_competitor:
+          single_round: Adicionar Competidor à Ronda
+          event_edit_warning: Este competidor não está inscrito nesta 
+            modalidade, e a competição já não permite alterar as modalidades das
+            inscrições. Ainda assim, é possível adicioná-lo. Confirme se é mesmo
+            essa a intenção.
+          round_closed: Não é possível adicionar um competidor a uma ronda que 
+            já está encerrada
+        open: Abrir
+        add_to_batch: Adicionar ao Lote
+        remove_from_batch: Remover do Lote
+        batch_mode: Modo Lote
+        submit_batch: Submeter Lote (%{count})
       results:
         competitor: Competidor
+        mean: Média
       manage_rounds: Gerir Rondas
       incompatible:
         external: Esta competição utiliza software externo para o registo dos 
@@ -2828,6 +2883,9 @@ pt:
           Siga esta ligação para consultar os resultados em direto:'
       round_state:
         ongoing: a decorrer
+        done: concluída
+      errors:
+        round_closed: A ronda ainda não está aberta
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -3094,6 +3152,7 @@ pt:
       is_bookmarked: Assinalou esta competição
       #original_hash: 74598a7
       number_of_bookmarks: Número de vezes que a competição foi assinalada
+      waiting_list_size: Tamanho da lista de espera
     index:
       #original_hash: db98a68
       title: Competições
@@ -3218,6 +3277,23 @@ pt:
       distance_units:
         km: km
         mi: mi
+      location_placeholder: Introduza uma morada
+      use_my_location: Usar a minha localização
+      location_sign_in_required: Inicie sessão para pesquisar uma morada
+      location_not_found: Não foi encontrada nenhuma localização para esta 
+        morada
+      location_search_failed: A pesquisa da morada falhou. Tente novamente 
+        dentro de um minuto
+      distance: Distância
+      advanced_filters: Filtros Avançados
+      registration_key: 'Chave de registo:'
+      registration_status:
+        not_open: Ainda não Aberto
+        closed: Fechado
+      view_competition: Ver Competição
+      why_compete_description_html: |-
+        <p>As competições não servem apenas para descobrir quem é o mais rápido - são também eventos sociais! Qualquer pessoa que saiba resolver um cubo é bem-vinda e pode tentar alcançar um novo recorde pessoal. É fácil fazer amigos, porque todos colaboram para que a competição decorra da melhor forma.</p>
+        <p>Utilize a ferramenta abaixo para encontrar uma competição perto de si e começar a sua jornada no speedcubing!</p>
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
@@ -3384,6 +3460,7 @@ pt:
           #original_hash: b37456c
           contact: Contacto
         #original_hash: 991f419
+          lead_delegate_id: Delegado Principal
         championships: Campeonatos
         website:
           #original_hash: 692e1f9
@@ -3398,6 +3475,7 @@ pt:
           uses_wca_registration: Gostaria de usar o site da WCA para registos
           #original_hash: ebe8c47
           uses_wca_live: Irei usar WCA Live para registo de resultados
+          scoretaking_software: Software utilizado para o registo dos resultados
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Código da moeda
@@ -4860,9 +4938,8 @@ pt:
             Página da Competição)
           #original_hash: 5e7242c
           payment_reference_label: >-
-            Que informações deve o competidor fornecer para que possa
-            identificar o pagamento? (por exemplo, número de referência do
-            pagamento/ID da conta/etc.)
+            Que informações deve o competidor fornecer para que possa identificar
+            o pagamento? (por exemplo, número de referência do pagamento/ID da conta/etc)
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
   persons:
@@ -5685,6 +5762,9 @@ pt:
       publish_error: Não foi possível publicar este incidente.
       unpublish_error: Não foi possível anular a publicação deste incidente.
       destroy_error: Não foi possível eliminar este incidente.
+      confirm_destroy: Tem a certeza de que pretende eliminar este incidente?
+      confirm_unpublish: Está prestes a anular a publicação deste registo de 
+        incidentes. Tem a certeza?
   about_regulations:
     #original_hash: 6bce1b5
     title: Sobre os Regulamentos
@@ -6339,6 +6419,7 @@ pt:
   scramble_set:
     group: Grupo %{number}
     attempt: Tentativa %{number}
+    name: Conjunto de Embaralhamentos %{letter_code}
   trainee_delegate_application:
     title: Candidatura a Delegado em Treino
     introduction: Este formulário destina-se a speedcubers registados que 
