@@ -1,4 +1,13 @@
-// This list is not exhaustive; it catches the most common physical style props.
+/*
+ * Enforces logical props like `ps` and `me` instead of physical props like `pl`
+ * and `mr` in Chakra for better right-to-left (RTL) support.
+ *
+ * File is entirely AI-generated and should be treated as a black box, with
+ * unit tests in ./prefer-logical-properties.test.mjs. It catches common physical
+ * props (e.g. padding, margin) but is not exhaustive; add additional `replacements`
+ * as needed.
+ */
+
 const replacements = {
   ml: "ms",
   mr: "me",
