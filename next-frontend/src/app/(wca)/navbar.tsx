@@ -315,7 +315,7 @@ export default async function Navbar() {
         </HStack>
 
         <Box hideFrom="xl">
-          <Collapsible.Content>
+          <Collapsible.Content mx={-3} px={3}>
             <VStack align="stretch" px={3.5} pt={1} pb={1.5} gap={1}>
               {showEmptyMessage && (
                 <Text>Oh no, there are no navbar items!</Text>
@@ -351,7 +351,7 @@ export default async function Navbar() {
                           </Collapsible.Indicator>
                         </MobileNavButton>
                       </Collapsible.Trigger>
-                      <Collapsible.Content>
+                      <Collapsible.Content mx={-3} px={3}>
                         <VStack align="stretch" ps={2} gap={1} py={1}>
                           {navbarEntry.entries.map((subEntry) => (
                             <React.Fragment key={subEntry.id}>
@@ -387,7 +387,7 @@ export default async function Navbar() {
                                       </Collapsible.Indicator>
                                     </MobileNavButton>
                                   </Collapsible.Trigger>
-                                  <Collapsible.Content>
+                                  <Collapsible.Content mx={-3} px={3}>
                                     <VStack
                                       align="stretch"
                                       ps={2}
@@ -443,7 +443,7 @@ export default async function Navbar() {
                             </Collapsible.Indicator>
                           </MobileNavButton>
                         </Collapsible.Trigger>
-                        <Collapsible.Content>
+                        <Collapsible.Content mx={-3} px={3}>
                           <VStack align="stretch" ps={2} gap={1} py={1}>
                             {socialLinks.map((item) => (
                               <MobileNavLink key={item.id}>

@@ -139,7 +139,7 @@ function AvatarMenu({ session }: { session: Session | null }) {
               </Collapsible.Indicator>
             </MobileNavButton>
           </Collapsible.Trigger>
-          <Collapsible.Content>
+          <Collapsible.Content mx={-3} px={3}>
             <VStack align="stretch" ps={2} gap={1} py={1}>
               <MobileNavLink>
                 <Link

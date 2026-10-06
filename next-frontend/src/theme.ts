@@ -98,11 +98,6 @@ const INTERACTIVITY_OVERRIDES = {
   collapsible: {
     slots: [],
     base: {
-      // Ensure hover/focus outlines don't get clipped when we hide overflow
-      content: {
-        mx: "-3",
-        px: "3",
-      },
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
