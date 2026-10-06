@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import React from "react";
 import { signIn, signOut, type Session } from "@/auth.client";
+import { MobileNavButton, MobileNavLink } from "@/components/MobileNav";
 import { LuChevronDown } from "react-icons/lu";
 import _ from "lodash";
 
@@ -42,15 +43,21 @@ function AvatarMenu({ session }: { session: Session | null }) {
 
   if (!session) {
     return (
-      <Button
-        onClick={() => signIn()}
-        variant="ghost"
-        size="sm"
-        px={2}
-        justifyContent="flex-start"
-      >
-        Sign in
-      </Button>
+      <>
+        <Button
+          hideBelow="md"
+          onClick={() => signIn()}
+          variant="ghost"
+          size="sm"
+          px={2}
+          justifyContent="flex-start"
+        >
+          Sign in
+        </Button>
+        <MobileNavButton hideFrom="md" onClick={() => signIn()}>
+          Sign in
+        </MobileNavButton>
+      </>
     );
   }
 
@@ -73,7 +80,7 @@ function AvatarMenu({ session }: { session: Session | null }) {
       {/* Desktop: popup dropdown */}
       <Box hideBelow="md">
         <Menu.Root positioning={{ placement: "bottom-end" }}>
-          <Menu.Trigger rounded="full" me={1.5}>
+          <Menu.Trigger rounded="full" me={2}>
             {avatarNode}
           </Menu.Trigger>
           <Menu.Positioner>
@@ -120,15 +127,9 @@ function AvatarMenu({ session }: { session: Session | null }) {
 
       {/* Mobile: inline collapsible */}
       <Box hideFrom="md" width="full">
-        <Collapsible.Root>
+        <Collapsible.Root display="flex" flexDirection="column">
           <Collapsible.Trigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              px={2}
-              justifyContent="flex-start"
-              width="full"
-            >
+            <MobileNavButton>
               <HStack gap={2}>
                 {avatarNode}
                 <Text>{session.user?.name}</Text>
@@ -136,17 +137,11 @@ function AvatarMenu({ session }: { session: Session | null }) {
               <Collapsible.Indicator ms="auto">
                 <LuChevronDown />
               </Collapsible.Indicator>
-            </Button>
+            </MobileNavButton>
           </Collapsible.Trigger>
           <Collapsible.Content>
             <VStack align="stretch" ps={2} gap={1} py={1}>
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                px={2}
-                justifyContent="flex-start"
-              >
+              <MobileNavLink>
                 <Link
                   href={route({
                     pathname: "/payload/[[...segments]]",
@@ -157,34 +152,16 @@ function AvatarMenu({ session }: { session: Session | null }) {
                 >
                   Payload CMS
                 </Link>
-              </Button>
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                px={2}
-                justifyContent="flex-start"
-              >
+              </MobileNavLink>
+              <MobileNavLink>
                 <Link href="/dashboard">Developer Dashboard</Link>
-              </Button>
-              <Separator mx={2} />
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                px={2}
-                justifyContent="flex-start"
-              >
+              </MobileNavLink>
+              <Separator />
+              <MobileNavLink>
                 <Link href="/competitions/mine">My Competitions</Link>
-              </Button>
+              </MobileNavLink>
               {session.user?.wcaId && (
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="sm"
-                  px={2}
-                  justifyContent="flex-start"
-                >
+                <MobileNavLink>
                   <Link
                     href={route({
                       pathname: "/persons/[wcaId]",
@@ -193,18 +170,10 @@ function AvatarMenu({ session }: { session: Session | null }) {
                   >
                     My Results
                   </Link>
-                </Button>
+                </MobileNavLink>
               )}
-              <Separator mx={2} />
-              <Button
-                variant="ghost"
-                size="sm"
-                px={2}
-                justifyContent="flex-start"
-                onClick={handleSignOut}
-              >
-                Log Out
-              </Button>
+              <Separator />
+              <MobileNavButton onClick={handleSignOut}>Log Out</MobileNavButton>
             </VStack>
           </Collapsible.Content>
         </Collapsible.Root>

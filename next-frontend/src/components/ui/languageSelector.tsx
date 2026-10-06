@@ -18,6 +18,7 @@ import {
 } from "@/lib/i18n/settings";
 import { availableLocales } from "@/lib/i18n/settings";
 import Cookies from "js-cookie";
+import { MobileNavButton } from "@/components/MobileNav";
 
 export default function Wrapper() {
   return (
@@ -72,34 +73,25 @@ const LanguageSelector = () => {
 
       {/* Mobile: inline collapsible */}
       <Box hideFrom="md" width="full">
-        <Collapsible.Root>
+        <Collapsible.Root display="flex" flexDirection="column">
           <Collapsible.Trigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              px={2}
-              justifyContent="flex-start"
-              width="full"
-            >
+            <MobileNavButton>
               {currentLanguageLabel}
               <Collapsible.Indicator ms="auto">
                 <LuChevronDown />
               </Collapsible.Indicator>
-            </Button>
+            </MobileNavButton>
           </Collapsible.Trigger>
           <Collapsible.Content>
             <VStack align="stretch" ps={2} gap={1} py={1}>
               {localeEntries.map(([lang, cfg]) => (
-                <Button
+                <MobileNavButton
                   key={lang}
-                  variant={lang === currentLocale ? "subtle" : "ghost"}
-                  size="sm"
-                  px={2}
-                  justifyContent="flex-start"
+                  active={lang === currentLocale}
                   onClick={() => handleChangeLocale(lang)}
                 >
                   {cfg.name}
-                </Button>
+                </MobileNavButton>
               ))}
             </VStack>
           </Collapsible.Content>

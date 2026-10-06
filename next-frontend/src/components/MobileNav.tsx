@@ -21,19 +21,29 @@ export function MobileNavRoot({ children }: { children: React.ReactNode }) {
   );
 }
 
+export function MobileNavButton({
+  active = false,
+  ...props
+}: React.ComponentProps<typeof Button> & { active?: boolean }) {
+  return (
+    <Button
+      variant={active ? "subtle" : "ghost"}
+      size="sm"
+      px={2}
+      // Optically align leading edge of text
+      mx={-2}
+      justifyContent="flex-start"
+      {...props}
+    />
+  );
+}
+
 export function MobileNavLink({ children }: { children: React.ReactNode }) {
   const closeMobileNav = use(CloseMobileNavContext);
 
   return (
-    <Button
-      asChild
-      variant="ghost"
-      size="sm"
-      px={2}
-      justifyContent="flex-start"
-      onClick={closeMobileNav}
-    >
+    <MobileNavButton asChild onClick={closeMobileNav}>
       {children}
-    </Button>
+    </MobileNavButton>
   );
 }
