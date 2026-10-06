@@ -178,6 +178,8 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   return (
     <Card.Root
       flexDirection="row"
+      // Always keep main image and its gradient on the left side
+      _rtl={{ flexDirection: "row-reverse" }}
       colorPalette={block.colorPalette}
       colorVariant="solid"
       width="full"

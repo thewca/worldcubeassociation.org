@@ -347,13 +347,13 @@ export default async function Navbar() {
                             navbarEntry={navbarEntry}
                             entryKey="title"
                           />
-                          <Collapsible.Indicator ml="auto">
+                          <Collapsible.Indicator ms="auto">
                             <LuChevronDown />
                           </Collapsible.Indicator>
                         </Button>
                       </Collapsible.Trigger>
                       <Collapsible.Content>
-                        <VStack align="stretch" pl={4} gap={1} py={1}>
+                        <VStack align="stretch" ps={4} gap={1} py={1}>
                           {navbarEntry.entries.map((subEntry) => (
                             <React.Fragment key={subEntry.id}>
                               {subEntry.blockType === "LinkItem" && (
@@ -385,7 +385,7 @@ export default async function Navbar() {
                                       width="full"
                                     >
                                       {subEntry.title}
-                                      <Collapsible.Indicator ml="auto">
+                                      <Collapsible.Indicator ms="auto">
                                         <LuChevronDown />
                                       </Collapsible.Indicator>
                                     </Button>
@@ -393,7 +393,7 @@ export default async function Navbar() {
                                   <Collapsible.Content>
                                     <VStack
                                       align="stretch"
-                                      pl={4}
+                                      ps={4}
                                       gap={1}
                                       py={1}
                                     >
@@ -446,13 +446,13 @@ export default async function Navbar() {
                               }}
                               entryKey="label"
                             />
-                            <Collapsible.Indicator ml="auto">
+                            <Collapsible.Indicator ms="auto">
                               <LuChevronDown />
                             </Collapsible.Indicator>
                           </Button>
                         </Collapsible.Trigger>
                         <Collapsible.Content>
-                          <VStack align="stretch" pl={4} gap={1} py={1}>
+                          <VStack align="stretch" ps={4} gap={1} py={1}>
                             {socialLinks.map((item) => (
                               <MobileNavLink key={item.id}>
                                 <LinkWrapper

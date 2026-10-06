@@ -44,11 +44,11 @@ export function LiveTableHeader({
       <Table.Header>
         <Table.Row>
           {byPerson && (
-            <Table.ColumnHeader textAlign="left">
+            <Table.ColumnHeader textAlign="start">
               {t("competitions.results_table.round")}
             </Table.ColumnHeader>
           )}
-          <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
+          <Table.ColumnHeader textAlign="end">#</Table.ColumnHeader>
           {isAdmin && (
             <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
           )}
@@ -70,19 +70,19 @@ export function LiveTableHeader({
             </Table.ColumnHeader>
           )}
           {attemptIndexes.map((num) => (
-            <Table.ColumnHeader key={num} textAlign="right" hideBelow="md">
+            <Table.ColumnHeader key={num} textAlign="end" hideBelow="md">
               {num + 1}
             </Table.ColumnHeader>
           ))}
           {stats.map((stat) => (
-            <Table.ColumnHeader textAlign="right" key={stat.field}>
+            <Table.ColumnHeader textAlign="end" key={stat.field}>
               {t(stat.i18nKey)}
             </Table.ColumnHeader>
           ))}
           {forecastView &&
             format.expected_solve_count === 5 &&
             ["BPA", "WPA"].map((label) => (
-              <Table.ColumnHeader key={label} textAlign="right" hideBelow="sm">
+              <Table.ColumnHeader key={label} textAlign="end" hideBelow="sm">
                 {label}
               </Table.ColumnHeader>
             ))}
@@ -107,7 +107,7 @@ export function LivePositionCell({
     <Table.Cell
       width={1}
       layerStyle={showAdvancing ? "fill.solid" : undefined}
-      textAlign="right"
+      textAlign="end"
       rowSpan={rowSpan}
       colorPalette={
         showAdvancing ? rankingCellColorPalette(advancingParams) : undefined
@@ -174,7 +174,7 @@ export function LiveAttemptsCells({
 }) {
   return padSkipped(attempts, format.expected_solve_count).map((attempt) => (
     <Table.Cell
-      textAlign="right"
+      textAlign="end"
       key={`attempts-${competitorId}-${attempt.attempt_number}`}
       hideBelow="md"
     >
@@ -225,7 +225,7 @@ export function LiveStatCells({
         return (
           <Table.Cell
             key={`${competitorId}-${stat.i18nKey}`}
-            textAlign="right"
+            textAlign="end"
             fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
           >
             {showProjected ? (
@@ -254,7 +254,7 @@ export function LiveStatCells({
         ).map(([label, value]) => (
           <Table.Cell
             key={`${competitorId}-${label}`}
-            textAlign="right"
+            textAlign="end"
             color="fg.muted"
             hideBelow="sm"
           >

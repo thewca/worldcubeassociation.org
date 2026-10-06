@@ -119,13 +119,13 @@ function AvatarMenu({ session }: { session: Session | null }) {
                 {avatarNode}
                 <Text>{session.user?.name}</Text>
               </HStack>
-              <Collapsible.Indicator ml="auto">
+              <Collapsible.Indicator ms="auto">
                 <LuChevronDown />
               </Collapsible.Indicator>
             </Button>
           </Collapsible.Trigger>
           <Collapsible.Content>
-            <VStack align="stretch" pl={4} gap={1} py={1}>
+            <VStack align="stretch" ps={4} gap={1} py={1}>
               <Button
                 asChild
                 variant="ghost"

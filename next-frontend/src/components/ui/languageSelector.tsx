@@ -81,13 +81,13 @@ const LanguageSelector = () => {
               width="full"
             >
               {currentLanguageLabel}
-              <Collapsible.Indicator ml="auto">
+              <Collapsible.Indicator ms="auto">
                 <LuChevronDown />
               </Collapsible.Indicator>
             </Button>
           </Collapsible.Trigger>
           <Collapsible.Content>
-            <VStack align="stretch" pl={4} gap={1} py={1}>
+            <VStack align="stretch" ps={4} gap={1} py={1}>
               {localeEntries.map(([lang, cfg]) => (
                 <Button
                   key={lang}

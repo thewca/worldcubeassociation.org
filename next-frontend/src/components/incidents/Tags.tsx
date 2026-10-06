@@ -202,7 +202,7 @@ function Tag({
         <ChakraTag.Root
           size="md"
           colorScheme={colorSchemeMap[labelClass]}
-          mr={2}
+          me={2}
         >
           {label}
         </ChakraTag.Root>
