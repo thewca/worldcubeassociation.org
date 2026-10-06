@@ -1099,6 +1099,9 @@ pt:
           #original_hash: c36d556
           disabled_failed: 'Não foi possível desabilitar 2FA, por favor veja os erros
             abaixo.'
+        redesign_notice: Está a visualizar a nova página de início de sessão. 
+          Esta irá substituir a página antiga até ao final do ano.
+        use_classic: Mudar para a página antiga de início de sessão
       destroy_other:
         #original_hash: a768ea6
         success: Desconectou-se com sucesso de outros dispositivos.
@@ -1121,6 +1124,10 @@ pt:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Por favor confirme o seu novo endereço de email.
+    registrations:
+      new:
+        redesign_notice: Está a visualizar a nova página de registo. Esta irá 
+          substituir a página antiga até ao final do ano.
   wca:
     errors:
       messages:
@@ -1196,11 +1203,9 @@ pt:
         seu ID da WCA.
       #original_hash: ef8243e
       welcome_html: >-
-        Bem-vindo! Antes que possa competir na sua primeira competição WCA,
-        precisamos de algumas informações adicionais para fins de manutenção de
-        registos. Note que a sua data de nascimento nunca será divulgada sem a
-        sua permissão.<br/><br/>Se se estiver a inscrever em nome de outra
-        pessoa, forneça os detalhes do <strong>competidor</strong>.
+        Bem-vindo! Antes que possa competir na sua primeira competição WCA, precisamos
+        de algumas informações adicionais para fins de manutenção de registos.<br/><br/>Se
+        se estiver a inscrever em nome de outra pessoa, forneça os detalhes do <strong>competidor</strong>.
       dob_privacy: Esta informação nunca será divulgada sem a sua autorização.
   layouts:
     navigation:
@@ -2356,6 +2361,7 @@ pt:
       series_registrations: Registos da Série
       #original_hash: b25928c
       total: Total
+      export_all_to_csv: Exportar todas as inscrições para CSV
     new_registration:
       #original_hash: 8b9f726
       title: 'Inscrever em %{comp}'
