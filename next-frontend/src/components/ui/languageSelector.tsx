@@ -73,7 +73,7 @@ const LanguageSelector = () => {
 
       {/* Mobile: inline collapsible */}
       <Box hideFrom="md" width="full">
-        <Collapsible.Root display="flex" flexDirection="column">
+        <Collapsible.Root overflowPadding display="flex" flexDirection="column">
           <Collapsible.Trigger asChild>
             <MobileNavButton>
               {currentLanguageLabel}
@@ -82,7 +82,7 @@ const LanguageSelector = () => {
               </Collapsible.Indicator>
             </MobileNavButton>
           </Collapsible.Trigger>
-          <Collapsible.Content mx={-3} px={3}>
+          <Collapsible.Content>
             <VStack align="stretch" ps={2} gap={1} py={1}>
               {localeEntries.map(([lang, cfg]) => (
                 <MobileNavButton

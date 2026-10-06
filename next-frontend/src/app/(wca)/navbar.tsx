@@ -315,7 +315,7 @@ export default async function Navbar() {
         </HStack>
 
         <Box hideFrom="xl">
-          <Collapsible.Content mx={-3} px={3}>
+          <Collapsible.Content>
             <VStack align="stretch" px={3.5} pt={1} pb={1.5} gap={1}>
               {showEmptyMessage && (
                 <Text>Oh no, there are no navbar items!</Text>
@@ -339,7 +339,11 @@ export default async function Navbar() {
                     </MobileNavLink>
                   )}
                   {navbarEntry.blockType === "NavDropdown" && (
-                    <Collapsible.Root display="flex" flexDirection="column">
+                    <Collapsible.Root
+                      overflowPadding
+                      display="flex"
+                      flexDirection="column"
+                    >
                       <Collapsible.Trigger asChild>
                         <MobileNavButton>
                           <TextWrapper
@@ -351,7 +355,7 @@ export default async function Navbar() {
                           </Collapsible.Indicator>
                         </MobileNavButton>
                       </Collapsible.Trigger>
-                      <Collapsible.Content mx={-3} px={3}>
+                      <Collapsible.Content>
                         <VStack align="stretch" ps={2} gap={1} py={1}>
                           {navbarEntry.entries.map((subEntry) => (
                             <React.Fragment key={subEntry.id}>
@@ -376,6 +380,7 @@ export default async function Navbar() {
                               )}
                               {subEntry.blockType === "NestedDropdown" && (
                                 <Collapsible.Root
+                                  overflowPadding
                                   display="flex"
                                   flexDirection="column"
                                 >
@@ -387,7 +392,7 @@ export default async function Navbar() {
                                       </Collapsible.Indicator>
                                     </MobileNavButton>
                                   </Collapsible.Trigger>
-                                  <Collapsible.Content mx={-3} px={3}>
+                                  <Collapsible.Content>
                                     <VStack
                                       align="stretch"
                                       ps={2}
@@ -428,7 +433,11 @@ export default async function Navbar() {
                   )}
                   {navbarEntry.blockType === "SocialsMenu" &&
                     socialLinks.length > 0 && (
-                      <Collapsible.Root display="flex" flexDirection="column">
+                      <Collapsible.Root
+                        overflowPadding
+                        display="flex"
+                        flexDirection="column"
+                      >
                         <Collapsible.Trigger asChild>
                           <MobileNavButton>
                             <TextWrapper
@@ -443,7 +452,7 @@ export default async function Navbar() {
                             </Collapsible.Indicator>
                           </MobileNavButton>
                         </Collapsible.Trigger>
-                        <Collapsible.Content mx={-3} px={3}>
+                        <Collapsible.Content>
                           <VStack align="stretch" ps={2} gap={1} py={1}>
                             {socialLinks.map((item) => (
                               <MobileNavLink key={item.id}>

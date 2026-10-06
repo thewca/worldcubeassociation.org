@@ -103,6 +103,17 @@ const INTERACTIVITY_OVERRIDES = {
         _disabled: { cursor: "disabled" },
       },
     },
+    variants: {
+      overflowPadding: {
+        true: {
+          // Ensure hover/focus outlines don't get clipped when we hide overflow
+          content: {
+            mx: "-3",
+            px: "3",
+          },
+        },
+      },
+    },
   },
   steps: {
     slots: [],

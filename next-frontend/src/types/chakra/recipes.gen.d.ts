@@ -548,7 +548,9 @@ export type CodeBlockVariantMap = {
 
 export type CollapsibleSlot = "root" | "trigger" | "content" | "indicator"
 
-export interface CollapsibleVariant {}
+export interface CollapsibleVariant {
+  overflowPadding?: boolean | undefined
+}
 
 export type CollapsibleVariantProps = {
   [K in keyof CollapsibleVariant]?: ConditionalValue<CollapsibleVariant[K]> | undefined
