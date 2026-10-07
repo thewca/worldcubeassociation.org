@@ -194,7 +194,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response).to have_http_status :ok
       json = response.parsed_body
-      expect(json["can_edit_users"]["scope"]).to eq [normal_user.id]
+      expect(json["can_edit_users"]["scope"]).to eq [normal_user.id.to_s]
     end
 
     it 'correctly returns delegates to be able to edit all users' do
@@ -211,7 +211,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response).to have_http_status :ok
       json = response.parsed_body
-      expect(json["can_edit_users"]["scope"]).to eq [organizer_user.id, normal_user.id]
+      expect(json["can_edit_users"]["scope"]).to eq [organizer_user.id.to_s, normal_user.id.to_s]
     end
   end
 end
