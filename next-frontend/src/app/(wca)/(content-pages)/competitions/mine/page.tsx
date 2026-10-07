@@ -1,4 +1,11 @@
-import { Accordion, Button, Heading, Stack, VStack } from "@chakra-ui/react";
+import {
+  Accordion,
+  Button,
+  Heading,
+  HStack,
+  Stack,
+  VStack,
+} from "@chakra-ui/react";
 import { getSession } from "@/auth";
 import { getT } from "@/lib/i18n/get18n";
 import UpcomingCompetitionTable from "@/components/competitions/Mine/UpcomingCompetitionTable";
@@ -8,6 +15,8 @@ import BookmarkIcon from "@/components/icons/BookmarkIcon";
 import { Metadata } from "next";
 import Link from "next/link";
 import { route } from "nextjs-routes";
+import getPermissions from "@/lib/wca/permissions.server";
+import RailsLink from "@/components/RailsLink";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -34,6 +43,7 @@ export default async function MyCompetitions() {
   }
 
   const myCompetitions = myCompetitionsRequest.data;
+  const permissions = await getPermissions();
 
   return (
     <VStack gap="8" alignItems="left">
@@ -44,18 +54,27 @@ export default async function MyCompetitions() {
         gap="4"
       >
         <Heading size="5xl">{t("competitions.my_competitions.title")}</Heading>
-        {session.user?.wcaId && (
-          <Button asChild>
-            <Link
-              href={route({
-                pathname: "/persons/[wcaId]",
-                query: { wcaId: session.user.wcaId },
-              })}
-            >
-              {t("layouts.navigation.my_results")}
-            </Link>
-          </Button>
-        )}
+        <HStack>
+          {permissions?.canCreateCompetitions() && (
+            <Button asChild>
+              <RailsLink href="/competitions/new">
+                {t("layouts.navigation.new_competition")}
+              </RailsLink>
+            </Button>
+          )}
+          {session.user?.wcaId && (
+            <Button asChild>
+              <Link
+                href={route({
+                  pathname: "/persons/[wcaId]",
+                  query: { wcaId: session.user.wcaId },
+                })}
+              >
+                {t("layouts.navigation.my_results")}
+              </Link>
+            </Button>
+          )}
+        </HStack>
       </Stack>
       <p>{t("competitions.my_competitions.disclaimer")}</p>
       <UpcomingCompetitionTable

@@ -1535,7 +1535,7 @@ en:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
     my_competitions:
-      title: "My competitions"
+      title: "My Competitions"
       disclaimer: "Only competitions that use the WCA registration system are shown here. If your competition isn't listed here, check the competition website's own competitor list."
       past_competitions: "Past competitions"
       bookmarked_title: "Bookmarked competitions"
