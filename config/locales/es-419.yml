@@ -401,6 +401,7 @@ es-419:
       unit_seconds: segundos
       #original_hash: 9d86b0d
       unit_moves: movimientos
+    back: Volver
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1123,6 +1124,9 @@ es-419:
           disabled_failed: >-
             No se pudo deshabilitar A2F, por favor mira los errores a
             continuación.
+        redesign_notice: Estás viendo la nueva página de inicio de sesión. 
+          Reemplazará a la antigua hacia el fin del año.
+        use_classic: Cambiar a la vista anterior
       destroy_other:
         #original_hash: a768ea6
         success: Desconectado con éxito de otros dispositivos
@@ -1145,6 +1149,10 @@ es-419:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Confirma por favor tu nueva dirección de correo
+    registrations:
+      new:
+        redesign_notice: Estás visualizando la nueva página de registro. 
+          Reemplazará a la antigua hacia el fin del año.
   wca:
     errors:
       messages:
@@ -1227,11 +1235,10 @@ es-419:
         necesitamos saber tu WCA ID.
       #original_hash: ef8243e
       welcome_html: >-
-        ¡Bienvenido! Antes de que puedas participar en tu primera competición de
-        la WCA, necesitamos conocer algunos detalles sobre ti. Ten presente que
-        tu fecha de nacimiento nunca será hecha pública sin tu
-        permiso.<br/><br/>Si te estás inscribiendo en nombre de otra persona,
-        por favor introduce los detalles del <strong>Ccompetidor</strong>.
+        ¡Bienvenido! Antes de que puedas participar en tu primera competición de la
+        WCA, necesitamos conocer algunos detalles sobre ti.<br/><br/>Si te estás inscribiendo
+        en nombre de otra persona, por favor introduce los detalles del <strong>competidor</strong>.
+      dob_privacy: Esta información nunca será revelada sin tu permiso.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2365,6 +2372,7 @@ es-419:
         href="%{dob_form_path}">este formulario</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'El WCA ID %{link_id} no existe.'
+      search_for_delegate: Buscar Delegado
   user_roles:
     email:
       role_metadata:
@@ -2771,8 +2779,9 @@ es-419:
       registrations_file_label: Fichero de registros
       #original_hash: d428219
       registrations_file_hint: >-
-        Fichero CSV con columnas: Estado, Nombre, Región, WCA ID, Fecha de
-        nacimiento, Género, Correo electrónico y una columna por cada evento.
+        Fichero CSV con columnas: Estado, Nombre, Región, WCA ID, Fecha de nacimiento,
+        Género, Correo electrónico y una columna por cada evento, o un archivo JSON
+        con información del WCIF.
       #original_hash: 01beb54
       preview: Vista previa de la información del registro
       #original_hash: d6fbc9d
@@ -3157,6 +3166,9 @@ es-419:
           in_batch: >-
             No se puede quitar a un competidor que es parte de un lote sin
             enviar.
+          scoresheet_warning: Asegúrate de solo eliminar a un competidor cuando 
+            tengas su scoresheet vacía en tu mano. No puedes volver a agregar a 
+            un competidor a una ronda finalizada.
         add_competitor:
           #original_hash: 9dcb50d
           single_round: Agregar competidor a la ronda
@@ -3170,6 +3182,8 @@ es-419:
             Este competidor no está registrado a este evento, y la competición
             ya no permite cambios en el registro. Se podrá añadirlo via
             software, pero procura controlar que esto es lo deseado.
+          round_closed: No puedes volver a agregar a un competidor a una ronda 
+            que ya ha sido cerrada
       results:
         #original_hash: 4705687
         competitor: Competidor
@@ -3451,6 +3465,7 @@ es-419:
       is_bookmarked: Has marcado esta competición como favorita
       #original_hash: 74598a7
       number_of_bookmarks: Número de veces marcada como favorita
+      waiting_list_size: Tamaño de la lista de espera
     index:
       #original_hash: db98a68
       title: Competiciones
@@ -3614,6 +3629,9 @@ es-419:
         porque todos trabajamos juntos para que la competición funcione.</p>
         <p>¡Usa la herramienta de abajo para encontrar una competición cerca de
         tí y comienza tu carrera cubera!</p>
+      location_sign_in_required: Inicia sesión para buscar una dirección
+      location_not_found: No se ha encontrado una ubicación para esa dirección
+      location_search_failed: La búsqueda falló, por favor intenta nuevamente
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
