@@ -125,6 +125,7 @@ pt:
     mmagic: Master Magic
     #original_hash: 1843dc4
     333mbo: 3x3x3 Vários Cubos Vendado Antigo
+    fto: Octaedro de Faces Rotativas (FTO)
   formats:
     #original_hash: e4b3c11
     '1': Melhor de 1
@@ -249,15 +250,15 @@ pt:
     time:
       one: '%{count} tentativa para obter < %{time}'
       many: '%{count} tentativas para obter < %{time}'
-      other:
+      other: '%{count} tentativas para obter < %{time}'
     moves:
       one: '%{count} tentativa para obter < %{moves} movimentos'
       many: '%{count} tentativas para obter < %{moves} movimentos'
-      other:
+      other: '%{count} tentativas para obter < %{moves} movimentos'
     points:
       one: '%{count} tentativa para obter > %{points} pontos'
       many: '%{count} tentativas para obter > %{points} pontos'
-      other:
+      other: '%{count} tentativas para obter > %{points} pontos'
   time_limit:
     cumulative:
       #original_hash: 9da5a3e
@@ -368,9 +369,9 @@ pt:
       invalid: inválido
     #original_hash: 49d0140
     days:
-      one: 1 dia
+      one: '%{count} dia'
       many: '%{count} dias'
-      other:
+      other: '%{count} dias'
     search_site: Procurar no site
     #original_hash: d7decf1
     filter: Filtro
@@ -1132,9 +1133,9 @@ pt:
       messages:
         #original_hash: e88f903
         form_error:
-          one: 'O formulário contém um erro:'
+          one: 'O formulário contém %{count} erro:'
           many: 'O formulário contém %{count} erros:'
-          other:
+          other: 'O formulário contém %{count} erros:'
       error_pages:
         #original_hash: 1042478
         500_error: 'Lamentamos, mas ocorreu um erro.'
@@ -2201,9 +2202,11 @@ pt:
       must_register: Deve inscrever-se em pelo menos uma modalidade.
       #original_hash: ef9b4ad
       exceeds_event_limit:
-        one: Tem que se registar em exatamente 1 evento
-        many: Tem que se registar em de 1 a %{count} eventos.
-        other:
+        one: Tem que se registar em exatamente %{count} modalidade.
+        many: Tem de se inscrever em, pelo menos, 1 e, no máximo, %{count} 
+          modalidades.
+        other: Tem de se inscrever em, pelo menos, 1 e, no máximo, %{count} 
+          modalidades.
       banned_html: >-
         Está banido. Se acreditar que se trata de um erro, por favor contacte o
         <a href='mailto:integrity@worldcubeassociation.org'
@@ -2230,15 +2233,15 @@ pt:
       newcomer:
         one: principiante
         many: principiantes
-        other:
+        other: principiantes
       returner:
         one: regressante
         many: regressantes
-        other:
+        other: regressantes
       person:
         one: pessoa
         many: pessoas
-        other:
+        other: pessoas
     flash:
       #original_hash: da7ec53
       not_using_wca: Esta competição não está a usar o sistema de inscrição da 
@@ -2340,9 +2343,9 @@ pt:
       edit: Editar
       #original_hash: beffc45
       country_plural:
-        one: 1 região
+        one: '%{count} região'
         many: '%{count} regiões'
-        other:
+        other: '%{count} regiões'
       export_csv: Exportar para CSV
       #original_hash: 84add5b
       email: Email
@@ -2362,6 +2365,10 @@ pt:
       #original_hash: b25928c
       total: Total
       export_all_to_csv: Exportar todas as inscrições para CSV
+      export_to_csv:
+        one: Exportar %{count} inscrição para CSV
+        many: Exportar %{count} inscrições para CSV
+        other: Exportar %{count} inscrições para CSV
     new_registration:
       #original_hash: 8b9f726
       title: 'Inscrever em %{comp}'
@@ -2787,6 +2794,10 @@ pt:
         editado após a submissão dos resultados.
       provisional_live_results: 'Entretanto, pode consultar aqui os resultados provisórios:'
       no_spots_left: Competição cheia
+      spots_left:
+        one: 1 vaga disponível
+        many: '%{count} vagas disponíveis'
+        other: '%{count} vagas disponíveis'
     live:
       #original_hash: 10d1a3c
       title: Resultados em direto
@@ -2829,6 +2840,14 @@ pt:
           title: Retirar Competidor
           quit_menu: Retirar
           no_next: Não há nenhum competidor seguinte para avançar.
+          next_to_advance:
+            one: O próximo competidor a avançar é %{competitors}
+            many: Os próximos competidores a avançar são %{competitors}
+            other: Os próximos competidores a avançar são %{competitors}
+          quit_confirm:
+            one: Retirar competidor da ronda
+            many: Retirar competidores da ronda
+            other: Retirar competidores da ronda
         edit: Editar
         results: Resultados
         registration: Registo
@@ -2870,6 +2889,12 @@ pt:
             essa a intenção.
           round_closed: Não é possível adicionar um competidor a uma ronda que 
             já está encerrada
+          multiple_rounds:
+            one: Adicionar o competidor a ambas as rondas da Ronda Dupla.
+            many: Adicionar o competidor à ronda. Como a segunda ronda da Ronda 
+              Dupla ainda não está aberta, terá de o adicionar separadamente.
+            other: Adicionar o competidor à ronda. Como a segunda ronda da Ronda
+              Dupla ainda não está aberta, terá de o adicionar separadamente.
         open: Abrir
         add_to_batch: Adicionar ao Lote
         remove_from_batch: Remover do Lote
@@ -3069,9 +3094,9 @@ pt:
         many: Competidores podem trazer no máximo %{count} convidados.
         other: Competidores podem trazer no máximo %{count} convidados.
       event_limit:
-        one: Competidores podem registar-se em exatamente 1 evento.
+        one: Competidores podem registar-se em exatamente %{count} evento.
         many: Competidores podem registar-se em, no máximo, %{count} eventos.
-        other:
+        other: Competidores podem registar-se em, no máximo, %{count} eventos.
       require_qualification: >-
         Competidores apenas se podem registar em eventos para os quais se
         encontram qualificados.
@@ -3300,6 +3325,10 @@ pt:
         <p>As competições não servem apenas para descobrir quem é o mais rápido - são também eventos sociais! Qualquer pessoa que saiba resolver um cubo é bem-vinda e pode tentar alcançar um novo recorde pessoal. É fácil fazer amigos, porque todos colaboram para que a competição decorra da melhor forma.</p>
         <p>Utilize a ferramenta abaixo para encontrar uma competição perto de si e começar a sua jornada no speedcubing!</p>
       register_now: Registar Agora
+      currently_displaying:
+        one: 'A mostrar atualmente: %{count} competição'
+        many: 'A mostrar atualmente: %{count} competições'
+        other: 'A mostrar atualmente: %{count} competições'
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
@@ -3912,7 +3941,7 @@ pt:
         spots_remaining_plural:
           one: '%{count} vaga disponível'
           many: '%{count} vagas disponíveis'
-          other:
+          other: '%{count} vagas disponíveis'
         no_spots_remaining: Sem vagas disponíveis
         pending:
           #original_hash: 4210670
@@ -4040,9 +4069,9 @@ pt:
           bcc!
         #original_hash: beedd53
         move_to:
-          one: Move %{count} para
-          many: Move %{count} para
-          other:
+          one: Move %{count} registo para
+          many: Move %{count} registos para
+          other: Move %{count} registos para
         move_to_none_selected: Move para
         #original_hash: 96f608c
         pending: Pendente
@@ -4065,6 +4094,14 @@ pt:
           registo.
         scroll_to: Ir para
         non_competing: Não Competidor
+        send_email:
+          one: Enviar email para %{count} endereço de email
+          many: Enviar email para %{count} endereços de email
+          other: Enviar email para %{count} endereços de email
+        copy_emails:
+          one: Copiar %{count} endereço de email
+          many: Copiar %{count} endereços de email
+          other: Copiar %{count} endereços de email
       register:
         #original_hash: e8cc296
         will_open_countdown: >-
@@ -4142,6 +4179,10 @@ pt:
           Esta competição limita a quantidade de modalidades nas quais se pode
           inscrever a %{max_events}.
         comment_overview: Os seus comentários
+        waiting_list_count:
+          one: Há %{count} competidor na lista de espera.
+          many: Há %{count} competidores na lista de espera.
+          other: Há %{count} competidores na lista de espera.
       errors:
         #original_hash: 3890616
         events: 'Falha ao carregar Eventos, por favor tente novamente'
@@ -4383,6 +4424,8 @@ pt:
       edited_deadline_not_in_future: >-
         Só lhe é permitido introduzir prazos futuros, mas %{new_timestamp} não
         está no futuro.
+      fto_not_yet_allowed: O Octaedro de faces rotativas (FTO) não pode ser 
+        realizado em competições com início antes de %{date}.
     new:
       #original_hash: 1208df7
       create_competition: Criar competição
@@ -4607,7 +4650,8 @@ pt:
           desta competição.
         many: Está a ver a programação do local %{venue_name}, um de %{count} 
           locais desta competição.
-        other:
+        other: Está a ver a programação do local %{venue_name}, um de %{count} 
+          locais desta competição.
       venue_selection_all: >-
         Está a ver a calendarização para todos os %{venueCount} locais ao mesmo
         tempo.
