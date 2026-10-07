@@ -2096,6 +2096,7 @@ export interface components {
         };
         PersonInfo: {
             person: components["schemas"]["Person"];
+            user_id: number | null;
             previous_persons?: Record<string, never>[];
             ranks_single?: components["schemas"]["Rank"][];
             ranks_average?: components["schemas"]["Rank"][];
@@ -2207,6 +2208,9 @@ export interface components {
             };
             can_request_to_edit_others_profile: {
                 scope: string[] | string;
+            };
+            can_edit_users: {
+                scope: number[] | string;
             };
         };
         RegulationsContent: {
