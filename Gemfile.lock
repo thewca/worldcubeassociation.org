@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: https://github.com/thewca/ruby-iso.git
-  revision: 58429d3092689c475bda5086844b6e65fb6d7357
+  revision: 97ba82e39c3b3445d469545ced2bfcc434f462f5
   specs:
     iso (0.4.0)
       i18n
