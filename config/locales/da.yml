@@ -374,7 +374,8 @@ da:
         #original_hash: 58e0c56
         remove_avatar: Fjern avatar
         #original_hash: 9af9099
-        results_notifications_enabled: Email mig når mine resultater bliver slået op.
+        results_notifications_enabled: Email mig når mine resultater bliver 
+          slået op.
         #original_hash: de60ab8
         delegate_status: Delegeret status
         #original_hash: 0f21717
@@ -447,7 +448,8 @@ da:
         #original_hash: 3c23a67
         guests_enabled: Gæster
         #original_hash: 089cbfd
-        receive_registration_emails: Send mig en email når nogen tilmelder sig til denne konkurrence.
+        receive_registration_emails: Send mig en email når nogen tilmelder sig 
+          til denne konkurrence.
         #original_hash: d4aeed9
         registration_open: Tilmelding er åben
         #original_hash: f8153a2
@@ -455,7 +457,8 @@ da:
         #original_hash: d7020f4
         remarks: Bemærkninger
         #original_hash: c305010
-        clone_tabs: Jeg vil gerne kopiere alle faner med yderligere informationer
+        clone_tabs: Jeg vil gerne kopiere alle faner med yderligere 
+          informationer
         #original_hash: c5497bc
         competition_events: Discipliner
         #original_hash: 71c8461
@@ -467,7 +470,8 @@ da:
         #original_hash: 2529d04
         on_the_spot_registration: Tilmeldinger i konkurrencelokalet
         #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: Deltagergebyret for tilmelding i konkurrencelokalet
+        on_the_spot_entry_fee_lowest_denomination: Deltagergebyret for 
+          tilmelding i konkurrencelokalet
         #original_hash: 7e53b96
         allow_registration_edits: Redigering af tilmeldinger
         #original_hash: efbdbab
@@ -475,9 +479,11 @@ da:
         #original_hash: b332299
         refund_policy_limit_date: Sidste frist for tilbagebetaling
         #original_hash: 16cf9a4
-        waiting_list_deadline_date: Deadline for accepting competitors from the waiting list
+        waiting_list_deadline_date: Deadline for accepting competitors from the 
+          waiting list
         #original_hash: 99a9169
-        event_change_deadline_date: Deadline for competitors to update their registered events
+        event_change_deadline_date: Deadline for competitors to update their 
+          registered events
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Indgangsgebyr for tilskuere
         #original_hash: bb16247
@@ -487,19 +493,22 @@ da:
           Jeg vil gerne have at deltagerne skal aflevere deres terninger på et
           bestemt tidspunkt før en event skal starte starte
         #original_hash: 78308cc
-        early_puzzle_submission_reason: Årsagen og detaljerne for at aflevere terninger tidligt
+        early_puzzle_submission_reason: Årsagen og detaljerne for at aflevere 
+          terninger tidligt
         #original_hash: 88da0ef
         qualification_results: >-
           Jeg vil gerne bruge kvalifikations resultater for at begrænse den
           mængde deltagere, der kan deltage i bestemte discipliner
         #original_hash: 1ec6dd4
-        qualification_results_reason: Årsagen og detaljer for brugen af kvalifikations resultater
+        qualification_results_reason: Årsagen og detaljer for brugen af 
+          kvalifikations resultater
         #original_hash: ac30de9
         event_restrictions: >-
           Jeg vil begrænse deltagerne i at tilmelde sig i en specifik
           kombination af discipliner
         #original_hash: 4bf194c
-        event_restrictions_reason: Årsagen og detaljerne for brugen af restriktion af discipliner
+        event_restrictions_reason: Årsagen og detaljerne for brugen af 
+          restriktion af discipliner
         #original_hash: 3c24bd2
         main_event_id: Hoveddisciplinen
       championship:
@@ -541,11 +550,13 @@ da:
         #original_hash: 5e326b1
         incidents: Hændelser
         #original_hash: 1362470
-        wrc_feedback_requested: Jeg vil gerne have feedback fra WRC på nogle af hændelserne ovenfor.
+        wrc_feedback_requested: Jeg vil gerne have feedback fra WRC på nogle af 
+          hændelserne ovenfor.
         #original_hash: 0c7191d
         wrc_incidents: Hændelser du vil have WRC feedback på
         #original_hash: 5a92b25
-        wdc_feedback_requested: Jer vil gerne have feedback fra WDC på nogle af hændelserne ovenfor.
+        wdc_feedback_requested: Jer vil gerne have feedback fra WDC på nogle af 
+          hændelserne ovenfor.
         #original_hash: 06a0568
         wdc_incidents: Hændelser du gerne vil have WDC feedback på
         #original_hash: d7020f4
@@ -637,13 +648,16 @@ da:
         #original_hash: 9855f80
         bylaws: Vedtægter
         #original_hash: 405201b
-        directors_and_officers: Listen af Direktører og Officerer og deres titler
+        directors_and_officers: Listen af Direktører og Officerer og deres 
+          titler
         #original_hash: 719db2d
         area_description: En klar beskrivelse af området der vil blive dækket
         #original_hash: 0cdb036
-        past_and_current_activities: Rapport over tidligere og nuværende WCA-relaterede aktiviteter
+        past_and_current_activities: Rapport over tidligere og nuværende 
+          WCA-relaterede aktiviteter
         #original_hash: 0faebcf
-        future_plans: Planer for fremtiden som en WCA-anerkendt Regional Organisation
+        future_plans: Planer for fremtiden som en WCA-anerkendt Regional 
+          Organisation
         #original_hash: f5ad34a
         extra_information: Ekstra information?
         #original_hash: bc07619
@@ -781,9 +795,11 @@ da:
           Konkurrence arrangører (de har brug for en konto for at være skrevet
           her)
         #original_hash: cabe7fb
-        external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s) url.
+        external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s) 
+          url.
         #original_hash: 9965635
-        registration_open: 'Note: Registreringens åbningstider og lukketider er i UTC-tid'
+        registration_open: 'Note: Registreringens åbningstider og lukketider er i
+          UTC-tid'
         #original_hash: 9ea6021
         remarks: >-
           Ekstra information som du vil fortælle WCAT. For eksempel, hvis der er
@@ -811,7 +827,8 @@ da:
           brugt for information, og forhindrer ikke folk i at tilmelde sig
           konkurrencen. Der arbejdes på sagen.
         #original_hash: 4bd7102
-        competitor_limit_reason: Hvad er grunden til deltagergrænsen? Udfyld det her på engelsk!
+        competitor_limit_reason: Hvad er grunden til deltagergrænsen? Udfyld det
+          her på engelsk!
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Indikere venligst her ekstra tilmeldingskrav, som ikke er nævnt oven
@@ -917,9 +934,11 @@ da:
           det mest specielle situationer. Klik på de relevante bokse nedenfor
           hvis der er nogle situationer du aktivt søger hjælp for.
         #original_hash: 98bb5cd
-        wrc_incidents: Numrene af de hændelser du gerne vil have WRC feedback på.
+        wrc_incidents: Numrene af de hændelser du gerne vil have WRC feedback 
+          på.
         #original_hash: 38a95e5
-        wdc_incidents: Numrene af de hændelser du gerne vil have WDC feedback på.
+        wdc_incidents: Numrene af de hændelser du gerne vil have WDC feedback 
+          på.
         #original_hash: f30abdc
         remarks: >-
           Skriv om andre detaljer som du gerne vil dele (eksempel.,
@@ -1007,7 +1026,8 @@ da:
           #original_hash: ec44d52
           confirm: Bekræft kode
           #original_hash: 912516c
-          regenerated_secret: Successfully regenerated your two-factor authentication secret.
+          regenerated_secret: Successfully regenerated your two-factor 
+            authentication secret.
           #original_hash: 1b0c44f
           enabled_success: Successfully enabled two-factor authentication.
           #original_hash: 9515157
@@ -1031,7 +1051,8 @@ da:
             #original_hash: c2f5347
             not_enabled: Two-factor authentication not enabled
             #original_hash: 14d294b
-            unknown: Unknown error when sending your email. Please contact the WST.
+            unknown: Unknown error when sending your email. Please contact the 
+              WST.
           otp_email:
             #original_hash: a20e037
             subject: Your one-time password for the WCA
@@ -1057,7 +1078,8 @@ da:
               generated by a dedicated 2FA application on your smartphone (such
               as Authy or Google Authenticator for instance).
             #original_hash: 34a7572
-            recovery: taken from the recovery codes generated when activating 2FA.
+            recovery: taken from the recovery codes generated when activating 
+              2FA.
             #original_hash: eaee403
             email: sent to you by email when you log in.
           #original_hash: 7ae99ae
@@ -1485,7 +1507,8 @@ da:
           href=%{competition_url}>%{competition}</a> åbner om mindre end 24
           timer.
         #original_hash: 2b93022
-        not_accepted_html: 'Du har tilmeldt dig, men din tilmelding er ikke blevet accepteret.'
+        not_accepted_html: 'Du har tilmeldt dig, men din tilmelding er ikke blevet
+          accepteret.'
         #original_hash: d4087ee
         more_info_html: >-
           Se <a href=%{competition_url}>konkurrencens WCA side</a> for mere
@@ -1570,9 +1593,11 @@ da:
         For at skifte din email kræver det at du bekræfter den nye email før at
         ændringen bliver lavet.
       #original_hash: 8a770cf
-      pending_mail_confirmation: 'Denne konto venter bekræftelse af den nye email adresse %{email}.'
+      pending_mail_confirmation: 'Denne konto venter bekræftelse af den nye email
+        adresse %{email}.'
       #original_hash: 0340b0b
-      pending_avatar_confirmation: Denne konto afventer bekræftelse af den nye avatar.
+      pending_avatar_confirmation: Denne konto afventer bekræftelse af den nye 
+        avatar.
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Denne konto venter på at %{delegate} bekræfter deres opkrævede WCA ID
@@ -1612,9 +1637,11 @@ da:
           #original_hash: 1c4670f
           registered: Du har tilmeldt dig til en konkurrence
       #original_hash: fe7122d
-      guidelines_confirmation: Jeg kan bekræfte at mit billede opfylder alle kravene.
+      guidelines_confirmation: Jeg kan bekræfte at mit billede opfylder alle 
+        kravene.
       #original_hash: d677ceb
-      confirm_guidelines: Vær sikker på at læse kravene og at opgive et passende billede.
+      confirm_guidelines: Vær sikker på at læse kravene og at opgive et passende
+        billede.
       #original_hash: efc007a
       save: Gem
       #original_hash: c3cd636
@@ -1713,7 +1740,8 @@ da:
       #original_hash: 2e582eb
       must_not_be_present: må ikke være nuværende
       #original_hash: 5b4eac9
-      senior_has_delegate: kan ikke degradere en Seniordelegeret med underordnede Delegerede
+      senior_has_delegate: kan ikke degradere en Seniordelegeret med 
+        underordnede Delegerede
       #original_hash: 48653a9
       already_have_id: >-
         kan ikke gøre krav på et WCA ID, fordi du allerede har et WCA ID
@@ -1747,7 +1775,8 @@ da:
         kontoen efter at have nulstillet dit kodeord <a
         href='/users/password/new'>her</a>.
       #original_hash: 50897d4
-      must_match_person: skal matche de personlige detaljer der passer til WCA ID'et
+      must_match_person: skal matche de personlige detaljer der passer til WCA 
+        ID'et
     successes:
       messages:
         #original_hash: 31bd401
@@ -1792,7 +1821,8 @@ da:
       #original_hash: cec28a0
       comp_not_found: Konkurrence ikke fundet
       #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: En tilmelding kan ikke blive slettet og accepteret på samme tid.
+      cannot_be_deleted_and_accepted: En tilmelding kan ikke blive slettet og 
+        accepteret på samme tid.
       #original_hash: a38d024
       must_register: skal tilmelde sig til mindst en disciplin
       #original_hash: e78eec3
@@ -1801,7 +1831,8 @@ da:
         href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
-      undelete_banned: er en bandlyst deltager og kan ikke fjernes som en slettet deltager
+      undelete_banned: er en bandlyst deltager og kan ikke fjernes som en 
+        slettet deltager
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1831,7 +1862,8 @@ da:
         one: Tilmeldingen blev slettet.
         other: Tilmeldingerne blev slettet.
       #original_hash: c3aa289
-      single_deletion_and_mail: 'Tilmeldingen blev slettet og en email blev sendt til %{mail}'
+      single_deletion_and_mail: 'Tilmeldingen blev slettet og en email blev sendt
+        til %{mail}'
       #original_hash: d8f067f
       cannot_delete: Du kan ikke slette din tilmelding.
       #original_hash: 82b3899
@@ -1854,7 +1886,8 @@ da:
       regards_html: 'Hilsen %{people}.'
       new:
         #original_hash: a32db59
-        mail_subject: 'Din tilmelding til %{comp_name} er afsendt men ikke accepteret endnu'
+        mail_subject: 'Din tilmelding til %{comp_name} er afsendt men ikke accepteret
+          endnu'
         #original_hash: 8374583
         registered_html: 'Du har tilmeldt dig %{comp_name}.'
         #original_hash: 13fabed
@@ -1895,7 +1928,8 @@ da:
         #original_hash: 268e248
         mail_subject: 'Din tilmelding til %{comp_name} er blevet slettet'
         #original_hash: f66ae63
-        message_html: 'Din tilmelding til %{comp_name} er blevet slettet. Mulige årsager er:'
+        message_html: 'Din tilmelding til %{comp_name} er blevet slettet. Mulige årsager
+          er:'
         causes:
           #original_hash: 978944c
           missing_info: Du indsendte ikke alle forlangte detaljer
@@ -1905,7 +1939,8 @@ da:
             tilmeldingsgebyret, eller ikke var under kvalifikationskravene for
             disciplinerne)
           #original_hash: 1e225f0
-          registrations_full: Deltagergrænsen er nået og der er ikke flere ledige pladser
+          registrations_full: Deltagergrænsen er nået og der er ikke flere 
+            ledige pladser
           #original_hash: 0d4cce9
           multiple_registrations: Du tilmeldte dig to eller flere gange
           #original_hash: 70b1e2c
@@ -2032,7 +2067,8 @@ da:
     #original_hash: 2e5d1b9
     will_pay_here: Du vil betale dem her efter at du har tilmeldt dig
     #original_hash: b7ef562
-    wont_pay_here: Tjek konkurrencens information for instruktion om hvordan man betaler
+    wont_pay_here: Tjek konkurrencens information for instruktion om hvordan man
+      betaler
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2073,7 +2109,8 @@ da:
         amount_too_low: Den totale mængde skal mindst betale tilmeldingsgebyret.
       errors:
         #original_hash: 166d48c
-        already_paid: 'Pengene blev ikke trukket, fordi deltagergebyret allerede var betalt.'
+        already_paid: 'Pengene blev ikke trukket, fordi deltagergebyret allerede var
+          betalt.'
         #original_hash: b2bc8ed
         not_allowed: Du kan ikke betale for denne tilmelding
         #original_hash: 630dbb9
@@ -2134,7 +2171,8 @@ da:
           ubekræftet WCA ID. I stedet for %{registration_wca_id} har den dette
           ubekræftede ID: %{unconfirmed_wca_id}.
         #original_hash: 4e32621
-        email_duplicates: 'Email skal være unik. Der blev fundet kopier for følgende: %{emails}.'
+        email_duplicates: 'Email skal være unik. Der blev fundet kopier for følgende:
+          %{emails}.'
         #original_hash: bcd8e78
         wca_id_duplicates: 'WCA ID''et skal være unikt. Fandt følgende kopier: %{wca_ids}.'
     add:
@@ -2221,7 +2259,8 @@ da:
       #original_hash: 376f461
       results_posted: Resultaterne blev annonceret!
       #original_hash: afe3a23
-      results_preview_alert: Du kigger på resultater der ikke er blevet offentliggjort endnu.
+      results_preview_alert: Du kigger på resultater der ikke er blevet 
+        offentliggjort endnu.
       #original_hash: 07de612
       upload_results: >-
         Denne konkurrence er slut, vi arbejder på at uploade resultaterne
@@ -2237,7 +2276,8 @@ da:
         Denne konkurrence er i gang. Kom tilbage efter den %{date} for at se
         resultaterne!
       #original_hash: 8ab1548
-      reg_opens_too_early: Tilmelding er sat til at åbne tidligere end de påkrævede 48 timer.
+      reg_opens_too_early: Tilmelding er sat til at åbne tidligere end de 
+        påkrævede 48 timer.
       #original_hash: 3322400
       tooltip_registered: Du er tilmeldt.
       #original_hash: f2d092f
@@ -2249,13 +2289,15 @@ da:
       #original_hash: a66bbe3
       not_confirmed_visible: Denne konkurrence er ikke bekræftet men synlig
       #original_hash: 0f44e45
-      not_confirmed_not_visible: Denne konkurrence er ikke bekræftet og ikke synlig
+      not_confirmed_not_visible: Denne konkurrence er ikke bekræftet og ikke 
+        synlig
       #original_hash: a821396
       stripe_connected: >-
         Du har nu succesfuldt tilknyttet din Stripe konto og kan nu modtage
         deltagergebyrs betalinger for denne konkurrence.
       #original_hash: 0a4bb53
-      stripe_not_connected: Der var et problem og vi kunne ikke forbinde din Stripe konto.
+      stripe_not_connected: Der var et problem og vi kunne ikke forbinde din 
+        Stripe konto.
       #original_hash: 724cf0d
       championship_exists: 'Der er allerede et %{championship_type} i %{year}'
     my_competitions:
@@ -2378,7 +2420,8 @@ da:
         Tilmeldinger i lokalet vil blive accepteret med et grundgebyr på
         %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
-      on_the_spot_registration_free: Tilmelding i konkurrencelokalet vil være gratis.
+      on_the_spot_registration_free: Tilmelding i konkurrencelokalet vil være 
+        gratis.
       #original_hash: f5f687d
       no_on_the_spot_registration: >-
         Det er ikke muligt at tilmelde sig til konkurrencen i lokalet! Du skal
@@ -2414,7 +2457,8 @@ da:
       #original_hash: 1f9c9c4
       highlights: Højdepunkter
       #original_hash: 945f917
-      click_to_display_highlights_html: 'Klik %{link_here} for at vise højdepunkterne for konkurrencen.'
+      click_to_display_highlights_html: 'Klik %{link_here} for at vise højdepunkterne
+        for konkurrencen.'
       #original_hash: dc5c597
       hide_highlights: Skjul højdepunkter.
       #original_hash: f691bf2
@@ -2517,7 +2561,8 @@ da:
         #original_hash: 8b57693
         custom: Konkurrencer i den valgte periode
         #original_hash: 0933739
-        by_announcement: 'Konkurrencer sorteret efter annonceringstidspunkt, de nyeste i toppen'
+        by_announcement: 'Konkurrencer sorteret efter annonceringstidspunkt, de nyeste
+          i toppen'
       #original_hash: 6684214
       no_access: Du har ikke adgang til denne side!
       tooltips:
@@ -2556,7 +2601,8 @@ da:
       #original_hash: e590657
       missing_report: Din report er ikke oppe endnu!
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: 'Du har lige nu ikke nogle fremtidige konkurrencer! Tjek %{link}.'
+      no_upcoming_competitions_html: 'Du har lige nu ikke nogle fremtidige konkurrencer!
+        Tjek %{link}.'
       #original_hash: e0f66bb
       competitions_list: konkurrence listen
       #original_hash: 9104a03
@@ -2671,31 +2717,33 @@ da:
           contact: Kontakt
         championships:
         website:
-          generate_website: Jeg vil gerne bruge WCA hjemmesiden i stedet for at bruge
-            en anden hjemmeside.
+          generate_website: Jeg vil gerne bruge WCA hjemmesiden i stedet for at 
+            bruge en anden hjemmeside.
           external_website: Hjemmeside
           external_registration_page: Tilmeldingsside
-          uses_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til tilmelding
+          uses_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til 
+            tilmelding
           uses_wca_live:
         user_settings:
-          receive_registration_emails: Send mig en email når nogen tilmelder sig til
-            denne konkurrence.
+          receive_registration_emails: Send mig en email når nogen tilmelder sig
+            til denne konkurrence.
         entry_fees:
           currency_code: Valuta kode
           base_entry_fee: Basis deltagergebyr
-          on_the_spot_entry_fee: Deltagergebyret for tilmelding i konkurrencelokalet
+          on_the_spot_entry_fee: Deltagergebyret for tilmelding i 
+            konkurrencelokalet
           guest_entry_fee: Indgangsgebyr for tilskuere
-          donations_enabled: Jeg vil give mulighed for donationer oven i at indsamle
-            deltagergebyrene
+          donations_enabled: Jeg vil give mulighed for donationer oven i at 
+            indsamle deltagergebyrene
           refund_policy_percent: Procent der vil blive tilbagebetalt
           refund_policy_limit_date: Sidste frist for tilbagebetaling
         registration:
           opening_date_time: Tilmelding er åben
           closing_date_time: Tilmelding er lukket
-          waiting_list_deadline_date: Deadline for accepting competitors from the
-            waiting list
-          event_change_deadline_date: Deadline for competitors to update their registered
-            events
+          waiting_list_deadline_date: Deadline for accepting competitors from 
+            the waiting list
+          event_change_deadline_date: Deadline for competitors to update their 
+            registered events
           allow_on_the_spot: Tilmeldinger i konkurrencelokalet
           allow_self_delete_after_acceptance:
           allow_self_edits: Redigering af tilmeldinger
@@ -2706,117 +2754,129 @@ da:
           force_comment:
         event_restrictions:
           early_puzzle_submission:
-            enabled: Jeg vil gerne have at deltagerne skal aflevere deres terninger
-              på et bestemt tidspunkt før en event skal starte starte
+            enabled: Jeg vil gerne have at deltagerne skal aflevere deres 
+              terninger på et bestemt tidspunkt før en event skal starte starte
             reason: Årsagen og detaljerne for at aflevere terninger tidligt
           qualification_results:
-            enabled: Jeg vil gerne bruge kvalifikations resultater for at begrænse
-              den mængde deltagere, der kan deltage i bestemte discipliner
+            enabled: Jeg vil gerne bruge kvalifikations resultater for at 
+              begrænse den mængde deltagere, der kan deltage i bestemte 
+              discipliner
             reason: Årsagen og detaljer for brugen af kvalifikations resultater
             allow_registration_without:
           event_limitation:
-            enabled: Jeg vil begrænse deltagerne i at tilmelde sig i en specifik kombination
-              af discipliner
-            reason: Årsagen og detaljerne for brugen af restriktion af discipliner
+            enabled: Jeg vil begrænse deltagerne i at tilmelde sig i en specifik
+              kombination af discipliner
+            reason: Årsagen og detaljerne for brugen af restriktion af 
+              discipliner
             per_registration_limit:
           main_event_id: Hoveddisciplinen
         remarks: Bemærkninger
-        clone_tabs: Jeg vil gerne kopiere alle faner med yderligere informationer
+        clone_tabs: Jeg vil gerne kopiere alle faner med yderligere 
+          informationer
       hints:
-        name: Konkurrencens fulde navn inklusiv året i slutningen (eksempel, Danish
-          Open 2016). Husk at lave store bogstaver. Navnet må kun indeholde alfanumeriske
-          tegn, streger(-), og-tegn(&), punktummer(.), kolonner(:), apostroffer(')
-          og mellemrum( ).
-        short_name: Et kort navn for visning. Hvis navnet på konkurrencen allerede
-          er kort, kan du bruge navnet igen (eksempel, Europe 2006)
-        name_reason_html: En kort forklaring på konkurrencens navn. Navnet skal overholde
-          <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        name: Konkurrencens fulde navn inklusiv året i slutningen (eksempel, 
+          Danish Open 2016). Husk at lave store bogstaver. Navnet må kun 
+          indeholde alfanumeriske tegn, streger(-), og-tegn(&), punktummer(.), 
+          kolonner(:), apostroffer(') og mellemrum( ).
+        short_name: Et kort navn for visning. Hvis navnet på konkurrencen 
+          allerede er kort, kan du bruge navnet igen (eksempel, Europe 2006)
+        name_reason_html: En kort forklaring på konkurrencens navn. Navnet skal 
+          overholde <a 
+          href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Konkurrence Kravs Politikken</a>.
         venue:
-          city_name: Byens navn og stat (hvis det er relevant) hvor konkurrencen bliver
-            afholdt. Inkluder ikke land (eksempel, Paris eller San Francisco, California).
+          city_name: Byens navn og stat (hvis det er relevant) hvor konkurrencen
+            bliver afholdt. Inkluder ikke land (eksempel, Paris eller San 
+            Francisco, California).
           name_html: 'Lokalet som konkurrencen vil blive afholdt. %{md}. For eksempel:  [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
-          details_html: Detaljer om lokalet (eksempel, På første sal lagt bagved,
-            følg skiltene). %{md}
+          details_html: Detaljer om lokalet (eksempel, På første sal lagt 
+            bagved, følg skiltene). %{md}
           coordinates:
-        information: Vigtig information som deltagerne burde vide. Det vil blive vist
-          på konkurrencens forside. <br/>Udfyld venligst det her på engelsk</b> og
-          andre sprog som dine deltagere snakker.
+        information: Vigtig information som deltagerne burde vide. Det vil blive
+          vist på konkurrencens forside. <br/>Udfyld venligst det her på 
+          engelsk</b> og andre sprog som dine deltagere snakker.
         competitor_limit:
-          enabled: Selvom at det ikke er nødvendigt ifølge Regelsættet, så er det
-            foreslået at have en deltagergrænse.
-          count: Antal deltagere tilladt for denne konkurrence. For nu er det tal
-            kun brugt for information, og forhindrer ikke folk i at tilmelde sig konkurrencen.
-            Der arbejdes på sagen.
-          reason: Hvad er grunden til deltagergrænsen? Udfyld det her på engelsk!
+          enabled: Selvom at det ikke er nødvendigt ifølge Regelsættet, så er 
+            det foreslået at have en deltagergrænse.
+          count: Antal deltagere tilladt for denne konkurrence. For nu er det 
+            tal kun brugt for information, og forhindrer ikke folk i at tilmelde
+            sig konkurrencen. Der arbejdes på sagen.
+          reason: Hvad er grunden til deltagergrænsen? Udfyld det her på 
+            engelsk!
         staff:
           staff_delegate_ids: WCA Delegerede for konkurrencen.
           trainee_delegate_ids: WCA Lærlingdelegerede for konkurrencen.
-          organizer_ids: Konkurrence arrangører (de har brug for en konto for at være
-            skrevet her)
+          organizer_ids: Konkurrence arrangører (de har brug for en konto for at
+            være skrevet her)
           contact_html: 'Optional contact information. If you do not fill this in,
             contact inquiries will be submitted through a form without revealing organizers''
             emails. %{md}. Example: [Text to display](mailto:some@email.com)'
         website:
-          external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s)
-            url.
-          external_registration_page: Siden hvor deltagerne skal tilmelde for konkurrencen.
-            Det skal være en http(s) url.
+          external_website: Konkurrencens hjemmeside. Skal være en gyldig 
+            http(s) url.
+          external_registration_page: Siden hvor deltagerne skal tilmelde for 
+            konkurrencen. Det skal være en http(s) url.
           uses_wca_live:
         entry_fees:
           currency_code: Valutakoden for deltagergebyret.
-          base_entry_fee: Basis deltagergebyret for konkurrencen. Deltagergebyret
-            vil blive vist på konkurrencens informationsside og tilmeldingssiden hvis
-            den bliver brugt. Hvis den bliver sat på 0, så vil en sætning blive vist,
-            der fortæller at tilmeldingen for konkurrencen er gratis.
-          on_the_spot_entry_fee: Hvis den bliver sat til 0, så vil en sætning blive
-            vist, der siger at tilmelding i lokalet vil være gratis.
-          guest_entry_fee: For now this number is informational only, guest fees cannot
-            be managed through this website. If this is set to 0, a sentence of your
-            choice will be displayed about the spectator policy.
-          refund_policy_percent: For nu, er dette tal kun for information. Refunderinger
-            skal stadig tilbagebetales manuelt. Hvis dette bliver sat til 0, så vil
-            en sætning blive vist, der vil sige, at det ikke vil være nogle refunderinger.
-          refund_policy_limit_date: Datoen hvorefter at der ikke vil blive tilbagebetalt
-            nogle deltagergebyrer.
+          base_entry_fee: Basis deltagergebyret for konkurrencen. 
+            Deltagergebyret vil blive vist på konkurrencens informationsside og 
+            tilmeldingssiden hvis den bliver brugt. Hvis den bliver sat på 0, så
+            vil en sætning blive vist, der fortæller at tilmeldingen for 
+            konkurrencen er gratis.
+          on_the_spot_entry_fee: Hvis den bliver sat til 0, så vil en sætning 
+            blive vist, der siger at tilmelding i lokalet vil være gratis.
+          guest_entry_fee: For now this number is informational only, guest fees
+            cannot be managed through this website. If this is set to 0, a 
+            sentence of your choice will be displayed about the spectator 
+            policy.
+          refund_policy_percent: For nu, er dette tal kun for information. 
+            Refunderinger skal stadig tilbagebetales manuelt. Hvis dette bliver 
+            sat til 0, så vil en sætning blive vist, der vil sige, at det ikke 
+            vil være nogle refunderinger.
+          refund_policy_limit_date: Datoen hvorefter at der ikke vil blive 
+            tilbagebetalt nogle deltagergebyrer.
         registration:
           opening_date_time: 'Note: Registreringens åbningstider og lukketider er
             i UTC-tid'
-          waiting_list_deadline_date: The date when waitlisted registrants will no
-            longer be accepted. If you have a deadline for refunds, the deadline for
-            being accepted should not be before the deadline for refunds.
-          event_change_deadline_date: Registered competitors have the right to update
-            their registered events until this time by contacting the organization
-            team. This deadline must not be set to a time before registration is set
-            to close. Leaving this field blank means that competitors may add an event
-            to their registered events up until that event is held. If you have on
-            the spot registration, this must be set to the same day as the competition.
+          waiting_list_deadline_date: The date when waitlisted registrants will 
+            no longer be accepted. If you have a deadline for refunds, the 
+            deadline for being accepted should not be before the deadline for 
+            refunds.
+          event_change_deadline_date: Registered competitors have the right to 
+            update their registered events until this time by contacting the 
+            organization team. This deadline must not be set to a time before 
+            registration is set to close. Leaving this field blank means that 
+            competitors may add an event to their registered events up until 
+            that event is held. If you have on the spot registration, this must 
+            be set to the same day as the competition.
           allow_self_delete_after_acceptance:
           guests_per_registration:
-          extra_requirements: Indikere venligst her ekstra tilmeldingskrav, som ikke
-            er nævnt oven over. Det kan være eksempler på hvordan man betaler. <br/>Udfyld
-            det her <b>på engelsk</b> og hvilke andre sprog som dine deltagere taler.
-            Det her vil blive vist på konkurrencens forside, og på tilmeldingssiden,
-            hvis der bruges WCA's tilmeldingssystem.
+          extra_requirements: Indikere venligst her ekstra tilmeldingskrav, som 
+            ikke er nævnt oven over. Det kan være eksempler på hvordan man 
+            betaler. <br/>Udfyld det her <b>på engelsk</b> og hvilke andre sprog
+            som dine deltagere taler. Det her vil blive vist på konkurrencens 
+            forside, og på tilmeldingssiden, hvis der bruges WCA's 
+            tilmeldingssystem.
           force_comment:
         event_restrictions:
           early_puzzle_submission:
-            reason: Uddyb hvorfor du gerne vil have at deltagerne skal aflevere deres
-              terninger tidligt. Udfyld det på engelsk!
+            reason: Uddyb hvorfor du gerne vil have at deltagerne skal aflevere 
+              deres terninger tidligt. Udfyld det på engelsk!
           qualification_results:
-            reason: Uddyb hvorfor du gerne vil bruge kvalifikationsresultater. Udfyld
-              det på engelsk!
+            reason: Uddyb hvorfor du gerne vil bruge kvalifikationsresultater. 
+              Udfyld det på engelsk!
             allow_registration_without:
           event_limitation:
-            reason: Uddyb hvorfor du gerne vil begrænse kombinationen af bestemte
-              discipliner. Udfyld det på engelsk!
+            reason: Uddyb hvorfor du gerne vil begrænse kombinationen af 
+              bestemte discipliner. Udfyld det på engelsk!
             per_registration_limit:
-          main_event_id: Vinderen af denne disciplin vil blive erklæret vinderen af
-            konkurrencen.
-        remarks: Ekstra information som du vil fortælle WCAT. For eksempel, hvis der
-          er noget som du er usikker på, eller hvis der er en speciel forespørgsel
-          til WCAT. Udfyld det her på engelsk!
+          main_event_id: Vinderen af denne disciplin vil blive erklæret vinderen
+            af konkurrencen.
+        remarks: Ekstra information som du vil fortælle WCAT. For eksempel, hvis
+          der er noget som du er usikker på, eller hvis der er en speciel 
+          forespørgsel til WCAT. Udfyld det her på engelsk!
       choices:
         guests_enabled:
           'true': Spørg om gæster
@@ -2837,8 +2897,8 @@ da:
               Competitors may NOT edit their registration once it has been
               accepted
           guest_entry_status:
-            unclear: Vis ikke noget (du burde uddybe hvorfor i sektionen om tilmeldingskrav
-              nedenfor)
+            unclear: Vis ikke noget (du burde uddybe hvorfor i sektionen om 
+              tilmeldingskrav nedenfor)
             free: '"Alle tilskuere kan se med gratis"'
             restricted: '"Tilskuere er kun tilladte som ledsagere af en deltager"'
     errors:
@@ -2854,17 +2914,21 @@ da:
       #original_hash: 3935fd6
       cannot_delete_confirmed: Kan ikke slette en bekræftet konkurrence.
       #original_hash: 191df37
-      must_contain_event: skal indeholde mindst en disciplin for denne konkurrence
+      must_contain_event: skal indeholde mindst en disciplin for denne 
+        konkurrence
       #original_hash: 54fe619
-      schedule_must_match_rounds: skal have mindst en runde og alle runder skal være inkluderet i skemaet.
+      schedule_must_match_rounds: skal have mindst en runde og alle runder skal 
+        være inkluderet i skemaet.
       #original_hash: 6e228b7
       must_contain_delegate: skal indeholde mindst en WCA Delegeret
       #original_hash: 8131fc2
       not_all_delegates: er ikke alle Delegerede
       #original_hash: 43a23c2
-      registration_close_after_open: tilmeldingens lukketid skal være efter tilmeldingen åbner
+      registration_close_after_open: tilmeldingens lukketid skal være efter 
+        tilmeldingen åbner
       #original_hash: 8a3a4f6
-      start_date_must_be_28_days_in_advance: Startdato skal være mindst 28 dage i fremtiden.
+      start_date_must_be_28_days_in_advance: Startdato skal være mindst 28 dage 
+        i fremtiden.
       #original_hash: 43a83a9
       end_date_before_start: Slut dato kan ikke være før start dato.
       #original_hash: 0c507fa
@@ -2876,19 +2940,26 @@ da:
       #original_hash: cdcd288
       invalid_currency_code: Valgte valuta kode er ikke gyldig
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: must have an advancement condition to all non final rounds.
+      advancement_condition_must_be_present_for_all_non_final_rounds: must have 
+        an advancement condition to all non final rounds.
       #original_hash: da17c99
-      registration_period_after_start: Registration period cannot be after start date.
+      registration_period_after_start: Registration period cannot be after start
+        date.
       #original_hash: f6b244b
-      waiting_list_deadline_before_registration_close: Wailting list deadline cannot be before registration close date.
+      waiting_list_deadline_before_registration_close: Wailting list deadline 
+        cannot be before registration close date.
       #original_hash: ececa98
-      waiting_list_deadline_before_refund_date: Waiting list deadline cannot be before limit date for refunds.
+      waiting_list_deadline_before_refund_date: Waiting list deadline cannot be 
+        before limit date for refunds.
       #original_hash: 44d9902
-      waiting_list_deadline_after_start: Waiting list deadline must be before start date.
+      waiting_list_deadline_after_start: Waiting list deadline must be before 
+        start date.
       #original_hash: c3eb1be
-      event_change_deadline_before_registration_close: Deadline for updating events cannot be before registration close date.
+      event_change_deadline_before_registration_close: Deadline for updating 
+        events cannot be before registration close date.
       #original_hash: bc1ca0f
-      event_change_deadline_after_end_date: Deadline for updating events cannot be after the competition.
+      event_change_deadline_after_end_date: Deadline for updating events cannot 
+        be after the competition.
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
         Deadline for updating events must be during the competition if on the
@@ -2935,7 +3006,8 @@ da:
       #original_hash: 7e76950
       no_date_yet: Du har ikke tildelt en dato for denne konkurrence endnu.
       #original_hash: 82a95d2
-      no_location_yet: Du har ikke tildelt en placering for denne konkurrence endnu.
+      no_location_yet: Du har ikke tildelt en placering for denne konkurrence 
+        endnu.
       #original_hash: 709a232
       name: Navn
       #original_hash: adc24b7
@@ -3013,7 +3085,8 @@ da:
         #original_hash: b2a983a
         cumulative_time_limit: sammenlagt tidsgrænse
         #original_hash: d47f11a
-        cumulative_one_round_html: 'En %{cumulative_time_limit} kan blive brugt (se %{regulation_link}).'
+        cumulative_one_round_html: 'En %{cumulative_time_limit} kan blive brugt (se
+          %{regulation_link}).'
         #original_hash: c6190b6
         cumulative_across_rounds_html: >-
           En %{cumulative_time_limit} kan blive brugt over forskellige runder
@@ -3574,7 +3647,8 @@ da:
             bruge den.
       regulations2:
         #original_hash: 48f1234
-        title: Må jeg bruge en magnetisk terning til en officiel WCA konkurrence?
+        title: Må jeg bruge en magnetisk terning til en officiel WCA 
+          konkurrence?
         content:
           #original_hash: 024ce81
           '1': >-
@@ -3678,7 +3752,8 @@ da:
       You can donate by credit card using Guidestar %{here_credit}, or by Paypal
       %{here_paypal}. If you prefer to write a check, you can write to:
     #original_hash: 2af9b71
-    tax_deductible_note: Du bedes selv undersøge om dette kan trækkes fra i skat.
+    tax_deductible_note: Du bedes selv undersøge om dette kan trækkes fra i 
+      skat.
     #original_hash: 6026d35
     other_help_title: Andre måder at hjælpe
     #original_hash: cb228f6
@@ -3766,7 +3841,8 @@ da:
         #original_hash: 70539cd
         name: WCA's Databeskyttelseskomité
         #original_hash: 1f69829
-        description: Denne komité er ansvarlig for alle emner vedrørende databeskyttelse.
+        description: Denne komité er ansvarlig for alle emner vedrørende 
+          databeskyttelse.
       wrc:
         #original_hash: 3da1e85
         name: WCA's Regelsætkomité
@@ -3799,7 +3875,8 @@ da:
         #original_hash: 9cb13de
         name: WCA's Finanskomité
         #original_hash: b4ed44b
-        description: Dette hold er ansvarlig for at holde styr over WCA's økonomi.
+        description: Dette hold er ansvarlig for at holde styr over WCA's 
+          økonomi.
       wec:
         #original_hash: 83bd1d0
         name: WCA's Etikkomité
@@ -4000,7 +4077,8 @@ da:
       #original_hash: a1c6de9
       private_information: Privat information
       #original_hash: 87a1c7e
-      private_information_disclaimer: Alt denne information vil kun blive vist til WCA Bestyrelsen
+      private_information_disclaimer: Alt denne information vil kun blive vist 
+        til WCA Bestyrelsen
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: kan ikke være efter "anerkendt indtil"
@@ -4011,7 +4089,8 @@ da:
         vurderer den.
     delete:
       #original_hash: 6588652
-      confirm_delete: Are you sure you want to delete this Regional Organization request?
+      confirm_delete: Are you sure you want to delete this Regional Organization
+        request?
   contact:
     #original_hash: a34b69f
     title: Kontakt information
@@ -4334,7 +4413,8 @@ da:
       content1_html: >-
         Hvis du er interesseret i at arrangere en konkurrence eller allerede
         planlægger er ved at planlægge en, så læs vores <a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Arrangør Retningslinjer</a>.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Arrangør
+        Retningslinjer</a>.
       #original_hash: 5016669
       content2_html: >-
         Dette dokument indeholder vigtig information og burde læses af hver
@@ -4414,7 +4494,8 @@ da:
       #original_hash: df43670
       validate_media: Valider medie
       #original_hash: 9f2158f
-      submit_media_html: Du kan indsende et nyt medie <a href="/media/new">her</a>.
+      submit_media_html: Du kan indsende et nyt medie <a 
+        href="/media/new">her</a>.
     validate:
       #original_hash: 1e0eee6
       title: Valider Medie

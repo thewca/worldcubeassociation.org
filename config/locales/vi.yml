@@ -392,6 +392,7 @@ vi:
       #original_hash: 9d86b0d
       unit_moves: bước
     back_to_top: Về đầu trang
+    back: Trở lại
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1090,6 +1091,9 @@ vi:
           #original_hash: c36d556
           disabled_failed: 'Không thể bỏ kích hoạt 2FA, vui lòng kiểm tra lỗi dưới
             đây.'
+        redesign_notice: Bạn đang xem trang đăng nhập mới. Trang này sẽ thay thế
+          trang đăng nhập cũ trước cuối năm nay.
+        use_classic: Trở lại trang đăng nhập cũ
       destroy_other:
         #original_hash: a768ea6
         success: Đã đăng xuất thành công khỏi các thiết bị khác.
@@ -1112,6 +1116,10 @@ vi:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Vui lòng xác nhận địa chỉ email mới của bạn
+    registrations:
+      new:
+        redesign_notice: Bạn đang xem trang đăng ký mới. Trang này sẽ thay thế 
+          trang đăng ký cũ trước cuối năm nay.
   wca:
     errors:
       messages:
@@ -1186,11 +1194,11 @@ vi:
         biết ID WCA mà bạn đã sử dụng để thi đấu.
       #original_hash: ef8243e
       welcome_html: >-
-        Chào mừng bạn! Trước khi tham gia giải đấu WCA đầu tiên, chúng tôi cần
-        một số thông tin cho việc lưu trữ kết quả. Lưu ý rằng ngày sinh của bạn
-        sẽ không bao giờ bị công khai mà không có sự cho phép của bạn.
-        <br/><br/>Nếu bạn thay mặt người khác đăng ký, xin vui lòng cung cấp
-        thông tin của <strong>thí sinh</strong>.
+        Chào mừng bạn! Trước khi tham gia giải đấu WCA đầu tiên, chúng tôi cần một
+        số thông tin cho việc lưu trữ kết quả.<br/><br/>Nếu bạn thay mặt người khác
+        đăng ký, xin vui lòng cung cấp thông tin của <strong>thí sinh</strong>.
+      dob_privacy: Thông tin này sẽ không được công bố khi chưa có sự cho phép 
+        của bạn.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2142,6 +2150,7 @@ vi:
         Kết quả WCA thông qua <a href="%{dob_form_path}">đơn này</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'ID WCA %{link_id} không tồn tại.'
+      search_for_delegate: Tìm Delegate
   user_roles:
     email:
       role_metadata:
@@ -2877,6 +2886,9 @@ vi:
           still_processing: Không thể bỏ thí sinh khi đang xử lý kết quả
           #original_hash: ecb0dd4
           in_batch: Không thể bỏ thí sinh trong batch chưa nộp
+          scoresheet_warning: Hãy nhớ chỉ được bỏ thí sinh khi đã có trong tay 
+            phiếu ghi kết quả trống của thí sinh này. Bạn không thể thêm lại thí
+            sinh vào một vòng thi đã đóng.
         add_competitor:
           #original_hash: 9dcb50d
           single_round: Thêm thí sinh vào vòng thi
@@ -2888,6 +2900,7 @@ vi:
             Thí sinh chưa đăng ký nội dung này và thời gian chỉnh sửa nội dung
             thi đấu đã đóng. Bạn vẫn có thể thêm thí sinh này, nhưng hãy đảm bảo
             bạn chắc chắn muốn làm như vậy.
+          round_closed: Bạn không thể thêm thí sinh vào vòng thi đã đóng
         first_timer: Thí sinh mới
       results:
         #original_hash: 4705687
@@ -3151,6 +3164,7 @@ vi:
       is_bookmarked: Bạn đã đánh dấu giải đấu này
       #original_hash: 74598a7
       number_of_bookmarks: Số lần đánh dấu
+      waiting_list_size: Độ dài danh sách chờ
     index:
       #original_hash: db98a68
       title: Giải đấu
@@ -3290,6 +3304,10 @@ vi:
       why_compete_description_html: |-
         <p>Các giải đấu không chỉ là nơi thi đấu xem ai nhanh nhất, mà còn là nơi để giao lưu nữa! Bất kì ai có thể giải Rubik đều được chào đón tại các giải đấu và đều có cơ hội phá kỷ lục của chính bản thân mình. Tại giải đấu, mọi người đều cùng hỗ trợ lẫn nhau để giải đấu diễn ra suôn sẻ, vì vậy việc kết bạn cũng vô cùng dễ dàng.</p>
         <p>Hãy sử dụng công cụ dưới đây để tìm các giải đấu sẽ diễn ra gần bạn và bắt đầu hành trình với khối Rubik nhé!</p>
+      location_sign_in_required: Đăng nhập để tìm theo địa chỉ
+      location_not_found: Không tìm thấy địa điểm ở địa chỉ này
+      location_search_failed: Tìm kiếm bằng địa chỉ thất bại, xin vui lòng thử 
+        lại sau ít phút
     my_competitions_table:
       #original_hash: 5301648
       edit: Chỉnh sửa
