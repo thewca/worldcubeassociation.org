@@ -71,6 +71,13 @@ class SessionsController < Devise::SessionsController
     end
   end
 
+  # Signing out of the Next frontend only drops its own cookies, so it sends the browser here
+  #   to end the Rails session too. This is a GET because it is reached by a redirect.
+  def destroy_from_next
+    sign_out(:user)
+    redirect_to EnvConfig.NEXT_FRONTEND_URL, allow_other_host: true
+  end
+
   def destroy_other
     # Override old validity token with a new one.
     # This way we invalidate all other sessions, while maintaining the current one.
