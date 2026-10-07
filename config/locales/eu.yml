@@ -400,6 +400,7 @@ eu:
       unit_seconds: segundo
       #original_hash: 9d86b0d
       unit_moves: mugimendu
+    back: Itzuli
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1110,6 +1111,9 @@ eu:
           #original_hash: c36d556
           disabled_failed: 'Ezin izan da 2FA desaktibatu, mesedez, ikusi ondorengo
             akatsak.'
+        redesign_notice: Saioa hasteko orri berria ikusten ari zara. Orri 
+          zaharra ordezkatuko du urte bukaerarako.
+        use_classic: Saioa hasteko orri zaharrera itzuli
       destroy_other:
         #original_hash: a768ea6
         success: Beste gailueatik saioa arrakastaz amaitu da.
@@ -1132,6 +1136,10 @@ eu:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Mesedez zure helbide elektroniko berria berretsi
+    registrations:
+      new:
+        redesign_notice: Erregistro orri berria ikusten ari zara. Orri zaharra 
+          ordezkatuko du urte bukaerarako.
   wca:
     errors:
       messages:
@@ -1211,11 +1219,10 @@ eu:
         zeinekin lehiatu zaren.
       #original_hash: ef8243e
       welcome_html: >-
-        Ongi Etorri! WCAko lehiaketa batean parte hartu baino lehen, erregistro
-        gehiago behar dugu informazioa mantentzeko. Kontuan hartu zure
-        urtebetetzea zure baimenik gabe ez dela sekula
-        argitaratuko.<br/><br/>Beste norbaiten izenean erregistratzen ari bazara
-        mesedez <strong>lehiakidearen</strong> datuak eman.
+        Ongi Etorri! WCAko lehiaketa batean parte hartu baino lehen, informazio gehiago
+        behar dugu erregistroa mantentzeko.<br/><br/>Beste norbaiten izenean erregistratzen
+        ari bazara mesedez <strong>lehiakidearen</strong> datuak eman.
+      dob_privacy: Informazio hau ez da sekula erabiliko zure baimena gabe.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1745,6 +1752,9 @@ eu:
         ikuspegia hobetzen laguntzeko.
       #original_hash: 65c84ec
       button: WCA nola lagundu dezakezun inguruan gehiago jakin
+    become_delegate:
+      title: Egin zaitez ordezkari!
+      link_title: Orain apuntatu
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -6640,3 +6650,27 @@ eu:
       actioner: Jokalaria
       #original_hash: bcdf8d3
       requester: Eskatzailea
+  trainee_delegate_application:
+    title: Praktiketako ordezkaria izateko eskaera
+    success_title: Eskaera bidali da
+    success: Zure eskaera arrakastatsuki bidali da. Zure WCAko e-mailera kopia 
+      bat bidali da.
+    eligibility:
+      title: Eskaera hau ezin duzu bidali oraindik
+      missing_wca_id: Zure WCAko kontuak WCA ID batera lotuta egon behar du.
+      missing_date_of_birth: Zure WCAko kontuak egiaztatutako jaiotza-data eduki
+        behar du.
+      underage: Eskaera egiten dutenek %{minimum_age} urte eduki behar dituzu 
+        gutxienez.
+      claim_wca_id: Zure WCA WDa eskatu.
+      edit_profile: Profila eguneratzea eskatu.
+    errors:
+      invalid_region: Aukeratu baliozko ordezkari-eskualde aktibo bat.
+      missing_reviewer: Aukeratutako eskualdeak ez du eskaera har dezakeen 
+        ordezkari erregional edo seniorrik.
+      recommender_required: Aukeratu gutxienez gomendatzen zaituen ordezkari 
+        bat.
+      invalid_recommender: Aukeratutako ordezkari gomendatzailea(k) ez d(ir)a 
+        dagoeneko aukeratutako eskualderako aukeragarriak.
+      spoken_delegate_required: Aukeratu mintzatu zaren ordezkari junior edo oso
+        bat.
