@@ -856,7 +856,7 @@ class User < ApplicationRecord
         scope: can_manage_incidents? ? "*" : [],
       },
       can_edit_users: {
-        scope: can_view_all_users? ? "*" : [id] | Registration.where(competition: organized_competitions.not_over).pluck(:user_id).map(&:to_s),
+        scope: can_view_all_users? ? "*" : ([id] | Registration.where(competition: organized_competitions.not_over).pluck(:user_id)).map(&:to_s),
       },
     }
     if banned?

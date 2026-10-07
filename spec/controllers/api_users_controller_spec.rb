@@ -87,7 +87,7 @@ RSpec.describe Api::V0::UsersController do
     let!(:delegate_user) { create(:delegate_role, group_id: senior_delegate_role.group.id).user }
     let!(:organizer_user) { create(:user) }
     let!(:competition) do
-      create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])
+      create(:competition, :confirmed, :future, delegates: [delegate_user], organizers: [organizer_user])
     end
     let!(:senior_delegate_role) { create(:senior_delegate_role) }
 
