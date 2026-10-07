@@ -140,10 +140,4 @@ properties:
       - scope
     properties:
       scope:
-        oneOf:
-          - type: array
-            items:
-              type: integer
-          - type: string
-            format: "Wildcard"
-            enum: "*"
+        $ref: "./CompetitionPermissions.yaml"

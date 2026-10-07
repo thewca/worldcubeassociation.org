@@ -2210,7 +2210,7 @@ export interface components {
                 scope: string[] | string;
             };
             can_edit_users: {
-                scope: number[] | string;
+                scope: components["schemas"]["CompetitionPermissions"];
             };
         };
         RegulationsContent: {
