@@ -1754,13 +1754,12 @@ pt:
         #original_hash: da39d05
         confirm: >-
           A sua conta foi criada e precisa de ser ativada antes de poder ser usada.
-          Por favor confirme a sua conta através do link abaixo:  #original_hash:
-          776476a
+          Por favor confirme a sua conta através do link abaixo: 
         confirmation_link: Confirmar a minha conta.
         #original_hash: d484f70
         activate: >-
           Após a ativação, poderá entrar na sua conta no website da World Cube Association:
-           #original_hash: fb02586
+          
         login_form: formulário de login
         #original_hash: 333999b
         addendum: >-
@@ -6251,7 +6250,7 @@ pt:
       #original_hash: 050c7e2
       non_matching_name_warning: >-
         O nome '%{name}' fornecido para %{wca_id} não corresponde ao registo atual
-        na base de dados da WCA ('%{expected_name}').  #original_hash: 333a035
+        na base de dados da WCA ('%{expected_name}'). 
       non_matching_country_warning: >-
         O país '%{country}' fornecido para %{name} (%{wca_id}) não corresponde
         ao registo atual na base de dados da WCA ('%{expected_country}'). Se
