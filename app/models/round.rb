@@ -85,6 +85,11 @@ class Round < ApplicationRecord
 
   validates :participation_source_type, comparison: { equal_to: LinkedRound.model_name, if: :participation_source_linked?, message: "must be the linked round group when the previous rounds are linked" }
 
+  after_destroy :destroy_orphaned_linked_round
+  private def destroy_orphaned_linked_round
+    self.linked_round&.destroy_if_orphaned
+  end
+
   after_save :reset_linked_round_information, if: :linked_round_previously_changed?
   private def reset_linked_round_information
     self.linked_round&.reset_round_information
