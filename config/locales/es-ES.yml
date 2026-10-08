@@ -403,6 +403,7 @@ es-ES:
       unit_seconds: segundos
       #original_hash: 9d86b0d
       unit_moves: movimientos
+    back: Volver
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1132,6 +1133,9 @@ es-ES:
           disabled_failed: >-
             No se ha podido desactivar el 2FA. Por favor, mira los errores a
             continuación.
+        redesign_notice: Estás viendo la nueva página de inicio de sesión. 
+          Reemplazará a la antigua al final del año.
+        use_classic: Cambiar a la página de inicio de sesión antigua
       destroy_other:
         #original_hash: a768ea6
         success: Desconectado satisfactoriamente de otros dispositivos.
@@ -1154,6 +1158,10 @@ es-ES:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: 'Por favor, confirma tu nueva dirección de correo electrónico'
+    registrations:
+      new:
+        redesign_notice: Estás viendo la nueva página de registro. Reemplazará a
+          la antigua al final del año.
   wca:
     errors:
       messages:
@@ -1236,11 +1244,10 @@ es-ES:
         necesitamos saber tu ID de la WCA.
       #original_hash: ef8243e
       welcome_html: >-
-        ¡Bienvenido! Antes de que puedas competir en tu primera competición de
-        la WCA, necesitamos conocer algunos detalles sobre ti. Ten presente que
-        tu fecha de nacimiento nunca será publicada sin tu permiso.<br/><br/>Si
-        te estás registrando en nombre de otra persona, por favor introduce los
-        detalles del <strong>competidor</strong>.
+        ¡Bienvenido! Antes de que puedas competir en tu primera competición de la
+        WCA, necesitamos conocer algunos detalles sobre ti.<br/><br/>Si te estás registrando
+        en nombre de otra persona, por favor introduce los detalles del <strong>competidor</strong>.
+      dob_privacy: Esta información nunca será revelada sin tu permiso.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2238,6 +2245,7 @@ es-ES:
         usando este <a href="%{dob_form_path}">formulario</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'El ID de la WCA %{link_id} no existe.'
+      search_for_delegate: Buscar Delegado
   user_roles:
     email:
       role_metadata:
@@ -2892,6 +2900,8 @@ es-ES:
         many: '%{count} plazas libres'
         other: '%{count} plazas libres'
       no_spots_left: Competición llena
+      provisional_live_results: 'Mientras tanto, puedes ver los resultados provisionales
+        aquí:'
     live:
       #original_hash: 10d1a3c
       title: Resultados en directo
@@ -3043,6 +3053,9 @@ es-ES:
           in_batch: >-
             No puedes eliminar a un competidor cuyos resultados forman parte de
             un lote no enviado
+          scoresheet_warning: Asegúrate de eliminar a un competidor solo cuando 
+            tengas su hoja de tiempos vacía en la mano. No puedes volver a 
+            añadir a un competidor a una ronda cerrada.
         add_competitor:
           #original_hash: 9dcb50d
           single_round: Añadir competidor a la ronda
@@ -3059,6 +3072,8 @@ es-ES:
             Este competidor no se ha registrado a esta categoría y la
             competición ya no permite cambios de categorías. Se le podrá añadir
             siempre que se haga intencionadamente.
+          round_closed: No puedes añadir a un competidor a una ronda que ya ha 
+            sido cerrada
       results:
         #original_hash: 4705687
         competitor: Competidor
@@ -3341,6 +3356,7 @@ es-ES:
       is_bookmarked: Has marcado esta competición como favorita
       #original_hash: 74598a7
       number_of_bookmarks: Número de veces marcada como favorita
+      waiting_list_size: Tamaño de la lista de espera
     index:
       #original_hash: db98a68
       title: Competiciones
@@ -3507,6 +3523,7 @@ es-ES:
         el mundo colabora para que la competición salga bien.</p>
          <p>¡Utiliza la herramienta que aparece a continuación para encontrar una
         competición cerca de ti y empezar tu aventura cubera!</p>
+      location_sign_in_required: Inicia sesión para buscar una dirección
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
@@ -6850,9 +6867,9 @@ es-ES:
         hablado ya no son Delegados Junior o Delegados activos en la región 
         seleccionada.
       declarations_required: Tienes que confirmar todas las declaraciones.
-      business_involvement_required: Selecciona si estás involucrado con un 
+      business_involvement_required: Selecciona si estás involucrado en un 
         negocio relacionado con el speedcubing.
-      business_involvement_explanation_required: Explica cuál es tu renación con
+      business_involvement_explanation_required: Explica cuál es tu relación con
         el negocio relacionado con el speedcubing.
     form:
       spoken_delegates: ¿Con qué Delegados Junior o Delegados has hablado sobre 
@@ -6890,3 +6907,23 @@ es-ES:
       experience_and_motivation: Experiencia y motivación
       delegates_placeholder: Selecciona al menos un Delegado
       reviewing_delegate: Delegado revisor
+      declaration_understands_application: Entiendo que este formulario es para 
+        Speedcubers Registrados que están solicitando convertirse en Delegado en
+        prácticas.
+      declaration_has_delegate_support: Confirmo que he hablado con un Delegado 
+        habilitado de mi región que apoya mi candidatura.
+      declaration_proficient_in_english: Confirmo que soy competente leyendo y 
+        escribiendo en inglés.
+      declaration_read_regulations_html: Confirmo que he leído el <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">Reglamento de
+        la WCA</a>.
+      regulations_note: 'Nota: No se espera que los Delegados conozcan todo el Reglamento
+        de memoria. Sin embargo, sí que se espera que conozcan los aspectos básicos
+        y que consulten el Reglamento cuando tengan dudas.'
+      cubing_business_involvement: ¿Estás involucrado en un negocio relacionado 
+        con el speedcubing?
+      cubing_business_involvement_details: Por favor, explica cuál es tu 
+        relación con el negocio relacionado con el speedcubing.
+      "yes": Sí
+      "no": No
+      submit: Enviar solicitud
