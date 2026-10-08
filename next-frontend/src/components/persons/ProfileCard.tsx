@@ -22,16 +22,19 @@ import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import MyResultsIcon from "@/components/icons/MyResultsIcon";
 import RegulationsHistoryIcon from "@/components/icons/RegulationsHistoryIcon";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
-import { LuStar, LuCircleHelp } from "react-icons/lu";
+import { LuStar, LuCircleHelp, LuPencil } from "react-icons/lu";
 import WcaFlag from "@/components/WcaFlag";
 import CountryMap from "@/components/CountryMap";
 import { getT } from "@/lib/i18n/get18n";
+import RailsLink from "@/components/RailsLink";
+import getPermissions from "@/lib/wca/permissions.server";
 
 interface ProfileData {
   name: string;
   profilePicture: string;
   roles: { teamRole: string; teamText: string; staffColor: StaffColor }[];
   wcaId: string;
+  userId: number | null;
   gender?: string;
   regionIso2: string;
   competitions: number;
@@ -46,6 +49,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
   profilePicture,
   roles,
   wcaId,
+  userId,
   gender,
   regionIso2,
   competitions,
@@ -58,6 +62,11 @@ const ProfileCard: React.FC<ProfileData> = async ({
   const currentYear = new Date().getFullYear();
 
   const { t } = await getT();
+  const permissions = await getPermissions();
+
+  // There is still plenty of users who don't have an account so they don't have a userId
+  const canEditUser =
+    userId !== null && Boolean(permissions?.canEditUser(userId.toString()));
 
   return (
     <Card.Root size="sm" position={{ base: "static", lg: "sticky" }} top={4}>
@@ -77,6 +86,18 @@ const ProfileCard: React.FC<ProfileData> = async ({
           <HStack>
             <WcaFlag code={regionIso2} size="2xl" />
             <Text textStyle="h2">{name}</Text>
+            {canEditUser && (
+              <IconButton
+                asChild
+                variant="ghost"
+                size="sm"
+                aria-label={t("layouts.navigation.edit_profile")}
+              >
+                <RailsLink href={`/users/${userId}/edit`}>
+                  <LuPencil />
+                </RailsLink>
+              </IconButton>
+            )}
           </HStack>
           <Flex direction="row" wrap="wrap" align="start" gap="4px 8px">
             {roles.map((role, index) => (

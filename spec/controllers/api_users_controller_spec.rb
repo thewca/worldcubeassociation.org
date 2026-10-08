@@ -87,7 +87,7 @@ RSpec.describe Api::V0::UsersController do
     let!(:delegate_user) { create(:delegate_role, group_id: senior_delegate_role.group.id).user }
     let!(:organizer_user) { create(:user) }
     let!(:competition) do
-      create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])
+      create(:competition, :confirmed, :future, delegates: [delegate_user], organizers: [organizer_user])
     end
     let!(:senior_delegate_role) { create(:senior_delegate_role) }
 
@@ -187,6 +187,31 @@ RSpec.describe Api::V0::UsersController do
       expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["can_administer_competitions"]["scope"]).to eq [competition.id]
+    end
+
+    it 'correctly returns normal users to be able to edit only themselves' do
+      sign_in normal_user
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_edit_users"]["scope"]).to eq [normal_user.id.to_s]
+    end
+
+    it 'correctly returns delegates to be able to edit all users' do
+      sign_in delegate_user
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_edit_users"]["scope"]).to eq "*"
+    end
+
+    it 'correctly returns organizer to be able to edit users registered for their competitions' do
+      create(:registration, competition: competition, user: normal_user)
+      sign_in organizer_user
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_edit_users"]["scope"]).to eq [organizer_user.id.to_s, normal_user.id.to_s]
     end
   end
 end
