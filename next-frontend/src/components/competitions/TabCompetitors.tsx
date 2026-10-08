@@ -1,145 +1,132 @@
+
 "use client";
-import React, { useMemo, useState } from "react";
+
+import React, { useState } from "react";
 import { Box, Button, Card, Text, Table } from "@chakra-ui/react";
+
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
-import PsychsheetTable from "@/components/competitions/PsychsheetTable";
+import PsychSheet from "@/components/competitions/PsychSheet";
 import { FormEventSelector } from "@/components/EventSelector";
 import Loading from "@/components/ui/loading";
 import RailsLink from "@/components/RailsLink";
-import { hasPassed, hasNotPassed } from "@/lib/wca/dates";
 import events from "@/lib/wca/data/events";
-import type { components } from "@/types/openapi";
 
 interface CompetitorData {
   id: string;
+  eventIds: string[];
   isLive?: boolean;
   canAddOnTheSpot?: boolean;
-  competitionInfo: components["schemas"]["CompetitionInfo"];
 }
 
 const TabCompetitors: React.FC<CompetitorData> = ({
   id,
+  eventIds,
   isLive = false,
   canAddOnTheSpot = false,
-  competitionInfo,
 }) => {
   const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<string>("average");
 
   const api = useAPI();
   const { t } = useT();
 
   const {
     data: registrationsQuery,
-    isFetching,
+    isPending,
     isError,
-  } = api.useQuery("get", "/v1/competitions/{competitionId}/registrations", {
-    params: { path: { competitionId: id } },
-  });
-
-  const {
-    data: psychSheetQuery,
-    isFetching: isFetchingPsychsheets,
-    isError: isPsychSheetError,
   } = api.useQuery(
     "get",
-    "/v0/competitions/{competitionId}/psych-sheet/{eventId}",
+    "/v1/competitions/{competitionId}/registrations",
     {
       params: {
-        path: { competitionId: id, eventId: psychSheetEvent! },
-        query: { sort_by: sortBy },
+        path: {
+          competitionId: id,
+        },
       },
-    },
-    {
-      enabled: psychSheetEvent !== null,
     },
   );
 
-  const eventIds = useMemo(() => {
-    const flatEventList = registrationsQuery?.flatMap(
-      (reg) => reg.competing.event_ids,
-    );
-
-    const eventSet = new Set(flatEventList);
-    return Array.from(eventSet);
-  }, [registrationsQuery]);
-
   if (isError) {
-    return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
+    return (
+      <Text>
+        {t("competitions.registration_v2.errors.-1001")}
+      </Text>
+    );
   }
 
-  if (isFetching || isFetchingPsychsheets || !registrationsQuery) {
+  if (isPending) {
     return <Loading />;
   }
 
-  // Normal Top Vars
-  const registrationIsOpen =
-    hasPassed(competitionInfo.registration_open) &&
-    hasNotPassed(competitionInfo.registration_close);
+  // All registrations for the competition
+  const totalRegistrations = registrationsQuery.length;
 
-  const totalCount = registrationsQuery.length;
+  // Filter competitors by the selected event.
+  // Without an event selection, include everyone.
+  const selectedRegistrations = psychSheetEvent
+    ? registrationsQuery.filter((registration) =>
+        registration.competing.event_ids.includes(
+          psychSheetEvent,
+        ),
+      )
+    : registrationsQuery;
 
-  const returnerCount = registrationsQuery.filter(
-    (reg) => reg.user.wca_id,
+  // Counts for the current view
+  const totalCount = selectedRegistrations.length;
+
+  const returnerCount = selectedRegistrations.filter(
+    (registration) => Boolean(registration.user.wca_id),
   ).length;
 
   const newcomerCount = totalCount - returnerCount;
 
+  // Summary title
+  const summaryTitle = psychSheetEvent
+    ? `${events.byId[psychSheetEvent]?.name ?? psychSheetEvent} (${totalCount})`
+    : `Registrations (${totalRegistrations})`;
+
   return (
     <Card.Root>
       <Card.Body>
-        {!psychSheetEvent && registrationIsOpen && totalCount > 0 && (
-          <Box
-            bg="black"
-            color="white"
-            width="full"
-            borderRadius="md"
-            mb={2}
-            p={3}
-          >
-            <Text fontWeight="semibold">
-              Registrations {totalCount > 0 ? `(${totalCount})` : ""}
-            </Text>
-            <Text>
-              {totalCount} participants = {returnerCount} returners +{" "}
-              {newcomerCount} newcomers
-            </Text>
-          </Box>
-        )}
-        {psychSheetEvent && registrationIsOpen && totalCount > 0 && (
-          <Box
-            bg="black"
-            color="white"
-            width="full"
-            borderRadius="md"
-            mb={2}
-            p={3}
-          >
-            <Text fontWeight="semibold">
-              {events.byId[psychSheetEvent]?.name} | ({totalCount})
-              participants{" "}
-            </Text>
-            <Text>
-              {totalCount} participants = {returnerCount} returners +{" "}
-              {newcomerCount} newcomers
-            </Text>
-          </Box>
-        )}
+        {/* Registration and psych sheet summary */}
+        <Box
+          bg="black"
+          color="white"
+          width="full"
+          borderRadius="md"
+          mb={3}
+          p={3}
+        >
+          <Text fontWeight="semibold">
+            {summaryTitle}
+          </Text>
+          <Text>
+            {totalCount} participants = {returnerCount}{" "}
+            returners + {newcomerCount} newcomers
+          </Text>
+        </Box>
+
+        {/* Add on-the-spot registrations */}
         {canAddOnTheSpot && (
           <Button asChild alignSelf="flex-end" mb={2}>
-            <RailsLink href={`/competitions/${id}/registrations/add`}>
+            <RailsLink
+              href={`/competitions/${id}/registrations/add`}
+            >
               Add on the spot registration
             </RailsLink>
           </Button>
         )}
+
+        {/* Event selector */}
         <Card.Title>
           <FormEventSelector
             title="Events"
-            selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
+            selectedEvents={
+              psychSheetEvent ? [psychSheetEvent] : []
+            }
             eventList={eventIds}
-            onEventClick={(event) => setPsychSheetEvent(event)}
+            onEventClick={setPsychSheetEvent}
             onClearClick={
               psychSheetEvent === null
                 ? undefined
@@ -147,21 +134,17 @@ const TabCompetitors: React.FC<CompetitorData> = ({
             }
           />
         </Card.Title>
+
+        {/* Competitors / Psych Sheet */}
         <Table.ScrollArea borderWidth="1px" maxW="full">
-          {psychSheetEvent && psychSheetQuery && (
-            <PsychsheetTable
-              pychsheet={psychSheetQuery}
+          {psychSheetEvent ? (
+            <PsychSheet
+              key={psychSheetEvent}
+              competitionId={id}
+              eventId={psychSheetEvent}
               t={t}
-              setSortBy={setSortBy}
             />
-          )}
-          {psychSheetEvent && !psychSheetQuery && !isPsychSheetError && (
-            <Loading />
-          )}
-          {psychSheetEvent && isPsychSheetError && (
-            <Text>{t("competitions.registration_v2.errors.-1001")}</Text>
-          )}
-          {!psychSheetEvent && (
+          ) : (
             <CompetitorTable
               eventIds={eventIds}
               registrations={registrationsQuery}
