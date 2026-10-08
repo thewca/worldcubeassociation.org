@@ -20,7 +20,7 @@ import {
   startYear,
   timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
-import { countries } from '../../lib/wca-data.js.erb';
+import { countries, events } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import { dateRange, toRelativeOptions } from '../../lib/utils/dates';
 import RegionFlag from '../wca/RegionFlag';
@@ -135,7 +135,7 @@ export function CompetitionsTable({
           <Table.HeaderCell textAlign="right">{I18n.t('competitions.competition_info.date')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('competitions.competition_info.name')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('competitions.competition_info.location')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('competitions.competition_info.venue')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.events')}</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -169,7 +169,19 @@ export function CompetitionsTable({
                 {`, ${comp.city}`}
               </Table.Cell>
               <Table.Cell width={5}>
-                <PseudoLinkMarkdown text={comp.venue} />
+                {comp.event_ids?.map((eventId) => (
+                  <Popup
+                    key={eventId}
+                    position="bottom center"
+                    size="tiny"
+                    content={events.byId[eventId].name}
+                    trigger={(
+                      <i
+                        className={`cubing-icon icon event-${eventId}`}
+                      />
+                    )}
+                  />
+                ))}
               </Table.Cell>
             </Table.Row>
           </React.Fragment>
