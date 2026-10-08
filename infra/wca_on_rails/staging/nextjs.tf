@@ -54,6 +54,10 @@ locals {
       value = "https://www.staging.worldcubeassociation.org/api/"
     },
     {
+      name  = "WEBLATE_URL"
+      value = "https://translate.worldcubeassociation.org"
+    },
+    {
       name  = "PROPRIETARY_FONT"
       value = "TTNormsPro"
     },
