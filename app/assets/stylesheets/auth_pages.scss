@@ -410,6 +410,7 @@ body:has(.auth-page) {
     margin-bottom: 12px;
     font-size: 16px;
     font-weight: 500;
+    white-space: normal;
     color: $auth-contrast;
     background-color: $auth-solid;
     border: 0;
