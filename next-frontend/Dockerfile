@@ -1,7 +1,9 @@
 # syntax=docker.io/docker/dockerfile:1
 
 FROM node:26-alpine AS base
+
 RUN npm install -g corepack
+RUN corepack enable
 
 FROM base AS deps
 
@@ -23,7 +25,6 @@ WORKDIR /app
 
 COPY package.json yarn.lock* .yarnrc.yml ./
 COPY src/theme.ts ./src/theme.ts
-RUN corepack enable
 RUN yarn install --immutable
 
 # Documentdb cert
@@ -41,7 +42,6 @@ ARG NEXT_ASSET_PREFIX
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN corepack enable
 
 # ENV Needed to be compiled into the static build
 ENV NEXT_PUBLIC_WCA_FRONTEND_API_URL="https://$WCA_SITE/api/"
