@@ -11,7 +11,7 @@ import {
   Stat,
   StatGroup,
 } from "@chakra-ui/react";
-import AttemptResultField from "@/app/(wca)/dashboard/AttemptResultField";
+import AttemptResultField from "@/app/(wca)/(content-pages)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
@@ -178,7 +178,11 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
                       input.selectionStart === input.value.length &&
                       input.selectionEnd === input.value.length;
 
-                    if (e.key === "Backspace" && atEnd && input.value !== "") {
+                    if (
+                      e.key === "Backspace" &&
+                      atEnd &&
+                      api.hasSelectedItems
+                    ) {
                       e.preventDefault();
                       api.clearValue();
                     }

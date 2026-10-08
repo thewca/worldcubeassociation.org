@@ -19,6 +19,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name  = "NEXT_FRONTEND_URL"
+      value = "https://${var.shared.next_url}"
+    },
+    {
       name  = "OIDC_ISSUER"
       value = var.ROOT_URL
     },

@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   FormatNumber,
   Heading,
@@ -29,6 +28,8 @@ import MapIcon from "@/components/icons/MapIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
 import LocalDateTime from "@/components/LocalDateTime";
 import RefundPolicyText from "@/components/competitions/RefundPolicyText";
+import BookmarkButton from "@/components/competitions/BookmarkButton";
+import { hasNotPassed, hasPassed } from "@/lib/wca/dates";
 
 function formatDateRange(start: Date, end: Date): string {
   const sameDay = start.toDateString() === end.toDateString();
@@ -72,8 +73,11 @@ export function VenueDetailsCard({
     <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">Venue Details</Card.Title>
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
-          <Stat.Root variant="competition">
+        {/* Sized against the card rather than the viewport: the card is narrow on a phone,
+            but also in a narrow desktop column, and both want one column. A flex basis
+            (unlike SimpleGrid's `minmax()` minimum) can still shrink below 3xs. */}
+        <Wrap gap="4">
+          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <VenueIcon />
               Venue
@@ -83,7 +87,7 @@ export function VenueDetailsCard({
             </ChakraMarkdown>
           </Stat.Root>
 
-          <Stat.Root variant="competition">
+          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <MapIcon />
               Address
@@ -92,7 +96,7 @@ export function VenueDetailsCard({
           </Stat.Root>
 
           {competitionInfo.venue_details && (
-            <Stat.Root variant="competition">
+            <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
               <Stat.Label>
                 <DetailsIcon />
                 Details
@@ -102,7 +106,7 @@ export function VenueDetailsCard({
               </ChakraMarkdown>
             </Stat.Root>
           )}
-        </SimpleGrid>
+        </Wrap>
       </Card.Body>
     </Card.Root>
   );
@@ -158,6 +162,16 @@ export async function RegistrationCard({
 }) {
   const { t } = await getT();
 
+  const registrationNotYetOpen = hasNotPassed(
+    competitionInfo.registration_open,
+  );
+  const registrationClosed = hasPassed(competitionInfo.registration_close);
+  const spotsLeft = competitionInfo.spots_left;
+  const showWaitingList =
+    competitionInfo["registration_full?"] &&
+    !registrationNotYetOpen &&
+    !registrationClosed;
+
   return (
     <Card.Root>
       <Card.Body>
@@ -185,15 +199,28 @@ export async function RegistrationCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <SpotsLeftIcon />
-              {t("competitions.competition_info.competitor_limit")}
+              {spotsLeft == null || registrationNotYetOpen
+                ? t("competitions.competition_info.competitor_limit")
+                : registrationClosed
+                  ? t("competitions.nav.menu.competitors")
+                  : t("competitions.my_competitions_table.registrations")}
             </Stat.Label>
             <Stat.ValueText>
-              {competitionInfo.spots_left == null ? (
+              {spotsLeft == null ? (
                 t("competitions.competition_info.no_competitor_limit")
+              ) : registrationNotYetOpen ? (
+                <FormatNumber value={competitionInfo.competitor_limit} />
               ) : (
                 <>
-                  <FormatNumber value={competitionInfo.spots_left} />/
-                  <FormatNumber value={competitionInfo.competitor_limit} />
+                  <FormatNumber
+                    value={competitionInfo.competitor_limit - spotsLeft}
+                  />
+                  {!registrationClosed && (
+                    <>
+                      &sol;
+                      <FormatNumber value={competitionInfo.competitor_limit} />
+                    </>
+                  )}
                 </>
               )}
             </Stat.ValueText>
@@ -218,19 +245,31 @@ export async function RegistrationCard({
             </Stat.ValueText>
           </Stat.Root>
 
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <OnTheSpotRegistrationIcon />
-              {t(
-                "competitions.competition_form.labels.registration.allow_on_the_spot",
-              )}
-            </Stat.Label>
-            <Stat.ValueText>
-              {competitionInfo.on_the_spot_registration
-                ? t("simple_form.yes")
-                : t("simple_form.no")}
-            </Stat.ValueText>
-          </Stat.Root>
+          {showWaitingList ? (
+            <Stat.Root variant="competition">
+              <Stat.Label>
+                <CompetitorsIcon />
+                {t("competitions.competition_info.waiting_list_size")}
+              </Stat.Label>
+              <Stat.ValueText>
+                <FormatNumber value={competitionInfo.waiting_list_count} />
+              </Stat.ValueText>
+            </Stat.Root>
+          ) : (
+            <Stat.Root variant="competition">
+              <Stat.Label>
+                <OnTheSpotRegistrationIcon />
+                {t(
+                  "competitions.competition_form.labels.registration.allow_on_the_spot",
+                )}
+              </Stat.Label>
+              <Stat.ValueText>
+                {competitionInfo.on_the_spot_registration
+                  ? t("simple_form.yes")
+                  : t("simple_form.no")}
+              </Stat.ValueText>
+            </Stat.Root>
+          )}
 
           <Stat.Root variant="competition">
             <Stat.Label>
@@ -291,9 +330,11 @@ export function EventCard({
 
 export function InfoCard({
   competitionInfo,
+  bookmark,
   t,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
+  bookmark?: components["schemas"]["CompetitionBookmark"];
   t: TFunction;
 }) {
   return (
@@ -301,9 +342,12 @@ export function InfoCard({
       <Card.Body>
         <Heading textStyle="h2" display="flex" alignItems="center">
           {competitionInfo.name}
-          <Button variant="ghost">
-            <BookmarkIcon boxSize="6" />
-          </Button>
+          {bookmark && (
+            <BookmarkButton
+              competitionId={competitionInfo.id}
+              initialBookmark={bookmark}
+            />
+          )}
         </Heading>
 
         <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
@@ -325,7 +369,9 @@ export function InfoCard({
               <LocationIcon />
               {t("competitions.competition_info.location")}
             </Stat.Label>
-            <Stat.ValueText>
+            {/* City and country overflowed a narrow card on one line; wrapping drops the
+                country onto its own row exactly when it no longer fits. */}
+            <Stat.ValueText flexWrap="wrap">
               <Text>{competitionInfo.city}, </Text>
               <CountryMap
                 code={competitionInfo.country_iso2}
@@ -395,7 +441,9 @@ export function SubPageCard({
               <LocationIcon />
               {t("competitions.competition_info.location")}
             </Stat.Label>
-            <Stat.ValueText>
+            {/* City and country overflowed a narrow card on one line; wrapping drops the
+                country onto its own row exactly when it no longer fits. */}
+            <Stat.ValueText flexWrap="wrap">
               <Text>{competitionInfo.city}, </Text>
               <CountryMap
                 code={competitionInfo.country_iso2}

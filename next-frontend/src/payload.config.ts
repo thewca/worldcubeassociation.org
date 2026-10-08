@@ -57,6 +57,10 @@ function plugins() {
       skipCollections: ["user"],
       // Roles come from OIDC; nobody is promoted for being first to log in.
       firstUserAdmin: false,
+      // Don't spam our logs with warnings about a behavior that is totally intended by us.
+      //   via https://delmaredigital.github.io/payload-better-auth/#better-auth-collections
+      //   and https://github.com/delmaredigital/payload-better-auth/issues/38
+      acknowledgeRoleGuardDisabled: true,
     }),
     createBetterAuthPlugin({
       createAuth: createCmsAuth,
@@ -119,7 +123,11 @@ function dbOptions(): Args {
   }
 }
 
-export default buildConfig({
+// The default `buildConfig` config further down below already applies plugins directly.
+//   But for the purposes of our own data export/dump, we need to know _strictly our_ collections
+//   and globals, without any plugins potentially adding their own stuff. So we export our config
+//   separately as a named export, and keep the `buildConfig` export further down below as default export.
+export const wcaConfig = {
   admin: {
     user: "users",
     importMap: {
@@ -170,4 +178,6 @@ export default buildConfig({
   db: mongooseAdapter(dbOptions()),
   sharp,
   plugins: plugins(),
-});
+};
+
+export default buildConfig(wcaConfig);

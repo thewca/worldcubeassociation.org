@@ -43,6 +43,8 @@ export function IncidentTags({ tags, action }: IncidentTagsProps) {
         key={id}
         id={id.toString()}
         typeLabel={t(
+          // i18n-tasks-use t("incidents_log.tags.guideline")
+          // i18n-tasks-use t("incidents_log.tags.regulation")
           url.includes("guideline")
             ? "incidents_log.tags.guideline"
             : "incidents_log.tags.regulation",
@@ -200,7 +202,7 @@ function Tag({
         <ChakraTag.Root
           size="md"
           colorScheme={colorSchemeMap[labelClass]}
-          mr={2}
+          me={2}
         >
           {label}
         </ChakraTag.Root>

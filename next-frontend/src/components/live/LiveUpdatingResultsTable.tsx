@@ -16,8 +16,8 @@ import { useLiveResults } from "@/providers/LiveResultProvider";
 import PendingResultsTable from "@/components/live/PendingResultsTable";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useState } from "react";
-import AddPersonModal from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
-import BulkQuitButton from "@/app/(wca)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
+import AddPersonModal from "@/app/(wca)/(content-pages)/competitions/[competitionId]/live/rounds/[roundId]/admin/AddPerson";
+import BulkQuitButton from "@/app/(wca)/(content-pages)/competitions/[competitionId]/live/rounds/[roundId]/admin/BulkQuitButton";
 import {
   LuCheckCheck,
   LuEye,
@@ -185,6 +185,7 @@ export default function LiveUpdatingResultsTable({
               competitionId={competitionId}
               competitors={competitors}
               roundId={roundWcifId}
+              roundClosed={roundFinished}
             />
             <BulkQuitButton
               competitionId={competitionId}

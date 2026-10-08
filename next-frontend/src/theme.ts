@@ -53,6 +53,8 @@ type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 // they fall back to the browser default and read as non-interactive.
 // We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
 // https://github.com/chakra-ui/chakra-ui/issues/10960
+const OPEN_TRIGGER = { _open: { bg: "bg.emphasized" } };
+
 const INTERACTIVITY_OVERRIDES = {
   menu: {
     slots: [],
@@ -60,6 +62,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -69,6 +72,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -87,6 +91,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -96,6 +101,17 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+      },
+    },
+    variants: {
+      overflowPadding: {
+        true: {
+          // Ensure hover/focus outlines don't get clipped when we hide overflow
+          content: {
+            mx: "-3",
+            px: "3",
+          },
+        },
       },
     },
   },
@@ -628,6 +644,17 @@ const customConfig = defineConfig({
       },
     },
     recipes: {
+      // Chakra's `outline` fields are transparent, which leaves them indistinguishable
+      //   from the grey page background the competition and results pages sit on.
+      input: {
+        variants: {
+          variant: {
+            outline: {
+              bg: "bg",
+            },
+          },
+        },
+      },
       container: {
         base: {
           px: { base: "3.5", md: "6", lg: "8" },
@@ -714,6 +741,39 @@ const customConfig = defineConfig({
     },
     slotRecipes: {
       ...INTERACTIVITY_OVERRIDES,
+      // Each of these carries its own copy of the `outline` variant rather than
+      //   inheriting the `input` recipe's, so the opaque background (see above)
+      //   has to be repeated per component.
+      combobox: {
+        ...INTERACTIVITY_OVERRIDES.combobox,
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      numberInput: {
+        slots: [],
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      datePicker: {
+        slots: [],
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
       segmentGroup: {
         ...INTERACTIVITY_OVERRIDES.segmentGroup,
         base: {
@@ -785,8 +845,10 @@ const customConfig = defineConfig({
           variant: {
             competition: {
               label: {
-                alignItems: "start",
-                textStyle: "annotation",
+                alignItems: "center",
+                textStyle: "body",
+                fontWeight: 300,
+                color: "fg",
               },
               valueText: {
                 textStyle: "bodyEmphasis",
@@ -804,8 +866,41 @@ const customConfig = defineConfig({
           body: {
             gap: "4",
           },
+          description: {
+            color: "fg",
+          },
         },
         variants: {
+          interactive: {
+            true: {
+              root: {
+                cursor: "pointer",
+                _focusWithin: {
+                  outline: "{borders.md}",
+                  outlineColor: "colorPalette.focusRing",
+                  outlineOffset: "{spacing.0.5}",
+                },
+                _after: {
+                  content: '""',
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: "inherit",
+                  pointerEvents: "none",
+                  zIndex: 1,
+                  transitionProperty: "background-color",
+                  transitionDuration: "moderate",
+                },
+                _hover: {
+                  _after: { bg: "colorPalette.contrast/5" },
+                },
+              },
+              body: {
+                transitionProperty: "background-color",
+                transitionDuration: "moderate",
+                _groupHover: { bg: "colorPalette.contrast/5" },
+              },
+            },
+          },
           variant: {
             info: {
               root: {
@@ -886,7 +981,6 @@ const customConfig = defineConfig({
             card: {
               root: {
                 spaceY: "4",
-                overflow: "hidden",
                 "--accordion-padding-x": "spacing.6",
                 "--accordion-padding-y": "spacing.3",
               },

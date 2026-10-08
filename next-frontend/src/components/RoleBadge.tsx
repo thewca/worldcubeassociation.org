@@ -52,12 +52,12 @@ const RoleBadge: FC<RoleBadgeProps> = ({
       variant="subtle"
       colorPalette={colorPalette}
       position="relative"
-      paddingLeft={4}
+      paddingStart={4}
       marginY={2}
-      marginLeft={3}
+      marginStart={3}
       {...badgeProps}
     >
-      <Float placement="middle-start">
+      <Float placement="middle-start" _rtl={{ translate: "50% -50%" }}>
         <StaffCubeIcon colorPalette={colorPalette} fontSize="3xl" />
       </Float>
       {teamText} {teamRole}

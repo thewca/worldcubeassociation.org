@@ -59,11 +59,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
     return <Loading />;
   }
 
-  // All registrations for the competition
-  const totalRegistrations = registrationsQuery.length;
-
-  // Filter competitors by the selected event.
-  // Without an event selection, include everyone.
+  // Registrations for the selected event
   const selectedRegistrations = psychSheetEvent
     ? registrationsQuery.filter((registration) =>
         registration.competing.event_ids.includes(
@@ -72,7 +68,6 @@ const TabCompetitors: React.FC<CompetitorData> = ({
       )
     : registrationsQuery;
 
-  // Counts for the current view
   const totalCount = selectedRegistrations.length;
 
   const returnerCount = selectedRegistrations.filter(
@@ -81,33 +76,33 @@ const TabCompetitors: React.FC<CompetitorData> = ({
 
   const newcomerCount = totalCount - returnerCount;
 
-  // Summary title
+  // Title for the summary box
   const summaryTitle = psychSheetEvent
     ? `${events.byId[psychSheetEvent]?.name ?? psychSheetEvent} (${totalCount})`
-    : `Registrations (${totalRegistrations})`;
+    : `Registrations (${totalCount})`;
 
   return (
     <Card.Root>
       <Card.Body>
-        {/* Registration and psych sheet summary */}
+        {/* Returners and newcomers summary */}
         <Box
           bg="black"
           color="white"
           width="full"
           borderRadius="md"
-          mb={3}
+          mb={2}
           p={3}
         >
           <Text fontWeight="semibold">
             {summaryTitle}
           </Text>
+
           <Text>
             {totalCount} participants = {returnerCount}{" "}
             returners + {newcomerCount} newcomers
           </Text>
         </Box>
 
-        {/* Add on-the-spot registrations */}
         {canAddOnTheSpot && (
           <Button asChild alignSelf="flex-end" mb={2}>
             <RailsLink
@@ -118,7 +113,6 @@ const TabCompetitors: React.FC<CompetitorData> = ({
           </Button>
         )}
 
-        {/* Event selector */}
         <Card.Title>
           <FormEventSelector
             title="Events"
@@ -135,7 +129,6 @@ const TabCompetitors: React.FC<CompetitorData> = ({
           />
         </Card.Title>
 
-        {/* Competitors / Psych Sheet */}
         <Table.ScrollArea borderWidth="1px" maxW="full">
           {psychSheetEvent ? (
             <PsychSheet

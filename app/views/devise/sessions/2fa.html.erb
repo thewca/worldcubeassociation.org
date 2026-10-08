@@ -1,4 +1,6 @@
-<div class="container">
+<% provide(:hide_wca_navbars, true) unless classic_sign_in? %>
+<div class="container <%= 'auth-page' unless classic_sign_in? %>">
+  <%= render 'shared/auth_page_header' unless classic_sign_in? %>
   <%= render layout: "devise/conversion_message", locals: { user: resource } do %>
     <div class="panel panel-default">
       <div class="panel-heading">

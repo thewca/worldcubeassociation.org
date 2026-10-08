@@ -160,6 +160,7 @@ const BannerImageWithGradient = ({
     <Box position="relative" width={boxWidth} hideBelow="md">
       <MediaImage
         media={mainImage as Media}
+        sizes="100vw"
         width="full"
         maxHeight="sm"
         bg={targetColor}
@@ -177,6 +178,8 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   return (
     <Card.Root
       flexDirection="row"
+      // Always keep main image and its gradient on the left side
+      _rtl={{ flexDirection: "row-reverse" }}
       colorPalette={block.colorPalette}
       colorVariant="solid"
       width="full"
@@ -251,6 +254,8 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
     <LinkBox asChild>
       <Card.Root
+        interactive={!!href}
+        className={href ? "group" : undefined}
         overflow="hidden"
         colorPalette={block.colorPalette}
         colorVariant="solid"
@@ -258,6 +263,7 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
       >
         <LinkOverlay
           href={href}
+          aria-label={block.heading ?? undefined}
           target={block.newTab ? "_blank" : undefined}
           rel={block.newTab ? "noopener noreferrer" : undefined}
         />
@@ -292,24 +298,31 @@ const FeaturedCompetition = async ({
   if (error) return <OpenapiError t={t} response={response} />;
 
   return (
-    <Card.Root colorPalette={colorPalette} colorVariant="solid" height="full">
-      <Card.Body>
-        <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
-          <Link
-            href={route({
-              pathname: "/competitions/[competitionId]",
-              query: { competitionId: competition.id },
-            })}
-          >
+    <Card.Root
+      asChild
+      interactive
+      className="group"
+      colorPalette={colorPalette}
+      colorVariant="solid"
+      height="full"
+    >
+      <Link
+        href={route({
+          pathname: "/competitions/[competitionId]",
+          query: { competitionId: competition.id },
+        })}
+      >
+        <Card.Body>
+          <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
             {competition.name}
-          </Link>
-        </Card.Title>
-        <CompetitionShortlist
-          comp={competition}
-          t={t}
-          items={["city", "start_date", "spots_left"]}
-        />
-      </Card.Body>
+          </Card.Title>
+          <CompetitionShortlist
+            comp={competition}
+            t={t}
+            items={["city", "start_date", "spots_left"]}
+          />
+        </Card.Body>
+      </Link>
     </Card.Root>
   );
 };
@@ -327,7 +340,9 @@ const FeaturedCompetitions = async ({
             Upcoming Competitions
           </Text>
           <Button asChild variant="pastelSolid">
-            <Link href="/competitions">View all Competitions</Link>
+            <ChakraLink asChild textStyle={undefined}>
+              <Link href="/competitions">View all Competitions</Link>
+            </ChakraLink>
           </Button>
         </HStack>
       </Card.Title>
@@ -528,7 +543,7 @@ export default async function Homepage() {
 
   if (homepageEntries.length === 0) {
     return (
-      <Center padding={10}>
+      <Center p={HOMEPAGE_SPACING} asChild>
         <Text>
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
@@ -544,8 +559,8 @@ export default async function Homepage() {
   }
 
   return (
-    <Box p={HOMEPAGE_SPACING} asChild>
+    <Center p={HOMEPAGE_SPACING} asChild>
       {renderVerticalLayout(homepageEntries)}
-    </Box>
+    </Center>
   );
 }

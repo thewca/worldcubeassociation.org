@@ -422,7 +422,8 @@ cs:
         #original_hash: 58e0c56
         remove_avatar: Odstranit avatar
         #original_hash: 9af9099
-        results_notifications_enabled: 'Zašlete mi e-mail, jakmile budou zveřejněny mé výsledky.'
+        results_notifications_enabled: 'Zašlete mi e-mail, jakmile budou zveřejněny
+          mé výsledky.'
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
           Pošlete mi email, když se někdo zaregistruje na soutěž kterou
@@ -432,7 +433,8 @@ cs:
         #original_hash: 0f21717
         region: Region
         #original_hash: 730db33
-        receive_delegate_reports: Chci zasílat Reporty Delegátů o soutěžích WCA na e-mail
+        receive_delegate_reports: Chci zasílat Reporty Delegátů o soutěžích WCA 
+          na e-mail
         #original_hash: 57eaf24
         user_preferred_events: Preferované eventy
         #original_hash: e632fbf
@@ -487,7 +489,8 @@ cs:
         #original_hash: 87b7d5f
         use_wca_registration: Pro registraci chci použít webové stránky WCA
         #original_hash: ebe8c47
-        use_wca_live_for_scoretaking: Chci použít WCA Live pro zapisování výsledků
+        use_wca_live_for_scoretaking: Chci použít WCA Live pro zapisování 
+          výsledků
         #original_hash: 8020e88
         external_registration_page: Registrační stránka
         #original_hash: 9bb1965
@@ -503,7 +506,8 @@ cs:
         #original_hash: 22516e1
         events_per_registration_limit: Eventy na registrační limit
         #original_hash: 089cbfd
-        receive_registration_emails: 'Informujte mě e-mailem, když se někdo zaregistruje na tuto soutěž'
+        receive_registration_emails: 'Informujte mě e-mailem, když se někdo zaregistruje
+          na tuto soutěž'
         #original_hash: d4aeed9
         registration_open: Zahájení registrace
         #original_hash: f8153a2
@@ -521,7 +525,8 @@ cs:
         #original_hash: 556fda0
         extra_registration_requirements: Speciální požadavky pro registraci
         #original_hash: 6c8e5bf
-        force_comment_in_registration: Donutit soutěžící zanechat komentář při registraci
+        force_comment_in_registration: Donutit soutěžící zanechat komentář při 
+          registraci
         #original_hash: 2529d04
         on_the_spot_registration: Registrace na místě
         #original_hash: 69780b5
@@ -535,9 +540,11 @@ cs:
         #original_hash: b332299
         refund_policy_limit_date: Nejzazší datum pro vrácení peněz
         #original_hash: 16cf9a4
-        waiting_list_deadline_date: Uzávěrka pro přijetí soutěžících z waiting listu
+        waiting_list_deadline_date: Uzávěrka pro přijetí soutěžících z waiting 
+          listu
         #original_hash: 99a9169
-        event_change_deadline_date: Uzávěrka pro soutěžící k aktualizaci jejich eventů
+        event_change_deadline_date: Uzávěrka pro soutěžící k aktualizaci jejich 
+          eventů
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Vstupné pro hosty
         #original_hash: bb16247
@@ -547,7 +554,8 @@ cs:
           Požaduji, aby soutěžící odevzdali své kostky ve specifický čas
           předtím, než event začne
         #original_hash: 78308cc
-        early_puzzle_submission_reason: Důvod a detaily pro dřívější odevzdání kostek
+        early_puzzle_submission_reason: Důvod a detaily pro dřívější odevzdání 
+          kostek
         #original_hash: 88da0ef
         qualification_results: >-
           Chci použít kvalifikační časy k limitaci toho, kdo může soutěžit v
@@ -555,7 +563,8 @@ cs:
         #original_hash: 1ec6dd4
         qualification_results_reason: Důvod a detaily kvalifikačních výsledků
         #original_hash: ac30de9
-        event_restrictions: Chci omezit registraci soutěžících na jisté kombinace eventů
+        event_restrictions: Chci omezit registraci soutěžících na jisté 
+          kombinace eventů
         #original_hash: 4bf194c
         event_restrictions_reason: Důvod a detaily pro omezení eventů
         #original_hash: 3c24bd2
@@ -603,11 +612,13 @@ cs:
         #original_hash: 5e326b1
         incidents: Incidenty
         #original_hash: 1362470
-        wrc_feedback_requested: Chci zpětnou vazbu od WRC k některým incidentům výše.
+        wrc_feedback_requested: Chci zpětnou vazbu od WRC k některým incidentům 
+          výše.
         #original_hash: 0c7191d
         wrc_incidents: Incidenty potřebující zpětnou vazbu WRC.
         #original_hash: 5a92b25
-        wdc_feedback_requested: Chci zpětnou vazbu od WdC k některým incidentům výše.
+        wdc_feedback_requested: Chci zpětnou vazbu od WdC k některým incidentům 
+          výše.
         #original_hash: 06a0568
         wdc_incidents: Incidenty potřebující zpětnou vazbu WDC
         #original_hash: d7020f4
@@ -703,7 +714,8 @@ cs:
         #original_hash: 719db2d
         area_description: Jasný popis pokryté oblasti
         #original_hash: 0cdb036
-        past_and_current_activities: Popis minulých a současných aktivit spojených s WCA
+        past_and_current_activities: Popis minulých a současných aktivit 
+          spojených s WCA
         #original_hash: 0faebcf
         future_plans: Plány do budoucna jako regionální organizace schválená WCA
         #original_hash: f5ad34a
@@ -849,9 +861,11 @@ cs:
           Organizátoři soutěže (aby zde mohli být uvedeni, musí mít vytvořený
           účet).
         #original_hash: cabe7fb
-        external_website: Webové stránky soutěže. Musí to být platná http(s) url.
+        external_website: Webové stránky soutěže. Musí to být platná http(s) 
+          url.
         #original_hash: 9965635
-        registration_open: 'Poznámka: Zahájení a ukončení registrace jsou uvedeny v UTC čase.'
+        registration_open: 'Poznámka: Zahájení a ukončení registrace jsou uvedeny
+          v UTC čase.'
         #original_hash: 9ea6021
         remarks: >-
           Dodatečné informace pro WCAT. Například pokud si něčím nejste jisti,
@@ -915,7 +929,8 @@ cs:
           řešit manuálně. Pokud to nastavíte na 0, zobrazí se věta, že se
           registrační poplatky nebudou vracet za žádných podmínek.
         #original_hash: f64d853
-        refund_policy_limit_date: 'Datum, po kterém se nebude řešit žádné vrácení peněz.'
+        refund_policy_limit_date: 'Datum, po kterém se nebude řešit žádné vrácení
+          peněz.'
         #original_hash: 664db64
         waiting_list_deadline_date: >-
           Datum po kterém osoby na waiting listu už nemohou být přijaty. Pokud
@@ -1016,7 +1031,8 @@ cs:
         dob: Datum narození by mělo být uvedeno ve formátu RRRR-MM-DD.
       registration:
         #original_hash: 34ef763
-        administrative_notes: Dodatečné poznámky pro správu registrace. Soutěžící je nevidí.
+        administrative_notes: Dodatečné poznámky pro správu registrace. 
+          Soutěžící je nevidí.
       results_submission:
       regional_organization:
         #original_hash: 72448d6
@@ -1093,7 +1109,8 @@ cs:
           #original_hash: ec44d52
           confirm: Potvrďte kód
           #original_hash: 912516c
-          regenerated_secret: Úspěšně znovu vygenerované Vaše tajemství pro dvoufaktorové ověření.
+          regenerated_secret: Úspěšně znovu vygenerované Vaše tajemství pro 
+            dvoufaktorové ověření.
           #original_hash: 1b0c44f
           enabled_success: Úspěšně povolené dvoufaktorové ověření.
           #original_hash: 9515157
@@ -1136,14 +1153,16 @@ cs:
           #original_hash: 8c13694
           name: Dvoufaktorové ověření (2FA)
           #original_hash: d28c3b6
-          support_desc_html: 'WCA podporuje %{two_factor_link} pomocí jednorázového hesla:'
+          support_desc_html: 'WCA podporuje %{two_factor_link} pomocí jednorázového
+            hesla:'
           options:
             #original_hash: 4f9dcb8
             app: >-
               generovaného speciální 2FA aplikací na Vašem mobilním telefonu
               (například Authy, Google Authenticator).
             #original_hash: 34a7572
-            recovery: získaného z obnovovacích kódů generovaných při aktivaci 2FA.
+            recovery: získaného z obnovovacích kódů generovaných při aktivaci 
+              2FA.
             #original_hash: eaee403
             email: poslaného na Váš email když se přihlašujete.
           #original_hash: 7ae99ae
@@ -1530,7 +1549,8 @@ cs:
         #original_hash: f34029e
         welcome: 'Ahoj %{user_email}!'
         #original_hash: 3095365
-        confirm: 'Můžete potvrdit svoji novou e-mailovou adresu přes níže uvedený odkaz:'
+        confirm: 'Můžete potvrdit svoji novou e-mailovou adresu přes níže uvedený
+          odkaz:'
         #original_hash: 4900afe
         confirmation_link: Potvrdit e-mailovou adresu.
       competition_submission_email:
@@ -1650,7 +1670,8 @@ cs:
         Všechny profilové obrázky jsou uloženy v Cloudu, takže jakákoliv změna
         náhledu se může projevit až za několik minut.
       #original_hash: cc1d51b
-      cdn_warning: Prosíme nepanikařte pokud se Váš náhled okamžitě nezaktualizuje!
+      cdn_warning: Prosíme nepanikařte pokud se Váš náhled okamžitě 
+        nezaktualizuje!
       #original_hash: 79f14eb
       current: 'Současný náhled:'
       #original_hash: b42ba27
@@ -1669,7 +1690,8 @@ cs:
       #original_hash: 3fc6dbe
       member_of: Člen
       #original_hash: 42619dd
-      preferred_events_desc: Výběr vámi preferovaných eventů urychlí registraci na soutěž.
+      preferred_events_desc: Výběr vámi preferovaných eventů urychlí registraci 
+        na soutěž.
       #original_hash: b402e03
       please_fix_profile: >-
         Abyste se mohl(a) zaregistrovat na soutěž, musíte vyřešit následující
@@ -1681,13 +1703,16 @@ cs:
       #original_hash: 85de4b8
       unconfirmed_email: 'E-mailová adresa tohoto účtu (%{email}) není potvrzena.'
       #original_hash: 7069007
-      confirm_new_email: Změna Vašeho emailu vyžaduje potvrzení nové adresy než bude platná.
+      confirm_new_email: Změna Vašeho emailu vyžaduje potvrzení nové adresy než 
+        bude platná.
       #original_hash: 8a770cf
-      pending_mail_confirmation: 'Tento účet čeká na potvrzení nové e-mailové adresy %{email}.'
+      pending_mail_confirmation: 'Tento účet čeká na potvrzení nové e-mailové adresy
+        %{email}.'
       #original_hash: 0340b0b
       pending_avatar_confirmation: Tento účet čeká na schválení nového avataru.
       #original_hash: 7b06f03
-      pending_claim_confirmation_html: 'Tento účet čeká, až %{delegate} potvrdí vyžádané WCA ID %{wca_id}.'
+      pending_claim_confirmation_html: 'Tento účet čeká, až %{delegate} potvrdí vyžádané
+        WCA ID %{wca_id}.'
       #original_hash: e7554d8
       pending_claim_mail_confirmation_html: >-
         Tento uživatel si zažádal o WCA ID %{wca_id}. Jeho Delegát %{delegate}
@@ -1722,7 +1747,8 @@ cs:
           #original_hash: 1c4670f
           registered: zaregistroval(a) jste se na soutěž
       #original_hash: fe7122d
-      guidelines_confirmation: 'Potvrzuji, že můj avatar splňuje všechny pokyny pro avatar.'
+      guidelines_confirmation: 'Potvrzuji, že můj avatar splňuje všechny pokyny pro
+        avatar.'
       #original_hash: d677ceb
       confirm_guidelines: >-
         Ujistěte se, že jste přečetl(a) pokyny pro avatar a nahrál(a) platný
@@ -1825,7 +1851,8 @@ cs:
       #original_hash: 2e582eb
       must_not_be_present: nesmí být přítomný
       #original_hash: 5b4eac9
-      senior_has_delegate: nelze snížit hodnost Vyššího Delegáta z pozice podřízeného Delegáta
+      senior_has_delegate: nelze snížit hodnost Vyššího Delegáta z pozice 
+        podřízeného Delegáta
       #original_hash: 48653a9
       already_have_id: 'nebylo možné zažádat o WCA ID, jelikož již máte WCA ID %{wca_id}'
       #original_hash: ec5db95
@@ -1898,7 +1925,8 @@ cs:
       #original_hash: d84a54f
       need_country: Potřebuje zemi
       #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Registrace nemůže být zároveň smazána a přijata
+      cannot_be_deleted_and_accepted: Registrace nemůže být zároveň smazána a 
+        přijata
       #original_hash: a38d024
       must_register: musíte se zaregistrovat alespoň na jeden event
       #original_hash: abdc718
@@ -1912,11 +1940,14 @@ cs:
         href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
-      undelete_banned: je zatracený soutěžící a nemůže být schválen/vrácen na waiting list.
+      undelete_banned: je zatracený soutěžící a nemůže být schválen/vrácen na 
+        waiting list.
       #original_hash: 3de7c86
-      series_more_than_one_accepted: Můžete být přijati jen na jednu soutěž ze série.
+      series_more_than_one_accepted: Můžete být přijati jen na jednu soutěž ze 
+        série.
       #original_hash: 13bfcd6
-      can_only_register_for_qualified_events: 'Nemůžete se zaregistrovat na eventy, na které nejste kvalifikováni'
+      can_only_register_for_qualified_events: 'Nemůžete se zaregistrovat na eventy,
+        na které nejste kvalifikováni'
       #original_hash: 22ca413
       cannot_register_without_comment: >-
         Musíte vyplnit komentář. Přečtěte si podmínky pro registraci, abyste
@@ -2024,7 +2055,8 @@ cs:
         #original_hash: 268e248
         mail_subject: 'Vaše registrace na %{comp_name} byla smazána'
         #original_hash: f66ae63
-        message_html: 'Vaše registrace na %{comp_name} byla smazána. Z těchto možných důvodů:'
+        message_html: 'Vaše registrace na %{comp_name} byla smazána. Z těchto možných
+          důvodů:'
         causes:
           #original_hash: 978944c
           missing_info: Nezadal(a) jste všechny požadované údaje
@@ -2034,7 +2066,8 @@ cs:
             registračního poplatku předem nebo dosažení kvalifikačních časů pro
             eventy)
           #original_hash: 1e225f0
-          registrations_full: Byl dosažen maximální počet soutěžících a už nejsou volná místa
+          registrations_full: Byl dosažen maximální počet soutěžících a už 
+            nejsou volná místa
           #original_hash: 0d4cce9
           multiple_registrations: 'Zaregistroval(a) jste se dvakrát, či vícekrát'
           #original_hash: 70b1e2c
@@ -2081,7 +2114,8 @@ cs:
       #original_hash: 3141a14
       series_registrations: Registrace série
       #original_hash: 845bb47
-      series_registrations_hint_html: 'Nápověda: Registrace série jsou zobrazovány jako <i>%{description}</i>'
+      series_registrations_hint_html: 'Nápověda: Registrace série jsou zobrazovány
+        jako <i>%{description}</i>'
       #original_hash: b25928c
       total: Celkem
       #original_hash: df036fe
@@ -2170,7 +2204,8 @@ cs:
     #original_hash: 58b1a3c
     accepted: Vaše registrace byla přijata!
     #original_hash: bcd7d70
-    entry_fees_fully_paid: 'Zaplatil(a) jste %{paid}, což zcela pokrývá registrační poplatek.'
+    entry_fees_fully_paid: 'Zaplatil(a) jste %{paid}, což zcela pokrývá registrační
+      poplatek.'
     #original_hash: 2e5d1b9
     will_pay_here: Zaplatíte je zde po podání vaší registrace
     #original_hash: b7ef562
@@ -2241,7 +2276,8 @@ cs:
           potvrzení stiskněte OK.
       errors:
         #original_hash: 166d48c
-        already_paid: 'Poplatek nebyl účtován, protože registrační poplatek už je zaplacen'
+        already_paid: 'Poplatek nebyl účtován, protože registrační poplatek už je
+          zaplacen'
         #original_hash: f10c80c
         not_allowed: Nemůžete zaplatit za tuto registraci
         #original_hash: a073600
@@ -2305,9 +2341,11 @@ cs:
           Uživatel s emailem %{email}, již existuje, ale má nepotvrzené WCA ID
           %{unconfirmed_wca_id}, nikoliv %{registration_wca_id}.
         #original_hash: 4e32621
-        email_duplicates: 'Email musí být unikátní, našli jsme následující duplikáty: %{emails}.'
+        email_duplicates: 'Email musí být unikátní, našli jsme následující duplikáty:
+          %{emails}.'
         #original_hash: bcd8e78
-        wca_id_duplicates: 'WCA ID musí být unikátní, nalezeny následující duplikáty: %{wca_ids}.'
+        wca_id_duplicates: 'WCA ID musí být unikátní, nalezeny následující duplikáty:
+          %{wca_ids}.'
     add:
       #original_hash: 975275e
       title: 'Přidat registraci na %{comp}'
@@ -2388,7 +2426,8 @@ cs:
       #original_hash: ead4a9e
       uncancel_failure: Nelze soutěž vysvoboodit z podsvětí.
       #original_hash: 8ad5e67
-      results_not_posted: 'Výsledky této soutěže jsou viditelné, ale ještě nebyly nahrány.'
+      results_not_posted: 'Výsledky této soutěže jsou viditelné, ale ještě nebyly
+        nahrány.'
       #original_hash: e205d73
       results_already_posted: Výsledky již byly nahrány.
       #original_hash: 376f461
@@ -2438,7 +2477,8 @@ cs:
       #original_hash: e1a250c
       stripe_disconnected_failure: Vyskytla se chyba při odpojování Stripe účtu.
       #original_hash: 0a4bb53
-      stripe_not_connected: Vyskytla se chyba a nemohli jsme připojit váš Stripe účet.
+      stripe_not_connected: Vyskytla se chyba a nemohli jsme připojit váš Stripe
+        účet.
       #original_hash: 1b92d16
       championship_exists: 'Už je jiné %{championship_type} v %{year}.'
       #original_hash: 0644bdc
@@ -2524,7 +2564,8 @@ cs:
       #original_hash: c5dfcc7
       part_of_a_series: Tato soutěž je součástí série soutěží.
       #original_hash: 171e593
-      part_of_a_series_list: 'Tato soutěž je součástí série %{name}. Další soutěže v této sérii jsou:'
+      part_of_a_series_list: 'Tato soutěž je součástí série %{name}. Další soutěže
+        v této sérii jsou:'
       #original_hash: 09fa333
       series_registration_warning_html: >-
         Poznámka: Můžete se zaregistrovat na všechny soutěže série, ale jen
@@ -2545,7 +2586,8 @@ cs:
         Registrační poplatek musí být zaplacen přes Stripe %{here} po
         registraci.
       #original_hash: cea0eb4
-      use_stripe_below_html: Registrační poplatek musí být zaplacen níže přes Stripe po registraci.
+      use_stripe_below_html: Registrační poplatek musí být zaplacen níže přes 
+        Stripe po registraci.
       #original_hash: d6bab8f
       refund_policy_html: >-
         Pokud registraci zrušíte před %{limit_date_and_time} bude Vám vráceno
@@ -2572,7 +2614,8 @@ cs:
         Registrace na místě budou přijímány se základním registračním poplatkem
         %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
-      on_the_spot_registration_free: Registrace na místě budou akceptovány zdarma.
+      on_the_spot_registration_free: Registrace na místě budou akceptovány 
+        zdarma.
       #original_hash: f5f687d
       no_on_the_spot_registration: Registrace na místě nebudou akceptovány.
       #original_hash: 4df139d
@@ -2622,7 +2665,8 @@ cs:
       #original_hash: 1f9c9c4
       highlights: Zvýraznění
       #original_hash: 945f917
-      click_to_display_highlights_html: 'Klikněte %{link_here} pro zobrazení detailů ze soutěže.'
+      click_to_display_highlights_html: 'Klikněte %{link_here} pro zobrazení detailů
+        ze soutěže.'
       #original_hash: dc5c597
       hide_highlights: Skrýt detaily.
       #original_hash: f691bf2
@@ -2764,7 +2808,8 @@ cs:
       #original_hash: 8b09d74
       no_comp_found: Žádné soutěže nebyly nalezeny.
       #original_hash: 7008166
-      no_comp_match: 'Nenalezli jsme žádnou soutěž s %{events}! Zkuste hledat pro méně eventů.'
+      no_comp_match: 'Nenalezli jsme žádnou soutěž s %{events}! Zkuste hledat pro
+        méně eventů.'
     my_competitions_table:
       #original_hash: 5301648
       edit: Upravit
@@ -2850,7 +2895,8 @@ cs:
         nebudete moct změnit žádné informace. Sledujte potom svůj e-mail, abyste
         se ujistil(a), že byl WCA Competition Announcement Team upozorněn.
       #original_hash: 4c7deb7
-      submit_delete: 'Jste si jist(á), že chcete smazat tuto soutěž? Pak už nebude cesty zpět.'
+      submit_delete: 'Jste si jist(á), že chcete smazat tuto soutěž? Pak už nebude
+        cesty zpět.'
       #original_hash: 8ebebca
       coordinates: Coordinates
       #original_hash: a672984
@@ -2909,30 +2955,31 @@ cs:
           contact: Kontakt
         championships:
         website:
-          generate_website: Pro více informací chci použít webové stránky WCA namísto
-            externích stránek.
+          generate_website: Pro více informací chci použít webové stránky WCA 
+            namísto externích stránek.
           external_website: Webové stránky
           external_registration_page: Registrační stránka
           uses_wca_registration: Pro registraci chci použít webové stránky WCA
           uses_wca_live: Chci použít WCA Live pro zapisování výsledků
         user_settings:
-          receive_registration_emails: Informujte mě e-mailem, když se někdo zaregistruje
-            na tuto soutěž
+          receive_registration_emails: Informujte mě e-mailem, když se někdo 
+            zaregistruje na tuto soutěž
         entry_fees:
           currency_code: Kód měny
           base_entry_fee: Základní registrační poplatek
           on_the_spot_entry_fee: Registrační poplatek na místě
           guest_entry_fee: Vstupné pro hosty
-          donations_enabled: Chci povolit možnost dobrovolných příspěvků nad rámec
-            vybírání registračních poplatků
+          donations_enabled: Chci povolit možnost dobrovolných příspěvků nad 
+            rámec vybírání registračních poplatků
           refund_policy_percent: Kolik procent z částky se bude vracet
           refund_policy_limit_date: Nejzazší datum pro vrácení peněz
         registration:
           opening_date_time: Zahájení registrace
           closing_date_time: Ukončení registrace
-          waiting_list_deadline_date: Uzávěrka pro přijetí soutěžících z waiting listu
-          event_change_deadline_date: Uzávěrka pro soutěžící k aktualizaci jejich
-            eventů
+          waiting_list_deadline_date: Uzávěrka pro přijetí soutěžících z waiting
+            listu
+          event_change_deadline_date: Uzávěrka pro soutěžící k aktualizaci 
+            jejich eventů
           allow_on_the_spot: Registrace na místě
           allow_self_delete_after_acceptance: Zrušení registrace
           allow_self_edits: Úpravy registrace
@@ -2943,37 +2990,40 @@ cs:
           force_comment: Donutit soutěžící zanechat komentář při registraci
         event_restrictions:
           early_puzzle_submission:
-            enabled: Požaduji, aby soutěžící odevzdali své kostky ve specifický čas
-              předtím, než event začne
+            enabled: Požaduji, aby soutěžící odevzdali své kostky ve specifický 
+              čas předtím, než event začne
             reason: Důvod a detaily pro dřívější odevzdání kostek
           qualification_results:
-            enabled: Chci použít kvalifikační časy k limitaci toho, kdo může soutěžit
-              v určitých eventech
+            enabled: Chci použít kvalifikační časy k limitaci toho, kdo může 
+              soutěžit v určitých eventech
             reason: Důvod a detaily kvalifikačních výsledků
             allow_registration_without: Eventy s kvalifikací
           event_limitation:
-            enabled: Chci omezit registraci soutěžících na jisté kombinace eventů
+            enabled: Chci omezit registraci soutěžících na jisté kombinace 
+              eventů
             reason: Důvod a detaily pro omezení eventů
             per_registration_limit: Eventy na registrační limit
           main_event_id: Hlavní event
         remarks: Poznámky
         clone_tabs: Chci zkopírovat všechny záložky s dalšími informacemi
       hints:
-        name: Celý název soutěže včetně roku na konci (např. Czech Open 2016). Dodržujte
-          velká písmena. Název může obsahovat pouze písmena, čísla, pomlčky (-), ampersandy
-          (&), tečky (.), dvojtečky (:), apostrofy (') a mezery ( ).
-        short_name: Zkrácený název pro zobrazení. Pokud je samotný název soutěže dostatečně
-          krátký, můžete ho použít (např. Europe 2006).
-        name_reason_html: Krátké objasnění jména soutěže. Jméno musí odpovídat <a
-          href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA Competition
-          Requirements Policy</a>.
+        name: Celý název soutěže včetně roku na konci (např. Czech Open 2016). 
+          Dodržujte velká písmena. Název může obsahovat pouze písmena, čísla, 
+          pomlčky (-), ampersandy (&), tečky (.), dvojtečky (:), apostrofy (') a
+          mezery ( ).
+        short_name: Zkrácený název pro zobrazení. Pokud je samotný název soutěže
+          dostatečně krátký, můžete ho použít (např. Europe 2006).
+        name_reason_html: Krátké objasnění jména soutěže. Jméno musí odpovídat 
+          <a 
+          href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          Competition Requirements Policy</a>.
         venue:
-          city_name: Název města a (případně) stát, ve kterém se bude soutěž konat.
-            Nezahrnujte zemi (např. Brno NEBO San Francisco, California).
+          city_name: Název města a (případně) stát, ve kterém se bude soutěž 
+            konat. Nezahrnujte zemi (např. Brno NEBO San Francisco, California).
           name_html: 'Místo konání soutěže. %{md}. Například: [Cité des Sciences et
             de l''Industrie](http://www.cite-sciences.fr)'
-          details_html: Podrobnosti o místě konání (např. V prvním poschodí vzadu,
-            následujte šipky). %{md}
+          details_html: Podrobnosti o místě konání (např. V prvním poschodí 
+            vzadu, následujte šipky). %{md}
           coordinates:
         series:
           name: >-
@@ -2987,31 +3037,33 @@ cs:
             <b>Toto pole nelze upravovat!</b> <br/>Pro přidání jednotlivých
             soutěží, musíte na individuální stránku „Upravit” soutěží, které
             chcete přidat.
-        information: Důležité informace, které by soutěžící měli vědět. Zobrazí se
-          na hlavní stránce soutěže. <br/>Prosíme, napište to <b>v angličtině</b>
-          a v jakémkoli dalším jazyce, kterým vaši soutěžící mluví.
+        information: Důležité informace, které by soutěžící měli vědět. Zobrazí 
+          se na hlavní stránce soutěže. <br/>Prosíme, napište to <b>v 
+          angličtině</b> a v jakémkoli dalším jazyce, kterým vaši soutěžící 
+          mluví.
         competitor_limit:
-          enabled: Doporučujeme stanovit limit pro soutěžící, ačkoliv to není dle
-            Pravidel nutné.
-          count: Počet soutěžících povolených pro tuto soutěž. Nyní je toto číslo
-            pouze informativní a nezabrání registraci více lidí. We are working on
-            adding explicit support for this to the registration flow, but it requires
-            some other work first.
-          reason: Z jakého důvodu jste určili tento limit pro soutěžící? Prosíme,
-            vyplňte toto pole v angličtině!
+          enabled: Doporučujeme stanovit limit pro soutěžící, ačkoliv to není 
+            dle Pravidel nutné.
+          count: Počet soutěžících povolených pro tuto soutěž. Nyní je toto 
+            číslo pouze informativní a nezabrání registraci více lidí. We are 
+            working on adding explicit support for this to the registration 
+            flow, but it requires some other work first.
+          reason: Z jakého důvodu jste určili tento limit pro soutěžící? 
+            Prosíme, vyplňte toto pole v angličtině!
         staff:
           staff_delegate_ids: Delegáti WCA pro tuto soutěž.
           trainee_delegate_ids: WCA Trainee delegáti pro tuto soutěž
-          organizer_ids: Organizátoři soutěže (aby zde mohli být uvedeni, musí mít
-            vytvořený účet).
+          organizer_ids: Organizátoři soutěže (aby zde mohli být uvedeni, musí 
+            mít vytvořený účet).
           contact_html: 'Dobrovolné kontaktní informace. Pokud to nevyplníte, zprávu
             budou odeslány přes kontaktní formulář bez odhalení emailů organizátorů.
             %{md}. Například: [Text k zobrazení](mailto:some@email.com)'
         championships:
         website:
-          external_website: Webové stránky soutěže. Musí to být platná http(s) url.
-          external_registration_page: Stránka, na které se budou soutěží přihlašovat
-            na soutěž. Musí to být platná http(s) url.
+          external_website: Webové stránky soutěže. Musí to být platná http(s) 
+            url.
+          external_registration_page: Stránka, na které se budou soutěží 
+            přihlašovat na soutěž. Musí to být platná http(s) url.
         entry_fees:
           currency_code: Kód měny pro poplatky.
           base_entry_fee: 'Základní registrační poplatek pro soutěž. Zobrazí se na
@@ -3021,53 +3073,58 @@ cs:
             přibližný a počítá s aktuálními směnnými kurzy. Není nijak právně závazný.</b><br>Kliněte
             na "Aktualizovat soutěž" poté co změníte kód měny, abyste synchronizovali
             odhad. Pokud nejsou dostupné žádné směnné kurzy, nebude nic zobrazeno.'
-          on_the_spot_entry_fee: Pokud je to nastaveno na 0, zobrazí se věta, že registrace
-            na místě budou přijaty zdarma.
-          guest_entry_fee: Prozatím je toto číslo pouze informativní a poplatky za
-            hosty nelze řešit pomocí této stránky. Pokud toto nastavíte na 0, zobrazí
-            se věta o divácích dle vaší volby.
-          refund_policy_percent: Nyní je toto číslo pouze informativní, vrácení peněz
-            se bude muset řešit manuálně. Pokud to nastavíte na 0, zobrazí se věta,
-            že se registrační poplatky nebudou vracet za žádných podmínek.
-          refund_policy_limit_date: Datum, po kterém se nebude řešit žádné vrácení
-            peněz.
+          on_the_spot_entry_fee: Pokud je to nastaveno na 0, zobrazí se věta, že
+            registrace na místě budou přijaty zdarma.
+          guest_entry_fee: Prozatím je toto číslo pouze informativní a poplatky 
+            za hosty nelze řešit pomocí této stránky. Pokud toto nastavíte na 0,
+            zobrazí se věta o divácích dle vaší volby.
+          refund_policy_percent: Nyní je toto číslo pouze informativní, vrácení 
+            peněz se bude muset řešit manuálně. Pokud to nastavíte na 0, zobrazí
+            se věta, že se registrační poplatky nebudou vracet za žádných 
+            podmínek.
+          refund_policy_limit_date: Datum, po kterém se nebude řešit žádné 
+            vrácení peněz.
         registration:
           opening_date_time: 'Poznámka: Zahájení a ukončení registrace jsou uvedeny
             v UTC čase.'
-          waiting_list_deadline_date: Datum po kterém osoby na waiting listu už nemohou
-            být přijaty. Pokud máte deadline na vrácení poplatků, tento deadline by
-            neměl být před ním.
-          event_change_deadline_date: Registrovaní soutěžící mají právo aktualizovat
-            své eventy až do této doby a to kontaktováním organizačního týmu. Uzávěrka
-            nesmí být nastavena před datum konce registrace. Pokud toto pole necháte
-            prázdné, soutěžící budou moci měnit eventy až do jejich začátku. Pokud
-            máte povolené registrace na místě, toto musí být nastaveno na den soutěže.
-          guests_per_registration: Počet hostů na jednu registraci povolený na této
-            soutěži. Registrace s příliš velkým počtem hostů bude zablokována. Nechte
-            prázdné, pokud nechcete stanovit limit.
-          extra_requirements: Prosíme udejte zde jakékoli speciální požadavky pro
-            registraci, které nejsou pokryty výše, jako například pokyny k platbě.<br/>Prosíme
-            napište to <b>v Angličtině</b> a v jakémkoli dalším jazyce, kterým vaši
-            soutěžící mluví; zobrazí se to na stránkách s informacemi o soutěži a
-            na registrační stránce, pokud používáte registrační stránky WCA.
+          waiting_list_deadline_date: Datum po kterém osoby na waiting listu už 
+            nemohou být přijaty. Pokud máte deadline na vrácení poplatků, tento 
+            deadline by neměl být před ním.
+          event_change_deadline_date: Registrovaní soutěžící mají právo 
+            aktualizovat své eventy až do této doby a to kontaktováním 
+            organizačního týmu. Uzávěrka nesmí být nastavena před datum konce 
+            registrace. Pokud toto pole necháte prázdné, soutěžící budou moci 
+            měnit eventy až do jejich začátku. Pokud máte povolené registrace na
+            místě, toto musí být nastaveno na den soutěže.
+          guests_per_registration: Počet hostů na jednu registraci povolený na 
+            této soutěži. Registrace s příliš velkým počtem hostů bude 
+            zablokována. Nechte prázdné, pokud nechcete stanovit limit.
+          extra_requirements: Prosíme udejte zde jakékoli speciální požadavky 
+            pro registraci, které nejsou pokryty výše, jako například pokyny k 
+            platbě.<br/>Prosíme napište to <b>v Angličtině</b> a v jakémkoli 
+            dalším jazyce, kterým vaši soutěžící mluví; zobrazí se to na 
+            stránkách s informacemi o soutěži a na registrační stránce, pokud 
+            používáte registrační stránky WCA.
         event_restrictions:
           early_puzzle_submission:
-            reason: Prosíme rozeberte, proč byste chtěli požadovat, aby soutěžící
-              odevzdali své kostky dříve. Prosíme, vyplňte toto v angličtině!
+            reason: Prosíme rozeberte, proč byste chtěli požadovat, aby 
+              soutěžící odevzdali své kostky dříve. Prosíme, vyplňte toto v 
+              angličtině!
           qualification_results:
-            reason: Prosíme rozeberte, proč byste chtěli používat kvalifikační časy.
-              Prosíme, vyplňte toto v angličtině!
+            reason: Prosíme rozeberte, proč byste chtěli používat kvalifikační 
+              časy. Prosíme, vyplňte toto v angličtině!
           event_limitation:
-            reason: Prosíme rozepište, proč byste chtěli zakázat některé kombinace
-              eventů. Prosíme, vyplňte toto v angličtině!
-            per_registration_limit: Volitelně vynuťte maximální počet eventů, na které
-              se soutěžící může zaregistrovat (často používané pro „Favourites“ soutěže.
-              Měli byste mít přidané eventy, než využijete toto pole. Registrace s
-              příliš mnoha eventy budou zablokovány. Nechte prázdné, pokud není žádný
-              limit.
+            reason: Prosíme rozepište, proč byste chtěli zakázat některé 
+              kombinace eventů. Prosíme, vyplňte toto v angličtině!
+            per_registration_limit: Volitelně vynuťte maximální počet eventů, na
+              které se soutěžící může zaregistrovat (často používané pro 
+              „Favourites“ soutěže. Měli byste mít přidané eventy, než využijete
+              toto pole. Registrace s příliš mnoha eventy budou zablokovány. 
+              Nechte prázdné, pokud není žádný limit.
           main_event_id: Vítěz tohoto eventu bude vítězem celé soutěže.
-        remarks: Dodatečné informace pro WCAT. Například pokud si něčím nejste jisti,
-          nebo nějaké speciální žádosti pro WCAT. Prosíme vyplňte v angličtině!
+        remarks: Dodatečné informace pro WCAT. Například pokud si něčím nejste 
+          jisti, nebo nějaké speciální žádosti pro WCAT. Prosíme vyplňte v 
+          angličtině!
       choices:
         guests_enabled:
           'true': Zeptat se na hosty
@@ -3093,8 +3150,8 @@ cs:
               přijata
             'false': 'Soutěžící NEsmí smazat svou registraci poté, co byla přijata'
           guest_entry_status:
-            unclear: Nezobrazovat nic (prosíme rozepište v dalších podmínkách pro
-              registraci)
+            unclear: Nezobrazovat nic (prosíme rozepište v dalších podmínkách 
+              pro registraci)
             free: Každý divák může přijít zdarma
             restricted: Diváci se mohou zůčastnit jen jako hosté soutěžících
         event_restrictions:
@@ -3128,31 +3185,40 @@ cs:
       #original_hash: 8131fc2
       not_all_delegates: ne všichni jsou Delegáti
       #original_hash: 43a23c2
-      registration_close_after_open: ukončení registrace musí být až po zahájení registrace
+      registration_close_after_open: ukončení registrace musí být až po zahájení
+        registrace
       #original_hash: 8a3a4f6
       start_date_must_be_28_days_in_advance: Začátek musí být nejméně za 28 dní.
       #original_hash: 43a83a9
       end_date_before_start: Datum ukončení nemůže být před datem zahájení.
       #original_hash: 0c507fa
-      refund_date_after_start: Nejzazší datum pro vrácení peněz nemůže být po datu zahájení.
+      refund_date_after_start: Nejzazší datum pro vrácení peněz nemůže být po 
+        datu zahájení.
       #original_hash: be3933b
       span_too_many_days: 'Soutěž nemůže trvat déle než %{max_days} dní.'
       #original_hash: cdcd288
       invalid_currency_code: Vybraný kód měny je neplatný.
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: musí být postupové podmínky pro všechna nefinálová kola.
+      advancement_condition_must_be_present_for_all_non_final_rounds: musí být 
+        postupové podmínky pro všechna nefinálová kola.
       #original_hash: da17c99
-      registration_period_after_start: Registrace nesmí být později než první den soutěže.
+      registration_period_after_start: Registrace nesmí být později než první 
+        den soutěže.
       #original_hash: f6b244b
-      waiting_list_deadline_before_registration_close: Uzávěrka waiting listu nesmí být před ukončením registrace.
+      waiting_list_deadline_before_registration_close: Uzávěrka waiting listu 
+        nesmí být před ukončením registrace.
       #original_hash: ececa98
-      waiting_list_deadline_before_refund_date: Uzávěrka waiting listu nesmí být před uzávěrkou pro vrácení peněz.
+      waiting_list_deadline_before_refund_date: Uzávěrka waiting listu nesmí být
+        před uzávěrkou pro vrácení peněz.
       #original_hash: 44d9902
-      waiting_list_deadline_after_start: Uzávěrka waiting listu musí být před začátečním datumem.
+      waiting_list_deadline_after_start: Uzávěrka waiting listu musí být před 
+        začátečním datumem.
       #original_hash: c3eb1be
-      event_change_deadline_before_registration_close: Deadline na aktualizaci eventů nesmí být před uzavřením registrace.
+      event_change_deadline_before_registration_close: Deadline na aktualizaci 
+        eventů nesmí být před uzavřením registrace.
       #original_hash: bc1ca0f
-      event_change_deadline_after_end_date: Uzávěrka na aktualizaci eventů nesmí být po soutěži.
+      event_change_deadline_after_end_date: Uzávěrka na aktualizaci eventů nesmí
+        být po soutěži.
       #original_hash: a2e4fc9
       event_change_deadline_with_ots: >-
         Uzávěrka na aktualizaci eventů musí být během soutěže, pokud jsou
@@ -3162,7 +3228,8 @@ cs:
       #original_hash: 4a5d7c5
       series_distance_days: 'Soutěž je příliš mnoho dní od %{competition}.'
       #original_hash: 7fc8fba
-      must_ask_about_guests_if_specifying_limit: 'Musíte se zeptat na hosty, pokud je limit pro hosty určený.'
+      must_ask_about_guests_if_specifying_limit: 'Musíte se zeptat na hosty, pokud
+        je limit pro hosty určený.'
     new:
       #original_hash: 1208df7
       create_competition: Vytvořit soutěž
@@ -3243,7 +3310,8 @@ cs:
       #original_hash: f1cecf1
       no_comp_colliding: Žádné kolize registračních období!
       #original_hash: 3e1051e
-      no_registration_start_date_yet: Ještě jste nepřiřadili datum začátku registrace na tuto soutěž.
+      no_registration_start_date_yet: Ještě jste nepřiřadili datum začátku 
+        registrace na tuto soutěž.
       #original_hash: c38824e
       opens_registration_at: otevírá registraci v
     #original_hash: 06b01c4
@@ -3271,7 +3339,8 @@ cs:
     #original_hash: b38ee61
     orga_close_reg: Uzavřít registraci.
     #original_hash: b2bfea9
-    orga_close_reg_confirm: 'Jste si jisti, že chcete uzavřít registraci? Tato akce je nevratná.'
+    orga_close_reg_confirm: 'Jste si jisti, že chcete uzavřít registraci? Tato akce
+      je nevratná.'
     #original_hash: ce5686a
     note_reg_not_full_orga_close_reg: >-
       Poznámka: registraci je možné uzavřít pouze pokud již byl dosažen limit
@@ -3279,7 +3348,8 @@ cs:
     #original_hash: 1ae594d
     stripe_disconnect: Odpojit Stripe účet
     #original_hash: 9ca8e2c
-    stripe_disconnect_confirm: 'Jste si jisti, že chcete odpojit Stripe účet? Tato akce je nenávratná.'
+    stripe_disconnect_confirm: 'Jste si jisti, že chcete odpojit Stripe účet? Tato
+      akce je nenávratná.'
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Poznámka: registrace již byla uzavřena.'
     show:
@@ -3304,7 +3374,8 @@ cs:
         #original_hash: b2a983a
         cumulative_time_limit: sčítající se časový limit
         #original_hash: d47f11a
-        cumulative_one_round_html: 'Může být vynucen %{cumulative_time_limit} (viz %{regulation_link}).'
+        cumulative_one_round_html: 'Může být vynucen %{cumulative_time_limit} (viz
+          %{regulation_link}).'
         #original_hash: c6190b6
         cumulative_across_rounds_html: >-
           %{cumulative_time_limit} může být vynucen v různých kolech (viz
@@ -3325,7 +3396,8 @@ cs:
         #original_hash: 51dfad5
         qualification_all_events_html: 'Kvalifikační časy musí být dosaženy před  <b>%{date}</b>.'
         #original_hash: 5eac9e5
-        qualification_some_events_html: 'Kvalifikační časy v %{events} musí být dosaženy před <b>%{date}</b>.'
+        qualification_some_events_html: 'Kvalifikační časy v %{events} musí být dosaženy
+          před <b>%{date}</b>.'
       #original_hash: 041a5de
       format: Formát
       #original_hash: 0d1fcc3
@@ -3482,7 +3554,8 @@ cs:
       #original_hash: 65310e5
       unknown_type: 'Neznámý typ parametru, musí být buď "single" nebo "average"'
       #original_hash: 01e188f
-      unknown_show: 'Neznámý parametr, musí být "N persons", "N results", nebo "by region"'
+      unknown_show: 'Neznámý parametr, musí být "N persons", "N results", nebo "by
+        region"'
     records:
       #original_hash: e51c552
       title: Rekordy
@@ -3494,9 +3567,11 @@ cs:
       dočasně nedostupná. WCA Software Tým pracuje na jejich obnovení –
       omlouváme se, za způsobené nepříjemnosti.
     #original_hash: e3710ed
-    tooltip_no_years: Naše databáze je příliš velká pro počítání historických dat.
+    tooltip_no_years: Naše databáze je příliš velká pro počítání historických 
+      dat.
     #original_hash: 357094b
-    tooltip_no_quantities: Naše databáze je příliš velká pro počítání dlouhých žebříčků
+    tooltip_no_quantities: Naše databáze je příliš velká pro počítání dlouhých 
+      žebříčků
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -3795,7 +3870,8 @@ cs:
             Competition Organizer Handbook</a> pro více informací.
       '6':
         #original_hash: 8005a61
-        title: K čemu jsou WCA účty? Jaký je rozdíl mezi WCA účtem a WCA profilem?
+        title: K čemu jsou WCA účty? Jaký je rozdíl mezi WCA účtem a WCA 
+          profilem?
         content:
           #original_hash: 57a3767
           '1': >-
@@ -4067,7 +4143,8 @@ cs:
         #original_hash: 67be768
         name: WCA Results Team
         #original_hash: 439ffae
-        description: Tento team je odpovědný za správu všech výsledků ze soutěží.
+        description: Tento team je odpovědný za správu všech výsledků ze 
+          soutěží.
       wst:
         #original_hash: a14bc62
         name: WCA Software Team
@@ -4159,7 +4236,8 @@ cs:
         #original_hash: ed5b65a
         name: WCT Čína
       #original_hash: f8c3f3c
-      operations_html: 'Každodenní aktivity WCA jsou obstarávány %{committees_and_teams} WCA.'
+      operations_html: 'Každodenní aktivity WCA jsou obstarávány %{committees_and_teams}
+        WCA.'
       #original_hash: 0e7a036
       teams_committees: Týmy a komise
       probation:
@@ -4218,7 +4296,8 @@ cs:
     #original_hash: 746e863
     title: WCA vzdělávací zdroje
     #original_hash: 081d65d
-    description: 'WQAC publikovalo několik dokumentů pro komunitu, jsou ke stažení níže.'
+    description: 'WQAC publikovalo několik dokumentů pro komunitu, jsou ke stažení
+      níže.'
     #original_hash: d0a3812
     competitor_tutorial: Tutoriál soutěžícího
     #original_hash: 9561bfc
@@ -4296,7 +4375,8 @@ cs:
       #original_hash: a1c6de9
       private_information: Soukromé informace
       #original_hash: 87a1c7e
-      private_information_disclaimer: Všechny informace níže uvidí jen vedení WCA.
+      private_information_disclaimer: Všechny informace níže uvidí jen vedení 
+        WCA.
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: nemůže být uznáno do
@@ -4417,7 +4497,8 @@ cs:
         WCA.
     wsot:
       #original_hash: 8f888d6
-      info_html: Tento tým se stará o uznání WCA jako mezinárodní sportovní organizace.
+      info_html: Tento tým se stará o uznání WCA jako mezinárodní sportovní 
+        organizace.
     wat:
       #original_hash: fae6850
       info_html: >-
@@ -4479,7 +4560,8 @@ cs:
         #original_hash: 4aaae5b
         title: AGE
         #original_hash: 2e4832d
-        description: Nástroj na generování a upravování skupin/rolí pro WCA soutěže.
+        description: Nástroj na generování a upravování skupin/rolí pro WCA 
+          soutěže.
       certificates:
         #original_hash: b3e4eb0
         title: Certifiláty
@@ -4591,7 +4673,8 @@ cs:
         #original_hash: 3499e7e
         incidents: Nebyly nalezeny žádné incidenty pro
         #original_hash: 76a6bf1
-        regulations_and_guidelines: Nebyla nalezena žádná pravidla ani pokyny pro
+        regulations_and_guidelines: Nebyla nalezena žádná pravidla ani pokyny 
+          pro
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -4645,7 +4728,8 @@ cs:
       content1_html: >-
         Pokud byste chtěli zorganizovat soutěž nebo již plánujete nějakou
         zorganizovat, prosíme, přečtěte si <a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Pokyny k organizaci</a>.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Pokyny
+        k organizaci</a>.
       #original_hash: 5016669
       content2_html: >-
         Tento dokument obsahuje důležité informace a měl by si ho přečíst každý

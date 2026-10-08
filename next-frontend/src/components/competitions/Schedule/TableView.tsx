@@ -341,7 +341,7 @@ function ActivityRow({
         )}
       </SimpleGrid>
       <SimpleGrid columns={16} hideFrom="lg" gap={3}>
-        <GridItem textAlign="left" colSpan={[6, 4]}>
+        <GridItem textAlign="start" colSpan={[6, 4]}>
           {t("competitions.schedule.range.from")}
           <br />
           <b>{getSimpleTimeString(startTime, timeZone)}</b>
@@ -349,7 +349,7 @@ function ActivityRow({
         <GridItem textAlign="center" colSpan={[4, 8]}>
           <LabelledEventIcon eventId={eventId} size="2xl" />
         </GridItem>
-        <GridItem textAlign="right" colSpan={[6, 4]}>
+        <GridItem textAlign="end" colSpan={[6, 4]}>
           {t("competitions.schedule.range.to")}
           <br />
           <b>{getSimpleTimeString(endTime, timeZone)}</b>
@@ -364,10 +364,10 @@ function ActivityRow({
           <>
             {format && (
               <>
-                <GridItem textAlign="left" colSpan={[6, 4]}>
+                <GridItem textAlign="start" colSpan={[6, 4]}>
                   {t("competitions.events.format")}
                 </GridItem>
-                <GridItem textAlign="right" colSpan={[10, 4]}>
+                <GridItem textAlign="end" colSpan={[10, 4]}>
                   <b>
                     {cutoff &&
                       `${formats.byId[cutoff.numberOfAttempts].short_name} / `}
@@ -378,10 +378,10 @@ function ActivityRow({
             )}
             {timeLimit && (
               <>
-                <GridItem textAlign="left" colSpan={[6, 4]}>
+                <GridItem textAlign="start" colSpan={[6, 4]}>
                   {t("competitions.events.time_limit")}
                 </GridItem>
-                <GridItem textAlign="right" colSpan={[10, 4]}>
+                <GridItem textAlign="end" colSpan={[10, 4]}>
                   <b>
                     {round &&
                       timeLimitToString(t, timeLimit, eventId, allRounds)}
@@ -397,20 +397,20 @@ function ActivityRow({
             )}
             {cutoff && (
               <>
-                <GridItem textAlign="left" colSpan={[6, 4]}>
+                <GridItem textAlign="start" colSpan={[6, 4]}>
                   {t("competitions.events.cutoff")}
                 </GridItem>
-                <GridItem textAlign="right" colSpan={[10, 4]}>
+                <GridItem textAlign="end" colSpan={[10, 4]}>
                   <b>{cutoffToString(t, cutoff, eventId)}</b>
                 </GridItem>
               </>
             )}
             {resultCondition && (
               <>
-                <GridItem textAlign="left" colSpan={[6, 4]}>
+                <GridItem textAlign="start" colSpan={[6, 4]}>
                   {t("competitions.events.proceed")}
                 </GridItem>
-                <GridItem textAlign="right" colSpan={[10, 4]}>
+                <GridItem textAlign="end" colSpan={[10, 4]}>
                   <b>
                     {resultConditionToString(
                       t,

@@ -265,8 +265,6 @@ Rails.application.routes.draw do
 
   get 'translations', to: redirect('translations/status', status: 302)
   get 'translations/status' => 'translations#index'
-  get 'translations/edit' => 'translations#edit'
-  patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
   get 'documents' => 'static_pages#documents'
@@ -287,6 +285,8 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'volunteer-positions', to: redirect('https://docs.google.com/spreadsheets/d/13JhGJWDfJR96MYgPpxkSaV2E3bMIdIWjWLuYO83vOls/edit?gid=0#gid=0', status: 302)
+  get 'trainee-delegate-application' => 'trainee_delegate_applications#new', as: :trainee_delegate_application
+  post 'trainee-delegate-application' => 'trainee_delegate_applications#create'
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
   resources :regional_organizations, only: %i[new create update edit destroy], path: '/regional-organizations'
@@ -372,9 +372,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       get '/persons/:wca_id/results' => 'persons#results', as: :person_results
       get '/persons/:wca_id/records' => 'persons#records', as: :person_records
+      get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
 
       resources :competitions, only: [] do
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
+        resource :bookmark, only: %i[show create destroy]
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open

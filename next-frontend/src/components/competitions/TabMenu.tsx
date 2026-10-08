@@ -8,6 +8,7 @@ import {
   Collapsible,
   Drawer,
   IconButton,
+  Link as ChakraLink,
   Separator,
   Spacer,
   Tabs,
@@ -20,6 +21,7 @@ import { components } from "@/types/openapi";
 import { useT } from "@/lib/i18n/useI18n";
 import {
   CompetitionNavTab,
+  TabBase,
   TabWithChildren,
   TabWithLink,
 } from "@/lib/wca/competitions/tabs";
@@ -27,7 +29,7 @@ import { useState } from "react";
 import { TFunction } from "i18next";
 import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
-import { iconMap } from "@/components/icons/iconMap";
+import IconDisplay from "@/components/IconDisplay";
 import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -114,9 +116,10 @@ export default function TabMenu({
           <Drawer.Trigger asChild>
             <IconButton
               aria-label="Open menu"
-              size="lg"
+              colorPalette="blue"
+              size="xl"
               position="fixed"
-              right="4"
+              insetEnd="4"
               bottom="4"
               zIndex="docked"
               rounded="full"
@@ -174,7 +177,9 @@ export default function TabMenu({
           </Drawer.Positioner>
         </Drawer.Root>
       </Box>
-      <Tabs.Content width="full" value={currentPath!}>
+      {/* Tabs.Content is a flex item, which has `min-width: auto`.
+       It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
+      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
         {children}
       </Tabs.Content>
     </Tabs.Root>
@@ -240,7 +245,8 @@ function TabList({
                 tabKey={tabKey}
                 currentPath={currentPath}
                 href={route({
-                  pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                  pathname:
+                    "/competitions/[competitionId]/custom-tabs/[tabName]",
                   query: { competitionId, tabName: tabKey },
                 })}
               >
@@ -281,6 +287,24 @@ function BackLink({
   );
 }
 
+function TabText<T extends TabBase>({
+  tab,
+  showIcon = true,
+  renderFn,
+  ...textProps
+}: {
+  tab: T;
+  renderFn: (tab: T) => string;
+  showIcon?: boolean;
+} & TextProps) {
+  return (
+    <>
+      {showIcon && tab.icon !== undefined && <IconDisplay name={tab.icon} />}
+      <Text {...textProps}>{renderFn(tab)}</Text>
+    </>
+  );
+}
+
 function TabLink({
   tab,
   t,
@@ -292,8 +316,15 @@ function TabLink({
   isAdminRoute: boolean;
   currentPath?: string;
 }) {
-  const label = t(
-    isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
+  const renderLabel = (renderTab: TabWithLink) =>
+    t(
+      isAdminRoute && renderTab.i18nKeyAdmin
+        ? renderTab.i18nKeyAdmin
+        : renderTab.i18nKey,
+    );
+
+  const tabLabel = (
+    <TabText tab={tab} renderFn={renderLabel} textStyle="bodyEmphasis" />
   );
 
   const trigger = (
@@ -303,11 +334,16 @@ function TabLink({
       disabled={tab.disabled}
       minHeight="fit-content"
     >
-      <Text asChild textStyle="bodyEmphasis" justifyContent="left">
+      <Text asChild justifyContent="left">
         {tab.externalHref && !tab.disabled ? (
-          <a href={tab.externalHref} target="_blank" rel="noopener noreferrer">
-            {label}
-          </a>
+          <ChakraLink
+            href={tab.externalHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="currentColor"
+          >
+            {tabLabel}
+          </ChakraLink>
         ) : (
           <TabTarget
             tabKey={tab.menuKey}
@@ -315,7 +351,7 @@ function TabLink({
             href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}
             disabled={tab.disabled}
           >
-            {label}
+            {tabLabel}
           </TabTarget>
         )}
       </Text>
@@ -346,8 +382,7 @@ function CollapsibleTabGroup({
   onToggle: () => void;
   currentPath?: string;
 }) {
-  const { i18nKey, icon, children } = tab;
-  const IconComponent = iconMap[icon];
+  const { children } = tab;
 
   return (
     <Collapsible.Root open={isOpen} onOpenChange={onToggle}>
@@ -361,13 +396,15 @@ function CollapsibleTabGroup({
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
       >
-        <Text textStyle="bodyEmphasis">
-          <IconComponent /> {t(i18nKey)}
-        </Text>
+        <TabText
+          tab={tab}
+          renderFn={(render) => t(render.i18nKey)}
+          textStyle="bodyEmphasis"
+        />
       </Collapsible.Trigger>
 
       <Collapsible.Content>
-        <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
+        <Box ps="3" display="flex" flexDirection="column" gap="1" pt="1">
           {children.map(
             ({ menuKey, disabled, i18nKey, href, hrefAdmin, badgeI18nKey }) => (
               <Tabs.Trigger

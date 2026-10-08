@@ -49,7 +49,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
 
     vault :DATABASE_PASSWORD
     vault :GOOGLE_MAPS_API_KEY
-    vault :GITHUB_CREATE_PR_ACCESS_TOKEN
     vault :STRIPE_API_KEY
     vault :OTP_ENCRYPTION_KEY
     vault :STRIPE_CLIENT_ID
@@ -89,7 +88,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
-    mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string
     mandatory :STRIPE_API_KEY, :string
     mandatory :OTP_ENCRYPTION_KEY, :string
     mandatory :STRIPE_CLIENT_ID, :string

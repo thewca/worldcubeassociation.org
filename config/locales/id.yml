@@ -412,7 +412,8 @@ id:
         #original_hash: 58e0c56
         remove_avatar: Hapus avatar
         #original_hash: 9af9099
-        results_notifications_enabled: Email saya jika hasil saya telah diposting.
+        results_notifications_enabled: Email saya jika hasil saya telah 
+          diposting.
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
           Ketika saya menjadi panitia atau delegasi kompetisi, email saya ketika
@@ -571,13 +572,16 @@ id:
         #original_hash: 9855f80
         bylaws: Anggaran Rumah Tangga
         #original_hash: 405201b
-        directors_and_officers: Daftar Direktur dan Pengurus utama beserta pangkat
+        directors_and_officers: Daftar Direktur dan Pengurus utama beserta 
+          pangkat
         #original_hash: 719db2d
         area_description: Deskripsi yang jelas mengenai lingkup wilayah
         #original_hash: 0cdb036
-        past_and_current_activities: Laporan aktivitas terkait WCA pada masa lampau dan sekarang
+        past_and_current_activities: Laporan aktivitas terkait WCA pada masa 
+          lampau dan sekarang
         #original_hash: 0faebcf
-        future_plans: Rencana yang akan datang sebagai Organisasi Regional yang diakui WCA
+        future_plans: Rencana yang akan datang sebagai Organisasi Regional yang 
+          diakui WCA
         #original_hash: f5ad34a
         extra_information: Adakah informasi tambahan?
         #original_hash: bc07619
@@ -817,7 +821,8 @@ id:
     attributes:
       contact_form:
         #original_hash: d31ab65
-        inquiry: Manakah di bawah ini yang paling tepat menggambarkan pertanyaan Anda?
+        inquiry: Manakah di bawah ini yang paling tepat menggambarkan pertanyaan
+          Anda?
         #original_hash: 1917f4f
         competition_id: Kompetisi
         #original_hash: 709a232
@@ -861,7 +866,8 @@ id:
           #original_hash: ec44d52
           confirm: Konfirmasi kode
           #original_hash: 912516c
-          regenerated_secret: Berhasil membuat ulang rahasia otentikasi dua-faktor Anda.
+          regenerated_secret: Berhasil membuat ulang rahasia otentikasi 
+            dua-faktor Anda.
           #original_hash: 1b0c44f
           enabled_success: Berhasil mengaktifkan otentikasi dua-faktor.
           #original_hash: 9515157
@@ -915,7 +921,8 @@ id:
               dibuat dengan aplikasi 2FA yang tertanam pada smartphone Anda
               (seperti Authy atau Google Authenticator).
             #original_hash: 34a7572
-            recovery: diambil dari kode pemulihan yang dibuat pada saat pengaktifan 2FA.
+            recovery: diambil dari kode pemulihan yang dibuat pada saat 
+              pengaktifan 2FA.
             #original_hash: eaee403
             email: dikirim kepada Anda melalui email saat Anda masuk.
           #original_hash: 7ae99ae
@@ -936,7 +943,8 @@ id:
             menghapus akses dari perangkat Anda, Anda dapat menyetel ulang
             rahasia otentkasi dua-faktor Anda di bawah ini:
           #original_hash: 69100a3
-          reset_warning: Anda memerlukan konfigurasi ulang semua perangkat 2FA Anda.
+          reset_warning: Anda memerlukan konfigurasi ulang semua perangkat 2FA 
+            Anda.
           #original_hash: a8d11db
           methods: Metode dua-faktor
           #original_hash: 0fd248d
@@ -994,7 +1002,8 @@ id:
           #original_hash: ab1b77d
           disabled_success: Berhasil menonaktifkan otentikasi dua-faktor.
           #original_hash: c36d556
-          disabled_failed: 'Tidak dapat menonaktifkan 2FA, harap lihat pesan kesalahan di bawah.'
+          disabled_failed: 'Tidak dapat menonaktifkan 2FA, harap lihat pesan kesalahan
+            di bawah.'
       destroy_other:
         #original_hash: a768ea6
         success: Berhasil keluar dari perangkat lain.
@@ -1040,7 +1049,8 @@ id:
       applications:
         help:
           #original_hash: 95c10ec
-          https_info: HTTPS diperlukan kecuali yang menjadi host adalah "localhost"
+          https_info: HTTPS diperlukan kecuali yang menjadi host adalah 
+            "localhost"
           #original_hash: 40b9d10
           scopes_html: >-
             Pisahkan Scope dengan spasi. Kosongkan untuk menggunakan Scope
@@ -1375,7 +1385,8 @@ id:
             label: Email
         contact_type:
           #original_hash: d31ab65
-          label: Manakah di antara ini yang paling menggambarkan pertanyaan Anda?
+          label: Manakah di antara ini yang paling menggambarkan pertanyaan 
+            Anda?
           competition:
             #original_hash: 92ea7e8
             label: Kontak Panitia dari Kompetisi Spesifik (pilih di bawah)
@@ -1578,7 +1589,8 @@ id:
         #original_hash: a31e8fb
         header: 'Anda telah dihapus dari %{competition} sebagai panitia'
         #original_hash: 66cb109
-        information: '%{remover} telah menghapus Anda dari %{competition} sebagai panitia.'
+        information: '%{remover} telah menghapus Anda dari %{competition} sebagai
+          panitia.'
       registration_reminder_email:
         #original_hash: 7d355cb
         header: 'Pendaftaran %{competition} segera dibuka'
@@ -1590,7 +1602,8 @@ id:
           href=%{competition_url}>%{competition}</a> akan dibuka dalam waktu
           kurang dari 24 jam.
         #original_hash: 2b93022
-        not_accepted_html: Anda sudah mendaftar namun pendaftaran Anda belum disetujui.
+        not_accepted_html: Anda sudah mendaftar namun pendaftaran Anda belum 
+          disetujui.
         #original_hash: d4087ee
         more_info_html: >-
           Harap cek <a href=%{competition_url}>halaman kompetisi WCA</a> untuk
@@ -1617,7 +1630,8 @@ id:
           yang terhubung dengan %{user_email}. Belum ada perubahan yang
           diterapkan ke akun Anda.
         #original_hash: 60fef9e
-        instruction2: 'Anda dapat mengatur ulang password dengan mengklik pranala di bawah:'
+        instruction2: 'Anda dapat mengatur ulang password dengan mengklik pranala
+          di bawah:'
         #original_hash: 00850c3
         instruction3: 'Jika Anda tidak meminta password baru, abaikan email ini.'
         #original_hash: dbc2263
@@ -1675,7 +1689,8 @@ id:
         Memilih cabang pilihan Anda dapat mempercepat proses pendaftaran pada
         kompetisi.
       #original_hash: b402e03
-      please_fix_profile: 'Untuk mendaftar kompetisi, Anda harus memperbaiki masalah berikut:'
+      please_fix_profile: 'Untuk mendaftar kompetisi, Anda harus memperbaiki masalah
+        berikut:'
       #original_hash: ff4fc02
       profile: Profil
       #original_hash: 7b2c7f1
@@ -1869,7 +1884,8 @@ id:
         pemilik email ini, Anda dapat menggunakan akun setelah Anda menyetel
         ulang password Anda <a href='/users/password/new'>di sini</a>.
       #original_hash: 50897d4
-      must_match_person: harus cocok dengan detail orang yang terkait dengan ID WCA
+      must_match_person: harus cocok dengan detail orang yang terkait dengan ID 
+        WCA
     successes:
       messages:
         #original_hash: 31bd401
@@ -1928,7 +1944,8 @@ id:
       #original_hash: aab7355
       need_country: Dibutuhkan wilayah perwakilan
       #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Pendaftaran tidak dapat dihapus dan diterima secara bersamaan.
+      cannot_be_deleted_and_accepted: Pendaftaran tidak dapat dihapus dan 
+        diterima secara bersamaan.
       #original_hash: a38d024
       must_register: wajib mendaftar minimal satu cabang
       #original_hash: abdc718
@@ -1940,13 +1957,15 @@ id:
         harap kontak <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
-      undelete_banned: adalah kompetitor yang di-banned dan tidak dapat dipulihkan
+      undelete_banned: adalah kompetitor yang di-banned dan tidak dapat 
+        dipulihkan
       #original_hash: 3de7c86
       series_more_than_one_accepted: >-
         Anda hanya dapat disetujui pada satu Rangkaian kompetisi dalam satu
         waktu.
       #original_hash: 13bfcd6
-      can_only_register_for_qualified_events: Anda tidak dapat mendaftar cabang yang tidak lolos kualifikasi.
+      can_only_register_for_qualified_events: Anda tidak dapat mendaftar cabang 
+        yang tidak lolos kualifikasi.
       #original_hash: 22ca413
       cannot_register_without_comment: >-
         Anda harus menulis komentar. Pastikan untuk membaca syarat pendaftaran
@@ -1975,7 +1994,8 @@ id:
       deleted_and_mailed:
         other: Pendaftaran telah dihapus
       #original_hash: c3aa289
-      single_deletion_and_mail: 'Pendaftaran telah dihapus dan email ke %{mail} telah terkirim'
+      single_deletion_and_mail: 'Pendaftaran telah dihapus dan email ke %{mail} telah
+        terkirim'
       #original_hash: d8f067f
       cannot_delete: Anda tidak dapat menghapus pendaftaran Anda.
       #original_hash: 82b3899
@@ -2049,7 +2069,8 @@ id:
         #original_hash: 8cbc6c0
         mail_subject: 'Pendaftaran Dihapus: %{comp_name}'
         #original_hash: f66ae63
-        message_html: 'Pendaftaran Anda pada %{comp_name} telah dihapus. Penyebabnya adalah:'
+        message_html: 'Pendaftaran Anda pada %{comp_name} telah dihapus. Penyebabnya
+          adalah:'
         causes:
           #original_hash: 978944c
           missing_info: Anda tidak mengirimkan seluruh detail yang dibutuhkan
@@ -2145,7 +2166,8 @@ id:
     #original_hash: 34eb009
     will_close_html: 'Pendaftaran ditutup dalam <strong>%{days}</strong> pada %{time}.'
     #original_hash: dc8a520
-    closed_html: 'Pendaftaran telah ditutup <strong>%{days}</strong> yang lalu pada %{time}.'
+    closed_html: 'Pendaftaran telah ditutup <strong>%{days}</strong> yang lalu pada
+      %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} untuk melihat status pendaftaran Anda. Jika Anda belum memiliki
@@ -2221,7 +2243,8 @@ id:
         Pembayaran Anda berhasil, dan pendaftaran Anda akan tampil dengan status
         sudah bayar di bawah.
       #original_hash: 92dde77
-      payment_processing: 'Pembayaran Anda telah dikonfirmasi, namun transaksi masih tertunda.'
+      payment_processing: 'Pembayaran Anda telah dikonfirmasi, namun transaksi masih
+        tertunda.'
       #original_hash: 62d7351
       button_text: Bayar sekarang!
       hints:
@@ -2267,7 +2290,8 @@ id:
           tersebut dengan menekan OK.
       errors:
         #original_hash: 166d48c
-        already_paid: Pemotongan saldo tidak terjadi karena biaya pendaftaran sudah dibayar.
+        already_paid: Pemotongan saldo tidak terjadi karena biaya pendaftaran 
+          sudah dibayar.
         #original_hash: f10c80c
         not_allowed: Anda tidak dapat membayar untuk pendaftaran tersebut.
         #original_hash: a073600
@@ -2279,7 +2303,8 @@ id:
           PayPal melaporkan bahwa transaksi dibatalkan secara manual. Mohon coba
           lagi.
         #original_hash: a32e40f
-        stripe_not_found: Stripe melapor balik bahwa ID transaksi tidak dapat ditemukan.
+        stripe_not_found: Stripe melapor balik bahwa ID transaksi tidak dapat 
+          ditemukan.
         #original_hash: aaa8ab7
         stripe_secret_invalid: >-
           Stripe melapor balik bahwa data transaksi tidak cocok dengan data
@@ -2371,7 +2396,8 @@ id:
         ID kompetisi dimulai dengan huruf kecil. Kami menganjurkan untuk
         menggunakan huruf kapital.
       #original_hash: 1a20fae
-      must_have_events: Harap tambahkan minimal satu cabang sebelum menyetujui kompetisi ini.
+      must_have_events: Harap tambahkan minimal satu cabang sebelum menyetujui 
+        kompetisi ini.
       #original_hash: a3aea56
       schedule_must_match_rounds: >-
         Pastikan bahwa kompetisi memiliki setidaknya satu babak per cabang dan
@@ -2412,7 +2438,8 @@ id:
         sistem pembayaran eksternal, harap diingat untuk menambahkan detail yang
         relevan pada syarat pendaftaran.
       #original_hash: ba067f0
-      not_announced: Kompetisi ini dapat terlihat oleh publik namun belum diumumkan.
+      not_announced: Kompetisi ini dapat terlihat oleh publik namun belum 
+        diumumkan.
       #original_hash: ab61991
       announced_success: Berhasil mengumumkan kompetisi!
       #original_hash: cbff8ce
@@ -2428,7 +2455,8 @@ id:
       #original_hash: ead4a9e
       uncancel_failure: Tidak dapat membatalkan pembatalan kompetisi.
       #original_hash: 8ad5e67
-      results_not_posted: Hasil kompetisi ini dapat terlihat namun belum diposting.
+      results_not_posted: Hasil kompetisi ini dapat terlihat namun belum 
+        diposting.
       #original_hash: e205d73
       results_already_posted: Hasil telah diposting.
       #original_hash: 376f461
@@ -2472,11 +2500,13 @@ id:
       #original_hash: 1b6dc61
       confirmed_visible: Kompetisi ini telah disetujui dan dapat terlihat.
       #original_hash: abc2f96
-      confirmed_not_visible: Kompetisi ini telah disetujui namun belum dapat terlihat.
+      confirmed_not_visible: Kompetisi ini telah disetujui namun belum dapat 
+        terlihat.
       #original_hash: 6d6290b
       not_confirmed_visible: Kompetisi ini belum disetujui namun dapat terlihat.
       #original_hash: b299b27
-      not_confirmed_not_visible: Kompetisi ini belum disetujui dan tidak dapat terlihat.
+      not_confirmed_not_visible: Kompetisi ini belum disetujui dan tidak dapat 
+        terlihat.
       #original_hash: 1b92d16
       championship_exists: 'Kompetisi %{championship_type} sudah ada pada tahun %{year}.'
       #original_hash: 0644bdc
@@ -2580,7 +2610,8 @@ id:
       #original_hash: 9bb1965
       competitor_limit: Batas kompetitor
       #original_hash: 196725e
-      competitor_limit_is: 'Terdapat batas kompetitor sejumlah %{competitor_limit} kompetitor.'
+      competitor_limit_is: 'Terdapat batas kompetitor sejumlah %{competitor_limit}
+        kompetitor.'
       #original_hash: 5101f65
       no_competitor_limit: Tidak ada batas kompetitor.
       #original_hash: f979d5e
@@ -2601,7 +2632,8 @@ id:
         mendapat pengembalian uang sejumlah %{refund_policy_percent} dari biaya
         pendaftaran Anda.
       #original_hash: 4aca553
-      no_refunds: Biaya pendaftaran tidak akan dikembalikan dalam kondisi apapun.
+      no_refunds: Biaya pendaftaran tidak akan dikembalikan dalam kondisi 
+        apapun.
       #original_hash: b016d2f
       waiting_list_deadline_html: >-
         Pendaftar pada daftar tunggu dapat disetujui ke dalam daftar kompetitor
@@ -2625,7 +2657,8 @@ id:
         Pendaftaran di tempat akan disetujui dengan biaya dasar pendaftaran
         sebesar %{on_the_spot_base_entry_fee}.
       #original_hash: 1637bea
-      on_the_spot_registration_free: Pendaftaran di tempat akan diterima secara gratis.
+      on_the_spot_registration_free: Pendaftaran di tempat akan diterima secara 
+        gratis.
       #original_hash: f5f687d
       no_on_the_spot_registration: Tidak menerima pendaftaran di tempat.
       #original_hash: 4df139d
@@ -2644,7 +2677,8 @@ id:
       event_limit:
         other: 'Kompetitor dapat mendaftar maksimal %{count} events.'
       #original_hash: 64e0ddd
-      require_qualification: Kompetitor hanya diperbolehkan mendaftar cabang yang lolos kualifikasi.
+      require_qualification: Kompetitor hanya diperbolehkan mendaftar cabang 
+        yang lolos kualifikasi.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Kompetisi ini telah berakhir, klik %{link_here} untuk menampilkan syarat
@@ -2669,7 +2703,8 @@ id:
       #original_hash: 1f9c9c4
       highlights: Sorotan
       #original_hash: 945f917
-      click_to_display_highlights_html: 'Klik %{link_here} untuk memunculkan sorotan kompetisi.'
+      click_to_display_highlights_html: 'Klik %{link_here} untuk memunculkan sorotan
+        kompetisi.'
       #original_hash: dc5c597
       hide_highlights: Sembunyikan sorotan.
       #original_hash: f691bf2
@@ -2836,7 +2871,8 @@ id:
       #original_hash: e590657
       missing_report: Laporan Anda belum diposting!
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: 'Anda tidak memiliki kompetisi mendatang! Lihat %{link}.'
+      no_upcoming_competitions_html: 'Anda tidak memiliki kompetisi mendatang! Lihat
+        %{link}.'
       #original_hash: e0f66bb
       competitions_list: daftar kompetisi
       #original_hash: 9104a03
@@ -2986,7 +3022,8 @@ id:
           #original_hash: 8020e88
           external_registration_page: Laman pendaftaran
           #original_hash: 87b7d5f
-          uses_wca_registration: Saya ingin menggunakan situs web WCA untuk pendaftaran
+          uses_wca_registration: Saya ingin menggunakan situs web WCA untuk 
+            pendaftaran
           #original_hash: ebe8c47
           uses_wca_live: Saya akan menggunakan WCA Live untuk input hasil
         entry_fees:
@@ -3012,9 +3049,11 @@ id:
           #original_hash: f8153a2
           closing_date_time: Pendaftaran ditutup
           #original_hash: 16cf9a4
-          waiting_list_deadline_date: Batas waktu untuk menerima kompetitor dari daftar tunggu
+          waiting_list_deadline_date: Batas waktu untuk menerima kompetitor dari
+            daftar tunggu
           #original_hash: 99a9169
-          event_change_deadline_date: Batas waktu kompetitor untuk memperbarui cabang yang didaftar
+          event_change_deadline_date: Batas waktu kompetitor untuk memperbarui 
+            cabang yang didaftar
           #original_hash: 2529d04
           allow_on_the_spot: Pendaftaran di tempat
           #original_hash: 3d47eca
@@ -3024,13 +3063,15 @@ id:
           #original_hash: 3c23a67
           guests_enabled: Pendamping
           #original_hash: bb16247
-          guest_entry_status: Tampilkan pesan untuk entri tamu/pendamping secara gratis
+          guest_entry_status: Tampilkan pesan untuk entri tamu/pendamping secara
+            gratis
           #original_hash: 7d78478
           guests_per_registration: Jumlah pendamping maksimal per pendaftaran
           #original_hash: 556fda0
           extra_requirements: Syarat pendaftaran tambahan
           #original_hash: 6c8e5bf
-          force_comment: Haruskan kompetitor untuk menulis komentar pada saat mendaftar
+          force_comment: Haruskan kompetitor untuk menulis komentar pada saat 
+            mendaftar
         event_restrictions:
           early_puzzle_submission:
             #original_hash: 723cad9
@@ -3063,7 +3104,8 @@ id:
         remarks: Catatan
         cloning:
           #original_hash: c305010
-          clone_tabs: Saya ingin menduplikasi semua tab dan juga dengan informasi tambahan
+          clone_tabs: Saya ingin menduplikasi semua tab dan juga dengan 
+            informasi tambahan
       hints:
         #original_hash: 2c812a0
         name: >-
@@ -3182,10 +3224,12 @@ id:
             pendaftaran tidak akan dikembalikan dalam kondisi apapun akan
             ditampilkan.
           #original_hash: f64d853
-          refund_policy_limit_date: Tanggal di mana pengembalian dana sudah tidak bisa dilakukan.
+          refund_policy_limit_date: Tanggal di mana pengembalian dana sudah 
+            tidak bisa dilakukan.
         registration:
           #original_hash: 9965635
-          opening_date_time: 'Catatan: Pembukaan dan penutupan pendaftaran dalam zona waktu UTC'
+          opening_date_time: 'Catatan: Pembukaan dan penutupan pendaftaran dalam zona
+            waktu UTC'
           #original_hash: 664db64
           waiting_list_deadline_date: >-
             Tanggal di mana pendaftar dalam daftar tunggu tidak dapat lagi
@@ -3297,7 +3341,8 @@ id:
                 Kompetitor akan diperbolehkan untuk mendaftar cabang yang
                 kualifikasinya tidak terpenuhi (Saya akan menghapusnya nanti)
               #original_hash: 6509041
-              'false': Kompetitor HARUS memenuhi kualifikasi untuk mendaftar cabang
+              'false': Kompetitor HARUS memenuhi kualifikasi untuk mendaftar 
+                cabang
     registration_v2:
       pdf:
         #original_hash: 5c7d60f
@@ -3321,7 +3366,8 @@ id:
           Saya telah membaca dan memahami semua informasi pada tab 'Daftar',
           termasuk biaya masuk dan kebijakan pengembalian uang
         #original_hash: 270bd63
-        acknowledgment_extra: Saya telah membaca dan memahami semua informasi di atas
+        acknowledgment_extra: Saya telah membaca dan memahami semua informasi di
+          atas
         #original_hash: 80d2933
         next_step: Lanjut ke Langkah selanjutnya
       update:
@@ -3355,12 +3401,14 @@ id:
         #original_hash: fc8bc84
         passed: Anda tidak dapat lagi memperbarui pendaftaran Anda
         #original_hash: 3c8d8b7
-        editing_disabled: Penyuntingan pendaftaran dinonaktifkan pada kompetisi ini
+        editing_disabled: Penyuntingan pendaftaran dinonaktifkan pada kompetisi 
+          ini
         registration_status:
           #original_hash: f1f32b6
           header: 'Status Pendaftaran Anda:'
         #original_hash: 2d9f36c
-        disclaimer: Pengajuan Pendaftaran bukan berarti persetujuan untuk berkompetisi
+        disclaimer: Pengajuan Pendaftaran bukan berarti persetujuan untuk 
+          berkompetisi
         #original_hash: 8fe68a1
         processing: Pendaftaran Anda sedang diproses...
         #original_hash: 897f272
@@ -3368,7 +3416,8 @@ id:
           Pemrosesan membutuhkan waktu yang lebih lama dari biasanya, jangan
           keluar dari halaman ini!
         #original_hash: 79ba42a
-        processing_queue: 'Banyak Pendaftaran yang sedang diproses, %{queueCount} dalam antrean.'
+        processing_queue: 'Banyak Pendaftaran yang sedang diproses, %{queueCount}
+          dalam antrean.'
       errors:
         #original_hash: 3890616
         events: 'Cabang gagal dimuat, mohon coba lagi'
@@ -3383,7 +3432,8 @@ id:
         #original_hash: e0b69a9
         '-1000': Kompetisi tidak ditemukan
         #original_hash: 2aa4aa1
-        '-1001': 'Kesalahan dalam memuat detail Kompetisi, mohon coba beberapa saat lagi'
+        '-1001': 'Kesalahan dalam memuat detail Kompetisi, mohon coba beberapa saat
+          lagi'
         #original_hash: 25b0063
         '-2001': Anda telah di-banned dari Kompetisi WCA untuk berkompetisi
         #original_hash: 82267b1
@@ -3413,7 +3463,8 @@ id:
         #original_hash: 0df821f
         '-6001': Pembayaran WCA tidak diaktifkan untuk kompetisi ini
         #original_hash: 092da51
-        '-6002': Anda harus menyelesaikan pendaftaran Anda sebelum Anda dapat membayar
+        '-6002': Anda harus menyelesaikan pendaftaran Anda sebelum Anda dapat 
+          membayar
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3422,9 +3473,11 @@ id:
       #original_hash: 8e8f765
       cannot_manage: Tidak dapat mengatur kompetisi.
       #original_hash: 0acc454
-      cannot_delete_public: Tidak dapat menghapus kompetisi yang telah terlihat secara publik.
+      cannot_delete_public: Tidak dapat menghapus kompetisi yang telah terlihat 
+        secara publik.
       #original_hash: 3935fd6
-      cannot_delete_confirmed: Tidak dapat menghapus kompetisi yang telah disetujui.
+      cannot_delete_confirmed: Tidak dapat menghapus kompetisi yang telah 
+        disetujui.
       #original_hash: 191df37
       must_contain_event: harus memiliki minimal satu cabang untuk kompetisi ini
       #original_hash: 54fe619
@@ -3436,25 +3489,31 @@ id:
       #original_hash: 8131fc2
       not_all_delegates: tidak semua merupakan Delegasi
       #original_hash: 43a23c2
-      registration_close_after_open: Pendaftaran ditutup harus berada setelah pendaftaran dibuka
+      registration_close_after_open: Pendaftaran ditutup harus berada setelah 
+        pendaftaran dibuka
       #original_hash: 2f8765e
       registration_already_closed: pendaftaran belum boleh ditutup.
       #original_hash: 8a3a4f6
-      start_date_must_be_28_days_in_advance: Tanggal mulai setidaknya harus 28 hari ke depan.
+      start_date_must_be_28_days_in_advance: Tanggal mulai setidaknya harus 28 
+        hari ke depan.
       #original_hash: 43a83a9
-      end_date_before_start: Tanggal berakhir tidak dapat berada sebelum tanggal mulai.
+      end_date_before_start: Tanggal berakhir tidak dapat berada sebelum tanggal
+        mulai.
       #original_hash: 0c507fa
       refund_date_after_start: >-
         Batas tanggal pengembalian uang tidak boleh berada sebelum tanggal
         mulai.
       #original_hash: be3933b
-      span_too_many_days: 'Kompetisi tidak dapat berlangsung lebih dari %{max_days} hari.'
+      span_too_many_days: 'Kompetisi tidak dapat berlangsung lebih dari %{max_days}
+        hari.'
       #original_hash: cdcd288
       invalid_currency_code: Kode mata uang yang dipilih tidak valid
       #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: harus memiliki syarat maju ke babak berikutnya untuk babak non-final.
+      advancement_condition_must_be_present_for_all_non_final_rounds: harus 
+        memiliki syarat maju ke babak berikutnya untuk babak non-final.
       #original_hash: da17c99
-      registration_period_after_start: Periode pendaftaran tidak boleh terjadi setelah tanggal mulai.
+      registration_period_after_start: Periode pendaftaran tidak boleh terjadi 
+        setelah tanggal mulai.
       #original_hash: f6b244b
       waiting_list_deadline_before_registration_close: >-
         Batas waktu daftar tunggu tidak boleh terjadi sebelum tanggal
@@ -3464,7 +3523,8 @@ id:
         Batas waktu daftar tunggu tidak boleh terjadi sebelum batas tanggal
         pengembalian uang.
       #original_hash: 7324d19
-      waiting_list_deadline_after_end: Batas waktu daftar tunggu harus sebelum waktu kompetisi berakhir.
+      waiting_list_deadline_after_end: Batas waktu daftar tunggu harus sebelum 
+        waktu kompetisi berakhir.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         Batas waktu untuk memperbarui cabang tidak boleh terjadi sebelum tanggal
@@ -3482,7 +3542,8 @@ id:
       #original_hash: 4a5d7c5
       series_distance_days: 'Kompetisi ini dijadwalkan terlalu jauh dari %{competition}.'
       #original_hash: 7fc8fba
-      must_ask_about_guests_if_specifying_limit: Wajib bertanya mengenai pendamping jika batas jumlah pendamping diisi.
+      must_ask_about_guests_if_specifying_limit: Wajib bertanya mengenai 
+        pendamping jika batas jumlah pendamping diisi.
     new:
       #original_hash: 1208df7
       create_competition: Buat kompetisi
@@ -3514,7 +3575,8 @@ id:
       #original_hash: 82a95d2
       no_location_yet: Anda belum memasukkan lokasi untuk kompetisi ini.
       #original_hash: 6def491
-      save_first: Harap simpan kompetisi ini sebelum ditambahkan ke dalam Rangkaian.
+      save_first: Harap simpan kompetisi ini sebelum ditambahkan ke dalam 
+        Rangkaian.
       #original_hash: 709a232
       name: Nama
       #original_hash: adc24b7
@@ -3549,9 +3611,11 @@ id:
       #original_hash: 8343ae2
       label: 'Periode pendaftaran bertabrakan (dimulai dalam %{hours} jam)'
       #original_hash: f1cecf1
-      no_comp_colliding: Periode pendaftaran yang bertabrakan tidak diperbolehkan!
+      no_comp_colliding: Periode pendaftaran yang bertabrakan tidak 
+        diperbolehkan!
       #original_hash: 3e1051e
-      no_registration_start_date_yet: Anda belum memasukkan tanggal mulai registrasi pada kompetisi ini.
+      no_registration_start_date_yet: Anda belum memasukkan tanggal mulai 
+        registrasi pada kompetisi ini.
       #original_hash: c38824e
       opens_registration_at: registrasi dibuka pada
     #original_hash: 06b01c4
@@ -3591,7 +3655,8 @@ id:
     #original_hash: c66488a
     user_preferences: Preferensi Pengguna
     #original_hash: 089cbfd
-    receive_registration_emails: Beritahu saya melalui email saat ada yang mendaftar untuk kompetisi ini
+    receive_registration_emails: Beritahu saya melalui email saat ada yang 
+      mendaftar untuk kompetisi ini
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Catatan: pendaftaran telah ditutup.'
     show:
@@ -3639,9 +3704,11 @@ id:
           Waktu kualifikasi harus disetel pada kompetisi WCA lain agar dapat
           berkompetisi.
         #original_hash: 51dfad5
-        qualification_all_events_html: 'Waktu kualifikasi harus ditetapkan sebelum <b>%{date}</b>.'
+        qualification_all_events_html: 'Waktu kualifikasi harus ditetapkan sebelum
+          <b>%{date}</b>.'
         #original_hash: 5eac9e5
-        qualification_some_events_html: 'Waktu kualifikasi %{events} harus ditetapkan sebelum <b>%{date}</b>.'
+        qualification_some_events_html: 'Waktu kualifikasi %{events} harus ditetapkan
+          sebelum <b>%{date}</b>.'
       #original_hash: 041a5de
       format: Format
       #original_hash: 0d1fcc3
@@ -3814,9 +3881,11 @@ id:
       digunakan. Tim Perangkat Lunak sedang berupaya untuk memperbaiki filter
       ini - kami mohon maaf atas ketidaknyamanannya.
     #original_hash: e3710ed
-    tooltip_no_years: Basis data kami terlalu besar untuk merangkum data historis
+    tooltip_no_years: Basis data kami terlalu besar untuk merangkum data 
+      historis
     #original_hash: 357094b
-    tooltip_no_quantities: Basis data kami terlalu besar untuk merangkum ranking yang panjang
+    tooltip_no_quantities: Basis data kami terlalu besar untuk merangkum ranking
+      yang panjang
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4180,7 +4249,8 @@ id:
             Panitia Kompetisi WCA</a> untuk mengetahui informasi lebih lanjut.
       '6':
         #original_hash: 8005a61
-        title: Apa fungsi akun WCA? Apa perbedaan antara akun WCA dan profil WCA?
+        title: Apa fungsi akun WCA? Apa perbedaan antara akun WCA dan profil 
+          WCA?
         content:
           #original_hash: 57a3767
           '1': >-
@@ -4263,7 +4333,8 @@ id:
             diperbolehkan memakai puzzle tersebut.
       regulations2:
         #original_hash: 48f1234
-        title: Bolehkah saya menggunakan puzzle bermagnet dalam kompetisi resmi WCA?
+        title: Bolehkah saya menggunakan puzzle bermagnet dalam kompetisi resmi 
+          WCA?
         content:
           #original_hash: 024ce81
           '1': >-
@@ -4606,13 +4677,15 @@ id:
         href='/regional-organizations/new'>formulir ini</a>.
     regional_organization_form:
       #original_hash: 134df45
-      filling_instructions_html: Harap isi semuanya <b> dalam bahasa Inggris!</b>
+      filling_instructions_html: Harap isi semuanya <b> dalam bahasa 
+        Inggris!</b>
       #original_hash: fbd64df
       public_information: Informasi publik
       #original_hash: a1c6de9
       private_information: Informasi pribadi
       #original_hash: 87a1c7e
-      private_information_disclaimer: Seluruh informasi di bawah hanya dapat dilihat oleh Dewan Direktur WCA
+      private_information_disclaimer: Seluruh informasi di bawah hanya dapat 
+        dilihat oleh Dewan Direktur WCA
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: tidak dapat diisi setelah tanggal Diakui sampai
@@ -4623,7 +4696,8 @@ id:
         Dewan Direktur WCA meninjau permohonan Anda
     delete:
       #original_hash: 6588652
-      confirm_delete: Apakah Anda yakin untuk menghapus permohonan Organisasi Regional ini?
+      confirm_delete: Apakah Anda yakin untuk menghapus permohonan Organisasi 
+        Regional ini?
   score_tools:
     #original_hash: 4fc2133
     title: Kakas perangkat lunak untuk kompetisi WCA
@@ -4792,7 +4866,8 @@ id:
         #original_hash: 3499e7e
         incidents: Tidak ada insiden yang ditemukan
         #original_hash: 76a6bf1
-        regulations_and_guidelines: Tidak ada Regulasi atau Pedoman yang ditemukan untuk
+        regulations_and_guidelines: Tidak ada Regulasi atau Pedoman yang 
+          ditemukan untuk
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -4848,7 +4923,8 @@ id:
       content1_html: >-
         Jika Anda tertarik untuk mengurus kompetisi atau sudah memiliki rencana
         untuk mengurus kompetisi, harap baca <a
-        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Pedoman Panitia</a> kami.
+        href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Pedoman
+        Panitia</a> kami.
       #original_hash: 5016669
       content2_html: >-
         Dokumen ini berisi informasi penting dan harus dibaca oleh setiap
@@ -4911,7 +4987,8 @@ id:
           Konten media tidak boleh mengandung sponsor atau iklan apapun secara
           luas.
         #original_hash: c9d797b
-        '4': Seluruh konten media harus memiliki judul yang sesuai dan deskriptif.
+        '4': Seluruh konten media harus memiliki judul yang sesuai dan 
+          deskriptif.
     edit:
       #original_hash: 32c7cc0
       title: Sunting Media
@@ -4923,7 +5000,8 @@ id:
       #original_hash: df43670
       validate_media: Validasi media
       #original_hash: 9f2158f
-      submit_media_html: Anda dapat mengirim media <a href="/media/new">di sini</a>.
+      submit_media_html: Anda dapat mengirim media <a href="/media/new">di 
+        sini</a>.
     validate:
       #original_hash: 1e0eee6
       title: Validasi Media
@@ -5022,7 +5100,8 @@ id:
         orang-orang (panitia, Delegasi, dsb...) tentang apa yang mereka rasakan
         pada kompetisi
       #original_hash: 6003b20
-      pictures_too: 'Anda juga dapat mengirimkan gambar, tidak harus dalam bentuk video saja'
+      pictures_too: 'Anda juga dapat mengirimkan gambar, tidak harus dalam bentuk
+        video saja'
       #original_hash: 8813619
       paragraph4: >-
         Komunikasi kami pada akhir minggu biasanya dilakukan pada grup WhatsApp.

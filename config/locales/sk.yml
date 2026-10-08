@@ -334,7 +334,8 @@ sk:
         #original_hash: 3c23a67
         guests_enabled: Hostia
         #original_hash: 089cbfd
-        receive_registration_emails: 'Notifikuj ma emailom, keď sa niekto prihlási na túto súťaž'
+        receive_registration_emails: 'Notifikuj ma emailom, keď sa niekto prihlási
+          na túto súťaž'
         #original_hash: d4aeed9
         registration_open: Registrácia sa otvorí
         #original_hash: f8153a2
@@ -342,11 +343,13 @@ sk:
         #original_hash: d7020f4
         remarks: Poznámky
         #original_hash: c305010
-        clone_tabs: Chcel by som tiež zklonovať všetky taby s dodatkovými informáciami
+        clone_tabs: Chcel by som tiež zklonovať všetky taby s dodatkovými 
+          informáciami
         #original_hash: c5497bc
         competition_events: Eventy
         #original_hash: 71c8461
-        enable_donations: Chcem povoliť donaty dodatočne ku registračným poplatkom
+        enable_donations: Chcem povoliť donaty dodatočne ku registračným 
+          poplatkom
         #original_hash: ff722f0
         registration_requirements: Požiadavky na registráciu
       championship:
@@ -715,7 +718,8 @@ sk:
       applications:
         help:
           #original_hash: 92e00ff
-          native_redirect_uri: 'Použite %{native_redirect_uri} ak chcete pridať localhost URI'
+          native_redirect_uri: 'Použite %{native_redirect_uri} ak chcete pridať localhost
+            URI'
           #original_hash: 62a0113
           scopes_html: >-
             Oddeľte polia s medzerami. Nechajte prázdne miesto pre použitie
@@ -732,7 +736,8 @@ sk:
         #original_hash: 17aa24f
         email: Zprístupnite svoju emailovú adresu
         #original_hash: e0d0654
-        manage_competitions: 'Spravovať hociaké nadchádzajúce súťaže, ktoré budete organizovať'
+        manage_competitions: 'Spravovať hociaké nadchádzajúce súťaže, ktoré budete
+          organizovať'
     devise:
       #original_hash: 06184f5
       no_account: Nemáte účet?
@@ -741,7 +746,8 @@ sk:
       #original_hash: dcd1d70
       have_never_competed: Nikdy som nesúťažil v súťaži WCA.
       #original_hash: 86a60c9
-      let_us_know: 'Prosím, dajte nám vedieť, ak ste súťažili predtým už v súťaži WCA.'
+      let_us_know: 'Prosím, dajte nám vedieť, ak ste súťažili predtým už v súťaži
+        WCA.'
       #original_hash: f9f512b
       welcome_back: >-
         Vitajte naspäť! Aby ste si mohli vytvoriť webový WCA účet, potrebujeme
@@ -858,7 +864,8 @@ sk:
         Už ste si vyžiadali WCA ID %{wca_id}. Kontaktujte delegáta %{delegate}
         ak máte nejaké otázky.
       #original_hash: 0660b5d
-      info_competed_before: 'Ak ste už súťažili, môžete požiadať o pripojenie WCA ID do svojho účtu.'
+      info_competed_before: 'Ak ste už súťažili, môžete požiadať o pripojenie WCA
+        ID do svojho účtu.'
       #original_hash: 7d605f8
       info_never_competed_html: >-
         Ak ste nikdy nesúťažili, choďte na %{comp}! WCA ID sa vytvorí po tom,
@@ -884,22 +891,28 @@ sk:
       #original_hash: 3fc6dbe
       member_of: Príslušník
       #original_hash: 42619dd
-      preferred_events_desc: Vyberanie preferovaných eventov urobí registráciu ešte rýchlejšiu.
+      preferred_events_desc: Vyberanie preferovaných eventov urobí registráciu 
+        ešte rýchlejšiu.
       #original_hash: b402e03
-      please_fix_profile: 'Ak sa chcete prihlásiť na súťaže, musíte vyriešiť tieto problémy:'
+      please_fix_profile: 'Ak sa chcete prihlásiť na súťaže, musíte vyriešiť tieto
+        problémy:'
       #original_hash: ff4fc02
       profile: Profil
       #original_hash: 7b2c7f1
       approve: Povoliť
       #original_hash: 85de4b8
       unconfirmed_email: 'Emailová adresa tohto účtu (%{email}) nie je potvrdená.'
-      confirm_new_email: 'Na vymenenie vášho emailu budeme potrebovať potvrdenie vášho nového emailu.'
+      confirm_new_email: 'Na vymenenie vášho emailu budeme potrebovať potvrdenie vášho
+        nového emailu.'
       #original_hash: 8a770cf
-      pending_mail_confirmation: 'Tomuto účtu chýbajú informácie novej emailovej adresy %{email}.'
+      pending_mail_confirmation: 'Tomuto účtu chýbajú informácie novej emailovej adresy
+        %{email}.'
       #original_hash: 0340b0b
-      pending_avatar_confirmation: Tomuto účtu chýbajú informácie o novom avatarovi.
+      pending_avatar_confirmation: Tomuto účtu chýbajú informácie o novom 
+        avatarovi.
       #original_hash: 7b06f03
-      pending_claim_confirmation_html: 'Tento účet čaká na %{delegate} aby potvrdil vyžiadané WCA ID %{wca_id}.'
+      pending_claim_confirmation_html: 'Tento účet čaká na %{delegate} aby potvrdil
+        vyžiadané WCA ID %{wca_id}.'
       #original_hash: fc7269a
       pending_claim_mail_confirmation_html: >-
         Tento použivateľ si už vyžiadal WCA ID %{wca_id}. Ich delegát
@@ -930,7 +943,8 @@ sk:
       #original_hash: fe7122d
       guidelines_confirmation: 'Potvrdzujem, že môj avatar spĺňa všetky pravidlá avatarov.'
       #original_hash: d677ceb
-      confirm_guidelines: Prečítajte si pravidlá avatarov a pošlite správnu fotku.
+      confirm_guidelines: Prečítajte si pravidlá avatarov a pošlite správnu 
+        fotku.
       #original_hash: efc007a
       save: Uložiť
       #original_hash: 58e0c56
@@ -973,7 +987,8 @@ sk:
       #original_hash: 2e582eb
       must_not_be_present: nemôže byť terajší
       #original_hash: b2c4ecc
-      senior_has_delegate: nemôžete degradovať skúseného delegáta ''podradenými'' delegátmi
+      senior_has_delegate: nemôžete degradovať skúseného delegáta 
+        ''podradenými'' delegátmi
       #original_hash: 48653a9
       already_have_id: 'nemôžete žiadať o WCA ID, pretože už máte WCA ID %{wca_id}'
       #original_hash: ec5db95
@@ -1045,7 +1060,8 @@ sk:
       #original_hash: cb763b8
       registration_closed: Registrácia na súťaž sa skončila
       #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Registrácia nemôže byť naraz vymazaná a prijatá.
+      cannot_be_deleted_and_accepted: Registrácia nemôže byť naraz vymazaná a 
+        prijatá.
       #original_hash: a38d024
       must_register: musí byť registrovaný aspoň na jeden event
     registration_info_people:
@@ -1134,12 +1150,14 @@ sk:
           #original_hash: 2ac6d84
           withdrawal: Chceli ste odstúpiť
         #original_hash: 8f7358f
-        email_if_error: 'Ak si myslíte že je toto chyba, prosím odpovedzte na tento email.'
+        email_if_error: 'Ak si myslíte že je toto chyba, prosím odpovedzte na tento
+          email.'
       deleted:
         #original_hash: 268e248
         mail_subject: 'Vaša registrácia na %{comp_name} bola vymazaná'
         #original_hash: f66ae63
-        message_html: 'Vaša registrácia na %{comp_name} bola vymazaná. Možnými dôvodmi sú:'
+        message_html: 'Vaša registrácia na %{comp_name} bola vymazaná. Možnými dôvodmi
+          sú:'
         causes:
           #original_hash: 978944c
           missing_info: Neudali ste všetky potrebné detaily
@@ -1291,7 +1309,8 @@ sk:
         #original_hash: a34940e
         not_a_number: Prosím zvoľte správnu čiastku
         #original_hash: 707b9ca
-        amount_too_low: Celková suma musí byť minimálne rovná registračnému poplatku.
+        amount_too_low: Celková suma musí byť minimálne rovná registračnému 
+          poplatku.
     #original_hash: 8607a87
     payment_button_text: Zaplaťte vaše poplatky s kartou
     #original_hash: 4cf01a2
@@ -1299,7 +1318,8 @@ sk:
       Aby sa urýchlila registrácia v budúcnosti, môžete si zvoliť preferované
       eventy %{link}.
     #original_hash: 67d8734
-    preferred_events_populated_html: 'Vyplnili sme tu vaše preferované eventy, ktoré môžete pozmeniť %{link}.'
+    preferred_events_populated_html: 'Vyplnili sme tu vaše preferované eventy, ktoré
+      môžete pozmeniť %{link}.'
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1309,7 +1329,8 @@ sk:
         Názov súťaže je dlhší ako 32 písmen. Preferujeme kratšie názvy a budeme
         radi, ak by sa zmenil názov.
       #original_hash: 1a20fae
-      must_have_events: Prosím pridajte aspoň jeden event pred potvrdením registrácie.
+      must_have_events: Prosím pridajte aspoň jeden event pred potvrdením 
+        registrácie.
       #original_hash: e390250
       create_success: Úspešne ste pridali novú súťaž!
       #original_hash: afe3a23
@@ -1339,7 +1360,8 @@ sk:
         Práve ste úspešne pripojili svoj Stripe účet a môžete prijímať
         registračné poplatky pre túto súťaž.
       #original_hash: 0a4bb53
-      stripe_not_connected: Stal sa problém a nemohli sme pripojiť váš Stripe účet.
+      stripe_not_connected: Stal sa problém a nemohli sme pripojiť váš Stripe 
+        účet.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Moje súťaže
@@ -1450,7 +1472,8 @@ sk:
       #original_hash: 8b09d74
       no_comp_found: Nenašli sa žiadne súťaže
       #original_hash: 7008166
-      no_comp_match: 'Nenašli sa žiadne súťaže s %{events}! Skúste hľadanie pre menej eventov'
+      no_comp_match: 'Nenašli sa žiadne súťaže s %{events}! Skúste hľadanie pre menej
+        eventov'
     my_competitions_table:
       #original_hash: 5301648
       edit: Pozmeniť
@@ -1465,7 +1488,8 @@ sk:
       #original_hash: e590657
       missing_report: Vaša správa ešte nebola odoslaná!
       #original_hash: 7fc0b5f
-      no_upcoming_competitions_html: 'Nemáte žiadne nadchádzajúce súťaže! Pozrite sa na %{link}.'
+      no_upcoming_competitions_html: 'Nemáte žiadne nadchádzajúce súťaže! Pozrite
+        sa na %{link}.'
       #original_hash: e0f66bb
       competitions_list: list súťaži
       #original_hash: 9104a03
@@ -1505,7 +1529,8 @@ sk:
         Potvrdili ste túto súťaž, ale ešte nie je viditeľná. Počkajte na
         %{board} aby ju spravila viditeľnou.
       #original_hash: e94cba8
-      is_visible: 'Táto súťaž je viditeľná, hociaké zmeny, ktoré urobíte sa ukážu verejne!'
+      is_visible: 'Táto súťaž je viditeľná, hociaké zmeny, ktoré urobíte sa ukážu
+        verejne!'
       #original_hash: 34862bb
       awaiting_confirmation_html: >-
         Vyplňte všetky políčka a kliknite na 'Potvrdiť' keď ste pripravení
@@ -1550,8 +1575,8 @@ sk:
         end_date: Dátum konca
         information: Informácie
         competitor_limit:
-          enabled: Rád by som špecifikoval limit počtu súťažiacich, ktorí sa môžu
-            zúčastniť tejto súťaže.
+          enabled: Rád by som špecifikoval limit počtu súťažiacich, ktorí sa 
+            môžu zúčastniť tejto súťaže.
           count: Maximálny počet súťažiacich
           reason: Dôvod pre limit súťažiacich
         staff:
@@ -1561,21 +1586,22 @@ sk:
           contact: Kontakt
         championships:
         website:
-          generate_website: Chcel by som použiť WCA stránku namiesto externej pre
-            dodatkové informácie
+          generate_website: Chcel by som použiť WCA stránku namiesto externej 
+            pre dodatkové informácie
           external_website: Webová stránka
           external_registration_page:
           uses_wca_registration: Chcel by som použiť WCA stránku pre registráciu
           uses_wca_live:
         user_settings:
-          receive_registration_emails: Notifikuj ma emailom, keď sa niekto prihlási
-            na túto súťaž
+          receive_registration_emails: Notifikuj ma emailom, keď sa niekto 
+            prihlási na túto súťaž
         entry_fees:
           currency_code: Kód meny
           base_entry_fee: Základná vstupná cena
           on_the_spot_entry_fee:
           guest_entry_fee:
-          donations_enabled: Chcem povoliť donaty dodatočne ku registračným poplatkom
+          donations_enabled: Chcem povoliť donaty dodatočne ku registračným 
+            poplatkom
           refund_policy_percent:
           refund_policy_limit_date:
         registration:
@@ -1605,40 +1631,41 @@ sk:
             per_registration_limit:
           main_event_id:
         remarks: Poznámky
-        clone_tabs: Chcel by som tiež zklonovať všetky taby s dodatkovými informáciami
+        clone_tabs: Chcel by som tiež zklonovať všetky taby s dodatkovými 
+          informáciami
       hints:
         admin:
           is_confirmed:
-        name: Celé meno súťaže aj s rokom na konci(napr. Danish Open 2016).Dávajte
-          si pozor, aby meno bolo kapitalizované. Meno musí obsahovať iba alfanumerické
-          znaky, pomlčky(-), ampersandy(&), bodky(.), dvojbodky(:), apostrofy(') a
-          medzery( ).
-        short_name: Krátke meno pre súťaž, na zobrazenie. Ak je meno súťaže dostatočne
-          krátke, môžete ho znovu použiť(napr. Europe 2006).
+        name: Celé meno súťaže aj s rokom na konci(napr. Danish Open 
+          2016).Dávajte si pozor, aby meno bolo kapitalizované. Meno musí 
+          obsahovať iba alfanumerické znaky, pomlčky(-), ampersandy(&), 
+          bodky(.), dvojbodky(:), apostrofy(') a medzery( ).
+        short_name: Krátke meno pre súťaž, na zobrazenie. Ak je meno súťaže 
+          dostatočne krátke, môžete ho znovu použiť(napr. Europe 2006).
         name_reason_html:
         venue:
-          city_name: Meno mesta a štátu(ak je), kde sa súťaž bude nachádzať. Nepíšte
-            krajinu(napr. Paris ALEBO San Francisco, Kalifornia)
+          city_name: Meno mesta a štátu(ak je), kde sa súťaž bude nachádzať. 
+            Nepíšte krajinu(napr. Paris ALEBO San Francisco, Kalifornia)
           name_html: 'Miesto, kde sa daná súťaž bude konať. %{md}. Napríklad: [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
-          details_html: Detaily o mieste (napr. On the first floor far in the back,
-            follow the signs). %{md}
+          details_html: Detaily o mieste (napr. On the first floor far in the 
+            back, follow the signs). %{md}
           coordinates:
-        information: Informácie o limite súťažiacich, vstupných poplatkoch pre súťažiacich
-          a divákov a iné detaily relevantné pre ľudí, ktorí maju záujem v zúčastnení
-          sa súťaže.
+        information: Informácie o limite súťažiacich, vstupných poplatkoch pre 
+          súťažiacich a divákov a iné detaily relevantné pre ľudí, ktorí maju 
+          záujem v zúčastnení sa súťaže.
         competitor_limit:
-          enabled: Pre teraz je toto číslo iba pre informačné použitie a nepreventuje
-            registrácie ostatných ľudí. Pracujeme na pridávaní podpory na zrýchlenie
-            registrácie, ale vyžaduje si to inú prácu.
+          enabled: Pre teraz je toto číslo iba pre informačné použitie a 
+            nepreventuje registrácie ostatných ľudí. Pracujeme na pridávaní 
+            podpory na zrýchlenie registrácie, ale vyžaduje si to inú prácu.
           count: Počet súťažiacich povolených na túto súťaž.
-          reason: Aký je dôvod na takýto limit súťažiacich? Vyplňte toto prosím v
-            angličtine.
+          reason: Aký je dôvod na takýto limit súťažiacich? Vyplňte toto prosím 
+            v angličtine.
         staff:
           staff_delegate_ids: WCA delegáti pre túto súťaž.
           trainee_delegate_ids:
-          organizer_ids: Organizátori súťaže(potrebujú mať účet, na to aby mohli byť
-            organizátormi)
+          organizer_ids: Organizátori súťaže(potrebujú mať účet, na to aby mohli
+            byť organizátormi)
           contact_html: 'Voliteľné informácie o kontakte. Ak toto nevyplníte, emaily
             organizátorov budú publikované verejnosti. %{md}. Príklad: [Text na ukážku](mailto:some@email.com)'
         website:
@@ -1647,9 +1674,9 @@ sk:
           uses_wca_live:
         entry_fees:
           currency_code: Kód meny pre vstupné poplatky.
-          base_entry_fee: Základný vstupný poplatok pre súťaž. Vstupný poplatok bude
-            ukázaný na informačnej stránke súťaže a tiež na registračnej stránke(ak
-            je použitá).
+          base_entry_fee: Základný vstupný poplatok pre súťaž. Vstupný poplatok 
+            bude ukázaný na informačnej stránke súťaže a tiež na registračnej 
+            stránke(ak je použitá).
           on_the_spot_entry_fee:
           guest_entry_fee:
           refund_policy_percent:
@@ -1721,9 +1748,11 @@ sk:
       #original_hash: 0b2b56b
       not_all_delegates: nie sú delegáti
       #original_hash: 43a23c2
-      registration_close_after_open: zatvorenie registrácie musí byť po otvorení registrácie
+      registration_close_after_open: zatvorenie registrácie musí byť po otvorení
+        registrácie
       #original_hash: 43a83a9
-      end_date_before_start: Konečný termín nemôže byť pred začiatočným termínom.
+      end_date_before_start: Konečný termín nemôže byť pred začiatočným 
+        termínom.
       #original_hash: be3933b
       span_too_many_days: 'Súťaž nemôže trvať viac ako %{max_days} dní.'
       #original_hash: cdcd288
@@ -1942,7 +1971,8 @@ sk:
       national_records: História Národných Rekordov
   posts:
     #original_hash: 2a7da42
-    confirm_delete_post: 'Ste si istí, že chcete vymazať tento post? Táto akcia je nevrátiteľná.'
+    confirm_delete_post: 'Ste si istí, že chcete vymazať tento post? Táto akcia je
+      nevrátiteľná.'
     #original_hash: 3dcbf6d
     announcement_info_html: 'Ohlásil %{author_name} o %{date_time}'
   contacts:
@@ -2065,7 +2095,8 @@ sk:
             Organizačné Pokyny WCA</a> pre viac informácii.
       '6':
         #original_hash: 8005a61
-        title: Aký účel majú WCA účty? Aký je rozdiel medzi WCA účtom a WCA profilom?
+        title: Aký účel majú WCA účty? Aký je rozdiel medzi WCA účtom a WCA 
+          profilom?
         content:
           #original_hash: 57a3767
           '1': >-
@@ -2155,7 +2186,8 @@ sk:
             3h</a>.
       regulations3:
         #original_hash: c7460a5
-        title: Stratil som stredné viečko z môjho hlavolamu. Môžem ho stále používať?
+        title: Stratil som stredné viečko z môjho hlavolamu. Môžem ho stále 
+          používať?
         content:
           #original_hash: 0d76323
           '1': >-
@@ -2224,7 +2256,8 @@ sk:
         #original_hash: 67be768
         name: Výsledkový tím WCA
         #original_hash: 439ffae
-        description: Tento tím je zodpovedný za spravovanie všetkých výsledkov zo súťaží.
+        description: Tento tím je zodpovedný za spravovanie všetkých výsledkov 
+          zo súťaží.
       wst:
         #original_hash: a14bc62
         name: Softvérový tím WCA
@@ -2324,7 +2357,8 @@ sk:
       title: Požiadavky pre Regionálne Organizácie WCA
       list:
         #original_hash: 22a9f26
-        '1': Aktívne organizovanie alebo podpora súťaží WCA v regióne organizácie
+        '1': Aktívne organizovanie alebo podpora súťaží WCA v regióne 
+          organizácie
         #original_hash: 8c5a7fe
         '2': >-
           Aktívne prispievanie do Kontinentálnych Súťaží WCA, ktoré sa konajú v
