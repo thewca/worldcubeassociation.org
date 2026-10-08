@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -35,24 +34,16 @@ const TabCompetitors: React.FC<CompetitorData> = ({
     data: registrationsQuery,
     isPending,
     isError,
-  } = api.useQuery(
-    "get",
-    "/v1/competitions/{competitionId}/registrations",
-    {
-      params: {
-        path: {
-          competitionId: id,
-        },
+  } = api.useQuery("get", "/v1/competitions/{competitionId}/registrations", {
+    params: {
+      path: {
+        competitionId: id,
       },
     },
-  );
+  });
 
   if (isError) {
-    return (
-      <Text>
-        {t("competitions.registration_v2.errors.-1001")}
-      </Text>
-    );
+    return <Text>{t("competitions.registration_v2.errors.-1001")}</Text>;
   }
 
   if (isPending) {
@@ -62,16 +53,14 @@ const TabCompetitors: React.FC<CompetitorData> = ({
   // Registrations for the selected event
   const selectedRegistrations = psychSheetEvent
     ? registrationsQuery.filter((registration) =>
-        registration.competing.event_ids.includes(
-          psychSheetEvent,
-        ),
+        registration.competing.event_ids.includes(psychSheetEvent),
       )
     : registrationsQuery;
 
   const totalCount = selectedRegistrations.length;
 
-  const returnerCount = selectedRegistrations.filter(
-    (registration) => Boolean(registration.user.wca_id),
+  const returnerCount = selectedRegistrations.filter((registration) =>
+    Boolean(registration.user.wca_id),
   ).length;
 
   const newcomerCount = totalCount - returnerCount;
@@ -93,21 +82,17 @@ const TabCompetitors: React.FC<CompetitorData> = ({
           mb={2}
           p={3}
         >
-          <Text fontWeight="semibold">
-            {summaryTitle}
-          </Text>
+          <Text fontWeight="semibold">{summaryTitle}</Text>
 
           <Text>
-            {totalCount} participants = {returnerCount}{" "}
-            returners + {newcomerCount} newcomers
+            {totalCount} participants = {returnerCount} returners +{" "}
+            {newcomerCount} newcomers
           </Text>
         </Box>
 
         {canAddOnTheSpot && (
           <Button asChild alignSelf="flex-end" mb={2}>
-            <RailsLink
-              href={`/competitions/${id}/registrations/add`}
-            >
+            <RailsLink href={`/competitions/${id}/registrations/add`}>
               Add on the spot registration
             </RailsLink>
           </Button>
@@ -116,9 +101,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
         <Card.Title>
           <FormEventSelector
             title="Events"
-            selectedEvents={
-              psychSheetEvent ? [psychSheetEvent] : []
-            }
+            selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
             eventList={eventIds}
             onEventClick={setPsychSheetEvent}
             onClearClick={
