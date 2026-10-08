@@ -394,6 +394,7 @@ th:
       unit_seconds: วินาที
       #original_hash: 9d86b0d
       unit_moves: ครั้ง
+    back: ย้อนกลับ
   oauth:
     applications:
       #original_hash: 0c4ea38
@@ -1069,6 +1070,9 @@ th:
           #original_hash: c36d556
           disabled_failed: ไม่สามารถปิดการทำงานของ 2FA ได้ 
             กรุณาดูข้อผิดพลาดด้านล่าง
+        redesign_notice: คุณกำลังดูหน้าเข้าสู่ระบบแบบใหม่ 
+          ซึ่งจะแทนที่แบบเก่าภายในปีนี้
+        use_classic: เปลี่ยนกลับไปเป็นหน้าแบบเก่า
       destroy_other:
         #original_hash: a768ea6
         success: ทำการออกจากระบบที่อุปกรณ์อื่นสำเร็จ
@@ -1090,6 +1094,10 @@ th:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: กรุณายืนยัน email ของคุณ
+    registrations:
+      new:
+        redesign_notice: คุณกำลังอยู่ที่หน้าเข้าสู่ระบบแบบใหม่ 
+          ซึ่งจะแทนที่แบบเก่าภายในปีนี้
   wca:
     errors:
       messages:
@@ -1162,11 +1170,9 @@ th:
         WCA ID ที่คุณใช้แข่งขัน
       #original_hash: ef8243e
       welcome_html: >-
-        ยินดีต้อนรับ! ก่อนที่คุณจะสามารถแข่งขันในการแข่งขัน WCA ครั้งแรกของคุณ
-        เราต้องการข้อมูลเพิ่มเติมบางอย่างสำหรับการเก็บบันทึกไว้
-        โปรดทราบว่าวันเกิดของคุณจะไม่ถูกเปิดเผยโดยไม่ได้รับอนุญาตจากคุณ
-        <br/><br/>ถ้าคุณเข้าสู่ระบบแทนผู้อื่น
-        กรุณากรอกข้อมูลของ<strong>ผู้เข้าแข่งขัน</strong>
+        ยินดีต้อนรับ! ก่อนที่คุณจะสามารถแข่งขันในการแข่งขัน WCA ครั้งแรกของคุณ เราต้องการข้อมูลเพิ่มเติมบางอย่างสำหรับการเก็บบันทึกไว้
+        <br/><br/>ถ้าคุณเข้าสู่ระบบแทนผู้อื่น กรุณากรอกข้อมูลของ<strong>ผู้เข้าแข่งขัน</strong>
+      dob_privacy: ข้อมูลเหล่านี้จะไม่เปิดเผยที่ไหนโดยที่คุณไม่อนุญาติ
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1691,6 +1697,11 @@ th:
         และส่งเสริมสภาพแวดล้อมการแข่งขันที่สนุกสนานและยุติธรรมสำหรับทุกคน
       #original_hash: 65c84ec
       button: เรียนรู้เกี่ยวกับการสนับสนุน WCA
+    become_delegate:
+      title: การเป็น Delegate
+      text: ร่วมสนับสนุนการจัดการแข่งขันที่ยุติธรรมและมีประสิทธิภาพในชุมชน 
+        speedcubing ในพื้นที่ของคุณ ด้วยการสมัครเป็น Trainee Delegate
+      link_title: สมัครตอนนี้
   users:
     update_locale:
       #original_hash: 4cde9bc
@@ -2083,6 +2094,7 @@ th:
         href="%{dob_form_path}">แบบฟอร์มเฉพาะนี้</a>
       #original_hash: 92aa857
       unknown_wca_id_html: 'ไม่มี WCA ID %{link_id}'
+      search_for_delegate: ค้นหา Delegate
   user_roles:
     email:
       role_metadata:
@@ -2616,8 +2628,7 @@ th:
         เพื่อดูผลการแข่งขัน
       #original_hash: 8eeeb44
       in_progress_at_wca_live_html: >-
-        การแข่งขันนี้กำลังแข่งขันอยู่ คุณสามารถตรวจสอบผลการแข่งขันได้<a
-        href='%{link_here}'>ที่นี่</a>!
+        การแข่งขันนี้กำลังแข่งขันอยู่ คุณสามารถตรวจสอบผลการแข่งขันได้<a href='%{link_here}'>here</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 
         ชั่วโมง
@@ -2666,6 +2677,7 @@ th:
       spots_left:
         other: เหลืออีก %{count} คน
       no_spots_left: ผู้สมัครเต็มแล้ว
+      provisional_live_results: 'ในระหว่างนี้ คุณสามารถดูผลเบื้องต้นได้ที่นี่:'
     live:
       #original_hash: 10d1a3c
       title: ผลการแข่งขัน
@@ -2811,6 +2823,9 @@ th:
           in_batch: >-
             ไม่สามารถยกเลิกผู้เข้าแข่งขันที่มีผลการแข่งขันอยู่ใน Batch
             ที่ยังไม่ได้ส่ง
+          scoresheet_warning: 
+            ตรวจสอบให้แน่ใจว่าจะถอนชื่อผู้เข้าแข่งขันออกก็ต่อเมื่อคุณถือใบลงคะแนนที่ยังไม่ได้กรอกข้อมูลอยู่ในมือแล้วเท่านั้น
+            เพราะคุณจะไม่สามารถเพิ่มชื่อผู้เข้าแข่งขันกลับเข้าไปในรอบที่ปิดไปแล้วได้
         add_competitor:
           #original_hash: 9dcb50d
           single_round: เพิ่มผู้เข้าแข่งขันในรอบ
@@ -2824,6 +2839,7 @@ th:
             และทางการแข่งขันไม่อนุญาตให้เปลี่ยนแปลงประเภทการแข่งขันอีกต่อไป
             การเพิ่มผู้เข้าแข่งขันรายนี้ยังคงทำได้
             แต่โปรดตรวจสอบให้แน่ใจว่าเป็นสิ่งที่ตั้งใจไว้
+          round_closed: คุณไม่สามารถเพิ่มผู้เข้าแข่งขันลงในรอบที่ปิดไปแล้วได้
       results:
         #original_hash: 4705687
         competitor: ผู้เข้าแข่งขัน
@@ -3084,6 +3100,7 @@ th:
       is_bookmarked: คุณได้บุ๊คมาร์คการแข่งขันนี้แล้ว
       #original_hash: 74598a7
       number_of_bookmarks: จำนวนครั้งที่ถูกบุ๊คมาร์ค
+      waiting_list_size: จำนวนรายชื่อใน Waiting list
     index:
       #original_hash: db98a68
       title: การแข่งขัน
@@ -3248,6 +3265,10 @@ th:
         เพราะทุกคนต่างร่วมมือกันเพื่อให้การแข่งขันดำเนินไปได้อย่างราบรื่น</p>
         <p>ใช้เครื่องมือด้านล่างนี้เพื่อค้นหาการแข่งขันที่จัดขึ้นใกล้คุณ
         แล้วเริ่มต้นเส้นทางแห่งการเล่นรูบิกของคุณได้เลย!</p>
+      location_sign_in_required: ลงชื่อเข้าใช้เพื่อค้นหาที่อยู่
+      location_not_found: ไม่พบตำแหน่งสำหรับที่อยู่นี้
+      location_search_failed: การค้นหาที่อยู่ล้มเหลว 
+        โปรดลองใหม่อีกครั้งในอีกหนึ่งนาที
     my_competitions_table:
       #original_hash: 5301648
       edit: แก้ไข
@@ -6312,3 +6333,94 @@ th:
       actioner: Actioner
       #original_hash: bcdf8d3
       requester: Requester
+  trainee_delegate_application:
+    title: ใบสมัคร Trainee Delegate
+    introduction: แบบฟอร์มนี้สำหรับนักแข่งรูบิกที่ลงทะเบียนการสมัครเป็น Trainee 
+      Delegate โดยใบสมัครของคุณจะถูกส่งไปยัง Delegate 
+      ที่รับผิดชอบภูมิภาคที่คุณเลือกไว้
+    success_title: ส่งใบสมัครแล้ว
+    success: ส่งใบสมัครของคุณเรียบร้อยแล้ว 
+      และมีการส่งสำเนาไปยังอีเมลที่ผูกกับบัญชี WCA ของคุณ
+    eligibility:
+      title: คุณยังไม่สามารถส่งใบสมัครนี้ได้
+      missing_wca_id: บัญชี WCA ของคุณต้องเชื่อมโยงกับ WCA ID
+      missing_date_of_birth: บัญชี WCA 
+        ของคุณต้องมีข้อมูลวันเกิดที่ผ่านการยืนยันแล้ว
+      underage: ผู้สมัครต้องมีอายุอย่างน้อย %{minimum_age} ปี
+      claim_wca_id: รับ WCA ID ของคุณ
+      edit_profile: ขอปรับปรุงข้อมูลโปรไฟล์
+    errors:
+      invalid_region: เลือกภูมิภาค Delegate ที่ถูกต้องและใช้งานได้
+      missing_reviewer: ในขณะนี้ 
+        พื้นที่ที่เลือกยังไม่มีผู้แทนระดับภูมิภาคหรือผู้แทนอาวุโสที่จะสามารถรับใบสมัครได้
+      recommender_required: เลือกผู้แทนที่ให้การรับรองอย่างน้อยหนึ่งคน
+      invalid_recommender: Delegate 
+        ที่ได้รับการคัดเลือกเพื่อเสนอชื่อหนึ่งคนหรือมากกว่านั้น 
+        ไม่มีคุณสมบัติเหมาะสมสำหรับภูมิภาคที่เลือกไว้อีกต่อไป
+      spoken_delegate_required: เลือก Junior Delegate หรือ Full Delegate 
+        อย่างน้อยหนึ่งคนที่คุณได้พูดคุยด้วย
+      invalid_spoken_delegate: Delegate 
+        ที่ได้รับเลือกหนึ่งคนหรือมากกว่าที่คุณได้พูดคุยด้วยนั้น 
+        ไม่ได้มีสถานะเป็น Junior Delegate หรือ Full Delegate 
+        ในภูมิภาคที่เลือกไว้อีกต่อไป
+      declarations_required: ต้องรับทราบคำประกาศทั้งหมด
+      business_involvement_required: 
+        โปรดระบุว่าคุณมีส่วนเกี่ยวข้องกับธุรกิจที่เกี่ยวกับรูบิกหรือไม่
+      business_involvement_explanation_required: 
+        จงอธิบายถึงบทบาทหรือส่วนร่วมของคุณในธุรกิจที่เกี่ยวข้องกับรูบิก
+    form:
+      declaration_and_basic_information: คำประกาศและข้อมูลพื้นฐาน
+      name: ชื่อ
+      wca_id: WCA ID
+      email: Email
+      age: อายุ
+      competition_count: จำนวนการแข่งขัน
+      region_and_references: ภูมิภาคและการอ้างอิง
+      region: ปัจจุบันคุณอาศัยอยู่ในเขต Delegate ใด
+      region_placeholder: เลือกภูมิภาคของคุณ
+      subregion: ปัจจุบันคุณอาศัยอยู่ในเขตย่อย Delegate เขตใด
+      subregion_placeholder: เลือกภูมิภาคย่อยของคุณ
+      reviewing_delegate: ผู้ตรวจสอบ Delegate
+      spoken_delegates: คุณได้พูดคุยกับ Junior Delegate หรือFull Delegate 
+        คนใดบ้างเกี่ยวกับการเป็น Trainee Delegate?
+      recommenders: มี Junior Delegate หรือ Full Delegate 
+        ท่านใดในภูมิภาคของคุณที่ตกลงจะเสนอชื่อคุณเป็นผู้สมัครสำหรับตำแหน่ง 
+        Trainee Delegate?
+      delegates_placeholder: เลือก Delegate อย่างน้อยหนึ่งคน
+      experience_and_motivation: ประสบการณ์และแรงจูงใจ
+      introduction: แนะนำตัวสั้นๆ โดยใช้ประโยคจำนวน 2 ถึง 4 ประโยค
+      competition_contributions: 
+        โปรดสรุปรายละเอียดว่าคุณได้มีส่วนช่วยสนับสนุนการแข่งขันในท้องถิ่นของคุณอย่างไรบ้าง
+        นอกเหนือไปจากสิ่งที่คาดหวังให้ผู้เข้าแข่งขันทุกคนพึงปฏิบัติ
+      volunteer_history: หากคุณเคยดำรงตำแหน่งอาสาสมัครของ WCA 
+        โปรดระบุลำดับเวลาไว้ที่นี่ (ไม่บังคับ)
+      role_history_warning: 
+        ประวัติบทบาทการทำงานบนเว็บไซต์นี้จะถูกรวมไว้ในใบสมัครของคุณโดยอัตโนมัติ 
+        เนื่องจากข้อมูลบทบาทในอดีตบางส่วนอาจไม่ได้ถูกบันทึกไว้อย่างครบถ้วน 
+        โปรดระบุตำแหน่งงานที่ขาดหายไปหรือแก้ไขข้อมูลให้ถูกต้องในส่วนด้านล่างนี้
+      motivation: โปรดอธิบายเหตุผลหรือแรงจูงใจในการสมัครเข้าร่วมเป็น Trainee 
+        Delegate โดยสังเขป ภายใน 2 ถึง 4 ประโยค
+      relevant_skills: โปรดระบุรายการทักษะและประสบการณ์ที่สำคัญที่สุดที่คุณมี 
+        ซึ่งจะช่วยให้คุณประสบความสำเร็จในบทบาท Trainee Delegate
+      declaration_understands_application: 
+        ข้าพเจ้าเข้าใจว่าแบบฟอร์มนี้สำหรับนักแข่งรูบิกที่ลงทะเบียนไว้แล้ว 
+        ซึ่งต้องการสมัครเป็น Trainee Delegate
+      declaration_has_delegate_support: ข้าพเจ้าขอยืนยันว่าข้าพเจ้าได้หารือกับ 
+        Delegate ที่มีคุณสมบัติเหมาะสมในเขตพื้นที่ของข้าพเจ้า 
+        ซึ่งให้การสนับสนุนการลงสมัครของข้าพเจ้าแล้ว
+      declaration_proficient_in_english: 
+        ข้าพเจ้ายืนยันว่าข้าพเจ้ามีความสามารถในการอ่านและเขียนภาษาอังกฤษได้เป็นอย่างดี
+      declaration_read_regulations_html: ข้าพเจ้ารับทราบว่าข้าพเจ้าได้อ่าน <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">กติกาของ 
+        WCA</a> แล้ว
+      regulations_note: 'หมายเหตุ: ไม่ได้คาดหวังให้ Delegate ทราบรายละเอียดของกฎระเบียบทุกข้อ
+        แต่คาดหวังให้มีความรู้พื้นฐานและทำการค้นหาข้อมูลเพิ่มเติมเมื่อมีความไม่แน่ใจ'
+      cubing_business_involvement: 
+        คุณมีส่วนเกี่ยวข้องกับธุรกิจที่เกี่ยวกับรูบิกหรือไม่?
+      cubing_business_involvement_details: 
+        กรุณาอธิบายถึงบทบาทหรือความเกี่ยวข้องของคุณในธุรกิจที่เกี่ยวกับรูบิก
+      "yes": ใช่
+      "no": ไม่
+      submit: ส่งใบสมัคร
+      present: ปัจจุบัน
+      board_member: สมาชิกบอร์ด
