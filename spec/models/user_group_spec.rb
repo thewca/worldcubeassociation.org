@@ -151,6 +151,14 @@ RSpec.describe UserGroup do
     expect(india_region.root_group?).to be(false)
   end
 
+  it "root_group returns itself for root group" do
+    expect(asia_region.root_group).to eq(asia_region)
+  end
+
+  it "root_group returns the top-level ancestor for nested group" do
+    expect(india_region.root_group).to eq(asia_region)
+  end
+
   context "Monthly digest changes" do
     let(:last_month) { 1.month.ago }
 

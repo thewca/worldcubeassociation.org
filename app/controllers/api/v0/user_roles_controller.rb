@@ -36,13 +36,18 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Returns a list of roles based on the parameters.
   def index
     roles = pre_filtered_user_roles
+    methods = []
+    if params[:groupType] == UserGroup.group_types[:delegate_regions]
+      roles = roles.preload(group: :parent_group, user: { roles: :metadata })
+      methods = %i[senior_region junior_delegate_promotion_date]
+    end
 
     # Filter & Sort roles.
     roles = UserRole.filter_roles(roles, current_user, params)
     roles = UserRole.sort_roles(roles, params[:sort])
 
     # Paginating the list by sending only first 100 elements unless mentioned in the API.
-    paginate json: roles, include: {
+    paginate json: roles, methods: methods, include: {
       user: { exclude_deprecated: true, include_email: true },
       group: {},
       metadata: {},
