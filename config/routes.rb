@@ -174,6 +174,7 @@ Rails.application.routes.draw do
     resources :scrambles, except: %i[index new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
     get 'sanity-check' => "admin#sanity_check", as: :sanity_check
+    get 'migration-dashboard' => "admin#migration_dashboard", as: :migration_dashboard
     get 'run-sanity-check' => "admin#run_sanity_check", as: :sanity_check_run
     get 'add-exclusion' => "admin#add_exclusion", as: :add_exclusion
   end
