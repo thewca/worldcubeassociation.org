@@ -16,6 +16,11 @@ echo "🛡️ Auditing physical database against build-time schema manifest..."
 #   Installing a new plugin, adding a new collection or a new global all require
 #   running a new Docker build (and deployment), which generates a new manifest.
 MANIFEST_FILE="./payload-schema-manifest.json"
+
+# Need to pull the credentials for being able to access the manifest in the first place
+vault login -method=aws role="$TASK_ROLE" region=us-west-2
+PAYLOAD_MANIFEST_PASSWORD=$(vault read -field=data -format=json kv/data/"$VAULT_APPLICATION"/PAYLOAD_MANIFEST_PASSWORD | jq -r '.value')
+
 wget --header "x-manifest-secret: $PAYLOAD_MANIFEST_PASSWORD" -O "$MANIFEST_FILE" "localhost:3000/api/payload/schema-manifest"
 
 PHYSICAL_COLLECTIONS=$(jq -c '.physical' "$MANIFEST_FILE")
