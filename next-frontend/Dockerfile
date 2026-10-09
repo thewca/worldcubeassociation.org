@@ -15,7 +15,7 @@ RUN apk add --no-cache libc6-compat
 RUN apk add g++ make py3-pip
 
 RUN apk add --update --virtual .deps --no-cache unzip && \
-     wget https://releases.hashicorp.com/vault/1.19.5/vault_1.19.5_linux_amd64.zip && \
+    wget https://releases.hashicorp.com/vault/1.19.5/vault_1.19.5_linux_amd64.zip && \
     unzip vault_1.19.5_linux_amd64.zip -d /tmp && \
     mv /tmp/vault /usr/local/bin/vault && \
     rm -f vault_1.19.5_linux_amd64.zip && \
@@ -92,8 +92,7 @@ COPY --from=builder /app/export-dump.sh /app/export-dump.sh
 # mongodb-tools = the `mongodump` command to create Payload CMS database copies
 # aws-cli = The S3 sync command to upload the dump to our internal storage
 # zip = Compressing the dump(s) before upload
-# curl = Being able to fetch the Payload manifest from our own API
-RUN apk add --no-cache jq mongodb-tools aws-cli zip curl
+RUN apk add --no-cache jq mongodb-tools aws-cli zip
 
 USER nextjs
 
