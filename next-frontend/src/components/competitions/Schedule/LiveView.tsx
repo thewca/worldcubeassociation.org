@@ -38,6 +38,7 @@ import _ from "lodash";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 import { currentTimeZone } from "@/lib/wca/data/timezones";
+import type { LiveRoundAdmin } from "@/types/live";
 import {
   cutoffToString,
   parseActivityCode,
@@ -109,12 +110,14 @@ function LiveSchedule({
 
   const roundsByWcifId = _.keyBy(rounds, "id");
 
-  const wcifEvents = _.values(
-    _.groupBy(rounds, (round) => parseActivityCode(round.id).eventId),
-  ).map((eventRounds) => ({
+  const wcifEvents: WcifEvent[] = _.values(
+    _.groupBy(rounds, (round: LiveRoundAdmin) =>
+      parseActivityCode(round.id).eventId,
+    ),
+  ).map((eventRounds: LiveRoundAdmin[]) => ({
     id: parseActivityCode(eventRounds[0].id).eventId,
     rounds: eventRounds,
-  })) as unknown as WcifEvent[];
+  }));
 
   return (
     <VStack align="left">
