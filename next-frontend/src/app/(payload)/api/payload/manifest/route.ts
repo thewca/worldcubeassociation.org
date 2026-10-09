@@ -4,6 +4,15 @@ import config, { wcaConfig } from "@payload-config";
 import { pluralize } from "mongoose";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
+  const authHeader = req.headers.get("x-manifest-secret");
+
+  if (
+    process.env.NODE_ENV === "production" &&
+    authHeader !== process.env.PAYLOAD_MANIFEST_PASSWORD
+  ) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const payload = await getPayload({ config });
 
   // Fetch all collections physically present in MongoDB.
