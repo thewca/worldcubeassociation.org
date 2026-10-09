@@ -10,6 +10,7 @@ import {
   Link,
   Tabs,
   Button,
+  Text,
   VStack,
   Select,
   createListCollection,
@@ -37,6 +38,12 @@ import _ from "lodash";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 import { currentTimeZone } from "@/lib/wca/data/timezones";
+import {
+  cutoffToString,
+  parseActivityCode,
+  timeLimitToString,
+  type WcifEvent,
+} from "@/lib/wca/wcif/rounds";
 
 interface LiveViewProps {
   timeZones: string[];
@@ -101,6 +108,13 @@ function LiveSchedule({
     lastDate;
 
   const roundsByWcifId = _.keyBy(rounds, "id");
+
+  const wcifEvents = _.values(
+    _.groupBy(rounds, (round) => parseActivityCode(round.id).eventId),
+  ).map((eventRounds) => ({
+    id: parseActivityCode(eventRounds[0].id).eventId,
+    rounds: eventRounds,
+  })) as unknown as WcifEvent[];
 
   return (
     <VStack align="left">
@@ -177,6 +191,8 @@ function LiveSchedule({
                   const roundState = roundsByWcifId[roundId].state;
                   const isOpen = ["open", "locked"].includes(roundState);
 
+                  const { cutoff, timeLimit } = roundsByWcifId[roundId];
+
                   return (
                     <Card.Root key={activity.id} rounded="md">
                       <Card.Body asChild alignItems="baseline">
@@ -208,8 +224,22 @@ function LiveSchedule({
                         </Button>
                       </Card.Body>
                       <Card.Footer>
-                        {getSimpleTimeString(activity.startTime, timeZone)} -{" "}
-                        {getSimpleTimeString(activity.endTime, timeZone)}
+                        <VStack align="start" gap={0.5}>
+                          <Text>
+                            {getSimpleTimeString(activity.startTime, timeZone)}{" "}
+                            - {getSimpleTimeString(activity.endTime, timeZone)}
+                          </Text>
+                          <Text textStyle="sm" color="fg.muted">
+                            {t("competitions.events.time_limit")}:{" "}
+                            {timeLimitToString(t, timeLimit, eventId, wcifEvents)}
+                          </Text>
+                          {cutoff && (
+                            <Text textStyle="sm" color="fg.muted">
+                              {t("competitions.events.cutoff")}:{" "}
+                              {cutoffToString(t, cutoff, eventId)}
+                            </Text>
+                          )}
+                        </VStack>
                       </Card.Footer>
                     </Card.Root>
                   );
