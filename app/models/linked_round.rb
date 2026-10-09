@@ -75,21 +75,22 @@ class LinkedRound < ApplicationRecord
     rounds.all?(&:score_taking_done?)
   end
 
+  # When new Regulations regarding combined dual round competitor count are launched a Dual Round sits at the position of its last round
+  # TODO: Keeping this so it can be used then
   def total_competitors
     live_results.distinct.count(:registration_id)
   end
 
-  # For 9m purposes, a Dual Round sits at the position of its last round
   delegate :number, to: :last_round_in_link
 
   # If you want to know the previous participation source before a linked round,
   # you have to ask the first of the linked rounds for its predecessor
   delegate :participation_source, to: :first_round_in_link
 
-  # For 9m purposes a LinkedRound counts as a single round sitting at the
-  #   position of its last round; its own source is always the CompetitionEvent.
+  # For 9m purposes every round in the link counts on its own,
+  #   so one sparsely attended round cannot hide behind the combined competitor count.
   def previous_rounds
-    [self, *participation_source.previous_rounds]
+    [*rounds, *participation_source.previous_rounds]
   end
 
   def live_podium
