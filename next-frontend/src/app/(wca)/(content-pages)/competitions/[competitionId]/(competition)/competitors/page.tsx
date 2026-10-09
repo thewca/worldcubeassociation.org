@@ -29,6 +29,7 @@ export default async function Competitors({
       id={competitionId}
       eventIds={competitionInfo.event_ids}
       isLive={isLive}
+      competitionInfo={competitionInfo}
       canAddOnTheSpot={
         isLive &&
         !!permissions &&
