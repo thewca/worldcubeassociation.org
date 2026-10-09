@@ -16,6 +16,7 @@ echo "🛡️ Auditing physical database against build-time schema manifest..."
 #   Installing a new plugin, adding a new collection or a new global all require
 #   running a new Docker build (and deployment), which generates a new manifest.
 MANIFEST_FILE="./payload-schema-manifest.json"
+curl -o "$MANIFEST_FILE" "localhost:3000/api/payload/manifest"
 
 PHYSICAL_COLLECTIONS=$(jq -c '.physical' "$MANIFEST_FILE")
 PAYLOAD_COLLECTIONS=$(jq -c '.payload' "$MANIFEST_FILE")

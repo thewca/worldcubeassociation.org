@@ -92,7 +92,8 @@ COPY --from=builder /app/export-dump.sh /app/export-dump.sh
 # mongodb-tools = the `mongodump` command to create Payload CMS database copies
 # aws-cli = The S3 sync command to upload the dump to our internal storage
 # zip = Compressing the dump(s) before upload
-RUN apk add --no-cache jq mongodb-tools aws-cli zip
+# curl = Being able to fetch the Payload manifest from our own API
+RUN apk add --no-cache jq mongodb-tools aws-cli zip curl
 
 USER nextjs
 

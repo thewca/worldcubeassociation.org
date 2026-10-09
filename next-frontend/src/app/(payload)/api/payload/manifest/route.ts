@@ -1,12 +1,9 @@
-import config, { wcaConfig } from "@payload-config";
+import { NextRequest, NextResponse } from "next/server";
 import { getPayload } from "payload";
+import config, { wcaConfig } from "@payload-config";
 import { pluralize } from "mongoose";
 
-// this mutes an annoying Payload warning about email providers, that would otherwise
-//   end up in the console.log STDOUT stream
-process.env.NEXT_PHASE = "phase-production-build";
-
-async function dumpManifest() {
+export async function GET(req: NextRequest): Promise<NextResponse> {
   const payload = await getPayload({ config });
 
   // Fetch all collections physically present in MongoDB.
@@ -55,11 +52,5 @@ async function dumpManifest() {
     wca: userDeclaredSlugs,
   };
 
-  console.log(JSON.stringify(payloadManifest));
-  process.exit(0);
+  return NextResponse.json(payloadManifest, { status: 200 });
 }
-
-dumpManifest().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
