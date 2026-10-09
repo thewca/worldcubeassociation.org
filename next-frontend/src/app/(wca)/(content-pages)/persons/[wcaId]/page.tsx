@@ -13,6 +13,7 @@ import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import { StaffColor } from "@/components/RoleBadge";
 import _ from "lodash";
 import { FULL_EVENT_IDS } from "@/lib/wca/data/events";
+import { teamDisplayAbbreviation } from "@/lib/wca/roles/teamDisplayAbbreviation";
 import { Metadata } from "next";
 
 type TitleProps = {
@@ -54,7 +55,7 @@ export default async function PersonOverview({
     teamText: string;
     staffColor: StaffColor;
   }[] = personDetails.person.teams.map((team) => {
-    const teamText = team.friendly_id.toUpperCase();
+    const teamText = teamDisplayAbbreviation(team.friendly_id);
 
     const roleMap = [
       { condition: teamText === "BOARD", teamRole: "", staffColor: "black" },
