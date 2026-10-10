@@ -1157,6 +1157,7 @@ fr:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Merci de confirmer votre nouvelle adresse e-mail
+    registrations: {}
   wca:
     errors:
       messages:
@@ -2454,8 +2455,6 @@ fr:
         one: 1 région
         many: '%{count} régions'
         other: '%{count} régions'
-      export_csv: Exporter en CSV
-      #original_hash: 84add5b
       email: Adresse e-mail
       #original_hash: e86b1e1
       non_competing: Inscriptions de non compétiteurs
@@ -3518,8 +3517,6 @@ fr:
       registration_key: 'Clef d''inscription :'
       registration_status:
         #original_hash: 10b28a8
-        full: Complet
-        #original_hash: cf9b770
         open: Ouvert
         #original_hash: 44bb7df
         not_open: Non ouvert
@@ -4320,10 +4317,6 @@ fr:
         #original_hash: 65bbb07
         no_changes: Aucun changement
         #original_hash: be4e8e2
-        email_send: Envoyer l'e-mail
-        #original_hash: b4bac52
-        email_copy: Copier les adresses e-mails
-        #original_hash: b83b663
         email_message: 'Copié dans le presse-papiers. N’oubliez pas d’utiliser le
           cci: !'
         #original_hash: beedd53

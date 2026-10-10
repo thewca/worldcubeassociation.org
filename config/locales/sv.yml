@@ -1098,6 +1098,7 @@ sv:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Bekräfta din nya e-postadress
+    registrations: {}
   wca:
     errors:
       messages:
@@ -3589,6 +3590,7 @@ sv:
               'false': >-
                 Tävlande MÅSTE vara kvalificerade för att anmäla sig till en
                 gren
+        website: {}
     registration_v2:
       auto_accept:
         #original_hash: eaf9960
@@ -4404,6 +4406,9 @@ sv:
       add_series: Addera till tävlingsserie
       #original_hash: be6edcd
       remove_series: Ta bort från tävlingsserie
+    live:
+      admin: {}
+      connection: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -6052,3 +6057,4 @@ sv:
     name: Blandningsset %{letter_code}
     group: Grupp %{number}
     attempt: Försök %{number}
+  trainee_delegate_application: {}

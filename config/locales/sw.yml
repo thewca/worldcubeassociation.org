@@ -670,6 +670,7 @@ sw:
     mailer:
       confirmation_instructions:
         subject: Tafadhali thibitisha anwani yako mpya ya barua pepe
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1278,3 +1279,76 @@ sw:
       wca_id_no_gender_html: Hatuna jinsia iliyorekodiwa kwa Kitambulisho hiki 
         cha WCA. Tafadhali wasiliana na <a href='%{wrt_contact_path}' 
         target='_blank'>Timu ya Matokeo ya WCA</a> ili kusuluhisha hili.
+    successes: {}
+  tickets: {}
+  competitions:
+    index:
+      tooltips: {}
+    competition_form:
+      choices:
+        registration: {}
+        website: {}
+        event_restrictions:
+          qualification_results: {}
+        competitor_limit: {}
+    registration_v2:
+      register:
+        panel: {}
+    live:
+      admin: {}
+      connection: {}
+    nav: {}
+    results_table: {}
+  payments:
+    payment_setup:
+      account_details: {}
+    errors: {}
+  media_and_instagram: {}
+  database: {}
+  user_roles:
+    email: {}
+  registrations:
+    mailer: {}
+    refund_form: {}
+    payment_form: {}
+    import: {}
+    add: {}
+  incidents_log: {}
+  competition_tabs: {}
+  contacts: {}
+  faq:
+    answers:
+      '6': {}
+      'regulations4': {}
+      '1': {}
+      '2': {}
+      '3': {}
+      '4': {}
+      '5': {}
+      'results': {}
+      '7': {}
+      '8': {}
+      '9': {}
+      'regulations1': {}
+      'regulations2': {}
+      'regulations3': {}
+  about: {}
+  regional_organizations:
+    requirements: {}
+  score_tools:
+    tools: {}
+  validators: {}
+  trainee_delegate_application: {}
+  user_groups: {}
+  results:
+    selector_elements: {}
+  persons: {}
+  logo:
+    headings:
+      usage_guidelines:
+        color: {}
+  search_results:
+    index: {}
+  about_regulations: {}
+  media:
+    new: {}

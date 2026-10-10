@@ -1759,7 +1759,7 @@ pt:
         #original_hash: d484f70
         activate: >-
           Após a ativação, poderá entrar na sua conta no website da World Cube Association:
-          
+
         login_form: formulário de login
         #original_hash: 333999b
         addendum: >-
@@ -2345,8 +2345,6 @@ pt:
         one: '%{count} região'
         many: '%{count} regiões'
         other: '%{count} regiões'
-      export_csv: Exportar para CSV
-      #original_hash: 84add5b
       email: Email
       #original_hash: e86b1e1
       non_competing: Inscrições de não-competidores
@@ -3508,7 +3506,6 @@ pt:
           #original_hash: 87b7d5f
           uses_wca_registration: Gostaria de usar o site da WCA para registos
           #original_hash: ebe8c47
-          uses_wca_live: Irei usar WCA Live para registo de resultados
           scoretaking_software: Software utilizado para o registo dos resultados
         entry_fees:
           #original_hash: 28a6fbb
@@ -4060,10 +4057,6 @@ pt:
         #original_hash: 65bbb07
         no_changes: Não há alterações
         #original_hash: be4e8e2
-        email_send: Enviar Email
-        #original_hash: b4bac52
-        email_copy: Copiar Emails
-        #original_hash: b83b663
         email_message: Copiado para a área de transferência. Lembre-se de usar 
           bcc!
         #original_hash: beedd53

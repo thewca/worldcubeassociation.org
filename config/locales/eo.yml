@@ -1096,6 +1096,7 @@ eo:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Bonvolu konfirmi vian novan retpoŝtadreson
+    registrations: {}
   wca:
     errors:
       messages:
@@ -2285,8 +2286,6 @@ eo:
         one: 1 regiono
         other: '%{count} regionoj'
       #original_hash: 1feee0e
-      export_csv: Eksporti al CSV-dosiero
-      #original_hash: 84add5b
       email: Retpoŝti
       #original_hash: e86b1e1
       non_competing: Nekonkursantaj registriĝoj
@@ -2644,8 +2643,6 @@ eo:
       #original_hash: e205d73
       results_already_posted: La rezultoj jam estis poŝtitaj.
       #original_hash: 376f461
-      results_posted: Sukcese poŝtis la rezultoj!
-      #original_hash: afe3a23
       results_preview_alert: Vi rigardas rezultojn kiuj ankoraŭ ne estas 
         publikigitaj.
       #original_hash: 16dd227
@@ -3252,7 +3249,6 @@ eo:
           uses_wca_registration: Mi ŝatus uzi la retejon de la WCA por la 
             registriĝoj
           #original_hash: ebe8c47
-          uses_wca_live: Mi uzos WCA Live por eniri rezultojn
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Valuta kodo
@@ -3608,6 +3604,7 @@ eo:
               'false': >-
                 Konkursantoj DEVAS esti kvalifikitaj por registriĝi por
                 konkursero
+        website: {}
     registration_v2:
       auto_accept:
         #original_hash: eaf9960
@@ -3772,10 +3769,6 @@ eo:
         #original_hash: 65bbb07
         no_changes: Ne estas ŝanĝoj
         #original_hash: be4e8e2
-        email_send: Sendi retmesaĝon
-        #original_hash: b4bac52
-        email_copy: Kopii retmesaĝojn
-        #original_hash: b83b663
         email_message: Kopiita al tondujo. Memoru uzi BCC!
         #original_hash: beedd53
         move_to:
@@ -4194,8 +4187,6 @@ eo:
     #original_hash: 25e68c3
     cancel_confirm: Ĉu vi certas ke vi volas nuligi tiun konkurson?
     #original_hash: 01de5ee
-    post_results: Poŝti la rezultojn
-    #original_hash: b6513f1
     results_posted_by_html: 'Poŝtita de %{poster_name} la %{date_time}'
     #original_hash: a6b5efe
     cancel_mistake: Ĉu vi eraris?
@@ -4235,8 +4226,6 @@ eo:
         #original_hash: 83d204f
         regulation_link_text: 'Regulo %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'Gvidlinio %{number}'
-        #original_hash: b2a983a
         cumulative_time_limit: akumula tempolimo
         #original_hash: d47f11a
         cumulative_one_round_html: >-
@@ -4386,8 +4375,6 @@ eo:
         #original_hash: f3d6278
         submit_results: Sendi rezultojn
         #original_hash: e2d046b
-        match_scrambles: Sendi miksojn
-        #original_hash: 4c9f914
         delegate_report: Delegitraporto
         #original_hash: b233e77
         registration: Registriĝoj
@@ -4440,6 +4427,7 @@ eo:
         ongoing: tuja
       podiums:
         title: Podioj
+      connection: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -5136,7 +5124,6 @@ eo:
     #original_hash: 4f05e8f
     finances: Financoj
     #original_hash: d1b1406
-    vision_and_strategy: Vizio kaj Strategio
   education:
     #original_hash: 746e863
     title: Edukaj Risurcoj de la WCA
@@ -5909,10 +5896,6 @@ eo:
         rezulto(j)n aŭ ĝisdatigi la raŭndajn informojn en la paĝo "Administri
         konkurserojn" de la konkurso.
       #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] La rezultoj de %{person_name} estas malbone strukturitaj:
-        %{expected_format} estas atendita sed %{format} estis ricevita.
-      #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Almenaŭ unu rezulto de %{person_name} superas la
         tempolimon de la raŭndo, kiu estas %{time_limit} po provo. Ĉiuj provoj
@@ -5922,11 +5905,6 @@ eo:
         [%{round_ids}] La sumo de la rezultoj de %{person_name} superas la
         akumulan tempolimon, kiu estas %{time_limit}.
       #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Ne estas informo pri ĉestempo nek tempolimo por ĉi tiu
-        raŭndo. Oni preterpasis tiujn kontrolojn. Bonvolu ĝisdatigi la raŭndaj
-        informoj en la paĝo "Administri konkursejojn" de la konukurso.
-      #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] La tempolimo de ĉi tiu raŭndo estas nedifinita, oni
         preterpasis la tempolimajn kontrolojn. Tio estas normala nur por
@@ -5958,11 +5936,6 @@ eo:
         kondiĉo estis: %{condition}). Bonvolu ĝisdatigi la raŭndajn informojn en
         la paĝo "Administri konkurserojn".
       #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        La raŭndo %{round_id} estas en la rezultoj sed ĝi ne estis kreita en la
-        langeto pri konkurseroj. Bonvolu inkludi la raŭndajn informojn en la
-        paĝo "Administri konkurserojn" de la konkurso.
-      #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         La raŭndo %{round_id} havas 99 aŭ malpli da 99 konkursantoj sed havas
         pli ol du sekvaj raŭndoj. La regulo 9m1 malpermesas tion.
@@ -6011,10 +5984,6 @@ eo:
         konkurseran langeton. Se ĉi tiu raŭndo ne okazis, forigu la raŭndon en
         la paĝo "Administri konkurserojn" de la konkurso.
       #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Neniu ĉestempo estis anoncita por '%{round_name}' sed oni trovis
-        ĉestempon en la rezultoj. Bonvolu ĝisdatigi la raŭndajn informojn en la
-        paĝo "Administri konkurserojn" de la konkurso.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -6030,11 +5999,6 @@ eo:
         Ĉi tiu konkurso ne havas ĉefan konkurseros. Bonvolu sciigi al la WRT ke
         tio ĝustas.
       #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Estas rezultoj de %{event_id} sed ĝi ne estas listigita kiel oficiala
-        konkursero. Bonvolu forigi la konkurseron el la rezultoj aŭ kontakti la
-        WCAT por peti aldonon de ĉi tiun konkurseron al la WCA-retejo.
-      #original_hash: fde208d
       missing_results_warning: >-
         Ne estas rezultoj de %{event_id} sed ĝi estas listigita kiel oficiala
         konkurseron. Se ĉi tiu konkursero okazis, bonvolu realŝuti vian JSON-n
@@ -6049,10 +6013,6 @@ eo:
         Mankantaj miksoj por la konkurso. Uzu "Scrambles Matcher" por aldoni
         miksojn.
       #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Tro multe da miksoj. Uzu "Scrambles Matcher" por malelekti
-        la neuzataj miksoj.
-      #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: mankantaj miksoj, oni trovis nur
         %{actual} anstataŭ %{expected}.
@@ -6077,3 +6037,5 @@ eo:
     name: Miksaro %{letter_code}
     group: Grupo %{number}
     attempt: Provo %{number}
+  trainee_delegate_application: {}
+  tickets: {}

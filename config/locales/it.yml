@@ -1146,6 +1146,7 @@ it:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Conferma il nuovo indirizzo email
+    registrations: {}
   wca:
     errors:
       messages:
@@ -2385,8 +2386,6 @@ it:
         one: Una nazione
         many: '%{count} nazioni'
         other:
-      export_csv: Esporta in CSV
-      #original_hash: 84add5b
       email: Email
       #original_hash: e86b1e1
       non_competing: Iscrizioni non-partecipanti
@@ -4114,10 +4113,6 @@ it:
         #original_hash: 65bbb07
         no_changes: Nessuna modifica
         #original_hash: be4e8e2
-        email_send: Invia email
-        #original_hash: b4bac52
-        email_copy: Copia email
-        #original_hash: b83b663
         email_message: Copiato negli appunti. Ricorda di scrivere i destinatari 
           in Ccn!
         #original_hash: beedd53
@@ -6578,3 +6573,4 @@ it:
       actioner: Esecutore
       #original_hash: bcdf8d3
       requester: Committente
+  trainee_delegate_application: {}

@@ -605,6 +605,7 @@ hy:
     mailer:
       confirmation_instructions:
         subject: Խնդրում ենք հաստատել ձեր նոր էլ․հասցեն
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1408,7 +1409,6 @@ hy:
       country_plural:
         one: 1 տարածաշրջան
         other: '%{count} տարածաշրջաններ'
-      export_csv: Էքսպորտ CSV-ով
       email: Էլ.հասցե
       non_competing: Չմասնակցող գրանցումներ
       not_paid: Չվճարված
@@ -1437,3 +1437,62 @@ hy:
     please_sign_in_past_html: '%{sign_in} որպեսզի ստուգեք ձեր գրանցման կարգավիճակը։
       Եթե դեռ չունեք WCA օգտահաշիվ, կարող եք այն ստեղծել %{here}, իսկ այս առաջնությանը
       չեք կարող գրանցվել։'
+    add: {}
+    refund_form: {}
+    payment_form: {}
+    import: {}
+  competitions:
+    live:
+      admin: {}
+      connection: {}
+    registration_v2:
+      list: {}
+      register:
+        panel: {}
+    nav: {}
+    competition_form:
+      choices:
+        competitor_limit: {}
+        website: {}
+        registration: {}
+        event_restrictions:
+          qualification_results: {}
+    results_table: {}
+  media:
+    new: {}
+  persons: {}
+  score_tools:
+    tools: {}
+  competition_tabs: {}
+  results:
+    selector_elements: {}
+  payments:
+    errors: {}
+    payment_setup: {}
+  posts: {}
+  contacts: {}
+  faq:
+    answers:
+      '1': {}
+      '2': {}
+      '4': {}
+      '5': {}
+      '7': {}
+      '8': {}
+      '9': {}
+      'regulations1': {}
+      'regulations4': {}
+      'regulations2': {}
+  delegates_page: {}
+  regional_organizations:
+    requirements: {}
+  logo:
+    headings:
+      usage_guidelines: {}
+  search_results: {}
+  about_regulations: {}
+  media_and_instagram: {}
+  merch: {}
+  database: {}
+  validators: {}
+  tickets: {}

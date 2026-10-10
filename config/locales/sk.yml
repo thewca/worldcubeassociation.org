@@ -492,6 +492,8 @@ sk:
         article: Artikel
         #original_hash: 82dabd0
         multimedia: Multimedia
+    user_roles:
+      status: {}
   simple_form:
     #original_hash: 5397e05
     'yes': Áno
@@ -706,6 +708,12 @@ sk:
         Nedostali ste potvrdzujúci email? Chodte na
         https://www.worldcubeassociation.org/users/confirmation/new a požiadajte
         si nový.
+    sessions:
+      new: {}
+    passwords: {}
+    registrations: {}
+    shared: {}
+    mailer: {}
   wca:
     errors:
       messages:
@@ -970,6 +978,7 @@ sk:
         '6': Avatar musí byť v správnej orientácii.
         #original_hash: 1a18831
         '7': Avatar nesmie obsahovať ofenzívny obsah (napr. ofenzívne gestá)
+      staff_avatar_guidelines: {}
     errors:
       #original_hash: 094b763
       not_found: nenájdené
@@ -1045,6 +1054,7 @@ sk:
         target='_blank'>WCA Výsledkový Tím</a>  pre riešenie problému.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} neexistuje.'
+    mailer: {}
   registrations:
     errors:
       #original_hash: 44ab952
@@ -1320,6 +1330,8 @@ sk:
     #original_hash: 67d8734
     preferred_events_populated_html: 'Vyplnili sme tu vaše preferované eventy, ktoré
       môžete pozmeniť %{link}.'
+    import: {}
+    add: {}
   competitions:
     messages:
       #original_hash: 7b80062
@@ -1558,19 +1570,16 @@ sk:
       add_championship: Pridať Šampionát
       labels:
         admin:
-          is_confirmed:
           is_visible: Zverejni súťaž
         competition_id: ID
         name: Meno
         short_name: Prezývka súťaže
-        name_reason:
         venue:
           country_id: Krajina
           city_name: Meno mesta
           name: Destinácia
           details: Detaily destinácie
           address: Adresa destinácie
-          coordinates:
         start_date: Dátum začiatku
         end_date: Dátum konca
         information: Informácie
@@ -1581,15 +1590,12 @@ sk:
           reason: Dôvod pre limit súťažiacich
         staff:
           staff_delegate_ids: WCA delegát(i)
-          trainee_delegate_ids:
           organizer_ids: Organizátor(i)
           contact: Kontakt
-        championships:
         website:
           generate_website: Chcel by som použiť WCA stránku namiesto externej 
             pre dodatkové informácie
           external_website: Webová stránka
-          external_registration_page:
           uses_wca_registration: Chcel by som použiť WCA stránku pre registráciu
           uses_wca_live:
         user_settings:
@@ -1598,38 +1604,14 @@ sk:
         entry_fees:
           currency_code: Kód meny
           base_entry_fee: Základná vstupná cena
-          on_the_spot_entry_fee:
-          guest_entry_fee:
           donations_enabled: Chcem povoliť donaty dodatočne ku registračným 
             poplatkom
-          refund_policy_percent:
-          refund_policy_limit_date:
         registration:
           opening_date_time: Registrácia sa otvorí
           closing_date_time: Registrácia sa uzavrie
-          waiting_list_deadline_date:
-          event_change_deadline_date:
-          allow_on_the_spot:
           allow_self_delete_after_acceptance:
-          allow_self_edits:
           guests_enabled: Hostia
-          guest_entry_status:
-          guests_per_registration:
-          extra_requirements:
-          force_comment:
-        event_restrictions:
-          early_puzzle_submission:
-            enabled:
-            reason:
-          qualification_results:
-            enabled:
-            reason:
-            allow_registration_without:
-          event_limitation:
-            enabled:
-            reason:
-            per_registration_limit:
-          main_event_id:
+        event_restrictions: {}
         remarks: Poznámky
         clone_tabs: Chcel by som tiež zklonovať všetky taby s dodatkovými 
           informáciami
@@ -1642,7 +1624,6 @@ sk:
           bodky(.), dvojbodky(:), apostrofy(') a medzery( ).
         short_name: Krátke meno pre súťaž, na zobrazenie. Ak je meno súťaže 
           dostatočne krátke, môžete ho znovu použiť(napr. Europe 2006).
-        name_reason_html:
         venue:
           city_name: Meno mesta a štátu(ak je), kde sa súťaž bude nachádzať. 
             Nepíšte krajinu(napr. Paris ALEBO San Francisco, Kalifornia)
@@ -1663,72 +1644,45 @@ sk:
             v angličtine.
         staff:
           staff_delegate_ids: WCA delegáti pre túto súťaž.
-          trainee_delegate_ids:
           organizer_ids: Organizátori súťaže(potrebujú mať účet, na to aby mohli
             byť organizátormi)
           contact_html: 'Voliteľné informácie o kontakte. Ak toto nevyplníte, emaily
             organizátorov budú publikované verejnosti. %{md}. Príklad: [Text na ukážku](mailto:some@email.com)'
         website:
           external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
-          external_registration_page:
           uses_wca_live:
         entry_fees:
           currency_code: Kód meny pre vstupné poplatky.
           base_entry_fee: Základný vstupný poplatok pre súťaž. Vstupný poplatok 
             bude ukázaný na informačnej stránke súťaže a tiež na registračnej 
             stránke(ak je použitá).
-          on_the_spot_entry_fee:
-          guest_entry_fee:
-          refund_policy_percent:
-          refund_policy_limit_date:
         registration:
           opening_date_time: 'Poznámka: Otvorenie a zatvorenie súťaže sú v čase UTC.'
-          waiting_list_deadline_date:
-          event_change_deadline_date:
           allow_on_the_spot:
           allow_self_delete_after_acceptance:
           allow_self_edits:
           guest_entry_status:
-          guests_per_registration:
-          extra_requirements:
           force_comment:
         event_restrictions:
           early_puzzle_submission:
             enabled:
-            reason:
           qualification_results:
             enabled:
-            reason:
             allow_registration_without:
           event_limitation:
             enabled:
-            reason:
-            per_registration_limit:
-          main_event_id:
-        remarks:
       choices:
-        competitor_limit:
-          enabled:
-            'true':
-            'false':
+        competitor_limit: {}
         registration:
-          allow_on_the_spot:
-            'true':
-            'false':
           allow_self_delete_after_acceptance:
-            'true':
-            'false':
-          allow_self_edits:
             'true':
             'false':
           guests_enabled:
             'true': Opýtajte sa ohľadom hostí
             'false': Nepýtajte sa ohľadom hostí
         event_restrictions:
-          qualification_results:
-            allow_registration_without:
-              'true':
-              'false':
+          qualification_results: {}
+        website: {}
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -1870,6 +1824,12 @@ sk:
       round: Kolo
       #original_hash: 709a232
       name: Meno
+    live:
+      admin: {}
+      connection: {}
+    registration_v2:
+      register:
+        panel: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -2445,6 +2405,7 @@ sk:
         Najnovšia verzia WCA súťažných listov skóre sa dá stiahnuť tu: <br /><a
         href="/files/results.xls" target="_blank">WCA competition Score
         sheet</a>.
+    tools: {}
   logo:
     #original_hash: c72c969
     title: WCA Logo
@@ -2469,3 +2430,42 @@ sk:
       '4': >-
         Povolené používanie loga WCA je popísané zásadami Používania WCA Loga,
         ktoré sa nachádzajú na <a href="/documents">Stránke dokumentov WCA</a>.
+    headings:
+      usage_guidelines:
+        color: {}
+  results:
+    selector_elements: {}
+  incidents_log: {}
+  page:
+    contact_edit_profile:
+      form: {}
+    teams_committees_councils: {}
+    contacts:
+      form:
+        user_data: {}
+        contact_recipient: {}
+        competition: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+  tickets: {}
+  homepage: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  payments:
+    errors: {}
+  search_results: {}
+  about_regulations: {}
+  media:
+    new: {}
+  media_and_instagram: {}
+  merch: {}
+  database: {}
+  validators: {}
+  formats: {}
+  advancement_condition:
+    short: {}
+  qualification: {}

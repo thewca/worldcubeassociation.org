@@ -1816,13 +1816,12 @@ es-ES:
         #original_hash: da39d05
         confirm: >-
           Tu cuenta se ha creado y tiene que ser activada antes de que puedas usarla.
-          Por favor, confirma tu cuenta a través del siguiente enlace:  #original_hash:
-          776476a
+          Por favor, confirma tu cuenta a través del siguiente enlace: 
         confirmation_link: Confirmar mi cuenta.
         #original_hash: d484f70
         activate: >-
           Tras la activación, puedes iniciar sesión en la página web de la World Cube
-          Association:  #original_hash: fb02586
+          Association: 
         login_form: formulario de inicio de sesión
         #original_hash: 333999b
         addendum: >-
@@ -3496,8 +3495,6 @@ es-ES:
       registration_key: 'Leyenda del registro:'
       registration_status:
         #original_hash: 10b28a8
-        full: Lleno
-        #original_hash: cf9b770
         open: Abierto
         #original_hash: 9c46019
         not_open: Aún sin abrir
@@ -3521,9 +3518,14 @@ es-ES:
         son eventos sociales! Cualquiera que sepa resolver un cubo es bienvenido a
         venir y batir su propio récord personal. Hacer amigos es fácil porque todo
         el mundo colabora para que la competición salga bien.</p>
-         <p>¡Utiliza la herramienta que aparece a continuación para encontrar una
-        competición cerca de ti y empezar tu aventura cubera!</p>
+
+        <p>¡Utiliza la herramienta que aparece a continuación para encontrar una competición
+        cerca de ti y empezar tu aventura cubera!</p>
       location_sign_in_required: Inicia sesión para buscar una dirección
+      location_not_found: No se ha encontrado ninguna ubicación para esa 
+        dirección
+      location_search_failed: La búsqueda de la dirección ha fallado, por favor 
+        inténtalo de nuevo en un minuto
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
@@ -6560,7 +6562,7 @@ es-ES:
       #original_hash: 050c7e2
       non_matching_name_warning: >-
         El nombre «%{name}» de %{wca_id} no coincide con el registrado en la base
-        de datos de la WCA («%{expected_name}»).  #original_hash: 333a035
+        de datos de la WCA («%{expected_name}»). 
       non_matching_country_warning: >-
         El país «%{country}» de %{name} (%{wca_id}) no coincide con el
         registrado en la base de datos de la WCA («%{expected_country}»). Si

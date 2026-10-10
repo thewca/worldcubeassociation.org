@@ -992,6 +992,7 @@ zh-CN:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: 请确认您的新电子邮件地址
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1939,8 +1940,6 @@ zh-CN:
       country_plural:
         other: '%{count}个国家/地区'
       #original_hash: 1feee0e
-      export_csv: 导出到 CSV
-      #original_hash: 84add5b
       email: 发邮件
       #original_hash: e86b1e1
       non_competing: 无参赛的报名
@@ -2745,8 +2744,6 @@ zh-CN:
       registration_key: 注册码
       registration_status:
         #original_hash: 10b28a8
-        full: 全部
-        #original_hash: cf9b770
         open: 报名开启中
         #original_hash: 44bb7df
         not_open: 报名未开启
@@ -3299,10 +3296,6 @@ zh-CN:
         #original_hash: 65bbb07
         no_changes: 没有变化
         #original_hash: be4e8e2
-        email_send: 发送邮件
-        #original_hash: b4bac52
-        email_copy: 复制邮件
-        #original_hash: b83b663
         email_message: 已复制到剪贴板。请记得使用密送（BCC）！
         #original_hash: beedd53
         move_to:
@@ -5172,3 +5165,4 @@ zh-CN:
       actioner: 处理人
       #original_hash: bcdf8d3
       requester: 请求人
+  trainee_delegate_application: {}

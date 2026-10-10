@@ -2378,8 +2378,6 @@ pl:
         one: 1 państwo
         few: '%{count} państwa'
         many: '%{count} państw'
-      export_csv: Eksportuj jako CSV
-      #original_hash: 84add5b
       email: Adres email
       #original_hash: e86b1e1
       non_competing: Nieukładające rejestracje
@@ -4098,10 +4096,6 @@ pl:
         #original_hash: 65bbb07
         no_changes: Nie ma zmian
         #original_hash: be4e8e2
-        email_send: Wyślij email
-        #original_hash: b4bac52
-        email_copy: Skopiuj adresy Email
-        #original_hash: b83b663
         email_message: Skopiowano do schowka. Pamiętaj o użyciu UDW!
         #original_hash: beedd53
         move_to:
@@ -6486,3 +6480,4 @@ pl:
       actioner: Wykonawca
       #original_hash: bcdf8d3
       requester: Wnioskodawca
+  trainee_delegate_application: {}
