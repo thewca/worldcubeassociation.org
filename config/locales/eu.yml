@@ -2377,8 +2377,6 @@ eu:
         one: Eskualde 1
         other: '%{count} eskualde'
       #original_hash: 1feee0e
-      export_csv: Esportatu CSVra
-      #original_hash: 84add5b
       email: E-maila
       #original_hash: e86b1e1
       non_competing: Parte hartzen ez duten erregistroak
@@ -3406,8 +3404,6 @@ eu:
       registration_key: 'Erregistro giltza:'
       registration_status:
         #original_hash: 10b28a8
-        full: Beteta
-        #original_hash: cf9b770
         open: Zabalik
         #original_hash: 9c46019
         not_open: Zabaldu gabe
@@ -4159,10 +4155,6 @@ eu:
         #original_hash: 65bbb07
         no_changes: Ez dago aldaketarik
         #original_hash: be4e8e2
-        email_send: E-mail bat bidali
-        #original_hash: b4bac52
-        email_copy: E-mailak kopiatu
-        #original_hash: b83b663
         email_message: Arbelera kopiatu da. Gogoratu bcc erabiltzeaz!
         #original_hash: 01f7c02
         move_to:

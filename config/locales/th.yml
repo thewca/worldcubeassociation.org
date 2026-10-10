@@ -3239,8 +3239,6 @@ th:
       registration_key: 'Registration Key:'
       registration_status:
         #original_hash: 10b28a8
-        full: เต็ม
-        #original_hash: cf9b770
         open: เปิด
         #original_hash: 9c46019
         not_open: ยังไม่เปิด

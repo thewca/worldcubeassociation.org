@@ -282,8 +282,6 @@ nl:
       #original_hash: 603a218
       wca_id: WCA-id
       #original_hash: e0f64f7
-      citizen_of: Land
-    #original_hash: 3fc0ba1
     all_regions: Alle regio's
     errors:
       #original_hash: 81f344a
@@ -293,10 +291,6 @@ nl:
       one: 1 dag
       other: '%{count} dagen'
     #original_hash: 203e1b3
-    these_events:
-      one: dit wedstrijdonderdeel
-      other: 'deze %{count} wedstrijdonderdelen'
-    #original_hash: 51ef7d4
     search_site: Zoeken op site
     #original_hash: d7decf1
     filter: Filter
@@ -387,132 +381,6 @@ nl:
         user_preferred_events: Voorkeur wedstrijdonderdelen
         #original_hash: e632fbf
         otp_attempt: Voer je two-factor authenticatiecode in
-      competition:
-        #original_hash: 89f89c0
-        id: id
-        #original_hash: 7f3d889
-        confirmed: Laat de organisatoren niet deze wedstrijd bewerken
-        #original_hash: d493e6a
-        show_at_all: Maak deze wedstrijd zichtbaar voor publiek
-        #original_hash: 709a232
-        name: Naam
-        #original_hash: f91b080
-        name_reason: De reden voor de naam
-        #original_hash: b649210
-        cell_name: Verkorte naam van wedstrijd
-        #original_hash: d523ebb
-        country_id: Land
-        #original_hash: 25b7b06
-        city_name: Stad
-        #original_hash: 67cd406
-        venue: Wedstrijdlocatie
-        #original_hash: 486f8fb
-        venue_address: Adres van wedstrijdlocatie
-        #original_hash: 08767af
-        venue_details: Details van wedstrijdlocatie
-        #original_hash: ff99f5b
-        start_date: Startdatum
-        #original_hash: 89d10cd
-        end_date: Einddatum
-        #original_hash: 2e8a57c
-        external_website: Website
-        #original_hash: 692e1f9
-        generate_website: Ik wil de WCA-website gebruiken in plaats van een 
-          externe website.
-        #original_hash: 6cf623b
-        base_entry_fee_lowest_denomination: Basisbedrag voor aanmelding
-        #original_hash: 28a6fbb
-        currency_code: Valutacode
-        #original_hash: 2e3ed8b
-        staff_delegate_ids: WCA-delegate(s)
-        #original_hash: c0ddcd6
-        trainee_delegate_ids: WCA Trainee Delegate(s)
-        #original_hash: 958562e
-        organizer_ids: Organisator(en)
-        #original_hash: b37456c
-        contact: Contact
-        #original_hash: 0eb5ed5
-        information: Informatie
-        #original_hash: 87b7d5f
-        use_wca_registration: Ik wil de WCA-website gebruiken voor aanmeldingen
-        #original_hash: 8020e88
-        external_registration_page: Aanmeldingspagina
-        #original_hash: 9bb1965
-        competitor_limit_enabled: Maximumaantal deelnemers
-        #original_hash: 749f4c9
-        competitor_limit: Maximumaantal deelnemers
-        #original_hash: 4a8b6f1
-        competitor_limit_reason: De reden voor het maximumaantal deelnemers
-        #original_hash: 3c23a67
-        guests_enabled: Gasten
-        #original_hash: 089cbfd
-        receive_registration_emails: Stuur me een mail als iemand zich aanmeldt
-        #original_hash: d4aeed9
-        registration_open: Aanmelding geopend
-        #original_hash: f8153a2
-        registration_close: Aanmelding gesloten
-        #original_hash: d7020f4
-        remarks: Opmerkingen
-        #original_hash: c305010
-        clone_tabs: Ik wil de tabbladen met aanvullende informatie klonen
-        #original_hash: c5497bc
-        competition_events: Wedstrijdonderdelen
-        #original_hash: 71c8461
-        enable_donations: >-
-          Ik wil naast de deelnamekosten ook de mogelijkheid bieden om donaties
-          te doen
-        #original_hash: 556fda0
-        extra_registration_requirements: Extra aanmeldingseisen
-        #original_hash: 2529d04
-        on_the_spot_registration: Ik wil aanmeldingen bij binnenkomst op locatie
-          accepteren.
-        #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: Deelnamekosten bij nieuwe 
-          aanmelding op locatie
-        #original_hash: 7e53b96
-        allow_registration_edits: Aanpassingen in aanmeldingen
-        #original_hash: efbdbab
-        refund_policy_percent: Teruggave percentage
-        #original_hash: b332299
-        refund_policy_limit_date: Uiterste datum voor teruggave
-        #original_hash: 16cf9a4
-        waiting_list_deadline_date: >-
-          Uiterste datum om deelnemers van de wachtlijst te accepteren voor de
-          wedstrijd
-        #original_hash: 99a9169
-        event_change_deadline_date: >-
-          Uiterste datum voor deelnemers om hun wedstrijdonderdelen aan te
-          passen
-        #original_hash: 3542671
-        guests_entry_fee_lowest_denomination: Bezoekerskosten
-        #original_hash: bb16247
-        guest_entry_status: Toon bericht over gratis toegang voor gasten
-        #original_hash: 723cad9
-        early_puzzle_submission: >-
-          Ik wil van deelnemers eisen dat ze hun puzzels op een specifiek
-          tijdstip voor het wedstrijdonderdeel inleveren
-        #original_hash: 78308cc
-        early_puzzle_submission_reason: Reden en detals voor het vroegtijdig 
-          inleveren van puzzels
-        #original_hash: 88da0ef
-        qualification_results: >-
-          Ik wil graag kwalificatieresultaten gebruiken om te beperken wie kan
-          deelnemen aan bepaalde wedstrijdonderdelen
-        #original_hash: 1ec6dd4
-        qualification_results_reason: Reden en details voor 
-          kwalificatieresultaten
-        #original_hash: ac30de9
-        event_restrictions: >-
-          Ik wil deelnemers beperken in het registreren voor specifieke
-          combinaties van wedstrijdonderdelen
-        #original_hash: 4bf194c
-        event_restrictions_reason: Reden en details voor beperkingen in 
-          wedstrijdonderdelen
-        #original_hash: 3c24bd2
-        main_event_id: Main Event
-      championship:
-        #original_hash: 4baf44b
-        championship_type: Type Kampioenschap
       registration:
         #original_hash: 3c23a67
         guests: Gasten
@@ -554,11 +422,6 @@ nl:
         #original_hash: 0c7191d
         wrc_incidents: Incidenten waar feedback voor nodig is van WRC
         #original_hash: 5a92b25
-        wdc_feedback_requested: Ik wil graag feedback van de WDC over een of 
-          meer incidenten
-        #original_hash: 06a0568
-        wdc_incidents: Incidenten waarvoor feedback nodig is van WDC
-        #original_hash: d7020f4
         remarks: Opmerkingen
       person:
         #original_hash: 8c41ae8
@@ -673,23 +536,7 @@ nl:
         f: Vrouwelijk
         #original_hash: 6e6a6f2
         o: Anders
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: Trainee Delegate
-        #original_hash: 9b97968
-        candidate_delegate: Junior Delegate
-        #original_hash: 12ab214
-        delegate: Delegate
-        #original_hash: d463c23
-        senior_delegate: Senior Delegate
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: Mannelijk
-        #original_hash: b7c17e9
-        f: Vrouwelijk
-        #original_hash: 6e6a6f2
-        o: Anders
+    person: {}
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -703,16 +550,9 @@ nl:
         article: Artikel
         #original_hash: 82dabd0
         multimedia: Multimedia
-    competition:
-      guest_entry_status:
-        #original_hash: 7e54323
-        unclear: >-
-          Laat niks zien (en wellicht een toelichting geven in de sectie Extra
-          registratie-eisen)
-        #original_hash: 694bce4
-        free: Iedere gast kan gratis komen kijken
-        #original_hash: 762c509
-        restricted: Gasten alleen toegestaan als begeleider van deelnemers
+    competition: {}
+    user_roles:
+      status: {}
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -763,121 +603,6 @@ nl:
         otp_attempt: >-
           Controleer je geconfigureerde mobiele applicatie op een eenmalig
           wachtwoord of voer een van je herstelcodes in.
-      competition:
-        #original_hash: 2c812a0
-        name: >-
-          De volledige wedstrijdnaam afgesloten met jaartal (bijv. Danish Open
-          2016). Gebruik hoofdletters. De naam mag alleen letters, cijfers en
-          spaties bevatten, en verder -&.:'.
-        #original_hash: 525fcc8
-        cell_name: >-
-          Een verkorte naam. Als de wedstrijdnaam al kort is kun je die
-          gebruiken (bijv. Euro 2006).
-        #original_hash: bce4589
-        city_name: >-
-          Naam van de stad, zonder provincie of land. (voor sommige landen laten
-          we de staat zien)
-        #original_hash: bb470cc
-        information: >-
-          Informatie over maximumaantal deelnemers, de aanmeldkosten voor
-          deelnemers en toeschouwers, en andere details die relevant zijn voor
-          mensen die zijn geïnteresseerd om deel te nemen of te komen kijken.
-        #original_hash: b4d020f
-        staff_delegate_ids: WCA-delegates van de wedstrijd.
-        #original_hash: cb9882c
-        trainee_delegate_ids: WCA Trainee Delegates voor deze wedstrijd
-        #original_hash: 517d376
-        organizer_ids: >-
-          Organisatoren (ze hebben een account nodig om op de lijst zichtbaar te
-          worden).
-        #original_hash: cabe7fb
-        external_website: 'Link naar de website van de wedstrijd, inclusief http(s).'
-        #original_hash: 9965635
-        registration_open: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone'
-        #original_hash: 9ea6021
-        remarks: >-
-          Enkele aanvullende informatie die je wilt doorgeven aan de WCAT. Als
-          er bijvoorbeeld iets is waarover je niet zeker bent, of als er
-          speciale verzoeken zijn voor de WCAT. Vul dit alstublieft in het
-          Engels in!
-        #original_hash: b2af5f5
-        external_registration_page: >-
-          De pagina waar deelnemers zich moeten aanmelden voor de wedstrijd.
-          Moet een valide http-link zijn.
-        #original_hash: 784879d
-        base_entry_fee_lowest_denomination: >-
-          Het basisbedrag voor aanmelding voor de wedstrijd. Het bedrag wordt
-          getoond op de wedstrijdinformatiepagina en aanmeldingspagina. Als het
-          bedrag 0 is, wordt een tekst getoond dat aanmelding gratis is.
-        #original_hash: 9735ddf
-        currency_code: Valutacode van de deelnamekosten.
-        #original_hash: dc47c39
-        competitor_limit_enabled: >-
-          Hoewel het niet vereist is in het wedstrijdreglement om een
-          deelnemerslimiet op te geven, wordt dit wel sterk aanbevolen.
-        #original_hash: b7b599b
-        competitor_limit: >-
-          Het aantal deelnemers dat wordt geaccepteerd voor deze wedstrijd.
-          Voorlopig is dit aantal alleen ter informatie, en voorkomt het niet
-          dat meer mensen zich aanmelden. We werken aan expliciete ondersteuning
-          voor het registratieproces, maar dit vraagt nog wat werk.
-        #original_hash: 4bd7102
-        competitor_limit_reason: >-
-          Wat is de reden voor het maximumaantal deelnemers? Graag in het
-          Engels!
-        #original_hash: 3de153b
-        extra_registration_requirements: >-
-          Geef hier alle extra aanmeldingseisen aan die niet boven zijn genoemd,
-          zoals aanwijzingen over hoe te betalen.</br>Geef de tekst <b>in
-          Engels</b> en andere talen die de deelnemers spreken; de tekst wordt
-          getoond op de informatiepagina van de wedstrijd, en op de
-          aanmeldpagina als je de aanmelding via de WCA-website doet.
-        #original_hash: 8c4fdf8
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Als dit bedrag 0 is, dan wordt een zin getoond dat aanmelding bij
-          binnenkomst gratis is.
-        #original_hash: 180b7b3
-        refund_policy_percent: >-
-          Dit getal is slechts ter informatie, teruggaves moeten handmatig
-          worden uitgevoerd. Als het bedrag 0 is, dan wordt een zin dat
-          aanmeldkosten onder geen enkele omstandigheid worden teruggegeven.
-        #original_hash: f64d853
-        refund_policy_limit_date: Datum waarna aanmeldkosten niet meer 
-          teruggegeven worden.
-        #original_hash: 664db64
-        waiting_list_deadline_date: >-
-          De datum waarop aangemelde personen op de wachtlijst niet meer worden
-          geaccepteerd. Als je een deadline hebt voor refunds, moet de datum
-          voor wachtlijst niet voor de deadline voor refunds liggen.
-        #original_hash: 75e6c1f
-        event_change_deadline_date: >-
-          Geregistreerde deelnemers hebben het recht om hun geregistreerde
-          wedstrijdonderdelen aan te passen tot dit moment, door contact op te
-          nemen met het organisatieteam. De deal moet niet zijn voor de
-          registratie is gesloten. Als het veld leeg is mogen deelnemers
-          wedstrijdonderdelen toevoegen tot de dag van de wedstrijd. Als
-          registratie op de dag van de wedstrijd mogelijk is, moet dit dezelfde
-          dag zijn als de wedstrijd.
-        #original_hash: 0419547
-        guests_entry_fee_lowest_denomination: >-
-          Dit getal is vooralsnog ter informatie, de toegangsprijs voor gasten
-          kun je niet via deze website regelen. Als het bedrag 0 is, dan wordt
-          een zin naar keuze getoond over het beleid rond gasten.
-        #original_hash: 4e8488b
-        early_puzzle_submission_reason: >-
-          Leg uit waarom je deelnemers hun puzzels vroegtijdig wilt laten
-          inleveren. In het Engels!
-        #original_hash: f859883
-        qualification_results_reason: >-
-          Leg uit waarom je kwalificatietijden wil gebruiken. Invullen in
-          Engels!
-        #original_hash: d3329d7
-        event_restrictions_reason: >-
-          Leg uit waarom je bepaalde combinaties van wedstrijdonderdelen wilt
-          uitsluiten. Invullen in Engels!
-        #original_hash: 1067798
-        main_event_id: De winnaar van dit wedstrijdonderdeel zal de winnaar zijn
-          de wedstrijd
       website_contact:
       dob_contact:
         #original_hash: 8723825
@@ -936,9 +661,6 @@ nl:
         wrc_incidents: Lijst van incidentnummers waarvoor je feedback wilt van 
           WRC
         #original_hash: 38a95e5
-        wdc_incidents: Lijst van incidentnummers waarvoor je feedback wilt van 
-          WRC
-        #original_hash: f30abdc
         remarks: >-
           Vermeld overige punten die je wilt delen (bijv. ontwikkeling in de
           community, plannen voor de regio). Als je opmerkingen niet kwijt kon
@@ -946,9 +668,6 @@ nl:
       competition_tab:
         #original_hash: e396d28
         name: 'Voorbeelden: Reisinformatie, Betaling, Prijzen, Overnachtingen'
-      person:
-        #original_hash: 498f4c5
-        dob: Geboortedatum moet het formaat jjjj-mm-dd hebben.
       registration:
       results_submission:
       regional_organization:
@@ -978,32 +697,7 @@ nl:
           pending: Wachtlijst
           #original_hash: 441bda6
           deleted: Verwijderd
-      competition:
-        guests_enabled:
-          #original_hash: cb8809d
-          'true': Vraag naar gasten
-          #original_hash: f8c2332
-          'false': Vraag niet naar gasten
-        competitor_limit_enabled:
-          #original_hash: d9c05cc
-          'true': Ik wil een deelnemerslimiet opgeven
-          #original_hash: 5b581b5
-          'false': Ik wil GEEN deelnemerslimiet opgeven
-        on_the_spot_registration:
-          #original_hash: 0c521ca
-          'true': Registratie op wedstrijdlocatie toegestaan
-          #original_hash: 0f236df
-          'false': Nieuwe aanmeldingen op de wedstrijdlocatie worden NIET 
-            toegestaan
-        allow_registration_edits:
-          #original_hash: 52a2f4a
-          'true': >-
-            Deelnemers mogen hun registratie aanpassen tot de deadline voor het
-            aanpassen van wedstrijdonderdelen
-          #original_hash: 2cbb80e
-          'false': >-
-            Deelnemers mogen hun registratie NIET aanpassen zodra ze zijn
-            geaccepteerd
+      competition: {}
   mail_form:
     attributes:
       contact_form:
@@ -1214,6 +908,7 @@ nl:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Bevestig je nieuwe e-mailadres
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1313,14 +1008,10 @@ nl:
       #original_hash: 82dabd0
       multimedia: Multimedia
       #original_hash: 4fd2a7f
-      db_export: Database Export
-      #original_hash: 1fa73f3
       regulations: Wedstrijdreglement
       #original_hash: 6bce1b5
       about_regulations: Over het Wedstrijdreglement
       #original_hash: 141d1d7
-      guidelines: Aanvullende richtlijnen
-      #original_hash: c4622c3
       scrambles: Scrambles
       #original_hash: 90ccd64
       history: Geschiedenis
@@ -1343,14 +1034,8 @@ nl:
       #original_hash: d3a928c
       results_team: Results team
       #original_hash: 4e7afeb
-      results_admin: Admin
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
-      #original_hash: aee74b8
       new_post: Nieuw bericht
       #original_hash: 0d67445
-      team_leader: Teamleider
-      #original_hash: 37b8fdc
       regional_organizations: Regionale Organisaties
       #original_hash: 6568fa0
       manage_regional_organizations: Beheren Regionale Organisaties
@@ -1601,8 +1286,6 @@ nl:
       #original_hash: 8be3c94
       password: Wachtwoord
       #original_hash: 3fc6dbe
-      member_of: Lid van
-      #original_hash: 42619dd
       preferred_events_desc: >-
         Door je voorkeursonderdelen aan te geven wordt het makkelijker om je aan
         te melden voor wedstrijden.
@@ -1770,11 +1453,6 @@ nl:
         De naam of het land moet verschillend zijn om de persoon te kunnen
         bijwerken.
       #original_hash: 2e582eb
-      must_not_be_present: moet niet aanwezig zijn
-      #original_hash: 5b4eac9
-      senior_has_delegate: kan senior delegate niet demoveren als deze nog 
-        delegates heeft
-      #original_hash: 48653a9
       already_have_id: 'kan WCA-id niet claimen omdat je al een WCA-id %{wca_id} hebt'
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
@@ -1796,8 +1474,6 @@ nl:
         <a href='%{wrt_contact_path}'
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
       #original_hash: d02c03b
-      avatar_requires_wca_id: vereist een toegekend WCA-id
-      #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         is al in gebruik voor een ander account. Het is automatisch aangemaakt
         als resultaat van dat je je hebt aangemeld voor een wedstrijd via een
@@ -1848,12 +1524,6 @@ nl:
       #original_hash: d84a54f
       need_country: Voer een land in
       #original_hash: cec28a0
-      comp_not_found: Wedstrijd niet gevonden
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: >-
-        Een aanmelding kan niet tegelijkertijd worden verwijderd en
-        geaccepteerd.
-      #original_hash: a38d024
       must_register: moet zich voor minimaal één onderdeel aanmelden
       #original_hash: e78eec3
       banned_html: >-
@@ -1881,28 +1551,8 @@ nl:
       not_using_wca: Deze wedstrijd gebruikt niet de aanmeldingsprocedure van de
         WCA-website
       #original_hash: d528030
-      accepted_and_mailed:
-        one: Aanmelding geaccepteerd. Bevestigingsmail verzonden.
-        other: Aanmeldingen geaccepteerd. Bevestigingsmails verzonden.
-      #original_hash: 42ea8de
-      rejected_and_mailed:
-        one: Aanmelding verplaatst naar wachtlijst
-        other: Aanmeldingen verplaatst naar wachtlijst
-      #original_hash: a360b31
-      deleted_and_mailed:
-        one: Aanmelding verwijderd
-        other: Aanmeldingen verwijderd
-      #original_hash: c3aa289
-      single_deletion_and_mail: 'Aanmelding verwijderd en mail verzonden naar %{mail}'
-      #original_hash: d8f067f
-      cannot_delete: Je kunt je aanmelding niet verwijderen.
-      #original_hash: 82b3899
       updated: Aanmelding bijgewerkt
       #original_hash: 856484a
-      failed: Aanmelding bijwerken mislukt
-      #original_hash: 016b4ae
-      deleted: 'Je aanmelding voor %{comp} is verwijderd'
-      #original_hash: 648424f
       registered: Aanmelding gelukt!
       #original_hash: 82fed60
       imported: Registraties met succes geïmporteerd!
@@ -1941,22 +1591,6 @@ nl:
           aanmelding staat %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'We kijken ernaar uit om je te zien tijdens %{comp_name}!'
-      pending:
-        #original_hash: e48d8bd
-        mail_subject: 'Je aanmelding is op de wachtlijst geplaatst voor %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          Je aanmelding voor %{comp_name} is op de wachtlijst geplaatst.
-          Mogelijke redenen hiervoor zijn:
-        causes:
-          #original_hash: eadfc0d
-          accepted: Je aanmelding was per abuis geaccepteerd
-          #original_hash: 2ac6d84
-          withdrawal: Je hebt gevraagd om terugtrekking
-        #original_hash: 8f7358f
-        email_if_error: >-
-          Als je denkt dat er een fout is gemaakt, stuur dan een antwoord op
-          deze mail.
       deleted:
         #original_hash: 268e248
         mail_subject: 'Je aanmelding voor %{comp_name} is verwijderd'
@@ -1990,22 +1624,8 @@ nl:
         one: 1 land
         other: '%{count} landen'
       #original_hash: 1feee0e
-      export_csv: Exporteren naar CSV
-      #original_hash: 84add5b
       email: E-mailadres
       #original_hash: 7b2c7f1
-      approve: Goedkeuren
-      #original_hash: 2b03b59
-      reject: Afwijzen
-      #original_hash: f6fdbe4
-      delete: Verwijderen
-      #original_hash: 92d40dc
-      waiting_list: Wachtlijst
-      #original_hash: 06f7d1a
-      approved_registrations: Goedgekeurde aanmeldingen
-      #original_hash: bff04e8
-      deleted_registrations: Verwijderde aanmeldingen
-      #original_hash: ac5d958
       not_paid: Nog niet betaald
       registered:
         #original_hash: 2c2f473
@@ -2015,25 +1635,16 @@ nl:
       #original_hash: ce53c71
       payment_requested_on: 'Betaalverzoek op: %{date}'
       #original_hash: f5b1b34
-      payment_completed_on: 'Betaling afgerond op: %{date}'
-      #original_hash: b25928c
       total: Totaal
       #original_hash: df036fe
-      n_events: Aantal wedstrijdonderdelen
     new_registration:
       #original_hash: 8b9f726
       title: 'Aanmelden voor %{comp}'
     #original_hash: 7cae988
-    registered_with_account_html: >-
-      Deze persoon heeft zich met een WCA-account aangemeld. Je kunt de
-      persoonlijke informatie %{here} bewerken.
-    #original_hash: ada2e9e
     sign_in: Inloggen
     #original_hash: 5d45a00
     profile: profiel
     #original_hash: 801b3e9
-    panel_title: Aanmeldingsgegevens
-    #original_hash: c0063c3
     register: Aanmelden!
     #original_hash: f484f15
     refund: Verzoek om terugbetaling
@@ -2042,8 +1653,6 @@ nl:
     #original_hash: a9af643
     update: Bijwerken aanmelding
     #original_hash: f6fdbe4
-    delete: Verwijderen
-    #original_hash: b72119a
     delete_confirm: Weet je zeker dat je je aanmelding wilt verwijderen?
     #original_hash: cfc4865
     delete_registration: Verwijder aanmelding.
@@ -2068,8 +1677,6 @@ nl:
       %{sign_in} om je voor %{comp} aan te melden. Als je nog geen WCA-account
       hebt, kun je deze  %{here} aanmaken.
     #original_hash: 89b4e7f
-    greeting: 'Hoi, %{name}!'
-    #original_hash: 322f646
     please_fix_profile_html: >-
       Om je aan te melden voor deze %{comp}, moet je de volgende problemen in je
       %{profile} oplossen:
@@ -2080,26 +1687,6 @@ nl:
       wachtlijst. Je aanmelding wordt goed gekeurd wanneer er een plekje
       vrijkomt, dit hoeft niet het geval te zijn.
     #original_hash: 855ca9c
-    can_register: 'Je kunt je hieronder aanmelden voor %{comp}.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Controleer ajb de informatie over de aanmelding om te bepalen of je nog
-      iets extra's moet doen, zoals deelnamekosten betalen.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Je hebt je aangemeld voor %{comp}. Je kunt hieronder de informatie over je
-      aanmelding vinden.
-    #original_hash: 3c9141f
-    contact_organizer: Neem contact op met de organisator als je een wijziging 
-      wilt doen.
-    #original_hash: 59354fd
-    waiting_list: >-
-      Je aanmelding is in behandeling. Voor goedkeuring kan het zijn dat je
-      eerst online deelnamekosten moet betalen. Zie de wedstrijdpagina voor
-      details.
-    #original_hash: 58b1a3c
-    accepted: Je aanmelding is geaccepteerd!
-    #original_hash: bcd7d70
     entry_fees_fully_paid: >-
       Je hebt %{paid} betaald, wat het volledige bedrag van de deelnamekosten
       is.
@@ -2109,18 +1696,11 @@ nl:
     wont_pay_here: Controleer de wedstrijdinformatie voor instructies over hoe 
       te belaten
     refund_form:
-      hints:
-        #original_hash: d97186d
-        refund_amount: >-
-          Het bedrag dat wordt terugbetaald aan de deelnemer, mag ieder bedrag
-          zijn tot maximaal het al betaalde bedrag.
       labels:
         #original_hash: 1cc5991
         refund_amount: Refund-bedrag
     payment_form:
       #original_hash: 4de825f
-      title: Aanmeldingsbedrag
-      #original_hash: d1569e6
       payment_successful: >-
         Je betaling was succesvol, en je registratie zou nu als betaald moeten
         zijn geregistreerd hieronder.
@@ -2128,23 +1708,12 @@ nl:
         #original_hash: bf3a39e
         donation: Optionele donatie voor het organisatieteam
         #original_hash: 16cf92d
-        card_information: >-
-          Je kaartinformatie bereikt nooit de WCA-website. Die is veilig
-          verstuurd naar Stripe, die het betaalproces afhandelt en terugkoppelt
-          naar ons.
       labels:
         #original_hash: 4de825f
-        entry_fees: Aanmeldingsbedrag
-        #original_hash: 2c09302
         donation: Donatie
         #original_hash: 184150d
-        card_information: Kaartinformatie
-        #original_hash: bc8091a
-        cardholder_name: Naam kaarthouder
       alerts:
         #original_hash: a34940e
-        not_a_number: Voer een juist bedrag in.
-        #original_hash: 707b9ca
         amount_too_low: >-
           Het totaalbedag moet minimaal gelijk zijn aan de te betalen
           deelnamekosten.
@@ -2156,14 +1725,6 @@ nl:
         #original_hash: b2bc8ed
         not_allowed: Je kunt niet betalen voor deze aanmelding
         #original_hash: 630dbb9
-        intent_not_found: >-
-          We konden geen betalingsintentie vinden op onze server. Het
-          betalingsproces is beëindigd en je kaart is niet belast.
-        #original_hash: 63e0ec1
-        cardholder_name: Controleer de naam van kaarthouder
-    #original_hash: 8607a87
-    payment_button_text: Betaal de deelnamekosten met kaart
-    #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Om je in de toekomst makkelijker aan te melden, kun je je voorkeuren voor
       de onderdelen opgeven %{link}.
@@ -2300,8 +1861,6 @@ nl:
       #original_hash: e205d73
       results_already_posted: De resultaten zijn al gepost.
       #original_hash: 376f461
-      results_posted: Resultaten succesvol gepost!
-      #original_hash: afe3a23
       results_preview_alert: Je kijkt naar resultaten die nog niet gepost zijn.
       #original_hash: 07de612
       upload_results: >-
@@ -2335,13 +1894,6 @@ nl:
       not_confirmed_not_visible: De wedstrijd is niet bevestigd en niet 
         zichtbaar.
       #original_hash: a821396
-      stripe_connected: >-
-        Je hebt nu je Stripe-account verbonden en kunt betalingen ontvangen voor
-        deze wedstrijd.
-      #original_hash: 0a4bb53
-      stripe_not_connected: Er was een probleem waardoor we je Stripe-account 
-        niet konden verbinden.
-      #original_hash: 724cf0d
       championship_exists: 'Er is al een %{championship_type} in %{year}'
     my_competitions:
       #original_hash: 5c6d3ea
@@ -2551,10 +2103,6 @@ nl:
       #original_hash: db98a68
       title: Wedstrijden
       #original_hash: f483b9c
-      disclaimer: >-
-        Houd er rekening mee dat vanwege de COVID-19-pandemie sommige landen
-        momenteel geen wedstrijden kunnen organiseren.
-      #original_hash: 6a72085
       all_events: Alle
       #original_hash: 6d76b81
       all_years: Alle jaren
@@ -2606,7 +2154,6 @@ nl:
         #original_hash: 0933739
         by_announcement: 'Wedstrijden gesorteerd op aankondigingsdatum, nieuwste bovenaan'
       #original_hash: 6684214
-      no_access: Je hebt geen toegang tot deze pagina!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -2626,9 +2173,6 @@ nl:
       #original_hash: 8b09d74
       no_comp_found: Geen wedstrijden gevonden.
       #original_hash: 7008166
-      no_comp_match: >-
-        Geen wedstrijden gevonden met %{events}! Probeer het met minder
-        wedstrijdonderdelen.
     my_competitions_table:
       #original_hash: 5301648
       edit: Bewerken
@@ -2662,25 +2206,6 @@ nl:
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
       #original_hash: e5cbb13
-      name_reason_html: >-
-        Een korte uitleg van de wedstrijdnaam. De naam moet voldoen aan de <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
-        Competition Requirements Policy</a>.
-      #original_hash: 9d9126e
-      venue_html: >-
-        De locatie waar de wedstrijd plaatsvindt. %{md}. Bijvoorbeeld: [Cité des
-        Sciences et de l'Industrie](http://www.cite-sciences.fr)
-      #original_hash: 2651d1a
-      venue_details_html: >-
-        Details van de wedstrijdlocatie (bijv. Op de eerste etage achterin, volg
-        de borden). %{md}
-      #original_hash: 447814d
-      contact_html: >-
-        Optionele contactinformatie. Als je deze niet invult, worden
-        contactverzoeken via een formulier ingestuurd, zonder dat de
-        e-mailadressen van de organisatoren worden getoond. %{md}. Voorbeeld:
-        [Tekst](mailto:some@email.com)
-      #original_hash: c5497bc
       events: Wedstrijdonderdelen
       #original_hash: cafc153
       public_and_locked_html: >-
@@ -2746,7 +2271,6 @@ nl:
           name: Wedstrijdlocatie
           details: Details van wedstrijdlocatie
           address: Adres van wedstrijdlocatie
-          coordinates:
         start_date: Startdatum
         end_date: Einddatum
         information: Informatie
@@ -2759,7 +2283,6 @@ nl:
           trainee_delegate_ids: WCA Trainee Delegate(s)
           organizer_ids: Organisator(en)
           contact: Contact
-        championships:
         website:
           generate_website: Ik wil de WCA-website gebruiken in plaats van een 
             externe website.
@@ -2768,9 +2291,6 @@ nl:
           uses_wca_registration: Ik wil de WCA-website gebruiken voor 
             aanmeldingen
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: Stuur me een mail als iemand zich 
-            aanmeldt
         entry_fees:
           currency_code: Valutacode
           base_entry_fee: Basisbedrag voor aanmelding
@@ -2793,9 +2313,7 @@ nl:
           allow_self_edits: Aanpassingen in aanmeldingen
           guests_enabled: Gasten
           guest_entry_status: Toon bericht over gratis toegang voor gasten
-          guests_per_registration:
           extra_requirements: Extra aanmeldingseisen
-          force_comment:
         event_restrictions:
           early_puzzle_submission:
             enabled: Ik wil van deelnemers eisen dat ze hun puzzels op een 
@@ -2805,15 +2323,12 @@ nl:
             enabled: Ik wil graag kwalificatieresultaten gebruiken om te 
               beperken wie kan deelnemen aan bepaalde wedstrijdonderdelen
             reason: Reden en details voor kwalificatieresultaten
-            allow_registration_without:
           event_limitation:
             enabled: Ik wil deelnemers beperken in het registreren voor 
               specifieke combinaties van wedstrijdonderdelen
             reason: Reden en details voor beperkingen in wedstrijdonderdelen
-            per_registration_limit:
           main_event_id: Main Event
         remarks: Opmerkingen
-        clone_tabs: Ik wil de tabbladen met aanvullende informatie klonen
       hints:
         name: De volledige wedstrijdnaam afgesloten met jaartal (bijv. Danish 
           Open 2016). Gebruik hoofdletters. De naam mag alleen letters, cijfers 
@@ -2892,7 +2407,6 @@ nl:
             wedstrijd. Als registratie op de dag van de wedstrijd mogelijk is, 
             moet dit dezelfde dag zijn als de wedstrijd.
           allow_self_delete_after_acceptance:
-          guests_per_registration:
           extra_requirements: Geef hier alle extra aanmeldingseisen aan die niet
             boven zijn genoemd, zoals aanwijzingen over hoe te betalen.</br>Geef
             de tekst <b>in Engels</b> en andere talen die de deelnemers spreken;
@@ -2910,7 +2424,6 @@ nl:
           event_limitation:
             reason: Leg uit waarom je bepaalde combinaties van 
               wedstrijdonderdelen wilt uitsluiten. Invullen in Engels!
-            per_registration_limit:
           main_event_id: De winnaar van dit wedstrijdonderdeel zal de winnaar 
             zijn de wedstrijd
         remarks: Enkele aanvullende informatie die je wilt doorgeven aan de 
@@ -2935,19 +2448,14 @@ nl:
               voor het aanpassen van wedstrijdonderdelen
             'false': Deelnemers mogen hun registratie NIET aanpassen zodra ze 
               zijn geaccepteerd
-          guests_enabled:
-            'true': Vraag naar gasten
-            'false': Vraag niet naar gasten
           guest_entry_status:
             unclear: Laat niks zien (en wellicht een toelichting geven in de 
               sectie Extra registratie-eisen)
             free: Iedere gast kan gratis komen kijken
             restricted: Gasten alleen toegestaan als begeleider van deelnemers
         event_restrictions:
-          qualification_results:
-            allow_registration_without:
-              'true':
-              'false':
+          qualification_results: {}
+        website: {}
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3003,9 +2511,6 @@ nl:
         Deadline voor wachtlijst kan niet voor de uiterste datum voor refunds
         zijn.
       #original_hash: 44d9902
-      waiting_list_deadline_after_start: Deadline voor wachtlijst kan niet voor 
-        de startdatum zijn.
-      #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         De deadline voor het bijwerken van wedstrijdonderdelen kan niet vóór de
         sluitingsdatum van de aanmelding zijn.
@@ -3038,19 +2543,6 @@ nl:
       competition_in: 'Wedstrijd is over %{n_days}.'
       #original_hash: e6e096a
       competition_was: 'Wedstijd was %{n_days} geleden.'
-    nearby_competitions:
-      #original_hash: 241801a
-      competitions:
-        one: 1 wedstrijd
-        other: '%{count} wedstrijden'
-      #original_hash: 3446062
-      label_admin: 'Laatste %{days} dagen'
-      #original_hash: 07a1cf0
-      nearby_admin: '%{x_competitions} binnen %{kms} km en %{days} dagen.'
-      #original_hash: 9eb8f46
-      within: 'Binnen %{days} dagen'
-      #original_hash: d97d1ee
-      show: Tonen
     adjacent_competitions:
       #original_hash: e3528ec
       label: 'Nabije wedstrijden (binnen %{days} dagen en %{kms} km)'
@@ -3103,10 +2595,6 @@ nl:
     #original_hash: 25e68c3
     cancel_confirm: Weet je zeker dat je de wedstrijd wilt annuleren?
     #original_hash: 9a42672
-    upload_results: Resultaten uploaden
-    #original_hash: 01de5ee
-    post_results: De resultaten posten
-    #original_hash: b6513f1
     results_posted_by_html: 'Gepost door %{poster_name} op %{date_time}'
     #original_hash: a6b5efe
     cancel_mistake: Heb je een fout gemaakt?
@@ -3132,8 +2620,6 @@ nl:
         #original_hash: 83d204f
         regulation_link_text: 'Reglement %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'Richtlijn %{number}'
-        #original_hash: b2a983a
         cumulative_time_limit: Cumulatieve tijdlimiet
         #original_hash: d47f11a
         cumulative_one_round_html: 'Er kan een %{cumulative_time_limit} gelden (zie
@@ -3163,8 +2649,6 @@ nl:
     schedule:
       display_as:
         #original_hash: ec5dd7c
-        label: 'Toon het tijdschema als:'
-        #original_hash: 0424f6e
         table: Tabel
         #original_hash: adab509
         calendar: Agenda
@@ -3182,18 +2666,10 @@ nl:
       #original_hash: 81c0d91
       activity: Activiteit
       #original_hash: 90e2fca
-      room: Ruimte
-      #original_hash: 73acb7f
       room_in_venue: '%{room} in %{venue}'
       #original_hash: 2896c7a
-      venue_information_html: 'Je bekijkt het schema voor de locatie %{venue_name}.'
-      #original_hash: b97e383
       timezone_message: 'In het tijdschema wordt tijdzone %{timezone} gebruikt.'
       #original_hash: 2ab94a0
-      multiple_venues_available: >-
-        Deze wedstrijd heeft meerdere locaties, zorg ervoor dat je het schema
-        ook controleert voor de andere locaties!
-      #original_hash: 37b1adb
       schedule_for_date: 'Schema voor %{day_name} (%{full_date})'
     nav:
       menu:
@@ -3258,6 +2734,11 @@ nl:
       group: Groep
       #original_hash: b7126cd
       scramble: Scramble
+    live:
+      admin: {}
+    registration_v2:
+      register:
+        panel: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3312,9 +2793,6 @@ nl:
         #original_hash: ad8919a
         event: Wedstrijdonderdeel
         #original_hash: 3e83afa
-        all_events: Alle wedstrijdonderdelen
-      #original_hash: 0f21717
-      region: Regio
       type_selector:
         #original_hash: 3deb745
         type: Type
@@ -3322,31 +2800,14 @@ nl:
         single: Single
         #original_hash: 15f86c0
         average: Gemiddelde
-      years_selector:
-        #original_hash: 96f997b
-        years: Jaren
-        #original_hash: 0977c76
-        all_years: Alle jaren
-        #original_hash: 8737f09
-        only: Alleen
-        #original_hash: b3c0fe7
-        only_html: 'Alleen %{year}'
-        #original_hash: 96bdb66
-        until: Tot en met
-        #original_hash: fa23930
-        until_html: 'Tot en met %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Tonen
         #original_hash: f3cf96e
         persons: Personen
         #original_hash: 16d3376
-        persons_html: '%{quantity} personen'
-        #original_hash: 612e12d
         results: Resultaten
         #original_hash: f3baa4a
-        results_html: '%{quantity} resultaten'
-        #original_hash: d46d2ee
         by_region: Per regio
         #original_hash: c0dcb86
         mixed: Gemengd
@@ -3373,8 +2834,6 @@ nl:
       #original_hash: 5faa59d
       result: Resultaat
       #original_hash: e0f64f7
-      citizen_of: Nationaliteit
-      #original_hash: 1917f4f
       competition: Wedstrijd
       #original_hash: e7f6fc5
       solves: Pogingen
@@ -3382,19 +2841,10 @@ nl:
       region: Regio
       #original_hash: 70c07ec
       world: Wereld
-      type_options:
-        #original_hash: 3deb745
-        type: Type
-        #original_hash: dd11868
-        single: Single
-        #original_hash: 15f86c0
-        average: Gemiddelde
-      #original_hash: ad8919a
       event: Wedstrijdonderdeel
       #original_hash: dcf8b56
       date_circa: Datum ongeveer
       #original_hash: 1c54132
-      record: Record
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Verbind je WCA-id met je WCA-account!
@@ -3471,33 +2921,6 @@ nl:
       #original_hash: 75d7ff7
       unstick_at_future: Moet in de toekomst liggen
   contacts:
-    website:
-      #original_hash: 35c333c
-      faq_note_html: >-
-        Voor het vragen om informatie, kun je het beste kijken in onze <a
-        href="/faq">Frequently Asked Questions</a>! Als je contact wilt opnemen
-        met een specifieke commissie of team, kun je de betreffende
-        contactinformatie vinden op <a href="/teams-committees">deze pagina</a>.
-      #original_hash: 4ef2aad
-      title: WCA-website contactformulier
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: >-
-          Neem contact op met de organisatie van een bepaalde wedstrijd (kies
-          hieronder)
-        #original_hash: f0bffb7
-        competitions_in_general: 'Wedstrijden in het algemeen (organiseren, wedstrijdregels,
-          enz.)'
-        #original_hash: f6ffa78
-        wca_id_or_profile: WCA ID of WCA profiel
-        #original_hash: 0c77aee
-        media: Pers
-        #original_hash: 9ad0522
-        software: Software
-        #original_hash: 6e6a6f2
-        different: Ander
-      #original_hash: c70a890
-      submit: Verstuur bericht
     dob:
       #original_hash: 907ac6c
       title: Formulier voor verandering geboortedatum
@@ -3837,186 +3260,21 @@ nl:
       donate_other: Andere manieren om te doneren
     structure:
       #original_hash: 0d62207
-      teams_committees_councils: 'WCA Teams, Commissies en Raden'
-      #original_hash: 9482c5d
       title: Structuur
       board:
         #original_hash: abd2828
-        name: WCA Board (bestuur)
-        #original_hash: e0d37a2
         description: >-
           De World Cube Association wordt geleid door the WCA Board, bestaande
           uit de volgende leden:
       #original_hash: d54d953
-      committees: >-
-        De volgende commissies zijn een integraal onderdeel van de organisatie
-        en voeren de dagelijkse werkzaamheden uit die nodig zijn om te blijven
-        functioneren. Deze commisses zijn samengesteld uit leden van de
-        WCA-community, inclusief WCA-delegates en deelnemers. Elke commissie
-        heeft een leider, wiens rol het is om te zorgen dat het goed
-        functioneert en om de andere teamleden aan te sturen. Raden zijn een
-        speciaal type teams die een adviesrol hebben aan de WCA-board en zijn
-        samengesteld uit leden van de community, not stafleden. Als er vacatures
-        zijn bij de commissies, teams en raden, wordt er informatie op de
-        hoofdpagina geplaatst over hoe je kunt solliciteren.
-      #original_hash: c366473
-      senior_member: Seniorlid
-      #original_hash: e26c936
-      leader: Leider
-      officers:
-        #original_hash: d79bd00
-        name: WCA-officers
-        #original_hash: 312e799
-        description: >-
-          De officers van de WCA handelen taken af rond  de non-profitstatus van
-          de WCA. Deze officers worden gekozen door het WCA-bestuur. De
-          Executive Director is de Chief Executive Officer van de WCA, de Chair
-          zit alle bestuursvergaderingen voor, de secretaris beheert de
-          documenten van de organisatie, en de penningmeester beheert de
-          financiën van de WCA.
-      chair:
-        #original_hash: de34439
-        name: WCA Voorzitter
-      executive_director:
-        #original_hash: 7d405ff
-        name: WCA Directeur
-      secretary:
-        #original_hash: 1dd4a07
-        name: WCA Secretaris
-      vice_chair:
-        #original_hash: 0388b19
-        name: WCA Vice-Voorzitter
-      treasurer:
-        #original_hash: 75e65d9
-        name: WCA-penningmeester
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}''s profiel'
-      wdc:
-        #original_hash: c97077a
-        name: WCA Disciplinaire Commissie
-        #original_hash: 286fdf8
-        description: >-
-          Deze commissie adviseert de WCA Board in speciale gevallen, zoals
-          verdenkingen van schending van het WCA Wedstrijdreglement, and kan
-          worden gecontacteerd door WCA-leden ingeval van belangrijke
-          persoonlijke zaken betreffende WCA-wedstrijden.
-      wdpc:
-        #original_hash: 70539cd
-        name: WCA Data Protection Committee
-        #original_hash: 1f69829
-        description: >-
-          Deze commissie is verantwoordelijk voor alle zaken rond Data
-          Protection.
-      wrc:
-        #original_hash: 3da1e85
-        name: WCA Reglementen Commissie
-        #original_hash: 13ada5b
-        description: >-
-          Deze commissie is verantwoordelijk voor het onderhouden van het WCA
-          Wedstrijdreglement.
-      wrt:
-        #original_hash: 67be768
-        name: WCA-resultatenteam
-        #original_hash: 439ffae
-        description: >-
-          Dit team is verantwoordelijk voor het beheren van alle
-          wedstrijdresultaten.
-      wst:
-        #original_hash: a14bc62
-        name: WCA-softwareteam
-        #original_hash: ec961e4
-        description: >-
-          Dit team is verantwoordelijk voor het beheren van de software van WCA
-          (website, scramblers, werkboeken, administratietools).
-      wct:
-        #original_hash: 63a2388
-        name: WCA Communicatie Team
-        #original_hash: 50fd091
-        description: >-
-          Het WCA Communicatie Team (WCT) heeft de rol om de communicatie van
-          WCA met de Community en het publiek te overzien en ondersteunen. De
-          communicatie van WCA moet bijdragen aan de doelstellingen van WCA en
-          een positieve cultuur van vriendschap, transparantie, inclusiviteit,
-          openheid en responsiviteit ondersteunen.
-      wfc:
-        #original_hash: 9cb13de
-        name: WCA Financiële Commissie
-        #original_hash: b4ed44b
-        description: Dit team is verantwoordelijk voor de financiën van de WCA.
-      wec:
-        #original_hash: 83bd1d0
-        name: WCA Ethische Commissie
-        #original_hash: c304d57
-        description: >-
-          De rol van deze commissie is om te zorgen dat alle procedures door WCA
-          Staff en External Staff de Code of Ethics volgen, en om onafhankelijk
-          onderzoek uit te voeren als het gedrag van één van deze leden niet
-          voldoet aan de Code of Ethics. Zulk onderzoek kan worden aangevraagd
-          door Geregistreerde Speedcubers, voor wie de WEC ook
-          vertrouwenspersoon is. De commissie functioneert ook als Hoger Beroep
-          als een betrokkene het niet eens is met het besluit dat is genomen
-          door de WCA Disciplinaire Commissie.
-      weat:
-        #original_hash: d1dbb86
-        name: WCA Executive Assistants team
-        #original_hash: 889dd90
-        description: >-
-          Dit team is verantwoordelijk voor het uitvoeren van de administratieve
-          werkzaamheden van het WCA-Bestuur.
-      wqac:
-        #original_hash: 8f32116
-        name: WCA QA Committee
-        #original_hash: 0171b3b
-        description: >-
-          Deze commissie heeft de rol om continue verbetering te ondersteunen en
-          bevorderen binnen de WCA, en de wereldwijde toepassing van
-          kwaliteitsstandaarden om een consistente hoge kwaliteit te garanderen
-          van processen, WCA Staff, regionale organisaties,
-          wedstrijdorganisatoren en wedstrijdstaf.
-      wcat:
-        #original_hash: 2b81984
-        name: WCA Competition Announcement Team (Wedstrijdaankondigingsteam)
-        #original_hash: f511502
-        description: >-
-          Dit team heeft de rol om WCA-wedstrijden goed te keuren en aan te
-          kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
-          WCA-kwaliteitsstandaarden.
-      wmt:
-        #original_hash: 2035811
-        name: WCA Marketing Team
-        #original_hash: f2a0140
-        description: >-
-          Dit team is verantwoordelijk voor het ontwikkelen en managen van het
-          WCA Brand, het zoeken van sponsoren, het ondersteunen van de
-          distributie van WCA wedstrijdmaterialen en het marketen van WCA
-          merchandise.
-      wac:
-        #original_hash: 1ce7604
-        name: WCA Adviesraad
-        #original_hash: fb6cd86
-        description: >-
-          Deze adviesraad is verantwoordelijk voor het opbouwen en onderhouden
-          van bilaterale communicatie tussen de WCA-community en de WCA-staf.
-      banned:
-        #original_hash: d30e2e5
-        name: Geschorste deelnemers
-      wct_china:
-        #original_hash: ed5b65a
-        name: WCT China
-      #original_hash: f8c3f3c
       operations_html: >-
         De dagelijkse operatie wordt uitgevoerd door de %{committees_and_teams}
         van de WCA.
       #original_hash: 0e7a036
       teams_committees: Teams en Commissies
-      probation:
-        #original_hash: 1dd6e3b
-        name: WCA-delegates met proeftijd
-      wst_admin:
-        #original_hash: d4112d2
-        name: Software Admins
-      #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA-delegates</strong> zijn leden van de WCA die
         verantwoordelijk zijn dat alle WCA-wedstrijden verlopen volgens de
@@ -4160,127 +3418,7 @@ nl:
         verwijderen?
   contact:
     #original_hash: a34b69f
-    title: Contactinformatie
-    #original_hash: b5c2eaa
-    info_alert_html: >-
-      Bekijk eerst deze %{link}, voordat je contact opneemt met een team op deze
-      pagina!
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      Voor vragen, opmerkingen en suggesties over de WCA-website, gebruik dit <a
-      href='/contact/website'>contactformulier</a>. Voor vragen over een
-      specifieke regio of wedstrijd neem je contact op met je lokale %{link}.
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>Commissies en Teams</u>
-    #original_hash: 1cb449c
-    members: Leden
-    board:
-      #original_hash: f3cbb35
-      info_html: >-
-        De World Cube Association wordt geleid door de WCA Board. Ze zijn
-        verantwoordelijk voor algemene vragen en de WCA-organisatie als geheel.
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        De WCT heeft de leiding over de communicatie van de WCA met de community
-        en het algemene publiek. Zij kunnen worden benaderd als je algemene
-        vragen hebt over de WCA of haar aanwezigheid op de sociale media.
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        De WDC onderzoekt een breed scala aan zaken en stelt oplossingen voor,
-        inclusief disciplinaire maatregelen indien nodig. Dit kan o.a. bij
-        serieuze schending van het WCA-wedstrijdreglement of zaken in de
-        community. Als je zoiets hebt meegemaakt, neem dan gerust met deze
-        commissie contact op.
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        De WDPC heeft de verantwoordelijkheid en taak voor het onderzoeken,
-        creëren, implementeren, managen, en afdwingen van alle punten van het
-        beleid voor WCA Data Protection, contracten met externe Data Processors
-        van WCA-data, en het managen van de taken in relatie tot Data
-        Protection.
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        De WRC handelt alle incidenten af die te maken hebben met het toepassen,
-        verbeteren en ontwikkelen van het WCA-wedstrijdreglement. Zij
-        ondersteunen WCA-delegates bij alle soort incidenten bij wedstrijden en
-        besluiten over de oplossingen. De WRC publiceert regelmatig interne
-        rapportages om alle WCA-delegates te helpen en hun kennis van het
-        WCA-wedstrijdreglement te verbeteren. Als je wilt zijn betrokken bij het
-        ontwikkelen van regels of veranderingen wilt voorstellen kun je contact
-        opnemen met WRC via mail of op <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        De WRT is verantwoordelijk voor het beheren van de data in de databases
-        van de WCA, als belangrijkste de wedstrijdresultaten en de persoonlijke
-        gegevens. Zij laden de resultaten van de WCA-wedstrijden op de
-        WCA-website, zodra de Delegate van de wedstrijd deze resultaten heeft
-        ingestuurd. Behalve het laden van resultaten is het WCA Resultatenteam
-        ook verantwoordelijk voor het afhandelen van correcties indien nodig en
-        beheren ze de profielpagina's. Hieronder vallen o.a. het veranderen van
-        gegevens zoals geboortedata, op basis van geverifieerde verzoeken, en
-        het beheren van de profielfoto's.
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        De WST is verantwoordelijk voor het onderhoud en het beheer van alle
-        software van de WCA. Ze ontwikkelen ook nieuwe software voor
-        verschillende taken binnen de WCA. Als je suggesties of ideeën hebt voor
-        verdere ontwikkeling van de website of als je fouten of bugs wilt
-        doorgeven, neem dan gerust contact met ze op! De WCA-website is een
-        groot open-sourceproject op <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
-        dus als je geïnteresseerd bent om te helpen met de ontwikkeling, neem
-        dan daar een kijkje.
-    wfc:
-      #original_hash: 3ec8256
-      info_html: >-
-        De WFC is verantwoordelijk voor alle financiële zaken binnen de WCA. Ze
-        beheren de financiën en de rekeningen van de WCA, in lijn met een
-        goedgekeurd voorstel voor het jaarbudget, wat ook hun werk is om
-        regelmatig op te leveren.
-    wec:
-      #original_hash: ec2b9c3
-      info_html: >-
-        Deze commisse heeft de rol om te zorgen dat alle procedures die worden
-        gevolgd door WCA Staff en Externe Staff voldoende aan de Code of Ethics.
-    weat:
-      #original_hash: 889dd90
-      info_html: >-
-        Dit team is verantwoordelijk voor het uitvoeren van de administratieve
-        werkzaamheden van het WCA-Bestuur.
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        Deze commissie heeft de rol om continue kwaliteitsverbetering te
-        ondersteunen en bevorderen binnen de WCA, en wereldwijde toepassing van
-        kwaliteitsstandaard om constante hoge kwaliteit te garanderen voor
-        processen, WCA Staff, regionale organisaties, wedstrijdorganisatoren en
-        wedstrijdstaff.
-    wcat:
-      #original_hash: 61a471f
-      info_html: >-
-        Deze commissie heeft de rol om WCA-wedstrijden goed te keuren en aan te
-        kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
-        WCA-kwaliteitsstandaarden.
-    wmt:
-      #original_hash: f2a0140
-      info_html: >-
-        Dit team is verantwoordelijk voor het ontwikkelen en managen van het WCA
-        Brand, het zoeken van sponsoren, het ondersteunen van de distributie van
-        WCA wedstrijdmaterialen en het marketen van WCA merchandise.
-    #original_hash: f97a4f5
-    councils_html: Adviesraden
-    wac:
-      #original_hash: fb6cd86
-      info_html: >-
-        Deze adviesraad is verantwoordelijk voor het opbouwen en onderhouden van
-        bilaterale communicatie tussen de WCA-community en de WCA-staf.
+{}
   score_tools:
     #original_hash: 4fc2133
     title: Softwaretools voor WCA-wedstrijden
@@ -4397,32 +3535,9 @@ nl:
   logo:
     #original_hash: c72c969
     title: WCA-logo
-    paragraphs:
-      #original_hash: 44cfe8d
-      '1': >-
-        Het WCA-logo is ontworpen door Justin Eastman in een ontwerpwedstrijd in
-        januari 2005.<br />We vonden het logo goed vanwege het ontwerp, de
-        kleuren en het feit dat het niet specifiek een 3x3x3 Kubus uitbeeldt.
-      #original_hash: 916e3fc
-      '2': >-
-        We hebben drie verschillende versies van het logo: <a
-        href="/files/WCAlogo_XL.jpg">grote versie</a> (46 KB, 1756 px bij 1068
-        px), <a href="/files/WCAlogo.svg">vectorversie</a> en <a
-        href="/files/WCAlogo_notext.svg">vectorversie zonder tekst</a> en een <a
-        href="/files/WCAlogo_monochrome.svg">monochrome vector-versie</a>.
-      #original_hash: dcb1ad6
-      '3': >-
-        3D-versie van het logo, ontworpen door Vu Minh Tan uit Vietnam: <a
-        href="/files/WCALogo3D.png">PNG-versie</a> (2.1 MB), <a
-        href="/files/WCALogo3Dsmall.png">kleine PNG-versie</a> (0.25 MB).
-      #original_hash: e5df1bf
-      '4': >-
-        Alle WCA-wedstrijdorganisatoren mogen het WCA-logo gebruiken voor
-        websites, kleding, kado's of decoraties, uitsluitend voor officiële
-        WCA-wedstrijden.<br /> Voor alle andere personen en doeleinden is
-        toestemming nodig van <a
-        href="mailto:board@worldcubeassociation.org">WCA Board</a> om het logo
-        the gebruiken.
+    headings:
+      usage_guidelines:
+        color: {}
   search_results:
     index:
       #original_hash: db98a68
@@ -4472,10 +3587,6 @@ nl:
         href="/regulations/guidelines.html">WCA Richtlijnen</a>, die aanvullende
         verduidelijkingen en toelichtingen bevatten.
       #original_hash: c8e1783
-      content3_html: >-
-        Belangrijke beslissingen over incidenten die zich hebben voorgedaan
-        tijdens wedstrijden die zijn opgelost door de WCA-reglementencommissie
-        zijn te vinden in het <a href="/incidents">Incidents-logboek</a>.
     panel2:
       #original_hash: 8ad8302
       title: Vertalingen
@@ -4700,3 +3811,28 @@ nl:
     privacy: Privacy
     #original_hash: 4c4a2e8
     disclaimer: Disclaimer
+  payments:
+    errors: {}
+  validators: {}
+  page:
+    teams_committees_councils: {}
+    contacts:
+      form:
+        user_data: {}
+        contact_recipient: {}
+        competition: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+    contact_edit_profile:
+      form: {}
+  trainee_delegate_application: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  merch: {}
+  database: {}
+  tickets: {}
+  qualification: {}

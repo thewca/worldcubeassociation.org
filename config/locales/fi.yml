@@ -1089,6 +1089,7 @@ fi:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Vahvista uusi sähköpostiosoite
+    registrations: {}
   wca:
     errors:
       messages:
@@ -2256,8 +2257,6 @@ fi:
         one: 1 alue
         other: '%{count} aluetta'
       #original_hash: 1feee0e
-      export_csv: Vie CSV-tiedostona
-      #original_hash: 84add5b
       email: Sähköposti
       #original_hash: e86b1e1
       non_competing: Non-competing registrations
@@ -2675,6 +2674,7 @@ fi:
         connected: 'Connected, results are being updated'
         #original_hash: 53abaa2
         disconnected: 'Lost connection, results are not being updated'
+      admin: {}
     my_competitions:
       #original_hash: 5c6d3ea
       title: Omat kilpailuni
@@ -3226,7 +3226,6 @@ fi:
           #original_hash: 87b7d5f
           uses_wca_registration: Haluan käyttää WCA-sivua rekisteröitymiseen
           #original_hash: ebe8c47
-          uses_wca_live: Käytän WCA Liveä tulosten tallentamiseen
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Valuuttatunnus
@@ -3580,6 +3579,7 @@ fi:
                 qualified for (I'll remove them later)
               #original_hash: 6509041
               'false': Competitors MUST be qualified to register for an event
+        website: {}
     registration_v2:
       auto_accept:
         #original_hash: eaf9960
@@ -3745,10 +3745,6 @@ fi:
         #original_hash: 65bbb07
         no_changes: Ei muutoksia
         #original_hash: be4e8e2
-        email_send: Lähetä sähköposti
-        #original_hash: b4bac52
-        email_copy: Copy Emails
-        #original_hash: b83b663
         email_message: Copied to clipboard. Remember to use bcc!
         #original_hash: beedd53
         move_to:
@@ -5859,10 +5855,6 @@ fi:
         cutoff-vaiheen ratkaisuyrityksen tulos. Lisää puuttuva tulos tai päivitä
         kierroksen tiedot kilpailusivulla.
       #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Results for %{person_name} are in the wrong format:
-        expected %{expected_format}, but got %{format}.
-      #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Kilpailijalla %{person_name} on vähintään yksi tulos, joka
         ylittää aikarajan %{time_limit}. Kaikki aikarajan yli menneet ratkaisut
@@ -5872,11 +5864,6 @@ fi:
         [%{round_ids}] Kilpailijan %{person_name} ratkaisujen summa ylittää
         kumulatiivisen aikarajan %{time_limit}.
       #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] There is no information about the cutoff and time limit
-        for this round. These validations have been skipped. Please update the
-        round's information in the competition's Manage Events page.
-      #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] The time limit for this round is undefined, time limit
         validations have been skipped. This is expected only for competitions
@@ -5908,11 +5895,6 @@ fi:
         %{expected}, jatkoonpääsyvaatimus oli %{condition}). Käy kilpailusivulla
         päivittämässä kierroksen tiedot.
       #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        Tuloksissa on mukana kierros %{round_id}, jota ei ole lisätty
-        kilpailusivulle. Käy kilpailusivulla päivittämässä kierrosten tiedot
-        oikeaksi.
-      #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         Kierroksella [%{round_id}] on alle 100 kilpailijaa, mutta yli kaksi
         jatkokierrosta, mikä rikkoo sääntöä 9m1.
@@ -5960,10 +5942,6 @@ fi:
         events tab. If this round was not held, please remove the round in the
         competition's manage events page.
       #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        No cutoff was announced for '%{round_name}', but it has been detected as
-        a cutoff round in the results. Please update the round's information in
-        the competition's manage events page.
     events:
       #original_hash: ef8709f
       not_333_main_event_warning: >-
@@ -5979,11 +5957,6 @@ fi:
         There is no selected main event for this competition. Please let WRT
         know that this is correct.
       #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Results are present for %{event_id}, however it is not listed as an
-        official event. Please remove the event from the results or contact the
-        WCAT to request the event to be added to the WCA website.
-      #original_hash: fde208d
       missing_results_warning: >-
         There are no results for %{event_id}, but it is listed as an official
         event. If the event was held, please reupload your JSON with the results
@@ -5998,10 +5971,6 @@ fi:
         Missing scrambles for the competition. Use Scrambles Matcher to add
         scrambles.
       #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the
-        unused scrambles.
-      #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Group %{group_id}: missing scrambles, detected only
         %{actual} instead of %{expected}.
@@ -6026,3 +5995,4 @@ fi:
       edit_person: Edit Person
       #original_hash: 5fb2137
       competition_result: Competition Result
+  trainee_delegate_application: {}

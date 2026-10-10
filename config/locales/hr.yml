@@ -576,8 +576,6 @@ hr:
         competition_id: Dogodilo se tokom
       competition_medium:
         #original_hash: 1917f4f
-        competition_d: Natjecanje
-        #original_hash: 3deb745
         media_type: Tip
         #original_hash: c3328c3
         text: Tekst
@@ -819,10 +817,6 @@ hr:
           Lista brojeva koji su referenca na incidente za koje se zahtjeva
           povratna informacija od WRC-a.
         #original_hash: 0aca3b0
-        wic_incidents: >-
-          Lista numeriranih referenci na incidente za koju treba WIC povratna
-          informacija.
-        #original_hash: f30abdc
         remarks: >-
           Par rečenica o bilo kojim detaljima koje želiš podijeliti (npr.
           poboljšanje/pogoršanje unutar zajednice, buduće planove za tu regiju).
@@ -1060,6 +1054,7 @@ hr:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Potvrdi svoju novu e-mail adresu
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1189,8 +1184,6 @@ hr:
       #original_hash: 6bce1b5
       about_regulations: O Pravilniku
       #original_hash: 141d1d7
-      guidelines: Smjernice
-      #original_hash: c4622c3
       scrambles: Scramble-ovi
       #original_hash: 90ccd64
       history: Povijest
@@ -2212,8 +2205,6 @@ hr:
         few: '%{count} država'
         other: '%{count} država'
       #original_hash: 1feee0e
-      export_csv: Izvezi u .csv datoteku
-      #original_hash: 84add5b
       email: Email
       #original_hash: e86b1e1
       non_competing: Nenatjecateljske registrations
@@ -2227,8 +2218,6 @@ hr:
       #original_hash: ce53c71
       payment_requested_on: 'Plaćanje potrebno do: %{date}'
       #original_hash: f5b1b34
-      payment_completed_on: 'Plaćanje izvršeno: %{date}'
-      #original_hash: 3141a14
       series_registrations: Registracije za Serije
       #original_hash: b25928c
       total: Ukupno
@@ -2236,10 +2225,6 @@ hr:
       #original_hash: 8b9f726
       title: 'Registriraj se za %{comp}'
     #original_hash: 7cae988
-    registered_with_account_html: >-
-      Ova osoba se registrirala s korisničkim računom. Možeš urediti njihove
-      osobne podatke %{here}.
-    #original_hash: ada2e9e
     sign_in: Prijavi se
     #original_hash: 5d45a00
     profile: profil
@@ -2298,11 +2283,6 @@ hr:
     #original_hash: 86877d4
     wont_pay_here: Provjeri informacije o natjecanju oko uputa kako platiti
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: >-
-          Povratak novca natjecatelju. Može biti do bilo kojeg iznosa koji je
-          već plaćen.
       labels:
         #original_hash: 1cc5991
         refund_amount: Vrati novac
@@ -2544,8 +2524,6 @@ hr:
       #original_hash: e205d73
       results_already_posted: Rezultati su već objavljeni.
       #original_hash: 376f461
-      results_posted: Uspješno objavljeni rezultati!
-      #original_hash: afe3a23
       results_preview_alert: Gledaš rezultate koji još nisu objavljeni.
       #original_hash: 16dd227
       upload_results: >-
@@ -3157,7 +3135,6 @@ hr:
           #original_hash: 87b7d5f
           uses_wca_registration: Želim koristiti WCA stranicu za registraciju
           #original_hash: ebe8c47
-          uses_wca_live: Želim koristiti WCA Live za bilježenje rezultata
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Kod valute
@@ -3493,6 +3470,7 @@ hr:
               'false': >-
                 Natjecatelji MORAJU biti kvalificirani za disciplinu za koju se
                 registriraju
+        website: {}
     registration_v2:
       pdf:
         #original_hash: 5c7d60f
@@ -3615,10 +3593,6 @@ hr:
         #original_hash: 65bbb07
         no_changes: Nema promjena
         #original_hash: be4e8e2
-        email_send: Pošalji email
-        #original_hash: b4bac52
-        email_copy: Kopiraj emailove
-        #original_hash: b83b663
         email_message: Kopirano u međuspremnik. Ne zaboravi koristiti bcc!
         #original_hash: beedd53
         move_to:
@@ -3969,8 +3943,6 @@ hr:
     #original_hash: 25e68c3
     cancel_confirm: Sigurno želite otkazati ovo natjecanje?
     #original_hash: 01de5ee
-    post_results: Objavi rezultate
-    #original_hash: b6513f1
     results_posted_by_html: 'Objavljeno %{poster_name} na dan %{date_time}'
     #original_hash: a6b5efe
     cancel_mistake: Napravljena pogreška?
@@ -4010,8 +3982,6 @@ hr:
         #original_hash: 83d204f
         regulation_link_text: 'Pravilo %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'Smjernica %{number}'
-        #original_hash: b2a983a
         cumulative_time_limit: kumulativno vremensko ograničenje
         #original_hash: d47f11a
         cumulative_one_round_html: >-
@@ -4197,6 +4167,9 @@ hr:
       add_series: Dodaj u Seriju
       #original_hash: be6edcd
       remove_series: Ukloni iz Serije
+    live:
+      admin: {}
+      connection: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -4254,17 +4227,11 @@ hr:
       onemogućeni. Softverski tim radi na vraćanju ovih filtera - ispričavamo se
       zbog neugodnosti.
     #original_hash: e3710ed
-    tooltip_no_years: Naša baza je prevelika za kalkulaciju povijesnih podataka
-    #original_hash: 357094b
-    tooltip_no_quantities: Naša baza je prevelika za kalkulaciju long rankinga
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Disciplina
         #original_hash: 3e83afa
-        all_events: Sve discipline
-      #original_hash: 0f21717
-      region: Regija
       type_selector:
         #original_hash: 3deb745
         type: Tip
@@ -4272,31 +4239,14 @@ hr:
         single: Pojedinačno
         #original_hash: 15f86c0
         average: Prosječno
-      years_selector:
-        #original_hash: 96f997b
-        years: Godine
-        #original_hash: 0977c76
-        all_years: Sve godine
-        #original_hash: 8737f09
-        only: Samo
-        #original_hash: b3c0fe7
-        only_html: 'Samo %{year}'
-        #original_hash: 96bdb66
-        until: Do
-        #original_hash: fa23930
-        until_html: 'Do %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Pokaži
         #original_hash: f3cf96e
         persons: Osobe
         #original_hash: 16d3376
-        persons_html: '%{quantity} osoba'
-        #original_hash: 612e12d
         results: Rezultati
         #original_hash: f3baa4a
-        results_html: '%{quantity} rezultata'
-        #original_hash: d46d2ee
         by_region: Po regiji
         #original_hash: c0dcb86
         mixed: Pomiješano
@@ -4323,8 +4273,6 @@ hr:
       #original_hash: 5faa59d
       result: Rezultat
       #original_hash: fa4c045
-      representing: Državljanstvo
-      #original_hash: 1917f4f
       competition: Natjecanje
       #original_hash: e7f6fc5
       solves: Slaganja
@@ -4332,19 +4280,10 @@ hr:
       region: Regija
       #original_hash: 70c07ec
       world: Svijet
-      type_options:
-        #original_hash: 3deb745
-        type: Tip
-        #original_hash: dd11868
-        single: Pojedinačno
-        #original_hash: 15f86c0
-        average: Prosječno
-      #original_hash: ad8919a
       event: Disciplina
       #original_hash: dcf8b56
       date_circa: Datum circa
       #original_hash: 1c54132
-      record: Rekord
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Spoji svoj WCA ID sa svojim korisničkim računom!
@@ -4445,6 +4384,7 @@ hr:
           primary_email: Email
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
+    errors: {}
   persons:
     index:
       #original_hash: 5934b4c
@@ -4898,7 +4838,6 @@ hr:
     #original_hash: 4f05e8f
     finances: Financije
     #original_hash: d1b1406
-    vision_and_strategy: Vizija i strategija
   education:
     #original_hash: 746e863
     title: WCA Edukacijski resursi
@@ -5241,10 +5180,6 @@ hr:
         WCA Pravilnik je upotpunjen <a href="/regulations/guidelines.html">WCA
         Smjernicama</a>, koje sadržavaju dodatna objašnjenja i razjašnjenja.
       #original_hash: c8e1783
-      content3_html: >-
-        Važne odluke oko incidenata koji su se dogodili na natjecanju i koji su
-        riješeni od strane WCA Odbora za Regulacije mogu se pronaći u <a
-        href="/incidents">Zapisniku o incidentima</a>.
     panel2:
       #original_hash: 8ad8302
       title: Prijevodi
@@ -5662,10 +5597,6 @@ hr:
         ažurirajte informacije o rundi na stranici Upravljanje događajima
         natjecanja.
       #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Rezultati za %{person_name} su u pogrešnom formatu:
-        očekivano %{expected_format}, ali dobiveno %{format}.
-      #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Najmanje jedan rezultat za %{person_name} premašuje
         vremensko ograničenje za rundu, koje je %{time_limit} po pokušaju. Sva
@@ -5675,11 +5606,6 @@ hr:
         [%{round_ids}] Zbroj rezultata za %{person_name} premašuje kumulativno
         vremensko ograničenje, koje je bilo %{time_limit}.
       #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Nema informacija o cutoffu i vremenskom ograničenju za ovu
-        rundu. Ove su provjere valjanosti preskočene. Ažurirajte informacije o
-        krugu na stranici Upravljanje događajima natjecanja.
-      #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] Vremensko ograničenje za ovu rundu je nedefinirano,
         provjere vremenskog ograničenja su preskočene. To se očekuje samo za
@@ -5711,11 +5637,6 @@ hr:
         bio: %{condition}). Ažurirajte informacije o krugu na stranici za
         upravljanje događajima.
       #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        Runda %{round_id} prisutna je u rezultatima, ali nije stvorena na
-        kartici događaja. Uključite informacije o krugu na stranicu za
-        upravljanje događajima natjecanja.
-      #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         Runda %{round_id} ima 99 ili manje natjecatelja, ali ima više od dvije
         uzastopne runde, što nije dopušteno prema Pravilu 9m1.
@@ -5763,10 +5684,6 @@ hr:
         Ako ovaj runda nije održana, uklonite rundu na stranici za upravljanje
         događajima natjecanja.
       #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Nije najavljen cutoff za '%{round_name}', ali je otkriveno kao cutoff u
-        rezultatima. Molimo ažurirajte informacije o rundi na stranici za
-        upravljanje događajima natjecanja.
     events:
       #original_hash: e87f8a0
       not_333_main_event_warning: >-
@@ -5779,11 +5696,6 @@ hr:
         Nema odabrane glavne discipline za ovo natjecanje. Obavijestite WRT da
         je to točno.
       #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Postoje rezultati za %{event_id}, ali nije navedeno kao službena
-        disciplina. Molimo uklonite događaj iz rezultata ili kontaktirajte WCAT
-        kako biste zatražili dodavanje događaja na web stranicu WCA.
-      #original_hash: fde208d
       missing_results_warning: >-
         Nema rezultata za %{event_id}, ali je naveden kao službena disciplina.
         Ako je disciplina održana, ponovno prenesite svoj JSON s uključenim
@@ -5798,10 +5710,6 @@ hr:
         Nedostaju scrambleovi za natjecanje. Upotrijebite Scrambles Matcher za
         dodavanje scrambleova.
       #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Previše scrambleova. Upotrijebite Scrambles Matcher da
-        poništite odabir neiskorištenih scrambleova.
-      #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupa %{group_id}: nedostaju scrambleovi, otkriveno samo
         %{actual} umjesto %{expected}.
@@ -5821,3 +5729,5 @@ hr:
         [%{round_id}] Ova runda ima drugačiji broj setova scramblea od navedenog
         na kartici Upravljanje događajima. Prilagodite broj scramble setova na
         kartici Upravljanje događajima prema broju korištenih setova.
+  trainee_delegate_application: {}
+  tickets: {}

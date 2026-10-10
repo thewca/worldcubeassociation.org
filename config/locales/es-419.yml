@@ -1957,7 +1957,7 @@ es-419:
         #original_hash: da39d05
         confirm: >-
           Tu cuenta ha sido creada y debe ser activada antes de que puedas usarla.
-          Por favor confirma tu cuenta mediante el enlace de debajo:  #original_hash: 776476a
+          Por favor confirma tu cuenta mediante el enlace de debajo: 
         confirmation_link: Confirmar mi cuenta.
         #original_hash: d484f70
         activate: 'Tras la activación, puedes identificarte en la web de la WCA: '
@@ -6622,7 +6622,7 @@ es-419:
       #original_hash: 050c7e2
       non_matching_name_warning: >-
         El nombre "%{name}" indicado para %{wca_id} no coincide con lo registrado
-        en la base de datos ("%{expected_name}").  #original_hash: 333a035
+        en la base de datos ("%{expected_name}"). 
       non_matching_country_warning: >-
         El país de %{name} (%{wca_id}), %{country}, no coincide lo registrado en
         la base de datos ("%{expected_country}"). Si es un error, corrígelo. En

@@ -325,8 +325,6 @@ ca:
       #original_hash: 603a218
       wca_id: WCA ID
       #original_hash: e0f64f7
-      citizen_of: Ciutadà de
-    #original_hash: 3fc0ba1
     all_regions: Totes les regions
     errors:
       #original_hash: 81f344a
@@ -335,10 +333,6 @@ ca:
     days:
       one: 1 dia
       many: '%{count} dies'
-      other:
-    these_events:
-      one: aquesta categoria
-      many: aquestes %{count} categories
       other:
     search_site: Cerca
     #original_hash: d7decf1
@@ -435,136 +429,6 @@ ca:
         user_preferred_events: Categories preferides
         #original_hash: e632fbf
         otp_attempt: 'Introdueix el teu codi de verificació en dos passos:'
-      competition:
-        #original_hash: 89f89c0
-        id: ID
-        #original_hash: 7f3d889
-        confirmed: No deixis als organitzadors editar aquesta competició
-        #original_hash: d493e6a
-        show_at_all: Fer la competició visible per al públic
-        #original_hash: 709a232
-        name: Nom
-        #original_hash: f91b080
-        name_reason: La raó del nom
-        #original_hash: b649210
-        cell_name: Sobrenom de la competició
-        #original_hash: d523ebb
-        country_id: País
-        #original_hash: 25b7b06
-        city_name: Nom de la ciutat
-        #original_hash: 67cd406
-        venue: Local
-        #original_hash: 486f8fb
-        venue_address: Adreça del lloc
-        #original_hash: 08767af
-        venue_details: Detalls del lloc
-        #original_hash: ff99f5b
-        start_date: Data d'inici
-        #original_hash: 89d10cd
-        end_date: Data de finalització
-        #original_hash: 2e8a57c
-        external_website: Pàgina web
-        #original_hash: 692e1f9
-        generate_website: >-
-          M'agradaria utilitzar la pàgina web de la WCA en lloc d'una externa
-          per informació addicional.
-        #original_hash: 6cf623b
-        base_entry_fee_lowest_denomination: Quota bàsica de registre
-        #original_hash: 28a6fbb
-        currency_code: Codi de divisa
-        #original_hash: 2e3ed8b
-        delegate_ids: Delegat(s) de la WCA
-        #original_hash: c0ddcd6
-        trainee_delegate_ids: Delegat(s) en pràctiques de la WCA
-        #original_hash: 958562e
-        organizer_ids: Organitzador(s)
-        #original_hash: b37456c
-        contact: Contacte
-        #original_hash: 0eb5ed5
-        information: Informació
-        #original_hash: 87b7d5f
-        use_wca_registration: M'agradaria utilitzar la pàgina web de la WCA pel 
-          registre
-        #original_hash: 8020e88
-        external_registration_page: Pàgina del registre
-        #original_hash: 9bb1965
-        competitor_limit_enabled: Límit de competidors
-        #original_hash: 749f4c9
-        competitor_limit: Nombre màxim de competidors
-        #original_hash: 4a8b6f1
-        competitor_limit_reason: La raó del límit de competidors
-        #original_hash: 3c23a67
-        guests_enabled: Espectadors
-        #original_hash: 089cbfd
-        receive_registration_emails: >-
-          Notifica'm per correu electrònic quan algú es registri a aquesta
-          competició
-        #original_hash: d4aeed9
-        registration_open: Registre obert
-        #original_hash: f8153a2
-        registration_close: Registre tancat
-        #original_hash: d7020f4
-        remarks: Observacions
-        #original_hash: c305010
-        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació 
-          addicional
-        #original_hash: c5497bc
-        competition_events: Categories
-        #original_hash: 71c8461
-        enable_donations: Vull activar les donacions addicionalment a les quotes
-          d'inscripció
-        #original_hash: 4baf44b
-        championship_type: Tipus de campionat
-        #original_hash: 556fda0
-        extra_registration_requirements: Requisits extra de registre
-        #original_hash: 2529d04
-        on_the_spot_registration: Registres al lloc
-        #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: Quota d'inscripció bàsica al 
-          lloc
-        #original_hash: 7e53b96
-        allow_registration_edits: Edicions dels registres
-        #original_hash: 3d47eca
-        allow_registration_self_delete_after_acceptance: Cancel·lacions de 
-          registres
-        #original_hash: efbdbab
-        refund_policy_percent: Percentatge de reemborsament
-        #original_hash: b332299
-        refund_policy_limit_date: Data límit pels retorns
-        #original_hash: 16cf9a4
-        waiting_list_deadline_date: Data límit per acceptar competidors de la 
-          llista d'espera
-        #original_hash: 99a9169
-        event_change_deadline_date: Data límit pels competidors per actualitzar 
-          les categories
-        #original_hash: 3542671
-        guests_entry_fee_lowest_denomination: Quota d'entrada pels espectadors
-        #original_hash: bb16247
-        free_guest_entry_status: Mostra missatge per entrada gratuïta dels 
-          espectadors
-        #original_hash: 723cad9
-        early_puzzle_submission: >-
-          M'agradaria sol·licitar als competidors que facin entrega dels seus cubs
-          en una hora específica abans que comenci la categoria
-        #original_hash: 78308cc
-        early_puzzle_submission_reason: Raó i detalls per l'entrega abans d'hora
-          dels cubs
-        #original_hash: 88da0ef
-        qualification_results: >-
-          M'agradaria utilitzar els resultats de qualificació per limitar qui
-          pot competir en certes categories
-        #original_hash: 1ec6dd4
-        qualification_results_reason: Raó i detalls pels resultats de 
-          qualificació
-        #original_hash: ac30de9
-        event_restrictions: >-
-          M'agradaria limitar als competidors de registrar-se a una combinació
-          específica de categories
-        #original_hash: 4bf194c
-        event_restrictions_reason: Raó i detalls per les limitacions de 
-          categories
-        #original_hash: 3c24bd2
-        main_event_id: Categoria principal
       registration:
         #original_hash: 3c23a67
         guests: Acompanyants
@@ -606,11 +470,6 @@ ca:
         #original_hash: 0c7191d
         wrc_incidents: Incidents que necessiten feedback de WRC
         #original_hash: 5a92b25
-        wdc_feedback_requested: M'agradaria rebre feedback de WDC en alguns dels
-          incidents mencionats.
-        #original_hash: 06a0568
-        wdc_incidents: Incidents que necessiten feedback de WDC
-        #original_hash: d7020f4
         remarks: Observacions
       person:
         #original_hash: 8c41ae8
@@ -727,23 +586,7 @@ ca:
         f: Dona
         #original_hash: 6e6a6f2
         o: Altres
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: Delegat en pràctiques
-        #original_hash: 9b97968
-        candidate_delegate: Delegat Junior
-        #original_hash: 12ab214
-        delegate: Delegat
-        #original_hash: d463c23
-        senior_delegate: Delegat Sènior
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: Home
-        #original_hash: b7c17e9
-        f: Dona
-        #original_hash: 6e6a6f2
-        o: Altres
+    person: {}
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -757,17 +600,9 @@ ca:
         article: Article
         #original_hash: 82dabd0
         multimedia: Multimèdia
-    competition:
-      free_guest_entry_status:
-        #original_hash: 7e54323
-        unclear: >-
-          No mostris res (i potser explica-ho millor a l'apartat "Requeriments
-          extra de registre")
-        #original_hash: 694bce4
-        anyone: Qualsevol espectador pot assistir gratuïtament
-        #original_hash: 762c509
-        restricted: Els espectadors només són permesos com acompanyants de 
-          competidors
+    competition: {}
+    user_roles:
+      status: {}
   simple_form:
     #original_hash: 5397e05
     'yes': Sí
@@ -823,133 +658,6 @@ ca:
         otp_attempt: >-
           Comprova la teva aplicació mòbil configurada per a una contrasenya
           d'un sol ús, o introdueix un dels teus codis de recuperació.
-      competition:
-        #original_hash: 2c812a0
-        name: >-
-          El nom complet de la competició incloent l'any al final (exemple:
-          Danish Open 2016). Revisa les majúscules. El nom ha de contenir només
-          caràcters alfanumèrics, guions(-), ampersands(&), punts(.), dos punts(:),
-          apòstrofs(') i espais().
-        #original_hash: 525fcc8
-        cell_name: >-
-          Un nom curt per mostrar. Si el nom de la competició ja és curt, pots
-          reutilitzar el nom (exemple: Europe 2006).
-        #original_hash: bce4589
-        city_name: >-
-          Nom de la ciutat i estat (si és possible) on hi haurà la competició.
-          No incloguis el país (exemple: París o San Francisco, Califòrnia).
-        #original_hash: bb470cc
-        information: >-
-          Informació important que els competidors haurien de saber. Sortirà a
-          la pàgina principal de la competició. <br/>Si us plau, emplena-ho
-          <b>en anglès</b> i qualsevol altre idioma que els competidors puguin
-          parlar.
-        #original_hash: b4d020f
-        delegate_ids: Delegats de la WCA per la competició.
-        #original_hash: cb9882c
-        trainee_delegate_ids: Delegats en pràctiques de la WCA per la 
-          competició.
-        #original_hash: 517d376
-        organizer_ids: >-
-          Organitzadors de la competició (han de tenir un compte per sortir
-          aquí).
-        #original_hash: cabe7fb
-        external_website: Pàgina web de la competició. Ha de tenir un enllaç 
-          http(s) vàlid.
-        #original_hash: 9965635
-        registration_open: 'Important: L''obertura i clausura del registre està en
-          horari UTC'
-        #original_hash: 9ea6021
-        remarks: >-
-          Alguna informació addicional que vulguis mencionar a WCAT. Per
-          exemple, si hi ha alguna cosa que no acabes de tenir clara o si tens
-          una proposta especial per WCAT. Si us plau, omple-ho en anglès!
-        #original_hash: b2af5f5
-        external_registration_page: >-
-          La pàgina on els competidors s'han de registrar per la competició. Ha
-          de ser un enllaç http(s) vàlid.
-        #original_hash: a6f6562
-        base_entry_fee_lowest_denomination: >-
-          La quota de registre bàsica per la competició. Es mostrarà a la pàgina
-          principal de la competició i a la pàgina de registre si s'utilitza. Si
-          s'estableix a 0, es mostrarà una frase dient que es pot atendre a la
-          competició gratuïtament. <br><br> <b>IMPORTANT: Les següents WCA Dues
-          són només una aproximació basada en el tipus de conversió de divisa
-          actual i de cap manera és legalment vinculant pel pagament d'aquestes.
-          </b><br> Prem "Actualitza Competició" després de canviar el codi de
-          moneda per sincronitzar l'estimació. Si no hi ha cap tipus de
-          conversió disponible per la moneda seleccionada, no es mostrarà res.
-        #original_hash: 9735ddf
-        currency_code: El codi de moneda per les quotes.
-        #original_hash: dc47c39
-        competitor_limit_enabled: >-
-          Tot i que no és requerit per les Regulacions d'establir un límit de
-          competidors, és altament recomanat.
-        #original_hash: b7b599b
-        competitor_limit: >-
-          El nombre de competidors permesos per aquesta competició. Per ara
-          aquest nombre només és informatiu i no impedeix que més gent es
-          registri. Estem treballant per afegir suport explícit per aquest
-          procés d'inscripció, però requereix més feina primer.
-        #original_hash: 4bd7102
-        competitor_limit_reason: >-
-          Quina és la raó del límit de competidors? Si us plau, omple-ho en
-          anglès!
-        #original_hash: 3de153b
-        extra_registration_requirements: >-
-          Si us plau, indica aquí qualsevol requisit extra pel registre que
-          encara no s'hagi indicat, com per exemple instruccions de com pagar.
-          <br/>Si us plau, omple-ho <b>en anglès</b> i qualsevol altre idioma
-          que els competidors puguin parlar; es mostrarà a la pàgina
-          d'informació sobre la competició així com la pàgina de registre a la
-          competició si és que s'utilitza la pàgina web de la WCA per fer-les.
-        #original_hash: 8c4fdf8
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Si s'introdueix un 0 aquí, es mostrarà una frase dient que els
-          registres al lloc seran acceptats gratuïtament.
-        #original_hash: 180b7b3
-        refund_policy_percent: >-
-          Per ara aquest nombre es només informatiu, els retorns s'han de fer
-          manualment. Si s'introdueix 0, es mostrarà una frase dient que les
-          quotes de registre mai seran retornades sota cap circumstància.
-        #original_hash: f64d853
-        refund_policy_limit_date: Data límit a partir de la qual no es retornarà
-          cap més quota.
-        #original_hash: 664db64
-        waiting_list_deadline_date: >-
-          La data a partir de la qual no s'acceptaran més persones de la llista
-          d'espera. Si tens una data límit pels retorns de quota, la data per
-          ser acceptat no hauria de ser abans de la data límit pels retorns.
-        #original_hash: 75e6c1f
-        event_change_deadline_date: >-
-          Els competidors registrats tenen el dret d'actualitzar les seves categories
-          fins aquesta data contactant l'equip organitzador. Aquesta data límit
-          no hauria de ser posada abans del moment que s'ha de tancar els
-          registres. Deixar aquest espai en blanc vol dir que els competidors
-          poden afegir una categoria més per competir fins al mateix moment de la
-          competició. Si acceptes registres al lloc, aquesta data ha de ser la
-          mateixa que l'inici de la competició.
-        #original_hash: 0419547
-        guests_entry_fee_lowest_denomination: >-
-          Per ara aquest nombre és només informatiu, les quotes d'espectador no
-          poden ser administrades per aquesta pàgina web. Si s'introdueix un 0,
-          es mostrarà una frase que escullis referent a la política pels
-          espectadors.
-        #original_hash: 4e8488b
-        early_puzzle_submission_reason: >-
-          Si us plau, explica perquè voldries requerir als competidors que
-          entriguin els cubs més aviat. Omple-ho en anglès!
-        #original_hash: f859883
-        qualification_results_reason: >-
-          Si us plau, explica aquí perquè voldries utilitzar temps de
-          qualificació. Omple-ho en anglès!
-        #original_hash: d3329d7
-        event_restrictions_reason: >-
-          Si us plau, explica aquí perquè voldries limitar una combinació
-          especifica de categories. Omple-ho en anglès!
-        #original_hash: 1067798
-        main_event_id: El guanyador d'aquesta categoria serà el guanyador de la 
-          competició.
       website_contact:
       dob_contact:
         #original_hash: 8723825
@@ -1008,10 +716,6 @@ ca:
           Llista dels números d'incidències de les quals t'agradaria rebre
           feedback de WRC.
         #original_hash: 38a95e5
-        wdc_incidents: >-
-          Llista dels números d'incidències de les quals t'agradaria rebre
-          feedback de WDC.
-        #original_hash: f30abdc
         remarks: >-
           Parla sobre qualsevol altre detall que t'agradaria comentar (per
           exemple una millora/regressió de la comunitat local, plans de futur
@@ -1020,9 +724,6 @@ ca:
       competition_tab:
         #original_hash: e396d28
         name: 'Exemples: Viatge, Pagaments, Premis, Estància'
-      person:
-        #original_hash: 498f4c5
-        dob: La data de naixement ha de tenir el format YYY-MM-DD.
       registration:
       results_submission:
       regional_organization:
@@ -1262,6 +963,7 @@ ca:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: 'Si  us plau, confirma la nova adreça de correu electrònic'
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1310,11 +1012,6 @@ ca:
         Benvingut! Per crear un compte de la WCA necessitem saber el WCA ID sota
         el que has competit.
       #original_hash: 669fb57
-      welcome: >-
-        Benvingut! Abans de competir a la teva primera competició de la WCA,
-        necessitem saber alguna informació addicional per mantenir un registre.
-        Recorda que mai publicarem la teva data de naixement sense el teu
-        permís.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1366,14 +1063,10 @@ ca:
       #original_hash: 82dabd0
       multimedia: Multimèdia
       #original_hash: 4fd2a7f
-      db_export: Exportar la base de dades
-      #original_hash: 1fa73f3
       regulations: Regulacions
       #original_hash: 6bce1b5
       about_regulations: Sobre les Regulacions
       #original_hash: 141d1d7
-      guidelines: Directrius
-      #original_hash: c4622c3
       scrambles: Barrejes
       #original_hash: 90ccd64
       history: Història
@@ -1396,14 +1089,8 @@ ca:
       #original_hash: d3a928c
       results_team: Equip de Resultats
       #original_hash: 4e7afeb
-      results_admin: Administrador
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
-      #original_hash: aee74b8
       new_post: Nova publicació
       #original_hash: 0d67445
-      team_leader: Líder d'equip
-      #original_hash: 37b8fdc
       regional_organizations: Organitzacions Regionals
       #original_hash: 6568fa0
       manage_regional_organizations: Administra Organitzacions Regionals
@@ -1665,8 +1352,6 @@ ca:
       #original_hash: 8be3c94
       password: Contrasenya
       #original_hash: 3fc6dbe
-      member_of: Membre de
-      #original_hash: 42619dd
       preferred_events_desc: >-
         Seleccionar les teves categories preferides fa que el registre per les
         competicions sigui més ràpid.
@@ -1836,11 +1521,6 @@ ca:
       must_have_a_change: El nom o el país ha de ser diferent per actualitzar la
         persona.
       #original_hash: 2e582eb
-      must_not_be_present: no pot ser present
-      #original_hash: 5b4eac9
-      senior_has_delegate: no es pot degradar Delegat Sènior amb Delegats 
-        subordinats
-      #original_hash: 48653a9
       already_have_id: 'no es pot reclmar un WCA ID perquè ja en tens un %{wca_id}'
       #original_hash: ec5db95
       wca_id_no_birthdate_html: >-
@@ -1863,8 +1543,6 @@ ca:
         <a href='%{wrt_contact_path}' target='_blank'>Equip
         de Resultats de la WCA</a> per resoldre-ho.
       #original_hash: d02c03b
-      avatar_requires_wca_id: necessita un WCA ID per ser assignat
-      #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         ja està utilitzat per un altre compte. Ha estat creat automàticament com
         a resultat del registre a una competició a través d'un servei extern. Si
@@ -1916,11 +1594,6 @@ ca:
       #original_hash: d84a54f
       need_country: Necessita un país
       #original_hash: cec28a0
-      comp_not_found: No s'ha trobat la competició
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Un registre no pot ser eliminat i acceptat
-        al mateix moment.
-      #original_hash: a38d024
       must_register: t'has de registrar com a mínim a una categoria
       #original_hash: e78eec3
       banned_html: >-
@@ -1947,28 +1620,8 @@ ca:
       #original_hash: da7ec53
       not_using_wca: Aquesta competició no utilitza el registre WCA
       #original_hash: d528030
-      accepted_and_mailed:
-        one: Registre acceptat! S'ha enviat la notificació per correu.
-        many: Registres acceptats! S'han enviat les notificacions per correu.
-        other:
-      rejected_and_mailed:
-        one: Registre desplaçat a la llista d'espera.
-        many: Registres desplaçats a la llista d'espera.
-        other:
-      deleted_and_mailed:
-        one: Registre eliminat
-        many: Registres eliminats
-        other:
-      single_deletion_and_mail: 'Registre eliminat i s''ha enviat un correu %{mail}'
-      #original_hash: d8f067f
-      cannot_delete: No pots eliminar el teu registre.
-      #original_hash: 82b3899
       updated: Registre actualitzat
       #original_hash: 856484a
-      failed: No s'ha pogut actualitzar el registre
-      #original_hash: 016b4ae
-      deleted: 'S''ha eliminat correctament el teu registre per %{comp}'
-      #original_hash: 648424f
       registered: Registrat correctament!
       #original_hash: 82fed60
       imported: Registres importats correctament!
@@ -2008,22 +1661,6 @@ ca:
           consultar l'estat del teu registre %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Estem desitjant a veure''t a %{comp_name}!'
-      pending:
-        #original_hash: e48d8bd
-        mail_subject: 'Has sigut afegit a la llista d''espera per %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          El teu registre per %{comp_name} ha sigut afegit a la llista d'espera.
-          Les possibles causes són:
-        causes:
-          #original_hash: eadfc0d
-          accepted: El teu registre ha sigut accidentalment acceptat
-          #original_hash: 2ac6d84
-          withdrawal: Has demanat la retirada
-        #original_hash: 8f7358f
-        email_if_error: >-
-          Si penses que és un error, si us plau, respon a aquest correu
-          electrònic.
       deleted:
         #original_hash: 268e248
         mail_subject: 'El teu registre per %{comp_name} ha sigut eliminat.'
@@ -2057,22 +1694,8 @@ ca:
         one: 1 país
         many: '%{count} països'
         other:
-      export_csv: Exportar a CSV
-      #original_hash: 84add5b
       email: Correu electrònic
       #original_hash: 7b2c7f1
-      approve: Aprovar
-      #original_hash: 2b03b59
-      reject: Denegar
-      #original_hash: f6fdbe4
-      delete: Eliminar
-      #original_hash: 92d40dc
-      waiting_list: Llista d'espera
-      #original_hash: 06f7d1a
-      approved_registrations: Registres aprovats
-      #original_hash: bff04e8
-      deleted_registrations: Registres eliminats
-      #original_hash: ac5d958
       not_paid: Sense pagar
       registered:
         #original_hash: 2c2f473
@@ -2082,25 +1705,16 @@ ca:
       #original_hash: ce53c71
       payment_requested_on: 'Pagament demanat a: %{date}'
       #original_hash: f5b1b34
-      payment_completed_on: 'Pagament completat a: %{date}'
-      #original_hash: b25928c
       total: Total
       #original_hash: df036fe
-      n_events: Nombre de categories
     new_registration:
       #original_hash: 8b9f726
       title: 'Registra''t a %{comp}'
     #original_hash: 7cae988
-    registered_with_account_html: >-
-      Aquesta persona s'ha registrat amb un compte. Pots editar la seva
-      informació personal %{here}.
-    #original_hash: ada2e9e
     sign_in: Inicia sessió
     #original_hash: 5d45a00
     profile: perfil
     #original_hash: 801b3e9
-    panel_title: Detalls del registre
-    #original_hash: c0063c3
     register: Registra't!
     #original_hash: f484f15
     refund: Reembolsament del pagament
@@ -2109,8 +1723,6 @@ ca:
     #original_hash: a9af643
     update: Actualitza el registre
     #original_hash: f6fdbe4
-    delete: Elimina
-    #original_hash: b72119a
     delete_confirm: Estàs segur que vols eliminar el teu registre?
     #original_hash: cfc4865
     delete_registration: Eliminar registre.
@@ -2135,8 +1747,6 @@ ca:
       %{sign_in} per registrar-te a %{comp}. Si encara no tens un compte de la
       WCA, te'n pots crear un %{here}.
     #original_hash: 89b4e7f
-    greeting: 'Hola, %{name}!'
-    #original_hash: 322f646
     please_fix_profile_html: >-
       Per registrar-te a %{comp}, has de solucionar els següents problemes al
       %{profile}:
@@ -2146,25 +1756,6 @@ ca:
       s'hi ha arribat. Si et registres, el teu registre serà posat a la llista
       d'espera. Aquest no serà aprovat  fins que hi hagi un lloc lliure.
     #original_hash: 855ca9c
-    can_register: 'Pots registrar-te per %{comp} seguidament.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Si us plau, revisa la informació sobre el registre per saber si has de fer
-      alguna cosa més, com pagar una quota d'inscripció.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Has enviat el teu registre per %{comp}. Pots veure els teus detalls del
-      registre seguidament.
-    #original_hash: 3c9141f
-    contact_organizer: Contacta amb els organitzadors si desitges fer un canvi.
-    #original_hash: 59354fd
-    waiting_list: >-
-      El teu registre està pendent. Per l'aprovació, pot ser necessari pagar la
-      quota d'inscripció. Comprova el lloc web de la competició per a més
-      detalls.
-    #original_hash: 58b1a3c
-    accepted: El teu registre s'ha acceptat!
-    #original_hash: bcd7d70
     entry_fees_fully_paid: 'Has pagat %{paid}, que cobreix tota la quota de registre.'
     #original_hash: 2e5d1b9
     will_pay_here: Les pagaràs aquí després d'enviar el teu registre.
@@ -2173,18 +1764,11 @@ ca:
       Si us plau, comprova la informació sobre la competició per les
       instruccions sobre com pagar
     refund_form:
-      hints:
-        #original_hash: d97186d
-        refund_amount: >-
-          La quantitat per retornar al competidor pot ser qualsevol valor fins a
-          la quantitat que ja està pagada.
       labels:
         #original_hash: 1cc5991
         refund_amount: Retornar quantitat
     payment_form:
       #original_hash: 4de825f
-      title: Quotes de registre
-      #original_hash: d1569e6
       payment_successful: >-
         El pagament ha sigut exitós i el teu registre hauria de sortir com a
         pagat seguidament.
@@ -2192,23 +1776,12 @@ ca:
         #original_hash: bf3a39e
         donation: Donació opcional que anirà només a l'equip organitzador
         #original_hash: 16cf92d
-        card_information: >-
-          La informació de la targeta mai arriba a la pàgina web de la WCA. És
-          enviada de forma segura a Stripe que administra el procés de pagament
-          i després ens informa a nosaltres.
       labels:
         #original_hash: 4de825f
-        entry_fees: Quotes de registre
-        #original_hash: 2c09302
         donation: Donació
         #original_hash: 184150d
-        card_information: Informació de la targeta
-        #original_hash: bc8091a
-        cardholder_name: Titular de la targeta
       alerts:
         #original_hash: a34940e
-        not_a_number: 'Si us plau, introdueix un valor vàlid.'
-        #original_hash: 707b9ca
         amount_too_low: >-
           El nombre total ha de ser com a mínim la quota de registre que s'ha de
           pagar.
@@ -2220,14 +1793,6 @@ ca:
         #original_hash: b2bc8ed
         not_allowed: No pots pagar el registre
         #original_hash: 630dbb9
-        intent_not_found: >-
-          No hem pogut trobar l'intent de pagament al nostre servidor. El procés
-          de pagament s'ha avortat i no s'ha fet cap càrrec a la targeta.
-        #original_hash: 63e0ec1
-        cardholder_name: 'Si us plau, revisa el nom del titular de la targeta.'
-    #original_hash: 8607a87
-    payment_button_text: Pagar les quotes amb targeta
-    #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Per accelerar el procés de registre en un futur, pots establir les teves
       categories preferides %{link}.
@@ -2374,8 +1939,6 @@ ca:
       #original_hash: e205d73
       results_already_posted: Els resultats ja s'han publicat.
       #original_hash: 376f461
-      results_posted: Resultats publicats exitosament!
-      #original_hash: afe3a23
       results_preview_alert: Estàs visualitzant resultats que encara no s'han 
         publicat.
       #original_hash: 07de612
@@ -2412,13 +1975,6 @@ ca:
       not_confirmed_not_visible: Aquesta competició no està confirmada i no és 
         visible.
       #original_hash: a821396
-      stripe_connected: >-
-        Has connectat exitosament el teu compte Stripe i ja pots rebre els
-        pagaments d'aquesta competició.
-      #original_hash: 0a4bb53
-      stripe_not_connected: Hi ha hagut un problema i no podem connectar el teu 
-        compte Stripe.
-      #original_hash: 724cf0d
       championship_exists: 'Ja hi ha un %{championship_type} al %{year}'
     my_competitions:
       #original_hash: 5c6d3ea
@@ -2549,8 +2105,6 @@ ca:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Qualsevol espectador pot entrar gratuïtament.
-        #original_hash: f1e6aef
         restricted: >-
           Els espectadors només estan permesos com a acompanyants del
           competidor.
@@ -2629,10 +2183,6 @@ ca:
       #original_hash: db98a68
       title: Competicions
       #original_hash: f483b9c
-      disclaimer: >-
-        Tinguis en compte que a causa de la pandèmia de COVID-19 alguns països
-        no poden acollir competicions.
-      #original_hash: 6a72085
       all_events: Tot
       #original_hash: 6d76b81
       all_years: Tots els anys
@@ -2687,7 +2237,6 @@ ca:
         by_announcement: 'Competicions ordenades per data d''anunci, les més noves
           a dalt'
       #original_hash: 6684214
-      no_access: No tens accés a aquesta pàgina!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -2716,9 +2265,6 @@ ca:
       #original_hash: 8b09d74
       no_comp_found: No s'han trobat competicions.
       #original_hash: 7008166
-      no_comp_match: >-
-        No hem trobat cap competició amb %{events}! Intenta buscar amb menys
-        categories.
     my_competitions_table:
       #original_hash: 5301648
       edit: Editar
@@ -2751,26 +2297,6 @@ ca:
         Suporta <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
       #original_hash: e5cbb13
-      name_reason_html: >-
-        Una breu explicació pel nom de la competició. El nom ha de complir amb
-        <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
-        Competition Requirements Policy</a>.
-      #original_hash: 9d9126e
-      venue_html: >-
-        El local on tindrà lloc la competició. %{md}. Per exemple: [Cité des
-        Sciences et de l'Industrie](http://www.cite-sciences.fr)
-      #original_hash: 2651d1a
-      venue_details_html: >-
-        Detalls sobre el local (per exemple, Al fons de la primera planta,
-        segueix els signes). %{md}
-      #original_hash: 447814d
-      contact_html: >-
-        Dades de contacte opcional. Si no ho omples, el contacte es farà a
-        través d'un formulari sense revelar les adreces de correu electrònic
-        dels organitzadors. %{md}. Exemple: [Text to
-        display](mailto:some@email.com)
-      #original_hash: c5497bc
       events: Categories
       #original_hash: cafc153
       public_and_locked_html: >-
@@ -2846,7 +2372,6 @@ ca:
           name: Local
           details: Detalls del lloc
           address: Adreça del lloc
-          coordinates:
         start_date: Data d'inici
         end_date: Data de finalització
         information: Informació
@@ -2868,9 +2393,6 @@ ca:
           uses_wca_registration: M'agradaria utilitzar la pàgina web de la WCA 
             pel registre
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: Notifica'm per correu electrònic quan 
-            algú es registri a aquesta competició
         entry_fees:
           currency_code: Codi de divisa
           base_entry_fee: Quota bàsica de registre
@@ -2888,14 +2410,11 @@ ca:
           event_change_deadline_date: Data límit pels competidors per 
             actualitzar les categories
           allow_on_the_spot: Registres al lloc
-          allow_self_delete_after_acceptance: Cancel·lacions de registres
           allow_self_edits: Edicions dels registres
           guests_enabled: Espectadors
           guest_entry_status: Mostra missatge per entrada gratuïta dels 
             espectadors
-          guests_per_registration:
           extra_requirements: Requisits extra de registre
-          force_comment:
         event_restrictions:
           early_puzzle_submission:
             enabled: M'agradaria sol·licitar als competidors que facin entrega 
@@ -2906,16 +2425,12 @@ ca:
             enabled: M'agradaria utilitzar els resultats de qualificació per 
               limitar qui pot competir en certes categories
             reason: Raó i detalls pels resultats de qualificació
-            allow_registration_without:
           event_limitation:
             enabled: M'agradaria limitar als competidors de registrar-se a una 
               combinació específica de categories
             reason: Raó i detalls per les limitacions de categories
-            per_registration_limit:
           main_event_id: Categoria principal
         remarks: Observacions
-        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació 
-          addicional
       hints:
         name: 'El nom complet de la competició incloent l''any al final (exemple:
           Danish Open 2016). Revisa les majúscules. El nom ha de contenir només caràcters
@@ -3001,7 +2516,6 @@ ca:
             categoria més per competir fins al mateix moment de la competició. 
             Si acceptes registres al lloc, aquesta data ha de ser la mateixa que
             l'inici de la competició.
-          guests_per_registration:
           extra_requirements: Si us plau, indica aquí qualsevol requisit extra 
             pel registre que encara no s'hagi indicat, com per exemple 
             instruccions de com pagar. <br/>Si us plau, omple-ho <b>en 
@@ -3021,7 +2535,6 @@ ca:
           event_limitation:
             reason: Si us plau, explica aquí perquè voldries limitar una 
               combinació especifica de categories. Omple-ho en anglès!
-            per_registration_limit:
           main_event_id: El guanyador d'aquesta categoria serà el guanyador de 
             la competició.
         remarks: Alguna informació addicional que vulguis mencionar a WCAT. Per 
@@ -3046,19 +2559,15 @@ ca:
             'false': >-
               Els competidors NO haurien d'editar el seu registre un cop ja s'hagi
               acceptat
-          allow_self_delete_after_acceptance:
-            'true': >-
-              Els competidors poden eliminar el seu registre inclús després
-              d'haver sigut acceptats
-            'false': >-
-              Els competidors NO haurien d'eliminar el seu registre un cop s'hagi
-              acceptat
           guest_entry_status:
             unclear: No mostris res (i potser explica-ho millor a l'apartat 
               "Requeriments extra de registre")
             free: Qualsevol espectador pot assistir gratuïtament
             restricted: Els espectadors només són permesos com acompanyants de 
               competidors
+        website: {}
+        event_restrictions:
+          qualification_results: {}
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3114,9 +2623,6 @@ ca:
         La data límit de la llista d'espera no pot ser abans que la data límit
         dels retorns.
       #original_hash: 44d9902
-      waiting_list_deadline_after_start: La data límit de la llista d'espera ha 
-        de ser abans de la data d'inici.
-      #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         La data límit per actualitzar categories no pot ser abans de la data de
         clausura del registre.
@@ -3149,57 +2655,6 @@ ca:
       competition_in: 'La competició és en %{n_days}.'
       #original_hash: e6e096a
       competition_was: 'La competició va ser fa  %{n_days}.'
-    nearby_competitions:
-      #original_hash: 241801a
-      competitions:
-        one: 1 competició
-        many: '%{count} competicions'
-        other:
-      label: 'Competicions pròximes (entre %{days} dies i %{kms} km)'
-      #original_hash: 3446062
-      label_admin: 'Els últims %{days} dies'
-      #original_hash: 07a1cf0
-      nearby_admin: '%{x_competitions} entre %{kms} km i %{days} dies.'
-      #original_hash: feefb46
-      no_comp_nearby: Sense competicions pròximes!
-      #original_hash: 7e76950
-      no_date_yet: Encara no has assignat una data per aquesta competició.
-      #original_hash: 82a95d2
-      no_location_yet: Encara no has assignat cap ubicació per aquesta 
-        competició.
-      #original_hash: 9eb8f46
-      within: 'Entre %{days} dies'
-      #original_hash: d97d1ee
-      show: Mostra
-      #original_hash: 709a232
-      name: Nom
-      #original_hash: adc24b7
-      delegates: Delegat(s)
-      #original_hash: eb9a4bc
-      date: Data
-      #original_hash: d219c68
-      location: Localització
-      #original_hash: 4232080
-      distance: Distància
-      #original_hash: 51de2b8
-      before: abans
-      #original_hash: 405906c
-      after: després
-      #original_hash: e1978a9
-      starts_on: comença al
-      #original_hash: 964aedc
-      ends_on: acaba en
-      #original_hash: 24d948e
-      limit: Límit
-      #original_hash: 855bd26
-      competitors: Competidors
-      #original_hash: c5497bc
-      events: Categories
-      #original_hash: 50cb854
-      show_events: Mostra categories
-      #original_hash: 0df66f7
-      hide_events: Amaga categories
-    #original_hash: 06b01c4
     announcements: Anuncis
     #original_hash: a2b80b0
     post_announcement: Anuncia la competició
@@ -3214,10 +2669,6 @@ ca:
     #original_hash: 25e68c3
     cancel_confirm: Estàs segur que vols cancel·lar la competició?
     #original_hash: 9a42672
-    upload_results: Penja els resultats
-    #original_hash: 01de5ee
-    post_results: Publica els resultats
-    #original_hash: b6513f1
     results_posted_by_html: 'Publicat per %{poster_name} a %{date_time}'
     #original_hash: a6b5efe
     cancel_mistake: Has comès un error?
@@ -3241,8 +2692,6 @@ ca:
         #original_hash: 83d204f
         regulation_link_text: 'Regulació %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'Directriu %{number}'
-        #original_hash: b2a983a
         cumulative_time_limit: temps límit acumulatiu
         #original_hash: d47f11a
         cumulative_one_round_html: 'Pot ser imposat un %{cumulative_time_limit} (mira
@@ -3285,8 +2734,6 @@ ca:
     schedule:
       display_as:
         #original_hash: ec5dd7c
-        label: 'Mostra l''horari com:'
-        #original_hash: 0424f6e
         table: Taula
         #original_hash: adab509
         calendar: Calendari
@@ -3304,18 +2751,10 @@ ca:
       #original_hash: 81c0d91
       activity: Activitat
       #original_hash: 90e2fca
-      room: Sala
-      #original_hash: 73acb7f
       room_in_venue: '%{room} dins %{venue}'
       #original_hash: 2896c7a
-      venue_information_html: 'Estàs mirant l''horari pel local %{venue_name}.'
-      #original_hash: b97e383
       timezone_message: 'L''horari es mostra en la zona horària %{timezone}.'
       #original_hash: 2ab94a0
-      multiple_venues_available: >-
-        Aquesta competició té diferents locals, assegura't també de comprovar
-        els horaris pels altres locals!
-      #original_hash: 37b1adb
       schedule_for_date: 'Horari per %{day_name} (%{full_date})'
     nav:
       menu:
@@ -3380,6 +2819,12 @@ ca:
       group: Grup
       #original_hash: b7126cd
       scramble: Barreja
+    registration_v2:
+      register:
+        panel: {}
+    live:
+      admin: {}
+      connection: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3434,9 +2879,6 @@ ca:
         #original_hash: ad8919a
         event: Categoria
         #original_hash: 3e83afa
-        all_events: Totes les categories
-      #original_hash: 0f21717
-      region: Regió
       type_selector:
         #original_hash: 3deb745
         type: Tipus
@@ -3444,31 +2886,14 @@ ca:
         single: Single
         #original_hash: 15f86c0
         average: Mitjana
-      years_selector:
-        #original_hash: 96f997b
-        years: Anys
-        #original_hash: 0977c76
-        all_years: Tots els anys
-        #original_hash: 8737f09
-        only: Només
-        #original_hash: b3c0fe7
-        only_html: 'Només %{year}'
-        #original_hash: 96bdb66
-        until: Fins
-        #original_hash: fa23930
-        until_html: 'Fins %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Mostra
         #original_hash: f3cf96e
         persons: Persones
         #original_hash: 16d3376
-        persons_html: '%{quantity} persones'
-        #original_hash: 612e12d
         results: Resultats
         #original_hash: f3baa4a
-        results_html: '%{quantity} resultats'
-        #original_hash: d46d2ee
         by_region: Per regió
         #original_hash: c0dcb86
         mixed: Mixt
@@ -3495,8 +2920,6 @@ ca:
       #original_hash: 5faa59d
       result: Resultat
       #original_hash: e0f64f7
-      citizen_of: Ciutadà de
-      #original_hash: 1917f4f
       competition: Competició
       #original_hash: e7f6fc5
       solves: Resolucions
@@ -3504,19 +2927,10 @@ ca:
       region: Regió
       #original_hash: 70c07ec
       world: Món
-      type_options:
-        #original_hash: 3deb745
-        type: Tipus
-        #original_hash: dd11868
-        single: Single
-        #original_hash: 15f86c0
-        average: Mitjana
-      #original_hash: ad8919a
       event: Categoria
       #original_hash: dcf8b56
       date_circa: Data aproximada
       #original_hash: 1c54132
-      record: Rècord
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Connecta el teu WCA ID al teu compte!
@@ -3593,33 +3007,6 @@ ca:
       #original_hash: 75d7ff7
       unstick_at_future: ha de ser al futur
   contacts:
-    website:
-      #original_hash: 35c333c
-      faq_note_html: >-
-        Abans de fer una pregunta, consulta les nostres <a href="/faq">Preguntes
-        Freqüents</a>! Si prefereixes contactar amb un comitè o equip específic,
-        pots trobar la informació de contacte en <a
-        href="/teams-committees">aquesta pàgina</a>.
-      #original_hash: 4ef2aad
-      title: Formulari de Contacte de la WCA
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: >-
-          Contacta amb els Organitzadors d'una Competició Específica (si us
-          plau, selecciona a sota)
-        #original_hash: f0bffb7
-        competitions_in_general: 'Competicions en General (organitzar, normes de competició,
-          etc.)'
-        #original_hash: f6ffa78
-        wca_id_or_profile: WCA ID o Perfil de la WCA
-        #original_hash: 0c77aee
-        media: Contingut Multimèdia
-        #original_hash: 9ad0522
-        software: Software
-        #original_hash: 6e6a6f2
-        different: Altres
-      #original_hash: c70a890
-      submit: Enviar missatge
     dob:
       #original_hash: 907ac6c
       title: Formulari Canvi Data de Naixement
@@ -3957,202 +3344,22 @@ ca:
       donate_other: Altres maneres de donar
     structure:
       #original_hash: 0d62207
-      teams_committees_councils: 'Equips de la WCA, Comitès i Consells'
-      #original_hash: 9482c5d
       title: Estructura
       board:
         #original_hash: abd2828
-        name: Consell Executiu de la WCA
-        #original_hash: e0d37a2
         description: >-
           El consell Executiu de la WCA és responsable de liderar l'organització
           en global i dur a terme qualsevol tasca que no sigui assignada a
           altres Equips, Comitès i Consells
       #original_hash: d54d953
-      committees: >-
-        Els equips i comitès de la WCA formen part de l'organització i realitzen
-        les tasques diàries necessàries per mantenir-la en funcionament. Aquests
-        comitès estan formats per membres de la comunitat WCA, inclosos els
-        delegats i competidors de la WCA. Cada equip té un líder, la funció del
-        qual és vetllar pel bon funcionament de l'equip i guiar els altres
-        membres de l'equip. Els consells són un tipus especial d'equip que
-        compleixen una funció assessora a la Junta de la WCA i estan formats per
-        membres de la comunitat, no per membres del personal de la WCA. Quan hi
-        ha posicions vacants de comitès, equips o consells, la informació sobre
-        com sol·licitar l'entrada es publica a la portada.
-      #original_hash: c366473
-      senior_member: Membre Sènior
-      #original_hash: e26c936
-      leader: Líder
-      officers:
-        #original_hash: d79bd00
-        name: Oficials de la WCA
-        #original_hash: 312e799
-        description: >-
-          Els oficials de la WCA s'encarreguen de les tasques relacionades amb
-          l'estatus sense ànim de lucre de l'WCA. Aquests oficials són elegits
-          pel Consell Executiu de la WCA. El director executiu és el director
-          general de la WCA, el president presideix totes les reunions del
-          Consell, el secretari manté els documents de l'organització i el
-          tresorer gestiona els assumptes financers de la WCA.
-      chair:
-        #original_hash: de34439
-        name: President de la WCA
-      executive_director:
-        #original_hash: 7d405ff
-        name: Director Executiu de la WCA
-      secretary:
-        #original_hash: 1dd4a07
-        name: Secretari de la WCA
-      vice_chair:
-        #original_hash: 0388b19
-        name: Vicepresident de la WCA
-      treasurer:
-        #original_hash: 75e65d9
-        name: Tresorer de la WCA
       users:
         #original_hash: 57bbaad
         profile: 'Perfil de %{user_name}'
-      wdc:
-        #original_hash: c97077a
-        name: Comitè Disciplinari de la WCA
-        #original_hash: 286fdf8
-        description: >-
-          Aquest comitè aconsella la Junta de la WCA en casos especials, com
-          violacions de les Regulacions de la WCA, i pot ser contactat per
-          membres de la WCA en cas d'una qüestió important sobre les
-          competicions de la WCA.
-      wdpc:
-        #original_hash: 70539cd
-        name: Comitè de Protecció de Dades de la WCA
-        #original_hash: 1f69829
-        description: >-
-          Aquest comitè és responsable de les matèries relacionades amb la
-          Protecció de Dades.
-      wrc:
-        #original_hash: 3da1e85
-        name: Comitè de Regulacions de la WCA
-        #original_hash: 13ada5b
-        description: Aquest comitè és responsable d'administrar les Regulacions 
-          de la WCA.
-      wrt:
-        #original_hash: 67be768
-        name: Equip de Resultats de la WCA
-        #original_hash: 439ffae
-        description: >-
-          Aquest equip és responsable d'administrar tots els resultats de les
-          competicions.
-      wst:
-        #original_hash: a14bc62
-        name: Equip de Software de la WCA
-        #original_hash: ec961e4
-        description: >-
-          Aquest equip és responsable d'administrar el software de la WCA
-          (pàgina web, scramblers, workbooks, eines d'administrador).
-      wct:
-        #original_hash: 63a2388
-        name: Equip de Comunicació de la WCA
-        #original_hash: 50fd091
-        description: >-
-          L'Equip de Comunicació de la WCA (WCT) té la funció de supervisar i
-          donar suport a les comunicacions de la WCA amb la comunitat i el
-          públic en general. La comunicació de la WCA ha de contribuir als
-          Objectius de la WCA i donar suport a una cultura positiva general de
-          cordialitat, transparència, inclusió, obertura i capacitat de
-          resposta.
-      wfc:
-        #original_hash: 9cb13de
-        name: Comitè de Finances de la WCA
-        #original_hash: b4ed44b
-        description: Aquest comitè és responsable d'administrar les finances de 
-          la WCA.
-      wec:
-        #original_hash: 83bd1d0
-        name: Comitè d'Ètica de la WCA
-        #original_hash: c304d57
-        description: >-
-          La funció d'aquest comitè és vetllar perquè tots els procediments
-          seguits pel personal de la WCA i el personal extern compleixin el seu
-          Codi Ètic, i realitzar investigacions independents si la conducta
-          d'algun d'aquests membres no s'ajusta a l'esmentat Codi Ètic. Aquestes
-          investigacions poden ser sol·licitades per qualsevol membre registrat,
-          dels quals WEC és un confident. Aquest comitè també funciona com a
-          junta d'apel·lacions si algú implicat no està d'acord amb una decisió
-          presa pel Comitè de Disciplina de la WCA.
-      weat:
-        #original_hash: d1dbb86
-        name: Equip d'Assistents Executius de la WCA
-        #original_hash: 889dd90
-        description: >-
-          Aquest equip és responsable de dur a terme les tasques administratives
-          del Consell Executiu de la WCA.
-      wqac:
-        #original_hash: 8f32116
-        name: Comitè de Garantia de Qualitat de la WCA
-        #original_hash: 0171b3b
-        description: >-
-          Aquest comitè té la funció de donar suport i promoure la millora
-          contínua de la qualitat dins de la WCA, així com l'aplicació mundial
-          d'estàndards de qualitat per garantir una alta qualitat constant dels
-          processos, el Personal de la WCA, les Organitzacions Regionals, els
-          Organitzadors de Competicions i el Personal de la Competició.
-      wcat:
-        #original_hash: 2b81984
-        name: Equip d'Anuncis de Competició de la WCA
-        #original_hash: f511502
-        description: >-
-          Aquest equip té el rol d'aprovar i anunciar les Competicions de la WCA
-          i assegurar-se que aquests anuncis s'adhereixen als estàndards de
-          qualitat de la WCA.
-      wmt:
-        #original_hash: 2035811
-        name: Equip de Màrqueting de la WCA
-        #original_hash: f2a0140
-        description: >-
-          Aquest equip és responsable del desenvolupament i administració de la
-          Marca WCA, buscar patrocinadors, ajudar en la distribució d'Equipament
-          de Competicions de la WCA i publicitar el Marxandatge de la WCA.
-      wac:
-        #original_hash: 1ce7604
-        name: Consell Assessor de la WCA
-        #original_hash: fb6cd86
-        description: >-
-          Aquest consell és responsable de construir i mantenir la comunicació
-          bilateral entre la Comunitat de la WCA i Staff de la WCA.
-      wsot:
-        #original_hash: 58765c7
-        name: Equip d'Organització d'Esports de la WCA
-        #original_hash: 8f888d6
-        description: >-
-          Aquest equip té el rol de supervisar i ajudar en la reconeixença de la
-          WCA com una organització d'esports internacional.
-      wat:
-        #original_hash: 90a1280
-        name: Equip d'Arxiu de la WCA
-        #original_hash: fae6850
-        description: >-
-          L'Equip d'Arxiu de la WCA és un Comitè Assessor de la WCA. Aquest
-          equip té el rol de supervisar i ajudar en el desenvolupament d'un
-          arxiu de l'organització.
-      banned:
-        #original_hash: d30e2e5
-        name: Competidors Sancionats
-      wct_china:
-        #original_hash: ed5b65a
-        name: WCT Xina
-      #original_hash: f8c3f3c
       operations_html: >-
         Les operacions del dia a dia són dirigides pels %{committees_and_teams}
         de la WCA.
       #original_hash: 0e7a036
       teams_committees: Equips i Comitès
-      probation:
-        #original_hash: 1dd6e3b
-        name: Delegats en Pràctiques
-      wst_admin:
-        #original_hash: d4112d2
-        name: Administradors de Software
-      #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>Delegat de la WCA</strong> és un rol definit a les Mocions de
         la WCA i descrit en el Reglament de la WCA. El deure principal d'un
@@ -4200,7 +3407,6 @@ ca:
     #original_hash: 4f05e8f
     finances: Finances
     #original_hash: d1b1406
-    vision_and_strategy: Visió i Estratègia
   education:
     #original_hash: 746e863
     title: Recursos Educacionals de la WCA
@@ -4305,142 +3511,7 @@ ca:
         Regional?
   contact:
     #original_hash: a34b69f
-    title: Informació de Contacte
-    #original_hash: b5c2eaa
-    info_alert_html: >-
-      Abans de posar-te en contacte amb qualsevol dels equips d'aquesta pàgina,
-      fes una ullada al nostre %{link}!
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      Per a preguntes sobre la pàgina web, comentaris i suggèrencies, utilitza
-      aquest <a href='/contact/website'>formulari de contacte</a>. Per a
-      preguntes sobre una àrea específica o una competició, si us plau, contacta
-      el teu %{link} local.
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>Comitès i Equips</u>
-    #original_hash: 1cb449c
-    members: Membres
-    board:
-      #original_hash: f3cbb35
-      info_html: >-
-        La World Cube Association és dirigida per la Junta de la WCA. Són
-        responsables de les preguntes generals i la WCA com a organització en
-        general.
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        WCT està a càrrec de supervisar i ajudar en les comunicacions de la WCA
-        amb la comunitat i el públic en general. Haurien de ser contactats si
-        tens preguntes generals sobre la WCA o la presència a les xarxes
-        socials.
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        WDC investiga una varietat de situacions i proposa solucions, inclosos
-        càstigs quan sigui necessari. Entre altres temes, aquestes situacions
-        podrien ser violacions greus de la normativa WCA o problemes de la
-        comunitat. Si has experimentat algun d'aquests, no dubtis a dirigir-te a
-        aquest comitè.
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        WDPC té la responsabilitat i el deure d'investigar, crear, implementar,
-        gestionar i fer complir totes les polítiques de protecció de dades de
-        WCA, els contractes amb encarregats de tractament de dades externs de
-        dades de WCA i gestionar les tasques relacionades amb la protecció de
-        dades.
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        WRC gestiona totes les qüestions relacionades amb l'aplicació, la
-        millora i el desenvolupament del Reglament WCA. Donen suport als
-        delegats de WCA en qualsevol tipus de qüestions de procediment que es
-        produeixin a les competicions i decideixen sobre incidències no resoltes
-        i no cobertes. WRC publica periòdicament informes interns de la WCA per
-        ajudar tots els Delegats de la WCA i millorar el seu coneixement del
-        Reglament. Si voleu participar en el desenvolupament de la normativa o
-        proposar canvis, podeu posar-vos en contacte amb el WRC a travès de
-        correu electrònic o debats a <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        WRT és responsable de gestionar totes les dades de les bases de dades de
-        la WCA, sobretot els resultats de la competició i les dades personals.
-        Penjen els resultats de les competicions de la WCA al lloc web de
-        la WCA, una vegada que els hagi enviat el delegat de la WCA de la
-        competició. A part de publicar els resultats de la competició, l'equip
-        de resultats de la WCA també és responsable de fer correccions als
-        resultats de la competició si és necessari i són els responsables
-        d'administrar totes les pàgines de perfil WCA. Això inclou, per exemple,
-        canviar les dades d'usuari, com ara les dates de naixement, segons les
-        sol·licituds verificades i gestionar les sol·licituds d'imatge de
-        perfil.
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        WST és responsable del manteniment i gestió de tot el programari del
-        WCA. També desenvolupen nou programari per a diverses tasques dins de la
-        WCA sempre que sigui necessari. Si teniu suggeriments i idees per al
-        desenvolupament del lloc web o si voleu informar d'errors, no dubteu a
-        contactar-hi! El lloc web de WCA és un gran projecte de codi obert a <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
-        així que si esteu interessat a ajudar a desenvolupar per a WCA, feu
-        servir una ullada allà.
-    wfc:
-      #original_hash: 3ec8256
-      info_html: >-
-        WFC es fa responsable de les finances a la WCA. Ells gestionen les finances
-        i els comptes de la WCA d’acord amb un pressupost anual, que han de proveir
-        normalment.
-    wec:
-      #original_hash: ec2b9c3
-      info_html: >-
-        Aquest comitè té la funció de garantir que tots els procediments seguits
-        pel personal de WCA i el personal extern compleixin el seu Codi Ètic.
-    weat:
-      #original_hash: 889dd90
-      info_html: >-
-        Aquest equip s'encarrega de dur a terme les tasques administratives de
-        la Junta Directiva de la WCA.
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        Aquest comitè té la funció de donar suport i promoure la millora
-        contínua de la qualitat dins de la WCA, així com l'aplicació mundial
-        d'estàndards de qualitat per garantir una alta qualitat constant dels
-        processos, el personal de la WCA, les Organitzacions Regionals, els
-        Organitzadors de Competicions i el Personal de la Competició.
-    wcat:
-      #original_hash: 61a471f
-      info_html: >-
-        Aquest comitè té la funció d'aprovar i anunciar les competicions de la
-        WCA i garantir que aquests anuncis compleixin els estàndards de qualitat
-        de la WCA.
-    wmt:
-      #original_hash: f2a0140
-      info_html: >-
-        Aquest equip és responsable de desenvolupar i gestionar la marca WCA,
-        buscar patrocinis, donar suport a la distribució d'Equipament de
-        Competicions de la WCA i comercialitzar el Marxandatge WCA.
-    wsot:
-      #original_hash: 8f888d6
-      info_html: >-
-        Aquest equip té el paper de supervisar i donar suport al reconeixement
-        de la WCA com a organització esportiva internacional.
-    wat:
-      #original_hash: fae6850
-      info_html: >-
-        L'equip d'arxiu de la WCA és un comitè assessor de la WCA. Aquest equip
-        té la funció de supervisar i donar suport al desenvolupament d'un arxiu
-        de l'organització.
-    #original_hash: f97a4f5
-    councils_html: Consells
-    wac:
-      #original_hash: fb6cd86
-      info_html: >-
-        Aquest consell és responsable d'establir i mantenir la comunicació
-        bilateral entre la comunitat WCA i el personal de WCA.
+{}
   score_tools:
     #original_hash: 4fc2133
     title: Eines de software per les competicions de la WCA
@@ -4555,46 +3626,13 @@ ca:
   logo:
     #original_hash: c72c969
     title: Logo de la WCA
-    paragraphs:
-      #original_hash: 44cfe8d
-      '1': >-
-        El logo de la WCA va ser dissenyat per Justin Eastman, durant un concurs
-        de disseny el gener del 2005.<br />Ens va agradar el logo pel disseny,
-        els colors i el fet que no hi apareix específicament un cub 3x3x3.
-      #original_hash: 916e3fc
-      '2': >-
-        Tenim quatre versions diferents del logo: una <a
-        href="/files/WCAlogo_XL.jpg">versió llarga</a> (46 KB, 1756 px by 1068
-        px), una <a href="/files/WCAlogo.svg">versió en vector</a>, una <a
-        href="/files/WCAlogo_notext.svg">versió en vector sense text</a> i una
-        <a href="/files/WCAlogo_monochrome.svg">versió en vector
-        monocromàtica</a>.
-      #original_hash: dcb1ad6
-      '3': >-
-        Versió 3D del logo, dissenyada per Vu Minh Tan de Vietnam: <a
-        href="/files/WCALogo3D.png">versió PNG</a> (2.1 MB),<a
-        href="/files/WCALogo3Dsmall.png">versió PNG petita</a> (0.25 MB).
-      #original_hash: e5df1bf
-      '4': >-
-        L'ús acceptable del logo de la WCA es descriu a la política d'ús del
-        logotip de la WCA que apareix a <a href="/documents">Documents de la
-        WCA</a>.
+    headings:
+      usage_guidelines:
+        color: {}
   relations:
     relation:
       #original_hash: 6519fe1
-      title: Relacions
-      #original_hash: 69ba020
-      find_relations: Troba connexions entre cubers
-      #original_hash: 5d6056d
-      show_relation: Mostra'm la relació!
-      connectives:
-        #original_hash: f85194e
-        was_at: Va ser a
-        #original_hash: 8c00243
-        together_with: Juntament amb
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Si us plau, introdueix dos WCA IDs vàlids.'
+{}
   search_results:
     index:
       #original_hash: db98a68
@@ -4643,10 +3681,6 @@ ca:
         href="/regulations/guidelines.html">Directrius de la WCA</a>, que
         contenen clarificacions addicionals i explicacions.
       #original_hash: c8e1783
-      content3_html: >-
-        Les decisions importants sobre incidents que van passar a competicions i
-        van ser resoltes pel Comitè de Regulacions de la WCA poden ser trobades
-        al <a href="/incidents">Registre d'Incidents</a>.
     panel2:
       #original_hash: 8ad8302
       title: Traduccions
@@ -4875,3 +3909,28 @@ ca:
     privacy: Privacitat
     #original_hash: 4c4a2e8
     disclaimer: Exempció de responsabilitat
+  page:
+    contacts:
+      form:
+        competition: {}
+        user_data: {}
+        contact_recipient: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+    contact_edit_profile:
+      form: {}
+    teams_committees_councils: {}
+  payments:
+    payment_setup: {}
+    errors: {}
+  trainee_delegate_application: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  tickets: {}
+  merch: {}
+  database: {}
+  validators: {}

@@ -43,8 +43,6 @@ uk:
     #original_hash: fefc818
     TW: Кита́йський Тайбе́й
     #original_hash: 0f3f60b
-    VA: Ватикан
-    #original_hash: 3fa9b2d
     VC: Сент-Вінсент і Гренадини
     #original_hash: 9af4622
     XF: Кілька країн (Африка)
@@ -285,8 +283,6 @@ uk:
       #original_hash: 603a218
       wca_id: WCA ID
       #original_hash: e0f64f7
-      citizen_of: Громадянин
-    #original_hash: 3fc0ba1
     all_regions: Всі регіони
     errors:
       #original_hash: 81f344a
@@ -296,10 +292,6 @@ uk:
       one: 1 день
       few: '%{count} днів'
       many: '%{count} днів'
-    these_events:
-      one: такою дисципліною
-      few: такими %{count} дисциплінами
-      many: такими %{count} дисциплінами
     search_site: Пошук по сайту
     #original_hash: d7decf1
     filter: Фільтр
@@ -364,8 +356,6 @@ uk:
         #original_hash: 8be3c94
         password: Пароль
         #original_hash: 19dff4d
-        current_password: Поточний пароль
-        #original_hash: aefce7f
         password_confirmation: Введіть пароль ще раз
         #original_hash: ced7b30
         remember_me: Запам’ятати мене
@@ -380,128 +370,12 @@ uk:
         #original_hash: 0f21717
         region: Регіон
         #original_hash: a10b651
-        location_description: Опис місцезнаходження
-        #original_hash: 8961d3b
-        phone_number: Номер телефону
-        #original_hash: 7044004
-        notes: Примітки
-        #original_hash: 730db33
         receive_delegate_reports: Я б хотів отримувати звіти Делегатів зі 
           Змагань WCA на e-mail
         #original_hash: 57eaf24
         user_preferred_events: Улюблені дисципліни
         #original_hash: e632fbf
         otp_attempt: 'Введіть код двофакторної аутентифікації:'
-      competition:
-        #original_hash: 89f89c0
-        id: ID
-        #original_hash: 7f3d889
-        confirmed: Не дозволяти організаторам редагувати ці змагання
-        #original_hash: d493e6a
-        show_at_all: Опублікувати змагання
-        #original_hash: 709a232
-        name: Назва
-        #original_hash: f91b080
-        name_reason: Обгрунтування імені
-        #original_hash: b649210
-        cell_name: Стисла назва змагання
-        #original_hash: d523ebb
-        country_id: Країна
-        #original_hash: 25b7b06
-        city_name: Місто
-        #original_hash: 67cd406
-        venue: Місце проведення
-        #original_hash: 486f8fb
-        venue_address: Адреса місця проведення
-        #original_hash: 08767af
-        venue_details: Опис місця проведення
-        #original_hash: ff99f5b
-        start_date: Дата початку
-        #original_hash: 89d10cd
-        end_date: Дата закінчення
-        #original_hash: 2e8a57c
-        external_website: Веб-сторінка
-        #original_hash: 692e1f9
-        generate_website: Використовувати сайт WCA для розміщення додаткової 
-          інформації
-        #original_hash: 6cf623b
-        base_entry_fee_lowest_denomination: Базовий реєстраційний внесок
-        #original_hash: 28a6fbb
-        currency_code: Валютний код
-        #original_hash: 2e3ed8b
-        staff_delegate_ids: Делегат(и) WCA
-        #original_hash: 958562e
-        organizer_ids: Організатор(и)
-        #original_hash: b37456c
-        contact: Контакти
-        #original_hash: 0eb5ed5
-        information: Інформація
-        #original_hash: 87b7d5f
-        use_wca_registration: Використовувати сайт WCA для реєстрації
-        #original_hash: 8020e88
-        external_registration_page: Сторінка реєстрації
-        #original_hash: 9bb1965
-        competitor_limit_enabled: Ліміт учасників
-        #original_hash: 749f4c9
-        competitor_limit: Максимальна кількість учасників
-        #original_hash: 4a8b6f1
-        competitor_limit_reason: Обгрунтування ліміту учасників
-        #original_hash: 3c23a67
-        guests_enabled: Гості
-        #original_hash: 089cbfd
-        receive_registration_emails: 'Надсилати електронний лист, коли хтось реєструється
-          на змагання'
-        #original_hash: d4aeed9
-        registration_open: Реєстрація відкривається
-        #original_hash: f8153a2
-        registration_close: Реєстрація закривається
-        #original_hash: d7020f4
-        remarks: Примітки
-        #original_hash: c305010
-        clone_tabs: Клонувати також всі вкладки з додатковою інформацією
-        #original_hash: c5497bc
-        competition_events: Дисципліни
-        #original_hash: 71c8461
-        enable_donations: Увімкнути донейти на додаток до збіру реєстраційних 
-          внесків
-        #original_hash: 556fda0
-        extra_registration_requirements: Додаткові реєстраційні вимоги
-        #original_hash: 2529d04
-        on_the_spot_registration: Реєстрація на місці
-        #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: Базовий реєстраційний внесок 
-          на місці
-        #original_hash: efbdbab
-        refund_policy_percent: 'Процент внеску, що повертається'
-        #original_hash: b332299
-        refund_policy_limit_date: Останній день для повернення внесків
-        #original_hash: 3542671
-        guests_entry_fee_lowest_denomination: Вхідний внесок для гостей
-        #original_hash: 723cad9
-        early_puzzle_submission: >-
-          Я б хотів, щоб учасники принесли головоломки в зазначений час перед
-          початком дисципліни
-        #original_hash: 78308cc
-        early_puzzle_submission_reason: 'Причина, за якої учасники мають принести
-          головоломки раніше'
-        #original_hash: 88da0ef
-        qualification_results: >-
-          Я б хотів використовувати кваліфікаційні результати, щоб обмежити
-          кількість учасників в деяких дисциплінах
-        #original_hash: 1ec6dd4
-        qualification_results_reason: Причина для застосування кваліфікаційних 
-          результатів
-        #original_hash: ac30de9
-        event_restrictions: >-
-          Я б хотів обмежити учасників від реєстрації в деяких комбінаціях
-          дисциплін
-        #original_hash: 4bf194c
-        event_restrictions_reason: Причина для обмежень в дисциплінах
-        #original_hash: 3c24bd2
-        main_event_id: Основна дисципліна
-      championship:
-        #original_hash: 4baf44b
-        championship_type: Тип чемпіонату
       registration:
         #original_hash: 3c23a67
         guests: Гості
@@ -543,11 +417,6 @@ uk:
         #original_hash: 0c7191d
         wrc_incidents: 'Інциденти, які потребують реакції WRC'
         #original_hash: 5a92b25
-        wdc_feedback_requested: Я б хотів отримати зворотний зв’язок від WDC 
-          щодо деяких інцидентів.
-        #original_hash: 06a0568
-        wdc_incidents: 'Інциденти, які потребують реакції WDC'
-        #original_hash: d7020f4
         remarks: Примітки
       person:
         #original_hash: 8c41ae8
@@ -607,8 +476,6 @@ uk:
         #original_hash: 1917f4f
         competition_id: Змагання
         #original_hash: 3deb745
-        type: Тип
-        #original_hash: c3328c3
         text: Текст
         #original_hash: d051707
         uri: Посилання
@@ -661,21 +528,7 @@ uk:
         f: Жінка
         #original_hash: 6e6a6f2
         o: Інший
-      delegate_status:
-        #original_hash: 28ec02d
-        candidate_delegate: Кандидат в Делегати
-        #original_hash: 12ab214
-        delegate: Делегат
-        #original_hash: d463c23
-        senior_delegate: Провідний делегат
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: Чоловік
-        #original_hash: b7c17e9
-        f: Жінка
-        #original_hash: 6e6a6f2
-        o: Інший
+    person: {}
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -689,6 +542,8 @@ uk:
         article: Стаття
         #original_hash: 82dabd0
         multimedia: Мультимедіа
+    user_roles:
+      status: {}
   simple_form:
     #original_hash: 5397e05
     'yes': Так
@@ -742,106 +597,6 @@ uk:
         otp_attempt: >-
           Перевірте одноразовий пароль у Вашому мобільному додатку, або введіть
           один з Ваших кодів відновлення.
-      competition:
-        #original_hash: 2c812a0
-        name: >-
-          Повна назва змагання включно з роком (наприклад, Kyiv Open 2011).
-          Переконайтесь, що всі слова починаються з великої літери. Ім’я має
-          містити лише букви, цифри, дефіси(-), амперсанди(&), крапки(.),
-          двокрапки(:), апострофи(') та пробіли( ).
-        #original_hash: 525fcc8
-        cell_name: >-
-          Скорочена назва для відображення. Якщо основна назва достатньо
-          коротка, можна її продублювати.
-        #original_hash: bce4589
-        city_name: >-
-          Назва міста та району/області (якщо треба) де буде відбуватись
-          змагання (наприклад, Sultan-Sarai, Bilogirs'kyi, Crimea). Країну
-          вказувати не потрібно.
-        #original_hash: bb470cc
-        information: >-
-          Важлива інформація, яку мають знати учасники. Вона буде відображена на
-          основній сторінці змагання. <br/>Будь ласка, заповніть її як
-          <strong>українською</strong>, так і <strong>англійською</strong>.
-        #original_hash: b4d020f
-        staff_delegate_ids: Делегати WCA на змаганнях.
-        #original_hash: 517d376
-        organizer_ids: Організатори змагань (вони повинні мати аккаунти на сайті
-          WCA).
-        #original_hash: cabe7fb
-        external_website: Веб-сторінка змагання. Це має бути працююче http(s) 
-          посилання.
-        #original_hash: 9965635
-        registration_open: 'Примітка: Реєстрація відкриється і закриється за часом
-          UTC.'
-        #original_hash: 9ea6021
-        remarks: >-
-          Додаткова інформація, яку потрібно повідомити WCAT. Наприклад, якщо є
-          щось, стосовно чого ви не впевнені, або якщо є окреме прохання до
-          WCAT. Будь ласка, заповніть це англійською!
-        #original_hash: b2af5f5
-        external_registration_page: >-
-          Сторінка, на якій учасники будуть реєструватись. Це має бути працююче
-          http(s) посилання.
-        #original_hash: 784879d
-        base_entry_fee_lowest_denomination: >-
-          Базовий реєстраційний внесок. Буде відображатись на основній сторінці
-          змагань та на сторінці реєстрації. Якщо вказати "0", то учасники
-          будуть бачити, що змагання безкоштовні.
-        #original_hash: 9735ddf
-        currency_code: Валютний код для внесків.
-        #original_hash: dc47c39
-        competitor_limit_enabled: >-
-          Хоча Правила WCA не вимагають встановлювати ліміт учасників, дуже
-          рекомендується це зробити.
-        #original_hash: b7b599b
-        competitor_limit: >-
-          Кількість учасників, що будуть допущені до участі. Це число має лише
-          інформаційний характер і не зупиняє процес реєстрації на змагання. Ми
-          працюємо над покращенням процедури реєстрації.
-        #original_hash: 4bd7102
-        competitor_limit_reason: >-
-          Обгрунтування ліміту учасників. Будь ласка, заповніть це поле
-          англійською!
-        #original_hash: 3de153b
-        extra_registration_requirements: >-
-          Напишіть тут ті додаткові реєстраційні вимоги, які не описані вище.
-          Наприклад, як учасник має сплатити реєстраційний внесок.<br/>Будь
-          ласка, заповніть це поле як <strong>українською</strong>, так і
-          <strong>англійською</strong>. Ця інформація буде відображена на
-          основній сторінці змагання, а також на сторінці реєстрації, якщо Ви
-          обрали сайт WCA для реєстрації.
-        #original_hash: 8c4fdf8
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Якщо вказати "0", то учасник буде бачити повідомлення, що реєстрація
-          на місці буде безкоштовною.
-        #original_hash: 180b7b3
-        refund_policy_percent: >-
-          Це число носить лише інформаційний характер. Якщо встановити "0", то
-          учасник буде бачити повідомлення, що реєстраційні внески не будуть
-          повертатись ні за яких обставин.
-        #original_hash: f64d853
-        refund_policy_limit_date: 'Термін, після якого повернути внесок буде неможливо.'
-        #original_hash: 25a1324
-        guests_entry_fee_lowest_denomination: >-
-          На даний момент це число носить інформаційний характер; гостьові
-          внески не сплачуються через сайт WCA. Якщо вказати 0, то учасники
-          будуть бачити повідомлення, що вхід для гостей безкоштовний.
-        #original_hash: 4e8488b
-        early_puzzle_submission_reason: >-
-          Будь ласка, опишіть тут, чому Ви просите учасників принести
-          головоломки заздалегідь. Будь ласка, заповніть це англійською!
-        #original_hash: f859883
-        qualification_results_reason: >-
-          Будь ласка, опишіть тут, чому Ви бажаєте використовувати
-          кваліфікаційний час. Будь ласка, заповніть це англійською!
-        #original_hash: d3329d7
-        event_restrictions_reason: >-
-          Будь ласка, опишіть тут, чому Ви б хотіли обмежити участь у комбінації
-          деяких дисциплін. Будь ласка, заповніть це англійською!
-        #original_hash: 1067798
-        main_event_id: Переможець цієї дисципліни буде оголошений переможцем 
-          змагання.
       website_contact:
       dob_contact:
         #original_hash: 8723825
@@ -895,9 +650,6 @@ uk:
         wrc_incidents: 'Номери інцидентів, стосовно яких Ви б хотіли почути відгук
           від WRC.'
         #original_hash: 38a95e5
-        wdc_incidents: 'Номери інцидентів, стосовно яких Ви б хотіли почути відгук
-          від WDC.'
-        #original_hash: f30abdc
         remarks: >-
           Розкажіть про будь-які інші подробиці, якими хочете поділитись
           (прогрес/регрес спільноти, майбутні плани в регіоні тощо). Якщо Ви про
@@ -907,9 +659,6 @@ uk:
         name: >-
           Приклади: Як дістатись, Призовий фонд, Розміщення, Харчування,
           Контакти
-      person:
-        #original_hash: 498f4c5
-        dob: Дата народження повинна мати формат РРРР-ММ-ДД
       registration:
       results_submission:
       regional_organization:
@@ -939,22 +688,7 @@ uk:
           pending: Список очікування
           #original_hash: 441bda6
           deleted: Видалено
-      competition:
-        guests_enabled:
-          #original_hash: cb8809d
-          'true': Питати про гостей
-          #original_hash: f8c2332
-          'false': Не питати про гостей
-        competitor_limit_enabled:
-          #original_hash: d9c05cc
-          'true': Я хочу вказати ліміт учасників
-          #original_hash: 5b581b5
-          'false': Я не хочу вказувати ліміт учасників
-        on_the_spot_registration:
-          #original_hash: 0c521ca
-          'true': Реєстрація на місці дозволена
-          #original_hash: 0f236df
-          'false': Реєстрація на місці заборонена
+      competition: {}
   mail_form:
     attributes:
       contact_form:
@@ -1146,6 +880,7 @@ uk:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: 'Будь ласка, підтвердіть нову електронну адресу'
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1213,8 +948,6 @@ uk:
       #original_hash: 3ad28c0
       teams: 'Команди, Комітети та Ради'
       #original_hash: 02617c0
-      tutorial: Інструктаж для новачків
-      #original_hash: a34b69f
       contact: Контактна інформація
       #original_hash: 4fa8cc8
       tools: Інструменти
@@ -1243,14 +976,10 @@ uk:
       #original_hash: 82dabd0
       multimedia: Мультимедіа
       #original_hash: 4fd2a7f
-      db_export: Експорт бази даних
-      #original_hash: 1fa73f3
       regulations: Правила
       #original_hash: 6bce1b5
       about_regulations: Про Правила
       #original_hash: 141d1d7
-      guidelines: Роз’яснення
-      #original_hash: c4622c3
       scrambles: Скрамбли
       #original_hash: 90ccd64
       history: Історія
@@ -1273,14 +1002,8 @@ uk:
       #original_hash: d3a928c
       results_team: Команда результатів
       #original_hash: 4e7afeb
-      results_admin: Адміністратор
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
-      #original_hash: aee74b8
       new_post: Нова публікація
       #original_hash: 0d67445
-      team_leader: Лідер команди
-      #original_hash: 37b8fdc
       regional_organizations: Регіональні організації
       #original_hash: 6568fa0
       manage_regional_organizations: Керування регіональними організаціями
@@ -1361,9 +1084,6 @@ uk:
         announced: WCAT підтвердили ваші змагання та офіційно опублікували їх на
           сайті.
         #original_hash: 1c20919
-        link: >-
-          Будь ласка, перейдіть за посиланням, щоб ознайомитись з оголошенням
-          про змагання:
       organizer_addition_email:
         #original_hash: dc6f415
         header: 'Ви були додані до змагання %{competition} в якості організатора'
@@ -1433,8 +1153,6 @@ uk:
       #original_hash: 8be3c94
       password: Пароль
       #original_hash: 3fc6dbe
-      member_of: Член
-      #original_hash: 42619dd
       preferred_events_desc: 'Оберіть улюблені дисципліни, щоб прискорити реєстрацію
         на змагання.'
       #original_hash: b402e03
@@ -1571,11 +1289,6 @@ uk:
       must_have_a_change: 'Ім’я або країна має відрізнятись, щоб оновити інформацію
         про особу.'
       #original_hash: 2e582eb
-      must_not_be_present: не має бути теперешнім
-      #original_hash: 5b4eac9
-      senior_has_delegate: не можна понизити Провідного делегата підлеглим 
-        Делегатом
-      #original_hash: 48653a9
       already_have_id: >-
         не можна запросити прив’язку WCA ID, бо WCA ID %{wca_id} вже прив’язаний
         до аккаунту
@@ -1600,8 +1313,6 @@ uk:
         <a href='%{wrt_contact_path}'
         target='_blank'>Команді результатів WCA</a>, щоб виправити це.
       #original_hash: d02c03b
-      avatar_requires_wca_id: щоб додати це необхідний WCA ID
-      #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         вже використовується іншим аккаунтом. Він був створений автоматично,
         коли Ви зареєструвались на змагання через сторонній сервіс. Якщо Ви
@@ -1637,11 +1348,6 @@ uk:
       #original_hash: d26bfdc
       missing_dob_html: 'WCA ID %{link_id} не має прив’язаної дати народження.'
       #original_hash: 5be6803
-      contact_results_team_html: >-
-        Будь ласка, зв’яжіться з <a
-        href='%{wrt_contact_path}' target='_blank'>Командою
-        результатів WCA</a>, щоб виправити це.
-      #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} не існує.'
   registrations:
     errors:
@@ -1654,11 +1360,6 @@ uk:
       #original_hash: d84a54f
       need_country: Необхідно обрати країну
       #original_hash: cec28a0
-      comp_not_found: Змагання не знайдено
-      #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Реєстрація не може бути видалена і 
-        прийнята одночасно.
-      #original_hash: a38d024
       must_register: необхідно зареєструватись принаймні на одну дисципліну
       #original_hash: e78eec3
       banned_html: >-
@@ -1685,28 +1386,8 @@ uk:
       #original_hash: da7ec53
       not_using_wca: Ці змагання не використовують реєстрацію через сайт WCA
       #original_hash: d528030
-      accepted_and_mailed:
-        one: Реєстрацію прийнято! Сповіщення надіслано на e-mail.
-        few: Реєстрації прийняті! Сповіщення надіслані на e-mail.
-        many: Реєстрації прийняті! Сповіщення надіслані на e-mail.
-      rejected_and_mailed:
-        one: Реєстрацію переміщено в список очікування
-        few: Реєстрації переміщені в список очікування
-        many: Реєстрації переміщені в список очікування
-      deleted_and_mailed:
-        one: Реєстрацію видалено
-        few: Реєстрації видалені
-        many: Реєстрації видалені
-      single_deletion_and_mail: 'Реєстрацію видалено і надіслано листа на %{mail}'
-      #original_hash: d8f067f
-      cannot_delete: Ви не можете видалити Вашу реєстрацію.
-      #original_hash: 82b3899
       updated: Реєстрацію оновлено
       #original_hash: 856484a
-      failed: Неможливо оновити реєстрацію
-      #original_hash: 016b4ae
-      deleted: 'Вашу реєстрацію на %{comp} видалено успішно'
-      #original_hash: 648424f
       registered: Реєстрація успішна!
       #original_hash: 82fed60
       imported: Заявки імпортовано успішно!
@@ -1745,22 +1426,6 @@ uk:
           можете перевірити статус Вашої реєстрації %{here}.
         #original_hash: 1852cbf
         see_you_soon: 'Будемо з нетерпінням на Вас на %{comp_name}!'
-      pending:
-        #original_hash: e48d8bd
-        mail_subject: 'Ви були переміщені в список очікування %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          Вашу реєстрацію на %{comp_name} було переміщено в список очікування.
-          Можливі причини:
-        causes:
-          #original_hash: eadfc0d
-          accepted: Вашу реєстрацію було підтверджено помилково
-          #original_hash: 2ac6d84
-          withdrawal: Ви попросили відшкодування
-        #original_hash: 8f7358f
-        email_if_error: >-
-          Якщо Ви думаєте, що це помилка, будь ласка надайте відповідь на цей
-          лист.
       deleted:
         #original_hash: 268e248
         mail_subject: 'Вашу реєстрацію на %{comp_name} видалено'
@@ -1788,22 +1453,8 @@ uk:
         one: 1 країна
         few: '%{count} країн'
         many: '%{count} країн'
-      export_csv: Експорт в CSV
-      #original_hash: 84add5b
       email: E-mail
       #original_hash: 7b2c7f1
-      approve: Підтвердити
-      #original_hash: 2b03b59
-      reject: Відхилити
-      #original_hash: f6fdbe4
-      delete: Видалити
-      #original_hash: 92d40dc
-      waiting_list: Список очікування
-      #original_hash: 06f7d1a
-      approved_registrations: Підтверджені реєстрації
-      #original_hash: bff04e8
-      deleted_registrations: Видалені реєстрації
-      #original_hash: ac5d958
       not_paid: Не сплачено
       registered:
         #original_hash: 2c2f473
@@ -1818,16 +1469,10 @@ uk:
       #original_hash: 8b9f726
       title: 'Зареєструватись на %{comp}'
     #original_hash: 7cae988
-    registered_with_account_html: >-
-      Ця особа зареєстрована з аккаунтом. Ви можете редагувати її особисті дані
-      %{here}.
-    #original_hash: ada2e9e
     sign_in: Авторизуйтесь
     #original_hash: 5d45a00
     profile: профілем
     #original_hash: 801b3e9
-    panel_title: Подробиці реєстрації
-    #original_hash: c0063c3
     register: Зареєструватись!
     #original_hash: f484f15
     refund: Повернути внесок
@@ -1836,8 +1481,6 @@ uk:
     #original_hash: a9af643
     update: Оновити реєстрацію
     #original_hash: f6fdbe4
-    delete: Видалити
-    #original_hash: b72119a
     delete_confirm: 'Ви впевнені, що хочете видалити реєстрацію?'
     #original_hash: cfc4865
     delete_registration: Видалити реєстрацію.
@@ -1862,8 +1505,6 @@ uk:
       %{sign_in}, щоб зареєструватись на %{comp}. Якщо Ви ще не маєте аккаунту
       на сайті WCA, Ви можете створити його %{here}.
     #original_hash: 89b4e7f
-    greeting: 'Вітаємо, %{name}!'
-    #original_hash: 322f646
     please_fix_profile_html: >-
       Для того, щоб зареєструватись на %{comp}, Ви маєте вирішити наступні
       проблеми з Вашим %{profile}:
@@ -1873,25 +1514,6 @@ uk:
       Ви зареєструєтесь, Вашу реєстрацію буде поміщено в список очікування.
       Реєстрацію зможуть підтвердити лише якщо для Вас звільниться місце.
     #original_hash: 855ca9c
-    can_register: 'Ви можете зареєструватись на %{comp} нижче.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Будь ласка, перевірте інформацію про умови реєстрації, щоб з’ясувати, що
-      ще потрібно зробити (наприклад, сплатити реєстраційний внесок).
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Ви відправили заявку на реєстрацію на %{comp}. Ви можете переглянути умови
-      реєстрації нижче.
-    #original_hash: 3c9141f
-    contact_organizer: 'Зв’яжіться з організатором, якщо Ви бажаєте внести зміни.'
-    #original_hash: 59354fd
-    waiting_list: >-
-      Ваша реєстрація очікує на розгляд. Для підтвердження Вам необхідно
-      сплатити реєстраційний внесок. Перевірте веб-сторінку змагання для
-      отримання інформації.
-    #original_hash: 58b1a3c
-    accepted: Вашу реєстрацію прийнято!
-    #original_hash: bcd7d70
     entry_fees_fully_paid: 'Ви сплатили %{paid}, що повністю покриває реєстраційний
       внесок.'
     #original_hash: 2e5d1b9
@@ -1902,18 +1524,11 @@ uk:
       Будь ласка, перевірте інформацію про змагання, щоб дізнатись, як сплатити
       внесок
     refund_form:
-      hints:
-        #original_hash: d97186d
-        refund_amount: >-
-          Розмір внеску, який повертається учаснику, має бути не більше аніж
-          сума, яку він вніс.
       labels:
         #original_hash: 1cc5991
         refund_amount: 'Розмір внеску, який повертається'
     payment_form:
       #original_hash: 4de825f
-      title: Реєстраційний внесок
-      #original_hash: d1569e6
       payment_successful: >-
         Ваш платіж пройшов успішно. Ваша реєстрація має бути в статусі
         "Сплачено" нижче.
@@ -1921,23 +1536,12 @@ uk:
         #original_hash: bf3a39e
         donation: 'Благодійна пожертва, яку отримає лише команда організаторів.'
         #original_hash: 16cf92d
-        card_information: >-
-          Інформація про Вашу банківську картку не доходить до вебсайту WCA.
-          Вона передається платіжному сервісу Stripe, який керує процесом оплати
-          та повідомляє нам про оплату.
       labels:
         #original_hash: 4de825f
-        entry_fees: Реєстраційні внески
-        #original_hash: 2c09302
         donation: Пожертви
         #original_hash: 184150d
-        card_information: Інформація про банківську картку
-        #original_hash: bc8091a
-        cardholder_name: Власник картки
       alerts:
         #original_hash: a34940e
-        not_a_number: 'Будь ласка, введіть коректну суму.'
-        #original_hash: 707b9ca
         amount_too_low: >-
           Повна сума, яку треба сплатити, має бути не менше за реєстраційний
           внесок.
@@ -1947,14 +1551,6 @@ uk:
         #original_hash: b2bc8ed
         not_allowed: Ви не можете сплатити за цю реєстрацію
         #original_hash: 630dbb9
-        intent_not_found: >-
-          Ми не змогли знайти спосіб підтвердження оплати на нашому сервері.
-          Процес оплати скасовано, гроші не були списані з Вашої картки.
-        #original_hash: 63e0ec1
-        cardholder_name: 'Будь ласка, перевірте ім’я власника картки.'
-    #original_hash: 8607a87
-    payment_button_text: Сплатити Ваші внески карткою
-    #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Для прискорення реєстрації на майбутнє, Ви можете обрати улюблені
       дисципліни %{link}.
@@ -2064,12 +1660,6 @@ uk:
       #original_hash: 0f44e45
       not_confirmed_not_visible: Ці змагання не підтверджені і не опубліковані
       #original_hash: a821396
-      stripe_connected: >-
-        Ви успішно приєднали Ваш Stripe-аккаунт і тепер можете отримувати
-        реєстраційні внески за ці змагання.
-      #original_hash: 0a4bb53
-      stripe_not_connected: 'Є проблема, і ми не можемо приєднати Ваш Stripe-аккаунт'
-      #original_hash: 724cf0d
       championship_exists: '%{championship_type} в %{year} році вже існує'
     my_competitions:
       #original_hash: 5c6d3ea
@@ -2174,8 +1764,6 @@ uk:
       #original_hash: 4df139d
       guests_pay: 'Гості мають сплатити внесок в розмірі %{guests_base_fee}.'
       #original_hash: b6c863e
-      guests_free: Вхід для гостей вільний.
-      #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Змагання завершені. Натисніть %{link_here}, щоб побачити умови
         реєстрації.
@@ -2251,7 +1839,6 @@ uk:
         #original_hash: 8b57693
         custom: Змагання за обраний проміжок часу
       #original_hash: 6684214
-      no_access: Ви не маєте доступу до цієї сторінки!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -2269,9 +1856,6 @@ uk:
       #original_hash: 8b09d74
       no_comp_found: Змагання не знайдені.
       #original_hash: 7008166
-      no_comp_match: >-
-        Ми не знайшли жодного змагання з %{events}! Спробуйте обрати менше
-        дисциплін.
     my_competitions_table:
       #original_hash: 5301648
       edit: Редагувати
@@ -2305,30 +1889,8 @@ uk:
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
       #original_hash: e5cbb13
-      name_reason_html: >-
-        Коротке пояснення назви змагання. Назва має відповідати <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Вимогам
-        до Змагань WCA</a>.
-      #original_hash: 9d9126e
-      venue_html: >-
-        Приміщення, в якому будуть відбуватись змаганнь. %{md}. Наприклад:
-        [Верховна Рада України](https://rada.gov.ua/)
-      #original_hash: 2651d1a
-      venue_details_html: >-
-        Детальний опис приміщення (розташування під’їзду, на якому поверсі
-        знаходиться зал тощо). %{md}
-      #original_hash: b727e58
-      contact_html: >-
-        Додаткова контактна інформація. Якщо не заповнювати це поле, користувачі
-        будуть бачити електронні адреси організаторів. %{md}. Наприклад: [Олег
-        Ляшко](mailto:some@email.com)
-      #original_hash: c5497bc
       events: Дисципліни
       #original_hash: 09b819f
-      deprecated_events: >-
-        На цих змаганнях проходили дисципліни, які вже не є офіційними і
-        редагування яких неможливе.
-      #original_hash: cafc153
       public_and_locked_html: >-
         Ці змагання опубліковані і недоступні для редагування. Якщо Ви хочете
         внести зміни, будь ласка, надайте відповідь на лист, яким ці змагання
@@ -2391,7 +1953,6 @@ uk:
           name: Місце проведення
           details: Опис місця проведення
           address: Адреса місця проведення
-          coordinates:
         start_date: Дата початку
         end_date: Дата закінчення
         information: Інформація
@@ -2401,10 +1962,8 @@ uk:
           reason: Обгрунтування ліміту учасників
         staff:
           staff_delegate_ids: Делегат(и) WCA
-          trainee_delegate_ids:
           organizer_ids: Організатор(и)
           contact: Контакти
-        championships:
         website:
           generate_website: Використовувати сайт WCA для розміщення додаткової 
             інформації
@@ -2412,9 +1971,6 @@ uk:
           external_registration_page: Сторінка реєстрації
           uses_wca_registration: Використовувати сайт WCA для реєстрації
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: Надсилати електронний лист, коли хтось 
-            реєструється на змагання
         entry_fees:
           currency_code: Валютний код
           base_entry_fee: Базовий реєстраційний внесок
@@ -2427,16 +1983,10 @@ uk:
         registration:
           opening_date_time: Реєстрація відкривається
           closing_date_time: Реєстрація закривається
-          waiting_list_deadline_date:
-          event_change_deadline_date:
           allow_on_the_spot: Реєстрація на місці
           allow_self_delete_after_acceptance:
-          allow_self_edits:
           guests_enabled: Гості
-          guest_entry_status:
-          guests_per_registration:
           extra_requirements: Додаткові реєстраційні вимоги
-          force_comment:
         event_restrictions:
           early_puzzle_submission:
             enabled: Я б хотів, щоб учасники принесли головоломки в зазначений 
@@ -2446,15 +1996,12 @@ uk:
             enabled: Я б хотів використовувати кваліфікаційні результати, щоб 
               обмежити кількість учасників в деяких дисциплінах
             reason: Причина для застосування кваліфікаційних результатів
-            allow_registration_without:
           event_limitation:
             enabled: Я б хотів обмежити учасників від реєстрації в деяких 
               комбінаціях дисциплін
             reason: Причина для обмежень в дисциплінах
-            per_registration_limit:
           main_event_id: Основна дисципліна
         remarks: Примітки
-        clone_tabs: Клонувати також всі вкладки з додатковою інформацією
       hints:
         name: Повна назва змагання включно з роком (наприклад, Kyiv Open 2011). 
           Переконайтесь, що всі слова починаються з великої літери. Ім’я має 
@@ -2489,7 +2036,6 @@ uk:
             англійською!
         staff:
           staff_delegate_ids: Делегати WCA на змаганнях.
-          trainee_delegate_ids:
           organizer_ids: Організатори змагань (вони повинні мати аккаунти на 
             сайті WCA).
           contact_html: 'Додаткова контактна інформація. Якщо не заповнювати це поле,
@@ -2520,12 +2066,9 @@ uk:
         registration:
           opening_date_time: 'Примітка: Реєстрація відкриється і закриється за часом
             UTC.'
-          waiting_list_deadline_date:
-          event_change_deadline_date:
           allow_self_delete_after_acceptance:
           allow_self_edits:
           guest_entry_status:
-          guests_per_registration:
           extra_requirements: Напишіть тут ті додаткові реєстраційні вимоги, які
             не описані вище. Наприклад, як учасник має сплатити реєстраційний 
             внесок.<br/>Будь ласка, заповніть це поле як 
@@ -2544,7 +2087,6 @@ uk:
           event_limitation:
             reason: Будь ласка, опишіть тут, чому Ви б хотіли обмежити участь у 
               комбінації деяких дисциплін. Будь ласка, заповніть це англійською!
-            per_registration_limit:
           main_event_id: Переможець цієї дисципліни буде оголошений переможцем 
             змагання.
         remarks: Додаткова інформація, яку потрібно повідомити WCAT. Наприклад, 
@@ -2562,17 +2104,9 @@ uk:
           allow_self_delete_after_acceptance:
             'true':
             'false':
-          allow_self_edits:
-            'true':
-            'false':
-          guests_enabled:
-            'true': Питати про гостей
-            'false': Не питати про гостей
         event_restrictions:
-          qualification_results:
-            allow_registration_without:
-              'true':
-              'false':
+          qualification_results: {}
+        website: {}
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2633,19 +2167,6 @@ uk:
       competition_in: 'Змагання через %{n_days}.'
       #original_hash: e6e096a
       competition_was: 'Змагання відбулись %{n_days} тому.'
-    nearby_competitions:
-      #original_hash: 241801a
-      competitions:
-        one: 1 змагання
-        few: '%{count} змагань'
-        many: '%{count} змагань'
-      label_admin: 'Тривають %{days} днів'
-      #original_hash: 07a1cf0
-      nearby_admin: '%{x_competitions} в радіусі %{kms} км та в межах %{days} днів.'
-      #original_hash: 9eb8f46
-      within: 'В межах %{days} днів'
-      #original_hash: d97d1ee
-      show: Показати
     adjacent_competitions:
       #original_hash: e3528ec
       label: 'Найближчі змагання (в межах %{days} днів та %{kms} км)'
@@ -2676,8 +2197,6 @@ uk:
     #original_hash: 06b01c4
     announcements: Оголошення
     #original_hash: 5b9523f
-    upload_results: Завантажити результати
-    #original_hash: 47dfd90
     post_announcement: Опублікувати оголошення про змагання
     show:
       #original_hash: b0fe391
@@ -2697,8 +2216,6 @@ uk:
         #original_hash: 83d204f
         regulation_link_text: 'Правило %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'Роз’яснення %{number}'
-        #original_hash: b2a983a
         cumulative_time_limit: сумарний ліміт
         #original_hash: d47f11a
         cumulative_one_round_html: >-
@@ -2729,8 +2246,6 @@ uk:
     schedule:
       display_as:
         #original_hash: ec5dd7c
-        label: 'Відображати розклад як:'
-        #original_hash: 0424f6e
         table: Таблиця
         #original_hash: adab509
         calendar: Календар
@@ -2748,18 +2263,10 @@ uk:
       #original_hash: 81c0d91
       activity: Дисципліна
       #original_hash: 90e2fca
-      room: Кімната
-      #original_hash: 73acb7f
       room_in_venue: '%{room} у %{venue}'
       #original_hash: 2896c7a
-      venue_information_html: 'Ви переглядаєте розклад для місця проведення %{venue_name}.'
-      #original_hash: b97e383
       timezone_message: 'Розклад відображається для часового поясу %{timezone}.'
       #original_hash: 2ab94a0
-      multiple_venues_available: >-
-        Ці змагання мають кілька місць проведення. Переконайтесь, що Ви
-        перевірили розклади для інших місць проведення.
-      #original_hash: 37b1adb
       schedule_for_date: 'Розклад: %{day_name} (%{full_date})'
     nav:
       menu:
@@ -2810,6 +2317,11 @@ uk:
       round: Раунд
       #original_hash: 709a232
       name: Ім’я
+    registration_v2:
+      register:
+        panel: {}
+    live:
+      admin: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -2864,9 +2376,6 @@ uk:
         #original_hash: ad8919a
         event: Дисципліна
         #original_hash: 3e83afa
-        all_events: Всі дисципліни
-      #original_hash: 0f21717
-      region: Регіон
       type_selector:
         #original_hash: 3deb745
         type: Тип
@@ -2874,31 +2383,14 @@ uk:
         single: Одиничний
         #original_hash: 15f86c0
         average: Середній
-      years_selector:
-        #original_hash: 96f997b
-        years: Роки
-        #original_hash: 0977c76
-        all_years: Всі роки
-        #original_hash: 8737f09
-        only: Тільки
-        #original_hash: b3c0fe7
-        only_html: 'Тільки %{year}'
-        #original_hash: 96bdb66
-        until: До
-        #original_hash: fa23930
-        until_html: 'До %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Показати
         #original_hash: f3cf96e
         persons: Учасники
         #original_hash: 16d3376
-        persons_html: '%{quantity} учасників'
-        #original_hash: 612e12d
         results: Результати
         #original_hash: f3baa4a
-        results_html: '%{quantity} результатів'
-        #original_hash: d46d2ee
         by_region: По регіонах
         #original_hash: c0dcb86
         mixed: Розгорнуто
@@ -2916,8 +2408,6 @@ uk:
       #original_hash: 5faa59d
       result: Результат
       #original_hash: e0f64f7
-      citizen_of: Країна
-      #original_hash: 1917f4f
       competition: Змагання
       #original_hash: e7f6fc5
       solves: Спроби
@@ -2925,19 +2415,10 @@ uk:
       region: Регіон
       #original_hash: 70c07ec
       world: Світ
-      type_options:
-        #original_hash: 3deb745
-        type: Тип
-        #original_hash: dd11868
-        single: Одиничний
-        #original_hash: 15f86c0
-        average: Середній
-      #original_hash: ad8919a
       event: Дисципліна
       #original_hash: dcf8b56
       date_circa: Дата
       #original_hash: 1c54132
-      record: Рекорд
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Прив’яжіть WCA ID до Вашого аккаунту!
@@ -3013,32 +2494,6 @@ uk:
       #original_hash: 75d7ff7
       unstick_at_future: має бути в майбутньому
   contacts:
-    website:
-      #original_hash: 35c333c
-      faq_note_html: >-
-        Перед тим як надіслати повідомлення, переконайтесь, що відповіді немає в
-        розділі <a href="/faq">Часті запитання</a>! Якщо Ви бажаєте надіслати
-        повідомлення конкретному комітету чи команді, Ви можете знайти їхні
-        контакти на <a href="/teams-committees">цій сторінці</a>.
-      #original_hash: 4ef2aad
-      title: Контактна форма WCA
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: >-
-          Зв’яжіться з організаторами конкретних змагань (будь ласка, оберіть
-          нижче)
-        #original_hash: f0bffb7
-        competitions_in_general: 'Змагання вцілому (організація, правила тощо)'
-        #original_hash: f6ffa78
-        wca_id_or_profile: WCA ID або Профіль WCA
-        #original_hash: 0c77aee
-        media: Медіа
-        #original_hash: 9ad0522
-        software: Програми
-        #original_hash: 6e6a6f2
-        different: Інше
-      #original_hash: c70a890
-      submit: Відправити повідомлення
     dob:
       #original_hash: 907ac6c
       title: Форма запиту на зміну дати народження
@@ -3354,166 +2809,20 @@ uk:
       donate_other: Зробити внесок іншим способом
     structure:
       #original_hash: 0d62207
-      teams_committees_councils: 'Команди, Комітети та Ради WCA'
-      #original_hash: 9482c5d
       title: Структура
       board:
         #original_hash: abd2828
-        name: Рада Директорів WCA
-        #original_hash: e0d37a2
         description: >-
           Рада Директорів WCA відповідальна за управління організацією вцілому
           та виконує зобов’язання, які не покривають інші Команди, Комітети та
           Ради
       #original_hash: d54d953
-      committees: "Команди та Комітети WCA є інтегрованою частиною організації та
-        виконують щоденні задачі, які необхідні для роботи організації. Ці комітети
-        створені з членів спільноти WCA, включно з Делегатами WCA та учасниками. Кожна
-        команда має лідера, який забезпечує належне функціонування команди та керує
-        іншими членами команди. Рада — це спеціальний комітет, який виконує дорадчу
-        роль Раді Директорів WCA та створений з членів спільноти, які не є Персоналом
-        WCA. Коли комітет, команда чи рада мають вакансії, інформація про це з’являється
-        на головній сторінці сайту WCA."
-      #original_hash: c366473
-      senior_member: Провідний член
-      #original_hash: e26c936
-      leader: Лідер
-      officers:
-        #original_hash: d79bd00
-        name: Службовці WCA
-        #original_hash: 312e799
-        description: >-
-          Службовці WCA виконують задачі, пов’язані з неприбутковим статусом
-          WCA. Такі службовці обираються Радою Директорів WCA. Виконавчий
-          директор є головним виконавчим службовцем WCA, Голова проводить всі
-          зустрічі Ради Директорів, Секретар працює з документами організації,
-          Казначей керує фінансовими питанням WCA.
-      chair:
-        #original_hash: de34439
-        name: Голова WCA
-      executive_director:
-        #original_hash: 7d405ff
-        name: Виконавчий директор WCA
-      secretary:
-        #original_hash: 1dd4a07
-        name: Секретар WCA
-      vice_chair:
-        #original_hash: 0388b19
-        name: Віце-голова WCA
-      treasurer:
-        #original_hash: 75e65d9
-        name: Казначей WCA
       users:
         #original_hash: 57bbaad
         profile: 'Профіль %{user_name}'
-      wdc:
-        #original_hash: c97077a
-        name: Дисциплінарний комітет WCA
-        #original_hash: 286fdf8
-        description: >-
-          Цей комітет допомагає Раді Директорів WCA у виняткових випадках, таких
-          як порушення Правил WCA, та приймає звернення від членів WCA у випадку
-          виникнення важливих питань стосовно Змагань WCA.
-      wdpc:
-        #original_hash: 70539cd
-        name: Комітет захисту даних WCA
-        #original_hash: 1f69829
-        description: >-
-          Цей комітет відповідальний за всі питання, пов’язані з захистом
-          персональних даних.
-      wrc:
-        #original_hash: 3da1e85
-        name: Комітет правил WCA
-        #original_hash: 13ada5b
-        description: Комітет відповідає за розробку Правил WCA.
-      wrt:
-        #original_hash: 67be768
-        name: Команда результатів WCA
-        #original_hash: 439ffae
-        description: Команда відповідає за управління результатами змагань.
-      wst:
-        #original_hash: a14bc62
-        name: Команда розробників WCA
-        #original_hash: ec961e4
-        description: >-
-          Команда відповідає за розробку програмного забезпечення WCA (вебсайт,
-          програми для перемішування головоломок, введення результатів,
-          інструменти адміністраторів).
-      wct:
-        #original_hash: 63a2388
-        name: Команда комунікації WCA
-        #original_hash: 50fd091
-        description: >-
-          Команда комунікації WCA (скорочено WCT) наглядає та підтримує зв’язок
-          між WCA, спільнотою швидкуберів та громадськістю. Коммунікація має
-          сприяти Цілям WCA і підтримувати загальну культуру дружелюбності,
-          прозорості, інклюзивності, відкритості і відповідальності.
-      wfc:
-        #original_hash: 9cb13de
-        name: Комітет фінансів WCA
-        #original_hash: b4ed44b
-        description: Ця команда відповідальна за керування фінансами WCA.
-      wec:
-        #original_hash: 83bd1d0
-        name: Комітет етики WCA
-        #original_hash: c304d57
-        description: >-
-          Цей комітет має забезпечити, щоб всі процедури, які виконуються
-          Персоналом WCA та Зовнішнім персоналом, відповідали Кодексу етики, та
-          виконувати незалежні розслідування у випадку, якщо хтось з
-          вищезазначених осіб порушує Кодекс етики. Такі розслідування можуть
-          ініціюватись учасниками Змагань WCA, для яких Комітет етики WCA є
-          довіреною особою. Цей комітет також є апеляційною інстанцією для тих,
-          хто не згоден з рішеннями, які приймає Дисциплінарний комітет WCA.
-      weat:
-        #original_hash: d1dbb86
-        name: Команда виконавчих помічників WCA
-        #original_hash: 889dd90
-        description: >-
-          Ця команда відповідальна за виконання адміністративних завдань Ради
-          Директорів WCA.
-      wqac:
-        #original_hash: 8f32116
-        name: Комітет із забезпечення якості WCA
-        #original_hash: 0171b3b
-        description: >-
-          Роль цього комітету — підримувати та сприяти постійному вдосконаленню
-          процесів всередині WCA, застосовувати в усьому світі стандарти для
-          забезпечення високої якості роботи Персоналу, Регіональних
-          організацій, Організаторів Змагань та Персоналу Змагань WCA.
-      wcat:
-        #original_hash: 2b81984
-        name: Команда оголошення Змагань WCA
-        #original_hash: f511502
-        description: >-
-          Ця команда затверджує і оголошує Змагання WCA та забезпечує дотримання
-          таких оголошень стандартам якості WCA.
-      wmt:
-        #original_hash: 2035811
-        name: Команда маркетингу WCA
-        #original_hash: f2a0140
-        description: >-
-          Ця команда відповідальна за розвиток та управління Брендом WCA,
-          допомагає в розповсюдженні Обладнання для Змагань WCA, займається
-          пошуком спонсорів та збутом Мерчендайзу WCA.
-      wac:
-        #original_hash: 1ce7604
-        name: Консультативна рада WCA
-        #original_hash: fb6cd86
-        description: >-
-          Ця рада відповідальна за побудову та підтримку зв’язку між Спільнотою
-          WCA та Персоналом WCA.
-      banned:
-        #original_hash: d30e2e5
-        name: Відсторонені учасники
-      #original_hash: f8c3f3c
       operations_html: 'Щоденні операції виконують %{committees_and_teams} WCA.'
       #original_hash: 0e7a036
       teams_committees: Команди та Комітети
-      probation:
-        #original_hash: 1dd6e3b
-        name: Делегати на випробуванні
-      #original_hash: 3d5b64b
       delegates_html: "<p>Роль <strong>Делегата WCA</strong> визначена в Положеннях
         WCA та описана в Правилах WCA. Основний обов’язок Делегата — спостерігати
         за змаганнями від імені WCA. Делегат WCA відповідальний за те, щоб всі Змагання
@@ -3624,174 +2933,17 @@ uk:
         чекайте доки Рада Директорів WCA перегляне її
   contact:
     #original_hash: a34b69f
-    title: Контактна інформація
-    #original_hash: b5c2eaa
-    info_alert_html: >-
-      Перш ніж зв’язатись з будь-якою командою на цій сторінці, будь ласка
-      перегляньте наші %{link}!
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      Питання щодо роботи вебсайту, коментарі та пропозиції надсилайте через <a
-      href='/contact/website'>цю форму</a>. Для питань стосовно конкретного
-      регіону чи змагання, будь ласка зв’яжіться з місцевим %{link}.
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>Комітети та Команди</u>
-    #original_hash: 1cb449c
-    members: Члени
-    board:
-      #original_hash: f3cbb35
-      info_html: >-
-        Всесвітня Асоціація Кубика керується Радою Директорів WCA. Вони
-        відповідальні за загальні питання та організацію вцілому.
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        WCT наглядає та підтримує зв’язок між WCA, спільнотою швидкуберів та
-        громадськістю. Якщо Ви маєте загальні питання щодо WCA або активності
-        організації в соціальних мережах, WCT з радістю відповість на них.
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        WDC розслідує різноманітні ситуації та пропонує рішення, включаючи
-        покарання, коли це необхідно. Це можуть бути серйозні порушення Правил
-        WCA або конфлікти в спільноті. Якщо Ви має подібний досвід, слід
-        звернутись до цього комітету.
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        WDPC має відповідальність і обов’язок досліджувати, розробляти,
-        впроваджувати та виконувати політику захисту даних WCA, контракти з
-        зовнішніми обробниками даних WCA, та керувати задачами щодо захисту
-        даних.
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        WRC займається питаннями застосування, покращення та розробки Правил
-        WCA. Комітет допомагає Делегатам WCA у вирішенні процедурних питань, що
-        виникають на змаганнях, та вирішує інциденти, які не покриваються
-        Правилами. WRC регулярно публікує внутрішні звіти WCA, щоб допомогти
-        Делегатам, та покращити їхні знання Правил. Якщо Ви бажаєте взяти участь
-        в розробці Правил або запропонувати зміни, Ви можете зв`язатись з WRC
-        електронною поштою або під час дискусій на <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        WRT відповідальна за управління даними в базі даних WCA, найважливішими
-        з яких є результати змагань та дані про учасників. Команда публікує
-        результати змагань на вебсайті WCA після того як Делегат WCA відправить
-        їх. Крім публікації результатів нових змагань, Команда Результатів WCA
-        також відповідальна за внесення змін до результатів минулих змагань,
-        якщо це необхідно, а також за адміністрування всіх сторінок профілів
-        WCA. Це включає, наприклад, зміни даних про користувача, такі як дата
-        народження, та управління запитами на оновлення зображення профілю.
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        WST відповідальна за роботу та управління усього програмного
-        забезпечення WCA. Вони також розробляють нові інструменти для різних
-        задач, якщо цього потребує WCA. Якщо у Вас є ідеї щодо покращення роботи
-        вебсайту WCA, або якщо Ви б хотіли повідомити про помилки, будь ласка
-        повідомте нас про це! Вебсайт WCA — це великий open-source проект на <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
-        тому, якщо Вам цікаво допомогти в розробці, ми будемо дуже раді
-        співпраці.
-    wfc:
-      #original_hash: 3ec8256
-      info_html: >-
-        WFC відповідальний за все, що стосується фінансів всередині WCA. Комітет
-        керує фінансами та рахунками WCA у відповідності до затвердженого
-        річного бюджету, що також є їхнім обов’язком на регулярній основі.
-    wec:
-      #original_hash: ec2b9c3
-      info_html: >-
-        Цей комітет має забезпечити, щоб всі процедури, які виконуються
-        Персоналом WCA та Зовнішнім персоналом, відповідали Кодексу етики.
-    weat:
-      #original_hash: 889dd90
-      info_html: >-
-        Ця команда відповідальна за виконання адміністративних завдань Ради
-        Директорів WCA.
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        Роль цього комітету — підримувати та сприяти постійному вдосконаленню
-        процесів всередині WCA, застосовувати в усьому світі стандарти для
-        забезпечення високої якості роботи Персоналу, Регіональних організацій,
-        Організаторів Змагань та Персоналу Змагань WCA.
-    wcat:
-      #original_hash: 61a471f
-      info_html: >-
-        Ця команда затверджує і оголошує Змагання WCA та забезпечує дотримання
-        таких оголошень стандартам якості WCA.
-    wmt:
-      #original_hash: f2a0140
-      info_html: >-
-        Ця команда відповідальна за розвиток та управління Брендом WCA,
-        допомагає в розповсюдженні Обладнання для Змагань WCA, займається
-        пошуком спонсорів та збутом Мерчендайзу WCA.
-    #original_hash: f97a4f5
-    councils_html: Ради
-    wac:
-      #original_hash: fb6cd86
-      info_html: >-
-        Ця рада відповідальна за побудову та підтримку зв’язку між Спільнотою
-        WCA та Персоналом WCA.
+{}
   score_tools:
     #original_hash: ea9d41d
     title: Інструменти для результатів WCA
-    paragraphs:
-      #original_hash: 305f7f8
-      '1': >-
-        WCA настійно рекомендує використовувати <a
-        href="https://live.worldcubeassociation.org">WCA Live</a> до та під час
-        змагання. WCA Live — це платформа, яка дозволяє керувати змаганням та
-        публікувати наживо результати в інтернеті.
-      #original_hash: 0867b38
-      '2': >-
-        Картки з результатами та скрамбли мають бути перевірені на наявність
-        помилок перед відправленням результатів Команді Результатів WCA. Для
-        цього можна використовувати <a
-        href="https://viroulep.github.io/scrambles-matcher/">Scrambles
-        Matcher</a> — open-source проект, розроблений Philippe Virouleau.
-      #original_hash: 975e59b
-      '3': >-
-        Останню версію таблиці для результатів WCA можна завантажити тут:<br
-        /><a href="/files/results.xls" target="_blank">Таблиця для результатів
-        WCA</a>.
-      #original_hash: c576675
-      '4': "Ми також радимо використовувати <a href=\"https://groupifier.jonatanklosko.com\"\
-        >Групіфаєр</a> для розподілення учасників змагань на групи. Цей інструмент
-        також може сортувати учасників за рейтингом або алфавітом, призначати задачі
-        (суддівство, скрамблінг), визначати кількість необхідних скрамблів, генерувати
-        картки для результатів, персональні картки та списки участників. Групіфаєр
-        — це open-source проект, створений Джонатаном Клоско."
+    tools: {}
   logo:
     #original_hash: c72c969
     title: Логотип WCA
-    paragraphs:
-      #original_hash: 44cfe8d
-      '1': >-
-        Логотип WCA був розроблений Джастіном Істменом на конкурсі дизайну в
-        січні 2005 року.<br />Нам сподобався логотип через його дизайн, кольори,
-        та той факт, що він не відображає лише Кубик 3х3х3.
-      #original_hash: 916e3fc
-      '2': >-
-        Ми маємо чотири різні версії логотипа: <a
-        href="/files/WCAlogo_XL.jpg">великий</a> (46 KB, 1756 x 1068 px), <a
-        href="/files/WCAlogo.svg">векторний</a>, <a
-        href="/files/WCAlogo_notext.svg">векторний без тексту</a> та <a
-        href="/files/WCAlogo_monochrome.svg">монохромний векторний</a>.
-      #original_hash: dcb1ad6
-      '3': >-
-        3D-версія логотипу була розроблена Ву Мін Таном з В’єтнаму: <a
-        href="/files/WCALogo3D.png">PNG-версія</a> (2.1 MB), <a
-        href="/files/WCALogo3Dsmall.png">маленька PNG-версія</a> (0.25 MB).
-      #original_hash: e5df1bf
-      '4': >-
-        Використання логотипу WCA регламентується Політикою використання
-        логотипу WCA, яку можна знайти в <a href="/documents">Документах
-        WCA</a>.
+    headings:
+      usage_guidelines:
+        color: {}
   search_results:
     index:
       #original_hash: db98a68
@@ -3952,3 +3104,31 @@ uk:
       confirm_accept: 'Ви впевнені, що хочете підтвердити цей медіа-матеріал?'
       #original_hash: 5301648
       edit: Редагувати
+  validators: {}
+  page:
+    contacts:
+      form:
+        competition: {}
+        wct: {}
+        user_data: {}
+        contact_recipient: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+    teams_committees_councils: {}
+    contact_edit_profile:
+      form: {}
+  homepage: {}
+  payments:
+    errors: {}
+    payment_setup: {}
+  media_and_instagram: {}
+  database: {}
+  trainee_delegate_application: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  merch: {}
+  tickets: {}
+  qualification: {}

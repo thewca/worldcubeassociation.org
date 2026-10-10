@@ -1158,6 +1158,7 @@ fr-CA:
       confirmation_instructions:
         #original_hash: 66e59f5
         subject: Merci de confirmer votre nouvelle adresse courriel
+    registrations: {}
   wca:
     errors:
       messages:
@@ -2455,8 +2456,6 @@ fr-CA:
         one: 1 région
         many: '%{count} régions'
         other: '%{count} régions'
-      export_csv: Exporter en CSV
-      #original_hash: e0edc01
       email: Adresse courriel
       #original_hash: b7d2f93
       non_competing: Inscriptions de non compétiteurs
@@ -3520,8 +3519,6 @@ fr-CA:
       registration_key: 'Clef d''inscription :'
       registration_status:
         #original_hash: 26275eb
-        full: Complet
-        #original_hash: 0201d81
         open: Ouvert
         #original_hash: 92ea9e6
         not_open: Non ouvert
@@ -4323,10 +4320,6 @@ fr-CA:
         #original_hash: 71c55d0
         no_changes: Aucun changement
         #original_hash: fcf7c90
-        email_send: Envoyer le courriel
-        #original_hash: ee1e028
-        email_copy: Copier les adresses courriels
-        #original_hash: 81d8499
         email_message: 'Copié dans le presse-papiers. N’oubliez pas d’utiliser le
           cci: !'
         #original_hash: 6783f30
@@ -6939,3 +6932,4 @@ fr-CA:
       actioner: Personne en charge
       #original_hash: 624ec47
       requester: Demandeur
+  trainee_delegate_application: {}

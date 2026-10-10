@@ -2,7 +2,8 @@ ko:
   time_will_tell:
     date_range:
       different_months_same_year: "%{from_month} %{from_day} %{sep} %{to_month} %{to_day}"
-      different_years: "%{from_year} %{from_month} %{from_day}, %{sep} %{to_year} %{to_month} %{to_day}"
+      different_years: "%{from_year} %{from_month} %{from_day}, %{sep} %{to_year}
+        %{to_month} %{to_day}"
       same_month: "%{month} %{from_day} %{sep} %{to_day}"
       same_date: "%{month} %{from_day}"
       with_year: "%{year} %{date_range}"

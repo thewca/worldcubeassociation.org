@@ -3,3 +3,126 @@ hu:
     update_locale:
       #original_hash: 4cde9bc
       success: Frissített nyelv.
+    edit:
+      cannot_edit: {}
+      staff_avatar_guidelines: {}
+    mailer: {}
+    successes: {}
+  activerecord:
+    attributes: {}
+  oauth: {}
+  common: {}
+  devise:
+    sessions: {}
+    passwords: {}
+    registrations: {}
+    shared: {}
+    mailer: {}
+  layouts: {}
+  page:
+    contact_edit_profile:
+      form: {}
+    teams_committees_councils: {}
+    contacts:
+      form:
+        user_data: {}
+        contact_recipient: {}
+        competition: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+  homepage: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  registrations:
+    mailer:
+      deleted: {}
+    refund_form: {}
+    payment_form: {}
+    add: {}
+  competitions:
+    live:
+      admin: {}
+      connection: {}
+    index:
+      tooltips: {}
+    registration_v2:
+      register:
+        panel: {}
+    competition_form:
+      labels: {}
+      choices:
+        competitor_limit: {}
+        website: {}
+        registration: {}
+        event_restrictions:
+          qualification_results: {}
+    nav: {}
+    results_table: {}
+  validators: {}
+  rounds: {}
+  helpers:
+    submit: {}
+  enums:
+    user: {}
+    user_roles:
+      status: {}
+    competition_medium: {}
+  simple_form:
+    hints: {}
+    options:
+      registration: {}
+  mail_form:
+    attributes: {}
+    errors: {}
+  errors: {}
+  wca:
+    errors: {}
+    doorkeeper:
+      applications: {}
+  trainee_delegate_application: {}
+  competition_tabs: {}
+  results:
+    selector_elements: {}
+  payments:
+    errors: {}
+  persons: {}
+  posts: {}
+  contacts: {}
+  faq:
+    answers:
+      '1': {}
+      '2': {}
+      '3': {}
+      '4': {}
+      'results': {}
+      '7': {}
+      '8': {}
+      '9': {}
+      'regulations2': {}
+      'regulations3': {}
+      'regulations4': {}
+  delegates_page: {}
+  regional_organizations:
+    requirements: {}
+  score_tools:
+    tools: {}
+  logo:
+    headings:
+      usage_guidelines:
+        color: {}
+  search_results:
+    index: {}
+  about_regulations: {}
+  media:
+    new: {}
+  media_and_instagram: {}
+  merch: {}
+  database: {}
+  tickets: {}
+  advancement_condition:
+    short: {}
+  qualification: {}

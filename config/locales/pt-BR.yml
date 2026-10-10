@@ -152,57 +152,46 @@ pt-BR:
       #original_hash: 4d618bb
       name: Rodada de qualificação
       #original_hash: 4d618bb
-      cellName: Rodada de Qualificação
     '1':
       #original_hash: 1e725b6
       name: Primeira rodada
       #original_hash: 1e725b6
-      cellName: Primeira Rodada
     '2':
       #original_hash: 985c8d0
       name: Segunda rodada
       #original_hash: 985c8d0
-      cellName: Segunda Rodada
     '3':
       #original_hash: e2f74d2
       name: Semifinal
       #original_hash: e2f74d2
-      cellName: Semifinal
     b:
       #original_hash: 327c999
       name: Final B
       #original_hash: 327c999
-      cellName: Final B
     c:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
     d:
       #original_hash: 1e725b6
       name: Primeira Rodada
       #original_hash: 1e725b6
-      cellName: Primeira Rodada
     e:
       #original_hash: 985c8d0
       name: Segunda Rodada
       #original_hash: 985c8d0
-      cellName: Segunda Rodada
     f:
       #original_hash: 672b22c
       name: Final
       #original_hash: 672b22c
-      cellName: Final
     g:
       #original_hash: e2f74d2
       name: Semifinal
       #original_hash: e2f74d2
-      cellName: Semifinal
     h:
       #original_hash: 4d618bb
       name: Rodada de Qualificação
       #original_hash: 4d618bb
-      cellName: Rodada de Qualificação
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Tentativa %{number}'
@@ -521,8 +510,6 @@ pt-BR:
         #original_hash: 8c41ae8
         wca_id: Pessoa
         #original_hash: fa4c045
-        countryId: Representando
-        #original_hash: ab58155
         dob: Data de nascimento
         #original_hash: 8a754c6
         gender: Gênero
@@ -574,20 +561,10 @@ pt-BR:
         competition_id: Aconteceu durante
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competição
-        #original_hash: 3deb745
-        type: Tipo
-        #original_hash: c3328c3
         text: Texto
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Nome do remetente
-        #original_hash: 78cdfee
-        submitterEmail: E-mail do remetente
-        #original_hash: 0d31f23
-        submitterComment: Comentário
-        #original_hash: bae7d5b
         status: Status
       regional_organization:
         #original_hash: 709a232
@@ -683,13 +660,6 @@ pt-BR:
         accepted: Aceita
         #original_hash: 96f608c
         pending: Pendente
-      type:
-        #original_hash: ee45c30
-        report: Relatório
-        #original_hash: 4360c2d
-        article: Artigo
-        #original_hash: 82dabd0
-        multimedia: Multimídia
   simple_form:
     #original_hash: 5397e05
     'yes': Sim
@@ -821,10 +791,6 @@ pt-BR:
           Lista dos números de incidentes para os quais você deseja uma resposta
           do WRC.
         #original_hash: 0aca3b0
-        wic_incidents: >-
-          Lista de números referenciando os incidentes para os quais você
-          gostaria de um retorno do WIC.
-        #original_hash: f30abdc
         remarks: >-
           Fale sobre qualquer outro detalhe que você gostaria de compartilhar
           (p. ex. melhora/piora na comunidade, planos futuros para esta região).
@@ -1068,6 +1034,7 @@ pt-BR:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Por favor confirme seu novo email
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1198,8 +1165,6 @@ pt-BR:
       #original_hash: 6bce1b5
       about_regulations: Sobre o Regulamento
       #original_hash: 141d1d7
-      guidelines: Orientações
-      #original_hash: c4622c3
       scrambles: Embaralhamentos
       #original_hash: 90ccd64
       history: História
@@ -2236,8 +2201,6 @@ pt-BR:
         one: região
         many: regiões
         other:
-      export_csv: Exportar em CSV
-      #original_hash: 84add5b
       email: Email
       #original_hash: e86b1e1
       non_competing: Inscrições de não competidores
@@ -2251,8 +2214,6 @@ pt-BR:
       #original_hash: ce53c71
       payment_requested_on: 'Pagamento solicitado em: %{date}'
       #original_hash: f5b1b34
-      payment_completed_on: 'Pagamento finalizado em: %{date}'
-      #original_hash: 3141a14
       series_registrations: Inscrição da série
       #original_hash: b25928c
       total: Total
@@ -2260,10 +2221,6 @@ pt-BR:
       #original_hash: 8b9f726
       title: 'Inscrever em %{comp}'
     #original_hash: 7cae988
-    registered_with_account_html: >-
-      Esta pessoa se inscreveu com uma conta. Você pode editar suas informações
-      %{here}.
-    #original_hash: ada2e9e
     sign_in: Entrar
     #original_hash: 5d45a00
     profile: perfil
@@ -2323,11 +2280,6 @@ pt-BR:
       Por favor verifique as informações da competição para instruções sobre
       como pagar
     refund_form:
-      hints:
-        #original_hash: 38c904c
-        refund_amount: >-
-          O valor a ser reembolsado ao competidor. Pode ser qualquer valor até o
-          máximo do que já foi pago.
       labels:
         #original_hash: 1cc5991
         refund_amount: Valor do Reembolso
@@ -2579,8 +2531,6 @@ pt-BR:
       #original_hash: e205d73
       results_already_posted: Os resultados já foram postados.
       #original_hash: 376f461
-      results_posted: Resultados postados com sucesso!
-      #original_hash: afe3a23
       results_preview_alert: Você está visualizando resultados que ainda não 
         foram publicados.
       #original_hash: 16dd227
@@ -3198,7 +3148,6 @@ pt-BR:
           #original_hash: 87b7d5f
           uses_wca_registration: Eu quero usar o site da WCA para as inscrições
           #original_hash: ebe8c47
-          uses_wca_live: Vou usar o WCA Live para registrar os resultados
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: Código da moeda do país
@@ -3542,6 +3491,7 @@ pt-BR:
               'false': >-
                 Os competidores PRECISAM estar qualificados para se inscrevem em
                 um evento
+        website: {}
     registration_v2:
       pdf:
         #original_hash: 5c7d60f
@@ -3666,10 +3616,6 @@ pt-BR:
         #original_hash: 65bbb07
         no_changes: Não há mudanças
         #original_hash: be4e8e2
-        email_send: Enviar e-mail
-        #original_hash: b4bac52
-        email_copy: Copiar e-mails
-        #original_hash: b83b663
         email_message: >-
           Copiado para a área de transferência. Lembre-se de usar cópia oculta
           (bcc)!
@@ -4069,8 +4015,6 @@ pt-BR:
     #original_hash: 25e68c3
     cancel_confirm: Você tem certeza que quer cancelar a competição?
     #original_hash: 01de5ee
-    post_results: Postar os resultados
-    #original_hash: b6513f1
     results_posted_by_html: 'Postado por %{poster_name} on %{date_time}'
     #original_hash: a6b5efe
     cancel_mistake: Cometeu um erro?
@@ -4112,8 +4056,6 @@ pt-BR:
         #original_hash: 83d204f
         regulation_link_text: 'Regra %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'Orientação %{number}'
-        #original_hash: b2a983a
         cumulative_time_limit: tempo limite cumulativo
         #original_hash: d47f11a
         cumulative_one_round_html: >-
@@ -4294,6 +4236,9 @@ pt-BR:
       add_series: Adicionar a Série
       #original_hash: be6edcd
       remove_series: Remover da Série
+    live:
+      connection: {}
+      admin: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -4351,19 +4296,11 @@ pt-BR:
       temporariamente desabilitados. A Equipe de Software está trabalhando para
       restaurá-los - pedimos desculpas pelo inconveniente.
     #original_hash: e3710ed
-    tooltip_no_years: Nossa base de dados é muito grande para computar dados 
-      históricos
-    #original_hash: 357094b
-    tooltip_no_quantities: Nossa base de dados é muito grande para computar 
-      rankings longos
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Evento
         #original_hash: 3e83afa
-        all_events: Todos os eventos
-      #original_hash: 0f21717
-      region: Região
       type_selector:
         #original_hash: 3deb745
         type: Tipo
@@ -4371,31 +4308,14 @@ pt-BR:
         single: Tempo único
         #original_hash: 15f86c0
         average: Média
-      years_selector:
-        #original_hash: 96f997b
-        years: Anos
-        #original_hash: 0977c76
-        all_years: Todos os anos
-        #original_hash: 8737f09
-        only: Somente
-        #original_hash: b3c0fe7
-        only_html: 'Somente %{year}'
-        #original_hash: 96bdb66
-        until: Até
-        #original_hash: fa23930
-        until_html: 'Até %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Mostrar
         #original_hash: f3cf96e
         persons: Pessoas
         #original_hash: 16d3376
-        persons_html: '%{quantity} pessoas'
-        #original_hash: 612e12d
         results: Resultados
         #original_hash: f3baa4a
-        results_html: '%{quantity} resultados'
-        #original_hash: d46d2ee
         by_region: Por região
         #original_hash: c0dcb86
         mixed: Mixed
@@ -4422,8 +4342,6 @@ pt-BR:
       #original_hash: 5faa59d
       result: Resultado
       #original_hash: fa4c045
-      representing: Representando
-      #original_hash: 1917f4f
       competition: Competição
       #original_hash: e7f6fc5
       solves: Resoluções
@@ -4431,19 +4349,10 @@ pt-BR:
       region: Região
       #original_hash: 70c07ec
       world: Mundo
-      type_options:
-        #original_hash: 3deb745
-        type: Tipo
-        #original_hash: dd11868
-        single: Tempo único
-        #original_hash: 15f86c0
-        average: Média
-      #original_hash: ad8919a
       event: Evento
       #original_hash: dcf8b56
       date_circa: Data aproximada
       #original_hash: 1c54132
-      record: Recorde
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Vincular sua ID da WCA à sua conta!
@@ -4540,6 +4449,7 @@ pt-BR:
           primary_email: E-mail
         #original_hash: 08d2e98
         fallback_not_applicable: N/A
+    errors: {}
   persons:
     index:
       #original_hash: 5934b4c
@@ -5000,7 +4910,6 @@ pt-BR:
     #original_hash: 4f05e8f
     finances: Finanças
     #original_hash: d1b1406
-    vision_and_strategy: Visão e Estratégia
   education:
     #original_hash: 746e863
     title: Recursos Educacionais da WCA
@@ -5342,10 +5251,6 @@ pt-BR:
         href="/regulations/guidelines.html">Orientações da WCA</a>, que contém
         esclarecimentos e explicações adicionais.
       #original_hash: c8e1783
-      content3_html: >-
-        Decisões importantes sobre incidentes que aconteceram em competições e
-        que foram resolvidos pelo Comitê do Regulamento da WCA podem ser
-        encontradas no <a href="/incidents">Registro de incidentes</a>.
     panel2:
       #original_hash: 8ad8302
       title: Traduções
@@ -5779,10 +5684,6 @@ pt-BR:
         tentativa(s) faltante(s) ou atualize as informações da rodada na página
         Gerenciar Eventos da competição.
       #original_hash: 24c10d3
-      mismatched_result_format_error: >-
-        [%{round_id}] Os resultados de %{person_name} estão no formato errado:
-        esperado %{expected_format}, apresentado %{format}.
-      #original_hash: 32ea6be
       result_over_time_limit_error: >-
         [%{round_id}] Pelo menos um resultado de %{person_name} está acima do
         tempo limite para a rodada, que é %{time_limit} por tentativa. Todas as
@@ -5792,11 +5693,6 @@ pt-BR:
         [%{round_ids}] A soma dos resultados de %{person_name} está acima do
         tempo limite cumulativo, que era %{time_limit}.
       #original_hash: 3fbb505
-      no_round_information_warning: >-
-        [%{round_id}] Não há informação sobre o tempo de corte e tempo limite
-        para essa rodada. Essas validações foram puladas. Por favor atualize a
-        informação da rodada na página Gerenciar Eventos da competição.
-      #original_hash: 76dc4e7
       undefined_time_limit_warning: >-
         [%{round_id}] O tempo limite para essa rodada não está definido;
         validações de tempo limite foram puladas. Isso é esperado somente para
@@ -5828,11 +5724,6 @@ pt-BR:
         %{condition}). Por favor atualize as informações da rodada na página
         Gerenciar Eventos.
       #original_hash: 09d3568
-      unexpected_round_results_error: >-
-        A rodada %{round_id} está presente nos resultados mas não foi criada na
-        aba de eventos. Por favor inclua as informações da rodada na página
-        Gerenciar Eventos da competição.
-      #original_hash: 5b5f9ee
       regulation_9m1_error: >-
         Rodada %{round_id} tem 99 competidores ou menos, mas tem mais de duas
         rodadas subsequentes, o que não é permitido conforme Regra 9m1.
@@ -5881,10 +5772,6 @@ pt-BR:
         de eventos. Se essa rodada não aconteceu, por favor remova-a na página
         Gerenciar Eventos da competição.
       #original_hash: dcf92d3
-      unexpected_combined_round_error: >-
-        Não foi anunciado um tempo de corte para '%{round_name}', mas a rodada
-        foi detectada como uma rodada com corte nos resultados. Por favor
-        atualize as informações na página Gerenciar Eventos da competição.
     events:
       #original_hash: e87f8a0
       not_333_main_event_warning: >-
@@ -5897,11 +5784,6 @@ pt-BR:
         Não há um evento principal selecionado para esta competição. Por favor
         informe ao WRT se isso está correto.
       #original_hash: 6fa46ad
-      unexpected_results_error: >-
-        Há resultados para %{event_id}, contudo ele não está listado como um
-        evento oficial. Por favor remova o evento dos resultados ou contate a
-        WCAT para solicitar que o evento seja adicionado ao site da WCA.
-      #original_hash: fde208d
       missing_results_warning: >-
         Não há resultados para %{event_id}, mas ele está listado como um evento
         oficial. Se o evento aconteceu, por favor reenvie o JSON com os
@@ -5917,10 +5799,6 @@ pt-BR:
         Embaralhamentos faltando para a competição. Use o Scrambles Matcher para
         adicionar os embaralhamentos.
       #original_hash: 0f334fd
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Embaralhamentos excessivos. Use o Scrambles Matcher para
-        desmarcar os embaralhamentos não usados.
-      #original_hash: 22706c5
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: embaralhamentos faltando, detectados
         apenas %{actual} em vez de %{expected}.
@@ -5940,3 +5818,5 @@ pt-BR:
         [%{round_id}] Essa rodada tem um número diferente de embaralhamentos do
         especificado na aba Gerenciar Eventos. Por favor ajuste o número de
         embaralhamentos para o número que foi usado.
+  trainee_delegate_application: {}
+  tickets: {}

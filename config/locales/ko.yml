@@ -1033,6 +1033,7 @@ ko:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: 새로운 이메일 주소를 확인해 주십시오.
+    registrations: {}
   wca:
     errors:
       messages:
@@ -2044,8 +2045,6 @@ ko:
       country_plural:
         other: '%{count} 개국'
       #original_hash: 1feee0e
-      export_csv: CSV로 추출
-      #original_hash: 84add5b
       email: 이메일
       #original_hash: e86b1e1
       non_competing: 대회 미참가 참가 신청
@@ -3457,10 +3456,6 @@ ko:
         #original_hash: 65bbb07
         no_changes: 변경 사항이 없습니다
         #original_hash: be4e8e2
-        email_send: 이메일 전송
-        #original_hash: b4bac52
-        email_copy: 이메일 복사
-        #original_hash: b83b663
         email_message: 클립보드에 복사되었습니다. 숨은 참조(bcc)를 사용하는 것을 잊지 마십시오!
         #original_hash: beedd53
         move_to:
@@ -5448,3 +5443,4 @@ ko:
       actioner: Actioner
       #original_hash: bcdf8d3
       requester: 요청자
+  trainee_delegate_application: {}

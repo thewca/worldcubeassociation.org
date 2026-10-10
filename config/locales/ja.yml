@@ -792,6 +792,7 @@ ja:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: 新しいメールアドレス認証を完了してください。
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1517,8 +1518,6 @@ ja:
       #original_hash: 5301648
       edit: 編集
       #original_hash: 1feee0e
-      export_csv: CSV に出力
-      #original_hash: 84add5b
       email: メールアドレス
       #original_hash: ac5d958
       not_paid: 未支払い
@@ -2211,7 +2210,6 @@ ja:
           #original_hash: 87b7d5f
           uses_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
           #original_hash: ebe8c47
-          uses_wca_live: 記録入力にWCA Liveを使用する。
         entry_fees:
           #original_hash: 28a6fbb
           currency_code: 通貨コード
@@ -2434,6 +2432,7 @@ ja:
               'true': 参加申し込み時点で参加資格がない種目への参加申し込みを許可する
               #original_hash: 6509041
               'false': 参加申し込み時点での参加資格を要求する
+        website: {}
     registration_v2:
       pdf:
         #original_hash: 5c7d60f
@@ -2515,10 +2514,6 @@ ja:
         #original_hash: 65bbb07
         no_changes: 変更はありません
         #original_hash: be4e8e2
-        email_send: メール送信
-        #original_hash: b4bac52
-        email_copy: メールをコピー
-        #original_hash: b83b663
         email_message: メールをコピーしました。メール送信の際、必要であればbccを使用してください。
         #original_hash: 43dc853
         amount: 数
@@ -2989,6 +2984,9 @@ ja:
       add_series: シリーズ大会に追加
       #original_hash: be6edcd
       remove_series: シリーズ大会から除外
+    live:
+      admin: {}
+      connection: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3508,6 +3506,9 @@ ja:
   logo:
     #original_hash: c72c969
     title: WCA ロゴ
+    headings:
+      usage_guidelines:
+        color: {}
   search_results:
     index:
       #original_hash: db98a68
@@ -3636,3 +3637,17 @@ ja:
     privacy: プライバシーポリシー
     #original_hash: 4c4a2e8
     disclaimer: 免責事項
+  payments:
+    errors: {}
+  database: {}
+  score_tools:
+    tools: {}
+  media_and_instagram: {}
+  merch: {}
+  validators: {}
+  tickets: {}
+  trainee_delegate_application: {}
+  user_roles:
+    email: {}
+  qualification: {}
+  user_groups: {}

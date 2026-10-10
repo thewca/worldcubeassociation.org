@@ -1128,6 +1128,7 @@ sl:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: 'Prosimo, potrdite nov e-naslov.'
+    registrations: {}
   wca:
     errors:
       messages:
@@ -6333,3 +6334,4 @@ sl:
       actioner: Izvajalec
       #original_hash: bcdf8d3
       requester: Prijavitelj
+  trainee_delegate_application: {}

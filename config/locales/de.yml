@@ -336,10 +336,6 @@ de:
       one: 1 Tag
       other: '%{count} Tagen'
     #original_hash: 203e1b3
-    these_events:
-      one: Diese Disziplin
-      other: 'Diese %{count} Disziplinen'
-    #original_hash: 51ef7d4
     search_site: Suche
     #original_hash: d7decf1
     filter: Filter
@@ -438,149 +434,6 @@ de:
         user_preferred_events: Favorisierte Disziplinen
         #original_hash: e632fbf
         otp_attempt: 'Gib deinen Zwei-Faktor-Authentifizierung-Code ein:'
-      competition:
-        #original_hash: 89f89c0
-        id: ID
-        #original_hash: 7f3d889
-        confirmed: Lasse dieser Turnier nicht von Organisatoren editieren
-        #original_hash: d493e6a
-        show_at_all: Wettbewerb öffentlich sichtbar machen
-        #original_hash: 709a232
-        name: Name
-        #original_hash: f91b080
-        name_reason: Der Grund für diesen Namen
-        #original_hash: fdba578
-        cell_name: Competition-Kurzname
-        #original_hash: 0f21717
-        country_id: Region
-        #original_hash: 25b7b06
-        city_name: Name der Stadt
-        #original_hash: 67cd406
-        venue: Veranstaltungsort
-        #original_hash: 486f8fb
-        venue_address: Adresse des Veranstaltungsortes
-        #original_hash: 08767af
-        venue_details: Details zum Veranstaltungsort
-        #original_hash: ff99f5b
-        start_date: Startdatum
-        #original_hash: 89d10cd
-        end_date: Enddatum
-        #original_hash: 2e8a57c
-        external_website: Website
-        #original_hash: 692e1f9
-        generate_website: >-
-          Ich würde gerne die WCA-Website statt einer externen Seite für
-          zusätzliche Informationen verwenden.
-        #original_hash: 6cf623b
-        base_entry_fee_lowest_denomination: Grundgebühr
-        #original_hash: 28a6fbb
-        currency_code: Währungscode
-        #original_hash: 2e3ed8b
-        staff_delegate_ids: WCA-Delegierte
-        #original_hash: c0ddcd6
-        trainee_delegate_ids: WCA Trainee Delegate(s)
-        #original_hash: 958562e
-        organizer_ids: Organisator(en)
-        #original_hash: b37456c
-        contact: Kontakt
-        #original_hash: 0eb5ed5
-        information: Informationen
-        #original_hash: 87b7d5f
-        use_wca_registration: Ich würde gerne die WCA-Website für die 
-          Registrierung benutzen
-        #original_hash: ebe8c47
-        use_wca_live_for_scoretaking: Ich werde WCA Live fürs Scoretaking 
-          verwenden
-        #original_hash: 8020e88
-        external_registration_page: Anmeldeseite
-        #original_hash: 9bb1965
-        competitor_limit_enabled: Teilnehmerlimit
-        #original_hash: 749f4c9
-        competitor_limit: Maximale Anzahl an Teilnehmern
-        #original_hash: 4a8b6f1
-        competitor_limit_reason: Der Grund für das Teilnehmerlimit
-        #original_hash: 3c23a67
-        guests_enabled: Gäste
-        #original_hash: 7d78478
-        guests_per_registration_limit: Maximale Anzahl Gäste pro Anmeldung
-        #original_hash: 22516e1
-        events_per_registration_limit: Events pro Anmeldung - Limit
-        #original_hash: 089cbfd
-        receive_registration_emails: >-
-          Benachrichtige mich per E-Mail, wenn sich jemand für diesen Wettbewerb
-          anmeldet
-        #original_hash: d4aeed9
-        registration_open: Anmeldung offen
-        #original_hash: f8153a2
-        registration_close: Anmeldung geschlossen
-        #original_hash: d7020f4
-        remarks: Bemerkungen
-        #original_hash: c305010
-        clone_tabs: >-
-          Ich möchte auch alle Registerkarten mit zusätzlichen Informationen
-          kopieren
-        #original_hash: c5497bc
-        competition_events: Disziplinen
-        #original_hash: 71c8461
-        enable_donations: Ich möchte zusätzlich zu den Eintrittsgebühren Spenden
-          ermöglichen
-        #original_hash: 556fda0
-        extra_registration_requirements: Zusätzliche Bedingungen für die 
-          Registrierung
-        #original_hash: 6c8e5bf
-        force_comment_in_registration: >-
-          Zwinge Teilnehmer dazu, bei der Anmeldung einen Kommentar zu
-          hinterlassen
-        #original_hash: 2529d04
-        on_the_spot_registration: Vor-Ort Registrierung
-        #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: Eintrittsgebühren für die 
-          Registrierung vor Ort
-        #original_hash: 7e53b96
-        allow_registration_edits: Änderungen der Registrierung
-        #original_hash: 3d47eca
-        allow_registration_self_delete_after_acceptance: Stornierungen der 
-          Registrierung
-        #original_hash: efbdbab
-        refund_policy_percent: 'Prozentsatz, der rückerstattet wird'
-        #original_hash: b332299
-        refund_policy_limit_date: Frist für die Rückerstattung
-        #original_hash: 16cf9a4
-        waiting_list_deadline_date: Deadline zum Akzeptieren von Teilnehmern auf
-          der Warteliste
-        #original_hash: 99a9169
-        event_change_deadline_date: 'Deadline für Teilnehmer, die ihre Events ändern
-          möchten'
-        #original_hash: 3542671
-        guests_entry_fee_lowest_denomination: Eintrittsgebühr für Gäste
-        #original_hash: bb16247
-        guest_entry_status: 'Zeige eine Mitteilung, dass Gäste freien Eintritt haben'
-        #original_hash: 723cad9
-        early_puzzle_submission: >-
-          Ich möchte festlegen, dass Teilnehmer ihre Puzzle zu einem bestimmten
-          Zeitpunkt vor dem eigentlichen Beginn des Events abgeben.
-        #original_hash: 78308cc
-        early_puzzle_submission_reason: 'Grund und Details dafür, die Puzzle früher
-          abzugeben'
-        #original_hash: 88da0ef
-        qualification_results: >-
-          Ich möchte Qualifikationszeiten nutzen, um die Anzahl der Teilnehmer
-          in bestimmten Events zu limitieren
-        #original_hash: 1ec6dd4
-        qualification_results_reason: Grund und Details für Qualifikationszeiten
-        #original_hash: ac30de9
-        event_restrictions: Ich möchte die Anmeldung für bestimmte 
-          Eventkombinationen einschränken
-        #original_hash: 4bf194c
-        event_restrictions_reason: Grund und Details zur Einschränkung von 
-          Events
-        #original_hash: 3c24bd2
-        main_event_id: Hauptevent
-        #original_hash: a541bfa
-        allow_registration_without_qualification: Events mit Qualifikation
-      championship:
-        #original_hash: 4baf44b
-        championship_type: Meisterschaftstyp
       registration:
         #original_hash: 3c23a67
         guests: Gäste
@@ -624,12 +477,6 @@ de:
         #original_hash: 0c7191d
         wrc_incidents: 'Zwischenfälle, die Feedback durch das WRC benötigen'
         #original_hash: 5a92b25
-        wdc_feedback_requested: >-
-          Ich möchte Feedback durch das WDC zu einigen oben genannten
-          Zwischenfällen erhalten.
-        #original_hash: 06a0568
-        wdc_incidents: 'Zwischenfälle, die Feedback durch das WDC benötigen'
-        #original_hash: d7020f4
         remarks: Bemerkungen
       person:
         #original_hash: 8c41ae8
@@ -746,39 +593,7 @@ de:
         f: Weiblich
         #original_hash: 6e6a6f2
         o: Andere
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: Trainee-Delegate
-        #original_hash: 9b97968
-        candidate_delegate: Junior-Delegate
-        #original_hash: 12ab214
-        delegate: Delegate
-        #original_hash: d463c23
-        senior_delegate: Senior-Delegate
-      role_status:
-        delegate_regions:
-          #original_hash: 621101a
-          trainee_delegate: Trainee-Delegate
-          #original_hash: 9b97968
-          candidate_delegate: Junior-Delegate
-          #original_hash: 12ab214
-          delegate: Delegate
-          #original_hash: d463c23
-          senior_delegate: Senior-Delegate
-        teams_committees:
-          #original_hash: 6853c98
-          member: Mitglied
-          #original_hash: c366473
-          senior_member: Senior-Mitglied
-          #original_hash: e26c936
-          leader: Leiter
-        councils:
-          #original_hash: 6853c98
-          member: Mitglied
-          #original_hash: c366473
-          senior_member: Senior-Mitglied
-          #original_hash: e26c936
-          leader: Leiter
+      role_status: {}
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -792,16 +607,9 @@ de:
         article: Artikel
         #original_hash: 82dabd0
         multimedia: Multimedia
-    competition:
-      guest_entry_status:
-        #original_hash: 7e54323
-        unclear: >-
-          Zeige nichts an (und erläutere eventuelle Details im Bereich
-          "Zusätzliche Anmeldebedingungen“)
-        #original_hash: 694bce4
-        free: '"Jeder Gast kann die Competition kostenlos besuchen"'
-        #original_hash: 762c509
-        restricted: '"Gäste werden nur als Begleitung von Teilnehmern zugelassen"'
+    competition: {}
+    user_roles:
+      status: {}
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -864,139 +672,6 @@ de:
           Einmal-Passwort oder gebe einen deiner Wiederherstellungs-Codes ein.
       competition:
         #original_hash: 2c812a0
-        name: >-
-          Der volle Name eines Wettbewerbs, inklusive Jahreszahl am Ende (z.B.
-          Danish Open 2016). Achte auf Großschreibung. Der Name darf nur
-          alphanumerische Zeichen, Bindestriche(-), Und-Zeichen(&), Punkte(.),
-          Doppelpunkte(:), Apostrophe(') und Leerzeichen( ) enthalten.
-        #original_hash: fbcda66
-        cell_name: >-
-          Ein Kurzname zum Anzeigen. Falls der Name des Wettbewerbs weniger als
-          %{short_name_limit} Zeichen hat, sollte dies nicht editiert werden und
-          sollte mit dem normalen Namen übereinstimmen.
-        #original_hash: bce4589
-        city_name: >-
-          Name der Stadt und des Verwaltungsbezirks (wenn möglich) in dem der
-          Wettbewerb stattfindet. Lasse hierbei das Land aus (z.B. Paris ODER
-          San Francisco, Kalifornien).
-        #original_hash: bb470cc
-        information: >-
-          Wichtige Informationen, die Teilnehmer wissen sollten. Sie werden auf
-          der Hauptseite des Wettbewerbs angezeigt. <br/>Bitte fülle diese in
-          <b>Englisch</b> und in jeder anderen Sprache, die die Teilnehmer
-          sprechen, aus.
-        #original_hash: b4d020f
-        staff_delegate_ids: WCA-Delegierte des Wettbewerbs
-        #original_hash: cb9882c
-        trainee_delegate_ids: WCA Trainee Delegate für diesen Wettbewerb.
-        #original_hash: 517d376
-        organizer_ids: Organisatoren (Account zum Eintragen benötigt).
-        #original_hash: cabe7fb
-        external_website: Die Website des Wettbewerbs. Muss als gültige 
-          http(s)-URL vorliegen.
-        #original_hash: 9965635
-        registration_open: 'Anmerkung: Anmeldebeginn und -schluss sind in UTC anzugeben'
-        #original_hash: 9ea6021
-        remarks: >-
-          Zusätzliche Informationen, die du zum WCAT weitergeben willst. Zum
-          Beispiel ob es Unklarheiten gibt oder ob es spezielle Anfragen an das
-          WCAT gibt. Bitte fülle dies in Englisch aus!
-        #original_hash: b2af5f5
-        external_registration_page: >-
-          Die Seite, auf der Teilnehmer sich für die Competition anmelden
-          können. Dies muss eine gültige http(s) Adresse sein.
-        #original_hash: 82ea18a
-        base_entry_fee_lowest_denomination: >-
-          Eintrittsgebühr für den Wettbewerb. Die Eintrittsgebühr wird auf der
-          Infoseite des Wettbewerbs, sowie der Anmeldeseite (falls genutzt)
-          angezeigt. Wenn diese auf 0 gesetzt wird, wird ein Hinweis angezeigt,
-          dass der Eintritt frei ist.<br><br><b>DISCLAIMER: Die folgende Angabe
-          der WCA-Gebühren ist ausschließlich eine Schätzung auf Basis der
-          aktuellen Umrechnungsraten und in keinster Weise rechtlich verbindlich
-          für die Zahlung der Gebühren.</b>
-        #original_hash: 9735ddf
-        currency_code: Der Währungscode für Eintrittsgebühren.
-        #original_hash: dc47c39
-        competitor_limit_enabled: >-
-          Auch wenn die Regeln nicht vorgeben, dass ein Teilnehmerlimit gesetzt
-          werden muss, ist es sehr empfohlen dies zu tun.
-        #original_hash: b7b599b
-        competitor_limit: >-
-          Die Anzahl der Teilnehmer, die für diesen Wettbewerb zugelassen
-          werden. Aktuell dient dieser Hinweis nur zur Information und
-          verhindert nicht, dass sich weitere Personen registrieren. Wir
-          arbeiten an einer expliziten Unterstützung des Anmeldeprozesses.
-        #original_hash: 4bd7102
-        competitor_limit_reason: >-
-          Was ist der Grund für das Teilnehmerlimit? Bitte fülle dieses Feld in
-          Englisch aus.
-        #original_hash: 4b51faa
-        guests_per_registration_limit: >-
-          Die Anzahl erlaubter Gäste pro Anmeldung bei dieser Competition. Eine
-          Anmeldung mit zu vielen Gästen wird blockiert. Lasse dies frei, wenn
-          es keine Begrenzung gibt.
-        #original_hash: d09af8f
-        events_per_registration_limit: >-
-          Lege wahlweise fest, für wie viele Events sich ein Teilnehmer
-          insgesamt anmelden darf (wird häufig für "Favorites" competitions
-          verwendet). Du solltest vor Nutzung dieses Feldes Events hinzufügen.
-          Anmeldungen mit zu vielen Events werden blockiert. Lasse dies frei,
-          wenn es kein Limit gibt.
-        #original_hash: 3de153b
-        extra_registration_requirements: >-
-          Bitte führe hier zusätzliche Registrierungsbedingungen auf, die oben
-          nicht genannt wurden, z.B. Zahlungsmöglichkeiten.<br/> Bitte fülle
-          diese <b>auf Englisch</b> und in jeder anderen Sprache, die die
-          Teilnehmer sprechen, aus. Dies wird auf der Seite des Wettbewerbs und
-          auf der Registrierungsseite angezeigt.
-        #original_hash: 8c4fdf8
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Wenn dies auf 0 gesetzt wird, wird ein Satz angezeigt dass
-          Vor-Ort-Registrierung kostenlos möglich ist.
-        #original_hash: 180b7b3
-        refund_policy_percent: >-
-          Aktuell dient diese Angabe nur zur Information und Rückerstattungen
-          müssen manuell veranlasst werden. Wenn dies auf 0 gesetzt wird, wird
-          ein Hinweis angezeigt, dass Eintrittsgebühren unter keinen Bedingungen
-          erstattet werden.
-        #original_hash: f64d853
-        refund_policy_limit_date: 'Datum, nachdem keine Rückerstattungen mehr erfolgen'
-        #original_hash: 664db64
-        waiting_list_deadline_date: >-
-          Der Zeitpunkt, ab welchem Personen auf der Warteliste nicht mehr
-          akzeptiert werden. Wenn du eine Deadline für Rückerstattungen
-          angegeben hast, sollte die Deadline für das Akzeptieren der Teilnahme
-          nicht vor der Deadline für Rückerstattungen liegen.
-        #original_hash: 75e6c1f
-        event_change_deadline_date: >-
-          Angemeldete Teilnehmer dürfen bis zu diesem Zeitpunkt ihre gewählten
-          Events verändern, indem sie die Organisatoren kontaktieren. Der
-          Zeitpunkt für diese Deadline darf nicht vor der Schließung der
-          Anmeldung liegen. Wird dieses Feld freigelassen, dürfen Teilnehmer
-          Events bis zum Stattfinden des jeweiligen Events hinzufügen. Wenn du
-          vor-Ort-Registrierungen zulässt, muss dieser Zeitpunkt auf den selben
-          Tag wie die Competition gelegt werden.
-        #original_hash: 0419547
-        guests_entry_fee_lowest_denomination: >-
-          Aktuell dient diese Angabe nur zur Information, da Eintrittsgebühren
-          für Gäste nicht über die Webseite verwaltet werden können. Wenn dies
-          auf 0 gesetzt wird, wird ein im Folgenden auswählbarer Satz bezüglich
-          der Registrierung für Gäste angezeigt.
-        #original_hash: 4e8488b
-        early_puzzle_submission_reason: >-
-          Bitte führe aus, warum du möchtest, dass Teilnehmer ihre Puzzle früher
-          abgeben. Fülle dies in Englisch aus!
-        #original_hash: f859883
-        qualification_results_reason: >-
-          Bitte erläutere hier, warum du Qualifikationszeiten nutzen möchtest.
-          Fülle dies in Englisch aus!
-        #original_hash: d3329d7
-        event_restrictions_reason: >-
-          Bitte erläutere hier, warum du die Anmeldung bestimmter
-          Eventkombinationen verbieten willst. Bitte fülle dies in Englisch aus!
-        #original_hash: 1067798
-        main_event_id: Der Gewinner dieses Events ist der Gewinner der 
-          Competition.
         championships:
       website_contact:
       dob_contact:
@@ -1064,10 +739,6 @@ de:
           Liste von Referenznummern der Zwischenfälle, für die du das Feedback
           des WRC möchtest.
         #original_hash: 38a95e5
-        wdc_incidents: >-
-          Liste der Referenznummern von Zwischenfällen, für die du das Feedback
-          des WDC möchtest.
-        #original_hash: f30abdc
         remarks: >-
           Rede über alle anderen Details die Du gerne teilen möchtest (z.B.
           Verbesserung/Verschlechterung innerhalb der Gemeinschaft, zukünftige
@@ -1078,11 +749,6 @@ de:
         #original_hash: e396d28
         name: 'Beispiele: Anreise, Zahlung, Preise/Auszeichnungen, Unterkunft'
       person:
-      registration:
-        #original_hash: 34ef763
-        administrative_notes: >-
-          Zusätzliche Anmerkungen zur Verwaltung dieser Anmeldung. Diese können
-          vom Teilnehmer nicht eingesehen werden.
       results_submission:
       regional_organization:
         #original_hash: 72448d6
@@ -1324,6 +990,7 @@ de:
       confirmation_instructions:
         #original_hash: 0ea8196
         subject: Bitte bestätige deine neue E-Mail-Adresse
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1335,15 +1002,8 @@ de:
         #original_hash: 1042478
         500_error: 'Entschuldige, etwas ist schiefgelaufen.'
         #original_hash: d815249
-        500_contact: >-
-          Wenn du diesen Fehler ans Software Team meldest, erwähne bitte die
-          Request ID
-        #original_hash: b61e305
         400_error: Die angeforderte Seite existiert nicht.
         #original_hash: 8b309f5
-        400_contact: >-
-          Wenn du glaubst, dass dies ein Fehler ist, kontaktiere bitte das
-          Software Team und erwähne die Request ID
     doorkeeper:
       applications:
         help:
@@ -1451,8 +1111,6 @@ de:
       #original_hash: 6bce1b5
       about_regulations: Über die Regeln
       #original_hash: 141d1d7
-      guidelines: Richtlinien
-      #original_hash: c4622c3
       scrambles: Scrambles
       #original_hash: 90ccd64
       history: Archiv
@@ -1475,16 +1133,12 @@ de:
       #original_hash: d3a928c
       results_team: Results-Team
       #original_hash: 4e7afeb
-      results_admin: Administrator
-      #original_hash: 61074f1
       results_database: Datenbank
       #original_hash: 54e0548
       results_sidekiq: Sidekiq-Dashboard
       #original_hash: aee74b8
       new_post: Neuer Post
       #original_hash: 0d67445
-      team_leader: Teamleiter
-      #original_hash: 37b8fdc
       regional_organizations: Regionale Organisationen
       #original_hash: 6568fa0
       manage_regional_organizations: Regionale Organisationen verwalten
@@ -1978,8 +1632,6 @@ de:
         das <a href='%{wrt_contact_path}'
         target='_blank'>WCA Results Team</a>, um dieses Problem zu lösen.
       #original_hash: d02c03b
-      avatar_requires_wca_id: erfordert die Verknüpfung mit einer WCA-ID
-      #original_hash: 8f785ea
       email_used_by_locked_account_html: >-
         wird bereits von einem anderen Account benutzt. Dieser wurde automatisch
         als Ergebnis deiner Anmeldung für eine Competition über einen externen
@@ -2031,9 +1683,6 @@ de:
       #original_hash: aab7355
       need_country: Region benötigt
       #original_hash: e0bb243
-      cannot_be_deleted_and_accepted: Eine Anmeldung kann nicht gleichzeitig 
-        akzeptiert und gelöscht werden.
-      #original_hash: a38d024
       must_register: muss sich für mindestens eine Disziplin anmelden
       #original_hash: abdc718
       exceeds_event_limit:
@@ -2078,28 +1727,8 @@ de:
       not_using_wca: Dieser Wettbewerb nutzt die Anmeldung auf der WCA-Website 
         nicht
       #original_hash: d528030
-      accepted_and_mailed:
-        one: Anmeldung akzeptiert! E-Mail-Benachrichtigung gesendet.
-        other: Anmeldungen akzeptiert! E-Mail-Benachrichtigung gesendet.
-      #original_hash: 42ea8de
-      rejected_and_mailed:
-        one: Anmeldung auf Warteliste gesetzt!
-        other: Anmeldungen auf Warteliste gesetzt!
-      #original_hash: a360b31
-      deleted_and_mailed:
-        one: Anmeldung gelöscht
-        other: Anmeldungen gelöscht
-      #original_hash: c3aa289
-      single_deletion_and_mail: 'Anmeldung gelöscht und Nachricht an %{mail} gesendet'
-      #original_hash: d8f067f
-      cannot_delete: Du kannst deine Anmeldung nicht löschen.
-      #original_hash: 82b3899
       updated: Aktualisierte Anmeldung
       #original_hash: 856484a
-      failed: Konnte Anmeldung nicht aktualisieren
-      #original_hash: 016b4ae
-      deleted: 'Deine Anmeldung für %{comp} erfolgreich gelöscht'
-      #original_hash: 7707307
       registered: >-
         Anmeldeformular gesendet - stelle sicher, dass alle Anweisungen der
         Anmeldebedingungen befolgt wurden, um deine Anmeldung zu
@@ -2146,22 +1775,6 @@ de:
           du den Status deiner Registrierung %{here} ansehen.
         #original_hash: 1852cbf
         see_you_soon: 'Wir freuen uns darauf dich bei %{comp_name} zu sehen!'
-      pending:
-        #original_hash: 8d26297
-        mail_subject: 'Anmeldung auf die Warteliste Gesetzt: %{comp_name}'
-        #original_hash: 6fd0a8e
-        moved_html: >-
-          Deine Registrierung für die %{comp_name} wurde auf die Warteliste
-          gesetzt. Mögliche Gründe sind:
-        causes:
-          #original_hash: eadfc0d
-          accepted: Deine Registrierung wurde versehentlich bestätigt
-          #original_hash: 2ac6d84
-          withdrawal: Du hast eine Rückerstattung beantragt
-        #original_hash: 8f7358f
-        email_if_error: >-
-          Wenn du denkst, dass dies ein Fehler ist, antworte bitte auf diese
-          E-Mail.
       deleted:
         #original_hash: 8cbc6c0
         mail_subject: 'Anmeldung Gelöscht: %{comp_name}'
@@ -2195,22 +1808,8 @@ de:
         one: 1 Region
         other: '%{count} Regionen'
       #original_hash: 1feee0e
-      export_csv: Als CSV exportieren
-      #original_hash: 84add5b
       email: E-Mail
       #original_hash: 7b2c7f1
-      approve: Bestätigen
-      #original_hash: 2b03b59
-      reject: Ablehnen
-      #original_hash: f6fdbe4
-      delete: Löschen
-      #original_hash: 92d40dc
-      waiting_list: Warteliste
-      #original_hash: 06f7d1a
-      approved_registrations: Bestätigte Anmeldungen
-      #original_hash: bff04e8
-      deleted_registrations: Gelöschte Anmeldungen
-      #original_hash: e86b1e1
       non_competing: Nicht-teilnehmende Anmeldungen
       #original_hash: ac5d958
       not_paid: Nicht bezahlt
@@ -2222,29 +1821,18 @@ de:
       #original_hash: ce53c71
       payment_requested_on: 'Zahlung angefordert am: %{date}'
       #original_hash: f5b1b34
-      payment_completed_on: 'Bezahlung abgeschlossen am: %{date}'
-      #original_hash: 3141a14
       series_registrations: Serien Anmeldungen
       #original_hash: 845bb47
-      series_registrations_hint_html: 'Serien Anmeldungen werden angezeigt als <i>%{description}</i>'
-      #original_hash: b25928c
       total: Gesamt
       #original_hash: df036fe
-      n_events: Anzahl der Disziplinen
     new_registration:
       #original_hash: 8b9f726
       title: 'Für %{comp} anmelden'
     #original_hash: 7cae988
-    registered_with_account_html: >-
-      Diese Person hat sich mit einem Benutzerkonto angemeldet. Du kannst die
-      persönlichen Informationen %{here} bearbeiten.
-    #original_hash: ada2e9e
     sign_in: Einloggen
     #original_hash: 5d45a00
     profile: Benutzerkonto
     #original_hash: 801b3e9
-    panel_title: Details der Anmeldung
-    #original_hash: c0063c3
     register: Neu anmelden!
     #original_hash: f484f15
     refund: Rückerstattung
@@ -2253,8 +1841,6 @@ de:
     #original_hash: a9af643
     update: Anmeldung aktualisieren
     #original_hash: f6fdbe4
-    delete: Löschen
-    #original_hash: b72119a
     delete_confirm: 'Bist Du sicher, dass du deine Anmeldung löschen willst?'
     #original_hash: cfc4865
     delete_registration: Anmeldung löschen.
@@ -2281,8 +1867,6 @@ de:
       %{sign_in} um dich für %{comp} anzumelden. Wenn Du noch kein
       WCA-Benutzerkonto hast, kannst Du dir %{here} einen anlegen.
     #original_hash: 89b4e7f
-    greeting: 'Hallo, %{name}!'
-    #original_hash: 322f646
     please_fix_profile_html: >-
       Für die Anmeldung für %{comp} musst Du die folgenden Probleme mit deinem
       %{profile} beheben:
@@ -2299,26 +1883,6 @@ de:
       die Warteliste gesetzt. Diese wird erst dann akzeptiert, wenn ein Platz
       frei wird.
     #original_hash: 855ca9c
-    can_register: 'Du kannst dich weiter unten für %{comp} anmelden.'
-    #original_hash: 4167ed7
-    check_registration_information: >-
-      Bitte überprüfe die Informationen zur Registrierung, um herauszufinden, ob
-      noch weitere Schritte, wie zum Beispiel die Zahlung einer Teilnahmegebühr,
-      notwendig sind.
-    #original_hash: 88ac7c3
-    have_registered: >-
-      Du hast deine Anmeldung für %{comp} abgeschickt. Du kannst die Details zu
-      deiner Anmeldung unten sehen.
-    #original_hash: 3c9141f
-    contact_organizer: 'Kontaktiere den Organisator, wenn Du Änderungen vornehmen
-      willst.'
-    #original_hash: 59354fd
-    waiting_list: >-
-      Deine Anmeldung ist im Gang. Zur Bestätigung kann es notwendig sein eine
-      Teilnahmegebühr zu zahlen. Überprüfe hierfür die Website des Wettbewerbs.
-    #original_hash: 58b1a3c
-    accepted: Deine Anmeldung wurde bestätigt!
-    #original_hash: bcd7d70
     entry_fees_fully_paid: 'Du hast %{paid} bezahlt, was der vollständigen Eintrittsgebühr
       entspricht.'
     #original_hash: 2e5d1b9
@@ -2328,20 +1892,12 @@ de:
       Bitte lies die Informationen zur Competition, um mehr darüber zu erfahren,
       wie du bezahlen kannst
     #original_hash: be4b39d
-    not_qualified: Nicht qualifiziert
     refund_form:
-      hints:
-        #original_hash: d97186d
-        refund_amount: >-
-          Der Betrag, der dem Teilnehmer zurückerstattet wird, kann jeder Betrag
-          bis zum bereits gezahlten Betrag sein.
       labels:
         #original_hash: 1cc5991
         refund_amount: Betrag zurückerstatten
     payment_form:
       #original_hash: 4de825f
-      title: Eintrittsgebühren
-      #original_hash: d1569e6
       payment_successful: >-
         Deine Zahlung war erfolgreich und deine Zahlung sollte unten als bezahlt
         markiert sein.
@@ -2360,8 +1916,6 @@ de:
           abwickelt wird und anschließend eine Weiterleitung an uns erfolgt.
       labels:
         #original_hash: 4de825f
-        entry_fees: Eintrittsgebühren
-        #original_hash: dc9d458
         fees_paid: Bezahlt
         #original_hash: cc632b5
         fees_remaining: Ausstehend
@@ -2374,17 +1928,11 @@ de:
         #original_hash: 4930c06
         payment_information: Zahlungsinformationen
         #original_hash: de0fc95
-        payment_button: Zahle deine Gebühren mit Stripe
-        #original_hash: f94d00f
         ajax_error: WCA Server Fehler
         #original_hash: e62c56c
-        stripe_error: Stripe Fehler
-        #original_hash: 97f7359
         subtotal: Zwischensumme
       alerts:
         #original_hash: a34940e
-        not_a_number: Bitte gebe einen gültigen Betrag ein
-        #original_hash: 707b9ca
         amount_too_low: Der Gesamtbetrag muss mindestens die zu zahlende 
           Eintrittsgebühr sein.
         #original_hash: 5cf6ce2
@@ -2399,16 +1947,6 @@ de:
         #original_hash: f10c80c
         not_allowed: Du kannst für diese Anmeldung nicht zahlen.
         #original_hash: a073600
-        stripe_failed: Bitte prüfe die Stripe-Transaktion.
-        #original_hash: a32e40f
-        stripe_not_found: >-
-          Stripe hat eine Transaktions-ID zurückgegeben, die nicht gefunden
-          werden konnte.
-        #original_hash: aaa8ab7
-        stripe_secret_invalid: >-
-          Stripe hat ein Transaktions-Secret zurückgegeben, welches nicht
-          unseren Daten entspricht.
-        #original_hash: 8d1a199
         payment_reset: Die Zahlung wurde von Stripe abgelehnt.
         #original_hash: bcf6a93
         payment_pending: Die Zahlung wurde noch nicht abgeschlossen.
@@ -2561,8 +2099,6 @@ de:
       #original_hash: e205d73
       results_already_posted: Die Ergebnisse wurden bereits versendet.
       #original_hash: 376f461
-      results_posted: Ergebnisse wurden erfolgreich versendet.
-      #original_hash: afe3a23
       results_preview_alert: 'Du siehst dir Ergebnisse an, die noch nicht veröffentlicht
         wurden.'
       #original_hash: 07de612
@@ -2612,29 +2148,12 @@ de:
       not_confirmed_not_visible: Dieser Wettbewerb ist nicht bestätigt und nicht
         sichtbar.
       #original_hash: a821396
-      stripe_connected: >-
-        Du hast jetzt erfolgreich dein Stripe Konto verbunden und kannst
-        Eintrittsgelder für diesen Wettbewerb empfangen.
-      #original_hash: b8fc60f
-      stripe_disconnected_success: Stripe-Account erfolgreich getrennt.
-      #original_hash: e1a250c
-      stripe_disconnected_failure: Es gab einen Fehler bei der Trennung des 
-        Stripe-Accounts.
-      #original_hash: 0a4bb53
-      stripe_not_connected: >-
-        Es ist ein Problem aufgetreten und wir konnten dein Stripe Konto nicht
-        verbinden.
-      #original_hash: 1b92d16
       championship_exists: 'Es gibt bereits eine %{championship_type} in %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Anmeldung erfolgreich geschlossen.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Anmeldung kann nicht geschlossen werden.
       #original_hash: b16bd13
-      cannot_activate_v2: >-
-        Du kannst das neue Anmeldesystem nicht aktivieren, wenn die Anmeldung
-        bereits geöffnet ist.
-      #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Dieser Wettbewerb hat keine Frist zum Akzeptieren von Teilnehmern auf
         der Warteliste. Wenn du eine Warteliste verwendest, gib bitte eine
@@ -2934,7 +2453,6 @@ de:
         by_announcement: 'Wettbewerbe sortiert nach Datum der Ankündigung, neueste
           oben'
       #original_hash: 6684214
-      no_access: Du hast keinen Zugriff auf diese Seite!
       tooltips:
         hourglass:
           #original_hash: b5183e1
@@ -2965,9 +2483,6 @@ de:
       #original_hash: 8b09d74
       no_comp_found: Keine Wettbewerbe gefunden.
       #original_hash: 7008166
-      no_comp_match: >-
-        Wir haben keine Wettbewerbe mit %{events} gefunden! Versuche, nach
-        weniger Disziplinen zu suchen.
     my_competitions_table:
       #original_hash: 5301648
       edit: Bearbeiten
@@ -3002,26 +2517,6 @@ de:
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
       #original_hash: e5cbb13
-      name_reason_html: >-
-        Eine kurze Erklärung des Namens des Turniers. Der Name muss der <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
-        Competition Requirements Policy</a> entsprechen.
-      #original_hash: 9d9126e
-      venue_html: >-
-        Der Veranstaltungsort an dem das Turnier stattfindet. %{md}. Zum
-        Beispiel: [Cité des Sciences et de
-        l'Industrie](http://www.cite-sciences.fr)
-      #original_hash: 2651d1a
-      venue_details_html: >-
-        Details über den Veranstaltungsort (z.B. Im hinteren Teil des ersten
-        Stocks, Beschilderung folgen). %{md}
-      #original_hash: 447814d
-      contact_html: >-
-        Optionale Kontaktinformationen. Wenn Du das nicht ausfüllst, werden
-        Kontaktanfragen mit einem Formular übermittelt, ohne die Emails der
-        Organisatoren zu veröffentlichen. %{md}. Beispiel: [Text zum
-        Anzeigen](mailto:some@email.com)
-      #original_hash: 05c66b5
       series_save_first_hint: >-
         Beachte: Du musst den Wettbewerb speichern bevor du eine neue Serie
         hinzufügen kannst.
@@ -3100,7 +2595,6 @@ de:
           name: Veranstaltungsort
           details: Details zum Veranstaltungsort
           address: Adresse des Veranstaltungsortes
-          coordinates:
         start_date: Startdatum
         end_date: Enddatum
         series:
@@ -3118,7 +2612,6 @@ de:
           trainee_delegate_ids: WCA Trainee Delegate(s)
           organizer_ids: Organisator(en)
           contact: Kontakt
-        championships:
         website:
           generate_website: Ich würde gerne die WCA-Website statt einer externen
             Seite für zusätzliche Informationen verwenden.
@@ -3126,10 +2619,6 @@ de:
           external_registration_page: Anmeldeseite
           uses_wca_registration: Ich würde gerne die WCA-Website für die 
             Registrierung benutzen
-          uses_wca_live: Ich werde WCA Live fürs Scoretaking verwenden
-        user_settings:
-          receive_registration_emails: Benachrichtige mich per E-Mail, wenn sich
-            jemand für diesen Wettbewerb anmeldet
         entry_fees:
           currency_code: Währungscode
           base_entry_fee: Grundgebühr
@@ -3147,7 +2636,6 @@ de:
           event_change_deadline_date: Deadline für Teilnehmer, die ihre Events 
             ändern möchten
           allow_on_the_spot: Vor-Ort Registrierung
-          allow_self_delete_after_acceptance: Stornierungen der Registrierung
           allow_self_edits: Änderungen der Registrierung
           guests_enabled: Gäste
           guest_entry_status: Zeige eine Mitteilung, dass Gäste freien Eintritt 
@@ -3174,8 +2662,6 @@ de:
             per_registration_limit: Events pro Anmeldung - Limit
           main_event_id: Hauptevent
         remarks: Bemerkungen
-        clone_tabs: Ich möchte auch alle Registerkarten mit zusätzlichen 
-          Informationen kopieren
       hints:
         name: Der volle Name eines Wettbewerbs, inklusive Jahreszahl am Ende 
           (z.B. Danish Open 2016). Achte auf Großschreibung. Der Name darf nur 
@@ -3321,27 +2807,14 @@ de:
             'false': >-
               Teilnehmer dürfen ihre Registrierung NICHT verändern, sobald diese
               akzeptiert wurde
-          allow_self_delete_after_acceptance:
-            'true': >-
-              Teilnehmer dürfen ihre eigene Registrierung löschen, auch nachdem
-              sie bereits akzeptiert wurde
-            'false': >-
-              Teilnehmer dürfen ihre eigene Registrierung NICHT löschen, nachdem
-              sie akzeptiert wurde
           guest_entry_status:
             unclear: Zeige nichts an (und erläutere eventuelle Details im 
               Bereich "Zusätzliche Anmeldebedingungen“)
             free: '"Jeder Gast kann die Competition kostenlos besuchen"'
             restricted: '"Gäste werden nur als Begleitung von Teilnehmern zugelassen"'
         event_restrictions:
-          qualification_results:
-            allow_registrations_without:
-              'true': >-
-                Teilnehmer dürfen sich zu Events anmelden, für die sie sich nicht
-                qualifiziert haben (ich entferne sie später)
-              'false': >-
-                Teilnehmer MÜSSEN für ein Event qualifiziert sein, um sich anmelden
-                zu können
+          qualification_results: {}
+        website: {}
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3446,19 +2919,6 @@ de:
       competition_in: 'Wettbewerb findet in %{n_days} statt.'
       #original_hash: e6e096a
       competition_was: 'Wettbewerb fand vor %{n_days} statt.'
-    nearby_competitions:
-      #original_hash: 241801a
-      competitions:
-        one: 1 Wettbewerb
-        other: '%{count} Wettbewerbe'
-      #original_hash: 3446062
-      label_admin: 'Letzte %{days} Tage'
-      #original_hash: 07a1cf0
-      nearby_admin: '%{x_competitions} innerhalb %{kms} km und %{days} Tage.'
-      #original_hash: 9eb8f46
-      within: 'innerhalb von %{days} Tagen'
-      #original_hash: d97d1ee
-      show: Zeigen
     adjacent_competitions:
       #original_hash: e3528ec
       label: 'Nahe gelegene Wettbewerbe (innerhalb %{days} Tage und %{kms} km)'
@@ -3524,8 +2984,6 @@ de:
     #original_hash: 25e68c3
     cancel_confirm: 'Bist du sicher, dass du den Wettbewerb absagen willst?'
     #original_hash: 01de5ee
-    post_results: Versende die Ergebnisse
-    #original_hash: b6513f1
     results_posted_by_html: 'Versendet von %{poster_name} am %{date_time}'
     #original_hash: a6b5efe
     cancel_mistake: Fehler gemacht?
@@ -3542,12 +3000,6 @@ de:
       Beachte: du kannst die Anmeldung nur schließen, nachdem das
       Teilnehmerlimit erreicht wurde.
     #original_hash: 1ae594d
-    stripe_disconnect: Trenne den Stripe-Account
-    #original_hash: 9ca8e2c
-    stripe_disconnect_confirm: >-
-      Bist du sicher, dass du den Stripe-Account trennen möchtest? Diese Aktion
-      kann nicht rückgängig gemacht werden.
-    #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Beachte: die Anmeldung ist bereits geschlossen.'
     show:
       #original_hash: b0fe391
@@ -3570,8 +3022,6 @@ de:
         #original_hash: 83d204f
         regulation_link_text: 'Regel %{number}'
         #original_hash: bd0e4a9
-        guideline_link_text: 'Guideline %{number}'
-        #original_hash: b2a983a
         cumulative_time_limit: kumulatives Zeitlimit
         #original_hash: d47f11a
         cumulative_one_round_html: >-
@@ -3615,8 +3065,6 @@ de:
     schedule:
       display_as:
         #original_hash: ec5dd7c
-        label: 'Zeige den Zeitplan als:'
-        #original_hash: 0424f6e
         table: Tabelle
         #original_hash: adab509
         calendar: Kalender
@@ -3634,18 +3082,10 @@ de:
       #original_hash: 81c0d91
       activity: Aktivität
       #original_hash: 90e2fca
-      room: Raum
-      #original_hash: 73acb7f
       room_in_venue: '%{room} in %{venue}'
       #original_hash: 2896c7a
-      venue_information_html: 'Du siehst den Zeitplan für den Veranstaltungsort %{venue_name}.'
-      #original_hash: b97e383
       timezone_message: 'Der Zeitplan wird in der Zeitzone %{timezone} angezeigt.'
       #original_hash: 2ab94a0
-      multiple_venues_available: >-
-        Der Wettbewerb hat mehrere Veranstaltungsorte. Stelle sicher, den
-        Zeitplan auch für die anderen Veranstaltungsorte anzusehen.
-      #original_hash: 37b1adb
       schedule_for_date: 'Zeitplan für %{day_name} (%{full_date})'
     nav:
       menu:
@@ -3690,7 +3130,6 @@ de:
         #original_hash: c4622c3
         scrambles: Scrambles
         #original_hash: f632da3
-        enable_v2: Aktiviere neues Anmeldesystem
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA-Profil
@@ -3718,6 +3157,12 @@ de:
       add_series: Zur Serie hinzufügen
       #original_hash: be6edcd
       remove_series: Von der Serie entfernen
+    registration_v2:
+      register:
+        panel: {}
+    live:
+      connection: {}
+      admin: {}
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3777,17 +3222,11 @@ de:
       daran, diese Filter wiederherzustellen - wir bitten, dies zu
       entschuldigen.
     #original_hash: e3710ed
-    tooltip_no_years: 'Unsere Datenbank ist zu groß, um historische Daten anzuzeigen'
-    #original_hash: 357094b
-    tooltip_no_quantities: 'Unsere Datenbank ist zu groß, um lange Rankings zu berechnen'
     selector_elements:
       events_selector:
         #original_hash: ad8919a
         event: Event
         #original_hash: 3e83afa
-        all_events: Alle Events
-      #original_hash: 0f21717
-      region: Region
       type_selector:
         #original_hash: 3deb745
         type: Typ
@@ -3795,31 +3234,14 @@ de:
         single: Einzelergebnis
         #original_hash: 15f86c0
         average: Durchschnitt
-      years_selector:
-        #original_hash: 96f997b
-        years: Jahre
-        #original_hash: 0977c76
-        all_years: Alle Jahre
-        #original_hash: 8737f09
-        only: Nur
-        #original_hash: b3c0fe7
-        only_html: 'Nur %{year}'
-        #original_hash: 96bdb66
-        until: Bis
-        #original_hash: fa23930
-        until_html: 'Bis %{year}'
       show_selector:
         #original_hash: d97d1ee
         show: Zeige
         #original_hash: f3cf96e
         persons: Personen
         #original_hash: 16d3376
-        persons_html: '%{quantity} Personen'
-        #original_hash: 612e12d
         results: Ergebnisse
         #original_hash: f3baa4a
-        results_html: '%{quantity} Ergebnisse'
-        #original_hash: d46d2ee
         by_region: Per Region
         #original_hash: c0dcb86
         mixed: Gemischt
@@ -3846,8 +3268,6 @@ de:
       #original_hash: 5faa59d
       result: Ergebnis
       #original_hash: fa4c045
-      representing: Repräsentiert
-      #original_hash: 1917f4f
       competition: Turnier
       #original_hash: e7f6fc5
       solves: Erfolgreiche Versuche
@@ -3855,19 +3275,10 @@ de:
       region: Region
       #original_hash: 70c07ec
       world: Welt
-      type_options:
-        #original_hash: 3deb745
-        type: Typ
-        #original_hash: dd11868
-        single: Einzelergebnis
-        #original_hash: 15f86c0
-        average: Durchschnitt
-      #original_hash: ad8919a
       event: Event
       #original_hash: dcf8b56
       date_circa: Datum etwa
       #original_hash: 1c54132
-      record: Rekord
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Verknüpfe deine WCA-ID mit deinem Benutzerkonto!
@@ -3944,35 +3355,6 @@ de:
       #original_hash: 75d7ff7
       unstick_at_future: muss in der Zukunft liegen
   contacts:
-    website:
-      #original_hash: 35c333c
-      faq_note_html: >-
-        Bevor du eine Anfrage erstellst, solltest du einen Blick in unsere <a
-        href="/faq">Frequently Asked Questions</a> werfen! Falls du ein
-        bestimmtes Komitee oder Team kontaktieren willst, findest du dessen
-        Kontaktinformationen auf <a href="/teams-committees">dieser Seite</a>.
-      #original_hash: 4ef2aad
-      title: WCA Kontaktformular
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: >-
-          Kontaktiere die Organisatoren eines bestimmten Wettbewerbs (bitte
-          unten auswählen)
-        #original_hash: f0bffb7
-        competitions_in_general: 'Wettbewerbe im Allgemeinen (organisieren, Regeln,
-          etc.)'
-        #original_hash: aabfcf7
-        results_team: Kontaktiere das Results-Team
-        #original_hash: f6ffa78
-        wca_id_or_profile: WCA ID oder WCA Profil
-        #original_hash: 0c77aee
-        media: Medien
-        #original_hash: 9ad0522
-        software: Software
-        #original_hash: 6e6a6f2
-        different: Andere
-      #original_hash: c70a890
-      submit: Nachricht verschicken
     dob:
       #original_hash: 907ac6c
       title: Formular zur Änderung des Geburtsdatums
@@ -4319,197 +3701,21 @@ de:
       donate_other: Andere Wege zu spenden
     structure:
       #original_hash: 0d62207
-      teams_committees_councils: 'WCA Teams, Komitees und Gremien'
-      #original_hash: 9482c5d
       title: Zusammensetzung
       board:
         #original_hash: abd2828
-        name: WCA Board of Directors
-        #original_hash: e0d37a2
         description: >-
           Die World Cube Association wird vom WCA Board geleitet, das aus
           folgenden Mitgliedern besteht:
       #original_hash: d54d953
-      committees: >-
-        Die folgenden Teams und Komitees sind ein wesentlicher Bestandteil der
-        Organisation und führen die täglichen Aufgaben aus, die nötig sind, um
-        die Organisation funktionsfähig zu halten. Diese Komitees bestehen aus
-        WCA Mitgliedern. Dies schließt sowohl WCA Delegierte als auch Teilnehmer
-        ein. Jedes Team hat einen Leiter, der in seiner Rolle sicherstellt, dass
-        das Team seine Aufgaben erledigt und auch andere WCA Team-Mitglieder
-        anleitet. Gremien sind ein spezieller Typ von Teams, die in einer
-        Beraterrolle für das WCA Board arbeiten und aus Community Mitgliedern
-        bestehen. Diese sind keine WCA Mitarbeiter. Wenn es offene Stellen in
-        Komitees, Teams oder Gremien gibt, wird dies inklusive der
-        Bewerbungsanforderungen auf der Frontseite veröffentlicht.
-      #original_hash: c366473
-      senior_member: Senior Mitglied
-      #original_hash: e26c936
-      leader: Leiter
-      officers:
-        #original_hash: d79bd00
-        name: WCA Direktor
-        #original_hash: 312e799
-        description: >-
-          Die Direktoren der WCA befassen sich mit Aufgaben, die mit dem
-          Non-Profit Status der WCA zusammenhängen. Diese Direktoren werden
-          durch das WCA Board gewählt. Der geschäftsführende Direktor ist der
-          Geschäftsführer der WCA, der Vorsitz leitet alle Board Meetings, der
-          Sekretär verwaltet die Dokumente der Organisation und der
-          Schatzmeister verwaltet die finanziellen Angelegenheiten der WCA.
-      chair:
-        #original_hash: de34439
-        name: WCA Vorsitz
-      executive_director:
-        #original_hash: 7d405ff
-        name: WCA Geschäftsführer
-      secretary:
-        #original_hash: 1dd4a07
-        name: WCA Sekretär
-      vice_chair:
-        #original_hash: 0388b19
-        name: WCA Vizepräsident
-      treasurer:
-        #original_hash: 75e65d9
-        name: WCA Schatzmeister
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}s Profil'
-      wdc:
-        #original_hash: c97077a
-        name: WCA Disciplinary Committee
-        #original_hash: 286fdf8
-        description: >-
-          Dieses Komitee berät das WCA Board in besonderen Fällen, wie etwa
-          mutmaßlichem Verstoß gegen die WCA-Regeln, und kann von Mitgliedern
-          der WCA in dringenden persönlichen Angelegenheiten bezüglich
-          WCA-Wettbewerben kontaktiert werden.
-      wdpc:
-        #original_hash: 70539cd
-        name: WCA Datenschutz Komitee
-        #original_hash: 1f69829
-        description: >-
-          Dieses Komitee ist für alle Angelegenheiten, die den Datenschutz
-          betreffen, zuständig.
-      wrc:
-        #original_hash: 3da1e85
-        name: WCA Regulations Committee
-        #original_hash: 13ada5b
-        description: 'Dieses Komitee ist dafür verantwortlich, die WCA-Regeln zu verwalten.'
-      wrt:
-        #original_hash: 67be768
-        name: WCA Results Team
-        #original_hash: 439ffae
-        description: >-
-          Dieses Team ist dafür zuständig, die Resultate von Turnieren zu
-          verwalten.
-      wst:
-        #original_hash: a14bc62
-        name: WCA Software Team
-        #original_hash: ec961e4
-        description: >-
-          Dieses Team ist für die Software der WCA zuständig (Webseite,
-          Scrambling Software, Workbook, Admin Tools).
-      wct:
-        #original_hash: 63a2388
-        name: WCA Communication Team
-        #original_hash: 50fd091
-        description: >-
-          Das WCA Communication Team (WCT) hat die Aufgabe die Kommunikation der
-          WCA mit der Community und der Öffentlichkeit zu managen und zu
-          unterstützen. Die Kommunikation der WCA sollte den Zielen der WCA
-          dienen und eine positive Kultur von Freundlichkeit, Transparenz,
-          Respekt, Offenheit und Verantwortung unterstützen.
-      wfc:
-        #original_hash: 9cb13de
-        name: WCA Financial Committee
-        #original_hash: b4ed44b
-        description: Das Team ist für die Verwaltung der Finanzen der WCA 
-          verantwortlich
-      wec:
-        #original_hash: 83bd1d0
-        name: WCA Ethik Komitee
-        #original_hash: c304d57
-        description: >-
-          Dieses Komitee hat die Aufgabe sicherzustellen, dass alle Handlungen
-          von WCA Personal und externem Personal den Ethikkodex befolgen.
-      weat:
-        #original_hash: d1dbb86
-        name: WCA Vorstandsassistenten Team
-        #original_hash: 889dd90
-        description: >-
-          Dieses Team ist verantwortlich dafür, administrative Aufgaben des WCA
-          Vorstands auszuführen.
-      wqac:
-        #original_hash: 8f32116
-        name: WCA Quality Assurance Committee
-        #original_hash: 0171b3b
-        description: >-
-          Dieses Komitee hat die Aufgabe, die Verbesserung der Qualität
-          innerhalb der WCA, sowie die Anwendung von Qualitätsstandards
-          international, zu unterstützen und zu fördern um eine konsistent hohe
-          Qualität von Prozessen, WCA  Personal, regionalen Organisationen,
-          Organisatoren von Wettbewerben und Personal von Wettbewerben
-          sicherzustellen.
-      wcat:
-        #original_hash: 2b81984
-        name: WCA Wettbewerbsankündigungsteam
-        #original_hash: f511502
-        description: >-
-          Dieses Team hat die Aufgabe, WCA Wettbewerbe zu bestätigen,
-          anzukündigen und sicherzustellen, dass die Ankündigungen den WCA
-          Qualitätsstandards entsprechen.
-      wmt:
-        #original_hash: 2035811
-        name: WCA Marketing Team
-        #original_hash: f2a0140
-        description: >-
-          Dieses Team ist dafür zuständig, die Marke WCA zu entwickeln und zu
-          verwalten, Sponsoren zu suchen, die Verteilung von WCA
-          Wettbewerbsequipment zu unterstützen, und WCA Merchandise zu
-          vermarkten.
-      wac:
-        #original_hash: 1ce7604
-        name: WCA Beratungsgremium
-        #original_hash: fb6cd86
-        description: >-
-          Dieses Gremium ist für den Aufbau und die Pflege der bilateralen
-          Kommunikation zwischen der WCA Community und den WCA Mitarbeitern
-          zuständig.
-      wsot:
-        #original_hash: 58765c7
-        name: WCA Sports Organization Team
-        #original_hash: 8f888d6
-        description: >-
-          Dieses Team ist dafür zuständig, die Anerkennung der WCA als
-          internationale Sportorganisation zu überwachen und zu unterstützen.
-      wat:
-        #original_hash: 90a1280
-        name: WCA Archive Team
-        #original_hash: fae6850
-        description: >-
-          Das WCA Archive Team ist ein Beratungsgremium der WCA. Dieses Team ist
-          dafür zuständig, die Entwicklung eines Archivs der Organisation zu
-          überwachen und zu unterstützen.
-      banned:
-        #original_hash: d30e2e5
-        name: Gesperrte Teilnehmer
-      wct_china:
-        #original_hash: ed5b65a
-        name: WCT China
-      #original_hash: f8c3f3c
       operations_html: >-
         Die alltäglichen Tätigkeiten werden durch die %{committees_and_teams}
         der WCA durchgeführt.
       #original_hash: 0e7a036
       teams_committees: Teams und Komitees
-      probation:
-        #original_hash: 1dd6e3b
-        name: Delegates auf Bewährung
-      wst_admin:
-        #original_hash: d4112d2
-        name: Software Admins
-      #original_hash: 7e849d2
       delegates_html: >-
         <p><strong>WCA Delegate</strong> ist eine Rolle die in den WCA Motions
         definiert ist und in den WCA Regeln weiter beschrieben wird. Die
@@ -4558,7 +3764,6 @@ de:
     #original_hash: 4f05e8f
     finances: Finances
     #original_hash: d1b1406
-    vision_and_strategy: Vision und Strategie
   education:
     #original_hash: 746e863
     title: WCA Anleitungen und Tutorials
@@ -4666,140 +3871,7 @@ de:
         löschen möchtest?
   contact:
     #original_hash: a34b69f
-    title: Kontaktinformationen
-    #original_hash: b5c2eaa
-    info_alert_html: >-
-      Bevor Du mit einem Team von dieser Seite Kontakt aufnimmst, lies bitte
-      unsere %{link}!
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      Für Fragen zur Website, Kommentare und Vorschläge, nutze bitte dieses <a
-      href='/contact/website'>Kontaktformular</a>. Für Anfragen bezüglich eines
-      spezifischen Gebiets oder Wettbewerbs ist dein lokaler %{link} zuständig.
-      Bitte kontaktiere ihn in diesem Fall.
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>Komitees und Teams</u>
-    #original_hash: 1cb449c
-    members: Mitglieder
-    board:
-      #original_hash: f3cbb35
-      info_html: >-
-        Die World Cube Association wird vom WCA Board geführt. Dieses ist
-        verantwortlich für generelle Anfragen und die WCA Organisation als
-        solche.
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        Die WCT ist für die Überwachung und Unterstützung der Kommunikation der
-        WCA mit der Community und der generellen Öffentlichkeit zuständig. Sie
-        sollten bei generellen Fragen über die WCA und die Social Media
-        Auftritte kontaktiert werden.
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        Die WDC ermittelt in unterschiedlichen Situationen und regt Lösungen an,
-        die auch Bestrafungen einschließen, falls diese nötig sind. Zu den
-        Themen gehört unter anderem die Verletzung der WCA Regeln oder Probleme
-        in der Community. Falls du von einem solchen Thema betroffen bist,
-        kontaktiere dieses Komitee.
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        Das WDPC hat die Verantwortung und Verpflichtung des Recherchierens, der
-        Erstellung, der Umsetzung, der Instandhaltung und der Vollstreckung
-        aller WCA Datenschutz Richtlinien, Verträge mit externen
-        Datenverarbeitern von WCA Daten und der Erledigung von Aufgaben, die mit
-        dem Datenschutz zusammenhängen.
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        Die WRC behandelt alle Angelegenheiten, die im Zusammenhang mit der
-        Anwendung, der Verbesserung und der Entwicklung der WCA Regeln stehen.
-        Sie unterstützen WCA Delegates bei prozeduralen Fragen, die bei
-        Turnieren auftreten und entscheiden über Zwischenfälle, die nicht gelöst
-        wurden oder nicht von den Regeln abgedeckt werden. Die WRC
-        veröffentlicht zudem regelmässig WCA interne Berichte, um WCA Delegates
-        zu unterstützen und ihre Kenntnisse der Regeln zu verbessern. Wenn du
-        bei der Entwicklung von Regeln unterstützen willst oder Änderungen
-        vorschlagen willst, kontaktiere die WRC via E-Mail oder nutze <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        Das WRT ist verantwortlich für die Verwaltung aller Daten in der
-        Datenbank der WCA, insbesondere der Ergebnisse von Wettbewerben und
-        persönlichen Daten. Sie veröffentlichen Ergebnisse von WCA Wettbewerben
-        auf der Webseite sobald der WCA Delegate diese eingereicht hat.
-        Abgesehen davon ist das WCA Results Team auch für die Korrektur von
-        Ergebnissen und Profilinformationen zuständig. Dies schließt die
-        Änderung von Namen und Geburtsdaten auf Basis verifizierter Dokumente
-        und die Verwaltung von Profilbildern ein.
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        Das WST ist verantwortlich für die Wartung und Verwaltung aller Software
-        der WCA. Sie entwickeln auch neue Software für die verschiedenen
-        Aufgaben innerhalb der WCA. Falls du einen Vorschlag oder eine Idee für
-        eine Weiterentwicklung der Webseite hast oder Fehler melden willst,
-        kontaktiere sie gerne! Die WCA Webseite ist ein großes Open Source
-        Projekt auf <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>.
-    wfc:
-      #original_hash: 3ec8256
-      info_html: >-
-        Das WFC ist verantwortliche für alle Angelegenheiten, die die Finanzen
-        der WCA betreffen. Sie verwalten Einkünfte und Konten der WCA in
-        Übereinstimmung mit einem jährlichen Budget, welches sie ebenso
-        regelmässig bestimmen.
-    wec:
-      #original_hash: ec2b9c3
-      info_html: >-
-        Dieses Komitee hat die Aufgabe sicherzustellen, dass alle Vorgänge, die
-        WCA Personal und externes Personal befolgen, den Ethikkodex befolgen.
-    weat:
-      #original_hash: 889dd90
-      info_html: >-
-        Dieses Team ist verantwortlich dafür, administrative Aufgaben des WCA
-        Vorstands auszuführen.
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        Dieses Komitee hat die Aufgabe, die Verbesserung der Qualität innerhalb
-        der WCA, sowie die Anwendung von Qualitätsstandards international, zu
-        unterstützen und zu fördern um eine konsistent hohe Qualität von
-        Prozessen, WCA  Personal, regionalen Organisationen, Organisatoren von
-        Wettbewerben und Personal von Wettbewerben sicherzustellen.
-    wcat:
-      #original_hash: 61a471f
-      info_html: >-
-        Dieses Komitee hat die Aufgabe, WCA Wettbewerbe zu bestätigen und
-        anzukündigen und sicherzustellen, dass die Ankündigungen den WCA
-        Qualitätsstandards entsprechen.
-    wmt:
-      #original_hash: f2a0140
-      info_html: >-
-        Dieses Team ist dafür zuständig, die Marke WCA zu entwickeln und zu
-        verwalten, Sponsoren zu suchen, die Verteilung von WCA
-        Wettbewerbsequipment zu unterstützen, und WCA Merchandise zu vermarkten.
-    wsot:
-      #original_hash: 8f888d6
-      info_html: >-
-        Dieses Team ist dafür zuständig, die Anerkennung der WCA als
-        internationale Sportorganisation zu überwachen und zu unterstützen.
-    wat:
-      #original_hash: fae6850
-      info_html: >-
-        Das WCA Archive Team ist ein Beratungsgremium der WCA. Dieses Team ist
-        dafür zuständig, die Entwicklung eines Archivs der Organisation zu
-        überwachen und zu unterstützen.
-    #original_hash: f97a4f5
-    councils_html: Räte
-    wac:
-      #original_hash: fb6cd86
-      info_html: >-
-        Dieser Rat ist verantwortlich für den Aufbau und die Verwaltung einer
-        bilateralen Kommunikation zwischen der WCA Community und den WCA
-        Mitarbeitern.
+{}
   score_tools:
     #original_hash: 4fc2133
     title: Software Tools für WCA Wettbewerbe
@@ -4918,31 +3990,9 @@ de:
   logo:
     #original_hash: c72c969
     title: WCA-Logo
-    paragraphs:
-      #original_hash: 44cfe8d
-      '1': >-
-        Das WCA-Logo wurde von Justin Eastman im Rahmen eines Design-Wettbewerbs
-        im Januar 2005 entworfen.<br />Uns gefiel das Logo aufgrund seines
-        Designs, der Farben, und der Tatsache, dass es nicht speziell einen
-        3x3x3 Cube zeigt.
-      #original_hash: 916e3fc
-      '2': >-
-        Wir bieten vier verschiedene Varianten des Logos an: Eine <a
-        href="/files/WCAlogo_XL.jpg">große Version</a> (46 KB, 1756 px by 1068
-        px), eine <a href="/files/WCAlogo.svg">Vektorgrafik</a>, eine <a
-        href="/files/WCAlogo_notext.svg">Vektorgrafik ohne Text</a> und eine <a
-        href="/files/WCAlogo_monochrome.svg">monochrome Variante der
-        Vektorgrafik</a>.
-      #original_hash: dcb1ad6
-      '3': >-
-        3D-Version des Logos, entworfen von Vu Minh Tan aus Vietnam: <a
-        href="/files/WCALogo3D.png">PNG-Version</a> (2.1 MB), eine <a
-        href="/files/WCALogo3Dsmall.png">kleine PNG-Version</a> (0.25 MB).
-      #original_hash: e5df1bf
-      '4': >-
-        Die zulässige Nutzung des WCA Logos ist in den Richtlinien zur Benutzung
-        des Logos definiert, welches auf der <a href="/documents">WCA Document
-        Seite</a> zu finden ist.
+    headings:
+      usage_guidelines:
+        color: {}
   search_results:
     index:
       #original_hash: db98a68
@@ -4996,10 +4046,6 @@ de:
         href="/regulations/guidelines.html">WCA Guidelines</a> ergänzt, die
         zusätzliche Erklärungen und Beispiele geben.
       #original_hash: c8e1783
-      content3_html: >-
-        Wichtige Entscheidungen über Zwischenfälle, die bei Wettbewerben
-        geschehen sind und durch das WCA Regulations Committee behandelt wurden,
-        befinden sich im <a href="/incidents">Incidents Log</a>.
     panel2:
       #original_hash: 8ad8302
       title: Übersetzungen
@@ -5312,3 +4358,26 @@ de:
         SQL dump bereit. Details sind auf %{github_link} zu finden.
       #original_hash: a479c9c
       download: Download
+  validators: {}
+  page:
+    teams_committees_councils: {}
+    contacts:
+      form:
+        user_data: {}
+        contact_recipient: {}
+        competition: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+    contact_edit_profile:
+      form: {}
+  trainee_delegate_application: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  payments:
+    errors: {}
+    payment_setup: {}
+  tickets: {}
