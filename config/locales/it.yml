@@ -726,6 +726,7 @@ it:
     mailer:
       confirmation_instructions:
         subject: Conferma il nuovo indirizzo email
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1587,7 +1588,6 @@ it:
         one: Una nazione
         many: '%{count} nazioni'
         other:
-      export_csv: Esporta in CSV
       email: Email
       non_competing: Iscrizioni non-partecipanti
       not_paid: Non pagato
@@ -2764,8 +2764,6 @@ it:
           %{update_params}
         delete_contact_message: Desidero cancellare la mia iscrizione
         no_changes: Nessuna modifica
-        email_send: Invia email
-        email_copy: Copia email
         email_message: Copiato negli appunti. Ricorda di scrivere i destinatari 
           in Ccn!
         move_to:
@@ -4510,3 +4508,4 @@ it:
     stakeholder_role:
       actioner: Esecutore
       requester: Committente
+  trainee_delegate_application: {}

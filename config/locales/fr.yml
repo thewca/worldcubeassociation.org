@@ -734,6 +734,7 @@ fr:
     mailer:
       confirmation_instructions:
         subject: Merci de confirmer votre nouvelle adresse e-mail
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1192,11 +1193,12 @@ fr:
         welcome: 'Bonjour %{user_email} !'
         confirm: >-
           Votre compte est créé et vous devez l'activer avant de pouvoir l'utiliser.
-          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :
+          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash:
+          776476a
         confirmation_link: Confirmer mon compte.
         activate: >-
           Après l'activation, vous pourrez vous connecter sur le site internet de
-          la World Cube Association :
+          la World Cube Association :  #original_hash: fb02586
         login_form: formulaire de connexion
         addendum: >-
           Cet e-mail est envoyé automatiquement. Si vous n'avez pas créé de
@@ -1650,7 +1652,6 @@ fr:
         one: 1 région
         many: '%{count} régions'
         other: '%{count} régions'
-      export_csv: Exporter en CSV
       email: Adresse e-mail
       non_competing: Inscriptions de non compétiteurs
       not_paid: Non payée
@@ -2352,7 +2353,6 @@ fr:
             inscrites sur la liste d'attente.
       registration_key: 'Clef d''inscription :'
       registration_status:
-        full: Complet
         open: Ouvert
         not_open: Non ouvert
         closed: Fermé
@@ -2926,8 +2926,6 @@ fr:
           %{update_params}
         delete_contact_message: Je souhaite supprimer mon inscription
         no_changes: Aucun changement
-        email_send: Envoyer l'e-mail
-        email_copy: Copier les adresses e-mails
         email_message: 'Copié dans le presse-papiers. N’oubliez pas d’utiliser le
           cci: !'
         move_to:
@@ -4549,7 +4547,8 @@ fr:
         commentaire au WRT à ce sujet.
       non_matching_name_warning: >-
         Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à l'enregistrement
-        actuel dans la base de données WCA ('%{expected_name}').
+        actuel dans la base de données WCA ('%{expected_name}').  #original_hash:
+        333a035
       non_matching_country_warning: >-
         Le pays '%{country}' fourni pour %{name} (%{wca_id}) ne correspond pas à
         l'enregistrement actuel dans la base de données WCA

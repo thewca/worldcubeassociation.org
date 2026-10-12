@@ -703,6 +703,7 @@ sl:
     mailer:
       confirmation_instructions:
         subject: 'Prosimo, potrdite nov e-naslov.'
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1528,7 +1529,6 @@ sl:
         two: '%{count} državi'
         few: '%{count} države'
         other: '%{count} držav'
-      export_csv: Izvozi v CSV
       email: E-naslov
       non_competing: Prijave netekmovalcev
       not_paid: Ni plačano
@@ -2614,8 +2614,6 @@ sl:
         update_contact_message: 'V svoji prijavi želim posodobiti naslednje: %{update_params}'
         delete_contact_message: Želim izbrisati svojo prijavo
         no_changes: Ni sprememb
-        email_send: Pošlji elektronsko sporočilo
-        email_copy: Kopiraj e-poštne naslove
         email_message: >-
           Kopirano v odložišče. Ne pozabite uporabiti skp (skrito kopiranje,
           angl. bcc)!

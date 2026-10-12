@@ -689,6 +689,7 @@ sv:
     mailer:
       confirmation_instructions:
         subject: Bekräfta din nya e-postadress
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1494,7 +1495,6 @@ sv:
       country_plural:
         one: 1 region
         other: '%{count} regioner'
-      export_csv: Exportera som CSV
       email: E-post
       non_competing: Icke-tävlande anmälningar
       not_paid: Inte betalat
@@ -2093,7 +2093,6 @@ sv:
           external_website: Hemsida
           external_registration_page: Anmälningssida
           uses_wca_registration: Jag vill använda WCAs hemsida för anmälan
-          uses_wca_live: Jag kommer använda WCA Live för resultatinmatning
         entry_fees:
           currency_code: Valutakod
           base_entry_fee: Anmälningsavgift
@@ -2353,6 +2352,7 @@ sv:
               'false': >-
                 Tävlande MÅSTE vara kvalificerade för att anmäla sig till en
                 gren
+        website: {}
     registration_v2:
       auto_accept:
         bulk_auto_accept: Godkänn anmälningar automatiskt
@@ -2467,8 +2467,6 @@ sv:
           %{update_params}
         delete_contact_message: Jag vill radera min anmälan
         no_changes: Det finns inga ändringar
-        email_send: Skicka mejl
-        email_copy: Kopiera mejladresser
         email_message: Kopierad till urklipp. Kom ihåg att använda "hemlig 
           kopia" (bcc)!
         move_to:
@@ -2756,7 +2754,6 @@ sv:
           Om du når tidsgränsen under din lösning kommer domaren att stoppa dig
           och ditt resultat blir DNF (se %{regulation_link}).
         regulation_link_text: 'Regel %{number}'
-        guideline_link_text: 'Riktlinje %{number}'
         cumulative_time_limit: kumulativ tidsgräns
         cumulative_one_round_html: 'En %{cumulative_time_limit} kan tillämpas (se
           %{regulation_link}).'
@@ -2867,6 +2864,8 @@ sv:
     competition_series_fields:
       add_series: Addera till tävlingsserie
       remove_series: Ta bort från tävlingsserie
+    live:
+      connection: {}
   competition_tabs:
     headers:
       tabs: Flikar
@@ -3919,9 +3918,6 @@ sv:
         [%{round_id}] %{person_name} saknar minst ett försök för cutoff-delen.
         Redigera resultatet för att inkludera de saknade försöken eller
         uppdatera omgångens information på tävlingens WCA-sida.
-      mismatched_result_format_error: >-
-        [%{round_id}] Resultaten för %{person_name} är i fel format: förväntade
-        %{expected_format}, men fick %{format}.
       result_over_time_limit_error: >-
         [%{round_id}] Minst ett resultat för %{person_name} är över tidsgränsen
         för omgången, som är %{time_limit} per försök. Alla lösningar som
@@ -3929,10 +3925,6 @@ sv:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] Summan av resultaten för %{person_name} är över den
         kumulativa tidsgränsen, som var %{time_limit}.
-      no_round_information_warning: >-
-        [%{round_id}] Det finns ingen information om cutoff och tidsgräns för
-        denna omgång. Dessa valideringar har hoppats över. Uppdatera
-        informationen om omgången på tävlingens WCA-sida.
       undefined_time_limit_warning: >-
         [%{round_id}] Tidsgränsen för denna omgång är odefinierad, valideringar
         av tidsgränser har hoppats över. Detta förväntas endast för tävlingar
@@ -3959,9 +3951,6 @@ sv:
         angivet i avancemangsvillkoren (%{actual} istället för %{expected},
         villkoret var: %{condition}). Uppdatera informationen om omgången på
         WCA-sidan.
-      unexpected_round_results_error: >-
-        Omgången %{round_id} finns med i resultaten men finns inte på på
-        WCA-sidan. Lägg till information om omgången på tävlingens WCA-sida.
       regulation_9m1_error: >-
         Omgång %{round_id} har 99 eller färre tävlande men har mer än två
         efterföljande omgångar, vilket inte är tillåtet enligt regel 9m1.
@@ -3997,10 +3986,6 @@ sv:
       missing_round_results_error: >-
         Det finns inga resultat för omgången %{round_id} men den är listad på
         WCA-sidan. Om denna omgång inte hölls, ta bort omgången från WCA-sidan.
-      unexpected_combined_round_error: >-
-        Ingen cutoff publicerades för '%{round_name}', men den har identifierats
-        som en cutoff-runda i resultaten. Uppdatera informationen om omgången på
-        WCA-sidan.
     events:
       not_333_main_event_warning: >-
         Den valda huvudgrenen för den här tävlingen är %{main_event_id}. FÖRE
@@ -4012,10 +3997,6 @@ sv:
       no_main_event_warning: >-
         Det finns ingen vald huvudgren för denna tävling. Vänligen meddela WRT
         att detta är korrekt.
-      unexpected_results_error: >-
-        Resultat finns för %{event_id}, men det är inte listat som en officiell
-        gren. Vänligen ta bort grenen från resultaten eller kontakta WCAT för
-        att begära att grenen läggs till på WCA-sidan.
       missing_results_warning: >-
         Det finns inga resultat för %{event_id}, men det är listat som en
         officiell gren. Om grenen hölls, ladda upp din JSON igen med resultaten
@@ -4027,9 +4008,6 @@ sv:
       missing_scrambles_for_competition_error: >-
         Saknar blandningar för tävlingen. Använd Scrambles Matcher för att lägga
         till blandningar.
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] För många blandningar. Använd Scrambles Matcher för att
-        avmarkera oanvända blandningar.
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupp %{group_id}: saknar blandningar, hittade bara
         %{actual} istället för %{expected}.
@@ -4053,3 +4031,4 @@ sv:
     name: Blandningsset %{letter_code}
     group: Grupp %{number}
     attempt: Försök %{number}
+  trainee_delegate_application: {}

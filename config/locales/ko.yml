@@ -607,6 +607,7 @@ ko:
     mailer:
       confirmation_instructions:
         subject: 새로운 이메일 주소를 확인해 주십시오.
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1234,7 +1235,6 @@ ko:
       edit: 수정
       country_plural:
         other: '%{count} 개국'
-      export_csv: CSV로 추출
       email: 이메일
       non_competing: 대회 미참가 참가 신청
       not_paid: 미지불
@@ -2073,8 +2073,6 @@ ko:
         update_contact_message: '저의 참가 신청 세부 정보를 다음과 같이 업데이트하고 싶습니다: %{update_params}'
         delete_contact_message: 참가 신청을 삭제하고 싶습니다
         no_changes: 변경 사항이 없습니다
-        email_send: 이메일 전송
-        email_copy: 이메일 복사
         email_message: 클립보드에 복사되었습니다. 숨은 참조(bcc)를 사용하는 것을 잊지 마십시오!
         move_to:
           other: '%{count}을(를) 다음으로 이동'
@@ -3338,3 +3336,4 @@ ko:
     stakeholder_role:
       actioner: Actioner
       requester: 요청자
+  trainee_delegate_application: {}

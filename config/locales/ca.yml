@@ -185,17 +185,12 @@ ca:
       no_date: Sense data
     user:
       wca_id: WCA ID
-      citizen_of: Ciutadà de
     all_regions: Totes les regions
     errors:
       invalid: invàlid
     days:
       one: 1 dia
       many: '%{count} dies'
-      other:
-    these_events:
-      one: aquesta categoria
-      many: aquestes %{count} categories
       other:
     search_site: Cerca
     filter: Filtra
@@ -252,82 +247,6 @@ ca:
           WCA per correu electrònic
         user_preferred_events: Categories preferides
         otp_attempt: 'Introdueix el teu codi de verificació en dos passos:'
-      competition:
-        id: ID
-        confirmed: No deixis als organitzadors editar aquesta competició
-        show_at_all: Fer la competició visible per al públic
-        name: Nom
-        name_reason: La raó del nom
-        cell_name: Sobrenom de la competició
-        country_id: País
-        city_name: Nom de la ciutat
-        venue: Local
-        venue_address: Adreça del lloc
-        venue_details: Detalls del lloc
-        start_date: Data d'inici
-        end_date: Data de finalització
-        external_website: Pàgina web
-        generate_website: >-
-          M'agradaria utilitzar la pàgina web de la WCA en lloc d'una externa
-          per informació addicional.
-        base_entry_fee_lowest_denomination: Quota bàsica de registre
-        currency_code: Codi de divisa
-        delegate_ids: Delegat(s) de la WCA
-        trainee_delegate_ids: Delegat(s) en pràctiques de la WCA
-        organizer_ids: Organitzador(s)
-        contact: Contacte
-        information: Informació
-        use_wca_registration: M'agradaria utilitzar la pàgina web de la WCA pel 
-          registre
-        external_registration_page: Pàgina del registre
-        competitor_limit_enabled: Límit de competidors
-        competitor_limit: Nombre màxim de competidors
-        competitor_limit_reason: La raó del límit de competidors
-        guests_enabled: Espectadors
-        receive_registration_emails: >-
-          Notifica'm per correu electrònic quan algú es registri a aquesta
-          competició
-        registration_open: Registre obert
-        registration_close: Registre tancat
-        remarks: Observacions
-        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació 
-          addicional
-        competition_events: Categories
-        enable_donations: Vull activar les donacions addicionalment a les quotes
-          d'inscripció
-        championship_type: Tipus de campionat
-        extra_registration_requirements: Requisits extra de registre
-        on_the_spot_registration: Registres al lloc
-        on_the_spot_entry_fee_lowest_denomination: Quota d'inscripció bàsica al 
-          lloc
-        allow_registration_edits: Edicions dels registres
-        allow_registration_self_delete_after_acceptance: Cancel·lacions de 
-          registres
-        refund_policy_percent: Percentatge de reemborsament
-        refund_policy_limit_date: Data límit pels retorns
-        waiting_list_deadline_date: Data límit per acceptar competidors de la 
-          llista d'espera
-        event_change_deadline_date: Data límit pels competidors per actualitzar 
-          les categories
-        guests_entry_fee_lowest_denomination: Quota d'entrada pels espectadors
-        free_guest_entry_status: Mostra missatge per entrada gratuïta dels 
-          espectadors
-        early_puzzle_submission: >-
-          M'agradaria sol·licitar als competidors que facin entrega dels seus cubs
-          en una hora específica abans que comenci la categoria
-        early_puzzle_submission_reason: Raó i detalls per l'entrega abans d'hora
-          dels cubs
-        qualification_results: >-
-          M'agradaria utilitzar els resultats de qualificació per limitar qui
-          pot competir en certes categories
-        qualification_results_reason: Raó i detalls pels resultats de 
-          qualificació
-        event_restrictions: >-
-          M'agradaria limitar als competidors de registrar-se a una combinació
-          específica de categories
-        event_restrictions_reason: Raó i detalls per les limitacions de 
-          categories
-        main_event_id: Categoria principal
       registration:
         guests: Acompanyants
         comments: Comentaris
@@ -350,9 +269,6 @@ ca:
         wrc_feedback_requested: M'agradaria rebre el feedback de WRC en alguns 
           dels incidents mencionats.
         wrc_incidents: Incidents que necessiten feedback de WRC
-        wdc_feedback_requested: M'agradaria rebre feedback de WDC en alguns dels
-          incidents mencionats.
-        wdc_incidents: Incidents que necessiten feedback de WDC
         remarks: Observacions
       person:
         wca_id: Persona
@@ -419,16 +335,7 @@ ca:
         m: Home
         f: Dona
         o: Altres
-      delegate_status:
-        trainee_delegate: Delegat en pràctiques
-        candidate_delegate: Delegat Junior
-        delegate: Delegat
-        senior_delegate: Delegat Sènior
-    person:
-      gender:
-        m: Home
-        f: Dona
-        o: Altres
+    person: {}
     competition_medium:
       status:
         accepted: Acceptat
@@ -437,14 +344,9 @@ ca:
         report: Denuncia
         article: Article
         multimedia: Multimèdia
-    competition:
-      free_guest_entry_status:
-        unclear: >-
-          No mostris res (i potser explica-ho millor a l'apartat "Requeriments
-          extra de registre")
-        anyone: Qualsevol espectador pot assistir gratuïtament
-        restricted: Els espectadors només són permesos com acompanyants de 
-          competidors
+    competition: {}
+    user_roles:
+      status: {}
   simple_form:
     'yes': Sí
     'no': 'No'
@@ -485,106 +387,6 @@ ca:
         otp_attempt: >-
           Comprova la teva aplicació mòbil configurada per a una contrasenya
           d'un sol ús, o introdueix un dels teus codis de recuperació.
-      competition:
-        name: >-
-          El nom complet de la competició incloent l'any al final (exemple:
-          Danish Open 2016). Revisa les majúscules. El nom ha de contenir només
-          caràcters alfanumèrics, guions(-), ampersands(&), punts(.), dos punts(:),
-          apòstrofs(') i espais().
-        cell_name: >-
-          Un nom curt per mostrar. Si el nom de la competició ja és curt, pots
-          reutilitzar el nom (exemple: Europe 2006).
-        city_name: >-
-          Nom de la ciutat i estat (si és possible) on hi haurà la competició.
-          No incloguis el país (exemple: París o San Francisco, Califòrnia).
-        information: >-
-          Informació important que els competidors haurien de saber. Sortirà a
-          la pàgina principal de la competició. <br/>Si us plau, emplena-ho
-          <b>en anglès</b> i qualsevol altre idioma que els competidors puguin
-          parlar.
-        delegate_ids: Delegats de la WCA per la competició.
-        trainee_delegate_ids: Delegats en pràctiques de la WCA per la 
-          competició.
-        organizer_ids: >-
-          Organitzadors de la competició (han de tenir un compte per sortir
-          aquí).
-        external_website: Pàgina web de la competició. Ha de tenir un enllaç 
-          http(s) vàlid.
-        registration_open: 'Important: L''obertura i clausura del registre està en
-          horari UTC'
-        remarks: >-
-          Alguna informació addicional que vulguis mencionar a WCAT. Per
-          exemple, si hi ha alguna cosa que no acabes de tenir clara o si tens
-          una proposta especial per WCAT. Si us plau, omple-ho en anglès!
-        external_registration_page: >-
-          La pàgina on els competidors s'han de registrar per la competició. Ha
-          de ser un enllaç http(s) vàlid.
-        base_entry_fee_lowest_denomination: >-
-          La quota de registre bàsica per la competició. Es mostrarà a la pàgina
-          principal de la competició i a la pàgina de registre si s'utilitza. Si
-          s'estableix a 0, es mostrarà una frase dient que es pot atendre a la
-          competició gratuïtament. <br><br> <b>IMPORTANT: Les següents WCA Dues
-          són només una aproximació basada en el tipus de conversió de divisa
-          actual i de cap manera és legalment vinculant pel pagament d'aquestes.
-          </b><br> Prem "Actualitza Competició" després de canviar el codi de
-          moneda per sincronitzar l'estimació. Si no hi ha cap tipus de
-          conversió disponible per la moneda seleccionada, no es mostrarà res.
-        currency_code: El codi de moneda per les quotes.
-        competitor_limit_enabled: >-
-          Tot i que no és requerit per les Regulacions d'establir un límit de
-          competidors, és altament recomanat.
-        competitor_limit: >-
-          El nombre de competidors permesos per aquesta competició. Per ara
-          aquest nombre només és informatiu i no impedeix que més gent es
-          registri. Estem treballant per afegir suport explícit per aquest
-          procés d'inscripció, però requereix més feina primer.
-        competitor_limit_reason: >-
-          Quina és la raó del límit de competidors? Si us plau, omple-ho en
-          anglès!
-        extra_registration_requirements: >-
-          Si us plau, indica aquí qualsevol requisit extra pel registre que
-          encara no s'hagi indicat, com per exemple instruccions de com pagar.
-          <br/>Si us plau, omple-ho <b>en anglès</b> i qualsevol altre idioma
-          que els competidors puguin parlar; es mostrarà a la pàgina
-          d'informació sobre la competició així com la pàgina de registre a la
-          competició si és que s'utilitza la pàgina web de la WCA per fer-les.
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Si s'introdueix un 0 aquí, es mostrarà una frase dient que els
-          registres al lloc seran acceptats gratuïtament.
-        refund_policy_percent: >-
-          Per ara aquest nombre es només informatiu, els retorns s'han de fer
-          manualment. Si s'introdueix 0, es mostrarà una frase dient que les
-          quotes de registre mai seran retornades sota cap circumstància.
-        refund_policy_limit_date: Data límit a partir de la qual no es retornarà
-          cap més quota.
-        waiting_list_deadline_date: >-
-          La data a partir de la qual no s'acceptaran més persones de la llista
-          d'espera. Si tens una data límit pels retorns de quota, la data per
-          ser acceptat no hauria de ser abans de la data límit pels retorns.
-        event_change_deadline_date: >-
-          Els competidors registrats tenen el dret d'actualitzar les seves categories
-          fins aquesta data contactant l'equip organitzador. Aquesta data límit
-          no hauria de ser posada abans del moment que s'ha de tancar els
-          registres. Deixar aquest espai en blanc vol dir que els competidors
-          poden afegir una categoria més per competir fins al mateix moment de la
-          competició. Si acceptes registres al lloc, aquesta data ha de ser la
-          mateixa que l'inici de la competició.
-        guests_entry_fee_lowest_denomination: >-
-          Per ara aquest nombre és només informatiu, les quotes d'espectador no
-          poden ser administrades per aquesta pàgina web. Si s'introdueix un 0,
-          es mostrarà una frase que escullis referent a la política pels
-          espectadors.
-        early_puzzle_submission_reason: >-
-          Si us plau, explica perquè voldries requerir als competidors que
-          entriguin els cubs més aviat. Omple-ho en anglès!
-        qualification_results_reason: >-
-          Si us plau, explica aquí perquè voldries utilitzar temps de
-          qualificació. Omple-ho en anglès!
-        event_restrictions_reason: >-
-          Si us plau, explica aquí perquè voldries limitar una combinació
-          especifica de categories. Omple-ho en anglès!
-        main_event_id: El guanyador d'aquesta categoria serà el guanyador de la 
-          competició.
       website_contact:
       dob_contact:
         dob: La teva data de naixement en el format YYYY-MM-DD
@@ -632,9 +434,6 @@ ca:
         wrc_incidents: >-
           Llista dels números d'incidències de les quals t'agradaria rebre
           feedback de WRC.
-        wdc_incidents: >-
-          Llista dels números d'incidències de les quals t'agradaria rebre
-          feedback de WDC.
         remarks: >-
           Parla sobre qualsevol altre detall que t'agradaria comentar (per
           exemple una millora/regressió de la comunitat local, plans de futur
@@ -642,8 +441,6 @@ ca:
           és el moment de comentar-ho.
       competition_tab:
         name: 'Exemples: Viatge, Pagaments, Premis, Estància'
-      person:
-        dob: La data de naixement ha de tenir el format YYY-MM-DD.
       registration:
       results_submission:
       regional_organization:
@@ -811,6 +608,7 @@ ca:
     mailer:
       confirmation_instructions:
         subject: 'Si  us plau, confirma la nova adreça de correu electrònic'
+    registrations: {}
   wca:
     errors:
       messages:
@@ -846,11 +644,6 @@ ca:
       welcome_back: >-
         Benvingut! Per crear un compte de la WCA necessitem saber el WCA ID sota
         el que has competit.
-      welcome: >-
-        Benvingut! Abans de competir a la teva primera competició de la WCA,
-        necessitem saber alguna informació addicional per mantenir un registre.
-        Recorda que mai publicarem la teva data de naixement sense el teu
-        permís.
   layouts:
     navigation:
       information: Informació
@@ -877,10 +670,8 @@ ca:
       my_results: Els meus resultats
       statistics: Estadístiques
       multimedia: Multimèdia
-      db_export: Exportar la base de dades
       regulations: Regulacions
       about_regulations: Sobre les Regulacions
-      guidelines: Directrius
       scrambles: Barrejes
       history: Història
       translations: Traduccions
@@ -892,10 +683,7 @@ ca:
       panel: Panell
       polls: Enquestes
       results_team: Equip de Resultats
-      results_admin: Administrador
-      results_phpmyadmin: phpMyAdmin
       new_post: Nova publicació
-      team_leader: Líder d'equip
       regional_organizations: Organitzacions Regionals
       manage_regional_organizations: Administra Organitzacions Regionals
       new_regional_organization: Nova Organització Regional
@@ -1069,7 +857,6 @@ ca:
       email: Correu electrònic
       preferences: Preferències
       password: Contrasenya
-      member_of: Membre de
       preferred_events_desc: >-
         Seleccionar les teves categories preferides fa que el registre per les
         competicions sigui més ràpid.
@@ -1188,9 +975,6 @@ ca:
         la persona al passat.
       must_have_a_change: El nom o el país ha de ser diferent per actualitzar la
         persona.
-      must_not_be_present: no pot ser present
-      senior_has_delegate: no es pot degradar Delegat Sènior amb Delegats 
-        subordinats
       already_have_id: 'no es pot reclmar un WCA ID perquè ja en tens un %{wca_id}'
       wca_id_no_birthdate_html: >-
         No tenim una data de naixement per aquest WCA ID. Si us plau, contacta
@@ -1208,7 +992,6 @@ ca:
         No tenim un nom associat a aquest WCA ID. Si us plau, envia un correu a
         <a href='%{wrt_contact_path}' target='_blank'>Equip
         de Resultats de la WCA</a> per resoldre-ho.
-      avatar_requires_wca_id: necessita un WCA ID per ser assignat
       email_used_by_locked_account_html: >-
         ja està utilitzat per un altre compte. Ha estat creat automàticament com
         a resultat del registre a una competició a través d'un servei extern. Si
@@ -1247,9 +1030,6 @@ ca:
       need_gender: Necessita un gènere
       need_dob: Necessita una data de naixement
       need_country: Necessita un país
-      comp_not_found: No s'ha trobat la competició
-      cannot_be_deleted_and_accepted: Un registre no pot ser eliminat i acceptat
-        al mateix moment.
       must_register: t'has de registrar com a mínim a una categoria
       banned_html: >-
         Tens l'accés prohibit. Si creus que es tracta d'un error, si us plau,
@@ -1271,23 +1051,7 @@ ca:
         other:
     flash:
       not_using_wca: Aquesta competició no utilitza el registre WCA
-      accepted_and_mailed:
-        one: Registre acceptat! S'ha enviat la notificació per correu.
-        many: Registres acceptats! S'han enviat les notificacions per correu.
-        other:
-      rejected_and_mailed:
-        one: Registre desplaçat a la llista d'espera.
-        many: Registres desplaçats a la llista d'espera.
-        other:
-      deleted_and_mailed:
-        one: Registre eliminat
-        many: Registres eliminats
-        other:
-      single_deletion_and_mail: 'Registre eliminat i s''ha enviat un correu %{mail}'
-      cannot_delete: No pots eliminar el teu registre.
       updated: Registre actualitzat
-      failed: No s'ha pogut actualitzar el registre
-      deleted: 'S''ha eliminat correctament el teu registre per %{comp}'
       registered: Registrat correctament!
       imported: Registres importats correctament!
       added: Registre afegit correctament!
@@ -1316,17 +1080,6 @@ ca:
           El teu registre per %{comp_name} s'ha acceptat. Com sempre, pots
           consultar l'estat del teu registre %{here}.
         see_you_soon: 'Estem desitjant a veure''t a %{comp_name}!'
-      pending:
-        mail_subject: 'Has sigut afegit a la llista d''espera per %{comp_name}'
-        moved_html: >-
-          El teu registre per %{comp_name} ha sigut afegit a la llista d'espera.
-          Les possibles causes són:
-        causes:
-          accepted: El teu registre ha sigut accidentalment acceptat
-          withdrawal: Has demanat la retirada
-        email_if_error: >-
-          Si penses que és un error, si us plau, respon a aquest correu
-          electrònic.
       deleted:
         mail_subject: 'El teu registre per %{comp_name} ha sigut eliminat.'
         message_html: >-
@@ -1350,35 +1103,21 @@ ca:
         one: 1 país
         many: '%{count} països'
         other:
-      export_csv: Exportar a CSV
       email: Correu electrònic
-      approve: Aprovar
-      reject: Denegar
-      delete: Eliminar
-      waiting_list: Llista d'espera
-      approved_registrations: Registres aprovats
-      deleted_registrations: Registres eliminats
       not_paid: Sense pagar
       registered:
         without_stripe: Registrat en
         with_stripe: Pagat en
       payment_requested_on: 'Pagament demanat a: %{date}'
-      payment_completed_on: 'Pagament completat a: %{date}'
       total: Total
-      n_events: Nombre de categories
     new_registration:
       title: 'Registra''t a %{comp}'
-    registered_with_account_html: >-
-      Aquesta persona s'ha registrat amb un compte. Pots editar la seva
-      informació personal %{here}.
     sign_in: Inicia sessió
     profile: perfil
-    panel_title: Detalls del registre
     register: Registra't!
     refund: Reembolsament del pagament
     refund_confirmation: Estàs segur que vols retornar el pagament?
     update: Actualitza el registre
-    delete: Elimina
     delete_confirm: Estàs segur que vols eliminar el teu registre?
     delete_registration: Eliminar registre.
     will_open_html: 'El registre s''obrirà en <strong>%{days}</strong> a %{time}.'
@@ -1395,7 +1134,6 @@ ca:
     please_sign_in_html: >-
       %{sign_in} per registrar-te a %{comp}. Si encara no tens un compte de la
       WCA, te'n pots crear un %{here}.
-    greeting: 'Hola, %{name}!'
     please_fix_profile_html: >-
       Per registrar-te a %{comp}, has de solucionar els següents problemes al
       %{profile}:
@@ -1403,49 +1141,23 @@ ca:
       El límit de competidors per aquesta competició és %{competitor_limit} i ja
       s'hi ha arribat. Si et registres, el teu registre serà posat a la llista
       d'espera. Aquest no serà aprovat  fins que hi hagi un lloc lliure.
-    can_register: 'Pots registrar-te per %{comp} seguidament.'
-    check_registration_information: >-
-      Si us plau, revisa la informació sobre el registre per saber si has de fer
-      alguna cosa més, com pagar una quota d'inscripció.
-    have_registered: >-
-      Has enviat el teu registre per %{comp}. Pots veure els teus detalls del
-      registre seguidament.
-    contact_organizer: Contacta amb els organitzadors si desitges fer un canvi.
-    waiting_list: >-
-      El teu registre està pendent. Per l'aprovació, pot ser necessari pagar la
-      quota d'inscripció. Comprova el lloc web de la competició per a més
-      detalls.
-    accepted: El teu registre s'ha acceptat!
     entry_fees_fully_paid: 'Has pagat %{paid}, que cobreix tota la quota de registre.'
     will_pay_here: Les pagaràs aquí després d'enviar el teu registre.
     wont_pay_here: >-
       Si us plau, comprova la informació sobre la competició per les
       instruccions sobre com pagar
     refund_form:
-      hints:
-        refund_amount: >-
-          La quantitat per retornar al competidor pot ser qualsevol valor fins a
-          la quantitat que ja està pagada.
       labels:
         refund_amount: Retornar quantitat
     payment_form:
-      title: Quotes de registre
       payment_successful: >-
         El pagament ha sigut exitós i el teu registre hauria de sortir com a
         pagat seguidament.
       hints:
         donation: Donació opcional que anirà només a l'equip organitzador
-        card_information: >-
-          La informació de la targeta mai arriba a la pàgina web de la WCA. És
-          enviada de forma segura a Stripe que administra el procés de pagament
-          i després ens informa a nosaltres.
       labels:
-        entry_fees: Quotes de registre
         donation: Donació
-        card_information: Informació de la targeta
-        cardholder_name: Titular de la targeta
       alerts:
-        not_a_number: 'Si us plau, introdueix un valor vàlid.'
         amount_too_low: >-
           El nombre total ha de ser com a mínim la quota de registre que s'ha de
           pagar.
@@ -1454,11 +1166,6 @@ ca:
           El càrrec no s'ha efectuat, ja que les quotes de registre ja s'havien
           pagat.
         not_allowed: No pots pagar el registre
-        intent_not_found: >-
-          No hem pogut trobar l'intent de pagament al nostre servidor. El procés
-          de pagament s'ha avortat i no s'ha fet cap càrrec a la targeta.
-        cardholder_name: 'Si us plau, revisa el nom del titular de la targeta.'
-    payment_button_text: Pagar les quotes amb targeta
     preferred_events_prompt_html: >-
       Per accelerar el procés de registre en un futur, pots establir les teves
       categories preferides %{link}.
@@ -1562,7 +1269,6 @@ ca:
         Els resultats de la competició són visibles, però encara no s'han
         publicat.
       results_already_posted: Els resultats ja s'han publicat.
-      results_posted: Resultats publicats exitosament!
       results_preview_alert: Estàs visualitzant resultats que encara no s'han 
         publicat.
       upload_results: >-
@@ -1586,11 +1292,6 @@ ca:
         visible.
       not_confirmed_not_visible: Aquesta competició no està confirmada i no és 
         visible.
-      stripe_connected: >-
-        Has connectat exitosament el teu compte Stripe i ja pots rebre els
-        pagaments d'aquesta competició.
-      stripe_not_connected: Hi ha hagut un problema i no podem connectar el teu 
-        compte Stripe.
       championship_exists: 'Ja hi ha un %{championship_type} al %{year}'
     my_competitions:
       title: Les meves competicions
@@ -1676,7 +1377,6 @@ ca:
         Els espectadors poden atendre pagant una quota d'entrada de
         %{guests_base_fee}.
       guests_free:
-        anyone: Qualsevol espectador pot entrar gratuïtament.
         restricted: >-
           Els espectadors només estan permesos com a acompanyants del
           competidor.
@@ -1723,9 +1423,6 @@ ca:
       number_of_bookmarks: Nombre de vegades marcat com a guardat
     index:
       title: Competicions
-      disclaimer: >-
-        Tinguis en compte que a causa de la pandèmia de COVID-19 alguns països
-        no poden acollir competicions.
       all_events: Tot
       all_years: Tots els anys
       clear: Esborrar
@@ -1754,7 +1451,6 @@ ca:
         custom: Competicions dins del període de temps seleccionat
         by_announcement: 'Competicions ordenades per data d''anunci, les més noves
           a dalt'
-      no_access: No tens accés a aquesta pàgina!
       tooltips:
         hourglass:
           ended: 'Ha acabat fa %{days}'
@@ -1771,9 +1467,6 @@ ca:
             Ja s'ha arribat al límit de competidors, els nous registres aniran a
             la llista d'espera
       no_comp_found: No s'han trobat competicions.
-      no_comp_match: >-
-        No hem trobat cap competició amb %{events}! Intenta buscar amb menys
-        categories.
     my_competitions_table:
       edit: Editar
       registrations: Registres
@@ -1793,22 +1486,6 @@ ca:
       supports_md_html: >-
         Suporta <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      name_reason_html: >-
-        Una breu explicació pel nom de la competició. El nom ha de complir amb
-        <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
-        Competition Requirements Policy</a>.
-      venue_html: >-
-        El local on tindrà lloc la competició. %{md}. Per exemple: [Cité des
-        Sciences et de l'Industrie](http://www.cite-sciences.fr)
-      venue_details_html: >-
-        Detalls sobre el local (per exemple, Al fons de la primera planta,
-        segueix els signes). %{md}
-      contact_html: >-
-        Dades de contacte opcional. Si no ho omples, el contacte es farà a
-        través d'un formulari sense revelar les adreces de correu electrònic
-        dels organitzadors. %{md}. Exemple: [Text to
-        display](mailto:some@email.com)
       events: Categories
       public_and_locked_html: >-
         Aquesta competició és visible pel públic i no es pot editar. Si
@@ -1864,7 +1541,6 @@ ca:
           name: Local
           details: Detalls del lloc
           address: Adreça del lloc
-          coordinates:
         start_date: Data d'inici
         end_date: Data de finalització
         information: Informació
@@ -1886,9 +1562,6 @@ ca:
           uses_wca_registration: M'agradaria utilitzar la pàgina web de la WCA 
             pel registre
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: Notifica'm per correu electrònic quan 
-            algú es registri a aquesta competició
         entry_fees:
           currency_code: Codi de divisa
           base_entry_fee: Quota bàsica de registre
@@ -1906,14 +1579,11 @@ ca:
           event_change_deadline_date: Data límit pels competidors per 
             actualitzar les categories
           allow_on_the_spot: Registres al lloc
-          allow_self_delete_after_acceptance: Cancel·lacions de registres
           allow_self_edits: Edicions dels registres
           guests_enabled: Espectadors
           guest_entry_status: Mostra missatge per entrada gratuïta dels 
             espectadors
-          guests_per_registration:
           extra_requirements: Requisits extra de registre
-          force_comment:
         event_restrictions:
           early_puzzle_submission:
             enabled: M'agradaria sol·licitar als competidors que facin entrega 
@@ -1924,16 +1594,12 @@ ca:
             enabled: M'agradaria utilitzar els resultats de qualificació per 
               limitar qui pot competir en certes categories
             reason: Raó i detalls pels resultats de qualificació
-            allow_registration_without:
           event_limitation:
             enabled: M'agradaria limitar als competidors de registrar-se a una 
               combinació específica de categories
             reason: Raó i detalls per les limitacions de categories
-            per_registration_limit:
           main_event_id: Categoria principal
         remarks: Observacions
-        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació 
-          addicional
       hints:
         name: 'El nom complet de la competició incloent l''any al final (exemple:
           Danish Open 2016). Revisa les majúscules. El nom ha de contenir només caràcters
@@ -2019,7 +1685,6 @@ ca:
             categoria més per competir fins al mateix moment de la competició. 
             Si acceptes registres al lloc, aquesta data ha de ser la mateixa que
             l'inici de la competició.
-          guests_per_registration:
           extra_requirements: Si us plau, indica aquí qualsevol requisit extra 
             pel registre que encara no s'hagi indicat, com per exemple 
             instruccions de com pagar. <br/>Si us plau, omple-ho <b>en 
@@ -2039,7 +1704,6 @@ ca:
           event_limitation:
             reason: Si us plau, explica aquí perquè voldries limitar una 
               combinació especifica de categories. Omple-ho en anglès!
-            per_registration_limit:
           main_event_id: El guanyador d'aquesta categoria serà el guanyador de 
             la competició.
         remarks: Alguna informació addicional que vulguis mencionar a WCAT. Per 
@@ -2064,19 +1728,15 @@ ca:
             'false': >-
               Els competidors NO haurien d'editar el seu registre un cop ja s'hagi
               acceptat
-          allow_self_delete_after_acceptance:
-            'true': >-
-              Els competidors poden eliminar el seu registre inclús després
-              d'haver sigut acceptats
-            'false': >-
-              Els competidors NO haurien d'eliminar el seu registre un cop s'hagi
-              acceptat
           guest_entry_status:
             unclear: No mostris res (i potser explica-ho millor a l'apartat 
               "Requeriments extra de registre")
             free: Qualsevol espectador pot assistir gratuïtament
             restricted: Els espectadors només són permesos com acompanyants de 
               competidors
+        website: {}
+        event_restrictions:
+          qualification_results: {}
     errors:
       invalid_name_message: >-
         ha d'acabar amb un any i només pot contenir caràcters alfanumèrics,
@@ -2113,8 +1773,6 @@ ca:
       waiting_list_deadline_before_refund_date: >-
         La data límit de la llista d'espera no pot ser abans que la data límit
         dels retorns.
-      waiting_list_deadline_after_start: La data límit de la llista d'espera ha 
-        de ser abans de la data d'inici.
       event_change_deadline_before_registration_close: >-
         La data límit per actualitzar categories no pot ser abans de la data de
         clausura del registre.
@@ -2138,34 +1796,6 @@ ca:
     time_until_competition:
       competition_in: 'La competició és en %{n_days}.'
       competition_was: 'La competició va ser fa  %{n_days}.'
-    nearby_competitions:
-      competitions:
-        one: 1 competició
-        many: '%{count} competicions'
-        other:
-      label: 'Competicions pròximes (entre %{days} dies i %{kms} km)'
-      label_admin: 'Els últims %{days} dies'
-      nearby_admin: '%{x_competitions} entre %{kms} km i %{days} dies.'
-      no_comp_nearby: Sense competicions pròximes!
-      no_date_yet: Encara no has assignat una data per aquesta competició.
-      no_location_yet: Encara no has assignat cap ubicació per aquesta 
-        competició.
-      within: 'Entre %{days} dies'
-      show: Mostra
-      name: Nom
-      delegates: Delegat(s)
-      date: Data
-      location: Localització
-      distance: Distància
-      before: abans
-      after: després
-      starts_on: comença al
-      ends_on: acaba en
-      limit: Límit
-      competitors: Competidors
-      events: Categories
-      show_events: Mostra categories
-      hide_events: Amaga categories
     announcements: Anuncis
     post_announcement: Anuncia la competició
     announced_by_html: 'Anunciat per %{announcer_name} a %{date_time}'
@@ -2173,8 +1803,6 @@ ca:
     uncancel: Restaura la competició
     cancelled_by_html: 'Cancel·lat per %{name} a %{date_time}'
     cancel_confirm: Estàs segur que vols cancel·lar la competició?
-    upload_results: Penja els resultats
-    post_results: Publica els resultats
     results_posted_by_html: 'Publicat per %{poster_name} a %{date_time}'
     cancel_mistake: Has comès un error?
     note_before_cancel: 'Important: només les competicions confirmades poden ser cancel·lades.'
@@ -2189,7 +1817,6 @@ ca:
           Si arribes al temps límit durant la resolució, el jutge et pararà i el
           teu resultat serà DNF (mira %{regulation_link}).
         regulation_link_text: 'Regulació %{number}'
-        guideline_link_text: 'Directriu %{number}'
         cumulative_time_limit: temps límit acumulatiu
         cumulative_one_round_html: 'Pot ser imposat un %{cumulative_time_limit} (mira
           %{regulation_link}).'
@@ -2219,7 +1846,6 @@ ca:
       qualification: Qualificació
     schedule:
       display_as:
-        label: 'Mostra l''horari com:'
         table: Taula
         calendar: Calendari
       display_for_room: 'Mostrar l''horari per:'
@@ -2229,13 +1855,8 @@ ca:
       start: Inici
       end: Fi
       activity: Activitat
-      room: Sala
       room_in_venue: '%{room} dins %{venue}'
-      venue_information_html: 'Estàs mirant l''horari pel local %{venue_name}.'
       timezone_message: 'L''horari es mostra en la zona horària %{timezone}.'
-      multiple_venues_available: >-
-        Aquesta competició té diferents locals, assegura't també de comprovar
-        els horaris pels altres locals!
       schedule_for_date: 'Horari per %{day_name} (%{full_date})'
     nav:
       menu:
@@ -2271,6 +1892,11 @@ ca:
     scrambles_table:
       group: Grup
       scramble: Barreja
+    registration_v2:
+      register:
+        panel: {}
+    live:
+      connection: {}
   competition_tabs:
     headers:
       tabs: Pestanyes
@@ -2305,25 +1931,14 @@ ca:
     selector_elements:
       events_selector:
         event: Categoria
-        all_events: Totes les categories
-      region: Regió
       type_selector:
         type: Tipus
         single: Single
         average: Mitjana
-      years_selector:
-        years: Anys
-        all_years: Tots els anys
-        only: Només
-        only_html: 'Només %{year}'
-        until: Fins
-        until_html: 'Fins %{year}'
       show_selector:
         show: Mostra
         persons: Persones
-        persons_html: '%{quantity} persones'
         results: Resultats
-        results_html: '%{quantity} resultats'
         by_region: Per regió
         mixed: Mixt
         slim: Slim
@@ -2338,18 +1953,12 @@ ca:
     table_elements:
       name: Nom
       result: Resultat
-      citizen_of: Ciutadà de
       competition: Competició
       solves: Resolucions
       region: Regió
       world: Món
-      type_options:
-        type: Tipus
-        single: Single
-        average: Mitjana
       event: Categoria
       date_circa: Data aproximada
-      record: Rècord
   notifications:
     connect_wca_id: Connecta el teu WCA ID al teu compte!
   persons:
@@ -2395,24 +2004,6 @@ ca:
     errors:
       unstick_at_future: ha de ser al futur
   contacts:
-    website:
-      faq_note_html: >-
-        Abans de fer una pregunta, consulta les nostres <a href="/faq">Preguntes
-        Freqüents</a>! Si prefereixes contactar amb un comitè o equip específic,
-        pots trobar la informació de contacte en <a
-        href="/teams-committees">aquesta pàgina</a>.
-      title: Formulari de Contacte de la WCA
-      inquiries:
-        competition: >-
-          Contacta amb els Organitzadors d'una Competició Específica (si us
-          plau, selecciona a sota)
-        competitions_in_general: 'Competicions en General (organitzar, normes de competició,
-          etc.)'
-        wca_id_or_profile: WCA ID o Perfil de la WCA
-        media: Contingut Multimèdia
-        software: Software
-        different: Altres
-      submit: Enviar missatge
     dob:
       title: Formulari Canvi Data de Naixement
       description: >-
@@ -2677,151 +2268,18 @@ ca:
       donate_paypal: Donar a través de Paypal
       donate_other: Altres maneres de donar
     structure:
-      teams_committees_councils: 'Equips de la WCA, Comitès i Consells'
       title: Estructura
       board:
-        name: Consell Executiu de la WCA
         description: >-
           El consell Executiu de la WCA és responsable de liderar l'organització
           en global i dur a terme qualsevol tasca que no sigui assignada a
           altres Equips, Comitès i Consells
-      committees: >-
-        Els equips i comitès de la WCA formen part de l'organització i realitzen
-        les tasques diàries necessàries per mantenir-la en funcionament. Aquests
-        comitès estan formats per membres de la comunitat WCA, inclosos els
-        delegats i competidors de la WCA. Cada equip té un líder, la funció del
-        qual és vetllar pel bon funcionament de l'equip i guiar els altres
-        membres de l'equip. Els consells són un tipus especial d'equip que
-        compleixen una funció assessora a la Junta de la WCA i estan formats per
-        membres de la comunitat, no per membres del personal de la WCA. Quan hi
-        ha posicions vacants de comitès, equips o consells, la informació sobre
-        com sol·licitar l'entrada es publica a la portada.
-      senior_member: Membre Sènior
-      leader: Líder
-      officers:
-        name: Oficials de la WCA
-        description: >-
-          Els oficials de la WCA s'encarreguen de les tasques relacionades amb
-          l'estatus sense ànim de lucre de l'WCA. Aquests oficials són elegits
-          pel Consell Executiu de la WCA. El director executiu és el director
-          general de la WCA, el president presideix totes les reunions del
-          Consell, el secretari manté els documents de l'organització i el
-          tresorer gestiona els assumptes financers de la WCA.
-      chair:
-        name: President de la WCA
-      executive_director:
-        name: Director Executiu de la WCA
-      secretary:
-        name: Secretari de la WCA
-      vice_chair:
-        name: Vicepresident de la WCA
-      treasurer:
-        name: Tresorer de la WCA
       users:
         profile: 'Perfil de %{user_name}'
-      wdc:
-        name: Comitè Disciplinari de la WCA
-        description: >-
-          Aquest comitè aconsella la Junta de la WCA en casos especials, com
-          violacions de les Regulacions de la WCA, i pot ser contactat per
-          membres de la WCA en cas d'una qüestió important sobre les
-          competicions de la WCA.
-      wdpc:
-        name: Comitè de Protecció de Dades de la WCA
-        description: >-
-          Aquest comitè és responsable de les matèries relacionades amb la
-          Protecció de Dades.
-      wrc:
-        name: Comitè de Regulacions de la WCA
-        description: Aquest comitè és responsable d'administrar les Regulacions 
-          de la WCA.
-      wrt:
-        name: Equip de Resultats de la WCA
-        description: >-
-          Aquest equip és responsable d'administrar tots els resultats de les
-          competicions.
-      wst:
-        name: Equip de Software de la WCA
-        description: >-
-          Aquest equip és responsable d'administrar el software de la WCA
-          (pàgina web, scramblers, workbooks, eines d'administrador).
-      wct:
-        name: Equip de Comunicació de la WCA
-        description: >-
-          L'Equip de Comunicació de la WCA (WCT) té la funció de supervisar i
-          donar suport a les comunicacions de la WCA amb la comunitat i el
-          públic en general. La comunicació de la WCA ha de contribuir als
-          Objectius de la WCA i donar suport a una cultura positiva general de
-          cordialitat, transparència, inclusió, obertura i capacitat de
-          resposta.
-      wfc:
-        name: Comitè de Finances de la WCA
-        description: Aquest comitè és responsable d'administrar les finances de 
-          la WCA.
-      wec:
-        name: Comitè d'Ètica de la WCA
-        description: >-
-          La funció d'aquest comitè és vetllar perquè tots els procediments
-          seguits pel personal de la WCA i el personal extern compleixin el seu
-          Codi Ètic, i realitzar investigacions independents si la conducta
-          d'algun d'aquests membres no s'ajusta a l'esmentat Codi Ètic. Aquestes
-          investigacions poden ser sol·licitades per qualsevol membre registrat,
-          dels quals WEC és un confident. Aquest comitè també funciona com a
-          junta d'apel·lacions si algú implicat no està d'acord amb una decisió
-          presa pel Comitè de Disciplina de la WCA.
-      weat:
-        name: Equip d'Assistents Executius de la WCA
-        description: >-
-          Aquest equip és responsable de dur a terme les tasques administratives
-          del Consell Executiu de la WCA.
-      wqac:
-        name: Comitè de Garantia de Qualitat de la WCA
-        description: >-
-          Aquest comitè té la funció de donar suport i promoure la millora
-          contínua de la qualitat dins de la WCA, així com l'aplicació mundial
-          d'estàndards de qualitat per garantir una alta qualitat constant dels
-          processos, el Personal de la WCA, les Organitzacions Regionals, els
-          Organitzadors de Competicions i el Personal de la Competició.
-      wcat:
-        name: Equip d'Anuncis de Competició de la WCA
-        description: >-
-          Aquest equip té el rol d'aprovar i anunciar les Competicions de la WCA
-          i assegurar-se que aquests anuncis s'adhereixen als estàndards de
-          qualitat de la WCA.
-      wmt:
-        name: Equip de Màrqueting de la WCA
-        description: >-
-          Aquest equip és responsable del desenvolupament i administració de la
-          Marca WCA, buscar patrocinadors, ajudar en la distribució d'Equipament
-          de Competicions de la WCA i publicitar el Marxandatge de la WCA.
-      wac:
-        name: Consell Assessor de la WCA
-        description: >-
-          Aquest consell és responsable de construir i mantenir la comunicació
-          bilateral entre la Comunitat de la WCA i Staff de la WCA.
-      wsot:
-        name: Equip d'Organització d'Esports de la WCA
-        description: >-
-          Aquest equip té el rol de supervisar i ajudar en la reconeixença de la
-          WCA com una organització d'esports internacional.
-      wat:
-        name: Equip d'Arxiu de la WCA
-        description: >-
-          L'Equip d'Arxiu de la WCA és un Comitè Assessor de la WCA. Aquest
-          equip té el rol de supervisar i ajudar en el desenvolupament d'un
-          arxiu de l'organització.
-      banned:
-        name: Competidors Sancionats
-      wct_china:
-        name: WCT Xina
       operations_html: >-
         Les operacions del dia a dia són dirigides pels %{committees_and_teams}
         de la WCA.
       teams_committees: Equips i Comitès
-      probation:
-        name: Delegats en Pràctiques
-      wst_admin:
-        name: Administradors de Software
       delegates_html: >-
         <p><strong>Delegat de la WCA</strong> és un rol definit a les Mocions de
         la WCA i descrit en el Reglament de la WCA. El deure principal d'un
@@ -2856,7 +2314,6 @@ ca:
     codeofethics: Codi d'Ètica
     codeofconduct: Codi de Conducta
     finances: Finances
-    vision_and_strategy: Visió i Estratègia
   education:
     title: Recursos Educacionals de la WCA
     description: >-
@@ -2927,122 +2384,7 @@ ca:
       confirm_delete: >-
         Esteu segur que voleu suprimir aquesta sol·licitud d'Organització
         Regional?
-  contact:
-    title: Informació de Contacte
-    info_alert_html: >-
-      Abans de posar-te en contacte amb qualsevol dels equips d'aquesta pàgina,
-      fes una ullada al nostre %{link}!
-    questions_and_comments_html: >-
-      Per a preguntes sobre la pàgina web, comentaris i suggèrencies, utilitza
-      aquest <a href='/contact/website'>formulari de contacte</a>. Per a
-      preguntes sobre una àrea específica o una competició, si us plau, contacta
-      el teu %{link} local.
-    committees_and_teams_html: <u>Comitès i Equips</u>
-    members: Membres
-    board:
-      info_html: >-
-        La World Cube Association és dirigida per la Junta de la WCA. Són
-        responsables de les preguntes generals i la WCA com a organització en
-        general.
-    wct:
-      info_html: >-
-        WCT està a càrrec de supervisar i ajudar en les comunicacions de la WCA
-        amb la comunitat i el públic en general. Haurien de ser contactats si
-        tens preguntes generals sobre la WCA o la presència a les xarxes
-        socials.
-    wdc:
-      info_html: >-
-        WDC investiga una varietat de situacions i proposa solucions, inclosos
-        càstigs quan sigui necessari. Entre altres temes, aquestes situacions
-        podrien ser violacions greus de la normativa WCA o problemes de la
-        comunitat. Si has experimentat algun d'aquests, no dubtis a dirigir-te a
-        aquest comitè.
-    wdpc:
-      info_html: >-
-        WDPC té la responsabilitat i el deure d'investigar, crear, implementar,
-        gestionar i fer complir totes les polítiques de protecció de dades de
-        WCA, els contractes amb encarregats de tractament de dades externs de
-        dades de WCA i gestionar les tasques relacionades amb la protecció de
-        dades.
-    wrc:
-      info_html: >-
-        WRC gestiona totes les qüestions relacionades amb l'aplicació, la
-        millora i el desenvolupament del Reglament WCA. Donen suport als
-        delegats de WCA en qualsevol tipus de qüestions de procediment que es
-        produeixin a les competicions i decideixen sobre incidències no resoltes
-        i no cobertes. WRC publica periòdicament informes interns de la WCA per
-        ajudar tots els Delegats de la WCA i millorar el seu coneixement del
-        Reglament. Si voleu participar en el desenvolupament de la normativa o
-        proposar canvis, podeu posar-vos en contacte amb el WRC a travès de
-        correu electrònic o debats a <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      info_html: >-
-        WRT és responsable de gestionar totes les dades de les bases de dades de
-        la WCA, sobretot els resultats de la competició i les dades personals.
-        Penjen els resultats de les competicions de la WCA al lloc web de
-        la WCA, una vegada que els hagi enviat el delegat de la WCA de la
-        competició. A part de publicar els resultats de la competició, l'equip
-        de resultats de la WCA també és responsable de fer correccions als
-        resultats de la competició si és necessari i són els responsables
-        d'administrar totes les pàgines de perfil WCA. Això inclou, per exemple,
-        canviar les dades d'usuari, com ara les dates de naixement, segons les
-        sol·licituds verificades i gestionar les sol·licituds d'imatge de
-        perfil.
-    wst:
-      info_html: >-
-        WST és responsable del manteniment i gestió de tot el programari del
-        WCA. També desenvolupen nou programari per a diverses tasques dins de la
-        WCA sempre que sigui necessari. Si teniu suggeriments i idees per al
-        desenvolupament del lloc web o si voleu informar d'errors, no dubteu a
-        contactar-hi! El lloc web de WCA és un gran projecte de codi obert a <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
-        així que si esteu interessat a ajudar a desenvolupar per a WCA, feu
-        servir una ullada allà.
-    wfc:
-      info_html: >-
-        WFC es fa responsable de les finances a la WCA. Ells gestionen les finances
-        i els comptes de la WCA d’acord amb un pressupost anual, que han de proveir
-        normalment.
-    wec:
-      info_html: >-
-        Aquest comitè té la funció de garantir que tots els procediments seguits
-        pel personal de WCA i el personal extern compleixin el seu Codi Ètic.
-    weat:
-      info_html: >-
-        Aquest equip s'encarrega de dur a terme les tasques administratives de
-        la Junta Directiva de la WCA.
-    wqac:
-      info_html: >-
-        Aquest comitè té la funció de donar suport i promoure la millora
-        contínua de la qualitat dins de la WCA, així com l'aplicació mundial
-        d'estàndards de qualitat per garantir una alta qualitat constant dels
-        processos, el personal de la WCA, les Organitzacions Regionals, els
-        Organitzadors de Competicions i el Personal de la Competició.
-    wcat:
-      info_html: >-
-        Aquest comitè té la funció d'aprovar i anunciar les competicions de la
-        WCA i garantir que aquests anuncis compleixin els estàndards de qualitat
-        de la WCA.
-    wmt:
-      info_html: >-
-        Aquest equip és responsable de desenvolupar i gestionar la marca WCA,
-        buscar patrocinis, donar suport a la distribució d'Equipament de
-        Competicions de la WCA i comercialitzar el Marxandatge WCA.
-    wsot:
-      info_html: >-
-        Aquest equip té el paper de supervisar i donar suport al reconeixement
-        de la WCA com a organització esportiva internacional.
-    wat:
-      info_html: >-
-        L'equip d'arxiu de la WCA és un comitè assessor de la WCA. Aquest equip
-        té la funció de supervisar i donar suport al desenvolupament d'un arxiu
-        de l'organització.
-    councils_html: Consells
-    wac:
-      info_html: >-
-        Aquest consell és responsable d'establir i mantenir la comunicació
-        bilateral entre la comunitat WCA i el personal de WCA.
+  contact: {}
   score_tools:
     title: Eines de software per les competicions de la WCA
     wca_icon_text: Desenvolupat i mantingut per WST
@@ -3129,36 +2471,11 @@ ca:
           al format adequat per a l'enviament a la WCA.
   logo:
     title: Logo de la WCA
-    paragraphs:
-      '1': >-
-        El logo de la WCA va ser dissenyat per Justin Eastman, durant un concurs
-        de disseny el gener del 2005.<br />Ens va agradar el logo pel disseny,
-        els colors i el fet que no hi apareix específicament un cub 3x3x3.
-      '2': >-
-        Tenim quatre versions diferents del logo: una <a
-        href="/files/WCAlogo_XL.jpg">versió llarga</a> (46 KB, 1756 px by 1068
-        px), una <a href="/files/WCAlogo.svg">versió en vector</a>, una <a
-        href="/files/WCAlogo_notext.svg">versió en vector sense text</a> i una
-        <a href="/files/WCAlogo_monochrome.svg">versió en vector
-        monocromàtica</a>.
-      '3': >-
-        Versió 3D del logo, dissenyada per Vu Minh Tan de Vietnam: <a
-        href="/files/WCALogo3D.png">versió PNG</a> (2.1 MB),<a
-        href="/files/WCALogo3Dsmall.png">versió PNG petita</a> (0.25 MB).
-      '4': >-
-        L'ús acceptable del logo de la WCA es descriu a la política d'ús del
-        logotip de la WCA que apareix a <a href="/documents">Documents de la
-        WCA</a>.
+    headings:
+      usage_guidelines:
+        color: {}
   relations:
-    relation:
-      title: Relacions
-      find_relations: Troba connexions entre cubers
-      show_relation: Mostra'm la relació!
-      connectives:
-        was_at: Va ser a
-        together_with: Juntament amb
-    messages:
-      invalid_wca_ids: 'Si us plau, introdueix dos WCA IDs vàlids.'
+    relation: {}
   search_results:
     index:
       competitions: Competicions
@@ -3190,10 +2507,6 @@ ca:
         Les Regulacions de la WCA són complementades amb les <a
         href="/regulations/guidelines.html">Directrius de la WCA</a>, que
         contenen clarificacions addicionals i explicacions.
-      content3_html: >-
-        Les decisions importants sobre incidents que van passar a competicions i
-        van ser resoltes pel Comitè de Regulacions de la WCA poden ser trobades
-        al <a href="/incidents">Registre d'Incidents</a>.
     panel2:
       title: Traduccions
       content1_html: >-
@@ -3359,3 +2672,28 @@ ca:
   footer:
     privacy: Privacitat
     disclaimer: Exempció de responsabilitat
+  page:
+    teams_committees_councils: {}
+    contact_edit_profile:
+      form: {}
+    contacts:
+      form:
+        competition: {}
+        user_data: {}
+        contact_recipient: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+  trainee_delegate_application: {}
+  database: {}
+  validators: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  payments:
+    errors: {}
+    payment_setup: {}
+  merch: {}
+  tickets: {}

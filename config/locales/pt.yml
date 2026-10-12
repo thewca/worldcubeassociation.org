@@ -1149,7 +1149,7 @@ pt:
         confirmation_link: Confirmar a minha conta.
         activate: >-
           Após a ativação, poderá entrar na sua conta no website da World Cube Association:
-          
+
         login_form: formulário de login
         addendum: >-
           Este email é gerado automaticamente. Se não registou uma conta no
@@ -1559,7 +1559,6 @@ pt:
         one: '%{count} região'
         many: '%{count} regiões'
         other: '%{count} regiões'
-      export_csv: Exportar para CSV
       email: Email
       non_competing: Inscrições de não-competidores
       not_paid: Não pago
@@ -2357,7 +2356,6 @@ pt:
           external_website: Website
           external_registration_page: Página de registo
           uses_wca_registration: Gostaria de usar o site da WCA para registos
-          uses_wca_live: Irei usar WCA Live para registo de resultados
           scoretaking_software: Software utilizado para o registo dos resultados
         entry_fees:
           currency_code: Código da moeda
@@ -2766,8 +2764,6 @@ pt:
           %{update_params}
         delete_contact_message: Quero apagar o meu registo
         no_changes: Não há alterações
-        email_send: Enviar Email
-        email_copy: Copiar Emails
         email_message: Copiado para a área de transferência. Lembre-se de usar 
           bcc!
         move_to:

@@ -185,8 +185,6 @@ id:
       invalid: tidak valid
     days:
       other: '%{count} hari'
-    these_events:
-      other: '%{count} cabang ini'
     search_site: Situs pencarian
     filter: Filter
     delete: Hapus
@@ -268,10 +266,6 @@ id:
           Saya ingin mendapatkan saran dari WRC mengenai beberapa insiden di
           atas.
         wrc_incidents: Insiden yang Membutuhkan Saran WRC
-        wdc_feedback_requested: >-
-          Saya ingin mendapatkan saran dari WDC mengenai beberapa insiden di
-          atas.
-        wdc_incidents: Insiden yang Membutuhkan Saran WDC
         remarks: Komentar
       person:
         wca_id: Orang
@@ -458,9 +452,6 @@ id:
         wrc_incidents: >-
           Daftar angka yang mereferensikan insiden yang Anda inginkan untuk
           diberi saran oleh WRC.
-        wdc_incidents: >-
-          Daftar angka yang mereferensikan insiden yang Anda inginkan untuk
-          diberi saran oleh WDC.
         remarks: >-
           Berisi tulisan tentang detail lainnya yang ingin Anda bagikan (contoh:
           peningkatan/penurunan minat komunitas, rencana ke depan untuk wilayah
@@ -470,10 +461,6 @@ id:
       competition_tab:
         name: 'Contoh: Perjalanan, Pembayaran, Hadiah, Akomodasi'
       person:
-      registration:
-        administrative_notes: >-
-          Catatan tambahan disimpan sebagai bagian untuk mengatur pendaftaran
-          ini. Hal ini tidak dapat dilihat oleh kompetitor.
       results_submission:
       regional_organization:
         website: >-
@@ -493,8 +480,6 @@ id:
           accepted: Diterima
           pending: Daftar tunggu
           deleted: Dihapus
-          cancelled: Dibatalkan
-          waiting_list: Dalam Daftar Tunggu
   mail_form:
     attributes:
       contact_form:
@@ -640,6 +625,7 @@ id:
     mailer:
       confirmation_instructions:
         subject: Harap konfirmasi alamat email baru Anda
+    registrations: {}
   wca:
     errors:
       messages:
@@ -647,13 +633,7 @@ id:
           other: 'Formulir mengandung %{count} kesalahan:'
       error_pages:
         500_error: 'Mohon maaf, ada yang tidak beres.'
-        500_contact: >-
-          Jika Anda melapor kesalahan ini kepada Tim Perangkat Lunak, mohon
-          salin ID Permintaan ke dalam email
         400_error: Laman yang Anda inginkan tidak tersedia.
-        400_contact: >-
-          Jika menurut Anda ini adalah kesalahan, mohon hubungi Tim Perangkat
-          Lunak dan salin ID Permintaan ke dalam email
     doorkeeper:
       applications:
         help:
@@ -719,7 +699,6 @@ id:
       db_dev_export: Ekspor Pengembang
       regulations: Regulasi
       about_regulations: Tentang Regulasi
-      guidelines: Pedoman
       scrambles: Acakan
       history: Riwayat
       translations: Terjemahan
@@ -731,11 +710,9 @@ id:
       panel: Panel
       polls: Jajak Pendapat
       results_team: Tim hasil
-      results_admin: Admin
       results_database: Basis Data
       results_sidekiq: Dashboard Sidekiq
       new_post: Postingan baru
-      team_leader: Pemimpin tim
       regional_organizations: Organisasi Regional
       manage_regional_organizations: Atur Organisasi Regional
       new_regional_organization: Organisasi Regional Baru
@@ -780,8 +757,6 @@ id:
         wat: Tim Arsip WCA
         wct: Tim Komunikasi WCA
         wcat: Tim Pengumuman Kompetisi WCA
-        wdc: Komite Disiplin WCA
-        wec: Komite Etik WCA
         weat: Tim Asisten Eksekutif WCA
         wfc: Komite Keuangan WCA
         wmt: Tim Marketing WCA
@@ -790,7 +765,6 @@ id:
         wrt: Tim Hasil WCA
         wst: Tim Perangkat Lunak WCA
         wsot: Tim Organisasi Olahraga WCA
-        wac: Majelis Penasihat WCA
       groups_description:
         wat: >-
           WAT bertanggung jawab dalam mengelola pengembangan dan pemeliharaan
@@ -812,20 +786,6 @@ id:
           tepat dari dokumen-dokumen seperti Kebijakan Kebutuhan Kompetisi WCA.
           WCAT TIDAK bertanggung jawab dalam kepengurusan dan delegasi setiap
           kompetisi.
-        wdc: >-
-          Komite Disiplin WCA (WDC) melakukan investigasi independen terkait
-          Speedcuber Terdaftar dan insiden dalam Kompetisi WCA atau pada
-          platform online resmi WCA. Insiden-insiden ini merupakan dugaan
-          pelanggaran terhadap Semangat, Pedoman Perilaku, dan/atau Regulasi
-          WCA.
-        wec: >-
-          Komite ini berperan dalam memastikan semua prosedur yang diikuti oleh
-          Staf WCA mematuhi Pedoman Perilaku, dan melakukan investigasi
-          independen jika perilaku dari anggota-anggota ini tidak sesuai dengan
-          Pedoman. WEC adalah pihak yang dipercaya oleh Speedcuber Terdaftar
-          yang dapat melaporkan masalah dan meminta penyelidikan. Komite ini
-          juga berfungsi sebagai dewan banding jika ada pihak yang tidak setuju
-          dengan keputusan yang dibuat oleh Komite Disiplin WCA.
         weat: >-
           Tim ini bertanggung jawab dalam melaksanakan tugas administratif Dewan
           Direktur WCA.
@@ -862,11 +822,6 @@ id:
         wsot: >-
           Tim ini berperan dalam mengawasi dan mendukung pengakuan WCA sebagai
           organisasi olahraga internasional.
-        wac: >-
-          WCA bertanggung jawab dalam menjaga umpan balik dan komunikasi antara
-          Komunitas WCA dengan Staf WCA. Mereka memelihara Forum WCA dan
-          merangkum survei serta berupaya untuk meningkatkan jangkauan ke
-          seluruh komunitas di seluruh dunia.
     contacts:
       title: Formulir Kontak WCA
       faq_note_html: >-
@@ -881,23 +836,7 @@ id:
             label: Nama
           email:
             label: Email
-        contact_type:
-          label: Manakah di antara ini yang paling menggambarkan pertanyaan 
-            Anda?
-          competition:
-            label: Kontak Panitia dari Kompetisi Spesifik (pilih di bawah)
-          competitions_in_general:
-            label: 'Kompetisi secara Umum (kepanitiaan, aturan kompetisi, dll.)'
-          results_team:
-            label: Kontak Tim Hasil
-          wca_id_or_profile:
-            label: ID WCA atau Profil WCA
-          media:
-            label: Media
-          software:
-            label: Perangkat Lunak
-          different:
-            label: Lainnya
+        contact_type: {}
         competition:
           competition:
             label: Kompetisi
@@ -909,6 +848,13 @@ id:
         captcha:
           validation_error: Mohon verifikasi bahwa Anda bukan robot.
         submit_button: Kirim
+        contact_recipient: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+    contact_edit_profile:
+      form: {}
   homepage:
     learn_more: Pelajari lebih lanjut
     title: Selamat datang di World Cube Association
@@ -1218,7 +1164,6 @@ id:
         Kami tidak memiliki catatan nama untuk ID WCA ini. Kirim email ke <a
         href='%{wrt_contact_path}' target='_blank'>Tim Hasil
         WCA</a> untuk memperbaikinya.
-      avatar_requires_wca_id: dibutuhkan penghubungan ID WCA
       email_used_by_locked_account_html: >-
         sudah digunakan oleh akun lain. Hal ini diakibatkan karena Anda telah
         mendaftar kompetisi dengan layanan/jasa di luar situs. Jika Anda adalah
@@ -1266,8 +1211,6 @@ id:
       need_gender: Dibutuhkan jenis kelamin
       need_dob: Dibutuhkan tanggal lahir
       need_country: Dibutuhkan wilayah perwakilan
-      cannot_be_deleted_and_accepted: Pendaftaran tidak dapat dihapus dan 
-        diterima secara bersamaan.
       must_register: wajib mendaftar minimal satu cabang
       exceeds_event_limit:
         other: 'anda harus mendaftar di %{count} cabang atau kurang'
@@ -1295,18 +1238,7 @@ id:
         other: orang
     flash:
       not_using_wca: Kompetisi ini tidak memakai pendaftaran pada situs WCA
-      accepted_and_mailed:
-        other: Pendaftaran diterima! Email notifikasi telah terkirim.
-      rejected_and_mailed:
-        other: Pendaftaran telah dipindahkan ke daftar tunggu
-      deleted_and_mailed:
-        other: Pendaftaran telah dihapus
-      single_deletion_and_mail: 'Pendaftaran telah dihapus dan email ke %{mail} telah
-        terkirim'
-      cannot_delete: Anda tidak dapat menghapus pendaftaran Anda.
       updated: Pendaftaran diperbarui
-      failed: Tidak dapat memperbarui pendaftaran
-      deleted: 'Berhasil menghapus pendaftaran Anda pada %{comp}'
       registered: >-
         Formulir pendaftaran telah dikirim - pastikan untuk mengikuti semua
         instruksi dari Syarat Pendaftaran di bawah untuk memastikan bahwa
@@ -1340,17 +1272,6 @@ id:
           Pendaftaran Anda pada %{comp_name} telah diterima. Seperti biasa, Anda
           dapat melihat status pendaftaran Anda %{here}.
         see_you_soon: 'Kami menantikan kedatangan Anda di %{comp_name}!'
-      pending:
-        mail_subject: 'Pendaftaran Dipindah ke Daftar Tunggu: %{comp_name}'
-        moved_html: >-
-          Pendaftaran Anda pada %{comp_name} telah dipindahkan ke daftar tunggu.
-          Penyebabnya adalah:
-        causes:
-          accepted: Pendaftaran Anda telah diterima secara tidak sengaja
-          withdrawal: Anda meminta uang Anda kembali
-        email_if_error: >-
-          Jika Anda yakin bahwa hal ini merupakan sebuah kesalahan, balas email
-          ini.
       deleted:
         mail_subject: 'Pendaftaran Dihapus: %{comp_name}'
         message_html: 'Pendaftaran Anda pada %{comp_name} telah dihapus. Penyebabnya
@@ -1371,40 +1292,23 @@ id:
       edit: Sunting
       country_plural:
         other: '%{count} wilayah'
-      export_csv: Ekspor dalam CSV
       email: Email
-      approve: Setujui
-      reject: Tolak
-      delete: Hapus
-      waiting_list: Daftar Tunggu
-      approved_registrations: Pendaftaran yang telah disetujui
-      deleted_registrations: Pendaftaran yang telah dihapus
       non_competing: Pendaftaran untuk yang tidak berkompetisi
       not_paid: Belum membayar
       registered:
         without_stripe: Mendaftar pada
         with_stripe: Membayar pada
       payment_requested_on: 'Pembayaran diminta pada: %{date}'
-      payment_completed_on: 'Pembayaran selesai pada: %{date}'
       series_registrations: Pendaftaran rangkaian
-      series_registrations_hint_html: >-
-        Petunjuk: Pendaftaran rangkaian ditampilkan sebagai
-        <i>%{description}</i>
       total: Total
-      n_events: Jumlah cabang
     new_registration:
       title: 'Daftar pada %{comp}'
-    registered_with_account_html: >-
-      Orang ini telah mendaftar dengan akun. Anda dapat menyunting informasi
-      pribadinya %{here}.
     sign_in: Masuk
     profile: profil
-    panel_title: Detail pendaftaran
     register: Daftar!
     refund: Minta Pengembalian Uang
     refund_confirmation: Apakah Anda yakin untuk meminta pengembalian uang?
     update: Perbarui Pendaftaran
-    delete: Hapus
     delete_confirm: Apakah Anda yakin untuk menghapus pendaftaran Anda?
     delete_registration: Hapus pendaftaran.
     will_open_html: 'Pendaftaran akan dibuka dalam <strong>%{days}</strong> pada %{time}.'
@@ -1421,7 +1325,6 @@ id:
     please_sign_in_html: >-
       %{sign_in} untuk mendaftar pada %{comp}. Jika Anda belum memiliki akun
       WCA, Anda dapat membuatnya %{here}.
-    greeting: 'Halo, %{name}!'
     please_fix_profile_html: >-
       Untuk mendaftar %{comp}, Anda harus memperbaiki masalah pada %{profile}
       Anda:
@@ -1435,32 +1338,13 @@ id:
       tersebut mungkin sudah tercapai. Jika Anda mendaftar, pendaftaran Anda
       akan ditempatkan ke daftar tunggu. Pendaftaran Anda mungkin tidak akan
       disetujui sampai ada tempat kosong.
-    can_register: 'Anda dapat mendaftar pada %{comp} di bawah ini.'
-    check_registration_information: >-
-      Harap cek informasi tentang registrasi untuk mencari tahu apa yang perlu
-      Anda lakukan, seperti membayar biaya pendaftaran.
-    have_registered: >-
-      Anda telah mendaftar pada %{comp}. Anda dapat melihat detail pendaftaran
-      Anda di bawah ini.
-    contact_organizer: Kontak panitia jika Anda ingin mengubah sesuatu.
-    waiting_list: >-
-      Pendaftaran Anda masih menunggu persetujuan. Agar pendaftaran disetujui,
-      Anda mungkin perlu membayar biaya pendaftaran. Lebih jelasnya lihat situs
-      web kompetisi.
-    accepted: Pendaftaran Anda telah diterima!
     entry_fees_fully_paid: 'Anda telah membayar %{paid} untuk menutup biaya pendaftaran.'
     will_pay_here: Anda akan membayar setelah mengirim pendaftaran Anda
     wont_pay_here: Lihat informasi kompetisi untuk melihat panduan pembayaran
-    not_qualified: Tidak lolos kualifikasi
     refund_form:
-      hints:
-        refund_amount: >-
-          Jumlah pengembalian dana kepada kompetitor, dapat berjumlah hingga
-          nilai yang telah dibayar.
       labels:
         refund_amount: Jumlah Pengembalian
     payment_form:
-      title: Biaya pendaftaran
       payment_successful: >-
         Pembayaran Anda berhasil, dan pendaftaran Anda akan tampil dengan status
         sudah bayar di bawah.
@@ -1474,7 +1358,6 @@ id:
           tersebut telah terkirim dengan aman ke Stripe yang menangani proses
           pembayaran dan menginformasikannya kepada kami.
       labels:
-        entry_fees: Biaya pendaftaran
         fees_paid: Lunas
         fees_remaining: Sisa
         donation: Donasi
@@ -1482,12 +1365,10 @@ id:
           Saya ingin membuat donasi tambahan opsional yang hanya ditujukan untuk
           tim organisasi.
         payment_information: Informasi pembayaran
-        payment_button: Lunasi biaya dengan Stripe
         ajax_error: Terjadi kesalahan pada server WCA
         payment_service_error: Terjadi kesalahan pada pelayanan pembayaran
         subtotal: Subtotal
       alerts:
-        not_a_number: Masukkan jumlah yang valid.
         amount_too_low: Jumlah total minimal harus menutup biaya registrasi.
         amount_rather_high: >-
           Anda akan membayar setidaknya dua kali lipat dari jumlah yang
@@ -1497,19 +1378,9 @@ id:
         already_paid: Pemotongan saldo tidak terjadi karena biaya pendaftaran 
           sudah dibayar.
         not_allowed: Anda tidak dapat membayar untuk pendaftaran tersebut.
-        stripe_failed: Mohon cek transaksi Stripe terkait.
-        paypal_failed: Mohon cek transaksi PayPal.
         paypal_canceled: >-
           PayPal melaporkan bahwa transaksi dibatalkan secara manual. Mohon coba
           lagi.
-        stripe_not_found: Stripe melapor balik bahwa ID transaksi tidak dapat 
-          ditemukan.
-        stripe_secret_invalid: >-
-          Stripe melapor balik bahwa data transaksi tidak cocok dengan data
-          arsip kami.
-        stripe_not_an_intent: >-
-          Stripe melaporkan kembali ID transaksi yang tidak dimaksudkan untuk
-          pembayaran.
         payment_reset: Pembayaran ditolak oleh Stripe.
         payment_pending: Pembayaran belum dilakukan.
     preferred_events_prompt_html: >-
@@ -1611,7 +1482,6 @@ id:
       results_not_posted: Hasil kompetisi ini dapat terlihat namun belum 
         diposting.
       results_already_posted: Hasil telah diposting.
-      results_posted: Berhasil memposting hasil!
       results_preview_alert: Anda sedang melihat hasil yang belum diposting.
       upload_results: >-
         Kompetisi ini telah berakhir, kami masih berusaha untuk mengunggah hasil
@@ -1645,9 +1515,6 @@ id:
       championship_exists: 'Kompetisi %{championship_type} sudah ada pada tahun %{year}.'
       orga_closed_reg_success: Berhasil menutup pendaftaran.
       orga_closed_reg_failure: Tidak dapat menutup pendaftaran.
-      cannot_activate_v2: >-
-        Anda tidak dapat mengaktivasi sistem pendaftaran baru jika pendaftaran
-        sudah dibuka.
       no_waiting_list_specified: >-
         Kompetisi ini tidak memiliki batas waktu untuk menerima kompetitor pada
         daftar tunggu. Jika Anda menggunakan daftar tunggu, mohon sertakan batas
@@ -1832,7 +1699,6 @@ id:
         by_announcement: >-
           Kompetisi diurutkan berdasarkan tanggal pengumuman, dengan yang
           terbaru terletak di atas
-      no_access: Anda tidak dapat mengakses halaman ini!
       tooltips:
         hourglass:
           ended: 'Berakhir %{days} yang lalu'
@@ -1851,9 +1717,6 @@ id:
             dimasukkan ke dalam daftar tunggu
       no_more_comps: Tidak ada kompetisi berikutnya.
       no_comp_found: Tidak ada kompetisi yang ditemukan.
-      no_comp_match: >-
-        Kami tidak dapat menemukan kompetisi dengan %{events}! Coba cari dengan
-        cabang yang lebih sedikit.
     my_competitions_table:
       edit: Sunting
       registrations: Pendaftaran
@@ -1956,7 +1819,6 @@ id:
           external_registration_page: Laman pendaftaran
           uses_wca_registration: Saya ingin menggunakan situs web WCA untuk 
             pendaftaran
-          uses_wca_live: Saya akan menggunakan WCA Live untuk input hasil
         entry_fees:
           currency_code: Kode mata uang
           base_entry_fee: Biaya pendaftaran dasar
@@ -1975,7 +1837,6 @@ id:
           event_change_deadline_date: Batas waktu kompetitor untuk memperbarui 
             cabang yang didaftar
           allow_on_the_spot: Pendaftaran di tempat
-          allow_self_delete_after_acceptance: Pembatalan pendaftaran
           allow_self_edits: Penyuntingan pendaftaran
           guests_enabled: Pendamping
           guest_entry_status: Tampilkan pesan untuk entri tamu/pendamping secara
@@ -2172,13 +2033,6 @@ id:
             'false': >-
               Kompetitor TIDAK dapat menyunting pendaftaran setelah pendaftaran
               diterima
-          allow_self_delete_after_acceptance:
-            'true': >-
-              Kompetitor dapat menghapus pendaftaran mereka bahkan setelah
-              pendaftaran diterima
-            'false': >-
-              Kompetitor TIDAK dapat menghapus pendaftaran mereka setelah
-              pendaftaran diterima
           guest_entry_status:
             unclear: >-
               Jangan tampilkan apapun (dan mungkin jelaskan pada bagian "Syarat
@@ -2193,6 +2047,7 @@ id:
                 kualifikasinya tidak terpenuhi (Saya akan menghapusnya nanti)
               'false': Kompetitor HARUS memenuhi kualifikasi untuk mendaftar 
                 cabang
+        website: {}
     registration_v2:
       pdf:
         link: 'Sebagai <0>%{pdfLink}</0>'
@@ -2200,24 +2055,15 @@ id:
         download: Unduh semua detail kompetisi.
       list:
         empty: Rekor yang sesuai tidak ditemukan
-        spots_remaining: '%{spots} tempat tersisa'
       bookmark:
         unbookmark: Anda telah menghapus penanda Anda
       requirements:
-        title: Kebutuhan
         acknowledgement: >-
           Saya telah membaca dan memahami semua informasi pada tab 'Daftar',
           termasuk biaya masuk dan kebijakan pengembalian uang
-        acknowledgment_extra: Saya telah membaca dan memahami semua informasi di
-          atas
         next_step: Lanjut ke Langkah selanjutnya
       update:
         no_changes: Tidak ada perubahan
-        email_send: Kirim Email
-        email_copy: Salin Email
-        move_pending: Pindahkan ke Daftar Tertunda
-        move_waiting: Pindahkan ke Daftar Tunggu
-        cancel: Batalkan Pendaftaran
         too_many: >-
           Menyutujui semua pendaftaran ini akan membuat jumlah kompetitor
           melebihi batas dengan jumlah kelebihan %{count}
@@ -2231,8 +2077,6 @@ id:
         passed: Anda tidak dapat lagi memperbarui pendaftaran Anda
         editing_disabled: Penyuntingan pendaftaran dinonaktifkan pada kompetisi 
           ini
-        registration_status:
-          header: 'Status Pendaftaran Anda:'
         disclaimer: Pengajuan Pendaftaran bukan berarti persetujuan untuk 
           berkompetisi
         processing: Pendaftaran Anda sedang diproses...
@@ -2241,6 +2085,7 @@ id:
           keluar dari halaman ini!
         processing_queue: 'Banyak Pendaftaran yang sedang diproses, %{queueCount}
           dalam antrean.'
+        panel: {}
       errors:
         events: 'Cabang gagal dimuat, mohon coba lagi'
         '-1': >-
@@ -2371,7 +2216,6 @@ id:
     uncancel: Batalkan pembatalan kompetisi
     cancelled_by_html: 'Dibatalkan oleh %{name} pada %{date_time}'
     cancel_confirm: Apakah Anda yakin untuk membatalkan kompetisi tersebut?
-    post_results: Posting hasil
     results_posted_by_html: 'Diposting oleh %{poster_name} pada %{date_time}'
     cancel_mistake: Terdapat kesalahan?
     note_before_cancel: 'Catatan: hanya kompetisi terkonfirmasi yang dapat dibatalkan.'
@@ -2398,7 +2242,6 @@ id:
           memberhentikan Anda dan hasil solve Anda akan menjadi DNF (lihat
           %{regulation_link}).
         regulation_link_text: 'Regulasi %{number}'
-        guideline_link_text: 'Pedoman %{number}'
         cumulative_time_limit: batas waktu kumulatif
         cumulative_one_round_html: >-
           %{cumulative_time_limit} dapat diberlakukan secara paksa (lihat
@@ -2428,7 +2271,6 @@ id:
       qualification: Kualifikasi
     schedule:
       display_as:
-        label: 'Tampilkan jadwal sebagai:'
         table: Tabel
         calendar: Kalender
       display_for_room: 'Tampilkan jadwal untuk:'
@@ -2438,13 +2280,8 @@ id:
       start: Mulai
       end: Selesai
       activity: Kegiatan
-      room: Ruang
       room_in_venue: '%{room} di %{venue}'
-      venue_information_html: 'Anda sedang melihat jadwal untuk venue %{venue_name}.'
       timezone_message: 'Jadwal ditampilkan dalam zona waktu %{timezone}.'
-      multiple_venues_available: >-
-        Kompetisi ini memiliki beberapa venue, pastikan Anda sudah mengecek
-        jadwal untuk venue lainnya!
       schedule_for_date: 'Jadwal untuk %{day_name} (%{full_date})'
     nav:
       menu:
@@ -2468,7 +2305,6 @@ id:
         register: Daftar
         competitors: Kompetitor
         scrambles: Acakan
-        enable_v2: Aktifkan Layanan Pendaftaran baru
     results_table:
       wca_profile: Profil WCA
       event: Cabang
@@ -2484,6 +2320,8 @@ id:
     competition_series_fields:
       add_series: Tambah pada Rangkaian
       remove_series: Hapus dari Rangkaian
+    live:
+      connection: {}
   competition_tabs:
     headers:
       tabs: Tab
@@ -2520,32 +2358,17 @@ id:
       Catat bahwa beberapa filter (seperti tahun lampau) saat ini tidak dapat
       digunakan. Tim Perangkat Lunak sedang berupaya untuk memperbaiki filter
       ini - kami mohon maaf atas ketidaknyamanannya.
-    tooltip_no_years: Basis data kami terlalu besar untuk merangkum data 
-      historis
-    tooltip_no_quantities: Basis data kami terlalu besar untuk merangkum ranking
-      yang panjang
     selector_elements:
       events_selector:
         event: Cabang
-        all_events: Semua cabang
-      region: Wilayah
       type_selector:
         type: Tipe
         single: Single
         average: Rata-Rata
-      years_selector:
-        years: Tahun
-        all_years: Semua tahun
-        only: Hanya
-        only_html: 'Hanya %{year}'
-        until: Sampai
-        until_html: 'Sampai %{year}'
       show_selector:
         show: Tampilkan
         persons: Orang
-        persons_html: '%{quantity} orang'
         results: Hasil
-        results_html: '%{quantity} hasil'
         by_region: Dengan wilayah
         mixed: Campur
         slim: Ringkas
@@ -2560,18 +2383,12 @@ id:
     table_elements:
       name: Nama
       result: Hasil
-      representing: Mewakili
       competition: Kompetisi
       solves: Solve
       region: Wilayah
       world: Dunia
-      type_options:
-        type: Tipe
-        single: Single
-        average: Rata-Rata
       event: Cabang
       date_circa: Tanggal sekitar
-      record: Rekor
   notifications:
     connect_wca_id: Hubungkan ID WCA Anda dengan akun Anda!
   payments:
@@ -2579,7 +2396,6 @@ id:
       paypal: PayPal
       stripe: Stripe
     payment_setup:
-      stripe_dashboard: Dashboard Stripe
       account_connected: >-
         Anda berhasil menghubungkan akun %{provider} Anda dan dapat menerima
         pembayaran pendaftaran untuk kompetisi ini.
@@ -2600,43 +2416,7 @@ id:
       provider_heading: 'Pembayaran %{provider}'
       accept_payments_header: Terima Pembayaran Pendaftaran
       connect_button: 'Hubungkan dengan %{provider}'
-      stripe_payment_info: >-
-        Untuk menerima pembayaran untuk kompetisi ini, Anda perlu menghubungkan
-        akun Stripe Anda dengan akun Stripe WCA dengan mengklik tombol di bawah.
-        Jika Anda belum punya akun Stripe, Anda juga dapat mengklik tombol di
-        bawah dan Anda akan dipandu untuk melanjutkan proses tersebut.
-      stripe_connect_warning: >-
-        Menghubungkan akun Stripe Anda memberikan situs web WCA kemampuan untuk
-        membuat biaya, dan menyampaikan pengembalian dana langsung pada akun
-        Stripe Anda.
-      stripe_disconnect_info: >-
-        Kompetisi ini diatur untuk menerima pembayaran melalui Stripe. Jika Anda
-        ingin memutuskan akun Stripe Anda, Anda harus melakukannya dari
-        dashboard Stripe terlebih dahulu (pranala di bawah). Catat bahwa hal ini
-        akan mencabut akses ke seluruh kompetisi yang menggunakan akun tersebut.
-        Sebelum akun Stripe baru dapat dihubungkan, Delegasi kompetisi harus
-        menghubungi WCAT untuk menghapus entri tersebut.
-      stripe_disconnect_warning: >-
-        Perlu diingat bahwa memutuskan akun hanya boleh dilakukan pada situasi
-        pengecualian, seperti akun saat ini tidak dapat menerima pembayaran.
-      paypal_payment_info: >-
-        Akun bisnis PayPal dibutuhkan untuk menerima pembayaran PayPal via laman
-        kompetisi. Jika Anda belum punya akun bisnis PayPal, Anda masih dapat
-        mengklik tombol di bawah dan Anda akan dipandu untuk melanjutkan proses
-        tersebut.
-      paypal_connect_warning: >-
-        Menghubungkan akun PayPal Anda memberikan situs web WCA kemampuan untuk
-        meneruskan pembayaran kepada Anda, dan menyampaikan pengembalian dana
-        langsung pada akun PayPal Anda.
-      paypal_disconnect_info: >-
-        Kompetisi ini diatur untuk menerima pembayaran melalui PayPal. Catat
-        bahwa dengan mengklik putuskan di sini tidak akan menghapus izin yang
-        sudah Anda berikan kepada WCA - hal ini harus dilakukan dari akun PayPal
-        Anda.
-      paypal_disconnect_warning: >-
-        Perlu diingat bahwa perubahan akun ini hanya boleh dilakukan pada
-        situasi pengecualian, seperti akun saat ini tidak dapat menerima
-        pembayaran.
+    errors: {}
   persons:
     index:
       name_or_wca_id: Penggalan nama atau ID WCA
@@ -2941,51 +2721,14 @@ id:
     structure:
       title: Struktur
       board:
-        name: Dewan Direktur WCA
         description: >-
           Dewan WCA bertanggung jawab dalam memimpin organisasi secara
           menyeluruh, dan memenuhi tugas yang tidak dipenuhi oleh Tim, Komite,
           atau Majelis
       users:
         profile: 'Profil %{user_name}'
-      wdc:
-        name: Komite Disiplin WCA
-      wdpc:
-        name: Komite Keamanan Data WCA
-      wrc:
-        name: Komite Regulasi WCA
-      wrt:
-        name: WCA Results Team
-      wst:
-        name: Tim Perangkat Lunak WCA
-      wct:
-        name: WCA Communication Team
-      wfc:
-        name: Komite Keuangan WCA
-      wec:
-        name: Komite Etik WCA
-      weat:
-        name: Tim Asisten Eksekutif WCA
-      wqac:
-        name: Komite Penjamin Kualitas WCA
-      wcat:
-        name: Tim Pengumuman Kompetisi WCA
-      wmt:
-        name: Tim Marketing WCA
-      wac:
-        name: Majelis Penasihat WCA
-      wsot:
-        name: Tim Organisasi Olahraga WCA
-      wat:
-        name: Tim Arsip WCA
-      banned:
-        name: Kompetitor yang Di-Banned
-      wct_china:
-        name: WCT Tiongkok
       operations_html: 'Tugas harian dijalankan oleh %{committees_and_teams} WCA.'
       teams_committees: Tim dan Komite
-      wst_admin:
-        name: Admin perangkat lunak
       delegates_html: >-
         <p><strong>Delegasi WCA</strong> adalah sebuah peran dalam Gerakan WCA
         dan ditulis pada Regulasi WCA. Tugas utama Delegasi adalah untuk
@@ -3019,7 +2762,6 @@ id:
     codeofethics: Kode Etik
     codeofconduct: Pedoman Perilaku
     finances: Keuangan
-    vision_and_strategy: Visi dan Strategi
   education:
     title: Sumber Daya Pendidikan WCA
     description: >-
@@ -3181,26 +2923,8 @@ id:
         description: Lihat grup untuk kompetisi yang berlangsung
   logo:
     title: Logo WCA
-    paragraphs:
-      '1': >-
-        Logo WCA didesain oleh Justin Eastman pada kontes desain bulan Januari
-        2005.<br />Kami menyukai logonya karena desainnya, warnanya, dan
-        kenyataannya bahwa logo tersebut tidak memperlihatkan kubus 3x3x3 secara
-        spesifik.
-      '2': >-
-        Kami memiliki empat versi logo berbeda: <a
-        href="/files/WCAlogo_XL.jpg">versi besar</a> (46 KB, 1756 px x 1068 px),
-        <a href="/files/WCAlogo.svg">versi vector</a>, dan <a
-        href="/files/WCAlogo_notext.svg">versi vector tanpa teks</a> dan <a
-        href="/files/WCAlogo_monochrome.svg">versi vector monokrom</a>.
-      '3': >-
-        Logo versi 3D, didesain oleh Vu Minh Tan dari Vietnam: <a
-        href="/files/WCALogo3D.png">versi PNG</a> (2.1 MB), a <a
-        href="/files/WCALogo3Dsmall.png">versi PNG kecil</a> (0.25 MB).
-      '4': >-
-        Pemakaian logo WCA yang diterima ditulis pada kebijakan Pemakaian Logo
-        WCA yang dapat diakses pada <a href="/documents">halaman Dokumen
-        WCA</a>.
+    headings:
+      usage_guidelines: {}
   search_results:
     index:
       competitions: Kompetisi
@@ -3235,10 +2959,6 @@ id:
         Regulasi WCA dilengkapi dengan <a
         href="/regulations/guidelines.html">Pedoman WCA</a> yang berisi
         klarfikasi dan penjelasan tambahan.
-      content3_html: >-
-        Keputusan penting tentang insiden yang terjadi di kompetisi yang telah
-        diselesaikan oleh Komite Regulasi WCA dapat ditemukan di <a
-        href="/incidents">Log Insiden</a>.
     panel2:
       title: Terjemahan
       content1_html: >-
@@ -3459,3 +3179,6 @@ id:
         Pada laman ini kami menawarkan ekspor pengembang WST untuk diunduh
         sebagai dump SQL. Detail dapat ditemukan di %{github_link}.
       download: Unduh
+  validators: {}
+  trainee_delegate_application: {}
+  tickets: {}

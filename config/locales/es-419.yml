@@ -1276,7 +1276,7 @@ es-419:
         welcome: '¡Bienvenido %{user_email}!'
         confirm: >-
           Tu cuenta ha sido creada y debe ser activada antes de que puedas usarla.
-          Por favor confirma tu cuenta mediante el enlace de debajo:
+          Por favor confirma tu cuenta mediante el enlace de debajo: 
         confirmation_link: Confirmar mi cuenta.
         activate: 'Tras la activación, puedes identificarte en la web de la WCA: '
         login_form: formulario de inicio de sesión
@@ -4456,7 +4456,7 @@ es-419:
         comentario al WRT explicando la situación.
       non_matching_name_warning: >-
         El nombre "%{name}" indicado para %{wca_id} no coincide con lo registrado
-        en la base de datos ("%{expected_name}").
+        en la base de datos ("%{expected_name}"). 
       non_matching_country_warning: >-
         El país de %{name} (%{wca_id}), %{country}, no coincide lo registrado en
         la base de datos ("%{expected_country}"). Si es un error, corrígelo. En

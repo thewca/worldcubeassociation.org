@@ -569,6 +569,7 @@ zh-TW:
     mailer:
       confirmation_instructions:
         subject: 請確認您的新電子郵件
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1130,7 +1131,6 @@ zh-TW:
       edit: 編輯
       country_plural:
         other: '%{count}個區域'
-      export_csv: 下載CSV檔
       email: 電子郵件
       non_competing: 無參賽的報名
       not_paid: 尚未付款
@@ -1772,6 +1772,7 @@ zh-TW:
             allow_registration_without:
               'true': 參賽者將會被允許報名沒有取得資格的比賽項目（之後自行移除）
               'false': 參賽者必須要達到資格限制才能報名
+        website: {}
     registration_v2:
       auto_accept:
         bulk_auto_accept: 自動核准參賽者
@@ -1828,8 +1829,6 @@ zh-TW:
         update_contact_message: '我想要更新我的報名內容：%{update_params}'
         delete_contact_message: 我想要刪除我的報名
         no_changes: 沒有變化
-        email_send: 送出郵件
-        email_copy: 複製郵件
         email_message: 已複製到剪貼簿。記得要使用bcc密件副本！
         move_to:
           other: 移動%{count}個報名到
@@ -2731,3 +2730,5 @@ zh-TW:
       missing_cumulative_round_id_error: >-
         [%{original_round_id}] 無法找到 WCIF 中指定的 %{wcif_id} 輪次以設置累積時間限制。請前往該比賽的「管理項目」頁面，並從
         %{original_round_id} 的累積時間限制中移除 %{wcif_id}。WST 團隊已知此錯誤（GitHub 問題編號 #3254）。
+  tickets: {}
+  trainee_delegate_application: {}

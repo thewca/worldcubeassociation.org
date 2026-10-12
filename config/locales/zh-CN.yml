@@ -566,6 +566,7 @@ zh-CN:
     mailer:
       confirmation_instructions:
         subject: 请确认您的新电子邮件地址
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1127,7 +1128,6 @@ zh-CN:
       edit: 编辑
       country_plural:
         other: '%{count}个国家/地区'
-      export_csv: 导出到 CSV
       email: 发邮件
       non_competing: 无参赛的报名
       not_paid: 未支付
@@ -1565,7 +1565,6 @@ zh-CN:
           full: 参赛者人数已满，将提供候补名单给新的报名。
       registration_key: 注册码
       registration_status:
-        full: 全部
         open: 报名开启中
         not_open: 报名未开启
         closed: 报名已结束
@@ -1890,8 +1889,6 @@ zh-CN:
         update_contact_message: '我想要更新我的报名内容：%{update_params}'
         delete_contact_message: 我想要删除我的报名
         no_changes: 没有变化
-        email_send: 发送邮件
-        email_copy: 复制邮件
         email_message: 已复制到剪贴板。请记得使用密送（BCC）！
         move_to:
           other: '移动%{count}个到'
@@ -2996,3 +2993,4 @@ zh-CN:
     stakeholder_role:
       actioner: 处理人
       requester: 请求人
+  trainee_delegate_application: {}
