@@ -40,6 +40,11 @@ updates:
     - dependency-name: "@tanstack/react-table"
       versions:
         - ">= 9"
+    # Babel 8 requires non-trivial migrations which we don't want/need to apply in the old Webpacker codebase.
+    #   We can happily adopt Babel 8 in NextJS land, but within the webpacker dependencies let's stay at v7.
+    - dependency-name: "@babel/*"
+      versions:
+        - ">= 8"
   open-pull-requests-limit: 10
   cooldown:
     default-days: 1
