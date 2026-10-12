@@ -1563,7 +1563,6 @@ eu:
       country_plural:
         one: Eskualde 1
         other: '%{count} eskualde'
-      export_csv: Esportatu CSVra
       email: E-maila
       non_competing: Parte hartzen ez duten erregistroak
       not_paid: Ordaindu gabeak
@@ -2223,7 +2222,6 @@ eu:
             sartuko dira.
       registration_key: 'Erregistro giltza:'
       registration_status:
-        full: Beteta
         open: Zabalik
         not_open: Zabaldu gabe
         closed: Itxita
@@ -2745,8 +2743,6 @@ eu:
           %{update_params}
         delete_contact_message: Nire erregistroa ezabatu nahi dut
         no_changes: Ez dago aldaketarik
-        email_send: E-mail bat bidali
-        email_copy: E-mailak kopiatu
         email_message: Arbelera kopiatu da. Gogoratu bcc erabiltzeaz!
         move_to:
           one: '%{count} hona mugitu:'

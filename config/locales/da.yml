@@ -158,16 +158,12 @@ da:
       no_date: Ingen dato
     user:
       wca_id: WCA ID
-      citizen_of: Nationalitet
     all_regions: Alle regioner
     errors:
       invalid: ugyldig
     days:
       one: dag
       other: '%{count} dage'
-    these_events:
-      one: denne disciplin
-      other: disse discipliner
     search_site: Søg på siden
     filter: Filter
     delete: Slet
@@ -220,79 +216,6 @@ da:
           over email.
         user_preferred_events: Foretrukne discipliner
         otp_attempt: 'Skriv din 2FA kode:'
-      competition:
-        id: ID
-        confirmed: Lad ikke arrangørerne redigere konkurrencen
-        show_at_all: Gør konkurrencen offentlig
-        name: Navn
-        name_reason: Årsagen til navnet for konkurrencen
-        cell_name: Kaldenavn for konkurrencen
-        country_id: Land
-        city_name: By navn
-        venue: Lokale
-        venue_address: Lokale adresse
-        venue_details: Lokale detaljer
-        start_date: Start dato
-        end_date: Slut dato
-        external_website: Hjemmeside
-        generate_website: >-
-          Jeg vil gerne bruge WCA hjemmesiden i stedet for at bruge en anden
-          hjemmeside.
-        base_entry_fee_lowest_denomination: Basis deltagergebyr
-        currency_code: Valuta kode
-        staff_delegate_ids: WCA Delegeret/Delegerede
-        trainee_delegate_ids: WCA Lærlingdelegerede
-        organizer_ids: Arrangør(er)
-        contact: Kontakt
-        information: Information
-        use_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til tilmelding
-        external_registration_page: Tilmeldingsside
-        competitor_limit_enabled: Deltagergrænse
-        competitor_limit: Max antal deltagere
-        competitor_limit_reason: Grunden til deltagergrænsen
-        guests_enabled: Gæster
-        receive_registration_emails: Send mig en email når nogen tilmelder sig 
-          til denne konkurrence.
-        registration_open: Tilmelding er åben
-        registration_close: Tilmelding er lukket
-        remarks: Bemærkninger
-        clone_tabs: Jeg vil gerne kopiere alle faner med yderligere 
-          informationer
-        competition_events: Discipliner
-        enable_donations: >-
-          Jeg vil give mulighed for donationer oven i at indsamle
-          deltagergebyrene
-        extra_registration_requirements: Ekstra tilmeldingskrav
-        on_the_spot_registration: Tilmeldinger i konkurrencelokalet
-        on_the_spot_entry_fee_lowest_denomination: Deltagergebyret for 
-          tilmelding i konkurrencelokalet
-        allow_registration_edits: Redigering af tilmeldinger
-        refund_policy_percent: Procent der vil blive tilbagebetalt
-        refund_policy_limit_date: Sidste frist for tilbagebetaling
-        waiting_list_deadline_date: Deadline for accepting competitors from the 
-          waiting list
-        event_change_deadline_date: Deadline for competitors to update their 
-          registered events
-        guests_entry_fee_lowest_denomination: Indgangsgebyr for tilskuere
-        guest_entry_status: Vis tekst om at det er gratis for gæster
-        early_puzzle_submission: >-
-          Jeg vil gerne have at deltagerne skal aflevere deres terninger på et
-          bestemt tidspunkt før en event skal starte starte
-        early_puzzle_submission_reason: Årsagen og detaljerne for at aflevere 
-          terninger tidligt
-        qualification_results: >-
-          Jeg vil gerne bruge kvalifikations resultater for at begrænse den
-          mængde deltagere, der kan deltage i bestemte discipliner
-        qualification_results_reason: Årsagen og detaljer for brugen af 
-          kvalifikations resultater
-        event_restrictions: >-
-          Jeg vil begrænse deltagerne i at tilmelde sig i en specifik
-          kombination af discipliner
-        event_restrictions_reason: Årsagen og detaljerne for brugen af 
-          restriktion af discipliner
-        main_event_id: Hoveddisciplinen
-      championship:
-        championship_type: Mesterskabs type
       registration:
         guests: Gæster
         comments: Kommentare
@@ -315,9 +238,6 @@ da:
         wrc_feedback_requested: Jeg vil gerne have feedback fra WRC på nogle af 
           hændelserne ovenfor.
         wrc_incidents: Hændelser du vil have WRC feedback på
-        wdc_feedback_requested: Jer vil gerne have feedback fra WDC på nogle af 
-          hændelserne ovenfor.
-        wdc_incidents: Hændelser du gerne vil have WDC feedback på
         remarks: Bemærkninger
       person:
         wca_id: Person
@@ -383,16 +303,7 @@ da:
         m: Mand
         f: Kvinde
         o: Andet
-      delegate_status:
-        trainee_delegate: WCA Lærlingdelegeret
-        candidate_delegate: Juniordelegeret
-        delegate: Delegeret
-        senior_delegate: Seniordelegeret
-    person:
-      gender:
-        m: Mand
-        f: Kvinde
-        o: Andet
+    person: {}
     competition_medium:
       status:
         accepted: Accepteret
@@ -401,13 +312,9 @@ da:
         report: Rapport
         article: Artikel
         multimedia: Multimedia
-    competition:
-      guest_entry_status:
-        unclear: >-
-          Vis ikke noget (du burde uddybe hvorfor i sektionen om tilmeldingskrav
-          nedenfor)
-        free: '"Alle tilskuere kan se med gratis"'
-        restricted: '"Tilskuere er kun tilladte som ledsagere af en deltager"'
+    competition: {}
+    user_roles:
+      status: {}
   simple_form:
     'yes': Ja
     'no': Nej
@@ -444,98 +351,6 @@ da:
         otp_attempt: >-
           Check your configured mobile application for a one-time password, or
           input one of your recovery codes.
-      competition:
-        name: >-
-          Konkurrencens fulde navn inklusiv året i slutningen (eksempel, Danish
-          Open 2016). Husk at lave store bogstaver. Navnet må kun indeholde
-          alfanumeriske tegn, streger(-), og-tegn(&), punktummer(.),
-          kolonner(:), apostroffer(') og mellemrum( ).
-        cell_name: >-
-          Et kort navn for visning. Hvis navnet på konkurrencen allerede er
-          kort, kan du bruge navnet igen (eksempel, Europe 2006)
-        city_name: >-
-          Byens navn og stat (hvis det er relevant) hvor konkurrencen bliver
-          afholdt. Inkluder ikke land (eksempel, Paris eller San Francisco,
-          California).
-        information: >-
-          Vigtig information som deltagerne burde vide. Det vil blive vist på
-          konkurrencens forside. <br/>Udfyld venligst det her på engelsk</b> og
-          andre sprog som dine deltagere snakker.
-        staff_delegate_ids: WCA Delegerede for konkurrencen.
-        trainee_delegate_ids: WCA Lærlingdelegerede for konkurrencen.
-        organizer_ids: >-
-          Konkurrence arrangører (de har brug for en konto for at være skrevet
-          her)
-        external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s) 
-          url.
-        registration_open: 'Note: Registreringens åbningstider og lukketider er i
-          UTC-tid'
-        remarks: >-
-          Ekstra information som du vil fortælle WCAT. For eksempel, hvis der er
-          noget som du er usikker på, eller hvis der er en speciel forespørgsel
-          til WCAT. Udfyld det her på engelsk!
-        external_registration_page: >-
-          Siden hvor deltagerne skal tilmelde for konkurrencen. Det skal være en
-          http(s) url.
-        base_entry_fee_lowest_denomination: >-
-          Basis deltagergebyret for konkurrencen. Deltagergebyret vil blive vist
-          på konkurrencens informationsside og tilmeldingssiden hvis den bliver
-          brugt. Hvis den bliver sat på 0, så vil en sætning blive vist, der
-          fortæller at tilmeldingen for konkurrencen er gratis.
-        currency_code: Valutakoden for deltagergebyret.
-        competitor_limit_enabled: >-
-          Selvom at det ikke er nødvendigt ifølge Regelsættet, så er det
-          foreslået at have en deltagergrænse.
-        competitor_limit: >-
-          Antal deltagere tilladt for denne konkurrence. For nu er det tal kun
-          brugt for information, og forhindrer ikke folk i at tilmelde sig
-          konkurrencen. Der arbejdes på sagen.
-        competitor_limit_reason: Hvad er grunden til deltagergrænsen? Udfyld det
-          her på engelsk!
-        extra_registration_requirements: >-
-          Indikere venligst her ekstra tilmeldingskrav, som ikke er nævnt oven
-          over. Det kan være eksempler på hvordan man betaler. <br/>Udfyld det
-          her <b>på engelsk</b> og hvilke andre sprog som dine deltagere taler.
-          Det her vil blive vist på konkurrencens forside, og på
-          tilmeldingssiden, hvis der bruges WCA's tilmeldingssystem.
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Hvis den bliver sat til 0, så vil en sætning blive vist, der siger at
-          tilmelding i lokalet vil være gratis.
-        refund_policy_percent: >-
-          For nu, er dette tal kun for information. Refunderinger skal stadig
-          tilbagebetales manuelt. Hvis dette bliver sat til 0, så vil en sætning
-          blive vist, der vil sige, at det ikke vil være nogle refunderinger.
-        refund_policy_limit_date: >-
-          Datoen hvorefter at der ikke vil blive tilbagebetalt nogle
-          deltagergebyrer.
-        waiting_list_deadline_date: >-
-          The date when waitlisted registrants will no longer be accepted. If
-          you have a deadline for refunds, the deadline for being accepted
-          should not be before the deadline for refunds.
-        event_change_deadline_date: >-
-          Registered competitors have the right to update their registered
-          events until this time by contacting the organization team. This
-          deadline must not be set to a time before registration is set to
-          close. Leaving this field blank means that competitors may add an
-          event to their registered events up until that event is held. If you
-          have on the spot registration, this must be set to the same day as the
-          competition.
-        guests_entry_fee_lowest_denomination: >-
-          For now this number is informational only, guest fees cannot be
-          managed through this website. If this is set to 0, a sentence of your
-          choice will be displayed about the spectator policy.
-        early_puzzle_submission_reason: >-
-          Uddyb hvorfor du gerne vil have at deltagerne skal aflevere deres
-          terninger tidligt. Udfyld det på engelsk!
-        qualification_results_reason: >-
-          Uddyb hvorfor du gerne vil bruge kvalifikationsresultater. Udfyld det
-          på engelsk!
-        event_restrictions_reason: >-
-          Uddyb hvorfor du gerne vil begrænse kombinationen af bestemte
-          discipliner. Udfyld det på engelsk!
-        main_event_id: >-
-          Vinderen af denne disciplin vil blive erklæret vinderen af
-          konkurrencen.
       website_contact:
       dob_contact:
         dob: Din korrekte fødselsdag i formatet ÅÅÅÅ-MM-DD
@@ -578,8 +393,6 @@ da:
           hvis der er nogle situationer du aktivt søger hjælp for.
         wrc_incidents: Numrene af de hændelser du gerne vil have WRC feedback 
           på.
-        wdc_incidents: Numrene af de hændelser du gerne vil have WDC feedback 
-          på.
         remarks: >-
           Skriv om andre detaljer som du gerne vil dele (eksempel.,
           forbedring/tilbagegang indenfor samfundet/fællesskabet, fremtidige
@@ -587,8 +400,6 @@ da:
           som du ikke fik nævnt tidligere, så kan du tilføje dem her.
       competition_tab:
         name: 'Eksempler: Transport, Betaling, Priser, Husly'
-      person:
-        dob: Fødselsdatoer skal have formatet ÅÅÅÅ-MM-DD
       registration:
       results_submission:
       regional_organization:
@@ -746,6 +557,7 @@ da:
     mailer:
       confirmation_instructions:
         subject: Bekræft venligst din nye emailadresse
+    registrations: {}
   wca:
     errors:
       messages:
@@ -806,10 +618,8 @@ da:
       my_results: Mine Resultater
       statistics: Statistikker
       multimedia: Multimedia
-      db_export: Database Eksport
       regulations: Regelsæt
       about_regulations: Om regelsættet
-      guidelines: Retningslinjer
       scrambles: Blandinger
       history: Historik
       translations: Oversættelser
@@ -821,10 +631,7 @@ da:
       panel: Oversigt
       polls: Meningsmålinger
       results_team: WCA's Resultathold
-      results_admin: Admin
-      results_phpmyadmin: phpMyAdmin
       new_post: Nyt opslag
-      team_leader: Holdleder
       regional_organizations: Regionale Organisationer
       manage_regional_organizations: Administrer Regionale Organisationer
       new_regional_organization: Ny Regional Organisation
@@ -994,7 +801,6 @@ da:
       email: Email
       preferences: Præferencer
       password: Kodeord
-      member_of: Medlem af
       preferred_events_desc: >-
         Vælg dine foretrukne discipliner. Dette gør tilmelding til konkurrencer
         hurtigere.
@@ -1107,9 +913,6 @@ da:
       must_have_a_change: >-
         Navnet eller landet skal være anderledes end før, for at opdatere
         personen.
-      must_not_be_present: må ikke være nuværende
-      senior_has_delegate: kan ikke degradere en Seniordelegeret med 
-        underordnede Delegerede
       already_have_id: >-
         kan ikke gøre krav på et WCA ID, fordi du allerede har et WCA ID
         %{wca_id}
@@ -1128,7 +931,6 @@ da:
         Vi har ikke et navn tilknyttet til dette WCA ID. Email <a
         href='%{wrt_contact_path}' target='_blank'>WCA's
         Resultathold</a> for at løse det.
-      avatar_requires_wca_id: har brug for et WCA ID tildelt
       email_used_by_locked_account_html: >-
         er allerede brugt af en anden konto. Det er blevet oprettet automatisk,
         som et resultat af at du har tilmeldt dig for til konkurrence med en
@@ -1167,9 +969,6 @@ da:
       need_gender: Har brug for et køn
       need_dob: Har brug for en fødselsdag
       need_country: Har brug for et land
-      comp_not_found: Konkurrence ikke fundet
-      cannot_be_deleted_and_accepted: En tilmelding kan ikke blive slettet og 
-        accepteret på samme tid.
       must_register: skal tilmelde sig til mindst en disciplin
       banned_html: >-
         Du er banlyst. Hvis du tror dette er en fejl, så kontakt <a
@@ -1189,21 +988,7 @@ da:
         other: personer
     flash:
       not_using_wca: Denne konkurrence bruger ikke WCAs tilmeldingssystem
-      accepted_and_mailed:
-        one: Tilmeldingen blev accepteret! En email notifikation blev sendt.
-        other: Tilmeldingerne blev accepteret! Email notifikationer blev sendt.
-      rejected_and_mailed:
-        one: Tilmeldingen blev flyttet til ventelisten.
-        other: Tilmeldingerne flyttet til ventelisten.
-      deleted_and_mailed:
-        one: Tilmeldingen blev slettet.
-        other: Tilmeldingerne blev slettet.
-      single_deletion_and_mail: 'Tilmeldingen blev slettet og en email blev sendt
-        til %{mail}'
-      cannot_delete: Du kan ikke slette din tilmelding.
       updated: Tilmeldingen blev opdateret.
-      failed: Kunne ikke opdatere tilmeldingen.
-      deleted: 'Din tilmelding blev succesfuldt slettet fra %{comp}'
       registered: Din tilmelding var succesfuld!
       imported: Importerede succesfuldt tilmeldingerne!
       added: Tilføjede succesfuldt tilmeldingen!
@@ -1230,15 +1015,6 @@ da:
           Din tilmelding til %{comp_name} er blevet accepteret. Du kan som altid
           tjekke statussen af din tilmelding %{here}.
         see_you_soon: 'Vi ser frem til at se dig til %{comp_name}!'
-      pending:
-        mail_subject: 'Du er blevet flyttet til ventelisten for %{comp_name}'
-        moved_html: >-
-          Din tilmelding til %{comp_name} er blevet flyttet til ventelisten.
-          Mulige årsager er:
-        causes:
-          accepted: Din tilmelding var ved en fejl blevet accepteret
-          withdrawal: Du aflyste din tilmelding
-        email_if_error: 'Hvis du tror det er en fejl, så send et svar til denne email.'
       deleted:
         mail_subject: 'Din tilmelding til %{comp_name} er blevet slettet'
         message_html: 'Din tilmelding til %{comp_name} er blevet slettet. Mulige årsager
@@ -1259,35 +1035,21 @@ da:
       country_plural:
         one: 1 land
         other: '%{count} lande'
-      export_csv: Eksporter til CSV
       email: Email
-      approve: Godkend
-      reject: Afvis
-      delete: Slet
-      waiting_list: Venteliste
-      approved_registrations: Accepterede tilmeldinger
-      deleted_registrations: Slettede tilmeldinger
       not_paid: Ikke betalt
       registered:
         without_stripe: Tilmeldt på
         with_stripe: Betalt på
       payment_requested_on: 'Betaling efterspurgt inden: %{date}'
-      payment_completed_on: 'Betaling fuldendt den %{date}'
       total: Total
-      n_events: Antal discipliner
     new_registration:
       title: 'Tilmeld dig til %{comp}'
-    registered_with_account_html: >-
-      Denne person tilmeldte sig med en konto. Du kan ændre deres personlige
-      informationer %{here}.
     sign_in: Log ind
     profile: profil
-    panel_title: Tilmeldingsdetaljer
     register: Tilmeld!
     refund: Tilbagebetal Betalingen
     refund_confirmation: Er du sikker på at du vil tilbagebetale denne betaling?
     update: Opdater Tildmeldingen
-    delete: Slet
     delete_confirm: Er du sikker på at du vil slette din tilmelding?
     delete_registration: Slet tilmeldingen.
     will_open_html: 'Tilmelding vil åbne om <strong>%{days}</strong> on %{time}.'
@@ -1303,7 +1065,6 @@ da:
     please_sign_in_html: >-
       %{sign_in} for at tilmelde dig til %{comp}. Hvis du ikke har en WCA konto
       endnu kan du oprette en %{here}.
-    greeting: 'Hej %{name}!'
     please_fix_profile_html: >-
       For at tilmelde dig til %{comp}, skal du fikse de følgende problemer med
       din %{profile}:
@@ -1312,58 +1073,27 @@ da:
       allerede blevet fyldt op. Hvis du tilmelder dig, så vil din tilmelding
       blive sat på ventelisten. Den bliver sandsynligvis ikke ikke godkendt: Det
       sker kun hvis nok aflyser, eller at arrangørerne hæver deltagergrænsen.
-    can_register: 'Du kan tilmelde dig til %{comp} nedenfor.'
-    check_registration_information: >-
-      Tjek informationen om tilmelding og find ud af om du også skal gøre noget
-      andet, som at betale et deltagergebyr.
-    have_registered: >-
-      Du har indsendt din tilmelding til %{comp}. Du kan se din tilmeldings
-      detaljer nedenunder.
-    contact_organizer: Kontakt arrangøren hvis du gerne vil lave en ændring.
-    waiting_list: >-
-      Din tilmelding er ikke accepteret. For at blive accepteret skal du
-      muligvis betale et deltagergebyr. Tjek konkurrencens hjemmeside for flere
-      detaljer.
-    accepted: Din tilmelding er blevet accepteret!
     entry_fees_fully_paid: 'Du har betalt %{paid}, som dækker hele deltagergebyret.'
     will_pay_here: Du vil betale dem her efter at du har tilmeldt dig
     wont_pay_here: Tjek konkurrencens information for instruktion om hvordan man
       betaler
     refund_form:
-      hints:
-        refund_amount: >-
-          Mængden at refundere til deltageren. Det kan være hvilken som helst
-          mængde, op til den mængde der allerede er betalt.
       labels:
         refund_amount: Refunder mængden
     payment_form:
-      title: Deltagergebyrer
       payment_successful: >-
         Din betaling var succesfuld og din tilmelding burde blive vist som
         betalt herunder.
       hints:
         donation: Valgfri donation der vil gå til arrangørholdet
-        card_information: >-
-          Din kreditkortinformation går aldrig igennem WCA hjemmesiden. Den
-          sendes sikkert til Stripe, som håndterer betalingsprocessen og sender
-          så statussen tilbage til os.
       labels:
-        entry_fees: Deltagergebyre
         donation: Donation
-        card_information: Kreditkortinformation
-        cardholder_name: Navn på ejeren af kreditkortet
       alerts:
-        not_a_number: Skriv en gyldig mængde
         amount_too_low: Den totale mængde skal mindst betale tilmeldingsgebyret.
       errors:
         already_paid: 'Pengene blev ikke trukket, fordi deltagergebyret allerede var
           betalt.'
         not_allowed: Du kan ikke betale for denne tilmelding
-        intent_not_found: >-
-          Der skete en serverfejl. Betalingsprocessen blev afbrudt og der blev
-          ikke trukket noget fra dit kort.
-        cardholder_name: Tjek navnet på kortholderen.
-    payment_button_text: Betal deltagergebyret med kort
     preferred_events_prompt_html: >-
       For at tilmelde dig hurtigere i fremtiden kan du sætte dine foretrukne
       discipliner %{link}.
@@ -1457,7 +1187,6 @@ da:
         Konkurrencens resultater er synlige, men er ikke blevet annonceret
         endnu.
       results_already_posted: Resultaterne er allerede blevet annonceret.
-      results_posted: Resultaterne blev annonceret!
       results_preview_alert: Du kigger på resultater der ikke er blevet 
         offentliggjort endnu.
       upload_results: >-
@@ -1478,11 +1207,6 @@ da:
       not_confirmed_visible: Denne konkurrence er ikke bekræftet men synlig
       not_confirmed_not_visible: Denne konkurrence er ikke bekræftet og ikke 
         synlig
-      stripe_connected: >-
-        Du har nu succesfuldt tilknyttet din Stripe konto og kan nu modtage
-        deltagergebyrs betalinger for denne konkurrence.
-      stripe_not_connected: Der var et problem og vi kunne ikke forbinde din 
-        Stripe konto.
       championship_exists: 'Der er allerede et %{championship_type} i %{year}'
     my_competitions:
       title: Mine konkurrencer
@@ -1612,9 +1336,6 @@ da:
       number_of_bookmarks: Antal gange gemt
     index:
       title: Konkurrencer
-      disclaimer: >-
-        Hvis du leder efter konkurrencer i bestemte lande, så læg mærke til at
-        corona stadig kan have en indflydelse.
       all_events: Alle
       all_years: Alle År
       clear: Ryd
@@ -1642,7 +1363,6 @@ da:
         custom: Konkurrencer i den valgte periode
         by_announcement: 'Konkurrencer sorteret efter annonceringstidspunkt, de nyeste
           i toppen'
-      no_access: Du har ikke adgang til denne side!
       tooltips:
         hourglass:
           ended: 'Sluttede %{days} siden'
@@ -1653,9 +1373,6 @@ da:
         search: Navn eller by
         recent: 'Sidste %{count} dage'
       no_comp_found: Ingen konkurrencer blev fundet.
-      no_comp_match: >-
-        Vi kunne ikke finde nogle konkurrencer med %{events}! Prøv at søge efter
-        færre discipliner.
     my_competitions_table:
       edit: Rediger
       registrations: Tilmeldinger
@@ -1675,20 +1392,6 @@ da:
       supports_md_html: >-
         Supports <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      name_reason_html: >-
-        En kort forklaring på konkurrencens navn. Navnet skal overholde <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
-        Konkurrence Kravs Politikken</a>.
-      venue_html: >-
-        Lokalet som konkurrencen vil blive afholdt. %{md}. For eksempel:  [Cité
-        des Sciences et de l'Industrie](http://www.cite-sciences.fr)
-      venue_details_html: >-
-        Detaljer om lokalet (eksempel, På første sal lagt bagved, følg
-        skiltene). %{md}
-      contact_html: >-
-        Optional contact information. If you do not fill this in, contact
-        inquiries will be submitted through a form without revealing organizers'
-        emails. %{md}. Example: [Text to display](mailto:some@email.com)
       events: Discipliner
       public_and_locked_html: >-
         Konkurrencen er offentlig og låst for redigering. Hvis du har brug for
@@ -1737,7 +1440,6 @@ da:
           name: Lokale
           details: Lokale detaljer
           address: Lokale adresse
-          coordinates:
         start_date: Start dato
         end_date: Slut dato
         information: Information
@@ -1750,7 +1452,6 @@ da:
           trainee_delegate_ids: WCA Lærlingdelegerede
           organizer_ids: Arrangør(er)
           contact: Kontakt
-        championships:
         website:
           generate_website: Jeg vil gerne bruge WCA hjemmesiden i stedet for at 
             bruge en anden hjemmeside.
@@ -1759,9 +1460,6 @@ da:
           uses_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til 
             tilmelding
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: Send mig en email når nogen tilmelder sig
-            til denne konkurrence.
         entry_fees:
           currency_code: Valuta kode
           base_entry_fee: Basis deltagergebyr
@@ -1784,9 +1482,7 @@ da:
           allow_self_edits: Redigering af tilmeldinger
           guests_enabled: Gæster
           guest_entry_status: Vis tekst om at det er gratis for gæster
-          guests_per_registration:
           extra_requirements: Ekstra tilmeldingskrav
-          force_comment:
         event_restrictions:
           early_puzzle_submission:
             enabled: Jeg vil gerne have at deltagerne skal aflevere deres 
@@ -1797,17 +1493,13 @@ da:
               begrænse den mængde deltagere, der kan deltage i bestemte 
               discipliner
             reason: Årsagen og detaljer for brugen af kvalifikations resultater
-            allow_registration_without:
           event_limitation:
             enabled: Jeg vil begrænse deltagerne i at tilmelde sig i en specifik
               kombination af discipliner
             reason: Årsagen og detaljerne for brugen af restriktion af 
               discipliner
-            per_registration_limit:
           main_event_id: Hoveddisciplinen
         remarks: Bemærkninger
-        clone_tabs: Jeg vil gerne kopiere alle faner med yderligere 
-          informationer
       hints:
         name: Konkurrencens fulde navn inklusiv året i slutningen (eksempel, 
           Danish Open 2016). Husk at lave store bogstaver. Navnet må kun 
@@ -1887,7 +1579,6 @@ da:
             that event is held. If you have on the spot registration, this must 
             be set to the same day as the competition.
           allow_self_delete_after_acceptance:
-          guests_per_registration:
           extra_requirements: Indikere venligst her ekstra tilmeldingskrav, som 
             ikke er nævnt oven over. Det kan være eksempler på hvordan man 
             betaler. <br/>Udfyld det her <b>på engelsk</b> og hvilke andre sprog
@@ -1906,7 +1597,6 @@ da:
           event_limitation:
             reason: Uddyb hvorfor du gerne vil begrænse kombinationen af 
               bestemte discipliner. Udfyld det på engelsk!
-            per_registration_limit:
           main_event_id: Vinderen af denne disciplin vil blive erklæret vinderen
             af konkurrencen.
         remarks: Ekstra information som du vil fortælle WCAT. For eksempel, hvis
@@ -1936,6 +1626,9 @@ da:
               tilmeldingskrav nedenfor)
             free: '"Alle tilskuere kan se med gratis"'
             restricted: '"Tilskuere er kun tilladte som ledsagere af en deltager"'
+        website: {}
+        event_restrictions:
+          qualification_results: {}
     errors:
       invalid_name_message: >-
         skal slutte med et år og må kun indeholde alfanumeriske tegn,
@@ -1968,8 +1661,6 @@ da:
         cannot be before registration close date.
       waiting_list_deadline_before_refund_date: Waiting list deadline cannot be 
         before limit date for refunds.
-      waiting_list_deadline_after_start: Waiting list deadline must be before 
-        start date.
       event_change_deadline_before_registration_close: Deadline for updating 
         events cannot be before registration close date.
       event_change_deadline_after_end_date: Deadline for updating events cannot 
@@ -1991,14 +1682,6 @@ da:
     time_until_competition:
       competition_in: 'Konkurrencen er om %{n_days}.'
       competition_was: 'Konkurrencen var %{n_days} siden.'
-    nearby_competitions:
-      competitions:
-        one: 1 konkurrence
-        other: '%{count} konkurrencer'
-      label_admin: 'Sidste %{days} dage'
-      nearby_admin: '%{x_competitions} indenfor %{kms} km og %{days} dage.'
-      within: 'Indenfor %{days} dage'
-      show: Vis
     adjacent_competitions:
       label: 'Konkurrencer i nærheden (indenfor %{days} dage og %{kms} km)'
       no_comp_nearby: Ingen konkurrencer i nærheden!
@@ -2026,8 +1709,6 @@ da:
     uncancel: Fjern aflysningen af konkurrencen
     cancelled_by_html: 'Aflyst af %{name} den %{date_time}'
     cancel_confirm: Er du sikker på at du vil aflyse konkurrencen?
-    upload_results: Upload resultaterne
-    post_results: Upload resultaterne
     results_posted_by_html: 'Uploadet af %{poster_name} %{date_time}'
     cancel_mistake: Lavede du en fejl?
     note_before_cancel: 'Note: Kun bekræftede konkurrencer kan blive aflyst.'
@@ -2045,7 +1726,6 @@ da:
           dommeren stoppe dig, og dit result vil blive markeret som en DNF (se
           %{regulation_link}).
         regulation_link_text: 'Regel %{number}'
-        guideline_link_text: 'Retningslinje %{number}'
         cumulative_time_limit: sammenlagt tidsgrænse
         cumulative_one_round_html: 'En %{cumulative_time_limit} kan blive brugt (se
           %{regulation_link}).'
@@ -2066,7 +1746,6 @@ da:
       proceed: Går videre
     schedule:
       display_as:
-        label: 'Hvis tidsskemaet som:'
         table: Tabel
         calendar: Kalender
       display_for_room: 'Vis skema for:'
@@ -2076,13 +1755,8 @@ da:
       start: Start
       end: Slut
       activity: Aktivitet
-      room: Lokale
       room_in_venue: '%{room} i %{venue}'
-      venue_information_html: 'Du kigger på tidsskemaet for lokalet %{venue_name}.'
       timezone_message: 'Tidsskemaet er vist i tidszonen %{timezone}.'
-      multiple_venues_available: >-
-        Konkurrencen har flere lokaler. Tjek venligst også tidsskemaet for de
-        andre lokaler!
       schedule_for_date: 'Tidsskemaet for %{day_name} (%{full_date})'
     nav:
       menu:
@@ -2118,6 +1792,12 @@ da:
     scrambles_table:
       group: Gruppe
       scramble: Blanding
+    live:
+      admin: {}
+      connection: {}
+    registration_v2:
+      register:
+        panel: {}
   competition_tabs:
     headers:
       tabs: Faner
@@ -2154,25 +1834,14 @@ da:
     selector_elements:
       events_selector:
         event: Disciplin
-        all_events: Alle discipliner
-      region: Område
       type_selector:
         type: Type
         single: Single
         average: Gennemsnit
-      years_selector:
-        years: År
-        all_years: Alle år
-        only: Kun
-        only_html: 'Kun %{year}'
-        until: Indtil
-        until_html: 'Indtil %{year}'
       show_selector:
         show: Vis
         persons: Personer
-        persons_html: '%{quantity} personer'
         results: Resultater
-        results_html: '%{quantity} resultater'
         by_region: Per område
         mixed: Blandet
         slim: Smal visning
@@ -2187,18 +1856,12 @@ da:
     table_elements:
       name: Navn
       result: Resultat
-      citizen_of: Statsborgerskab
       competition: Konkurrence
       solves: Resultater
       region: Område
       world: Verden
-      type_options:
-        type: Type
-        single: Single
-        average: Gennemsnit
       event: Disciplin
       date_circa: Dato (ca.)
-      record: Rekord
   notifications:
     connect_wca_id: Tilslut dit WCA ID til din konto!
   persons:
@@ -2244,25 +1907,6 @@ da:
     errors:
       unstick_at_future: skal være i fremtiden
   contacts:
-    website:
-      faq_note_html: >-
-        Før du sender en forespørgsel, så kig gerne under vores <a
-        href="/faq">Ofte Stillede Spørgsmål</a>! Hvis du ønsker at kontakte en
-        bestemt komité eller hold, så kan du finde deres kontaktinformation på
-        <a href="/teams-committees">denne side</a>.
-      title: WCA's Hjemmeside Kontaktformular
-      inquiries:
-        competition: >-
-          Kontakt arrangørerne af en bestemt konkurrence (vælg venligst
-          herunder)
-        competitions_in_general: >-
-          Konkurrencer generelt (at arrangere konkurrencer, konkurrencereglerne,
-          osv.)
-        wca_id_or_profile: WCA ID eller WCA Profil
-        media: Medie
-        software: Software
-        different: Andet
-      submit: Send besked
     dob:
       title: Formularen til at ændre fødselsdato
       description: >-
@@ -2516,125 +2160,15 @@ da:
       donate_paypal: Doner gennem Paypal
       donate_other: Andre måder at donere
     structure:
-      teams_committees_councils: 'WCA''s hold, komitéer og råd'
       title: Strukturen
       board:
-        name: WCA Bestyrelsen
         description: >-
           World Cube Association bliver ledt af WCA Bestyrelsen, som består af
           følgende medlemmer:
-      committees: >-
-        WCA's hold og komitéer er en vigtig del af organisationen og udfører
-        daglige opgaver, som er nødvendige for at vedligeholde organisationen.
-        Disse komitéer er bygget op af medlemmer af WCA samfundet, inklusiv WCA
-        Delegerede og deltagere. Hvert hold har en leder, hvis rolle er at sikre
-        sig at holdet fungerer, som det skal og vejlede de andre holdmedlemmer.
-        Råd er en speciel type af hold, der skal rådgive WCA Bestyrelsen og er
-        kun opbygget af WCA samfundet, ikke personale af WCA. Når der er ledige
-        positioner af i komitéer, hold og råd så vil der være information om
-        hvordan man ansøger på forsiden af WCA.
-      senior_member: Senior Medlem
-      leader: Leder
-      officers:
-        name: WCA's Officerer
-        description: >-
-          Officererne af WCA håndterer opgaverne, der er relateret til WCA's
-          'non-profit' status. Disse officerer er valgt af WCA Bestyrelsen.
-          Dette inkluderer, den administrerende direktør, formanden som styrer
-          bestyrelsens møder, sekretæren som vedligeholder organisationens
-          dokumenter og kasseren som styrer alle finansielle gøremål af WCA.
-      chair:
-        name: WCA's Formand
-      executive_director:
-        name: WCA's Administrerende Direktør
-      secretary:
-        name: WCA's Sekretær
-      vice_chair:
-        name: WCA's Næstformand
-      treasurer:
-        name: WCA's Kasserer
       users:
         profile: '%{user_name}s profil'
-      wdc:
-        name: WCA's Disciplinærkomité
-        description: >-
-          Denne komité giver WCA Kommissionen råd i specielle tilfælde, som hvis
-          WCA reglerne bliver brudt, eller vil muligvis blive kontaktet af WCA
-          medlemmer der har problemer med WCA konkurrencer.
-      wdpc:
-        name: WCA's Databeskyttelseskomité
-        description: Denne komité er ansvarlig for alle emner vedrørende 
-          databeskyttelse.
-      wrc:
-        name: WCA's Regelsætkomité
-        description: Denne komité er ansvarlig for WCA reglerne.
-      wrt:
-        name: WCA's Resultathold
-        description: >-
-          Dette hold er ansvarlig for at holde styr på alle
-          konkurrenceresultater.
-      wst:
-        name: WCA's Softwarehold
-        description: >-
-          Dette hold er ansvarlig for at WCA's software (hjemmeside, blandinger,
-          workbooks, admin redskaber).
-      wct:
-        name: WCA's Kommunikationshold
-        description: >-
-          WCA's kommunikationshold (WCT) har rollen at hjælpe kommunikationen
-          mellem WCA og cubingmiljøet. WCAs kommunikation er til for at nå WCAs
-          mål og hjælpe på den positive kultur af venlighed, gennemskuelighed,
-          ansvar, rummelighed og åbenhed.
-      wfc:
-        name: WCA's Finanskomité
-        description: Dette hold er ansvarlig for at holde styr over WCA's 
-          økonomi.
-      wec:
-        name: WCA's Etikkomité
-        description: >-
-          Denne komité har rollen at sikre sig, at alle procedurer fulgt af WCA
-          Personalet og Eksternt Personale, overholder WCA's Etiske Regler, og
-          udføre selvstændige undersøgelser hvis adfærden af de medlemmer ikke
-          stemmer overens med WCA's Etiske Regler. Disse slags undersøgelser kan
-          blive efterspurgt af hvilken som helst tilmeldt speedcuber, som WEC
-          har tavshedspligt over for.
-      weat:
-        name: WCA's Hold af Administrerende Assistenter
-        description: >-
-          Dette hold er ansvarlig for at fuldføre de administrative opgaver for
-          WCA Bestyrelsen.
-      wqac:
-        name: WCA's Kvalitetsforsikringskomité
-        description: >-
-          Denne Komité har rollen at støtte og fremme kvalitetsforbedring i WCA,
-          og at sikre verdensomspændende kvalitet hos WCA Personale, Regionale
-          Organisationer, Konkurrence Arrangører og Konkurrence Personale.
-      wcat:
-        name: WCA's Konkurrenceannonceringshold
-        description: >-
-          Dette hold har rollen at godkende og annoncere WCA Konkurrencer, og
-          sikre sig at de overholder WCA's standarder.
-      wmt:
-        name: WCA's Marketinghold
-        description: >-
-          Holdet er ansvarlig for at udvikle og håndtere WCA's Varemærke. Det
-          involvere at finde sponsorater, støtte distribuering af WCA
-          Konkurrence Udstyr og markedsføre WCA varer.
-      wac:
-        name: WCA's Rådgivningsråd
-        description: >-
-          Dette råd er ansvarlig for at bygge og vedligeholde tosidig
-          kommunikation mellem WCA Samfundet og WCA Personale.
-      banned:
-        name: Banlyste Deltagere
-      wct_china:
-        name: WCT Kina
       operations_html: 'Dag til dag arbejde er gjort af WCA''s %{committees_and_teams}.'
       teams_committees: Hold og Komitéer
-      probation:
-        name: Delegerede på Prøvetid
-      wst_admin:
-        name: Software administratorer
       delegates_html: >-
         <strong>WCA Delegerede</strong> har rollen som er beskrevet i WCA's
         forslag, og beskrevet i WCA Regelsæt. Den vigtigste pligt for en
@@ -2668,7 +2202,6 @@ da:
     codeofethics: Etiske Regler
     codeofconduct: Adfærdsprincipper
     finances: Økonomi
-    vision_and_strategy: Vision og strategi
   education:
     title: WCA's Uddannelsesmateriale
     description: >-
@@ -2739,99 +2272,7 @@ da:
     delete:
       confirm_delete: Are you sure you want to delete this Regional Organization
         request?
-  contact:
-    title: Kontakt information
-    info_alert_html: >-
-      Før du kontakter nogle af holdene på denne her side, så kig venligst først
-      på vores %{link}!
-    questions_and_comments_html: >-
-      For spørgsmål og hjemmesiden, kommentarer og forslag, så brug denne <a
-      href='/contact/website'>kontakt formular</a>. For spørgsmål som involverer
-      et specifikt område eller konkurrence, så kontakt din lokale %{link}.
-    committees_and_teams_html: <u>Komitéer og Hold</u>
-    members: Medlemmer
-    board:
-      info_html: >-
-        "The World Cube Association" er ledt af WCA bestyrelsen. De er
-        ansvarlige for generelle forespørgsler og WCA organisationens helhed.
-    wct:
-      info_html: >-
-        WCT er ansvarlige for at holde øje med og støtte kommunikationen fra WCA
-        med kubing samfundet og offentligheden. De burde blive kontaktet hvis
-        man har generelle spørgsmål omkring WCA eller deres medieoptræden.
-    wdc:
-      info_html: >-
-        WDC undersøger en del situationer og foreslår løsninger, også straffe
-        når det er nødvendigt. Mellem andre emner, kan nogle af dem være seriøse
-        regelbrud fra WCA regelsættet, eller problemer i kubing samfundet. Hvis
-        du nogensinde har oplevet nogle eksempler på det, så kontakt venligst
-        denne komite.
-    wdpc:
-      info_html: >-
-        WDPC er ansvarlig for at undersøge, oprette, udføre, håndtere og
-        håndhæve alle WCA's Databeskyttelses politikker. WDPC har også ansvar
-        for at lave kontrakter med eksterne dataprocessorer af WCA's data og at
-        styre alle opgaver der involvere Databeskyttelse.
-    wrc:
-      info_html: >-
-        WRC håndtere alle problemer som handler om at forbedre WCA regelsættet.
-        De støtter WCA delegerede på alle procedure problemer, som er et sket
-        under konkurrencer. WRC sender ofte interne rapporter ud til alle WCA
-        delegerede, og prøver at forbedre dere kendskab til reglerne. Hvis du
-        kunne tænke dig at deltage i regelsættets forbedring, kunne du kontakte
-        WRC via email, eller diskutere her <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      info_html: >-
-        WRT er ansvarlige for at styre alt data i WCA's database, og vigtigst af
-        alt, konkurrenceresultater og personlig data. De lægger resultaterne fra
-        WCA konkurrencer op på WCA's hjemmeside, når den ansvarlige WCA
-        Delegerede har indsendt dem. Udover at lægge konkurrenceresultater op,
-        er de også ansvarlige for at lave rettelser i konkurrenceresultater,
-        hvis der er behov, og de styrer alle WCA profilsider. Dette inkludere at
-        ændre brugerdata, som fødselsdage efter bekræftede efterspørgsler, og
-        profilbilleder.
-    wst:
-      info_html: >-
-        WST er ansvarlige for at opretholde og styre alt WCA's software. De
-        laver også ny software, for forskellige ting, som er behøvet inde i WCA.
-        Hvis du har forslag og idéer for yderligere hjemmeside forbedring eller
-        vil reportere fejl, så kontakt dem! WCA hjemmesiden er et stort åbent
-        projekt på <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>, så
-        hvis du er interesseret i at hjælpe WCA, så kig der.
-    wfc:
-      info_html: >-
-        WFC er ansvarlige for alt hvad der har noget med finanserne inde i WCA.
-        De håndtere finanserne og WCA's kontoer, som er i overensstemmelse med
-        det normale budget forslag, som også er deres arbejde at give normalt.
-    wec:
-      info_html: >-
-        Denne komité har rollen at sikre sig, at alle procedure fulgt a WCA
-        Personalet og Eksternt Personale, overholder WCA's Etiske Regler.
-    weat:
-      info_html: >-
-        Dette hold er ansvarlig for at fuldføre de administrative opgaver for
-        WCA Bestyrelsen.
-    wqac:
-      info_html: >-
-        Denne Komité har rollen at støtte og fremme kvalitetsforbedring i WCA,
-        og at sikre verdensomspændende kvalitet hos WCA Personale, Regionale
-        Organisationer, Konkurrence Arrangører og Konkurrence Personale.
-    wcat:
-      info_html: >-
-        Denne komité har rollen at godkende og annoncere WCA Konkurrencer, og
-        sikre sig at de overholder WCA's standarder.
-    wmt:
-      info_html: >-
-        Holdet er ansvarlig for at udvikle og håndtere WCA's Varemærke. Det
-        involvere at finde sponsorater, støtte distribuering af WCA Konkurrence
-        Udstyr og markedsføre WCA varer.
-    councils_html: Råd
-    wac:
-      info_html: >-
-        Dette råd er ansvarlig for at bygge og vedligeholde tosidig
-        kommunikation mellem WCA Samfundet og WCA Personale.
+  contact: {}
   score_tools:
     title: Værktøjer til WCA konkurrencer
     wca_icon_text: Udviklet og vedligeholdt af WST
@@ -2913,24 +2354,8 @@ da:
           for WCA submission.
   logo:
     title: WCA Logo
-    paragraphs:
-      '1': >-
-        WCA logoet var designet af Justin Eastman, i en konkurrence i Januar
-        2005 <br />Vi kunne lide logoet på grund af dets design, farverne, og at
-        det ikke nødvendigvis viser en 3x3x3 cube.
-      '2': >-
-        Vi har fire forskellige versioner af logoet: En <a
-        href="/files/WCAlogo_XL.jpg">stor version</a> (46 KB, 1756 px by 1068
-        px), en <a href="/files/WCAlogo.svg">vector version</a>, a <a
-        href="/files/WCAlogo_notext.svg">vector version uden tekst</a> og en <a
-        href="/files/WCAlogo_monochrome.svg">monokrom vector version</a>.
-      '3': >-
-        3D version af logoet designet af Vu Minh Tan fra Vietnam: <a
-        href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a
-        href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).
-      '4': >-
-        Acceptabel brug af WCA logoet er beskrevet i 'WCA Logo Brugspolitikken',
-        som kan findes under <a href="/documents">WCA Dokument siden</a>.
+    headings:
+      usage_guidelines: {}
   search_results:
     index:
       competitions: Konkurrencer
@@ -2961,10 +2386,6 @@ da:
         WCA regelsættet bliver sublimenteret af  <a
         href="/regulations/guidelines.html">WCA Retnings linjerne</a>, som
         indeholder ekstra information.
-      content3_html: >-
-        Important decisions about incidents that happened in competitions that
-        were resolved by the WCA Regulations Committee are found in the <a
-        href="/incidents">Incidents Log</a>.
     panel2:
       title: Oversættelser
       content1_html: >-
@@ -3128,3 +2549,27 @@ da:
   footer:
     privacy: Privatliv
     disclaimer: Disclaimer
+  validators: {}
+  page:
+    contacts:
+      form:
+        user_data: {}
+        contact_recipient: {}
+        competition: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+    contact_edit_profile:
+      form: {}
+    teams_committees_councils: {}
+  user_roles:
+    email: {}
+  qualification: {}
+  trainee_delegate_application: {}
+  user_groups: {}
+  payments:
+    errors: {}
+  database: {}
+  tickets: {}

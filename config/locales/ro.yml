@@ -185,7 +185,6 @@ ro:
       no_date: Fără dată
     user:
       wca_id: ID WCA
-      citizen_of: Țara de origine
     all_regions: Toate regiunile
     errors:
       invalid: invalid
@@ -193,10 +192,6 @@ ro:
       one: o zi
       few: câteva
       other: '%{count} zile'
-    these_events:
-      one: acest eveniment
-      few: 'aceste %{count} evenimente'
-      other: 'aceste %{count} evenimente'
     search_site: Caută în site
     filter: Filtru
     delete: Șterge
@@ -252,90 +247,6 @@ ro:
           e-mail
         user_preferred_events: Evenimente preferate
         otp_attempt: 'Introdu codul de autentificare two-factor:'
-      competition:
-        id: Id
-        confirmed: Nu permite organizatorilor să editeze competiția
-        show_at_all: Fă competiția vizibilă
-        name: Nume
-        name_reason: Explicatie pentru nume
-        cell_name: Apelativ pentru competiție
-        country_id: Țară
-        city_name: Numele orașului
-        venue: Locație
-        venue_address: Adresa locației
-        venue_details: Detalii despre locație
-        start_date: Prima zi
-        end_date: Ultima zi
-        external_website: Site
-        generate_website: >-
-          Voi folosi site-ul WCA pentru informații suplimentare în loc de alt
-          site
-        base_entry_fee_lowest_denomination: Taxa de înregistrare de bază
-        currency_code: RON
-        staff_delegate_ids: Delegat/Delegați WCA
-        trainee_delegate_ids: 'Delegați Candidați WCA:'
-        organizer_ids: Organizatori
-        contact: Contact
-        information: Informații
-        use_wca_registration: Vreau să folosesc site-ul WCA pentru înregistrare
-        use_wca_live_for_scoretaking: Voi folosi WCA Live pentru scoruri.
-        external_registration_page: Pagina de înregistrare
-        competitor_limit_enabled: Limita de concurenți
-        competitor_limit: Numărul maxim de concurenți
-        competitor_limit_reason: Motivul pentru limita de concurenți
-        guests_enabled: Însoțitori
-        guests_per_registration_limit: Numărul maxim de spectatori per 
-          înregistrare
-        events_per_registration_limit: Număr maxim de probe per înregistrare
-        receive_registration_emails: >-
-          Trimite-mi notificare pe e-mail când cineva se înregistrează pentru
-          competiție
-        registration_open: Înregistrare deschisă
-        registration_close: Înregistrare închisă
-        remarks: Observații
-        clone_tabs: >-
-          Vreau să multiplic, de asemenea, toate taburile cu informații
-          suplimentare
-        competition_events: Probe
-        enable_donations: >-
-          Vreau să accept donații, îm plus față de colectarea taxei de
-          înregistrare.
-        extra_registration_requirements: Alte cerințe pentru înregistrare
-        force_comment_in_registration: >-
-          Cere-le concurenților să scrie un comentariu obligatoriu la
-          înregistrare
-        on_the_spot_registration: Înregistrări pe loc
-        on_the_spot_entry_fee_lowest_denomination: Taxa de bază pentru 
-          înregistrare pe loc
-        allow_registration_edits: Editare înscrieri
-        allow_registration_self_delete_after_acceptance: Anulare înscrieri
-        refund_policy_percent: Procent de restituit
-        refund_policy_limit_date: Data limită pentru restituiri
-        waiting_list_deadline_date: Termen limită pentru acceptarea 
-          concurenților de pe lista de așteptare
-        event_change_deadline_date: Termen limită pentru actualizarea de către 
-          concurenți a probelor
-        guests_entry_fee_lowest_denomination: Taxa de intrare pentru spectatori
-        guest_entry_status: Afișează mesaj pentru accesul gratuit al 
-          spectatorilor
-        early_puzzle_submission: >-
-          Vreau să le cer concurenților să își depună puzzleurile la un moment
-          de timp specificat înainte de începutul unei probe
-        early_puzzle_submission_reason: Motivație pentru depunerea din timp a 
-          puzzle-urilor
-        qualification_results: >-
-          Vreau să folosesc rezultatele din calificări pentru a limita numărul
-          de concurenți la anumite probe
-        qualification_results_reason: Motivație pentru folosirea rezultatelor 
-          din calificări
-        event_restrictions: >-
-          Vreau să nu le permit concurențiilor să se înscrie la anumite
-          combinații de probe
-        event_restrictions_reason: Motivație pentru restricțiile legate de probe
-        main_event_id: Proba principală
-        allow_registration_without_qualification: Probe cu Calificare
-      championship:
-        championship_type: Tipul campionatului
       registration:
         guests: Însoțitori
         comments: Comentarii
@@ -359,9 +270,6 @@ ro:
         wrc_feedback_requested: Vreau feedback de la WRC pentru unele din 
           incidentele de mai sus
         wrc_incidents: Incidente pentru feedback de la WRC
-        wdc_feedback_requested: Vreau feedback de la WDC pentru unele din 
-          incidentele de mai sus.
-        wdc_incidents: Incidente pentru feedback de la WDC
         remarks: Observații
       person:
         wca_id: Persoană
@@ -395,7 +303,6 @@ ro:
         competition_id: S-a întâmplat în timpul
       competition_medium:
         competition_id: Competiție
-        type: Tip
         text: Text
         uri: Link
         submitter_name: Numele aplicantului
@@ -427,16 +334,7 @@ ro:
         m: Masculin
         f: Feminin
         o: Altul
-      delegate_status:
-        trainee_delegate: Delegat Candidat
-        candidate_delegate: Delegat Junior
-        delegate: Delegat
-        senior_delegate: Delegat Senior
-    person:
-      gender:
-        m: Masculin
-        f: Feminin
-        o: Altul
+    person: {}
     competition_medium:
       status:
         accepted: Acceptat
@@ -445,13 +343,9 @@ ro:
         report: Raport
         article: Articol
         multimedia: Multimedia
-    competition:
-      guest_entry_status:
-        unclear: >-
-          Nu afișa nimic (poate poți elabora în secțiunea "Cerințe suplimentare
-          pentru înregistrare")
-        free: '"Orice spectator poate participa gratuit"'
-        restricted: '"Accesul spectatorilor este permis doar dacă însoțesc un concurent"'
+    competition: {}
+    user_roles:
+      status: {}
   simple_form:
     'yes': Da
     'no': Nu
@@ -496,110 +390,6 @@ ro:
           Verifică-ți aplicația mobilă pentru o parolă cu utilizare unică
           (one-time password) sau introdu un cod de recuperare.
       competition:
-        name: >-
-          Numele complet al competiției, inclusiv anul la sfârșitul ei (de
-          exemplu U.R.A. Spring 2016). Asigură-te că începi cuvintele cu literă
-          mare. Numele trebuie să conțină numai caractere alfanumerice, spații
-          și următoareel caractere speciale  -  &  .  :  '
-        cell_name: >-
-          Un nume mai scurt pentru a fi afișat. Dacă numele competiției are mai
-          puțin de %{short_name_limit} caractere, nu trebuie să editezi acest
-          câmp, întrucât trebuie să fie identic cu numele complet.
-        city_name: >-
-          Numele orașului și statului (unde este cazul) în care are loc
-          competiția. Nu scrieți țara (exemplu: Paris SAU San Francisco,
-          California)
-        information: >-
-          Informații despre numărul maxim de concurenți, taxe de înregistrare
-          pentru concurenți și spectatori și alte detalii relevante pentru
-          pamenii ce vor să concureze sau să fie în public.
-        staff_delegate_ids: Delegați WCA pentru competiție
-        trainee_delegate_ids: Delegați Candidați WCA pentru această competiție
-        organizer_ids: >-
-          Organizatorii competiției (trebuie să aibă cont WCA pentru a apărea
-          aici)
-        external_website: Site-ul competiției. Trebuie să aiba un URL http sau 
-          https valid.
-        registration_open: 'Notă: Orele pentru începutul și sfarșitul înregistrării
-          sunt în UTC'
-        remarks: >-
-          Informații adiționale pe care vrei să le transmiți către WCAT. De
-          exemplu, dacă este ceva de care nu ești sigur, sau dacă ai orice
-          cerere specială către WCAT. Completează în engleză!
-        external_registration_page: >-
-          Pagina unde concurenții se pot înregistra pentru competiție. Trebuie
-          să fi un URL http(s) valid .
-        base_entry_fee_lowest_denomination: >-
-          Taxa de înregistrare de bază. Va fi afișată pe pagina de informații a
-          competiției și pe pagina de înregistrare, dacă există. Dacă este
-          setată la 0, un mesaj conform căruia înregistrările sunt acceptate
-          gratuit va fi afișat. <br><br><b>DISCLAIMER: Următorul estimat al
-          Cotizațiilor WCA este doar o aproximație bazată pe cursul valutar
-          curent și nu are sub nicio formă un caracter juridic obligatoriu
-          pentru plata Cotizațiilor </b>
-        currency_code: Codul valutei pentru taxe
-        competitor_limit_enabled: >-
-          Deși nu este cerut de Regulament, este foarte indicat să se precizeze
-          limita numărului de concurenți.
-        competitor_limit: >-
-          Numărul maxim de concurenți permis în această competiție. Deocamdată,
-          acest număr este doar informativ și nu poate împiedica înscrierea
-          concurenților suplimentari. Lucrăm pentru a remedia această situație,
-          dar implică și alte eforturi.
-        competitor_limit_reason: >-
-          De ce există limita numărului de concurenți? Te rugăm să scrii în
-          limba engleză!
-        guests_per_registration_limit: >-
-          Numărul de spectatori per înregistrare permis în cadrul acestei
-          competiții. Înregistrările care au prea mulți spectatori asociați vor
-          fi blocate. Lasă câmpul gol dacă nu există limită.
-        events_per_registration_limit: >-
-          Opțional, setează numărul total de probe pentru care un concurent se
-          poate înregostra (folosit în mod uzual pentru competițiile din
-          categoria "Favorites"). Trebuie să adaugi probe înainte de a utiliza
-          acest câmp. Lasă câmpul gol dacă nu există nicio limită.
-        extra_registration_requirements: >-
-          Te rugăm să specifici aici orice alt criteriu pentru înregistrare care
-          nu a fost acoperit mai sus, de exemplu informații despre efectuarea
-          plății. <br/>Te rugăm să completezi <b>în engleză</b> și în orice alte
-          limbi care te aștepți să fie vorbite la competiție; acestea vor fi
-          afișate pe pagina de informații a competiției, precum și pe pagina de
-          înregistrări (dacă folosești interfața WCA).
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Dacă este setată la 0, va fi afișat un mesaj conform căruia
-          înregistrările pe loc vor fi acceptate gratuit.
-        refund_policy_percent: >-
-          Deocamdată, acest număr este doar informativ, restituirile vor trebui
-          să fie cerute manual. Dacă este setat la 0, va fi afișat un mesaj
-          conform căruia taxele de înregistrare nu vor fi restituite sub nicio
-          circumstanță.
-        refund_policy_limit_date: Data după care nu se vor mai acorda restituiri
-        waiting_list_deadline_date: >-
-          Data la care ce înscriși pe lista de așteptare nu vor mai fi aceptați.
-          Dacă ai termen limită pentru rambursări, termenul limită pentru
-          acceptare nu ar trebui să preceadă celui pentru rambursări.
-        event_change_deadline_date: >-
-          Concurenții înscriși au dreptul să-și actualizeze probele până la
-          momentul specificat, contactând echipa de organizare. Acest termen
-          limită nu poate fi setat înainte de închiderea înscrierilor. Dacă
-          acest câmp nu este completat, atunci concurenții își pot adăuga o
-          probă până la momentul desfășurării acesteia. Dacă accepți înscrieri
-          pe loc, acest lucru trebuie să se întâmple în ziua competiției.
-        guests_entry_fee_lowest_denomination: >-
-          Deocamdată, acest număr este doar informativ, taxele pentru spectatori
-          nu pot fi administrate prin acest site. Dacă este setat la 0, va fi
-          afișat un mesaj la alegerea ta despre regimul spectatorilor.
-        early_puzzle_submission_reason: >-
-          Te rugăm să elaborezi aici de ce soliciți depunerea puzzle-urilor mai
-          devreme. Completează în engleză!
-        qualification_results_reason: >-
-          Te rugăm să elaborezi aici de ce soliciți utilizarea timpilor din
-          calificări. Completează în engleză!
-        event_restrictions_reason: >-
-          Te rugăm să elaborezi aici de ce soliciți restricționarea participării
-          la anumite combinații de probe. Completează în engleză!
-        main_event_id: Câștigătorul acestei probe va fi câștigătorul 
-          competiției.
         championships:
       website_contact:
       dob_contact:
@@ -654,8 +444,6 @@ ro:
           această cerere.
         wrc_incidents: Lista cu numerele incidentelor pentru care ai vrea 
           feedback de la WRC
-        wdc_incidents: Lista cu numerele incidentelor pentru care ai vrea 
-          feedback de la WDC
         remarks: >-
           Vorbește despre orice alt detaliu pe care ai vrea să-l împărtășești
           (exemplu: îmbunătățiri/regres în rândul comunității, planuri de viitor
@@ -663,12 +451,6 @@ ro:
           secțiunile trecute, scrie aici.
       competition_tab:
         name: 'Exemple: Călătorie, Plăți, Premii, Cazare'
-      person:
-        dob: Data nașterii trebuie să fie în formatul an-lună-zi (AAAA-LL-ZZ)
-      registration:
-        administrative_notes: >-
-          Note suplimentare cu privire la managementul acestei înregistrări.
-          Concurentul nu are acces la aceste note.
       results_submission:
       regional_organization:
         website: >-
@@ -687,36 +469,7 @@ ro:
           accepted: Acceptat
           pending: Lista de așteptare
           deleted: Șters
-      competition:
-        guests_enabled:
-          'true': Întreabă despre însoțitori
-          'false': NU întreba despre însoțitori
-        competitor_limit_enabled:
-          'true': Vreau să specific o limită de concurenți
-          'false': NU VREAU să specific o limită de concurenți
-        on_the_spot_registration:
-          'true': Înregistrările pe loc vor fi acceptate
-          'false': Înregistrările pe loc NU vor fi acceptate
-        allow_registration_without_qualification:
-          'true': >-
-            Concurenții se pot înscrie la probe pentru care nu sunt calificați
-            (îi voi șterge ulterior)
-          'false': Concurenții TREBUIE să fie calificați pentru a se înscrie la 
-            o probă
-        allow_registration_edits:
-          'true': >-
-            Concurenții își pot edita detaliile din înscriere până la termenul
-            limită pentru actualizarea probelor
-          'false': >-
-            Concurenții NU își pot edita detaliile înscrierii după ce aceasta a
-            fost acceptată
-        allow_registration_self_delete_after_acceptance:
-          'true': >-
-            Concurenții își pot anula înregistrarea după ce aceasta a fost
-            acceptată
-          'false': >-
-            Concurenții NU își pot anula înregistrarea după ce aceasta a fost
-            acceptată
+      competition: {}
   mail_form:
     attributes:
       contact_form:
@@ -860,6 +613,7 @@ ro:
     mailer:
       confirmation_instructions:
         subject: Te rugăm să confirmi noua adresă de email
+    registrations: {}
   wca:
     errors:
       messages:
@@ -869,13 +623,7 @@ ro:
           other: 'Formularul conține %{count} erori:'
       error_pages:
         500_error: 'Ne pare rău, a apărut o eroare.'
-        500_contact: >-
-          Dacă raportezi eroarea către Echipa de Software, te rugăm să
-          menționezi Request ID-ul.
         400_error: Pagina pe care o cauți nu există.
-        400_contact: >-
-          Dacă crezi că e vorba de o eroare, te rugăm să contactezi echipa de
-          Software și să incluzi Request ID-ul.
     doorkeeper:
       applications:
         help:
@@ -938,7 +686,6 @@ ro:
       db_dev_export: Export Dezvoltator
       regulations: Regulament
       about_regulations: Despre Regulament
-      guidelines: Îndrumări
       scrambles: Scramble-uri
       history: Istoric
       translations: Traduceri
@@ -950,10 +697,8 @@ ro:
       panel: Panou
       polls: Polls
       results_team: Echipa de Rezultate
-      results_admin: Admin
       results_database: Baza de Date
       new_post: Postare noua
-      team_leader: Liderul echipei
       regional_organizations: Organizații Regionale
       manage_regional_organizations: Administrează Organizațiile Regionale
       new_regional_organization: Organizație Regională nouă
@@ -1140,7 +885,6 @@ ro:
       email: E-mail
       preferences: Preferințe
       password: Parolă
-      member_of: Membru al
       preferred_events_desc: >-
         Dacă selectezi probele tale preferate, înscrierea la competiții va dura
         mai puțin.
@@ -1252,9 +996,6 @@ ro:
         concurentului
       must_have_a_change: Numele țării trebuie să fie diferit pentru 
         actualizarea persoanei
-      must_not_be_present: trebuie să nu fie prezent
-      senior_has_delegate: cannot demote Senior Delegate with subordinate 
-        delegates
       already_have_id: 'nu poți obține un Id WCA, deoarece deja ai unul alocat: %{wca_id}'
       wca_id_no_birthdate_html: >-
         Nu avem data nașterii înregistrată pentru acest Id WCA. Te rugăm să
@@ -1275,7 +1016,6 @@ ro:
         e-mail către <a href='%{wrt_contact_path}'
         target='_blank'>Echipa de Rezultate WCA</a> pentru a rezolva această
         problemă.
-      avatar_requires_wca_id: necesită alocarea unui Id WCA
       email_used_by_locked_account_html: >-
         este deja folosit în alt cont. A fost creat automat ca urmare a
         înregistrării pentru o competiție printr-un serviciu extern. Dacă ești
@@ -1312,8 +1052,6 @@ ro:
       need_gender: Gen nespecificat
       need_dob: Data nașterii nespecificată
       need_country: Țara nespecificată
-      cannot_be_deleted_and_accepted: O înregistrare nu poate fi ștearsă și 
-        acceptată în același timp.
       must_register: trebuie să te înscrii la cel puțin un eveniment
       exceeds_event_limit:
         one: trebuie să te înscrii la o singură probă
@@ -1349,23 +1087,7 @@ ro:
       not_using_wca: >-
         Această competiție nu folosește înregistrarea prin intermediul site-ului
         WCA.
-      accepted_and_mailed:
-        one: Înregistrare acceptată! E-mail de notificare trimis.
-        few: Înregistrări acceptate! E-mailuri de notificare trimise.
-        other: Înregistrări acceptate! E-mailuri de notificare trimise.
-      rejected_and_mailed:
-        one: Înregistrare transferată pe lista de așteptare.
-        few: Înregistrări transferate pe lista de așteptare.
-        other: Înregistrări transferate pe lista de așteptare.
-      deleted_and_mailed:
-        one: Înregistrare ștearsă.
-        few: Înregistrări șterse.
-        other: Înregistrări șterse.
-      single_deletion_and_mail: 'Înregistrare ștearsă și e-mail trimis către %{mail}.'
-      cannot_delete: Nu îți poți șterge înregistrarea.
       updated: Înregistrare actualizată.
-      failed: Nu s-a putut actualiza înregistrarea.
-      deleted: 'Înregistrarea concurentului %{comp} a fost ștearsă.'
       registered: Înregistrare reușită!
       imported: Importarea înscrierilor efectuată cu succes!
       added: Înregistrare adăugată cu succes!
@@ -1396,17 +1118,6 @@ ro:
           Înregistrarea ta pentru %{comp_name} a fost acceptată. Ca de obicei,
           poți verifica stadiul înregistrării tale %{here}.
         see_you_soon: 'Abia așteptăm să te vedem la %{comp_name}!'
-      pending:
-        mail_subject: 'Ai fost mutat pe lista de așteptare pentru %{comp_name}.'
-        moved_html: >-
-          Înregistrarea ta pentru %{comp_name} a fost mutată pe lista de
-          așteptare. Cauze posibile sunt:
-        causes:
-          accepted: Înregistrarea ta a fost acceptată din greșeală
-          withdrawal: Ai cerut retragerea din competiție
-        email_if_error: >-
-          Dacă bănuiești că este vorba de eroare, te rugăm să dai reply acestui
-          e-mail.
       deleted:
         mail_subject: 'Înregistrarea ta pentru %{comp_name} a fost ștearsă.'
         message_html: 'Înregistrarea ta pentru %{comp_name} a fost ștearsă. Cauze
@@ -1429,39 +1140,23 @@ ro:
         one: o țară
         few: '%{count} țări'
         other: '%{count} țări'
-      export_csv: Exportă în CSV
       email: E-mail
-      approve: Aprobă
-      reject: Respinge
-      delete: Șterge
-      waiting_list: Lista de așteptare
-      approved_registrations: Înregistrări aprobate
-      deleted_registrations: Înregistrări șterse
       non_competing: Înregistrare pentru spectatori
       not_paid: Neplătit
       registered:
         without_stripe: Înregistrat pe
         with_stripe: Plătit pe
       payment_requested_on: 'Plată cerută pe: %{date}'
-      payment_completed_on: 'Plata efectuată la data de %{date}'
       series_registrations: Înscrieri pentru Serie
-      series_registrations_hint_html: 'Hint: Înscrierile pentru serie sunt afișate
-        ca  <i>%{description}</i>'
       total: Total
-      n_events: Numărul de probe
     new_registration:
       title: 'Înregistrează-te la %{comp}'
-    registered_with_account_html: >-
-      Această persoană s-a înscris cu un cont. Poți edita informațiile personale
-      %{here}.
     sign_in: Intră în cont
     profile: profil
-    panel_title: Detalii despre înregistrare
     register: Înregistrează-te!
     refund: Returnarea Plății
     refund_confirmation: Ești sigur că vrei să anulezi această plată?
     update: Actualizarea Înregistrării
-    delete: Ștergere
     delete_confirm: Ești sigur că vrei să îți ștergi înregistrarea?
     delete_registration: Ștergerea înregistrării.
     will_open_html: 'Înregistrările se vor deschide în <strong>%{days}</strong> la
@@ -1482,7 +1177,6 @@ ro:
     please_sign_in_html: >-
       %{sign_in} pentru a te înregistra la %{comp}. Dacă nu ai încă un cont WCA,
       îl poți crea %{here}
-    greeting: 'Salut, %{name}!'
     please_fix_profile_html: >-
       Pentru a te înregistra pentru %{comp}, trebuie să rezolvi următoarele
       probleme ale %{profile} tău:
@@ -1497,35 +1191,15 @@ ro:
       înregistrzi, vei fi pus într-o listă de așteptare. În acest caz, este
       posibil ca participarea ta să fie aprobată doar în urma eliberării unui
       loc.
-    can_register: 'Te poți înregistra pentru %{comp} mai jos.'
-    check_registration_information: >-
-      Te rugăm să verifici informațiile despre înregistrare pentru a afla dacă e
-      nevoie să mai faci ceva (de exemplu, plata unei taxe de înregistrare).
-    have_registered: >-
-      Ți-ai depus cererea de înregistrare pentru %{comp}. Poți vedea informații
-      despre înregistrarea ta mai jos.
-    contact_organizer: Contactează organizatorul dacă vrei să faci vreo 
-      schimbare.
-    waiting_list: >-
-      Înregistrarea ta este în așteptare. Pentru aprobare, este posibil să fie
-      nevoie să plătești o taxă de înregistrare. Verifică site-ul competiției
-      pentru detalii.
-    accepted: Înregistrarea ta a fost acceptată!
     entry_fees_fully_paid: 'Ai plătit, %{paid}, ce acoperă integral taxele de înregistrare'
     will_pay_here: Le vei plăti aici după depunerea înregistrării
     wont_pay_here: >-
       Te rugăm să verifici informațiile despre competiție pentru a afla cum poți
       plăti
-    not_qualified: Necalificat
     refund_form:
-      hints:
-        refund_amount: >-
-          Suma de bani returnată concurentului poate avea orice valoare, până la
-          cantitatea deja plătită
       labels:
         refund_amount: Suma returnată
     payment_form:
-      title: Taxe de înregistrare
       payment_successful: >-
         Plata a fost efectuată cu succes, iar înscrierea ta trebuie să apară cu
         statutul "plătit" mai jos.
@@ -1538,7 +1212,6 @@ ro:
           sunt trimise securizat către Stripe, platformă ce se ocupă de procesul
           de plată și ne comunică rezultatul.
       labels:
-        entry_fees: Taxe de înregistrare
         fees_paid: Plătit
         fees_remaining: Rest de plată
         donation: Donație
@@ -1546,12 +1219,9 @@ ro:
           Doresc să fac o donație suplimentară ce va ajunge exclusiv la echipa
           de organizare.
         payment_information: Informații pentru plată
-        payment_button: Plătește taxele de înregistrare prin Stripe
         ajax_error: Eroare de server WCA
-        stripe_error: Eroare de la Stripe
         subtotal: Subtotal
       alerts:
-        not_a_number: Te rugăm să introduci o cantitate validă
         amount_too_low: Suma totală trebuie să fie cel puțin cât taxa de 
           înregistrare.
         amount_rather_high: >-
@@ -1563,12 +1233,6 @@ ro:
           Suma nu a fost extrasă deoarece taxa de înregistrare a fost deja
           plătită
         not_allowed: Nu poți plăti pentru acea înscriere.
-        stripe_failed: Te rugăm să verifici tranzacția Stripe
-        stripe_not_found: Stripe a raportat un ID de tranzacție ce nu poate fi 
-          identificat.
-        stripe_secret_invalid: >-
-          Stripe a raportat un element secret al tranzacției care nu se
-          potrivește cu informațiile noastre.
         payment_reset: Plata a fost respinsă de către Stripe.
         payment_pending: Plata nu a fost încă completată.
     preferred_events_prompt_html: >-
@@ -1673,7 +1337,6 @@ ro:
         Rezultatele acestei competiții sunt vizibile, dar nu au fost încă
         postate.
       results_already_posted: Rezultatele au fost deja postate.
-      results_posted: Rezultate postate cu succes!
       results_preview_alert: Vezi rezultate care nu au fost încă postate.
       upload_results: >-
         Competiția este gata, iar noi lucrăm pentru a încărca rezultatele cât
@@ -1700,14 +1363,6 @@ ro:
       confirmed_not_visible: 'Competiția este confirmată, dar nu este vizibilă.'
       not_confirmed_visible: 'Competiția nu este confirmată, dar este vizibilă.'
       not_confirmed_not_visible: 'Competiția nu este nici confirmată, nici vizibilă.'
-      stripe_connected: >-
-        Ai connectat cu cu succes contul tău Stripe, și acum poți primi plăți de
-        înregistrare pentru această competiție.
-      stripe_disconnected_success: Contul Stripe deconectat cu succes.
-      stripe_disconnected_failure: A apărut o eroare la deconectarea contului 
-        Stripe.
-      stripe_not_connected: A apărut o problemă și nu am putut conecta contul 
-        tău Stripe.
       championship_exists: 'Există deja un %{championship_type} în %{year}.'
       orga_closed_reg_success: Înregistrarile au fost închise cu succes.
       orga_closed_reg_failure: Înregistrările nu pot fi închise.
@@ -1868,9 +1523,6 @@ ro:
       number_of_bookmarks: Numărul de salvări
     index:
       title: Competiții
-      disclaimer: >-
-        Te rugăm să ții cont că, din cauza pandemiei de COVID-19, unele țări nu
-        pot, deocamdată, să organizeze competiții.
       all_events: Toate
       all_years: Toți Anii
       clear: Șterge
@@ -1900,7 +1552,6 @@ ro:
         upcoming: Competiții viitoare
         custom: Competiții în perioada selectată
         by_announcement: 'Competițiile sortate după data anunțării, cele mai noi primele'
-      no_access: Nu ai acces la această pagină!
       tooltips:
         hourglass:
           ended: 'S-a terminat acum %{days}'
@@ -1918,9 +1569,6 @@ ro:
             Limita de concurenți a fost atinsă, înscrierile noi vor ajunge în
             lista de așteptare
       no_comp_found: Nu au fost găsite competiții.
-      no_comp_match: >-
-        Nu am găsit nicio competiție cu %{events}! Încearcă să cauți mai puține
-        probe.
     my_competitions_table:
       edit: Editare
       registrations: Înregistrări
@@ -1940,21 +1588,6 @@ ro:
       supports_md_html: >-
         Suportă <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      name_reason_html: >-
-        O scurtă explicație a numelui competiției. Numele trebuie să respecte <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Politica
-        de Competiții WCA</a>.
-      venue_html: >-
-        Locația unde se desfășoară competiția. %{md}. De exemplu: [Cité des
-        Sciences et de l'Industrie](http://www.cite-sciences.fr)
-      venue_details_html: >-
-        Detalii despre locație (exemplu: La parter, urmați semnele din partea
-        dreaptă a holului).  %{md}
-      contact_html: >-
-        Informații de contact opționale. Dacă nu completezi această secțiune,
-        cererile vor fi transmise printr-un formular fără a dezvălui adresele de
-        e-mail ale organizatorilor. %{md} Exemplu: [Text de
-        afișat](mailto:some@email.com)
       series_save_first_hint: 'Notă: trebuie să salvezi competiția înainte de a adăuga
         o Serie nouă'
       events: Probe
@@ -2009,7 +1642,6 @@ ro:
           name: Locație
           details: Detalii despre locație
           address: Adresa locației
-          coordinates:
         start_date: Prima zi
         end_date: Ultima zi
         series:
@@ -2027,7 +1659,6 @@ ro:
           trainee_delegate_ids: 'Delegați Candidați WCA:'
           organizer_ids: Organizatori
           contact: Contact
-        championships:
         website:
           generate_website: Voi folosi site-ul WCA pentru informații 
             suplimentare în loc de alt site
@@ -2035,10 +1666,6 @@ ro:
           external_registration_page: Pagina de înregistrare
           uses_wca_registration: Vreau să folosesc site-ul WCA pentru 
             înregistrare
-          uses_wca_live: Voi folosi WCA Live pentru scoruri.
-        user_settings:
-          receive_registration_emails: Trimite-mi notificare pe e-mail când 
-            cineva se înregistrează pentru competiție
         entry_fees:
           currency_code: RON
           base_entry_fee: Taxa de înregistrare de bază
@@ -2056,7 +1683,6 @@ ro:
           event_change_deadline_date: Termen limită pentru actualizarea de către
             concurenți a probelor
           allow_on_the_spot: Înregistrări pe loc
-          allow_self_delete_after_acceptance: Anulare înscrieri
           allow_self_edits: Editare înscrieri
           guests_enabled: Însoțitori
           guest_entry_status: Afișează mesaj pentru accesul gratuit al 
@@ -2082,8 +1708,6 @@ ro:
             per_registration_limit: Număr maxim de probe per înregistrare
           main_event_id: Proba principală
         remarks: Observații
-        clone_tabs: Vreau să multiplic, de asemenea, toate taburile cu 
-          informații suplimentare
       hints:
         name: 'Numele complet al competiției, inclusiv anul la sfârșitul ei (de exemplu
           U.R.A. Spring 2016). Asigură-te că începi cuvintele cu literă mare. Numele
@@ -2220,19 +1844,11 @@ ro:
           allow_on_the_spot:
             'true': Înregistrările pe loc vor fi acceptate
             'false': Înregistrările pe loc NU vor fi acceptate
-          allow_self_delete_after_acceptance:
-            'true': Concurenții își pot anula înregistrarea după ce aceasta a 
-              fost acceptată
-            'false': Concurenții NU își pot anula înregistrarea după ce aceasta 
-              a fost acceptată
           allow_self_edits:
             'true': Concurenții își pot edita detaliile din înscriere până la 
               termenul limită pentru actualizarea probelor
             'false': Concurenții NU își pot edita detaliile înscrierii după ce 
               aceasta a fost acceptată
-          guests_enabled:
-            'true': Întreabă despre însoțitori
-            'false': NU întreba despre însoțitori
           guest_entry_status:
             unclear: Nu afișa nimic (poate poți elabora în secțiunea "Cerințe 
               suplimentare pentru înregistrare")
@@ -2246,6 +1862,7 @@ ro:
                 calificați (îi voi șterge ulterior)
               'false': Concurenții TREBUIE să fie calificați pentru a se înscrie
                 la o probă
+        website: {}
     errors:
       invalid_name_message: >-
         trebuie să se termine cu un an și poate să conțină numai caractere
@@ -2282,9 +1899,6 @@ ro:
       waiting_list_deadline_before_refund_date: >-
         Termenul limită pentru lista de așteptare nu poate fi înainte datei
         limită pentru rambursări.
-      waiting_list_deadline_after_start: >-
-        Termenul limită pentru lista de așteptare nu poate fi înainte de data de
-        începere.
       event_change_deadline_before_registration_close: >-
         Termenul limită pentru actualizarea probelor nu poate fi înainte de
         încheierea înscrierilor.
@@ -2313,15 +1927,6 @@ ro:
     time_until_competition:
       competition_in: 'Competiția începe în %{n_days}.'
       competition_was: 'Competiția a fost acum %{n_days}.'
-    nearby_competitions:
-      competitions:
-        one: O competiție
-        few: '%{count} competiții'
-        other: '%{count} competiții'
-      label_admin: 'Ultimele %{days} zile'
-      nearby_admin: '%{x_competitions} în cel mult %{kms} km și %{days} zile.'
-      within: 'În cel mult %{days} zile'
-      show: Arată
     adjacent_competitions:
       label: 'Competiții apropiate (sub %{days} zile și %{kms} km)'
       no_comp_nearby: Nu există competiții apropiate!
@@ -2357,7 +1962,6 @@ ro:
     uncancel: Revocă anularea competiției
     cancelled_by_html: 'Anulată de %{name} în %{date_time}'
     cancel_confirm: Ești sigur că vrei să anulezi competiția?
-    post_results: Postează rezultatele
     results_posted_by_html: 'Postate de %{poster_name} în %{date_time}'
     cancel_mistake: Ai făcut o greșeală?
     note_before_cancel: 'Notă: doar competițiile confirmate pot fi anulate'
@@ -2368,10 +1972,6 @@ ro:
     note_reg_not_full_orga_close_reg: >-
       Notă: poți opri înregistrările doar după ce s-a atins limita numărului de
       concurenți.
-    stripe_disconnect: Deconectează contul Stripe
-    stripe_disconnect_confirm: >-
-      Ești sigur că vrei să deconectezi contul Stripe? Această acțiune este
-      ireversibilă!
     note_reg_closed_orga_close_reg: 'Notă: înregistrările sunt deja oprite.'
     show:
       general_info: Informații generale
@@ -2384,7 +1984,6 @@ ro:
           Dacă atingi limita de timp în timpul rezolvării, arbitrul de va opri,
           iar rezultatul va fi DNF (vezi %{regulation_link}).
         regulation_link_text: 'Regula %{number}'
-        guideline_link_text: 'Îndrumarea %{number}'
         cumulative_time_limit: limita de timp cumulativă
         cumulative_one_round_html: 'O %{cumulative_time_limit} poate fi impusă (vezi
           %{regulation_link}).'
@@ -2414,7 +2013,6 @@ ro:
       qualification: Calificare
     schedule:
       display_as:
-        label: 'Afișează programul ca:'
         table: Tabel
         calendar: Calendar
       display_for_room: 'Afișează programul pentru:'
@@ -2424,13 +2022,8 @@ ro:
       start: Start
       end: Sfârșit
       activity: Activitate
-      room: Sală
       room_in_venue: '%{room} în %{venue}'
-      venue_information_html: 'Acum vezi programul pentru locația %{venue_name}.'
       timezone_message: 'Programul este afișat pentru fusul orar %{timezone}.'
-      multiple_venues_available: >-
-        Competiția aceasta are mai multe locații, asigură-te că verifici și
-        programul pentru celelalte locații!
       schedule_for_date: 'Programul pentru %{day_name} (%{full_date})'
     nav:
       menu:
@@ -2469,6 +2062,12 @@ ro:
     competition_series_fields:
       add_series: Adaugă la Serie
       remove_series: Înlătură din Serie
+    live:
+      admin: {}
+      connection: {}
+    registration_v2:
+      register:
+        panel: {}
   competition_tabs:
     headers:
       tabs: Taburi
@@ -2505,33 +2104,17 @@ ro:
       Unele filtre (cum ar fi anii anteriori) sunt dezactivate temporar. Echipa
       de Software lucrează pentru remedierea filtrelor - ne cerem scuze pentru
       inconvenient.
-    tooltip_no_years: >-
-      Baza noastră de date este prea mare pentru a calcula informații cu
-      istoric.
-    tooltip_no_quantities: Baza noastră de date este prea mare pentru a calcula 
-      clasamente lungi.
     selector_elements:
       events_selector:
         event: Probă
-        all_events: Toate probele
-      region: Regiune
       type_selector:
         type: Tip
         single: Single
         average: Medie
-      years_selector:
-        years: Ani
-        all_years: Toți anii
-        only: Doar
-        only_html: 'Doar %{year}'
-        until: Până în
-        until_html: 'Până în %{year}'
       show_selector:
         show: Arată
         persons: Persoane
-        persons_html: '%{quantity} persoane'
         results: Rezultate
-        results_html: '%{quantity} rezultate'
         by_region: Dupî regiune
         mixed: Desfășurat
         slim: Restrâns
@@ -2546,18 +2129,12 @@ ro:
     table_elements:
       name: Nume
       result: Rezultat
-      citizen_of: Naționalitate
       competition: Competiție
       solves: Rezolvări
       region: Regiune
       world: Toată Lumea
-      type_options:
-        type: Tip
-        single: Single
-        average: Medie
       event: Probă
       date_circa: 'Dată: circa'
-      record: Record
   notifications:
     connect_wca_id: Connectează-ți Id-ul WCA la cont!
   persons:
@@ -2602,23 +2179,6 @@ ro:
     errors:
       unstick_at_future: trebuie să fie în viitor
   contacts:
-    website:
-      faq_note_html: >-
-        Înainte de a transmite mesajul, ar fi bine să te uiți pe pagina noastră
-        de  <a href="/faq">Întrebări Frecvente</a>. Dacă vrei să contactezi o
-        echipă specifică sau un comitet, poți găsi informațiile lor de contact
-        <a href="/teams-committees">aici</a>.
-      title: Formular de Contact pentru Site-ul WCA
-      inquiries:
-        competition: >-
-          Contactează Organizatorii unei competiții specifice (selectează mai
-          jos)
-        competitions_in_general: 'Competiții în general (organizare, reguli, etc.)'
-        wca_id_or_profile: ID WCA sau Profil WCA
-        media: Media
-        software: Software
-        different: Altele
-      submit: Trimite mesajul
     dob:
       title: Formular de Cerere pentru Schimbarea Datei Nașterii
       description: >-
@@ -2882,147 +2442,18 @@ ro:
       donate_paypal: Donează prin Paypal
       donate_other: Alte modalități de a dona
     structure:
-      teams_committees_councils: 'Echipe, Comitete și Consilii WCA'
       title: Structură
       board:
-        name: Boardul de Directori WCA
         description: >-
           Board-ul WCA este responsabil de conducerea globală a organizației și
           de îndeplinirea sarcinilor care nu intră în sfera celorlalte Echipe,
           Comitete și Consiliilor.
-      committees: >-
-        Echipele și comitetele WCA sunt o parte integrala a organizației și
-        desfășoară activități zilnice, necesare pentru funcționarea acesteia.
-        Aceste comitete sunt compuse din membri ai comunității WCA, inclusiv
-        Delegați WCA și concurenți. Fiecare echipă are un lider, al cărui rol
-        este de a asigura buna funcționare a acesteia și de a îi îndruma pe
-        ceilalalți membri. Consiliile sunt echipe speciale, care au rolul de a
-        oferi sfatului Boardului WCA, si sunt alcătuite din membri ai
-        comunității (dar nu din WCA Staff). Când se formează noi echipe,
-        comitete sau consilii, informațiile despre procesul de aplicare sunt
-        afișate pe homepage-ul WCA.
-      senior_member: Membru Senior
-      leader: Lider
-      officers:
-        name: Ofițeri WCA
-        description: >-
-          Directorii WCA se ocupă de sarcinile legate de statutul non-profit al
-          WCA. Acești directori sunt aleși de Boardul WCA. Directorul Executiv
-          este CEO-ul WCA, Președintele conduce toate întâlnirile Boardului,
-          Secretarul se ocupă de documentele organizației iar Trezorierul se
-          ocupă de aspectele financiare ale WCA.
-      chair:
-        name: Președintele WCA
-      executive_director:
-        name: Directorul Executiv WCA
-      secretary:
-        name: Secretarul WCA
-      vice_chair:
-        name: Vicepreședintele WCA
-      treasurer:
-        name: Trezorierul WCA
       users:
         profile: 'profilul utilizatorului %{user_name}'
-      wdc:
-        name: Comitetul Disciplinar WCA
-        description: >-
-          Acest comitet consiliază Boardul WCA în cazuri speciale, ca încălcări
-          intenționate ale Regulamentului WCA, și poate fi contactat de membrii
-          WCA în cazul unor probleme personale importante ce vizează
-          competițiile WCA.
-      wdpc:
-        name: Comitetul de Protecția Datelor WCA
-        description: >-
-          Acest comitet este responsabil de toate aspectele legate de Protecția
-          Datelor.
-      wrc:
-        name: Comitetul de Regulamente WCA
-        description: Acest comitet este responsabil de administrarea 
-          Regulamentului WCA.
-      wrt:
-        name: Echipa de Rezultate WCA
-        description: >-
-          Această echipă este responsabilă pentru administrarea tuturor
-          rezultatelor oficiale.
-      wst:
-        name: Echipa de Software WCA
-        description: >-
-          Această echipă este responsabilă pentru administrarea software-ului
-          WCA (site, programe de amestecare, workbook-uri, tooluri de admin).
-      wct:
-        name: Echipa de Comunicare WCA
-        description: >-
-          Echipa de Comunicare WCA (WCT) are rolul de a supraveghea și susține
-          comunicarea WCA cu comunitatea și publicul general. Comunicarea WCA
-          trebuie să contribuie la realizarea Obiectivelor WCA și să susțină o
-          cultură pozitivă de prietenie, transparență, incluziune, deschidere și
-          răspundere.
-      wfc:
-        name: Comitetul Financiar WCA
-        description: Această echipă este responsabilă de finanțele WCA.
-      wec:
-        name: Comitetul de Etică WCA
-        description: >-
-          Acest comitet are rolul de a se asigura că toate procedurile
-          întreprinse de Stafful WCA și Stafful extern se supun Codului de Etică
-          și de a face investigații independente dacă acțiunile întreprinse de
-          acești membri nu respectă Codul de Etică. Astfel de investigații pot
-          fi cerute de către orice speedcuberi înregistrați care se adreseză
-          Comitetului de Etică. Acesta rezolvă, de asemena, disputele apărute
-          când cineva nu este de acord cu o decizie luată de Comisia
-          Disciplinară WCA.
-      weat:
-        name: Echipa de Asistenți Executivi WCA
-        description: >-
-          Această echipă este responsabilă de desfășurarea sarcinilor
-          administrative ale Boardului WCA.
-      wqac:
-        name: Comitetul de Asigurare a Calității WCA
-        description: >-
-          Acest comitet are rolul de a susține și promova constant îmbunătățirea
-          calității în WCA, precum și aplicarea la nivel global a standardelor
-          de calitate pentru a asigura un nivel consistent de calitate al
-          proceselor, Staffului WCA, Organizațiilor Regionale, Organizatorilor
-          de Competiții și Staffului de Competiție.
-      wcat:
-        name: Echipa de Anunțare a Competițiilor WCA
-        description: >-
-          Această echipă are rolul de a aproba și anunța Competițiile WCA și a
-          asigura că aceste informări aderă standardelor de calitate WCA.
-      wmt:
-        name: Echipa de Marketing WCA
-        description: >-
-          Această echipă este responsabilă de dezvoltarea și întreținerea
-          Brandului WCA, căutarea sponsorilor, susținerea distribuirii
-          Echipamentului de Competiții WCA și marketingul Produselor WCA.
-      wac:
-        name: Echipa de Consilieri WCA
-        description: >-
-          Această echipă este responsabilă de clădirea și menținerea
-          comunicației bilaterale între Comunitatea WCA și Stafful WCA.
-      wsot:
-        name: Echipa de Organizare Sportivă WCA
-        description: >-
-          Această echipă are rolul de a supraveghea și susține recunoașterea WCA
-          ca o federație sportivă internațională.
-      wat:
-        name: Echipa de Arhivare WCA
-        description: >-
-          Echipa de Arhivare WCA este un Comitet Consultativ al WCA. Această
-          echipă are rolul de a suprabeghea și susține dezvoltarea unei arhive a
-          organizației.
-      banned:
-        name: Concurenți interziși
-      wct_china:
-        name: WCT China
       operations_html: >-
         Operațiunile de zi cu zi ale WCA sunt executate de
         %{committees_and_teams} WCA.
       teams_committees: Echipe și Comitete
-      probation:
-        name: Delegați în Probă
-      wst_admin:
-        name: Admini software
       delegates_html: >-
         <p><strong>Delegatul WCA</strong> este un rol definit în Moțiunile WCA
         și descris mai departe în Regulamentul WCA. Sarcina principală a unui
@@ -3057,7 +2488,6 @@ ro:
     codeofethics: Codul de Etică
     codeofconduct: Codul de conduită
     finances: Finanțe
-    vision_and_strategy: Viziune și Strategie
   education:
     title: Resurse Educaționale WCA
     description: >-
@@ -3124,115 +2554,7 @@ ro:
     delete:
       confirm_delete: Ești sigur că vrei să ștergi cererea de Organizație 
         Regională?
-  contact:
-    title: Informații de Contact
-    info_alert_html: >-
-      Înainte de a contacta oricare dintre echipele de pe această pagină, te
-      rugăm să consulți pagina de %{link}!
-    questions_and_comments_html: >-
-      Pentru întrebări legate de site, comentarii și sugestii, folosește acest
-      <a href='/contact/website'>formular de contact</a>. Pentru întrebări
-      specifice unei anumite zone sau competiții, te rugăm să contactezi un
-      %{link} din zona ta.
-    committees_and_teams_html: <u>Comitete și Echipe</u>
-    members: Membri
-    board:
-      info_html: >-
-        World Cube Association este coordonată de Boardul WCA. Acesta este
-        responsabil de investigații generale și de organizația WCA per total.
-    wct:
-      info_html: >-
-        WCT este responsabilă de supravegherea și susținerea comunicării WCA cu
-        comunitatea și publicul general. Ei pot fi contactați dacă ai întrebări
-        generale despre WCA sau desăre aparițiile media.
-    wdc:
-      info_html: >-
-        WDC investigehază o varietate de probleme și soluții propuse, inclusiv
-        sancțiuni, atunci când este nevoie. Printre altele, aceste situații pot
-        fi încălcări serioase ale Regulamentului WCA sau probleme legate de
-        comunitate. Dacă ai trecut printr-o astfel de situație, fii liber să
-        contactezi această comisie.
-    wdpc:
-      info_html: >-
-        WPDC este responsabil de documentarea, crearea, implementarea,
-        administrarea și aplicarea tuturor politicilor de Protecția Datelor ale
-        WCA, contractelor cu entități externe care procesează Datele WCA și de
-        toate sarcinile legate de Protecția Datelor.
-    wrc:
-      info_html: >-
-        WRC se ocupă cu tot ce ține de aplicarea, îmbunătățirea și dezvoltarea
-        Regulamentului WCA. Ei susțin delegații WCA în orice fel de problemă
-        procedurală ce apare în cadrul competițiilor și decid ce se întâmplă în
-        cazul incidentelor nerezolvate și neacoperite. WRC publică regulat
-        rapoarte interne pentru a ajuta delegații WCA și a le îmbogăți
-        cunoștințele despre Regulament. Dacă dorești să iei parte la dezvoltarea
-        regulilor sau să propui schimbări, poți contacta WRC prin mail, sau prin
-        discuții pe <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      info_html: >-
-        WRT este responsabilă de administrarea tutoror datelor din bazele de
-        date ale WCA, cele mai importante fiind rezultatele de la competiții și
-        datele personale. Ei postează rezultatele competițiilor WCA pe site-ul
-        WCA, odată ce Delegatul competiției le-a trimis. În afară de aceasta,
-        Echipa de Rezultate WCA este responsabilă cu corectarea rezultatelor,
-        unde este necesar, și cu administrarea paginilor de profil WCA. Aceste
-        responsabilități includ, de exemplu, schimbarea datelor utilizatorului,
-        precum data nașterii, în acord cu cerințele verificate, sau rezolvarea
-        cererilor de schimbare a pozei de profil.
-    wst:
-      info_html: >-
-        WST este responsabilă de managementul și mentenanța software-ului WCA.
-        Ei dezvoltă, de asemenea, programe noi, pentru diverse necesități din
-        WCA, oricând este nevoie. Dacă ai idei sau sugestii pentru îmbunătățirea
-        site-ului, sau dacă vrei să raportezi erori și buguri, fii liber să îi
-        contactezi! Site-ul WCA este un proiect open-source uriaș pe <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
-        așa că dacă ești interesat să ajuți la dezvoltarea lui, aruncă o privire
-        acolo.
-    wfc:
-      info_html: >-
-        WFC este responsabilă cu tot ce ține de finanțele WCA. Ei administrează
-        conturile și finanțele WCA în acord cu un buget anual aprobat, care
-        intră tot în responsabilitatea lor.
-    wec:
-      info_html: >-
-        Acest comitet are rolul de a se asigura că toate procedurile Staffului
-        WCA și Staffului Extern se supum Codului de Etică.
-    weat:
-      info_html: >-
-        Această echipă este responsabilă cu rezolvarea sarcinilor administrative
-        ale Boardului WCA.
-    wqac:
-      info_html: >-
-        Acest comitet are rolul de a susține și promova constant îmbunătățirea
-        calității în WCA, precum și aplicarea la nivel global a standardelor de
-        calitate pentru a asigura un nivel consistent de calitate al proceselor,
-        Staffului WCA, Organizațiilor Regionale, Organizatorilor de Competiții
-        și Staffului de Competiție.
-    wcat:
-      info_html: >-
-        Acest comitet are rolul de a aproba și anunța Competițiile WCA și de a
-        asigura că aceste anunțuri aderă la standardele de calitate WCA.
-    wmt:
-      info_html: >-
-        Această echipă este responsabilă de dezvoltarea și întreținerea
-        Brandului WCA, căutarea sponsorilor, susținerea distribuirii
-        Echipamentului de Competiții WCA și marketingul Produselor WCA.
-    wsot:
-      info_html: >-
-        Această echipă are rolul de a supraveghea și susține recunoașterea WCA
-        ca o federație sportivă internațională.
-    wat:
-      info_html: >-
-        Echipa de Arhivare WCA este un Comitet Consultativ al WCA. Această
-        echipă are rolul de a suprabeghea și susține dezvoltarea unei arhive a
-        organizației.
-    councils_html: Consilii
-    wac:
-      info_html: >-
-        Acest consiliu este responsabil cu crearea și menținerea comunicării
-        bilaterale între Comunitatea WCA și Stafful WCA.
+  contact: {}
   score_tools:
     title: Instrumente Software pentru competițiile WCA
     wca_icon_text: Dezvoltat și menținut de WST
@@ -3322,25 +2644,9 @@ ro:
           desfășurare
   logo:
     title: Logoul WCA
-    paragraphs:
-      '1': >-
-        Logoul WCA a fost creat de Justin Eastman, într-un concurs de design din
-        ianuarie 2005. <br />Ne-a plăcut logoul datorită design-ului, culorilor
-        și pentru că nu arată în mod specific un cub 3x3x3.
-      '2': >-
-        Avem patru versiuni diferite ale logoului: o <a
-        href="/files/WCAlogo_XL.jpg">versiune mare</a> (46 KB, 1756x1068
-        pixeli), o <a href="/files/WCAlogo.svg">versiune vector</a>, o <a
-        href="/files/WCAlogo_notext.svg">versiune vector fără text</a> și <a
-        href="/files/WCAlogo_monochrome.svg">o versiune vector monocromă</a>.
-      '3': >-
-        Versiunea 3D a logoului, creată de Vu Minh Tan din Vietnam: <a
-        href="/files/WCALogo3D.png">versiunea PNG</a> (2.1 MB), o <a
-        href="/files/WCALogo3Dsmall.png">versiune PNG mică</a> (0.25 MB).
-      '4': >-
-        Utilizarea acceptabilă a logoului WCA este delimitată în Politica de
-        Utilizare a Logoului WCA, care se găsește în <a href="/documents">pagina
-        de Documente WCA</a>.
+    headings:
+      usage_guidelines:
+        color: {}
   search_results:
     index:
       competitions: Competiții
@@ -3374,10 +2680,6 @@ ro:
         Pe lângă Regulamentul WCA, există și <a
         href="/regulations/guidelines.html">Îndrumările WCA</a>, ce conțin
         clarificări și explicații suplimentare
-      content3_html: >-
-        Deciziile importante luate de către Comitetul de Regulamente WCA asupra
-        incidentelor care s-au petrecut la competiții pot fi consultate în <a
-        href="/incidents">Incidents Log</a>.
     panel2:
       title: Traduceri
       content1_html: >-
@@ -3594,3 +2896,25 @@ ro:
         prin descărcarea sub formă de SQL dump. Mai multe detalii aici:
         %{github_link}.
       download: Descărcare
+  validators: {}
+  tickets: {}
+  page:
+    contacts:
+      form:
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wct: {}
+        user_data: {}
+        contact_recipient: {}
+        competition: {}
+        wst: {}
+    contact_edit_profile:
+      form: {}
+  trainee_delegate_application: {}
+  payments:
+    payment_setup: {}
+    errors: {}
+  user_roles:
+    email: {}
+  user_groups: {}

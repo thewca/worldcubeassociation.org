@@ -1575,7 +1575,6 @@ pl:
         one: 1 państwo
         few: '%{count} państwa'
         many: '%{count} państw'
-      export_csv: Eksportuj jako CSV
       email: Adres email
       non_competing: Nieukładające rejestracje
       not_paid: Nie opłacone
@@ -2727,8 +2726,6 @@ pl:
           %{update_params}
         delete_contact_message: Chcę usunąć moją rejestrację
         no_changes: Nie ma zmian
-        email_send: Wyślij email
-        email_copy: Skopiuj adresy Email
         email_message: Skopiowano do schowka. Pamiętaj o użyciu UDW!
         move_to:
           one: Przenieś %{count} do
@@ -4390,3 +4387,4 @@ pl:
     stakeholder_role:
       actioner: Wykonawca
       requester: Wnioskodawca
+  trainee_delegate_application: {}

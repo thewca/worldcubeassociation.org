@@ -456,6 +456,7 @@ ja:
     mailer:
       confirmation_instructions:
         subject: 新しいメールアドレス認証を完了してください。
+    registrations: {}
   wca:
     errors:
       messages:
@@ -907,7 +908,6 @@ ja:
     list:
       title: '%{comp} の参加申し込み一覧'
       edit: 編集
-      export_csv: CSV に出力
       email: メールアドレス
       not_paid: 未支払い
       registered:
@@ -1292,7 +1292,6 @@ ja:
           external_website: ウェブサイト
           external_registration_page: 参加申し込みページ
           uses_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
-          uses_wca_live: 記録入力にWCA Liveを使用する。
         entry_fees:
           currency_code: 通貨コード
           base_entry_fee: 基本参加費
@@ -1434,6 +1433,7 @@ ja:
             allow_registration_without:
               'true': 参加申し込み時点で参加資格がない種目への参加申し込みを許可する
               'false': 参加申し込み時点での参加資格を要求する
+        website: {}
     registration_v2:
       pdf:
         link: '<0>%{pdfLink}</0> として'
@@ -1483,8 +1483,6 @@ ja:
         update_contact_message: '参加申し込みを以下のように更新することを希望します： %{update_params}'
         delete_contact_message: 参加申し込みの削除を希望します
         no_changes: 変更はありません
-        email_send: メール送信
-        email_copy: メールをコピー
         email_message: メールをコピーしました。メール送信の際、必要であればbccを使用してください。
         amount: 数
         no_self_update: 参加申し込みを更新する場合、主催者に連絡してください。
@@ -1742,6 +1740,8 @@ ja:
     competition_series_fields:
       add_series: シリーズ大会に追加
       remove_series: シリーズ大会から除外
+    live:
+      connection: {}
   competition_tabs:
     headers:
       tabs: タブ
@@ -2076,6 +2076,9 @@ ja:
       create_success: 申請が送信されました。WCA 理事会によるレビューをお待ちください。
   logo:
     title: WCA ロゴ
+    headings:
+      usage_guidelines:
+        color: {}
   search_results:
     index:
       competitions: 大会
@@ -2157,3 +2160,18 @@ ja:
   footer:
     privacy: プライバシーポリシー
     disclaimer: 免責事項
+  media_and_instagram: {}
+  database: {}
+  qualification: {}
+  trainee_delegate_application: {}
+  user_groups: {}
+  payments:
+    errors: {}
+    payment_setup: {}
+  score_tools:
+    tools: {}
+  validators: {}
+  user_roles:
+    email: {}
+  merch: {}
+  tickets: {}

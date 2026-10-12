@@ -687,6 +687,7 @@ eo:
     mailer:
       confirmation_instructions:
         subject: Bonvolu konfirmi vian novan retpoŝtadreson
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1505,7 +1506,6 @@ eo:
       country_plural:
         one: 1 regiono
         other: '%{count} regionoj'
-      export_csv: Eksporti al CSV-dosiero
       email: Retpoŝti
       non_competing: Nekonkursantaj registriĝoj
       not_paid: Ne pagata
@@ -1749,7 +1749,6 @@ eo:
         Ni okupiĝas pri la rezultoj de ĉi tiu konkurso - ili estu disponeblaj
         baldaŭ.
       results_already_posted: La rezultoj jam estis poŝtitaj.
-      results_posted: Sukcese poŝtis la rezultoj!
       results_preview_alert: Vi rigardas rezultojn kiuj ankoraŭ ne estas 
         publikigitaj.
       upload_results: >-
@@ -2113,7 +2112,6 @@ eo:
           external_registration_page: Paĝo por la registriĝoj
           uses_wca_registration: Mi ŝatus uzi la retejon de la WCA por la 
             registriĝoj
-          uses_wca_live: Mi uzos WCA Live por eniri rezultojn
         entry_fees:
           currency_code: Valuta kodo
           base_entry_fee: Baza registriĝkosto
@@ -2376,6 +2374,7 @@ eo:
               'false': >-
                 Konkursantoj DEVAS esti kvalifikitaj por registriĝi por
                 konkursero
+        website: {}
     registration_v2:
       auto_accept:
         bulk_auto_accept: Aŭtomate aprobi konkursantojn
@@ -2490,8 +2489,6 @@ eo:
           %{update_params}'
         delete_contact_message: Mi volas forigi mian registriĝon
         no_changes: Ne estas ŝanĝoj
-        email_send: Sendi retmesaĝon
-        email_copy: Kopii retmesaĝojn
         email_message: Kopiita al tondujo. Memoru uzi BCC!
         move_to:
           one: 'Movi %{count} al'
@@ -2752,7 +2749,6 @@ eo:
     uncancel: Malnuligi la konkurson
     cancelled_by_html: 'Nuligita de %{name} la %{date_time}'
     cancel_confirm: Ĉu vi certas ke vi volas nuligi tiun konkurson?
-    post_results: Poŝti la rezultojn
     results_posted_by_html: 'Poŝtita de %{poster_name} la %{date_time}'
     cancel_mistake: Ĉu vi eraris?
     note_before_cancel: 'Noto: nur konfirmitaj konkursoj povas esti nuligitaj.'
@@ -2777,7 +2773,6 @@ eo:
           Se vi atingis la tempolimon dum via provo, la juĝanto haltos vin kaj
           via rezulto estos DNF (vidu %{regulation_link}).
         regulation_link_text: 'Regulo %{number}'
-        guideline_link_text: 'Gvidlinio %{number}'
         cumulative_time_limit: akumula tempolimo
         cumulative_one_round_html: >-
           Povas esti neprigo de %{cumulative_time_limit} (vidu
@@ -2869,7 +2864,6 @@ eo:
         tabs: Administri langetojn
         newcomer_checks: Kontrolado de novaj konkursantoj
         submit_results: Sendi rezultojn
-        match_scrambles: Sendi miksojn
         delegate_report: Delegitraporto
         registration: Registriĝoj
         import_registrations: Importi registriĝojn
@@ -2906,6 +2900,7 @@ eo:
         ongoing: tuja
       podiums:
         title: Podioj
+      connection: {}
   competition_tabs:
     headers:
       tabs: Langetoj
@@ -3396,7 +3391,6 @@ eo:
     codeofethics: Etika Kodo
     codeofconduct: Konduta Kodo
     finances: Financoj
-    vision_and_strategy: Vizio kaj Strategio
   education:
     title: Edukaj Risurcoj de la WCA
     description: >-
@@ -3952,9 +3946,6 @@ eo:
         %{person_name}. Bonvolu redakti la rezulton por inkludi la mankanta(j)n
         rezulto(j)n aŭ ĝisdatigi la raŭndajn informojn en la paĝo "Administri
         konkurserojn" de la konkurso.
-      mismatched_result_format_error: >-
-        [%{round_id}] La rezultoj de %{person_name} estas malbone strukturitaj:
-        %{expected_format} estas atendita sed %{format} estis ricevita.
       result_over_time_limit_error: >-
         [%{round_id}] Almenaŭ unu rezulto de %{person_name} superas la
         tempolimon de la raŭndo, kiu estas %{time_limit} po provo. Ĉiuj provoj
@@ -3962,10 +3953,6 @@ eo:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] La sumo de la rezultoj de %{person_name} superas la
         akumulan tempolimon, kiu estas %{time_limit}.
-      no_round_information_warning: >-
-        [%{round_id}] Ne estas informo pri ĉestempo nek tempolimo por ĉi tiu
-        raŭndo. Oni preterpasis tiujn kontrolojn. Bonvolu ĝisdatigi la raŭndaj
-        informoj en la paĝo "Administri konkursejojn" de la konukurso.
       undefined_time_limit_warning: >-
         [%{round_id}] La tempolimo de ĉi tiu raŭndo estas nedifinita, oni
         preterpasis la tempolimajn kontrolojn. Tio estas normala nur por
@@ -3992,10 +3979,6 @@ eo:
         kion la kvalifikajn kondiĉojn planis (%{actual} anstataŭ %{expected}, la
         kondiĉo estis: %{condition}). Bonvolu ĝisdatigi la raŭndajn informojn en
         la paĝo "Administri konkurserojn".
-      unexpected_round_results_error: >-
-        La raŭndo %{round_id} estas en la rezultoj sed ĝi ne estis kreita en la
-        langeto pri konkurseroj. Bonvolu inkludi la raŭndajn informojn en la
-        paĝo "Administri konkurserojn" de la konkurso.
       regulation_9m1_error: >-
         La raŭndo %{round_id} havas 99 aŭ malpli da 99 konkursantoj sed havas
         pli ol du sekvaj raŭndoj. La regulo 9m1 malpermesas tion.
@@ -4034,10 +4017,6 @@ eo:
         Ne estas rezultoj por la raŭndo %{round_id} sed ĝi estas listigata en la
         konkurseran langeton. Se ĉi tiu raŭndo ne okazis, forigu la raŭndon en
         la paĝo "Administri konkurserojn" de la konkurso.
-      unexpected_combined_round_error: >-
-        Neniu ĉestempo estis anoncita por '%{round_name}' sed oni trovis
-        ĉestempon en la rezultoj. Bonvolu ĝisdatigi la raŭndajn informojn en la
-        paĝo "Administri konkurserojn" de la konkurso.
     events:
       not_333_main_event_warning: >-
         La elektita ĉefa konkursero estas %{main_event_id}. Kvankam ĝi jam estis
@@ -4050,10 +4029,6 @@ eo:
       no_main_event_warning: >-
         Ĉi tiu konkurso ne havas ĉefan konkurseros. Bonvolu sciigi al la WRT ke
         tio ĝustas.
-      unexpected_results_error: >-
-        Estas rezultoj de %{event_id} sed ĝi ne estas listigita kiel oficiala
-        konkursero. Bonvolu forigi la konkurseron el la rezultoj aŭ kontakti la
-        WCAT por peti aldonon de ĉi tiun konkurseron al la WCA-retejo.
       missing_results_warning: >-
         Ne estas rezultoj de %{event_id} sed ĝi estas listigita kiel oficiala
         konkurseron. Se ĉi tiu konkursero okazis, bonvolu realŝuti vian JSON-n
@@ -4065,9 +4040,6 @@ eo:
       missing_scrambles_for_competition_error: >-
         Mankantaj miksoj por la konkurso. Uzu "Scrambles Matcher" por aldoni
         miksojn.
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Tro multe da miksoj. Uzu "Scrambles Matcher" por malelekti
-        la neuzataj miksoj.
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: mankantaj miksoj, oni trovis nur
         %{actual} anstataŭ %{expected}.
@@ -4089,3 +4061,4 @@ eo:
     name: Miksaro %{letter_code}
     group: Grupo %{number}
     attempt: Provo %{number}
+  tickets: {}

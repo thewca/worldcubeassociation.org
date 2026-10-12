@@ -675,6 +675,7 @@ fi:
     mailer:
       confirmation_instructions:
         subject: Vahvista uusi sähköpostiosoite
+    registrations: {}
   wca:
     errors:
       messages:
@@ -1466,7 +1467,6 @@ fi:
       country_plural:
         one: 1 alue
         other: '%{count} aluetta'
-      export_csv: Vie CSV-tiedostona
       email: Sähköposti
       non_competing: Non-competing registrations
       not_paid: Ei maksettu
@@ -2074,7 +2074,6 @@ fi:
           external_website: Verkkosivusto
           external_registration_page: Rekisteröitymissivu
           uses_wca_registration: Haluan käyttää WCA-sivua rekisteröitymiseen
-          uses_wca_live: Käytän WCA Liveä tulosten tallentamiseen
         entry_fees:
           currency_code: Valuuttatunnus
           base_entry_fee: Osallistumismaksu
@@ -2335,6 +2334,7 @@ fi:
                 Competitors will be allowed to register for events they're not
                 qualified for (I'll remove them later)
               'false': Competitors MUST be qualified to register for an event
+        website: {}
     registration_v2:
       auto_accept:
         bulk_auto_accept: Auto-Approve Competitors
@@ -2450,8 +2450,6 @@ fi:
           %{update_params}'
         delete_contact_message: Haluan poistaa rekisteröitymiseni
         no_changes: Ei muutoksia
-        email_send: Lähetä sähköposti
-        email_copy: Copy Emails
         email_message: Copied to clipboard. Remember to use bcc!
         move_to:
           one: 'Move %{count} to'
@@ -3885,9 +3883,6 @@ fi:
         [%{round_id}] Kilpailijalta %{person_name} puuttuu vähintään yksi
         cutoff-vaiheen ratkaisuyrityksen tulos. Lisää puuttuva tulos tai päivitä
         kierroksen tiedot kilpailusivulla.
-      mismatched_result_format_error: >-
-        [%{round_id}] Results for %{person_name} are in the wrong format:
-        expected %{expected_format}, but got %{format}.
       result_over_time_limit_error: >-
         [%{round_id}] Kilpailijalla %{person_name} on vähintään yksi tulos, joka
         ylittää aikarajan %{time_limit}. Kaikki aikarajan yli menneet ratkaisut
@@ -3895,10 +3890,6 @@ fi:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] Kilpailijan %{person_name} ratkaisujen summa ylittää
         kumulatiivisen aikarajan %{time_limit}.
-      no_round_information_warning: >-
-        [%{round_id}] There is no information about the cutoff and time limit
-        for this round. These validations have been skipped. Please update the
-        round's information in the competition's Manage Events page.
       undefined_time_limit_warning: >-
         [%{round_id}] The time limit for this round is undefined, time limit
         validations have been skipped. This is expected only for competitions
@@ -3925,10 +3916,6 @@ fi:
         merkitty jatkoonpääsyvaatimus sallisi (jatkoon pääsi %{actual} eikä
         %{expected}, jatkoonpääsyvaatimus oli %{condition}). Käy kilpailusivulla
         päivittämässä kierroksen tiedot.
-      unexpected_round_results_error: >-
-        Tuloksissa on mukana kierros %{round_id}, jota ei ole lisätty
-        kilpailusivulle. Käy kilpailusivulla päivittämässä kierrosten tiedot
-        oikeaksi.
       regulation_9m1_error: >-
         Kierroksella [%{round_id}] on alle 100 kilpailijaa, mutta yli kaksi
         jatkokierrosta, mikä rikkoo sääntöä 9m1.
@@ -3966,10 +3953,6 @@ fi:
         There are no results for round %{round_id} but it is listed in the
         events tab. If this round was not held, please remove the round in the
         competition's manage events page.
-      unexpected_combined_round_error: >-
-        No cutoff was announced for '%{round_name}', but it has been detected as
-        a cutoff round in the results. Please update the round's information in
-        the competition's manage events page.
     events:
       not_333_main_event_warning: >-
         The selected main event is %{main_event_id}. Although this was approved
@@ -3982,10 +3965,6 @@ fi:
       no_main_event_warning: >-
         There is no selected main event for this competition. Please let WRT
         know that this is correct.
-      unexpected_results_error: >-
-        Results are present for %{event_id}, however it is not listed as an
-        official event. Please remove the event from the results or contact the
-        WCAT to request the event to be added to the WCA website.
       missing_results_warning: >-
         There are no results for %{event_id}, but it is listed as an official
         event. If the event was held, please reupload your JSON with the results
@@ -3997,9 +3976,6 @@ fi:
       missing_scrambles_for_competition_error: >-
         Missing scrambles for the competition. Use Scrambles Matcher to add
         scrambles.
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the
-        unused scrambles.
       missing_scrambles_for_group_error: >-
         [%{round_id}] Group %{group_id}: missing scrambles, detected only
         %{actual} instead of %{expected}.

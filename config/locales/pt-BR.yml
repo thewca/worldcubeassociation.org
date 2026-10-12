@@ -79,37 +79,26 @@ pt-BR:
   rounds:
     '0':
       name: Rodada de qualificação
-      cellName: Rodada de Qualificação
     '1':
       name: Primeira rodada
-      cellName: Primeira Rodada
     '2':
       name: Segunda rodada
-      cellName: Segunda Rodada
     '3':
       name: Semifinal
-      cellName: Semifinal
     b:
       name: Final B
-      cellName: Final B
     c:
       name: Final
-      cellName: Final
     d:
       name: Primeira Rodada
-      cellName: Primeira Rodada
     e:
       name: Segunda Rodada
-      cellName: Segunda Rodada
     f:
       name: Final
-      cellName: Final
     g:
       name: Semifinal
-      cellName: Semifinal
     h:
       name: Rodada de Qualificação
-      cellName: Rodada de Qualificação
   attempts:
     attempt_name: 'Tentativa %{number}'
   round:
@@ -296,7 +285,6 @@ pt-BR:
         remarks: Observações
       person:
         wca_id: Pessoa
-        countryId: Representando
         dob: Data de nascimento
         gender: Gênero
         name: Nome
@@ -326,13 +314,8 @@ pt-BR:
         tags: Marcadores
         competition_id: Aconteceu durante
       competition_medium:
-        competitionId: Competição
-        type: Tipo
         text: Texto
         uri: Link
-        submitterName: Nome do remetente
-        submitterEmail: E-mail do remetente
-        submitterComment: Comentário
         status: Status
       regional_organization:
         name: Nome
@@ -389,10 +372,6 @@ pt-BR:
       status:
         accepted: Aceita
         pending: Pendente
-      type:
-        report: Relatório
-        article: Artigo
-        multimedia: Multimídia
   simple_form:
     'yes': Sim
     'no': Não
@@ -495,9 +474,6 @@ pt-BR:
         wrc_incidents: >-
           Lista dos números de incidentes para os quais você deseja uma resposta
           do WRC.
-        wic_incidents: >-
-          Lista de números referenciando os incidentes para os quais você
-          gostaria de um retorno do WIC.
         remarks: >-
           Fale sobre qualquer outro detalhe que você gostaria de compartilhar
           (p. ex. melhora/piora na comunidade, planos futuros para esta região).
@@ -666,6 +642,7 @@ pt-BR:
     mailer:
       confirmation_instructions:
         subject: Por favor confirme seu novo email
+    registrations: {}
   wca:
     errors:
       messages:
@@ -746,7 +723,6 @@ pt-BR:
       regulations: Regulamento
       regulations_full: Regulamento e Orientações
       about_regulations: Sobre o Regulamento
-      guidelines: Orientações
       scrambles: Embaralhamentos
       history: História
       translations: Traduções
@@ -1470,7 +1446,6 @@ pt-BR:
         one: região
         many: regiões
         other:
-      export_csv: Exportar em CSV
       email: Email
       non_competing: Inscrições de não competidores
       not_paid: Não paga
@@ -1478,14 +1453,10 @@ pt-BR:
         without_stripe: Inscrito em
         with_stripe: Paga em
       payment_requested_on: 'Pagamento solicitado em: %{date}'
-      payment_completed_on: 'Pagamento finalizado em: %{date}'
       series_registrations: Inscrição da série
       total: Total
     new_registration:
       title: 'Inscrever em %{comp}'
-    registered_with_account_html: >-
-      Esta pessoa se inscreveu com uma conta. Você pode editar suas informações
-      %{here}.
     sign_in: Entrar
     profile: perfil
     register: Inscrever!
@@ -1526,10 +1497,6 @@ pt-BR:
       Por favor verifique as informações da competição para instruções sobre
       como pagar
     refund_form:
-      hints:
-        refund_amount: >-
-          O valor a ser reembolsado ao competidor. Pode ser qualquer valor até o
-          máximo do que já foi pago.
       labels:
         refund_amount: Valor do Reembolso
     payment_form:
@@ -1704,7 +1671,6 @@ pt-BR:
         Estamos ocupados processando os resultados dessa competição - eles devem
         estar disponíveis em breve.
       results_already_posted: Os resultados já foram postados.
-      results_posted: Resultados postados com sucesso!
       results_preview_alert: Você está visualizando resultados que ainda não 
         foram publicados.
       upload_results: >-
@@ -2085,7 +2051,6 @@ pt-BR:
           external_website: Website
           external_registration_page: Página de inscrição
           uses_wca_registration: Eu quero usar o site da WCA para as inscrições
-          uses_wca_live: Vou usar o WCA Live para registrar os resultados
         entry_fees:
           currency_code: Código da moeda do país
           base_entry_fee: Taxa base de inscrição
@@ -2341,6 +2306,7 @@ pt-BR:
               'false': >-
                 Os competidores PRECISAM estar qualificados para se inscrevem em
                 um evento
+        website: {}
     registration_v2:
       pdf:
         link: 'Como um <0>%{pdfLink}</0>'
@@ -2426,8 +2392,6 @@ pt-BR:
           %{update_params}
         delete_contact_message: Eu quero excluir minha inscrição
         no_changes: Não há mudanças
-        email_send: Enviar e-mail
-        email_copy: Copiar e-mails
         email_message: >-
           Copiado para a área de transferência. Lembre-se de usar cópia oculta
           (bcc)!
@@ -2680,7 +2644,6 @@ pt-BR:
     uncancel: Restaurar a competição
     cancelled_by_html: 'Cancelada por %{name} em %{date_time}'
     cancel_confirm: Você tem certeza que quer cancelar a competição?
-    post_results: Postar os resultados
     results_posted_by_html: 'Postado por %{poster_name} on %{date_time}'
     cancel_mistake: Cometeu um erro?
     note_before_cancel: 'Nota: somente competições confirmadas podem ser canceladas.'
@@ -2707,7 +2670,6 @@ pt-BR:
           Se você atingir o limite durante sua resolução, o juiz irá te
           interromper e seu resultado será DNF (veja %{regulation_link}).
         regulation_link_text: 'Regra %{number}'
-        guideline_link_text: 'Orientação %{number}'
         cumulative_time_limit: tempo limite cumulativo
         cumulative_one_round_html: >-
           Um %{cumulative_time_limit} pode ser aplicado (veja
@@ -2816,6 +2778,8 @@ pt-BR:
     competition_series_fields:
       add_series: Adicionar a Série
       remove_series: Remover da Série
+    live:
+      connection: {}
   competition_tabs:
     headers:
       tabs: Abas
@@ -2852,32 +2816,17 @@ pt-BR:
       Por favor observe que alguns filtros (como anos anteriores) estão
       temporariamente desabilitados. A Equipe de Software está trabalhando para
       restaurá-los - pedimos desculpas pelo inconveniente.
-    tooltip_no_years: Nossa base de dados é muito grande para computar dados 
-      históricos
-    tooltip_no_quantities: Nossa base de dados é muito grande para computar 
-      rankings longos
     selector_elements:
       events_selector:
         event: Evento
-        all_events: Todos os eventos
-      region: Região
       type_selector:
         type: Tipo
         single: Tempo único
         average: Média
-      years_selector:
-        years: Anos
-        all_years: Todos os anos
-        only: Somente
-        only_html: 'Somente %{year}'
-        until: Até
-        until_html: 'Até %{year}'
       show_selector:
         show: Mostrar
         persons: Pessoas
-        persons_html: '%{quantity} pessoas'
         results: Resultados
-        results_html: '%{quantity} resultados'
         by_region: Por região
         mixed: Mixed
         slim: Slim
@@ -2892,18 +2841,12 @@ pt-BR:
     table_elements:
       name: Nome
       result: Resultado
-      representing: Representando
       competition: Competição
       solves: Resoluções
       region: Região
       world: Mundo
-      type_options:
-        type: Tipo
-        single: Tempo único
-        average: Média
       event: Evento
       date_circa: Data aproximada
-      record: Recorde
   notifications:
     connect_wca_id: Vincular sua ID da WCA à sua conta!
   payments:
@@ -2972,6 +2915,7 @@ pt-BR:
           display_name: Nome
           primary_email: E-mail
         fallback_not_applicable: N/A
+    errors: {}
   persons:
     index:
       name_or_wca_id: Parte do nome ou ID da WCA
@@ -3311,7 +3255,6 @@ pt-BR:
     codeofethics: Código de Ética
     codeofconduct: Código de Conduta
     finances: Finanças
-    vision_and_strategy: Visão e Estratégia
   education:
     title: Recursos Educacionais da WCA
     description: >-
@@ -3549,10 +3492,6 @@ pt-BR:
         O Regulamento da WCA é complementado pelas <a
         href="/regulations/guidelines.html">Orientações da WCA</a>, que contém
         esclarecimentos e explicações adicionais.
-      content3_html: >-
-        Decisões importantes sobre incidentes que aconteceram em competições e
-        que foram resolvidos pelo Comitê do Regulamento da WCA podem ser
-        encontradas no <a href="/incidents">Registro de incidentes</a>.
     panel2:
       title: Traduções
       content1_html: >-
@@ -3872,9 +3811,6 @@ pt-BR:
         na fase de corte. Por favor edite o resultado para incluir a(s)
         tentativa(s) faltante(s) ou atualize as informações da rodada na página
         Gerenciar Eventos da competição.
-      mismatched_result_format_error: >-
-        [%{round_id}] Os resultados de %{person_name} estão no formato errado:
-        esperado %{expected_format}, apresentado %{format}.
       result_over_time_limit_error: >-
         [%{round_id}] Pelo menos um resultado de %{person_name} está acima do
         tempo limite para a rodada, que é %{time_limit} por tentativa. Todas as
@@ -3882,10 +3818,6 @@ pt-BR:
       results_over_cumulative_time_limit_error: >-
         [%{round_ids}] A soma dos resultados de %{person_name} está acima do
         tempo limite cumulativo, que era %{time_limit}.
-      no_round_information_warning: >-
-        [%{round_id}] Não há informação sobre o tempo de corte e tempo limite
-        para essa rodada. Essas validações foram puladas. Por favor atualize a
-        informação da rodada na página Gerenciar Eventos da competição.
       undefined_time_limit_warning: >-
         [%{round_id}] O tempo limite para essa rodada não está definido;
         validações de tempo limite foram puladas. Isso é esperado somente para
@@ -3912,10 +3844,6 @@ pt-BR:
         condições de avanço (%{actual} em vez de %{expected}, a condição era:
         %{condition}). Por favor atualize as informações da rodada na página
         Gerenciar Eventos.
-      unexpected_round_results_error: >-
-        A rodada %{round_id} está presente nos resultados mas não foi criada na
-        aba de eventos. Por favor inclua as informações da rodada na página
-        Gerenciar Eventos da competição.
       regulation_9m1_error: >-
         Rodada %{round_id} tem 99 competidores ou menos, mas tem mais de duas
         rodadas subsequentes, o que não é permitido conforme Regra 9m1.
@@ -3954,10 +3882,6 @@ pt-BR:
         Não há resultados para a rodada %{round_id} mas ela está listada na aba
         de eventos. Se essa rodada não aconteceu, por favor remova-a na página
         Gerenciar Eventos da competição.
-      unexpected_combined_round_error: >-
-        Não foi anunciado um tempo de corte para '%{round_name}', mas a rodada
-        foi detectada como uma rodada com corte nos resultados. Por favor
-        atualize as informações na página Gerenciar Eventos da competição.
     events:
       not_333_main_event_warning: >-
         O evento principal selecionado para esta competição é %{main_event_id}.
@@ -3967,10 +3891,6 @@ pt-BR:
       no_main_event_warning: >-
         Não há um evento principal selecionado para esta competição. Por favor
         informe ao WRT se isso está correto.
-      unexpected_results_error: >-
-        Há resultados para %{event_id}, contudo ele não está listado como um
-        evento oficial. Por favor remova o evento dos resultados ou contate a
-        WCAT para solicitar que o evento seja adicionado ao site da WCA.
       missing_results_warning: >-
         Não há resultados para %{event_id}, mas ele está listado como um evento
         oficial. Se o evento aconteceu, por favor reenvie o JSON com os
@@ -3983,9 +3903,6 @@ pt-BR:
       missing_scrambles_for_competition_error: >-
         Embaralhamentos faltando para a competição. Use o Scrambles Matcher para
         adicionar os embaralhamentos.
-      unexpected_scrambles_for_round_error: >-
-        [%{round_id}] Embaralhamentos excessivos. Use o Scrambles Matcher para
-        desmarcar os embaralhamentos não usados.
       missing_scrambles_for_group_error: >-
         [%{round_id}] Grupo %{group_id}: embaralhamentos faltando, detectados
         apenas %{actual} em vez de %{expected}.
@@ -4002,3 +3919,5 @@ pt-BR:
         [%{round_id}] Essa rodada tem um número diferente de embaralhamentos do
         especificado na aba Gerenciar Eventos. Por favor ajuste o número de
         embaralhamentos para o número que foi usado.
+  trainee_delegate_application: {}
+  tickets: {}

@@ -158,16 +158,12 @@ nl:
       no_date: Geen datum
     user:
       wca_id: WCA-id
-      citizen_of: Land
     all_regions: Alle regio's
     errors:
       invalid: onjuist
     days:
       one: 1 dag
       other: '%{count} dagen'
-    these_events:
-      one: dit wedstrijdonderdeel
-      other: 'deze %{count} wedstrijdonderdelen'
     search_site: Zoeken op site
     filter: Filter
     delete: Verwijderen
@@ -219,79 +215,6 @@ nl:
           WCA-wedstrijden per email ontvangen
         user_preferred_events: Voorkeur wedstrijdonderdelen
         otp_attempt: Voer je two-factor authenticatiecode in
-      competition:
-        id: id
-        confirmed: Laat de organisatoren niet deze wedstrijd bewerken
-        show_at_all: Maak deze wedstrijd zichtbaar voor publiek
-        name: Naam
-        name_reason: De reden voor de naam
-        cell_name: Verkorte naam van wedstrijd
-        country_id: Land
-        city_name: Stad
-        venue: Wedstrijdlocatie
-        venue_address: Adres van wedstrijdlocatie
-        venue_details: Details van wedstrijdlocatie
-        start_date: Startdatum
-        end_date: Einddatum
-        external_website: Website
-        generate_website: Ik wil de WCA-website gebruiken in plaats van een 
-          externe website.
-        base_entry_fee_lowest_denomination: Basisbedrag voor aanmelding
-        currency_code: Valutacode
-        staff_delegate_ids: WCA-delegate(s)
-        trainee_delegate_ids: WCA Trainee Delegate(s)
-        organizer_ids: Organisator(en)
-        contact: Contact
-        information: Informatie
-        use_wca_registration: Ik wil de WCA-website gebruiken voor aanmeldingen
-        external_registration_page: Aanmeldingspagina
-        competitor_limit_enabled: Maximumaantal deelnemers
-        competitor_limit: Maximumaantal deelnemers
-        competitor_limit_reason: De reden voor het maximumaantal deelnemers
-        guests_enabled: Gasten
-        receive_registration_emails: Stuur me een mail als iemand zich aanmeldt
-        registration_open: Aanmelding geopend
-        registration_close: Aanmelding gesloten
-        remarks: Opmerkingen
-        clone_tabs: Ik wil de tabbladen met aanvullende informatie klonen
-        competition_events: Wedstrijdonderdelen
-        enable_donations: >-
-          Ik wil naast de deelnamekosten ook de mogelijkheid bieden om donaties
-          te doen
-        extra_registration_requirements: Extra aanmeldingseisen
-        on_the_spot_registration: Ik wil aanmeldingen bij binnenkomst op locatie
-          accepteren.
-        on_the_spot_entry_fee_lowest_denomination: Deelnamekosten bij nieuwe 
-          aanmelding op locatie
-        allow_registration_edits: Aanpassingen in aanmeldingen
-        refund_policy_percent: Teruggave percentage
-        refund_policy_limit_date: Uiterste datum voor teruggave
-        waiting_list_deadline_date: >-
-          Uiterste datum om deelnemers van de wachtlijst te accepteren voor de
-          wedstrijd
-        event_change_deadline_date: >-
-          Uiterste datum voor deelnemers om hun wedstrijdonderdelen aan te
-          passen
-        guests_entry_fee_lowest_denomination: Bezoekerskosten
-        guest_entry_status: Toon bericht over gratis toegang voor gasten
-        early_puzzle_submission: >-
-          Ik wil van deelnemers eisen dat ze hun puzzels op een specifiek
-          tijdstip voor het wedstrijdonderdeel inleveren
-        early_puzzle_submission_reason: Reden en detals voor het vroegtijdig 
-          inleveren van puzzels
-        qualification_results: >-
-          Ik wil graag kwalificatieresultaten gebruiken om te beperken wie kan
-          deelnemen aan bepaalde wedstrijdonderdelen
-        qualification_results_reason: Reden en details voor 
-          kwalificatieresultaten
-        event_restrictions: >-
-          Ik wil deelnemers beperken in het registreren voor specifieke
-          combinaties van wedstrijdonderdelen
-        event_restrictions_reason: Reden en details voor beperkingen in 
-          wedstrijdonderdelen
-        main_event_id: Main Event
-      championship:
-        championship_type: Type Kampioenschap
       registration:
         guests: Gasten
         comments: Opmerkingen
@@ -314,9 +237,6 @@ nl:
         wrc_feedback_requested: Ik wil graag feedback van de WRC over een of 
           meer incidenten
         wrc_incidents: Incidenten waar feedback voor nodig is van WRC
-        wdc_feedback_requested: Ik wil graag feedback van de WDC over een of 
-          meer incidenten
-        wdc_incidents: Incidenten waarvoor feedback nodig is van WDC
         remarks: Opmerkingen
       person:
         wca_id: Persoon
@@ -381,16 +301,7 @@ nl:
         m: Mannelijk
         f: Vrouwelijk
         o: Anders
-      delegate_status:
-        trainee_delegate: Trainee Delegate
-        candidate_delegate: Junior Delegate
-        delegate: Delegate
-        senior_delegate: Senior Delegate
-    person:
-      gender:
-        m: Mannelijk
-        f: Vrouwelijk
-        o: Anders
+    person: {}
     competition_medium:
       status:
         accepted: Geaccepteerd
@@ -399,13 +310,9 @@ nl:
         report: Rapportage
         article: Artikel
         multimedia: Multimedia
-    competition:
-      guest_entry_status:
-        unclear: >-
-          Laat niks zien (en wellicht een toelichting geven in de sectie Extra
-          registratie-eisen)
-        free: Iedere gast kan gratis komen kijken
-        restricted: Gasten alleen toegestaan als begeleider van deelnemers
+    competition: {}
+    user_roles:
+      status: {}
   simple_form:
     'yes': Ja
     'no': Nee
@@ -442,94 +349,6 @@ nl:
         otp_attempt: >-
           Controleer je geconfigureerde mobiele applicatie op een eenmalig
           wachtwoord of voer een van je herstelcodes in.
-      competition:
-        name: >-
-          De volledige wedstrijdnaam afgesloten met jaartal (bijv. Danish Open
-          2016). Gebruik hoofdletters. De naam mag alleen letters, cijfers en
-          spaties bevatten, en verder -&.:'.
-        cell_name: >-
-          Een verkorte naam. Als de wedstrijdnaam al kort is kun je die
-          gebruiken (bijv. Euro 2006).
-        city_name: >-
-          Naam van de stad, zonder provincie of land. (voor sommige landen laten
-          we de staat zien)
-        information: >-
-          Informatie over maximumaantal deelnemers, de aanmeldkosten voor
-          deelnemers en toeschouwers, en andere details die relevant zijn voor
-          mensen die zijn geïnteresseerd om deel te nemen of te komen kijken.
-        staff_delegate_ids: WCA-delegates van de wedstrijd.
-        trainee_delegate_ids: WCA Trainee Delegates voor deze wedstrijd
-        organizer_ids: >-
-          Organisatoren (ze hebben een account nodig om op de lijst zichtbaar te
-          worden).
-        external_website: 'Link naar de website van de wedstrijd, inclusief http(s).'
-        registration_open: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone'
-        remarks: >-
-          Enkele aanvullende informatie die je wilt doorgeven aan de WCAT. Als
-          er bijvoorbeeld iets is waarover je niet zeker bent, of als er
-          speciale verzoeken zijn voor de WCAT. Vul dit alstublieft in het
-          Engels in!
-        external_registration_page: >-
-          De pagina waar deelnemers zich moeten aanmelden voor de wedstrijd.
-          Moet een valide http-link zijn.
-        base_entry_fee_lowest_denomination: >-
-          Het basisbedrag voor aanmelding voor de wedstrijd. Het bedrag wordt
-          getoond op de wedstrijdinformatiepagina en aanmeldingspagina. Als het
-          bedrag 0 is, wordt een tekst getoond dat aanmelding gratis is.
-        currency_code: Valutacode van de deelnamekosten.
-        competitor_limit_enabled: >-
-          Hoewel het niet vereist is in het wedstrijdreglement om een
-          deelnemerslimiet op te geven, wordt dit wel sterk aanbevolen.
-        competitor_limit: >-
-          Het aantal deelnemers dat wordt geaccepteerd voor deze wedstrijd.
-          Voorlopig is dit aantal alleen ter informatie, en voorkomt het niet
-          dat meer mensen zich aanmelden. We werken aan expliciete ondersteuning
-          voor het registratieproces, maar dit vraagt nog wat werk.
-        competitor_limit_reason: >-
-          Wat is de reden voor het maximumaantal deelnemers? Graag in het
-          Engels!
-        extra_registration_requirements: >-
-          Geef hier alle extra aanmeldingseisen aan die niet boven zijn genoemd,
-          zoals aanwijzingen over hoe te betalen.</br>Geef de tekst <b>in
-          Engels</b> en andere talen die de deelnemers spreken; de tekst wordt
-          getoond op de informatiepagina van de wedstrijd, en op de
-          aanmeldpagina als je de aanmelding via de WCA-website doet.
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Als dit bedrag 0 is, dan wordt een zin getoond dat aanmelding bij
-          binnenkomst gratis is.
-        refund_policy_percent: >-
-          Dit getal is slechts ter informatie, teruggaves moeten handmatig
-          worden uitgevoerd. Als het bedrag 0 is, dan wordt een zin dat
-          aanmeldkosten onder geen enkele omstandigheid worden teruggegeven.
-        refund_policy_limit_date: Datum waarna aanmeldkosten niet meer 
-          teruggegeven worden.
-        waiting_list_deadline_date: >-
-          De datum waarop aangemelde personen op de wachtlijst niet meer worden
-          geaccepteerd. Als je een deadline hebt voor refunds, moet de datum
-          voor wachtlijst niet voor de deadline voor refunds liggen.
-        event_change_deadline_date: >-
-          Geregistreerde deelnemers hebben het recht om hun geregistreerde
-          wedstrijdonderdelen aan te passen tot dit moment, door contact op te
-          nemen met het organisatieteam. De deal moet niet zijn voor de
-          registratie is gesloten. Als het veld leeg is mogen deelnemers
-          wedstrijdonderdelen toevoegen tot de dag van de wedstrijd. Als
-          registratie op de dag van de wedstrijd mogelijk is, moet dit dezelfde
-          dag zijn als de wedstrijd.
-        guests_entry_fee_lowest_denomination: >-
-          Dit getal is vooralsnog ter informatie, de toegangsprijs voor gasten
-          kun je niet via deze website regelen. Als het bedrag 0 is, dan wordt
-          een zin naar keuze getoond over het beleid rond gasten.
-        early_puzzle_submission_reason: >-
-          Leg uit waarom je deelnemers hun puzzels vroegtijdig wilt laten
-          inleveren. In het Engels!
-        qualification_results_reason: >-
-          Leg uit waarom je kwalificatietijden wil gebruiken. Invullen in
-          Engels!
-        event_restrictions_reason: >-
-          Leg uit waarom je bepaalde combinaties van wedstrijdonderdelen wilt
-          uitsluiten. Invullen in Engels!
-        main_event_id: De winnaar van dit wedstrijdonderdeel zal de winnaar zijn
-          de wedstrijd
       website_contact:
       dob_contact:
         dob: Je correcte geboortedatum in het formaat jjjj-mm-dd
@@ -577,16 +396,12 @@ nl:
           hieronder aan als je actief op zoek bent naar feedback.
         wrc_incidents: Lijst van incidentnummers waarvoor je feedback wilt van 
           WRC
-        wdc_incidents: Lijst van incidentnummers waarvoor je feedback wilt van 
-          WRC
         remarks: >-
           Vermeld overige punten die je wilt delen (bijv. ontwikkeling in de
           community, plannen voor de regio). Als je opmerkingen niet kwijt kon
           bij de andere vragen, neem ze dan hier op.
       competition_tab:
         name: 'Voorbeelden: Reisinformatie, Betaling, Prijzen, Overnachtingen'
-      person:
-        dob: Geboortedatum moet het formaat jjjj-mm-dd hebben.
       registration:
       results_submission:
       regional_organization:
@@ -608,24 +423,7 @@ nl:
           accepted: Geaccepteerd
           pending: Wachtlijst
           deleted: Verwijderd
-      competition:
-        guests_enabled:
-          'true': Vraag naar gasten
-          'false': Vraag niet naar gasten
-        competitor_limit_enabled:
-          'true': Ik wil een deelnemerslimiet opgeven
-          'false': Ik wil GEEN deelnemerslimiet opgeven
-        on_the_spot_registration:
-          'true': Registratie op wedstrijdlocatie toegestaan
-          'false': Nieuwe aanmeldingen op de wedstrijdlocatie worden NIET 
-            toegestaan
-        allow_registration_edits:
-          'true': >-
-            Deelnemers mogen hun registratie aanpassen tot de deadline voor het
-            aanpassen van wedstrijdonderdelen
-          'false': >-
-            Deelnemers mogen hun registratie NIET aanpassen zodra ze zijn
-            geaccepteerd
+      competition: {}
   mail_form:
     attributes:
       contact_form:
@@ -772,6 +570,7 @@ nl:
     mailer:
       confirmation_instructions:
         subject: Bevestig je nieuwe e-mailadres
+    registrations: {}
   wca:
     errors:
       messages:
@@ -833,10 +632,8 @@ nl:
       my_results: Mijn Resultaten
       statistics: Statistieken
       multimedia: Multimedia
-      db_export: Database Export
       regulations: Wedstrijdreglement
       about_regulations: Over het Wedstrijdreglement
-      guidelines: Aanvullende richtlijnen
       scrambles: Scrambles
       history: Geschiedenis
       translations: Vertalingen
@@ -848,10 +645,7 @@ nl:
       panel: Panel
       polls: Polls
       results_team: Results team
-      results_admin: Admin
-      results_phpmyadmin: phpMyAdmin
       new_post: Nieuw bericht
-      team_leader: Teamleider
       regional_organizations: Regionale Organisaties
       manage_regional_organizations: Beheren Regionale Organisaties
       new_regional_organization: Nieuwe Regionale Organisatie
@@ -1016,7 +810,6 @@ nl:
       email: E-mailadres
       preferences: Voorkeuren
       password: Wachtwoord
-      member_of: Lid van
       preferred_events_desc: >-
         Door je voorkeursonderdelen aan te geven wordt het makkelijker om je aan
         te melden voor wedstrijden.
@@ -1133,9 +926,6 @@ nl:
       must_have_a_change: >-
         De naam of het land moet verschillend zijn om de persoon te kunnen
         bijwerken.
-      must_not_be_present: moet niet aanwezig zijn
-      senior_has_delegate: kan senior delegate niet demoveren als deze nog 
-        delegates heeft
       already_have_id: 'kan WCA-id niet claimen omdat je al een WCA-id %{wca_id} hebt'
       wca_id_no_birthdate_html: >-
         We hebben je geboortedatum nog niet. Neem alsjeblieft contact op met het
@@ -1152,7 +942,6 @@ nl:
         Voor deze WCA-id hebben wij nog geen naam gevuld. Stuur een e-mail aan
         <a href='%{wrt_contact_path}'
         target='_blank'>WCA-resultatenteam</a> om dit op te lossen.
-      avatar_requires_wca_id: vereist een toegekend WCA-id
       email_used_by_locked_account_html: >-
         is al in gebruik voor een ander account. Het is automatisch aangemaakt
         als resultaat van dat je je hebt aangemeld voor een wedstrijd via een
@@ -1190,10 +979,6 @@ nl:
       need_gender: Voer een geslacht in
       need_dob: Voer een geboortedatum in
       need_country: Voer een land in
-      comp_not_found: Wedstrijd niet gevonden
-      cannot_be_deleted_and_accepted: >-
-        Een aanmelding kan niet tegelijkertijd worden verwijderd en
-        geaccepteerd.
       must_register: moet zich voor minimaal één onderdeel aanmelden
       banned_html: >-
         Je bent geschorst. Als je denk dat dit een fout is, neem dan contact op
@@ -1214,20 +999,7 @@ nl:
     flash:
       not_using_wca: Deze wedstrijd gebruikt niet de aanmeldingsprocedure van de
         WCA-website
-      accepted_and_mailed:
-        one: Aanmelding geaccepteerd. Bevestigingsmail verzonden.
-        other: Aanmeldingen geaccepteerd. Bevestigingsmails verzonden.
-      rejected_and_mailed:
-        one: Aanmelding verplaatst naar wachtlijst
-        other: Aanmeldingen verplaatst naar wachtlijst
-      deleted_and_mailed:
-        one: Aanmelding verwijderd
-        other: Aanmeldingen verwijderd
-      single_deletion_and_mail: 'Aanmelding verwijderd en mail verzonden naar %{mail}'
-      cannot_delete: Je kunt je aanmelding niet verwijderen.
       updated: Aanmelding bijgewerkt
-      failed: Aanmelding bijwerken mislukt
-      deleted: 'Je aanmelding voor %{comp} is verwijderd'
       registered: Aanmelding gelukt!
       imported: Registraties met succes geïmporteerd!
       added: Registratie succesvol toegevoegd!
@@ -1255,17 +1027,6 @@ nl:
           Je aanmelding voor %{comp_name} is geaccepteerd. De status van je
           aanmelding staat %{here}.
         see_you_soon: 'We kijken ernaar uit om je te zien tijdens %{comp_name}!'
-      pending:
-        mail_subject: 'Je aanmelding is op de wachtlijst geplaatst voor %{comp_name}'
-        moved_html: >-
-          Je aanmelding voor %{comp_name} is op de wachtlijst geplaatst.
-          Mogelijke redenen hiervoor zijn:
-        causes:
-          accepted: Je aanmelding was per abuis geaccepteerd
-          withdrawal: Je hebt gevraagd om terugtrekking
-        email_if_error: >-
-          Als je denkt dat er een fout is gemaakt, stuur dan een antwoord op
-          deze mail.
       deleted:
         mail_subject: 'Je aanmelding voor %{comp_name} is verwijderd'
         message_html: >-
@@ -1288,35 +1049,21 @@ nl:
       country_plural:
         one: 1 land
         other: '%{count} landen'
-      export_csv: Exporteren naar CSV
       email: E-mailadres
-      approve: Goedkeuren
-      reject: Afwijzen
-      delete: Verwijderen
-      waiting_list: Wachtlijst
-      approved_registrations: Goedgekeurde aanmeldingen
-      deleted_registrations: Verwijderde aanmeldingen
       not_paid: Nog niet betaald
       registered:
         without_stripe: Aangemeld op
         with_stripe: Betaald op
       payment_requested_on: 'Betaalverzoek op: %{date}'
-      payment_completed_on: 'Betaling afgerond op: %{date}'
       total: Totaal
-      n_events: Aantal wedstrijdonderdelen
     new_registration:
       title: 'Aanmelden voor %{comp}'
-    registered_with_account_html: >-
-      Deze persoon heeft zich met een WCA-account aangemeld. Je kunt de
-      persoonlijke informatie %{here} bewerken.
     sign_in: Inloggen
     profile: profiel
-    panel_title: Aanmeldingsgegevens
     register: Aanmelden!
     refund: Verzoek om terugbetaling
     refund_confirmation: Weet je zeker dat je het bedrag wilt terugbetalen?
     update: Bijwerken aanmelding
-    delete: Verwijderen
     delete_confirm: Weet je zeker dat je je aanmelding wilt verwijderen?
     delete_registration: Verwijder aanmelding.
     will_open_html: 'Aanmelding gaat open over <strong>%{days}</strong> op %{time}.'
@@ -1333,7 +1080,6 @@ nl:
     please_sign_in_html: >-
       %{sign_in} om je voor %{comp} aan te melden. Als je nog geen WCA-account
       hebt, kun je deze  %{here} aanmaken.
-    greeting: 'Hoi, %{name}!'
     please_fix_profile_html: >-
       Om je aan te melden voor deze %{comp}, moet je de volgende problemen in je
       %{profile} oplossen:
@@ -1342,20 +1088,6 @@ nl:
       dit aantal is bereikt. Als je je nu aanmeldt, dan kom je op een
       wachtlijst. Je aanmelding wordt goed gekeurd wanneer er een plekje
       vrijkomt, dit hoeft niet het geval te zijn.
-    can_register: 'Je kunt je hieronder aanmelden voor %{comp}.'
-    check_registration_information: >-
-      Controleer ajb de informatie over de aanmelding om te bepalen of je nog
-      iets extra's moet doen, zoals deelnamekosten betalen.
-    have_registered: >-
-      Je hebt je aangemeld voor %{comp}. Je kunt hieronder de informatie over je
-      aanmelding vinden.
-    contact_organizer: Neem contact op met de organisator als je een wijziging 
-      wilt doen.
-    waiting_list: >-
-      Je aanmelding is in behandeling. Voor goedkeuring kan het zijn dat je
-      eerst online deelnamekosten moet betalen. Zie de wedstrijdpagina voor
-      details.
-    accepted: Je aanmelding is geaccepteerd!
     entry_fees_fully_paid: >-
       Je hebt %{paid} betaald, wat het volledige bedrag van de deelnamekosten
       is.
@@ -1363,30 +1095,17 @@ nl:
     wont_pay_here: Controleer de wedstrijdinformatie voor instructies over hoe 
       te belaten
     refund_form:
-      hints:
-        refund_amount: >-
-          Het bedrag dat wordt terugbetaald aan de deelnemer, mag ieder bedrag
-          zijn tot maximaal het al betaalde bedrag.
       labels:
         refund_amount: Refund-bedrag
     payment_form:
-      title: Aanmeldingsbedrag
       payment_successful: >-
         Je betaling was succesvol, en je registratie zou nu als betaald moeten
         zijn geregistreerd hieronder.
       hints:
         donation: Optionele donatie voor het organisatieteam
-        card_information: >-
-          Je kaartinformatie bereikt nooit de WCA-website. Die is veilig
-          verstuurd naar Stripe, die het betaalproces afhandelt en terugkoppelt
-          naar ons.
       labels:
-        entry_fees: Aanmeldingsbedrag
         donation: Donatie
-        card_information: Kaartinformatie
-        cardholder_name: Naam kaarthouder
       alerts:
-        not_a_number: Voer een juist bedrag in.
         amount_too_low: >-
           Het totaalbedag moet minimaal gelijk zijn aan de te betalen
           deelnamekosten.
@@ -1395,11 +1114,6 @@ nl:
           De betaling heeft niet plaatsgevonden omdat het aanmeldingsbedrag al
           is betaald.
         not_allowed: Je kunt niet betalen voor deze aanmelding
-        intent_not_found: >-
-          We konden geen betalingsintentie vinden op onze server. Het
-          betalingsproces is beëindigd en je kaart is niet belast.
-        cardholder_name: Controleer de naam van kaarthouder
-    payment_button_text: Betaal de deelnamekosten met kaart
     preferred_events_prompt_html: >-
       Om je in de toekomst makkelijker aan te melden, kun je je voorkeuren voor
       de onderdelen opgeven %{link}.
@@ -1494,7 +1208,6 @@ nl:
         De resultaten van deze wedstrijd zijn zichtbaar maar nog niet
         gepubliceerd.
       results_already_posted: De resultaten zijn al gepost.
-      results_posted: Resultaten succesvol gepost!
       results_preview_alert: Je kijkt naar resultaten die nog niet gepost zijn.
       upload_results: >-
         Deze wedstrijd is afgelopen, we zullen zo snel mogelijk de resultaten
@@ -1515,11 +1228,6 @@ nl:
       not_confirmed_visible: De wedstrijd is niet bevestigd maar wel zichtbaar.
       not_confirmed_not_visible: De wedstrijd is niet bevestigd en niet 
         zichtbaar.
-      stripe_connected: >-
-        Je hebt nu je Stripe-account verbonden en kunt betalingen ontvangen voor
-        deze wedstrijd.
-      stripe_not_connected: Er was een probleem waardoor we je Stripe-account 
-        niet konden verbinden.
       championship_exists: 'Er is al een %{championship_type} in %{year}'
     my_competitions:
       title: Mijn wedstrijden
@@ -1650,9 +1358,6 @@ nl:
       number_of_bookmarks: Aantal bladwijzers gemaakt
     index:
       title: Wedstrijden
-      disclaimer: >-
-        Houd er rekening mee dat vanwege de COVID-19-pandemie sommige landen
-        momenteel geen wedstrijden kunnen organiseren.
       all_events: Alle
       all_years: Alle jaren
       clear: Wissen
@@ -1679,7 +1384,6 @@ nl:
         upcoming: Aankomende wedstrijden
         custom: Wedstrijden in de geselecteerde tijdsperiode
         by_announcement: 'Wedstrijden gesorteerd op aankondigingsdatum, nieuwste bovenaan'
-      no_access: Je hebt geen toegang tot deze pagina!
       tooltips:
         hourglass:
           ended: 'Afgelopen %{days} geleden'
@@ -1690,9 +1394,6 @@ nl:
         search: 'Naam, stad, wedstrijdlocatie, land of maand'
         recent: 'Laatste %{count} dagen'
       no_comp_found: Geen wedstrijden gevonden.
-      no_comp_match: >-
-        Geen wedstrijden gevonden met %{events}! Probeer het met minder
-        wedstrijdonderdelen.
     my_competitions_table:
       edit: Bewerken
       registrations: Aanmeldingen
@@ -1713,21 +1414,6 @@ nl:
         Ondersteunt <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      name_reason_html: >-
-        Een korte uitleg van de wedstrijdnaam. De naam moet voldoen aan de <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
-        Competition Requirements Policy</a>.
-      venue_html: >-
-        De locatie waar de wedstrijd plaatsvindt. %{md}. Bijvoorbeeld: [Cité des
-        Sciences et de l'Industrie](http://www.cite-sciences.fr)
-      venue_details_html: >-
-        Details van de wedstrijdlocatie (bijv. Op de eerste etage achterin, volg
-        de borden). %{md}
-      contact_html: >-
-        Optionele contactinformatie. Als je deze niet invult, worden
-        contactverzoeken via een formulier ingestuurd, zonder dat de
-        e-mailadressen van de organisatoren worden getoond. %{md}. Voorbeeld:
-        [Tekst](mailto:some@email.com)
       events: Wedstrijdonderdelen
       public_and_locked_html: >-
         De wedstrijd is publiek zichtbaar en kan niet worden bewerkt. Als je een
@@ -1776,7 +1462,6 @@ nl:
           name: Wedstrijdlocatie
           details: Details van wedstrijdlocatie
           address: Adres van wedstrijdlocatie
-          coordinates:
         start_date: Startdatum
         end_date: Einddatum
         information: Informatie
@@ -1789,7 +1474,6 @@ nl:
           trainee_delegate_ids: WCA Trainee Delegate(s)
           organizer_ids: Organisator(en)
           contact: Contact
-        championships:
         website:
           generate_website: Ik wil de WCA-website gebruiken in plaats van een 
             externe website.
@@ -1798,9 +1482,6 @@ nl:
           uses_wca_registration: Ik wil de WCA-website gebruiken voor 
             aanmeldingen
           uses_wca_live:
-        user_settings:
-          receive_registration_emails: Stuur me een mail als iemand zich 
-            aanmeldt
         entry_fees:
           currency_code: Valutacode
           base_entry_fee: Basisbedrag voor aanmelding
@@ -1823,9 +1504,7 @@ nl:
           allow_self_edits: Aanpassingen in aanmeldingen
           guests_enabled: Gasten
           guest_entry_status: Toon bericht over gratis toegang voor gasten
-          guests_per_registration:
           extra_requirements: Extra aanmeldingseisen
-          force_comment:
         event_restrictions:
           early_puzzle_submission:
             enabled: Ik wil van deelnemers eisen dat ze hun puzzels op een 
@@ -1835,15 +1514,12 @@ nl:
             enabled: Ik wil graag kwalificatieresultaten gebruiken om te 
               beperken wie kan deelnemen aan bepaalde wedstrijdonderdelen
             reason: Reden en details voor kwalificatieresultaten
-            allow_registration_without:
           event_limitation:
             enabled: Ik wil deelnemers beperken in het registreren voor 
               specifieke combinaties van wedstrijdonderdelen
             reason: Reden en details voor beperkingen in wedstrijdonderdelen
-            per_registration_limit:
           main_event_id: Main Event
         remarks: Opmerkingen
-        clone_tabs: Ik wil de tabbladen met aanvullende informatie klonen
       hints:
         name: De volledige wedstrijdnaam afgesloten met jaartal (bijv. Danish 
           Open 2016). Gebruik hoofdletters. De naam mag alleen letters, cijfers 
@@ -1922,7 +1598,6 @@ nl:
             wedstrijd. Als registratie op de dag van de wedstrijd mogelijk is, 
             moet dit dezelfde dag zijn als de wedstrijd.
           allow_self_delete_after_acceptance:
-          guests_per_registration:
           extra_requirements: Geef hier alle extra aanmeldingseisen aan die niet
             boven zijn genoemd, zoals aanwijzingen over hoe te betalen.</br>Geef
             de tekst <b>in Engels</b> en andere talen die de deelnemers spreken;
@@ -1940,7 +1615,6 @@ nl:
           event_limitation:
             reason: Leg uit waarom je bepaalde combinaties van 
               wedstrijdonderdelen wilt uitsluiten. Invullen in Engels!
-            per_registration_limit:
           main_event_id: De winnaar van dit wedstrijdonderdeel zal de winnaar 
             zijn de wedstrijd
         remarks: Enkele aanvullende informatie die je wilt doorgeven aan de 
@@ -1965,19 +1639,14 @@ nl:
               voor het aanpassen van wedstrijdonderdelen
             'false': Deelnemers mogen hun registratie NIET aanpassen zodra ze 
               zijn geaccepteerd
-          guests_enabled:
-            'true': Vraag naar gasten
-            'false': Vraag niet naar gasten
           guest_entry_status:
             unclear: Laat niks zien (en wellicht een toelichting geven in de 
               sectie Extra registratie-eisen)
             free: Iedere gast kan gratis komen kijken
             restricted: Gasten alleen toegestaan als begeleider van deelnemers
         event_restrictions:
-          qualification_results:
-            allow_registration_without:
-              'true':
-              'false':
+          qualification_results: {}
+        website: {}
     errors:
       invalid_name_message: >-
         moet eindigen met een jaartal en mag alleen letters, cijfers en spaties
@@ -2014,8 +1683,6 @@ nl:
       waiting_list_deadline_before_refund_date: >-
         Deadline voor wachtlijst kan niet voor de uiterste datum voor refunds
         zijn.
-      waiting_list_deadline_after_start: Deadline voor wachtlijst kan niet voor 
-        de startdatum zijn.
       event_change_deadline_before_registration_close: >-
         De deadline voor het bijwerken van wedstrijdonderdelen kan niet vóór de
         sluitingsdatum van de aanmelding zijn.
@@ -2039,14 +1706,6 @@ nl:
     time_until_competition:
       competition_in: 'Wedstrijd is over %{n_days}.'
       competition_was: 'Wedstijd was %{n_days} geleden.'
-    nearby_competitions:
-      competitions:
-        one: 1 wedstrijd
-        other: '%{count} wedstrijden'
-      label_admin: 'Laatste %{days} dagen'
-      nearby_admin: '%{x_competitions} binnen %{kms} km en %{days} dagen.'
-      within: 'Binnen %{days} dagen'
-      show: Tonen
     adjacent_competitions:
       label: 'Nabije wedstrijden (binnen %{days} dagen en %{kms} km)'
       no_comp_nearby: Geen nabije wedstrijden!
@@ -2073,8 +1732,6 @@ nl:
     uncancel: Draai annulering van wedstrijd terug
     cancelled_by_html: 'Geannuleerd door %{name} op %{date_time}'
     cancel_confirm: Weet je zeker dat je de wedstrijd wilt annuleren?
-    upload_results: Resultaten uploaden
-    post_results: De resultaten posten
     results_posted_by_html: 'Gepost door %{poster_name} op %{date_time}'
     cancel_mistake: Heb je een fout gemaakt?
     note_before_cancel: 'Let op: alleen bevestigde wedstrijden kunnen worden geannuleerd.'
@@ -2091,7 +1748,6 @@ nl:
           Als je de tijdlimiet bereikt tijdens je oplospoging, dan zal de judge
           je stoppen en het resultaat als DNF noteren (zie %{regulation_link}).
         regulation_link_text: 'Reglement %{number}'
-        guideline_link_text: 'Richtlijn %{number}'
         cumulative_time_limit: Cumulatieve tijdlimiet
         cumulative_one_round_html: 'Er kan een %{cumulative_time_limit} gelden (zie
           %{regulation_link}).'
@@ -2112,7 +1768,6 @@ nl:
       proceed: Doorgaan
     schedule:
       display_as:
-        label: 'Toon het tijdschema als:'
         table: Tabel
         calendar: Agenda
       display_for_room: 'Toon schema voor:'
@@ -2122,13 +1777,8 @@ nl:
       start: Begin
       end: Einde
       activity: Activiteit
-      room: Ruimte
       room_in_venue: '%{room} in %{venue}'
-      venue_information_html: 'Je bekijkt het schema voor de locatie %{venue_name}.'
       timezone_message: 'In het tijdschema wordt tijdzone %{timezone} gebruikt.'
-      multiple_venues_available: >-
-        Deze wedstrijd heeft meerdere locaties, zorg ervoor dat je het schema
-        ook controleert voor de andere locaties!
       schedule_for_date: 'Schema voor %{day_name} (%{full_date})'
     nav:
       menu:
@@ -2164,6 +1814,12 @@ nl:
     scrambles_table:
       group: Groep
       scramble: Scramble
+    live:
+      admin: {}
+      connection: {}
+    registration_v2:
+      register:
+        panel: {}
   competition_tabs:
     headers:
       tabs: Tabbladen
@@ -2198,25 +1854,14 @@ nl:
     selector_elements:
       events_selector:
         event: Wedstrijdonderdeel
-        all_events: Alle wedstrijdonderdelen
-      region: Regio
       type_selector:
         type: Type
         single: Single
         average: Gemiddelde
-      years_selector:
-        years: Jaren
-        all_years: Alle jaren
-        only: Alleen
-        only_html: 'Alleen %{year}'
-        until: Tot en met
-        until_html: 'Tot en met %{year}'
       show_selector:
         show: Tonen
         persons: Personen
-        persons_html: '%{quantity} personen'
         results: Resultaten
-        results_html: '%{quantity} resultaten'
         by_region: Per regio
         mixed: Gemengd
         slim: Bondig
@@ -2231,18 +1876,12 @@ nl:
     table_elements:
       name: Naam
       result: Resultaat
-      citizen_of: Nationaliteit
       competition: Wedstrijd
       solves: Pogingen
       region: Regio
       world: Wereld
-      type_options:
-        type: Type
-        single: Single
-        average: Gemiddelde
       event: Wedstrijdonderdeel
       date_circa: Datum ongeveer
-      record: Record
   notifications:
     connect_wca_id: Verbind je WCA-id met je WCA-account!
   persons:
@@ -2288,24 +1927,6 @@ nl:
     errors:
       unstick_at_future: Moet in de toekomst liggen
   contacts:
-    website:
-      faq_note_html: >-
-        Voor het vragen om informatie, kun je het beste kijken in onze <a
-        href="/faq">Frequently Asked Questions</a>! Als je contact wilt opnemen
-        met een specifieke commissie of team, kun je de betreffende
-        contactinformatie vinden op <a href="/teams-committees">deze pagina</a>.
-      title: WCA-website contactformulier
-      inquiries:
-        competition: >-
-          Neem contact op met de organisatie van een bepaalde wedstrijd (kies
-          hieronder)
-        competitions_in_general: 'Wedstrijden in het algemeen (organiseren, wedstrijdregels,
-          enz.)'
-        wca_id_or_profile: WCA ID of WCA profiel
-        media: Pers
-        software: Software
-        different: Ander
-      submit: Verstuur bericht
     dob:
       title: Formulier voor verandering geboortedatum
       description: >-
@@ -2572,139 +2193,17 @@ nl:
       donate_paypal: Doneer via Paypal
       donate_other: Andere manieren om te doneren
     structure:
-      teams_committees_councils: 'WCA Teams, Commissies en Raden'
       title: Structuur
       board:
-        name: WCA Board (bestuur)
         description: >-
           De World Cube Association wordt geleid door the WCA Board, bestaande
           uit de volgende leden:
-      committees: >-
-        De volgende commissies zijn een integraal onderdeel van de organisatie
-        en voeren de dagelijkse werkzaamheden uit die nodig zijn om te blijven
-        functioneren. Deze commisses zijn samengesteld uit leden van de
-        WCA-community, inclusief WCA-delegates en deelnemers. Elke commissie
-        heeft een leider, wiens rol het is om te zorgen dat het goed
-        functioneert en om de andere teamleden aan te sturen. Raden zijn een
-        speciaal type teams die een adviesrol hebben aan de WCA-board en zijn
-        samengesteld uit leden van de community, not stafleden. Als er vacatures
-        zijn bij de commissies, teams en raden, wordt er informatie op de
-        hoofdpagina geplaatst over hoe je kunt solliciteren.
-      senior_member: Seniorlid
-      leader: Leider
-      officers:
-        name: WCA-officers
-        description: >-
-          De officers van de WCA handelen taken af rond  de non-profitstatus van
-          de WCA. Deze officers worden gekozen door het WCA-bestuur. De
-          Executive Director is de Chief Executive Officer van de WCA, de Chair
-          zit alle bestuursvergaderingen voor, de secretaris beheert de
-          documenten van de organisatie, en de penningmeester beheert de
-          financiën van de WCA.
-      chair:
-        name: WCA Voorzitter
-      executive_director:
-        name: WCA Directeur
-      secretary:
-        name: WCA Secretaris
-      vice_chair:
-        name: WCA Vice-Voorzitter
-      treasurer:
-        name: WCA-penningmeester
       users:
         profile: '%{user_name}''s profiel'
-      wdc:
-        name: WCA Disciplinaire Commissie
-        description: >-
-          Deze commissie adviseert de WCA Board in speciale gevallen, zoals
-          verdenkingen van schending van het WCA Wedstrijdreglement, and kan
-          worden gecontacteerd door WCA-leden ingeval van belangrijke
-          persoonlijke zaken betreffende WCA-wedstrijden.
-      wdpc:
-        name: WCA Data Protection Committee
-        description: >-
-          Deze commissie is verantwoordelijk voor alle zaken rond Data
-          Protection.
-      wrc:
-        name: WCA Reglementen Commissie
-        description: >-
-          Deze commissie is verantwoordelijk voor het onderhouden van het WCA
-          Wedstrijdreglement.
-      wrt:
-        name: WCA-resultatenteam
-        description: >-
-          Dit team is verantwoordelijk voor het beheren van alle
-          wedstrijdresultaten.
-      wst:
-        name: WCA-softwareteam
-        description: >-
-          Dit team is verantwoordelijk voor het beheren van de software van WCA
-          (website, scramblers, werkboeken, administratietools).
-      wct:
-        name: WCA Communicatie Team
-        description: >-
-          Het WCA Communicatie Team (WCT) heeft de rol om de communicatie van
-          WCA met de Community en het publiek te overzien en ondersteunen. De
-          communicatie van WCA moet bijdragen aan de doelstellingen van WCA en
-          een positieve cultuur van vriendschap, transparantie, inclusiviteit,
-          openheid en responsiviteit ondersteunen.
-      wfc:
-        name: WCA Financiële Commissie
-        description: Dit team is verantwoordelijk voor de financiën van de WCA.
-      wec:
-        name: WCA Ethische Commissie
-        description: >-
-          De rol van deze commissie is om te zorgen dat alle procedures door WCA
-          Staff en External Staff de Code of Ethics volgen, en om onafhankelijk
-          onderzoek uit te voeren als het gedrag van één van deze leden niet
-          voldoet aan de Code of Ethics. Zulk onderzoek kan worden aangevraagd
-          door Geregistreerde Speedcubers, voor wie de WEC ook
-          vertrouwenspersoon is. De commissie functioneert ook als Hoger Beroep
-          als een betrokkene het niet eens is met het besluit dat is genomen
-          door de WCA Disciplinaire Commissie.
-      weat:
-        name: WCA Executive Assistants team
-        description: >-
-          Dit team is verantwoordelijk voor het uitvoeren van de administratieve
-          werkzaamheden van het WCA-Bestuur.
-      wqac:
-        name: WCA QA Committee
-        description: >-
-          Deze commissie heeft de rol om continue verbetering te ondersteunen en
-          bevorderen binnen de WCA, en de wereldwijde toepassing van
-          kwaliteitsstandaarden om een consistente hoge kwaliteit te garanderen
-          van processen, WCA Staff, regionale organisaties,
-          wedstrijdorganisatoren en wedstrijdstaf.
-      wcat:
-        name: WCA Competition Announcement Team (Wedstrijdaankondigingsteam)
-        description: >-
-          Dit team heeft de rol om WCA-wedstrijden goed te keuren en aan te
-          kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
-          WCA-kwaliteitsstandaarden.
-      wmt:
-        name: WCA Marketing Team
-        description: >-
-          Dit team is verantwoordelijk voor het ontwikkelen en managen van het
-          WCA Brand, het zoeken van sponsoren, het ondersteunen van de
-          distributie van WCA wedstrijdmaterialen en het marketen van WCA
-          merchandise.
-      wac:
-        name: WCA Adviesraad
-        description: >-
-          Deze adviesraad is verantwoordelijk voor het opbouwen en onderhouden
-          van bilaterale communicatie tussen de WCA-community en de WCA-staf.
-      banned:
-        name: Geschorste deelnemers
-      wct_china:
-        name: WCT China
       operations_html: >-
         De dagelijkse operatie wordt uitgevoerd door de %{committees_and_teams}
         van de WCA.
       teams_committees: Teams en Commissies
-      probation:
-        name: WCA-delegates met proeftijd
-      wst_admin:
-        name: Software Admins
       delegates_html: >-
         <p><strong>WCA-delegates</strong> zijn leden van de WCA die
         verantwoordelijk zijn dat alle WCA-wedstrijden verlopen volgens de
@@ -2802,109 +2301,7 @@ nl:
       confirm_delete: >-
         Weet je zeker dat je het verzoek voor deze Regionale Organisatie wilt
         verwijderen?
-  contact:
-    title: Contactinformatie
-    info_alert_html: >-
-      Bekijk eerst deze %{link}, voordat je contact opneemt met een team op deze
-      pagina!
-    questions_and_comments_html: >-
-      Voor vragen, opmerkingen en suggesties over de WCA-website, gebruik dit <a
-      href='/contact/website'>contactformulier</a>. Voor vragen over een
-      specifieke regio of wedstrijd neem je contact op met je lokale %{link}.
-    committees_and_teams_html: <u>Commissies en Teams</u>
-    members: Leden
-    board:
-      info_html: >-
-        De World Cube Association wordt geleid door de WCA Board. Ze zijn
-        verantwoordelijk voor algemene vragen en de WCA-organisatie als geheel.
-    wct:
-      info_html: >-
-        De WCT heeft de leiding over de communicatie van de WCA met de community
-        en het algemene publiek. Zij kunnen worden benaderd als je algemene
-        vragen hebt over de WCA of haar aanwezigheid op de sociale media.
-    wdc:
-      info_html: >-
-        De WDC onderzoekt een breed scala aan zaken en stelt oplossingen voor,
-        inclusief disciplinaire maatregelen indien nodig. Dit kan o.a. bij
-        serieuze schending van het WCA-wedstrijdreglement of zaken in de
-        community. Als je zoiets hebt meegemaakt, neem dan gerust met deze
-        commissie contact op.
-    wdpc:
-      info_html: >-
-        De WDPC heeft de verantwoordelijkheid en taak voor het onderzoeken,
-        creëren, implementeren, managen, en afdwingen van alle punten van het
-        beleid voor WCA Data Protection, contracten met externe Data Processors
-        van WCA-data, en het managen van de taken in relatie tot Data
-        Protection.
-    wrc:
-      info_html: >-
-        De WRC handelt alle incidenten af die te maken hebben met het toepassen,
-        verbeteren en ontwikkelen van het WCA-wedstrijdreglement. Zij
-        ondersteunen WCA-delegates bij alle soort incidenten bij wedstrijden en
-        besluiten over de oplossingen. De WRC publiceert regelmatig interne
-        rapportages om alle WCA-delegates te helpen en hun kennis van het
-        WCA-wedstrijdreglement te verbeteren. Als je wilt zijn betrokken bij het
-        ontwikkelen van regels of veranderingen wilt voorstellen kun je contact
-        opnemen met WRC via mail of op <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      info_html: >-
-        De WRT is verantwoordelijk voor het beheren van de data in de databases
-        van de WCA, als belangrijkste de wedstrijdresultaten en de persoonlijke
-        gegevens. Zij laden de resultaten van de WCA-wedstrijden op de
-        WCA-website, zodra de Delegate van de wedstrijd deze resultaten heeft
-        ingestuurd. Behalve het laden van resultaten is het WCA Resultatenteam
-        ook verantwoordelijk voor het afhandelen van correcties indien nodig en
-        beheren ze de profielpagina's. Hieronder vallen o.a. het veranderen van
-        gegevens zoals geboortedata, op basis van geverifieerde verzoeken, en
-        het beheren van de profielfoto's.
-    wst:
-      info_html: >-
-        De WST is verantwoordelijk voor het onderhoud en het beheer van alle
-        software van de WCA. Ze ontwikkelen ook nieuwe software voor
-        verschillende taken binnen de WCA. Als je suggesties of ideeën hebt voor
-        verdere ontwikkeling van de website of als je fouten of bugs wilt
-        doorgeven, neem dan gerust contact met ze op! De WCA-website is een
-        groot open-sourceproject op <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
-        dus als je geïnteresseerd bent om te helpen met de ontwikkeling, neem
-        dan daar een kijkje.
-    wfc:
-      info_html: >-
-        De WFC is verantwoordelijk voor alle financiële zaken binnen de WCA. Ze
-        beheren de financiën en de rekeningen van de WCA, in lijn met een
-        goedgekeurd voorstel voor het jaarbudget, wat ook hun werk is om
-        regelmatig op te leveren.
-    wec:
-      info_html: >-
-        Deze commisse heeft de rol om te zorgen dat alle procedures die worden
-        gevolgd door WCA Staff en Externe Staff voldoende aan de Code of Ethics.
-    weat:
-      info_html: >-
-        Dit team is verantwoordelijk voor het uitvoeren van de administratieve
-        werkzaamheden van het WCA-Bestuur.
-    wqac:
-      info_html: >-
-        Deze commissie heeft de rol om continue kwaliteitsverbetering te
-        ondersteunen en bevorderen binnen de WCA, en wereldwijde toepassing van
-        kwaliteitsstandaard om constante hoge kwaliteit te garanderen voor
-        processen, WCA Staff, regionale organisaties, wedstrijdorganisatoren en
-        wedstrijdstaff.
-    wcat:
-      info_html: >-
-        Deze commissie heeft de rol om WCA-wedstrijden goed te keuren en aan te
-        kondigen, en te zorgen dat zulke aankondigingen voldoen aan de
-        WCA-kwaliteitsstandaarden.
-    wmt:
-      info_html: >-
-        Dit team is verantwoordelijk voor het ontwikkelen en managen van het WCA
-        Brand, het zoeken van sponsoren, het ondersteunen van de distributie van
-        WCA wedstrijdmaterialen en het marketen van WCA merchandise.
-    councils_html: Adviesraden
-    wac:
-      info_html: >-
-        Deze adviesraad is verantwoordelijk voor het opbouwen en onderhouden van
-        bilaterale communicatie tussen de WCA-community en de WCA-staf.
+  contact: {}
   score_tools:
     title: Softwaretools voor WCA-wedstrijden
     wca_icon_text: Ontwikkeld en onderhouden door de WST
@@ -2993,28 +2390,9 @@ nl:
           insturen van resultaten naar WCA.
   logo:
     title: WCA-logo
-    paragraphs:
-      '1': >-
-        Het WCA-logo is ontworpen door Justin Eastman in een ontwerpwedstrijd in
-        januari 2005.<br />We vonden het logo goed vanwege het ontwerp, de
-        kleuren en het feit dat het niet specifiek een 3x3x3 Kubus uitbeeldt.
-      '2': >-
-        We hebben drie verschillende versies van het logo: <a
-        href="/files/WCAlogo_XL.jpg">grote versie</a> (46 KB, 1756 px bij 1068
-        px), <a href="/files/WCAlogo.svg">vectorversie</a> en <a
-        href="/files/WCAlogo_notext.svg">vectorversie zonder tekst</a> en een <a
-        href="/files/WCAlogo_monochrome.svg">monochrome vector-versie</a>.
-      '3': >-
-        3D-versie van het logo, ontworpen door Vu Minh Tan uit Vietnam: <a
-        href="/files/WCALogo3D.png">PNG-versie</a> (2.1 MB), <a
-        href="/files/WCALogo3Dsmall.png">kleine PNG-versie</a> (0.25 MB).
-      '4': >-
-        Alle WCA-wedstrijdorganisatoren mogen het WCA-logo gebruiken voor
-        websites, kleding, kado's of decoraties, uitsluitend voor officiële
-        WCA-wedstrijden.<br /> Voor alle andere personen en doeleinden is
-        toestemming nodig van <a
-        href="mailto:board@worldcubeassociation.org">WCA Board</a> om het logo
-        the gebruiken.
+    headings:
+      usage_guidelines:
+        color: {}
   search_results:
     index:
       competitions: Wedstrijden
@@ -3047,10 +2425,6 @@ nl:
         Het WCA-wedstrijdreglement is aangevuld met de <a
         href="/regulations/guidelines.html">WCA Richtlijnen</a>, die aanvullende
         verduidelijkingen en toelichtingen bevatten.
-      content3_html: >-
-        Belangrijke beslissingen over incidenten die zich hebben voorgedaan
-        tijdens wedstrijden die zijn opgelost door de WCA-reglementencommissie
-        zijn te vinden in het <a href="/incidents">Incidents-logboek</a>.
     panel2:
       title: Vertalingen
       content1_html: >-
@@ -3212,3 +2586,28 @@ nl:
   footer:
     privacy: Privacy
     disclaimer: Disclaimer
+  payments:
+    errors: {}
+  page:
+    contacts:
+      form:
+        competition: {}
+        user_data: {}
+        contact_recipient: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+    contact_edit_profile:
+      form: {}
+    teams_committees_councils: {}
+  trainee_delegate_application: {}
+  user_groups: {}
+  qualification: {}
+  validators: {}
+  tickets: {}
+  user_roles:
+    email: {}
+  merch: {}
+  database: {}

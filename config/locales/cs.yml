@@ -185,7 +185,6 @@ cs:
       no_date: Bez data
     user:
       wca_id: WCA ID
-      citizen_of: Státní příslušnost
     all_regions: Všechny regiony
     errors:
       invalid: neplatný
@@ -193,10 +192,6 @@ cs:
       one: den
       few: dny
       other: dní
-    these_events:
-      one: event
-      few: eventy
-      other: eventů
     search_site: Hledat
     filter: Filtr
     delete: Smazat
@@ -251,82 +246,6 @@ cs:
           na e-mail
         user_preferred_events: Preferované eventy
         otp_attempt: 'Vložte svůj 2FA autentifikační kód:'
-      competition:
-        id: ID
-        confirmed: Nepovolit organizátorům upravovat tuto soutěž
-        show_at_all: Zviditelnit soutěž pro veřejnost
-        name: Název
-        name_reason: Důvod pro název
-        cell_name: Přezdívka soutěže
-        country_id: Země
-        city_name: Název města
-        venue: Místo konání
-        venue_address: Adresa místa konání
-        venue_details: Podrobnosti o místě konání
-        start_date: Datum zahájení
-        end_date: Datum ukončení
-        external_website: Webové stránky
-        generate_website: >-
-          Pro více informací chci použít webové stránky WCA namísto externích
-          stránek.
-        base_entry_fee_lowest_denomination: Základní registrační poplatek
-        currency_code: Kód měny
-        staff_delegate_ids: Delegát(i) WCA
-        trainee_delegate_ids: WCA Trainee Delegát(i)
-        organizer_ids: Organizátor/Organizátoři
-        contact: Kontakt
-        information: Informace
-        use_wca_registration: Pro registraci chci použít webové stránky WCA
-        use_wca_live_for_scoretaking: Chci použít WCA Live pro zapisování 
-          výsledků
-        external_registration_page: Registrační stránka
-        competitor_limit_enabled: Limit pro soutěžící
-        competitor_limit: Maximální počet soutěžícich
-        competitor_limit_reason: Důvod pro limit soutěžících
-        guests_enabled: Hosté
-        guests_per_registration_limit: Maximální počet hostů na jednu registraci
-        events_per_registration_limit: Eventy na registrační limit
-        receive_registration_emails: 'Informujte mě e-mailem, když se někdo zaregistruje
-          na tuto soutěž'
-        registration_open: Zahájení registrace
-        registration_close: Ukončení registrace
-        remarks: Poznámky
-        clone_tabs: Chci zkopírovat všechny záložky s dalšími informacemi
-        competition_events: Eventy
-        enable_donations: >-
-          Chci povolit možnost dobrovolných příspěvků nad rámec vybírání
-          registračních poplatků
-        extra_registration_requirements: Speciální požadavky pro registraci
-        force_comment_in_registration: Donutit soutěžící zanechat komentář při 
-          registraci
-        on_the_spot_registration: Registrace na místě
-        on_the_spot_entry_fee_lowest_denomination: Registrační poplatek na místě
-        allow_registration_edits: Úpravy registrace
-        allow_registration_self_delete_after_acceptance: Zrušení registrace
-        refund_policy_percent: Kolik procent z částky se bude vracet
-        refund_policy_limit_date: Nejzazší datum pro vrácení peněz
-        waiting_list_deadline_date: Uzávěrka pro přijetí soutěžících z waiting 
-          listu
-        event_change_deadline_date: Uzávěrka pro soutěžící k aktualizaci jejich 
-          eventů
-        guests_entry_fee_lowest_denomination: Vstupné pro hosty
-        guest_entry_status: Zpráva o bezplatném vstupu hostů
-        early_puzzle_submission: >-
-          Požaduji, aby soutěžící odevzdali své kostky ve specifický čas
-          předtím, než event začne
-        early_puzzle_submission_reason: Důvod a detaily pro dřívější odevzdání 
-          kostek
-        qualification_results: >-
-          Chci použít kvalifikační časy k limitaci toho, kdo může soutěžit v
-          určitých eventech
-        qualification_results_reason: Důvod a detaily kvalifikačních výsledků
-        event_restrictions: Chci omezit registraci soutěžících na jisté 
-          kombinace eventů
-        event_restrictions_reason: Důvod a detaily pro omezení eventů
-        main_event_id: Hlavní event
-        allow_registration_without_qualification: Eventy s kvalifikací
-      championship:
-        championship_type: Typ šampionátu
       registration:
         guests: Hosté
         comments: Komentáře
@@ -350,9 +269,6 @@ cs:
         wrc_feedback_requested: Chci zpětnou vazbu od WRC k některým incidentům 
           výše.
         wrc_incidents: Incidenty potřebující zpětnou vazbu WRC.
-        wdc_feedback_requested: Chci zpětnou vazbu od WdC k některým incidentům 
-          výše.
-        wdc_incidents: Incidenty potřebující zpětnou vazbu WDC
         remarks: Poznámky
       person:
         wca_id: Osoba
@@ -416,16 +332,7 @@ cs:
         m: Muž
         f: Žena
         o: Jiné
-      delegate_status:
-        trainee_delegate: Trainee delegát
-        candidate_delegate: Junior delegát
-        delegate: Delegát
-        senior_delegate: Vyšší Delegát
-    person:
-      gender:
-        m: Muž
-        f: Žena
-        o: Jině
+    person: {}
     competition_medium:
       status:
         accepted: Přijato
@@ -434,13 +341,9 @@ cs:
         report: Report
         article: Článek
         multimedia: Multimédia
-    competition:
-      guest_entry_status:
-        unclear: >-
-          Nezobrazovat nic (prosíme rozepište v dalších podmínkách pro
-          registraci)
-        free: Každý divák může přijít zdarma
-        restricted: Diváci se mohou zůčastnit jen jako hosté soutěžících
+    competition: {}
+    user_roles:
+      status: {}
   simple_form:
     'yes': Ano
     'no': Ne
@@ -484,107 +387,6 @@ cs:
           Zkontrolujte svou nakonfigurovanou mobilní aplikaci k získání hesla,
           nebo vložte jeden ze záložních kódů.
       competition:
-        name: >-
-          Celý název soutěže včetně roku na konci (např. Czech Open 2016).
-          Dodržujte velká písmena. Název může obsahovat pouze písmena, čísla,
-          pomlčky (-), ampersandy (&), tečky (.), dvojtečky (:), apostrofy (') a
-          mezery ( ).
-        cell_name: >-
-          Zkrácený název pro zobrazení. Pokud je samotný název soutěže
-          dostatečně krátký, můžete ho použít (např. Europe 2006).
-        city_name: >-
-          Název města a (případně) stát, ve kterém se bude soutěž konat.
-          Nezahrnujte zemi (např. Brno NEBO San Francisco, California).
-        information: >-
-          Důležité informace, které by soutěžící měli vědět. Zobrazí se na
-          hlavní stránce soutěže. <br/>Prosíme, napište to <b>v angličtině</b> a
-          v jakémkoli dalším jazyce, kterým vaši soutěžící mluví.
-        staff_delegate_ids: Delegáti WCA pro tuto soutěž.
-        trainee_delegate_ids: WCA Trainee delegáti pro tuto soutěž
-        organizer_ids: >-
-          Organizátoři soutěže (aby zde mohli být uvedeni, musí mít vytvořený
-          účet).
-        external_website: Webové stránky soutěže. Musí to být platná http(s) 
-          url.
-        registration_open: 'Poznámka: Zahájení a ukončení registrace jsou uvedeny
-          v UTC čase.'
-        remarks: >-
-          Dodatečné informace pro WCAT. Například pokud si něčím nejste jisti,
-          nebo nějaké speciální žádosti pro WCAT. Prosíme vyplňte v angličtině!
-        external_registration_page: >-
-          Stránka, na které se budou soutěží přihlašovat na soutěž. Musí to být
-          platná http(s) url.
-        base_entry_fee_lowest_denomination: >-
-          Základní registrační poplatek pro soutěž. Zobrazí se na stránkách s
-          informacemi o soutěži a na registrační stránce, pokud se bude
-          používat. Pokud bude stanoven na 0, zobrazí se věta, že registrace
-          budou přijaty zdarma. <br><br><b>POZNÁMKA: Následující odhad WCA Dues
-          je jen přibližný a počítá s aktuálními směnnými kurzy. Není nijak
-          právně závazný.</b><br>Kliněte na "Aktualizovat soutěž" poté co
-          změníte kód měny, abyste synchronizovali odhad. Pokud nejsou dostupné
-          žádné směnné kurzy, nebude nic zobrazeno.
-        currency_code: Kód měny pro poplatky.
-        competitor_limit_enabled: >-
-          Doporučujeme stanovit limit pro soutěžící, ačkoliv to není dle
-          Pravidel nutné.
-        competitor_limit: >-
-          Počet soutěžících povolených pro tuto soutěž. Nyní je toto číslo pouze
-          informativní a nezabrání registraci více lidí. We are working on
-          adding explicit support for this to the registration flow, but it
-          requires some other work first.
-        competitor_limit_reason: >-
-          Z jakého důvodu jste určili tento limit pro soutěžící? Prosíme,
-          vyplňte toto pole v angličtině!
-        guests_per_registration_limit: >-
-          Počet hostů na jednu registraci povolený na této soutěži. Registrace s
-          příliš velkým počtem hostů bude zablokována. Nechte prázdné, pokud
-          nechcete stanovit limit.
-        events_per_registration_limit: >-
-          Volitelně vynuťte maximální počet eventů, na které se soutěžící může
-          zaregistrovat (často používané pro „Favourites“ soutěže. Měli byste
-          mít přidané eventy, než využijete toto pole. Registrace s příliš mnoha
-          eventy budou zablokovány. Nechte prázdné, pokud není žádný limit.
-        extra_registration_requirements: >-
-          Prosíme udejte zde jakékoli speciální požadavky pro registraci, které
-          nejsou pokryty výše, jako například pokyny k platbě.<br/>Prosíme
-          napište to <b>v Angličtině</b> a v jakémkoli dalším jazyce, kterým
-          vaši soutěžící mluví; zobrazí se to na stránkách s informacemi o
-          soutěži a na registrační stránce, pokud používáte registrační stránky
-          WCA.
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Pokud je to nastaveno na 0, zobrazí se věta, že registrace na místě
-          budou přijaty zdarma.
-        refund_policy_percent: >-
-          Nyní je toto číslo pouze informativní, vrácení peněz se bude muset
-          řešit manuálně. Pokud to nastavíte na 0, zobrazí se věta, že se
-          registrační poplatky nebudou vracet za žádných podmínek.
-        refund_policy_limit_date: 'Datum, po kterém se nebude řešit žádné vrácení
-          peněz.'
-        waiting_list_deadline_date: >-
-          Datum po kterém osoby na waiting listu už nemohou být přijaty. Pokud
-          máte deadline na vrácení poplatků, tento deadline by neměl být před
-          ním.
-        event_change_deadline_date: >-
-          Registrovaní soutěžící mají právo aktualizovat své eventy až do této
-          doby a to kontaktováním organizačního týmu. Uzávěrka nesmí být
-          nastavena před datum konce registrace. Pokud toto pole necháte
-          prázdné, soutěžící budou moci měnit eventy až do jejich začátku. Pokud
-          máte povolené registrace na místě, toto musí být nastaveno na den
-          soutěže.
-        guests_entry_fee_lowest_denomination: >-
-          Prozatím je toto číslo pouze informativní a poplatky za hosty nelze
-          řešit pomocí této stránky. Pokud toto nastavíte na 0, zobrazí se věta
-          o divácích dle vaší volby.
-        early_puzzle_submission_reason: >-
-          Prosíme rozeberte, proč byste chtěli požadovat, aby soutěžící
-          odevzdali své kostky dříve. Prosíme, vyplňte toto v angličtině!
-        qualification_results_reason: >-
-          Prosíme rozeberte, proč byste chtěli používat kvalifikační časy.
-          Prosíme, vyplňte toto v angličtině!
-        event_restrictions_reason: >-
-          Prosíme rozepište, proč byste chtěli zakázat některé kombinace eventů.
-          Prosíme, vyplňte toto v angličtině!
-        main_event_id: Vítěz tohoto eventu bude vítězem celé soutěže.
         championships:
       website_contact:
       dob_contact:
@@ -627,7 +429,6 @@ cs:
           případy. Prosíme zaškrtněte správná pole níže, pokud aktivně chcete
           zpětnou vazbu.
         wrc_incidents: 'Seznam čísel incidentů, ke kterým chcete zpětnou vazbu WRC.'
-        wdc_incidents: 'Seznam čísel incidentů, ke kterým chcete zpětnou vazbu WDC.'
         remarks: >-
           Další detaily, o které byste se chtěli podělit (např.
           zlepšení/zhoršení v rámci komunity, plány do budoucna v daném
@@ -635,11 +436,6 @@ cs:
           vynechali, neváhejte se k tomu zde vyjádřit.
       competition_tab:
         name: 'Příklady: cestování, platby, ocenění, ubytování'
-      person:
-        dob: Datum narození by mělo být uvedeno ve formátu RRRR-MM-DD.
-      registration:
-        administrative_notes: Dodatečné poznámky pro správu registrace. 
-          Soutěžící je nevidí.
       results_submission:
       regional_organization:
         website: Musí být platné HTTP(S) URL. HTTPS je doporučené.
@@ -793,6 +589,7 @@ cs:
     mailer:
       confirmation_instructions:
         subject: Potvrďte prosím svoji novou e-mailovou adresu
+    registrations: {}
   wca:
     errors:
       messages:
@@ -802,13 +599,7 @@ cs:
           other: chyb
       error_pages:
         500_error: 'Je nám to líto, ale něco se pokazilo.'
-        500_contact: >-
-          Pokud tuto chybu nahlásíte WCA Software Týmu, prosíme zmiňte Request
-          ID
         400_error: 'Stránka, kterou hledáte, neexistuje.'
-        400_contact: >-
-          Pokud is myslíte, že se jedná o chybu, kontaktujte WCA Software Tým a
-          zahrňte Request ID
     doorkeeper:
       applications:
         help:
@@ -870,7 +661,6 @@ cs:
       db_dev_export: Export pro vývojáře
       regulations: Pravidla
       about_regulations: O Pravidlech
-      guidelines: Guidelines
       scrambles: Scrambly
       history: Historie
       translations: Překlady
@@ -882,10 +672,8 @@ cs:
       panel: Panel
       polls: Ankety
       results_team: Results team
-      results_admin: Admin
       results_database: Databáze
       new_post: Nový příspěvek
-      team_leader: Vedoucí týmu
       regional_organizations: Regionální organizace
       manage_regional_organizations: Spravovat regionální organizace
       new_regional_organization: Nová regionální organizace
@@ -1064,7 +852,6 @@ cs:
       email: E-mail
       preferences: Preference
       password: Heslo
-      member_of: Člen
       preferred_events_desc: Výběr vámi preferovaných eventů urychlí registraci 
         na soutěž.
       please_fix_profile: >-
@@ -1171,9 +958,6 @@ cs:
         Nemůžete změnit zemi na zemi, kterou daná osoba v minulosti
         reprezentovala.
       must_have_a_change: Název země musí být jiný pro aktualizaci dané osoby.
-      must_not_be_present: nesmí být přítomný
-      senior_has_delegate: nelze snížit hodnost Vyššího Delegáta z pozice 
-        podřízeného Delegáta
       already_have_id: 'nebylo možné zažádat o WCA ID, jelikož již máte WCA ID %{wca_id}'
       wca_id_no_birthdate_html: >-
         Pro toto WCA ID nemáme zaznamenané datum narození. Prosíme, kontaktujte
@@ -1190,7 +974,6 @@ cs:
         Pro toto WCA ID nemáme zaznamenané jméno. Prosíme, pošlete e-mail <a
         href='%{wrt_contact_path}' target='_blank'>WCA
         Results Týmu</a> pro vyřešení.
-      avatar_requires_wca_id: 'vyžaduje WCA ID, aby mohl být přiřazen'
       email_used_by_locked_account_html: >-
         již používá jiný účet. Bylo vytvořeno automaticky poté, co jste se
         zaregistroval(a) na soutěž přes externí službu. Pokud jste majitelem
@@ -1226,8 +1009,6 @@ cs:
       need_gender: Potřebuje pohlaví
       need_dob: Potřebuje datum narození
       need_country: Potřebuje zemi
-      cannot_be_deleted_and_accepted: Registrace nemůže být zároveň smazána a 
-        přijata
       must_register: musíte se zaregistrovat alespoň na jeden event
       exceeds_event_limit:
         one: musíte se zaregistrovat na právě 1 event
@@ -1262,23 +1043,7 @@ cs:
         other: lidí
     flash:
       not_using_wca: Tato soutěž nevyužívá pro registraci stránky WCA.
-      accepted_and_mailed:
-        one: Registrace přijata! Upozornění posláno na e-mail.
-        few: Registrace přijaty! Upozornění poslána na e-mail.
-        other: Registrací přijato! Upozornění poslána na e-mail.
-      rejected_and_mailed:
-        one: Registrace přesunuta na waiting list
-        few: Registrace přesunuty na waiting list
-        other: Registrací přesunuto na waiting list
-      deleted_and_mailed:
-        one: Registrace smazána
-        few: Registrace smazány
-        other: Registrací smazáno
-      single_deletion_and_mail: 'Registrace byla smazána a byl zaslán e-mail na %{mail}'
-      cannot_delete: Nemůžete smazat svoji registraci.
       updated: Registrace aktualizována
-      failed: Nemohli jsme aktualizovat registraci
-      deleted: 'Vaše registrace na %{comp} byla úspěšně smazána'
       registered: Registrace proběhla úspěšně!
       imported: Úspěšně importované registrace!
       added: Úspěšně přidané registrace!
@@ -1305,17 +1070,6 @@ cs:
           Vaše registrace na %{comp_name} byla přijata. Jako obvykle můžete
           sledovat status své registrace %{here}.
         see_you_soon: 'Těšíme se na Vás na %{comp_name}!'
-      pending:
-        mail_subject: 'Byl(a) jste přesunut(a) na waiting list pro %{comp_name}'
-        moved_html: >-
-          Vaše registrace na %{comp_name} byla přesunuta na waiting list. Z
-          těchto možných důvodu:
-        causes:
-          accepted: Vaše registrace byla přijata omylem
-          withdrawal: Požádali jste o odstranění
-        email_if_error: >-
-          Pokud si myslíte, že se jedná o chybu, prosíme, odpovězte na tento
-          e-mail.
       deleted:
         mail_subject: 'Vaše registrace na %{comp_name} byla smazána'
         message_html: 'Vaše registrace na %{comp_name} byla smazána. Z těchto možných
@@ -1337,39 +1091,23 @@ cs:
         one: země
         few: země
         other: zemí
-      export_csv: Exportovat do CSV
       email: E-mail
-      approve: Schválit
-      reject: Zamítnout
-      delete: Smazat
-      waiting_list: Waiting List
-      approved_registrations: Schválené registrace
-      deleted_registrations: Smazané registrace
       non_competing: Registrace nesoutěžících
       not_paid: Nezaplaceno
       registered:
         without_stripe: Zaregistrovaní na
         with_stripe: Zaplaceno
       payment_requested_on: 'Platba vyžádána ze dne: %{date}'
-      payment_completed_on: 'Platba dokončena: %{date}'
       series_registrations: Registrace série
-      series_registrations_hint_html: 'Nápověda: Registrace série jsou zobrazovány
-        jako <i>%{description}</i>'
       total: Celkem
-      n_events: Počet eventů
     new_registration:
       title: 'Zaregistrovat se na %{comp}'
-    registered_with_account_html: >-
-      Tato osoba se registrovala přes účet. Můžete upravit její osobní informace
-      %{here}.
     sign_in: Přihlásit se
     profile: profil
-    panel_title: Detaily registrace
     register: Zaregistrovat se!
     refund: Vrácení platby
     refund_confirmation: 'Jste si jist(á), že chcete vrátit tuto platbu?'
     update: Aktualizovat registraci
-    delete: Smazat
     delete_confirm: 'Jste si jist(á), že chcete smazat svoji registraci?'
     delete_registration: Smazat registraci.
     will_open_html: 'Registrace bude zahájena za <strong>%{days}</strong> v %{time}.'
@@ -1386,7 +1124,6 @@ cs:
     please_sign_in_html: >-
       %{sign_in}, abyste jste se mohl(a) zaregistrovat na %{comp}. Pokud nemáte
       WCA účet, můžete si ho vytvořit %{here}.
-    greeting: 'Ahoj, %{name}!'
     please_fix_profile_html: >-
       Abyste se mohli zaregistrovat na %{comp}, musíte spravit následující
       problémy se svým %{profile}:
@@ -1398,34 +1135,14 @@ cs:
       Limit pro soutěžící je %{competitor_limit} a je možné, že je již zaplněn.
       Pokud se zaregistrujete, Vaše registrace bude přidána na waiting list.
       Nemůže být schválena, dokud se neuvolní místo.
-    can_register: 'Níže se můžete zaregistrovat na %{comp}.'
-    check_registration_information: >-
-      Prosíme, podívejte se na informace o registraci pro případ, že byste
-      měl(a) udělat ještě něco dalšího, jako například zaplatit registrační
-      poplatek.
-    have_registered: >-
-      Podal(a) jste registraci na %{comp}. Podrobnosti o své registraci
-      naleznete níže.
-    contact_organizer: 'Kontaktujte organizátora, pokud budete chtít něco změnit.'
-    waiting_list: >-
-      Vaše registrace čeká na vyřízení. Pro potvrzení možná budete muset
-      zaplatit registrační poplatek. Podívejte se na webové stránky soutěže pro
-      podrobnosti.
-    accepted: Vaše registrace byla přijata!
     entry_fees_fully_paid: 'Zaplatil(a) jste %{paid}, což zcela pokrývá registrační
       poplatek.'
     will_pay_here: Zaplatíte je zde po podání vaší registrace
     wont_pay_here: 'Prosíme, podívejte se na informace o soutěži pro pokyny k platbě'
-    not_qualified: Nesplňuje podmínky pro kvalifikaci
     refund_form:
-      hints:
-        refund_amount: >-
-          Částka vrácená soutěžícímu může být libovolné hodnoty až do výše
-          částky, která byla zaplacena.
       labels:
         refund_amount: Vrácená částka
     payment_form:
-      title: Registrační poplatek
       payment_successful: >-
         Vaše platba byla úspěšná a Vaše registrace níže by se měla zobrazovat
         jako zaplacená.
@@ -1438,7 +1155,6 @@ cs:
           odeslány Stripu, který transakci vyřídí a informuje nás o jejím
           provedení.
       labels:
-        entry_fees: Registrační poplatky
         fees_paid: Zaplaceno
         fees_remaining: Zbývá
         donation: Dar
@@ -1446,12 +1162,9 @@ cs:
           Rád bych přidal dobrovolný příspěvek, který půjde jen organizačnímu
           týmu
         payment_information: Platební informace
-        payment_button: Zaplatit poplatky pomocí Stripu
         ajax_error: WCA server error
-        stripe_error: Stripe error
         subtotal: Mezisoučet
       alerts:
-        not_a_number: 'Prosíme, zadejte platnou částku.'
         amount_too_low: >-
           Celková částka k zaplacení musí být minimálně v hodnotě registračního
           poplatku.
@@ -1462,11 +1175,6 @@ cs:
         already_paid: 'Poplatek nebyl účtován, protože registrační poplatek už je
           zaplacen'
         not_allowed: Nemůžete zaplatit za tuto registraci
-        stripe_failed: Prosíme zkontrolujte Stripe transakci.
-        stripe_not_found: 'Stripe vrátilo ID transakce, které nebylo nalezeno.'
-        stripe_secret_invalid: >-
-          Stripe reported back a transaction secret that doesn't match our
-          records.
         payment_reset: Stripe odmítlo platbu.
         payment_pending: Platba ještě nebyla dokončena.
     preferred_events_prompt_html: >-
@@ -1564,7 +1272,6 @@ cs:
       results_not_posted: 'Výsledky této soutěže jsou viditelné, ale ještě nebyly
         nahrány.'
       results_already_posted: Výsledky již byly nahrány.
-      results_posted: Výsledky úspěšně nahrány!
       results_preview_alert: 'Prohlížíte si výsledky, které ještě nebyly zveřejněny.'
       upload_results: >-
         Tato soutěž skončila, pracujeme na tom, aby byly výsledky nahrány co
@@ -1586,13 +1293,6 @@ cs:
       confirmed_not_visible: 'Tato soutěž je potvrzená, ale není viditelná.'
       not_confirmed_visible: 'Tato soutěž není potvrzená, ale je viditelná.'
       not_confirmed_not_visible: 'Tato soutěž není ani potvrzená, ani viditelná.'
-      stripe_connected: >-
-        Připojil(a) jste úspěšně svůj Stripe účet a můžete nyní dostávat
-        registrační platby pro tuto soutěž.
-      stripe_disconnected_success: Stripe účet byl úspěšně odpojen.
-      stripe_disconnected_failure: Vyskytla se chyba při odpojování Stripe účtu.
-      stripe_not_connected: Vyskytla se chyba a nemohli jsme připojit váš Stripe
-        účet.
       championship_exists: 'Už je jiné %{championship_type} v %{year}.'
       orga_closed_reg_success: Registrace byla úspěšně uzavřena.
       orga_closed_reg_failure: Nebylo možné uzavřít registraci.
@@ -1740,9 +1440,6 @@ cs:
       number_of_bookmarks: Počet založení
     index:
       title: Soutěže
-      disclaimer: >-
-        Některé státy teď nemohou organizovat soutěže kvůli pandemii COVIDu-19.
-        Prosíme o pochopení.
       all_events: Všechny
       all_years: Všechny roky
       clear: Zrušit
@@ -1772,7 +1469,6 @@ cs:
         upcoming: Nadcházející soutěže
         custom: Soutěže ve vybraném období
         by_announcement: 'Soutěže seřazené dle data oznámení, nejnovější nahoře'
-      no_access: Nemáte přístup na tuto stránku!
       tooltips:
         hourglass:
           ended: 'Skončila před %{days}'
@@ -1790,8 +1486,6 @@ cs:
             Limit soutěžících byl dosáhnut, nové registrace budou umístěny na
             waiting list.
       no_comp_found: Žádné soutěže nebyly nalezeny.
-      no_comp_match: 'Nenalezli jsme žádnou soutěž s %{events}! Zkuste hledat pro
-        méně eventů.'
     my_competitions_table:
       edit: Upravit
       registrations: Registrace
@@ -1812,20 +1506,6 @@ cs:
       supports_md_html: >-
         Podporuje <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      name_reason_html: >-
-        Krátké objasnění jména soutěže. Jméno musí odpovídat <a
-        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
-        Competition Requirements Policy</a>.
-      venue_html: >-
-        Místo konání soutěže. %{md}. Například: [Cité des Sciences et de
-        l'Industrie](http://www.cite-sciences.fr)
-      venue_details_html: >-
-        Podrobnosti o místě konání (např. V prvním poschodí vzadu, následujte
-        šipky). %{md}
-      contact_html: >-
-        Dobrovolné kontaktní informace. Pokud to nevyplníte, zprávu budou
-        odeslány přes kontaktní formulář bez odhalení emailů organizátorů.
-        %{md}. Například: [Text k zobrazení](mailto:some@email.com)
       series_save_first_hint: 'Musíte nejprve uložit soutěž, než přidáte novou sérii.'
       events: Eventy
       public_and_locked_html: >-
@@ -1879,7 +1559,6 @@ cs:
           name: Místo konání
           details: Podrobnosti o místě konání
           address: Adresa místa konání
-          coordinates:
         start_date: Datum zahájení
         end_date: Datum ukončení
         series:
@@ -1897,17 +1576,12 @@ cs:
           trainee_delegate_ids: WCA Trainee Delegát(i)
           organizer_ids: Organizátor/Organizátoři
           contact: Kontakt
-        championships:
         website:
           generate_website: Pro více informací chci použít webové stránky WCA 
             namísto externích stránek.
           external_website: Webové stránky
           external_registration_page: Registrační stránka
           uses_wca_registration: Pro registraci chci použít webové stránky WCA
-          uses_wca_live: Chci použít WCA Live pro zapisování výsledků
-        user_settings:
-          receive_registration_emails: Informujte mě e-mailem, když se někdo 
-            zaregistruje na tuto soutěž
         entry_fees:
           currency_code: Kód měny
           base_entry_fee: Základní registrační poplatek
@@ -1925,7 +1599,6 @@ cs:
           event_change_deadline_date: Uzávěrka pro soutěžící k aktualizaci 
             jejich eventů
           allow_on_the_spot: Registrace na místě
-          allow_self_delete_after_acceptance: Zrušení registrace
           allow_self_edits: Úpravy registrace
           guests_enabled: Hosté
           guest_entry_status: Zpráva o bezplatném vstupu hostů
@@ -1949,7 +1622,6 @@ cs:
             per_registration_limit: Eventy na registrační limit
           main_event_id: Hlavní event
         remarks: Poznámky
-        clone_tabs: Chci zkopírovat všechny záložky s dalšími informacemi
       hints:
         name: Celý název soutěže včetně roku na konci (např. Czech Open 2016). 
           Dodržujte velká písmena. Název může obsahovat pouze písmena, čísla, 
@@ -2088,11 +1760,6 @@ cs:
             'false': >-
               Soutěžící NEmohou upravit svou registraci od chvíle, kdy byla
               přijata
-          allow_self_delete_after_acceptance:
-            'true': >-
-              Soutěžící mohou smazat svou vlastní registraci i pokud už byla
-              přijata
-            'false': 'Soutěžící NEsmí smazat svou registraci poté, co byla přijata'
           guest_entry_status:
             unclear: Nezobrazovat nic (prosíme rozepište v dalších podmínkách 
               pro registraci)
@@ -2107,6 +1774,7 @@ cs:
               'false': >-
                 Soutěžící musí být kvalifikováni, aby se mohli zaregistrovat na
                 event
+        website: {}
     errors:
       invalid_name_message: >-
         musí končit měsícem a může obsahovat pouze písmena, čísla, pomlčky(-),
@@ -2136,8 +1804,6 @@ cs:
         nesmí být před ukončením registrace.
       waiting_list_deadline_before_refund_date: Uzávěrka waiting listu nesmí být
         před uzávěrkou pro vrácení peněz.
-      waiting_list_deadline_after_start: Uzávěrka waiting listu musí být před 
-        začátečním datumem.
       event_change_deadline_before_registration_close: Deadline na aktualizaci 
         eventů nesmí být před uzavřením registrace.
       event_change_deadline_after_end_date: Uzávěrka na aktualizaci eventů nesmí
@@ -2163,15 +1829,6 @@ cs:
     time_until_competition:
       competition_in: 'Soutěž začne za %{n_days}.'
       competition_was: 'Soutěž byla před %{n_days}.'
-    nearby_competitions:
-      competitions:
-        one: soutěž
-        few: soutěže
-        other: soutěží
-      label_admin: 'Posledních %{days} dní'
-      nearby_admin: '%{x_competitions} v rámci %{kms} km a %{days} dní.'
-      within: 'V rámci %{days} dní'
-      show: Zobrazit
     adjacent_competitions:
       label: 'Soutěže v blízkosti (v rámci %{days} dní a %{kms} km)'
       no_comp_nearby: Žádné soutěže poblíž!
@@ -2205,7 +1862,6 @@ cs:
     uncancel: Reinkarnovat soutěž
     cancelled_by_html: 'Zrušeno %{name} %{date_time}'
     cancel_confirm: 'Jste si jisti, že chcete zrušit soutěž?'
-    post_results: Sdílet výsledky
     results_posted_by_html: 'Sdíleno %{poster_name} %{date_time}'
     cancel_mistake: Udělali jste chybu?
     note_before_cancel: 'Poznámka: jen potvrzené soutěže mohou být zrušené.'
@@ -2215,9 +1871,6 @@ cs:
     note_reg_not_full_orga_close_reg: >-
       Poznámka: registraci je možné uzavřít pouze pokud již byl dosažen limit
       pro soutěžící.
-    stripe_disconnect: Odpojit Stripe účet
-    stripe_disconnect_confirm: 'Jste si jisti, že chcete odpojit Stripe účet? Tato
-      akce je nenávratná.'
     note_reg_closed_orga_close_reg: 'Poznámka: registrace již byla uzavřena.'
     show:
       general_info: Obecné info
@@ -2230,7 +1883,6 @@ cs:
           Pokud dosáhnete časového limitu během svého solvu, judge vás zastaví a
           zaznamená výsledek jako DNF (viz %{regulation_link}).
         regulation_link_text: 'Pravidlo %{number}'
-        guideline_link_text: 'Pokyn %{number}'
         cumulative_time_limit: sčítající se časový limit
         cumulative_one_round_html: 'Může být vynucen %{cumulative_time_limit} (viz
           %{regulation_link}).'
@@ -2257,7 +1909,6 @@ cs:
       qualification: Kvalifikace
     schedule:
       display_as:
-        label: 'Zobrazit harmonogram jako:'
         table: Tabulku
         calendar: Kalendář
       display_for_room: 'Zobrazit harmonogram pro:'
@@ -2267,13 +1918,8 @@ cs:
       start: Začátek
       end: Konec
       activity: Aktivita
-      room: Místnost
       room_in_venue: '%{room} v %{venue}'
-      venue_information_html: 'Prohlížíte si harmonogram pro místo konání %{venue_name}.'
       timezone_message: 'Harmonogram je zobrazen v časové zóně %{timezone}.'
-      multiple_venues_available: >-
-        Soutěž proběhne na několika místech, podívejte se na harmonogram i pro
-        ostatní venue!
       schedule_for_date: 'Harmonogram pro %{day_name} (%{full_date})'
     nav:
       menu:
@@ -2312,6 +1958,12 @@ cs:
     competition_series_fields:
       add_series: Přidat do série
       remove_series: Odebrat ze série
+    live:
+      connection: {}
+    registration_v2:
+      list: {}
+      register:
+        panel: {}
   competition_tabs:
     headers:
       tabs: Záložky
@@ -2347,32 +1999,17 @@ cs:
       Berte na vědomí, že některá nastavení (například uplynulé roky), jsou
       dočasně nedostupná. WCA Software Tým pracuje na jejich obnovení –
       omlouváme se, za způsobené nepříjemnosti.
-    tooltip_no_years: Naše databáze je příliš velká pro počítání historických 
-      dat.
-    tooltip_no_quantities: Naše databáze je příliš velká pro počítání dlouhých 
-      žebříčků
     selector_elements:
       events_selector:
         event: Event
-        all_events: Všechny eventy
-      region: Region
       type_selector:
         type: Typ
         single: Single
         average: Průměr
-      years_selector:
-        years: Roky
-        all_years: Všechny roky
-        only: Jen
-        only_html: 'Jen %{year}'
-        until: Do
-        until_html: 'Do %{year}'
       show_selector:
         show: Ukázat
         persons: Osoby
-        persons_html: '%{quantity} osob'
         results: Výsledky
-        results_html: '%{quantity} výsledků'
         by_region: Dle regionu
         mixed: Smíšené
         slim: Tenké
@@ -2387,18 +2024,12 @@ cs:
     table_elements:
       name: Název
       result: Výsledek
-      citizen_of: Občanství
       competition: Soutěž
       solves: Solvy
       region: Region
       world: Svět
-      type_options:
-        type: Typ
-        single: Single
-        average: Průměr
       event: Event
       date_circa: Přibližné datum
-      record: Rekord
   notifications:
     connect_wca_id: Propojte své WCA ID se svým účtem!
   persons:
@@ -2444,21 +2075,6 @@ cs:
     errors:
       unstick_at_future: musí být v budoucnosti
   contacts:
-    website:
-      faq_note_html: >-
-        Předtím než odešlete zprávu, ujistěte se, že jste si prohlédli <a
-        href="/faq">často kladené otázky</a>! Pokud chcete kontaktovat konkrétní
-        komisi nebo tým, najdete jejich kontaktní informace na  <a
-        href="/teams-committees">této stránce</a>.
-      title: WCA kontaktní formulář
-      inquiries:
-        competition: Kontaktujte Organizátory Specifické Soutěže (vyberte níže)
-        competitions_in_general: 'Soutěže obecně (organizace, pravidla soutěží, atd.)'
-        wca_id_or_profile: WCA ID nebo WCA Profil
-        media: Média
-        software: Software
-        different: Jiné
-      submit: Poslat zprávu
     dob:
       title: Formulář pro žádost o změnu data narození
       description: >-
@@ -2694,134 +2310,16 @@ cs:
       donate_paypal: Přispět přes PayPal
       donate_other: Další způsoby jak přispět
     structure:
-      teams_committees_councils: 'WCA Týmy, Komise a Koncily'
       title: Struktura
       board:
-        name: WCA Board of Directors
         description: >-
           World Cube Association je vedena WCA Boardem, který se skládá z
           následujících členů:
-      committees: >-
-        WCA týmy a komise jsou nezbytnou součástí organizace a starají se o
-        každodenní úkoly, které jsou zapotřebí, aby správně fungovala. Tyto
-        komise se skládají z členů WCA komunity, včetně WCA delegátů a
-        soutěžících. Každý tým má vedoucího, jehož úkolem je zajišťovat správné
-        fungování týmu a vést ostatní jeho členy. Koncily jsou speciální typ
-        týmu, které mají poradní roli pro vedení WCA a jsou složeny z členů
-        komunity, ne ze zaměstnanců. Pokud je otevřené místo v komisi, týmu,
-        nebo koncilu, informace budou sdíleny na úvodní straně WCA webu.
-      senior_member: Vyšší člen
-      leader: Vedoucí
-      officers:
-        name: WCA úředníci
-        description: >-
-          Úředníci WCA se starají o úkoly související s non-profit statusem WCA.
-          Tito úředníci jsou zvoleni vedením WCA. Výkonní ředitelé a Křeslo
-          předsedají všem setkáním vedení, tajemník se stará o dokumenty
-          organizace a pokladník řeší finanční záležitosti WCA.
-      chair:
-        name: WCA Chair
-      executive_director:
-        name: WCA Executive Director
-      secretary:
-        name: WCA Secretary
-      vice_chair:
-        name: WCA Vice-Chair
-      treasurer:
-        name: Pokladník WCA
       users:
         profile: 'Profil %{user_name}'
-      wdc:
-        name: WCA Disciplinary Committee
-        description: >-
-          Tato committee radí WCA Boardu ve zvláštních případech, jako například
-          při údajném porušování Pravidel WCA a může být kontaktována členy WCA
-          v případě důležitých osobních záležitostí týkajících se WCA soutěží.
-      wdpc:
-        name: WCA Data Protection Committee
-        description: >-
-          Tato committee je zodpovědná za všechny záležitosti týkající se Data
-          Protection.
-      wrc:
-        name: WCA Regulations Committee
-        description: Tato committee je odpovědná za správu Pravidel WCA.
-      wrt:
-        name: WCA Results Team
-        description: Tento team je odpovědný za správu všech výsledků ze 
-          soutěží.
-      wst:
-        name: WCA Software Team
-        description: >-
-          Tento team je odpovědný za správu softwaru WCA (webové stránky,
-          workbooky, nástroje admina).
-      wct:
-        name: WCA Communication Team
-        description: >-
-          Role WCA Communication Teamu (WCT) spočívá v dohlížení a podporování
-          komunikace WCA s komunitou a širokou veřejností. Komunikace WCA by
-          měla přispívat k realizaci cílů WCA a podporovat obecně pozitivní
-          kulturu přátelství, respektování, otevřenosti a odpovědnosti.
-      wfc:
-        name: WCA Financial Committee
-        description: Tento tým se stará o finance WCA.
-      wec:
-        name: WCA Ethics Committee
-        description: >-
-          Tato committee má za úkol zajistit, aby všechny postupy, které používá
-          WCA staff a externí staff, odpovídaly Etickému kodexu, a provádět
-          nezávislé vyšetřování, pokud jednání některého z těchto členů není v
-          souladu s uvedeným Etickým kodexem. Taková vyšetřování mohou být
-          vyžádána všemi registrovanými Speedcubery, pro které je WEC
-          důvěrníkem. Tato committee funguje také jako odvolací výbor, pokud
-          někdo zúčastněný nesouhlasí s rozhodnutím WCA Disciplinary Committee.
-      weat:
-        name: Tým výkonných asistentů WCA
-        description: Tento tým se stará o administrativní úkoly vedení WCA.
-      wqac:
-        name: WCA Quality Assurance Committee
-        description: >-
-          Tato committee má za úkol podporovat a prosazovat nepřetržité
-          zlepšování kvality v rámci WCA, jakožto i celosvětové uplatňování
-          norem kvality, které zajistí konzistentní vysokou kvalitu procesů, WCA
-          staffu, regionálních organizací, organizátorů soutěží a staffu
-          soutěží.
-      wcat:
-        name: WCA Competition Announcement Team
-        description: >-
-          Tento team má za úkol schvalovat a ohlašovat soutěže WCA a zajišťuje,
-          aby tato ohlášení dodržovala standardy kvality WCA.
-      wmt:
-        name: WCA Marketing Team
-        description: >-
-          Tento team je odpovědný za rozvoj a spravování Značky WCA, vyhledává
-          sponzory, podporuje distributory Soutěžních Zařízení WCA a prodej WCA
-          Zboží.
-      wac:
-        name: Poradní koncil WCA
-        description: >-
-          Tento koncil je zodpovědný za budování a udržování bilaterální
-          komunikace mezi zaměstnanci WCA a komunitou WCA.
-      wsot:
-        name: Tým sportovní organizace WCA
-        description: >-
-          Tento tým se stará o podporu uznání WCA jako mezinárodní sportovní
-          organizace.
-      wat:
-        name: Archivní tým WCA
-        description: >-
-          Archivní tým WCA je poradní komise WCA. Jeho role je spravovat a
-          rozvíjet archiv organizace.
-      banned:
-        name: Soutěžící se zákazem
-      wct_china:
-        name: WCT Čína
       operations_html: 'Každodenní aktivity WCA jsou obstarávány %{committees_and_teams}
         WCA.'
       teams_committees: Týmy a komise
-      probation:
-        name: Delegáti s podmínkou
-      wst_admin:
-        name: Software administrátoři
       delegates_html: >-
         <p><strong>WCA Delegát</strong> je role definovaná v WCA Motions a
         popsaná v WCA Regulations. Jeho hlavní povinností je dohled nad
@@ -2853,7 +2351,6 @@ cs:
     codeofethics: Code of Ethics
     codeofconduct: Kodex chování
     finances: Finance
-    vision_and_strategy: Vize a strategie
   education:
     title: WCA vzdělávací zdroje
     description: 'WQAC publikovalo několik dokumentů pro komunitu, jsou ke stažení
@@ -2918,107 +2415,7 @@ cs:
         odpověď od vedení WCA.
     delete:
       confirm_delete: 'Jste si jisti, že chcete smazat tuto žádost regionální organizace?'
-  contact:
-    title: Kontakt
-    info_alert_html: >-
-      Před kontaktováním kteréhokoli týmu na této stránce se podívejte na
-      %{link}!
-    questions_and_comments_html: >-
-      Pro otázky, komentáře a návrhy, týkající se webových stránek použijte
-      tento <a href='/contact/website'>kontaktní formulář</a>. Pro jiné
-      záležitosti týkající se určité oblasti nebo soutěže, prosíme, kontaktujte
-      svého místního %{link}.
-    committees_and_teams_html: <u>Committees a Teamy</u>
-    members: Členi
-    board:
-      info_html: >-
-        World Cube Association vede WCA Board. Členové Boardu jsou zodpovědní za
-        všeobecné dotazy a za WCA organizaci jako celek.
-    wct:
-      info_html: >-
-        WCT má na starost dohled a podporu komunikace WCA s komunitou a širokou
-        veřejností. Měli byste je kontaktovat, pokud máte obecné otázky ohledně
-        WCA a jejího vystupování na sociálních sítích.
-    wdc:
-      info_html: >-
-        WDC zkoumá řadu situací a navrhuje řešení, včetně případných trestů.
-        Mimo jiné by jednou z těchto situací mohlo být vážné porušení Pravidel
-        WCA nebo záležitosti ohledně komunity. Pokud jste zažili nějakou z
-        těchto situací, nebojte se obrátit na tuto committee.
-    wdpc:
-      info_html: >-
-        WDPC má odpovědnost a povinnost zkoumat, vytvářet, implementovat,
-        spravovat a vyžadovat všechny zásady WCA Data Protection, smlouvy s
-        externími Data Processors WCA Dat a spravování úkonů souvisejících s
-        Data Protection.
-    wrc:
-      info_html: >-
-        WRC se zabývá všemi záležitostmi, které souvisejí s aplikací, zlepšením
-        a vývojem Pravidel WCA. Podporují Delegáty WCA v jakýchkoli procesních
-        záležitostech, k nimž dochází na soutěžích, a rozhodují o nevyřešených a
-        neodkrytých incidentech. WRC pravidelně publikuje interní zprávy WCA,
-        které pomáhají všem Delegátům WCA a zlepšují jejich znalost pravidel.
-        Pokud byste se chtěli podílet na vývoji pravidel nebo navrhovat změny,
-        můžete se obrátit na WRC tím, že je kontaktujete prostřednictvím e-mailu
-        nebo diskusí na <a href='https://github.com/thewca/wca-regulations'>
-        GitHub </a>.
-    wrt:
-      info_html: >-
-        WRT je zodpovědný za správu všech dat v databázích WCA, nejdůležitější
-        jsou výsledky soutěží a údaje o osobách. Nahrávají výsledky WCA soutěží
-        na webové stránky WCA poté, co je pošle delegát dané soutěže. Vedle
-        výsledků soutěže je WCA Results Team zodpovědný také za provedení
-        korekcí výsledků soutěže v případě potřeby a jsou odpovědní za správu
-        všech stránek WCA profilů. To zahrnuje například změnu uživatelských
-        dat, jako jsou data narození, podle ověřených žádostí a správy žádostí o
-        profilové obrázky.
-    wst:
-      info_html: >-
-        WST je zodpovědný za údržbu a správu veškerého softwaru WCA. Vyvíjejí
-        také nový software pro různé úkoly v rámci WCA, kdykoli to bude nutné.
-        Máte-li návrhy a nápady pro další vývoj webových stránek nebo chcete-li
-        ohlásit chyby a bugy, neváhejte a kontaktujte tento team! Webová stránka
-        WCA je rozsáhlý open source projekt na <a
-        href='https://github.com/thewca/worldcubeassociation.org'> GitHub </a>,
-        takže pokud máte zájem pomáhat s vývojem pro WCA, mrkněte na to.
-    wfc:
-      info_html: >-
-        WFC je zodpovědný za vše, co se týká financí v rámci WCA. Řídí finance a
-        účetnictví WCA v souladu se schváleným ročním rozpočtem, což je také
-        jejich pravidelná práce.
-    wec:
-      info_html: >-
-        Tato komise má za úkol zajistit, aby všechny postupy, které používá WCA
-        staff a externí staff, byly v souladu s Etickým kodexem.
-    weat:
-      info_html: Tento tým se stará o administrativní úkoly vedení WCA.
-    wqac:
-      info_html: >-
-        Tato committee má za úkol podporovat a prosazovat nepřetržité zlepšování
-        kvality v rámci WCA, stejně jako celosvětové uplatňování norem kvality,
-        které zajistí konzistentní vysokou kvalitu procesů, WCA staffu,
-        regionálních organizací, organizátorů soutěží a staffu na soutěžích.
-    wcat:
-      info_html: >-
-        Tato komise má za úkol schvalovat a ohlašovat Soutěže WCA a zajistit, že
-        tato ohlášení odpovídají standardům kvality WCA.
-    wmt:
-      info_html: >-
-        Tato komise je odpovědná za rozvoj a správu WCA Značky, vyhledává
-        sponzory, podporuje a distribuuje Soutěžní Zařízení WCA a prodává Zboží
-        WCA.
-    wsot:
-      info_html: Tento tým se stará o uznání WCA jako mezinárodní sportovní 
-        organizace.
-    wat:
-      info_html: >-
-        WCA archivářský tým je poradní komise WCA. Tento tým dohlíží a podporuje
-        rozvoj archivů WCA.
-    councils_html: Koncily
-    wac:
-      info_html: >-
-        Tento koncil je zodpovědný za budování a udržování bilaterální
-        komunikace mezi komunitou a zaměstnanci WCA.
+  contact: {}
   score_tools:
     title: Softwarové nástroje pro WCA soutěže
     wca_icon_text: Vyvinuté a udržované WST
@@ -3101,24 +2498,8 @@ cs:
         description: Zobrazit soutěžní skupiny jakékoliv probíhající soutěže
   logo:
     title: Logo WCA
-    paragraphs:
-      '1': >-
-        Logo WCA navrhnul Justin Eastman v rámci designové soutěže v roce
-        2005.<br />Toto logo nás zaujalo díky svému designu, barvám a také
-        proto, že nezobrazuje přímo 3x3x3 kostku.
-      '2': >-
-        Máme 4 různé verze loga: a <a href="/files/WCAlogo_XL.jpg">velkou</a>
-        (46 KB, 1756 px by 1068 px), <a
-        href="/files/WCAlogo.svg">vektorovou</a>, a <a
-        href="/files/WCAlogo_notext.svg">vektorovou bez textu</a> a <a
-        href="/files/WCAlogo_monochrome.svg">vektorovou černobílou</a>.
-      '3': >-
-        3D verzi loga WCA navrhnul Vu Minh Tan z Vietnamu: <a
-        href="/files/WCALogo3D.png">PNG verze</a> (2.1 MB), <a
-        href="/files/WCALogo3Dsmall.png">malá PNG verze</a> (0.25 MB).
-      '4': >-
-        Přijatelné použití loga WCA je vymezeno ve WCA Logo Usage policy
-        dostupném na <a href="/documents">stránce s WCA Dokumenty</a>.
+    headings:
+      usage_guidelines: {}
   search_results:
     index:
       competitions: Soutěže
@@ -3152,10 +2533,6 @@ cs:
       content2_html: >-
         Pravidla WCA jsou doplněna <a href="/regulations/guidelines.html">Pokyny
         WCA</a>, které obsahují další objasnění a vysvětlení.
-      content3_html: >-
-        Důležitá rozhodnutí o incidentech, které se staly na soutěžích a byly
-        vyřešeny WCA komisí pro regulace lze nalézt v <a
-        href="/incidents">záznamu incidentů</a>.
     panel2:
       title: Překlady
       content1_html: >-
@@ -3339,3 +2716,27 @@ cs:
         Na této stránce naleznete WST export pro vývojáře jako SQL dump. Detaily
         můžete nalézt na %{github_link}.
       download: Stáhnout
+  tickets: {}
+  page:
+    teams_committees_councils: {}
+    contacts:
+      form:
+        user_data: {}
+        contact_recipient: {}
+        competition: {}
+        wct: {}
+        wrt:
+          query_type: {}
+          profile_data_to_change: {}
+        wst: {}
+    contact_edit_profile:
+      form: {}
+  trainee_delegate_application: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  payments:
+    errors: {}
+    payment_setup: {}
+  merch: {}
+  validators: {}

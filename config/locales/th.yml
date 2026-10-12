@@ -2070,7 +2070,6 @@ th:
             การสมัครการแข่งขันหลังจากนี้จะไปอยู่ใน waiting list
       registration_key: 'Registration Key:'
       registration_status:
-        full: เต็ม
         open: เปิด
         not_open: ยังไม่เปิด
         closed: ปิด

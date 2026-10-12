@@ -1191,11 +1191,11 @@ es-ES:
         welcome: '¡Bienvenido, %{user_email}!'
         confirm: >-
           Tu cuenta se ha creado y tiene que ser activada antes de que puedas usarla.
-          Por favor, confirma tu cuenta a través del siguiente enlace:
+          Por favor, confirma tu cuenta a través del siguiente enlace: 
         confirmation_link: Confirmar mi cuenta.
         activate: >-
           Tras la activación, puedes iniciar sesión en la página web de la World Cube
-          Association:
+          Association: 
         login_form: formulario de inicio de sesión
         addendum: >-
           Este correo electrónico se genera automáticamente. Si no has
@@ -2328,7 +2328,6 @@ es-ES:
             a la lista de espera.
       registration_key: 'Leyenda del registro:'
       registration_status:
-        full: Lleno
         open: Abierto
         not_open: Aún sin abrir
         closed: Cerrado
@@ -2345,9 +2344,14 @@ es-ES:
         son eventos sociales! Cualquiera que sepa resolver un cubo es bienvenido a
         venir y batir su propio récord personal. Hacer amigos es fácil porque todo
         el mundo colabora para que la competición salga bien.</p>
-         <p>¡Utiliza la herramienta que aparece a continuación para encontrar una
-        competición cerca de ti y empezar tu aventura cubera!</p>
+
+        <p>¡Utiliza la herramienta que aparece a continuación para encontrar una competición
+        cerca de ti y empezar tu aventura cubera!</p>
       location_sign_in_required: Inicia sesión para buscar una dirección
+      location_not_found: No se ha encontrado ninguna ubicación para esa 
+        dirección
+      location_search_failed: La búsqueda de la dirección ha fallado, por favor 
+        inténtalo de nuevo en un minuto
     my_competitions_table:
       edit: Editar
       registrations: Registros
@@ -4450,7 +4454,7 @@ es-ES:
         al respecto explicando la situación.
       non_matching_name_warning: >-
         El nombre «%{name}» de %{wca_id} no coincide con el registrado en la base
-        de datos de la WCA («%{expected_name}»).
+        de datos de la WCA («%{expected_name}»). 
       non_matching_country_warning: >-
         El país «%{country}» de %{name} (%{wca_id}) no coincide con el
         registrado en la base de datos de la WCA («%{expected_country}»). Si
