@@ -113,6 +113,10 @@ class LinkedRound < ApplicationRecord
     rounds.sum { it.lock_results(locking_user) }
   end
 
+  def unlock_results(unlocking_user)
+    rounds.sum { it.unlock_results(unlocking_user) }
+  end
+
   delegate :final_round?, to: :last_round_in_link
 
   def self.combine_results(round_results)
