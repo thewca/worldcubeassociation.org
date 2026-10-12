@@ -61,14 +61,14 @@ function plugins() {
       //   via https://delmaredigital.github.io/payload-better-auth/#better-auth-collections
       //   and https://github.com/delmaredigital/payload-better-auth/issues/38
       acknowledgeRoleGuardDisabled: true,
+      roleField: "roles",
     }),
     createBetterAuthPlugin({
       createAuth: createCmsAuth,
       admin: {
         login: {
-          // The plugin's gate looks for a singular `role` we do not have; `access.admin` on
-          //   the users collection enforces team membership instead.
-          requiredRole: null,
+          // read based on `betterAuthCollections`'s `roleField` config entry above.
+          requiredRole: ["wst", "wct", "wat", "wmt", "board"],
           // The plugin defaults to `/admin`; our admin route is `/payload` (see `routes` below).
           afterLoginPath: "/payload",
           enableSocial: [WCA_CMS_PROVIDER_ID],
