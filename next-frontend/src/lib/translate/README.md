@@ -119,8 +119,17 @@ no longer round-trips.
 
 Details worth knowing:
 
-- `pushSource` uses `method=replace`, which is what lets strings deleted from Payload disappear
-  from Weblate. With `translate` they would linger as orphaned units forever.
+- `pushSource` uses `method=replace`, so Weblate's English always mirrors Payload exactly. This
+  fits us because:
+  - Payload is the only place English is edited. Weblate never holds a source string we would
+    lose by overwriting it.
+  - Every sync uploads the complete source set (`unitsFromDocs` over every document), never a
+    partial diff. A replace therefore can't drop a string that still exists in Payload.
+  - Keys are stable across syncs (rows are addressed by `id`, not index), so a string that did
+    not change keeps its key and its translations.
+  - Deleted blocks, array rows and documents disappear from Weblate on the next sync. With
+    `translate` they would linger as orphaned units forever, and translators would keep
+    spending time on text nobody can see.
 - `pullTranslations` drops empty strings, so an untranslated unit never overwrites anything.
 
 ---

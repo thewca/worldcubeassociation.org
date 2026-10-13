@@ -116,6 +116,9 @@ function jsonFile(strings: Record<string, string>, name: string): FormData {
  * Replace the source file. `method=replace` is what lets strings that no longer
  * exist in Payload disappear from Weblate — with `translate` they would linger
  * forever as orphaned units.
+ *
+ * Overwriting is safe for us because Payload is the only place English is
+ * edited, and `strings` is always the complete source set rather than a diff.
  */
 export async function pushSource(
   strings: Record<string, string>,
