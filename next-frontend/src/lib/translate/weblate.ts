@@ -157,7 +157,7 @@ export async function pullTranslations(
 ): Promise<Record<string, string>> {
   const code = weblateCode(locale);
   const res = await call(`/translations/${project}/${component}/${code}/file/`);
-  const body = (await res.json()) as Record<string, unknown>;
+  const body: Record<string, unknown> = await res.json();
   // Untranslated units come back as empty strings; treat them as absent so a
   // blank never overwrites anything in Payload.
   return _.pickBy(

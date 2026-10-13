@@ -17,16 +17,10 @@
  * Payload's own `convertLexicalToPlaintext` is not a substitute: it flattens an
  * editor state to one string, which is lossy and cannot be written back.
  */
+import { isRecord } from "./registry";
 
-interface LexicalNode {
-  type?: string;
-  text?: string;
-  children?: unknown[];
-}
-
-function lexicalRoot(value: unknown): LexicalNode | null {
-  const root = (value as { root?: unknown } | null | undefined)?.root;
-  return root && typeof root === "object" ? (root as LexicalNode) : null;
+function lexicalRoot(value: unknown): Record<string, unknown> | null {
+  return isRecord(value) && isRecord(value.root) ? value.root : null;
 }
 
 /** Every non-blank text node in a Lexical value, with its index path. */
@@ -37,14 +31,13 @@ export function lexicalTextNodes(
     node: unknown,
     path: number[],
   ): { path: string; text: string }[] => {
-    if (!node || typeof node !== "object") return [];
-    const n = node as LexicalNode;
+    if (!isRecord(node)) return [];
     const self =
-      n.type === "text" && typeof n.text === "string" && n.text.trim()
-        ? [{ path: path.join("."), text: n.text }]
+      node.type === "text" && typeof node.text === "string" && node.text.trim()
+        ? [{ path: path.join("."), text: node.text }]
         : [];
-    const children = Array.isArray(n.children)
-      ? n.children.flatMap((child, i) => visit(child, [...path, i]))
+    const children = Array.isArray(node.children)
+      ? node.children.flatMap((child, i) => visit(child, [...path, i]))
       : [];
     return [...self, ...children];
   };
@@ -60,22 +53,20 @@ export function applyLexicalTexts(
   texts: Map<string, string>,
 ): unknown {
   const rebuild = (node: unknown, path: number[]): unknown => {
-    if (!node || typeof node !== "object") return node;
-    const n = node as LexicalNode;
+    if (!isRecord(node)) return node;
     const replacement =
-      n.type === "text" && typeof n.text === "string"
+      node.type === "text" && typeof node.text === "string"
         ? texts.get(path.join("."))
         : undefined;
     return {
-      ...n,
+      ...node,
       ...(replacement !== undefined && { text: replacement }),
-      ...(Array.isArray(n.children) && {
-        children: n.children.map((child, i) => rebuild(child, [...path, i])),
+      ...(Array.isArray(node.children) && {
+        children: node.children.map((child, i) => rebuild(child, [...path, i])),
       }),
     };
   };
-  const root = lexicalRoot(source);
-  return root
-    ? { ...(source as Record<string, unknown>), root: rebuild(root, []) }
+  return isRecord(source) && isRecord(source.root)
+    ? { ...source, root: rebuild(source.root, []) }
     : source;
 }

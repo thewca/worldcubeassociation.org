@@ -51,12 +51,12 @@ export const weblateAfterChange = ({
  */
 export function withWeblateSync<T extends CollectionConfig | GlobalConfig>(
   entity: T,
-): T {
+) {
   return {
     ...entity,
     hooks: {
       ...entity.hooks,
       afterChange: [...(entity.hooks?.afterChange ?? []), weblateAfterChange],
     },
-  } as T;
+  };
 }
