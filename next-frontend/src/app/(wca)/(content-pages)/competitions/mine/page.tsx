@@ -1,8 +1,8 @@
 import {
   Accordion,
   Button,
+  ButtonGroup,
   Heading,
-  HStack,
   Stack,
   VStack,
 } from "@chakra-ui/react";
@@ -54,7 +54,7 @@ export default async function MyCompetitions() {
         gap="4"
       >
         <Heading size="5xl">{t("competitions.my_competitions.title")}</Heading>
-        <HStack>
+        <ButtonGroup>
           {permissions?.canCreateCompetitions() && (
             <Button asChild>
               <RailsLink href="/competitions/new">
@@ -74,7 +74,7 @@ export default async function MyCompetitions() {
               </Link>
             </Button>
           )}
-        </HStack>
+        </ButtonGroup>
       </Stack>
       <p>{t("competitions.my_competitions.disclaimer")}</p>
       <UpcomingCompetitionTable
