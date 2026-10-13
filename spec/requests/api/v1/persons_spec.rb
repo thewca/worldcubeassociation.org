@@ -38,7 +38,7 @@ RSpec.describe "API v1 Persons" do
 
       get api_v1_person_path(person.wca_id)
 
-      expect(response.parsed_body["event_ids_with_results"]).to eq %w[222 333]
+      expect(response.parsed_body["event_ids_with_results"]).to eq %w[222 333oh]
     end
 
     it "serializes championship podiums as v1 results" do

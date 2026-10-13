@@ -66,7 +66,7 @@ function PodiumTable({
               <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
               <Table.ColumnHeader>{t("common.single")}</Table.ColumnHeader>
               <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
-              <Table.ColumnHeader colSpan={5} textAlign="left">
+              <Table.ColumnHeader colSpan={5} textAlign="start">
                 {t("common.solves")}
               </Table.ColumnHeader>
             </Table.Row>
