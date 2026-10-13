@@ -1,6 +1,8 @@
 import Markdown, { Options } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 import {
+  chakra,
   Link as ChakraLink,
   Image as ChakraImage,
   Em,
@@ -19,6 +21,7 @@ import type {
   ComponentType,
   ElementType,
 } from "react";
+import type { Parent as MdastParent, Root as MdastRoot } from "mdast";
 
 const LOOSE_HEADING_PREFIX = /^(#{1,6})(?=[^#\s])/gm;
 
@@ -29,6 +32,58 @@ const LOOSE_HEADING_PREFIX = /^(#{1,6})(?=[^#\s])/gm;
 //   paragraph, which a space-less one glued to the next line would never get the chance to.
 const spaceLooseHeadings = (markdown: Options["children"]) =>
   markdown?.replace(LOOSE_HEADING_PREFIX, "$1 ");
+
+const YOUTUBE_OPENING = "youtube(";
+
+const youtubeEmbedUrl = (href: string) => {
+  const url = URL.parse(href);
+
+  const isYoutube =
+    url?.hostname === "youtube.com" || url?.hostname.endsWith(".youtube.com");
+
+  const videoId = isYoutube ? url?.searchParams.get("v") : null;
+
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : undefined;
+};
+
+const embedYoutubeLinks = (parent: MdastParent) => {
+  parent.children.forEach((child, index) => {
+    const before = parent.children[index - 1];
+    const after = parent.children[index + 1];
+
+    if (
+      child.type === "link" &&
+      before?.type === "text" &&
+      before.value.endsWith(YOUTUBE_OPENING) &&
+      after?.type === "text" &&
+      after.value.startsWith(")")
+    ) {
+      const embedUrl = youtubeEmbedUrl(child.url);
+
+      if (embedUrl) {
+        before.value = before.value.slice(0, -YOUTUBE_OPENING.length);
+        after.value = after.value.slice(1);
+        child.data = {
+          hName: "iframe",
+          hProperties: {
+            src: embedUrl,
+            href: undefined,
+            allowFullScreen: true,
+          },
+          hChildren: [],
+        };
+      }
+    }
+
+    if ("children" in child) embedYoutubeLinks(child);
+  });
+};
+
+// Redcarpet (used by the rest of the WCA website) turns `youtube(https://www.youtube.com/watch?v=…)`
+//   into an embedded video, so authors' existing videos have to keep showing up here. Only
+//   YouTube watch links are embedded; anything else stays the literal text the author wrote.
+// Transformers are handed the tree to edit in place; that is the remark plugin contract.
+const remarkYoutubeEmbeds = () => (tree: MdastRoot) => embedYoutubeLinks(tree);
 
 const TABLE_DELIMITER_ROW = /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/;
 
@@ -108,6 +163,9 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
       remarkPlugins={[
         // Redcarpet only strikes through on `~~`, so `~5 min` must stay literal here too.
         [remarkGfm, { singleTilde: false }],
+        // Redcarpet renders with `hard_wrap`, keeping every single line break the author typed.
+        remarkBreaks,
+        remarkYoutubeEmbeds,
       ]}
       components={{
         a: ({ children, ...aTag }) => (
@@ -126,6 +184,17 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
           </ChakraLink>
         ),
         img: (imgTag) => <ChakraImage {...imgTag} {...imageProps} />,
+        iframe: (iframeTag) => (
+          <chakra.iframe
+            {...iframeTag}
+            title="YouTube video"
+            display="block"
+            width="full"
+            maxW="640px"
+            aspectRatio="16 / 9"
+            border="none"
+          />
+        ),
         h1: (h1Tag) => <HeadingRenderAs {...h1Tag} as="h1" />,
         h2: (h2Tag) => <HeadingRenderAs {...h2Tag} as="h2" />,
         h3: (h3Tag) => <HeadingRenderAs {...h3Tag} as="h3" />,
