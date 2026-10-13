@@ -684,15 +684,15 @@ class Round < ApplicationRecord
   end
 
   def lock_results(locking_user)
-    count = live_results.update_all(locked_by_id: locking_user.id)
-    self.bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
-    count
+    live_results.update_all(locked_by_id: locking_user.id).tap do
+      bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
+    end
   end
 
   def unlock_results(unlocking_user)
-    count = live_results.update_all(locked_by_id: nil)
-    self.bulk_insert_history(live_results.ids, unlocking_user, action_type: :unlocked)
-    count
+    live_results.update_all(locked_by_id: nil).tap do
+      bulk_insert_history(live_results.ids, unlocking_user, action_type: :unlocked)
+    end
   end
 
   STATE_LOCKED = "locked"
