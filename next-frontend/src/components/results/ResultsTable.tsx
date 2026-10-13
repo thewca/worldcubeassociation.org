@@ -9,13 +9,32 @@ import {
   personalBestColor,
   WithRecordTag,
 } from "@/components/results/TableCells";
-import { isSkipped, resultAttempts } from "@/lib/wca/results/attempts";
+import { maxAttemptCount, resultAttempts } from "@/lib/wca/results/attempts";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
 import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
+import { DateTime } from "luxon";
+
+// The solve columns push the row past the width of a phone, so the column that says
+// whose row it is stays pinned to the left edge while the rest scrolls under it.
+// Only one column is pinned: a second would need to know the first one's rendered
+// width, which auto table layout decides from the content.
+const STICKY_COLUMN = {
+  position: "sticky" as const,
+  insetStart: "0",
+  // The row already paints `bg` (or the striped rung), so inheriting it keeps the
+  //   pinned cell opaque without naming a colour that could drift from the row's.
+  bg: "inherit",
+  zIndex: "1",
+};
+
+// The ScrollArea sets `white-space: nowrap`, so an unbounded name grows the pinned
+// column until it covers the screen it was pinned to make room on. The name gets a
+// ceiling and ellipsizes; the full name is one tap away on the person's page.
+const STICKY_NAME_WIDTH = { base: "36", md: "2xs" };
 
 export function ResultsTable({
   results,
@@ -44,7 +63,9 @@ export function ResultsTable({
           <Table.Row>
             <Table.ColumnHeader>#</Table.ColumnHeader>
             {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-            <Table.ColumnHeader>Competitor</Table.ColumnHeader>
+            <Table.ColumnHeader {...STICKY_COLUMN}>
+              Competitor
+            </Table.ColumnHeader>
             <Table.ColumnHeader>Best</Table.ColumnHeader>
             {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
             <Table.ColumnHeader>Representing</Table.ColumnHeader>
@@ -66,8 +87,11 @@ export function ResultsTable({
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
                 <Table.Cell>{competitorResult.pos}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell {...STICKY_COLUMN}>
                   <Link
+                    display="block"
+                    maxWidth={STICKY_NAME_WIDTH}
+                    truncate
                     href={route({
                       pathname: "/persons/[wcaId]",
                       query: { wcaId: competitorResult.wca_id },
@@ -128,12 +152,7 @@ export function ByPersonTable({
   solveTextAlign?: CssProperties["textAlign"];
   showNationalityColumn?: boolean;
 }) {
-  // The backend always pads with zeros at the end, which we need to manually kick out again
-  const validAttemptCounts = results.map(
-    (res) => _.dropRightWhile(res.attempts, (att) => isSkipped(att)).length,
-  );
-
-  const maxAttemptCount = _.max(validAttemptCounts) || 0;
+  const attemptCount = maxAttemptCount(results);
 
   const orderedResults = _.sortBy(results, [
     (res) => events.byId[res.event_id].rank,
@@ -155,7 +174,7 @@ export function ByPersonTable({
               <Table.ColumnHeader>Representing</Table.ColumnHeader>
             )}
             <Table.ColumnHeader
-              colSpan={maxAttemptCount}
+              colSpan={attemptCount}
               textAlign={solveTextAlign}
             >
               Solves
@@ -208,7 +227,7 @@ export function ByPersonTable({
                   worstResultIndex={worstResultIndex}
                   eventId={eventId}
                   recordTag={competitorResult.regional_single_record}
-                  attemptCount={maxAttemptCount}
+                  attemptCount={attemptCount}
                 />
               </Table.Row>
             );
@@ -240,10 +259,13 @@ function personalBestIds(
   return new Set(ids);
 }
 
+const competitionStartMillis = (result: components["schemas"]["V1Result"]) =>
+  DateTime.fromISO(result.competition_start_date).toMillis();
+
 function historicalPbMarkers(results: components["schemas"]["V1Result"][]) {
   const chronological = _.orderBy(
     results,
-    ["competition_start_date", "id"],
+    [competitionStartMillis, "id"],
     ["asc", "asc"],
   );
 
@@ -266,15 +288,26 @@ export function ByCompetitionTable({
     ? historicalPbMarkers(results)
     : null;
 
-  // Newest competition first. Ordering explicitly rather than reversing the payload keeps this
-  // independent of whatever order the API happens to return rows in.
+  const attemptCount = maxAttemptCount(results);
+
+  const anyAverages = results.some((res) => res.average !== 0);
+
+  // Newest competition first, and the final before earlier rounds within a competition, matching
+  // the legacy profile page.
   const resultsByCompetition = _.groupBy(
-    _.orderBy(results, ["competition_start_date", "id"], ["desc", "asc"]),
+    _.orderBy(
+      results,
+      [
+        competitionStartMillis,
+        (result) => roundTypes.byId[result.round_type_id].rank,
+      ],
+      ["desc", "desc"],
+    ),
     "competition_id",
   );
 
   return (
-    <Table.ScrollArea rounded="md">
+    <Table.ScrollArea rounded="md" width="full">
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -284,8 +317,8 @@ export function ByCompetitionTable({
             <Table.ColumnHeader>Round</Table.ColumnHeader>
             <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
             <Table.ColumnHeader>Single</Table.ColumnHeader>
-            <Table.ColumnHeader>Average</Table.ColumnHeader>
-            <Table.ColumnHeader colSpan={5} textAlign="left">
+            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
+            <Table.ColumnHeader colSpan={attemptCount} textAlign="start">
               Solves
             </Table.ColumnHeader>
           </Table.Row>
@@ -294,7 +327,6 @@ export function ByCompetitionTable({
           {_.flatMap(resultsByCompetition, (competitionResults) => {
             return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
-              const resultFormat = formats.byId[competitorResult.format_id];
 
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
@@ -336,28 +368,30 @@ export function ByCompetitionTable({
                       {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
                   </Table.Cell>
-                  <Table.Cell
-                    color={
-                      pbMarkers?.average.has(competitorResult.id)
-                        ? personalBestColor(
-                            competitorResult.regional_average_record,
-                          )
-                        : undefined
-                    }
-                  >
-                    <WithRecordTag
-                      recordTag={competitorResult.regional_average_record}
+                  {anyAverages && (
+                    <Table.Cell
+                      color={
+                        pbMarkers?.average.has(competitorResult.id)
+                          ? personalBestColor(
+                              competitorResult.regional_average_record,
+                            )
+                          : undefined
+                      }
                     >
-                      {formatAttemptResult(competitorResult.average, eventId)}
-                    </WithRecordTag>
-                  </Table.Cell>
+                      <WithRecordTag
+                        recordTag={competitorResult.regional_average_record}
+                      >
+                        {formatAttemptResult(competitorResult.average, eventId)}
+                      </WithRecordTag>
+                    </Table.Cell>
+                  )}
                   <AttemptsCells
                     attempts={definedAttempts}
                     bestResultIndex={bestResultIndex}
                     worstResultIndex={worstResultIndex}
                     eventId={eventId}
                     recordTag={competitorResult.regional_single_record}
-                    attemptCount={resultFormat.expected_solve_count}
+                    attemptCount={attemptCount}
                   />
                 </Table.Row>
               );

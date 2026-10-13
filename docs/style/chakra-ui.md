@@ -46,6 +46,31 @@ We define `h1`–`h3`, `s1`, `s2` already, please use them rather than picking f
 Don't force `textTransform` when the `textStyle` already decides it. If really necessary, make a good case for
 introducing a new shared `textStyle` in `theme.ts`.
 
+### Use logical start/end properties
+
+Use logical properties for horizontal spacing, positioning, borders, and alignment to support
+both left-to-right and right-to-left (RTL) layouts.
+
+| Physical property | Preferred logical property |
+| --- | --- |
+| `ml` / `mr` | `ms` / `me` |
+| `pl` / `pr` | `ps` / `pe` |
+| `marginLeft` / `marginRight` | `marginStart` / `marginEnd` |
+| `paddingLeft` / `paddingRight` | `paddingStart` / `paddingEnd` |
+| `left` / `right` | `insetStart` / `insetEnd` |
+| `borderLeft` / `borderRight` | `borderStart` / `borderEnd` |
+| `textAlign="left"` / `textAlign="right"` | `textAlign="start"` / `textAlign="end"` |
+
+Native CSS `*InlineStart` / `*InlineEnd` equivalents are also valid. Use this convention in
+responsive and conditional styles, `css` objects, and theme recipes. Top/bottom properties and
+symmetric spacing (`mx`, `px`, `my`, `py`) can stay unchanged.
+
+`wca/prefer-logical-properties` checks common cases on Chakra imports, including `css` and
+conditional style objects, and `defineStyle` / `defineGlobalStyles` calls. Run `yarn lint:fix` in
+`next-frontend` to autofix; review conflicts and spreads manually, and check both text directions.
+
+For intentional physical positioning, use a focused ESLint suppression explaining why.
+
 ### Other
 - In our own theme you don't need Chakra's `--var` indirection — pass the palette colour directly.
 - Chakra ships `fade-in` / `fade-out` keyframes and animation style props out of the box. Check

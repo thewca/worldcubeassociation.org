@@ -14,7 +14,7 @@
     </div>
 
     <div class="ui container cover-segments">
-      <div class="ui six column stackable cards">
+      <div class="ui seven column stackable cards">
         <%= render "box", title: t('homepage.about_us.title'), path: about_path do %>
           <%= t('homepage.about_us.text') %>
         <% end %>
@@ -30,6 +30,9 @@
         <% end %>
         <%= render "box", title: t('homepage.volunteer.title'), path: volunteer_positions_path do %>
           <%= t('homepage.volunteer.text') %>
+        <% end %>
+        <%= render "box", title: t('homepage.become_delegate.title'), path: trainee_delegate_application_path, link_title: t('homepage.become_delegate.link_title') do %>
+          <%= t('homepage.become_delegate.text') %>
         <% end %>
         <%= render "box", title: t('homepage.faq.title'), path: faq_path do %>
           <%= t('homepage.faq.text') %>

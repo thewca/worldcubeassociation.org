@@ -50,11 +50,15 @@ RUN apt-get update -qq && \
       build-essential \
       git \
       libclang-dev \
-      cargo \
+      rustup \
       pkg-config \
       libssl-dev \
       libyaml-dev \
       libvips
+
+# Configure Rust toolchain to use what's currently stable,
+#   not what our current Debian sources happened to be shipped with
+RUN rustup default stable
 
 COPY bin ./bin
 

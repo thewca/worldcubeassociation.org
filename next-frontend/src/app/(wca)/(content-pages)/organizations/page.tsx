@@ -78,8 +78,8 @@ export default async function RegionalOrganizations() {
             <VStack
               position={org.logo_url ? "absolute" : "relative"}
               top={0}
-              left={0}
-              right={0}
+              insetStart={0}
+              insetEnd={0}
               bottom={0}
               minHeight="32"
               justify="center"
