@@ -210,9 +210,9 @@ class Round < ApplicationRecord
   end
 
   def close_round!(closing_user)
-    deleted_count = live_results.destroy_all.count
-    participation_source.unlock_results(closing_user) unless first_round?
-    deleted_count
+    live_results.destroy_all.count.tap do
+      participation_source.unlock_results(closing_user) unless first_round?
+    end
   end
 
   def open_round!(opening_user)
