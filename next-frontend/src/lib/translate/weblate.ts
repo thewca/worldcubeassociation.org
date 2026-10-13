@@ -11,6 +11,7 @@
  * `home:blocks[a1].body#0.1.0`, and `json-nested` would split them
  * on the dots into a tree that no longer round-trips.
  */
+import _ from "lodash";
 
 const url = process.env.WEBLATE_URL ?? "http://localhost:8080";
 const token = process.env.WEBLATE_TOKEN;
@@ -157,11 +158,11 @@ export async function pullTranslations(
   const code = weblateCode(locale);
   const res = await call(`/translations/${project}/${component}/${code}/file/`);
   const body = (await res.json()) as Record<string, unknown>;
-  const out: Record<string, string> = {};
-  for (const [key, value] of Object.entries(body)) {
-    // Untranslated units come back as empty strings; treat them as absent so a
-    // blank never overwrites anything in Payload.
-    if (typeof value === "string" && value.trim() !== "") out[key] = value;
-  }
-  return out;
+  // Untranslated units come back as empty strings; treat them as absent so a
+  // blank never overwrites anything in Payload.
+  return _.pickBy(
+    body,
+    (value): value is string =>
+      typeof value === "string" && value.trim() !== "",
+  );
 }

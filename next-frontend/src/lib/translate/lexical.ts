@@ -8,7 +8,7 @@
  *   home:body            -> plain field
  *   home:body#0.1.0      -> the text node at root.children[0].children[1].children[0]
  *
- * Translators therefore see plain sentences. On write-back we deep-clone the
+ * Translators therefore see plain sentences. On write-back we copy the
  * **source** state and substitute only `text` values, so structure, node
  * `version`s and any node type we have never heard of come from Payload itself.
  * A Payload or Lexical upgrade cannot corrupt a write, because we never author
@@ -54,26 +54,28 @@ export function lexicalTextNodes(
   return root.children.flatMap((child, i) => visit(child, [i]));
 }
 
-/** Clone `source` and replace the text of every node named in `texts`. */
+/** Copy `source`, replacing the text of every node named in `texts`. */
 export function applyLexicalTexts(
   source: unknown,
   texts: Map<string, string>,
 ): unknown {
-  const clone = structuredClone(source);
-  const visit = (node: unknown, path: number[]): void => {
-    if (!node || typeof node !== "object") return;
+  const rebuild = (node: unknown, path: number[]): unknown => {
+    if (!node || typeof node !== "object") return node;
     const n = node as LexicalNode;
-    if (n.type === "text" && typeof n.text === "string") {
-      const replacement = texts.get(path.join("."));
-      if (replacement !== undefined) n.text = replacement;
-    }
-    if (Array.isArray(n.children)) {
-      n.children.forEach((child, i) => visit(child, [...path, i]));
-    }
+    const replacement =
+      n.type === "text" && typeof n.text === "string"
+        ? texts.get(path.join("."))
+        : undefined;
+    return {
+      ...n,
+      ...(replacement !== undefined && { text: replacement }),
+      ...(Array.isArray(n.children) && {
+        children: n.children.map((child, i) => rebuild(child, [...path, i])),
+      }),
+    };
   };
-  const root = lexicalRoot(clone);
-  if (root && Array.isArray(root.children)) {
-    root.children.forEach((child, i) => visit(child, [i]));
-  }
-  return clone;
+  const root = lexicalRoot(source);
+  return root
+    ? { ...(source as Record<string, unknown>), root: rebuild(root, []) }
+    : source;
 }

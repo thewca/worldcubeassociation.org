@@ -1,5 +1,6 @@
 import type { CollectionSlug, GlobalSlug, Payload, TypedLocale } from "payload";
 import _ from "lodash";
+import fp from "lodash/fp";
 import { fallbackLng, languages } from "@/lib/i18n/settings";
 import {
   ensureLanguage,
@@ -71,42 +72,39 @@ interface ResolvedLeaf {
 }
 
 /**
- * Fill the localized leaves of `next` — a clone of the source document, so the
- * arrays and blocks exist in the target locale at all — from `resolved`,
- * falling back to whatever Payload already holds for this locale.
+ * The source document with its localized leaves filled from `resolved` —
+ * starting from the source so the arrays and blocks exist in the target locale
+ * at all — falling back to whatever Payload already holds for this locale.
  */
 function fillDocument(
-  next: Record<string, unknown>,
+  sourceDoc: Record<string, unknown>,
   existing: Record<string, unknown> | null,
   resolved: ResolvedLeaf[],
-): { written: number; unresolved: Leaf[] } {
-  const located = resolved.map((entry) => ({
-    entry,
-    target: resolveLeaf(next, entry.leaf.field, entry.leaf.dataPath),
-  }));
-  const writable = located.flatMap(({ entry, target }) =>
-    target ? [{ entry, target }] : [],
+): { doc: Record<string, unknown>; written: number; unresolved: Leaf[] } {
+  const [writable, unresolved] = _.partition(resolved, ({ leaf }) =>
+    resolveLeaf(sourceDoc, leaf.field, leaf.dataPath),
   );
 
-  writable.forEach(({ entry, target }) => {
-    if (entry.value !== undefined) {
-      target.container[target.key] = entry.value;
-      return;
-    }
-    // Preserve anything already translated inside Payload that Weblate does
-    // not know about; otherwise clear, so Payload falls back to English.
+  // Preserve anything already translated inside Payload that Weblate does not
+  // know about; otherwise clear, so Payload falls back to English.
+  const previousValue = ({ leaf }: ResolvedLeaf): unknown => {
     const previous =
-      existing && resolveLeaf(existing, entry.leaf.field, entry.leaf.dataPath);
-    target.container[target.key] = previous
-      ? (previous.container[previous.key] ?? null)
-      : null;
-  });
+      existing && resolveLeaf(existing, leaf.field, leaf.dataPath);
+    return previous ? (previous.container[previous.key] ?? null) : null;
+  };
 
   return {
-    written: writable.filter(({ entry }) => entry.value !== undefined).length,
-    unresolved: located
-      .filter(({ target }) => !target)
-      .map(({ entry }) => entry.leaf),
+    doc: writable.reduce(
+      (doc, entry) =>
+        fp.set(
+          entry.leaf.dataPath,
+          entry.value !== undefined ? entry.value : previousValue(entry),
+          doc,
+        ),
+      sourceDoc,
+    ),
+    written: writable.filter(({ value }) => value !== undefined).length,
+    unresolved: unresolved.map(({ leaf }) => leaf),
   };
 }
 
@@ -173,8 +171,7 @@ async function applyDocument(
     ? await readDoc(payload, source, locale)
     : null;
 
-  const next = structuredClone(source.doc);
-  const filled = fillDocument(next, existing, resolved);
+  const filled = fillDocument(source.doc, existing, resolved);
   const unresolved = filled.unresolved.map((leaf) => ({
     document: docLabel(source),
     key: leaf.baseKey,
@@ -188,7 +185,7 @@ async function applyDocument(
       .map((leaf) => leaf.dataPath[0])
       .filter((key): key is string => typeof key === "string"),
   );
-  const data = Object.fromEntries(topLevel.map((key) => [key, next[key]]));
+  const data = _.pick(filled.doc, topLevel);
 
   if (source.type === "global") {
     await payload.updateGlobal({
@@ -215,19 +212,23 @@ async function applyLocale(
   docs: SourceDoc[],
   translations: Record<string, string>,
 ): Promise<ApplyResult> {
-  const results: DocumentResult[] = [];
   // Sequential on purpose: writes go one document at a time so a failure
   // part-way through leaves a state that can be read off the report.
-  for (const source of docs) {
-    results.push(await applyDocument(payload, locale, source, translations));
-  }
+  const documentResults = await docs.reduce<Promise<DocumentResult[]>>(
+    async (previous, source) => [
+      ...(await previous),
+      await applyDocument(payload, locale, source, translations),
+    ],
+    Promise.resolve([]),
+  );
 
   return {
     locale,
-    documentsUpdated: results.filter(({ written }) => written > 0).length,
-    stringsWritten: _.sumBy(results, ({ written }) => written),
-    pending: results.flatMap(({ pending }) => pending),
-    unresolved: results.flatMap(({ unresolved }) => unresolved),
+    documentsUpdated: documentResults.filter(({ written }) => written > 0)
+      .length,
+    stringsWritten: _.sumBy(documentResults, ({ written }) => written),
+    pending: documentResults.flatMap(({ pending }) => pending),
+    unresolved: documentResults.flatMap(({ unresolved }) => unresolved),
   };
 }
 
@@ -283,18 +284,23 @@ export async function runSync(
 
   await pushSource(source);
 
-  const results: Awaited<ReturnType<typeof syncLocale>>[] = [];
   // Sequential on purpose: one language at a time keeps the write load on
   // Payload and on Weblate to what a single locale produces.
-  for (const locale of languages.filter((code) => code !== fallbackLng)) {
-    results.push(await syncLocale(payload, locale, docs, !!options.seed));
-  }
+  const localeSyncs = await languages
+    .filter((code) => code !== fallbackLng)
+    .reduce<Promise<Awaited<ReturnType<typeof syncLocale>>[]>>(
+      async (previous, locale) => [
+        ...(await previous),
+        await syncLocale(payload, locale, docs, !!options.seed),
+      ],
+      Promise.resolve([]),
+    );
 
   return {
     sourceLocale: fallbackLng,
     sourceStrings: Object.keys(source).length,
     documents: docs.length,
-    seeded: results.flatMap(({ seeded }) => seeded),
-    applied: results.map(({ applied }) => applied),
+    seeded: localeSyncs.flatMap(({ seeded }) => seeded),
+    applied: localeSyncs.map(({ applied }) => applied),
   };
 }
