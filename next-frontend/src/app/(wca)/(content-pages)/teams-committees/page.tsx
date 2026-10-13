@@ -10,10 +10,8 @@ import { getT } from "@/lib/i18n/get18n";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
 import UserBadge from "@/components/UserBadge";
-import {
-  getTeamCommitteeMembers,
-  getTeamsCommittees,
-} from "@/lib/wca/roles/teamsCommittees";
+import { getTeamsCommittees } from "@/lib/wca/roles/teamsCommittees";
+import { getTeamCommitteeMembers } from "@/lib/wca/roles/activeRoles";
 import OpenapiError from "@/components/ui/openapiError";
 import getPermissions from "@/lib/wca/permissions.server";
 import { Metadata } from "next";

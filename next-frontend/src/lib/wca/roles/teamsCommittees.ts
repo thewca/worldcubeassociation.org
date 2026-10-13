@@ -12,17 +12,3 @@ export const getTeamsCommittees = cache(async () => {
     },
   });
 });
-
-export const getTeamCommitteeMembers = cache(
-  async (groupId: number, pastMembers: boolean = false) => {
-    return await serverClient.GET("/v0/user_roles", {
-      params: {
-        query: {
-          groupId,
-          isActive: pastMembers,
-          sort: "status:desc,name:asc",
-        },
-      },
-    });
-  },
-);
