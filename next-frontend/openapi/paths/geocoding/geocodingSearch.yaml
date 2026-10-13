@@ -1,0 +1,38 @@
+get:
+  summary: Look up the locations matching an address
+  description: >-
+    Resolves a free-text address, city or postcode to coordinates. Requires authentication, and
+    each user may only search 5 times per minute.
+  tags:
+    - geocoding
+  operationId: v1GeocodingSearch
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: q
+      in: query
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: The matching locations, best match first. Empty if nothing matched.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/geocoding/GeocodedLocation.yaml'
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'
+    '429':
+      description: The user has exceeded their search rate limit
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+            properties:
+              error:
+                type: string

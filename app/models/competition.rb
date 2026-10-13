@@ -522,6 +522,10 @@ class Competition < ApplicationRecord
     competitor_limit - registrations.accepted_and_paid_pending_count
   end
 
+  def waiting_list_count
+    registrations.waitlisted.count
+  end
+
   def auto_accept_threshold_reached?
     return false if auto_accept_disable_threshold.blank?
 
@@ -1855,7 +1859,7 @@ class Competition < ApplicationRecord
   WCIF_STABLE_VERSION = '1.1'
 
   WCIF_VERSION_CATALOGUE = {
-    latest: '2.1.1',
+    latest: '2.2',
     stable: WCIF_STABLE_VERSION,
   }.freeze
 
@@ -1906,7 +1910,7 @@ class Competition < ApplicationRecord
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? spots_left h2h_rounds tab_names],
+                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds tab_names],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2198,6 +2202,10 @@ class Competition < ApplicationRecord
   end
 
   def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
+    # WCIF v2.2 properly documents the `id` and `version` props as required,
+    #   so enforce this requirement regardless of the additional option param
+    required_props ||= Gem::Version.new(version) >= Gem::Version.new("2.2")
+
     {
       # This $id property is the actual JsonSchema URI
       "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
@@ -2251,7 +2259,7 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[id name website start_date end_date
+    only: %w[id name website start_date end_date scoretaking_software
              registration_open registration_close announced_at
              cancelled_at results_posted_at competitor_limit venue],
     methods: %w[url website short_name short_display_name city
