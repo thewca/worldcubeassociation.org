@@ -589,6 +589,9 @@ pt:
     passwords:
       edit:
         new_password_confirmation: Reintroduza a nova password
+      send_paranoid_instructions: Será enviada uma ligação para redefinir a 
+        palavra-passe para o endereço de email, caso este esteja associado a uma
+        conta registada na WCA.
     sessions:
       new:
         sign_in: Entrar
@@ -1148,8 +1151,8 @@ pt:
           Por favor confirme a sua conta através do link abaixo: 
         confirmation_link: Confirmar a minha conta.
         activate: >-
-          Após a ativação, poderá entrar na sua conta no website da World Cube Association:
-
+          Após a ativação poderá entrar na sua conta no website da World Cube Association:
+          
         login_form: formulário de login
         addendum: >-
           Este email é gerado automaticamente. Se não registou uma conta no
@@ -1928,7 +1931,7 @@ pt:
           omitted: Omitiu a tentativa %{attempt_number}. Certifique-se de que 
             foi intencional.
           DNS: Existe pelo menos um DNS seguido de um resultado válido. Confirme
-            se se trata realmente de um DNS e não de um DNF.
+            que se trata realmente de um DNS e não de um DNF.
           impossible: 'O resultado que está a tentar submeter parece ser impossível:
             a tentativa %{attempt_number} foi concluída em menos de 30 segundos por
             cubo tentado. Se pretende introduzir o tempo em minutos, não se esqueça
