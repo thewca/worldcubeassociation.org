@@ -389,6 +389,8 @@ function CollapsibleTabGroup({
       <Collapsible.Trigger
         width="full"
         display="flex"
+        alignItems="center"
+        gap="2"
         textAlign="start"
         minHeight="fit-content"
         px="3"
