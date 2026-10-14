@@ -1132,11 +1132,6 @@ pt:
       title: Voluntário
       text: Participe! A WCA tem vagas para voluntários em diversas equipas. Não
         precisa de ser speedcuber para ser voluntário.
-    become_delegate:
-      title: Tornar-se Delegado
-      text: Ajude a garantir competições justas e bem organizadas na sua 
-        comunidade local de speedcubing, candidatando-se a Delegado em Treino.
-      link_title: Candidate-se agora
   users:
     update_locale:
       success: Linguagem atualizada.
@@ -1152,7 +1147,7 @@ pt:
         confirmation_link: Confirmar a minha conta.
         activate: >-
           Após a ativação poderá entrar na sua conta no website da World Cube Association:
-          
+
         login_form: formulário de login
         addendum: >-
           Este email é gerado automaticamente. Se não registou uma conta no

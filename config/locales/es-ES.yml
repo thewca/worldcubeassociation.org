@@ -608,6 +608,9 @@ es-ES:
     passwords:
       edit:
         new_password_confirmation: Introduce otra vez la nueva contraseña
+      send_paranoid_instructions: Se enviará un enlace para restablecer la 
+        contraseña a la dirección de correo electrónico si tiene una cuenta 
+        registrada en la WCA.
     sessions:
       new:
         sign_in: Iniciar sesión
@@ -1175,11 +1178,6 @@ es-ES:
         nuestro Propósito de empoderar a la comunidad global de speedcubing y
         mantener un entorno competitivo divertido y justo para todos.
       button: Saber más sobre cómo puedes apoyar a la WCA
-    become_delegate:
-      text: Ayuda a tener competiciones justas y de calidad en tu comunidad 
-        local de speedcubing solicitando ser Delegado en prácticas.
-      title: Conviértete en Delegado
-      link_title: Solicitar ahora
   users:
     update_locale:
       success: Idioma actualizado.
