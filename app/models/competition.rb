@@ -2284,11 +2284,11 @@ class Competition < ApplicationRecord
     cal = Icalendar::Calendar.new
     all_activities.each do |activity|
       event = Icalendar::Event.new
-      # Use tzid "UTC" (not "Etc/UTC") so icalendar emits the Zulu form
-      # (e.g. DTSTART:20261003T151500Z). Google Calendar and other clients often
-      # mishandle TZID=Etc/UTC when no VTIMEZONE is present; see #7587 / #7590.
-      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time.utc, "tzid" => "UTC")
-      event.dtend = Icalendar::Values::DateTime.new(activity.end_time.utc, "tzid" => "UTC")
+      # TZID=UTC makes icalendar emit the RFC 5545 UTC form (DTSTART:20261003T151500Z)
+      # with no TZID parameter. Google Calendar and other clients often mishandle
+      # TZID=Etc/UTC when no VTIMEZONE is present; see #7587 / #7590.
+      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time.utc, "TZID" => "UTC")
+      event.dtend = Icalendar::Values::DateTime.new(activity.end_time.utc, "TZID" => "UTC")
       event.summary = activity.localized_name
       cal.add_event(event)
     end
