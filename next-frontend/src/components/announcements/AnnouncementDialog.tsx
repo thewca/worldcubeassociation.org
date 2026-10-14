@@ -68,6 +68,7 @@ export default function AnnouncementDialog({
           <Dialog.Content
             colorPalette={colorPalette}
             layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
+            color={{ _dark: "fg" }}
           >
             <Dialog.Header>
               <Stack gap={1}>
