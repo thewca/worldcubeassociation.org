@@ -31,7 +31,11 @@ export default async function Tab({
   return (
     <Card.Root>
       <Card.Body>
-        <ChakraMarkdown headingAs={Card.Title} paragraphAs={Card.Description}>
+        <ChakraMarkdown
+          headingAs={Card.Title}
+          paragraphAs={Card.Description}
+          listProps={{ textStyle: "body" }}
+        >
           {tab.content}
         </ChakraMarkdown>
       </Card.Body>

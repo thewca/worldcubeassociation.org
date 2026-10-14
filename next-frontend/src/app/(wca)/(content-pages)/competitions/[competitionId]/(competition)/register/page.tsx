@@ -130,6 +130,7 @@ export default async function RegisterPage({
             <ChakraMarkdown
               headingAs={Card.Title}
               paragraphAs={Card.Description}
+              listProps={{ textStyle: "body" }}
             >
               {competitionInfo.extra_registration_requirements}
             </ChakraMarkdown>
