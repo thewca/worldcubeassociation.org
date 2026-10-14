@@ -1,6 +1,5 @@
 import type { CollectionSlug, GlobalSlug, Payload, TypedLocale } from "payload";
 import _ from "lodash";
-import fp from "lodash/fp";
 import { fallbackLng, languages } from "@/lib/i18n/settings";
 import {
   ensureLanguage,
@@ -96,12 +95,12 @@ function fillDocument(
   return {
     doc: writable.reduce(
       (doc, entry) =>
-        fp.set(
+        _.set(
+          doc,
           entry.leaf.dataPath,
           entry.value !== undefined ? entry.value : previousValue(entry),
-          doc,
         ),
-      sourceDoc,
+      _.cloneDeep(sourceDoc),
     ),
     written: writable.filter(({ value }) => value !== undefined).length,
     unresolved: unresolved.map(({ leaf }) => leaf),
