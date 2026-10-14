@@ -153,6 +153,18 @@ class User < ApplicationRecord
     end
   end
 
+  def extend_remember_period # rubocop:disable Naming/PredicateMethod
+    !staff_or_any_delegate?
+  end
+
+  def forget_me!
+    return super if staff_or_any_delegate?
+    return unless persisted?
+
+    self.remember_token = nil if respond_to?(:remember_token)
+    save(validate: false)
+  end
+
   devise :two_factor_authenticatable,
          otp_secret_encryption_key: AppSecrets.OTP_ENCRYPTION_KEY
   BACKUP_CODES_LENGTH = 8

@@ -54,6 +54,48 @@ RSpec.describe "sessions" do
     end
   end
 
+  context "with a staff or delegate account" do
+    let(:user) { create(:delegate) }
+
+    it "signs out other remembered devices when signing out" do
+      phone = ActionDispatch::Integration::Session.new(Rails.application)
+      laptop = ActionDispatch::Integration::Session.new(Rails.application)
+
+      phone.post(user_session_path, params: sign_in_params(user))
+      laptop.post(user_session_path, params: sign_in_params(user))
+
+      phone.delete(destroy_user_session_path)
+      laptop.cookies.delete("_WcaOnRails_session")
+      laptop.get(profile_edit_path)
+
+      expect(laptop.response).to have_http_status(:redirect)
+      expect(laptop.response.location).to end_with(new_user_session_path)
+    end
+
+    it "does not refresh the remember period when a cookie restores the session" do
+      browser = ActionDispatch::Integration::Session.new(Rails.application)
+      signed_in_at = Time.current
+
+      browser.post(user_session_path, params: sign_in_params(user))
+      original_remember_cookie = browser.cookies["remember_user_token"]
+      browser.cookies.delete("_WcaOnRails_session")
+
+      travel_to(signed_in_at + 1.week) do
+        browser.get(profile_edit_path)
+        expect(browser.response).to be_successful
+        expect(browser.cookies["remember_user_token"]).to eq(original_remember_cookie)
+      end
+
+      browser.cookies.delete("_WcaOnRails_session")
+
+      travel_to(signed_in_at + 20.days) do
+        browser.get(profile_edit_path)
+        expect(browser.response).to have_http_status(:redirect)
+        expect(browser.response.location).to end_with(new_user_session_path)
+      end
+    end
+  end
+
   it "expires an active session after the absolute timeout" do
     user = create(:user)
     browser = ActionDispatch::Integration::Session.new(Rails.application)
