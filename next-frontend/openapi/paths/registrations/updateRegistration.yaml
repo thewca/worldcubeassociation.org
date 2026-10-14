@@ -1,0 +1,54 @@
+patch:
+  summary: Update an existing registration
+  description: |
+    Only the properties present in the payload are changed. Competitors may only set `status` to
+    `cancelled` (to withdraw) or `pending` (to re-register after withdrawing).
+  tags:
+    - competitions
+    - registrations
+  operationId: updateRegistration
+  parameters:
+    - name: registrationId
+      in: path
+      required: true
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - competing
+          properties:
+            guests:
+              type: integer
+            competing:
+              type: object
+              properties:
+                event_ids:
+                  type: array
+                  items:
+                    type: string
+                comment:
+                  type: string
+                status:
+                  $ref: '../../schemas/registrations/CompetingStatus.yaml'
+  responses:
+    '200':
+      description: The updated registration
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+              - registration
+            properties:
+              status:
+                type: string
+              registration:
+                $ref: '../../schemas/registrations/RegistrationDataV2.yaml'
+    '4XX':
+      $ref: '../../errorResponses/RegistrationError.yaml'

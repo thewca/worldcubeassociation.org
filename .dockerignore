@@ -29,3 +29,6 @@ node_modules
 
 # Don't add the git frontend (yet)
 /next-frontend
+
+# Assets exported by the `assets` bake target for the S3 sync
+/assets

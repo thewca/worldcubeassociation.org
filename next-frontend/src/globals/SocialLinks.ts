@@ -1,5 +1,6 @@
 import type { Block, GlobalConfig } from "payload";
 import { iconMap, type IconName } from "@/components/icons/iconMap";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 
 const iconOptions = Object.keys(iconMap) as IconName[];
 
@@ -34,4 +35,7 @@ export const SocialLinks: GlobalConfig = {
       blocks: [SocialLinkItem],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };

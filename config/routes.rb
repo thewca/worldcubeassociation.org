@@ -40,7 +40,6 @@ Rails.application.routes.draw do
   post 'competitions/:competition_id/refund/:payment_integration/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   get 'competitions/:competition_id/payment-completion/:payment_integration' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
-  get 'registration/:competition_id/:user_id/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   get '/users/admin_search' => 'users#admin_search'
   resources :users, only: %i[index edit update]
   get 'users/show_for_edit' => 'users#show_for_edit', as: :user_show_for_edit
@@ -98,8 +97,6 @@ Rails.application.routes.draw do
     get 'results/by_person' => 'competitions#show_results_by_person'
     get 'scrambles' => 'competitions#show_scrambles'
 
-    patch 'registrations/selected' => 'registrations#do_actions_for_selected', as: :registrations_do_actions_for_selected
-    post 'registrations/export' => 'registrations#export', as: :registrations_export
     get 'registrations/import' => 'registrations#import', as: :registrations_import
     post 'registrations/import' => 'registrations#do_import', as: :registrations_do_import
     post 'registrations/validate_and_convert_registrations' => 'registrations#validate_and_convert_registrations', as: :registrations_validate_and_convert
@@ -107,7 +104,7 @@ Rails.application.routes.draw do
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
     get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
-    resources :registrations, only: %i[index update create edit destroy], shallow: true
+    resources :registrations, only: %i[index edit], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
@@ -121,6 +118,9 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    # TODO: This should use `live-results-preview` ideally, but as of September 26 we have an ELB rule
+    #   that grabs /live* for ILR redirects which conflicts with this route. Feel free to clean up after full ILR launch.
+    get 'synced-results-preview' => 'results_submission#live_results_preview', as: :live_results_preview
     get 'unfinished-persons' => 'results_submission#unfinished_persons', as: :unfinished_persons
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
@@ -140,6 +140,8 @@ Rails.application.routes.draw do
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
+
+  get 'pending-results-submissions' => 'results_submission#pending_results_submissions', as: :pending_results_submissions
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
@@ -172,6 +174,7 @@ Rails.application.routes.draw do
     resources :scrambles, except: %i[index new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
     get 'sanity-check' => "admin#sanity_check", as: :sanity_check
+    get 'migration-dashboard' => "admin#migration_dashboard", as: :migration_dashboard
     get 'run-sanity-check' => "admin#run_sanity_check", as: :sanity_check_run
     get 'add-exclusion' => "admin#add_exclusion", as: :add_exclusion
   end
@@ -263,11 +266,10 @@ Rails.application.routes.draw do
 
   get 'translations', to: redirect('translations/status', status: 302)
   get 'translations/status' => 'translations#index'
-  get 'translations/edit' => 'translations#edit'
-  patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
   get 'documents' => 'static_pages#documents'
+  get 'documents/motions/:id' => 'static_pages#motion', as: :motion, constraints: { id: /\d+\.\d+/ }, format: false
   get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
@@ -275,7 +277,8 @@ Rails.application.routes.draw do
   get 'logo' => 'static_pages#logo'
   get 'media-instagram' => 'static_pages#media_instagram'
   get 'merch', to: redirect('https://shop.worldcubeassociation.org/')
-  get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
+  get 'organizer-guidelines', to: redirect('https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf', status: 302)
+  get 'organizer-handbook', to: redirect('https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf', status: 302)
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
@@ -283,6 +286,8 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'volunteer-positions', to: redirect('https://docs.google.com/spreadsheets/d/13JhGJWDfJR96MYgPpxkSaV2E3bMIdIWjWLuYO83vOls/edit?gid=0#gid=0', status: 302)
+  get 'trainee-delegate-application' => 'trainee_delegate_applications#new', as: :trainee_delegate_application
+  post 'trainee-delegate-application' => 'trainee_delegate_applications#create'
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
   resources :regional_organizations, only: %i[new create update edit destroy], path: '/regional-organizations'
@@ -323,7 +328,6 @@ Rails.application.routes.draw do
   get '/admin/regional-voters' => 'admin#regional_voters', as: :regional_voters
   post '/admin/merge_people' => 'admin#do_merge_people', as: :admin_do_merge_people
   get '/admin/person_data' => 'admin#person_data'
-  get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
@@ -366,11 +370,14 @@ Rails.application.routes.draw do
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
 
-    # While this is the start of a v1 API, this is currently not usable by outside developers as
-    # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
+      get '/persons/:wca_id/results' => 'persons#results', as: :person_results
+      get '/persons/:wca_id/records' => 'persons#records', as: :person_records
+      get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
+
       resources :competitions, only: [] do
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
+        resource :bookmark, only: %i[show create destroy]
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
@@ -396,6 +403,7 @@ Rails.application.routes.draw do
 
           member do
             get 'payment_ticket', to: 'registrations#payment_ticket'
+            get 'payment_denomination', to: 'registrations#payment_denomination'
           end
 
           collection do
@@ -408,6 +416,7 @@ Rails.application.routes.draw do
 
         member do
           get 'registration_config', to: 'registrations#registration_config', as: :registration_config
+          get 'registration_eligibility', to: 'registrations#registration_eligibility', as: :registration_eligibility
         end
       end
     end

@@ -11,7 +11,7 @@
   <% if @regional_organization.logo.attached? &&
     @regional_organization.logo.blob.present? &&
     @regional_organization.logo.blob.persisted? %>
-    <%= image_tag @regional_organization.logo.variant(resize: "200x200") %>
+    <%= image_tag @regional_organization.logo.variant(resize_to_limit: [200, 200]) %>
   <% end %>
 
   <h3><%= t('.private_information') %></h3>
@@ -24,7 +24,7 @@
     @regional_organization.bylaws.blob.present? &&
     @regional_organization.bylaws.blob.persisted? &&
     @regional_organization.bylaws.previewable? %>
-    <%= link_to(image_tag(@regional_organization.bylaws.preview(resize: "200x200")), rails_blob_path(@regional_organization.bylaws, disposition: "attachment")) %>
+    <%= link_to(image_tag(@regional_organization.bylaws.preview(resize_to_limit: [200, 200])), rails_blob_path(@regional_organization.bylaws, disposition: "attachment")) %>
   <% end %>
 
   <%= f.input :directors_and_officers %>
@@ -35,7 +35,7 @@
 
   <%= f.input :extra_file %>
   <% if @regional_organization.extra_file.attached? && @regional_organization.extra_file.previewable? %>
-    <%= link_to(image_tag(@regional_organization.extra_file.preview(resize: "200x200")), rails_blob_path(@regional_organization.extra_file, disposition: "attachment")) %>
+    <%= link_to(image_tag(@regional_organization.extra_file.preview(resize_to_limit: [200, 200])), rails_blob_path(@regional_organization.extra_file, disposition: "attachment")) %>
   <% end %>
 
   <% if @current_user.can_manage_regional_organizations? %>

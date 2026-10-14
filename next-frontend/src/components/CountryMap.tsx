@@ -10,15 +10,13 @@ type CountryMapProps = {
   t: TFunction;
 } & TextProps;
 
-const CountryMap = ({ code, t, ...textProps }: CountryMapProps) => {
-  const translatedCountryName = t(`countries.${code}`);
+export const countryName = (code: string, t: TFunction) =>
+  t(`countries.${code}`) ||
+  WCACountries.byIso2[code.toUpperCase()].id ||
+  "Unknown";
 
-  const countryName =
-    translatedCountryName ||
-    WCACountries.byIso2[code.toUpperCase()].id ||
-    "Unknown";
-
-  return <Text {...textProps}>{countryName}</Text>;
-};
+const CountryMap = ({ code, t, ...textProps }: CountryMapProps) => (
+  <Text {...textProps}>{countryName(code, t)}</Text>
+);
 
 export default CountryMap;

@@ -10,9 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { FaPause, FaPlay, FaTimes } from "react-icons/fa";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { recordTagBadge } from "@/components/results/TableCells";
+import { WithRecordTag } from "@/components/results/TableCells";
 import formats from "@/lib/wca/data/formats";
 import { LiveCompetitor } from "@/types/live";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
@@ -136,7 +136,7 @@ function ResultsProjector({
                     onClick={() => setStatus("hiding")}
                     aria-label="Play"
                     size="lg"
-                    mr={2}
+                    me={2}
                   >
                     <FaPlay />
                   </IconButton>
@@ -146,7 +146,7 @@ function ResultsProjector({
                     onClick={() => setStatus("paused")}
                     aria-label="Pause"
                     size="lg"
-                    mr={2}
+                    me={2}
                   >
                     <FaPause />
                   </IconButton>
@@ -208,10 +208,10 @@ function ResultsProjector({
                             {showText && (
                               <Table.Cell
                                 fontSize="1.5rem"
-                                pr={2}
-                                textAlign="right"
+                                pe={2}
+                                textAlign="end"
                                 rowSpan={rowSpan}
-                                layerStyle="fill.deep"
+                                layerStyle="fill.solid"
                                 colorPalette={rankingCellColorPalette(
                                   competitor,
                                 )}
@@ -230,7 +230,7 @@ function ResultsProjector({
                             )}
                             {showText && (
                               <Table.Cell textAlign="center" rowSpan={rowSpan}>
-                                <Flag code={competitor.country_iso2} />
+                                <WcaFlag code={competitor.country_iso2} />
                               </Table.Cell>
                             )}
                             {isLinkedRound && (
@@ -247,7 +247,7 @@ function ResultsProjector({
                             ).map((attempt) => (
                               <Table.Cell
                                 key={attempt.attempt_number}
-                                textAlign="right"
+                                textAlign="end"
                               >
                                 {formatAttemptResult(attempt.value, eventId)}
                               </Table.Cell>
@@ -259,11 +259,17 @@ function ResultsProjector({
                               ) => (
                                 <Table.Cell
                                   key={i18nKey}
-                                  textAlign="right"
+                                  textAlign="end"
                                   fontWeight={statIndex === 0 ? 600 : 400}
                                 >
-                                  {formatAttemptResult(result[field], eventId)}{" "}
-                                  {recordTagBadge(result[recordTagField])}
+                                  <WithRecordTag
+                                    recordTag={result[recordTagField]}
+                                  >
+                                    {formatAttemptResult(
+                                      result[field],
+                                      eventId,
+                                    )}
+                                  </WithRecordTag>
                                 </Table.Cell>
                               ),
                             )}

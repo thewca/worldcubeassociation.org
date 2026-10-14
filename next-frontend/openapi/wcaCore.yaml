@@ -13,9 +13,20 @@ servers:
     description: The production API server
 paths:
   /v1/competitions/{competitionId}/registrations:
-    $ref: 'paths/registrations/registrationsByCompetition.yaml'
+    get:
+      $ref: 'paths/registrations/registrationsByCompetition.yaml#/get'
+    post:
+      $ref: 'paths/registrations/createRegistration.yaml'
+  /v1/competitions/{competitionId}/registrations/{userId}:
+    $ref: 'paths/registrations/registrationByUser.yaml'
+  /v1/registrations/{registrationId}:
+    $ref: 'paths/registrations/updateRegistration.yaml'
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
+  /v1/competitions/{competitionId}/registration_eligibility:
+    $ref: 'paths/registrations/registrationEligibility.yaml'
+  /v1/registrations/{registrationId}/payment_denomination:
+    $ref: 'paths/registrations/paymentDenomination.yaml'
 
   /v1/competitions/{competitionId}/scoretakers:
     get:
@@ -25,6 +36,9 @@ paths:
   /v1/competitions/{competitionId}/scoretakers/{id}:
     delete:
       $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
+
+  /v1/competitions/{competitionId}/bookmark:
+    $ref: 'paths/competitions/competitionBookmark.yaml'
 
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
@@ -62,6 +76,14 @@ paths:
     $ref: 'paths/competitions/live/LivePodiums.yaml'
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:
     $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
+
+  /v1/persons/{wca_id}/results:
+    $ref: 'paths/persons/personResults.yaml'
+  /v1/persons/{wca_id}/records:
+    $ref: 'paths/persons/personRecords.yaml'
+
+  /v1/geocoding/search:
+    $ref: 'paths/geocoding/geocodingSearch.yaml'
 
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'

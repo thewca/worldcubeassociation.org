@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :competition_scoretakers
+  has_many :trainee_delegate_applications, foreign_key: :applicant_id, inverse_of: :applicant, dependent: :restrict_with_exception
   has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
@@ -38,6 +39,8 @@ class User < ApplicationRecord
   has_many :teams_committees_at_least_senior_roles, through: :teams_committees_at_least_senior_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :teams_committees_at_least_senior_groups, through: :teams_committees_at_least_senior_roles, source: :group, class_name: "UserGroup"
   has_many :teams_committees_at_least_senior, through: :teams_committees_at_least_senior_groups, source: :metadata, source_type: "GroupsMetadataTeamsCommittees"
+  has_many :translator_groups, -> { translators }, through: :active_roles, source: :group, class_name: "UserGroup"
+  has_many :translators, through: :translator_groups, source: :metadata, source_type: "GroupsMetadataTranslators"
   has_many :past_bans_metadata, through: :past_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
   has_many :past_bans, through: :past_bans_metadata, source: :user_role, class_name: "UserRole"
   has_many :active_bans_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataBannedCompetitors"
@@ -539,6 +542,16 @@ class User < ApplicationRecord
     user.senior_delegates.include?(self)
   end
 
+  def age
+    return if dob.blank?
+
+    today = Date.current
+    years_since_birth_year = today.year - dob.year
+    had_birthday_this_year = today >= dob + years_since_birth_year.years
+
+    had_birthday_this_year ? years_since_birth_year : years_since_birth_year - 1
+  end
+
   def below_forum_age_requirement?
     (Date.today - FORUM_AGE_REQUIREMENT.years) < dob
   end
@@ -593,11 +606,11 @@ class User < ApplicationRecord
   end
 
   private def can_view_delegate_probations?
-    wic_team?
+    wic_team? || appeals_committee?
   end
 
   private def can_view_past_banned_competitors?
-    wic_team? || board_member? || higher_permission_officer? || weat_team? || results_team? || admin?
+    wic_team? || board_member? || higher_permission_officer? || weat_team? || results_team? || admin? || appeals_committee?
   end
 
   def can_request_to_edit_others_profile?
@@ -932,7 +945,7 @@ class User < ApplicationRecord
   end
 
   def can_create_posts?
-    wic_team? || wrc_team? || communication_team? || can_announce_competitions?
+    wic_team? || wrc_team? || communication_team? || can_announce_competitions? || appeals_committee?
   end
 
   def can_upload_images?
@@ -953,7 +966,8 @@ class User < ApplicationRecord
       competition.delegates.include?(self) ||
       competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       competition.delegates.flat_map(&:regional_delegates).compact.include?(self) ||
-      wic_team?
+      wic_team? ||
+      appeals_committee?
   end
 
   def can_scoretake_competition?(competition)
@@ -1022,7 +1036,7 @@ class User < ApplicationRecord
   end
 
   def can_view_delegate_matters?
-    any_kind_of_delegate? || can_admin_results? || wrc_team? || wic_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team? || financial_committee?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wic_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team? || financial_committee? || appeals_committee?
   end
 
   def can_manage_incidents?
@@ -1041,7 +1055,7 @@ class User < ApplicationRecord
     if delegate_report.posted?
       can_view_delegate_matters?
     else
-      can_edit_delegate_report?(delegate_report) || wic_team?
+      can_edit_delegate_report?(delegate_report) || wic_team? || appeals_committee?
     end
   end
 
@@ -1072,7 +1086,7 @@ class User < ApplicationRecord
   end
 
   def can_see_eligible_voters?
-    can_admin_results? || wic_team?
+    can_admin_results? || wic_team? || appeals_committee?
   end
 
   def get_cannot_delete_competition_reason(competition)
@@ -1097,6 +1111,14 @@ class User < ApplicationRecord
       reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
       reasons << I18n.t('registrations.errors.banned_html').html_safe if is_competing && competition.present? && banned_at_date?(competition.start_date)
     end
+  end
+
+  REGISTRATION_PROFILE_FIELDS = %w[name gender dob country_iso2].freeze
+
+  # The same conditions as `cannot_register_for_competition_reasons`, but as data rather than
+  # translated sentences, so that API clients can render (and translate) them themselves.
+  def missing_registration_profile_fields
+    REGISTRATION_PROFILE_FIELDS.select { self.public_send(it).blank? }
   end
 
   def cannot_organize_competition_reasons
@@ -1207,7 +1229,11 @@ class User < ApplicationRecord
   end
 
   def notify_of_results_posted(competition)
-    CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later if results_notifications_enabled?
+    if results_notifications_enabled?
+      CompetitionsMailer.notify_users_of_results_presence(self, competition).deliver_later
+    elsif locked_account?
+      RegistrationsMailer.notify_registrant_of_locked_account_creation(self, competition).deliver_later
+    end
   end
 
   def maybe_assign_wca_id_by_results(competition, notify: true)
@@ -1228,6 +1254,20 @@ class User < ApplicationRecord
 
   def competition_bookmarked?(competition)
     BookmarkedCompetition.where(competition: competition, user: self).present?
+  end
+
+  def cached_bookmarked_competition_ids
+    Rails.cache.fetch(bookmarked_competitions_cache_key, expires_in: 60.minutes) do
+      competitions_bookmarked.pluck(:competition_id)
+    end
+  end
+
+  def clear_bookmarked_competitions_cache
+    Rails.cache.delete(bookmarked_competitions_cache_key)
+  end
+
+  private def bookmarked_competitions_cache_key
+    "#{id}-competitions-bookmarked"
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)
@@ -1254,6 +1294,48 @@ class User < ApplicationRecord
       .flat_map(&:active_roles)
       .select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
       .map(&:user_id)
+  end
+
+  DELEGATE_MILESTONES = [50, 100, 200, 300].freeze
+
+  def self.delegate_milestones_for_digest
+    last_month_start = 1.month.ago.beginning_of_month.to_date
+    last_month_end = 1.month.ago.end_of_month.to_date
+
+    active_delegate_ids = UserRole.active
+                                  .where(group: UserGroup.delegate_regions)
+                                  .pluck(:user_id)
+                                  .uniq
+
+    return {} if active_delegate_ids.empty?
+
+    base_scope = User.joins(:actually_delegated_competitions).where(id: active_delegate_ids)
+
+    before_counts = base_scope
+                    .where(competitions: { end_date: ...last_month_start })
+                    .group("users.id")
+                    .count
+
+    through_counts = base_scope
+                     .where(competitions: { end_date: ..last_month_end })
+                     .group("users.id")
+                     .count
+
+    milestone_achievers = DELEGATE_MILESTONES.index_with do |milestone|
+      through_counts.filter_map do |user_id, through_count|
+        before_count = before_counts.fetch(user_id, 0)
+        user_id if before_count < milestone && through_count >= milestone
+      end
+    end.select { |_milestone, user_ids| user_ids.any? }
+
+    all_ids = milestone_achievers.values.flatten.uniq
+    return {} if all_ids.empty?
+
+    users_by_id = User.where(id: all_ids).index_by(&:id)
+
+    milestone_achievers.transform_values do |user_ids|
+      user_ids.filter_map { |id| users_by_id[id] }.sort_by(&:name)
+    end
   end
 
   def self.search(query, params: {})
@@ -1628,6 +1710,7 @@ class User < ApplicationRecord
       competitions_announced.update_all(announced_by: new_user.id)
       roles.update_all(user_id: new_user.id)
       registrations.update_all(user_id: new_user.id)
+      trainee_delegate_applications.update_all(applicant_id: new_user.id)
 
       final_wca_id = new_user.wca_id.presence || self.wca_id.presence
       new_user.newcomer_results.update_all(person_id: final_wca_id) if final_wca_id.present?

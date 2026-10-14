@@ -1,34 +1,16 @@
-import { Card, Link as ChakraLink, Separator } from "@chakra-ui/react";
-import Link from "next/link";
+import { Card, Separator } from "@chakra-ui/react";
 import AnnouncementMarkdown from "@/components/announcements/AnnouncementMarkdown";
 import {
   announcementByline,
-  announcementRoute,
   announcementSummary,
 } from "@/components/announcements/announcement";
-import ReadMoreButton from "@/components/announcements/ReadMoreButton";
+import AnnouncementDialog from "@/components/announcements/AnnouncementDialog";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
 
-function AnnouncementHeader({
-  announcement,
-  linkTitle,
-}: {
-  announcement: Announcement;
-  linkTitle: boolean;
-}) {
+function AnnouncementHeader({ announcement }: { announcement: Announcement }) {
   return (
     <>
-      <Card.Title textStyle="h2" asChild={linkTitle}>
-        {linkTitle ? (
-          <ChakraLink asChild color="currentColor">
-            <Link href={announcementRoute(announcement)}>
-              {announcement.title}
-            </Link>
-          </ChakraLink>
-        ) : (
-          announcement.title
-        )}
-      </Card.Title>
+      <Card.Title textStyle="h2">{announcement.title}</Card.Title>
       <Card.Description color="currentColor">
         {announcementByline(announcement)}
       </Card.Description>
@@ -47,17 +29,20 @@ export function AnnouncementCard({
   return (
     <Card.Root
       colorPalette={colorPalette}
-      layerStyle="card.pastel"
+      layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
       width="full"
     >
       <Card.Body gap={2}>
-        <AnnouncementHeader announcement={announcement} linkTitle />
+        <AnnouncementHeader announcement={announcement} />
         <AnnouncementMarkdown>
           {announcementSummary(announcement)}
         </AnnouncementMarkdown>
       </Card.Body>
       <Card.Footer>
-        <ReadMoreButton announcement={announcement} />
+        <AnnouncementDialog
+          announcement={announcement}
+          colorPalette={colorPalette}
+        />
       </Card.Footer>
     </Card.Root>
   );
@@ -73,18 +58,12 @@ export function AnnouncementFullCard({
   return (
     <Card.Root
       colorPalette={colorPalette}
-      layerStyle="card.pastel"
+      layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
       width="full"
     >
       <Card.Body gap={2}>
-        <AnnouncementHeader announcement={announcement} linkTitle={false} />
+        <AnnouncementHeader announcement={announcement} />
 
-        <Card.Title textStyle="h3">Summary</Card.Title>
-        <AnnouncementMarkdown>
-          {announcementSummary(announcement)}
-        </AnnouncementMarkdown>
-
-        <Card.Title textStyle="h3">Body</Card.Title>
         <AnnouncementMarkdown>
           {announcement.contentMarkdown}
         </AnnouncementMarkdown>

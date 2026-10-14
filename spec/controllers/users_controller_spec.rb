@@ -186,6 +186,24 @@ RSpec.describe UsersController do
     end
   end
 
+  describe "DELETE #delete_avatar" do
+    let(:user) { create(:user) }
+    let(:remover) { create(:user, :wrt_member) }
+    let!(:avatar) { create(:user_avatar, user: user) }
+    let(:reason) { "The avatar must not include text." }
+
+    before { sign_in remover }
+
+    it "enqueues a removal email with the acting user, avatar owner, and reason" do
+      expect do
+        delete :delete_avatar, params: { id: user.id, avatarId: avatar.id, reason: reason }
+      end.to have_enqueued_mail(AvatarsMailer, :notify_user_of_avatar_removal).with(remover, user, reason).once
+
+      expect(response).to have_http_status(:ok)
+      expect(avatar.reload).to be_deleted
+    end
+  end
+
   describe "GET #index" do
     before { sign_in create :admin }
 

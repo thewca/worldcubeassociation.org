@@ -1,5 +1,6 @@
 import { GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 
 export const FaqPage: GlobalConfig = {
   slug: "faq-page",
@@ -25,4 +26,7 @@ export const FaqPage: GlobalConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };

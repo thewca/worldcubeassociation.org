@@ -11,7 +11,7 @@ import { route } from "nextjs-routes";
 import countries from "@/lib/wca/data/countries";
 import React from "react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { recordTagBadge } from "@/components/results/TableCells";
+import { WithRecordTag } from "@/components/results/TableCells";
 import { CompetitorWithResults } from "@/lib/live/mergeAndOrderResults";
 import { Stat } from "@/lib/live/statColumnsForFormat";
 import { TFunction } from "i18next";
@@ -95,8 +95,9 @@ export default function LiveResultsMobileModal({
                           {t(stat.i18nKey)}
                         </DataList.ItemLabel>
                         <DataList.ItemValue>
-                          {formatAttemptResult(r[stat.field], eventId)}{" "}
-                          {recordTagBadge(r[stat.recordTagField])}
+                          <WithRecordTag recordTag={r[stat.recordTagField]}>
+                            {formatAttemptResult(r[stat.field], eventId)}
+                          </WithRecordTag>
                         </DataList.ItemValue>
                       </DataList.Item>
                     ))}
