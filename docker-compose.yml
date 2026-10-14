@@ -34,6 +34,7 @@ services:
     command: >
       bash -c './package-install.dev.sh packages.dev.txt &&
       ./package-install.dev.sh packages.runtime.txt &&
+      ./package-config.dev.sh &&
       rm -f .db-inited &&
       bin/setup &&
       touch .db-inited'

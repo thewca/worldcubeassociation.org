@@ -103,6 +103,17 @@ const INTERACTIVITY_OVERRIDES = {
         _disabled: { cursor: "disabled" },
       },
     },
+    variants: {
+      overflowPadding: {
+        true: {
+          // Ensure hover/focus outlines don't get clipped when we hide overflow
+          content: {
+            mx: "-3",
+            px: "3",
+          },
+        },
+      },
+    },
   },
   steps: {
     slots: [],
@@ -855,8 +866,41 @@ const customConfig = defineConfig({
           body: {
             gap: "4",
           },
+          description: {
+            color: "fg",
+          },
         },
         variants: {
+          interactive: {
+            true: {
+              root: {
+                cursor: "pointer",
+                _focusWithin: {
+                  outline: "{borders.md}",
+                  outlineColor: "colorPalette.focusRing",
+                  outlineOffset: "{spacing.0.5}",
+                },
+                _after: {
+                  content: '""',
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: "inherit",
+                  pointerEvents: "none",
+                  zIndex: 1,
+                  transitionProperty: "background-color",
+                  transitionDuration: "moderate",
+                },
+                _hover: {
+                  _after: { bg: "colorPalette.contrast/5" },
+                },
+              },
+              body: {
+                transitionProperty: "background-color",
+                transitionDuration: "moderate",
+                _groupHover: { bg: "colorPalette.contrast/5" },
+              },
+            },
+          },
           variant: {
             info: {
               root: {
@@ -937,7 +981,6 @@ const customConfig = defineConfig({
             card: {
               root: {
                 spaceY: "4",
-                overflow: "hidden",
                 "--accordion-padding-x": "spacing.6",
                 "--accordion-padding-y": "spacing.3",
               },

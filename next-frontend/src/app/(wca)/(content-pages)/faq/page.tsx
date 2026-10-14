@@ -48,6 +48,7 @@ export default async function FAQ() {
               headingAs={Card.Title}
               paragraphAs={Card.Description}
               textStyle="body"
+              listProps={{ textStyle: "body" }}
             >
               {faqPage.introTextMarkdown}
             </ChakraMarkdown>

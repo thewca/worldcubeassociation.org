@@ -299,6 +299,11 @@ class RoleChangeMailer < ApplicationMailer
           email: role.group.lead_user&.email,
           message: 'Informing as there is a role end in your Team/Committee.',
         ),
+        UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_wqac.name,
+          email: UserGroup.teams_committees_group_wqac.metadata.email,
+          message: "Please suspend the member's Moodle account if necessary.",
+        ),
       )
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
       @to_list.push(

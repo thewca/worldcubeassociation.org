@@ -119,7 +119,7 @@ export default function TabMenu({
               colorPalette="blue"
               size="xl"
               position="fixed"
-              right="4"
+              insetEnd="4"
               bottom="4"
               zIndex="docked"
               rounded="full"
@@ -389,6 +389,8 @@ function CollapsibleTabGroup({
       <Collapsible.Trigger
         width="full"
         display="flex"
+        alignItems="center"
+        gap="2"
         textAlign="start"
         minHeight="fit-content"
         px="3"
@@ -404,7 +406,7 @@ function CollapsibleTabGroup({
       </Collapsible.Trigger>
 
       <Collapsible.Content>
-        <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
+        <Box ps="3" display="flex" flexDirection="column" gap="1" pt="1">
           {children.map(
             ({ menuKey, disabled, i18nKey, href, hrefAdmin, badgeI18nKey }) => (
               <Tabs.Trigger

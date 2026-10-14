@@ -52,6 +52,7 @@ required:
   - registration_full_and_accepted?
   - delegates
   - organizers
+  - waiting_list_count
   - tab_names
   - class
 properties:
@@ -211,6 +212,9 @@ properties:
     type: integer
     nullable: true
     example: 42
+  waiting_list_count:
+    type: integer
+    example: 7
   tab_names:
     type: array
     items:

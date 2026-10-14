@@ -12,6 +12,8 @@ import {
 } from "@/components/competitions/Cards";
 import OrganizationTeamCard from "@/components/competitions/OrganizerCard";
 import OpenapiError from "@/components/ui/openapiError";
+import { getSession } from "@/auth";
+import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 
 export default async function CompetitionOverView({
   params,
@@ -39,12 +41,24 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
     return <Text>Competition does not exist</Text>;
   }
 
+  const session = await getSession();
+  const bookmarkRequest =
+    session &&
+    (await serverClientWithToken(session.accessToken).GET(
+      "/v1/competitions/{competitionId}/bookmark",
+      { params: { path: { competitionId } } },
+    ));
+
   return (
     // Two columns only from `lg`: at `md` the tab sidebar appears and takes 3xs of the
     //   row, which leaves each of two columns narrower than the cards in them.
     <SimpleGrid gap="8" columns={{ base: 1, lg: 2 }}>
       <VStack gap="8" alignItems="stretch">
-        <InfoCard competitionInfo={competitionInfo} t={t} />
+        <InfoCard
+          competitionInfo={competitionInfo}
+          bookmark={bookmarkRequest?.data}
+          t={t}
+        />
         <RegistrationCard competitionInfo={competitionInfo} />
         <EventCard competitionInfo={competitionInfo} />
       </VStack>

@@ -14,10 +14,12 @@ declare module "nextjs-routes" {
     | StaticRoute<"/">
     | StaticRoute<"/about">
     | DynamicRoute<"/api/auth/[...all]", { "all": string[] }>
+    | StaticRoute<"/api/health">
     | DynamicRoute<"/api/payload/[...slug]", { "slug": string[] }>
     | StaticRoute<"/api/payload/draft">
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
+    | StaticRoute<"/api/payload/schema-manifest">
     | StaticRoute<"/competitions">
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>

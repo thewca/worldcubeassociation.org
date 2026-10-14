@@ -259,6 +259,8 @@ en:
     search_site: "Search site"
     #context: Label of a button that scrolls the user back to the top of a long page.
     back_to_top: "Back to top"
+    #context: Label of a button on the sign in and sign up pages that returns to the page the user came from.
+    back: "Back"
     filter: Filter
     delete: Delete
     date_placeholder: "YYYY-MM-DD"
@@ -554,12 +556,22 @@ en:
   devise:
     #context: Overridden key for sign in
     passwords:
+      #context: Shown after requesting a password reset, regardless of whether the account exists
+      send_paranoid_instructions: "A password reset link will be sent to the email address if it has a registered account with the WCA."
       edit:
         new_password_confirmation: 'Re-enter new password'
+
+    registrations:
+      new:
+        #context: shown on the redesigned sign up page
+        redesign_notice: "You are viewing the new sign up page. It will replace the old one by the end of the year."
 
     sessions:
       new:
         sign_in: "Sign in"
+        #context: shown on the redesigned sign in page, above a link to the old one
+        redesign_notice: "You are viewing the new sign in page. It will replace the old one by the end of the year."
+        use_classic: "Switch to the old sign in page"
         #context: used when handling two-factor authentication for a user
         2fa:
           verify: "To sign in, verify it's you"
@@ -667,7 +679,9 @@ en:
       have_never_competed: "I have never competed in a WCA competition."
       let_us_know: "Please let us know if you have competed in a WCA competition before:"
       welcome_back: "Welcome back! To create your WCA website account, we need to know the WCA ID under which you competed."
-      welcome_html: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission.<br/><br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
+      welcome_html: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes.<br/><br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
+      #context: shown below the birthdate field on the sign up page
+      dob_privacy: "This information will never be released without your permission."
   layouts:
     #context: This key belongs to the navigation bar
     navigation:
@@ -893,10 +907,6 @@ en:
     volunteer:
       title: "Volunteer"
       text: "Get involved! The WCA has volunteer positions open across different teams. You do not have to be a speedcuber to be a volunteer."
-    become_delegate:
-      title: "Become a Delegate"
-      text: "Help support fair and well-run competitions in your local speedcubing community by applying to become a Trainee Delegate."
-      link_title: "Apply now"
     faq:
       title: "FAQ"
       text: "Take a look at our list of Frequently Asked Questions if you need help with anything. Many questions you have might have an answer there."
@@ -1145,6 +1155,8 @@ en:
         wca_id_claimed: "Successfully claimed WCA ID %{wca_id}. Check your email, and wait for %{user} to approve it!"
         account_updated_confirm: "Account updated, emailed %{email} to confirm your new email address."
     select_nearby_delegate:
+      #context: label above the box used to search for a Delegate by name
+      search_for_delegate: "Search for Delegate"
       select_delegate_html: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA Delegate</a> to confirm your identify. Please enter your birthdate and select the Delegate you think knows you best."
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
@@ -1506,12 +1518,14 @@ en:
           failed_to_fetch: "Failed to fetch next advancing competitor"
           still_processing: "Cannot execute 'Quit Competitor' actions while some results are still processing"
           in_batch: "Cannot quit a competitor whose results are part of an unsubmitted batch"
+          scoresheet_warning: "Make sure to only quit a competitor when you have their empty scoresheet physically in hand. You can not add a competitor back to a closed round."
         add_competitor:
           single_round: "Add Competitor to Round"
           multiple_rounds:
             one: "Add Competitor to both Rounds in the Dual Round."
             other: "Add Competitor to Round, as the second Round of the dual round is not open you will need to add them separately."
           event_edit_warning: "This competitor is not registered for this event, and the competition no longer allows event changes to registrations. Adding them will still work, but make sure this is intended."
+          round_closed: "You cannot add a competitor to a round that is already closed"
       results:
         competitor: "Competitor"
         mean: "Mean"
@@ -1519,7 +1533,7 @@ en:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
     my_competitions:
-      title: "My competitions"
+      title: "My Competitions"
       disclaimer: "Only competitions that use the WCA registration system are shown here. If your competition isn't listed here, check the competition website's own competitor list."
       past_competitions: "Past competitions"
       bookmarked_title: "Bookmarked competitions"
@@ -1581,6 +1595,7 @@ en:
       competitor_limit: "Competitor limit"
       competitor_limit_is: "There is a competitor limit of %{competitor_limit} competitors."
       no_competitor_limit: "There is no competitor limit."
+      waiting_list_size: "Waiting list size"
       entry_fee_is: "The base registration fee for this competition is %{base_entry_fee}."
       no_entry_fee: "Registering for this competition is free."
       use_stripe_link_html: "The registration fee has to be paid through Stripe %{here} once registered."
@@ -1664,6 +1679,12 @@ en:
       location_placeholder: "Enter an address"
       #context: button that fills the location field in with the device's own position
       use_my_location: "Use my location"
+      #context: tooltip on the location field, which only works for competitors who are signed in
+      location_sign_in_required: "Sign in to search for an address"
+      #context: shown below the location field when the typed address could not be found
+      location_not_found: "No location found for this address"
+      #context: shown below the location field when looking up the typed address failed, for example after too many searches in a short time
+      location_search_failed: "The address search failed, please try again in a minute"
       #context: label of the field limiting how far away a competition may be from the chosen location
       distance: "Distance"
       distance_units:

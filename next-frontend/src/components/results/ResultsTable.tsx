@@ -24,7 +24,7 @@ import { DateTime } from "luxon";
 // width, which auto table layout decides from the content.
 const STICKY_COLUMN = {
   position: "sticky" as const,
-  left: "0",
+  insetStart: "0",
   // The row already paints `bg` (or the striped rung), so inheriting it keeps the
   //   pinned cell opaque without naming a colour that could drift from the row's.
   bg: "inherit",
@@ -318,7 +318,7 @@ export function ByCompetitionTable({
             <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
             <Table.ColumnHeader>Single</Table.ColumnHeader>
             {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
-            <Table.ColumnHeader colSpan={attemptCount} textAlign="left">
+            <Table.ColumnHeader colSpan={attemptCount} textAlign="start">
               Solves
             </Table.ColumnHeader>
           </Table.Row>

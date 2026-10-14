@@ -24,7 +24,11 @@ import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
-import { MobileNavLink, MobileNavRoot } from "@/components/MobileNav";
+import {
+  MobileNavButton,
+  MobileNavLink,
+  MobileNavRoot,
+} from "@/components/MobileNav";
 import { getCachedGlobal } from "@/lib/payload/globals";
 
 type NavbarEntry<K extends string = "displayText"> = {
@@ -131,7 +135,7 @@ export default async function Navbar() {
     >
       <RefreshRouteOnSave />
       <MobileNavRoot>
-        <HStack padding="3" justifyContent="space-between">
+        <HStack ps={3.5} pe={1.5} py={3} justifyContent="space-between">
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
             <Box hideFrom="xl">
@@ -293,7 +297,7 @@ export default async function Navbar() {
               ))}
             </HStack>
           </HStack>
-          <Box flex="1" mx={4}>
+          <Box flex="1" px={{ base: 0, md: 2 }}>
             {!LIVE_RESULT_BETA && <WcaSearch />}
           </Box>
           <HStack>
@@ -312,7 +316,7 @@ export default async function Navbar() {
 
         <Box hideFrom="xl">
           <Collapsible.Content>
-            <VStack align="stretch" px={3} pb={3} gap={1}>
+            <VStack align="stretch" px={3.5} pt={1} pb={1.5} gap={1}>
               {showEmptyMessage && (
                 <Text>Oh no, there are no navbar items!</Text>
               )}
@@ -335,25 +339,24 @@ export default async function Navbar() {
                     </MobileNavLink>
                   )}
                   {navbarEntry.blockType === "NavDropdown" && (
-                    <Collapsible.Root>
+                    <Collapsible.Root
+                      overflowPadding
+                      display="flex"
+                      flexDirection="column"
+                    >
                       <Collapsible.Trigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          justifyContent="flex-start"
-                          width="full"
-                        >
+                        <MobileNavButton>
                           <TextWrapper
                             navbarEntry={navbarEntry}
                             entryKey="title"
                           />
-                          <Collapsible.Indicator ml="auto">
+                          <Collapsible.Indicator ms="auto">
                             <LuChevronDown />
                           </Collapsible.Indicator>
-                        </Button>
+                        </MobileNavButton>
                       </Collapsible.Trigger>
                       <Collapsible.Content>
-                        <VStack align="stretch" pl={4} gap={1} py={1}>
+                        <VStack align="stretch" ps={2} gap={1} py={1}>
                           {navbarEntry.entries.map((subEntry) => (
                             <React.Fragment key={subEntry.id}>
                               {subEntry.blockType === "LinkItem" && (
@@ -376,24 +379,23 @@ export default async function Navbar() {
                                 <Separator />
                               )}
                               {subEntry.blockType === "NestedDropdown" && (
-                                <Collapsible.Root>
+                                <Collapsible.Root
+                                  overflowPadding
+                                  display="flex"
+                                  flexDirection="column"
+                                >
                                   <Collapsible.Trigger asChild>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      justifyContent="flex-start"
-                                      width="full"
-                                    >
+                                    <MobileNavButton>
                                       {subEntry.title}
-                                      <Collapsible.Indicator ml="auto">
+                                      <Collapsible.Indicator ms="auto">
                                         <LuChevronDown />
                                       </Collapsible.Indicator>
-                                    </Button>
+                                    </MobileNavButton>
                                   </Collapsible.Trigger>
                                   <Collapsible.Content>
                                     <VStack
                                       align="stretch"
-                                      pl={4}
+                                      ps={2}
                                       gap={1}
                                       py={1}
                                     >
@@ -431,14 +433,13 @@ export default async function Navbar() {
                   )}
                   {navbarEntry.blockType === "SocialsMenu" &&
                     socialLinks.length > 0 && (
-                      <Collapsible.Root>
+                      <Collapsible.Root
+                        overflowPadding
+                        display="flex"
+                        flexDirection="column"
+                      >
                         <Collapsible.Trigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            justifyContent="flex-start"
-                            width="full"
-                          >
+                          <MobileNavButton>
                             <TextWrapper
                               navbarEntry={{
                                 ...navbarEntry,
@@ -446,13 +447,13 @@ export default async function Navbar() {
                               }}
                               entryKey="label"
                             />
-                            <Collapsible.Indicator ml="auto">
+                            <Collapsible.Indicator ms="auto">
                               <LuChevronDown />
                             </Collapsible.Indicator>
-                          </Button>
+                          </MobileNavButton>
                         </Collapsible.Trigger>
                         <Collapsible.Content>
-                          <VStack align="stretch" pl={4} gap={1} py={1}>
+                          <VStack align="stretch" ps={2} gap={1} py={1}>
                             {socialLinks.map((item) => (
                               <MobileNavLink key={item.id}>
                                 <LinkWrapper
@@ -470,7 +471,7 @@ export default async function Navbar() {
               {/* From `md` upwards both of these already sit in the top bar, so without this the
                   open drawer shows a second language selector and a second avatar. */}
               <Separator hideFrom="md" />
-              <VStack align="start" hideFrom="md">
+              <VStack align="stretch" hideFrom="md" gap={1}>
                 <LanguageSelector />
                 <AvatarMenu session={session} />
               </VStack>
