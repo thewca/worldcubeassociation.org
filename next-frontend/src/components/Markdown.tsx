@@ -68,7 +68,10 @@ const embedYoutubeLinks = (parent: MdastParent) => {
           hProperties: {
             src: embedUrl,
             href: undefined,
+            title: "YouTube video",
             allowFullScreen: true,
+            maxW: "640px",
+            aspectRatio: "16 / 9",
           },
           hChildren: [],
         };
@@ -186,13 +189,10 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
         img: (imgTag) => <ChakraImage {...imgTag} {...imageProps} />,
         iframe: (iframeTag) => (
           <chakra.iframe
-            {...iframeTag}
-            title="YouTube video"
             display="block"
             width="full"
-            maxW="640px"
-            aspectRatio="16 / 9"
             border="none"
+            {...iframeTag}
           />
         ),
         h1: (h1Tag) => <HeadingRenderAs {...h1Tag} as="h1" />,
