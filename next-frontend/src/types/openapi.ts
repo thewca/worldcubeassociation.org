@@ -1704,7 +1704,10 @@ export interface components {
             spots_left?: number | null;
             /** @example 7 */
             waiting_list_count: number;
-            tab_names: string[];
+            tabs: {
+                id: number;
+                name: string;
+            }[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
         };
@@ -1772,7 +1775,7 @@ export interface components {
             venues: components["schemas"]["WcifVenue"][];
         };
         Tabs: {
-            id: string;
+            id: number;
             competition_id: string;
             name: string;
             content: string;
