@@ -35,8 +35,8 @@ export default function CompetitionsTab({ wcaId }: CompetitionsTabProps) {
   }
 
   return (
-    <Table.ScrollArea maxW="full">
-      <Table.Root>
+    <Table.ScrollArea maxW="full" rounded="wca">
+      <Table.Root striped>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>#</Table.ColumnHeader>
