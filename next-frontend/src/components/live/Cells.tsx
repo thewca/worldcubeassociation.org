@@ -76,7 +76,7 @@ export function LiveTableHeader({
           ))}
           {stats.map((stat) => (
             <Table.ColumnHeader textAlign="right" key={stat.field}>
-              {t(stat.i18nKey)}
+              <WithRecordTag>{t(stat.i18nKey)}</WithRecordTag>
             </Table.ColumnHeader>
           ))}
           {forecastView &&
@@ -231,7 +231,9 @@ export function LiveStatCells({
             {showProjected ? (
               <Tooltip content="Projected average" showArrow openDelay={200}>
                 <Box as="span" color="fg.muted">
-                  {formatAttemptResult(forecast!.projected_average!, eventId)}
+                  <WithRecordTag>
+                    {formatAttemptResult(forecast!.projected_average!, eventId)}
+                  </WithRecordTag>
                 </Box>
               </Tooltip>
             ) : (
