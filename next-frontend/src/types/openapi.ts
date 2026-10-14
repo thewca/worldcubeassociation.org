@@ -1476,6 +1476,11 @@ export interface components {
              * @example 1
              */
             pos: number;
+            /**
+             * @description The competitor's position across all rounds linked into the same dual round. Only meaningful when `linked_round_id` is present.
+             * @example 1
+             */
+            global_pos: number;
             /** @example 84 */
             best: number;
             /**
@@ -1512,6 +1517,11 @@ export interface components {
             round_type_id: string;
             /** @example a */
             format_id: string;
+            /**
+             * @description Present when this round is linked with others into a dual round.
+             * @example 42
+             */
+            linked_round_id?: number;
             /** @example WR */
             regional_single_record?: string;
             /** @example NR */
