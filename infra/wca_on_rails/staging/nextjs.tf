@@ -55,7 +55,7 @@ locals {
     },
     {
       name  = "WEBLATE_URL"
-      value = "https://translate.worldcubeassociation.org"
+      value = "http://weblate.internal:8080"
     },
     {
       name  = "PROPRIETARY_FONT"
