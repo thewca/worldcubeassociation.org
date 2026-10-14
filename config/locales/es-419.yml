@@ -1132,12 +1132,6 @@ es-419:
       text: >-
         ¡Sé parte! La WCA tiene posiciones voluntarias abiertas en varios
         equipos diferentes. No hace falta que seas un speeecuber para ofrecerte.
-    become_delegate:
-      title: Conviértete en Delegado
-      text: >-
-        Ayuda a tener competiciones justas y de calidad en tu comunidad local
-        postulándote como Delegado en Prácticas.
-      link_title: Aplicar ahora
     faq:
       title: FAQ
       text: >-

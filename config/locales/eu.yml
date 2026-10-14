@@ -1130,9 +1130,6 @@ eu:
         diegu zuen donazioei, mundu osoan lehiaketa atseginagoak izateko dugun
         ikuspegia hobetzen laguntzeko.
       button: WCA nola lagundu dezakezun inguruan gehiago jakin
-    become_delegate:
-      title: Egin zaitez ordezkari!
-      link_title: Orain apuntatu
   users:
     update_locale:
       success: Hizkuntza eguneratuta.
