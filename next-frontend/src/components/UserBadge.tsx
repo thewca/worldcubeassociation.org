@@ -83,11 +83,12 @@ const UserBadge: React.FC<UserBadgeData> = async ({
                 </LinkOverlay>
                 {email && ( 
                   <CopyButton
-                    variant={"outline"}
+                    variant={"subtle"}
                     size={"xs"}
                     text={t("delegates_page.copy_email")}
                     value={email}
                     icon={<LuMails />}
+                    toastLabel={t("notifications.copied_to_clipboard")}
                   />
                 )}
               </HStack>
@@ -95,10 +96,9 @@ const UserBadge: React.FC<UserBadgeData> = async ({
             {roles && (
               <HStack direction="row" wrap="wrap" gap="4px 8px" marginTop="4px">
                 {roles.map((role, index) => (
-                  <Stack>
+                  <Stack key={index}>
                     <Text color="dimgray">{role.teamText}</Text>
                     <RoleBadge
-                      key={index}
                       teamRole={role.teamRole}
                       colorPalette={role.staffColor}
                       fontSize="0.7em"
