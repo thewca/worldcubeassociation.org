@@ -24,7 +24,7 @@ type RankingType = "single" | "average";
 const getColor = (rank: number) => {
   if (rank === 1) return "recordMarkers.personal";
   if (rank < 11) return "recordMarkers.national";
-  return undefined;
+  return "fg";
 };
 
 function RankHeader({
