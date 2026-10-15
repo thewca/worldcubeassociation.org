@@ -5,7 +5,7 @@ import { ReactElement } from "react"
 import { Toaster, toaster } from "./ui/toaster"
 
 export interface CopyButtonProps extends ButtonProps {
-    text: string,
+    text?: string,
     value: string,
     icon?: ReactElement,
     toastLabel: string,
