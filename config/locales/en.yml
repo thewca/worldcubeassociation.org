@@ -2732,6 +2732,7 @@ en:
       total_delegated: "Total Delegated"
       lead_delegated: "Lead Delegated Competitions"
       history: "History"
+    copy_email: 'Copy email'
   regional_organizations:
     title: "Regional Organizations"
     content: "The WCA acknowledges the following Regional Organizations:"
