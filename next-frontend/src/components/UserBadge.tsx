@@ -7,6 +7,8 @@ import {
   Image,
   LinkBox,
   LinkOverlay,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
@@ -66,7 +68,7 @@ const UserBadge: React.FC<UserBadgeData> = async ({
           />
         )}
         <Center flexGrow={1}>
-          <Card.Body>
+          <Card.Body gap={2}>
             <Card.Title>
               <HStack direction="row" justify={"space-between"}>
                 <LinkOverlay asChild>
@@ -93,13 +95,15 @@ const UserBadge: React.FC<UserBadgeData> = async ({
             {roles && (
               <HStack direction="row" wrap="wrap" gap="4px 8px" marginTop="4px">
                 {roles.map((role, index) => (
-                  <RoleBadge
-                    key={index}
-                    teamRole={role.teamRole}
-                    teamText={role.teamText ?? ""}
-                    colorPalette={role.staffColor}
-                    fontSize="0.7em"
-                  />
+                  <Stack>
+                    <Text color="dimgray">{role.teamText}</Text>
+                    <RoleBadge
+                      key={index}
+                      teamRole={role.teamRole}
+                      colorPalette={role.staffColor}
+                      fontSize="0.7em"
+                    />
+                  </Stack>
                 ))}
               </HStack>
             )}
