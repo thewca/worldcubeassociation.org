@@ -1,30 +1,30 @@
 "use client";
 
-import { Steps, VStack } from "@chakra-ui/react";
+import { Stack, Steps, useStepsContext, VStack } from "@chakra-ui/react";
 import type { components } from "@/types/openapi";
-import CompetingStep from "@/components/competitions/Registration/CompetingStep";
-import RegistrationOverview, {
-  RegistrationStatus,
-} from "@/components/competitions/Registration/RegistrationOverview";
+import RegistrationSummary from "@/components/competitions/Registration/RegistrationSummary";
+import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
+import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
+import NextStepButton from "@/components/competitions/Registration/NextStepButton";
+import SubmitStepButton from "@/components/competitions/Registration/SubmitStepButton";
 import {
-  activeStepIndex,
-  isGatingStep,
+  initialStepIndex,
+  isStepComplete,
   StepContent,
-  type StepContext,
 } from "@/components/competitions/Registration/steps";
+import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
-import { toaster } from "@/components/ui/toaster";
-import pollRegistrationQueue from "@/lib/wca/registrations/pollRegistrationQueue";
-import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import useRegistration, {
   registrationQueryKey,
 } from "@/lib/wca/registrations/useRegistration";
+import showRegistrationError from "@/lib/wca/registrations/showRegistrationError";
 import {
   registrationFormValues,
   useRegistrationForm,
+  type RegistrationForm,
   type RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
 
@@ -32,10 +32,50 @@ type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
-// How often we ask the queue whether it has worked off our submission yet.
-const QUEUE_POLL_INTERVAL_MS = 3000;
-// Once the queue says it is done, how often we ask Rails for the registration it produced.
-const REGISTRATION_REFETCH_INTERVAL_MS = 1000;
+// Finishing the last step before the registration exists submits it, so that every step after it
+//   has a registration to work with.
+function WizardStepButton({
+  steps,
+  step,
+  form,
+  isSubmitting,
+}: {
+  steps: StepConfig[];
+  step: StepConfig;
+  form: RegistrationForm;
+  isSubmitting: boolean;
+}) {
+  const { t } = useT();
+  const stepsContext = useStepsContext();
+
+  const submitsRegistration =
+    stepsContext.value === steps.findLastIndex((step) => !step.is_post_step);
+  const leadsToSummary = stepsContext.value === stepsContext.count - 1;
+
+  return (
+    <form.Subscribe selector={(state) => isStepComplete(step, state.values)}>
+      {(isComplete) =>
+        submitsRegistration ? (
+          <SubmitStepButton
+            isSubmitting={isSubmitting}
+            disabled={!isComplete}
+            onSubmit={() =>
+              form.handleSubmit({ onSubmitted: stepsContext.goToNextStep })
+            }
+          >
+            {t("registrations.register")}
+          </SubmitStepButton>
+        ) : (
+          <NextStepButton
+            leadsToSummary={leadsToSummary}
+            disabled={!isComplete}
+            onNext={stepsContext.goToNextStep}
+          />
+        )
+      }
+    </form.Subscribe>
+  );
+}
 
 export default function StepPanel({
   steps,
@@ -50,219 +90,93 @@ export default function StepPanel({
 }) {
   const { t } = useT();
 
-  // Which steps there are, and in which order, is the server's business - but what this lane is
-  //   for is registering, so the competing step is the one thing it is built around.
-  const competingParameters = steps.find(
-    (step) => step.key === "competing",
-  )!.parameters;
-
   const api = useAPI();
   const queryClient = useQueryClient();
-
-  const [hasAcknowledgedRequirements, setHasAcknowledgedRequirements] =
-    useState(false);
-
-  // Kept apart from the acknowledgement itself: ticking the box would otherwise swap the panel out
-  //   from under the competitor before they ever reach the Continue button.
-  const [hasAcceptedRequirements, setHasAcceptedRequirements] = useState(false);
-
-  const [isEditing, setIsEditing] = useState(false);
-
-  const showRegistrationError = (payload: { error: number }) =>
-    toaster.create({
-      id: "registration-error",
-      type: "error",
-      description: t(`competitions.registration_v2.errors.${payload.error}`, {
-        defaultValue: t("competitions.registration_v2.errors.-4"),
-      }),
-    });
-
-  const createRegistration = api.useMutation(
-    "post",
-    "/v1/competitions/{competitionId}/registrations",
-    { onError: showRegistrationError },
-  );
-
-  // Editing a registration and withdrawing from one are the same PATCH, so they share the mutation:
-  //   what they have in common lives here, and each action adds its own outcome where it is called.
-  const patchRegistration = api.useMutation(
-    "patch",
-    "/v1/registrations/{registrationId}",
-    {
-      onError: showRegistrationError,
-      onSuccess: (data) => {
-        queryClient.setQueryData(
-          registrationQueryKey(competitionInfo.id, userId),
-          data.registration,
-        );
-        setIsEditing(false);
-      },
-    },
-  );
-
-  const updateRegistration = (
-    current: Registration,
-    { comment, guests, eventIds }: RegistrationFormValues,
-  ) =>
-    patchRegistration.mutate(
-      {
-        params: { path: { registrationId: current.id } },
-        body: {
-          guests,
-          competing: {
-            event_ids: eventIds,
-            comment,
-            // Registering again after withdrawing means moving back to `pending` for approval.
-            ...(current.competing.registration_status === "cancelled" && {
-              status: "pending",
-            }),
-          },
-        },
-      },
-      {
-        onSuccess: () =>
-          toaster.create({
-            id: "registration-updated",
-            type: "success",
-            description: t("registrations.flash.updated"),
-          }),
-      },
-    );
-
-  const cancelRegistration = (registrationId: number) =>
-    patchRegistration.mutate(
-      {
-        params: { path: { registrationId } },
-        body: { competing: { status: "cancelled" } },
-      },
-      {
-        onSuccess: () => {
-          // Signing up again starts at the requirements, not where the competitor left off.
-          setHasAcceptedRequirements(false);
-          toaster.create({
-            id: "registration-cancelled",
-            type: "success",
-            description: t(
-              "competitions.registration_v2.register.registration_status.cancelled",
-            ),
-          });
-        },
-      },
-    );
-
-  // One mutation serves both actions, so which of the two is in flight is told by what is being
-  //   sent - and each button only spins for its own action.
-  const isCancelling =
-    patchRegistration.isPending &&
-    patchRegistration.variables?.body.competing?.status === "cancelled";
-
-  // Creating a registration only puts it on a queue, and the queue - not Rails - is what knows
-  //   whether it has been worked off yet, so that is what we wait on.
-  const { data: queueStatus } = useQuery({
-    queryKey: ["registration-queue", competitionInfo.id, userId],
-    queryFn: () => pollRegistrationQueue(competitionInfo.id, userId),
-    enabled: createRegistration.isSuccess,
-    refetchInterval: (query) =>
-      query.state.data?.processing === false ? false : QUEUE_POLL_INTERVAL_MS,
-  });
-
-  const isQueueDone = queueStatus?.processing === false;
 
   const registration = useRegistration({
     competitionId: competitionInfo.id,
     userId,
     initialRegistration,
-    // Only once the queue reports it is finished do we go and collect the registration itself.
-    refetchInterval: (current) =>
-      createRegistration.isSuccess && isQueueDone && current === null
-        ? REGISTRATION_REFETCH_INTERVAL_MS
-        : false,
   });
 
-  // The create endpoint only queues a job, so the submission is not finished until the queue has
-  //   worked it off and Rails has handed us the registration it produced.
-  const isAwaitingCreation =
-    createRegistration.isSuccess && registration === null;
+  const createRegistration = api.useMutation(
+    "post",
+    "/v1/competitions/{competitionId}/registrations",
+    { onError: (payload) => showRegistrationError(t, payload) },
+  );
 
-  const submitRegistration = ({
-    comment,
-    guests,
-    eventIds,
-  }: RegistrationFormValues) => {
+  const updateRegistration = api.useMutation(
+    "patch",
+    "/v1/registrations/{registrationId}",
+    {
+      onError: (payload) => showRegistrationError(t, payload),
+      onSuccess: (data) => {
+        queryClient.setQueryData(
+          registrationQueryKey(competitionInfo.id, userId),
+          data.registration,
+        );
+        toaster.create({
+          id: "registration-updated",
+          type: "success",
+          description: t("registrations.flash.updated"),
+        });
+      },
+    },
+  );
+
+  const submitRegistration = (
+    { comment, guests, eventIds }: RegistrationFormValues,
+    onSubmitted: () => void,
+  ) => {
     if (registration === null) {
+      // Creating only puts the registration on a queue - the step is done once
+      //   `RegistrationProcessing` has seen it come out the other end.
       createRegistration.mutate({
         params: { path: { competitionId: competitionInfo.id } },
         body: {
           user_id: userId,
           guests,
+          // This still sends only the competing lane by default
           competing: { event_ids: eventIds, comment },
         },
       });
     } else {
-      updateRegistration(registration, { comment, guests, eventIds });
+      updateRegistration.mutate(
+        {
+          params: { path: { registrationId: registration.id } },
+          body: {
+            guests,
+            competing: {
+              event_ids: eventIds,
+              comment,
+              // Registering again after withdrawing means moving back to `pending` for approval.
+              ...(registration.competing.registration_status ===
+                "cancelled" && { status: "pending" }),
+            },
+          },
+        },
+        { onSuccess: onSubmitted },
+      );
     }
   };
 
   const form = useRegistrationForm({
     registration,
-    parameters: competingParameters,
+    steps,
     onSubmit: submitRegistration,
   });
 
-  // Reset on the way in rather than on the way out, so that the form the competitor opens always
-  //   starts from what is currently saved - and `isDefaultValue` means "nothing changed yet".
-  const startEditing = (editing: boolean) => {
-    if (editing) {
-      form.reset(registrationFormValues(registration, competingParameters));
-    }
+  const isSubmitting =
+    createRegistration.isPending || updateRegistration.isPending;
 
-    setIsEditing(editing);
+  const [currentStep, setCurrentStep] = useState(
+    initialStepIndex(steps, registration),
+  );
+
+  const finishCreation = (continueToNextStep: () => void) => {
+    createRegistration.reset();
+    continueToNextStep();
   };
-
-  // Withdrawing puts the competitor back at the start: signing up again means going through the
-  //   requirements and, where there is a fee, paying it - so they get the whole flow back rather
-  //   than a summary of a registration that no longer stands.
-  const hasRegistration =
-    (registration !== null &&
-      registration.competing.registration_status !== "cancelled") ||
-    isAwaitingCreation;
-
-  // Only a registration still waiting for approval has a fee to chase: organizers accepting or
-  //   waitlisting someone settles the question - their fee has been waived, or is being collected
-  //   some other way - and a withdrawn or rejected competitor owes nothing at all.
-  const isPaymentOutstanding =
-    registration !== null &&
-    registration.competing.registration_status === "pending" &&
-    !registration.payment?.has_paid;
-
-  const context: StepContext = {
-    competitionInfo,
-    registration,
-    hasRegistration,
-    hasAcknowledgedRequirements,
-    onAcknowledgedChange: setHasAcknowledgedRequirements,
-    hasAcceptedRequirements,
-    onAcceptRequirements: () => setHasAcceptedRequirements(true),
-    isPaymentOutstanding,
-    // `onClose` only where there is a summary to go back to, which is what tells the form it may
-    //   offer a way out of itself.
-    registrationForm: (onClose?: () => void) => (
-      <CompetingStep
-        competitionInfo={competitionInfo}
-        parameters={competingParameters}
-        registration={registration}
-        form={form}
-        isSubmitting={
-          createRegistration.isPending ||
-          (patchRegistration.isPending && !isCancelling) ||
-          isAwaitingCreation
-        }
-        onClose={onClose}
-      />
-    ),
-  };
-
-  const currentStep = activeStepIndex(steps, context);
 
   return (
     <VStack width="full" gap="4" align="stretch">
@@ -274,6 +188,7 @@ export default function StepPanel({
       <Steps.Root
         count={steps.length}
         step={currentStep}
+        onStepChange={(details) => setCurrentStep(details.step)}
         colorPalette="blue"
         // Four labelled steps do not fit side by side on a phone, so there they become one step per
         //   row. `flexDirection` because the vertical variant otherwise puts the strip beside the
@@ -303,41 +218,61 @@ export default function StepPanel({
           })}
         </Steps.List>
 
-        {/* Only the steps that ask something of the competitor are walked through one at a time. */}
+        {/* `Steps.Content` only hides the steps that are not current, so only the current one is
+            mounted - each step then starts out fresh when the competitor reaches it. */}
         {steps.map(
           (step, index) =>
-            isGatingStep(step) && (
+            index === currentStep && (
               <Steps.Content key={step.key} index={index}>
-                <StepContent step={step} context={context} />
+                {createRegistration.isSuccess ? (
+                  <Steps.Context>
+                    {(stepsContext) => (
+                      <RegistrationProcessing
+                        competitionId={competitionInfo.id}
+                        userId={userId}
+                        onCreated={() =>
+                          finishCreation(stepsContext.goToNextStep)
+                        }
+                      />
+                    )}
+                  </Steps.Context>
+                ) : (
+                  <Stack gap="3">
+                    <StepContent
+                      step={step}
+                      competitionInfo={competitionInfo}
+                      registration={registration}
+                      form={form}
+                    />
+                    <WizardStepButton
+                      steps={steps}
+                      step={step}
+                      form={form}
+                      isSubmitting={isSubmitting}
+                    />
+                  </Stack>
+                )}
               </Steps.Content>
             ),
         )}
 
         <Steps.CompletedContent>
-          <VStack width="full" gap="4" align="stretch">
-            {/* The steps the competitor only watches say their piece together, in the order the
-                server listed them, above the registration they are all about. */}
-            {steps
-              .filter((step) => !isGatingStep(step))
-              .map((step) => (
-                <StepContent key={step.key} step={step} context={context} />
-              ))}
-            <RegistrationOverview
+          {registration !== null && (
+            <RegistrationSummary
+              steps={steps}
               competitionInfo={competitionInfo}
               registration={registration}
-              queueCount={queueStatus?.queue_count}
-              canEdit={
-                registration !== null &&
-                canEditRegistration(competingParameters, registration)
+              userId={userId}
+              form={form}
+              isSubmitting={isSubmitting}
+              // Reset on the way in rather than on the way out, so that the form the competitor
+              //   opens always starts from what is currently saved.
+              onStartEditing={() =>
+                form.reset(registrationFormValues(registration, steps))
               }
-              isEditing={isEditing}
-              onEditingChange={startEditing}
-              isCancelling={isCancelling}
-              onCancel={cancelRegistration}
-            >
-              {context.registrationForm(() => setIsEditing(false))}
-            </RegistrationOverview>
-          </VStack>
+              onWithdrawn={() => setCurrentStep(0)}
+            />
+          )}
         </Steps.CompletedContent>
       </Steps.Root>
     </VStack>
