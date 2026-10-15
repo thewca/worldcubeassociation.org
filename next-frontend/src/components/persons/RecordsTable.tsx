@@ -49,7 +49,12 @@ export default function RecordsTable({
               <Checkbox.HiddenInput />
               <Checkbox.Control />
               <Checkbox.Label>
-                {t(`persons.show.record_types.${recordType}`)}
+                {t(
+                  // i18n-tasks-use t("persons.show.record_types.world")
+                  // i18n-tasks-use t("persons.show.record_types.continental")
+                  // i18n-tasks-use t("persons.show.record_types.national")
+                  `persons.show.record_types.${recordType}`,
+                )}
               </Checkbox.Label>
             </Checkbox.Root>
           ))}
