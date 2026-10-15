@@ -2446,6 +2446,7 @@ en:
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
+    copied_to_clipboard: "Copied to clipboard"
   payments:
     header: "Payment History"
     messages:
