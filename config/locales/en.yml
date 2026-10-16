@@ -556,6 +556,8 @@ en:
   devise:
     #context: Overridden key for sign in
     passwords:
+      #context: Shown after requesting a password reset, regardless of whether the account exists
+      send_paranoid_instructions: "A password reset link will be sent to the email address if it has a registered account with the WCA."
       edit:
         new_password_confirmation: 'Re-enter new password'
 
@@ -905,10 +907,6 @@ en:
     volunteer:
       title: "Volunteer"
       text: "Get involved! The WCA has volunteer positions open across different teams. You do not have to be a speedcuber to be a volunteer."
-    become_delegate:
-      title: "Become a Delegate"
-      text: "Help support fair and well-run competitions in your local speedcubing community by applying to become a Trainee Delegate."
-      link_title: "Apply now"
     faq:
       title: "FAQ"
       text: "Take a look at our list of Frequently Asked Questions if you need help with anything. Many questions you have might have an answer there."
@@ -1535,7 +1533,7 @@ en:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
     my_competitions:
-      title: "My competitions"
+      title: "My Competitions"
       disclaimer: "Only competitions that use the WCA registration system are shown here. If your competition isn't listed here, check the competition website's own competitor list."
       past_competitions: "Past competitions"
       bookmarked_title: "Bookmarked competitions"

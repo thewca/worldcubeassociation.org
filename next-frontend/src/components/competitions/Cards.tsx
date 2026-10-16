@@ -124,6 +124,7 @@ export function AdditionalInformationCard({
         <ChakraMarkdown
           paragraphAs={Card.Description}
           imageProps={{ maxW: { base: "full", md: "sm" } }}
+          listProps={{ textStyle: "body" }}
           textStyle="body"
         >
           {competitionInfo.information}

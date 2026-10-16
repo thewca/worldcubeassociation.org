@@ -2259,7 +2259,7 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[id name website start_date end_date
+    only: %w[id name website start_date end_date scoretaking_software
              registration_open registration_close announced_at
              cancelled_at results_posted_at competitor_limit venue],
     methods: %w[url website short_name short_display_name city

@@ -58,3 +58,6 @@ src/styles/fonts/TTNormsPro/**/*.woff2
 
 # copied by scripts/copy-maplibre-worker.mjs
 /public/maplibre
+
+# Build artifact for sanitizing the Payload CMS dump
+payload-schema-manifest.json

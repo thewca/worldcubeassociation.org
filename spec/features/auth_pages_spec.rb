@@ -49,6 +49,15 @@ RSpec.feature "Redesigned authentication pages" do
     expect(page).to have_no_css ".navbar"
   end
 
+  it "does not reveal whether an account exists when requesting a password reset" do
+    [user.email, "nobody@example.com"].each do |login|
+      visit "/users/password/new"
+      fill_in "user[login]", with: login
+      click_button "Send me reset password instructions"
+      expect(page).to have_text "A password reset link will be sent to the email address if it has a registered account with the WCA."
+    end
+  end
+
   context "when signing in with a WCA ID that has no account yet" do
     let(:person) { create(:person) }
 
