@@ -107,7 +107,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/competitions/:competitionId/results/by_person",
-        destination: "/competitions/:competitionId/results/byPerson",
+        destination: "/competitions/:competitionId/results/by-person",
         permanent: true,
       },
     ];
