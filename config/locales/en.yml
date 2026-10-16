@@ -623,6 +623,8 @@ en:
           disable_section_content: "The WST strongly advise you to not disable 2FA, but you can by clicking the button below. Please note that if you reactivate 2FA you will have to reconfigure your device(s)."
           disabled_success: "Successfully disabled two-factor authentication."
           disabled_failed: "Couldn't disable 2FA, please see errors below."
+      destroy:
+        success: "You have been signed out."
       destroy_other:
         success: "Successfully signed out of other devices."
     shared:
