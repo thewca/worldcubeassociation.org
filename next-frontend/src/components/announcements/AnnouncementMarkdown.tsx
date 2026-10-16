@@ -19,6 +19,7 @@ export default function AnnouncementMarkdown({
       textStyle="body"
       color="currentColor"
       linkProps={{ color: "currentColor", textDecoration: "underline" }}
+      marginTop={4}
     >
       {children}
     </ChakraMarkdown>
