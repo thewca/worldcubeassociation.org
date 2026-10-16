@@ -209,8 +209,7 @@ async function DelegateGrid({
           profilePicture={role.user.avatar}
           name={role.user.name}
           wcaId={role.user.wca_id}
-          // @ts-expect-error email field should be in metadata but it's actually in user
-          email={role.metadata.email || role.user.email || null}
+          email={role.user.email}
           roles={[
             {
               teamRole: t(
