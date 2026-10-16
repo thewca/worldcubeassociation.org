@@ -1907,7 +1907,7 @@ class Competition < ApplicationRecord
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
                   part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds],
-      include: ['delegates', 'organizers', { tabs: { only: %w[id name] } }],
+      include: %w[delegates organizers tabs],
     }
     self.as_json(options)
   end
