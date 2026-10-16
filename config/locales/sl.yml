@@ -229,6 +229,8 @@ sl:
     solve_time:
       unit_seconds: sekunde
       unit_moves: potez
+    back_to_top: Nazaj na vrh
+    back: Nazaj
   oauth:
     applications:
       your_apps: Vaše OAuth aplikacije
@@ -589,6 +591,8 @@ sl:
     passwords:
       edit:
         new_password_confirmation: Ponovno vnesite novo geslo
+      send_paranoid_instructions: Povezava za ponastavitev gesla bo poslana na 
+        e-poštni naslov, če je z njim pri WCA povezan registriran račun.
     sessions:
       new:
         sign_in: Vpis
@@ -687,6 +691,9 @@ sl:
           disabled_success: Dvostopenjsko preverjanje pristnosti je bilo uspešno
             onemogočeno.
           disabled_failed: '2FA ni bilo možno onemogočiti, napake so navedene spodaj.'
+        redesign_notice: Ogledujete si novo stran za prijavo, ki bo do konca 
+          leta nadomestila staro.
+        use_classic: Nazaj na staro stran za prijavo
       destroy_other:
         success: Uspešno ste bili odjavljeni iz ostalih naprav.
     shared:
@@ -703,7 +710,10 @@ sl:
     mailer:
       confirmation_instructions:
         subject: 'Prosimo, potrdite nov e-naslov.'
-    registrations: {}
+    registrations:
+      new:
+        redesign_notice: Ogledujete si novo stran za registracijo, ki bo do 
+          konca leta nadomestila staro.
   wca:
     errors:
       messages:
@@ -746,8 +756,11 @@ sl:
         dob: Dostopala do vašega datuma rojstva
         email: Dostopala do vašega e-naslova
         manage_competitions: 'Upravljala s prihajajočimi tekmovanji, ki jih organizirate'
+        manage_registrations: Prijavite se na tekmovanja ter spremenite ali 
+          prekličite svoje prijave
+        translations: Dostop do seznama jezikov, za katere ste prevajalec
     devise:
-      no_account: Ni uporabniškega računa?
+      no_account: Nimate uporabniškega računa?
       have_competed: Sem že tekmoval/a na WCA tekmovanju.
       have_never_competed: Nikoli še nisem tekmoval/a na WCA tekmovanju.
       let_us_know: 'Prosimo označite, ali ste že tekmovali na WCA tekmovanju:'
@@ -755,11 +768,10 @@ sl:
         Dobrodošli nazaj! Za ustvarjanje vašega WCA uporabniškega računa moramo
         poznati WCA ID, s katerim ste tekmovali.
       welcome_html: >-
-        Dobrodošli! Preden lahko tekmujete na svojem prvem WCA tekmovanju,
-        potrebujemo nekaj informacij za namene vodenja evidenc. Prosimo,
-        upoštevajte, da vašega datuma rojstva ne bomo delili brez vašega
-        dovoljenja.<br/><br/>Če se prijavljate v imenu nekoga drugega, prosimo,
-        navedite osebne podatke <strong>tekmovalca</strong>.
+        Dobrodošli! Preden lahko tekmujete na svojem prvem WCA tekmovanju, potrebujemo
+        nekaj informacij za namene vodenja evidenc.<br/><br/>Če se prijavljate v imenu
+        nekoga drugega, prosimo, navedite osebne podatke <strong>tekmovalca</strong>.
+      dob_privacy: Teh podatkov ne bomo nikoli razkrili brez vašega dovoljenja.
   layouts:
     navigation:
       information: Informacije
@@ -1055,6 +1067,9 @@ sl:
           label: Pošlji zahtevo
         captcha:
           validation_error: 'Prosimo, potrdite, da niste robot.'
+        verified_checkbox:
+          label: Z oddajo tega obrazca potrjujete, da ste pregledali uradni 
+            dokument in preverili navedene podatke.
       success_message: Zahteva poslana - odgovor lahko pričakujete kmalu.
       success_message_with_ticket_link_html: >-
         Prošnja oddana - odgovor boste prejeli kmalu. Za ogled statusa prošnje,
@@ -4231,3 +4246,32 @@ sl:
     stakeholder_role:
       actioner: Izvajalec
       requester: Prijavitelj
+  trainee_delegate_application:
+    title: Prijava za delegata pripravnika
+    introduction: Ta vloga je namenjena registriranim tekmovalcem, ki želijo 
+      postati delegati pripravniki. Vaša vloga bo poslana delegatom, pristojnim 
+      za regijo, ki ste jo izbrali.
+    success_title: Vloga oddana
+    success: Vaša vloga je bila uspešno poslana. Na e-poštni naslov, ki je 
+      povezan z vašim WCA računom, ste prejeli kopijo vloge.
+    eligibility:
+      title: Te vloge še ne morete oddati
+      missing_wca_id: Vaš WCA račun mora biti povezan z WCA ID-jem.
+      missing_date_of_birth: Na vašem WCA računu mora biti potrjen datum 
+        rojstva.
+      underage: Za oddajo vloge morate biti stari vsaj %{minimum_age} let.
+      claim_wca_id: Pridobi WCA ID.
+      edit_profile: Zaprosi za urejanje profila.
+    errors:
+      invalid_region: Izberite veljavno in aktivno delegatsko regijo.
+      missing_reviewer: Izbrana regija trenutno nima regionalnega delegata ali 
+        višjega delegata, ki bi lahko prejel prijavo.
+      recommender_required: Izberite vsaj enega delegata, ki lahko poda 
+        priporočilo.
+      invalid_recommender: Eden ali več izbranih delegatov ni več odgovornih za 
+        izbrano regijo.
+      spoken_delegate_required: Izberite vsaj enega delegata ali delegata 
+        začetnika, s katerim ste govorili.
+      invalid_spoken_delegate: Eden ali več izbranih delegatov, s katerimi ste 
+        govorili, v izbrani regiji ni več aktiven kot delegat ali delegat 
+        začetnik.
