@@ -209,8 +209,10 @@ class Round < ApplicationRecord
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
-  def close_round!
-    live_results.destroy_all.count
+  def close_round!(closing_user)
+    live_results.destroy_all.count.tap do
+      participation_source.unlock_results(closing_user) unless first_round?
+    end
   end
 
   def open_round!(opening_user)
@@ -682,9 +684,15 @@ class Round < ApplicationRecord
   end
 
   def lock_results(locking_user)
-    count = live_results.update_all(locked_by_id: locking_user.id)
-    self.bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
-    count
+    live_results.update_all(locked_by_id: locking_user.id).tap do
+      bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
+    end
+  end
+
+  def unlock_results(unlocking_user)
+    live_results.update_all(locked_by_id: nil).tap do
+      bulk_insert_history(live_results.ids, unlocking_user, action_type: :unlocked)
+    end
   end
 
   STATE_LOCKED = "locked"
