@@ -60,7 +60,7 @@ export default async function RootLayout({
                 <Suspense fallback={<NavbarSkeleton />}>
                   <Navbar />
                 </Suspense>
-                <NextTopLoader height={5} />
+                <NextTopLoader height={5} showForHashAnchor={false}/>
                 <Suspense fallback={<Loading />}>{children}</Suspense>
                 <Suspense fallback={<FooterSkeleton />}>
                   <Footer />
