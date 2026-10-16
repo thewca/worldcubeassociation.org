@@ -16,7 +16,8 @@ import {
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import React from "react";
-import { signIn, signOut, type Session } from "@/auth.client";
+import { signIn, signOut } from "@/auth.client";
+import type { Session } from "@/auth";
 import { MobileNavButton, MobileNavLink } from "@/components/MobileNav";
 import { LuChevronDown } from "react-icons/lu";
 import _ from "lodash";
@@ -38,16 +39,6 @@ export default function Wrapper({ session }: { session: Session | null }) {
 }
 
 function AvatarMenu({ session }: { session: Session | null }) {
-  // Better Auth's `signOut` only clears our own cookies. The Rails session would otherwise
-  // survive and sign the user straight back in on the next OIDC round trip, so we hand off
-  // to Rails, which ends its session and redirects back here.
-  const handleSignOut = () =>
-    signOut({
-      fetchOptions: {
-        onSuccess: () => window.location.assign(RAILS_SIGN_OUT_URL),
-      },
-    });
-
   if (!session) {
     return (
       <>
@@ -67,6 +58,20 @@ function AvatarMenu({ session }: { session: Session | null }) {
       </>
     );
   }
+
+  // Better Auth's `signOut` only clears our own cookies. The Rails session would otherwise
+  // survive and sign the user straight back in on the next OIDC round trip, so we hand off
+  // to Rails, which ends its session and redirects back here. The access token proves to
+  // Rails that the sign-out really comes from us.
+  const railsSignOutUrl = new URL(RAILS_SIGN_OUT_URL);
+  railsSignOutUrl.searchParams.set("access_token", session.accessToken);
+
+  const handleSignOut = () =>
+    signOut({
+      fetchOptions: {
+        onSuccess: () => window.location.assign(railsSignOutUrl),
+      },
+    });
 
   const colorPalette = _.sample(AVATAR_COLORS);
 

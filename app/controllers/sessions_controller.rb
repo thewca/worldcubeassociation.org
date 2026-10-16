@@ -72,10 +72,21 @@ class SessionsController < Devise::SessionsController
   end
 
   # Signing out of the Next frontend only drops its own cookies, so it sends the browser here
-  #   to end the Rails session too. This is a GET because it is reached by a redirect.
+  #   to end the Rails session too. This is a GET because it is reached by a redirect,
+  #   so the access token travels as the `access_token` param that Doorkeeper reads natively.
+  #   Requiring it stops third-party pages from signing users out. Expired tokens are fine,
+  #   they still prove that the request came from the user's own Next session.
   def destroy_from_next
-    sign_out(:user)
-    redirect_to EnvConfig.NEXT_FRONTEND_URL, allow_other_host: true
+    next_frontend_url = URI.parse(EnvConfig.NEXT_FRONTEND_URL)
+
+    if doorkeeper_token.present? && !doorkeeper_token.revoked?
+      sign_out(:user) if current_user&.id == doorkeeper_token.resource_owner_id
+      doorkeeper_token.revoke
+
+      next_frontend_url.query = { signed_out: true }.to_query
+    end
+
+    redirect_to next_frontend_url.to_s, allow_other_host: true
   end
 
   def destroy_other
