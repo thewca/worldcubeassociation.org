@@ -1,6 +1,7 @@
 import type { Block, GlobalConfig } from "payload";
 import { iconMap, type IconName } from "@/components/icons/iconMap";
 import { revalidateGlobal } from "@/globals/revalidateGlobal";
+import { marketingTeamAccess } from "@/payload.access";
 
 const iconOptions = Object.keys(iconMap) as IconName[];
 
@@ -28,6 +29,9 @@ const SocialLinkItem: Block = {
 
 export const SocialLinks: GlobalConfig = {
   slug: "social-links",
+  access: {
+    update: marketingTeamAccess,
+  },
   fields: [
     {
       name: "links",
