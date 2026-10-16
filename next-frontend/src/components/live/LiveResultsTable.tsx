@@ -122,6 +122,10 @@ export default function LiveResultsTable({
                 <Table.Row
                   key={rowKey}
                   onClick={(e) => {
+                    // React bubbles events from portals (the result menu, the quit dialog)
+                    //   up the component tree, so ignore clicks that didn't happen inside the row
+                    if (!e.currentTarget.contains(e.target as Node)) return;
+
                     if (isAdmin) {
                       setSelectedRow(competitorAndTheirResults);
                       setMenuClickPosition({ x: e.clientX, y: e.clientY });
