@@ -11,6 +11,8 @@ class MarkdownImage < ApplicationRecord
 
   MAX_UPLOAD_SIZE = 5.megabytes
 
-  validates :image, blob: { content_type: :web_image, size_range: 0..MAX_UPLOAD_SIZE }
-  validates :image, presence: true
+  validates :image,
+            presence: true,
+            content_type: ActiveStorage.web_image_content_types,
+            size: { less_than_or_equal_to: MAX_UPLOAD_SIZE }
 end
