@@ -44,6 +44,7 @@ import {
   Args,
 } from "@payloadcms/db-mongodb";
 import { fromContainerMetadata } from "@aws-sdk/credential-providers";
+import { withWeblateSync } from "@/lib/translate/hooks";
 import { WCA_CMS_PROVIDER_ID, WCA_ROLES_FIELD } from "@/auth.config";
 
 const filename = fileURLToPath(import.meta.url);
@@ -159,7 +160,7 @@ export const wcaConfig = {
     Documents,
     RegulationsHistoryItem,
     Tools,
-  ],
+  ].map(withWeblateSync),
   globals: [
     Nav,
     Footer,
@@ -173,7 +174,7 @@ export const wcaConfig = {
     DocumentsPage,
     FaqPage,
     LogoPage,
-  ],
+  ].map(withWeblateSync),
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

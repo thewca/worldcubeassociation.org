@@ -50,6 +50,10 @@ locals {
       value = "https://www.worldcubeassociation.org/api/"
     },
     {
+      name  = "WEBLATE_URL"
+      value = "http://weblate.internal:8080"
+    },
+    {
       name  = "PROPRIETARY_FONT"
       value = "TTNormsPro"
     },
