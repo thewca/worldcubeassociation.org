@@ -259,7 +259,6 @@ export default function RegistrationEditor({ registrationId, competitor, competi
 
       {competitionInfo['using_payment_integrations?'] && (
         <RegistrationPayments
-          competitionId={competitionInfo.id}
           registrationId={registrationId}
         />
       )}

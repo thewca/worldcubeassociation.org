@@ -5,6 +5,10 @@ class Api::V1::ApiController < ApplicationController
 
   protect_from_forgery with: :null_session
 
+  # Third-party OAuth clients have to be granted this explicitly before they may write to
+  # registrations (including issuing refunds) on a user's behalf.
+  MANAGE_REGISTRATIONS_SCOPE = 'manage_registrations'
+
   # Authentication is deny-by-default: endpoints that serve public data opt out with
   # `skip_before_action :require_user!`. Keep it this way round — an endpoint that forgets to
   # declare itself should 401, not leak.
@@ -30,6 +34,11 @@ class Api::V1::ApiController < ApplicationController
   # hand, may only do what that token was explicitly granted.
   def token_has_scope?(scope)
     doorkeeper_token.blank? || doorkeeper_token.scopes.include?(scope)
+  end
+
+  private def require_registration_scope!
+    raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+      token_has_scope?(MANAGE_REGISTRATIONS_SCOPE)
   end
 
   def require_manage!(competition)
