@@ -1,12 +1,13 @@
 type: object
+# `resolved_at` is only set once an incident is published, and the `digest_*` and `private_*`
+# fields are only serialized for users who may view Delegate matters. See
+# `Incident::DEFAULT_PUBLIC_SERIALIZE_OPTIONS`.
 required:
   - id
   - title
   - public_summary
   - created_at
   - updated_at
-  - resolved_at
-  - digest_worthy
   - url
   - tags
   - competitions
@@ -16,6 +17,8 @@ properties:
   title:
     type: string
   private_description:
+    type: string
+  private_wrc_decision:
     type: string
   public_summary:
     type: string

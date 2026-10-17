@@ -11,7 +11,8 @@ class Result < ApplicationRecord
 
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
   # we also need sure to query the correct competition as well through a composite key.
-  belongs_to :inbox_person, foreign_key: %i[person_id competition_id], optional: true, inverse_of: :results
+  belongs_to :inbox_person, foreign_key: %i[competition_id person_id], optional: true, inverse_of: :results
+  belongs_to :newcomer_registration, class_name: "Registration", foreign_key: %i[competition_id person_id], primary_key: %i[competition_id registrant_id], optional: true, inverse_of: :newcomer_results
 
   has_many :result_attempts, inverse_of: :result, dependent: :destroy, autosave: true, index_errors: true
   validates_associated :result_attempts
@@ -51,17 +52,28 @@ class Result < ApplicationRecord
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }
   scope :average_better_than, ->(time) { where("average < ? AND average > 0", time) }
   scope :in_event, ->(event_id) { where(event_id: event_id) }
+  scope :unmerged_newcomers, -> { where("person_id REGEXP '^[0-9]+$'") }
 
   alias_attribute :name, :person_name
   alias_attribute :wca_id, :person_id
 
   delegate :iso2, to: :country, prefix: true
+  delegate :short_name, :start_date, to: :competition, prefix: true
+  delegate :linked_round_id, to: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id round_id pos best best_index worst_index average],
     methods: %w[name country_iso2 competition_id event_id
                 round_type_id format_id wca_id attempts best_index
                 worst_index regional_single_record regional_average_record],
+  }.freeze
+
+  # `best_index` / `worst_index` are omitted deliberately: they are derivable from `attempts`.
+  V1_SERIALIZE_OPTIONS = {
+    only: %w[id pos global_pos best average],
+    methods: %w[wca_id name country_iso2 competition_id competition_short_name competition_start_date
+                event_id round_type_id format_id linked_round_id attempts
+                regional_single_record regional_average_record],
   }.freeze
 
   def serializable_hash(options = nil)

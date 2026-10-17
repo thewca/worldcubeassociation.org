@@ -1,10 +1,11 @@
-oneOf:
-  - $ref: './WcifQualificationAttemptResult.yaml'
-  - $ref: './WcifQualificationRanking.yaml'
-  - $ref: './WcifQualificationAnyResult.yaml'
-discriminator:
-  propertyName: type
-  mapping:
-    attemptResult: './WcifQualificationAttemptResult.yaml'
-    ranking: './WcifQualificationRanking.yaml'
-    anyResult: './WcifQualificationAnyResult.yaml'
+type: object
+properties:
+  earliestResultDate:
+    type: string
+  latestResultDate:
+    type: string
+  resultCondition:
+    $ref: './WcifResultCondition.yaml'
+required:
+  - latestResultDate
+  - resultCondition

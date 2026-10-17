@@ -10,13 +10,13 @@
     <li><b><%= t "#{i18n_prefix}.website" %>:</b> <%= link_to "#{@regional_organization.website}", @regional_organization.website %></li>
     <% if @regional_organization.logo.attached? %>
       <li><b><%= t "#{i18n_prefix}.logo" %>:</b></li>
-      <%= link_to(image_tag(@regional_organization.logo.variant(resize: "200x200")), rails_blob_url(@regional_organization.logo, disposition: "attachment")) %>
+      <%= link_to(image_tag(@regional_organization.logo.variant(resize_to_limit: [200, 200])), rails_blob_url(@regional_organization.logo, disposition: "attachment")) %>
     <% end %>
     <li><b><%= t "#{i18n_prefix}.email" %>:</b> <%= mail_to @regional_organization.email, "#{@regional_organization.email}" %></li>
     <li><b><%= t "#{i18n_prefix}.address" %>:</b> <%= @regional_organization.address %></li>
     <% if @regional_organization.bylaws.attached? && @regional_organization.bylaws.previewable? %>
       <li><b><%= t "#{i18n_prefix}.bylaws" %>:</b></li>
-      <%= link_to(image_tag(@regional_organization.bylaws.preview(resize: "200x200")), rails_blob_url(@regional_organization.bylaws, disposition: "attachment")) %>
+      <%= link_to(image_tag(@regional_organization.bylaws.preview(resize_to_limit: [200, 200])), rails_blob_url(@regional_organization.bylaws, disposition: "attachment")) %>
     <% end %>
     <li><b><%= t "#{i18n_prefix}.directors_and_officers" %>:</b> <%= @regional_organization.directors_and_officers %></li>
     <li><b><%= t "#{i18n_prefix}.area_description" %>:</b> <%= @regional_organization.area_description %></li>
@@ -27,7 +27,7 @@
     <% end %>
     <% if @regional_organization.extra_file.attached? && @regional_organization.extra_file.previewable? %>
       <li><b>Extra file:</b></li>
-      <%= link_to(image_tag(@regional_organization.extra_file.preview(resize: "200x200")), rails_blob_url(@regional_organization.extra_file, disposition: "attachment")) %>
+      <%= link_to(image_tag(@regional_organization.extra_file.preview(resize_to_limit: [200, 200])), rails_blob_url(@regional_organization.extra_file, disposition: "attachment")) %>
     <% end %>
   </ul>
 </p>

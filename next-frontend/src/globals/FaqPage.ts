@@ -1,8 +1,13 @@
 import { GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
+import { qualityTeamAccess } from "@/payload.access";
 
 export const FaqPage: GlobalConfig = {
   slug: "faq-page",
+  access: {
+    update: qualityTeamAccess,
+  },
   label: "Faq Page",
   fields: [
     {
@@ -25,4 +30,7 @@ export const FaqPage: GlobalConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };

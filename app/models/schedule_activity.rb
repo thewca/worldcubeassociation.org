@@ -194,6 +194,8 @@ class ScheduleActivity < ApplicationRecord
         "startTime" => { "type" => "string" },
         "endTime" => { "type" => "string" },
         "childActivities" => { "type" => "array", "items" => { "$ref" => "activity" } },
+        # NOTE: accepted for WCIF spec compliance, but ignored on import (see the scramble_set_id TODO above).
+        "scrambleSetId" => { "type" => %w[integer null] },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
       "required" => %w[id name activityCode startTime endTime childActivities],

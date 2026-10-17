@@ -1,0 +1,56 @@
+summary: Register the given user for a competition
+description: |
+  Registrations are created asynchronously, so a successful response only means the request was
+  queued. Poll `registrationByUser` until the registration shows up.
+tags:
+  - competitions
+  - registrations
+operationId: createRegistration
+parameters:
+  - name: competitionId
+    in: path
+    required: true
+    schema:
+      type: string
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - user_id
+          - competing
+        properties:
+          user_id:
+            type: integer
+          guests:
+            type: integer
+          competing:
+            type: object
+            required:
+              - event_ids
+            properties:
+              event_ids:
+                type: array
+                items:
+                  type: string
+              comment:
+                type: string
+responses:
+  '202':
+    description: The registration was queued for processing
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: string
+            message:
+              type: string
+  '4XX':
+    $ref: '../../errorResponses/RegistrationError.yaml'

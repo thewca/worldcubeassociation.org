@@ -13,17 +13,22 @@ export const mergeAndOrderResults = (
   resultsByRegistrationId: LiveResultsByRegistrationId,
   competitors: Map<number, components["schemas"]["LiveCompetitor"]>,
   format: Format,
+  forecastView = false,
 ): CompetitorWithResults[] => {
   const orderedResultsByRegistrationId = _.mapValues(
     resultsByRegistrationId,
-    (results) => orderResults(results, format),
+    (results) => orderResults(results, format, forecastView),
   );
 
   const bestResultsPerCompetitor = Object.values(
     orderedResultsByRegistrationId,
   ).map((results) => results[0]);
 
-  const globallyOrderedResults = orderResults(bestResultsPerCompetitor, format);
+  const globallyOrderedResults = orderResults(
+    bestResultsPerCompetitor,
+    format,
+    forecastView,
+  );
 
   return globallyOrderedResults.map((result) => {
     const competitor = competitors.get(result.registration_id)!;

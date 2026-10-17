@@ -25,6 +25,15 @@ export function decompressFullResult(
 export function decompressPartialResult(
   diff: CompressedDiffedLiveResults,
 ): DiffedLiveResult {
+  const forecast = _.omitBy(
+    {
+      best_possible_average: diff.bpa,
+      worst_possible_average: diff.wpa,
+      projected_average: diff.pra,
+    },
+    _.isUndefined,
+  );
+
   return {
     registration_id: diff.r,
     ..._.omitBy(
@@ -37,6 +46,7 @@ export function decompressPartialResult(
         single_record_tag: diff.srt,
         attempts: diff.la?.map((l) => ({ attempt_number: l.an, value: l.v })),
         last_attempt_entered_at: diff.at,
+        forecast_statistics: _.isEmpty(forecast) ? undefined : forecast,
       },
       _.isUndefined,
     ),

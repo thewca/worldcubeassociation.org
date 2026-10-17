@@ -70,6 +70,9 @@ class UsersController < ApplicationController
 
     @user.update!(user_details)
 
+    @user.newcomer_results.update_all(person_name: @user.name) if @user.saved_change_to_name?
+    @user.newcomer_results.update_all(country_id: @user.country&.id) if @user.saved_change_to_country_iso2?
+
     render status: :ok, json: @user.as_json(
       private_attributes: %w[dob],
     )
@@ -325,6 +328,8 @@ class UsersController < ApplicationController
       revoked_by_user: current_user,
       revocation_reason: reason,
     )
+
+    AvatarsMailer.notify_user_of_avatar_removal(current_user, user_avatar.user, reason).deliver_later
 
     render json: { ok: true }
   end

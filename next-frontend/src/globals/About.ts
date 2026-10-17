@@ -2,6 +2,8 @@ import { Block, GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
 import { QuoteBlock } from "@/blocks/text/quote";
 import { newTabCheckbox } from "@/blocks/utils";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
+import { marketingTeamAccess } from "@/payload.access";
 
 const callToActionBlock: Block = {
   slug: "callToAction",
@@ -66,6 +68,9 @@ const simpleItemBlock: Block = {
 
 export const AboutUsPage: GlobalConfig = {
   slug: "about-us-page",
+  access: {
+    update: marketingTeamAccess,
+  },
   label: "About Us Page",
   fields: [
     {
@@ -75,4 +80,7 @@ export const AboutUsPage: GlobalConfig = {
       blocks: [callToActionBlock, simpleItemBlock, QuoteBlock],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };

@@ -8,7 +8,6 @@ import {
   serverStatusPageUrl,
   mergeProfilesUrl,
 } from '../../lib/requests/routes.js.erb';
-import PostingCompetitionsTable from '../PostingCompetitions';
 import EditPersonPage from './pages/EditPersonPage';
 import BannedCompetitorsPage from './pages/BannedCompetitorsPage';
 import GroupsManagerAdmin from './pages/GroupsManagerAdmin';
@@ -40,11 +39,12 @@ import CheckRecordsPage from './pages/CheckRecordsPage';
 import FixResultsPage from './pages/FixResultsPage';
 import MergeUsersPage from './pages/MergeUsersPage';
 import HelpfulQueriesPage from './pages/HelpfulQueriesPage';
+import PostingDashboard from './pages/PostingDashboard';
 
 export default {
   [PANEL_PAGES.postingDashboard]: {
     name: 'Posting Dashboard',
-    component: PostingCompetitionsTable,
+    component: PostingDashboard,
   },
   [PANEL_PAGES.editPerson]: {
     name: 'Edit Person',
