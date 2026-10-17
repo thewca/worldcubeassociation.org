@@ -1506,6 +1506,11 @@ export interface components {
              * @example 2024-11-16
              */
             competition_start_date: string;
+            /**
+             * @description Whether the competition is a championship of any kind, from national up to world.
+             * @example false
+             */
+            competition_is_championship: boolean;
             /** @example 222 */
             event_id: string;
             /** @example f */

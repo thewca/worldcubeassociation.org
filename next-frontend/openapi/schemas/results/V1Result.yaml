@@ -16,6 +16,7 @@ required:
   - competition_id
   - competition_short_name
   - competition_start_date
+  - competition_is_championship
   - event_id
   - round_type_id
   - format_id
@@ -65,6 +66,10 @@ properties:
     type: string
     format: date
     example: "2024-11-16"
+  competition_is_championship:
+    type: boolean
+    description: Whether the competition is a championship of any kind, from national up to world.
+    example: false
   event_id:
     type: string
     example: "222"

@@ -5,6 +5,7 @@ import { Text } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import RecordsTable from "@/components/persons/RecordsTable";
+import Loading from "@/components/ui/loading";
 
 interface RecordsTabProps {
   wcaId: string;
@@ -23,7 +24,7 @@ const RecordsTab: React.FC<RecordsTabProps> = ({ wcaId }) => {
   );
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
 
   if (!recordsQuery) {

@@ -71,9 +71,15 @@ class Result < ApplicationRecord
   V1_SERIALIZE_OPTIONS = {
     only: %w[id pos best average],
     methods: %w[wca_id name country_iso2 competition_id competition_short_name competition_start_date
-                event_id round_type_id format_id attempts
+                competition_is_championship event_id round_type_id format_id attempts
                 regional_single_record regional_average_record],
   }.freeze
+
+  def competition_championship?
+    competition.championships.any?
+  end
+
+  alias_method :competition_is_championship, :competition_championship?
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))

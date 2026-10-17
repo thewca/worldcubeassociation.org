@@ -17,6 +17,7 @@ import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
 import { DateTime } from "luxon";
+import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 
 // The solve columns push the row past the width of a phone, so the column that says
 // whose row it is stays pinned to the left edge while the rest scrolls under it.
@@ -307,8 +308,8 @@ export function ByCompetitionTable({
   );
 
   return (
-    <Table.ScrollArea rounded="md" width="full">
-      <Table.Root>
+    <Table.ScrollArea rounded="wca" width="full">
+      <Table.Root striped>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
@@ -335,18 +336,23 @@ export function ByCompetitionTable({
                 <Table.Row key={competitorResult.id}>
                   <Table.Cell>
                     {index === 0 && (
-                      <Link asChild>
-                        <NextLink
-                          href={route({
-                            pathname: "/competitions/[competitionId]",
-                            query: {
-                              competitionId: competitorResult.competition_id,
-                            },
-                          })}
-                        >
-                          {competitorResult.competition_short_name}
-                        </NextLink>
-                      </Link>
+                      <HStack gap="1">
+                        {competitorResult.competition_is_championship && (
+                          <NationalChampionshipIcon />
+                        )}
+                        <Link asChild>
+                          <NextLink
+                            href={route({
+                              pathname: "/competitions/[competitionId]",
+                              query: {
+                                competitionId: competitorResult.competition_id,
+                              },
+                            })}
+                          >
+                            {competitorResult.competition_short_name}
+                          </NextLink>
+                        </Link>
+                      </HStack>
                     )}
                   </Table.Cell>
                   <Table.Cell>

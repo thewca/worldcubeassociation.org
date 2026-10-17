@@ -5,6 +5,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { ByCompetitionTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
+import Loading from "@/components/ui/loading";
 
 interface ResultsTabProps {
   wcaId: string;
@@ -47,7 +48,7 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
   );
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
 
   if (!resultsQuery) {
