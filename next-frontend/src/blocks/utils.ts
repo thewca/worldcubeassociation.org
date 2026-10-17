@@ -13,6 +13,9 @@ export const colorPaletteSelect: SelectField = {
     "yellow",
     { label: "white", value: "wcaWhite" },
   ],
+  admin: {
+    description: "Background and accent color of this box",
+  },
 };
 
 export const newTabCheckbox: CheckboxField = {
