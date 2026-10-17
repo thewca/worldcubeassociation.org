@@ -763,7 +763,7 @@ class Round < ApplicationRecord
   end
 
   def locked?
-    return false unless score_taking_done?
+    return false unless open?
 
     if live_results.loaded?
       live_results.count(&:locked?) == total_competitors
