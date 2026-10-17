@@ -1,8 +1,14 @@
 import type { CollectionConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
+import { canCreatePosts } from "@/payload.access";
 
 export const Announcements: CollectionConfig = {
   slug: "announcements",
+  access: {
+    create: canCreatePosts,
+    update: canCreatePosts,
+    delete: canCreatePosts,
+  },
   admin: {
     useAsTitle: "title",
   },
