@@ -213,18 +213,14 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
             <Table.ColumnHeader>
               {t("results.table_elements.name")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("common.single")}
-            </Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.single")}</Table.ColumnHeader>
             <Table.ColumnHeader>
               {t("results.table_elements.event")}
             </Table.ColumnHeader>
             <Table.ColumnHeader>
               {t("results.table_elements.name")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("common.average")}
-            </Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
             <Table.ColumnHeader colSpan={5}>
               {t("results.table_elements.solves")}
             </Table.ColumnHeader>
