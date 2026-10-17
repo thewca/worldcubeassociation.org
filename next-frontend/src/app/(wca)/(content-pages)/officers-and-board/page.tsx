@@ -1,11 +1,13 @@
 import _ from "lodash";
-import { Heading, Link, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Heading, Link, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
 import UserBadge from "@/components/UserBadge";
 import { MdMarkEmailUnread } from "react-icons/md";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { getBoardRoles, getOfficersRoles } from "@/lib/wca/roles/activeRoles";
 import { Metadata } from "next";
+import CopyButton from "@/components/CopyButton";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -65,13 +67,24 @@ export default async function OfficersAndBoard() {
           />
         ))}
       </SimpleGrid>
-      <Heading size="2xl">
-        {t("user_groups.group_types.board")}{" "}
-        <Link href={boardRoles[0].group.metadata!.email}>
-          <MdMarkEmailUnread />
-          {boardRoles[0].group.metadata!.email}
-        </Link>
-      </Heading>
+      <Stack
+        direction="row"
+        gap={5}
+        justify="start"
+      >
+        <Heading size="2xl">
+          {t("user_groups.group_types.board")}{" "}
+        </Heading>
+        <Tooltip content={t("delegates_page.copy_email")}>
+          <CopyButton
+            toastLabel={t("notifications.copied_to_clipboard")}
+            value={boardRoles[0].group.metadata!.email || ""}
+            icon={<MdMarkEmailUnread size={14}/>}
+            variant="outline"
+            size="xs"
+            />
+        </Tooltip>
+      </Stack>
       <Text>{t("page.officers_and_board.board_description")}</Text>
       <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
         {boardRoles.map((board) => (

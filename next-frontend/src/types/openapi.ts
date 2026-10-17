@@ -1549,6 +1549,8 @@ export interface components {
             country_iso2: string;
             /** @example delegate */
             delegate_status: string;
+            /** Format: email */
+            email?: string;
             teams: components["schemas"]["TeamMembership"][];
             /**
              * Format: uri
@@ -2156,8 +2158,6 @@ export interface components {
                 created_at?: string;
                 /** Format: date-time */
                 updated_at?: string;
-                /** Format: email */
-                email?: string;
                 location?: string;
             };
             class?: string;

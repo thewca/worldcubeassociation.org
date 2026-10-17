@@ -1,16 +1,22 @@
 import React from "react";
 import {
+  Button,
   Card,
   Center,
   HStack,
   Image,
   LinkBox,
   LinkOverlay,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
+import { LuMails } from "react-icons/lu";
+import CopyButton from "./CopyButton";
+import { getT } from "@/lib/i18n/get18n";
 
 interface UserBadgeData {
   name: string;
@@ -18,15 +24,19 @@ interface UserBadgeData {
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
   wcaId: string;
   action?: React.ReactNode;
+  email?: string;
 }
 
-const UserBadge: React.FC<UserBadgeData> = ({
+const UserBadge: React.FC<UserBadgeData> = async ({
   name,
   profilePicture,
   roles,
   wcaId,
   action,
+  email
 }) => {
+  const { t } = await getT();
+
   return (
     <LinkBox asChild>
       <Card.Root
@@ -57,30 +67,43 @@ const UserBadge: React.FC<UserBadgeData> = ({
             minH="avatarThumb"
           />
         )}
-        <Center>
-          <Card.Body>
+        <Center flexGrow={1}>
+          <Card.Body gap={2}>
             <Card.Title>
-              <LinkOverlay asChild>
-                <Link
-                  href={route({
-                    pathname: "/persons/[wcaId]",
-                    query: { wcaId },
-                  })}
-                >
-                  {name}
-                </Link>
-              </LinkOverlay>
+              <HStack direction="row" justify={"space-between"}>
+                <LinkOverlay asChild>
+                  <Link
+                    href={route({
+                      pathname: "/persons/[wcaId]",
+                      query: { wcaId },
+                    })}
+                    >
+                    {name}
+                  </Link>
+                </LinkOverlay>
+                {email && ( 
+                  <CopyButton
+                    variant={"subtle"}
+                    size={"xs"}
+                    text={t("delegates_page.copy_email")}
+                    value={email}
+                    icon={<LuMails />}
+                    toastLabel={t("notifications.copied_to_clipboard")}
+                  />
+                )}
+              </HStack>
             </Card.Title>
             {roles && (
               <HStack direction="row" wrap="wrap" gap="4px 8px" marginTop="4px">
                 {roles.map((role, index) => (
-                  <RoleBadge
-                    key={index}
-                    teamRole={role.teamRole}
-                    teamText={role.teamText ?? ""}
-                    colorPalette={role.staffColor}
-                    fontSize="0.7em"
-                  />
+                  <Stack key={index}>
+                    <Text color="dimgray">{role.teamText}</Text>
+                    <RoleBadge
+                      teamRole={role.teamRole}
+                      colorPalette={role.staffColor}
+                      fontSize="0.7em"
+                    />
+                  </Stack>
                 ))}
               </HStack>
             )}
