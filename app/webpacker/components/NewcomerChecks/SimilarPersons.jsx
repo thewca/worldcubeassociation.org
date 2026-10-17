@@ -22,9 +22,11 @@ export default function SimilarPersons({ similarPersons, competitionId, setUserI
     <>
       {userIds.map((userId) => (
         <SimilarPersonTable
+          key={userId}
           potentialDuplicates={duplicatesByUserId[userId]}
           editUser={setUserIdToEdit}
           mergePotentialDuplicate={setPotentialDuplicatePerson}
+          competitionId={competitionId}
         />
       ))}
       <Modal
