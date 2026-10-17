@@ -10,11 +10,13 @@ import {
   Link,
   Tabs,
   Button,
+  Text,
   VStack,
   Select,
   createListCollection,
   Portal,
   IconButton,
+  Icon,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
@@ -30,13 +32,22 @@ import {
   hasPassedEndOfDay,
 } from "@/lib/wca/dates";
 import EventIcon from "@/components/EventIcon";
+import { Tooltip } from "@/components/ui/tooltip";
 import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
-import { LuLock } from "react-icons/lu";
+import { LuInfo, LuLock } from "react-icons/lu";
 import _ from "lodash";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
 import { currentTimeZone } from "@/lib/wca/data/timezones";
+import type { LiveRoundAdmin } from "@/types/live";
+import {
+  advancementConditionToString,
+  cutoffToString,
+  parseActivityCode,
+  timeLimitToString,
+  type WcifEvent,
+} from "@/lib/wca/wcif/rounds";
 
 interface LiveViewProps {
   timeZones: string[];
@@ -101,6 +112,17 @@ function LiveSchedule({
     lastDate;
 
   const roundsByWcifId = _.keyBy(rounds, "id");
+
+  const wcifEvents: WcifEvent[] = _.map(
+    _.groupBy(
+      rounds,
+      (round: LiveRoundAdmin) => parseActivityCode(round.id).eventId,
+    ),
+    (eventRounds: LiveRoundAdmin[], eventId: string) => ({
+      id: eventId,
+      rounds: eventRounds,
+    }),
+  );
 
   return (
     <VStack align="left">
@@ -177,6 +199,9 @@ function LiveSchedule({
                   const roundState = roundsByWcifId[roundId].state;
                   const isOpen = ["open", "locked"].includes(roundState);
 
+                  const { cutoff, timeLimit, advancementCondition, format } =
+                    roundsByWcifId[roundId];
+
                   return (
                     <Card.Root key={activity.id} rounded="md">
                       <Card.Body asChild alignItems="baseline">
@@ -208,8 +233,51 @@ function LiveSchedule({
                         </Button>
                       </Card.Body>
                       <Card.Footer>
-                        {getSimpleTimeString(activity.startTime, timeZone)} -{" "}
-                        {getSimpleTimeString(activity.endTime, timeZone)}
+                        <HStack
+                          width="full"
+                          align="center"
+                          justifyContent="space-between"
+                        >
+                          <Text>
+                            {getSimpleTimeString(activity.startTime, timeZone)}{" "}
+                            - {getSimpleTimeString(activity.endTime, timeZone)}
+                          </Text>
+                          <Tooltip
+                            showArrow
+                            content={
+                              <VStack align="start" gap={0.5}>
+                                <Text textStyle="sm">
+                                  {t("competitions.events.time_limit")}:{" "}
+                                  {timeLimitToString(
+                                    t,
+                                    timeLimit,
+                                    eventId,
+                                    wcifEvents,
+                                  )}
+                                </Text>
+                                {cutoff && (
+                                  <Text textStyle="sm">
+                                    {t("competitions.events.cutoff")}:{" "}
+                                    {cutoffToString(t, cutoff, eventId)}
+                                  </Text>
+                                )}
+                                {advancementCondition && (
+                                  <Text textStyle="sm">
+                                    {t("competitions.events.proceed")}:{" "}
+                                    {advancementConditionToString(
+                                      t,
+                                      advancementCondition,
+                                      eventId,
+                                      format,
+                                    )}
+                                  </Text>
+                                )}
+                              </VStack>
+                            }
+                          >
+                            <Icon as={LuInfo} color="fg.muted" boxSize="5" />
+                          </Tooltip>
+                        </HStack>
                       </Card.Footer>
                     </Card.Root>
                   );
