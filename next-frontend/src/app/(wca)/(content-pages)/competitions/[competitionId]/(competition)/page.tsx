@@ -14,6 +14,7 @@ import OrganizationTeamCard from "@/components/competitions/OrganizerCard";
 import OpenapiError from "@/components/ui/openapiError";
 import { getSession } from "@/auth";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
+import LegacyHashRedirect from "./LegacyHashRedirect";
 
 export default async function CompetitionOverView({
   params,
@@ -21,8 +22,6 @@ export default async function CompetitionOverView({
   params: Promise<{ competitionId: string }>;
 }) {
   const { competitionId } = await params;
-  // TODO: parse the hash and then redirect
-  // redirect(`/competitions/${competitionId}/general`);
 
   return <GeneralPage competitionId={competitionId} />;
 }
@@ -53,6 +52,10 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
     // Two columns only from `lg`: at `md` the tab sidebar appears and takes 3xs of the
     //   row, which leaves each of two columns narrower than the cards in them.
     <SimpleGrid gap="8" columns={{ base: 1, lg: 2 }}>
+      <LegacyHashRedirect
+        competitionId={competitionId}
+        tabs={competitionInfo.tabs}
+      />
       <VStack gap="8" alignItems="stretch">
         <InfoCard
           competitionInfo={competitionInfo}

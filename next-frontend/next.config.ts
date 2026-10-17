@@ -98,6 +98,20 @@ const nextConfig: NextConfig = {
     "**": newrelicDeps.map((dep) => `./node_modules/${dep}/**/*`),
   },
   productionBrowserSourceMaps: true,
+  async redirects() {
+    return [
+      {
+        source: "/competitions/:competitionId/registrations",
+        destination: "/competitions/:competitionId/competitors",
+        permanent: true,
+      },
+      {
+        source: "/competitions/:competitionId/results/by_person",
+        destination: "/competitions/:competitionId/results/by-person",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

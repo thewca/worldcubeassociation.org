@@ -35,6 +35,8 @@ export default async function CompetitionMenu({
 
   const tabs = isOngoing ? [...baseTabs, competitionLiveTab] : baseTabs;
 
+  const customTabNames = competitionInfo.tabs.map((tab) => tab.name);
+
   const liveResultsHref =
     competitionLiveTab.externalHref ?? competitionLiveTab.href;
 
@@ -42,7 +44,7 @@ export default async function CompetitionMenu({
     <TabMenu
       competitionInfo={competitionInfo}
       tabs={tabs}
-      customTabs={competitionInfo.tab_names}
+      customTabs={customTabNames}
     >
       {isAwaitingResults && (
         <Alert.Root status="info" marginBottom="4">

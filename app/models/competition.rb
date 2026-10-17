@@ -1825,10 +1825,6 @@ class Competition < ApplicationRecord
     }
   end
 
-  def tab_names
-    tabs.pluck(:name)
-  end
-
   def available_registration_lanes(current_user)
     # There is currently only one lane, so this always returns the competitor lane
     steps = []
@@ -1910,8 +1906,8 @@ class Competition < ApplicationRecord
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds tab_names],
-      include: %w[delegates organizers],
+                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds],
+      include: %w[delegates organizers tabs],
     }
     self.as_json(options)
   end

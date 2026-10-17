@@ -88,7 +88,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def tabs
     competition = competition_from_params
-    render json: competition.tabs
+    render json: competition.tabs, only: %w[id competition_id name content display_order]
   end
 
   def podiums
