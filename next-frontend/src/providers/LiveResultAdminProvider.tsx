@@ -115,7 +115,10 @@ export function LiveResultAdminProvider({
   // out of the batch. `competitors` is kept up to date by the websocket
   // subscription, so this also covers quits from other devices.
   const batch = useMemo(
-    () => storedBatch.filter((e) => competitors.has(e.registration_id)),
+    () =>
+      storedBatch.filter(
+        (e) => competitors.has(e.registration_id) && e.attempts.length > 0,
+      ),
     [storedBatch, competitors],
   );
 
