@@ -214,11 +214,13 @@ export async function RegistrationCard({
               ) : (
                 <>
                   <FormatNumber
-                    value={competitionInfo.competitor_limit - spotsLeft}
+                    value={
+                      competitionInfo.competitor_limit - Math.max(spotsLeft, 0)
+                    }
                   />
                   {!registrationClosed && (
                     <>
-                      &sol;
+                      /
                       <FormatNumber value={competitionInfo.competitor_limit} />
                     </>
                   )}
