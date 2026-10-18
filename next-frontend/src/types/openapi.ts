@@ -3259,7 +3259,9 @@ export interface operations {
     competitionList: {
         parameters: {
             query?: {
+                /** @description Page number to retrieve */
                 page?: number;
+                /** @description Number of results per page */
                 per_page?: number;
                 include_cancelled?: boolean;
                 continent?: string;
