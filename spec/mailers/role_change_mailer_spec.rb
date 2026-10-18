@@ -62,6 +62,26 @@ RSpec.describe RoleChangeMailer do
     end
   end
 
+  describe 'notify_role_change for delegate regions' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:status_change) { UserRole::UserRoleChange.new(changed_parameter: 'Status', previous_value: 'Trainee Delegate', new_value: 'Junior Delegate') }
+    let(:location_change) { UserRole::UserRoleChange.new(changed_parameter: 'Location', previous_value: 'Old City', new_value: 'New City') }
+
+    it 'includes the email when a trainee is promoted' do
+      role = create(:trainee_delegate_role)
+      mail = described_class.notify_role_change(role, user_who_made_the_change, [status_change].to_json)
+
+      expect(CGI.unescapeHTML(mail.body.encoded)).to match "Email: #{role.user.email}"
+    end
+
+    it 'does not include the email when a trainee changes location only' do
+      role = create(:trainee_delegate_role)
+      mail = described_class.notify_role_change(role, user_who_made_the_change, [location_change].to_json)
+
+      expect(CGI.unescapeHTML(mail.body.encoded)).not_to match "Email: #{role.user.email}"
+    end
+  end
+
   describe 'notify_role_end' do
     let(:translator) { create(:regional_delegate_role) }
     let(:user_who_made_the_change) { create(:user, name: 'Sherlock Holmes') }

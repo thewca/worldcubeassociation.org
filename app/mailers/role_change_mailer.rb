@@ -9,7 +9,7 @@ class RoleChangeMailer < ApplicationMailer
     )
   end
 
-  private def role_metadata(role)
+  private def role_metadata(role, action, changes = [])
     metadata = {}
     group = role.group
 
@@ -20,6 +20,12 @@ class RoleChangeMailer < ApplicationMailer
       metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
       metadata[:location] = role.metadata.location
       metadata[:delegated_competitions_count] = role.metadata.total_delegated
+      case action
+      when :start
+        metadata[:wca_id] = role.user.wca_id if role.metadata.trainee_delegate?
+      when :change
+        metadata[:email] = role.user.email if role.metadata.promoted_from_trainee?(changes)
+      end
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]
@@ -33,8 +39,7 @@ class RoleChangeMailer < ApplicationMailer
     @role = role
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[@role.group.group_type.to_sym]
-    @metadata = role_metadata(role)
-    @metadata[:wca_id] = role.user.wca_id if role.group.group_type == UserGroup.group_types[:delegate_regions] && role.metadata.trainee_delegate? && role.user.wca_id.present?
+    @metadata = role_metadata(role, :start)
     @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
@@ -154,13 +159,8 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @changes = JSON.parse changes
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
-    @metadata = role_metadata(role)
+    @metadata = role_metadata(role, :change, @changes)
     @today_date = Date.today
-    if role.group_type == UserGroup.group_types[:delegate_regions]
-      trainee_promoted = role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] &&
-                         @changes.any? { |change| change['changed_parameter'] == 'Status' }
-      @metadata[:email] = role.user.email if trainee_promoted && role.user.email.present?
-    end
     @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
@@ -243,7 +243,7 @@ class RoleChangeMailer < ApplicationMailer
     @role = role
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
-    @metadata = role_metadata(role)
+    @metadata = role_metadata(role, :end)
     @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
