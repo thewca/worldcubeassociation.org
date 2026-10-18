@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Spinner, Text } from "@chakra-ui/react";
+import { Alert, Spinner } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useEffectEvent } from "react";
 import { useT } from "@/lib/i18n/useI18n";
@@ -57,15 +57,17 @@ export default function RegistrationProcessing({
   }, [registration]);
 
   return (
-    <HStack>
-      <Spinner />
-      <Text>
+    <Alert.Root>
+      <Alert.Indicator>
+        <Spinner />
+      </Alert.Indicator>
+      <Alert.Title>
         {queueStatus?.queue_count === undefined
           ? t("competitions.registration_v2.register.processing")
           : t("competitions.registration_v2.register.processing_queue", {
               queueCount: queueStatus.queue_count,
             })}
-      </Text>
-    </HStack>
+      </Alert.Title>
+    </Alert.Root>
   );
 }
