@@ -8,7 +8,7 @@ import Errored from '../../../Requests/Errored';
 import useInputState from '../../../../lib/hooks/useInputState';
 
 export default function CreateModal({
-  open, onClose, title, groupId, status, location,
+  open, onClose, title, groupId, status,
 }) {
   const {
     mutate: createUserRoleMutation,
@@ -66,7 +66,6 @@ export default function CreateModal({
                 userId,
                 groupId,
                 status,
-                location,
               });
             }}
           >

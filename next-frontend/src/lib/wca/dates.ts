@@ -60,6 +60,13 @@ export function hasPassed(dateTime: string, timeZone?: string | Zone) {
   return DateTime.fromISO(dateTime, { zone: timeZone }) < DateTime.now();
 }
 
+// for date-only strings, which would otherwise parse as midnight
+export function hasPassedEndOfDay(date: string, timeZone?: string | Zone) {
+  return (
+    DateTime.fromISO(date, { zone: timeZone }).endOf("day") < DateTime.now()
+  );
+}
+
 export function hasNotPassed(dateTime: string, timeZone?: string | Zone) {
   return DateTime.now() < DateTime.fromISO(dateTime, { zone: timeZone });
 }

@@ -62,7 +62,67 @@ RSpec.describe RoleChangeMailer do
     end
   end
 
+  describe 'notify_role_start for delegate regions' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:role) { create(:delegate_role) }
+    let(:mail) { described_class.notify_role_start(role, user_who_made_the_change) }
+
+    it 'renders the headers' do
+      expect(mail.to).to contain_exactly(
+        user_who_made_the_change.email,
+        GroupsMetadataBoard.email,
+        UserGroup.teams_committees_group_weat.metadata.email,
+        UserGroup.teams_committees_group_wic.metadata.email,
+        UserGroup.teams_committees_group_wqac.metadata.email,
+        UserGroup.teams_committees_group_wrt.metadata.email,
+      )
+    end
+  end
+
   describe 'notify_role_change for delegate regions' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:role) { create(:delegate_role) }
+    let(:changes) { [UserRole::UserRoleChange.new(changed_parameter: 'Delegate Region', previous_value: 'Africa', new_value: 'Asia')] }
+    let(:mail) { described_class.notify_role_change(role, user_who_made_the_change, changes.to_json) }
+
+    it 'renders the headers' do
+      expect(mail.to).to contain_exactly(
+        user_who_made_the_change.email,
+        GroupsMetadataBoard.email,
+        UserGroup.teams_committees_group_weat.metadata.email,
+        UserGroup.teams_committees_group_wqac.metadata.email,
+        UserGroup.teams_committees_group_wrt.metadata.email,
+      )
+    end
+  end
+
+  describe 'notify_role_end for teams and committees' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:team_leader) { create(:wrt_leader_role) }
+    let(:role) { create(:wrt_member_role, group: team_leader.group, end_date: Date.today) }
+    let(:mail) { described_class.notify_role_end(role, user_who_made_the_change) }
+
+    it 'renders the headers' do
+      expect(mail.to).to contain_exactly(
+        user_who_made_the_change.email,
+        GroupsMetadataBoard.email,
+        UserGroup.teams_committees_group_weat.metadata.email,
+        UserGroup.teams_committees_group_wrt.metadata.email,
+        UserGroup.teams_committees_group_wqac.metadata.email,
+        team_leader.user.email,
+      )
+      expect(mail.reply_to).to contain_exactly(user_who_made_the_change.email)
+      expect(mail.subject).to eq "Role removed for #{role.user.name} in Teams & Committees"
+    end
+
+    it 'renders the Moodle suspension instruction for WQAC' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).to include(
+        "#{UserGroup.teams_committees_group_wqac.name}: Please suspend the member's Moodle account if necessary.",
+      )
+    end
+  end
+
+  describe 'notify_role_change for trainee promotion' do
     let(:user_who_made_the_change) { create(:user) }
     let(:status_change) { UserRole::UserRoleChange.new(changed_parameter: 'Status', previous_value: 'Trainee Delegate', new_value: 'Junior Delegate') }
     let(:location_change) { UserRole::UserRoleChange.new(changed_parameter: 'Location', previous_value: 'Old City', new_value: 'New City') }
@@ -89,7 +149,7 @@ RSpec.describe RoleChangeMailer do
 
     it 'renders the headers' do
       expect(mail.to).to contain_exactly(user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, UserGroup.teams_committees_group_wfc.metadata.email,
-                                         UserGroup.teams_committees_group_wrt.metadata.email)
+                                         UserGroup.teams_committees_group_wqac.metadata.email, UserGroup.teams_committees_group_wrt.metadata.email)
       expect(mail.reply_to).to contain_exactly(user_who_made_the_change.email)
       expect(mail.subject).to eq "Role removed for #{translator.user.name} in Delegate Regions"
     end

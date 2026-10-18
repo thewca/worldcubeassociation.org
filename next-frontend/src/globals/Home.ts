@@ -3,6 +3,7 @@ import { colorPaletteSelect } from "@/blocks/utils";
 import { TextCardBlock } from "@/blocks/text/textCard";
 import { BannerImageBlock } from "@/blocks/image/bannerImage";
 import { ImageCardBlock } from "@/blocks/image/imageCard";
+import { marketingTeamAccess } from "@/payload.access";
 
 const FeaturedCompetitions: Block = {
   slug: "FeaturedComps", // intentionally short to avoid Payload internally assigning a long table name
@@ -153,6 +154,9 @@ const createTwoBlocks = (depth: number = 1): Block => {
 
 export const Home: GlobalConfig = {
   slug: "home",
+  access: {
+    update: marketingTeamAccess,
+  },
   fields: [
     {
       name: "layout",

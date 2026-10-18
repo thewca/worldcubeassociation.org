@@ -1,0 +1,108 @@
+import React, { useCallback } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+} from 'semantic-ui-react';
+import I18n from '../lib/i18n';
+import { events, formats } from '../lib/wca-data.js.erb';
+import {
+  roundAdvancementToString,
+  cutoffToString,
+  eventQualificationToString,
+  getRoundTypeId,
+  timeLimitToString,
+} from '../lib/utils/wcif';
+
+export default function EventsTable({ competitionInfo, wcifEvents }) {
+  const determineH2hfinal = useCallback((roundTypeId, roundId) => (competitionInfo.h2h_rounds.includes(roundId) && roundTypeId === 'f'), [competitionInfo.h2h_rounds]);
+
+  return (
+    <div style={{ overflowX: 'scroll' }}>
+      <Table striped selectable compact unstackable singleLine>
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell>
+              {I18n.t('competitions.results_table.event')}
+            </TableHeaderCell>
+            <TableHeaderCell>
+              {I18n.t('competitions.results_table.round')}
+            </TableHeaderCell>
+            <TableHeaderCell>
+              <a href="#format">{I18n.t('competitions.events.format')}</a>
+            </TableHeaderCell>
+            <TableHeaderCell>
+              <a href="#time-limit">{I18n.t('competitions.events.time_limit')}</a>
+            </TableHeaderCell>
+            {competitionInfo['uses_cutoff?'] && (
+              <TableHeaderCell>
+                <a href="#cutoff">{I18n.t('competitions.events.cutoff')}</a>
+              </TableHeaderCell>
+            )}
+            <TableHeaderCell>
+              {I18n.t('competitions.events.proceed')}
+            </TableHeaderCell>
+            {competitionInfo['uses_qualification?'] && (
+              <TableHeaderCell>
+                {I18n.t('competitions.events.qualification')}
+              </TableHeaderCell>
+            )}
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {wcifEvents.map((event) => event.rounds.map((round, i) => {
+            const roundTypeId = getRoundTypeId(i + 1, event.rounds.length, Boolean(round.cutoff));
+            const isH2hFinal = determineH2hfinal(roundTypeId, round.id);
+
+            return (
+              <TableRow key={round.id}>
+                {i === 0 && (
+                  <TableCell rowSpan={event.rounds.length}>
+                    {events.byId[event.id].name}
+                  </TableCell>
+                )}
+                <TableCell>{I18n.t(`rounds.${roundTypeId}.cell_name`)}</TableCell>
+                <TableCell>
+                  {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
+                  {isH2hFinal ? I18n.t('formats.short.h') : formats.byId[round.format].shortName}
+                </TableCell>
+                <TableCell>
+                  {timeLimitToString(round, wcifEvents)}
+                  {round.timeLimit !== null && (
+                    <>
+                      {round.timeLimit.cumulativeRoundIds.length === 1 && (
+                        <a href="#cumulative-time-limit">*</a>
+                      )}
+                      {round.timeLimit.cumulativeRoundIds.length > 1 && (
+                        <a href="#cumulative-across-rounds-time-limit">**</a>
+                      )}
+                    </>
+                  )}
+                </TableCell>
+                {competitionInfo['uses_cutoff?'] && (
+                  <TableCell>
+                    {round.cutoff
+                      && cutoffToString(round, { isV2: true })}
+                  </TableCell>
+                )}
+                <TableCell>
+                  {roundAdvancementToString(round, wcifEvents)}
+                </TableCell>
+                {competitionInfo['uses_qualification?'] && (
+                  <TableCell>
+                    { i === 0
+                    && eventQualificationToString(event, event.qualification, { isV2: true })}
+                  </TableCell>
+                )}
+              </TableRow>
+            );
+          }))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}

@@ -147,6 +147,10 @@ class CompetitionsController < ApplicationController
         # Used by TimeLimit, but this is a weird includes...
         competition: { rounds: [:competition_event] },
       },
+      # Eager load delegates/organizers + their roles/avatars, otherwise serializing
+      # them (sidebar + EventsTable) fires ~10 queries per user. See INFO_SERIALIZATION_INCLUDES.
+      delegates: User::SERIALIZATION_INCLUDES,
+      organizers: User::SERIALIZATION_INCLUDES,
     }
     @competition = competition_from_params(includes: associations)
     respond_to do |format|
@@ -470,14 +474,14 @@ class CompetitionsController < ApplicationController
   def bookmark
     @competition = competition_from_params
     BookmarkedCompetition.find_or_create_by(competition: @competition, user: current_user)
-    Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
+    current_user.clear_bookmarked_competitions_cache
     head :ok
   end
 
   def unbookmark
     @competition = competition_from_params
     BookmarkedCompetition.where(competition: @competition, user: current_user).destroy_all
-    Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
+    current_user.clear_bookmarked_competitions_cache
     head :ok
   end
 

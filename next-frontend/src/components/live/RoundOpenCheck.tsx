@@ -1,16 +1,17 @@
-import { LiveRoundState } from "@/types/live";
-import { TFunction } from "i18next";
+"use client";
+
 import ClosedRoundError from "@/components/live/ClosedRoundError";
+import { useRoundInfo } from "@/providers/RoundInfoProvider";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function RoundOpenCheck({
-  state,
-  t,
   children,
 }: {
-  state: LiveRoundState;
-  t: TFunction;
   children: React.ReactNode;
 }) {
+  const { state } = useRoundInfo();
+  const { t } = useT();
+
   const roundClosed = ["pending", "ready"].includes(state);
 
   if (roundClosed) {

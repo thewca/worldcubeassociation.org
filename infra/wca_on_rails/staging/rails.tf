@@ -1,5 +1,6 @@
 resource "aws_cloudwatch_log_group" "this" {
-  name = var.name_prefix
+  name              = var.name_prefix
+  retention_in_days = 30
 }
 
 locals {
@@ -10,6 +11,13 @@ locals {
     },
     {
       name  = "ROOT_URL"
+      value = var.ROOT_URL
+    },
+    {
+      # Staging has no Next host of its own: the ALB only forwards a handful of
+      # paths there (see rails_forward_next_staging), and neither /persons nor
+      # /delegates is one of them, so these links stay on staging's own Rails.
+      name  = "NEXT_FRONTEND_URL"
       value = var.ROOT_URL
     },
     {
@@ -317,14 +325,14 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = aws_iam_role.task_role.arn
 
   cpu = "1024"
-  memory = "3900"
+  memory = "3850"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1024
-      memory = 3900
+      memory = 3850
 
       portMappings = [
         {

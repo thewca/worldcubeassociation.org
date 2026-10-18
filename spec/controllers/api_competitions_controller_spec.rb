@@ -406,5 +406,55 @@ RSpec.describe Api::V0::CompetitionsController do
         expect(parsed_body['series']['competitionIds']).to eq ['TestComp2014']
       end
     end
+
+    context 'schema checks' do
+      let(:wcif_version) { '2.1.1' }
+      let(:competition_wcif) { competition.to_wcif(version: wcif_version) }
+
+      context 'legacy v1' do
+        let(:wcif_version) { '1.1' }
+
+        it 'validates a compliant schema' do
+          put :check_wcif, params: competition_wcif, as: :json
+          expect(response).to have_http_status :ok
+        end
+      end
+
+      it 'validates a compliant schema' do
+        put :check_wcif, params: competition_wcif, as: :json
+        expect(response).to have_http_status :ok
+      end
+
+      it 'complains about missing keys' do
+        put :check_wcif, params: competition_wcif.except("formatVersion"), as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body).to contain_exactly("The property '#/' did not contain a required property of 'formatVersion' in schema WCIFv#{Competition::WCIF_STABLE_VERSION}")
+      end
+
+      it 'complains about extraneous keys' do
+        extraneous_wcif = { **competition_wcif, "extraProperty" => "yippie" }
+
+        put :check_wcif, params: extraneous_wcif, as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body).to contain_exactly("The property '#/' contained undefined properties: 'extraProperty' in schema WCIFv2.1.1")
+      end
+
+      it 'complains about values in the wrong format' do
+        wrong_format_wcif = { **competition_wcif, "id" => 123 }
+
+        put :check_wcif, params: wrong_format_wcif, as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body).to contain_exactly("The property '#/id' of type integer did not match the following type: string in schema WCIFv2.1.1")
+      end
+
+      it 'reports multiple errors at once' do
+        put :check_wcif, params: { id: 123 }, as: :json
+        expect(response).to have_http_status :bad_request
+        expect(response.parsed_body).to contain_exactly(
+          "The property '#/id' of type integer did not match the following type: string in schema WCIFv#{Competition::WCIF_STABLE_VERSION}",
+          "The property '#/' did not contain a required property of 'formatVersion' in schema WCIFv#{Competition::WCIF_STABLE_VERSION}",
+        )
+      end
+    end
   end
 end

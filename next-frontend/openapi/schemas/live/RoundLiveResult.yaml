@@ -14,8 +14,11 @@ allOf:
         type: integer
       forecast_statistics:
         type: object
+        nullable: true
         properties:
           best_possible_average:
             type: integer
           worst_possible_average:
+            type: integer
+          projected_average:
             type: integer

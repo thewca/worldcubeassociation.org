@@ -93,7 +93,8 @@ namespace :h2h_results do
             person: lr.registration.person,
             person_name: lr.registration.name,
             country_id: lr.registration.country.id,
-            pos: lr.global_pos,
+            pos: lr.local_pos,
+            global_pos: lr.global_pos,
           )
 
           result_attempts = lr.live_attempts.map { ResultAttempt.new(attempt_number: it.attempt_number, value: it.value) }

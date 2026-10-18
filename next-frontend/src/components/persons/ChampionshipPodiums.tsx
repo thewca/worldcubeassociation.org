@@ -14,24 +14,26 @@ const ChampionshipPodiumsTab: React.FC<{
   return (
     <>
       <Heading>Championship Podiums</Heading>
-      <Table.Root>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeader>Event</Table.ColumnHeader>
-            <Table.ColumnHeader>Place</Table.ColumnHeader>
-            <Table.ColumnHeader>Competition</Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {podiums.map((podium, index) => (
-            <Table.Row key={index}>
-              <Table.Cell>{podium.event}</Table.Cell>
-              <Table.Cell>{podium.place}</Table.Cell>
-              <Table.Cell>{podium.competition}</Table.Cell>
+      <Table.ScrollArea>
+        <Table.Root>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader>Event</Table.ColumnHeader>
+              <Table.ColumnHeader>Place</Table.ColumnHeader>
+              <Table.ColumnHeader>Competition</Table.ColumnHeader>
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+          </Table.Header>
+          <Table.Body>
+            {podiums.map((podium, index) => (
+              <Table.Row key={index}>
+                <Table.Cell>{podium.event}</Table.Cell>
+                <Table.Cell>{podium.place}</Table.Cell>
+                <Table.Cell>{podium.competition}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
+      </Table.ScrollArea>
     </>
   );
 };

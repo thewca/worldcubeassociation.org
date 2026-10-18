@@ -23,6 +23,10 @@ class LinkedRound < ApplicationRecord
   validates :round_cutoffs, length: { maximum: 1, message: "all rounds must have the same cutoff" }
   validates :round_time_limits, length: { maximum: 1, message: "all rounds must have the same time limit" }
 
+  # All linked rounds draw their competitors from the same place. Presence of a
+  #   participation source is enforced per-round on Round; here we ensure they match.
+  validates :participation_sources, length: { maximum: 1, message: "all rounds must have the same participation source" }
+
   after_touch :reset_round_information
   def reset_round_information
     self.rounds.reset
@@ -39,6 +43,10 @@ class LinkedRound < ApplicationRecord
 
   def round_time_limits
     rounds.filter_map(&:time_limit).uniq(&:to_wcif)
+  end
+
+  def participation_sources
+    rounds.filter_map(&:participation_source).uniq { |source| [source.class.polymorphic_name, source.id] }
   end
 
   delegate :number, to: :first_round_in_link, prefix: :first_round, allow_nil: true
@@ -67,6 +75,24 @@ class LinkedRound < ApplicationRecord
     rounds.all?(&:score_taking_done?)
   end
 
+  # When new Regulations regarding combined dual round competitor count are launched a Dual Round sits at the position of its last round
+  # TODO: Keeping this so it can be used then
+  def total_competitors
+    live_results.distinct.count(:registration_id)
+  end
+
+  delegate :number, to: :last_round_in_link
+
+  # If you want to know the previous participation source before a linked round,
+  # you have to ask the first of the linked rounds for its predecessor
+  delegate :participation_source, to: :first_round_in_link
+
+  # For 9m purposes every round in the link counts on its own,
+  #   so one sparsely attended round cannot hide behind the combined competitor count.
+  def previous_rounds
+    [*rounds, *participation_source.previous_rounds]
+  end
+
   def live_podium
     merged_live_results.filter { it.advancing? && it.global_pos.in?(LiveResult::PODIUM_RANGE) }
   end
@@ -85,6 +111,10 @@ class LinkedRound < ApplicationRecord
 
   def lock_results(locking_user)
     rounds.sum { it.lock_results(locking_user) }
+  end
+
+  def unlock_results(unlocking_user)
+    rounds.sum { it.unlock_results(unlocking_user) }
   end
 
   delegate :final_round?, to: :last_round_in_link

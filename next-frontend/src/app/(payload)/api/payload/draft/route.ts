@@ -5,9 +5,11 @@ import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import configPromise from '@payload-config'
-import { NextRequest } from "next/server";
+import { NextRequest, connection } from "next/server";
 
 export async function GET(req: NextRequest): Promise<Response> {
+  await connection()
+
   const payload = await getPayload({ config: configPromise })
 
   const { searchParams } = new URL(req.url)

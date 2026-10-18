@@ -68,7 +68,9 @@ export default function OrganizationTeamCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   return (
-    <Card.Root minW="xs">
+    // No width floor: from `md` the page puts this card in one of two columns *beside*
+    //   the tab sidebar, which leaves each column narrower than the floor used to be.
+    <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">Organization Team</Card.Title>
         <Stat.Root variant="competition">

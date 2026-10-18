@@ -87,6 +87,7 @@ module ApplicationHelper
 
   def wca_table(responsive: true, hover: true, striped: true, float_thead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
+    add_to_js_assets("tables") if float_thead || data[:toggle].to_s == "table"
     table_classes = "table table-condensed #{table_class}"
     table_classes += " floatThead" if float_thead
     table_classes += " table-hover" if hover
@@ -177,11 +178,11 @@ module ApplicationHelper
     [hours.positive? ? "#{hours}h " : '', minutes.positive? ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
   end
 
-  def wca_id_link(wca_id, **options)
+  def wca_id_link(wca_id, url: nil, **options)
     return if wca_id.blank?
 
     content_tag :span, class: "wca-id" do
-      link_to wca_id, person_url(wca_id), options
+      link_to wca_id, url || person_url(wca_id), options
     end
   end
 

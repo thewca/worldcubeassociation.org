@@ -3,6 +3,8 @@ import _ from "lodash";
 import { TFunction } from "i18next";
 import { LiveRoundAdminBase } from "@/types/live";
 import events from "@/lib/wca/data/events";
+import { useAllRoundsInfo, useRoundInfo } from "@/providers/RoundInfoProvider";
+import { useT } from "@/lib/i18n/useI18n";
 
 export function getRoundName(
   roundWcifId: string,
@@ -29,4 +31,12 @@ export function getRoundName(
   const eventOrEmpty = withEvent ? [events.byId[eventId].name] : [];
 
   return [...eventOrEmpty, roundName].join(" - ");
+}
+
+export function useRoundName() {
+  const { rounds } = useAllRoundsInfo();
+  const { id } = useRoundInfo();
+  const { t } = useT();
+
+  return getRoundName(id, t, rounds, true);
 }
