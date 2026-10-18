@@ -1132,7 +1132,7 @@ vi:
         confirmation_link: Xác nhận tài khoản của tôi.
         activate: >-
           Sau khi kích hoạt thành công, bạn có thể đăng nhập vào trang web của WCA:
-
+          
         login_form: đơn đăng nhập
         addendum: >-
           Email này được tự động gửi đi. Nếu bạn không đăng ký tài khoản trên
@@ -1507,7 +1507,7 @@ vi:
           competition_canceled: Giải đấu đã bị hủy
       formerly_banned:
         ban_count: >-
-          Thí sinh đã bị cấm thi đấu %{ban_count} lần, với các phạm vi và lý do
+          Thí sinh đã bị cấm thi đấu %{ban_count} lần, với các phạm vi cấm và lý do
           sau đây:
         scope_and_reason: 'Phạm vi: %{ban_scope}, Lý do: %{ban_reason}'
         wic_message: >-
@@ -2709,7 +2709,7 @@ vi:
         '-4': Hệ thống đăng ký đang gặp lỗi. Liên hệ WST nếu vấn đề tiếp diễn
         '-1000': Giải đấu không tồn tại
         '-1001': 'Thu thập thông tin Giải đấu thất bại, xin vui lòng thử lại sau'
-        '-2001': Bạn bi cấm thi đấu tại các Giải đấu WCA
+        '-2001': Bạn bi cấm thi đấu tại các giải đấu WCA
         '-2002': Hồ sơ chưa hoàn tất
         '-2003': Bạn không có quyền thực hiện hành động này
         '-2004': >-

@@ -587,6 +587,8 @@ eu:
     passwords:
       edit:
         new_password_confirmation: Berridatzi pasahitza berria
+      send_paranoid_instructions: Helbide elektronikora pasahitza berrezartzeko 
+        esteka bat bidaliko da WCAn erregistratutako kontu bat baldin badauka.
     sessions:
       new:
         sign_in: Saioa hasi
@@ -1431,6 +1433,7 @@ eu:
         harremanetan WCA Emaitzen Taldearekin <a
         href="%{dob_form_path}">formulario hau</a> erabiliz.
       unknown_wca_id_html: '%{link_id} WCA IDa ez da existitzen.'
+      search_for_delegate: Ordezkaria bilatu
   user_roles:
     email:
       role_metadata:
@@ -1569,6 +1572,10 @@ eu:
       payment_requested_on: '%{date} datan ordainketa eskatu da'
       series_registrations: Serieen erregistroak
       total: Guztira
+      export_to_csv:
+        one: Esportatu erregistro %{count} CVSra
+        other: Esportatu %{count} erregistro CVSra
+      export_all_to_csv: Esportatu erregistro guztiak CSVra
     new_registration:
       title: '%{comp} lehiaketarako izena eman'
     sign_in: Saioa hasi
@@ -1705,8 +1712,9 @@ eu:
         eta hortaz datutegia eguneratuko da.
       registrations_file_label: Erregistroen fitxategia
       registrations_file_hint: >-
-        CSV fitxategia zutabeekin: egoera, izena, eskualdea, WCA IDa,
-        jaiotza-data, generoa, e-maila eta zutabe bat kategoria bakoitzeko.
+        CSV fitxategia zutabeekin: egoera, izena, eskualdea, WCA IDa, jaiotza-data,
+        generoa, helbide elektronikoa eta zutabe bat kategoria bakoitzeko, edo WCIFko
+        datuak dituen JSON fitxategi bat.
       preview: Erregistroko datuak aurreikusi
       import: Inportatu
       cancel: Ezeztatu
@@ -1835,9 +1843,8 @@ eu:
         Etorkizunean ezarri mesedez.
       tooltip_registered: Izena eman duzu dagoeneko.
       tooltip_pending: >-
-        Zure erregistroa eskuz onartzearen zain dago. Ikuskatu lehiaketa orrian
-        zerrendaturiko jarraibide guztiak jarraitu dituzula (ordainketa,
-        adibidez).
+        Zure erregistroa eskuz onar dadin zain dago. Ziurtatu lehiaketa orrian zerrendaturiko
+        jarraibide guztiak jarraitu dituzula (ordainketa, adibidez).
       tooltip_waiting_list: Une honetan itxaron-zerrendan zaude.
       tooltip_deleted: >-
         Zoritxarrez zure erregistroa ezabatu egin da. Mesedez, begiratu zure
@@ -1864,6 +1871,8 @@ eu:
         one: Toki bat libre
         other: '%{count} toki libre'
       no_spots_left: Lehiaketa beteta
+      provisional_live_results: 'Bitartean, behin-behineko emaitzak hemen kontsulta
+        ditzakezu:'
     live:
       title: Zuzenezko emaitzak
       manage_rounds: Txandak kudeatu
@@ -1960,17 +1969,21 @@ eu:
           in_batch: >-
             Ezin duzu lehiakide bat utziarazi bere emaitzak bidali gabeko
             emaitza-sorta batekoak badira
+          scoresheet_warning: Ziurtatu lehiakidearen hutsik dagoen denbora-orria
+            fisikoki eskura daukazunean utziarazten duzula bakarrik. Ezin duzu 
+            lehiakiderik gehitu itxitako txanda batera.
         add_competitor:
           single_round: Txandara lehiakide bat gehitu
           multiple_rounds:
-            one: Lehiakidea txanda bikoitzera gehitu.
-            other: >-
-              Lehiakidea txandara gehitu, txanda bikoitzaren lehen txanda itxita
-              dagoenez bereiz gehitu beharko duzu.
+            one: Lehiakidea txanda bikoitzara gehitu.
+            other: Lehiakidea txandara gehitu, txanda bikoitzaren lehen txanda 
+              itxita dagoenez bereiz gehitu beharko duzu.
           event_edit_warning: >-
             Lehiakide honek ez du proba honetarako izena eman, eta lehiaketak ez
             du uzten erregistroetako probak aldatzea dagoeneko. Probak gehitu
             daitezke oraindik, baina ziurta ezazu lehiakideak hau nahi duela.
+          round_closed: Ezin duzu lehiakiderik gehitu dagoeneko itxita dagoen 
+            txanda batera
       results:
         competitor: Lehiakidea
         mean: Batez-bestekoa
@@ -2145,6 +2158,7 @@ eu:
       bookmark: Lehiaketa hau laster-markatu
       is_bookmarked: Lehiaketa hau laster-markatu duzu
       number_of_bookmarks: Laster-markatutako aldiak
+      waiting_list_size: Itxaron-zerrendaren tamaina
     index:
       title: Lehiaketak
       all_competitions: Lehiaketa guztiak
@@ -2236,6 +2250,10 @@ eu:
         erraza da denok lan egiten dugulako lehiaketa ongi joan dadin.</p>
         <p>Erabili azpiko tresna zugandik gertu dagoen lehiaketa bat bilatu eta
         zure kuboetako ibilbidea hasteko!</p>
+      location_sign_in_required: Hasi saioa helbide bat bilatzeko
+      location_not_found: Ez da kokapenik aurkitu helbide honetarako
+      location_search_failed: Helbidea bilatzeak huts egin du, saiatu berriro 
+        minutu batean mesedez
     my_competitions_table:
       edit: Editatu
       registrations: Erregistroak
@@ -2666,9 +2684,9 @@ eu:
         pending:
           title: Zain dauden erregistroak
           information: >-
-            Erregistroak zain uztea osatu gabeko (ordaindu gabea, adibidez)
-            erregistroetarako da bakarrik. Mesedez, erabili itxaron-zerrenda
-            zure lehiaketa beteegi badago lehiakide berriak onartzeko.
+            Erregistroak zain uztea osatu gabeko erregistroetarako da bakarrik (ordaindu
+            gabekoetarako, adibidez). Mesedez, erabili itxaron-zerrenda zure lehiaketa
+            lehiakide berriak onartzeko beteegi badago.
           waitlist_skipped_warning: >-
             Aurretik ordaintzeko zain zeuden %{count} erregistro saltatu
             d(it)uzu. Seguru zaude aukeratutako erregistroa(k)
@@ -2693,6 +2711,8 @@ eu:
             Aurretik ordaintzeko zain edo itxaron-zerrendan zeuden %{count}
             erregistro saltatu d(it)uzu. Seguru zaude aukeratutako
             erregistroa(k) onartu nahi d(it)uzula?
+          information: Onartutako lehiakideek lehiaketan izena eman duten 
+            probetan parte hartzeko onarpena dute.
         cancelled:
           title: Ezeztatutako erregistroak
           information: Ezeztatu diren lehiakideek berriro ere izena emateko 
@@ -2757,6 +2777,14 @@ eu:
         no_self_update: >-
           Antolatzaile taldearekin harremanetan jarri nire erregistroa
           eguneratzeko.
+        send_email:
+          one: Bidali korreoa helbide elektroniko %{count}era
+          other: Bidali korreoa %{count} helbide elektronikotara
+        copy_emails:
+          one: Kopiatu helbide elektroniko %{count}
+          other: Kopiatu %{count} helbide elektroniko
+        scroll_to: 'Hona korritu:'
+        non_competing: Lehiatzen ez direnak
       register:
         will_open_countdown: >-
           Izen ematea %{minutes} minututan eta %{seconds} segundutan irekiko da.
@@ -2870,8 +2898,8 @@ eu:
         WCAko orrialdea erregistroetarako erabiltzen arituz gero erabil dezakezu
         automatikoki onartzea
       must_use_payment_integration: >-
-        Ordainketa integrazio bat gaitu behar duzu (Stripe, adibidez) onarpen
-        automatikoa erabiltzearren
+        Ordainketa integrazio bat gaitu behar duzu (Stripe, adibidez) onarpen automatikoa
+        erabili ahal izateko
       auto_accept_limit: >-
         Automatikoki onartutako erregistroentzako muga lehiakide muga azpikoa
         izan behar da
@@ -3334,9 +3362,9 @@ eu:
           payment_instructions: Ordainketa argibideak (hau lehiaketa orrian 
             agertuko da)
           payment_reference_label: >-
-            Zein informazio hornitu beharko luke erabiltzaileak zuk bere
-            ordainketa identifika dezazun? (Adibidez, ordainketaren
-            erreferentzia zenbakia, kontuaren IDa, etab.)
+            Zein informazio eman beharko lizuke erabiltzaileak zuk bere ordainketa
+            identifika dezazun? (Adibidez, ordainketaren erreferentzia zenbakia, kontuaren
+            IDa, etab.)
         fallback_not_applicable: Ezin da
   persons:
     index:
@@ -4483,3 +4511,70 @@ eu:
         dagoeneko aukeratutako eskualderako aukeragarriak.
       spoken_delegate_required: Aukeratu mintzatu zaren ordezkari junior edo oso
         bat.
+      invalid_spoken_delegate: Aukeratutako eta mintzatu zaren ordezkaria(k) ez 
+        dago (daude) aktibo ordezkari junior edo ordezkari oso bezala 
+        aukeratutako eskualdean dagoeneko.
+      declarations_required: Aitorpen guztiak onartu behar dituzu.
+      business_involvement_required: Hautatu kuboekin zerikusia duen negozioren 
+        batean parte hartzen duzun.
+      business_involvement_explanation_required: Azaldu kuboekin zerikusia duen 
+        negozioan duzun parte-hartzea.
+    introduction: Inprimaki hau praktiketako ordezkari izan nahi duten WCAn 
+      erregistratutako kubozaleentzat da. Zure eskaera aukeratu duzun eskualdeaz
+      arduratzen den ordezkariari bidaliko zaio.
+    form:
+      declaration_and_basic_information: Aitorpena eta oinarrizko informazioa
+      name: Izena
+      wca_id: WCA IDa
+      email: Helbide elektronikoa
+      age: Adina
+      competition_count: Lehiaketa kopurua
+      region_and_references: Eskualdea eta erreferentziak
+      region: Zein ordezkari-eskualdetan bizi zara une honetan?
+      region_placeholder: Aukeratu zure eskualdea
+      subregion: Zein ordezkari-azpieskualdetan bizi zara une honetan?
+      subregion_placeholder: Aukeratu zure azpieskualdea
+      reviewing_delegate: Ordezkari ikuskatzailea
+      spoken_delegates: Zein ordezkari junior edo osorekin mintzatu zara 
+        praktiketako ordezkari izateaz?
+      recommenders: Zein ordezkari junior edo osok onartu du zu gomendatzea 
+        praktiketako ordezkari gisa?
+      delegates_placeholder: Aukeratu ordezkari bat gutxienez
+      experience_and_motivation: Esperientzia eta motibazioa
+      introduction: Aurkeztu zure burua laburki bi edo lau esalditan.
+      competition_contributions: Aurkeztu laburpen bat zeinak deskribatzen duen 
+        nola lagundu duzun zure inguruko lehiaketetan lehiakideez espero dena 
+        baino harago.
+      volunteer_history: WCAko boluntario gisa ibili bazara karguren batean, 
+        aurkeztu kronologia bat hemen (hautazkoa).
+      role_history_warning: Webguneko rol historia hau zure eskaeran sartuko da 
+        automatikoki. Zaharragoak diren rolak ez dira behar bezala gorde, 
+        hortaz, gehitu falta diren kargu edo zuzenketak hemen azpian.
+      present: gaur egungoa
+      board_member: Batzordekidea
+      motivation: Aurkeztu laburki praktiketako ordezkari izateko izena ematera 
+        bultzatu zaituena bi edo lau esalditan.
+      relevant_skills: Aurkeztu praktiketako ordezkari arrakastatsua izaten 
+        lagundu zaitzaketen eta dauzkazun trebezia eta esperientzia 
+        garrantzitsuenen zerrenda bat.
+      declaration_understands_application: Inprimaki hau praktiketako ordezkari 
+        izateko izena ematen ari diren erregistratutako kubozaleentzat bideratua
+        dela ulertzen dut.
+      declaration_has_delegate_support: Nire eskualdean gaitutako eta nire 
+        hautagaitza onartzen duen ordezkari batekin hitz egin dudala onartzen 
+        dut.
+      declaration_proficient_in_english: Ingelesez ongi irakurtzeko eta idazteko
+        trebe naizela onartzen dut.
+      declaration_read_regulations_html: <a href="%{regulations_url}" 
+        target="_blank" rel="noreferrer">WCAko araudia</a> irakurri dudala 
+        onartzen dut.
+      regulations_note: Ez da ordezkarietaz arau guztiak jakin dezaten espero. 
+        Alabaina, oinarriak jakin ditzaten eta gauzak argiak ez direnean 
+        araudian begira dezaten espero da.
+      cubing_business_involvement: Kuboekin zerikusia duen negozioren batean 
+        parte hartzen al duzu?
+      cubing_business_involvement_details: Azaldu mesedez kuboekin zerikusia 
+        duen negozioan duzun parte-hartzea.
+      "yes": Bai
+      "no": Ez
+      submit: Eskaera bidali
