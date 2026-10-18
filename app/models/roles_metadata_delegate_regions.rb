@@ -41,10 +41,4 @@ class RolesMetadataDelegateRegions < ApplicationRecord
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
-
-  # A Delegate role change ends the current role and starts a new one, so the metadata
-  # describing the change is the one of the ended role and still holds the previous status.
-  def promoted_from_trainee?(changes)
-    trainee_delegate? && changes.any? { |change| change['changed_parameter'] == 'Status' }
-  end
 end

@@ -9,7 +9,7 @@ class RoleChangeMailer < ApplicationMailer
     )
   end
 
-  private def role_metadata(role, action, changes = [])
+  private def role_metadata(role)
     metadata = {}
     group = role.group
 
@@ -20,12 +20,8 @@ class RoleChangeMailer < ApplicationMailer
       metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
       metadata[:location] = role.metadata.location
       metadata[:delegated_competitions_count] = role.metadata.total_delegated
-      case action
-      when :start
-        metadata[:wca_id] = role.user.wca_id if role.metadata.trainee_delegate?
-      when :change
-        metadata[:email] = role.user.email if role.metadata.promoted_from_trainee?(changes)
-      end
+      metadata[:wca_id] = role.user.wca_id
+      metadata[:email] = role.user.email
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]
@@ -39,7 +35,7 @@ class RoleChangeMailer < ApplicationMailer
     @role = role
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[@role.group.group_type.to_sym]
-    @metadata = role_metadata(role, :start)
+    @metadata = role_metadata(role)
     @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
@@ -164,7 +160,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @changes = JSON.parse changes
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
-    @metadata = role_metadata(role, :change, @changes)
+    @metadata = role_metadata(role)
     @today_date = Date.today
     @to_list = [wrt_email_recipient]
 
@@ -253,7 +249,7 @@ class RoleChangeMailer < ApplicationMailer
     @role = role
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
-    @metadata = role_metadata(role, :end)
+    @metadata = role_metadata(role)
     @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
