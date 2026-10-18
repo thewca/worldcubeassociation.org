@@ -3,13 +3,12 @@
 import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { LuPencil, LuTrash2, LuUndo2 } from "react-icons/lu";
-import NextStepButton from "@/components/competitions/Registration/NextStepButton";
-import SubmitStepButton from "@/components/competitions/Registration/SubmitStepButton";
+import { LuPencil, LuSave, LuTrash2, LuUndo2 } from "react-icons/lu";
 import {
   isStepComplete,
   isStepEditable,
   StepContent,
+  stepsButtonAction,
   StepSummary,
   summarySteps,
 } from "@/components/competitions/Registration/steps";
@@ -56,7 +55,11 @@ function EditingStepButton({
   const { t } = useT();
 
   if (step.is_post_step) {
-    return <NextStepButton leadsToSummary onNext={onDone} />;
+    return (
+      <Button width="full" colorPalette="blue" onClick={onDone}>
+        {t("competitions.registration_v2.register.view_registration")}
+      </Button>
+    );
   }
 
   // With nothing changed there is nothing to submit, so the same button takes the competitor back
@@ -71,27 +74,21 @@ function EditingStepButton({
             : "incomplete"
       }
     >
-      {(formStatus) =>
-        formStatus === "unchanged" ? (
-          <Button
-            width="full"
-            variant="outline"
-            colorPalette="blue"
-            onClick={onDone}
-          >
-            <LuUndo2 />
-            {t("competitions.registration_v2.register.view_registration")}
-          </Button>
-        ) : (
-          <SubmitStepButton
-            isSubmitting={isSubmitting}
-            disabled={formStatus === "incomplete"}
-            onSubmit={() => form.handleSubmit({ onSubmitted: onDone })}
-          >
-            {t("registrations.update")}
-          </SubmitStepButton>
-        )
-      }
+      {(formStatus) => (
+        <Button
+          width="full"
+          variant={formStatus === "unchanged" ? "outline" : undefined}
+          colorPalette={formStatus === "unchanged" ? "blue" : "green"}
+          loading={isSubmitting}
+          disabled={formStatus === "incomplete"}
+          onClick={stepsButtonAction(onDone, form, formStatus !== "unchanged")}
+        >
+          {formStatus === "unchanged" ? <LuUndo2 /> : <LuSave />}
+          {formStatus === "unchanged"
+            ? t("competitions.registration_v2.register.view_registration")
+            : t("registrations.update")}
+        </Button>
+      )}
     </form.Subscribe>
   );
 }

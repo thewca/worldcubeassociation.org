@@ -1,16 +1,21 @@
 "use client";
 
-import { Stack, Steps, useStepsContext, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Stack,
+  Steps,
+  useStepsContext,
+  VStack,
+} from "@chakra-ui/react";
 import type { components } from "@/types/openapi";
 import RegistrationSummary from "@/components/competitions/Registration/RegistrationSummary";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
-import NextStepButton from "@/components/competitions/Registration/NextStepButton";
-import SubmitStepButton from "@/components/competitions/Registration/SubmitStepButton";
 import {
   initialStepIndex,
   isStepComplete,
   StepContent,
+  stepsButtonAction,
 } from "@/components/competitions/Registration/steps";
 import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
@@ -27,6 +32,7 @@ import {
   type RegistrationForm,
   type RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
+import { LuSend } from "react-icons/lu";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -48,31 +54,32 @@ function WizardStepButton({
   const { t } = useT();
   const stepsContext = useStepsContext();
 
-  const submitsRegistration =
-    stepsContext.value === steps.findLastIndex((step) => !step.is_post_step);
-  const leadsToSummary = stepsContext.value === stepsContext.count - 1;
+  const lastRegularStepIndex = steps.findLastIndex(
+    (step) => !step.is_post_step,
+  );
+
+  const submitsRegistration = stepsContext.value === lastRegularStepIndex;
 
   return (
     <form.Subscribe selector={(state) => isStepComplete(step, state.values)}>
-      {(isComplete) =>
-        submitsRegistration ? (
-          <SubmitStepButton
-            isSubmitting={isSubmitting}
-            disabled={!isComplete}
-            onSubmit={() =>
-              form.handleSubmit({ onSubmitted: stepsContext.goToNextStep })
-            }
-          >
-            {t("registrations.register")}
-          </SubmitStepButton>
-        ) : (
-          <NextStepButton
-            leadsToSummary={leadsToSummary}
-            disabled={!isComplete}
-            onNext={stepsContext.goToNextStep}
-          />
-        )
-      }
+      {(isComplete) => (
+        <Button
+          width="full"
+          colorPalette={submitsRegistration ? "green" : "blue"}
+          loading={isSubmitting}
+          disabled={!isComplete}
+          onClick={stepsButtonAction(
+            stepsContext.goToNextStep,
+            form,
+            submitsRegistration,
+          )}
+        >
+          {submitsRegistration && <LuSend />}
+          {submitsRegistration
+            ? t("registrations.register")
+            : t("competitions.registration_v2.requirements.next_step")}
+        </Button>
+      )}
     </form.Subscribe>
   );
 }
@@ -115,6 +122,7 @@ export default function StepPanel({
           registrationQueryKey(competitionInfo.id, userId),
           data.registration,
         );
+
         toaster.create({
           id: "registration-updated",
           type: "success",

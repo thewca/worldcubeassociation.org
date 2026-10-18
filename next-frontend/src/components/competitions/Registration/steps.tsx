@@ -225,3 +225,12 @@ export function summarySteps(steps: StepConfig[]) {
     ...byPriority(steps.filter((step) => !step.is_post_step)),
   ];
 }
+
+export function stepsButtonAction(
+  onClick: () => void,
+  form: RegistrationForm,
+  isFormSubmit: boolean,
+) {
+  return () =>
+    isFormSubmit ? form.handleSubmit({ onSubmitted: onClick }) : onClick();
+}
