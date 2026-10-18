@@ -59,6 +59,7 @@ function WizardStepButton({
   );
 
   const submitsRegistration = stepsContext.value === lastRegularStepIndex;
+  const finishesStepsWizard = stepsContext.value === stepsContext.count - 1;
 
   return (
     <form.Subscribe selector={(state) => isStepComplete(step, state.values)}>
@@ -77,7 +78,9 @@ function WizardStepButton({
           {submitsRegistration && <LuSend />}
           {submitsRegistration
             ? t("registrations.register")
-            : t("competitions.registration_v2.requirements.next_step")}
+            : finishesStepsWizard
+              ? t("competitions.registration_v2.register.view_registration")
+              : t("competitions.registration_v2.requirements.next_step")}
         </Button>
       )}
     </form.Subscribe>
