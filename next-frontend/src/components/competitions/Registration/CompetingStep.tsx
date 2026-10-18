@@ -113,7 +113,6 @@ export default function CompetingStep({
           <Fieldset.Root invalid={!field.state.meta.isValid}>
             <FormEventSelector
               title={t("competitions.competition_form.events")}
-              wrap
               eventList={parameters.event_ids}
               selectedEvents={field.state.value}
               maxEvents={maxEvents}

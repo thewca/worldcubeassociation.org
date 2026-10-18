@@ -12,14 +12,14 @@ import events from "@/lib/wca/data/events";
 
 interface RankingsRowProps {
   ranking: components["schemas"]["ExtendedResult"];
-  index: number;
+  rank: number;
   isAverage?: boolean;
   isByRegion?: boolean;
 }
 
 export function RankingsRow({
   ranking,
-  index,
+  rank,
   isAverage = false,
   isByRegion = false,
 }: RankingsRowProps) {
@@ -37,7 +37,7 @@ export function RankingsRow({
       {isByRegion ? (
         <CountryCell countryId={ranking.country_id} filterable />
       ) : (
-        <Table.Cell>{index + 1}</Table.Cell>
+        <Table.Cell>{rank}</Table.Cell>
       )}
       <PersonCell
         personId={ranking.person_id}

@@ -185,6 +185,7 @@ export default function LiveUpdatingResultsTable({
               competitionId={competitionId}
               competitors={competitors}
               roundId={roundWcifId}
+              roundClosed={roundFinished}
             />
             <BulkQuitButton
               competitionId={competitionId}

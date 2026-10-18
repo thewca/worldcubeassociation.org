@@ -23,9 +23,9 @@ class Api::V1::PersonsController < Api::V1::ApiController
   private def person_results
     person = Person.current.find_by!(wca_id: params.require(:wca_id))
 
-    # `attempts` reads `result_attempts`, and the competition columns come off the association,
-    # so both have to be preloaded or every row fires its own query.
-    person.results.includes(:competition, :result_attempts)
+    # `attempts` reads `result_attempts`, and the competition and linked round columns come off
+    # their associations, so all of them have to be preloaded or every row fires its own query.
+    person.results.includes(:competition, :round, :result_attempts)
   end
 
   private def render_results(results)

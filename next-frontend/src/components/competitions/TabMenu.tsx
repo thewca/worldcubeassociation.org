@@ -116,9 +116,10 @@ export default function TabMenu({
           <Drawer.Trigger asChild>
             <IconButton
               aria-label="Open menu"
-              size="lg"
+              colorPalette="blue"
+              size="xl"
               position="fixed"
-              right="4"
+              insetEnd="4"
               bottom="4"
               zIndex="docked"
               rounded="full"
@@ -176,7 +177,9 @@ export default function TabMenu({
           </Drawer.Positioner>
         </Drawer.Root>
       </Box>
-      <Tabs.Content width="full" value={currentPath!}>
+      {/* Tabs.Content is a flex item, which has `min-width: auto`.
+       It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
+      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
         {children}
       </Tabs.Content>
     </Tabs.Root>
@@ -242,7 +245,8 @@ function TabList({
                 tabKey={tabKey}
                 currentPath={currentPath}
                 href={route({
-                  pathname: "/competitions/[competitionId]/tabs/[tabName]",
+                  pathname:
+                    "/competitions/[competitionId]/custom-tabs/[tabName]",
                   query: { competitionId, tabName: tabKey },
                 })}
               >
@@ -385,6 +389,8 @@ function CollapsibleTabGroup({
       <Collapsible.Trigger
         width="full"
         display="flex"
+        alignItems="center"
+        gap="2"
         textAlign="start"
         minHeight="fit-content"
         px="3"
@@ -400,7 +406,7 @@ function CollapsibleTabGroup({
       </Collapsible.Trigger>
 
       <Collapsible.Content>
-        <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
+        <Box ps="3" display="flex" flexDirection="column" gap="1" pt="1">
           {children.map(
             ({ menuKey, disabled, i18nKey, href, hrefAdmin, badgeI18nKey }) => (
               <Tabs.Trigger

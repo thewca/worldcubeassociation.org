@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html <%= tag.attributes(data: { theme: yield(:theme).presence }) %>>
 <head>
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -63,6 +63,10 @@
 
   <% if content_for? :robots_head %>
     <%= yield :robots_head %>
+  <% end %>
+
+  <% if content_for? :signin_fonts_head %>
+    <%= yield :signin_fonts_head %>
   <% end %>
 
   <%= csrf_meta_tags %>

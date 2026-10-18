@@ -34,6 +34,7 @@ services:
     command: >
       bash -c './package-install.dev.sh packages.dev.txt &&
       ./package-install.dev.sh packages.runtime.txt &&
+      ./package-config.dev.sh &&
       rm -f .db-inited &&
       bin/setup &&
       touch .db-inited'
@@ -78,6 +79,8 @@ services:
     depends_on:
       wca_environment:
         condition: service_completed_successfully
+      wca_mailcatcher:
+        condition: service_started
 
   wca_nextjs:
     build:
@@ -156,15 +159,12 @@ services:
         condition: service_completed_successfully
 
   wca_mailcatcher:
-    <<: *app
+    image: "sj26/mailcatcher:v0.11.0"
     container_name: "mailcatcher"
     expose:
       - "1025"
     ports:
       - "1080:1080"
-    command: >
-      bash -c 'gem install mailcatcher &&
-      mailcatcher --foreground --ip=0.0.0.0'
 
   wca_sidekiq:
     <<: *app

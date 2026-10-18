@@ -23,8 +23,9 @@ export default async function CompetitionTabsLayout({
 
   // The competition page layout is very card-heave, and Chakra cards bring their own padding.
   //   So we subtract a little bit of the global padding that we had previously applied to shared pages.
+  // width=full so tables won't overflow a tab
   return (
-    <Box marginTop="-3">
+    <Box marginTop="-3" width="full">
       <CompetitionMenu competitionInfo={competitionInfo}>
         {children}
       </CompetitionMenu>
