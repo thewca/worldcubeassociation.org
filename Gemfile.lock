@@ -1042,7 +1042,7 @@ DEPENDENCIES
   iso!
   jaro_winkler
   jbuilder
-  json (~> 3)
+  json
   json-schema
   jwt
   kaminari
