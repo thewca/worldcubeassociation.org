@@ -12869,7 +12869,7 @@ __metadata:
     react-markdown: "npm:^10.1.0"
     remark-breaks: "npm:^4.0.0"
     remark-gfm: "npm:^4.0.1"
-    temporal-polyfill: "npm:^1.0.5"
+    temporal-polyfill: "npm:^1.0.6"
     typescript: "npm:^6"
     vite: "npm:^8"
     vitest: "npm:^5.0.5"
@@ -15419,13 +15419,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"temporal-polyfill@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "temporal-polyfill@npm:1.0.5"
+"temporal-polyfill@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "temporal-polyfill@npm:1.0.6"
   dependencies:
     temporal-spec: "npm:1.0.1"
     temporal-utils: "npm:1.0.3"
-  checksum: 10c0/88928e40e60d0da0c998af2b8da09768ee2c8784fec7526317fde83f55eb69926209a6bbc4360792cac7ace7371949718bc1f12edac1df0fe42eba5d55a43451
+  checksum: 10c0/f67f3d0edf62335cc572f7680cfc9f3da6b9124fbcbc22fd016d17fcedb64ac8c7ce26886474c1ecc549a1e5fe0bc167988da5c59d51d88956a5a7e7195fb2b1
   languageName: node
   linkType: hard
 
