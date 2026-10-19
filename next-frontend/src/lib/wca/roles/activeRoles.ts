@@ -1,16 +1,29 @@
 import { serverClient } from "@/lib/wca/wcaAPI";
+import { operations } from "@/types/openapi";
 import { cache } from "react";
 
-const getActiveRolesOfType = cache(
-  async (groupType: string, perPage: number = 25) => {
-    return await serverClient.GET("/v0/user_roles", {
-      params: { query: { isActive: true, groupType, per_page: perPage } },
-    });
-  },
-);
+type UserRolesQuery = NonNullable<
+  operations["userRoles"]["parameters"]["query"]
+>;
 
-export const getOfficersRoles = () => getActiveRolesOfType("officers");
-export const getBoardRoles = () => getActiveRolesOfType("board");
-// This will break again if we ever get over 100 translators
-export const getTranslatorRoles = () =>
-  getActiveRolesOfType("translators", 100);
+const getRoles = (query: UserRolesQuery) =>
+  serverClient.GET("/v0/user_roles", { params: { query } });
+
+export const getOfficersRoles = cache(() =>
+  getRoles({ isActive: true, groupType: "officers" }),
+);
+export const getBoardRoles = cache(() =>
+  getRoles({ isActive: true, groupType: "board" }),
+);
+export const getTranslatorRoles = cache(() =>
+  getRoles({ isActive: true, groupType: "translators" }),
+);
+export const getTeamCommitteeMembers = cache(
+  (groupId: number, isActive: boolean = true) =>
+    getRoles({
+      groupId,
+      isActive,
+      sort: "status:desc,name:asc",
+      per_page: 100,
+    }),
+);

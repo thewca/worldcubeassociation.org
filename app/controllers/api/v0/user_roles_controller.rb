@@ -41,12 +41,17 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = UserRole.filter_roles(roles, current_user, params)
     roles = UserRole.sort_roles(roles, params[:sort])
 
-    # Paginating the list by sending only first 100 elements unless mentioned in the API.
-    paginate json: roles, include: {
+    serialize_options = {
       user: { exclude_deprecated: true, include_email: true },
       group: {},
       metadata: {},
     }
+
+    if ActiveRecord::Type::Boolean.new.cast(params[:isActive])
+      render json: roles, include: serialize_options
+    else
+      paginate json: roles, include: serialize_options
+    end
   end
 
   def show
