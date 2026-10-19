@@ -51,7 +51,7 @@
     "lodash": "^4.18.1",
     "luxon": "^3.7.2",
     "maplibre-gl": "^6.15.0",
-    "newrelic": "^14.7.0",
+    "newrelic": "^14.8.0",
     "next": "16.4.2",
     "nextjs-routes": "^2.2.5",
     "nextjs-toploader": "^3.9.17",
