@@ -6091,9 +6091,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wrksz/themes@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "@wrksz/themes@npm:2.0.4"
+"@wrksz/themes@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@wrksz/themes@npm:2.1.1"
   peerDependencies:
     next: ">=16.0.0"
     react: ^18.0.0 || ^19.0.0
@@ -6102,7 +6102,7 @@ __metadata:
   peerDependenciesMeta:
     next:
       optional: true
-  checksum: 10c0/45ab1b4e52ae3bf2f00c499e9d3973679085c03bfe2afdbc763a0e1f652c759098f424a94b34113269480ecfdbbdde8b376807876925217bc564aaaa3d745650
+  checksum: 10c0/3664f27eb80821258bdc08c5dff4d44678d2d645771865d9a2f9b54da99e72e74bc5f86f68639b3851d6db0dc2c16a1b531c90824661fa72a48cf90895a1d49c
   languageName: node
   linkType: hard
 
@@ -12829,7 +12829,7 @@ __metadata:
     "@types/react-dom": "npm:^19"
     "@types/swagger-ui-react": "npm:^5.18.0"
     "@vitejs/plugin-react": "npm:^6.1.2"
-    "@wrksz/themes": "npm:^2.0.4"
+    "@wrksz/themes": "npm:^2.1.1"
     accept-language-parser: "npm:^1.5.0"
     aws4: "npm:^1.13.2"
     babel-plugin-react-compiler: "npm:^1.0.0"
