@@ -7,7 +7,7 @@ required:
   - display_order
 properties:
   id:
-    type: string
+    type: integer
   competition_id:
     type: string
   name:

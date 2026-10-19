@@ -27,6 +27,10 @@ class CompetitionTab < ApplicationRecord
     register
   ].freeze
 
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: %w[id name],
+  }.freeze
+
   def slug
     # parameterization behaves differently under different locales. However, we
     # want slugs to be the same across all locales, so we intentionally wrap
@@ -69,5 +73,9 @@ class CompetitionTab < ApplicationRecord
       other_tab.update_column :display_order, current_display_order
       update_column :display_order, other_display_order
     end
+  end
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

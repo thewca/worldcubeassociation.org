@@ -53,7 +53,7 @@ required:
   - delegates
   - organizers
   - waiting_list_count
-  - tab_names
+  - tabs
   - class
 properties:
   id:
@@ -215,10 +215,18 @@ properties:
   waiting_list_count:
     type: integer
     example: 7
-  tab_names:
+  tabs:
     type: array
     items:
-      type: string
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
   delegates:
     type: array
     items:

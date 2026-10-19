@@ -251,10 +251,10 @@ export const afterCompetitionTabs = (
     {
       i18nKey: "competitions.nav.menu.by_person",
       href: route({
-        pathname: "/competitions/[competitionId]/results/byPerson",
+        pathname: "/competitions/[competitionId]/results/by-person",
         query: { competitionId: competitionInfo.id },
       }),
-      menuKey: "byPerson",
+      menuKey: "by-person",
       icon: "Competitors",
     },
   ];
