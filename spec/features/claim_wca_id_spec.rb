@@ -17,7 +17,7 @@ RSpec.feature "Claim WCA ID" do
 
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
-      expect(page.find("div.user_dob_verification", visible: false).visible?).to be false
+      expect(page.find("div.user_dob_verification", visible: :hidden).visible?).to be false
 
       # Fill in WCA ID.
       fill_in_selectize "WCA ID", with: person.wca_id
