@@ -1,36 +1,23 @@
 "use client";
 
 import {
-  Elements,
-  PaymentElement,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
-import {
-  loadStripe,
-  type Stripe,
-  type StripeElements,
-} from "@stripe/stripe-js";
-import {
   Alert,
-  Button,
   Checkbox,
   Field,
   HStack,
   NumberInput,
-  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { keepPreviousData, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { LuCreditCard } from "react-icons/lu";
 import { useT } from "@/lib/i18n/useI18n";
 import CurrencyValue from "@/components/CurrencyValue";
 import { hasPassed } from "@/lib/wca/dates";
-import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
-import { paymentCompletionUrl } from "@/lib/wca/payments/stripe";
-import { toaster } from "@/components/ui/toaster";
+import StripePayment from "@/components/competitions/Registration/StripePayment";
+import {
+  PaymentAmountProvider,
+  usePaymentAmount,
+} from "@/providers/PaymentAmountProvider";
 import type { components } from "@/types/openapi";
 import { DateTime } from "luxon";
 
@@ -39,256 +26,107 @@ type Registration = components["schemas"]["RegistrationDataV2"];
 type PaymentStepParameters =
   components["schemas"]["PaymentStepConfig"]["parameters"];
 
-function PaymentForm({
+function DonationFields({
   competitionInfo,
-  registrationId,
-  donationIso,
-  onDonationChange,
-  humanAmount,
 }: {
   competitionInfo: CompetitionInfo;
-  registrationId: number;
-  donationIso: number;
-  onDonationChange: (donationIso: number) => void;
-  humanAmount: string;
 }) {
   const { t } = useT();
 
-  const stripe = useStripe();
-  const elements = useElements();
-  const apiClient = useAPIClient();
+  const { donationIso, setDonationIso } = usePaymentAmount();
 
   const [isDonating, setIsDonating] = useState(false);
-
-  const payRegistration = useMutation({
-    mutationFn: async ({
-      stripe,
-      elements,
-    }: {
-      stripe: Stripe;
-      elements: StripeElements;
-    }) => {
-      // Stripe requires `submit` before any async work, so that it can validate the entered details
-      //   while the user gesture is still fresh.
-      const { error: submitError } = await elements.submit();
-
-      if (submitError) {
-        throw submitError;
-      }
-
-      const { data, error } = await apiClient.GET(
-        "/v1/registrations/{registrationId}/payment_ticket",
-        {
-          params: {
-            path: { registrationId },
-            query: { iso_donation_amount: donationIso },
-          },
-        },
-      );
-
-      if (error) {
-        throw error;
-      }
-
-      // On success the browser leaves for Stripe and comes back to the monolith, so anything after
-      //   this only runs when the payment could not even be started.
-      const { error: confirmError } = await stripe.confirmPayment({
-        elements,
-        clientSecret: data.client_secret,
-        confirmParams: { return_url: paymentCompletionUrl(competitionInfo.id) },
-      });
-
-      if (confirmError) {
-        throw confirmError;
-      }
-    },
-    onError: () =>
-      toaster.create({
-        id: "payment-error",
-        type: "error",
-        description: t("registrations.payment_form.errors.generic.failed", {
-          provider: t("payments.payment_providers.stripe"),
-        }),
-      }),
-  });
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    // Only try to confirm once Stripe has actually finished loading
-    if (stripe && elements) {
-      payRegistration.mutate({ stripe, elements });
-    }
-  };
 
   // Unticking has to take the donation with it, otherwise the competitor keeps paying an amount
   //   they can no longer see.
   const toggleDonation = (isChecked: boolean) => {
     setIsDonating(isChecked);
-    onDonationChange(0);
+    setDonationIso(0);
   };
 
   const changeDonation = (donationUnits: number) =>
-    onDonationChange(
+    setDonationIso(
       Number.isNaN(donationUnits)
         ? 0
         : Math.round(donationUnits * competitionInfo.currency_subunit_to_unit),
     );
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack gap="4">
-        <PaymentElement />
+    <>
+      {competitionInfo.enable_donations && (
+        <Stack gap="2">
+          <Checkbox.Root
+            width="full"
+            // The label runs to a sentence, so on a narrow screen it wraps and the box belongs
+            //   beside its first line rather than centred against the whole paragraph.
+            alignItems="start"
+            checked={isDonating}
+            onCheckedChange={(e) => toggleDonation(!!e.checked)}
+          >
+            <Checkbox.HiddenInput />
+            <Checkbox.Control />
+            <Checkbox.Label>
+              {t("registrations.payment_form.labels.show_donation")}
+            </Checkbox.Label>
+          </Checkbox.Root>
 
-        {competitionInfo.enable_donations && (
-          <Stack gap="2">
-            <Checkbox.Root
-              width="full"
-              // The label runs to a sentence, so on a narrow screen it wraps and the box belongs
-              //   beside its first line rather than centred against the whole paragraph.
-              alignItems="start"
-              checked={isDonating}
-              onCheckedChange={(e) => toggleDonation(!!e.checked)}
-            >
-              <Checkbox.HiddenInput />
-              <Checkbox.Control />
-              <Checkbox.Label>
-                {t("registrations.payment_form.labels.show_donation")}
-              </Checkbox.Label>
-            </Checkbox.Root>
+          {isDonating && (
+            <Field.Root>
+              <Field.Label>
+                {t("registrations.payment_form.labels.donation")} (
+                {competitionInfo.currency_code})
+              </Field.Label>
+              <NumberInput.Root
+                min={0}
+                width="full"
+                value={(
+                  donationIso / competitionInfo.currency_subunit_to_unit
+                ).toString()}
+                onValueChange={(e) => changeDonation(e.valueAsNumber)}
+              >
+                <NumberInput.Input />
+                <NumberInput.Control />
+              </NumberInput.Root>
+            </Field.Root>
+          )}
+        </Stack>
+      )}
 
-            {isDonating && (
-              <Field.Root>
-                <Field.Label>
-                  {t("registrations.payment_form.labels.donation")} (
-                  {competitionInfo.currency_code})
-                </Field.Label>
-                <NumberInput.Root
-                  min={0}
-                  width="full"
-                  value={(
-                    donationIso / competitionInfo.currency_subunit_to_unit
-                  ).toString()}
-                  onValueChange={(e) => changeDonation(e.valueAsNumber)}
-                >
-                  <NumberInput.Input />
-                  <NumberInput.Control />
-                </NumberInput.Root>
-              </Field.Root>
-            )}
-          </Stack>
-        )}
-
-        {donationIso > competitionInfo.base_entry_fee_lowest_denomination && (
-          <Alert.Root status="warning">
-            <Alert.Indicator />
-            <Alert.Title>
-              {t("registrations.payment_form.alerts.amount_rather_high")}
-            </Alert.Title>
-          </Alert.Root>
-        )}
-
-        {/* The amount carries its currency's full name, so on a phone it is too long to sit beside
-            the label and drops onto its own line instead of breaking mid-word. */}
-        <HStack justify="space-between" flexWrap="wrap">
-          <Text fontWeight="medium">
-            {t("registrations.payment_form.labels.subtotal")}
-          </Text>
-          <Text textAlign="end">{humanAmount}</Text>
-        </HStack>
-
-        <Button
-          type="submit"
-          width="full"
-          colorPalette="green"
-          loading={payRegistration.isPending}
-          disabled={!stripe || !elements}
-        >
-          <LuCreditCard />
-          {t("registrations.payment_form.button_text")}
-        </Button>
-      </Stack>
-    </form>
+      {donationIso > competitionInfo.base_entry_fee_lowest_denomination && (
+        <Alert.Root status="warning">
+          <Alert.Indicator />
+          <Alert.Title>
+            {t("registrations.payment_form.alerts.amount_rather_high")}
+          </Alert.Title>
+        </Alert.Root>
+      )}
+    </>
   );
 }
 
-function StripePayment({
+/** The donation the competitor may add, and what they pay with it, whichever provider takes it. */
+function PaymentAmountDetails({
   competitionInfo,
-  registrationId,
-  parameters,
 }: {
   competitionInfo: CompetitionInfo;
-  registrationId: number;
-  parameters: PaymentStepParameters;
 }) {
   const { t } = useT();
 
-  const api = useAPI();
-
-  const [donationIso, setDonationIso] = useState(0);
-
-  // `loadStripe` injects a script tag, so it must run once rather than on every render. The key
-  //   and the connected account belong to this competition, which is why this cannot be the
-  //   module-level constant Stripe's own examples use.
-  const [stripePromise] = useState(() =>
-    loadStripe(parameters.stripePublishableKey, {
-      stripeAccount: parameters.connectedAccountId,
-    }),
-  );
-
-  // The outstanding fee includes per-event fees, and Stripe wants its own denomination, so the
-  //   amount is the backend's to compute rather than ours to reconstruct.
-  const { data: denomination, isError } = api.useQuery(
-    "get",
-    "/v1/registrations/{registrationId}/payment_denomination",
-    {
-      params: {
-        path: { registrationId },
-        query: { iso_donation_amount: donationIso },
-      },
-    },
-    {
-      // Changing the donation must not blank the amount out: `Elements` unmounts when it loses its
-      //   options, and unmounting takes the card details the competitor already typed with it.
-      placeholderData: keepPreviousData,
-    },
-  );
-
-  // Without an amount there is nothing to hand Stripe, so say so rather than spin forever.
-  if (isError) {
-    return (
-      <Alert.Root status="error">
-        <Alert.Indicator />
-        <Alert.Title>
-          {t("registrations.payment_form.errors.generic.failed", {
-            provider: t("payments.payment_providers.stripe"),
-          })}
-        </Alert.Title>
-      </Alert.Root>
-    );
-  }
-
-  if (denomination === undefined) {
-    return <Spinner />;
-  }
+  const { humanAmount } = usePaymentAmount();
 
   return (
-    <Elements
-      stripe={stripePromise}
-      options={{
-        mode: "payment",
-        amount: denomination.api_amounts.stripe,
-        currency: competitionInfo.currency_code.toLowerCase(),
-      }}
-    >
-      <PaymentForm
-        competitionInfo={competitionInfo}
-        registrationId={registrationId}
-        donationIso={donationIso}
-        onDonationChange={setDonationIso}
-        humanAmount={denomination.human_amount}
-      />
-    </Elements>
+    <>
+      <DonationFields competitionInfo={competitionInfo} />
+
+      {/* The amount carries its currency's full name, so on a phone it is too long to sit beside
+          the label and drops onto its own line instead of breaking mid-word. */}
+      <HStack justify="space-between" flexWrap="wrap">
+        <Text fontWeight="medium">
+          {t("registrations.payment_form.labels.subtotal")}
+        </Text>
+        <Text textAlign="end">{humanAmount}</Text>
+      </HStack>
+    </>
   );
 }
 
@@ -366,11 +204,18 @@ export default function PaymentStep({
               </Alert.Title>
             </Alert.Root>
 
-            <StripePayment
-              competitionInfo={competitionInfo}
+            <PaymentAmountProvider
               registrationId={registration.id}
-              parameters={parameters}
-            />
+              providerName={t("payments.payment_providers.stripe")}
+            >
+              <StripePayment
+                competitionInfo={competitionInfo}
+                registrationId={registration.id}
+                parameters={parameters}
+              >
+                <PaymentAmountDetails competitionInfo={competitionInfo} />
+              </StripePayment>
+            </PaymentAmountProvider>
           </>
         )
       )}
