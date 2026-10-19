@@ -233,7 +233,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    date (3.5.1)
+    date (3.6.0)
     debug_inspector (1.2.0)
     declarative (0.0.20)
     devise (5.0.4)
@@ -521,14 +521,14 @@ GEM
       uri (>= 0.11.1)
     net-http-persistent (4.0.8)
       connection_pool (>= 2.2.4, < 4)
-    net-imap (0.6.7)
+    net-imap (0.6.8)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
     net-protocol (0.4.0)
       timeout
-    net-smtp (0.5.1)
+    net-smtp (0.5.2)
       net-protocol
     netrc (0.11.0)
     newrelic_rpm (10.9.1)
@@ -596,7 +596,7 @@ GEM
       actionmailer (>= 3)
       net-smtp
       premailer (~> 1.7, >= 1.7.9)
-    prettyprint (0.2.0)
+    prettyprint (0.2.1)
     prism (1.9.0)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -669,12 +669,12 @@ GEM
       logger
       prism (>= 1.6.0)
       tsort
-    rdoc (8.0.0)
+    rdoc (8.1.0)
       erb
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    react_on_rails (17.1.0)
+    react_on_rails (17.2.0)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -1068,7 +1068,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-i18n
   rake
-  react_on_rails (= 17.1.0)
+  react_on_rails (= 17.2.0)
   recaptcha
   redcarpet
   redis
@@ -1189,7 +1189,7 @@ CHECKSUMS
   database_cleaner (2.1.0) sha256=1dcba26e3b1576da692fc6bac10136a4744da5bcc293d248aae19640c65d89cd
   database_cleaner-active_record (2.2.0) sha256=3228d6d8ec1f2103fd6ab468dae923424318bcfabcf5dd5b02e5fcb0c486e1c7
   database_cleaner-core (2.0.1) sha256=8646574c32162e59ed7b5258a97a208d3c44551b854e510994f24683865d846c
-  date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
+  date (3.6.0) sha256=18ac945c4e24ebd93534f8eab8c2fd8c5604b3e977105b3798d62a1e8d27b580
   debug_inspector (1.2.0) sha256=9bdfa02eebc3da163833e6a89b154084232f5766087e59573b70521c77ea68a2
   declarative (0.0.20) sha256=8021dd6cb17ab2b61233c56903d3f5a259c5cf43c80ff332d447d395b17d9ff9
   devise (5.0.4) sha256=d605f2b85854e74e56ee789e2d398702bc2d06e6bcd894717a670a3199c74cc1
@@ -1316,10 +1316,10 @@ CHECKSUMS
   nenv (0.3.0) sha256=d9de6d8fb7072228463bf61843159419c969edb34b3cef51832b516ae7972765
   net-http (0.10.0) sha256=1a2ff6e37a05724973c43f2bf7bf105f59c36a4cd0a7e9b1c021a0a566987c27
   net-http-persistent (4.0.8) sha256=ef3de8319d691537b329053fae3a33195f8b070bbbfae8bf1a58c796081960e6
-  net-imap (0.6.7) sha256=b5c9573be975d856de252ee851871724da66aa2d449b2482d5690bd12bc23660
+  net-imap (0.6.8) sha256=eb30bb62227b64a3af6b518b04b2375113d69f68f15de59b0193b07d98acf6d9
   net-pop (0.1.2) sha256=848b4e982013c15b2f0382792268763b748cce91c9e91e36b0f27ed26420dff3
   net-protocol (0.4.0) sha256=f9f90c8c6f64794a45160bf422177a336db12809de3beeeaa26b88fcd2e8c853
-  net-smtp (0.5.1) sha256=ed96a0af63c524fceb4b29b0d352195c30d82dd916a42f03c62a3a70e5b70736
+  net-smtp (0.5.2) sha256=35103cc04d6b2d94632f9928ede07483c24b70b9c0db1f231fea43909b678f3c
   netrc (0.11.0) sha256=de1ce33da8c99ab1d97871726cba75151113f117146becbe45aa85cb3dabee3f
   newrelic_rpm (10.9.1) sha256=7a2c8f0bd6c3407f7d981999d46e0d5c39c53bee9ca737f0e083d3b6dcc8f0c3
   nio4r (2.7.5) sha256=6c90168e48fb5f8e768419c93abb94ba2b892a1d0602cb06eef16d8b7df1dca1
@@ -1347,7 +1347,7 @@ CHECKSUMS
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570
   premailer (1.22.0) sha256=538935ebc4a75bfdd1aa624bd348e54986902b6caf08ceaaa6297fc7388227da
   premailer-rails (1.12.0) sha256=c13815d161b9bc7f7d3d81396b0bb0a61a90fa9bd89931548bf4e537c7710400
-  prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
+  prettyprint (0.2.1) sha256=d555d57ea6d7cf001d4774b693546a6bd88bec1e778ddffb5c60b68ceec4b7d4
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   pry (0.14.1) sha256=99b6df0665875dd5a39d85e0150aa5a12e2bb4fef401b6c4f64d32ee502f8454
   pstore (0.2.1) sha256=03904d0f2c66579e96d1e6704cdabc0c88df7ea8ed8782d9f3569f6f6c702c1a
@@ -1374,8 +1374,8 @@ CHECKSUMS
   rb-inotify (0.10.1) sha256=050062d4f31d307cca52c3f6a7f4b946df8de25fc4bd373e1a5142e41034a7ca
   rb_sys (0.9.130) sha256=7d486d99c1da02635515deaf9860fc5aea90bb4ab2589b2deec7fdc7d3548615
   rbs (4.2.0) sha256=51f7b886dcc05bc09e10b901daa6a81829f6adc03101d6ca9ea4aac6103e0674
-  rdoc (8.0.0) sha256=03bf8c08a9639658855a0cfd77c0abca8325c227693f7f33f82957811348c469
-  react_on_rails (17.1.0) sha256=3c8914dbe61e862932f9dc08c0adb55dac049e0f923fc9a753f6c2beaf279767
+  rdoc (8.1.0) sha256=befc37880a5cfd36dcb176c748b5fd5ee39dd3536a75e81824e4972ce230f60a
+  react_on_rails (17.2.0) sha256=7b38030e73c17fe6b426781031d5f1abe9fea850e318e0e18e0006cccc84b310
   recaptcha (5.21.2) sha256=8f7bb6cc9f04c523fff3f38126b7c5f1314c35fcb3691fc8e70d2b464533c12a
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.1) sha256=b5e675b57ad22b15c9bcc765d5ac26f60b675408af916d31527af9bd5a81faae
