@@ -2282,62 +2282,62 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/core@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/core@npm:6.1.21"
+"@fullcalendar/core@npm:^6.1.22":
+  version: 6.1.22
+  resolution: "@fullcalendar/core@npm:6.1.22"
   dependencies:
     preact: "npm:~10.12.1"
-  checksum: 10c0/6856367e4b1aa7941badcd38198efc379aa03c34a1a6c6d97cd4d68fc6f99d26340cbe1007b247cab01af431abbc89ee78a3cb42d67f1e722655e8adca66692e
+  checksum: 10c0/589c1119cca23c97aec7116accb0d45069b69af1b7ea790ef9065302ac3bc7c7cf7852aa5cd9ae8eb853957533dff87b3c4b94cce63c8f0db726c8fc9962debb
   languageName: node
   linkType: hard
 
-"@fullcalendar/daygrid@npm:~6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/daygrid@npm:6.1.21"
+"@fullcalendar/daygrid@npm:~6.1.22":
+  version: 6.1.22
+  resolution: "@fullcalendar/daygrid@npm:6.1.22"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.21
-  checksum: 10c0/8e7a9e25b7390ec9c09970a729259a3882ebd4d5551084d532e330c7584d302e492dc1f15ae100c2430ae885485182dcd9fd75697962ffb1d7ac6f8f74e53407
+    "@fullcalendar/core": ~6.1.22
+  checksum: 10c0/86d818a56dd393da8bd619cb074e8456db27d09ea3dbb52c8de9d324517b4cb5760d29aaa8fc11564b23f483b3e70c321faa4ad599d0a81e89fbaa68e565246b
   languageName: node
   linkType: hard
 
-"@fullcalendar/interaction@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/interaction@npm:6.1.21"
+"@fullcalendar/interaction@npm:^6.1.22":
+  version: 6.1.22
+  resolution: "@fullcalendar/interaction@npm:6.1.22"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.21
-  checksum: 10c0/70167d97ce97a20aca2aa2f271e2941c88a21e0b6b825d0fe8b97fb4d6f527476398cce7091c004db6a42fddc985f8806ed75ee62cf9d6683e5080cffd2e12da
+    "@fullcalendar/core": ~6.1.22
+  checksum: 10c0/714206d0fd2ba2e7a6996db52117671a91ed41e6f6c90699dd425138b6c0c74e6342cb7cb3309a0f735baf0aeeb06022450403acab1c5e1877d1ddc695aa61b0
   languageName: node
   linkType: hard
 
-"@fullcalendar/luxon3@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/luxon3@npm:6.1.21"
+"@fullcalendar/luxon3@npm:^6.1.22":
+  version: 6.1.22
+  resolution: "@fullcalendar/luxon3@npm:6.1.22"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.21
+    "@fullcalendar/core": ~6.1.22
     luxon: ^3.0.0
-  checksum: 10c0/04e40071bc12282131444f05e04a2338a699b2ef12c0f92720d944d0405ea2a170a795952c50d4089971a24aeb5d72075168e2e769b5118790ed433a8381085f
+  checksum: 10c0/f43ec5f2d63839f7b0c53eeef621a4520711658845f29cfb1d80b938c29e57b75bece74f2b38014634c87141598efe98fafaf5e7679865b5044e096724832aee
   languageName: node
   linkType: hard
 
-"@fullcalendar/react@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/react@npm:6.1.21"
+"@fullcalendar/react@npm:^6.1.22":
+  version: 6.1.22
+  resolution: "@fullcalendar/react@npm:6.1.22"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.21
+    "@fullcalendar/core": ~6.1.22
     react: ^16.7.0 || ^17 || ^18 || ^19
     react-dom: ^16.7.0 || ^17 || ^18 || ^19
-  checksum: 10c0/7103e724676ea12a43c5020e2581902394c0e3d30ace0a15319d869efc099b0a4e053aac1ab52576e8086649679f616236399996bebd5b36a131e5cb338d6ec3
+  checksum: 10c0/60b7171c3e4d8c95c775435e11e7c873cc1b35d6e92a426ed9a862db71447779e528ed08a397d05b151e7fbb1feff176cfc702ff0135de585adc5dd8e44071ec
   languageName: node
   linkType: hard
 
-"@fullcalendar/timegrid@npm:^6.1.21":
-  version: 6.1.21
-  resolution: "@fullcalendar/timegrid@npm:6.1.21"
+"@fullcalendar/timegrid@npm:^6.1.22":
+  version: 6.1.22
+  resolution: "@fullcalendar/timegrid@npm:6.1.22"
   dependencies:
-    "@fullcalendar/daygrid": "npm:~6.1.21"
+    "@fullcalendar/daygrid": "npm:~6.1.22"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.21
-  checksum: 10c0/657d3c574c2ba434fee03bfbac70ab1999778476dd8ce1b1506c229aab46f9285188e09cac5a0d036795b3c73476d3e0eaaac05a7d55c742f832668c67e92bf1
+    "@fullcalendar/core": ~6.1.22
+  checksum: 10c0/f101736f5de9caecf6f307427c0f1d8118f8bb7873c42e03999efebf66bb1952b57f3ff6282e2758478ba4575f7826696943dff80a913cbe365439a7212e5d79
   languageName: node
   linkType: hard
 
@@ -10551,11 +10551,11 @@ __metadata:
     "@babel/preset-react": "npm:^7.29.7"
     "@babel/runtime": "npm:^7.29.10"
     "@cubing/icons": "npm:^3.0.5"
-    "@fullcalendar/core": "npm:^6.1.21"
-    "@fullcalendar/interaction": "npm:^6.1.21"
-    "@fullcalendar/luxon3": "npm:^6.1.21"
-    "@fullcalendar/react": "npm:^6.1.21"
-    "@fullcalendar/timegrid": "npm:^6.1.21"
+    "@fullcalendar/core": "npm:^6.1.22"
+    "@fullcalendar/interaction": "npm:^6.1.22"
+    "@fullcalendar/luxon3": "npm:^6.1.22"
+    "@fullcalendar/react": "npm:^6.1.22"
+    "@fullcalendar/timegrid": "npm:^6.1.22"
     "@hello-pangea/dnd": "npm:^18.0.1"
     "@playwright/test": "npm:^1.63.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.3"
