@@ -13,6 +13,11 @@ updates:
     - dependency-name: iso
     - dependency-name: selectize-rails
     - dependency-name: i18n-country-translations
+    # Vault breaks during runtime and we cannot catch this in CI because our CI does not have access to a Vault instance
+    #   Can be removed once https://github.com/hashicorp/vault-ruby/pull/427 is merged and released
+    - dependency-name: json
+      versions:
+        - ">= 3"
   open-pull-requests-limit: 10
 - package-ecosystem: npm
   directory: "/"

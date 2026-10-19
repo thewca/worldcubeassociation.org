@@ -51,7 +51,7 @@ gem 'eu_central_bank'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
 gem 'csv'
-gem 'json'
+gem 'json', '~> 2'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
