@@ -118,7 +118,7 @@ function PaymentForm({
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Stripe.js has not finished loading, so there is nothing to confirm against yet.
+    // Only try to confirm once Stripe has actually finished loading
     if (stripe && elements) {
       payRegistration.mutate({ stripe, elements });
     }
