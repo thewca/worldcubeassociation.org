@@ -76,7 +76,7 @@ import { nonFutureCompetitionYears } from "@/lib/wca/data/competitions";
 import _ from "lodash";
 
 const DEBOUNCE_MS = 600;
-const COMPETITIONS_PER_PAGE = 100;
+const COMPETITIONS_PER_PAGE = 50;
 
 // Units offered by the "within X of me" filter. `toKm` converts a radius in that unit to the
 // kilometres the distance calculation works in, and each unit carries its own default and step
