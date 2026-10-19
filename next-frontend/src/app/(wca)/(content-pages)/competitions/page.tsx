@@ -75,6 +75,8 @@ import {
 } from "@/lib/wca/competitions/statusUtils";
 import { nonFutureCompetitionYears } from "@/lib/wca/data/competitions";
 import _ from "lodash";
+import useIsScrolled from "@/lib/hooks/useIsScrolled";
+import BackToTopButton from "@/components/BackToTopButton";
 
 const DEBOUNCE_MS = 600;
 
@@ -143,6 +145,8 @@ export default function CompetitionsPage() {
     searchParams,
     createFilterState,
   );
+
+  const { isScrolledDown, ref } = useIsScrolled("100px");
 
   const { t } = useT();
 
@@ -462,7 +466,11 @@ export default function CompetitionsPage() {
                   variant="competitions"
                   borderWidth="2px"
                   stickyHeader
+                  pos="relative"
                 >
+                  {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+                  <Box ref={ref} position="absolute" />
+
                   <Table.Header bg="bg.muted">
                     <Table.Row>
                       <Table.ColumnHeader
@@ -533,6 +541,8 @@ export default function CompetitionsPage() {
           </Card.Body>
         </Tabs.Root>
       </Card.Root>
+
+      <BackToTopButton visible={isScrolledDown} />
     </VStack>
   );
 }
