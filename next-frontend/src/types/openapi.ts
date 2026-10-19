@@ -1157,6 +1157,7 @@ export interface components {
                 payment_status?: string;
                 paid_amount_iso: number;
                 currency_code: string;
+                currency_subunit_to_unit: number;
                 /** Format: datetime */
                 updated_at?: string;
             };
@@ -1640,6 +1641,11 @@ export interface components {
             /** @example USD */
             currency_code: string;
             /**
+             * @description How many of the currency's lowest denomination make up one unit
+             * @example 100
+             */
+            currency_subunit_to_unit: number;
+            /**
              * Format: date
              * @example 2025-07-03
              */
@@ -1882,6 +1888,11 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
+            /**
+             * @description How many of the currency's lowest denomination make up one unit
+             * @example 100
+             */
+            currency_subunit_to_unit: number;
             competitor_limit: number;
             championship_types: string[];
             /** Format: date-time */

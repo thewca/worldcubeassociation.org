@@ -65,6 +65,7 @@ properties:
       - has_paid
       - paid_amount_iso
       - currency_code
+      - currency_subunit_to_unit
     properties:
       has_paid:
         type: boolean
@@ -74,6 +75,8 @@ properties:
         type: integer
       currency_code:
         type: string
+      currency_subunit_to_unit:
+        type: integer
       updated_at:
         type: string
         format: datetime

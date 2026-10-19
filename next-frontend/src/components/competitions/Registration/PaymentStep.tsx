@@ -29,7 +29,6 @@ import { useT } from "@/lib/i18n/useI18n";
 import CurrencyValue from "@/components/CurrencyValue";
 import { hasPassed } from "@/lib/wca/dates";
 import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
-import { lowestDenominationsPerUnit } from "@/lib/wca/payments/currency";
 import { paymentCompletionUrl } from "@/lib/wca/payments/stripe";
 import { toaster } from "@/components/ui/toaster";
 import type { components } from "@/types/openapi";
@@ -60,8 +59,6 @@ function PaymentForm({
   const apiClient = useAPIClient();
 
   const [isDonating, setIsDonating] = useState(false);
-
-  const perUnit = lowestDenominationsPerUnit(competitionInfo.currency_code);
 
   const payRegistration = useMutation({
     mutationFn: async ({
@@ -133,7 +130,9 @@ function PaymentForm({
 
   const changeDonation = (donationUnits: number) =>
     onDonationChange(
-      Number.isNaN(donationUnits) ? 0 : Math.round(donationUnits * perUnit),
+      Number.isNaN(donationUnits)
+        ? 0
+        : Math.round(donationUnits * competitionInfo.currency_subunit_to_unit),
     );
 
   return (
@@ -167,7 +166,9 @@ function PaymentForm({
                 <NumberInput.Root
                   min={0}
                   width="full"
-                  value={(donationIso / perUnit).toString()}
+                  value={(
+                    donationIso / competitionInfo.currency_subunit_to_unit
+                  ).toString()}
                   onValueChange={(e) => changeDonation(e.valueAsNumber)}
                 >
                   <NumberInput.Input />
@@ -320,6 +321,7 @@ export default function PaymentStep({
             <CurrencyValue
               lowestDenomination={payment.paid_amount_iso}
               currencyCode={payment.currency_code}
+              subunitToUnit={payment.currency_subunit_to_unit}
             />
           </Alert.Description>
         </Alert.Content>

@@ -37,7 +37,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     competitions = competitions_scope.search(params[:q], params: params)
 
-    serial_methods = %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types]
+    serial_methods = %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types currency_subunit_to_unit]
     serial_includes = {}
 
     serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode

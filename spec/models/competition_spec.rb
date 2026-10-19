@@ -1525,6 +1525,18 @@ RSpec.describe Competition do
       end
     end
 
+    describe '#currency_subunit_to_unit' do
+      it 'uses the subunits of the competition currency' do
+        competition = create(:competition, currency_code: "EUR")
+        expect(competition.currency_subunit_to_unit).to eq(100)
+      end
+
+      it 'does not use subunits for currencies that have none in practice' do
+        competition = create(:competition, currency_code: "HUF")
+        expect(competition.currency_subunit_to_unit).to eq(1)
+      end
+    end
+
     describe '#payments_enabled?' do
       it 'returns true when stripe is connected' do
         competition = create(:competition, :stripe_connected)
