@@ -429,6 +429,7 @@ export default function CompetitionsPage() {
                 direction={{ base: "column", lg: "row" }}
                 justify="space-between"
                 align={{ base: "start", lg: "center" }}
+                mb={3}
               >
                 <Wrap gapX="3" gapY="1" align="center">
                   <Text>{t("competitions.index.registration_key")}</Text>
