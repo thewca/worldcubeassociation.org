@@ -20,6 +20,7 @@ import { useAPIClient } from "@/lib/wca/useAPI";
 import { paymentCompletionUrl } from "@/lib/wca/payments/stripe";
 import { toaster } from "@/components/ui/toaster";
 import { usePaymentAmount } from "@/providers/PaymentAmountProvider";
+import { useColorMode } from "@/components/ui/color-mode";
 import type { components } from "@/types/openapi";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
@@ -138,6 +139,7 @@ export default function StripePayment({
   children: ReactNode;
 }) {
   const { apiAmounts } = usePaymentAmount();
+  const { colorMode } = useColorMode();
 
   // `loadStripe` injects a script tag, so it must run once rather than on every render. The key
   //   and the connected account belong to this competition, which is why this cannot be the
@@ -155,6 +157,7 @@ export default function StripePayment({
         mode: "payment",
         amount: apiAmounts.stripe,
         currency: competitionInfo.currency_code.toLowerCase(),
+        appearance: { theme: colorMode === "dark" ? "night" : "stripe" },
       }}
     >
       <StripePaymentForm
