@@ -3697,7 +3697,7 @@ export interface operations {
                 isLead?: boolean;
                 /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
                 sort?: string;
-                /** @description Number of results per page */
+                /** @description Number of results per page. Ignored when isActive is true, which always returns all matching roles. */
                 per_page?: number;
             };
             header?: never;

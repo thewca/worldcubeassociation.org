@@ -89,6 +89,22 @@ RSpec.describe Api::V0::UserRolesController do
 
         expect(response.body).to eq(group_roles)
       end
+
+      it 'does not paginate active roles' do
+        create_list(:translator_role, 2)
+
+        get :index, params: { groupType: UserGroup.group_types[:translators], isActive: true, per_page: 1 }
+
+        expect(response.parsed_body.length).to eq(2)
+      end
+
+      it 'paginates inactive roles' do
+        create_list(:user_role, 2, :translators, :inactive)
+
+        get :index, params: { groupType: UserGroup.group_types[:translators], isActive: false, per_page: 1 }
+
+        expect(response.parsed_body.length).to eq(1)
+      end
     end
 
     context 'when user is logged in as an admin' do

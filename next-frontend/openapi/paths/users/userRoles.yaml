@@ -54,7 +54,7 @@ get:
       schema:
         type: integer
         default: 100
-      description: Number of results per page
+      description: Number of results per page. Ignored when isActive is true, which always returns all matching roles.
   responses:
     '200':
       description: A list of user roles

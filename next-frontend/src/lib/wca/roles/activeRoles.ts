@@ -15,9 +15,8 @@ export const getOfficersRoles = cache(() =>
 export const getBoardRoles = cache(() =>
   getRoles({ isActive: true, groupType: "board" }),
 );
-// This will break again if we ever get over 100 translators
 export const getTranslatorRoles = cache(() =>
-  getRoles({ isActive: true, groupType: "translators", per_page: 100 }),
+  getRoles({ isActive: true, groupType: "translators" }),
 );
 export const getTeamCommitteeMembers = cache(
   (groupId: number, isActive: boolean = true) =>
