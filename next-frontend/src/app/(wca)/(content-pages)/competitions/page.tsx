@@ -478,11 +478,19 @@ export default function CompetitionsPage() {
                     </Table.Row>
                     <Table.Row>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader>Date</Table.ColumnHeader>
-                      <Table.ColumnHeader>Name</Table.ColumnHeader>
+                      <Table.ColumnHeader>
+                        {t("competitions.competition_info.date")}
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader>
+                        {t("competitions.competition_info.name")}
+                      </Table.ColumnHeader>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader>Location</Table.ColumnHeader>
-                      <Table.ColumnHeader>Venue</Table.ColumnHeader>
+                      <Table.ColumnHeader>
+                        {t("competitions.competition_info.location")}
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader>
+                        {t("competitions.competition_info.venue")}
+                      </Table.ColumnHeader>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
