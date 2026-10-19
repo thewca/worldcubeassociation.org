@@ -356,7 +356,6 @@ class Registration < ApplicationRecord
                               competing: {
                                 registration_status: is_competing ? competing_status : 'non_competing',
                                 registered_on: registered_at,
-                                comments: comments,
                                 comment: comments || "",
                                 admin_comment: administrative_notes || "",
                               },
