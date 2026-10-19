@@ -193,7 +193,7 @@ export default function StepPanel({
     <VStack width="full" gap="4" align="stretch">
       {/* Withdrawing hands the competitor back to the start of the flow, and this is what tells
           them why the panel they were looking at has reset. */}
-      {registration !== null && currentStep < steps.length && (
+      {registration !== null && (
         <RegistrationStatus registration={registration} />
       )}
       <Steps.Root
