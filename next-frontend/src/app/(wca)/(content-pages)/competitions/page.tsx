@@ -455,14 +455,36 @@ export default function CompetitionsPage() {
                     </Badge>
                   ))}
                 </Wrap>
-                <Text>
-                  {t("competitions.index.currently_displaying", {
-                    count: competitionsFiltered.length,
-                  })}
-                </Text>
               </Stack>
               <Table.ScrollArea>
-                <Table.Root size="xs" variant="competitions" borderWidth="2px">
+                <Table.Root
+                  size="xs"
+                  variant="competitions"
+                  borderWidth="2px"
+                  stickyHeader
+                >
+                  <Table.Header bg="bg.muted">
+                    <Table.Row>
+                      <Table.ColumnHeader
+                        colSpan={6}
+                        fontWeight="normal"
+                        textAlign="end"
+                        p={2}
+                      >
+                        {t("competitions.index.currently_displaying", {
+                          count: competitionsFiltered.length,
+                        })}
+                      </Table.ColumnHeader>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.ColumnHeader></Table.ColumnHeader>
+                      <Table.ColumnHeader>Date</Table.ColumnHeader>
+                      <Table.ColumnHeader>Name</Table.ColumnHeader>
+                      <Table.ColumnHeader></Table.ColumnHeader>
+                      <Table.ColumnHeader>Location</Table.ColumnHeader>
+                      <Table.ColumnHeader>Venue</Table.ColumnHeader>
+                    </Table.Row>
+                  </Table.Header>
                   <Table.Body>
                     {inProgressComps.length > 0 && (
                       <>
