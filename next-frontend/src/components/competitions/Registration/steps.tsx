@@ -52,6 +52,7 @@ export function StepContent({
         <PaymentStep
           competitionInfo={competitionInfo}
           registration={registration}
+          parameters={step.parameters}
           deadline={step.deadline}
         />
       );
@@ -167,6 +168,7 @@ export function StepSummary({
         <PaymentStep
           competitionInfo={competitionInfo}
           registration={registration}
+          parameters={step.parameters}
           deadline={step.deadline}
         />
       ) : (

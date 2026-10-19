@@ -1506,6 +1506,56 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  # The v1 counterpart of the route above, which the Next.js register page uses. Unlike that one it
+  # is registration-scoped and checks that the caller is allowed to see the registration.
+  describe 'GET #payment_denomination in the v1 API' do
+    let(:competition) do
+      create(:competition,
+             :registration_open,
+             :with_organizer,
+             :stripe_connected,
+             currency_code: "SEK",
+             base_entry_fee_lowest_denomination: 1500)
+    end
+    let(:reg) { create(:registration, :pending, competition: competition) }
+
+    it 'returns a hash of amounts/currencies formatted for payment providers' do
+      expected_response = { api_amounts: { stripe: 1500, paypal: "15.00" }, human_amount: "15 kr (Swedish Krona)" }.with_indifferent_access
+      api_sign_in_as(reg.user)
+      get payment_denomination_api_v1_registration_path(reg)
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to eq(expected_response)
+    end
+
+    it 'allows a donation to be specified' do
+      api_sign_in_as(reg.user)
+      get payment_denomination_api_v1_registration_path(reg), params: { iso_donation_amount: 1000 }
+
+      expect(response.parsed_body.dig('api_amounts', 'stripe')).to be(2500)
+    end
+
+    it 'lets the organizers look at it' do
+      api_sign_in_as(competition.organizers.first)
+      get payment_denomination_api_v1_registration_path(reg)
+
+      expect(response).to be_successful
+    end
+
+    it 'refuses an unrelated user' do
+      api_sign_in_as(create(:user))
+      get payment_denomination_api_v1_registration_path(reg)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'requires a signed in user' do
+      get payment_denomination_api_v1_registration_path(reg)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+
   describe 'PATCH #bulk_accept' do
     let(:auto_accept_comp) do
       create(

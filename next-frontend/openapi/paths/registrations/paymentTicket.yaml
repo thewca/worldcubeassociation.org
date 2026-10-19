@@ -1,0 +1,38 @@
+get:
+  summary: Open a payment intent for a registration
+  description: |
+    Creates a payment intent with the competition's payment provider and hands back the client
+    secret needed to confirm it from the browser. The amount charged is the registration's entry
+    fee plus the donation asked for here - the client does not get to name a price.
+  tags:
+    - registrations
+    - payments
+  operationId: registrationPaymentTicket
+  parameters:
+    - name: registrationId
+      in: path
+      required: true
+      schema:
+        type: integer
+    - name: iso_donation_amount
+      in: query
+      required: false
+      description: Optional donation on top of the entry fee, in the currency's lowest denomination
+      schema:
+        type: integer
+        default: 0
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - client_secret
+            properties:
+              client_secret:
+                type: string
+                description: The provider-issued secret that confirms this payment from the browser
+    '4XX':
+      $ref: '../../errorResponses/RegistrationError.yaml'

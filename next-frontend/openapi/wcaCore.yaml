@@ -27,6 +27,8 @@ paths:
     $ref: 'paths/registrations/registrationEligibility.yaml'
   /v1/registrations/{registrationId}/payment_denomination:
     $ref: 'paths/registrations/paymentDenomination.yaml'
+  /v1/registrations/{registrationId}/payment_ticket:
+    $ref: 'paths/registrations/paymentTicket.yaml'
 
   /v1/competitions/{competitionId}/scoretakers:
     get:
