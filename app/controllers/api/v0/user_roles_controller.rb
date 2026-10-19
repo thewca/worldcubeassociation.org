@@ -314,6 +314,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     end
 
+    # Make sure to hide roles which should be hidden from certain users (or the public)
+    active_roles = UserRole.filter_roles_for_logged_in_user(active_roles, current_user)
+
     render json: { result: active_roles }
   end
 end
