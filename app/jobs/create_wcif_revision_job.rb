@@ -4,7 +4,7 @@ class CreateWcifRevisionJob < ApplicationJob
   def perform(competition, editing_user, oauth_application)
     # Two quick PATCHes enqueue two jobs, which would otherwise race on the latest revision.
     competition.with_lock do
-      wcif_json = competition.to_wcif(authorized: true, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).to_json
+      wcif_json = competition.to_wcif(version: Competition::WCIF_VERSION_CATALOGUE[:latest]).to_json
       latest_revision = competition.wcif_revisions.last
 
       return if latest_revision.present? && latest_revision.wcif_json == wcif_json

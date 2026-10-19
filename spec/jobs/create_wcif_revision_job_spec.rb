@@ -9,7 +9,7 @@ RSpec.describe CreateWcifRevisionJob do
   let(:oauth_application) { create(:oauth_application) }
 
   def latest_wcif_json
-    competition.to_wcif(authorized: true, version: Competition::WCIF_VERSION_CATALOGUE[:latest]).to_json
+    competition.to_wcif(version: Competition::WCIF_VERSION_CATALOGUE[:latest]).to_json
   end
 
   it "stores the current WCIF as the first revision" do
@@ -20,6 +20,13 @@ RSpec.describe CreateWcifRevisionJob do
     expect(revision.edited_by).to eq delegate
     expect(revision.oauth_application).to be_nil
     expect(revision.wcif_json).to eq latest_wcif_json
+  end
+
+  it "does not store private person data" do
+    CreateWcifRevisionJob.perform_now(competition, delegate, nil)
+
+    delegate_wcif = JSON.parse(competition.wcif_revisions.sole.wcif_json)["persons"].find { it["wcaUserId"] == delegate.id }
+    expect(delegate_wcif).not_to include("email", "birthdate")
   end
 
   it "skips a WCIF identical to the latest revision" do
