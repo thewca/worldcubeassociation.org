@@ -41,9 +41,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = UserRole.filter_roles(roles, current_user, params)
     roles = UserRole.sort_roles(roles, params[:sort])
 
+    should_include_emails = authenticated_user&.can_view_delegate_matters?
+
     # Paginating the list by sending only first 100 elements unless mentioned in the API.
     paginate json: roles, include: {
-      user: { exclude_deprecated: true, include_email: true },
+      user: { exclude_deprecated: true, include_email: should_include_emails },
       group: {},
       metadata: {},
     }
