@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_29_170000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1682,6 +1682,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_170000) do
     t.index ["extendable_type", "extendable_id"], name: "index_wcif_extensions_on_extendable_type_and_extendable_id"
   end
 
+  create_table "wcif_revisions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", null: false
+    t.integer "revision_number", null: false
+    t.bigint "edited_by_id", null: false
+    t.integer "oauth_application_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id", "revision_number"], name: "index_wcif_revisions_on_competition_id_and_revision_number", unique: true
+    t.index ["edited_by_id"], name: "index_wcif_revisions_on_edited_by_id"
+    t.index ["oauth_application_id"], name: "index_wcif_revisions_on_oauth_application_id"
+  end
+
   create_table "wfc_dues_redirects", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "redirect_source_id", null: false
@@ -1772,5 +1784,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_170000) do
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"
   add_foreign_key "user_roles", "users"
+  add_foreign_key "wcif_revisions", "oauth_applications", on_delete: :nullify
+  add_foreign_key "wcif_revisions", "users", column: "edited_by_id"
   add_foreign_key "wfc_dues_redirects", "wfc_xero_users", column: "redirect_to_id"
 end

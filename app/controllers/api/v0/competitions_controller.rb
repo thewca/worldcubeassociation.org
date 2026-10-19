@@ -298,7 +298,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     wcif = wcif["_json"] || wcif
 
-    competition.set_wcif!(wcif, require_user!)
+    competition.set_wcif!(wcif, require_user!, oauth_application: doorkeeper_token&.application)
     render json: {
       status: "Successfully saved WCIF",
     }

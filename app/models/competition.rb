@@ -49,6 +49,7 @@ class Competition < ApplicationRecord
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id", inverse_of: :competition
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
+  has_many :wcif_revisions, -> { order(:revision_number) }, dependent: :destroy, inverse_of: :competition
   has_one :tickets_competition_result
   has_one :result_ticket, through: :tickets_competition_result, source: :ticket
 
@@ -2017,7 +2018,7 @@ class Competition < ApplicationRecord
     JSON::Validator.validate!(expected_schema, wcif, **self.json_validation_options)
   end
 
-  def set_wcif!(wcif, current_user)
+  def set_wcif!(wcif, current_user, oauth_application: nil)
     import_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
 
     Competition.validate_wcif_schema!(wcif, version: import_version)
@@ -2044,6 +2045,8 @@ class Competition < ApplicationRecord
       #   artificially pretend like the Competition object was updated anyways.
       touch
     end
+
+    CreateWcifRevisionJob.perform_later(self, current_user, oauth_application)
   end
 
   def set_wcif_competitor_limit!(wcif_competitor_limit, current_user)
