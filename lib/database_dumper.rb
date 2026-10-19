@@ -852,6 +852,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "wcif_extensions" => :skip_all_rows,
+    "wcif_revisions" => :skip_all_rows,
     "assignments" => :skip_all_rows,
     "paypal_records" => :skip_all_rows,
     "stripe_records" => :skip_all_rows,
