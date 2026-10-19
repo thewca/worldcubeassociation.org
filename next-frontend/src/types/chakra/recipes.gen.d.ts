@@ -433,7 +433,8 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
-  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | "deep" | "slatePastel" | undefined
+  interactive?: boolean | undefined
+  colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | undefined
 }
 
 export type CardVariantProps = {
@@ -548,7 +549,9 @@ export type CodeBlockVariantMap = {
 
 export type CollapsibleSlot = "root" | "trigger" | "content" | "indicator"
 
-export interface CollapsibleVariant {}
+export interface CollapsibleVariant {
+  overflowPadding?: boolean | undefined
+}
 
 export type CollapsibleVariantProps = {
   [K in keyof CollapsibleVariant]?: ConditionalValue<CollapsibleVariant[K]> | undefined
@@ -1362,7 +1365,9 @@ export interface TabsVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "line" */
   variant?: "line" | "subtle" | "enclosed" | "outline" | "plain" | undefined
+  fitContent?: boolean | undefined
   highContrast?: boolean | undefined
+  sideNav?: boolean | undefined
 }
 
 export type TabsVariantProps = {

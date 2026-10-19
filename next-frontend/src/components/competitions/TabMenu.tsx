@@ -8,9 +8,12 @@ import {
   Collapsible,
   Drawer,
   IconButton,
+  Link as ChakraLink,
+  Separator,
   Spacer,
   Tabs,
   Text,
+  TextProps,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
@@ -19,11 +22,16 @@ import { useT } from "@/lib/i18n/useI18n";
 import {
   CompetitionNavTab,
   TabWithChildren,
+  TabWithLink,
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
 import { TFunction } from "i18next";
-import { LuAlignJustify } from "react-icons/lu";
-import { iconMap } from "@/components/icons/iconMap";
+import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
+import type { RouteLiteral } from "nextjs-routes";
+import IconDisplay from "@/components/IconDisplay";
+import TabTarget from "@/components/ui/tabTarget";
+import { route } from "nextjs-routes";
+import { Tooltip } from "@/components/ui/tooltip";
 
 function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
@@ -34,10 +42,14 @@ export default function TabMenu({
   competitionInfo,
   children,
   tabs,
+  backHref,
+  customTabs = [],
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
+  backHref?: RouteLiteral;
+  customTabs?: string[];
 }) {
   const pathName = usePathname();
   const { t } = useT();
@@ -49,7 +61,12 @@ export default function TabMenu({
   const eventId = activityCodeFromPath(currentPath!);
 
   const [openGroup, setOpenGroup] = useState<string | null>(eventId);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  // The drawer stays open only while the route it was opened on is still current, so any
+  //   navigation closes it. Until tab navigation became client-side the page reload did that
+  //   for us; hanging an onClick on the links instead would mean threading a callback three
+  //   components down, past two `asChild` merges that are known to drop handlers.
+  const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
+  const drawerOpen = drawerOpenedAt === pathName;
 
   return (
     <Tabs.Root
@@ -57,18 +74,25 @@ export default function TabMenu({
       width="full"
       value={currentPath}
       orientation="vertical"
+      sideNav
       lazyMount
       unmountOnExit
     >
       <Tabs.List
-        height="fit-content"
-        position="sticky"
         width="fit-content"
-        min-width="3xs"
+        minW="3xs"
         textAlign="start"
         hideBelow="md"
         gap="3"
       >
+        {backHref && (
+          <BackLink
+            href={backHref}
+            label={competitionInfo.name}
+            px="3"
+            py="2"
+          />
+        )}
         <TabList
           tabs={tabs}
           t={t}
@@ -77,23 +101,28 @@ export default function TabMenu({
           onToggle={(tab: CompetitionNavTab) =>
             setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
           }
+          customTabs={customTabs}
+          competitionId={competitionInfo.id}
+          currentPath={currentPath}
         />
       </Tabs.List>
-      <Box hideFrom="md" mb="4">
+      <Box hideFrom="md">
         <Drawer.Root
           open={drawerOpen}
-          onOpenChange={(e) => setDrawerOpen(e.open)}
+          onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
           placement="start"
         >
           <Drawer.Trigger asChild>
             <IconButton
               aria-label="Open menu"
-              size="sm"
+              colorPalette="blue"
+              size="xl"
               position="fixed"
-              left="3"
-              top="3"
-              colorPalette="bg"
-              variant="ghost"
+              insetEnd="4"
+              bottom="4"
+              zIndex="docked"
+              rounded="full"
+              shadow="lg"
             >
               <LuAlignJustify />
             </IconButton>
@@ -103,7 +132,17 @@ export default function TabMenu({
           <Drawer.Positioner>
             <Drawer.Content>
               <Drawer.Header>
-                <Drawer.Title>{competitionInfo.name}</Drawer.Title>
+                <Drawer.Title>
+                  {backHref ? (
+                    <BackLink
+                      href={backHref}
+                      label={competitionInfo.name}
+                      onClick={() => setDrawerOpenedAt(null)}
+                    />
+                  ) : (
+                    competitionInfo.name
+                  )}
+                </Drawer.Title>
                 <Drawer.CloseTrigger asChild>
                   <CloseButton />
                 </Drawer.CloseTrigger>
@@ -127,6 +166,9 @@ export default function TabMenu({
                         prev === tab.menuKey ? null : tab.menuKey,
                       )
                     }
+                    customTabs={customTabs}
+                    competitionId={competitionInfo.id}
+                    currentPath={currentPath}
                   />
                 </Tabs.List>
               </Drawer.Body>
@@ -134,7 +176,9 @@ export default function TabMenu({
           </Drawer.Positioner>
         </Drawer.Root>
       </Box>
-      <Tabs.Content width="full" value={currentPath!}>
+      {/* Tabs.Content is a flex item, which has `min-width: auto`.
+       It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
+      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
         {children}
       </Tabs.Content>
     </Tabs.Root>
@@ -147,34 +191,159 @@ function TabList({
   isAdminRoute,
   onToggle,
   openGroup,
+  customTabs,
+  competitionId,
+  currentPath,
 }: {
   tabs: CompetitionNavTab[];
   t: TFunction;
   isAdminRoute: boolean;
   openGroup: string | null;
   onToggle: (tab: CompetitionNavTab) => void;
+  customTabs: string[];
+  competitionId: string;
+  currentPath?: string;
 }) {
-  return tabs.map((tab) =>
-    "href" in tab ? (
-      <Tabs.Trigger value={tab.menuKey} asChild key={tab.menuKey}>
-        <Text asChild textStyle="bodyEmphasis" justifyContent="left">
-          <Link href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}>
-            {t(
-              isAdminRoute && tab.i18nKeyAdmin ? tab.i18nKeyAdmin : tab.i18nKey,
-            )}
-          </Link>
-        </Text>
-      </Tabs.Trigger>
-    ) : (
-      <CollapsibleTabGroup
-        key={tab.menuKey}
-        tab={tab}
-        t={t}
-        isAdminRoute={isAdminRoute}
-        isOpen={openGroup === tab.menuKey}
-        onToggle={() => onToggle(tab)}
-      />
-    ),
+  return (
+    <>
+      {tabs.map((tab) =>
+        "href" in tab ? (
+          <TabLink
+            key={tab.menuKey}
+            tab={tab}
+            t={t}
+            isAdminRoute={isAdminRoute}
+            currentPath={currentPath}
+          />
+        ) : (
+          <CollapsibleTabGroup
+            key={tab.menuKey}
+            tab={tab}
+            t={t}
+            isAdminRoute={isAdminRoute}
+            isOpen={openGroup === tab.menuKey}
+            onToggle={() => onToggle(tab)}
+            currentPath={currentPath}
+          />
+        ),
+      )}
+      {customTabs.length > 0 && <Separator />}
+      {customTabs.map((tabName) => {
+        const tabKey = encodeURIComponent(tabName);
+
+        return (
+          <Tabs.Trigger
+            key={tabName}
+            value={tabKey}
+            minHeight="fit-content"
+            maxWidth="xs"
+            asChild
+          >
+            <Text textStyle="bodyEmphasis" asChild justifyContent="left">
+              <TabTarget
+                tabKey={tabKey}
+                currentPath={currentPath}
+                href={route({
+                  pathname:
+                    "/competitions/[competitionId]/custom-tabs/[tabName]",
+                  query: { competitionId, tabName: tabKey },
+                })}
+              >
+                {tabName}
+              </TabTarget>
+            </Text>
+          </Tabs.Trigger>
+        );
+      })}
+    </>
+  );
+}
+
+function BackLink({
+  href,
+  label,
+  onClick,
+  ...rest
+}: TextProps & {
+  href: RouteLiteral;
+  label: string;
+  onClick?: () => void;
+}) {
+  return (
+    <Text
+      asChild
+      display="inline-flex"
+      alignItems="center"
+      gap="2"
+      textStyle="bodyEmphasis"
+      {...rest}
+    >
+      <Link href={href} onClick={onClick}>
+        <LuArrowLeft />
+        {label}
+      </Link>
+    </Text>
+  );
+}
+
+function TabLink({
+  tab,
+  t,
+  isAdminRoute,
+  currentPath,
+}: {
+  tab: TabWithLink;
+  t: TFunction;
+  isAdminRoute: boolean;
+  currentPath?: string;
+}) {
+  const renderLabel = (renderTab: TabWithLink) =>
+    t(
+      isAdminRoute && renderTab.i18nKeyAdmin
+        ? renderTab.i18nKeyAdmin
+        : renderTab.i18nKey,
+    );
+
+  const trigger = (
+    <Tabs.Trigger
+      value={tab.menuKey}
+      asChild
+      disabled={tab.disabled}
+      minHeight="fit-content"
+      justifyContent="left"
+    >
+      {tab.externalHref && !tab.disabled ? (
+        <ChakraLink
+          href={tab.externalHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          color="currentColor"
+          textStyle="bodyEmphasis"
+        >
+          {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
+          {renderLabel(tab)}
+        </ChakraLink>
+      ) : (
+        <TabTarget
+          tabKey={tab.menuKey}
+          currentPath={currentPath}
+          href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}
+          disabled={tab.disabled}
+          textStyle="bodyEmphasis"
+        >
+          {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
+          {renderLabel(tab)}
+        </TabTarget>
+      )}
+    </Tabs.Trigger>
+  );
+
+  if (!tab.tooltipI18nKey) return trigger;
+
+  return (
+    <Tooltip content={t(tab.tooltipI18nKey)} showArrow openDelay={200}>
+      {trigger}
+    </Tooltip>
   );
 }
 
@@ -184,34 +353,38 @@ function CollapsibleTabGroup({
   isAdminRoute,
   isOpen,
   onToggle,
+  currentPath,
 }: {
   tab: TabWithChildren;
   t: TFunction;
   isAdminRoute: boolean;
   isOpen: boolean;
   onToggle: () => void;
+  currentPath?: string;
 }) {
-  const { i18nKey, icon, children } = tab;
-  const IconComponent = iconMap[icon];
+  const { children } = tab;
 
   return (
     <Collapsible.Root open={isOpen} onOpenChange={onToggle}>
       <Collapsible.Trigger
         width="full"
         display="flex"
+        alignItems="center"
+        gap="2"
         textAlign="start"
+        textStyle="bodyEmphasis"
+        minHeight="fit-content"
         px="3"
         py="2"
         borderRadius="md"
         _hover={{ bg: "bg.subtle" }}
       >
-        <Text textStyle="bodyEmphasis">
-          <IconComponent /> {t(i18nKey)}
-        </Text>
+        {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
+        {t(tab.i18nKey)}
       </Collapsible.Trigger>
 
       <Collapsible.Content>
-        <Box pl="3" display="flex" flexDirection="column" gap="1" pt="1">
+        <Box ps="3" display="flex" flexDirection="column" gap="1" pt="1">
           {children.map(
             ({ menuKey, disabled, i18nKey, href, hrefAdmin, badgeI18nKey }) => (
               <Tabs.Trigger
@@ -221,14 +394,16 @@ function CollapsibleTabGroup({
                 disabled={disabled}
               >
                 <Text asChild justifyContent="left">
-                  {disabled ? (
-                    <Text>{t(i18nKey)}</Text>
-                  ) : (
-                    <Link href={isAdminRoute && hrefAdmin ? hrefAdmin : href}>
-                      {t(i18nKey)} <Spacer />
-                      {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                    </Link>
-                  )}
+                  <TabTarget
+                    tabKey={menuKey}
+                    currentPath={currentPath}
+                    href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
+                    disabled={disabled}
+                    display="flex"
+                  >
+                    {t(i18nKey)} <Spacer />
+                    {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                  </TabTarget>
                 </Text>
               </Tabs.Trigger>
             ),

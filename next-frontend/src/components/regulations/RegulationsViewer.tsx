@@ -4,15 +4,21 @@ import { MouseEvent, useCallback, useMemo, useState } from "react";
 import {
   Box,
   Combobox,
+  IconButton,
   Portal,
   Text,
   VStack,
   createListCollection,
 } from "@chakra-ui/react";
-import { LuSearch } from "react-icons/lu";
+import { LuArrowUp, LuSearch } from "react-icons/lu";
+import { useOnInView } from "react-intersection-observer";
+import { useT } from "@/lib/i18n/useI18n";
 
 const MIN_QUERY_LENGTH = 2;
 const MAX_RESULTS = 50;
+// Grows the observed area upwards, so the top sentinel only counts as out of
+// view once the reader has scrolled a screenful or so past it.
+const BACK_TO_TOP_ROOT_MARGIN = "400px 0px 0px 0px";
 
 interface SearchItem {
   id: string;
@@ -55,7 +61,7 @@ const contentStyles = {
   "& h2": { fontSize: "2xl", fontWeight: "bold", mt: 6, mb: 2 },
   "& h3": { fontSize: "xl", fontWeight: "bold", mt: 4, mb: 2 },
   "& p": { my: 3 },
-  "& ul": { listStyleType: "none", pl: 6, my: 2 },
+  "& ul": { listStyleType: "none", ps: 6, my: 2 },
   "& a": { color: "blue.500", textDecoration: "underline" },
   "& li[id]": { my: 2, scrollMarginTop: "6rem" },
   "& h2[id], & h3[id]": { scrollMarginTop: "6rem" },
@@ -67,7 +73,7 @@ const contentStyles = {
     fontSize: "xs",
     fontWeight: "bold",
     textTransform: "uppercase",
-    mr: 1,
+    me: 1,
   },
   "& .version": { color: "fg.muted", fontSize: "sm", mb: 4 },
 } as const;
@@ -84,7 +90,13 @@ export default function RegulationsViewer({
 }: {
   contentHtml: string;
 }) {
+  const { t } = useT();
   const [query, setQuery] = useState("");
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
+
+  const topSentinelRef = useOnInView((inView) => setIsScrolledDown(!inView), {
+    rootMargin: BACK_TO_TOP_ROOT_MARGIN,
+  });
 
   const items = useMemo(() => extractSearchItems(contentHtml), [contentHtml]);
 
@@ -143,6 +155,9 @@ export default function RegulationsViewer({
 
   return (
     <VStack align="stretch" gap={4}>
+      {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+      <Box ref={topSentinelRef} position="absolute" />
+
       <Box position="sticky" top={0} zIndex={1} bg="bg" py={2}>
         <Combobox.Root
           collection={collection}
@@ -191,6 +206,21 @@ export default function RegulationsViewer({
         // must be injected verbatim so every anchor id keeps working.
         dangerouslySetInnerHTML={{ __html: contentHtml }}
       />
+
+      {isScrolledDown && (
+        <IconButton
+          aria-label={t("common.back_to_top")}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          position="fixed"
+          bottom={6}
+          insetEnd={6}
+          zIndex="sticky"
+          rounded="full"
+          animation="fade-in"
+        >
+          <LuArrowUp />
+        </IconButton>
+      )}
     </VStack>
   );
 }

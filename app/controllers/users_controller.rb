@@ -329,6 +329,8 @@ class UsersController < ApplicationController
       revocation_reason: reason,
     )
 
+    AvatarsMailer.notify_user_of_avatar_removal(current_user, user_avatar.user, reason).deliver_later
+
     render json: { ok: true }
   end
 

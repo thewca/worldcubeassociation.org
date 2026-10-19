@@ -34,7 +34,6 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
-      NODE_MAJOR: 24
       DISABLE_SPRING: 1
     steps:
       - uses: actions/checkout@v7
@@ -46,10 +45,13 @@ jobs:
       - name: Install fresh Bundler packages
         run: bin/bundle install
       - name: Set up Corepack/Yarn
-        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        run: |
+          npm install -g corepack
+          corepack enable
       - uses: actions/setup-node@v7
         with:
-          node-version: ${{ env.NODE_MAJOR }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: bin/yarn install
@@ -74,7 +76,6 @@ jobs:
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
-      NODE_MAJOR: 24
       DISABLE_SPRING: 1
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       CAPYBARA_APP_HOST: "" # Explicitly set a blank value to override our default Docker container setup
@@ -92,10 +93,13 @@ jobs:
       - name: Install fresh Bundler packages
         run: bin/bundle install
       - name: Set up Corepack/Yarn
-        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        run: |
+          npm install -g corepack
+          corepack enable
       - uses: actions/setup-node@v7
         with:
-          node-version: ${{ env.NODE_MAJOR }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
       - name: Install fresh Yarn packages
         run: bin/yarn install

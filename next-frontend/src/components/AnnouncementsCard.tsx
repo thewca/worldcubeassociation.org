@@ -14,10 +14,11 @@ function AnnouncementItem({
   return (
     <Accordion.Item
       value={announcement.id}
+      borderWidth="1px"
       layerStyle="fill.subtle"
       _open={{ layerStyle: { _light: "fill.solid", _dark: "fill.muted" } }}
     >
-      <Accordion.ItemTrigger _open={{ textStyle: "h2" }}>
+      <Accordion.ItemTrigger _open={{ textStyle: "h2", cursor: "default" }}>
         <Accordion.ItemIndicator _open={{ display: "none" }} />
         <Stack gap={1} alignItems="flex-start">
           <Text textStyle="s1">{announcement.title}</Text>

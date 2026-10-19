@@ -183,6 +183,25 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/bookmark": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Whether the current user has bookmarked a competition */
+        get: operations["getCompetitionBookmark"];
+        put?: never;
+        /** Bookmark a competition for the current user */
+        post: operations["bookmarkCompetition"];
+        /** Remove the current user's bookmark of a competition */
+        delete: operations["unbookmarkCompetition"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/live/rounds": {
         parameters: {
             query?: never;
@@ -494,6 +513,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/persons/{wca_id}/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get results for a person
+         * @description Every result the person has ever earned, optionally narrowed to one event. Public: no authentication required.
+         */
+        get: operations["v1PersonResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/persons/{wca_id}/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get record-setting results for a person
+         * @description The subset of the person's results that set a national, continental or world record, for either single or average. Public: no authentication required.
+         */
+        get: operations["v1PersonRecords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/geocoding/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Look up the locations matching an address
+         * @description Resolves a free-text address, city or postcode to coordinates. Requires authentication, and each user may only search 5 times per minute.
+         */
+        get: operations["v1GeocodingSearch"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/": {
         parameters: {
             query?: never;
@@ -607,7 +686,7 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    sort_by?: string;
+                    sort_by?: "average" | "single";
                 };
                 header?: never;
                 path: {
@@ -1050,6 +1129,8 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @enum {string} */
+        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         RegistrationDataV2: {
             id: number;
             registrant_id: number;
@@ -1064,7 +1145,7 @@ export interface components {
             };
             competing: {
                 event_ids: string[];
-                registration_status?: string;
+                registration_status?: components["schemas"]["CompetingStatus"];
                 /** Format: datetime */
                 registered_on?: string;
                 comment?: string;
@@ -1080,12 +1161,13 @@ export interface components {
                 updated_at?: string;
             };
         };
-        /** @enum {string} */
-        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         BaseRegistrationConfig: {
             key: string;
-            isEditable: boolean;
+            is_editable: boolean;
+            is_post_step: boolean;
             parameters?: Record<string, never>;
+            /** @enum {string} */
+            summary_status: "show" | "hide" | "priority";
         };
         RequirementsStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
             /**
@@ -1207,6 +1289,10 @@ export interface components {
             name: string;
         };
         ScoretakerList: components["schemas"]["Scoretaker"][];
+        CompetitionBookmark: {
+            /** @example true */
+            bookmarked: boolean;
+        };
         WcifTimeLimit: {
             /** @example 18000 */
             centiseconds: number;
@@ -1406,6 +1492,75 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
+        /** @description A single competitor's result in one round, carrying the competition context needed to render it on its own. This is the result shape for the v1 API; the v0 `Result` and `ExtendedResult` schemas name several of the same fields after database columns and are not interchangeable with it. */
+        V1Result: {
+            /** @example 6709306 */
+            id: number;
+            /**
+             * @description The competitor's position within this round.
+             * @example 1
+             */
+            pos: number;
+            /**
+             * @description The competitor's position across all rounds linked into the same dual round. Only meaningful when `linked_round_id` is present.
+             * @example 1
+             */
+            global_pos: number;
+            /** @example 84 */
+            best: number;
+            /**
+             * @description Zero when the round's format does not produce an average.
+             * @example 88
+             */
+            average: number;
+            /** @description Attempt values in solve order. Skipped solves are 0 and DNF/DNS are negative, so the best and worst attempt are derived from this list rather than sent as separate indices. */
+            attempts: number[];
+            /** @example 2019WANY36 */
+            wca_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            name: string;
+            /**
+             * @description ISO 3166-1 alpha-2 code of the country the competitor represented.
+             * @example CN
+             */
+            country_iso2: string;
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /**
+             * @description The competition's short name, as used in table cells. Distinct from its full name, which this endpoint does not carry.
+             * @example Hangzhou Open 2024
+             */
+            competition_short_name: string;
+            /**
+             * Format: date
+             * @example 2024-11-16
+             */
+            competition_start_date: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example f */
+            round_type_id: string;
+            /** @example a */
+            format_id: string;
+            /**
+             * @description Present when this round is linked with others into a dual round.
+             * @example 42
+             */
+            linked_round_id?: number;
+            /** @example WR */
+            regional_single_record?: string;
+            /** @example NR */
+            regional_average_record?: string;
+        };
+        V1Results: components["schemas"]["V1Result"][];
+        GeocodedLocation: {
+            /** @example Berlin, Germany */
+            formatted_address: string;
+            /** @example 52.52 */
+            latitude: number;
+            /** @example 13.405 */
+            longitude: number;
+        };
         TeamMembership: {
             id: number;
             /** @example wst */
@@ -1516,6 +1671,8 @@ export interface components {
             /** @example false */
             event_restrictions: boolean;
             cancelled_at?: string | null;
+            /** Format: date-time */
+            results_posted_at: string | null;
             /**
              * Format: date-time
              * @example 2025-05-29T06:59:00.000Z
@@ -1580,6 +1737,8 @@ export interface components {
             "registration_full_and_accepted?": boolean;
             /** @example 42 */
             spots_left?: number | null;
+            /** @example 7 */
+            waiting_list_count: number;
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
@@ -1679,19 +1838,21 @@ export interface components {
             regional_average_record: string | null;
         };
         PsychSheet: {
-            sort_by: string;
-            sort_by_second: string;
+            /** @enum {string} */
+            sort_by: "average" | "single";
+            /** @enum {string} */
+            sort_by_second: "average" | "single";
             sorted_rankings: {
                 name: string;
                 user_id: number;
-                wca_id: string;
+                wca_id: string | null;
                 country_iso2: string;
                 average_best: number;
-                average_rank: number;
+                average_rank: number | null;
                 single_best: number;
-                single_rank: number;
-                tied_previous: boolean;
-                pos: number;
+                single_rank: number | null;
+                tied_previous: boolean | null;
+                pos: number | null;
             }[];
         };
         CompetitionIndex: {
@@ -1711,12 +1872,16 @@ export interface components {
             country_iso2: string;
             city: string;
             venue: string;
+            venue_address: string;
             /** Format: float */
             latitude_degrees: number;
             /** Format: float */
             longitude_degrees: number;
             event_ids: string[];
             main_event_id: string;
+            base_entry_fee_lowest_denomination: number;
+            /** @example USD */
+            currency_code: string;
             competitor_limit: number;
             championship_types: string[];
             /** Format: date-time */
@@ -2028,6 +2193,7 @@ export interface components {
                 updated_at?: string;
                 /** Format: email */
                 email?: string;
+                location?: string;
             };
             class?: string;
         };
@@ -2479,6 +2645,78 @@ export interface operations {
             };
         };
     };
+    getCompetitionBookmark: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The current user's bookmark state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    bookmarkCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The competition is bookmarked. Bookmarking twice is a no-op. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    unbookmarkCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The competition is not bookmarked. Removing a missing bookmark is a no-op. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
     liveAdmin: {
         parameters: {
             query?: never;
@@ -2833,6 +3071,100 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LivePerson"];
+                };
+            };
+        };
+    };
+    v1PersonResults: {
+        parameters: {
+            query?: {
+                event_id?: string;
+            };
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1Results"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    v1PersonRecords: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1Results"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    v1GeocodingSearch: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The matching locations, best match first. Empty if nothing matched. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeocodedLocation"][];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            /** @description The user has exceeded their search rate limit */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                    };
                 };
             };
         };

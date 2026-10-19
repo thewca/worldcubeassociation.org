@@ -76,6 +76,8 @@ export const competitionEventResultsApiUrl = (id, eventId) => `<%= CGI.unescape(
 
 export const competitionAllResultsUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_results_all_path("${id}", event: "${eventId}")) %>`;
 
+export const competitionPreviewLiveResultsUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_live_results_preview_path("${id}")) %>`
+
 export const omnisearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?q=${query}`;
 
 export const competitionSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_competitions_path %>?q=${query}`;
@@ -220,6 +222,14 @@ export const contactEditOthersProfileActionUrl = `<%= CGI.unescape(Rails.applica
 export const contactRecipientUrl = (contactRecipient) => `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path(contactRecipient: "${contactRecipient}")) %>`
 
 export const contactCompetitionUrl = (competitionId, message) => `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_path(competitionId: "${competitionId}", contactRecipient: "competition", message: "${message}")) %>`
+
+export const traineeDelegateApplicationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.trainee_delegate_application_path) %>`;
+
+export const regulationsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.regulations_path) %>`;
+
+export const claimWcaIdUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_claim_wca_id_path) %>`;
+
+export const profileEditUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_edit_path) %>`;
 
 export const apiV0Urls = {
   users: {

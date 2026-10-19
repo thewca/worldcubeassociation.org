@@ -58,7 +58,7 @@ locals {
       value = "TTNormsPro"
     },
     {
-      name = "NEXTAUTH_URL"
+      name = "BETTER_AUTH_URL"
       value = "https://staging.worldcubeassociation.org"
     },
     {

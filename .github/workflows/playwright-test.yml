@@ -17,7 +17,6 @@ jobs:
       DISABLE_SPRING: 1
       RAILS_ENV: test
       NODE_ENV: test
-      NODE_MAJOR: 24
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       PW_TEST_CONNECT_WS_ENDPOINT: "" # Override Docker orchestra default
       PW_TEST_BASE_URL: http://localhost:3001 # Talk to Next directly on this machine
@@ -34,10 +33,13 @@ jobs:
       - name: Install fresh Bundler packages
         run: bin/bundle install
       - name: Set up Corepack/Yarn
-        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        run: |
+          npm install -g corepack
+          corepack enable
       - uses: actions/setup-node@v7
         with:
-          node-version: ${{ env.NODE_MAJOR }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
       - name: Install fresh root Yarn packages
         run: bin/yarn install

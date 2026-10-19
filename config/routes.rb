@@ -118,6 +118,9 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    # TODO: This should use `live-results-preview` ideally, but as of September 26 we have an ELB rule
+    #   that grabs /live* for ILR redirects which conflicts with this route. Feel free to clean up after full ILR launch.
+    get 'synced-results-preview' => 'results_submission#live_results_preview', as: :live_results_preview
     get 'unfinished-persons' => 'results_submission#unfinished_persons', as: :unfinished_persons
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
@@ -171,6 +174,7 @@ Rails.application.routes.draw do
     resources :scrambles, except: %i[index new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
     get 'sanity-check' => "admin#sanity_check", as: :sanity_check
+    get 'migration-dashboard' => "admin#migration_dashboard", as: :migration_dashboard
     get 'run-sanity-check' => "admin#run_sanity_check", as: :sanity_check_run
     get 'add-exclusion' => "admin#add_exclusion", as: :add_exclusion
   end
@@ -262,8 +266,6 @@ Rails.application.routes.draw do
 
   get 'translations', to: redirect('translations/status', status: 302)
   get 'translations/status' => 'translations#index'
-  get 'translations/edit' => 'translations#edit'
-  patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
   get 'documents' => 'static_pages#documents'
@@ -284,6 +286,8 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'volunteer-positions', to: redirect('https://docs.google.com/spreadsheets/d/13JhGJWDfJR96MYgPpxkSaV2E3bMIdIWjWLuYO83vOls/edit?gid=0#gid=0', status: 302)
+  get 'trainee-delegate-application' => 'trainee_delegate_applications#new', as: :trainee_delegate_application
+  post 'trainee-delegate-application' => 'trainee_delegate_applications#create'
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
   resources :regional_organizations, only: %i[new create update edit destroy], path: '/regional-organizations'
@@ -366,11 +370,14 @@ Rails.application.routes.draw do
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
 
-    # While this is the start of a v1 API, this is currently not usable by outside developers as
-    # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
+      get '/persons/:wca_id/results' => 'persons#results', as: :person_results
+      get '/persons/:wca_id/records' => 'persons#records', as: :person_records
+      get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
+
       resources :competitions, only: [] do
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
+        resource :bookmark, only: %i[show create destroy]
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open

@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { useSession } from "@/auth.client";
 import { useAPIClient } from "@/lib/wca/useAPI";
 import { useQuery } from "@tanstack/react-query";
 import { hydrateUserPermissions } from "@/lib/wca/permissions";

@@ -1,5 +1,8 @@
 import Markdown, { Options } from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 import {
+  chakra,
   Link as ChakraLink,
   Image as ChakraImage,
   Em,
@@ -9,6 +12,7 @@ import {
   Blockquote,
   Text,
   Heading,
+  Table,
 } from "@chakra-ui/react";
 
 import type {
@@ -17,67 +21,113 @@ import type {
   ComponentType,
   ElementType,
 } from "react";
-import type {
-  Heading as MdastHeading,
-  Paragraph as MdastParagraph,
-  Root as MdastRoot,
-} from "mdast";
+import type { Parent as MdastParent, Root as MdastRoot } from "mdast";
 
-const HEADING_DEPTHS = {
-  "#": 1,
-  "##": 2,
-  "###": 3,
-  "####": 4,
-  "#####": 5,
-  "######": 6,
-} as const;
-
-const LOOSE_HEADING_PREFIX = /^(#{1,6})(?=[^#\s])/;
-
-const isHeadingPrefix = (
-  prefix: string,
-): prefix is keyof typeof HEADING_DEPTHS => prefix in HEADING_DEPTHS;
-
-const asLooseHeading = (
-  paragraph: MdastParagraph,
-): MdastHeading | undefined => {
-  // A heading is always a single line. Promoting a multi-line paragraph would swallow the
-  //   lines that follow the hashes into the heading.
-  if (paragraph.position?.start.line !== paragraph.position?.end.line) {
-    return undefined;
-  }
-
-  const [firstChild, ...siblings] = paragraph.children;
-
-  if (firstChild?.type !== "text") {
-    return undefined;
-  }
-
-  const prefix = LOOSE_HEADING_PREFIX.exec(firstChild.value)?.[1];
-
-  if (prefix === undefined || !isHeadingPrefix(prefix)) {
-    return undefined;
-  }
-
-  return {
-    type: "heading",
-    depth: HEADING_DEPTHS[prefix],
-    children: [
-      { ...firstChild, value: firstChild.value.slice(prefix.length) },
-      ...siblings,
-    ],
-  };
-};
+const LOOSE_HEADING_PREFIX = /^(#{1,6})(?=[^#\s])/gm;
 
 // The rest of the WCA website renders markdown with Redcarpet, which accepts `##Heading`
 //   even though CommonMark demands a space after the hashes. Authors write against Redcarpet,
-//   so what they wrote has to keep working here. Only top-level paragraphs are promoted; a
-//   space-less heading nested in a list or quote stays a paragraph.
+//   so what they wrote has to keep working here. Redcarpet also ends a paragraph on such a
+//   line, so the space is added on the raw text: CommonMark lets a proper heading interrupt a
+//   paragraph, which a space-less one glued to the next line would never get the chance to.
+const spaceLooseHeadings = (markdown: Options["children"]) =>
+  markdown?.replace(LOOSE_HEADING_PREFIX, "$1 ");
+
+const YOUTUBE_OPENING = "youtube(";
+
+const youtubeEmbedUrl = (href: string) => {
+  const url = URL.parse(href);
+
+  const isYoutube =
+    url?.hostname === "youtube.com" || url?.hostname.endsWith(".youtube.com");
+
+  const videoId = isYoutube ? url?.searchParams.get("v") : null;
+
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : undefined;
+};
+
+const embedYoutubeLinks = (parent: MdastParent) => {
+  parent.children.forEach((child, index) => {
+    const before = parent.children[index - 1];
+    const after = parent.children[index + 1];
+
+    if (
+      child.type === "link" &&
+      before?.type === "text" &&
+      before.value.endsWith(YOUTUBE_OPENING) &&
+      after?.type === "text" &&
+      after.value.startsWith(")")
+    ) {
+      const embedUrl = youtubeEmbedUrl(child.url);
+
+      if (embedUrl) {
+        before.value = before.value.slice(0, -YOUTUBE_OPENING.length);
+        after.value = after.value.slice(1);
+        child.data = {
+          hName: "iframe",
+          hProperties: {
+            src: embedUrl,
+            href: undefined,
+            title: "YouTube video",
+            allowFullScreen: true,
+            maxW: "640px",
+            aspectRatio: "16 / 9",
+          },
+          hChildren: [],
+        };
+      }
+    }
+
+    if ("children" in child) embedYoutubeLinks(child);
+  });
+};
+
+// Redcarpet (used by the rest of the WCA website) turns `youtube(https://www.youtube.com/watch?v=…)`
+//   into an embedded video, so authors' existing videos have to keep showing up here. Only
+//   YouTube watch links are embedded; anything else stays the literal text the author wrote.
 // Transformers are handed the tree to edit in place; that is the remark plugin contract.
-const remarkLooseHeadings = () => (tree: MdastRoot) => {
-  tree.children = tree.children.map((child) =>
-    child.type === "paragraph" ? (asLooseHeading(child) ?? child) : child,
+const remarkYoutubeEmbeds = () => (tree: MdastRoot) => embedYoutubeLinks(tree);
+
+const TABLE_DELIMITER_ROW = /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/;
+
+const tableCells = (row: string) =>
+  row
+    .trim()
+    .replace(/^\|/, "")
+    .replace(/(?<!\\)\|$/, "")
+    .split(/(?<!\\)\|/)
+    .map((cell) => cell.trim());
+
+const withHeaderCellCount = (delimiterRow: string, headerRow: string) => {
+  const delimiterCells = tableCells(delimiterRow);
+
+  const resized = tableCells(headerRow).map(
+    (_, index) => delimiterCells[index] ?? "---",
   );
+
+  return `| ${resized.join(" | ")} |`;
+};
+
+// GFM only recognises a table when the delimiter row has exactly as many cells as the header,
+//   but Redcarpet (used by the rest of the WCA website) renders it regardless. Authors write
+//   against Redcarpet, so the delimiter row is resized to the header before parsing. This has
+//   to happen on the raw text because a mismatched table never makes it into the syntax tree.
+const alignTableDelimiters = (markdown: Options["children"]) => {
+  if (!markdown) return markdown;
+
+  const lines = markdown.split("\n");
+
+  return lines
+    .map((line, index) => {
+      const headerRow = lines[index - 1];
+
+      return headerRow?.includes("|") &&
+        line.includes("|") &&
+        TABLE_DELIMITER_ROW.test(line)
+        ? withHeaderCellCount(line, headerRow)
+        : line;
+    })
+    .join("\n");
 };
 
 type DefaultParagraph = typeof Text;
@@ -113,7 +163,13 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
 }) => {
   return (
     <Markdown
-      remarkPlugins={[remarkLooseHeadings]}
+      remarkPlugins={[
+        // Redcarpet only strikes through on `~~`, so `~5 min` must stay literal here too.
+        [remarkGfm, { singleTilde: false }],
+        // Redcarpet renders with `hard_wrap`, keeping every single line break the author typed.
+        remarkBreaks,
+        remarkYoutubeEmbeds,
+      ]}
       components={{
         a: ({ children, ...aTag }) => (
           <ChakraLink
@@ -131,6 +187,14 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
           </ChakraLink>
         ),
         img: (imgTag) => <ChakraImage {...imgTag} {...imageProps} />,
+        iframe: (iframeTag) => (
+          <chakra.iframe
+            display="block"
+            width="full"
+            border="none"
+            {...iframeTag}
+          />
+        ),
         h1: (h1Tag) => <HeadingRenderAs {...h1Tag} as="h1" />,
         h2: (h2Tag) => <HeadingRenderAs {...h2Tag} as="h2" />,
         h3: (h3Tag) => <HeadingRenderAs {...h3Tag} as="h3" />,
@@ -149,9 +213,19 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
             <Blockquote.Content {...blockquoteTag} />
           </Blockquote.Root>
         ),
+        table: (tableProps) => (
+          <Table.ScrollArea>
+            <Table.Root {...tableProps} />
+          </Table.ScrollArea>
+        ),
+        thead: Table.Header,
+        tbody: Table.Body,
+        tr: Table.Row,
+        th: Table.ColumnHeader,
+        td: Table.Cell,
       }}
     >
-      {children}
+      {alignTableDelimiters(spaceLooseHeadings(children))}
     </Markdown>
   );
 };

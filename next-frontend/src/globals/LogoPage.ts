@@ -1,5 +1,7 @@
 import { Block, GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
+import { marketingTeamAccess } from "@/payload.access";
 
 const paragraph: Block = {
   slug: "paragraph",
@@ -80,6 +82,9 @@ const logoVariant: Block = {
 
 export const LogoPage: GlobalConfig = {
   slug: "logo-page",
+  access: {
+    update: marketingTeamAccess,
+  },
   label: "Logo Page",
   fields: [
     {
@@ -89,4 +94,7 @@ export const LogoPage: GlobalConfig = {
       blocks: [paragraph, logoVariant, downloadLink],
     },
   ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };

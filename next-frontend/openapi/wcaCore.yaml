@@ -39,6 +39,9 @@ paths:
     delete:
       $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
 
+  /v1/competitions/{competitionId}/bookmark:
+    $ref: 'paths/competitions/competitionBookmark.yaml'
+
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
@@ -75,6 +78,14 @@ paths:
     $ref: 'paths/competitions/live/LivePodiums.yaml'
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:
     $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
+
+  /v1/persons/{wca_id}/results:
+    $ref: 'paths/persons/personResults.yaml'
+  /v1/persons/{wca_id}/records:
+    $ref: 'paths/persons/personRecords.yaml'
+
+  /v1/geocoding/search:
+    $ref: 'paths/geocoding/geocodingSearch.yaml'
 
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'

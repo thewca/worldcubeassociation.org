@@ -6,7 +6,11 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import {
+  loadStripe,
+  type Stripe,
+  type StripeElements,
+} from "@stripe/stripe-js";
 import {
   Alert,
   Button,
@@ -18,7 +22,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { keepPreviousData } from "@tanstack/react-query";
+import { keepPreviousData, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { LuCreditCard } from "react-icons/lu";
 import { useT } from "@/lib/i18n/useI18n";
@@ -54,70 +58,82 @@ function PaymentForm({
   const elements = useElements();
   const apiClient = useAPIClient();
 
-  const [isPaying, setIsPaying] = useState(false);
   const [isDonating, setIsDonating] = useState(false);
 
   const perUnit = lowestDenominationsPerUnit(competitionInfo.currency_code);
 
-  const showError = (messageKey: string) =>
-    toaster.create({
-      id: "payment-error",
-      type: "error",
-      description: t(messageKey, {
-        provider: t("payments.payment_providers.stripe"),
-      }),
-    });
+  const payRegistration = useMutation({
+    mutationFn: async ({
+      stripe,
+      elements,
+    }: {
+      stripe: Stripe;
+      elements: StripeElements;
+    }) => {
+      // Stripe requires `submit` before any async work, so that it can validate the entered details
+      //   while the user gesture is still fresh.
+      const { error: submitError } = await elements.submit();
 
-  const handleSubmit = async (event: React.FormEvent) => {
+      if (submitError) {
+        throw submitError;
+      }
+
+      const { data, error } = await apiClient.GET(
+        "/v1/registrations/{registrationId}/payment_ticket",
+        {
+          params: {
+            path: { registrationId },
+            query: { iso_donation_amount: donationIso },
+          },
+        },
+      );
+
+      if (error) {
+        throw error;
+      }
+
+      // On success the browser leaves for Stripe and comes back to the monolith, so anything after
+      //   this only runs when the payment could not even be started.
+      const { error: confirmError } = await stripe.confirmPayment({
+        elements,
+        clientSecret: data.client_secret,
+        confirmParams: { return_url: paymentCompletionUrl(competitionInfo.id) },
+      });
+
+      if (confirmError) {
+        throw confirmError;
+      }
+    },
+    onError: () =>
+      toaster.create({
+        id: "payment-error",
+        type: "error",
+        description: t("registrations.payment_form.errors.generic.failed", {
+          provider: t("payments.payment_providers.stripe"),
+        }),
+      }),
+  });
+
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     // Stripe.js has not finished loading, so there is nothing to confirm against yet.
-    if (!stripe || !elements) {
-      return;
+    if (stripe && elements) {
+      payRegistration.mutate({ stripe, elements });
     }
-
-    setIsPaying(true);
-
-    // Stripe requires `submit` before any async work, so that it can validate the entered details
-    //   while the user gesture is still fresh.
-    const { error: submitError } = await elements.submit();
-
-    if (submitError) {
-      showError("registrations.payment_form.errors.generic.failed");
-      setIsPaying(false);
-      return;
-    }
-
-    const { data, error } = await apiClient.GET(
-      "/v1/registrations/{registrationId}/payment_ticket",
-      {
-        params: {
-          path: { registrationId },
-          query: { iso_donation_amount: donationIso },
-        },
-      },
-    );
-
-    if (error) {
-      showError("registrations.payment_form.errors.generic.failed");
-      setIsPaying(false);
-      return;
-    }
-
-    // On success the browser leaves for Stripe and comes back to the monolith, so anything after
-    //   this only runs when the payment could not even be started.
-    const { error: confirmError } = await stripe.confirmPayment({
-      elements,
-      clientSecret: data.client_secret,
-      confirmParams: { return_url: paymentCompletionUrl(competitionInfo.id) },
-    });
-
-    if (confirmError) {
-      showError("registrations.payment_form.errors.generic.failed");
-    }
-
-    setIsPaying(false);
   };
+
+  // Unticking has to take the donation with it, otherwise the competitor keeps paying an amount
+  //   they can no longer see.
+  const toggleDonation = (isChecked: boolean) => {
+    setIsDonating(isChecked);
+    onDonationChange(0);
+  };
+
+  const changeDonation = (donationUnits: number) =>
+    onDonationChange(
+      Number.isNaN(donationUnits) ? 0 : Math.round(donationUnits * perUnit),
+    );
 
   return (
     <form onSubmit={handleSubmit}>
@@ -132,12 +148,7 @@ function PaymentForm({
               //   beside its first line rather than centred against the whole paragraph.
               alignItems="start"
               checked={isDonating}
-              onCheckedChange={(e) => {
-                setIsDonating(!!e.checked);
-                // Unticking has to take the donation with it, otherwise the competitor keeps
-                //   paying an amount they can no longer see.
-                onDonationChange(0);
-              }}
+              onCheckedChange={(e) => toggleDonation(!!e.checked)}
             >
               <Checkbox.HiddenInput />
               <Checkbox.Control />
@@ -156,13 +167,7 @@ function PaymentForm({
                   min={0}
                   width="full"
                   value={(donationIso / perUnit).toString()}
-                  onValueChange={(e) =>
-                    onDonationChange(
-                      Number.isNaN(e.valueAsNumber)
-                        ? 0
-                        : Math.round(e.valueAsNumber * perUnit),
-                    )
-                  }
+                  onValueChange={(e) => changeDonation(e.valueAsNumber)}
                 >
                   <NumberInput.Input />
                   <NumberInput.Control />
@@ -194,7 +199,7 @@ function PaymentForm({
           type="submit"
           width="full"
           colorPalette="green"
-          loading={isPaying}
+          loading={payRegistration.isPending}
           disabled={!stripe || !elements}
         >
           <LuCreditCard />
@@ -298,6 +303,8 @@ export default function PaymentStep({
 }) {
   const { t } = useT();
 
+  const isRegistrationClosed = hasPassed(competitionInfo.registration_close);
+
   return (
     <Stack gap="4">
       <Alert.Root status="warning">
@@ -318,7 +325,7 @@ export default function PaymentStep({
         </Alert.Content>
       </Alert.Root>
 
-      {hasPassed(competitionInfo.registration_close) ? (
+      {isRegistrationClosed ? (
         <Alert.Root status="error">
           <Alert.Indicator />
           <Alert.Title>
@@ -326,8 +333,6 @@ export default function PaymentStep({
           </Alert.Title>
         </Alert.Root>
       ) : (
-        // The registration is created by a queue worker, so there is a window in which the payment
-        //   step is reachable but the registration it would pay for does not exist yet.
         registration !== null && (
           <>
             <Alert.Root status="info">

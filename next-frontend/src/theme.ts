@@ -53,6 +53,8 @@ type ChakraColorScale = Readonly<Record<LuminanceKey, { value: string }>>;
 // they fall back to the browser default and read as non-interactive.
 // We should be able to override them in the cursor tokens, but this is currently not supported in chakra.
 // https://github.com/chakra-ui/chakra-ui/issues/10960
+const OPEN_TRIGGER = { _open: { bg: "bg.emphasized" } };
+
 const INTERACTIVITY_OVERRIDES = {
   menu: {
     slots: [],
@@ -60,6 +62,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -69,6 +72,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -87,6 +91,7 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+        ...OPEN_TRIGGER,
       },
     },
   },
@@ -96,6 +101,17 @@ const INTERACTIVITY_OVERRIDES = {
       trigger: {
         cursor: "pointer",
         _disabled: { cursor: "disabled" },
+      },
+    },
+    variants: {
+      overflowPadding: {
+        true: {
+          // Ensure hover/focus outlines don't get clipped when we hide overflow
+          content: {
+            mx: "-3",
+            px: "3",
+          },
+        },
       },
     },
   },
@@ -410,6 +426,9 @@ const customConfig = defineConfig({
           },
         },
       },
+      sizes: {
+        avatarThumb: { value: "75px" },
+      },
       cursor: {
         menuitem: { value: "pointer" },
         checkbox: { value: "pointer" },
@@ -429,45 +448,46 @@ const customConfig = defineConfig({
           fg: { value: "{colors.link}" },
         },
         recordMarkers: {
-          personal: { value: "{colors.orange.solid}" },
-          national: { value: "{colors.green.solid}" },
-          continental: { value: "{colors.red.solid}" },
-          world: { value: "{colors.blue.solid}" },
+          personal: { value: "{colors.orange.fg}" },
+          national: { value: "{colors.green.fg}" },
+          continental: { value: "{colors.red.fg}" },
+          world: { value: "{colors.blue.fg}" },
         },
         wcaWhite: {
-          // values mostly stolen from Chakra's `gray` scale,
-          // with a minor adjustment for the `solid` entry.
+          // values different from Chakra's `gray` scale: They use an "almost-white" palette in dark mode
+          //   and an "almost black" palette in light mode. By contrast, our schema is designed around
+          //   the idea of letting the palette appear "soft gray" in both light and dark mode.
           contrast: {
-            value: { _light: "{colors.white}", _dark: "{colors.black}" },
+            value: "{colors.black}",
           },
           fg: {
             value: {
-              _light: "{colors.wcaWhite.800}",
-              _dark: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.700}",
+              _dark: "{colors.wcaWhite.400}",
             },
           },
           subtle: {
             value: {
-              _light: "{colors.wcaWhite.100}",
+              _light: "{colors.wcaWhite.50}",
               _dark: "{colors.wcaWhite.900}",
             },
           },
           muted: {
             value: {
-              _light: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.100}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
           emphasized: {
             value: {
-              _light: "{colors.wcaWhite.300}",
+              _light: "{colors.wcaWhite.200}",
               _dark: "{colors.wcaWhite.700}",
             },
           },
           solid: {
             value: {
-              _light: "{colors.wcaWhite.900}",
-              _dark: "{colors.wcaWhite.50}",
+              _light: "{colors.wcaWhite.200}",
+              _dark: "{colors.wcaWhite.200}",
             },
           },
           focusRing: {
@@ -478,7 +498,7 @@ const customConfig = defineConfig({
           },
           border: {
             value: {
-              _light: "{colors.wcaWhite.200}",
+              _light: "{colors.wcaWhite.700}",
               _dark: "{colors.wcaWhite.800}",
             },
           },
@@ -497,6 +517,9 @@ const customConfig = defineConfig({
         black: {
           // not a full color scheme, only the necessary colors for badges
           subtle: { value: "{colors.supplementary.text.dark}" },
+          // `subtle` is a dark grey in both modes, so without an explicit `fg` the badge
+          //   text inherits the page colour and becomes unreadable in light mode.
+          fg: { value: "{colors.supplementary.text.white}" },
           cubeShades: {
             left: { value: "#282828" },
             top: { value: "#3B3B3B" },
@@ -621,6 +644,17 @@ const customConfig = defineConfig({
       },
     },
     recipes: {
+      // Chakra's `outline` fields are transparent, which leaves them indistinguishable
+      //   from the grey page background the competition and results pages sit on.
+      input: {
+        variants: {
+          variant: {
+            outline: {
+              bg: "bg",
+            },
+          },
+        },
+      },
       container: {
         base: {
           px: { base: "3.5", md: "6", lg: "8" },
@@ -707,6 +741,50 @@ const customConfig = defineConfig({
     },
     slotRecipes: {
       ...INTERACTIVITY_OVERRIDES,
+      // Each of these carries its own copy of the `outline` variant rather than
+      //   inheriting the `input` recipe's, so the opaque background (see above)
+      //   has to be repeated per component.
+      combobox: {
+        ...INTERACTIVITY_OVERRIDES.combobox,
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      numberInput: {
+        slots: [],
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      datePicker: {
+        slots: [],
+        variants: {
+          variant: {
+            outline: {
+              input: { bg: "bg" },
+            },
+          },
+        },
+      },
+      segmentGroup: {
+        ...INTERACTIVITY_OVERRIDES.segmentGroup,
+        base: {
+          ...INTERACTIVITY_OVERRIDES.segmentGroup.base,
+          // Zag animates the indicator with `var(--transition-timing-function)`,
+          //   which nothing defines, so it silently falls back to `ease`.
+          root: {
+            "--transition-timing-function": "{easings.ease-in-smooth}",
+          },
+        },
+      },
       steps: {
         ...INTERACTIVITY_OVERRIDES.steps,
         variants: {
@@ -767,8 +845,10 @@ const customConfig = defineConfig({
           variant: {
             competition: {
               label: {
-                alignItems: "start",
-                textStyle: "annotation",
+                alignItems: "center",
+                textStyle: "body",
+                fontWeight: 300,
+                color: "fg",
               },
               valueText: {
                 textStyle: "bodyEmphasis",
@@ -786,8 +866,41 @@ const customConfig = defineConfig({
           body: {
             gap: "4",
           },
+          description: {
+            color: "fg",
+          },
         },
         variants: {
+          interactive: {
+            true: {
+              root: {
+                cursor: "pointer",
+                _focusWithin: {
+                  outline: "{borders.md}",
+                  outlineColor: "colorPalette.focusRing",
+                  outlineOffset: "{spacing.0.5}",
+                },
+                _after: {
+                  content: '""',
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: "inherit",
+                  pointerEvents: "none",
+                  zIndex: 1,
+                  transitionProperty: "background-color",
+                  transitionDuration: "moderate",
+                },
+                _hover: {
+                  _after: { bg: "colorPalette.contrast/5" },
+                },
+              },
+              body: {
+                transitionProperty: "background-color",
+                transitionDuration: "moderate",
+                _groupHover: { bg: "colorPalette.contrast/5" },
+              },
+            },
+          },
           variant: {
             info: {
               root: {
@@ -844,24 +957,6 @@ const customConfig = defineConfig({
                 layerStyle: "fill.emphasized",
               },
             },
-            deep: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "fill.solid",
-              },
-              description: {
-                layerStyle: "fill.solid",
-              },
-            },
-            slatePastel: {
-              root: {
-                colorPalette: "wcaWhite",
-                layerStyle: "fill.solid",
-              },
-              description: {
-                layerStyle: "fill.solid",
-              },
-            },
           },
         },
         defaultVariants: {
@@ -886,7 +981,6 @@ const customConfig = defineConfig({
             card: {
               root: {
                 spaceY: "4",
-                overflow: "hidden",
                 "--accordion-padding-x": "spacing.6",
                 "--accordion-padding-y": "spacing.3",
               },
@@ -897,7 +991,7 @@ const customConfig = defineConfig({
                 px: "var(--accordion-padding-x)",
               },
               item: {
-                borderRadius: "l3",
+                borderRadius: "wca",
               },
             },
           },
@@ -915,7 +1009,6 @@ const customConfig = defineConfig({
                 whiteSpace: "noWrap",
               },
               row: {
-                cursor: "pointer",
                 "& td": {
                   transitionProperty: "background-color",
                   transitionTimingFunction: "ease",
@@ -925,7 +1018,7 @@ const customConfig = defineConfig({
                   bg: "bg.subtle",
                 },
                 "&:hover td": {
-                  bg: "colorPalette.fg/60",
+                  bg: "colorPalette.muted",
                 },
               },
             },
@@ -952,11 +1045,51 @@ const customConfig = defineConfig({
       tabs: {
         slots: [],
         variants: {
+          // Grows the triggers to fill the row when they fit, and lets the list
+          //   scroll instead of squashing them when they don't.
+          fitContent: {
+            true: {
+              list: {
+                maxWidth: "full",
+                overflowX: "auto",
+              },
+              trigger: {
+                flex: "1 0 auto",
+                flexDirection: "column",
+              },
+            },
+          },
           highContrast: {
             true: {
               trigger: {
                 _selected: {
                   color: "colorPalette.contrast",
+                },
+              },
+            },
+          },
+          // Vertical tab list that sticks alongside the content on desktop and
+          //   collapses above it on mobile.
+          sideNav: {
+            true: {
+              root: {
+                flexDirection: { base: "column", md: "row" },
+              },
+              list: {
+                height: "fit-content",
+                position: { base: "static", md: "sticky" },
+                top: "3",
+              },
+              // Matching the hover the collapsible groups in the same list already have.
+              //   The selected trigger is excluded so hovering it doesn't drop its own background.
+              trigger: {
+                "&:not([data-selected]):hover": {
+                  bg: "bg.subtle",
+                },
+              },
+              content: {
+                _vertical: {
+                  ps: { base: "0", md: "var(--tabs-content-padding)" },
                 },
               },
             },
