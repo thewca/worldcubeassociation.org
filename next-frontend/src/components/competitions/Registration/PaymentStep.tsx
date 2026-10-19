@@ -26,6 +26,7 @@ import { keepPreviousData, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { LuCreditCard } from "react-icons/lu";
 import { useT } from "@/lib/i18n/useI18n";
+import CurrencyValue from "@/components/CurrencyValue";
 import { hasPassed } from "@/lib/wca/dates";
 import useAPI, { useAPIClient } from "@/lib/wca/useAPI";
 import { lowestDenominationsPerUnit } from "@/lib/wca/payments/currency";
@@ -304,6 +305,27 @@ export default function PaymentStep({
   const { t } = useT();
 
   const isRegistrationClosed = hasPassed(competitionInfo.registration_close);
+
+  const payment = registration?.payment;
+
+  if (payment?.has_paid) {
+    return (
+      <Alert.Root status="success">
+        <Alert.Indicator />
+        <Alert.Content>
+          <Alert.Title>
+            {t("registrations.payment_form.labels.fees_paid")}
+          </Alert.Title>
+          <Alert.Description>
+            <CurrencyValue
+              lowestDenomination={payment.paid_amount_iso}
+              currencyCode={payment.currency_code}
+            />
+          </Alert.Description>
+        </Alert.Content>
+      </Alert.Root>
+    );
+  }
 
   return (
     <Stack gap="4">
