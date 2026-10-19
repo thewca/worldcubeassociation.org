@@ -1408,6 +1408,9 @@ vi:
         locale: Ngôn ngữ
         group_name: Tên Đội ngũ/Ủy ban
         delegated_competitions_count: Số Giải đấu đã làm nhiệm vụ Delegate
+        wca_id: ID WCA
+        location: Địa điểm
+        email: Email
   user_groups:
     group_types:
       board: Ban Quản trị WCA
