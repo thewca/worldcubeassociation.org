@@ -66,8 +66,14 @@ const nextConfig: NextConfig = {
     return config;
   },
   cacheComponents: true,
+  cacheHandler:
+    process.env.NODE_ENV === "production"
+      ? require.resolve("./src/lib/cache/cacheHandler.js")
+      : undefined,
+  // Has to be set to 0 so all cache reads go to redis and not stay local
+  cacheMaxMemorySize: 0,
   cacheHandlers: {
-    default: require.resolve("./src/lib/cache/redisCacheHandler.js"),
+    remote: require.resolve("./src/lib/cache/cacheComponentsHandler.js"),
   },
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
