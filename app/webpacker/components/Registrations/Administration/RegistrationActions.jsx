@@ -54,7 +54,7 @@ function V3csvExport(selected, registrations, competition) {
       },${
         registration.competing.waiting_list_position || ''
       },${
-        escapeCsv(registration.competing.comments)
+        escapeCsv(registration.competing.comment)
       }\n`;
     });
 

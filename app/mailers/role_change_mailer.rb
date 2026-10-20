@@ -18,7 +18,10 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:delegate_regions]
       metadata[:region_name] = group.name
       metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
+      metadata[:location] = role.metadata.location
       metadata[:delegated_competitions_count] = role.metadata.total_delegated
+      metadata[:wca_id] = role.user.wca_id
+      metadata[:email] = role.user.email
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]

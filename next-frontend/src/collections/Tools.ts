@@ -1,7 +1,13 @@
 import { CollectionConfig } from "payload";
+import { marketingTeamAccess } from "@/payload.access";
 
 export const Tools: CollectionConfig = {
   slug: "tools",
+  access: {
+    create: marketingTeamAccess,
+    update: marketingTeamAccess,
+    delete: marketingTeamAccess,
+  },
   admin: {
     useAsTitle: "name",
   },

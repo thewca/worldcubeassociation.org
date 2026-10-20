@@ -331,6 +331,8 @@ export function ByCompetitionTable({
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
 
+              const isDualRound = Boolean(competitorResult.linked_round_id);
+
               return (
                 <Table.Row key={competitorResult.id}>
                   <Table.Cell>
@@ -351,8 +353,12 @@ export function ByCompetitionTable({
                   </Table.Cell>
                   <Table.Cell>
                     {t(`rounds.${competitorResult.round_type_id}.name`)}
+                    {isDualRound && ` (${t("persons.show.dual")})`}
                   </Table.Cell>
-                  <Table.Cell>{competitorResult.pos}</Table.Cell>
+                  <Table.Cell>
+                    {competitorResult.pos}
+                    {isDualRound && ` (${competitorResult.global_pos})`}
+                  </Table.Cell>
                   <Table.Cell
                     color={
                       pbMarkers?.single.has(competitorResult.id)

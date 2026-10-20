@@ -301,7 +301,6 @@ export default function CompetitionsPage() {
             <Collapsible.Root asChild>
               <VStack gap="3" borderBottom="black">
                 <FormEventSelector
-                  wrap
                   selectedEvents={filterState.selectedEvents}
                   title={t("competitions.index.event")}
                   onEventClick={(eventId) =>

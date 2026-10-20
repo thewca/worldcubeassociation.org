@@ -59,6 +59,7 @@ class Result < ApplicationRecord
 
   delegate :iso2, to: :country, prefix: true
   delegate :short_name, :start_date, to: :competition, prefix: true
+  delegate :linked_round_id, to: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id round_id pos best best_index worst_index average],
@@ -69,9 +70,9 @@ class Result < ApplicationRecord
 
   # `best_index` / `worst_index` are omitted deliberately: they are derivable from `attempts`.
   V1_SERIALIZE_OPTIONS = {
-    only: %w[id pos best average],
+    only: %w[id pos global_pos best average],
     methods: %w[wca_id name country_iso2 competition_id competition_short_name competition_start_date
-                event_id round_type_id format_id attempts
+                event_id round_type_id format_id linked_round_id attempts
                 regional_single_record regional_average_record],
   }.freeze
 

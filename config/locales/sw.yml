@@ -223,6 +223,7 @@ sw:
       unit_seconds: sekunde
       unit_moves: hatua
     back_to_top: Rudi juu
+    back: nyuma
   oauth:
     applications:
       your_apps: Programu zako za OAuth
@@ -567,6 +568,8 @@ sw:
     passwords:
       edit:
         new_password_confirmation: Weka nenosiri jipya tena
+      send_paranoid_instructions: Kiunganishi cha kuweka upya nenosiri kitatumwa
+        kwa anwani ya barua pepe ikiwa ina akaunti iliyosajiliwa na WCA.
     sessions:
       new:
         sign_in: ingia
@@ -654,6 +657,9 @@ sw:
           disabled_success: Uthibitishaji wa hatua mbili umezimwa kwa mafanikio.
           disabled_failed: Imeshindwa kuzima uthibitishaji wa hatua mbili, 
             tafadhali angalia hitilafu hapa chini.
+        redesign_notice: Unatazama ukurasa mpya wa kuingia. Utaingia badala ya 
+          ule wa zamani kabla ya mwisho wa mwaka.
+        use_classic: Rudi kwenye ukurasa wa zamani wa kuingia
       destroy_other:
         success: Umetoka kwa mafanikio kwenye vifaa vingine vyote.
     shared:
@@ -670,7 +676,10 @@ sw:
     mailer:
       confirmation_instructions:
         subject: Tafadhali thibitisha anwani yako mpya ya barua pepe
-    registrations: {}
+    registrations:
+      new:
+        redesign_notice: Unatazama ukurasa mpya wa kujisajili. Utaingia badala 
+          ya ule wa zamani kabla ya mwisho wa mwaka.
   wca:
     errors:
       messages:
@@ -724,6 +733,7 @@ sw:
         Tafadhali kumbuka kuwa tarehe yako ya kuzaliwa haitatolewa kamwe bila 
         idhini yako.<br/><br/>Ikiwa unajisajili kwa niaba ya mtu mwingine, 
         tafadhali toa maelezo ya <strong> mshindani <strong>.
+      dob_privacy: Taarifa hizi hazitawahi kutolewa bila ruhusa yako.
   layouts:
     navigation:
       information: Taarifa
@@ -1279,7 +1289,40 @@ sw:
       wca_id_no_gender_html: Hatuna jinsia iliyorekodiwa kwa Kitambulisho hiki 
         cha WCA. Tafadhali wasiliana na <a href='%{wrt_contact_path}' 
         target='_blank'>Timu ya Matokeo ya WCA</a> ili kusuluhisha hili.
-    successes: {}
+      wca_id_no_citizenship_html: Hatuna uraia uliorekodiwa kwa ajili ya WCA ID 
+        hii. Tafadhali wasiliana na<a href='%{wrt_contact_path}' 
+        target='_blank'> Timu ya Matokeo ya WCA</a> ili kutatua suala hili.
+      wca_id_no_name_html: Hatuna jina liliorekodiwa kwa ajili ya WCA ID hii. 
+        Tafadhali wasiliana na<a href='%{wrt_contact_path}' target='_blank'> 
+        timu ya Matokeo ya WCA</a> ili kutatua suala hili.
+      email_used_by_locked_account_html: tayari inatumiwa na akaunti nyingine. 
+        Iliundwa kiotomatiki kutokana na wewe kujisajili kwa ajili ya mashindano
+        kupitia huduma ya nje. Ikiwa wewe ndiye mmiliki wa barua pepe hii, 
+        unaweza kutumia akaunti hiyo baada ya kuweka upya nenosiri yako <a 
+        href='/users/password/new'>.
+      must_match_person: lazima ifanane na taarifa za mtu zinazolingana na WCA 
+        ID hiyo
+    successes:
+      messages:
+        account_updated: Akaunti imesasishwa
+        wca_id_claimed: Umefanikiwa kudai WCA ID %{wca_id}. Angalia barua pepe 
+          yako, na usubiri %{user} aipitishe!
+        account_updated_confirm: Akaunti imesasishwa, barua pepe imetumwa kwa 
+          %{email} ili kuthibitisha anwani yako mpya ya barua pepe.
+    select_nearby_delegate:
+      search_for_delegate: Mtafute Mjumbe
+      select_delegate_html: Ili kukupatia WCA ID yako, tunahitaji <a 
+        href='%{link_delegate}' target='_blank'> Mjumbe wa WCA </a> athibitishe 
+        utambulisho wako. Tafadhali ingiza tarehe yako ya kuzaliwa na umchague 
+        Mjumbe unayedhani anakujua vyema zaidi.
+      already_assigned_html: WCA ID %{link_id} tayari imekabidhiwa kwa akaunti 
+        nyingine. Ikiwa unaamini hili lilifanyika kwa makosa, wasiliana na <a 
+        href='%{link_delegate}' target='_blank'> Mjumbe wako wa eneo husika 
+        </a>.
+      missing_dob_html: WCA ID %{link_id} haina tarehe ya kuzaliwa iliyowekwa. 
+        Tafadhali wasiliana na Timu ya Matokeo ya WCA kwa kutumia <a 
+        href="%{dob_form_path}"> fomu hii maalum </a>.
+      unknown_wca_id_html: Kitambulisho cha WCA %{link_id} haipo.
   competitions:
     registration_v2:
       register:
@@ -1301,15 +1344,138 @@ sw:
     nav: {}
     results_table: {}
   tickets: {}
-  trainee_delegate_application: {}
+  trainee_delegate_application:
+    title: Maombi ya Mjumbe Anayefunzwa
+    introduction: Fomu hii ni kwa ajili ya Wachezaji wa Speedcube Waliosajiliwa 
+      wanaoomba kuwa Wajumbe Wanaofunzwa. Maombi yako yatatumwa kwa Wajumbe 
+      wanaohusika na eneo ulilolichagua.
+    success_title: Maombi yametumwa
+    success: Maombi yako yametumwa kufanikiwa. Nakala imetumiwa kwa anwani ya 
+      barua pepe ya akaunti yako ya WCA.
+    eligibility:
+      title: Huwezi kutuma maombi haya bado
+      missing_wca_id: Akaunti yako ya WCA lazima iunganishwe na WCA ID.
+      missing_date_of_birth: Akaunti yako ya WCA lazima iwe na tarehe ya 
+        kuzaliwa iliyothibitishwa.
+      underage: Waombaji lazima wawe na angalau umri wa miaka %{minimum_age}.
+      claim_wca_id: Chukua WCA ID yako.
+      edit_profile: Omba kusasisha Wasifu.
+    errors:
+      invalid_region: Chagua eneo halali na linalotumika la Mjumbe.
+      missing_reviewer: Eneo lililochaguliwa kwa sasa halina Mjumbe wa Kanda au 
+        Mjumbe Mwandamizi anayeweza kupokea maombi haya.
+      recommender_required: Chagua angalau Mjumbe mmoja anayependekeza.
+      invalid_recommender: Mjumbe mmoja au zaidi waliopendekezwa waliochaguliwa 
+        hawatakiwi tena kwa eneo lililochaguliwa.
+      spoken_delegate_required: Chagua angalau Mjumbe Mdogo au Mjumbe Kamili 
+        mmoja uliyezungumza naye.
+      invalid_spoken_delegate: Mjumbe mmoja au zaidi uliyezungumza naye si 
+        Mjumbe Mdogo au Mjumbe Kamili anayehudumu tena katika eneo 
+        lililochaguliwa.
+      declarations_required: Tamko zote lazima zithibitishwe.
+      business_involvement_required: Chagua ikiwa unahusika na biashara 
+        inayohusiana na cubing.
+      business_involvement_explanation_required: Eleza uhusiano wako na biashara
+        inayohusiana na cubing.
+    form:
+      declaration_and_basic_information: Tamko na Taarifa za Msingi
+      name: Jina
+      wca_id: Kitambulisho Cha WCA
+      email: Barua pepe
+      age: Umri
+      competition_count: Idadi ya washindani
+      region_and_references: Eneo na Wanaopendekeza
+      region: Ni eneo gani la Mjumbe unaloomba au unaloishi kwa sasa?
+      region_placeholder: Chagua eneo lako
+      subregion: Ni eneo dogo gani la Mjumbe unaloomba au unaloishi kwa sasa?
+      subregion_placeholder: Chagua eneo dogo lako
+      reviewing_delegate: Mjumbe Mhakiki
+      spoken_delegates: Ni Wajumbe gani Wadogo au Wajumbe Makamili uliowahi 
+        kuzungumza nao kuhusu kuwa Mjumbe Anayejifunza?
+      recommenders: Ni Wajumbe gani Wadogo au Wajumbe Makamili katika eneo lako 
+        waliokubali kukupendekeza kama mgombea wa nafasi ya Mjumbe Anayejifunza?
+      delegates_placeholder: Chagua angalau Mjumbe mmoja
+      experience_and_motivation: Uzoefu na Dhumuni
+      introduction: Jitambulishe kwa ufupi katika sentensi mbili hadi nne.
+      competition_contributions: Toa muhtasari wa jinsi ulivyosaidia mashindano 
+        ya eneo lako zaidi ya kile kinachotajiwa kwa washiriki wote.
+      volunteer_history: Ikiwa umewahi kushikilia nafasi za kujitolea ndani ya 
+        WCA, toa ratiba ya matukio hapa (sio lazima).
+      role_history_warning: Historia ya nafasi zako kwenye tovuti itawekwa 
+        kwenye maombi yako moja kwa moja. Nafasi za zamani hazikuwekwa 
+        kikamilifu kwenye mfumo, kwa hivyo ongeza nafasi zozote zinazokosekana 
+        au marekebisho hapa chini.
+      present: Wakati wa Sasa
+      board_member: Mjumbe wa Bodi
+      motivation: Eleza kwa ufupi nia yako ya kuomba kuwa Mjumbe Anayejifunza 
+        katika sentensi mbili hadi nne.
+      relevant_skills: Toa orodha ya ujuzi na uzoefu muhimu zaidi ulionao 
+        utakaokusaidia kufanikiwa kama Mjumbe Anayejifunza.
+      declaration_understands_application: Naelewa kwamba fomu hii ni kwa ajili 
+        ya Wachezaji wa Rubik's Cube Waliosajiliwa wanaoomba kuwa Mjumbe 
+        Anayejifunza.
+      declaration_has_delegate_support: Nathibitisha kuwa nimezungumza na Mjumbe
+        anayekidhi vigezo katika eneo langu anayeunga mkono ugombea wangu.
+      declaration_proficient_in_english: Ninakiri kwamba nina umahiri wa kusoma 
+        na kuandika Kiingereza.
+      declaration_read_regulations_html: Ninakiri kwamba nimesoma <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">Kanuni za 
+        WCA</a>.
+      regulations_note: 'Kumbuka: Wajumbe hawatarajiwi kujua kila Kanuni. Hata hivyo,
+        wanatarajiwa kujua mambo ya msingi na kutafuta taarifa pale wanapotatizika
+        au kutokuwa na uhakika.'
+      cubing_business_involvement: Je, unajihusisha na biashara inayohusiana na 
+        Rubik's Cube?
+      cubing_business_involvement_details: Tafadhali eleza jinsi unavyojihusisha
+        na biashara inayohusiana na Rubik's Cube.
+      "yes": Ndio
+      "no": Apana
+      submit: Wasilisha Maombi
   user_roles:
-    email: {}
-  user_groups: {}
+    email:
+      role_metadata:
+        region_name: Jina la Eneo
+        status: Hali
+        locale: Lugha na Eneo
+        group_name: Jina la Timu/Kamati
+        delegated_competitions_count: Idadi ya Mashindano Yaliyosimamiwa
+  user_groups:
+    group_types:
+      board: Bodi ya Wakurugenzi ya WCA
+      officers: Maafisa wa WCA
+      translators: Watafsiri
   registrations:
     mailer:
       deleted: {}
     refund_form: {}
     add: {}
+    errors:
+      exceeding_competitor_limit: Kiwango cha mwisho cha washiriki kimefikiwa.
+      edit_deadline_passed: Muda wa mwisho wa kubadilisha usajili umepita! 
+        Mabadiliko yanapaswa kufanywa tu pale ambapo kuna dharura ya kipekee.
+      need_name: Inahitaji jina
+      need_gender: Inahitaji jinsia
+      need_dob: Inahitaji tarehe ya kuzaliwa
+      need_country: Inahitaji eneo
+      must_register: Lazima usajili kamati au tukio kamili angalau moja.
+      exceeds_event_limit:
+        one: Lazima ujisajili kwa tukio 1 pekee.
+        other: Lazima ujisajili kwa matukio kati ya 1 na %{count}.
+      banned_html: Akaunti yako imezuiliwa. Ikiwa unaamini huu ni makosa, 
+        tafadhali mawasiliana na <a 
+        href='mailto:integrity@worldcubeassociation.org' target='_blank'>WIC 
+        </a>.
+      banned_until: Zuio lako linatarajiwa kuisha tarehe %{date}.
+      undelete_banned: ni mshiriki aliyezuiliwa na hawezi kurudishwa
+      series_more_than_one_accepted: Unaweza kukubaliwa katika mashindano 
+        mfululizo (Series) mamoja tu kwa wakati mmoja.
+      can_only_register_for_qualified_events: Huwezi kujisajili kwa matukio 
+        ambayo hujafuzu.
+      cannot_change_events_when_cancelling: Huwezi kubadilisha matukio yako 
+        wakati unaghairi usajili wako.
+      cannot_register_without_comment: 'Ni lazima uweke maelezo. Tafadhali soma Vigezo
+        vya Usajili hapo juu ili kuona kile kinachopaswa kujumuishwa (mfano: katika
+        shindano la pamoja la FMC, eneo ambalo utashiriki).'
   competition_tabs: {}
   results:
     selector_elements: {}

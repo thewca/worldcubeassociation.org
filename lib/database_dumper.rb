@@ -589,6 +589,7 @@ module DatabaseDumper
     }.freeze,
     "regional_records_lookup" => :skip_all_rows,
     "registration_competition_events" => {
+      where_clause: "JOIN registrations ON registrations.id = registration_id #{JOIN_WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -628,6 +629,7 @@ module DatabaseDumper
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
     "waiting_lists" => {
+      where_clause: "JOIN competitions ON competitions.id = holder_id AND holder_type = 'Competition' #{WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
