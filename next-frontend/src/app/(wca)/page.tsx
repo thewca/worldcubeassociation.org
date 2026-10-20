@@ -535,33 +535,11 @@ const renderBlock = (
   }
 };
 
-export default async function Homepage({
-  searchParams,
-}: {
-  searchParams: Promise<{ signed_out?: string }>;
-}) {
-  await connection();
-
+const PayloadContents = async () => {
   const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
-  const { t, lng } = await getT();
+  const { lng } = await getT();
 
-  // Rails redirects here with this flag once it has ended its own session.
-  //   Dismissing links back to the bare homepage, which drops the flag.
-  const { signed_out: signedOut } = await searchParams;
-  const signedOutAlert = signedOut === "true" && (
-    <Box px={HOMEPAGE_SPACING} pt={HOMEPAGE_SPACING}>
-      <Alert.Root status="success">
-        <Alert.Indicator />
-        <Alert.Title>{t("devise.sessions.destroy.success")}</Alert.Title>
-        <CloseButton asChild pos="relative" top="-2" insetEnd="-2">
-          <Link href="/">
-            <LuX />
-          </Link>
-        </CloseButton>
-      </Alert.Root>
-    </Box>
-  );
   const homepage = await payload.findGlobal({
     slug: "home",
     draft: isDraftMode,
@@ -573,33 +551,57 @@ export default async function Homepage({
 
   if (homepageEntries.length === 0) {
     return (
-      <>
-        {signedOutAlert}
-        <Center p={HOMEPAGE_SPACING} asChild>
-          <Text>
-            No homepage content yet, go ahead and{" "}
-            <ChakraLink asChild>
-              <Link
-                href={route({
-                  pathname: "/payload/[[...segments]]",
-                  query: {},
-                })}
-              >
-                add some!
-              </Link>
-            </ChakraLink>
-          </Text>
-        </Center>
-      </>
+      <Center p={HOMEPAGE_SPACING} asChild>
+        <Text>
+          No homepage content yet, go ahead and{" "}
+          <ChakraLink asChild>
+            <Link
+              href={route({ pathname: "/payload/[[...segments]]", query: {} })}
+            >
+              add some!
+            </Link>
+          </ChakraLink>
+        </Text>
+      </Center>
     );
   }
 
   return (
+    <Center p={HOMEPAGE_SPACING} asChild>
+      {renderVerticalLayout(homepageEntries)}
+    </Center>
+  );
+};
+
+export default async function Homepage({
+  searchParams,
+}: {
+  searchParams: Promise<{ signed_out?: string }>;
+}) {
+  await connection();
+
+  const { t } = await getT();
+
+  // Rails redirects here with this flag once it has ended its own session.
+  //   Dismissing links back to the bare homepage, which drops the flag.
+  const { signed_out: signedOut } = await searchParams;
+
+  return (
     <>
-      {signedOutAlert}
-      <Center p={HOMEPAGE_SPACING} asChild>
-        {renderVerticalLayout(homepageEntries)}
-      </Center>
+      {signedOut === "true" && (
+        <Box px={HOMEPAGE_SPACING} pt={HOMEPAGE_SPACING}>
+          <Alert.Root status="success">
+            <Alert.Indicator />
+            <Alert.Title>{t("devise.sessions.destroy.success")}</Alert.Title>
+            <CloseButton asChild pos="relative" top="-2" insetEnd="-2">
+              <Link href="/">
+                <LuX />
+              </Link>
+            </CloseButton>
+          </Alert.Root>
+        </Box>
+      )}
+      <PayloadContents />
     </>
   );
 }
