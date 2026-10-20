@@ -55,7 +55,7 @@ export default function buildAvatarMenuEntries(
     ...cmsEntries
       .filter(
         ({ requiredPermission }) =>
-          requiredPermission === "none" || can[requiredPermission](),
+          !requiredPermission || can[requiredPermission](),
       )
       .map(({ label, href, isRailsPage, newTab }): MenuEntry =>
         isRailsPage

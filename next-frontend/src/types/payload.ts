@@ -127,7 +127,6 @@ export type IconName =
  * via the `definition` "AvatarMenuPermission".
  */
 export type AvatarMenuPermission =
-  | 'none'
   | 'canAccessCms'
   | 'canViewPolls'
   | 'canViewAllUsers'
@@ -674,7 +673,7 @@ export interface AvatarMenuEntry {
    * Open this link in a new tab
    */
   newTab?: boolean | null;
-  requiredPermission: AvatarMenuPermission;
+  requiredPermission?: AvatarMenuPermission | null;
   updatedAt: string;
   createdAt: string;
 }
