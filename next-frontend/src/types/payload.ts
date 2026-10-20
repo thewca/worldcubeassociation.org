@@ -127,14 +127,17 @@ export type IconName =
  * via the `definition` "AvatarMenuPermission".
  */
 export type AvatarMenuPermission =
-  | 'canAccessCms'
-  | 'canViewPolls'
-  | 'canViewAllUsers'
-  | 'canAdminResults'
-  | 'canCreatePosts'
-  | 'canManageRegionalOrganizations'
-  | 'canViewDelegateAdminPage'
-  | 'canManageIncidents';
+  | (
+      | 'canAccessCms'
+      | 'canViewPolls'
+      | 'canViewAllUsers'
+      | 'canAdminResults'
+      | 'canCreatePosts'
+      | 'canManageRegionalOrganizations'
+      | 'canViewDelegateAdminPage'
+      | 'canManageIncidents'
+    )
+  | null;
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "StaticTargetLink".
@@ -673,7 +676,7 @@ export interface AvatarMenuEntry {
    * Open this link in a new tab
    */
   newTab?: boolean | null;
-  requiredPermission?: AvatarMenuPermission | null;
+  requiredPermission?: AvatarMenuPermission;
   updatedAt: string;
   createdAt: string;
 }
