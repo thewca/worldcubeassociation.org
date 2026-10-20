@@ -5,3 +5,5 @@ apis:
   wca:
     root: openapi/wcaCore.yaml
     output: openapi/wcaAPI.yaml
+    x-openapi-ts:
+      output: src/types/openapi.ts
