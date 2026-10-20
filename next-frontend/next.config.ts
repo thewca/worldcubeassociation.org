@@ -66,6 +66,9 @@ const nextConfig: NextConfig = {
     return config;
   },
   cacheComponents: true,
+  cacheHandlers: {
+    default: require.resolve("./src/lib/cache/redisCacheHandler.js"),
+  },
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },
