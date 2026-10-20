@@ -8,6 +8,10 @@ locals {
   dev_dump_db_url = "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
 
   sidekiq_environment = [
+    {
+      name  = "PAYLOAD_DATABASE_URI"
+      value = local.payload_database_uri
+    },
   ]
   rails_environment = [
     {

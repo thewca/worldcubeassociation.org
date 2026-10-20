@@ -188,6 +188,7 @@ Rails.application.routes.draw do
   get 'export/results/:version/:file_type' => 'database#results_permalink', as: :results_permalink
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
   get 'export/developer/wca-developer-database-dump' => "database#dev_export_permalink"
+  get 'export/payload/wca-payload-database-dump' => "database#payload_export_permalink", as: :payload_export_permalink
   # redirect from the old path that used to be linked on GitHub
   get 'wst/wca-developer-database-dump.zip' => "database#dev_export_permalink"
 
