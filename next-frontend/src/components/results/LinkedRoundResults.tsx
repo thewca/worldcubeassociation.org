@@ -72,6 +72,7 @@ export default function LinkedRoundResults({
         t={t}
         isAdmin={false}
         solveTextAlign="center"
+        showLinkedRoundsView={showAll}
       />
     </>
   );
