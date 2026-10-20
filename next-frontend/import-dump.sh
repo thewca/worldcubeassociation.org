@@ -6,7 +6,7 @@ trap 'echo ""; echo "Error: Command failed at line $LINENO: $BASH_COMMAND"; echo
 
 # Configuration
 CONTAINER_NAME="payload_db"
-DUMP_URL="https://assets.worldcubeassociation.org/export/payload/dump.zip"
+DUMP_URL="https://exports.worldcubeassociation.org/payload/dump.zip"
 WORK_DIR=""
 MONGO_USER="root"
 MONGO_PASS="root"
