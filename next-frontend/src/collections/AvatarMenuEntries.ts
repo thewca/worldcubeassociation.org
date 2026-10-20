@@ -1,4 +1,6 @@
-import type { Access, CollectionConfig } from "payload";
+import type { CollectionConfig } from "payload";
+import { hasRole } from "@delmaredigital/payload-better-auth";
+import { WCA_ROLES_FIELD } from "@/auth.config";
 import type { PermissionFunctions } from "@/lib/wca/permissions";
 import { newTabCheckbox } from "@/blocks/utils";
 import { revalidateCollection } from "@/collections/revalidateCollection";
@@ -20,8 +22,7 @@ const permissionOptions = [
   "canManageIncidents",
 ] satisfies UnscopedPermission[];
 
-const isWstAdmin: Access = ({ req: { user } }) =>
-  Boolean(user?.roles?.includes("wst_admin"));
+const isWstAdmin = hasRole(["wst_admin"], WCA_ROLES_FIELD);
 
 export const AvatarMenuEntries: CollectionConfig = {
   slug: "avatarMenuEntries",
@@ -58,10 +59,8 @@ export const AvatarMenuEntries: CollectionConfig = {
     {
       name: "requiredPermission",
       type: "select",
-      options: ["none", ...permissionOptions],
-      defaultValue: "none",
+      options: permissionOptions,
       interfaceName: "AvatarMenuPermission",
-      required: true,
     },
   ],
 };
