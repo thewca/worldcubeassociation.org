@@ -87,7 +87,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
           </Card.Body>
         </Center>
         {action && (
-          <Center marginLeft="auto" paddingRight="3">
+          <Center marginStart="auto" paddingEnd="3">
             {action}
           </Center>
         )}

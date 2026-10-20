@@ -1,6 +1,7 @@
 import type { Block, GlobalConfig } from "payload";
 import type { Route } from "nextjs-routes";
 import { revalidateGlobal } from "@/globals/revalidateGlobal";
+import { marketingTeamAccess } from "@/payload.access";
 
 type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
 
@@ -67,6 +68,9 @@ const FooterExternalLinkItem: Block = {
 
 export const Footer: GlobalConfig = {
   slug: "footer",
+  access: {
+    update: marketingTeamAccess,
+  },
   fields: [
     {
       name: "navigationLinks",

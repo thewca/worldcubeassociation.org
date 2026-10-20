@@ -3,9 +3,13 @@ import { ParagraphBlock } from "@/blocks/text/paragraph";
 import { QuoteBlock } from "@/blocks/text/quote";
 import { CaptionedImageBlock } from "@/blocks/image/captionedImage";
 import { revalidateGlobal } from "@/globals/revalidateGlobal";
+import { archiveTeamAccess } from "@/payload.access";
 
 export const SpeedCubingHistoryPage: GlobalConfig = {
   slug: "speedcubing-history-page",
+  access: {
+    update: archiveTeamAccess,
+  },
   label: "Speedcubing History Page",
   fields: [
     {

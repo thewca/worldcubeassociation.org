@@ -15,6 +15,7 @@ class LiveResultHistoryEntry < ApplicationRecord
     scoretaking: 'scoretaking',
     advanced_next: 'advanced_next',
     locked: 'locked',
+    unlocked: 'unlocked',
     quit: 'quit',
     cleared: 'cleared',
   }, prefix: true
