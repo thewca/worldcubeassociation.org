@@ -85,6 +85,11 @@ class Round < ApplicationRecord
 
   validates :participation_source_type, comparison: { equal_to: LinkedRound.model_name, if: :participation_source_linked?, message: "must be the linked round group when the previous rounds are linked" }
 
+  after_destroy :destroy_orphaned_linked_round
+  private def destroy_orphaned_linked_round
+    self.linked_round&.destroy_if_orphaned
+  end
+
   after_save :reset_linked_round_information, if: :linked_round_previously_changed?
   private def reset_linked_round_information
     self.linked_round&.reset_round_information
@@ -204,8 +209,10 @@ class Round < ApplicationRecord
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
-  def close_round!
-    live_results.destroy_all.count
+  def close_round!(closing_user)
+    live_results.destroy_all.count.tap do
+      participation_source.unlock_results(closing_user) unless first_round?
+    end
   end
 
   def open_round!(opening_user)
@@ -677,9 +684,15 @@ class Round < ApplicationRecord
   end
 
   def lock_results(locking_user)
-    count = live_results.update_all(locked_by_id: locking_user.id)
-    self.bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
-    count
+    live_results.update_all(locked_by_id: locking_user.id).tap do
+      bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
+    end
+  end
+
+  def unlock_results(unlocking_user)
+    live_results.update_all(locked_by_id: nil).tap do
+      bulk_insert_history(live_results.ids, unlocking_user, action_type: :unlocked)
+    end
   end
 
   STATE_LOCKED = "locked"

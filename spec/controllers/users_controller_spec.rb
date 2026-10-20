@@ -386,6 +386,27 @@ RSpec.describe UsersController do
     end
   end
 
+  describe 'GET #show_for_merge' do
+    let(:user) { create(:user) }
+
+    it 'does not show user details to regular users' do
+      sign_in create(:user)
+
+      get :show_for_merge, params: { id: user.id }
+
+      expect(response).to redirect_to root_url
+    end
+
+    it 'shows user details to WRT members' do
+      sign_in create(:user, :wrt_member)
+
+      get :show_for_merge, params: { id: user.id }
+
+      expect(response).to have_http_status :ok
+      expect(response.parsed_body["email"]).to eq user.email
+    end
+  end
+
   describe 'POST #update_user_data' do
     let(:user) { create(:user, wca_id: nil) }
     let(:admin) { create(:admin) }

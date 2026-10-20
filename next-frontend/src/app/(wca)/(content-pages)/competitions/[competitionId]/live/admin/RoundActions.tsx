@@ -31,7 +31,7 @@ export default function RoundActions({
         variant="subtle"
         flex="1"
         justifyContent="flex-start"
-        textAlign="left"
+        textAlign="start"
         disabled={["ready", "pending", "blocked"].includes(state)}
       >
         {isOpen ? (

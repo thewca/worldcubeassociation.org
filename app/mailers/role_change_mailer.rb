@@ -18,7 +18,10 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:delegate_regions]
       metadata[:region_name] = group.name
       metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
+      metadata[:location] = role.metadata.location
       metadata[:delegated_competitions_count] = role.metadata.total_delegated
+      metadata[:wca_id] = role.user.wca_id
+      metadata[:email] = role.user.email
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]
@@ -298,6 +301,11 @@ class RoleChangeMailer < ApplicationMailer
           name: 'Team/Committee Leader',
           email: role.group.lead_user&.email,
           message: 'Informing as there is a role end in your Team/Committee.',
+        ),
+        UserRole::UserRoleEmailRecipient.new(
+          name: UserGroup.teams_committees_group_wqac.name,
+          email: UserGroup.teams_committees_group_wqac.metadata.email,
+          message: "Please suspend the member's Moodle account if necessary.",
         ),
       )
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]

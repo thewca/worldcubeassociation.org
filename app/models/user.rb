@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :competition_scoretakers
+  has_many :trainee_delegate_applications, foreign_key: :applicant_id, inverse_of: :applicant, dependent: :restrict_with_exception
   has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
@@ -514,6 +515,16 @@ class User < ApplicationRecord
 
   def senior_delegate_for?(user)
     user.senior_delegates.include?(self)
+  end
+
+  def age
+    return if dob.blank?
+
+    today = Date.current
+    years_since_birth_year = today.year - dob.year
+    had_birthday_this_year = today >= dob + years_since_birth_year.years
+
+    had_birthday_this_year ? years_since_birth_year : years_since_birth_year - 1
   end
 
   def below_forum_age_requirement?
@@ -1243,6 +1254,20 @@ class User < ApplicationRecord
     BookmarkedCompetition.where(competition: competition, user: self).present?
   end
 
+  def cached_bookmarked_competition_ids
+    Rails.cache.fetch(bookmarked_competitions_cache_key, expires_in: 60.minutes) do
+      competitions_bookmarked.pluck(:competition_id)
+    end
+  end
+
+  def clear_bookmarked_competitions_cache
+    Rails.cache.delete(bookmarked_competitions_cache_key)
+  end
+
+  private def bookmarked_competitions_cache_key
+    "#{id}-competitions-bookmarked"
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     login = conditions.delete(:login)
@@ -1683,6 +1708,7 @@ class User < ApplicationRecord
       competitions_announced.update_all(announced_by: new_user.id)
       roles.update_all(user_id: new_user.id)
       registrations.update_all(user_id: new_user.id)
+      trainee_delegate_applications.update_all(applicant_id: new_user.id)
 
       final_wca_id = new_user.wca_id.presence || self.wca_id.presence
       new_user.newcomer_results.update_all(person_id: final_wca_id) if final_wca_id.present?

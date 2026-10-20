@@ -136,7 +136,7 @@ function ResultsProjector({
                     onClick={() => setStatus("hiding")}
                     aria-label="Play"
                     size="lg"
-                    mr={2}
+                    me={2}
                   >
                     <FaPlay />
                   </IconButton>
@@ -146,7 +146,7 @@ function ResultsProjector({
                     onClick={() => setStatus("paused")}
                     aria-label="Pause"
                     size="lg"
-                    mr={2}
+                    me={2}
                   >
                     <FaPause />
                   </IconButton>
@@ -208,8 +208,8 @@ function ResultsProjector({
                             {showText && (
                               <Table.Cell
                                 fontSize="1.5rem"
-                                pr={2}
-                                textAlign="right"
+                                pe={2}
+                                textAlign="end"
                                 rowSpan={rowSpan}
                                 layerStyle="fill.solid"
                                 colorPalette={rankingCellColorPalette(
@@ -247,7 +247,7 @@ function ResultsProjector({
                             ).map((attempt) => (
                               <Table.Cell
                                 key={attempt.attempt_number}
-                                textAlign="right"
+                                textAlign="end"
                               >
                                 {formatAttemptResult(attempt.value, eventId)}
                               </Table.Cell>
@@ -259,7 +259,7 @@ function ResultsProjector({
                               ) => (
                                 <Table.Cell
                                   key={i18nKey}
-                                  textAlign="right"
+                                  textAlign="end"
                                   fontWeight={statIndex === 0 ? 600 : 400}
                                 >
                                   <WithRecordTag

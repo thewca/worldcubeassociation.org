@@ -3,6 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe Api::V0::UserRolesController do
+  describe 'GET #index for delegates' do
+    let!(:role) { create(:delegate_role) }
+
+    it 'includes the senior region and junior promotion date in the metadata' do
+      create(:junior_delegate_role, user: role.user, start_date: '2020-02-01', end_date: '2021-01-01')
+      create(:junior_delegate_role, user: role.user, start_date: '2021-01-01', end_date: '2022-01-01')
+
+      get :index, params: { groupType: 'delegate_regions', isActive: true }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.sole['metadata']).to include(
+        'senior_region' => role.group.name,
+        'junior_delegate_promotion_date' => '2020-02-01',
+      )
+    end
+  end
+
   describe 'GET #list' do
     let!(:user_senior_delegate_role) { create(:senior_delegate_role) }
     let!(:user_whose_delegate_status_changes) { create(:junior_delegate_role, group_id: user_senior_delegate_role.group_id).user }
@@ -132,6 +149,27 @@ RSpec.describe Api::V0::UserRolesController do
         get :show, params: { id: probation_role.id }
         expect(response).to have_http_status(:unauthorized)
       end
+    end
+  end
+
+  describe 'GET #search' do
+    let!(:banned_competitor) { create(:banned_competitor_role) }
+    let(:search_params) { { query: banned_competitor.user.name, groupType: UserGroup.group_types[:banned_competitors] } }
+
+    it 'does not return banned competitors to a normal user' do
+      sign_in create(:user)
+
+      get :search, params: search_params
+
+      expect(response.parsed_body["result"]).to be_empty
+    end
+
+    it 'returns banned competitors to an admin' do
+      sign_in create(:wst_admin_role).user
+
+      get :search, params: search_params
+
+      expect(response.parsed_body["result"].pluck("id")).to eq [banned_competitor.id]
     end
   end
 

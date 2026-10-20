@@ -44,7 +44,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     competition = Competition.find(competition_id)
     registrations = competition.registrations.accepted.competing
     payload = Rails.cache.fetch([
-                                  "registrations_v2_list",
+                                  "registrations_v2_public_list",
                                   competition.id,
                                   competition.event_ids,
                                   registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),

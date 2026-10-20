@@ -18,6 +18,16 @@ export default function RankingsTable({
 }: RankingsTableProps) {
   const { t } = useT();
 
+  const ranks = rankings.reduce<number[]>(
+    (previousRanks, ranking, index) => [
+      ...previousRanks,
+      ranking.value === rankings[index - 1]?.value
+        ? previousRanks[index - 1]
+        : index + 1,
+    ],
+    [],
+  );
+
   return (
     <Table.ScrollArea rounded="md">
       <Table.Root size="xs" striped>
@@ -52,7 +62,7 @@ export default function RankingsTable({
             <RankingsRow
               key={`${ranking.id}-${index}`}
               ranking={ranking}
-              index={index}
+              rank={ranks[index]}
               isAverage={isAverage}
               isByRegion={isByRegion}
             />

@@ -1,5 +1,6 @@
 import { CollectionConfig } from "payload";
 import { iconMap, IconName } from "@/components/icons/iconMap";
+import { qualityTeamAccess } from "@/payload.access";
 
 const iconOptions = Object.keys(iconMap) as IconName[];
 
@@ -24,6 +25,11 @@ const documentCategories = [
 
 export const Documents: CollectionConfig = {
   slug: "documents",
+  access: {
+    create: qualityTeamAccess,
+    update: qualityTeamAccess,
+    delete: qualityTeamAccess,
+  },
   labels: {
     singular: "Document",
     plural: "Documents",

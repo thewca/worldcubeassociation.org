@@ -54,7 +54,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
+      expect(page.find_by_id('claim-wca-id-explanation')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -110,7 +110,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
+      expect(page.find_by_id('claim-wca-id-explanation')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -133,7 +133,7 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
+      expect(page.find_by_id('claim-wca-id-explanation')).to have_text "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
@@ -218,14 +218,14 @@ RSpec.feature "Sign up" do
       fill_in_selectize "WCA ID", with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
-      expect(page.find_by_id('select-nearby-delegate-area')).to have_text "In order to assign you your WCA ID"
+      expect(page.find_by_id('claim-wca-id-explanation')).to have_text "In order to assign you your WCA ID"
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
       expect(page).to have_css("div.user_dob_verification", visible: :visible)
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")
       # Now enter the wrong birthdate.
-      fill_in "Birthdate", with: "1900-02-03"
+      fill_in("Birthdate", with: "1900-02-03").send_keys(:escape)
 
       # We just filled some invalid information as if we were a returning competitor, but
       # now change our minds and fill out the form as if we're a noobie. We should only show
