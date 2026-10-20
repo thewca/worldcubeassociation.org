@@ -1504,15 +1504,13 @@ RSpec.describe Competition do
 
     it "ics export encodes datetimes as UTC with Zulu suffix" do
       ical = competition.to_ics.to_ical
-      expect(ical).to match(/^DTSTART:\d{8}T\d{6}Z$/m)
-      expect(ical).to match(/^DTEND:\d{8}T\d{6}Z$/m)
-      expect(ical).not_to include("TZID=Etc/UTC")
-      expect(ical).not_to include("TZID=UTC")
+      expect(ical).not_to include("TZID")
 
-      activity = competition.all_activities.first
-      event = competition.to_ics.events.find { |e| e.summary.to_s == activity.localized_name }
-      expect(event.dtstart.value_ical).to eq(activity.start_time.utc.strftime("%Y%m%dT%H%M%SZ"))
-      expect(event.dtend.value_ical).to eq(activity.end_time.utc.strftime("%Y%m%dT%H%M%SZ"))
+      lines = ical.split("\r\n")
+      competition.all_activities.each do |activity|
+        expect(lines).to include("DTSTART:#{activity.start_time.utc.strftime('%Y%m%dT%H%M%SZ')}")
+        expect(lines).to include("DTEND:#{activity.end_time.utc.strftime('%Y%m%dT%H%M%SZ')}")
+      end
     end
   end
 
