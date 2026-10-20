@@ -8,7 +8,7 @@
     "check:types": "tsc --noEmit",
     "build": "node ./scripts/copy-maplibre-worker.mjs && next build --webpack",
     "start": "next start",
-    "types:openapi": "redocly bundle wca && openapi-typescript openapi/wcaAPI.yaml -o src/types/openapi.ts && redocly build-docs wca -o public/api.html",
+    "types:openapi": "redocly lint wca && redocly bundle wca && openapi-typescript openapi/wcaAPI.yaml -o src/types/openapi.ts && redocly build-docs wca -o public/api.html",
     "types:chakra": "chakra typegen ./src/theme.ts --outdir src/types/chakra --strict",
     "types:payload": "payload generate:types",
     "build:translations": "./build-translations.cjs",
