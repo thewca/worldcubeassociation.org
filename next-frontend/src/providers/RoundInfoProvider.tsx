@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LiveRoundAdmin, LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import useAPI from "@/lib/wca/useAPI";
+import { SERVER_SEEDED_STALE_TIME } from "@/providers/WCAQueryClientProvider";
 import Loading from "@/components/ui/loading";
 
 interface AllRoundInfoProviderType {
@@ -71,6 +72,8 @@ export function RoundsInfoProvider({
   const { data, isLoading } = useQuery({
     ...roundsQueryOptions,
     initialData: { rounds: initialRounds },
+    refetchOnMount: true,
+    staleTime: SERVER_SEEDED_STALE_TIME,
   });
 
   const patchRound = useCallback(

@@ -42,9 +42,17 @@ Doorkeeper::OpenidConnect.configure do
       resource_owner.current_avatar&.strict_url
     end
 
-    claim :roles, response: :user_info, scope: :cms do |resource_owner|
+    claim :delegate_status, response: %i[id_token user_info] do |resource_owner|
+      resource_owner.delegate_status
+    end
+
+    claim :roles, response: %i[id_token user_info], scope: :cms do |resource_owner|
       resource_owner.teams_committees.pluck(:friendly_id) |
         ["board"].select { resource_owner.board_member? }
+    end
+
+    claim :translator_locales, response: %i[id_token user_info], scope: :translations do |resource_owner|
+      resource_owner.translators.pluck(:locale)
     end
   end
 

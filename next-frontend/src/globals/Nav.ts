@@ -1,7 +1,9 @@
 import { Block, GlobalConfig } from "payload";
 
 import { iconMap, type IconName } from "@/components/icons/iconMap";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 import type { Route } from "nextjs-routes";
+import { marketingTeamAccess } from "@/payload.access";
 
 const iconOptions = Object.keys(iconMap) as IconName[];
 
@@ -147,6 +149,9 @@ const Dropdown: Block = {
 
 export const Nav: GlobalConfig = {
   slug: "nav",
+  access: {
+    update: marketingTeamAccess,
+  },
   fields: [
     {
       name: "entry",
@@ -160,5 +165,8 @@ export const Nav: GlobalConfig = {
     livePreview: {
       url: "/",
     },
+  },
+  hooks: {
+    afterChange: [revalidateGlobal],
   },
 };

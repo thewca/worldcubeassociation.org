@@ -6,8 +6,8 @@ import {
   NameTableCell,
   ReportTableCell,
 } from "./TableCells";
-import { Alert, Table } from "@chakra-ui/react";
-import I18nHTMLTranslate from "@/components/I18nHTMLTranslate";
+import { Alert, Link, Table } from "@chakra-ui/react";
+import { Trans } from "react-i18next";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
 import { components } from "@/types/openapi";
@@ -28,9 +28,11 @@ export default function PastCompetitionsTable({
     return (
       <Alert.Root status="info">
         <Alert.Title>
-          <I18nHTMLTranslate
+          <Trans
+            t={t}
             i18nKey={fallbackMessage.key}
-            options={fallbackMessage.options}
+            values={fallbackMessage.options}
+            components={{ a: <Link /> }}
           />
         </Alert.Title>
       </Alert.Root>

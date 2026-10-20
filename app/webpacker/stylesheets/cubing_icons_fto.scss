@@ -1,0 +1,11 @@
+@use "sass:string";
+
+// @cubing/icons only ships this glyph as 'unofficial-fto', but we render
+// official events with the 'event-<id>' class.
+.cubing-icon.event-fto:before {
+  // Emit the escape sequence literally instead of the resolved U+F135 glyph:
+  // non-ASCII output makes Sass prepend a BOM to the compiled stylesheet, and
+  // once Webpack concatenates that into a bundle the stray BOM glues itself to
+  // the first selector and kills this rule.
+  content: string.unquote('"\\f135"');
+}

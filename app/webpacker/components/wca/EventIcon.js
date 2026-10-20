@@ -3,11 +3,16 @@ import classnames from 'classnames';
 
 /* eslint react/jsx-props-no-spreading: "off" */
 function EventIcon({
-  id, className, size = undefined, hoverable = true, ...other
+  id,
+  className,
+  size = undefined,
+  hoverable = true,
+  baseComponent: Component = 'span',
+  ...other
 }) {
   const resetHoverable = hoverable ? {} : { pointerEvents: 'none' };
   return (
-    <span
+    <Component
       {...other}
       className={classnames('cubing-icon', `event-${id}`, className)}
       style={{ fontSize: size, ...resetHoverable }}

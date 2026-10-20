@@ -1,8 +1,14 @@
 import type { CollectionConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
+import { marketingTeamAccess } from "@/payload.access";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
+  access: {
+    create: marketingTeamAccess,
+    update: marketingTeamAccess,
+    delete: marketingTeamAccess,
+  },
   fields: [
     {
       name: "image",

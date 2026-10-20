@@ -13,16 +13,18 @@ declare module "nextjs-routes" {
   export type Route =
     | StaticRoute<"/">
     | StaticRoute<"/about">
-    | DynamicRoute<"/api/auth/[...nextauth]", { "nextauth": string[] }>
-    | DynamicRoute<"/api/auth/payload/[...nextauth]", { "nextauth": string[] }>
+    | DynamicRoute<"/api/auth/[...all]", { "all": string[] }>
+    | StaticRoute<"/api/health">
     | DynamicRoute<"/api/payload/[...slug]", { "slug": string[] }>
     | StaticRoute<"/api/payload/draft">
     | StaticRoute<"/api/payload/graphql">
     | StaticRoute<"/api/payload/graphql-playground">
+    | StaticRoute<"/api/payload/schema-manifest">
     | StaticRoute<"/competitions">
     | DynamicRoute<"/competitions/[competitionId]", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/admin", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/competitors", { "competitionId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/custom-tabs/[tabName]", { "competitionId": string; "tabName": string }>
     | DynamicRoute<"/competitions/[competitionId]/events", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live/admin", { "competitionId": string }>
@@ -31,13 +33,13 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]", { "competitionId": string; "roundId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]/admin", { "competitionId": string; "roundId": string }>
     | DynamicRoute<"/competitions/[competitionId]/live/rounds/[roundId]/admin/double-check", { "competitionId": string; "roundId": string }>
+    | DynamicRoute<"/competitions/[competitionId]/live/scoretakers", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/podiums", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/register", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/results/all", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/results/byPerson", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/scrambles", { "competitionId": string }>
-    | DynamicRoute<"/competitions/[competitionId]/tabs/[tabName]", { "competitionId": string; "tabName": string }>
     | StaticRoute<"/competitions/mine">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
@@ -47,20 +49,26 @@ declare module "nextjs-routes" {
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
     | StaticRoute<"/incidents">
+    | DynamicRoute<"/incidents/[id]", { "id": string }>
     | StaticRoute<"/logo">
     | StaticRoute<"/officers-and-board">
     | StaticRoute<"/organizations">
     | DynamicRoute<"/payload/[[...segments]]", { "segments"?: string[] | undefined }>
     | DynamicRoute<"/persons/[wcaId]", { "wcaId": string }>
+    | StaticRoute<"/posts">
+    | DynamicRoute<"/posts/[announcementId]", { "announcementId": string }>
     | StaticRoute<"/privacy">
+    | StaticRoute<"/regulations">
     | StaticRoute<"/regulations/about">
     | StaticRoute<"/regulations/history">
     | DynamicRoute<"/regulations/history/official/[version]", { "version": string }>
     | StaticRoute<"/regulations/scrambles">
     | StaticRoute<"/regulations/translations">
+    | DynamicRoute<"/regulations/translations/[language]", { "language": string }>
     | StaticRoute<"/results/rankings">
     | StaticRoute<"/results/records">
     | StaticRoute<"/score-tools">
+    | StaticRoute<"/search">
     | StaticRoute<"/speedcubing-history">
     | StaticRoute<"/teams-committees">
     | StaticRoute<"/translators">

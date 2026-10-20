@@ -8,8 +8,10 @@ import {
   Portal,
   VStack,
   Text,
+  Stat,
+  StatGroup,
 } from "@chakra-ui/react";
-import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
+import AttemptResultField from "@/app/(wca)/(content-pages)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
@@ -24,6 +26,9 @@ import {
 import { flushSync } from "react-dom";
 import type { KeyboardEvent, ReactNode, Ref } from "react";
 import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
+import { normalizeForSearch } from "@/lib/live/normalizeForSearch";
+import { average, best } from "@/lib/wca/results/attempts";
+import { formatAttemptResult, SKIPPED_VALUE } from "@/lib/wca/wcif/attempts";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import { useRoundInfo } from "@/providers/RoundInfoProvider";
@@ -76,9 +81,9 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
       .filter(
         (competitor) =>
           !filterText ||
-          toCompetitorString(competitor)
-            .toLowerCase()
-            .includes(filterText.toLowerCase()) ||
+          normalizeForSearch(toCompetitorString(competitor)).includes(
+            normalizeForSearch(filterText),
+          ) ||
           parseInt(filterText, 10) === competitor.registrant_id,
       );
 
@@ -131,6 +136,13 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
 
   const hasMetCutoff = meetsCutoff(attempts, cutoff);
 
+  const bestResult = best(attempts);
+  // `average` only supports Mo3/Ao5-shaped attempt counts and throws otherwise.
+  const averageResult =
+    attempts.length === 3 || attempts.length === 5
+      ? average(attempts, eventId)
+      : SKIPPED_VALUE;
+
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <VStack align="left">
@@ -153,7 +165,31 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
             <Heading size="2xl">{header}</Heading>
           </Combobox.Label>
           <Combobox.Control>
-            <Combobox.Input ref={inputRef} placeholder="Type to search" />
+            <Combobox.Context>
+              {(api) => (
+                <Combobox.Input
+                  ref={inputRef}
+                  placeholder="Type to search"
+                  onKeyDown={(e) => {
+                    // Backspace at the end of the field clears the whole name,
+                    // so double-checking can move on to the next competitor.
+                    const input = e.currentTarget;
+                    const atEnd =
+                      input.selectionStart === input.value.length &&
+                      input.selectionEnd === input.value.length;
+
+                    if (
+                      e.key === "Backspace" &&
+                      atEnd &&
+                      api.hasSelectedItems
+                    ) {
+                      e.preventDefault();
+                      api.clearValue();
+                    }
+                  }}
+                />
+              )}
+            </Combobox.Context>
             <Combobox.IndicatorGroup>
               <Combobox.ClearTrigger />
               <Combobox.Trigger />
@@ -207,6 +243,24 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
             </Button>
           )}
         </FocusScope>
+        {selectedCompetitor && (
+          <StatGroup justifyContent="space-between">
+            <Stat.Root flex="0" alignItems="flex-start">
+              <Stat.Label>{t("common.best")}</Stat.Label>
+              <Stat.ValueText>
+                {formatAttemptResult(bestResult, eventId)}
+              </Stat.ValueText>
+            </Stat.Root>
+            {averageResult !== SKIPPED_VALUE && (
+              <Stat.Root flex="0" alignItems="flex-end">
+                <Stat.Label>{t("common.average")}</Stat.Label>
+                <Stat.ValueText>
+                  {formatAttemptResult(averageResult, eventId)}
+                </Stat.ValueText>
+              </Stat.Root>
+            )}
+          </StatGroup>
+        )}
         <Checkbox.Root checked={batchMode} onCheckedChange={batchConfirmation}>
           <Checkbox.HiddenInput />
           <Checkbox.Control />
@@ -275,7 +329,15 @@ function AttemptFieldsNav({
       e.preventDefault();
       const from = e.target as HTMLElement;
       flushSync(() => from.blur());
-      focusManager?.focusPrevious({ wrap: false, from });
+      // Moving back from the first attempt lands on the competitor field.
+      const didFocusPrevious = focusManager?.focusPrevious({
+        wrap: false,
+        from,
+      });
+
+      if (!didFocusPrevious) {
+        onFocusCompetitor();
+      }
     }
   };
 

@@ -73,12 +73,14 @@ export function createSearchParams(
   } else if (timeOrder === "by_announcement") {
     searchParams["sort"] = "-announced_at,name";
   } else if (timeOrder === "custom") {
-    const startLuxon = DateTime.fromISO(customStartDate!, { zone: "UTC" });
-    const endLuxon = DateTime.fromISO(customEndDate!, { zone: "UTC" });
-
+    // Either end of the range may be left open, in which case we omit the bound entirely.
     searchParams["sort"] = "start_date,end_date,name";
-    searchParams["start"] = startLuxon.isValid ? startLuxon.toISODate() : "";
-    searchParams["end"] = endLuxon.isValid ? endLuxon.toISODate() : "";
+    if (customStartDate) {
+      searchParams["start"] = customStartDate;
+    }
+    if (customEndDate) {
+      searchParams["end"] = customEndDate;
+    }
   }
 
   return searchParams;

@@ -14,6 +14,9 @@ class LiveResult < ApplicationRecord
   after_save :trigger_recompute, if: :should_recompute?
 
   belongs_to :registration
+  has_one :user, through: :registration
+
+  delegate :wca_id, :name, :country_iso2, to: :user
 
   belongs_to :round
 
@@ -61,6 +64,14 @@ class LiveResult < ApplicationRecord
 
   delegate :event_id, :format_id, :round_type_id, :competition_id, to: :round
   delegate :registrant_id, to: :registration
+
+  def event
+    Event.c_find(self.event_id)
+  end
+
+  def format
+    Format.c_find(self.format_id)
+  end
 
   def to_solve_time(field)
     SolveTime.new(event_id, field, send(field))
@@ -128,9 +139,11 @@ class LiveResult < ApplicationRecord
     end
   end
 
-  def to_inbox_result
-    attempt_values = live_attempts.pluck(:value)
+  def attempt_values
+    self.live_attempts.pluck(:value)
+  end
 
+  def to_inbox_result
     InboxResult.new(
       round: self.round,
       competition_id: self.competition_id,
@@ -150,23 +163,23 @@ class LiveResult < ApplicationRecord
     )
   end
 
-  def to_wcif
+  def to_wcif(version: Competition::WCIF_STABLE_VERSION)
     {
       "personId" => registrant_id,
       "ranking" => global_pos,
-      "attempts" => live_attempts.map(&:to_wcif),
+      "attempts" => live_attempts.map { it.to_wcif(version: version) },
       "best" => best,
       "average" => average,
     }
   end
 
-  def self.wcif_json_schema
+  def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
     {
       "type" => %w[object null],
       "properties" => {
         "personId" => { "type" => "integer" },
         "ranking" => { "type" => %w[integer null] },
-        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema },
+        "attempts" => { "type" => "array", "items" => LiveAttempt.wcif_json_schema(version: version) },
         "best" => { "type" => "integer" },
         "average" => { "type" => "integer" },
       },
@@ -178,6 +191,17 @@ class LiveResult < ApplicationRecord
     methods: %w[],
     include: [{ live_attempts: { only: %i[value attempt_number] } }],
   }.freeze
+
+  def to_inbox_compat
+    self.as_json(
+      only: %w[id best average global_pos],
+      methods: %w[wca_id name country_iso2 event_id round_type_id],
+    ).merge(
+      # renaming properties that the old frontend still expects in legacy nomenclature
+      pos: self.local_pos,
+      attempts: self.attempt_values,
+    )
+  end
 
   def to_live_state
     serializable_hash(LIVE_STATE_SERIALIZE_OPTIONS)

@@ -53,5 +53,107 @@ module Registrations
         on_or_before: date.iso8601,
       }
     end
+
+    def self.import_registrations!(competition, registrations_data, creator)
+      # registered_at stores millisecond precision, but we want all registrations
+      #   from CSV import to be considered as one "batch". So we mark a timestamp
+      #   once, and then reuse it throughout the loop.
+      import_time = Time.now.utc
+      emails = registrations_data.pluck(:email)
+
+      ActiveRecord::Base.transaction do
+        competition.registrations.accepted.each do |registration|
+          registration.update!(competing_status: STATUS_CANCELLED) unless emails.include?(registration.user.email)
+        end
+        registrations_data.each do |registration_data|
+          user = user_for_registration!(registration_data)
+          registration = competition.registrations.find_or_initialize_by(user_id: user.id) do |reg|
+            reg.registered_at = import_time
+          end
+          registration.save_registration_data!(registration_data: registration_data, creator: creator, source: Registration::CSV_IMPORT)
+        rescue StandardError => e
+          raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_data[:name], error: e))
+        end
+      end
+    end
+
+    def self.user_for_registration!(registration_row)
+      wca_id = registration_row[:wcaId]&.upcase
+      email = registration_row[:email]&.downcase
+
+      person_details = {
+        name: registration_row[:name],
+        country_iso2: registration_row[:countryIso2],
+        gender: registration_row[:gender],
+        dob: registration_row[:birthdate],
+      }
+
+      if wca_id.present?
+        raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: wca_id) unless Person.exists?(wca_id: wca_id)
+
+        user = User.find_by(wca_id: wca_id)
+        if user
+          if user.dummy_account?
+            email_user = User.find_by(email: email)
+            if email_user
+              if email_user.wca_id.present?
+                raise I18n.t("registrations.import.errors.email_user_with_different_wca_id",
+                             email: email, user_wca_id: email_user.wca_id,
+                             registration_wca_id: wca_id)
+              else
+                # User hooks will also remove the dummy user account.
+                email_user.update!(wca_id: wca_id, **person_details)
+                email_user
+              end
+            else
+              user.skip_reconfirmation!
+              user.update!(dummy_account: false, **person_details, email: email)
+              user
+            end
+          else
+            user # Use this account.
+          end
+        else
+          email_user = User.find_by(email: email)
+          if email_user
+            if email_user.unconfirmed_wca_id.present? && email_user.unconfirmed_wca_id != wca_id
+              raise I18n.t("registrations.import.errors.email_user_with_different_unconfirmed_wca_id",
+                           email: email, unconfirmed_wca_id: email_user.unconfirmed_wca_id,
+                           registration_wca_id: wca_id)
+            else
+              email_user.update!(wca_id: wca_id, **person_details)
+              email_user
+            end
+          else
+            # Create a locked account with confirmed WCA ID.
+            create_locked_account!(registration_row)
+          end
+        end
+      else
+        email_user = User.find_by(email: email)
+        # Use the user if exists, otherwise create a locked account without WCA ID.
+        if email_user
+          if email_user.wca_id.blank?
+            # If this is just a user account with no WCA ID, update its data.
+            # Given it's verified by organizers, it's more trustworthy/official data (if different at all).
+            email_user.update!(person_details)
+          end
+          email_user
+        else
+          create_locked_account!(registration_row)
+        end
+      end
+    end
+
+    private_class_method def self.create_locked_account!(registration_row)
+      User.new_locked_account(
+        name: registration_row[:name],
+        email: registration_row[:email]&.downcase,
+        wca_id: registration_row[:wcaId]&.upcase,
+        country_iso2: registration_row[:countryIso2],
+        gender: registration_row[:gender],
+        dob: registration_row[:birthdate],
+      ).tap(&:save!)
+    end
   end
 end

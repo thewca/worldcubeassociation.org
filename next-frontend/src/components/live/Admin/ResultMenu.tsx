@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Alert,
   Button,
   Checkbox,
   CloseButton,
@@ -20,6 +21,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { Tooltip } from "@/components/ui/tooltip";
+import RailsLink from "@/components/RailsLink";
 
 export type ClickPosition = {
   x: number;
@@ -106,12 +108,12 @@ export default function ResultMenu({
                     {t("competitions.live.admin.edit")}
                   </Menu.Item>
                   <Menu.Item value="registration" asChild disabled={isPending}>
-                    <Link
+                    <RailsLink
                       href={`/registrations/${competitor.id}/edit`}
                       fontWeight="normal"
                     >
                       {t("competitions.live.admin.registration")}
-                    </Link>
+                    </RailsLink>
                   </Menu.Item>
                   <Menu.Item value="results" asChild disabled={isPending}>
                     <Link
@@ -147,15 +149,19 @@ export default function ResultMenu({
                     </Menu.Item>
                   ) : (
                     <Tooltip
-                      content={t(
-                        "competitions.live.admin.quit.still_processing",
-                      )}
-                      disabled={pendingLiveResults.length === 0}
+                      content={
+                        inBatch
+                          ? t("competitions.live.admin.quit.in_batch")
+                          : t("competitions.live.admin.quit.still_processing")
+                      }
+                      disabled={pendingLiveResults.length === 0 && !inBatch}
                     >
                       <Menu.Item
                         value="quit"
                         onClick={() => setIsQuitting(true)}
-                        disabled={isPending || pendingLiveResults.length > 0}
+                        disabled={
+                          isPending || pendingLiveResults.length > 0 || inBatch
+                        }
                       >
                         {t("competitions.live.admin.quit.quit_menu")}
                       </Menu.Item>
@@ -228,6 +234,12 @@ function QuitModal({
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
+              <Alert.Root status="warning" mb="3">
+                <Alert.Indicator />
+                <Alert.Content>
+                  {t("competitions.live.admin.quit.scoresheet_warning")}
+                </Alert.Content>
+              </Alert.Root>
               <Text fontWeight="bold">{competitor.name}</Text>
               {toAdvance.length > 0 ? (
                 <>

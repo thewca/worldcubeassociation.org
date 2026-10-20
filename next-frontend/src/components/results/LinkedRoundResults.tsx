@@ -68,8 +68,10 @@ export default function LinkedRoundResults({
       <ResultsTable
         results={combinedResults}
         eventId={eventId}
+        formatId={results[0].format_id}
         t={t}
         isAdmin={false}
+        solveTextAlign="center"
       />
     </>
   );
