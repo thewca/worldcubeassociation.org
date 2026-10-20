@@ -25,9 +25,7 @@ const PANEL_NAMES: Record<string, string> = {
   wqac: "WQAC panel",
 };
 
-export type MenuEntry =
-  | { kind: "separator" }
-  | { kind: "header"; label: string }
+export type FlatMenuEntry =
   | {
       kind: "link";
       label: string;
@@ -37,13 +35,16 @@ export type MenuEntry =
   // Rails owns most of these pages, so they need a full page load rather than a client transition.
   | { kind: "rails"; label: string; href: string };
 
+export type MenuEntry =
+  FlatMenuEntry | { kind: "group"; header: string; entries: FlatMenuEntry[] };
+
 export default function buildAvatarMenuEntries(
   session: Session,
   cmsEntries: AvatarMenuEntry[],
   permissions?: UserPermissions,
 ): MenuEntry[] {
   const can = hydrateUserPermissions(permissions);
-  const rails = (label: string, href: string): MenuEntry => ({
+  const rails = (label: string, href: string): FlatMenuEntry => ({
     kind: "rails",
     label,
     href,
@@ -63,8 +64,7 @@ export default function buildAvatarMenuEntries(
           : { kind: "link", label, href: href as RouteLiteral, newTab },
       ),
     ...(session.user?.wcaId
-      ? ([
-          { kind: "separator" },
+      ? [
           {
             kind: "link",
             label: "My Results",
@@ -72,24 +72,28 @@ export default function buildAvatarMenuEntries(
               pathname: "/persons/[wcaId]",
               query: { wcaId: session.user.wcaId },
             }),
-          },
-        ] as MenuEntry[])
+          } satisfies MenuEntry,
+        ]
       : []),
     ...(panels.length > 0
-      ? ([
-          { kind: "separator" },
-          { kind: "header", label: "Panel" },
-          ...panels.map((panelId) =>
-            rails(PANEL_NAMES[panelId] ?? panelId, `/panel/${panelId}`),
-          ),
-        ] as MenuEntry[])
+      ? [
+          {
+            kind: "group",
+            header: "Panel",
+            entries: panels.map((panelId) =>
+              rails(PANEL_NAMES[panelId] ?? panelId, `/panel/${panelId}`),
+            ),
+          } satisfies MenuEntry,
+        ]
       : []),
     ...(can.canViewDelegateAdminPage() && can.canOrganizeCompetitions("*")
-      ? ([
-          { kind: "separator" },
-          { kind: "header", label: "Delegate" },
-          rails("New competition", "/competitions/new"),
-        ] as MenuEntry[])
+      ? [
+          {
+            kind: "group",
+            header: "Delegate",
+            entries: [rails("New competition", "/competitions/new")],
+          } satisfies MenuEntry,
+        ]
       : []),
   ];
 }

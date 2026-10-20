@@ -24,7 +24,7 @@ import RailsLink from "@/components/RailsLink";
 import { type UserPermissions } from "@/lib/wca/permissions";
 import type { AvatarMenuEntry } from "@/types/payload";
 import buildAvatarMenuEntries, {
-  type MenuEntry,
+  type FlatMenuEntry,
 } from "@/lib/wca/avatarMenuEntries";
 
 const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
@@ -33,7 +33,7 @@ function EntryLink({
   entry,
   ...rest
 }: {
-  entry: Extract<MenuEntry, { kind: "link" | "rails" }>;
+  entry: FlatMenuEntry;
 } & React.ComponentPropsWithoutRef<"a">) {
   if (entry.kind === "rails") {
     return (
@@ -139,17 +139,25 @@ function AvatarMenu({
           <Menu.Positioner>
             <Menu.Content maxHeight="80vh" overflowY="auto">
               {entries.map((entry, index) => {
-                if (entry.kind === "separator") {
-                  return <Menu.Separator key={index} />;
-                }
-
-                if (entry.kind === "header") {
+                if (entry.kind === "group") {
                   return (
-                    // `ItemGroupLabel` reads its group's context, so it needs the
-                    // wrapper even though our entries are a flat list.
-                    <Menu.ItemGroup key={index}>
-                      <Menu.ItemGroupLabel>{entry.label}</Menu.ItemGroupLabel>
-                    </Menu.ItemGroup>
+                    <React.Fragment key={index}>
+                      {index > 0 && <Menu.Separator />}
+                      <Menu.ItemGroup>
+                        <Menu.ItemGroupLabel>
+                          {entry.header}
+                        </Menu.ItemGroupLabel>
+                        {entry.entries.map((groupEntry, groupIndex) => (
+                          <Menu.Item
+                            key={groupIndex}
+                            value={`${index}-${groupIndex}`}
+                            asChild
+                          >
+                            <EntryLink entry={groupEntry} />
+                          </Menu.Item>
+                        ))}
+                      </Menu.ItemGroup>
+                    </React.Fragment>
                   );
                 }
 
@@ -185,15 +193,19 @@ function AvatarMenu({
           <Collapsible.Content>
             <VStack align="stretch" ps={2} gap={1} py={1}>
               {entries.map((entry, index) => {
-                if (entry.kind === "separator") {
-                  return <Separator key={index} />;
-                }
-
-                if (entry.kind === "header") {
+                if (entry.kind === "group") {
                   return (
-                    <Text key={index} textStyle="sm" fontWeight="bold">
-                      {entry.label}
-                    </Text>
+                    <React.Fragment key={index}>
+                      {index > 0 && <Separator />}
+                      <Text textStyle="sm" fontWeight="bold">
+                        {entry.header}
+                      </Text>
+                      {entry.entries.map((groupEntry, groupIndex) => (
+                        <MobileNavLink key={groupIndex}>
+                          <EntryLink entry={groupEntry} />
+                        </MobileNavLink>
+                      ))}
+                    </React.Fragment>
                   );
                 }
 
