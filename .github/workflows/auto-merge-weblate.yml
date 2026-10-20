@@ -20,20 +20,13 @@ jobs:
       - name: Check that only locale files are changed
         id: files
         run: |
-          unexpected=$(gh pr diff "$PR_NUMBER" --name-only | grep -vE '^config/locales/[^/]+\.yml$' || true)
-          if [ -n "$unexpected" ]; then
-            echo "Unexpected files changed:"
-            echo "$unexpected"
-            echo "only_locales=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "only_locales=true" >> "$GITHUB_OUTPUT"
-          fi
+          changed=$(gh pr diff "$PR_NUMBER" --name-only)
+          ! echo "$changed" | grep -vE '^config/locales/[^/]+\.yml$'
       - name: Approve and enable auto-merge
-        if: steps.files.outputs.only_locales == 'true'
         run: |
           gh pr review "$PR_NUMBER" --approve
           gh pr merge "$PR_NUMBER" --auto --squash
       # Ensures that a subsequent push that doesn't only contain locale files is rejected
       - name: Disable auto-merge
-        if: steps.files.outputs.only_locales == 'false'
+        if: failure() && steps.files.outcome == 'failure'
         run: gh pr merge "$PR_NUMBER" --disable-auto || true
