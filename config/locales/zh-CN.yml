@@ -1059,6 +1059,9 @@ zh-CN:
         locale: 地区设置
         group_name: 团队/委员会名称
         delegated_competitions_count: 担任代表的比赛场数
+        wca_id: WCA ID
+        location: 国家/地区
+        email: 邮箱
   user_groups:
     group_types:
       board: WCA董事会
