@@ -370,7 +370,11 @@ export function ByCompetitionTable({
                     fontWeight="bold"
                   >
                     <WithRecordTag
-                      recordTag={competitorResult.regional_single_record}
+                      recordTag={
+                        pbMarkers?.single.has(competitorResult.id)
+                          ? "PR"
+                          : competitorResult.regional_single_record
+                      }
                     >
                       {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
@@ -387,7 +391,11 @@ export function ByCompetitionTable({
                       fontWeight="bold"
                     >
                       <WithRecordTag
-                        recordTag={competitorResult.regional_average_record}
+                        recordTag={
+                          pbMarkers?.average.has(competitorResult.id)
+                            ? "PR"
+                            : competitorResult.regional_average_record
+                        }
                       >
                         {formatAttemptResult(competitorResult.average, eventId)}
                       </WithRecordTag>
