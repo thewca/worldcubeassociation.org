@@ -367,7 +367,7 @@ export function ByCompetitionTable({
                           )
                         : undefined
                     }
-                    fontWeight="bold"
+                    fontWeight="black"
                   >
                     <WithRecordTag
                       recordTag={
@@ -388,7 +388,7 @@ export function ByCompetitionTable({
                             )
                           : undefined
                       }
-                      fontWeight="bold"
+                      fontWeight="black"
                     >
                       <WithRecordTag
                         recordTag={
