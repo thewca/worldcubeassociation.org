@@ -110,13 +110,31 @@ module ApplicationHelper
     nav_items
   end
 
-  def wca_date_range(from_date, to_date, **options)
-    if from_date && to_date
-      options[:separator] = '-'
-      date_range(from_date, to_date, **options)
-    else
-      t "common.date.no_date"
-    end
+  def wca_date_range(from_date, to_date, locale: I18n.locale)
+    return t("common.date.no_date", locale: locale) unless from_date && to_date
+
+    from_date, to_date = to_date, from_date if from_date > to_date
+    month_names = I18n.t("date.abbr_month_names", locale: locale)
+    months = { from_month: month_names[from_date.month], to_month: month_names[to_date.month], to_day: to_date.day }
+
+    template, dates = if from_date == to_date
+                        [:same_date, { month: month_names[from_date.month] }]
+                      elsif from_date.month == to_date.month && from_date.year == to_date.year
+                        [:same_month, { to_day: to_date.day, month: month_names[from_date.month] }]
+                      elsif from_date.year == to_date.year
+                        [:different_months_same_year, months]
+                      else
+                        [:different_years, { **months, from_year: from_date.year, to_year: to_date.year }]
+                      end
+
+    # i18n-tasks-use t('date_range.same_date')
+    # i18n-tasks-use t('date_range.same_month')
+    # i18n-tasks-use t('date_range.different_months_same_year')
+    # i18n-tasks-use t('date_range.different_years')
+    date_range = I18n.t("date_range.#{template}", from_day: from_date.day, sep: '-', **dates, locale: locale)
+    return date_range if template == :different_years
+
+    I18n.t("date_range.with_year", date_range: date_range, year: from_date.year, locale: locale)
   end
 
   def alert(type, content = nil, note: false, &block)
