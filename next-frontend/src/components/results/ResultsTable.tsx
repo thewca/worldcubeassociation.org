@@ -367,6 +367,7 @@ export function ByCompetitionTable({
                           )
                         : undefined
                     }
+                    fontWeight="bold"
                   >
                     <WithRecordTag
                       recordTag={competitorResult.regional_single_record}
@@ -383,6 +384,7 @@ export function ByCompetitionTable({
                             )
                           : undefined
                       }
+                      fontWeight="bold"
                     >
                       <WithRecordTag
                         recordTag={competitorResult.regional_average_record}
