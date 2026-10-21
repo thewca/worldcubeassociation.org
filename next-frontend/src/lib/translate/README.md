@@ -23,7 +23,7 @@ LocalizedField[]        "home.blocks(TextCard)[].body" — schema, no document y
 SourceDoc[] (doc + Leaf[])   concrete paths: ["blocks", 0, "body"]
      │  unitsFromDocs() → lexicalTextNodes()              documents.ts + lexical.ts
      ▼
-Record<key, string>     flat units, one per sentence
+Record<key, Unit>       flat units, one per sentence, with the field's description
      │  pushSource()                                      weblate.ts
      ▼
                     ─── Weblate: translators work ───
@@ -103,19 +103,19 @@ cannot be written back.)
 
 Reads every document of every collection and global and expands it into `Leaf`s (field descriptor + `dataPath` + `baseKey` + source value).
 
-### `unitsFromDocs(docs): Record<string, string>`
+### `unitsFromDocs(docs): Record<string, Unit>`
 
 Flattens those leaves into the map uploaded to Weblate. A plain field contributes one unit, keyed
-by `baseKey`.
+by `baseKey`. Every unit carries its field's `admin.description` as the translator hint.
 
 ---
 
 ## `weblate.ts` — the REST client
 
 The component is created with `vcs: "local"`, so there is no external git repo of generated JSON.
-Files move purely over the API. `file_format` is flat `json` on purpose: keys are dotted paths
-like `home:blocks[a1].body#0.1.0`, and `json-nested` would split them on the dots into a tree that
-no longer round-trips.
+Files move purely over the API. `file_format` is `webextension` on purpose: it is a flat map, so
+dotted keys like `home:blocks[a1].body#0.1.0` round-trip (`json-nested` would split them on the
+dots), and unlike plain `json` every unit has a `description` that Weblate shows translators.
 
 Details worth knowing:
 

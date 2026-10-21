@@ -7,9 +7,10 @@
  * we upload the source strings, translators work in Weblate, we download the
  * translated files back. See weblate/seed-payload.sh.
  *
- * `file_format: "json"` (flat) is deliberate — our keys are dotted paths like
- * `home:blocks[a1].body#0.1.0`, and `json-nested` would split them
- * on the dots into a tree that no longer round-trips.
+ * `file_format: "webextension"` is deliberate: it is a flat map, so dotted keys
+ * like `home:blocks[a1].body#0.1.0` round-trip (`json-nested` would split them
+ * on the dots), and unlike plain `json` each unit carries a `description` that
+ * Weblate shows translators as a hint.
  */
 import _ from "lodash";
 
@@ -106,9 +107,15 @@ export async function ensureLanguage(locale: string): Promise<string> {
   return code;
 }
 
-function jsonFile(strings: Record<string, string>, name: string): FormData {
+/** One unit in a WebExtension JSON file. */
+export interface Unit {
+  message: string;
+  description?: string;
+}
+
+function jsonFile(units: Record<string, Unit>, name: string): FormData {
   const form = new FormData();
-  form.append("file", new Blob([JSON.stringify(strings, null, 2)]), name);
+  form.append("file", new Blob([JSON.stringify(units, null, 2)]), name);
   return form;
 }
 
@@ -120,10 +127,8 @@ function jsonFile(strings: Record<string, string>, name: string): FormData {
  * Overwriting is safe for us because Payload is the only place English is
  * edited, and `strings` is always the complete source set rather than a diff.
  */
-export async function pushSource(
-  strings: Record<string, string>,
-): Promise<void> {
-  const form = jsonFile(strings, "en.json");
+export async function pushSource(units: Record<string, Unit>): Promise<void> {
+  const form = jsonFile(units, "en.json");
   form.append("method", "replace");
   await call(`/translations/${project}/${component}/en/file/`, {
     method: "POST",
@@ -141,7 +146,10 @@ export async function pushTranslations(
   strings: Record<string, string>,
 ): Promise<{ accepted: number; total: number }> {
   const code = weblateCode(locale);
-  const form = jsonFile(strings, `${code}.json`);
+  const form = jsonFile(
+    _.mapValues(strings, (message) => ({ message })),
+    `${code}.json`,
+  );
   form.append("method", "translate");
   const res = await call(
     `/translations/${project}/${component}/${code}/file/`,
@@ -160,11 +168,11 @@ export async function pullTranslations(
 ): Promise<Record<string, string>> {
   const code = weblateCode(locale);
   const res = await call(`/translations/${project}/${component}/${code}/file/`);
-  const body: Record<string, unknown> = await res.json();
+  const body: Record<string, Partial<Unit>> = await res.json();
   // Untranslated units come back as empty strings; treat them as absent so a
   // blank never overwrites anything in Payload.
   return _.pickBy(
-    body,
+    _.mapValues(body, (unit) => unit.message),
     (value): value is string =>
       typeof value === "string" && value.trim() !== "",
   );

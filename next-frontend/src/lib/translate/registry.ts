@@ -48,6 +48,8 @@ export interface LocalizedField {
    * The sync uses this to decide whether a document is writable yet.
    */
   required: boolean;
+  /** The field's admin description, shown to translators as a hint. */
+  description?: string;
 }
 
 /** A concrete translatable string, resolved against a specific document. */
@@ -178,6 +180,10 @@ function walk(
             pathString: `${parent.slug}.${path.map(segmentToString).join(".")}`,
             widget: field.type === "richText" ? "lexical" : "plain",
             required: field.required === true,
+            description:
+              typeof field.admin?.description === "string"
+                ? field.admin.description
+                : undefined,
           },
         ];
       }

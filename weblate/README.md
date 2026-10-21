@@ -64,7 +64,8 @@ a one-time migration step.
 - **Rich text is split into one unit per text node**, a rich
 text field is written only when every one of its text nodes is translated.
 - **A document is written only when all its required strings are translated.**
-- `file_format` is flat `json`
+- `file_format` is `webextension`, so each string carries its Payload field's
+admin description as a hint for translators
 - **Six locale codes need remapping**, since Weblate has its own language
 database: `es-ES` is plain `es`, `zh-CN`/`zh-TW` are script-based
 (`zh_Hans`/`zh_Hant`), and `es-419`, `fr-CA`, `pt-BR` use underscores. The map

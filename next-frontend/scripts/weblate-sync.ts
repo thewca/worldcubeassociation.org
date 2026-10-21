@@ -41,7 +41,7 @@ try {
       `dry run: ${keys.length} source strings across ${docs.length} documents`,
     );
     for (const key of keys.slice(0, 25)) {
-      log(`  ${key} = ${JSON.stringify(units[key]).slice(0, 80)}`);
+      log(`  ${key} = ${JSON.stringify(units[key].message).slice(0, 80)}`);
     }
     if (keys.length > 25) log(`  ... and ${keys.length - 25} more`);
   } else {

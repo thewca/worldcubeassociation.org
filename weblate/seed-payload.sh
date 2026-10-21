@@ -90,11 +90,12 @@ post /projects/ \
 # `method=replace` upload in pushSource().
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
-echo '{"_placeholder": "Replaced on the first weblate sync run."}' > "$TMP/en.json"
+echo '{"_placeholder": {"message": "Replaced on the first weblate sync run."}}' > "$TMP/en.json"
 
-# file_format MUST be flat "json", not "json-nested": the keys are dotted paths
-# like `home#64f2:blocks(TextCard)[abc].body#0.1.0`, and json-nested would split
-# them on every dot into a tree that no longer round-trips.
+# file_format is "webextension": a flat map, so dotted keys like
+# `home#64f2:blocks(TextCard)[abc].body#0.1.0` round-trip (json-nested would
+# split them on every dot), and each unit carries a `description` taken from the
+# Payload field's admin description, which Weblate shows translators as a hint.
 #
 # vcs=local / repo=local: gives Weblate an internal git repo it manages itself,
 # so there is no external repository of generated JSON to keep in sync.
@@ -104,7 +105,7 @@ post /projects/wca/components/ \
   -F slug=payload \
   -F vcs=local \
   -F repo=local: \
-  -F file_format=json \
+  -F file_format=webextension \
   -F filemask='payload/*.json' \
   -F template='payload/en.json' \
   -F edit_template=false \

@@ -12,7 +12,13 @@ import {
 const textCardBlock = {
   slug: "TextCard",
   fields: [
-    { name: "heading", type: "text", required: true, localized: true },
+    {
+      name: "heading",
+      type: "text",
+      required: true,
+      localized: true,
+      admin: { description: "Shown above the card body." },
+    },
     { name: "body", type: "richText", required: true, localized: true },
     { name: "separator", type: "checkbox" }, // not translatable
   ],
@@ -66,6 +72,14 @@ describe("buildTranslationRegistry", () => {
     const byPath = Object.fromEntries(registry.map((f) => [f.pathString, f]));
     expect(byPath["home.blocks(TextCard)[].body"].widget).toBe("lexical");
     expect(byPath["home.blocks(TextCard)[].heading"].widget).toBe("plain");
+  });
+
+  it("carries a string admin description as the translator hint", () => {
+    const byPath = Object.fromEntries(registry.map((f) => [f.pathString, f]));
+    expect(byPath["home.blocks(TextCard)[].heading"].description).toBe(
+      "Shown above the card body.",
+    );
+    expect(byPath["home.blocks(TextCard)[].body"].description).toBeUndefined();
   });
 
   it("skips non-localized and non-text fields", () => {

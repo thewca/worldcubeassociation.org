@@ -8,6 +8,7 @@ import {
   resolveStrings,
 } from "./registry";
 import type { LocalizedField } from "./registry";
+import type { Unit } from "./weblate";
 
 /**
  * Reading Payload: which documents exist, which strings inside them are
@@ -146,18 +147,19 @@ export async function collectSourceDocs(
 }
 
 /** Flat source strings for Weblate, keyed exactly as they will come back. */
-export function unitsFromDocs(docs: SourceDoc[]): Record<string, string> {
+export function unitsFromDocs(docs: SourceDoc[]): Record<string, Unit> {
   return Object.fromEntries(
     docs.flatMap(({ leaves }) =>
-      leaves.flatMap((leaf): [string, string][] => {
+      leaves.flatMap((leaf): [string, Unit][] => {
+        const { description } = leaf.field;
         if (leaf.field.widget === "plain") {
           return typeof leaf.source === "string" && leaf.source.trim()
-            ? [[leaf.baseKey, leaf.source]]
+            ? [[leaf.baseKey, { message: leaf.source, description }]]
             : [];
         }
         return lexicalTextNodes(leaf.source).map((node) => [
           `${leaf.baseKey}#${node.path}`,
-          node.text,
+          { message: node.text, description },
         ]);
       }),
     ),
