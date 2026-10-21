@@ -19,13 +19,6 @@ GIT
     iso (0.4.0)
       i18n
 
-GIT
-  remote: https://github.com/thewca/time_will_tell.git
-  revision: d1ad80f4e4c60762c50086976301453e1f40fab4
-  specs:
-    time_will_tell (0.1.0)
-      railties (>= 3.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1107,7 +1100,6 @@ DEPENDENCIES
   stripe
   superconfig
   terser
-  time_will_tell!
   timecop
   translighterate
   tsort
@@ -1463,7 +1455,6 @@ CHECKSUMS
   terser (1.2.8) sha256=64931851d173bc5be0a90bd4570d751be5e83b2b063ccb750dbdc11a7b1d14db
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   tilt (2.7.0) sha256=0d5b9ba69f6a36490c64b0eee9f6e9aad517e20dcc848800a06eb116f08c6ab3
-  time_will_tell (0.1.0)
   timecop (0.9.11) sha256=41284dc6e5041f2184f781ace766f942108c842f8d8c1386a26e6343decc7542
   timeout (0.6.1) sha256=78f57368a7e7bbadec56971f78a3f5ecbcfb59b7fcbb0a3ed6ddc08a5094accb
   trailblazer-option (0.1.2) sha256=20e4f12ea4e1f718c8007e7944ca21a329eee4eed9e0fa5dde6e8ad8ac4344a3
