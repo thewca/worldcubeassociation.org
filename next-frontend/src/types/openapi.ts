@@ -2247,7 +2247,7 @@ export interface components {
             };
             class?: string;
         };
-        CompetitionPermissions: string[] | string;
+        CompetitionPermissions: string[] | "*";
         UserPermissions: {
             can_attend_competitions: {
                 scope: components["schemas"]["CompetitionPermissions"];
@@ -2291,7 +2291,7 @@ export interface components {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
             can_request_to_edit_others_profile: {
-                scope: string[] | string;
+                scope: string[] | "*";
             };
         };
         RegulationsContent: {

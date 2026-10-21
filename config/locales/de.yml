@@ -64,6 +64,7 @@ de:
     magic: Magic
     mmagic: Master Magic
     333mbo: Mehrfach Blind alter Stil
+    fto: Face Turning Octahedron
   formats:
     '1': Best of 1
     '2': Best of 2
@@ -76,6 +77,9 @@ de:
       '3': Bo3
       a: Ao5
       m: Mo3
+      "5": Bo5
+      "h": H2H
+    "5": Best of 5
   rounds:
     '0':
       name: Qualifikationsrunde
@@ -114,6 +118,8 @@ de:
     attempt_name: 'Versuch %{number}'
   round:
     name: '%{event_name} %{round_name}'
+    title: Runden
+    round_number: Runde %{round_number}
   advancement_condition:
     short:
       ranking: 'Top %{ranking}'
@@ -122,12 +128,14 @@ de:
         time: '%{round_format} < %{time}'
         moves: '%{round_format} < %{moves}'
         points: '%{round_format} > %{points}'
+      all_advance: Alle kommen weiter
     ranking: 'Die obersten %{ranking} kommen in die nächste Runde'
     percent: 'Die obersten %{percent}% kommen in die nächste Runde'
     attempt_result:
       time: '%{round_format} < %{time} um in die nächste Runde zu kommen'
       moves: '%{round_format} < %{moves} Zügen um in die nächste Runde zu kommen'
       points: '%{round_format} > %{points} Punkten um in die nächste Runde zu kommen'
+    all_advance: Alle Teilnehmenden kommen weiter
   cutoff:
     time:
       one: '%{count} Versuch um < %{time} zu erreichen'
@@ -198,6 +206,8 @@ de:
     solve_time:
       unit_seconds: Sekunden
       unit_moves: Züge
+    back_to_top: Zurück zum Anfang
+    back: Zurück
   oauth:
     applications:
       your_apps: Deine OAuth-Anwendungen
@@ -246,6 +256,11 @@ de:
           erhalten
         user_preferred_events: Favorisierte Disziplinen
         otp_attempt: 'Gib deinen Zwei-Faktor-Authentifizierung-Code ein:'
+        subRegion: Bezirk
+        receive_developer_mails: Ich möchte gerne Benachrichtigungen über 
+          Neuerungen in der WCA Software-Ressourcen erhalten
+        delegate_reports_region: Ich möchte nur Delegate Reports für die 
+          folgende Region empfangen
       registration:
         guests: Gäste
         comments: Kommentare
@@ -256,6 +271,9 @@ de:
         birthday: Geburtsdatum
         registration_competition_events: Disziplinen
         email: E-Mail
+        search: Suchen...
+        too_few_chars: Zu wenige Zeichen
+        no_results: Keine Ergebnisse
       competition_tab:
         content: Inhalt
         name: Name
@@ -270,6 +288,11 @@ de:
           Zwischenfällen erhalten.
         wrc_incidents: 'Zwischenfälle, die Feedback durch das WRC benötigen'
         remarks: Bemerkungen
+        summary: Zusammenfassung
+        setup_images: Bilder vom Aufbau des Wettbewerbs
+        wic_feedback_requested: Ich möchte gerne Feedback vom WIC betreffend 
+          einiger Incidents.
+        wic_incidents: Incidents, die Feedback vom WIC benötigen
       person:
         wca_id: Person
         country_id: Repräsentiert
@@ -346,7 +369,32 @@ de:
         multimedia: Multimedia
     competition: {}
     user_roles:
-      status: {}
+      status:
+        delegate_regions:
+          trainee_delegate: Trainee Delegate
+          junior_delegate: Junior-Delegate
+          delegate: Delegate
+          regional_delegate: Regional-Delegate
+          senior_delegate: Senior-Delegate
+        teams_committees:
+          member: Mitglied
+          senior_member: Senior-Mitglied
+          leader: Leiter
+        councils:
+          member: Mitglied
+          senior_member: Senior-Mitglied
+          leader: Leiter
+        officers:
+          chair: WCA Vorsitz
+          executive_director: WCA Geschaftsführung
+          chief_operating_officer: WCA Betriebsleitung
+          secretary: WCA Sekretär
+          vice_chair: Stellvertretender WCA-Vorsitz
+          treasurer: WCA Schatzmeister
+      ban_scope:
+        competing_only: Nur Teilnahme
+        competing_and_attending: Teilnahme & Anwesenheit
+        competing_and_attending_and_forums: Teilnahme, Anwesenheit & Forum
   simple_form:
     'yes': Ja
     'no': Nein
@@ -392,6 +440,14 @@ de:
         otp_attempt: >-
           Überprüfe deine konfigurierte mobile Applikation für ein
           Einmal-Passwort oder gebe einen deiner Wiederherstellungs-Codes ein.
+        receive_developer_mails: Dies ist begrenzt auf Benachrichtigungen für 
+          wesentliche Versions-Änderungen in Ressourcen wie den Daten-Exporten, 
+          dem WCIF-Schema oder öffentlichen APIs. Für Entwickler:innen 
+          empfohlen, die Software auf Grundlage dieser Schnittstellen entwickeln
+          und betreiben.
+        delegate_reports_region: 'Wenn Du alle Reports empfangen möchtest, lasse dieses
+          Feld frei (die Option ganz oben im Dropdown). Beachte: Es kann bis zu 12
+          Stunden dauern, bis die Änderungen übernommen werden.'
       competition:
         championships:
       website_contact:
@@ -455,6 +511,31 @@ de:
           Pläne für diese Region). Alles was in den vorherigen Bereichen im
           Sinne der klaren und präzisen Ausdrucksweise ausgelassen wurde, kann
           hier erscheinen.
+        summary: Die zuvor aufgeführten Punkte sind nur eine Richtlinie für 
+          einen vollständigen Report. Nutze sie im eigenen Ermessen, je nachdem 
+          was passt. Bitte entferne nicht verwendete Bausteine!
+        setup_images: Du MUSST mindestens %{image_count} Bilder hinzufügen, die 
+          die Scrambling- und Teilnehmer-Areale des aktuellen Wettbewerbs 
+          zeigen, am besten während des laufenden Wettbewerbs (weitere Bilder 
+          sind auch willkommen). Du kannst mehrere Dateien auf einmal auswählen.
+          Du kannst nur dann Dateien löschen, wenn ausreichend andere Bilder 
+          hochgeladen wurden (wenn Du ein Bild ersetzen möchtest, musst du erst 
+          das neue hochladen und danach das alte löschen). Wenn du keine 
+          aktuellen Bilder von den Teilnehmer- und/oder Scrambling-Arealen in 
+          Benutzung vorliegen hast, erkläre bitte wieso.
+        wic_incidents_html: Liste an Nummern, die sich auf Incidents beziehen, 
+          für die Du Feedback vom WIC haben möchest. <br> 
+          <strong>%{wic_incident_alert}</strong>
+        wic_incident_alert: Falls der WIC-Incident vertraulich ist (zum Beispiel
+          aber nicht nur im Falle von Verbrechen, Belästigung, Tätlichkeit, 
+          etc.), bitte lasse ihn im Bericht aus und schreibe eine separate Mail 
+          an das WIC. Für andere WIC-Incidents, nutze bitte eine bündige, 
+          anonymisierte Formulierung des Incidents und melde dich privat beim 
+          WIC um weitere Details hinzuzufügen. Das WIC wird trotzdem Feedback 
+          auf anonymisierte Incidents geben, um allgemeine Aufmerksamkeit 
+          sicherzustellen. Für alle WIC-Incidents in Zusammenhang mit einem WCA 
+          Volunteer, bitte alle Details aus dem Report auslassen und das WIC 
+          gesondert kontaktieren.
       competition_tab:
         name: 'Beispiele: Anreise, Zahlung, Preise/Auszeichnungen, Unterkunft'
       person:
@@ -3012,3 +3093,19 @@ de:
     email: {}
   user_groups: {}
   tickets: {}
+  scramble_set:
+    name: Scramble Set %{letter_code}
+    group: Gruppe %{number}
+    attempt: Versuch %{number}
+  activity:
+    registration: Anmeldung vor Ort
+    checkin: Check-In
+    tutorial: Einführung für Turnier-Neulinge
+    multi: Würfel abgeben für 3x3x3 Mehrfach Blind
+    breakfast: Frühstück
+    lunch: Mittagessen
+    dinner: Abendessen
+    awards: Siegerehrung
+    setup: Aufbauen
+    teardown: Abbauen
+    misc: Sonstiges
