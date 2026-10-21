@@ -3,7 +3,7 @@ export const formattedTextForDate = (utcTime, locale) => {
   let formatted;
   if (typeof (Intl) !== 'undefined') {
     formatted = new Intl.DateTimeFormat(locale, {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short',
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short', calendar: 'gregory',
     }).format(date);
   } else {
     // Workaround for https://github.com/thewca/worldcubeassociation.org/issues/3228.
@@ -38,7 +38,7 @@ export const setUrlParams = (params) => {
 };
 
 export const formattedDateRange = (fromDate, toDate, locale) => new Intl.DateTimeFormat(locale, {
-  day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+  day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC', calendar: 'gregory',
 }).formatRange(new Date(fromDate), new Date(toDate));
 
 export const initDateRanges = () => {
