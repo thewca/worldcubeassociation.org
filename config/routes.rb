@@ -188,6 +188,7 @@ Rails.application.routes.draw do
   get 'export/results/:version/:file_type' => 'database#results_permalink', as: :results_permalink
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
   get 'export/developer/wca-developer-database-dump' => "database#dev_export_permalink"
+  get 'export/payload/wca-payload-database-dump' => "database#payload_export_permalink", as: :payload_export_permalink
   # redirect from the old path that used to be linked on GitHub
   get 'wst/wca-developer-database-dump.zip' => "database#dev_export_permalink"
 
@@ -376,6 +377,9 @@ Rails.application.routes.draw do
       get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
 
       resources :competitions, only: [] do
+        get '/results' => 'competitions#results', as: :results
+        get '/podiums' => 'competitions#podiums', as: :podiums
+
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         resource :bookmark, only: %i[show create destroy]
         namespace :live do

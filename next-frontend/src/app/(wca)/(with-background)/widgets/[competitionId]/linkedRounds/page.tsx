@@ -22,16 +22,16 @@ export default async function LinkedRoundsPage({
 
   if (error) return <OpenapiError t={t} response={response} />;
 
-  const linkedResults = competitionResults.filter(
-    (result) => result.linked_round_id != null,
+  const linkedRounds = competitionResults.filter(
+    (round) => round.ranking_mode === "linked_round",
   );
 
   const linkedRoundGroups = _.map(
-    _.groupBy(linkedResults, "linked_round_id"),
-    (results, linkedRoundId) => ({
+    _.groupBy(linkedRounds, (round) => round.linked_round_wcif_ids?.join()),
+    (rounds, linkedRoundId) => ({
       linkedRoundId,
-      eventId: results[0].event_id,
-      results,
+      eventId: rounds[0].event_id,
+      rounds,
     }),
   );
 
@@ -43,7 +43,7 @@ export default async function LinkedRoundsPage({
             {linkedRoundGroups.map((group) => (
               <LinkedRoundResults
                 key={group.linkedRoundId}
-                results={group.results}
+                rounds={group.rounds}
                 eventId={group.eventId}
               />
             ))}

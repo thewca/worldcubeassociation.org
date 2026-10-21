@@ -1,24 +1,21 @@
 "use client";
 
 import { Fragment, useMemo, useState } from "react";
+import _ from "lodash";
 import { components } from "@/types/openapi";
 import { Heading, VStack } from "@chakra-ui/react";
-import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import LinkedRoundResults from "@/components/results/LinkedRoundResults";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
-import roundTypes from "@/lib/wca/data/roundTypes";
-
-type Result = components["schemas"]["Result"];
 
 export default function FilteredResults({
   competitionInfo,
-  resultsByEvent,
+  roundsByEvent,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
-  resultsByEvent: Record<string, Result[]>;
+  roundsByEvent: Record<string, components["schemas"]["V1CompetitionRound"][]>;
 }) {
   const [activeEventId, setActiveEventId] = useState<string>(
     competitionInfo.event_ids[0],
@@ -26,39 +23,18 @@ export default function FilteredResults({
 
   const { t } = useT();
 
-  const roundGroups = useMemo(() => {
-    const eventResults = resultsByEvent[activeEventId] ?? [];
-
-    const [linked, normal] = _.partition(
-      eventResults,
-      (r) => r.linked_round_id != null,
-    );
-
-    const linkedGroups = _.map(
-      _.groupBy(linked, "linked_round_id"),
-      (results, linkedRoundId) => ({
-        key: `linked-${linkedRoundId}`,
-        isLinked: true,
-        roundTypeId: results[0].round_type_id,
-        results,
-      }),
-    );
-
-    const normalGroups = _.map(
-      _.groupBy(normal, "round_type_id"),
-      (results, roundTypeId) => ({
-        key: roundTypeId,
-        isLinked: false,
-        roundTypeId,
-        results,
-      }),
-    );
-
-    return _.sortBy(
-      [...normalGroups, ...linkedGroups],
-      (group) => roundTypes.byId[group.roundTypeId].rank,
-    );
-  }, [activeEventId, resultsByEvent]);
+  // The rounds of a Dual Round are shown together, in place of the first one.
+  const roundGroups = useMemo(
+    () =>
+      _.values(
+        _.groupBy(roundsByEvent[activeEventId] ?? [], (round) =>
+          round.ranking_mode === "linked_round"
+            ? round.linked_round_wcif_ids?.join()
+            : round.wcif_id,
+        ),
+      ),
+    [activeEventId, roundsByEvent],
+  );
 
   return (
     <VStack align="left" gap={4}>
@@ -68,26 +44,25 @@ export default function FilteredResults({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
-      {roundGroups.map((group) =>
-        group.isLinked ? (
+      {roundGroups.map(([round, ...linkedRounds]) =>
+        linkedRounds.length > 0 ? (
           <LinkedRoundResults
-            key={`${activeEventId}-${group.key}`}
-            results={group.results}
+            key={round.wcif_id}
+            rounds={[round, ...linkedRounds]}
             eventId={activeEventId}
           />
         ) : (
-          <Fragment key={`${activeEventId}-${group.key}`}>
+          <Fragment key={round.wcif_id}>
             <Heading textStyle="h3">
               {events.byId[activeEventId].name}{" "}
-              {t(`rounds.${group.roundTypeId}.name`)}
+              {t(`rounds.${round.round_type_id}.name`)}
             </Heading>
+            {/* Already ordered by `pos`, the position within this round. */}
             <ResultsTable
-              results={group.results.toSorted((a, b) => a.pos - b.pos)}
+              results={round.results}
               eventId={activeEventId}
-              formatId={
-                group.results[0]
-                  .format_id /* anti-pattern because of current prop type restrictions */
-              }
+              formatId={round.format_id}
+              rankingMode={round.ranking_mode}
               t={t}
               isAdmin={false}
               solveTextAlign="center"

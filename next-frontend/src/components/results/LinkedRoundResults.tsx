@@ -9,13 +9,19 @@ import formats from "@/lib/wca/data/formats";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
 
-type Result = components["schemas"]["Result"];
+type Round = components["schemas"]["V1CompetitionRound"];
+type Result = components["schemas"]["V1RoundResult"] & {
+  round_type_id: string;
+};
 
 // Linked (dual) rounds share a global_pos across both rounds. Merge them into one
 // table ranked by the combined global_pos: by default keep each competitor's better
 // round (mirroring the live results merging), or every result when showAll is set.
-export function combineLinkedRound(rows: Result[], showAll = false): Result[] {
-  const useAverage = formats.byId[rows[0].format_id]?.sort_by === "average";
+export function combineLinkedRound(rounds: Round[], showAll = false): Result[] {
+  const rows = rounds.flatMap((round) =>
+    round.results.map((r) => ({ ...r, round_type_id: round.round_type_id })),
+  );
+  const useAverage = formats.byId[rounds[0].format_id]?.sort_by === "average";
   const metric = (r: Result) => {
     const v = useAverage ? r.average : r.best;
     return v > 0 ? v : Infinity;
@@ -25,25 +31,22 @@ export function combineLinkedRound(rows: Result[], showAll = false): Result[] {
     : Object.values(_.groupBy(rows, "wca_id")).map((personRows) =>
         _.minBy(personRows, metric)!,
       );
-  return _.sortBy(
-    kept.map((r) => ({ ...r, pos: r.global_pos })),
-    ["pos", metric],
-  );
+  return _.sortBy(kept, ["global_pos", metric]);
 }
 
 export default function LinkedRoundResults({
-  results,
+  rounds,
   eventId,
 }: {
-  results: Result[];
+  rounds: Round[];
   eventId: string;
 }) {
   const { t } = useT();
   const [showAll, setShowAll] = useState(false);
 
   const combinedResults = useMemo(
-    () => combineLinkedRound(results, showAll),
-    [results, showAll],
+    () => combineLinkedRound(rounds, showAll),
+    [rounds, showAll],
   );
 
   return (
@@ -68,7 +71,9 @@ export default function LinkedRoundResults({
       <ResultsTable
         results={combinedResults}
         eventId={eventId}
-        formatId={results[0].format_id}
+        formatId={rounds[0].format_id}
+        rankingMode="linked_round"
+        variant="standings"
         t={t}
         isAdmin={false}
         solveTextAlign="center"
