@@ -36,3 +36,14 @@ export const setUrlParams = (params) => {
   /* eslint-disable-next-line */
   history.replaceState(null, null, `?${paramsAsStr}`);
 };
+
+export const formattedDateRange = (fromDate, toDate, locale) => new Intl.DateTimeFormat(locale, {
+  day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+}).formatRange(new Date(fromDate), new Date(toDate));
+
+export const initDateRanges = () => {
+  document.querySelectorAll('.wca-date-range').forEach((element) => {
+    const { from, to, locale } = element.dataset;
+    element.replaceChildren(formattedDateRange(from, to, locale));
+  });
+};
