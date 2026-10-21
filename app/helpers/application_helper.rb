@@ -110,6 +110,12 @@ module ApplicationHelper
     nav_items
   end
 
+  def wca_date_range_tag(from_date, to_date)
+    return t("common.date.no_date") unless from_date && to_date
+
+    content_tag :span, wca_date_range(from_date, to_date), class: "wca-date-range", data: { from: from_date.iso8601, to: to_date.iso8601, locale: I18n.locale }
+  end
+
   def wca_date_range(from_date, to_date, locale: I18n.locale)
     return t("common.date.no_date", locale: locale) unless from_date && to_date
 
