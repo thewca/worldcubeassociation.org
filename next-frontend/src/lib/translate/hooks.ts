@@ -2,7 +2,7 @@ import type { CollectionConfig, GlobalConfig, Payload } from "payload";
 import _ from "lodash";
 import { fallbackLng } from "@/lib/i18n/settings";
 import { buildTranslationRegistry, resolveStrings } from "./registry";
-import { runSync } from "./sync";
+import { logSyncReport, runSync } from "./sync";
 import { weblateConfigured } from "./weblate";
 
 /**
@@ -12,8 +12,8 @@ import { weblateConfigured } from "./weblate";
  * finished translations back down — so one `afterChange` hook covers "a source
  * string changed, Weblate should know" and "translations done since the last
  * sync should land". What it cannot cover is work finished in Weblate while
- * nobody edits Payload; that still needs `scripts/weblate-sync.ts` on a
- * schedule.
+ * nobody edits Payload; for that an admin presses "Sync now" on the Payload
+ * dashboard (`endpoint.ts`).
  *
  * Two things keep this from feeding itself:
  *
@@ -27,15 +27,27 @@ import { weblateConfigured } from "./weblate";
  */
 let inFlight: Promise<unknown> | null = null;
 
-function syncSoon(payload: Payload): void {
-  if (!weblateConfigured || inFlight) return;
-  inFlight = runSync(payload)
+/**
+ * Start a sync in the background unless one is already running in this
+ * process. Returns whether it started. Shared with the admin endpoint in
+ * `endpoint.ts`, so a button press and a save never run side by side.
+ */
+export function syncSoon(
+  payload: Payload,
+  options: { seed?: boolean } = {},
+): boolean {
+  if (!weblateConfigured || inFlight) return false;
+  inFlight = runSync(payload, options)
+    .then((report) =>
+      logSyncReport((message) => payload.logger.info(message), report),
+    )
     .catch((error) => {
-      payload.logger.error({ err: error }, "weblate: sync after change failed");
+      payload.logger.error({ err: error }, "weblate: sync failed");
     })
     .finally(() => {
       inFlight = null;
     });
+  return true;
 }
 
 /**

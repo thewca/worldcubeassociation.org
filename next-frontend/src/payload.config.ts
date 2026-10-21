@@ -45,6 +45,7 @@ import {
 } from "@payloadcms/db-mongodb";
 import { fromContainerMetadata } from "@aws-sdk/credential-providers";
 import { withWeblateSync } from "@/lib/translate/hooks";
+import { weblateSyncEndpoint } from "@/lib/translate/endpoint";
 import { WCA_CMS_PROVIDER_ID, WCA_ROLES_FIELD } from "@/auth.config";
 
 const filename = fileURLToPath(import.meta.url);
@@ -138,6 +139,9 @@ export const wcaConfig = {
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      afterDashboard: ["/lib/translate/WeblateSyncPanel#WeblateSyncPanel"],
+    },
   },
   routes: {
     admin: "/payload",
@@ -175,6 +179,7 @@ export const wcaConfig = {
     FaqPage,
     LogoPage,
   ].map(withWeblateSync),
+  endpoints: [weblateSyncEndpoint],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

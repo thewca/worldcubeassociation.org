@@ -303,3 +303,44 @@ export async function runSync(
     applied: localeSyncs.map(({ applied }) => applied),
   };
 }
+
+/** Log what a sync did, including what it could not write back and why. */
+export function logSyncReport(
+  log: (message: string) => void,
+  report: SyncReport,
+): void {
+  log(
+    `pushed ${report.sourceStrings} source strings from ${report.documents} documents`,
+  );
+  for (const { locale, accepted } of report.seeded) {
+    log(`  seeded ${locale}: ${accepted} accepted by Weblate`);
+  }
+  const written = report.applied.filter((r) => r.stringsWritten > 0);
+  if (written.length === 0) {
+    log("no translations to write back yet");
+  }
+  for (const r of written) {
+    log(
+      `  ${r.locale}: wrote ${r.stringsWritten} strings across ${r.documentsUpdated} documents`,
+    );
+  }
+  // Payload validates required fields per locale, so a document is held back
+  // until all of its required strings are translated. Report it, or a
+  // translator who has done most of the work sees nothing happen.
+  for (const r of report.applied) {
+    for (const p of r.pending) {
+      log(
+        `  ${r.locale}: ${p.document} held back, ${p.missing}/${p.total} required strings still untranslated`,
+      );
+    }
+  }
+  // A leaf whose schema path no longer resolves can be translated in Weblate
+  // but never written back, so it has to be visible somewhere.
+  for (const r of report.applied) {
+    for (const u of r.unresolved) {
+      log(
+        `  ${r.locale}: ${u.key} in ${u.document} no longer matches the stored document`,
+      );
+    }
+  }
+}

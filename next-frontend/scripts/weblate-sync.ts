@@ -9,9 +9,9 @@
  * parses argv with minimist and passes only the positional remainder through;
  * a `--flag` would be swallowed and silently ignored.
  *
- * Same code path as the `afterChange` hook — both call `runSync` — but runnable
- * on a schedule, which is what covers translations finished in Weblate while
- * nobody edits Payload.
+ * Same code path as the `afterChange` hook and the dashboard buttons — all call
+ * `runSync`. Development only: the standalone production build has no
+ * `payload` CLI, so production runs go through the buttons (see `endpoint.ts`).
  *
  * `payload run` imports this module and nothing else: it does not call an
  * export or hand us a payload instance, so the work happens at module scope and
@@ -19,12 +19,9 @@
  */
 import { getPayload } from "payload";
 import config from "../src/payload.config";
-import { runSync } from "../src/lib/translate/sync";
-import {
-  collectSourceDocs,
-  unitsFromDocs,
-} from "../src/lib/translate/documents";
-import { weblateConfigured } from "../src/lib/translate/weblate";
+import { logSyncReport, runSync } from "@/lib/translate/sync";
+import { collectSourceDocs, unitsFromDocs } from "@/lib/translate/documents";
+import { weblateConfigured } from "@/lib/translate/weblate";
 
 const seed = process.argv.includes("seed");
 const dryRun = process.argv.includes("dry-run");
@@ -59,40 +56,7 @@ try {
 
     const report = await runSync(payload, { seed });
 
-    log(
-      `pushed ${report.sourceStrings} source strings from ${report.documents} documents`,
-    );
-    for (const { locale, accepted } of report.seeded) {
-      log(`  seeded ${locale}: ${accepted} accepted by Weblate`);
-    }
-    const written = report.applied.filter((r) => r.stringsWritten > 0);
-    if (written.length === 0) {
-      log("no translations to write back yet");
-    }
-    for (const r of written) {
-      log(
-        `  ${r.locale}: wrote ${r.stringsWritten} strings across ${r.documentsUpdated} documents`,
-      );
-    }
-    // Payload validates required fields per locale, so a document is held back
-    // until all of its required strings are translated. Report it, or a
-    // translator who has done most of the work sees nothing happen.
-    for (const r of report.applied) {
-      for (const p of r.pending) {
-        log(
-          `  ${r.locale}: ${p.document} held back, ${p.missing}/${p.total} required strings still untranslated`,
-        );
-      }
-    }
-    // A leaf whose schema path no longer resolves can be translated in Weblate
-    // but never written back, so it has to be visible somewhere.
-    for (const r of report.applied) {
-      for (const u of r.unresolved) {
-        log(
-          `  ${r.locale}: ${u.key} in ${u.document} no longer matches the stored document`,
-        );
-      }
-    }
+    logSyncReport(log, report);
   }
 } finally {
   // Payload keeps the Mongo connection open, which would hang the process.

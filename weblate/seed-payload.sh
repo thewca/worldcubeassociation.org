@@ -127,13 +127,10 @@ next-frontend/.env — without WEBLATE_TOKEN the sync is a no-op:
   WEBLATE_PROJECT=wca
   WEBLATE_COMPONENT=payload
 
-Then, from next-frontend/:
+Then copy the translations already in Payload up to Weblate: press
+"Seed existing translations" on the Payload dashboard twice (or locally, run
+\`yarn payload run scripts/weblate-sync.ts seed\` twice from next-frontend/).
 
-  # first run only — copies translations already in Payload up to Weblate
-  yarn payload run scripts/weblate-sync.ts seed
-
-  # afterwards, and on a schedule
-  yarn payload run scripts/weblate-sync.ts
-
-Editing content in Payload also triggers a sync via the afterChange hook.
+Afterwards Payload syncs after every save; "Sync now" on the dashboard pulls in
+translations finished in Weblate in between.
 EOF

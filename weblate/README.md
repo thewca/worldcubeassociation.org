@@ -44,10 +44,14 @@ Payload (MongoDB)  ──push source──▶  Weblate  ──translators work h
        └────────pull translations───────┘
 ```
 
-`runSync` is both directions at once, and it runs from two places:
+`runSync` is both directions at once, and it runs from three places:
 
 - An `afterChange` hook on every collection and global
-- `scripts/weblate-sync.ts`, which can be triggered manually
+- The "Sync now" / "Seed existing translations" buttons on the Payload dashboard
+(admins only, `src/lib/translate/endpoint.ts`). This is the only way to seed, or to
+pull in translations finished in Weblate while nobody edits Payload, in
+production: the standalone build ships no `payload` CLI.
+- `scripts/weblate-sync.ts`, for local development
 
 ```bash
 cd next-frontend
@@ -57,7 +61,8 @@ yarn payload run scripts/weblate-sync.ts           # afterwards
 ```
 
 - `seed` uploads translations that already exist in Payload before pulling. It is
-a one-time migration step.
+a one-time migration step. Run it twice: strings that are new to Weblate in the
+first run are not in the target languages yet when their translations arrive.
 - `WEBLATE_TOKEN`: a Weblate API token, from `/accounts/profile/#api` stored in Vault via `docker-entrypoint.sh`)
 
 ### Design decisions worth knowing:

@@ -179,4 +179,4 @@ Appends `weblateAfterChange` to a collection's or global's `afterChange` hooks
 Fires a sync after an editor saves
 
 What it cannot cover is translation work finished in Weblate while nobody edits Payload, that
-needs the CLI on a schedule.
+is the "Sync now" button on the Payload dashboard (`endpoint.ts`).
