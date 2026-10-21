@@ -1888,8 +1888,6 @@ export interface components {
             worst_index: number;
             regional_single_record: string | null;
             regional_average_record: string | null;
-            global_pos: number;
-            linked_round_id?: number | null;
         };
         PsychSheet: {
             /** @enum {string} */

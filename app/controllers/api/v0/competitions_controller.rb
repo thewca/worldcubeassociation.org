@@ -83,9 +83,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def results
     competition = competition_from_params
-    render json: competition.results.includes(:round, :result_attempts).as_json(
-      methods: Result::DEFAULT_SERIALIZE_OPTIONS[:methods] + %w[linked_round_id],
-    )
+    render json: competition.results.includes(:result_attempts)
   end
 
   def tabs
