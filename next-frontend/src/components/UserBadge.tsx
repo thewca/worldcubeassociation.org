@@ -96,7 +96,7 @@ const UserBadge: React.FC<UserBadgeData> = async ({
               <HStack direction="row" wrap="wrap" gap="4px 8px" marginTop="4px">
                 {roles.map((role, index) => (
                   <Stack key={index}>
-                    <Text color="dimgray">{role.teamText}</Text>
+                    <Text color="fg.muted">{role.teamText}</Text>
                     <RoleBadge
                       teamRole={role.teamRole}
                       colorPalette={role.staffColor}
