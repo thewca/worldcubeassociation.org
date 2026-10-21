@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Button,
   Card,
   Center,
   HStack,
@@ -33,7 +32,7 @@ const UserBadge: React.FC<UserBadgeData> = async ({
   roles,
   wcaId,
   action,
-  email
+  email,
 }) => {
   const { t } = await getT();
 
@@ -70,21 +69,21 @@ const UserBadge: React.FC<UserBadgeData> = async ({
         <Center flexGrow={1}>
           <Card.Body gap={2}>
             <Card.Title>
-              <HStack direction="row" justify={"space-between"}>
+              <HStack direction="row" justify="space-between">
                 <LinkOverlay asChild>
                   <Link
                     href={route({
                       pathname: "/persons/[wcaId]",
                       query: { wcaId },
                     })}
-                    >
+                  >
                     {name}
                   </Link>
                 </LinkOverlay>
-                {email && ( 
+                {email && (
                   <CopyButton
-                    variant={"subtle"}
-                    size={"xs"}
+                    variant="subtle"
+                    size="xs"
                     text={t("delegates_page.copy_email")}
                     value={email}
                     icon={<LuMails />}

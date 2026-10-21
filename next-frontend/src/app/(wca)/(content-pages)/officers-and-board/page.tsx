@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Heading, Link, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
+import { Heading, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
 import UserBadge from "@/components/UserBadge";
 import { MdMarkEmailUnread } from "react-icons/md";
 import OpenapiError from "@/components/ui/openapiError";
@@ -67,22 +67,16 @@ export default async function OfficersAndBoard() {
           />
         ))}
       </SimpleGrid>
-      <Stack
-        direction="row"
-        gap={5}
-        justify="start"
-      >
-        <Heading size="2xl">
-          {t("user_groups.group_types.board")}{" "}
-        </Heading>
+      <Stack direction="row" gap={5} justify="start">
+        <Heading size="2xl">{t("user_groups.group_types.board")} </Heading>
         <Tooltip content={t("delegates_page.copy_email")}>
           <CopyButton
             toastLabel={t("notifications.copied_to_clipboard")}
             value={boardRoles[0].group.metadata!.email || ""}
-            icon={<MdMarkEmailUnread size={14}/>}
+            icon={<MdMarkEmailUnread size={14} />}
             variant="outline"
             size="xs"
-            />
+          />
         </Tooltip>
       </Stack>
       <Text>{t("page.officers_and_board.board_description")}</Text>
