@@ -113,34 +113,19 @@ module ApplicationHelper
   def wca_date_range_tag(from_date, to_date)
     return t("common.date.no_date") unless from_date && to_date
 
-    content_tag :span, wca_date_range(from_date, to_date), class: "wca-date-range", data: { from: from_date.iso8601, to: to_date.iso8601, locale: I18n.locale }
+    content_tag :span, "", class: "wca-date-range", data: { from: from_date.iso8601, to: to_date.iso8601, locale: I18n.locale }
   end
 
-  def wca_date_range(from_date, to_date, locale: I18n.locale)
-    return t("common.date.no_date", locale: locale) unless from_date && to_date
+  def wca_date_range(from_date, to_date)
+    return t("common.date.no_date") unless from_date && to_date
 
     from_date, to_date = to_date, from_date if from_date > to_date
-    month_names = I18n.t("date.abbr_month_names", locale: locale)
-    months = { from_month: month_names[from_date.month], to_month: month_names[to_date.month], to_day: to_date.day }
+    return from_date.strftime("%b %-d, %Y") if from_date == to_date
 
-    template, dates = if from_date == to_date
-                        [:same_date, { month: month_names[from_date.month] }]
-                      elsif from_date.month == to_date.month && from_date.year == to_date.year
-                        [:same_month, { to_day: to_date.day, month: month_names[from_date.month] }]
-                      elsif from_date.year == to_date.year
-                        [:different_months_same_year, months]
-                      else
-                        [:different_years, { **months, from_year: from_date.year, to_year: to_date.year }]
-                      end
+    from_format = from_date.year == to_date.year ? "%b %-d" : "%b %-d, %Y"
+    to_format = from_date.beginning_of_month == to_date.beginning_of_month ? "%-d, %Y" : "%b %-d, %Y"
 
-    # i18n-tasks-use t('date_range.same_date')
-    # i18n-tasks-use t('date_range.same_month')
-    # i18n-tasks-use t('date_range.different_months_same_year')
-    # i18n-tasks-use t('date_range.different_years')
-    date_range = I18n.t("date_range.#{template}", from_day: from_date.day, sep: '-', **dates, locale: locale)
-    return date_range if template == :different_years
-
-    I18n.t("date_range.with_year", date_range: date_range, year: from_date.year, locale: locale)
+    "#{from_date.strftime(from_format)} – #{to_date.strftime(to_format)}"
   end
 
   def alert(type, content = nil, note: false, &block)
