@@ -50,9 +50,10 @@ export function ResultsTable({
   solveTextAlign = "left",
   showLinkedRoundsView = false,
 }: {
-  results: (components["schemas"]["V1RoundResult"] & {
-    round_type_id?: string;
-  })[];
+  results: (components["schemas"]["V1RoundResult"] &
+    Partial<
+      Pick<components["schemas"]["V1CompetitionRound"], "round_type_id">
+    >)[];
   eventId: string;
   formatId: string;
   rankingMode: components["schemas"]["RankingMode"];

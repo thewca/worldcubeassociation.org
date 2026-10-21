@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
 import _ from "lodash";
 import { components } from "@/types/openapi";
 import { Heading, VStack } from "@chakra-ui/react";
@@ -24,16 +24,12 @@ export default function FilteredResults({
   const { t } = useT();
 
   // The rounds of a Dual Round are shown together, in place of the first one.
-  const roundGroups = useMemo(
-    () =>
-      _.values(
-        _.groupBy(roundsByEvent[activeEventId] ?? [], (round) =>
-          round.ranking_mode === "linked_round"
-            ? round.linked_round_wcif_ids?.join()
-            : round.wcif_id,
-        ),
-      ),
-    [activeEventId, roundsByEvent],
+  const roundGroups = _.values(
+    _.groupBy(roundsByEvent[activeEventId] ?? [], (round) =>
+      round.ranking_mode === "linked_round"
+        ? round.linked_round_wcif_ids?.join()
+        : round.wcif_id,
+    ),
   );
 
   return (
