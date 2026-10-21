@@ -4,6 +4,12 @@ class Api::V1::PersonsController < Api::V1::ApiController
   # A person's results are public data — the profile page renders them for signed-out visitors.
   skip_before_action :require_user!
 
+  def show
+    person = Person.current.includes(:user, :ranks_single, :ranks_average).find_by!(wca_id: params.require(:wca_id))
+
+    render json: person.as_json(Person::V1_SERIALIZE_OPTIONS)
+  end
+
   def results
     results = person_results
     results = results.in_event(params[:event_id]) if params[:event_id].present?
