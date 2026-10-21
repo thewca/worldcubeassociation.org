@@ -2019,7 +2019,7 @@ class Competition < ApplicationRecord
     JSON::Validator.validate!(expected_schema, wcif, **self.json_validation_options)
   end
 
-  def set_wcif!(wcif, current_user, oauth_application: nil)
+  def set_wcif!(wcif, current_user)
     import_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
 
     Competition.validate_wcif_schema!(wcif, version: import_version)
@@ -2046,8 +2046,6 @@ class Competition < ApplicationRecord
       #   artificially pretend like the Competition object was updated anyways.
       touch
     end
-
-    CreateWcifRevisionJob.perform_later(self, current_user, oauth_application)
   end
 
   def set_wcif_competitor_limit!(wcif_competitor_limit, current_user)

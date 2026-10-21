@@ -18,7 +18,7 @@ class WcifRevision < ApplicationRecord
   def wcif_json=(json)
     wcif_file.attach(
       io: StringIO.new(ActiveSupport::Gzip.compress(json)),
-      filename: "#{competition_id}-WCIF-#{revision_number}.json.gz",
+      filename: "wcif.json.gz",
       content_type: "application/gzip",
     )
   end
