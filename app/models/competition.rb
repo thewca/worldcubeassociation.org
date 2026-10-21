@@ -1832,10 +1832,10 @@ class Competition < ApplicationRecord
   def available_registration_lanes(current_user)
     # There is currently only one lane, so this always returns the competitor lane
     steps = []
-    steps << { key: 'requirements', isEditable: false }
-    steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
-    steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
-    steps << { key: 'approval', parameters: approval_step_parameters, isEditable: false }
+    steps << { key: 'requirements', is_editable: false, is_post_step: false, summary_status: 'hide' }
+    steps << { key: 'competing', parameters: competing_step_parameters(current_user), is_editable: true, is_post_step: false, summary_status: 'show' }
+    steps << { key: 'payment', parameters: payment_step_parameters, is_editable: true, is_post_step: true, deadline: self.registration_close, summary_status: 'show' } if using_payment_integrations?
+    steps << { key: 'approval', parameters: approval_step_parameters, is_editable: false, is_post_step: true, summary_status: 'priority' }
 
     steps
   end
@@ -2292,8 +2292,11 @@ class Competition < ApplicationRecord
     cal = Icalendar::Calendar.new
     all_activities.each do |activity|
       event = Icalendar::Event.new
-      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
-      event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
+      # TZID=UTC makes icalendar emit the RFC 5545 UTC form (DTSTART:20261003T151500Z)
+      # with no TZID parameter. Google Calendar and other clients often mishandle
+      # TZID=Etc/UTC when no VTIMEZONE is present; see #7587 / #7590.
+      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time.utc, "TZID" => "UTC")
+      event.dtend = Icalendar::Values::DateTime.new(activity.end_time.utc, "TZID" => "UTC")
       event.summary = activity.localized_name
       cal.add_event(event)
     end

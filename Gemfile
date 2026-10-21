@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'bundler', '4.0.20'
+gem 'bundler', '4.0.23'
 gem 'rails'
 gem 'rails-i18n'
 gem 'i18n-js'
@@ -51,7 +51,6 @@ gem 'eu_central_bank'
 gem 'jwt'
 gem 'iso', github: 'thewca/ruby-iso'
 gem 'csv'
-# HOTFIX until https://github.com/rails/rails/pull/58601 lands
 gem 'json', '~> 2'
 
 # Pointing to jfly/selectize-rails which has a workaround for
@@ -91,7 +90,7 @@ gem 'activestorage-validator'
 gem 'image_processing'
 gem 'rest-client'
 gem 'icalendar'
-gem 'react_on_rails', '17.1.0'
+gem 'react_on_rails', '17.2.0'
 gem 'sprockets-rails'
 gem 'jaro_winkler'
 gem 'sidekiq'

@@ -1,25 +1,46 @@
 import type { CollectionConfig } from "payload";
+import { regulationsCommitteeAccess } from "@/payload.access";
 
 export const RegulationsHistoryItem: CollectionConfig = {
   slug: "regulationsHistoryItem",
+  access: {
+    create: regulationsCommitteeAccess,
+    update: regulationsCommitteeAccess,
+    delete: regulationsCommitteeAccess,
+  },
   fields: [
     {
       name: "version",
       type: "text",
       required: true,
+      admin: {
+        description:
+          "Version identifier of this Regulations release, for example '2024'.",
+      },
     },
     {
       name: "url",
       type: "text",
       required: true,
+      admin: {
+        description: "URL of the Regulations at this version.",
+      },
     },
     {
       name: "changesUrl",
       type: "text",
+      admin: {
+        description:
+          "Optional. URL of the full list of changes introduced by this version.",
+      },
     },
     {
       name: "summarizedChangesUrl",
       type: "text",
+      admin: {
+        description:
+          "Optional. URL of the summary of changes introduced by this version.",
+      },
     },
   ],
   admin: {

@@ -70,10 +70,6 @@ class TraineeDelegateApplication < ApplicationRecord
     end
   end
 
-  def self.root_region(region)
-    region.parent_group ? root_region(region.parent_group) : region
-  end
-
   def self.region_path_names(region)
     region.parent_group ? [*region_path_names(region.parent_group), region.name] : [region.name]
   end
@@ -107,7 +103,7 @@ class TraineeDelegateApplication < ApplicationRecord
 
   def delegate_region_options
     self.class.leaf_regions.map do |region|
-      root_region = self.class.root_region(region)
+      root_region = region.root_group
 
       {
         id: region.id,

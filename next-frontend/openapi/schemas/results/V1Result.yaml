@@ -7,6 +7,7 @@ description: >-
 required:
   - id
   - pos
+  - global_pos
   - best
   - average
   - attempts
@@ -26,6 +27,12 @@ properties:
   pos:
     type: integer
     description: The competitor's position within this round.
+    example: 1
+  global_pos:
+    type: integer
+    description: >-
+      The competitor's position across all rounds linked into the same dual round. Only meaningful
+      when `linked_round_id` is present.
     example: 1
   best:
     type: integer
@@ -74,6 +81,10 @@ properties:
   format_id:
     type: string
     example: "a"
+  linked_round_id:
+    type: integer
+    description: Present when this round is linked with others into a dual round.
+    example: 42
   regional_single_record:
     type: string
     example: "WR"

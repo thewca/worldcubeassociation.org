@@ -907,10 +907,6 @@ en:
     volunteer:
       title: "Volunteer"
       text: "Get involved! The WCA has volunteer positions open across different teams. You do not have to be a speedcuber to be a volunteer."
-    become_delegate:
-      title: "Become a Delegate"
-      text: "Help support fair and well-run competitions in your local speedcubing community by applying to become a Trainee Delegate."
-      link_title: "Apply now"
     faq:
       title: "FAQ"
       text: "Take a look at our list of Frequently Asked Questions if you need help with anything. Many questions you have might have an answer there."
@@ -1173,6 +1169,9 @@ en:
         locale: "Locale"
         group_name: "Team/Committee Name"
         delegated_competitions_count: "Number of Delegated Competitions"
+        wca_id: "WCA ID"
+        location: "Location"
+        email: "Email"
   user_groups:
     group_types:
       board: "WCA Board of Directors"

@@ -568,6 +568,9 @@ th:
     passwords:
       edit:
         new_password_confirmation: กรอกรหัสผ่านใหม่อีกครั้ง
+      send_paranoid_instructions: 
+        ลิงก์สำหรับตั้งรหัสผ่านใหม่จะถูกส่งไปยังอีเมลดังกล่าว 
+        หากอีเมลนั้นมีการลงทะเบียนบัญชีไว้กับ WCA แล้ว
     sessions:
       new:
         sign_in: เข้าสู่ระบบ
@@ -1078,11 +1081,6 @@ th:
         Speedcubing ทั่วโลก
         และส่งเสริมสภาพแวดล้อมการแข่งขันที่สนุกสนานและยุติธรรมสำหรับทุกคน
       button: เรียนรู้เกี่ยวกับการสนับสนุน WCA
-    become_delegate:
-      title: การเป็น Delegate
-      text: ร่วมสนับสนุนการจัดการแข่งขันที่ยุติธรรมและมีประสิทธิภาพในชุมชน 
-        speedcubing ในพื้นที่ของคุณ ด้วยการสมัครเป็น Trainee Delegate
-      link_title: สมัครตอนนี้
   users:
     update_locale:
       success: เปลี่ยนภาษาแล้ว

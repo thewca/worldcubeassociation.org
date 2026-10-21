@@ -4,6 +4,16 @@ get:
     - competitions
   operationId: competitionList
   parameters:
+    - name: page
+      in: query
+      schema:
+        type: integer
+      description: Page number to retrieve
+    - name: per_page
+      in: query
+      schema:
+        type: integer
+      description: Number of results per page
     - name: include_cancelled
       in: query
       schema:

@@ -91,7 +91,11 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           {block.heading}
         </Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <ChakraMarkdown paragraphAs={Card.Description} textStyle="body">
+        <ChakraMarkdown
+          paragraphAs={Card.Description}
+          textStyle="body"
+          listProps={{ textStyle: "body" }}
+        >
           {block.bodyMarkdown}
         </ChakraMarkdown>
       </Card.Body>
@@ -205,6 +209,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           <ChakraMarkdown
             paragraphAs={Card.Description}
             textStyle={{ base: "body", md: "s2" }}
+            listProps={{ textStyle: { base: "body", md: "s2" } }}
           >
             {block.bodyMarkdown}
           </ChakraMarkdown>
@@ -396,6 +401,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   <ChakraMarkdown
                     paragraphAs={Card.Description}
                     textStyle="quote"
+                    listProps={{ textStyle: "quote" }}
                   >
                     {testimonial.fullTestimonialMarkdown!}
                   </ChakraMarkdown>

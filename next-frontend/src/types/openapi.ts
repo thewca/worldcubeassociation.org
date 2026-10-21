@@ -1107,6 +1107,8 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @enum {string} */
+        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         RegistrationDataV2: {
             id: number;
             registrant_id: number;
@@ -1121,7 +1123,7 @@ export interface components {
             };
             competing: {
                 event_ids: string[];
-                registration_status?: string;
+                registration_status?: components["schemas"]["CompetingStatus"];
                 /** Format: datetime */
                 registered_on?: string;
                 comment?: string;
@@ -1137,12 +1139,13 @@ export interface components {
                 updated_at?: string;
             };
         };
-        /** @enum {string} */
-        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         BaseRegistrationConfig: {
             key: string;
-            isEditable: boolean;
+            is_editable: boolean;
+            is_post_step: boolean;
             parameters?: Record<string, never>;
+            /** @enum {string} */
+            summary_status: "show" | "hide" | "priority";
         };
         RequirementsStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
             /**
@@ -1476,6 +1479,11 @@ export interface components {
              * @example 1
              */
             pos: number;
+            /**
+             * @description The competitor's position across all rounds linked into the same dual round. Only meaningful when `linked_round_id` is present.
+             * @example 1
+             */
+            global_pos: number;
             /** @example 84 */
             best: number;
             /**
@@ -1512,6 +1520,11 @@ export interface components {
             round_type_id: string;
             /** @example a */
             format_id: string;
+            /**
+             * @description Present when this round is linked with others into a dual round.
+             * @example 42
+             */
+            linked_round_id?: number;
             /** @example WR */
             regional_single_record?: string;
             /** @example NR */
@@ -2162,7 +2175,7 @@ export interface components {
             };
             class?: string;
         };
-        CompetitionPermissions: string[] | string;
+        CompetitionPermissions: string[] | "*";
         UserPermissions: {
             can_attend_competitions: {
                 scope: components["schemas"]["CompetitionPermissions"];
@@ -2206,7 +2219,7 @@ export interface components {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
             can_request_to_edit_others_profile: {
-                scope: string[] | string;
+                scope: string[] | "*";
             };
         };
         RegulationsContent: {
@@ -3249,6 +3262,10 @@ export interface operations {
     competitionList: {
         parameters: {
             query?: {
+                /** @description Page number to retrieve */
+                page?: number;
+                /** @description Number of results per page */
+                per_page?: number;
                 include_cancelled?: boolean;
                 continent?: string;
                 country_iso2?: string;

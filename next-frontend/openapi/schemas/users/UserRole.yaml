@@ -13,9 +13,10 @@ properties:
     type: string
     format: date
   end_date:
-    type: string
+    type:
+      - string
+      - "null"
     format: date
-    nullable: true
   group:
     $ref: './UserGroup.yaml'
   user:

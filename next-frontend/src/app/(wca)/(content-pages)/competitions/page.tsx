@@ -55,7 +55,6 @@ import {
 import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
 import useDebounce from "@/lib/hooks/useDebounce";
-import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
 import { useSearchParams } from "next/navigation";
 import { useOnInView } from "react-intersection-observer";
@@ -77,6 +76,7 @@ import { nonFutureCompetitionYears } from "@/lib/wca/data/competitions";
 import _ from "lodash";
 
 const DEBOUNCE_MS = 600;
+const COMPETITIONS_PER_PAGE = 50;
 
 // Units offered by the "within X of me" filter. `toKm` converts a radius in that unit to the
 // kilometres the distance calculation works in, and each unit carries its own default and step
@@ -164,14 +164,16 @@ export default function CompetitionsPage() {
     "get",
     "/v0/competition_index",
     {
-      params: { query: querySearchParams },
+      params: {
+        query: { ...querySearchParams, per_page: COMPETITIONS_PER_PAGE },
+      },
     },
     {
       pageParamName: "page",
       getNextPageParam: (previousPage, allPages) => {
         // Continue until less than a full page of data is fetched,
         // which indicates the very last page.
-        if (previousPage.length < WCA_API_PAGINATION) {
+        if (previousPage.length < COMPETITIONS_PER_PAGE) {
           return undefined;
         }
         return allPages.length + 1;
@@ -301,7 +303,6 @@ export default function CompetitionsPage() {
             <Collapsible.Root asChild>
               <VStack gap="3" borderBottom="black">
                 <FormEventSelector
-                  wrap
                   selectedEvents={filterState.selectedEvents}
                   title={t("competitions.index.event")}
                   onEventClick={(eventId) =>
