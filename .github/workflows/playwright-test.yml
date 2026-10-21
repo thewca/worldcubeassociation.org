@@ -12,7 +12,11 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Needs to pin here until https://jira.mongodb.org/browse/SERVER-131779 is shipped:
+    #   Without this fix, Mongo currently mis-understands the `ubuntu-latest` kernel as
+    #   a "bad" kernel which it cannot run on due to a Malloc glitch. That's a false positive
+    #   but the fix has not been released in Mongo mainline as of writing this comment.
+    runs-on: ubuntu-22.04
     env:
       DISABLE_SPRING: 1
       RAILS_ENV: test
