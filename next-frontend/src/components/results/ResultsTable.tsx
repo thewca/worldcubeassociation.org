@@ -108,7 +108,7 @@ export function ResultsTable({
                     {competitorResult.name}
                   </Link>
                 </Table.Cell>
-                <Table.Cell fontWeight="bold">
+                <Table.Cell fontWeight="extrabold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_single_record}
                   >
@@ -116,7 +116,7 @@ export function ResultsTable({
                   </WithRecordTag>
                 </Table.Cell>
                 {anyAverages && (
-                  <Table.Cell fontWeight="bold">
+                  <Table.Cell fontWeight="extrabold">
                     <WithRecordTag
                       recordTag={competitorResult.regional_average_record}
                     >
@@ -341,6 +341,9 @@ export function ByCompetitionTable({
             return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
 
+              const isSingleRecord = pbMarkers?.single.has(competitorResult.id);
+              const isAvgRecord = pbMarkers?.average.has(competitorResult.id);
+
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
 
@@ -373,17 +376,17 @@ export function ByCompetitionTable({
                   />
                   <Table.Cell
                     color={
-                      pbMarkers?.single.has(competitorResult.id)
+                      isSingleRecord
                         ? personalBestColor(
                             competitorResult.regional_single_record,
                           )
                         : undefined
                     }
-                    fontWeight="black"
+                    fontWeight="extrabold"
                   >
                     <WithRecordTag
                       recordTag={
-                        pbMarkers?.single.has(competitorResult.id)
+                        isSingleRecord
                           ? "PR"
                           : competitorResult.regional_single_record
                       }
@@ -394,17 +397,17 @@ export function ByCompetitionTable({
                   {anyAverages && (
                     <Table.Cell
                       color={
-                        pbMarkers?.average.has(competitorResult.id)
+                        isAvgRecord
                           ? personalBestColor(
                               competitorResult.regional_average_record,
                             )
                           : undefined
                       }
-                      fontWeight="black"
+                      fontWeight="extrabold"
                     >
                       <WithRecordTag
                         recordTag={
-                          pbMarkers?.average.has(competitorResult.id)
+                          isAvgRecord
                             ? "PR"
                             : competitorResult.regional_average_record
                         }
