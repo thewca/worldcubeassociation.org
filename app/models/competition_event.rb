@@ -241,6 +241,10 @@ class CompetitionEvent < ApplicationRecord
 
   def self.wcif_qualification_attributes(wcif, version: Competition::WCIF_STABLE_VERSION)
     wcif_qualification = wcif["qualification"]
+
+    # It's perfectly fine and legal for a competition event not to have any qualifications at all
+    return { qualification_latest_date: nil, qualification_condition: nil } if wcif_qualification.blank?
+
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
 
     {
