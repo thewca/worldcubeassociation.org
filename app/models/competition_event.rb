@@ -233,7 +233,7 @@ class CompetitionEvent < ApplicationRecord
     end
     self.update!(
       rounds: new_rounds,
-      **self.wcif_qualification_attributes(wcif, version: version),
+      **CompetitionEvent.wcif_qualification_attributes(wcif, version: version),
     )
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
