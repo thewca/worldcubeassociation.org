@@ -136,7 +136,7 @@ class RegistrationsController < ApplicationController
 
   private def parse_json_to_registration_data(file_path)
     wcif = JSON.parse(File.read(file_path))
-    schema_version = wcif["formatVersion"] || WCIF_STABLE_VERSION
+    schema_version = wcif["formatVersion"] || Competition::WCIF_STABLE_VERSION
 
     Competition.validate_wcif_schema!(wcif, version: schema_version)
 
