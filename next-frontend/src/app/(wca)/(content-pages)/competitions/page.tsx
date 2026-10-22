@@ -184,11 +184,20 @@ export default function CompetitionsPage() {
     },
   );
 
-  const bottomRef = useOnInView((inView) => {
-    if (inView && hasMoreCompsToLoad && !competitionsIsFetching) {
-      competitionsFetchNextPage();
-    }
-  });
+  const [scrollEl, setScrollEl] = useState<HTMLDivElement | null>(null);
+
+  const bottomRef = useOnInView(
+    (inView) => {
+      if (!scrollEl) return; // The loading fires only when the table exists
+      if (inView && hasMoreCompsToLoad && !competitionsIsFetching) {
+        competitionsFetchNextPage();
+      }
+    },
+    {
+      root: scrollEl,
+      rootMargin: "0px 0px 50px 0px", // It will fire before reaching the real bottom
+    },
+  );
 
   const geolocationSupported =
     typeof navigator !== "undefined" && "geolocation" in navigator;
@@ -460,7 +469,20 @@ export default function CompetitionsPage() {
                   ))}
                 </Wrap>
               </Stack>
-              <Table.ScrollArea>
+
+              {/* Shown only on small screens */}
+              <Box
+                insetEnd="2"
+                w="fit-content"
+                ms={{ base: "0", md: "auto" }}
+                display={{ base: "block", md: "none" }}
+              >
+                {t("competitions.index.currently_displaying", {
+                  count: competitionsFiltered.length,
+                })}
+              </Box>
+
+              <Table.ScrollArea maxH="calc(100dvh - 10rem)" ref={setScrollEl}>
                 <Table.Root
                   size="xs"
                   variant="competitions"
@@ -469,22 +491,9 @@ export default function CompetitionsPage() {
                   pos="relative"
                 >
                   {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-                  <Box ref={ref} position="absolute" />
-
-                  <Table.Header bg="bg.muted">
-                    <Table.Row>
-                      <Table.ColumnHeader
-                        colSpan={6}
-                        fontWeight="normal"
-                        textAlign="end"
-                        p={2}
-                      >
-                        {t("competitions.index.currently_displaying", {
-                          count: competitionsFiltered.length,
-                        })}
-                      </Table.ColumnHeader>
-                    </Table.Row>
-                    <Table.Row>
+                  <Box ref={ref} position="absolute" w="100%" />
+                  <Table.Header>
+                    <Table.Row bg="bg.muted">
                       <Table.ColumnHeader></Table.ColumnHeader>
                       <Table.ColumnHeader>
                         {t("competitions.competition_info.date")}
@@ -493,10 +502,14 @@ export default function CompetitionsPage() {
                         {t("competitions.competition_info.name")}
                       </Table.ColumnHeader>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader>
+                      <Table.ColumnHeader
+                        display={{ base: "none", md: "table-cell" }}
+                      >
                         {t("competitions.competition_info.location")}
                       </Table.ColumnHeader>
-                      <Table.ColumnHeader>
+                      <Table.ColumnHeader
+                        display={{ base: "none", md: "table-cell" }}
+                      >
                         {t("competitions.competition_info.venue")}
                       </Table.ColumnHeader>
                     </Table.Row>
@@ -520,14 +533,26 @@ export default function CompetitionsPage() {
                     ))}
                   </Table.Body>
                 </Table.Root>
+                <ListViewFooter
+                  isLoading={competitionsIsFetching}
+                  hasMoreCompsToLoad={hasMoreCompsToLoad}
+                  numCompetitions={competitionsFiltered.length}
+                  bottomRef={bottomRef}
+                  t={t}
+                />
               </Table.ScrollArea>
-              <ListViewFooter
-                isLoading={competitionsIsFetching}
-                hasMoreCompsToLoad={hasMoreCompsToLoad}
-                numCompetitions={competitionsFiltered.length}
-                bottomRef={bottomRef}
-                t={t}
-              />
+
+              {/* Shown only on large screens */}
+              <Box
+                insetEnd="2"
+                w="fit-content"
+                ms={{ base: "0", md: "auto" }}
+                display={{ base: "none", md: "block" }}
+              >
+                {t("competitions.index.currently_displaying", {
+                  count: competitionsFiltered.length,
+                })}
+              </Box>
             </Tabs.Content>
             <Tabs.Content value="map">
               <TabMap
@@ -542,7 +567,7 @@ export default function CompetitionsPage() {
         </Tabs.Root>
       </Card.Root>
 
-      <BackToTopButton visible={isScrolledDown} />
+      <BackToTopButton visible={isScrolledDown} parent={scrollEl} />
     </VStack>
   );
 }
