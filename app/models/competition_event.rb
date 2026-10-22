@@ -137,7 +137,7 @@ class CompetitionEvent < ApplicationRecord
     return nil if qualification_condition.blank?
 
     v2_wcif_type = qualification_condition.class.wcif_type
-    v1_backported_type = v2_wcif_type == 'resultAchieved' && qualification_condition.value.nil ? "anyResult" : v2_wcif_type.gsub("resultAchieved", "attemptResult")
+    v1_backported_type = v2_wcif_type == 'resultAchieved' && qualification_condition.value.nil? ? "anyResult" : v2_wcif_type.gsub("resultAchieved", "attemptResult")
 
     {
       "type" => v1_backported_type,
