@@ -568,6 +568,9 @@ th:
     passwords:
       edit:
         new_password_confirmation: กรอกรหัสผ่านใหม่อีกครั้ง
+      send_paranoid_instructions: 
+        ลิงก์สำหรับตั้งรหัสผ่านใหม่จะถูกส่งไปยังอีเมลดังกล่าว 
+        หากอีเมลนั้นมีการลงทะเบียนบัญชีไว้กับ WCA แล้ว
     sessions:
       new:
         sign_in: เข้าสู่ระบบ

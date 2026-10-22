@@ -1500,6 +1500,9 @@ es-ES:
         locale: Idioma
         group_name: Nombre del Equipo/Comité
         delegated_competitions_count: Número de Competiciones delegadas
+        wca_id: ID de la WCA
+        location: Ubicación
+        email: Correo electrónico
   user_groups:
     group_types:
       board: Junta Directiva de la WCA

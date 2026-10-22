@@ -209,6 +209,7 @@ async function DelegateGrid({
           profilePicture={role.user.avatar}
           name={role.user.name}
           wcaId={role.user.wca_id}
+          email={role.user.email}
           roles={[
             {
               teamRole: t(
@@ -218,6 +219,7 @@ async function DelegateGrid({
               staffColor: "yellow",
             },
           ]}
+
           action={
             isAdminMode && (
               <IconButton
