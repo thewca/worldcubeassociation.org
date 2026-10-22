@@ -232,12 +232,12 @@ class CompetitionEvent < ApplicationRecord
       end
     end
     wcif_qualification = wcif["qualification"]
-    using_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
-    wcif_qualification_date = using_v2 ? wcif_qualification["latestResultDate"] : wcif["whenDate"]
+    wcif_qualification_date = wcif_qualification[at_least_v2 ? "latestResultDate" : "whenDate"]
+    wcif_qualification_condition = at_least_v2 ? wcif_qualification["resultCondition"] : ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification)
     self.update!(
       rounds: new_rounds,
       qualification_latest_date: Date.iso8601(wcif_qualification_date),
-      qualification_condition: ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
+      qualification_condition: wcif_qualification_condition,
     )
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
