@@ -6,12 +6,14 @@ type BackToTopButtonProps = {
   visible: boolean;
   buttonProps?: ButtonProps;
   text?: string;
+  parent?: HTMLDivElement | null;
 };
 
 export default function BackToTopButton({
   visible,
   text,
   buttonProps,
+  parent,
 }: BackToTopButtonProps) {
   const { t } = useT();
   return (
@@ -19,7 +21,9 @@ export default function BackToTopButton({
       {visible && (
         <IconButton
           aria-label={t("common.back_to_top")}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() =>
+            (parent || window).scrollTo({ top: 0, behavior: "smooth" })
+          }
           position="fixed"
           bottom={6}
           insetEnd={6}
