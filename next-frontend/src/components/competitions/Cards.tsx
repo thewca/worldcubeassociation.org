@@ -69,6 +69,7 @@ export function VenueDetailsCard({
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
+  console.log(competitionInfo.guests_entry_fee_lowest_denomination);
   return (
     <Card.Root width="inherit">
       <Card.Body>
@@ -235,14 +236,16 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              {/* A free guest entry formats as a zero amount rather than the word "free",
-                  which has no translation of its own. */}
-              <CurrencyValue
-                lowestDenomination={
-                  competitionInfo.guests_entry_fee_lowest_denomination
-                }
-                currencyCode={competitionInfo.currency_code}
-              />
+              {competitionInfo.guests_entry_fee_lowest_denomination ? (
+                <CurrencyValue
+                  lowestDenomination={
+                    competitionInfo.guests_entry_fee_lowest_denomination
+                  }
+                  currencyCode={competitionInfo.currency_code}
+                />
+              ) : (
+                t("competitions.competition_info.guests_free.free")
+              )}
             </Stat.ValueText>
           </Stat.Root>
 
