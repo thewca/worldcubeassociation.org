@@ -126,7 +126,8 @@ function cleanAttempts(attempts: number[]) {
 }
 
 export function resultAttempts(
-  result: components["schemas"]["Result"] | components["schemas"]["V1Result"],
+  result:
+    components["schemas"]["Result"] | components["schemas"]["V1RoundResult"],
 ) {
   return cleanAttempts(result.attempts);
 }

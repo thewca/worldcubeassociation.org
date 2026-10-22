@@ -23,6 +23,9 @@ export const Users: CollectionConfig = {
       name: "id",
       type: "text",
       defaultValue: () => crypto.randomUUID(),
+      admin: {
+        description: "Payload's own identifier for this user.",
+      },
     },
     // `email`, `emailVerified`, `image`, `wcaId` and `wcaUserId` are deliberately absent:
     //   `betterAuthCollections` augments this collection with every schema field it does not
@@ -33,6 +36,9 @@ export const Users: CollectionConfig = {
     {
       name: "name",
       type: "text",
+      admin: {
+        description: "Display name of the user, as Rails knows them.",
+      },
     },
     {
       name: "roles",

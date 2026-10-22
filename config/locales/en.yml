@@ -2449,6 +2449,7 @@ en:
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
+    copied_to_clipboard: "Copied to clipboard"
   payments:
     header: "Payment History"
     messages:
@@ -2735,6 +2736,7 @@ en:
       total_delegated: "Total Delegated"
       lead_delegated: "Lead Delegated Competitions"
       history: "History"
+    copy_email: 'Copy email'
   regional_organizations:
     title: "Regional Organizations"
     content: "The WCA acknowledges the following Regional Organizations:"
