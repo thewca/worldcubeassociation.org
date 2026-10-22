@@ -246,7 +246,7 @@ class CompetitionEvent < ApplicationRecord
 
     {
       qualification_latest_date: wcif_qualification[at_least_v2 ? "latestResultDate" : "whenDate"],
-      qualification_condition: at_least_v2 ? wcif_qualification["resultCondition"] : ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
+      qualification_condition: at_least_v2 ? ResultConditions::ResultCondition.load(wcif_qualification["resultCondition"]) : ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
     }
   end
 
