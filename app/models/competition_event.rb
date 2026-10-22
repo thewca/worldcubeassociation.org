@@ -90,6 +90,10 @@ class CompetitionEvent < ApplicationRecord
   def meets_qualification?(user)
     return true if qualification_condition.nil?
 
+    # If the registered user never competed before, they do not have results
+    #   and thus they cannot meet any qualification deadline
+    return false if user.person.nil?
+
     before_deadline_results = user.person.results
                                   .in_event(self.event_id)
                                   .on_or_before(self.qualification_latest_date)
