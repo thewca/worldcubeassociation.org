@@ -69,7 +69,6 @@ export function VenueDetailsCard({
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  console.log(competitionInfo.guests_entry_fee_lowest_denomination);
   return (
     <Card.Root width="inherit">
       <Card.Body>
