@@ -17,12 +17,15 @@ jobs:
       DISABLE_SPRING: 1
       RAILS_ENV: test
       NODE_ENV: test
-      NODE_MAJOR: 24
       PLAYWRIGHT_BROWSERS_PATH: ./pw-browsers
       PW_TEST_CONNECT_WS_ENDPOINT: "" # Override Docker orchestra default
       PW_TEST_BASE_URL: http://localhost:3001 # Talk to Next directly on this machine
     steps:
       - uses: actions/checkout@v7
+      - name: Set up Libvips # This is not included in GitHub runners by default
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends libvips
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -30,10 +33,13 @@ jobs:
       - name: Install fresh Bundler packages
         run: bin/bundle install
       - name: Set up Corepack/Yarn
-        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
-      - uses: actions/setup-node@v6
+        # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+        run: |
+          npm install -g corepack
+          corepack enable
+      - uses: actions/setup-node@v7
         with:
-          node-version: ${{ env.NODE_MAJOR }}
+          node-version-file: '.nvmrc'
           cache: 'yarn'
       - name: Install fresh root Yarn packages
         run: bin/yarn install
@@ -45,7 +51,11 @@ jobs:
       - name: Install and start MongoDB # for Payload CMS in the frontend
         uses: supercharge/mongodb-github-action@1.12.1
         with:
-          mongodb-version: 8
+          # Needs to pin 7 here until https://jira.mongodb.org/browse/SERVER-131779 is shipped:
+          #   Without this fix, Mongo 8+ currently mis-understands the `ubuntu-latest` kernel as
+          #   a "bad" kernel which it cannot run on due to a Malloc glitch. That's a false positive
+          #   but the fix has not been released in Mongo 8+ mainline as of writing this comment.
+          mongodb-version: 7
           mongodb-username: root
           mongodb-password: root
           mongodb-db: payload

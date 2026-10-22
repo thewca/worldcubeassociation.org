@@ -6,8 +6,14 @@ required:
 properties:
   sort_by:
     type: string
+    enum:
+      - average
+      - single
   sort_by_second:
     type: string
+    enum:
+      - average
+      - single
   sorted_rankings:
     type: array
     items:
@@ -29,18 +35,28 @@ properties:
         user_id:
           type: integer
         wca_id:
-          type: string
+          type:
+            - string
+            - "null"
         country_iso2:
           type: string
         average_best:
           type: integer
         average_rank:
-          type: integer
+          type:
+            - integer
+            - "null"
         single_best:
           type: integer
         single_rank:
-          type: integer
+          type:
+            - integer
+            - "null"
         tied_previous:
-          type: boolean
+          type:
+            - boolean
+            - "null"
         pos:
-          type: integer
+          type:
+            - integer
+            - "null"

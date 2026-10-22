@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.1.2
 info:
   title: WCA API Documentation
   summary: Documentation of the WCA API, currently in progress
@@ -14,33 +14,44 @@ servers:
 paths:
   /v1/competitions/{competitionId}/registrations:
     $ref: 'paths/registrations/registrationsByCompetition.yaml'
+  /v1/competitions/{competitionId}/registrations/{userId}:
+    $ref: 'paths/registrations/registrationByUser.yaml'
+  /v1/registrations/{registrationId}:
+    $ref: 'paths/registrations/updateRegistration.yaml'
   /v1/competitions/{competitionId}/registration_config:
     $ref: 'paths/registrations/registrationConfigForCompetition.yaml'
+  /v1/competitions/{competitionId}/registration_eligibility:
+    $ref: 'paths/registrations/registrationEligibility.yaml'
+  /v1/registrations/{registrationId}/payment_denomination:
+    $ref: 'paths/registrations/paymentDenomination.yaml'
+
+  /v1/competitions/{competitionId}/results:
+    $ref: 'paths/competitions/v1CompetitionResults.yaml'
+  /v1/competitions/{competitionId}/podiums:
+    $ref: 'paths/competitions/v1CompetitionPodiums.yaml'
+
+  /v1/competitions/{competitionId}/scoretakers:
+    $ref: 'paths/competitions/scoretakers/CompetitionScoretakers.yaml'
+  /v1/competitions/{competitionId}/scoretakers/{id}:
+    $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
+
+  /v1/competitions/{competitionId}/bookmark:
+    $ref: 'paths/competitions/competitionBookmark.yaml'
 
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
-    post:
-      $ref: 'paths/competitions/live/SubmitLiveResults.yaml'
-    patch:
-      $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
-    get:
-      $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+    $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/batch:
-    post:
-      $ref: 'paths/competitions/live/BatchSubmitLiveResults.yaml'
+    $ref: 'paths/competitions/live/BatchSubmitLiveResults.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit:
     $ref: 'paths/competitions/live/GetNextCompetitorIfQuit.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors:
     $ref: 'paths/competitions/live/CanBeAddedToRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}:
-    put:
-      $ref: 'paths/competitions/live/addCompetitorToRound.yaml'
-    delete:
-      $ref: 'paths/competitions/live/QuitCompetitor.yaml'
+    $ref: 'paths/competitions/live/LiveRoundsCompetitors.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/bulk_quit:
-    delete:
-      $ref: 'paths/competitions/live/BulkQuitCompetitor.yaml'
+    $ref: 'paths/competitions/live/BulkQuitCompetitor.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
     $ref: 'paths/competitions/live/ClearRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/close:
@@ -53,6 +64,14 @@ paths:
     $ref: 'paths/competitions/live/LivePodiums.yaml'
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:
     $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
+
+  /v1/persons/{wca_id}/results:
+    $ref: 'paths/persons/personResults.yaml'
+  /v1/persons/{wca_id}/records:
+    $ref: 'paths/persons/personRecords.yaml'
+
+  /v1/geocoding/search:
+    $ref: 'paths/geocoding/geocodingSearch.yaml'
 
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'
@@ -83,6 +102,12 @@ paths:
   /v0/incidents:
     $ref: 'paths/regulations/incidentsList.yaml'
 
+  /v0/incidents/{id}:
+    $ref: 'paths/regulations/incidentById.yaml'
+
+  /v0/incidents/{incident_id}/mark_as/{kind}:
+    $ref: 'paths/regulations/incidentMarkAs.yaml'
+
   /v0/search:
     $ref: 'paths/search/omniSearch.yaml'
 
@@ -105,8 +130,17 @@ paths:
   /v0/users/me/permissions:
     $ref: 'paths/users/userPermissions.yaml'
 
+  /v0/regulations:
+    $ref: 'paths/regulations/regulations.yaml'
+
+  /v0/regulations/history/official/{version}:
+    $ref: 'paths/regulations/historicalRegulations.yaml'
+
   /v0/regulations/translations:
     $ref: 'paths/regulations/regulationTranslations.yaml'
+
+  /v0/regulations/translations/{language}:
+    $ref: 'paths/regulations/translatedRegulations.yaml'
 
   /v0/export/public:
     $ref: 'paths/results/publicExports.yaml'

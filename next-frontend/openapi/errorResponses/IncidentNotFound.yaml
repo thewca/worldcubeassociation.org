@@ -1,0 +1,5 @@
+description: Incident not found, or not visible to the current user
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/errors/General404.yaml"

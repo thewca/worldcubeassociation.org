@@ -3,8 +3,8 @@ properties:
   numberOfAttempts:
     type: integer
     example: 2
-  attemptResult:
+  resultValue:
     $ref: './WcifAttemptResult.yaml'
 required:
   - numberOfAttempts
-  - attemptResult
+  - resultValue

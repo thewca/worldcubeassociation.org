@@ -10,9 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { FaPause, FaPlay, FaTimes } from "react-icons/fa";
 import { statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
-import Flag from "react-world-flags";
+import WcaFlag from "@/components/WcaFlag";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { recordTagBadge } from "@/components/results/TableCells";
+import { WithRecordTag } from "@/components/results/TableCells";
 import formats from "@/lib/wca/data/formats";
 import { LiveCompetitor } from "@/types/live";
 import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
@@ -23,6 +23,7 @@ import {
 import { LiveTableHeader } from "@/components/live/Cells";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
+import { parseActivityCode } from "@/lib/wca/wcif/rounds";
 import { useT } from "@/lib/i18n/useI18n";
 
 type Status = "showing" | "shown" | "hiding" | "paused";
@@ -40,6 +41,7 @@ interface ResultsProjectorProps {
   formatId: string;
   eventId: string;
   title: string;
+  isLinkedRound?: boolean;
   disableProjectorView: () => void;
 }
 
@@ -53,6 +55,7 @@ function ResultsProjector({
   formatId,
   eventId,
   title,
+  isLinkedRound = false,
   disableProjectorView,
   competitors,
 }: ResultsProjectorProps) {
@@ -116,7 +119,7 @@ function ResultsProjector({
             h="full"
           >
             <Dialog.Header
-              color="white"
+              color="fg"
               py={4}
               position="sticky"
               top={0}
@@ -129,29 +132,26 @@ function ResultsProjector({
                 <Box flex={1} />
                 {status === "paused" ? (
                   <IconButton
-                    colorPalette="whiteAlpha"
                     variant="ghost"
                     onClick={() => setStatus("hiding")}
                     aria-label="Play"
                     size="lg"
-                    mr={2}
+                    me={2}
                   >
                     <FaPlay />
                   </IconButton>
                 ) : (
                   <IconButton
-                    colorPalette="whiteAlpha"
                     variant="ghost"
                     onClick={() => setStatus("paused")}
                     aria-label="Pause"
                     size="lg"
-                    mr={2}
+                    me={2}
                   >
                     <FaPause />
                   </IconButton>
                 )}
                 <IconButton
-                  colorPalette="whiteAlpha"
                   variant="ghost"
                   aria-label="Close"
                   size="lg"
@@ -164,7 +164,12 @@ function ResultsProjector({
 
             <Dialog.Body p={0}>
               <Table.Root size="lg">
-                <LiveTableHeader format={format} t={t} isProjector />
+                <LiveTableHeader
+                  format={format}
+                  t={t}
+                  isProjector
+                  isLinked={isLinkedRound}
+                />
                 <Table.Body>
                   {nonemptyResults
                     .slice(topResultIndex, topResultIndex + getNumberOfRows())
@@ -174,63 +179,103 @@ function ResultsProjector({
                       ).includes(status);
 
                       // For dual/linked rounds a competitor has one result per
-                      // linked round; the projector shows only their best one
-                      // rather than the combined breakdown.
-                      const result = competitor.results[0];
+                      // linked round, each shown on its own row with the
+                      // combined ranking/name spanning them. Otherwise a single
+                      // row for their best result.
+                      const rows = isLinkedRound
+                        ? competitor.results
+                        : [competitor.results[0]];
 
-                      return (
-                        <Table.Row
-                          whiteSpace="nowrap"
-                          key={`${result.registration_id}-${result.round_wcif_id}`}
-                          opacity={isVisible ? 0 : 1}
-                          animationName={isVisible ? "fade-in" : "fade-out"}
-                          animationDuration={`${(isVisible ? DURATION.showing : DURATION.hiding) / 1000}s`}
-                          animationTimingFunction="ease-in-out"
-                          animationFillMode="forwards"
-                          animationDelay={
-                            status === "showing" ? `${index * 100}ms` : "0ms"
-                          }
-                        >
-                          <Table.Cell
-                            fontSize="1.5rem"
-                            pr={2}
-                            textAlign="right"
-                            layerStyle="fill.deep"
-                            colorPalette={rankingCellColorPalette(result)}
+                      return rows.map((result, resultIndex) => {
+                        const showText = !isLinkedRound || resultIndex === 0;
+                        const rowSpan = isLinkedRound
+                          ? competitor.results.length
+                          : 1;
+
+                        return (
+                          <Table.Row
+                            whiteSpace="nowrap"
+                            key={`${result.registration_id}-${result.round_wcif_id}`}
+                            opacity={isVisible ? 0 : 1}
+                            animationName={isVisible ? "fade-in" : "fade-out"}
+                            animationDuration={`${(isVisible ? DURATION.showing : DURATION.hiding) / 1000}s`}
+                            animationTimingFunction="ease-in-out"
+                            animationFillMode="forwards"
+                            animationDelay={
+                              status === "showing" ? `${index * 100}ms` : "0ms"
+                            }
                           >
-                            {competitor.global_pos}
-                          </Table.Cell>
-                          <Table.Cell overflow="hidden" textOverflow="ellipsis">
-                            {competitor.name}
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">
-                            <Flag code={competitor.country_iso2} />
-                          </Table.Cell>
-                          {padSkipped(
-                            result.attempts,
-                            format.expected_solve_count,
-                          ).map((attempt) => (
-                            <Table.Cell
-                              key={attempt.attempt_number}
-                              textAlign="right"
-                            >
-                              {formatAttemptResult(attempt.value, eventId)}
-                            </Table.Cell>
-                          ))}
-                          {stats.map(
-                            ({ i18nKey, field, recordTagField }, statIndex) => (
+                            {showText && (
                               <Table.Cell
-                                key={i18nKey}
-                                textAlign="right"
-                                fontWeight={statIndex === 0 ? 600 : 400}
+                                fontSize="1.5rem"
+                                pe={2}
+                                textAlign="end"
+                                rowSpan={rowSpan}
+                                layerStyle="fill.solid"
+                                colorPalette={rankingCellColorPalette(
+                                  competitor,
+                                )}
                               >
-                                {formatAttemptResult(result[field], eventId)}{" "}
-                                {recordTagBadge(result[recordTagField])}
+                                {competitor.global_pos}
                               </Table.Cell>
-                            ),
-                          )}
-                        </Table.Row>
-                      );
+                            )}
+                            {showText && (
+                              <Table.Cell
+                                overflow="hidden"
+                                textOverflow="ellipsis"
+                                rowSpan={rowSpan}
+                              >
+                                {competitor.name}
+                              </Table.Cell>
+                            )}
+                            {showText && (
+                              <Table.Cell textAlign="center" rowSpan={rowSpan}>
+                                <WcaFlag code={competitor.country_iso2} />
+                              </Table.Cell>
+                            )}
+                            {isLinkedRound && (
+                              <Table.Cell textAlign="center">
+                                {
+                                  parseActivityCode(result.round_wcif_id)
+                                    .roundNumber
+                                }
+                              </Table.Cell>
+                            )}
+                            {padSkipped(
+                              result.attempts,
+                              format.expected_solve_count,
+                            ).map((attempt) => (
+                              <Table.Cell
+                                key={attempt.attempt_number}
+                                textAlign="end"
+                              >
+                                {formatAttemptResult(attempt.value, eventId)}
+                              </Table.Cell>
+                            ))}
+                            {stats.map(
+                              (
+                                { i18nKey, field, recordTagField },
+                                statIndex,
+                              ) => (
+                                <Table.Cell
+                                  key={i18nKey}
+                                  textAlign="end"
+                                  fontWeight={statIndex === 0 ? 600 : 400}
+                                >
+                                  <WithRecordTag
+                                    recordTag={result[recordTagField]}
+                                  >
+                                    {formatAttemptResult(
+                                      result[field],
+                                      eventId,
+                                    )}
+                                  </WithRecordTag>
+                                </Table.Cell>
+                              ),
+                            )}
+                          </Table.Row>
+                        );
+                      });
                     })}
                 </Table.Body>
               </Table.Root>

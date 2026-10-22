@@ -3,21 +3,32 @@ import {
   Button,
   Checkbox,
   Combobox,
+  createListCollection,
   Heading,
   Portal,
-  useListCollection,
   VStack,
   Text,
+  Stat,
+  StatGroup,
 } from "@chakra-ui/react";
-import AttemptResultField from "@/app/(wca)/(with-background)/dashboard/AttemptResultField";
+import AttemptResultField from "@/app/(wca)/(content-pages)/dashboard/AttemptResultField";
 import _ from "lodash";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { LiveCompetitor } from "@/types/live";
-import { useCallback, useImperativeHandle, useRef } from "react";
+import {
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { flushSync } from "react-dom";
 import type { KeyboardEvent, ReactNode, Ref } from "react";
 import { attemptResultsWarning, meetsCutoff } from "@/lib/live/attempt-result";
+import { normalizeForSearch } from "@/lib/live/normalizeForSearch";
+import { average, best } from "@/lib/wca/results/attempts";
+import { formatAttemptResult, SKIPPED_VALUE } from "@/lib/wca/wcif/attempts";
 import { useT } from "@/lib/i18n/useI18n";
 import { useConfirm } from "@/providers/ConfirmProvider";
 import { useRoundInfo } from "@/providers/RoundInfoProvider";
@@ -60,16 +71,28 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const attemptFieldsRef = useRef<AttemptFieldsNavHandle>(null);
 
-  const { collection, filter } = useListCollection({
-    initialItems: Array.from(competitors.values()).toSorted(
-      (a, b) => a.registrant_id - b.registrant_id,
-    ),
-    itemToValue: (competitor) => competitor.id.toString(),
-    itemToString: toCompetitorString,
-    filter: (itemText, filterText, item) =>
-      itemText.toLowerCase().includes(filterText.toLowerCase()) ||
-      parseInt(filterText, 10) === item.registrant_id,
-  });
+  const [filterText, setFilterText] = useState("");
+
+  // Derived from `competitors` (instead of useListCollection's mount-time
+  // snapshot) so websocket updates like quits are reflected in the dropdown.
+  const collection = useMemo(() => {
+    const items = Array.from(competitors.values())
+      .toSorted((a, b) => a.registrant_id - b.registrant_id)
+      .filter(
+        (competitor) =>
+          !filterText ||
+          normalizeForSearch(toCompetitorString(competitor)).includes(
+            normalizeForSearch(filterText),
+          ) ||
+          parseInt(filterText, 10) === competitor.registrant_id,
+      );
+
+    return createListCollection({
+      items,
+      itemToValue: (competitor) => competitor.id.toString(),
+      itemToString: toCompetitorString,
+    });
+  }, [competitors, filterText]);
 
   const selectedCompetitor = registrationId
     ? competitors.get(registrationId)
@@ -113,12 +136,19 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
 
   const hasMetCutoff = meetsCutoff(attempts, cutoff);
 
+  const bestResult = best(attempts);
+  // `average` only supports Mo3/Ao5-shaped attempt counts and throws otherwise.
+  const averageResult =
+    attempts.length === 3 || attempts.length === 5
+      ? average(attempts, eventId)
+      : SKIPPED_VALUE;
+
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <VStack align="left">
         <Combobox.Root
           collection={collection}
-          onInputValueChange={(e) => filter(e.inputValue)}
+          onInputValueChange={(e) => setFilterText(e.inputValue)}
           inputValue={inputDisplayValue}
           onValueChange={(e) => {
             if (e.value.length > 0) {
@@ -135,7 +165,31 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
             <Heading size="2xl">{header}</Heading>
           </Combobox.Label>
           <Combobox.Control>
-            <Combobox.Input ref={inputRef} placeholder="Type to search" />
+            <Combobox.Context>
+              {(api) => (
+                <Combobox.Input
+                  ref={inputRef}
+                  placeholder="Type to search"
+                  onKeyDown={(e) => {
+                    // Backspace at the end of the field clears the whole name,
+                    // so double-checking can move on to the next competitor.
+                    const input = e.currentTarget;
+                    const atEnd =
+                      input.selectionStart === input.value.length &&
+                      input.selectionEnd === input.value.length;
+
+                    if (
+                      e.key === "Backspace" &&
+                      atEnd &&
+                      api.hasSelectedItems
+                    ) {
+                      e.preventDefault();
+                      api.clearValue();
+                    }
+                  }}
+                />
+              )}
+            </Combobox.Context>
             <Combobox.IndicatorGroup>
               <Combobox.ClearTrigger />
               <Combobox.Trigger />
@@ -189,6 +243,24 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
             </Button>
           )}
         </FocusScope>
+        {selectedCompetitor && (
+          <StatGroup justifyContent="space-between">
+            <Stat.Root flex="0" alignItems="flex-start">
+              <Stat.Label>{t("common.best")}</Stat.Label>
+              <Stat.ValueText>
+                {formatAttemptResult(bestResult, eventId)}
+              </Stat.ValueText>
+            </Stat.Root>
+            {averageResult !== SKIPPED_VALUE && (
+              <Stat.Root flex="0" alignItems="flex-end">
+                <Stat.Label>{t("common.average")}</Stat.Label>
+                <Stat.ValueText>
+                  {formatAttemptResult(averageResult, eventId)}
+                </Stat.ValueText>
+              </Stat.Root>
+            )}
+          </StatGroup>
+        )}
         <Checkbox.Root checked={batchMode} onCheckedChange={batchConfirmation}>
           <Checkbox.HiddenInput />
           <Checkbox.Control />
@@ -257,7 +329,15 @@ function AttemptFieldsNav({
       e.preventDefault();
       const from = e.target as HTMLElement;
       flushSync(() => from.blur());
-      focusManager?.focusPrevious({ wrap: false, from });
+      // Moving back from the first attempt lands on the competitor field.
+      const didFocusPrevious = focusManager?.focusPrevious({
+        wrap: false,
+        from,
+      });
+
+      if (!didFocusPrevious) {
+        onFocusCompetitor();
+      }
     }
   };
 

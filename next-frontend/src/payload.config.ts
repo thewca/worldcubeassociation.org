@@ -3,9 +3,16 @@ import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
-import { authjsPlugin } from "payload-authjs";
+import {
+  betterAuthCollections,
+  createBetterAuthPlugin,
+} from "@delmaredigital/payload-better-auth";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { payloadAuthConfig } from "@/auth.config";
+import {
+  cmsBetterAuthOptions,
+  createCmsAuth,
+  PAYLOAD_ADMIN_ROLES,
+} from "@/payload.auth";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
@@ -37,6 +44,7 @@ import {
   Args,
 } from "@payloadcms/db-mongodb";
 import { fromContainerMetadata } from "@aws-sdk/credential-providers";
+import { WCA_CMS_PROVIDER_ID, WCA_ROLES_FIELD } from "@/auth.config";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -46,8 +54,34 @@ function plugins() {
   const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
-    authjsPlugin({
-      authjsConfig: payloadAuthConfig,
+    betterAuthCollections({
+      betterAuthOptions: cmsBetterAuthOptions,
+      // `users` exists already, so it is augmented with the schema fields rather than
+      //   generated; `skip` only covers the case where it is missing entirely.
+      skipCollections: ["user"],
+      // Roles come from OIDC; nobody is promoted for being first to log in.
+      firstUserAdmin: false,
+      // Don't spam our logs with warnings about a behavior that is totally intended by us.
+      //   via https://delmaredigital.github.io/payload-better-auth/#better-auth-collections
+      //   and https://github.com/delmaredigital/payload-better-auth/issues/38
+      acknowledgeRoleGuardDisabled: true,
+      roleField: WCA_ROLES_FIELD,
+    }),
+    createBetterAuthPlugin({
+      createAuth: createCmsAuth,
+      admin: {
+        login: {
+          // read based on `betterAuthCollections`'s `roleField` config entry above.
+          requiredRole: PAYLOAD_ADMIN_ROLES,
+          // The plugin defaults to `/admin`; our admin route is `/payload` (see `routes` below).
+          afterLoginPath: "/payload",
+          enableSocial: [WCA_CMS_PROVIDER_ID],
+          // WCA OIDC is the only way in: no local passwords, no self-registration.
+          enablePassword: false,
+          enableSignUp: false,
+          enableForgotPassword: false,
+        },
+      },
     }),
     s3Storage({
       enabled: isProduction,
@@ -93,7 +127,11 @@ function dbOptions(): Args {
   }
 }
 
-export default buildConfig({
+// The default `buildConfig` config further down below already applies plugins directly.
+//   But for the purposes of our own data export/dump, we need to know _strictly our_ collections
+//   and globals, without any plugins potentially adding their own stuff. So we export our config
+//   separately as a named export, and keep the `buildConfig` export further down below as default export.
+export const wcaConfig = {
   admin: {
     user: "users",
     importMap: {
@@ -144,4 +182,6 @@ export default buildConfig({
   db: mongooseAdapter(dbOptions()),
   sharp,
   plugins: plugins(),
-});
+};
+
+export default buildConfig(wcaConfig);

@@ -8,6 +8,14 @@ RSpec.describe Result do
     expect(result).to be_valid
   end
 
+  it "belongs to newcomer_registration" do
+    competition = create(:competition)
+    registration = create(:registration, competition: competition)
+    result = create(:result, competition: competition, person_id: registration.registrant_id.to_s)
+    expect(result.newcomer_registration).to eq registration
+    expect(registration.reload.newcomer_results).to include(result)
+  end
+
   context "with previous light_result methods" do
     let(:competition) { create(:competition) }
     let(:format_id) { "a" }

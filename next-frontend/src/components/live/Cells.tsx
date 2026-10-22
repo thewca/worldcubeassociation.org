@@ -1,12 +1,14 @@
 import { Format } from "@/lib/wca/data/formats";
-import { Box, Link, Table } from "@chakra-ui/react";
+import { Box, HStack, Icon, Link, Table } from "@chakra-ui/react";
 import { Stat, statColumnsForFormat } from "@/lib/live/statColumnsForFormat";
 import { rankingCellColorPalette } from "@/lib/live/rankingCellColorPalette";
 import { padSkipped } from "@/lib/live/padSkipped";
-import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
+import { formatAttemptResult, SKIPPED_VALUE } from "@/lib/wca/wcif/attempts";
 import { WithRecordTag } from "@/components/results/TableCells";
+import { Tooltip } from "@/components/ui/tooltip";
 import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 import { TFunction } from "i18next";
+import { LuPersonStanding } from "react-icons/lu";
 
 export function LiveTableHeader({
   isLinked = false,
@@ -14,12 +16,14 @@ export function LiveTableHeader({
   byPerson = false,
   isAdmin = false,
   isProjector = false,
+  forecastView = false,
   t,
 }: {
   isLinked?: boolean;
   byPerson?: boolean;
   isAdmin?: boolean;
   isProjector?: boolean;
+  forecastView?: boolean;
   format: Format;
   t: TFunction;
 }) {
@@ -40,11 +44,11 @@ export function LiveTableHeader({
       <Table.Header>
         <Table.Row>
           {byPerson && (
-            <Table.ColumnHeader textAlign="left">
+            <Table.ColumnHeader textAlign="start">
               {t("competitions.results_table.round")}
             </Table.ColumnHeader>
           )}
-          <Table.ColumnHeader textAlign="right">#</Table.ColumnHeader>
+          <Table.ColumnHeader textAlign="end">#</Table.ColumnHeader>
           {isAdmin && (
             <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
           )}
@@ -66,15 +70,22 @@ export function LiveTableHeader({
             </Table.ColumnHeader>
           )}
           {attemptIndexes.map((num) => (
-            <Table.ColumnHeader key={num} textAlign="right" hideBelow="md">
+            <Table.ColumnHeader key={num} textAlign="end" hideBelow="md">
               {num + 1}
             </Table.ColumnHeader>
           ))}
           {stats.map((stat) => (
-            <Table.ColumnHeader textAlign="right" key={stat.field}>
+            <Table.ColumnHeader textAlign="end" key={stat.field}>
               {t(stat.i18nKey)}
             </Table.ColumnHeader>
           ))}
+          {forecastView &&
+            format.expected_solve_count === 5 &&
+            ["BPA", "WPA"].map((label) => (
+              <Table.ColumnHeader key={label} textAlign="end" hideBelow="sm">
+                {label}
+              </Table.ColumnHeader>
+            ))}
         </Table.Row>
       </Table.Header>
     </>
@@ -95,8 +106,8 @@ export function LivePositionCell({
   return (
     <Table.Cell
       width={1}
-      layerStyle={showAdvancing ? "fill.deep" : undefined}
-      textAlign="right"
+      layerStyle={showAdvancing ? "fill.solid" : undefined}
+      textAlign="end"
       rowSpan={rowSpan}
       colorPalette={
         showAdvancing ? rankingCellColorPalette(advancingParams) : undefined
@@ -112,25 +123,40 @@ export function LiveCompetitorCell({
   rowSpan,
   competitionId,
   competitor,
+  showFirstTimer = false,
+  t,
 }: {
   link?: boolean;
   rowSpan?: number;
   competitionId: string;
-  competitor: Pick<LiveCompetitor, "id" | "name">;
+  competitor: Pick<LiveCompetitor, "id" | "name" | "wca_id">;
+  showFirstTimer?: boolean;
+  t: TFunction;
 }) {
   return (
     <Table.Cell rowSpan={rowSpan}>
-      {link && (
-        <Link
-          href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
-          hideBelow="md"
-        >
+      <HStack gap={1}>
+        {link && (
+          <Link
+            href={`/competitions/${competitionId}/live/competitors/${competitor.id}`}
+            hideBelow="md"
+          >
+            {competitor.name}
+          </Link>
+        )}
+        <Box as="span" hideFrom={link ? "md" : undefined}>
           {competitor.name}
-        </Link>
-      )}
-      <Box as="span" hideFrom={link ? "md" : undefined}>
-        {competitor.name}
-      </Box>
+        </Box>
+        {showFirstTimer && !competitor.wca_id && (
+          <Tooltip
+            content={t("competitions.live.admin.first_timer")}
+            showArrow
+            openDelay={200}
+          >
+            <Icon as={LuPersonStanding} size="md" />
+          </Tooltip>
+        )}
+      </HStack>
     </Table.Cell>
   );
 }
@@ -148,7 +174,7 @@ export function LiveAttemptsCells({
 }) {
   return padSkipped(attempts, format.expected_solve_count).map((attempt) => (
     <Table.Cell
-      textAlign="right"
+      textAlign="end"
       key={`attempts-${competitorId}-${attempt.attempt_number}`}
       hideBelow="md"
     >
@@ -164,6 +190,8 @@ export function LiveStatCells({
   result,
   isAdmin = false,
   highlight,
+  forecastView = false,
+  format,
 }: {
   stats: Stat[];
   competitorId: number;
@@ -171,6 +199,8 @@ export function LiveStatCells({
   result: LiveResult;
   isAdmin?: boolean;
   highlight?: boolean;
+  forecastView?: boolean;
+  format?: Format;
 }) {
   const shouldHighlight = (statIndex: number) => {
     if (highlight !== undefined) {
@@ -179,15 +209,62 @@ export function LiveStatCells({
     return statIndex === 0;
   };
 
-  return stats.map((stat, statIndex) => (
-    <Table.Cell
-      key={`${competitorId}-${stat.i18nKey}`}
-      textAlign="right"
-      fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
-    >
-      <WithRecordTag recordTag={isAdmin ? null : result[stat.recordTagField]}>
-        {formatAttemptResult(result[stat.field], eventId)}
-      </WithRecordTag>
-    </Table.Cell>
-  ));
+  // Only present (and non-null) on incomplete round results.
+  const forecast =
+    "forecast_statistics" in result ? result.forecast_statistics : undefined;
+
+  return (
+    <>
+      {stats.map((stat, statIndex) => {
+        const showProjected =
+          forecastView &&
+          stat.field === "average" &&
+          result.average === SKIPPED_VALUE &&
+          forecast?.projected_average != null;
+
+        return (
+          <Table.Cell
+            key={`${competitorId}-${stat.i18nKey}`}
+            textAlign="end"
+            fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
+          >
+            {showProjected ? (
+              <Tooltip content="Projected average" showArrow openDelay={200}>
+                <Box as="span" color="fg.muted">
+                  {formatAttemptResult(forecast!.projected_average!, eventId)}
+                </Box>
+              </Tooltip>
+            ) : (
+              <WithRecordTag
+                recordTag={isAdmin ? null : result[stat.recordTagField]}
+              >
+                {formatAttemptResult(result[stat.field], eventId)}
+              </WithRecordTag>
+            )}
+          </Table.Cell>
+        );
+      })}
+      {forecastView &&
+        format?.expected_solve_count === 5 &&
+        (
+          [
+            ["BPA", forecast?.best_possible_average],
+            ["WPA", forecast?.worst_possible_average],
+          ] as const
+        ).map(([label, value]) => (
+          <Table.Cell
+            key={`${competitorId}-${label}`}
+            textAlign="end"
+            color="fg.muted"
+            hideBelow="sm"
+          >
+            {/* Like wca-live, only meaningful once a single solve is left */}
+            {result.attempts.length === format.expected_solve_count - 1 &&
+            value != null
+              ? formatAttemptResult(value, eventId)
+              : ""}
+          </Table.Cell>
+        ))}
+    </>
+  );
 }

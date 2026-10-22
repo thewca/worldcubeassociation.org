@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LiveRoundAdmin, LiveRoundState } from "@/types/live";
 import { useT } from "@/lib/i18n/useI18n";
 import useAPI from "@/lib/wca/useAPI";
+import { SERVER_SEEDED_STALE_TIME } from "@/providers/WCAQueryClientProvider";
 import Loading from "@/components/ui/loading";
 
 interface AllRoundInfoProviderType {
@@ -14,6 +15,8 @@ interface AllRoundInfoProviderType {
     state: LiveRoundState,
     patch?: Partial<LiveRoundAdmin>,
   ) => void;
+  setCompletedCount: (roundId: string, count: number) => void;
+  setTotalCompetitors: (roundId: string, count: number) => void;
 }
 
 const AllRoundInfoProvider = createContext<
@@ -69,24 +72,44 @@ export function RoundsInfoProvider({
   const { data, isLoading } = useQuery({
     ...roundsQueryOptions,
     initialData: { rounds: initialRounds },
+    refetchOnMount: true,
+    staleTime: SERVER_SEEDED_STALE_TIME,
   });
 
-  const setRoundState = useCallback(
-    (
-      roundId: string,
-      state: LiveRoundState,
-      patch?: Partial<LiveRoundAdmin>,
-    ) => {
+  const patchRound = useCallback(
+    (roundId: string, patch: (round: LiveRoundAdmin) => LiveRoundAdmin) => {
       queryClient.setQueryData(
         queryKey,
         (old: { rounds: LiveRoundAdmin[] }) => ({
-          rounds: old.rounds.map((r) =>
-            r.id === roundId ? { ...r, ...patch, state } : r,
-          ),
+          rounds: old.rounds.map((r) => (r.id === roundId ? patch(r) : r)),
         }),
       );
     },
     [queryClient, queryKey],
+  );
+
+  const setRoundState = useCallback(
+    (roundId: string, state: LiveRoundState, patch?: Partial<LiveRoundAdmin>) =>
+      patchRound(roundId, (r) => ({ ...r, ...patch, state }) as LiveRoundAdmin),
+    [patchRound],
+  );
+
+  const setCompletedCount = useCallback(
+    (roundId: string, count: number) =>
+      patchRound(roundId, (r) =>
+        r.state === "open" ? { ...r, completed_competitors: count } : r,
+      ),
+    [patchRound],
+  );
+
+  const setTotalCompetitors = useCallback(
+    (roundId: string, count: number) =>
+      patchRound(roundId, (r) =>
+        r.state === "open" || r.state === "locked"
+          ? { ...r, total_competitors: count }
+          : r,
+      ),
+    [patchRound],
   );
 
   if (isLoading) {
@@ -99,7 +122,12 @@ export function RoundsInfoProvider({
 
   return (
     <AllRoundInfoProvider.Provider
-      value={{ rounds: data.rounds, setRoundState }}
+      value={{
+        rounds: data.rounds,
+        setRoundState,
+        setCompletedCount,
+        setTotalCompetitors,
+      }}
     >
       {children}
     </AllRoundInfoProvider.Provider>

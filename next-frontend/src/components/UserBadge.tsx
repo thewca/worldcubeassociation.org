@@ -1,31 +1,41 @@
 import React from "react";
 import {
-  Box,
   Card,
   Center,
   HStack,
+  Image,
   LinkBox,
   LinkOverlay,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
+import { LuMails } from "react-icons/lu";
+import CopyButton from "./CopyButton";
+import { getT } from "@/lib/i18n/get18n";
 
 interface UserBadgeData {
   name: string;
   profilePicture?: components["schemas"]["UserAvatar"];
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
   wcaId: string;
+  action?: React.ReactNode;
+  email?: string;
 }
 
-const UserBadge: React.FC<UserBadgeData> = ({
+const UserBadge: React.FC<UserBadgeData> = async ({
   name,
   profilePicture,
   roles,
   wcaId,
+  action,
+  email,
 }) => {
+  const { t } = await getT();
+
   return (
     <LinkBox asChild>
       <Card.Root
@@ -39,48 +49,70 @@ const UserBadge: React.FC<UserBadgeData> = ({
         maxW="xl"
       >
         {profilePicture && (
-          <Box objectFit="cover" width="75px" minH="75px" position="relative">
-            <Image
-              src={
-                profilePicture.is_default
-                  ? "/missing_avatar_thumb.png"
-                  : profilePicture.url
-              }
-              alt="Profile Picture"
-              fill
-              style={{ objectFit: "cover" }}
-            />
-          </Box>
+          <Image
+            src={
+              profilePicture.is_default
+                ? "/missing_avatar_thumb.png"
+                : (profilePicture.thumb_url ?? profilePicture.url)
+            }
+            alt="Profile Picture"
+            objectFit="cover"
+            // The badge needs a fixed-width column, so a non-square photo has to
+            //   be cropped; anchor the crop at the top so heads survive it.
+            objectPosition="top"
+            width="avatarThumb"
+            // Fixed width, but only a *minimum* height, so the picture stretches
+            //   to the card whenever the roles wrap it taller than the thumb.
+            minH="avatarThumb"
+          />
         )}
-        <Center>
-          <Card.Body>
+        <Center flexGrow={1}>
+          <Card.Body gap={2}>
             <Card.Title>
-              <LinkOverlay asChild>
-                <Link
-                  href={route({
-                    pathname: "/persons/[wcaId]",
-                    query: { wcaId },
-                  })}
-                >
-                  {name}
-                </Link>
-              </LinkOverlay>
+              <HStack direction="row" justify="space-between">
+                <LinkOverlay asChild>
+                  <Link
+                    href={route({
+                      pathname: "/persons/[wcaId]",
+                      query: { wcaId },
+                    })}
+                  >
+                    {name}
+                  </Link>
+                </LinkOverlay>
+                {email && (
+                  <CopyButton
+                    variant="subtle"
+                    size="xs"
+                    text={t("delegates_page.copy_email")}
+                    value={email}
+                    icon={<LuMails />}
+                    toastLabel={t("notifications.copied_to_clipboard")}
+                  />
+                )}
+              </HStack>
             </Card.Title>
             {roles && (
               <HStack direction="row" wrap="wrap" gap="4px 8px" marginTop="4px">
                 {roles.map((role, index) => (
-                  <RoleBadge
-                    key={index}
-                    teamRole={role.teamRole}
-                    teamText={role.teamText ?? ""}
-                    colorPalette={role.staffColor}
-                    fontSize="0.7em"
-                  />
+                  <Stack key={index}>
+                    <Text color="fg.muted">{role.teamText}</Text>
+                    <RoleBadge
+                      teamRole={role.teamRole}
+                      colorPalette={role.staffColor}
+                      fontSize="0.7em"
+                    />
+                  </Stack>
                 ))}
               </HStack>
             )}
           </Card.Body>
         </Center>
+        {action && (
+          <Center marginStart="auto" paddingEnd="3">
+            {action}
+          </Center>
+        )}
       </Card.Root>
     </LinkBox>
   );

@@ -352,6 +352,7 @@ module DatabaseDumper
     "active_storage_attachments" => :skip_all_rows,
     "active_storage_blobs" => :skip_all_rows,
     "active_storage_variant_records" => :skip_all_rows,
+    "markdown_images" => :skip_all_rows,
     "ar_internal_metadata" => :skip_all_rows,
     "result_attempts" => {
       column_sanitizers: actions_to_column_sanitizers(
@@ -405,6 +406,7 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
+    "competition_scoretakers" => :skip_all_rows,
     "competition_series" => {
       # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
       where_clause: "LEFT JOIN competitions ON competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
@@ -587,6 +589,7 @@ module DatabaseDumper
     }.freeze,
     "regional_records_lookup" => :skip_all_rows,
     "registration_competition_events" => {
+      where_clause: "JOIN registrations ON registrations.id = registration_id #{JOIN_WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -626,6 +629,7 @@ module DatabaseDumper
     "registration_history_changes" => :skip_all_rows,
     "registration_history_entries" => :skip_all_rows,
     "waiting_lists" => {
+      where_clause: "JOIN competitions ON competitions.id = holder_id AND holder_type = 'Competition' #{WHERE_VISIBLE_COMP}",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           id
@@ -821,7 +825,6 @@ module DatabaseDumper
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
-      where_clause: "WHERE name NOT IN (#{ServerSetting::HIDDEN_SETTINGS.map { "'#{it}'" }.join(',')})",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w[
           name
@@ -965,6 +968,9 @@ module DatabaseDumper
     "duplicate_checker_job_runs" => :skip_all_rows,
     "potential_duplicate_persons" => :skip_all_rows,
     "tickets_competition_result" => :skip_all_rows,
+    "trainee_delegate_applications" => :skip_all_rows,
+    "trainee_delegate_conversations" => :skip_all_rows,
+    "trainee_delegate_recommendations" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

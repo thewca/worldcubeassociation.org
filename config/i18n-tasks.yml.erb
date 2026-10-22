@@ -52,6 +52,7 @@ search:
   paths:
     - app/
     - lib/
+    - next-frontend/src/
 
   ## Root directories for relative keys resolution.
   # relative_roots:
@@ -95,9 +96,17 @@ ignore_missing:
   - 'devise.{mailer,passwords,registrations,sessions,shared,confirmations,unlocks}.*'
 # - 'errors.messages.{accepted,blank,invalid,too_short,too_long}'
 # - '{devise,simple_form}.*'
-  # We don't want to translate these.
-  - 'simple_form.hints.translation.*'
-  - 'activerecord.attributes.translation.*'
+  # CustomWcaI18nScanner marks `simple_form.hints.<model>.<attribute>` as used
+  # for every form input that does not pass an inline `hint:`, but most inputs
+  # have no hint at all. simple_form's lookup ends in '' and then `.presence`,
+  # so an absent hint renders nothing — exactly like the empty string these keys
+  # used to hold in all 33 locale files. Only flag hints as unused, never as
+  # missing. (Subsumes the old `simple_form.hints.translation.*` entry.)
+  - 'simple_form.hints.*'
+  # The new i18n-tasks v1.1 Prism parser mis-interprets the `content.1` paragraph notation as plurals
+  #   and complains that CLDR also requires other plural rules. We're moving FAQ to Payload
+  #   as part of the redesign anyways so I won't bother fixing this in the old FAQ page.
+  - 'faq.answers.*'
 
 ## Consider these keys used:
 ignore_unused:
@@ -110,7 +119,6 @@ ignore_unused:
   - 'score_tools.tools.*'
   - 'wca.doorkeeper.scopes.*'
   - 'contact.*.info'
-  - 'organizer_guidelines.*'
   - 'merch.paragraphs.*'
   - 'activity.*'
   # Mark all events/continents/countries as used.
@@ -122,6 +130,7 @@ ignore_unused:
 # - 'simple_form.{placeholders,hints,labels}.*'
   - 'faker.name.*'
   - 'devise.mailer.*'
+  - 'devise.passwords.send_paranoid_instructions'
   # These are keys dynamically built in lib/advancement_condition.rb
   - 'advancement_condition.*'
   # The keys below are all used on the records page
@@ -140,8 +149,6 @@ ignore_unused:
   - 'activerecord.attributes.delegate_report.*'
   - 'simple_form.hints.delegate_report.*'
   - 'competitions.live.*'
-  - 'competitions.messages.spots_left.*'
-  - 'errors.next_frontend.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
@@ -153,7 +160,7 @@ ignore_unused:
 ## Ignore these keys completely:
 ignore:
 ## Ignore these keys as they are from external application
-  - '{time_will_tell,doorkeeper,mail_form}.*'
+  - '{doorkeeper,mail_form}.*'
 ## These are in rails.locale.yml
   - '{date, datetime, number, errors, time, support, helpers}.*'
 ## TODO: if at some point we really care about translating oauth stuff we should
@@ -167,10 +174,15 @@ ignore:
 <%
   require './lib/custom_wca_i18n_scanner.rb'
   I18n::Tasks.add_scanner 'CustomWcaI18nScanner', only: %w(*.erb)
+  I18n::Tasks.add_ast_matcher 'OptionalTMatcher'
 
   I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
     only: %w(*.js),
     patterns: [['I18nHTMLTranslate\s+i18nKey=%{key}', '%{key}']]
+
+  I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
+    only: %w(*.tsx),
+    patterns: [['i18nKey=%{key}', '%{key}']]
 %>
 # <%#= I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
 #        only: %w(*.html.haml *.html.slim),

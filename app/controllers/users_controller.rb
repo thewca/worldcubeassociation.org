@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
   before_action :redirect_if_cannot_edit_user, only: %i[edit update]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
-  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge show_for_merge clear_claim_wca_id]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
@@ -69,6 +69,9 @@ class UsersController < ApplicationController
     user_details = params.permit(:name, :gender, :dob, :country_iso2)
 
     @user.update!(user_details)
+
+    @user.newcomer_results.update_all(person_name: @user.name) if @user.saved_change_to_name?
+    @user.newcomer_results.update_all(country_id: @user.country&.id) if @user.saved_change_to_country_iso2?
 
     render status: :ok, json: @user.as_json(
       private_attributes: %w[dob],
@@ -325,6 +328,8 @@ class UsersController < ApplicationController
       revoked_by_user: current_user,
       revocation_reason: reason,
     )
+
+    AvatarsMailer.notify_user_of_avatar_removal(current_user, user_avatar.user, reason).deliver_later
 
     render json: { ok: true }
   end

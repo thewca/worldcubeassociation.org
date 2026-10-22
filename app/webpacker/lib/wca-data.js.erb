@@ -98,11 +98,18 @@ function extendFormats(rawFormat) {
 const eventsData = loadStaticData(<%= Event.all_raw.to_json.html_safe %>);
 
 export const events = {
-  official: _.map(_.filter(eventsData, 'isOfficial'), extendEvents),
+  official: _.map(_.filter(eventsData, (e) => e.rank < 800), extendEvents),
+  officialWithFuture: _.map(_.filter(eventsData, (e) => e.rank < 990), extendEvents),
   byId: _.mapValues(_.keyBy(eventsData, 'id'), extendEvents),
 };
 
+// The events that are official as of today.
 export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+
+// The universe of event IDs that can legitimately appear in our data, including events that
+// are already announced but not holdable yet. Use this for ordering and validity checks,
+// never to decide which events a competition may offer today.
+export const WCA_EVENT_IDS_WITH_FUTURE = Object.values(events.officialWithFuture).map((e) => e.id);
 
 function extendEvents(rawEvent) {
   return {

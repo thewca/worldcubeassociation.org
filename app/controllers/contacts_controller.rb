@@ -95,8 +95,7 @@ class ContactsController < ApplicationController
 
   def edit_profile_action
     form_values = JSON.parse(params.require(:formValues), symbolize_names: true)
-    edited_profile_details = form_values[:editedProfileDetails]
-    edit_profile_reason = form_values[:editProfileReason]
+    edited_profile_details_from_form = form_values[:editedProfileDetails]
     attachment = params[:attachment]
     wca_id = form_values[:wcaId]
     person = Person.find_by(wca_id: wca_id)
@@ -114,6 +113,9 @@ class ContactsController < ApplicationController
       gender: person.gender,
       dob: person.dob,
     }
+
+    edited_profile_details = edited_profile_details_from_form.transform_values { |v| v[:newValue] }
+
     changes_requested = Person.fields_edit_requestable
                               .reject { |field| profile_to_edit[field].to_s == edited_profile_details[field].to_s }
                               .map do |field|
@@ -121,6 +123,7 @@ class ContactsController < ApplicationController
                                   field: field,
                                   from: profile_to_edit[field],
                                   to: edited_profile_details[field],
+                                  reason: edited_profile_details_from_form[field][:editReason],
                                 )
                               end
 
@@ -129,7 +132,6 @@ class ContactsController < ApplicationController
       name: profile_to_edit[:name],
       wca_id: wca_id,
       changes_requested: changes_requested,
-      edit_profile_reason: edit_profile_reason,
       requestor_user: current_user,
       document: attachment,
       request: request,

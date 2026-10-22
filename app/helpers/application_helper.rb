@@ -87,6 +87,7 @@ module ApplicationHelper
 
   def wca_table(responsive: true, hover: true, striped: true, float_thead: true, table_class: "", data: {}, greedy: true, table_id: nil, &block)
     data[:locale] = I18n.locale
+    add_to_js_assets("tables") if float_thead || data[:toggle].to_s == "table"
     table_classes = "table table-condensed #{table_class}"
     table_classes += " floatThead" if float_thead
     table_classes += " table-hover" if hover
@@ -109,13 +110,22 @@ module ApplicationHelper
     nav_items
   end
 
-  def wca_date_range(from_date, to_date, **options)
-    if from_date && to_date
-      options[:separator] = '-'
-      date_range(from_date, to_date, **options)
-    else
-      t "common.date.no_date"
-    end
+  def wca_date_range_tag(from_date, to_date)
+    return t("common.date.no_date") unless from_date && to_date
+
+    content_tag :span, "", class: "wca-date-range", data: { from: from_date.iso8601, to: to_date.iso8601, locale: I18n.locale }
+  end
+
+  def wca_date_range(from_date, to_date)
+    return t("common.date.no_date") unless from_date && to_date
+
+    from_date, to_date = to_date, from_date if from_date > to_date
+    return from_date.strftime("%b %-d, %Y") if from_date == to_date
+
+    from_format = from_date.year == to_date.year ? "%b %-d" : "%b %-d, %Y"
+    to_format = from_date.beginning_of_month == to_date.beginning_of_month ? "%-d, %Y" : "%b %-d, %Y"
+
+    "#{from_date.strftime(from_format)} – #{to_date.strftime(to_format)}"
   end
 
   def alert(type, content = nil, note: false, &block)
@@ -177,11 +187,11 @@ module ApplicationHelper
     [hours.positive? ? "#{hours}h " : '', minutes.positive? ? "#{minutes}m " : '', format('%.2f', seconds), 's'].join
   end
 
-  def wca_id_link(wca_id, **options)
+  def wca_id_link(wca_id, url: nil, **options)
     return if wca_id.blank?
 
     content_tag :span, class: "wca-id" do
-      link_to wca_id, person_url(wca_id), options
+      link_to wca_id, url || person_url(wca_id), options
     end
   end
 

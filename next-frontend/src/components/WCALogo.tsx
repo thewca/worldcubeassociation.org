@@ -1,24 +1,13 @@
-"use client";
-
 import Link from "next/link";
-import { Image as ChakraImage } from "@chakra-ui/react";
-import Image from "next/image";
 import { IconButton } from "@chakra-ui/react";
 import React from "react";
-import { useColorModeValue } from "@/components/ui/color-mode";
+import WcaLogoIcon from "@/components/icons/WcaLogoIcon";
 
 export default function WCALogo() {
-  const { src, alt } = useColorModeValue(
-    { src: "/logo.png", alt: "Wca Logo Light" },
-    { src: "/logo_dark.png", alt: "Wca Logo Dark" },
-  );
-
   return (
-    <IconButton asChild variant="ghost">
+    <IconButton asChild variant="ghost" aria-label="WCA Logo">
       <Link href="/">
-        <ChakraImage asChild maxW={10}>
-          <Image src={src} alt={alt} height={50} width={50} />
-        </ChakraImage>
+        <WcaLogoIcon boxSize={10} color="fg" />
       </Link>
     </IconButton>
   );

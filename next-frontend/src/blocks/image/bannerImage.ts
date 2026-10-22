@@ -10,10 +10,18 @@ export const BannerImageBlock: Block = {
     {
       name: "heading",
       type: "text",
+      localized: true,
+      admin: {
+        description: "Heading shown next to the banner image.",
+      },
     },
     {
       name: "body",
       type: "richText",
+      localized: true,
+      admin: {
+        description: "Body text shown under the heading.",
+      },
     },
     markdownConvertedField("body"),
     {
@@ -21,6 +29,9 @@ export const BannerImageBlock: Block = {
       type: "upload",
       relationTo: "media",
       required: true,
+      admin: {
+        description: "The image shown beside the text.",
+      },
     },
     {
       name: "imagePosition",
@@ -30,6 +41,7 @@ export const BannerImageBlock: Block = {
       required: true,
       admin: {
         layout: "horizontal",
+        description: "Which side of the text the image sits on",
       },
     },
     colorPaletteSelect,
@@ -47,6 +59,10 @@ export const BannerImageBlock: Block = {
       name: "bgImage",
       type: "upload",
       relationTo: "media",
+      admin: {
+        description:
+          "Optional decorative image drawn behind the banner's content.",
+      },
     },
     {
       name: "bgSize",
@@ -65,6 +81,9 @@ export const BannerImageBlock: Block = {
       options: ["right", "left"],
       defaultValue: "right",
       required: true,
+      admin: {
+        description: "Which side of the banner the background image sits on",
+      },
     },
   ],
 };
