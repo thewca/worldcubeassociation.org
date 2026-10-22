@@ -20,9 +20,6 @@ class CompetitionEvent < ApplicationRecord
            as: "fee",
            with_model_currency: :currency_code
 
-  serialize :qualification, coder: Qualification
-  validates_associated :qualification
-
   serialize :qualification_condition, coder: ResultConditions::ResultCondition
   validates_associated :qualification_condition
 
