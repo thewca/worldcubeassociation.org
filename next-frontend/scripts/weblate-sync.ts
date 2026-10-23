@@ -23,8 +23,9 @@ import { logSyncReport, runSync } from "@/lib/translate/sync";
 import { collectSourceDocs, unitsFromDocs } from "@/lib/translate/documents";
 import { weblateConfigured } from "@/lib/translate/weblate";
 
-const seed = process.argv.includes("seed");
+const shouldSeed = process.argv.includes("seed");
 const dryRun = process.argv.includes("dry-run");
+const DRY_RUN_PREVIEW_COUNT = 25;
 
 const payload = await getPayload({ config });
 const log = (message: string) => payload.logger.info(message);
@@ -37,10 +38,12 @@ try {
     log(
       `dry run: ${keys.length} source strings across ${docs.length} documents`,
     );
-    for (const key of keys.slice(0, 25)) {
+    for (const key of keys.slice(0, DRY_RUN_PREVIEW_COUNT)) {
       log(`  ${key} = ${JSON.stringify(units[key].message).slice(0, 80)}`);
     }
-    if (keys.length > 25) log(`  ... and ${keys.length - 25} more`);
+    if (keys.length > DRY_RUN_PREVIEW_COUNT) {
+      log(`  ... and ${keys.length - DRY_RUN_PREVIEW_COUNT} more`);
+    }
   } else {
     if (!weblateConfigured) {
       throw new Error(
@@ -48,13 +51,13 @@ try {
           "weblate/seed-payload.sh prints the token for the local instance.",
       );
     }
-    if (seed) {
+    if (shouldSeed) {
       log(
         "seeding: existing Payload translations go to Weblate before pulling",
       );
     }
 
-    const report = await runSync(payload, { seed });
+    const report = await runSync(payload, { shouldSeed });
 
     logSyncReport(log, report);
   }
