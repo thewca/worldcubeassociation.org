@@ -81,8 +81,8 @@ class Round < ApplicationRecord
   delegate :wcif_ids, to: :linked_round, prefix: true, allow_nil: true
   validates :format, inclusion: { in: :allowed_formats, message: ->(round, _args) { "'#{round.format_id}' is not allowed for '#{round.event_id}'" } }
 
-  validates :advancement_condition, presence: { if: :advancement_condition_changed?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
-  validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
+  validates :participation_condition, presence: { if: :participation_condition_changed?, unless: :initial_round?, message: "cannot be un-set on a non-initial round" }, on: :update
+  validates :participation_condition, absence: { if: :initial_round?, message: "cannot be set on an initial round" }
 
   validates :participation_source_type, comparison: { equal_to: LinkedRound.model_name, if: :participation_source_linked?, message: "must be the linked round group when the previous rounds are linked" }
 
@@ -149,6 +149,12 @@ class Round < ApplicationRecord
 
   def round_type
     RoundType.c_find(round_type_id)
+  end
+
+  def initial_round?
+    # NOTE: This is not quite the same as `first_round`. That method only checks for number,
+    #   here we actually check for source type.
+    self.participation_source_type == CompetitionEvent.model_name
   end
 
   def final_round?
@@ -374,8 +380,8 @@ class Round < ApplicationRecord
     can_change_time_limit? && time_limit == TimeLimit::UNDEF_TL
   end
 
-  def advancement_condition_is_valid?
-    final_round? || advancement_condition
+  def participation_condition_is_valid?
+    initial_round? || participation_condition?
   end
 
   def cutoff_is_greater_than_time_limit?

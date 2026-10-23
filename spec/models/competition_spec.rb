@@ -552,12 +552,12 @@ RSpec.describe Competition do
       expect(competition.warnings_for(nil)[:id]).to be_nil
     end
 
-    it "warns if advancement condition isn't present for a non final round" do
+    it "warns if participation condition isn't present for a non initial round" do
       create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
       create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2)
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:advancement_conditions]).to eq I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
+      expect(competition.warnings_for(nil)[:participation_conditions]).to eq I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
     end
 
     it "warns if the cutoff is greater than the time limit for any round" do
