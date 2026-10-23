@@ -346,12 +346,11 @@ sk:
           vyskytli(napr. nedodržiavanie rozvrhu-oneskorenie) a ako ste ich
           vyriešili...Prosím, buďte struční a nepíšte nepravdivé veci.
         incidents: >-
-          Napíšte nám o nejakých incidentoch, ktoré si myslíte, že stoja za to
-          byť spomenuté. Očíslujte incidenty, počínajúc 1, čiže ostatní delgáti
-          ich môžu okomentovať svojimi číslami. Prosím, uistite sa že spomínate
-          iba dôležité veci, nie bežné veci (napr. bežné +2 alebo DNF). Nebojte
-          sa opýtať pre spätnú väzbu delegátov alebo WRC. Ak by chceli zapojiť
-          WDC, uistite sa že sa opýtate skoro.
+          Napíšte sem incidenty, ktoré stoja za to byť spomenuté. Očíslujte ich začínajúc
+          1., aby sa k nim mohli ostatní vyjadriť prostredníctvom daného čísla. Aj
+          pokiaľ neboli žiadne incidenty na súťaži výnimočné, spomeňte aspoň tie najdôležitejšie.
+          Ak chcete dostať spätnú väzbu od WRC/WIC, odškrtnite nižšie prislúchajúce
+          políčka.
         remarks: >-
           Napíšte o nejakých iných detailov, ktoré by ste chceli spomenúť(napr.
           zlepšenie/zhoršenie v komunite, budúce plány pre tento región). Ak ste
@@ -444,7 +443,7 @@ sk:
       documents: Dokumenty WCA
       delegates: WCA delegáti
       organizations: Regionálne Organizácie
-      faq: Často pýtané otázky(FAQ)
+      faq: Často pýtané otázky (FAQ)
       contact: Kontakné infomácie
       tools: Prístroje
       logo: Logo
@@ -568,17 +567,17 @@ sk:
         Výsledkový tím WCA použitím <a href="%{dob_form_path}">tohoto
         formuláru</a>.
       wca_id_no_gender_html: >-
-        Nemáme zaznamenané vaše pohlavie pre toto WCA ID. Prosím, pošlite email
-        na <a href='%{wrt_contact_path}' target='_blank'>WCA
-        Výsledkový Tím</a>  pre riešenie problému.
+        Nemáme zaznamenané vaše pohlavie pre toto WCA ID. Prosím, pošlite email na
+        <a href='%{wrt_contact_path}' target='_blank'>WCA Výsledkový Tím</a> pre riešenie
+        problému.
       wca_id_no_citizenship_html: >-
-        Nemáme zaznamenané vaše občianstvo pre toto WCA ID. Prosím, pošlite
-        email na <a href='%{wrt_contact_path}'
-        target='_blank'>WCA Výsledkový Tím</a>  pre riešenie problému.
+        Nemáme zaznamenané vaše občianstvo pre toto WCA ID. Prosím, pošlite email
+        na <a href='%{wrt_contact_path}' target='_blank'>WCA Výsledkový Tím</a> pre
+        riešenie problému.
       wca_id_no_name_html: >-
-        Nemáme zaznamenané vaše meno pre toto WCA ID. Prosím, pošlite email na
-        <a href='%{wrt_contact_path}' target='_blank'>WCA
-        Výsledkový Tím</a>  pre riešenie problému.
+        Nemáme zaznamenané vaše meno pre toto WCA ID. Prosím, pošlite email na <a
+        href='%{wrt_contact_path}' target='_blank'>WCA Výsledkový Tím</a> pre riešenie
+        problému.
     successes:
       messages:
         account_updated: Účet upravený
@@ -1089,7 +1088,7 @@ sk:
       success: Ďakujeme vám za vašu správu. Budeme vás kontaktovať!
       delivery_error: Chyba pri posielaní správy.
   faq:
-    title: Často pýtané otázky(FAQ)
+    title: Často pýtané otázky (FAQ)
     contact_html: 'Ak žiadne z týchto odpovedí nepomohli, prosím %{contact_us}!'
     contact_us: kontaktujte nás
     search_for_competition: 'Tu hľadajte súťaž:'
@@ -1367,6 +1366,10 @@ sk:
       ranking: Top %{ranking}
       percent: Top %{percent}%
       all_advance: Všetci postupujú
+      attempt_result:
+        time: '%{round_format} < %{time}'
+        moves: '%{round_format} < %{moves}'
+        points: '%{round_format} > %{points}'
     all_advance: Všetci súťažiaci postupujú
     ranking: Najlepších %{ranking} postupuje do ďalšieho kola
     percent: Najlepších %{percent}% postupuje do ďalšieho kola
@@ -1407,6 +1410,8 @@ sk:
     attempt_name: Pokus %{number}
   round:
     title: Kolá
+    name: '%{event_name} %{round_name}'
+    round_number: '%{round_number}. kolo'
   scramble_set:
     group: Skupina %{number}
     attempt: Pokus %{number}
