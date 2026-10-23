@@ -1,15 +1,37 @@
 sk:
   countries:
-    XA: Viaceré krajiny(Ázia)
-    XE: Viaceré krajiny(Európa)
-    XS: Viaceré krajiny(Južná Amerika)
-    XM: Viaceré Krajiny (Ameriky)
+    XA: Viaceré krajiny (Ázia)
+    XE: Viaceré krajiny (Európa)
+    XS: Viaceré krajiny (Južná Amerika)
+    XM: Viaceré krajiny (Ameriky)
     MO: Macao, Čína
     HK: Hong Kong, Čína
     KR: Kórea
     TW: Čínsky Tchaj-pej
+    AG: Antigua a Barbuda
+    BA: Bosna a Hercegovina
+    CD: Konžská demokratická republika
+    CG: Kongo
+    CI: Pobrežie Slonoviny
+    CV: Kapverdy
+    FM: Mikronézske federatívne štáty
+    GW: Guinea-Bissau
+    KN: Svätý Krištof a Nevis
+    KP: Kórejská ľudovodemokratická republika
+    LC: Svätá Lucia
+    MK: Severné Macedónsko
+    MM: Mjanmarsko
+    PS: Palestína
+    ST: Svätý Tomáš a Princov ostrov
+    SZ: Eswatini
+    TT: Trinidad a Tobago
+    VC: Svätý Vincent a Grenadíny
+    XF: Viaceré krajiny (Afrika)
+    XN: Viaceré krajiny (Severná Amerika)
+    XO: Viaceré krajiny (Oceánia)
+    XW: Viaceré krajiny (svet)
   continents:
-    Multiple Continents: Viaceré Kontinenty
+    Multiple Continents: Viaceré kontinenty
     Africa: Afrika
     Asia: Ázia
     Europe: Európa
@@ -24,30 +46,31 @@ sk:
     '666': Kocka 6x6x6
     '777': Kocka 7x7x7
     333bf: 3x3x3 poslepiačky
-    333fm: 3x3x3 Na najmenej ťahov
-    333oh: 3x3x3 Jednou rukou
-    333ft: 3x3x3 S nohami
-    clock: Rubik's Clock
+    333fm: 3x3x3 na najmenej ťahov
+    333oh: 3x3x3 jednou rukou
+    333ft: 3x3x3 s nohami
+    clock: Clock
     minx: Megaminx
     pyram: Pyraminx
     skewb: Skewb
     sq1: Square-1
     444bf: 4x4x4 poslepiačky
     555bf: 5x5x5 poslepiačky
-    333mbf: 3x3x3 Viacero kociek poslepiačky
+    333mbf: 3x3x3 viacero kociek poslepiačky
     magic: Magic
     mmagic: Master Magic
-    333mbo: 3x3x3 Viacero kociek poslepiačky-starý štýl
+    333mbo: 3x3x3 viacero kociek poslepiačky - starý štýl
+    fto: Face Turning Octahedron
   rounds:
     '0':
-      name: Kolo kvalifikácie
-      cell_name: Kvalifikácia
+      name: Kvalifikačné kolo
+      cell_name: Kvalifikačné kolo
     '1':
       name: Prvé kolo
-      cell_name: Prvý
+      cell_name: Prvé kolo
     '2':
       name: Druhé kolo
-      cell_name: Druhý
+      cell_name: Druhé kolo
     '3':
       name: Semifinále
       cell_name: Semifinále
@@ -55,22 +78,22 @@ sk:
       name: B Finále
       cell_name: B Finále
     c:
-      name: Kombinované finále
-      cell_name: Kombinované finále
+      name: Finále
+      cell_name: Finále
     d:
-      name: Kombinované Prvé kolo
-      cell_name: Kombinované Prvé
+      name: Prvé kolo
+      cell_name: Prvé kolo
     e:
-      name: Kombinovane Druhé kolo
-      cell_name: Kombinovane Druhé
+      name: Druhé kolo
+      cell_name: Druhé kolo
     f:
       name: Finále
       cell_name: Finále
     g:
-      name: Kombinované tretie kolo
-      cell_name: Kombinovane Tretie
+      name: Semifinále
+      cell_name: Semifinále
     h:
-      name: Kombinovaná kvalifikácia
+      name: Kvalifikačné kolo
       cell_name: Kombinovaná kvalifikácia
   cutoff:
     time:
@@ -87,9 +110,9 @@ sk:
       other: '%{count} pokusov na dostanie > %{points} bodov'
   time_limit:
     cumulative:
-      across_rounds: '%{time} pre kolá %{rounds}'
+      across_rounds: '%{time} dokopy pre %{rounds}'
     333fm: 1 hodina
-    333mbf: 10 minút na jednu kocku
+    333mbf: 10 minút na jednu kocku, najviac dokopy 60:00.00
   common:
     continent: Kontinent
     country: Krajina
@@ -102,18 +125,27 @@ sk:
       no_date: Nie je dátum
     user:
       wca_id: WCA ID
-    all_regions: Všetky regióny
+      representing: Reprezentujúci
+    all_regions: Všetky krajiny
     errors:
       invalid: neplatný
     days:
       one: Jeden deň
-      few: '-'
+      few: '%{count} dni'
       other: '%{count} dní'
     search_site: Hľadať
     filter: Filter
     delete: Vymazať
     date_placeholder: RRRR-MM-DD
     datetime_placeholder: 'RRRR-MM-DD HH:MM'
+    world: Svet
+    hello: Ahoj %{name},
+    back_to_top: Späť na začiatok
+    back: Späť
+    time_format: 24h
+    solve_time:
+      unit_seconds: sekúnd
+      unit_moves: ťahov
   oauth:
     applications:
       your_apps: Tvoje OAuth Aplikácie
@@ -129,7 +161,7 @@ sk:
   helpers:
     submit:
       competition_medium:
-        create: Odoslať media
+        create: Odoslať
         update: Upraviť
   activerecord:
     attributes:
@@ -152,6 +184,9 @@ sk:
         delegate_status: Status delegáta
         region: Región
         user_preferred_events: Preferované eventy
+        registration_notifications_enabled: Pošli mi email, keď sa niekto 
+          prihlási na súťaž, ktorú organizujem/delegujem.
+        location: Poloha
       registration:
         guests: Hostia
         comments: Komentáre
@@ -1269,12 +1304,58 @@ sk:
     selector_elements: {}
   trainee_delegate_application: {}
   homepage: {}
-  qualification: {}
+  qualification:
+    type_label: Typ kvalifikácie
+    result_type: Typ výsledku
+    for_event: Kvalifikácia pre %{event}
+    type:
+      none: Bez kvalifikácie
+      result: Podľa výsledku
+      ranking: Top N
+      any_result: Akýkoľvek výsledok
+    single:
+      time: Single lepší ako %{time}
+      moves: Single lepší ako %{moves} ťahov
+      points: Single viac ako %{points} bodov
+      ranking: Top %{ranking} podľa singlu
+      any_result: Akýkoľvek single
+    average:
+      time: Priemer lepší ako %{time}
+      moves: Priemer lepší ako %{moves} ťahov
+      points: Priemer lepší ako %{points} bodov
+      ranking: Top %{ranking} podľa priemeru
+      any_result: Akýkoľvek priemer
+    deadline:
+      by_date: do %{date}
   search_results: {}
   validators: {}
-  formats: {}
+  formats:
+    "1": Best of 1
+    "2": Best of 2
+    "3": Best of 3
+    "5": Best of 5
+    "a": Average of 5
+    "m": Mean of 3
+    short:
+      "1": Bo1
+      "2": Bo2
+      "3": Bo3
+      "5": Bo5
+      "a": Ao5
+      "m": Mo3
+      "h": H2H
   advancement_condition:
-    short: {}
+    short:
+      ranking: Top %{ranking}
+      percent: Top %{percent}%
+      all_advance: Všetci postupujú
+    all_advance: Všetci súťažiaci postupujú
+    ranking: Najlepších %{ranking} postupuje do ďalšieho kola
+    percent: Najlepších %{percent}% postupuje do ďalšieho kola
+    attempt_result:
+      time: '%{round_format} < %{time} postupuje do ďalšieho kola'
+      moves: '%{round_format} < %{moves} ťahov postupuje do ďalšieho kola'
+      points: '%{round_format} > %{points} bodov postupuje do ďalšieho kola'
   page:
     teams_committees_councils: {}
     contacts:
@@ -1302,3 +1383,20 @@ sk:
   user_roles:
     email: {}
   user_groups: {}
+  country_bands:
+    due_value: $%{value} za súťažiaceho za súťaž
+  attempts:
+    attempt_name: Pokus %{number}
+  round:
+    title: Kolá
+  scramble_set:
+    group: Skupina %{number}
+    attempt: Pokus %{number}
+  activity:
+    tutorial: Návod pre nováčikov
+    multi: Odovzdanie kociek pre 3x3x3 viacero kociek poslepiačky
+    breakfast: Raňajky
+    lunch: Obed
+    dinner: Večera
+    awards: Odovzdávanie cien
+    misc: Iné
