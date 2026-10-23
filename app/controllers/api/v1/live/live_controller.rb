@@ -77,7 +77,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def by_person
     registration_id = params.require(:registration_id)
-    registration = Registration.find(registration_id)
+    registration = @competition.registrations.find(registration_id)
 
     results = registration.live_results.includes(:live_attempts)
 
