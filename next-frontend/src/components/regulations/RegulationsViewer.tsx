@@ -4,21 +4,17 @@ import { MouseEvent, useCallback, useMemo, useState } from "react";
 import {
   Box,
   Combobox,
-  IconButton,
   Portal,
   Text,
   VStack,
   createListCollection,
 } from "@chakra-ui/react";
-import { LuArrowUp, LuSearch } from "react-icons/lu";
-import { useOnInView } from "react-intersection-observer";
-import { useT } from "@/lib/i18n/useI18n";
+import { LuSearch } from "react-icons/lu";
+import useIsScrolled from "@/lib/hooks/useIsScrolled";
+import BackToTopButton from "../BackToTopButton";
 
 const MIN_QUERY_LENGTH = 2;
 const MAX_RESULTS = 50;
-// Grows the observed area upwards, so the top sentinel only counts as out of
-// view once the reader has scrolled a screenful or so past it.
-const BACK_TO_TOP_ROOT_MARGIN = "400px 0px 0px 0px";
 
 interface SearchItem {
   id: string;
@@ -90,13 +86,8 @@ export default function RegulationsViewer({
 }: {
   contentHtml: string;
 }) {
-  const { t } = useT();
   const [query, setQuery] = useState("");
-  const [isScrolledDown, setIsScrolledDown] = useState(false);
-
-  const topSentinelRef = useOnInView((inView) => setIsScrolledDown(!inView), {
-    rootMargin: BACK_TO_TOP_ROOT_MARGIN,
-  });
+  const { isScrolledDown, ref } = useIsScrolled();
 
   const items = useMemo(() => extractSearchItems(contentHtml), [contentHtml]);
 
@@ -156,7 +147,7 @@ export default function RegulationsViewer({
   return (
     <VStack align="stretch" gap={4}>
       {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-      <Box ref={topSentinelRef} position="absolute" />
+      <Box ref={ref} position="absolute" />
 
       <Box position="sticky" top={0} zIndex={1} bg="bg" py={2}>
         <Combobox.Root
@@ -207,20 +198,7 @@ export default function RegulationsViewer({
         dangerouslySetInnerHTML={{ __html: contentHtml }}
       />
 
-      {isScrolledDown && (
-        <IconButton
-          aria-label={t("common.back_to_top")}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          position="fixed"
-          bottom={6}
-          insetEnd={6}
-          zIndex="sticky"
-          rounded="full"
-          animation="fade-in"
-        >
-          <LuArrowUp />
-        </IconButton>
-      )}
+      <BackToTopButton visible={isScrolledDown} />
     </VStack>
   );
 }
