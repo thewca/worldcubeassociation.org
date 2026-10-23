@@ -377,6 +377,9 @@ Rails.application.routes.draw do
       get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
 
       resources :competitions, only: [] do
+        get '/results' => 'competitions#results', as: :results
+        get '/podiums' => 'competitions#podiums', as: :podiums
+
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         resource :bookmark, only: %i[show create destroy]
         namespace :live do

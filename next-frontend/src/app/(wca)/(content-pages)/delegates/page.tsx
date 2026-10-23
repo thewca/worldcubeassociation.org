@@ -24,6 +24,8 @@ import AdminModeToggle from "@/app/(wca)/(content-pages)/delegates/adminModeTogg
 import OpenapiError from "@/components/ui/openapiError";
 import TabTarget from "@/components/ui/tabTarget";
 import { Metadata } from "next";
+import { Suspense } from "react";
+import Loading from "@/components/ui/loading";
 
 // Editing a user is still served by Rails, which sits at the root of the public API host.
 const RAILS_ROOT_URL = new URL(process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL!)
@@ -37,11 +39,19 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function DelegatesPage({
-  searchParams,
-}: {
+type DelegatesPageProps = {
   searchParams: Promise<{ region?: string; admin?: string }>;
-}) {
+};
+
+export default function DelegatesPage({ searchParams }: DelegatesPageProps) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Delegates searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function Delegates({ searchParams }: DelegatesPageProps) {
   const { t } = await getT();
   const { region, admin } = await searchParams;
 
@@ -209,6 +219,7 @@ async function DelegateGrid({
           profilePicture={role.user.avatar}
           name={role.user.name}
           wcaId={role.user.wca_id}
+          email={role.user.email}
           roles={[
             {
               teamRole: t(
@@ -218,6 +229,7 @@ async function DelegateGrid({
               staffColor: "yellow",
             },
           ]}
+
           action={
             isAdminMode && (
               <IconButton

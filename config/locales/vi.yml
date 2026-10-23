@@ -1132,7 +1132,7 @@ vi:
         confirmation_link: Xác nhận tài khoản của tôi.
         activate: >-
           Sau khi kích hoạt thành công, bạn có thể đăng nhập vào trang web của WCA:
-          
+
         login_form: đơn đăng nhập
         addendum: >-
           Email này được tự động gửi đi. Nếu bạn không đăng ký tài khoản trên
@@ -3107,6 +3107,7 @@ vi:
       date_circa: Ngày ước tính
   notifications:
     connect_wca_id: Kết nối ID WCA với tài khoản của bạn!
+    copied_to_clipboard: Đã sao chép vào bảng nhớ tạm
   payments:
     header: Lịch sử thanh toná
     messages:
@@ -3576,6 +3577,7 @@ vi:
       total_delegated: Tổng số giải đấu Delegate
       lead_delegated: Các giải đấu làm Trưởng nhóm Delegate
       history: Lịch sử
+    copy_email: Sao chép email
   regional_organizations:
     title: Tổ chức khu vực
     content: 'WCA công nhận các Tổ chức Khu vực sau đây:'
