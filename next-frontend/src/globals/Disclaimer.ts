@@ -15,6 +15,10 @@ export const Disclaimer: GlobalConfig = {
       type: "blocks",
       required: true,
       blocks: [ParagraphBlock],
+      admin: {
+        description:
+          "The paragraphs making up the Disclaimer page, top to bottom.",
+      },
     },
   ],
   hooks: {

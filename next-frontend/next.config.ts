@@ -75,6 +75,7 @@ const nextConfig: NextConfig = {
   cacheHandlers: {
     remote: require.resolve("./src/lib/cache/cacheComponentsHandler.js"),
   },
+  partialPrefetching: true,
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },

@@ -3768,6 +3768,7 @@ it:
       total_delegated: Gare totali da Delegato
       lead_delegated: Competizioni da Delegato principale
       history: Cronologia
+    copy_email: 'Copia email'
   regional_organizations:
     title: Organizzazioni regionali
     content: 'La WCA riconosce le seguenti Organizzazioni Regionali:'
