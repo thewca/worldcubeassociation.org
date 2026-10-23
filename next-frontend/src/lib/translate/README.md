@@ -136,7 +136,7 @@ Details worth knowing:
 
 ## `sync.ts` — writing back, and the run itself
 
-### `runSync(payload, { seed }): SyncReport`
+### `runSync(payload, { shouldSeed }): SyncReport`
 
 One full sync, shared by both entry points so they cannot drift apart on ordering or on the
 seeding rule:
@@ -145,7 +145,7 @@ seeding rule:
 2. For each non-English locale, sequentially (`syncLocale`): `ensureLanguage`, optionally seed,
    `pullTranslations`, `applyLocale`. Sequential on purpose — one locale at a time bounds the write load on both sides.
 
-`seed: true` additionally uploads translations that already exist in Payload *before* pulling.
+`shouldSeed: true` additionally uploads translations that already exist in Payload *before* pulling.
 That is a one-time migration step. Routine syncs never push translations upward, because doing so
 would overwrite newer translator work with whatever Payload happens to hold.
 

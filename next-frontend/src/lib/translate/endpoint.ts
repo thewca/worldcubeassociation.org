@@ -1,4 +1,4 @@
-import type { Endpoint } from "payload";
+import { addDataAndFileToRequest, type Endpoint } from "payload";
 import { isAdmin } from "@/payload.access";
 import { syncSoon } from "./hooks";
 import { weblateConfigured } from "./weblate";
@@ -24,7 +24,8 @@ export const weblateSyncEndpoint: Endpoint = {
         { status: 503 },
       );
     }
-    const seed = req.searchParams.get("seed") === "true";
-    return Response.json({ started: syncSoon(req.payload, { seed }) });
+    await addDataAndFileToRequest(req);
+    const shouldSeed = req.data?.shouldSeed === true;
+    return Response.json({ started: syncSoon(req.payload, { shouldSeed }) });
   },
 };

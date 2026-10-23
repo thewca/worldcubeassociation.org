@@ -34,7 +34,7 @@ let inFlight: Promise<unknown> | null = null;
  */
 export function syncSoon(
   payload: Payload,
-  options: { seed?: boolean } = {},
+  options: { shouldSeed?: boolean } = {},
 ): boolean {
   if (!weblateConfigured || inFlight) return false;
   inFlight = runSync(payload, options)

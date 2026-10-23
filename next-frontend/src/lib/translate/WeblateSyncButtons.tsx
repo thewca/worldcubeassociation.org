@@ -11,24 +11,25 @@ export function WeblateSyncButtons() {
   } = useConfig();
   const [busy, setBusy] = useState(false);
 
-  const start = async (seed: boolean) => {
+  const start = async (shouldSeed: boolean) => {
     setBusy(true);
-    try {
-      const res = await fetch(`${api}/weblate-sync?seed=${seed}`, {
-        method: "POST",
-        credentials: "include",
-      });
-      const body = await res.json();
-      if (!res.ok) throw new Error(body.error ?? res.statusText);
-      if (body.started) {
-        toast.success(seed ? "Weblate seed started" : "Weblate sync started");
-      } else {
-        toast.info("A Weblate sync is already running, try again shortly");
-      }
-    } catch (error) {
-      toast.error(`Could not start the Weblate sync: ${String(error)}`);
-    } finally {
-      setBusy(false);
+    const res = await fetch(`${api}/weblate-sync`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ shouldSeed }),
+    }).finally(() => setBusy(false));
+    const body = await res.json();
+    if (!res.ok) {
+      toast.error(
+        `Could not start the Weblate sync: ${body.error ?? res.statusText}`,
+      );
+    } else if (body.started) {
+      toast.success(
+        shouldSeed ? "Weblate seed started" : "Weblate sync started",
+      );
+    } else {
+      toast.info("A Weblate sync is already running, try again shortly");
     }
   };
 

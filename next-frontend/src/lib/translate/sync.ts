@@ -244,11 +244,11 @@ async function syncLocale(
   payload: Payload,
   locale: TypedLocale,
   docs: SourceDoc[],
-  seed: boolean,
+  shouldSeed: boolean,
 ): Promise<{ seeded: SyncReport["seeded"]; applied: ApplyResult }> {
   await ensureLanguage(locale);
 
-  const existing = seed
+  const existing = shouldSeed
     ? await collectExistingTranslations(payload, locale, docs)
     : {};
   const pushed =
@@ -276,7 +276,7 @@ async function syncLocale(
  */
 export async function runSync(
   payload: Payload,
-  options: { seed?: boolean } = {},
+  options: { shouldSeed?: boolean } = {},
 ): Promise<SyncReport> {
   const docs = await collectSourceDocs(payload);
   const source = unitsFromDocs(docs);
@@ -290,7 +290,7 @@ export async function runSync(
     .reduce<Promise<Awaited<ReturnType<typeof syncLocale>>[]>>(
       async (previous, locale) => [
         ...(await previous),
-        await syncLocale(payload, locale, docs, !!options.seed),
+        await syncLocale(payload, locale, docs, !!options.shouldSeed),
       ],
       Promise.resolve([]),
     );
