@@ -1440,8 +1440,8 @@ class Competition < ApplicationRecord
     competition_events.any? { |ce| ce.rounds.any?(&:cutoff) }
   end
 
-  def uses_advancement_condition?
-    competition_events.any? { |ce| ce.rounds.any?(&:advancement_condition) }
+  def uses_participation_condition?
+    competition_events.any? { |ce| ce.rounds.any?(&:participation_condition?) }
   end
 
   def uses_cumulative?
