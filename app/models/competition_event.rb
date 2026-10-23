@@ -171,12 +171,11 @@ class CompetitionEvent < ApplicationRecord
     # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)
     #   need the record to already exist in the database in order to reference their IDs
     new_rounds = wcif["rounds"].zip(model_rounds).map do |round_wcif, round|
-      if at_least_v2
-        # Linked Round already needs to be present for computing the backlinking below
-        round.linked_round = Round.compute_linked_round(round_wcif, round, model_rounds)
-      end
+      # Linked Round already needs to be present for computing the backlinking below
+      round.linked_round = Round.compute_linked_round(round_wcif, round, model_rounds) if at_least_v2
+      round.participation_source = Round.backport_participation_source(round, model_rounds)
 
-      round.update!(**Round.backport_participation_ruleset(round, model_rounds))
+      round.save!
       round
     end
     previously_linked_rounds.each(&:destroy_if_orphaned)
