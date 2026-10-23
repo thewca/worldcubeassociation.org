@@ -49,6 +49,7 @@ class Competition < ApplicationRecord
   has_many :accepted_registrations, -> { accepted }, class_name: "Registration", foreign_key: "competition_id", inverse_of: :competition
   has_many :accepted_newcomers, -> { where(wca_id: nil) }, through: :accepted_registrations, source: :user
   has_many :duplicate_checker_job_runs, dependent: :delete_all
+  has_many :wcif_revisions, -> { order(:revision_number) }, dependent: :destroy, inverse_of: :competition
   has_one :tickets_competition_result
   has_one :result_ticket, through: :tickets_competition_result, source: :ticket
 
@@ -739,7 +740,8 @@ class Competition < ApplicationRecord
              'duplicate_checker_job_runs',
              'tickets_competition_result',
              'result_ticket',
-             'lead_delegate'
+             'lead_delegate',
+             'wcif_revisions'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
