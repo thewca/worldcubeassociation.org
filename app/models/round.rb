@@ -41,9 +41,6 @@ class Round < ApplicationRecord
   serialize :cutoff, coder: Cutoff
   validates_associated :cutoff
 
-  serialize :advancement_condition, coder: AdvancementConditions::AdvancementCondition
-  validates_associated :advancement_condition
-
   serialize :participation_condition, coder: ResultConditions::ResultCondition
   validates_associated :participation_condition
 
