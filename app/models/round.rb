@@ -181,8 +181,12 @@ class Round < ApplicationRecord
     cutoff ? cutoff.to_s(self, short: short) : ""
   end
 
+  def participation_condition_to_desc(short: false)
+    self.participation_condition&.to_desc(self, short: short)
+  end
+
   def advancement_condition_to_s(short: false)
-    advancement_condition ? advancement_condition.to_s(self, short: short) : ""
+    target_rounds.first&.participation_condition_to_desc(short: short)
   end
 
   def live_podium
