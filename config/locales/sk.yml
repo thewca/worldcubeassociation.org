@@ -187,6 +187,8 @@ sk:
         registration_notifications_enabled: Pošli mi email, keď sa niekto 
           prihlási na súťaž, ktorú organizujem/delegujem.
         location: Poloha
+        receive_developer_mails: Chcem dostávať upozornenia o zmenách v WCA 
+          software zdrojoch
       registration:
         guests: Hostia
         comments: Komentáre
@@ -195,17 +197,26 @@ sk:
         name: Meno
         birthday: Dátum narodenia
         registration_competition_events: Eventy
+        email: Email
+        search: Hľadať...
+        too_few_chars: Nedostatok znakov
+        no_results: Nenašli sa žiadne výsledky
       competition_tab:
         content: Obsah
         name: Meno
       delegate_report:
         discussion_url: URL diskusie na Google Group
         schedule_url: URL rozvrhu
-        equipment: Zariadenie
-        venue: Destinácia
-        organization: Organizácia
+        equipment: Vybavenie
+        venue: Priestory
+        organization: Organizácia súťaže
         incidents: Incidenty
-        remarks: Poznámky
+        remarks: Poznámky delegátov
+        summary: Zhrnutie
+        wrc_feedback_requested: Chcem dostať spätnú väzbu od WRC na niektorý z 
+          vyššie uvedených incidentov.
+        wic_feedback_requested: Chcem dostať spätnú väzbu od WIC na niektorý z 
+          vyššie uvedených incidentov.
       person:
         wca_id: Osoba
         country_id: Krajina
@@ -242,6 +253,13 @@ sk:
         submitter_email: Email zadávateľa
         submitter_comment: Komentár zadávateľa
         status: Status
+      regional_organization:
+        name: Meno
+        country: Krajina
+        website: Webstránka
+        logo: Logo
+        email: Email
+        address: Oficiálna adresa
   enums:
     user:
       gender:

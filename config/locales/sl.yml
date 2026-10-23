@@ -64,6 +64,7 @@ sl:
     magic: Magic
     mmagic: Master magic
     333mbo: 3x3x3 več kock slepo (stari način)
+    fto: Oktaeder
   formats:
     '1': Najboljši izmed 1
     '2': Najboljši izmed 2
@@ -1411,6 +1412,7 @@ sl:
         WCA ekipo za rezultate (WRT) preko <a href="%{dob_form_path}">tega
         obrazca</a>.
       unknown_wca_id_html: 'WCA ID %{link_id} ne obstaja.'
+      search_for_delegate: Išči delegate
   user_roles:
     email:
       role_metadata:
@@ -1419,6 +1421,9 @@ sl:
         locale: Jezik
         group_name: Ime ekipe/odbora
         delegated_competitions_count: Število delegiranih tekmovanj
+        wca_id: WCA ID
+        location: Lokacija
+        email: E-naslov
   user_groups:
     group_types:
       board: WCA upravni odbor
@@ -1457,6 +1462,7 @@ sl:
         Napisati morate komentar. Prosimo, preberite pogoje za prijavo zgoraj,
         da vidite, kaj mora biti zapisano (npr. na kateri lokaciji boste
         tekmovali, če gre za tekmovanje v disciplini FMC na več lokacijah).
+      banned_until: Vaša prepoved se izteče %{date}.
     registration_info_people:
       newcomer:
         one: novinec
@@ -1553,6 +1559,12 @@ sl:
       payment_requested_on: 'Plačilo zahtevano: %{date}'
       series_registrations: Prijave v tej seriji tekmovanj
       total: Skupaj
+      export_to_csv:
+        one: Izvozi %{count} prijavo v CSV
+        two: Izvozi %{count} prijavi v CSV
+        few: Izvozi %{count} prijave v CSV
+        other: Izvozi %{count} prijav v CSV
+      export_all_to_csv: Izvozi vse prijave v CSV
     new_registration:
       title: 'Prijavi se na %{comp}'
     sign_in: Vpis
@@ -1679,8 +1691,8 @@ sl:
         ustrezno posodobljena.
       registrations_file_label: Datoteka prijav
       registrations_file_hint: >-
-        Datoteka CSV s stolpci: status, ime, regija, WCA ID, datum rojstva,
-        spol, e-naslov in en stolpec za vsako disciplino.
+        Datoteka CSV s stolpci: status, ime, regija, WCA ID, datum rojstva, spol,
+        e-naslov in en stolpec za vsako disciplino ali datoteka JSON z WCIF podatki.
       import: Uvozi
       errors:
         error: 'Napaka pri uvozu %{registration}: %{error}.'
@@ -1706,6 +1718,12 @@ sl:
           1944-07-13). Pojavili so se datumi, ki jih ni mogoče razčleniti:
           %{raw_dobs}.
         empty_file: Datoteka je prazna.
+        invalid_country: 'Neveljavna država: %{country}.'
+        invalid_wcif: Datoteka JSON ne vsebuje veljavnih WCIF podatkov.
+        unsupported_file_format: Nepodprt format datoteke. Naložite JSON ali CSV
+          datoteko.
+      preview: Predogled prijavne podatke
+      cancel: Prekliči
     add:
       title: 'Dodaj prijave za %{comp}'
       info: >-
@@ -1719,6 +1737,8 @@ sl:
         tekmovanja.
       errors:
         already_registered: Za to osebo že obstaja prijava.
+      ots_before_registration_open: Prijav na samem tekmovanju ni možno 
+        uporabiti, dokler se prijave ne odprejo.
   competitions:
     messages:
       not_visible: To tekmovanje ni vidno javnosti.
@@ -1813,6 +1833,7 @@ sl:
         few: 'Še %{count} prosta mesta.'
         other: 'Še %{count} prostih mest.'
       no_spots_left: Vsa mesta so zapolnjena.
+      provisional_live_results: 'Medtem si lahko začasne rezultate ogledate tukaj:'
     live:
       title: Rezultati v živo
       manage_rounds: Upravljanje krogov
@@ -1873,6 +1894,10 @@ sl:
             (%{worst_single}) je velika. Preverite, če so rezultati pravilno
             vnešeni.
           round_locked: 'Naslednji krog je že odprt, spremembe nanj ne bodo vplivale!'
+          9m_violated: V prejšnjem krogu ni vnesenih dovolj rezultatov, da bi 
+            bil izpolnjen pogoj iz člena 9m3. Če v prejšnjem krogu ne bo 
+            vnesenih vsaj %{competitor_count_needed} rezultatov, rezultati tega 
+            kroga ne bodo priznani.
         quit:
           title: Izloči tekmovalca
           next_to_advance:
@@ -1900,6 +1925,11 @@ sl:
           still_processing: >-
             Tekmovalca ni možno izločiti dokler so nekateri rezultati še v
             obdelavi
+          in_batch: Ni mogoče izločiti tekmovalca, katerega rezultati so del še 
+            neoddane skupine rezultatov
+          scoresheet_warning: Tekmovalca izločite šele takrat, ko imate njegov 
+            prazen tekmovalni listek fizično v rokah. Tekmovalca ne morete 
+            ponovno dodati v krog, ki je že zaključen.
         add_competitor:
           single_round: Dodaj tekmovalca v krog
           multiple_rounds:
@@ -1907,6 +1937,11 @@ sl:
             two: Dodaj tekmovalca v dvojni krog
             few: Dodaj tekmovalca v dvojni krog
             other: Dodaj tekmovalca v dvojni krog
+          event_edit_warning: Ta tekmovalec ni prijavljen na to disciplino, 
+            spremembe disciplin pa niso več mogoče. Tekmovalca vseeno lahko 
+            dodate, vendar se prepričajte, da je to res namerno.
+          round_closed: Tekmovalca ne morete dodati v krog, ki je že zaključen
+        first_timer: Novinec
       results:
         competitor: Tekmovalec
         mean: Povprečje
@@ -2088,6 +2123,7 @@ sl:
       bookmark: Označi si to tekmovanje
       is_bookmarked: To tekmovanje ste si označili
       number_of_bookmarks: Število označb
+      waiting_list_size: Velikost čakalnega seznama
     index:
       title: Tekmovanja
       all_events: Vse
@@ -2150,6 +2186,20 @@ sl:
             čakalni seznam.
       no_more_comps: To so vsa tekmovanja.
       no_comp_found: Najdeno ni bilo nobeno tekmovanje.
+      all_competitions: Vsa tekmovanja
+      event: Disciplina
+      name: Ime
+      location: Lokacija
+      location_placeholder: Vpišite naslov
+      use_my_location: Uporabi mojo lokacijo
+      location_sign_in_required: Če želite iskati po naslovu, se vpišite
+      location_not_found: Za ta naslov ni bila najdena nobena lokacija
+      location_search_failed: Iskanje naslova ni uspelo, poskusite znova kasneje
+      distance: Razdalja
+      distance_units:
+        km: km
+        mi: mi
+      advanced_filters: Napredni filtri
     my_competitions_table:
       edit: Uredi
       registrations: Prijave
@@ -4275,3 +4325,63 @@ sl:
       invalid_spoken_delegate: Eden ali več izbranih delegatov, s katerimi ste 
         govorili, v izbrani regiji ni več aktiven kot delegat ali delegat 
         začetnik.
+      declarations_required: Seznaniti se morate z vsemi izjavami.
+      business_involvement_required: Označite, ali ste vključeni v poslovno 
+        dejavnost, povezano s kockanjem.
+      business_involvement_explanation_required: Razložite svojo vlogo v 
+        poslovni dejavnosti, povezani s kockanjem.
+    form:
+      declaration_and_basic_information: Izjave in osnovne informacije
+      name: Ime
+      wca_id: WCA ID
+      email: E-naslov
+      age: Starost
+      competition_count: Število tekmovanj
+      region_and_references: Regija in reference
+      region: V kateri delegatski regiji trenutno bivate?
+      region_placeholder: Izberite svojo regijo
+      subregion: V kateri delegatski podregiji trenutno bivate?
+      subregion_placeholder: Izberite svojo podregijo
+      reviewing_delegate: Delegat pregledovalec
+      spoken_delegates: S katerimi delegati ali delegati začetniki ste govorili 
+        o tem, da bi postali delegat pripravnik?
+      recommenders: Kateri delegati ali delegati začetniki so se strinjali, da 
+        vas predlagajo za delegata pripravnika?
+      delegates_placeholder: Izberite vsaj enega delegata
+      experience_and_motivation: Izkušnje in motivacija
+      introduction: Opišite se v dveh do štirih stavkih.
+      competition_contributions: Podajte povzetek tega, kako ste prispevali k 
+        lokalnim tekmovanjem – poleg tistega, kar se pričakuje od vseh 
+        tekmovalcev.
+      volunteer_history: Če ste že kdaj zasedali prostovoljske položaje pri WCA,
+        jih opišite po vrsti (neobvezno).
+      role_history_warning: Zgodovina vlog na spletni strani bo samodejno 
+        vključena v vašo prijavo. Podatki za starejše vloge niso bili v celoti 
+        naknadno vneseni, zato spodaj dodajte morebitne manjkajoče položaje ali 
+        popravke.
+      present: trenutno
+      board_member: Član upravnega odbora
+      motivation: V dveh do štirih stavkih na opišite svojo motivacijo za 
+        prijavo na mesto delegata pripravnika.
+      relevant_skills: Naštejte najpomembnejše veščine in izkušnje, ki jih imate
+        in ki bi vam pomagale do uspeha na mestu delegata pripravnika.
+      declaration_understands_application: Razumem, da je ta obrazec namenjen 
+        registriranim tekmovalcem, ki se prijavljajo za status delegata 
+        pripravnika.
+      declaration_has_delegate_support: Potrjujem, da sem govoril s 
+        kvalificiranim delegatom v svoji regiji, ki podpira mojo kandidaturo.
+      declaration_proficient_in_english: Potrjujem, da je moje pisno in govorno 
+        znanje angleščine dobro.
+      declaration_read_regulations_html: Potrjujem, da sem prebral <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">WCA 
+        pravilnik</a>.
+      regulations_note: 'Opomba: Od delegatov se ne pričakuje, da poznajo vsako pravilo.
+        Pričakuje pa se, da poznajo osnove in da v primeru negotovosti poiščejo ustrezne
+        informacije.'
+      cubing_business_involvement: Ali ste vključeni v poslovno dejavnost, ki je
+        povezana s kockanjem?
+      cubing_business_involvement_details: Razložite svojo vključenost v 
+        poslovno dejavnost, ki je povezana s kockanjem.
+      "yes": Da
+      "no": Ne
+      submit: Oddaj vlogo
