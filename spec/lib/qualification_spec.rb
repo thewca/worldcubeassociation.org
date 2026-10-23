@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Qualification do
+RSpec.describe CompetitionEvent do
   let(:user) { create(:user_with_wca_id) }
   let(:first_competition) do
     create(
@@ -81,306 +81,128 @@ RSpec.describe Qualification do
   end
 
   context "Single" do
-    it "requires single" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'ranking',
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "requires date" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'ranking',
-        'level' => 1000,
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "requires type" do
-      input = {
-        'resultType' => 'single',
-        'level' => 1000,
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "parses correctly" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-01',
-        'level' => 1000,
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).to be_valid
-    end
-
-    it "parses anyResult correctly" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'anyResult',
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).to be_valid
-    end
-
     it "requires a successful time for ranking" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'ranking',
-        'whenDate' => '2021-02-15',
-        'level' => 50,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::Ranking.new(scope: 'single', value: 50)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
-      expect(qualification.can_register?(user, '333oh')).to be false
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333.meets_qualification?(user)).to be true
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333oh.meets_qualification?(user)).to be false
 
-      input = {
-        'resultType' => 'single',
-        'type' => 'ranking',
-        'whenDate' => '2021-03-15',
-        'level' => 50,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::Ranking.new(scope: 'single', value: 50)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
-      expect(qualification.can_register?(user, '333oh')).to be true
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-03-15')
+      expect(competition_event_333.meets_qualification?(user)).to be true
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-03-15')
+      expect(competition_event_333oh.meets_qualification?(user)).to be true
     end
 
     it "requires a successful time for anyResult" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'anyResult',
-        'whenDate' => '2021-02-15',
-        'level' => 50,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'single', value: nil)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
-      expect(qualification.can_register?(user, '333oh')).to be false
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333.meets_qualification?(user)).to be true
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333oh.meets_qualification?(user)).to be false
 
-      input = {
-        'resultType' => 'single',
-        'type' => 'anyResult',
-        'whenDate' => '2021-03-15',
-        'level' => 50,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'single', value: nil)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
-      expect(qualification.can_register?(user, '333oh')).to be true
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-03-15')
+      expect(competition_event_333.meets_qualification?(user)).to be true
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-03-15')
+      expect(competition_event_333oh.meets_qualification?(user)).to be true
     end
 
     it "requires strictly less than for attemptResult" do
-      input = {
-        'resultType' => 'single',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-02-15',
-        'level' => 1200,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'single', value: 1200)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be false
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333.meets_qualification?(user)).to be false
 
-      input = {
-        'resultType' => 'single',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-02-15',
-        'level' => 1201,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'single', value: 1201)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333.meets_qualification?(user)).to be true
     end
 
     # User's qualifying result was achieved on the 2nd
     it "requires end date before" do
       # Result must be achieved by the 3rd - user qualifies because result achieved before whenDate
-      input = {
-        'resultType' => 'single',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-03-03',
-        'level' => 1150,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'single', value: 1150)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-03-03')
+      expect(competition_event_333.meets_qualification?(user)).to be true
 
       # Result must be achieved by the 2nd - user qualifies because result achieved on whenDate
-      input = {
-        'resultType' => 'single',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-03-02',
-        'level' => 1150,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'single', value: 1150)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-03-02')
+      expect(competition_event_333.meets_qualification?(user)).to be true
 
       # Result must be achieved by the 1st - user does not qualify because result achieved after whenDate
-      input = {
-        'resultType' => 'single',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-03-01',
-        'level' => 1150,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'single', value: 1150)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be false
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-03-01')
+      expect(competition_event_333.meets_qualification?(user)).to be false
     end
   end
 
   context "Average" do
-    it "requires average" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "requires date" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'level' => 1000,
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "requires type" do
-      input = {
-        'resultType' => 'average',
-        'level' => 1000,
-        'whenDate' => '2021-06-01',
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).not_to be_valid
-    end
-
-    it "parses correctly" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-01',
-        'level' => 1000,
-      }
-      qualification = Qualification.load(input)
-      expect(qualification).to be_valid
-    end
-
     it "requires a successful time for ranking" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'ranking',
-        'whenDate' => '2021-02-15',
-        'level' => 50,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::Ranking.new(scope: 'average', value: 50)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '444')).to be false
+      competition_event_444 = CompetitionEvent.new(event_id: '444', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_444.meets_qualification?(user)).to be false
 
-      input = {
-        'resultType' => 'average',
-        'type' => 'ranking',
-        'whenDate' => '2021-03-15',
-        'level' => 50,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::Ranking.new(scope: 'average', value: 50)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '444')).to be true
+      competition_event_444 = CompetitionEvent.new(event_id: '444', qualification_condition: qualification, qualification_latest_date: '2021-03-15')
+      expect(competition_event_444.meets_qualification?(user)).to be true
     end
 
     it "requires a successful time for anyResult" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'anyResult',
-        'whenDate' => '2021-02-15',
-        'level' => 50,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'average', value: nil)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '444')).to be false
+      competition_event_444 = CompetitionEvent.new(event_id: '444', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_444.meets_qualification?(user)).to be false
 
-      input = {
-        'resultType' => 'average',
-        'type' => 'anyResult',
-        'whenDate' => '2021-03-15',
-        'level' => 50,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'average', value: nil)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '444')).to be true
+      competition_event_444 = CompetitionEvent.new(event_id: '444', qualification_condition: qualification, qualification_latest_date: '2021-03-15')
+      expect(competition_event_444.meets_qualification?(user)).to be true
     end
 
     it "requires strictly less than for attemptResult" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-02-15',
-        'level' => 1500,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'average', value: 1500)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be false
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333.meets_qualification?(user)).to be false
 
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-02-15',
-        'level' => 1501,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'average', value: 1501)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333')).to be true
+      competition_event_333 = CompetitionEvent.new(event_id: '333', qualification_condition: qualification, qualification_latest_date: '2021-02-15')
+      expect(competition_event_333.meets_qualification?(user)).to be true
     end
 
     # User's qualifying result was achieved on the 2nd
     it "supports achieving result on qualification date" do
       # Result must be achieved by the 3rd - user qualifies because result achieved before whenDate
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-03-03',
-        'level' => 2500,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'average', value: 2500)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333oh')).to be true
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-03-03')
+      expect(competition_event_333oh.meets_qualification?(user)).to be true
 
       # Result must be achieved by the 2nd - user qualifies because result achieved on whenDate
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-03-02',
-        'level' => 2500,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'average', value: 2500)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333oh')).to be true
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-03-02')
+      expect(competition_event_333oh.meets_qualification?(user)).to be true
 
       # Result must be achieved by the 1st - user does not qualify because result achieved after whenDate
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-03-01',
-        'level' => 2500,
-      }
-      qualification = Qualification.load(input)
+      qualification = ResultConditions::ResultAchieved.new(scope: 'average', value: 2500)
       expect(qualification).to be_valid
-      expect(qualification.can_register?(user, '333oh')).to be false
+      competition_event_333oh = CompetitionEvent.new(event_id: '333oh', qualification_condition: qualification, qualification_latest_date: '2021-03-01')
+      expect(competition_event_333oh.meets_qualification?(user)).to be false
     end
   end
 end

@@ -138,7 +138,7 @@ RSpec.feature "Competition events management" do
         comp_event_333.reload
 
         expect(comp_event_333.qualification_to_s).to eq "Any single solve"
-        expect(comp_event_333.qualification.when_date).to eq qualification_date
+        expect(comp_event_333.qualification_latest_date).to eq qualification_date
       end
     end
   end
