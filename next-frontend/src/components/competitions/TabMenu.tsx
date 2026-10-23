@@ -10,7 +10,6 @@ import {
   IconButton,
   Link as ChakraLink,
   Separator,
-  Spacer,
   Tabs,
   Text,
   TextProps,
@@ -393,18 +392,17 @@ function CollapsibleTabGroup({
                 key={menuKey}
                 disabled={disabled}
               >
-                <Text asChild justifyContent="left">
-                  <TabTarget
-                    tabKey={menuKey}
-                    currentPath={currentPath}
-                    href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
-                    disabled={disabled}
-                    display="flex"
-                  >
-                    {t(i18nKey)} <Spacer />
-                    {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                  </TabTarget>
-                </Text>
+                <TabTarget
+                  tabKey={menuKey}
+                  currentPath={currentPath}
+                  href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
+                  disabled={disabled}
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  {t(i18nKey)}
+                  {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                </TabTarget>
               </Tabs.Trigger>
             ),
           )}
