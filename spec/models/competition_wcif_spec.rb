@@ -1205,7 +1205,7 @@ RSpec.describe "Competition WCIF" do
         # Previously, 333 used to be a "classic" R1 -> R2 -> R3 setup. Now that R1 and R2 are getting linked,
         # R2 cannot point to "only" R1 anymore. Instead, it has to source from the same place as R1,
         # to keep Linked Rounds state consistent.
-        round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source)
+        round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source, participation_condition: nil)
 
         expect(competition.to_wcif(version: wcif_version)["events"]).not_to eq(wcif_unlinked)
 
@@ -1223,7 +1223,7 @@ RSpec.describe "Competition WCIF" do
           linked_round = create(:linked_round)
 
           round333_1.update!(linked_round: linked_round)
-          round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source)
+          round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source, participation_condition: nil)
 
           wcif_events = competition.to_wcif(version: removal_version)["events"]
           wcif_333_event = wcif_events.find { |e| e["id"] == "333" }
