@@ -598,7 +598,7 @@ class Competition < ApplicationRecord
       # message on the edit schedule page?
       warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_event_without_rounds? && schedule_includes_rounds?
 
-      warnings[:participation_conditions] = I18n.t('competitions.messages.participation_condition_must_be_present_for_all_non_initial_rounds') unless rounds.all?(&:participation_condition_is_valid?)
+      warnings[:participation_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:participation_condition_is_valid?)
 
       rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
         warnings["cutoff_is_greater_than_time_limit#{round.id}"] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
