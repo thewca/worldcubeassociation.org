@@ -185,8 +185,8 @@ class Round < ApplicationRecord
     self.participation_condition&.to_desc(self, short: short)
   end
 
-  def advancement_condition_to_s(short: false)
-    target_rounds.first&.participation_condition_to_desc(short: short)
+  def advancement_condition_to_desc(short: false)
+    target_participation_condition&.to_desc(self, short: short)
   end
 
   def live_podium
@@ -874,7 +874,7 @@ class Round < ApplicationRecord
       format_name: full_format_name(with_short_names: true),
       time_limit: time_limit_to_s,
       cutoff: cutoff_to_s(short: short),
-      advancement: advancement_condition_to_s(short: short),
+      advancement: advancement_condition_to_desc(short: short),
     }
   end
 
@@ -909,7 +909,7 @@ class Round < ApplicationRecord
       )
     else
       base_wcif.merge(
-        "advancementCondition" => target_rounds.first&.participation_condition&.to_v1_wcif,
+        "advancementCondition" => target_participation_condition&.to_v1_wcif,
       )
     end
   end
