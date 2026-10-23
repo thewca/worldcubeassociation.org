@@ -7,14 +7,14 @@ sk:
     MO: Macao, Čína
     HK: Hong Kong, Čína
     KR: Kórea
-    TW: Čínsky Tchaj-pej
+    TW: Taiwan
     AG: Antigua a Barbuda
     BA: Bosna a Hercegovina
     CD: Konžská demokratická republika
     CG: Kongo
     CI: Pobrežie Slonoviny
     CV: Kapverdy
-    FM: Mikronézske federatívne štáty
+    FM: Mikronézia
     GW: Guinea-Bissau
     KN: Svätý Krištof a Nevis
     KP: Kórejská ľudovodemokratická republika
@@ -260,6 +260,7 @@ sk:
         logo: Logo
         email: Email
         address: Oficiálna adresa
+        directors_and_officers: Zoznam riaditeľov a úradníkov a ich tituly
   enums:
     user:
       gender:
@@ -273,10 +274,27 @@ sk:
         pending: Čakajúci
       media_type:
         report: Nahlásiť
-        article: Artikel
+        article: Článok
         multimedia: Multimedia
     user_roles:
-      status: {}
+      status:
+        delegate_regions:
+          trainee_delegate: Trainee delegát
+          junior_delegate: Junior delegát
+          delegate: Delegát
+          regional_delegate: Regionálny delegát
+          senior_delegate: Senior delegát
+        teams_committees:
+          member: Člen
+          senior_member: Seniorský člen
+          leader: Líder
+        councils:
+          member: Člen
+          senior_member: Seniorský člen
+          leader: Líder
+        officers:
+          executive_director: WCA výkonný riaditeľ
+          treasurer: WCA tajomník
   simple_form:
     'yes': Áno
     'no': Nie
@@ -289,16 +307,16 @@ sk:
       incident:
         title: 'Nezabudnite, že toto je verejné, čiže to musíte vyplniť v angličtine!'
         private_description: >-
-          Popis incidentu, ktorý bude videný len Delegátmi. Prosím, vyplňte toto
-          v angičtine.
+          Popis incidentu, ktorý bude videný len delegátmi. Prosím, vyplňte toto v
+          angličtine.
         private_wrc_decision: >-
           Finálne rozhodnute WRC obsahujúce súkromné detaily. Prosím, vyplňte
           toto v angličtine.
         public_summary: >-
-          Celkový popis incidentu a jeho rozhodnutia, bude videný verejne.
-          Prosím, vyplňte toto v angličtine.
+          Celkový popis incidentu a jeho rozhodnutia bude videný verejne. Prosím,
+          vyplňte toto v angličtine.
       user:
-        dob: Napíšte váš dátum narodenia vo formáte YYYY-MM-DD
+        dob: Napíšte váš dátum narodenia vo formáte RRRR-MM-DD.
         name: >-
           Napíšte svoje celé meno správne, napríklad <strong>Stefan
           Pochmann</strong>. Nie nepresne ako <strong>s pochman</strong>.
@@ -1263,7 +1281,7 @@ sk:
         zozačiatku označení ako WCA Kandidujúci Delegáti a musia ukázať, že sú
         schopní viesť súťaže úspešne predtým, než budú označení ako WCA
         Delegáti.</p>
-      see_link_html: '(pozri %{link})'
+      see_link_html: ' (pozri %{link})'
       members_html: >-
         Všetci súťažiaci budú automaticky zaradení ako <strong>členovia</strong>
         WCA v ich prvej WCA súťaži.
@@ -1423,3 +1441,4 @@ sk:
     dinner: Večera
     awards: Odovzdávanie cien
     misc: Iné
+    registration: Registrácia na mieste
