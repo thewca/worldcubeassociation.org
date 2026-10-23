@@ -94,6 +94,11 @@ jobs:
         # Advisory, never a merge gate: a provider outage or a malformed diff
         # must not put a red X on a contributor's PR.
         continue-on-error: true
+        env:
+          # OCR updates itself otherwise which would defeat the version pin
+          # and introduces a race condition where an update might still be in progress
+          # while the later review step runs
+          OCR_NO_UPDATE: '1'
         with:
           ocr_version: '1.13.2'
           rule: ${{ runner.temp }}/ocr-rules.json
