@@ -909,7 +909,7 @@ class Round < ApplicationRecord
       )
     else
       base_wcif.merge(
-        "advancementCondition" => advancement_condition&.to_wcif,
+        "advancementCondition" => target_rounds.first&.participation_condition&.to_v1_wcif,
       )
     end
   end
@@ -1062,7 +1062,13 @@ class Round < ApplicationRecord
       )
     else
       base_properties.merge(
-        "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
+        "advancementCondition" => {
+          "type" => %w[object null],
+          "properties" => {
+            "type" => { "type" => "string", "enum" => %w[attemptResult percent ranking] },
+            "level" => { "type" => "integer" },
+          },
+        },
       )
     end
   end

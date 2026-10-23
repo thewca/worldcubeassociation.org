@@ -38,16 +38,6 @@ module AdvancementConditions
       cutoff ? JSON.dump(cutoff.to_wcif) : nil
     end
 
-    def self.wcif_json_schema
-      {
-        "type" => %w[object null],
-        "properties" => {
-          "type" => { "type" => "string", "enum" => Utils::ALL_ADVANCEMENT_CONDITIONS.map(&:wcif_type) },
-          "level" => { "type" => "integer" },
-        },
-      }
-    end
-
     # Our Regulations allow at most 75% of competitors to proceed
     def regulations_boundary(results)
       (results.count * 0.75).floor
