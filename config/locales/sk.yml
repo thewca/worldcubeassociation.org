@@ -97,20 +97,21 @@ sk:
       cell_name: Kombinovaná kvalifikácia
   cutoff:
     time:
-      one: '%{count} pokus na dostanie < %{time}'
-      few: '-'
-      other: '%{count} pokusov na dostanie < %{time}'
+      one: '%{count} pokus na dosiahnutie < %{time}'
+      few: '%{count} pokusy na dosiahnutie < %{time}'
+      other: '%{count} pokusov na dosiahnutie < %{time}'
     moves:
-      one: '%{count} pokus na dostanie < %{moves} ťahov'
-      few: '-'
-      other: '%{count} pokusov na dostanie < %{moves} ťahov'
+      one: '%{count} pokus na dosiahnutie < %{moves} ťahov'
+      few: '%{count} pokusy na dosiahnutie < %{moves} ťahov'
+      other: '%{count} pokusov na dosiahnutie < %{moves} ťahov'
     points:
-      one: '%{count} pokus na dostanie > %{points} bodov'
-      few: '-'
-      other: '%{count} pokusov na dostanie > %{points} bodov'
+      one: '%{count} pokus na dosiahnutie > %{points} bodov'
+      few: '%{count} pokusy na dosiahnutie > %{points} bodov'
+      other: '%{count} pokusov na dosiahnutie > %{points} bodov'
   time_limit:
     cumulative:
       across_rounds: '%{time} dokopy pre %{rounds}'
+      one_round: '%{time} kumulatívny'
     333fm: 1 hodina
     333mbf: 10 minút na jednu kocku, najviac dokopy 60:00.00
   common:
@@ -148,7 +149,7 @@ sk:
       unit_moves: ťahov
   oauth:
     applications:
-      your_apps: Tvoje OAuth Aplikácie
+      your_apps: Vaše OAuth Aplikácie
       new: Nový
       name: Meno
       callback_url: Callback Url
@@ -172,7 +173,7 @@ sk:
         login: Email alebo WCA ID
         country_iso2: Občianstvo
         dob: Dátum narodenia
-        dob_verification: Váš Dátum narodenia
+        dob_verification: Váš dátum narodenia
         gender: Pohlavie
         email: Email
         password: Heslo
@@ -322,18 +323,17 @@ sk:
           Pochmann</strong>. Nie nepresne ako <strong>s pochman</strong>.
           Stredné mená (buď celé alebo ako iniciálky) sú voliteľné.
         pending_avatar: >-
-          Po tom, ako nahráte svojho nového Avatara, budete musieť počkať,
-          pokiaľ ho Výsledkový Tím WCA schváli.
+          Po tom, ako nahráte svojho nového Avatara budete musieť počkať, pokiaľ ho
+          Výsledkový Tím WCA schváli.
       website_contact:
       dob_contact:
-        dob: Váš správny deň narodenia vo formáte YYYY-MM-DD
+        dob: Váš správny deň narodenia vo formáte RRRR-MM-DD
         document: >-
-          Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte
-          pripojiť fotku hociakého legálneho dokumentu (ID karta, vodičský
-          preukaz, šutdentská karta, pas, rodný list,...). Musí tam byť
-          viditeľné meno a dátum narodenia a musí to byť pochopiteľné pre
-          Anglicky hovoriaceho človeka (alebo kontaktuje miestneho Delegáta WCA
-          ak nemáte taký dokument).
+          Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte pripojiť
+          fotku hocijakého legálneho dokumentu (ID karta, vodičský preukaz, šutdentská
+          karta, pas, rodný list,...). Musí tam byť viditeľné meno a dátum narodenia
+          a musí to byť pochopiteľné pre Anglicky hovoriaceho človeka (alebo kontaktuje
+          miestneho Delegáta WCA ak nemáte taký dokument).
       post:
         body: >-
           Použite &lt;!-- break --&gt; aby ste ukázali ukážku domácej stránky.
@@ -1338,7 +1338,8 @@ sk:
   results:
     selector_elements: {}
   trainee_delegate_application: {}
-  homepage: {}
+  homepage:
+    title: Vitajte vo World Cube Association
   qualification:
     type_label: Typ kvalifikácie
     result_type: Typ výsledku
@@ -1362,6 +1363,7 @@ sk:
       any_result: Akýkoľvek priemer
     deadline:
       by_date: do %{date}
+      description: Uzávierka kvalifikácie
   search_results: {}
   validators: {}
   formats:
@@ -1442,3 +1444,6 @@ sk:
     awards: Odovzdávanie cien
     misc: Iné
     registration: Registrácia na mieste
+    setup: Príprava
+    checkin: Prezentácia
+    teardown: Upratovanie
