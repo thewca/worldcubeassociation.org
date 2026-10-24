@@ -12,6 +12,10 @@ module ResultConditions
       "percent"
     end
 
+    def to_desc(_round, short: false)
+      I18n.t("advancement_condition#{'.short' if short}.percent", percent: self.value)
+    end
+
     def max_advancing(results)
       valid_results = results.count { |r| r.best.positive? }
       proceeds = results.size * value / 100

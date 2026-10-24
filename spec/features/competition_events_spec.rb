@@ -116,7 +116,7 @@ RSpec.feature "Competition events management" do
 
         save_events_react
 
-        expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to next round"
+        expect(round_333_1.reload.advancement_condition_to_desc).to eq "Top 12 advance to next round"
       end
 
       scenario "change qualification time to any result", :js do

@@ -391,9 +391,9 @@ class Competition < ApplicationRecord
     errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(no_event_without_rounds? && schedule_includes_rounds?)
   end
 
-  validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_at_changed?, on: :update
-  def advancement_condition_must_be_present_for_all_non_final_rounds
-    errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds')) unless rounds.all?(&:advancement_condition_is_valid?)
+  validate :participation_condition_must_be_present_for_all_non_initial_rounds, if: :confirmed_at_changed?, on: :update
+  def participation_condition_must_be_present_for_all_non_initial_rounds
+    errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds')) unless rounds.all?(&:participation_condition_is_valid?)
   end
   private def should_validate_registration_closing?
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
@@ -598,7 +598,7 @@ class Competition < ApplicationRecord
       # message on the edit schedule page?
       warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_event_without_rounds? && schedule_includes_rounds?
 
-      warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:advancement_condition_is_valid?)
+      warnings[:participation_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:participation_condition_is_valid?)
 
       rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
         warnings["cutoff_is_greater_than_time_limit#{round.id}"] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
@@ -1440,8 +1440,8 @@ class Competition < ApplicationRecord
     competition_events.any? { |ce| ce.rounds.any?(&:cutoff) }
   end
 
-  def uses_advancement_condition?
-    competition_events.any? { |ce| ce.rounds.any?(&:advancement_condition) }
+  def uses_participation_condition?
+    competition_events.any? { |ce| ce.rounds.any?(&:participation_condition?) }
   end
 
   def uses_cumulative?
