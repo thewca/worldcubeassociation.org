@@ -192,8 +192,7 @@ sk:
           software zdrojoch
         receive_delegate_reports: Chcem dostávať emaily s delegátskymi reportmi 
           z WCA súťaží
-        delegate_reports_region: Chcem dostávať delegátske reporty iba z tejto 
-          oblasti
+        delegate_reports_region: Chcem dostávať reporty iba z tejto oblasti
       registration:
         guests: Hostia
         comments: Komentáre
@@ -211,7 +210,7 @@ sk:
         name: Meno
       delegate_report:
         discussion_url: URL diskusie na Google Group
-        schedule_url: URL rozvrhu
+        schedule_url: URL harmonogramu
         equipment: Vybavenie
         venue: Priestory
         organization: Organizácia súťaže
@@ -222,6 +221,9 @@ sk:
           vyššie uvedených incidentov.
         wic_feedback_requested: Chcem dostať spätnú väzbu od WIC na niektorý z 
           vyššie uvedených incidentov.
+        setup_images: Obrázky zo súťaže
+        wrc_incidents: Incidenty vyžadujúce si spätnú väzbu od WRC
+        wic_incidents: Incidenty vyžadujúce si spätnú väzbu od WIC
       person:
         wca_id: Osoba
         country_id: Krajina
@@ -333,6 +335,12 @@ sk:
         pending_avatar: >-
           Po tom, ako nahráte svojho nového Avatara budete musieť počkať, pokiaľ ho
           WRT schváli.
+        delegate_reports_region: 'Ak chcete dostávať reporty z celého sveta, nevypĺňajte
+          toto pole (resp. vyberte prázdne pole). Poznámka: táto zmena sa môže prejaviť
+          až po 12 hodinách.'
+        receive_delegate_reports: 'Ak ste senior delegát, člen WRC alebo WQAC, dostávanie
+          reportov máte už vopred nastavené. Poznámka: táto zmena sa môže prejaviť
+          až po 12 hodinách.'
       website_contact:
       dob_contact:
         dob: Váš správny deň narodenia vo formáte RRRR-MM-DD
