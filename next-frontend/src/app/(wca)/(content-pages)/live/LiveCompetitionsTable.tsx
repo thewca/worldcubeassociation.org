@@ -25,7 +25,7 @@ export default function LiveCompetitionsTable({
         <Table.Body>
           {competitions.map((competition) => (
             <Table.Row key={competition.id}>
-              <Table.Cell whiteSpace={{ base: "normal", md: "nowrap" }}>
+              <Table.Cell whiteSpace="normal" width="full">
                 <HStack gap="2">
                   <WcaFlag
                     code={competition.country_iso2}
@@ -47,7 +47,7 @@ export default function LiveCompetitionsTable({
               <Table.Cell>
                 {formatDateRange(competition.start_date, competition.end_date)}
               </Table.Cell>
-              <Table.Cell hideBelow="md" width="full">
+              <Table.Cell hideBelow="md">
                 {`${competition.city}, ${countryName(competition.country_iso2, t)}`}
               </Table.Cell>
             </Table.Row>
