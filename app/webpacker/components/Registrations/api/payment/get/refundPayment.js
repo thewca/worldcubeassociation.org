@@ -2,13 +2,13 @@ import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthentic
 import { refundPaymentUrl } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function refundPayment({
-  competitionId,
+  registrationId,
   paymentId,
   paymentProvider,
   amount,
 }) {
   const { data } = await fetchJsonOrError(
-    refundPaymentUrl(competitionId, paymentProvider, paymentId),
+    refundPaymentUrl(registrationId, paymentProvider, paymentId),
     {
       body:
         JSON.stringify({
