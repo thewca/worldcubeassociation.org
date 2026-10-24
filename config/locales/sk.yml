@@ -126,7 +126,7 @@ sk:
       no_date: Nie je dátum
     user:
       wca_id: WCA ID
-      representing: Reprezentujúci
+      representing: Krajina
     all_regions: Všetky krajiny
     errors:
       invalid: neplatný
@@ -294,8 +294,12 @@ sk:
           senior_member: Seniorský člen
           leader: Líder
         officers:
-          executive_director: WCA výkonný riaditeľ
-          treasurer: WCA tajomník
+          executive_director: Výkonný riaditeľ WCA
+          treasurer: Pokladník WCA
+          chair: Predseda WCA
+          chief_operating_officer: Prevádzkový riaditeľ WCA
+          secretary: Tajomník WCA
+          vice_chair: Podpredseda WCA
   simple_form:
     'yes': Áno
     'no': Nie
