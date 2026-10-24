@@ -193,7 +193,7 @@ export default function StepPanel({
     <VStack width="full" gap="4" align="stretch">
       {/* Withdrawing hands the competitor back to the start of the flow, and this is what tells
           them why the panel they were looking at has reset. */}
-      {registration !== null && currentStep < steps.length && (
+      {registration !== null && (
         <RegistrationStatus registration={registration} />
       )}
       <Steps.Root
@@ -235,36 +235,34 @@ export default function StepPanel({
           (step, index) =>
             index === currentStep && (
               <Steps.Content key={step.key} index={index}>
-                {createRegistration.isSuccess ? (
-                  <Steps.Context>
-                    {(stepsContext) => (
-                      <RegistrationProcessing
-                        competitionId={competitionInfo.id}
-                        userId={userId}
-                        onCreated={() =>
-                          finishCreation(stepsContext.goToNextStep)
-                        }
-                      />
-                    )}
-                  </Steps.Context>
-                ) : (
-                  <Stack gap="3">
-                    <StepContent
-                      step={step}
-                      competitionInfo={competitionInfo}
-                      registration={registration}
-                      form={form}
-                    />
-                    <WizardStepButton
-                      steps={steps}
-                      step={step}
-                      form={form}
-                      isSubmitting={isSubmitting}
-                    />
-                  </Stack>
-                )}
+                <Stack gap="3">
+                  <StepContent
+                    step={step}
+                    competitionInfo={competitionInfo}
+                    registration={registration}
+                    form={form}
+                  />
+                  <WizardStepButton
+                    steps={steps}
+                    step={step}
+                    form={form}
+                    isSubmitting={isSubmitting}
+                  />
+                </Stack>
               </Steps.Content>
             ),
+        )}
+
+        {createRegistration.isSuccess && (
+          <Steps.Context>
+            {(stepsContext) => (
+              <RegistrationProcessing
+                competitionId={competitionInfo.id}
+                userId={userId}
+                onCreated={() => finishCreation(stepsContext.goToNextStep)}
+              />
+            )}
+          </Steps.Context>
         )}
 
         <Steps.CompletedContent>

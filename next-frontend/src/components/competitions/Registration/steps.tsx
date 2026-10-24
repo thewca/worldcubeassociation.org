@@ -18,6 +18,7 @@ import type {
   RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
 import type { components } from "@/types/openapi";
+import ApprovalStatus from "@/components/competitions/Registration/ApprovalStatus";
 
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
@@ -56,7 +57,7 @@ export function StepContent({
         />
       );
     case "approval":
-      return registration && <RegistrationStatus registration={registration} />;
+      return registration && <ApprovalStatus registration={registration} />;
   }
 }
 
