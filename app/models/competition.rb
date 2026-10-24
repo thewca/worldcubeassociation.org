@@ -2293,6 +2293,12 @@ class Competition < ApplicationRecord
     include: %w[delegates organizers],
   }.freeze
 
+  INDEX_SERIALIZE_OPTIONS = {
+    only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
+    methods: %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types],
+    include: {},
+  }.freeze
+
   def serializable_hash(options = nil)
     # The intent behind this is to have a "good" default setup for serialization.
     # We also want the caller to be able to be picky about the attributes included

@@ -37,14 +37,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     competitions = competitions_scope.search(params[:q], params: params)
 
-    serial_methods = %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types]
+    serial_methods = Competition::INDEX_SERIALIZE_OPTIONS[:methods]
     serial_includes = {}
 
     serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode
     serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user lead_delegate_id] if admin_mode
 
     paginate json: competitions,
-             only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
+             only: Competition::INDEX_SERIALIZE_OPTIONS[:only],
              methods: serial_methods,
              include: serial_includes
   end

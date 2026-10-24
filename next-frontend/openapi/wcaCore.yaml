@@ -12,6 +12,8 @@ servers:
   - url: http://localhost:3000/api/
     description: The production API server
 paths:
+  /v1/competitions/live:
+    $ref: 'paths/competitions/liveCompetitions.yaml'
   /v1/competitions/{competitionId}/registrations:
     $ref: 'paths/registrations/registrationsByCompetition.yaml'
   /v1/competitions/{competitionId}/registrations/{userId}:
