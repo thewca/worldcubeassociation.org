@@ -190,6 +190,10 @@ sk:
         location: Poloha
         receive_developer_mails: Chcem dostávať upozornenia o zmenách v WCA 
           software zdrojoch
+        receive_delegate_reports: Chcem dostávať emaily s delegátskymi reportmi 
+          z WCA súťaží
+        delegate_reports_region: Chcem dostávať delegátske reporty iba z tejto 
+          oblasti
       registration:
         guests: Hostia
         comments: Komentáre
@@ -276,7 +280,7 @@ sk:
       media_type:
         report: Nahlásiť
         article: Článok
-        multimedia: Multimedia
+        multimedia: Multimédiá
     user_roles:
       status:
         delegate_regions:
@@ -304,7 +308,7 @@ sk:
     'yes': Áno
     'no': Nie
     required:
-      text: potrebné
+      text: povinné
       mark: '*'
     error_notification:
       default_message: 'Prosím, pozrite si problémy uvedené nižšie:'
@@ -328,33 +332,24 @@ sk:
           Stredné mená (buď celé alebo ako iniciálky) sú voliteľné.
         pending_avatar: >-
           Po tom, ako nahráte svojho nového Avatara budete musieť počkať, pokiaľ ho
-          Výsledkový Tím WCA schváli.
+          WRT schváli.
       website_contact:
       dob_contact:
         dob: Váš správny deň narodenia vo formáte RRRR-MM-DD
         document: >-
-          Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte pripojiť
+          Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte pridať
           fotku hocijakého legálneho dokumentu (ID karta, vodičský preukaz, šutdentská
           karta, pas, rodný list,...). Musí tam byť viditeľné meno a dátum narodenia
           a musí to byť pochopiteľné pre Anglicky hovoriaceho človeka (alebo kontaktuje
-          miestneho Delegáta WCA ak nemáte taký dokument).
+          miestneho delegáta WCA ak nemáte taký dokument).
       post:
         body: >-
           Použite &lt;!-- break --&gt; aby ste ukázali ukážku domácej stránky.
           Hocijaký post na domovskej stránke ukáže celý text pred deličom.
           Skutočný príspevok ukáže celý text.
-        show_on_homepage: >-
-          Pozor! Toto nie je bezpečné pre súkromné dáta. Toto je iba na
-          prevenciu toho, aby na domácej stránke nebol chaos. Posty, ktoré nie
-          sú ukázané na domovskej stránke sú stále dostupné verejnosti cez linky
-          alebo tagy.
       delegate_report:
         schedule_url: >-
-          Celý link zverejneného rozvrhu(napr.
-          https://www.cubingusa.com/usnationals2016/schedule.php)
-        equipment: >-
-          Počet a typ timerov a displejov použitých v súťaži. Prosím, vymažte
-          čiary zariadení, ktoré nebudete používať.
+          Odkaz na zverejnený rozvrh (napr. https://www.cubingusa.com/usnationals2016/schedule.php)
         venue: >-
           Napíšte niečo o miestnosti(mistnostiach), verejnom prístupe,
           distribúcíi zón(skladanie, miešanie, čakanie, zapisovaní skóre), ak

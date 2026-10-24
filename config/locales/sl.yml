@@ -673,9 +673,9 @@ sl:
             Rezervnih kod še niste generirali. Kliknte gumb spodaj, da jih
             generirate.
           regenerate_backup_codes: >-
-            Generirali ste nekaj rezervnih kod. Če ste te te kode že uporabili
-            ali izgubili, lahko generirate nove s klikom na gumb spodaj. Če to
-            storite, bodo obstoječe rezervne kode razveljavljene.
+            Generirali ste nekaj rezervnih kod. Če ste te kode že uporabili ali izgubili,
+            lahko generirate nove s klikom na gumb spodaj. Če to storite, bodo obstoječe
+            rezervne kode razveljavljene.
           generate_backup_codes: Generiraj rezervne kode
           backup_codes_warning: >-
             Rezervne kode bodo prikazane spodaj. Zapišite ali shranite jih
