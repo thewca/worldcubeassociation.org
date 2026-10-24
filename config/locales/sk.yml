@@ -357,7 +357,7 @@ sk:
           Skutočný príspevok ukáže celý text.
       delegate_report:
         schedule_url: >-
-          Odkaz na zverejnený rozvrh (napr. https://www.cubingusa.com/usnationals2016/schedule.php)
+          Odkaz na zverejnený harmonogram (napr. https://www.cubingusa.com/usnationals2016/schedule.php)
         venue: >-
           Napíšte niečo o miestnosti(mistnostiach), verejnom prístupe,
           distribúcíi zón(skladanie, miešanie, čakanie, zapisovaní skóre), ak
