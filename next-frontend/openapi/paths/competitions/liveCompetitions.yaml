@@ -1,5 +1,5 @@
 get:
-  summary: Get recent and future competitions using WCA Live Results, grouped by status
+  summary: Get recent and future competitions using internal live results, grouped by status
   operationId: getLiveCompetitions
   tags:
     - competitions

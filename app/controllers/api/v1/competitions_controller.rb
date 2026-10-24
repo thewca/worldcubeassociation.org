@@ -4,8 +4,6 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
   # Posted results are public data — the competition results pages render them for signed-out visitors.
   skip_before_action :require_user!
 
-  before_action :set_competition, except: %i[live]
-
   # Mirrors the WCA Live landing page, which lists everything from one month back.
   LIVE_COMPETITIONS_LOOKBACK = 1.month
 
@@ -26,6 +24,8 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
       past: past.reverse.as_json(Competition::INDEX_SERIALIZE_OPTIONS),
     }
   end
+
+  before_action :set_competition, except: %i[live]
 
   # Every round of the competition with its results nested, ordered by event and round number.
   # The frontend regroups these by event or by person; the round carries the context that would

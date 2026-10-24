@@ -27,7 +27,9 @@ export default async function LiveCompetitionsPage() {
 
   const { upcoming, in_progress, past } = liveCompetitions;
 
+  const hasUpcoming = upcoming.length > 0;
   const hasInProgress = in_progress.length > 0;
+  const hasPast = past.length > 0;
   const defaultTab = hasInProgress ? "in_progress" : "upcoming";
 
   return (
@@ -46,14 +48,14 @@ export default async function LiveCompetitionsPage() {
               {t("competitions.live.overview.in_progress")}
             </Tabs.Trigger>
           )}
-          {past.length > 0 && (
+          {hasPast && (
             <Tabs.Trigger value="past">
               {t("competitions.live.overview.past_month")}
             </Tabs.Trigger>
           )}
         </Tabs.List>
         <Tabs.Content value="upcoming">
-          {upcoming.length > 0 ? (
+          {hasUpcoming ? (
             <LiveCompetitionsTable competitions={upcoming} t={t} />
           ) : (
             <Text>{t("competitions.live.overview.no_upcoming")}</Text>
