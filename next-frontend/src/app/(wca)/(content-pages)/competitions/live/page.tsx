@@ -25,26 +25,24 @@ export default async function LiveCompetitionsPage() {
 
   if (error) return <OpenapiError response={response} t={t} />;
 
-  const { upcoming, in_progress: inProgress, past } = liveCompetitions;
+  const { upcoming, in_progress, past } = liveCompetitions;
+
+  const hasInProgress = in_progress.length > 0;
+  const defaultTab = hasInProgress ? "in_progress" : "upcoming";
 
   return (
     <VStack align="stretch" gap="4" width="full">
       <HStack justifyContent="space-between" wrap="wrap" gap="4">
-        <Heading size="5xl">{t("competitions.live.title")}</Heading>
+        <Heading textStyle="h1">{t("competitions.live.title")}</Heading>
         <LiveCompetitionSearch />
       </HStack>
-      <Tabs.Root
-        defaultValue={inProgress.length > 0 ? "inProgress" : "upcoming"}
-        variant="enclosed"
-        fitted
-        lazyMount
-      >
+      <Tabs.Root defaultValue={defaultTab} variant="enclosed" fitted lazyMount>
         <Tabs.List>
           <Tabs.Trigger value="upcoming">
             {t("competitions.live.overview.upcoming")}
           </Tabs.Trigger>
-          {inProgress.length > 0 && (
-            <Tabs.Trigger value="inProgress">
+          {hasInProgress && (
+            <Tabs.Trigger value="in_progress">
               {t("competitions.live.overview.in_progress")}
             </Tabs.Trigger>
           )}
@@ -61,8 +59,8 @@ export default async function LiveCompetitionsPage() {
             <Text>{t("competitions.live.overview.no_upcoming")}</Text>
           )}
         </Tabs.Content>
-        <Tabs.Content value="inProgress">
-          <LiveCompetitionsTable competitions={inProgress} t={t} />
+        <Tabs.Content value="in_progress">
+          <LiveCompetitionsTable competitions={in_progress} t={t} />
         </Tabs.Content>
         <Tabs.Content value="past">
           <LiveCompetitionsTable competitions={past} t={t} />

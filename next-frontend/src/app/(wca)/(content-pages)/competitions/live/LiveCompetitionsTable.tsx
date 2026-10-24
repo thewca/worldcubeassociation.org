@@ -12,6 +12,9 @@ type LiveCompetition = Pick<
   "id" | "name" | "start_date" | "end_date" | "city" | "country_iso2"
 >;
 
+const locationLabel = (competition: LiveCompetition, t: TFunction) =>
+  `${competition.city}, ${countryName(competition.country_iso2, t)}`;
+
 export default function LiveCompetitionsTable({
   competitions,
   t,
@@ -48,7 +51,7 @@ export default function LiveCompetitionsTable({
                 {formatDateRange(competition.start_date, competition.end_date)}
               </Table.Cell>
               <Table.Cell hideBelow="md">
-                {`${competition.city}, ${countryName(competition.country_iso2, t)}`}
+                {locationLabel(competition, t)}
               </Table.Cell>
             </Table.Row>
           ))}
