@@ -53,7 +53,14 @@ export function LiveTableHeader({
             <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
           )}
           {!byPerson && (
-            <Table.ColumnHeader overflow="hidden" textOverflow="ellipsis">
+            // Must give way on phones like the names below it, otherwise the
+            //   header alone keeps the column too wide for the screen.
+            <Table.ColumnHeader
+              overflow="hidden"
+              textOverflow="ellipsis"
+              maxWidth={{ base: "0", md: "none" }}
+              whiteSpace={{ base: "nowrap", md: "normal" }}
+            >
               {t("competitions.live.results.competitor")}
             </Table.ColumnHeader>
           )}
@@ -76,7 +83,7 @@ export function LiveTableHeader({
           ))}
           {stats.map((stat) => (
             <Table.ColumnHeader textAlign="end" key={stat.field}>
-              {t(stat.i18nKey)}
+              <WithRecordTag>{t(stat.i18nKey)}</WithRecordTag>
             </Table.ColumnHeader>
           ))}
           {forecastView &&
@@ -134,7 +141,14 @@ export function LiveCompetitorCell({
   t: TFunction;
 }) {
   return (
-    <Table.Cell rowSpan={rowSpan}>
+    // On phones the name gives way to the results: `maxWidth: 0` stops it from
+    //   dictating the column width and the cell takes whatever space is left.
+    //   Tapping the row opens the result modal, which shows the full name.
+    <Table.Cell
+      rowSpan={rowSpan}
+      maxWidth={{ base: "0", md: "none" }}
+      width={{ base: "full", md: "auto" }}
+    >
       <HStack gap={1}>
         {link && (
           <Link
@@ -144,7 +158,14 @@ export function LiveCompetitorCell({
             {competitor.name}
           </Link>
         )}
-        <Box as="span" hideFrom={link ? "md" : undefined}>
+        <Box
+          as="span"
+          hideFrom={link ? "md" : undefined}
+          minWidth="0"
+          overflow={{ base: "hidden", md: "visible" }}
+          textOverflow="ellipsis"
+          whiteSpace={{ base: "nowrap", md: "normal" }}
+        >
           {competitor.name}
         </Box>
         {showFirstTimer && !competitor.wca_id && (
@@ -231,7 +252,9 @@ export function LiveStatCells({
             {showProjected ? (
               <Tooltip content="Projected average" showArrow openDelay={200}>
                 <Box as="span" color="fg.muted">
-                  {formatAttemptResult(forecast!.projected_average!, eventId)}
+                  <WithRecordTag>
+                    {formatAttemptResult(forecast!.projected_average!, eventId)}
+                  </WithRecordTag>
                 </Box>
               </Tooltip>
             ) : (
