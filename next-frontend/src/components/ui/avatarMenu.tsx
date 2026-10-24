@@ -14,15 +14,21 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import React from "react";
-import { signIn, signOut, type Session } from "@/auth.client";
+import { signIn, signOut } from "@/auth.client";
+import type { Session } from "@/auth";
 import { MobileNavButton, MobileNavLink } from "@/components/MobileNav";
 import { LuChevronDown } from "react-icons/lu";
 import _ from "lodash";
 
 const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
+
+// Rails sits at the root of the public API host.
+const RAILS_SIGN_OUT_URL = new URL(
+  "/users/sign-out-from-next",
+  process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
+);
 
 export default function Wrapper({ session }: { session: Session | null }) {
   return (
@@ -33,14 +39,6 @@ export default function Wrapper({ session }: { session: Session | null }) {
 }
 
 function AvatarMenu({ session }: { session: Session | null }) {
-  const router = useRouter();
-
-  // Better Auth's `signOut` only clears the cookies and resolves; unlike NextAuth's, it does not
-  // navigate. `session` here is a prop from a server component, so without a refresh the navbar
-  // keeps rendering the signed-in state and the button looks like it did nothing.
-  const handleSignOut = () =>
-    signOut({ fetchOptions: { onSuccess: () => router.refresh() } });
-
   if (!session) {
     return (
       <>
@@ -60,6 +58,20 @@ function AvatarMenu({ session }: { session: Session | null }) {
       </>
     );
   }
+
+  // Better Auth's `signOut` only clears our own cookies. The Rails session would otherwise
+  // survive and sign the user straight back in on the next OIDC round trip, so we hand off
+  // to Rails, which ends its session and redirects back here. The access token proves to
+  // Rails that the sign-out really comes from us.
+  const railsSignOutUrl = new URL(RAILS_SIGN_OUT_URL);
+  railsSignOutUrl.searchParams.set("access_token", session.accessToken);
+
+  const handleSignOut = () =>
+    signOut({
+      fetchOptions: {
+        onSuccess: () => window.location.assign(railsSignOutUrl),
+      },
+    });
 
   const colorPalette = _.sample(AVATAR_COLORS);
 
