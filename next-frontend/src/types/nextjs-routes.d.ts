@@ -50,6 +50,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/faq">
     | StaticRoute<"/incidents">
     | DynamicRoute<"/incidents/[id]", { "id": string }>
+    | StaticRoute<"/live">
     | StaticRoute<"/logo">
     | StaticRoute<"/officers-and-board">
     | StaticRoute<"/organizations">

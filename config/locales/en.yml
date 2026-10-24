@@ -1455,6 +1455,15 @@ en:
       no_spots_left: "Competition full"
     live:
       title: "Live Results"
+      overview:
+        #context: tab listing competitions that have not started yet
+        upcoming: "Upcoming"
+        #context: tab listing competitions that are happening today
+        in_progress: "Right now"
+        #context: tab listing competitions that ended within the last month
+        past_month: "Past month"
+        no_upcoming: "There are no upcoming competitions with live results."
+        search: "Search competitions"
       manage_rounds: "Manage Rounds"
       incompatible:
         external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
