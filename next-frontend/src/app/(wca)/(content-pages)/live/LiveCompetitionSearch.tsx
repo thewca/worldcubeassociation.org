@@ -9,7 +9,7 @@ import {
   createListCollection,
 } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { route } from "nextjs-routes";
 import useDebounce from "@/lib/hooks/useDebounce";
 import useAPI from "@/lib/wca/useAPI";
@@ -25,7 +25,6 @@ type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 export default function LiveCompetitionSearch() {
   const { t } = useT();
   const api = useAPI();
-  const router = useRouter();
 
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, DEBOUNCE_MS);
@@ -55,21 +54,10 @@ export default function LiveCompetitionSearch() {
     itemToString: (competition) => competition.name,
   });
 
-  const openLiveResults = (competitionId: string) =>
-    router.push(
-      route({
-        pathname: "/competitions/[competitionId]/live",
-        query: { competitionId },
-      }),
-    );
-
   return (
     <Combobox.Root
       collection={collection}
-      value={[]}
       onInputValueChange={(e) => setQuery(e.inputValue)}
-      onValueChange={(e) => openLiveResults(e.value[0])}
-      selectionBehavior="clear"
       width={{ base: "full", md: "xs" }}
       placeholder={t("competitions.live.overview.search")}
     >
@@ -84,11 +72,18 @@ export default function LiveCompetitionSearch() {
         <Combobox.Positioner>
           <Combobox.Content>
             {visibleCompetitions.map((competition) => (
-              <Combobox.Item item={competition} key={competition.id}>
-                <HStack gap="2">
-                  <WcaFlag code={competition.country_iso2} flexShrink="0" />
-                  {competition.name}
-                </HStack>
+              <Combobox.Item item={competition} key={competition.id} asChild>
+                <Link
+                  href={route({
+                    pathname: "/competitions/[competitionId]/live",
+                    query: { competitionId: competition.id },
+                  })}
+                >
+                  <HStack gap="2">
+                    <WcaFlag code={competition.country_iso2} flexShrink="0" />
+                    {competition.name}
+                  </HStack>
+                </Link>
               </Combobox.Item>
             ))}
           </Combobox.Content>
