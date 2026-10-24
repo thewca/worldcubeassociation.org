@@ -1,32 +1,10 @@
 import { HStack, Heading, Tabs, Text, VStack } from "@chakra-ui/react";
-import { DateTime } from "luxon";
-import _ from "lodash";
 import { Metadata } from "next";
-import { connection } from "next/server";
 import { getT } from "@/lib/i18n/get18n";
 import { serverClient } from "@/lib/wca/wcaAPI";
-import { hasNotPassed } from "@/lib/wca/dates";
-import { isInProgress } from "@/lib/wca/competitions/statusUtils";
 import OpenapiError from "@/components/ui/openapiError";
-import { components } from "@/types/openapi";
 import LiveCompetitionsTable from "./LiveCompetitionsTable";
 import LiveCompetitionSearch from "./LiveCompetitionSearch";
-
-// Mirrors the WCA Live landing page, which lists everything from one month back.
-const PAST_COMPETITIONS_LOOKBACK = { months: 1 };
-
-// Get every competition in a single request.
-const MAX_PER_PAGE = 1000;
-
-type LiveStatus = "upcoming" | "inProgress" | "past";
-
-const liveStatus = (
-  competition: components["schemas"]["CompetitionIndex"],
-): LiveStatus => {
-  if (hasNotPassed(competition.start_date)) return "upcoming";
-  if (isInProgress(competition)) return "inProgress";
-  return "past";
-};
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -37,35 +15,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LiveCompetitionsPage() {
-  await connection();
   const { t } = await getT();
 
-  const lookbackDate = DateTime.now()
-    .minus(PAST_COMPETITIONS_LOOKBACK)
-    .toISODate();
-
   const {
-    data: competitions,
+    data: liveCompetitions,
     error,
     response,
-  } = await serverClient.GET("/v0/competition_index", {
-    params: {
-      query: {
-        scoretaking_software: "internal",
-        ongoing_and_future: lookbackDate,
-        sort: "start_date,end_date",
-        per_page: MAX_PER_PAGE,
-      },
-    },
-  });
+  } = await serverClient.GET("/v1/competitions/live");
 
   if (error) return <OpenapiError response={response} t={t} />;
 
-  const competitionsByStatus = _.groupBy(competitions, liveStatus);
-
-  const upcoming = competitionsByStatus.upcoming ?? [];
-  const inProgress = competitionsByStatus.inProgress ?? [];
-  const past = (competitionsByStatus.past ?? []).toReversed();
+  const { upcoming, in_progress: inProgress, past } = liveCompetitions;
 
   return (
     <VStack align="stretch" gap="4" width="full">
