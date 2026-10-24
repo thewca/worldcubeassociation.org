@@ -3395,6 +3395,7 @@ export interface operations {
                 q?: string;
                 sort?: string;
                 ongoing_and_future?: string;
+                scoretaking_software?: "external" | "wca_live" | "internal";
             };
             header?: never;
             path?: never;

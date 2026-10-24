@@ -1753,6 +1753,14 @@ class Competition < ApplicationRecord
       competitions = competitions.where(end_date: target_date..)
     end
 
+    if params[:scoretaking_software].present?
+      scoretaking_software = params[:scoretaking_software].to_s
+      # Our `'is' => 'are'` inflection makes Rails think "software" is already plural, so the enum mapping isn't called `scoretaking_softwares`.
+      raise WcaExceptions::BadApiParameter.new("Invalid scoretaking_software: '#{scoretaking_software}'") unless Competition.scoretaking_software.key?(scoretaking_software)
+
+      competitions = competitions.where(scoretaking_software: scoretaking_software)
+    end
+
     if params[:announced_after].present?
       announced_date = Date.safe_parse(params[:announced_after])
       raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'") unless announced_date
