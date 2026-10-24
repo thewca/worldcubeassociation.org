@@ -243,7 +243,7 @@ sl:
       actions: Dejanja
       secret: Tajnost
       scopes: Obseg
-      callback_urls: Callback URLi
+      callback_urls: Callback URL-i
   helpers:
     submit:
       competition_medium:
@@ -277,11 +277,11 @@ sl:
         receive_developer_mails: Želim prejemati obvestila o spremembah 
           programske opreme WCA
         receive_delegate_reports: Preko e-pošte želim prejemati delegatska 
-          poročila z WCA tekmovanj.
+          poročila z WCA tekmovanj
         delegate_reports_region: Delegatska poročila želim prejemati le za 
           naslednjo regijo
         user_preferred_events: Prednostne discipline
-        otp_attempt: Vpišite svojo kodo za dvojno preverjanje pristnosti
+        otp_attempt: 'Vpišite svojo kodo za dvojno preverjanje pristnosti:'
       registration:
         guests: Gostje
         comments: Komentarji
@@ -341,7 +341,7 @@ sl:
         private_description: Opis (zaseben)
         private_wrc_decision: Odločitev (zasebna)
         public_summary: Povzetek (javni)
-        digest_worthy: Vredno omembe v "WIC Digest"
+        digest_worthy: Vredno omembe v povzetku incidentov
         tags: Oznake
         competition_id: Se je zgodilo med
       competition_medium:
@@ -587,7 +587,7 @@ sl:
       wrong_size: 'je napačne velikosti (mora biti %{file_size})'
       size_too_small: 'je premajhen (mora biti najmanj %{file_size})'
       size_too_big: 'je prevelik (mora biti največ %{file_size})'
-      no_permission: Nimate dovoljenj za dostop do te strani
+      no_permission: Nimate dovoljenja za dostop do te strani.
   devise:
     passwords:
       edit:
@@ -601,10 +601,10 @@ sl:
           verify: 'Da se vpišite, potrdite, da ste to res vi'
           confirm: Potrdi kodo
           regenerated_secret: >-
-            Vaš tajni ključ za dvostopenjsko preverjanje pristnosti je bil
-            uspešno obnovljen
+            Vaš tajni ključ za dvostopenjsko preverjanje pristnosti je bil uspešno
+            obnovljen.
           enabled_success: Dvostopenjsko preverjanje pristnosti je uspešno 
-            omogočeno
+            omogočeno.
           email_auth: Avtentikacija preko e-pošte
           get_by_email: Pridobi kodo preko e-pošte
           get_by_email_desc: >-
@@ -710,7 +710,7 @@ sl:
         zahtevajte novo.
     mailer:
       confirmation_instructions:
-        subject: 'Prosimo, potrdite nov e-naslov.'
+        subject: 'Potrdite nov e-naslov'
     registrations:
       new:
         redesign_notice: Ogledujete si novo stran za registracijo, ki bo do 
@@ -1122,11 +1122,11 @@ sl:
     support:
       title: Podprite WCA
       text: >-
-        Svetovna kockarska zveza je po členu 501(c)(3) davkov oproščena
-        organizacija. Kot neprofitna organizacija, ki jo vodijo izključno
-        prostovoljci, z veseljem sprejemamo vaše donacije, ki nam pomagajo
-        uresničevati naš cilj – krepiti svetovno skupnost hitrostnega kockanja
-        ter ohranjati zabavno in pošteno tekmovalno okolje za vse."
+        Svetovna kockarska zveza je po členu 501(c)(3) davkov oproščena organizacija.
+        Kot neprofitna organizacija, ki jo vodijo izključno prostovoljci, z veseljem
+        sprejemamo vaše donacije, ki nam pomagajo uresničevati naš cilj – krepiti
+        svetovno skupnost hitrostnega kockanja ter ohranjati zabavno in pošteno tekmovalno
+        okolje za vse.
       button: 'Več o tem, kako lahko podprete WCA'
   users:
     update_locale:
@@ -1138,10 +1138,10 @@ sl:
         header: Navodila za potrditev
         welcome: 'Pozdravljeni, %{user_email}!'
         confirm: >-
-          Vaš račun je ustvarjen in mora bit pred uporabo potrjen. Prosimo,
-          potrdite račun preko sledeče povezave:
+          Vaš račun je ustvarjen in mora bit pred uporabo potrjen. Prosimo, potrdite
+          račun preko sledeče povezave: 
         confirmation_link: Potrdi moj račun.
-        activate: 'Po aktivaciji se lahko vpišete v WCA spletno stran:'
+        activate: 'Po aktivaciji se lahko vpišete v WCA spletno stran: '
         login_form: obrazec za prijavo
         addendum: >-
           To elektronsko sporočilo je generirano samodejno. Če niste
@@ -1164,8 +1164,8 @@ sl:
           tekmovanje %{competition} in poslal/a predlog najave WCAT. Takoj ko
           WCAT javno najavi tekmovanje, boste prejeli še eno obvestilo.
         contact: >-
-          Če imate še kakšno vprašanje, kontaktirajte delegata tekmovanja preko
-          e-pošte:
+          Če imate še kakšno vprašanje, kontaktirajte delegata/e tekmovanja preko
+          e-pošte: 
       competition_announcement_email:
         header: 'WCAT je najavila tekmovanje %{competition}'
         announced: WCAT je odobrila vaše tekmovanje in ga uradno najavila 
@@ -1186,7 +1186,7 @@ sl:
           %{confirmer} vas je dodal k tekmovanju %{competition} kot
           organizatorja. Tekmovanje lahko urejate tukaj:
       organizer_removal_email:
-        header: 'S tekmovanja %{competition} ste bili odstranjeni kot organizator.'
+        header: 'S tekmovanja %{competition} ste bili odstranjeni kot organizator'
         information: >-
           %{remover} vas je s tekmovanja %{competition} odstranil kot
           organizatorja.
@@ -1205,7 +1205,7 @@ sl:
         intro_html: >-
           Vaši rezultati s tekmovanja %{competition_link} so bili pravkar
           objavljeni.
-        information_html: 'Vse svoje rezultate si lahko ogledate na %{result_link}'
+        information_html: 'Vse svoje rezultate si lahko ogledate na %{result_link}.'
         more_info_html: >-
           Vaše nastavitve prejemanja elektronske pošte lahko urejate na
           %{preferences_link}.
@@ -1256,7 +1256,7 @@ sl:
       please_fix_profile: 'Če se želite prijaviti na tekmovanja, morate popraviti
         naslednje težave:'
       profile: Profil
-      approve: Potrdi
+      approve: Sprejmi
       approve_confirm: 'Ste prepričani, da želite odobriti WCA ID %{wca_id}?'
       clear_claim: Počisti zahtevo
       clear_claim_confirm: >-
@@ -1282,8 +1282,8 @@ sl:
       edit_thumbnail: Kliknite za urejanje sličice
       manage_pending: Upravljaj čakajoče avatarje
       have_no_wca_id_html: >-
-        WCA ID vam še ni bil dodeljen. Če ste že tekmovali, povežite WCA ID z
-        vašim računom %{here}.
+        WCA ID vam še ni bil dodeljen. Če ste že tekmovali, povežite WCA ID z vašim
+        računom %{here}!
       have_wca_id_html: 'Vaš WCA ID je %{link_id}.'
       account_is_special: >-
         WCA ID in uporabniški račun sta povezana s posebnimi vlogami pri WCA
@@ -1450,8 +1450,8 @@ sl:
         se obrnite na <a href='mailto:integrity@worldcubeassociation.org'
         target='_blank'>WIC</a>.
       undelete_banned: >-
-        je tekmovalec, ki mu je bila izrečena prepoved tekmovanja, zato ga ni
-        možno odstraniti izmed izbrisanih.
+        je tekmovalec, ki mu je bila izrečena prepoved tekmovanja, zato ga ni možno
+        odstraniti izmed izbrisanih
       series_more_than_one_accepted: Sprejeti ste lahko le na eno izmed 
         tekmovanj v seriji tekmovanj hkrati.
       can_only_register_for_qualified_events: 'Prijava na discipline, za katere niste
@@ -1587,8 +1587,8 @@ sl:
       uporabniškega računa, ga lahko ustvarite %{here}, vendar prijave še niso
       odprte.
     please_sign_in_html: >-
-      %{sign_in} za prijavo na %{comp}. Če še nimate WCA uporabniškega računa,
-      ga lahko ustvarite %{here}
+      %{sign_in} za prijavo na %{comp}. Če še nimate WCA uporabniškega računa, ga
+      lahko ustvarite %{here}.
     please_fix_profile_html: >-
       Če se želite prijaviti na %{comp}, obiščite svoj %{profile} in popravite
       naslednje težave:
@@ -1625,7 +1625,7 @@ sl:
       button_text: Plačaj zdaj!
       hints:
         donation: 'Prostovoljna donacija, ki bo namenjena izključno organizacijski
-          ekipi.'
+          ekipi'
         payment_button: >-
           Vaši podatki o plačilu nikoli ne dosežejo WCA strani, ampak so varno
           poslani storitvi Stripe, ki upravlja postopek plačila.
@@ -1808,8 +1808,8 @@ sl:
         čas v prihodnosti.
       tooltip_registered: Prijavljeni ste.
       tooltip_pending: >-
-        Vaša prijava čaka na ročno odobritev. Poskrbite, da ste sledili vsem
-        navodilom (npr. plačilo) na strani tekmovanja.
+        Vaša prijava čaka na ročno odobritev. Poskrbite, da ste sledili vsem navodilom
+        na strani tekmovanja (npr. glede plačila prijavnine).
       tooltip_waiting_list: Trenutno ste na čakalnem seznamu.
       tooltip_deleted: >-
         Vaša prijava je bila žal izbrisana. Preverite e-pošto za več podrobnosti
@@ -1828,11 +1828,11 @@ sl:
       schedule_locked_after_results_submitted: Urnika ni mogoče urejati po 
         objavi rezultatov.
       spots_left:
-        one: Še eno prosto mesto.
-        two: Še dve prosti mesti.
-        few: 'Še %{count} prosta mesta.'
-        other: 'Še %{count} prostih mest.'
-      no_spots_left: Vsa mesta so zapolnjena.
+        one: Še %{count} prosto mesto
+        two: Še %{count} prosti mesti
+        few: Še %{count} prosta mesta
+        other: Še %{count} prostih mest
+      no_spots_left: Vsa mesta so zapolnjena
       provisional_live_results: 'Medtem si lahko začasne rezultate ogledate tukaj:'
     live:
       title: Rezultati v živo
@@ -1901,10 +1901,10 @@ sl:
         quit:
           title: Izloči tekmovalca
           next_to_advance:
-            one: 'Naslednji tekmovalec, ki napreduje, je %{competitors}.'
-            two: 'Naslednja tekmovalca, ki napredujeta, sta %{competitors}.'
-            few: 'Naslednji tekmovalci, ki napredujejo, so %{competitors}.'
-            other: 'Naslednji tekmovalci, ki napredujejo, so %{competitors}.'
+            one: Naslednji tekmovalec, ki napreduje, je %{competitors}
+            two: Naslednja tekmovalca, ki napredujeta, sta %{competitors}
+            few: Naslednji tekmovalci, ki napredujejo, so %{competitors}
+            other: Naslednji tekmovalci, ki napredujejo, so %{competitors}
           advance: Napreduj naslednjega tekmovalca
           quit_confirm:
             one: Izloči tekmovalca iz kroga
@@ -1933,10 +1933,14 @@ sl:
         add_competitor:
           single_round: Dodaj tekmovalca v krog
           multiple_rounds:
-            one: Dodaj tekmovalca v dvojni krog
-            two: Dodaj tekmovalca v dvojni krog
-            few: Dodaj tekmovalca v dvojni krog
-            other: Dodaj tekmovalca v dvojni krog
+            one: Dodaj tekmovalca v dvojni krog. Potrebno je dodati vsakega 
+              tekmovalca posebej, saj drugi krog dvojnega kroga še ni odprt.
+            two: Dodaj tekmovalca v dvojni krog. Potrebno je dodati vsakega 
+              tekmovalca posebej, saj drugi krog dvojnega kroga še ni odprt.
+            few: Dodaj tekmovalca v dvojni krog. Potrebno je dodati vsakega 
+              tekmovalca posebej, saj drugi krog dvojnega kroga še ni odprt.
+            other: Dodaj tekmovalca v dvojni krog. Potrebno je dodati vsakega 
+              tekmovalca posebej, saj drugi krog dvojnega kroga še ni odprt.
           event_edit_warning: Ta tekmovalec ni prijavljen na to disciplino, 
             spremembe disciplin pa niso več mogoče. Tekmovalca vseeno lahko 
             dodate, vendar se prepričajte, da je to res namerno.
@@ -2200,6 +2204,21 @@ sl:
         km: km
         mi: mi
       advanced_filters: Napredni filtri
+      registration_key: 'Status prijav:'
+      registration_status:
+        open: Odprte
+        not_open: Še niso odprte
+        closed: Zaprte
+      currently_displaying:
+        one: 'Trenutno prikazano: %{count} tekmovanje'
+        two: 'Trenutno prikazani: %{count} tekmovanji'
+        few: 'Trenutno prikazana: %{count} tekmovanja'
+        other: 'Trenutno prikazanih: %{count} tekmovanj'
+      register_now: Prijavi se zdaj
+      view_competition: Ogled tekmovanja
+      why_compete_description_html: |-
+        <p>Ne gre le za to, kdo je najhitrejši – tekmovanja so predvsem družabni dogodki! Vsakdo, ki zna sestaviti kocko, je dobrodošel, da se udeleži tekmovanja in postavi nov osebni rekord. Sklepanje prijateljstev je preprosto, saj vsi skupaj sodelujemo, da tekmovanje poteka gladko.</p>
+        <p>Spodaj poišči tekmovanje v bližini in začni svojo pot v svetu kockanja!</p>
     my_competitions_table:
       edit: Uredi
       registrations: Prijave
@@ -2450,8 +2469,8 @@ sl:
           external_registration_page: >-
             Spletna stran, kjer se tekmovalci prijavijo na tekmovanje. To mora
             biti veljaven http(s) URL.
-          scoretaking_software: 'Izberite ''%{choice_ilr}'', če želite uporabiti dvojne
-            kroge'
+          scoretaking_software: 'Izberite ''%{choice_ilr}'' ali zunanje orodje, če
+            želite uporabiti dvojne kroge'
         entry_fees:
           currency_code: Koda valute za vstopnine.
           base_entry_fee: >-
@@ -2637,6 +2656,8 @@ sl:
             Preskočili ste %{count} predhodnih čakajočih prijav oziroma prijav s
             čakalnega seznama. Ste prepričani, da želite sprejeti izbrane
             prijave?
+          information: Sprejeti tekmovalci lahko sodelujejo na tekmovanju v 
+            disciplinah, na katere so prijavljeni.
         cancelled:
           title: Izbrisane prijave
           information: Izbrisani tekmovalci se lahko ponovno prijavijo.
@@ -2664,6 +2685,7 @@ sl:
           "Prijava", vključno s prijavninami, pogoji za vračilo denarja in
           morebitnimi dodatnimi zahtevami, navedenimi zgoraj.
         next_step: Nadaljuj na naslednji korak
+        accept: Sprejmi
       update:
         being_updated: Prijava se posodablja...
         being_deleted: Brisanje prijave...
@@ -2683,10 +2705,10 @@ sl:
           Kopirano v odložišče. Ne pozabite uporabiti skp (skrito kopiranje,
           angl. bcc)!
         move_to:
-          one: 'Premakni %{count} v'
-          two: 'Premakni %{count} v'
-          few: 'Premakni %{count} v'
-          other: 'Premakni %{count} v'
+          one: Premakni %{count} prjavo v
+          two: Premakni %{count} prijavi v
+          few: Premakni %{count} prijave v
+          other: Premakni %{count} prijav v
         move_to_none_selected: Premakni
         pending: Čakajoče
         waitlist: Čakalni seznam
@@ -2699,6 +2721,18 @@ sl:
           tekmovalcev za %{count}.
         no_self_update: Za posodobitev prijave se obrnite na organizacijsko 
           ekipo.
+        send_email:
+          one: Pošlji sporočilo na %{count} elektronski naslov
+          two: Pošlji sporočilo na %{count} elektronska naslova
+          few: Pošlji sporočilo na %{count} elektronske naslove
+          other: Pošlji sporočilo na %{count} elektronskih naslovov
+        copy_emails:
+          one: Kopiraj %{count} elektronski naslov
+          two: Kopiraj %{count} elektronska naslova
+          few: Kopiraj %{count} elektronske naslove
+          other: Kopiraj %{count} elektronskih naslovov
+        scroll_to: Pomakni se na
+        non_competing: Netekmovalec
       register:
         will_open_countdown: >-
           Prijave se odprejo čez %{minutes} minut in %{seconds} sekund. Ob
@@ -2747,6 +2781,12 @@ sl:
         event_limit: >-
           Na tem tekmovanju je število disciplin, na katere se lahko prijavite,
           omejeno na %{max_events}.
+        comment_overview: Vaši komentarji
+        waiting_list_count:
+          one: Na čakalnem seznamu je %{count} tekmovalec.
+          two: Na čakalnem seznamu sta %{count} tekmovalca.
+          few: Na čakalnem seznamu so %{count} tekmovalci.
+          other: Na čakalnem seznamu je %{count} tekmovalcev.
       errors:
         events: 'Nalaganje disciplin ni uspelo, poskusite znova'
         '-1': >-
@@ -2785,7 +2825,7 @@ sl:
         '-4013': >-
           Tekmovalcev povratnikov ni mogoče sprejeti, ko so na voljo le še mesta
           za novince
-        '-4014': Na to tekmovanje ste že prijavljeni
+        '-4014': Na to tekmovanje ste že prijavljeni.
         '-4015': >-
           Prosimo, vnesite razumno število gostov. Če želite povabiti veliko
           število gostov, se obrnite na organizacijsko ekipo.
@@ -2806,8 +2846,8 @@ sl:
         Samodejno sprejemanje prijav je možno le, če za prijave uporabljate WCA
         spletno stran
       must_use_payment_integration: >-
-        Če želite uporabljati samodejno potrjevanje prijav, morate omogočiti
-        integrirano plačevanje (npr. Stripe)
+        Če želite uporabiti samodejno potrjevanje prijav, morate omogočiti integrirano
+        plačevanje (npr. Stripe)
       auto_accept_limit: >-
         Omejitev za samodejno potrjevanje prijav mora biti manjše od omejitve
         števila tekmovalcev
@@ -2893,6 +2933,8 @@ sl:
       edited_deadline_not_in_future: >-
         Uvedete lahko le roke v prihodnosti, %{new_timestamp} pa ni v
         prihodnosti.
+      fto_not_yet_allowed: Discipline oktaeder ni možno izvesti na tekmovanjih, 
+        ki se začnejo pred %{date}.
     new:
       create_competition: Ustvari tekmovanje
       note_clone: >-
@@ -3162,6 +3204,7 @@ sl:
       date_circa: Datum
   notifications:
     connect_wca_id: Povežite svoj WCA ID s svojim uporabniškim računom!
+    copied_to_clipboard: Kopirano v odložišče
   payments:
     header: Zgodovina plačil
     messages:
@@ -3294,6 +3337,7 @@ sl:
       world_records: Zgodovina svetovnih rekordov
       continental_records: Zgodovina celinskih rekordov
       national_records: Zgodovina državnih rekordov
+      dual: dvojni
   posts:
     confirm_delete_post: >-
       Ste prepričani, da želite izbrisati to objavo? Tega dejanja ni mogoče
@@ -3346,7 +3390,7 @@ sl:
       '2':
         title: Kako lahko najdem WCA tekmovanje?
         content:
-          '1': Preverite naš seznam <a href='/competitions'>tekmovanj</a>.
+          '1': Oglejte si naš seznam <a href='/competitions'>tekmovanj</a>
       '3':
         title: >-
           Kako se lahko prijavim na tekmovanje? Na koga se lahko obrnem, če pri
@@ -3583,7 +3627,7 @@ sl:
         samostojnega vodenja tekmovanja, napredujejo v delegata.</p> <p>Delegati
         pripravniki se učijo delegiranja, tekmovanja pa lahko nadzirajo le pod
         mentorstvom drugega WCA delegata.</p>
-      see_link_html: '(glej %{link})'
+      see_link_html: ' (glej %{link})'
       members_html: >-
         Vsi tekmovalci samodejno postanejo <strong>člani</strong> WCA na svojem
         prvem WCA tekmovanju.
@@ -3600,6 +3644,9 @@ sl:
     codeofconduct: Kodeks ravnanja
     finances: Finance
     strategic_plan: Strateški načrt
+    motion_not_found: Predlog ni najden
+    motion_not_found_action: Predloga s številko "%{motion_id}" nismo našli. 
+      Morda je bila razveljavljen.
   education:
     title: Viri za izobraževanje
     description: >-
@@ -3609,6 +3656,7 @@ sl:
     judge_tutorial: Vodič sojenja za novince
     competition_templates: Predloge za tekmovanja
     certificates: Predloge potrdil WCA ekipe za komunikacijo (WCT)
+    orga_handbook: Priročnik za organizatorje
   delegates_page:
     title: WCA delegati
     acknowledges: 'WCA priznava sledeče WCA delegate:'
@@ -3623,6 +3671,7 @@ sl:
       total_delegated: Število delegiranj
       lead_delegated: Glavna delegiranja
       history: Zgodovina
+    copy_email: Kopiraj e-naslov
   regional_organizations:
     title: Regionalne organizacije
     content: 'WCA priznava sledeče regionalne organizacije:'
@@ -3662,7 +3711,7 @@ sl:
       public_information: Javni podatki
       private_information: Zasebni podatki
       private_information_disclaimer: Vsi spodnji podatki bodo vidni le 
-        upravnemu odboru WCA.
+        upravnemu odboru WCA
     errors:
       end_date_after_start_date: ne more biti priznana do
     create:
@@ -3820,11 +3869,50 @@ sl:
         posts: Ni najdenih objav
         incidents: Ni najdenih incidentov
         regulations_and_guidelines: Ni najdenih pravil
+      empty_query: Poišči kaj!
   incidents_log:
     i18n_disclaimer: >-
-      Upoštevajte, da je razdelek o incidentih na voljo samo v angleščini,
-      spodnja vsebina ni prevedena.
+      Razdelek o incidentih je na voljo samo v angleščini. Spodnja vsebina ni prevedena.
     incident: 'Incident:'
+    title: Zapisnik incidentov
+    page_title: 'Incident: %{title}'
+    not_found: Incident ni bil najden
+    back_to_log: Nazaj v zapisnik incidentov
+    search_placeholder: Išči
+    status: Status
+    resolved: Razrešen
+    pending: V obdelavi
+    sent_in_digest: Poslano v povzetek incidentov
+    sent: Poslano
+    showing_entries: Prikaz vnosov od %{first} do %{last} od skupno %{total} 
+      vnosov, <select></select> na stran
+    not_public_warning: 'Opomba: Ta incident še ni bil razrešen, zato ni javno viden.'
+    public_summary: Opis in razrešitev incidenta
+    private_description: Opis (vidijo samo delegati)
+    private_wrc_decision: Odločitev WRC (vidijo samo delegati)
+    tags:
+      regulation: Pravilo
+      guideline: Smernica
+      search_with_tag: Išči incidente s to značko
+      filter_by_tag: Filtriraj po tej znački
+      competition_page: Stran tekmovanja
+      delegate_report: Delegatsko poročilo
+    admin:
+      publish: Objavi
+      unpublish: Prekliči objavo
+      edit: Uredi
+      destroy: Uniči
+      cancel: Prekliči
+      confirm: Potrdi
+      change_status: Status spremembe
+      destroy_title: Uniči incident
+      confirm_publish: Ste prepričani, da želite objaviti ta zapisnik incidenta?
+      confirm_unpublish: Ste prepričani, da želite preklicati objavio tega 
+        zapisnika incidenta?
+      confirm_destroy: Ste prepričani, da želite izbrisati ta incident?
+      publish_error: Objava incidenta ni bila mogoča.
+      unpublish_error: Preklic objave incidenta ni bil mogoč.
+      destroy_error: Incidenta ni bilo mogoče izbrisati.
   about_regulations:
     title: O pravilniku
     panel1:
@@ -3852,7 +3940,7 @@ sl:
         Na strani <a href="/faq">pogosto zastavljenih vprašanj</a> najdete
         odgovore na nekatera vprašanja o WCA pravilih.
     panel4:
-      title: Smernice za organizatorje
+      title: Priročnik za organizatorje
       content1_html: >-
         Če ste zainteresirani za organiziranje tekmovanja ali ga že načrtujete,
         preberite <a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">smernice
@@ -3963,17 +4051,17 @@ sl:
         prijetna izkušnja na tekmovanju je na prvem mestu, šele nato pride
         deljenje izkušnje z drugimi.
       paragraph3: 'Vlogo gostitelja lahko povzamemo takole:'
-      short_intro: 'Na kratko se predstavite, povejte nekaj o sebi in o tekmovanju.'
+      short_intro: 'Na kratko se predstavite, povejte nekaj o sebi in o tekmovanju'
       venue_feel: >-
-        Posnemite nekaj posnetkov, da gledalci dobijo občutek za prizorišče in
-        ljudi. To je lahko le posnetek s tekmovalnega območja.
+        Posnemite nekaj posnetkov, da gledalci dobijo občutek za prizorišče in ljudi.
+        To je lahko le posnetek s tekmovalnega območja
       people_solving: >-
-        Poskusite posneti nekaj posnetkov ljudi, ki rešujejo (po možnosti hitrih
-        ljudi v njihovih glavnih disciplinah).
+        Poskusite posneti nekaj posnetkov ljudi, ki rešujejo (po možnosti hitrih ljudi
+        v njihovih glavnih disciplinah)
       mini_interviews: >-
-        Lahko poskusite opraviti kratke intervjuje z ljudmi (organizatorji,
-        delegati itd.), ki želijo povedati, kaj si mislijo o tekmovanju.
-      pictures_too: 'Pošiljate lahko tudi slike, ni nujno, da so samo videoposnetki.'
+        Lahko poskusite opraviti kratke intervjuje z ljudmi (organizatorji, delegati
+        itd.), ki želijo povedati, kaj si mislijo o tekmovanju
+      pictures_too: 'Pošiljate lahko tudi slike, ni nujno, da so samo videoposnetki'
       paragraph4: >-
         Naša komunikacija čez vikend običajno poteka prek WhatsApp skupine.
         Prosimo, poskrbite, da poznate to platformo za sporočanje, ali pa nam
@@ -4063,7 +4151,7 @@ sl:
         %{name} je star približno 100 let, prosimo preverite, ali je to
         pravilno.
       person_doesnt_have_any_results_error: 'Ni rezultatov za %{person_name} z ID-jem
-        %{person_id}.'
+        %{person_id}'
       results_not_associated_with_any_person_error: 'Na voljo so rezultati za neznano
         osebo z ID-jem %{person_id}'
       whitespace_in_name_error: 'Oseba ''%{name}'' ima presledke na začetku/na koncu
@@ -4091,8 +4179,8 @@ sl:
         Polje za spol novinca %{name} je prazno. Veljavne vrednosti spola so
         'ženski', 'moški' in 'drugo'. Prosimo, pustite komentar o tem za WRT.
       non_matching_name_warning: >-
-        Ime '%{name}', podano za %{wca_id}, se ne ujema s trenutnim zapisom v
-        zbirki podatkov WCA ('%{expected_name}').
+        Ime '%{name}', podano za %{wca_id}, se ne ujema s trenutnim zapisom v podatkovni
+        bazi WCA ('%{expected_name}'). 
       non_matching_country_warning: >-
         Država '%{country}', podana za %{name} (%{wca_id}), se ne ujema s
         trenutnim zapisom v zbirki podatkov WCA ('%{expected_country}'). Če gre
@@ -4195,6 +4283,11 @@ sl:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} je na napačnem mestu: pričakovan
         %{expected_pos}, dobljen pa %{pos}.
+      automatically_global_position_fixed_info: '[%{round_id}] Samodejno popravljen
+        skupni položaj osebe %{person_name} z mesta %{pos} na mesto %{expected_pos}.'
+      wrong_global_position_in_results_error: '[%{round_id}] %{person_name} je na
+        napačnem skupnem mestu: pričakovano mesto je %{expected_pos}, dejansko pa
+        je na mestu %{pos}.'
     rounds:
       too_many_qualified_warning: >-
         Krog %{round_id}: kvalificiralo se je več tekmovalcev, kot je bilo
@@ -4325,7 +4418,7 @@ sl:
       invalid_spoken_delegate: Eden ali več izbranih delegatov, s katerimi ste 
         govorili, v izbrani regiji ni več aktiven kot delegat ali delegat 
         začetnik.
-      declarations_required: Seznaniti se morate z vsemi izjavami.
+      declarations_required: Potrditi morate vse izjave.
       business_involvement_required: Označite, ali ste vključeni v poslovno 
         dejavnost, povezano s kockanjem.
       business_involvement_explanation_required: Razložite svojo vlogo v 
