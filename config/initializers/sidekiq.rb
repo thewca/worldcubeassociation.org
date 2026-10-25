@@ -21,6 +21,12 @@ Sidekiq.configure_server do |config|
     cap.concurrency = 1
     cap.queues = %w[sanity_checks]
   end
+
+  # Jobs that write or export the results tables must not overlap with each other, see PostResultsJob.
+  config.capsule("results") do |cap|
+    cap.concurrency = 1
+    cap.queues = %w[results]
+  end
 end
 
 Sidekiq.configure_client do |config|
