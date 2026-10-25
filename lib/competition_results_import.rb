@@ -124,8 +124,6 @@ module CompetitionResultsImport
   end
 
   def self.post_results_error(comp)
-    return I18n.t('competitions.messages.computing_auxiliary_data') if ComputeAuxiliaryData.in_progress?
-
     return I18n.t('competitions.messages.no_results') unless comp.results.any?
 
     return I18n.t('competitions.messages.no_main_event_results', event_name: comp.main_event.name) if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?

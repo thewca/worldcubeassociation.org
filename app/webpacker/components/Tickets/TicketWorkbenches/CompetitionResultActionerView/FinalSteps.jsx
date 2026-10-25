@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Confirm, List } from 'semantic-ui-react';
+import {
+  Button, Confirm, List, Message,
+} from 'semantic-ui-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
@@ -9,11 +11,12 @@ import {
   competitionAllResultsUrl,
   panelPageUrl,
 } from '../../../../lib/requests/routes.js.erb';
-import { PANEL_PAGES } from '../../../../lib/wca-data.js.erb';
+import { PANEL_PAGES, ticketsCompetitionResultStatuses } from '../../../../lib/wca-data.js.erb';
 
 export default function FinalSteps({ ticketDetails }) {
   const { ticket: { id, metadata: { competition_id: competitionId } } } = ticketDetails;
   const [showPostConfirm, setShowPostConfirm] = useState();
+  const [isPostingQueued, setIsPostingQueued] = useState(false);
 
   const queryClient = useQueryClient();
   const {
@@ -23,14 +26,29 @@ export default function FinalSteps({ ticketDetails }) {
     error,
   } = useMutation({
     mutationFn: postResults,
-    onSuccess: (ticket) => queryClient.setQueryData(
-      ['ticket-details', id],
-      (oldTicketDetails) => ({ ...oldTicketDetails, ticket }),
-    ),
+    onSuccess: (ticket) => {
+      if (ticket.metadata.status !== ticketsCompetitionResultStatuses.posted) {
+        setIsPostingQueued(true);
+        return;
+      }
+      queryClient.setQueryData(
+        ['ticket-details', id],
+        (oldTicketDetails) => ({ ...oldTicketDetails, ticket }),
+      );
+    },
   });
 
   if (isPending) return <Loading />;
   if (isError) return <Errored error={error} />;
+
+  if (isPostingQueued) {
+    return (
+      <Message info>
+        Auxiliary data is currently being computed.
+        The results will be posted automatically once the computation has finished.
+      </Message>
+    );
+  }
 
   return (
     <>

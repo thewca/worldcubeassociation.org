@@ -368,6 +368,11 @@ class TicketsController < ApplicationController
     error = CompetitionResultsImport.post_results_error(competition)
     return render status: :unprocessable_content, json: { error: error } if error
 
+    if ComputeAuxiliaryData.in_progress?
+      PostResultsJob.perform_later(competition, current_user)
+      return render status: :accepted, json: ticket
+    end
+
     CompetitionResultsImport.post_results(competition, current_user)
 
     render status: :ok, json: ticket

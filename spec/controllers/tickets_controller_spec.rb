@@ -205,6 +205,31 @@ RSpec.describe TicketsController do
 
         expect(user.reload.wca_id).to be_nil
       end
+
+      it "returns the posted ticket when auxiliary data is not being computed" do
+        competition = results_ticket.competition
+        round = create(:round, competition: competition, number: 2)
+        create(:result, competition: competition, event_id: "333", round: round)
+
+        post :post_results, params: { ticket_id: results_ticket.ticket.id }
+
+        expect(response).to have_http_status :ok
+        expect(response.parsed_body.dig("metadata", "status")).to eq TicketsCompetitionResult.statuses[:posted]
+      end
+
+      it "queues posting the results while auxiliary data is being computed" do
+        competition = results_ticket.competition
+        round = create(:round, competition: competition, number: 2)
+        create(:result, competition: competition, event_id: "333", round: round)
+        ComputeAuxiliaryData.cronjob_statistics.update!(run_start: 1.minute.ago, run_end: nil)
+
+        expect do
+          post :post_results, params: { ticket_id: results_ticket.ticket.id }
+        end.to have_enqueued_job(PostResultsJob).with(competition, wrt_member).on_queue(ApplicationJob::RESULTS_QUEUE_NAME.to_s)
+
+        expect(response).to have_http_status :accepted
+        expect(competition.reload.results_posted_at).to be_nil
+      end
     end
   end
 
