@@ -26,7 +26,7 @@ dump_developer_database:
 dump_public_results_database:
   class: "DumpPublicResultsDatabase"
   cron: "0 0 * * *"
-  queue: wca_jobs
+  queue: results
 
 dump_payload_database:
   class: "DumpPayloadDatabase"
