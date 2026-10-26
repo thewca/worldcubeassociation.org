@@ -596,13 +596,18 @@ class Round < ApplicationRecord
 
     return nil if round_index.zero?
 
+    # This call is safe because we checked `round_index` to be > 0 directly above.
     previous_wcif_round = all_wcif_rounds[round_index - 1]
-
-    # Linked rounds expressed as V1 can yield "fake" 100% advancement conditions; skip over them.
     previous_advancement_condition = previous_wcif_round["advancementCondition"]
-    return self.find_previous_wcif_v1_round(previous_wcif_round, all_wcif_rounds) if previous_advancement_condition.present?
-                                                                                     && previous_advancement_condition["type"] == 'percent'
-                                                                                     && previous_advancement_condition["value"] == 100
+
+    # Linked rounds expressed as V1 can yield "fake" 100% advancement conditions
+    was_fake_dual_condition = previous_advancement_condition.present?
+                              && previous_advancement_condition["type"] == 'percent'
+                              && previous_advancement_condition["value"] == 100
+
+    # Skip over linked rounds (based on heuristic). They're meant to have all identical advancement conditions
+    #   within the same link.
+    return self.find_previous_wcif_v1_round(previous_wcif_round, all_wcif_rounds) if was_fake_dual_condition
 
     previous_wcif_round
   end
