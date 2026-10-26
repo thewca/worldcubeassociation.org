@@ -146,7 +146,7 @@ export default function CompetitionsPage() {
     createFilterState,
   );
 
-  const { isScrolledDown, ref } = useIsScrolled("100px");
+  const { isScrolledDown, topSentinelRef } = useIsScrolled("100px");
 
   const { t } = useT();
 
@@ -431,7 +431,7 @@ export default function CompetitionsPage() {
           </Card.Body>
           <Card.Body pos="relative">
             {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-            <Box ref={ref} position="absolute" />
+            <Box ref={topSentinelRef} position="absolute" />
 
             <Tabs.Content value="list">
               <Stack

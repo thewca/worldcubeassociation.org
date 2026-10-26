@@ -12,5 +12,5 @@ export default function useIsScrolled(rootMargin?: string) {
     rootMargin: rootMargin || BACK_TO_TOP_ROOT_MARGIN_DEFAULT,
   });
 
-  return { isScrolledDown, ref: topSentinelRef };
+  return { isScrolledDown, topSentinelRef };
 }

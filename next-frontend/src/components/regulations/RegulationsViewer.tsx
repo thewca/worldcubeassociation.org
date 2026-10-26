@@ -87,7 +87,7 @@ export default function RegulationsViewer({
   contentHtml: string;
 }) {
   const [query, setQuery] = useState("");
-  const { isScrolledDown, ref } = useIsScrolled();
+  const { isScrolledDown, topSentinelRef } = useIsScrolled();
 
   const items = useMemo(() => extractSearchItems(contentHtml), [contentHtml]);
 
@@ -147,7 +147,7 @@ export default function RegulationsViewer({
   return (
     <VStack align="stretch" gap={4}>
       {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-      <Box ref={ref} position="absolute" />
+      <Box ref={topSentinelRef} position="absolute" />
 
       <Box position="sticky" top={0} zIndex={1} bg="bg" py={2}>
         <Combobox.Root
