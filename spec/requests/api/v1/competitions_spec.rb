@@ -99,4 +99,23 @@ RSpec.describe "API v1 Competitions" do
       ]
     end
   end
+
+  describe "GET #live" do
+    it 'groups recent and future live results competitions by status' do
+      upcoming = create(:competition, :visible, scoretaking_software: :internal, starts: 1.week.from_now)
+      in_progress = create(:competition, :visible, scoretaking_software: :internal, starts: 1.day.ago, ends: 1.day.from_now)
+      ended_two_weeks_ago = create(:competition, :visible, scoretaking_software: :internal, starts: 2.weeks.ago)
+      ended_last_week = create(:competition, :visible, scoretaking_software: :internal, starts: 1.week.ago)
+      create(:competition, :visible, scoretaking_software: :internal, starts: 2.months.ago)
+      create(:competition, :visible, scoretaking_software: :wca_live, starts: 1.day.ago, ends: 1.day.from_now)
+
+      get api_v1_live_competitions_path
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json["upcoming"].pluck("id")).to eq([upcoming.id])
+      expect(response_json["in_progress"].pluck("id")).to eq([in_progress.id])
+      expect(response_json["past"].pluck("id")).to eq([ended_last_week.id, ended_two_weeks_ago.id])
+    end
+  end
 end
