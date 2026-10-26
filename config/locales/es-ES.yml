@@ -3410,6 +3410,7 @@ es-ES:
       date_circa: Fecha
   notifications:
     connect_wca_id: ¡Vincula tu ID de la WCA a tu cuenta!
+    copied_to_clipboard: Copiado al portapapeles
   payments:
     header: Historial de pago
     messages:
@@ -3909,6 +3910,7 @@ es-ES:
       total_delegated: Competiciones delegadas en total
       lead_delegated: Competiciones como Delegado Responsable
       history: Historial
+    copy_email: Copiar correo electrónico
   regional_organizations:
     title: Organizaciones Regionales
     content: 'La WCA reconoce las siguientes Organizaciones Regionales:'
