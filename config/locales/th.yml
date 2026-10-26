@@ -757,16 +757,16 @@ th:
       history: ประวัติ
       translations: การแปล
       disciplinary: บันทึกวินัย
-      incidents: บันทึก incidents
+      incidents: บันทึกเหตุการณ์
       administration: การบริหาร
       manage_users: จัดการผู้ใช้งาน
       delegate: Delegate
       panel: Panel
       polls: การออกเสียงลงคะแนน
       results_team: Results team
-      results_database: Database
+      results_database: ฐานข้อมูล
       results_sidekiq: Sidekiq dashboard
-      new_post: New post
+      new_post: โพสต์ใหม่
       regional_organizations: องค์กรระดับภูมิภาค
       manage_regional_organizations: จัดการองค์กรระดับภูมิภาค
       new_regional_organization: องค์กรระดับภูมิภาคใหม่
@@ -776,15 +776,15 @@ th:
       api: API
       manage_app: จัดการแอปพลิเคชันของคุณ
       manage_auth_app: จัดการแอปพลิเคชันที่ได้รับอนุญาต
-      media_submission: Media Submission
+      media_submission: นำส่งสื่อ
       privacy: Privacy
       disclaimer: Disclaimer
       find_us: Find us
   page:
     translators:
-      title: Translators
+      title: ผู้แปลภาษา
     officers_and_board:
-      title: WCA Officers & Board
+      title: เจ้าหน้าที่และบอร์ดบริหารของ WCA
       officers_description: >-
         เจ้าหน้าที่ของ WCA จัดการงานที่เกี่ยวข้องกับสถานะที่ไม่แสวงหาผลกำไรของ
         WCA, เจ้าหน้าที่เหล่านี้ได้รับเลือกจาก WCA Board, Executive Director
@@ -795,7 +795,7 @@ th:
         WCA Board มีหน้าที่รับผิดชอบในการเป็นผู้นำองค์กรโดยรวม
         และปฏิบัติหน้าที่ใดๆ ที่ทีมและคณะกรรมการไม่ได้ปฏิบัติตาม
     teams_committees_councils:
-      title: WCA Teams and Committees
+      title: ทีมงานและคณะกรรมการของ WCA
       description: >-
         ทีมงานและคณะกรรมการของ WCA
         ถือเป็นส่วนสำคัญขององค์กรและปฏิบัติหน้าที่ประจำวันที่จำเป็นเพื่อให้องค์กรดำเนินต่อไปได้
@@ -829,11 +829,9 @@ th:
           ที่โดดเด่นที่จะนำเสนอเป็นส่วนหนึ่งของไทม์ไลน์ WCA ที่กว้างขึ้น
           เพื่อรักษามรดกของ WCA ใน speedcubing
         wct: >-
-          WCA Communication Team (WCT) ดูแลและสนับสนุนการสื่อสารของ WCA
-          กับชุมชนและประชาชนทั่วไป การสื่อสารของ WCA
-          ควรมีส่วนสนับสนุนวัตถุประสงค์ของ WCA
-          และสนับสนุนวัฒนธรรมเชิงบวกโดยทั่วไปในด้านความเป็นมิตร ความโปร่งใส
-          การไม่แบ่งแยก ความเปิดกว้าง และตอบสนองต่อความคิดเห็นต่างๆ
+          The WCA Communication Team (WCT) ดูแลและสนับสนุนการสื่อสารของ WCA กับชุมชนและประชาชนทั่วไป
+          การสื่อสารของ WCA ควรมีส่วนสนับสนุนวัตถุประสงค์ของ WCA และสนับสนุนวัฒนธรรมเชิงบวกโดยทั่วไปในด้านความเป็นมิตร
+          ความโปร่งใส การไม่แบ่งแยก ความเปิดกว้าง และตอบสนองต่อความคิดเห็นต่างๆ
         wcat: >-
           WCA Competition Announcement Team (WCAT) อนุมัติและประกาศการแข่งขัน
           WCA ที่ส่งโดย WCA Delegates
