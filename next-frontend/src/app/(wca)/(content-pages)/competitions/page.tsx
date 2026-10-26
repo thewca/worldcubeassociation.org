@@ -146,7 +146,9 @@ export default function CompetitionsPage() {
     createFilterState,
   );
 
-  const { isScrolledDown, topSentinelRef } = useIsScrolled("100px");
+  const { isScrolledDown, topSentinelRef } = useIsScrolled({
+    scrollThreshold: "100px",
+  });
 
   const { t } = useT();
 

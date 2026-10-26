@@ -5,7 +5,10 @@ import { useOnInView } from "react-intersection-observer";
 // view once the reader has scrolled a screenful or so past it.
 const BACK_TO_TOP_ROOT_MARGIN_DEFAULT = "400px 0px 0px 0px";
 
-export default function useIsScrolled(rootMargin?: string) {
+export default function useIsScrolled({
+  scrollThreshold,
+}: { scrollThreshold?: string } = {}) {
+  const rootMargin = scrollThreshold || BACK_TO_TOP_ROOT_MARGIN_DEFAULT;
   const [isScrolledDown, setIsScrolledDown] = useState(false);
 
   const topSentinelRef = useOnInView((inView) => setIsScrolledDown(!inView), {
