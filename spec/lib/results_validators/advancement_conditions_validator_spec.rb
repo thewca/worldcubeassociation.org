@@ -282,10 +282,15 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
   end
 
   def create_rounds(event_id, count:, **attrs)
-    first_round = parent_round = create(:round, number: 1, event_id: event_id, total_number_of_rounds: count, **attrs)
-    remaining_rounds = (2..count).map do |number|
-      parent_round = create(:round, number: number, total_number_of_rounds: count, competition_event: first_round.competition_event, participation_source: parent_round, **attrs)
+    first_round = create(:round, number: 1, event_id: event_id, total_number_of_rounds: count, **attrs)
+
+    # Fold the rounds into one big array, while keeping track of the rounds we already have:
+    #   It is required to backlink the (respectively) previous round into the current round.
+    (2..count).reduce([first_round]) do |rounds, number|
+      [
+        *rounds,
+        create(:round, number: number, competition_event: first_round.competition_event, total_number_of_rounds: count, participation_source: rounds.last, **attrs),
+      ]
     end
-    [first_round, *remaining_rounds]
   end
 end
