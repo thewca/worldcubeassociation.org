@@ -150,7 +150,10 @@ class Round < ApplicationRecord
 
   def initial_round?
     # NOTE: This is not quite the same as `first_round`. That method only checks for number,
-    #   here we actually check for source type.
+    #   here we actually check for source type. The difference is when your first round(s)
+    #   are linked to each other:
+    #   - `first_round?` only returns `true` for the _very_ first round
+    #   - `initial_round?` returns `true` for every round in the same link as the first.
     self.participation_source_type == CompetitionEvent.model_name
   end
 
