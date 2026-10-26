@@ -48,8 +48,12 @@ export function ResultsTable({
   isAdmin = false,
   variant = "round",
   solveTextAlign = "left",
+  showLinkedRoundsView = false,
 }: {
-  results: components["schemas"]["V1RoundResult"][];
+  results: (components["schemas"]["V1RoundResult"] &
+    Partial<
+      Pick<components["schemas"]["V1CompetitionRound"], "round_type_id">
+    >)[];
   eventId: string;
   formatId: string;
   rankingMode: components["schemas"]["RankingMode"];
@@ -57,11 +61,16 @@ export function ResultsTable({
   isAdmin?: boolean;
   variant?: "round" | "standings";
   solveTextAlign?: CssProperties["textAlign"];
+  showLinkedRoundsView?: boolean;
 }) {
   const format = formats.byId[formatId];
 
   const solveCount = format.expected_solve_count;
   const anyAverages = results.some((r) => r.average !== 0);
+
+  const resultsByCompetitor = showLinkedRoundsView
+    ? _.values(_.groupBy(results, "wca_id"))
+    : results.map((result) => [result]);
 
   return (
     <Table.ScrollArea rounded="md">
@@ -76,6 +85,11 @@ export function ResultsTable({
             <Table.ColumnHeader>Best</Table.ColumnHeader>
             {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
             <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            {showLinkedRoundsView && (
+              <Table.ColumnHeader>
+                {t("competitions.results_table.round")}
+              </Table.ColumnHeader>
+            )}
             <Table.ColumnHeader colSpan={solveCount} textAlign={solveTextAlign}>
               Solves
             </Table.ColumnHeader>
@@ -83,64 +97,87 @@ export function ResultsTable({
         </Table.Header>
 
         <Table.Body>
-          {results.map((competitorResult) => {
-            const { definedAttempts, bestResultIndex, worstResultIndex } =
-              resultAttempts(competitorResult);
+          {resultsByCompetitor.flatMap((competitorResults) =>
+            competitorResults.map((competitorResult, index) => {
+              const showText = index === 0;
+              const rowSpan = competitorResults.length;
 
-            return (
-              <Table.Row key={competitorResult.id}>
-                {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-                <PositionCell
-                  result={competitorResult}
-                  rankingMode={rankingMode}
-                  variant={variant}
-                />
-                <Table.Cell {...STICKY_COLUMN}>
-                  <Link
-                    display="block"
-                    maxWidth={STICKY_NAME_WIDTH}
-                    truncate
-                    href={route({
-                      pathname: "/persons/[wcaId]",
-                      query: { wcaId: competitorResult.wca_id },
-                    })}
-                  >
-                    {competitorResult.name}
-                  </Link>
-                </Table.Cell>
-                <Table.Cell fontWeight="bold">
-                  <WithRecordTag
-                    recordTag={competitorResult.regional_single_record}
-                  >
-                    {formatAttemptResult(competitorResult.best, eventId)}
-                  </WithRecordTag>
-                </Table.Cell>
-                {anyAverages && (
-                  <Table.Cell fontWeight="bold">
+              const { definedAttempts, bestResultIndex, worstResultIndex } =
+                resultAttempts(competitorResult);
+
+              return (
+                <Table.Row key={competitorResult.id}>
+                  {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                  {showText && (
+                    <PositionCell
+                      result={competitorResult}
+                      rankingMode={rankingMode}
+                      variant={variant}
+                      rowSpan={rowSpan}
+                    />
+                  )}
+                  {showText && (
+                    <Table.Cell {...STICKY_COLUMN} rowSpan={rowSpan}>
+                      <Link
+                        display="block"
+                        maxWidth={STICKY_NAME_WIDTH}
+                        truncate
+                        href={route({
+                          pathname: "/persons/[wcaId]",
+                          query: { wcaId: competitorResult.wca_id },
+                        })}
+                      >
+                        {competitorResult.name}
+                      </Link>
+                    </Table.Cell>
+                  )}
+                  <Table.Cell fontWeight={showText ? "bold" : undefined}>
                     <WithRecordTag
-                      recordTag={competitorResult.regional_average_record}
+                      recordTag={competitorResult.regional_single_record}
                     >
-                      {formatAttemptResult(competitorResult.average, eventId)}
+                      {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
                   </Table.Cell>
-                )}
-                <Table.Cell>
-                  <HStack>
-                    <WcaFlag code={competitorResult.country_iso2} size="sm" />
-                    <CountryMap code={competitorResult.country_iso2} t={t} />
-                  </HStack>
-                </Table.Cell>
-                <AttemptsCells
-                  attempts={definedAttempts}
-                  bestResultIndex={bestResultIndex}
-                  worstResultIndex={worstResultIndex}
-                  eventId={eventId}
-                  recordTag={competitorResult.regional_single_record}
-                  attemptCount={solveCount}
-                />
-              </Table.Row>
-            );
-          })}
+                  {anyAverages && (
+                    <Table.Cell fontWeight={showText ? "bold" : undefined}>
+                      <WithRecordTag
+                        recordTag={competitorResult.regional_average_record}
+                      >
+                        {formatAttemptResult(competitorResult.average, eventId)}
+                      </WithRecordTag>
+                    </Table.Cell>
+                  )}
+                  {showText && (
+                    <Table.Cell rowSpan={rowSpan}>
+                      <HStack>
+                        <WcaFlag
+                          code={competitorResult.country_iso2}
+                          size="sm"
+                        />
+                        <CountryMap
+                          code={competitorResult.country_iso2}
+                          t={t}
+                        />
+                      </HStack>
+                    </Table.Cell>
+                  )}
+                  {showLinkedRoundsView && (
+                    <Table.Cell>
+                      {t(`rounds.${competitorResult.round_type_id}.name`)}
+                    </Table.Cell>
+                  )}
+                  <AttemptsCells
+                    attempts={definedAttempts}
+                    bestResultIndex={bestResultIndex}
+                    worstResultIndex={worstResultIndex}
+                    eventId={eventId}
+                    recordTag={competitorResult.regional_single_record}
+                    attemptCount={solveCount}
+                  />
+                </Table.Row>
+              );
+            }),
+          )}
         </Table.Body>
       </Table.Root>
     </Table.ScrollArea>
