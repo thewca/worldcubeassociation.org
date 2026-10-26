@@ -1348,6 +1348,7 @@ th:
         locale: สถานที่
         group_name: Team/Committee Name
         delegated_competitions_count: จำนวนครั้งที่ Delegate การแข่งขัน
+        email: อีเมล
   user_groups:
     group_types:
       board: WCA Board of Directors
@@ -1803,7 +1804,7 @@ th:
             other: ถอนผู้เข้าแข่งขันออกจากรอบ
           bulk:
             success: 'ถอนผู้เข้าแข่งขันสำเร็จแล้ว %{count} คน'
-            failure: ล้มเหลวในการถอนผู้เข้าแข่งขันจำนวนมาก
+            failure: เกิดข้อผิดพลาดขณะถอนผู้เข้าแข่งขันจำนวนมาก
             menu: ถอนผู้เข้าแข่งขันจำนวนมาก
             id: ID
             name: ชื่อ
@@ -3023,6 +3024,7 @@ th:
       date_circa: วันที่โดยประมาณ
   notifications:
     connect_wca_id: เชื่อมต่อ WCA ID กับ account ของคุณ
+    copied_to_clipboard: คัดลอกไปยังคลิปบอร์ดแล้ว
   payments:
     header: ประวัติการชำระเงิน
     messages:
@@ -3470,6 +3472,7 @@ th:
       total_delegated: จำนวนครั้งที่ Delegate
       lead_delegated: ผู้นำ Delegate ของการแข่งขัน
       history: ประวัติ
+    copy_email: คัดลอกอีเมล
   regional_organizations:
     title: องค์กรระดับภูมิภาค
     content: 'WCA ยอมรับองค์กรระดับภูมิภาคดังต่อไปนี้:'
