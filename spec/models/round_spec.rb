@@ -193,13 +193,12 @@ RSpec.describe Round do
       expect(round3).to be_invalid_with_errors(participation_source: ["must exist"])
     end
   end
-end
 
-def create_rounds(event_id, count:, **attrs)
-  first_round = FactoryBot.create(:round, number: 1, event_id: event_id, total_number_of_rounds: count, **attrs)
-  parent_round = first_round
-  remaining_rounds = (2..count).map do |number|
-    parent_round = FactoryBot.create(:round, number: number, total_number_of_rounds: count, competition_event: first_round.competition_event, participation_source: parent_round, **attrs)
+  def create_rounds(event_id, count:, format_id: 'a')
+    first_round = parent_round = create(:round, number: 1, format_id: format_id, event_id: event_id, total_number_of_rounds: count)
+    remaining_rounds = (2..count).map do |number|
+      parent_round = create(:round, number: number, format_id: format_id, competition_event: first_round.competition_event, total_number_of_rounds: count, participation_source: parent_round)
+    end
+    [first_round] + remaining_rounds
   end
-  [first_round, *remaining_rounds]
 end
