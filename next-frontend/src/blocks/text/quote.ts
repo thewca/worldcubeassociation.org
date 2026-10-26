@@ -12,6 +12,10 @@ export const QuoteBlock: Block = {
       name: "content",
       type: "richText",
       required: true,
+      localized: true,
+      admin: {
+        description: "The quoted words themselves.",
+      },
     },
     markdownConvertedField("content"),
     {
@@ -19,6 +23,9 @@ export const QuoteBlock: Block = {
       type: "text",
       required: true,
       label: "Who is quoted",
+      admin: {
+        description: "Name of the person the quote is attributed to.",
+      },
     },
   ],
 };

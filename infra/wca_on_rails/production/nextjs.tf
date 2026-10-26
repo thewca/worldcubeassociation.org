@@ -4,6 +4,8 @@ resource "aws_cloudwatch_log_group" "nextjs" {
 }
 
 locals {
+  payload_database_uri = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
+
   nextjs_environment = [
     {
       name  = "WCA_LIVE_SITE"
@@ -39,7 +41,7 @@ locals {
     },
     {
       name  = "DATABASE_URI"
-      value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
+      value = local.payload_database_uri
     },
     {
       name  = "WCA_BACKEND_API_URL"
@@ -48,6 +50,10 @@ locals {
     {
       name  = "WCA_FRONTEND_API_URL"
       value = "https://www.worldcubeassociation.org/api/"
+    },
+    {
+      name  = "WEBLATE_URL"
+      value = "http://weblate.internal:8080"
     },
     {
       name  = "PROPRIETARY_FONT"
