@@ -1755,8 +1755,7 @@ class Competition < ApplicationRecord
 
     if params[:scoretaking_software].present?
       scoretaking_software = params[:scoretaking_software].to_s
-      # Our `'is' => 'are'` inflection makes Rails think "software" is already plural, so the enum mapping isn't called `scoretaking_softwares`.
-      raise WcaExceptions::BadApiParameter.new("Invalid scoretaking_software: '#{scoretaking_software}'") unless Competition.scoretaking_software.key?(scoretaking_software)
+      raise WcaExceptions::BadApiParameter.new("Invalid scoretaking_software: '#{scoretaking_software}'") unless Competition.scoretaking_softwares.key?(scoretaking_software)
 
       competitions = competitions.where(scoretaking_software: scoretaking_software)
     end
