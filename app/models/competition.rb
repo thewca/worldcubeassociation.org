@@ -1753,6 +1753,14 @@ class Competition < ApplicationRecord
       competitions = competitions.where(end_date: target_date..)
     end
 
+    if params[:scoretaking_software].present?
+      scoretaking_software = params[:scoretaking_software].to_s
+      # Our `'is' => 'are'` inflection makes Rails think "software" is already plural, so the enum mapping isn't called `scoretaking_softwares`.
+      raise WcaExceptions::BadApiParameter.new("Invalid scoretaking_software: '#{scoretaking_software}'") unless Competition.scoretaking_software.key?(scoretaking_software)
+
+      competitions = competitions.where(scoretaking_software: scoretaking_software)
+    end
+
     if params[:announced_after].present?
       announced_date = Date.safe_parse(params[:announced_after])
       raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'") unless announced_date
@@ -2283,6 +2291,12 @@ class Competition < ApplicationRecord
                 venue_address venue_details latitude_degrees longitude_degrees
                 country_iso2 event_ids time_until_registration date_range],
     include: %w[delegates organizers],
+  }.freeze
+
+  INDEX_SERIALIZE_OPTIONS = {
+    only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
+    methods: %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types],
+    include: {},
   }.freeze
 
   def serializable_hash(options = nil)

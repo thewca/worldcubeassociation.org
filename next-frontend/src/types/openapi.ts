@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/v1/competitions/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get recent and future competitions using internal live results, grouped by status */
+        get: operations["getLiveCompetitions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -1147,6 +1164,61 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        UserAvatar: {
+            /**
+             * Format: uri
+             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
+             */
+            url: string;
+            /**
+             * Format: uri
+             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
+             */
+            thumb_url?: string;
+            is_default: boolean;
+        };
+        CompetitionIndex: {
+            id: string;
+            name: string;
+            short_display_name: string;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string;
+            /** Format: date-time */
+            registration_open: string;
+            /** Format: date-time */
+            registration_close: string;
+            /** Format: date-time */
+            announced_at: string;
+            country_iso2: string;
+            city: string;
+            venue: string;
+            venue_address: string;
+            /** Format: float */
+            latitude_degrees: number;
+            /** Format: float */
+            longitude_degrees: number;
+            event_ids: string[];
+            main_event_id: string;
+            base_entry_fee_lowest_denomination: number;
+            /** @example USD */
+            currency_code: string;
+            competitor_limit: number;
+            championship_types: string[];
+            /** Format: date-time */
+            results_submitted_at?: string;
+            /** Format: date-time */
+            results_posted_at?: string;
+            /** Format: date-time */
+            report_posted_at?: string;
+            report_posted_by_user?: number;
+            delegates?: {
+                id: number;
+                name: string;
+                avatar: components["schemas"]["UserAvatar"];
+            }[];
+        };
         /** @enum {string} */
         CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         RegistrationDataV2: {
@@ -1531,19 +1603,6 @@ export interface components {
         BatchSubmitLiveResult: {
             results: components["schemas"]["SubmitLiveResult"][];
         };
-        UserAvatar: {
-            /**
-             * Format: uri
-             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
-             */
-            url: string;
-            /**
-             * Format: uri
-             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
-             */
-            thumb_url?: string;
-            is_default: boolean;
-        };
         WcifRegistration: {
             wcaRegistrationId: number;
             eventIds: string[];
@@ -1905,48 +1964,6 @@ export interface components {
                 single_rank: number | null;
                 tied_previous: boolean | null;
                 pos: number | null;
-            }[];
-        };
-        CompetitionIndex: {
-            id: string;
-            name: string;
-            short_display_name: string;
-            /** Format: date */
-            start_date: string;
-            /** Format: date */
-            end_date: string;
-            /** Format: date-time */
-            registration_open: string;
-            /** Format: date-time */
-            registration_close: string;
-            /** Format: date-time */
-            announced_at: string;
-            country_iso2: string;
-            city: string;
-            venue: string;
-            venue_address: string;
-            /** Format: float */
-            latitude_degrees: number;
-            /** Format: float */
-            longitude_degrees: number;
-            event_ids: string[];
-            main_event_id: string;
-            base_entry_fee_lowest_denomination: number;
-            /** @example USD */
-            currency_code: string;
-            competitor_limit: number;
-            championship_types: string[];
-            /** Format: date-time */
-            results_submitted_at?: string;
-            /** Format: date-time */
-            results_posted_at?: string;
-            /** Format: date-time */
-            report_posted_at?: string;
-            report_posted_by_user?: number;
-            delegates?: {
-                id: number;
-                name: string;
-                avatar: components["schemas"]["UserAvatar"];
             }[];
         };
         MyCompetition: {
@@ -2390,6 +2407,30 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getLiveCompetitions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        upcoming: components["schemas"]["CompetitionIndex"][];
+                        in_progress: components["schemas"]["CompetitionIndex"][];
+                        past: components["schemas"]["CompetitionIndex"][];
+                    };
+                };
+            };
+        };
+    };
     competitionRegistrationsV2: {
         parameters: {
             query?: never;
@@ -3395,6 +3436,7 @@ export interface operations {
                 q?: string;
                 sort?: string;
                 ongoing_and_future?: string;
+                scoretaking_software?: "external" | "wca_live" | "internal";
             };
             header?: never;
             path?: never;
