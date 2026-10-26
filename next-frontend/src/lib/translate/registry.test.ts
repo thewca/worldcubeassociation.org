@@ -11,6 +11,7 @@ import {
 // and an array nested inside a global.
 const textCardBlock = {
   slug: "TextCard",
+  labels: { singular: "Text Card", plural: "Text Cards" },
   fields: [
     {
       name: "heading",
@@ -197,6 +198,31 @@ describe("resolveStrings", () => {
     );
     expect(strings).toHaveLength(1);
     expect(strings[0].value).toBe("yes");
+  });
+
+  it("builds a breadcrumb from labels, row position and block name", () => {
+    const doc = {
+      blocks: [
+        { id: "x", blockType: "ImageCard" },
+        {
+          id: "y",
+          blockType: "TextCard",
+          blockName: "Mission",
+          heading: "Our Mission",
+        },
+      ],
+      links: [{ id: "l1", label: "Rules" }],
+    };
+    const [heading] = resolveStrings(
+      byPath["home.blocks(TextCard)[].heading"],
+      doc,
+    );
+    const [link] = resolveStrings(byPath["home.links[].label"], doc);
+
+    // Position counts every block, matching what editors see in the admin.
+    expect(heading.breadcrumb).toEqual(['Text Card #2 ("Mission")', "Heading"]);
+    // Without explicit labels, Payload's own name-to-words fallback is used.
+    expect(link.breadcrumb).toEqual(["Links #1", "Label"]);
   });
 
   it("returns null for a missing leaf value", () => {
