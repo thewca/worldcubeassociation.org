@@ -167,6 +167,7 @@ async function DelegateTab({
         profilePicture={lead_user!.avatar}
         name={lead_user!.name}
         wcaId={lead_user!.wca_id}
+        email={lead_user?.email}
         roles={[
           {
             teamRole: t(

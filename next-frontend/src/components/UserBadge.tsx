@@ -13,9 +13,7 @@ import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
-import { LuMails } from "react-icons/lu";
-import CopyButton from "./CopyButton";
-import { getT } from "@/lib/i18n/get18n";
+import EmailCopyButton from "@/components/EmailCopyButton";
 
 interface UserBadgeData {
   name: string;
@@ -26,7 +24,7 @@ interface UserBadgeData {
   email?: string;
 }
 
-const UserBadge: React.FC<UserBadgeData> = async ({
+const UserBadge: React.FC<UserBadgeData> = ({
   name,
   profilePicture,
   roles,
@@ -34,8 +32,6 @@ const UserBadge: React.FC<UserBadgeData> = async ({
   action,
   email,
 }) => {
-  const { t } = await getT();
-
   return (
     <LinkBox asChild>
       <Card.Root
@@ -80,16 +76,7 @@ const UserBadge: React.FC<UserBadgeData> = async ({
                     {name}
                   </Link>
                 </LinkOverlay>
-                {email && (
-                  <CopyButton
-                    variant="subtle"
-                    size="xs"
-                    text={t("delegates_page.copy_email")}
-                    value={email}
-                    icon={<LuMails />}
-                    toastLabel={t("notifications.copied_to_clipboard")}
-                  />
-                )}
+                {email && <EmailCopyButton email={email} />}
               </HStack>
             </Card.Title>
             {roles && (
