@@ -4,7 +4,7 @@ import {
   type FlattenedField,
   type Tab,
 } from "payload";
-import { fieldShouldBeLocalized } from "payload/shared";
+import { fieldShouldBeLocalized, toWords } from "payload/shared";
 
 /**
  * Config-introspection registry for the Weblate sync.
@@ -23,20 +23,28 @@ import { fieldShouldBeLocalized } from "payload/shared";
  */
 
 /** A single step in the path from a document root to a localized leaf field. */
-export type PathSegment =
+export type PathSegment = { label: string } &
   // Object nesting: a named field, named group, or named tab.
-  | { kind: "field"; name: string }
-  // Repeatable array field — expands to one entry per row at resolve time.
-  | { kind: "array"; name: string }
-  // Blocks field — expands to one entry per matching block instance.
-  | { kind: "block"; name: string; blockSlug: string };
+  (
+    | { kind: "field"; name: string }
+    // Repeatable array field — expands to one entry per row at resolve time.
+    | { kind: "array"; name: string }
+    // Blocks field — expands to one entry per matching block instance.
+    | { kind: "block"; name: string; blockSlug: string }
+  );
 
 /** How a translator should edit this field. */
 export type Widget = "plain" | "lexical";
 
 /** A localized field as it exists in the schema (not tied to any document). */
 export interface LocalizedField {
-  parent: { type: "collection" | "global"; slug: string };
+  parent: {
+    type: "collection" | "global";
+    slug: string;
+    label: string;
+    /** The collection's `admin.useAsTitle`, naming a row in the breadcrumb. */
+    titleField?: string;
+  };
   /** Path from the document root down to (and including) the leaf field. */
   path: PathSegment[];
   /** Stable, human-readable id, e.g. `home.blocks(TextCard)[].body`. */
@@ -62,13 +70,28 @@ export interface TranslatableString {
    * reordering). `documents.ts` prefixes the document to make a unit key.
    */
   keyPath: string;
+  /**
+   * Where the string sits, for translators, e.g. `["Text Card #2", "Heading"]`.
+   * Rows are numbered by position, so this shifts on reorder; keys do not.
+   */
+  breadcrumb: string[];
   value: unknown;
 }
 
 type RegistrySource = {
-  collections: { slug: string; fields: Field[] }[];
-  globals: { slug: string; fields: Field[] }[];
+  collections: {
+    slug: string;
+    fields: Field[];
+    labels?: { plural?: unknown };
+    admin?: { useAsTitle?: string };
+  }[];
+  globals: { slug: string; fields: Field[]; label?: unknown }[];
 };
+
+/** Payload labels may be per-locale maps or functions; only plain strings are used. */
+function labelText(label: unknown, name: string): string {
+  return typeof label === "string" ? label : toWords(name);
+}
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return value != null && typeof value === "object";
@@ -124,7 +147,14 @@ function walk(
         return walk(
           field.flattenedFields,
           parent,
-          [...basePath, { kind: "field", name: field.name }],
+          [
+            ...basePath,
+            {
+              kind: "field",
+              name: field.name,
+              label: labelText(field.label, field.name),
+            },
+          ],
           isLocalized(field, parentIsLocalized),
         );
 
@@ -132,7 +162,14 @@ function walk(
         return walk(
           field.flattenedFields,
           parent,
-          [...basePath, { kind: "array", name: field.name }],
+          [
+            ...basePath,
+            {
+              kind: "array",
+              name: field.name,
+              label: labelText(field.label, field.name),
+            },
+          ],
           isLocalized(field, parentIsLocalized),
         );
 
@@ -158,7 +195,12 @@ function walk(
             parent,
             [
               ...basePath,
-              { kind: "block", name: field.name, blockSlug: block.slug },
+              {
+                kind: "block",
+                name: field.name,
+                blockSlug: block.slug,
+                label: labelText(block.labels?.singular, block.slug),
+              },
             ],
             childIsLocalized,
           );
@@ -171,7 +213,11 @@ function walk(
         if (!isLocalized(field, parentIsLocalized)) return [];
         const path: PathSegment[] = [
           ...basePath,
-          { kind: "field", name: field.name },
+          {
+            kind: "field",
+            name: field.name,
+            label: labelText(field.label, field.name),
+          },
         ];
         return [
           {
@@ -223,7 +269,12 @@ export function buildTranslationRegistry(
     ...config.collections.flatMap((collection) =>
       walk(
         flattenAllFields({ fields: collection.fields }),
-        { type: "collection", slug: collection.slug },
+        {
+          type: "collection",
+          slug: collection.slug,
+          label: labelText(collection.labels?.plural, collection.slug),
+          titleField: collection.admin?.useAsTitle,
+        },
         [],
         false,
       ),
@@ -231,7 +282,11 @@ export function buildTranslationRegistry(
     ...config.globals.flatMap((global) =>
       walk(
         flattenAllFields({ fields: global.fields }),
-        { type: "global", slug: global.slug },
+        {
+          type: "global",
+          slug: global.slug,
+          label: labelText(global.label, global.slug),
+        },
         [],
         false,
       ),
@@ -252,6 +307,7 @@ export function resolveStrings(
     node: unknown,
     dataPath: (string | number)[],
     keyParts: string[],
+    breadcrumb: string[],
   ): TranslatableString[] => {
     if (!isRecord(node)) return [];
     const [seg, ...rest] = segs;
@@ -263,12 +319,14 @@ export function resolveStrings(
           node[seg.name],
           [...dataPath, seg.name],
           [...keyParts, seg.name],
+          [...breadcrumb, seg.label],
         );
       }
       return [
         {
           dataPath: [...dataPath, seg.name],
           keyPath: [...keyParts, seg.name].join("."),
+          breadcrumb: [...breadcrumb, seg.label],
           value: node[seg.name] ?? null,
         },
       ];
@@ -280,16 +338,24 @@ export function resolveStrings(
     return rows.flatMap((row, index) => {
       if (seg.kind === "block" && !isBlock(row, seg.blockSlug)) return [];
       const id = isRecord(row) ? row.id : undefined;
+      const blockName = isRecord(row) ? row.blockName : undefined;
+      const crumb = `${seg.label} #${index + 1}`;
       return recurse(
         rest,
         row,
         [...dataPath, seg.name, index],
         [...keyParts, `${seg.name}[${id ?? index}]`],
+        [
+          ...breadcrumb,
+          typeof blockName === "string" && blockName
+            ? `${crumb} ("${blockName}")`
+            : crumb,
+        ],
       );
     });
   };
 
-  return recurse(field.path, doc, [], []);
+  return recurse(field.path, doc, [], [], []);
 }
 
 /**

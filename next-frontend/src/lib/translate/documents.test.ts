@@ -3,11 +3,15 @@ import { unitsFromDocs } from "./documents";
 import type { SourceDoc } from "./documents";
 import type { LocalizedField } from "./registry";
 
-const parent: LocalizedField["parent"] = { type: "global", slug: "home" };
+const parent: LocalizedField["parent"] = {
+  type: "global",
+  slug: "home",
+  label: "Home",
+};
 
 const heading: LocalizedField = {
   parent,
-  path: [{ kind: "field", name: "heading" }],
+  path: [{ kind: "field", name: "heading", label: "Heading" }],
   pathString: "home.heading",
   widget: "plain",
   required: true,
@@ -16,7 +20,7 @@ const heading: LocalizedField = {
 
 const body: LocalizedField = {
   parent,
-  path: [{ kind: "field", name: "body" }],
+  path: [{ kind: "field", name: "body", label: "Body" }],
   pathString: "home.body",
   widget: "lexical",
   required: true,
@@ -47,12 +51,14 @@ const doc: SourceDoc = {
       field: heading,
       dataPath: ["heading"],
       baseKey: "home:heading",
+      breadcrumb: "Home › Heading",
       source: "Welcome",
     },
     {
       field: body,
       dataPath: ["body"],
       baseKey: "home:body",
+      breadcrumb: "Home › Body",
       source: bodySource,
     },
   ],
@@ -61,14 +67,14 @@ const doc: SourceDoc = {
 describe("unitsFromDocs", () => {
   const units = unitsFromDocs([doc]);
 
-  it("puts the field description on a plain unit", () => {
+  it("puts the breadcrumb and field description on a plain unit", () => {
     expect(units["home:heading"]).toEqual({
       message: "Welcome",
-      description: "Shown above the body.",
+      description: "Home › Heading — Shown above the body.",
     });
   });
 
-  it("puts the field description on every rich text node", () => {
+  it("puts the breadcrumb and field description on every rich text node", () => {
     const bodyUnits = Object.entries(units).filter(([key]) =>
       key.startsWith("home:body#"),
     );
@@ -78,7 +84,8 @@ describe("unitsFromDocs", () => {
     ]);
     expect(
       bodyUnits.every(
-        ([, unit]) => unit.description === "Main text of the page.",
+        ([, unit]) =>
+          unit.description === "Home › Body — Main text of the page.",
       ),
     ).toBe(true);
   });

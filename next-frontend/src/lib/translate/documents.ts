@@ -26,6 +26,8 @@ export interface Leaf {
    * `slug:path` for a global and `slug#docId:path` for a collection row.
    */
   baseKey: string;
+  /** e.g. `Announcements › "Spring Update" › Heading`, prefixed to the description. */
+  breadcrumb: string;
   source: unknown;
 }
 
@@ -93,7 +95,7 @@ export async function collectSourceDocs(
 
   const perParent = await Promise.all(
     Object.values(byParent).map(async (fields): Promise<SourceDoc[]> => {
-      const { type, slug } = fields[0].parent;
+      const { type, slug, label, titleField } = fields[0].parent;
 
       const heads: (
         | { type: "global"; doc: Record<string, unknown> }
@@ -125,21 +127,29 @@ export async function collectSourceDocs(
               doc: asRecord(doc),
             }));
 
-      return heads.map((head) => ({
-        ...head,
-        slug,
-        leaves: fields.flatMap((field) =>
-          resolveStrings(field, head.doc).map((string) => ({
-            field,
-            dataPath: string.dataPath,
-            baseKey:
-              head.type === "global"
-                ? `${slug}:${string.keyPath}`
-                : `${slug}#${head.docId}:${string.keyPath}`,
-            source: string.value,
-          })),
-        ),
-      }));
+      return heads.map((head) => {
+        const title = titleField && head.doc[titleField];
+        const root =
+          head.type === "global"
+            ? [label]
+            : [label, typeof title === "string" ? `"${title}"` : head.docId];
+        return {
+          ...head,
+          slug,
+          leaves: fields.flatMap((field) =>
+            resolveStrings(field, head.doc).map((string) => ({
+              field,
+              dataPath: string.dataPath,
+              baseKey:
+                head.type === "global"
+                  ? `${slug}:${string.keyPath}`
+                  : `${slug}#${head.docId}:${string.keyPath}`,
+              breadcrumb: [...root, ...string.breadcrumb].join(" › "),
+              source: string.value,
+            })),
+          ),
+        };
+      });
     }),
   );
 
@@ -151,7 +161,9 @@ export function unitsFromDocs(docs: SourceDoc[]): Record<string, Unit> {
   return Object.fromEntries(
     docs.flatMap(({ leaves }) =>
       leaves.flatMap((leaf): [string, Unit][] => {
-        const { description } = leaf.field;
+        const description = leaf.field.description
+          ? `${leaf.breadcrumb} — ${leaf.field.description}`
+          : leaf.breadcrumb;
         if (leaf.field.widget === "plain") {
           return typeof leaf.source === "string" && leaf.source.trim()
             ? [[leaf.baseKey, { message: leaf.source, description }]]

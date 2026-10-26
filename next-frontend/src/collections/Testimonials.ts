@@ -4,6 +4,9 @@ import { marketingTeamAccess } from "@/payload.access";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
+  admin: {
+    useAsTitle: "whoDunnit",
+  },
   access: {
     create: marketingTeamAccess,
     update: marketingTeamAccess,
