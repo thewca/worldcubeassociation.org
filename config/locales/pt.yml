@@ -1985,6 +1985,12 @@ pt:
         done: concluída
       errors:
         round_closed: A ronda ainda não está aberta
+      overview:
+        upcoming: Próximas
+        in_progress: Agora
+        past_month: Mês passado
+        no_upcoming: Não há próximas competições com resultados em direto.
+        search: Procurar competições
     my_competitions:
       title: Minhas competições
       disclaimer: >-
@@ -3281,6 +3287,7 @@ pt:
       date_circa: Data aproximada
   notifications:
     connect_wca_id: Associe o seu ID da WCA à sua conta!
+    copied_to_clipboard: Copiado para Área de Transferência
   payments:
     header: Histórico de Pagamentos
     messages:
@@ -3762,6 +3769,7 @@ pt:
       total_delegated: Total como Delegado
       history: História
       lead_delegated: Competições lideradas como Delegado
+    copy_email: Copiar email
   regional_organizations:
     title: Organizações Regionais
     content: 'A WCA reconhece as seguintes Organizações Regionais:'
