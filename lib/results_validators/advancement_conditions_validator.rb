@@ -30,7 +30,7 @@ module ResultsValidators
 
     def competition_associations(check_real_results: false)
       {
-        rounds: [:competition_event],
+        rounds: [:competition_event, { linked_round: [:rounds] }],
       }
     end
 
