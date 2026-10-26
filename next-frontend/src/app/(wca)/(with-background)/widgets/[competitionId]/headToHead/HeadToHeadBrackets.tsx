@@ -27,6 +27,7 @@ import {
   groupMatchesIntoStages,
   orderedSets,
   raceWinnerUserId,
+  H2hAttempt,
   H2hCompetitorScore,
   H2hMatch,
   H2hMatchCompetitor,
@@ -55,7 +56,7 @@ export default function HeadToHeadBrackets({
   );
 
   return (
-    <VStack align="left" gap={4}>
+    <VStack align="start" gap={4}>
       {eventIds.length > 1 && (
         <SingleEventSelector
           selectedEvent={activeEventId}
@@ -64,7 +65,7 @@ export default function HeadToHeadBrackets({
         />
       )}
       {activeRounds.map((round) => (
-        <Fragment key={round.id}>
+        <Fragment key={round.wcif_id}>
           <Heading textStyle="h3">
             {events.byId[round.event_id].name}{" "}
             {t(`rounds.${round.round_type_id}.name`)}
@@ -321,7 +322,10 @@ function SetAttemptsTable({
   match: H2hMatch;
   eventId: string;
 }) {
-  const attemptsByUserId = _.groupBy(set.attempts, "user_id");
+  const attemptsByCompetitorAndRace = _.keyBy(
+    set.attempts,
+    (a) => `${a.user_id}-${a.set_attempt_number}`,
+  );
   const winnerByRace = _.mapValues(
     _.groupBy(set.attempts, "set_attempt_number"),
     raceWinnerUserId,
@@ -337,33 +341,41 @@ function SetAttemptsTable({
       columnGap={3}
       rowGap={1}
     >
-      {match.competitors.map((competitor) => {
-        const attempts = attemptsByUserId[competitor.user_id] ?? [];
-
-        return (
-          <Fragment key={competitor.user_id}>
-            <Text>{competitor.name}</Text>
-            {raceNumbers.map((raceNumber) => {
-              const attempt = attempts.find(
-                (a) => a.set_attempt_number === raceNumber,
-              );
-              const isRaceWin = winnerByRace[raceNumber] === competitor.user_id;
-
-              return (
-                <Text
-                  key={raceNumber}
-                  textAlign="right"
-                  fontWeight={isRaceWin ? "bold" : "normal"}
-                >
-                  {attempt?.value != null
-                    ? formatAttemptResult(attempt.value, eventId)
-                    : "–"}
-                </Text>
-              );
-            })}
-          </Fragment>
-        );
-      })}
+      {match.competitors.map((competitor) => (
+        <Fragment key={competitor.user_id}>
+          <Text>{competitor.name}</Text>
+          {raceNumbers.map((raceNumber) => (
+            <AttemptCell
+              key={raceNumber}
+              attempt={
+                attemptsByCompetitorAndRace[
+                  `${competitor.user_id}-${raceNumber}`
+                ]
+              }
+              isRaceWin={winnerByRace[raceNumber] === competitor.user_id}
+              eventId={eventId}
+            />
+          ))}
+        </Fragment>
+      ))}
     </Grid>
+  );
+}
+
+function AttemptCell({
+  attempt,
+  isRaceWin,
+  eventId,
+}: {
+  attempt?: H2hAttempt;
+  isRaceWin: boolean;
+  eventId: string;
+}) {
+  return (
+    <Text textAlign="end" fontWeight={isRaceWin ? "bold" : "normal"}>
+      {attempt?.value != null
+        ? formatAttemptResult(attempt.value, eventId)
+        : "–"}
+    </Text>
   );
 }

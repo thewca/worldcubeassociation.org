@@ -58,7 +58,7 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
                            ],
                          )
 
-    render json: rounds.map(&:to_h2h_json)
+    render json: rounds.as_json(Round::H2H_SERIALIZE_OPTIONS)
   end
 
   private def set_competition

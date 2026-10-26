@@ -5,13 +5,18 @@ class H2hMatchCompetitor < ApplicationRecord
   belongs_to :h2h_match
   belongs_to :user
 
-  def to_h2h_json(final_pos_by_user_id)
-    {
-      user_id: user_id,
-      name: user.name,
-      wca_id: user.wca_id,
-      country_iso2: user.country_iso2,
-      final_pos: final_pos_by_user_id[user_id],
-    }
+  delegate :name, :wca_id, :country_iso2, to: :user
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: %w[user_id],
+    methods: %w[name wca_id country_iso2 final_pos],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
+
+  def final_pos
+    h2h_match.round.h2h_final_positions_by_user_id[user_id]
   end
 end

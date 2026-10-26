@@ -148,7 +148,7 @@ RSpec.describe "API v1 Competitions" do
 
       json = response.parsed_body
       expect(json.length).to eq 1
-      expect(json[0]["id"]).to eq round.wcif_id
+      expect(json[0]["wcif_id"]).to eq round.wcif_id
       expect(json[0]["event_id"]).to eq "333"
 
       json_match = json[0]["matches"][0]

@@ -1,11 +1,11 @@
 type: object
 required:
-  - id
+  - wcif_id
   - event_id
   - round_type_id
   - matches
 properties:
-  id:
+  wcif_id:
     type: string
     example: "333-r1"
   event_id:

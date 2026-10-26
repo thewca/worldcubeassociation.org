@@ -6,11 +6,15 @@ class H2hMatch < ApplicationRecord
   has_many :users, through: :h2h_match_competitors
   has_many :h2h_sets, -> { order(:set_number) }, inverse_of: :h2h_match, dependent: :destroy
 
-  def to_h2h_json(final_pos_by_user_id)
-    {
-      match_number: match_number,
-      competitors: h2h_match_competitors.map { it.to_h2h_json(final_pos_by_user_id) },
-      sets: h2h_sets.map(&:to_h2h_json),
-    }
+  alias_method :competitors, :h2h_match_competitors
+  alias_method :sets, :h2h_sets
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: %w[match_number],
+    methods: %w[competitors sets],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

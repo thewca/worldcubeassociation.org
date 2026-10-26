@@ -1486,7 +1486,7 @@ export interface components {
         };
         H2hRound: {
             /** @example 333-r1 */
-            id: string;
+            wcif_id: string;
             /** @example 333 */
             event_id: string;
             /** @example f */
