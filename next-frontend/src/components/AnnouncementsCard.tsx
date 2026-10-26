@@ -18,9 +18,9 @@ function AnnouncementItem({
       layerStyle="fill.subtle"
       _open={{
         layerStyle: { _light: "fill.solid", _dark: "fill.muted" },
-        color: { _dark: "fg" },
+        textStyle: "darkModeFg",
       }}
-      color={{ _dark: "fg" }}
+      textStyle="darkModeFg"
     >
       <Accordion.ItemTrigger _open={{ textStyle: "h2", cursor: "default" }}>
         <Accordion.ItemIndicator _open={{ display: "none" }} />
@@ -73,7 +73,7 @@ export default function AnnouncementsCard({
         <Accordion.Item
           value="see-all"
           layerStyle="fill.subtle"
-          color={{ _dark: "fg" }}
+          textStyle="darkModeFg"
         >
           <Accordion.ItemTrigger textStyle="s1" asChild>
             <ChakraLink href="/posts" color="currentColor">

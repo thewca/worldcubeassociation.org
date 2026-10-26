@@ -30,7 +30,7 @@ export function AnnouncementCard({
     <Card.Root
       colorPalette={colorPalette}
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
-      color={{ _dark: "fg" }}
+      textStyle="darkModeFg"
       width="full"
     >
       <Card.Body gap={2}>
@@ -60,7 +60,7 @@ export function AnnouncementFullCard({
     <Card.Root
       colorPalette={colorPalette}
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
-      color={{ _dark: "fg" }}
+      textStyle="darkModeFg"
       width="full"
     >
       <Card.Body gap={2}>

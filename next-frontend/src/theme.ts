@@ -631,6 +631,13 @@ const customConfig = defineConfig({
           color: "currentColor",
         },
       },
+      // `fill.muted` sets `colorPalette.fg`, which is unreadable on the muted
+      //   background in dark mode. Must come after `layerStyle` to override it.
+      darkModeFg: {
+        value: {
+          color: { _dark: "fg" },
+        },
+      },
     },
     layerStyles: {
       // Chakra ships fill.subtle / fill.muted / fill.solid / fill.surface and
