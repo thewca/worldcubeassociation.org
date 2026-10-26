@@ -7,6 +7,8 @@
  */
 
 /**
+ * Background and accent color of this box
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ColorPaletteSelect".
  */
@@ -115,6 +117,7 @@ export type IconName =
   | '666Icon'
   | '777Icon'
   | 'ClockIcon'
+  | 'FtoIcon'
   | 'MagicIcon'
   | 'MinxIcon'
   | 'MmagicIcon'
@@ -122,6 +125,8 @@ export type IconName =
   | 'SkewbIcon'
   | 'Sq1Icon';
 /**
+ * Page on this website the link points to.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "StaticTargetLink".
  */
@@ -151,6 +156,8 @@ export type StaticTargetLink =
   | '/teams-committees'
   | '/translators';
 /**
+ * What to do when one column ends up shorter than the other.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "GrowthStrategy".
  */
@@ -225,6 +232,9 @@ export interface Config {
     documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
+    sessions: Session;
+    accounts: Account;
+    verifications: Verification;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -245,6 +255,9 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
+    sessions: SessionsSelect<false> | SessionsSelect<true>;
+    accounts: AccountsSelect<false> | AccountsSelect<true>;
+    verifications: VerificationsSelect<false> | VerificationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -422,7 +435,13 @@ export interface UserAuthOperations {
  */
 export interface Media {
   id: string;
+  /**
+   * Alternative text describing the image, read out by screen readers and shown when the image cannot load.
+   */
   alt: string;
+  /**
+   * Optional. If set, the image becomes a link to this URL wherever it is rendered.
+   */
   customLink?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -460,8 +479,17 @@ export interface Media {
  */
 export interface Testimonial {
   id: string;
+  /**
+   * Picture of the person being quoted.
+   */
   image?: (string | null) | Media;
+  /**
+   * Short pull quote shown on the testimonials spinner before the full testimonial is opened.
+   */
   punchline: string;
+  /**
+   * The complete testimonial in the person's own words.
+   */
   fullTestimonial: {
     root: {
       type: string;
@@ -478,6 +506,9 @@ export interface Testimonial {
     [k: string]: unknown;
   };
   fullTestimonialMarkdown?: string | null;
+  /**
+   * Name of the person being quoted.
+   */
   whoDunnit: string;
   updatedAt: string;
   createdAt: string;
@@ -488,12 +519,21 @@ export interface Testimonial {
  */
 export interface Announcement {
   id: string;
+  /**
+   * Header image shown next to the announcement on the announcements list and at the top of the announcement itself.
+   */
   image?: (string | null) | Media;
+  /**
+   * Headline of the announcement, shown on the announcements list and as the page title.
+   */
   title: string;
   /**
    * Shown on the announcements list before 'Read More'. Falls back to the beginning of the content when empty.
    */
   summary?: string | null;
+  /**
+   * Full body of the announcement.
+   */
   content: {
     root: {
       type: string;
@@ -511,10 +551,12 @@ export interface Announcement {
   };
   contentMarkdown?: string | null;
   /**
-   * Optional. When set, the 'Read More' button links to this URL instead of expanding the content.
+   * Date the announcement was published, used to sort the announcements list.
    */
-  url?: string | null;
   publishedAt: string;
+  /**
+   * WCA user credited as the author of the announcement.
+   */
   publishedBy: string | User;
   updatedAt: string;
   createdAt: string;
@@ -524,20 +566,35 @@ export interface Announcement {
  * via the `definition` "users".
  */
 export interface User {
+  /**
+   * Payload's own identifier for this user.
+   */
   id: string;
-  email: string;
-  emailVerified?: string | null;
+  /**
+   * Display name of the user, as Rails knows them.
+   */
   name?: string | null;
-  image?: string | null;
   roles?: string[];
-  accounts?:
-    | {
-        provider: string;
-        providerAccountId: string;
-        type: 'oidc' | 'oauth' | 'email' | 'webauthn';
-        id?: string | null;
-      }[]
-    | null;
+  /**
+   * Auto-added by Better Auth (email)
+   */
+  email: string;
+  /**
+   * Auto-added by Better Auth (emailVerified)
+   */
+  emailVerified: boolean;
+  /**
+   * Auto-added by Better Auth (image)
+   */
+  image?: string | null;
+  /**
+   * Auto-added by Better Auth (wcaId)
+   */
+  wcaId?: string | null;
+  /**
+   * Auto-added by Better Auth (wcaUserId)
+   */
+  wcaUserId?: number | null;
   updatedAt: string;
   createdAt: string;
   collection: 'users';
@@ -548,8 +605,14 @@ export interface User {
  */
 export interface FaqCategory {
   id: string;
+  /**
+   * Name of the category, shown as the heading above its questions on the FAQ page.
+   */
   title: string;
   colorPalette: ColorPaletteSelect;
+  /**
+   * Questions that point at this category. Filled in automatically, edit the question to change it.
+   */
   relatedQuestions?: {
     docs?: (string | FaqQuestion)[];
     hasNextPage?: boolean;
@@ -564,9 +627,21 @@ export interface FaqCategory {
  */
 export interface FaqQuestion {
   id: string;
+  /**
+   * Category this question is grouped under on the FAQ page.
+   */
   category: string | FaqCategory;
+  /**
+   * The question as asked, shown as the clickable heading of the FAQ entry.
+   */
   question: string;
+  /**
+   * Plain text answer. Used when the rich text answer below is empty.
+   */
   answer: string;
+  /**
+   * Formatted answer. Takes precedence over the plain text answer above.
+   */
   answerRichtext?: {
     root: {
       type: string;
@@ -592,8 +667,14 @@ export interface FaqQuestion {
  */
 export interface Document {
   id: string;
+  /**
+   * Name of the document, shown as the link text.
+   */
   title: string;
   icon: IconName;
+  /**
+   * URL the document links to.
+   */
   link: string;
   /**
    * Category name (used for grouping documents)
@@ -608,9 +689,21 @@ export interface Document {
  */
 export interface RegulationsHistoryItem {
   id: string;
+  /**
+   * Version identifier of this Regulations release, for example '2024'.
+   */
   version: string;
+  /**
+   * URL of the Regulations at this version.
+   */
   url: string;
+  /**
+   * Optional. URL of the full list of changes introduced by this version.
+   */
   changesUrl?: string | null;
+  /**
+   * Optional. URL of the summary of changes introduced by this version.
+   */
   summarizedChangesUrl?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -621,14 +714,89 @@ export interface RegulationsHistoryItem {
  */
 export interface Tool {
   id: string;
+  /**
+   * Name of the tool.
+   */
   name: string;
+  /**
+   * One line explaining what the tool does, shown on its card on the score tools page.
+   */
   description: string;
+  /**
+   * URL of the tool's homepage.
+   */
   homepageLink: string;
+  /**
+   * Optional. URL of a guide on how to use the tool.
+   */
   guideLink?: string | null;
+  /**
+   * Optional. URL of the tool's source code repository.
+   */
   sourceCodeLink?: string | null;
+  /**
+   * Whether this tool is maintained by the WCA.
+   */
   isOfficial?: boolean | null;
+  /**
+   * Name of the person or team that maintains the tool.
+   */
   author: string;
+  /**
+   * Stage of a competition the tool is used in, used to group the tools.
+   */
   category: 'before' | 'during' | 'after';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Auto-generated from Better Auth schema (session)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sessions".
+ */
+export interface Session {
+  id: string;
+  expiresAt: string;
+  token: string;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+  user: string | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Auto-generated from Better Auth schema (account)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "accounts".
+ */
+export interface Account {
+  id: string;
+  accountId: string;
+  providerId: string;
+  user: string | User;
+  accessToken?: string | null;
+  refreshToken?: string | null;
+  idToken?: string | null;
+  accessTokenExpiresAt?: string | null;
+  refreshTokenExpiresAt?: string | null;
+  scope?: string | null;
+  password?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Auto-generated from Better Auth schema (verification)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "verifications".
+ */
+export interface Verification {
+  id: string;
+  identifier: string;
+  value: string;
+  expiresAt: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -691,6 +859,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tools';
         value: string | Tool;
+      } | null)
+    | ({
+        relationTo: 'sessions';
+        value: string | Session;
+      } | null)
+    | ({
+        relationTo: 'accounts';
+        value: string | Account;
+      } | null)
+    | ({
+        relationTo: 'verifications';
+        value: string | Verification;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -800,7 +980,6 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   summary?: T;
   content?: T;
   contentMarkdown?: T;
-  url?: T;
   publishedAt?: T;
   publishedBy?: T;
   updatedAt?: T;
@@ -836,19 +1015,13 @@ export interface FaqQuestionsSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   id?: T;
+  name?: T;
+  roles?: T;
   email?: T;
   emailVerified?: T;
-  name?: T;
   image?: T;
-  roles?: T;
-  accounts?:
-    | T
-    | {
-        provider?: T;
-        providerAccountId?: T;
-        type?: T;
-        id?: T;
-      };
+  wcaId?: T;
+  wcaUserId?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -889,6 +1062,48 @@ export interface ToolsSelect<T extends boolean = true> {
   isOfficial?: T;
   author?: T;
   category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sessions_select".
+ */
+export interface SessionsSelect<T extends boolean = true> {
+  expiresAt?: T;
+  token?: T;
+  ipAddress?: T;
+  userAgent?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "accounts_select".
+ */
+export interface AccountsSelect<T extends boolean = true> {
+  accountId?: T;
+  providerId?: T;
+  user?: T;
+  accessToken?: T;
+  refreshToken?: T;
+  idToken?: T;
+  accessTokenExpiresAt?: T;
+  refreshTokenExpiresAt?: T;
+  scope?: T;
+  password?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "verifications_select".
+ */
+export interface VerificationsSelect<T extends boolean = true> {
+  identifier?: T;
+  value?: T;
+  expiresAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -938,12 +1153,24 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Nav {
   id: string;
+  /**
+   * The top level entries of the navigation, left to right.
+   */
   entry: (
     | {
+        /**
+         * Label of the dropdown in the top level navigation.
+         */
         title: string;
         displayIcon?: IconName;
+        /**
+         * Links and submenus inside this dropdown.
+         */
         entries: (
           | {
+              /**
+               * Link text shown in the navigation.
+               */
               displayText: string;
               targetLink: StaticTargetLink;
               displayIcon?: IconName;
@@ -952,7 +1179,13 @@ export interface Nav {
               blockType: 'LinkItem';
             }
           | {
+              /**
+               * Link text shown in the navigation.
+               */
               displayText: string;
+              /**
+               * URL outside this website the link points to.
+               */
               targetLink: string;
               displayIcon?: IconName;
               id?: string | null;
@@ -960,10 +1193,19 @@ export interface Nav {
               blockType: 'ExternalLinkItem';
             }
           | {
+              /**
+               * Label of the submenu inside the dropdown.
+               */
               title: string;
               displayIcon?: IconName;
+              /**
+               * Links inside this submenu.
+               */
               entries: (
                 | {
+                    /**
+                     * Link text shown in the navigation.
+                     */
                     displayText: string;
                     targetLink: StaticTargetLink;
                     displayIcon?: IconName;
@@ -972,7 +1214,13 @@ export interface Nav {
                     blockType: 'LinkItem';
                   }
                 | {
+                    /**
+                     * Link text shown in the navigation.
+                     */
                     displayText: string;
+                    /**
+                     * URL outside this website the link points to.
+                     */
                     targetLink: string;
                     displayIcon?: IconName;
                     id?: string | null;
@@ -995,6 +1243,9 @@ export interface Nav {
         blockType: 'NavDropdown';
       }
     | {
+        /**
+         * Link text shown in the navigation.
+         */
         displayText: string;
         targetLink: StaticTargetLink;
         displayIcon?: IconName;
@@ -1003,7 +1254,13 @@ export interface Nav {
         blockType: 'LinkItem';
       }
     | {
+        /**
+         * Link text shown in the navigation.
+         */
         displayText: string;
+        /**
+         * URL outside this website the link points to.
+         */
         targetLink: string;
         displayIcon?: IconName;
         id?: string | null;
@@ -1011,6 +1268,9 @@ export interface Nav {
         blockType: 'ExternalLinkItem';
       }
     | {
+        /**
+         * Label of the menu listing the WCA's social media profiles.
+         */
         label: string;
         id?: string | null;
         blockName?: string | null;
@@ -1026,9 +1286,15 @@ export interface Nav {
  */
 export interface Footer {
   id: string;
+  /**
+   * Links in the main part of the footer.
+   */
   navigationLinks?:
     | (
         | {
+            /**
+             * Link text shown in the footer.
+             */
             displayText: string;
             targetLink: StaticTargetLink;
             id?: string | null;
@@ -1036,7 +1302,13 @@ export interface Footer {
             blockType: 'FooterLinkItem';
           }
         | {
+            /**
+             * Link text shown in the footer.
+             */
             displayText: string;
+            /**
+             * URL outside this website the link points to.
+             */
             targetLink: string;
             id?: string | null;
             blockName?: string | null;
@@ -1044,8 +1316,14 @@ export interface Footer {
           }
       )[]
     | null;
+  /**
+   * Links in the legal row at the very bottom of the footer.
+   */
   legalLinks?:
     | {
+        /**
+         * Link text shown in the footer.
+         */
         displayText: string;
         targetLink: StaticTargetLink;
         id?: string | null;
@@ -1062,10 +1340,22 @@ export interface Footer {
  */
 export interface SocialLink {
   id: string;
+  /**
+   * The WCA's social media profiles, shown in the footer and in the navigation's socials menu.
+   */
   links?:
     | {
+        /**
+         * Name of the social network, shown next to its icon and read out by screen readers.
+         */
         displayText: string;
+        /**
+         * URL of the WCA's profile on that network.
+         */
         targetLink: string;
+        /**
+         * Icon shown for this network.
+         */
         displayIcon:
           | 'About the Regulations'
           | 'About the WCA'
@@ -1164,6 +1454,7 @@ export interface SocialLink {
           | '666Icon'
           | '777Icon'
           | 'ClockIcon'
+          | 'FtoIcon'
           | 'MagicIcon'
           | 'MinxIcon'
           | 'MmagicIcon'
@@ -1184,6 +1475,9 @@ export interface SocialLink {
  */
 export interface Home {
   id: string;
+  /**
+   * The boxes making up the home page, top to bottom.
+   */
   layout: (
     | TextCardBlock
     | AnnouncementsSectionBlock
@@ -1202,7 +1496,13 @@ export interface Home {
  * via the `definition` "TextCardBlock".
  */
 export interface TextCardBlock {
+  /**
+   * Heading shown at the top of the card.
+   */
   heading: string;
+  /**
+   * Body text of the card, shown under the heading.
+   */
   body: {
     root: {
       type: string;
@@ -1219,8 +1519,17 @@ export interface TextCardBlock {
     [k: string]: unknown;
   };
   bodyMarkdown?: string | null;
+  /**
+   * Draw a horizontal line between the heading and the body
+   */
   separatorAfterHeading: boolean;
+  /**
+   * Optional call-to-action button shown below the body.
+   */
   buttons?: BentoActionButton[] | null;
+  /**
+   * Optional image shown above the heading.
+   */
   headerImage?: (string | null) | Media;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -1232,7 +1541,13 @@ export interface TextCardBlock {
  * via the `definition` "BentoActionButton".
  */
 export interface BentoActionButton {
+  /**
+   * Label written on the button.
+   */
   displayText: string;
+  /**
+   * URL the button links to.
+   */
   hyperlink: string;
   /**
    * Open this link in a new tab
@@ -1251,8 +1566,17 @@ export interface BentoActionButton {
  * via the `definition` "AnnouncementsSectionBlock".
  */
 export interface AnnouncementsSectionBlock {
+  /**
+   * Announcement shown large at the top of the section.
+   */
   mainAnnouncement: string | Announcement;
+  /**
+   * Announcements listed under the main one.
+   */
   furtherAnnouncements?: (string | Announcement)[] | null;
+  /**
+   * Show a link to the full list of announcements at the bottom of the section
+   */
   showSeeAll: boolean;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -1264,7 +1588,13 @@ export interface AnnouncementsSectionBlock {
  * via the `definition` "ImageBannerBlock".
  */
 export interface ImageBannerBlock {
+  /**
+   * Heading shown next to the banner image.
+   */
   heading?: string | null;
+  /**
+   * Body text shown under the heading.
+   */
   body?: {
     root: {
       type: string;
@@ -1281,7 +1611,13 @@ export interface ImageBannerBlock {
     [k: string]: unknown;
   } | null;
   bodyMarkdown?: string | null;
+  /**
+   * The image shown beside the text.
+   */
   mainImage: string | Media;
+  /**
+   * Which side of the text the image sits on
+   */
   imagePosition: 'left' | 'right';
   colorPalette: ColorPaletteSelect;
   /**
@@ -1289,11 +1625,17 @@ export interface ImageBannerBlock {
    */
   colorPaletteDarker?: boolean | null;
   headingColor?: ColorPaletteSelect;
+  /**
+   * Optional decorative image drawn behind the banner's content.
+   */
   bgImage?: (string | null) | Media;
   /**
    * The size of the background image in percent (%)
    */
   bgSize: number;
+  /**
+   * Which side of the banner the background image sits on
+   */
   bgPos: 'right' | 'left';
   id?: string | null;
   blockName?: string | null;
@@ -1304,7 +1646,13 @@ export interface ImageBannerBlock {
  * via the `definition` "ImageOnlyCardBlock".
  */
 export interface ImageOnlyCardBlock {
+  /**
+   * The image filling the card.
+   */
   mainImage: string | Media;
+  /**
+   * Optional caption shown over the image.
+   */
   heading?: string | null;
   /**
    * Optional. If set, the whole card becomes a link to this URL.
@@ -1314,6 +1662,9 @@ export interface ImageOnlyCardBlock {
    * Open this link in a new tab
    */
   newTab?: boolean | null;
+  /**
+   * Whether the caption sits above or below the image
+   */
   textPosition?: ('top' | 'bottom') | null;
   colorPalette: ColorPaletteSelect;
   id?: string | null;
@@ -1325,7 +1676,13 @@ export interface ImageOnlyCardBlock {
  * via the `definition` "TestimonialsBlock".
  */
 export interface TestimonialsBlock {
+  /**
+   * The testimonials the spinner rotates through.
+   */
   slides: {
+    /**
+     * The testimonial shown on this slide.
+     */
     testimonial: string | Testimonial;
     colorPalette: ColorPaletteSelect;
     id?: string | null;
@@ -1339,8 +1696,14 @@ export interface TestimonialsBlock {
  * via the `definition` "FeaturedCompetitionsBlock".
  */
 export interface FeaturedCompetitionsBlock {
+  /**
+   * The competitions to feature, in the order they appear.
+   */
   competitions?:
     | {
+        /**
+         * WCA competition ID, for example 'WC2025'.
+         */
         competitionId: string;
         colorPalette: ColorPaletteSelect;
         id?: string | null;
@@ -1355,7 +1718,13 @@ export interface FeaturedCompetitionsBlock {
  * via the `definition` "TwoBlocksLevel2Block".
  */
 export interface TwoBlocksLevel2Block {
+  /**
+   * How the available width is split between the left and right column.
+   */
   ratio: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  /**
+   * Boxes stacked in the left column.
+   */
   left: (
     | TextCardBlock
     | AnnouncementsSectionBlock
@@ -1365,6 +1734,9 @@ export interface TwoBlocksLevel2Block {
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel1Block
   )[];
+  /**
+   * Boxes stacked in the right column.
+   */
   right: (
     | TextCardBlock
     | AnnouncementsSectionBlock
@@ -1384,7 +1756,13 @@ export interface TwoBlocksLevel2Block {
  * via the `definition` "TwoBlocksLevel1Block".
  */
 export interface TwoBlocksLevel1Block {
+  /**
+   * How the available width is split between the left and right column.
+   */
   ratio: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  /**
+   * Boxes stacked in the left column.
+   */
   left: (
     | TextCardBlock
     | AnnouncementsSectionBlock
@@ -1394,6 +1772,9 @@ export interface TwoBlocksLevel1Block {
     | FeaturedCompetitionsBlock
     | TwoBlocksLevel0Block
   )[];
+  /**
+   * Boxes stacked in the right column.
+   */
   right: (
     | TextCardBlock
     | AnnouncementsSectionBlock
@@ -1413,7 +1794,13 @@ export interface TwoBlocksLevel1Block {
  * via the `definition` "TwoBlocksLevel0Block".
  */
 export interface TwoBlocksLevel0Block {
+  /**
+   * How the available width is split between the left and right column.
+   */
   ratio: '1/3 & 2/3' | '2/3 & 1/3' | '1/2 & 1/2' | '1/4 & 3/4' | '3/4 & 1/4';
+  /**
+   * Boxes stacked in the left column.
+   */
   left: (
     | TextCardBlock
     | AnnouncementsSectionBlock
@@ -1422,6 +1809,9 @@ export interface TwoBlocksLevel0Block {
     | TestimonialsBlock
     | FeaturedCompetitionsBlock
   )[];
+  /**
+   * Boxes stacked in the right column.
+   */
   right: (
     | TextCardBlock
     | AnnouncementsSectionBlock
@@ -1441,8 +1831,14 @@ export interface TwoBlocksLevel0Block {
  */
 export interface AboutUsPage {
   id: string;
+  /**
+   * The sections making up the About Us page, top to bottom.
+   */
   blocks: (
     | {
+        /**
+         * Text shown above the buttons.
+         */
         content: {
           root: {
             type: string;
@@ -1459,8 +1855,17 @@ export interface AboutUsPage {
           [k: string]: unknown;
         };
         contentMarkdown?: string | null;
+        /**
+         * The buttons offered under the text.
+         */
         buttons: {
+          /**
+           * Label written on the button.
+           */
           label: string;
+          /**
+           * URL the button links to.
+           */
           url: string;
           /**
            * Open this link in a new tab
@@ -1473,8 +1878,17 @@ export interface AboutUsPage {
         blockType: 'callToAction';
       }
     | {
+        /**
+         * Heading of this section of the About Us page.
+         */
         title: string;
+        /**
+         * Optional image shown alongside the text.
+         */
         image?: (string | null) | Media;
+        /**
+         * Body text of this section.
+         */
         content: {
           root: {
             type: string;
@@ -1496,6 +1910,9 @@ export interface AboutUsPage {
         blockType: 'simpleItem';
       }
     | {
+        /**
+         * The quoted words themselves.
+         */
         content: {
           root: {
             type: string;
@@ -1512,6 +1929,9 @@ export interface AboutUsPage {
           [k: string]: unknown;
         };
         contentMarkdown?: string | null;
+        /**
+         * Name of the person the quote is attributed to.
+         */
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1527,6 +1947,9 @@ export interface AboutUsPage {
  */
 export interface PrivacyPage {
   id: string;
+  /**
+   * Text shown at the top of the Privacy page, above the numbered paragraphs.
+   */
   preamble: {
     root: {
       type: string;
@@ -1543,8 +1966,17 @@ export interface PrivacyPage {
     [k: string]: unknown;
   };
   preambleMarkdown?: string | null;
+  /**
+   * The paragraphs making up the Privacy page, top to bottom.
+   */
   blocks: {
+    /**
+     * Heading shown above the paragraph.
+     */
     title: string;
+    /**
+     * Body text of the paragraph.
+     */
     content: {
       root: {
         type: string;
@@ -1574,8 +2006,17 @@ export interface PrivacyPage {
  */
 export interface DisclaimerPage {
   id: string;
+  /**
+   * The paragraphs making up the Disclaimer page, top to bottom.
+   */
   blocks: {
+    /**
+     * Heading shown above the paragraph.
+     */
     title: string;
+    /**
+     * Body text of the paragraph.
+     */
     content: {
       root: {
         type: string;
@@ -1605,9 +2046,18 @@ export interface DisclaimerPage {
  */
 export interface SpeedcubingHistoryPage {
   id: string;
+  /**
+   * The sections making up the Speedcubing History page, top to bottom.
+   */
   blocks: (
     | {
+        /**
+         * Heading shown above the paragraph.
+         */
         title: string;
+        /**
+         * Body text of the paragraph.
+         */
         content: {
           root: {
             type: string;
@@ -1629,13 +2079,22 @@ export interface SpeedcubingHistoryPage {
         blockType: 'paragraph';
       }
     | {
+        /**
+         * Caption shown underneath the image.
+         */
         caption: string;
+        /**
+         * The image to show.
+         */
         image: string | Media;
         id?: string | null;
         blockName?: string | null;
         blockType: 'captionedImage';
       }
     | {
+        /**
+         * The quoted words themselves.
+         */
         content: {
           root: {
             type: string;
@@ -1652,6 +2111,9 @@ export interface SpeedcubingHistoryPage {
           [k: string]: unknown;
         };
         contentMarkdown?: string | null;
+        /**
+         * Name of the person the quote is attributed to.
+         */
         quotedPerson: string;
         id?: string | null;
         blockName?: string | null;
@@ -1667,8 +2129,17 @@ export interface SpeedcubingHistoryPage {
  */
 export interface AboutRegulationsPage {
   id: string;
+  /**
+   * The paragraphs making up the About Regulations page, top to bottom.
+   */
   blocks: {
+    /**
+     * Heading shown above the paragraph.
+     */
     title: string;
+    /**
+     * Body text of the paragraph.
+     */
     content: {
       root: {
         type: string;
@@ -1698,7 +2169,13 @@ export interface AboutRegulationsPage {
  */
 export interface DocumentsPage {
   id: string;
+  /**
+   * The documents listed on the Documents page, in the order they appear.
+   */
   documents: {
+    /**
+     * The document to list here.
+     */
     document: string | Document;
     id?: string | null;
   }[];
@@ -1711,6 +2188,9 @@ export interface DocumentsPage {
  */
 export interface FaqPage {
   id: string;
+  /**
+   * Text shown above the list of questions on the FAQ page.
+   */
   introText?: {
     root: {
       type: string;
@@ -1727,7 +2207,13 @@ export interface FaqPage {
     [k: string]: unknown;
   } | null;
   introTextMarkdown?: string | null;
+  /**
+   * The questions listed on the FAQ page, in the order they appear.
+   */
   questions: {
+    /**
+     * The question to list here.
+     */
     faqQuestion: string | FaqQuestion;
     id?: string | null;
   }[];
@@ -1740,9 +2226,18 @@ export interface FaqPage {
  */
 export interface LogoPage {
   id: string;
+  /**
+   * The sections making up the Logo page, top to bottom.
+   */
   blocks: (
     | {
+        /**
+         * Optional heading shown above the paragraph.
+         */
         title?: string | null;
+        /**
+         * Body text of the paragraph.
+         */
         content: {
           root: {
             type: string;
@@ -1764,11 +2259,29 @@ export interface LogoPage {
         blockType: 'paragraph';
       }
     | {
+        /**
+         * Name of this logo variant.
+         */
         title: string;
+        /**
+         * Explains when this logo variant should be used.
+         */
         caption: string;
+        /**
+         * Tick this for variants without wordmark, so they are rendered smaller.
+         */
         logoOnly?: boolean | null;
+        /**
+         * The files this variant is offered in.
+         */
         images: {
+          /**
+           * The logo file to show.
+           */
           image: string | Media;
+          /**
+           * Tick this when the logo needs a dark backdrop to be visible.
+           */
           darkBackground?: boolean | null;
           id?: string | null;
         }[];
@@ -1777,6 +2290,9 @@ export interface LogoPage {
         blockType: 'logoVariant';
       }
     | {
+        /**
+         * URL of the logo package the download button points to.
+         */
         url: string;
         id?: string | null;
         blockName?: string | null;

@@ -930,6 +930,29 @@ RSpec.describe "Competition WCIF" do
         end.not_to raise_error
       end
 
+      it "passes when an unregistered manager has personal bests" do
+        create(:ranks_single, person_id: delegate.wca_id)
+
+        wcif = competition.to_wcif(version: '2.0.0')
+        manager_wcif = wcif["persons"].find { it["wcaUserId"] == delegate.id }
+
+        expect(manager_wcif["registration"]).to be_nil
+        expect(manager_wcif["personalBests"].first).to include("value")
+
+        expect do
+          Competition.validate_wcif_schema!(wcif, version: '2.0.0')
+        end.not_to raise_error
+      end
+
+      it "passes when activities carry a scrambleSetId" do
+        wcif = competition.to_wcif
+        wcif["schedule"]["venues"].first["rooms"].first["activities"].first["scrambleSetId"] = nil
+
+        expect do
+          Competition.validate_wcif_schema!(wcif)
+        end.not_to raise_error
+      end
+
       it "does not pass on cross-version schema" do
         expect do
           Competition.validate_wcif_schema!(
@@ -1192,6 +1215,33 @@ RSpec.describe "Competition WCIF" do
 
         # Our cleanup code picks up orphaned rounds, see the model spec for linked_round.rb
         expect(LinkedRound.count).to be 0
+      end
+
+      %w[1.1 2.1.1].each do |removal_version|
+        it "unlinks the remaining round when removing a linked round with WCIF #{removal_version}" do
+          round333_2.update!(cutoff: sixty_second_2_attempt_cutoff)
+
+          linked_round = create(:linked_round)
+
+          round333_1.update!(linked_round: linked_round)
+          round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source)
+
+          wcif_events = competition.to_wcif(version: removal_version)["events"]
+          wcif_333_event = wcif_events.find { |e| e["id"] == "333" }
+
+          wcif_333_event["rounds"] = wcif_333_event["rounds"].take(1)
+          if removal_version == '1.1'
+            wcif_333_event["rounds"][0]["advancementCondition"] = nil
+          else
+            wcif_333_event["rounds"][0]["linkedRounds"] = nil
+          end
+
+          competition.set_wcif_events!(wcif_events, delegate, version: removal_version)
+
+          expect(event_333.reload.rounds).to eq([round333_1])
+          expect(round333_1.reload.linked_round).to be_nil
+          expect(LinkedRound.count).to be 0
+        end
       end
 
       context "malformed linked_rounds entries" do

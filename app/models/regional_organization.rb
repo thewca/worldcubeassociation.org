@@ -30,7 +30,7 @@ class RegionalOrganization < ApplicationRecord
   end
 
   def logo_url
-    Rails.application.routes.url_helpers.rails_representation_url(logo.variant(resize: "500x300").processed) if logo.attached?
+    Rails.application.routes.url_helpers.rails_representation_url(logo.variant(resize_to_limit: [500, 300]).processed) if logo.attached?
   end
 
   def country_iso2

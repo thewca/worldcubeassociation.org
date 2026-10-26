@@ -102,6 +102,14 @@ RSpec.describe Competition do
     expect(competition.guests_entry_fee_required?).to be false
   end
 
+  it "does not require a guest entry fee when guests are not enabled" do
+    competition = create(:competition, :confirmed, country_id: "USA", guests_enabled: false, guests_entry_fee_lowest_denomination: nil)
+
+    expect(competition.guests_entry_fee_required?).to be false
+
+    expect(competition).to be_valid
+  end
+
   it "handles free guest entry status" do
     competition = create(:competition)
 
@@ -1493,6 +1501,17 @@ RSpec.describe Competition do
         expect(competition.to_ics.events.map { |e| e.summary.to_s }).to include(r)
       end
     end
+
+    it "ics export encodes datetimes as UTC with Zulu suffix" do
+      ical = competition.to_ics.to_ical
+      expect(ical).not_to include("TZID")
+
+      lines = ical.split("\r\n")
+      competition.all_activities.each do |activity|
+        expect(lines).to include("DTSTART:#{activity.start_time.utc.strftime('%Y%m%dT%H%M%SZ')}")
+        expect(lines).to include("DTEND:#{activity.end_time.utc.strftime('%Y%m%dT%H%M%SZ')}")
+      end
+    end
   end
 
   context "payment integration methods" do
@@ -1711,7 +1730,7 @@ RSpec.describe Competition do
         it 'integrated payment not enabled when competition is confirmed' do
           confirmed_comp = build(:competition, :confirmed, :bulk_auto_accept, :future)
           expect(confirmed_comp).not_to be_valid
-          expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
+          expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (e.g., Stripe) in order to use auto-accept")
         end
 
         it 'any paid-pending registrations exist' do
@@ -1775,7 +1794,7 @@ RSpec.describe Competition do
         it 'integrated payment not enabled when competition is confirmed' do
           confirmed_comp = build(:competition, :confirmed, :live_auto_accept, :future)
           expect(confirmed_comp).not_to be_valid
-          expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (eg, Stripe) in order to use auto-accept")
+          expect(confirmed_comp.errors[:auto_accept_preference]).to include("You must enable a payment integration (e.g., Stripe) in order to use auto-accept")
         end
 
         it 'any paid-pending registrations exist' do

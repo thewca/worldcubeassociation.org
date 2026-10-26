@@ -19,9 +19,9 @@ import { showMessage } from './RegistrationMessage';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 import Loading from '../../Requests/Loading';
 
-const convertISOAmount = async (competitionId, userId, isoDonationAmount) => {
+const convertISOAmount = async (registrationId, isoDonationAmount) => {
   const { data } = await fetchJsonOrError(
-    paymentDenominationUrl(competitionId, userId, isoDonationAmount),
+    paymentDenominationUrl(registrationId, isoDonationAmount),
   );
   return data;
 };
@@ -30,8 +30,9 @@ export default function Wrapper({
   competitionInfo,
   stripePublishableKey,
   connectedAccountId,
-  user,
 }) {
+  const { registrationId } = useRegistration();
+
   const stripePromise = useMemo(() => loadStripe(stripePublishableKey, {
     stripeAccount: connectedAccountId,
   }), [stripePublishableKey, connectedAccountId]);
@@ -42,8 +43,8 @@ export default function Wrapper({
   const {
     data, isFetching,
   } = useQuery({
-    queryFn: () => convertISOAmount(competitionInfo.id, user.id, isoDonationAmount),
-    queryKey: ['displayAmount', isoDonationAmount, competitionInfo.id, user.id],
+    queryFn: () => convertISOAmount(registrationId, isoDonationAmount),
+    queryKey: ['displayAmount', isoDonationAmount, registrationId],
   });
 
   return (

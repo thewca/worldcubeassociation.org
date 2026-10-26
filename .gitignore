@@ -79,3 +79,6 @@ WCA_export_*
 # AI coding assistants
 .claude/
 .agents/
+
+# Assets exported by the `assets` bake target
+/assets

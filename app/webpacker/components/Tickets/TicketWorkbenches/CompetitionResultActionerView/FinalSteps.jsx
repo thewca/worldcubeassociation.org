@@ -4,7 +4,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Loading from '../../../Requests/Loading';
 import Errored from '../../../Requests/Errored';
 import postResults from '../../api/competitionResult/postResults';
-import { viewUrls, competitionAllResultsUrl } from '../../../../lib/requests/routes.js.erb';
+import {
+  viewUrls,
+  competitionAllResultsUrl,
+  panelPageUrl,
+} from '../../../../lib/requests/routes.js.erb';
+import { PANEL_PAGES } from '../../../../lib/wca-data.js.erb';
 
 export default function FinalSteps({ ticketDetails }) {
   const { ticket: { id, metadata: { competition_id: competitionId } } } = ticketDetails;
@@ -45,7 +50,7 @@ export default function FinalSteps({ ticketDetails }) {
           <Button
             as="a"
             primary
-            href={viewUrls.competitions.adminDoComputeAuxiliaryData}
+            href={panelPageUrl(PANEL_PAGES.computeAuxiliaryData)}
             target="_blank"
           >
             Compute auxiliary data

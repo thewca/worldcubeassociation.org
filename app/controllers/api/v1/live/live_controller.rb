@@ -26,7 +26,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "Values cannot be 0, please omit them instead" }, status: :unprocessable_content if results.any? { it[:value].to_i.zero? }
 
-    UpdateLiveResultJob.perform_later(live_result, results, @current_user.id)
+    UpdateLiveResultJob.perform_later(live_result, results, authenticated_user.id)
 
     render json: { status: "ok" }
   end
@@ -54,7 +54,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
       { live_result: live_result, results: results }
     end
 
-    BatchUpdateLiveResultJob.perform_later(round, job_entries, @current_user.id)
+    BatchUpdateLiveResultJob.perform_later(round, job_entries, authenticated_user.id)
 
     render json: { status: "ok" }
   end
@@ -77,11 +77,11 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def by_person
     registration_id = params.require(:registration_id)
-    registration = Registration.find(registration_id)
+    registration = @competition.registrations.find(registration_id)
 
     results = registration.live_results.includes(:live_attempts)
 
-    user_wcif = registration.user.to_wcif(@competition, registration)
+    user_wcif = registration.user.to_wcif(@competition, registration, version: Competition::WCIF_VERSION_CATALOGUE[:latest])
     user_wcif["results"] = results
 
     render json: user_wcif
@@ -107,7 +107,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round is not open" }, status: :bad_request if state != Round::STATE_OPEN
 
-    recreated_rows = round.clear_round!(@current_user)
+    recreated_rows = round.clear_round!(authenticated_user)
 
     render json: { status: "ok", recreated_rows: recreated_rows, state: round.lifecycle_state }
   end
@@ -128,7 +128,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round has results entered" }, status: :bad_request if round.completed_competitors.positive?
 
-    deleted_count = round.close_round!
+    deleted_count = round.close_round!(authenticated_user)
 
     render json: { status: "ok", deleted_count: deleted_count }
   end
@@ -146,11 +146,13 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     delete_count = Live::DiffHelper.broadcast_changes(round) do
       deleted = result.live_attempts.delete_all
       LiveResult.reset_counters(result.id, :live_attempts)
-      result.update!(average: 0, best: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
+      result.assign_attributes(average: 0, best: 0, single_record_tag: nil, average_record_tag: nil)
+      result.assign_attributes(advancing: false, advancing_questionable: false) unless result.locked?
+      result.save!
       deleted
     end
 
-    result.live_result_history_entries.create(action_source: "live_results", action_type: "cleared", entered_by: @current_user)
+    result.live_result_history_entries.create(action_source: "live_results", action_type: "cleared", entered_by: authenticated_user)
 
     render json: { status: "ok", deleted_attempts: delete_count }
   end
@@ -174,7 +176,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
       return render json: { status: "regulation #{violation}: #{Round::INSUFFICIENT_COMPETITORS_MESSAGES[violation]}" }, status: :bad_request
     end
 
-    created_rows, locked_rows = round.open_and_lock_previous(@current_user)
+    created_rows, locked_rows = round.open_and_lock_previous(authenticated_user)
 
     render json: { status: "ok", locked_rows: locked_rows, created_rows: created_rows, state: round.lifecycle_state }
   end
@@ -197,7 +199,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "The advancing competitor doesn't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids.present? && advancing_ids.map(&:to_i) != to_advance&.pluck(:registration_id)
 
-    quit_count = round.quit_from_round!(registration_id, @current_user, to_advance: to_advance)
+    quit_count = round.quit_from_round!(registration_id, authenticated_user, to_advance: to_advance)
 
     render json: { status: "ok", quit: quit_count }
   end
@@ -219,7 +221,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "The advancing competitors don't match who should be advancing.", should_advance: to_advance }, status: :bad_request if advancing_ids.present? && advancing_ids.map(&:to_i) != to_advance&.pluck(:registration_id)
 
-    quit_count = round.bulk_quit_from_round!(registration_ids, @current_user, to_advance: to_advance)
+    quit_count = round.bulk_quit_from_round!(registration_ids, authenticated_user, to_advance: to_advance)
 
     render json: { status: "ok", quit: quit_count }
   end

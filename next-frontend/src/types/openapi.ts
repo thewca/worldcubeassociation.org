@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/v1/competitions/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get recent and future competitions using internal live results, grouped by status */
+        get: operations["getLiveCompetitions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -14,11 +31,54 @@ export interface paths {
         /** Get competition registrations */
         get: operations["competitionRegistrationsV2"];
         put?: never;
+        /**
+         * Register the given user for a competition
+         * @description Registrations are created asynchronously, so a successful response only means the request was
+         *     queued. Poll `registrationByUser` until the registration shows up.
+         */
+        post: operations["createRegistration"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/registrations/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a user's registration for a competition */
+        get: operations["registrationByUser"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/registrations/{registrationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update an existing registration
+         * @description Only the properties present in the payload are changed. Competitors may only set `status` to
+         *     `cancelled` (to withdraw) or `pending` (to re-register after withdrawing).
+         */
+        patch: operations["updateRegistration"];
         trace?: never;
     };
     "/v1/competitions/{competitionId}/registration_config": {
@@ -30,6 +90,91 @@ export interface paths {
         };
         /** Get registration config for a competition */
         get: operations["competitionRegistrationConfig"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/registration_eligibility": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the current user's eligibility to register for a competition
+         * @description Whether the calling user may be shown the registration form at all, and which blocker to
+         *     explain to them if not. Complements `registrationConfig`, which describes the steps
+         *     themselves.
+         */
+        get: operations["registrationEligibility"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/registrations/{registrationId}/payment_denomination": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Convert a registration's fee into the denominations a payment needs
+         * @description What a payment attempt would charge, expressed in every denomination the frontend needs. The
+         *     payment providers each want their own integer format - Stripe has special-case currencies that
+         *     are not simple subunits - so the conversion stays on the server rather than being reimplemented
+         *     per client.
+         */
+        get: operations["registrationPaymentDenomination"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the posted results of a competition
+         * @description Every round of the competition with its results nested, ordered by event and then by round number. Public: no authentication required. Returns an empty array while results have not been posted.
+         */
+        get: operations["v1CompetitionResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/podiums": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the podiums of a competition
+         * @description The first three placed competitors of every event, by `global_pos`. Public: no authentication required. Returns an empty array while results have not been posted.
+         */
+        get: operations["v1CompetitionPodiums"];
         put?: never;
         post?: never;
         delete?: never;
@@ -68,6 +213,25 @@ export interface paths {
         post?: never;
         /** Remove a scoretaker from a competition */
         delete: operations["removeScoretaker"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/bookmark": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Whether the current user has bookmarked a competition */
+        get: operations["getCompetitionBookmark"];
+        put?: never;
+        /** Bookmark a competition for the current user */
+        post: operations["bookmarkCompetition"];
+        /** Remove the current user's bookmark of a competition */
+        delete: operations["unbookmarkCompetition"];
         options?: never;
         head?: never;
         patch?: never;
@@ -384,6 +548,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/persons/{wca_id}/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get results for a person
+         * @description Every result the person has ever earned, optionally narrowed to one event. Public: no authentication required.
+         */
+        get: operations["v1PersonResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/persons/{wca_id}/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get record-setting results for a person
+         * @description The subset of the person's results that set a national, continental or world record, for either single or average. Public: no authentication required.
+         */
+        get: operations["v1PersonRecords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/geocoding/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Look up the locations matching an address
+         * @description Resolves a free-text address, city or postcode to coordinates. Requires authentication, and each user may only search 5 times per minute.
+         */
+        get: operations["v1GeocodingSearch"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/competitions/{competitionId}/": {
         parameters: {
             query?: never;
@@ -408,7 +632,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get competition events in WCIF v0 format */
+        /** Get competition events in WCIF format */
         get: operations["competitionEvents"];
         put?: never;
         post?: never;
@@ -497,7 +721,7 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    sort_by?: string;
+                    sort_by?: "average" | "single";
                 };
                 header?: never;
                 path: {
@@ -644,6 +868,41 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v0/incidents/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a single incident */
+        get: operations["incidentById"];
+        put?: never;
+        post?: never;
+        /** Delete an incident */
+        delete: operations["deleteIncident"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v0/incidents/{incident_id}/mark_as/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Publish or unpublish an incident */
+        patch: operations["incidentMarkAs"];
         trace?: never;
     };
     "/v0/search": {
@@ -922,6 +1181,63 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        UserAvatar: {
+            /**
+             * Format: uri
+             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
+             */
+            url: string;
+            /**
+             * Format: uri
+             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
+             */
+            thumb_url?: string;
+            is_default: boolean;
+        };
+        CompetitionIndex: {
+            id: string;
+            name: string;
+            short_display_name: string;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string;
+            /** Format: date-time */
+            registration_open: string;
+            /** Format: date-time */
+            registration_close: string;
+            /** Format: date-time */
+            announced_at: string;
+            country_iso2: string;
+            city: string;
+            venue: string;
+            venue_address: string;
+            /** Format: float */
+            latitude_degrees: number;
+            /** Format: float */
+            longitude_degrees: number;
+            event_ids: string[];
+            main_event_id: string;
+            base_entry_fee_lowest_denomination: number;
+            /** @example USD */
+            currency_code: string;
+            competitor_limit: number;
+            championship_types: string[];
+            /** Format: date-time */
+            results_submitted_at?: string;
+            /** Format: date-time */
+            results_posted_at?: string;
+            /** Format: date-time */
+            report_posted_at?: string;
+            report_posted_by_user?: number;
+            delegates?: {
+                id: number;
+                name: string;
+                avatar: components["schemas"]["UserAvatar"];
+            }[];
+        };
+        /** @enum {string} */
+        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         RegistrationDataV2: {
             id: number;
             registrant_id: number;
@@ -936,25 +1252,29 @@ export interface components {
             };
             competing: {
                 event_ids: string[];
-                registration_status?: string;
+                registration_status?: components["schemas"]["CompetingStatus"];
                 /** Format: datetime */
                 registered_on?: string;
                 comment?: string;
                 admin_comment?: string;
+                waiting_list_position?: number;
             };
             payment?: {
-                has_paid?: boolean;
+                has_paid: boolean;
                 payment_status?: string;
-                paid_amount_iso?: number;
-                currency_code?: string;
+                paid_amount_iso: number;
+                currency_code: string;
                 /** Format: datetime */
                 updated_at?: string;
             };
         };
         BaseRegistrationConfig: {
             key: string;
-            isEditable: boolean;
+            is_editable: boolean;
+            is_post_step: boolean;
             parameters?: Record<string, never>;
+            /** @enum {string} */
+            summary_status: "show" | "hide" | "priority";
         };
         RequirementsStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
             /**
@@ -963,48 +1283,23 @@ export interface components {
              */
             key: "requirements";
         };
+        WcifResultCondition: {
+            /** @enum {string} */
+            type: "resultAchieved" | "ranking" | "percent";
+            /** @enum {string} */
+            scope: "single" | "average";
+            value?: number | null;
+        } | null;
+        WcifQualification: {
+            earliestResultDate?: string;
+            latestResultDate: string;
+            resultCondition: components["schemas"]["WcifResultCondition"];
+        };
         WcifAttemptResult: number;
-        WcifQualificationAttemptResult: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "attemptResult";
-            /** @enum {string} */
-            resultType: "single" | "average";
-            level: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifRanking: number;
-        WcifQualificationRanking: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "ranking";
-            /** @enum {string} */
-            resultType: "single" | "average";
-            level: components["schemas"]["WcifRanking"];
-        };
-        WcifQualificationAnyResult: {
-            /** Format: date */
-            whenDate: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "anyResult";
-            /** @enum {string} */
-            resultType: "single" | "average";
-        };
-        WcifQualification: components["schemas"]["WcifQualificationAttemptResult"] | components["schemas"]["WcifQualificationRanking"] | components["schemas"]["WcifQualificationAnyResult"];
         WcifPersonalBest: {
             /** @example 333 */
             eventId: string;
-            best: components["schemas"]["WcifAttemptResult"];
+            value: components["schemas"]["WcifAttemptResult"];
             worldRanking: number;
             continentalRanking: number;
             nationalRanking: number;
@@ -1040,6 +1335,8 @@ export interface components {
             key: "competing";
         };
         PaymentStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
+            /** Format: datetime */
+            deadline?: string;
             parameters: {
                 stripePublishableKey: string;
                 connectedAccountId: string;
@@ -1065,11 +1362,115 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
+        };
+        RegistrationEligibility: {
+            /** @description Whether the user may register before registration opens, i.e. is a delegate or organizer of this competition */
+            can_pre_register: boolean;
+            /** @description Whether the user is still banned on the day the competition starts */
+            banned: boolean;
+            /**
+             * Format: date
+             * @description When the ban lapses, or null for an indefinite ban
+             */
+            banned_until?: string | null;
+            /** @description Profile fields the user has to fill in before they can register */
+            missing_profile_fields: ("name" | "gender" | "dob" | "country_iso2")[];
+            /** @description How many competitors are currently on the waiting list */
+            waiting_list_count: number;
+        };
+        /**
+         * @description What decides a competitor's final position. `round` ranks them within the round by their time. `linked_round` ranks them across every round of a Dual Round on their better result, which is what `global_pos` reports. `head_to_head` positions come from match outcomes and not from comparing times, so they may contradict the times shown.
+         * @example linked_round
+         * @enum {string}
+         */
+        RankingMode: "round" | "linked_round" | "head_to_head";
+        /** @description One competitor's result in a single round. Rendered inside a round or a podium, both of which already name the competition, event and format, so this shape carries only what is specific to the competitor. `V1Result` is the same result rendered on its own. */
+        V1RoundResult: {
+            /** @example 6709306 */
+            id: number;
+            /**
+             * @description The competitor's position within this round alone.
+             * @example 1
+             */
+            pos: number;
+            /**
+             * @description The competitor's position across every round the round is ranked against. Equal to `pos` unless the round is part of a Dual Round, where a competitor holds one result per round but is ranked once, on their better one — so both of their results carry the same `global_pos`. This is the position that decides medals.
+             * @example 1
+             */
+            global_pos: number;
+            /** @example 84 */
+            best: number;
+            /**
+             * @description Zero when the round's format does not produce an average.
+             * @example 88
+             */
+            average: number;
+            /** @description Attempt values in solve order. Skipped solves are 0 and DNF/DNS are negative, so the best and worst attempt are derived from this list rather than sent as separate indices. */
+            attempts: number[];
+            /** @example 2019WANY36 */
+            wca_id: string;
+            /** @example Yiheng Wang (王艺衡) */
+            name: string;
+            /**
+             * @description ISO 3166-1 alpha-2 code of the country the competitor represented.
+             * @example CN
+             */
+            country_iso2: string;
+            /** @example WR */
+            regional_single_record?: string;
+            /** @example NR */
+            regional_average_record?: string;
+        };
+        /** @description One round of a competition together with its results, ordered by `pos`. The rounds of a Dual Round each appear on their own and name the whole link in `linked_round_wcif_ids`; their competitors hold one result in each, ranked once between them by `global_pos`. */
+        V1CompetitionRound: {
+            /**
+             * @description The round's WCIF id, unique within the competition.
+             * @example 333fm-r2
+             */
+            wcif_id: string;
+            /** @example 333fm */
+            event_id: string;
+            /** @example f */
+            round_type_id: string;
+            /** @example m */
+            format_id: string;
+            ranking_mode: components["schemas"]["RankingMode"];
+            /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking_mode` is `linked_round`. */
+            linked_round_wcif_ids?: string[];
+            results: components["schemas"]["V1RoundResult"][];
+        };
+        /** @description One event's podium, ordered by `global_pos`. Grouped by event rather than by round because a Dual Round podium spans both of its rounds, keeping only each competitor's better result — every round of a link shares an event and a format, so those sit here. */
+        V1CompetitionPodium: {
+            /** @example 333fm */
+            event_id: string;
+            /** @example m */
+            format_id: string;
+            ranking_mode: components["schemas"]["RankingMode"];
+            /** @description The competitors placed first to third by `global_pos`, ties included, so this can hold more or fewer than three results. `pos` is the position within whichever round holds the competitor's better result and does not order this list. */
+            results: components["schemas"]["V1RoundResult"][];
+        };
         Scoretaker: {
             user_id: number;
             name: string;
         };
         ScoretakerList: components["schemas"]["Scoretaker"][];
+        CompetitionBookmark: {
+            /** @example true */
+            bookmarked: boolean;
+        };
         WcifTimeLimit: {
             /** @example 18000 */
             centiseconds: number;
@@ -1078,34 +1479,29 @@ export interface components {
         WcifCutoff: {
             /** @example 2 */
             numberOfAttempts: number;
-            attemptResult: components["schemas"]["WcifAttemptResult"];
+            resultValue: components["schemas"]["WcifAttemptResult"];
         };
-        WcifAdvancementConditionRanking: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "ranking";
-            level: components["schemas"]["WcifRanking"];
+        WcifParticipationSource: {
+            /** @enum {string} */
+            type: "registrations";
+        } | {
+            /** @enum {string} */
+            type: "round";
+            roundId: string;
+            resultCondition?: components["schemas"]["WcifResultCondition"];
+        } | {
+            /** @enum {string} */
+            type: "linkedRounds";
+            roundIds: string[];
+            resultCondition?: components["schemas"]["WcifResultCondition"];
         };
-        WcifPercent: number;
-        WcifAdvancementConditionPercent: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "percent";
-            level: components["schemas"]["WcifPercent"];
+        WcifParticipationRuleset: {
+            participationSource: components["schemas"]["WcifParticipationSource"];
+            reservedPlaces?: {
+                nationalities?: string[];
+                reservations?: number;
+            };
         };
-        WcifAdvancementConditionAttemptResult: {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "attemptResult";
-            level: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifAdvancementCondition: components["schemas"]["WcifAdvancementConditionRanking"] | components["schemas"]["WcifAdvancementConditionPercent"] | components["schemas"]["WcifAdvancementConditionAttemptResult"];
         WcifScramble: string;
         WcifScrambleSet: {
             /** @example 1 */
@@ -1120,31 +1516,17 @@ export interface components {
             format: "1" | "2" | "3" | "a" | "m";
             timeLimit?: components["schemas"]["WcifTimeLimit"];
             cutoff?: components["schemas"]["WcifCutoff"];
-            advancementCondition?: components["schemas"]["WcifAdvancementCondition"];
-            scrambleSetCount: number;
-            scrambleSets: components["schemas"]["WcifScrambleSet"][];
-            extensions: unknown[];
-        };
-        WcifAttempt: {
-            result: components["schemas"]["WcifAttemptResult"];
-            reconstruction?: string;
-        };
-        WcifResult: {
-            /** @example 1 */
-            personId: number;
-            /** @example 10 */
-            ranking?: number;
-            attempts: components["schemas"]["WcifAttempt"][];
-            best: components["schemas"]["WcifAttemptResult"];
-            average: components["schemas"]["WcifAttemptResult"];
-        };
-        WcifRound: components["schemas"]["BaseWcifRound"] & {
-            results: components["schemas"]["WcifResult"][];
+            linkedRounds?: string[];
+            participationRuleset?: components["schemas"]["WcifParticipationRuleset"];
+            scrambleSetCount?: number;
+            scrambleSets?: components["schemas"]["WcifScrambleSet"][];
+            extensions?: unknown[];
         };
         /** @enum {string} */
         RoundState: "open" | "locked" | "pending" | "ready" | "blocked";
-        BaseAdminRound: components["schemas"]["WcifRound"] & {
+        BaseAdminRound: components["schemas"]["BaseWcifRound"] & {
             state: components["schemas"]["RoundState"];
+            min_competitors_to_open?: number;
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
@@ -1221,6 +1603,7 @@ export interface components {
             user_id: number;
             name: string;
             country_iso2: string;
+            wca_id: string | null;
         };
         LiveRound: components["schemas"]["BaseWcifRound"] & {
             results: components["schemas"]["RoundLiveResult"][];
@@ -1236,33 +1619,6 @@ export interface components {
         };
         BatchSubmitLiveResult: {
             results: components["schemas"]["SubmitLiveResult"][];
-        };
-        General404: {
-            error: string;
-            data: {
-                model: string;
-                id: string;
-            };
-        };
-        Competition404: components["schemas"]["General404"] & {
-            data?: {
-                /** @enum {string} */
-                model: "Competition";
-                id: string;
-            };
-        };
-        UserAvatar: {
-            /**
-             * Format: uri
-             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
-             */
-            url: string;
-            /**
-             * Format: uri
-             * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
-             */
-            thumb_url?: string;
-            is_default: boolean;
         };
         WcifRegistration: {
             wcaRegistrationId: number;
@@ -1301,6 +1657,36 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
+        V1Result: components["schemas"]["V1RoundResult"] & {
+            /** @example HangzhouOpen2024 */
+            competition_id: string;
+            /**
+             * @description The competition's short name, as used in table cells. Distinct from its full name, which this endpoint does not carry.
+             * @example Hangzhou Open 2024
+             */
+            competition_short_name: string;
+            /**
+             * Format: date
+             * @example 2024-11-16
+             */
+            competition_start_date: string;
+            /** @example 222 */
+            event_id: string;
+            /** @example f */
+            round_type_id: string;
+            /** @example a */
+            format_id: string;
+            ranking_mode: components["schemas"]["RankingMode"];
+        };
+        V1Results: components["schemas"]["V1Result"][];
+        GeocodedLocation: {
+            /** @example Berlin, Germany */
+            formatted_address: string;
+            /** @example 52.52 */
+            latitude: number;
+            /** @example 13.405 */
+            longitude: number;
+        };
         TeamMembership: {
             id: number;
             /** @example wst */
@@ -1324,6 +1710,8 @@ export interface components {
             country_iso2: string;
             /** @example delegate */
             delegate_status: string;
+            /** Format: email */
+            email?: string;
             teams: components["schemas"]["TeamMembership"][];
             /**
              * Format: uri
@@ -1411,6 +1799,8 @@ export interface components {
             /** @example false */
             event_restrictions: boolean;
             cancelled_at?: string | null;
+            /** Format: date-time */
+            results_posted_at: string | null;
             /**
              * Format: date-time
              * @example 2025-05-29T06:59:00.000Z
@@ -1467,12 +1857,16 @@ export interface components {
             /** @example 123 */
             number_of_bookmarks: number;
             "uses_qualification?": boolean;
+            "using_payment_integrations?": boolean;
+            "part_of_competition_series?": boolean;
             /** @example true */
             "registration_full?": boolean;
             /** @example true */
             "registration_full_and_accepted?": boolean;
             /** @example 42 */
             spots_left?: number | null;
+            /** @example 7 */
+            waiting_list_count: number;
             tab_names: string[];
             /**
              * @example [
@@ -1482,6 +1876,22 @@ export interface components {
             h2h_rounds?: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
+        };
+        WcifAttempt: {
+            value: components["schemas"]["WcifAttemptResult"];
+            reconstruction?: string;
+        };
+        WcifResult: {
+            /** @example 1 */
+            personId: number;
+            /** @example 10 */
+            ranking?: number;
+            attempts: components["schemas"]["WcifAttempt"][];
+            best: components["schemas"]["WcifAttemptResult"];
+            average: components["schemas"]["WcifAttemptResult"];
+        };
+        WcifRound: components["schemas"]["BaseWcifRound"] & {
+            results: components["schemas"]["WcifResult"][];
         };
         WcifEvent: {
             /** @example 333 */
@@ -1562,57 +1972,21 @@ export interface components {
             regional_average_record: string | null;
         };
         PsychSheet: {
-            sort_by: string;
-            sort_by_second: string;
+            /** @enum {string} */
+            sort_by: "average" | "single";
+            /** @enum {string} */
+            sort_by_second: "average" | "single";
             sorted_rankings: {
                 name: string;
                 user_id: number;
-                wca_id: string;
+                wca_id: string | null;
                 country_iso2: string;
                 average_best: number;
-                average_rank: number;
+                average_rank: number | null;
                 single_best: number;
-                single_rank: number;
-                tied_previous: boolean;
-                pos: number;
-            }[];
-        };
-        CompetitionIndex: {
-            id: string;
-            name: string;
-            short_display_name: string;
-            /** Format: date */
-            start_date: string;
-            /** Format: date */
-            end_date: string;
-            /** Format: date-time */
-            registration_open: string;
-            /** Format: date-time */
-            registration_close: string;
-            /** Format: date-time */
-            announced_at: string;
-            country_iso2: string;
-            city: string;
-            venue: string;
-            /** Format: float */
-            latitude_degrees: number;
-            /** Format: float */
-            longitude_degrees: number;
-            event_ids: string[];
-            main_event_id: string;
-            competitor_limit: number;
-            championship_types: string[];
-            /** Format: date-time */
-            results_submitted_at?: string;
-            /** Format: date-time */
-            results_posted_at?: string;
-            /** Format: date-time */
-            report_posted_at?: string;
-            report_posted_by_user?: number;
-            delegates?: {
-                id: number;
-                name: string;
-                avatar: components["schemas"]["UserAvatar"];
+                single_rank: number | null;
+                tied_previous: boolean | null;
+                pos: number | null;
             }[];
         };
         MyCompetition: {
@@ -1638,8 +2012,6 @@ export interface components {
             championships: string[];
             registration_status?: string;
         };
-        /** @enum {string} */
-        CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
         Results: components["schemas"]["Result"][];
         H2hMatchCompetitor: {
             user_id: number;
@@ -1732,14 +2104,15 @@ export interface components {
             id: string;
             title: string;
             private_description?: string;
+            private_wrc_decision?: string;
             public_summary: string;
             /** Format: date-time */
             created_at: string;
             /** Format: date-time */
             updated_at: string;
             /** Format: date-time */
-            resolved_at: string;
-            digest_worthy: boolean;
+            resolved_at?: string;
+            digest_worthy?: boolean;
             /** Format: date-time */
             digest_sent_at?: string;
             /** Format: uri */
@@ -1941,12 +2314,11 @@ export interface components {
                 created_at?: string;
                 /** Format: date-time */
                 updated_at?: string;
-                /** Format: email */
-                email?: string;
+                location?: string;
             };
             class?: string;
         };
-        CompetitionPermissions: string[] | string;
+        CompetitionPermissions: string[] | "*";
         UserPermissions: {
             can_attend_competitions: {
                 scope: components["schemas"]["CompetitionPermissions"];
@@ -1986,8 +2358,11 @@ export interface components {
             can_access_panels: {
                 scope: string[];
             };
+            can_manage_incidents: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
             can_request_to_edit_others_profile: {
-                scope: string[] | string;
+                scope: string[] | "*";
             };
         };
         RegulationsContent: {
@@ -2026,19 +2401,20 @@ export interface components {
         };
     };
     responses: {
-        /** @description Not logged in */
-        NotLoggedIn: {
+        /** @description The registration request was rejected */
+        RegistrationError: {
             headers: {
                 [name: string]: unknown;
             };
             content: {
                 "application/json": {
-                    error: string;
+                    /** @description Numeric registration error code */
+                    error: number;
                 };
             };
         };
-        /** @description Organizer privileges required */
-        NotPermitted: {
+        /** @description Not logged in */
+        NotLoggedIn: {
             headers: {
                 [name: string]: unknown;
             };
@@ -2057,6 +2433,26 @@ export interface components {
                 "application/json": components["schemas"]["Competition404"];
             };
         };
+        /** @description Organizer privileges required */
+        NotPermitted: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    error: string;
+                };
+            };
+        };
+        /** @description Incident not found, or not visible to the current user */
+        IncidentNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["General404"];
+            };
+        };
     };
     parameters: never;
     requestBodies: never;
@@ -2065,6 +2461,30 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getLiveCompetitions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        upcoming: components["schemas"]["CompetitionIndex"][];
+                        in_progress: components["schemas"]["CompetitionIndex"][];
+                        past: components["schemas"]["CompetitionIndex"][];
+                    };
+                };
+            };
+        };
+    };
     competitionRegistrationsV2: {
         parameters: {
             query?: never;
@@ -2087,6 +2507,104 @@ export interface operations {
             };
         };
     };
+    createRegistration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    user_id: number;
+                    guests?: number;
+                    competing: {
+                        event_ids: string[];
+                        comment?: string;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description The registration was queued for processing */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        message: string;
+                    };
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
+        };
+    };
+    registrationByUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationDataV2"];
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
+        };
+    };
+    updateRegistration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    guests?: number;
+                    competing: {
+                        event_ids?: string[];
+                        comment?: string;
+                        status?: components["schemas"]["CompetingStatus"];
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description The updated registration */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                        registration: components["schemas"]["RegistrationDataV2"];
+                    };
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
+        };
+    };
     competitionRegistrationConfig: {
         parameters: {
             query?: never;
@@ -2107,6 +2625,112 @@ export interface operations {
                     "application/json": components["schemas"]["RegistrationConfig"][];
                 };
             };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    registrationEligibility: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationEligibility"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    registrationPaymentDenomination: {
+        parameters: {
+            query?: {
+                /** @description Optional donation on top of the entry fee, in the currency's lowest denomination */
+                iso_donation_amount?: number;
+            };
+            header?: never;
+            path: {
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        api_amounts: {
+                            /** @description The amount as the Stripe API wants it */
+                            stripe: number;
+                            /** @description The amount as the PayPal API wants it, which is a decimal string */
+                            paypal: string;
+                        };
+                        /** @description The amount formatted for display, including the currency's name */
+                        human_amount: string;
+                    };
+                };
+            };
+        };
+    };
+    v1CompetitionResults: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1CompetitionRound"][];
+                };
+            };
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    v1CompetitionPodiums: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1CompetitionPodium"][];
+                };
+            };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     listScoretakers: {
@@ -2181,6 +2805,78 @@ export interface operations {
                     "application/json": components["schemas"]["Scoretaker"] | null;
                 };
             };
+        };
+    };
+    getCompetitionBookmark: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The current user's bookmark state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    bookmarkCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The competition is bookmarked. Bookmarking twice is a no-op. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    unbookmarkCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The competition is not bookmarked. Removing a missing bookmark is a no-op. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompetitionBookmark"];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     liveAdmin: {
@@ -2541,6 +3237,100 @@ export interface operations {
             };
         };
     };
+    v1PersonResults: {
+        parameters: {
+            query?: {
+                event_id?: string;
+            };
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1Results"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    v1PersonRecords: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1Results"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    v1GeocodingSearch: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The matching locations, best match first. Empty if nothing matched. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeocodedLocation"][];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            /** @description The user has exceeded their search rate limit */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                    };
+                };
+            };
+        };
+    };
     competitionById: {
         parameters: {
             query?: never;
@@ -2566,7 +3356,10 @@ export interface operations {
     };
     competitionEvents: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Which WCIF version to render, by lifecycle name. Defaults to the stable version, the response schema documents the latest one. */
+                wcif_version?: "stable" | "latest";
+            };
             header?: never;
             path: {
                 competitionId: string;
@@ -2682,6 +3475,10 @@ export interface operations {
     competitionList: {
         parameters: {
             query?: {
+                /** @description Page number to retrieve */
+                page?: number;
+                /** @description Number of results per page */
+                per_page?: number;
                 include_cancelled?: boolean;
                 continent?: string;
                 country_iso2?: string;
@@ -2693,6 +3490,7 @@ export interface operations {
                 q?: string;
                 sort?: string;
                 ongoing_and_future?: string;
+                scoretaking_software?: "external" | "wca_live" | "internal";
             };
             header?: never;
             path?: never;
@@ -2857,6 +3655,104 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Incident"][];
+                };
+            };
+        };
+    };
+    incidentById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Incident"];
+                };
+            };
+            404: components["responses"]["IncidentNotFound"];
+        };
+    };
+    deleteIncident: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status: string;
+                    };
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            403: components["responses"]["NotPermitted"];
+            404: components["responses"]["IncidentNotFound"];
+        };
+    };
+    incidentMarkAs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                incident_id: string;
+                kind: "resolved" | "unresolve";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Incident"];
+                };
+            };
+            /** @description The `kind` is not one of the recognized actions */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string;
+                    };
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            403: components["responses"]["NotPermitted"];
+            404: components["responses"]["IncidentNotFound"];
+            /** @description The incident could not be updated */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        error: string[];
+                    };
                 };
             };
         };
@@ -3055,7 +3951,7 @@ export interface operations {
                 /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
                 sort?: string;
                 /** @description Number of results per page */
-                perPage?: number;
+                per_page?: number;
             };
             header?: never;
             path?: never;

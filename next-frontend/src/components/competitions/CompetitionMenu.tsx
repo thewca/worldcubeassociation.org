@@ -3,44 +3,65 @@ import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import {
   afterCompetitionTabs,
   beforeCompetitionTabs,
+  liveTab,
 } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
-import LiveMenu from "@/components/competitions/LiveMenu";
+import { Alert, Link } from "@chakra-ui/react";
+import { getT } from "@/lib/i18n/get18n";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
-export default function CompetitionMenu({
+export default async function CompetitionMenu({
   competitionInfo,
   children,
 }: {
   children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
-  const { scoretaking_software } = competitionInfo;
+  const { t } = await getT();
 
-  if (!hasPassed(competitionInfo.start_date)) {
-    const tabs = beforeCompetitionTabs(competitionInfo);
-    return (
-      <TabMenu competitionInfo={competitionInfo} tabs={tabs}>
-        {children}
-      </TabMenu>
-    );
-  }
+  const hasEnded =
+    hasPassedEndOfDay(competitionInfo.end_date) && !LIVE_RESULT_BETA;
 
-  if (!hasPassedEndOfDay(competitionInfo.end_date) || LIVE_RESULT_BETA) {
-    return (
-      <LiveMenu
-        competitionInfo={competitionInfo}
-        scoretakingSoftware={scoretaking_software}
-      >
-        {children}
-      </LiveMenu>
-    );
-  }
-  // TODO: Differentiate if the results have been posted
-  const tabs = afterCompetitionTabs(competitionInfo);
+  const isOngoing = !hasEnded && hasPassed(competitionInfo.start_date);
+
+  const isAwaitingResults = hasEnded && !competitionInfo.results_posted_at;
+
+  const baseTabs = hasEnded
+    ? afterCompetitionTabs(competitionInfo, isAwaitingResults)
+    : beforeCompetitionTabs(competitionInfo);
+
+  const competitionLiveTab = liveTab(competitionInfo);
+
+  const tabs = isOngoing ? [...baseTabs, competitionLiveTab] : baseTabs;
+
+  const liveResultsHref =
+    competitionLiveTab.externalHref ?? competitionLiveTab.href;
+
   return (
-    <TabMenu competitionInfo={competitionInfo} tabs={tabs}>
+    <TabMenu
+      competitionInfo={competitionInfo}
+      tabs={tabs}
+      customTabs={competitionInfo.tab_names}
+    >
+      {isAwaitingResults && (
+        <Alert.Root status="info" marginBottom="4">
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title>
+              {t("competitions.messages.upload_results")}
+            </Alert.Title>
+            {!competitionLiveTab.disabled && (
+              <Alert.Description>
+                {t("competitions.messages.provisional_live_results")}{" "}
+                <Link href={liveResultsHref}>
+                  {t("competitions.live.title")}
+                </Link>
+              </Alert.Description>
+            )}
+          </Alert.Content>
+        </Alert.Root>
+      )}
       {children}
     </TabMenu>
   );
