@@ -5469,12 +5469,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^18.0.8":
-  version: 18.0.8
-  resolution: "dotenv@npm:18.0.8"
+"dotenv@npm:^18.0.9":
+  version: 18.0.9
+  resolution: "dotenv@npm:18.0.9"
   bin:
     dotenv: dist/index.cjs
-  checksum: 10c0/88a6a81afe58aaad7f9ae5d97422731c6e7b9efa4db752ea5add7fb6035f5866ce6e10a76fb7ad2d7f606bdf0afc9507ffd7e04d86d9b347b38d4614a3a0c2ac
+  checksum: 10c0/62a70960e611f1d26bf5ade0e0baa7850513f65d56789ba282c8ae7f690411d364457d33d4302b2611cc18157d03dea589ac7e33f1aa85b8f69737b8c05cf726
   languageName: node
   linkType: hard
 
@@ -6196,9 +6196,9 @@ __metadata:
   linkType: hard
 
 "fast-uri@npm:^3.0.1":
-  version: 3.1.8
-  resolution: "fast-uri@npm:3.1.8"
-  checksum: 10c0/c9c47860a7f9110176d94bb30a02942182f0bfc8d6780e9702f320336dc2dadb83b1d9879cceaf8d4b439642d1ec6d78c317cb808ab155455551bd5d9d7c22d8
+  version: 3.1.9
+  resolution: "fast-uri@npm:3.1.9"
+  checksum: 10c0/052757540d8c0bbc16bb124a45b8f5cb5d0932f9b89f019221ee41cdb3cafc1db44b2e809d6b888b87922af3e5560a863124454e9d9193e1fc955887357b5add
   languageName: node
   linkType: hard
 
@@ -8006,10 +8006,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-plural@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "make-plural@npm:8.1.0"
-  checksum: 10c0/e3c346cc7a217072f2c5058f6b1cdf98ec71c68511ebce2d7480380c9abcc13ad37661152b54a4925996d9e590bd215fa26552497bcc6d3e435897eeacc59aeb
+"make-plural@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "make-plural@npm:8.2.0"
+  checksum: 10c0/76b214e323a8e27a7e3932b52b3d2b6eafbd350eb65052cc28bc6f85f504f68f78ce854b2726c4a19bff1e9a01dd11c1d1f5e3241f5d72e6c78f157c8b843cb5
   languageName: node
   linkType: hard
 
@@ -10572,7 +10572,7 @@ __metadata:
     css-minimizer-webpack-plugin: "npm:^8.0.0"
     date-fns: "npm:^4.4.0"
     dompurify: "npm:^3.4.17"
-    dotenv: "npm:^18.0.8"
+    dotenv: "npm:^18.0.9"
     easymde: "npm:^2.21.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:^19.0.4"
@@ -10593,7 +10593,7 @@ __metadata:
     leaflet-geosearch: "npm:^4.4.0"
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
-    make-plural: "npm:^8.1.0"
+    make-plural: "npm:^8.2.0"
     mini-css-extract-plugin: "npm:^2.10.2"
     path-complete-extname: "npm:^1.0.0"
     pnp-webpack-plugin: "npm:^1.7.0"
@@ -10619,7 +10619,7 @@ __metadata:
     react-textarea-autosize: "npm:^8.5.9"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
-    sass: "npm:^1.105.2"
+    sass: "npm:^1.106.1"
     sass-loader: "npm:^17.0.1"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:10.3.2"
@@ -10629,8 +10629,8 @@ __metadata:
     stylelint-config-recommended-scss: "npm:^17.0.1"
     stylelint-scss: "npm:^7.3.0"
     terser-webpack-plugin: "npm:^5.6.1"
-    webpack: "npm:^5.112.0"
-    webpack-assets-manifest: "npm:^6.5.4"
+    webpack: "npm:^5.112.2"
+    webpack-assets-manifest: "npm:^6.5.5"
     webpack-bundle-analyzer: "npm:^5.4.0"
     webpack-cli: "npm:^7.2.3"
     webpack-dev-server: "npm:^5.2.7"
@@ -10732,9 +10732,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.105.2":
-  version: 1.105.2
-  resolution: "sass@npm:1.105.2"
+"sass@npm:^1.106.1":
+  version: 1.106.1
+  resolution: "sass@npm:1.106.1"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^5.0.0"
@@ -10745,7 +10745,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/2e219603b075559d834f8f56b03ed1b5d61a88b3fb85a92baef238a653242ef486bbe71f33daf9b8dd0f30b4f627c434e594e35591214b8b177d3b03ac24925c
+  checksum: 10c0/4f1043e2d5b3b7e9cf563050040ed3d91ef1bf8eb9dd180ecfd7ec403bfbd52ac2f557d7e7b398573021f9240a134a080d11af21b802724c05cad386b768df4c
   languageName: node
   linkType: hard
 
@@ -10776,15 +10776,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^4.0.0, schema-utils@npm:^4.2.0, schema-utils@npm:^4.3.0, schema-utils@npm:^4.3.3, schema-utils@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "schema-utils@npm:4.5.0"
+"schema-utils@npm:^4.0.0, schema-utils@npm:^4.2.0, schema-utils@npm:^4.3.0, schema-utils@npm:^4.3.3, schema-utils@npm:^4.8.1":
+  version: 4.8.1
+  resolution: "schema-utils@npm:4.8.1"
   dependencies:
     "@types/json-schema": "npm:^7.0.15"
     ajv: "npm:^8.20.0"
     ajv-formats: "npm:^3.0.1"
     ajv-keywords: "npm:^5.1.0"
-  checksum: 10c0/b2b8e6fc1b1f2abb30741a04e9d309879fd09afcea8c8aa163bdb380d8836ab4102f60a750cb1116c5e299f597cc8d59ee8f2bbee87dd7606d45e748ce901794
+  peerDependencies:
+    webpack: ^5.112.0
+  peerDependenciesMeta:
+    webpack:
+      optional: true
+  bin:
+    schema-utils: bin/schema-utils.js
+  checksum: 10c0/b18b816e5628adb6a703883dbbb672aa3368e6462e16097c9df16d9ca192e41191b98c1b63b6cf18b0ee17a7223268ec9ca76935e8c50337cfa8484d3d289eea
   languageName: node
   linkType: hard
 
@@ -10869,9 +10876,9 @@ __metadata:
   linkType: hard
 
 "serialize-javascript@npm:^7.0.3":
-  version: 7.0.5
-  resolution: "serialize-javascript@npm:7.0.5"
-  checksum: 10c0/7b7818e5267f6d474ec7a56d36ba69dd712726a13eab37706ec94615fb7ca8945471f2b7fb0dc9dbe8c79c1930c1079d97f66f91315c8c8c2ca6c38898cec96f
+  version: 7.1.4
+  resolution: "serialize-javascript@npm:7.1.4"
+  checksum: 10c0/aece56a71a7fc54d51af3c49ef18cc8c47caa2815210709ab585c0b5e72f1e90969bd6c7947cf95e2f8e93d15595ae80ce7137800465b5fa61812693bf7e63ac
   languageName: node
   linkType: hard
 
@@ -12191,12 +12198,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watchpack@npm:^2.6.1":
-  version: 2.6.2
-  resolution: "watchpack@npm:2.6.2"
+"watchpack@npm:^2.6.3":
+  version: 2.6.3
+  resolution: "watchpack@npm:2.6.3"
   dependencies:
     graceful-fs: "npm:^4.1.2"
-  checksum: 10c0/dae6fa80caf47a67c2516d8b84e9dfb96c9b70d0cd8498a56b9a1ed77e99121cf3247d0c7f8b8f4ecd97d3c0b42c83cd7ee92fdd7b646723f7781d340f7e9858
+  checksum: 10c0/c0630d3b9a6bab485a5edce6c0b240e7c7565119023a03f5d12329c9ec6561e897e0b80c58c7117d11719cc4549f14db4b889aae2d74dd4f1e7d4ccf57fde5d7
   languageName: node
   linkType: hard
 
@@ -12209,17 +12216,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^6.5.4":
-  version: 6.5.4
-  resolution: "webpack-assets-manifest@npm:6.5.4"
+"webpack-assets-manifest@npm:^6.5.5":
+  version: 6.5.5
+  resolution: "webpack-assets-manifest@npm:6.5.5"
   dependencies:
     deepmerge: "npm:^4.3.1"
     proper-lockfile: "npm:^4.1.2"
-    schema-utils: "npm:^4.5.0"
+    schema-utils: "npm:^4.8.1"
     tapable: "npm:^2.3.3"
   peerDependencies:
     webpack: ^5.61.0
-  checksum: 10c0/836b87b49818d99d1dd7978c298dcb15f9dee8841ece923640f8cdbfc3e522015e0ef6f781de5b6396e7d11ec9256bb3e598210b6709059bbd5a9c906677dbb8
+  checksum: 10c0/780605c8571e4331df6a2fca18445be60aa7667c02bb99a75cbe633b86117ef0ff346a7e0adfd1a787e74ee46ad9489af46a3fa377fbc16971d9016d3bf0b026
   languageName: node
   linkType: hard
 
@@ -12384,9 +12391,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.112.0":
-  version: 5.112.0
-  resolution: "webpack@npm:5.112.0"
+"webpack@npm:^5.112.2":
+  version: 5.112.2
+  resolution: "webpack@npm:5.112.2"
   dependencies:
     "@types/estree": "npm:^1.0.8"
     "@types/json-schema": "npm:^7.0.15"
@@ -12401,16 +12408,16 @@ __metadata:
     graceful-fs: "npm:^4.2.11"
     mime-db: "npm:^1.54.0"
     minimizer-webpack-plugin: "npm:^5.13.0"
-    schema-utils: "npm:^4.5.0"
+    schema-utils: "npm:^4.8.1"
     tapable: "npm:^2.3.0"
-    watchpack: "npm:^2.6.1"
+    watchpack: "npm:^2.6.3"
     webpack-sources: "npm:^3.6.0"
   peerDependenciesMeta:
     webpack-cli:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10c0/dee2e7ad612138536e1b8d5dc306955fc5b110146085061e43ed5e100293ebeb23d3521a1b400da9f4e11e99396305bba8aabb5fc35be9480c15c38759c163f9
+  checksum: 10c0/e3b299c0ce691f22d9c9bd75731f6406d9fb5166c20eb0f61f5a4f8f59c55ddddda9b4633a0348c272dfded407735b8d20311bc8a5d6d13d80d0088440e93283
   languageName: node
   linkType: hard
 

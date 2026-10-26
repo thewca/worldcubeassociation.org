@@ -17,7 +17,7 @@ import {
   mergeAndOrderResults,
 } from "@/lib/live/mergeAndOrderResults";
 import { parseActivityCode } from "@/lib/wca/wcif/rounds";
-import { LiveCompetitor, PendingLiveResult } from "@/types/live";
+import { LiveCompetitor, LiveResult, PendingLiveResult } from "@/types/live";
 import React, { useState } from "react";
 import LiveResultsMobileModal from "@/components/live/LiveResultsMobileModal";
 import ResultMenu, { ClickPosition } from "@/components/live/Admin/ResultMenu";
@@ -54,6 +54,10 @@ export default function LiveResultsTable({
   const { t } = useT();
 
   const [selectedRow, setSelectedRow] = useState<CompetitorWithResults>();
+  const [selectedResult, setSelectedResult] = useState<{
+    competitor: CompetitorWithResults;
+    result: LiveResult;
+  }>();
   const [menuClickPosition, setMenuClickPosition] = useState<ClickPosition>();
 
   const { eventId } = parseActivityCode(roundWcifId);
@@ -123,7 +127,10 @@ export default function LiveResultsTable({
                   key={rowKey}
                   onClick={(e) => {
                     if (isAdmin) {
-                      setSelectedRow(competitorAndTheirResults);
+                      setSelectedResult({
+                        competitor: competitorAndTheirResults,
+                        result,
+                      });
                       setMenuClickPosition({ x: e.clientX, y: e.clientY });
                     } else if (isMobile) {
                       setSelectedRow(competitorAndTheirResults);
@@ -151,24 +158,7 @@ export default function LiveResultsTable({
                   )}
                   {isAdmin && (
                     <Table.Cell>
-                      <ResultMenu
-                        result={result}
-                        competitor={competitorAndTheirResults}
-                        competitionId={competitionId}
-                        roundId={roundWcifId}
-                        open={selectedRow?.id === competitorAndTheirResults.id}
-                        onOpenChange={(open) => {
-                          setMenuClickPosition(
-                            open ? menuClickPosition : undefined,
-                          );
-                          setSelectedRow(undefined);
-                        }}
-                        clickPos={
-                          selectedRow?.id === competitorAndTheirResults.id
-                            ? menuClickPosition
-                            : undefined
-                        }
-                      />
+                      {competitorAndTheirResults.registrant_id}
                     </Table.Cell>
                   )}
                   {showText && (
@@ -214,6 +204,19 @@ export default function LiveResultsTable({
           })}
         </Table.Body>
       </Table.Root>
+      {selectedResult && (
+        <ResultMenu
+          result={selectedResult.result}
+          competitor={selectedResult.competitor}
+          competitionId={competitionId}
+          roundId={roundWcifId}
+          open={menuClickPosition !== undefined}
+          onOpenChange={(open) => {
+            if (!open) setMenuClickPosition(undefined);
+          }}
+          clickPos={menuClickPosition}
+        />
+      )}
       {isMobile && (
         <LiveResultsMobileModal
           selectedRow={selectedRow}

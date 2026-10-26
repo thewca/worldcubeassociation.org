@@ -367,7 +367,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done?
-    open? && completed_competitors == total_competitors
+    any_live_results? && completed_competitors == total_competitors
   end
 
   def time_limit_undefined?
@@ -718,7 +718,7 @@ class Round < ApplicationRecord
 
   def lifecycle_state
     return STATE_LOCKED if locked?
-    return STATE_OPEN if open?
+    return STATE_OPEN if any_live_results?
     return STATE_PENDING unless participation_source.score_taking_done?
     return STATE_BLOCKED if insufficient_competitors_violation.present?
 
@@ -759,12 +759,12 @@ class Round < ApplicationRecord
     MIN_COMPETITORS_PER_CLAUSE.values.reverse[number - 2] if number > 1
   end
 
-  def open?
+  def any_live_results?
     live_results.any?
   end
 
   def locked?
-    return false unless score_taking_done?
+    return false unless any_live_results?
 
     if live_results.loaded?
       live_results.count(&:locked?) == total_competitors
