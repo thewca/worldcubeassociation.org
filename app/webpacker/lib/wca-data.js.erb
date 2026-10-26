@@ -32,7 +32,7 @@ export const countries = {
 function extendCountries(country) {
   return {
     ...country,
-    name: I18n.t(`countries.${country.iso2}`),
+    get name() { return I18n.t(`countries.${country.iso2}`); },
   };
 }
 
@@ -50,7 +50,7 @@ export const continents = {
 function extendContinents(continent){
   return {
     ...continent,
-    name: I18n.t(`continents.${continent.name}`),
+    get name() { return I18n.t(`continents.${continent.name}`); },
   };
 }
 
@@ -88,8 +88,8 @@ export const formats = {
 function extendFormats(rawFormat) {
   return {
     ...rawFormat,
-    name: I18n.t(`formats.${rawFormat.id}`),
-    shortName: I18n.t(`formats.short.${rawFormat.id}`),
+    get name() { return I18n.t(`formats.${rawFormat.id}`); },
+    get shortName() { return I18n.t(`formats.short.${rawFormat.id}`); },
   };
 }
 
@@ -114,7 +114,7 @@ export const WCA_EVENT_IDS_WITH_FUTURE = Object.values(events.officialWithFuture
 function extendEvents(rawEvent) {
   return {
     ...rawEvent,
-    name: I18n.t(`events.${rawEvent.id}`),
+    get name() { return I18n.t(`events.${rawEvent.id}`); },
     formats() {
       return this.formatIds.map(formatId => formats.byId[formatId]);
     },
@@ -133,7 +133,7 @@ export const genders = {
 function extendGenders(gender) {
   return {
     id: gender,
-    name: I18n.t(`enums.user.gender.${gender}`),
+    get name() { return I18n.t(`enums.user.gender.${gender}`); },
   };
 }
 
