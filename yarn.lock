@@ -8006,10 +8006,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-plural@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "make-plural@npm:8.1.0"
-  checksum: 10c0/e3c346cc7a217072f2c5058f6b1cdf98ec71c68511ebce2d7480380c9abcc13ad37661152b54a4925996d9e590bd215fa26552497bcc6d3e435897eeacc59aeb
+"make-plural@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "make-plural@npm:8.2.0"
+  checksum: 10c0/76b214e323a8e27a7e3932b52b3d2b6eafbd350eb65052cc28bc6f85f504f68f78ce854b2726c4a19bff1e9a01dd11c1d1f5e3241f5d72e6c78f157c8b843cb5
   languageName: node
   linkType: hard
 
@@ -10593,7 +10593,7 @@ __metadata:
     leaflet-geosearch: "npm:^4.4.0"
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
-    make-plural: "npm:^8.1.0"
+    make-plural: "npm:^8.2.0"
     mini-css-extract-plugin: "npm:^2.10.2"
     path-complete-extname: "npm:^1.0.0"
     pnp-webpack-plugin: "npm:^1.7.0"
