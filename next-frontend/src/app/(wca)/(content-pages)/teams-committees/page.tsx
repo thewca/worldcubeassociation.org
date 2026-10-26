@@ -1,6 +1,6 @@
 import {
   Heading,
-  Link,
+  HStack,
   SimpleGrid,
   Tabs,
   Text,
@@ -17,6 +17,7 @@ import {
 import OpenapiError from "@/components/ui/openapiError";
 import getPermissions from "@/lib/wca/permissions.server";
 import { Metadata } from "next";
+import EmailCopyButton from "@/components/EmailCopyButton";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -79,11 +80,13 @@ async function TeamTab({
 
   return (
     <VStack align="left">
-      <Heading size="2xl">{name}</Heading>
+      <HStack gap="2">
+        <Heading size="2xl">{name}</Heading>
+        {email && <EmailCopyButton email={email} />}
+      </HStack>
       <Text>
         {t(`page.teams_committees_councils.groups_description.${friendly_id}`)}
       </Text>
-      <Link href={`mailto:${email}`}>{email}</Link>
       <MemberTable id={id} />
       {canReadGroupPast && (
         <>
