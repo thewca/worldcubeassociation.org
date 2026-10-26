@@ -141,9 +141,10 @@ export default function StripePayment({
   const { apiAmounts } = usePaymentAmount();
   const { colorMode } = useColorMode();
 
-  // `loadStripe` injects a script tag, so it must run once rather than on every render. The key
-  //   and the connected account belong to this competition, which is why this cannot be the
-  //   module-level constant Stripe's own examples use.
+  // `<Elements>` does not support swapping its `stripe` prop, so the instance must be created
+  //   exactly once per mount. A memo (manual or React Compiler) is only a cache and may recompute.
+  //   The key and the connected account belong to this competition, which is why this cannot be
+  //   the module-level constant Stripe's own examples use.
   const [stripePromise] = useState(() =>
     loadStripe(parameters.stripePublishableKey, {
       stripeAccount: parameters.connectedAccountId,
