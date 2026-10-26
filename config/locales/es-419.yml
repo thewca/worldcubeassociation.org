@@ -2028,7 +2028,7 @@ es-419:
         undetermined: A definir
         none: ¡No hay podios aún!
       admin:
-        open: Abierto
+        open: Abrir
         clear: Limpiar
         close: Cerrar
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors}
