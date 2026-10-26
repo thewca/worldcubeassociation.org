@@ -9,5 +9,6 @@ properties:
   set_attempt_number:
     type: integer
   value:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"

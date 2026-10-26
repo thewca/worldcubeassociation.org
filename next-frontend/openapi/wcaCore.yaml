@@ -31,6 +31,8 @@ paths:
     $ref: 'paths/competitions/v1CompetitionResults.yaml'
   /v1/competitions/{competitionId}/podiums:
     $ref: 'paths/competitions/v1CompetitionPodiums.yaml'
+  /v1/competitions/{competitionId}/head-to-head:
+    $ref: 'paths/results/headToHeadByCompetition.yaml'
 
   /v1/competitions/{competitionId}/scoretakers:
     $ref: 'paths/competitions/scoretakers/CompetitionScoretakers.yaml'
@@ -95,8 +97,6 @@ paths:
     $ref: 'paths/competitions/myCompetitions.yaml'
   /v0/competitions/{competitionId}/results:
     $ref: 'paths/results/resultsByCompetition.yaml'
-  /v0/competitions/{competitionId}/head-to-head:
-    $ref: 'paths/results/headToHeadByCompetition.yaml'
   /v0/competitions/{competitionId}/scrambles:
     $ref: 'paths/competitions/competitionScrambles.yaml'
 

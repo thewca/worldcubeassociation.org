@@ -11,10 +11,12 @@ properties:
   name:
     type: string
   wca_id:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
   country_iso2:
     type: string
   final_pos:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"
