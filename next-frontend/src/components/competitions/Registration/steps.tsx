@@ -179,7 +179,7 @@ export function StepSummary({
       );
     }
     case "approval":
-      return <RegistrationStatus registration={registration} />;
+      return <ApprovalStatus registration={registration} />;
   }
 }
 
