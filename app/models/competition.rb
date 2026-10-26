@@ -1950,18 +1950,12 @@ class Competition < ApplicationRecord
     return {} unless uses_qualification?
 
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    serialization_method = at_least_v2 ? :v2_qualification_wcif : :v1_qualification_wcif
 
-    if at_least_v2
-      competition_events
-        .where.not(qualification_condition: nil)
-        .index_by(&:event_id)
-        .transform_values(&:v2_qualification_wcif)
-    else
-      competition_events
-        .where.not(qualification_condition: nil)
-        .index_by(&:event_id)
-        .transform_values(&:v1_qualification_wcif)
-    end
+    competition_events
+      .where.not(qualification_condition: nil)
+      .index_by(&:event_id)
+      .transform_values(&serialization_method)
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
