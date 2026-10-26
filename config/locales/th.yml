@@ -1349,6 +1349,7 @@ th:
         group_name: Team/Committee Name
         delegated_competitions_count: จำนวนครั้งที่ Delegate การแข่งขัน
         email: อีเมล
+        wca_id: WCA ID
   user_groups:
     group_types:
       board: WCA Board of Directors
@@ -1839,6 +1840,12 @@ th:
         mean: Mean
       errors:
         round_closed: รอบการแข่งขันยังไม่ได้เปิด
+      overview:
+        past_month: เดือนก่อนหน้า
+        no_upcoming: ขณะนี้ยังไม่มีการแข่งขันที่รายงานผลการแข่งขันสด
+        search: ค้นหาการแข่งขัน
+        upcoming: การแข่งขันในเร็ว ๆ นี้
+        in_progress: การแข่งขันในขณะนี้
     my_competitions:
       title: การแข่งขันของฉัน
       disclaimer: >-
