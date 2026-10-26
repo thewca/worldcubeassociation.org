@@ -73,7 +73,7 @@ async function TeamTab({
   const { t } = await getT();
 
   const { metadata, name, id } = group;
-  const { friendly_id, email } = metadata!;
+  const { friendly_id, email, preferred_contact_mode } = metadata!;
 
   const permissions = await getPermissions();
   const canReadGroupPast = permissions?.canReadGroupPast(group.name);
@@ -82,7 +82,9 @@ async function TeamTab({
     <VStack align="left">
       <HStack gap="2">
         <Heading size="2xl">{name}</Heading>
-        {email && <EmailCopyButton email={email} />}
+        {email && preferred_contact_mode !== "no_contact" && (
+          <EmailCopyButton email={email} />
+        )}
       </HStack>
       <Text>
         {t(`page.teams_committees_councils.groups_description.${friendly_id}`)}
