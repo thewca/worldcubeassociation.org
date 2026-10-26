@@ -429,7 +429,10 @@ export default function CompetitionsPage() {
               </VStack>
             </Collapsible.Root>
           </Card.Body>
-          <Card.Body>
+          <Card.Body pos="relative">
+            {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+            <Box ref={ref} position="absolute" />
+
             <Tabs.Content value="list">
               <Stack
                 direction={{ base: "column", lg: "row" }}
@@ -468,11 +471,7 @@ export default function CompetitionsPage() {
                   variant="competitions"
                   borderWidth="2px"
                   stickyHeader
-                  pos="relative"
                 >
-                  {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-                  <Box ref={ref} position="absolute" />
-
                   <Table.Header bg="bg.muted">
                     <Table.Row>
                       <Table.ColumnHeader
