@@ -55,6 +55,21 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  describe 'GET #index' do
+    let(:competition) { create(:competition, :visible) }
+
+    before do
+      create(:registration, :accepted, competition: competition, comments: 'Please seat me near the stage')
+    end
+
+    it 'does not include comments' do
+      get api_v1_competition_registrations_path(competition)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.first['competing']).not_to have_key('comments')
+    end
+  end
+
   describe 'POST #create' do
     context 'when creating a registration' do
       let(:user) { create(:user) }

@@ -138,12 +138,14 @@ properties:
     type: boolean
     example: false
   cancelled_at:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
   results_posted_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
-    nullable: true
   waiting_list_deadline_date:
     type: string
     format: date-time
@@ -214,8 +216,9 @@ properties:
     type: boolean
     example: true
   spots_left:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"
     example: 42
   waiting_list_count:
     type: integer

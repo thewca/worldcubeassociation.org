@@ -1408,6 +1408,9 @@ vi:
         locale: Ngôn ngữ
         group_name: Tên Đội ngũ/Ủy ban
         delegated_competitions_count: Số Giải đấu đã làm nhiệm vụ Delegate
+        wca_id: ID WCA
+        location: Địa điểm
+        email: Email
   user_groups:
     group_types:
       board: Ban Quản trị WCA
@@ -3104,6 +3107,7 @@ vi:
       date_circa: Ngày ước tính
   notifications:
     connect_wca_id: Kết nối ID WCA với tài khoản của bạn!
+    copied_to_clipboard: Đã sao chép vào bảng nhớ tạm
   payments:
     header: Lịch sử thanh toná
     messages:
@@ -3573,6 +3577,7 @@ vi:
       total_delegated: Tổng số giải đấu Delegate
       lead_delegated: Các giải đấu làm Trưởng nhóm Delegate
       history: Lịch sử
+    copy_email: Sao chép email
   regional_organizations:
     title: Tổ chức khu vực
     content: 'WCA công nhận các Tổ chức Khu vực sau đây:'

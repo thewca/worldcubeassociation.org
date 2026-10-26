@@ -1494,6 +1494,23 @@ class Competition < ApplicationRecord
     results.includes(:result_attempts).winners
   end
 
+  # A Dual Round podium merges both linked rounds, so the podium is grouped by event rather than
+  # by round. Every round of a link shares an event and a format, which lets those sit here.
+  def to_v1_podiums_json
+    final_rounds_by_event = rounds.final.includes(competition_event: :event).index_by(&:event)
+
+    events_with_podium_results.map do |event, podium_results|
+      podium_round = final_rounds_by_event[event]
+
+      {
+        "event_id" => event.id,
+        "format_id" => podium_round.format_id,
+        "ranking_mode" => podium_round.ranking_mode,
+        "results" => podium_results.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS),
+      }
+    end
+  end
+
   def person_ids_with_results
     results.includes(:result_attempts, :round).group_by(&:person_id)
            .sort_by { |_person_id, results| results.first.person_name }
@@ -1734,6 +1751,14 @@ class Competition < ApplicationRecord
       raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'") unless target_date
 
       competitions = competitions.where(end_date: target_date..)
+    end
+
+    if params[:scoretaking_software].present?
+      scoretaking_software = params[:scoretaking_software].to_s
+      # Our `'is' => 'are'` inflection makes Rails think "software" is already plural, so the enum mapping isn't called `scoretaking_softwares`.
+      raise WcaExceptions::BadApiParameter.new("Invalid scoretaking_software: '#{scoretaking_software}'") unless Competition.scoretaking_software.key?(scoretaking_software)
+
+      competitions = competitions.where(scoretaking_software: scoretaking_software)
     end
 
     if params[:announced_after].present?
@@ -2273,6 +2298,12 @@ class Competition < ApplicationRecord
     include: %w[delegates organizers],
   }.freeze
 
+  INDEX_SERIALIZE_OPTIONS = {
+    only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
+    methods: %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types currency_subunit_to_unit],
+    include: {},
+  }.freeze
+
   def serializable_hash(options = nil)
     # The intent behind this is to have a "good" default setup for serialization.
     # We also want the caller to be able to be picky about the attributes included
@@ -2297,8 +2328,11 @@ class Competition < ApplicationRecord
     cal = Icalendar::Calendar.new
     all_activities.each do |activity|
       event = Icalendar::Event.new
-      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
-      event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
+      # TZID=UTC makes icalendar emit the RFC 5545 UTC form (DTSTART:20261003T151500Z)
+      # with no TZID parameter. Google Calendar and other clients often mishandle
+      # TZID=Etc/UTC when no VTIMEZONE is present; see #7587 / #7590.
+      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time.utc, "TZID" => "UTC")
+      event.dtend = Icalendar::Values::DateTime.new(activity.end_time.utc, "TZID" => "UTC")
       event.summary = activity.localized_name
       cal.add_event(event)
     end

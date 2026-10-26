@@ -236,15 +236,17 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              {/* A free guest entry formats as a zero amount rather than the word "free",
-                  which has no translation of its own. */}
-              <CurrencyValue
-                lowestDenomination={
-                  competitionInfo.guests_entry_fee_lowest_denomination
-                }
-                currencyCode={competitionInfo.currency_code}
-                subunitToUnit={competitionInfo.currency_subunit_to_unit}
-              />
+              {competitionInfo.guests_entry_fee_lowest_denomination ? (
+                <CurrencyValue
+                  lowestDenomination={
+                    competitionInfo.guests_entry_fee_lowest_denomination
+                  }
+                  currencyCode={competitionInfo.currency_code}
+                  subunitToUnit={competitionInfo.currency_subunit_to_unit}
+                />
+              ) : (
+                t("competitions.competition_info.guests_free.free")
+              )}
             </Stat.ValueText>
           </Stat.Root>
 

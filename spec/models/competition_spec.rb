@@ -1501,6 +1501,17 @@ RSpec.describe Competition do
         expect(competition.to_ics.events.map { |e| e.summary.to_s }).to include(r)
       end
     end
+
+    it "ics export encodes datetimes as UTC with Zulu suffix" do
+      ical = competition.to_ics.to_ical
+      expect(ical).not_to include("TZID")
+
+      lines = ical.split("\r\n")
+      competition.all_activities.each do |activity|
+        expect(lines).to include("DTSTART:#{activity.start_time.utc.strftime('%Y%m%dT%H%M%SZ')}")
+        expect(lines).to include("DTEND:#{activity.end_time.utc.strftime('%Y%m%dT%H%M%SZ')}")
+      end
+    end
   end
 
   context "payment integration methods" do

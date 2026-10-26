@@ -1433,6 +1433,9 @@ pt:
         locale: Idioma
         group_name: Nome da Equipa/Comité
         delegated_competitions_count: Número de Competições como Delegado
+        wca_id: ID da WCA
+        location: Local
+        email: Email
   user_groups:
     group_types:
       board: Conselho de Administração da WCA

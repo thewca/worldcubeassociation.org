@@ -113,7 +113,7 @@ api POST /projects/ '{
 # The filemask picks up config/locales/*.yml. Weblate's default language filter
 # (^[^.]+$) drops anything with a dot in the language slot, which is exactly the
 # files that are not plain locales: faker.en.yml, shared.en.yml,
-# devise_overrieds.ru.yml and the time_will_tell.*.yml set. So this component
+# devise_overrieds.ru.yml. So this component
 # lands on the 33 real locales and nothing else.
 #
 # file_format MUST be "ruby-yaml", not plain "yaml". Rails locale files are
@@ -142,22 +142,6 @@ api POST /projects/wca/components/ "$(cat <<JSON
 }
 JSON
 )" >/dev/null || echo "    (component already exists, continuing)"
-
-# time_will_tell.*.yml is its own monolingual set with the language in a dotted
-# suffix, so it needs its own filemask. Sharing the repo via weblate://wca/locales
-# means it is a second component over the *same* clone, not a second 450 MB copy.
-echo "==> Creating component 'time-will-tell' (config/locales/time_will_tell.*.yml)"
-api POST /projects/wca/components/ '{
-  "name": "Time Will Tell",
-  "slug": "time-will-tell",
-  "vcs": "git",
-  "repo": "weblate://wca/locales",
-  "file_format": "ruby-yaml",
-  "filemask": "config/locales/time_will_tell.*.yml",
-  "template": "config/locales/time_will_tell.en.yml",
-  "edit_template": false,
-  "license": "GPL-3.0-or-later"
-}' >/dev/null || echo "    (component already exists, continuing)"
 
 cat <<EOF
 
