@@ -198,7 +198,7 @@ it:
   common:
     world: Mondo
     continent: Continente
-    country: Nazione
+    country: Regione
     here: qui
     best: Migliore
     single: Singolo
@@ -270,7 +270,7 @@ it:
         delegate_status: Stato del delegato
         location: Posizione
         region: Regione
-        subRegion: Subregion
+        subRegion: Sottoregione
         receive_developer_mails: >-
           Desidero ricevere notifiche relative alle modifiche apportate alle
           risorse software WCA.
@@ -357,7 +357,7 @@ it:
         status: Stato
       regional_organization:
         name: Nome
-        country: Nazione
+        country: Regione
         website: Sito web
         logo: Logo
         email: Email
@@ -1334,11 +1334,10 @@ it:
         altro account.
       cannot_edit:
         msg: >-
-          Non puoi cambiare il tuo nome, data di nascita, sesso o nazione.
-          Motivazione: %{reason}. Contatta il <a href='%{wrt_contact_path}'
-          target='_blank'>WCA Results Team</a> o il tuo <a
-          href='%{delegate_url}'>Delegato</a> se hai bisogno di effettuare
-          modifiche.
+          Non puoi cambiare il tuo nome, data di nascita, sesso o regione. Motivazione:
+          %{reason}. Contatta il <a href='%{wrt_contact_path}' target='_blank'>WCA
+          Results Team</a> o il tuo <a href='%{delegate_url}'>Delegato</a> se hai
+          bisogno di effettuare modifiche.
         reason:
           no_access: non hai i permessi per modificare l'utente
           assigned: hai un WCA ID assegnato
@@ -1491,7 +1490,7 @@ it:
       need_name: Serve un nome
       need_gender: È necessario un genere
       need_dob: È necessaria una data di nascita
-      need_country: È necessaria una nazione
+      need_country: È richiesta una regione
       must_register: È necessario iscriversi almeno a un evento.
       exceeds_event_limit:
         one: Devi iscriverti a un solo evento.
@@ -1604,9 +1603,9 @@ it:
       title: 'Iscrizioni per la competizione %{comp}'
       edit: Modifica
       country_plural:
-        one: Una nazione
-        many: '%{count} nazioni'
-        other:
+        one: Una regione
+        many: '%{count} regioni'
+        other: '%{count} regioni'
       email: Email
       non_competing: Iscrizioni non-partecipanti
       not_paid: Non pagato
@@ -2052,7 +2051,7 @@ it:
           tempo reale.
         search: Cerca competizioni
     my_competitions:
-      title: Le mie competizioni
+      title: Le mie Competizioni
       disclaimer: >-
         Solamente le competizioni che utilizzano il sistema di iscrizione sul
         sito WCA sono visibili qui. Se la tua competizione non è elencata qui,
@@ -2396,7 +2395,7 @@ it:
         short_name: Nickname della competizione
         name_reason: Motivazioni del nome
         venue:
-          country_id: Nazione
+          country_id: Regione
           city_name: Città
           name: Sede
           details: Dettagli della sede
@@ -2590,8 +2589,8 @@ it:
           external_registration_page: >-
             La pagina dove i partecipanti devono iscriversi alla competizione.
             Deve avere un url http(s) valido.
-          scoretaking_software: 'Seleziona "%{choice_ilr}" se desideri usare i doppi
-            turni'
+          scoretaking_software: 'Seleziona ''%{choice_ilr}'' o uno strumento esterno
+            se desideri usare i doppi turni'
         entry_fees:
           currency_code: La valuta delle tasse di iscrizione.
           base_entry_fee: >-
