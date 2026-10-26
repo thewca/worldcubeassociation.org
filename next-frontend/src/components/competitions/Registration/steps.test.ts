@@ -3,6 +3,7 @@ import {
   initialStepIndex,
   isStepComplete,
   isStepEditable,
+  isStepSettled,
   summarySteps,
 } from "@/components/competitions/Registration/steps";
 import type { RegistrationFormValues } from "@/lib/wca/registrations/registrationForm";
@@ -194,5 +195,24 @@ describe("isStepComplete", () => {
   it("has nothing to ask for in the steps after submitting", () => {
     expect(isStepComplete(payment, valuesWith({}))).toBe(true);
     expect(isStepComplete(approval, valuesWith({}))).toBe(true);
+  });
+});
+
+describe("isStepSettled", () => {
+  const [, , payment, approval] = steps;
+
+  it("only settles approval once the organizers have accepted", () => {
+    expect(isStepSettled(approval, registrationWith("accepted"))).toBe(true);
+    expect(isStepSettled(approval, registrationWith("pending"))).toBe(false);
+    expect(isStepSettled(approval, registrationWith("waiting_list"))).toBe(
+      false,
+    );
+    expect(isStepSettled(approval, null)).toBe(false);
+  });
+
+  it("settles every other step by walking past it", () => {
+    expect(isStepSettled(payment, registrationWith("pending", false))).toBe(
+      true,
+    );
   });
 });

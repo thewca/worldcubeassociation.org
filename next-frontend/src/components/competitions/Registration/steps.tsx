@@ -86,6 +86,22 @@ export function isStepComplete(
   }
 }
 
+/**
+ * Whether a step the competitor has walked past is actually done. Approval is up to the organizers,
+ * so walking past it only means waiting for them.
+ */
+export function isStepSettled(
+  step: StepConfig,
+  registration: Registration | null,
+) {
+  switch (step.key) {
+    case "approval":
+      return registration?.competing.registration_status === "accepted";
+    default:
+      return true;
+  }
+}
+
 /** What the competitor settled in a step, as shown on the summary once they have walked them all. */
 export function StepSummary({
   step,

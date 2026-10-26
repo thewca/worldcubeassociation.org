@@ -14,6 +14,7 @@ import RegistrationProcessing from "@/components/competitions/Registration/Regis
 import {
   initialStepIndex,
   isStepComplete,
+  isStepSettled,
   StepContent,
   stepsButtonAction,
 } from "@/components/competitions/Registration/steps";
@@ -32,7 +33,7 @@ import {
   type RegistrationForm,
   type RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
-import { LuSend } from "react-icons/lu";
+import { LuCheck, LuHourglass, LuSend } from "react-icons/lu";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -216,7 +217,18 @@ export default function StepPanel({
 
             return (
               <Steps.Item key={step.key} index={index}>
-                <Steps.Indicator />
+                <Steps.Indicator>
+                  <Steps.Status
+                    complete={
+                      isStepSettled(step, registration) ? (
+                        <LuCheck />
+                      ) : (
+                        <LuHourglass />
+                      )
+                    }
+                    incomplete={<Steps.Number />}
+                  />
+                </Steps.Indicator>
                 <VStack gap="0" alignItems="start" minWidth="0">
                   <Steps.Title>{t(`${translationKey}.title`)}</Steps.Title>
                   <Steps.Description>
