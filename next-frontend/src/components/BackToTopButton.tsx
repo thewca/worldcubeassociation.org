@@ -16,26 +16,24 @@ export default function BackToTopButton({
   parent,
 }: BackToTopButtonProps) {
   const { t } = useT();
+
+  if (!visible) return null;
   return (
-    <>
-      {visible && (
-        <IconButton
-          aria-label={t("common.back_to_top")}
-          onClick={() =>
-            (parent || window).scrollTo({ top: 0, behavior: "smooth" })
-          }
-          position="fixed"
-          bottom={6}
-          insetEnd={6}
-          zIndex="sticky"
-          rounded="full"
-          animation="fade-in"
-          p={text ? 4 : 0}
-          {...buttonProps}
-        >
-          {text} <LuArrowUp />
-        </IconButton>
-      )}
-    </>
+    <IconButton
+      aria-label={t("common.back_to_top")}
+      onClick={() =>
+        (parent || window).scrollTo({ top: 0, behavior: "smooth" })
+      }
+      position="fixed"
+      bottom={6}
+      insetEnd={6}
+      zIndex="sticky"
+      rounded="full"
+      animation="fade-in"
+      p={text ? 4 : 0}
+      {...buttonProps}
+    >
+      {text} <LuArrowUp />
+    </IconButton>
   );
 }
