@@ -1773,7 +1773,7 @@ class Competition < ApplicationRecord
       competitions = competitions.end_date_passed_since(num_days).pending_report_or_results_posting
     end
 
-    if ActiveRecord::Type::Boolean.new.cast(params[:championship_only])
+    if params[:championship_only].present?
       competitions = competitions.where(id: Championship.select(:competition_id))
     end
 
