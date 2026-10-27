@@ -1774,7 +1774,8 @@ class Competition < ApplicationRecord
     end
 
     if params[:championship_only].present?
-      competitions = competitions.where(id: Championship.select(:competition_id))
+      championship_only = ActiveRecord::Type::Boolean.new.cast(params[:championship_only])
+      competitions = competitions.where(id: Championship.select(:competition_id)) if championship_only
     end
 
     query&.split&.each do |part|
