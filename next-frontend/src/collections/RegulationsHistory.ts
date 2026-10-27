@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { regulationsCommitteeAccess } from "@/payload.access";
+import { revalidateCollection } from "@/collections/revalidateCollection";
 
 export const RegulationsHistoryItem: CollectionConfig = {
   slug: "regulationsHistoryItem",
@@ -7,6 +8,10 @@ export const RegulationsHistoryItem: CollectionConfig = {
     create: regulationsCommitteeAccess,
     update: regulationsCommitteeAccess,
     delete: regulationsCommitteeAccess,
+  },
+  hooks: {
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
   },
   fields: [
     {

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
 import { canCreatePosts } from "@/payload.access";
+import { revalidateCollection } from "@/collections/revalidateCollection";
 
 export const Announcements: CollectionConfig = {
   slug: "announcements",
@@ -11,6 +12,10 @@ export const Announcements: CollectionConfig = {
   },
   admin: {
     useAsTitle: "title",
+  },
+  hooks: {
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
   },
   fields: [
     {
