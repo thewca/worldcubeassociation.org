@@ -41,7 +41,7 @@ const INCLUDE_CANCELLED_TRUE = "on";
 const SHOW_ADMIN_DETAILS_TRUE = "yes";
 const LEGACY_DISPLAY_MODE_ADMIN = "admin";
 const LEGACY_YEARS_ALL = "all";
-const CHAMPIONSHIP_ONLY_TRUE = "yes";
+const CHAMPIONSHIP_ONLY_TRUE = "on";
 
 export type CompetitionFilterState = {
   timeOrder: string;
@@ -187,6 +187,7 @@ export const updateSearchParams = (
     shouldIncludeCancelled,
     shouldShowAdminDetails,
     adminStatus,
+    championshipOnly,
   } = filterState;
 
   // update every string value; and then remove that value if it's redundant (ie is the default)
@@ -248,6 +249,12 @@ export const updateSearchParams = (
     searchParams.delete(SHOW_ADMIN_DETAILS);
   }
 
+  if (championshipOnly) {
+    searchParams.set(CHAMPIONSHIP_ONLY, CHAMPIONSHIP_ONLY_TRUE);
+  } else {
+    searchParams.delete(CHAMPIONSHIP_ONLY);
+  }
+
   window.history.replaceState(
     {},
     "",
@@ -270,7 +277,7 @@ export type CompetitionFilterAction =
   | { type: "set_should_include_cancelled"; shouldIncludeCancelled: boolean }
   | { type: "set_should_show_admin_details"; shouldShowAdminDetails: boolean }
   | { type: "set_admin_status"; adminStatus: string }
-  | { type: "toggle_championship" };
+  | { type: "set_championship_only"; championshipOnly: boolean };
 
 export const competitionFilterReducer = (
   state: CompetitionFilterState,
@@ -312,8 +319,6 @@ export const competitionFilterReducer = (
         ),
       };
     }
-    case "toggle_championship":
-      return { ...state, championshipOnly: !state.championshipOnly };
     default:
       return { ...state, ...action };
   }
