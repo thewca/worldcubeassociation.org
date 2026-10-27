@@ -2,7 +2,7 @@ import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
 import AnnouncementContent from "@/components/AnnouncementContent";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
-import { announcementByline } from "@/components/announcements/announcement";
+import AnnouncementByline from "@/components/announcements/AnnouncementByline";
 
 function AnnouncementItem({
   announcement,
@@ -22,7 +22,9 @@ function AnnouncementItem({
         <Accordion.ItemIndicator _open={{ display: "none" }} />
         <Stack gap={1} alignItems="flex-start">
           <Text textStyle="s1">{announcement.title}</Text>
-          <Text>{announcementByline(announcement)}</Text>
+          <Text>
+            <AnnouncementByline announcement={announcement} />
+          </Text>
         </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>
