@@ -2216,6 +2216,7 @@ it:
       delegates_loading: Attendo di caricare tutti i Delegati...
       no_delegates_found: Nessun Delegato trovato.
       show_cancelled: Mostra competizioni cancellate
+      championship_only: Mostra solo campionati
       show_registration_status: Mostra icona status iscrizioni
       use_admin_view: Usa vista amministratore
       titles:
