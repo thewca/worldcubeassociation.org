@@ -1398,6 +1398,12 @@ zh-CN:
         mean: 平均
       errors:
         round_closed: 该轮尚未开始
+      overview:
+        upcoming: 即将推出
+        in_progress: 现在
+        past_month: 过去一个月
+        no_upcoming: 目前没有即将举行且提供实时赛果的赛事。
+        search: 搜索比赛
     my_competitions:
       title: 我的比赛
       disclaimer: 只有使用 WCA 报名系统的比赛会列在此处。如果你的比赛没有列在下方，请查阅比赛官网的选手列表。
