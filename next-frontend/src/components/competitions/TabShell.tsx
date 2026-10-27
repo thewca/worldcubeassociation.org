@@ -30,7 +30,9 @@ export default function TabShell({
       unmountOnExit
     >
       {menu}
-      <Tabs.Content width="full" value={currentPath!}>
+      {/* Tabs.Content is a flex item, which has `min-width: auto`.
+       It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
+      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
         {children}
       </Tabs.Content>
     </Tabs.Root>
