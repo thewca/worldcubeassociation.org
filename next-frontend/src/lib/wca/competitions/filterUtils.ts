@@ -25,6 +25,7 @@ const INCLUDE_CANCELLED = "show_cancelled";
 const SHOW_ADMIN_DETAILS = "show_admin_details";
 const ADMIN_STATUS = "admin_status";
 const LEGACY_ADMIN_STATUS = "status";
+const CHAMPIONSHIP_ONLY = "championship_only";
 
 const DEFAULT_DISPLAY_MODE = "list";
 const DEFAULT_TIME_ORDER = "present";
@@ -40,6 +41,7 @@ const INCLUDE_CANCELLED_TRUE = "on";
 const SHOW_ADMIN_DETAILS_TRUE = "yes";
 const LEGACY_DISPLAY_MODE_ADMIN = "admin";
 const LEGACY_YEARS_ALL = "all";
+const CHAMPIONSHIP_ONLY_TRUE = "yes";
 
 export type CompetitionFilterState = {
   timeOrder: string;
@@ -53,6 +55,7 @@ export type CompetitionFilterState = {
   shouldIncludeCancelled: boolean;
   shouldShowAdminDetails: boolean;
   adminStatus: string;
+  championshipOnly: boolean;
 };
 
 // search param sanitizers
@@ -162,6 +165,8 @@ export const createFilterState = (searchParams: URLSearchParams) => {
     adminStatus: sanitizeAdminStatus(
       searchParams.get(ADMIN_STATUS) || searchParams.get(LEGACY_ADMIN_STATUS),
     ),
+    championshipOnly:
+      searchParams.get(CHAMPIONSHIP_ONLY) === CHAMPIONSHIP_ONLY_TRUE,
   };
 };
 
@@ -264,7 +269,8 @@ export type CompetitionFilterAction =
   | { type: "set_custom_end_date"; customEndDate: string | null }
   | { type: "set_should_include_cancelled"; shouldIncludeCancelled: boolean }
   | { type: "set_should_show_admin_details"; shouldShowAdminDetails: boolean }
-  | { type: "set_admin_status"; adminStatus: string };
+  | { type: "set_admin_status"; adminStatus: string }
+  | { type: "toggle_championship" };
 
 export const competitionFilterReducer = (
   state: CompetitionFilterState,
@@ -306,6 +312,8 @@ export const competitionFilterReducer = (
         ),
       };
     }
+    case "toggle_championship":
+      return { ...state, championshipOnly: !state.championshipOnly };
     default:
       return { ...state, ...action };
   }

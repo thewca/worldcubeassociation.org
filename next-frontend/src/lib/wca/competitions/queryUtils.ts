@@ -24,6 +24,7 @@ export function createSearchParams(
     customEndDate,
     adminStatus,
     shouldIncludeCancelled,
+    // championshipOnly
   } = filterState;
 
   const dateNow = DateTime.now();
