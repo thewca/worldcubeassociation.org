@@ -47,7 +47,7 @@ export default async function AnnouncementPage({
     <VStack align="stretch" py={8}>
       <AnnouncementFullCard
         announcement={announcement}
-        colorPalette={randomAnnouncementColorPalette()}
+        colorPalette={randomAnnouncementColorPalette(announcement)}
       />
     </VStack>
   );

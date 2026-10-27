@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { route } from "nextjs-routes";
-import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
 
 // Matches the `summary` field's limit in the Announcements collection.
@@ -21,9 +20,10 @@ export const announcementColorPalette = (index: number) =>
   CARD_COLOR_PALETTES[index % CARD_COLOR_PALETTES.length];
 
 /// An announcement's own page is reached by link, not from a card, so there is
-/// no neighbouring color to match — pick one at random.
-export const randomAnnouncementColorPalette = () =>
-  announcementColorPalette(_.random(CARD_COLOR_PALETTES.length - 1));
+/// no neighbouring color to match. Derived from the ObjectId's random tail rather
+/// than `Math.random()`, so the page can be prerendered and cached.
+export const randomAnnouncementColorPalette = (announcement: Announcement) =>
+  announcementColorPalette(parseInt(announcement.id.slice(-6), 16));
 
 /// The teaser shown before "Read More". Announcements written before the
 /// `summary` field existed fall back to the beginning of their content.
@@ -40,7 +40,3 @@ export const announcementRoute = (announcement: Announcement) =>
     pathname: "/posts/[announcementId]",
     query: { announcementId: announcement.id },
   });
-
-/// Phase 2 prefixes this with "Posted by {team name} | ".
-export const announcementByline = (announcement: Announcement) =>
-  getFullDateTimeStringNoSeconds(announcement.publishedAt);
