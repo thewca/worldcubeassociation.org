@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Alert,
   Button,
   Checkbox,
   CloseButton,
@@ -93,7 +94,6 @@ export default function ResultMenu({
         onOpenChange={({ open: o }) => onOpenChange?.(o)}
         positioning={clickPos ? { getAnchorRect: () => clickPos } : undefined}
       >
-        <Menu.Trigger>{competitor.registrant_id}</Menu.Trigger>
         <Portal>
           <Menu.Positioner>
             <Menu.Content>
@@ -233,6 +233,12 @@ function QuitModal({
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
+              <Alert.Root status="warning" mb="3">
+                <Alert.Indicator />
+                <Alert.Content>
+                  {t("competitions.live.admin.quit.scoresheet_warning")}
+                </Alert.Content>
+              </Alert.Root>
               <Text fontWeight="bold">{competitor.name}</Text>
               {toAdvance.length > 0 ? (
                 <>

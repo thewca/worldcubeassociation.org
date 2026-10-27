@@ -522,6 +522,10 @@ class Competition < ApplicationRecord
     competitor_limit - registrations.accepted_and_paid_pending_count
   end
 
+  def waiting_list_count
+    registrations.waitlisted.count
+  end
+
   def auto_accept_threshold_reached?
     return false if auto_accept_disable_threshold.blank?
 
@@ -1490,6 +1494,23 @@ class Competition < ApplicationRecord
     results.includes(:result_attempts).winners
   end
 
+  # A Dual Round podium merges both linked rounds, so the podium is grouped by event rather than
+  # by round. Every round of a link shares an event and a format, which lets those sit here.
+  def to_v1_podiums_json
+    final_rounds_by_event = rounds.final.includes(competition_event: :event).index_by(&:event)
+
+    events_with_podium_results.map do |event, podium_results|
+      podium_round = final_rounds_by_event[event]
+
+      {
+        "event_id" => event.id,
+        "format_id" => podium_round.format_id,
+        "ranking_mode" => podium_round.ranking_mode,
+        "results" => podium_results.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS),
+      }
+    end
+  end
+
   def person_ids_with_results
     results.includes(:result_attempts, :round).group_by(&:person_id)
            .sort_by { |_person_id, results| results.first.person_name }
@@ -1732,6 +1753,13 @@ class Competition < ApplicationRecord
       competitions = competitions.where(end_date: target_date..)
     end
 
+    if params[:scoretaking_software].present?
+      scoretaking_software = params[:scoretaking_software].to_s
+      raise WcaExceptions::BadApiParameter.new("Invalid scoretaking_software: '#{scoretaking_software}'") unless Competition.scoretaking_softwares.key?(scoretaking_software)
+
+      competitions = competitions.where(scoretaking_software: scoretaking_software)
+    end
+
     if params[:announced_after].present?
       announced_date = Date.safe_parse(params[:announced_after])
       raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'") unless announced_date
@@ -1828,10 +1856,10 @@ class Competition < ApplicationRecord
   def available_registration_lanes(current_user)
     # There is currently only one lane, so this always returns the competitor lane
     steps = []
-    steps << { key: 'requirements', isEditable: false }
-    steps << { key: 'competing', parameters: competing_step_parameters(current_user), isEditable: true }
-    steps << { key: 'payment', parameters: payment_step_parameters, isEditable: true, deadline: self.registration_close } if using_payment_integrations?
-    steps << { key: 'approval', parameters: approval_step_parameters, isEditable: false }
+    steps << { key: 'requirements', is_editable: false, is_post_step: false, summary_status: 'hide' }
+    steps << { key: 'competing', parameters: competing_step_parameters(current_user), is_editable: true, is_post_step: false, summary_status: 'show' }
+    steps << { key: 'payment', parameters: payment_step_parameters, is_editable: true, is_post_step: true, deadline: self.registration_close, summary_status: 'show' } if using_payment_integrations?
+    steps << { key: 'approval', parameters: approval_step_parameters, is_editable: false, is_post_step: true, summary_status: 'priority' }
 
     steps
   end
@@ -1855,7 +1883,7 @@ class Competition < ApplicationRecord
   WCIF_STABLE_VERSION = '1.1'
 
   WCIF_VERSION_CATALOGUE = {
-    latest: '2.1.1',
+    latest: '2.2',
     stable: WCIF_STABLE_VERSION,
   }.freeze
 
@@ -1896,7 +1924,7 @@ class Competition < ApplicationRecord
 
   def to_competition_info
     options = {
-      only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
+      only: %w[id name website start_date registration_open registration_close announced_at cancelled_at results_posted_at end_date competitor_limit
                extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
                on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
                base_entry_fee_lowest_denomination currency_code allow_registration_edits competitor_can_cancel scoretaking_software
@@ -1906,7 +1934,7 @@ class Competition < ApplicationRecord
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? spots_left h2h_rounds tab_names],
+                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds tab_names],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2198,6 +2226,10 @@ class Competition < ApplicationRecord
   end
 
   def self.wcif_json_schema(version: WCIF_STABLE_VERSION, required_props: false)
+    # WCIF v2.2 properly documents the `id` and `version` props as required,
+    #   so enforce this requirement regardless of the additional option param
+    required_props ||= Gem::Version.new(version) >= Gem::Version.new("2.2")
+
     {
       # This $id property is the actual JsonSchema URI
       "$id" => Rails.application.routes.url_helpers.wcif_json_schema_api_v0_competitions_url(version, host: EnvConfig.ROOT_URL),
@@ -2251,13 +2283,19 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: %w[id name website start_date end_date
+    only: %w[id name website start_date end_date scoretaking_software
              registration_open registration_close announced_at
              cancelled_at results_posted_at competitor_limit venue],
     methods: %w[url website short_name short_display_name city
                 venue_address venue_details latitude_degrees longitude_degrees
                 country_iso2 event_ids time_until_registration date_range],
     include: %w[delegates organizers],
+  }.freeze
+
+  INDEX_SERIALIZE_OPTIONS = {
+    only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
+    methods: %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types],
+    include: {},
   }.freeze
 
   def serializable_hash(options = nil)
@@ -2284,8 +2322,11 @@ class Competition < ApplicationRecord
     cal = Icalendar::Calendar.new
     all_activities.each do |activity|
       event = Icalendar::Event.new
-      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
-      event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
+      # TZID=UTC makes icalendar emit the RFC 5545 UTC form (DTSTART:20261003T151500Z)
+      # with no TZID parameter. Google Calendar and other clients often mishandle
+      # TZID=Etc/UTC when no VTIMEZONE is present; see #7587 / #7590.
+      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time.utc, "TZID" => "UTC")
+      event.dtend = Icalendar::Values::DateTime.new(activity.end_time.utc, "TZID" => "UTC")
       event.summary = activity.localized_name
       cal.add_event(event)
     end

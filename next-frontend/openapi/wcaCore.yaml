@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.1.2
 info:
   title: WCA API Documentation
   summary: Documentation of the WCA API, currently in progress
@@ -12,11 +12,10 @@ servers:
   - url: http://localhost:3000/api/
     description: The production API server
 paths:
+  /v1/competitions/live:
+    $ref: 'paths/competitions/liveCompetitions.yaml'
   /v1/competitions/{competitionId}/registrations:
-    get:
-      $ref: 'paths/registrations/registrationsByCompetition.yaml#/get'
-    post:
-      $ref: 'paths/registrations/createRegistration.yaml'
+    $ref: 'paths/registrations/registrationsByCompetition.yaml'
   /v1/competitions/{competitionId}/registrations/{userId}:
     $ref: 'paths/registrations/registrationByUser.yaml'
   /v1/registrations/{registrationId}:
@@ -28,39 +27,33 @@ paths:
   /v1/registrations/{registrationId}/payment_denomination:
     $ref: 'paths/registrations/paymentDenomination.yaml'
 
+  /v1/competitions/{competitionId}/results:
+    $ref: 'paths/competitions/v1CompetitionResults.yaml'
+  /v1/competitions/{competitionId}/podiums:
+    $ref: 'paths/competitions/v1CompetitionPodiums.yaml'
+
   /v1/competitions/{competitionId}/scoretakers:
-    get:
-      $ref: 'paths/competitions/scoretakers/ListScoretakers.yaml'
-    post:
-      $ref: 'paths/competitions/scoretakers/AddScoretaker.yaml'
+    $ref: 'paths/competitions/scoretakers/CompetitionScoretakers.yaml'
   /v1/competitions/{competitionId}/scoretakers/{id}:
-    delete:
-      $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
+    $ref: 'paths/competitions/scoretakers/RemoveScoretaker.yaml'
+
+  /v1/competitions/{competitionId}/bookmark:
+    $ref: 'paths/competitions/competitionBookmark.yaml'
 
   /v1/competitions/{competitionId}/live/rounds:
     $ref: 'paths/competitions/live/LiveAdmin.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}:
-    post:
-      $ref: 'paths/competitions/live/SubmitLiveResults.yaml'
-    patch:
-      $ref: 'paths/competitions/live/UpdateLiveResults.yaml'
-    get:
-      $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
+    $ref: 'paths/competitions/live/LiveResultsByRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/batch:
-    post:
-      $ref: 'paths/competitions/live/BatchSubmitLiveResults.yaml'
+    $ref: 'paths/competitions/live/BatchSubmitLiveResults.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/next_if_quit:
     $ref: 'paths/competitions/live/GetNextCompetitorIfQuit.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/addable_competitors:
     $ref: 'paths/competitions/live/CanBeAddedToRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/{registrationId}:
-    put:
-      $ref: 'paths/competitions/live/addCompetitorToRound.yaml'
-    delete:
-      $ref: 'paths/competitions/live/QuitCompetitor.yaml'
+    $ref: 'paths/competitions/live/LiveRoundsCompetitors.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/bulk_quit:
-    delete:
-      $ref: 'paths/competitions/live/BulkQuitCompetitor.yaml'
+    $ref: 'paths/competitions/live/BulkQuitCompetitor.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/clear:
     $ref: 'paths/competitions/live/ClearRound.yaml'
   /v1/competitions/{competitionId}/live/rounds/{roundId}/close:
@@ -78,6 +71,9 @@ paths:
     $ref: 'paths/persons/personResults.yaml'
   /v1/persons/{wca_id}/records:
     $ref: 'paths/persons/personRecords.yaml'
+
+  /v1/geocoding/search:
+    $ref: 'paths/geocoding/geocodingSearch.yaml'
 
   /v0/competitions/{competitionId}/:
     $ref: 'paths/competitions/competitionById.yaml'

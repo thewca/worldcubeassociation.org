@@ -3,4 +3,4 @@ build-essential
 libssl-dev
 libyaml-dev
 libclang-dev
-cargo
+rustup

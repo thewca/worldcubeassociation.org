@@ -78,12 +78,18 @@ class Round < ApplicationRecord
 
   # The event dictates which formats are even allowed in the first place, hence the prefix
   delegate :formats, :format_ids, to: :event, prefix: :allowed
+  delegate :wcif_ids, to: :linked_round, prefix: true, allow_nil: true
   validates :format, inclusion: { in: :allowed_formats, message: ->(round, _args) { "'#{round.format_id}' is not allowed for '#{round.event_id}'" } }
 
   validates :advancement_condition, presence: { if: :advancement_condition_changed?, unless: :final_round?, message: "cannot be un-set on a non-final round" }, on: :update
   validates :advancement_condition, absence: { if: :final_round?, message: "cannot be set on a final round" }
 
   validates :participation_source_type, comparison: { equal_to: LinkedRound.model_name, if: :participation_source_linked?, message: "must be the linked round group when the previous rounds are linked" }
+
+  after_destroy :destroy_orphaned_linked_round
+  private def destroy_orphaned_linked_round
+    self.linked_round&.destroy_if_orphaned
+  end
 
   after_save :reset_linked_round_information, if: :linked_round_previously_changed?
   private def reset_linked_round_information
@@ -204,8 +210,10 @@ class Round < ApplicationRecord
     self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
   end
 
-  def close_round!
-    live_results.destroy_all.count
+  def close_round!(closing_user)
+    live_results.destroy_all.count.tap do
+      participation_source.unlock_results(closing_user) unless first_round?
+    end
   end
 
   def open_round!(opening_user)
@@ -359,7 +367,7 @@ class Round < ApplicationRecord
   end
 
   def score_taking_done?
-    open? && completed_competitors == total_competitors
+    any_live_results? && completed_competitors == total_competitors
   end
 
   def time_limit_undefined?
@@ -677,9 +685,15 @@ class Round < ApplicationRecord
   end
 
   def lock_results(locking_user)
-    count = live_results.update_all(locked_by_id: locking_user.id)
-    self.bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
-    count
+    live_results.update_all(locked_by_id: locking_user.id).tap do
+      bulk_insert_history(live_results.ids, locking_user, action_type: :locked)
+    end
+  end
+
+  def unlock_results(unlocking_user)
+    live_results.update_all(locked_by_id: nil).tap do
+      bulk_insert_history(live_results.ids, unlocking_user, action_type: :unlocked)
+    end
   end
 
   STATE_LOCKED = "locked"
@@ -704,7 +718,7 @@ class Round < ApplicationRecord
 
   def lifecycle_state
     return STATE_LOCKED if locked?
-    return STATE_OPEN if open?
+    return STATE_OPEN if any_live_results?
     return STATE_PENDING unless participation_source.score_taking_done?
     return STATE_BLOCKED if insufficient_competitors_violation.present?
 
@@ -745,12 +759,12 @@ class Round < ApplicationRecord
     MIN_COMPETITORS_PER_CLAUSE.values.reverse[number - 2] if number > 1
   end
 
-  def open?
+  def any_live_results?
     live_results.any?
   end
 
   def locked?
-    return false unless score_taking_done?
+    return false unless any_live_results?
 
     if live_results.loaded?
       live_results.count(&:locked?) == total_competitors
@@ -909,6 +923,37 @@ class Round < ApplicationRecord
         "advancementCondition" => advancement_condition&.to_wcif,
       )
     end
+  end
+
+  RANKING_MODES = {
+    within_round: "round",
+    linked_round: "linked_round",
+    head_to_head: "head_to_head",
+  }.freeze
+
+  # What decides a competitor's final position in this round. `pos` always ranks them within the
+  # round itself; in a Dual Round `global_pos` additionally spans every round of the link, and in
+  # a Head-to-Head round both come from match outcomes rather than from comparing times.
+  def ranking_mode
+    return RANKING_MODES[:head_to_head] if is_h2h_mock?
+    return RANKING_MODES[:linked_round] if linked_round_id?
+
+    RANKING_MODES[:within_round]
+  end
+
+  V1_RESULTS_SERIALIZE_OPTIONS = {
+    only: %w[format_id],
+    methods: %w[wcif_id event_id round_type_id ranking_mode linked_round_wcif_ids],
+  }.freeze
+
+  def to_v1_results_json
+    # The results are sorted here rather than by the association so that the ordering is not
+    # something every caller of `round.results` pays for.
+    sorted_results = results.sort_by { [it.pos, it.person_name] }
+
+    self.as_json(V1_RESULTS_SERIALIZE_OPTIONS)
+        .merge("results" => sorted_results.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS))
+        .compact
   end
 
   def to_live_results_json(only_podiums: false)

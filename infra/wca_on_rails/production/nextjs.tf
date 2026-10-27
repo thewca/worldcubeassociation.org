@@ -4,6 +4,8 @@ resource "aws_cloudwatch_log_group" "nextjs" {
 }
 
 locals {
+  payload_database_uri = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
+
   nextjs_environment = [
     {
       name  = "WCA_LIVE_SITE"
@@ -39,7 +41,7 @@ locals {
     },
     {
       name  = "DATABASE_URI"
-      value = "mongodb://payload-database-prod.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com:27017/payload?retryWrites=false"
+      value = local.payload_database_uri
     },
     {
       name  = "WCA_BACKEND_API_URL"
@@ -48,6 +50,10 @@ locals {
     {
       name  = "WCA_FRONTEND_API_URL"
       value = "https://www.worldcubeassociation.org/api/"
+    },
+    {
+      name  = "WEBLATE_URL"
+      value = "http://weblate.internal:8080"
     },
     {
       name  = "PROPRIETARY_FONT"
@@ -153,11 +159,11 @@ resource "aws_ecs_task_definition" "nextjs" {
       }
       environment = local.nextjs_environment
       healthCheck       = {
-        command            = ["CMD-SHELL", "wget --spider -q http://localhost:3000/ || exit 1"]
+        command            = ["CMD-SHELL", "wget --spider -q http://localhost:3000/api/health || exit 1"]
         interval           = 30
         retries            = 3
         startPeriod        = 5
-        timeout            = 5
+        timeout            = 10
       }
     }
     ])
@@ -204,11 +210,11 @@ resource "aws_ecs_task_definition" "nextjs_live_results" {
       }
       environment = local.nextjs_merged_environment
       healthCheck       = {
-        command            = ["CMD-SHELL", "wget --spider -q http://localhost:3000/ || exit 1"]
+        command            = ["CMD-SHELL", "wget --spider -q http://localhost:3000/api/health || exit 1"]
         interval           = 30
         retries            = 3
         startPeriod        = 5
-        timeout            = 5
+        timeout            = 10
       }
     }
   ])
@@ -284,7 +290,7 @@ resource "aws_ecs_service" "nextjs" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.nextjs.arn
-  desired_count                      = 1
+  desired_count                      = 3
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50

@@ -6,11 +6,14 @@ import {
   Image,
   LinkBox,
   LinkOverlay,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
 import RoleBadge, { StaffColor } from "@/components/RoleBadge";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
+import EmailCopyButton from "@/components/EmailCopyButton";
 
 interface UserBadgeData {
   name: string;
@@ -18,6 +21,7 @@ interface UserBadgeData {
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
   wcaId: string;
   action?: React.ReactNode;
+  email?: string;
 }
 
 const UserBadge: React.FC<UserBadgeData> = ({
@@ -26,6 +30,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
   roles,
   wcaId,
   action,
+  email,
 }) => {
   return (
     <LinkBox asChild>
@@ -57,37 +62,41 @@ const UserBadge: React.FC<UserBadgeData> = ({
             minH="avatarThumb"
           />
         )}
-        <Center>
-          <Card.Body>
+        <Center flexGrow={1}>
+          <Card.Body gap={2}>
             <Card.Title>
-              <LinkOverlay asChild>
-                <Link
-                  href={route({
-                    pathname: "/persons/[wcaId]",
-                    query: { wcaId },
-                  })}
-                >
-                  {name}
-                </Link>
-              </LinkOverlay>
+              <HStack direction="row" justify="space-between">
+                <LinkOverlay asChild>
+                  <Link
+                    href={route({
+                      pathname: "/persons/[wcaId]",
+                      query: { wcaId },
+                    })}
+                  >
+                    {name}
+                  </Link>
+                </LinkOverlay>
+                {email && <EmailCopyButton email={email} />}
+              </HStack>
             </Card.Title>
             {roles && (
               <HStack direction="row" wrap="wrap" gap="4px 8px" marginTop="4px">
                 {roles.map((role, index) => (
-                  <RoleBadge
-                    key={index}
-                    teamRole={role.teamRole}
-                    teamText={role.teamText ?? ""}
-                    colorPalette={role.staffColor}
-                    fontSize="0.7em"
-                  />
+                  <Stack key={index}>
+                    <Text color="fg.muted">{role.teamText}</Text>
+                    <RoleBadge
+                      teamRole={role.teamRole}
+                      colorPalette={role.staffColor}
+                      fontSize="0.7em"
+                    />
+                  </Stack>
                 ))}
               </HStack>
             )}
           </Card.Body>
         </Center>
         {action && (
-          <Center marginLeft="auto" paddingRight="3">
+          <Center marginStart="auto" paddingEnd="3">
             {action}
           </Center>
         )}

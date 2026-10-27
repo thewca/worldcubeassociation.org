@@ -1,4 +1,6 @@
-import CompetitionMenu from "@/components/competitions/CompetitionMenu";
+import CompetitionMenu, {
+  AwaitingResultsAlert,
+} from "@/components/competitions/CompetitionMenu";
 import TabShell from "@/components/competitions/TabShell";
 import TabMenuSkeleton from "@/components/competitions/TabMenuSkeleton";
 import { Box } from "@chakra-ui/react";
@@ -13,8 +15,9 @@ export default function CompetitionTabsLayout({
 }) {
   // The competition page layout is very card-heave, and Chakra cards bring their own padding.
   //   So we subtract a little bit of the global padding that we had previously applied to shared pages.
+  // width=full so tables won't overflow a tab
   return (
-    <Box marginTop="-3">
+    <Box marginTop="-3" width="full">
       <TabShell
         menu={
           <Suspense fallback={<TabMenuSkeleton />}>
@@ -22,6 +25,9 @@ export default function CompetitionTabsLayout({
           </Suspense>
         }
       >
+        <Suspense>
+          <AwaitingResultsAlert params={params} />
+        </Suspense>
         {children}
       </TabShell>
     </Box>

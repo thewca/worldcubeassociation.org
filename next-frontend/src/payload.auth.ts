@@ -3,6 +3,7 @@ import { genericOAuth } from "better-auth/plugins";
 import {
   payloadAdapter,
   type CreateAuthFunction,
+  hasAnyRole,
 } from "@delmaredigital/payload-better-auth";
 import {
   cmsWcaProvider,
@@ -10,7 +11,22 @@ import {
   CMS_AUTH_BASE_PATH,
   WCA_CMS_APP_NAME,
   WCA_CMS_PROVIDER_ID,
+  WCA_ROLES_FIELD,
 } from "@/auth.config";
+
+export const PAYLOAD_ADMIN_ROLES = [
+  "wst",
+  "wct",
+  "wat",
+  "wmt",
+  "board",
+  "wic",
+  "wrc",
+  "wapc",
+  "wcat",
+  "wrt",
+  "wqac",
+];
 
 export const cmsBetterAuthOptions: BetterAuthOptions = {
   appName: WCA_CMS_APP_NAME,
@@ -30,6 +46,20 @@ export const cmsBetterAuthOptions: BetterAuthOptions = {
   },
   databaseHooks: {
     user: {
+      create: {
+        before: async (user, context) => {
+          // Only gate OAuth sign-ups; leave admin-created users and other flows alone.
+          if (!context?.path?.includes("/callback/")) return;
+
+          // Make sure that users who don't have access to the dashboard do not get inserted
+          //   into BetterAuth in the first place. This has to happen very high in the callback chain,
+          //   even _before_ BetterAuth serialize back into Payload (because at that point, a database
+          //   row would already need to exist, and we want to prevent just that).
+          // See https://delmaredigital.github.io/payload-better-auth/#social-admin-only for details.
+          if (!hasAnyRole(user, PAYLOAD_ADMIN_ROLES, WCA_ROLES_FIELD))
+            return false;
+        },
+      },
       update: {
         before: async (_user, context) => {
           // A CMS user is a projection of the WCA account: `overrideUserInfo` rewrites every

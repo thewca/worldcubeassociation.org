@@ -14,6 +14,13 @@ locals {
       value = var.ROOT_URL
     },
     {
+      # Staging has no Next host of its own: the ALB only forwards a handful of
+      # paths there (see rails_forward_next_staging), and neither /persons nor
+      # /delegates is one of them, so these links stay on staging's own Rails.
+      name  = "NEXT_FRONTEND_URL"
+      value = var.ROOT_URL
+    },
+    {
       name  = "OIDC_ISSUER"
       value = var.ROOT_URL
     },

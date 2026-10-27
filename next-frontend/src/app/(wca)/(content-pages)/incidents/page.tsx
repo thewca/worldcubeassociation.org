@@ -30,6 +30,9 @@ import {
   type TagAction,
 } from "@/components/incidents/Tags";
 import { useT } from "@/lib/i18n/useI18n";
+import useDebounce from "@/lib/hooks/useDebounce";
+
+const DEBOUNCE_MS = 300;
 
 const itemsPerPageChoices = createListCollection({
   items: [5, 10, 15, 20, 30, 40],
@@ -60,7 +63,8 @@ function IncidentsLog() {
   const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [query, setQuery] = useState<string | undefined>(undefined);
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, DEBOUNCE_MS);
 
   // The tag filter lives in the URL so that it stays shareable and so that linking to
   // `/incidents?tags=...` from a single incident actually applies the filter.
@@ -78,13 +82,13 @@ function IncidentsLog() {
         params: {
           query: {
             per_page: itemsPerPage,
-            query,
+            q: debouncedQuery,
             page,
             tags: searchTags.length === 0 ? undefined : searchTags.join(","),
           },
         },
       }),
-    queryKey: ["incidents", page, itemsPerPage, query, ...searchTags],
+    queryKey: ["incidents", page, itemsPerPage, debouncedQuery, ...searchTags],
     placeholderData: keepPreviousData,
   });
 
@@ -120,7 +124,10 @@ function IncidentsLog() {
       <Input
         placeholder={t("incidents_log.search_placeholder")}
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setPage(1);
+        }}
       />
       {isFetching && <Loading />}
       <Table.ScrollArea maxW="full">
@@ -174,6 +181,8 @@ function IncidentsLog() {
                 </Table.Cell>
                 <Table.Cell>
                   {t(
+                    // i18n-tasks-use t("incidents_log.resolved")
+                    // i18n-tasks-use t("incidents_log.pending")
                     item.resolved_at
                       ? "incidents_log.resolved"
                       : "incidents_log.pending",
@@ -181,6 +190,7 @@ function IncidentsLog() {
                 </Table.Cell>
                 <Table.Cell hideBelow="md">
                   {t(
+                    // i18n-tasks-use t("incidents_log.sent")
                     item.digest_worthy && item.digest_sent_at
                       ? "incidents_log.sent"
                       : "incidents_log.pending",
