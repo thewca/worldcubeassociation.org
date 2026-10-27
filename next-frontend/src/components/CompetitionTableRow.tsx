@@ -1,5 +1,5 @@
 "use client";
-import React, { JSX, useMemo, useState } from "react";
+import React, { JSX, useState } from "react";
 import {
   Table,
   Text,
@@ -55,10 +55,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   const regoStatus = getRegistrationStatus(comp);
 
-  const isChampionship = useMemo(
-    () => comp.championship_types.length > 0,
-    [comp],
-  );
+  const isChampionship = comp.championship_types.length > 0;
 
   const { t } = useT();
   return (
