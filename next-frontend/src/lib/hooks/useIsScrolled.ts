@@ -12,7 +12,7 @@ export default function useIsScrolled({
   const [isScrolledDown, setIsScrolledDown] = useState(false);
 
   const topSentinelRef = useOnInView((inView) => setIsScrolledDown(!inView), {
-    rootMargin: rootMargin || BACK_TO_TOP_ROOT_MARGIN_DEFAULT,
+    rootMargin,
   });
 
   return { isScrolledDown, topSentinelRef };
