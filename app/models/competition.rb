@@ -1773,6 +1773,10 @@ class Competition < ApplicationRecord
       competitions = competitions.end_date_passed_since(num_days).pending_report_or_results_posting
     end
 
+    if ActiveRecord::Type::Boolean.new.cast(params[:championship_only])
+      competitions = competitions.where(id: Championship.select(:competition_id))
+    end
+
     query&.split&.each do |part|
       like_query = %w[id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
