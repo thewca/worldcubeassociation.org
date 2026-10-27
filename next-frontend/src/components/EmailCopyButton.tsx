@@ -18,7 +18,13 @@ import { useT } from "@/lib/i18n/useI18n";
 import { Toaster, toaster } from "./ui/toaster";
 import { TFunction } from "i18next";
 
-export default function EmailCopyButton({ email }: { email: string }) {
+export default function EmailCopyButton({
+  email,
+  showTooltip = true,
+}: {
+  email: string;
+  showTooltip?: boolean;
+}) {
   const { t } = useT();
   const clipboard = useClipboard({ value: email });
 
@@ -30,6 +36,8 @@ export default function EmailCopyButton({ email }: { email: string }) {
   );
 
   const copy = () => {
+    if (!showTooltip) return;
+
     clipboard.copy();
     toaster.create({
       type: "info",
@@ -37,22 +45,14 @@ export default function EmailCopyButton({ email }: { email: string }) {
     });
   };
 
+  const buttonProps = { email, copy, clipboard, t, showTooltip };
+
   return (
     <>
       {hasCoarsePointer ? (
-        <TouchCopyButton
-          email={email}
-          copy={copy}
-          clipboard={clipboard}
-          t={t}
-        />
+        <TouchCopyButton {...buttonProps} />
       ) : (
-        <DesktopCopyButton
-          email={email}
-          copy={copy}
-          clipboard={clipboard}
-          t={t}
-        />
+        <DesktopCopyButton {...buttonProps} />
       )}
 
       <Toaster />
@@ -65,11 +65,18 @@ interface ButtonProps {
   copy: () => void;
   clipboard: UseClipboardReturn;
   t: TFunction;
+  showTooltip: boolean;
 }
 
-function DesktopCopyButton({ email, copy, clipboard, t }: ButtonProps) {
+function DesktopCopyButton({
+  email,
+  copy,
+  clipboard,
+  t,
+  showTooltip,
+}: ButtonProps) {
   return (
-    <Tooltip content={email} showArrow openDelay={100}>
+    <Tooltip content={email} showArrow openDelay={100} disabled={!showTooltip}>
       <IconButton
         aria-label={
           clipboard.copied
@@ -108,7 +115,25 @@ function DesktopCopyButton({ email, copy, clipboard, t }: ButtonProps) {
   );
 }
 
-function TouchCopyButton({ email, copy, clipboard, t }: ButtonProps) {
+function TouchCopyButton({
+  email,
+  copy,
+  clipboard,
+  t,
+  showTooltip,
+}: ButtonProps) {
+  const trigger = (
+    <IconButton
+      aria-label={t("activerecord.attributes.user.email")}
+      variant="ghost"
+      size="sm"
+    >
+      <LuMail />
+    </IconButton>
+  );
+
+  if (!showTooltip) return trigger;
+
   return (
     <ToggleTip
       showArrow
@@ -134,13 +159,7 @@ function TouchCopyButton({ email, copy, clipboard, t }: ButtonProps) {
         </HStack>
       }
     >
-      <IconButton
-        aria-label={t("activerecord.attributes.user.email")}
-        variant="ghost"
-        size="sm"
-      >
-        <LuMail />
-      </IconButton>
+      {trigger}
     </ToggleTip>
   );
 }
