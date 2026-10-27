@@ -2120,6 +2120,12 @@ es-419:
         mean: Media
       errors:
         round_closed: La ronda no ha sido abierta aún
+      overview:
+        upcoming: Próximas
+        in_progress: Ahora mismo
+        past_month: Últimos 30 días
+        no_upcoming: No hay próximas competiciones con resultados en vivo.
+        search: Buscar competiciones
     my_competitions:
       title: Mis competiciones
       disclaimer: >-
