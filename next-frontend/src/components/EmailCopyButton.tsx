@@ -11,33 +11,59 @@ import {
   UseClipboardReturn,
   useMediaQuery,
 } from "@chakra-ui/react";
-import { LuCheck, LuCopy, LuMail } from "react-icons/lu";
-import { Tooltip } from "@/components/ui/tooltip";
-import { ToggleTip } from "@/components/ui/toggle-tip";
-import { useT } from "@/lib/i18n/useI18n";
-import { Toaster, toaster } from "./ui/toaster";
 import { TFunction } from "i18next";
+import { LuCheck, LuCopy, LuMail } from "react-icons/lu";
+import { ToggleTip } from "@/components/ui/toggle-tip";
+import { Tooltip } from "@/components/ui/tooltip";
+import { useT } from "@/lib/i18n/useI18n";
+import RailsLink from "./RailsLink";
+import { Toaster, toaster } from "./ui/toaster";
 
-export default function EmailCopyButton({
-  email,
-  showTooltip = true,
-}: {
+interface EmailCopyButtonProps {
   email: string;
-  showTooltip?: boolean;
-}) {
+  /** When provided, the button navigates to this URL instead of copying. */
+  href?: string;
+}
+
+export default function EmailCopyButton({ email, href }: EmailCopyButtonProps) {
   const { t } = useT();
+
+  if (href) return <EmailLinkButton href={href} t={t} />;
+
+  return <EmailClipboardButton email={email} t={t} />;
+}
+
+function EmailLinkButton({ href, t }: { href: string; t: TFunction }) {
+  return (
+    <IconButton
+      asChild
+      aria-label={t("activerecord.attributes.user.email")}
+      variant="ghost"
+      size="sm"
+    >
+      <RailsLink href={href} color="inherit">
+        <LuMail />
+      </RailsLink>
+    </IconButton>
+  );
+}
+
+interface CopyButtonProps {
+  email: string;
+  copy: () => void;
+  clipboard: UseClipboardReturn;
+  t: TFunction;
+}
+
+function EmailClipboardButton({ email, t }: { email: string; t: TFunction }) {
   const clipboard = useClipboard({ value: email });
 
   const [hasCoarsePointer] = useMediaQuery(
     ["(any-pointer: coarse) and (hover: none)"],
-    {
-      fallback: [true],
-    },
+    { fallback: [true] },
   );
 
   const copy = () => {
-    if (!showTooltip) return;
-
     clipboard.copy();
     toaster.create({
       type: "info",
@@ -45,7 +71,7 @@ export default function EmailCopyButton({
     });
   };
 
-  const buttonProps = { email, copy, clipboard, t, showTooltip };
+  const buttonProps: CopyButtonProps = { email, copy, clipboard, t };
 
   return (
     <>
@@ -60,23 +86,9 @@ export default function EmailCopyButton({
   );
 }
 
-interface ButtonProps {
-  email: string;
-  copy: () => void;
-  clipboard: UseClipboardReturn;
-  t: TFunction;
-  showTooltip: boolean;
-}
-
-function DesktopCopyButton({
-  email,
-  copy,
-  clipboard,
-  t,
-  showTooltip,
-}: ButtonProps) {
+function DesktopCopyButton({ email, copy, clipboard, t }: CopyButtonProps) {
   return (
-    <Tooltip content={email} showArrow openDelay={100} disabled={!showTooltip}>
+    <Tooltip content={email} showArrow openDelay={100}>
       <IconButton
         aria-label={
           clipboard.copied
@@ -115,25 +127,7 @@ function DesktopCopyButton({
   );
 }
 
-function TouchCopyButton({
-  email,
-  copy,
-  clipboard,
-  t,
-  showTooltip,
-}: ButtonProps) {
-  const trigger = (
-    <IconButton
-      aria-label={t("activerecord.attributes.user.email")}
-      variant="ghost"
-      size="sm"
-    >
-      <LuMail />
-    </IconButton>
-  );
-
-  if (!showTooltip) return trigger;
-
+function TouchCopyButton({ email, copy, clipboard, t }: CopyButtonProps) {
   return (
     <ToggleTip
       showArrow
@@ -159,7 +153,13 @@ function TouchCopyButton({
         </HStack>
       }
     >
-      {trigger}
+      <IconButton
+        aria-label={t("activerecord.attributes.user.email")}
+        variant="ghost"
+        size="sm"
+      >
+        <LuMail />
+      </IconButton>
     </ToggleTip>
   );
 }
