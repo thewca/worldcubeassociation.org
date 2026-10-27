@@ -17,7 +17,7 @@ export default function TabShell({
   const { competitionId } = useParams<"/competitions/[competitionId]">();
 
   const path = _.last(pathName.split("/"));
-  const currentPath = path === competitionId ? "general" : path;
+  const currentPath = !path || path === competitionId ? "general" : path;
 
   return (
     <Tabs.Root
@@ -32,7 +32,7 @@ export default function TabShell({
       {menu}
       {/* Tabs.Content is a flex item, which has `min-width: auto`.
        It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
-      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
+      <Tabs.Content width="full" minWidth="0" value={currentPath}>
         {children}
       </Tabs.Content>
     </Tabs.Root>

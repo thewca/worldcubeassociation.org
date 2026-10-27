@@ -66,10 +66,13 @@ export async function AwaitingResultsAlert({
   params: Promise<{ competitionId: string }>;
 }) {
   const { competitionId } = await params;
-  const { data: competitionInfo } = await getCompetitionInfo(competitionId);
+  const { data: competitionInfo, error } =
+    await getCompetitionInfo(competitionId);
 
-  if (!competitionInfo || !competitionStatus(competitionInfo).isAwaitingResults)
-    return null;
+  // `CompetitionMenu` already renders the error for this same cached request.
+  if (error) return null;
+
+  if (!competitionStatus(competitionInfo).isAwaitingResults) return null;
 
   const { t } = await getT();
   const competitionLiveTab = liveTab(competitionInfo);
