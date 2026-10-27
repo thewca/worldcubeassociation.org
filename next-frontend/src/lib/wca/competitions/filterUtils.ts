@@ -55,7 +55,7 @@ export type CompetitionFilterState = {
   shouldIncludeCancelled: boolean;
   shouldShowAdminDetails: boolean;
   adminStatus: string;
-  championshipOnly: boolean;
+  shouldShowChampionshipOnly: boolean;
 };
 
 // search param sanitizers
@@ -165,7 +165,7 @@ export const createFilterState = (searchParams: URLSearchParams) => {
     adminStatus: sanitizeAdminStatus(
       searchParams.get(ADMIN_STATUS) || searchParams.get(LEGACY_ADMIN_STATUS),
     ),
-    championshipOnly:
+    shouldShowChampionshipOnly:
       searchParams.get(CHAMPIONSHIP_ONLY) === CHAMPIONSHIP_ONLY_TRUE,
   };
 };
@@ -187,7 +187,7 @@ export const updateSearchParams = (
     shouldIncludeCancelled,
     shouldShowAdminDetails,
     adminStatus,
-    championshipOnly,
+    shouldShowChampionshipOnly,
   } = filterState;
 
   // update every string value; and then remove that value if it's redundant (ie is the default)
@@ -249,7 +249,7 @@ export const updateSearchParams = (
     searchParams.delete(SHOW_ADMIN_DETAILS);
   }
 
-  if (championshipOnly) {
+  if (shouldShowChampionshipOnly) {
     searchParams.set(CHAMPIONSHIP_ONLY, CHAMPIONSHIP_ONLY_TRUE);
   } else {
     searchParams.delete(CHAMPIONSHIP_ONLY);
@@ -277,7 +277,7 @@ export type CompetitionFilterAction =
   | { type: "set_should_include_cancelled"; shouldIncludeCancelled: boolean }
   | { type: "set_should_show_admin_details"; shouldShowAdminDetails: boolean }
   | { type: "set_admin_status"; adminStatus: string }
-  | { type: "set_championship_only"; championshipOnly: boolean };
+  | { type: "set_championship_only"; shouldShowChampionshipOnly: boolean };
 
 export const competitionFilterReducer = (
   state: CompetitionFilterState,

@@ -425,11 +425,11 @@ export default function CompetitionsPage() {
                     <Checkbox.Root
                       width="auto"
                       minHeight="10"
-                      checked={filterState.championshipOnly}
+                      checked={filterState.shouldShowChampionshipOnly}
                       onCheckedChange={(e) =>
                         dispatchFilter({
                           type: "set_championship_only",
-                          championshipOnly: Boolean(e.checked),
+                          shouldShowChampionshipOnly: Boolean(e.checked),
                         })
                       }
                     >
