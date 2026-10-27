@@ -47,6 +47,7 @@ import { fromContainerMetadata } from "@aws-sdk/credential-providers";
 import { withWeblateSync } from "@/lib/translate/hooks";
 import { weblateSyncEndpoint } from "@/lib/translate/endpoint";
 import { WCA_CMS_PROVIDER_ID, WCA_ROLES_FIELD } from "@/auth.config";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -105,7 +106,10 @@ function plugins() {
 }
 
 function dbOptions(): Args {
-  if (process.env.NODE_ENV === "production") {
+  // The build prerenders against a local MongoDB seeded from the public dump, see .github/actions/build-js-image
+  const isBuildPhase = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD;
+
+  if (process.env.NODE_ENV === "production" && !isBuildPhase) {
     return {
       url: process.env.DATABASE_URI || "",
       connectOptions: {
