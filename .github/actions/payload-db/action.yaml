@@ -1,0 +1,18 @@
+name: 'Start Payload database'
+description: 'Runs MongoDB on localhost:27017 (root/root, database `payload`) seeded from the public Payload dump.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Start MongoDB from the public dump
+      shell: bash
+      run: |
+        docker build -t payload-db -f ./next-frontend/Dockerfile.payload ./next-frontend
+        # GLIBC_TUNABLES: same Mongo 8 kernel workaround as in docker-compose.yml
+        docker run -d --name payload_db -p 27017:27017 \
+          -e GLIBC_TUNABLES="glibc:pthread:rseq=1" \
+          -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -e MONGO_INITDB_DATABASE=payload \
+          payload-db
+        # The image's init phase runs a temporary mongod bound to 127.0.0.1 only, so pinging the
+        #   container IP waits for the real server instead of restoring into one that is about to stop.
+        timeout 120 bash -c 'until docker exec payload_db bash -c "mongosh --host \$(hostname -i) -u root -p root --quiet --eval \"db.runCommand({ ping: 1 }).ok\"" >/dev/null 2>&1; do sleep 2; done'
+        bash ./next-frontend/import-dump.sh --without-media --clean

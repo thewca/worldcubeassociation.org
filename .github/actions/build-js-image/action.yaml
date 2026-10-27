@@ -34,12 +34,17 @@ runs:
       # Assets live under a per-commit prefix, so a deploy never overwrites the bundle
       #   that clients on the previous build are still fetching.
       run: echo "NEXT_ASSET_PREFIX=https://${{ inputs.asset_bucket }}/nextjs/${{ github.sha }}" >> $GITHUB_ENV
+    - name: Start Payload database
+      uses: ./.github/actions/payload-db
     - name: Build and push JS Docker image
       uses: docker/build-push-action@v7
       id: build-js-image
       with:
         push: true
         context: ./next-frontend
+        # Lets `next build` reach the Payload database started above
+        network: host
+        allow: network.host
         tags: |
           ${{ inputs.registry }}:${{ inputs.tag }}
         cache-from: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.tag }}
@@ -52,6 +57,8 @@ runs:
       with:
         context: ./next-frontend
         target: assets
+        network: host
+        allow: network.host
         outputs: type=local,dest=./nextjs-assets
         cache-from: type=registry,ref=${{ inputs.registry }}:buildcache-${{ inputs.tag }}
         build-args: |
