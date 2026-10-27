@@ -3385,6 +3385,8 @@ export interface operations {
                 /** @description Number of results per page */
                 per_page?: number;
                 include_cancelled?: boolean;
+                /** @description Only return championships */
+                championship_only?: boolean;
                 continent?: string;
                 country_iso2?: string;
                 delegate?: string;
