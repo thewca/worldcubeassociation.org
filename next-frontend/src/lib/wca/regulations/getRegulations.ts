@@ -1,18 +1,28 @@
-import { cache } from "react";
-import { serverClient } from "@/lib/wca/wcaAPI";
+import { cachedServerClient } from "@/lib/wca/wcaAPI";
 
-export const getRegulations = cache(async () => {
-  return await serverClient.GET("/v0/regulations");
-});
+import { cacheLife } from "next/cache";
 
-export const getHistoricalRegulations = cache(async (version: string) => {
-  return await serverClient.GET("/v0/regulations/history/official/{version}", {
+export async function getRegulations() {
+  "use cache";
+  cacheLife("days");
+
+  return cachedServerClient.GET("/v0/regulations");
+}
+
+export async function getHistoricalRegulations(version: string) {
+  "use cache";
+  cacheLife("days");
+
+  return cachedServerClient.GET("/v0/regulations/history/official/{version}", {
     params: { path: { version } },
   });
-});
+}
 
-export const getTranslatedRegulations = cache(async (language: string) => {
-  return await serverClient.GET("/v0/regulations/translations/{language}", {
+export async function getTranslatedRegulations(language: string) {
+  "use cache";
+  cacheLife("days");
+
+  return cachedServerClient.GET("/v0/regulations/translations/{language}", {
     params: { path: { language } },
   });
-});
+}
