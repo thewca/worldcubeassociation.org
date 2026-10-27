@@ -6,10 +6,10 @@ runs:
     - name: Start MongoDB from the public dump
       shell: bash
       run: |
-        docker build -t payload-db -f ./next-frontend/Dockerfile.payload ./next-frontend
-        # GLIBC_TUNABLES: same Mongo 8 kernel workaround as in docker-compose.yml
+        # Pinned to 7 for the same reason as in playwright-test.yml: until https://jira.mongodb.org/browse/SERVER-131779
+        #   ships, Mongo 8+ rejects the `ubuntu-latest` kernel as unsupported.
+        docker build -t payload-db --build-arg MONGO_VERSION=7 -f ./next-frontend/Dockerfile.payload ./next-frontend
         docker run -d --name payload_db -p 27017:27017 \
-          -e GLIBC_TUNABLES="glibc:pthread:rseq=1" \
           -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -e MONGO_INITDB_DATABASE=payload \
           payload-db
         # The image's init phase runs a temporary mongod bound to 127.0.0.1 only, so pinging the
