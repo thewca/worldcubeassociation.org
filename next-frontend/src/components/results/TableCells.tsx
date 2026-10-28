@@ -1,4 +1,4 @@
-import { Badge, Box, Float, Table } from "@chakra-ui/react";
+import { Badge, BadgeProps, Box, Float, Table } from "@chakra-ui/react";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import _ from "lodash";
 import type { ReactNode } from "react";
@@ -33,6 +33,25 @@ const recordTagBadge = (tag?: string | null) => {
 // badge overlaps whatever sits in the next column.
 const RECORD_TAG_SLOT = "7";
 
+type RecordTagBadge = NonNullable<ReturnType<typeof recordTagBadge>>;
+
+function RecordBadge({
+  badge,
+  ...props
+}: { badge: RecordTagBadge } & BadgeProps) {
+  return (
+    <Badge
+      size="xs"
+      variant="solid"
+      colorPalette={badge.color}
+      minHeight="3.5"
+      {...props}
+    >
+      {badge.label}
+    </Badge>
+  );
+}
+
 // Renders the record badge as a superscript floating off the top-right corner
 // of its content, without overflowing the surrounding text's line box.
 export function WithRecordTag({
@@ -51,45 +70,30 @@ export function WithRecordTag({
 
   if (!badge) return children;
 
-  if (hanging) {
-    return (
-      <Box as="span" position="relative">
-        {children}
-        <Badge
-          size="xs"
-          variant="solid"
-          colorPalette={badge.color}
-          minHeight="3.5"
-          position="absolute"
-          insetInlineStart="100%"
-          top="-1.5"
-          marginStart="0.5"
-          paddingInline="0.5"
-        >
-          {badge.label}
-        </Badge>
-      </Box>
-    );
-  }
+  const positionedBadge = hanging ? (
+    <RecordBadge
+      badge={badge}
+      position="absolute"
+      insetInlineStart="full"
+      top="-1.5"
+      marginStart="0.5"
+      paddingInline="0.5"
+    />
+  ) : (
+    <Float placement="top-end" offsetX="3.5" offsetY="1">
+      <RecordBadge badge={badge} />
+    </Float>
+  );
 
   return (
     <Box
       as="span"
       position="relative"
-      display="inline-block"
-      paddingEnd={RECORD_TAG_SLOT}
+      display={hanging ? undefined : "inline-block"}
+      paddingEnd={hanging ? undefined : RECORD_TAG_SLOT}
     >
       {children}
-      <Float placement="top-end" offsetX="3.5" offsetY="1">
-        <Badge
-          size="xs"
-          variant="solid"
-          colorPalette={badge.color}
-          minHeight="3.5"
-        >
-          {badge.label}
-        </Badge>
-      </Float>
+      {positionedBadge}
     </Box>
   );
 }
