@@ -30,21 +30,47 @@ const recordTagBadge = (tag?: string | null) => {
 
 // Width reserved at the end of the value for the floating badge: `Float` is
 // absolutely positioned and contributes no width of its own, so without it the
-// badge overlaps whatever sits in the next column. Reserve the same space for
-// untagged values and column headers so record badges do not shift numbers
-// out of alignment with each other or with their header.
+// badge overlaps whatever sits in the next column.
 const RECORD_TAG_SLOT = "7";
 
 // Renders the record badge as a superscript floating off the top-right corner
 // of its content, without overflowing the surrounding text's line box.
 export function WithRecordTag({
   recordTag,
+  hanging = false,
   children,
 }: {
   recordTag?: string | null;
+  // Hang the badge past the end of the value instead of reserving space for
+  //   it, so tagged and untagged values stay aligned. The badge then sits in
+  //   the cell padding, which must be wide enough for it.
+  hanging?: boolean;
   children: ReactNode;
 }) {
   const badge = recordTagBadge(recordTag);
+
+  if (!badge) return children;
+
+  if (hanging) {
+    return (
+      <Box as="span" position="relative">
+        {children}
+        <Badge
+          size="xs"
+          variant="solid"
+          colorPalette={badge.color}
+          minHeight="3.5"
+          position="absolute"
+          insetInlineStart="100%"
+          top="-1.5"
+          marginStart="0.5"
+          paddingInline="0.5"
+        >
+          {badge.label}
+        </Badge>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -54,18 +80,16 @@ export function WithRecordTag({
       paddingEnd={RECORD_TAG_SLOT}
     >
       {children}
-      {badge && (
-        <Float placement="top-end" offsetX="3.5" offsetY="1">
-          <Badge
-            size="xs"
-            variant="solid"
-            colorPalette={badge.color}
-            minHeight="3.5"
-          >
-            {badge.label}
-          </Badge>
-        </Float>
-      )}
+      <Float placement="top-end" offsetX="3.5" offsetY="1">
+        <Badge
+          size="xs"
+          variant="solid"
+          colorPalette={badge.color}
+          minHeight="3.5"
+        >
+          {badge.label}
+        </Badge>
+      </Float>
     </Box>
   );
 }

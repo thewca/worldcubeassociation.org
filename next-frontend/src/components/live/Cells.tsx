@@ -10,6 +10,10 @@ import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 import { TFunction } from "i18next";
 import { LuPersonStanding } from "react-icons/lu";
 
+// Record badges hang past the end of their value (see `WithRecordTag`), so
+//   the last column needs room for them before the edge of the table.
+const HANGING_BADGE_PADDING = "6";
+
 export function LiveTableHeader({
   isLinked = false,
   format,
@@ -53,14 +57,7 @@ export function LiveTableHeader({
             <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
           )}
           {!byPerson && (
-            // Must give way on phones like the names below it, otherwise the
-            //   header alone keeps the column too wide for the screen.
-            <Table.ColumnHeader
-              overflow="hidden"
-              textOverflow="ellipsis"
-              maxWidth={{ base: "0", md: "none" }}
-              whiteSpace={{ base: "nowrap", md: "normal" }}
-            >
+            <Table.ColumnHeader overflow="hidden" textOverflow="ellipsis">
               {t("competitions.live.results.competitor")}
             </Table.ColumnHeader>
           )}
@@ -82,8 +79,12 @@ export function LiveTableHeader({
             </Table.ColumnHeader>
           ))}
           {stats.map((stat) => (
-            <Table.ColumnHeader textAlign="end" key={stat.field}>
-              <WithRecordTag>{t(stat.i18nKey)}</WithRecordTag>
+            <Table.ColumnHeader
+              textAlign="end"
+              key={stat.field}
+              _last={{ paddingEnd: HANGING_BADGE_PADDING }}
+            >
+              {t(stat.i18nKey)}
             </Table.ColumnHeader>
           ))}
           {forecastView &&
@@ -141,14 +142,7 @@ export function LiveCompetitorCell({
   t: TFunction;
 }) {
   return (
-    // On phones the name gives way to the results: `maxWidth: 0` stops it from
-    //   dictating the column width and the cell takes whatever space is left.
-    //   Tapping the row opens the result modal, which shows the full name.
-    <Table.Cell
-      rowSpan={rowSpan}
-      maxWidth={{ base: "0", md: "none" }}
-      width={{ base: "full", md: "auto" }}
-    >
+    <Table.Cell rowSpan={rowSpan} maxWidth={{ base: "24", md: "none" }}>
       <HStack gap={1}>
         {link && (
           <Link
@@ -158,14 +152,7 @@ export function LiveCompetitorCell({
             {competitor.name}
           </Link>
         )}
-        <Box
-          as="span"
-          hideFrom={link ? "md" : undefined}
-          minWidth="0"
-          overflow={{ base: "hidden", md: "visible" }}
-          textOverflow="ellipsis"
-          whiteSpace={{ base: "nowrap", md: "normal" }}
-        >
+        <Box as="span" hideFrom={link ? "md" : undefined} truncate>
           {competitor.name}
         </Box>
         {showFirstTimer && !competitor.wca_id && (
@@ -248,18 +235,18 @@ export function LiveStatCells({
             key={`${competitorId}-${stat.i18nKey}`}
             textAlign="end"
             fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
+            _last={{ paddingEnd: HANGING_BADGE_PADDING }}
           >
             {showProjected ? (
               <Tooltip content="Projected average" showArrow openDelay={200}>
                 <Box as="span" color="fg.muted">
-                  <WithRecordTag>
-                    {formatAttemptResult(forecast!.projected_average!, eventId)}
-                  </WithRecordTag>
+                  {formatAttemptResult(forecast!.projected_average!, eventId)}
                 </Box>
               </Tooltip>
             ) : (
               <WithRecordTag
                 recordTag={isAdmin ? null : result[stat.recordTagField]}
+                hanging
               >
                 {formatAttemptResult(result[stat.field], eventId)}
               </WithRecordTag>
