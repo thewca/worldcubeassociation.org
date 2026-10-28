@@ -48,6 +48,9 @@ RSpec.describe "DatabaseDumper" do
     visible_competition = create(:competition, :visible, remarks: "Super secret message to the Board")
     user = create(:user, dob: Date.new(1989, 1, 1))
     create(:user, :banned)
+    approved_avatar = create(:user_avatar, backend: UserAvatar.backends[:active_storage], upload_file: true)
+    approved_thumbnail_key = approved_avatar.thumbnail_image.processed.key
+    pending_avatar = create(:user_avatar, :pending, backend: UserAvatar.backends[:active_storage], upload_file: true)
 
     dump_file = Tempfile.new
     before_dump = Time.now.change(usec: 0) # Truncate the sub second part of the datetime, since mysql only stores 1 second granularity.
@@ -72,6 +75,13 @@ RSpec.describe "DatabaseDumper" do
       banned_group = UserGroup.banned_competitors_group
       expect(banned_group).not_to be_nil
       expect(banned_group.roles).to be_empty
+
+      dumped_avatar = UserAvatar.find(approved_avatar.id)
+      expect(dumped_avatar.image.key).to eq approved_avatar.image.key
+      expect(dumped_avatar.image.filename.to_s).to eq "avatar.png"
+      expect(dumped_avatar.thumbnail_image.processed.key).to eq approved_thumbnail_key
+      expect(UserAvatar.find_by(id: pending_avatar.id)).to be_nil
+      expect(ActiveStorage::Blob.where.not(key: approved_avatar.image.key).where.not(key: approved_thumbnail_key)).to be_empty
     end
   end
 

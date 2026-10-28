@@ -102,8 +102,10 @@ class UserAvatar < ApplicationRecord
   alias_method :thumb_url, :thumbnail_url
 
   def using_cdn?
-    # Approved avatars are actively being used and should therefor be served by our CDN
-    self.approved? && self.attached? && !Rails.env.local?
+    # Approved avatars are actively being used and should therefor be served by our CDN.
+    #   Locally, avatars imported through the developer dump still point to the production CDN,
+    #   because their files were never stored on the developer's machine.
+    self.approved? && self.attached? && (!Rails.env.local? || self.image.blob.service_name != EnvConfig.AVATARS_PUBLIC_STORAGE)
   end
 
   def filename
