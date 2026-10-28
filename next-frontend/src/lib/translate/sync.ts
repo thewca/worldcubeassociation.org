@@ -39,13 +39,13 @@ function translatedValue(
   if (leaf.field.widget === "plain") {
     return translations[leaf.baseKey];
   }
-  const nodes = lexicalUnits(leaf.source);
-  if (nodes.length === 0) return undefined;
-  const texts = nodes.flatMap((node): [string, string][] => {
-    const text = translations[`${leaf.baseKey}#${node.path}`];
-    return text === undefined ? [] : [[node.path, text]];
+  const units = lexicalUnits(leaf.source);
+  if (units.length === 0) return undefined;
+  const texts = units.flatMap((unit): [string, string][] => {
+    const text = translations[`${leaf.baseKey}#${unit.path}`];
+    return text === undefined ? [] : [[unit.path, text]];
   });
-  if (texts.length < nodes.length) return undefined;
+  if (texts.length < units.length) return undefined;
   return applyLexicalTexts(leaf.source, new Map(texts));
 }
 

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { describe, expect, it } from "vitest";
 import { applyLexicalTexts, lexicalUnits } from "./lexical";
 
@@ -61,9 +62,8 @@ const source: { root: TestNode } = {
   },
 };
 
-type Root = typeof source;
 const children = (result: unknown, i: number) =>
-  (result as Root).root.children![i].children!;
+  _.get(result, ["root", "children", i, "children"]);
 
 describe("lexicalUnits", () => {
   it("makes one unit per block, with inline nodes as placeholders", () => {
@@ -130,18 +130,25 @@ describe("applyLexicalTexts", () => {
   });
 
   it("preserves versions and unknown node properties", () => {
-    const result = applyLexicalTexts(source, translations) as Root;
-    const [, future, rule] = result.root.children!;
-    expect(future.type).toBe("some-future-block");
-    expect(future.customProp).toEqual({ deeply: ["nested", 1, true] });
-    expect(future.children![0].children).toEqual([text("Titel")]);
-    expect(rule).toEqual({ type: "horizontalrule", version: 1 });
-    expect(result.root.version).toBe(1);
+    expect(applyLexicalTexts(source, translations)).toMatchObject({
+      root: {
+        version: 1,
+        children: [
+          {},
+          {
+            type: "some-future-block",
+            customProp: { deeply: ["nested", 1, true] },
+            children: [{ children: [text("Titel")] }],
+          },
+          { type: "horizontalrule", version: 1 },
+        ],
+      },
+    });
   });
 
   it("leaves blocks alone when no translation is supplied", () => {
     const partial = applyLexicalTexts(source, new Map([["1.0", "Titel"]]));
-    expect(children(partial, 0)).toEqual(source.root.children![0].children);
+    expect(children(partial, 0)).toEqual(children(source, 0));
   });
 
   it.each([

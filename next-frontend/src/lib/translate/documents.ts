@@ -172,10 +172,10 @@ export function unitsFromDocs(docs: SourceDoc[]): Record<string, Unit> {
             ? [[leaf.baseKey, { message: leaf.source, description }]]
             : [];
         }
-        return lexicalUnits(leaf.source).map((node) => [
-          `${leaf.baseKey}#${node.path}`,
+        return lexicalUnits(leaf.source).map((unit) => [
+          `${leaf.baseKey}#${unit.path}`,
           {
-            message: node.text,
+            message: unit.text,
             description: `${description}${RICH_TEXT_HINT}`,
           },
         ]);

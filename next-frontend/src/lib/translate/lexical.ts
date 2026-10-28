@@ -25,12 +25,13 @@
  * Payload's own `convertLexicalToPlaintext` is not a substitute: it flattens an
  * editor state to one string, which is lossy and cannot be written back.
  */
+import _ from "lodash";
 import { isRecord } from "./registry";
 
 type LexicalNode = Record<string, unknown>;
 
-// ponytail: Lexical's inline element types; an unknown inline type is treated as
-// a block of its own, which splits its sentence but never corrupts a write.
+// Lexical's inline element types. An unknown inline type is treated as a block
+// of its own, which splits its sentence but never corrupts a write.
 const INLINE_ELEMENTS = new Set(["link", "autolink"]);
 
 const PLACEHOLDER = /<(\d+)\/>|<(\d+)>|<\/(\d+)>/g;
@@ -53,10 +54,12 @@ function childrenOf(node: LexicalNode): unknown[] {
   return Array.isArray(node.children) ? node.children : [];
 }
 
-const isText = (node: unknown): node is LexicalNode =>
+type TextNode = LexicalNode & { text: string };
+
+const isText = (node: unknown): node is TextNode =>
   isRecord(node) && node.type === "text" && typeof node.text === "string";
 
-const isPlainText = (node: unknown) =>
+const isPlainText = (node: unknown): node is TextNode =>
   isText(node) && !node.format && !node.style;
 
 const isInlineElement = (node: unknown) =>
@@ -68,23 +71,35 @@ const isBlock = (node: LexicalNode) =>
   childrenOf(node).some((child) => isText(child) || isInlineElement(child));
 
 /**
- * One block as a placeholder string. `placeholders[n]` is the source node
- * behind `<n>`, and `plain` is the node plain text is cloned from on the way
- * back.
+ * The nodes of a block, depth-first, descending into inline elements. The
+ * non-plain ones are the placeholders: `<n>` stands for the n-th of them.
  */
-function serializeBlock(block: LexicalNode) {
-  const placeholders: LexicalNode[] = [];
-  let plain: LexicalNode | undefined;
+const inlineNodes = (nodes: unknown[]): LexicalNode[] =>
+  nodes
+    .filter(isRecord)
+    .flatMap((node) =>
+      isInlineElement(node) ? [node, ...inlineNodes(childrenOf(node))] : [node],
+    );
+
+function placeholdersOf(block: LexicalNode) {
+  const nodes = inlineNodes(childrenOf(block));
+  return {
+    placeholders: nodes.filter((node) => !isPlainText(node)),
+    // Plain text a translator writes is cloned from the block's own plain text,
+    // so it keeps whatever `mode`/`detail` Payload gave it.
+    plain: nodes.find(isPlainText) ?? DEFAULT_TEXT,
+  };
+}
+
+function serializeBlock(block: LexicalNode): string {
+  const { placeholders } = placeholdersOf(block);
 
   const serialize = (nodes: unknown[]): string =>
     nodes
+      .filter(isRecord)
       .map((node) => {
-        if (!isRecord(node)) return "";
-        if (isPlainText(node)) {
-          plain ??= node;
-          return node.text as string;
-        }
-        const id = placeholders.push(node) - 1;
+        if (isPlainText(node)) return node.text;
+        const id = placeholders.indexOf(node);
         if (isText(node)) return `<${id}>${node.text}</${id}>`;
         if (isInlineElement(node))
           return `<${id}>${serialize(childrenOf(node))}</${id}>`;
@@ -92,65 +107,80 @@ function serializeBlock(block: LexicalNode) {
       })
       .join("");
 
-  const text = serialize(childrenOf(block));
-  return { text, placeholders, plain: plain ?? DEFAULT_TEXT };
+  return serialize(childrenOf(block));
+}
+
+// `split` with PLACEHOLDER's three capture groups yields one text fragment, then
+// one slot per group: [text, void, open, close, text, ...].
+const SPLIT_STRIDE = 4;
+
+interface Frame {
+  id?: number;
+  children: unknown[];
 }
 
 /**
- * Inverse of `serializeBlock`, or `null` when the translation does not use
- * every placeholder exactly once with the right shape.
+ * Inverse of `serializeBlock`, or `undefined` when the translation does not
+ * use every placeholder exactly once with the right shape.
  */
 function parseBlock(
   translation: string,
-  placeholders: LexicalNode[],
-  plain: LexicalNode,
-): unknown[] | null {
-  const tokens = translation.split(PLACEHOLDER);
-  // `split` with 3 capture groups yields [text, void, open, close, text, ...].
-  let i = 0;
-  const used = new Set<number>();
+  block: LexicalNode,
+): unknown[] | undefined {
+  const { placeholders, plain } = placeholdersOf(block);
+  const tokens = _.chunk(translation.split(PLACEHOLDER), SPLIT_STRIDE);
 
-  const take = (id: string | undefined) => {
-    const n = Number(id);
-    if (used.has(n) || !placeholders[n]) return null;
-    used.add(n);
-    return placeholders[n];
+  const ids = tokens.flatMap(([, selfClosing, open]) =>
+    [selfClosing, open].filter((id) => id !== undefined).map(Number),
+  );
+  if (ids.length !== placeholders.length || new Set(ids).size !== ids.length)
+    return undefined;
+
+  const append = (stack: Frame[], child: unknown): Frame[] => {
+    const top = stack[stack.length - 1];
+    return [
+      ...stack.slice(0, -1),
+      { ...top, children: [...top.children, child] },
+    ];
   };
 
-  const parse = (closing?: string): unknown[] | null => {
-    const out: unknown[] = [];
-    while (i < tokens.length) {
-      const text = tokens[i];
-      const [selfClosing, open, close] = tokens.slice(i + 1, i + 4);
-      i += 4;
-      if (text) out.push({ ...plain, text });
+  const close = (stack: Frame[], id: number): Frame[] | undefined => {
+    const top = stack[stack.length - 1];
+    const node = placeholders[id];
+    if (stack.length < 2 || top.id !== id) return undefined;
+    const rest = stack.slice(0, -1);
+    if (isInlineElement(node))
+      return append(rest, { ...node, children: top.children });
+    if (isText(node) && top.children.every(isPlainText))
+      return append(rest, {
+        ...node,
+        text: top.children.map((child) => child.text).join(""),
+      });
+    return undefined;
+  };
 
-      if (close !== undefined) return close === closing ? out : null;
-      if (selfClosing !== undefined) {
-        const node = take(selfClosing);
-        if (!node || isText(node) || isInlineElement(node)) return null;
-        out.push(node);
-      } else if (open !== undefined) {
-        const node = take(open);
-        const inner = node && parse(open);
-        if (!node || !inner) return null;
-        if (isInlineElement(node)) {
-          out.push({ ...node, children: inner });
-        } else if (isText(node) && inner.every(isPlainText)) {
-          out.push({
-            ...node,
-            text: inner.map((child) => (child as LexicalNode).text).join(""),
-          });
-        } else {
-          return null;
-        }
-      }
+  const step = (
+    stack: Frame[] | undefined,
+    [text, selfClosing, open, closing]: (string | undefined)[],
+  ): Frame[] | undefined => {
+    if (!stack) return undefined;
+    const withText = text ? append(stack, { ...plain, text }) : stack;
+    if (selfClosing !== undefined) {
+      const node = placeholders[Number(selfClosing)];
+      return node && !isText(node) && !isInlineElement(node)
+        ? append(withText, node)
+        : undefined;
     }
-    return closing === undefined ? out : null;
+    if (open !== undefined)
+      return placeholders[Number(open)]
+        ? [...withText, { id: Number(open), children: [] }]
+        : undefined;
+    if (closing !== undefined) return close(withText, Number(closing));
+    return withText;
   };
 
-  const children = parse();
-  return children && used.size === placeholders.length ? children : null;
+  const stack = tokens.reduce(step, [{ children: [] }]);
+  return stack?.length === 1 ? stack[0].children : undefined;
 }
 
 /** Index paths and nodes of every block, outermost first. */
@@ -177,7 +207,7 @@ export function lexicalUnits(
   value: unknown,
 ): { path: string; text: string; shape: string }[] {
   return lexicalBlocks(value).flatMap(({ path, node }) => {
-    const { text } = serializeBlock(node);
+    const text = serializeBlock(node);
     if (!text.replace(PLACEHOLDER, "").trim()) return [];
     const shape = JSON.stringify(node, (key, v) =>
       key === "text" ? undefined : v,
@@ -194,27 +224,22 @@ export function applyLexicalTexts(
   source: unknown,
   texts: Map<string, string>,
 ): unknown {
-  let broken = false;
-
   const rebuild = (node: unknown, path: number[]): unknown => {
     if (!isRecord(node)) return node;
     const translation = texts.get(path.join("."));
     if (translation !== undefined && isBlock(node)) {
-      const { placeholders, plain } = serializeBlock(node);
-      const children = parseBlock(translation, placeholders, plain);
-      if (!children) broken = true;
-      return { ...node, children: children ?? node.children };
+      const children = parseBlock(translation, node);
+      return children && { ...node, children };
     }
-    return {
-      ...node,
-      ...(Array.isArray(node.children) && {
-        children: node.children.map((child, i) => rebuild(child, [...path, i])),
-      }),
-    };
+    if (!Array.isArray(node.children)) return { ...node };
+    const children = node.children.map((child, i) =>
+      rebuild(child, [...path, i]),
+    );
+    // A broken block anywhere below makes the whole value untranslated.
+    return children.includes(undefined) ? undefined : { ...node, children };
   };
 
-  const root = lexicalRoot(source);
-  if (!root) return source;
-  const result = { ...(source as LexicalNode), root: rebuild(root, []) };
-  return broken ? undefined : result;
+  if (!isRecord(source) || !isRecord(source.root)) return source;
+  const root = rebuild(source.root, []);
+  return root && { ...source, root };
 }
