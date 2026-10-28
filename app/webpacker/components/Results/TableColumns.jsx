@@ -32,7 +32,7 @@ function resultAttempts(result) {
 
 export const resultsFiveWideColumn = {
   accessorKey: 'result',
-  header: I18n.t('results.table_elements.solves'),
+  header: () => I18n.t('results.table_elements.solves'),
   colSpan: 5,
   rendersOwnCells: true,
   cell: ({ getValue }) => {
@@ -55,7 +55,7 @@ export const resultsFiveWideColumn = {
 
 export const competitionColumn = {
   accessorKey: 'competition',
-  header: I18n.t('results.table_elements.competition'),
+  header: () => I18n.t('results.table_elements.competition'),
   cell: ({ getValue }) => (
     <CompetitionCell competition={getValue()} />
   ),
@@ -63,7 +63,7 @@ export const competitionColumn = {
 
 export const regionColumn = {
   accessorKey: 'country',
-  header: I18n.t('results.table_elements.region'),
+  header: () => I18n.t('results.table_elements.region'),
   cell: ({ getValue }) => (
     <CountryCell country={getValue()} />
   ),
@@ -71,7 +71,7 @@ export const regionColumn = {
 
 export const representingColumn = {
   accessorKey: 'country',
-  header: I18n.t('results.table_elements.region'),
+  header: () => I18n.t('results.table_elements.region'),
   cell: ({ getValue }) => (
     <CountryCell country={getValue()} />
   ),
@@ -79,13 +79,13 @@ export const representingColumn = {
 
 export const attemptResultColumn = {
   accessorKey: 'result.value',
-  header: I18n.t('results.table_elements.result'),
+  header: () => I18n.t('results.table_elements.result'),
   cell: ({ row, getValue }) => formatAttemptResult(getValue(), row.original.result.event_id),
 };
 
 export const personColumn = {
   accessorKey: 'result.person_name',
-  header: I18n.t('results.table_elements.name'),
+  header: () => I18n.t('results.table_elements.name'),
   cell: ({ row, getValue }) => (
     <PersonCell
       personId={row.original.result.person_id}
@@ -96,7 +96,7 @@ export const personColumn = {
 
 export const eventColumn = {
   accessorKey: 'result.event_id',
-  header: I18n.t('results.table_elements.event'),
+  header: () => I18n.t('results.table_elements.event'),
   cell: ({ getValue }) => <EventCell eventId={getValue()} />,
 };
 

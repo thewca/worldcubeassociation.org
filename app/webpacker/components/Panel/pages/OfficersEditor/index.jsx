@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Button, Form, Header, Modal, Table,
 } from 'semantic-ui-react';
@@ -13,14 +13,8 @@ import WcaSearch from '../../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 
-const officersStatusOptions = Object.keys(officersStatus).map((option) => ({
-  key: option,
-  text: I18n.t(`enums.user_roles.status.officers.${option}`),
-  value: option,
-}));
-
 const initialOfficerValue = {
-  status: officersStatusOptions[0].value,
+  status: Object.keys(officersStatus)[0],
 };
 
 export default function OfficersEditor() {
@@ -34,6 +28,11 @@ export default function OfficersEditor() {
   );
   const [openModal, setOpenModal] = useState(false);
   const [newOfficer, setNewOfficer] = useState(initialOfficerValue);
+  const officersStatusOptions = useMemo(() => Object.keys(officersStatus).map((option) => ({
+    key: option,
+    text: I18n.t(`enums.user_roles.status.officers.${option}`),
+    value: option,
+  })), []);
   const [formError, setFormError] = useState(null);
   const { save, saving } = useSaveAction();
   const confirm = useConfirm();

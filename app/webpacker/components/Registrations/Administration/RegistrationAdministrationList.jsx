@@ -26,12 +26,12 @@ import {
 } from '../../../lib/utils/registrationAdmin';
 
 const expandableColumns = {
-  dob: I18n.t('activerecord.attributes.user.dob'),
-  region: I18n.t('activerecord.attributes.user.region'),
-  events: I18n.t('competitions.show.events'),
-  comments: I18n.t('competitions.registration_v2.list.comment_and_note'),
-  email: I18n.t('activerecord.attributes.user.email'),
-  timestamp: I18n.t('competitions.registration_v2.list.timestamp'),
+  get dob() { return I18n.t('activerecord.attributes.user.dob'); },
+  get region() { return I18n.t('activerecord.attributes.user.region'); },
+  get events() { return I18n.t('competitions.show.events'); },
+  get comments() { return I18n.t('competitions.registration_v2.list.comment_and_note'); },
+  get email() { return I18n.t('activerecord.attributes.user.email'); },
+  get timestamp() { return I18n.t('competitions.registration_v2.list.timestamp'); },
 };
 const initialExpandedColumns = {
   dob: false,
