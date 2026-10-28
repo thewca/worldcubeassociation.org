@@ -267,7 +267,16 @@ sk:
         logo: Logo
         email: Email
         address: Oficiálna adresa
-        directors_and_officers: Zoznam riaditeľov a úradníkov a ich tituly
+        directors_and_officers: Zoznam riaditeľov a úradníkov s ich titulmi
+        bylaws: Stanovy
+        area_description: Jasný popis oblasti
+        past_and_current_activities: Opis predošlých a aktuálnych aktivít 
+          spojených s WCA
+        future_plans: Plány do budúcnosti ako organizácia schválená WCA
+        extra_information: Nejaké ďalšie informácie?
+        extra_file: Nejaké ďalšie súbory?
+        start_date: Uznané od
+        end_date: Uznané do
   enums:
     user:
       gender:
@@ -358,12 +367,6 @@ sk:
       delegate_report:
         schedule_url: >-
           Odkaz na zverejnený harmonogram (napr. https://www.cubingusa.com/usnationals2016/schedule.php)
-        venue: >-
-          Napíšte niečo o miestnosti(mistnostiach), verejnom prístupe,
-          distribúcíi zón(skladanie, miešanie, čakanie, zapisovaní skóre), ak
-          ste pripravili viaceré dejiská, problémy ktoré sa vyskytli(napríklad
-          hluk) a ako ste ich vyriešili...Prosím, buďte stručný a nepíšte
-          nepravdivé veci.
         organization: >-
           Napíšte niečo o organizačnom tíme a ako pracovali na súťaži, ak
           poznáte ich minulosť a či ste si všimli pokrok na ich práci, či boli
