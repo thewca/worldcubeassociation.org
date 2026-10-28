@@ -322,6 +322,7 @@ class UsersController < ApplicationController
     return head :not_found if user_avatar.blank?
 
     reason = params.require(:reason)
+    includes_avatar_picture = ActiveRecord::Type::Boolean.new.cast(params[:include_avatar_picture])
 
     user_avatar.update!(
       status: UserAvatar.statuses[:deleted],
@@ -329,7 +330,12 @@ class UsersController < ApplicationController
       revocation_reason: reason,
     )
 
-    AvatarsMailer.notify_user_of_avatar_removal(current_user, user_avatar.user, reason).deliver_later
+    AvatarsMailer.notify_user_of_avatar_removal(
+      current_user,
+      user_avatar.user,
+      reason,
+      attached_avatar: (user_avatar if includes_avatar_picture),
+    ).deliver_later
 
     render json: { ok: true }
   end
