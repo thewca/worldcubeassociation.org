@@ -353,6 +353,7 @@ export interface Config {
     'documents-page': DocumentsPage;
     'faq-page': FaqPage;
     'logo-page': LogoPage;
+    'executives-page': ExecutivesPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -367,6 +368,7 @@ export interface Config {
     'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
     'faq-page': FaqPageSelect<false> | FaqPageSelect<true>;
     'logo-page': LogoPageSelect<false> | LogoPageSelect<true>;
+    'executives-page': ExecutivesPageSelect<false> | ExecutivesPageSelect<true>;
   };
   locale:
     | 'en'
@@ -2304,6 +2306,80 @@ export interface LogoPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "executives-page".
+ */
+export interface ExecutivesPage {
+  id: string;
+  /**
+   * Heading shown at the top of the Executives page.
+   */
+  title: string;
+  /**
+   * Paragraph shown below the heading.
+   */
+  intro: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  introMarkdown?: string | null;
+  /**
+   * Show the profile picture on every executive's card.
+   */
+  showImages?: boolean | null;
+  /**
+   * The executives shown on the page, in order.
+   */
+  executives: {
+    /**
+     * WCA ID of the executive. Name, region and stats are loaded from their profile.
+     */
+    wcaId: string;
+    /**
+     * Title of the executive, e.g. Chairperson.
+     */
+    role: string;
+    /**
+     * Short bio shown on the card.
+     */
+    summary: string;
+    /**
+     * Full bio shown when clicking "More Information".
+     */
+    bio: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    bioMarkdown?: string | null;
+    colorPalette: ColorPaletteSelect;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -2917,6 +2993,30 @@ export interface LogoPageSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "executives-page_select".
+ */
+export interface ExecutivesPageSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  introMarkdown?: T;
+  showImages?: T;
+  executives?:
+    | T
+    | {
+        wcaId?: T;
+        role?: T;
+        summary?: T;
+        bio?: T;
+        bioMarkdown?: T;
+        colorPalette?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

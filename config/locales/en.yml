@@ -748,6 +748,11 @@ en:
   page:
     translators:
       title: "Translators"
+    executives:
+      title: "Executives"
+      more_information: "More Information"
+      close: "Close"
+      person_not_found: "No person found with WCA ID %{wca_id}"
     officers_and_board:
       title: "WCA Officers & Board"
       officers_description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
