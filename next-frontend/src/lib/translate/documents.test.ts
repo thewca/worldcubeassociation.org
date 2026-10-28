@@ -35,7 +35,7 @@ const bodySource = {
         type: "paragraph",
         children: [
           { type: "text", text: "Hello " },
-          { type: "text", text: "world" },
+          { type: "text", text: "world", format: 1 },
         ],
       },
     ],
@@ -74,18 +74,18 @@ describe("unitsFromDocs", () => {
     });
   });
 
-  it("puts the breadcrumb and field description on every rich text node", () => {
+  it("puts the breadcrumb, field description and tag hint on every rich text block", () => {
     const bodyUnits = Object.entries(units).filter(([key]) =>
       key.startsWith("home:body#"),
     );
     expect(bodyUnits.map(([, unit]) => unit.message)).toEqual([
-      "Hello ",
-      "world",
+      "Hello <0>world</0>",
     ]);
     expect(
-      bodyUnits.every(
-        ([, unit]) =>
-          unit.description === "Home › Body — Main text of the page.",
+      bodyUnits.every(([, unit]) =>
+        unit.description?.startsWith(
+          "Home › Body — Main text of the page. — keep every",
+        ),
       ),
     ).toBe(true);
   });

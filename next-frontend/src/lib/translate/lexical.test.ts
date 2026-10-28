@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { applyLexicalTexts, lexicalTextNodes } from "./lexical";
+import { applyLexicalTexts, lexicalUnits } from "./lexical";
 
 /**
  * These cover the contract that removes the need for a rich text editor:
- * translators only ever see and edit plain text, and the document structure on
- * write-back comes from Payload's own source value rather than being authored
- * by us.
+ * translators only ever see and edit sentences with numbered placeholders, and
+ * the document structure on write-back comes from Payload's own source value
+ * rather than being authored by us.
  */
 
 interface TestNode {
@@ -15,8 +15,24 @@ interface TestNode {
   [key: string]: unknown;
 }
 
-// A paragraph with a bold run and a link, plus a node type this code has never
-// heard of, standing in for whatever a future Payload/Lexical version adds.
+const text = (value: string, format = 0): TestNode => ({
+  type: "text",
+  version: 1,
+  format,
+  style: "",
+  text: value,
+});
+
+const link: TestNode = {
+  type: "link",
+  version: 1,
+  fields: { url: "https://example.com" },
+  children: [text("our website")],
+};
+
+// A paragraph with a bold run, a link, a trailing period and a line break, plus
+// a node type this code has never heard of, standing in for whatever a future
+// Payload/Lexical version adds.
 const source: { root: TestNode } = {
   root: {
     type: "root",
@@ -26,105 +42,119 @@ const source: { root: TestNode } = {
         type: "paragraph",
         version: 1,
         children: [
-          { type: "text", version: 1, format: 0, text: "Hello " },
-          { type: "text", version: 1, format: 1, text: "world" },
+          text("Hello "),
+          text("world", 1),
+          text(", see "),
+          link,
+          text("."),
+          { type: "linebreak", version: 1 },
         ],
       },
       {
         type: "some-future-block",
         version: 3,
         customProp: { deeply: ["nested", 1, true] },
-        children: [
-          {
-            type: "link",
-            version: 1,
-            fields: { url: "https://example.com" },
-            children: [{ type: "text", version: 1, format: 0, text: "a link" }],
-          },
-        ],
+        children: [{ type: "heading", version: 1, children: [text("Title")] }],
       },
       { type: "horizontalrule", version: 1 },
     ],
   },
 };
 
-describe("lexicalTextNodes", () => {
-  it("extracts every text node with its index path", () => {
-    expect(lexicalTextNodes(source)).toEqual([
-      { path: "0.0", text: "Hello " },
-      { path: "0.1", text: "world" },
-      { path: "1.0.0", text: "a link" },
+type Root = typeof source;
+const children = (result: unknown, i: number) =>
+  (result as Root).root.children![i].children!;
+
+describe("lexicalUnits", () => {
+  it("makes one unit per block, with inline nodes as placeholders", () => {
+    expect(
+      lexicalUnits(source).map(({ path, text }) => ({ path, text })),
+    ).toEqual([
+      { path: "0", text: "Hello <0>world</0>, see <1>our website</1>.<2/>" },
+      { path: "1.0", text: "Title" },
     ]);
   });
 
-  it("descends into unknown node types rather than stopping at them", () => {
-    // "a link" lives under `some-future-block`; missing it would silently drop
-    // strings whenever Payload adds a node type.
-    expect(lexicalTextNodes(source).map((n) => n.text)).toContain("a link");
-  });
-
-  it("skips blank text nodes so Weblate gets no empty units", () => {
-    const withBlank = {
+  it("skips blocks without real text so Weblate gets no empty units", () => {
+    const blank = {
       root: {
         children: [
-          { type: "paragraph", children: [{ type: "text", text: "   " }] },
-          { type: "paragraph", children: [{ type: "text", text: "real" }] },
+          { type: "paragraph", children: [text("   ")] },
+          {
+            type: "paragraph",
+            children: [text(" "), { type: "linebreak" }],
+          },
+          { type: "paragraph", children: [text("real")] },
         ],
       },
     };
-    expect(lexicalTextNodes(withBlank)).toEqual([
-      { path: "1.0", text: "real" },
-    ]);
+    expect(lexicalUnits(blank).map((u) => u.path)).toEqual(["2"]);
+  });
+
+  it("gives blocks differing only in text the same shape", () => {
+    const [paragraph] = lexicalUnits(source);
+    const translated = applyLexicalTexts(
+      source,
+      new Map([["0", "Hallo <0>Welt</0>, siehe <1>unsere Seite</1>.<2/>"]]),
+    );
+    const reordered = applyLexicalTexts(
+      source,
+      new Map([["0", "<1>Unsere Seite</1>: hallo <0>Welt</0>.<2/>"]]),
+    );
+    expect(lexicalUnits(translated)[0].shape).toBe(paragraph.shape);
+    expect(lexicalUnits(reordered)[0].shape).not.toBe(paragraph.shape);
   });
 
   it("returns nothing for null or non-Lexical values", () => {
-    expect(lexicalTextNodes(null)).toEqual([]);
-    expect(lexicalTextNodes("a plain string")).toEqual([]);
-    expect(lexicalTextNodes({})).toEqual([]);
+    expect(lexicalUnits(null)).toEqual([]);
+    expect(lexicalUnits("a plain string")).toEqual([]);
+    expect(lexicalUnits({})).toEqual([]);
   });
 });
 
 describe("applyLexicalTexts", () => {
   const translations = new Map([
-    ["0.0", "Hallo "],
-    ["0.1", "Welt"],
-    ["1.0.0", "ein Link"],
+    ["0", "<1>Unsere Seite</1> und <0>Welt</0>, hallo.<2/>"],
+    ["1.0", "Titel"],
   ]);
 
-  it("substitutes text without disturbing structure", () => {
-    const result = applyLexicalTexts(source, translations) as typeof source;
-    expect(lexicalTextNodes(result)).toEqual([
-      { path: "0.0", text: "Hallo " },
-      { path: "0.1", text: "Welt" },
-      { path: "1.0.0", text: "ein Link" },
+  it("rebuilds blocks in translated order from the source's own nodes", () => {
+    const result = applyLexicalTexts(source, translations);
+    expect(children(result, 0)).toEqual([
+      { ...link, children: [text("Unsere Seite")] },
+      text(" und "),
+      text("Welt", 1),
+      text(", hallo."),
+      { type: "linebreak", version: 1 },
     ]);
   });
 
-  it("preserves formatting, versions and unknown node properties", () => {
-    const result = applyLexicalTexts(source, translations) as typeof source;
-    const [paragraph, future, rule] = result.root.children!;
-
-    // The bold run stays bold, and the link keeps its href.
-    expect(paragraph.children![1].format).toBe(1);
-    expect(future.children![0].fields).toEqual({ url: "https://example.com" });
-    // The node type we do not understand survives untouched, which is the whole
-    // reason structure is cloned from the source rather than rebuilt.
+  it("preserves versions and unknown node properties", () => {
+    const result = applyLexicalTexts(source, translations) as Root;
+    const [, future, rule] = result.root.children!;
     expect(future.type).toBe("some-future-block");
     expect(future.customProp).toEqual({ deeply: ["nested", 1, true] });
+    expect(future.children![0].children).toEqual([text("Titel")]);
     expect(rule).toEqual({ type: "horizontalrule", version: 1 });
     expect(result.root.version).toBe(1);
   });
 
-  it("leaves nodes alone when no translation is supplied", () => {
-    const partial = applyLexicalTexts(
-      source,
-      new Map([["0.0", "Hallo "]]),
-    ) as typeof source;
-    expect(lexicalTextNodes(partial)).toEqual([
-      { path: "0.0", text: "Hallo " },
-      { path: "0.1", text: "world" },
-      { path: "1.0.0", text: "a link" },
-    ]);
+  it("leaves blocks alone when no translation is supplied", () => {
+    const partial = applyLexicalTexts(source, new Map([["1.0", "Titel"]]));
+    expect(children(partial, 0)).toEqual(source.root.children![0].children);
+  });
+
+  it.each([
+    ["a missing placeholder", "Hallo <0>Welt</0>.<2/>"],
+    ["a duplicated placeholder", "<0>a</0> <0>b</0> <1>c</1><2/>"],
+    ["an unknown placeholder", "<0>a</0> <1>b</1><2/><3/>"],
+    ["an unclosed tag", "<0>a <1>b</1><2/>"],
+    ["mismatched tags", "<0>a <1>b</0></1><2/>"],
+    ["a void node written as a pair", "<0>a</0> <1>b</1><2>x</2>"],
+    ["a link written as void", "<0>a</0> <1/><2/>"],
+    ["a tag nested in a text run", "<0>a <2/></0> <1>b</1>"],
+  ])("rejects a translation with %s", (_, broken) => {
+    expect(applyLexicalTexts(source, new Map([["0", broken]]))).toBeUndefined();
   });
 
   it("does not mutate the source value", () => {
@@ -133,14 +163,12 @@ describe("applyLexicalTexts", () => {
     expect(JSON.stringify(source)).toBe(before);
   });
 
-  it("round-trips: extract, translate each unit, apply", () => {
-    const units = lexicalTextNodes(source);
-    const translated = new Map(
-      units.map((u) => [u.path, `[de] ${u.text}`] as const),
+  it("round-trips: extract, apply unchanged, extract again", () => {
+    const units = lexicalUnits(source);
+    const result = applyLexicalTexts(
+      source,
+      new Map(units.map((u) => [u.path, u.text])),
     );
-    const result = applyLexicalTexts(source, translated);
-    expect(lexicalTextNodes(result)).toEqual(
-      units.map((u) => ({ path: u.path, text: `[de] ${u.text}` })),
-    );
+    expect(result).toEqual(source);
   });
 });

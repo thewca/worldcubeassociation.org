@@ -7,7 +7,7 @@ import {
   pushSource,
   pushTranslations,
 } from "./weblate";
-import { applyLexicalTexts, lexicalTextNodes } from "./lexical";
+import { applyLexicalTexts, lexicalUnits } from "./lexical";
 import { resolveLeaf } from "./registry";
 import {
   collectExistingTranslations,
@@ -29,7 +29,8 @@ import type { Leaf, SourceDoc } from "./documents";
  *
  * Rich text is all-or-nothing: a paragraph half in German and half in English
  * reads worse than the English original, which is what Payload's fallback shows
- * when we leave the field empty.
+ * when we leave the field empty. A translation with broken placeholders counts
+ * as missing for the same reason.
  */
 function translatedValue(
   leaf: Leaf,
@@ -38,7 +39,7 @@ function translatedValue(
   if (leaf.field.widget === "plain") {
     return translations[leaf.baseKey];
   }
-  const nodes = lexicalTextNodes(leaf.source);
+  const nodes = lexicalUnits(leaf.source);
   if (nodes.length === 0) return undefined;
   const texts = nodes.flatMap((node): [string, string][] => {
     const text = translations[`${leaf.baseKey}#${node.path}`];
