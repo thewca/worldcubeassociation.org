@@ -315,6 +315,10 @@ sk:
           chief_operating_officer: Prevádzkový riaditeľ WCA
           secretary: Tajomník WCA
           vice_chair: Podpredseda WCA
+      ban_scope:
+        competing_only: Iba súťaženie
+        competing_and_attending: Súťaženie a zapájanie sa
+        competing_and_attending_and_forums: Súťaženie, zapájanie sa a fóra
   simple_form:
     'yes': Áno
     'no': Nie
@@ -338,9 +342,9 @@ sk:
       user:
         dob: Napíšte váš dátum narodenia vo formáte RRRR-MM-DD.
         name: >-
-          Napíšte svoje celé meno správne, napríklad <strong>Stefan
-          Pochmann</strong>. Nie nepresne ako <strong>s pochman</strong>.
-          Stredné mená (buď celé alebo ako iniciálky) sú voliteľné.
+          Zadajte celé meno súťažiaceho správne, napríklad <strong>Jozef Mrkvička</strong>,
+          a nie ako <strong>jozko mrkva</strong>.<br/>Stredné mená (či už celé alebo
+          iba iniciály) sú voliteľné.
         pending_avatar: >-
           Po tom, ako nahráte svojho nového Avatara budete musieť počkať, pokiaľ ho
           WRT schváli.
