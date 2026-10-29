@@ -188,6 +188,7 @@ export default function EditQualificationModal({
             <UtcDatePicker
               onChange={setEarliestResultDate}
               isoDate={earliestResultDate}
+              isoMaxDate={latestResultDate}
             />
           </Form.Field>
           <br />

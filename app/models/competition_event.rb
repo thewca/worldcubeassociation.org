@@ -24,11 +24,21 @@ class CompetitionEvent < ApplicationRecord
   validates_associated :qualification_condition
 
   validates :qualification_latest_date, presence: { if: :qualification_condition? }
+  validates :qualification_earliest_date, comparison: { less_than: :qualification_latest_date, allow_nil: true, if: :qualification_latest_date? }
+
+  # WCRP v5.5 point 5.1.5.1 (as of 2026-10-29)
+  validates :qualification_gap, numericality: { greater_than_or_equal_to: 90, allow_nil: true }
 
   validate do
     remaining_rounds = rounds.reject(&:marked_for_destruction?)
     numbers = remaining_rounds.map(&:number).sort
     errors.add(:rounds, "#{numbers} is wrong") if numbers != (1..remaining_rounds.length).to_a
+  end
+
+  def qualification_gap
+    return nil unless qualification_latest_date? && qualification_earliest_date?
+
+    (qualification_latest_date - qualification_earliest_date).days.in_days
   end
 
   def advancing_competitor_ids
