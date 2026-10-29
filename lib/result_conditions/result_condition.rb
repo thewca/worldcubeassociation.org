@@ -6,6 +6,11 @@ module ResultConditions
     include ActiveModel::Validations
     include ActiveModel::Attributes
 
+    attribute :scope, :string
+    attribute :value, :integer
+
+    validates :scope, presence: true, inclusion: { in: %w[single average] }
+
     def self.load(json_obj)
       if json_obj.nil? || json_obj.is_a?(self)
         json_obj
