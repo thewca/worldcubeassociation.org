@@ -5,7 +5,6 @@ import { DateTime } from "luxon";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
-import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { useT } from "@/lib/i18n/useI18n";
@@ -18,6 +17,7 @@ import type {
   RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
 import type { components } from "@/types/openapi";
+import ApprovalStatus from "@/components/competitions/Registration/ApprovalStatus";
 
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
@@ -56,7 +56,7 @@ export function StepContent({
         />
       );
     case "approval":
-      return registration && <RegistrationStatus registration={registration} />;
+      return registration && <ApprovalStatus registration={registration} />;
   }
 }
 
@@ -82,6 +82,22 @@ export function isStepComplete(
       );
     case "payment":
     case "approval":
+      return true;
+  }
+}
+
+/**
+ * Whether a step the competitor has walked past is actually done. Approval is up to the organizers,
+ * so walking past it only means waiting for them.
+ */
+export function isStepSettled(
+  step: StepConfig,
+  registration: Registration | null,
+) {
+  switch (step.key) {
+    case "approval":
+      return registration?.competing.registration_status === "accepted";
+    default:
       return true;
   }
 }
@@ -178,7 +194,7 @@ export function StepSummary({
       );
     }
     case "approval":
-      return <RegistrationStatus registration={registration} />;
+      return <ApprovalStatus registration={registration} />;
   }
 }
 
