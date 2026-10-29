@@ -12,16 +12,16 @@ module ResultConditions
       ALL_RESULT_CONDITIONS.find { it.wcif_type == wcif_type }
     end
 
-    def self.upcycle_advancement_condition(advancement_condition, round)
-      return if advancement_condition.blank?
+    def self.upcycle_advancement_condition(advancement_condition_json, format)
+      return if advancement_condition_json.blank?
 
-      case advancement_condition.class.wcif_type
+      case advancement_condition_json["type"]
       when 'attemptResult'
-        ResultAchieved.new(scope: round.format.sort_by, value: advancement_condition.level)
+        ResultAchieved.new(scope: format.sort_by, value: advancement_condition_json["level"])
       when 'percent'
-        Percent.new(scope: round.format.sort_by, value: advancement_condition.level)
+        Percent.new(scope: format.sort_by, value: advancement_condition_json["level"])
       when 'ranking'
-        Ranking.new(scope: round.format.sort_by, value: advancement_condition.level)
+        Ranking.new(scope: format.sort_by, value: advancement_condition_json["level"])
       end
     end
 

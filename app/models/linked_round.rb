@@ -101,7 +101,7 @@ class LinkedRound < ApplicationRecord
     self.target_rounds.first&.participation_condition
   end
 
-  delegate :format, to: :first_round_in_link, prefix: :ranking
+  delegate :format, :event, to: :first_round_in_link, prefix: :ranking
 
   alias_method :advancement_results, :merged_live_results
 

@@ -8,6 +8,10 @@ module ResultConditions
       "ranking"
     end
 
+    def to_desc(_source, short: false)
+      I18n.t("advancement_condition#{'.short' if short}.ranking", ranking: self.value)
+    end
+
     def max_advancing(_results)
       value
     end

@@ -34,6 +34,13 @@ module ResultConditions
       self.attributes.reverse_merge("type" => self.class.wcif_type)
     end
 
+    def to_v1_wcif
+      {
+        "type" => self.class.wcif_type.gsub('resultAchieved', 'attemptResult'),
+        "level" => self.value,
+      }
+    end
+
     def ==(other)
       other.class == self.class && other.to_wcif == self.to_wcif
     end
