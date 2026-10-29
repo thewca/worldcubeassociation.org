@@ -223,20 +223,43 @@ export function getMatchingActivities(scheduleWcif, activity) {
   ).filter((act) => doActivitiesMatch(act, activity));
 }
 
+// Qualification results only carry a date, not a precise time.
+//   So we *want* to show this as a local timestamp if you're living west of Greenwich
+//   as a "best estimate" of when you can still achieve qualification results.
+const parseUtcAsLocal = (dateString) => DateTime
+  .fromISO(dateString, { zone: 'UTC' })
+  .setZone('local');
+
+const qualificationDateString = (qualification, { isV2 = false } = {}) => {
+  const wcifWhenDate = isV2 ? qualification.latestResultDate : qualification.whenDate;
+
+  if (!wcifWhenDate) {
+    // This can happen when the "Edit Qualification" modal UI is still work in progress.
+    //   A clean WCIF spec will never allow this to be null, but while the user is still
+    //   building up certain data we allow it to be null temporarily.
+    return '-';
+  }
+
+  const localLatestDate = parseUtcAsLocal(wcifWhenDate).toString().substring(0, 10);
+  const latestDateDesc = I18n.t('qualification.deadline.by_date', { date: localLatestDate });
+
+  if (isV2 && qualification.earliestResultDate) {
+    const localEarliestDate = parseUtcAsLocal(qualification.earliestResultDate)
+      .toString().substring(0, 10);
+
+    const earliestDateDesc = I18n.t('qualification.earliest_date.from_date', { date: localEarliestDate });
+
+    return [earliestDateDesc, latestDateDesc].join(' ');
+  }
+
+  return latestDateDesc;
+};
+
 export function eventQualificationToString(wcifEvent, qualification, { short, isV2 = false } = {}) {
   if (!qualification) {
     return '-';
   }
-  let dateString = '-';
-  const wcifWhenDate = isV2 ? qualification.latestResultDate : qualification.whenDate;
-  if (wcifWhenDate) {
-    const whenDate = DateTime
-      .fromISO(wcifWhenDate, { zone: 'UTC' })
-      .setZone('local'); // We *want* to show this as a local timestamp if you're living west of Greenwich
-
-    dateString = whenDate.toString().substring(0, 10);
-  }
-  const deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString });
+  const dateString = qualificationDateString(qualification, { isV2 });
   const event = events.byId[wcifEvent.id];
   const wcifResultType = isV2 ? qualification.resultCondition.scope : qualification.resultType;
   const wcifQualificationType = isV2 ? qualification.resultCondition.type : qualification.type;
@@ -246,24 +269,24 @@ export function eventQualificationToString(wcifEvent, qualification, { short, is
     case 'average':
       if (wcifQualificationType === 'ranking') {
         const messageName = `qualification.${wcifResultType}.ranking`;
-        return `${I18n.t(messageName, { ranking: wcifQualificationLevel })} ${deadlineString}`;
+        return `${I18n.t(messageName, { ranking: wcifQualificationLevel })} ${dateString}`;
       }
       if (wcifQualificationType === 'anyResult' || (wcifQualificationType === 'resultAchieved' && wcifQualificationLevel === null)) {
         const messageName = `qualification.${wcifResultType}.any_result`;
-        return `${I18n.t(messageName)} ${deadlineString}`;
+        return `${I18n.t(messageName)} ${dateString}`;
       }
       if (event.isTimedEvent) {
         const messageName = `qualification.${wcifResultType}.time`;
-        return `${I18n.t(messageName, { time: attemptResultToString(wcifQualificationLevel, wcifEvent.id, short) })} ${deadlineString}`;
+        return `${I18n.t(messageName, { time: attemptResultToString(wcifQualificationLevel, wcifEvent.id, short) })} ${dateString}`;
       }
       if (event.isFewestMoves) {
         const messageName = `qualification.${wcifResultType}.moves`;
         const moves = wcifResultType === 'average' ? wcifQualificationLevel / 100 : wcifQualificationLevel;
-        return `${I18n.t(messageName, { moves })} ${deadlineString}`;
+        return `${I18n.t(messageName, { moves })} ${dateString}`;
       }
       if (event.isMultipleBlindfolded) {
         const messageName = `qualification.${wcifResultType}.points`;
-        return `${I18n.t(messageName, { points: attemptResultToMbPoints(wcifQualificationLevel) })} ${deadlineString}`;
+        return `${I18n.t(messageName, { points: attemptResultToMbPoints(wcifQualificationLevel) })} ${dateString}`;
       }
       return '-';
     default:

@@ -183,7 +183,7 @@ export default function EditQualificationModal({
               isoDate={latestResultDate}
             />
           </Form.Field>
-          <Form.Field>
+          <Form.Field disabled={!latestResultDate}>
             <Label>{I18n.t('qualification.earliest_date.description')}</Label>
             <UtcDatePicker
               onChange={setEarliestResultDate}
