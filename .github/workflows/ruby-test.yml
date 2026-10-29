@@ -62,6 +62,17 @@ jobs:
           overcommit --sign pre-commit
           overcommit --run
 
+  brakeman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Run Brakeman
+        run: bin/bundle exec brakeman --no-pager
+
   rspec:
     runs-on: ubuntu-latest
     strategy:
@@ -140,11 +151,11 @@ jobs:
   # Single aggregating check so branch protection can require one stable name
   # ("test") regardless of how the rspec matrix above evolves.
   test:
-    needs: [rspec, overcommit]
+    needs: [rspec, overcommit, brakeman]
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Verify all rspec matrix jobs and overcommit passed
+      - name: Verify all rspec matrix jobs, overcommit and brakeman passed
         run: |
           if [ "${{ needs.rspec.result }}" != "success" ]; then
             echo "One or more rspec matrix jobs failed: ${{ needs.rspec.result }}"
@@ -152,6 +163,10 @@ jobs:
           fi
           if [ "${{ needs.overcommit.result }}" != "success" ]; then
             echo "Overcommit hooks failed: ${{ needs.overcommit.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.brakeman.result }}" != "success" ]; then
+            echo "Brakeman failed: ${{ needs.brakeman.result }}"
             exit 1
           fi
 
