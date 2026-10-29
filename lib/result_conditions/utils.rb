@@ -8,6 +8,8 @@ module ResultConditions
       Percent,
     ].freeze
 
+    WCIF_TYPES = ALL_RESULT_CONDITIONS.map(&:wcif_type).freeze
+
     def self.result_condition_class_from_wcif_type(wcif_type)
       ALL_RESULT_CONDITIONS.find { it.wcif_type == wcif_type }
     end

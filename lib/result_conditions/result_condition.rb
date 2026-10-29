@@ -10,6 +10,7 @@ module ResultConditions
     attribute :value, :integer
 
     validates :scope, presence: true, inclusion: { in: %w[single average] }
+    validates :wcif_type, presence: true, inclusion: { in: ResultConditions::Utils::WCIF_TYPES }
 
     def self.load(json_obj)
       if json_obj.nil? || json_obj.is_a?(self)
@@ -26,6 +27,8 @@ module ResultConditions
 
       result_condition.to_wcif
     end
+
+    delegate :wcif_type, to: :class
 
     def to_wcif
       self.attributes.reverse_merge("type" => self.class.wcif_type)
