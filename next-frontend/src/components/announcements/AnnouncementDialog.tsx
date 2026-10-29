@@ -11,10 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { LuCheck, LuShare2 } from "react-icons/lu";
 import AnnouncementMarkdown from "@/components/announcements/AnnouncementMarkdown";
-import {
-  announcementByline,
-  announcementRoute,
-} from "@/components/announcements/announcement";
+import { announcementRoute } from "@/components/announcements/announcement";
+import AnnouncementByline from "@/components/announcements/AnnouncementByline";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
 
 /// The announcement's own page is no longer linked from anywhere, so this is
@@ -72,7 +70,9 @@ export default function AnnouncementDialog({
             <Dialog.Header>
               <Stack gap={1}>
                 <Dialog.Title textStyle="h2">{announcement.title}</Dialog.Title>
-                <Text>{announcementByline(announcement)}</Text>
+                <Text>
+                  <AnnouncementByline announcement={announcement} />
+                </Text>
               </Stack>
             </Dialog.Header>
             <Dialog.Body>

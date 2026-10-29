@@ -26,7 +26,7 @@ import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { connection } from "next/server";
+import { getCachedGlobal } from "@/lib/payload/globals";
 
 import type {
   TextCardBlock,
@@ -533,17 +533,13 @@ const renderBlock = (
 };
 
 export default async function Homepage() {
-  await connection();
-
-  const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
   const { lng } = await getT();
-  const homepage = await payload.findGlobal({
-    slug: "home",
-    draft: isDraftMode,
-    locale: lng,
-    fallbackLocale: "en",
-  });
+  const homepage = isDraftMode
+    ? await (
+        await getPayload({ config })
+      ).findGlobal({ slug: "home", draft: true, locale: lng })
+    : await getCachedGlobal("home", undefined, lng);
 
   const homepageEntries = homepage.layout;
 

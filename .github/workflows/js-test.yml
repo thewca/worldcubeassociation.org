@@ -61,7 +61,16 @@ jobs:
       - name: Run unit tests
         # `yarn test` is bare `vitest`, which watches. Invoke the run-once form.
         run: yarn vitest run
+      - name: Start Payload database
+        uses: ./.github/actions/payload-db
       - name: Run build
+        # Pages are prerendered against the Payload database, see build-js-image
+        env:
+          DATABASE_URI: mongodb://localhost:27017/payload
+          DATABASE_USER: root
+          DATABASE_PASSWORD: root
+          PAYLOAD_SECRET: build-only
+          AUTH_SECRET: build-only
         run: yarn run build
       - name: Verify newrelic loads from standalone output
         # Simulates the production container startup: NODE_OPTIONS='-r newrelic'.

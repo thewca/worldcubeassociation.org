@@ -2,6 +2,7 @@ import { CollectionConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
 import { colorPaletteSelect } from "@/blocks/utils";
 import { qualityTeamAccess } from "@/payload.access";
+import { revalidateCollection } from "@/collections/revalidateCollection";
 
 export const FaqCategories: CollectionConfig = {
   slug: "faqCategories",
@@ -9,6 +10,10 @@ export const FaqCategories: CollectionConfig = {
     create: qualityTeamAccess,
     update: qualityTeamAccess,
     delete: qualityTeamAccess,
+  },
+  hooks: {
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
   },
   fields: [
     {
@@ -44,6 +49,10 @@ export const FaqQuestions: CollectionConfig = {
     create: qualityTeamAccess,
     update: qualityTeamAccess,
     delete: qualityTeamAccess,
+  },
+  hooks: {
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
   },
   fields: [
     {

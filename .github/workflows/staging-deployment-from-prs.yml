@@ -29,6 +29,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
         if: steps.trigger-deployment.outputs.triggered == 'true'
+        with:
+          # The image build prerenders against a MongoDB on the runner, see build-js-image
+          driver-opts: network=host
+          buildkitd-flags: --allow-insecure-entitlement network.host
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:

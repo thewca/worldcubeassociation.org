@@ -7,7 +7,6 @@ import {
   List,
   VStack,
 } from "@chakra-ui/react";
-import { io } from "next/cache";
 import { getCachedGlobal } from "@/lib/payload/globals";
 import _ from "lodash";
 import IconDisplay from "@/components/IconDisplay";
@@ -23,11 +22,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function Documents() {
-  // `io()` marks the boundary the build-time prerender stops at, so the Payload read below
-  // never runs while building, where MongoDB is unreachable. It has to stay out here rather
-  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
-  await io();
-
   const documentsResult = await getCachedGlobal("documents-page");
 
   const documentRelation = documentsResult.documents;

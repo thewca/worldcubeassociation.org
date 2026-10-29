@@ -1,9 +1,7 @@
 import { VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPayload } from "payload";
-import config from "@payload-config";
-import { connection } from "next/server";
+import { findCached } from "@/lib/payload/collections";
 import { AnnouncementFullCard } from "@/components/announcements/AnnouncementCard";
 import { randomAnnouncementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
@@ -11,13 +9,9 @@ import { Announcement } from "@/types/payload";
 const findAnnouncement = async (
   announcementId: string,
 ): Promise<Announcement | null> => {
-  await connection();
-
-  const payload = await getPayload({ config });
-
   // `findByID` throws on unknown IDs, and MongoDB additionally throws on IDs
   // that aren't valid ObjectIDs, so query instead of catching two error types.
-  const { docs } = await payload.find({
+  const { docs } = await findCached({
     collection: "announcements",
     where: { id: { equals: announcementId } },
     limit: 1,
@@ -53,7 +47,7 @@ export default async function AnnouncementPage({
     <VStack align="stretch" py={8}>
       <AnnouncementFullCard
         announcement={announcement}
-        colorPalette={randomAnnouncementColorPalette()}
+        colorPalette={randomAnnouncementColorPalette(announcement)}
       />
     </VStack>
   );

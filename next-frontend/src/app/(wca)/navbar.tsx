@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,6 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { io } from "next/cache";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
@@ -108,18 +107,18 @@ function LinkWrapper<T extends string>({
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
-export default async function Navbar() {
-  // `io()` marks the boundary the build-time prerender stops at, so the Payload reads below
-  // never run while building, where MongoDB is unreachable. It has to stay out here rather
-  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
-  await io();
+async function SessionAvatarMenu() {
+  const session = await getSession();
 
+  return <AvatarMenu session={session} />;
+}
+
+export default async function Navbar() {
   const [navbar, socialLinksGlobal] = await Promise.all([
     getCachedGlobal("nav"),
     getCachedGlobal("social-links"),
   ]);
 
-  const session = await getSession();
   const socialLinks = socialLinksGlobal.links ?? [];
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages
@@ -309,7 +308,9 @@ export default async function Navbar() {
               <LanguageSelector />
             </Box>
             <Box hideBelow="md">
-              <AvatarMenu session={session} />
+              <Suspense>
+                <SessionAvatarMenu />
+              </Suspense>
             </Box>
           </HStack>
         </HStack>
@@ -473,7 +474,9 @@ export default async function Navbar() {
               <Separator hideFrom="md" />
               <VStack align="stretch" hideFrom="md" gap={1}>
                 <LanguageSelector />
-                <AvatarMenu session={session} />
+                <Suspense>
+                  <SessionAvatarMenu />
+                </Suspense>
               </VStack>
             </VStack>
           </Collapsible.Content>

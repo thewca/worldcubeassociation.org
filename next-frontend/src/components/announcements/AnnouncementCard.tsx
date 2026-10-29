@@ -1,9 +1,7 @@
 import { Card, Separator } from "@chakra-ui/react";
 import AnnouncementMarkdown from "@/components/announcements/AnnouncementMarkdown";
-import {
-  announcementByline,
-  announcementSummary,
-} from "@/components/announcements/announcement";
+import { announcementSummary } from "@/components/announcements/announcement";
+import AnnouncementByline from "@/components/announcements/AnnouncementByline";
 import AnnouncementDialog from "@/components/announcements/AnnouncementDialog";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
 
@@ -12,7 +10,7 @@ function AnnouncementHeader({ announcement }: { announcement: Announcement }) {
     <>
       <Card.Title textStyle="h2">{announcement.title}</Card.Title>
       <Card.Description color="currentColor">
-        {announcementByline(announcement)}
+        <AnnouncementByline announcement={announcement} />
       </Card.Description>
       <Separator size="md" />
     </>

@@ -1,6 +1,4 @@
-import { getPayload } from "payload";
-import config from "@payload-config";
-import { connection } from "next/server";
+import { findCached } from "@/lib/payload/collections";
 import {
   Badge,
   Card,
@@ -33,11 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ScoreTools() {
   const { t, lng } = await getT();
 
-  await connection();
-
-  const payload = await getPayload({ config });
-
-  const toolResults = await payload.find({
+  const toolResults = await findCached({
     collection: "tools",
     limit: 0,
     locale: lng,
