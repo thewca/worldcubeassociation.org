@@ -49,6 +49,9 @@ class Result < ApplicationRecord
   scope :winners, -> { final.succeeded.where(global_pos: 1).merged_dual_rounds.joins(:event).order("events.rank") }
   scope :before, ->(date) { joins(:competition).where(competition: { end_date: ...date }) }
   scope :on_or_before, ->(date) { joins(:competition).where(competition: { end_date: ..date }) }
+  # Rails cannot handle `date...` open-ended ranges, so we use the inverse (after X means not before or on X)
+  scope :after, ->(date) { joins(:competition).where.not(competition: { end_date: ..date }) }
+  scope :on_or_after, ->(date) { joins(:competition).where(competition: { end_date: date.. }) }
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }
   scope :average_better_than, ->(time) { where("average < ? AND average > 0", time) }
   scope :in_event, ->(event_id) { where(event_id: event_id) }

@@ -98,30 +98,38 @@ class CompetitionEvent < ApplicationRecord
                                   .in_event(self.event_id)
                                   .on_or_before(self.qualification_latest_date)
 
+    # An end range (aka "until") date MUST always be present for qualifications.
+    #   Only the start range (aka "from") date is optional, and thus we're branching here.
+    within_timeframe_results = if self.qualification_earliest_date?
+                                 before_deadline_results.on_or_after(self.qualification_earliest_date)
+                               else
+                                 before_deadline_results
+                               end
+
     case qualification_condition
     # Allow any competitor with a result to register when type == "ranking".
     # When type == "ranking", the results need to be manually cleared out later.
     when ResultConditions::Ranking
       case qualification_condition.scope
       when "single"
-        before_deadline_results.succeeded.any?
+        within_timeframe_results.succeeded.any?
       when "average"
-        before_deadline_results.average_succeeded.any?
+        within_timeframe_results.average_succeeded.any?
       end
     when ResultConditions::ResultAchieved
       if qualification_condition.value.nil?
         case qualification_condition.scope
         when "single"
-          before_deadline_results.succeeded.any?
+          within_timeframe_results.succeeded.any?
         when "average"
-          before_deadline_results.average_succeeded.any?
+          within_timeframe_results.average_succeeded.any?
         end
       else
         case qualification_condition.scope
         when "single"
-          before_deadline_results.single_better_than(qualification_condition.value).any?
+          within_timeframe_results.single_better_than(qualification_condition.value).any?
         when "average"
-          before_deadline_results.average_better_than(qualification_condition.value).any?
+          within_timeframe_results.average_better_than(qualification_condition.value).any?
         end
       end
     end
