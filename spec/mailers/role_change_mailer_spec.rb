@@ -164,13 +164,24 @@ RSpec.describe RoleChangeMailer do
     end
   end
 
+  describe 'notify_role_end when the user is still a member of a hidden team' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:delegate) { create(:delegate_role, end_date: Date.today) }
+    let!(:wct_china_role) { create(:wct_china_role, user: delegate.user) }
+    let(:mail) { described_class.notify_role_end(delegate, user_who_made_the_change) }
+
+    it 'lists the hidden team role too' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).to include wct_china_role.group.name
+    end
+  end
+
   describe 'notify_role_end when the user has no other staff roles' do
     let(:user_who_made_the_change) { create(:user) }
     let(:delegate) { create(:delegate_role, end_date: Date.today) }
-    let(:mail) do
-      create(:translator_role, user: delegate.user)
-      described_class.notify_role_end(delegate, user_who_made_the_change)
-    end
+    let!(:translator_role) { create(:translator_role, user: delegate.user) }
+    let!(:probation_role) { create(:probation_role, user: delegate.user) }
+    let!(:banned_competitor_role) { create(:banned_competitor_role, user: delegate.user) }
+    let(:mail) { described_class.notify_role_end(delegate, user_who_made_the_change) }
 
     it 'does not mention them still being a WCA volunteer' do
       expect(CGI.unescapeHTML(mail.body.encoded)).not_to include 'is still a WCA volunteer'

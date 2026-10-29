@@ -9,6 +9,10 @@ class RoleChangeMailer < ApplicationMailer
     )
   end
 
+  private def status_title(role)
+    I18n.t("enums.user_roles.status.#{role.group_type}.#{role.metadata.status}", locale: 'en')
+  end
+
   private def role_metadata(role)
     metadata = {}
     group = role.group
@@ -17,7 +21,7 @@ class RoleChangeMailer < ApplicationMailer
     case group.group_type
     when UserGroup.group_types[:delegate_regions]
       metadata[:region_name] = group.name
-      metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
+      metadata[:status] = status_title(role)
       metadata[:location] = role.metadata.location
       metadata[:delegated_competitions_count] = role.metadata.total_delegated
       metadata[:wca_id] = role.user.wca_id
@@ -25,17 +29,16 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils], UserGroup.group_types[:officers]
-      metadata[:status] = I18n.t("enums.user_roles.status.#{group.group_type}.#{role.metadata.status}", locale: 'en')
+      metadata[:status] = status_title(role)
       metadata[:group_name] = group.name
     end
     metadata.compact
   end
 
   private def role_title(role)
-    status = role.metadata&.status
-    return role.group.name if status.blank?
+    return role.group.name if role.metadata&.status.blank?
 
-    "#{I18n.t("enums.user_roles.status.#{role.group_type}.#{status}", locale: 'en')} (#{role.group.name})"
+    "#{status_title(role)} (#{role.group.name})"
   end
 
   private def remaining_staff_roles(role)
