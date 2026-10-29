@@ -1724,6 +1724,9 @@ class Competition < ApplicationRecord
       event_ids = params[:event_ids].presence
       raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'") unless event_ids.is_a?(Array)
 
+      unknown_event_ids = event_ids - Event.c_all_by_id.keys
+      raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{unknown_event_ids.join(', ')}'") if unknown_event_ids.any?
+
       event_ids.each do |event_id|
         # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
         #   but is actually necessary to make sure that the competition holds ALL of the required events
