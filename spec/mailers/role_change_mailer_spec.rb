@@ -139,4 +139,41 @@ RSpec.describe RoleChangeMailer do
       expect(CGI.unescapeHTML(mail.body.encoded)).to match user_who_made_the_change.name
     end
   end
+
+  describe 'notify_role_end when the user is still a WCA volunteer' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:delegate) { create(:delegate_role, end_date: Date.today) }
+    let!(:wrt_role) { create(:wrt_member_role, user: delegate.user) }
+    let(:mail) { described_class.notify_role_end(delegate, user_who_made_the_change) }
+
+    it 'notes that they are still a WCA volunteer and lists the remaining roles' do
+      body = CGI.unescapeHTML(mail.body.encoded)
+      expect(body).to include "#{delegate.user.name} is still a WCA volunteer, so their WCA accounts should stay active"
+      expect(body).to include "Member (#{wrt_role.group.name})"
+    end
+  end
+
+  describe 'notify_role_end when the user is still a Board member' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:delegate) { create(:delegate_role, end_date: Date.today) }
+    let!(:board_role) { create(:board_role, user: delegate.user) }
+    let(:mail) { described_class.notify_role_end(delegate, user_who_made_the_change) }
+
+    it 'lists the Board role by its group name only' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).to include "<li>#{board_role.group.name}</li>"
+    end
+  end
+
+  describe 'notify_role_end when the user has no other staff roles' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:delegate) { create(:delegate_role, end_date: Date.today) }
+    let(:mail) do
+      create(:translator_role, user: delegate.user)
+      described_class.notify_role_end(delegate, user_who_made_the_change)
+    end
+
+    it 'does not mention them still being a WCA volunteer' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).not_to include 'is still a WCA volunteer'
+    end
+  end
 end

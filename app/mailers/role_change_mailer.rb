@@ -31,6 +31,17 @@ class RoleChangeMailer < ApplicationMailer
     metadata.compact
   end
 
+  private def role_title(role)
+    status = role.metadata&.status
+    return role.group.name if status.blank?
+
+    "#{I18n.t("enums.user_roles.status.#{role.group_type}.#{status}", locale: 'en')} (#{role.group.name})"
+  end
+
+  private def remaining_staff_roles(role)
+    role.user.active_roles.includes(:group, :metadata).where.not(id: role.id).filter(&:staff?)
+  end
+
   def notify_role_start(role, user_who_made_the_change)
     @role = role
     @user_who_made_the_change = user_who_made_the_change
@@ -250,6 +261,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
     @metadata = role_metadata(role)
+    @remaining_staff_role_titles = remaining_staff_roles(role).map { |remaining_role| role_title(remaining_role) }
     @to_list = [wrt_email_recipient]
 
     # Populate the recepient list.
