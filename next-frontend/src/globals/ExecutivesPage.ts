@@ -31,8 +31,10 @@ export const ExecutivesPage: GlobalConfig = {
     },
     markdownConvertedField("intro"),
     {
-      name: "showImages",
+      name: "showsImages",
       type: "checkbox",
+      required: true,
+      defaultValue: false,
       admin: {
         description: "Show the profile picture on every executive's card.",
       },

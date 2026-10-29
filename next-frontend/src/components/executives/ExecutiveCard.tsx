@@ -10,10 +10,10 @@ type Executive = ExecutivesPage["executives"][number];
 
 export default async function ExecutiveCard({
   executive,
-  showsImage,
+  showsImages,
 }: {
   executive: Executive;
-  showsImage: boolean;
+  showsImages: boolean;
 }) {
   const { t } = await getT();
   const { data: personDetails } = await getPersonInfo(executive.wcaId);
@@ -34,7 +34,7 @@ export default async function ExecutiveCard({
       colorPalette={executive.colorPalette}
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
     >
-      {showsImage && (
+      {showsImages && (
         <Card.Header>
           <Center>
             <Image src={person.avatar.url} rounded="md" alt={person.name} />

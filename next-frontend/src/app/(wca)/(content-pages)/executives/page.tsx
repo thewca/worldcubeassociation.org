@@ -19,7 +19,6 @@ export default async function ExecutivesPage() {
   await io();
 
   const executivesPage = await getCachedGlobal("executives-page");
-  const showsImages = Boolean(executivesPage.showImages);
 
   return (
     <VStack gap="8" alignItems="stretch" py="8">
@@ -30,7 +29,7 @@ export default async function ExecutivesPage() {
           <ExecutiveCard
             key={executive.id}
             executive={executive}
-            showsImage={showsImages}
+            showsImages={executivesPage.showsImages}
           />
         ))}
       </SimpleGrid>

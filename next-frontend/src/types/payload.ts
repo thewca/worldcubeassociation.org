@@ -2336,7 +2336,7 @@ export interface ExecutivesPage {
   /**
    * Show the profile picture on every executive's card.
    */
-  showImages?: boolean | null;
+  showsImages: boolean;
   /**
    * The executives shown on the page, in order.
    */
@@ -3014,7 +3014,7 @@ export interface ExecutivesPageSelect<T extends boolean = true> {
   title?: T;
   intro?: T;
   introMarkdown?: T;
-  showImages?: T;
+  showsImages?: T;
   executives?:
     | T
     | {
