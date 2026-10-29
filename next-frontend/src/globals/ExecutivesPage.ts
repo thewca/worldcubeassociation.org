@@ -64,6 +64,22 @@ export const ExecutivesPage: GlobalConfig = {
           },
         },
         {
+          name: "joinedWcaYear",
+          type: "number",
+          required: true,
+          admin: {
+            description: "Year this person joined the WCA.",
+          },
+        },
+        {
+          name: "joinedExecutivesYear",
+          type: "number",
+          required: true,
+          admin: {
+            description: "Year this person joined the Executives team.",
+          },
+        },
+        {
           name: "summary",
           type: "textarea",
           required: true,

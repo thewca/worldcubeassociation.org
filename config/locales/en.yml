@@ -750,6 +750,8 @@ en:
       title: "Translators"
     executives:
       title: "Executives"
+      joined_wca: "Joined WCA"
+      joined_executives: "Joined Executives Team"
       more_information: "More Information"
       close: "Close"
       person_not_found: "No person found with WCA ID %{wca_id}"

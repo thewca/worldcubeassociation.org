@@ -2350,6 +2350,14 @@ export interface ExecutivesPage {
      */
     role: string;
     /**
+     * Year this person joined the WCA.
+     */
+    joinedWcaYear: number;
+    /**
+     * Year this person joined the Executives team.
+     */
+    joinedExecutivesYear: number;
+    /**
      * Short bio shown on the card.
      */
     summary: string;
@@ -3012,6 +3020,8 @@ export interface ExecutivesPageSelect<T extends boolean = true> {
     | {
         wcaId?: T;
         role?: T;
+        joinedWcaYear?: T;
+        joinedExecutivesYear?: T;
         summary?: T;
         bio?: T;
         bioMarkdown?: T;

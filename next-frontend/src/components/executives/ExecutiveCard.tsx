@@ -1,15 +1,6 @@
-import {
-  Card,
-  Center,
-  DataList,
-  HStack,
-  Image,
-  SimpleGrid,
-  Text,
-} from "@chakra-ui/react";
+import { Card, Center, DataList, HStack, Image, Text } from "@chakra-ui/react";
 import RoleBadge from "@/components/RoleBadge";
 import WcaFlag from "@/components/WcaFlag";
-import CountryMap from "@/components/CountryMap";
 import ExecutiveBioDialog from "@/components/executives/ExecutiveBioDialog";
 import { getPersonInfo } from "@/lib/wca/persons/getPersonInfo";
 import { getT } from "@/lib/i18n/get18n";
@@ -61,40 +52,22 @@ export default async function ExecutiveCard({
             colorPalette={executive.colorPalette}
           />
         </Card.Title>
-        <SimpleGrid columns={2}>
-          <DataList.Root variant="bold">
-            <DataList.Item>
-              <DataList.ItemLabel>{t("common.user.wca_id")}</DataList.ItemLabel>
-              <DataList.ItemValue>{executive.wcaId}</DataList.ItemValue>
-            </DataList.Item>
-            <DataList.Item>
-              <DataList.ItemLabel>
-                {t("persons.show.completed_solves")}
-              </DataList.ItemLabel>
-              <DataList.ItemValue>
-                {personDetails.total_solves}
-              </DataList.ItemValue>
-            </DataList.Item>
-          </DataList.Root>
-          <DataList.Root variant="bold">
-            <DataList.Item>
-              <DataList.ItemLabel>
-                {t("results.table_elements.region")}
-              </DataList.ItemLabel>
-              <DataList.ItemValue>
-                <CountryMap code={person.country_iso2} t={t} />
-              </DataList.ItemValue>
-            </DataList.Item>
-            <DataList.Item>
-              <DataList.ItemLabel>
-                {t("layouts.navigation.competitions")}
-              </DataList.ItemLabel>
-              <DataList.ItemValue>
-                {personDetails.competition_count}
-              </DataList.ItemValue>
-            </DataList.Item>
-          </DataList.Root>
-        </SimpleGrid>
+        <DataList.Root variant="bold">
+          <DataList.Item>
+            <DataList.ItemLabel>
+              {t("page.executives.joined_wca")}
+            </DataList.ItemLabel>
+            <DataList.ItemValue>{executive.joinedWcaYear}</DataList.ItemValue>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.ItemLabel>
+              {t("page.executives.joined_executives")}
+            </DataList.ItemLabel>
+            <DataList.ItemValue>
+              {executive.joinedExecutivesYear}
+            </DataList.ItemValue>
+          </DataList.Item>
+        </DataList.Root>
         <Text>{executive.summary}</Text>
       </Card.Body>
       <Card.Footer>
