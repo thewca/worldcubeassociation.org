@@ -10,7 +10,7 @@ module ResultConditions
     attribute :value, :integer
 
     validates :scope, presence: true, inclusion: { in: %w[single average] }
-    validates :wcif_type, presence: true, inclusion: { in: ResultConditions::Utils::WCIF_TYPES }
+    validates :wcif_type, presence: true, inclusion: { in: %w[resultAchieved ranking percent] }
 
     def self.load(json_obj)
       if json_obj.nil? || json_obj.is_a?(self)
