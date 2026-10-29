@@ -155,7 +155,7 @@ class CompetitionEvent < ApplicationRecord
     return nil if qualification_condition.blank?
 
     {
-      "earliestResultDate" => nil,
+      "earliestResultDate" => qualification_earliest_date&.strftime("%Y-%m-%d"),
       "latestResultDate" => qualification_latest_date&.strftime("%Y-%m-%d"),
       "resultCondition" => qualification_condition.to_wcif,
     }
@@ -249,6 +249,7 @@ class CompetitionEvent < ApplicationRecord
 
     {
       qualification_latest_date: wcif_qualification[at_least_v2 ? "latestResultDate" : "whenDate"],
+      qualification_earliest_date: at_least_v2 ? wcif_qualification["earliestResultDate"] : nil,
       qualification_condition: at_least_v2 ? ResultConditions::ResultCondition.load(wcif_qualification["resultCondition"]) : ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
     }
   end
