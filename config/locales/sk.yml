@@ -7,14 +7,14 @@ sk:
     MO: Macao, Čína
     HK: Hong Kong, Čína
     KR: Kórea
-    TW: Čínsky Tchaj-pej
+    TW: Taiwan
     AG: Antigua a Barbuda
     BA: Bosna a Hercegovina
     CD: Konžská demokratická republika
     CG: Kongo
     CI: Pobrežie Slonoviny
     CV: Kapverdy
-    FM: Mikronézske federatívne štáty
+    FM: Mikronézia
     GW: Guinea-Bissau
     KN: Svätý Krištof a Nevis
     KP: Kórejská ľudovodemokratická republika
@@ -97,20 +97,21 @@ sk:
       cell_name: Kombinovaná kvalifikácia
   cutoff:
     time:
-      one: '%{count} pokus na dostanie < %{time}'
-      few: '-'
-      other: '%{count} pokusov na dostanie < %{time}'
+      one: '%{count} pokus na dosiahnutie < %{time}'
+      few: '%{count} pokusy na dosiahnutie < %{time}'
+      other: '%{count} pokusov na dosiahnutie < %{time}'
     moves:
-      one: '%{count} pokus na dostanie < %{moves} ťahov'
-      few: '-'
-      other: '%{count} pokusov na dostanie < %{moves} ťahov'
+      one: '%{count} pokus na dosiahnutie < %{moves} ťahov'
+      few: '%{count} pokusy na dosiahnutie < %{moves} ťahov'
+      other: '%{count} pokusov na dosiahnutie < %{moves} ťahov'
     points:
-      one: '%{count} pokus na dostanie > %{points} bodov'
-      few: '-'
-      other: '%{count} pokusov na dostanie > %{points} bodov'
+      one: '%{count} pokus na dosiahnutie > %{points} bodov'
+      few: '%{count} pokusy na dosiahnutie > %{points} bodov'
+      other: '%{count} pokusov na dosiahnutie > %{points} bodov'
   time_limit:
     cumulative:
       across_rounds: '%{time} dokopy pre %{rounds}'
+      one_round: '%{time} kumulatívny'
     333fm: 1 hodina
     333mbf: 10 minút na jednu kocku, najviac dokopy 60:00.00
   common:
@@ -125,7 +126,7 @@ sk:
       no_date: Nie je dátum
     user:
       wca_id: WCA ID
-      representing: Reprezentujúci
+      representing: Krajina
     all_regions: Všetky krajiny
     errors:
       invalid: neplatný
@@ -148,7 +149,7 @@ sk:
       unit_moves: ťahov
   oauth:
     applications:
-      your_apps: Tvoje OAuth Aplikácie
+      your_apps: Vaše OAuth Aplikácie
       new: Nový
       name: Meno
       callback_url: Callback Url
@@ -172,7 +173,7 @@ sk:
         login: Email alebo WCA ID
         country_iso2: Občianstvo
         dob: Dátum narodenia
-        dob_verification: Váš Dátum narodenia
+        dob_verification: Váš dátum narodenia
         gender: Pohlavie
         email: Email
         password: Heslo
@@ -189,6 +190,9 @@ sk:
         location: Poloha
         receive_developer_mails: Chcem dostávať upozornenia o zmenách v WCA 
           software zdrojoch
+        receive_delegate_reports: Chcem dostávať emaily s delegátskymi reportmi 
+          z WCA súťaží
+        delegate_reports_region: Chcem dostávať reporty iba z tejto oblasti
       registration:
         guests: Hostia
         comments: Komentáre
@@ -206,7 +210,7 @@ sk:
         name: Meno
       delegate_report:
         discussion_url: URL diskusie na Google Group
-        schedule_url: URL rozvrhu
+        schedule_url: URL harmonogramu
         equipment: Vybavenie
         venue: Priestory
         organization: Organizácia súťaže
@@ -217,6 +221,9 @@ sk:
           vyššie uvedených incidentov.
         wic_feedback_requested: Chcem dostať spätnú väzbu od WIC na niektorý z 
           vyššie uvedených incidentov.
+        setup_images: Obrázky zo súťaže
+        wrc_incidents: Incidenty vyžadujúce si spätnú väzbu od WRC
+        wic_incidents: Incidenty vyžadujúce si spätnú väzbu od WIC
       person:
         wca_id: Osoba
         country_id: Krajina
@@ -260,6 +267,16 @@ sk:
         logo: Logo
         email: Email
         address: Oficiálna adresa
+        directors_and_officers: Zoznam riaditeľov a úradníkov s ich titulmi
+        bylaws: Stanovy
+        area_description: Jasný popis oblasti
+        past_and_current_activities: Opis predošlých a aktuálnych aktivít 
+          spojených s WCA
+        future_plans: Plány do budúcnosti ako organizácia schválená WCA
+        extra_information: Nejaké ďalšie informácie?
+        extra_file: Nejaké ďalšie súbory?
+        start_date: Uznané od
+        end_date: Uznané do
   enums:
     user:
       gender:
@@ -273,15 +290,40 @@ sk:
         pending: Čakajúci
       media_type:
         report: Nahlásiť
-        article: Artikel
-        multimedia: Multimedia
+        article: Článok
+        multimedia: Multimédiá
     user_roles:
-      status: {}
+      status:
+        delegate_regions:
+          trainee_delegate: Trainee delegát
+          junior_delegate: Junior delegát
+          delegate: Delegát
+          regional_delegate: Regionálny delegát
+          senior_delegate: Senior delegát
+        teams_committees:
+          member: Člen
+          senior_member: Seniorský člen
+          leader: Líder
+        councils:
+          member: Člen
+          senior_member: Seniorský člen
+          leader: Líder
+        officers:
+          executive_director: Výkonný riaditeľ WCA
+          treasurer: Pokladník WCA
+          chair: Predseda WCA
+          chief_operating_officer: Prevádzkový riaditeľ WCA
+          secretary: Tajomník WCA
+          vice_chair: Podpredseda WCA
+      ban_scope:
+        competing_only: Iba súťaženie
+        competing_and_attending: Súťaženie a zapájanie sa
+        competing_and_attending_and_forums: Súťaženie, zapájanie sa a fóra
   simple_form:
     'yes': Áno
     'no': Nie
     required:
-      text: potrebné
+      text: povinné
       mark: '*'
     error_notification:
       default_message: 'Prosím, pozrite si problémy uvedené nižšie:'
@@ -289,56 +331,46 @@ sk:
       incident:
         title: 'Nezabudnite, že toto je verejné, čiže to musíte vyplniť v angličtine!'
         private_description: >-
-          Popis incidentu, ktorý bude videný len Delegátmi. Prosím, vyplňte toto
-          v angičtine.
+          Popis incidentu, ktorý bude videný len delegátmi. Prosím, vyplňte toto v
+          angličtine.
         private_wrc_decision: >-
           Finálne rozhodnute WRC obsahujúce súkromné detaily. Prosím, vyplňte
           toto v angličtine.
         public_summary: >-
-          Celkový popis incidentu a jeho rozhodnutia, bude videný verejne.
-          Prosím, vyplňte toto v angličtine.
+          Celkový popis incidentu a jeho rozhodnutia bude videný verejne. Prosím,
+          vyplňte toto v angličtine.
       user:
-        dob: Napíšte váš dátum narodenia vo formáte YYYY-MM-DD
+        dob: Napíšte váš dátum narodenia vo formáte RRRR-MM-DD.
         name: >-
-          Napíšte svoje celé meno správne, napríklad <strong>Stefan
-          Pochmann</strong>. Nie nepresne ako <strong>s pochman</strong>.
-          Stredné mená (buď celé alebo ako iniciálky) sú voliteľné.
+          Zadajte celé meno súťažiaceho správne, napríklad <strong>Jozef Mrkvička</strong>,
+          a nie ako <strong>jozko mrkva</strong>.<br/>Stredné mená (či už celé alebo
+          iba iniciály) sú voliteľné.
         pending_avatar: >-
-          Po tom, ako nahráte svojho nového Avatara, budete musieť počkať,
-          pokiaľ ho Výsledkový Tím WCA schváli.
+          Po tom, ako nahráte svojho nového Avatara budete musieť počkať, pokiaľ ho
+          WRT schváli.
+        delegate_reports_region: 'Ak chcete dostávať reporty z celého sveta, nevypĺňajte
+          toto pole (resp. vyberte prázdne pole). Poznámka: táto zmena sa môže prejaviť
+          až po 12 hodinách.'
+        receive_delegate_reports: 'Ak ste senior delegát, člen WRC alebo WQAC, dostávanie
+          reportov máte už vopred nastavené. Poznámka: táto zmena sa môže prejaviť
+          až po 12 hodinách.'
       website_contact:
       dob_contact:
-        dob: Váš správny deň narodenia vo formáte YYYY-MM-DD
+        dob: Váš správny deň narodenia vo formáte RRRR-MM-DD
         document: >-
-          Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte
-          pripojiť fotku hociakého legálneho dokumentu (ID karta, vodičský
-          preukaz, šutdentská karta, pas, rodný list,...). Musí tam byť
-          viditeľné meno a dátum narodenia a musí to byť pochopiteľné pre
-          Anglicky hovoriaceho človeka (alebo kontaktuje miestneho Delegáta WCA
-          ak nemáte taký dokument).
+          Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte pridať
+          fotku hocijakého legálneho dokumentu (ID karta, vodičský preukaz, šutdentská
+          karta, pas, rodný list,...). Musí tam byť viditeľné meno a dátum narodenia
+          a musí to byť pochopiteľné pre Anglicky hovoriaceho človeka (alebo kontaktuje
+          miestneho delegáta WCA ak nemáte taký dokument).
       post:
         body: >-
           Použite &lt;!-- break --&gt; aby ste ukázali ukážku domácej stránky.
           Hocijaký post na domovskej stránke ukáže celý text pred deličom.
           Skutočný príspevok ukáže celý text.
-        show_on_homepage: >-
-          Pozor! Toto nie je bezpečné pre súkromné dáta. Toto je iba na
-          prevenciu toho, aby na domácej stránke nebol chaos. Posty, ktoré nie
-          sú ukázané na domovskej stránke sú stále dostupné verejnosti cez linky
-          alebo tagy.
       delegate_report:
         schedule_url: >-
-          Celý link zverejneného rozvrhu(napr.
-          https://www.cubingusa.com/usnationals2016/schedule.php)
-        equipment: >-
-          Počet a typ timerov a displejov použitých v súťaži. Prosím, vymažte
-          čiary zariadení, ktoré nebudete používať.
-        venue: >-
-          Napíšte niečo o miestnosti(mistnostiach), verejnom prístupe,
-          distribúcíi zón(skladanie, miešanie, čakanie, zapisovaní skóre), ak
-          ste pripravili viaceré dejiská, problémy ktoré sa vyskytli(napríklad
-          hluk) a ako ste ich vyriešili...Prosím, buďte stručný a nepíšte
-          nepravdivé veci.
+          Odkaz na zverejnený harmonogram (napr. https://www.cubingusa.com/usnationals2016/schedule.php)
         organization: >-
           Napíšte niečo o organizačnom tíme a ako pracovali na súťaži, ak
           poznáte ich minulosť a či ste si všimli pokrok na ich práci, či boli
@@ -1263,7 +1295,7 @@ sk:
         zozačiatku označení ako WCA Kandidujúci Delegáti a musia ukázať, že sú
         schopní viesť súťaže úspešne predtým, než budú označení ako WCA
         Delegáti.</p>
-      see_link_html: '(pozri %{link})'
+      see_link_html: ' (pozri %{link})'
       members_html: >-
         Všetci súťažiaci budú automaticky zaradení ako <strong>členovia</strong>
         WCA v ich prvej WCA súťaži.
@@ -1320,7 +1352,8 @@ sk:
   results:
     selector_elements: {}
   trainee_delegate_application: {}
-  homepage: {}
+  homepage:
+    title: Vitajte vo World Cube Association
   qualification:
     type_label: Typ kvalifikácie
     result_type: Typ výsledku
@@ -1344,6 +1377,7 @@ sk:
       any_result: Akýkoľvek priemer
     deadline:
       by_date: do %{date}
+      description: Uzávierka kvalifikácie
   search_results: {}
   validators: {}
   formats:
@@ -1423,3 +1457,7 @@ sk:
     dinner: Večera
     awards: Odovzdávanie cien
     misc: Iné
+    registration: Registrácia na mieste
+    setup: Príprava
+    checkin: Prezentácia
+    teardown: Upratovanie

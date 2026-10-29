@@ -1462,11 +1462,12 @@ class Competition < ApplicationRecord
     # We want to trigger the checks for qualification details even when
     # the actual qualification requirements have not been filled out yet for a newly created competition.
     # In other words, checking the `qualification_results` checkbox should be enough to trigger validations.
-    self.qualification_results? || competition_events.any?(&:qualification)
+    self.qualification_results? || competition_events.any?(&:qualification_condition?)
   end
 
   def qualification_date_to_events
-    competition_events.select(&:qualification).group_by { |e| e.qualification.when_date }
+    competition_events.filter(&:qualification_condition?)
+                      .group_by(&:qualification_latest_date)
   end
 
   # The name `is_probably_over` is meant to be surprising.
@@ -1724,6 +1725,9 @@ class Competition < ApplicationRecord
       event_ids = params[:event_ids].presence
       raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'") unless event_ids.is_a?(Array)
 
+      unknown_event_ids = event_ids - Event.c_all_by_id.keys
+      raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{unknown_event_ids.join(', ')}'") if unknown_event_ids.any?
+
       event_ids.each do |event_id|
         # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
         #   but is actually necessary to make sure that the competition holds ALL of the required events
@@ -1751,6 +1755,13 @@ class Competition < ApplicationRecord
       raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'") unless target_date
 
       competitions = competitions.where(end_date: target_date..)
+    end
+
+    if params[:scoretaking_software].present?
+      scoretaking_software = params[:scoretaking_software].to_s
+      raise WcaExceptions::BadApiParameter.new("Invalid scoretaking_software: '#{scoretaking_software}'") unless Competition.scoretaking_softwares.key?(scoretaking_software)
+
+      competitions = competitions.where(scoretaking_software: scoretaking_software)
     end
 
     if params[:announced_after].present?
@@ -1949,19 +1960,12 @@ class Competition < ApplicationRecord
     return {} unless uses_qualification?
 
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    serialization_method = at_least_v2 ? :v2_qualification_wcif : :v1_qualification_wcif
 
-    if at_least_v2
-      competition_events
-        .where.not(qualification_condition: nil)
-        .index_by(&:event_id)
-        .transform_values(&:v2_qualification_wcif)
-    else
-      competition_events
-        .where.not(qualification: nil)
-        .index_by(&:event_id)
-        .transform_values(&:qualification)
-        .transform_values(&:to_wcif)
-    end
+    competition_events
+      .where.not(qualification_condition: nil)
+      .index_by(&:event_id)
+      .transform_values(&serialization_method)
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
@@ -2283,6 +2287,12 @@ class Competition < ApplicationRecord
                 venue_address venue_details latitude_degrees longitude_degrees
                 country_iso2 event_ids time_until_registration date_range],
     include: %w[delegates organizers],
+  }.freeze
+
+  INDEX_SERIALIZE_OPTIONS = {
+    only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
+    methods: %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types],
+    include: {},
   }.freeze
 
   def serializable_hash(options = nil)

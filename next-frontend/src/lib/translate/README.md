@@ -106,7 +106,9 @@ Reads every document of every collection and global and expands it into `Leaf`s 
 ### `unitsFromDocs(docs): Record<string, Unit>`
 
 Flattens those leaves into the map uploaded to Weblate. A plain field contributes one unit, keyed
-by `baseKey`. Every unit carries its field's `admin.description` as the translator hint.
+by `baseKey`. Every unit carries a breadcrumb (`Home › Text Card #2 › Heading`, or the
+collection's `useAsTitle` value for a row) followed by its field's `admin.description` as the
+translator hint.
 
 ---
 

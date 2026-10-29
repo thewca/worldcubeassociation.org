@@ -1911,6 +1911,13 @@ vi:
         mean: Trung bình
       errors:
         round_closed: Vòng này hiện chưa mở
+      overview:
+        upcoming: Sắp tới
+        in_progress: Hiện tại
+        past_month: Tháng trước
+        no_upcoming: Hiện không có giải đấu sắp tới nào sử dụng hệ thống kết quả
+          trực tiếp.
+        search: Tìm kiếm giải đấu
     my_competitions:
       title: Giải đấu của tôi
       disclaimer: >-

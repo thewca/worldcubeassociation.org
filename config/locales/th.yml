@@ -65,7 +65,7 @@ th:
     fto: Face Turning Octahedron
     magic: Magic
     mmagic: Master Magic
-    333mbo: 3x3x3 Multi-Blind Old Style
+    333mbo: 3x3x3 Multi-Blind รูปแบบเก่า
   formats:
     '1': Best of 1
     '2': Best of 2
@@ -122,9 +122,9 @@ th:
     name: '%{event_name} %{round_name}'
     round_number: '%{round_number} รอบ'
   scramble_set:
-    name: 'Scramble Set %{letter_code}'
-    group: 'Group %{number}'
-    attempt: 'Attempt %{number}'
+    name: 'โจทย์ชุดที่ %{letter_code}'
+    group: 'กลุ่มที่ %{number}'
+    attempt: 'โจทย์ที่ %{number}'
   advancement_condition:
     short:
       ranking: '%{ranking} อันดับแรก'
@@ -161,7 +161,7 @@ th:
     type:
       none: ไม่มีการคัดเลือก
       result: โดยผลการแข่งขัน
-      ranking: N อันดับ
+      ranking: N อันดับแรก
       any_result: ผลการแข่งขันใด ๆ ก็ได้
     single:
       time: 'เวลาเดี่ยวต่ำกว่า %{time}'
@@ -223,7 +223,7 @@ th:
     back: ย้อนกลับ
   oauth:
     applications:
-      your_apps: Your OAuth Applications
+      your_apps: แอปพลิเคชันของคุณที่มีการใช้งาน OAuth
       new: ใหม่
       name: ชื่อ
       callback_url: Callback Url
@@ -253,13 +253,12 @@ th:
         password: รหัสผ่าน
         password_confirmation: ป้อนรหัสผ่านอีกครั้ง
         remember_me: จำฉันไว้
-        pending_avatar: อัปโหลดรูปแทนตัวใหม่
-        remove_avatar: ลบรูปแทนตัว
+        pending_avatar: อัปโหลดรูปประจำตัวใหม่
+        remove_avatar: ลบรูปประจำตัว
         results_notifications_enabled: ส่ง Email 
           ให้ฉันเมื่อผลการแข่งขันของฉันถูกโพสต์
         registration_notifications_enabled: >-
-          หากฉันจัดการแข่งขันหรือเป็น delegate ในการแข่งขัน ส่ง email
-          หาฉันเมื่อมีการสมัครการแข่งขัน
+          ถ้าฉันจัดการแข่งขันหรือเป็น delegate ในการแข่งขัน ให้ส่ง email หาฉันเมื่อมีการสมัครการแข่งขัน
         delegate_status: สถานะ Delegate
         location: สถานที่
         region: Region
@@ -280,7 +279,7 @@ th:
         name: ชื่อ
         birthday: วันเกิด
         registration_competition_events: ประเภท
-        email: Email
+        email: อีเมล
         search: ค้นหา...
         too_few_chars: ตัวอักษรน้อยเกินไป
         no_results: ไม่พบผลลัพธ์
@@ -294,14 +293,14 @@ th:
         equipment: อุปกรณ์
         venue: สถานที่
         organization: ผู้จัดการแข่งขัน
-        incidents: Incidents
+        incidents: อุบัติเหตุหรือเหตุการณ์ที่เกิดขึ้น
         setup_images: ภาพการจัดสถานที่การแข่งขัน
-        wrc_feedback_requested: ฉันต้องการการตอบกลับจาก WRC สำหรับ incidents 
-          ข้างต้น
-        wrc_incidents: Incidents ที่ต้องการการตอบกลับจาก WRC
-        wic_feedback_requested: ฉันต้องการการตอบกลับจาก WIC เกี่ยวกับ incidents 
-          ด้านบน
-        wic_incidents: Incidents ที่ต้องการคำแนะนำจาก WIC
+        wrc_feedback_requested: ฉันต้องการการตอบกลับจาก WRC 
+          สำหรับเหตุการณ์ข้างต้น
+        wrc_incidents: เหตุการณ์ที่ต้องการการตอบกลับจาก WRC
+        wic_feedback_requested: ฉันต้องการการตอบกลับจาก WIC 
+          เกี่ยวกับเหตุการณ์ด้านบน
+        wic_incidents: เหตุการณ์ที่ต้องการคำแนะนำจาก WIC
         remarks: หมายเหตุ
       person:
         wca_id: บุคคล
@@ -318,7 +317,7 @@ th:
         body: เนื้อหา
         sticky: ปักหมุด
         unstick_at: เลิกปักหมุด
-        tags: Tags
+        tags: แท็ก
         show_on_homepage: แสดงในหน้าแรก
       team:
         name: ชื่อ
@@ -331,23 +330,23 @@ th:
         private_wrc_decision: การตัดสิน (ส่วนตัว)
         public_summary: ข้อสรุป (สาธารณะ)
         digest_worthy: ส่วนที่มีคุณค่า
-        tags: Tags
+        tags: แท็ก
         competition_id: เกิดขึ้นระหว่าง
       competition_medium:
         competition_id: การแข่งขัน
         media_type: ประเภท
         text: ข้อความ
-        uri: Link
+        uri: ลิงก์
         submitter_name: ชื่อผู้ส่ง
-        submitter_email: email ผู้ส่ง
+        submitter_email: อีเมลผู้ส่ง
         submitter_comment: ผู้แสดงความเห็น
         status: สถานะ
       regional_organization:
         name: ชื่อ
         country: ภูมิภาค
-        website: Website
-        logo: Logo
-        email: Email
+        website: เว็บไซต์
+        logo: โลโก้
+        email: อีเมล
         address: ที่อยู่
         bylaws: ข้อบังคับ
         directors_and_officers: รายชื่อกรรมการและผู้บริหารหลักและตำแหน่ง
@@ -382,12 +381,12 @@ th:
           senior_member: Senior Member
           leader: Leader
         officers:
-          chair: WCA Chair
-          executive_director: WCA Executive Director
+          chair: ประธานของ WCA
+          executive_director: กรรมการบริหารของ WCA
           chief_operating_officer: ประธานเจ้าหน้าที่ฝ่ายปฏิบัติการของ WCA
-          secretary: WCA Secretary
-          vice_chair: WCA Vice-Chair
-          treasurer: WCA Treasurer
+          secretary: เลขานุการของ WCA
+          vice_chair: รองประธานของ WCA
+          treasurer: เหรัญญิกของ WCA
       ban_scope:
         competing_only: เฉพาะการแข่งขัน
         competing_and_attending: การแข่งขันและการเข้าร่วม
@@ -410,25 +409,25 @@ th:
       default_message: โปรดตรวจสอบปัญหาด้านล่าง
     hints:
       incident:
-        title: โปรดทราบว่านี่เป็นสาธารณะและคุณต้องกรอกข้อมูลนี้เป็นภาษาอังกฤษ!
+        title: 
+          โปรดทราบว่าข้อมูลนี้จะเป็นสาธารณะและคุณต้องกรอกข้อมูลนี้เป็นภาษาอังกฤษ
         private_description: >-
-          รายละเอียดของ incident ที่ Delegates สามารถดูได้เท่านั้น
-          กรุณากรอกเป็นภาษาอังกฤษ
+          รายละเอียดของเหตุการณ์ที่ Delegates สามารถดูได้เท่านั้น กรุณากรอกเป็นภาษาอังกฤษ
         private_wrc_decision: ผลการตัดสินของ WRC รวมไปถึงรายละเอียดส่วนตัว 
           กรุณากรอกเป็นภาษาอังกฤษ
         public_summary: >-
           คำอธิบายโดยรวมของ incident และการตัดสินใจที่จะแสดงต่อสาธารณะ
           กรุณากรอกเป็นภาษาอังกฤษ
       user:
-        dob: กรอกวันเกิดของผู้เข้าแข่งขันในรูปแบบ YYYY-MM-DD
+        dob: กรอกวันเกิดของผู้เข้าแข่งขันในรูปแบบ ปี-เดือน-วัน (YYYY-MM-DD)
         name: >-
           กรอกชื่อเต็มของผู้เข้าแข่งขันให้ถูกต้อง
           เป็นภาษาอังกฤษแล้วตามด้วยชื่อภาษาไทยในวงเล็บ ตัวอย่างเช่น
           <strong>Chanatupe Songrasai (ชนาธูป สรงกระสัย)</strong>,
           ไม่กรอกรูปแบบนี้ <strong>c songrasai</strong>.<br/>ชื่อกลาง
           (เต็มหรือย่อ) ไม่จำเป็น
-        pending_avatar: หลังจากอัปโหลดภาพแทนตัวใหม่คุณจะต้องรอให้ทีม WCA Results
-          อนุมัติ
+        pending_avatar: หลังจากอัปโหลดภาพประจำตัวใหม่แล้ว 
+          คุณจะต้องรอให้ทีมจัดการผลการแข่งขันของ WCA อนุมัติ
         registration_notifications_enabled: >-
           ใช้ได้เฉพาะกับการแข่งขันที่คุณจัดหรือ delegate เท่านั้น
           และสามารถแทนที่ได้ในแต่ละการแข่งขัน
@@ -450,13 +449,10 @@ th:
       dob_contact:
         dob: วันเกิดของคุณในรูปแบบ YYYY-MM-DD
         document: >-
-          เพื่อพิสูจน์ตัวตนและวันเดือนปีเกิดที่ถูกต้องของคุณ
-          คุณต้องแนบรูปภาพของเอกสารทางกฎหมายใด ๆ (บัตรประชาชน, ใบขับขี่,
-          บัตรนักเรียน, หนังสือเดินทาง, สูติบัตร, ... )
-          ที่แสดงชื่อและวันเดือนปีเกิดของคุณอบ่างชัดเจน
-          และวสมารถเข้าใจได้สำหรับผู้ใช้ภาษาอังกฤษ (หรือติดต่อ WCA Delegate
-          หากคุณไม่มีเอกสารดังกล่าว)
-          ในการระบุตัวตนเราต้องการชื่อและวันเกิดของคุณเป็นอย่างน้อย
+          เพื่อพิสูจน์ตัวตนและวันเดือนปีเกิดที่ถูกต้องของคุณ คุณต้องแนบรูปภาพของเอกสารทางการใด
+          ๆ (บัตรประชาชน, ใบขับขี่, บัตรนักเรียน, หนังสือเดินทาง, สูติบัตร, ... )
+          ที่แสดงชื่อและวันเดือนปีเกิดของคุณอย่างชัดเจน และสามารถเข้าใจได้สำหรับผู้ใช้ภาษาอังกฤษ
+          (หรือติดต่อ WCA Delegate หากคุณไม่มีเอกสารดังกล่าว) ในการระบุตัวตนเราต้องการชื่อและวันเกิดของคุณเป็นอย่างน้อย
           คุณสามารถปกปิดข้อมูลส่วนตัวอื่นๆได้
       post:
         body: >-
@@ -487,9 +483,8 @@ th:
           ใช้ดุลยพินิจของคุณสำหรับสิ่งที่คุณเห็นว่าเหมาะสม
           โปรดลบส่วนที่ไม่ได้ใช้ออก!
         incidents: >-
-          รายงาน incident ที่ไม่ใช่เป็น incidents ทั่ว ๆ ไป เลขของ incidents
-          เริ่มจาก 1 เพื่อให้ Delegate คนอื่นสามารถอ้างอิงได้
-          แม้ว่าทุกอย่างจะดูปกติ แต่อย่างน้อยให้ระบุกรณีที่น่าจดจำที่สุด
+          รายงานเหตุการณ์ที่ไม่เป็นเหตุการณ์กรณีทั่ว ๆ ไป เลขของเหตุการณ์เริ่มจาก
+          1 เพื่อให้ Delegate คนอื่นสามารถอ้างอิงได้ แม้ว่าทุกอย่างจะดูปกติ แต่อย่างน้อยให้ระบุกรณีที่น่าจดจำที่สุด
           โปรดทำเครื่องหมายในช่องที่เหมาะสมด้านล่างหากคุณกำลังรับข้อเสนอแนะ
         setup_images: >-
           คุณต้องเลือกรูปภาพอย่างน้อย %{image_count} รูป
@@ -501,20 +496,18 @@ th:
           จากนั้นจึงลบรูปภาพเก่า)
           หากคุณไม่มีรูปของพื้นที่แข่งขันและ/หรือพื้นที่ตั้งโจทย์ขณะกำลังใช้งาน
           กรุณาแจ้งเหตุผล
-        wrc_incidents: หมายเลขของ incident ที่ต้องการข้อเสนอแนะจาก WRC
+        wrc_incidents: หมายเลขของเหตุการณ์ที่ต้องการข้อเสนอแนะจาก WRC
         wic_incidents_html: >-
-          รายการตัวเลขที่อ้างอิงถึง Incidents ที่คุณต้องการให้ WIC
-          แสดงความคิดเห็น <br> <strong>%{wic_incident_alert}</strong>
+          รายการตัวเลขที่อ้างอิงถึงเหตุการณ์ที่คุณต้องการให้ WIC แสดงความคิดเห็น <br>
+          <strong>%{wic_incident_alert}</strong>
         wic_incident_alert: >-
-          หาก Incidents ของ WIC เป็นเรื่องละเอียดอ่อน
-          (ไม่จำกัดเพียงเรื่องอาชญากรรม การคุกคาม การทำร้ายร่างกาย ฯลฯ)
-          โปรดอย่ารายงานเรื่องนี้และส่งอีเมลถึง WIC แยกต่างหาก สำหรับ Incidents
-          อื่นๆ ของ WIC โปรดใช้เวอร์ชันสั้น ๆ ที่ไม่เปิดเผยตัวตนของเหตุการณ์นั้น
-          และติดตามเรื่องดังกล่าวกับ WIC เป็นการส่วนตัวพร้อมรายละเอียดเพิ่มเติม
-          โดย WIC
-          จะยังคงให้ข้อเสนอแนะเกี่ยวกับเวอร์ชันที่ไม่เปิดเผยตัวตนเพื่อให้ทราบโดยทั่วไป
-          สำหรับเหตุการณ์ WIC ทั้งหมดที่เกี่ยวข้องกับอาสาสมัคร WCA
-          โปรดอย่ารายงานรายละเอียดทั้งหมด และติดต่อ WIC เป็นการส่วนตัว
+          หากเหตุการณ์ของ WIC เป็นเรื่องละเอียดอ่อน (ไม่จำกัดเพียงเรื่องอาชญากรรม
+          การคุกคาม การทำร้ายร่างกาย ฯลฯ) โปรดอย่ารายงานเรื่องนี้และส่งอีเมลถึง WIC
+          แยกต่างหาก สำหรับเหตุการณ์อื่นๆ ของ WIC โปรดใช้เหตุการณ์แบบสั้น ๆ ที่ไม่เปิดเผยตัวตนของเหตุการณ์นั้น
+          และติดตามเรื่องดังกล่าวกับ WIC เป็นการส่วนตัวพร้อมรายละเอียดเพิ่มเติม โดย
+          WIC จะยังคงให้ข้อเสนอแนะเกี่ยวกับเวอร์ชันที่ไม่เปิดเผยตัวตนเพื่อให้ทราบโดยทั่วไป
+          สำหรับเหตุการณ์ WIC ทั้งหมดที่เกี่ยวข้องกับอาสาสมัคร WCA โปรดอย่ารายงานรายละเอียดทั้งหมด
+          และติดต่อ WIC เป็นการส่วนตัว
         remarks: >-
           พูดเกี่ยวกับรายละเอียดอย่างอื่นที่คุณต้องการแบ่งปัน (เช่น
           การพัฒนา/การถดถอยของกลุ่มผู้เข้าแข่งขัน, แผนงานในอนาคต)
@@ -531,7 +524,7 @@ th:
       registration:
         status:
           accepted: ได้รับการยืนยัน
-          pending: รายชื่อรอ
+          pending: รายชื่อสำรอง
           deleted: ถูกลบทิ้ง
   mail_form:
     attributes:
@@ -539,7 +532,7 @@ th:
         inquiry: ข้อใดต่อไปนี้อธิบายคำถามของคุณได้ดีที่สุด
         competition_id: การแข่งขัน
         name: ชื่อ
-        your_email: email ของคุณ
+        your_email: อีเมลของคุณ
       website_contact:
         message: ข้อความ
       dob_contact:
@@ -579,27 +572,25 @@ th:
           confirm: รหัสยืนยัน
           regenerated_secret: สร้างการยืนยันตัวตนผ่านสองขั้นตอนสำเร็จแล้ว
           enabled_success: เปิดการใช้งานการยืนยันตัวตนผ่านสองขั้นตอนสำเร็จ
-          email_auth: รับรอง email
-          get_by_email: รับรหัสผ่านทาง email
+          email_auth: รับรองอีเมล
+          get_by_email: รับรหัสผ่านทางอีเมล
           get_by_email_desc: >-
-            ถ้าคุณไม่สามารถเข้าถึงโทรศัพท์หรือรหัสของคุณ
-            คุณสามารถกดปุ่มด้านล่างเพื่อรับ one-time password ด้วย email
+            ถ้าคุณไม่สามารถเข้าถึงโทรศัพท์หรือรหัสของคุณ คุณสามารถกดปุ่มด้านล่างเพื่อรับ
+            one-time password ด้วยอีเมล
           email_sent: >-
-            รหัสผ่านส่งไปทาง email แล้ว ต้องใช้รหัสภายใน 2 นาที หากเกิน 2 นาที
-            คุณต้องของรหัสใหม่
+            รหัสผ่านส่งไปทางอีเมลแล้ว ต้องใช้รหัสภายใน 2 นาที หากเกิน 2 นาที คุณต้องของรหัสใหม่
           errors:
-            cant_send_email: คุณไม่สามารถสร้าง email ตอนนี้ได้
-            invalid_otp: การยืนยันตัวตนสองขั้นตอนผิด
+            cant_send_email: คุณไม่สามารถสร้างอีเมลตอนนี้ได้
+            invalid_otp: รหัสยืนยันตัวตนสองขั้นตอนไม่ถูกต้อง
             not_enabled: การยืนยันตัวตนผ่านสองขั้นตอนไม่สามารถใช้ได้
-            unknown: เกิดข้อผิดพลาดในการส่ง email ให้คุณ กรุณาติดต่อ WST
+            unknown: เกิดข้อผิดพลาดในการส่งอีเมลให้คุณ กรุณาติดต่อ WST
           otp_email:
             subject: one-time password ของคุณสำหรับ WCA
             2fa_attempt: >-
-              คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email  กรุณาดูด้านล่าง
+              คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2 ขั้นตอน
+              และคุณเพิ่งจะขอให้ส่ง one-time password ด้วยอีเมลกรุณาดูด้านล่าง
             disclaimer: >-
-              ถ้าคุณไม่ได้ขอรหัสยืนยันตัวตน กรุณาติดต่อ WST ทันที ด้วยการตอบกลับ
-              email นี้
+              ถ้าคุณไม่ได้ขอรหัสยืนยันตัวตน กรุณาติดต่อ WST ทันที ด้วยการตอบกลับอีเมลนี้
               คุณอาจจะเปิดเซสชั่นที่ไหนสักแห่งหรือรหัสผ่านของคุณอาจถูกบุกรุก
           name: การยืนยันตัวตนสองขั้นตอน (2FA)
           support_desc_html: 'เว็บไซต์ WCA รองรับ %{two_factor_link} ในการใช้ one-time
@@ -613,7 +604,7 @@ th:
           status_html: 'การยืนยันตัวตนสองขั้นตอนมีสถานะ %{status} สำหรับคุณ'
           enabled: เปิดการใช้งาน
           disabled: ปิดการใช้งาน
-          enable: เปิดการใช้งาน F2P
+          enable: เปิดการใช้งาน 2FA
           disable: ปิดการใช้งาน 2FA
           reset: Reset 2FA secret
           reset_if_needed: >-
@@ -628,8 +619,8 @@ th:
             password ตอนที่ลงชื่อเข้าใช้ <br/>รวมไปถึง %{google}, %{apple}, and
             %{microsoft}.
           scan_qrcode_html: >-
-            Scan QR Code ด้านล่าง เมื่อคุณได้รับ 2FA application (หรือคลิก
-            %{here} ถ้าคุณใช้โทรศัพท์มือถือ)
+            สแกน QR Code ด้านล่าง เมื่อคุณได้รับ 2FA application (หรือคลิก %{here}
+            ถ้าคุณใช้โทรศัพท์มือถือ)
           backup_codes: รหัสสำรอง
           backup_codes_desc: >-
             รหัสสำรองสามารถใช้แทนรหัสผ่านแบบใช้ครั้งเดียวได้ในกรณีที่คุณไม่สามารถเข้าถึงอุปกรณ์ของคุณด้วยแอปพลิเคชันการตรวจสอบสิทธิ์แบบสองปัจจัย
@@ -664,7 +655,7 @@ th:
       links:
         sign_in: เข้าสู่ระบบ
     failure:
-      invalid: 'email, WCA ID หรือ รหัสผ่าน ไม่ถูกต้อง'
+      invalid: 'อีเมล, WCA ID หรือรหัสผ่านไม่ถูกต้อง'
       not_found_in_database: 'email, WCA ID หรือรหัสผ่าน ไม่ถูกต้อง'
       unconfirmed: >-
         คุณต้องยืนยัน email ของคุณก่อนจะดำเนินการต่อ หากไม่ได้รับ email ยินยัน
@@ -717,7 +708,7 @@ th:
         translations: เข้าถึงรายชื่อภาษาที่คุณเป็นนักแปลที่ได้รับการรับรองจาก 
           WCA
     devise:
-      no_account: ไม่มี accout?
+      no_account: ไม่มีบัญชี?
       have_competed: ฉันเคยเข้าแข่งขันในการแข่งขัน WCA มาก่อน
       have_never_competed: ฉันไม่เคยแข่งขันการแข่งขันของ WCA
       let_us_know: 'กรุณาแจ้งให้เราทราบหากคุณแคยแข่งขันการแข่งขัน WCA มาก่อน:'
@@ -733,10 +724,10 @@ th:
       information: ข้อมูล
       about: เกี่ยวกับ WCA
       documents: เอกสาร WCA
-      officers_and_board: WCA Officers & Board
+      officers_and_board: เจ้าหน้าที่และบอร์ดบริหารของ WCA
       delegates: WCA Delegates
       organizations: องค์กรระดับภูมิภาค
-      translators: Translators
+      translators: ผู้แปลภาษา
       faq: คำถามที่พบบ่อย
       forum: Forum
       teams: ทีมและคณะกรรมการ
@@ -745,7 +736,7 @@ th:
       contact: ข้อมูลติดต่อ
       speedcubing_history: ประวัติ Speedcubing
       tools: เครื่องมือ
-      logo: Logo
+      logo: โลโก้
       competitions: การแข่งขัน
       all: ทั้งหมด
       my_competitions: การแข่งขันของฉัน
@@ -766,16 +757,16 @@ th:
       history: ประวัติ
       translations: การแปล
       disciplinary: บันทึกวินัย
-      incidents: บันทึก incidents
+      incidents: บันทึกเหตุการณ์
       administration: การบริหาร
       manage_users: จัดการผู้ใช้งาน
       delegate: Delegate
       panel: Panel
       polls: การออกเสียงลงคะแนน
       results_team: Results team
-      results_database: Database
+      results_database: ฐานข้อมูล
       results_sidekiq: Sidekiq dashboard
-      new_post: New post
+      new_post: โพสต์ใหม่
       regional_organizations: องค์กรระดับภูมิภาค
       manage_regional_organizations: จัดการองค์กรระดับภูมิภาค
       new_regional_organization: องค์กรระดับภูมิภาคใหม่
@@ -785,15 +776,15 @@ th:
       api: API
       manage_app: จัดการแอปพลิเคชันของคุณ
       manage_auth_app: จัดการแอปพลิเคชันที่ได้รับอนุญาต
-      media_submission: Media Submission
+      media_submission: นำส่งสื่อ
       privacy: Privacy
       disclaimer: Disclaimer
       find_us: Find us
   page:
     translators:
-      title: Translators
+      title: ผู้แปลภาษา
     officers_and_board:
-      title: WCA Officers & Board
+      title: เจ้าหน้าที่และบอร์ดบริหารของ WCA
       officers_description: >-
         เจ้าหน้าที่ของ WCA จัดการงานที่เกี่ยวข้องกับสถานะที่ไม่แสวงหาผลกำไรของ
         WCA, เจ้าหน้าที่เหล่านี้ได้รับเลือกจาก WCA Board, Executive Director
@@ -804,7 +795,7 @@ th:
         WCA Board มีหน้าที่รับผิดชอบในการเป็นผู้นำองค์กรโดยรวม
         และปฏิบัติหน้าที่ใดๆ ที่ทีมและคณะกรรมการไม่ได้ปฏิบัติตาม
     teams_committees_councils:
-      title: WCA Teams and Committees
+      title: ทีมงานและคณะกรรมการของ WCA
       description: >-
         ทีมงานและคณะกรรมการของ WCA
         ถือเป็นส่วนสำคัญขององค์กรและปฏิบัติหน้าที่ประจำวันที่จำเป็นเพื่อให้องค์กรดำเนินต่อไปได้
@@ -838,11 +829,9 @@ th:
           ที่โดดเด่นที่จะนำเสนอเป็นส่วนหนึ่งของไทม์ไลน์ WCA ที่กว้างขึ้น
           เพื่อรักษามรดกของ WCA ใน speedcubing
         wct: >-
-          WCA Communication Team (WCT) ดูแลและสนับสนุนการสื่อสารของ WCA
-          กับชุมชนและประชาชนทั่วไป การสื่อสารของ WCA
-          ควรมีส่วนสนับสนุนวัตถุประสงค์ของ WCA
-          และสนับสนุนวัฒนธรรมเชิงบวกโดยทั่วไปในด้านความเป็นมิตร ความโปร่งใส
-          การไม่แบ่งแยก ความเปิดกว้าง และตอบสนองต่อความคิดเห็นต่างๆ
+          The WCA Communication Team (WCT) ดูแลและสนับสนุนการสื่อสารของ WCA กับชุมชนและประชาชนทั่วไป
+          การสื่อสารของ WCA ควรมีส่วนสนับสนุนวัตถุประสงค์ของ WCA และสนับสนุนวัฒนธรรมเชิงบวกโดยทั่วไปในด้านความเป็นมิตร
+          ความโปร่งใส การไม่แบ่งแยก ความเปิดกว้าง และตอบสนองต่อความคิดเห็นต่างๆ
         wcat: >-
           WCA Competition Announcement Team (WCAT) อนุมัติและประกาศการแข่งขัน
           WCA ที่ส่งโดย WCA Delegates
@@ -1348,6 +1337,9 @@ th:
         locale: สถานที่
         group_name: Team/Committee Name
         delegated_competitions_count: จำนวนครั้งที่ Delegate การแข่งขัน
+        email: อีเมล
+        wca_id: WCA ID
+        location: ตำแหน่ง
   user_groups:
     group_types:
       board: WCA Board of Directors
@@ -1803,7 +1795,7 @@ th:
             other: ถอนผู้เข้าแข่งขันออกจากรอบ
           bulk:
             success: 'ถอนผู้เข้าแข่งขันสำเร็จแล้ว %{count} คน'
-            failure: ล้มเหลวในการถอนผู้เข้าแข่งขันจำนวนมาก
+            failure: เกิดข้อผิดพลาดขณะถอนผู้เข้าแข่งขันจำนวนมาก
             menu: ถอนผู้เข้าแข่งขันจำนวนมาก
             id: ID
             name: ชื่อ
@@ -1838,6 +1830,12 @@ th:
         mean: Mean
       errors:
         round_closed: รอบการแข่งขันยังไม่ได้เปิด
+      overview:
+        past_month: เดือนก่อนหน้า
+        no_upcoming: ขณะนี้ยังไม่มีการแข่งขันที่รายงานผลการแข่งขันสด
+        search: ค้นหาการแข่งขัน
+        upcoming: การแข่งขันในเร็ว ๆ นี้
+        in_progress: การแข่งขันในขณะนี้
     my_competitions:
       title: การแข่งขันของฉัน
       disclaimer: >-
@@ -3023,6 +3021,7 @@ th:
       date_circa: วันที่โดยประมาณ
   notifications:
     connect_wca_id: เชื่อมต่อ WCA ID กับ account ของคุณ
+    copied_to_clipboard: คัดลอกไปยังคลิปบอร์ดแล้ว
   payments:
     header: ประวัติการชำระเงิน
     messages:
@@ -3470,6 +3469,7 @@ th:
       total_delegated: จำนวนครั้งที่ Delegate
       lead_delegated: ผู้นำ Delegate ของการแข่งขัน
       history: ประวัติ
+    copy_email: คัดลอกอีเมล
   regional_organizations:
     title: องค์กรระดับภูมิภาค
     content: 'WCA ยอมรับองค์กรระดับภูมิภาคดังต่อไปนี้:'

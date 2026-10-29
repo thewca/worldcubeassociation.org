@@ -90,7 +90,7 @@ jobs:
             "$RUNNER_TEMP/ocr-rules.json"
 
       - name: Review against the style guide
-        uses: alibaba/open-code-review@v1.13.2
+        uses: alibaba/open-code-review@v1.13.3
         # Advisory, never a merge gate: a provider outage or a malformed diff
         # must not put a red X on a contributor's PR.
         continue-on-error: true

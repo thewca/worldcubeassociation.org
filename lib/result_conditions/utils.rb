@@ -25,16 +25,16 @@ module ResultConditions
       end
     end
 
-    def self.upcycle_v1_qualification(v1_qualification)
-      return if v1_qualification.blank?
+    def self.upcycle_v1_qualification(v1_qualification_json)
+      return if v1_qualification_json.blank?
 
-      case v1_qualification.wcif_type
+      case v1_qualification_json["type"]
       when 'attemptResult'
-        ResultAchieved.new(scope: v1_qualification.result_type, value: v1_qualification.level)
+        ResultAchieved.new(scope: v1_qualification_json["resultType"], value: v1_qualification_json["level"])
       when 'ranking'
-        Ranking.new(scope: v1_qualification.result_type, value: v1_qualification.level)
+        Ranking.new(scope: v1_qualification_json["resultType"], value: v1_qualification_json["level"])
       when 'anyResult'
-        ResultAchieved.new(scope: v1_qualification.result_type, value: nil)
+        ResultAchieved.new(scope: v1_qualification_json["resultType"], value: nil)
       end
     end
   end
