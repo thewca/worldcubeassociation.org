@@ -2341,12 +2341,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@googlemaps/js-api-loader@npm:^1.16.6":
-  version: 1.16.6
-  resolution: "@googlemaps/js-api-loader@npm:1.16.6"
+"@googlemaps/js-api-loader@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@googlemaps/js-api-loader@npm:2.1.3"
   dependencies:
-    fast-deep-equal: "npm:^3.1.3"
-  checksum: 10c0/084f92f0cef9920e8ef7e54cd7931dddef102a4baf20fe4ba30d45dee3327748c626f1b40ccc158c76544e8d88ccebb41edf6c65d115fdd25d5bdebd7d909bb6
+    "@types/google.maps": "npm:^3.65.3"
+  checksum: 10c0/332cddce733684d568a0643a4b6a80f91c3fbaa19a6857263c1c10862d1bbacfecbbc400d22f5f44c1a77d953a126ee25c7d42b8cb876a270ae2c10bfcbac209
   languageName: node
   linkType: hard
 
@@ -3387,6 +3387,13 @@ __metadata:
     "@types/qs": "npm:*"
     "@types/serve-static": "npm:^1"
   checksum: 10c0/f42b616d2c9dbc50352c820db7de182f64ebbfa8dba6fb6c98e5f8f0e2ef3edde0131719d9dc6874803d25ad9ca2d53471d0fec2fbc60a6003a43d015bab72c4
+  languageName: node
+  linkType: hard
+
+"@types/google.maps@npm:^3.53.1, @types/google.maps@npm:^3.65.3":
+  version: 3.66.7
+  resolution: "@types/google.maps@npm:3.66.7"
+  checksum: 10c0/ef1c7c4a7717865c1b5bf7cfa920662eb11915d900683ec784cf2d7aab450bba6f2d579ed2333cdd996603e5fdb3ad6bfbc73fad600ca895fc7d7fa77d7a011d
   languageName: node
   linkType: hard
 
@@ -7780,22 +7787,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet-geosearch@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "leaflet-geosearch@npm:4.4.0"
+"leaflet-geosearch@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "leaflet-geosearch@npm:5.1.0"
   dependencies:
-    "@googlemaps/js-api-loader": "npm:^1.16.6"
-    leaflet: "npm:^1.6.0"
+    "@googlemaps/js-api-loader": "npm:^2.1.3"
+    "@types/google.maps": "npm:^3.53.1"
+    leaflet: "npm:^1.6.0 || ^2.0.0-alpha.1"
   dependenciesMeta:
     "@googlemaps/js-api-loader":
       optional: true
     leaflet:
       optional: true
-  checksum: 10c0/1760e11be92eba02a9ef0e0eb8f4a371b5a165f0f633aa69d5c019faae578411f87e6eb127c79a9129f5d3c1de2fccfcb37aeffaa0661daccd46dd1f1e88acf3
+  checksum: 10c0/9d15fcbeaca5131d076ad3e6e791f52cdf23aa61de5f33a44913e4ca784083d607e02beb69383c06024867423a9a0039fe09772ab39903bd0f7976290c5da003
   languageName: node
   linkType: hard
 
-"leaflet@npm:^1.6.0, leaflet@npm:^1.9.4":
+"leaflet@npm:^1.6.0 || ^2.0.0-alpha.1":
+  version: 2.0.0-alpha.1
+  resolution: "leaflet@npm:2.0.0-alpha.1"
+  checksum: 10c0/df7a6640aa90c6509c9cfb534fbaf6c024e9fc73df350ccb3c3369e3d6d37f03b16b96f78e92c96d89b49bee725c1566b21566f18af3bebc9c48d758b7b1cce5
+  languageName: node
+  linkType: hard
+
+"leaflet@npm:^1.9.4":
   version: 1.9.4
   resolution: "leaflet@npm:1.9.4"
   checksum: 10c0/f639441dbb7eb9ae3fcd29ffd7d3508f6c6106892441634b0232fafb9ffb1588b05a8244ec7085de2c98b5ed703894df246898477836cfd0ce5b96d4717b5ca1
@@ -10590,7 +10605,7 @@ __metadata:
     js-yaml: "npm:^5.5.0"
     jshint: "npm:^2.13.6"
     leaflet: "npm:^1.9.4"
-    leaflet-geosearch: "npm:^4.4.0"
+    leaflet-geosearch: "npm:^5.1.0"
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
     make-plural: "npm:^8.2.0"
