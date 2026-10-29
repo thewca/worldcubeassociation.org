@@ -144,15 +144,15 @@ it:
     time:
       one: '%{count} tentativo per fare < %{time}'
       many: '%{count} tentativi per fare < %{time}'
-      other:
+      other: '%{count} tentativi per fare < %{time}'
     moves:
       one: '%{count} tentativo per fare < %{moves} mosse'
       many: '%{count} tentativi per fare < %{moves} mosse'
-      other:
+      other: '%{count} tentativi per fare < %{moves} mosse'
     points:
       one: '%{count} tentativo per fare < %{points} punti'
       many: '%{count} tentativi per fare < %{points} punti'
-      other:
+      other: '%{count} tentativi per fare < %{points} punti'
   time_limit:
     cumulative:
       one_round: '%{time} cumulativi'
@@ -216,7 +216,7 @@ it:
     days:
       one: un giorno
       many: '%{count} giorni'
-      other:
+      other: '%{count} giorni'
     search_site: Cerca nel sito
     filter: Filtra
     delete: Cancella
@@ -743,7 +743,7 @@ it:
         form_error:
           one: 'Il form contiene un errore:'
           many: 'Il form contiene %{count} errori:'
-          other:
+          other: 'Il form contiene %{count} errori:'
       error_pages:
         500_error: Siamo spiacenti. Qualcosa è andato storto.
         500_contact_html: '<a href=%{contact_url}>Clicca qui</a> per segnalarlo.'
@@ -1495,7 +1495,7 @@ it:
       exceeds_event_limit:
         one: Devi iscriverti a un solo evento.
         many: Devi iscriverti da uno a un massimo di %{count} eventi.
-        other:
+        other: Devi iscriverti da uno a un massimo di %{count} eventi.
       banned_html: >-
         Sei attualmente squalificato. Se ritieni che ci sia un errore, contatta
         il <a href='mailto:integrity@worldcubeassociation.org'
@@ -1519,15 +1519,15 @@ it:
       newcomer:
         one: esordiente
         many: esordienti
-        other:
+        other: esordienti
       returner:
         one: veterano
         many: veterani
-        other:
+        other: veterani
       person:
         one: persona
         many: persone
-        other:
+        other: persone
     flash:
       not_using_wca: Questa competizione non sta usando le iscrizioni sul sito 
         WCA
@@ -1923,7 +1923,7 @@ it:
       spots_left:
         one: Un posto rimasto
         many: '%{count} posti rimasti'
-        other:
+        other: '%{count} posti rimasti'
       no_spots_left: Competizione al completo
       provisional_live_results: 'Nel frattempo, puoi consultare i risultati provvisori
         qui:'
@@ -1985,12 +1985,12 @@ it:
           next_to_advance:
             one: Il prossimo partecipante ad avanzare è %{competitors}
             many: I prossimi partecipanti ad avanzare sono %{competitors}
-            other:
+            other: I prossimi partecipanti ad avanzare sono %{competitors}
           advance: Fai avanzare il prossimo partecipante
           quit_confirm:
             one: Elimina il partecipante dal turno
             many: Elimina i partecipanti dal turno
-            other:
+            other: Elimina i partecipanti dal turno
           bulk:
             success: 'Eliminati %{count} partecipanti con successo'
             failure: Impossibile eliminare in blocco i partecipanti
@@ -2017,7 +2017,9 @@ it:
             many: Aggiungi il partecipante a questo turno. Poiché il secondo 
               turno del doppio turno è ancora chiuso, dovrai aggiungerlo 
               successivamente.
-            other:
+            other: Aggiungi il partecipante a questo turno. Poiché il secondo 
+              turno del doppio turno è ancora chiuso, dovrai aggiungerlo 
+              successivamente.
           event_edit_warning: Questo partecipante non è iscritto a questo 
             evento, e la competizione non consente ulteriori modifiche 
             all'iscrizione agli eventi. L'aggiunta sarà comunque possibile, ma 
@@ -2092,12 +2094,12 @@ it:
       organizer_plural:
         one: Organizzatore
         many: Organizzatori
-        other:
+        other: Organizzatori
       organization_team: Team organizzativo
       delegate:
         one: Delegato WCA
         many: Delegati WCA
-        other:
+        other: Delegati WCA
       contact: Contatti
       information: Informazioni
       events: Eventi
@@ -2168,11 +2170,12 @@ it:
         one: Ciascun partecipante può portare UN SOLO accompagnatore.
         many: Ciascun partecipante può portare un massimo di %{count} 
           accompagnatori.
-        other:
+        other: Ciascun partecipante può portare un massimo di %{count} 
+          accompagnatori.
       event_limit:
         one: I partecipanti possono iscriversi a un solo evento.
         many: I partecipanti possono iscriversi a un massimo di %{count} eventi.
-        other:
+        other: I partecipanti possono iscriversi a un massimo di %{count} eventi.
       require_qualification: >-
         I partecipanti possono iscriversi soltanto agli eventi per cui sono
         qualificati.
@@ -2761,7 +2764,7 @@ it:
         spots_remaining_plural:
           one: '%{count} posto rimanente'
           many: '%{count} posti rimanenti'
-          other:
+          other: '%{count} posti rimanenti'
         no_spots_remaining: Nessun posto rimanente
         pending:
           title: Iscrizioni in attesa
@@ -2845,7 +2848,7 @@ it:
         move_to:
           one: Sposta %{count} in
           many: Sposta %{count} in
-          other:
+          other: Sposta %{count} in
         move_to_none_selected: Sposta in
         pending: In attesa
         waitlist: Lista d'attesa
@@ -3242,7 +3245,8 @@ it:
           sede della competizione.
         many: Stai vedendo il programma relativo alla sede %{venue_name}, una 
           delle %{count} sedi della competizione.
-        other:
+        other: Stai vedendo il programma relativo alla sede %{venue_name}, una 
+          delle %{count} sedi della competizione.
       venue_selection_all: >-
         Stai vedendo il programma per tutte le %{venueCount} sedi
         contemporaneamente.

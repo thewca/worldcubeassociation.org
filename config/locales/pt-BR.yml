@@ -140,15 +140,15 @@ pt-BR:
     time:
       one: '%{count} tentativa para obter um tempo menor que %{time}'
       many: '%{count} tentativas para obter um tempo menor que %{time}'
-      other:
+      other: '%{count} tentativas para obter um tempo menor que %{time}'
     moves:
       one: '%{count} tentativa para obter um resultado menor que %{moves}'
       many: '%{count} tentativas para obter um resultado menor que %{moves}'
-      other:
+      other: '%{count} tentativas para obter um resultado menor que %{moves}'
     points:
       one: '%{count} tentativa para obter um resultado maior que %{points}'
       many: '%{count} tentativas para obter um resultado maior que %{points}'
-      other:
+      other: '%{count} tentativas para obter um resultado maior que %{points}'
   time_limit:
     cumulative:
       one_round: '%{time} cumulativo'
@@ -212,7 +212,7 @@ pt-BR:
     days:
       one: 1 dia
       many: '%{count} dias'
-      other:
+      other: '%{count} dias'
     search_site: Procurar no site
     filter: Filtro
     delete: Apagar
@@ -692,7 +692,7 @@ pt-BR:
         form_error:
           one: 'O formulário contém um erro:'
           many: 'O formulário contém %{count} erros:'
-          other:
+          other: 'O formulário contém %{count} erros:'
       error_pages:
         500_error: 'Desculpe, algo deu errado.'
         500_contact_html: '<a href=%{contact_url} Clique aqui</a> para reportar.'
@@ -1384,7 +1384,7 @@ pt-BR:
       exceeds_event_limit:
         one: você deve se inscrever em apenas 1 evento.
         many: você deve se inscrever em 1 a %{count} eventos.
-        other:
+        other: você deve se inscrever em 1 a %{count} eventos.
       banned_html: >-
         Você está banido. Se você acredita que isso é um erro, por favor contate
         o <a href='mailto:integrity@worldcubeassociation.org'
@@ -1404,15 +1404,15 @@ pt-BR:
       newcomer:
         one: novato
         many: novatos
-        other:
+        other: novatos
       returner:
         one: regressante
         many: regressantes
-        other:
+        other: regressantes
       person:
         one: pessoa
         many: pessoas
-        other:
+        other: pessoas
     flash:
       not_using_wca: Esta competição não está usando o sistema de inscrição da 
         WCA
@@ -1488,7 +1488,7 @@ pt-BR:
       country_plural:
         one: região
         many: regiões
-        other:
+        other: regiões
       email: Email
       non_competing: Inscrições de não competidores
       not_paid: Não paga
@@ -1800,12 +1800,12 @@ pt-BR:
       organizer_plural:
         one: Organizador
         many: Organizadores
-        other:
+        other: Organizadores
       organization_team: Equipe de organização
       delegate:
         one: Delegado da WCA
         many: Delegados da WCA
-        other:
+        other: Delegados da WCA
       contact: Contato
       information: Informação
       events: Eventos
@@ -1867,11 +1867,11 @@ pt-BR:
       guest_limit:
         one: Competidores podem ter no máximo 1 convidado.
         many: Competidores podem ter no máximo %{count} convidados.
-        other:
+        other: Competidores podem ter no máximo %{count} convidados.
       event_limit:
         one: Competidores podem se inscrever em apenas 1 evento.
         many: Competidores podem se inscrever em até %{count} eventos.
-        other:
+        other: Competidores podem se inscrever em até %{count} eventos.
       require_qualification: >-
         Os competidores somente podem se inscrever em eventos para os quais já
         estão qualificados.
@@ -2379,7 +2379,7 @@ pt-BR:
         spots_remaining_plural:
           one: '%{count} vaga restante'
           many: '%{count} vagas restantes'
-          other:
+          other: '%{count} vagas restantes'
         no_spots_remaining: nenhuma vaga restante
         pending:
           title: Inscrições Pendentes
@@ -2441,7 +2441,7 @@ pt-BR:
         move_to:
           one: Mover %{count} para
           many: Mover %{count} para
-          other:
+          other: Mover %{count} para
         move_to_none_selected: Mover para
         pending: Pendente
         waitlist: Lista de Espera
@@ -2766,7 +2766,7 @@ pt-BR:
       venue_selection_html:
         one: um
         many: outro
-        other:
+        other: outro
       venue_selection_all: >-
         Você está vendo o cronograma para todos os %{venueCount} locais de uma
         vez.
