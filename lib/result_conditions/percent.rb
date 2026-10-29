@@ -12,7 +12,7 @@ module ResultConditions
       "percent"
     end
 
-    def to_desc(_round, short: false)
+    def to_desc(_source, short: false)
       I18n.t("advancement_condition#{'.short' if short}.percent", percent: self.value)
     end
 

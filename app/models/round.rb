@@ -182,7 +182,11 @@ class Round < ApplicationRecord
   end
 
   def participation_condition_to_desc(short: false)
-    self.participation_condition&.to_desc(self, short: short)
+    # The `presence` and `absence` validations on `participation_condition` make sure that
+    #   the source is always another round or linked round.
+    # If the source is the original competition event (initial round), then the condition will be nil,
+    #   and the code never reaches the actual `to_desc` implementation.
+    self.participation_condition&.to_desc(self.participation_source, short: short)
   end
 
   def advancement_condition_to_desc(short: false)
@@ -269,6 +273,10 @@ class Round < ApplicationRecord
 
   def ranking_format
     self.format
+  end
+
+  def ranking_event
+    self.event
   end
 
   def recompute_advancing
