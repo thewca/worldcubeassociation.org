@@ -380,6 +380,7 @@ Rails.application.routes.draw do
       resources :competitions, only: [] do
         get '/results' => 'competitions#results', as: :results
         get '/podiums' => 'competitions#podiums', as: :podiums
+        get '/head-to-head' => 'competitions#head_to_head', as: :head_to_head
 
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         resource :bookmark, only: %i[show create destroy]

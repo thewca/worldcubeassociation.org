@@ -1,0 +1,17 @@
+type: object
+required:
+  - match_number
+  - competitors
+  - sets
+properties:
+  match_number:
+    type: integer
+    example: 1
+  competitors:
+    type: array
+    items:
+      $ref: "./H2hMatchCompetitor.yaml"
+  sets:
+    type: array
+    items:
+      $ref: "./H2hSet.yaml"

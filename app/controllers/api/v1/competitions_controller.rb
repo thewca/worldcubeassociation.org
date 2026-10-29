@@ -46,6 +46,21 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     render json: @competition.to_v1_podiums_json
   end
 
+  def head_to_head
+    rounds = @competition.rounds
+                         .h2h
+                         .includes(
+                           { results: { person: :user } },
+                           { live_results: :registration },
+                           h2h_matches: [
+                             { h2h_match_competitors: :user },
+                             { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
+                           ],
+                         )
+
+    render json: rounds.as_json(Round::H2H_SERIALIZE_OPTIONS)
+  end
+
   private def set_competition
     @competition = Competition.find(params.require(:competition_id))
   end

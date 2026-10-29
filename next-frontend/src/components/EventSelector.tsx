@@ -17,7 +17,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 import EventIcon, { LabelledEventIcon } from "@/components/EventIcon";
 
 interface SingleEventSelectorProps {
-  title: string;
+  title?: string;
   eventList?: string[];
   selectedEvent: string;
   onEventClick: (eventId: string) => void;

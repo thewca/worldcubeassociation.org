@@ -1,0 +1,20 @@
+type: object
+required:
+  - wcif_id
+  - event_id
+  - round_type_id
+  - matches
+properties:
+  wcif_id:
+    type: string
+    example: "333-r1"
+  event_id:
+    type: string
+    example: "333"
+  round_type_id:
+    type: string
+    example: "f"
+  matches:
+    type: array
+    items:
+      $ref: "./H2hMatch.yaml"
