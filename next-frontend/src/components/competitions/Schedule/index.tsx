@@ -104,6 +104,15 @@ export default function Schedule({
 
   return (
     <VStack gap="3" alignItems="stretch">
+      <Alert.Root status="info" variant="surface">
+        <Alert.Content>
+          <Alert.Title>
+            Download the Schedule PDF by clicking the &quot;Download&quot;
+            button next to the title
+          </Alert.Title>
+        </Alert.Content>
+      </Alert.Root>
+
       {timeZoneCount > 1 && (
         <Alert.Root status="warning">
           <Alert.Content>
@@ -114,7 +123,8 @@ export default function Schedule({
         </Alert.Root>
       )}
 
-      <Alert.Root status="info" colorPalette="gray">
+      <Alert.Root status="warning" variant="subtle">
+        <Alert.Indicator />
         <Alert.Content>
           <Alert.Title>
             {t("competitions.schedule.schedule_change_warning")}
