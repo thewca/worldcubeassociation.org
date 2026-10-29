@@ -603,7 +603,7 @@ class Round < ApplicationRecord
     # Linked rounds expressed as V1 can yield "fake" 100% advancement conditions
     was_fake_dual_condition = previous_advancement_condition.present?
                               && previous_advancement_condition["type"] == 'percent'
-                              && previous_advancement_condition["value"] == 100
+                              && previous_advancement_condition["level"] == 100
 
     # Skip over linked rounds (based on heuristic). They're meant to have all identical advancement conditions
     #   within the same link.
