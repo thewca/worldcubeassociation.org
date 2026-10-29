@@ -3410,22 +3410,18 @@ th:
         ของ WCA'
       teams_committees: ทีมและคณะกรรมการ
       delegates_html: >-
-        <p><strong>WCA Delegate</strong>
-        เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ WCA หน้าที่หลักของ Delegate
-        คือดูแลการแข่งขันในนามของ WCA โดย WCA Delegate
-        รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA ทั้งหมดดำเนินการค่านิยม
-        และข้อบังคับของ WCA โดย WCA ได้แยกบทบาทดังนี้ <strong>Senior
-        Delegates</strong>,  <strong>Regional Delegates</strong>, <strong>Full
-        Delegates </strong>, <strong>Junior Delegates</strong>, และ
-        <strong>Trainee Delegates</strong>%{see_link}</p>
-        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates
-        ยังมีหน้าที่ในการจัดการ WCA Delegates
-        ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
-        <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น WCA Candidate Delegates ก่อน
-        หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน WCA
-        ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates</p><p>Trainee
-        Delegates จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate
-        และสามารถดูแลได้แค่การแข่งขันที่มี WCA Delegate คนอื่นด้วยเท่านั้น</p>
+        <p><strong>WCA Delegate</strong> เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ
+        WCA หน้าที่หลักของ Delegate คือดูแลการแข่งขันในนามของ WCA โดย WCA Delegate
+        รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA ทั้งหมดดำเนินการตามจุดประสงค์
+        ค่านิยม และกติกาของ WCA โดย WCA ได้แยกบทบาทดังนี้ <strong>Senior Delegates</strong>,
+        <strong>Regional Delegates</strong>, <strong>Full Delegates </strong>, <strong>Junior
+        Delegates</strong>, และ <strong>Trainee Delegates</strong>%{see_link}</p>
+        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates ยังมีหน้าที่ในการจัดการ
+        WCA Delegates ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
+        <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น Junior Delegates ก่อน หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน
+        WCA ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates</p><p>Trainee Delegates
+        จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate และสามารถดูแลได้แค่การแข่งขันที่มี
+        WCA Delegate คนอื่นด้วยเท่านั้น</p>
       see_link_html: '(ดู%{link})'
       members_html: >-
         ผู้เข้าแข่งขันทุกคนจะเข้าร่วมการเป็น<strong>สมาชิก</strong>ของ WCA
