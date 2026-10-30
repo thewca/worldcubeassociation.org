@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useOnInView } from "react-intersection-observer";
+import { useInView } from "react-intersection-observer";
 
 // Grows the observed area upwards, so the top sentinel only counts as out of
 // view once the reader has scrolled a screenful or so past it.
@@ -9,11 +8,10 @@ export default function useIsScrolled({
   scrollThreshold,
 }: { scrollThreshold?: string } = {}) {
   const rootMargin = scrollThreshold || BACK_TO_TOP_ROOT_MARGIN_DEFAULT;
-  const [isScrolledDown, setIsScrolledDown] = useState(false);
 
-  const topSentinelRef = useOnInView((inView) => setIsScrolledDown(!inView), {
+  const { ref, inView } = useInView({
     rootMargin,
   });
 
-  return { isScrolledDown, topSentinelRef };
+  return { isScrolledDown: !inView, topSentinelRef: ref };
 }
