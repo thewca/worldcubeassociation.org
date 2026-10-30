@@ -17,6 +17,7 @@ import {
   Stack,
   Stat,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
@@ -125,7 +126,17 @@ function OrganizersSection({
   const first = organizers[0];
   const rest = organizers.slice(1);
 
-  console.log(first);
+  const avatarLimit =
+    useBreakpointValue(
+      {
+        base: 4,
+        sm: 8,
+        md: 8,
+        lg: 4,
+        xl: 8,
+      },
+      { fallback: "md" },
+    ) || 4;
 
   return (
     <Stack direction="row" gap={3}>
@@ -157,7 +168,7 @@ function OrganizersSection({
                 >
                   <AvatarGroup>
                     {rest
-                      .filter((_, i) => i < 8)
+                      .filter((_, i) => i < avatarLimit)
                       .map((delegate) => (
                         <Avatar.Root key={delegate.id} size="xs">
                           <Avatar.Fallback name={delegate.name} />
