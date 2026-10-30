@@ -780,6 +780,12 @@ th:
       privacy: Privacy
       disclaimer: Disclaimer
       find_us: Find us
+      panels:
+        delegate: สำหรับ Delegate
+        wapc: สำหรับ WAC
+        wfc: สำหรับ WFC
+        admin: สำหรับผู้ดูแลระบบ
+        volunteer: สำหรับอาสาสมัคร
   page:
     translators:
       title: ผู้แปลภาษา
@@ -2010,8 +2016,8 @@ th:
       use_my_location: ใช้ที่อยู่ของฉัน
       distance: ระยะห่าง
       distance_units:
-        km: km
-        mi: mi
+        km: กม.
+        mi: ไมล์
       advanced_filters: ตัวกรองขั้นสูง
       state: เมื่อ
       present: ปัจจุบัน
@@ -2029,7 +2035,7 @@ th:
       to_date: ถึง
       show_filters: แสดงตัวกรอง
       hide_filters: ซ่อนตัวกรอง
-      reset_filters: Reset Filters
+      reset_filters: ล้างค่าการกรอง
       past_from: 'อดีตตั้งแต่ปี %{year}'
       past_all: อดีตทุกปี
       no_delegates: None
@@ -2087,6 +2093,7 @@ th:
       location_not_found: ไม่พบตำแหน่งสำหรับที่อยู่นี้
       location_search_failed: การค้นหาที่อยู่ล้มเหลว 
         โปรดลองใหม่อีกครั้งในอีกหนึ่งนาที
+      championship_only: แสดงเฉพาะการแข่งขันชิงแชมป์ระดับภูมิภาคเท่านั้น
     my_competitions_table:
       edit: แก้ไข
       registrations: การสมัคร
