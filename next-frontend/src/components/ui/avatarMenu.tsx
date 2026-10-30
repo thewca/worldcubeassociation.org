@@ -139,7 +139,7 @@ function AvatarMenu({
             {avatarNode}
           </Menu.Trigger>
           <Menu.Positioner>
-            <Menu.Content maxHeight="80vh" overflowY="auto">
+            <Menu.Content>
               {entries.map((entry, index) => {
                 if (entry.kind === "group") {
                   return (
