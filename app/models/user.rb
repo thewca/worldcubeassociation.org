@@ -855,6 +855,24 @@ class User < ApplicationRecord
       can_manage_incidents: {
         scope: can_manage_incidents? ? "*" : [],
       },
+      can_view_polls: {
+        scope: can_view_poll? ? "*" : [],
+      },
+      can_view_all_users: {
+        scope: can_view_all_users? ? "*" : [],
+      },
+      can_admin_results: {
+        scope: can_admin_results? ? "*" : [],
+      },
+      can_create_posts: {
+        scope: can_create_posts? ? "*" : [],
+      },
+      can_manage_regional_organizations: {
+        scope: can_manage_regional_organizations? ? "*" : [],
+      },
+      can_access_cms: {
+        scope: can_access_cms? ? "*" : [],
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
@@ -909,6 +927,13 @@ class User < ApplicationRecord
 
   def can_edit_banned_competitors?
     can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic) || group_leader?(UserGroup.teams_committees_group_wapc)
+  end
+
+  # Keep in sync with the `admin` access check on Payload's `Users` collection in the Next frontend.
+  def can_access_cms?
+    board_member? || software_team? || communication_team? || group_member?(UserGroup.teams_committees_group_wat) ||
+      marketing_team? || wic_team? || wrc_team? || appeals_committee? || competition_announcement_team? ||
+      results_team? || quality_assurance_committee?
   end
 
   def can_manage_regional_organizations?
