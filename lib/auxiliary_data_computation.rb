@@ -14,17 +14,21 @@ module AuxiliaryDataComputation
       %w[best concise_single_results],
       %w[average concise_average_results],
     ].each do |field, table_name|
-      ActiveRecord::Base.connection.execute <<~SQL.squish
-        INSERT INTO #{table_name} (result_id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
+      connection = ActiveRecord::Base.connection
+      quoted_field = connection.quote_column_name(field)
+      quoted_table_name = connection.quote_table_name(table_name)
+
+      connection.execute <<~SQL.squish
+        INSERT INTO #{quoted_table_name} (result_id, #{quoted_field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
         WITH concise_agg AS (
-          SELECT MIN(#{field} * 1000000000 + result_id) value_and_id
+          SELECT MIN(#{quoted_field} * 1000000000 + result_id) value_and_id
           FROM regional_records_lookup
-          WHERE #{field} > 0
+          WHERE #{quoted_field} > 0
           GROUP BY person_id, country_id, event_id, competition_reg_year
         )
         SELECT
           rrl.result_id,
-          rrl.#{field},
+          rrl.#{quoted_field},
           concise_agg.value_and_id,
           rrl.person_id,
           rrl.event_id,
@@ -35,7 +39,7 @@ module AuxiliaryDataComputation
           INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
         ON DUPLICATE KEY UPDATE
           result_id = rrl.result_id,
-          #{field} = rrl.#{field},
+          #{quoted_field} = rrl.#{quoted_field},
           value_and_id = concise_agg.value_and_id,
           person_id = rrl.person_id,
           event_id = rrl.event_id,
@@ -46,12 +50,12 @@ module AuxiliaryDataComputation
 
       # If somebody had a result > 0 in previous CAD runs, but was later penalized,
       #   the "old" row will still stick around. This statement cleans them up.
-      ActiveRecord::Base.connection.execute <<~SQL.squish
+      connection.execute <<~SQL.squish
         DELETE concise_results
-        FROM #{table_name} concise_results
+        FROM #{quoted_table_name} concise_results
         LEFT JOIN regional_records_lookup rrl
           ON concise_results.result_id = rrl.result_id
-            AND rrl.#{field} > 0
+            AND rrl.#{quoted_field} > 0
         WHERE rrl.result_id IS NULL;
       SQL
     end
@@ -63,9 +67,13 @@ module AuxiliaryDataComputation
       %w[best ranks_single concise_single_results],
       %w[average ranks_average concise_average_results],
     ].each do |field, table_name, concise_table_name|
+      connection = ActiveRecord::Base.connection
+      quoted_field = connection.quote_column_name(field)
+      quoted_concise_table_name = connection.quote_table_name(concise_table_name)
+
       DbHelper.with_temp_table(table_name) do |temp_table_name|
-        ActiveRecord::Base.connection.execute <<~SQL.squish
-          INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)
+        connection.execute <<~SQL.squish
+          INSERT INTO #{connection.quote_table_name(temp_table_name)} (person_id, event_id, best, world_rank, continent_rank, country_rank)
           WITH current_person_regions AS (
             SELECT
               p.wca_id AS person_id,
@@ -81,8 +89,8 @@ module AuxiliaryDataComputation
               event_id,
               continent_id,
               country_id,
-              MIN(#{field}) AS value
-            FROM #{concise_table_name}
+              MIN(#{quoted_field}) AS value
+            FROM #{quoted_concise_table_name}
             GROUP BY
               person_id,
               event_id,

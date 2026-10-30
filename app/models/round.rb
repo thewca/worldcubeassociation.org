@@ -302,9 +302,9 @@ class Round < ApplicationRecord
   def recompute_local_pos
     return if format_id == "h"
 
-    rank_by = format.rank_by_column
+    rank_by = ActiveRecord::Base.connection.quote_column_name(format.rank_by_column)
     # We only want to decide ties by single in events decided by average
-    secondary_rank_by = format.secondary_rank_by_column
+    secondary_rank_by = ActiveRecord::Base.connection.quote_column_name(format.secondary_rank_by_column) if format.secondary_rank_by_column
     # The following query uses an `ORDER BY best <= 0, best ASC` trick. The idea is:
     #   1. The first part of the `ORDER BY` evaluates to a boolean. Booleans are just
     #     `TINYINT` in MySQL with TRUE=1 and FALSE=0, so that FALSE < TRUE.

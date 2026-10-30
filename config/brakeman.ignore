@@ -3,29 +3,6 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "115bd3ab11c9073ddf4f4ba4bdcff64c0ddce3fa1d42cf7441233302455ce9ad",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/auxiliary_data_computation.rb",
-      "line": 18,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"INSERT INTO #{table_name} (result_id, #{field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)\\nWITH concise_agg AS (\\n  SELECT MIN(#{field} * 1000000000 + result_id) value_and_id\\n  FROM regional_records_lookup\\n  WHERE #{field} > 0\\n  GROUP BY person_id, country_id, event_id, competition_reg_year\\n)\\nSELECT\\n  rrl.result_id,\\n  rrl.#{field},\\n  concise_agg.value_and_id,\\n  rrl.person_id,\\n  rrl.event_id,\\n  rrl.country_id,\\n  rrl.continent_id,\\n  rrl.competition_reg_year `reg_year`\\nFROM concise_agg\\n  INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)\\nON DUPLICATE KEY UPDATE\\n  result_id = rrl.result_id,\\n  #{field} = rrl.#{field},\\n  value_and_id = concise_agg.value_and_id,\\n  person_id = rrl.person_id,\\n  event_id = rrl.event_id,\\n  country_id = rrl.country_id,\\n  continent_id = rrl.continent_id,\\n  reg_year = rrl.competition_reg_year\\n\".squish)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "AuxiliaryDataComputation",
-        "method": "self.compute_concise_results"
-      },
-      "user_input": "table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "field and table names come from hardcoded lists in this file"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
       "fingerprint": "1592fd74a5c4d475d5ab2fa8c25aa56bf22d675e65d7268fc90565b3c164a32c",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -49,29 +26,6 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "1bd7c9c389557f7a30e467eed3c374ffb96bc06814ade468276f1ea1be6ed6dc",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/db_helper.rb",
-      "line": 20,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"DROP TABLE IF EXISTS #{\"#{table_name}_temp\"}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbHelper",
-        "method": "self.with_temp_table"
-      },
-      "user_input": "table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "table_name only comes from internal callers with hardcoded table names"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
       "fingerprint": "213c9ba0468beba064b5f4a6433b9ea2fdd08a582a12eb377aa4c41233a65597",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -91,29 +45,6 @@
         89
       ],
       "note": "table/column names and sanitizers come from the hardcoded dump config; db name from database.yml"
-    },
-    {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "2495bd12b81870625e082d17f762e74eec89c68925cfa2a350c4219dc997f864",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "lib/db_dump_helper.rb",
-      "line": 189,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "system(\"zip #{zip_filename} #{zip_contents.join(\" \")}\", :exception => true)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbDumpHelper",
-        "method": "self.zip_and_upload_to_s3"
-      },
-      "user_input": "zip_filename",
-      "confidence": "Medium",
-      "cwe_id": [
-        77
-      ],
-      "note": "zip filename and contents are internal constants / generated export file names, never user input"
     },
     {
       "warning_type": "File Access",
@@ -162,52 +93,6 @@
       "note": "WCIF payload is validated against the WCIF JSON schema before use; too large to enumerate in permit"
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "37369233e67162cac17ab985dc1ad11ba4a6a67c91e6f5ebdfe7637a63ec8a8e",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/db_helper.rb",
-      "line": 34,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"DROP TABLE #{\"#{table_name}_old\"}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbHelper",
-        "method": "self.with_temp_table"
-      },
-      "user_input": "table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "table_name only comes from internal callers with hardcoded table names"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "3c99b8c8e1e7064278c0148fbeb1b7b80980e7364c10fced972c66e6d3d03c51",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/check_regional_records.rb",
-      "line": 99,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Result.where(:competition_id => competition_id).where(:event_id => event_id).select(\"event_id, competition_id, round_type_id, country_id, MIN(#{value_column}) AS `value`\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CheckRegionalRecords",
-        "method": "self.load_ordered_results"
-      },
-      "user_input": "value_column",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "value_column comes from the SOLUTION_TYPES constant"
-    },
-    {
       "warning_type": "Mass Assignment",
       "warning_code": 70,
       "fingerprint": "42f8912db9163d219f00748efa87345ffa45411b0404d2c6668235b385469cd8",
@@ -229,52 +114,6 @@
         915
       ],
       "note": "set_form_data! validates the payload against a JSON schema"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "56ecf8d3765b462e586ca5005c3f3fd347eca757fb58bfb50a98e11a8c879464",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/round.rb",
-      "line": 336,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.exec_query(\"UPDATE live_results r\\nLEFT JOIN (\\n    SELECT id,\\n           RANK() OVER (\\n               ORDER BY #{if format.secondary_rank_by_column then\n  primary_sort = \"IF(#{format.rank_by_column} > 0, #{format.rank_by_column}, #{format.secondary_rank_by_column})\"\n  \"#{format.rank_by_column} <= 0, #{format.secondary_rank_by_column} <= 0, #{\"IF(#{format.rank_by_column} > 0, #{format.rank_by_column}, #{format.secondary_rank_by_column})\"} ASC, #{format.secondary_rank_by_column} ASC\"\nelse\n  \"#{format.rank_by_column} <= 0, #{format.rank_by_column} ASC\"\nend}\\n           ) AS `rank`\\n    FROM live_results\\n    WHERE round_id = #{id} AND best != 0\\n) ranked\\nON r.id = ranked.id\\nSET r.local_pos = ranked.rank#{\", r.global_pos = ranked.rank\" if linked_round.blank?}\\nWHERE r.round_id = #{id};\\n\".squish)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Round",
-        "method": "recompute_local_pos"
-      },
-      "user_input": "if format.secondary_rank_by_column then\n  primary_sort = \"IF(#{format.rank_by_column} > 0, #{format.rank_by_column}, #{format.secondary_rank_by_column})\"\n  \"#{format.rank_by_column} <= 0, #{format.secondary_rank_by_column} <= 0, #{\"IF(#{format.rank_by_column} > 0, #{format.rank_by_column}, #{format.secondary_rank_by_column})\"} ASC, #{format.secondary_rank_by_column} ASC\"\nelse\n  \"#{format.rank_by_column} <= 0, #{format.rank_by_column} ASC\"\nend",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "rank columns come from Format model constants and id is the integer primary key"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "5c2ed3e8d095f41c1f999550e5672b294a71b8cd6fa01050c16460c8668b89be",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/check_regional_records.rb",
-      "line": 111,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Result.includes(:competition).from(\"results, (#{Result.where(:competition_id => competition_id).where(:event_id => event_id).select(\"event_id, competition_id, round_type_id, country_id, MIN(#{value_column}) AS `value`\").where.not(value_column => ((..0))).group(\"event_id, competition_id, round_type_id, country_id\").to_sql}) AS `helper`\").where(\"results.event_id = helper.event_id\").where(\"results.competition_id = helper.competition_id\").where(\"results.round_type_id = helper.round_type_id\").where(\"results.country_id = helper.country_id\").where(\"results.#{value_column} = helper.`value`\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CheckRegionalRecords",
-        "method": "self.load_ordered_results"
-      },
-      "user_input": "value_column",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "value_column comes from the SOLUTION_TYPES constant"
     },
     {
       "warning_type": "Mass Assignment",
@@ -325,167 +164,6 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "66a6d4fa43543e45e01375f400dbb73b40f7a82c7fcfc0d06e568d66e5f1b168",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/db_helper.rb",
-      "line": 24,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"ALTER TABLE #{\"#{table_name}_temp\"} AUTO_INCREMENT = 1\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbHelper",
-        "method": "self.with_temp_table"
-      },
-      "user_input": "table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "table_name only comes from internal callers with hardcoded table names"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "71cba8e04306b03f9172827bdaffdd02eae8cc48037a310ae65998045a54ccb5",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/db_helper.rb",
-      "line": 36,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"DROP TABLE IF EXISTS #{temp_table_name}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbHelper",
-        "method": "self.with_temp_table"
-      },
-      "user_input": "temp_table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "table_name only comes from internal callers with hardcoded table names"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "76515baffea0dc22e9ca6e8bcd8a4a9f74ec34749cba6c0161e3b78fe6d880c0",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/db_helper.rb",
-      "line": 21,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"DROP TABLE IF EXISTS #{\"#{table_name}_old\"}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbHelper",
-        "method": "self.with_temp_table"
-      },
-      "user_input": "table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "table_name only comes from internal callers with hardcoded table names"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "80145a18b9a1432262d0b27c9e7cada8e3a11d262f635576ad46c098faf196f8",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/db_helper.rb",
-      "line": 23,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"CREATE TABLE #{\"#{table_name}_temp\"} LIKE #{table_name}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbHelper",
-        "method": "self.with_temp_table"
-      },
-      "user_input": "table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "table_name only comes from internal callers with hardcoded table names"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "84ccf5893d32478697e26368f8dc4bfb44aa04a6e45e8aa8f505008bfa5cf9e9",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/auxiliary_data_computation.rb",
-      "line": 51,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"DELETE concise_results\\nFROM #{table_name} concise_results\\nLEFT JOIN regional_records_lookup rrl\\n  ON concise_results.result_id = rrl.result_id\\n    AND rrl.#{field} > 0\\nWHERE rrl.result_id IS NULL;\\n\".squish)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "AuxiliaryDataComputation",
-        "method": "self.compute_concise_results"
-      },
-      "user_input": "table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "field and table names come from hardcoded lists in this file"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "b446699d4520b2deb5b6415d61dce7160d3d8ae2c9058fd23720b37d158dc81a",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/check_regional_records.rb",
-      "line": 145,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Result.select(\"event_id, country_id, MIN(#{value_column}) AS `value`\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "CheckRegionalRecords",
-        "method": "self.check_records"
-      },
-      "user_input": "value_column",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "value_column comes from the SOLUTION_TYPES constant"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "bb8dda87359dfef7b7727bfe153612e06d7823bc3331b6b86e0673b2c08028ea",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/auxiliary_data_computation.rb",
-      "line": 68,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"INSERT INTO #{temp_table_name} (person_id, event_id, best, world_rank, continent_rank, country_rank)\\nWITH current_person_regions AS (\\n  SELECT\\n    p.wca_id AS person_id,\\n    p.country_id AS current_country_id,\\n    c.continent_id AS current_continent_id\\n  FROM persons p\\n    INNER JOIN countries c ON p.country_id = c.id\\n  WHERE p.sub_id = 1\\n),\\npersonal_bests AS (\\n  SELECT\\n    person_id,\\n    event_id,\\n    continent_id,\\n    country_id,\\n    MIN(#{field}) AS value\\n  FROM #{concise_table_name}\\n  GROUP BY\\n    person_id,\\n    event_id,\\n    continent_id,\\n    country_id\\n  WITH ROLLUP\\n  HAVING person_id IS NOT NULL\\n    AND event_id IS NOT NULL\\n),\\nworld_ranks AS (\\n  SELECT person_id, event_id, value,\\n    RANK() OVER (PARTITION BY event_id ORDER BY value) AS world_rank\\n  FROM personal_bests\\n  WHERE country_id IS NULL\\n    AND continent_id IS NULL\\n),\\ncontinent_ranks AS (\\n  SELECT person_id, event_id, continent_id, value,\\n    RANK() OVER (PARTITION BY event_id, continent_id ORDER BY value) AS continent_rank\\n  FROM personal_bests\\n  WHERE country_id IS NULL\\n    AND continent_id IS NOT NULL\\n),\\ncountry_ranks AS (\\n  SELECT person_id, event_id, country_id, value,\\n    RANK() OVER (PARTITION BY event_id, country_id ORDER BY value) AS country_rank\\n  FROM personal_bests\\n  WHERE country_id IS NOT NULL\\n    AND continent_id IS NOT NULL\\n)\\nSELECT\\n  wr.person_id,\\n  wr.event_id,\\n  wr.value AS best,\\n  wr.world_rank,\\n  COALESCE(cr.continent_rank, 0) AS continent_rank,\\n  COALESCE(nr.country_rank, 0) AS country_rank\\nFROM world_ranks wr\\nINNER JOIN current_person_regions cpr\\n  ON cpr.person_id = wr.person_id\\nLEFT JOIN continent_ranks cr\\n  ON cpr.person_id = cr.person_id\\n    AND wr.event_id = cr.event_id\\n    AND cpr.current_continent_id = cr.continent_id\\nLEFT JOIN country_ranks nr\\n  ON cpr.person_id = nr.person_id\\n    AND wr.event_id = nr.event_id\\n    AND cpr.current_country_id = nr.country_id\\nORDER BY\\n  wr.event_id,\\n  wr.world_rank\\n\".squish)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "AuxiliaryDataComputation",
-        "method": "self.compute_rank_tables"
-      },
-      "user_input": "temp_table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "field and table names come from hardcoded lists in this file"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
       "fingerprint": "c1990aadae8a29e190e583d8bac128d4d948ecef487bd453119eed25c1b9df7d",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -528,52 +206,6 @@
         915
       ],
       "note": "WCIF payload is validated against the WCIF JSON schema before use; too large to enumerate in permit"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "ea9719db4e5c5df45e5932663bf58f4800659dc3e7fbeb138c06484533db4f02",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/db_helper.rb",
-      "line": 31,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"RENAME TABLE #{table_name} TO #{\"#{table_name}_old\"}, #{\"#{table_name}_temp\"} TO #{table_name}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbHelper",
-        "method": "self.with_temp_table"
-      },
-      "user_input": "table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "table_name only comes from internal callers with hardcoded table names"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "f4611a3c4c771b611a5af4bb947868eda72e51a20dbffbc7ab484d26c659a2aa",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "lib/db_helper.rb",
-      "line": 37,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"DROP TABLE IF EXISTS #{old_table_name}\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "DbHelper",
-        "method": "self.with_temp_table"
-      },
-      "user_input": "old_table_name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "table_name only comes from internal callers with hardcoded table names"
     },
     {
       "warning_type": "SQL Injection",
