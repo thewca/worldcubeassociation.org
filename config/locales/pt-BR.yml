@@ -64,6 +64,7 @@ pt-BR:
     magic: Magic
     mmagic: Master Magic
     333mbo: 3x3x3 Multi Vendado Antigo
+    fto: Face Turning Octahedron
   formats:
     '1': Melhor de 1
     '2': Melhor de 2
@@ -71,39 +72,54 @@ pt-BR:
     a: Média de 5
     m: Média de 3
     short:
-      '1': Melhor de 1
-      '2': Melhor de 2
-      '3': Melhor de 3
-      a: Média de 5
-      m: Média de 3
+      '1': Bo1
+      '2': Bo2
+      '3': Bo3
+      a: Ao5
+      m: Mo3
+      "5": Bo5
+      "h": H2H
+    "5": Melhor de 5
   rounds:
     '0':
       name: Rodada de qualificação
+      cell_name: Rodada de qualificação
     '1':
       name: Primeira rodada
+      cell_name: Primeira rodada
     '2':
       name: Segunda rodada
+      cell_name: Segunda rodada
     '3':
       name: Semifinal
+      cell_name: Semifinal
     b:
       name: Final B
+      cell_name: Final B
     c:
       name: Final
+      cell_name: Final
     d:
       name: Primeira Rodada
+      cell_name: Primeira rodada
     e:
       name: Segunda Rodada
+      cell_name: Segunda rodada
     f:
       name: Final
+      cell_name: Final
     g:
       name: Semifinal
+      cell_name: Semifinal
     h:
       name: Rodada de Qualificação
+      cell_name: Rodada de qualificação
   attempts:
     attempt_name: 'Tentativa %{number}'
   round:
     name: '%{event_name} %{round_name}'
     round_number: 'Rodada %{round_number}'
+    title: Rodadas
   advancement_condition:
     short:
       ranking: 'Primeiros %{ranking}'
@@ -112,25 +128,27 @@ pt-BR:
         time: '%{round_format} < %{time}'
         moves: '%{round_format} < %{moves}'
         points: '%{round_format} > %{points}'
+      all_advance: Todos avançam
     ranking: 'Os %{ranking} primeiros avançam para a próxima rodada'
     percent: 'Os %{percent}% primeiros avançam para a próxima rodada'
     attempt_result:
       time: '%{round_format} < %{time} avançam para a próxima rodada'
       moves: '%{round_format} < %{moves} movimentos avançam para a próxima rodada'
       points: '%{round_format} > %{points} pontos avançam para a próxima rodada'
+    all_advance: Todos os competidores avançam
   cutoff:
     time:
       one: '%{count} tentativa para obter um tempo menor que %{time}'
       many: '%{count} tentativas para obter um tempo menor que %{time}'
-      other:
+      other: '%{count} tentativas para obter um tempo menor que %{time}'
     moves:
       one: '%{count} tentativa para obter um resultado menor que %{moves}'
       many: '%{count} tentativas para obter um resultado menor que %{moves}'
-      other:
+      other: '%{count} tentativas para obter um resultado menor que %{moves}'
     points:
       one: '%{count} tentativa para obter um resultado maior que %{points}'
       many: '%{count} tentativas para obter um resultado maior que %{points}'
-      other:
+      other: '%{count} tentativas para obter um resultado maior que %{points}'
   time_limit:
     cumulative:
       one_round: '%{time} cumulativo'
@@ -194,7 +212,7 @@ pt-BR:
     days:
       one: 1 dia
       many: '%{count} dias'
-      other:
+      other: '%{count} dias'
     search_site: Procurar no site
     filter: Filtro
     delete: Apagar
@@ -204,6 +222,8 @@ pt-BR:
     solve_time:
       unit_seconds: segundos
       unit_moves: movimentos
+    back_to_top: Voltar para o topo
+    back: Voltar
   oauth:
     applications:
       your_apps: Seus aplicativos OAuth
@@ -254,6 +274,8 @@ pt-BR:
           região
         user_preferred_events: Eventos favoritos
         otp_attempt: 'Informe seu código de autenticação de dois fatores:'
+        receive_developer_mails: Eu gostaria de receber notificações sobre 
+          mudanças nos recursos de software da WCA
       registration:
         guests: Acompanhantes
         comments: Comentários
@@ -264,6 +286,9 @@ pt-BR:
         birthday: Data de nascimento
         registration_competition_events: Eventos
         email: E-mail
+        search: Pesquisar...
+        too_few_chars: Número insuficiente de caracteres
+        no_results: Sem resultados
       competition_tab:
         content: Conteúdo
         name: Nome
@@ -290,6 +315,7 @@ pt-BR:
         name: Nome
         incorrect_wca_id_claim_count: Número de tentativas incorretas de 
           conectar a ID da WCA
+        country_id: Representando
       poll:
         question: Questão
         deadline: Prazo final
@@ -317,6 +343,11 @@ pt-BR:
         text: Texto
         uri: Link
         status: Status
+        competition_id: Competição
+        media_type: Tipo
+        submitter_name: Nome do remetente
+        submitter_email: E-mail do remetente
+        submitter_comment: Comentário do remetente
       regional_organization:
         name: Nome
         country: Região
@@ -364,6 +395,7 @@ pt-BR:
           secretary: Secretário da WCA
           vice_chair: Vice-Presidente da WCA
           treasurer: Tesoureiro da WCA
+          chief_operating_officer: Diretor de Operações da WCA
       ban_scope:
         competing_only: Somente competir
         competing_and_attending: Competir e assistir
@@ -372,6 +404,10 @@ pt-BR:
       status:
         accepted: Aceita
         pending: Pendente
+      media_type:
+        report: Relatório
+        article: Artigo
+        multimedia: Multimídia
   simple_form:
     'yes': Sim
     'no': Não
@@ -417,6 +453,10 @@ pt-BR:
         otp_attempt: >-
           Verifique seu aplicativo móvel para uma senha única, ou informe um de
           seus códigos de recuperação.
+        receive_developer_mails: Isso é limitado a notificações de mudanças 
+          principais nos resultados, como "data exports", esquema WCIF e APIs 
+          públicas. Recomendado para desenvolvedores de software que depende 
+          dessas ferramentas.
       dob_contact:
         dob: Sua data de nascimento no formato AAAA-MM-DD
         document: >-
@@ -479,6 +519,9 @@ pt-BR:
           (p. ex. melhora/piora na comunidade, planos futuros para esta região).
           Se você omitiu algo nas seções anteriores para ser conciso, pode
           comentar aqui.
+        wic_incidents_html: Lista de números referenciando quaisquer incidentes 
+          para os quais você gostaria de feedback do WIC. <br> 
+          <strong>%{wic_incident_alert}</strong>
       competition_tab:
         name: 'Exemplos: Como chegar, Pagamento, Prêmios, Acomodações'
       competition_medium:
@@ -649,7 +692,7 @@ pt-BR:
         form_error:
           one: 'O formulário contém um erro:'
           many: 'O formulário contém %{count} erros:'
-          other:
+          other: 'O formulário contém %{count} erros:'
       error_pages:
         500_error: 'Desculpe, algo deu errado.'
         500_contact_html: '<a href=%{contact_url} Clique aqui</a> para reportar.'
@@ -1341,7 +1384,7 @@ pt-BR:
       exceeds_event_limit:
         one: você deve se inscrever em apenas 1 evento.
         many: você deve se inscrever em 1 a %{count} eventos.
-        other:
+        other: você deve se inscrever em 1 a %{count} eventos.
       banned_html: >-
         Você está banido. Se você acredita que isso é um erro, por favor contate
         o <a href='mailto:integrity@worldcubeassociation.org'
@@ -1361,15 +1404,15 @@ pt-BR:
       newcomer:
         one: novato
         many: novatos
-        other:
+        other: novatos
       returner:
         one: regressante
         many: regressantes
-        other:
+        other: regressantes
       person:
         one: pessoa
         many: pessoas
-        other:
+        other: pessoas
     flash:
       not_using_wca: Esta competição não está usando o sistema de inscrição da 
         WCA
@@ -1445,7 +1488,7 @@ pt-BR:
       country_plural:
         one: região
         many: regiões
-        other:
+        other: regiões
       email: Email
       non_competing: Inscrições de não competidores
       not_paid: Não paga
@@ -1757,12 +1800,12 @@ pt-BR:
       organizer_plural:
         one: Organizador
         many: Organizadores
-        other:
+        other: Organizadores
       organization_team: Equipe de organização
       delegate:
         one: Delegado da WCA
         many: Delegados da WCA
-        other:
+        other: Delegados da WCA
       contact: Contato
       information: Informação
       events: Eventos
@@ -1824,11 +1867,11 @@ pt-BR:
       guest_limit:
         one: Competidores podem ter no máximo 1 convidado.
         many: Competidores podem ter no máximo %{count} convidados.
-        other:
+        other: Competidores podem ter no máximo %{count} convidados.
       event_limit:
         one: Competidores podem se inscrever em apenas 1 evento.
         many: Competidores podem se inscrever em até %{count} eventos.
-        other:
+        other: Competidores podem se inscrever em até %{count} eventos.
       require_qualification: >-
         Os competidores somente podem se inscrever em eventos para os quais já
         estão qualificados.
@@ -2336,7 +2379,7 @@ pt-BR:
         spots_remaining_plural:
           one: '%{count} vaga restante'
           many: '%{count} vagas restantes'
-          other:
+          other: '%{count} vagas restantes'
         no_spots_remaining: nenhuma vaga restante
         pending:
           title: Inscrições Pendentes
@@ -2398,7 +2441,7 @@ pt-BR:
         move_to:
           one: Mover %{count} para
           many: Mover %{count} para
-          other:
+          other: Mover %{count} para
         move_to_none_selected: Mover para
         pending: Pendente
         waitlist: Lista de Espera
@@ -2723,7 +2766,7 @@ pt-BR:
       venue_selection_html:
         one: um
         many: outro
-        other:
+        other: outro
       venue_selection_all: >-
         Você está vendo o cronograma para todos os %{venueCount} locais de uma
         vez.
@@ -3921,3 +3964,7 @@ pt-BR:
         embaralhamentos para o número que foi usado.
   trainee_delegate_application: {}
   tickets: {}
+  scramble_set:
+    name: Scramble Set %{letter_code}
+    group: Grupo %{number}
+    attempt: Tentativa %{number}

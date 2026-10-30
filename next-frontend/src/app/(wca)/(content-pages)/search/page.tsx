@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { EmptyState, Heading, List, Text, VStack } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 import _ from "lodash";
@@ -48,7 +49,15 @@ export async function generateMetadata({
   return { title: q?.trim() || t("common.search_site") };
 }
 
-export default async function SearchResults({ searchParams }: SearchPageProps) {
+export default function SearchPage({ searchParams }: SearchPageProps) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <SearchResults searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function SearchResults({ searchParams }: SearchPageProps) {
   const { t } = await getT();
   const { q } = await searchParams;
 

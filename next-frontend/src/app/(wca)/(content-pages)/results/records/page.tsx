@@ -1,9 +1,10 @@
 import { getRecords } from "@/lib/wca/results/records";
 import { Alert } from "@chakra-ui/react";
-import React from "react";
+import React, { Suspense } from "react";
 import FilteredRecords from "@/app/(wca)/(content-pages)/results/records/filteredRecords";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
+import Loading from "@/components/ui/loading";
 
 const GENDER_ALL = "All";
 const EVENTS_ALL = "all events";
@@ -19,11 +20,19 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t("results.records.title"),
   };
 }
-export default async function RecordsPage({
-  searchParams,
-}: {
+type RecordsPageProps = {
   searchParams: Promise<{ [key: string]: string | undefined }>;
-}) {
+};
+
+export default function RecordsPage({ searchParams }: RecordsPageProps) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Records searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function Records({ searchParams }: RecordsPageProps) {
   const {
     gender = GENDER_ALL,
     region = REGION_WORLD,

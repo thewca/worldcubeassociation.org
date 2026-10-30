@@ -173,13 +173,13 @@ es-419:
       moves: 'Una resolución por debajo de %{moves} movimientos'
       points: 'Una resolución por encima de %{points} puntos'
       ranking: 'Mejores %{ranking} por single'
-      any_result: Cualquier single
+      any_result: Cualquier resolución
     average:
-      time: 'Media inferior a %{time}'
-      moves: 'Media inferior a %{moves} movimientos'
-      points: 'Media superior a %{points} puntos'
-      ranking: 'Mejores %{ranking} por media'
-      any_result: Cualquier media
+      time: 'Promedio inferior a %{time}'
+      moves: 'Promedio inferior a %{moves} movimientos'
+      points: 'Promedio superior a %{points} puntos'
+      ranking: 'Mejores %{ranking} por promedio'
+      any_result: Cualquier promedio
     deadline:
       description: Fecha límite de calificación
       by_date: 'hasta el %{date}'
@@ -187,7 +187,7 @@ es-419:
     registration: Registro in situ
     checkin: Registro
     tutorial: Tutorial para nuevos competidores
-    multi: Entrega de cubos para 3x3x3 Multi-Blind
+    multi: Entrega de cubos para 3x3x3 Múltiple a Ciegas
     breakfast: Desayuno
     lunch: Almuerzo
     dinner: Cena
@@ -202,8 +202,8 @@ es-419:
     here: aquí
     best: Mejor
     single: Single
-    average: Media
-    solves: Resultados
+    average: Promedio
+    solves: Resoluciones
     hello: 'Hola %{name},'
     date:
       no_date: Sin fecha
@@ -276,11 +276,11 @@ es-419:
           Me gustaría recibir notificaciones sobre cambios en los recursos de
           software de la WCA
         receive_delegate_reports: >-
-          Me gustaría recibir los informes de delegados de Competiciones WCA por
+          Me gustaría recibir los reportes de los Delegados de Competiciones WCA por
           correo electrónico
         delegate_reports_region: >-
-          Solo quiero recibir los informes de delegados de Competiciones WCA
-          para la siguiente región
+          Solo quiero recibir los reportes de los Delegados de Competiciones WCA para
+          la siguiente región
         user_preferred_events: Eventos favoritos
         otp_attempt: 'Introduce tu código de autenticación de dos factores:'
       registration:
@@ -304,7 +304,7 @@ es-419:
         schedule_url: URL del horario
         summary: Resumen
         equipment: Equipo de competición
-        venue: Local
+        venue: Lugar
         organization: Organización
         incidents: Incidentes
         setup_images: Imágenes de la competición
@@ -363,7 +363,8 @@ es-419:
         email: Correo Electrónico
         address: Dirección oficial
         bylaws: Estatutos
-        directors_and_officers: Lista de miembros de la Junta y sus cargos
+        directors_and_officers: Lista de los principales miembros de la Junta 
+          Directiva y Directivos, con sus cargos
         area_description: Descripción concisa del área cubierta
         past_and_current_activities: Informe de actividades relacionadas con la 
           WCA pasadas y actuales
@@ -400,7 +401,7 @@ es-419:
           chair: Presidente WCA
           executive_director: Director Ejecutivo WCA
           chief_operating_officer: Director de Operaciones WCA
-          secretary: Secretario Corporativo WCA
+          secretary: Secretario de la WCA
           vice_chair: Vicepresidente WCA
           treasurer: Tesorero WCA
       ban_scope:
@@ -456,9 +457,9 @@ es-419:
           recomienda para desarrolladores que mantengan software utilizando
           estas herramientas.
         receive_delegate_reports: >-
-          Si eres un Delegado Senior o Miembro del WRC o WQAC, recibirás
-          informes de delegados de Competiciones WCA de forma predeterminada.
-          Nota: el cambio puede demorar hasta 12 horas en hacer efecto.
+          Si eres un Delegado Senior o Miembro del WRC o WQAC, recibirás reportes
+          de los Delegados de Competiciones WCA de forma predeterminada. Nota: el
+          cambio puede demorar hasta 12 horas en hacer efecto.
         delegate_reports_region: >-
           Si quieres recibir todos los informes de delegados de Competiciones
           WCA, deja este campo en blanco (la primera opción del menú
@@ -493,8 +494,8 @@ es-419:
           Enlace completo al horario. (Por ejemplo.,
           "https://www.cubingusa.com/usnationals2016/schedule.php".)
         equipment: >-
-          Cantidad y tipo de timers y displays utilizados en la competición. Por
-          favor, quita las líneas relativas a equipo que no hayas utilizado.
+          Cantidad y tipo de cronómetros y displays utilizados en la competición.
+          Por favor, quita las líneas relativas a equipo que no hayas utilizado.
         summary: >-
           Los puntos mencionados anteriormente solo sirven de guía para un
           reporte completo. Úsalos a tu discreción para lo que creas necesario.
@@ -549,8 +550,8 @@ es-419:
           Debe estar en formato PNG, con buena resolución y con fondo
           transparente
         email: >-
-          Debería ser una lista de correo conteniendo todos los cargos de la
-          Junta directiva
+          Debería ser una lista de correo que incluya a todos los miembros de la Junta
+          Directiva y a los Directivos
         bylaws: Debe estar en formato PDF
         extra_file: >-
           Debe estar en formato PDF. Si necesitas añadir más archivos, por favor únelos
@@ -795,7 +796,7 @@ es-419:
       information: Información
       about: Acerca de la WCA
       documents: Documentos WCA
-      officers_and_board: Oficiales WCA y Junta Directiva
+      officers_and_board: Directivos y Junta Directiva de la WCA
       delegates: Delegados de la WCA
       organizations: Organizaciones regionales
       translators: Traductores
@@ -813,7 +814,7 @@ es-419:
       my_competitions: Mis competiciones
       new_competition: Nueva competición
       results: Resultados
-      rankings: Ránkings
+      rankings: Rankings
       records: Récords
       persons: Personas
       my_results: Mis resultados
@@ -855,14 +856,13 @@ es-419:
     translators:
       title: Traductores
     officers_and_board:
-      title: Oficiales WCA y Junta Directiva
+      title: Directivos y Junta Directiva de la WCA
       officers_description: >-
-        Los oficiales de la WCA manejan tareas relacionadas a la condición sin
-        fines de lucro de la WCA. Estos oficiales son elegidos por la Junta
-        Directiva de la WCA. El Director Ejecutivo es el CEO de la WCA, el
-        Presidente preside todas las reuniones de directorio, el Secretario
-        administra los documentos de la WCA, y el Tesorero maneja los asuntos
-        financieros de la WCA.
+        Los directivos de la WCA manejan tareas relacionadas a la condición sin fines
+        de lucro de la WCA. Estos directivos son elegidos por la Junta Directiva de
+        la WCA. El Director Ejecutivo es el CEO de la WCA, el Presidente preside todas
+        las reuniones de directorio, el Secretario administra los documentos de la
+        WCA, y el Tesorero maneja los asuntos financieros de la WCA.
       board_description: >-
         La Junta Directiva de la WCA es responsable de liderar la organización en
         general, y de cumplir cualquier tarea que no sea cumplida por otro Equipo
@@ -885,7 +885,7 @@ es-419:
       groups_name:
         wat: Equipo de Archivo WCA
         wct: Equipo de Comunicación WCA
-        wcat: Equipo de Anuncio de Torneos WCA
+        wcat: Equipo de Anuncio de Competiciones WCA
         wic: Comité de Integridad WCA
         weat: Equipo de Asistentes Ejecutivos WCA
         wfc: Comité Financiero WCA
@@ -911,13 +911,12 @@ es-419:
           positiva de amistad, transparencia, inclusión, apertura, y
           responsabilidad.
         wcat: >-
-          El Equipo de Anuncio de Torneos WCA (WCAT) aprueba y anuncia
-          Competiciones WCA enviadas por Delegados WCA, y se asegura de que
-          dichos anuncios cumplan con todos los estándares de calidad de la WCA.
-          Este equipo también es responsable de mantener un protocolo apropiado
-          de envío de torneos tomando como base la Política de Requerimientos
-          para Competiciones WCA. El WCAT NO es responsable de la organización
-          de competiciones individuales.
+          El Equipo de Anuncio de Competiciones WCA (WCAT) aprueba y anuncia Competiciones
+          WCA enviadas por Delegados WCA, y se asegura de que dichos anuncios cumplan
+          con todos los estándares de calidad de la WCA. Este equipo también es responsable
+          de mantener un protocolo apropiado de envío de competiciones tomando como
+          base la Política de Requerimientos para Competiciones WCA. El WCAT NO es
+          responsable de la organización de competiciones individuales.
         wic: >-
           El Comité de Integridad WCA (WIC) realiza investigaciones independientes
           acerca de miembros de la comunidad WCA e incidentes durante Competiciones
@@ -994,9 +993,8 @@ es-419:
           label: ¿A quién quieres contactar?
           competition:
             label: >-
-              Contactar organizadores/Delegados de una competición (para
-              preguntar sobre ese torneo puntualmente, incluyendo resultados aún
-              no publicados)
+              Contactar organizadores/Delegados de una competición (para preguntar
+              sobre esa competición puntualmente, incluyendo resultados aún no publicados)
           wct:
             label: >-
               Contactar a la WCA para consultas generales (esto puede involucrar
@@ -1064,9 +1062,8 @@ es-419:
         tu perfil. Para otras consultas, por favor <a
         href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contáctanos</a>.
       no_profile_error: >-
-        Parece que no tienes un perfil WCA todavía, ya que no has participado en
-        ningún torneo aún. Para otras consultas, por favor <a
-        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contáctanos</a>.
+        Parece que no tienes un perfil WCA todavía, ya que no has participado en ninguna
+        competición aún. Para otras consultas, por favor <a href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">contáctanos</a>.
       no_permission_error: >-
         No tienes permiso para solicitar una edición en el perfil de otra
         persona.
@@ -1327,9 +1324,8 @@ es-419:
         not_accepted_html: Te has registrado pero tu registro no ha sido 
           aceptado.
         more_info_html: >-
-          Por favor dirígete a la <a href=%{competition_url}>página WCA de la
-          competición</a> para obtener más información sobre requisitos del
-          registro.
+          Por favor dirígete a la <a href=%{competition_url}>página WCA de la competición</a>
+          para obtener más información sobre requisitos de registro.
       results_presence_email:
         header: 'Los resultados de %{competition} se han publicado'
         intro_html: 'Tus resultados en %{competition_link} acaban de ser publicados.'
@@ -1425,11 +1421,10 @@ es-419:
         te ayude a cambiar el WCA ID a alguna cuenta distinta.
       cannot_edit:
         msg: >-
-          No puedes modificar tu nombre, fecha de nacimiento, género ni región.
-          Motivo: %{reason}. Ponte en contacto con el <a
-          href='%{wrt_contact_path}' target='_blank'>WCA Results Team</a> o tu
-          <a href='%{delegate_url}'>Delegado</a> si necesitas cambiar alguno de
-          estos campos.
+          No puedes modificar tu nombre, fecha de nacimiento, género ni región. Motivo:
+          %{reason}. Ponte en contacto con el <a href='%{wrt_contact_path}' target='_blank'>Equipo
+          de Resultados de la WCA</a> o tu <a href='%{delegate_url}'>Delegado</a>
+          si necesitas cambiar alguno de estos campos.
         reason:
           no_access: no cuentas con acceso para editar el usuario
           assigned: ya tienes un WCA ID asignado
@@ -1453,7 +1448,7 @@ es-419:
         '3': 'Si hay más de una persona en la foto, debe quedar claro quién eres tú.'
         '4': 'Tu cabeza, aunque no necesariamente la cara entera, debe ser visible.'
         '5': >-
-          La foto no debe contener textos superpuestos o filtros artificiales,
+          La foto no debe contener textos superpuestos, stickers ni filtros artificiales,
           incluyendo bordes.
         '6': La foto tiene que tener la orientación correcta.
         '7': La foto no debe contener contenido ofensivo (p.e. gestos 
@@ -1465,9 +1460,9 @@ es-419:
             El avatar tiene que ser de tu propia persona, actualizado y de forma
             similar a como aparecerías en una competición.
           '2': >-
-            El avatar debe estar encuadrado, recortado e iluminado de modo que
-            un competidor o espectador en una competición puedan usarlo para
-            identificarte inequívocamente en un recinto de competición.
+            El avatar debe estar encuadrado, recortado e iluminado de modo que un
+            competidor o espectador en una competición puedan usarlo para identificarte
+            inequívocamente en un lugar de competición.
           '3': >-
             La miniatura del avatar es solo una sección del avatar y se usará para
             representar tu avatar completo. La miniatura debe ajustarse para que se
@@ -1559,14 +1554,14 @@ es-419:
         status: Estado
         locale: Lugar
         group_name: Nombre del Equipo o Comité
-        delegated_competitions_count: Cantidad de torneos delegados
-        wca_id: ID de la WCA
+        delegated_competitions_count: Cantidad de competiciones delegadas
+        wca_id: WCA ID
         location: Ubicación
         email: Correo electrónico
   user_groups:
     group_types:
       board: Junta Directiva WCA
-      officers: Oficiales WCA
+      officers: Directivos de la WCA
       translators: Traductores
   registrations:
     errors:
@@ -1595,14 +1590,14 @@ es-419:
       cannot_change_events_when_cancelling: No puedes cambiar tus eventos al 
         eliminar el registro.
       cannot_register_without_comment: >-
-        Debes introducir un comentario. Asegúrate de leer en los requisitos de
-        inscripción qué se debe incluir (por ejemplo, en una competición de
-        3x3x3 Menos Movimientos simultánea, en qué lugar competirás).
+        Debes introducir un comentario. Asegúrate de leer en los requisitos de registro
+        qué se debe incluir (por ejemplo, en una competición de 3x3x3 Menos Movimientos
+        simultánea, en qué lugar competirás).
     registration_info_people:
       newcomer:
-        one: nuevo
-        many: nuevos
-        other: nuevos
+        one: primerizo
+        many: primerizos
+        other: primerizos
       returner:
         one: repetidor
         many: repetidores
@@ -1625,13 +1620,12 @@ es-419:
     mailer:
       regards_html: 'Atentamente, %{people}.'
       new:
-        mail_subject: 'Te has registrado en %{comp_name}'
+        mail_subject: 'Registro pendiente: %{comp_name}'
         registered_html: >-
-          Tu registro para %{comp_name} está pendiente aprobación del equipo de
-          organización.
+          Tu registro para %{comp_name} está pendiente aprobación del equipo organizador.
         awaits_approval: >-
-          Por favor asegúrate haber seguido todos los requisitos de registro del
-          torneo. Por ejemplo, una cuota de registro podría necesitar ser paga
+          Por favor asegúrate de haber seguido todos los requisitos de registro de
+          la competición. Por ejemplo, puede ser necesario pagar una cuota de registro
           antes de completar el registro.
         approval_info_html: >-
           Se te enviará un correo electrónico cuando tu registro se apruebe. Por
@@ -1650,9 +1644,9 @@ es-419:
       waiting_list:
         mail_subject: 'Estás en la lista de espera: %{comp_name}'
         waitlisted_html: >-
-          El torneo está lleno, pero has sido colocado en la lista de espera.
-          Recibirás un correo si se liberan suficientes lugares. Revisa tu
-          posición en la lista de espera: %{here}.
+          La competición está llena, pero has sido colocado en la lista de espera.
+          Recibirás un correo si se liberan suficientes lugares. Revisa tu posición
+          en la lista de espera: %{here}.
         email_if_error: 'Si crees que esto es un error, por favor responde a este
           correo.'
       deleted:
@@ -1667,8 +1661,8 @@ es-419:
             forma incorrecta
           incomplete: >-
             No has cumplido todos los requisitos del registro (por ejemplo, no has
-            pagado el registro por adelantado o no cumples con los tiempos de calificación
-            de los eventos)
+            pagado la cuota de registro por adelantado o no cumples con los tiempos
+            de calificación de los eventos)
           registrations_full: >-
             El límite de competidores se ha alcanzado y no hay más plazas
             disponibles
@@ -1695,7 +1689,7 @@ es-419:
         other: Exportar %{count} registros a CSV
       export_all_to_csv: Exportar todos los registros a CSV
       email: Correo
-      non_competing: Inscripciones de no competidores
+      non_competing: Registros de no competidores
       not_paid: Impagado
       registered:
         without_stripe: Registrado el
@@ -1738,12 +1732,13 @@ es-419:
       El límite de competidores para esta competición es %{competitor_limit} y puede
       que ya esté completo. Si te registras, tu registro se colocará en una lista
       de espera. Puede que no sea aprobado a menos que se libere un lugar.
-    entry_fees_fully_paid: 'Has pagado la totalidad de tu registro (%{paid}).'
+    entry_fees_fully_paid: 'Has pagado %{paid}, lo que cubre por completo las cuotas
+      de registro.'
     entry_fees_partially_paid: >-
       Haz pagado un monto de %{paid} sobre el total de %{total}. Consulta con
       los organizadores si debes pagar lo restante.
     entry_fees_fully_refunded: >-
-      Tu registro ha sido completamente reembolsado. Si necesitas pagar
+      Las cuotas de tu registro han sido reembolsadas por completo. Si necesitas pagar
       nuevamente, puedes hacerlo aquí debajo
     entry_fees_pay_again: Quiero pagar nuevamente
     will_pay_here: Vas a pagar en cuanto solicites el registro
@@ -1779,15 +1774,16 @@ es-419:
         payment_service_error: Error del servicio de pago
         subtotal: Subtotal
       alerts:
-        amount_too_low: El total pagado es menos que el importe del registro.
+        amount_too_low: El importe total debe ser al menos igual a las cuotas de
+          registro que deban pagarse.
         amount_rather_high: >-
-          Vas a pagar al menos el doble de la cantidad requerida para que tu inscripción
-          continue. Por favor confirma el pago haciendo clic en OK.
+          Vas a pagar al menos el doble de la cantidad requerida para que tu registro
+          continúe. Por favor confirma el pago haciendo clic en OK.
       errors:
         registration_closed: El registro ha cerrado. No se aceptan más pagos.
         already_paid: No se hizo ningún cargo porque la cuota de registro ya ha 
           sido pagada.
-        not_allowed: No puedes pagar por esta inscripción.
+        not_allowed: No puedes pagar por este registro.
         cpi_disconnected: >-
           Se intentó confirmar un pago sin la integración de pago habilitada.
           Por favor, contacta a los organizadores de la competición.
@@ -1962,8 +1958,7 @@ es-419:
         Esta competición se está celebrando ahora. ¡Vuelve después de %{date} para
         consultar sus resultados!
       in_progress_at_wca_live_html: >-
-        Esta competición está en marcha. ¡Puedes ver los resultados en directo
-        <a href='%{link_here}'>Aquí</a>!
+        Esta competición está en marcha. ¡Puedes ver los resultados en vivo <a href='%{link_here}'>Aquí</a>!
       reg_opens_too_early: El registro comenzará en menos de las 48 horas 
         requeridas.
       registration_already_closed: >-
@@ -1976,9 +1971,8 @@ es-419:
         de la competición.
       tooltip_waiting_list: Actualmente estás en la lista de espera.
       tooltip_deleted: >-
-        Desafortunadamente tu inscripción ha sido eliminada. Por favor comprueba
-        tu correo electrónico para más detalles, o contacta con los
-        organizadores.
+        Desafortunadamente tu registro ha sido eliminado. Por favor comprueba tu correo
+        electrónico para más detalles, o contacta con los organizadores.
       confirmed_visible: Esta competición está confirmada y es visible.
       confirmed_not_visible: Esta competición está confirmada pero no es 
         visible.
@@ -1987,13 +1981,13 @@ es-419:
       not_confirmed_not_visible: Esta competición ni está confirmada ni es 
         visible.
       championship_exists: 'Ya hay un %{championship_type} en %{year}.'
-      orga_closed_reg_success: Inscripción cerrada con éxito.
-      orga_closed_reg_failure: No ha podido cerrarse la inscripción.
+      orga_closed_reg_success: Registro cerrado con éxito.
+      orga_closed_reg_failure: No ha podido cerrarse el registro.
       no_waiting_list_specified: >-
-        Esta competición no tienen una fecha límite para aceptar competidores en
-        la lista de espera. Si estás usando lista de espera, por favor
-        especifica una fecha límite. Si no estás usando una lista de espera,
-        recuerda especificar esto en los requisitos de las inscripciones.
+        Esta competición no tienen una fecha límite para aceptar competidores en la
+        lista de espera. Si estás usando lista de espera, por favor especifica una
+        fecha límite. Si no estás usando una lista de espera, recuerda especificar
+        esto en los requisitos de los registros.
       schedule_locked_after_results_submitted: El horario no puede ser editado 
         luego de enviar los resultados.
       spots_left:
@@ -2028,7 +2022,7 @@ es-419:
         undetermined: A definir
         none: ¡No hay podios aún!
       admin:
-        open: Abierto
+        open: Abrir
         clear: Limpiar
         close: Cerrar
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors}
@@ -2059,9 +2053,9 @@ es-419:
             te olvides de agregar los dos ceros para los centisegundos al final del
             tiempo
           inconsistent: >-
-            El resultado ingresado parece inconsistente. Hay una diferencia muy
-            grande entre el mejor single (%{best_single}) y el peor
-            (%{worst_single}). Por favor, comprueba que esté bien.
+            El resultado ingresado parece inconsistente. Hay una diferencia muy grande
+            entre la mejor resolución (%{best_single}) y la peor (%{worst_single}).
+            Por favor, comprueba que esté bien.
           round_locked: >-
             La siguiente ronda ya ha sido abierta. ¡Cualquier cambio en esta
             ronda no la afectará!
@@ -2120,6 +2114,12 @@ es-419:
         mean: Media
       errors:
         round_closed: La ronda no ha sido abierta aún
+      overview:
+        upcoming: Próximas
+        in_progress: Ahora mismo
+        past_month: Últimos 30 días
+        no_upcoming: No hay próximas competiciones con resultados en vivo.
+        search: Buscar competiciones
     my_competitions:
       title: Mis competiciones
       disclaimer: >-
@@ -2143,8 +2143,8 @@ es-419:
       name: Nombre
       location: Ubicación
       city: Ciudad
-      venue: Local
-      location_and_venue: Ubicación y salón
+      venue: Lugar
+      location_and_venue: Ubicación y lugar
       address: Dirección
       details: Detalles
       website: Web
@@ -2220,8 +2220,8 @@ es-419:
         tu registro en línea. Sin embargo, podrás anotarte a nuevos eventos hasta
         el comienzo de los mismos según corresponda.
       on_the_spot_registration_fee_html: >-
-        Se aceptarán registros in situ si aún hay lugares, con una cuota base de
-        registro de %{on_the_spot_base_entry_fee}.
+        Se aceptarán registros in situ si aún hay lugares, con una cuota de registro
+        básica de %{on_the_spot_base_entry_fee}.
       on_the_spot_registration_free: Se aceptarán registros in situ de forma 
         gratuita si aún hay lugares.
       no_on_the_spot_registration: No se aceptarán registros in situ.
@@ -2233,9 +2233,9 @@ es-419:
         restricted: Los espectadores sólo se permiten como acompañantes de 
           competidores.
       guest_limit:
-        one: Los competidores pueden traer un invitado como máximo.
-        many: Los competidores pueden traer %{count} invitados como máximo.
-        other: Los competidores pueden traer %{count} invitados como máximo.
+        one: Los competidores pueden traer un acompañante como máximo.
+        many: Los competidores pueden traer %{count} acompañantes como máximo.
+        other: Los competidores pueden traer %{count} acompañantes como máximo.
       event_limit:
         one: Los competidores puedn registrarse en exactamente un evento.
         many: Los competidores pueden registrarse en como mucho %{count} 
@@ -2266,7 +2266,7 @@ es-419:
       hide_highlights: Ocultar destacados.
       result: un resultado
       single: una única resolución
-      average: una media
+      average: un promedio
       mean: una media
       result_sentence: 'con %{a_win_by_word} de %{result}'
       no_winner: >-
@@ -2293,7 +2293,7 @@ es-419:
         nar: Records de Norte América
         sar: Records de Sudamérica
       regional_single_record: '%{event_name} %{result} (single)'
-      regional_average_record: '%{event_name} %{result} (media)'
+      regional_average_record: '%{event_name} %{result} (promedio)'
       bookmark: Marcar esta competición como favorita
       is_bookmarked: Has marcado esta competición como favorita
       number_of_bookmarks: Número de veces marcada como favorita
@@ -2398,7 +2398,7 @@ es-419:
       edit: Editar
       registrations: Registro
       results_up: ¡Ya están los resultados!
-      report: Ver el informe del Delegado
+      report: Ver el reporte del Delegado
       edit_report: Editar el informe
       missing_report: ¡Tu informe no se ha publicado aún!
       no_upcoming_competitions_html: 'No tienes próximas competiciones. Prueba %{link}.'
@@ -2433,9 +2433,9 @@ es-419:
       submit_confirm_value: Confirmar
       submit_delete_value: Eliminar
       submit_confirm: >-
-        ¿Estás seguro de que quieres confirmar? Después de confirmar no podrás
-        modificar nada. Tras confirmar, comprueba tu correo para verificar que
-        el Equipo de Anuncios de Competiciones de la WCA ha sido notificado.
+        ¿Estás seguro de que quieres confirmar? Después de confirmar no podrás modificar
+        nada. Tras confirmar, comprueba tu correo para verificar que el Equipo de
+        Anuncio de Competiciones de la WCA ha sido notificado.
       submit_delete: >-
         Esta acción no puede deshacerse. Por favor, escribe "%{competition_id}"
         debajo para confirmar la eliminación.
@@ -2465,9 +2465,9 @@ es-419:
         venue:
           country_id: Región
           city_name: Ciudad
-          name: Local
-          details: Detalles del local
-          address: Dirección del local
+          name: Lugar
+          details: Detalles del lugar
+          address: Dirección del lugar
           coordinates: Coordenadas
         start_date: Fecha de comienzo
         end_date: Fecha de finalización
@@ -2502,11 +2502,11 @@ es-419:
           scoretaking_software: Software para carga de resultados
         entry_fees:
           currency_code: Moneda
-          base_entry_fee: Tarifa básica
-          on_the_spot_entry_fee: Cuota básica de registro in situ
+          base_entry_fee: Cuota de registro básica
+          on_the_spot_entry_fee: Cuota de registro básica in situ
           guest_entry_fee: Precio de entrada de acompañantes
-          donations_enabled: Quiero habilitar donaciones además de cobrar el 
-            importe del registro
+          donations_enabled: Quiero habilitar donaciones además de cobrar la 
+            cuota de registro
           refund_policy_percent: Porcentaje a reembolsar
           refund_policy_limit_date: Fecha límite para reembolsos
         registration:
@@ -2522,8 +2522,9 @@ es-419:
             registro
           allow_self_edits: Modificaciones de registro
           guests_enabled: Acompañantes
-          guest_entry_status: Mostrar mensaje para acceso gratuito de invitados
-          guests_per_registration: Máximo número de invitados por inscripción
+          guest_entry_status: Mostrar mensaje para acceso gratuito de 
+            acompañantes
+          guests_per_registration: Máximo número de acompañantes por registro
           extra_requirements: Requisitos de registro adicionales
           force_comment: >-
             Forzar a los competidores a introducir un comentario cuando se inscriban
@@ -2580,11 +2581,11 @@ es-419:
             Nombre de la ciudad y provincia donde tendrá lugar la competición.
             No incluyas el país. (Ejemplos: "Madrid" o "Archena, Murcia").
           name_html: >-
-            El local donde se celebra la competición. %{md}. Por ejemplo:
-            [Parque de las Ciencias](http://www.parqueciencias.com/)
+            El lugar donde se celebra la competición. %{md}. Por ejemplo: [Parque
+            de las Ciencias](http://www.parqueciencias.com/)
           details_html: >-
-            Detalles sobre el local (por ejemplo, "primera planta" o "sigue los
-            carteles"). %{md}
+            Detalles sobre el lugar (por ejemplo, "primera planta" o "sigue los carteles").
+            %{md}
         series:
           name: >-
             El nombre completo de la serie de competiciones incluyendo el año al
@@ -2657,21 +2658,20 @@ es-419:
         entry_fees:
           currency_code: Moneda en que se especifican los pagos.
           base_entry_fee: >-
-            Precio del registro básico. Se mostrará en la página de información
-            de la competición y en la de registro si se utiliza. Si esto se pone
-            a 0, se mostrará una frase indicando que se aceptan registros
-            gratuitos. <br><br><b>DESCARGO DE RESPONSABILIDAD: Las siguientes
-            estimaciones de cuotas WCA son simplemente una estimación basada en
-            las actuales tarifas de cambios de moneda y de ningún modo son
-            jurídicamente vinculantes para el pago de las cuotas.</b>
+            Cuota de registro básica. Se mostrará en la página de información de la
+            competición y en la página de registro si se utiliza. Si esto se pone
+            a 0, se mostrará una frase indicando que se aceptan registros gratuitos.
+            <br><br><b>DESCARGO DE RESPONSABILIDAD: Las siguientes estimaciones de
+            cuotas WCA son simplemente una estimación basada en las actuales tarifas
+            de cambios de moneda y de ningún modo son jurídicamente vinculantes para
+            el pago de las cuotas.</b>
           on_the_spot_entry_fee: >-
             Si esto se pone en 0, se mostrará una frase indicando que se aceptan
             los registros in situ de forma gratuita.
           guest_entry_fee: >-
-            Por el momento esta cifra es informativa, los precios de entrada de
-            espectadores no se pueden gestionar desde este sitio web. Si se pone
-            en $0, se mostrará la frase seleccionada en "Mostrar mensaje para
-            acceso gratuito de invitados".
+            Por el momento esta cifra es informativa, los precios de entrada de espectadores
+            no se pueden gestionar desde este sitio web. Si se pone en $0, se mostrará
+            la frase seleccionada en "Mostrar mensaje para acceso gratuito de acompañantes".
           refund_policy_percent: >-
             Por ahora esta cifra es informativa, los reembolsos deberán
             realizarse manualmente. Si esto se pone a 0, se mostrará una frase
@@ -2680,8 +2680,8 @@ es-419:
           refund_policy_limit_date: Fecha tras la cual no se efectuarán más 
             reembolsos.
         registration:
-          opening_date_time: 'Nota: la apertura y cierre se registra según la hora
-            UTC'
+          opening_date_time: 'Nota: la apertura y el cierre del registro se indican
+            en hora UTC'
           waiting_list_deadline_date: >-
             Fecha a partir de la cual los competidores en lista de espera
             dejarán de ser aceptados. Si tienes fecha límite para reembolsos, la
@@ -2696,9 +2696,9 @@ es-419:
             que empiecen. Si hay registro in situ, se debe poner la fecha en la
             que ocurra la competición.
           guests_per_registration: >-
-            El número de invitados por inscripción permitidos en esta
-            competición. Inscripciones con demasiados invitados se bloquearán.
-            Dejar en blanco si no hay límite.
+            El número de acompañantes por registro permitidos en esta competición.
+            Registros con demasiados acompañantes se bloquearán. Dejar en blanco si
+            no hay límite.
           extra_requirements: >-
             Por favor indica aquí cualquier requisito adicional no cubierto
             arriba, como por ejemplo indicaciones sobre cómo efectuar el pago.
@@ -2709,8 +2709,8 @@ es-419:
         event_restrictions:
           forbid_newcomers:
             reason: >-
-              Por favor elabora a continuación por qué no te gustaría que se
-              registren primerizos en tu torneo. ¡Por favor, en inglés!
+              Por favor elabora a continuación por qué no te gustaría que se registren
+              primerizos en tu competición. ¡Por favor, en inglés!
           early_puzzle_submission:
             reason: >-
               Por favor explica aquí por qué te gustaría requerir que los competidores
@@ -2736,8 +2736,8 @@ es-419:
           ¡Por favor rellena esto en inglés!
       choices:
         guests_enabled:
-          'true': Preguntar sobre invitados
-          'false': NO preguntar sobre invitados
+          'true': Preguntar sobre acompañantes
+          'false': NO preguntar sobre acompañantes
         competitor_limit:
           enabled:
             'true': Quiero especificar un límite de competidores
@@ -2750,7 +2750,7 @@ es-419:
           scoretaking_software:
             external: 'Una herramienta externa, no mantenida por la WCA'
             wca_live: 'WCA Live, hosteado en live.worldcubeassociation.org'
-            internal: Integrated Live Results
+            internal: Resultados en vivo integrados
         registration:
           allow_on_the_spot:
             'true': Se aceptarán registros in situ
@@ -2821,9 +2821,9 @@ es-419:
         pending:
           title: Registros pendientes
           information: >-
-            La lista de "pendientes" solo debería usarse para registros
-            incompletos (por ejemplo, sin pagar). Por favor, usa la lista de
-            espera si tu torneo ya no tiene lugar para nuevos competidores.
+            La lista de "pendientes" solo debería usarse para registros incompletos
+            (por ejemplo, sin pagar). Por favor, usa la lista de espera si tu competición
+            ya no tiene lugar para nuevos competidores.
           waitlist_skipped_warning: >-
             Has omitido %{count} registro(s) pendiente(s). ¿Estás seguro que
             deseas mover el o los registros seleccionados a la lista de espera?
@@ -2925,7 +2925,7 @@ es-419:
         too_many: >-
           Aceptar todos estos registros excedería el límite de competidores por
           %{count}.
-        no_self_update: Contacta al equipo de organización para actualizar tu 
+        no_self_update: Contacta al equipo organizador para actualizar tu 
           registro.
       register:
         will_open_countdown: >-
@@ -2937,7 +2937,7 @@ es-419:
         panel:
           approval:
             title: Aprobación
-            description: Por organizadores
+            description: Por el equipo organizador
           payment:
             title: Información de pago
             description: Ingresar información de facturación
@@ -3026,8 +3026,8 @@ es-419:
           para primerizos
         '-4014': Ya te has registrado a esta competición.
         '-4015': >-
-          Por favor ingresa un número razonable de invitados, o contacta a los
-          organizadores si vendrás con un número extraordinario de invitados.
+          Por favor ingresa un número razonable de acompañantes, o contacta a los
+          organizadores si vendrás con un número extraordinario de acompañantes.
         '-6001': >-
           No se han habilitado pagos gestionados mediante la WCA para esta
           competición
@@ -3035,7 +3035,7 @@ es-419:
         '-6003': >-
           No se ha encontrado ningún pago pendiente. Probablemente esto
           signifique que ya hayas pagado tu registro.
-        '-7001': El competidor aún tiene pagos pendientes de registro
+        '-7001': El competidor aún tiene cuotas de registro pendientes de pago
         '-7002': >-
           La opción de auto-aceptar registros no está habilitada para esta
           competición.
@@ -3057,8 +3057,8 @@ es-419:
       auto_accept_not_negative: El límite de registros auto-aceptados no puede 
         ser menos que 0.
       auto_accept_accept_paid_pending: >-
-        No se puede habilitar auto-aceptar si hay registros con su pago
-        pendiente. Acéptalos o muévelos a la lista de espera
+        No se puede habilitar auto-aceptar si hay registros pendientes que ya fueron
+        pagados. Acéptalos o muévelos a la lista de espera
       auto_accept_accept_waitlisted: >-
         No se puede habilitar auto-aceptar. Por favor, acepta tantos
         competidores de la lista de espera como sea posible.
@@ -3115,8 +3115,8 @@ es-419:
         La fecha límite de la lista de espera no puede ser anterior a la fecha
         de cierre del registro.
       waiting_list_deadline_before_refund_date: >-
-        La fecha límite de la lista de espera no puede ser anterior a la fecha
-        límite para reintegros.
+        La fecha límite de la lista de espera no puede ser anterior a la fecha límite
+        para reembolsos.
       waiting_list_deadline_after_end: >-
         La fecha límite de la lista de espera debe ser antes del fin de la
         competición.
@@ -3135,8 +3135,8 @@ es-419:
       series_distance_km: 'La competición se encuentra demasiado lejos de %{competition}.'
       series_distance_days: 'La competición está programada a demasiados días de %{competition}.'
       must_ask_about_guests_if_specifying_limit: >-
-        Debes preguntar por los invitados si se ha especificado un número límite
-        de invitados.
+        Debes preguntar por los acompañantes si se ha especificado un número límite
+        de acompañantes.
       not_full_url: >-
         Hay un URL relativo (%{url}) en el contenido. Por favor, ingresa URLs
         enteros con su prefijo http:// o https://.
@@ -3206,15 +3206,14 @@ es-419:
     note_before_cancel: 'Nota: sólo se pueden cancelar competiciones confirmadas.'
     orga_close_reg: Cerrar registro
     orga_close_reg_confirm: >-
-      ¿Estás seguro de que quieres cerrar las inscripciones? No puedes deshacer
-      esto.
+      ¿Estás seguro de que quieres cerrar los registros? No puedes deshacer esto.
     note_reg_not_full_orga_close_reg: >-
-      Nota: sólo puedes cerrar las inscripciones una vez se haya alcanzado el
-      límite de competidores.
+      Nota: sólo puedes cerrar los registros una vez se haya alcanzado el límite de
+      competidores.
     user_preferences: Preferencias de usuario
     receive_registration_emails: Notificarme por correo cuando alguien se 
       registre a esta competición
-    note_reg_closed_orga_close_reg: Las inscripciones ya han sido cerradas.
+    note_reg_closed_orga_close_reg: Los registros ya han sido cerrados.
     show:
       general_info: Información general
       events: Eventos
@@ -3237,10 +3236,9 @@ es-419:
           El resultado que hay que batir para pasar a la segunda fase de una
           ronda con corte (ver %{regulation_link}).
         format_html: >-
-          El formato describe como determinar la clasificación de los competidores
-          basándose en sus resultados. La lista de formatos permitidos por evento
-          está descrita en %{link_to_9b}. Ver %{link_to_9f} para una descripción de
-          cada formato.
+          El formato describe como determinar el ranking de los competidores basándose
+          en sus resultados. La lista de formatos permitidos por evento está descrita
+          en %{link_to_9b}. Ver %{link_to_9f} para una descripción de cada formato.
         qualification_html: Es necesario tener tiempos en otras competiciones 
           WCA para competir.
         qualification_all_events_html: >-
@@ -3296,10 +3294,9 @@ es-419:
       timezone_message: 'El horario se muestra en la zona horaria %{timezone}.'
       timezone_setting: 'Estás viendo el horario en la siguiente zona horaria:'
       multiple_timezones_available: >-
-        ¡Cuidado! Algunas localidades están en distinta zona horaria. ¡No te
-        confundas!
+        ¡Cuidado! Algunos lugares están en distinta zona horaria. ¡No te confundas!
       select_a_timezone: Elegir zona horaria
-      select_a_venue_to_view: 'Para ver el horario, elige una localidad.'
+      select_a_venue_to_view: 'Para ver el horario, elige un lugar.'
       timezone_set_local: Usar zona horaria local
       timezone_set_venue: Usar zona horaria del lugar
       timezone_follow_venue: Usar la zona horaria del lugar activo 
@@ -3328,7 +3325,7 @@ es-419:
         newcomer_checks: Chequeos de primerizos
         submit_results: Entregar resultados
         upload_scrambles: Subir mezclas
-        delegate_report: Informe del Delegado
+        delegate_report: Reporte del Delegado
         registration: Registro
         import_registrations: Importar registros
         register: Registrarse
@@ -3336,9 +3333,9 @@ es-419:
         scrambles: Mezclas
     results_table:
       h2h_results_disclaimer: >-
-        Resultados determinados por una final Head-to-Head. Solo se muestra la
-        posición y la mejor solve, ya que la presentación de resultados
-        Head-to-Head completos sigue en desarrollo.
+        Resultados determinados por una final Head-to-Head. Solo se muestra la posición
+        y la mejor resolución, ya que la presentación de resultados Head-to-Head completos
+        sigue en desarrollo.
       wca_profile: Perfil WCA
       event: Evento
       round: Ronda
@@ -3377,7 +3374,7 @@ es-419:
       edit_tab_title: 'Editar la pestaña %{tab_name}'
   results:
     rankings:
-      title: Clasificaciones
+      title: Rankings
       unknown_type: 'Parámetro de tipo desconocido, debe ser "single" o "average"'
       unknown_show: >-
         Parámetro de mostrar desconocido debe ser "N persons", "N results" o "by
@@ -3395,7 +3392,7 @@ es-419:
       type_selector:
         type: Tipo
         single: Single
-        average: Media
+        average: Promedio
       show_selector:
         show: Mostrar
         persons: Personas
@@ -3415,7 +3412,7 @@ es-419:
       name: Nombre
       result: Resultado
       competition: Competición
-      solves: Soluciones
+      solves: Resoluciones
       region: Región
       world: Mundo
       event: Evento
@@ -3530,10 +3527,9 @@ es-419:
       completed_solves: Soluciones completadas
       personal_records: Récords personales actuales
       odd_rank_reason: >-
-        Que falte una clasificación o que haya una clasificación regional peor
-        que una continental se deben a un cambio de región. Los resultados de la
-        anterior región no se tienen en cuenta en la clasificación regional
-        actual.
+        Que falte un ranking o que el ranking regional sea peor que el continental
+        se debe a un cambio de región. Los resultados de la región anterior no se
+        tienen en cuenta en el ranking de la región actual.
       championship_podiums: Podios en Campeonatos
       championship_podium_levels:
         world: Podios en Campeonatos Mundiales
@@ -3700,12 +3696,11 @@ es-419:
           WCA?
         content:
           '1': >-
-            Cuando la competición termina, el Delegado de la WCA tiene que
-            comprobar todas las hojas de tiempos y los datos de los competidores
-            para subsanar posibles errores. Una vez que esto está hecho, los
-            resultados son enviados al Equipo de Resultados (WRT) que es el
-            responsable de subir estos resultados y actualizar la base de datos.
-            Finalmente, el WRT hace públicos los resultados.
+            Cuando la competición termina, el Delegado de la WCA tiene que comprobar
+            todas las hojas de resultados y los datos de los competidores para subsanar
+            posibles errores. Una vez que esto está hecho, los resultados son enviados
+            al Equipo de Resultados (WRT) que es el responsable de subir estos resultados
+            y actualizar la base de datos. Finalmente, el WRT hace públicos los resultados.
           '2': >-
             Dependiendo del tamaño de la competición y de la disponibilidad de
             tiempo del Delegado, esto puede llevar entre un día y una semana.
@@ -3797,11 +3792,10 @@ es-419:
       y acercándonos a quienes se interesan por los puzzles.</p>
     world_championship_title: Campeonato Mundial
     world_championship_content_html: >-
-      <p>Cada dos años, apoyamos las competiciones que finalmente designa al
-      campeón del mundo. Estos eventos requieren una planificación
-      extremadamente cuidada por un número de voluntarios, además de un gran
-      compromiso económico para reservar el local y hacer las preparaciones
-      necesarias.</p>
+      <p>Cada dos años, apoyamos las competiciones que finalmente designa al campeón
+      del mundo. Estos eventos requieren una planificación extremadamente cuidada
+      por un número de voluntarios, además de un gran compromiso económico para reservar
+      el lugar y hacer las preparaciones necesarias.</p>
     contributing_title: Contribuir
     contributing_content_html: >-
       Puedes donar mediante tarjeta de crédito usando Guidestar %{here_credit},
@@ -3841,10 +3835,10 @@ es-419:
         de un Delegado es supervisar competiciones en representación de la WCA. Un
         Delegado de la WCA es responsable de asegurarse de que todas las competiciones
         de la WCA se lleven a cabo de acuerdo con el Propósito, los Valores y el Reglamento
-        de la WCA. La WCA distingue entre <strong>Delegados Sénior</strong>, <strong>Delegados
+        de la WCA. La WCA distingue entre <strong>Delegados Senior</strong>, <strong>Delegados
         Regionales</strong>, <strong>Delegados Plenos</strong>, <strong>Delegados
         Junior</strong> y <strong>Delegados en Prácticas</strong>%{see_link}.</p>
-        <p>Además de las responsabilidades de un Delegado de la WCA, un Delegado Sénior
+        <p>Además de las responsabilidades de un Delegado de la WCA, un Delegado Senior
         o Delegado Regional es responsable de gestionar a los Delegados de la WCA
         de su área y también puede ser contactado por la comunidad para asuntos regionales.</p>
         <p>Los nuevos Delegados inicialmente figuran como Delegados Junior; posteriormente,
@@ -3852,7 +3846,8 @@ es-419:
         WCA antes de ser promovidos a Delegados de la WCA.</p> <p>Los Delegados en
         Prácticas están siendo capacitados para desempeñar el rol de Delegado de la
         WCA y solo pueden supervisar competiciones en las que esté presente un Delegado
-        de la WCA.</p>
+        de la WCA.</p> <p>Si te interesa convertirte en Delegado en Prácticas, contacta
+        con tu Delegado Regional para determinar tu elegibilidad.</p>
       see_link_html: ' (ver %{link})'
       members_html: >-
         Todos los competidores se convierten automáticamente en <strong>miembros
@@ -3880,7 +3875,7 @@ es-419:
       WQAC ha publicado varios documentos para la comunidad, puedes descargarlos
       a continuación.
     competitor_tutorial: Tutorial de competidor
-    judge_tutorial: Tutorial de hacer de jueces para novatos
+    judge_tutorial: Tutorial de hacer de jueces para primerizos
     competition_templates: Plantillas de competición
     certificates: Plantillas de certificados del WCT
     orga_handbook: Manual para organizadores
@@ -3928,7 +3923,8 @@ es-419:
         '3': >-
           Respetar y poner en práctica los Objetivos fijados en los Estatutos y
           Mociones de la WCA
-        '4': Cumplir con todas las reglas pertinentes de la WCA
+        '4': Cumplir con todas las disposiciones aplicables del Reglamento de la
+          WCA
         '5': Acatar las decisiones de los Voluntarios WCA
         '6': >-
           Mantener registrada en la WCA una copia actualizada de sus estatutos y
@@ -4002,15 +3998,14 @@ es-419:
       groupifier:
         title: Groupifier
         description: >-
-          Herramienta de gestión de tareas y grupos para organizadores de
-          competiciones WCA. Entre sus principales funcionalidades encontrarás:
-          Ordenar competidores por su ranking, asignar tareas (ser juez,
-          mezclar), decidir cuantas mezclas son necesarias, generar hojas de
-          tiempos, horarios personalizados, resúmenes, etc. Visita la web para
-          averiguar más.
+          Herramienta de gestión de tareas y grupos para organizadores de competiciones
+          WCA. Entre sus principales funcionalidades encontrarás: Ordenar competidores
+          por su ranking, asignar tareas (ser juez, mezclar), decidir cuantas mezclas
+          son necesarias, generar hojas de resultados, horarios personalizados, resúmenes,
+          etc. Visita la web para averiguar más.
       scorecards:
-        title: Scorecards
-        description: Imprime hojas de tiempos para competiciones WCA que usen 
+        title: Hojas de resultados
+        description: Imprime hojas de resultados para competiciones WCA que usen
           WCA Live
       tnoodle:
         title: TNoodle (Mezclas)
@@ -4022,8 +4017,8 @@ es-419:
       live:
         title: WCA Live
         description: >-
-          Plataforma para llevar competiciones WCA y compartir resultados en
-          directo con el mundo.
+          Plataforma para llevar competiciones WCA y compartir resultados en vivo
+          con el mundo.
       nightmare:
         title: Hoja de cálculo de resultados
         description: >-
@@ -4303,7 +4298,7 @@ es-419:
       paragraph3: 'El rol de un anfitrión puede ser resumido del siguiente modo:'
       short_intro: 'Haz una breve introducción, habla sobre ti y sobre la competición'
       venue_feel: >-
-        Haz algunos videos cortos para dar una idea del salón y de la gente. Puede
+        Haz algunos videos cortos para dar una idea del lugar y de la gente. Puede
         ser simplemente de las áreas de espera o estaciones
       people_solving: >-
         Intenta obtener videos de gente resolviendo (gente rápida en sus eventos principales,
@@ -4345,11 +4340,10 @@ es-419:
     title: Mercadería WCA
     paragraphs:
       '1': >-
-        ¡La WCA tiene productos exclusivos disponibles para comprar! Desde
-        camisetas, camperas, pegatinas, mats, mochilas, y más. Nuestros diseños
-        se actualizan continuamente incluyendo el clásico logo de la WCA,
-        productos de los Campeonatos Mundiales y diseños de los récords
-        mundiales.
+        ¡La WCA tiene productos exclusivos disponibles para comprar! Desde camisetas,
+        camperas, stickers, mats, mochilas, y más. Nuestros diseños se actualizan
+        continuamente incluyendo el clásico logo de la WCA, productos de los Campeonatos
+        Mundiales y diseños de los récords mundiales.
       '2': >-
         Comprar productos WCA en nuestras tiendas es una de las mejores maneras
         de apoyar a la WCA, una organización sin ánimo de lucro, basada en
@@ -4498,8 +4492,8 @@ es-419:
         [%{round_id}] Se corrigió automáticamente la posición de %{person_name}
         de %{pos} a %{expected_pos}.
       mbf_result_over_time_limit_warning: >-
-        [%{round_id}] El resultado "%{result}" de %{person_name} supera el
-        tiempo límite. Por favor, asegúrate de que esto sea por penalidades
+        [%{round_id}] El resultado "%{result}" de %{person_name} supera el tiempo
+        límite. Por favor, asegúrate de que esto sea por penalizaciones de tiempo
         antes de enviar los resultados, o cambia el resultado a DNF.
       result_after_dns_warning: >-
         [%{round_id}] %{person_name} tiene al menos un DNS seguido de un
@@ -4521,28 +4515,29 @@ es-419:
         los intentos faltantes, o actualiza la información de la ronda en la
         página de "Administrar eventos" (Manage Events).
       result_over_time_limit_error: >-
-        [%{round_id}] Al menos un resultado de %{person_name} excede el tiempo
-        límite de la ronda, que es %{time_limit} por intento. Todas las
-        soluciones que excedan el tiempo límite deben ser cambiadas a DNF.
+        [%{round_id}] Al menos un resultado de %{person_name} excede el tiempo límite
+        de la ronda, que es %{time_limit} por intento. Todas las resoluciones que
+        excedan el tiempo límite deben ser cambiadas a DNF.
       results_over_cumulative_time_limit_error: >-
-        [%{round_ids}] La suma de resultados de %{person_name} excede el límite
+        [%{round_ids}] La suma de resultados de %{person_name} excede el tiempo límite
         acumulativo, que era %{time_limit}.
       undefined_time_limit_warning: >-
         [%{round_id}] El tiempo límite de esta ronda es indefinido, se han
         omitido las validaciones de tiempo límite. Esto solo se pretende para
         competiciones antes del 2013.
       suspicious_dnf_warning: >-
-        [%{round_ids}] La ronda tiene un límite acumulativo, y al aproximar los
-        tiempos de %{person_name} notamos que habría tenido muy poco tiempo
-        disponible para al menos uno de sus DNFs. Por favor, asegúrate de que
-        cada DNF y DNS es correcto. Si el competidor no comenzó un intento o se
-        quedó sin límite acumulativo, debe ser ingresado como DNS (A1a2+++++).
+        [%{round_ids}] La ronda tiene un tiempo límite acumulativo, y al extrapolar
+        a partir de las resoluciones exitosas de %{person_name} notamos que habría
+        tenido muy poco tiempo disponible para al menos uno de sus DNFs. Por favor,
+        asegúrate de que cada DNF y DNS es correcto. Si el competidor no comenzó un
+        intento o se quedó sin tiempo límite acumulativo, debe ser ingresado como
+        DNS (A1a2+++++).
       missing_cumulative_round_id_error: >-
-        [%{original_round_id}] No se puede encontrar la ronda %{wcif_id} para el
-        límite acumulativo especificado en el WCIF. Por favor, dirígete al menú
-        de "Administrar eventos" (Manage Events) y retira %{wcif_id} del límite
-        acumulativo de %{original_round_id}. WST está al tanto de este problema
-        (issue de GitHub #3254).
+        [%{original_round_id}] No se puede encontrar la ronda %{wcif_id} para el tiempo
+        límite acumulativo especificado en el WCIF. Por favor, dirígete al menú de
+        "Administrar eventos" (Manage Events) y retira %{wcif_id} del tiempo límite
+        acumulativo de %{original_round_id}. WST está al tanto de este problema (issue
+        de GitHub #3254).
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} está en la posición incorrecta: se esperó
         %{expected_pos} pero se encontró %{pos}.
