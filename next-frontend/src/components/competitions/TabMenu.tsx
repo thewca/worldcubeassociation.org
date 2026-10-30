@@ -4,10 +4,10 @@ import Link from "next/link";
 import {
   Badge,
   Box,
-  CloseButton,
+  // CloseButton,
   Collapsible,
-  Drawer,
-  IconButton,
+  // Drawer,
+  // IconButton,
   Link as ChakraLink,
   Separator,
   Tabs,
@@ -28,13 +28,17 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
 import { TFunction } from "i18next";
-import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
+import {
+  // LuAlignJustify,
+  LuArrowLeft,
+} from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import IconDisplay from "@/components/IconDisplay";
 import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 import WcaDocsIcon from "../icons/WcaDocsIcon";
+import MobileTabMenu from "./MobileTabMenu";
 
 function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
@@ -68,8 +72,8 @@ export default function TabMenu({
   //   navigation closes it. Until tab navigation became client-side the page reload did that
   //   for us; hanging an onClick on the links instead would mean threading a callback three
   //   components down, past two `asChild` merges that are known to drop handlers.
-  const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
-  const drawerOpen = drawerOpenedAt === pathName;
+  // const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
+  // const drawerOpen = drawerOpenedAt === pathName;
 
   return (
     <Tabs.Root
@@ -109,7 +113,7 @@ export default function TabMenu({
           currentPath={currentPath}
         />
       </Tabs.List>
-      <Box hideFrom="md">
+      {/* <Box hideFrom="md">
         <Drawer.Root
           open={drawerOpen}
           onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
@@ -178,7 +182,14 @@ export default function TabMenu({
             </Drawer.Content>
           </Drawer.Positioner>
         </Drawer.Root>
-      </Box>
+      </Box> */}
+      <MobileTabMenu
+        tabs={tabs}
+        currentPath={currentPath}
+        isAdminRoute={isAdminRoute}
+        t={t}
+      />
+
       {/* Tabs.Content is a flex item, which has `min-width: auto`.
        It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
       <Tabs.Content width="full" minWidth="0" value={currentPath!}>
