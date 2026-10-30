@@ -930,8 +930,10 @@ class User < ApplicationRecord
   end
 
   # Keep in sync with the `admin` access check on Payload's `Users` collection in the Next frontend.
+  CMS_ACCESS_COMMITTEES = %w[wst wct wat wmt wic wrc wapc wcat wrt wqac].freeze
+
   def can_access_cms?
-    board_member? || teams_committees.pluck(:friendly_id).intersect?(%w[wst wct wat wmt wic wrc wapc wcat wrt wqac])
+    board_member? || teams_committees.pluck(:friendly_id).intersect?(CMS_ACCESS_COMMITTEES)
   end
 
   def can_manage_regional_organizations?

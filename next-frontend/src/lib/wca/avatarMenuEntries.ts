@@ -1,29 +1,13 @@
 import type Link from "next/link";
 import React from "react";
-import { route, type RouteLiteral } from "nextjs-routes";
+import { route } from "nextjs-routes";
+import type { TFunction } from "i18next";
 import type { Session } from "@/auth.client";
 import {
   hydrateUserPermissions,
   type UserPermissions,
 } from "@/lib/wca/permissions";
 import type { AvatarMenuEntry } from "@/types/payload";
-
-// Mirrors the names in `User.panel_list`; the permissions endpoint only hands us the ids.
-const PANEL_NAMES: Record<string, string> = {
-  admin: "Admin panel",
-  volunteer: "Volunteer panel",
-  delegate: "Delegate panel",
-  wapc: "WAC panel",
-  wfc: "WFC panel",
-  wrt: "WRT panel",
-  wst: "WST panel",
-  board: "Board panel",
-  leader: "Leader panel",
-  senior_delegate: "Senior Delegate panel",
-  wic: "WIC panel",
-  weat: "WEAT panel",
-  wqac: "WQAC panel",
-};
 
 export type FlatMenuEntry =
   | {
@@ -41,6 +25,7 @@ export type MenuEntry =
 export default function buildAvatarMenuEntries(
   session: Session,
   cmsEntries: AvatarMenuEntry[],
+  t: TFunction,
   permissions?: UserPermissions,
 ): MenuEntry[] {
   const can = hydrateUserPermissions(permissions);
@@ -58,16 +43,34 @@ export default function buildAvatarMenuEntries(
         ({ requiredPermission }) =>
           !requiredPermission || can[requiredPermission](),
       )
-      .map(({ label, href, isRailsPage, newTab }): MenuEntry =>
-        isRailsPage
-          ? rails(label, href)
-          : { kind: "link", label, href: href as RouteLiteral, newTab },
+      .flatMap(
+        ({ label, href, isRailsPage, targetLink, newTab }): MenuEntry[] => {
+          if (isRailsPage) {
+            return href ? [rails(label, href)] : [];
+          }
+
+          if (!targetLink) {
+            return [];
+          }
+
+          return [
+            {
+              kind: "link",
+              label,
+              href:
+                targetLink === "/payload"
+                  ? route({ pathname: "/payload/[[...segments]]", query: {} })
+                  : targetLink,
+              newTab,
+            },
+          ];
+        },
       ),
     ...(session.user?.wcaId
       ? [
           {
             kind: "link",
-            label: "My Results",
+            label: t("layouts.navigation.my_results"),
             href: route({
               pathname: "/persons/[wcaId]",
               query: { wcaId: session.user.wcaId },
@@ -79,19 +82,29 @@ export default function buildAvatarMenuEntries(
       ? [
           {
             kind: "group",
-            header: "Panel",
+            header: t("layouts.navigation.panel"),
             entries: panels.map((panelId) =>
-              rails(PANEL_NAMES[panelId] ?? panelId, `/panel/${panelId}`),
+              rails(
+                t(`layouts.navigation.panels.${panelId}`, {
+                  defaultValue: panelId,
+                }),
+                `/panel/${panelId}`,
+              ),
             ),
           } satisfies MenuEntry,
         ]
       : []),
-    ...(can.canViewDelegateAdminPage() && can.canOrganizeCompetitions("*")
+    ...(can.canViewDelegateAdminPage() && can.canCreateCompetitions()
       ? [
           {
             kind: "group",
-            header: "Delegate",
-            entries: [rails("New competition", "/competitions/new")],
+            header: t("layouts.navigation.delegate"),
+            entries: [
+              rails(
+                t("layouts.navigation.new_competition"),
+                "/competitions/new",
+              ),
+            ],
           } satisfies MenuEntry,
         ]
       : []),

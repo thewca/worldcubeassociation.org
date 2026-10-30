@@ -23,6 +23,7 @@ import _ from "lodash";
 import RailsLink from "@/components/RailsLink";
 import { type UserPermissions } from "@/lib/wca/permissions";
 import type { AvatarMenuEntry } from "@/types/payload";
+import { useT } from "@/lib/i18n/useI18n";
 import buildAvatarMenuEntries, {
   type FlatMenuEntry,
 } from "@/lib/wca/avatarMenuEntries";
@@ -85,6 +86,7 @@ function AvatarMenu({
   permissions?: UserPermissions;
 }) {
   const router = useRouter();
+  const { t } = useT();
 
   // Better Auth's `signOut` only clears the cookies and resolves; unlike NextAuth's, it does not
   // navigate. `session` here is a prop from a server component, so without a refresh the navbar
@@ -126,7 +128,7 @@ function AvatarMenu({
     </Avatar.Root>
   );
 
-  const entries = buildAvatarMenuEntries(session, cmsEntries, permissions);
+  const entries = buildAvatarMenuEntries(session, cmsEntries, t, permissions);
 
   return (
     <>

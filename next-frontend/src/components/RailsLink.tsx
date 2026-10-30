@@ -5,9 +5,14 @@ interface RailsLinkProps extends LinkProps {
   href: string;
 }
 
+const apiUrl = process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL;
+
+if (!apiUrl) {
+  throw new Error("NEXT_PUBLIC_WCA_FRONTEND_API_URL is not set");
+}
+
 // Rails sits at the root of the public API host.
-const RAILS_ROOT_URL = new URL(process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL!)
-  .origin;
+const RAILS_ROOT_URL = new URL(apiUrl).origin;
 
 /**
  * A link to a page that is still served by the Rails monolith. It renders a

@@ -128,6 +128,11 @@ export type IconName =
  * Page on this website the link points to.
  *
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AvatarMenuTargetLink".
+ */
+export type AvatarMenuTargetLink = ('/competitions/mine' | '/dashboard' | '/payload') | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "AvatarMenuPermission".
  */
 export type AvatarMenuPermission =
@@ -143,6 +148,8 @@ export type AvatarMenuPermission =
     )
   | null;
 /**
+ * Page on this website the link points to.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "StaticTargetLink".
  */
@@ -778,8 +785,12 @@ export interface AvatarMenuEntry {
    * Link text shown in the avatar menu in the top-right corner of the navbar. Keep it short.
    */
   label: string;
-  href: string;
   isRailsPage?: boolean | null;
+  /**
+   * Root-relative path on the Rails site, e.g. /profile/edit.
+   */
+  href?: string | null;
+  targetLink?: AvatarMenuTargetLink;
   /**
    * Open this link in a new tab
    */
@@ -1115,8 +1126,9 @@ export interface ToolsSelect<T extends boolean = true> {
 export interface AvatarMenuEntriesSelect<T extends boolean = true> {
   _order?: T;
   label?: T;
-  href?: T;
   isRailsPage?: T;
+  href?: T;
+  targetLink?: T;
   newTab?: T;
   requiredPermission?: T;
   updatedAt?: T;

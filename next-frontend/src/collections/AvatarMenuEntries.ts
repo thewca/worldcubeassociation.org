@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import type { Route } from "nextjs-routes";
 import { hasRole } from "@delmaredigital/payload-better-auth";
 import { WCA_ROLES_FIELD } from "@/auth.config";
 import type { PermissionFunctions } from "@/lib/wca/permissions";
@@ -21,6 +22,15 @@ const permissionOptions = [
   "canViewDelegateAdminPage",
   "canManageIncidents",
 ] satisfies UnscopedPermission[];
+
+type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
+
+// `/payload` is the optional catch-all `/payload/[[...segments]]`, so it isn't a `StaticRoute`.
+const targetLinkOptions = [
+  "/competitions/mine",
+  "/dashboard",
+  "/payload",
+] satisfies (StaticRoute | "/payload")[];
 
 const isWstAdmin = hasRole(["wst_admin"], WCA_ROLES_FIELD);
 
@@ -51,14 +61,30 @@ export const AvatarMenuEntries: CollectionConfig = {
       },
     },
     {
-      name: "href",
-      type: "text",
-      required: true,
-    },
-    {
       name: "isRailsPage",
       type: "checkbox",
       defaultValue: true,
+    },
+    {
+      name: "href",
+      type: "text",
+      required: true,
+      admin: {
+        condition: (_, siblingData) => Boolean(siblingData.isRailsPage),
+        description:
+          "Root-relative path on the Rails site, e.g. /profile/edit.",
+      },
+    },
+    {
+      name: "targetLink",
+      type: "select",
+      options: targetLinkOptions,
+      interfaceName: "AvatarMenuTargetLink",
+      required: true,
+      admin: {
+        condition: (_, siblingData) => !siblingData.isRailsPage,
+        description: "Page on this website the link points to.",
+      },
     },
     newTabCheckbox,
     {
