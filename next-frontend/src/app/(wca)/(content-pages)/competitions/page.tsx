@@ -421,27 +421,6 @@ export default function CompetitionsPage() {
                       dispatchFilter={dispatchFilter}
                       t={t}
                     />
-
-                    <Checkbox.Root
-                      width="auto"
-                      minHeight="10"
-                      checked={filterState.shouldShowChampionshipOnly}
-                      onCheckedChange={(e) =>
-                        dispatchFilter({
-                          type: "set_championship_only",
-                          shouldShowChampionshipOnly: Boolean(e.checked),
-                        })
-                      }
-                    >
-                      <Checkbox.HiddenInput />
-                      <Checkbox.Control />
-                      <Checkbox.Label>
-                        <HStack gap={2} align="center">
-                          {t("competitions.index.championship_only")}
-                          <NationalChampionshipIcon />
-                        </HStack>
-                      </Checkbox.Label>
-                    </Checkbox.Root>
                   </VStack>
                 </Collapsible.Content>
               </VStack>
@@ -847,6 +826,26 @@ function AdvancedFilters({
         <Checkbox.Control />
         <Checkbox.Label>
           {t("competitions.index.show_cancelled")}
+        </Checkbox.Label>
+      </Checkbox.Root>
+      <Checkbox.Root
+        width="auto"
+        minHeight="10"
+        checked={filterState.shouldShowChampionshipOnly}
+        onCheckedChange={(e) =>
+          dispatchFilter({
+            type: "set_championship_only",
+            shouldShowChampionshipOnly: Boolean(e.checked),
+          })
+        }
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>
+          <HStack gap={2} align="center">
+            {t("competitions.index.championship_only")}
+            <NationalChampionshipIcon />
+          </HStack>
         </Checkbox.Label>
       </Checkbox.Root>
     </Stack>
