@@ -28,6 +28,7 @@ import {
 } from "react-icons/lu";
 import { useT } from "@/lib/i18n/useI18n";
 import { usePathname } from "next/navigation";
+import WcaFlag from "../WcaFlag";
 
 type OrganizerPerson =
   components["schemas"]["Person"] | components["schemas"]["Organizer"];
@@ -90,7 +91,9 @@ function ClickableOrganizer({
         <Avatar.Image src={organizer.avatar.thumb_url} />
       </Avatar.Root>
       <Stack gap={0.5} justify="start">
-        <ChakraLink href={organizer.url}>{organizer.name}</ChakraLink>
+        <ChakraLink href={organizer.url}>
+          {organizer.name} <WcaFlag code={organizer.country_iso2} size="xs" />
+        </ChakraLink>
         {isLead && (
           <Badge
             variant="subtle"
@@ -122,6 +125,8 @@ function OrganizersSection({
   const first = organizers[0];
   const rest = organizers.slice(1);
 
+  console.log(first);
+
   return (
     <Stack direction="row" gap={3}>
       {first && <ClickableOrganizer organizer={first} isLead />}
@@ -140,7 +145,6 @@ function OrganizersSection({
             >
               <button
                 type="button"
-                onClick={() => {}}
                 aria-haspopup="dialog"
                 aria-label={`View ${rest.length} more team members`}
               >
