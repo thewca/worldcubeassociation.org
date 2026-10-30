@@ -2106,10 +2106,11 @@ en:
             title: "Approval"
             description: "By organization team"
           payment:
-            title: "Payment information"
+            title: "Payment Information"
             description: "Enter billing information"
           competing:
             title: "Register"
+            summary_title: "Registration"
             description: "Choose your events"
           requirements:
             title: "Requirements"
