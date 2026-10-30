@@ -217,6 +217,9 @@ en:
     deadline:
       description: "Qualification Deadline"
       by_date: "by %{date}"
+    earliest_date:
+      description: "Qualification Results From"
+      from_date: "on or after %{date}"
   #context: other activities which occur in the schedule
   activity:
     registration: "On-site registration"

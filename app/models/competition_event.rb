@@ -24,11 +24,21 @@ class CompetitionEvent < ApplicationRecord
   validates_associated :qualification_condition
 
   validates :qualification_latest_date, presence: { if: :qualification_condition? }
+  validates :qualification_earliest_date, comparison: { less_than: :qualification_latest_date, allow_nil: true, if: :qualification_latest_date? }
+
+  # WCRP v5.5 point 5.1.5.1 (as of 2026-10-29)
+  validates :qualification_gap, numericality: { greater_than_or_equal_to: 90, allow_nil: true }
 
   validate do
     remaining_rounds = rounds.reject(&:marked_for_destruction?)
     numbers = remaining_rounds.map(&:number).sort
     errors.add(:rounds, "#{numbers} is wrong") if numbers != (1..remaining_rounds.length).to_a
+  end
+
+  def qualification_gap
+    return nil unless qualification_latest_date? && qualification_earliest_date?
+
+    (qualification_latest_date - qualification_earliest_date).days.in_days
   end
 
   def advancing_competitor_ids
@@ -98,30 +108,38 @@ class CompetitionEvent < ApplicationRecord
                                   .in_event(self.event_id)
                                   .on_or_before(self.qualification_latest_date)
 
+    # An end range (aka "until") date MUST always be present for qualifications.
+    #   Only the start range (aka "from") date is optional, and thus we're branching here.
+    within_timeframe_results = if self.qualification_earliest_date?
+                                 before_deadline_results.on_or_after(self.qualification_earliest_date)
+                               else
+                                 before_deadline_results
+                               end
+
     case qualification_condition
     # Allow any competitor with a result to register when type == "ranking".
     # When type == "ranking", the results need to be manually cleared out later.
     when ResultConditions::Ranking
       case qualification_condition.scope
       when "single"
-        before_deadline_results.succeeded.any?
+        within_timeframe_results.succeeded.any?
       when "average"
-        before_deadline_results.average_succeeded.any?
+        within_timeframe_results.average_succeeded.any?
       end
     when ResultConditions::ResultAchieved
       if qualification_condition.value.nil?
         case qualification_condition.scope
         when "single"
-          before_deadline_results.succeeded.any?
+          within_timeframe_results.succeeded.any?
         when "average"
-          before_deadline_results.average_succeeded.any?
+          within_timeframe_results.average_succeeded.any?
         end
       else
         case qualification_condition.scope
         when "single"
-          before_deadline_results.single_better_than(qualification_condition.value).any?
+          within_timeframe_results.single_better_than(qualification_condition.value).any?
         when "average"
-          before_deadline_results.average_better_than(qualification_condition.value).any?
+          within_timeframe_results.average_better_than(qualification_condition.value).any?
         end
       end
     end
@@ -155,7 +173,7 @@ class CompetitionEvent < ApplicationRecord
     return nil if qualification_condition.blank?
 
     {
-      "earliestResultDate" => nil,
+      "earliestResultDate" => qualification_earliest_date&.strftime("%Y-%m-%d"),
       "latestResultDate" => qualification_latest_date&.strftime("%Y-%m-%d"),
       "resultCondition" => qualification_condition.to_wcif,
     }
@@ -249,6 +267,7 @@ class CompetitionEvent < ApplicationRecord
 
     {
       qualification_latest_date: wcif_qualification[at_least_v2 ? "latestResultDate" : "whenDate"],
+      qualification_earliest_date: at_least_v2 ? wcif_qualification["earliestResultDate"] : nil,
       qualification_condition: at_least_v2 ? ResultConditions::ResultCondition.load(wcif_qualification["resultCondition"]) : ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
     }
   end

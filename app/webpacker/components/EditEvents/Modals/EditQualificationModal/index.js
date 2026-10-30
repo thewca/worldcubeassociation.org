@@ -100,6 +100,7 @@ export default function EditQualificationModal({
   const [conditionScope, setConditionScope] = useInputState(qualification?.resultCondition?.scope ?? '');
   const [conditionType, setConditionType] = useInputState(v1ConditionType);
   const [latestResultDate, setLatestResultDate] = useState(qualification?.latestResultDate ?? '');
+  const [earliestResultDate, setEarliestResultDate] = useState(qualification?.earliestResultDate ?? '');
   const [conditionValue, setConditionValue] = useState(qualification?.resultCondition?.value ?? 0);
 
   const qualificationStateWcif = useMemo(() => {
@@ -110,7 +111,7 @@ export default function EditQualificationModal({
     const v2ConditionValue = conditionType === 'anyResult' ? null : conditionValue;
 
     return ({
-      earliestResultDate: null,
+      earliestResultDate,
       latestResultDate,
       resultCondition: {
         type: v2ConditionType,
@@ -118,7 +119,7 @@ export default function EditQualificationModal({
         value: v2ConditionValue,
       },
     });
-  }, [conditionScope, conditionType, conditionValue, latestResultDate]);
+  }, [conditionScope, conditionType, conditionValue, earliestResultDate, latestResultDate]);
 
   const hasUnsavedChanges = useMemo(() => (
     !_.isEqual(qualification, qualificationStateWcif)
@@ -128,6 +129,7 @@ export default function EditQualificationModal({
     setConditionScope(qualification?.resultCondition?.scope ?? '');
     setConditionType(v1ConditionType ?? 'attemptResult');
     setLatestResultDate(qualification?.latestResultDate ?? '');
+    setEarliestResultDate(qualification?.earliestResultDate ?? '');
     setConditionValue(qualification?.resultCondition?.value ?? 0);
   };
 
@@ -179,6 +181,14 @@ export default function EditQualificationModal({
             <UtcDatePicker
               onChange={setLatestResultDate}
               isoDate={latestResultDate}
+            />
+          </Form.Field>
+          <Form.Field disabled={!latestResultDate}>
+            <Label>{I18n.t('qualification.earliest_date.description')}</Label>
+            <UtcDatePicker
+              onChange={setEarliestResultDate}
+              isoDate={earliestResultDate}
+              isoMaxDate={latestResultDate}
             />
           </Form.Field>
           <br />
