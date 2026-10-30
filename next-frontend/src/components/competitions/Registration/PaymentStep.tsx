@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useT } from "@/lib/i18n/useI18n";
-import CurrencyValue from "@/components/CurrencyValue";
 import { hasPassed } from "@/lib/wca/dates";
 import StripePayment from "@/components/competitions/Registration/StripePayment";
 import {
@@ -130,6 +129,52 @@ function PaymentAmountDetails({
   );
 }
 
+/** How much of the fee the competitor has paid so far. */
+export function PaymentStatus({
+  competitionInfo,
+  payment,
+}: {
+  competitionInfo: CompetitionInfo;
+  payment: Registration["payment"];
+}) {
+  const { t, i18n } = useT();
+
+  if (payment === undefined || payment.paid_amount_iso === 0) {
+    return <Text>{t("registrations.payment_form.labels.fees_remaining")}</Text>;
+  }
+
+  const formatAmount = (lowestDenomination: number) =>
+    new Intl.NumberFormat(i18n.language, {
+      style: "currency",
+      currency: payment.currency_code,
+    }).format(lowestDenomination / payment.currency_subunit_to_unit);
+
+  const paid = formatAmount(payment.paid_amount_iso);
+
+  return (
+    <Alert.Root status={payment.has_paid ? "success" : "warning"}>
+      <Alert.Indicator />
+      <Alert.Content>
+        <Alert.Title>
+          {payment.has_paid
+            ? t("registrations.payment_form.labels.fees_paid")
+            : t("registrations.payment_form.labels.fees_remaining")}
+        </Alert.Title>
+        <Alert.Description>
+          {payment.has_paid
+            ? t("registrations.entry_fees_fully_paid", { paid })
+            : t("registrations.entry_fees_partially_paid", {
+                paid,
+                total: formatAmount(
+                  competitionInfo.base_entry_fee_lowest_denomination,
+                ),
+              })}
+        </Alert.Description>
+      </Alert.Content>
+    </Alert.Root>
+  );
+}
+
 export default function PaymentStep({
   competitionInfo,
   registration,
@@ -149,21 +194,7 @@ export default function PaymentStep({
 
   if (payment?.has_paid) {
     return (
-      <Alert.Root status="success">
-        <Alert.Indicator />
-        <Alert.Content>
-          <Alert.Title>
-            {t("registrations.payment_form.labels.fees_paid")}
-          </Alert.Title>
-          <Alert.Description>
-            <CurrencyValue
-              lowestDenomination={payment.paid_amount_iso}
-              currencyCode={payment.currency_code}
-              subunitToUnit={payment.currency_subunit_to_unit}
-            />
-          </Alert.Description>
-        </Alert.Content>
-      </Alert.Root>
+      <PaymentStatus competitionInfo={competitionInfo} payment={payment} />
     );
   }
 
