@@ -125,7 +125,7 @@ function OrganizersSection({
   return (
     <Stack direction="row" gap={3}>
       {first && <ClickableOrganizer organizer={first} isLead />}
-      {rest.length && (
+      {!!rest.length && (
         <Dialog.Root placement="center" lazyMount>
           <Dialog.Trigger asChild>
             <Card.Root
@@ -152,12 +152,14 @@ function OrganizersSection({
                   gap={2}
                 >
                   <AvatarGroup>
-                    {rest.map((delegate) => (
-                      <Avatar.Root key={delegate.id} size="xs">
-                        <Avatar.Fallback name={delegate.name} />
-                        <Avatar.Image src={delegate.avatar.thumb_url} />
-                      </Avatar.Root>
-                    ))}
+                    {rest
+                      .filter((_, i) => i < 8)
+                      .map((delegate) => (
+                        <Avatar.Root key={delegate.id} size="xs">
+                          <Avatar.Fallback name={delegate.name} />
+                          <Avatar.Image src={delegate.avatar.thumb_url} />
+                        </Avatar.Root>
+                      ))}
                   </AvatarGroup>
                   <Text fontSize="xs"> +{rest.length} more</Text>
                   <Icon>
