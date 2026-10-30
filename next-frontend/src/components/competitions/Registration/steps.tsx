@@ -1,10 +1,12 @@
 "use client";
 
-import { DataList, HStack, Text } from "@chakra-ui/react";
+import { DataList, HStack } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
-import PaymentStep from "@/components/competitions/Registration/PaymentStep";
+import PaymentStep, {
+  PaymentStatus,
+} from "@/components/competitions/Registration/PaymentStep";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
@@ -172,11 +174,10 @@ export function StepSummary({
           deadline={step.deadline}
         />
       ) : (
-        <Text>
-          {registration.payment?.has_paid
-            ? t("registrations.payment_form.labels.fees_paid")
-            : t("registrations.payment_form.labels.fees_remaining")}
-        </Text>
+        <PaymentStatus
+          competitionInfo={competitionInfo}
+          payment={registration.payment}
+        />
       );
     }
     case "approval":
@@ -191,6 +192,8 @@ export function isStepEditable(step: StepConfig, registration: Registration) {
       return (
         step.is_editable && canEditRegistration(step.parameters, registration)
       );
+    case "payment":
+      return step.is_editable && !registration.payment?.has_paid;
     default:
       return step.is_editable;
   }
