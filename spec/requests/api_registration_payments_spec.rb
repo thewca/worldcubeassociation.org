@@ -6,6 +6,44 @@ require 'rails_helper'
 # v1 API. It has to be a request spec now, because setting a payment up still drives the monolith's
 # own payment-intent and payment-completion routes.
 RSpec.describe 'API Registration Payments', :clean_db_with_truncation do
+  describe 'GET #show' do
+    let!(:competition) { create(:competition, :stripe_connected) }
+    let(:reg) { create(:registration, competition: competition) }
+    let!(:registration_payment) { create(:registration_payment, registration: reg) }
+
+    it 'returns an unrefunded registration payment' do
+      api_sign_in_as(reg.user)
+      get api_v1_registration_payments_path(reg), as: :json
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'charge has 1000 amount refundable' do
+      api_sign_in_as(reg.user)
+      get api_v1_registration_payments_path(reg), as: :json
+
+      charge = response.parsed_body['charges'].first
+      expect(charge['iso_amount_refundable']).to eq(1000)
+    end
+
+    it 'returns 500 amount refundable with partial refund' do
+      api_sign_in_as(reg.user)
+      create(:registration_payment, :refund, registration: reg, amount_lowest_denomination: -500)
+      get api_v1_registration_payments_path(reg), as: :json
+
+      charge = response.parsed_body['charges'].first
+      expect(charge['iso_amount_refundable']).to eq(500)
+    end
+
+    it 'returns 0 amount refundable with full refund' do
+      api_sign_in_as(reg.user)
+      create(:registration_payment, :refund, registration: reg)
+      get api_v1_registration_payments_path(reg), as: :json
+
+      charge = response.parsed_body['charges'].first
+      expect(charge['iso_amount_refundable']).to eq(0)
+    end
+  end
+
   describe 'POST #refund' do
     context 'when signed in as a competitor' do
       let(:competition) { create(:competition, :stripe_connected, :visible, :registration_open, events: Event.where(id: %w[222 333])) }
@@ -17,7 +55,7 @@ RSpec.describe 'API Registration Payments', :clean_db_with_truncation do
 
         post payment_refund_api_v1_registration_path(registration, :stripe, registration.id)
 
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 

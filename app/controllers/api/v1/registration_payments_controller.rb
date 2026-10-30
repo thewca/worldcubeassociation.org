@@ -21,7 +21,7 @@ class Api::V1::RegistrationPaymentsController < Api::V1::ApiController
     registration = Registration.includes(:competition).find(params.require(:id))
     competition = registration.competition
 
-    return head :unauthorized unless authenticated_user.can_manage_competition?(competition)
+    require_manage!(competition)
 
     payment_integration = params.require(:payment_integration).to_sym
     payment_account = competition.payment_account_for(payment_integration)
