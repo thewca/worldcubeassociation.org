@@ -5,13 +5,11 @@ import { LuArrowUp } from "react-icons/lu";
 type BackToTopButtonProps = {
   visible: boolean;
   buttonProps?: ButtonProps;
-  text?: string;
   parent?: HTMLDivElement | null;
 };
 
 export default function BackToTopButton({
   visible,
-  text,
   buttonProps,
   parent,
 }: BackToTopButtonProps) {
@@ -30,10 +28,10 @@ export default function BackToTopButton({
       zIndex="sticky"
       rounded="full"
       animation="fade-in"
-      p={text ? 4 : 0}
+      p={0}
       {...buttonProps}
     >
-      {text} <LuArrowUp />
+      <LuArrowUp />
     </IconButton>
   );
 }
