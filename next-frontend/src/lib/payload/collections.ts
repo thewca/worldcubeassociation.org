@@ -1,12 +1,13 @@
 import config from "@payload-config";
 import { cacheLife, cacheTag } from "next/cache";
-import { getPayload, type CollectionSlug } from "payload";
+import { getPayload, type CollectionSlug, type TypedLocale } from "payload";
 
 export const collectionCacheTag = (slug: CollectionSlug) =>
   `payload-collection:${slug}`;
 
 export async function getCachedCollection<TSlug extends CollectionSlug>(
   slug: TSlug,
+  locale?: TypedLocale,
   depth?: number,
   pagination = false,
   sort = "_order",
@@ -19,6 +20,7 @@ export async function getCachedCollection<TSlug extends CollectionSlug>(
 
   const { docs } = await payload.find({
     collection: slug,
+    locale,
     sort,
     pagination,
     depth,

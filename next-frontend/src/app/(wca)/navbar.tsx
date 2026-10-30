@@ -31,6 +31,7 @@ import {
 } from "@/components/MobileNav";
 import { getCachedGlobal } from "@/lib/payload/globals";
 import { getCachedCollection } from "@/lib/payload/collections";
+import { getT } from "@/lib/i18n/get18n";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -115,10 +116,12 @@ export default async function Navbar() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
+  const { lng } = await getT();
+
   const [navbar, socialLinksGlobal, avatarMenuEntries] = await Promise.all([
     getCachedGlobal("nav"),
     getCachedGlobal("social-links"),
-    getCachedCollection("avatarMenuEntries"),
+    getCachedCollection("avatarMenuEntries", lng),
   ]);
 
   const session = await getSession();

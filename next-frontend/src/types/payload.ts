@@ -774,6 +774,9 @@ export interface Tool {
 export interface AvatarMenuEntry {
   id: string;
   _order?: string | null;
+  /**
+   * Link text shown in the avatar menu in the top-right corner of the navbar. Keep it short.
+   */
   label: string;
   href: string;
   isRailsPage?: boolean | null;

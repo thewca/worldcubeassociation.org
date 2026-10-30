@@ -44,6 +44,11 @@ export const AvatarMenuEntries: CollectionConfig = {
       name: "label",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description:
+          "Link text shown in the avatar menu in the top-right corner of the navbar. Keep it short.",
+      },
     },
     {
       name: "href",
