@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_29_170000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1301,6 +1301,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_170000) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["competition_event_id", "number"], name: "index_rounds_on_competition_event_id_and_number", unique: true
     t.index ["linked_round_id"], name: "index_rounds_on_linked_round_id"
+    t.index ["participation_source_type", "participation_source_id"], name: "index_rounds_on_participation_source"
   end
 
   create_table "sanity_check_categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
