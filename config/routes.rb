@@ -102,8 +102,7 @@ Rails.application.routes.draw do
     post 'registrations/validate_and_convert_registrations' => 'registrations#validate_and_convert_registrations', as: :registrations_validate_and_convert
     get 'registrations/add' => 'registrations#add', as: :registrations_add
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
-    get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
-    get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
+    get 'registrations/psych-sheet(/:event_id)', to: redirect('/competitions/%{competition_id}/registrations')
     resources :registrations, only: %i[index edit], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'

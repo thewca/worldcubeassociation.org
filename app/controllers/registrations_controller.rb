@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index psych_sheet psych_sheet_event register stripe_webhook]
+  before_action :authenticate_user!, except: %i[index register stripe_webhook]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -23,9 +23,9 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: %i[index psych_sheet psych_sheet_event register payment_completion load_payment_intent stripe_webhook capture_paypal_payment]
+                except: %i[index register payment_completion load_payment_intent stripe_webhook capture_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index psych_sheet psych_sheet_event stripe_webhook]
+  before_action :competition_must_be_using_wca_registration!, except: %i[import do_import validate_and_convert_registrations add do_add index stripe_webhook]
   private def competition_must_be_using_wca_registration!
     return if competition_from_params.use_wca_registration?
 
@@ -238,23 +238,6 @@ class RegistrationsController < ApplicationController
 
   def edit_registrations
     @competition = competition_from_params
-  end
-
-  def psych_sheet
-    @competition = competition_from_params
-    most_main_event = @competition.events.min_by(&:rank)
-    redirect_to competition_psych_sheet_event_url(@competition.id, most_main_event.id)
-  end
-
-  def psych_sheet_event
-    @competition = competition_from_params
-    @event = Event.c_find(params[:event_id])
-    if @competition.results_posted?
-      render :psych_results_posted
-      return
-    end
-
-    @psych_sheet = @competition.psych_sheet_event(@event, params[:sort_by])
   end
 
   def index
