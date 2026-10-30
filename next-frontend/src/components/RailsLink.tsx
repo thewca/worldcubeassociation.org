@@ -5,15 +5,6 @@ interface RailsLinkProps extends LinkProps {
   href: string;
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL;
-
-if (!apiUrl) {
-  throw new Error("NEXT_PUBLIC_WCA_FRONTEND_API_URL is not set");
-}
-
-// Rails sits at the root of the public API host.
-const RAILS_ROOT_URL = new URL(apiUrl).origin;
-
 /**
  * A link to a page that is still served by the Rails monolith. It renders a
  * plain anchor so the browser does a full page load — routing it through
@@ -22,5 +13,11 @@ const RAILS_ROOT_URL = new URL(apiUrl).origin;
  * TODO: swap for `next/link` per call site as each target page is migrated.
  */
 export default function RailsLink({ href, ...props }: RailsLinkProps) {
-  return <Link {...props} href={`${RAILS_ROOT_URL}${href}`} />;
+  // Rails sits at the root of the public API host, and a root-relative `href` resolves against that.
+  return (
+    <Link
+      {...props}
+      href={new URL(href, process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL).href}
+    />
+  );
 }
