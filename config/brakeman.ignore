@@ -1,0 +1,235 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "1592fd74a5c4d475d5ab2fa8c25aa56bf22d675e65d7268fc90565b3c164a32c",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/registrations_controller.rb",
+      "line": 276,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Registration.find_by!(**params.permit(:competition_id, :user_id))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "RegistrationsController",
+        "method": "redirect_v2_attendee"
+      },
+      "user_input": "params.permit(:competition_id, :user_id)",
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ],
+      "note": "params are permitted to exactly :competition_id and :user_id; find_by! with a hash is parameterized"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "213c9ba0468beba064b5f4a6433b9ea2fdd08a582a12eb377aa4c41233a65597",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "lib/database_dumper.rb",
+      "line": 1497,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(\"INSERT INTO #{ActiveRecord::Base.configurations.configs_for(:name => dump_config_name.to_s, :include_hidden => true).configuration_hash[:database]}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DatabaseDumper",
+        "method": "self.with_dumped_db"
+      },
+      "user_input": "ActiveRecord::Base.configurations.configs_for(:name => dump_config_name.to_s, :include_hidden => true).configuration_hash[:database]",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "table/column names and sanitizers come from the hardcoded dump config; db name from database.yml"
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "2f2711fc1b8e62d155e38e05e93f66cc9410d9f04ece678c67262c2f10debd74",
+      "check_name": "FileAccess",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/competitions_controller.rb",
+      "line": 201,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.open(helpers.path_to_cached_pdf(competition_from_params(:includes => ({ :competition_venues => ({ :venue_rooms => ([:schedule_activities]) }), :competition_events => ({ :competition => ([]), :event => ([]), :rounds => ({ :competition => ({ :rounds => ([:competition_event]) }), :competition_event => ([]) }) }), :rounds => ({ :competition => ({ :rounds => ([:competition_event]) }) }), :delegates => ([:current_avatar, :delegate_role_metadata, :delegate_roles, { :active_roles => ([:metadata, { :group => :metadata }]) }]), :organizers => ([:current_avatar, :delegate_role_metadata, :delegate_roles, { :active_roles => ([:metadata, { :group => :metadata }]) }]) })), params.key?(:with_colors)))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CompetitionsController",
+        "method": "show"
+      },
+      "user_input": "params.key?(:with_colors)",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": "PDF path is built from the competition loaded from the DB and a boolean, not from raw params"
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "304f858c775c9c88c2cff48dd6d4064f3e3acfd22434d6c1f942999636d3c8a7",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/api/v0/competitions_controller.rb",
+      "line": 297,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Api::V0::CompetitionsController",
+        "method": "update_wcif"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ],
+      "note": "WCIF payload is validated against the WCIF JSON schema before use; too large to enumerate in permit"
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "42f8912db9163d219f00748efa87345ffa45411b0404d2c6668235b385469cd8",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/competitions_controller.rb",
+      "line": 577,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CompetitionsController",
+        "method": "params_for_competition_form"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ],
+      "note": "set_form_data! validates the payload against a JSON schema"
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "60772c7d1d2eaf491d191c8adc7f73aa5c8bc0bcb65fa166c1a6bd9711ddfe11",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/regulations_controller.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "RegulationsController",
+        "method": "ensure_trailing_slash"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ],
+      "note": "only used for url_for with only_path: true to rebuild the current URL with a trailing slash"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "64c543fba94488b0a0940b9146487d7ffb49db4844738437a77b143461d96a15",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/server_status_controller.rb",
+      "line": 101,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.select_one(\"SELECT #{EXPECTED_MYSQL_SETTINGS.keys.join(\", \")};\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MysqlSettingsCheck",
+        "method": "_status_description"
+      },
+      "user_input": "EXPECTED_MYSQL_SETTINGS.keys.join(\", \")",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "keys come from the EXPECTED_MYSQL_SETTINGS constant"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "c1990aadae8a29e190e583d8bac128d4d948ecef487bd453119eed25c1b9df7d",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "lib/database_dumper.rb",
+      "line": 1494,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(\"INSERT INTO #{ActiveRecord::Base.configurations.configs_for(:name => dump_config_name.to_s, :include_hidden => true).configuration_hash[:database]}.#{table_name} (#{dump_sanitizers[table_name][:column_sanitizers].reject do\n (column_sanitizer == :db_default)\n end.keys.map do\n ActiveRecord::Base.connection.quote_column_name(column_name)\n end.join(\", \")}) SELECT #{dump_sanitizers[table_name][:column_sanitizers].reject do\n (column_sanitizer == :db_default)\n end.map do\n if (column_sanitizer == :copy) then\n  \"#{(dump_sanitizers[table_name][:source_table] or table_name)}.#{column_name}\"\nelse\n  \"#{column_sanitizer} AS #{ActiveRecord::Base.connection.quote_column_name(column_name)}\"\nend\n end.join(\", \")} FROM #{(dump_sanitizers[table_name][:source_table] or table_name)} #{dump_sanitizers[table_name].fetch(:where_clause, \"\")} #{dump_sanitizers[table_name].fetch(:order_by_clause, \"\")}\".strip)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DatabaseDumper",
+        "method": "self.with_dumped_db"
+      },
+      "user_input": "ActiveRecord::Base.configurations.configs_for(:name => dump_config_name.to_s, :include_hidden => true).configuration_hash[:database]",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "table/column names and sanitizers come from the hardcoded dump config; db name from database.yml"
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "ce44539daa5c183f2c48d42fbabe7b7ae4d365cc0dbb4d98a9d36e9eea94e44e",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/api/v0/competitions_controller.rb",
+      "line": 265,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Api::V0::CompetitionsController",
+        "method": "check_wcif"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ],
+      "note": "WCIF payload is validated against the WCIF JSON schema before use; too large to enumerate in permit"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "fdb76c2784787dc4154cd1e973b3b2b1b93bc7dbd24c89ba8c272adae77e5b78",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/competition.rb",
+      "line": 96,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "joins(\"join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.id\\n      join events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id\").where(\"e#{event_id}.id = :event_id\", :event_id => event_id)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Competition",
+        "method": "has_event"
+      },
+      "user_input": "event_id",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "event_id is validated against Event.c_all_by_id.keys by the only caller (search)"
+    }
+  ],
+  "brakeman_version": "8.1.0"
+}
