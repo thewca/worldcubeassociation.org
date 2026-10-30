@@ -723,7 +723,8 @@ zh-CN:
         wrt: 该组负责管理WCA数据库中的所有数据，最重要的是比赛成绩和选手个人数据。
         wst: 该组负责管理WCA软件（官网、打乱程序、管理工具等）。
         wsot: 该团队负责监督和协助WCA成为一个国际认可的体育组织。
-        wapc: 该委员会负责审查和解决针对其他WCA员工所做决定的申诉。WAC提供独立、公正的审查流程，以确保决定公平、合理且符合WCA政策和规定。
+        wapc: 
+          该委员会负责审查和解决针对其他WCA志愿者所做决定的申诉。WAC提供独立、公正的审查流程，以确保决定公平、合理且符合WCA政策和规定。
     contacts:
       title: WCA联系表单
       faq_note_html: >-
@@ -1059,6 +1060,9 @@ zh-CN:
         locale: 地区设置
         group_name: 团队/委员会名称
         delegated_competitions_count: 担任代表的比赛场数
+        wca_id: WCA ID
+        location: 国家/地区
+        email: 邮箱
   user_groups:
     group_types:
       board: WCA董事会
@@ -1394,6 +1398,12 @@ zh-CN:
         mean: 平均
       errors:
         round_closed: 该轮尚未开始
+      overview:
+        upcoming: 即将推出
+        in_progress: 现在
+        past_month: 过去一个月
+        no_upcoming: 目前没有即将举行且提供实时赛果的赛事。
+        search: 搜索比赛
     my_competitions:
       title: 我的比赛
       disclaimer: 只有使用 WCA 报名系统的比赛会列在此处。如果你的比赛没有列在下方，请查阅比赛官网的选手列表。
@@ -2273,6 +2283,7 @@ zh-CN:
       date_circa: 日期
   notifications:
     connect_wca_id: 关联 WCA ID 到你的账号！
+    copied_to_clipboard: 已复制到剪贴板
   payments:
     header: 付款记录
     messages:
@@ -2578,6 +2589,7 @@ zh-CN:
       total_delegated: 总共监督
       lead_delegated: 担任主代表的比赛
       history: 历史
+    copy_email: 复制邮箱
   regional_organizations:
     title: 区域组织
     content: WCA承认下列区域组织：

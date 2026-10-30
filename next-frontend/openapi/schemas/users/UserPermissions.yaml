@@ -29,9 +29,10 @@ properties:
       scope:
         $ref: "./CompetitionPermissions.yaml"
       until:
-        type: string
+        type:
+          - string
+          - "null"
         format: date-time
-        nullable: true
   can_organize_competitions:
     type: object
     required:
@@ -180,4 +181,5 @@ properties:
               type: string
           - type: string
             format: "Wildcard"
-            enum: "*"
+            enum:
+              - "*"

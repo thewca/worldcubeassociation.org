@@ -108,6 +108,7 @@ EnvConfig = SuperConfig.new(raise_exception: !is_compiling_assets) do
   # send people onwards to it, and it serves its own /persons and /delegates.
   # Defaults to this app so that development and tests stay self-contained.
   optional :NEXT_FRONTEND_URL, :string, default_root_url
+  optional :PAYLOAD_DATABASE_URI, :string, ''
   mandatory :OIDC_ALGORITHM, :string
 
   # For server status

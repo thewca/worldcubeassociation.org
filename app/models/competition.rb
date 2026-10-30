@@ -391,9 +391,9 @@ class Competition < ApplicationRecord
     errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(no_event_without_rounds? && schedule_includes_rounds?)
   end
 
-  validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_at_changed?, on: :update
-  def advancement_condition_must_be_present_for_all_non_final_rounds
-    errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds')) unless rounds.all?(&:advancement_condition_is_valid?)
+  validate :participation_condition_must_be_present_for_all_non_initial_rounds, if: :confirmed_at_changed?, on: :update
+  def participation_condition_must_be_present_for_all_non_initial_rounds
+    errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds')) unless rounds.all?(&:participation_condition_is_valid?)
   end
   private def should_validate_registration_closing?
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
@@ -598,7 +598,7 @@ class Competition < ApplicationRecord
       # message on the edit schedule page?
       warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_event_without_rounds? && schedule_includes_rounds?
 
-      warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:advancement_condition_is_valid?)
+      warnings[:participation_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:participation_condition_is_valid?)
 
       rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
         warnings["cutoff_is_greater_than_time_limit#{round.id}"] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
@@ -1440,8 +1440,8 @@ class Competition < ApplicationRecord
     competition_events.any? { |ce| ce.rounds.any?(&:cutoff) }
   end
 
-  def uses_advancement_condition?
-    competition_events.any? { |ce| ce.rounds.any?(&:advancement_condition) }
+  def uses_participation_condition?
+    competition_events.any? { |ce| ce.rounds.any?(&:participation_condition?) }
   end
 
   def uses_cumulative?
@@ -1462,11 +1462,12 @@ class Competition < ApplicationRecord
     # We want to trigger the checks for qualification details even when
     # the actual qualification requirements have not been filled out yet for a newly created competition.
     # In other words, checking the `qualification_results` checkbox should be enough to trigger validations.
-    self.qualification_results? || competition_events.any?(&:qualification)
+    self.qualification_results? || competition_events.any?(&:qualification_condition?)
   end
 
   def qualification_date_to_events
-    competition_events.select(&:qualification).group_by { |e| e.qualification.when_date }
+    competition_events.filter(&:qualification_condition?)
+                      .group_by(&:qualification_latest_date)
   end
 
   # The name `is_probably_over` is meant to be surprising.
@@ -1492,6 +1493,23 @@ class Competition < ApplicationRecord
 
   def winning_results
     results.includes(:result_attempts).winners
+  end
+
+  # A Dual Round podium merges both linked rounds, so the podium is grouped by event rather than
+  # by round. Every round of a link shares an event and a format, which lets those sit here.
+  def to_v1_podiums_json
+    final_rounds_by_event = rounds.final.includes(competition_event: :event).index_by(&:event)
+
+    events_with_podium_results.map do |event, podium_results|
+      podium_round = final_rounds_by_event[event]
+
+      {
+        "event_id" => event.id,
+        "format_id" => podium_round.format_id,
+        "ranking_mode" => podium_round.ranking_mode,
+        "results" => podium_results.as_json(Result::V1_ROUND_SERIALIZE_OPTIONS),
+      }
+    end
   end
 
   def person_ids_with_results
@@ -1707,6 +1725,9 @@ class Competition < ApplicationRecord
       event_ids = params[:event_ids].presence
       raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'") unless event_ids.is_a?(Array)
 
+      unknown_event_ids = event_ids - Event.c_all_by_id.keys
+      raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{unknown_event_ids.join(', ')}'") if unknown_event_ids.any?
+
       event_ids.each do |event_id|
         # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
         #   but is actually necessary to make sure that the competition holds ALL of the required events
@@ -1734,6 +1755,13 @@ class Competition < ApplicationRecord
       raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'") unless target_date
 
       competitions = competitions.where(end_date: target_date..)
+    end
+
+    if params[:scoretaking_software].present?
+      scoretaking_software = params[:scoretaking_software].to_s
+      raise WcaExceptions::BadApiParameter.new("Invalid scoretaking_software: '#{scoretaking_software}'") unless Competition.scoretaking_softwares.key?(scoretaking_software)
+
+      competitions = competitions.where(scoretaking_software: scoretaking_software)
     end
 
     if params[:announced_after].present?
@@ -1932,19 +1960,12 @@ class Competition < ApplicationRecord
     return {} unless uses_qualification?
 
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    serialization_method = at_least_v2 ? :v2_qualification_wcif : :v1_qualification_wcif
 
-    if at_least_v2
-      competition_events
-        .where.not(qualification_condition: nil)
-        .index_by(&:event_id)
-        .transform_values(&:v2_qualification_wcif)
-    else
-      competition_events
-        .where.not(qualification: nil)
-        .index_by(&:event_id)
-        .transform_values(&:qualification)
-        .transform_values(&:to_wcif)
-    end
+    competition_events
+      .where.not(qualification_condition: nil)
+      .index_by(&:event_id)
+      .transform_values(&serialization_method)
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
@@ -2268,6 +2289,12 @@ class Competition < ApplicationRecord
     include: %w[delegates organizers],
   }.freeze
 
+  INDEX_SERIALIZE_OPTIONS = {
+    only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
+    methods: %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types],
+    include: {},
+  }.freeze
+
   def serializable_hash(options = nil)
     # The intent behind this is to have a "good" default setup for serialization.
     # We also want the caller to be able to be picky about the attributes included
@@ -2292,8 +2319,11 @@ class Competition < ApplicationRecord
     cal = Icalendar::Calendar.new
     all_activities.each do |activity|
       event = Icalendar::Event.new
-      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
-      event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
+      # TZID=UTC makes icalendar emit the RFC 5545 UTC form (DTSTART:20261003T151500Z)
+      # with no TZID parameter. Google Calendar and other clients often mishandle
+      # TZID=Etc/UTC when no VTIMEZONE is present; see #7587 / #7590.
+      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time.utc, "TZID" => "UTC")
+      event.dtend = Icalendar::Values::DateTime.new(activity.end_time.utc, "TZID" => "UTC")
       event.summary = activity.localized_name
       cal.add_event(event)
     end

@@ -28,6 +28,11 @@ dump_public_results_database:
   cron: "0 0 * * *"
   queue: wca_jobs
 
+dump_payload_database:
+  class: "DumpPayloadDatabase"
+  cron: "0 2 * * *"
+  queue: wca_jobs
+
 unstick_posts:
   class: "UnstickPosts"
   cron: "0 * * * *"

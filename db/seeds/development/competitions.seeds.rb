@@ -63,7 +63,6 @@ after "development:users", "development:user_roles" do
 
       round_types.each_with_index do |round_type_id, j|
         round_format = event.preferred_formats.first.format
-        is_final = j == round_types.length - 1
 
         round = competition_event.rounds.create!(
           format: round_format,
@@ -71,7 +70,6 @@ after "development:users", "development:user_roles" do
           total_number_of_rounds: round_types.length,
           time_limit: event.can_change_time_limit? ? TimeLimit.new : nil,
           cutoff: nil,
-          advancement_condition: is_final ? nil : AdvancementConditions::RankingCondition.new(16),
           participation_source: j.zero? ? competition_event : competition_event.rounds.last,
           participation_condition: ResultConditions::Ranking.new(scope: round_format.sort_by, value: 16),
           scramble_set_count: rand(1..4),

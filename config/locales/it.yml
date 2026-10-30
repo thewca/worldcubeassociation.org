@@ -144,15 +144,15 @@ it:
     time:
       one: '%{count} tentativo per fare < %{time}'
       many: '%{count} tentativi per fare < %{time}'
-      other:
+      other: '%{count} tentativi per fare < %{time}'
     moves:
       one: '%{count} tentativo per fare < %{moves} mosse'
       many: '%{count} tentativi per fare < %{moves} mosse'
-      other:
+      other: '%{count} tentativi per fare < %{moves} mosse'
     points:
       one: '%{count} tentativo per fare < %{points} punti'
       many: '%{count} tentativi per fare < %{points} punti'
-      other:
+      other: '%{count} tentativi per fare < %{points} punti'
   time_limit:
     cumulative:
       one_round: '%{time} cumulativi'
@@ -198,7 +198,7 @@ it:
   common:
     world: Mondo
     continent: Continente
-    country: Nazione
+    country: Regione
     here: qui
     best: Migliore
     single: Singolo
@@ -216,7 +216,7 @@ it:
     days:
       one: un giorno
       many: '%{count} giorni'
-      other:
+      other: '%{count} giorni'
     search_site: Cerca nel sito
     filter: Filtra
     delete: Cancella
@@ -226,6 +226,8 @@ it:
     solve_time:
       unit_seconds: secondi
       unit_moves: mosse
+    back_to_top: Torna all'inizio
+    back: Indietro
   oauth:
     applications:
       your_apps: Le tue Applicazioni OAuth
@@ -268,7 +270,7 @@ it:
         delegate_status: Stato del delegato
         location: Posizione
         region: Regione
-        subRegion: Subregion
+        subRegion: Sottoregione
         receive_developer_mails: >-
           Desidero ricevere notifiche relative alle modifiche apportate alle
           risorse software WCA.
@@ -355,7 +357,7 @@ it:
         status: Stato
       regional_organization:
         name: Nome
-        country: Nazione
+        country: Regione
         website: Sito web
         logo: Logo
         email: Email
@@ -601,6 +603,8 @@ it:
     passwords:
       edit:
         new_password_confirmation: Conferma nuova password
+      send_paranoid_instructions: Un link di recupero password verrà inviato 
+        all'indirizzo email, se questo è associato a un account WCA.
     sessions:
       new:
         sign_in: Accedi
@@ -710,6 +714,9 @@ it:
           disabled_success: Autenticazione a due fattori disabilitata con 
             successo.
           disabled_failed: 'Impossibile disabilitare 2FA, vedi errori qui sotto.'
+        redesign_notice: Stai visualizzando la nuova pagina di accesso, che 
+          sostituirà definitivamente quella vecchia entro la fine dell'anno.
+        use_classic: Torna alla vecchia pagina di accesso
       destroy_other:
         success: Disconnesso con successo dagli altri dispositivi.
     shared:
@@ -726,14 +733,17 @@ it:
     mailer:
       confirmation_instructions:
         subject: Conferma il nuovo indirizzo email
-    registrations: {}
+    registrations:
+      new:
+        redesign_notice: Stai visualizzando la nuova pagina di registrazione, 
+          che sostituirà definitivamente quella vecchia entro la fine dell'anno.
   wca:
     errors:
       messages:
         form_error:
           one: 'Il form contiene un errore:'
           many: 'Il form contiene %{count} errori:'
-          other:
+          other: 'Il form contiene %{count} errori:'
       error_pages:
         500_error: Siamo spiacenti. Qualcosa è andato storto.
         500_contact_html: '<a href=%{contact_url}>Clicca qui</a> per segnalarlo.'
@@ -769,6 +779,10 @@ it:
         email: Accedere al tuo indirizzo email
         manage_competitions: Gestisci una competizione futura che stai 
           organizzando
+        manage_registrations: Iscriviti alle competizioni e modifica/annulla le 
+          tue iscrizioni
+        translations: Consulta la lista delle lingue per cui sei un traduttore 
+          WCA
     devise:
       no_account: Non hai un account?
       have_competed: Ho già partecipato a una competizione WCA
@@ -778,12 +792,12 @@ it:
         Bentornato! Per creare il tuo account sul sito WCA, ci serve conoscere
         il WCA ID con cui hai gareggiato.
       welcome_html: >-
-        Benvenuto! Prima che tu possa partecipare alla tua prima competizione
-        WCA, ci servono alcune informazioni utili al mantenimento dei record e
-        delle statistiche. Nota: la tua data di nascita non sarà mai divulgata
-        senza il tuo consenso.<br/><br/>Se stai effettuando la registrazione per
-        conto di qualcun altro, fornisci le informazioni relative al
-        <strong>partecipante</strong>.
+        Benvenuto! Prima che tu possa partecipare alla tua prima competizione WCA,
+        ci servono alcune informazioni utili al mantenimento dei record e delle statistiche.<br/><br/>Se
+        stai effettuando la registrazione per conto di qualcun altro, fornisci le
+        informazioni relative al <strong>partecipante</strong>.
+      dob_privacy: Queste informazioni non verranno mai diffuse senza il tuo 
+        permesso.
   layouts:
     navigation:
       information: Informazioni
@@ -1123,7 +1137,7 @@ it:
         Consulta i record attuali e storici per tutte le discipline ufficiali
         WCA.
     volunteer:
-      title: Volontario
+      title: Contribuisci
       text: >-
         Partecipa anche tu! La WCA offre opportunità di volontariato in diversi
         team. Non è necessario essere un speedcuber per diventare volontario.
@@ -1320,11 +1334,10 @@ it:
         altro account.
       cannot_edit:
         msg: >-
-          Non puoi cambiare il tuo nome, data di nascita, sesso o nazione.
-          Motivazione: %{reason}. Contatta il <a href='%{wrt_contact_path}'
-          target='_blank'>WCA Results Team</a> o il tuo <a
-          href='%{delegate_url}'>Delegato</a> se hai bisogno di effettuare
-          modifiche.
+          Non puoi cambiare il tuo nome, data di nascita, sesso o regione. Motivazione:
+          %{reason}. Contatta il <a href='%{wrt_contact_path}' target='_blank'>WCA
+          Results Team</a> o il tuo <a href='%{delegate_url}'>Delegato</a> se hai
+          bisogno di effettuare modifiche.
         reason:
           no_access: non hai i permessi per modificare l'utente
           assigned: hai un WCA ID assegnato
@@ -1450,6 +1463,7 @@ it:
         il WCA Results Team tramite <a href="%{dob_form_path}">questo
         modulo</a>.
       unknown_wca_id_html: 'Il WCA ID %{link_id} non esiste.'
+      search_for_delegate: Cerca un Delegato
   user_roles:
     email:
       role_metadata:
@@ -1458,6 +1472,9 @@ it:
         locale: Locale
         group_name: Nome team/commissione
         delegated_competitions_count: Numero di competizioni delegate
+        wca_id: WCA ID
+        location: Posizione
+        email: Email
   user_groups:
     group_types:
       board: Consiglio Direttivo WCA
@@ -1473,12 +1490,12 @@ it:
       need_name: Serve un nome
       need_gender: È necessario un genere
       need_dob: È necessaria una data di nascita
-      need_country: È necessaria una nazione
+      need_country: È richiesta una regione
       must_register: È necessario iscriversi almeno a un evento.
       exceeds_event_limit:
         one: Devi iscriverti a un solo evento.
         many: Devi iscriverti da uno a un massimo di %{count} eventi.
-        other:
+        other: Devi iscriverti da uno a un massimo di %{count} eventi.
       banned_html: >-
         Sei attualmente squalificato. Se ritieni che ci sia un errore, contatta
         il <a href='mailto:integrity@worldcubeassociation.org'
@@ -1497,19 +1514,20 @@ it:
         Devi lasciare un commento. Leggi i requisiti di iscrizione in alto per
         sapere quali informazioni sono richieste (es. in una competizione FMC
         con più sedi in contemporanea, in quale sede intendi competere).
+      banned_until: Il tuo ban sarà revocato il %{date}.
     registration_info_people:
       newcomer:
         one: esordiente
         many: esordienti
-        other:
+        other: esordienti
       returner:
         one: veterano
         many: veterani
-        other:
+        other: veterani
       person:
         one: persona
         many: persone
-        other:
+        other: persone
     flash:
       not_using_wca: Questa competizione non sta usando le iscrizioni sul sito 
         WCA
@@ -1585,9 +1603,9 @@ it:
       title: 'Iscrizioni per la competizione %{comp}'
       edit: Modifica
       country_plural:
-        one: Una nazione
-        many: '%{count} nazioni'
-        other:
+        one: Una regione
+        many: '%{count} regioni'
+        other: '%{count} regioni'
       email: Email
       non_competing: Iscrizioni non-partecipanti
       not_paid: Non pagato
@@ -1597,6 +1615,11 @@ it:
       payment_requested_on: 'Richiesta di pagamento il: %{date}'
       series_registrations: Iscrizioni alla Serie
       total: Totale
+      export_to_csv:
+        one: Esporta %{count} iscrizione in formato CSV
+        many: Esporta %{count} iscrizioni in formato CSV
+        other: Esporta %{count} iscrizioni in formato CSV
+      export_all_to_csv: Esporta tutte le iscrizioni in formato CSV
     new_registration:
       title: 'Registrati per la competizione %{comp}'
     sign_in: Accedi
@@ -1738,8 +1761,9 @@ it:
         conseguenza.
       registrations_file_label: File delle iscrizioni
       registrations_file_hint: >-
-        File CSV con colonne: Status, Name, Region, WCA ID, Birth Date, Gender,
-        Email e una colonna per ogni evento.
+        File CSV con le colonne: Status, Nome, Regione, WCA ID, Data di nascita, Sesso,
+        E-mail e una colonna per ciascun evento, oppure file JSON contenente i dati
+        WCIF.
       import: Importa
       errors:
         error: 'Errore durante l''importazione di %{registration}: %{error}.'
@@ -1769,6 +1793,10 @@ it:
           (anno-mese-giorno, per esempio 1944-07-13). Le seguenti date non
           possono essere analizzate: %{raw_dobs}.
         empty_file: Il file è vuoto.
+        invalid_country: 'Paese non valido: %{country}.'
+        invalid_wcif: Il file JSON non contiene dati WCIF validi.
+        unsupported_file_format: Formato file non supportato. Carica un file 
+          JSON o CSV.
       preview: Anteprima dati di iscrizione
       cancel: Annulla
     add:
@@ -1895,8 +1923,10 @@ it:
       spots_left:
         one: Un posto rimasto
         many: '%{count} posti rimasti'
-        other:
+        other: '%{count} posti rimasti'
       no_spots_left: Competizione al completo
+      provisional_live_results: 'Nel frattempo, puoi consultare i risultati provvisori
+        qui:'
     live:
       title: Risultati in diretta
       round_state:
@@ -1955,12 +1985,12 @@ it:
           next_to_advance:
             one: Il prossimo partecipante ad avanzare è %{competitors}
             many: I prossimi partecipanti ad avanzare sono %{competitors}
-            other:
+            other: I prossimi partecipanti ad avanzare sono %{competitors}
           advance: Fai avanzare il prossimo partecipante
           quit_confirm:
             one: Elimina il partecipante dal turno
             many: Elimina i partecipanti dal turno
-            other:
+            other: Elimina i partecipanti dal turno
           bulk:
             success: 'Eliminati %{count} partecipanti con successo'
             failure: Impossibile eliminare in blocco i partecipanti
@@ -1977,6 +2007,9 @@ it:
             risultati sono ancora in elaborazione
           in_batch: Non è possibile rimuovere un partecipante i cui risultati 
             fanno parte di un batch non inviato
+          scoresheet_warning: Assicurati di eliminare un partecipante solo 
+            quando hai fisicamente in mano il suo foglio dei risultati vuoto. 
+            Non è possibile reinserire un partecipante in un turno già chiuso.
         add_competitor:
           single_round: Aggiungi partecipante al turno
           multiple_rounds:
@@ -1984,17 +2017,22 @@ it:
             many: Aggiungi il partecipante a questo turno. Poiché il secondo 
               turno del doppio turno è ancora chiuso, dovrai aggiungerlo 
               successivamente.
-            other:
+            other: Aggiungi il partecipante a questo turno. Poiché il secondo 
+              turno del doppio turno è ancora chiuso, dovrai aggiungerlo 
+              successivamente.
           event_edit_warning: Questo partecipante non è iscritto a questo 
             evento, e la competizione non consente ulteriori modifiche 
             all'iscrizione agli eventi. L'aggiunta sarà comunque possibile, ma 
             assicurati di voler procedere.
+          round_closed: Non è possibile inserire un partecipante in un turno già
+            chiuso
         close: Chiudi
         submit_results: Invia risultati
         add_to_batch: Aggiungi al batch
         remove_from_batch: Rimuovi dal batch
         batch_mode: Modalità batch
         submit_batch: Invia batch (%{count})
+        first_timer: Esordiente
       results:
         competitor: Partecipante
         mean: Media
@@ -2007,8 +2045,15 @@ it:
           competizione per sapere dove consultare i risultati in diretta.
         wca_live: "Questa competizione utilizza WCA Live per l'immissione dei risultati.
           Clicca su questo link per vedere i risultati in diretta:"
+      overview:
+        upcoming: In programma
+        in_progress: In corso
+        past_month: Mese scorso
+        no_upcoming: Non ci sono competizioni in programma con risultati in 
+          tempo reale.
+        search: Cerca competizioni
     my_competitions:
-      title: Le mie competizioni
+      title: Le mie Competizioni
       disclaimer: >-
         Solamente le competizioni che utilizzano il sistema di iscrizione sul
         sito WCA sono visibili qui. Se la tua competizione non è elencata qui,
@@ -2049,12 +2094,12 @@ it:
       organizer_plural:
         one: Organizzatore
         many: Organizzatori
-        other:
+        other: Organizzatori
       organization_team: Team organizzativo
       delegate:
         one: Delegato WCA
         many: Delegati WCA
-        other:
+        other: Delegati WCA
       contact: Contatti
       information: Informazioni
       events: Eventi
@@ -2125,11 +2170,12 @@ it:
         one: Ciascun partecipante può portare UN SOLO accompagnatore.
         many: Ciascun partecipante può portare un massimo di %{count} 
           accompagnatori.
-        other:
+        other: Ciascun partecipante può portare un massimo di %{count} 
+          accompagnatori.
       event_limit:
         one: I partecipanti possono iscriversi a un solo evento.
         many: I partecipanti possono iscriversi a un massimo di %{count} eventi.
-        other:
+        other: I partecipanti possono iscriversi a un massimo di %{count} eventi.
       require_qualification: >-
         I partecipanti possono iscriversi soltanto agli eventi per cui sono
         qualificati.
@@ -2183,6 +2229,7 @@ it:
       bookmark: Salva competizione
       is_bookmarked: Hai salvato questa competizione
       number_of_bookmarks: Numero di salvataggi
+      waiting_list_size: Numero di persone in lista d'attesa
     index:
       title: Competizioni
       all_events: Tutti
@@ -2224,7 +2271,7 @@ it:
         past_all: Competizioni passate di tutti gli anni
         recent: 'Competizioni recenti (ultimi %{count} giorni)'
         upcoming: Competizioni future
-        ongoing_and_upcoming: Competizioni imminenti e in corso
+        ongoing_and_upcoming: Competizioni in programma e in corso
         custom: Competizioni nel periodo di tempo selezionato
         by_announcement: 'Competizioni ordinate per data di annuncio, dalla più recente'
       tooltips:
@@ -2245,6 +2292,35 @@ it:
             lista d'attesa.
       no_more_comps: Nessuna competizione.
       no_comp_found: Nessuna competizione trovata.
+      all_competitions: Tutte le competizioni
+      event: Evento
+      name: Nome
+      location: Posizione
+      location_placeholder: Inserisci un indirizzo
+      use_my_location: Usa la mia posizione
+      location_sign_in_required: Accedi per cercare un indirizzo
+      location_not_found: Nessuna posizione trovata per questo indirizzo
+      location_search_failed: La ricerca per indirizzo non è andata a buon fine.
+        Riprova tra poco.
+      distance: Distanza
+      distance_units:
+        km: km
+        mi: mi
+      advanced_filters: Filtri avanzati
+      registration_key: 'Chiave di iscrizione:'
+      registration_status:
+        open: Aperte
+        not_open: Non ancora aperte
+        closed: Chiuse
+      currently_displaying:
+        one: 'Attualmente visualizzata: %{count} competizione'
+        many: 'Attualmente visualizzate: %{count} competizioni'
+        other: 'Attualmente visualizzate: %{count} competizioni'
+      register_now: Iscriviti ora
+      view_competition: Vedi competizione
+      why_compete_description_html: |-
+        <p>Le competizioni non sono solo una gara a chi è più veloce: sono eventi sociali! Chiunque sappia risolvere un cubo è il benvenuto a partecipare e stabilire un nuovo record personale. Fare amicizia è facile, perché tutti collaborano per portare avanti la competizione.</p>
+        <p>Usa lo strumento qui sotto per trovare una competizione vicino a te e iniziare il tuo viaggio nel mondo del cubing!</p>
     my_competitions_table:
       edit: Modifica
       registrations: Iscrizioni
@@ -2322,7 +2398,7 @@ it:
         short_name: Nickname della competizione
         name_reason: Motivazioni del nome
         venue:
-          country_id: Nazione
+          country_id: Regione
           city_name: Città
           name: Sede
           details: Dettagli della sede
@@ -2516,8 +2592,8 @@ it:
           external_registration_page: >-
             La pagina dove i partecipanti devono iscriversi alla competizione.
             Deve avere un url http(s) valido.
-          scoretaking_software: 'Seleziona "%{choice_ilr}" se desideri usare i doppi
-            turni'
+          scoretaking_software: 'Seleziona ''%{choice_ilr}'' o uno strumento esterno
+            se desideri usare i doppi turni'
         entry_fees:
           currency_code: La valuta delle tasse di iscrizione.
           base_entry_fee: >-
@@ -2688,7 +2764,7 @@ it:
         spots_remaining_plural:
           one: '%{count} posto rimanente'
           many: '%{count} posti rimanenti'
-          other:
+          other: '%{count} posti rimanenti'
         no_spots_remaining: Nessun posto rimanente
         pending:
           title: Iscrizioni in attesa
@@ -2718,6 +2794,8 @@ it:
           pending_waitlist_combined_skipped_warning: >-
             Hai saltato %{count} iscrizioni precedenti in attesa o in lista
             d'attesa. Sei sicuro di voler accettare le iscrizioni selezionate?
+          information: I partecipanti approvati sono confermati come idonei a 
+            partecipare alla competizione, negli eventi a cui sono iscritti.
         cancelled:
           title: Iscrizioni cancellate
           information: I partecipanti cancellati possono iscriversi di nuovo.
@@ -2747,6 +2825,7 @@ it:
           comprese le quote di iscrizioni, le politiche di rimborso e qualsiasi
           altro requisito ivi elencato.
         next_step: Prosegui alla fase successiva
+        accept: Accetta
       update:
         being_updated: L'iscrizione è in fase di aggiornamento...
         being_deleted: L'iscrizione è in fase di cancellazione...
@@ -2769,7 +2848,7 @@ it:
         move_to:
           one: Sposta %{count} in
           many: Sposta %{count} in
-          other:
+          other: Sposta %{count} in
         move_to_none_selected: Sposta in
         pending: In attesa
         waitlist: Lista d'attesa
@@ -2782,6 +2861,16 @@ it:
           partecipanti di %{count}.
         no_self_update: Contatta il Team Organizzativo per aggiornare la tua 
           iscrizione.
+        send_email:
+          one: Invia email a %{count} indirizzo
+          many: Invia email a %{count} indirizzi
+          other: Invia email a %{count} indirizzi
+        copy_emails:
+          one: Copia %{count} indirizzo email
+          many: Copia %{count} indirizzi email
+          other: Copia %{count} indirizzi email
+        scroll_to: Scorri a
+        non_competing: Non partecipante
       register:
         will_open_countdown: >-
           Le iscrizioni apriranno tra %{minutes} minuti e %{seconds} secondi.
@@ -2836,6 +2925,11 @@ it:
         event_limit: >-
           Per questa competizione, il numero massimo di eventi ai quali è
           possibile iscriversi è %{max_events}.
+        comment_overview: I tuoi commenti
+        waiting_list_count:
+          one: C'è %{count} partecipante in lista d'attesa.
+          many: Ci sono %{count} partecipanti in lista d'attesa.
+          other: Ci sono %{count} partecipanti in lista d'attesa.
       errors:
         events: Caricamento degli eventi fallito. Riprovare.
         '-1': >-
@@ -3151,7 +3245,8 @@ it:
           sede della competizione.
         many: Stai vedendo il programma relativo alla sede %{venue_name}, una 
           delle %{count} sedi della competizione.
-        other:
+        other: Stai vedendo il programma relativo alla sede %{venue_name}, una 
+          delle %{count} sedi della competizione.
       venue_selection_all: >-
         Stai vedendo il programma per tutte le %{venueCount} sedi
         contemporaneamente.
@@ -3285,6 +3380,7 @@ it:
       date_circa: Data
   notifications:
     connect_wca_id: Connetti il tuo WCA ID con il tuo account!
+    copied_to_clipboard: Copiato negli appunti
   payments:
     header: Storico pagamenti
     messages:
@@ -3745,6 +3841,9 @@ it:
     codeofconduct: Codice di Condotta
     finances: Finanze
     strategic_plan: Piano strategico
+    motion_not_found: Mozione non trovata
+    motion_not_found_action: Non siamo riusciti a trovare una mozione con il 
+      numero “%{motion_id}”. Potrebbe essere stata abrogata.
   education:
     title: Guide WCA per l'apprendimento
     description: >-
@@ -3754,6 +3853,7 @@ it:
     judge_tutorial: Tutorial per i giudici
     competition_templates: Template per competizioni
     certificates: Template del WCT per gli attestati
+    orga_handbook: Manuale per gli organizzatori
   delegates_page:
     title: Delegati WCA
     acknowledges: 'La WCA riconosce i seguenti Delegati WCA:'
@@ -3768,6 +3868,7 @@ it:
       total_delegated: Gare totali da Delegato
       lead_delegated: Competizioni da Delegato principale
       history: Cronologia
+    copy_email: 'Copia email'
   regional_organizations:
     title: Organizzazioni regionali
     content: 'La WCA riconosce le seguenti Organizzazioni Regionali:'
@@ -3974,6 +4075,7 @@ it:
         posts: Nessun messaggio trovato per
         incidents: Nessun incidente trovato per
         regulations_and_guidelines: Nessun Regolamento trovato per
+      empty_query: Prova a cercare qualcosa!
   incidents_log:
     i18n_disclaimer: >-
       Nota che la sezione incidenti è disponibile soltanto in inglese. Il
@@ -4410,6 +4512,11 @@ it:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} è nella posizione sbagliata: prevista
         %{expected_pos}, inserita %{pos}.
+      automatically_global_position_fixed_info: '[%{round_id}] La posizione generale
+        di %{person_name} è stata corretta automaticamente da %{pos} a %{expected_pos}.'
+      wrong_global_position_in_results_error: '[%{round_id}] %{person_name} si trova
+        nella posizione generale sbagliata: previsto %{expected_pos}, ma risultato
+        %{pos}.'
     rounds:
       too_many_qualified_warning: >-
         Turno %{round_id}: si sono qualificati al turno successivo più
@@ -4508,4 +4615,92 @@ it:
     stakeholder_role:
       actioner: Esecutore
       requester: Committente
-  trainee_delegate_application: {}
+  trainee_delegate_application:
+    title: Candidatura per Delegato in prova
+    introduction: Questo modulo è rivolto agli speedcuber iscritti alla WCA che 
+      desiderano candidarsi per diventare Delegato in prova. La tua candidatura 
+      sarà inviata ai Delegati responsabili per la regione da te selezionata.
+    success_title: Candidatura inviata
+    success: La tua candidatura è stata inviata con successo. Una copia è stata 
+      inviata all'indirizzo email associato al tuo account WCA.
+    eligibility:
+      title: Non puoi ancora inviare questa candidatura
+      missing_wca_id: Il tuo account WCA deve essere collegato a un WCA ID.
+      missing_date_of_birth: Il tuo account WCA deve avere una data di nascita 
+        verificata.
+      underage: I candidati devono avere almeno %{minimum_age} anni.
+      claim_wca_id: Inserisci il tuo WCA ID.
+      edit_profile: Richiedi un aggiornamento del profilo.
+    errors:
+      invalid_region: Seleziona una regione valida e attiva per cui delegare.
+      missing_reviewer: La regione selezionata non ha attualmente un Delegato 
+        regionale o Delegato Senior che può ricevere la candidatura.
+      recommender_required: Seleziona almeno un Delegato referente.
+      invalid_recommender: Uno o più Delegati referenti selezionati non sono più
+        idonei per la regione scelta.
+      spoken_delegate_required: Indica almeno un Delegato a pieno titolo o 
+        Junior con cui hai parlato.
+      invalid_spoken_delegate: Uno o più Delegati che hai indicato non sono più 
+        Delegati attivi nella regione scelta.
+      declarations_required: Tutte le dichiarazioni devono essere confermate.
+      business_involvement_required: Indica se sei coinvolto in un'attività 
+        legata al cubing.
+      business_involvement_explanation_required: Spiega in che modo sei 
+        coinvolto in un'attività legata al cubing.
+    form:
+      declaration_and_basic_information: Dichiarazione e informazioni di base
+      name: Nome
+      wca_id: WCA ID
+      email: Email
+      age: Età
+      competition_count: Numero di competizioni
+      region_and_references: Regione e riferimenti
+      region: In quale regione vivi attualmente?
+      region_placeholder: Seleziona la tua regione
+      subregion: In quale sottoregione di Delegati vivi attualmente?
+      subregion_placeholder: Seleziona la tua sottoregione
+      reviewing_delegate: Delegato revisore
+      spoken_delegates: Con quali Delegati Junior o a pieno titolo hai parlato 
+        riguardo alla possibilità di diventare un Delegato in prova?
+      recommenders: Quali Delegati Junior o a pieno titolo della tua regione 
+        hanno accettato di raccomandarti come candidato per il ruolo di Delegato
+        in prova?
+      delegates_placeholder: Seleziona almeno un Delegato
+      experience_and_motivation: Esperienze e motivazioni
+      introduction: Presentati brevemente in 2-4 frasi.
+      competition_contributions: Descrivi brevemente in che modo hai contribuito
+        alle competizioni locali al di là di quanto ci si aspetta da tutti i 
+        concorrenti.
+      volunteer_history: Se hai ricoperto incarichi di volontariato presso la 
+        WCA, indica qui la cronologia. (facoltativo)
+      role_history_warning: La cronologia delle posizioni ricoperte verrà 
+        inclusa automaticamente nella tua candidatura. Le posizioni precedenti 
+        non sono state riportate in modo completo, quindi aggiungi di seguito 
+        eventuali posizioni mancanti o correzioni.
+      board_member: Membro del Board
+      motivation: Descrivi brevemente in 2-4 frasi le motivazioni che ti 
+        spingono a candidarti per diventare Delegato in prova.
+      relevant_skills: Elenca le competenze e le esperienze più importanti che 
+        possiedi e che ti aiuterebbero ad avere successo nel ruolo di Delegato 
+        in prova.
+      declaration_understands_application: Sono consapevole che questo modulo è 
+        riservato agli speedcuber registrati che presentano domanda per 
+        diventare Delegati in prova.
+      declaration_has_delegate_support: Confermo di aver parlato con un Delegato
+        qualificato della mia regione che sostiene la mia candidatura.
+      declaration_proficient_in_english: Dichiaro di possedere una buona 
+        padronanza della lingua inglese, sia nella lettura che nella scrittura.
+      declaration_read_regulations_html: Dichiaro di aver letto il <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">Regolamento 
+        WCA</a>.
+      regulations_note: 'Nota: non ci si aspetta che i delegati conoscano ogni singolo
+        articolo del regolamento. Tuttavia, ci si aspetta che ne conoscano i principi
+        fondamentali e che consultino il testo in caso di dubbi.'
+      cubing_business_involvement: Sei coinvolto in un’attività legata al 
+        cubing?
+      cubing_business_involvement_details: Spiega in che modo sei coinvolto in 
+        attività legate al cubing.
+      "yes": Sì
+      "no": No
+      submit: Invia candidatura
+      present: presente
