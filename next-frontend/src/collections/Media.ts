@@ -1,4 +1,8 @@
 import type { CollectionConfig } from "payload";
+import { canUploadMedia } from "@/payload.access";
+
+const THUMBNAIL_IMAGE_WIDTH = 400;
+const CARD_IMAGE_WIDTH = 768;
 
 export const Media: CollectionConfig = {
   admin: {
@@ -7,17 +11,29 @@ export const Media: CollectionConfig = {
   slug: "media",
   access: {
     read: () => true,
+    create: canUploadMedia,
+    update: canUploadMedia,
+    delete: canUploadMedia,
   },
   fields: [
     {
       name: "alt",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description:
+          "Alternative text describing the image, read out by screen readers and shown when the image cannot load.",
+      },
     },
     {
       name: "customLink",
       label: "Custom Link",
       type: "text",
+      admin: {
+        description:
+          "Optional. If set, the image becomes a link to this URL wherever it is rendered.",
+      },
     },
   ],
   upload: {
@@ -39,12 +55,12 @@ export const Media: CollectionConfig = {
     imageSizes: [
       {
         name: "thumbnail",
-        width: 400,
+        width: THUMBNAIL_IMAGE_WIDTH,
         height: 300,
       },
       {
         name: "card",
-        width: 768,
+        width: CARD_IMAGE_WIDTH,
         height: 512,
       },
     ],

@@ -96,6 +96,32 @@ RSpec.describe RoleChangeMailer do
     end
   end
 
+  describe 'notify_role_end for teams and committees' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:team_leader) { create(:wrt_leader_role) }
+    let(:role) { create(:wrt_member_role, group: team_leader.group, end_date: Date.today) }
+    let(:mail) { described_class.notify_role_end(role, user_who_made_the_change) }
+
+    it 'renders the headers' do
+      expect(mail.to).to contain_exactly(
+        user_who_made_the_change.email,
+        GroupsMetadataBoard.email,
+        UserGroup.teams_committees_group_weat.metadata.email,
+        UserGroup.teams_committees_group_wrt.metadata.email,
+        UserGroup.teams_committees_group_wqac.metadata.email,
+        team_leader.user.email,
+      )
+      expect(mail.reply_to).to contain_exactly(user_who_made_the_change.email)
+      expect(mail.subject).to eq "Role removed for #{role.user.name} in Teams & Committees"
+    end
+
+    it 'renders the Moodle suspension instruction for WQAC' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).to include(
+        "#{UserGroup.teams_committees_group_wqac.name}: Please suspend the member's Moodle account if necessary.",
+      )
+    end
+  end
+
   describe 'notify_role_end' do
     let(:translator) { create(:regional_delegate_role) }
     let(:user_who_made_the_change) { create(:user, name: 'Sherlock Holmes') }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { useAPIClient } from "@/lib/wca/useAPI";
 import type { components } from "@/types/openapi";
 
@@ -12,27 +12,14 @@ export const registrationQueryKey = (competitionId: string, userId: number) => [
   userId,
 ];
 
-/**
- * The competitor's own registration. Both the panel - which decides from it whether the flow is
- * still worth showing - and the flow itself read it, so it is fetched once under a shared key
- * rather than passed down and left to go stale.
- */
-export default function useRegistration({
-  competitionId,
-  userId,
-  initialRegistration,
-  refetchInterval,
-}: {
-  competitionId: string;
-  userId: number;
-  // `null` rather than `undefined` for "not registered": react-query reads `initialData:
-  //   undefined` as "no initial data" and refetches on mount, throwing away the server fetch.
-  initialRegistration: Registration | null;
-  refetchInterval?: (registration: Registration | null) => number | false;
-}) {
-  const apiClient = useAPIClient();
+type APIClient = ReturnType<typeof useAPIClient>;
 
-  const { data } = useQuery({
+export const registrationQueryOptions = (
+  apiClient: APIClient,
+  competitionId: string,
+  userId: number,
+) =>
+  queryOptions({
     queryKey: registrationQueryKey(competitionId, userId),
     queryFn: async () => {
       const { data, error, response } = await apiClient.GET(
@@ -51,9 +38,29 @@ export default function useRegistration({
 
       return data;
     },
+  });
+
+/**
+ * The competitor's own registration. Both the panel - which decides from it whether the flow is
+ * still worth showing - and the flow itself read it, so it is fetched once under a shared key
+ * rather than passed down and left to go stale.
+ */
+export default function useRegistration({
+  competitionId,
+  userId,
+  initialRegistration,
+}: {
+  competitionId: string;
+  userId: number;
+  // `null` rather than `undefined` for "not registered": react-query reads `initialData:
+  //   undefined` as "no initial data" and refetches on mount, throwing away the server fetch.
+  initialRegistration: Registration | null;
+}) {
+  const apiClient = useAPIClient();
+
+  const { data } = useQuery({
+    ...registrationQueryOptions(apiClient, competitionId, userId),
     initialData: initialRegistration,
-    refetchInterval: (query) =>
-      refetchInterval?.(query.state.data ?? null) ?? false,
   });
 
   return data;

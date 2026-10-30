@@ -8,6 +8,10 @@ locals {
   dev_dump_db_url = "dev-dump-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
 
   sidekiq_environment = [
+    {
+      name  = "PAYLOAD_DATABASE_URI"
+      value = local.payload_database_uri
+    },
   ]
   rails_environment = [
     {
@@ -17,6 +21,10 @@ locals {
     {
       name  = "ROOT_URL"
       value = var.ROOT_URL
+    },
+    {
+      name  = "NEXT_FRONTEND_URL"
+      value = "https://${var.shared.next_url}"
     },
     {
       name  = "OIDC_ISSUER"

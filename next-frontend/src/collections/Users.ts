@@ -1,5 +1,8 @@
 import type { CollectionConfig } from "payload";
-import { betterAuthStrategy } from "@delmaredigital/payload-better-auth";
+import {
+  betterAuthStrategy,
+  isAdminOrSelf,
+} from "@delmaredigital/payload-better-auth";
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -20,6 +23,9 @@ export const Users: CollectionConfig = {
       name: "id",
       type: "text",
       defaultValue: () => crypto.randomUUID(),
+      admin: {
+        description: "Payload's own identifier for this user.",
+      },
     },
     // `email`, `emailVerified`, `image`, `wcaId` and `wcaUserId` are deliberately absent:
     //   `betterAuthCollections` augments this collection with every schema field it does not
@@ -30,6 +36,9 @@ export const Users: CollectionConfig = {
     {
       name: "name",
       type: "text",
+      admin: {
+        description: "Display name of the user, as Rails knows them.",
+      },
     },
     {
       name: "roles",
@@ -60,27 +69,6 @@ export const Users: CollectionConfig = {
     // the source of truth
     create: () => false,
     update: () => false,
-    admin: ({ req: { user } }) => {
-      return ["wst", "wct", "wat", "wmt", "board"].some((team) =>
-        user?.roles?.includes(team),
-      );
-    },
-    read: ({ req: { user } }) => {
-      if (!user) {
-        return false;
-      }
-
-      if (user.roles?.includes("wst_admin")) {
-        // Admins are allowed to see all users
-        return true;
-      }
-
-      return {
-        // Only allow to read the current user, ie "yourself"
-        id: {
-          equals: user.id,
-        },
-      };
-    },
+    read: isAdminOrSelf({ adminRoles: ["wst_admin"], roleField: "roles" }),
   },
 };

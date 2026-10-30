@@ -433,6 +433,7 @@ export interface CardVariant {
   size?: "sm" | "md" | "lg" | undefined
   /** @default "info" */
   variant?: "elevated" | "outline" | "subtle" | "info" | undefined
+  interactive?: boolean | undefined
   colorVariant?: "solid" | "muted" | "subtle" | "surface" | "emphasized" | undefined
 }
 
@@ -548,7 +549,9 @@ export type CodeBlockVariantMap = {
 
 export type CollapsibleSlot = "root" | "trigger" | "content" | "indicator"
 
-export interface CollapsibleVariant {}
+export interface CollapsibleVariant {
+  overflowPadding?: boolean | undefined
+}
 
 export type CollapsibleVariantProps = {
   [K in keyof CollapsibleVariant]?: ConditionalValue<CollapsibleVariant[K]> | undefined

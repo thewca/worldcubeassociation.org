@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :competition_organizers, foreign_key: "organizer_id", inverse_of: :organizer
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :competition_scoretakers
+  has_many :trainee_delegate_applications, foreign_key: :applicant_id, inverse_of: :applicant, dependent: :restrict_with_exception
   has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
@@ -516,6 +517,16 @@ class User < ApplicationRecord
     user.senior_delegates.include?(self)
   end
 
+  def age
+    return if dob.blank?
+
+    today = Date.current
+    years_since_birth_year = today.year - dob.year
+    had_birthday_this_year = today >= dob + years_since_birth_year.years
+
+    had_birthday_this_year ? years_since_birth_year : years_since_birth_year - 1
+  end
+
   def below_forum_age_requirement?
     (Date.today - FORUM_AGE_REQUIREMENT.years) < dob
   end
@@ -844,6 +855,24 @@ class User < ApplicationRecord
       can_manage_incidents: {
         scope: can_manage_incidents? ? "*" : [],
       },
+      can_view_polls: {
+        scope: can_view_poll? ? "*" : [],
+      },
+      can_view_all_users: {
+        scope: can_view_all_users? ? "*" : [],
+      },
+      can_admin_results: {
+        scope: can_admin_results? ? "*" : [],
+      },
+      can_create_posts: {
+        scope: can_create_posts? ? "*" : [],
+      },
+      can_manage_regional_organizations: {
+        scope: can_manage_regional_organizations? ? "*" : [],
+      },
+      can_access_cms: {
+        scope: can_access_cms? ? "*" : [],
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
@@ -898,6 +927,13 @@ class User < ApplicationRecord
 
   def can_edit_banned_competitors?
     can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wic) || group_leader?(UserGroup.teams_committees_group_wapc)
+  end
+
+  # Keep in sync with the `admin` access check on Payload's `Users` collection in the Next frontend.
+  def can_access_cms?
+    board_member? || software_team? || communication_team? || group_member?(UserGroup.teams_committees_group_wat) ||
+      marketing_team? || wic_team? || wrc_team? || appeals_committee? || competition_announcement_team? ||
+      results_team? || quality_assurance_committee?
   end
 
   def can_manage_regional_organizations?
@@ -1218,6 +1254,20 @@ class User < ApplicationRecord
 
   def competition_bookmarked?(competition)
     BookmarkedCompetition.where(competition: competition, user: self).present?
+  end
+
+  def cached_bookmarked_competition_ids
+    Rails.cache.fetch(bookmarked_competitions_cache_key, expires_in: 60.minutes) do
+      competitions_bookmarked.pluck(:competition_id)
+    end
+  end
+
+  def clear_bookmarked_competitions_cache
+    Rails.cache.delete(bookmarked_competitions_cache_key)
+  end
+
+  private def bookmarked_competitions_cache_key
+    "#{id}-competitions-bookmarked"
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)
@@ -1660,6 +1710,7 @@ class User < ApplicationRecord
       competitions_announced.update_all(announced_by: new_user.id)
       roles.update_all(user_id: new_user.id)
       registrations.update_all(user_id: new_user.id)
+      trainee_delegate_applications.update_all(applicant_id: new_user.id)
 
       final_wca_id = new_user.wca_id.presence || self.wca_id.presence
       new_user.newcomer_results.update_all(person_id: final_wca_id) if final_wca_id.present?

@@ -38,6 +38,14 @@ RSpec.describe 'Database Endpoints' do
       end
     end
 
+    describe 'payload_export_permalink' do
+      it 'redirects to the Payload CMS dump' do
+        get payload_export_permalink_path
+        expect(response).to have_http_status(:moved_permanently)
+        expect(response.location).to eq("https://exports.worldcubeassociation.org/payload/dump.zip")
+      end
+    end
+
     describe 'results_permalink' do
       it "returns 404 error if the requested version doesn't exist" do
         get results_permalink_path(:v99, "sql")

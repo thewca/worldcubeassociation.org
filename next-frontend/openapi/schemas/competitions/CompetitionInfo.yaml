@@ -10,6 +10,7 @@ required:
   - use_wca_registration
   - guests_enabled
   - announced_at
+  - results_posted_at
   - base_entry_fee_lowest_denomination
   - currency_code
   - start_date
@@ -51,6 +52,7 @@ required:
   - registration_full_and_accepted?
   - delegates
   - organizers
+  - waiting_list_count
   - tab_names
   - class
 properties:
@@ -131,8 +133,14 @@ properties:
     type: boolean
     example: false
   cancelled_at:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
+  results_posted_at:
+    type:
+      - string
+      - "null"
+    format: date-time
   waiting_list_deadline_date:
     type: string
     format: date-time
@@ -203,9 +211,13 @@ properties:
     type: boolean
     example: true
   spots_left:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"
     example: 42
+  waiting_list_count:
+    type: integer
+    example: 7
   tab_names:
     type: array
     items:

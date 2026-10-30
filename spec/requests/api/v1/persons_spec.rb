@@ -36,6 +36,18 @@ RSpec.describe "API v1 Persons" do
       expect(response.parsed_body.first.keys).not_to include("best_index", "worst_index")
     end
 
+    it "serializes the dual round placement" do
+      linked_round = create(:linked_round)
+      result.round.update!(linked_round: linked_round)
+
+      get api_v1_person_results_path(person.wca_id)
+
+      expect(response.parsed_body.first).to include(
+        "global_pos" => result.global_pos,
+        "ranking_mode" => "linked_round",
+      )
+    end
+
     it "filters by event when event_id is given" do
       other_event_result = create(:result, person: person, event_id: "222", format_id: "a")
 

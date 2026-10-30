@@ -50,11 +50,15 @@ RUN apt-get update -qq && \
       build-essential \
       git \
       libclang-dev \
-      cargo \
+      rustup \
       pkg-config \
       libssl-dev \
       libyaml-dev \
       libvips
+
+# Configure Rust toolchain to use what's currently stable,
+#   not what our current Debian sources happened to be shipped with
+RUN rustup default stable
 
 COPY bin ./bin
 
@@ -107,6 +111,14 @@ RUN rm -rf node_modules
 FROM scratch AS assets
 COPY --from=build /rails/public /
 
+FROM base AS mongodb-tools
+
+# mongodb-database-tools = the `mongodump` command to create Payload CMS database copies
+#   MongoDB doesn't publish packages for Debian 13 yet, but the Debian 12 build only links against libc and Kerberos
+ARG MONGODB_TOOLS_VERSION=100.15.0
+RUN curl -o ./mongodb-database-tools.deb https://fastdl.mongodb.org/tools/db/mongodb-database-tools-debian12-x86_64-${MONGODB_TOOLS_VERSION}.deb && \
+    apt-get install --no-install-recommends -y ./mongodb-database-tools.deb
+
 FROM base AS runtime
 
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
@@ -157,6 +169,8 @@ RUN curl -o ./rds-cert.pem https://truststore.pki.rds.amazonaws.com/global/globa
 USER rails:rails
 
 FROM runtime AS sidekiq
+
+COPY --from=mongodb-tools /usr/bin/mongodump /usr/bin/mongodump
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
 

@@ -12,7 +12,7 @@ module CheckRegionalRecords
       FROM results
       INNER JOIN competitions ON results.competition_id = competitions.id
       INNER JOIN countries ON results.country_id = countries.id
-      #{"WHERE results.competition_id = '#{competition_id}'" if competition_id.present?}
+      #{"WHERE results.competition_id = #{ActiveRecord::Base.connection.quote(competition_id)}" if competition_id.present?}
       ON DUPLICATE KEY UPDATE
         person_id = results.person_id,
         country_id = results.country_id,

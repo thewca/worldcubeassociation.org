@@ -1,5 +1,5 @@
 import { getSession } from "@/auth";
-import { Alert, Box, Card, Link, VStack } from "@chakra-ui/react";
+import { Alert, Box, Card, Icon, Link, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import RegistrationPanel from "@/app/(wca)/(content-pages)/competitions/[competitionId]/(competition)/register/RegistrationPanel";
@@ -9,6 +9,7 @@ import { ChakraMarkdown } from "@/components/Markdown";
 import OpenapiError from "@/components/ui/openapiError";
 import { Toaster } from "@/components/ui/toaster";
 import { getT } from "@/lib/i18n/get18n";
+import { LuExternalLink } from "react-icons/lu";
 
 const fetchConfig = cache(async (authToken: string, competitionId: string) => {
   const client = serverClientWithToken(authToken);
@@ -130,6 +131,7 @@ export default async function RegisterPage({
             <ChakraMarkdown
               headingAs={Card.Title}
               paragraphAs={Card.Description}
+              listProps={{ textStyle: "body" }}
             >
               {competitionInfo.extra_registration_requirements}
             </ChakraMarkdown>
@@ -138,14 +140,18 @@ export default async function RegisterPage({
       )}
       <Alert.Root status="warning">
         <Alert.Indicator />
-        <Alert.Content>
+        <Alert.Content flexDirection="row">
           This is a preview. We recommend registering via the regular panel{" "}
           <Link
             href={`https://www.worldcubeassociation.org/competitions/${competitionInfo.id}/register`}
             variant="underline"
             target="_blank"
+            rel="noopener noreferrer"
           >
             on the current registration page
+            <Icon>
+              <LuExternalLink />
+            </Icon>
           </Link>
         </Alert.Content>
       </Alert.Root>
