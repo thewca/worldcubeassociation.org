@@ -202,8 +202,8 @@ function listedDelegates(
       role.metadata.status !== "senior_delegate" &&
       (isAdminMode || role.metadata.status !== "trainee_delegate") &&
       // Avoid showing regional delegates twice in the same category
-      (role.metadata.status !== "delegate" ||
-        !regionalDelegateUserIds.has(role.user.id)),
+      (!regionalDelegateUserIds.has(role.user.id) ||
+        role.metadata.status !== "delegate"),
   );
 }
 
