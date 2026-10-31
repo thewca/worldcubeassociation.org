@@ -186,8 +186,6 @@ async function DelegateTab({
   );
 }
 
-// Trainee Delegates are only listed in admin mode, and the senior Delegate is already shown as the
-// region lead.
 function listedDelegates(
   roles: components["schemas"]["UserRole"][],
   isAdminMode: boolean,
@@ -200,8 +198,10 @@ function listedDelegates(
 
   return roles.filter(
     (role) =>
+      // Senior Delegates are shown as region leads at the top of the list
       role.metadata.status !== "senior_delegate" &&
       (isAdminMode || role.metadata.status !== "trainee_delegate") &&
+      // Avoid showing regional delegates twice in the same category
       (role.metadata.status !== "delegate" ||
         !regionalDelegateUserIds.has(role.user.id)),
   );
