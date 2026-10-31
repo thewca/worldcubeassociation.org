@@ -21,8 +21,8 @@ import { LuPencil } from "react-icons/lu";
 import getPermissions from "@/lib/wca/permissions.server";
 import AdminModeToggle from "@/app/(wca)/(content-pages)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
-import TabTarget from "@/components/ui/tabTarget";
 import RailsLink from "@/components/RailsLink";
+import ResponsiveTabsList from "@/components/ui/responsiveTabsList";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import Loading from "@/components/ui/loading";
@@ -68,6 +68,24 @@ async function Delegates({ searchParams }: DelegatesPageProps) {
     rootGroups[0];
   const activeFriendlyId = activeGroup.metadata!.friendly_id!;
 
+  const regionItems = rootGroups.flatMap((group) => {
+    const friendlyId = group.metadata?.friendly_id;
+    if (!friendlyId) return [];
+
+    return [
+      {
+        value: friendlyId,
+        label: group.name,
+        href: route({
+          pathname: "/delegates",
+          query: isAdminMode
+            ? { region: friendlyId, admin: "true" }
+            : { region: friendlyId },
+        }),
+      },
+    ];
+  });
+
   return (
     <VStack align="left" gap="8" width="full" alignItems="left">
       <Heading size="5xl">{t("delegates_page.title")}</Heading>
@@ -87,30 +105,12 @@ async function Delegates({ searchParams }: DelegatesPageProps) {
         sideNav
         fitted
         value={activeFriendlyId}
-        gap={8}
+        gap={{ base: 8, md: 4 }}
       >
-        <Tabs.List>
-          {rootGroups.map((group) => {
-            const friendlyId = group.metadata!.friendly_id!;
-
-            return (
-              <Tabs.Trigger value={friendlyId} key={group.id} asChild>
-                <TabTarget
-                  tabKey={friendlyId}
-                  currentPath={activeFriendlyId}
-                  href={route({
-                    pathname: "/delegates",
-                    query: isAdminMode
-                      ? { region: friendlyId, admin: "true" }
-                      : { region: friendlyId },
-                  })}
-                >
-                  {group.name}
-                </TabTarget>
-              </Tabs.Trigger>
-            );
-          })}
-        </Tabs.List>
+        <ResponsiveTabsList
+          label={t("delegates_page.title")}
+          items={regionItems}
+        />
         <Tabs.Content value={activeFriendlyId} w="full">
           <DelegateTab group={activeGroup} isAdminMode={isAdminMode} />
         </Tabs.Content>
@@ -156,26 +156,30 @@ async function DelegateTab({
   );
 
   return (
-    <VStack align="left">
-      <Heading textStyle="h2">{name}</Heading>
-      <UserBadge
-        key={lead_user!.id}
-        profilePicture={lead_user!.avatar}
-        name={lead_user!.name}
-        wcaId={lead_user!.wca_id}
-        email={lead_user?.email}
-        roles={[
-          {
-            teamRole: t(
-              "enums.user_roles.status.delegate_regions.senior_delegate",
-            ),
-            staffColor: "yellow",
-          },
-        ]}
-      />
-      {regionDelegates.length > 0 && (
-        <DelegateGrid delegates={regionDelegates} isAdminMode={isAdminMode} />
-      )}
+    <VStack align="left" gap="8">
+      <VStack align="left" gap="4">
+        <Heading textStyle="h2">{name}</Heading>
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+          <UserBadge
+            key={lead_user!.id}
+            profilePicture={lead_user!.avatar}
+            name={lead_user!.name}
+            wcaId={lead_user!.wca_id}
+            email={lead_user?.email}
+            roles={[
+              {
+                teamRole: t(
+                  "enums.user_roles.status.delegate_regions.senior_delegate",
+                ),
+                staffColor: "yellow",
+              },
+            ]}
+          />
+        </SimpleGrid>
+        {regionDelegates.length > 0 && (
+          <DelegateGrid delegates={regionDelegates} isAdminMode={isAdminMode} />
+        )}
+      </VStack>
       {_.map(delegatesBySubregion, (delegates, subregion) => (
         <VStack align="left" key={subregion}>
           <Heading size="xl">{subregion}</Heading>
@@ -217,7 +221,7 @@ async function DelegateGrid({
   const { t } = await getT();
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
+    <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
       {delegates.map((role) => (
         <UserBadge
           key={role.id}
