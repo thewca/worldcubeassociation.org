@@ -152,7 +152,14 @@ export default function CompetingStep({
                     {t("competitions.registration_v2.register.comment")}
                     <Field.RequiredIndicator />
                   </Text>
-                  <Text fontStyle="italic">
+                  <Text
+                    fontStyle="italic"
+                    color={
+                      field.state.value.length >= COMMENT_CHARACTER_LIMIT
+                        ? "fg.error"
+                        : undefined
+                    }
+                  >
                     ({field.state.value.length}/{COMMENT_CHARACTER_LIMIT})
                   </Text>
                 </HStack>
@@ -190,9 +197,15 @@ export default function CompetingStep({
               </Field.Label>
               <NumberInput.Root
                 value={field.state.value.toString()}
-                onValueChange={(e) => field.handleChange(e.valueAsNumber)}
+                // Clearing the input leaves no number to parse, which means no guests.
+                onValueChange={(e) =>
+                  field.handleChange(
+                    Number.isNaN(e.valueAsNumber) ? 0 : e.valueAsNumber,
+                  )
+                }
                 min={0}
                 max={maxGuests}
+                allowOverflow={false}
                 width="full"
               >
                 <NumberInput.Input />
