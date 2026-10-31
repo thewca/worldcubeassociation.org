@@ -23,7 +23,7 @@ module AuxiliaryDataComputation
       connection.execute <<~SQL.squish
         DELETE csr
         FROM #{quoted_table_name} csr
-        LEFT JOIN regional_records_lookup rrl
+        LEFT JOIN #{CheckRegionalRecords::LOOKUP_TABLE_NAME} rrl
           ON csr.result_id = rrl.result_id
           AND csr.person_id = rrl.person_id
         WHERE rrl.result_id IS NULL;
@@ -33,7 +33,7 @@ module AuxiliaryDataComputation
         INSERT INTO #{quoted_table_name} (result_id, #{quoted_field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
         WITH concise_agg AS (
           SELECT MIN(#{quoted_field} * 1000000000 + result_id) value_and_id
-          FROM regional_records_lookup
+          FROM #{CheckRegionalRecords::LOOKUP_TABLE_NAME}
           WHERE #{quoted_field} > 0
           GROUP BY person_id, country_id, event_id, competition_reg_year
         )
@@ -47,7 +47,7 @@ module AuxiliaryDataComputation
           rrl.continent_id,
           rrl.competition_reg_year `reg_year`
         FROM concise_agg
-          INNER JOIN regional_records_lookup rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
+          INNER JOIN #{CheckRegionalRecords::LOOKUP_TABLE_NAME} rrl ON rrl.result_id = (concise_agg.value_and_id % 1000000000)
         ON DUPLICATE KEY UPDATE
           result_id = rrl.result_id,
           #{quoted_field} = rrl.#{quoted_field},
@@ -64,7 +64,7 @@ module AuxiliaryDataComputation
       connection.execute <<~SQL.squish
         DELETE concise_results
         FROM #{quoted_table_name} concise_results
-        LEFT JOIN regional_records_lookup rrl
+        LEFT JOIN #{CheckRegionalRecords::LOOKUP_TABLE_NAME} rrl
           ON concise_results.result_id = rrl.result_id
             AND rrl.#{quoted_field} > 0
         WHERE rrl.result_id IS NULL;
