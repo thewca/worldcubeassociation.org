@@ -55,7 +55,7 @@ export function augmentApiResults(data, show) {
 export const slimConfig = [
   {
     accessorKey: 'single.person_name',
-    header: I18n.t('results.table_elements.name'),
+    header: () => I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => getValue() && (
       <PersonCell
         personId={row.original.single.person_id}
@@ -65,26 +65,26 @@ export const slimConfig = [
   },
   {
     accessorKey: 'single.value',
-    header: I18n.t('common.single'),
+    header: () => I18n.t('common.single'),
     cell: ({ row, getValue }) => (
       getValue() && formatAttemptResult(getValue(), row.original.single.event_id)
     ),
   },
   {
     accessorKey: 'single.event_id',
-    header: I18n.t('results.table_elements.event'),
+    header: () => I18n.t('results.table_elements.event'),
     cell: ({ getValue }) => getValue() && <EventCell eventId={getValue()} />,
   },
   {
     accessorKey: 'average.value',
-    header: I18n.t('common.average'),
+    header: () => I18n.t('common.average'),
     cell: ({ row, getValue }) => (
       getValue() && formatAttemptResult(getValue(), row.original.average?.event_id)
     ),
   },
   {
     accessorKey: 'average.person_name',
-    header: I18n.t('results.table_elements.name'),
+    header: () => I18n.t('results.table_elements.name'),
     cell: ({ row, getValue }) => getValue && (
       <PersonCell
         personId={row.original.average?.person_id}
@@ -141,7 +141,7 @@ export const historyConfig = (isMixed) => [
 export const mixedRecordsConfig = [
   {
     accessorKey: 'result.type',
-    header: I18n.t('results.selector_elements.type_selector.type'),
+    header: () => I18n.t('results.selector_elements.type_selector.type'),
     cell: ({ getValue }) => I18n.t(`results.selector_elements.type_selector.${getValue()}`),
   },
   personColumn,
