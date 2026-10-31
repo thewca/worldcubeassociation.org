@@ -772,6 +772,7 @@ en:
       description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. When there are team or committee openings, information about how to apply is posted on the front page."
       contact_button: "Contact"
       no_contact_description: "The contact details of this team/committee is not publicly available."
+      empty: "No teams or committees found. Please check back later."
       groups_name:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
