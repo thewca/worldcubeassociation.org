@@ -1,5 +1,13 @@
 <p>The role has been removed for <%= @role.user.name %> in <%= @group_type_name %> on <%= @role[:end_date] %>.</p>
 <p>The change has been executed by <%= @user_who_made_the_change.name %>.</p>
+<% if @remaining_staff_role_titles.present? %>
+  <p><strong>Note:</strong> <%= @role.user.name %> is still a WCA volunteer, so their WCA accounts should stay active. Their remaining roles are:</p>
+  <ul>
+    <% @remaining_staff_role_titles.each do |title| %>
+      <li><%= title %></li>
+    <% end %>
+  </ul>
+<% end %>
 <% if @role.group_type == UserGroup.group_types[:delegate_regions] && @role.user.delegate_in_probation? %>
   <p><strong>Warning:</strong> <%= @role.user.name %> is currently on probation. Please check the <%= link_to "Delegates on Probation spreadsheet", "https://docs.google.com/spreadsheets/d/1ZU1lk0niGn-vjmbiDkoROU8qjmdHkNebZ2GCFHm6vvA/edit#gid=1887522006" %> for more details.</p>
 <% end %>
