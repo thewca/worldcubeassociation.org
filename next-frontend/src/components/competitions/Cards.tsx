@@ -193,6 +193,7 @@ export async function RegistrationCard({
                   competitionInfo.base_entry_fee_lowest_denomination
                 }
                 currencyCode={competitionInfo.currency_code}
+                subunitToUnit={competitionInfo.currency_subunit_to_unit}
               />
             </Stat.ValueText>
           </Stat.Root>
@@ -241,6 +242,7 @@ export async function RegistrationCard({
                     competitionInfo.guests_entry_fee_lowest_denomination
                   }
                   currencyCode={competitionInfo.currency_code}
+                  subunitToUnit={competitionInfo.currency_subunit_to_unit}
                 />
               ) : (
                 t("competitions.competition_info.guests_free.free")

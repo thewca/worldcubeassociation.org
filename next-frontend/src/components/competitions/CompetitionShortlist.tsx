@@ -96,6 +96,7 @@ function ShortlistItem<T extends DataCompetition>({
             <CurrencyValue
               lowestDenomination={comp.base_entry_fee_lowest_denomination}
               currencyCode={comp.currency_code}
+              subunitToUnit={comp.currency_subunit_to_unit}
             />
           </DataList.ItemValue>
         </DataList.Item>

@@ -13,6 +13,7 @@ required:
   - results_posted_at
   - base_entry_fee_lowest_denomination
   - currency_code
+  - currency_subunit_to_unit
   - start_date
   - end_date
   - enable_donations
@@ -96,6 +97,10 @@ properties:
   currency_code:
     type: string
     example: "USD"
+  currency_subunit_to_unit:
+    type: integer
+    description: How many of the currency's lowest denomination make up one unit
+    example: 100
   start_date:
     type: string
     format: date
