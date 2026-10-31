@@ -192,10 +192,18 @@ function listedDelegates(
   roles: components["schemas"]["UserRole"][],
   isAdminMode: boolean,
 ) {
+  const regionalDelegateUserIds = new Set(
+    roles
+      .filter((role) => role.metadata.status === "regional_delegate")
+      .map((role) => role.user.id),
+  );
+
   return roles.filter(
     (role) =>
       role.metadata.status !== "senior_delegate" &&
-      (isAdminMode || role.metadata.status !== "trainee_delegate"),
+      (isAdminMode || role.metadata.status !== "trainee_delegate") &&
+      (role.metadata.status !== "delegate" ||
+        !regionalDelegateUserIds.has(role.user.id)),
   );
 }
 
