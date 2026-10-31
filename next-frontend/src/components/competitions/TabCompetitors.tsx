@@ -1,6 +1,8 @@
 "use client";
+
 import React, { useState } from "react";
-import { Button, Card, Text, Table } from "@chakra-ui/react";
+import { Box, Button, Card, Text, Table } from "@chakra-ui/react";
+
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
@@ -8,6 +10,7 @@ import PsychSheet from "@/components/competitions/PsychSheet";
 import { FormEventSelector } from "@/components/EventSelector";
 import Loading from "@/components/ui/loading";
 import RailsLink from "@/components/RailsLink";
+import events from "@/lib/wca/data/events";
 
 interface CompetitorData {
   id: string;
@@ -32,7 +35,11 @@ const TabCompetitors: React.FC<CompetitorData> = ({
     isPending,
     isError,
   } = api.useQuery("get", "/v1/competitions/{competitionId}/registrations", {
-    params: { path: { competitionId: id } },
+    params: {
+      path: {
+        competitionId: id,
+      },
+    },
   });
 
   if (isError) {
@@ -43,9 +50,46 @@ const TabCompetitors: React.FC<CompetitorData> = ({
     return <Loading />;
   }
 
+  // Registrations for the selected event
+  const selectedRegistrations = psychSheetEvent
+    ? registrationsQuery.filter((registration) =>
+        registration.competing.event_ids.includes(psychSheetEvent),
+      )
+    : registrationsQuery;
+
+  const totalCount = selectedRegistrations.length;
+
+  const returnerCount = selectedRegistrations.filter((registration) =>
+    Boolean(registration.user.wca_id),
+  ).length;
+
+  const newcomerCount = totalCount - returnerCount;
+
+  // Title for the summary box
+  const summaryTitle = psychSheetEvent
+    ? `${events.byId[psychSheetEvent]?.name ?? psychSheetEvent} (${totalCount})`
+    : `Registrations (${totalCount})`;
+
   return (
     <Card.Root>
       <Card.Body>
+        {/* Returners and newcomers summary */}
+        <Box
+          bg="black"
+          color="white"
+          width="full"
+          borderRadius="md"
+          mb={2}
+          p={3}
+        >
+          <Text fontWeight="semibold">{summaryTitle}</Text>
+
+          <Text>
+            {totalCount} participants = {returnerCount} returners +{" "}
+            {newcomerCount} newcomers
+          </Text>
+        </Box>
+
         {canAddOnTheSpot && (
           <Button asChild alignSelf="flex-end" mb={2}>
             <RailsLink href={`/competitions/${id}/registrations/add`}>
@@ -53,6 +97,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
             </RailsLink>
           </Button>
         )}
+
         <Card.Title>
           <FormEventSelector
             title="Events"
@@ -66,10 +111,9 @@ const TabCompetitors: React.FC<CompetitorData> = ({
             }
           />
         </Card.Title>
+
         <Table.ScrollArea borderWidth="1px" maxW="full">
           {psychSheetEvent ? (
-            // Remounting per event keeps one event's rows from ever being
-            // rendered with another event's result formatting.
             <PsychSheet
               key={psychSheetEvent}
               competitionId={id}
