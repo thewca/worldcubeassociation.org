@@ -18,6 +18,17 @@ module AuxiliaryDataComputation
       quoted_field = connection.quote_column_name(field)
       quoted_table_name = connection.quote_table_name(table_name)
 
+      # Cleanup step: If we have merged profiles (for example, because of newcomers who aren't really newcomers)
+      #   then there might be orphaned rows in the concise_* tables containing the old pre-merge WCA ID.
+      connection.execute <<~SQL.squish
+        DELETE csr
+        FROM #{quoted_table_name} csr
+        LEFT JOIN regional_records_lookup rrl
+          ON csr.result_id = rrl.result_id
+          AND csr.person_id = rrl.person_id
+        WHERE rrl.result_id IS NULL;
+      SQL
+
       connection.execute <<~SQL.squish
         INSERT INTO #{quoted_table_name} (result_id, #{quoted_field}, value_and_id, person_id, event_id, country_id, continent_id, reg_year)
         WITH concise_agg AS (
