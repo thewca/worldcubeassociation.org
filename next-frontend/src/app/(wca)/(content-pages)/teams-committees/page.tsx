@@ -65,6 +65,23 @@ export default async function TeamsCommitteesPage() {
   );
 }
 
+function ContactAction({
+  email,
+  preferred_contact_mode,
+}: {
+  email?: string;
+  preferred_contact_mode?: string;
+}) {
+  if (!email || preferred_contact_mode === "no_contact") return null;
+
+  return (
+    <EmailCopyButton
+      email={email}
+      href={preferred_contact_mode === "contact_form" ? "/contact" : undefined}
+    />
+  );
+}
+
 async function TeamTab({
   group,
 }: {
@@ -82,9 +99,10 @@ async function TeamTab({
     <VStack align="left">
       <HStack gap="2">
         <Heading size="2xl">{name}</Heading>
-        {email && preferred_contact_mode !== "no_contact" && (
-          <EmailCopyButton email={email} />
-        )}
+        <ContactAction
+          email={email}
+          preferred_contact_mode={preferred_contact_mode}
+        />
       </HStack>
       <Text>
         {t(`page.teams_committees_councils.groups_description.${friendly_id}`)}
