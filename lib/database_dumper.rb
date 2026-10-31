@@ -11,6 +11,17 @@ module DatabaseDumper
                             "LEFT JOIN competition_organizers ON competitions.id = competition_organizers.competition_id " \
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
                             "GROUP BY competitions.id".freeze
+  # Approved avatars are public on our CDN anyway. Their ActiveStorage rows hold the random key that the CDN URL is built from,
+  #   so dumping them lets the developer dump show the same profile pictures as production.
+  APPROVED_AVATAR_ATTACHMENT = "record_type = 'UserAvatar' AND name = 'public_image' AND record_id IN (SELECT id FROM user_avatars WHERE status = 'approved')"
+  APPROVED_AVATAR_BLOB_IDS = "SELECT blob_id FROM active_storage_attachments WHERE #{APPROVED_AVATAR_ATTACHMENT}".freeze
+  APPROVED_AVATAR_VARIANT_ATTACHMENT = "record_type = 'ActiveStorage::VariantRecord' AND name = 'image' " \
+                                       "AND record_id IN (SELECT id FROM active_storage_variant_records WHERE blob_id IN (#{APPROVED_AVATAR_BLOB_IDS}))".freeze
+  # ActiveStorage derives the thumbnail format (and thereby the variant digest) from the file extension,
+  #   so the extension has to survive. The rest of the name is whatever the user's file was called on their computer.
+  AVATAR_IMAGE_EXTENSIONS = "'jpg', 'jpeg', 'jpe', 'jfif', 'png', 'gif', 'webp'"
+  AVATAR_BLOB_FILENAME = "CONCAT('avatar', IF(LOWER(SUBSTRING_INDEX(active_storage_blobs.filename, '.', -1)) IN (#{AVATAR_IMAGE_EXTENSIONS}), " \
+                         "CONCAT('.', SUBSTRING_INDEX(active_storage_blobs.filename, '.', -1)), ''))".freeze
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
@@ -349,9 +360,47 @@ module DatabaseDumper
         ],
       ),
     }.freeze,
-    "active_storage_attachments" => :skip_all_rows,
-    "active_storage_blobs" => :skip_all_rows,
-    "active_storage_variant_records" => :skip_all_rows,
+    "active_storage_attachments" => {
+      where_clause: "WHERE (#{APPROVED_AVATAR_ATTACHMENT}) OR (#{APPROVED_AVATAR_VARIANT_ATTACHMENT})",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          blob_id
+          created_at
+          name
+          record_id
+          record_type
+        ],
+      ),
+    }.freeze,
+    "active_storage_blobs" => {
+      where_clause: "WHERE id IN (#{APPROVED_AVATAR_BLOB_IDS}) OR id IN (SELECT blob_id FROM active_storage_attachments WHERE #{APPROVED_AVATAR_VARIANT_ATTACHMENT})",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          byte_size
+          checksum
+          content_type
+          created_at
+          key
+          metadata
+          service_name
+        ],
+        fake_values: {
+          "filename" => AVATAR_BLOB_FILENAME,
+        },
+      ),
+    }.freeze,
+    "active_storage_variant_records" => {
+      where_clause: "WHERE blob_id IN (#{APPROVED_AVATAR_BLOB_IDS})",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w[
+          id
+          blob_id
+          variation_digest
+        ],
+      ),
+    }.freeze,
     "markdown_images" => :skip_all_rows,
     "ar_internal_metadata" => :skip_all_rows,
     "result_attempts" => {

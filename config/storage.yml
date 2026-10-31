@@ -8,8 +8,6 @@ local_private:
 
 s3_default: &s3_default
   service: S3
-  access_key_id: <%= AppSecrets.AWS_ACCESS_KEY_ID %>
-  secret_access_key: <%= AppSecrets.AWS_SECRET_ACCESS_KEY %>
 
 amazon:
   <<: *s3_default

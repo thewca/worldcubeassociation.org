@@ -102,8 +102,10 @@ class UserAvatar < ApplicationRecord
   alias_method :thumb_url, :thumbnail_url
 
   def using_cdn?
-    # Approved avatars are actively being used and should therefor be served by our CDN
-    self.approved? && self.attached? && !Rails.env.local?
+    # Approved avatars are actively being used and should therefor be served by our CDN.
+    #   Locally, avatars imported through the developer dump still point to the production CDN,
+    #   because their files were never stored on the developer's machine.
+    self.approved? && self.attached? && (!Rails.env.local? || self.image.blob.service_name != EnvConfig.AVATARS_PUBLIC_STORAGE)
   end
 
   def filename
@@ -241,10 +243,7 @@ class UserAvatar < ApplicationRecord
 
     return unless thumbnail_changed
 
-    cloudfront_sdk = ::Aws::CloudFront::Client.new(
-      access_key_id: AppSecrets.AWS_ACCESS_KEY_ID,
-      secret_access_key: AppSecrets.AWS_SECRET_ACCESS_KEY,
-    )
+    cloudfront_sdk = ::Aws::CloudFront::Client.new(credentials: Aws::ECSCredentials.new)
 
     store_path = self.thumbnail_image.processed.key.delete_prefix('/')
     api_reference = "avatar-thumbnail_#{self.id}_#{Time.now.to_i}"
