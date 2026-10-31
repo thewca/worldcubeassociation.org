@@ -191,7 +191,7 @@ function VenueInfo({ activeVenue, venueCount }: VenueInfoProps) {
 
   if (activeVenue === undefined) {
     return (
-      <Alert.Root status="info" colorPalette="gray">
+      <Alert.Root status="info" variant="outline">
         <Alert.Content>
           <Alert.Description>
             {t("competitions.schedule.venue_selection_all", {
@@ -211,7 +211,7 @@ function VenueInfo({ activeVenue, venueCount }: VenueInfoProps) {
   const mapLink = `https://google.com/maps/place/${latitude},${longitude}`;
 
   return (
-    <Alert.Root status="info" colorPalette="gray">
+    <Alert.Root status="info" variant="outline">
       <Alert.Content>
         <Alert.Title>
           <p

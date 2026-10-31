@@ -13,6 +13,9 @@ import {
   Tabs,
   Text,
   TextProps,
+  Heading,
+  Stack,
+  Button,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
@@ -31,6 +34,7 @@ import IconDisplay from "@/components/IconDisplay";
 import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
+import WcaDocsIcon from "../icons/WcaDocsIcon";
 
 function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
@@ -178,6 +182,32 @@ export default function TabMenu({
       {/* Tabs.Content is a flex item, which has `min-width: auto`.
        It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
       <Tabs.Content width="full" minWidth="0" value={currentPath!}>
+        <Stack
+          direction="row"
+          justifyContent="start"
+          alignItems="center"
+          mb={2}
+          gap={3}
+        >
+          <Heading size="3xl" fontWeight="bold">
+            {(eventId || "").toUpperCase()}
+          </Heading>
+          {currentPath === "schedule" && (
+            <Button variant="outline" size="xs" asChild>
+              <ChakraLink
+                href={
+                  "https://www.worldcubeassociation.org/competitions/" +
+                  competitionInfo.id +
+                  ".pdf"
+                }
+                color="inherit"
+                textDecoration="none"
+              >
+                <WcaDocsIcon /> Download
+              </ChakraLink>
+            </Button>
+          )}
+        </Stack>
         {children}
       </Tabs.Content>
     </Tabs.Root>
