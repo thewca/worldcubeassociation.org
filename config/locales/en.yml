@@ -1124,6 +1124,7 @@ en:
       remove_avatar_confirm: "Are you sure you want to delete your avatar?"
       remove_avatar_confirm_button: "Confirm avatar removal"
       remove_avatar_reason: "Please provide the reason for removal"
+      include_avatar_picture_in_email: "Include the picture in the email sent to the user"
       guidelines: "Guidelines"
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."

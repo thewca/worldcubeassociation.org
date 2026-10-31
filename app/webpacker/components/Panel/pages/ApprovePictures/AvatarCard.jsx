@@ -13,6 +13,7 @@ import {
 import { editPersonUrl } from '../../../../lib/requests/routes.js.erb';
 import I18n from '../../../../lib/i18n';
 import useInputState from '../../../../lib/hooks/useInputState';
+import useCheckboxState from '../../../../lib/hooks/useCheckboxState';
 
 function Avatar({
   title, actions, imageUrl,
@@ -49,6 +50,7 @@ export default function AvatarCard({
   const [activeAvatarIndex, setActiveAvatarIndex] = useState(0);
   const [rejectionGuidelines, setRejectionGuidelines] = useState([]);
   const [rejectionReason, setRejectionReason] = useInputState('');
+  const [includesAvatarPicture, setIncludesAvatarPicture] = useCheckboxState(true);
   const [isChoosingRejectionReason, setIsChoosingRejectionReason] = useState(false);
 
   const possibleRejectionReasons = useMemo(() => {
@@ -90,7 +92,12 @@ export default function AvatarCard({
       if (rejectionGuidelines.length === 0) {
         setIsChoosingRejectionReason(false);
       } else {
-        onReject(user.pending_avatar, rejectionGuidelines, rejectionReason);
+        onReject(
+          user.pending_avatar,
+          rejectionGuidelines,
+          rejectionReason,
+          includesAvatarPicture,
+        );
       }
     } else {
       setIsChoosingRejectionReason(true);
@@ -100,6 +107,7 @@ export default function AvatarCard({
     onReject,
     rejectionGuidelines,
     rejectionReason,
+    includesAvatarPicture,
     user.pending_avatar,
   ]);
 
@@ -150,6 +158,11 @@ export default function AvatarCard({
                       />
                     ))}
                     <Input fluid placeholder="Additional Rejection Reason" value={rejectionReason} onChange={setRejectionReason} />
+                    <Checkbox
+                      label={I18n.t('users.edit.include_avatar_picture_in_email')}
+                      checked={includesAvatarPicture}
+                      onChange={setIncludesAvatarPicture}
+                    />
                   </>
                 )}
               </Grid.Column>

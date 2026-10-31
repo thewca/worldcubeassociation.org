@@ -11,6 +11,7 @@ module Admin
       avatar_action = params.require(:avatar_action)
       rejection_reason = params[:rejection_reason] || ''
       rejection_guidelines = params[:rejection_guidelines] || []
+      includes_avatar_picture = ActiveRecord::Type::Boolean.new.cast(params[:include_avatar_picture])
 
       ActiveRecord::Base.transaction do
         avatar = UserAvatar.pending.find(avatar_id)
@@ -28,7 +29,11 @@ module Admin
           avatar.revocation_reason = combined_reasons
 
           user = avatar.pending_user
-          AvatarsMailer.notify_user_of_avatar_rejection(user, combined_reasons).deliver_later
+          AvatarsMailer.notify_user_of_avatar_rejection(
+            user,
+            combined_reasons,
+            attached_avatar: (avatar if includes_avatar_picture),
+          ).deliver_later
         else
           raise "Unrecognized avatar action '#{avatar_action}'"
         end

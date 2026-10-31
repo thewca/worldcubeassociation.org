@@ -43,9 +43,18 @@ function ApprovePictures() {
     decideOnAvatars({ avatarId: avatar.id, action: 'approve' });
   }, [decideOnAvatars]);
 
-  const onReject = useCallback((avatar, rejectionGuidelines, rejectionReason) => {
+  const onReject = useCallback((
+    avatar,
+    rejectionGuidelines,
+    rejectionReason,
+    includesAvatarPicture,
+  ) => {
     decideOnAvatars({
-      avatarId: avatar.id, action: 'reject', rejectionGuidelines, rejectionReason,
+      avatarId: avatar.id,
+      action: 'reject',
+      rejectionGuidelines,
+      rejectionReason,
+      includesAvatarPicture,
     });
   }, [decideOnAvatars]);
 
