@@ -158,34 +158,37 @@ RSpec.describe SanityCheck do
       expect(result_ids).to contain_exactly([competition_1.id, competition_2.id].join(","))
     end
 
-    it "Duplicate 222 Scrambles across competition sharing at least 3 scrambles" do
-      sanity_check = SanityCheck.find(21)
-      shared_scrambles = ["R U F", "R U' F", "R U F'"]
-      [create(:competition, event_ids: ["222"]), create(:competition, event_ids: ["222"])].each do |competition|
-        round = create(:round, competition: competition, event_id: "222")
-        shared_scrambles.each do |scramble|
-          create(:scramble, competition: competition, round: round, event_id: "222", scramble: scramble)
+    context "Duplicate 222 Scrambles across competitions" do
+      let(:sanity_check) { SanityCheck.find(21) }
+
+      before do
+        create_list(:competition, 2, event_ids: ["222"]).each do |competition|
+          round = create(:round, competition: competition, event_id: "222")
+          shared_scrambles.each do |scramble|
+            create(:scramble, competition: competition, round: round, event_id: "222", scramble: scramble)
+          end
         end
       end
 
-      result_ids = sanity_check.run_query.pluck("scramble")
+      context "sharing at least 3 scrambles" do
+        let(:shared_scrambles) { ["R U F", "R U' F", "R U F'"] }
 
-      expect(result_ids).to match_array(shared_scrambles)
-    end
+        it "reports them" do
+          reported_scrambles = sanity_check.run_query.pluck("scramble")
 
-    it "Ignores duplicate 222 Scrambles across competition sharing less than 3 scrambles" do
-      sanity_check = SanityCheck.find(21)
-      shared_scrambles = ["R U F", "R U' F"]
-      [create(:competition, event_ids: ["222"]), create(:competition, event_ids: ["222"])].each do |competition|
-        round = create(:round, competition: competition, event_id: "222")
-        shared_scrambles.each do |scramble|
-          create(:scramble, competition: competition, round: round, event_id: "222", scramble: scramble)
+          expect(reported_scrambles).to match_array(shared_scrambles)
         end
       end
 
-      result_ids = sanity_check.run_query.pluck("scramble")
+      context "sharing less than 3 scrambles" do
+        let(:shared_scrambles) { ["R U F", "R U' F"] }
 
-      expect(result_ids).to be_empty
+        it "ignores them" do
+          reported_scrambles = sanity_check.run_query.pluck("scramble")
+
+          expect(reported_scrambles).to be_empty
+        end
+      end
     end
   end
 
