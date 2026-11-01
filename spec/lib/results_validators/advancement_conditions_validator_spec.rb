@@ -44,16 +44,16 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       round_333oh_1, round_333oh_2, round_333oh_3, round_333oh_f = create_rounds("333oh", count: 4, competition: competition1)
       round_222_1, round_222_f = create_rounds("222", count: 2, competition: competition2)
       [Result, InboxResult].each do |model|
-        people1 = people_pool(model, competition1, 100)
-        people2 = people_pool(model, competition2, 8)
+        people_333oh = people_pool(model, competition1, 100)
+        people_222 = people_pool(model, competition2, 8)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += build_round_results(model, people1, competition1, round_333oh_1, event_id: "333oh", round_type_id: "1")
-        results += build_round_results(model, people1.first(16), competition1, round_333oh_2, event_id: "333oh", round_type_id: "2")
-        results += build_round_results(model, people1.first(8), competition1, round_333oh_3, event_id: "333oh", round_type_id: "3")
-        results += build_round_results(model, people1.first(7), competition1, round_333oh_f, event_id: "333oh", round_type_id: "f")
-        results += build_round_results(model, people2, competition2, round_222_1, event_id: "222", round_type_id: "1")
-        results += build_round_results(model, people2.first(5), competition2, round_222_f, event_id: "222", round_type_id: "f")
+        results += build_round_results(model, people_333oh, competition1, round_333oh_1, event_id: "333oh", round_type_id: "1")
+        results += build_round_results(model, people_333oh.first(16), competition1, round_333oh_2, event_id: "333oh", round_type_id: "2")
+        results += build_round_results(model, people_333oh.first(8), competition1, round_333oh_3, event_id: "333oh", round_type_id: "3")
+        results += build_round_results(model, people_333oh.first(7), competition1, round_333oh_f, event_id: "333oh", round_type_id: "f")
+        results += build_round_results(model, people_222, competition2, round_222_1, event_id: "222", round_type_id: "1")
+        results += build_round_results(model, people_222.first(5), competition2, round_222_f, event_id: "222", round_type_id: "f")
         model.import(results)
       end
 
@@ -245,17 +245,19 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       first_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1)
       second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round)
 
-      # 12 competitors in round 1, the last of which DNFs all their attempts.
-      people = (1..12).map do |i|
+      # 11 competitors with a successful result in round 1...
+      people = (1..11).map do |i|
         fake_person = create(:person)
-        value = i == 12 ? -1 : i * 100
-        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: value, average: value, round: first_round)
+        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: i * 100, average: i * 100, round: first_round)
         fake_person
       end
+      # ...and one who DNFs all their attempts.
+      dnf_person = create(:person)
+      create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: dnf_person, best: -1, average: -1, round: first_round)
 
       # 9 competitors in the final (exactly 75% of 12, so no 9P1 issues): 7 valid
       # qualifiers, the all-DNF competitor, and one person without any round 1 result.
-      finalists = people.first(7) + [people.last, create(:person)]
+      finalists = people.first(7) + [dnf_person, create(:person)]
       finalists.each_with_index do |fake_person, i|
         value = (i + 1) * 100
         create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, best: value, average: value, round: second_round)
@@ -266,7 +268,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       expect(acv.errors.length).to be(1)
       expect(acv.errors.first.instance_variable_get(:@id)).to eq(:advanced_without_valid_result_error)
       flagged_ids = acv.errors.first.instance_variable_get(:@args)[:ids]
-      expect(flagged_ids).to include(people.last.name)
+      expect(flagged_ids).to include(dnf_person.name)
       expect(flagged_ids).to include(finalists.last.name)
     end
 
@@ -274,17 +276,19 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       old_competition = create(:competition, starts: Date.new(2008, 6, 1), event_ids: ["333"])
       first_round, second_round = create_rounds("333", count: 2, competition: old_competition)
 
-      # 12 competitors in round 1, the last of which DNFs all their attempts.
-      people = (1..12).map do |i|
+      # 11 competitors with a successful result in round 1...
+      people = (1..11).map do |i|
         fake_person = create(:person)
-        value = i == 12 ? -1 : i * 100
-        create(:result, competition: old_competition, event_id: "333", round_type_id: "1", person: fake_person, best: value, average: value, round: first_round)
+        create(:result, competition: old_competition, event_id: "333", round_type_id: "1", person: fake_person, best: i * 100, average: i * 100, round: first_round)
         fake_person
       end
+      # ...and one who DNFs all their attempts.
+      dnf_person = create(:person)
+      create(:result, competition: old_competition, event_id: "333", round_type_id: "1", person: dnf_person, best: -1, average: -1, round: first_round)
 
       # Back then, competitors could be admitted directly into subsequent rounds, like the
       # all-DNF competitor and one person without any round 1 result here.
-      [*people.first(7), people.last, create(:person)].each do |fake_person|
+      [*people.first(7), dnf_person, create(:person)].each do |fake_person|
         create(:result, competition: old_competition, event_id: "333", round_type_id: "f", person: fake_person, round: second_round)
       end
 
@@ -298,16 +302,20 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round,
                                     participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 900))
 
-      # 12 competitors: 8 with an average below 9.00, one with exactly 9.00, one with
-      # a successful single but a DNF average, and two with an average above 9.00.
-      people = (1..12).map do |i|
+      # 8 competitors with an average below 9.00 and 2 with an average above it...
+      people = [100, 200, 300, 400, 500, 600, 700, 800, 1100, 1200].map do |average|
         fake_person = create(:person)
-        best, average = i == 10 ? [500, -1] : [i * 100, i * 100]
-        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: best, average: average, round: first_round)
+        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: average, average: average, round: first_round)
         fake_person
       end
+      # ...one with an average of exactly 9.00...
+      person_at_value = create(:person)
+      create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: person_at_value, best: 900, average: 900, round: first_round)
+      # ...and one with a successful single but a DNF average.
+      person_with_dnf_average = create(:person)
+      create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: person_with_dnf_average, best: 500, average: -1, round: first_round)
 
-      not_qualified = [people[8], people[9]]
+      not_qualified = [person_at_value, person_with_dnf_average]
       [*people.first(6), *not_qualified].each do |fake_person|
         create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, round: second_round)
       end
@@ -326,8 +334,9 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     end
 
     it "ignores historic result conditions without a value" do
-      first_round, second_round = create_rounds("333", count: 2, competition: competition3)
-      second_round.update!(participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: nil))
+      first_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1)
+      second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round,
+                                    participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: nil))
 
       people = people_pool(Result, competition3, 8)
       results = build_round_results(Result, people, competition3, first_round, event_id: "333", round_type_id: "1")
@@ -379,16 +388,18 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round,
                                     participation_condition: ResultConditions::Ranking.new(scope: 'average', value: 4))
 
-      # 20 competitors, the 4th and 5th of whom are tied, so both of them qualify with the top 4.
-      people = (1..20).map do |i|
+      # 19 competitors with distinct results in round 1...
+      people = (1..19).map do |i|
         fake_person = create(:person)
-        value = (i == 5 ? 4 : i) * 100
-        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: value, average: value, round: first_round)
+        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: i * 100, average: i * 100, round: first_round)
         fake_person
       end
+      # ...and one tied with the 4th, so both of them qualify with the top 4.
+      tied_person = create(:person)
+      create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: tied_person, best: 400, average: 400, round: first_round)
 
-      # The 5 qualified competitors advance, plus one who did not qualify.
-      people.first(6).each do |fake_person|
+      # The 5 qualified competitors advance, plus the next one who did not qualify.
+      [*people.first(4), tied_person, people[4]].each do |fake_person|
         create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, round: second_round)
       end
 
@@ -451,16 +462,16 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       round_333oh_1, round_333oh_2, round_333oh_3, round_333oh_f = create_rounds("333oh", count: 4, competition: competition1)
       round_222_1, round_222_f = create_rounds("222", count: 2, competition: competition2)
       [Result, InboxResult].each do |model|
-        people1 = people_pool(model, competition1, 99)
-        people2 = people_pool(model, competition2, 8)
+        people_333oh = people_pool(model, competition1, 99)
+        people_222 = people_pool(model, competition2, 8)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += build_round_results(model, people1, competition1, round_333oh_1, event_id: "333oh", round_type_id: "1")
-        results += build_round_results(model, people1.first(15), competition1, round_333oh_2, event_id: "333oh", round_type_id: "2")
-        results += build_round_results(model, people1.first(7), competition1, round_333oh_3, event_id: "333oh", round_type_id: "3")
-        results += build_round_results(model, people1.first(7), competition1, round_333oh_f, event_id: "333oh", round_type_id: "f")
-        results += build_round_results(model, people2, competition2, round_222_1, event_id: "222", round_type_id: "1")
-        results += build_round_results(model, people2.first(7), competition2, round_222_f, event_id: "222", round_type_id: "f")
+        results += build_round_results(model, people_333oh, competition1, round_333oh_1, event_id: "333oh", round_type_id: "1")
+        results += build_round_results(model, people_333oh.first(15), competition1, round_333oh_2, event_id: "333oh", round_type_id: "2")
+        results += build_round_results(model, people_333oh.first(7), competition1, round_333oh_3, event_id: "333oh", round_type_id: "3")
+        results += build_round_results(model, people_333oh.first(7), competition1, round_333oh_f, event_id: "333oh", round_type_id: "f")
+        results += build_round_results(model, people_222, competition2, round_222_1, event_id: "222", round_type_id: "1")
+        results += build_round_results(model, people_222.first(7), competition2, round_222_f, event_id: "222", round_type_id: "f")
         model.import(results, validate: false)
       end
       expected_errors = [

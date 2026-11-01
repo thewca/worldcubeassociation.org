@@ -41,11 +41,9 @@ module ResultsValidators
       "#{result.name}#{" (#{wca_id})" if wca_id.present?}"
     end
 
-    # Competitors tied with the last one a ranking or percentage condition lets through advance
-    #   together with them (see ResultConditions::ResultCondition#apply), so they count as qualified
-    #   as well. A "result achieved" condition is a fixed threshold that ties cannot move.
-    private def number_qualified_with_ties(condition, ranked_results, number_qualified)
-      return number_qualified if condition.is_a?(ResultConditions::ResultAchieved)
+    # Competitors tied with the last one the condition lets through advance together with them
+    #   (see ResultConditions::ResultCondition#apply), so they count as qualified as well.
+    private def number_qualified_with_ties(ranked_results, number_qualified)
       return number_qualified unless number_qualified.between?(1, ranked_results.size - 1)
 
       last_qualified = ranked_results[number_qualified - 1]
@@ -106,17 +104,13 @@ module ResultsValidators
 
             # Linked (dual) rounds are run as a single combined round, so the previous results
             # are the union of the previous round and any of its colinked rounds, keeping only
-            # each competitor's best result. They are ranked from best to worst the same way
-            # the PositionsValidator ranks a Dual Round.
+            # each competitor's best result, ranked from best to worst.
             # Old qualification rounds are not taken into account, as competitors could be seeded past them.
             previous_round_ids = round.participation_source.rounds
                                       .reject { IGNORE_ROUND_TYPES.include?(it.round_type_id) }
                                       .pluck(:id)
-            previous_results = previous_round_ids
-                               .flat_map { |id| results_by_round_id[id] || [] }
-                               .group_by(&:person_id)
-                               .map { |_, person_results| person_results.min_by { ValidatorData.ranking_key(it) } }
-                               .sort_by { ValidatorData.ranking_key(it) }
+            previous_round_results = previous_round_ids.flat_map { |id| results_by_round_id[id] || [] }
+            previous_results = ValidatorData.best_result_per_person(previous_round_results)
             number_of_people_in_previous_round = previous_results.size
             # Nothing to check against: the previous round is either an old qualification round,
             #   or has no results at all, which the EventsRoundsValidator reports
@@ -141,16 +135,16 @@ module ResultsValidators
             end
 
             condition = round.participation_condition
-            # Historic data may carry a "result achieved" condition without a concrete value,
+            # Historic data may carry a condition without a concrete value,
             #   which leaves nothing to check against.
-            condition = nil if condition.is_a?(ResultConditions::ResultAchieved) && condition.value.nil?
+            condition = nil if condition&.value.nil?
 
             # Check that no one proceeded if they shouldn't have
             if condition.instance_of? ResultConditions::ResultAchieved
               current_persons = results.map(&:person_id)
               # The condition requires a result strictly better than its value,
               #   just like ResultConditions::ResultAchieved#max_advancing
-              scope_column = condition.scope == "single" ? :best : :average
+              scope_column = condition.result_field
               people_over_condition = previous_results.filter do |r|
                 scope_result = r.send(scope_column)
                 # Competitors without any successful attempt are covered by the 9p4 check above
@@ -188,7 +182,7 @@ module ResultsValidators
               end
               if condition.present?
                 theoretical_number_of_people = condition.max_advancing(previous_results)
-                qualified_number_of_people = number_qualified_with_ties(condition, previous_results, theoretical_number_of_people)
+                qualified_number_of_people = number_qualified_with_ties(previous_results, theoretical_number_of_people)
                 if number_of_people_in_round > qualified_number_of_people
                   @errors << ValidationError.new(TOO_MANY_QUALIFIED_ERROR,
                                                  :rounds, competition.id,
