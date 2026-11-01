@@ -141,6 +141,7 @@ class TicketsController < ApplicationController
     [user, person]
   end
 
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[details_before_anonymization anonymize]
   before_action :check_errors, only: %i[details_before_anonymization anonymize]
 
   private def check_errors

@@ -88,6 +88,51 @@ RSpec.describe TicketsController do
       expect(user.dob).to eq User::ANONYMOUS_DOB.to_date
       expect(user.gender).to eq User::ANONYMOUS_GENDER
     end
+
+    context 'when signed in as a regular user' do
+      before { sign_in create :user }
+
+      it 'cannot anonymize a person' do
+        person = create(:person_who_has_competed_once)
+        name = person.name
+
+        post :anonymize, params: { wcaId: person.wca_id }
+
+        expect(response).to redirect_to root_url
+        expect(person.reload.name).to eq name
+      end
+
+      it 'cannot anonymize an account' do
+        user = create(:user)
+        email = user.email
+
+        post :anonymize, params: { userId: user.id }
+
+        expect(response).to redirect_to root_url
+        expect(user.reload.email).to eq email
+      end
+    end
+  end
+
+  describe "GET #details_before_anonymization" do
+    it 'shows the details to a results team member' do
+      sign_in create(:user, :wrt_member)
+      person = create(:person_who_has_competed_once)
+
+      get :details_before_anonymization, params: { wcaId: person.wca_id }
+
+      expect(response).to be_successful
+      expect(response.parsed_body["person"]["wca_id"]).to eq person.wca_id
+    end
+
+    it 'does not show the details to a regular user' do
+      sign_in create :user
+      person = create(:person_who_has_competed_once)
+
+      get :details_before_anonymization, params: { wcaId: person.wca_id }
+
+      expect(response).to redirect_to root_url
+    end
   end
 
   describe 'POST #post_results' do
