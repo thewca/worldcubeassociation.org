@@ -11,9 +11,10 @@ module ResultsValidators
     REGULATION_9P1_ERROR = :regulation_9p1_error
     OLD_REGULATION_9P_ERROR = :no_competitor_eliminated_error
     ROUND_9P1_ERROR = :less_than_twenty_five_percent_eliminated_error
-    TOO_MANY_QUALIFIED_WARNING = :too_many_qualified_warning
+    TOO_MANY_QUALIFIED_ERROR = :too_many_qualified_error
     NOT_ENOUGH_QUALIFIED_WARNING = :not_enough_qualified_warning
     COMPETED_NOT_QUALIFIED_ERROR = :competed_not_qualified_error
+    ADVANCED_WITHOUT_VALID_RESULT_ERROR = :advanced_without_valid_result_error
     ROUND_NOT_FOUND_ERROR = :round_not_found_error
 
     # These are the old "(combined) qualification" and "b-final" rounds.
@@ -34,11 +35,24 @@ module ResultsValidators
       }
     end
 
-    # Sort key matching Result.merged_dual_rounds: primary score (average or best per format,
-    # with DNF/<=0 ranked worst), then best, then id. Lower sorts first (better).
-    private def dual_round_sort_key(result)
-      primary = result.format.sort_by == "average" ? result.average : result.best
-      [primary <= 0 ? 1 : 0, primary, result.best <= 0 ? 1 : 0, result.best, result.id]
+    # Uploaded results can lack a matching person, in which case there is no WCA ID to show.
+    private def competitor_label(result)
+      wca_id = result.person&.wca_id
+      "#{result.name}#{" (#{wca_id})" if wca_id.present?}"
+    end
+
+    # Competitors tied with the last one a ranking or percentage condition lets through advance
+    #   together with them (see ResultConditions::ResultCondition#apply), so they count as qualified
+    #   as well. A "result achieved" condition is a fixed threshold that ties cannot move.
+    private def number_qualified_with_ties(condition, ranked_results, number_qualified)
+      return number_qualified if condition.is_a?(ResultConditions::ResultAchieved)
+      return number_qualified unless number_qualified.between?(1, ranked_results.size - 1)
+
+      last_qualified = ranked_results[number_qualified - 1]
+      # Competitors without any successful attempt cannot advance, so they cannot tie for a spot either
+      return number_qualified unless last_qualified.best.positive?
+
+      number_qualified + ranked_results.drop(number_qualified).take_while { it.tied_with?(last_qualified) }.size
     end
 
     def run_validation(validator_data)
@@ -59,6 +73,9 @@ module ResultsValidators
 
           rounds_without_deprecated_types.each do |round|
             results = results_by_round_id[round.id]
+            # Rounds without any results are reported by the EventsRoundsValidator
+            next if results.blank?
+
             number_of_people_in_round = results.size
             remaining_number_of_rounds = round.total_number_of_rounds - round.number
 
@@ -89,25 +106,57 @@ module ResultsValidators
 
             # Linked (dual) rounds are run as a single combined round, so the previous results
             # are the union of the previous round and any of its colinked rounds, keeping only
-            # each competitor's best result (mirrors Result.merged_dual_rounds).
-            previous_round_ids = round.participation_source.rounds.pluck(:id)
+            # each competitor's best result. They are ranked from best to worst the same way
+            # the PositionsValidator ranks a Dual Round.
+            # Old qualification rounds are not taken into account, as competitors could be seeded past them.
+            previous_round_ids = round.participation_source.rounds
+                                      .reject { IGNORE_ROUND_TYPES.include?(it.round_type_id) }
+                                      .pluck(:id)
             previous_results = previous_round_ids
                                .flat_map { |id| results_by_round_id[id] || [] }
                                .group_by(&:person_id)
-                               .map { |_, person_results| person_results.min_by { |r| dual_round_sort_key(r) } }
+                               .map { |_, person_results| person_results.min_by { ValidatorData.ranking_key(it) } }
+                               .sort_by { ValidatorData.ranking_key(it) }
             number_of_people_in_previous_round = previous_results.size
+            # Nothing to check against: the previous round is either an old qualification round,
+            #   or has no results at all, which the EventsRoundsValidator reports
+            next if number_of_people_in_previous_round.zero?
+
+            # https://www.worldcubeassociation.org/regulations/#9p4: Regardless of any participation condition,
+            #   competitors need a successful result in order to advance. Since we keep each competitor's best
+            #   result, it is successful whenever any of their results in a Dual Round is.
+            # Until 2009, competitors could be admitted directly into subsequent rounds under
+            #   special circumstances, so this only applies to modern competitions.
+            if comp_start_date >= Date.new(2009, 1, 1)
+              previous_results_by_person_id = previous_results.index_by(&:person_id)
+              people_without_valid_result = results.filter_map do |result|
+                competitor_label(result) unless previous_results_by_person_id[result.person_id]&.best&.positive?
+              end
+              if people_without_valid_result.any?
+                @errors << ValidationError.new(ADVANCED_WITHOUT_VALID_RESULT_ERROR,
+                                               :rounds, competition.id,
+                                               round_id: round.human_id,
+                                               ids: people_without_valid_result.join(","))
+              end
+            end
 
             condition = round.participation_condition
+            # Historic data may carry a "result achieved" condition without a concrete value,
+            #   which leaves nothing to check against.
+            condition = nil if condition.is_a?(ResultConditions::ResultAchieved) && condition.value.nil?
 
             # Check that no one proceeded if they shouldn't have
             if condition.instance_of? ResultConditions::ResultAchieved
               current_persons = results.map(&:person_id)
+              # The condition requires a result strictly better than its value,
+              #   just like ResultConditions::ResultAchieved#max_advancing
+              scope_column = condition.scope == "single" ? :best : :average
               people_over_condition = previous_results.filter do |r|
-                sort_by_column = r.format.sort_by == "single" ? :best : :average
-                current_persons.include?(r.person_id) && r.send(sort_by_column) > condition.value
-              end.map do |competitor|
-                "#{competitor.name}#{" (#{competitor.wca_id})" if competitor.wca_id.present?}"
-              end
+                scope_result = r.send(scope_column)
+                # Competitors without any successful attempt are covered by the 9p4 check above
+                current_persons.include?(r.person_id) && r.best.positive? &&
+                  (scope_result <= 0 || scope_result >= condition.value)
+              end.map { competitor_label(it) }
               if people_over_condition.any?
                 @errors << ValidationError.new(COMPETED_NOT_QUALIFIED_ERROR,
                                                :rounds, competition.id,
@@ -139,13 +188,14 @@ module ResultsValidators
               end
               if condition.present?
                 theoretical_number_of_people = condition.max_advancing(previous_results)
-                if number_of_people_in_round > theoretical_number_of_people
-                  @warnings << ValidationWarning.new(TOO_MANY_QUALIFIED_WARNING,
-                                                     :rounds, competition.id,
-                                                     round_id: round.human_id,
-                                                     actual: number_of_people_in_round,
-                                                     expected: theoretical_number_of_people,
-                                                     condition: round.participation_condition_to_desc)
+                qualified_number_of_people = number_qualified_with_ties(condition, previous_results, theoretical_number_of_people)
+                if number_of_people_in_round > qualified_number_of_people
+                  @errors << ValidationError.new(TOO_MANY_QUALIFIED_ERROR,
+                                                 :rounds, competition.id,
+                                                 round_id: round.human_id,
+                                                 actual: number_of_people_in_round,
+                                                 expected: qualified_number_of_people,
+                                                 condition: round.participation_condition_to_desc)
                 end
                 if theoretical_number_of_people > max_advancing
                   @errors << ValidationError.new(ROUND_9P1_ERROR,
@@ -153,13 +203,15 @@ module ResultsValidators
                                                  round_id: round.human_id,
                                                  condition: round.participation_condition_to_desc)
                 end
+                # Competitors without any successful attempt cannot advance, whatever the condition allows
+                attainable_number_of_people = [theoretical_number_of_people, previous_results.count { it.best.positive? }].min
                 # This comes from https://github.com/thewca/worldcubeassociation.org/issues/5587
-                if theoretical_number_of_people - number_of_people_in_round >= 3 &&
-                   (number_of_people_in_round / theoretical_number_of_people) <= 0.8
+                if attainable_number_of_people - number_of_people_in_round >= 3 &&
+                   number_of_people_in_round <= 0.8 * attainable_number_of_people
                   @warnings << ValidationWarning.new(NOT_ENOUGH_QUALIFIED_WARNING,
                                                      :rounds, competition.id,
                                                      round_id: round.human_id,
-                                                     expected: theoretical_number_of_people,
+                                                     expected: attainable_number_of_people,
                                                      actual: number_of_people_in_round)
                 end
               end

@@ -25,19 +25,35 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       end
     end
 
+    def people_pool(model, competition, count)
+      if model == Result
+        create_list(:person, count)
+      else
+        create_list(:inbox_person, count, competition_id: competition.id)
+      end
+    end
+
+    def build_round_results(model, people, competition, round, event_id:, round_type_id:)
+      result_kind = model.model_name.singular.to_sym
+      people.map do |person|
+        build(result_kind, competition: competition, event_id: event_id, round_type_id: round_type_id, round: round, person: person)
+      end
+    end
+
     it "doesn't complain when it's fine" do
       round_333oh_1, round_333oh_2, round_333oh_3, round_333oh_f = create_rounds("333oh", count: 4, competition: competition1)
       round_222_1, round_222_f = create_rounds("222", count: 2, competition: competition2)
       [Result, InboxResult].each do |model|
-        result_kind = model.model_name.singular.to_sym
+        people1 = people_pool(model, competition1, 100)
+        people2 = people_pool(model, competition2, 8)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", round: round_333oh_1)
-        results += build_list(result_kind, 16, competition: competition1, event_id: "333oh", round_type_id: "2", round: round_333oh_2)
-        results += build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "3", round: round_333oh_3)
-        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", round: round_333oh_f)
-        results += build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", round: round_222_1)
-        results += build_list(result_kind, 5, competition: competition2, event_id: "222", round_type_id: "f", round: round_222_f)
+        results += build_round_results(model, people1, competition1, round_333oh_1, event_id: "333oh", round_type_id: "1")
+        results += build_round_results(model, people1.first(16), competition1, round_333oh_2, event_id: "333oh", round_type_id: "2")
+        results += build_round_results(model, people1.first(8), competition1, round_333oh_3, event_id: "333oh", round_type_id: "3")
+        results += build_round_results(model, people1.first(7), competition1, round_333oh_f, event_id: "333oh", round_type_id: "f")
+        results += build_round_results(model, people2, competition2, round_222_1, event_id: "222", round_type_id: "1")
+        results += build_round_results(model, people2.first(5), competition2, round_222_f, event_id: "222", round_type_id: "f")
         model.import(results)
       end
 
@@ -52,12 +68,12 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       round_333oh_b_final = create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 2, number: 0, old_type: "b")
       round_33_oh_1, round_33_oh_f = create_rounds("333oh", count: 2, competition: competition1)
       [Result, InboxResult].each do |model|
-        result_kind = model.model_name.singular.to_sym
+        people = people_pool(model, competition1, 100)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", round: round_33_oh_1)
-        results += build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "b", round: round_333oh_b_final)
-        results += build_list(result_kind, 32, competition: competition1, event_id: "333oh", round_type_id: "f", round: round_33_oh_f)
+        results += build_round_results(model, people, competition1, round_33_oh_1, event_id: "333oh", round_type_id: "1")
+        results += build_round_results(model, people.first(8), competition1, round_333oh_b_final, event_id: "333oh", round_type_id: "b")
+        results += build_round_results(model, people.first(32), competition1, round_33_oh_f, event_id: "333oh", round_type_id: "f")
         model.import(results, validate: false)
       end
 
@@ -72,7 +88,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
 
     # Triggers:
     # ROUND_9P1_ERROR
-    # TOO_MANY_QUALIFIED_WARNING
+    # TOO_MANY_QUALIFIED_ERROR
     # NOT_ENOUGH_QUALIFIED_WARNING
     # COMPETED_NOT_QUALIFIED_ERROR
     it "validates round's advancement condition" do
@@ -85,9 +101,9 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
 
       expected_errors = []
       # We create 20 competitors:
-      #   - for 2x2 this would actually let 17/20 people proceed, which breaks 9P1.
-      #   - for second round we let a valid number of competitors proceed, which
-      #   trigger the warning about letting less competitor proceed than expected.
+      #   - for 2x2 the "result achieved" condition would allow 16/20 people to
+      #   proceed, which breaks 9P1. We let a valid number of competitors proceed,
+      #   which triggers the warning about fewer competitors proceeding than expected.
       #   - for 3x3 we set a ranking condition arbitrarily low, and we let more
       #   competitors proceed than expected.
       (1..20).each do |i|
@@ -113,14 +129,14 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
                                                  :rounds, competition2.id,
                                                  round_id: "222-f",
                                                  condition: second_round.participation_condition_to_desc)
+      expected_errors << RV::ValidationError.new(ACV::TOO_MANY_QUALIFIED_ERROR,
+                                                 :rounds, competition3.id,
+                                                 round_id: "333-f", actual: 9, expected: 4,
+                                                 condition: second_round2.participation_condition_to_desc)
       expected_warnings = [
         RV::ValidationWarning.new(ACV::NOT_ENOUGH_QUALIFIED_WARNING,
                                   :rounds, competition2.id,
                                   round_id: "222-f", expected: 16, actual: 10),
-        RV::ValidationWarning.new(ACV::TOO_MANY_QUALIFIED_WARNING,
-                                  :rounds, competition3.id,
-                                  round_id: "333-f", actual: 9, expected: 4,
-                                  condition: second_round2.participation_condition_to_desc),
       ]
       acv = ACV.new.validate(competition_ids: [competition2.id, competition3.id], model: Result)
       expect(acv.warnings).to match_array(expected_warnings)
@@ -172,8 +188,9 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         second_round.update(participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 99))
 
         acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
-        expect(acv.errors.length).to be(1)
-        expect(acv.errors.first.instance_variable_get(:@id)).to eq(:competed_not_qualified_error)
+        # Since nobody satisfies the condition, the round as a whole is also over-advanced
+        error_ids = acv.errors.map { it.instance_variable_get(:@id) }
+        expect(error_ids).to contain_exactly(:competed_not_qualified_error, :too_many_qualified_error)
       end
 
       it 'returns name, and WCA ID when available' do
@@ -190,8 +207,19 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         )
 
         acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
+        competed_error = acv.errors.find { it.instance_variable_get(:@id) == :competed_not_qualified_error }
+        expect(competed_error.instance_variable_get(:@args)[:ids]).to eq("#{@finalist.name},#{person.name} (#{person.wca_id})")
+      end
+
+      it 'reports results without a matching person' do
+        orphan_result = create(
+          :inbox_result, competition: competition3, event_id: "333", round_type_id: "f", round: second_round, person_id: "9999"
+        )
+
+        acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
         expect(acv.errors.length).to be(1)
-        expect(acv.errors.first.instance_variable_get(:@args)[:ids]).to eq("#{@finalist.name},#{person.name} (#{person.wca_id})")
+        expect(acv.errors.first.instance_variable_get(:@id)).to eq(:advanced_without_valid_result_error)
+        expect(acv.errors.first.instance_variable_get(:@args)[:ids]).to eq(orphan_result.name)
       end
     end
 
@@ -213,6 +241,169 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       expect(acv.errors).to be_empty
     end
 
+    it "flags competitors advancing without a valid result, regardless of any condition" do
+      first_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1)
+      second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round)
+
+      # 12 competitors in round 1, the last of which DNFs all their attempts.
+      people = (1..12).map do |i|
+        fake_person = create(:person)
+        value = i == 12 ? -1 : i * 100
+        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: value, average: value, round: first_round)
+        fake_person
+      end
+
+      # 9 competitors in the final (exactly 75% of 12, so no 9P1 issues): 7 valid
+      # qualifiers, the all-DNF competitor, and one person without any round 1 result.
+      finalists = people.first(7) + [people.last, create(:person)]
+      finalists.each_with_index do |fake_person, i|
+        value = (i + 1) * 100
+        create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, best: value, average: value, round: second_round)
+      end
+
+      acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors.length).to be(1)
+      expect(acv.errors.first.instance_variable_get(:@id)).to eq(:advanced_without_valid_result_error)
+      flagged_ids = acv.errors.first.instance_variable_get(:@args)[:ids]
+      expect(flagged_ids).to include(people.last.name)
+      expect(flagged_ids).to include(finalists.last.name)
+    end
+
+    it "does not flag competitors advancing without a valid result before 2009" do
+      old_competition = create(:competition, starts: Date.new(2008, 6, 1), event_ids: ["333"])
+      first_round, second_round = create_rounds("333", count: 2, competition: old_competition)
+
+      # 12 competitors in round 1, the last of which DNFs all their attempts.
+      people = (1..12).map do |i|
+        fake_person = create(:person)
+        value = i == 12 ? -1 : i * 100
+        create(:result, competition: old_competition, event_id: "333", round_type_id: "1", person: fake_person, best: value, average: value, round: first_round)
+        fake_person
+      end
+
+      # Back then, competitors could be admitted directly into subsequent rounds, like the
+      # all-DNF competitor and one person without any round 1 result here.
+      [*people.first(7), people.last, create(:person)].each do |fake_person|
+        create(:result, competition: old_competition, event_id: "333", round_type_id: "f", person: fake_person, round: second_round)
+      end
+
+      acv = ACV.new.validate(competition_ids: [old_competition.id], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to be_empty
+    end
+
+    it "flags results equal to a result condition's value and DNF averages" do
+      first_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1)
+      second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round,
+                                    participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 900))
+
+      # 12 competitors: 8 with an average below 9.00, one with exactly 9.00, one with
+      # a successful single but a DNF average, and two with an average above 9.00.
+      people = (1..12).map do |i|
+        fake_person = create(:person)
+        best, average = i == 10 ? [500, -1] : [i * 100, i * 100]
+        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: best, average: average, round: first_round)
+        fake_person
+      end
+
+      not_qualified = [people[8], people[9]]
+      [*people.first(6), *not_qualified].each do |fake_person|
+        create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, round: second_round)
+      end
+
+      expected_errors = [
+        RV::ValidationError.new(ACV::COMPETED_NOT_QUALIFIED_ERROR,
+                                :rounds, competition3.id,
+                                round_id: "333-f",
+                                ids: not_qualified.map { "#{it.name} (#{it.wca_id})" }.join(","),
+                                condition: second_round.participation_condition_to_desc),
+      ]
+
+      acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to match_array(expected_errors)
+    end
+
+    it "ignores historic result conditions without a value" do
+      first_round, second_round = create_rounds("333", count: 2, competition: competition3)
+      second_round.update!(participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: nil))
+
+      people = people_pool(Result, competition3, 8)
+      results = build_round_results(Result, people, competition3, first_round, event_id: "333", round_type_id: "1")
+      results += build_round_results(Result, people.first(6), competition3, second_round, event_id: "333", round_type_id: "f")
+      Result.import(results)
+
+      acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to be_empty
+    end
+
+    it "does not warn about fewer competitors proceeding while at least 80% of the qualified ones did" do
+      first_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1)
+      second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round,
+                                    participation_condition: ResultConditions::Ranking.new(scope: 'average', value: 20))
+
+      # 20 of the 28 competitors qualify and 17 of them proceed: 3 fewer, but still 85%.
+      people = people_pool(Result, competition3, 28)
+      results = build_round_results(Result, people, competition3, first_round, event_id: "333", round_type_id: "1")
+      results += build_round_results(Result, people.first(17), competition3, second_round, event_id: "333", round_type_id: "f")
+      Result.import(results)
+
+      acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to be_empty
+    end
+
+    it "does not treat old qualification rounds as the previous round" do
+      qualification_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 0, old_type: "0")
+      first_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1, participation_source: qualification_round)
+      final_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round)
+
+      # Half of the first round's competitors were seeded past the qualification round.
+      people = people_pool(Result, competition3, 16)
+      first_round_people = people.last(12)
+      results = []
+      results += build_round_results(Result, people.first(10), competition3, qualification_round, event_id: "333", round_type_id: "0")
+      results += build_round_results(Result, first_round_people, competition3, first_round, event_id: "333", round_type_id: "1")
+      results += build_round_results(Result, first_round_people.first(9), competition3, final_round, event_id: "333", round_type_id: "f")
+      Result.import(results, validate: false)
+
+      acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to be_empty
+    end
+
+    it "counts competitors tied at the boundary as qualified" do
+      first_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1)
+      second_round = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round,
+                                    participation_condition: ResultConditions::Ranking.new(scope: 'average', value: 4))
+
+      # 20 competitors, the 4th and 5th of whom are tied, so both of them qualify with the top 4.
+      people = (1..20).map do |i|
+        fake_person = create(:person)
+        value = (i == 5 ? 4 : i) * 100
+        create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: value, average: value, round: first_round)
+        fake_person
+      end
+
+      # The 5 qualified competitors advance, plus one who did not qualify.
+      people.first(6).each do |fake_person|
+        create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, round: second_round)
+      end
+
+      expected_errors = [
+        RV::ValidationError.new(ACV::TOO_MANY_QUALIFIED_ERROR,
+                                :rounds, competition3.id,
+                                round_id: "333-f", actual: 6, expected: 5,
+                                condition: second_round.participation_condition_to_desc),
+      ]
+
+      acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to match_array(expected_errors)
+    end
+
     it "merges linked (dual) rounds when checking advancement to the next round" do
       # Dual round (9v5): rounds 1 and 2 are run as a single combined round, then round 3 follows.
       # 60 competitors in round 1 and 40 (different) in round 2 => 100 combined. 70 advance to
@@ -221,17 +412,33 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       linked_round = create(:linked_round)
       round_333_1 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 1)
       round_333_2 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 2)
-      round_333_3 = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 3, number: 3)
+      round_333_3 = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 3, number: 3, participation_source: linked_round)
 
+      people = people_pool(Result, competition3, 100)
       results = []
-      results += build_list(:result, 60, competition: competition3, event_id: "333", round_type_id: "1", round: round_333_1)
-      results += build_list(:result, 40, competition: competition3, event_id: "333", round_type_id: "2", round: round_333_2)
-      results += build_list(:result, 70, competition: competition3, event_id: "333", round_type_id: "f", round: round_333_3)
+      results += people.first(60).map { build(:result, competition: competition3, event_id: "333", round_type_id: "1", person: it, round: round_333_1) }
+      results += people.last(40).map { build(:result, competition: competition3, event_id: "333", round_type_id: "2", person: it, round: round_333_2) }
+      results += people.first(70).map { build(:result, competition: competition3, event_id: "333", round_type_id: "f", person: it, round: round_333_3) }
       Result.import(results, validate: false)
 
       acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
       expect(acv.warnings).to be_empty
       expect(acv.errors).to be_empty
+    end
+
+    it "leaves rounds without results to the EventsRoundsValidator instead of crashing" do
+      first_round = create_rounds("333", count: 2, competition: competition3).first
+      people = people_pool(InboxResult, competition3, 8)
+      InboxResult.import(build_round_results(InboxResult, people, competition3, first_round, event_id: "333", round_type_id: "1"))
+
+      validator = RV::CompetitionsResultsValidator.new([ACV, RV::EventsRoundsValidator]).validate(competition3.id)
+      # ValidationError equality does not compare the error type, so check it explicitly
+      expect(validator.errors.map { it.instance_variable_get(:@id) }).to contain_exactly(RV::EventsRoundsValidator::MISSING_ROUND_RESULTS_ERROR)
+      expect(validator.errors).to contain_exactly(
+        RV::ValidationError.new(RV::EventsRoundsValidator::MISSING_ROUND_RESULTS_ERROR,
+                                :rounds, competition3.id,
+                                round_id: "333-f"),
+      )
     end
 
     # Triggers:
@@ -244,15 +451,16 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       round_333oh_1, round_333oh_2, round_333oh_3, round_333oh_f = create_rounds("333oh", count: 4, competition: competition1)
       round_222_1, round_222_f = create_rounds("222", count: 2, competition: competition2)
       [Result, InboxResult].each do |model|
-        result_kind = model.model_name.singular.to_sym
+        people1 = people_pool(model, competition1, 99)
+        people2 = people_pool(model, competition2, 8)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += build_list(result_kind, 99, competition: competition1, event_id: "333oh", round_type_id: "1", round: round_333oh_1)
-        results += build_list(result_kind, 15, competition: competition1, event_id: "333oh", round_type_id: "2", round: round_333oh_2)
-        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "3", round: round_333oh_3)
-        results += build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", round: round_333oh_f)
-        results += build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", round: round_222_1)
-        results += build_list(result_kind, 7, competition: competition2, event_id: "222", round_type_id: "f", round: round_222_f)
+        results += build_round_results(model, people1, competition1, round_333oh_1, event_id: "333oh", round_type_id: "1")
+        results += build_round_results(model, people1.first(15), competition1, round_333oh_2, event_id: "333oh", round_type_id: "2")
+        results += build_round_results(model, people1.first(7), competition1, round_333oh_3, event_id: "333oh", round_type_id: "3")
+        results += build_round_results(model, people1.first(7), competition1, round_333oh_f, event_id: "333oh", round_type_id: "f")
+        results += build_round_results(model, people2, competition2, round_222_1, event_id: "222", round_type_id: "1")
+        results += build_round_results(model, people2.first(7), competition2, round_222_f, event_id: "222", round_type_id: "f")
         model.import(results, validate: false)
       end
       expected_errors = [
