@@ -136,6 +136,40 @@ RSpec.describe TicketsController do
   end
 
   describe 'POST #post_results' do
+    context 'when signed in as a regular user' do
+      let(:results_ticket) { create(:competition_result_ticket) }
+
+      before { sign_in create :user }
+
+      it 'does not post the results' do
+        competition = results_ticket.competition
+        round = create(:round, competition: competition, number: 2)
+        create(:result, competition: competition, event_id: "333", round: round)
+
+        post :post_results, params: { ticket_id: results_ticket.ticket.id }
+
+        expect(response).to redirect_to root_url
+        expect(competition.reload.results_posted_at).to be_nil
+      end
+    end
+
+    context 'when signed in as a delegate of the competition' do
+      let(:results_ticket) { create(:competition_result_ticket) }
+
+      before { sign_in results_ticket.competition.delegates.first }
+
+      it 'does not post the results' do
+        competition = results_ticket.competition
+        round = create(:round, competition: competition, number: 2)
+        create(:result, competition: competition, event_id: "333", round: round)
+
+        post :post_results, params: { ticket_id: results_ticket.ticket.id }
+
+        expect(response).to redirect_to root_url
+        expect(competition.reload.results_posted_at).to be_nil
+      end
+    end
+
     context 'when signed in as results team member' do
       let(:results_ticket) { create(:competition_result_ticket) }
       let(:wrt_member) { create(:user, :wrt_member) }
