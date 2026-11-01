@@ -2,6 +2,7 @@ WITH scramble_counts AS (
   SELECT
     scramble,
     SUM(event_id NOT IN ('222', 'skewb')) AS other_count,
+    MIN(event_id) AS event_id,
     -- For a scramble shared by exactly two competitions, this is the pair of competitions
     MIN(competition_id) AS first_competition_id,
     MAX(competition_id) AS last_competition_id
@@ -15,7 +16,9 @@ pair_counts AS (
     other_count,
     first_competition_id,
     last_competition_id,
-    COUNT(*) OVER (PARTITION BY first_competition_id, last_competition_id) AS pair_count
+    SUM(other_count = 0) OVER (
+      PARTITION BY first_competition_id, last_competition_id, event_id
+    ) AS pair_count
   FROM scramble_counts
 ),
 eligible_scrambles AS (
@@ -24,11 +27,11 @@ eligible_scrambles AS (
   WHERE other_count > 1
     /*
       222 and skewb have such a small scramble space that single duplicates across
-      competitions are expected by chance. Several scrambles shared by the same two
-      competitions, however, point to a copied scramble set, e.g. scrambles uploaded
-      from the wrong competition. The limit of 3 was tested against the live data in
-      November 2026 and produced no false positives, whereas a limit of 2 reported
-      12 pairs of competitions sharing exactly 2 scrambles by chance.
+      competitions are expected by chance. Several scrambles of the same event shared
+      by the same two competitions, however, point to a copied scramble set, e.g.
+      scrambles uploaded from the wrong competition. The limit of 3 was tested against
+      the live data in November 2026 and produced no false positives, whereas a limit
+      of 2 reported 12 pairs of competitions sharing exactly 2 scrambles by chance.
     */
     OR (
       other_count = 0
