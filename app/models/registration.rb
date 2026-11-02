@@ -309,9 +309,10 @@ class Registration < ApplicationRecord
     end
   end
 
-  def registration_history
+  def registration_history(admin: false)
     registration_history_entries.map do |r|
       changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value).symbolize_keys
+      changed_attributes = changed_attributes.except(:administrative_notes) unless admin
 
       {
         changed_attributes: changed_attributes,
@@ -327,7 +328,7 @@ class Registration < ApplicationRecord
     as_json(methods: %i[name country_iso2 wca_id], only: %i[id user_id registrant_id])
   end
 
-  def to_v2_json(admin: false, pii: false)
+  def to_v2_json(admin: false, pii: false, admin_notes: admin)
     private_attributes = pii ? %w[dob email] : nil
 
     base_json = {
@@ -357,9 +358,9 @@ class Registration < ApplicationRecord
                                 registration_status: is_competing ? competing_status : 'non_competing',
                                 registered_on: registered_at,
                                 comment: comments || "",
-                                admin_comment: administrative_notes || "",
                               },
                             })
+      base_json[:competing][:admin_comment] = administrative_notes || "" if admin_notes
       base_json[:competing][:waiting_list_position] = waiting_list_position if competing_status_waiting_list?
     end
     base_json

@@ -64,7 +64,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def show
-    render json: @registration.to_v2_json(admin: true)
+    render json: @registration.to_v2_json(admin: true, admin_notes: authenticated_user.can_manage_competition?(@competition))
   end
 
   def ensure_registration_exists
@@ -79,7 +79,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def show_by_user
-    render json: @registration.to_v2_json(admin: true)
+    render json: @registration.to_v2_json(admin: true, admin_notes: authenticated_user.can_manage_competition?(@competition))
   end
 
   def registration_config
@@ -146,7 +146,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   def update
     if params[:competing]
       @registration.update_lanes!(@request, authenticated_user.id)
-      return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true) }, status: :ok
+      return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true, admin_notes: authenticated_user.can_manage_competition?(@competition)) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end

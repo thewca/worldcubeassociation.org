@@ -55,6 +55,35 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  describe 'admin comment visibility' do
+    let(:delegate) { create(:delegate) }
+    let(:registration) { create(:registration, :pending, competition: create(:competition, :registration_open, delegates: [delegate])) }
+
+    before do
+      Registrations::Lanes::Competing.update!({ 'competing' => { 'admin_comment' => 'secret history note' } }, registration, delegate.id)
+    end
+
+    it 'hides the admin comment from the competitor' do
+      api_sign_in_as(registration.user)
+
+      get api_v1_registration_path(registration)
+      expect(response.parsed_body['competing']).not_to have_key('admin_comment')
+
+      get api_v1_registration_history_path(registration)
+      expect(response.parsed_body.flat_map { it['changed_attributes'].keys }).not_to include('administrative_notes')
+    end
+
+    it 'shows the admin comment to the organizer' do
+      api_sign_in_as(delegate)
+
+      get api_v1_registration_path(registration)
+      expect(response.parsed_body['competing']['admin_comment']).to eq('secret history note')
+
+      get api_v1_registration_history_path(registration)
+      expect(response.parsed_body.pluck('changed_attributes')).to include(include('administrative_notes' => 'secret history note'))
+    end
+  end
+
   describe 'GET #index' do
     let(:competition) { create(:competition, :visible) }
 

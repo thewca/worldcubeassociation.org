@@ -5,8 +5,9 @@ class Api::V1::RegistrationHistoryController < Api::V1::ApiController
     registration_id = params.require(:registration_id)
     registration = Registration.find(registration_id)
 
-    return head :unauthorized unless authenticated_user.id == registration.user_id || authenticated_user.can_manage_competition?(registration.competition)
+    can_manage = authenticated_user.can_manage_competition?(registration.competition)
+    return head :unauthorized unless authenticated_user.id == registration.user_id || can_manage
 
-    render json: registration.registration_history
+    render json: registration.registration_history(admin: can_manage)
   end
 end
