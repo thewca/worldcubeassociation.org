@@ -59,7 +59,7 @@ function EmailClipboardButton({ email, t }: { email: string; t: TFunction }) {
   const clipboard = useClipboard({ value: email });
 
   const [hasCoarsePointer] = useMediaQuery(
-    ["(any-pointer: coarse) and (hover: none)"],
+    ["(pointer: coarse) and (hover: none)"],
     { fallback: [true] },
   );
 
