@@ -13,6 +13,7 @@ import Loading from "@/components/ui/loading";
 import NavbarSkeleton from "./navbar-skeleton";
 import FooterSkeleton from "./footer-skeleton";
 import { EmotionRegistry } from "@/components/ui/emotion-registry";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: {
@@ -65,6 +66,7 @@ export default async function RootLayout({
                 <Suspense fallback={<FooterSkeleton />}>
                   <Footer />
                 </Suspense>
+                <Toaster />
               </UiProvider>
             </EmotionRegistry>
           </WCAQueryClientProvider>
