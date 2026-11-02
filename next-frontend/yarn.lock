@@ -10238,12 +10238,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^8.2.2":
-  version: 8.2.2
-  resolution: "i18next-browser-languagedetector@npm:8.2.2"
+"i18next-browser-languagedetector@npm:^8.2.4":
+  version: 8.2.4
+  resolution: "i18next-browser-languagedetector@npm:8.2.4"
   dependencies:
     "@babel/runtime": "npm:^7.29.2"
-  checksum: 10c0/c4380554d871928153a442c80f647161227146f84d9c56e77cf6bc096c47125fb48272f8904eef869800bcfd86b062e72611e815a37c186888a086acd1f627cd
+  checksum: 10c0/d2f4134e6859faee2269703144f36320395952fb3ce09ed40440dd5df19c9f2e12e8b77bde82e10be16b23efe0df23798fb230fc5d4528e45e0f71419c7c98a5
   languageName: node
   linkType: hard
 
@@ -12671,7 +12671,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.7"
     graphql: "npm:^17.0.2"
     i18next: "npm:^26.5.10"
-    i18next-browser-languagedetector: "npm:^8.2.2"
+    i18next-browser-languagedetector: "npm:^8.2.4"
     i18next-resources-to-backend: "npm:^1.2.3"
     js-cookie: "npm:^3.0.8"
     jsdom: "npm:^30.1.3"
