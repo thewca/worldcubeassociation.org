@@ -309,11 +309,9 @@ class Registration < ApplicationRecord
     end
   end
 
-  def registration_history(includes_admin_notes: false)
-    hidden_keys = includes_admin_notes ? [] : %i[administrative_notes]
-
+  def registration_history
     registration_history_entries.map do |r|
-      changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value).symbolize_keys.except(*hidden_keys)
+      changed_attributes = r.registration_history_changes.index_by(&:key).transform_values(&:parsed_value).symbolize_keys
 
       {
         changed_attributes: changed_attributes,

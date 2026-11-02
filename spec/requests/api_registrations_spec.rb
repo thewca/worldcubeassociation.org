@@ -79,9 +79,6 @@ RSpec.describe 'API Registrations' do
 
       get show_mine_api_v1_competition_registrations_path(registration.competition)
       expect(response.parsed_body['competing']).not_to have_key('admin_comment')
-
-      get api_v1_registration_history_path(registration)
-      expect(response.parsed_body.flat_map { it['changed_attributes'].keys }).not_to include('administrative_notes')
     end
 
     it 'shows the admin comment to the organizer' do
@@ -101,6 +98,9 @@ RSpec.describe 'API Registrations' do
       expect(response).to have_http_status(:unauthorized)
 
       get show_by_user_api_v1_competition_registrations_path(registration.competition, registration.user_id)
+      expect(response).to have_http_status(:unauthorized)
+
+      get api_v1_registration_history_path(registration)
       expect(response).to have_http_status(:unauthorized)
     end
   end
