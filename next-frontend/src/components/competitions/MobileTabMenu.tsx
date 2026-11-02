@@ -2,17 +2,19 @@ import { CompetitionNavTab, TabWithLink } from "@/lib/wca/competitions/tabs";
 import {
   Box,
   Card,
-  SimpleGrid,
   Tabs,
   Link as ChakraLink,
   Stack,
   Text,
+  Menu,
+  Portal,
+  Icon,
 } from "@chakra-ui/react";
 import { TFunction } from "i18next";
-import TabTarget from "../ui/tabTarget";
 import IconDisplay from "../IconDisplay";
+import { LuAArrowDown } from "react-icons/lu";
 
-const groupTabsMap = new Map([
+export const groupTabsMap = new Map([
   ["general", "info"],
   ["register", "register"],
   ["competitors", "info"],
@@ -26,12 +28,10 @@ export default function MobileTabMenu({
   tabs,
   t,
   isAdminRoute,
-  currentPath,
 }: {
   tabs: CompetitionNavTab[];
   t: TFunction;
   isAdminRoute: boolean;
-  currentPath?: string;
 }) {
   const groupedTabs = tabs.reduce((acc, tab) => {
     const group = groupTabsMap.get(tab.menuKey);
@@ -41,7 +41,6 @@ export default function MobileTabMenu({
     }
     return acc;
   }, {} as GroupedTab);
-
   return (
     <Box
       as="nav"
@@ -50,22 +49,20 @@ export default function MobileTabMenu({
       insetInline="3"
       bottom="calc(env(safe-area-inset-bottom) + var(--chakra-spacing-4))"
       zIndex="sticky"
-      display={{ base: "block", md: "none" }} // mobile only
+      hideFrom="md" // mobile only
     >
-      <Card.Root variant="elevated" hideFrom="md">
+      <Card.Root variant="elevated" rounded="3xl">
         <Card.Body p={0}>
-          <Tabs.Root variant="enclosed">
-            <Tabs.List>
-              {Object.keys(groupedTabs).length > 1 && (
-                <MobileTabList
-                  groupedTabs={groupedTabs}
-                  isAdminRoute={isAdminRoute}
-                  currentPath={currentPath}
-                  t={t}
-                />
-              )}
-            </Tabs.List>
-          </Tabs.Root>{" "}
+          <Tabs.List rounded="3xl">
+            {Object.keys(groupedTabs).length > 1 && (
+              <MobileTabList
+                groupedTabs={groupedTabs}
+                isAdminRoute={isAdminRoute}
+                t={t}
+              />
+            )}
+            <Tabs.Indicator rounded="l2" />
+          </Tabs.List>
         </Card.Body>
       </Card.Root>
     </Box>
@@ -76,84 +73,48 @@ function MobileTabList({
   groupedTabs,
   t,
   isAdminRoute,
-  currentPath,
 }: {
   groupedTabs: GroupedTab;
   t: TFunction;
   isAdminRoute: boolean;
-  currentPath?: string;
 }) {
   return (
-    <SimpleGrid columns={[6]}>
-      {Object.entries(groupedTabs).map(([group, tabs]) =>
-        tabs.length === 1 ? (
-          <MobileTabLink
-            tab={tabs[0]}
-            t={t}
-            key={group}
-            isAdminRoute={isAdminRoute}
-            currentPath={currentPath}
-          />
-        ) : null,
-      )}
-    </SimpleGrid>
+    <>
+      {Object.entries(groupedTabs).map(([group, tabs]) => (
+        <Tabs.Trigger
+          value={group}
+          disabled={tabs.every((tab) => tab.disabled)}
+          minHeight="fit-content"
+          p="0"
+          rounded="3xl"
+          key={group}
+        >
+          {tabs.length === 1 ? (
+            <MobileTabLink tab={tabs[0]} t={t} isAdminRoute={isAdminRoute} />
+          ) : (
+            <MobileTabWithSubmenu
+              tabs={tabs}
+              group={group}
+              t={t}
+              isAdminRoute={isAdminRoute}
+            />
+          )}
+        </Tabs.Trigger>
+      ))}
+    </>
   );
 }
 
 function MobileTabLink({
   tab,
-  currentPath,
   isAdminRoute,
   t,
+  mode,
 }: {
   tab: CompetitionNavTab;
   isAdminRoute: boolean;
-  currentPath?: string;
   t: TFunction;
-}) {
-  if ("href" in tab)
-    return (
-      <Tabs.Trigger
-        value={tab.menuKey}
-        asChild
-        disabled={tab.disabled}
-        minHeight="fit-content"
-        justifyContent="left"
-      >
-        {tab.externalHref && !tab.disabled ? (
-          <ChakraLink
-            href={tab.externalHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            color="currentColor"
-            textStyle="bodyEmphasis"
-            asChild
-          >
-            <TabLabel tab={tab} t={t} isAdminRoute={isAdminRoute} />
-          </ChakraLink>
-        ) : (
-          <TabTarget
-            tabKey={tab.menuKey}
-            currentPath={currentPath}
-            href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}
-            disabled={tab.disabled}
-            textStyle="bodyEmphasis"
-          >
-            <TabLabel tab={tab} t={t} isAdminRoute={isAdminRoute} />
-          </TabTarget>
-        )}
-      </Tabs.Trigger>
-    );
-}
-
-function TabLabel({
-  tab,
-  t,
-  isAdminRoute,
-}: {
-  tab: TabWithLink;
-  t: TFunction;
-  isAdminRoute: boolean;
+  mode?: "vertical" | "horizontal";
 }) {
   const renderLabel = (renderTab: TabWithLink) =>
     t(
@@ -161,10 +122,87 @@ function TabLabel({
         ? renderTab.i18nKeyAdmin
         : renderTab.i18nKey,
     );
+  if ("href" in tab)
+    return (
+      <ChakraLink
+        unstyled
+        asChild
+        href={tab.href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <TabLabel
+          text={renderLabel(tab)}
+          icon={tab.icon ? <IconDisplay name={tab.icon} size="1.5em" /> : null}
+          mode={mode}
+        />
+      </ChakraLink>
+    );
+}
+
+function MobileTabWithSubmenu({
+  tabs,
+  group,
+  t,
+  isAdminRoute,
+}: {
+  tabs: CompetitionNavTab[];
+  group: string;
+  t: TFunction;
+  isAdminRoute: boolean;
+}) {
   return (
-    <Stack justifyContent="center" alignItems="center" gap={3}>
-      {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
-      <Text>{renderLabel(tab)}</Text>
+    <Menu.Root>
+      <Menu.Trigger asChild>
+        <TabLabel
+          text={group}
+          icon={
+            <Icon>
+              <LuAArrowDown />
+            </Icon>
+          }
+        />
+      </Menu.Trigger>
+      <Portal>
+        <Menu.Positioner>
+          <Menu.Content>
+            {tabs.map((tab) => (
+              <Menu.Item value={tab.menuKey} asChild key={tab.menuKey}>
+                <MobileTabLink
+                  tab={tab}
+                  t={t}
+                  isAdminRoute={isAdminRoute}
+                  mode="horizontal"
+                />
+              </Menu.Item>
+            ))}
+          </Menu.Content>
+        </Menu.Positioner>
+      </Portal>
+    </Menu.Root>
+  );
+}
+
+function TabLabel({
+  text,
+  icon,
+  mode = "vertical",
+}: {
+  text: string;
+  icon: React.ReactNode | null;
+  mode?: "vertical" | "horizontal";
+}) {
+  return (
+    <Stack
+      direction={mode === "vertical" ? "column" : "row"}
+      justifyContent="center"
+      alignItems="center"
+      gap={4}
+      w="full"
+      p="2"
+    >
+      {icon}
+      <Text fontSize="sm">{text}</Text>
     </Stack>
   );
 }
