@@ -25,6 +25,7 @@ import { Users } from "@/collections/Users";
 import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
 import { Documents } from "@/collections/Documents";
+import { AvatarMenuEntries } from "@/collections/AvatarMenuEntries";
 import { Nav } from "@/globals/Nav";
 import { Footer } from "@/globals/Footer";
 import { SocialLinks } from "@/globals/SocialLinks";
@@ -164,6 +165,7 @@ export const wcaConfig = {
     Documents,
     RegulationsHistoryItem,
     Tools,
+    AvatarMenuEntries,
   ].map(withWeblateSync),
   globals: [
     Nav,

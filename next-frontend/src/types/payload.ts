@@ -128,6 +128,29 @@ export type IconName =
  * Page on this website the link points to.
  *
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AvatarMenuTargetLink".
+ */
+export type AvatarMenuTargetLink = ('/competitions/mine' | '/dashboard' | '/payload') | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AvatarMenuPermission".
+ */
+export type AvatarMenuPermission =
+  | (
+      | 'canAccessCms'
+      | 'canViewPolls'
+      | 'canViewAllUsers'
+      | 'canAdminResults'
+      | 'canCreatePosts'
+      | 'canManageRegionalOrganizations'
+      | 'canViewDelegateAdminPage'
+      | 'canManageIncidents'
+    )
+  | null;
+/**
+ * Page on this website the link points to.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "StaticTargetLink".
  */
 export type StaticTargetLink =
@@ -232,6 +255,7 @@ export interface Config {
     documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
+    avatarMenuEntries: AvatarMenuEntry;
     sessions: Session;
     accounts: Account;
     verifications: Verification;
@@ -255,6 +279,7 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
+    avatarMenuEntries: AvatarMenuEntriesSelect<false> | AvatarMenuEntriesSelect<true>;
     sessions: SessionsSelect<false> | SessionsSelect<true>;
     accounts: AccountsSelect<false> | AccountsSelect<true>;
     verifications: VerificationsSelect<false> | VerificationsSelect<true>;
@@ -750,6 +775,31 @@ export interface Tool {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "avatarMenuEntries".
+ */
+export interface AvatarMenuEntry {
+  id: string;
+  _order?: string | null;
+  /**
+   * Link text shown in the avatar menu in the top-right corner of the navbar. Keep it short.
+   */
+  label: string;
+  isRailsPage?: boolean | null;
+  /**
+   * Root-relative path on the Rails site, e.g. /profile/edit.
+   */
+  href?: string | null;
+  targetLink?: AvatarMenuTargetLink;
+  /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
+  requiredPermission?: AvatarMenuPermission;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Auto-generated from Better Auth schema (session)
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -859,6 +909,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tools';
         value: string | Tool;
+      } | null)
+    | ({
+        relationTo: 'avatarMenuEntries';
+        value: string | AvatarMenuEntry;
       } | null)
     | ({
         relationTo: 'sessions';
@@ -1062,6 +1116,21 @@ export interface ToolsSelect<T extends boolean = true> {
   isOfficial?: T;
   author?: T;
   category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "avatarMenuEntries_select".
+ */
+export interface AvatarMenuEntriesSelect<T extends boolean = true> {
+  _order?: T;
+  label?: T;
+  isRailsPage?: T;
+  href?: T;
+  targetLink?: T;
+  newTab?: T;
+  requiredPermission?: T;
   updatedAt?: T;
   createdAt?: T;
 }

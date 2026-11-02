@@ -55,6 +55,8 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
   const [open, setOpen] = useState(false);
   const regoStatus = getRegistrationStatus(comp);
 
+  const isChampionship = comp.championship_types.length > 0;
+
   const { t } = useT();
   return (
     <Table.Row key={comp.id}>
@@ -74,6 +76,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
           >
             <WcaFlag code={comp.country_iso2} size="lg" />
           </Box>
+          {isChampionship && <NationalChampionshipIcon />}
           <ChakraLink asChild>
             <Link
               href={route({
@@ -121,7 +124,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
               borderRadius="wca"
               height="max-content"
             >
-              {comp.championship_types.length > 0 && (
+              {isChampionship && (
                 <Float
                   placement="middle-end"
                   offsetX="20"
