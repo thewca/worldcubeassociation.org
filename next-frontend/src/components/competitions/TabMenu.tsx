@@ -39,6 +39,7 @@ import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 import WcaDocsIcon from "../icons/WcaDocsIcon";
 import MobileTabMenu from "./MobileTabMenu";
+import TabsRoot from "./TabsRoot";
 
 function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
@@ -76,44 +77,39 @@ export default function TabMenu({
   // const drawerOpen = drawerOpenedAt === pathName;
 
   return (
-    <Tabs.Root
-      variant="enclosed"
-      width="full"
-      value={currentPath}
-      orientation="vertical"
-      sideNav
-      lazyMount
-      unmountOnExit
-    >
-      <Tabs.List
-        width="fit-content"
-        minW="3xs"
-        textAlign="start"
-        hideBelow="md"
-        gap="3"
-      >
-        {backHref && (
-          <BackLink
-            href={backHref}
-            label={competitionInfo.name}
-            px="3"
-            py="2"
+    <>
+      <TabsRoot currentPath={currentPath}>
+        <Tabs.List
+          width="fit-content"
+          minW="3xs"
+          textAlign="start"
+          hideBelow="md"
+          gap="3"
+        >
+          {backHref && (
+            <BackLink
+              href={backHref}
+              label={competitionInfo.name}
+              px="3"
+              py="2"
+            />
+          )}
+          <TabList
+            tabs={tabs}
+            t={t}
+            isAdminRoute={isAdminRoute}
+            openGroup={openGroup}
+            onToggle={(tab: CompetitionNavTab) =>
+              setOpenGroup((prev) =>
+                prev === tab.menuKey ? null : tab.menuKey,
+              )
+            }
+            customTabs={customTabs}
+            competitionId={competitionInfo.id}
+            currentPath={currentPath}
           />
-        )}
-        <TabList
-          tabs={tabs}
-          t={t}
-          isAdminRoute={isAdminRoute}
-          openGroup={openGroup}
-          onToggle={(tab: CompetitionNavTab) =>
-            setOpenGroup((prev) => (prev === tab.menuKey ? null : tab.menuKey))
-          }
-          customTabs={customTabs}
-          competitionId={competitionInfo.id}
-          currentPath={currentPath}
-        />
-      </Tabs.List>
-      {/* <Box hideFrom="md">
+        </Tabs.List>
+        {/* <Box hideFrom="md">
         <Drawer.Root
           open={drawerOpen}
           onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
@@ -183,45 +179,41 @@ export default function TabMenu({
           </Drawer.Positioner>
         </Drawer.Root>
       </Box> */}
-      <MobileTabMenu
-        tabs={tabs}
-        currentPath={currentPath}
-        isAdminRoute={isAdminRoute}
-        t={t}
-      />
+        <MobileTabMenu tabs={tabs} t={t} isAdminRoute={isAdminRoute} />
 
-      {/* Tabs.Content is a flex item, which has `min-width: auto`.
+        {/* Tabs.Content is a flex item, which has `min-width: auto`.
        It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
-      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
-        <Stack
-          direction="row"
-          justifyContent="start"
-          alignItems="center"
-          mb={2}
-          gap={3}
-        >
-          <Heading size="3xl" fontWeight="bold">
-            {(eventId || "").toUpperCase()}
-          </Heading>
-          {currentPath === "schedule" && (
-            <Button variant="outline" size="xs" asChild>
-              <ChakraLink
-                href={
-                  "https://www.worldcubeassociation.org/competitions/" +
-                  competitionInfo.id +
-                  ".pdf"
-                }
-                color="inherit"
-                textDecoration="none"
-              >
-                <WcaDocsIcon /> Download
-              </ChakraLink>
-            </Button>
-          )}
-        </Stack>
-        {children}
-      </Tabs.Content>
-    </Tabs.Root>
+        <Tabs.Content width="full" minWidth="0" value={currentPath!}>
+          <Stack
+            direction="row"
+            justifyContent="start"
+            alignItems="center"
+            mb={2}
+            gap={3}
+          >
+            <Heading size="3xl" fontWeight="bold">
+              {(eventId || "").toUpperCase()}
+            </Heading>
+            {currentPath === "schedule" && (
+              <Button variant="outline" size="xs" asChild>
+                <ChakraLink
+                  href={
+                    "https://www.worldcubeassociation.org/competitions/" +
+                    competitionInfo.id +
+                    ".pdf"
+                  }
+                  color="inherit"
+                  textDecoration="none"
+                >
+                  <WcaDocsIcon /> Download
+                </ChakraLink>
+              </Button>
+            )}
+          </Stack>
+          {children}
+        </Tabs.Content>
+      </TabsRoot>
+    </>
   );
 }
 
