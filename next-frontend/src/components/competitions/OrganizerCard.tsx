@@ -92,9 +92,19 @@ function ClickableOrganizer({
         <Avatar.Image src={organizer.avatar.thumb_url} />
       </Avatar.Root>
       <Stack gap={0.5} justify="start">
-        <ChakraLink href={organizer.url}>
-          {organizer.name} <WcaFlag code={organizer.country_iso2} size="xs" />
-        </ChakraLink>
+        <Stack direction="row" gap={2} alignItems="center">
+          <ChakraLink href={organizer.url}>
+            <Text as="span">
+              {organizer.name}
+              <WcaFlag
+                code={organizer.country_iso2}
+                size="xs"
+                ms="1"
+                aria-hidden
+              />
+            </Text>
+          </ChakraLink>
+        </Stack>
         {isLead && (
           <Badge
             variant="subtle"
