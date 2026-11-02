@@ -78,11 +78,12 @@ class Incident < ApplicationRecord
     end
 
     json[:competitions] = incident_competitions.map do |incident_competition|
-      {
+      competition_json = {
         id: incident_competition.competition.id,
         name: incident_competition.competition.name,
-        comments: incident_competition.comments,
       }
+      competition_json[:comments] = incident_competition.comments if options[:can_view_delegate_matters]
+      competition_json
     end
 
     json

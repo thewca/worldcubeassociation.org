@@ -125,14 +125,15 @@ class Api::V0::ApiController < ApplicationController
     end
 
     concise_results_date = ComputeAuxiliaryData.end_date || Date.current
-    cache_key = ["search", *models, concise_results_date.iso8601, query]
+    can_manage_incidents = authenticated_user&.can_manage_incidents? || false
+    cache_key = ["search", *models, concise_results_date.iso8601, query, can_manage_incidents]
 
     # Temporary fix to skip cache if this is requested from Edit Person script. Long term fix would
     # be to have an API which gives an option to force cache miss, but this API cannot be public,
     # instead should be private to the corresponding microservice.
     result = Rails.cache.fetch(cache_key, force: current_user&.results_team?) do
       ActiveRecord::Base.connected_to(role: :read_replica) do
-        models.flat_map { |model| search_scope_for(model, query).limit(DEFAULT_API_RESULT_LIMIT) }
+        models.flat_map { |model| search_scope_for(model, query, can_manage_incidents).limit(DEFAULT_API_RESULT_LIMIT) }
       end
     end
 
@@ -149,8 +150,9 @@ class Api::V0::ApiController < ApplicationController
 
   # These results are rendered through each model's default `as_json`, so preload whatever that
   # serialization walks. `Regulation` is not an ActiveRecord model and has no associations at all.
-  private def search_scope_for(model, query)
+  private def search_scope_for(model, query, can_manage_incidents)
     scope = model.try(:with_serialization_preloads) || model
+    scope = scope.resolved if model == Incident && !can_manage_incidents
     scope.search(query, params: params)
   end
 
