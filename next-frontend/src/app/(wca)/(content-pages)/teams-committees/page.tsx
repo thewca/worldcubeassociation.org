@@ -130,6 +130,8 @@ async function TeamTab({
   const { t } = await getT();
 
   const { metadata, name, id } = group;
+
+  // object is always set here
   const { friendly_id, email, preferred_contact_mode } = metadata!;
 
   const permissions = await getPermissions();
