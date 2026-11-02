@@ -17,7 +17,7 @@ import { ToggleTip } from "@/components/ui/toggle-tip";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
 import RailsLink from "./RailsLink";
-import { Toaster, toaster } from "./ui/toaster";
+import { toaster } from "./ui/toaster";
 
 interface EmailCopyButtonProps {
   email: string;
@@ -73,17 +73,9 @@ function EmailClipboardButton({ email, t }: { email: string; t: TFunction }) {
 
   const buttonProps: CopyButtonProps = { email, copy, clipboard, t };
 
-  return (
-    <>
-      {hasCoarsePointer ? (
-        <TouchCopyButton {...buttonProps} />
-      ) : (
-        <DesktopCopyButton {...buttonProps} />
-      )}
+  if (hasCoarsePointer) return <TouchCopyButton {...buttonProps} />;
 
-      <Toaster />
-    </>
-  );
+  return <DesktopCopyButton {...buttonProps} />;
 }
 
 function DesktopCopyButton({ email, copy, clipboard, t }: CopyButtonProps) {
