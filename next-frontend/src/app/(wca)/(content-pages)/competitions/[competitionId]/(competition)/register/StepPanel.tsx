@@ -11,6 +11,7 @@ import type { components } from "@/types/openapi";
 import RegistrationSummary from "@/components/competitions/Registration/RegistrationSummary";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
+import { PaymentStatus } from "@/components/competitions/Registration/PaymentStep";
 import {
   initialStepIndex,
   isStepComplete,
@@ -194,7 +195,17 @@ export default function StepPanel({
       {/* Withdrawing hands the competitor back to the start of the flow, and this is what tells
           them why the panel they were looking at has reset. */}
       {registration !== null && currentStep < steps.length && (
-        <RegistrationStatus registration={registration} />
+        <>
+          <RegistrationStatus registration={registration} />
+          {/* Withdrawing does not refund, so whatever they paid still counts if they sign up again. */}
+          {registration.payment !== undefined &&
+            registration.payment.paid_amount_iso > 0 && (
+              <PaymentStatus
+                competitionInfo={competitionInfo}
+                payment={registration.payment}
+              />
+            )}
+        </>
       )}
       <Steps.Root
         count={steps.length}

@@ -1851,6 +1851,10 @@ class Competition < ApplicationRecord
     }
   end
 
+  def currency_subunit_to_unit
+    Money::Currency.new(currency_code).subunit_to_unit
+  end
+
   def approval_step_parameters
     {
       auto_accept_enabled?: self.auto_accept_preference_disabled?,
@@ -1943,7 +1947,8 @@ class Competition < ApplicationRecord
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds tab_names],
+                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds tab_names
+                  currency_subunit_to_unit],
       include: %w[delegates organizers],
     }
     self.as_json(options)
@@ -2296,7 +2301,7 @@ class Competition < ApplicationRecord
 
   INDEX_SERIALIZE_OPTIONS = {
     only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
-    methods: %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types],
+    methods: %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types currency_subunit_to_unit],
     include: {},
   }.freeze
 

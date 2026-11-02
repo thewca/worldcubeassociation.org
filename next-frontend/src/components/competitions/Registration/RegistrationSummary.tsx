@@ -185,9 +185,10 @@ export default function RegistrationSummary({
         return (
           <VStack key={step.key} gap={4} alignItems="stretch">
             <Heading textStyle="h3">
-              {t(
+              {t([
+                `competitions.registration_v2.register.panel.${step.key}.summary_title`,
                 `competitions.registration_v2.register.panel.${step.key}.title`,
-              )}
+              ])}
             </Heading>
             {isEditing ? (
               <>
