@@ -27,7 +27,7 @@ export default function EmailCopyButton({ email }: EmailCopyButtonProps) {
   const clipboard = useClipboard({ value: email });
 
   const [hasCoarsePointer] = useMediaQuery(
-    ["(any-pointer: coarse) and (hover: none)"],
+    ["(pointer: coarse) and (hover: none)"],
     { fallback: [true] },
   );
 
