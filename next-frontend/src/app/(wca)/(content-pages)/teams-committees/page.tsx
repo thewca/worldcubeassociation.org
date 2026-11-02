@@ -118,7 +118,7 @@ async function TeamTab({
   const { t } = await getT();
 
   const { metadata, name, id } = group;
-  const { friendly_id, email, preferred_contact_mode } = metadata;
+  const { friendly_id, email, preferred_contact_mode } = metadata!;
 
   const permissions = await getPermissions();
   const canReadGroupPast = permissions?.canReadGroupPast(group.name);
