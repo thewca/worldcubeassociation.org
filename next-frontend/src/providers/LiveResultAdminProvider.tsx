@@ -11,7 +11,7 @@ import {
 import formats from "@/lib/wca/data/formats";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import useAPI from "@/lib/wca/useAPI";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 import { applyCutoff, applyTimeLimit } from "@/lib/live/attempt-result";
 import { padSkipped } from "@/lib/live/padSkipped";
 import { LiveAttempt, LiveCompetitor } from "@/types/live";
@@ -382,7 +382,6 @@ export function LiveResultAdminProvider({
       }}
     >
       {children}
-      <Toaster />
     </AdminResultsContext.Provider>
   );
 }
