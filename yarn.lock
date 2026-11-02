@@ -4139,6 +4139,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"autoprefixer@npm:^10.6.2":
+  version: 10.6.2
+  resolution: "autoprefixer@npm:10.6.2"
+  dependencies:
+    browserslist: "npm:^4.28.9"
+    caniuse-lite: "npm:^1.0.30001810"
+    fraction.js: "npm:^5.3.4"
+    picocolors: "npm:^1.1.1"
+    postcss-value-parser: "npm:^4.2.0"
+  peerDependencies:
+    postcss: ^8.1.0
+  bin:
+    autoprefixer: bin/autoprefixer
+  checksum: 10c0/16dce8742468c4f956205f2ad3a1b4a8da5a298533796077110dcddd2dfcc439fea693c03aaf503db080c10b24f0a286ae841a54dbd8f78b1aba4a690ac5b7f7
+  languageName: node
+  linkType: hard
+
 "autosize@npm:^6.0.1":
   version: 6.0.1
   resolution: "autosize@npm:6.0.1"
@@ -10556,7 +10573,7 @@ __metadata:
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.9"
     autonumeric: "npm:^4.10.10"
-    autoprefixer: "npm:^10.6.1"
+    autoprefixer: "npm:^10.6.2"
     autosize: "npm:^6.0.1"
     babel-loader: "npm:^10.1.1"
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
