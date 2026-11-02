@@ -100,7 +100,7 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     it "can find by email as a results admin" do
       sign_in create(:user, :wrt_member)
 
-      get :users_search, params: { q: "example", email: true }
+      get :users_search, params: { q: "example@email.com", email: true }
       expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
