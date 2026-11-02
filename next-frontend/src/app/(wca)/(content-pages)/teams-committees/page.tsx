@@ -96,18 +96,24 @@ export default async function TeamsCommitteesPage({
   );
 }
 
-function ContactAction({
+async function ContactAction({
   email,
   preferred_contact_mode,
 }: {
   email?: string;
   preferred_contact_mode?: string;
 }) {
+  const { t } = await getT();
   if (!email || preferred_contact_mode === "no_contact") return null;
 
   if (preferred_contact_mode === "contact_form")
     return (
-      <IconButton asChild variant="ghost" size="sm">
+      <IconButton
+        asChild
+        variant="ghost"
+        size="sm"
+        aria-label={t("page.contacts.title")}
+      >
         <RailsLink href="/contact" color="inherit">
           <LuMail />
         </RailsLink>
