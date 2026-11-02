@@ -60,11 +60,11 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     @competition_id = @registration.competition_id
     @competition = @registration.competition
     @user_id = @registration.user_id
-    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.id == @user_id || authenticated_user.can_manage_competition?(@competition)
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.can_manage_competition?(@competition)
   end
 
   def show
-    render json: @registration.to_v2_json(admin: true, admin_notes: authenticated_user.can_manage_competition?(@competition))
+    render json: @registration.to_v2_json(admin: true)
   end
 
   def ensure_registration_exists
@@ -75,11 +75,16 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def validate_show_registration_by_user
     @competition = Competition.find(@competition_id)
-    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.id == @user_id || authenticated_user.can_manage_competition?(@competition)
+    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.can_manage_competition?(@competition)
   end
 
   def show_by_user
-    render json: @registration.to_v2_json(admin: true, admin_notes: authenticated_user.can_manage_competition?(@competition))
+    render json: @registration.to_v2_json(admin: true)
+  end
+
+  def show_mine
+    registration = Registration.find_by!(competition_id: params_competition_id, user: authenticated_user)
+    render json: registration.to_v2_json(admin: true, includes_admin_notes: false)
   end
 
   def registration_config
@@ -146,7 +151,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   def update
     if params[:competing]
       @registration.update_lanes!(@request, authenticated_user.id)
-      return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true, admin_notes: authenticated_user.can_manage_competition?(@competition)) }, status: :ok
+      return render json: { status: 'ok', registration: @registration.to_v2_json(admin: true, includes_admin_notes: authenticated_user.can_manage_competition?(@competition)) }, status: :ok
     end
     render json: { status: 'bad request', message: 'You need to supply at least one lane' }, status: :bad_request
   end
