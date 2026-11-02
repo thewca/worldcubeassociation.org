@@ -8,6 +8,6 @@ class Api::V1::RegistrationHistoryController < Api::V1::ApiController
     can_manage = authenticated_user.can_manage_competition?(registration.competition)
     return head :unauthorized unless authenticated_user.id == registration.user_id || can_manage
 
-    render json: registration.registration_history(admin: can_manage)
+    render json: registration.registration_history(includes_admin_notes: can_manage)
   end
 end
