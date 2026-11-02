@@ -49,9 +49,20 @@ RSpec.describe 'API Registrations' do
       registration = create(:registration, competition: competition, user: user)
 
       api_sign_in_as(user, scopes: Doorkeeper::OAuth::Scopes.new)
-      get api_v1_registration_path(registration)
+      get show_mine_api_v1_competition_registrations_path(registration.competition)
 
       expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'GET #show_mine' do
+    it 'returns 404 when the user is not registered' do
+      competition = create(:competition, :registration_open)
+      api_sign_in_as(create(:user))
+
+      get show_mine_api_v1_competition_registrations_path(competition)
+
+      expect(response).to have_http_status(:not_found)
     end
   end
 
@@ -66,7 +77,7 @@ RSpec.describe 'API Registrations' do
     it 'hides the admin comment from the competitor' do
       api_sign_in_as(registration.user)
 
-      get api_v1_registration_path(registration)
+      get show_mine_api_v1_competition_registrations_path(registration.competition)
       expect(response.parsed_body['competing']).not_to have_key('admin_comment')
 
       get api_v1_registration_history_path(registration)
@@ -81,6 +92,16 @@ RSpec.describe 'API Registrations' do
 
       get api_v1_registration_history_path(registration)
       expect(response.parsed_body.pluck('changed_attributes')).to include(include('administrative_notes' => 'secret history note'))
+    end
+
+    it 'does not let the competitor read their registration through the organizer endpoints' do
+      api_sign_in_as(registration.user)
+
+      get api_v1_registration_path(registration)
+      expect(response).to have_http_status(:unauthorized)
+
+      get show_by_user_api_v1_competition_registrations_path(registration.competition, registration.user_id)
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 
