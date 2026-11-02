@@ -2,7 +2,7 @@
 
 import { Button, ButtonProps, Icon } from "@chakra-ui/react";
 import { ReactElement } from "react";
-import { Toaster, toaster } from "./ui/toaster";
+import { toaster } from "./ui/toaster";
 
 export interface CopyButtonProps extends ButtonProps {
   text?: string;
@@ -27,11 +27,8 @@ export default function CopyButton({
   };
 
   return (
-    <>
-      <Button {...buttonProps} onClick={copy}>
-        {icon && <Icon>{icon}</Icon>} {text}
-      </Button>
-      <Toaster />
-    </>
+    <Button {...buttonProps} onClick={copy}>
+      {icon && <Icon>{icon}</Icon>} {text}
+    </Button>
   );
 }
