@@ -14,7 +14,7 @@
     "@stripe/stripe-js": "^10.2.0",
     "@tanstack/react-query": "^5.105.0",
     "@tanstack/react-table": "^8.21.3",
-    "@wca/helpers": "^1.1.9",
+    "@wca/helpers": "^2.0.0",
     "autonumeric": "^4.10.10",
     "autoprefixer": "^10.6.2",
     "autosize": "^6.0.1",
