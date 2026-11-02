@@ -102,8 +102,7 @@ Rails.application.routes.draw do
     post 'registrations/validate_and_convert_registrations' => 'registrations#validate_and_convert_registrations', as: :registrations_validate_and_convert
     get 'registrations/add' => 'registrations#add', as: :registrations_add
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
-    get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
-    get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
+    get 'registrations/psych-sheet(/:event_id)', to: redirect('/competitions/%{competition_id}/registrations')
     resources :registrations, only: %i[index edit], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
@@ -320,9 +319,9 @@ Rails.application.routes.draw do
   get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
   get '/regulations/translations/:language/:pdf' => "regulations_translations#translated_pdfs"
   get '/regulations/history' => 'regulations#history'
-  get '/regulations/history/official/:id' => 'regulations#historical_regulations'
-  get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
-  get '/regulations/history/official/:id/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/history/official/%{id}/wca-regulations-and-guidelines.pdf', status: 302)
+  get '/regulations/history/official/:id' => 'regulations#historical_regulations', constraints: { id: /\d{4}-\d{2}-\d{2}/ }
+  get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines', constraints: { id: /\d{4}-\d{2}-\d{2}/ }
+  get '/regulations/history/official/:id/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/history/official/%{id}/wca-regulations-and-guidelines.pdf', status: 302), constraints: { id: /\d{4}-\d{2}-\d{2}/ }
 
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
@@ -461,7 +460,7 @@ Rails.application.routes.draw do
       get '/regulations' => 'regulations#show', as: :regulations
       get '/regulations/translations' => 'regulations#translations', as: :regulations_translations
       get '/regulations/translations/:language' => 'regulations#translation', as: :regulations_translation
-      get '/regulations/history/official/:version' => 'regulations#historical', as: :regulations_historical
+      get '/regulations/history/official/:version' => 'regulations#historical', as: :regulations_historical, constraints: { version: /\d{4}-\d{2}-\d{2}/ }
       get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
       get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'

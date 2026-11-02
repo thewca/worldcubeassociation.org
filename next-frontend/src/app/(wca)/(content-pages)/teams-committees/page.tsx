@@ -18,6 +18,12 @@ import OpenapiError from "@/components/ui/openapiError";
 import getPermissions from "@/lib/wca/permissions.server";
 import { Metadata } from "next";
 import EmailCopyButton from "@/components/EmailCopyButton";
+import ResponsiveTabsList from "@/components/ui/responsiveTabsList";
+import { route } from "nextjs-routes";
+
+type GroupWithFriendlyId = components["schemas"]["UserGroup"] & {
+  metadata: { friendly_id: string };
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -27,12 +33,39 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function TeamsCommitteesPage() {
+export default async function TeamsCommitteesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ team?: string }>;
+}) {
   const { t } = await getT();
+  const { team } = await searchParams;
 
   const { data: teamsCommittees, error, response } = await getTeamsCommittees();
 
   if (error) return <OpenapiError response={response} t={t} />;
+
+  const selectableTeams = teamsCommittees.filter(
+    (group): group is GroupWithFriendlyId =>
+      Boolean(group.metadata?.friendly_id),
+  );
+
+  if (!selectableTeams.length) {
+    return <Text>{t("page.teams_committees_councils.empty")}</Text>;
+  }
+
+  const activeTeam =
+    selectableTeams.find((group) => group.metadata.friendly_id === team) ??
+    selectableTeams[0];
+
+  const teamItems = selectableTeams.map((group) => ({
+    value: group.metadata.friendly_id,
+    label: group.name,
+    href: route({
+      pathname: "/teams-committees",
+      query: { team: group.metadata.friendly_id },
+    }),
+  }));
 
   return (
     <VStack align="left" gap="8" width="full" alignItems="left">
@@ -41,54 +74,49 @@ export default async function TeamsCommitteesPage() {
       <Tabs.Root
         variant="enclosed"
         orientation="vertical"
-        defaultValue={teamsCommittees[0].name}
+        value={activeTeam.metadata.friendly_id}
         sideNav
         lazyMount
         fitted
         unmountOnExit
-        gap={8}
+        gap={{ base: 8, md: 4 }}
       >
-        <Tabs.List>
-          {teamsCommittees.map((group) => (
-            <Tabs.Trigger value={group.name} key={group.id}>
-              {group.name}
-            </Tabs.Trigger>
-          ))}
-        </Tabs.List>
-        {teamsCommittees.map((group) => (
-          <Tabs.Content value={group.name} key={group.id} w="full">
-            <TeamTab group={group} />
-          </Tabs.Content>
-        ))}
+        <ResponsiveTabsList
+          label={t("page.teams_committees_councils.title")}
+          items={teamItems}
+        />
+        <Tabs.Content value={activeTeam.metadata.friendly_id} w="full">
+          <TeamTab group={activeTeam} />
+        </Tabs.Content>
       </Tabs.Root>
     </VStack>
   );
 }
 
-async function TeamTab({
-  group,
-}: {
-  group: components["schemas"]["UserGroup"];
-}) {
+async function TeamTab({ group }: { group: GroupWithFriendlyId }) {
   const { t } = await getT();
 
   const { metadata, name, id } = group;
-  const { friendly_id, email, preferred_contact_mode } = metadata!;
+  const { friendly_id, email, preferred_contact_mode } = metadata;
 
   const permissions = await getPermissions();
   const canReadGroupPast = permissions?.canReadGroupPast(group.name);
 
   return (
-    <VStack align="left">
-      <HStack gap="2">
-        <Heading size="2xl">{name}</Heading>
-        {email && preferred_contact_mode !== "no_contact" && (
-          <EmailCopyButton email={email} />
-        )}
-      </HStack>
-      <Text>
-        {t(`page.teams_committees_councils.groups_description.${friendly_id}`)}
-      </Text>
+    <VStack align="left" gap="4">
+      <VStack align="stretch" gap="2">
+        <HStack gap="2">
+          <Heading size="2xl">{name}</Heading>
+          {email && preferred_contact_mode !== "no_contact" && (
+            <EmailCopyButton email={email} />
+          )}
+        </HStack>
+        <Text>
+          {t(
+            `page.teams_committees_councils.groups_description.${friendly_id}`,
+          )}
+        </Text>
+      </VStack>
       <MemberTable id={id} />
       {canReadGroupPast && (
         <>
@@ -118,7 +146,7 @@ async function MemberTable({
   if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap="20px">
+    <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap="4">
       {roles.map((role) => (
         <UserBadge
           key={role.id}

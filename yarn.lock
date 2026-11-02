@@ -3228,45 +3228,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@stripe/react-stripe-js@npm:7.0.0"
+"@stripe/react-stripe-js@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "@stripe/react-stripe-js@npm:7.0.1"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
     "@stripe/stripe-js": ">=10.0.0 <11.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/e361a602533778179dcc8473c74d16a046e8c30b33a96614fe011ac68915b0675290595689acf4bac95c3e6f56eacb339ec20d1e58e3f1609676b05d7ea6dd2b
+  checksum: 10c0/27f95f489793b4968ed1e1dc775afad05f85a978c2b0c71093d3d6b48080c504ed7f138af7bd8c506f2de4e7baa4a6b46aad534910e43f39ab1f5964487d391f
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "@stripe/stripe-js@npm:10.1.0"
-  checksum: 10c0/30af2ddacc9da2b8419dec0391a442cf18eb6580a743541784cf8f0b51701e51cd481099a93d768d51f4fec1086b0d94fb3af14e9bf613748d230b812ec74b2b
+"@stripe/stripe-js@npm:^10.2.0":
+  version: 10.2.0
+  resolution: "@stripe/stripe-js@npm:10.2.0"
+  checksum: 10c0/64c884f1991f207efd87df0ed6189096158ff77ffb6ff4ce5c53c9e207dd34849f28272305ce5b7f178659dd9dcb1773aaad424bd04ed7b50eb6d679e5e842d5
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.104.5":
-  version: 5.104.5
-  resolution: "@tanstack/query-core@npm:5.104.5"
-  checksum: 10c0/bc2f0626e33ccb1c881343e2b351168d6c07df01f42ed0b4f679d4ecc753af5864678f3e09f57bef500a02de5fc52cfef13aa7c3f2d3be6b62297bac024acaed
+"@tanstack/query-core@npm:5.105.0":
+  version: 5.105.0
+  resolution: "@tanstack/query-core@npm:5.105.0"
+  checksum: 10c0/1b4baa128a95810b677d93f91156e3d32eb07dbe9e062fe0a2651089569f3fca275e43dc9fe569efd55b9e5a00d0d2e18b78de6fa9ed65b1ad54f24e5a90106e
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.104.5":
-  version: 5.104.5
-  resolution: "@tanstack/react-query@npm:5.104.5"
+"@tanstack/react-query@npm:^5.105.0":
+  version: 5.105.0
+  resolution: "@tanstack/react-query@npm:5.105.0"
   dependencies:
-    "@tanstack/query-core": "npm:5.104.5"
+    "@tanstack/query-core": "npm:5.105.0"
   peerDependencies:
     "@types/react": ^18 || ^19
     react: ^18 || ^19
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/eaff9dd4cec0cc43cf835d780efeaf0a2603b792cc2f5f5800a73b4f62b4562cce54b88885f74be72ea0fa7fc721636884ec4bae152b24aea9ce49544fb4c5d1
+  checksum: 10c0/7c9e8d073a0a9192937d0996b18ff6c27a769efb93a3a9cf6cf31c811c9187229573c0746849f1f99c0c96af63e7d738c475e445e53cea6c3a8b0718d8b16f7d
   languageName: node
   linkType: hard
 
@@ -6366,12 +6366,12 @@ __metadata:
   linkType: hard
 
 "follow-redirects@npm:^1.0.0":
-  version: 1.16.1
-  resolution: "follow-redirects@npm:1.16.1"
+  version: 1.16.2
+  resolution: "follow-redirects@npm:1.16.2"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 10c0/544e24ccb93b7afb5dd5a2199bd556e167b84de2af7c13b2ced08494239677359d7883bae56ae43a9ca98ac5451e75cf4834a5fadd6fa79053b9248fac5447a4
+  checksum: 10c0/ff38c8ceb904e505021057f58d395ea5f2e7c34257032960a76b21df1726395ce753f5678b6ee3b15210a557277c00b2607c67b682ee4dec1f33cb5147e08e90
   languageName: node
   linkType: hard
 
@@ -10550,9 +10550,9 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.3"
     "@rails/actioncable": "npm:^8.1.400"
     "@rails/ujs": "npm:^7.1.600"
-    "@stripe/react-stripe-js": "npm:^7.0.0"
-    "@stripe/stripe-js": "npm:^10.1.0"
-    "@tanstack/react-query": "npm:^5.104.5"
+    "@stripe/react-stripe-js": "npm:^7.0.1"
+    "@stripe/stripe-js": "npm:^10.2.0"
+    "@tanstack/react-query": "npm:^5.105.0"
     "@tanstack/react-table": "npm:^8.21.3"
     "@wca/helpers": "npm:^1.1.9"
     autonumeric: "npm:^4.10.10"
@@ -10619,8 +10619,8 @@ __metadata:
     react-textarea-autosize: "npm:^8.5.9"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
-    sass: "npm:^1.106.1"
-    sass-loader: "npm:^17.0.1"
+    sass: "npm:^1.107.1"
+    sass-loader: "npm:^17.1.0"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:10.3.2"
     shakapacker-webpack: "npm:10.3.2"
@@ -10711,9 +10711,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:^17.0.1":
-  version: 17.0.1
-  resolution: "sass-loader@npm:17.0.1"
+"sass-loader@npm:^17.1.0":
+  version: 17.1.0
+  resolution: "sass-loader@npm:17.1.0"
   peerDependencies:
     "@rspack/core": 0.x || ^1.0.0 || ^2.0.0-0
     sass: ^1.3.0
@@ -10728,13 +10728,13 @@ __metadata:
       optional: true
     webpack:
       optional: true
-  checksum: 10c0/a5211341426096acd7b96db6cba95935a86c3ba97a16c16d2f743f42c98ff79281f4f0f6e03fc336b77b22969eb8363379ffd52efe9bf87944cc21f1490c6595
+  checksum: 10c0/6eff347a98c3ff654430562d661f689a48079b16298dc4e59c49cf8730c7abea09cbdbe2493a3b68059d44bd89c0db2e3e5e93facc9ea83e332b0f8ba1b357e9
   languageName: node
   linkType: hard
 
-"sass@npm:^1.106.1":
-  version: 1.106.1
-  resolution: "sass@npm:1.106.1"
+"sass@npm:^1.107.1":
+  version: 1.107.1
+  resolution: "sass@npm:1.107.1"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^5.0.0"
@@ -10745,7 +10745,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/4f1043e2d5b3b7e9cf563050040ed3d91ef1bf8eb9dd180ecfd7ec403bfbd52ac2f557d7e7b398573021f9240a134a080d11af21b802724c05cad386b768df4c
+  checksum: 10c0/35672944940bd78e89cf661c0c8f6e3ea434fa25a7c815466dfee0b37a6185306da9d8f47ef3b241bd672d5e0e25d368da0f23393e8434b923f927e5e1ed6665
   languageName: node
   linkType: hard
 

@@ -264,6 +264,25 @@ RSpec.describe 'API Registrations' do
         expect(response).to have_http_status(:unauthorized)
       end
 
+      RSpec.shared_examples 'rejects organizer-only fields' do |competing_fields|
+        it "rejects #{competing_fields}" do
+          api_sign_in_as(user)
+
+          expect do
+            post api_v1_competition_registrations_path(competition), params: registration_request.merge('competing' => { 'event_ids' => %w[333], **competing_fields })
+          end.not_to have_enqueued_job(AddRegistrationJob)
+
+          expect(response.body).to eq({ error: Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS }.to_json)
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      it_behaves_like 'rejects organizer-only fields', { status: 'accepted' }
+      it_behaves_like 'rejects organizer-only fields', { status: 'waiting_list' }
+      it_behaves_like 'rejects organizer-only fields', { status: 'pending' }
+      it_behaves_like 'rejects organizer-only fields', { admin_comment: 'Approved by myself' }
+      it_behaves_like 'rejects organizer-only fields', { waiting_list_position: 1 }
+
       it 'can register if this is the first registration in a series' do
         series = create(:competition_series)
         competition_a = create(:competition, :registration_open, competition_series: series)
