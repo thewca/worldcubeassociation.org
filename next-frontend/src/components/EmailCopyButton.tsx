@@ -16,46 +16,14 @@ import { LuCheck, LuCopy, LuMail } from "react-icons/lu";
 import { ToggleTip } from "@/components/ui/toggle-tip";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
-import RailsLink from "./RailsLink";
 import { toaster } from "./ui/toaster";
 
 interface EmailCopyButtonProps {
   email: string;
-  /** When provided, the button navigates to this URL instead of copying. */
-  href?: string;
 }
 
-export default function EmailCopyButton({ email, href }: EmailCopyButtonProps) {
+export default function EmailCopyButton({ email }: EmailCopyButtonProps) {
   const { t } = useT();
-
-  if (href) return <EmailLinkButton href={href} t={t} />;
-
-  return <EmailClipboardButton email={email} t={t} />;
-}
-
-function EmailLinkButton({ href, t }: { href: string; t: TFunction }) {
-  return (
-    <IconButton
-      asChild
-      aria-label={t("activerecord.attributes.user.email")}
-      variant="ghost"
-      size="sm"
-    >
-      <RailsLink href={href} color="inherit">
-        <LuMail />
-      </RailsLink>
-    </IconButton>
-  );
-}
-
-interface CopyButtonProps {
-  email: string;
-  copy: () => void;
-  clipboard: UseClipboardReturn;
-  t: TFunction;
-}
-
-function EmailClipboardButton({ email, t }: { email: string; t: TFunction }) {
   const clipboard = useClipboard({ value: email });
 
   const [hasCoarsePointer] = useMediaQuery(
@@ -76,6 +44,13 @@ function EmailClipboardButton({ email, t }: { email: string; t: TFunction }) {
   if (hasCoarsePointer) return <TouchCopyButton {...buttonProps} />;
 
   return <DesktopCopyButton {...buttonProps} />;
+}
+
+interface CopyButtonProps {
+  email: string;
+  copy: () => void;
+  clipboard: UseClipboardReturn;
+  t: TFunction;
 }
 
 function DesktopCopyButton({ email, copy, clipboard, t }: CopyButtonProps) {

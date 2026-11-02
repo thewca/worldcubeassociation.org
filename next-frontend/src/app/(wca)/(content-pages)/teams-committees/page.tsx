@@ -1,6 +1,7 @@
 import {
   Heading,
   HStack,
+  IconButton,
   SimpleGrid,
   Tabs,
   Text,
@@ -20,6 +21,8 @@ import { Metadata } from "next";
 import EmailCopyButton from "@/components/EmailCopyButton";
 import ResponsiveTabsList from "@/components/ui/responsiveTabsList";
 import { route } from "nextjs-routes";
+import RailsLink from "@/components/RailsLink";
+import { LuMail } from "react-icons/lu";
 
 type GroupWithFriendlyId = components["schemas"]["UserGroup"] & {
   metadata: { friendly_id: string };
@@ -102,12 +105,15 @@ function ContactAction({
 }) {
   if (!email || preferred_contact_mode === "no_contact") return null;
 
-  return (
-    <EmailCopyButton
-      email={email}
-      href={preferred_contact_mode === "contact_form" ? "/contact" : undefined}
-    />
-  );
+  if (preferred_contact_mode === "contact_form")
+    return (
+      <IconButton asChild variant="ghost" size="sm">
+        <RailsLink href="/contact" color="inherit">
+          <LuMail />
+        </RailsLink>
+      </IconButton>
+    );
+  return <EmailCopyButton email={email} />;
 }
 
 async function TeamTab({
