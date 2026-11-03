@@ -46,6 +46,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/delegates">
     | StaticRoute<"/disclaimer">
     | StaticRoute<"/documents">
+    | StaticRoute<"/executives">
     | StaticRoute<"/export/developer">
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
