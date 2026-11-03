@@ -23,6 +23,13 @@ const otherActivityCodes = [
   'other-misc',
 ];
 
+const otherActivityCodeOptions = otherActivityCodes
+  .map((activityCode) => ({
+    key: activityCode,
+    get text() { return I18n.t(`activity.${activityCode.substring(6)}`); },
+    value: activityCode,
+  }));
+
 function EditActivityModal({
   isModalOpen,
   activity,
@@ -34,13 +41,6 @@ function EditActivityModal({
 }) {
   const [activityCode, setActivityCode] = useInputState();
   const [activityName, setActivityName] = useInputState();
-
-  const otherActivityCodeOptions = otherActivityCodes
-    .map((otherActivityCode) => ({
-      key: otherActivityCode,
-      text: I18n.t(`activity.${otherActivityCode.substring(6)}`),
-      value: otherActivityCode,
-    }));
 
   const setActivityCodeInternal = (evt, data) => {
     const { value: newActivityCode } = data;

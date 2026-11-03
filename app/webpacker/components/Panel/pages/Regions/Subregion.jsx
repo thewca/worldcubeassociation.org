@@ -22,6 +22,10 @@ const delegateStatusOptions = [
   delegateRegionsStatus.junior_delegate,
   delegateRegionsStatus.delegate,
 ];
+const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
+  get text() { return I18n.t(`enums.user_roles.status.delegate_regions.${option}`); },
+  value: option,
+}));
 const initialValue = {
   newDelegate: null,
   status: delegateStatusOptions[0],
@@ -54,10 +58,6 @@ export default function Subregion({ group }) {
     'location,name',
   ));
   const [openModalType, setOpenModalType] = useState(null);
-  const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
-    text: I18n.t(`enums.user_roles.status.delegate_regions.${option}`),
-    value: option,
-  }));
   const [delegateToChange, setDelegateToChange] = useState(null);
   const [formValues, setFormValues] = useState(initialValue);
   const [newDelegateUser, setNewDelegateUser] = useState(null);
