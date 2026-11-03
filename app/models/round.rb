@@ -972,7 +972,7 @@ class Round < ApplicationRecord
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
       "completed_competitors" => completed_competitors,
-    }
+    }.compact
   end
 
   def to_live_info_json

@@ -13,6 +13,8 @@ required:
   - wca_id
   - name
   - country_iso2
+  - regional_single_record
+  - regional_average_record
 properties:
   id:
     type: integer
@@ -55,8 +57,12 @@ properties:
     description: ISO 3166-1 alpha-2 code of the country the competitor represented.
     example: "CN"
   regional_single_record:
-    type: string
+    type:
+      - string
+      - "null"
     example: "WR"
   regional_average_record:
-    type: string
+    type:
+      - string
+      - "null"
     example: "NR"
