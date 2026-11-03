@@ -51,7 +51,11 @@ jobs:
       - name: Install and start MongoDB # for Payload CMS in the frontend
         uses: supercharge/mongodb-github-action@1.12.1
         with:
-          mongodb-version: 8
+          # Needs to pin 7 here until https://jira.mongodb.org/browse/SERVER-131779 is shipped:
+          #   Without this fix, Mongo 8+ currently mis-understands the `ubuntu-latest` kernel as
+          #   a "bad" kernel which it cannot run on due to a Malloc glitch. That's a false positive
+          #   but the fix has not been released in Mongo 8+ mainline as of writing this comment.
+          mongodb-version: 7
           mongodb-username: root
           mongodb-password: root
           mongodb-db: payload

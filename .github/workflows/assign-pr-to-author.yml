@@ -1,14 +1,26 @@
-name: Auto Author Assign
+name: Auto Assign PM
 
 on:
   pull_request_target:
-    types: [ opened, reopened ]
+    types: [opened, reopened, ready_for_review]
 
 permissions:
   pull-requests: write
 
 jobs:
-  assign-author:
+  assign-pm:
     runs-on: ubuntu-latest
+    if: >-
+      github.event.pull_request.user.type != 'Bot' &&
+      github.event.pull_request.user.login != 'thewca-bot' &&
+      !github.event.pull_request.draft
     steps:
-      - uses: toshimaru/auto-author-assign@v3.1.0
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              assignees: ['kathrynzav']
+            });

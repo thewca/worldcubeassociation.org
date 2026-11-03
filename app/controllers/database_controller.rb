@@ -4,6 +4,7 @@ class DatabaseController < ApplicationController
   if Rails.env.production?
     rate_limit to: 5, within: 1.day, name: "results_export", only: %i[sql_permalink tsv_permalink results_permalink]
     rate_limit to: 5, within: 1.day, name: "dev_export",     only: %i[dev_export_permalink]
+    rate_limit to: 5, within: 1.day, name: "payload_export", only: %i[payload_export_permalink]
   end
 
   RESULTS_EXPORT_FILE_TYPES = %w[sql tsv].freeze
@@ -71,6 +72,10 @@ class DatabaseController < ApplicationController
 
   def dev_export_permalink
     redirect_to DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK), status: :moved_permanently, allow_other_host: true
+  end
+
+  def payload_export_permalink
+    redirect_to DbDumpHelper.public_s3_path(DbDumpHelper::PAYLOAD_EXPORT_PERMALINK), status: :moved_permanently, allow_other_host: true
   end
 
   def developer_export

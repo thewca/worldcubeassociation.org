@@ -13,7 +13,7 @@ class TicketsController < ApplicationController
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:approve_edit_person_request]) }, only: [:approve_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:reject_edit_person_request]) }, only: [:reject_edit_person_request]
   before_action -> { check_ticket_errors(TicketLog.action_types[:metadata_action], TicketsEditPerson::ACTION_TYPE[:sync_edit_person_request]) }, only: [:sync_edit_person_request]
-  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons]
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[delete_inbox_persons post_results]
 
   SORT_WEIGHT_LAMBDAS = {
     createdAt:
@@ -141,6 +141,7 @@ class TicketsController < ApplicationController
     [user, person]
   end
 
+  before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[details_before_anonymization anonymize]
   before_action :check_errors, only: %i[details_before_anonymization anonymize]
 
   private def check_errors

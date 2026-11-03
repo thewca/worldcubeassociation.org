@@ -1,25 +1,26 @@
-summary: Remove a scoretaker from a competition
-tags:
-  - scoretakers
-operationId: removeScoretaker
-parameters:
-  - name: competitionId
-    in: path
-    required: true
-    schema:
-      type: string
-  - name: id
-    in: path
-    required: true
-    description: The user id of the scoretaker to remove
-    schema:
-      type: number
-responses:
-  '200':
-    description: The scoretaker that was removed, or null if there was none
-    content:
-      application/json:
-        schema:
-          oneOf:
-            - $ref: '../../../schemas/competitions/Scoretaker.yaml'
-            - type: 'null'
+delete:
+  summary: Remove a scoretaker from a competition
+  tags:
+    - scoretakers
+  operationId: removeScoretaker
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      description: The user id of the scoretaker to remove
+      schema:
+        type: number
+  responses:
+    '200':
+      description: The scoretaker that was removed, or null if there was none
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../../../schemas/competitions/Scoretaker.yaml'
+              - type: 'null'

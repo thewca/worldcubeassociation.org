@@ -13,8 +13,9 @@ allOf:
       local_pos:
         type: integer
       forecast_statistics:
-        type: object
-        nullable: true
+        type:
+          - object
+          - "null"
         properties:
           best_possible_average:
             type: integer

@@ -7,7 +7,6 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { RegistrationCard } from "@/components/competitions/Cards";
 import { ChakraMarkdown } from "@/components/Markdown";
 import OpenapiError from "@/components/ui/openapiError";
-import { Toaster } from "@/components/ui/toaster";
 import { getT } from "@/lib/i18n/get18n";
 import { LuExternalLink } from "react-icons/lu";
 
@@ -166,7 +165,6 @@ export default async function RegisterPage({
           />
         </Card.Body>
       </Card.Root>
-      <Toaster />
     </VStack>
   );
 }

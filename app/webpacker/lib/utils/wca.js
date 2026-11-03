@@ -3,7 +3,7 @@ export const formattedTextForDate = (utcTime, locale) => {
   let formatted;
   if (typeof (Intl) !== 'undefined') {
     formatted = new Intl.DateTimeFormat(locale, {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short',
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short', calendar: 'gregory',
     }).format(date);
   } else {
     // Workaround for https://github.com/thewca/worldcubeassociation.org/issues/3228.
@@ -35,4 +35,15 @@ export const setUrlParams = (params) => {
     .join('&');
   /* eslint-disable-next-line */
   history.replaceState(null, null, `?${paramsAsStr}`);
+};
+
+export const formattedDateRange = (fromDate, toDate, locale) => new Intl.DateTimeFormat(locale, {
+  day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC', calendar: 'gregory',
+}).formatRange(new Date(fromDate), new Date(toDate));
+
+export const initDateRanges = () => {
+  document.querySelectorAll('.wca-date-range').forEach((element) => {
+    const { from, to, locale } = element.dataset;
+    element.replaceChildren(formattedDateRange(from, to, locale));
+  });
 };

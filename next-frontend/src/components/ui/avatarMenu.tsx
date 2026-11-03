@@ -14,13 +14,19 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { route } from "nextjs-routes";
 import React from "react";
 import { signIn, signOut } from "@/auth.client";
 import type { Session } from "@/auth";
 import { MobileNavButton, MobileNavLink } from "@/components/MobileNav";
 import { LuChevronDown } from "react-icons/lu";
 import _ from "lodash";
+import RailsLink from "@/components/RailsLink";
+import { type UserPermissions } from "@/lib/wca/permissions";
+import type { AvatarMenuEntry } from "@/types/payload";
+import { useT } from "@/lib/i18n/useI18n";
+import buildAvatarMenuEntries, {
+  type FlatMenuEntry,
+} from "@/lib/wca/avatarMenuEntries";
 
 const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
 
@@ -30,15 +36,63 @@ const RAILS_SIGN_OUT_URL = new URL(
   process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
 );
 
-export default function Wrapper({ session }: { session: Session | null }) {
+function EntryLink({
+  entry,
+  ...rest
+}: {
+  entry: FlatMenuEntry;
+} & React.ComponentPropsWithoutRef<"a">) {
+  if (entry.kind === "rails") {
+    return (
+      <RailsLink {...rest} href={entry.href}>
+        {entry.label}
+      </RailsLink>
+    );
+  }
+
+  return (
+    <Link
+      {...rest}
+      href={entry.href}
+      target={entry.newTab ? "_blank" : undefined}
+      rel={entry.newTab ? "noreferrer" : undefined}
+    >
+      {entry.label}
+    </Link>
+  );
+}
+
+export default function Wrapper({
+  session,
+  cmsEntries,
+  permissions,
+}: {
+  session: Session | null;
+  cmsEntries: AvatarMenuEntry[];
+  permissions?: UserPermissions;
+}) {
   return (
     <ClientOnly fallback={<Skeleton boxSize={8} />}>
-      <AvatarMenu session={session} />
+      <AvatarMenu
+        session={session}
+        cmsEntries={cmsEntries}
+        permissions={permissions}
+      />
     </ClientOnly>
   );
 }
 
-function AvatarMenu({ session }: { session: Session | null }) {
+function AvatarMenu({
+  session,
+  cmsEntries,
+  permissions,
+}: {
+  session: Session | null;
+  cmsEntries: AvatarMenuEntry[];
+  permissions?: UserPermissions;
+}) {
+  const { t } = useT();
+
   if (!session) {
     return (
       <>
@@ -87,6 +141,8 @@ function AvatarMenu({ session }: { session: Session | null }) {
     </Avatar.Root>
   );
 
+  const entries = buildAvatarMenuEntries(session, cmsEntries, t, permissions);
+
   return (
     <>
       {/* Desktop: popup dropdown */}
@@ -97,37 +153,35 @@ function AvatarMenu({ session }: { session: Session | null }) {
           </Menu.Trigger>
           <Menu.Positioner>
             <Menu.Content>
-              <Menu.Item value="payloadcms" asChild>
-                <Link
-                  href={route({
-                    pathname: "/payload/[[...segments]]",
-                    query: {},
-                  })}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Payload CMS
-                </Link>
-              </Menu.Item>
-              <Menu.Item value="dashboard" asChild>
-                <Link href="/dashboard">Developer Dashboard</Link>
-              </Menu.Item>
-              <Menu.Separator />
-              <Menu.Item value="mycompetitions" asChild>
-                <Link href="/competitions/mine">My Competitions</Link>
-              </Menu.Item>
-              {session.user?.wcaId && (
-                <Menu.Item value="myresults" asChild>
-                  <Link
-                    href={route({
-                      pathname: "/persons/[wcaId]",
-                      query: { wcaId: session.user.wcaId },
-                    })}
-                  >
-                    My Results
-                  </Link>
-                </Menu.Item>
-              )}
+              {entries.map((entry, index) => {
+                if (entry.kind === "group") {
+                  return (
+                    <React.Fragment key={index}>
+                      {index > 0 && <Menu.Separator />}
+                      <Menu.ItemGroup>
+                        <Menu.ItemGroupLabel>
+                          {entry.header}
+                        </Menu.ItemGroupLabel>
+                        {entry.entries.map((groupEntry, groupIndex) => (
+                          <Menu.Item
+                            key={groupIndex}
+                            value={`${index}-${groupIndex}`}
+                            asChild
+                          >
+                            <EntryLink entry={groupEntry} />
+                          </Menu.Item>
+                        ))}
+                      </Menu.ItemGroup>
+                    </React.Fragment>
+                  );
+                }
+
+                return (
+                  <Menu.Item key={index} value={String(index)} asChild>
+                    <EntryLink entry={entry} />
+                  </Menu.Item>
+                );
+              })}
               <Menu.Separator />
               <Menu.Item value="logout" onSelect={handleSignOut}>
                 Log Out
@@ -153,37 +207,29 @@ function AvatarMenu({ session }: { session: Session | null }) {
           </Collapsible.Trigger>
           <Collapsible.Content>
             <VStack align="stretch" ps={2} gap={1} py={1}>
-              <MobileNavLink>
-                <Link
-                  href={route({
-                    pathname: "/payload/[[...segments]]",
-                    query: {},
-                  })}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Payload CMS
-                </Link>
-              </MobileNavLink>
-              <MobileNavLink>
-                <Link href="/dashboard">Developer Dashboard</Link>
-              </MobileNavLink>
-              <Separator />
-              <MobileNavLink>
-                <Link href="/competitions/mine">My Competitions</Link>
-              </MobileNavLink>
-              {session.user?.wcaId && (
-                <MobileNavLink>
-                  <Link
-                    href={route({
-                      pathname: "/persons/[wcaId]",
-                      query: { wcaId: session.user.wcaId },
-                    })}
-                  >
-                    My Results
-                  </Link>
-                </MobileNavLink>
-              )}
+              {entries.map((entry, index) => {
+                if (entry.kind === "group") {
+                  return (
+                    <React.Fragment key={index}>
+                      {index > 0 && <Separator />}
+                      <Text textStyle="sm" fontWeight="bold">
+                        {entry.header}
+                      </Text>
+                      {entry.entries.map((groupEntry, groupIndex) => (
+                        <MobileNavLink key={groupIndex}>
+                          <EntryLink entry={groupEntry} />
+                        </MobileNavLink>
+                      ))}
+                    </React.Fragment>
+                  );
+                }
+
+                return (
+                  <MobileNavLink key={index}>
+                    <EntryLink entry={entry} />
+                  </MobileNavLink>
+                );
+              })}
               <Separator />
               <MobileNavButton onClick={handleSignOut}>Log Out</MobileNavButton>
             </VStack>

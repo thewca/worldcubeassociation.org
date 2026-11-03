@@ -11,7 +11,7 @@ plugins:
   - rubocop-rake
 
 AllCops:
-  TargetRubyVersion: 3.4
+  TargetRubyVersion: 4.0
   DisplayCopNames: true
   NewCops: enable
   Exclude:

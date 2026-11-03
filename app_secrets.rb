@@ -79,6 +79,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :WRC_WEBHOOK_USERNAME
     vault :WRC_WEBHOOK_PASSWORD
     vault :CURRENCY_LAYER_API_KEY
+    vault :PAYLOAD_MANIFEST_PASSWORD
 
     # To allow logging in to staging with your prod account
     unless EnvConfig.WCA_LIVE_SITE?
@@ -121,5 +122,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :WRC_WEBHOOK_USERNAME, :string, ''
     optional :WRC_WEBHOOK_PASSWORD, :string, ''
     optional :CURRENCY_LAYER_API_KEY, :string, ''
+    optional :PAYLOAD_MANIFEST_PASSWORD, :string, ''
   end
 end

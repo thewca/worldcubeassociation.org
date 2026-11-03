@@ -44,7 +44,7 @@ RSpec.describe "API v1 Persons" do
 
       expect(response.parsed_body.first).to include(
         "global_pos" => result.global_pos,
-        "linked_round_id" => linked_round.id,
+        "ranking_mode" => "linked_round",
       )
     end
 

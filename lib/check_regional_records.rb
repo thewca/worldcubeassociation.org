@@ -12,7 +12,7 @@ module CheckRegionalRecords
       FROM results
       INNER JOIN competitions ON results.competition_id = competitions.id
       INNER JOIN countries ON results.country_id = countries.id
-      #{"WHERE results.competition_id = '#{competition_id}'" if competition_id.present?}
+      #{"WHERE results.competition_id = #{ActiveRecord::Base.connection.quote(competition_id)}" if competition_id.present?}
       ON DUPLICATE KEY UPDATE
         person_id = results.person_id,
         country_id = results.country_id,
@@ -93,10 +93,12 @@ module CheckRegionalRecords
     results_scope = results_scope.where(competition_id: competition_id) if competition_id.present?
     results_scope = results_scope.where(event_id: event_id) if event_id.present?
 
+    quoted_value_column = ActiveRecord::Base.connection.quote_column_name(value_column)
+
     marked_records = results_scope.includes(:competition)
                                   .where.not(regional_record_marker => '')
 
-    minimum_result_candidates = results_scope.select("event_id, competition_id, round_type_id, country_id, MIN(#{value_column}) AS `value`")
+    minimum_result_candidates = results_scope.select("event_id, competition_id, round_type_id, country_id, MIN(#{quoted_value_column}) AS `value`")
                                              .where.not(value_column => ..0)
                                              .group("event_id, competition_id, round_type_id, country_id")
 
@@ -108,7 +110,7 @@ module CheckRegionalRecords
                             .where("results.competition_id = helper.competition_id")
                             .where("results.round_type_id = helper.round_type_id")
                             .where("results.country_id = helper.country_id")
-                            .where("results.#{value_column} = helper.`value`")
+                            .where("results.#{quoted_value_column} = helper.`value`")
 
     (marked_records + minimum_results).uniq(&:id)
       .sort_by do |r|
@@ -142,7 +144,7 @@ module CheckRegionalRecords
         model_comp = Competition.find(competition_id)
         event_filter = event_id || model_comp.event_ids
 
-        previous_min_results = Result.select("event_id, country_id, MIN(#{value_column}) AS `value`")
+        previous_min_results = Result.select("event_id, country_id, MIN(#{ActiveRecord::Base.connection.quote_column_name(value_column)}) AS `value`")
                                      .from("#{LOOKUP_TABLE_NAME} AS results")
                                      .where.not(value_column => ..0)
                                      .where(competition_end_date: ...model_comp.start_date)

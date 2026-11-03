@@ -36,7 +36,6 @@ gem 'doorkeeper'
 gem 'doorkeeper-openid_connect'
 gem 'doorkeeper-i18n'
 gem 'strip_attributes'
-gem 'time_will_tell', github: 'thewca/time_will_tell'
 gem 'redcarpet'
 gem 'bootstrap-table-rails'
 gem 'money-rails'
@@ -135,6 +134,7 @@ group :development do
   gem 'rubocop-factory_bot', require: false
   gem 'rubocop-capybara', require: false
   gem 'rubocop-rake', require: false
+  gem 'brakeman', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
