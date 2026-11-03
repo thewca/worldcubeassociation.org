@@ -78,7 +78,7 @@ export default function TabMenu({
         <PageContent
           eventId={eventId!}
           currentPath={currentPath!}
-          competitionId={competitionInfo.id}
+          competition={competitionInfo}
         >
           {children}
         </PageContent>
@@ -136,7 +136,7 @@ export default function TabMenu({
         <PageContent
           eventId={eventId!}
           currentPath={currentPath!}
-          competitionId={competitionInfo.id}
+          competition={competitionInfo}
         >
           {children}
         </PageContent>

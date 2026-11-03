@@ -1,15 +1,16 @@
-import { Button, Heading, Link, Stack } from "@chakra-ui/react";
+import { Button, Heading, Link, Stack, Text } from "@chakra-ui/react";
 import WcaDocsIcon from "../icons/WcaDocsIcon";
+import { components } from "@/types/openapi";
 
 export default function PageContent({
   eventId,
   currentPath,
-  competitionId,
+  competition,
   children,
 }: {
   eventId: string;
   currentPath: string;
-  competitionId: string;
+  competition: components["schemas"]["CompetitionInfo"];
   children: React.ReactNode;
 }) {
   return (
@@ -21,15 +22,22 @@ export default function PageContent({
         mb={2}
         gap={3}
       >
-        <Heading size="3xl" fontWeight="bold">
-          {(eventId === "general" ? "Info" : eventId || "").toUpperCase()}
-        </Heading>
+        {eventId !== "general" && (
+          <Stack gap={0}>
+            <Text color="fg.muted" fontSize="xs">
+              {competition.name}
+            </Text>
+            <Heading size="3xl" fontWeight="bold" textTransform="capitalize">
+              {eventId}
+            </Heading>
+          </Stack>
+        )}
         {currentPath === "schedule" && (
           <Button variant="outline" size="xs" asChild>
             <Link
               href={
                 "https://www.worldcubeassociation.org/competitions/" +
-                competitionId +
+                competition.id +
                 ".pdf"
               }
               color="inherit"
