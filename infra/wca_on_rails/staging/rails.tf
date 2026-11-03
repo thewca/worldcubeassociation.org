@@ -58,15 +58,15 @@ locals {
     },
     {
       name = "CACHE_REDIS_URL"
-      value = "redis://redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://${aws_elasticache_replication_group.cache.primary_endpoint_address}:6379"
     },
     {
       name = "SIDEKIQ_REDIS_URL"
-      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://${aws_elasticache_replication_group.sidekiq.primary_endpoint_address}:6379"
     },
     {
       name = "ANYCABLE_REDIS_URL",
-      value = "redis://wca-staging-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://${aws_elasticache_replication_group.sidekiq.primary_endpoint_address}:6379"
     },
     {
       name = "STAGING_OAUTH_URL"
