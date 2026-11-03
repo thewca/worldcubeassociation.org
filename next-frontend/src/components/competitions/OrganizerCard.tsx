@@ -5,7 +5,6 @@ import {
   Avatar,
   AvatarGroup,
   Badge,
-  Button,
   Card,
   CloseButton,
   Dialog,
@@ -21,14 +20,12 @@ import {
 } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
-import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import {
   // LuChevronLeft,
   LuChevronRight,
   LuFlag,
 } from "react-icons/lu";
 import { useT } from "@/lib/i18n/useI18n";
-import { usePathname } from "next/navigation";
 import WcaFlag from "../WcaFlag";
 
 type OrganizerPerson =
@@ -217,8 +214,6 @@ export default function OrganizationTeamCard({
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   const { t } = useT();
-  const pathname = usePathname();
-  const scheduleHref = `${pathname.replace(/\/$/, "")}/schedule`;
 
   const isPlural = (arr: OrganizerPerson[]) => arr.length > 1;
 
@@ -269,12 +264,12 @@ export default function OrganizationTeamCard({
           </Stat.Root>
         )}
 
-        <Button variant="outline" colorPalette="blue" asChild>
+        {/* <Button variant="outline" colorPalette="blue" asChild>
           <ChakraLink textStyle="headerLink" href={scheduleHref}>
             Download Competition PDF
             <WcaDocsIcon />
           </ChakraLink>
-        </Button>
+        </Button> */}
       </Card.Body>
     </Card.Root>
   );
