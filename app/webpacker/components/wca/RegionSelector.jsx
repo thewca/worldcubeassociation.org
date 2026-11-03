@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Form, Header } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import {
@@ -8,47 +8,49 @@ import RegionFlag from './RegionFlag';
 
 export const ALL_REGIONS_VALUE = 'all';
 
-const allRegionsOption = { key: 'all', text: I18n.t('common.all_regions'), value: ALL_REGIONS_VALUE };
+function buildCountryOptions() {
+  return Object.values(countries.real)
+    .toSorted((a, b) => a.name.localeCompare(b.name))
+    .map((country) => (
+      {
+        key: country.id,
+        text: country.name,
+        value: country.iso2,
+        flag: (
+          <>
+            <RegionFlag iso2={country.iso2} withoutTooltip />
+            {' '}
+          </>
+        ),
+      }
+    ));
+}
 
-const continentOptions = Object.values(continents.real)
-  .toSorted((a, b) => a.name.localeCompare(b.name))
-  .map((continent) => (
-    { key: continent.id, text: continent.name, value: continent.id }
-  ));
+function buildRegionsOptions() {
+  const continentOptions = Object.values(continents.real)
+    .toSorted((a, b) => a.name.localeCompare(b.name))
+    .map((continent) => (
+      { key: continent.id, text: continent.name, value: continent.id }
+    ));
 
-const countryOptions = Object.values(countries.real)
-  .toSorted((a, b) => a.name.localeCompare(b.name))
-  .map((country) => (
+  return [
+    { key: 'all', text: I18n.t('common.all_regions'), value: ALL_REGIONS_VALUE },
     {
-      key: country.id,
-      text: country.name,
-      value: country.iso2,
-      flag: (
-        <>
-          <RegionFlag iso2={country.iso2} withoutTooltip />
-          {' '}
-        </>
-      ),
-    }
-  ));
-
-const regionsOptions = [
-  allRegionsOption,
-  {
-    key: 'continents_header',
-    value: '',
-    disabled: true,
-    content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
-  },
-  ...continentOptions,
-  {
-    key: 'countries_header',
-    value: '',
-    disabled: true,
-    content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
-  },
-  ...countryOptions,
-];
+      key: 'continents_header',
+      value: '',
+      disabled: true,
+      content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
+    },
+    ...continentOptions,
+    {
+      key: 'countries_header',
+      value: '',
+      disabled: true,
+      content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
+    },
+    ...buildCountryOptions(),
+  ];
+}
 
 /**
  * For `region`, pass `ALL_REGIONS_VALUE`, a continent id, or a country iso2.
@@ -69,6 +71,11 @@ export default function RegionSelector({
 }) {
   const defaultValue = (nullable || onlyCountries) ? null : ALL_REGIONS_VALUE;
 
+  const options = useMemo(
+    () => (onlyCountries ? buildCountryOptions() : buildRegionsOptions()),
+    [onlyCountries],
+  );
+
   return (
     <Form.Select
       label={label}
@@ -79,7 +86,7 @@ export default function RegionSelector({
         (nullable && region !== null) || (defaultValue && region !== defaultValue)
       }
       value={region}
-      options={onlyCountries ? countryOptions : regionsOptions}
+      options={options}
       onChange={(e, data) => {
         // clearing calls onChange with the empty string; catch and replace it
         const modifiedData = { ...data, value: data.value || defaultValue };

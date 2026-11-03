@@ -14,7 +14,19 @@ import {
   WCA_ROLES_FIELD,
 } from "@/auth.config";
 
-export const PAYLOAD_ADMIN_ROLES = ["wst", "wct", "wat", "wmt", "board"];
+export const PAYLOAD_ADMIN_ROLES = [
+  "wst",
+  "wct",
+  "wat",
+  "wmt",
+  "board",
+  "wic",
+  "wrc",
+  "wapc",
+  "wcat",
+  "wrt",
+  "wqac",
+];
 
 export const cmsBetterAuthOptions: BetterAuthOptions = {
   appName: WCA_CMS_APP_NAME,

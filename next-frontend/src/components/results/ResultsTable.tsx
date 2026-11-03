@@ -6,10 +6,13 @@ import { route } from "nextjs-routes";
 import NextLink from "next/link";
 import {
   AttemptsCells,
+  PositionCell,
+  RoundNameCell,
   personalBestColor,
   WithRecordTag,
 } from "@/components/results/TableCells";
 import { maxAttemptCount, resultAttempts } from "@/lib/wca/results/attempts";
+import { CompetitionResultRow } from "@/lib/wca/results/competitionResults";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
@@ -40,15 +43,19 @@ export function ResultsTable({
   results,
   eventId,
   formatId,
+  rankingMode,
   t,
   isAdmin = false,
+  variant = "round",
   solveTextAlign = "left",
 }: {
-  results: components["schemas"]["Result"][];
+  results: components["schemas"]["V1RoundResult"][];
   eventId: string;
   formatId: string;
+  rankingMode: components["schemas"]["RankingMode"];
   t: TFunction;
   isAdmin?: boolean;
+  variant?: "round" | "standings";
   solveTextAlign?: CssProperties["textAlign"];
 }) {
   const format = formats.byId[formatId];
@@ -80,13 +87,14 @@ export function ResultsTable({
             const { definedAttempts, bestResultIndex, worstResultIndex } =
               resultAttempts(competitorResult);
 
-            const attemptCount =
-              formats.byId[competitorResult.format_id].expected_solve_count;
-
             return (
               <Table.Row key={competitorResult.id}>
                 {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-                <Table.Cell>{competitorResult.pos}</Table.Cell>
+                <PositionCell
+                  result={competitorResult}
+                  rankingMode={rankingMode}
+                  variant={variant}
+                />
                 <Table.Cell {...STICKY_COLUMN}>
                   <Link
                     display="block"
@@ -100,7 +108,7 @@ export function ResultsTable({
                     {competitorResult.name}
                   </Link>
                 </Table.Cell>
-                <Table.Cell fontWeight="bold">
+                <Table.Cell fontWeight="extrabold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_single_record}
                   >
@@ -108,7 +116,7 @@ export function ResultsTable({
                   </WithRecordTag>
                 </Table.Cell>
                 {anyAverages && (
-                  <Table.Cell fontWeight="bold">
+                  <Table.Cell fontWeight="extrabold">
                     <WithRecordTag
                       recordTag={competitorResult.regional_average_record}
                     >
@@ -128,7 +136,7 @@ export function ResultsTable({
                   worstResultIndex={worstResultIndex}
                   eventId={eventId}
                   recordTag={competitorResult.regional_single_record}
-                  attemptCount={attemptCount}
+                  attemptCount={solveCount}
                 />
               </Table.Row>
             );
@@ -146,7 +154,7 @@ export function ByPersonTable({
   solveTextAlign = "left",
   showNationalityColumn = false,
 }: {
-  results: components["schemas"]["Result"][];
+  results: CompetitionResultRow[];
   t: TFunction;
   isAdmin?: boolean;
   solveTextAlign?: CssProperties["textAlign"];
@@ -195,10 +203,15 @@ export function ByPersonTable({
                 <Table.Cell>
                   {isFirstRoundOfEvent && events.byId[eventId].name}
                 </Table.Cell>
-                <Table.Cell>
-                  {t(`rounds.${competitorResult.round_type_id}.name`)}
-                </Table.Cell>
-                <Table.Cell>{competitorResult.pos}</Table.Cell>
+                <RoundNameCell
+                  roundTypeId={competitorResult.round_type_id}
+                  rankingMode={competitorResult.rankingMode}
+                  t={t}
+                />
+                <PositionCell
+                  result={competitorResult}
+                  rankingMode={competitorResult.rankingMode}
+                />
                 <Table.Cell fontWeight="bold">
                   <WithRecordTag
                     recordTag={competitorResult.regional_single_record}
@@ -328,6 +341,9 @@ export function ByCompetitionTable({
             return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
 
+              const isSingleRecord = pbMarkers?.single.has(competitorResult.id);
+              const isAvgRecord = pbMarkers?.average.has(competitorResult.id);
+
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
 
@@ -349,21 +365,31 @@ export function ByCompetitionTable({
                       </Link>
                     )}
                   </Table.Cell>
-                  <Table.Cell>
-                    {t(`rounds.${competitorResult.round_type_id}.name`)}
-                  </Table.Cell>
-                  <Table.Cell>{competitorResult.pos}</Table.Cell>
+                  <RoundNameCell
+                    roundTypeId={competitorResult.round_type_id}
+                    rankingMode={competitorResult.ranking_mode}
+                    t={t}
+                  />
+                  <PositionCell
+                    result={competitorResult}
+                    rankingMode={competitorResult.ranking_mode}
+                  />
                   <Table.Cell
                     color={
-                      pbMarkers?.single.has(competitorResult.id)
+                      isSingleRecord
                         ? personalBestColor(
                             competitorResult.regional_single_record,
                           )
                         : undefined
                     }
+                    fontWeight="extrabold"
                   >
                     <WithRecordTag
-                      recordTag={competitorResult.regional_single_record}
+                      recordTag={
+                        isSingleRecord
+                          ? "PR"
+                          : competitorResult.regional_single_record
+                      }
                     >
                       {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
@@ -371,15 +397,20 @@ export function ByCompetitionTable({
                   {anyAverages && (
                     <Table.Cell
                       color={
-                        pbMarkers?.average.has(competitorResult.id)
+                        isAvgRecord
                           ? personalBestColor(
                               competitorResult.regional_average_record,
                             )
                           : undefined
                       }
+                      fontWeight="extrabold"
                     >
                       <WithRecordTag
-                        recordTag={competitorResult.regional_average_record}
+                        recordTag={
+                          isAvgRecord
+                            ? "PR"
+                            : competitorResult.regional_average_record
+                        }
                       >
                         {formatAttemptResult(competitorResult.average, eventId)}
                       </WithRecordTag>

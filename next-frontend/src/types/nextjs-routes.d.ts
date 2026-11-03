@@ -40,11 +40,13 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/competitions/[competitionId]/results/by-person", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/schedule", { "competitionId": string }>
     | DynamicRoute<"/competitions/[competitionId]/scrambles", { "competitionId": string }>
+    | StaticRoute<"/competitions/live">
     | StaticRoute<"/competitions/mine">
     | StaticRoute<"/dashboard">
     | StaticRoute<"/delegates">
     | StaticRoute<"/disclaimer">
     | StaticRoute<"/documents">
+    | StaticRoute<"/executives">
     | StaticRoute<"/export/developer">
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">

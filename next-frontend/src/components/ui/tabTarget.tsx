@@ -15,6 +15,7 @@ export default function TabTarget({
   tabKey,
   currentPath,
   href,
+  replace,
   disabled,
   children,
   ...textProps
@@ -22,6 +23,7 @@ export default function TabTarget({
   tabKey: string;
   currentPath?: string;
   href: RouteLiteral;
+  replace?: boolean;
   disabled?: boolean;
   children: React.ReactNode;
 }) {
@@ -39,7 +41,9 @@ export default function TabTarget({
 
   return (
     <Text asChild {...textProps}>
-      <Link href={href}>{children}</Link>
+      <Link href={href} replace={replace}>
+        {children}
+      </Link>
     </Text>
   );
 }

@@ -13,9 +13,10 @@ properties:
     type: string
     format: date
   end_date:
-    type: string
+    type:
+      - string
+      - "null"
     format: date
-    nullable: true
   group:
     $ref: './UserGroup.yaml'
   user:
@@ -33,9 +34,6 @@ properties:
       updated_at:
         type: string
         format: date-time
-      email:
-        type: string
-        format: email
       location:
         type: string
   class:

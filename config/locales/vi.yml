@@ -1408,6 +1408,9 @@ vi:
         locale: Ngôn ngữ
         group_name: Tên Đội ngũ/Ủy ban
         delegated_competitions_count: Số Giải đấu đã làm nhiệm vụ Delegate
+        wca_id: ID WCA
+        location: Địa điểm
+        email: Email
   user_groups:
     group_types:
       board: Ban Quản trị WCA
@@ -1507,7 +1510,7 @@ vi:
           competition_canceled: Giải đấu đã bị hủy
       formerly_banned:
         ban_count: >-
-          Thí sinh đã bị cấm thi đấu %{ban_count} lần, với các phạm vi và lý do
+          Thí sinh đã bị cấm thi đấu %{ban_count} lần, với các phạm vi cấm và lý do
           sau đây:
         scope_and_reason: 'Phạm vi: %{ban_scope}, Lý do: %{ban_reason}'
         wic_message: >-
@@ -1908,6 +1911,13 @@ vi:
         mean: Trung bình
       errors:
         round_closed: Vòng này hiện chưa mở
+      overview:
+        upcoming: Sắp tới
+        in_progress: Hiện tại
+        past_month: Tháng trước
+        no_upcoming: Hiện không có giải đấu sắp tới nào sử dụng hệ thống kết quả
+          trực tiếp.
+        search: Tìm kiếm giải đấu
     my_competitions:
       title: Giải đấu của tôi
       disclaimer: >-
@@ -2709,7 +2719,7 @@ vi:
         '-4': Hệ thống đăng ký đang gặp lỗi. Liên hệ WST nếu vấn đề tiếp diễn
         '-1000': Giải đấu không tồn tại
         '-1001': 'Thu thập thông tin Giải đấu thất bại, xin vui lòng thử lại sau'
-        '-2001': Bạn bi cấm thi đấu tại các Giải đấu WCA
+        '-2001': Bạn bi cấm thi đấu tại các giải đấu WCA
         '-2002': Hồ sơ chưa hoàn tất
         '-2003': Bạn không có quyền thực hiện hành động này
         '-2004': >-
@@ -3104,6 +3114,7 @@ vi:
       date_circa: Ngày ước tính
   notifications:
     connect_wca_id: Kết nối ID WCA với tài khoản của bạn!
+    copied_to_clipboard: Đã sao chép vào bảng nhớ tạm
   payments:
     header: Lịch sử thanh toná
     messages:
@@ -3573,6 +3584,7 @@ vi:
       total_delegated: Tổng số giải đấu Delegate
       lead_delegated: Các giải đấu làm Trưởng nhóm Delegate
       history: Lịch sử
+    copy_email: Sao chép email
   regional_organizations:
     title: Tổ chức khu vực
     content: 'WCA công nhận các Tổ chức Khu vực sau đây:'

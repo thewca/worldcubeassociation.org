@@ -834,6 +834,20 @@ pt:
       privacy: Privacidade
       disclaimer: Isenção de Responsabilidade
       find_us: Encontre-nos
+      panels:
+        admin: Painel de Administração
+        volunteer: Painel de Voluntário
+        delegate: Painel de Delegado
+        wapc: Painel WAC
+        wfc: Painel WFC
+        wrt: Painel WRT
+        wst: Painel WST
+        board: Painel Conselho WCA
+        leader: Painel Líder
+        senior_delegate: Painel Delegado Sénior
+        wic: Painel WIC
+        weat: Painel WEAT
+        wqac: Painel WQAC
   page:
     translators:
       title: Tradutores
@@ -951,6 +965,8 @@ pt:
           tomadas por outros Voluntários da WCA. A WAC fornece um processo de revisão
           independente e imparcial para garantir que as decisões são justas, razoáveis
           e de acordo com as políticas e regulamentos da WCA.
+      empty: Não foram encontradas equipas nem comités. Volte a verificar mais 
+        tarde.
     contacts:
       title: Formulário de Contacto WCA
       faq_note_html: >-
@@ -1147,7 +1163,7 @@ pt:
         confirmation_link: Confirmar a minha conta.
         activate: >-
           Após a ativação poderá entrar na sua conta no website da World Cube Association:
-
+          
         login_form: formulário de login
         addendum: >-
           Este email é gerado automaticamente. Se não registou uma conta no
@@ -1433,6 +1449,9 @@ pt:
         locale: Idioma
         group_name: Nome da Equipa/Comité
         delegated_competitions_count: Número de Competições como Delegado
+        wca_id: ID da WCA
+        location: Local
+        email: Email
   user_groups:
     group_types:
       board: Conselho de Administração da WCA
@@ -1982,6 +2001,12 @@ pt:
         done: concluída
       errors:
         round_closed: A ronda ainda não está aberta
+      overview:
+        upcoming: Próximas
+        in_progress: Agora
+        past_month: Mês passado
+        no_upcoming: Não há próximas competições com resultados em direto.
+        search: Procurar competições
     my_competitions:
       title: Minhas competições
       disclaimer: >-
@@ -2245,6 +2270,7 @@ pt:
         one: 'A mostrar atualmente: %{count} competição'
         many: 'A mostrar atualmente: %{count} competições'
         other: 'A mostrar atualmente: %{count} competições'
+      championship_only: Mostrar apenas campeonatos
     my_competitions_table:
       edit: Editar
       registrations: Inscrições
@@ -3278,6 +3304,7 @@ pt:
       date_circa: Data aproximada
   notifications:
     connect_wca_id: Associe o seu ID da WCA à sua conta!
+    copied_to_clipboard: Copiado para Área de Transferência
   payments:
     header: Histórico de Pagamentos
     messages:
@@ -3699,22 +3726,22 @@ pt:
         da WCA.
       teams_committees: Equipas e Comités
       delegates_html: >-
-        <p><strong>Delegado da WCA</strong> é o papel definido nas Moções da WCA
-        e retratado nos Regulamentos da WCA. O dever principal de um Delegado é
-        o de supervisionar competições em nome da WCA. Um Delegado da WCA é
-        responsável por garantir que todas as competições da WCA decorram de
-        acordo com a Missão, Espírito e Regulamento da WCA. A WCA distingue
-        entre <strong>Delegados Sénior</strong>, <strong>Delegados
-        Regionais</strong>, <strong>Delegados</strong>, <strong>Delegados
-        Júnior</strong> e <strong>Delegados em treino</strong>%{see_link}.</p>
-        <p> Além das tarefas de um Delegado, um Delegado Sénior é responsável
-        por gerir os Delegados da sua área, e também pode ser contactado pela
-        comunidade para assuntos pertinentes à região.</p> <p>Novos Delegados
-        são listados inicialmente como Delegados Júnior e devem mostrar que são
-        capazes de conduzir competições adequadamente antes de serem
-        considerados Delegados.</p><p>Delegados em treino estão a ser treinados
-        para a posição de Delegado da WCA e apenas podem supervisionar
-        competições em que um Delegado da WCA esteja presente.</p>
+        <p><strong>Delegado da WCA</strong> é o papel definido nas Moções da WCA e
+        retratado nos Regulamentos da WCA. O dever principal de um Delegado é o de
+        supervisionar competições em nome da WCA. Um Delegado da WCA é responsável
+        por garantir que todas as competições da WCA decorram de acordo com a Missão,
+        Espírito e Regulamento da WCA. A WCA distingue entre <strong>Delegados Sénior</strong>,
+        <strong>Delegados Regionais</strong>, <strong>Delegados</strong>, <strong>Delegados
+        Júnior</strong> e <strong>Delegados em treino</strong>%{see_link}.</p> <p>
+        Além das tarefas de um Delegado, um Delegado Sénior é responsável por gerir
+        os Delegados da sua área, e também pode ser contactado pela comunidade para
+        assuntos pertinentes à região.</p> <p>Novos Delegados são listados inicialmente
+        como Delegados Júnior e devem mostrar que são capazes de conduzir competições
+        adequadamente antes de serem considerados Delegados.</p><p>Delegados em treino
+        estão a ser treinados para a posição de Delegado da WCA e apenas podem supervisionar
+        competições em que um Delegado da WCA esteja presente.</p><p>Se estiver interessado
+        em tornar-se Delegado em Formação, contacte o seu Delegado Regional para saber
+        se reúne os requisitos necessários.</p>
       see_link_html: ' (ver %{link})'
       members_html: >-
         Todos os competidores tornam-se automaticamente <strong>membros</strong>
@@ -3759,6 +3786,7 @@ pt:
       total_delegated: Total como Delegado
       history: História
       lead_delegated: Competições lideradas como Delegado
+    copy_email: Copiar email
   regional_organizations:
     title: Organizações Regionais
     content: 'A WCA reconhece as seguintes Organizações Regionais:'

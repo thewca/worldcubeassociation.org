@@ -66,6 +66,7 @@ const nextConfig: NextConfig = {
     return config;
   },
   cacheComponents: true,
+  partialPrefetching: true,
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },

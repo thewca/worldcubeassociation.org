@@ -32,7 +32,13 @@ interface MapProps {
 // Limit number of markers on map, especially for "All Past Competitions"
 export const MAP_DISPLAY_LIMIT = 500;
 
-setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+// via https://maplibre.org/maplibre-gl-js/docs/#__tabbed_1_5
+setWorkerUrl(
+  new URL(
+    "maplibre-gl/dist/maplibre-gl-worker.mjs",
+    import.meta.url,
+  ).toString(),
+);
 
 const TILE_STYLE = "https://tiles.openfreemap.org/styles/bright";
 

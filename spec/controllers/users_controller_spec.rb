@@ -187,7 +187,7 @@ RSpec.describe UsersController do
   end
 
   describe "DELETE #delete_avatar" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user_with_wca_id) }
     let(:remover) { create(:user, :wrt_member) }
     let!(:avatar) { create(:user_avatar, user: user) }
     let(:reason) { "The avatar must not include text." }
@@ -201,6 +201,65 @@ RSpec.describe UsersController do
 
       expect(response).to have_http_status(:ok)
       expect(avatar.reload).to be_deleted
+    end
+  end
+
+  describe "avatar actions on another user" do
+    let(:user) { create(:user_with_wca_id) }
+    let!(:avatar) { create(:user_avatar, user: user) }
+
+    context "when signed in as a regular user" do
+      before { sign_in create(:user_with_wca_id) }
+
+      it "cannot read the avatar data" do
+        get :avatar_data, params: { id: user.id }
+
+        expect(response).to redirect_to root_url
+      end
+
+      it "cannot upload an avatar" do
+        expect do
+          post :upload_avatar, params: {
+            id: user.id,
+            file: Rack::Test::UploadedFile.new('spec/support/logo.jpg', 'image/jpeg'),
+            thumbnail: { x: 0, y: 0, width: 100, height: 100 }.to_json,
+          }
+        end.not_to change(UserAvatar, :count)
+
+        expect(response).to redirect_to root_url
+      end
+
+      it "cannot change the avatar crop" do
+        patch :update_avatar, params: { id: user.id, avatarId: avatar.id, thumbnail: { x: 10, y: 10, width: 50, height: 50 } }
+
+        expect(response).to redirect_to root_url
+        expect(avatar.reload.thumbnail_crop_x).to eq 0
+      end
+
+      it "cannot delete the avatar" do
+        expect do
+          delete :delete_avatar, params: { id: user.id, avatarId: avatar.id, reason: "Not allowed" }
+        end.not_to have_enqueued_mail(AvatarsMailer, :notify_user_of_avatar_removal)
+
+        expect(response).to redirect_to root_url
+        expect(avatar.reload).not_to be_deleted
+      end
+    end
+
+    context "when signed in as the user" do
+      before { sign_in user }
+
+      it "can upload an avatar" do
+        expect do
+          post :upload_avatar, params: {
+            id: user.id,
+            file: Rack::Test::UploadedFile.new('spec/support/logo.jpg', 'image/jpeg'),
+            thumbnail: { x: 0, y: 0, width: 100, height: 100 }.to_json,
+          }
+        end.to change(UserAvatar, :count).by(1)
+
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 
@@ -383,6 +442,27 @@ RSpec.describe UsersController do
         expect(result1.reload.person_id).to eq user2_wca_id
         expect(result2.reload.person_id).to eq user2_wca_id
       end
+    end
+  end
+
+  describe 'GET #show_for_merge' do
+    let(:user) { create(:user) }
+
+    it 'does not show user details to regular users' do
+      sign_in create(:user)
+
+      get :show_for_merge, params: { id: user.id }
+
+      expect(response).to redirect_to root_url
+    end
+
+    it 'shows user details to WRT members' do
+      sign_in create(:user, :wrt_member)
+
+      get :show_for_merge, params: { id: user.id }
+
+      expect(response).to have_http_status :ok
+      expect(response.parsed_body["email"]).to eq user.email
     end
   end
 

@@ -101,7 +101,7 @@ class LinkedRound < ApplicationRecord
     self.target_rounds.first&.participation_condition
   end
 
-  delegate :format, to: :first_round_in_link, prefix: :ranking
+  delegate :format, :event, to: :first_round_in_link, prefix: :ranking
 
   alias_method :advancement_results, :merged_live_results
 
@@ -111,6 +111,10 @@ class LinkedRound < ApplicationRecord
 
   def lock_results(locking_user)
     rounds.sum { it.lock_results(locking_user) }
+  end
+
+  def unlock_results(unlocking_user)
+    rounds.sum { it.unlock_results(unlocking_user) }
   end
 
   delegate :final_round?, to: :last_round_in_link

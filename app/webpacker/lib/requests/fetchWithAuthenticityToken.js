@@ -18,7 +18,7 @@ export function fetchJsonOrError(url, fetchOptions = {}) {
       const contentType = response.headers.get('content-type');
       // The content type might include its charset in the header
       if (!contentType?.startsWith('application/json')) {
-        throw new FetchJsonError(`${response.status}: ${response.statusText}\nPlease Report this to WST\nRequestId: ${response.headers.get('x-request-id')}`, response, { status: 'An unexpected error occurred.' });
+        throw new FetchJsonError(`${response.status}: ${response.statusText}\nPlease Report this to WST\nRequestId: ${response.headers.get('x-request-id')}`, response, { error: 'An unexpected error occurred.' });
       }
       return response.json().then((json) => {
         if (!response.ok) {

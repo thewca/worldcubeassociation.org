@@ -1,0 +1,49 @@
+name: Vault smoke test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches:
+      - '**'
+    paths:
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '.ruby-version'
+      - 'app_secrets.rb'
+      - 'vault_config.rb'
+      - '.github/workflows/vault-smoke-test.yml'
+
+jobs:
+  vault:
+    runs-on: ubuntu-latest
+    services:
+      vault:
+        image: hashicorp/vault:1.20
+        env:
+          VAULT_DEV_ROOT_TOKEN_ID: smoke-test-token
+        ports:
+          - 8200:8200
+    env:
+      RACK_ENV: test
+      RAILS_ENV: test
+      DISABLE_SPRING: 1
+      VAULT_ADDR: http://127.0.0.1:8200
+      VAULT_TOKEN: smoke-test-token
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Seed a secret the same way production stores them
+        run: |
+          for i in $(seq 1 30); do curl -sf $VAULT_ADDR/v1/sys/health > /dev/null && break; sleep 1; done
+          curl -sf -H "X-Vault-Token: $VAULT_TOKEN" -X POST -d '{"type":"kv","options":{"version":"2"}}' $VAULT_ADDR/v1/sys/mounts/kv
+          curl -sf -H "X-Vault-Token: $VAULT_TOKEN" -X POST -d '{"data":{"value":"vault-works"}}' $VAULT_ADDR/v1/kv/data/smoke-test/SMOKE_TEST_SECRET
+      - name: Read the secret from Rails
+        run: |
+          bin/rails runner '
+            secret = Vault.logical.read("kv/data/smoke-test/SMOKE_TEST_SECRET")
+            raise "Unexpected Vault response: #{secret.inspect}" unless secret&.data&.dig(:data, :value) == "vault-works"
+          '

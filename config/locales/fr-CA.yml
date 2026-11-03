@@ -227,6 +227,7 @@ fr-CA:
       unit_seconds: secondes
       unit_moves: mouvements
     back_to_top: Retour en haut de la page
+    back: Retour
   oauth:
     applications:
       your_apps: Vos applications OAuth
@@ -604,6 +605,9 @@ fr-CA:
     passwords:
       edit:
         new_password_confirmation: Ressaisissez le nouveau mot de passe
+      send_paranoid_instructions: Un lien permettant de réinitialiser le mot de 
+        passe sera envoyé à l'adresse courriel si un compte a été créé auprès de
+        la WCA.
     sessions:
       new:
         sign_in: Connexion
@@ -719,6 +723,9 @@ fr-CA:
           disabled_failed: >-
             Impossible de désactiver le 2FA, merci de consulter l'erreur
             ci-dessous.
+        redesign_notice: Vous consultez actuellement la nouvelle page de 
+          connexion. Elle remplacera l'ancienne d'ici la fin de l'année.
+        use_classic: Passer à l'ancienne page de connexion
       destroy_other:
         success: Vos autres appareils ont été déconnectés avec succès.
     shared:
@@ -735,7 +742,10 @@ fr-CA:
     mailer:
       confirmation_instructions:
         subject: Merci de confirmer votre nouvelle adresse courriel
-    registrations: {}
+    registrations:
+      new:
+        redesign_notice: Vous consultez actuellement la nouvelle page 
+          d'inscription. Elle remplacera l'ancienne d'ici la fin de l'année.
   wca:
     errors:
       messages:
@@ -794,12 +804,12 @@ fr-CA:
         Bon retour parmi nous ! Pour créer votre compte sur le site de la WCA,
         nous avons besoin de connaître l'ID WCA avec lequel vous avez participé.
       welcome_html: >-
-        Bienvenue! Avant de participer à votre première compétition WCA, nous
-        avons besoin de renseignements supplémentaires. Veuillez noter que votre
-        date de naissance ne sera jamais publiée sans votre
-        permission.<br/><br/>Si vous vous inscrivez au nom de quelqu’un d’autre,
-        veuillez fournir les information du <strong>compétiteur</strong>/de la
-        <strong>compétitrice</strong>.
+        Bienvenue! Avant de participer à votre première compétition WCA, nous avons
+        besoin de renseignements supplémentaires.<br/><br/>Si vous vous inscrivez
+        au nom de quelqu’un d’autre, veuillez fournir les information du <strong>compétiteur</strong>/de
+        la <strong>compétitrice</strong>.
+      dob_privacy: Cette information ne sera jamais divulguée sans votre 
+        autorisation.
   layouts:
     navigation:
       information: Informations
@@ -1194,12 +1204,11 @@ fr-CA:
         welcome: 'Bonjour %{user_email} !'
         confirm: >-
           Votre compte est créé et vous devez l'activer avant de pouvoir l'utiliser.
-          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash:
-          d60834b
+          Merci de confirmer votre compte en cliquant sur le lien ci-dessous : 
         confirmation_link: Confirmer mon compte.
         activate: >-
           Après l'activation, vous pourrez vous connecter sur le site internet de
-          la World Cube Association :  #original_hash: c8dc6a6
+          la World Cube Association : 
         login_form: formulaire de connexion
         addendum: >-
           Ce courriel est envoyé automatiquement. Si vous n'avez pas créé de
@@ -1415,8 +1424,7 @@ fr-CA:
           gestes offensants).
       staff_avatar_guidelines:
         title: >-
-          Lignes directrices supplémentaires pour les bénévoles et les délégués
-          stagiaires :
+          Lignes directrices supplémentaires pour les bénévoles et les apprentis délégués :
         paragraphs:
           '1': >-
             La photo de profil doit vous représenter, de la même manière dont
@@ -1510,6 +1518,7 @@ fr-CA:
         contacter l'équipe de résultats de la WCA (WRT) en utilisant <a
         href="%{dob_form_path}">ce formulaire dédié</a>.
       unknown_wca_id_html: 'L''ID WCA %{link_id} n''existe pas.'
+      search_for_delegate: Rechercher un délégué
   user_roles:
     email:
       role_metadata:
@@ -1974,6 +1983,8 @@ fr-CA:
         many: '%{count} places restantes'
         other: '%{count} places restantes'
       no_spots_left: Compétition pleine
+      provisional_live_results: 'En attendant, vous pouvez consulter les résultats
+        provisoires ici :'
     live:
       title: Résultats en direct
       manage_rounds: Gérer les tours
@@ -2073,6 +2084,9 @@ fr-CA:
           in_batch: >-
             Impossible de retirer un compétiteur dont les résultats font partie
             d'un lot non soumis
+          scoresheet_warning: Veillez à ne retirer un compétiteur que lorsque 
+            vous avez physiquement en main sa feuille de score vierge. Vous ne 
+            pouvez pas réintégrer un compétiteur dans un tour déjà terminé.
         add_competitor:
           single_round: Ajouter un compétiteur au tour
           multiple_rounds:
@@ -2089,13 +2103,15 @@ fr-CA:
             la compétition n'autorise plus la modification des inscriptions.
             Vous pouvez tout de même l'ajouter, mais assurez-vous que c'est bien
             ce que vous souhaitez faire.
+          round_closed: Vous ne pouvez pas ajouter un compétiteur à un tour déjà
+            terminé
       results:
         competitor: Compétiteur
         mean: Moyenne
       errors:
         round_closed: Le tour n'est pas encore ouvert
     my_competitions:
-      title: Mes compétitions
+      title: Mes Compétitions
       disclaimer: >-
         Seules les compétitions qui utilisent le site de la WCA pour les
         inscriptions seront affichées ici. Si votre compétition n'est pas listée
@@ -2278,6 +2294,7 @@ fr-CA:
       bookmark: Ajouter cette compétition aux favoris
       is_bookmarked: Vous avez ajouté cette compétition aux favoris
       number_of_bookmarks: Nombre de personne ayant cette compétition en favoris
+      waiting_list_size: Nombre de personnes sur la liste d'attente
     index:
       title: Compétitions
       all_competitions: Toutes les compétitions
@@ -2369,6 +2386,10 @@ fr-CA:
       why_compete_description_html: |-
         <p>Les compétitions ne servent pas seulement à déterminer qui est le plus rapide : ce sont aussi des événements conviviaux ! Toute personne capable de résoudre un cube Rubik est la bienvenue pour venir battre son propre record personnel. Il est facile de se faire des amis, car tout le monde travaille main dans la main pour assurer le bon déroulement de la compétition.</p>
         <p>Utilisez l'outil ci-dessous pour trouver une compétition près de chez vous et vous lancer dans l'aventure du cube Rubik !</p>
+      location_sign_in_required: Connectez-vous pour rechercher une adresse
+      location_not_found: Aucun lieu n'a été trouvé pour cette adresse
+      location_search_failed: La recherche d'adresse a échoué, veuillez 
+        réessayer dans une minute
     my_competitions_table:
       edit: Éditer
       registrations: Inscriptions
@@ -3924,23 +3945,21 @@ fr-CA:
         %{committees_and_teams} de la WCA.
       teams_committees: Équipes et Comités
       delegates_html: >-
-        <p><strong>Délégués WCA</strong> est un rôle défini dans les statuts de
-        la WCA et décrit dans le Règlement WCA. Le devoir principal d'un Délégué
-        est de superviser les compétitions au nom de la WCA. Le Délégué WCA est
-        responsable de s'assurer que les compétitions WCA se déroulent selon
-        l'objectif, le règlement, et les valeurs de la WCA. La WCA distingue les
-        statuts suivants : <strong>Délégués Senior</strong>, <strong>Délégués
-        Régionaux</strong>, <strong>Délégués</strong>, <strong>Délégués
-        Junior</strong>, et <strong>Délégué Stagiaire</strong>
-        %{see_link}.</p><p>En plus des devoirs d'un Délégué WCA, un Délégué
-        Senior ou un Délégué régional est responsable de la gestion des Délégués
-        dans sa zone, et peut également être contacté par la communauté pour des
-        affaires régionales.</p><p>Les nouveaux Délégués sont d'abord listés en
-        tant que Délégués Junior, et doivent montrer qu'ils sont capables de
-        gérer des compétitions avec succès avant d'être listés comme Délégués
-        WCA.</p> <p>Les Délégués Stagiaires sont en formation pour devenir
-        Délégué WCA and ne peuvent superviser que des compétitions où au moins
-        une personne avec le statut de Délégué WCA est présente.</p>
+        <p><strong>Délégués WCA</strong> est un rôle défini dans les statuts de la
+        WCA et décrit dans le Règlement WCA. Le devoir principal d'un Délégué est
+        de superviser les compétitions au nom de la WCA. Le Délégué WCA est responsable
+        de s'assurer que les compétitions WCA se déroulent selon l'objectif, le règlement,
+        et les valeurs de la WCA. La WCA distingue les statuts suivants : <strong>Délégués
+        Senior</strong>, <strong>Délégués Régionaux</strong>, <strong>Délégués</strong>,
+        <strong>Délégués Junior</strong>, et <strong>Apprenti Délégué</strong> %{see_link}.</p><p>En
+        plus des devoirs d'un Délégué WCA, un Délégué Senior ou un Délégué régional
+        est responsable de la gestion des Délégués dans sa zone, et peut également
+        être contacté par la communauté pour des affaires régionales.</p><p>Les nouveaux
+        Délégués sont d'abord listés en tant que Délégués Junior, et doivent montrer
+        qu'ils sont capables de gérer des compétitions avec succès avant d'être listés
+        comme Délégués WCA.</p> <p>Les Apprentis Délégués sont en formation pour devenir
+        Délégué WCA and ne peuvent superviser que des compétitions où au moins une
+        personne avec le statut de Délégué WCA est présente.</p>
       see_link_html: ' (voir %{link})'
       members_html: >-
         Tous les compétiteurs deviennent automatiquement des
@@ -4550,8 +4569,7 @@ fr-CA:
         commentaire au WRT à ce sujet.
       non_matching_name_warning: >-
         Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à l'enregistrement
-        actuel dans la base de données WCA ('%{expected_name}').  #original_hash:
-        9cfb3b5
+        actuel dans la base de données WCA ('%{expected_name}'). 
       non_matching_country_warning: >-
         Le pays '%{country}' fourni pour %{name} (%{wca_id}) ne correspond pas à
         l'enregistrement actuel dans la base de données WCA
@@ -4778,3 +4796,94 @@ fr-CA:
     stakeholder_role:
       actioner: Personne en charge
       requester: Demandeur
+  trainee_delegate_application:
+    success: Votre candidature a bien été envoyée. Une copie vous a été envoyée 
+      par courriel à l'adresse associée à votre compte WCA.
+    form:
+      email: Courriel
+      spoken_delegates: À quels délégués juniors ou principaux avez-vous parlé 
+        de la possibilité de devenir apprenti délégué ?
+      recommenders: Quels délégués juniors ou principaux de votre région ont 
+        accepté de vous recommander comme candidat au poste d'apprenti délégué ?
+      declaration_and_basic_information: Déclaration et informations générales
+      name: Nom
+      wca_id: ID WCA
+      age: Âge
+      competition_count: Nombre de compétitions
+      region_and_references: Région et références
+      region: Dans quelle région de délégué vivez-vous actuellement ?
+      region_placeholder: Sélectionnez votre région
+      subregion: Dans quelle sous-région de délégué vivez-vous actuellement ?
+      subregion_placeholder: Sélectionnez votre sous-région
+      reviewing_delegate: Examen du délégué
+      delegates_placeholder: Sélectionnez au moins un délégué
+      experience_and_motivation: Expérience et motivation
+      introduction: Présentez-vous brièvement en deux à quatre phrases.
+      competition_contributions: Présentez brièvement en quoi vous avez 
+        contribué à vos compétitions locales au-delà de ce qui est attendu de 
+        tous les compétiteurs.
+      volunteer_history: Si vous avez occupé des postes de bénévole au sein de 
+        la WCA, veuillez indiquer ici les dates correspondantes (facultatif).
+      role_history_warning: L'historique de vos postes figurera automatiquement 
+        dans votre candidature. Les postes antérieurs n'ont pas été entièrement 
+        renseignés ; veuillez donc ajouter ci-dessous les postes manquants ou 
+        apporter les corrections nécessaires.
+      present: actuel
+      board_member: Membre du conseil d'administration
+      motivation: Décrivez brièvement, en deux à quatre phrases, les raisons qui
+        vous poussent à postuler pour devenir apprenti délégué.
+      relevant_skills: Veuillez dresser la liste des compétences et de 
+        l'expérience les plus importantes dont vous disposez et qui vous 
+        aideraient à réussir en tant qu'apprenti délégué.
+      declaration_understands_application: Je comprends que ce formulaire est 
+        destiné aux speedcubeurs enregistrés qui postulent pour devenir 
+        apprentis délégués.
+      declaration_has_delegate_support: Je confirme avoir discuté avec un 
+        délégué habilité de ma région qui soutient ma candidature.
+      declaration_proficient_in_english: Je certifie que je maîtrise l'anglais à
+        l'écrit et à l'oral.
+      declaration_read_regulations_html: Je certifie avoir lu le <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">règlement de 
+        la WCA</a>.
+      regulations_note: "Remarque : on n'attend pas des délégués qu'ils connaissent
+        tous les règlements. En revanche, ils doivent en maîtriser les principes fondamentaux
+        et se renseigner en cas de doute."
+      cubing_business_involvement: Êtes-vous impliqué dans une entreprise liée 
+        au monde du cube ?
+      cubing_business_involvement_details: Pourriez-vous nous expliquer en quoi 
+        consiste votre implication dans l'entreprise liée au monde du cube.
+      "yes": Oui
+      "no": Non
+      submit: Envoyer la candidature
+    title: Candidature au poste d'apprenti délégué
+    introduction: Ce formulaire est destiné aux speedcubeurs inscrits qui 
+      souhaitent postuler pour devenir apprentis délégués. Votre candidature 
+      sera transmise aux délégués responsables de la région que vous avez 
+      choisie.
+    success_title: Candidature déposée
+    eligibility:
+      title: Vous ne pouvez pas encore envoyer cette candidature
+      missing_wca_id: Votre compte WCA doit être associé à un ID WCA.
+      missing_date_of_birth: Votre compte WCA doit comporter une date de 
+        naissance vérifiée.
+      underage: Les candidats doivent être âgés d'au moins %{minimum_age} ans.
+      claim_wca_id: Demandez votre ID WCA.
+      edit_profile: Demander une mise à jour du profil.
+    errors:
+      invalid_region: Sélectionnez une région de délégué valide et active.
+      missing_reviewer: La région sélectionnée ne dispose actuellement d'aucun 
+        délégué régional ou senior habilité à recevoir la demande.
+      recommender_required: Sélectionnez au moins un délégué qui vous 
+        recommande.
+      invalid_recommender: Un ou plusieurs délégués sélectionnés ne sont plus 
+        éligibles pour la région concernée.
+      spoken_delegate_required: Sélectionnez au moins un délégué junior ou 
+        principal avec lequel vous avez discuté.
+      invalid_spoken_delegate: Un ou plusieurs délégués sélectionnés avec 
+        lesquels vous avez échangé ne sont plus délégués juniors ou principaux 
+        dans la région sélectionnée.
+      declarations_required: Toutes les déclarations doivent être acceptées.
+      business_involvement_required: Indiquez si vous êtes impliqué dans une 
+        entreprise liée au monde du cube.
+      business_involvement_explanation_required: Expliquez-nous en quoi consiste
+        votre implication dans une entreprise liée au monde du cube.

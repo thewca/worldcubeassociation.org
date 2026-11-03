@@ -1,0 +1,129 @@
+name: Style guide review
+
+# Reviews pull requests against the style guide in thewca/web-dev-docs and
+# leaves inline comments. Advisory only: this workflow never fails a PR, it just
+# comments.
+#
+# Runs OpenCodeReview (https://github.com/alibaba/open-code-review, Apache-2.0).
+# OCR cannot load the guide itself, only a rules file mapping path globs to rule
+# text. .github/style-guide-review/rules.json says which guide files apply to
+# which paths, and build_ocr_rules.py turns that into OCR's format by pasting in
+# the guide from web-dev-docs at run time, so guide changes apply without edits
+# here.
+#
+# Uses `pull_request_target` so that fork PRs (which is most contributions) can
+# be reviewed at all -- `pull_request` runs from forks get no secrets, and this
+# job needs an LLM token.
+#
+# Because `pull_request_target` runs in the context of the BASE repo with
+# secrets available, this job must never execute code from the PR:
+#   * no `yarn install`, no `bundle install`, no build, no tests
+#   * the action checks out the trusted BASE branch and fetches the PR head as
+#     bare git objects, so untrusted files are never materialised in the tree
+#   * the rules are built from the BASE checkout and web-dev-docs, so a PR
+#     cannot edit the rules it is about to be judged against
+# Keep it that way when editing this file.
+#
+# Both the action and the npm package it installs are pinned. Bump them
+# deliberately; `ocr_version: latest` would pull unreviewed code into a job that
+# holds secrets.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, ready_for_review]
+    paths:
+      - 'app/**'
+      - 'lib/**'
+      - 'spec/**'
+      - 'db/**'
+      - 'next-frontend/**'
+      - '.github/style-guide-review/**'
+      - '.github/workflows/style-guide-review.yml'
+
+# A new push supersedes the review of the previous one.
+concurrency:
+  group: style-guide-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    # Draft PRs are still work in progress; don't spend tokens on them.
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout rules template
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/style-guide-review
+          path: base
+          persist-credentials: false
+
+      - name: Checkout style guide
+        uses: actions/checkout@v7
+        with:
+          repository: thewca/web-dev-docs
+          sparse-checkout: style_guide
+          path: web-dev-docs
+          persist-credentials: false
+
+      # Written outside the workspace because the review action checks out the
+      # repo into it, which would wipe the generated file.
+      - name: List changed files
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api --paginate \
+            "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+            --jq '.[].filename' > "$RUNNER_TEMP/changed-files.txt"
+
+      - name: Build OCR rules from the style guide
+        run: |
+          python3 base/.github/style-guide-review/build_ocr_rules.py \
+            base/.github/style-guide-review/rules.json \
+            web-dev-docs/style_guide \
+            "$RUNNER_TEMP/changed-files.txt" \
+            "$RUNNER_TEMP/ocr-rules.json"
+
+      - name: Review against the style guide
+        uses: alibaba/open-code-review@v1.13.3
+        # Advisory, never a merge gate: a provider outage or a malformed diff
+        # must not put a red X on a contributor's PR.
+        continue-on-error: true
+        env:
+          # OCR updates itself otherwise which would defeat the version pin
+          # and introduces a race condition where an update might still be in progress
+          # while the later review step runs
+          OCR_NO_UPDATE: '1'
+        with:
+          ocr_version: '1.13.2'
+          rule: ${{ runner.temp }}/ocr-rules.json
+
+          llm_url: https://api.deepseek.com/anthropic
+          llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN }}
+          llm_model: deepseek-v4-pro
+          llm_use_anthropic: 'true'
+
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Update one summary comment in place rather than adding a new one on
+          # every push, and only add inline comments on lines that don't already
+          # have one -- otherwise a long-running PR accumulates duplicates.
+          sticky_summary: 'true'
+          incremental: 'true'
+
+          # Each rule carries the whole guide, so only review what was pushed
+          # since the last completed review. Falls back to the full PR whenever
+          # the checkpoint can't be trusted.
+          checkpoint_range: 'true'
+
+          # Keep the high bar: low-severity findings go to the summary instead
+          # of interrupting the diff. Nothing is ever dropped.
+          route_severity_below: 'low'
+
+          # Raw model output is kept as a workflow artifact for debugging.
+          upload_artifacts: 'true'

@@ -1,48 +1,35 @@
 "use client";
 
-import { Alert, Button, Checkbox, VStack } from "@chakra-ui/react";
+import { Alert, Checkbox } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
+import type { RegistrationForm } from "@/lib/wca/registrations/registrationForm";
 
-export default function RequirementsStep({
-  hasAcknowledged,
-  onAcknowledgedChange,
-  onContinue,
-}: {
-  hasAcknowledged: boolean;
-  onAcknowledgedChange: (acknowledged: boolean) => void;
-  onContinue: () => void;
-}) {
+export default function RequirementsStep({ form }: { form: RegistrationForm }) {
   const { t } = useT();
 
   return (
-    <VStack gap="3">
-      <Checkbox.Root
-        variant="solid"
-        width="full"
-        cursor="pointer"
-        checked={hasAcknowledged}
-        onCheckedChange={(e) => onAcknowledgedChange(!!e.checked)}
-      >
-        <Checkbox.HiddenInput />
-        <Alert.Root status="success">
-          <Alert.Indicator>
-            <Checkbox.Control />
-          </Alert.Indicator>
-          <Alert.Title asChild>
-            <Checkbox.Label>
-              {t("competitions.registration_v2.requirements.acknowledgement")}
-            </Checkbox.Label>
-          </Alert.Title>
-        </Alert.Root>
-      </Checkbox.Root>
-      <Button
-        width="full"
-        disabled={!hasAcknowledged}
-        onClick={onContinue}
-        colorPalette="blue"
-      >
-        {t("competitions.registration_v2.requirements.accept")}
-      </Button>
-    </VStack>
+    <form.Field name="hasAcknowledgedRequirements">
+      {(field) => (
+        <Checkbox.Root
+          variant="solid"
+          width="full"
+          cursor="pointer"
+          checked={field.state.value}
+          onCheckedChange={(e) => field.handleChange(!!e.checked)}
+        >
+          <Checkbox.HiddenInput />
+          <Alert.Root status="success">
+            <Alert.Indicator>
+              <Checkbox.Control />
+            </Alert.Indicator>
+            <Alert.Title asChild>
+              <Checkbox.Label>
+                {t("competitions.registration_v2.requirements.acknowledgement")}
+              </Checkbox.Label>
+            </Alert.Title>
+          </Alert.Root>
+        </Checkbox.Root>
+      )}
+    </form.Field>
   );
 }

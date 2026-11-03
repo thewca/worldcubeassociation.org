@@ -9,7 +9,6 @@ import {
   Fieldset,
   RadioCard,
   VisuallyHidden,
-  HStack,
   Wrap,
   Stack,
 } from "@chakra-ui/react";
@@ -24,7 +23,6 @@ interface SingleEventSelectorProps {
   onEventClick: (eventId: string) => void;
   disabled?: boolean;
   eventButtonsCompact?: boolean;
-  wrap?: boolean;
 }
 
 export function SingleEventSelector({
@@ -34,10 +32,7 @@ export function SingleEventSelector({
   onEventClick,
   disabled,
   eventButtonsCompact = false,
-  wrap = false,
 }: SingleEventSelectorProps) {
-  const Container = wrap ? HStack : Wrap;
-
   return (
     <RadioCard.Root
       disabled={disabled}
@@ -48,7 +43,7 @@ export function SingleEventSelector({
       onValueChange={(e) => onEventClick(e.value!)}
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
-      <Container justify="center">
+      <Wrap justify="center">
         {eventList.map((eventId) => {
           return (
             <RadioCard.Item
@@ -65,7 +60,7 @@ export function SingleEventSelector({
             </RadioCard.Item>
           );
         })}
-      </Container>
+      </Wrap>
     </RadioCard.Root>
   );
 }
@@ -79,7 +74,6 @@ interface MultiEventSelectorProps {
   maxEvents?: number;
   eventsDisabled?: string[];
   disabledText?: (eventId: string) => string;
-  wrap?: boolean;
 }
 
 export function MultiEventSelector({
@@ -91,16 +85,11 @@ export function MultiEventSelector({
   maxEvents = Infinity,
   eventsDisabled = [],
   disabledText = () => "",
-  wrap = false,
 }: MultiEventSelectorProps) {
   const { t } = useT();
 
   return (
-    <CheckboxGroup
-      disabled={disabled}
-      flexDirection="row"
-      flexWrap={wrap ? "wrap" : undefined}
-    >
+    <CheckboxGroup disabled={disabled} flexDirection="row" flexWrap="wrap">
       {eventList.map((eventId) => {
         const currentEventSelected = selectedEvents.includes(eventId);
         const currentEventDisabled = eventsDisabled.includes(eventId);
@@ -174,7 +163,6 @@ export function FormEventSelector({
   maxEvents = Infinity,
   eventsDisabled = [],
   disabledText = () => "",
-  wrap = false,
 }: FormEventSelectorProps) {
   const { t } = useT();
 
@@ -228,7 +216,6 @@ export function FormEventSelector({
         maxEvents={maxEvents}
         eventsDisabled={eventsDisabled}
         disabledText={disabledText}
-        wrap={wrap}
       />
     </Fieldset.Root>
   );
