@@ -651,6 +651,8 @@ th:
         use_classic: เปลี่ยนกลับไปเป็นหน้าแบบเก่า
       destroy_other:
         success: ทำการออกจากระบบที่อุปกรณ์อื่นสำเร็จ
+      destroy:
+        success: คุณได้ออกจากระบบเรียบร้อยแล้ว
     shared:
       links:
         sign_in: เข้าสู่ระบบ
