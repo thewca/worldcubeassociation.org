@@ -8,6 +8,7 @@ class Incident < ApplicationRecord
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
   scope :resolved, -> { where.not(resolved_at: nil) }
+  scope :filter_by_permissions, ->(user) { user&.can_manage_incidents? ? all : resolved }
 
   validate :digest_sent_at_consistent
   validates :title, presence: true
