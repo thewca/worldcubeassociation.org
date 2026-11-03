@@ -13,9 +13,9 @@ export default function PageContent({
   competition: components["schemas"]["CompetitionInfo"];
   children: React.ReactNode;
 }) {
-  if (eventId !== "general")
-    return (
-      <>
+  return (
+    <>
+      {eventId !== "general" && (
         <Stack gap={0}>
           <Text color="fg.muted" fontSize="xs">
             {competition.name}
@@ -47,7 +47,8 @@ export default function PageContent({
             )}
           </Stack>
         </Stack>
-        {children}
-      </>
-    );
+      )}
+      {children}
+    </>
+  );
 }
