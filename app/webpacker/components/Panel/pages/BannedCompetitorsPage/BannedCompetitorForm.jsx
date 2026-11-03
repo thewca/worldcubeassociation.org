@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
 import { groupTypes, banScopes } from '../../../../lib/wca-data.js.erb';
@@ -13,14 +13,14 @@ import I18n from '../../../../lib/i18n';
 export default function BanendCompetitorForm({
   sync, banAction, banActionRole, closeForm,
 }) {
-  const banScopeOptions = useMemo(() => Object.keys(banScopes).map((option) => ({
+  const banScopeOptions = Object.keys(banScopes).map((option) => ({
     key: option,
     // i18n-tasks-use t('enums.user_roles.ban_scope.competing_only')
     // i18n-tasks-use t('enums.user_roles.ban_scope.competing_and_attending')
     // i18n-tasks-use t('enums.user_roles.ban_scope.competing_and_attending_and_forums')
     text: I18n.t(`enums.user_roles.ban_scope.${option}`),
     value: option,
-  })), []);
+  }));
 
   const [formValues, setFormValues] = useState({
     user: null,

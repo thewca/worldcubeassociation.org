@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import { Form } from 'semantic-ui-react';
 
@@ -11,11 +11,11 @@ function GenderSelector({
   onChange,
   disabled = false,
 }) {
-  const genderOptions = useMemo(() => _.map(genders.byId, (genderOption) => ({
+  const genderOptions = _.map(genders.byId, (genderOption) => ({
     key: genderOption.id,
     text: genderOption.name,
     value: genderOption.id,
-  })), []);
+  }));
 
   return (
     <Form.Select

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Header, Table, Button, Modal, Form, Message, Icon,
   Segment,
@@ -54,10 +54,10 @@ export default function Subregion({ group }) {
     'location,name',
   ));
   const [openModalType, setOpenModalType] = useState(null);
-  const delegateStatusOptionsList = useMemo(() => delegateStatusOptions.map((option) => ({
+  const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
     text: I18n.t(`enums.user_roles.status.delegate_regions.${option}`),
     value: option,
-  })), []);
+  }));
   const [delegateToChange, setDelegateToChange] = useState(null);
   const [formValues, setFormValues] = useState(initialValue);
   const [newDelegateUser, setNewDelegateUser] = useState(null);

@@ -20,22 +20,22 @@ import { hasNotPassedOrNull } from '../../../lib/utils/dates';
 export default function RegistrationDetails() {
   const { entryFees, registration } = useFormObject();
 
-  const guestsEnabledOptions = useMemo(() => [true, false].map((bool) => ({
+  const guestsEnabledOptions = [true, false].map((bool) => ({
     value: bool,
     text: I18n.t(`competitions.competition_form.choices.guests_enabled.${bool.toString()}`),
-  })), []);
+  }));
 
-  const guestMessageOptions = useMemo(() => ['unclear', 'free', 'restricted'].map((status) => ({
+  const guestMessageOptions = ['unclear', 'free', 'restricted'].map((status) => ({
     key: status,
     value: status,
     text: I18n.t(`competitions.competition_form.choices.registration.guest_entry_status.${status}`),
-  })), []);
+  }));
 
-  const canCancelOptions = useMemo(() => ['not_accepted', 'always', 'unpaid'].map((status) => ({
+  const canCancelOptions = ['not_accepted', 'always', 'unpaid'].map((status) => ({
     key: status,
     value: status,
     text: I18n.t(`competitions.competition_form.choices.registration.competitor_can_cancel.${status}`),
-  })), []);
+  }));
 
   const {
     registration: {

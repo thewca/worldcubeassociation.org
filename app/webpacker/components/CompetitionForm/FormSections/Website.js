@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { InputBoolean, InputSelect, InputString } from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormBuilder/SubSection';
@@ -11,11 +11,11 @@ export default function Website() {
   const ilrChoiceText = I18n.t('competitions.competition_form.choices.website.scoretaking_software.internal');
   const dualRoundsHint = I18n.t('competitions.competition_form.hints.website.scoretaking_software', { choice_ilr: ilrChoiceText });
 
-  const scoretakingSoftwareOptions = useMemo(() => ['external', 'wca_live', 'internal'].map((software) => ({
+  const scoretakingSoftwareOptions = ['external', 'wca_live', 'internal'].map((software) => ({
     key: software,
     value: software,
     text: I18n.t(`competitions.competition_form.choices.website.scoretaking_software.${software}`),
-  })), []);
+  }));
 
   const usingExternalWebsite = websiteData && !websiteData.generateWebsite;
   const usingExternalRegistration = websiteData && !websiteData.usesWcaRegistration;

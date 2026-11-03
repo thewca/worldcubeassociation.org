@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Container,
@@ -35,12 +35,12 @@ function EditActivityModal({
   const [activityCode, setActivityCode] = useInputState();
   const [activityName, setActivityName] = useInputState();
 
-  const otherActivityCodeOptions = useMemo(() => otherActivityCodes
+  const otherActivityCodeOptions = otherActivityCodes
     .map((otherActivityCode) => ({
       key: otherActivityCode,
       text: I18n.t(`activity.${otherActivityCode.substring(6)}`),
       value: otherActivityCode,
-    })), []);
+    }));
 
   const setActivityCodeInternal = (evt, data) => {
     const { value: newActivityCode } = data;
