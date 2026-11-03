@@ -18,6 +18,7 @@ RSpec.describe "WCA Live API" do
       put api_v1_competition_live_live_round_clear_path(competition.id, round.wcif_id), as: :json
 
       expect(response).to be_successful
+      expect(response.parsed_body["recreated_rows"]).to eq(5)
 
       round.live_results.reload
 
