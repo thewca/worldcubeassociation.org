@@ -292,6 +292,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         delete?: never;
@@ -314,8 +316,8 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description Result Updated */
-                200: {
+                /** @description Result Update Accepted */
+                202: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -325,6 +327,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         trace?: never;
@@ -366,6 +370,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         delete?: never;
@@ -2408,6 +2414,20 @@ export interface components {
                 };
             };
         };
+        /** @description The submitted live results were rejected */
+        LiveResultRejected: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    status: "round is not open" | "user is not part of this round" | "Values cannot be 0, please omit them instead";
+                    /** @description The rejected entry of a batch submission */
+                    registration_id?: number;
+                };
+            };
+        };
         /** @description Incident not found, or not visible to the current user */
         IncidentNotFound: {
             headers: {
@@ -2649,6 +2669,7 @@ export interface operations {
                     };
                 };
             };
+            400: components["responses"]["RegistrationError"];
         };
     };
     v1CompetitionResults: {
@@ -2745,6 +2766,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scoretaker"];
                 };
             };
+            403: components["responses"]["NotPermitted"];
         };
     };
     removeScoretaker: {
@@ -2769,6 +2791,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scoretaker"] | null;
                 };
             };
+            403: components["responses"]["NotPermitted"];
         };
     };
     getCompetitionBookmark: {

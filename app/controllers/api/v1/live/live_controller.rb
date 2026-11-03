@@ -28,7 +28,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     UpdateLiveResultJob.perform_later(live_result, results, authenticated_user.id)
 
-    render json: { status: "ok" }
+    render json: { status: "ok" }, status: :accepted
   end
 
   def batch_add_or_update_results
@@ -56,7 +56,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     BatchUpdateLiveResultJob.perform_later(round, job_entries, authenticated_user.id)
 
-    render json: { status: "ok" }
+    render json: { status: "ok" }, status: :accepted
   end
 
   def round_results

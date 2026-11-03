@@ -9,7 +9,7 @@ OPENAPI_CONTRACT_PREFIX = '/api/v1/'
 OpenapiFirst::Test.setup do |test|
   test.register(
     OpenapiFirst.load(
-      Rails.root.join('next-frontend/openapi/wcaAPI.yaml').to_s,
+      Rails.root.join('next-frontend/openapi/wcaCore.yaml').to_s,
       only: ->(path) { path.start_with?('/v1/') },
       # The spec documents paths relative to the `/api/` server URL
       path_prefix: '/api',
