@@ -43,6 +43,8 @@ OpenapiFirst::Test.setup do |test|
   end
   # Some legacy routes collide with a documented path template, like `registrations/admin` with `registrations/{userId}`
   test.ignore_response_error { |_validated_response, rack_request| undocumented_legacy_route.call(rack_request) }
+  # TODO: raise as request specs for the uncovered v1 operations are added, until it reaches the default of 100
+  test.minimum_coverage = 68.6
   test.coverage_reporter = OpenapiFirst::Test::Coverage::TerminalReporter
 end
 
