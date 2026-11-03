@@ -13,42 +13,41 @@ export default function PageContent({
   competition: components["schemas"]["CompetitionInfo"];
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Stack
-        direction="row"
-        justifyContent="start"
-        alignItems="center"
-        mb={2}
-        gap={3}
-      >
-        {eventId !== "general" && (
-          <Stack gap={0}>
-            <Text color="fg.muted" fontSize="xs">
-              {competition.name}
-            </Text>
+  if (eventId !== "general")
+    return (
+      <>
+        <Stack gap={0}>
+          <Text color="fg.muted" fontSize="xs">
+            {competition.name}
+          </Text>
+          <Stack
+            direction="row"
+            justifyContent="start"
+            alignItems="center"
+            mb={2}
+            gap={3}
+          >
             <Heading size="3xl" fontWeight="bold" textTransform="capitalize">
               {eventId}
             </Heading>
+            {currentPath === "schedule" && (
+              <Button variant="outline" size="xs" asChild>
+                <Link
+                  href={
+                    "https://www.worldcubeassociation.org/competitions/" +
+                    competition.id +
+                    ".pdf"
+                  }
+                  color="inherit"
+                  textDecoration="none"
+                >
+                  <WcaDocsIcon /> Download
+                </Link>
+              </Button>
+            )}
           </Stack>
-        )}
-        {currentPath === "schedule" && (
-          <Button variant="outline" size="xs" asChild>
-            <Link
-              href={
-                "https://www.worldcubeassociation.org/competitions/" +
-                competition.id +
-                ".pdf"
-              }
-              color="inherit"
-              textDecoration="none"
-            >
-              <WcaDocsIcon /> Download
-            </Link>
-          </Button>
-        )}
-      </Stack>
-      {children}
-    </>
-  );
+        </Stack>
+        {children}
+      </>
+    );
 }
