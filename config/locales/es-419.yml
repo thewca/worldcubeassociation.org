@@ -711,6 +711,8 @@ es-419:
         use_classic: Cambiar a la vista anterior
       destroy_other:
         success: Desconectado con éxito de otros dispositivos.
+      destroy:
+        success: Se ha cerrado tu sesión.
     shared:
       links:
         sign_in: Iniciar sesión
@@ -852,6 +854,20 @@ es-419:
       privacy: Privacidad
       disclaimer: Descargo de responsabilidad
       find_us: Encuéntranos
+      panels:
+        admin: Panel de administrador
+        volunteer: Panel de voluntario
+        delegate: Panel de Delegado
+        wapc: Panel del WAC
+        wfc: Panel del WFC
+        wrt: Panel del WRT
+        wst: Panel del WST
+        board: Panel de la Junta Directiva
+        leader: Panel de líder
+        senior_delegate: Panel de Delegado Senior
+        wic: Panel del WIC
+        weat: Panel del WEAT
+        wqac: Panel del WQAC
   page:
     translators:
       title: Traductores
@@ -971,6 +987,8 @@ es-419:
           decisiones hechas por otros Voluntarios WCA. El WAC provee un proceso
           independiente y parcial para asegurar que las decisiones sean justas,
           razonables, y de acuerdo con las Políticas y Reglamento de la WCA.
+      empty: No se encontraron equipos ni comités. Por favor, vuelve a consultar
+        más tarde.
     contacts:
       title: Formulario de contacto WCA
       faq_note_html: >-
@@ -1093,6 +1111,13 @@ es-419:
         Solicitud enviada, te responderemos a la brevedad. Para consultar el
         estado de tu solicitud, por favor visita <a href="%{link}">este
         enlace</a>.
+    executives:
+      title: Ejecutivos
+      joined_wca: Se unió a la WCA
+      joined_executives: Se unió al Equipo de Ejecutivos
+      more_information: Más información
+      close: Cerrar
+      person_not_found: No se encontró ninguna persona con el WCA ID %{wca_id}
   homepage:
     learn_more: Saber más
     title: Bienvenidos a la World Cube Association
@@ -2394,6 +2419,7 @@ es-419:
       location_sign_in_required: Inicia sesión para buscar una dirección
       location_not_found: No se ha encontrado una ubicación para esa dirección
       location_search_failed: La búsqueda falló, por favor intenta nuevamente
+      championship_only: Mostrar solo campeonatos
     my_competitions_table:
       edit: Editar
       registrations: Registro
