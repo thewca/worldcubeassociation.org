@@ -116,8 +116,6 @@ export default function MobileTabMenu({
     {} as GroupedTab,
   );
 
-  console.log(events);
-
   const activeGroup = groupTabsMap.has(activeMenuKey)
     ? groupTabsMap.get(activeMenuKey)
     : customTabs.some(
@@ -245,14 +243,12 @@ function GroupItem({
                 encodeURIComponent(tab.menuKey) === activeMenuKey ||
                 (group === "events" && activeMenuKey.includes(tab.menuKey));
 
-              console.log(activeMenuKey, tab.menuKey, isActive);
-
               const label = renderLabel(tab);
               return (
                 <Menu.Item
                   key={tab.menuKey}
                   value={tab.menuKey}
-                  asChild
+                  asChild={!isLink}
                   disabled={tab.disabled}
                   bg={isActive ? "blue.subtle" : undefined}
                   color={isActive ? "blue.fg" : undefined}
@@ -290,15 +286,25 @@ function ItemLabel({
 }) {
   return (
     <Stack justify="center" alignItems="center" h="full">
-      {icon}
-      <Stack direction="row" gap="0.5" alignItems="center" textAlign="center">
-        {text}
+      <Stack direction="row" alignItems="center" gap={0}>
+        {icon}{" "}
         {chevron && (
-          <Icon size="sm">
+          <Icon size="xs">
             <LuChevronUp />
           </Icon>
         )}
       </Stack>
+      <Box
+        textAlign="center"
+        fontSize="0.72rem"
+        fontWeight="medium"
+        lineHeight="1.2"
+        overflowWrap="anywhere"
+        hyphens="auto"
+        lineClamp={2}
+      >
+        {text}
+      </Box>
     </Stack>
   );
 }
@@ -323,8 +329,9 @@ function SingleItem({
       _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
       aria-current={isActive ? "page" : undefined}
     >
-      {tab.icon && <IconDisplay name={tab.icon} size="1.25em" />}
-      {label}
+      <Stack direction="row" alignItems="center" gap={2}>
+        {tab.icon && <IconDisplay name={tab.icon} size="1.25em" />} {label}
+      </Stack>
     </ChakraLink>
   );
 }
