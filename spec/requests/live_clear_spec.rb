@@ -15,7 +15,7 @@ RSpec.describe "WCA Live API" do
       round.open_and_lock_previous(User.first)
       expect(round.live_results.length).to eq(5)
 
-      put api_v1_competition_live_live_round_clear_path(competition.id, round.wcif_id)
+      put api_v1_competition_live_live_round_clear_path(competition.id, round.wcif_id), as: :json
 
       expect(response).to be_successful
 
@@ -43,7 +43,7 @@ RSpec.describe "WCA Live API" do
       attempts = Array.new(5) { |i| { value: 300, attempt_number: i + 1 } }
       UpdateLiveResultJob.perform_now(result, attempts, User.first.id)
 
-      put api_v1_competition_live_clear_competitor_in_round_path(competition.id, round.wcif_id, result.registration_id)
+      put api_v1_competition_live_clear_competitor_in_round_path(competition.id, round.wcif_id, result.registration_id), as: :json
 
       expect(response).to be_successful
 
@@ -76,7 +76,7 @@ RSpec.describe "WCA Live API" do
       result = round.live_results.find_by!(registration_id: registrations.first.id)
       expect(result).to be_advancing
 
-      put api_v1_competition_live_clear_competitor_in_round_path(competition.id, round.wcif_id, registrations.first.id)
+      put api_v1_competition_live_clear_competitor_in_round_path(competition.id, round.wcif_id, registrations.first.id), as: :json
 
       expect(response).to be_successful
       expect(round.reload.lifecycle_state).to eq(Round::STATE_LOCKED)
