@@ -21,6 +21,8 @@ import {
   AbsoluteCenter,
   Float,
   Carousel,
+  Alert,
+  CloseButton,
 } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
@@ -53,6 +55,7 @@ import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 import OpenapiError from "@/components/ui/openapiError";
+import { LuX } from "react-icons/lu";
 
 type TwoBlocksUnion =
   TwoBlocksLevel0Block | TwoBlocksLevel1Block | TwoBlocksLevel2Block;
@@ -532,13 +535,18 @@ const renderBlock = (
   }
 };
 
-export default async function Homepage() {
+const PayloadContents = async () => {
   const { isEnabled: isDraftMode } = await draftMode();
   const { lng } = await getT();
   const homepage = isDraftMode
     ? await (
         await getPayload({ config })
-      ).findGlobal({ slug: "home", draft: true, locale: lng })
+      ).findGlobal({
+        slug: "home",
+        draft: true,
+        locale: lng,
+        fallbackLocale: "en",
+      })
     : await getCachedGlobal("home", undefined, lng);
 
   const homepageEntries = homepage.layout;
@@ -564,5 +572,36 @@ export default async function Homepage() {
     <Center p={HOMEPAGE_SPACING} asChild>
       {renderVerticalLayout(homepageEntries)}
     </Center>
+  );
+};
+
+export default async function Homepage({
+  searchParams,
+}: {
+  searchParams: Promise<{ signed_out?: string }>;
+}) {
+  const { t } = await getT();
+
+  // Rails redirects here with this flag once it has ended its own session.
+  //   Dismissing links back to the bare homepage, which drops the flag.
+  const { signed_out: signedOut } = await searchParams;
+
+  return (
+    <>
+      {signedOut === "true" && (
+        <Box px={HOMEPAGE_SPACING} pt={HOMEPAGE_SPACING}>
+          <Alert.Root status="success">
+            <Alert.Indicator />
+            <Alert.Title>{t("devise.sessions.destroy.success")}</Alert.Title>
+            <CloseButton asChild pos="relative" top="-2" insetEnd="-2">
+              <Link href="/">
+                <LuX />
+              </Link>
+            </CloseButton>
+          </Alert.Root>
+        </Box>
+      )}
+      <PayloadContents />
+    </>
   );
 }

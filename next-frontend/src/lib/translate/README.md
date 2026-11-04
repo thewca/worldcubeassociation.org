@@ -5,7 +5,7 @@ A library that syncs localized Payload fields to Weblate and back.
 | Module | Direction | Responsibility |
 | --- | --- | --- |
 | `registry.ts` | — | Introspect the Payload config: which fields are localized, where they live in a document |
-| `lexical.ts` | both | Turn rich text into flat sentences and back again |
+| `lexical.ts` | both | Turn rich text into sentences with placeholders and back again |
 | `documents.ts` | Payload → Weblate | Read documents, expand them into translation units |
 | `weblate.ts` | both | Minimal Weblate REST client |
 | `sync.ts` | Weblate → Payload | Write translations back, and orchestrate one full run |
@@ -21,9 +21,9 @@ LocalizedField[]        "home.blocks(TextCard)[].body" — schema, no document y
      │  collectSourceDocs() → resolveStrings()            documents.ts
      ▼
 SourceDoc[] (doc + Leaf[])   concrete paths: ["blocks", 0, "body"]
-     │  unitsFromDocs() → lexicalTextNodes()              documents.ts + lexical.ts
+     │  unitsFromDocs() → lexicalUnits()                   documents.ts + lexical.ts
      ▼
-Record<key, Unit>       flat units, one per sentence, with the field's description
+Record<key, Unit>       flat units, one per block,    with the field's description
      │  pushSource()                                      weblate.ts
      ▼
                     ─── Weblate: translators work ───
@@ -45,12 +45,12 @@ Two different string formats:
 home.blocks(TextCard)[].body
 ```
 
-**Unit key** is what Weblate actually stores. Document id, row ids, and for rich text a node path:
+**Unit key** is what Weblate actually stores. Document id, row ids, and for rich text a block path:
 
 ```
 home:blocks[a1].heading              global, plain text
 testimonials#64f2a:quote             collection row, plain text
-home:blocks[a1].body#0.1.0           global, one text node inside a rich text field
+home:blocks[a1].body#0               global, one paragraph inside a rich text field
 ```
 
 Keys must be stable across syncs, a changed key is a new, untranslated unit in Weblate.
@@ -82,15 +82,25 @@ swapped for another type, a row was deleted), which is how `sync.ts` detects sha
 
 ## `lexical.ts` — rich text as sentences
 
-Translators get plain sentences, not Lexical JSON.
+Translators get whole sentences, not Lexical JSON. Each block (paragraph, heading, list item) is
+one unit; inline nodes become numbered placeholders so they can be moved with the words they wrap:
 
-### `lexicalTextNodes(value): { path, text }[]`
+```
+See <0>our website</0> or <1>this</1>.<2/>
+```
 
-Every non-blank text node in a Lexical value, each with its index path (`"0.1.0"`).
+`<n>…</n>` is a formatted text run or a link, `<n/>` a node without text (line break).
+
+### `lexicalUnits(value): { path, text, shape }[]`
+
+Every non-blank block in a Lexical value, with its index path (`"0"`, `"1.0"`), its placeholder
+text, and a `shape` that only matches another block's when the two differ only in text.
 
 ### `applyLexicalTexts(source, texts): unknown`
 
-Deep-clones the **source** editor state and substitutes only `text` values at the paths given.
+Copies the **source** editor state and rebuilds the children of each translated block from the
+source's own inline nodes. Returns `undefined` if any translation drops, duplicates or mangles a
+placeholder, so a broken translation is treated as missing.
 
 (Payload's `convertLexicalToPlaintext` is not a substitute: it flattens to one lossy string that
 cannot be written back.)

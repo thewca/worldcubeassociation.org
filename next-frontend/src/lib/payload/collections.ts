@@ -4,6 +4,8 @@ import {
   getPayload,
   type CollectionSlug,
   type FindOptions,
+  type PaginatedDocs,
+  type TransformCollectionWithSelect,
   type SelectType,
 } from "payload";
 import { payloadCacheLife } from "@/lib/payload/globals";
@@ -20,5 +22,9 @@ export async function findCached<TSlug extends CollectionSlug>(
 
   const payload = await getPayload({ config });
 
-  return payload.find(options);
+  const find = payload.find as (
+    options: FindOptions<TSlug, SelectType>,
+  ) => Promise<PaginatedDocs<TransformCollectionWithSelect<TSlug, SelectType>>>;
+
+  return find(options);
 }

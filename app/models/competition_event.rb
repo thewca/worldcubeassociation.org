@@ -20,11 +20,10 @@ class CompetitionEvent < ApplicationRecord
            as: "fee",
            with_model_currency: :currency_code
 
-  serialize :qualification, coder: Qualification
-  validates_associated :qualification
-
   serialize :qualification_condition, coder: ResultConditions::ResultCondition
   validates_associated :qualification_condition
+
+  validates :qualification_latest_date, presence: { if: :qualification_condition? }
 
   validate do
     remaining_rounds = rounds.reject(&:marked_for_destruction?)
@@ -71,16 +70,84 @@ class CompetitionEvent < ApplicationRecord
   end
 
   def qualification_to_s
-    qualification&.to_s(self)
+    case qualification_condition
+    when ResultConditions::Ranking
+      I18n.t("qualification.#{qualification_condition.scope}.ranking", ranking: qualification_condition.value)
+    when ResultConditions::ResultAchieved
+      if qualification_condition.value.nil?
+        I18n.t("qualification.#{qualification_condition.scope}.any_result")
+      elsif event.timed_event?
+        I18n.t("qualification.#{qualification_condition.scope}.time", time: SolveTime.centiseconds_to_clock_format(qualification_condition.value))
+      elsif event.fewest_moves?
+        moves = qualification_condition.scope == "average" ? (qualification_condition.value / 100.0).round(2) : qualification_condition.value
+        I18n.t("qualification.#{qualification_condition.scope}.moves", moves: moves)
+      elsif event.multiple_blindfolded?
+        I18n.t("qualification.#{qualification_condition.scope}.points", points: SolveTime.multibld_attempt_to_points(qualification_condition.value))
+      end
+    end
+  end
+
+  def meets_qualification?(user)
+    return true if qualification_condition.nil?
+
+    # If the registered user never competed before, they do not have results
+    #   and thus they cannot meet any qualification deadline
+    return false if user.person.nil?
+
+    before_deadline_results = user.person.results
+                                  .in_event(self.event_id)
+                                  .on_or_before(self.qualification_latest_date)
+
+    case qualification_condition
+    # Allow any competitor with a result to register when type == "ranking".
+    # When type == "ranking", the results need to be manually cleared out later.
+    when ResultConditions::Ranking
+      case qualification_condition.scope
+      when "single"
+        before_deadline_results.succeeded.any?
+      when "average"
+        before_deadline_results.average_succeeded.any?
+      end
+    when ResultConditions::ResultAchieved
+      if qualification_condition.value.nil?
+        case qualification_condition.scope
+        when "single"
+          before_deadline_results.succeeded.any?
+        when "average"
+          before_deadline_results.average_succeeded.any?
+        end
+      else
+        case qualification_condition.scope
+        when "single"
+          before_deadline_results.single_better_than(qualification_condition.value).any?
+        when "average"
+          before_deadline_results.average_better_than(qualification_condition.value).any?
+        end
+      end
+    end
   end
 
   def can_register?(user)
-    competition.allow_registration_without_qualification || qualification.nil? || qualification.can_register?(user, event_id)
+    competition.allow_registration_without_qualification || self.meets_qualification?(user)
   end
 
   def as_wcif_participation_source(_target_round)
     {
       "type" => "registrations",
+    }
+  end
+
+  def v1_qualification_wcif
+    return nil if qualification_condition.blank?
+
+    v2_wcif_type = qualification_condition.class.wcif_type
+    v1_backported_type = v2_wcif_type == 'resultAchieved' && qualification_condition.value.nil? ? "anyResult" : v2_wcif_type.gsub("resultAchieved", "attemptResult")
+
+    {
+      "type" => v1_backported_type,
+      "resultType" => qualification_condition.scope,
+      "whenDate" => qualification_latest_date&.strftime("%Y-%m-%d"),
+      "level" => qualification_condition.value,
     }
   end
 
@@ -101,31 +168,8 @@ class CompetitionEvent < ApplicationRecord
       "id" => self.event.id,
       "rounds" => self.rounds.map { it.to_wcif(version: version, include_results: include_results) },
       "extensions" => wcif_extensions.map(&:to_wcif),
-      "qualification" => at_least_v2 ? v2_qualification_wcif : qualification&.to_wcif,
+      "qualification" => at_least_v2 ? v2_qualification_wcif : v1_qualification_wcif,
     }
-  end
-
-  def self.load_wcif_qualification(wcif_event, version: Competition::WCIF_STABLE_VERSION)
-    if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
-      json_obj = wcif_event['qualification']
-
-      # Most events actually don't have a qualification, so return early.
-      return nil if json_obj.nil?
-
-      result_condition = json_obj['resultCondition']
-
-      v2_wcif_type = result_condition['type']
-      v1_wcif_type = result_condition['value'].present? ? v2_wcif_type.gsub('resultAchieved', 'attemptResult') : v2_wcif_type.gsub('resultAchieved', 'anyResult')
-
-      Qualification.new(
-        wcif_type: v1_wcif_type,
-        when_date: Date.iso8601(json_obj['latestResultDate']),
-        result_type: result_condition['scope'],
-        level: result_condition['value'],
-      )
-    else
-      Qualification.load(wcif_event["qualification"])
-    end
   end
 
   def load_wcif!(wcif, current_user, version: Competition::WCIF_STABLE_VERSION)
@@ -171,12 +215,11 @@ class CompetitionEvent < ApplicationRecord
     # Have to do this in a second pass because nested associations (mostly `linked_round` and `participation_source`)
     #   need the record to already exist in the database in order to reference their IDs
     new_rounds = wcif["rounds"].zip(model_rounds).map do |round_wcif, round|
-      if at_least_v2
-        # Linked Round already needs to be present for computing the backlinking below
-        round.linked_round = Round.compute_linked_round(round_wcif, round, model_rounds)
-      end
+      # Linked Round already needs to be present for computing the backlinking below
+      round.linked_round = Round.compute_linked_round(round_wcif, round, model_rounds) if at_least_v2
+      round.participation_source = Round.backport_participation_source(round, model_rounds)
 
-      round.update!(**Round.backport_participation_ruleset(round, model_rounds))
+      round.save!
       round
     end
     previously_linked_rounds.each(&:destroy_if_orphaned)
@@ -188,15 +231,26 @@ class CompetitionEvent < ApplicationRecord
         round.load_live_results!(round_wcif["results"], current_user, version: version) if round_wcif["results"].present?
       end
     end
-    wcif_qualification = CompetitionEvent.load_wcif_qualification(wcif, version: version)
     self.update!(
       rounds: new_rounds,
-      qualification: wcif_qualification,
-      qualification_latest_date: wcif_qualification&.when_date,
-      qualification_condition: ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
+      **CompetitionEvent.wcif_qualification_attributes(wcif, version: version),
     )
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
+  end
+
+  def self.wcif_qualification_attributes(wcif, version: Competition::WCIF_STABLE_VERSION)
+    wcif_qualification = wcif["qualification"]
+
+    # It's perfectly fine and legal for a competition event not to have any qualifications at all
+    return { qualification_latest_date: nil, qualification_condition: nil } if wcif_qualification.blank?
+
+    at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+
+    {
+      qualification_latest_date: wcif_qualification[at_least_v2 ? "latestResultDate" : "whenDate"],
+      qualification_condition: at_least_v2 ? ResultConditions::ResultCondition.load(wcif_qualification["resultCondition"]) : ResultConditions::Utils.upcycle_v1_qualification(wcif_qualification),
+    }
   end
 
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
@@ -215,13 +269,21 @@ class CompetitionEvent < ApplicationRecord
                            {
                              "type" => %w[object null],
                              "properties" => {
-                               "earliestResultDate" => { "type" => %w[string null] },
-                               "latestResultDate" => { "type" => "string" },
+                               "earliestResultDate" => { "type" => %w[string null], "format" => "date" },
+                               "latestResultDate" => { "type" => "string", "format" => "date" },
                                "resultCondition" => ResultConditions::ResultCondition.wcif_json_schema,
                              },
                            }
                          else
-                           Qualification.wcif_json_schema
+                           {
+                             "type" => %w[object null],
+                             "properties" => {
+                               "whenDate" => { "type" => "string" },
+                               "resultType" => { "type" => "string", "enum" => %w[single average] },
+                               "type" => { "type" => "string", "enum" => %w[attemptResult ranking anyResult] },
+                               "level" => { "type" => %w[integer null] },
+                             },
+                           }
                          end,
       "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
     }

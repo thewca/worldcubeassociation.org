@@ -16,11 +16,11 @@ import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
-
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
 import AvatarMenu from "@/components/ui/avatarMenu";
+import getPermissions from "@/lib/wca/permissions.server";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
 import {
@@ -29,6 +29,8 @@ import {
   MobileNavRoot,
 } from "@/components/MobileNav";
 import { getCachedGlobal } from "@/lib/payload/globals";
+import { findCached } from "@/lib/payload/collections";
+import { getT } from "@/lib/i18n/get18n";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -108,9 +110,28 @@ function LinkWrapper<T extends string>({
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
 async function SessionAvatarMenu() {
-  const session = await getSession();
+  const { lng } = await getT();
 
-  return <AvatarMenu session={session} />;
+  const [session, permissions, { docs: avatarMenuEntries }] = await Promise.all(
+    [
+      getSession(),
+      getPermissions().then((p) => p?.permissions),
+      findCached({
+        collection: "avatarMenuEntries",
+        locale: lng,
+        sort: "_order",
+        pagination: false,
+      }),
+    ],
+  );
+
+  return (
+    <AvatarMenu
+      session={session}
+      cmsEntries={avatarMenuEntries}
+      permissions={permissions}
+    />
+  );
 }
 
 export default async function Navbar() {

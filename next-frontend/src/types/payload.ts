@@ -128,6 +128,29 @@ export type IconName =
  * Page on this website the link points to.
  *
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AvatarMenuTargetLink".
+ */
+export type AvatarMenuTargetLink = ('/competitions/mine' | '/dashboard' | '/payload') | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AvatarMenuPermission".
+ */
+export type AvatarMenuPermission =
+  | (
+      | 'canAccessCms'
+      | 'canViewPolls'
+      | 'canViewAllUsers'
+      | 'canAdminResults'
+      | 'canCreatePosts'
+      | 'canManageRegionalOrganizations'
+      | 'canViewDelegateAdminPage'
+      | 'canManageIncidents'
+    )
+  | null;
+/**
+ * Page on this website the link points to.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "StaticTargetLink".
  */
 export type StaticTargetLink =
@@ -232,6 +255,7 @@ export interface Config {
     documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
+    avatarMenuEntries: AvatarMenuEntry;
     sessions: Session;
     accounts: Account;
     verifications: Verification;
@@ -255,6 +279,7 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
+    avatarMenuEntries: AvatarMenuEntriesSelect<false> | AvatarMenuEntriesSelect<true>;
     sessions: SessionsSelect<false> | SessionsSelect<true>;
     accounts: AccountsSelect<false> | AccountsSelect<true>;
     verifications: VerificationsSelect<false> | VerificationsSelect<true>;
@@ -353,6 +378,7 @@ export interface Config {
     'documents-page': DocumentsPage;
     'faq-page': FaqPage;
     'logo-page': LogoPage;
+    'executives-page': ExecutivesPage;
   };
   globalsSelect: {
     nav: NavSelect<false> | NavSelect<true>;
@@ -367,6 +393,7 @@ export interface Config {
     'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
     'faq-page': FaqPageSelect<false> | FaqPageSelect<true>;
     'logo-page': LogoPageSelect<false> | LogoPageSelect<true>;
+    'executives-page': ExecutivesPageSelect<false> | ExecutivesPageSelect<true>;
   };
   locale:
     | 'en'
@@ -750,6 +777,31 @@ export interface Tool {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "avatarMenuEntries".
+ */
+export interface AvatarMenuEntry {
+  id: string;
+  _order?: string | null;
+  /**
+   * Link text shown in the avatar menu in the top-right corner of the navbar. Keep it short.
+   */
+  label: string;
+  isRailsPage?: boolean | null;
+  /**
+   * Root-relative path on the Rails site, e.g. /profile/edit.
+   */
+  href?: string | null;
+  targetLink?: AvatarMenuTargetLink;
+  /**
+   * Open this link in a new tab
+   */
+  newTab?: boolean | null;
+  requiredPermission?: AvatarMenuPermission;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Auto-generated from Better Auth schema (session)
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -859,6 +911,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tools';
         value: string | Tool;
+      } | null)
+    | ({
+        relationTo: 'avatarMenuEntries';
+        value: string | AvatarMenuEntry;
       } | null)
     | ({
         relationTo: 'sessions';
@@ -1062,6 +1118,21 @@ export interface ToolsSelect<T extends boolean = true> {
   isOfficial?: T;
   author?: T;
   category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "avatarMenuEntries_select".
+ */
+export interface AvatarMenuEntriesSelect<T extends boolean = true> {
+  _order?: T;
+  label?: T;
+  isRailsPage?: T;
+  href?: T;
+  targetLink?: T;
+  newTab?: T;
+  requiredPermission?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2304,6 +2375,88 @@ export interface LogoPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "executives-page".
+ */
+export interface ExecutivesPage {
+  id: string;
+  /**
+   * Heading shown at the top of the Executives page.
+   */
+  title: string;
+  /**
+   * Paragraph shown below the heading.
+   */
+  intro: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  introMarkdown?: string | null;
+  /**
+   * Show the profile picture on every executive's card.
+   */
+  showsImages: boolean;
+  /**
+   * The executives shown on the page, in order.
+   */
+  executives: {
+    /**
+     * WCA ID of the executive. Name, region and stats are loaded from their profile.
+     */
+    wcaId: string;
+    /**
+     * Title of the executive, e.g. Chairperson.
+     */
+    role: string;
+    /**
+     * Year this person joined the WCA.
+     */
+    joinedWcaYear: number;
+    /**
+     * Year this person joined the Executives team.
+     */
+    joinedExecutivesYear: number;
+    /**
+     * Short bio shown on the card.
+     */
+    summary: string;
+    /**
+     * Full bio shown when clicking "More Information".
+     */
+    bio: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    bioMarkdown?: string | null;
+    colorPalette: ColorPaletteSelect;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nav_select".
  */
 export interface NavSelect<T extends boolean = true> {
@@ -2917,6 +3070,32 @@ export interface LogoPageSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "executives-page_select".
+ */
+export interface ExecutivesPageSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  introMarkdown?: T;
+  showsImages?: T;
+  executives?:
+    | T
+    | {
+        wcaId?: T;
+        role?: T;
+        joinedWcaYear?: T;
+        joinedExecutivesYear?: T;
+        summary?: T;
+        bio?: T;
+        bioMarkdown?: T;
+        colorPalette?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
