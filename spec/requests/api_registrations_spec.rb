@@ -14,7 +14,7 @@ RSpec.describe 'API Registrations' do
   def api_sign_in_as(user, scopes: nil)
     super(
       user,
-      scopes: scopes || Doorkeeper::OAuth::Scopes.from_string(Api::V1::RegistrationsController::MANAGE_REGISTRATIONS_SCOPE),
+      scopes: scopes || Doorkeeper::OAuth::Scopes.from_string(Api::V1::ApiController::MANAGE_REGISTRATIONS_SCOPE),
     )
   end
 
