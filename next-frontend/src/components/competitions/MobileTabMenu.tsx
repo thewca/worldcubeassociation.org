@@ -40,7 +40,7 @@ const groupTabsMap = new Map([
   ["scrambles", "results"],
   ["byPerson", "results"],
   ["live", "live"],
-  ["events", "events"],
+  ["irlevents", "events"],
 ]);
 
 const groupIcons = {
@@ -225,6 +225,7 @@ function GroupItem({
           type="button"
           css={itemStyle}
           data-selected={selected ? "" : undefined}
+          outline="none"
         >
           <ItemLabel
             text={t(`competitions.nav.${group}`)}
@@ -235,7 +236,7 @@ function GroupItem({
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content minW="56" autoFocus={false}>
+          <Menu.Content minW="56">
             {tabs.map((tab) => {
               const isLink = "href" in tab;
               const isActive =
@@ -331,6 +332,7 @@ function SingleItem({
       onClick={tab.disabled ? (e) => e.preventDefault() : undefined}
       _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
       aria-current={isActive ? "page" : undefined}
+      outline="none"
     >
       <Stack direction="row" alignItems="center" gap={2}>
         {tab.icon && <IconDisplay name={tab.icon} size="1.25em" />} {label}
