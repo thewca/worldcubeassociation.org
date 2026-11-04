@@ -22,7 +22,7 @@ export const announcementColorPalette = (index: number) =>
 /// An announcement's own page is reached by link, not from a card, so there is
 /// no neighbouring color to match. Derived from the ObjectId's random tail rather
 /// than `Math.random()`, so the page can be prerendered and cached.
-export const randomAnnouncementColorPalette = (announcement: Announcement) =>
+export const announcementColorPaletteFromId = (announcement: Announcement) =>
   announcementColorPalette(parseInt(announcement.id.slice(-6), 16));
 
 /// The teaser shown before "Read More". Announcements written before the

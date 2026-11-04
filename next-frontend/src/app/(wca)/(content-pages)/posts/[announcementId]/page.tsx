@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { findCached } from "@/lib/payload/collections";
 import { AnnouncementFullCard } from "@/components/announcements/AnnouncementCard";
-import { randomAnnouncementColorPalette } from "@/components/announcements/announcement";
+import { announcementColorPaletteFromId } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 
 const findAnnouncement = async (
@@ -46,7 +46,7 @@ export default async function AnnouncementPage({
     <VStack align="stretch" py={8}>
       <AnnouncementFullCard
         announcement={announcement}
-        colorPalette={randomAnnouncementColorPalette(announcement)}
+        colorPalette={announcementColorPaletteFromId(announcement)}
       />
     </VStack>
   );
