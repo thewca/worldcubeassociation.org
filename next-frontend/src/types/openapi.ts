@@ -1351,20 +1351,6 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
-        General404: {
-            error: string;
-            data: {
-                model: string;
-                id: string;
-            };
-        };
-        Competition404: components["schemas"]["General404"] & {
-            data?: {
-                /** @enum {string} */
-                model: "Competition";
-                id: string;
-            };
-        };
         RegistrationEligibility: {
             /** @description Whether the user may register before registration opens, i.e. is a delegate or organizer of this competition */
             can_pre_register: boolean;
@@ -1440,6 +1426,20 @@ export interface components {
             /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking_mode` is `linked_round`. */
             linked_round_wcif_ids?: string[];
             results: components["schemas"]["V1RoundResult"][];
+        };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
         };
         /** @description One event's podium, ordered by `global_pos`. Grouped by event rather than by round because a Dual Round podium spans both of its rounds, keeping only each competitor's better result — every round of a link shares an event and a format, so those sit here. */
         V1CompetitionPodium: {
@@ -2610,7 +2610,7 @@ export interface operations {
                 };
             };
             401: components["responses"]["NotLoggedIn"];
-            404: components["responses"]["CompetitionNotFound"];
+            404: components["responses"]["RegistrationError"];
         };
     };
     registrationEligibility: {
@@ -2634,7 +2634,7 @@ export interface operations {
                 };
             };
             401: components["responses"]["NotLoggedIn"];
-            404: components["responses"]["CompetitionNotFound"];
+            404: components["responses"]["RegistrationError"];
         };
     };
     registrationPaymentDenomination: {
