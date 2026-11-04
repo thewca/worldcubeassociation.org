@@ -183,10 +183,8 @@ module DbDumpHelper
   end
 
   def self.zip_and_upload_to_s3(zip_filename, s3_path, *zip_contents)
-    zip_file_list = zip_contents.join(" ")
-
     LogTask.log_task "Zipping #{zip_contents.length} file entries to '#{zip_filename}'" do
-      system("zip #{zip_filename} #{zip_file_list}", exception: true)
+      system("zip", zip_filename, *zip_contents, exception: true)
     end
 
     LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do

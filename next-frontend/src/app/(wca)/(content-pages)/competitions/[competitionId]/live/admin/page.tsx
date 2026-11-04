@@ -1,6 +1,5 @@
 import PermissionCheck from "@/components/PermissionCheck";
 import RoundAdmin from "@/app/(wca)/(content-pages)/competitions/[competitionId]/live/admin/RoundAdmin";
-import { Toaster } from "@/components/ui/toaster";
 
 export default async function LiveOverview({
   params,
@@ -15,7 +14,6 @@ export default async function LiveOverview({
       item={competitionId}
     >
       <RoundAdmin competitionId={competitionId} />
-      <Toaster />
     </PermissionCheck>
   );
 }

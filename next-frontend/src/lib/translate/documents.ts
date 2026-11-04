@@ -1,7 +1,7 @@
 import type { CollectionSlug, GlobalSlug, Payload, TypedLocale } from "payload";
 import _ from "lodash";
 import { fallbackLng } from "@/lib/i18n/settings";
-import { lexicalTextNodes } from "./lexical";
+import { lexicalUnits } from "./lexical";
 import {
   buildTranslationRegistry,
   resolveLeaf,
@@ -156,6 +156,9 @@ export async function collectSourceDocs(
   return perParent.flat();
 }
 
+const RICH_TEXT_HINT =
+  " — keep every <n>…</n> and <n/> tag, moving it with the words it wraps";
+
 /** Flat source strings for Weblate, keyed exactly as they will come back. */
 export function unitsFromDocs(docs: SourceDoc[]): Record<string, Unit> {
   return Object.fromEntries(
@@ -169,9 +172,12 @@ export function unitsFromDocs(docs: SourceDoc[]): Record<string, Unit> {
             ? [[leaf.baseKey, { message: leaf.source, description }]]
             : [];
         }
-        return lexicalTextNodes(leaf.source).map((node) => [
-          `${leaf.baseKey}#${node.path}`,
-          { message: node.text, description },
+        return lexicalUnits(leaf.source).map((unit) => [
+          `${leaf.baseKey}#${unit.path}`,
+          {
+            message: unit.text,
+            description: `${description}${RICH_TEXT_HINT}`,
+          },
         ]);
       }),
     ),
@@ -204,15 +210,18 @@ export async function collectExistingTranslations(
               : [];
           }
 
-          // Only meaningful when the translated tree still matches the source
-          // shape; a mismatch means the structures diverged and the safe move is
+          // Only meaningful when the translated block still matches the source
+          // shape; a mismatch means the structures diverged (or inline nodes
+          // were reordered, which renumbers placeholders) and the safe move is
           // to let the translator start from the source.
-          const targetNodes = new Map(
-            lexicalTextNodes(value).map((node) => [node.path, node.text]),
+          const targetUnits = new Map(
+            lexicalUnits(value).map((unit) => [unit.path, unit]),
           );
-          return lexicalTextNodes(leaf.source).flatMap((node) => {
-            const text = targetNodes.get(node.path);
-            return text ? [[`${leaf.baseKey}#${node.path}`, text]] : [];
+          return lexicalUnits(leaf.source).flatMap((unit) => {
+            const target = targetUnits.get(unit.path);
+            return target?.shape === unit.shape
+              ? [[`${leaf.baseKey}#${unit.path}`, target.text]]
+              : [];
           });
         });
       }),

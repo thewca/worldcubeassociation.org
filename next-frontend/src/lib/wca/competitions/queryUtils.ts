@@ -24,6 +24,7 @@ export function createSearchParams(
     customEndDate,
     adminStatus,
     shouldIncludeCancelled,
+    shouldShowChampionshipOnly,
   } = filterState;
 
   const dateNow = DateTime.now();
@@ -46,6 +47,8 @@ export function createSearchParams(
     searchParams["admin_status"] = adminStatus;
   }
   searchParams["include_cancelled"] = shouldIncludeCancelled;
+
+  searchParams["championship_only"] = shouldShowChampionshipOnly;
 
   if (timeOrder === "present") {
     searchParams["sort"] = "start_date,end_date,name";

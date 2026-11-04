@@ -162,6 +162,13 @@ class Api::V0::ApiController < ApplicationController
     search(Competition)
   end
 
+  private def email_search_requested?
+    %i[email adminSearch].any? { ActiveRecord::Type::Boolean.new.cast(params[it]) }
+  end
+
+  before_action -> { render status: :forbidden, json: { error: "Searching by email requires permission to administer results" } if email_search_requested? && !current_user&.can_admin_results? },
+                only: %i[users_search omni_search]
+
   def users_search
     search(User)
   end

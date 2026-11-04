@@ -182,7 +182,7 @@ it:
       any_result: Qualsiasi media
     deadline:
       description: Scadenza qualificazioni
-      by_date: 'entro %{date}'
+      by_date: 'entro il %{date}'
   activity:
     registration: Iscrizioni in loco
     checkin: Check-in
@@ -859,6 +859,20 @@ it:
       privacy: Privacy
       disclaimer: Disclaimer
       find_us: Seguici
+      panels:
+        admin: Pannello Amministratore
+        volunteer: Pannello Volontario
+        delegate: Pannello Delegato
+        wapc: Pannello WAC
+        wfc: Pannello WFC
+        wrt: Pannello WRT
+        wst: Pannello WST
+        board: Pannello Board
+        leader: Pannello Leader
+        senior_delegate: Pannello Delegato Senior
+        wic: Pannello WIC
+        weat: Pannello WEAT
+        wqac: Pannello WQAC
   page:
     translators:
       title: Traduttori
@@ -983,6 +997,8 @@ it:
           revisione indipendente ed imparziale per assicurare che le decisioni
           prese siano giuste e ragionevoli e rispettino le politiche e il
           regolamento WCA.
+      empty: Non è stato possibile trovare team o commissioni. Riprova più 
+        tardi.
     contacts:
       title: Modulo di contatto WCA
       faq_note_html: >-
@@ -1173,13 +1189,12 @@ it:
         header: Istruzioni di conferma
         welcome: 'Benvenuto %{user_email}!'
         confirm: >-
-          Il tuo account è stato creato e deve essere attivato prima di poterlo
-          utilizzare. Si prega di confermare il tuo account tramite il link
-          sottostante:
+          Il tuo account è stato creato e deve essere attivato prima di poterlo utilizzare.
+          Si prega di confermare il tuo account tramite il link sottostante: 
         confirmation_link: Conferma il mio account.
         activate: >-
-          Dopo l'attivazione sarà possibile accedere al sito web della World
-          Cube Association:
+          Dopo l'attivazione sarà possibile accedere al sito web della World Cube
+          Association: 
         login_form: modulo di log-in
         addendum: >-
           Questa email è generata automaticamente. Se non hai registrato un
@@ -1202,8 +1217,8 @@ it:
           %{competition} e ha inviato l'invio al WCAT. Non appena il WCAT
           annuncia questa competizione al pubblico, riceverai un'altra notifica.
         contact: >-
-          Se hai altre domande, mettiti in contatto con i Delegati della
-          competizione via email:
+          Se hai altre domande, mettiti in contatto con i Delegati della competizione
+          via email: 
       competition_announcement_email:
         header: 'Il WCAT ha annunciato %{competition}'
         announced: >-
@@ -2175,7 +2190,8 @@ it:
       event_limit:
         one: I partecipanti possono iscriversi a un solo evento.
         many: I partecipanti possono iscriversi a un massimo di %{count} eventi.
-        other: I partecipanti possono iscriversi a un massimo di %{count} eventi.
+        other: I partecipanti possono iscriversi a un massimo di %{count} 
+          eventi.
       require_qualification: >-
         I partecipanti possono iscriversi soltanto agli eventi per cui sono
         qualificati.
@@ -2263,6 +2279,7 @@ it:
       delegates_loading: Attendo di caricare tutti i Delegati...
       no_delegates_found: Nessun Delegato trovato.
       show_cancelled: Mostra competizioni cancellate
+      championship_only: Mostra solo campionati
       show_registration_status: Mostra icona status iscrizioni
       use_admin_view: Usa vista amministratore
       titles:
@@ -2846,9 +2863,9 @@ it:
         email_message: Copiato negli appunti. Ricorda di scrivere i destinatari 
           in Ccn!
         move_to:
-          one: Sposta %{count} in
-          many: Sposta %{count} in
-          other: Sposta %{count} in
+          one: Sposta %{count} iscrizione in
+          many: Sposta %{count} iscrizioni in
+          other: Sposta %{count} iscrizioni in
         move_to_none_selected: Sposta in
         pending: In attesa
         waitlist: Lista d'attesa
@@ -3806,25 +3823,24 @@ it:
         WCA.'
       teams_committees: Team e Commissioni
       delegates_html: >-
-        <p>Il <strong>Delegato WCA</strong> è un ruolo definito nelle WCA
-        Motions e illustrato nel Regolamento WCA. Il dovere principale di un
-        delegato è quello di supervisionare le competizioni per conto della WCA.
-        Un Delegato WCA ha il compito di assicurarsi che tutte le competizioni
-        WCA si svolgano rispettando gli ideali, il regolamento e lo spirito
-        della WCA. La WCA distingue tra <strong>Delegati Senior</strong>,
-        <strong>Delegati Regionali</strong>, <strong>Delegati</strong>,
-        <strong>Delegati Junior</strong> e <strong>Delegati
-        Apprendisti</strong>%{see_link}.</p> <p>Oltre a i compiti di un Delegato
-        WCA, un Delegato Senior o un Delegato Regionale è responsabile della
-        gestione dei Delegati WCA nella propria area e può essere contattato
-        dalla comunità per questioni locali.</p> <p>I nuovi Delegati sono
-        riportati in una prima fase come Delegati Junior; prima di essere
-        promossi a Delegati WCA, viene richiesto loro di dimostrare competenza
-        nella gestione delle competizioni WCA.</p> <p>I Delegati Apprendisti
-        sono in fase di prova per ricoprire il ruolo di Delegati, e possono
-        supervisionare competizioni soltanto in presenza di un altro delegato
-        WCA.</p>
-      see_link_html: '(vedi %{link})'
+        <p>Il <strong>Delegato WCA</strong> è un ruolo definito nelle WCA Motions
+        e illustrato nel Regolamento WCA. Il dovere principale di un delegato è quello
+        di supervisionare le competizioni per conto della WCA. Un Delegato WCA ha
+        il compito di assicurarsi che tutte le competizioni WCA si svolgano rispettando
+        gli ideali, il regolamento e lo spirito della WCA. La WCA distingue tra <strong>Delegati
+        Senior</strong>, <strong>Delegati Regionali</strong>, <strong>Delegati</strong>,
+        <strong>Delegati Junior</strong> e <strong>Delegati Apprendisti</strong>%{see_link}.</p>
+        <p>Oltre a i compiti di un Delegato WCA, un Delegato Senior o un Delegato
+        Regionale è responsabile della gestione dei Delegati WCA nella propria area
+        e può essere contattato dalla comunità per questioni locali.</p> <p>I nuovi
+        Delegati sono riportati in una prima fase come Delegati Junior; prima di essere
+        promossi a Delegati WCA, viene richiesto loro di dimostrare competenza nella
+        gestione delle competizioni WCA.</p> <p>I Delegati Apprendisti sono in fase
+        di prova per ricoprire il ruolo di Delegati, e possono supervisionare competizioni
+        soltanto in presenza di un altro delegato WCA.</p> <p>Se sei interessato a
+        intraprendere il percorso da Delegato, contatta il tuo Delegato Regionale
+        per determinare la tua idoneità.</p>
+      see_link_html: ' (vedi %{link})'
       members_html: >-
         Tutti i partecipanti diventano automaticamente <strong>membri</strong>
         della WCA alla loro prima competizione WCA.
@@ -4209,7 +4225,7 @@ it:
     index:
       title: Media
       validate_media: Convalida media
-      submit_media_html: Puoi inviare un media qui <a href="/media/new2>here</a>
+      submit_media_html: Puoi inviare un media qui <a href="/media/new">here</a>
     validate:
       title: Convalida media
     media_table:
@@ -4401,8 +4417,8 @@ it:
         sono 'Femmina', 'Maschio', e 'Altro'. Lascia un commento a riguardo per
         il WCA Results Team.
       non_matching_name_warning: >-
-        Il nome '%{name}' fornito per (%{wca_id}) non coincide con il dato
-        attualmente presente nel database WCA ('%{expected_name}').
+        Il nome '%{name}' fornito per (%{wca_id}) non coincide con il dato attualmente
+        presente nel database WCA ('%{expected_name}'). 
       non_matching_country_warning: >-
         La nazione '%{country}' fornita per %{name} (%{wca_id}) non coincide con
         il dato attualmente presente nel database WCA ('%{expected_country}').

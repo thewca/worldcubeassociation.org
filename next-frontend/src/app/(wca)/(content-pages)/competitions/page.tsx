@@ -74,6 +74,9 @@ import {
 } from "@/lib/wca/competitions/statusUtils";
 import { nonFutureCompetitionYears } from "@/lib/wca/data/competitions";
 import _ from "lodash";
+import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
+import useIsScrolled from "@/lib/hooks/useIsScrolled";
+import BackToTopButton from "@/components/BackToTopButton";
 
 const DEBOUNCE_MS = 600;
 const COMPETITIONS_PER_PAGE = 50;
@@ -143,6 +146,10 @@ export default function CompetitionsPage() {
     searchParams,
     createFilterState,
   );
+
+  const { isScrolledDown, topSentinelRef } = useIsScrolled({
+    scrollThreshold: "100px",
+  });
 
   const { t } = useT();
 
@@ -425,12 +432,16 @@ export default function CompetitionsPage() {
               </VStack>
             </Collapsible.Root>
           </Card.Body>
-          <Card.Body>
+          <Card.Body pos="relative">
+            {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+            <Box ref={topSentinelRef} position="absolute" />
+
             <Tabs.Content value="list">
               <Stack
                 direction={{ base: "column", lg: "row" }}
                 justify="space-between"
                 align={{ base: "start", lg: "center" }}
+                mb={3}
               >
                 <Wrap gapX="3" gapY="1" align="center">
                   <Text>{t("competitions.index.registration_key")}</Text>
@@ -456,14 +467,48 @@ export default function CompetitionsPage() {
                     </Badge>
                   ))}
                 </Wrap>
-                <Text>
-                  {t("competitions.index.currently_displaying", {
-                    count: competitionsFiltered.length,
-                  })}
-                </Text>
               </Stack>
               <Table.ScrollArea>
-                <Table.Root size="xs" variant="competitions" borderWidth="2px">
+                <Table.Root
+                  size="xs"
+                  variant="competitions"
+                  borderWidth="2px"
+                  stickyHeader
+                >
+                  <Table.Header bg="bg.muted">
+                    <Table.Row>
+                      <Table.ColumnHeader
+                        colSpan={6}
+                        fontWeight="normal"
+                        textAlign="end"
+                        p={2}
+                      >
+                        {t("competitions.index.currently_displaying", {
+                          count: competitionsFiltered.length,
+                        })}
+                      </Table.ColumnHeader>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.ColumnHeader></Table.ColumnHeader>
+                      <Table.ColumnHeader>
+                        {t("competitions.competition_info.date")}
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader>
+                        {t("competitions.competition_info.name")}
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader></Table.ColumnHeader>
+                      <Table.ColumnHeader
+                        display={{ base: "none", md: "table-cell" }}
+                      >
+                        {t("competitions.competition_info.location")}
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader
+                        display={{ base: "none", md: "table-cell" }}
+                      >
+                        {t("competitions.competition_info.venue")}
+                      </Table.ColumnHeader>
+                    </Table.Row>
+                  </Table.Header>
                   <Table.Body>
                     {inProgressComps.length > 0 && (
                       <>
@@ -504,6 +549,8 @@ export default function CompetitionsPage() {
           </Card.Body>
         </Tabs.Root>
       </Card.Root>
+
+      <BackToTopButton visible={isScrolledDown} />
     </VStack>
   );
 }
@@ -825,6 +872,26 @@ function AdvancedFilters({
         <Checkbox.Control />
         <Checkbox.Label>
           {t("competitions.index.show_cancelled")}
+        </Checkbox.Label>
+      </Checkbox.Root>
+      <Checkbox.Root
+        width="auto"
+        minHeight="10"
+        checked={filterState.shouldShowChampionshipOnly}
+        onCheckedChange={(e) =>
+          dispatchFilter({
+            type: "set_championship_only",
+            shouldShowChampionshipOnly: Boolean(e.checked),
+          })
+        }
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>
+          <HStack gap={2} align="center">
+            {t("competitions.index.championship_only")}
+            <NationalChampionshipIcon />
+          </HStack>
         </Checkbox.Label>
       </Checkbox.Root>
     </Stack>
