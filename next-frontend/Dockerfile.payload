@@ -1,5 +1,4 @@
-ARG MONGO_VERSION=8
-FROM mongo:${MONGO_VERSION}
+FROM mongo:8
 
 # Install dependencies needed for CMS data import
 RUN apt-get update && \
