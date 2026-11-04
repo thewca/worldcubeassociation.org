@@ -933,7 +933,7 @@ class User < ApplicationRecord
   def can_access_cms?
     board_member? || software_team? || communication_team? || group_member?(UserGroup.teams_committees_group_wat) ||
       marketing_team? || wic_team? || wrc_team? || appeals_committee? || competition_announcement_team? ||
-      results_team? || quality_assurance_committee?
+      results_team? || quality_assurance_committee? || weat_team?
   end
 
   def can_manage_regional_organizations?
