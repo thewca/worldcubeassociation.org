@@ -100,6 +100,7 @@ export default function MobileTabMenu({
     },
     {} as GroupedTab,
   );
+  console.log(grouped);
 
   const custom = customTabs.reduce<Record<string, CompetitionNavTab[]>>(
     (acc, tab) => {
@@ -184,7 +185,8 @@ function LinkItem({ tab, selected, renderLabel }: ItemProps) {
   return (
     <ChakraLink
       unstyled
-      href={tab.href}
+      href={tab.externalHref || tab.href}
+      target={tab.externalHref ? "_blank" : undefined}
       css={itemStyle}
       data-selected={selected ? "" : undefined}
       aria-current={selected ? "page" : undefined}
@@ -325,10 +327,11 @@ function SingleItem({
     <ChakraLink
       unstyled
       w="full"
-      href={tab.disabled ? undefined : tab.href}
+      href={tab.disabled ? undefined : tab.externalHref || tab.href}
       aria-disabled={tab.disabled || undefined}
       data-disabled={tab.disabled ? "" : undefined}
       tabIndex={tab.disabled ? -1 : undefined}
+      target={tab.externalHref ? "_blank" : undefined}
       onClick={tab.disabled ? (e) => e.preventDefault() : undefined}
       _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
       aria-current={isActive ? "page" : undefined}
