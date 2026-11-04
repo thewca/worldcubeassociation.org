@@ -39,6 +39,7 @@ import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
 import { DocumentsPage } from "@/globals/Documents";
 import { FaqPage } from "@/globals/FaqPage";
 import { LogoPage } from "@/globals/LogoPage";
+import { ExecutivesPage } from "@/globals/ExecutivesPage";
 import {
   compatibilityOptions,
   mongooseAdapter,
@@ -180,6 +181,7 @@ export const wcaConfig = {
     DocumentsPage,
     FaqPage,
     LogoPage,
+    ExecutivesPage,
   ].map(withWeblateSync),
   endpoints: [weblateSyncEndpoint],
   editor: lexicalEditor(),

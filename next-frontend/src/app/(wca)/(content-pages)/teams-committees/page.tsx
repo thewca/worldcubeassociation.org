@@ -1,6 +1,7 @@
 import {
   Heading,
   HStack,
+  IconButton,
   SimpleGrid,
   Tabs,
   Text,
@@ -20,6 +21,8 @@ import { Metadata } from "next";
 import EmailCopyButton from "@/components/EmailCopyButton";
 import ResponsiveTabsList from "@/components/ui/responsiveTabsList";
 import { route } from "nextjs-routes";
+import RailsLink from "@/components/RailsLink";
+import { LuMail } from "react-icons/lu";
 
 type GroupWithFriendlyId = components["schemas"]["UserGroup"] & {
   metadata: { friendly_id: string };
@@ -93,11 +96,43 @@ export default async function TeamsCommitteesPage({
   );
 }
 
-async function TeamTab({ group }: { group: GroupWithFriendlyId }) {
+async function ContactAction({
+  email,
+  preferred_contact_mode,
+}: {
+  email?: string;
+  preferred_contact_mode?: string;
+}) {
+  const { t } = await getT();
+  if (!email || preferred_contact_mode === "no_contact") return null;
+
+  if (preferred_contact_mode === "contact_form")
+    return (
+      <IconButton
+        asChild
+        variant="ghost"
+        size="sm"
+        aria-label={t("page.contacts.title")}
+      >
+        <RailsLink href="/contact" color="inherit">
+          <LuMail />
+        </RailsLink>
+      </IconButton>
+    );
+  return <EmailCopyButton email={email} />;
+}
+
+async function TeamTab({
+  group,
+}: {
+  group: components["schemas"]["UserGroup"];
+}) {
   const { t } = await getT();
 
   const { metadata, name, id } = group;
-  const { friendly_id, email, preferred_contact_mode } = metadata;
+
+  // object is always set here
+  const { friendly_id, email, preferred_contact_mode } = metadata!;
 
   const permissions = await getPermissions();
   const canReadGroupPast = permissions?.canReadGroupPast(group.name);
@@ -107,9 +142,10 @@ async function TeamTab({ group }: { group: GroupWithFriendlyId }) {
       <VStack align="stretch" gap="2">
         <HStack gap="2">
           <Heading size="2xl">{name}</Heading>
-          {email && preferred_contact_mode !== "no_contact" && (
-            <EmailCopyButton email={email} />
-          )}
+          <ContactAction
+            email={email}
+            preferred_contact_mode={preferred_contact_mode}
+          />
         </HStack>
         <Text>
           {t(

@@ -2,19 +2,19 @@ import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import I18n from '../../../../lib/i18n';
 
-const QualificationResultTypeOptions = [
-  { key: 0, value: 0, text: I18n.t('qualification.type.none') },
-  {
-    key: -1, value: -1, text: '────────', disabled: true,
-  },
-  { key: 1, value: 'single', text: I18n.t('common.single') },
-  { key: 2, value: 'average', text: I18n.t('common.average') },
-];
-const MbfQualificationResultTypeOptions = QualificationResultTypeOptions.slice(0, 3);
-
 export function qualificationResultTypeInput({
   qualificationResultType, onChange, eventId,
 }) {
+  const QualificationResultTypeOptions = [
+    { key: 0, value: 0, text: I18n.t('qualification.type.none') },
+    {
+      key: -1, value: -1, text: '────────', disabled: true,
+    },
+    { key: 1, value: 'single', text: I18n.t('common.single') },
+    { key: 2, value: 'average', text: I18n.t('common.average') },
+  ];
+  const MbfQualificationResultTypeOptions = QualificationResultTypeOptions.slice(0, 3);
+
   return (
     <Form.Select
       name="qualificationResultType"
