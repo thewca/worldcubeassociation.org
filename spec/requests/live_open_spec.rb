@@ -18,7 +18,7 @@ RSpec.describe "WCA Live API - open_round" do
       round = create(:round, competition: competition, event_id: "333", number: 1)
       create(:registration, :accepted, competition: competition)
 
-      put api_v1_competition_live_live_round_open_path(competition.id, round.wcif_id)
+      put api_v1_competition_live_live_round_open_path(competition.id, round.wcif_id), as: :json
 
       expect(response).to be_successful
       expect(response.parsed_body["status"]).to eq "ok"
@@ -36,11 +36,11 @@ RSpec.describe "WCA Live API - open_round" do
       round1 = create(:round, competition: competition, event_id: "333", number: 1, linked_round: linked_round)
       round2 = create(:round, competition: competition, event_id: "444", number: 1, linked_round: linked_round)
 
-      put api_v1_competition_live_live_round_open_path(competition.id, round1.wcif_id)
+      put api_v1_competition_live_live_round_open_path(competition.id, round1.wcif_id), as: :json
       expect(response).to be_successful
       expect(round1.live_results.count).to eq 1
 
-      put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+      put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id), as: :json
       expect(response).to be_successful
       expect(round2.live_results.count).to eq 1
     end
@@ -56,7 +56,7 @@ RSpec.describe "WCA Live API - open_round" do
       # Open round 1 but don't enter any results → score_taking not done
       round1.open_round!(delegate)
 
-      put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+      put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id), as: :json
 
       expect(response).not_to be_successful
       expect(response.parsed_body["status"]).to eq "score taking is not finished in the previous round"
@@ -77,7 +77,7 @@ RSpec.describe "WCA Live API - open_round" do
       finish_round!(round1_333_1, delegate)
       round1_333_2.open_round!(delegate)
 
-      put api_v1_competition_live_live_round_open_path(competition.id, round2_333.wcif_id)
+      put api_v1_competition_live_live_round_open_path(competition.id, round2_333.wcif_id), as: :json
 
       expect(response).not_to be_successful
       expect(response.parsed_body["status"]).to eq "score taking is not finished in the previous round"
@@ -98,7 +98,7 @@ RSpec.describe "WCA Live API - open_round" do
       finish_round!(round1_333_1, delegate)
       finish_round!(round1_333_2, delegate)
 
-      put api_v1_competition_live_live_round_open_path(competition.id, round2_333.wcif_id)
+      put api_v1_competition_live_live_round_open_path(competition.id, round2_333.wcif_id), as: :json
 
       expect(response).to be_successful
       expect(response.parsed_body["status"]).to eq "ok"
@@ -116,7 +116,7 @@ RSpec.describe "WCA Live API - open_round" do
 
         round1 = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round1.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round1.wcif_id), as: :json
 
         expect(response).to be_successful
         expect(response.parsed_body["status"]).to eq "ok"
@@ -133,7 +133,7 @@ RSpec.describe "WCA Live API - open_round" do
 
         finish_round!(round1, delegate)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id), as: :json
 
         expect(response).to be_successful
         expect(response.parsed_body["status"]).to eq "ok"
@@ -152,7 +152,7 @@ RSpec.describe "WCA Live API - open_round" do
         # Round 1 of the link is open with no results entered yet
         round1.open_round!(delegate)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id), as: :json
 
         expect(response).to be_successful
         expect(response.parsed_body["status"]).to eq "ok"
@@ -171,7 +171,7 @@ RSpec.describe "WCA Live API - open_round" do
         finish_round!(round1, delegate)
         finish_round!(round2, delegate)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round3.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round3.wcif_id), as: :json
 
         expect(response).to be_successful
         expect(response.parsed_body["status"]).to eq "ok"
@@ -192,7 +192,7 @@ RSpec.describe "WCA Live API - open_round" do
         finish_round!(round2, delegate)
         finish_round!(round3, delegate)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round4.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round4.wcif_id), as: :json
 
         expect(response).to be_successful
         expect(response.parsed_body["status"]).to eq "ok"
@@ -211,7 +211,7 @@ RSpec.describe "WCA Live API - open_round" do
 
         finish_round!(round1, delegate)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id), as: :json
 
         expect(response).not_to be_successful
         expect(response.parsed_body["status"]).to include("9m3")
@@ -231,7 +231,7 @@ RSpec.describe "WCA Live API - open_round" do
         finish_round!(round1_1, delegate)
         finish_round!(round1_2, delegate)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round2.wcif_id), as: :json
 
         expect(response).not_to be_successful
         expect(response.parsed_body["status"]).to include("9m3")
@@ -250,7 +250,7 @@ RSpec.describe "WCA Live API - open_round" do
         finish_round!(round1, delegate)
         finish_round!(round2, delegate)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round3.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round3.wcif_id), as: :json
 
         expect(response).not_to be_successful
         expect(response.parsed_body["status"]).to include("9m2")
@@ -274,7 +274,7 @@ RSpec.describe "WCA Live API - open_round" do
         expect(round1.reload.total_competitors).to eq 15
         expect(round2.total_competitors).to eq 16
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round3.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round3.wcif_id), as: :json
 
         expect(response).not_to be_successful
         expect(response.parsed_body["status"]).to include("9m2")
@@ -295,7 +295,7 @@ RSpec.describe "WCA Live API - open_round" do
         finish_round!(round2, delegate)
         finish_round!(round3, delegate)
 
-        put api_v1_competition_live_live_round_open_path(competition.id, round4.wcif_id)
+        put api_v1_competition_live_live_round_open_path(competition.id, round4.wcif_id), as: :json
 
         expect(response).not_to be_successful
         expect(response.parsed_body["status"]).to include("9m1")

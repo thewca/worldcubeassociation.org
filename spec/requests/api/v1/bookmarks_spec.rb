@@ -40,7 +40,7 @@ RSpec.describe "API v1 Bookmarks" do
 
     describe "POST #create" do
       it "bookmarks the competition" do
-        expect { post api_v1_competition_bookmark_path(competition) }
+        expect { post api_v1_competition_bookmark_path(competition), as: :json }
           .to change { user.competition_bookmarked?(competition) }.from(false).to(true)
         expect(response.parsed_body).to eq({ "bookmarked" => true })
       end
@@ -48,7 +48,7 @@ RSpec.describe "API v1 Bookmarks" do
       it "does not create a duplicate bookmark" do
         BookmarkedCompetition.create!(competition: competition, user: user)
 
-        expect { post api_v1_competition_bookmark_path(competition) }
+        expect { post api_v1_competition_bookmark_path(competition), as: :json }
           .not_to change(BookmarkedCompetition, :count)
         expect(response).to be_successful
       end
@@ -58,7 +58,7 @@ RSpec.describe "API v1 Bookmarks" do
       it "removes the bookmark" do
         BookmarkedCompetition.create!(competition: competition, user: user)
 
-        expect { delete api_v1_competition_bookmark_path(competition) }
+        expect { delete api_v1_competition_bookmark_path(competition), as: :json }
           .to change { user.competition_bookmarked?(competition) }.from(true).to(false)
         expect(response.parsed_body).to eq({ "bookmarked" => false })
       end

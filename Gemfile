@@ -149,6 +149,7 @@ group :test do
   gem 'launchy'
   gem 'capybara'
   gem 'oga' # XML parsing library introduced for testing RSS feed
+  gem 'openapi_first'
   gem 'database_cleaner'
   gem 'rails-controller-testing'
   gem 'capybara-playwright-driver'

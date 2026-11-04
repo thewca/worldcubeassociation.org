@@ -18,7 +18,7 @@ RSpec.describe "WCA Live API" do
         registration_id: registration.id,
       }
 
-      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request
+      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request, as: :json
       expect(response).to be_successful
 
       perform_enqueued_jobs
@@ -44,7 +44,7 @@ RSpec.describe "WCA Live API" do
       create(:live_result, round: round, registration: registration)
 
       expect do
-        put api_v1_competition_live_clear_competitor_in_round_path(competition.id, round.wcif_id, registration.id)
+        put api_v1_competition_live_clear_competitor_in_round_path(competition.id, round.wcif_id, registration.id), as: :json
       end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including("updated" => [Live::DiffHelper.compress_payload({ "registration_id" => registration.id, "average" => 0, "best" => 0, "live_attempts" => [], "bpa" => 1, "wpa" => -1, "pra" => 0 })]))
@@ -69,7 +69,7 @@ RSpec.describe "WCA Live API" do
         registration_id: registration.id,
       }
 
-      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request
+      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request, as: :json
       expect(response).not_to be_successful
     end
   end
