@@ -45,8 +45,24 @@ RSpec.describe Competition do
     end
 
     it "accepts a competition starting on the introduction date" do
-      competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto])
+      competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto], scoretaking_software: :internal)
       expect(competition).to be_valid
+    end
+
+    it "rejects the event without internal scoretaking" do
+      competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto], scoretaking_software: :external)
+      expect(competition).to be_invalid_with_errors(scoretaking_software: ["must be set to Internal Live Results when holding Face Turning Octahedron."])
+    end
+
+    it "rejects adding the event through the WCIF without internal scoretaking" do
+      competition = create(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333], scoretaking_software: :wca_live)
+      admin = create(:admin)
+
+      wcif = competition.to_wcif
+      wcif['events'] += [{ 'id' => 'fto', 'rounds' => [] }]
+
+      expect { competition.set_wcif!(wcif, admin) }.to raise_error(ActiveRecord::RecordInvalid, /Internal Live Results/)
+      expect(competition.reload.event_ids).not_to include('fto')
     end
 
     it "accepts a competition starting before the introduction date without the event" do
