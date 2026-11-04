@@ -27,6 +27,24 @@ RSpec.describe "Scoretakers API" do
       expect(response).not_to be_successful
       expect(competition.reload.scoretakers).to be_empty
     end
+
+    it "does not let a random user remove a scoretaker" do
+      competition.competition_scoretakers.create!(user: competitor)
+      sign_in create(:user)
+
+      delete api_v1_competition_scoretaker_path(competition.id, competitor.id), as: :json
+      expect(response).to have_http_status(:forbidden)
+      expect(competition.reload.scoretakers).to include(competitor)
+    end
+
+    it "lists the scoretakers" do
+      competition.competition_scoretakers.create!(user: competitor)
+      sign_in delegate
+
+      get api_v1_competition_scoretakers_path(competition.id)
+      expect(response).to be_successful
+      expect(response.parsed_body).to eq([{ "user_id" => competitor.id, "name" => competitor.name }])
+    end
   end
 
   describe "scoretaking permission" do

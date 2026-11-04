@@ -1297,15 +1297,15 @@ export interface components {
         };
         CompetingStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
             parameters: {
-                events_per_registration_limit?: number;
+                events_per_registration_limit?: number | null;
                 allow_registration_edits: boolean;
                 /** @enum {string} */
                 guest_entry_status: "unclear" | "free" | "restricted";
-                guests_per_registration_limit?: number;
+                guests_per_registration_limit?: number | null;
                 guests_enabled: boolean;
                 "uses_qualification?": boolean;
-                allow_registration_without_qualification: boolean;
-                force_comment_in_registration: boolean;
+                allow_registration_without_qualification: boolean | null;
+                force_comment_in_registration: boolean | null;
                 qualification_wcif: {
                     [key: string]: components["schemas"]["WcifQualification"];
                 };
@@ -1351,20 +1351,6 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
-        General404: {
-            error: string;
-            data: {
-                model: string;
-                id: string;
-            };
-        };
-        Competition404: components["schemas"]["General404"] & {
-            data?: {
-                /** @enum {string} */
-                model: "Competition";
-                id: string;
-            };
-        };
         RegistrationEligibility: {
             /** @description Whether the user may register before registration opens, i.e. is a delegate or organizer of this competition */
             can_pre_register: boolean;
@@ -1441,6 +1427,20 @@ export interface components {
             linked_round_wcif_ids?: string[];
             results: components["schemas"]["V1RoundResult"][];
         };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
+        };
         /** @description One event's podium, ordered by `global_pos`. Grouped by event rather than by round because a Dual Round podium spans both of its rounds, keeping only each competitor's better result — every round of a link shares an event and a format, so those sit here. */
         V1CompetitionPodium: {
             /** @example 333fm */
@@ -1515,7 +1515,7 @@ export interface components {
         RoundState: "open" | "locked" | "pending" | "ready" | "blocked";
         BaseAdminRound: components["schemas"]["BaseWcifRound"] & {
             state: components["schemas"]["RoundState"];
-            min_competitors_to_open?: number;
+            min_competitors_to_open?: number | null;
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
@@ -1578,8 +1578,8 @@ export interface components {
         };
         RoundLiveResult: components["schemas"]["BaseLiveResult"] & {
             round_wcif_id: string;
-            global_pos: number;
-            local_pos: number;
+            global_pos: number | null;
+            local_pos: number | null;
             forecast_statistics?: {
                 best_possible_average?: number;
                 worst_possible_average?: number;
@@ -1630,7 +1630,7 @@ export interface components {
             birthdate?: string;
             /** Format: email */
             email?: string;
-            avatar?: components["schemas"]["UserAvatar"];
+            avatar?: components["schemas"]["UserAvatar"] | null;
             roles: ("delegate" | "trainee-delegate" | "organizer")[];
             registration?: components["schemas"]["WcifRegistration"];
             assignments: components["schemas"]["WcifAssignment"][];
@@ -1639,8 +1639,8 @@ export interface components {
         };
         ByPersonLiveResult: components["schemas"]["BaseLiveResult"] & {
             round_wcif_id: string;
-            global_pos: number;
-            local_pos: number;
+            global_pos: number | null;
+            local_pos: number | null;
             event_id: string;
         };
         LivePerson: components["schemas"]["WcifPerson"] & {
@@ -2610,7 +2610,7 @@ export interface operations {
                 };
             };
             401: components["responses"]["NotLoggedIn"];
-            404: components["responses"]["CompetitionNotFound"];
+            404: components["responses"]["RegistrationError"];
         };
     };
     registrationEligibility: {
@@ -2634,7 +2634,7 @@ export interface operations {
                 };
             };
             401: components["responses"]["NotLoggedIn"];
-            404: components["responses"]["CompetitionNotFound"];
+            404: components["responses"]["RegistrationError"];
         };
     };
     registrationPaymentDenomination: {

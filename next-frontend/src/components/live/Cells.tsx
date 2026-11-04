@@ -98,7 +98,7 @@ export function LivePositionCell({
   advancingParams,
   showAdvancing = true,
 }: {
-  position: number | string;
+  position: number | string | null;
   rowSpan?: number;
   advancingParams: Pick<LiveResult, "advancing_questionable" | "advancing">;
   showAdvancing?: boolean;

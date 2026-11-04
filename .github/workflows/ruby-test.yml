@@ -86,8 +86,6 @@ jobs:
           - suite: openapi-contract # validates v1 responses against next-frontend/openapi, see spec/support/openapi_contract.rb
             rspec-args: "spec/requests"
             openapi-contract: "1"
-    # TODO: drop once the v1 contract is green, so the `test` gate starts requiring it
-    continue-on-error: ${{ matrix.suite == 'openapi-contract' }}
     env:
       OPENAPI_CONTRACT: ${{ matrix.openapi-contract }}
       RACK_ENV: test

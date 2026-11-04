@@ -72,5 +72,21 @@ RSpec.describe "WCA Live API" do
       patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: live_request, as: :json
       expect(response).not_to be_successful
     end
+
+    it "rejects a user without scoretaking privileges" do
+      sign_in create(:user)
+
+      competition = create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate])
+      round = create(:round, competition: competition, event_id: "333")
+      registration = create(:registration, :accepted, competition: competition)
+      create(:live_result, round: round, registration: registration)
+
+      patch api_v1_competition_live_update_results_path(competition.id, round.wcif_id), params: {
+        attempts: [{ value: 111, attempt_number: 1 }],
+        registration_id: registration.id,
+      }, as: :json
+
+      expect(response).to have_http_status(:forbidden)
+    end
   end
 end

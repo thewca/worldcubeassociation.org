@@ -1827,10 +1827,9 @@ class Competition < ApplicationRecord
                                                     guest_entry_status
                                                     guests_per_registration_limit
                                                     guests_enabled
-                                                    uses_qualification?
                                                     allow_registration_without_qualification
                                                     force_comment_in_registration],
-                                           methods: %i[event_ids],
+                                           methods: %i[event_ids uses_qualification?],
                                            include: [])
     user_params = {
       preferredEvents: current_user.preferred_events.pluck(:id),
