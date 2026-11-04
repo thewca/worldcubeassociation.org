@@ -1,22 +1,49 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 
-// Inlined into the page via `toString()`, so it must not reference anything outside its own body.
-//   Rails `CompetitionTab#slug` is "<id>-<parameterized name>", so the id is enough to find the tab.
-function redirectLegacyHash(targets: Record<string, string>) {
-  const { hash } = window.location;
-  const customTabId = hash.match(/^#(\d+)-/)?.[1];
-  const target = targets[hash] ?? (customTabId && targets[customTabId]);
+// Rails `CompetitionTab#slug` is "<id>-<parameterized name>", so the id is enough to find the tab
+const CUSTOM_TAB_SLUG = /^#(\d+)-/;
 
-  if (target) {
-    window.location.replace(target);
+function targetForHash(
+  hash: string,
+  competitionId: string,
+  tabs: components["schemas"]["CompetitionInfo"]["tabs"],
+) {
+  if (hash === "#competition-events") {
+    return route({
+      pathname: "/competitions/[competitionId]/events",
+      query: { competitionId },
+    });
   }
+
+  if (hash === "#competition-schedule") {
+    return route({
+      pathname: "/competitions/[competitionId]/schedule",
+      query: { competitionId },
+    });
+  }
+
+  const tabId = hash.match(CUSTOM_TAB_SLUG)?.[1];
+  const customTab = tabs.find((tab) => tab.id.toString() === tabId);
+
+  if (customTab) {
+    return route({
+      pathname: "/competitions/[competitionId]/custom-tabs/[tabName]",
+      query: { competitionId, tabName: encodeURIComponent(customTab.name) },
+    });
+  }
+
+  return undefined;
 }
 
 /**
  * The Rails competition page selects its tabs through the URL hash, which never reaches the
- * server. An inline script forwards old links like `/competitions/Foo2026#competition-schedule`
- * to their dedicated Next route before React even hydrates.
+ * server. So old links like `/competitions/Foo2026#competition-schedule` can only be
+ * forwarded to their dedicated Next route once we are in the browser.
  */
 export default function LegacyHashRedirect({
   competitionId,
@@ -25,29 +52,22 @@ export default function LegacyHashRedirect({
   competitionId: string;
   tabs: components["schemas"]["CompetitionInfo"]["tabs"];
 }) {
-  const targets = {
-    "#competition-events": route({
-      pathname: "/competitions/[competitionId]/events",
-      query: { competitionId },
-    }),
-    "#competition-schedule": route({
-      pathname: "/competitions/[competitionId]/schedule",
-      query: { competitionId },
-    }),
-    ...Object.fromEntries(
-      tabs.map((tab) => [
-        tab.id,
-        route({
-          pathname: "/competitions/[competitionId]/custom-tabs/[tabName]",
-          query: { competitionId, tabName: encodeURIComponent(tab.name) },
-        }),
-      ]),
-    ),
-  };
+  const router = useRouter();
 
-  // The URL and organizer-written tab names end up in here, so `</script>` must not close the tag
-  const safeTargets = JSON.stringify(targets).replaceAll("<", "\\u003c");
-  const redirectScript = `(${redirectLegacyHash.toString()})(${safeTargets})`;
+  useEffect(() => {
+    const redirectLegacyHash = () => {
+      const target = targetForHash(window.location.hash, competitionId, tabs);
 
-  return <script dangerouslySetInnerHTML={{ __html: redirectScript }} />;
+      if (target) {
+        router.replace(target);
+      }
+    };
+
+    redirectLegacyHash();
+    window.addEventListener("hashchange", redirectLegacyHash);
+
+    return () => window.removeEventListener("hashchange", redirectLegacyHash);
+  }, [competitionId, tabs, router]);
+
+  return null;
 }
