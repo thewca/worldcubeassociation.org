@@ -28,7 +28,7 @@ RSpec.describe "WCA Live API batch submit" do
       }
 
       expect do
-        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request
+        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request, as: :json
       end.to have_enqueued_job(BatchUpdateLiveResultJob).once
       expect(response).to be_successful
 
@@ -54,7 +54,7 @@ RSpec.describe "WCA Live API batch submit" do
       }
 
       expect do
-        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request
+        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request, as: :json
       end.not_to have_enqueued_job(BatchUpdateLiveResultJob)
       expect(response).to have_http_status(:unprocessable_content)
     end

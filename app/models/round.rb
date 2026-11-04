@@ -218,10 +218,11 @@ class Round < ApplicationRecord
   def clear_round!(clearing_user)
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
     # We have to use update_all here because live_attempts_count is write protected
-    live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
-    # live_results were changed via raw SQL, refresh the loaded association so lifecycle_state is accurate
-    live_results.reset
-    self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
+    live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil).tap do
+      # live_results were changed via raw SQL, refresh the loaded association so lifecycle_state is accurate
+      live_results.reset
+      self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
+    end
   end
 
   def close_round!(closing_user)
@@ -972,7 +973,7 @@ class Round < ApplicationRecord
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
       "completed_competitors" => completed_competitors,
-    }
+    }.compact
   end
 
   def to_live_info_json

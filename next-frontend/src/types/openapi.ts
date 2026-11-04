@@ -292,6 +292,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         delete?: never;
@@ -314,8 +316,8 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description Result Updated */
-                200: {
+                /** @description Result Update Accepted */
+                202: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -325,6 +327,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         trace?: never;
@@ -366,6 +370,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         delete?: never;
@@ -1190,7 +1196,7 @@ export interface components {
             /** Format: date-time */
             registration_close: string;
             /** Format: date-time */
-            announced_at: string;
+            announced_at: string | null;
             country_iso2: string;
             city: string;
             venue: string;
@@ -1204,7 +1210,7 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
-            competitor_limit: number;
+            competitor_limit: number | null;
             championship_types: string[];
             /** Format: date-time */
             results_submitted_at?: string;
@@ -1231,7 +1237,7 @@ export interface components {
                 name: string;
                 gender: string;
                 country_iso2: string;
-                wca_id: string;
+                wca_id: string | null;
             };
             competing: {
                 event_ids: string[];
@@ -1413,9 +1419,9 @@ export interface components {
              */
             country_iso2: string;
             /** @example WR */
-            regional_single_record?: string;
+            regional_single_record: string | null;
             /** @example NR */
-            regional_average_record?: string;
+            regional_average_record: string | null;
         };
         /** @description One round of a competition together with its results, ordered by `pos`. The rounds of a Dual Round each appear on their own and name the whole link in `linked_round_wcif_ids`; their competitors hold one result in each, ranked once between them by `global_pos`. */
         V1CompetitionRound: {
@@ -1480,10 +1486,10 @@ export interface components {
         };
         WcifParticipationRuleset: {
             participationSource: components["schemas"]["WcifParticipationSource"];
-            reservedPlaces?: {
+            reservedPlaces: {
                 nationalities?: string[];
                 reservations?: number;
-            };
+            } | null;
         };
         WcifScramble: string;
         WcifScrambleSet: {
@@ -1562,8 +1568,8 @@ export interface components {
             registration_id: number;
             best: number;
             average: number;
-            single_record_tag: string;
-            average_record_tag: string;
+            single_record_tag: string | null;
+            average_record_tag: string | null;
             advancing: boolean;
             advancing_questionable: boolean;
             attempts: components["schemas"]["LiveAttempt"][];
@@ -2408,6 +2414,20 @@ export interface components {
                 };
             };
         };
+        /** @description The submitted live results were rejected */
+        LiveResultRejected: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    status: "round is not open" | "user is not part of this round" | "Values cannot be 0, please omit them instead";
+                    /** @description The rejected entry of a batch submission */
+                    registration_id?: number;
+                };
+            };
+        };
         /** @description Incident not found, or not visible to the current user */
         IncidentNotFound: {
             headers: {
@@ -2649,6 +2669,7 @@ export interface operations {
                     };
                 };
             };
+            400: components["responses"]["RegistrationError"];
         };
     };
     v1CompetitionResults: {
@@ -2745,6 +2766,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scoretaker"];
                 };
             };
+            403: components["responses"]["NotPermitted"];
         };
     };
     removeScoretaker: {
@@ -2769,6 +2791,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scoretaker"] | null;
                 };
             };
+            403: components["responses"]["NotPermitted"];
         };
     };
     getCompetitionBookmark: {

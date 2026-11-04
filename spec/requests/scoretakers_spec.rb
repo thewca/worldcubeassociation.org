@@ -11,11 +11,11 @@ RSpec.describe "Scoretakers API" do
     it "lets a manager add and remove a scoretaker" do
       sign_in delegate
 
-      post api_v1_competition_scoretakers_path(competition.id), params: { user_id: competitor.id }
+      post api_v1_competition_scoretakers_path(competition.id), params: { user_id: competitor.id }, as: :json
       expect(response).to be_successful
       expect(competition.reload.scoretakers).to include(competitor)
 
-      delete api_v1_competition_scoretaker_path(competition.id, competitor.id)
+      delete api_v1_competition_scoretaker_path(competition.id, competitor.id), as: :json
       expect(response).to be_successful
       expect(competition.reload.scoretakers).not_to include(competitor)
     end
@@ -23,7 +23,7 @@ RSpec.describe "Scoretakers API" do
     it "does not let a random user add a scoretaker" do
       sign_in create(:user)
 
-      post api_v1_competition_scoretakers_path(competition.id), params: { user_id: competitor.id }
+      post api_v1_competition_scoretakers_path(competition.id), params: { user_id: competitor.id }, as: :json
       expect(response).not_to be_successful
       expect(competition.reload.scoretakers).to be_empty
     end
@@ -41,7 +41,7 @@ RSpec.describe "Scoretakers API" do
       post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: {
         attempts: [{ value: 111, attempt_number: 1 }],
         registration_id: registration.id,
-      }
+      }, as: :json
       expect(response).to be_successful
     end
 
@@ -55,7 +55,7 @@ RSpec.describe "Scoretakers API" do
       post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: {
         attempts: [{ value: 111, attempt_number: 1 }],
         registration_id: registration.id,
-      }
+      }, as: :json
       expect(response).not_to be_successful
     end
   end

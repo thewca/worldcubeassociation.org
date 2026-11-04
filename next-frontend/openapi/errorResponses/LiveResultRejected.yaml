@@ -1,0 +1,17 @@
+description: The submitted live results were rejected
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - round is not open
+            - user is not part of this round
+            - Values cannot be 0, please omit them instead
+        registration_id:
+          type: integer
+          description: The rejected entry of a batch submission
