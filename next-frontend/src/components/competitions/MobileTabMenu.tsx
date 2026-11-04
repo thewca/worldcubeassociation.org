@@ -235,7 +235,7 @@ function GroupItem({
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content minW="56">
+          <Menu.Content minW="56" autoFocus={false}>
             {tabs.map((tab) => {
               const isLink = "href" in tab;
               const isActive =
@@ -253,6 +253,8 @@ function GroupItem({
                   bg={isActive ? "blue.subtle" : undefined}
                   color={isActive ? "blue.fg" : undefined}
                   fontWeight={isActive ? "bold" : undefined}
+                  h="10"
+                  fontSize="sm"
                   _highlighted={{ bg: isActive ? "blue.muted" : "bg.muted" }}
                 >
                   {isLink ? (
@@ -321,6 +323,7 @@ function SingleItem({
   return (
     <ChakraLink
       unstyled
+      w="full"
       href={tab.disabled ? undefined : tab.href}
       aria-disabled={tab.disabled || undefined}
       data-disabled={tab.disabled ? "" : undefined}
