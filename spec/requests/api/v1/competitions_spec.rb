@@ -118,4 +118,18 @@ RSpec.describe "API v1 Competitions" do
       expect(response_json["past"].pluck("id")).to eq([ended_last_week.id, ended_two_weeks_ago.id])
     end
   end
+
+  describe "unknown competition" do
+    it "returns not found for the results" do
+      get api_v1_competition_results_path("NotAComp2026")
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns not found for the podiums" do
+      get api_v1_competition_podiums_path("NotAComp2026")
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end
