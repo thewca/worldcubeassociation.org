@@ -41,8 +41,7 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
   const { page = "1" } = await searchParams;
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
 
-  const announcements = await findCached({
-    collection: "announcements",
+  const announcements = await findCached("announcements", {
     sort: "-publishedAt",
     page: currentPage,
     limit: ANNOUNCEMENTS_PER_PAGE,

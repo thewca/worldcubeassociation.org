@@ -3,10 +3,8 @@ import { cacheTag } from "next/cache";
 import {
   getPayload,
   type CollectionSlug,
-  type FindOptions,
-  type PaginatedDocs,
-  type TransformCollectionWithSelect,
-  type SelectType,
+  type TypedLocale,
+  type Where,
 } from "payload";
 import { payloadCacheLife } from "@/lib/payload/globals";
 
@@ -14,17 +12,39 @@ export const collectionCacheTag = (slug: CollectionSlug) =>
   `payload-collection:${slug}`;
 
 export async function findCached<TSlug extends CollectionSlug>(
-  options: FindOptions<TSlug, SelectType>,
+  collection: TSlug,
+  {
+    locale,
+    depth,
+    sort,
+    where,
+    limit,
+    page,
+    pagination,
+  }: {
+    locale?: TypedLocale;
+    depth?: number;
+    sort?: string;
+    where?: Where;
+    limit?: number;
+    page?: number;
+    pagination?: boolean;
+  } = {},
 ) {
   "use cache";
-  cacheTag(collectionCacheTag(options.collection));
+  cacheTag(collectionCacheTag(collection));
   payloadCacheLife();
 
   const payload = await getPayload({ config });
 
-  const find = payload.find as (
-    options: FindOptions<TSlug, SelectType>,
-  ) => Promise<PaginatedDocs<TransformCollectionWithSelect<TSlug, SelectType>>>;
-
-  return find(options);
+  return payload.find({
+    collection,
+    locale,
+    depth,
+    sort,
+    where,
+    limit,
+    page,
+    pagination,
+  });
 }

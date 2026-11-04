@@ -11,8 +11,7 @@ const findAnnouncement = async (
 ): Promise<Announcement | null> => {
   // `findByID` throws on unknown IDs, and MongoDB additionally throws on IDs
   // that aren't valid ObjectIDs, so query instead of catching two error types.
-  const { docs } = await findCached({
-    collection: "announcements",
+  const { docs } = await findCached("announcements", {
     where: { id: { equals: announcementId } },
     limit: 1,
   });

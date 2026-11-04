@@ -116,8 +116,7 @@ async function SessionAvatarMenu() {
     [
       getSession(),
       getPermissions().then((p) => p?.permissions),
-      findCached({
-        collection: "avatarMenuEntries",
+      findCached("avatarMenuEntries", {
         locale: lng,
         sort: "_order",
         pagination: false,

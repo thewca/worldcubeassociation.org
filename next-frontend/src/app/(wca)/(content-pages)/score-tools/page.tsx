@@ -31,8 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ScoreTools() {
   const { t, lng } = await getT();
 
-  const toolResults = await findCached({
-    collection: "tools",
+  const toolResults = await findCached("tools", {
     limit: 0,
     locale: lng,
   });

@@ -13,8 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RegulationsHistory() {
   const { i18n } = await getT();
 
-  const regulationsHistory = await findCached({
-    collection: "regulationsHistoryItem",
+  const regulationsHistory = await findCached("regulationsHistoryItem", {
     limit: 0,
     depth: 1,
   });
