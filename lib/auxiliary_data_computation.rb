@@ -26,6 +26,9 @@ module AuxiliaryDataComputation
         LEFT JOIN #{CheckRegionalRecords::LOOKUP_TABLE_NAME} rrl
           ON csr.result_id = rrl.result_id
           AND csr.person_id = rrl.person_id
+          AND csr.country_id = rrl.country_id
+          AND csr.event_id = rrl.event_id
+          AND csr.reg_year = rrl.competition_reg_year
         WHERE rrl.result_id IS NULL;
       SQL
 
