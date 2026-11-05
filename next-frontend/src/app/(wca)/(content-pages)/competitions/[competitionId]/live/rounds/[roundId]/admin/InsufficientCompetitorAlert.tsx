@@ -18,7 +18,7 @@ export default function InsufficientCompetitorAlert() {
 
   const violates9m =
     round.state === "open" &&
-    competitorCountNeeded !== undefined &&
+    competitorCountNeeded != null &&
     previousRound !== undefined &&
     // Locked or Open
     "total_competitors" in previousRound &&

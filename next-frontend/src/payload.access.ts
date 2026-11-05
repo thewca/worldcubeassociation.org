@@ -1,4 +1,4 @@
-import { hasRole } from "@delmaredigital/payload-better-auth";
+import { hasAnyRole, hasRole } from "@delmaredigital/payload-better-auth";
 import { WCA_ROLES_FIELD } from "@/auth.config";
 
 // Approximates `User#admin?` in Rails, which on the live site only admits `wst_admin`.
@@ -15,6 +15,9 @@ const POST_CREATOR_ROLES = [
   "wrt",
   "board",
 ];
+
+export const isAdmin = (user: object | null | undefined) =>
+  hasAnyRole(user, ADMIN_ROLES, WCA_ROLES_FIELD);
 
 const teamAccess = (teams: string[]) =>
   hasRole([...ADMIN_ROLES, ...teams], WCA_ROLES_FIELD);

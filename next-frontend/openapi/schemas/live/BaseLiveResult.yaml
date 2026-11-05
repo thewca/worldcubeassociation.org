@@ -17,9 +17,13 @@ properties:
   average:
     type: integer
   single_record_tag:
-    type: string
+    type:
+      - string
+      - "null"
   average_record_tag:
-    type: string
+    type:
+      - string
+      - "null"
   advancing:
     type: boolean
   advancing_questionable:

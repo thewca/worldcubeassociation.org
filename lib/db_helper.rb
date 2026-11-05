@@ -12,29 +12,35 @@ module DbHelper
   end
 
   def self.with_temp_table(table_name)
+    connection = ActiveRecord::Base.connection
+
     temp_table_name = "#{table_name}_temp"
     old_table_name = "#{table_name}_old"
 
+    quoted_table_name = connection.quote_table_name(table_name)
+    quoted_temp_table_name = connection.quote_table_name(temp_table_name)
+    quoted_old_table_name = connection.quote_table_name(old_table_name)
+
     # Clean up leftover tables from a previous run that was not cleanly terminated.
     #   In particular, redeployments can hard-kill Sidekiq in a way that skips the `ensure` block below.
-    ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
-    ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{old_table_name}")
+    connection.execute("DROP TABLE IF EXISTS #{quoted_temp_table_name}")
+    connection.execute("DROP TABLE IF EXISTS #{quoted_old_table_name}")
 
-    ActiveRecord::Base.connection.execute("CREATE TABLE #{temp_table_name} LIKE #{table_name}")
-    ActiveRecord::Base.connection.execute("ALTER TABLE #{temp_table_name} AUTO_INCREMENT = 1")
+    connection.execute("CREATE TABLE #{quoted_temp_table_name} LIKE #{quoted_table_name}")
+    connection.execute("ALTER TABLE #{quoted_temp_table_name} AUTO_INCREMENT = 1")
 
     ActiveRecord::Base.transaction do
       yield temp_table_name
     end
 
     # Atomically swap the tables
-    ActiveRecord::Base.connection.execute("RENAME TABLE #{table_name} TO #{old_table_name}, #{temp_table_name} TO #{table_name}")
+    connection.execute("RENAME TABLE #{quoted_table_name} TO #{quoted_old_table_name}, #{quoted_temp_table_name} TO #{quoted_table_name}")
 
     # Drop the old table
-    ActiveRecord::Base.connection.execute("DROP TABLE #{old_table_name}")
+    connection.execute("DROP TABLE #{quoted_old_table_name}")
   ensure
-    ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{temp_table_name}")
-    ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{old_table_name}")
+    connection.execute("DROP TABLE IF EXISTS #{quoted_temp_table_name}")
+    connection.execute("DROP TABLE IF EXISTS #{quoted_old_table_name}")
   end
 
   def self.execute_cached_query(cache_params, timestamp, sql_query, db_role: :read_replica)

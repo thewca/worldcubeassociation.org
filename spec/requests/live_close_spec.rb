@@ -23,7 +23,7 @@ RSpec.describe "WCA Live API - close_round" do
       round2.open_and_lock_previous(delegate)
       expect(round1.lifecycle_state).to eq Round::STATE_LOCKED
 
-      delete api_v1_competition_live_live_round_close_path(competition.id, round2.wcif_id)
+      delete api_v1_competition_live_live_round_close_path(competition.id, round2.wcif_id), as: :json
 
       expect(response).to be_successful
       expect(round1.reload.lifecycle_state).to eq Round::STATE_OPEN
@@ -45,7 +45,7 @@ RSpec.describe "WCA Live API - close_round" do
       finish_round!(round1_2, delegate)
       round2.open_and_lock_previous(delegate)
 
-      delete api_v1_competition_live_live_round_close_path(competition.id, round2.wcif_id)
+      delete api_v1_competition_live_live_round_close_path(competition.id, round2.wcif_id), as: :json
 
       expect(response).to be_successful
       expect(round1_1.reload.lifecycle_state).to eq Round::STATE_OPEN

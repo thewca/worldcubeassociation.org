@@ -1442,6 +1442,9 @@ eu:
         locale: Hizkuntza
         group_name: Taldearen edo komitearen izena
         delegated_competitions_count: Ordezkatutako lehiaketen zenbakia
+        wca_id: WCA IDa
+        location: Kokapena
+        email: Helbide elektronikoa
   user_groups:
     group_types:
       board: WCAko Zuzendaritza Batzarra
@@ -3265,6 +3268,7 @@ eu:
       date_circa: Data inguruan
   notifications:
     connect_wca_id: Lotu zure WCA IDa kontura!
+    copied_to_clipboard: Arbelean kopiatu da
   payments:
     header: Ordainketa historiala
     messages:
@@ -3751,6 +3755,7 @@ eu:
       total_delegated: Ordezkaritza lan osoa
       lead_delegated: Ordezkari Nagusia gisa parte hartutako lehiaketak
       history: Historia
+    copy_email: Helbide elektronikoa kopiatu
   regional_organizations:
     title: Eskualdeetako organizazioak
     content: 'WCAk hurrengo eskualdeetako organizazioak onartzen ditu:'

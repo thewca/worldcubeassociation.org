@@ -1,10 +1,11 @@
 import { getRankings } from "@/lib/wca/results/rankings";
 
-import React from "react";
+import React, { Suspense } from "react";
 import FilteredRankings from "@/app/(wca)/(content-pages)/results/rankings/filteredRankings";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
+import Loading from "@/components/ui/loading";
 
 const GENDER_ALL = "All";
 const SHOW_100_PERSONS = "100 persons";
@@ -18,11 +19,19 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RankingsPage({
-  searchParams,
-}: {
+type RankingsPageProps = {
   searchParams: Promise<{ [key: string]: string | undefined }>;
-}) {
+};
+
+export default function RankingsPage({ searchParams }: RankingsPageProps) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Rankings searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function Rankings({ searchParams }: RankingsPageProps) {
   const {
     gender = GENDER_ALL,
     region = REGION_WORLD,
