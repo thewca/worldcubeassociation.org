@@ -1024,12 +1024,10 @@ class Round < ApplicationRecord
 
     # `person` is optional and scoped to current Persons, and a Person need not
     # have a WCA account, so a posted result may not map to a user at all.
-    positions = results.filter_map do |result|
+    results.filter_map do |result|
       user = result.person&.user
       [user.id, result.pos] if user
-    end
-
-    positions.to_h
+    end.to_h
   end
 
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
