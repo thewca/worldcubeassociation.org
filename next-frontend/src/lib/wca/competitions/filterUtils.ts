@@ -4,6 +4,7 @@ import { ALL_REGIONS_VALUE } from "@/components/RegionSelector";
 import countries from "@/lib/wca/data/countries";
 import { nonFutureCompetitionYears } from "@/lib/wca/data/competitions";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
+import { sortOrderValues } from "./queryUtils";
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
@@ -43,7 +44,7 @@ const SHOW_ADMIN_DETAILS_TRUE = "yes";
 const LEGACY_DISPLAY_MODE_ADMIN = "admin";
 const LEGACY_YEARS_ALL = "all";
 const CHAMPIONSHIP_ONLY_TRUE = "on";
-const DEFAULT_SORT_ORDER = "start_date,end_date,name";
+const DEFAULT_SORT_ORDER = "start_date";
 
 export type CompetitionFilterState = {
   timeOrder: string;
@@ -73,6 +74,13 @@ const sanitizeMode = (mode: string | null) => {
     return lcMode;
   }
   return DEFAULT_DISPLAY_MODE;
+};
+
+const sanitizeSortOrder = (order: string | null) => {
+  const normalized = order?.toLowerCase().trim();
+  const exists = sortOrderValues.some((o) => o.value === normalized);
+  if (exists) return normalized;
+  return DEFAULT_SORT_ORDER;
 };
 
 const timeOrders = ["present", "recent", "past", "by_announcement", "custom"];
@@ -170,7 +178,7 @@ export const createFilterState = (searchParams: URLSearchParams) => {
     ),
     shouldShowChampionshipOnly:
       searchParams.get(CHAMPIONSHIP_ONLY) === CHAMPIONSHIP_ONLY_TRUE,
-    sort: searchParams.get(SORT_ORDER) || DEFAULT_SORT_ORDER,
+    sort: sanitizeSortOrder(searchParams.get(SORT_ORDER) || DEFAULT_SORT_ORDER),
   };
 };
 

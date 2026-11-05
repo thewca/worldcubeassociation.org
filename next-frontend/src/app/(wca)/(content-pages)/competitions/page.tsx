@@ -860,7 +860,7 @@ function AdvancedFilters({
       )}
 
       <SortOrderSelect
-        value={filterState.sort.split(",")[0]}
+        value={filterState.sort}
         onChange={(v) => dispatchFilter({ type: "set_sort_order", sort: v })}
         t={t}
       />
