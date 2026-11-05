@@ -369,6 +369,14 @@ class Competition < ApplicationRecord
     errors.add(:competition_events, I18n.t('competitions.errors.fto_not_yet_allowed', date: I18n.l(FTO_INTRODUCTION_DATE, format: :long)))
   end
 
+  validate :fto_requires_internal_scoretaking
+  private def fto_requires_internal_scoretaking
+    return unless self.event_ids.include?("fto")
+    return if scoretaking_software_internal?
+
+    errors.add(:scoretaking_software, I18n.t('competitions.errors.fto_requires_internal_scoretaking'))
+  end
+
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
   validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
   private def auto_close_threshold_validations
