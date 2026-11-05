@@ -131,12 +131,10 @@ FROM base AS runtime
 # lmodern = Random accents and special symbols for Latin script
 # RUNTIME STUFF
 # mariadb-client = talking to our database in production mode
-# imagemagick = image processing for Rails ActiveStorage attachments
 # libvips = image processing for Rails ActiveStorage attachments
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       mariadb-client \
-      imagemagick \
       libvips \
       zip \
       python-is-python3 \
