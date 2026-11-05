@@ -19,6 +19,7 @@ import {
 import { availableLocales } from "@/lib/i18n/settings";
 import Cookies from "js-cookie";
 import { MobileNavButton } from "@/components/MobileNav";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function Wrapper() {
   return (
@@ -29,7 +30,9 @@ export default function Wrapper() {
 }
 
 const LanguageSelector = () => {
-  const currentLocaleRaw = Cookies.get(storageKey) ?? fallbackLng;
+  const { i18n } = useT();
+  const currentLocaleRaw =
+    Cookies.get(storageKey) || i18n.resolvedLanguage || fallbackLng;
   const currentLocale = coerceLanguageCode(currentLocaleRaw);
 
   const handleChangeLocale = (code: string) => {
