@@ -137,15 +137,13 @@ export default function CompetingStep({
             the competitor is told about it before they have typed anything. */}
       <form.Field name="comment">
         {(field) => {
+          const commentRequired =
+            parameters.force_comment_in_registration ?? false;
           const commentMissing =
-            parameters.force_comment_in_registration &&
-            field.state.value.trim() === "";
+            commentRequired && field.state.value.trim() === "";
 
           return (
-            <Field.Root
-              invalid={commentMissing}
-              required={parameters.force_comment_in_registration}
-            >
+            <Field.Root invalid={commentMissing} required={commentRequired}>
               <Field.Label width="full" asChild>
                 <HStack justify="space-between">
                   <Text>

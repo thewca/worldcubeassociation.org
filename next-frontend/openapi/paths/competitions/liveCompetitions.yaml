@@ -1,0 +1,29 @@
+get:
+  summary: Get recent and future competitions using internal live results, grouped by status
+  operationId: getLiveCompetitions
+  tags:
+    - competitions
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - upcoming
+              - in_progress
+              - past
+            properties:
+              upcoming:
+                type: array
+                items:
+                  $ref: "../../schemas/competitions/CompetitionIndex.yaml"
+              in_progress:
+                type: array
+                items:
+                  $ref: "../../schemas/competitions/CompetitionIndex.yaml"
+              past:
+                type: array
+                items:
+                  $ref: "../../schemas/competitions/CompetitionIndex.yaml"

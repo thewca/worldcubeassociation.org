@@ -132,15 +132,15 @@ ca:
     time:
       one: '%{count} intent per obtenir < %{time}'
       many: '%{count} intents per obtenir < %{time}'
-      other:
+      other: '%{count} intents per obtenir < %{time}'
     moves:
       one: '%{count} intent per obtenir < %{moves} moviments'
       many: '%{count} intents per obtenir < %{moves} moviments'
-      other:
+      other: '%{count} intents per obtenir < %{moves} moviments'
     points:
       one: '%{count} intent per obtenir > %{points} punts'
       many: '%{count} intents per obtenir > %{points} punts'
-      other:
+      other: '%{count} intents per obtenir > %{points} punts'
   time_limit:
     cumulative:
       one_round: '%{time} acumulatiu'
@@ -191,7 +191,7 @@ ca:
     days:
       one: 1 dia
       many: '%{count} dies'
-      other:
+      other: '%{count} dies'
     search_site: Cerca
     filter: Filtra
     delete: Elimina
@@ -615,7 +615,7 @@ ca:
         form_error:
           one: 'El formulari conté un error:'
           many: 'El formulari conté  %{count} errors:'
-          other:
+          other: 'El formulari conté  %{count} errors:'
     doorkeeper:
       applications:
         help:
@@ -1040,15 +1040,15 @@ ca:
       newcomer:
         one: Novell
         many: Novells
-        other:
+        other: Novells
       returner:
         one: Repetidor
         many: Repetidors
-        other:
+        other: Repetidors
       person:
         one: Persona
         many: Persones
-        other:
+        other: Persones
     flash:
       not_using_wca: Aquesta competició no utilitza el registre WCA
       updated: Registre actualitzat
@@ -1102,7 +1102,7 @@ ca:
       country_plural:
         one: 1 país
         many: '%{count} països'
-        other:
+        other: '%{count} països'
       email: Correu electrònic
       not_paid: Sense pagar
       registered:
@@ -1322,12 +1322,12 @@ ca:
       organizer_plural:
         one: Organitzador
         many: Organitzadors
-        other:
+        other: Organitzadors
       organization_team: Equip organitzador
       delegate:
         one: Delegat de la WCA
         many: Delegats de la WCA
-        other:
+        other: Delegats de la WCA
       contact: Contacte
       information: Informació
       events: Categories

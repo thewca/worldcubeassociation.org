@@ -25,7 +25,7 @@ RSpec.describe "WCA Live API" do
       registration_1 = registrations.first
       round.open_and_lock_previous(User.first)
 
-      delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, round.wcif_id, registration_1.id)
+      delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, round.wcif_id, registration_1.id), as: :json
 
       expect(response).to be_successful
 
@@ -51,7 +51,7 @@ RSpec.describe "WCA Live API" do
         advancing_ids: to_advance.pluck(:registration_id),
       }
 
-      delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
+      delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request, as: :json
       expect(response).to be_successful
 
       result = LiveResult.find_by(round_id: final.id, registration_id: registrations.first.id)
@@ -71,7 +71,7 @@ RSpec.describe "WCA Live API" do
       before_hash = Live::DiffHelper.state_hash(round.to_live_state)
 
       expect do
-        delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, round.wcif_id, registration_1.id)
+        delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, round.wcif_id, registration_1.id), as: :json
       end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(deleted: [registration_1.id], before_hash: before_hash))
@@ -97,7 +97,7 @@ RSpec.describe "WCA Live API" do
       }
 
       expect do
-        delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
+        delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request, as: :json
       end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(updated: [{ "advancing" => false, "advancing_questionable" => false, "registration_id" => registrations.first.id },
@@ -127,7 +127,7 @@ RSpec.describe "WCA Live API" do
       user = registrations.third.to_live_json
 
       expect do
-        delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request
+        delete api_v1_competition_live_quit_competitor_from_round_path(competition.id, final.wcif_id, registrations.first.id), params: live_request, as: :json
       end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, final.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(deleted: [registrations.first.id],
@@ -175,6 +175,30 @@ RSpec.describe "WCA Live API" do
 
       next_qualifying = round2.next_participating_without(registrations.first.id)
       expect(next_qualifying.map(&:registration_id)).to contain_exactly(registrations[3].id)
+    end
+  end
+
+  describe "GET #next_if_quit" do
+    let!(:delegate) { create(:delegate) }
+    let(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate]) }
+    let(:registrations) { create_list(:registration, 5, :accepted, competition: competition, event_ids: ["333"]) }
+
+    it "returns the competitor who would advance instead" do
+      sign_in delegate
+
+      round = create(:round, number: 1, total_number_of_rounds: 2, event_id: "333", competition: competition)
+      final = create(:round, number: 2, total_number_of_rounds: 2, event_id: "333", competition: competition, participation_condition: percent_condition, participation_source: round)
+
+      5.times do |i|
+        create(:live_result, registration: registrations[i], round: round, average: (i + 1) * 100)
+      end
+
+      final.open_and_lock_previous(delegate)
+
+      get api_v1_competition_live_next_advancing_competitor_path(competition.id, final.wcif_id), params: { registration_id: registrations.first.id }
+
+      expect(response).to be_successful
+      expect(response.parsed_body["next_advancing"].pluck("id")).to eq([registrations.third.id])
     end
   end
 end

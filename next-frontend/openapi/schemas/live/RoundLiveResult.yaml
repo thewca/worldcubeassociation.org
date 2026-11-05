@@ -9,9 +9,13 @@ allOf:
       round_wcif_id:
         type: string
       global_pos:
-        type: integer
+        type:
+          - integer
+          - "null"
       local_pos:
-        type: integer
+        type:
+          - integer
+          - "null"
       forecast_statistics:
         type:
           - object
