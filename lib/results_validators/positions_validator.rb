@@ -34,7 +34,7 @@ module ResultsValidators
         # A Dual Round ranks each competitor once across all of its rounds, counting only their
         # better solve, so `global_pos` spans the whole link.
         results_for_comp.group_by { it.round.linked_round_id }.except(nil).each_value do |results_for_group|
-          merged_ranking = best_result_per_person(results_for_group)
+          merged_ranking = ValidatorData.best_result_per_person(results_for_group)
           expected_pos_by_person = expected_positions(merged_ranking).transform_keys(&:person_id)
 
           results_for_group.each do |result|
@@ -42,15 +42,6 @@ module ResultsValidators
           end
         end
       end
-    end
-
-    # Within a Dual Round a competitor holds one result per round but is ranked on their better
-    # one, so the merged ranking is built from each competitor's best result.
-    private def best_result_per_person(results)
-      results.group_by(&:person_id)
-             .values
-             .map { |person_results| person_results.min_by { ValidatorData.ranking_key(it) } }
-             .sort_by { ValidatorData.ranking_key(it) }
     end
 
     # Maps every result of the given ranking, which must be ordered from best to worst, to the
