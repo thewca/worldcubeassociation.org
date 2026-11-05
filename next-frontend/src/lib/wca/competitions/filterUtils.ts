@@ -26,6 +26,7 @@ const SHOW_ADMIN_DETAILS = "show_admin_details";
 const ADMIN_STATUS = "admin_status";
 const LEGACY_ADMIN_STATUS = "status";
 const CHAMPIONSHIP_ONLY = "championship_only";
+const SORT_ORDER = "sort";
 
 const DEFAULT_DISPLAY_MODE = "list";
 const DEFAULT_TIME_ORDER = "present";
@@ -42,6 +43,7 @@ const SHOW_ADMIN_DETAILS_TRUE = "yes";
 const LEGACY_DISPLAY_MODE_ADMIN = "admin";
 const LEGACY_YEARS_ALL = "all";
 const CHAMPIONSHIP_ONLY_TRUE = "on";
+const DEFAULT_SORT_ORDER = "start_date,end_date,name";
 
 export type CompetitionFilterState = {
   timeOrder: string;
@@ -56,6 +58,7 @@ export type CompetitionFilterState = {
   shouldShowAdminDetails: boolean;
   adminStatus: string;
   shouldShowChampionshipOnly: boolean;
+  sort: string;
 };
 
 // search param sanitizers
@@ -167,6 +170,7 @@ export const createFilterState = (searchParams: URLSearchParams) => {
     ),
     shouldShowChampionshipOnly:
       searchParams.get(CHAMPIONSHIP_ONLY) === CHAMPIONSHIP_ONLY_TRUE,
+    sort: searchParams.get(SORT_ORDER) || DEFAULT_SORT_ORDER,
   };
 };
 
@@ -188,6 +192,7 @@ export const updateSearchParams = (
     shouldShowAdminDetails,
     adminStatus,
     shouldShowChampionshipOnly,
+    sort,
   } = filterState;
 
   // update every string value; and then remove that value if it's redundant (ie is the default)
@@ -215,6 +220,9 @@ export const updateSearchParams = (
 
   searchParams.set(SEARCH, search);
   searchParams.delete(SEARCH, DEFAULT_SEARCH);
+
+  searchParams.set(SORT_ORDER, sort);
+  searchParams.delete(SORT_ORDER, DEFAULT_SORT_ORDER);
 
   // first, delete previously selected events, then add new events.
   // If no custom events are selected, this code does not change the URL, which is what we want.
@@ -277,7 +285,8 @@ export type CompetitionFilterAction =
   | { type: "set_should_include_cancelled"; shouldIncludeCancelled: boolean }
   | { type: "set_should_show_admin_details"; shouldShowAdminDetails: boolean }
   | { type: "set_admin_status"; adminStatus: string }
-  | { type: "set_championship_only"; shouldShowChampionshipOnly: boolean };
+  | { type: "set_championship_only"; shouldShowChampionshipOnly: boolean }
+  | { type: "set_sort_order"; sort: string };
 
 export const competitionFilterReducer = (
   state: CompetitionFilterState,
