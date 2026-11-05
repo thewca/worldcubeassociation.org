@@ -192,11 +192,6 @@ export default function StepPanel({
 
   return (
     <VStack width="full" gap="4" align="stretch">
-      {/* Withdrawing hands the competitor back to the start of the flow, and this is what tells
-          them why the panel they were looking at has reset. */}
-      {registration !== null && (
-        <RegistrationStatus registration={registration} />
-      )}
       <Steps.Root
         count={steps.length}
         step={currentStep}
@@ -240,6 +235,16 @@ export default function StepPanel({
             );
           })}
         </Steps.List>
+        {/* Withdrawing hands the competitor back to the start of the flow, and this is what tells
+            them why the panel they were looking at has reset. */}
+        {registration !== null && (
+          <RegistrationStatus
+            registration={registration}
+            hasAdditionalRequirements={Boolean(
+              competitionInfo.extra_registration_requirements,
+            )}
+          />
+        )}
 
         {/* `Steps.Content` only hides the steps that are not current, so only the current one is
             mounted - each step then starts out fresh when the competitor reaches it. */}
