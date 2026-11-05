@@ -79,7 +79,7 @@ const sanitizeMode = (mode: string | null) => {
 const sanitizeSortOrder = (order: string | null) => {
   const normalized = order?.toLowerCase().trim();
   const exists = sortOrderValues.some((o) => o.value === normalized);
-  if (exists) return normalized;
+  if (exists && normalized) return normalized;
   return DEFAULT_SORT_ORDER;
 };
 
