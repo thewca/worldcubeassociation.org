@@ -134,6 +134,7 @@ group :development do
   gem 'rubocop-factory_bot', require: false
   gem 'rubocop-capybara', require: false
   gem 'rubocop-rake', require: false
+  gem 'brakeman', require: false
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
@@ -148,6 +149,7 @@ group :test do
   gem 'launchy'
   gem 'capybara'
   gem 'oga' # XML parsing library introduced for testing RSS feed
+  gem 'openapi_first'
   gem 'database_cleaner'
   gem 'rails-controller-testing'
   gem 'capybara-playwright-driver'

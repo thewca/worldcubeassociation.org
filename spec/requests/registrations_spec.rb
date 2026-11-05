@@ -6,6 +6,14 @@ require "csv"
 RSpec.describe "registrations" do
   let!(:competition) { create(:competition, :with_delegate, :future, :visible, event_ids: %w[333 444]) }
 
+  describe "GET legacy psych sheet" do
+    it "redirects to the registrations page" do
+      get "/competitions/#{competition.id}/registrations/psych-sheet/333"
+      expect(response).to redirect_to competition_registrations_path(competition)
+      expect(response).to have_http_status :moved_permanently
+    end
+  end
+
   describe "POST #do_import" do
     context "when signed in as a normal user" do
       it "doesn't allow access" do

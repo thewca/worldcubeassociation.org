@@ -8,29 +8,52 @@ import {
   IconProps,
   Popover,
   useClipboard,
+  UseClipboardReturn,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { TFunction } from "i18next";
 import { LuCheck, LuCopy, LuMail } from "react-icons/lu";
-import { Tooltip } from "@/components/ui/tooltip";
 import { ToggleTip } from "@/components/ui/toggle-tip";
+import { Tooltip } from "@/components/ui/tooltip";
 import { useT } from "@/lib/i18n/useI18n";
+import { toaster } from "./ui/toaster";
 
-export default function EmailCopyButton({ email }: { email: string }) {
-  const [hasCoarsePointer] = useMediaQuery(["(any-pointer: coarse)"], {
-    fallback: [true],
-  });
-
-  return hasCoarsePointer ? (
-    <TouchCopyButton email={email} />
-  ) : (
-    <DesktopCopyButton email={email} />
-  );
+interface EmailCopyButtonProps {
+  email: string;
 }
 
-function DesktopCopyButton({ email }: { email: string }) {
+export default function EmailCopyButton({ email }: EmailCopyButtonProps) {
   const { t } = useT();
   const clipboard = useClipboard({ value: email });
 
+  const [hasCoarsePointer] = useMediaQuery(
+    ["(pointer: coarse) and (hover: none)"],
+    { fallback: [true] },
+  );
+
+  const copy = () => {
+    clipboard.copy();
+    toaster.create({
+      type: "info",
+      description: t("notifications.copied_to_clipboard"),
+    });
+  };
+
+  const buttonProps: CopyButtonProps = { email, copy, clipboard, t };
+
+  if (hasCoarsePointer) return <TouchCopyButton {...buttonProps} />;
+
+  return <DesktopCopyButton {...buttonProps} />;
+}
+
+interface CopyButtonProps {
+  email: string;
+  copy: () => void;
+  clipboard: UseClipboardReturn;
+  t: TFunction;
+}
+
+function DesktopCopyButton({ email, copy, clipboard, t }: CopyButtonProps) {
   return (
     <Tooltip content={email} showArrow openDelay={100}>
       <IconButton
@@ -42,7 +65,7 @@ function DesktopCopyButton({ email }: { email: string }) {
         variant="ghost"
         size="sm"
         className="group"
-        onClick={clipboard.copy}
+        onClick={copy}
       >
         {/* Render on top of each other for smooth cross dissolve */}
         <Grid boxSize="4">
@@ -71,10 +94,7 @@ function DesktopCopyButton({ email }: { email: string }) {
   );
 }
 
-function TouchCopyButton({ email }: { email: string }) {
-  const { t } = useT();
-  const clipboard = useClipboard({ value: email });
-
+function TouchCopyButton({ email, copy, clipboard, t }: CopyButtonProps) {
   return (
     <ToggleTip
       showArrow
@@ -91,7 +111,7 @@ function TouchCopyButton({ email }: { email: string }) {
                 ? t("notifications.copied_to_clipboard")
                 : t("delegates_page.copy_email")
             }
-            onClick={clipboard.copy}
+            onClick={copy}
             variant="ghost"
             size="xs"
           >

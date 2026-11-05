@@ -623,6 +623,8 @@ en:
           disable_section_content: "The WST strongly advise you to not disable 2FA, but you can by clicking the button below. Please note that if you reactivate 2FA you will have to reconfigure your device(s)."
           disabled_success: "Successfully disabled two-factor authentication."
           disabled_failed: "Couldn't disable 2FA, please see errors below."
+      destroy:
+        success: "You have been signed out."
       destroy_other:
         success: "Successfully signed out of other devices."
     shared:
@@ -726,6 +728,21 @@ en:
       manage_users: "Manage users"
       delegate: "Delegate"
       panel: "Panel"
+      #context: Names of the admin panels
+      panels:
+        admin: "Admin panel"
+        volunteer: "Volunteer panel"
+        delegate: "Delegate panel"
+        wapc: "WAC panel"
+        wfc: "WFC panel"
+        wrt: "WRT panel"
+        wst: "WST panel"
+        board: "Board panel"
+        leader: "Leader panel"
+        senior_delegate: "Senior Delegate panel"
+        wic: "WIC panel"
+        weat: "WEAT panel"
+        wqac: "WQAC panel"
       polls: "Polls"
       results_team: "Results team"
       results_database: "Database"
@@ -748,6 +765,13 @@ en:
   page:
     translators:
       title: "Translators"
+    executives:
+      title: "Executives"
+      joined_wca: "Joined WCA"
+      joined_executives: "Joined Executives Team"
+      more_information: "More Information"
+      close: "Close"
+      person_not_found: "No person found with WCA ID %{wca_id}"
     officers_and_board:
       title: "WCA Officers & Board"
       officers_description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
@@ -757,6 +781,7 @@ en:
       description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. When there are team or committee openings, information about how to apply is posted on the front page."
       contact_button: "Contact"
       no_contact_description: "The contact details of this team/committee is not publicly available."
+      empty: "No teams or committees found. Please check back later."
       groups_name:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
@@ -1729,6 +1754,7 @@ en:
       delegates_loading: "Waiting to finish loading all Delegates..."
       no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
+      championship_only: "Show only championships"
       show_registration_status: "Show registration status icon"
       use_admin_view: "Use admin view"
       #context: titles for the competitions list
@@ -2196,6 +2222,7 @@ en:
       cannot_delete_confirmed: "Cannot delete a confirmed competition."
       must_contain_event: "must contain at least one event for this competition"
       fto_not_yet_allowed: "Face Turning Octahedron cannot be held at competitions starting before %{date}."
+      fto_requires_internal_scoretaking: "must be set to Internal Live Results when holding Face Turning Octahedron."
       schedule_must_match_rounds: "must have at least one round, and all rounds must be included in the schedule."
       must_contain_delegate: "must contain at least one WCA Delegate"
       must_contain_organizer: "must contain at least one organizer"
@@ -2702,7 +2729,8 @@ en:
       delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Purpose, Values, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
 <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
 <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
-<p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>"
+<p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>
+<p>If you are interested in becoming a Trainee Delegate, contact your Regional Delegate to determine your eligibility.</p>"
       see_link_html: " (see %{link})"
       members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
   speedcubing_history:

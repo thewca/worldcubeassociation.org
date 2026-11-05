@@ -205,4 +205,18 @@ RSpec.describe "API v1 Competitions" do
       expect(response.parsed_body).to be_empty
     end
   end
+
+  describe "unknown competition" do
+    it "returns not found for the results" do
+      get api_v1_competition_results_path("NotAComp2026")
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns not found for the podiums" do
+      get api_v1_competition_podiums_path("NotAComp2026")
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end

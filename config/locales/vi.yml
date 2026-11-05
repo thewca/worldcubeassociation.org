@@ -1132,7 +1132,7 @@ vi:
         confirmation_link: Xác nhận tài khoản của tôi.
         activate: >-
           Sau khi kích hoạt thành công, bạn có thể đăng nhập vào trang web của WCA:
-          
+
         login_form: đơn đăng nhập
         addendum: >-
           Email này được tự động gửi đi. Nếu bạn không đăng ký tài khoản trên
@@ -1911,6 +1911,13 @@ vi:
         mean: Trung bình
       errors:
         round_closed: Vòng này hiện chưa mở
+      overview:
+        upcoming: Sắp tới
+        in_progress: Hiện tại
+        past_month: Tháng trước
+        no_upcoming: Hiện không có giải đấu sắp tới nào sử dụng hệ thống kết quả
+          trực tiếp.
+        search: Tìm kiếm giải đấu
     my_competitions:
       title: Giải đấu của tôi
       disclaimer: >-
