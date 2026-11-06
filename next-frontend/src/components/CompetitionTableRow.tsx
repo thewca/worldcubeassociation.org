@@ -66,22 +66,15 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
   const { t } = useT();
   return (
     <Table.Row key={comp.id} height={{ base: "10", lg: "auto" }}>
-      <Table.Cell padding="1" width="10">
+      <Table.Cell width="10">
         <Center boxSize="10">{registrationStatusIcons[regoStatus]}</Center>
       </Table.Cell>
 
-      <Table.Cell
-        width="1"
-        padding="1"
-        textAlign="start"
-        verticalAlign="middle"
-        whiteSpace="nowrap"
-        hideBelow="md"
-      >
+      <Table.Cell width="1" whiteSpace="nowrap" hideBelow="md">
         <Text opacity={isRepeatedDate ? 0.5 : 1}>{dateLabel}</Text>
       </Table.Cell>
 
-      <Table.Cell padding="1" width="1">
+      <Table.Cell width="1">
         <Box as="span" title={countryName(comp.country_iso2, t)} lineHeight="0">
           <WcaFlag
             code={comp.country_iso2}
@@ -92,9 +85,6 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
       </Table.Cell>
 
       <Table.Cell
-        padding="1"
-        textAlign="start"
-        verticalAlign="middle"
         width={{ base: "full", lg: "auto" }}
         whiteSpace={{ base: "normal", lg: "nowrap" }}
         overflowWrap={{ base: "anywhere", lg: "normal" }}
@@ -115,9 +105,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
           </HStack>
           <Text hideFrom="lg" color="fg.muted" textStyle="xs">
             <Box as="span" hideFrom="md">
-              <Box as="span" whiteSpace="nowrap">
-                {dateLabel}
-              </Box>
+              {dateLabel}
               {" – "}
             </Box>
             {comp.city}
@@ -125,7 +113,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
         </Box>
       </Table.Cell>
 
-      <Table.Cell padding="1" width="10">
+      <Table.Cell width="10">
         <IconButton
           size="2xs"
           boxSize="10"
@@ -138,28 +126,14 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
         </IconButton>
       </Table.Cell>
 
-      <Table.Cell
-        padding="1"
-        textAlign="start"
-        verticalAlign="middle"
-        hideBelow="lg"
-        width="2/3"
-        maxW="0"
-      >
+      <Table.Cell hideBelow="lg" width="2/3" maxW="0">
         <Text truncate>
           <strong>{countryName(comp.country_iso2, t)}</strong>
           {`, ${comp.city}`}
         </Text>
       </Table.Cell>
 
-      <Table.Cell
-        padding="1"
-        textAlign="start"
-        verticalAlign="middle"
-        width="1/3"
-        maxW="0"
-        hideBelow="lg"
-      >
+      <Table.Cell width="1/3" maxW="0" hideBelow="lg">
         <Box lineClamp="1">
           <ChakraMarkdown paragraphAs={Text}>{comp.venue}</ChakraMarkdown>
         </Box>
