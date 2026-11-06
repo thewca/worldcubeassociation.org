@@ -1022,12 +1022,7 @@ class Round < ApplicationRecord
   private def compute_h2h_final_positions_by_user_id
     return live_results.to_h { |live_result| [live_result.registration.user_id, live_result.global_pos] } if results.none?
 
-    # `person` is optional and scoped to current Persons, and a Person need not
-    # have a WCA account, so a posted result may not map to a user at all.
-    results.filter_map do |result|
-      user = result.person&.user
-      [user.id, result.pos] if user
-    end.to_h
+    results.to_h { |result| [result.person.user.id, result.pos] }
   end
 
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)
