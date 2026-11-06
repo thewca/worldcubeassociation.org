@@ -16,7 +16,6 @@ export default function PageContent({
   children,
 }: {
   eventId: string;
-  currentPath: string;
   competition: components["schemas"]["CompetitionInfo"];
   children: React.ReactNode;
 }) {
@@ -86,8 +85,8 @@ function BreadcrumbHeader({
 }) {
   return (
     <Breadcrumb.Root>
-      <Breadcrumb.List>
-        <Breadcrumb.Item>
+      <Breadcrumb.List flexWrap="nowrap">
+        <Breadcrumb.Item flexShrink={0}>
           <Breadcrumb.Link
             href={route({
               pathname: "/competitions/[competitionId]",
@@ -102,8 +101,12 @@ function BreadcrumbHeader({
             </Stack>
           </Breadcrumb.Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Separator />
-        <Breadcrumb.Item textTransform="capitalize">{page}</Breadcrumb.Item>
+        <Breadcrumb.Separator flexShrink={0} />
+        <Breadcrumb.Item minW={0} textTransform="capitalize">
+          <Text as="span" truncate title={page}>
+            {page}
+          </Text>
+        </Breadcrumb.Item>
       </Breadcrumb.List>
     </Breadcrumb.Root>
   );

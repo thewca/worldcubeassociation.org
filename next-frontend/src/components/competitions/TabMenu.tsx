@@ -76,8 +76,7 @@ export default function TabMenu({
     return (
       <>
         <PageContent
-          eventId={eventId!}
-          currentPath={currentPath!}
+          eventId={eventId || decodeURIComponent(currentPath!)}
           competition={competitionInfo}
         >
           {children}
@@ -134,8 +133,7 @@ export default function TabMenu({
        It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
       <Tabs.Content width="full" minWidth="0" value={currentPath!}>
         <PageContent
-          eventId={eventId!}
-          currentPath={currentPath!}
+          eventId={eventId || decodeURIComponent(currentPath!)}
           competition={competitionInfo}
         >
           {children}
