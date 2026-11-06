@@ -1,5 +1,11 @@
-import { getRecords } from "@/lib/wca/results/records";
-import { Alert } from "@chakra-ui/react";
+import { getRecordsQueryOptions } from "@/lib/wca/results/records";
+import { serverClient } from "@/lib/wca/wcaAPI";
+import createQueryClient from "openapi-react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import React, { Suspense } from "react";
 import FilteredRecords from "@/app/(wca)/(content-pages)/results/records/filteredRecords";
 import { Metadata } from "next";
@@ -7,10 +13,7 @@ import { getT } from "@/lib/i18n/get18n";
 import Loading from "@/components/ui/loading";
 
 const GENDER_ALL = "All";
-const EVENTS_ALL = "all events";
 const SHOW_MIXED = "mixed";
-const SHOW_HISTORY = "history";
-const SHOW_MIXED_HISTORY = "mixed history";
 const REGION_WORLD = "world";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,34 +40,16 @@ async function Records({ searchParams }: RecordsPageProps) {
     gender = GENDER_ALL,
     region = REGION_WORLD,
     show = SHOW_MIXED,
-    event = EVENTS_ALL,
   } = await searchParams;
 
-  // Both history views read from the history data set; the API only distinguishes history from
-  //   everything else, the same way `@is_histories` does in the Rails controller.
-  const isHistory = show === SHOW_HISTORY || show === SHOW_MIXED_HISTORY;
-
-  const recordRequest = await getRecords({
-    gender,
-    region,
-    show: isHistory ? "history" : "mixed",
-  });
-
-  if (recordRequest.error) {
-    return (
-      <Alert.Root status="error">
-        <Alert.Title>Error fetching Records</Alert.Title>
-      </Alert.Root>
-    );
-  }
+  const api = createQueryClient(serverClient);
+  const queryClient = new QueryClient();
+  const queryOptions = getRecordsQueryOptions(api, { gender, region, show });
+  await queryClient.prefetchQuery(queryOptions);
 
   return (
-    <>
-      <FilteredRecords
-        searchParams={{ gender, region, show, event }}
-        records={recordRequest.data.records}
-        timestamp={recordRequest.data.timestamp}
-      />
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <FilteredRecords />
+    </HydrationBoundary>
   );
 }
