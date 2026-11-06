@@ -138,6 +138,9 @@ export default function RegionSelector({
               <Combobox.Input
                 placeholder={name}
                 cursor="pointer"
+                autoComplete="off"
+                data-1p-ignore
+                data-lpignore="true"
                 onClick={() => api.setOpen(!api.open)}
                 // Focusing an input that already holds a region otherwise shows that one
                 // region filtered down to itself, so you have to clear it by hand before
