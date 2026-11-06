@@ -1,8 +1,12 @@
 import {
   Card,
+  Button,
   FormatNumber,
   Heading,
+  Box,
+  Link,
   SimpleGrid,
+  Separator,
   Text,
   Stat,
   Wrap,
@@ -25,7 +29,9 @@ import { LabelledEventIcon } from "@/components/EventIcon";
 import { ChakraMarkdown } from "@/components/Markdown";
 import VenueIcon from "@/components/icons/VenueIcon";
 import MapIcon from "@/components/icons/MapIcon";
+import ExternalLinkIcon from "@/components/icons/ExternalLinkIcon";
 import DetailsIcon from "@/components/icons/DetailsIcon";
+import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import LocalDateTime from "@/components/LocalDateTime";
 import RefundPolicyText from "@/components/competitions/RefundPolicyText";
 import BookmarkButton from "@/components/competitions/BookmarkButton";
@@ -75,32 +81,12 @@ export function AdditionalInformationCard({
         <Card.Title textStyle="s4">Information</Card.Title>
         <ChakraMarkdown
           paragraphAs={Card.Description}
-          imageProps={{ maxW: { base: "full", md: "sm" } }}
+          imageProps={{ maxW: "full" }}
           listProps={{ textStyle: "body" }}
           textStyle="body"
         >
           {competitionInfo.information}
         </ChakraMarkdown>
-      </Card.Body>
-    </Card.Root>
-  );
-}
-
-export function RefundPolicyCard({
-  competitionInfo,
-}: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
-}) {
-  return (
-    <Card.Root>
-      <Card.Body>
-        <Card.Title textStyle="s4">Refund Policy</Card.Title>
-        <Card.Description>
-          <RefundPolicyText
-            refundPolicyPercent={competitionInfo.refund_policy_percent}
-            refundPolicyLimitDate={competitionInfo.refund_policy_limit_date}
-          />
-        </Card.Description>
       </Card.Body>
     </Card.Root>
   );
@@ -252,34 +238,16 @@ export async function RegistrationCard({
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>
-      </Card.Body>
-    </Card.Root>
-  );
-}
-
-export function EventCard({
-  competitionInfo,
-}: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
-}) {
-  return (
-    <Card.Root>
-      <Card.Body>
-        <Card.Title textStyle="s4">Events List</Card.Title>
-        <Wrap gap="4">
-          {competitionInfo.event_ids.map((event_id) => (
-            <LabelledEventIcon
-              key={event_id}
-              eventId={event_id}
-              boxSize="8"
-              color={
-                event_id === competitionInfo.main_event_id && event_id !== "333"
-                  ? "green.solid"
-                  : "currentColor"
-              }
-            />
-          ))}
-        </Wrap>
+        <Separator />
+        <Heading as="h3" textStyle="s4">
+          Refund Policy
+        </Heading>
+        <Card.Description>
+          <RefundPolicyText
+            refundPolicyPercent={competitionInfo.refund_policy_percent}
+            refundPolicyLimitDate={competitionInfo.refund_policy_limit_date}
+          />
+        </Card.Description>
       </Card.Body>
     </Card.Root>
   );
@@ -296,6 +264,7 @@ export function InfoCard({
   userId?: number;
   t: TFunction;
 }) {
+  const mapLink = `https://www.google.com/maps/place/${competitionInfo.latitude_degrees},${competitionInfo.longitude_degrees}`;
   const isCompetitionStaff =
     competitionInfo.organizers.some((organizer) => organizer.id === userId) ||
     competitionInfo.delegates.some((delegate) => delegate.id === userId);
@@ -303,15 +272,17 @@ export function InfoCard({
   return (
     <Card.Root>
       <Card.Body>
-        <Heading textStyle="h2" display="flex" alignItems="center">
-          {competitionInfo.name}
+        <Box display="flow-root">
           {bookmark && (
-            <BookmarkButton
-              competitionId={competitionInfo.id}
-              initialBookmark={bookmark}
-            />
+            <Box float="inline-end" ms="4">
+              <BookmarkButton
+                competitionId={competitionInfo.id}
+                initialBookmark={bookmark}
+              />
+            </Box>
           )}
-        </Heading>
+          <Heading textStyle="h2">{competitionInfo.name}</Heading>
+        </Box>
 
         <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
           <Stat.Root variant="competition">
@@ -359,7 +330,12 @@ export function InfoCard({
               <MapIcon />
               {t("competitions.competition_info.address")}
             </Stat.Label>
-            <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
+            <Stat.ValueText asChild>
+              <Link href={mapLink} target="_blank" rel="noopener">
+                {competitionInfo.venue_address}
+                <ExternalLinkIcon flexShrink="0" />
+              </Link>
+            </Stat.ValueText>
           </Stat.Root>
 
           {competitionInfo.venue_details && (
@@ -386,6 +362,36 @@ export function InfoCard({
             </Stat.Root>
           )}
         </SimpleGrid>
+        <Heading as="h3" textStyle="s4">
+          {t("competitions.competition_info.events")}
+        </Heading>
+        <Wrap gap="4">
+          {competitionInfo.event_ids.map((event_id) => (
+            <LabelledEventIcon
+              key={event_id}
+              eventId={event_id}
+              boxSize="8"
+              color={
+                event_id === competitionInfo.main_event_id && event_id !== "333"
+                  ? "green.solid"
+                  : "currentColor"
+              }
+            />
+          ))}
+        </Wrap>
+        <Button variant="outline" colorPalette="blue" asChild>
+          <Link
+            textStyle="headerLink"
+            href={
+              "https://www.worldcubeassociation.org/competitions/" +
+              competitionInfo.id +
+              ".pdf"
+            }
+          >
+            Download Competition PDF
+            <WcaDocsIcon />
+          </Link>
+        </Button>
       </Card.Body>
     </Card.Root>
   );

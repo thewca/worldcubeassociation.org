@@ -3,6 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { createInstance } from "i18next";
 import { InfoCard, RegistrationCard } from "./Cards";
+import OrganizationTeamCard from "./OrganizerCard";
 import type { components } from "@/types/openapi";
 import translations from "@/lib/i18n/locales/en.json";
 
@@ -10,6 +11,10 @@ const i18n = createInstance();
 
 vi.mock("@/lib/i18n/get18n", () => ({
   getT: async () => ({ t: i18n.t }),
+}));
+
+vi.mock("@/lib/i18n/useI18n", () => ({
+  useT: () => ({ t: i18n.t }),
 }));
 
 vi.mock("@/components/competitions/BookmarkButton", () => ({
@@ -88,6 +93,7 @@ beforeAll(async () => {
   await i18n.init({
     lng: "en",
     keySeparator: false,
+    pluralSeparator: ".",
     resources: { en: { translation: translations } },
   });
 });
@@ -126,7 +132,7 @@ describe("InfoCard", () => {
     (userId) => {
       renderInfoCard(userId);
 
-      expect(screen.queryByText("Number of times bookmarked")).toBeNull();
+      expect(screen.queryByText("bookmarks")).toBeNull();
       expect(
         screen.getByRole("button", { name: "Bookmark this competition" }),
       ).toBeVisible();
@@ -138,9 +144,9 @@ describe("InfoCard", () => {
     (userId) => {
       renderInfoCard(userId);
 
-      expect(
-        screen.getByText("Number of times bookmarked").parentElement,
-      ).toHaveTextContent("40");
+      expect(screen.getByText("bookmarks").parentElement).toHaveTextContent(
+        "40",
+      );
     },
   );
 
@@ -237,5 +243,56 @@ describe("RegistrationCard", () => {
     expect(screen.getByText("Competitors").parentElement).toHaveTextContent(
       /^Competitors157$/,
     );
+  });
+});
+
+describe("OrganizationTeamCard", () => {
+  const delegates = [
+    { ...person(100), name: "First Delegate" },
+    { ...person(200), name: "Second Delegate" },
+    { ...person(300), name: "Third Delegate" },
+  ];
+  const organizers = [
+    { ...person(400), name: "First Organizer" },
+    { ...person(500), name: "Second Organizer" },
+  ];
+
+  it("uses the base card's summaries and more-members controls", () => {
+    render(
+      <ChakraProvider value={defaultSystem}>
+        <OrganizationTeamCard
+          competitionInfo={{ ...competitionInfo, delegates, organizers }}
+        />
+      </ChakraProvider>,
+    );
+
+    expect(screen.getByRole("link", { name: "First Delegate" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "First Organizer" })).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "View 2 more team members" }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "View 1 more team members" }),
+    ).toBeVisible();
+  });
+
+  it("shows single-person teams without more-members controls", () => {
+    render(
+      <ChakraProvider value={defaultSystem}>
+        <OrganizationTeamCard
+          competitionInfo={{
+            ...competitionInfo,
+            delegates: [delegates[0]],
+            organizers: [organizers[0]],
+          }}
+        />
+      </ChakraProvider>,
+    );
+
+    expect(screen.getByRole("link", { name: "First Delegate" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "First Organizer" })).toBeVisible();
+    expect(
+      screen.queryByRole("button", { name: /more team members/ }),
+    ).toBeNull();
   });
 });
