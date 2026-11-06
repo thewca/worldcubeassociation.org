@@ -38,6 +38,31 @@ RSpec.describe "WCA Live API batch submit" do
       expect(LiveResult.find_by(round_id: round.id, registration_id: reg_b.id).best).to eq 222
     end
 
+    it "applies the remaining entries when a competitor is quit before the job runs" do
+      sign_in delegate
+
+      reg_a = create(:registration, :accepted, competition: competition)
+      reg_b = create(:registration, :accepted, competition: competition)
+      create(:live_result, round: round, registration: reg_a)
+      quit_result = create(:live_result, round: round, registration: reg_b)
+
+      batch_request = {
+        results: [
+          { registration_id: reg_b.id, attempts: attempts_for(222) },
+          { registration_id: reg_a.id, attempts: attempts_for(111) },
+        ],
+      }
+
+      post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request
+      expect(response).to be_successful
+
+      quit_result.destroy!
+
+      expect { perform_enqueued_jobs }.not_to raise_error
+
+      expect(LiveResult.find_by(round_id: round.id, registration_id: reg_a.id).best).to eq 111
+    end
+
     it "fails the whole batch and enqueues nothing when an entry is invalid" do
       sign_in delegate
 
