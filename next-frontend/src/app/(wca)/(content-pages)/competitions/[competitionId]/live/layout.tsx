@@ -15,20 +15,24 @@ export default async function LiveLayout({
   const { competitionId } = await params;
   const { t } = await getT();
 
-  const [
-    {
-      data: competitionInfo,
-      error: competitionError,
-      response: competitionResponse,
-    },
-    { data: roundsData, error: roundsError, response: roundsResponse },
-  ] = await Promise.all([
-    getCompetitionInfo(competitionId),
-    getRounds(competitionId),
-  ]);
+  const {
+    data: competitionInfo,
+    error: competitionError,
+    response: competitionResponse,
+  } = await getCompetitionInfo(competitionId);
 
   if (competitionError)
     return <OpenapiError response={competitionResponse} t={t} />;
+
+  if (competitionInfo.scoretaking_software !== "internal") {
+    return children;
+  }
+
+  const {
+    data: roundsData,
+    error: roundsError,
+    response: roundsResponse,
+  } = await getRounds(competitionId);
 
   if (roundsError) {
     return <OpenapiError response={roundsResponse} t={t} />;
