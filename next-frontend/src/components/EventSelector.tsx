@@ -25,11 +25,6 @@ interface SingleEventSelectorProps {
   eventButtonsCompact?: boolean;
 }
 
-const commonJustifyRules = {
-  base: "start",
-  lg: "space-between",
-};
-
 const commonControlStyle = {
   p: 0,
   justifyContent: "center",
@@ -54,7 +49,7 @@ export function SingleEventSelector({
       onValueChange={(e) => onEventClick(e.value!)}
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
-      <Wrap justify={commonJustifyRules}>
+      <Wrap>
         {eventList.map((eventId) => {
           return (
             <RadioCard.Item
@@ -71,6 +66,7 @@ export function SingleEventSelector({
                   fontSize="3xl"
                   eventId={eventId}
                   p={{ base: 1, lg: 0 }}
+                  fullWidth
                 />
               </RadioCard.ItemControl>
             </RadioCard.Item>
@@ -106,7 +102,7 @@ export function MultiEventSelector({
 
   return (
     <CheckboxGroup disabled={disabled}>
-      <Wrap justify={commonJustifyRules}>
+      <Wrap>
         {eventList.map((eventId) => {
           const currentEventSelected = selectedEvents.includes(eventId);
           const currentEventDisabled = eventsDisabled.includes(eventId);
@@ -148,6 +144,7 @@ export function MultiEventSelector({
                       currentEventDisabled ? disabledText(eventId) : undefined
                     }
                     p={{ base: 1, lg: 0 }}
+                    fullWidth
                   />
                   <VisuallyHidden>
                     <CheckboxCard.Label>

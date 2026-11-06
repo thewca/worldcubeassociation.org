@@ -60,18 +60,24 @@ type EventIconIntrinsicProps = ComponentPropsWithoutRef<EventIconIntrinsic>;
 type EventIconProps = {
   eventId: string;
   disabledLabel?: string;
+  fullWidth?: boolean;
 } & EventIconIntrinsicProps;
 
 const EventIcon = ({
   eventId,
   disabledLabel,
+  fullWidth,
   ...iconIntrinsicProps
 }: EventIconProps) => {
   const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
 
   return (
-    <EventTooltip eventId={eventId} disabledLabel={disabledLabel}>
+    <EventTooltip
+      eventId={eventId}
+      disabledLabel={disabledLabel}
+      fullWidth={fullWidth}
+    >
       <IconComponent {...iconIntrinsicProps} />
     </EventTooltip>
   );
@@ -83,9 +89,14 @@ const EventIcon = ({
 export const LabelledEventIcon = ({
   eventId,
   disabledLabel,
+  fullWidth,
   ...iconIntrinsicProps
 }: EventIconProps) => (
-  <EventTooltip eventId={eventId} disabledLabel={disabledLabel}>
+  <EventTooltip
+    eventId={eventId}
+    disabledLabel={disabledLabel}
+    fullWidth={fullWidth}
+  >
     <EventIcon
       eventId={eventId}
       role="img"
@@ -99,15 +110,22 @@ export const LabelledEventIcon = ({
 function EventTooltip({
   eventId,
   disabledLabel,
+  fullWidth,
   children,
 }: {
   eventId: string;
   disabledLabel?: string;
+  fullWidth?: boolean;
   children: React.ReactNode;
 }) {
+  const dimension = fullWidth ? "full" : undefined;
   return (
-    <Tooltip content={disabledLabel ?? events.byId[eventId]?.name}>
-      <Center w="full" h="full">
+    <Tooltip
+      content={disabledLabel ?? events.byId[eventId]?.name}
+      closeDelay={20}
+      openDelay={20}
+    >
+      <Center w={dimension} h={dimension}>
         {children}
       </Center>
     </Tooltip>
