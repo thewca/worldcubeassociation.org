@@ -1491,6 +1491,11 @@ en:
         no_upcoming: "There are no upcoming competitions with live results."
         search: "Search competitions"
       manage_rounds: "Manage Rounds"
+      external_results:
+        title: "Live results for %{competition_name}"
+        description: "This competition uses an external website for live results."
+        link: "View live results"
+        redirect_notice: "You will be redirected automatically in %{seconds} seconds."
       incompatible:
         external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
         wca_live: "This competition uses WCA Live for scoretaking - please follow this link to see the live results:"
