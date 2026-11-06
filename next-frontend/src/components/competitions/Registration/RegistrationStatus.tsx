@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert } from "@chakra-ui/react";
+import { Alert, Text } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import type { components } from "@/types/openapi";
 
@@ -16,8 +16,10 @@ const STATUS_ALERTS = {
 
 export default function RegistrationStatus({
   registration,
+  hasAdditionalRequirements,
 }: {
   registration: Registration;
+  hasAdditionalRequirements: boolean;
 }) {
   const { t } = useT();
 
@@ -43,7 +45,11 @@ export default function RegistrationStatus({
           )}
         </Alert.Title>
         <Alert.Description>
-          {t(`competitions.registration_v2.info.${message}`)}
+          <Text>{t(`competitions.registration_v2.info.${message}`)}</Text>
+          {hasAdditionalRequirements && (
+            <Text>{t("competitions.registration_v2.info.additional")}</Text>
+          )}
+          <Text>{t("competitions.registration_v2.info.email")}</Text>
         </Alert.Description>
       </Alert.Content>
     </Alert.Root>

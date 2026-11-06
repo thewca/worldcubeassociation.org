@@ -1,7 +1,7 @@
 "use client";
 
-import { Alert, Spinner } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { Alert, Dialog, Portal, Stack } from "@chakra-ui/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useEffectEvent } from "react";
 import { useT } from "@/lib/i18n/useI18n";
 import { useAPIClient } from "@/lib/wca/useAPI";
@@ -29,13 +29,22 @@ export default function RegistrationProcessing({
 }) {
   const { t } = useT();
   const apiClient = useAPIClient();
+  const queryClient = useQueryClient();
+
+  const queueQueryKey = ["registration-queue", competitionId, userId];
 
   const { data: queueStatus } = useQuery({
-    queryKey: ["registration-queue", competitionId, userId],
+    queryKey: queueQueryKey,
     queryFn: () => pollRegistrationQueue(competitionId, userId),
     refetchInterval: (query) =>
       query.state.data?.processing === false ? false : QUEUE_POLL_INTERVAL_MS,
+    // The queue answers the same thing on every poll, which on its own would not re-render us and
+    //   so never update the poll count.
+    notifyOnChangeProps: ["data", "dataUpdatedAt"],
   });
+
+  const queuePollCount =
+    queryClient.getQueryState(queueQueryKey)?.dataUpdateCount ?? 0;
 
   const isQueueDone = queueStatus?.processing === false;
 
@@ -57,17 +66,44 @@ export default function RegistrationProcessing({
   }, [registration]);
 
   return (
-    <Alert.Root>
-      <Alert.Indicator>
-        <Spinner />
-      </Alert.Indicator>
-      <Alert.Title>
-        {queueStatus?.queue_count === undefined
-          ? t("competitions.registration_v2.register.processing")
-          : t("competitions.registration_v2.register.processing_queue", {
-              queueCount: queueStatus.queue_count,
-            })}
-      </Alert.Title>
-    </Alert.Root>
+    <Dialog.Root open role="alertdialog" placement="center">
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>
+              <Dialog.Title>
+                {t("competitions.registration_v2.register.processing")}
+              </Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>
+              <Stack gap="3">
+                {queuePollCount > 1 && (
+                  <Alert.Root status="warning">
+                    <Alert.Indicator />
+                    <Alert.Title>
+                      {t(
+                        "competitions.registration_v2.register.processing_longer",
+                      )}
+                    </Alert.Title>
+                  </Alert.Root>
+                )}
+                {(queueStatus?.queue_count ?? 0) > 0 && (
+                  <Alert.Root status="warning">
+                    <Alert.Indicator />
+                    <Alert.Title>
+                      {t(
+                        "competitions.registration_v2.register.processing_queue",
+                        { queueCount: queueStatus?.queue_count },
+                      )}
+                    </Alert.Title>
+                  </Alert.Root>
+                )}
+              </Stack>
+            </Dialog.Body>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
   );
 }
