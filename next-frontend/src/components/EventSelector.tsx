@@ -40,7 +40,9 @@ export function SingleEventSelector({
       orientation="vertical"
       align="center"
       value={selectedEvent}
-      onValueChange={(e) => onEventClick(e.value!)}
+      onClick={(e) =>
+        e.target instanceof HTMLInputElement && onEventClick(e.target.value)
+      }
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
       <Wrap justify="center">
