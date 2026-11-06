@@ -974,7 +974,7 @@ function SortOrderSelect({
   const values = createListCollection({
     items: sortOrderValues.map(({ value, key }) => ({
       value: value,
-      label: t(`competitions.index.${key}`),
+      label: t(`competitions.index.sort.${key}`),
     })),
   });
 
@@ -988,7 +988,7 @@ function SortOrderSelect({
       minWidth="xs"
     >
       <Select.HiddenSelect />
-      <Select.Label>{t("competitions.index.sort_order")}</Select.Label>
+      <Select.Label>{t("competitions.index.sort.order")}</Select.Label>
 
       <Select.Control>
         <Select.Trigger>

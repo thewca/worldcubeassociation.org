@@ -2280,15 +2280,16 @@ it:
       no_delegates_found: Nessun Delegato trovato.
       show_cancelled: Mostra competizioni cancellate
       championship_only: Mostra solo campionati
-      sort_order: Ordina per
-      start_date_asc: "Data di inizio: crescente"
-      start_date_desc: "Data di inizio: decrescente"
-      end_date_asc: "Data di fine: crescente"
-      end_date_desc: "Data di fine: decrescente"
-      announced_at_asc: "Data di annuncio: crescente"
-      announced_at_desc: "Data di annuncio: decrescente"
-      name_asc: "Nome: A-Z"
-      name_desc: "Nome: Z-A"
+      sort:
+        order: Ordina per
+        start_date_asc: "Data di inizio: crescente"
+        start_date_desc: "Data di inizio: decrescente"
+        end_date_asc: "Data di fine: crescente"
+        end_date_desc: "Data di fine: decrescente"
+        announced_at_asc: "Data di annuncio: crescente"
+        announced_at_desc: "Data di annuncio: decrescente"
+        name_asc: "Nome: A-Z"
+        name_desc: "Nome: Z-A"
       show_registration_status: Mostra icona status iscrizioni
       use_admin_view: Usa vista amministratore
       titles:
