@@ -10,7 +10,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import { getMediumDateString } from "@/lib/wca/dates";
 import { useSearchParams } from "next/navigation";
 import { route } from "nextjs-routes";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import { getRecordsQueryOptions } from "@/lib/wca/results/records";
 
@@ -30,9 +30,10 @@ export default function FilteredRecords() {
     gender: searchParams.get("gender") ?? "All",
     show: searchParams.get("show") ?? "mixed",
   };
-  const { data, isFetching, error } = useQuery(
-    getRecordsQueryOptions(api, filters),
-  );
+  const { data, isFetching, isPlaceholderData, error } = useQuery({
+    ...getRecordsQueryOptions(api, filters),
+    placeholderData: keepPreviousData,
+  });
   const updateFilters = (changes: Partial<FilterParams>) => {
     const params = new URLSearchParams(window.location.search);
     for (const [key, value] of Object.entries(changes)) params.set(key, value);
@@ -75,7 +76,10 @@ export default function FilteredRecords() {
           <Alert.Title>{t("results.records.load_error")}</Alert.Title>
         </Alert.Root>
       ) : (
-        data && <RecordsTable records={filteredRecords} show={show} />
+        data &&
+        !isPlaceholderData && (
+          <RecordsTable records={filteredRecords} show={show} />
+        )
       )}
     </VStack>
   );
