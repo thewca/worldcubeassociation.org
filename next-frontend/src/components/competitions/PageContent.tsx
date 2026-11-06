@@ -58,21 +58,6 @@ export default function PageContent({
                 >
                   {tHeader}
                 </Heading>
-                {/* {currentPath === "schedule" && (
-              <Button variant="outline" size="xs" asChild>
-                <Link
-                  href={
-                    "https://www.worldcubeassociation.org/competitions/" +
-                    competition.id +
-                    ".pdf"
-                  }
-                  color="inherit"
-                  textDecoration="none"
-                >
-                  <WcaDocsIcon /> Download
-                </Link>
-              </Button>
-            )} */}
               </Stack>
             </>
           )}

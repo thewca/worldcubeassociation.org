@@ -42,6 +42,7 @@ export default async function TabSchedule({
           wcifSchedule={wcifSchedule}
           wcifEvents={wcifEvents}
           competitionName={competitionName}
+          competitionId={competitionId}
         />
       </Card.Body>
     </Card.Root>
