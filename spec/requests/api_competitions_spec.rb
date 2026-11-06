@@ -5,6 +5,28 @@ require "rails_helper"
 RSpec.describe "API Competitions" do
   let(:headers) { { "CONTENT_TYPE" => "application/json" } }
 
+  describe "GET #show" do
+    let(:competition) { create(:competition, :visible, :registration_open, :with_competitor_limit) }
+
+    it "counts accepted registrations without paid pending or waitlisted registrations" do
+      create_list(:registration, 2, :accepted, competition: competition)
+      create(:registration, :paid_pending, competition: competition)
+      create(:registration, :waiting_list, competition: competition)
+
+      get api_v0_competition_path(competition)
+
+      expect(response).to be_successful
+      expect(response.parsed_body.fetch("accepted_registration_count")).to eq(2)
+    end
+
+    it "returns zero when there are no accepted registrations" do
+      get api_v0_competition_path(competition)
+
+      expect(response).to be_successful
+      expect(response.parsed_body.fetch("accepted_registration_count")).to eq(0)
+    end
+  end
+
   describe "GET #index" do
     let!(:competition1) { create(:competition, :visible, starts: 1.week.from_now, name: "First 2019") }
     let!(:competition2) { create(:competition, :visible, starts: 1.week.from_now, name: "Second 2019") }

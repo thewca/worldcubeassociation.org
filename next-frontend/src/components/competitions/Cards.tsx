@@ -64,54 +64,6 @@ function formatDateRange(start: Date, end: Date): string {
   return `${fullFormatter.format(start)} - ${fullFormatter.format(end)}`;
 }
 
-export function VenueDetailsCard({
-  competitionInfo,
-}: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
-}) {
-  return (
-    <Card.Root width="inherit">
-      <Card.Body>
-        <Card.Title textStyle="s4">Venue Details</Card.Title>
-        {/* Sized against the card rather than the viewport: the card is narrow on a phone,
-            but also in a narrow desktop column, and both want one column. A flex basis
-            (unlike SimpleGrid's `minmax()` minimum) can still shrink below 3xs. */}
-        <Wrap gap="4">
-          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
-            <Stat.Label>
-              <VenueIcon />
-              Venue
-            </Stat.Label>
-            <ChakraMarkdown paragraphAs={Stat.ValueText}>
-              {competitionInfo.venue}
-            </ChakraMarkdown>
-          </Stat.Root>
-
-          <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
-            <Stat.Label>
-              <MapIcon />
-              Address
-            </Stat.Label>
-            <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
-          </Stat.Root>
-
-          {competitionInfo.venue_details && (
-            <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
-              <Stat.Label>
-                <DetailsIcon />
-                Details
-              </Stat.Label>
-              <ChakraMarkdown paragraphAs={Stat.ValueText}>
-                {competitionInfo.venue_details}
-              </ChakraMarkdown>
-            </Stat.Root>
-          )}
-        </Wrap>
-      </Card.Body>
-    </Card.Root>
-  );
-}
-
 export function AdditionalInformationCard({
   competitionInfo,
 }: {
@@ -167,7 +119,11 @@ export async function RegistrationCard({
     competitionInfo.registration_open,
   );
   const registrationClosed = hasPassed(competitionInfo.registration_close);
-  const spotsLeft = competitionInfo.spots_left;
+  const hasRegistrations = competitionInfo.accepted_registration_count > 0;
+  const showCompetitorCount =
+    hasRegistrations ||
+    (competitionInfo.use_wca_registration && !registrationNotYetOpen);
+  const hasCompetitorLimit = competitionInfo.spots_left != null;
   const showWaitingList =
     competitionInfo["registration_full?"] &&
     !registrationNotYetOpen &&
@@ -200,29 +156,27 @@ export async function RegistrationCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <SpotsLeftIcon />
-              {spotsLeft == null || registrationNotYetOpen
-                ? t("competitions.competition_info.competitor_limit")
-                : registrationClosed
-                  ? t("competitions.nav.menu.competitors")
-                  : t("competitions.my_competitions_table.registrations")}
+              {showCompetitorCount
+                ? t("competitions.nav.menu.competitors")
+                : t("competitions.competition_info.competitor_limit")}
             </Stat.Label>
             <Stat.ValueText>
-              {spotsLeft == null ? (
-                t("competitions.competition_info.no_competitor_limit")
-              ) : registrationNotYetOpen ? (
-                <FormatNumber value={competitionInfo.competitor_limit} />
-              ) : (
+              {showCompetitorCount ? (
                 <>
                   <FormatNumber
-                    value={competitionInfo.competitor_limit - spotsLeft}
+                    value={competitionInfo.accepted_registration_count}
                   />
-                  {!registrationClosed && (
+                  {hasCompetitorLimit && (
                     <>
-                      &sol;
+                      {" / "}
                       <FormatNumber value={competitionInfo.competitor_limit} />
                     </>
                   )}
                 </>
+              ) : hasCompetitorLimit ? (
+                <FormatNumber value={competitionInfo.competitor_limit} />
+              ) : (
+                t("competitions.competition_info.no_competitor_limit")
               )}
             </Stat.ValueText>
           </Stat.Root>
@@ -334,12 +288,18 @@ export function EventCard({
 export function InfoCard({
   competitionInfo,
   bookmark,
+  userId,
   t,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
   bookmark?: components["schemas"]["CompetitionBookmark"];
+  userId?: number;
   t: TFunction;
 }) {
+  const isCompetitionStaff =
+    competitionInfo.organizers.some((organizer) => organizer.id === userId) ||
+    competitionInfo.delegates.some((delegate) => delegate.id === userId);
+
   return (
     <Card.Root>
       <Card.Body>
@@ -386,23 +346,45 @@ export function InfoCard({
 
           <Stat.Root variant="competition">
             <Stat.Label>
-              <CompetitorsIcon />
-              Competitor Limit
+              <VenueIcon />
+              {t("competitions.competition_info.venue")}
             </Stat.Label>
-            <Stat.ValueText>
-              <FormatNumber value={competitionInfo.competitor_limit} />
-            </Stat.ValueText>
+            <ChakraMarkdown paragraphAs={Stat.ValueText}>
+              {competitionInfo.venue}
+            </ChakraMarkdown>
           </Stat.Root>
 
           <Stat.Root variant="competition">
             <Stat.Label>
-              <BookmarkIcon />
-              Bookmarked
+              <MapIcon />
+              {t("competitions.competition_info.address")}
             </Stat.Label>
-            <Stat.ValueText>
-              <FormatNumber value={competitionInfo.number_of_bookmarks} /> Times
-            </Stat.ValueText>
+            <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
           </Stat.Root>
+
+          {competitionInfo.venue_details && (
+            <Stat.Root variant="competition">
+              <Stat.Label>
+                <DetailsIcon />
+                {t("competitions.competition_info.details")}
+              </Stat.Label>
+              <ChakraMarkdown paragraphAs={Stat.ValueText}>
+                {competitionInfo.venue_details}
+              </ChakraMarkdown>
+            </Stat.Root>
+          )}
+
+          {isCompetitionStaff && (
+            <Stat.Root variant="competition">
+              <Stat.Label>
+                <BookmarkIcon />
+                {t("competitions.competition_info.number_of_bookmarks")}
+              </Stat.Label>
+              <Stat.ValueText>
+                <FormatNumber value={competitionInfo.number_of_bookmarks} />
+              </Stat.ValueText>
+            </Stat.Root>
+          )}
         </SimpleGrid>
       </Card.Body>
     </Card.Root>
