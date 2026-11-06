@@ -38,7 +38,9 @@ export function SingleEventSelector({
     (e: MouseEvent<HTMLDivElement>) => {
       const { target } = e;
 
-      if (target instanceof HTMLInputElement) {
+      const isInputClicked = target instanceof HTMLInputElement;
+
+      if (isInputClicked) {
         onEventClick(target.value);
       }
     },
