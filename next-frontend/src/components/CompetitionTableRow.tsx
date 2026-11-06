@@ -118,7 +118,12 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
       <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="xl">
         <Portal>
           <Drawer.Backdrop />
-          <Drawer.Positioner padding="4">
+          <Drawer.Positioner
+            padding="4"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
             <Drawer.Content
               overflow="hidden"
               borderRadius="wca"
