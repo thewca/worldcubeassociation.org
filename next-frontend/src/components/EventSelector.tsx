@@ -15,6 +15,7 @@ import {
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 import EventIcon, { LabelledEventIcon } from "@/components/EventIcon";
+import { MouseEvent, useCallback } from "react";
 
 interface SingleEventSelectorProps {
   title: string;
@@ -33,6 +34,17 @@ export function SingleEventSelector({
   disabled,
   eventButtonsCompact = false,
 }: SingleEventSelectorProps) {
+  const selectEvent = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      const { target } = e;
+
+      if (target instanceof HTMLInputElement) {
+        onEventClick(target.value);
+      }
+    },
+    [onEventClick],
+  );
+
   return (
     <RadioCard.Root
       disabled={disabled}
@@ -40,9 +52,7 @@ export function SingleEventSelector({
       orientation="vertical"
       align="center"
       value={selectedEvent}
-      onClick={(e) =>
-        e.target instanceof HTMLInputElement && onEventClick(e.target.value)
-      }
+      onClick={selectEvent}
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
       <Wrap justify="center">
