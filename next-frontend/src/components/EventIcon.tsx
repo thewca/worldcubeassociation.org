@@ -24,6 +24,7 @@ import _555bfIcon from "@/components/icons/events/_555bfIcon";
 import events from "@/lib/wca/data/events";
 
 import type { ComponentPropsWithoutRef } from "react";
+import { Tooltip } from "./ui/tooltip";
 
 const eventIconMap = {
   "333": _333Icon,
@@ -73,13 +74,15 @@ export const LabelledEventIcon = ({
   eventId,
   ...iconIntrinsicProps
 }: EventIconProps) => (
-  <EventIcon
-    eventId={eventId}
-    role="img"
-    aria-hidden={false}
-    aria-label={events.byId[eventId]?.name}
-    {...iconIntrinsicProps}
-  />
+  <Tooltip content={events.byId[eventId]?.name}>
+    <EventIcon
+      eventId={eventId}
+      role="img"
+      aria-hidden={false}
+      aria-label={events.byId[eventId]?.name}
+      {...iconIntrinsicProps}
+    />
+  </Tooltip>
 );
 
 export default EventIcon;
