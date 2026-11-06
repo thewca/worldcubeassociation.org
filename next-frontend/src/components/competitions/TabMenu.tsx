@@ -78,6 +78,7 @@ export default function TabMenu({
         <PageContent
           eventId={eventId || decodeURIComponent(currentPath!)}
           competition={competitionInfo}
+          tabs={tabs}
         >
           {children}
         </PageContent>
@@ -135,6 +136,7 @@ export default function TabMenu({
         <PageContent
           eventId={eventId || decodeURIComponent(currentPath!)}
           competition={competitionInfo}
+          tabs={tabs}
         >
           {children}
         </PageContent>

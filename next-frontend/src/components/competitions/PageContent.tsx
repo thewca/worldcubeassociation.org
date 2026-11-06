@@ -9,24 +9,33 @@ import {
 import { components } from "@/types/openapi";
 import { LuHouse } from "react-icons/lu";
 import { route } from "nextjs-routes";
+import { CompetitionNavTab } from "@/lib/wca/competitions/tabs";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function PageContent({
   eventId,
   competition,
   children,
+  tabs,
 }: {
   eventId: string;
   competition: components["schemas"]["CompetitionInfo"];
   children: React.ReactNode;
+  tabs: CompetitionNavTab[];
 }) {
+  const { t } = useT();
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const headerKey = tabs.find((t) => t.menuKey === eventId)?.i18nKey;
+
+  const tHeader = headerKey ? t(headerKey) : eventId;
+
   return (
     <>
       {eventId !== "general" && (
         <Stack gap={0} mb={2}>
           {isMobile ? (
             <BreadcrumbHeader
-              page={eventId}
+              page={tHeader}
               competitionName={competition.name}
               competitionId={competition.id}
             />
@@ -47,7 +56,7 @@ export default function PageContent({
                   fontWeight="bold"
                   textTransform="capitalize"
                 >
-                  {eventId}
+                  {tHeader}
                 </Heading>
                 {/* {currentPath === "schedule" && (
               <Button variant="outline" size="xs" asChild>
