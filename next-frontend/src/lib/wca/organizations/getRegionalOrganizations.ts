@@ -1,6 +1,9 @@
-import { serverClient } from "@/lib/wca/wcaAPI";
-import { cache } from "react";
+import { cachedServerClient } from "@/lib/wca/wcaAPI";
+import { cacheLife } from "next/cache";
 
-export const getRegionalOrganizations = cache(async () => {
-  return await serverClient.GET("/v0/regional-organizations");
-});
+export async function getRegionalOrganizations() {
+  "use cache";
+  cacheLife("days");
+
+  return cachedServerClient.GET("/v0/regional-organizations");
+}
