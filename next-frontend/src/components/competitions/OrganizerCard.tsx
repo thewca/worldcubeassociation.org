@@ -83,25 +83,30 @@ function ClickableOrganizer({
   isLead?: boolean;
 }) {
   return (
-    <HStack key={organizer.id}>
-      <Avatar.Root>
+    <HStack key={organizer.id} minW={0}>
+      <Avatar.Root flexShrink={0}>
         <Avatar.Fallback name={organizer.name} />
         <Avatar.Image src={organizer.avatar.thumb_url} />
       </Avatar.Root>
-      <Stack gap={0.5} justify="start">
-        <Stack direction="row" gap={2} alignItems="center">
-          <ChakraLink href={organizer.url}>
-            <Text as="span">
-              {organizer.name}
-              <WcaFlag
-                code={organizer.country_iso2}
-                size="xs"
-                ms="1"
-                aria-hidden
-              />
-            </Text>
-          </ChakraLink>
-        </Stack>
+      <Stack gap={0.5} justify="start" minW={0}>
+        <ChakraLink
+          href={organizer.url}
+          display="flex"
+          alignItems="center"
+          minW={0}
+          title={organizer.name}
+        >
+          <Text as="span" truncate minW={0}>
+            {organizer.name}
+          </Text>
+          <WcaFlag
+            code={organizer.country_iso2}
+            size="xs"
+            ms="1"
+            flexShrink={0}
+            aria-hidden
+          />
+        </ChakraLink>
         {isLead && (
           <Badge
             variant="subtle"
@@ -146,13 +151,14 @@ function OrganizersSection({
     ) || 4;
 
   return (
-    <Stack direction="row" gap={3}>
+    <Stack direction="row" gap={3} minW={0} maxW="full">
       {first && <ClickableOrganizer organizer={first} isLead />}
       {!!rest.length && (
         <Dialog.Root placement="center" lazyMount>
           <Dialog.Trigger asChild>
             <Card.Root
               asChild
+              flexShrink={0}
               variant="outline"
               rounded="full"
               cursor="pointer"
@@ -225,13 +231,13 @@ export default function OrganizationTeamCard({
         <Card.Title textStyle="s4">
           {t("competitions.competition_info.organization_team")}
         </Card.Title>
-        <Stat.Root variant="competition">
+        <Stat.Root variant="competition" minW={0}>
           <Stat.Label fontWeight="medium">
             {t(
               `competitions.competition_info.organizer_plural.${isPlural(competitionInfo.organizers) ? "other" : "one"}`,
             )}
           </Stat.Label>
-          <Stat.ValueText>
+          <Stat.ValueText minW={0} maxW="full">
             <OrganizersSection
               organizers={competitionInfo.organizers}
               mode="organizers"
@@ -240,13 +246,13 @@ export default function OrganizationTeamCard({
           </Stat.ValueText>
         </Stat.Root>
 
-        <Stat.Root variant="competition">
+        <Stat.Root variant="competition" minW={0}>
           <Stat.Label fontWeight="medium">
             {t(
               `competitions.competition_info.delegate.${isPlural(competitionInfo.delegates) ? "other" : "one"}`,
             )}
           </Stat.Label>
-          <Stat.ValueText>
+          <Stat.ValueText minW={0} maxW="full">
             <OrganizersSection
               organizers={competitionInfo.delegates}
               mode="delegates"
