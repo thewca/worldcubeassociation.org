@@ -1,7 +1,7 @@
 import {
   Combobox,
   Field,
-  Heading,
+  Text,
   Portal,
   useFilter,
   useListCollection,
@@ -33,7 +33,6 @@ type RegionSelectorOption = {
   disabled?: boolean;
   flag?: JSX.Element;
   content?: JSX.Element;
-  centered?: boolean;
 };
 
 const allRegionsOption = (t: TFunction) => ({
@@ -68,11 +67,10 @@ const regionsOptions = (t: TFunction) =>
       key: "continents_header",
       label: "",
       disabled: true,
-      centered: true,
       content: (
-        <Heading textStyle="s4" fontSize="sm">
+        <Text textStyle="s4" fontSize="xs">
           {t("common.continent")}
-        </Heading>
+        </Text>
       ),
     },
     ...continentOptions(t),
@@ -80,11 +78,10 @@ const regionsOptions = (t: TFunction) =>
       key: "countries_header",
       label: "",
       disabled: true,
-      centered: true,
       content: (
-        <Heading textStyle="s4" fontSize="sm">
+        <Text textStyle="s4" fontSize="xs">
           {t("common.country")}
-        </Heading>
+        </Text>
       ),
     },
     ...countryOptions(t),
@@ -179,7 +176,7 @@ export default function RegionSelector({
                 <Combobox.Item
                   item={item}
                   key={item.key}
-                  justifyContent={item.centered ? "center" : "start"}
+                  justifyContent="start"
                 >
                   {item.flag}
                   {item.content ?? item.label}
