@@ -126,7 +126,6 @@ export default function RegionSelector({
         inputBehavior="autohighlight"
         onValueChange={(e) => onRegionChange(e.value[0])}
         width="100%"
-        openOnClick
         value={region ? [region] : undefined}
         disabled={disabled}
         defaultValue={[ALL_REGIONS_VALUE]}
@@ -139,6 +138,7 @@ export default function RegionSelector({
               <Combobox.Input
                 placeholder={name}
                 cursor="pointer"
+                onClick={() => api.setOpen(!api.open)}
                 // Focusing an input that already holds a region otherwise shows that one
                 // region filtered down to itself, so you have to clear it by hand before
                 // you can type or browse. The selection itself is untouched, so the list
