@@ -1850,6 +1850,8 @@ export interface components {
             spots_left?: number | null;
             /** @example 7 */
             waiting_list_count: number;
+            /** @example 157 */
+            accepted_registration_count: number;
             tab_names: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];

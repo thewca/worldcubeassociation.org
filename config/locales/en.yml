@@ -1685,7 +1685,7 @@ en:
       regional_average_record: "%{event_name} %{result} (average)"
       bookmark: "Bookmark this competition"
       is_bookmarked: "You've bookmarked this competition"
-      number_of_bookmarks: "Number of times bookmarked"
+      number_of_bookmarks: "bookmarks"
     #context: on the competition's index page
     index:
       title: "Competitions"
