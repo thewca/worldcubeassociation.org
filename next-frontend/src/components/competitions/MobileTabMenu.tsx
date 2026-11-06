@@ -8,6 +8,7 @@ import {
   Portal,
   Stack,
   type SystemStyleObject,
+  Text,
 } from "@chakra-ui/react";
 import {
   LuBox,
@@ -238,7 +239,7 @@ function GroupItem({
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content minW="56">
+          <Menu.Content minW="56" maxW="min(20rem, calc(100vw - 2rem))">
             {tabs.map((tab) => {
               const isLink = "href" in tab;
               const isActive =
@@ -327,6 +328,7 @@ function SingleItem({
     <ChakraLink
       unstyled
       w="full"
+      minW={0}
       href={tab.disabled ? undefined : tab.externalHref || tab.href}
       aria-disabled={tab.disabled || undefined}
       data-disabled={tab.disabled ? "" : undefined}
@@ -337,8 +339,15 @@ function SingleItem({
       aria-current={isActive ? "page" : undefined}
       outline="none"
     >
-      <Stack direction="row" alignItems="center" gap={2}>
-        {tab.icon && <IconDisplay name={tab.icon} size="1.25em" />} {label}
+      <Stack direction="row" alignItems="center" gap={2} minW={0}>
+        {tab.icon && (
+          <Box as="span" flexShrink={0} display="inline-flex">
+            <IconDisplay name={tab.icon} size="1.25em" />
+          </Box>
+        )}
+        <Text as="span" truncate minW={0} title={label}>
+          {label}
+        </Text>
       </Stack>
     </ChakraLink>
   );
@@ -358,13 +367,21 @@ function ItemWithChildren({
   return (
     <Menu.Root positioning={{ placement: "left", gutter: 2 }}>
       <Menu.TriggerItem color={isItemActive ? "blue.border" : undefined}>
-        <LuChevronLeft />
-        {tab.icon && <IconDisplay name={tab.icon} size="1.25em" />}
-        {renderLabel(tab)}
+        <Box as="span" flexShrink={0} display="inline-flex">
+          <LuChevronLeft />
+        </Box>
+        {tab.icon && (
+          <Box as="span" flexShrink={0} display="inline-flex">
+            <IconDisplay name={tab.icon} size="1.25em" />
+          </Box>
+        )}
+        <Text as="span" truncate minW={0} title={renderLabel(tab)}>
+          {renderLabel(tab)}
+        </Text>
       </Menu.TriggerItem>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content>
+          <Menu.Content maxW="min(20rem, calc(100vw - 2rem))">
             {tab.children.length > 0 &&
               tab.children.map((tab) => {
                 const isActive = tab.menuKey === activeMenuKey;
