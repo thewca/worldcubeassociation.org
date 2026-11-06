@@ -32,7 +32,7 @@ export function AnnouncementCard({
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
       width="full"
     >
-      <Card.Body gap={2}>
+      <Card.Body>
         <AnnouncementHeader announcement={announcement} />
         <AnnouncementMarkdown>
           {announcementSummary(announcement)}
@@ -61,7 +61,7 @@ export function AnnouncementFullCard({
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
       width="full"
     >
-      <Card.Body gap={2}>
+      <Card.Body>
         <AnnouncementHeader announcement={announcement} />
 
         <AnnouncementMarkdown>
