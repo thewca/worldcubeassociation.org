@@ -64,6 +64,8 @@ import RegionSelector from "@/components/RegionSelector";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
+import EventDropdown from "@/components/EventDropdown";
+import { formatDateRange } from "@/lib/dates/format";
 import TabMap from "@/components/competitions/TabMap";
 import { LuMapPin, LuSearch, LuSettings2 } from "react-icons/lu";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -246,6 +248,12 @@ export default function CompetitionsPage() {
     (competition) => showInProgressSection && isInProgress(competition),
   );
 
+  const firstCompetitionIds = new Set(
+    _.uniqBy([...inProgressComps, ...upcomingComps], (competition) =>
+      formatDateRange(competition.start_date, competition.end_date),
+    ).map((competition) => competition.id),
+  );
+
   const loadedCompetitionCount =
     rawCompetitionData?.pages.reduce((total, page) => total + page.length, 0) ??
     0;
@@ -309,18 +317,30 @@ export default function CompetitionsPage() {
           <Card.Body asChild>
             <Collapsible.Root asChild>
               <VStack gap="3" borderBottom="black">
-                <FormEventSelector
-                  selectedEvents={filterState.selectedEvents}
-                  title={t("competitions.index.event")}
-                  onEventClick={(eventId) =>
-                    dispatchFilter({ type: "toggle_event", eventId })
-                  }
-                  onClearClick={() => dispatchFilter({ type: "clear_events" })}
-                  onAllClick={() =>
-                    dispatchFilter({ type: "select_all_events" })
-                  }
-                />
-                <SimpleGrid gap="2" width="full" columns={{ base: 1, md: 2 }}>
+                <Box hideBelow="lg" width="full">
+                  <FormEventSelector
+                    selectedEvents={filterState.selectedEvents}
+                    title={t("competitions.index.event")}
+                    onEventClick={(eventId) =>
+                      dispatchFilter({ type: "toggle_event", eventId })
+                    }
+                    onClearClick={() =>
+                      dispatchFilter({ type: "clear_events" })
+                    }
+                    onAllClick={() =>
+                      dispatchFilter({ type: "select_all_events" })
+                    }
+                  />
+                </Box>
+                <SimpleGrid gap="2" width="full" columns={{ base: 3, lg: 2 }}>
+                  <Box hideFrom="lg" minW="0">
+                    <EventDropdown
+                      selectedEvents={filterState.selectedEvents}
+                      onEventsChange={(eventIds) =>
+                        dispatchFilter({ type: "set_events", eventIds })
+                      }
+                    />
+                  </Box>
                   <RegionSelector
                     t={t}
                     label={t("activerecord.attributes.user.region")}
@@ -475,36 +495,21 @@ export default function CompetitionsPage() {
                   borderWidth="2px"
                   stickyHeader
                 >
-                  <Table.Header bg="bg.muted">
-                    <Table.Row>
-                      <Table.ColumnHeader
-                        colSpan={6}
-                        fontWeight="normal"
-                        textAlign="end"
-                        p={2}
-                      >
-                        {t("competitions.index.currently_displaying", {
-                          count: competitionsFiltered.length,
-                        })}
-                      </Table.ColumnHeader>
-                    </Table.Row>
+                  <Table.Header bg="bg.muted" hideBelow="md">
                     <Table.Row>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader>
+                      <Table.ColumnHeader width="1" textAlign="start">
                         {t("competitions.competition_info.date")}
                       </Table.ColumnHeader>
+                      <Table.ColumnHeader></Table.ColumnHeader>
                       <Table.ColumnHeader>
                         {t("competitions.competition_info.name")}
                       </Table.ColumnHeader>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader
-                        display={{ base: "none", md: "table-cell" }}
-                      >
+                      <Table.ColumnHeader hideBelow="lg">
                         {t("competitions.competition_info.location")}
                       </Table.ColumnHeader>
-                      <Table.ColumnHeader
-                        display={{ base: "none", md: "table-cell" }}
-                      >
+                      <Table.ColumnHeader hideBelow="lg">
                         {t("competitions.competition_info.venue")}
                       </Table.ColumnHeader>
                     </Table.Row>
@@ -516,7 +521,11 @@ export default function CompetitionsPage() {
                           {t("competitions.index.titles.in_progress")}
                         </TableHeaderRow>
                         {inProgressComps.map((comp) => (
-                          <CompetitionTableRow comp={comp} key={comp.id} />
+                          <CompetitionTableRow
+                            comp={comp}
+                            key={comp.id}
+                            isRepeatedDate={!firstCompetitionIds.has(comp.id)}
+                          />
                         ))}
                         <TableHeaderRow>
                           {t("competitions.index.titles.upcoming")}
@@ -524,7 +533,11 @@ export default function CompetitionsPage() {
                       </>
                     )}
                     {upcomingComps.map((comp) => (
-                      <CompetitionTableRow comp={comp} key={comp.id} />
+                      <CompetitionTableRow
+                        comp={comp}
+                        key={comp.id}
+                        isRepeatedDate={!firstCompetitionIds.has(comp.id)}
+                      />
                     ))}
                   </Table.Body>
                 </Table.Root>
@@ -900,7 +913,7 @@ function AdvancedFilters({
 
 function TableHeaderRow({
   children,
-  colSpan = 6,
+  colSpan = 7,
 }: {
   children: ReactNode;
   colSpan?: number;
