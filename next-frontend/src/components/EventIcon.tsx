@@ -25,6 +25,7 @@ import events from "@/lib/wca/data/events";
 
 import type { ComponentPropsWithoutRef } from "react";
 import { Tooltip } from "./ui/tooltip";
+import { Center } from "@chakra-ui/react";
 
 const eventIconMap = {
   "333": _333Icon,
@@ -58,13 +59,22 @@ type EventIconIntrinsicProps = ComponentPropsWithoutRef<EventIconIntrinsic>;
 
 type EventIconProps = {
   eventId: string;
+  disabledLabel?: string;
 } & EventIconIntrinsicProps;
 
-const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
+const EventIcon = ({
+  eventId,
+  disabledLabel,
+  ...iconIntrinsicProps
+}: EventIconProps) => {
   const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
 
-  return <IconComponent {...iconIntrinsicProps} />;
+  return (
+    <EventTooltip eventId={eventId} disabledLabel={disabledLabel}>
+      <IconComponent {...iconIntrinsicProps} />
+    </EventTooltip>
+  );
 };
 
 // Chakra hides icons from assistive tech by default, which is right for most of our call sites:
@@ -72,9 +82,10 @@ const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
 //   This is for the icons that stand alone and have to carry the name themselves.
 export const LabelledEventIcon = ({
   eventId,
+  disabledLabel,
   ...iconIntrinsicProps
 }: EventIconProps) => (
-  <Tooltip content={events.byId[eventId]?.name}>
+  <EventTooltip eventId={eventId} disabledLabel={disabledLabel}>
     <EventIcon
       eventId={eventId}
       role="img"
@@ -82,7 +93,25 @@ export const LabelledEventIcon = ({
       aria-label={events.byId[eventId]?.name}
       {...iconIntrinsicProps}
     />
-  </Tooltip>
+  </EventTooltip>
 );
+
+function EventTooltip({
+  eventId,
+  disabledLabel,
+  children,
+}: {
+  eventId: string;
+  disabledLabel?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Tooltip content={disabledLabel ?? events.byId[eventId]?.name}>
+      <Center w="full" h="full">
+        {children}
+      </Center>
+    </Tooltip>
+  );
+}
 
 export default EventIcon;
