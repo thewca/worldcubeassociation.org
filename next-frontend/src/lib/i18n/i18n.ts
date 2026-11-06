@@ -8,15 +8,8 @@ import {
   storageKey,
   defaultNamespace,
 } from "./settings";
-import { Settings } from "luxon";
 
 const runsOnServerSide = typeof window === "undefined";
-
-if (!runsOnServerSide) {
-  i18next.on("languageChanged", (lng) => {
-    Settings.defaultLocale = lng;
-  });
-}
 
 i18next
   .use(initReactI18next)
