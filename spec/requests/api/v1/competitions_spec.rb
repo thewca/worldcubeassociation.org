@@ -127,8 +127,6 @@ RSpec.describe "API v1 Competitions" do
     let!(:match) { round.h2h_matches.create!(match_number: 1) }
     let!(:competitors) { users.map { match.h2h_match_competitors.create!(user: it) } }
 
-    # The winner of the first race is ranked first, so that the live standings
-    # and the posted results below disagree about who came where.
     def enter_live_results(values)
       set = match.h2h_sets.create!(set_number: 1)
 
