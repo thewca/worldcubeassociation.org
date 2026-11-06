@@ -33,6 +33,7 @@ type RegionSelectorOption = {
   disabled?: boolean;
   flag?: JSX.Element;
   content?: JSX.Element;
+  centered?: boolean;
 };
 
 const allRegionsOption = (t: TFunction) => ({
@@ -67,6 +68,7 @@ const regionsOptions = (t: TFunction) =>
       key: "continents_header",
       label: "",
       disabled: true,
+      centered: true,
       content: (
         <Text textStyle="s4" fontSize="xs">
           {t("common.continent")}
@@ -78,6 +80,7 @@ const regionsOptions = (t: TFunction) =>
       key: "countries_header",
       label: "",
       disabled: true,
+      centered: true,
       content: (
         <Text textStyle="s4" fontSize="xs">
           {t("common.country")}
@@ -176,7 +179,7 @@ export default function RegionSelector({
                 <Combobox.Item
                   item={item}
                   key={item.key}
-                  justifyContent="start"
+                  justifyContent={item.centered ? "center" : "start"}
                 >
                   {item.flag}
                   {item.content ?? item.label}
