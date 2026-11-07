@@ -71,7 +71,7 @@ RSpec.describe WcaMonthlyDigest do
       change_role(delegate_role, :regional_delegate_role, group: region)
 
       expect(digest.new_regional_delegates).to eq [
-        "#{user.name} has been appointed as the new Regional Delegate for the #{location} region, " \
+        "#{user.name} has been appointed as the new Regional Delegate for the #{region.name} region, " \
         "as #{previous_regional_delegate_role.user.name} stepped down from this role.",
       ]
     end
@@ -81,7 +81,7 @@ RSpec.describe WcaMonthlyDigest do
       change_role(other_regional_delegate_role, :delegate_role, group: other_region)
       create(:regional_delegate_role, user: user, start_date: change_date, group: region)
 
-      expect(digest.new_regional_delegates).to eq ["#{user.name} has been appointed as the new Regional Delegate for the #{location} region."]
+      expect(digest.new_regional_delegates).to eq ["#{user.name} has been appointed as the new Regional Delegate for the #{region.name} region."]
     end
 
     it "lists new Senior Delegates with their region" do

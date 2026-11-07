@@ -68,7 +68,7 @@ class WcaMonthlyDigest
       predecessor = delegate_changes.find { it.stopped_being?(DELEGATE_STATUSES[:regional_delegate]) && it.role_before.group_id == region.id }
       stepped_down_note = ", as #{predecessor.user.name} stepped down from this role" if predecessor.present?
 
-      "#{change.user.name} has been appointed as the new Regional Delegate for the #{change.location} region#{stepped_down_note}."
+      "#{change.user.name} has been appointed as the new Regional Delegate for the #{region.name} region#{stepped_down_note}."
     end
   end
 
