@@ -6,13 +6,13 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { TFunction } from "i18next";
-import type { ErrorDetails } from "@/lib/wca/errorDetails";
+import type { ResponseMetadata } from "@/lib/wca/responseMetadata";
 
 export default function OpenapiError({
   t,
   response,
 }: {
-  response: Response | ErrorDetails;
+  response: Response | ResponseMetadata;
   t: TFunction;
 }) {
   return (
