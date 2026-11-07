@@ -146,7 +146,7 @@ export default function MobileTabMenu({
       hideFrom="md"
     >
       <Card.Root variant="elevated" rounded="3xl" colorPalette="blue">
-        <Card.Body p="1" flexDirection="row" gap="1">
+        <Card.Body p="1.5" flexDirection="row" gap="1">
           {Object.entries({ ...grouped, ...custom }).map(
             ([group, groupTabs]) =>
               groupTabs.length === 1 && group !== "more" ? (
