@@ -974,6 +974,14 @@ function SortOrderSelect({
   const values = createListCollection({
     items: sortOrderValues.map(({ value, key }) => ({
       value: value,
+      // i18n-tasks-use t("competitions.index.sort.start_date_asc")
+      // i18n-tasks-use t("competitions.index.sort.start_date_desc")
+      // i18n-tasks-use t("competitions.index.sort.end_date_asc")
+      // i18n-tasks-use t("competitions.index.sort.end_date_desc")
+      // i18n-tasks-use t("competitions.index.sort.name_asc")
+      // i18n-tasks-use t("competitions.index.sort.name_desc")
+      // i18n-tasks-use t("competitions.index.sort.announced_at_asc")
+      // i18n-tasks-use t("competitions.index.sort.announced_at_desc")
       label: t(`competitions.index.sort.${key}`),
     })),
   });
