@@ -195,6 +195,10 @@ class UserGroup < ApplicationRecord
     parent_group_id.nil?
   end
 
+  def root_group
+    parent_group&.root_group || self
+  end
+
   def self.roles_of_group_type(group_type, includes_params: [])
     UserRole.includes(:group).includes(includes_params).where(group: { group_type: group_type })
   end

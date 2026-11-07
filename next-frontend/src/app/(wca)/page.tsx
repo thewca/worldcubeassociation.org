@@ -21,11 +21,14 @@ import {
   AbsoluteCenter,
   Float,
   Carousel,
+  Alert,
+  CloseButton,
 } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { connection } from "next/server";
 
 import type {
   TextCardBlock,
@@ -52,12 +55,17 @@ import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
 import OpenapiError from "@/components/ui/openapiError";
+import { LuX } from "react-icons/lu";
 
 type TwoBlocksUnion =
   TwoBlocksLevel0Block | TwoBlocksLevel1Block | TwoBlocksLevel2Block;
 
 type TwoBlocksRatio = TwoBlocksUnion["ratio"];
 type TwoBlocksSpanConfig = { left: number; right: number };
+
+// The gaps between blocks and the padding around them read as one rhythm, so they
+//   share a value rather than drifting apart.
+const HOMEPAGE_SPACING = { base: "3.5", md: "6", lg: "8" };
 
 const RATIO_GRID_MAP: Record<TwoBlocksRatio, TwoBlocksSpanConfig> = {
   "1/3 & 2/3": { left: 1, right: 2 },
@@ -71,14 +79,14 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
   return (
     <Card.Root
       colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
+      colorVariant="solid"
       width="full"
     >
       {block.headerImage && (
         <MediaImage
           media={block.headerImage as Media}
           aspectRatio="3/1"
-          borderTopRadius="l3"
+          borderTopRadius="wca"
         />
       )}
       <Card.Body>
@@ -86,7 +94,11 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
           {block.heading}
         </Card.Title>
         {block.separatorAfterHeading && <Separator size="md" />}
-        <ChakraMarkdown paragraphAs={Card.Description} textStyle="body">
+        <ChakraMarkdown
+          paragraphAs={Card.Description}
+          textStyle="body"
+          listProps={{ textStyle: "body" }}
+        >
           {block.bodyMarkdown}
         </ChakraMarkdown>
       </Card.Body>
@@ -155,6 +167,7 @@ const BannerImageWithGradient = ({
     <Box position="relative" width={boxWidth} hideBelow="md">
       <MediaImage
         media={mainImage as Media}
+        sizes="100vw"
         width="full"
         maxHeight="sm"
         bg={targetColor}
@@ -172,8 +185,10 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
   return (
     <Card.Root
       flexDirection="row"
+      // Always keep main image and its gradient on the left side
+      _rtl={{ flexDirection: "row-reverse" }}
       colorPalette={block.colorPalette}
-      colorVariant="slatePastel"
+      colorVariant="solid"
       width="full"
       maxHeight="xs" // somewhat arbitrary, if you have a better idea please shout
       overflow="hidden"
@@ -197,6 +212,7 @@ const ImageBanner = ({ block }: { block: ImageBannerBlock }) => {
           <ChakraMarkdown
             paragraphAs={Card.Description}
             textStyle={{ base: "body", md: "s2" }}
+            listProps={{ textStyle: { base: "body", md: "s2" } }}
           >
             {block.bodyMarkdown}
           </ChakraMarkdown>
@@ -246,13 +262,16 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
   return (
     <LinkBox asChild>
       <Card.Root
+        interactive={!!href}
+        className={href ? "group" : undefined}
         overflow="hidden"
         colorPalette={block.colorPalette}
-        colorVariant="slatePastel"
+        colorVariant="solid"
         width="full"
       >
         <LinkOverlay
           href={href}
+          aria-label={block.heading ?? undefined}
           target={block.newTab ? "_blank" : undefined}
           rel={block.newTab ? "noopener noreferrer" : undefined}
         />
@@ -288,16 +307,30 @@ const FeaturedCompetition = async ({
 
   return (
     <Card.Root
+      asChild
+      interactive
+      className="group"
       colorPalette={colorPalette}
-      colorVariant="slatePastel"
+      colorVariant="solid"
       height="full"
     >
-      <Card.Body>
-        <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
-          {competition.name}
-        </Card.Title>
-        <CompetitionShortlist comp={competition} t={t} />
-      </Card.Body>
+      <Link
+        href={route({
+          pathname: "/competitions/[competitionId]",
+          query: { competitionId: competition.id },
+        })}
+      >
+        <Card.Body>
+          <Card.Title textStyle={{ base: "h3", md: "h2" }} flex="1">
+            {competition.name}
+          </Card.Title>
+          <CompetitionShortlist
+            comp={competition}
+            t={t}
+            items={["city", "start_date", "spots_left"]}
+          />
+        </Card.Body>
+      </Link>
     </Card.Root>
   );
 };
@@ -315,7 +348,9 @@ const FeaturedCompetitions = async ({
             Upcoming Competitions
           </Text>
           <Button asChild variant="pastelSolid">
-            <Link href="/competitions">View all Competitions</Link>
+            <ChakraLink asChild textStyle={undefined}>
+              <Link href="/competitions">View all Competitions</Link>
+            </ChakraLink>
           </Button>
         </HStack>
       </Card.Title>
@@ -351,7 +386,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
           return (
             <Carousel.Item key={slide.id} index={i} asChild>
               <Card.Root
-                colorVariant="slatePastel"
+                colorVariant="solid"
                 flexDirection={{ base: "column", md: "row" }}
                 overflow="hidden"
                 colorPalette={slide.colorPalette}
@@ -369,6 +404,7 @@ const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
                   <ChakraMarkdown
                     paragraphAs={Card.Description}
                     textStyle="quote"
+                    listProps={{ textStyle: "quote" }}
                   >
                     {testimonial.fullTestimonialMarkdown!}
                   </ChakraMarkdown>
@@ -398,7 +434,7 @@ const renderVerticalLayout = (
 ) => {
   return (
     <VStack
-      gap={8}
+      gap={HOMEPAGE_SPACING}
       justifyContent={
         growthStrategy === "justify" ? "space-between" : undefined
       }
@@ -442,7 +478,7 @@ const renderHorizontalSplit = (
   return (
     <SimpleGrid
       columns={{ base: 1, md: foldMd ? 1 : totalCols, lg: totalCols }}
-      gap={8}
+      gap={HOMEPAGE_SPACING}
       width="full"
     >
       <GridItem
@@ -499,10 +535,11 @@ const renderBlock = (
   }
 };
 
-export default async function Homepage() {
+const PayloadContents = async () => {
   const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
   const { lng } = await getT();
+
   const homepage = await payload.findGlobal({
     slug: "home",
     draft: isDraftMode,
@@ -514,7 +551,7 @@ export default async function Homepage() {
 
   if (homepageEntries.length === 0) {
     return (
-      <Center padding={10}>
+      <Center p={HOMEPAGE_SPACING} asChild>
         <Text>
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
@@ -530,8 +567,41 @@ export default async function Homepage() {
   }
 
   return (
-    <Box p={{ base: "3.5", md: "6", lg: "8" }} asChild>
+    <Center p={HOMEPAGE_SPACING} asChild>
       {renderVerticalLayout(homepageEntries)}
-    </Box>
+    </Center>
+  );
+};
+
+export default async function Homepage({
+  searchParams,
+}: {
+  searchParams: Promise<{ signed_out?: string }>;
+}) {
+  await connection();
+
+  const { t } = await getT();
+
+  // Rails redirects here with this flag once it has ended its own session.
+  //   Dismissing links back to the bare homepage, which drops the flag.
+  const { signed_out: signedOut } = await searchParams;
+
+  return (
+    <>
+      {signedOut === "true" && (
+        <Box px={HOMEPAGE_SPACING} pt={HOMEPAGE_SPACING}>
+          <Alert.Root status="success">
+            <Alert.Indicator />
+            <Alert.Title>{t("devise.sessions.destroy.success")}</Alert.Title>
+            <CloseButton asChild pos="relative" top="-2" insetEnd="-2">
+              <Link href="/">
+                <LuX />
+              </Link>
+            </CloseButton>
+          </Alert.Root>
+        </Box>
+      )}
+      <PayloadContents />
+    </>
   );
 }

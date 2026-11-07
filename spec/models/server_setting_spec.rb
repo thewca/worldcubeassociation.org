@@ -13,6 +13,20 @@ RSpec.describe ServerSetting do
     end
   end
 
+  context "staging OAuth login flag" do
+    it "is on when the setting has never been written" do
+      expect(ServerSetting.staging_oauth_login_enabled?).to be(true)
+    end
+
+    it "is off only once the setting is written as false" do
+      setting = ServerSetting.create!(name: ServerSetting::STAGING_OAUTH_LOGIN, value: 'false')
+      expect(ServerSetting.staging_oauth_login_enabled?).to be(false)
+
+      setting.update!(value: 'true')
+      expect(ServerSetting.staging_oauth_login_enabled?).to be(true)
+    end
+  end
+
   context "parses booleans" do
     it "casts truthy values into actual boolean" do
       server_setting = ServerSetting.create!(name: 'dummy_true', value: '1')

@@ -16,9 +16,17 @@ export type WcifActivity = components["schemas"]["WcifActivity"];
 export type WcifVenue = components["schemas"]["WcifVenue"];
 export type WcifRoom = components["schemas"]["WcifRoom"];
 
+// The activity fields the schedule views read. Server components pass these
+// instead of full activities so that `childActivities` and `extensions` — half
+// a megabyte of JSON on a big competition — stay out of the client payload.
+export type ScheduleActivity = Pick<
+  WcifActivity,
+  "id" | "activityCode" | "startTime" | "endTime"
+>;
+
 export const earliestWithLongestTieBreaker = (
-  a: WcifActivity,
-  b: WcifActivity,
+  a: ScheduleActivity,
+  b: ScheduleActivity,
 ) => {
   if (a.startTime < b.startTime) {
     return -1;
@@ -35,14 +43,16 @@ export const earliestWithLongestTieBreaker = (
   return 0;
 };
 
-const areGroupable = (a: WcifActivity, b: WcifActivity) =>
+const areGroupable = (a: ScheduleActivity, b: ScheduleActivity) =>
   a.startTime === b.startTime &&
   a.endTime === b.endTime &&
   a.activityCode === b.activityCode;
 
 // assumes they are sorted
-export const groupActivities = (activities: WcifActivity[]) => {
-  const grouped: WcifActivity[][] = [];
+export const groupActivities = <T extends ScheduleActivity>(
+  activities: T[],
+) => {
+  const grouped: T[][] = [];
   activities.forEach((activity) => {
     if (
       grouped.length > 0 &&
@@ -56,10 +66,10 @@ export const groupActivities = (activities: WcifActivity[]) => {
   return grouped;
 };
 
-export const getActivityEventId = (activity: WcifActivity) =>
+export const getActivityEventId = (activity: ScheduleActivity) =>
   activity.activityCode.split("-")[0];
 
-export const getActivityRoundId = (activity: WcifActivity) =>
+export const getActivityRoundId = (activity: ScheduleActivity) =>
   activity.activityCode.split("-").slice(0, 2).join("-");
 
 export const findActivityEvent = (
@@ -78,8 +88,8 @@ export const findActivityRound = (
   return wcifRounds.find((round) => round.id === roundId);
 };
 
-export const activitiesOnDate = (
-  activities: WcifActivity[],
+export const activitiesOnDate = <T extends ScheduleActivity>(
+  activities: T[],
   date: DateTime,
   timeZone: string | Zone,
 ) =>

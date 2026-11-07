@@ -10,6 +10,7 @@ module JobUtils
     ClearConnectedPaymentIntegrations,
     ComputeAuxiliaryData,
     DumpDeveloperDatabase,
+    DumpPayloadDatabase,
     DumpPublicResultsDatabase,
     GenerateChore,
     RegistrationReminderJob,

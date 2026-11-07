@@ -18,45 +18,57 @@ export default function RankingsTable({
 }: RankingsTableProps) {
   const { t } = useT();
 
+  const ranks = rankings.reduce<number[]>(
+    (previousRanks, ranking, index) => [
+      ...previousRanks,
+      ranking.value === rankings[index - 1]?.value
+        ? previousRanks[index - 1]
+        : index + 1,
+    ],
+    [],
+  );
+
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>
-            {isByRegion ? t("results.table_elements.region") : "#"}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {t("results.table_elements.name")}
-          </Table.ColumnHeader>
-          <Table.ColumnHeader>
-            {t("results.table_elements.result")}
-          </Table.ColumnHeader>
-          {!isByRegion && (
+    <Table.ScrollArea rounded="md">
+      <Table.Root size="xs" striped>
+        <Table.Header>
+          <Table.Row>
             <Table.ColumnHeader>
-              {t("results.table_elements.region")}
+              {isByRegion ? t("results.table_elements.region") : "#"}
             </Table.ColumnHeader>
-          )}
-          <Table.ColumnHeader>
-            {t("results.table_elements.competition")}
-          </Table.ColumnHeader>
-          {isAverage && (
-            <Table.ColumnHeader colSpan={5}>
-              {t("results.table_elements.solves")}
+            <Table.ColumnHeader>
+              {t("results.table_elements.name")}
             </Table.ColumnHeader>
-          )}
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {rankings.map((ranking, index) => (
-          <RankingsRow
-            key={`${ranking.id}-${index}`}
-            ranking={ranking}
-            index={index}
-            isAverage={isAverage}
-            isByRegion={isByRegion}
-          />
-        ))}
-      </Table.Body>
-    </Table.Root>
+            <Table.ColumnHeader>
+              {t("results.table_elements.result")}
+            </Table.ColumnHeader>
+            {!isByRegion && (
+              <Table.ColumnHeader>
+                {t("results.table_elements.region")}
+              </Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {t("results.table_elements.competition")}
+            </Table.ColumnHeader>
+            {isAverage && (
+              <Table.ColumnHeader colSpan={5}>
+                {t("results.table_elements.solves")}
+              </Table.ColumnHeader>
+            )}
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {rankings.map((ranking, index) => (
+            <RankingsRow
+              key={`${ranking.id}-${index}`}
+              ranking={ranking}
+              rank={ranks[index]}
+              isAverage={isAverage}
+              isByRegion={isByRegion}
+            />
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 }

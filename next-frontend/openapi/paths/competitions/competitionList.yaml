@@ -4,10 +4,25 @@ get:
     - competitions
   operationId: competitionList
   parameters:
+    - name: page
+      in: query
+      schema:
+        type: integer
+      description: Page number to retrieve
+    - name: per_page
+      in: query
+      schema:
+        type: integer
+      description: Number of results per page
     - name: include_cancelled
       in: query
       schema:
         type: boolean
+    - name: championship_only
+      in: query
+      schema:
+        type: boolean
+      description: Only return championships
     - name: continent
       in: query
       schema:
@@ -53,6 +68,11 @@ get:
       schema:
         type: string
         format: datetime
+    - name: scoretaking_software
+      in: query
+      schema:
+        type: string
+        enum: [external, wca_live, internal]
   responses:
     '200':
       description: Successful response

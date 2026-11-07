@@ -9,6 +9,7 @@ import {
   Separator,
   Button,
   Stack,
+  Portal,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
@@ -43,6 +44,8 @@ export function IncidentTags({ tags, action }: IncidentTagsProps) {
         key={id}
         id={id.toString()}
         typeLabel={t(
+          // i18n-tasks-use t("incidents_log.tags.guideline")
+          // i18n-tasks-use t("incidents_log.tags.regulation")
           url.includes("guideline")
             ? "incidents_log.tags.guideline"
             : "incidents_log.tags.regulation",
@@ -200,32 +203,44 @@ function Tag({
         <ChakraTag.Root
           size="md"
           colorScheme={colorSchemeMap[labelClass]}
-          mr={2}
+          me={2}
         >
           {label}
         </ChakraTag.Root>
       </Popover.Trigger>
-      <Popover.Content>
-        <Popover.Header fontWeight="bold">
-          {titleLink ? (
-            <Link href={titleLink} target="_blank" rel="noopener noreferrer">
-              {title}
-            </Link>
-          ) : (
-            title
-          )}
-        </Popover.Header>
-        <Popover.Body>
-          {/* Stack drops falsy children, so absent sections take no separator with them. */}
-          <Stack separator={<Separator />} gap="2">
-            {description && (
-              <Box dangerouslySetInnerHTML={{ __html: description }} />
-            )}
-            {links && <Box>{links}</Box>}
-            {buttons && <Box>{buttons}</Box>}
-          </Stack>
-        </Popover.Body>
-      </Popover.Content>
+      <Portal>
+        <Popover.Positioner>
+          <Popover.Content>
+            <Popover.Header fontWeight="bold">
+              {titleLink ? (
+                <Link
+                  href={titleLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {title}
+                </Link>
+              ) : (
+                title
+              )}
+            </Popover.Header>
+            <Popover.Body>
+              {/* Stack drops falsy children, so absent sections take no separator with them. */}
+              <Stack separator={<Separator />} gap="2">
+                {description && (
+                  <Box
+                    dangerouslySetInnerHTML={{
+                      __html: description,
+                    }}
+                  />
+                )}
+                {links && <Box>{links}</Box>}
+                {buttons && <Box>{buttons}</Box>}
+              </Stack>
+            </Popover.Body>
+          </Popover.Content>
+        </Popover.Positioner>
+      </Portal>
     </Popover.Root>
   );
 }

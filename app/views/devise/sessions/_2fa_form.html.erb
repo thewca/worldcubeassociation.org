@@ -1,5 +1,6 @@
 <% resource_params ||= {} %>
 <%= simple_form_for(form_object, as: form_object_name, url: form_url, html: { role: "form" }, method: :post) do |f| %>
+  <%= hidden_field_tag :classic, true if classic_sign_in? %>
   <%= f.input :remember_me, as: :hidden, input_html: { value: resource_params.fetch(:remember_me, 0) } %>
   <%= f.input :otp_attempt, autofocus: true, class: "form-control" %>
   <%= f.submit t('devise.sessions.new.2fa.confirm'), class: "btn btn-primary", tabindex: "3" %>

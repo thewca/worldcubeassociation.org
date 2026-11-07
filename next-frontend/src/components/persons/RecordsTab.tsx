@@ -16,7 +16,7 @@ const RecordsTab: React.FC<RecordsTabProps> = ({ wcaId }) => {
 
   const { data: recordsQuery, isLoading } = api.useQuery(
     "get",
-    "/v0/persons/{wca_id}/records",
+    "/v1/persons/{wca_id}/records",
     {
       params: { path: { wca_id: wcaId } },
     },

@@ -33,12 +33,12 @@ export function CallToActionBlock({
       fluid
     >
       <Stack direction="column">
-        <Box color="gray.700" fontSize="lg">
+        <Box color="fg.muted" fontSize="lg">
           <ChakraMarkdown>{content}</ChakraMarkdown>
         </Box>
 
         <Stack direction={{ base: "column", sm: "row" }}>
-          <ButtonGroup colorScheme="blue" size="lg">
+          <ButtonGroup colorScheme="blue" size="lg" flexWrap="wrap">
             {buttons.map((button, i) => (
               <Button key={i} variant={i === 0 ? "solid" : "outline"} asChild>
                 <Link

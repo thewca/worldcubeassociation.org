@@ -1,7 +1,7 @@
 import {
   Combobox,
   Field,
-  Heading,
+  Text,
   Portal,
   useFilter,
   useListCollection,
@@ -10,7 +10,7 @@ import WcaFlag from "@/components/WcaFlag";
 import countries from "@/lib/wca/data/countries";
 import { TFunction } from "i18next";
 import continents from "@/lib/wca/data/continents";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 
 interface RegionSelectorProps {
   onlyCountries?: boolean;
@@ -56,14 +56,7 @@ const countryOptions = (t: TFunction) =>
     .map((country) => ({
       key: country.id,
       label: t(`countries.${country.iso2}`),
-      flag: (
-        <WcaFlag
-          code={country.iso2}
-          fallback={country.id}
-          width={32}
-          height={25}
-        />
-      ),
+      flag: <WcaFlag code={country.iso2} size="lg" />,
       value: country.iso2,
     }))
     .toSorted((a, b) => a.label.localeCompare(b.label));
@@ -77,9 +70,9 @@ const regionsOptions = (t: TFunction) =>
       disabled: true,
       centered: true,
       content: (
-        <Heading textStyle="s4" fontSize="sm">
+        <Text textStyle="s4" fontSize="xs">
           {t("common.continent")}
-        </Heading>
+        </Text>
       ),
     },
     ...continentOptions(t),
@@ -89,9 +82,9 @@ const regionsOptions = (t: TFunction) =>
       disabled: true,
       centered: true,
       content: (
-        <Heading textStyle="s4" fontSize="sm">
+        <Text textStyle="s4" fontSize="xs">
           {t("common.country")}
-        </Heading>
+        </Text>
       ),
     },
     ...countryOptions(t),
@@ -109,6 +102,7 @@ export default function RegionSelector({
   t,
 }: RegionSelectorProps) {
   const { contains } = useFilter({ sensitivity: "base" });
+  const [inputValue, setInputValue] = useState("");
 
   const items: RegionSelectorOption[] = onlyCountries
     ? countryOptions(t)
@@ -125,23 +119,58 @@ export default function RegionSelector({
       <Combobox.Root
         lazyMount
         collection={collection}
-        onInputValueChange={(e) => filter(e.inputValue)}
+        onInputValueChange={(e) => {
+          setInputValue(e.inputValue);
+          filter(e.inputValue);
+        }}
+        inputBehavior="autohighlight"
         onValueChange={(e) => onRegionChange(e.value[0])}
         width="100%"
-        openOnClick
         value={region ? [region] : undefined}
         disabled={disabled}
         defaultValue={[ALL_REGIONS_VALUE]}
         invalid={error !== undefined}
         selectionBehavior={nullable ? "clear" : "replace"}
       >
-        <Combobox.Control>
-          <Combobox.Input placeholder={name} cursor="pointer" />
-          <Combobox.IndicatorGroup>
-            <Combobox.ClearTrigger />
-            <Combobox.Trigger />
-          </Combobox.IndicatorGroup>
-        </Combobox.Control>
+        <Combobox.Context>
+          {(api) => (
+            <Combobox.Control>
+              <Combobox.Input
+                placeholder={name}
+                cursor="pointer"
+                autoComplete="off"
+                data-1p-ignore
+                data-lpignore="true"
+                onClick={() => api.setOpen(!api.open)}
+                // Focusing an input that already holds a region otherwise shows that one
+                // region filtered down to itself, so you have to clear it by hand before
+                // you can type or browse. The selection itself is untouched, so the list
+                // still opens with the current region checked.
+                onFocus={() => api.setInputValue("")}
+                // Tabbing away otherwise discards what was typed and snaps back to the
+                // current selection, so commit the highlighted (first) match instead.
+                onKeyDown={(e) => {
+                  if (e.key !== "Tab" || inputValue === "") return;
+
+                  const firstMatch = collection.items.find(
+                    (item) => !item.disabled,
+                  );
+
+                  if (firstMatch) onRegionChange(firstMatch.value);
+                }}
+              />
+              <Combobox.IndicatorGroup>
+                {/* Clearing is how you start a new search, so reopen the list on the
+                    way out rather than leaving an empty, closed field. */}
+                <Combobox.ClearTrigger
+                  cursor="pointer"
+                  onClick={() => api.setOpen(true)}
+                />
+                <Combobox.Trigger />
+              </Combobox.IndicatorGroup>
+            </Combobox.Control>
+          )}
+        </Combobox.Context>
         <Portal>
           <Combobox.Positioner>
             <Combobox.Content>

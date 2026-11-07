@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     post 'users/generate-email-otp' => 'sessions#generate_email_otp'
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
+    get 'users/sign-out-from-next' => 'sessions#destroy_from_next', as: :destroy_user_session_from_next
   end
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
@@ -102,8 +103,7 @@ Rails.application.routes.draw do
     post 'registrations/validate_and_convert_registrations' => 'registrations#validate_and_convert_registrations', as: :registrations_validate_and_convert
     get 'registrations/add' => 'registrations#add', as: :registrations_add
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
-    get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet
-    get 'registrations/psych-sheet/:event_id' => 'registrations#psych_sheet_event', as: :psych_sheet_event
+    get 'registrations/psych-sheet(/:event_id)', to: redirect('/competitions/%{competition_id}/registrations')
     resources :registrations, only: %i[index edit], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
@@ -118,6 +118,9 @@ Rails.application.routes.draw do
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     get 'upload-scrambles' => 'results_submission#upload_scrambles', as: :upload_scrambles
     post 'submit-results' => 'results_submission#create', as: :submit_results
+    # TODO: This should use `live-results-preview` ideally, but as of September 26 we have an ELB rule
+    #   that grabs /live* for ILR redirects which conflicts with this route. Feel free to clean up after full ILR launch.
+    get 'synced-results-preview' => 'results_submission#live_results_preview', as: :live_results_preview
     get 'unfinished-persons' => 'results_submission#unfinished_persons', as: :unfinished_persons
     resources :scramble_files, only: %i[index create destroy], shallow: true do
       patch 'update-round-matching' => 'scramble_files#update_round_matching', on: :collection
@@ -171,6 +174,7 @@ Rails.application.routes.draw do
     resources :scrambles, except: %i[index new], controller: 'admin/scrambles'
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
     get 'sanity-check' => "admin#sanity_check", as: :sanity_check
+    get 'migration-dashboard' => "admin#migration_dashboard", as: :migration_dashboard
     get 'run-sanity-check' => "admin#run_sanity_check", as: :sanity_check_run
     get 'add-exclusion' => "admin#add_exclusion", as: :add_exclusion
   end
@@ -184,6 +188,7 @@ Rails.application.routes.draw do
   get 'export/results/:version/:file_type' => 'database#results_permalink', as: :results_permalink
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
   get 'export/developer/wca-developer-database-dump' => "database#dev_export_permalink"
+  get 'export/payload/wca-payload-database-dump' => "database#payload_export_permalink", as: :payload_export_permalink
   # redirect from the old path that used to be linked on GitHub
   get 'wst/wca-developer-database-dump.zip' => "database#dev_export_permalink"
 
@@ -262,8 +267,6 @@ Rails.application.routes.draw do
 
   get 'translations', to: redirect('translations/status', status: 302)
   get 'translations/status' => 'translations#index'
-  get 'translations/edit' => 'translations#edit'
-  patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
   get 'documents' => 'static_pages#documents'
@@ -284,6 +287,8 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'translators' => 'static_pages#translators'
   get 'volunteer-positions', to: redirect('https://docs.google.com/spreadsheets/d/13JhGJWDfJR96MYgPpxkSaV2E3bMIdIWjWLuYO83vOls/edit?gid=0#gid=0', status: 302)
+  get 'trainee-delegate-application' => 'trainee_delegate_applications#new', as: :trainee_delegate_application
+  post 'trainee-delegate-application' => 'trainee_delegate_applications#create'
   get 'officers-and-board' => 'static_pages#officers_and_board'
 
   resources :regional_organizations, only: %i[new create update edit destroy], path: '/regional-organizations'
@@ -315,9 +320,9 @@ Rails.application.routes.draw do
   get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
   get '/regulations/translations/:language/:pdf' => "regulations_translations#translated_pdfs"
   get '/regulations/history' => 'regulations#history'
-  get '/regulations/history/official/:id' => 'regulations#historical_regulations'
-  get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
-  get '/regulations/history/official/:id/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/history/official/%{id}/wca-regulations-and-guidelines.pdf', status: 302)
+  get '/regulations/history/official/:id' => 'regulations#historical_regulations', constraints: { id: /\d{4}-\d{2}-\d{2}/ }
+  get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines', constraints: { id: /\d{4}-\d{2}-\d{2}/ }
+  get '/regulations/history/official/:id/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/history/official/%{id}/wca-regulations-and-guidelines.pdf', status: 302), constraints: { id: /\d{4}-\d{2}-\d{2}/ }
 
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
@@ -366,11 +371,19 @@ Rails.application.routes.draw do
   namespace :api do
     get '/', to: redirect('/help/api', status: 302)
 
-    # While this is the start of a v1 API, this is currently not usable by outside developers as
-    # getting a JWT token requires you to be logged in through the Website
     namespace :v1 do
+      get '/persons/:wca_id/results' => 'persons#results', as: :person_results
+      get '/persons/:wca_id/records' => 'persons#records', as: :person_records
+      get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
+      get '/competitions/live' => 'competitions#live', as: :live_competitions
+
       resources :competitions, only: [] do
+        get '/results' => 'competitions#results', as: :results
+        get '/podiums' => 'competitions#podiums', as: :podiums
+        get '/head-to-head' => 'competitions#head_to_head', as: :head_to_head
+
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
+        resource :bookmark, only: %i[show create destroy]
         namespace :live do
           get '/rounds/:round_id' => 'live#round_results', as: :live_round_results
           put '/rounds/:round_id/open' => "live#open_round", as: :live_round_open
@@ -409,6 +422,7 @@ Rails.application.routes.draw do
 
         member do
           get 'registration_config', to: 'registrations#registration_config', as: :registration_config
+          get 'registration_eligibility', to: 'registrations#registration_eligibility', as: :registration_eligibility
         end
       end
     end
@@ -448,7 +462,7 @@ Rails.application.routes.draw do
       get '/regulations' => 'regulations#show', as: :regulations
       get '/regulations/translations' => 'regulations#translations', as: :regulations_translations
       get '/regulations/translations/:language' => 'regulations#translation', as: :regulations_translation
-      get '/regulations/history/official/:version' => 'regulations#historical', as: :regulations_historical
+      get '/regulations/history/official/:version' => 'regulations#historical', as: :regulations_historical, constraints: { version: /\d{4}-\d{2}-\d{2}/ }
       get '/geocoding/search' => 'geocoding#location_from_query', as: :geocoding_search
       get '/geocoding/time_zone' => 'geocoding#time_zone_from_coordinates', as: :geocoding_time_zone
       get '/countries' => 'api#countries'

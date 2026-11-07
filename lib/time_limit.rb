@@ -89,7 +89,7 @@ class TimeLimit
       if round.can_change_time_limit?
         time_str
       else
-        I18n.t "time_limit.#{round.event.id}"
+        I18nUtils.optional_t("time_limit.#{round.event.id}")
       end
     when 1
       I18n.t("time_limit.cumulative.one_round", time: time_str)

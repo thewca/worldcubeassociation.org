@@ -1,5 +1,6 @@
 import { CollectionConfig } from "payload";
 import { iconMap, IconName } from "@/components/icons/iconMap";
+import { qualityTeamAccess } from "@/payload.access";
 
 const iconOptions = Object.keys(iconMap) as IconName[];
 
@@ -24,6 +25,11 @@ const documentCategories = [
 
 export const Documents: CollectionConfig = {
   slug: "documents",
+  access: {
+    create: qualityTeamAccess,
+    update: qualityTeamAccess,
+    delete: qualityTeamAccess,
+  },
   labels: {
     singular: "Document",
     plural: "Documents",
@@ -36,6 +42,10 @@ export const Documents: CollectionConfig = {
       name: "title",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description: "Name of the document, shown as the link text.",
+      },
     },
     {
       name: "icon",
@@ -51,6 +61,9 @@ export const Documents: CollectionConfig = {
       name: "link",
       type: "text",
       required: true,
+      admin: {
+        description: "URL the document links to.",
+      },
     },
     {
       name: "category",

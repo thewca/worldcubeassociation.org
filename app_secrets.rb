@@ -49,7 +49,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
 
     vault :DATABASE_PASSWORD
     vault :GOOGLE_MAPS_API_KEY
-    vault :GITHUB_CREATE_PR_ACCESS_TOKEN
     vault :STRIPE_API_KEY
     vault :OTP_ENCRYPTION_KEY
     vault :STRIPE_CLIENT_ID
@@ -64,8 +63,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :RECAPTCHA_PRIVATE_KEY
     vault :SECRET_KEY_BASE
     vault :STRIPE_PUBLISHABLE_KEY
-    vault :AWS_ACCESS_KEY_ID
-    vault :AWS_SECRET_ACCESS_KEY
     vault :STRIPE_WEBHOOK_SECRET
     vault :RECAPTCHA_PUBLIC_KEY
     vault :CDN_AVATARS_DISTRIBUTION_ID
@@ -80,6 +77,7 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     vault :WRC_WEBHOOK_USERNAME
     vault :WRC_WEBHOOK_PASSWORD
     vault :CURRENCY_LAYER_API_KEY
+    vault :PAYLOAD_MANIFEST_PASSWORD
 
     # To allow logging in to staging with your prod account
     unless EnvConfig.WCA_LIVE_SITE?
@@ -89,7 +87,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
-    mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string
     mandatory :STRIPE_API_KEY, :string
     mandatory :OTP_ENCRYPTION_KEY, :string
     mandatory :STRIPE_CLIENT_ID, :string
@@ -104,8 +101,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     mandatory :STAGING_OAUTH_CLIENT, :string
     mandatory :STAGING_OAUTH_SECRET, :string
 
-    optional :AWS_ACCESS_KEY_ID, :string, ''
-    optional :AWS_SECRET_ACCESS_KEY, :string, ''
     optional :STRIPE_WEBHOOK_SECRET, :string, ''
     optional :RECAPTCHA_PUBLIC_KEY, :string, ''
     optional :RECAPTCHA_PRIVATE_KEY, :string, ''
@@ -123,5 +118,6 @@ AppSecrets = SuperConfig.new(raise_exception: !EnvConfig.ASSETS_COMPILATION?) do
     optional :WRC_WEBHOOK_USERNAME, :string, ''
     optional :WRC_WEBHOOK_PASSWORD, :string, ''
     optional :CURRENCY_LAYER_API_KEY, :string, ''
+    optional :PAYLOAD_MANIFEST_PASSWORD, :string, ''
   end
 end

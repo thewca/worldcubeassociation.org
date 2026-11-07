@@ -1,0 +1,27 @@
+type: object
+description: >-
+  One event's podium, ordered by `global_pos`. Grouped by event rather than by round because a
+  Dual Round podium spans both of its rounds, keeping only each competitor's better result — every
+  round of a link shares an event and a format, so those sit here.
+required:
+  - event_id
+  - format_id
+  - ranking_mode
+  - results
+properties:
+  event_id:
+    type: string
+    example: "333fm"
+  format_id:
+    type: string
+    example: "m"
+  ranking_mode:
+    $ref: '../results/RankingMode.yaml'
+  results:
+    type: array
+    description: >-
+      The competitors placed first to third by `global_pos`, ties included, so this can hold more
+      or fewer than three results. `pos` is the position within whichever round holds the
+      competitor's better result and does not order this list.
+    items:
+      $ref: '../results/V1RoundResult.yaml'

@@ -8,6 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: >-
+      github.event.issue.pull_request &&
+      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
 
     steps:
       - name: Trigger deployment on comment
@@ -58,6 +61,7 @@ jobs:
           registry: ${{ steps.login-ecr.outputs.registry }}/wca-nextjs
           tag: nextjs-staging
           base_url: staging.worldcubeassociation.org
+          asset_bucket: assets-staging.worldcubeassociation.org
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |

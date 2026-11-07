@@ -1,0 +1,15 @@
+type: object
+required:
+  - formatted_address
+  - latitude
+  - longitude
+properties:
+  formatted_address:
+    type: string
+    example: 'Berlin, Germany'
+  latitude:
+    type: number
+    example: 52.52
+  longitude:
+    type: number
+    example: 13.405

@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.4.6'
+ruby '4.0.6'
 
 gem 'aws-sdk-sqs'
 gem 'superconfig'

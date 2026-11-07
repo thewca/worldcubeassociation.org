@@ -11,10 +11,13 @@ required:
   - country_iso2
   - city
   - venue
+  - venue_address
   - latitude_degrees
   - longitude_degrees
   - event_ids
   - main_event_id
+  - base_entry_fee_lowest_denomination
+  - currency_code
   - competitor_limit
   - championship_types
 properties:
@@ -37,13 +40,17 @@ properties:
     type: string
     format: date-time
   announced_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
   country_iso2:
     type: string
   city:
     type: string
   venue:
+    type: string
+  venue_address:
     type: string
   latitude_degrees:
     type: number
@@ -57,8 +64,15 @@ properties:
       type: string
   main_event_id:
     type: string
-  competitor_limit:
+  base_entry_fee_lowest_denomination:
     type: integer
+  currency_code:
+    type: string
+    example: "USD"
+  competitor_limit:
+    type:
+      - integer
+      - "null"
   championship_types:
     type: array
     items:

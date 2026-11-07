@@ -19,13 +19,40 @@ export interface TabWithChildren extends TabBase {
   children: TabWithLink[];
 }
 
-interface TabWithLink extends TabBase {
+export interface TabWithLink extends TabBase {
   badgeI18nKey?: string;
+  tooltipI18nKey?: string;
+  externalHref?: string;
   href: RouteLiteral;
   hrefAdmin?: RouteLiteral;
 }
 
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
+
+const eventsAndScheduleTabs = (
+  competitionInfo: components["schemas"]["CompetitionInfo"],
+): TabWithLink[] => {
+  return [
+    {
+      i18nKey: "competitions.show.events",
+      href: route({
+        pathname: "/competitions/[competitionId]/events",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "events",
+      icon: "333Icon",
+    },
+    {
+      i18nKey: "competitions.show.schedule",
+      href: route({
+        pathname: "/competitions/[competitionId]/schedule",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "schedule",
+      icon: "Registration Open Date",
+    },
+  ];
+};
 
 export const beforeCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
@@ -48,7 +75,6 @@ export const beforeCompetitionTabs = (
       }),
       menuKey: "register",
       icon: "Register",
-      disabled: process.env.NODE_ENV === "production",
     },
     {
       i18nKey: "competitions.nav.menu.competitors",
@@ -59,25 +85,48 @@ export const beforeCompetitionTabs = (
       menuKey: "competitors",
       icon: "Competitors",
     },
-    {
-      i18nKey: "competitions.show.events",
-      href: route({
-        pathname: "/competitions/[competitionId]/events",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "events",
-      icon: "333Icon",
-    },
-    {
-      i18nKey: "competitions.show.schedule",
-      href: route({
-        pathname: "/competitions/[competitionId]/schedule",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "schedule",
-      icon: "Registration Open Date",
-    },
+    ...eventsAndScheduleTabs(competitionInfo),
   ];
+};
+
+export const liveTab = (
+  competitionInfo: components["schemas"]["CompetitionInfo"],
+): TabWithLink => {
+  const base = {
+    i18nKey: "competitions.live.title",
+    menuKey: "live",
+    icon: "Records" as const,
+  };
+
+  switch (competitionInfo.scoretaking_software) {
+    case "internal":
+      return {
+        ...base,
+        href: route({
+          pathname: "/competitions/[competitionId]/live",
+          query: { competitionId: competitionInfo.id },
+        }),
+      };
+    case "wca_live":
+      return {
+        ...base,
+        href: route({
+          pathname: "/competitions/[competitionId]/live",
+          query: { competitionId: competitionInfo.id },
+        }),
+        externalHref: `https://live.worldcubeassociation.org/link/competitions/${competitionInfo.id}`,
+      };
+    default:
+      return {
+        ...base,
+        href: route({
+          pathname: "/competitions/[competitionId]/live",
+          query: { competitionId: competitionInfo.id },
+        }),
+        disabled: true,
+        tooltipI18nKey: "competitions.live.incompatible.external",
+      };
+  }
 };
 
 export const duringCompetitionTabs = (
@@ -162,17 +211,28 @@ export const duringCompetitionTabs = (
 };
 export const afterCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
+  isAwaitingResults: boolean,
 ): TabWithLink[] => {
+  const infoTab: TabWithLink = {
+    i18nKey: "competitions.nav.menu.info",
+    href: route({
+      pathname: "/competitions/[competitionId]",
+      query: { competitionId: competitionInfo.id },
+    }),
+    menuKey: "general",
+    icon: "Information",
+  };
+
+  if (isAwaitingResults) {
+    return [
+      infoTab,
+      liveTab(competitionInfo),
+      ...eventsAndScheduleTabs(competitionInfo),
+    ];
+  }
+
   return [
-    {
-      i18nKey: "competitions.nav.menu.info",
-      href: route({
-        pathname: "/competitions/[competitionId]",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "general",
-      icon: "Information",
-    },
+    infoTab,
     {
       i18nKey: "competitions.nav.menu.podiums",
       href: route({
@@ -192,13 +252,23 @@ export const afterCompetitionTabs = (
       icon: "List",
     },
     {
-      i18nKey: "competitions.nav.menu.by_person",
+      i18nKey: "competitions.nav.menu.scrambles",
       href: route({
-        pathname: "/competitions/[competitionId]/results/byPerson",
+        pathname: "/competitions/[competitionId]/scrambles",
         query: { competitionId: competitionInfo.id },
       }),
-      menuKey: "byPerson",
+      menuKey: "scrambles",
+      icon: "Scrambles",
+    },
+    {
+      i18nKey: "competitions.nav.menu.by_person",
+      href: route({
+        pathname: "/competitions/[competitionId]/results/by-person",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "by-person",
       icon: "Competitors",
     },
+    ...eventsAndScheduleTabs(competitionInfo),
   ];
 };

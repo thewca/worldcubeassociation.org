@@ -54,8 +54,9 @@ properties:
     type: string
     example: "2"
   round_id:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     example: null
   format_id:
     type: string
@@ -72,12 +73,14 @@ properties:
     type: integer
     example: 88
   regional_single_record:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     example: null
   regional_average_record:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
     example: "WR"
   updated_at:
     type: string

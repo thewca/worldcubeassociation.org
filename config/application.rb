@@ -38,6 +38,8 @@ module WcaOnRails
 
     config.load_defaults 8.1
 
+    config.silence_healthcheck_path = "/api/v0/healthcheck"
+
     # Force belongs_to validations even on empty/unset keys.
     #   This is potentially a Rails bug (?!?) and has been reported at https://github.com/rails/rails/issues/52614
     config.active_record.belongs_to_required_validates_foreign_key = true

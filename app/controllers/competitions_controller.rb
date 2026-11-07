@@ -474,14 +474,14 @@ class CompetitionsController < ApplicationController
   def bookmark
     @competition = competition_from_params
     BookmarkedCompetition.find_or_create_by(competition: @competition, user: current_user)
-    Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
+    current_user.clear_bookmarked_competitions_cache
     head :ok
   end
 
   def unbookmark
     @competition = competition_from_params
     BookmarkedCompetition.where(competition: @competition, user: current_user).destroy_all
-    Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
+    current_user.clear_bookmarked_competitions_cache
     head :ok
   end
 

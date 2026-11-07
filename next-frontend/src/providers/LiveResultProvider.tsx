@@ -29,6 +29,7 @@ import {
 } from "@/lib/live/decompressDiff";
 import { countCompletedResults } from "@/lib/live/countCompletedResults";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
+import { SERVER_SEEDED_STALE_TIME } from "@/providers/WCAQueryClientProvider";
 
 export type LiveResultsByRegistrationId = Record<string, LiveResult[]>;
 interface LiveResultContextType {
@@ -125,6 +126,8 @@ export function MultiRoundResultProvider({
   const queries = initialRounds.map((round) => ({
     ...roundQueryOptions(round.id),
     initialData: round,
+    refetchOnMount: true,
+    staleTime: SERVER_SEEDED_STALE_TIME,
   }));
 
   const {

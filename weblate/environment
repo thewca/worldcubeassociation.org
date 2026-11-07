@@ -1,0 +1,68 @@
+# Weblate container settings for a LOCAL DEVELOPMENT instance.
+# Do not reuse these values anywhere real — the passwords are hardcoded.
+# Full reference: https://docs.weblate.org/en/latest/admin/install/docker.html
+
+WEBLATE_SITE_DOMAIN=localhost:8080
+WEBLATE_SITE_TITLE=WCA Weblate (local)
+WEBLATE_ALLOWED_HOSTS=*
+WEBLATE_DEBUG=0
+WEBLATE_LOGLEVEL=INFO
+
+# Admin login is  admin / admin  at http://localhost:8080/
+WEBLATE_ADMIN_NAME=WCA Admin
+WEBLATE_ADMIN_EMAIL=admin@example.com
+WEBLATE_ADMIN_PASSWORD=admin
+
+# Registration must be open for SSO to create accounts on first login, but
+# ALLOW_BACKENDS restricts it to OIDC — there is no password signup form.
+WEBLATE_REGISTRATION_OPEN=1
+WEBLATE_REGISTRATION_ALLOW_BACKENDS=oidc
+
+# No SMTP server for a local instance — mail is printed to the container log
+# instead, so invite/password-reset links are visible via `docker compose logs`.
+WEBLATE_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+WEBLATE_SERVER_EMAIL=weblate@example.com
+WEBLATE_DEFAULT_FROM_EMAIL=weblate@example.com
+
+# Keep the footprint down on a laptop that is also running the main stack.
+WEBLATE_WORKERS=2
+
+# --- WCA SSO ---------------------------------------------------------------
+# Sign in with a WCA account. These are staging's seeded example application
+# (lib/tasks/db.rake) — it carries every scope and
+# `dangerously_allow_any_redirect_uri: true`, so the localhost callback below is
+# accepted with nothing to register. Staging only; production needs a real
+# confidential app from /oauth/applications/new.
+#
+# Callback URL Weblate will use: http://localhost:8080/accounts/complete/oidc/
+# Plain http is fine because Doorkeeper only forces SSL for non-localhost hosts
+# (config/initializers/doorkeeper.rb:94), so no tunnel is needed.
+WEBLATE_SOCIAL_AUTH_OIDC_OIDC_ENDPOINT=https://staging.worldcubeassociation.org
+WEBLATE_SOCIAL_AUTH_OIDC_KEY=example-application-id
+WEBLATE_SOCIAL_AUTH_OIDC_SECRET=example-secret
+WEBLATE_SOCIAL_AUTH_OIDC_TITLE=WCA account
+
+# REQUIRED, and the one setting that will silently break logins if skipped.
+# python-social-auth defaults USERNAME_KEY to `preferred_username`, which WCA
+# maps to `wca_id` (config/initializers/doorkeeper_openid_connect.rb) — and
+# users.wca_id is nullable, so every translator without a WCA ID fails to get a
+# username. `sub` is the WCA user id and is always present; the display name
+# still comes from the `name` claim.
+WEBLATE_SOCIAL_AUTH_OIDC_USERNAME_KEY=sub
+
+# Leave this commented until a real WCA login has been confirmed working — it
+# disables password auth for EVERY account including admin/admin, so turning it
+# on before verifying SSO locks you out of the instance.
+#WEBLATE_NO_EMAIL_AUTH=1
+# ---------------------------------------------------------------------------
+
+# PostgreSQL
+POSTGRES_PASSWORD=weblate
+POSTGRES_USER=weblate
+POSTGRES_DB=weblate
+POSTGRES_HOST=database
+POSTGRES_PORT=
+
+# Cache
+REDIS_HOST=cache
+REDIS_PORT=6379

@@ -142,5 +142,25 @@ RSpec.describe LinkedRound do
       linked_round.rounds << r2
       expect(linked_round.reload).not_to be_nil
     end
+
+    it "cleans up a valid Dual Round after destroying one round" do
+      r1 = create(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 3, number: 1)
+      r2 = create(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 3, number: 2)
+
+      r2.destroy!
+
+      expect(r1.reload.linked_round_id).to be_nil
+      expect { linked_round.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "cleans up a valid Dual Round after destroying its competition event" do
+      r1 = create(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 3, number: 1)
+      create(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 3, number: 2)
+
+      r1.competition_event.destroy!
+
+      expect(Round.where(competition_event: r1.competition_event)).to be_empty
+      expect { linked_round.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 end

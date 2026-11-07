@@ -301,13 +301,8 @@ RSpec.describe Registration do
     end
 
     it "allows unqualified registration when not required" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-21',
-        'level' => 1300,
-      }
-      competition_event.qualification = Qualification.load(input)
+      competition_event.qualification_condition = ResultConditions::ResultAchieved.new(scope: 'average', value: 1300)
+      competition_event.qualification_latest_date = '2021-06-21'
       competition_event.save!
       competition.allow_registration_without_qualification = true
       competition.save!
@@ -316,13 +311,8 @@ RSpec.describe Registration do
     end
 
     it "allows qualified registration" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-21',
-        'level' => 1600,
-      }
-      competition_event.qualification = Qualification.load(input)
+      competition_event.qualification_condition = ResultConditions::ResultAchieved.new(scope: 'average', value: 1600)
+      competition_event.qualification_latest_date = '2021-06-21'
       competition_event.save!
       competition.allow_registration_without_qualification = false
       competition.save!
@@ -331,13 +321,8 @@ RSpec.describe Registration do
     end
 
     it "doesn't allow unqualified registration" do
-      input = {
-        'resultType' => 'average',
-        'type' => 'attemptResult',
-        'whenDate' => '2021-06-21',
-        'level' => 1000,
-      }
-      competition_event.qualification = Qualification.load(input)
+      competition_event.qualification_condition = ResultConditions::ResultAchieved.new(scope: 'average', value: 1000)
+      competition_event.qualification_latest_date = '2021-06-21'
       competition_event.save!
       competition.allow_registration_without_qualification = false
       competition.save!
@@ -1409,13 +1394,23 @@ RSpec.describe Registration do
     end
   end
 
-  describe '#entry_fee_with_donation' do
+  describe '#outstanding_entry_fees_with_donation' do
     it 'returns a RubyMoney object' do
-      expect(registration.entry_fee_with_donation).to eq(Money.new(1000, "USD"))
+      expect(registration.outstanding_entry_fees_with_donation).to eq(Money.new(1000, "USD"))
     end
 
     it 'given a donation, sums the donation and entry fee' do
-      expect(registration.entry_fee_with_donation(1500)).to eq(Money.new(2500, "USD"))
+      expect(registration.outstanding_entry_fees_with_donation(1500)).to eq(Money.new(2500, "USD"))
+    end
+
+    it 'excludes fees which have already been paid' do
+      create(:registration_payment, registration: registration, amount_lowest_denomination: 400)
+      expect(registration.outstanding_entry_fees_with_donation).to eq(Money.new(600, "USD"))
+    end
+
+    it 'given a donation, sums the donation and the fees which are still outstanding' do
+      create(:registration_payment, registration: registration, amount_lowest_denomination: 400)
+      expect(registration.outstanding_entry_fees_with_donation(1500)).to eq(Money.new(2100, "USD"))
     end
   end
 

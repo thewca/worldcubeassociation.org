@@ -44,7 +44,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     competition = Competition.find(competition_id)
     registrations = competition.registrations.accepted.competing
     payload = Rails.cache.fetch([
-                                  "registrations_v2_list",
+                                  "registrations_v2_public_list",
                                   competition.id,
                                   competition.event_ids,
                                   registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
@@ -87,6 +87,21 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     render json: competition.available_registration_lanes(authenticated_user)
   end
 
+  # Everything the register page needs to decide whether it may show the registration form at all,
+  # and which blocker to explain to the user if not.
+  def registration_eligibility
+    competition = Competition.find(params.require(:id))
+    is_banned = authenticated_user.banned_at_date?(competition.start_date)
+
+    render json: {
+      can_pre_register: competition.user_can_pre_register?(authenticated_user),
+      banned: is_banned,
+      banned_until: is_banned ? authenticated_user.ban_end : nil,
+      missing_profile_fields: authenticated_user.missing_registration_profile_fields,
+      waiting_list_count: competition.registrations.waitlisted.count,
+    }
+  end
+
   def create
     # Currently we only have one lane
     if params[:competing]
@@ -113,6 +128,9 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
     # Only the user themselves can create a registration for the user
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.id == @target_user.id
+
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if
+      contains_admin_fields?(@request) || @request.dig('competing', 'status').present?
 
     # Only organizers can register when registration is closed
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || authenticated_user.can_manage_competition?(@competition)
@@ -265,16 +283,16 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_ENABLED) unless @competition.using_payment_integrations?
     return render_error(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) if @competition.registration_past?
 
-    return render_error(:forbidden, Registrations::ErrorCodes::PAYMENT_NOT_READY) if @registration.nil?
+    return render_error(:forbidden, Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT) if @registration.outstanding_entry_fees.zero?
 
-    render_error(:forbidden, Registrations::ErrorCodes::NO_OUTSTANDING_PAYMENT) if @registration.outstanding_entry_fees.zero?
+    render_error(:bad_request, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if params[:iso_donation_amount].to_i.negative?
   end
 
   def payment_ticket
     iso_donation_amount = params[:iso_donation_amount].to_i
     # We could delegate this call to the prepare_intent function given that we're already giving it registration - however,
     # in the long-term we want to decouple registrations from payments, so I'm deliberately not introducing any more tight coupling
-    ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
+    ruby_money = @registration.outstanding_entry_fees_with_donation(iso_donation_amount)
     payment_account = @competition.payment_account_for(:stripe)
     payment_intent = payment_account.prepare_intent(@registration, ruby_money.cents, ruby_money.currency.iso_code, authenticated_user)
     render json: { client_secret: payment_intent.client_secret }
@@ -283,8 +301,10 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   def validate_payment_denomination_request
     @registration = Registration.find(params_id)
 
-    render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
+    return render_error(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless
       authenticated_user.id == @registration.user_id || authenticated_user.can_manage_competition?(@registration.competition)
+
+    render_error(:bad_request, Registrations::ErrorCodes::INVALID_REQUEST_DATA) if params[:iso_donation_amount].to_i.negative?
   end
 
   # What a payment attempt would charge, in every denomination the frontend needs: the payment
@@ -292,7 +312,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   # currency rules here means clients never have to know about Stripe's special-case currencies.
   def payment_denomination
     iso_donation_amount = params[:iso_donation_amount].to_i
-    ruby_money = @registration.entry_fee_with_donation(iso_donation_amount)
+    ruby_money = @registration.outstanding_entry_fees_with_donation(iso_donation_amount)
 
     api_amounts = {
       stripe: StripeRecord.amount_to_stripe(ruby_money.cents, ruby_money.currency.iso_code),

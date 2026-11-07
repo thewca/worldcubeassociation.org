@@ -1,5 +1,125 @@
 hu:
   users:
     update_locale:
-      #original_hash: 4cde9bc
       success: Frissített nyelv.
+    edit:
+      cannot_edit: {}
+      staff_avatar_guidelines: {}
+    mailer: {}
+    successes: {}
+  activerecord:
+    attributes: {}
+  devise:
+    sessions: {}
+    passwords: {}
+    mailer: {}
+    registrations: {}
+    shared: {}
+  layouts: {}
+  page:
+    contact_edit_profile:
+      form: {}
+    contacts:
+      form:
+        user_data: {}
+        contact_recipient: {}
+        competition: {}
+        wct: {}
+        wrt:
+          query_type: {}
+        wst: {}
+  user_roles:
+    email: {}
+  user_groups: {}
+  registrations:
+    mailer: {}
+    refund_form: {}
+    payment_form: {}
+    add: {}
+  competitions:
+    live:
+      connection: {}
+    index:
+      tooltips: {}
+    competition_form:
+      labels: {}
+      hints:
+        event_restrictions: {}
+      choices:
+        competitor_limit: {}
+        website: {}
+        registration: {}
+        event_restrictions:
+          qualification_results: {}
+    registration_v2:
+      register:
+        panel: {}
+    nav: {}
+    results_table: {}
+  validators: {}
+  regional_organizations: {}
+  score_tools:
+    tools: {}
+  search_results:
+    index: {}
+  about_regulations: {}
+  wca:
+    errors: {}
+    doorkeeper:
+      applications: {}
+  trainee_delegate_application: {}
+  database: {}
+  qualification: {}
+  payments:
+    errors: {}
+  results:
+    selector_elements: {}
+  rounds: {}
+  advancement_condition:
+    short: {}
+  helpers:
+    submit: {}
+  simple_form:
+    hints: {}
+    options:
+      registration: {}
+  oauth: {}
+  competition_tabs: {}
+  persons: {}
+  posts: {}
+  contacts: {}
+  faq:
+    answers:
+      '1': {}
+      '2': {}
+      '3': {}
+      '4': {}
+      '5': {}
+      '6': {}
+      'results': {}
+      '7': {}
+      '8': {}
+      '9': {}
+      'regulations1': {}
+      'regulations2': {}
+      'regulations3': {}
+      'regulations4': {}
+  delegates_page: {}
+  logo:
+    headings:
+      usage_guidelines:
+        color: {}
+  media:
+    new: {}
+  media_and_instagram: {}
+  merch: {}
+  tickets: {}
+  enums:
+    user: {}
+    user_roles:
+      status: {}
+    competition_medium: {}
+  mail_form:
+    attributes: {}
+    errors: {}
+  errors: {}

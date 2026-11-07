@@ -6,7 +6,7 @@ function isComplete(attemptResult: number) {
   return attemptResult > 0;
 }
 
-function isSkipped(attemptResult: number) {
+export function isSkipped(attemptResult: number) {
   return attemptResult === SKIPPED_VALUE;
 }
 
@@ -125,8 +125,23 @@ function cleanAttempts(attempts: number[]) {
   };
 }
 
-export function resultAttempts(result: components["schemas"]["Result"]) {
+export function resultAttempts(
+  result:
+    components["schemas"]["Result"] | components["schemas"]["V1RoundResult"],
+) {
   return cleanAttempts(result.attempts);
+}
+
+// The backend always pads with zeros at the end, which we need to manually kick out again.
+// Tables size all their rows by the maximum so the column count stays stable.
+export function maxAttemptCount(results: { attempts: number[] }[]) {
+  return (
+    _.max(
+      results.map(
+        (res) => _.dropRightWhile(res.attempts, (att) => isSkipped(att)).length,
+      ),
+    ) || 0
+  );
 }
 
 export function recordAttempts(

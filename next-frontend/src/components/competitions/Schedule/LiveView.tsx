@@ -22,8 +22,8 @@ import {
   getActivityEventId,
   getActivityRoundId,
   groupActivities,
+  ScheduleActivity,
 } from "@/lib/wca/wcif/activities";
-import { components } from "@/types/openapi";
 import {
   getDatesBetweenInclusive,
   getSimpleTimeString,
@@ -41,7 +41,7 @@ import { currentTimeZone } from "@/lib/wca/data/timezones";
 interface LiveViewProps {
   timeZones: string[];
   competitionId: string;
-  activities: components["schemas"]["WcifActivity"][];
+  activities: ScheduleActivity[];
   canManage?: boolean;
 }
 
@@ -76,11 +76,8 @@ function LiveSchedule({
   const { t } = useT();
   const { rounds } = useAllRoundsInfo();
 
-  const eventActivities = activities.filter(
-    (a) => !a.activityCode.startsWith("other"),
-  );
-  const firstStartTime = eventActivities[0].startTime;
-  const lastStartTime = eventActivities[eventActivities.length - 1].startTime;
+  const firstStartTime = activities[0].startTime;
+  const lastStartTime = activities[activities.length - 1].startTime;
   const [timeZone, setTimeZone] = useState(currentTimeZone);
 
   const collection = createListCollection({
@@ -163,11 +160,7 @@ function LiveSchedule({
           ))}
         </Tabs.List>
         {dates.map((date) => {
-          const activitiesOnDay = activitiesOnDate(
-            activities,
-            date,
-            timeZone,
-          ).filter((a) => !a.activityCode.startsWith("other"));
+          const activitiesOnDay = activitiesOnDate(activities, date, timeZone);
           const groupedActivities = groupActivities(activitiesOnDay);
 
           return (

@@ -22,6 +22,7 @@ jobs:
         with:
           registry: ${{ steps.login-ecr.outputs.registry }}/wca-nextjs
           tag: nextjs-staging
+          asset_bucket: assets-staging.worldcubeassociation.org
           base_url: staging.worldcubeassociation.org
       - name: Deploy new nextjs Image
         run: |

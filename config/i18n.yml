@@ -84,3 +84,4 @@ translations:
       - "*.payments.*"
       - "*.misc.*"
       - "*.tickets.*"
+      - "*.trainee_delegate_application.*"

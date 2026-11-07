@@ -1,0 +1,137 @@
+<% provide(:title, "Migration dashboard") %>
+
+<div class="container">
+  <h1>Migration dashboard</h1>
+  <p>Adoption of Integrated Live Results (ILR), the integrated results submission and scramble uploads. This week is <%= @week.first %> to <%= @week.last %>.</p>
+
+  <h2>Integrated Live Results</h2>
+  <table class="table table-condensed">
+    <tbody>
+      <tr><th>Competitions that have used ILR</th><td><%= @ilr_competitions_count %></td></tr>
+      <tr><th>…of which did not have dual rounds</th><td><%= @ilr_competitions_without_dual_rounds_count %> (<%= number_to_percentage(@ilr_competitions_count.zero? ? 0 : 100.0 * @ilr_competitions_without_dual_rounds_count / @ilr_competitions_count, precision: 1) %>)</td></tr>
+      <tr><th>Competitions using ILR this week</th><td><%= @ilr_competitions_this_week.size %> (<%= number_to_percentage(@competitions_this_week_count.zero? ? 0 : 100.0 * @ilr_competitions_this_week.size / @competitions_this_week_count, precision: 1) %>)</td></tr>
+      <tr><th>Upcoming competitions set to use ILR</th><td><%= @upcoming_ilr_competitions_count %></td></tr>
+      <tr><th>Attempts entered in ILR (all time)</th><td><%= @live_attempts_count %></td></tr>
+      <tr><th>Attempts entered in ILR this week</th><td><%= @live_attempts_this_week_count %></td></tr>
+      <tr><th>Distinct users who have entered results</th><td><%= @live_scoretakers_count %></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Competitions using ILR this week (<%= number_to_percentage(@competitions_this_week_count.zero? ? 0 : 100.0 * @ilr_competitions_this_week.size / @competitions_this_week_count, precision: 1) %>)</h3>
+  <% if @ilr_competitions_this_week.empty? %>
+    <p>No competitions are using ILR this week.</p>
+  <% else %>
+    <table class="table table-striped table-condensed">
+      <thead>
+        <tr><th>Competition</th><th>Dates</th><th>Attempts entered</th><th>Results submitted</th></tr>
+      </thead>
+      <tbody>
+        <% @ilr_competitions_this_week.each do |competition| %>
+          <tr>
+            <td>
+              <%= link_to competition.name, competition_path(competition) %>
+              <% if @dual_round_competition_ids_this_week.include?(competition.id) %>
+                <span class="badge">Dual rounds</span>
+              <% end %>
+            </td>
+            <td><%= competition.start_date %> – <%= competition.end_date %></td>
+            <td><%= @live_attempts_by_competition.fetch(competition.id, 0) %></td>
+            <td><%= competition.results_submitted? ? "Yes" : "No" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <h2>Integrated results submission</h2>
+  <table class="table table-condensed">
+    <tbody>
+      <tr><th>Competitions that submitted results from ILR</th><td><%= @integrated_submissions_count %></td></tr>
+      <tr><th>…of which have been posted</th><td><%= @integrated_posted_count %></td></tr>
+      <tr><th>Posted results from those competitions</th><td><%= @integrated_posted_results_count %></td></tr>
+      <tr><th>Results waiting to be posted from those competitions</th><td><%= @integrated_inbox_results_count %></td></tr>
+      <% @uploaded_jsons_by_type.each do |upload_type, count| %>
+        <tr><th>Stored uploads of type <code><%= upload_type %></code></th><td><%= count %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h2>Scramble uploads</h2>
+  <table class="table table-condensed">
+    <tbody>
+      <tr><th>Scramble files uploaded</th><td><%= @scramble_file_uploads_count %></td></tr>
+      <tr><th>Scramble files uploaded this week</th><td><%= @scramble_file_uploads_this_week_count %></td></tr>
+      <tr><th>Competitions with uploaded scramble files</th><td><%= @scramble_upload_competitions_count %></td></tr>
+      <tr><th>Scrambles uploaded</th><td><%= @external_scrambles_count %></td></tr>
+      <tr><th>Posted scrambles that came from an upload</th><td><%= @posted_uploaded_scrambles_count %></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Scramble programs</h3>
+  <table class="table table-striped table-condensed">
+    <thead>
+      <tr><th>Program</th><th>Uploads</th></tr>
+    </thead>
+    <tbody>
+      <% @scramble_programs.each do |scramble_program, count| %>
+        <tr><td><%= scramble_program || "Unknown" %></td><td><%= count %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h2>Adoption</h2>
+  <h3>Scoretaking software since ILR launch</h3>
+  <table class="table table-striped table-condensed">
+    <thead>
+      <tr><th>Software</th><th>Competitions</th></tr>
+    </thead>
+    <tbody>
+      <% @scoretaking_software_counts.each do |scoretaking_software, count| %>
+        <tr><td><%= scoretaking_software %></td><td><%= count %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h3>Adoption since ILR launch by month of competition end date</h3>
+  <table class="table table-striped table-condensed">
+    <thead>
+      <tr><th>Month</th><th>Competitions</th><th>Used ILR</th><th>Uploaded scrambles</th></tr>
+    </thead>
+    <tbody>
+      <% @adoption_months.each do |adoption_month| %>
+        <% month = adoption_month.strftime("%Y-%m") %>
+        <% total = @competitions_by_month.fetch(month, 0) %>
+        <% ilr = @ilr_competitions_by_month.fetch(month, 0) %>
+        <% scramble_uploads = @scramble_upload_competitions_by_month.fetch(month, 0) %>
+        <tr>
+          <td><%= month %></td>
+          <td><%= total %></td>
+          <td><%= ilr %> (<%= number_to_percentage(total.zero? ? 0 : 100.0 * ilr / total, precision: 1) %>)</td>
+          <td><%= scramble_uploads %> (<%= number_to_percentage(total.zero? ? 0 : 100.0 * scramble_uploads / total, precision: 1) %>)</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h3>ILR adoption by country since ILR launch</h3>
+  <p>Only countries with at least <%= AdminController::ILR_SHARE_MIN_COMPETITIONS %> competitions since <%= AdminController::ILR_LAUNCH_DATE %> are shown.</p>
+  <% if @ilr_adoption_by_country.empty? %>
+    <p>No country has used ILR yet.</p>
+  <% else %>
+    <table class="table table-striped table-condensed">
+      <thead>
+        <tr><th>Country</th><th>Used ILR</th><th>Competitions</th><th>Share</th></tr>
+      </thead>
+      <tbody>
+        <% @ilr_adoption_by_country.each do |country_id, ilr, total| %>
+          <tr>
+            <td><%= Country.c_find(country_id).name %></td>
+            <td><%= ilr %></td>
+            <td><%= total %></td>
+            <td><%= number_to_percentage(100.0 * ilr / total, precision: 1) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

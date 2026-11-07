@@ -72,20 +72,24 @@ module ResultsValidators
       competition_scope
     end
 
+    # Orders results from best to worst the way the WCA ranks them: by average for the
+    # average-ranked formats and by single otherwise, with invalid results pushed to the back.
+    def self.ranking_key(result)
+      valid_average = %w[a m].include?(result.format_id) && result.average.positive?
+      valid_best = result.best.positive?
+
+      [
+        valid_average ? result.average : BACKOFF_INT_MAX,
+        valid_best ? result.best : BACKOFF_INT_MAX,
+        result.id, # tie-breaker for the rare case that two persons in the same round achieved the same single and average
+      ]
+    end
+
     def self.load_data(validator, competition, results, check_real_results: false)
       # We're sorting in-memory because it is cheaper to re-order an arbitrary Results array that was efficiently loaded by `Competition.includes`,
       # rather than firing a custom SQL ORDER BY that cannot be pre-loaded via `includes`. Bonus: We get to sort via rank and not pure ID.
       ordered_results = results.sort_by do |r|
-        valid_average = %w[a m].include?(r.format_id) && r.average.positive?
-        valid_best = r.best.positive?
-
-        [
-          r.event.rank,
-          r.round_type.rank,
-          valid_average ? r.average : BACKOFF_INT_MAX,
-          valid_best ? r.best : BACKOFF_INT_MAX,
-          r.id, # tie-breaker for the rare case that two persons in the same round achieved the same single and average
-        ]
+        [r.event.rank, r.round_type.rank, *self.ranking_key(r)]
       end
 
       data = ResultsValidators::ValidatorData.new(

@@ -1,0 +1,72 @@
+get:
+  summary: Whether the current user has bookmarked a competition
+  tags:
+    - competitions
+  operationId: getCompetitionBookmark
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: The current user's bookmark state
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/competitions/CompetitionBookmark.yaml'
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'
+post:
+  summary: Bookmark a competition for the current user
+  tags:
+    - competitions
+  operationId: bookmarkCompetition
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: The competition is bookmarked. Bookmarking twice is a no-op.
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/competitions/CompetitionBookmark.yaml'
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'
+delete:
+  summary: Remove the current user's bookmark of a competition
+  tags:
+    - competitions
+  operationId: unbookmarkCompetition
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: The competition is not bookmarked. Removing a missing bookmark is a no-op.
+      content:
+        application/json:
+          schema:
+            $ref: '../../schemas/competitions/CompetitionBookmark.yaml'
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'
+    '404':
+      $ref: '../../errorResponses/CompetitionNotFound.yaml'

@@ -198,7 +198,7 @@ RSpec.feature "Registering for a competition", :js do
       fill_in "Password", with: user.password
       click_button "Sign in"
 
-      expect(current_url).to eq competition_register_url(competition)
+      expect(page).to have_current_path competition_register_url(competition)
     end
   end
 

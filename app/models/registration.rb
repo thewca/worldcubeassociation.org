@@ -186,8 +186,9 @@ class Registration < ApplicationRecord
     )
   end
 
-  def entry_fee_with_donation(iso_donation_amount = 0)
-    entry_fee + Money.new(iso_donation_amount, entry_fee.currency)
+  def outstanding_entry_fees_with_donation(iso_donation_amount = 0)
+    outstanding_fees = outstanding_entry_fees
+    outstanding_fees + Money.new(iso_donation_amount, outstanding_fees.currency)
   end
 
   def paid_entry_fees
@@ -336,7 +337,6 @@ class Registration < ApplicationRecord
       registrant_id: registrant_id,
       competing: {
         event_ids: event_ids,
-        comments: comments,
       },
     }
     if admin

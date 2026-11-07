@@ -20,6 +20,14 @@ updates:
     interval: weekly
     day: monday
     time: "06:00"
+  groups:
+    react:
+      patterns:
+        - "react"
+        - "react-dom"
+    fullcalendar:
+      patterns:
+        - "@fullcalendar/*"
   ignore:
     # Version 7 automatically activates React Compiler strict rules that we won't implement in the old ecosystem
     - dependency-name: eslint-plugin-react-hooks
@@ -35,6 +43,16 @@ updates:
     - dependency-name: "@fullcalendar/*"
       versions:
         - ">= 7"
+    # Version 9 has breaking changes which we're not going to bother about implementing in the legacy frontend.
+    #   As of writing this comment, it is yet unclear whether we will incorporate Tanstack-Table into Next at all.
+    - dependency-name: "@tanstack/react-table"
+      versions:
+        - ">= 9"
+    # Babel 8 requires non-trivial migrations which we don't want/need to apply in the old Webpacker codebase.
+    #   We can happily adopt Babel 8 in NextJS land, but within the webpacker dependencies let's stay at v7.
+    - dependency-name: "@babel/*"
+      versions:
+        - ">= 8"
   open-pull-requests-limit: 10
   cooldown:
     default-days: 1

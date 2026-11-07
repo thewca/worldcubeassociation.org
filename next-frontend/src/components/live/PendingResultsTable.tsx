@@ -27,7 +27,7 @@ export default function PendingResultsTable({
     <Collapsible.Root open={pendingLiveResults.length > 0}>
       <Collapsible.Content>
         <VStack align="start">
-          <Heading textStyle="h3" textAlign="left">
+          <Heading textStyle="h3" textAlign="start">
             Processing
           </Heading>
           <Table.Root>
@@ -38,7 +38,7 @@ export default function PendingResultsTable({
                   {t("competitions.live.results.competitor")}
                 </Table.ColumnHeader>
                 {attemptIndexes.map((num) => (
-                  <Table.ColumnHeader key={num} textAlign="right">
+                  <Table.ColumnHeader key={num} textAlign="end">
                     {num + 1}
                   </Table.ColumnHeader>
                 ))}
@@ -60,7 +60,7 @@ export default function PendingResultsTable({
                       format.expected_solve_count,
                     ).map((attempt) => (
                       <Table.Cell
-                        textAlign="right"
+                        textAlign="end"
                         key={`${competitor.id}-${attempt.attempt_number}`}
                       >
                         {formatAttemptResult(attempt.value, eventId)}

@@ -4,7 +4,8 @@ class Api::V0::ApiController < ApplicationController
   include Rails::Pagination
 
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation if Rails.env.production?
-  rate_limit to: 60, within: 1.minute, unless: -> { internal_ip?(request.remote_ip) } if Rails.env.production?
+  include ApiRateLimiting
+
   protect_from_forgery with: :null_session
   before_action :doorkeeper_authorize!, only: [:me]
   rescue_from WcaExceptions::ApiException do |e|
@@ -17,19 +18,6 @@ class Api::V0::ApiController < ApplicationController
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
-
-  INTERNAL_IP_RANGES = [
-    # Standard loopback range, AWS Internal Load Balancers appear as 127.0.0.1:
-    # Right at the bottom of https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect-concepts-deploy.html#service-connect-considerations
-    IPAddr.new('127.0.0.0/8'),
-    IPAddr.new('10.0.0.0/8'), # Private Class A
-    IPAddr.new('172.16.0.0/12'), # Private Class B
-    IPAddr.new('192.168.0.0/16'), # Private Class C
-  ].freeze
-
-  def internal_ip?(remote_ip)
-    INTERNAL_IP_RANGES.any? { it.include?(remote_ip) }
-  end
 
   def me
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
@@ -48,6 +36,7 @@ class Api::V0::ApiController < ApplicationController
 
   def user_qualification_data
     date = cutoff_date
+
     return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request if date.blank?
     return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
 
@@ -172,6 +161,13 @@ class Api::V0::ApiController < ApplicationController
   def competitions_search
     search(Competition)
   end
+
+  private def email_search_requested?
+    %i[email adminSearch].any? { ActiveRecord::Type::Boolean.new.cast(params[it]) }
+  end
+
+  before_action -> { render status: :forbidden, json: { error: "Searching by email requires permission to administer results" } if email_search_requested? && !current_user&.can_admin_results? },
+                only: %i[users_search omni_search]
 
   def users_search
     search(User)

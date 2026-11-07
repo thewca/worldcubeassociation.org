@@ -8,17 +8,18 @@ import {
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import { recordAttempts } from "@/lib/wca/results/attempts";
 import { AttemptsCells } from "@/components/results/TableCells";
+import events from "@/lib/wca/data/events";
 
 interface RankingsRowProps {
   ranking: components["schemas"]["ExtendedResult"];
-  index: number;
+  rank: number;
   isAverage?: boolean;
   isByRegion?: boolean;
 }
 
 export function RankingsRow({
   ranking,
-  index,
+  rank,
   isAverage = false,
   isByRegion = false,
 }: RankingsRowProps) {
@@ -28,12 +29,15 @@ export function RankingsRow({
     worstResultIndex,
   } = recordAttempts(ranking);
 
+  const attemptCount =
+    events.byId[ranking.event_id].recommendedFormat.expected_solve_count;
+
   return (
     <Table.Row>
       {isByRegion ? (
         <CountryCell countryId={ranking.country_id} filterable />
       ) : (
-        <Table.Cell>{index + 1}</Table.Cell>
+        <Table.Cell>{rank}</Table.Cell>
       )}
       <PersonCell
         personId={ranking.person_id}
@@ -54,6 +58,7 @@ export function RankingsRow({
           bestResultIndex={bestResultIndex}
           worstResultIndex={worstResultIndex}
           eventId={ranking.event_id}
+          attemptCount={attemptCount}
         />
       )}
     </Table.Row>

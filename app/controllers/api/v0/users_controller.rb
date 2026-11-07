@@ -52,10 +52,7 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   def bookmarked_competitions
     require_user!
-    bookmarked_competitions = Rails.cache.fetch("#{current_user.id}-competitions-bookmarked", expires_in: 60.minutes) do
-      current_user.competitions_bookmarked.pluck(:competition_id)
-    end
-    render json: bookmarked_competitions
+    render json: current_user.cached_bookmarked_competition_ids
   end
 
   private

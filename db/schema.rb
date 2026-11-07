@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_02_160000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1312,6 +1312,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_160000) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["competition_event_id", "number"], name: "index_rounds_on_competition_event_id_and_number", unique: true
     t.index ["linked_round_id"], name: "index_rounds_on_linked_round_id"
+    t.index ["participation_source_type", "participation_source_id"], name: "index_rounds_on_participation_source"
   end
 
   create_table "sanity_check_categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1509,6 +1510,40 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_160000) do
     t.bigint "tickets_edit_person_id", null: false
     t.datetime "updated_at", null: false
     t.index ["tickets_edit_person_id"], name: "index_tickets_edit_person_fields_on_tickets_edit_person_id"
+  end
+
+  create_table "trainee_delegate_applications", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "applicant_id", null: false
+    t.bigint "delegate_region_id", null: false
+    t.text "introduction", null: false
+    t.text "competition_contributions", null: false
+    t.text "volunteer_history"
+    t.text "motivation", null: false
+    t.text "relevant_skills", null: false
+    t.boolean "is_involved_in_cubing_business", null: false
+    t.text "cubing_business_involvement_details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["applicant_id"], name: "index_trainee_delegate_applications_on_applicant_id"
+    t.index ["delegate_region_id"], name: "index_trainee_delegate_applications_on_delegate_region_id"
+  end
+
+  create_table "trainee_delegate_conversations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "application_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["application_id", "user_id"], name: "index_trainee_delegate_conversations_uniqueness", unique: true
+    t.index ["user_id"], name: "index_trainee_delegate_conversations_on_user_id"
+  end
+
+  create_table "trainee_delegate_recommendations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "application_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["application_id", "user_id"], name: "index_trainee_delegate_recommendations_uniqueness", unique: true
+    t.index ["user_id"], name: "index_trainee_delegate_recommendations_on_user_id"
   end
 
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1738,8 +1773,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_160000) do
   add_foreign_key "ticket_logs", "tickets", on_delete: :cascade
   add_foreign_key "ticket_logs", "users", column: "acting_user_id"
   add_foreign_key "ticket_stakeholders", "tickets", on_delete: :cascade
-  add_foreign_key "tickets_competition_result", "competitions", on_delete: :cascade
+  add_foreign_key "tickets_competition_result", "competitions", on_update: :cascade, on_delete: :cascade
   add_foreign_key "tickets_edit_person_fields", "tickets_edit_person", on_delete: :cascade
+  add_foreign_key "trainee_delegate_applications", "user_groups", column: "delegate_region_id"
+  add_foreign_key "trainee_delegate_applications", "users", column: "applicant_id"
+  add_foreign_key "trainee_delegate_conversations", "trainee_delegate_applications", column: "application_id"
+  add_foreign_key "trainee_delegate_conversations", "users"
+  add_foreign_key "trainee_delegate_recommendations", "trainee_delegate_applications", column: "application_id"
+  add_foreign_key "trainee_delegate_recommendations", "users"
   add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"

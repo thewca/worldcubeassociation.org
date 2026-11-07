@@ -1,0 +1,41 @@
+allOf:
+  - $ref: './V1RoundResult.yaml'
+  - type: object
+    description: >-
+      A single competitor's result in one round, rendered on its own rather than inside a round, so
+      it repeats the competition, event and format context that `V1CompetitionRound` would carry.
+      This is the result shape for the v1 API; the v0 `Result` and `ExtendedResult` schemas name
+      several of the same fields after database columns and are not interchangeable with it.
+    required:
+      - competition_id
+      - competition_short_name
+      - competition_start_date
+      - event_id
+      - round_type_id
+      - format_id
+      - ranking_mode
+    properties:
+      competition_id:
+        type: string
+        example: "HangzhouOpen2024"
+      competition_short_name:
+        type: string
+        description: >-
+          The competition's short name, as used in table cells. Distinct from its full name, which
+          this endpoint does not carry.
+        example: "Hangzhou Open 2024"
+      competition_start_date:
+        type: string
+        format: date
+        example: "2024-11-16"
+      event_id:
+        type: string
+        example: "222"
+      round_type_id:
+        type: string
+        example: "f"
+      format_id:
+        type: string
+        example: "a"
+      ranking_mode:
+        $ref: './RankingMode.yaml'
