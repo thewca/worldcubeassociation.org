@@ -23,7 +23,7 @@ export default function TransWithLinks({
       t={t}
       i18nKey={i18nKey}
       values={values}
-      components={{ a: <Link /> }}
+      components={{ a: <Link display="inline" /> }}
     />
   );
 }

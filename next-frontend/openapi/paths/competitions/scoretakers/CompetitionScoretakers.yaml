@@ -45,3 +45,5 @@ post:
         application/json:
           schema:
             $ref: '../../../schemas/competitions/Scoretaker.yaml'
+    '403':
+      $ref: '../../../errorResponses/NotPermitted.yaml'

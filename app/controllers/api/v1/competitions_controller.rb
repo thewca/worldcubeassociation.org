@@ -50,6 +50,7 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     rounds = @competition.rounds
                          .h2h
                          .includes(
+                           :competition_event,
                            { results: { person: :user } },
                            { live_results: :registration },
                            h2h_matches: [

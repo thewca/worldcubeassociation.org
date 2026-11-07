@@ -26,7 +26,7 @@ RSpec.describe "WCA Live API" do
       round.open_and_lock_previous(User.first)
 
       delete api_v1_competition_live_bulk_quit_competitors_from_round_path(competition.id, round.wcif_id),
-             params: { registration_ids: [registration_1.id] }
+             params: { registration_ids: [registration_1.id] }, as: :json
 
       expect(response).to be_successful
 
@@ -54,7 +54,7 @@ RSpec.describe "WCA Live API" do
       }
 
       delete api_v1_competition_live_bulk_quit_competitors_from_round_path(competition.id, final.wcif_id),
-             params: live_request
+             params: live_request, as: :json
       expect(response).to be_successful
 
       result = LiveResult.find_by(round_id: final.id, registration_id: registrations.first.id)
@@ -75,7 +75,7 @@ RSpec.describe "WCA Live API" do
 
       expect do
         delete api_v1_competition_live_bulk_quit_competitors_from_round_path(competition.id, round.wcif_id),
-               params: { registration_ids: [registration_1.id] }
+               params: { registration_ids: [registration_1.id] }, as: :json
       end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(deleted: [registration_1.id], before_hash: before_hash))
@@ -103,7 +103,7 @@ RSpec.describe "WCA Live API" do
 
       expect do
         delete api_v1_competition_live_bulk_quit_competitors_from_round_path(competition.id, final.wcif_id),
-               params: live_request
+               params: live_request, as: :json
       end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(updated: [{ "advancing" => false, "advancing_questionable" => false, "registration_id" => registrations.first.id },
@@ -135,7 +135,7 @@ RSpec.describe "WCA Live API" do
 
       expect do
         delete api_v1_competition_live_bulk_quit_competitors_from_round_path(competition.id, final.wcif_id),
-               params: live_request
+               params: live_request, as: :json
       end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, final.wcif_id))
         .from_channel(ApplicationCable::Channel)
         .with(hash_including(deleted: [registrations.first.id],
@@ -161,7 +161,7 @@ RSpec.describe "WCA Live API" do
       round.open_and_lock_previous(User.first)
 
       delete api_v1_competition_live_bulk_quit_competitors_from_round_path(competition.id, round.wcif_id),
-             params: { registration_ids: quit_ids }
+             params: { registration_ids: quit_ids }, as: :json
 
       expect(response).to be_successful
 

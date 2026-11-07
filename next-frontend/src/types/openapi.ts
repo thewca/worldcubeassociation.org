@@ -309,6 +309,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         delete?: never;
@@ -331,8 +333,8 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description Result Updated */
-                200: {
+                /** @description Result Update Accepted */
+                202: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -342,6 +344,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         trace?: never;
@@ -383,6 +387,8 @@ export interface paths {
                         };
                     };
                 };
+                403: components["responses"]["NotPermitted"];
+                422: components["responses"]["LiveResultRejected"];
             };
         };
         delete?: never;
@@ -1207,7 +1213,7 @@ export interface components {
             /** Format: date-time */
             registration_close: string;
             /** Format: date-time */
-            announced_at: string;
+            announced_at: string | null;
             country_iso2: string;
             city: string;
             venue: string;
@@ -1221,7 +1227,7 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
-            competitor_limit: number;
+            competitor_limit: number | null;
             championship_types: string[];
             /** Format: date-time */
             results_submitted_at?: string;
@@ -1248,7 +1254,7 @@ export interface components {
                 name: string;
                 gender: string;
                 country_iso2: string;
-                wca_id: string;
+                wca_id: string | null;
             };
             competing: {
                 event_ids: string[];
@@ -1308,15 +1314,15 @@ export interface components {
         };
         CompetingStepConfig: components["schemas"]["BaseRegistrationConfig"] & {
             parameters: {
-                events_per_registration_limit?: number;
+                events_per_registration_limit?: number | null;
                 allow_registration_edits: boolean;
                 /** @enum {string} */
                 guest_entry_status: "unclear" | "free" | "restricted";
-                guests_per_registration_limit?: number;
+                guests_per_registration_limit?: number | null;
                 guests_enabled: boolean;
                 "uses_qualification?": boolean;
-                allow_registration_without_qualification: boolean;
-                force_comment_in_registration: boolean;
+                allow_registration_without_qualification: boolean | null;
+                force_comment_in_registration: boolean | null;
                 qualification_wcif: {
                     [key: string]: components["schemas"]["WcifQualification"];
                 };
@@ -1362,20 +1368,6 @@ export interface components {
             key: "approval";
         };
         RegistrationConfig: components["schemas"]["RequirementsStepConfig"] | components["schemas"]["CompetingStepConfig"] | components["schemas"]["PaymentStepConfig"] | components["schemas"]["ApprovalStepConfig"];
-        General404: {
-            error: string;
-            data: {
-                model: string;
-                id: string;
-            };
-        };
-        Competition404: components["schemas"]["General404"] & {
-            data?: {
-                /** @enum {string} */
-                model: "Competition";
-                id: string;
-            };
-        };
         RegistrationEligibility: {
             /** @description Whether the user may register before registration opens, i.e. is a delegate or organizer of this competition */
             can_pre_register: boolean;
@@ -1430,9 +1422,9 @@ export interface components {
              */
             country_iso2: string;
             /** @example WR */
-            regional_single_record?: string;
+            regional_single_record: string | null;
             /** @example NR */
-            regional_average_record?: string;
+            regional_average_record: string | null;
         };
         /** @description One round of a competition together with its results, ordered by `pos`. The rounds of a Dual Round each appear on their own and name the whole link in `linked_round_wcif_ids`; their competitors hold one result in each, ranked once between them by `global_pos`. */
         V1CompetitionRound: {
@@ -1451,6 +1443,20 @@ export interface components {
             /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking_mode` is `linked_round`. */
             linked_round_wcif_ids?: string[];
             results: components["schemas"]["V1RoundResult"][];
+        };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
         };
         /** @description One event's podium, ordered by `global_pos`. Grouped by event rather than by round because a Dual Round podium spans both of its rounds, keeping only each competitor's better result — every round of a link shares an event and a format, so those sit here. */
         V1CompetitionPodium: {
@@ -1528,10 +1534,10 @@ export interface components {
         };
         WcifParticipationRuleset: {
             participationSource: components["schemas"]["WcifParticipationSource"];
-            reservedPlaces?: {
+            reservedPlaces: {
                 nationalities?: string[];
                 reservations?: number;
-            };
+            } | null;
         };
         WcifScramble: string;
         WcifScrambleSet: {
@@ -1557,7 +1563,7 @@ export interface components {
         RoundState: "open" | "locked" | "pending" | "ready" | "blocked";
         BaseAdminRound: components["schemas"]["BaseWcifRound"] & {
             state: components["schemas"]["RoundState"];
-            min_competitors_to_open?: number;
+            min_competitors_to_open?: number | null;
         };
         OpenRound: components["schemas"]["BaseAdminRound"] & {
             total_competitors: number;
@@ -1610,8 +1616,8 @@ export interface components {
             registration_id: number;
             best: number;
             average: number;
-            single_record_tag: string;
-            average_record_tag: string;
+            single_record_tag: string | null;
+            average_record_tag: string | null;
             advancing: boolean;
             advancing_questionable: boolean;
             attempts: components["schemas"]["LiveAttempt"][];
@@ -1620,8 +1626,8 @@ export interface components {
         };
         RoundLiveResult: components["schemas"]["BaseLiveResult"] & {
             round_wcif_id: string;
-            global_pos: number;
-            local_pos: number;
+            global_pos: number | null;
+            local_pos: number | null;
             forecast_statistics?: {
                 best_possible_average?: number;
                 worst_possible_average?: number;
@@ -1672,7 +1678,7 @@ export interface components {
             birthdate?: string;
             /** Format: email */
             email?: string;
-            avatar?: components["schemas"]["UserAvatar"];
+            avatar?: components["schemas"]["UserAvatar"] | null;
             roles: ("delegate" | "trainee-delegate" | "organizer")[];
             registration?: components["schemas"]["WcifRegistration"];
             assignments: components["schemas"]["WcifAssignment"][];
@@ -1681,8 +1687,8 @@ export interface components {
         };
         ByPersonLiveResult: components["schemas"]["BaseLiveResult"] & {
             round_wcif_id: string;
-            global_pos: number;
-            local_pos: number;
+            global_pos: number | null;
+            local_pos: number | null;
             event_id: string;
         };
         LivePerson: components["schemas"]["WcifPerson"] & {
@@ -1898,7 +1904,10 @@ export interface components {
             spots_left?: number | null;
             /** @example 7 */
             waiting_list_count: number;
-            tab_names: string[];
+            tabs: {
+                id: number;
+                name: string;
+            }[];
             /**
              * @example [
              *       "333-r1"
@@ -1972,7 +1981,7 @@ export interface components {
             venues: components["schemas"]["WcifVenue"][];
         };
         Tabs: {
-            id: string;
+            id: number;
             competition_id: string;
             name: string;
             content: string;
@@ -2361,6 +2370,24 @@ export interface components {
             can_manage_incidents: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
+            can_view_polls: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_view_all_users: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_admin_results: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_create_posts: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_manage_regional_organizations: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_access_cms: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
             can_request_to_edit_others_profile: {
                 scope: string[] | "*";
             };
@@ -2441,6 +2468,20 @@ export interface components {
             content: {
                 "application/json": {
                     error: string;
+                };
+            };
+        };
+        /** @description The submitted live results were rejected */
+        LiveResultRejected: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    status: "round is not open" | "user is not part of this round" | "Values cannot be 0, please omit them instead";
+                    /** @description The rejected entry of a batch submission */
+                    registration_id?: number;
                 };
             };
         };
@@ -2626,7 +2667,7 @@ export interface operations {
                 };
             };
             401: components["responses"]["NotLoggedIn"];
-            404: components["responses"]["CompetitionNotFound"];
+            404: components["responses"]["RegistrationError"];
         };
     };
     registrationEligibility: {
@@ -2650,7 +2691,7 @@ export interface operations {
                 };
             };
             401: components["responses"]["NotLoggedIn"];
-            404: components["responses"]["CompetitionNotFound"];
+            404: components["responses"]["RegistrationError"];
         };
     };
     registrationPaymentDenomination: {
@@ -2685,6 +2726,7 @@ export interface operations {
                     };
                 };
             };
+            400: components["responses"]["RegistrationError"];
         };
     };
     v1CompetitionResults: {
@@ -2803,6 +2845,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scoretaker"];
                 };
             };
+            403: components["responses"]["NotPermitted"];
         };
     };
     removeScoretaker: {
@@ -2827,6 +2870,7 @@ export interface operations {
                     "application/json": components["schemas"]["Scoretaker"] | null;
                 };
             };
+            403: components["responses"]["NotPermitted"];
         };
     };
     getCompetitionBookmark: {
@@ -3502,6 +3546,8 @@ export interface operations {
                 /** @description Number of results per page */
                 per_page?: number;
                 include_cancelled?: boolean;
+                /** @description Only return championships */
+                championship_only?: boolean;
                 continent?: string;
                 country_iso2?: string;
                 delegate?: string;

@@ -62,6 +62,17 @@ jobs:
           overcommit --sign pre-commit
           overcommit --run
 
+  brakeman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Run Brakeman
+        run: bin/bundle exec brakeman --no-pager
+
   rspec:
     runs-on: ubuntu-latest
     strategy:
@@ -72,7 +83,11 @@ jobs:
             rspec-args: "--tag js"
           - suite: other # everything else
             rspec-args: "--tag ~js"
+          - suite: openapi-contract # validates v1 responses against next-frontend/openapi, see spec/support/openapi_contract.rb
+            rspec-args: "spec/requests"
+            openapi-contract: "1"
     env:
+      OPENAPI_CONTRACT: ${{ matrix.openapi-contract }}
       RACK_ENV: test
       RAILS_ENV: test
       NODE_ENV: test
@@ -82,10 +97,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
-      - name: Set up ImageMagick and Libvips # This is not included in GitHub runners by default anymore
+      - name: Set up Libvips # This is not included in GitHub runners by default anymore
         run: |
           sudo apt update
-          sudo apt install --no-install-recommends imagemagick libvips
+          sudo apt install --no-install-recommends libvips
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -112,12 +127,16 @@ jobs:
         run: |
           bin/i18n export
           bin/rake assets:precompile
+      - name: Get runner image
+        id: image
+        if: matrix.suite == 'js'
+        run: echo "os=$ImageOS" >> "$GITHUB_OUTPUT"
       - name: Cache Playwright runnables
         if: matrix.suite == 'js'
         uses: actions/cache@v6
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}-capybara
+          key: ${{ steps.image.outputs.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}-capybara
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         if: matrix.suite == 'js'
         run: bin/yarn playwright install --with-deps --no-shell chromium
@@ -125,6 +144,7 @@ jobs:
         id: rspec
         run: bin/rspec ${{ matrix.rspec-args }}
       - name: Push coverage data to Coveralls
+        if: matrix.suite != 'openapi-contract' # its specs are already covered by the `other` suite
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -140,11 +160,11 @@ jobs:
   # Single aggregating check so branch protection can require one stable name
   # ("test") regardless of how the rspec matrix above evolves.
   test:
-    needs: [rspec, overcommit]
+    needs: [rspec, overcommit, brakeman]
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Verify all rspec matrix jobs and overcommit passed
+      - name: Verify all rspec matrix jobs, overcommit and brakeman passed
         run: |
           if [ "${{ needs.rspec.result }}" != "success" ]; then
             echo "One or more rspec matrix jobs failed: ${{ needs.rspec.result }}"
@@ -152,6 +172,10 @@ jobs:
           fi
           if [ "${{ needs.overcommit.result }}" != "success" ]; then
             echo "Overcommit hooks failed: ${{ needs.overcommit.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.brakeman.result }}" != "success" ]; then
+            echo "Brakeman failed: ${{ needs.brakeman.result }}"
             exit 1
           fi
 

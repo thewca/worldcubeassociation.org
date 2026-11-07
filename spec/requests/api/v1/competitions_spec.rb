@@ -127,8 +127,6 @@ RSpec.describe "API v1 Competitions" do
     let!(:match) { round.h2h_matches.create!(match_number: 1) }
     let!(:competitors) { users.map { match.h2h_match_competitors.create!(user: it) } }
 
-    # The winner of the first race is ranked first, so that the live standings
-    # and the posted results below disagree about who came where.
     def enter_live_results(values)
       set = match.h2h_sets.create!(set_number: 1)
 
@@ -203,6 +201,20 @@ RSpec.describe "API v1 Competitions" do
 
       expect(response).to be_successful
       expect(response.parsed_body).to be_empty
+    end
+  end
+
+  describe "unknown competition" do
+    it "returns not found for the results" do
+      get api_v1_competition_results_path("NotAComp2026")
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns not found for the podiums" do
+      get api_v1_competition_podiums_path("NotAComp2026")
+
+      expect(response).to have_http_status(:not_found)
     end
   end
 end

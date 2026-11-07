@@ -24,6 +24,8 @@ export function createSearchParams(
     customEndDate,
     adminStatus,
     shouldIncludeCancelled,
+    shouldShowChampionshipOnly,
+    sort,
   } = filterState;
 
   const dateNow = DateTime.now();
@@ -47,34 +49,29 @@ export function createSearchParams(
   }
   searchParams["include_cancelled"] = shouldIncludeCancelled;
 
+  searchParams["championship_only"] = shouldShowChampionshipOnly;
+
   if (timeOrder === "present") {
-    searchParams["sort"] = "start_date,end_date,name";
     searchParams["ongoing_and_future"] = dateNow.toISODate();
   } else if (timeOrder === "recent") {
     const recentDaysAgo = dateNow.minus({
       days: competitionConstants.competitionRecentDays,
     });
 
-    searchParams["sort"] = "-end_date,-start_date,name";
     searchParams["start"] = recentDaysAgo.toISODate();
     searchParams["end"] = dateNow.toISODate();
   } else if (timeOrder === "past") {
     if (selectedYear === "all_years") {
-      searchParams["sort"] = "-end_date,-start_date,name";
       searchParams["end"] = dateNow.toISODate();
     } else {
-      searchParams["sort"] = "-end_date,-start_date,name";
       searchParams["start"] = `${selectedYear}-1-1`;
       searchParams["end"] =
         dateNow.year === selectedYear
           ? dateNow.toISODate()
           : `${selectedYear}-12-31`;
     }
-  } else if (timeOrder === "by_announcement") {
-    searchParams["sort"] = "-announced_at,name";
   } else if (timeOrder === "custom") {
     // Either end of the range may be left open, in which case we omit the bound entirely.
-    searchParams["sort"] = "start_date,end_date,name";
     if (customStartDate) {
       searchParams["start"] = customStartDate;
     }
@@ -83,5 +80,23 @@ export function createSearchParams(
     }
   }
 
+  if (sort) {
+    searchParams["sort"] = sort;
+  }
+
   return searchParams;
 }
+
+// All the possible sort values at the moment
+// Adding an element here automatically adds it to select options
+// Translations and competition.rb support must be done by hand
+export const sortOrderValues = [
+  { value: "start_date", key: "start_date_asc" },
+  { value: "-start_date", key: "start_date_desc" },
+  { value: "end_date", key: "end_date_asc" },
+  { value: "-end_date", key: "end_date_desc" },
+  { value: "name", key: "name_asc" },
+  { value: "-name", key: "name_desc" },
+  { value: "announced_at", key: "announced_at_asc" },
+  { value: "-announced_at", key: "announced_at_desc" },
+];

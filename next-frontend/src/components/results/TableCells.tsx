@@ -16,23 +16,25 @@ export function PositionCell({
   result,
   rankingMode,
   variant = "round",
+  rowSpan,
 }: {
   result: Pick<components["schemas"]["V1RoundResult"], "pos" | "global_pos">;
   rankingMode: components["schemas"]["RankingMode"];
   variant?: RankingVariant;
+  rowSpan?: number;
 }) {
   // A standings row is already merged across the Dual Round, keeping only the competitor's better
   // result, so the position within whichever round that came from would be meaningless here.
   if (variant === "standings") {
-    return <Table.Cell>{result.global_pos}</Table.Cell>;
+    return <Table.Cell rowSpan={rowSpan}>{result.global_pos}</Table.Cell>;
   }
 
   if (rankingMode !== "linked_round") {
-    return <Table.Cell>{result.pos}</Table.Cell>;
+    return <Table.Cell rowSpan={rowSpan}>{result.pos}</Table.Cell>;
   }
 
   return (
-    <Table.Cell>
+    <Table.Cell rowSpan={rowSpan}>
       {result.pos} ({result.global_pos})
     </Table.Cell>
   );
