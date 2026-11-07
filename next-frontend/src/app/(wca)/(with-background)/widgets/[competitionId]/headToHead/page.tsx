@@ -21,6 +21,7 @@ export default async function HeadToHeadPage({
 
   if (error) return <OpenapiError t={t} response={response} />;
 
+  // i18n-tasks-use t("competitions.h2h.title")
   return (
     <Card.Root>
       <Card.Body>
