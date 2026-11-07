@@ -5,8 +5,6 @@ class CompetitionTab < ApplicationRecord
 
   belongs_to :competition
 
-  MARKDOWN_IMAGE_COLUMNS = %i[content].freeze
-
   validates :name, presence: true
   validates :display_order, uniqueness: { scope: :competition_id, case_sensitive: false }
 

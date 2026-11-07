@@ -15,8 +15,6 @@ class DelegateReport < ApplicationRecord
     remarks
   ].freeze
 
-  MARKDOWN_IMAGE_COLUMNS = AVAILABLE_SECTIONS
-
   belongs_to :competition
   belongs_to :posted_by_user, class_name: "User", optional: true
   belongs_to :wrc_primary_user, class_name: "User", optional: true

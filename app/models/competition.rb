@@ -3,8 +3,6 @@
 class Competition < ApplicationRecord
   include HasMarkdownImages
 
-  MARKDOWN_IMAGE_COLUMNS = %i[information extra_registration_requirements].freeze
-
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy, inverse_of: :competition
   has_many :events, through: :competition_events
@@ -740,7 +738,6 @@ class Competition < ApplicationRecord
              'tickets_competition_result',
              'result_ticket',
              'lead_delegate',
-             # Rebuilt from the cloned markdown by HasMarkdownImages when the clone is saved.
              'markdown_image_usages',
              'markdown_images'
           # Do nothing as they shouldn't be cloned.

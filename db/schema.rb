@@ -877,7 +877,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_02_160000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "uploaded_by_id"
-    t.string "visibility", default: "private", null: false
     t.index ["uploaded_by_id"], name: "index_markdown_images_on_uploaded_by_id"
   end
 
