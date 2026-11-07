@@ -4,6 +4,7 @@ import { Alert } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import { Trans } from "react-i18next";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { fullTimeDiff } from "@/lib/wca/dates";
 import usePerpetualState from "@/lib/hooks/usePerpetualState";
 
@@ -13,8 +14,9 @@ export default function RegistrationOpeningMessage({
   registrationStart: string;
 }) {
   const { t } = useT();
+  const lng = useLocale();
 
-  const start = DateTime.fromISO(registrationStart);
+  const start = DateTime.fromISO(registrationStart, { locale: lng });
   const timeLeft = usePerpetualState(() => fullTimeDiff(start));
 
   // Any component going negative means the moment has definitely passed.
