@@ -343,8 +343,10 @@ export function InfoCard({
   return (
     <Card.Root>
       <Card.Body>
-        <Heading textStyle="h2" display="flex" alignItems="center">
-          {competitionInfo.name}
+        <Heading textStyle="h2" display="flex" alignItems="center" asChild>
+          <Text as="span" minW={0} overflowWrap="anywhere">
+            {competitionInfo.name}
+          </Text>
           {bookmark && (
             <BookmarkButton
               competitionId={competitionInfo.id}
