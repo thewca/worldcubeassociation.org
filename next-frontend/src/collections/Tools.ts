@@ -1,5 +1,6 @@
 import { CollectionConfig } from "payload";
 import { marketingTeamAccess } from "@/payload.access";
+import { revalidateCollection } from "@/collections/revalidateCollection";
 
 export const Tools: CollectionConfig = {
   slug: "tools",
@@ -10,6 +11,10 @@ export const Tools: CollectionConfig = {
   },
   admin: {
     useAsTitle: "name",
+  },
+  hooks: {
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
   },
   fields: [
     {

@@ -1,0 +1,22 @@
+name: 'Start Payload database'
+description: 'Runs MongoDB on localhost:27017 (root/root, database `payload`) seeded from the public Payload dump.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install and start MongoDB
+      uses: supercharge/mongodb-github-action@1.12.1
+      with:
+        # Pinned to 7 for the same reason as in playwright-test.yml: until https://jira.mongodb.org/browse/SERVER-131779
+        #   ships, Mongo 8+ rejects the `ubuntu-latest` kernel as unsupported.
+        mongodb-version: 7
+        mongodb-username: root
+        mongodb-password: root
+        mongodb-db: payload
+    - name: Import the public dump
+      shell: bash
+      run: |
+        # The image's init phase runs a temporary mongod bound to 127.0.0.1 only, which also satisfies the
+        #   action's own readiness check. Pinging the container IP waits for the real server instead of
+        #   restoring into one that is about to stop.
+        timeout 120 bash -c 'until docker exec mongodb bash -c "mongosh --host \$(hostname -i) -u root -p root --quiet --eval \"db.runCommand({ ping: 1 }).ok\"" >/dev/null 2>&1; do sleep 2; done'
+        bash ./next-frontend/import-dump.sh --container mongodb --prepare-on-host --without-media --clean

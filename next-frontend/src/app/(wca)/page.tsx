@@ -28,7 +28,7 @@ import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { connection } from "next/server";
+import { getCachedGlobal } from "@/lib/payload/globals";
 
 import type {
   TextCardBlock,
@@ -536,16 +536,18 @@ const renderBlock = (
 };
 
 const PayloadContents = async () => {
-  const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
   const { lng } = await getT();
-
-  const homepage = await payload.findGlobal({
-    slug: "home",
-    draft: isDraftMode,
-    locale: lng,
-    fallbackLocale: "en",
-  });
+  const homepage = isDraftMode
+    ? await (
+        await getPayload({ config })
+      ).findGlobal({
+        slug: "home",
+        draft: true,
+        locale: lng,
+        fallbackLocale: "en",
+      })
+    : await getCachedGlobal("home", undefined, lng);
 
   const homepageEntries = homepage.layout;
 
@@ -578,8 +580,6 @@ export default async function Homepage({
 }: {
   searchParams: Promise<{ signed_out?: string }>;
 }) {
-  await connection();
-
   const { t } = await getT();
 
   // Rails redirects here with this flag once it has ended its own session.
