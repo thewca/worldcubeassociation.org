@@ -40,7 +40,9 @@ properties:
     type: string
     format: date-time
   announced_at:
-    type: string
+    type:
+      - string
+      - "null"
     format: date-time
   country_iso2:
     type: string
@@ -68,7 +70,9 @@ properties:
     type: string
     example: "USD"
   competitor_limit:
-    type: integer
+    type:
+      - integer
+      - "null"
   championship_types:
     type: array
     items:

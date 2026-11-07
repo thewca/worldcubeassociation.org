@@ -369,6 +369,14 @@ class Competition < ApplicationRecord
     errors.add(:competition_events, I18n.t('competitions.errors.fto_not_yet_allowed', date: I18n.l(FTO_INTRODUCTION_DATE, format: :long)))
   end
 
+  validate :fto_requires_internal_scoretaking
+  private def fto_requires_internal_scoretaking
+    return unless self.event_ids.include?("fto")
+    return if scoretaking_software_internal?
+
+    errors.add(:scoretaking_software, I18n.t('competitions.errors.fto_requires_internal_scoretaking'))
+  end
+
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
   validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
   private def auto_close_threshold_validations
@@ -391,9 +399,9 @@ class Competition < ApplicationRecord
     errors.add(:competition_events, I18n.t('competitions.errors.schedule_must_match_rounds')) if start_date.present? && start_date > Date.new(2018, 12, 31) && !(no_event_without_rounds? && schedule_includes_rounds?)
   end
 
-  validate :advancement_condition_must_be_present_for_all_non_final_rounds, if: :confirmed_at_changed?, on: :update
-  def advancement_condition_must_be_present_for_all_non_final_rounds
-    errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds')) unless rounds.all?(&:advancement_condition_is_valid?)
+  validate :participation_condition_must_be_present_for_all_non_initial_rounds, if: :confirmed_at_changed?, on: :update
+  def participation_condition_must_be_present_for_all_non_initial_rounds
+    errors.add(:competition_events, I18n.t('competitions.errors.advancement_condition_must_be_present_for_all_non_final_rounds')) unless rounds.all?(&:participation_condition_is_valid?)
   end
   private def should_validate_registration_closing?
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
@@ -598,7 +606,7 @@ class Competition < ApplicationRecord
       # message on the edit schedule page?
       warnings[:schedule] = I18n.t('competitions.messages.schedule_must_match_rounds') unless no_event_without_rounds? && schedule_includes_rounds?
 
-      warnings[:advancement_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:advancement_condition_is_valid?)
+      warnings[:participation_conditions] = I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds') unless rounds.all?(&:participation_condition_is_valid?)
 
       rounds.select(&:cutoff_is_greater_than_time_limit?).each do |round|
         warnings["cutoff_is_greater_than_time_limit#{round.id}"] = I18n.t('competitions.messages.cutoff_is_greater_than_time_limit', round_number: round.number, event: I18n.t("events.#{round.event.id}"))
@@ -1440,8 +1448,8 @@ class Competition < ApplicationRecord
     competition_events.any? { |ce| ce.rounds.any?(&:cutoff) }
   end
 
-  def uses_advancement_condition?
-    competition_events.any? { |ce| ce.rounds.any?(&:advancement_condition) }
+  def uses_participation_condition?
+    competition_events.any? { |ce| ce.rounds.any?(&:participation_condition?) }
   end
 
   def uses_cumulative?
@@ -1462,11 +1470,12 @@ class Competition < ApplicationRecord
     # We want to trigger the checks for qualification details even when
     # the actual qualification requirements have not been filled out yet for a newly created competition.
     # In other words, checking the `qualification_results` checkbox should be enough to trigger validations.
-    self.qualification_results? || competition_events.any?(&:qualification)
+    self.qualification_results? || competition_events.any?(&:qualification_condition?)
   end
 
   def qualification_date_to_events
-    competition_events.select(&:qualification).group_by { |e| e.qualification.when_date }
+    competition_events.filter(&:qualification_condition?)
+                      .group_by(&:qualification_latest_date)
   end
 
   # The name `is_probably_over` is meant to be surprising.
@@ -1724,6 +1733,9 @@ class Competition < ApplicationRecord
       event_ids = params[:event_ids].presence
       raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{params[:event_ids]}'") unless event_ids.is_a?(Array)
 
+      unknown_event_ids = event_ids - Event.c_all_by_id.keys
+      raise WcaExceptions::BadApiParameter.new("Invalid event IDs: '#{unknown_event_ids.join(', ')}'") if unknown_event_ids.any?
+
       event_ids.each do |event_id|
         # This looks completely crazy (why not just pass the array as a whole, to build a `WHERE event_id IN (...)`??)
         #   but is actually necessary to make sure that the competition holds ALL of the required events
@@ -1780,6 +1792,11 @@ class Competition < ApplicationRecord
       competitions = competitions.end_date_passed_since(num_days).pending_report_or_results_posting
     end
 
+    if params[:championship_only].present?
+      championship_only = ActiveRecord::Type::Boolean.new.cast(params[:championship_only])
+      competitions = competitions.where(id: Championship.select(:competition_id)) if championship_only
+    end
+
     query&.split&.each do |part|
       like_query = %w[id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
@@ -1818,10 +1835,9 @@ class Competition < ApplicationRecord
                                                     guest_entry_status
                                                     guests_per_registration_limit
                                                     guests_enabled
-                                                    uses_qualification?
                                                     allow_registration_without_qualification
                                                     force_comment_in_registration],
-                                           methods: %i[event_ids],
+                                           methods: %i[event_ids uses_qualification?],
                                            include: [])
     user_params = {
       preferredEvents: current_user.preferred_events.pluck(:id),
@@ -1847,10 +1863,6 @@ class Competition < ApplicationRecord
       auto_accept_enabled?: self.auto_accept_preference_disabled?,
       auto_accept_preference: self.auto_accept_preference,
     }
-  end
-
-  def tab_names
-    tabs.pluck(:name)
   end
 
   def available_registration_lanes(current_user)
@@ -1934,8 +1946,8 @@ class Competition < ApplicationRecord
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds tab_names],
-      include: %w[delegates organizers],
+                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds],
+      include: %w[delegates organizers tabs],
     }
     self.as_json(options)
   end
@@ -1956,19 +1968,12 @@ class Competition < ApplicationRecord
     return {} unless uses_qualification?
 
     at_least_v2 = Gem::Version.new(version) >= Gem::Version.new("2.0.0")
+    serialization_method = at_least_v2 ? :v2_qualification_wcif : :v1_qualification_wcif
 
-    if at_least_v2
-      competition_events
-        .where.not(qualification_condition: nil)
-        .index_by(&:event_id)
-        .transform_values(&:v2_qualification_wcif)
-    else
-      competition_events
-        .where.not(qualification: nil)
-        .index_by(&:event_id)
-        .transform_values(&:qualification)
-        .transform_values(&:to_wcif)
-    end
+    competition_events
+      .where.not(qualification_condition: nil)
+      .index_by(&:event_id)
+      .transform_values(&serialization_method)
   end
 
   def persons_wcif(authorized: false, version: WCIF_STABLE_VERSION)
@@ -2004,7 +2009,7 @@ class Competition < ApplicationRecord
         :competition_event,
         :wcif_extensions,
         { participation_source: [:competition_event, { rounds: :competition_event }] },
-        include_results ? { live_results: [:live_attempts] } : {},
+        include_results ? { live_results: %i[live_attempts registration] } : {},
       ] },
       :wcif_extensions,
     ]

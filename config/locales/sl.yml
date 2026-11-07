@@ -206,7 +206,7 @@ sl:
     best: Najboljši
     single: Posamezno
     average: Povprečje
-    solves: Rešitve
+    solves: Poskusi
     hello: 'Pozdravljeni, %{name},'
     date:
       no_date: Brez datuma
@@ -291,7 +291,7 @@ sl:
         name: Ime
         birthday: Datum rojstva
         registration_competition_events: Discipline
-        email: E-pošta
+        email: E-naslov
         search: Iskanje...
         too_few_chars: Premalo znakov
         no_results: Ni rezultatov
@@ -303,7 +303,7 @@ sl:
         schedule_url: URL urnika
         summary: Povzetek
         equipment: Oprema
-        venue: Prostor tekmovanja
+        venue: Prizorišče
         organization: Organizacija
         incidents: Incidenti
         setup_images: Slike postavitve tekmovališča
@@ -313,7 +313,7 @@ sl:
         wic_feedback_requested: Želim povratno informacijo WIC za nekatere izmed
           zgornjih incidentov.
         wic_incidents: 'Incidenti, ki potrebujejo povratno informacijo WIC'
-        remarks: Opazke
+        remarks: Opombe
       person:
         wca_id: Oseba
         country_id: Država
@@ -536,10 +536,9 @@ sl:
           prostovoljec, prosimo, izpustite vse podrobnosti iz poročila in
           kontakirajte WIC preko zasebnega kanala.
         remarks: >-
-          Pišite o kakršnih koli drugih podrobnostih, ki bi jih radi delili
-          (npr. izboljšanje/upadanje znotraj skupnosti, prihodnji načrti za to
-          regijo). Če ste z namenom jedrnatosti v prejšnjih predelih kaj
-          izpustili, lahko pišete o tem tu.
+          Kakršne koli druge podrobnosti, ki bi jih radi delili (npr. izboljšanje/nazadovanje
+          skupnosti, prihodnji načrti za to regijo). Če ste z namenom jedrnatosti
+          v prejšnjih predelih kaj izpustili, to napišete tukaj.
       competition_tab:
         name: 'Primeri: potovanje, plačila, nagrade, nastanitve'
       regional_organization:
@@ -697,6 +696,8 @@ sl:
         use_classic: Nazaj na staro stran za prijavo
       destroy_other:
         success: Uspešno ste bili odjavljeni iz ostalih naprav.
+      destroy:
+        success: Odjavljeni ste.
     shared:
       links:
         sign_in: Vpis
@@ -811,7 +812,7 @@ sl:
       history: Zgodovina
       translations: Prevodi
       disciplinary: Disciplinska evidenca
-      incidents: Evidenca incidentov
+      incidents: Zapisnik incidentov
       administration: Administracija
       manage_users: Upravljaj uporabnike
       delegate: Delegiranje
@@ -834,6 +835,20 @@ sl:
       privacy: Zasebnost
       disclaimer: Izjava o omejitvi odgovornosti
       find_us: Najdi nas
+      panels:
+        admin: Skrbniška plošča
+        volunteer: Plošča za prostovoljce
+        delegate: Plošča za delegate
+        wapc: Plošča WAC
+        wfc: Plošča WFC
+        wrt: Plošča WRT
+        wst: Plošča WST
+        board: Plošča upravnega odbora
+        leader: Plošča za vodje
+        senior_delegate: Plošča za višje delegate
+        wic: Plošča WIC
+        weat: Plošča WEAT
+        wqac: Plošča WQAC
   page:
     translators:
       title: Prevajalci
@@ -947,6 +962,7 @@ sl:
           zagotavlja neodvisno in nepristransko obravnavo, da zagotovi
           pravičnost, razumnost in skladnost odločitev z WCA pravili in
           pravilniki.
+      empty: Ni najdenih ekip ali odborov. Poskusite ponovno kasneje.
     contacts:
       title: Kontaktni obrazec WCA
       faq_note_html: >-
@@ -965,7 +981,7 @@ sl:
           name:
             label: Ime
           email:
-            label: E-pošta
+            label: E-naslov
         contact_recipient:
           label: Koga želite kontaktirati?
           competition:
@@ -980,8 +996,8 @@ sl:
               večpredstavnostne vsebine itd.)
           wrt:
             label: >-
-              Kontaktiraj ekipo za rezultate (WRC) (glede česarkoli povezanega z
-              rezultati ali podatki vašega profila na WCA strani)
+              Kontaktiraj ekipo za rezultate (WRT) (glede česarkoli povezanega z rezultati
+              ali podatki vašega profila na WCA strani)
           wst:
             label: >-
               Kontaktiraj ekipo za programsko opremo (WST) (če želite prijaviti
@@ -1075,6 +1091,13 @@ sl:
       success_message_with_ticket_link_html: >-
         Prošnja oddana - odgovor boste prejeli kmalu. Za ogled statusa prošnje,
         obiščite <a href="%{link}">to povezavo</a>.
+    executives:
+      title: Izvršno vodstvo
+      joined_wca: V WCA od
+      joined_executives: V izvršnem vodstvu od
+      more_information: Več informacij
+      close: Zapri
+      person_not_found: Oseba z WCA ID %{wca_id} ni najdena
   homepage:
     learn_more: Več o tem
     title: Dobrodošli pri Svetovni kockarski zvezi
@@ -1540,8 +1563,8 @@ sl:
           Obsegi izključitev in razlogi so naslednji:
         scope_and_reason: 'Obseg: %{ban_scope}, razlog: %{ban_reason}'
         wic_message: >-
-          Če imate kakršnakoli vprašanja glede disciplinske zgodovine tega
-          tekmovalca, kontakirajte WIC z odgovorom na to e-pošto.
+          Če imate kakršnakoli vprašanja glede disciplinske zgodovine tega tekmovalca,
+          kontakirajte WIC z odgovorom na to sporočilo.
     list:
       title: 'Prijave za %{comp}'
       edit: Uredi
@@ -1872,7 +1895,7 @@ sl:
         admin_view: Pogled skrbnika
         results_view: Pogled rezultatov
         double_check: Dvojno preverjanje
-        submit_results: Objavi rezultate
+        submit_results: Oddaj rezultate
         add_to_batch: Dodaj v skupino
         remove_from_batch: Odstrani iz skupine
         batch_mode: Skupinski način
@@ -1951,6 +1974,13 @@ sl:
         mean: Povprečje
       errors:
         round_closed: Krog še ni odprt
+      combined_title: Dvojna kroga
+      overview:
+        upcoming: Prihodnja
+        in_progress: Trenutna
+        past_month: Zadnji mesec
+        no_upcoming: Ni prihodnjih tekmovanj z rezultati v živo.
+        search: Išči po tekmovanjih
     my_competitions:
       title: Moja tekmovanja
       disclaimer: >-
@@ -2219,6 +2249,7 @@ sl:
       why_compete_description_html: |-
         <p>Ne gre le za to, kdo je najhitrejši – tekmovanja so predvsem družabni dogodki! Vsakdo, ki zna sestaviti kocko, je dobrodošel, da se udeleži tekmovanja in postavi nov osebni rekord. Sklepanje prijateljstev je preprosto, saj vsi skupaj sodelujemo, da tekmovanje poteka gladko.</p>
         <p>Spodaj poišči tekmovanje v bližini in začni svojo pot v svetu kockanja!</p>
+      championship_only: Prikaži le prvenstva
     my_competitions_table:
       edit: Uredi
       registrations: Prijave
@@ -2935,6 +2966,8 @@ sl:
         prihodnosti.
       fto_not_yet_allowed: Discipline oktaeder ni možno izvesti na tekmovanjih, 
         ki se začnejo pred %{date}.
+      fto_requires_internal_scoretaking: mora biti nastavljeno na interne 
+        rezultate v živo, če tekmovanje vključuje disciplino Oktaeder.
     new:
       create_competition: Ustvari tekmovanje
       note_clone: >-
@@ -3130,6 +3163,10 @@ sl:
         national: Mesto na državni lestvici
         continent: Mesto na celinski lestvici
         world: Mesto na svetovni lestvici
+      show_all_linked_results: Prikaži rezultate obeh krogov
+      linked_results_disclaimer_html: Ta krog je del dvojnega kroga. Rezultati 
+        so prikazani za vsak krog posebej; združeni rezultati so vidni na <a 
+        href="%{results_url}">novi strani z rezultati</a>.
     scrambles_table:
       group: Skupina
       scramble: Mešalni algoritem
@@ -3288,12 +3325,12 @@ sl:
         tekoči račun ne more prejemati plačil.
       account_details:
         stripe:
-          email: E-pošta
+          email: E-naslov
           country: Država
           business_name: Ime podjetja
         paypal:
           display_name: Ime
-          primary_email: E-pošta
+          primary_email: E-naslov
         manual:
           payment_instructions: Navodila za plačilo (ki bodo prikazana na strani
             tekmovanja)
@@ -3612,21 +3649,21 @@ sl:
       operations_html: 'Vsakodnevne naloge opravljajo WCA %{committees_and_teams}.'
       teams_committees: ekipe in odbori
       delegates_html: >-
-        <p><strong>WCA delegat</strong> je vloga, definirana v WCA sklepih in
-        prikazana v WCA pravilniku. Glavna naloga delegata je nadzor tekmovanj v
-        imenu WCA. Delegati so odgovorni, da vsa WCA tekmovanja potekajo v
-        skladu z namenom, pravili in poslanstvom WCA. WCA razlikuje med
-        <strong>višjimi delegati (senior delegati)</strong>,
-        <strong>regionalnimi delegati</strong>, <strong>polnopravnimi
-        delegati</strong>, <strong>delegati začetniki (junior delegati)</strong>
-        in <strong>delegati pripravniki</strong> %{see_link}.</p> <p>Poleg
-        običajnih obveznosti WCA delegata je višji delegat ali regionalni
-        delegat zadolžen za vodenje delegatov s svojega področja, nanj pa se
-        lahko obrne tudi skupnost glede regionalnih zadev.</p> <p>Novi delegati
-        najprej postanejo delegati začetniki. Ko dokažejo sposobnost
-        samostojnega vodenja tekmovanja, napredujejo v delegata.</p> <p>Delegati
-        pripravniki se učijo delegiranja, tekmovanja pa lahko nadzirajo le pod
-        mentorstvom drugega WCA delegata.</p>
+        <p><strong>WCA delegat</strong> je vloga, definirana v WCA sklepih in prikazana
+        v WCA pravilniku. Glavna naloga delegata je nadzor tekmovanj v imenu WCA.
+        Delegati so odgovorni, da vsa WCA tekmovanja potekajo v skladu z namenom,
+        pravili in poslanstvom WCA. WCA razlikuje med <strong>višjimi delegati (senior
+        delegati)</strong>, <strong>regionalnimi delegati</strong>, <strong>polnopravnimi
+        delegati</strong>, <strong>delegati začetniki (junior delegati)</strong> in
+        <strong>delegati pripravniki</strong> %{see_link}.</p> <p>Poleg običajnih
+        obveznosti WCA delegata je višji delegat ali regionalni delegat zadolžen za
+        vodenje delegatov s svojega področja, nanj pa se lahko obrne tudi skupnost
+        glede regionalnih zadev.</p> <p>Novi delegati najprej postanejo delegati začetniki.
+        Ko dokažejo sposobnost samostojnega vodenja tekmovanja, napredujejo v delegata.</p>
+        <p>Delegati pripravniki se učijo delegiranja, tekmovanja pa lahko nadzirajo
+        le pod mentorstvom drugega WCA delegata.</p> <p>Če želite postati delegat
+        pripravnik, stopite v stik s svojim regionalnim delegatom, da preverite, ali
+        izpolnjujete pogoje.</p>
       see_link_html: ' (glej %{link})'
       members_html: >-
         Vsi tekmovalci samodejno postanejo <strong>člani</strong> WCA na svojem
@@ -4395,8 +4432,8 @@ sl:
       postati delegati pripravniki. Vaša vloga bo poslana delegatom, pristojnim 
       za regijo, ki ste jo izbrali.
     success_title: Vloga oddana
-    success: Vaša vloga je bila uspešno poslana. Na e-poštni naslov, ki je 
-      povezan z vašim WCA računom, ste prejeli kopijo vloge.
+    success: Vaša vloga je bila uspešno poslana. Na e-naslov, ki je povezan z 
+      vašim WCA računom, ste prejeli kopijo vloge.
     eligibility:
       title: Te vloge še ne morete oddati
       missing_wca_id: Vaš WCA račun mora biti povezan z WCA ID-jem.

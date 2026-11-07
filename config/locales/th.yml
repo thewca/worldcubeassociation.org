@@ -651,6 +651,8 @@ th:
         use_classic: เปลี่ยนกลับไปเป็นหน้าแบบเก่า
       destroy_other:
         success: ทำการออกจากระบบที่อุปกรณ์อื่นสำเร็จ
+      destroy:
+        success: คุณได้ออกจากระบบเรียบร้อยแล้ว
     shared:
       links:
         sign_in: เข้าสู่ระบบ
@@ -780,6 +782,12 @@ th:
       privacy: Privacy
       disclaimer: Disclaimer
       find_us: Find us
+      panels:
+        delegate: สำหรับ Delegate
+        wapc: สำหรับ WAC
+        wfc: สำหรับ WFC
+        admin: สำหรับผู้ดูแลระบบ
+        volunteer: สำหรับอาสาสมัคร
   page:
     translators:
       title: ผู้แปลภาษา
@@ -2010,8 +2018,8 @@ th:
       use_my_location: ใช้ที่อยู่ของฉัน
       distance: ระยะห่าง
       distance_units:
-        km: km
-        mi: mi
+        km: กม.
+        mi: ไมล์
       advanced_filters: ตัวกรองขั้นสูง
       state: เมื่อ
       present: ปัจจุบัน
@@ -2029,7 +2037,7 @@ th:
       to_date: ถึง
       show_filters: แสดงตัวกรอง
       hide_filters: ซ่อนตัวกรอง
-      reset_filters: Reset Filters
+      reset_filters: ล้างค่าการกรอง
       past_from: 'อดีตตั้งแต่ปี %{year}'
       past_all: อดีตทุกปี
       no_delegates: None
@@ -2087,6 +2095,7 @@ th:
       location_not_found: ไม่พบตำแหน่งสำหรับที่อยู่นี้
       location_search_failed: การค้นหาที่อยู่ล้มเหลว 
         โปรดลองใหม่อีกครั้งในอีกหนึ่งนาที
+      championship_only: แสดงเฉพาะการแข่งขันชิงแชมป์ระดับภูมิภาคเท่านั้น
     my_competitions_table:
       edit: แก้ไข
       registrations: การสมัคร
@@ -3410,22 +3419,18 @@ th:
         ของ WCA'
       teams_committees: ทีมและคณะกรรมการ
       delegates_html: >-
-        <p><strong>WCA Delegate</strong>
-        เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ WCA หน้าที่หลักของ Delegate
-        คือดูแลการแข่งขันในนามของ WCA โดย WCA Delegate
-        รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA ทั้งหมดดำเนินการค่านิยม
-        และข้อบังคับของ WCA โดย WCA ได้แยกบทบาทดังนี้ <strong>Senior
-        Delegates</strong>,  <strong>Regional Delegates</strong>, <strong>Full
-        Delegates </strong>, <strong>Junior Delegates</strong>, และ
-        <strong>Trainee Delegates</strong>%{see_link}</p>
-        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates
-        ยังมีหน้าที่ในการจัดการ WCA Delegates
-        ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
-        <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น WCA Candidate Delegates ก่อน
-        หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน WCA
-        ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates</p><p>Trainee
-        Delegates จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate
-        และสามารถดูแลได้แค่การแข่งขันที่มี WCA Delegate คนอื่นด้วยเท่านั้น</p>
+        <p><strong>WCA Delegate</strong> เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ
+        WCA หน้าที่หลักของ Delegate คือดูแลการแข่งขันในนามของ WCA โดย WCA Delegate
+        รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA ทั้งหมดดำเนินการตามจุดประสงค์
+        ค่านิยม และกติกาของ WCA โดย WCA ได้แยกบทบาทดังนี้ <strong>Senior Delegates</strong>,
+        <strong>Regional Delegates</strong>, <strong>Full Delegates </strong>, <strong>Junior
+        Delegates</strong>, และ <strong>Trainee Delegates</strong>%{see_link}</p>
+        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates ยังมีหน้าที่ในการจัดการ
+        WCA Delegates ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
+        <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น Junior Delegates ก่อน หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน
+        WCA ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates</p><p>Trainee Delegates
+        จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate และสามารถดูแลได้แค่การแข่งขันที่มี
+        WCA Delegate คนอื่นด้วยเท่านั้น</p>
       see_link_html: '(ดู%{link})'
       members_html: >-
         ผู้เข้าแข่งขันทุกคนจะเข้าร่วมการเป็น<strong>สมาชิก</strong>ของ WCA

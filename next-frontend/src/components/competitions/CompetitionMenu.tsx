@@ -54,7 +54,7 @@ export default async function CompetitionMenu({
     <TabMenu
       competitionInfo={competitionInfo}
       tabs={tabs}
-      customTabs={competitionInfo.tab_names}
+      customTabs={competitionInfo.tabs.map((tab) => tab.name)}
     />
   );
 }

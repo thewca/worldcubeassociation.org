@@ -11,7 +11,7 @@ import DelegatesOfSubregion from './DelegatesOfSubregion';
 
 export const ALL_REGIONS = {
   id: 'all',
-  name: I18n.t('delegates_page.all_regions'),
+  get name() { return I18n.t('delegates_page.all_regions'); },
 };
 
 function SeniorDelegate({ seniorDelegate }) {

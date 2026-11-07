@@ -2,14 +2,21 @@
 
 module ResultConditions
   class ResultAchieved < ResultCondition
-    attribute :scope, :string
-    attribute :value, :integer
-
-    validates :scope, inclusion: { in: %w[single average] }
     validates :value, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
     def self.wcif_type
       "resultAchieved"
+    end
+
+    def to_desc(source, short: false)
+      round_form = I18n.t("formats#{'.short' if short}.#{source.ranking_format.id}")
+      if source.ranking_event.timed_event?
+        I18n.t("advancement_condition#{'.short' if short}.attempt_result.time", round_format: round_form, time: SolveTime.centiseconds_to_clock_format(self.value))
+      elsif source.ranking_event.fewest_moves?
+        I18n.t("advancement_condition#{'.short' if short}.attempt_result.moves", round_format: round_form, moves: self.value)
+      elsif source.ranking_event.multiple_blindfolded?
+        I18n.t("advancement_condition#{'.short' if short}.attempt_result.points", round_format: round_form, points: SolveTime.multibld_attempt_to_points(self.value))
+      end
     end
 
     def max_advancing(results)
