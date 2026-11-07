@@ -126,6 +126,7 @@ export function AdditionalInformationCard({
           imageProps={{ maxW: { base: "full", md: "sm" } }}
           listProps={{ textStyle: "body" }}
           textStyle="body"
+          linkProps={{ fontSize: "inherit" }}
         >
           {competitionInfo.information}
         </ChakraMarkdown>
