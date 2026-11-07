@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DelegateReport < ApplicationRecord
-  include HasMarkdownImages
+  include HasAttachedImages
 
   REPORTS_ENABLED_DATE = Date.new(2016, 6, 1)
   # Any potentially available section, regardless of versioning.

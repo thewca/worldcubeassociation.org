@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_07_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -280,6 +280,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
     t.integer "station_number"
     t.index ["registration_id", "registration_type"], name: "index_assignments_on_registration_id_and_registration_type"
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
+  end
+
+  create_table "attached_image_usages", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "attachable_id", null: false
+    t.string "attachable_type", null: false
+    t.bigint "attached_image_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachable_type", "attachable_id"], name: "index_attached_image_usages_on_attachable"
+    t.index ["attached_image_id", "attachable_type", "attachable_id"], name: "index_attached_image_usages_uniqueness", unique: true
+    t.index ["attached_image_id"], name: "index_attached_image_usages_on_attached_image_id"
+  end
+
+  create_table "attached_images", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "uploaded_by_id"
+    t.index ["uploaded_by_id"], name: "index_attached_images_on_uploaded_by_id"
   end
 
   create_table "bookmarked_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -860,24 +878,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
     t.text "payment_instructions", null: false
     t.string "payment_reference_label", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "markdown_image_usages", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "attachable_id", null: false
-    t.string "attachable_type", null: false
-    t.datetime "created_at", null: false
-    t.bigint "markdown_image_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["attachable_type", "attachable_id"], name: "index_markdown_image_usages_on_attachable"
-    t.index ["markdown_image_id", "attachable_type", "attachable_id"], name: "index_markdown_image_usages_uniqueness", unique: true
-    t.index ["markdown_image_id"], name: "index_markdown_image_usages_on_markdown_image_id"
-  end
-
-  create_table "markdown_images", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "uploaded_by_id"
-    t.index ["uploaded_by_id"], name: "index_markdown_images_on_uploaded_by_id"
   end
 
   create_table "matched_scramble_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1713,6 +1713,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "attached_image_usages", "attached_images"
+  add_foreign_key "attached_images", "users", column: "uploaded_by_id"
   add_foreign_key "concise_average_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "concise_single_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "external_scramble_sets", "competitions"
@@ -1734,8 +1736,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
   add_foreign_key "live_results", "rounds", on_delete: :cascade
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
-  add_foreign_key "markdown_image_usages", "markdown_images"
-  add_foreign_key "markdown_images", "users", column: "uploaded_by_id"
   add_foreign_key "matched_scramble_sets", "external_scramble_sets"
   add_foreign_key "matched_scramble_sets", "rounds"
   add_foreign_key "matched_scrambles", "external_scrambles"

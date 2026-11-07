@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
-  include HasMarkdownImages
+  include HasAttachedImages
 
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy, inverse_of: :competition
@@ -750,8 +750,8 @@ class Competition < ApplicationRecord
              'tickets_competition_result',
              'result_ticket',
              'lead_delegate',
-             'markdown_image_usages',
-             'markdown_images'
+             'attached_image_usages',
+             'attached_images'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers

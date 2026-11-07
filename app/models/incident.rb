@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Incident < ApplicationRecord
-  include HasMarkdownImages
-
   has_many :incident_tags, autosave: true, dependent: :destroy
   has_many :incident_competitions, dependent: :destroy
   has_many :competitions, -> { order("competitions.start_date asc") }, through: :incident_competitions

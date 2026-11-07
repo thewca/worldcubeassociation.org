@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompetitionTab < ApplicationRecord
-  include HasMarkdownImages
+  include HasAttachedImages
 
   belongs_to :competition
 
