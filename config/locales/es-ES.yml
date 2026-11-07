@@ -723,6 +723,8 @@ es-ES:
         use_classic: Cambiar a la página de inicio de sesión antigua
       destroy_other:
         success: Desconectado satisfactoriamente de otros dispositivos.
+      destroy:
+        success: Se ha cerrado tu sesión.
     shared:
       links:
         sign_in: Iniciar sesión
@@ -864,6 +866,20 @@ es-ES:
       privacy: Privacidad
       disclaimer: Descargo de responsabilidad
       find_us: Encuéntranos
+      panels:
+        admin: Panel de administración
+        volunteer: Panel de Voluntario
+        delegate: Panel de Delegado
+        wapc: Panel del WAC
+        wfc: Panel del WFC
+        wrt: Panel del WRT
+        wst: Panel del WST
+        board: Panel de la Junta Directiva
+        leader: Panel de Líder
+        senior_delegate: Panel de Delegado Sénior
+        wic: Panel del WIC
+        weat: Panel del WEAT
+        wqac: Panel del WQAC
   page:
     translators:
       title: Traductores
@@ -991,6 +1007,8 @@ es-ES:
           provee un proceso de revisión independiente e imparcial para asegurar
           que las decisiones son justas, razonables y de acuerdo con las
           políticas y el reglamento de la WCA.
+      empty: No se han encontrado equipos o comités. Por favor, compruébalo más 
+        tarde.
     contacts:
       title: Formulario de Contacto de la WCA
       faq_note_html: >-
@@ -1120,6 +1138,14 @@ es-ES:
         Solicitud enviada, nos pondremos en contacto contigo pronto. Para
         consultar el estado de esta solicitud, visita <a href="%{link}">este
         enlace</a>.
+    executives:
+      title: Ejecutivos
+      joined_wca: Se unió a la WCA
+      joined_executives: Se unió al Equipo de Ejecutivos
+      more_information: Más información
+      close: Cerrar
+      person_not_found: No se encontró ninguna persona con el ID de la WCA 
+        %{wca_id}
   homepage:
     learn_more: Saber más
     title: Bienvenido a la World Cube Association
@@ -1500,6 +1526,9 @@ es-ES:
         locale: Idioma
         group_name: Nombre del Equipo/Comité
         delegated_competitions_count: Número de Competiciones delegadas
+        wca_id: ID de la WCA
+        location: Ubicación
+        email: Correo electrónico
   user_groups:
     group_types:
       board: Junta Directiva de la WCA
@@ -2073,6 +2102,12 @@ es-ES:
         mean: Media
       errors:
         round_closed: La ronda no está abierta aún
+      overview:
+        past_month: Último mes
+        no_upcoming: No hay próximas competiciones con resultados en directo.
+        upcoming: Próximas
+        in_progress: Ahora mismo
+        search: Buscar competiciones
     my_competitions:
       title: Mis competiciones
       disclaimer: >-
@@ -2350,6 +2385,7 @@ es-ES:
         dirección
       location_search_failed: La búsqueda de la dirección ha fallado, por favor 
         inténtalo de nuevo en un minuto
+      championship_only: Mostrar solo campeonatos
     my_competitions_table:
       edit: Editar
       registrations: Registros
@@ -3407,6 +3443,7 @@ es-ES:
       date_circa: Fecha
   notifications:
     connect_wca_id: ¡Vincula tu ID de la WCA a tu cuenta!
+    copied_to_clipboard: Copiado al portapapeles
   payments:
     header: Historial de pago
     messages:
@@ -3860,7 +3897,9 @@ es-ES:
         su competencia en la gestión de Competiciones de la WCA antes de ser ascendidos
         a Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados
         para ser Delegados de la WCA y solo pueden supervisar competiciones en las
-        que un Delegado de la WCA está presente.</p>
+        que un Delegado de la WCA está presente.</p> <p>Si te interesa convertirte
+        en Delegado en prácticas, ponte en contacto con tu Delegado Regional para
+        determinar tu elegibilidad.</p>
       see_link_html: ' (ver %{link})'
       members_html: >-
         Todos los competidores se convierten automáticamente en
@@ -3906,6 +3945,7 @@ es-ES:
       total_delegated: Competiciones delegadas en total
       lead_delegated: Competiciones como Delegado Responsable
       history: Historial
+    copy_email: Copiar correo electrónico
   regional_organizations:
     title: Organizaciones Regionales
     content: 'La WCA reconoce las siguientes Organizaciones Regionales:'

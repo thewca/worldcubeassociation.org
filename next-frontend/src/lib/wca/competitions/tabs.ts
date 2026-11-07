@@ -6,7 +6,7 @@ import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import { EventId } from "@/lib/wca/data/events";
 
-export interface TabBase {
+interface TabBase {
   i18nKey: string;
   i18nKeyAdmin?: string;
   menuKey: string;
@@ -28,6 +28,31 @@ export interface TabWithLink extends TabBase {
 }
 
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
+
+const eventsAndScheduleTabs = (
+  competitionInfo: components["schemas"]["CompetitionInfo"],
+): TabWithLink[] => {
+  return [
+    {
+      i18nKey: "competitions.show.events",
+      href: route({
+        pathname: "/competitions/[competitionId]/events",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "events",
+      icon: "333Icon",
+    },
+    {
+      i18nKey: "competitions.show.schedule",
+      href: route({
+        pathname: "/competitions/[competitionId]/schedule",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "schedule",
+      icon: "Registration Open Date",
+    },
+  ];
+};
 
 export const beforeCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
@@ -60,24 +85,7 @@ export const beforeCompetitionTabs = (
       menuKey: "competitors",
       icon: "Competitors",
     },
-    {
-      i18nKey: "competitions.show.events",
-      href: route({
-        pathname: "/competitions/[competitionId]/events",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "events",
-      icon: "333Icon",
-    },
-    {
-      i18nKey: "competitions.show.schedule",
-      href: route({
-        pathname: "/competitions/[competitionId]/schedule",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "schedule",
-      icon: "Registration Open Date",
-    },
+    ...eventsAndScheduleTabs(competitionInfo),
   ];
 };
 
@@ -216,7 +224,11 @@ export const afterCompetitionTabs = (
   };
 
   if (isAwaitingResults) {
-    return [infoTab, liveTab(competitionInfo)];
+    return [
+      infoTab,
+      liveTab(competitionInfo),
+      ...eventsAndScheduleTabs(competitionInfo),
+    ];
   }
 
   return [
@@ -251,11 +263,12 @@ export const afterCompetitionTabs = (
     {
       i18nKey: "competitions.nav.menu.by_person",
       href: route({
-        pathname: "/competitions/[competitionId]/results/byPerson",
+        pathname: "/competitions/[competitionId]/results/by-person",
         query: { competitionId: competitionInfo.id },
       }),
-      menuKey: "byPerson",
+      menuKey: "by-person",
       icon: "Competitors",
     },
+    ...eventsAndScheduleTabs(competitionInfo),
   ];
 };

@@ -55,7 +55,7 @@ RSpec.feature "Competition events management" do
         find_round("333", 1).click_button("timeLimit")
 
         modal = find_modal
-        modal.find(:css, "input[type='text']").fill_in with: "4:00.00"
+        modal.find_field(type: 'text').fill_in with: "4:00.00"
         modal.click_button "Close"
 
         # Modal asking to discard changes.
@@ -81,7 +81,7 @@ RSpec.feature "Competition events management" do
         find_round("333", 1).click_button("timeLimit")
 
         modal = find_modal
-        modal.find(:css, "input[type='text']").fill_in with: "5:00.00"
+        modal.find_field(type: 'text').fill_in with: "5:00.00"
         modal.click_button "Ok"
 
         save_events_react
@@ -116,7 +116,7 @@ RSpec.feature "Competition events management" do
 
         save_events_react
 
-        expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to next round"
+        expect(round_333_1.reload.advancement_condition_to_desc).to eq "Top 12 advance to next round"
       end
 
       scenario "change qualification time to any result", :js do
@@ -138,7 +138,7 @@ RSpec.feature "Competition events management" do
         comp_event_333.reload
 
         expect(comp_event_333.qualification_to_s).to eq "Any single solve"
-        expect(comp_event_333.qualification.when_date).to eq qualification_date
+        expect(comp_event_333.qualification_latest_date).to eq qualification_date
       end
     end
   end
@@ -285,7 +285,7 @@ end
 def save_events_react(wait_for_completion: true)
   # Wait for the modal to be hidden.
   expect(page).to have_no_css(".modal-open")
-  first(:button, "save your changes!", visible: true).click
+  first(:button, "save your changes!", visible: :visible).click
   # Wait for ajax to complete.
   expect(page).to have_no_text("You have unsaved changes") if wait_for_completion
 end

@@ -3,7 +3,6 @@
 require "newrelic_rpm"
 
 class ApplicationController < ActionController::Base
-  include TimeWillTell::Helpers::DateRangeHelper
   include Devise::Controllers::StoreLocation
 
   protect_from_forgery with: :exception, unless: :oauth_request?

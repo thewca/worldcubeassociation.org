@@ -1,7 +1,7 @@
 import {
   Combobox,
   Field,
-  Heading,
+  Text,
   Portal,
   useFilter,
   useListCollection,
@@ -70,9 +70,9 @@ const regionsOptions = (t: TFunction) =>
       disabled: true,
       centered: true,
       content: (
-        <Heading textStyle="s4" fontSize="sm">
+        <Text textStyle="s4" fontSize="xs">
           {t("common.continent")}
-        </Heading>
+        </Text>
       ),
     },
     ...continentOptions(t),
@@ -82,9 +82,9 @@ const regionsOptions = (t: TFunction) =>
       disabled: true,
       centered: true,
       content: (
-        <Heading textStyle="s4" fontSize="sm">
+        <Text textStyle="s4" fontSize="xs">
           {t("common.country")}
-        </Heading>
+        </Text>
       ),
     },
     ...countryOptions(t),
@@ -126,7 +126,6 @@ export default function RegionSelector({
         inputBehavior="autohighlight"
         onValueChange={(e) => onRegionChange(e.value[0])}
         width="100%"
-        openOnClick
         value={region ? [region] : undefined}
         disabled={disabled}
         defaultValue={[ALL_REGIONS_VALUE]}
@@ -139,6 +138,10 @@ export default function RegionSelector({
               <Combobox.Input
                 placeholder={name}
                 cursor="pointer"
+                autoComplete="off"
+                data-1p-ignore
+                data-lpignore="true"
+                onClick={() => api.setOpen(!api.open)}
                 // Focusing an input that already holds a region otherwise shows that one
                 // region filtered down to itself, so you have to clear it by hand before
                 // you can type or browse. The selection itself is untouched, so the list

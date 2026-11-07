@@ -152,6 +152,27 @@ RSpec.describe Api::V0::UserRolesController do
     end
   end
 
+  describe 'GET #search' do
+    let!(:banned_competitor) { create(:banned_competitor_role) }
+    let(:search_params) { { query: banned_competitor.user.name, groupType: UserGroup.group_types[:banned_competitors] } }
+
+    it 'does not return banned competitors to a normal user' do
+      sign_in create(:user)
+
+      get :search, params: search_params
+
+      expect(response.parsed_body["result"]).to be_empty
+    end
+
+    it 'returns banned competitors to an admin' do
+      sign_in create(:wst_admin_role).user
+
+      get :search, params: search_params
+
+      expect(response.parsed_body["result"].pluck("id")).to eq [banned_competitor.id]
+    end
+  end
+
   describe 'POST #create' do
     let!(:user_to_be_banned_with_past_comps) { create(:user, :with_past_competitions) }
     let!(:user_to_be_banned_with_future_comps) { create(:user, :with_future_competitions) }

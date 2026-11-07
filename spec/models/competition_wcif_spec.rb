@@ -46,8 +46,7 @@ RSpec.describe "Competition WCIF" do
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_average_condition) { ResultConditions::Ranking.new(value: 16, scope: 'average') }
-  let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
-  let(:round333_1) { build(:round, number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
+  let(:round333_1) { build(:round, number: 1, cutoff: sixty_second_2_attempt_cutoff, scramble_set_count: 16, total_number_of_rounds: 2) }
   let(:round333_2) { build(:round, number: 2, total_number_of_rounds: 2, participation_source: round333_1, participation_condition: top_16_average_condition) }
   let(:event_333) { build(:competition_event, event_id: "333", rounds: [round333_1, round333_2]) }
   let(:round444_1) { build(:round, number: 1) }
@@ -1206,7 +1205,7 @@ RSpec.describe "Competition WCIF" do
         # Previously, 333 used to be a "classic" R1 -> R2 -> R3 setup. Now that R1 and R2 are getting linked,
         # R2 cannot point to "only" R1 anymore. Instead, it has to source from the same place as R1,
         # to keep Linked Rounds state consistent.
-        round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source)
+        round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source, participation_condition: nil)
 
         expect(competition.to_wcif(version: wcif_version)["events"]).not_to eq(wcif_unlinked)
 
@@ -1224,7 +1223,7 @@ RSpec.describe "Competition WCIF" do
           linked_round = create(:linked_round)
 
           round333_1.update!(linked_round: linked_round)
-          round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source)
+          round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source, participation_condition: nil)
 
           wcif_events = competition.to_wcif(version: removal_version)["events"]
           wcif_333_event = wcif_events.find { |e| e["id"] == "333" }

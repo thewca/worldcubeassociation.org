@@ -110,13 +110,22 @@ module ApplicationHelper
     nav_items
   end
 
-  def wca_date_range(from_date, to_date, **options)
-    if from_date && to_date
-      options[:separator] = '-'
-      date_range(from_date, to_date, **options)
-    else
-      t "common.date.no_date"
-    end
+  def wca_date_range_tag(from_date, to_date)
+    return t("common.date.no_date") unless from_date && to_date
+
+    content_tag :span, "", class: "wca-date-range", data: { from: from_date.iso8601, to: to_date.iso8601, locale: I18n.locale }
+  end
+
+  def wca_date_range(from_date, to_date)
+    return t("common.date.no_date") unless from_date && to_date
+
+    from_date, to_date = to_date, from_date if from_date > to_date
+    return from_date.strftime("%b %-d, %Y") if from_date == to_date
+
+    from_format = from_date.year == to_date.year ? "%b %-d" : "%b %-d, %Y"
+    to_format = from_date.beginning_of_month == to_date.beginning_of_month ? "%-d, %Y" : "%b %-d, %Y"
+
+    "#{from_date.strftime(from_format)} – #{to_date.strftime(to_format)}"
   end
 
   def alert(type, content = nil, note: false, &block)

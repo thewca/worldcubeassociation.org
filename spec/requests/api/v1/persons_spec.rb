@@ -44,7 +44,7 @@ RSpec.describe "API v1 Persons" do
 
       expect(response.parsed_body.first).to include(
         "global_pos" => result.global_pos,
-        "linked_round_id" => linked_round.id,
+        "ranking_mode" => "linked_round",
       )
     end
 
@@ -90,6 +90,12 @@ RSpec.describe "API v1 Persons" do
 
       json = response.parsed_body
       expect(json.pluck("id")).to contain_exactly(single_record.id, average_record.id)
+    end
+
+    it "404s for an unknown WCA ID" do
+      get api_v1_person_records_path("1000AAAA01")
+
+      expect(response).to have_http_status(:not_found)
     end
   end
 end

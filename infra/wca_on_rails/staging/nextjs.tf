@@ -42,16 +42,16 @@ locals {
       value = "mongodb://payload-database-staging.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com/payload?retryWrites=false"
     },
     {
-      name  = "LIVE_RESULT_BETA"
-      value = "1"
-    },
-    {
       name  = "WCA_BACKEND_API_URL"
       value = "http://${local.rails_internal_dns}:3000/api/"
     },
     {
       name  = "WCA_FRONTEND_API_URL"
       value = "https://www.staging.worldcubeassociation.org/api/"
+    },
+    {
+      name  = "WEBLATE_URL"
+      value = "http://weblate.internal:8080"
     },
     {
       name  = "PROPRIETARY_FONT"

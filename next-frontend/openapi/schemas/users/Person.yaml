@@ -27,6 +27,9 @@ properties:
   delegate_status:
     type: string
     example: "delegate"
+  email:
+    type: string
+    format: email
   teams:
     type: array
     items:

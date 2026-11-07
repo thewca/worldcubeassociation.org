@@ -5,9 +5,10 @@ class UsersController < ApplicationController
   before_action :check_recent_authentication, only: %i[enable_2fa disable_2fa regenerate_2fa_backup_codes]
   before_action :check_recent_auth_dangerous, only: %i[update], if: :dangerous_profile_change?
   before_action :set_recent_authentication!, only: %i[edit update enable_2fa disable_2fa]
-  before_action :redirect_if_cannot_edit_user, only: %i[edit update]
+  before_action :redirect_if_cannot_edit_user, only: %i[edit update avatar_data upload_avatar update_avatar delete_avatar]
+  before_action -> { redirect_to_root_unless_user(:can_change_users_avatar?, user_to_edit) }, only: %i[avatar_data upload_avatar update_avatar delete_avatar]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: %i[admin_search]
-  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge clear_claim_wca_id]
+  before_action -> { redirect_to_root_unless_user(:can_edit_any_user?) }, only: %i[assign_wca_id confirm_wca_id merge show_for_merge clear_claim_wca_id]
   before_action -> { check_edit_access }, only: %i[show_for_edit update_user_data]
 
   RECENT_AUTHENTICATION_DURATION = 10.minutes.freeze
