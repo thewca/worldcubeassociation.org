@@ -71,4 +71,23 @@ RSpec.describe UserRole do
       end
     end
   end
+
+  describe '#active_on?' do
+    let(:role) { build(:delegate_role, start_date: Date.new(2026, 3, 1), end_date: Date.new(2026, 3, 31)) }
+
+    it 'is active from its start date until the day before its end date' do
+      expect(role.active_on?(Date.new(2026, 3, 1))).to be true
+      expect(role.active_on?(Date.new(2026, 3, 30))).to be true
+    end
+
+    it 'is not active before its start date or on its end date' do
+      expect(role.active_on?(Date.new(2026, 2, 28))).to be false
+      expect(role.active_on?(Date.new(2026, 3, 31))).to be false
+    end
+
+    it 'stays active without an end date' do
+      role.end_date = nil
+      expect(role.active_on?(Date.new(2030, 1, 1))).to be true
+    end
+  end
 end
