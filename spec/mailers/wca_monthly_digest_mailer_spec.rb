@@ -13,12 +13,26 @@ RSpec.describe WcaMonthlyDigestMailer do
       expect(mail.subject).to eq("WCA Monthly Digest Draft - #{last_month.strftime('%B %Y')}")
     end
 
-    it "renders the changes in teams/committees section" do
-      expect(mail.body.encoded).to include("Changes in Teams/Committees")
-    end
+    it "renders every digest section, starting with the delegate milestones" do
+      section_titles = [
+        "Delegate Milestones",
+        "Committee/Team Leaders",
+        "New Senior Delegates",
+        "New Regional Delegates",
+        "New Trainee Delegates",
+        "New Junior Delegates",
+        "Delegate Promotions: Trainee Delegate to Junior Delegate",
+        "Delegate Promotions: Junior Delegate to Delegate",
+        "Delegate Resignations/Demotions",
+        "New Committee/Team Members",
+        "Promoted Committee/Team Members",
+        "Resigned/Demoted Committee/Team Members",
+        "Recognized Regional Organizations",
+      ]
+      section_positions = section_titles.map { |title| mail.body.encoded.index("<b>#{title}</b>") }
 
-    it "renders the delegate milestones section" do
-      expect(mail.body.encoded).to include("Delegate Milestones")
+      expect(section_positions).to all(be_present)
+      expect(section_positions).to eq section_positions.sort
     end
   end
 end
