@@ -2413,7 +2413,6 @@ en:
         competitors: "Competitors"
         scrambles: "Scrambles"
     h2h:
-      title: "Head To Head Bracket"
       set_number: "Set %{number}"
       stage_of: "Stage of %{number}"
       quarterfinal_stage: "Quarterfinal Stage"
@@ -2421,7 +2420,7 @@ en:
       final_stage: "Final Stage"
       third_place: "Third Place"
     results_table:
-      h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
+      h2h_results_disclaimer_html: "Results determined by a Head-to-Head Final. Only placement order and best solve are shown here; the full Head-to-Head bracket is available on the <a href=\"%{results_url}\">new results page</a>."
       show_all_linked_results: "Show results from both rounds"
       linked_results_disclaimer_html: "This round is part of a Dual Round. The results below are shown per round; combined results across both rounds are available on the <a href=\"%{results_url}\">new results page</a>."
       wca_profile: "WCA profile"

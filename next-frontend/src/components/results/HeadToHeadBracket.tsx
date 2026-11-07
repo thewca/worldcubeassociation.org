@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import {
   Box,
   Flex,
@@ -17,9 +17,7 @@ import NextLink from "next/link";
 import _ from "lodash";
 import { TFunction } from "i18next";
 import { HiOutlineInformationCircle } from "react-icons/hi";
-import events from "@/lib/wca/data/events";
 import { useT } from "@/lib/i18n/useI18n";
-import { SingleEventSelector } from "@/components/EventSelector";
 import { Tooltip } from "@/components/ui/tooltip";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import {
@@ -41,43 +39,7 @@ const THIRD_PLACE = 3;
 // A match whose competitors have no final position yet sorts last.
 const UNPLACED = Number.POSITIVE_INFINITY;
 
-export default function HeadToHeadBrackets({
-  h2hRounds,
-}: {
-  h2hRounds: H2hRound[];
-}) {
-  const eventIds = _.uniq(h2hRounds.map((round) => round.event_id));
-  const [activeEventId, setActiveEventId] = useState<string>(eventIds[0]);
-
-  const { t } = useT();
-
-  const activeRounds = h2hRounds.filter(
-    (round) => round.event_id === activeEventId,
-  );
-
-  return (
-    <VStack align="start" gap={4}>
-      {eventIds.length > 1 && (
-        <SingleEventSelector
-          selectedEvent={activeEventId}
-          onEventClick={setActiveEventId}
-          eventList={eventIds}
-        />
-      )}
-      {activeRounds.map((round) => (
-        <Fragment key={round.wcif_id}>
-          <Heading textStyle="h3">
-            {events.byId[round.event_id].name}{" "}
-            {t(`rounds.${round.round_type_id}.name`)}
-          </Heading>
-          <Bracket round={round} />
-        </Fragment>
-      ))}
-    </VStack>
-  );
-}
-
-function Bracket({ round }: { round: H2hRound }) {
+export default function HeadToHeadBracket({ round }: { round: H2hRound }) {
   const { t } = useT();
 
   const stages = groupMatchesIntoStages(round.matches);
