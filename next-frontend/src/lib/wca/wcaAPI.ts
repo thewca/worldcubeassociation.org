@@ -53,7 +53,7 @@ export const serverClient = {
     Init extends MaybeOptionalInit<paths[Path], "get">,
   >(
     url: Path,
-    ...init: [Init] | []
+    ...init: [Init & { headers?: never }] | []
   ) => {
     const { response, ...result } = await baseServerClient.GET(
       url,
