@@ -5,16 +5,21 @@ import React, { type ReactNode } from "react";
 interface IconDisplayProps {
   name: IconName;
   fallback?: boolean | ReactNode;
+  size?: string;
 }
 
-const IconDisplay = ({ name, fallback = undefined }: IconDisplayProps) => {
+const IconDisplay = ({
+  name,
+  fallback = undefined,
+  size = "1em",
+}: IconDisplayProps) => {
   const IconComponent = iconMap[name];
 
   if (!IconComponent) {
     return fallback === true ? <Text>No_Icon</Text> : fallback;
   }
 
-  return <IconComponent />;
+  return <IconComponent boxSize={size} />;
 };
 
 export default IconDisplay;

@@ -4,15 +4,13 @@ import Link from "next/link";
 import {
   Badge,
   Box,
-  CloseButton,
   Collapsible,
-  Drawer,
-  IconButton,
   Link as ChakraLink,
   Separator,
   Tabs,
   Text,
   TextProps,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
@@ -25,12 +23,17 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
 import { TFunction } from "i18next";
-import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
+import {
+  // LuAlignJustify,
+  LuArrowLeft,
+} from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import IconDisplay from "@/components/IconDisplay";
 import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
+import MobileTabMenu from "./MobileTabMenu";
+import PageContent from "./PageContent";
 
 function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
@@ -59,29 +62,50 @@ export default function TabMenu({
 
   const eventId = activityCodeFromPath(currentPath!);
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   const [openGroup, setOpenGroup] = useState<string | null>(eventId);
   // The drawer stays open only while the route it was opened on is still current, so any
   //   navigation closes it. Until tab navigation became client-side the page reload did that
   //   for us; hanging an onClick on the links instead would mean threading a callback three
   //   components down, past two `asChild` merges that are known to drop handlers.
-  const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
-  const drawerOpen = drawerOpenedAt === pathName;
+  // const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
+  // const drawerOpen = drawerOpenedAt === pathName;
 
+  if (isMobile)
+    return (
+      <>
+        <PageContent
+          eventId={eventId || decodeURIComponent(currentPath!)}
+          competition={competitionInfo}
+          tabs={tabs}
+        >
+          {children}
+        </PageContent>
+        <MobileTabMenu
+          tabs={tabs}
+          customTabs={customTabs}
+          competitionId={competitionInfo.id}
+          t={t}
+          isAdminRoute={isAdminRoute}
+          activeMenuKey={currentPath || ""}
+        />
+      </>
+    );
   return (
     <Tabs.Root
       variant="enclosed"
       width="full"
       value={currentPath}
       orientation="vertical"
-      sideNav
       lazyMount
-      unmountOnExit
+      hideBelow="md"
     >
       <Tabs.List
         width="fit-content"
         minW="3xs"
         textAlign="start"
-        hideBelow="md"
+
         gap="3"
       >
         {backHref && (
@@ -105,80 +129,17 @@ export default function TabMenu({
           currentPath={currentPath}
         />
       </Tabs.List>
-      <Box hideFrom="md">
-        <Drawer.Root
-          open={drawerOpen}
-          onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
-          placement="start"
-        >
-          <Drawer.Trigger asChild>
-            <IconButton
-              aria-label="Open menu"
-              colorPalette="blue"
-              size="xl"
-              position="fixed"
-              insetEnd="4"
-              bottom="4"
-              zIndex="docked"
-              rounded="full"
-              shadow="lg"
-            >
-              <LuAlignJustify />
-            </IconButton>
-          </Drawer.Trigger>
 
-          <Drawer.Backdrop />
-          <Drawer.Positioner>
-            <Drawer.Content>
-              <Drawer.Header>
-                <Drawer.Title>
-                  {backHref ? (
-                    <BackLink
-                      href={backHref}
-                      label={competitionInfo.name}
-                      onClick={() => setDrawerOpenedAt(null)}
-                    />
-                  ) : (
-                    competitionInfo.name
-                  )}
-                </Drawer.Title>
-                <Drawer.CloseTrigger asChild>
-                  <CloseButton />
-                </Drawer.CloseTrigger>
-              </Drawer.Header>
-
-              <Drawer.Body>
-                <Tabs.List
-                  flexDirection="column"
-                  gap="1"
-                  borderInlineEnd="none"
-                  w="100%"
-                  bg="none"
-                >
-                  <TabList
-                    tabs={tabs}
-                    t={t}
-                    isAdminRoute={isAdminRoute}
-                    openGroup={openGroup}
-                    onToggle={(tab: CompetitionNavTab) =>
-                      setOpenGroup((prev) =>
-                        prev === tab.menuKey ? null : tab.menuKey,
-                      )
-                    }
-                    customTabs={customTabs}
-                    competitionId={competitionInfo.id}
-                    currentPath={currentPath}
-                  />
-                </Tabs.List>
-              </Drawer.Body>
-            </Drawer.Content>
-          </Drawer.Positioner>
-        </Drawer.Root>
-      </Box>
       {/* Tabs.Content is a flex item, which has `min-width: auto`.
        It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
       <Tabs.Content width="full" minWidth="0" value={currentPath!}>
-        {children}
+        <PageContent
+          eventId={eventId || decodeURIComponent(currentPath!)}
+          competition={competitionInfo}
+          tabs={tabs}
+        >
+          {children}
+        </PageContent>
       </Tabs.Content>
     </Tabs.Root>
   );

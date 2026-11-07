@@ -2402,6 +2402,11 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+      info: "General"
+      more: "More"
+      admin: "Admin"
+      results: "Results"
+      events: "Events"
     results_table:
       h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
       show_all_linked_results: "Show results from both rounds"
