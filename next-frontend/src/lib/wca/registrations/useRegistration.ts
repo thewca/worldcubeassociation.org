@@ -23,8 +23,8 @@ export const registrationQueryOptions = (
     queryKey: registrationQueryKey(competitionId, userId),
     queryFn: async () => {
       const { data, error, response } = await apiClient.GET(
-        "/v1/competitions/{competitionId}/registrations/{userId}",
-        { params: { path: { competitionId, userId } } },
+        "/v1/competitions/{competitionId}/registrations/mine",
+        { params: { path: { competitionId } } },
       );
 
       // Not being registered is a normal answer rather than a failure, so it must not reject.

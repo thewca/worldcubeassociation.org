@@ -22,13 +22,13 @@ const fetchConfig = cache(async (authToken: string, competitionId: string) => {
 });
 
 const fetchRegistration = cache(
-  async (authToken: string, competitionId: string, userId: number) => {
+  async (authToken: string, competitionId: string) => {
     const client = serverClientWithToken(authToken);
 
     return await client.GET(
-      "/v1/competitions/{competitionId}/registrations/{userId}",
+      "/v1/competitions/{competitionId}/registrations/mine",
       {
-        params: { path: { competitionId, userId } },
+        params: { path: { competitionId } },
       },
     );
   },
@@ -89,11 +89,7 @@ export default async function RegisterPage({
   ] = await Promise.all([
     getCompetitionInfo(competitionId),
     fetchConfig(session.accessToken, competitionId),
-    fetchRegistration(
-      session.accessToken,
-      competitionId,
-      session.user.wcaUserId,
-    ),
+    fetchRegistration(session.accessToken, competitionId),
     fetchEligibility(session.accessToken, competitionId),
   ]);
 

@@ -415,6 +415,7 @@ Rails.application.routes.draw do
             patch 'bulk_auto_accept', to: 'registrations#bulk_auto_accept'
             patch 'bulk_update', to: 'registrations#bulk_update'
             get 'admin', to: 'registrations#index_admin'
+            get 'mine', to: 'registrations#show_mine', as: :show_mine
             get ':user_id', to: 'registrations#show_by_user', as: :show_by_user
           end
         end

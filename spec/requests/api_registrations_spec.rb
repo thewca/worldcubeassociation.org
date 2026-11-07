@@ -49,9 +49,59 @@ RSpec.describe 'API Registrations' do
       registration = create(:registration, competition: competition, user: user)
 
       api_sign_in_as(user, scopes: Doorkeeper::OAuth::Scopes.new)
-      get api_v1_registration_path(registration)
+      get show_mine_api_v1_competition_registrations_path(registration.competition)
 
       expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'GET #show_mine' do
+    it 'returns 404 when the user is not registered' do
+      competition = create(:competition, :registration_open)
+      api_sign_in_as(create(:user))
+
+      get show_mine_api_v1_competition_registrations_path(competition)
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  describe 'admin comment visibility' do
+    let(:delegate) { create(:delegate) }
+    let(:registration) { create(:registration, :pending, competition: create(:competition, :registration_open, delegates: [delegate])) }
+
+    before do
+      Registrations::Lanes::Competing.update!({ 'competing' => { 'admin_comment' => 'secret history note' } }, registration, delegate.id)
+    end
+
+    it 'hides the admin comment from the competitor' do
+      api_sign_in_as(registration.user)
+
+      get show_mine_api_v1_competition_registrations_path(registration.competition)
+      expect(response.parsed_body['competing']).not_to have_key('admin_comment')
+    end
+
+    it 'shows the admin comment to the organizer' do
+      api_sign_in_as(delegate)
+
+      get api_v1_registration_path(registration)
+      expect(response.parsed_body['competing']['admin_comment']).to eq('secret history note')
+
+      get api_v1_registration_history_path(registration)
+      expect(response.parsed_body.pluck('changed_attributes')).to include(include('administrative_notes' => 'secret history note'))
+    end
+
+    it 'does not let the competitor read their registration through the organizer endpoints' do
+      api_sign_in_as(registration.user)
+
+      get api_v1_registration_path(registration)
+      expect(response).to have_http_status(:unauthorized)
+
+      get show_by_user_api_v1_competition_registrations_path(registration.competition, registration.user_id)
+      expect(response).to have_http_status(:unauthorized)
+
+      get api_v1_registration_history_path(registration)
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 
