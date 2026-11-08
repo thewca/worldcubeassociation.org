@@ -773,6 +773,11 @@ const customConfig = defineConfig({
       },
       datePicker: {
         slots: [],
+        base: {
+          trigger: {
+            cursor: "pointer",
+          },
+        },
         variants: {
           variant: {
             outline: {

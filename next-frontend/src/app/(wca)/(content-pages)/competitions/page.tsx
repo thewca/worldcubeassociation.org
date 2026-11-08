@@ -749,7 +749,7 @@ function DateFilter({
         <DatePicker.Input />
         <DatePicker.IndicatorGroup>
           <DatePicker.ClearTrigger />
-          <DatePicker.Trigger cursor="pointer">{icon}</DatePicker.Trigger>
+          <DatePicker.Trigger>{icon}</DatePicker.Trigger>
         </DatePicker.IndicatorGroup>
       </DatePicker.Control>
       <Portal>
