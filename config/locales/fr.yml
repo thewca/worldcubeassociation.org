@@ -727,6 +727,8 @@ fr:
         use_classic: Passer à l'ancienne page de connexion
       destroy_other:
         success: Vos autres appareils ont été déconnectés avec succès.
+      destroy:
+        success: Vous avez été déconnecté.
     shared:
       links:
         sign_in: Connexion
@@ -870,6 +872,20 @@ fr:
       privacy: Données personnelles
       disclaimer: Mentions légales
       find_us: Nous trouver
+      panels:
+        admin: Panneau d'administration
+        volunteer: Panneau bénévole
+        delegate: Panneau Délégué
+        wapc: Panneau WAC
+        wfc: Panneau WFC
+        wrt: Panneau WRT
+        wst: Panneau WST
+        board: Panneau du Conseil d'administration
+        leader: Panneau responsable
+        senior_delegate: Panneau Délégué Senior
+        wic: Panneau WIC
+        weat: Panneau WEAT
+        wqac: Panneau WQAC
   page:
     translators:
       title: Traducteur·rice·s
@@ -1001,6 +1017,7 @@ fr:
           WAC fournit un processus de révision indépendant et impartial pour
           s'assurer que les décisions sont justes, raisonnables et conformes aux
           politiques et règlements de la WCA.
+      empty: Aucune équipe ni aucun comité trouvé. Veuillez revenir plus tard.
     contacts:
       title: Formulaire de contact WCA
       faq_note_html: >-
@@ -1134,6 +1151,13 @@ fr:
         Original : Demande envoyée - nous vous répondrons prochainement. Pour
         consulter le statut de cette demande, veuillez vous rendre sur <a
         href="%{link}">ce lien</a>.
+    executives:
+      title: Dirigeants
+      joined_wca: A rejoint la WCA
+      joined_executives: A rejoint l'équipe de direction
+      more_information: Plus d'informations
+      close: Fermer
+      person_not_found: Aucune personne trouvée avec l'ID WCA %{wca_id}
   homepage:
     learn_more: En savoir plus
     title: Bienvenue à la World Cube Association
@@ -1526,6 +1550,9 @@ fr:
         locale: Langue
         group_name: Nom du comité ou de l'équipe
         delegated_competitions_count: Nombre de compétition déléguées
+        wca_id: ID WCA
+        location: Lieu
+        email: E-mail
   user_groups:
     group_types:
       board: Conseil d'administration de la WCA
@@ -2108,6 +2135,14 @@ fr:
         mean: Moyenne
       errors:
         round_closed: Le tour n'est pas encore ouvert
+      combined_title: Doubles confrontations combinées
+      overview:
+        upcoming: À venir
+        in_progress: En ce moment
+        past_month: Le mois dernier
+        no_upcoming: Il n'y a aucune compétition à venir avec des résultats en 
+          direct.
+        search: Rechercher des compétitions
     my_competitions:
       title: Mes Compétitions
       disclaimer: >-
@@ -2388,6 +2423,17 @@ fr:
       location_not_found: Aucun lieu n'a été trouvé pour cette adresse
       location_search_failed: La recherche d'adresse a échoué, veuillez 
         réessayer dans une minute
+      championship_only: Afficher uniquement les championnats
+      sort:
+        order: Ordre de tri
+        start_date_asc: 'Date de début : croissante'
+        start_date_desc: 'Date de début : décroissante'
+        end_date_asc: 'Date de fin : croissante'
+        end_date_desc: 'Date de fin : décroissante'
+        announced_at_asc: "Date d'annonce : croissante"
+        announced_at_desc: "Date d'annonce : décroissante"
+        name_asc: 'Nom : A-Z'
+        name_desc: 'Nom : Z-A'
     my_competitions_table:
       edit: Éditer
       registrations: Inscriptions
@@ -3214,6 +3260,8 @@ fr:
       edited_deadline_not_in_future: >-
         Vous ne pouvez introduire que des dates limites futures, mais
         %{new_timestamp} n'est pas dans le futur.
+      fto_requires_internal_scoretaking: doit être défini sur Résultats en 
+        direct internes lorsque l'Octaminx (FTO) est présent.
     new:
       create_competition: Créer une compétition
       note_clone: >-
@@ -3421,6 +3469,11 @@ fr:
         national: Rang national
         continent: Rang continental
         world: Rang mondial
+      show_all_linked_results: Afficher les résultats des deux tours
+      linked_results_disclaimer_html: Ce tour fait partie d'une double 
+        confrontation. Les résultats ci-dessous sont affichés par tour ; les 
+        résultats combinés des deux tours sont disponibles sur la <a 
+        href="%{results_url}">nouvelle page des résultats</a>.
     scrambles_table:
       group: Groupe
       scramble: Mélange
@@ -3459,6 +3512,7 @@ fr:
         results" ou "by region"
     records:
       title: Records
+      load_error: Erreur lors de la récupération des records
     last_updated_html: 'Dernière modification : %{timestamp}'
     filters_fixes_underway: >-
       Veuillez noter que certains filtres (comme les années précédentes) sont
@@ -3497,6 +3551,7 @@ fr:
       date_circa: Date circa
   notifications:
     connect_wca_id: Associez votre ID WCA à votre compte !
+    copied_to_clipboard: Copié dans le presse-papiers
   payments:
     header: Historique des paiements
     messages:
@@ -3942,21 +3997,23 @@ fr:
         %{committees_and_teams} de la WCA.
       teams_committees: Équipes et Comités
       delegates_html: >-
-        <p><strong>Délégués WCA</strong> est un rôle défini dans les statuts de la
+        <p><strong>Délégué WCA</strong> est un rôle défini dans les Motions de la
         WCA et décrit dans le Règlement WCA. Le devoir principal d'un Délégué est
-        de superviser les compétitions au nom de la WCA. Le Délégué WCA est responsable
-        de s'assurer que les compétitions WCA se déroulent selon l'objectif, le règlement,
-        et les valeurs de la WCA. La WCA distingue les statuts suivants : <strong>Délégués
-        Senior</strong>, <strong>Délégués Régionaux</strong>, <strong>Délégués</strong>,
-        <strong>Délégués Junior</strong>, et <strong>Apprenti Délégué</strong> %{see_link}.</p><p>En
-        plus des devoirs d'un Délégué WCA, un Délégué Senior ou un Délégué régional
-        est responsable de la gestion des Délégués dans sa zone, et peut également
-        être contacté par la communauté pour des affaires régionales.</p><p>Les nouveaux
-        Délégués sont d'abord listés en tant que Délégués Junior, et doivent montrer
-        qu'ils sont capables de gérer des compétitions avec succès avant d'être listés
-        comme Délégués WCA.</p> <p>Les Apprentis Délégués sont en formation pour devenir
-        Délégué WCA and ne peuvent superviser que des compétitions où au moins une
-        personne avec le statut de Délégué WCA est présente.</p>
+        de superviser les compétitions au nom de la WCA. Un Délégué WCA est responsable
+        de s'assurer que toutes les compétitions WCA se déroulent conformément à l'objectif,
+        aux valeurs et au Règlement de la WCA. La WCA distingue les <strong>Délégués
+        Senior</strong>, les <strong>Délégués Régionaux</strong>, les <strong>Délégués
+        Titulaires</strong>, les <strong>Délégués Junior</strong> et les <strong>Apprentis
+        Délégués</strong>%{see_link}.</p> <p>En plus des devoirs d'un Délégué WCA,
+        un Délégué Senior ou un Délégué Régional est responsable de la gestion des
+        Délégués WCA dans sa zone et peut également être contacté par la communauté
+        pour des affaires régionales.</p> <p>Les nouveaux Délégués sont d'abord listés
+        en tant que Délégués Junior ; ils doivent ensuite démontrer leur capacité
+        à gérer des compétitions WCA avant d'être promus Délégués WCA.</p> <p>Les
+        Apprentis Délégués sont en formation pour devenir Délégué WCA et ne peuvent
+        superviser que des compétitions où un Délégué WCA est présent.</p> <p>Si vous
+        souhaitez devenir Apprenti Délégué, contactez votre Délégué Régional afin
+        de déterminer votre éligibilité.</p>
       see_link_html: ' (voir %{link})'
       members_html: >-
         Tous les compétiteurs deviennent automatiquement des
@@ -4003,6 +4060,7 @@ fr:
       total_delegated: Compétitions déléguées
       lead_delegated: Compétitions en tant que délégué principal
       history: Historique
+    copy_email: Copier l'e-mail
   regional_organizations:
     title: Organisations Régionales
     content: 'La WCA reconnait les organisations régionales suivantes :'
