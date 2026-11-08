@@ -749,7 +749,9 @@ function DateFilter({
         <DatePicker.Input />
         <DatePicker.IndicatorGroup>
           <DatePicker.ClearTrigger />
-          <DatePicker.Trigger>{icon}</DatePicker.Trigger>
+          <DatePicker.Trigger style={{ cursor: "pointer" }}>
+            {icon}
+          </DatePicker.Trigger>
         </DatePicker.IndicatorGroup>
       </DatePicker.Control>
       <Portal>
