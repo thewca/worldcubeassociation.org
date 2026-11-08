@@ -2,6 +2,7 @@ import Markdown, { Options } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import {
+  Box,
   chakra,
   Link as ChakraLink,
   Image as ChakraImage,
@@ -162,70 +163,76 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
   ...paragraphProps
 }) => {
   return (
-    <Markdown
-      remarkPlugins={[
-        // Redcarpet only strikes through on `~~`, so `~5 min` must stay literal here too.
-        [remarkGfm, { singleTilde: false }],
-        // Redcarpet renders with `hard_wrap`, keeping every single line break the author typed.
-        remarkBreaks,
-        remarkYoutubeEmbeds,
-      ]}
-      components={{
-        a: ({ children, ...aTag }) => (
-          <ChakraLink
-            {...aTag}
-            // Chakra's link recipe is `inline-flex`, which strips whitespace at
-            // the edges of the link text. Markdown authors regularly write
-            // `the[ Policy](url)`, where that space is the only thing
-            // separating the link from the word before it.
-            display="inline"
-            {...linkProps}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {children}
-          </ChakraLink>
-        ),
-        img: (imgTag) => <ChakraImage {...imgTag} {...imageProps} />,
-        iframe: (iframeTag) => (
-          <chakra.iframe
-            display="block"
-            width="full"
-            border="none"
-            {...iframeTag}
-          />
-        ),
-        h1: (h1Tag) => <HeadingRenderAs {...h1Tag} as="h1" />,
-        h2: (h2Tag) => <HeadingRenderAs {...h2Tag} as="h2" />,
-        h3: (h3Tag) => <HeadingRenderAs {...h3Tag} as="h3" />,
-        h4: (h4Tag) => <HeadingRenderAs {...h4Tag} as="h4" />,
-        h5: (h5Tag) => <HeadingRenderAs {...h5Tag} as="h5" />,
-        h6: (h6Tag) => <HeadingRenderAs {...h6Tag} as="h6" />,
-        p: (pTag) => <ParagraphRenderAs {...pTag} {...paragraphProps} />,
-        em: Em,
-        hr: Separator,
-        code: Code,
-        ul: (ulTag) => <List.Root {...ulTag} indented {...listProps} as="ul" />,
-        ol: (olTag) => <List.Root {...olTag} indented {...listProps} as="ol" />,
-        li: List.Item,
-        blockquote: (blockquoteTag) => (
-          <Blockquote.Root>
-            <Blockquote.Content {...blockquoteTag} />
-          </Blockquote.Root>
-        ),
-        table: (tableProps) => (
-          <Table.ScrollArea>
-            <Table.Root {...tableProps} />
-          </Table.ScrollArea>
-        ),
-        thead: Table.Header,
-        tbody: Table.Body,
-        tr: Table.Row,
-        th: Table.ColumnHeader,
-        td: Table.Cell,
-      }}
-    >
-      {alignTableDelimiters(spaceLooseHeadings(children))}
-    </Markdown>
+    <Box spaceY="4">
+      <Markdown
+        remarkPlugins={[
+          // Redcarpet only strikes through on `~~`, so `~5 min` must stay literal here too.
+          [remarkGfm, { singleTilde: false }],
+          // Redcarpet renders with `hard_wrap`, keeping every single line break the author typed.
+          remarkBreaks,
+          remarkYoutubeEmbeds,
+        ]}
+        components={{
+          a: ({ children, ...aTag }) => (
+            <ChakraLink
+              {...aTag}
+              // Chakra's link recipe is `inline-flex`, which strips whitespace at
+              // the edges of the link text. Markdown authors regularly write
+              // `the[ Policy](url)`, where that space is the only thing
+              // separating the link from the word before it.
+              display="inline"
+              {...linkProps}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {children}
+            </ChakraLink>
+          ),
+          img: (imgTag) => <ChakraImage {...imgTag} {...imageProps} />,
+          iframe: (iframeTag) => (
+            <chakra.iframe
+              display="block"
+              width="full"
+              border="none"
+              {...iframeTag}
+            />
+          ),
+          h1: (h1Tag) => <HeadingRenderAs {...h1Tag} as="h1" />,
+          h2: (h2Tag) => <HeadingRenderAs {...h2Tag} as="h2" />,
+          h3: (h3Tag) => <HeadingRenderAs {...h3Tag} as="h3" />,
+          h4: (h4Tag) => <HeadingRenderAs {...h4Tag} as="h4" />,
+          h5: (h5Tag) => <HeadingRenderAs {...h5Tag} as="h5" />,
+          h6: (h6Tag) => <HeadingRenderAs {...h6Tag} as="h6" />,
+          p: (pTag) => <ParagraphRenderAs {...pTag} {...paragraphProps} />,
+          em: Em,
+          hr: Separator,
+          code: Code,
+          ul: (ulTag) => (
+            <List.Root {...ulTag} indented {...listProps} as="ul" />
+          ),
+          ol: (olTag) => (
+            <List.Root {...olTag} indented {...listProps} as="ol" />
+          ),
+          li: List.Item,
+          blockquote: (blockquoteTag) => (
+            <Blockquote.Root>
+              <Blockquote.Content {...blockquoteTag} />
+            </Blockquote.Root>
+          ),
+          table: (tableProps) => (
+            <Table.ScrollArea>
+              <Table.Root {...tableProps} />
+            </Table.ScrollArea>
+          ),
+          thead: Table.Header,
+          tbody: Table.Body,
+          tr: Table.Row,
+          th: Table.ColumnHeader,
+          td: Table.Cell,
+        }}
+      >
+        {alignTableDelimiters(spaceLooseHeadings(children))}
+      </Markdown>
+    </Box>
   );
 };
