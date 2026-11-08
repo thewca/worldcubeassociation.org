@@ -12,6 +12,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
 import _ from "lodash";
 import { SingleEventSelector } from "@/components/EventSelector";
+import { useMemo } from "react";
 
 type FilterState = {
   event: string;
@@ -137,13 +138,21 @@ export function RankingsFilterBox({
 }: RankingsFilterBoxProps) {
   const toValue = (label: string) => _.invert(valueLabelMap)[label];
 
+  const rankingTypeItems = useMemo(
+    () =>
+      filterState.event !== "333mbf"
+        ? [valueLabelMap["single"], valueLabelMap["average"]]
+        : [valueLabelMap["single"]],
+    [filterState.event, valueLabelMap],
+  );
+
   return (
     <FilterBox filterState={filterState} filterActions={filterActions}>
       <Stack direction={{ base: "column", md: "row" }}>
         <SegmentedField
           label="Type"
           value={valueLabelMap[filterState.rankingType]}
-          items={[valueLabelMap["single"], valueLabelMap["average"]]}
+          items={rankingTypeItems}
           onChange={(label) => filterActions.setType(toValue(label))}
         />
         <SegmentedField
