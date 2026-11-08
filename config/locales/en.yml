@@ -1548,6 +1548,7 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            select_all: "Select all"
             id: "ID"
             name: "Name"
           quit_menu: "Quit"
