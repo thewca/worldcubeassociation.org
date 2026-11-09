@@ -188,21 +188,19 @@ export function RecordsFilterBox({
                   filterActions.setGroupBy(value === "type" ? "type" : "event")
                 }
               />
-              {filterState.groupBy === "event" && (
-                <SegmentedField
-                  label={t("results.records.display")}
-                  value={filterState.display}
-                  items={[
-                    { value: "standard", label: t("results.records.standard") },
-                    { value: "compact", label: t("results.records.compact") },
-                  ]}
-                  onChange={(value) =>
-                    filterActions.setDisplay(
-                      value === "compact" ? "compact" : "standard",
-                    )
-                  }
-                />
-              )}
+              <SegmentedField
+                label={t("results.records.display")}
+                value={filterState.display}
+                items={[
+                  { value: "standard", label: t("results.records.standard") },
+                  { value: "compact", label: t("results.records.compact") },
+                ]}
+                onChange={(value) =>
+                  filterActions.setDisplay(
+                    value === "compact" ? "compact" : "standard",
+                  )
+                }
+              />
             </>
           )}
         </Stack>
