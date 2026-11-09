@@ -1,5 +1,5 @@
 import { getRecordsQueryOptions } from "@/lib/wca/results/records";
-import { serverClient } from "@/lib/wca/wcaAPI";
+import { serverQueryApi } from "@/lib/wca/wcaAPI";
 import {
   dehydrate,
   HydrationBoundary,
@@ -43,12 +43,12 @@ async function Records({ searchParams }: RecordsPageProps) {
   } = await searchParams;
 
   const queryClient = new QueryClient();
-  const queryOptions = getRecordsQueryOptions(serverClient, {
+  const options = getRecordsQueryOptions(serverQueryApi, {
     gender,
     region,
     show,
   });
-  await queryClient.query(queryOptions).catch(noop);
+  await queryClient.query(options).catch(noop);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

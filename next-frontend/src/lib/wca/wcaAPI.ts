@@ -1,6 +1,5 @@
 import createClient from "openapi-fetch";
-import createQueryClient from "openapi-react-query";
-import type { MediaType, RequiredKeysOf } from "openapi-typescript-helpers";
+import createQueryApi from "openapi-react-query";
 import type {
   ClientPathsWithMethod,
   FetchResponse,
@@ -12,52 +11,11 @@ import {
   toResponseMetadata,
 } from "@/lib/wca/responseMetadata";
 
-/** Distributes over the `data`/`error` union so the result still narrows. */
-type Serializable<T> = T extends { response: Response }
-  ? Omit<T, "response"> & { response: ResponseMetadata }
-  : never;
-
-type NoHeaders<Init> = Init & { headers?: never } & Record<string, unknown>;
-
-type QueryArgs<Init, Options> =
-  RequiredKeysOf<Init> extends never
-    ? [init?: NoHeaders<Init>, options?: Options]
-    : [init: NoHeaders<Init>, options?: Options];
-
-type GetQueryOptions<
-  Method extends "get",
-  Path extends ClientPathsWithMethod<typeof baseServerClient, Method>,
-  Init extends MaybeOptionalInit<paths[Path], Method>,
-> = ReturnType<
-  typeof baseQueryClient.queryOptions<
-    Method,
-    Path,
-    Init,
-    Required<FetchResponse<NonNullable<paths[Path][Method]>, Init, MediaType>>,
-    object
-  >
->;
-
-type WcaQueryOptions = <
-  Path extends ClientPathsWithMethod<typeof baseServerClient, "get">,
-  Init extends MaybeOptionalInit<paths[Path], "get">,
->(
-  method: "get",
-  path: Path,
-  ...args: QueryArgs<
-    Init,
-    Omit<GetQueryOptions<"get", Path, Init>, "queryKey" | "queryFn">
-  >
-) => GetQueryOptions<"get", Path, Init>;
-
-export type WcaQueryClient = { queryOptions: WcaQueryOptions };
-
 const baseServerClient = createClient<paths>({
   baseUrl: process.env.WCA_BACKEND_API_URL,
   headers: { "Content-Type": "application/json" },
 });
-const baseQueryClient = createQueryClient(baseServerClient);
-
+export const serverQueryApi = createQueryApi(baseServerClient);
 export const serverClientWithToken = (token: string) =>
   createClient<paths>({
     baseUrl: process.env.WCA_BACKEND_API_URL,
@@ -80,6 +38,11 @@ export const authenticatedClient = (token: string) =>
     },
   });
 
+/** Distributes over the `data`/`error` union so the result still narrows. */
+type Serializable<T> = T extends { response: Response }
+  ? Omit<T, "response"> & { response: ResponseMetadata }
+  : never;
+
 /**
  * Safe to use inside a `"use cache"` function: `Response` is a host object with
  * a single-use stream body, so it cannot be serialized across the cache
@@ -87,13 +50,12 @@ export const authenticatedClient = (token: string) =>
  * renders, so no individual fetcher has to remember to.
  */
 export const serverClient = {
-  queryOptions: baseQueryClient.queryOptions as WcaQueryOptions,
   GET: async <
     Path extends ClientPathsWithMethod<typeof baseServerClient, "get">,
     Init extends MaybeOptionalInit<paths[Path], "get">,
   >(
     url: Path,
-    ...init: [NoHeaders<Init>] | []
+    ...init: [Init & { headers?: never }] | []
   ) => {
     const { response, ...result } = await baseServerClient.GET(
       url,
