@@ -1,5 +1,5 @@
-import { OpenapiQueryClient } from "openapi-react-query";
-import { operations, paths } from "@/types/openapi";
+import type { WcaQueryClient } from "@/lib/wca/wcaAPI";
+import { operations } from "@/types/openapi";
 
 export type RecordsQuery = Pick<
   NonNullable<operations["getRecords"]["parameters"]["query"]>,
@@ -7,7 +7,7 @@ export type RecordsQuery = Pick<
 >;
 
 export function getRecordsQueryOptions(
-  api: OpenapiQueryClient<paths>,
+  api: WcaQueryClient,
   { gender, region, show }: RecordsQuery,
 ) {
   const dataset =
