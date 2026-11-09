@@ -1480,6 +1480,7 @@ en:
       no_spots_left: "Competition full"
     live:
       title: "Live Results"
+      combined_title: "Combined Dual Rounds"
       overview:
         #context: tab listing competitions that have not started yet
         upcoming: "Upcoming"
@@ -1755,6 +1756,16 @@ en:
       no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
       championship_only: "Show only championships"
+      sort:
+        order: "Sort order"
+        start_date_asc: "Start date: ascending"
+        start_date_desc: "Start date: descending"
+        end_date_asc: "End date: ascending"
+        end_date_desc: "End date: descending"
+        announced_at_asc: "Announcement date: ascending"
+        announced_at_desc: "Announcement date: descending"
+        name_asc: "Name: A-Z"
+        name_desc: "Name: Z-A"
       show_registration_status: "Show registration status icon"
       use_admin_view: "Use admin view"
       #context: titles for the competitions list
@@ -2222,6 +2233,7 @@ en:
       cannot_delete_confirmed: "Cannot delete a confirmed competition."
       must_contain_event: "must contain at least one event for this competition"
       fto_not_yet_allowed: "Face Turning Octahedron cannot be held at competitions starting before %{date}."
+      fto_requires_internal_scoretaking: "must be set to Internal Live Results when holding Face Turning Octahedron."
       schedule_must_match_rounds: "must have at least one round, and all rounds must be included in the schedule."
       must_contain_delegate: "must contain at least one WCA Delegate"
       must_contain_organizer: "must contain at least one organizer"
@@ -2402,6 +2414,8 @@ en:
         scrambles: "Scrambles"
     results_table:
       h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
+      show_all_linked_results: "Show results from both rounds"
+      linked_results_disclaimer_html: "This round is part of a Dual Round. The results below are shown per round; combined results across both rounds are available on the <a href=\"%{results_url}\">new results page</a>."
       wca_profile: "WCA profile"
       event: "Event"
       round: "Round"
@@ -2448,6 +2462,7 @@ en:
       unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
     records:
       title: "Records"
+      load_error: "Error fetching records"
     last_updated_html: "Last updated: %{timestamp}"
     filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
     selector_elements:

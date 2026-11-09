@@ -64,7 +64,6 @@ gem 'aws-sdk-cloudfront'
 gem 'redis'
 # Faster Redis library
 gem 'hiredis'
-gem 'mini_magick', require: false
 gem 'ruby-vips', require: false
 gem 'mysql2'
 gem 'premailer-rails'
