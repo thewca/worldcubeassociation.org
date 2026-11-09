@@ -20,6 +20,7 @@ interface MixedRecordsRowProp {
 
 interface SeparateRecordsRowProp {
   record: components["schemas"]["Record"];
+  compact: boolean;
 }
 
 interface HistoryRowProps {
@@ -114,7 +115,10 @@ export function HistoryRow({ record, mixed = false }: HistoryRowProps) {
   );
 }
 
-export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
+export function SeparateRecordsRow({
+  record,
+  compact,
+}: SeparateRecordsRowProp) {
   const {
     definedAttempts: attempts,
     bestResultIndex,
@@ -128,13 +132,15 @@ export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
         {formatAttemptResult(record.value, record.event_id)}
       </Table.Cell>
       <PersonCell personId={record.person_id} personName={record.person_name} />
-      <CountryCell countryId={record.country_id} filterable />
-      <CompetitionCell
-        competitionId={record.competition_id}
-        competitionName={record.competition_name}
-        competitionCountry={record.competition_country_id}
-      />
-      {record.type === "average" && (
+      {!compact && <CountryCell countryId={record.country_id} filterable />}
+      {!compact && (
+        <CompetitionCell
+          competitionId={record.competition_id}
+          competitionName={record.competition_name}
+          competitionCountry={record.competition_country_id}
+        />
+      )}
+      {!compact && record.type === "average" && (
         <AttemptsCells
           attempts={attempts}
           bestResultIndex={bestResultIndex}

@@ -35,6 +35,7 @@ interface SlimRecordsTableProps {
 }
 
 interface SeparateRecordsTableProps {
+  display: FilterParams["display"];
   recordsByType: {
     single: components["schemas"]["Record"][];
     average: components["schemas"]["Record"][];
@@ -68,7 +69,12 @@ export default function RecordsTable({
     const average = allRecords.filter((record) => record.type === "average");
     const single = allRecords.filter((record) => record.type === "single");
 
-    return <SeparateRecordsTable recordsByType={{ average, single }} />;
+    return (
+      <SeparateRecordsTable
+        recordsByType={{ average, single }}
+        display={display}
+      />
+    );
   }
 
   if (display === "compact") {
@@ -196,8 +202,12 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
   );
 }
 
-function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
+function SeparateRecordsTable({
+  recordsByType,
+  display,
+}: SeparateRecordsTableProps) {
   const { t } = useT();
+  const compact = display === "compact";
 
   return (
     <VStack align="stretch" gap={6}>
@@ -219,13 +229,17 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
                   <Table.ColumnHeader>
                     {t("results.table_elements.name")}
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader>
-                    {t("results.table_elements.region")}
-                  </Table.ColumnHeader>
-                  <Table.ColumnHeader>
-                    {t("results.table_elements.competition")}
-                  </Table.ColumnHeader>
-                  {type === "average" && (
+                  {!compact && (
+                    <Table.ColumnHeader>
+                      {t("results.table_elements.region")}
+                    </Table.ColumnHeader>
+                  )}
+                  {!compact && (
+                    <Table.ColumnHeader>
+                      {t("results.table_elements.competition")}
+                    </Table.ColumnHeader>
+                  )}
+                  {!compact && type === "average" && (
                     <Table.ColumnHeader colSpan={5}>
                       {t("results.table_elements.solves")}
                     </Table.ColumnHeader>
@@ -234,7 +248,11 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
               </Table.Header>
               <Table.Body>
                 {recordsByType[type as "single" | "average"].map((record) => (
-                  <SeparateRecordsRow key={record.id} record={record} />
+                  <SeparateRecordsRow
+                    key={record.id}
+                    record={record}
+                    compact={compact}
+                  />
                 ))}
               </Table.Body>
             </Table.Root>
