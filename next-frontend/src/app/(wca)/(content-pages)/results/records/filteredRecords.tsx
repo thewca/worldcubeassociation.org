@@ -3,7 +3,7 @@
 import React from "react";
 import _ from "lodash";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
-import { Alert, Heading, VStack } from "@chakra-ui/react";
+import { Alert, Heading, Tabs, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
@@ -13,37 +13,28 @@ import { useSearchParams } from "next/navigation";
 import { route } from "nextjs-routes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
-import { getRecordsQueryOptions } from "@/lib/wca/results/records";
-
-type FilterParams = {
-  event: string;
-  region: string;
-  gender: string;
-  show: string;
-};
+import {
+  FilterParams,
+  getFilters,
+  getRecordsQueryOptions,
+} from "@/lib/wca/results/records";
 
 export default function FilteredRecords() {
   const api = useAPI();
   const searchParams = useSearchParams();
-  const filters: FilterParams = {
-    event: searchParams.get("event") ?? "all events",
-    region: searchParams.get("region") ?? "world",
-    gender: searchParams.get("gender") ?? "All",
-    show: searchParams.get("show") ?? "mixed",
-  };
+  const filters = getFilters(searchParams);
   const { data, isFetching, isPlaceholderData, error } = useQuery({
     ...getRecordsQueryOptions(api, filters),
     placeholderData: keepPreviousData,
   });
   const updateFilters = (changes: Partial<FilterParams>) => {
-    const params = new URLSearchParams(window.location.search);
-    for (const [key, value] of Object.entries(changes)) {
-      if (key === "event" && !value) params.delete(key);
-      else params.set(key, value);
-    }
+    const updatedFilters = {
+      ...getFilters(new URLSearchParams(window.location.search)),
+      ...changes,
+    };
     const url = route({
       pathname: "/results/records",
-      query: Object.fromEntries(params),
+      query: updatedFilters,
     });
 
     window.history.replaceState(null, "", url);
@@ -62,9 +53,13 @@ export default function FilteredRecords() {
     },
     setRegion: (region: string) => updateFilters({ region: region || "world" }),
     setGender: (gender: string) => updateFilters({ gender }),
-    setShow: (show: string) => updateFilters({ show }),
   };
-  const { event, show } = filters;
+  const { event, view } = filters;
+  const setView = (value: string) => {
+    if (value === "current" || value === "history") {
+      updateFilters({ view: value });
+    }
+  };
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const selectedEvents = _.intersection(WCA_EVENT_IDS, event.split(","));
@@ -82,6 +77,21 @@ export default function FilteredRecords() {
         t("results.last_updated_html", {
           timestamp: getMediumDateString(data.timestamp),
         })}
+      <Tabs.Root
+        value={view}
+        onValueChange={({ value }) => setView(value)}
+        variant="line"
+        width="full"
+      >
+        <Tabs.List aria-label={t("results.records.title")}>
+          <Tabs.Trigger value="current">
+            {t("results.records.current")}
+          </Tabs.Trigger>
+          <Tabs.Trigger value="history">
+            {t("results.selector_elements.show_selector.history")}
+          </Tabs.Trigger>
+        </Tabs.List>
+      </Tabs.Root>
       <RecordsFilterBox
         filterState={{ ...filters, events: selectedEvents }}
         filterActions={filterActions}
@@ -94,7 +104,11 @@ export default function FilteredRecords() {
       ) : (
         data &&
         !isPlaceholderData && (
-          <RecordsTable records={filteredRecords} show={show} />
+          <RecordsTable
+            records={filteredRecords}
+            // TODO: clean up this prop
+            show={view === "history" ? "mixed history" : "mixed"}
+          />
         )
       )}
     </VStack>

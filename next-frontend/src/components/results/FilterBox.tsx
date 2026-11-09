@@ -25,7 +25,6 @@ type FilterState = {
 type FilterActions = {
   setRegion: (region: string) => void;
   setGender: (gender: string) => void;
-  setShow: (show: string) => void;
 };
 
 interface FilterBoxProps {
@@ -35,7 +34,9 @@ interface FilterBoxProps {
 }
 
 interface RecordsFilterBoxProps {
-  filterState: Omit<FilterState, "event"> & { events: string[] };
+  filterState: Pick<FilterState, "region" | "gender"> & {
+    events: string[];
+  };
   filterActions: FilterActions & {
     setEvents: (events: string[]) => void;
     toggleEvent: (event: string) => void;
@@ -47,6 +48,7 @@ interface RankingsFilterBoxProps {
   filterActions: FilterActions & {
     setEvent: (event: string) => void;
     setType: (type: string) => void;
+    setShow: (show: string) => void;
   };
 }
 
@@ -155,35 +157,6 @@ export function RecordsFilterBox({
               },
             ]}
             onChange={filterActions.setGender}
-          />
-          <SegmentedField
-            label={t("results.selector_elements.show_selector.show")}
-            value={filterState.show}
-            items={[
-              {
-                value: "mixed",
-                label: t("results.selector_elements.show_selector.mixed"),
-              },
-              {
-                value: "slim",
-                label: t("results.selector_elements.show_selector.slim"),
-              },
-              {
-                value: "separate",
-                label: t("results.selector_elements.show_selector.separate"),
-              },
-              {
-                value: "history",
-                label: t("results.selector_elements.show_selector.history"),
-              },
-              {
-                value: "mixed history",
-                label: t(
-                  "results.selector_elements.show_selector.mixed_history",
-                ),
-              },
-            ]}
-            onChange={filterActions.setShow}
           />
         </Stack>
       </VStack>

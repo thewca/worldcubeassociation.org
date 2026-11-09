@@ -1,4 +1,4 @@
-import { getRecordsQueryOptions } from "@/lib/wca/results/records";
+import { getFilters, getRecordsQueryOptions } from "@/lib/wca/results/records";
 import { serverQueryApi } from "@/lib/wca/wcaAPI";
 import {
   dehydrate,
@@ -11,10 +11,6 @@ import FilteredRecords from "@/app/(wca)/(content-pages)/results/records/filtere
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import Loading from "@/components/ui/loading";
-
-const GENDER_ALL = "All";
-const SHOW_MIXED = "mixed";
-const REGION_WORLD = "world";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -36,18 +32,15 @@ export default function RecordsPage({ searchParams }: RecordsPageProps) {
 }
 
 async function Records({ searchParams }: RecordsPageProps) {
-  const {
-    gender = GENDER_ALL,
-    region = REGION_WORLD,
-    show = SHOW_MIXED,
-  } = await searchParams;
+  const params = new URLSearchParams(
+    Object.entries(await searchParams).flatMap(([key, value]) =>
+      value === undefined ? [] : [[key, value]],
+    ),
+  );
+  const filters = getFilters(params);
 
   const queryClient = new QueryClient();
-  const options = getRecordsQueryOptions(serverQueryApi, {
-    gender,
-    region,
-    show,
-  });
+  const options = getRecordsQueryOptions(serverQueryApi, filters);
   await queryClient.query(options).catch(noop);
 
   return (
