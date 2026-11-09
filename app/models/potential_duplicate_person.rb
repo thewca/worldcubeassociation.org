@@ -7,6 +7,8 @@ class PotentialDuplicatePerson < ApplicationRecord
   belongs_to :original_user, class_name: 'User'
   belongs_to :duplicate_person, class_name: 'Person'
 
+  has_one :registration, ->(pdp) { where(competition_id: pdp.duplicate_checker_job_run.competition_id) }, primary_key: :original_user_id, foreign_key: :user_id, class_name: 'Registration'
+
   enum :name_matching_algorithm, {
     jarowinkler: 'jarowinkler',
     exact_first_last_dob: 'exact_first_last_dob',
@@ -21,6 +23,9 @@ class PotentialDuplicatePerson < ApplicationRecord
       duplicate_person: {
         private_attributes: %w[dob],
         methods: %w[country user_id],
+      },
+      registration: {
+        only: %i[id],
       },
     },
   }.freeze
