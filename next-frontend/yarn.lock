@@ -1637,10 +1637,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@delmaredigital/payload-better-auth@npm:0.14.0":
-  version: 0.14.0
-  resolution: "@delmaredigital/payload-better-auth@npm:0.14.0"
+"@delmaredigital/payload-better-auth@npm:0.14.2":
+  version: 0.14.2
+  resolution: "@delmaredigital/payload-better-auth@npm:0.14.2"
   dependencies:
+    drizzle-orm: "npm:0.45.2"
     qrcode.react: "npm:^4.2.0"
   peerDependencies:
     "@better-auth/api-key": ">=1.7.7 <2"
@@ -1656,7 +1657,7 @@ __metadata:
       optional: true
     "@better-auth/passkey":
       optional: true
-  checksum: 10c0/a936c4996c0e635397cd248a52746c6240173517196c06c74c8068fec740075861b0ec5b6b2af9487231d6d511311e9acd23bdae8743dad7ca4b4fbd4590bb9b
+  checksum: 10c0/e2916d40d5ecf9e0056f7560b118db3cd7c93c112ddb5d5d36bbf562d60930bcee153a570e45f3a7f39f669d71308b6c42fb07fbae3945e1205ecaccd76bbb8e
   languageName: node
   linkType: hard
 
@@ -12842,7 +12843,7 @@ __metadata:
     "@aws-sdk/credential-providers": "npm:^3.1161.0"
     "@chakra-ui/cli": "npm:^3.37.0"
     "@chakra-ui/react": "npm:^3.37.0"
-    "@delmaredigital/payload-better-auth": "npm:0.14.0"
+    "@delmaredigital/payload-better-auth": "npm:0.14.2"
     "@emotion/cache": "npm:^11.14.0"
     "@emotion/react": "npm:^11.14.0"
     "@eslint/eslintrc": "npm:^3"
