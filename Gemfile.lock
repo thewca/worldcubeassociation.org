@@ -220,7 +220,7 @@ GEM
     css_parser (3.0.0)
       addressable
       ssrf_filter (~> 1.5)
-    csv (3.3.6)
+    csv (3.3.7)
     daemons (1.4.1)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
@@ -1188,7 +1188,7 @@ CHECKSUMS
   crass (1.0.8) sha256=7a0145c7a2c59f8e7923b3a69ce819c444823a00a5127d805298fea13be24efe
   cronex (0.15.0) sha256=21c794e085fad2951c4f2e279f440340a35ba2297e0b738f22f263f69fbe2186
   css_parser (3.0.0) sha256=eaf0e9283fd581d06e815235ceef4f0910c0b394c606355dbc69f93e84443885
-  csv (3.3.6) sha256=aba61e7e507a66f03d45cb1f3c4b6359861c3504038b422962875dce099e4456
+  csv (3.3.7) sha256=15a3f16f6628da8664d455eb634e7f22031bcf53044923caf56975109e71b9f8
   daemons (1.4.1) sha256=8fc76d76faec669feb5e455d72f35bd4c46dc6735e28c420afb822fac1fa9a1d
   database_cleaner (2.1.0) sha256=1dcba26e3b1576da692fc6bac10136a4744da5bcc293d248aae19640c65d89cd
   database_cleaner-active_record (2.2.0) sha256=3228d6d8ec1f2103fd6ab468dae923424318bcfabcf5dd5b02e5fcb0c486e1c7
