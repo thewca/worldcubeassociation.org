@@ -1,7 +1,5 @@
 import { Heading, Link, List, Text, VStack } from "@chakra-ui/react";
-import { getPayload } from "payload";
-import config from "@payload-config";
-import { connection } from "next/server";
+import { findCached } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
 
@@ -15,12 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RegulationsHistory() {
   const { i18n } = await getT();
 
-  await connection();
-
-  const payload = await getPayload({ config });
-
-  const regulationsHistory = await payload.find({
-    collection: "regulationsHistoryItem",
+  const regulationsHistory = await findCached("regulationsHistoryItem", {
     limit: 0,
     depth: 1,
   });

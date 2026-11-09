@@ -1,30 +1,50 @@
 import config from "@payload-config";
-import { cacheLife, cacheTag } from "next/cache";
-import { getPayload, type CollectionSlug, type TypedLocale } from "payload";
+import { cacheTag } from "next/cache";
+import {
+  getPayload,
+  type CollectionSlug,
+  type TypedLocale,
+  type Where,
+} from "payload";
+import { payloadCacheLife } from "@/lib/payload/globals";
 
 export const collectionCacheTag = (slug: CollectionSlug) =>
   `payload-collection:${slug}`;
 
-export async function getCachedCollection<TSlug extends CollectionSlug>(
-  slug: TSlug,
-  locale?: TypedLocale,
-  depth?: number,
-  pagination = false,
-  sort = "_order",
+export async function findCached<TSlug extends CollectionSlug>(
+  collection: TSlug,
+  {
+    locale,
+    depth,
+    sort,
+    where,
+    limit,
+    page,
+    pagination,
+  }: {
+    locale?: TypedLocale;
+    depth?: number;
+    sort?: string;
+    where?: Where;
+    limit?: number;
+    page?: number;
+    pagination?: boolean;
+  } = {},
 ) {
   "use cache";
-  cacheTag(collectionCacheTag(slug));
-  cacheLife("max");
+  cacheTag(collectionCacheTag(collection));
+  payloadCacheLife();
 
   const payload = await getPayload({ config });
 
-  const { docs } = await payload.find({
-    collection: slug,
+  return payload.find({
+    collection,
     locale,
-    sort,
-    pagination,
     depth,
+    sort,
+    where,
+    limit,
+    page,
+    pagination,
   });
-
-  return docs;
 }

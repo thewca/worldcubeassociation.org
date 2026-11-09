@@ -18,6 +18,7 @@ FORCE_CONTAINER=false
 FORCE_LOCAL=false
 CLEAN=false
 WITH_MEDIA=true
+PREPARE_ON_HOST=false
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -37,8 +38,16 @@ while [[ $# -gt 0 ]]; do
       WITH_MEDIA=false
       shift
       ;;
+    --container)
+      CONTAINER_NAME="$2"
+      shift 2
+      ;;
+    --prepare-on-host)
+      PREPARE_ON_HOST=true
+      shift
+      ;;
     -h|--help)
-      echo "Usage: $0 [--force-container|--force-local] [--clean] [--without-media]"
+      echo "Usage: $0 [--force-container|--force-local] [--clean] [--without-media] [--container NAME] [--prepare-on-host]"
       echo ""
       echo "Import CMS data into the local Payload MongoDB instance."
       echo ""
@@ -47,6 +56,9 @@ while [[ $# -gt 0 ]]; do
       echo "  --force-local     Force direct execution without docker exec (when already inside container)"
       echo "  --clean           Remove downloaded files after import"
       echo "  --without-media   Skip downloading media files after the import"
+      echo "  --container NAME  MongoDB container to import into (default: $CONTAINER_NAME)"
+      echo "  --prepare-on-host Download and process the dump on the host (needs wget, unzip, jq),"
+      echo "                    so the container only has to provide mongorestore"
       echo "  -h, --help        Show this help message"
       echo ""
       echo "The script auto-detects whether it's running on the host or inside"
@@ -117,7 +129,14 @@ run_import() {
   cd ..
 
   echo "==> Restoring to MongoDB (this may take a moment)..."
-  mongorestore --drop --host=localhost --username="$MONGO_USER" --password="$MONGO_PASS" --authenticationDatabase="$MONGO_AUTH_DB" dump/ || {
+  RESTORE_CMD=(mongorestore --drop --host=localhost --username="$MONGO_USER" --password="$MONGO_PASS" --authenticationDatabase="$MONGO_AUTH_DB")
+  if [ "$PREPARE_ON_HOST" = true ]; then
+    docker cp dump "$CONTAINER_NAME:/tmp/payload-dump"
+    docker exec "$CONTAINER_NAME" "${RESTORE_CMD[@]}" /tmp/payload-dump/
+    docker exec "$CONTAINER_NAME" rm -rf /tmp/payload-dump
+  else
+    "${RESTORE_CMD[@]}" dump/
+  fi || {
     echo "Error: mongorestore failed. Check that MongoDB is running and credentials are correct."
     echo "Expected credentials: username='$MONGO_USER', authDB='$MONGO_AUTH_DB'"
     exit 1
@@ -169,16 +188,20 @@ if is_on_host; then
     echo "Warning: Container '$CONTAINER_NAME' health status is '$CONTAINER_STATUS'. Proceeding anyway..."
   fi
 
-  # Build the command to run inside container
-  # Pass through flags
-  CONTAINER_ARGS=""
-  [ "$CLEAN" = true ] && CONTAINER_ARGS="$CONTAINER_ARGS --clean"
-  CONTAINER_ARGS="$CONTAINER_ARGS --force-local"
+  if [ "$PREPARE_ON_HOST" = true ]; then
+    run_import
+  else
+    # Build the command to run inside container
+    # Pass through flags
+    CONTAINER_ARGS=""
+    [ "$CLEAN" = true ] && CONTAINER_ARGS="$CONTAINER_ARGS --clean"
+    CONTAINER_ARGS="$CONTAINER_ARGS --force-local"
 
-  # Copy this script into container and execute it
-  SCRIPT_PATH="$SCRIPT_DIR/$(basename "${BASH_SOURCE[0]}")"
-  docker cp "$SCRIPT_PATH" "$CONTAINER_NAME:/tmp/import-dump.sh"
-  docker exec "$CONTAINER_NAME" bash /tmp/import-dump.sh $CONTAINER_ARGS
+    # Copy this script into container and execute it
+    SCRIPT_PATH="$SCRIPT_DIR/$(basename "${BASH_SOURCE[0]}")"
+    docker cp "$SCRIPT_PATH" "$CONTAINER_NAME:/tmp/import-dump.sh"
+    docker exec "$CONTAINER_NAME" bash /tmp/import-dump.sh $CONTAINER_ARGS
+  fi
 
   if [ "$WITH_MEDIA" = true ]; then
     echo ""
