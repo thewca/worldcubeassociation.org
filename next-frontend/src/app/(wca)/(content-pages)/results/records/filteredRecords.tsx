@@ -41,13 +41,20 @@ export default function FilteredRecords() {
     placeholderData: keepPreviousData,
   });
   const updateFilters = (changes: Partial<FilterParams>) => {
-    const { groupBy, ...params } = {
+    const { event, region, gender, view, groupBy, display } = {
       ...getFilters(new URLSearchParams(window.location.search)),
       ...changes,
     };
     const url = route({
       pathname: "/results/records",
-      query: { ...params, group_by: groupBy },
+      query: {
+        event: event && event !== "all events" ? event : undefined,
+        region: region === "world" ? undefined : region,
+        gender: gender === "All" ? undefined : gender,
+        view: view === "current" ? undefined : view,
+        group_by: groupBy === "event" ? undefined : groupBy,
+        display: display === "standard" ? undefined : display,
+      },
     });
 
     window.history.replaceState(null, "", url);
