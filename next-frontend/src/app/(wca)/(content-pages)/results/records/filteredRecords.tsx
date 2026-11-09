@@ -3,7 +3,20 @@
 import React from "react";
 import _ from "lodash";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
-import { Alert, Heading, Tabs, VStack } from "@chakra-ui/react";
+import {
+  Alert,
+  Box,
+  Circle,
+  Collapsible,
+  Float,
+  Heading,
+  IconButton,
+  Tabs,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { LuFilter } from "react-icons/lu";
+import { Tooltip } from "@/components/ui/tooltip";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
@@ -67,55 +80,103 @@ export default function FilteredRecords() {
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const selectedEvents = _.intersection(WCA_EVENT_IDS, event.split(","));
+  const hasActiveFilters =
+    selectedEvents.length > 0 ||
+    filters.region !== "world" ||
+    filters.gender !== "All";
   const filteredRecords =
     selectedEvents.length === 0
       ? currentRecords
       : _.pick(currentRecords, selectedEvents);
 
   return (
-    <VStack align="left" gap={2}>
+    <VStack align="stretch" gap={4}>
       <Heading size={{ base: "3xl", md: "5xl" }}>
         {t("results.records.title")}
       </Heading>
-      {data &&
-        t("results.last_updated_html", {
-          timestamp: getMediumDateString(data.timestamp),
-        })}
-      <Tabs.Root
-        value={view}
-        onValueChange={({ value }) => setView(value)}
-        variant="line"
-        width="full"
-      >
-        <Tabs.List aria-label={t("results.records.title")}>
-          <Tabs.Trigger value="current">
-            {t("results.records.current")}
-          </Tabs.Trigger>
-          <Tabs.Trigger value="history">
-            {t("results.selector_elements.show_selector.history")}
-          </Tabs.Trigger>
-        </Tabs.List>
-      </Tabs.Root>
-      <RecordsFilterBox
-        filterState={{ ...filters, events: selectedEvents }}
-        filterActions={filterActions}
-      />
-      {isFetching && <Loading />}
-      {error ? (
-        <Alert.Root status="error">
-          <Alert.Title>{t("results.records.load_error")}</Alert.Title>
-        </Alert.Root>
-      ) : (
-        data &&
-        !isPlaceholderData && (
-          <RecordsTable
-            records={filteredRecords}
-            view={view}
-            groupBy={groupBy}
-            display={display}
-          />
-        )
+      {data && (
+        <Text fontSize="sm" color="fg.muted">
+          {t("results.last_updated_html", {
+            timestamp: getMediumDateString(data.timestamp),
+          })}
+        </Text>
       )}
+      <Collapsible.Root overflowPadding>
+        <Tabs.Root
+          value={view}
+          onValueChange={({ value }) => setView(value)}
+          variant="line"
+        >
+          <Tabs.List aria-label={t("results.records.title")}>
+            <Tabs.Trigger value="current">
+              {t("results.records.current")}
+            </Tabs.Trigger>
+            <Tabs.Trigger value="history">
+              {t("results.selector_elements.show_selector.history")}
+            </Tabs.Trigger>
+            <Tooltip content={t("common.filter")}>
+              <Collapsible.Trigger asChild>
+                <IconButton
+                  aria-label={t("common.filter")}
+                  aria-description={
+                    hasActiveFilters
+                      ? t("results.records.filters_applied")
+                      : undefined
+                  }
+                  variant="ghost"
+                  colorPalette={hasActiveFilters ? "blue" : undefined}
+                  color={hasActiveFilters ? "colorPalette.fg" : undefined}
+                  size="sm"
+                  marginStart="auto"
+                  alignSelf="center"
+                  position="relative"
+                >
+                  <Box as="span" position="relative" display="inline-flex">
+                    <LuFilter />
+                    {hasActiveFilters && (
+                      <Float placement="top-end" pointerEvents="none">
+                        <Circle
+                          as="span"
+                          size="1.5"
+                          bg="colorPalette.solid"
+                          outlineWidth="2px"
+                          outlineStyle="solid"
+                          outlineColor="bg"
+                          aria-hidden="true"
+                        />
+                      </Float>
+                    )}
+                  </Box>
+                </IconButton>
+              </Collapsible.Trigger>
+            </Tooltip>
+          </Tabs.List>
+        </Tabs.Root>
+        <Collapsible.Content pt="4" pb="3" mb="-2">
+          <RecordsFilterBox
+            filterState={{ ...filters, events: selectedEvents }}
+            filterActions={filterActions}
+          />
+        </Collapsible.Content>
+      </Collapsible.Root>
+      <VStack align="stretch" gap="4" pt="2">
+        {isFetching && <Loading />}
+        {error ? (
+          <Alert.Root status="error">
+            <Alert.Title>{t("results.records.load_error")}</Alert.Title>
+          </Alert.Root>
+        ) : (
+          data &&
+          !isPlaceholderData && (
+            <RecordsTable
+              records={filteredRecords}
+              view={view}
+              groupBy={groupBy}
+              display={display}
+            />
+          )
+        )}
+      </VStack>
     </VStack>
   );
 }
