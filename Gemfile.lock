@@ -676,7 +676,7 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    react_on_rails (17.2.0)
+    react_on_rails (17.2.1)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -1069,7 +1069,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-i18n
   rake
-  react_on_rails (= 17.2.0)
+  react_on_rails (= 17.2.1)
   recaptcha
   redcarpet
   redis
@@ -1377,7 +1377,7 @@ CHECKSUMS
   rb_sys (0.9.130) sha256=7d486d99c1da02635515deaf9860fc5aea90bb4ab2589b2deec7fdc7d3548615
   rbs (4.2.0) sha256=51f7b886dcc05bc09e10b901daa6a81829f6adc03101d6ca9ea4aac6103e0674
   rdoc (8.1.0) sha256=befc37880a5cfd36dcb176c748b5fd5ee39dd3536a75e81824e4972ce230f60a
-  react_on_rails (17.2.0) sha256=7b38030e73c17fe6b426781031d5f1abe9fea850e318e0e18e0006cccc84b310
+  react_on_rails (17.2.1) sha256=e12d79d21d8eaf08039610ed17f2173ae9dcdbab820b94e35aba0000b9368054
   recaptcha (5.21.2) sha256=8f7bb6cc9f04c523fff3f38126b7c5f1314c35fcb3691fc8e70d2b464533c12a
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   redis (5.4.1) sha256=b5e675b57ad22b15c9bcc765d5ac26f60b675408af916d31527af9bd5a81faae
