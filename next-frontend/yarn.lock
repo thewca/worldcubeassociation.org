@@ -3824,18 +3824,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@newrelic/native-metrics@npm:^13.1.0":
-  version: 13.1.0
-  resolution: "@newrelic/native-metrics@npm:13.1.0"
-  dependencies:
-    nan: "npm:^2.22.2"
-    node-gyp: "npm:latest"
-    node-gyp-build: "npm:^4.8.1"
-    prebuildify: "npm:^6.0.1"
-  checksum: 10c0/f1688bdabee686ce8dd57bc74d4a28254f8b5e2cae28e06a9d22d1d84ec8c234168ce4a38875d322800ccd32ba6c7baa674bd26416a201c12d7d09fb8c5a59a2
-  languageName: node
-  linkType: hard
-
 "@newrelic/security-agent@npm:^3.0.0":
   version: 3.0.0
   resolution: "@newrelic/security-agent@npm:3.0.0"
@@ -12791,16 +12779,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^14.10.0":
-  version: 14.10.0
-  resolution: "newrelic@npm:14.10.0"
+"newrelic@npm:^14.11.0":
+  version: 14.11.0
+  resolution: "newrelic@npm:14.11.0"
   dependencies:
     "@apm-js-collab/tracing-hooks": "npm:^0.13.0"
     "@datadog/pprof": "npm:^5.14.2"
     "@grpc/grpc-js": "npm:^1.13.2"
     "@grpc/proto-loader": "npm:^0.8.1"
     "@newrelic/fn-inspect": "npm:^5.1.0"
-    "@newrelic/native-metrics": "npm:^13.1.0"
     "@newrelic/security-agent": "npm:^3.0.0"
     "@opentelemetry/api": "npm:^1.10.0"
     "@opentelemetry/exporter-metrics-otlp-http": "npm:^0.300.0"
@@ -12825,14 +12812,12 @@ __metadata:
       optional: true
     "@newrelic/fn-inspect":
       optional: true
-    "@newrelic/native-metrics":
-      optional: true
     "@prisma/prisma-fmt-wasm":
       optional: true
   bin:
     newrelic: cli/index.mjs
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 10c0/d8f1cfb7012032bd6dc3e84330cf8ce526c040d76b016b9563ca5a5af3483add827d77ba34be37c7731a39c30311d70d588f29d571c0e94847d88c2cd9a5b613
+  checksum: 10c0/9dc46fa14ec85354b1571cf0fead6dd6c450ed58304d4bc0d72e6064f4af570a74c21c8a28e007e4236229fa97179f87d79445dbf0e27c398b954fad4f82242b
   languageName: node
   linkType: hard
 
@@ -12898,7 +12883,7 @@ __metadata:
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
     maplibre-gl: "npm:^6.16.0"
-    newrelic: "npm:^14.10.0"
+    newrelic: "npm:^14.11.0"
     next: "npm:16.4.5"
     nextjs-routes: "npm:^2.2.5"
     nextjs-toploader: "npm:^3.9.17"
