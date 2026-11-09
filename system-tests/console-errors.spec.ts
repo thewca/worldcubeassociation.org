@@ -60,6 +60,10 @@ function collectConsoleErrors(page: Page): string[] {
 test.describe('console errors', () => {
   test.skip(({ browserName }) => browserName !== 'chromium', 'React warnings are browser-independent');
 
+  test.beforeEach(async ({ context, baseURL }) => {
+    await context.addCookies([{ name: 'beta_disclaimer_accepted', value: 'true', url: baseURL }]);
+  });
+
   for (const route of routes) {
     test(`${route} has no console errors`, async ({ page }) => {
       const errors = collectConsoleErrors(page);
