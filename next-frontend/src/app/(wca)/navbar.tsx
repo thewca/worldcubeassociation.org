@@ -30,7 +30,6 @@ import {
   MobileNavRoot,
 } from "@/components/MobileNav";
 import { getCachedGlobal } from "@/lib/payload/globals";
-import { getCachedCollection } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
 
 type NavbarEntry<K extends string = "displayText"> = {
@@ -118,10 +117,10 @@ export default async function Navbar() {
 
   const { lng } = await getT();
 
-  const [navbar, socialLinksGlobal, avatarMenuEntries] = await Promise.all([
+  const [navbar, socialLinksGlobal, avatarMenu] = await Promise.all([
     getCachedGlobal("nav"),
     getCachedGlobal("social-links"),
-    getCachedCollection("avatarMenuEntries", lng),
+    getCachedGlobal("avatar-menu", undefined, lng),
   ]);
 
   const session = await getSession();
@@ -317,7 +316,7 @@ export default async function Navbar() {
             <Box hideBelow="md">
               <AvatarMenu
                 session={session}
-                cmsEntries={avatarMenuEntries}
+                cmsEntries={avatarMenu.entries}
                 permissions={permissions}
               />
             </Box>
@@ -485,7 +484,7 @@ export default async function Navbar() {
                 <LanguageSelector />
                 <AvatarMenu
                   session={session}
-                  cmsEntries={avatarMenuEntries}
+                  cmsEntries={avatarMenu.entries}
                   permissions={permissions}
                 />
               </VStack>

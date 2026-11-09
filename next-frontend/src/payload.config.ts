@@ -25,7 +25,6 @@ import { Users } from "@/collections/Users";
 import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
 import { Documents } from "@/collections/Documents";
-import { AvatarMenuEntries } from "@/collections/AvatarMenuEntries";
 import { Nav } from "@/globals/Nav";
 import { Footer } from "@/globals/Footer";
 import { SocialLinks } from "@/globals/SocialLinks";
@@ -40,6 +39,7 @@ import { DocumentsPage } from "@/globals/Documents";
 import { FaqPage } from "@/globals/FaqPage";
 import { LogoPage } from "@/globals/LogoPage";
 import { ExecutivesPage } from "@/globals/ExecutivesPage";
+import { AvatarMenu } from "@/globals/AvatarMenu";
 import {
   compatibilityOptions,
   mongooseAdapter,
@@ -166,7 +166,6 @@ export const wcaConfig = {
     Documents,
     RegulationsHistoryItem,
     Tools,
-    AvatarMenuEntries,
   ].map(withWeblateSync),
   globals: [
     Nav,
@@ -182,6 +181,7 @@ export const wcaConfig = {
     FaqPage,
     LogoPage,
     ExecutivesPage,
+    AvatarMenu,
   ].map(withWeblateSync),
   endpoints: [weblateSyncEndpoint],
   editor: lexicalEditor(),

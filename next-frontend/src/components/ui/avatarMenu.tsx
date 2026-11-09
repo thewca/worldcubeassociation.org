@@ -22,7 +22,7 @@ import { LuChevronDown } from "react-icons/lu";
 import _ from "lodash";
 import RailsLink from "@/components/RailsLink";
 import { type UserPermissions } from "@/lib/wca/permissions";
-import type { AvatarMenuEntry } from "@/types/payload";
+import type { AvatarMenu as AvatarMenuGlobal } from "@/types/payload";
 import { useT } from "@/lib/i18n/useI18n";
 import buildAvatarMenuEntries, {
   type FlatMenuEntry,
@@ -44,7 +44,7 @@ function EntryLink({
 } & React.ComponentPropsWithoutRef<"a">) {
   if (entry.kind === "rails") {
     return (
-      <RailsLink {...rest} href={entry.href}>
+      <RailsLink {...rest} href={entry.href} fontWeight="inherit">
         {entry.label}
       </RailsLink>
     );
@@ -68,7 +68,7 @@ export default function Wrapper({
   permissions,
 }: {
   session: Session | null;
-  cmsEntries: AvatarMenuEntry[];
+  cmsEntries: AvatarMenuGlobal["entries"];
   permissions?: UserPermissions;
 }) {
   return (
@@ -88,7 +88,7 @@ function AvatarMenu({
   permissions,
 }: {
   session: Session | null;
-  cmsEntries: AvatarMenuEntry[];
+  cmsEntries: AvatarMenuGlobal["entries"];
   permissions?: UserPermissions;
 }) {
   const { t } = useT();
