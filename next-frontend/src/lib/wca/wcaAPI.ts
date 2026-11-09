@@ -1,4 +1,5 @@
 import createClient from "openapi-fetch";
+import createQueryApi from "openapi-react-query";
 import type {
   ClientPathsWithMethod,
   FetchResponse,
@@ -14,6 +15,7 @@ const baseServerClient = createClient<paths>({
   baseUrl: process.env.WCA_BACKEND_API_URL,
   headers: { "Content-Type": "application/json" },
 });
+export const serverQueryApi = createQueryApi(baseServerClient);
 export const serverClientWithToken = (token: string) =>
   createClient<paths>({
     baseUrl: process.env.WCA_BACKEND_API_URL,
