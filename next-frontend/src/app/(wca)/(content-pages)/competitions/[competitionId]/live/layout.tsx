@@ -5,7 +5,6 @@ import OpenapiError from "@/components/ui/openapiError";
 import { RoundsInfoProvider } from "@/providers/RoundInfoProvider";
 import LiveTabs from "@/components/competitions/LiveTabs";
 import TabShell from "@/components/competitions/TabShell";
-import { MobileCompetitionMenu } from "@/components/competitions/CompetitionMenu";
 
 export default async function LiveLayout({
   children,
@@ -42,7 +41,9 @@ export default async function LiveLayout({
       initialRounds={roundsData.rounds}
     >
       <TabShell
-        mobileMenu={<MobileCompetitionMenu params={params} />}
+        mobileMenu={
+          <LiveTabs competitionInfo={competitionInfo} mode="mobile" />
+        }
         menu={<LiveTabs competitionInfo={competitionInfo} />}
       >
         {children}

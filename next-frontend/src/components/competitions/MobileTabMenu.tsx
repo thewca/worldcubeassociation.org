@@ -46,7 +46,7 @@ const groupTabsMap = new Map([
   ["scrambles", "results"],
   ["byPerson", "results"],
   ["live", "live"],
-  ["irlevents", "events"],
+  ["live_events", "events"],
 ]);
 
 const groupIcons = {
@@ -88,7 +88,7 @@ export default function MobileTabMenu({
   competitionId,
 }: {
   tabs: CompetitionNavTab[];
-  customTabs: string[];
+  customTabs?: string[];
   competitionId: string;
 }) {
   const { t } = useT();
