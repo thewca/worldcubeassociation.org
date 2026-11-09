@@ -14,20 +14,31 @@ import type { WcifEvent } from "@/lib/wca/wcif/rounds";
 import useSet from "@/lib/hooks/useSet";
 import useStoredState from "@/lib/hooks/useStoredState";
 import { getDatesBetweenInclusive } from "@/lib/wca/dates";
-import { Alert, Box, VStack } from "@chakra-ui/react";
+import {
+  Alert,
+  Box,
+  Button,
+  Group,
+  Link,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { FormEventSelector } from "@/components/EventSelector";
+import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 
 interface ScheduleProps {
   wcifSchedule: WcifSchedule;
   wcifEvents: WcifEvent[];
   competitionName: string;
+  competitionId: string;
 }
 
 export default function Schedule({
   wcifSchedule,
   wcifEvents,
   competitionName,
+  competitionId,
 }: ScheduleProps) {
   // venues
 
@@ -104,6 +115,29 @@ export default function Schedule({
 
   return (
     <VStack gap="3" alignItems="stretch">
+      <Alert.Root status="info" variant="surface">
+        <Alert.Content>
+          <Alert.Title>
+            <Group justify="space-between" w="full">
+              <Text>{t("competitions.competition_info.pdf.download_pdf")}</Text>
+              <Button variant="outline" size="xs" asChild>
+                <Link
+                  href={
+                    "https://www.worldcubeassociation.org/competitions/" +
+                    competitionId +
+                    ".pdf"
+                  }
+                  color="inherit"
+                  textDecoration="none"
+                >
+                  <WcaDocsIcon />{" "}
+                  {t("competitions.competition_info.pdf.download")}
+                </Link>
+              </Button>
+            </Group>
+          </Alert.Title>
+        </Alert.Content>
+      </Alert.Root>
       {timeZoneCount > 1 && (
         <Alert.Root status="warning">
           <Alert.Content>
