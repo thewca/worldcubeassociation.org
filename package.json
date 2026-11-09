@@ -38,7 +38,7 @@
     "make-plural": "^8.2.0",
     "mini-css-extract-plugin": "^2.10.2",
     "path-complete-extname": "^1.0.0",
-    "postcss": "^8.5.31",
+    "postcss": "^8.5.32",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^17.0.1",
     "postcss-loader": "^8.2.1",
