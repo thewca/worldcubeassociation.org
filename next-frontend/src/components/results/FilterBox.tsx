@@ -10,7 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
-import { SingleEventSelector } from "@/components/EventSelector";
+import {
+  FormEventSelector,
+  SingleEventSelector,
+} from "@/components/EventSelector";
 
 type FilterState = {
   event: string;
@@ -20,7 +23,6 @@ type FilterState = {
 };
 
 type FilterActions = {
-  setEvent: (event: string) => void;
   setRegion: (region: string) => void;
   setGender: (gender: string) => void;
   setShow: (show: string) => void;
@@ -28,18 +30,24 @@ type FilterActions = {
 
 interface FilterBoxProps {
   filterState: FilterState;
-  filterActions: FilterActions;
+  filterActions: FilterActions & { setEvent: (event: string) => void };
   children: React.ReactElement;
 }
 
 interface RecordsFilterBoxProps {
-  filterState: FilterState;
-  filterActions: FilterActions;
+  filterState: Omit<FilterState, "event"> & { events: string[] };
+  filterActions: FilterActions & {
+    setEvents: (events: string[]) => void;
+    toggleEvent: (event: string) => void;
+  };
 }
 
 interface RankingsFilterBoxProps {
   filterState: FilterState & { rankingType: string };
-  filterActions: FilterActions & { setType: (type: string) => void };
+  filterActions: FilterActions & {
+    setEvent: (event: string) => void;
+    setType: (type: string) => void;
+  };
 }
 
 interface SegmentedFieldProps {
@@ -111,56 +119,75 @@ export function RecordsFilterBox({
   const { t } = useT();
 
   return (
-    <FilterBox filterState={filterState} filterActions={filterActions}>
-      <Stack direction={{ base: "column", md: "row" }}>
-        <SegmentedField
-          label={t("results.selector_elements.gender_selector.gender")}
-          value={filterState.gender}
-          items={[
-            {
-              value: "All",
-              label: t("results.selector_elements.gender_selector.gender_all"),
-            },
-            {
-              value: "Male",
-              label: t("results.selector_elements.gender_selector.male"),
-            },
-            {
-              value: "Female",
-              label: t("results.selector_elements.gender_selector.female"),
-            },
-          ]}
-          onChange={filterActions.setGender}
+    <FilterPanel>
+      <VStack align="left">
+        <FormEventSelector
+          title={t("competitions.competition_form.events")}
+          selectedEvents={filterState.events}
+          onEventClick={filterActions.toggleEvent}
+          onClearClick={() => filterActions.setEvents([])}
         />
-        <SegmentedField
-          label={t("results.selector_elements.show_selector.show")}
-          value={filterState.show}
-          items={[
-            {
-              value: "mixed",
-              label: t("results.selector_elements.show_selector.mixed"),
-            },
-            {
-              value: "slim",
-              label: t("results.selector_elements.show_selector.slim"),
-            },
-            {
-              value: "separate",
-              label: t("results.selector_elements.show_selector.separate"),
-            },
-            {
-              value: "history",
-              label: t("results.selector_elements.show_selector.history"),
-            },
-            {
-              value: "mixed history",
-              label: t("results.selector_elements.show_selector.mixed_history"),
-            },
-          ]}
-          onChange={filterActions.setShow}
+        <RegionSelector
+          region={filterState.region}
+          onRegionChange={filterActions.setRegion}
+          label={t("common.country")}
+          t={t}
+          name={t("delegates_page.all_regions")}
         />
-      </Stack>
-    </FilterBox>
+        <Stack direction={{ base: "column", md: "row" }}>
+          <SegmentedField
+            label={t("results.selector_elements.gender_selector.gender")}
+            value={filterState.gender}
+            items={[
+              {
+                value: "All",
+                label: t(
+                  "results.selector_elements.gender_selector.gender_all",
+                ),
+              },
+              {
+                value: "Male",
+                label: t("results.selector_elements.gender_selector.male"),
+              },
+              {
+                value: "Female",
+                label: t("results.selector_elements.gender_selector.female"),
+              },
+            ]}
+            onChange={filterActions.setGender}
+          />
+          <SegmentedField
+            label={t("results.selector_elements.show_selector.show")}
+            value={filterState.show}
+            items={[
+              {
+                value: "mixed",
+                label: t("results.selector_elements.show_selector.mixed"),
+              },
+              {
+                value: "slim",
+                label: t("results.selector_elements.show_selector.slim"),
+              },
+              {
+                value: "separate",
+                label: t("results.selector_elements.show_selector.separate"),
+              },
+              {
+                value: "history",
+                label: t("results.selector_elements.show_selector.history"),
+              },
+              {
+                value: "mixed history",
+                label: t(
+                  "results.selector_elements.show_selector.mixed_history",
+                ),
+              },
+            ]}
+            onChange={filterActions.setShow}
+          />
+        </Stack>
+      </VStack>
+    </FilterPanel>
   );
 }
 
@@ -235,15 +262,7 @@ function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
   const { t } = useT();
 
   return (
-    <Box
-      bg="bg"
-      w="full"
-      p={{ base: 4, md: 6 }}
-      borderRadius="md"
-      boxShadow="md"
-      borderWidth="1px"
-      borderColor="gray.100"
-    >
+    <FilterPanel>
       <VStack align="left">
         <SingleEventSelector
           title={t("competitions.competition_form.events")}
@@ -263,6 +282,22 @@ function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
         />
         {children}
       </VStack>
+    </FilterPanel>
+  );
+}
+
+function FilterPanel({ children }: { children: React.ReactNode }) {
+  return (
+    <Box
+      bg="bg"
+      w="full"
+      p={{ base: 4, md: 6 }}
+      borderRadius="md"
+      boxShadow="md"
+      borderWidth="1px"
+      borderColor="gray.100"
+    >
+      {children}
     </Box>
   );
 }
