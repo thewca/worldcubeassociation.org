@@ -83,8 +83,14 @@ export default function RecordsTable({
         return (
           recordsByEvent && (
             <VStack key={event} align="stretch">
-              <Heading size="2xl">
-                <EventIcon eventId={event} /> {events.byId[event].name}
+              <Heading
+                size={{ base: "xl", md: "2xl" }}
+                display="flex"
+                alignItems="center"
+                gap={2}
+              >
+                <EventIcon eventId={event} flexShrink={0} />
+                {events.byId[event].name}
               </Heading>
               <MixedRecordsTable records={recordsByEvent} />
             </VStack>
@@ -197,7 +203,7 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
     <VStack align="stretch" gap={6}>
       {["single", "average"].map((type) => (
         <VStack align="stretch" key={type}>
-          <Heading size="2xl">
+          <Heading size={{ base: "xl", md: "2xl" }}>
             {t(`results.selector_elements.type_selector.${type}`)}
           </Heading>
           <Table.ScrollArea rounded="md">
