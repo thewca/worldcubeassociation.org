@@ -178,7 +178,7 @@ GEM
     brakeman (8.1.0)
       racc
     builder (3.3.0)
-    bullet (8.3.0)
+    bullet (8.3.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (13.0.0)
@@ -489,9 +489,9 @@ GEM
     mime-types-data (3.2026.1027)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (6.0.6)
+    minitest (6.1.0)
       drb (~> 2.0)
-      prism (~> 1.5)
+      prism (>= 1.5, < 3)
     momentjs-rails (2.29.4.1)
       railties (>= 3.1)
     monetize (1.11.0)
@@ -1169,7 +1169,7 @@ CHECKSUMS
   bootstrap3-datetimepicker-rails (4.17.47) sha256=ee87a9bad74c140729f6a1ea2a7f3f2d9aaefa7e9defbe31b4edd27ff64689a2
   brakeman (8.1.0) sha256=cfa9e5214e4925842f4bc849a64f8a7e6c5d0425fe98eac8d7b7bc60fdc17e07
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
-  bullet (8.3.0) sha256=61a27261323e0f8557d87df3f03d9b175ccb8431f422876268de9b0c79d4fd14
+  bullet (8.3.1) sha256=e38418cc49c9cf3fae2a2a0f04ec152fec4b57f12752b6e678f54bf847baab53
   bundler (4.0.23) sha256=407ba8a1d928f412847f819aa5f8b6aef7c59fb51feb517112af8a165487287b
   byebug (13.0.0) sha256=d2263efe751941ca520fa29744b71972d39cbc41839496706f5d9b22e92ae05d
   camertron-eprun (1.1.1) sha256=9a8e337916445e62648f6a4f35d229302fc44c50549cc881bff1e296ccf9ce4b
@@ -1308,7 +1308,7 @@ CHECKSUMS
   mime-types-data (3.2026.1027) sha256=4568729e44974c1c8a8ceb76f7a5fc164e8c9553335455688bb3c00020f5d83f
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
-  minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
+  minitest (6.1.0) sha256=ff373595aa8888631e8a5463986a76b3845346ae6d7fa46e139c1633d418076e
   momentjs-rails (2.29.4.1) sha256=c7f9bc583872b628f8723319f4ae12a646c858c1c3ddb352bc75d5a7aa0b9e01
   monetize (1.11.0) sha256=d6c506daf4da0f424caa74cad1283fb82133607e504c631fc08eafd67d15ca32
   money (6.16.0) sha256=cf476f5f19188e247ec20f6509cff64dc35d395ee018bad799b1a9ea8bd4754a
