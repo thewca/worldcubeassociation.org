@@ -48,7 +48,12 @@ export default function FilteredRecords() {
     const url = route({
       pathname: "/results/records",
       query: {
-        event: event && event !== "all events" ? event : undefined,
+        event:
+          view === "history"
+            ? _.intersection(WCA_EVENT_IDS, event.split(","))[0]
+            : event && event !== "all events"
+              ? event
+              : undefined,
         region: region === "world" ? undefined : region,
         gender: gender === "All" ? undefined : gender,
         view: view === "current" ? undefined : view,
@@ -62,13 +67,21 @@ export default function FilteredRecords() {
   const filterActions = {
     setEvents: (events: string[]) => updateFilters({ event: events.join(",") }),
     toggleEvent: (event: string) => {
-      const requestedEvents =
-        new URLSearchParams(window.location.search).get("event")?.split(",") ??
-        [];
-      const currentEvents = _.intersection(WCA_EVENT_IDS, requestedEvents);
-      const events = currentEvents.includes(event)
-        ? currentEvents.filter((selected) => selected !== event)
-        : [...currentEvents, event];
+      const currentFilters = getFilters(
+        new URLSearchParams(window.location.search),
+      );
+      const currentEvents = _.intersection(
+        WCA_EVENT_IDS,
+        currentFilters.event.split(","),
+      );
+      const events =
+        currentFilters.view === "history"
+          ? currentEvents[0] === event
+            ? []
+            : [event]
+          : currentEvents.includes(event)
+            ? currentEvents.filter((selected) => selected !== event)
+            : [...currentEvents, event];
       updateFilters({ event: events.join(",") });
     },
     setRegion: (region: string) => updateFilters({ region: region || "world" }),
@@ -86,7 +99,9 @@ export default function FilteredRecords() {
   };
   const { t } = useT();
   const currentRecords = data?.records ?? {};
-  const selectedEvents = _.intersection(WCA_EVENT_IDS, event.split(","));
+  const requestedEvents = _.intersection(WCA_EVENT_IDS, event.split(","));
+  const selectedEvents =
+    view === "history" ? requestedEvents.slice(0, 1) : requestedEvents;
   const hasActiveFilters =
     selectedEvents.length > 0 ||
     filters.region !== "world" ||
