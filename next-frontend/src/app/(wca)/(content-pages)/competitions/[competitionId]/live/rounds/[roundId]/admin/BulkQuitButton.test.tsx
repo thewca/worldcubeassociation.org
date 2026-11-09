@@ -80,23 +80,26 @@ const makeResult = (
 const competitors = [
   makeCompetitor(101, 3, "Charlie"),
   makeCompetitor(102, 1, "bob"),
-  makeCompetitor(103, 2, "Alice"),
+  makeCompetitor(103, 2, "Ángela"),
   makeCompetitor(104, 4, "Dana"),
   makeCompetitor(105, 5, "Eve"),
 ];
 
+const bulkQuitButton = () => (
+  <ChakraProvider value={defaultSystem}>
+    <BulkQuitButton competitionId="Foo2026" roundId="333-r1" />
+  </ChakraProvider>
+);
+
 const openDialog = async () => {
-  render(
-    <ChakraProvider value={defaultSystem}>
-      <BulkQuitButton competitionId="Foo2026" roundId="333-r1" />
-    </ChakraProvider>,
-  );
+  const { rerender } = render(bulkQuitButton());
   fireEvent.click(
     screen.getByRole("button", {
       name: "competitions.live.admin.quit.bulk.menu",
     }),
   );
   await screen.findByRole("table");
+  return { rerender };
 };
 
 const displayedNames = () =>
@@ -149,21 +152,21 @@ describe("BulkQuitButton", () => {
   it("lists only competitors without results, ordered by registrant ID", async () => {
     await openDialog();
 
-    expect(displayedNames()).toEqual(["bob", "Alice", "Charlie"]);
+    expect(displayedNames()).toEqual(["bob", "Ángela", "Charlie"]);
   });
 
-  it("sorts by name ignoring case, and reverses on a second click", async () => {
+  it("sorts by name ignoring case and accents, and reverses on a second click", async () => {
     await openDialog();
     const nameHeader = screen.getByRole("columnheader", {
       name: "competitions.live.admin.quit.bulk.name",
     });
 
     fireEvent.click(nameHeader);
-    expect(displayedNames()).toEqual(["Alice", "bob", "Charlie"]);
+    expect(displayedNames()).toEqual(["Ángela", "bob", "Charlie"]);
     expect(nameHeader).toHaveAttribute("aria-sort", "ascending");
 
     fireEvent.click(nameHeader);
-    expect(displayedNames()).toEqual(["Charlie", "bob", "Alice"]);
+    expect(displayedNames()).toEqual(["Charlie", "bob", "Ángela"]);
     expect(nameHeader).toHaveAttribute("aria-sort", "descending");
   });
 
@@ -176,31 +179,45 @@ describe("BulkQuitButton", () => {
     expect(idHeader).toHaveAttribute("aria-sort", "ascending");
 
     fireEvent.click(idHeader);
-    expect(displayedNames()).toEqual(["Charlie", "Alice", "bob"]);
+    expect(displayedNames()).toEqual(["Charlie", "Ángela", "bob"]);
     expect(idHeader).toHaveAttribute("aria-sort", "descending");
 
     fireEvent.click(idHeader);
-    expect(displayedNames()).toEqual(["bob", "Alice", "Charlie"]);
+    expect(displayedNames()).toEqual(["bob", "Ángela", "Charlie"]);
     expect(idHeader).toHaveAttribute("aria-sort", "ascending");
   });
 
-  it("starts with everyone selected and toggles all from the header", async () => {
+  it("starts with nobody selected and the confirm button disabled", async () => {
     await openDialog();
 
+    const checkboxes = screen.getAllByRole("checkbox");
+    // The "select all" checkbox plus one per eligible competitor.
+    expect(checkboxes).toHaveLength(4);
+    checkboxes.forEach((checkbox) => expect(checkbox).not.toBeChecked());
+    expect(
+      screen.getByRole("button", {
+        name: "competitions.live.admin.quit.quit_confirm",
+      }),
+    ).toBeDisabled();
+  });
+
+  it("toggles all from the header", async () => {
+    await openDialog();
+
+    fireEvent.click(selectAllCheckbox());
+    await waitFor(() => expect(checkboxFor("Ángela")).toBeChecked());
     expect(selectAllCheckbox()).toBeChecked();
 
     fireEvent.click(selectAllCheckbox());
-    await waitFor(() => expect(checkboxFor("Alice")).not.toBeChecked());
+    await waitFor(() => expect(checkboxFor("Ángela")).not.toBeChecked());
     expect(selectAllCheckbox()).not.toBeChecked();
-
-    fireEvent.click(selectAllCheckbox());
-    await waitFor(() => expect(checkboxFor("Alice")).toBeChecked());
   });
 
   it("shows a partial selection and only quits the selected competitors", async () => {
     await openDialog();
 
-    fireEvent.click(checkboxFor("Alice"));
+    fireEvent.click(checkboxFor("Charlie"));
+    fireEvent.click(checkboxFor("bob"));
     await waitFor(() => expect(selectAllCheckbox()).toBePartiallyChecked());
 
     fireEvent.click(
@@ -215,5 +232,31 @@ describe("BulkQuitButton", () => {
     await waitFor(() =>
       expect(screen.queryByRole("table")).not.toBeInTheDocument(),
     );
+  });
+
+  it("drops selected competitors who receive results while the dialog is open", async () => {
+    const { rerender } = await openDialog();
+
+    fireEvent.click(selectAllCheckbox());
+    await waitFor(() => expect(selectAllCheckbox()).toBeChecked());
+
+    // Charlie gets a first attempt entered from another device.
+    liveResultsContext.liveResultsByRegistrationId = {
+      ...liveResultsContext.liveResultsByRegistrationId,
+      "101": [makeResult(101, 1)],
+    };
+    rerender(bulkQuitButton());
+
+    expect(screen.queryByRole("checkbox", { name: "Charlie" })).toBeNull();
+    expect(selectAllCheckbox()).toBeChecked();
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "competitions.live.admin.quit.quit_confirm",
+      }),
+    );
+
+    const quitRegistrationIds = mutate.mock.calls[0][0].body.registration_ids;
+    expect(quitRegistrationIds.toSorted()).toEqual([102, 103]);
   });
 });

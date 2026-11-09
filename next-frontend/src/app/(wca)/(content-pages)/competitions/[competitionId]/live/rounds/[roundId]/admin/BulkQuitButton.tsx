@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import _ from "lodash";
 import { Button, Checkbox, HStack, Table } from "@chakra-ui/react";
 import { LuArrowDown, LuArrowUp } from "react-icons/lu";
 import { ConfirmDialog } from "@/providers/ConfirmProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
+import { LiveCompetitor } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
@@ -48,13 +48,15 @@ export default function BulkQuitButton({
     (competitor) => competitor.id,
   );
 
-  const orderedCompetitors = _.orderBy(
-    emptyCompetitors,
-    (competitor) =>
-      sort.column === "id"
-        ? competitor.registrant_id
-        : competitor.name.toLowerCase(),
-    sort.direction,
+  const compareCompetitors = (a: LiveCompetitor, b: LiveCompetitor) =>
+    sort.column === "id"
+      ? a.registrant_id - b.registrant_id
+      : a.name.localeCompare(b.name);
+
+  const orderedCompetitors = emptyCompetitors.toSorted((a, b) =>
+    sort.direction === "asc"
+      ? compareCompetitors(a, b)
+      : compareCompetitors(b, a),
   );
 
   const toggleSort = (column: SortColumn) =>
@@ -96,7 +98,7 @@ export default function BulkQuitButton({
   );
 
   const openDialog = () => {
-    setSelected(new Set(emptyRegistrationIds));
+    setSelected(new Set());
     setOpen(true);
   };
 
@@ -111,11 +113,17 @@ export default function BulkQuitButton({
       return next;
     });
 
+  // A competitor can receive results while the dialog is open, so only
+  // count selections that are still eligible for bulk quitting.
+  const selectedRegistrationIds = emptyRegistrationIds.filter((id) =>
+    selected.has(id),
+  );
+
   const allSelected =
     emptyRegistrationIds.length > 0 &&
-    selected.size === emptyRegistrationIds.length;
+    selectedRegistrationIds.length === emptyRegistrationIds.length;
 
-  const someSelected = selected.size > 0;
+  const someSelected = selectedRegistrationIds.length > 0;
   const selectAllState = allSelected || (someSelected && "indeterminate");
 
   const toggleAll = () =>
@@ -124,7 +132,7 @@ export default function BulkQuitButton({
   const handleConfirm = () => {
     bulkQuit({
       params: { path: { competitionId, roundId } },
-      body: { registration_ids: [...selected] },
+      body: { registration_ids: selectedRegistrationIds },
     });
     setOpen(false);
   };
@@ -159,9 +167,9 @@ export default function BulkQuitButton({
         onConfirm={handleConfirm}
         cancelButton={t("competitions.live.admin.quit.cancel")}
         confirmButton={t("competitions.live.admin.quit.quit_confirm", {
-          count: selected.size,
+          count: selectedRegistrationIds.length,
         })}
-        confirmDisabled={selected.size === 0}
+        confirmDisabled={!someSelected}
       >
         <Table.Root size="sm">
           <Table.Header>
