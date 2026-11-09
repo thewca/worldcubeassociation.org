@@ -117,6 +117,7 @@ export function StepSummary({
                     key={eventId}
                     eventId={eventId}
                     size="lg"
+                    t={t}
                   />
                 ))}
               </HStack>

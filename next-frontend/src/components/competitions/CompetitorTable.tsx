@@ -35,7 +35,7 @@ export default function CompetitorTable({
                 cursor="pointer"
                 _hover={{ bg: "grey.solid", color: "wcawhite.contrast" }}
               >
-                <LabelledEventIcon eventId={eventId} />
+                <LabelledEventIcon eventId={eventId} t={t} />
               </Table.ColumnHeader>
             ))}
             <Table.ColumnHeader>Total</Table.ColumnHeader>
@@ -94,7 +94,7 @@ export default function CompetitorTable({
                 {eventIds.map((eventId) => (
                   <Table.Cell key={eventId}>
                     {registration.competing.event_ids.includes(eventId) ? (
-                      <LabelledEventIcon eventId={eventId} />
+                      <LabelledEventIcon eventId={eventId} t={t} />
                     ) : null}
                   </Table.Cell>
                 ))}

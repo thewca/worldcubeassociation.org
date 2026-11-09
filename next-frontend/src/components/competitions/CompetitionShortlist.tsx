@@ -45,6 +45,7 @@ function ShortlistItem<T extends DataCompetition>({
                       ? "green.solid"
                       : "currentColor"
                   }
+                  t={t}
                 />
               ))}
             </Wrap>
