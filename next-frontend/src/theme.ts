@@ -1006,6 +1006,20 @@ const customConfig = defineConfig({
       },
       table: {
         slots: [],
+        compoundVariants: [
+          {
+            variant: "competitions",
+            size: "xs",
+            css: {
+              cell: {
+                px: "1",
+                py: "1",
+                textAlign: "start",
+                verticalAlign: "middle",
+              },
+            },
+          },
+        ],
         variants: {
           variant: {
             competitions: {
