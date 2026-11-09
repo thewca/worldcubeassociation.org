@@ -142,6 +142,7 @@ export function RecordsFilterBox({
         >
           <Box
             width={{ base: "full", sm: "auto" }}
+            maxW={{ base: "full", sm: "sm" }}
             flex={{ base: "none", sm: "1" }}
             flexBasis={{ base: "auto", sm: "xs" }}
             minW={0}
