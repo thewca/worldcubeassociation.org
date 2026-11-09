@@ -91,7 +91,7 @@
     "react-refresh": "^0.19.0",
     "shakapacker": "10.3.2",
     "shakapacker-webpack": "10.3.2",
-    "stylelint": "^17.16.0",
+    "stylelint": "^18.0.0",
     "stylelint-config-recommended-scss": "^17.0.1",
     "stylelint-scss": "^7.4.0",
     "terser-webpack-plugin": "^5.6.1",
