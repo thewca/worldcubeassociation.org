@@ -71,7 +71,7 @@
     "not dead"
   ],
   "devDependencies": {
-    "@babel/core": "^7.29.7",
+    "@babel/core": "^7.29.13",
     "@babel/plugin-transform-runtime": "^7.29.7",
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
