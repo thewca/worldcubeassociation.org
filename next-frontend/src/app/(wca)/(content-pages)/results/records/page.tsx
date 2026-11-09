@@ -1,9 +1,9 @@
 import { getRecordsQueryOptions } from "@/lib/wca/results/records";
 import { serverClient } from "@/lib/wca/wcaAPI";
-import createQueryClient from "openapi-react-query";
 import {
   dehydrate,
   HydrationBoundary,
+  noop,
   QueryClient,
 } from "@tanstack/react-query";
 import React, { Suspense } from "react";
@@ -42,10 +42,13 @@ async function Records({ searchParams }: RecordsPageProps) {
     show = SHOW_MIXED,
   } = await searchParams;
 
-  const api = createQueryClient(serverClient);
   const queryClient = new QueryClient();
-  const queryOptions = getRecordsQueryOptions(api, { gender, region, show });
-  await queryClient.prefetchQuery(queryOptions);
+  const queryOptions = getRecordsQueryOptions(serverClient, {
+    gender,
+    region,
+    show,
+  });
+  await queryClient.query(queryOptions).catch(noop);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
