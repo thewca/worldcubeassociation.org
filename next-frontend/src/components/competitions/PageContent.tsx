@@ -69,7 +69,8 @@ export default function Content({
   const path = _.last(pathName.split("/"));
   const currentPath = path === competition.id ? "general" : path;
 
-  const eventId = activityCodeFromPath(currentPath!) || "general";
+  const eventId =
+    activityCodeFromPath(currentPath!) || decodeURIComponent(currentPath!);
 
   const isMobile = useBreakpointValue({ base: true, md: false });
 
