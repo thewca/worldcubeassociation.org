@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
+import { FilterParams } from "@/lib/wca/results/records";
 import {
   FormEventSelector,
   SingleEventSelector,
@@ -34,12 +35,17 @@ interface FilterBoxProps {
 }
 
 interface RecordsFilterBoxProps {
-  filterState: Pick<FilterState, "region" | "gender"> & {
+  filterState: Pick<
+    FilterParams,
+    "region" | "gender" | "view" | "groupBy" | "display"
+  > & {
     events: string[];
   };
   filterActions: FilterActions & {
     setEvents: (events: string[]) => void;
     toggleEvent: (event: string) => void;
+    setGroupBy: (groupBy: FilterParams["groupBy"]) => void;
+    setDisplay: (display: FilterParams["display"]) => void;
   };
 }
 
@@ -158,6 +164,36 @@ export function RecordsFilterBox({
             ]}
             onChange={filterActions.setGender}
           />
+          {filterState.view === "current" && (
+            <>
+              <SegmentedField
+                label={t("results.records.group_by")}
+                value={filterState.groupBy}
+                items={[
+                  { value: "event", label: t("results.table_elements.event") },
+                  { value: "type", label: t("results.records.result_type") },
+                ]}
+                onChange={(value) =>
+                  filterActions.setGroupBy(value === "type" ? "type" : "event")
+                }
+              />
+              {filterState.groupBy === "event" && (
+                <SegmentedField
+                  label={t("results.records.display")}
+                  value={filterState.display}
+                  items={[
+                    { value: "standard", label: t("results.records.standard") },
+                    { value: "compact", label: t("results.records.compact") },
+                  ]}
+                  onChange={(value) =>
+                    filterActions.setDisplay(
+                      value === "compact" ? "compact" : "standard",
+                    )
+                  }
+                />
+              )}
+            </>
+          )}
         </Stack>
       </VStack>
     </FilterPanel>

@@ -8,6 +8,8 @@ export type FilterParams = {
   region: string;
   gender: string;
   view: RecordsView;
+  groupBy: "event" | "type";
+  display: "standard" | "compact";
 };
 
 export function getFilters(searchParams: URLSearchParams): FilterParams {
@@ -16,6 +18,8 @@ export function getFilters(searchParams: URLSearchParams): FilterParams {
     region: searchParams.get("region") ?? "world",
     gender: searchParams.get("gender") ?? "All",
     view: searchParams.get("view") === "history" ? "history" : "current",
+    groupBy: searchParams.get("group_by") === "type" ? "type" : "event",
+    display: searchParams.get("display") === "compact" ? "compact" : "standard",
   };
   const show = searchParams.get("show");
   // handle backwards compatibility with legacy `show` param
@@ -24,6 +28,8 @@ export function getFilters(searchParams: URLSearchParams): FilterParams {
       ...filters,
       view:
         show === "history" || show === "mixed history" ? "history" : "current",
+      groupBy: show === "separate" ? "type" : "event",
+      display: show === "slim" ? "compact" : "standard",
     };
   }
   return filters;

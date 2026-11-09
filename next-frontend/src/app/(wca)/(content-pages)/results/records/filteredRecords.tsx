@@ -28,13 +28,13 @@ export default function FilteredRecords() {
     placeholderData: keepPreviousData,
   });
   const updateFilters = (changes: Partial<FilterParams>) => {
-    const updatedFilters = {
+    const { groupBy, ...params } = {
       ...getFilters(new URLSearchParams(window.location.search)),
       ...changes,
     };
     const url = route({
       pathname: "/results/records",
-      query: updatedFilters,
+      query: { ...params, group_by: groupBy },
     });
 
     window.history.replaceState(null, "", url);
@@ -53,8 +53,12 @@ export default function FilteredRecords() {
     },
     setRegion: (region: string) => updateFilters({ region: region || "world" }),
     setGender: (gender: string) => updateFilters({ gender }),
+    setGroupBy: (groupBy: FilterParams["groupBy"]) =>
+      updateFilters({ groupBy }),
+    setDisplay: (display: FilterParams["display"]) =>
+      updateFilters({ display }),
   };
-  const { event, view } = filters;
+  const { event, view, groupBy, display } = filters;
   const setView = (value: string) => {
     if (value === "current" || value === "history") {
       updateFilters({ view: value });
@@ -107,7 +111,15 @@ export default function FilteredRecords() {
           <RecordsTable
             records={filteredRecords}
             // TODO: clean up this prop
-            show={view === "history" ? "mixed history" : "mixed"}
+            show={
+              view === "history"
+                ? "mixed history"
+                : groupBy === "type"
+                  ? "separate"
+                  : display === "compact"
+                    ? "slim"
+                    : "mixed"
+            }
           />
         )
       )}
