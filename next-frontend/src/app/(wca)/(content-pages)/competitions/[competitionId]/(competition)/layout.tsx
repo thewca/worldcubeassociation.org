@@ -1,5 +1,6 @@
 import CompetitionMenu, {
   AwaitingResultsAlert,
+  MobileCompetitionMenu,
 } from "@/components/competitions/CompetitionMenu";
 import TabShell from "@/components/competitions/TabShell";
 import TabMenuSkeleton from "@/components/competitions/TabMenuSkeleton";
@@ -24,6 +25,7 @@ export default function CompetitionTabsLayout({
             <CompetitionMenu params={params} />
           </Suspense>
         }
+        mobileMenu={<MobileCompetitionMenu params={params} />}
       >
         <Suspense>
           <AwaitingResultsAlert params={params} />

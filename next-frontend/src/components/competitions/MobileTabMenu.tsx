@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   Card,
@@ -29,6 +31,9 @@ import {
 import { TFunction } from "i18next";
 import { route } from "nextjs-routes";
 import events from "@/lib/wca/data/events";
+import { usePathname } from "next/navigation";
+import _ from "lodash";
+import { useT } from "@/lib/i18n/useI18n";
 
 const groupTabsMap = new Map([
   ["general", "info"],
@@ -81,17 +86,18 @@ export default function MobileTabMenu({
   tabs,
   customTabs = [],
   competitionId,
-  t,
-  isAdminRoute,
-  activeMenuKey,
 }: {
   tabs: CompetitionNavTab[];
   customTabs: string[];
   competitionId: string;
-  t: TFunction;
-  isAdminRoute: boolean;
-  activeMenuKey: string;
 }) {
+  const { t } = useT();
+  const pathName = usePathname();
+  const isAdminRoute = pathName.includes("/admin");
+
+  const path = _.last(pathName.split("/")) || "";
+  const activeMenuKey = path === competitionId ? "general" : path;
+
   const grouped = tabs.reduce<Record<string, CompetitionNavTab[]>>(
     (acc, tab) => {
       const group = groupTabsMap.get(tab.menuKey);
@@ -129,6 +135,11 @@ export default function MobileTabMenu({
         : "";
 
   const renderLabel = (renderTab: CompetitionNavTab) =>
+    // i18n-tasks-use t('competitions.nav.info')
+    // i18n-tasks-use t('competitions.nav.more')
+    // i18n-tasks-use t('competitions.nav.admin')
+    // i18n-tasks-use t('competitions.nav.results')
+    // i18n-tasks-use t('competitions.nav.events')
     t(
       isAdminRoute && renderTab.i18nKeyAdmin
         ? renderTab.i18nKeyAdmin

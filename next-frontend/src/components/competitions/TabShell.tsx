@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs } from "@chakra-ui/react";
+import { Tabs, useBreakpointValue } from "@chakra-ui/react";
 import { useParams, usePathname } from "next/navigation";
 import _ from "lodash";
 
@@ -8,9 +8,11 @@ import _ from "lodash";
 //   the content instead of the two blocking each other.
 export default function TabShell({
   menu,
+  mobileMenu,
   children,
 }: {
   menu: React.ReactNode;
+  mobileMenu: React.ReactNode;
   children: React.ReactNode;
 }) {
   const pathName = usePathname();
@@ -18,6 +20,16 @@ export default function TabShell({
 
   const path = _.last(pathName.split("/"));
   const currentPath = !path || path === competitionId ? "general" : path;
+
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
+  if (isMobile)
+    return (
+      <>
+        {children}
+        {mobileMenu}
+      </>
+    );
 
   return (
     <Tabs.Root
