@@ -8,12 +8,10 @@ locals {
     staging = {
       service_prefix = "${var.name_prefix}-staging"
       asset_bucket   = "assets-staging.worldcubeassociation.org"
-      exec_container = "rails-staging"
     }
     production = {
       service_prefix = "${var.name_prefix}-prod"
       asset_bucket   = "assets.worldcubeassociation.org"
-      exec_container = null
     }
   }
 }
@@ -82,39 +80,6 @@ data "aws_iam_policy_document" "github_deploy" {
   statement {
     actions   = ["ecs:UpdateService"]
     resources = ["arn:aws:ecs:${var.region}:${data.aws_caller_identity.current.account_id}:service/${aws_ecs_cluster.this.name}/${each.value.service_prefix}*"]
-  }
-
-  dynamic "statement" {
-    for_each = each.value.exec_container == null ? [] : [each.value.exec_container]
-
-    content {
-      actions   = ["ecs:ListTasks"]
-      resources = ["*"]
-
-      condition {
-        test     = "ArnEquals"
-        variable = "ecs:cluster"
-        values   = [aws_ecs_cluster.this.arn]
-      }
-    }
-  }
-
-  dynamic "statement" {
-    for_each = each.value.exec_container == null ? [] : [each.value.exec_container]
-
-    content {
-      actions = ["ecs:ExecuteCommand"]
-      resources = [
-        aws_ecs_cluster.this.arn,
-        "arn:aws:ecs:${var.region}:${data.aws_caller_identity.current.account_id}:task/${aws_ecs_cluster.this.name}/*",
-      ]
-
-      condition {
-        test     = "StringEquals"
-        variable = "ecs:container-name"
-        values   = [statement.value]
-      }
-    }
   }
 }
 
