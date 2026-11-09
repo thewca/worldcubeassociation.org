@@ -76,10 +76,10 @@ function SegmentedField({
   const collection = createListCollection({ items });
 
   return (
-    <Field.Root>
+    <Field.Root minW={0} width={{ base: "full", sm: "auto" }}>
       <Field.Label>{label}</Field.Label>
       <SegmentGroup.Root
-        hideBelow="md"
+        hideBelow="sm"
         value={value}
         onValueChange={(e) => onChange(e.value!)}
         size="md"
@@ -88,7 +88,7 @@ function SegmentedField({
         <SegmentGroup.Items items={items} />
       </SegmentGroup.Root>
       <Select.Root
-        hideFrom="md"
+        hideFrom="sm"
         collection={collection}
         value={[value]}
         onValueChange={({ value }) => value[0] && onChange(value[0])}
@@ -129,21 +129,32 @@ export function RecordsFilterBox({
 
   return (
     <FilterPanel>
-      <VStack align="left">
+      <VStack align="stretch" gap={4}>
         <FormEventSelector
           title={t("competitions.competition_form.events")}
           selectedEvents={filterState.events}
           onEventClick={filterActions.toggleEvent}
           onClearClick={() => filterActions.setEvents([])}
         />
-        <RegionSelector
-          region={filterState.region}
-          onRegionChange={filterActions.setRegion}
-          label={t("common.country")}
-          t={t}
-          name={t("delegates_page.all_regions")}
-        />
-        <Stack direction={{ base: "column", md: "row" }}>
+        <Stack
+          direction={{ base: "column", sm: "row" }}
+          flexWrap="wrap"
+          gap={4}
+        >
+          <Box
+            width={{ base: "full", sm: "auto" }}
+            flex={{ base: "none", sm: "1" }}
+            flexBasis={{ base: "auto", sm: "xs" }}
+            minW={0}
+          >
+            <RegionSelector
+              region={filterState.region}
+              onRegionChange={filterActions.setRegion}
+              label={t("common.country")}
+              t={t}
+              name={t("delegates_page.all_regions")}
+            />
+          </Box>
           <SegmentedField
             label={t("results.selector_elements.gender_selector.gender")}
             value={filterState.gender}
