@@ -2139,7 +2139,7 @@ fr:
       overview:
         upcoming: À venir
         in_progress: En ce moment
-        past_month: Le mois dernier
+        past_month: Dernier mois
         no_upcoming: Il n'y a aucune compétition à venir avec des résultats en 
           direct.
         search: Rechercher des compétitions
