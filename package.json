@@ -57,7 +57,7 @@
     "react-spinners": "^0.17.1",
     "react-textarea-autosize": "^8.5.9",
     "regenerator-runtime": "^0.14.1",
-    "sass": "^1.107.1",
+    "sass": "^1.108.1",
     "sass-loader": "^17.1.0",
     "semantic-ui-react": "^2.1.5",
     "style-loader": "^4.0.0",
