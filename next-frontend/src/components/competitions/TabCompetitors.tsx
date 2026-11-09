@@ -5,7 +5,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
 import PsychSheet from "@/components/competitions/PsychSheet";
-import { FormEventSelector } from "@/components/EventSelector";
+import EventDropdown from "@/components/EventDropdown";
 import Loading from "@/components/ui/loading";
 
 interface CompetitorData {
@@ -21,7 +21,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
   isLive = false,
   addOnTheSpotSlot,
 }) => {
-  const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
+  const [psychSheetEvent, setPsychSheetEvent] = useState("");
 
   const api = useAPI();
   const { t } = useT();
@@ -47,16 +47,12 @@ const TabCompetitors: React.FC<CompetitorData> = ({
       <Card.Body>
         {addOnTheSpotSlot}
         <Card.Title>
-          <FormEventSelector
-            title="Events"
-            selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
-            eventList={eventIds}
-            onEventClick={setPsychSheetEvent}
-            onClearClick={
-              psychSheetEvent === null
-                ? undefined
-                : () => setPsychSheetEvent(null)
-            }
+          <EventDropdown
+            label={t("competitions.competition_form.events")}
+            value={psychSheetEvent}
+            eventIds={eventIds}
+            onValueChange={setPsychSheetEvent}
+            allEventsValue=""
           />
         </Card.Title>
         <Table.ScrollArea borderWidth="1px" maxW="full">
@@ -73,7 +69,6 @@ const TabCompetitors: React.FC<CompetitorData> = ({
             <CompetitorTable
               eventIds={eventIds}
               registrations={registrationsQuery}
-              setPsychSheetEvent={setPsychSheetEvent}
               t={t}
               linkToLive={isLive}
               competitionId={id}

@@ -7,63 +7,12 @@ import {
   CheckboxCard,
   CheckboxGroup,
   Fieldset,
-  RadioCard,
   VisuallyHidden,
-  Wrap,
   Stack,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
-import EventIcon, { LabelledEventIcon } from "@/components/EventIcon";
-
-interface SingleEventSelectorProps {
-  title: string;
-  eventList?: string[];
-  selectedEvent: string;
-  onEventClick: (eventId: string) => void;
-  disabled?: boolean;
-  eventButtonsCompact?: boolean;
-}
-
-export function SingleEventSelector({
-  title,
-  eventList = WCA_EVENT_IDS,
-  selectedEvent,
-  onEventClick,
-  disabled,
-  eventButtonsCompact = false,
-}: SingleEventSelectorProps) {
-  return (
-    <RadioCard.Root
-      disabled={disabled}
-      size={eventButtonsCompact ? "sm" : undefined}
-      orientation="vertical"
-      align="center"
-      value={selectedEvent}
-      onValueChange={(e) => onEventClick(e.value!)}
-    >
-      {title && <RadioCard.Label>{title}</RadioCard.Label>}
-      <Wrap justify="center">
-        {eventList.map((eventId) => {
-          return (
-            <RadioCard.Item
-              key={eventId}
-              colorPalette="green"
-              disabled={disabled}
-              value={eventId}
-              maxW="16"
-            >
-              <RadioCard.ItemHiddenInput />
-              <RadioCard.ItemControl>
-                <LabelledEventIcon fontSize="2xl" eventId={eventId} />
-              </RadioCard.ItemControl>
-            </RadioCard.Item>
-          );
-        })}
-      </Wrap>
-    </RadioCard.Root>
-  );
-}
+import EventIcon from "@/components/EventIcon";
 
 interface MultiEventSelectorProps {
   eventList?: string[];

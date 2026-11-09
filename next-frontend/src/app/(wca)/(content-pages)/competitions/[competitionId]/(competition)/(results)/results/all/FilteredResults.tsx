@@ -8,7 +8,7 @@ import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import LinkedRoundResults from "@/components/results/LinkedRoundResults";
 import { useT } from "@/lib/i18n/useI18n";
-import { SingleEventSelector } from "@/components/EventSelector";
+import EventDropdown from "@/components/EventDropdown";
 
 export default function FilteredResults({
   competitionInfo,
@@ -34,11 +34,10 @@ export default function FilteredResults({
 
   return (
     <VStack align="left" gap={4}>
-      <SingleEventSelector
-        title=""
-        selectedEvent={activeEventId}
-        onEventClick={setActiveEventId}
-        eventList={competitionInfo.event_ids}
+      <EventDropdown
+        value={activeEventId}
+        onValueChange={setActiveEventId}
+        eventIds={competitionInfo.event_ids}
       />
       {roundGroups.map(([round, ...linkedRounds]) =>
         linkedRounds.length > 0 ? (
