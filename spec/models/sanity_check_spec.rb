@@ -157,6 +157,45 @@ RSpec.describe SanityCheck do
 
       expect(result_ids).to contain_exactly([competition_1.id, competition_2.id].join(","))
     end
+
+    context "Duplicate 222 Scrambles across competitions" do
+      let(:sanity_check) { SanityCheck.find(21) }
+      let(:competitions) { create_list(:competition, 2, event_ids: %w[222 333]) }
+
+      def share_scrambles(event_id, scrambles)
+        competitions.each do |competition|
+          round = create(:round, competition: competition, event_id: event_id)
+          scrambles.each do |scramble|
+            create(:scramble, competition: competition, round: round, event_id: event_id, scramble: scramble)
+          end
+        end
+      end
+
+      it "reports competitions sharing at least 3 scrambles" do
+        share_scrambles("222", ["R U F", "R U' F", "R U F'"])
+
+        reported_scrambles = sanity_check.run_query.pluck("scramble")
+
+        expect(reported_scrambles).to contain_exactly("R U F", "R U' F", "R U F'")
+      end
+
+      it "ignores competitions sharing less than 3 scrambles" do
+        share_scrambles("222", ["R U F", "R U' F"])
+
+        reported_scrambles = sanity_check.run_query.pluck("scramble")
+
+        expect(reported_scrambles).to be_empty
+      end
+
+      it "counts shared scrambles per event" do
+        share_scrambles("222", ["R U F"])
+        share_scrambles("333", ["R2 D2", "F2 B2"])
+
+        reported_scrambles = sanity_check.run_query.pluck("scramble")
+
+        expect(reported_scrambles).to contain_exactly("R2 D2", "F2 B2")
+      end
+    end
   end
 
   context "Duplicate Results" do

@@ -3,7 +3,9 @@ import {
   VStack,
   Stack,
   Field,
-  NativeSelect,
+  Select,
+  Portal,
+  createListCollection,
   SegmentGroup,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
@@ -49,13 +51,15 @@ interface SegmentedFieldProps {
   onChange: (value: string) => void;
 }
 
-// Segmented control on desktop, native select on mobile where it doesn't fit
+// Use a select on narrow screens where the segmented controls don't fit.
 function SegmentedField({
   label,
   value,
   items,
   onChange,
 }: SegmentedFieldProps) {
+  const collection = createListCollection({ items });
+
   return (
     <Field.Root>
       <Field.Label>{label}</Field.Label>
@@ -68,19 +72,36 @@ function SegmentedField({
         <SegmentGroup.Indicator />
         <SegmentGroup.Items items={items} />
       </SegmentGroup.Root>
-      <NativeSelect.Root hideFrom="md">
-        <NativeSelect.Field
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        >
-          {items.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </NativeSelect.Field>
-        <NativeSelect.Indicator />
-      </NativeSelect.Root>
+      <Select.Root
+        hideFrom="md"
+        collection={collection}
+        value={[value]}
+        onValueChange={({ value }) => value[0] && onChange(value[0])}
+        width="full"
+        lazyMount
+      >
+        <Select.HiddenSelect />
+        <Select.Control>
+          <Select.Trigger aria-label={label}>
+            <Select.ValueText />
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+        <Portal>
+          <Select.Positioner>
+            <Select.Content>
+              {items.map((item) => (
+                <Select.Item item={item} key={item}>
+                  <Select.ItemText>{item}</Select.ItemText>
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Portal>
+      </Select.Root>
     </Field.Root>
   );
 }
