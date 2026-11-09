@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { EventId } from "@/lib/wca/data/events";
+import _ from "lodash";
+import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
@@ -16,7 +17,7 @@ import useAPI from "@/lib/wca/useAPI";
 import { getRecordsQueryOptions } from "@/lib/wca/results/records";
 
 type FilterParams = {
-  event: EventId | "all events";
+  event: string;
   region: string;
   gender: string;
   show: string;
@@ -37,7 +38,10 @@ export default function FilteredRecords() {
   });
   const updateFilters = (changes: Partial<FilterParams>) => {
     const params = new URLSearchParams(window.location.search);
-    for (const [key, value] of Object.entries(changes)) params.set(key, value);
+    for (const [key, value] of Object.entries(changes)) {
+      if (key === "event" && !value) params.delete(key);
+      else params.set(key, value);
+    }
     const url = route({
       pathname: "/results/records",
       query: Object.fromEntries(params),
@@ -46,7 +50,17 @@ export default function FilteredRecords() {
     window.history.replaceState(null, "", url);
   };
   const filterActions = {
-    setEvent: (event: string) => updateFilters({ event }),
+    setEvents: (events: string[]) => updateFilters({ event: events.join(",") }),
+    toggleEvent: (event: string) => {
+      const requestedEvents =
+        new URLSearchParams(window.location.search).get("event")?.split(",") ??
+        [];
+      const currentEvents = _.intersection(WCA_EVENT_IDS, requestedEvents);
+      const events = currentEvents.includes(event)
+        ? currentEvents.filter((selected) => selected !== event)
+        : [...currentEvents, event];
+      updateFilters({ event: events.join(",") });
+    },
     setRegion: (region: string) => updateFilters({ region: region || "world" }),
     setGender: (gender: string) => updateFilters({ gender }),
     setShow: (show: string) => updateFilters({ show }),
@@ -55,13 +69,11 @@ export default function FilteredRecords() {
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const lng = useLocale();
-
+  const selectedEvents = _.intersection(WCA_EVENT_IDS, event.split(","));
   const filteredRecords =
-    event === "all events"
+    selectedEvents.length === 0
       ? currentRecords
-      : {
-          [event]: currentRecords[event] ?? [],
-        };
+      : _.pick(currentRecords, selectedEvents);
 
   return (
     <VStack align="left" gap={2}>
@@ -72,7 +84,10 @@ export default function FilteredRecords() {
         t("results.last_updated_html", {
           timestamp: getMediumDateString(data.timestamp, lng),
         })}
-      <RecordsFilterBox filterState={filters} filterActions={filterActions} />
+      <RecordsFilterBox
+        filterState={{ ...filters, events: selectedEvents }}
+        filterActions={filterActions}
+      />
       {isFetching && <Loading />}
       {error ? (
         <Alert.Root status="error">
