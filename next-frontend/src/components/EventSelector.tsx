@@ -58,7 +58,7 @@ export function SingleEventSelector({
               colorPalette="green"
               disabled={disabled}
               value={eventId}
-              maxW={{ base: "8", lg: "14" }}
+              maxW={{ base: "8", lg: eventButtonsCompact ? "16" : "14" }}
               aspectRatio="1"
             >
               <RadioCard.ItemHiddenInput />
@@ -66,7 +66,7 @@ export function SingleEventSelector({
                 <LabelledEventIcon
                   fontSize="3xl"
                   eventId={eventId}
-                  p={{ base: 1, lg: 0 }}
+                  p={{ base: 1, lg: eventButtonsCompact ? 1 : 0 }}
                   fullWidth
                   t={t}
                 />
