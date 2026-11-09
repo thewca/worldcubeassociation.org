@@ -302,7 +302,7 @@ function FilterPanel({ children }: { children: React.ReactNode }) {
       w="full"
       p={{ base: 4, md: 6 }}
       borderRadius="md"
-      boxShadow="md"
+      boxShadow="sm"
       borderWidth="1px"
       borderColor="gray.100"
     >
