@@ -110,16 +110,9 @@ export default function FilteredRecords() {
         !isPlaceholderData && (
           <RecordsTable
             records={filteredRecords}
-            // TODO: clean up this prop
-            show={
-              view === "history"
-                ? "mixed history"
-                : groupBy === "type"
-                  ? "separate"
-                  : display === "compact"
-                    ? "slim"
-                    : "mixed"
-            }
+            view={view}
+            groupBy={groupBy}
+            display={display}
           />
         )
       )}
