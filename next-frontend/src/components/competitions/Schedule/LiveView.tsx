@@ -194,14 +194,22 @@ function LiveSchedule({
                                 })}
                               >
                                 <HStack wrap="wrap">
-                                  <EventIcon eventId={eventId} fontSize="2xl" />
+                                  <EventIcon
+                                    eventId={eventId}
+                                    fontSize="2xl"
+                                    t={t}
+                                  />
                                   {roundName}
                                 </HStack>
                               </NextLink>
                             </Link>
                           ) : (
                             <HStack>
-                              <EventIcon eventId={eventId} fontSize="2xl" />
+                              <EventIcon
+                                eventId={eventId}
+                                fontSize="2xl"
+                                t={t}
+                              />
                               {roundName}
                             </HStack>
                           )}

@@ -63,7 +63,7 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
           t={t}
         />
         <RegistrationCard competitionInfo={competitionInfo} />
-        <EventCard competitionInfo={competitionInfo} />
+        <EventCard competitionInfo={competitionInfo} t={t} />
       </VStack>
       <VStack gap="8" alignItems="stretch">
         <OrganizationTeamCard competitionInfo={competitionInfo} />

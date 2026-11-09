@@ -61,6 +61,7 @@ export default async function PodiumsPage({
                       <LabelledEventIcon
                         key={finalRound.id}
                         eventId={eventId}
+                        t={t}
                       />
                     );
                   })}
@@ -90,7 +91,7 @@ export default async function PodiumsPage({
           <Fragment key={finalRound.id}>
             <Heading textStyle="h3" p="2" asChild>
               <HStack gap="2">
-                <EventIcon eventId={eventId} />
+                <EventIcon eventId={eventId} t={t} />
                 {events.byId[eventId].name}
               </HStack>
             </Heading>

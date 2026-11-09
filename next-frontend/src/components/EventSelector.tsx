@@ -39,6 +39,7 @@ export function SingleEventSelector({
   disabled,
   eventButtonsCompact = false,
 }: SingleEventSelectorProps) {
+  const { t } = useT();
   return (
     <RadioCard.Root
       disabled={disabled}
@@ -67,6 +68,7 @@ export function SingleEventSelector({
                   eventId={eventId}
                   p={{ base: 1, lg: 0 }}
                   fullWidth
+                  t={t}
                 />
               </RadioCard.ItemControl>
             </RadioCard.Item>
@@ -139,6 +141,7 @@ export function MultiEventSelector({
                   <EventIcon
                     eventId={eventId}
                     fontSize="3xl"
+                    t={t}
                     color={currentEventDisabled ? "#FFBBBB" : undefined}
                     disabledLabel={
                       currentEventDisabled ? disabledText(eventId) : undefined

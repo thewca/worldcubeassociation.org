@@ -21,11 +21,10 @@ import _333ohIcon from "@/components/icons/events/_333ohIcon";
 import _444bfIcon from "@/components/icons/events/_444bfIcon";
 import _555bfIcon from "@/components/icons/events/_555bfIcon";
 
-import events from "@/lib/wca/data/events";
-
 import type { ComponentPropsWithoutRef } from "react";
 import { Tooltip } from "./ui/tooltip";
 import { Center } from "@chakra-ui/react";
+import { TFunction } from "i18next";
 
 const eventIconMap = {
   "333": _333Icon,
@@ -61,20 +60,45 @@ type EventIconProps = {
   eventId: string;
   disabledLabel?: string;
   fullWidth?: boolean;
+  t: TFunction;
 } & EventIconIntrinsicProps;
 
 const EventIcon = ({
   eventId,
   disabledLabel,
   fullWidth,
+  t,
   ...iconIntrinsicProps
 }: EventIconProps) => {
   const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
+  // i18n-tasks-use t('events.333')
+  // i18n-tasks-use t('events.222')
+  // i18n-tasks-use t('events.444')
+  // i18n-tasks-use t('events.555')
+  // i18n-tasks-use t('events.666')
+  // i18n-tasks-use t('events.777')
+  // i18n-tasks-use t('events.333bf')
+  // i18n-tasks-use t('events.333fm')
+  // i18n-tasks-use t('events.333oh')
+  // i18n-tasks-use t('events.333ft')
+  // i18n-tasks-use t('events.clock')
+  // i18n-tasks-use t('events.minx')
+  // i18n-tasks-use t('events.pyram')
+  // i18n-tasks-use t('events.skewb')
+  // i18n-tasks-use t('events.sq1')
+  // i18n-tasks-use t('events.444bf')
+  // i18n-tasks-use t('events.555bf')
+  // i18n-tasks-use t('events.333mbf')
+  // i18n-tasks-use t('events.fto')
+  // i18n-tasks-use t('events.magic')
+  // i18n-tasks-use t('events.mmagic')
+  // i18n-tasks-use t('events.333mbo')
+  const eventName = t(`events.${eventId}`);
 
   return (
     <EventTooltip
-      eventId={eventId}
+      eventName={eventName}
       disabledLabel={disabledLabel}
       fullWidth={fullWidth}
     >
@@ -90,30 +114,31 @@ export const LabelledEventIcon = ({
   eventId,
   disabledLabel,
   fullWidth,
+  t,
   ...iconIntrinsicProps
-}: EventIconProps) => (
-  <EventTooltip
-    eventId={eventId}
-    disabledLabel={disabledLabel}
-    fullWidth={fullWidth}
-  >
+}: EventIconProps) => {
+  const eventName = t(`events.${eventId}`);
+  return (
     <EventIcon
       eventId={eventId}
       role="img"
       aria-hidden={false}
-      aria-label={events.byId[eventId]?.name}
+      aria-label={eventName}
+      t={t}
+      fullWidth={fullWidth}
+      disabledLabel={disabledLabel}
       {...iconIntrinsicProps}
     />
-  </EventTooltip>
-);
+  );
+};
 
 function EventTooltip({
-  eventId,
+  eventName,
   disabledLabel,
   fullWidth,
   children,
 }: {
-  eventId: string;
+  eventName: string;
   disabledLabel?: string;
   fullWidth?: boolean;
   children: React.ReactNode;
@@ -121,7 +146,7 @@ function EventTooltip({
   const dimension = fullWidth ? "full" : undefined;
   return (
     <Tooltip
-      content={disabledLabel ?? events.byId[eventId]?.name}
+      content={disabledLabel ?? eventName}
       closeDelay={20}
       openDelay={20}
     >
