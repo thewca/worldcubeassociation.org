@@ -10,7 +10,7 @@
     "@hello-pangea/dnd": "^18.0.1",
     "@rails/ujs": "^7.1.600",
     "@stripe/react-stripe-js": "^7.0.1",
-    "@stripe/stripe-js": "^10.2.0",
+    "@stripe/stripe-js": "^10.2.1",
     "@tanstack/react-query": "^5.105.0",
     "@tanstack/react-table": "^8.21.3",
     "autonumeric": "^4.10.10",
