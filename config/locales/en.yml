@@ -1706,6 +1706,7 @@ en:
       select_hint: "Please select events"
       list: "List"
       map: "Map"
+      hide_multiple_venues: "Hide competitions with multiple venues"
       event: "Event"
       region: "Region"
       search: "Search"
