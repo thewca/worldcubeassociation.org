@@ -197,6 +197,7 @@ en:
     type_label: "Qualification Type"
     result_type: "Result Type"
     for_event: "Qualification for %{event}"
+    preview: "Qualification preview"
     type:
       none: "No qualification"
       result: "By Result"
@@ -220,6 +221,11 @@ en:
     earliest_date:
       description: "Qualification Window Start Date"
       from_date: "on or after %{date}"
+      window_too_short: "The Window Start Date must be at least %{days} days before the Window Deadline."
+      explanation:
+        '1': "Qualification Window Start Date is optional. If left empty, any result achieved before the Deadline counts."
+        '2': "If a Window Start Date is entered, only results achieved on or after the Window Start Date count towards the qualification."
+        '3': "The Window Start Date must be at least %{days} days before the Window Deadline."
   #context: other activities which occur in the schedule
   activity:
     registration: "On-site registration"

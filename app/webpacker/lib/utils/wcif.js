@@ -237,7 +237,7 @@ const qualificationDateString = (qualification, { isV2 = false } = {}) => {
     // This can happen when the "Edit Qualification" modal UI is still work in progress.
     //   A clean WCIF spec will never allow this to be null, but while the user is still
     //   building up certain data we allow it to be null temporarily.
-    return '-';
+    return '';
   }
 
   const localLatestDate = parseUtcAsLocal(wcifWhenDate).toString().substring(0, 10);
@@ -260,6 +260,8 @@ export function eventQualificationToString(wcifEvent, qualification, { short, is
     return '-';
   }
   const dateString = qualificationDateString(qualification, { isV2 });
+  // The date part may be empty (see above), so avoid leaving a dangling space.
+  const withDate = (description) => [description, dateString].filter(Boolean).join(' ');
   const event = events.byId[wcifEvent.id];
   const wcifResultType = isV2 ? qualification.resultCondition.scope : qualification.resultType;
   const wcifQualificationType = isV2 ? qualification.resultCondition.type : qualification.type;
@@ -269,24 +271,24 @@ export function eventQualificationToString(wcifEvent, qualification, { short, is
     case 'average':
       if (wcifQualificationType === 'ranking') {
         const messageName = `qualification.${wcifResultType}.ranking`;
-        return `${I18n.t(messageName, { ranking: wcifQualificationLevel })} ${dateString}`;
+        return withDate(I18n.t(messageName, { ranking: wcifQualificationLevel }));
       }
       if (wcifQualificationType === 'anyResult' || (wcifQualificationType === 'resultAchieved' && wcifQualificationLevel === null)) {
         const messageName = `qualification.${wcifResultType}.any_result`;
-        return `${I18n.t(messageName)} ${dateString}`;
+        return withDate(I18n.t(messageName));
       }
       if (event.isTimedEvent) {
         const messageName = `qualification.${wcifResultType}.time`;
-        return `${I18n.t(messageName, { time: attemptResultToString(wcifQualificationLevel, wcifEvent.id, short) })} ${dateString}`;
+        return withDate(I18n.t(messageName, { time: attemptResultToString(wcifQualificationLevel, wcifEvent.id, short) }));
       }
       if (event.isFewestMoves) {
         const messageName = `qualification.${wcifResultType}.moves`;
         const moves = wcifResultType === 'average' ? wcifQualificationLevel / 100 : wcifQualificationLevel;
-        return `${I18n.t(messageName, { moves })} ${dateString}`;
+        return withDate(I18n.t(messageName, { moves }));
       }
       if (event.isMultipleBlindfolded) {
         const messageName = `qualification.${wcifResultType}.points`;
-        return `${I18n.t(messageName, { points: attemptResultToMbPoints(wcifQualificationLevel) })} ${dateString}`;
+        return withDate(I18n.t(messageName, { points: attemptResultToMbPoints(wcifQualificationLevel) }));
       }
       return '-';
     default:
