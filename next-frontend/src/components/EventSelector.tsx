@@ -9,8 +9,8 @@ import {
   Fieldset,
   RadioCard,
   VisuallyHidden,
-  Wrap,
   Stack,
+  Grid,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -40,6 +40,7 @@ export function SingleEventSelector({
   eventButtonsCompact = false,
 }: SingleEventSelectorProps) {
   const { t } = useT();
+  const lgSize = eventButtonsCompact ? "16" : "14";
   return (
     <RadioCard.Root
       disabled={disabled}
@@ -50,7 +51,14 @@ export function SingleEventSelector({
       onValueChange={(e) => onEventClick(e.value!)}
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
-      <Wrap>
+      <Grid
+        gap="2"
+        justifyContent="space-evenly"
+        templateColumns={{
+          base: "repeat(auto-fill, {sizes.8})",
+          lg: `repeat(auto-fill, {sizes.${lgSize}})`,
+        }}
+      >
         {eventList.map((eventId) => {
           return (
             <RadioCard.Item
@@ -74,7 +82,7 @@ export function SingleEventSelector({
             </RadioCard.Item>
           );
         })}
-      </Wrap>
+      </Grid>
     </RadioCard.Root>
   );
 }
@@ -104,7 +112,11 @@ export function MultiEventSelector({
 
   return (
     <CheckboxGroup disabled={disabled}>
-      <Wrap>
+      <Grid
+        gap="2"
+        justifyContent="space-evenly"
+        templateColumns="repeat(auto-fill, {sizes.12})"
+      >
         {eventList.map((eventId) => {
           const currentEventSelected = selectedEvents.includes(eventId);
           const currentEventDisabled = eventsDisabled.includes(eventId);
@@ -159,7 +171,7 @@ export function MultiEventSelector({
             </CheckboxCard.Root>
           );
         })}
-      </Wrap>
+      </Grid>
     </CheckboxGroup>
   );
 }
