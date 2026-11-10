@@ -160,7 +160,7 @@ class UserRole < ApplicationRecord
   end
 
   private def minor_competing_ban?
-    group.banned_competitors? && metadata.competing_only? && user.age.present? && user.age < 18
+    group.banned_competitors? && metadata.competing_only? && user.minor?
   end
 
   def self.filter_roles_for_logged_in_user(roles, current_user)
