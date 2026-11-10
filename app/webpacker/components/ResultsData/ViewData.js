@@ -10,7 +10,6 @@ import EventNavigation from './EventNavigation';
 import { getUrlParams, setUrlParams } from '../../lib/utils/wca';
 import { competitionApiUrl, nextCompetitionResultsUrl } from '../../lib/requests/routes.js.erb';
 import { localizeRoundInformation } from '../../lib/utils/wcif';
-import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
 function RoundResultsTable({
@@ -25,7 +24,16 @@ function RoundResultsTable({
   return (
     <>
       <h2>{localizeRoundInformation(eventId, round.roundTypeId)}</h2>
-      {round.isH2hMock && <p><i>{I18n.t('competitions.results_table.h2h_results_disclaimer')}</i></p>}
+      {round.isH2hMock && (
+        <p>
+          <i>
+            <I18nHTMLTranslate
+              i18nKey="competitions.results_table.h2h_results_disclaimer_html"
+              options={{ results_url: nextCompetitionResultsUrl(competitionId) }}
+            />
+          </i>
+        </p>
+      )}
       {round.isLinked && (
         <p>
           <i>
