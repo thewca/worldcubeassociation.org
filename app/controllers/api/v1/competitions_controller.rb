@@ -73,9 +73,7 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
   # Unannounced competitions answer exactly like missing ones, so their IDs can't be probed.
   private def set_viewable_competition
     competition_id = params.require(:id)
-    @competition = Competition.with_serialization_preloads
-                              .includes(:events, :competition_events, :tabs)
-                              .find_by(id: competition_id)
+    @competition = Competition.includes(Competition::V1_INFO_INCLUDES).find_by(id: competition_id)
 
     managing_user = authenticated_user if token_has_scope?(MANAGE_COMPETITIONS_SCOPE)
     raise WcaExceptions::NotFound.new("Competition with id #{competition_id} not found", data: { model: Competition.name, id: competition_id }) unless @competition&.user_can_view?(managing_user)

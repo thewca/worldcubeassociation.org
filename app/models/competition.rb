@@ -2310,6 +2310,16 @@ class Competition < ApplicationRecord
     exclude_deprecated: true,
   }.freeze
 
+  # `User#serializable_hash` checks `staff_delegate?` even with `exclude_deprecated`, which reads the role metadata.
+  V1_INFO_STAFF_INCLUDES = %i[current_avatar delegate_role_metadata].freeze
+
+  V1_INFO_INCLUDES = [
+    :events,
+    :competition_events,
+    :tabs,
+    { delegates: V1_INFO_STAFF_INCLUDES, organizers: V1_INFO_STAFF_INCLUDES },
+  ].freeze
+
   def to_v1_info_json
     {
       "id" => id,
