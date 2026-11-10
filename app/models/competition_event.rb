@@ -129,6 +129,7 @@ class CompetitionEvent < ApplicationRecord
         within_timeframe_results.average_succeeded.any?
       end
     when ResultConditions::ResultAchieved
+      # This covers the case where any non-DNF result is required (eg, for BLD events)
       if qualification_condition.value.nil?
         case qualification_condition.scope
         when "single"

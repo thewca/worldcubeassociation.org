@@ -1515,6 +1515,81 @@ RSpec.describe "Competition WCIF" do
       expect(competition_333_event.qualification_latest_date).to eq(Date.new(2021, 7, 1))
       expect(competition_333_event.qualification_condition).not_to be_nil
     end
+
+    it "ignores an earliest date when importing v1 qualifications" do
+      wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+      wcif_333_event["qualification"] = {
+        "resultType" => "average",
+        "type" => "attemptResult",
+        "whenDate" => "2021-07-01",
+        "level" => 6000,
+        "earliestResultDate" => "2021-01-01",
+      }
+
+      competition.set_wcif_events!(wcif["events"], delegate)
+
+      competition_333_event = competition.competition_events.find { it.event_id == '333' }
+      expect(competition_333_event.qualification_earliest_date).to be_nil
+    end
+
+    it "does not export an earliest date in v1" do
+      competition_333_event = competition.competition_events.find { it.event_id == '333' }
+      competition_333_event.update!(
+        qualification_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 6000),
+        qualification_earliest_date: Date.new(2021, 1, 1),
+        qualification_latest_date: Date.new(2021, 7, 1),
+      )
+
+      wcif_333_event = competition.to_wcif(version: '1.1')["events"].find { |e| e["id"] == "333" }
+      expect(wcif_333_event["qualification"]).not_to have_key("earliestResultDate")
+    end
+
+    context "with WCIF v2 qualifications" do
+      let(:wcif_version) { "2.0.0" }
+      let(:wcif_333_event) { wcif["events"].find { |e| e["id"] == "333" } }
+      let(:competition_333_event) { competition.competition_events.find { it.event_id == '333' } }
+
+      def v2_qualification(earliest_date:)
+        {
+          "earliestResultDate" => earliest_date,
+          "latestResultDate" => "2021-07-01",
+          "resultCondition" => {
+            "type" => "resultAchieved",
+            "scope" => "average",
+            "value" => 6000,
+          },
+        }
+      end
+
+      it "can set an earliest date" do
+        wcif_333_event["qualification"] = v2_qualification(earliest_date: "2021-01-01")
+
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        expect(competition_333_event.qualification_earliest_date).to eq(Date.new(2021, 1, 1))
+        expect(competition_333_event.qualification_latest_date).to eq(Date.new(2021, 7, 1))
+        expect(competition.to_wcif(version: wcif_version)["events"]).to eq(wcif["events"])
+      end
+
+      it "can set a qualification without an earliest date" do
+        wcif_333_event["qualification"] = v2_qualification(earliest_date: nil)
+
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        expect(competition_333_event.qualification_earliest_date).to be_nil
+        expect(competition.to_wcif(version: wcif_version)["events"]).to eq(wcif["events"])
+      end
+
+      it "can clear an existing earliest date" do
+        wcif_333_event["qualification"] = v2_qualification(earliest_date: "2021-01-01")
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        wcif_333_event["qualification"] = v2_qualification(earliest_date: nil)
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        expect(competition_333_event.reload.qualification_earliest_date).to be_nil
+      end
+    end
   end
 
   describe "#set_wcif_schedule!" do
