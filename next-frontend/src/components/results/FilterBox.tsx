@@ -10,7 +10,6 @@ import {
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
-import _ from "lodash";
 import { SingleEventSelector } from "@/components/EventSelector";
 
 type FilterState = {
@@ -41,13 +40,12 @@ interface RecordsFilterBoxProps {
 interface RankingsFilterBoxProps {
   filterState: FilterState & { rankingType: string };
   filterActions: FilterActions & { setType: (type: string) => void };
-  valueLabelMap: Record<string, string>;
 }
 
 interface SegmentedFieldProps {
   label: string;
   value: string;
-  items: string[];
+  items: { label: string; value: string }[];
   onChange: (value: string) => void;
 }
 
@@ -93,8 +91,8 @@ function SegmentedField({
           <Select.Positioner>
             <Select.Content>
               {items.map((item) => (
-                <Select.Item item={item} key={item}>
-                  <Select.ItemText>{item}</Select.ItemText>
+                <Select.Item item={item} key={item.value}>
+                  <Select.ItemText>{item.label}</Select.ItemText>
                   <Select.ItemIndicator />
                 </Select.Item>
               ))}
@@ -110,19 +108,55 @@ export function RecordsFilterBox({
   filterState,
   filterActions,
 }: RecordsFilterBoxProps) {
+  const { t } = useT();
+
   return (
     <FilterBox filterState={filterState} filterActions={filterActions}>
       <Stack direction={{ base: "column", md: "row" }}>
         <SegmentedField
-          label="Gender"
+          label={t("results.selector_elements.gender_selector.gender")}
           value={filterState.gender}
-          items={["All", "Male", "Female"]}
+          items={[
+            {
+              value: "All",
+              label: t("results.selector_elements.gender_selector.gender_all"),
+            },
+            {
+              value: "Male",
+              label: t("results.selector_elements.gender_selector.male"),
+            },
+            {
+              value: "Female",
+              label: t("results.selector_elements.gender_selector.female"),
+            },
+          ]}
           onChange={filterActions.setGender}
         />
         <SegmentedField
-          label="Show"
+          label={t("results.selector_elements.show_selector.show")}
           value={filterState.show}
-          items={["mixed", "slim", "separate", "history", "mixed history"]}
+          items={[
+            {
+              value: "mixed",
+              label: t("results.selector_elements.show_selector.mixed"),
+            },
+            {
+              value: "slim",
+              label: t("results.selector_elements.show_selector.slim"),
+            },
+            {
+              value: "separate",
+              label: t("results.selector_elements.show_selector.separate"),
+            },
+            {
+              value: "history",
+              label: t("results.selector_elements.show_selector.history"),
+            },
+            {
+              value: "mixed history",
+              label: t("results.selector_elements.show_selector.mixed_history"),
+            },
+          ]}
           onChange={filterActions.setShow}
         />
       </Stack>
@@ -133,38 +167,64 @@ export function RecordsFilterBox({
 export function RankingsFilterBox({
   filterState,
   filterActions,
-  valueLabelMap,
 }: RankingsFilterBoxProps) {
-  const toValue = (label: string) => _.invert(valueLabelMap)[label];
+  const { t } = useT();
 
   return (
     <FilterBox filterState={filterState} filterActions={filterActions}>
       <Stack direction={{ base: "column", md: "row" }}>
         <SegmentedField
-          label="Type"
-          value={valueLabelMap[filterState.rankingType]}
-          items={[valueLabelMap["single"], valueLabelMap["average"]]}
-          onChange={(label) => filterActions.setType(toValue(label))}
+          label={t("results.selector_elements.type_selector.type")}
+          value={filterState.rankingType}
+          items={[
+            {
+              value: "single",
+              label: t("results.selector_elements.type_selector.single"),
+            },
+            {
+              value: "average",
+              label: t("results.selector_elements.type_selector.average"),
+            },
+          ]}
+          onChange={filterActions.setType}
         />
         <SegmentedField
-          label="Gender"
-          value={valueLabelMap[filterState.gender]}
+          label={t("results.selector_elements.gender_selector.gender")}
+          value={filterState.gender}
           items={[
-            valueLabelMap["All"],
-            valueLabelMap["Male"],
-            valueLabelMap["Female"],
+            {
+              value: "All",
+              label: t("results.selector_elements.gender_selector.gender_all"),
+            },
+            {
+              value: "Male",
+              label: t("results.selector_elements.gender_selector.male"),
+            },
+            {
+              value: "Female",
+              label: t("results.selector_elements.gender_selector.female"),
+            },
           ]}
-          onChange={(label) => filterActions.setGender(toValue(label))}
+          onChange={filterActions.setGender}
         />
         <SegmentedField
-          label="Show"
-          value={valueLabelMap[filterState.show]}
+          label={t("results.selector_elements.show_selector.show")}
+          value={filterState.show}
           items={[
-            valueLabelMap["100 persons"],
-            valueLabelMap["100 results"],
-            valueLabelMap["by region"],
+            {
+              value: "100 persons",
+              label: t("results.selector_elements.show_selector.persons"),
+            },
+            {
+              value: "100 results",
+              label: t("results.selector_elements.show_selector.results"),
+            },
+            {
+              value: "by region",
+              label: t("results.selector_elements.show_selector.by_region"),
+            },
           ]}
-          onChange={(label) => filterActions.setShow(toValue(label))}
+          onChange={filterActions.setShow}
         />
       </Stack>
     </FilterBox>
