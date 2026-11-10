@@ -155,8 +155,12 @@ class UserRole < ApplicationRecord
     return true unless group.is_hidden # Roles of non-hidden groups are public
     return false if user.nil? # Roles of hidden groups are visible only to a set of users based on permisssions.
 
-    role_permission = active? ? :can_read_groups_current : :can_read_groups_past
+    role_permission = active? && !minor_competing_ban? ? :can_read_groups_current : :can_read_groups_past
     user.has_permission?(role_permission, group.id)
+  end
+
+  private def minor_competing_ban?
+    group.banned_competitors? && metadata.competing_only? && user.age.present? && user.age < 18
   end
 
   def self.filter_roles_for_logged_in_user(roles, current_user)
