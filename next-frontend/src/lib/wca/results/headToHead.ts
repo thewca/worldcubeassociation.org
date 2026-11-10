@@ -144,3 +144,118 @@ export function groupMatchesIntoStages(matches: H2hMatch[]): H2hMatch[][] {
 
   return stages;
 }
+
+// A match whose competitors have no final position yet sorts last.
+const UNPLACED = Number.POSITIVE_INFINITY;
+
+export function bestFinalPos(match: H2hMatch) {
+  const positions = match.competitors
+    .map((competitor) => competitor.final_pos)
+    .filter((pos) => pos != null);
+
+  return positions.length > 0 ? Math.min(...positions) : UNPLACED;
+}
+
+/** Where a match's line enters the bracket line of the match its winner advanced to. */
+export type H2hFeederPosition = "only" | "upper" | "lower";
+
+export interface H2hBracketSlot {
+  match: H2hMatch;
+  stage: number;
+  row: number;
+  rowSpan: number;
+  hasFeeders: boolean;
+  feederPosition?: H2hFeederPosition;
+}
+
+interface StagedMatch {
+  match: H2hMatch;
+  stage: number;
+  advancesToMatchNumber?: number;
+}
+
+function nextFreeRow(slots: H2hBracketSlot[], firstRow: number) {
+  return Math.max(firstRow, ...slots.map((slot) => slot.row + slot.rowSpan));
+}
+
+function feederPosition(index: number, count: number): H2hFeederPosition {
+  if (count === 1) return "only";
+  return index === 0 ? "upper" : "lower";
+}
+
+/**
+ * Places every match on a grid with one column per stage. A match spans the
+ * rows of the matches whose winners it was played by, so it sits centered
+ * between them. Matches nobody advanced from (the final, the third place
+ * match, or anything not played yet) start their own block of rows.
+ */
+export function layoutBracket(matches: H2hMatch[]): H2hBracketSlot[] {
+  const stages = groupMatchesIntoStages(matches);
+
+  const stagedMatches: StagedMatch[] = stages.flatMap((stageMatches, stage) =>
+    stageMatches.map((match) => {
+      const { winnerUserId } = computeMatchScores(match);
+      const advancesTo = stages[stage + 1]?.find((nextMatch) =>
+        nextMatch.competitors.some(
+          (competitor) => competitor.user_id === winnerUserId,
+        ),
+      );
+
+      return { match, stage, advancesToMatchNumber: advancesTo?.match_number };
+    }),
+  );
+
+  const feedersByMatchNumber = _.groupBy(
+    stagedMatches.filter((staged) => staged.advancesToMatchNumber != null),
+    "advancesToMatchNumber",
+  );
+
+  const placeSubtree = (
+    staged: StagedMatch,
+    row: number,
+    position?: H2hFeederPosition,
+  ): H2hBracketSlot[] => {
+    const feeders = feedersByMatchNumber[staged.match.match_number] ?? [];
+    const feederSlots = placeBelowEachOther(feeders, row, (index) =>
+      feederPosition(index, feeders.length),
+    );
+
+    return [
+      ...feederSlots,
+      {
+        match: staged.match,
+        stage: staged.stage,
+        row,
+        rowSpan: Math.max(1, nextFreeRow(feederSlots, row) - row),
+        hasFeeders: feeders.length > 0,
+        feederPosition: position,
+      },
+    ];
+  };
+
+  const placeBelowEachOther = (
+    siblings: StagedMatch[],
+    row: number,
+    positionAt: (index: number) => H2hFeederPosition | undefined,
+  ) =>
+    siblings.reduce<H2hBracketSlot[]>(
+      (slots, sibling, index) => [
+        ...slots,
+        ...placeSubtree(sibling, nextFreeRow(slots, row), positionAt(index)),
+      ],
+      [],
+    );
+
+  // Deepest trees first, and the final above the third place match.
+  const roots = _.orderBy(
+    stagedMatches.filter((staged) => staged.advancesToMatchNumber == null),
+    [
+      "stage",
+      (staged) => bestFinalPos(staged.match),
+      (staged) => staged.match.match_number,
+    ],
+    ["desc", "asc", "asc"],
+  );
+
+  return placeBelowEachOther(roots, 0, () => undefined);
+}

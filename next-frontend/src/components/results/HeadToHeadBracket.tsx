@@ -6,11 +6,10 @@ import {
   Flex,
   Grid,
   Heading,
-  HStack,
   IconButton,
   Link,
+  SystemStyleObject,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { route } from "nextjs-routes";
 import NextLink from "next/link";
@@ -23,10 +22,13 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import {
   computeMatchScores,
   groupMatchesIntoStages,
+  layoutBracket,
   orderedSets,
   raceWinnerUserId,
   H2hAttempt,
+  H2hBracketSlot,
   H2hCompetitorScore,
+  H2hFeederPosition,
   H2hMatch,
   H2hMatchCompetitor,
   H2hRound,
@@ -36,13 +38,44 @@ import {
 // Final standings, used to tell the final apart from the third place match.
 const FIRST_PLACE = 1;
 const THIRD_PLACE = 3;
-// A match whose competitors have no final position yet sorts last.
-const UNPLACED = Number.POSITIVE_INFINITY;
+// Spacing token on either side of a match card. Two of them make up the gap
+// between stages that the bracket lines are drawn in.
+const CONNECTOR_WIDTH = 4;
+const LINE_WIDTH = "3px";
+
+const BRACKET_LINE = {
+  content: '""',
+  position: "absolute",
+  w: CONNECTOR_WIDTH,
+  borderColor: "fg",
+};
+
+// The line out of a feeder match bends towards the center of the match its
+// winner advanced to, which sits between the upper and the lower feeder.
+const FEEDER_LINES: Record<H2hFeederPosition, SystemStyleObject> = {
+  only: { top: "50%", borderTopWidth: LINE_WIDTH },
+  upper: {
+    top: "50%",
+    bottom: 0,
+    borderTopWidth: LINE_WIDTH,
+    borderEndWidth: LINE_WIDTH,
+  },
+  lower: {
+    top: 0,
+    bottom: "50%",
+    borderBottomWidth: LINE_WIDTH,
+    borderEndWidth: LINE_WIDTH,
+  },
+};
+
+// A slot spans the rows of its feeders, the header takes up the first row.
+const FIRST_SLOT_ROW = 2;
 
 export default function HeadToHeadBracket({ round }: { round: H2hRound }) {
   const { t } = useT();
 
   const stages = groupMatchesIntoStages(round.matches);
+  const slots = layoutBracket(round.matches);
   const places = _.uniqBy(
     round.matches.flatMap((match) => match.competitors),
     "user_id",
@@ -50,44 +83,76 @@ export default function HeadToHeadBracket({ round }: { round: H2hRound }) {
 
   return (
     <Box overflowX="auto">
-      <HStack align="stretch" gap={8} minW="fit-content">
-        {stages.map((stageMatches, stageIndex) => {
-          const isLastStage = stageIndex === stages.length - 1;
-          // The final goes on top of the third place match
-          const orderedMatches = isLastStage
-            ? _.sortBy(stageMatches, bestFinalPos)
-            : stageMatches;
-
-          return (
-            <VStack
-              key={stageMatches[0].match_number}
-              align="stretch"
-              minW="18rem"
-              gap={4}
-            >
-              <Heading textStyle="s3">
-                {stageLabel(stageIndex, stages.length, places, t)}
-              </Heading>
-              <VStack
-                flex="1"
-                align="stretch"
-                justify={isLastStage ? "center" : "space-around"}
-                gap={6}
-              >
-                {orderedMatches.map((match) => (
-                  <MatchCard
-                    key={match.match_number}
-                    match={match}
-                    eventId={round.event_id}
-                    label={isLastStage ? thirdPlaceLabel(match, t) : undefined}
-                  />
-                ))}
-              </VStack>
-            </VStack>
-          );
-        })}
-      </HStack>
+      <Grid
+        templateColumns={`repeat(${stages.length}, minmax(18rem, 1fr))`}
+        minW="fit-content"
+      >
+        {stages.map((stageMatches, stageIndex) => (
+          <Heading
+            key={stageMatches[0].match_number}
+            textStyle="s3"
+            px={CONNECTOR_WIDTH}
+            mb={4}
+          >
+            {stageLabel(stageIndex, stages.length, places, t)}
+          </Heading>
+        ))}
+        {slots.map((slot) => (
+          <BracketSlot
+            key={slot.match.match_number}
+            slot={slot}
+            eventId={round.event_id}
+            label={
+              slot.stage === stages.length - 1
+                ? thirdPlaceLabel(slot.match, t)
+                : undefined
+            }
+          />
+        ))}
+      </Grid>
     </Box>
+  );
+}
+
+function BracketSlot({
+  slot,
+  eventId,
+  label,
+}: {
+  slot: H2hBracketSlot;
+  eventId: string;
+  label?: string;
+}) {
+  return (
+    <Flex
+      gridColumn={slot.stage + 1}
+      gridRow={`${slot.row + FIRST_SLOT_ROW} / span ${slot.rowSpan}`}
+      position="relative"
+      align="center"
+      px={CONNECTOR_WIDTH}
+      py={3}
+      _before={
+        slot.hasFeeders
+          ? {
+              ...BRACKET_LINE,
+              insetStart: 0,
+              top: "50%",
+              borderTopWidth: LINE_WIDTH,
+            }
+          : undefined
+      }
+      _after={
+        slot.feederPosition
+          ? {
+              ...BRACKET_LINE,
+              insetEnd: 0,
+              ...FEEDER_LINES[slot.feederPosition],
+            }
+          : undefined
+      }
+    >
+      <MatchCard match={slot.match} eventId={eventId} label={label} />
+    </Flex>
   );
 }
 
@@ -106,14 +171,6 @@ function stageLabel(
   if (stagesFromFinal === 1) return t("competitions.h2h.semifinal_stage");
   if (stagesFromFinal === 2) return t("competitions.h2h.quarterfinal_stage");
   return t("competitions.h2h.stage_of", { number: places });
-}
-
-function bestFinalPos(match: H2hMatch) {
-  const positions = match.competitors
-    .map((competitor) => competitor.final_pos)
-    .filter((pos) => pos != null);
-
-  return positions.length > 0 ? Math.min(...positions) : UNPLACED;
 }
 
 function thirdPlaceLabel(match: H2hMatch, t: TFunction) {
@@ -138,7 +195,7 @@ function MatchCard({
   const sets = orderedSets(match);
 
   return (
-    <Box borderWidth="1px" rounded="md" px={3} py={2}>
+    <Box flex="1" bg="bg" borderWidth="1px" rounded="md" px={3} py={2}>
       {label && (
         <Text
           textStyle="annotation"

@@ -4,6 +4,7 @@ import {
   computeMatchScores,
   groupMatchesIntoStages,
   H2hMatch,
+  layoutBracket,
 } from "./headToHead";
 
 const DNF = -1;
@@ -129,5 +130,54 @@ describe("groupMatchesIntoStages", () => {
     expect(stages.length).toBe(2);
     expect(stages[0].map((match) => match.match_number)).toEqual([1, 2]);
     expect(stages[1].map((match) => match.match_number)).toEqual([3, 4]);
+  });
+});
+
+describe("layoutBracket", () => {
+  it("centers each match between the matches its competitors advanced from", () => {
+    // the first competitor wins every match
+    const firstWins: [number, number][][] = [[[500, 600]]];
+    const matches = [
+      buildMatch(1, [1, 2], firstWins),
+      buildMatch(2, [3, 4], firstWins),
+      buildMatch(3, [5, 6], firstWins),
+      buildMatch(4, [7, 8], firstWins),
+      buildMatch(5, [1, 3], firstWins),
+      buildMatch(6, [5, 7], firstWins),
+      buildMatch(7, [1, 5], firstWins),
+      // the semifinal losers play for third place
+      buildMatch(8, [3, 7], firstWins),
+    ];
+
+    const slots = layoutBracket(matches).map((slot) => ({
+      matchNumber: slot.match.match_number,
+      stage: slot.stage,
+      row: slot.row,
+      rowSpan: slot.rowSpan,
+      feederPosition: slot.feederPosition,
+    }));
+
+    expect(slots).toEqual([
+      { matchNumber: 1, stage: 0, row: 0, rowSpan: 1, feederPosition: "upper" },
+      { matchNumber: 2, stage: 0, row: 1, rowSpan: 1, feederPosition: "lower" },
+      { matchNumber: 5, stage: 1, row: 0, rowSpan: 2, feederPosition: "upper" },
+      { matchNumber: 3, stage: 0, row: 2, rowSpan: 1, feederPosition: "upper" },
+      { matchNumber: 4, stage: 0, row: 3, rowSpan: 1, feederPosition: "lower" },
+      { matchNumber: 6, stage: 1, row: 2, rowSpan: 2, feederPosition: "lower" },
+      {
+        matchNumber: 7,
+        stage: 2,
+        row: 0,
+        rowSpan: 4,
+        feederPosition: undefined,
+      },
+      {
+        matchNumber: 8,
+        stage: 2,
+        row: 4,
+        rowSpan: 1,
+        feederPosition: undefined,
+      },
+    ]);
   });
 });
