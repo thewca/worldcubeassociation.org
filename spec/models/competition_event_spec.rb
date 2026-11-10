@@ -55,7 +55,7 @@ RSpec.describe CompetitionEvent do
 
       it "is invalid if the earliest date is 89 days before the latest date" do
         competition_event.qualification_earliest_date = latest_date - 89.days
-        expect(competition_event).to be_invalid
+        expect(competition_event).not_to be_valid
       end
 
       it "is valid if the earliest date is exactly 90 days before the latest date" do
@@ -70,17 +70,17 @@ RSpec.describe CompetitionEvent do
 
       it "is invalid if the earliest date is the same as the latest date" do
         competition_event.qualification_earliest_date = latest_date
-        expect(competition_event).to be_invalid
+        expect(competition_event).not_to be_valid
       end
 
       it "is invalid if the earliest date is after the latest date" do
         competition_event.qualification_earliest_date = latest_date + 1.day
-        expect(competition_event).to be_invalid
+        expect(competition_event).not_to be_valid
       end
 
       it "is invalid without a latest date" do
         competition_event.qualification_latest_date = nil
-        expect(competition_event).to be_invalid
+        expect(competition_event).not_to be_valid
       end
 
       it "is invalid with an earliest date but without a latest date" do
@@ -88,7 +88,7 @@ RSpec.describe CompetitionEvent do
           qualification_earliest_date: latest_date - 120.days,
           qualification_latest_date: nil,
         )
-        expect(competition_event).to be_invalid
+        expect(competition_event).not_to be_valid
       end
     end
 
@@ -106,7 +106,7 @@ RSpec.describe CompetitionEvent do
           qualification_earliest_date: latest_date - 120.days,
           qualification_latest_date: nil,
         )
-        expect(competition_event).to be_invalid
+        expect(competition_event).not_to be_valid
       end
     end
 
