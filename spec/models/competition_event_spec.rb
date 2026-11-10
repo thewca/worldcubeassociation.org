@@ -101,7 +101,6 @@ RSpec.describe CompetitionEvent do
         expect(competition_event).to be_valid
       end
 
-      # A date window without an end date is meaningless, regardless of whether a condition is set.
       it "is invalid with an earliest date but without a latest date" do
         competition_event.assign_attributes(
           qualification_earliest_date: latest_date - 120.days,
