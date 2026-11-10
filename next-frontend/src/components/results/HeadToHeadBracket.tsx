@@ -102,13 +102,9 @@ function stageLabel(
 ) {
   const stagesFromFinal = stageCount - 1 - stageIndex;
 
-  // i18n-tasks-use t("competitions.h2h.final_stage")
   if (stagesFromFinal === 0) return t("competitions.h2h.final_stage");
-  // i18n-tasks-use t("competitions.h2h.semifinal_stage")
   if (stagesFromFinal === 1) return t("competitions.h2h.semifinal_stage");
-  // i18n-tasks-use t("competitions.h2h.quarterfinal_stage")
   if (stagesFromFinal === 2) return t("competitions.h2h.quarterfinal_stage");
-  // i18n-tasks-use t("competitions.h2h.stage_of")
   return t("competitions.h2h.stage_of", { number: places });
 }
 
@@ -124,7 +120,6 @@ function thirdPlaceLabel(match: H2hMatch, t: TFunction) {
   const positions = match.competitors.map((competitor) => competitor.final_pos);
   if (positions.includes(FIRST_PLACE)) return undefined;
 
-  // i18n-tasks-use t("competitions.h2h.third_place")
   return positions.includes(THIRD_PLACE)
     ? t("competitions.h2h.third_place")
     : undefined;
@@ -252,7 +247,6 @@ function SetAttemptsInfo({
   eventId: string;
 }) {
   const { t } = useT();
-  // i18n-tasks-use t("competitions.h2h.set_number")
   const setName = t("competitions.h2h.set_number", { number: set.set_number });
 
   return (
