@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Badge,
   Box,
   Button,
   Card,
@@ -29,7 +28,6 @@ import {
   Tabs,
   Text,
   VStack,
-  Wrap,
   Select,
   createListCollection,
 } from "@chakra-ui/react";
@@ -47,7 +45,13 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { Trans } from "react-i18next";
 import { useSession } from "@/auth.client";
-import { Dispatch, ReactNode, useReducer, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useReducer,
+  useState,
+} from "react";
 import {
   competitionFilterReducer,
   createFilterState,
@@ -311,7 +315,7 @@ export default function CompetitionsPage() {
               </Tabs.List>
             </Stack>
           </Card.Header>
-          <Card.Body asChild>
+          <Card.Body asChild pb={0}>
             <Collapsible.Root asChild>
               <VStack gap="3" borderBottom="black">
                 <FormEventSelector
@@ -365,6 +369,13 @@ export default function CompetitionsPage() {
                     </InputGroup>
                   </Field.Root>
                 </SimpleGrid>
+                <Stack direction="row" justify="start" width="full">
+                  <RegistrationSelect
+                    registrationStatus={registrationStatus}
+                    setRegistrationStatus={setRegistrationStatus}
+                    t={t}
+                  />
+                </Stack>
                 <Collapsible.Trigger asChild alignSelf="flex-end">
                   <Button
                     variant="outline"
@@ -442,37 +453,6 @@ export default function CompetitionsPage() {
             <Box ref={topSentinelRef} position="absolute" />
 
             <Tabs.Content value="list">
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                justify="space-between"
-                align={{ base: "start", lg: "center" }}
-                mb={3}
-              >
-                <Wrap gapX="3" gapY="1" align="center">
-                  <Text>{t("competitions.index.registration_key")}</Text>
-                  {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
-                  {/* full: <CompRegoFullButOpenOrangeIcon /> */}
-                  {REGISTRATION_STATUS_KEY.map(({ status, icon, labelKey }) => (
-                    <Badge
-                      key={status}
-                      as="button"
-                      size="md"
-                      variant={
-                        registrationStatus === status ? "solid" : "surface"
-                      }
-                      cursor="pointer"
-                      onClick={() =>
-                        setRegistrationStatus(
-                          registrationStatus === status ? null : status,
-                        )
-                      }
-                    >
-                      {icon}
-                      {t(labelKey)}
-                    </Badge>
-                  ))}
-                </Wrap>
-              </Stack>
               <Table.ScrollArea>
                 <Table.Root
                   size="xs"
@@ -1018,5 +998,56 @@ function SortOrderSelect({
         </Select.Content>
       </Select.Positioner>
     </Select.Root>
+  );
+}
+
+function RegistrationSelect({
+  registrationStatus,
+  setRegistrationStatus,
+  t,
+}: {
+  registrationStatus: RegistrationStatus | null;
+  setRegistrationStatus: Dispatch<SetStateAction<RegistrationStatus | null>>;
+  t: TFunction;
+}) {
+  return (
+    <Stack mb={3}>
+      <Text fontWeight="bold">{t("competitions.index.registration_key")}</Text>
+      {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
+      {/* full: <CompRegoFullButOpenOrangeIcon /> */}
+      <SegmentGroup.Root
+        value={registrationStatus ?? "null"}
+        onValueChange={(e) =>
+          setRegistrationStatus(
+            e.value === "null" ? null : (e.value as RegistrationStatus),
+          )
+        }
+        width="fit-content"
+      >
+        <SegmentGroup.Indicator />
+        {[
+          {
+            status: "null",
+            icon: <></>,
+            labelKey: "All",
+          },
+          ...REGISTRATION_STATUS_KEY,
+        ].map(({ status, icon, labelKey }) => (
+          <SegmentGroup.Item key={status} value={status}>
+            <SegmentGroup.ItemText>
+              <Stack
+                direction="row"
+                gap={{ base: 1.5, md: 3 }}
+                fontSize={{ base: "xs", md: "sm" }}
+                align="center"
+              >
+                {icon} {t(labelKey)}
+              </Stack>
+            </SegmentGroup.ItemText>
+            <SegmentGroup.ItemHiddenInput />
+          </SegmentGroup.Item>
+        ))}
+      </SegmentGroup.Root>
+    </Stack>
   );
 }
