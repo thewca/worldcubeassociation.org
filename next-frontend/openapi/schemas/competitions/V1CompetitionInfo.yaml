@@ -5,40 +5,17 @@ required:
   - id
   - name
   - information
-  - venue
-  - venue_address
-  - venue_details
-  - contact
-  - city
-  - country_iso2
   - start_date
   - end_date
-  - event_ids
-  - main_event_id
-  - registration_open
-  - registration_close
   - results_posted_at
-  - competitor_limit
-  - extra_registration_requirements
-  - on_the_spot_registration
-  - base_entry_fee_lowest_denomination
-  - guests_entry_fee_lowest_denomination
-  - currency_code
-  - refund_policy_percent
-  - refund_policy_limit_date
-  - event_change_deadline_date
-  - competitor_can_cancel
   - scoretaking_software
   - number_of_bookmarks
-  - spots_left
-  - waiting_list_count
-  - uses_qualification?
-  - part_of_competition_series?
-  - registration_full?
-  - registration_full_and_accepted?
+  - is_part_of_competition_series
   - tabs
-  - delegates
-  - organizers
+  - events
+  - venue
+  - registration_info
+  - staff
 properties:
   id:
     type: string
@@ -49,24 +26,6 @@ properties:
   information:
     type: [string, "null"]
     example: "First WCA World Championship"
-  venue:
-    type: string
-    example: "Toronto"
-  venue_address:
-    type: [string, "null"]
-    example: "770 Don Mills Rd, North York, ON M3C IT3, Canada"
-  venue_details:
-    type: [string, "null"]
-    example: "The big convention center"
-  contact:
-    type: [string, "null"]
-    example: "[Organization team](mailto:worlds@example.com)"
-  city:
-    type: string
-    example: "Seattle, Washington"
-  country_iso2:
-    type: [string, "null"]
-    example: "US"
   start_date:
     type: [string, "null"]
     format: date
@@ -75,72 +34,16 @@ properties:
     type: [string, "null"]
     format: date
     example: "2025-07-06"
-  event_ids:
-    type: array
-    items:
-      type: string
-    example: ["333"]
-  main_event_id:
-    type: [string, "null"]
-    example: "333"
-  registration_open:
-    type: [string, "null"]
-    format: date-time
-    example: "2025-01-03T14:00:00.000Z"
-  registration_close:
-    type: [string, "null"]
-    format: date-time
-    example: "2025-01-10T14:00:00.000Z"
   results_posted_at:
     type: [string, "null"]
     format: date-time
-  competitor_limit:
-    type: [integer, "null"]
-    example: 2000
-  extra_registration_requirements:
-    type: [string, "null"]
-  on_the_spot_registration:
-    type: [boolean, "null"]
-  base_entry_fee_lowest_denomination:
-    type: [integer, "null"]
-    example: 12000
-  guests_entry_fee_lowest_denomination:
-    type: [integer, "null"]
-    example: 1000
-  currency_code:
-    type: [string, "null"]
-    example: "USD"
-  refund_policy_percent:
-    type: [integer, "null"]
-    example: 50
-  refund_policy_limit_date:
-    type: [string, "null"]
-    format: date-time
-  event_change_deadline_date:
-    type: [string, "null"]
-    format: date-time
-  competitor_can_cancel:
-    type: string
-    enum: [not_accepted, always, unpaid]
   scoretaking_software:
     type: string
     enum: [external, wca_live, internal]
   number_of_bookmarks:
     type: integer
     example: 123
-  spots_left:
-    type: [integer, "null"]
-    example: 42
-  waiting_list_count:
-    type: integer
-    example: 7
-  uses_qualification?:
-    type: boolean
-  part_of_competition_series?:
-    type: boolean
-  registration_full?:
-    type: boolean
-  registration_full_and_accepted?:
+  is_part_of_competition_series:
     type: boolean
   tabs:
     type: array
@@ -152,11 +55,122 @@ properties:
           type: integer
         name:
           type: string
-  delegates:
-    type: array
-    items:
-      $ref: 'V1CompetitionStaff.yaml'
-  organizers:
-    type: array
-    items:
-      $ref: 'V1CompetitionStaff.yaml'
+  events:
+    type: object
+    required: [event_ids, main_event_id, uses_qualification]
+    properties:
+      event_ids:
+        type: array
+        items:
+          type: string
+        example: ["333"]
+      main_event_id:
+        type: [string, "null"]
+        example: "333"
+      uses_qualification:
+        type: boolean
+  venue:
+    type: object
+    required: [name, address, details, city, country_iso2]
+    properties:
+      name:
+        type: string
+        example: "Toronto"
+      address:
+        type: [string, "null"]
+        example: "770 Don Mills Rd, North York, ON M3C IT3, Canada"
+      details:
+        type: [string, "null"]
+        example: "The big convention center"
+      city:
+        type: string
+        example: "Seattle, Washington"
+      country_iso2:
+        type: [string, "null"]
+        example: "US"
+  registration_info:
+    type: object
+    required:
+      - opens_at
+      - closes_at
+      - competitor_limit
+      - spots_left
+      - waiting_list_count
+      - is_full
+      - is_full_and_accepted
+      - on_the_spot_registration
+      - extra_requirements
+      - event_change_deadline_date
+      - competitor_can_cancel
+      - fees
+      - refund_policy
+    properties:
+      opens_at:
+        type: [string, "null"]
+        format: date-time
+        example: "2025-01-03T14:00:00.000Z"
+      closes_at:
+        type: [string, "null"]
+        format: date-time
+        example: "2025-01-10T14:00:00.000Z"
+      competitor_limit:
+        type: [integer, "null"]
+        example: 2000
+      spots_left:
+        type: [integer, "null"]
+        example: 42
+      waiting_list_count:
+        type: integer
+        example: 7
+      is_full:
+        type: boolean
+      is_full_and_accepted:
+        type: boolean
+      on_the_spot_registration:
+        type: [boolean, "null"]
+      extra_requirements:
+        type: [string, "null"]
+      event_change_deadline_date:
+        type: [string, "null"]
+        format: date-time
+      competitor_can_cancel:
+        type: string
+        enum: [not_accepted, always, unpaid]
+      fees:
+        type: object
+        required: [currency_code, base_entry_lowest_denomination, guests_entry_lowest_denomination]
+        properties:
+          currency_code:
+            type: [string, "null"]
+            example: "USD"
+          base_entry_lowest_denomination:
+            type: [integer, "null"]
+            example: 12000
+          guests_entry_lowest_denomination:
+            type: [integer, "null"]
+            example: 1000
+      refund_policy:
+        type: object
+        required: [percent, limit_date]
+        properties:
+          percent:
+            type: [integer, "null"]
+            example: 50
+          limit_date:
+            type: [string, "null"]
+            format: date-time
+  staff:
+    type: object
+    required: [contact, delegates, organizers]
+    properties:
+      contact:
+        type: [string, "null"]
+        example: "[Organization team](mailto:worlds@example.com)"
+      delegates:
+        type: array
+        items:
+          $ref: 'V1CompetitionStaff.yaml'
+      organizers:
+        type: array
+        items:
+          $ref: 'V1CompetitionStaff.yaml'

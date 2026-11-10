@@ -2310,19 +2310,59 @@ class Competition < ApplicationRecord
     exclude_deprecated: true,
   }.freeze
 
-  V1_INFO_SERIALIZE_OPTIONS = {
-    only: %w[id name information venue venue_address venue_details contact start_date end_date main_event_id
-             registration_open registration_close results_posted_at competitor_limit extra_registration_requirements
-             on_the_spot_registration base_entry_fee_lowest_denomination guests_entry_fee_lowest_denomination currency_code
-             refund_policy_percent refund_policy_limit_date event_change_deadline_date competitor_can_cancel scoretaking_software],
-    methods: %w[city country_iso2 event_ids number_of_bookmarks spots_left waiting_list_count uses_qualification?
-                part_of_competition_series? registration_full? registration_full_and_accepted?],
-    include: {
-      tabs: { only: %w[id name] },
-      delegates: V1_INFO_STAFF_SERIALIZE_OPTIONS,
-      organizers: V1_INFO_STAFF_SERIALIZE_OPTIONS,
-    },
-  }.freeze
+  def to_v1_info_json
+    {
+      "id" => id,
+      "name" => name,
+      "information" => information,
+      "start_date" => start_date,
+      "end_date" => end_date,
+      "results_posted_at" => results_posted_at,
+      "scoretaking_software" => scoretaking_software,
+      "number_of_bookmarks" => number_of_bookmarks,
+      "is_part_of_competition_series" => part_of_competition_series?,
+      "tabs" => tabs.as_json(only: %w[id name]),
+      "events" => {
+        "event_ids" => event_ids,
+        "main_event_id" => main_event_id,
+        "uses_qualification" => uses_qualification?,
+      },
+      "venue" => {
+        "name" => venue,
+        "address" => venue_address,
+        "details" => venue_details,
+        "city" => city,
+        "country_iso2" => country_iso2,
+      },
+      "registration_info" => {
+        "opens_at" => registration_open,
+        "closes_at" => registration_close,
+        "competitor_limit" => competitor_limit,
+        "spots_left" => spots_left,
+        "waiting_list_count" => waiting_list_count,
+        "is_full" => registration_full?,
+        "is_full_and_accepted" => registration_full_and_accepted?,
+        "on_the_spot_registration" => on_the_spot_registration,
+        "extra_requirements" => extra_registration_requirements,
+        "event_change_deadline_date" => event_change_deadline_date,
+        "competitor_can_cancel" => competitor_can_cancel,
+        "fees" => {
+          "currency_code" => currency_code,
+          "base_entry_lowest_denomination" => base_entry_fee_lowest_denomination,
+          "guests_entry_lowest_denomination" => guests_entry_fee_lowest_denomination,
+        },
+        "refund_policy" => {
+          "percent" => refund_policy_percent,
+          "limit_date" => refund_policy_limit_date,
+        },
+      },
+      "staff" => {
+        "contact" => contact,
+        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS),
+        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS),
+      },
+    }
+  end
 
   def serializable_hash(options = nil)
     # The intent behind this is to have a "good" default setup for serialization.

@@ -30,7 +30,7 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
   before_action :set_viewable_competition, only: %i[show]
 
   def show
-    render json: @competition.as_json(Competition::V1_INFO_SERIALIZE_OPTIONS)
+    render json: @competition.to_v1_info_json
   end
 
   before_action :set_competition, except: %i[live show]

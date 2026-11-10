@@ -152,7 +152,7 @@ export interface paths {
         };
         /**
          * Get the details of a competition
-         * @description Public for announced competitions. Unannounced competitions are only returned to users who can manage them; everyone else gets the same 404 as for a competition that does not exist.
+         * @description Public for announced competitions. Unannounced competitions are only returned to users who can manage them, and an OAuth token additionally needs the `manage_competitions` scope; everyone else gets the same 404 as for a competition that does not exist.
          */
         get: operations["v1CompetitionInfo"];
         put?: never;
@@ -1423,18 +1423,6 @@ export interface components {
             name: string;
             /** @example First WCA World Championship */
             information: string | null;
-            /** @example Toronto */
-            venue: string;
-            /** @example 770 Don Mills Rd, North York, ON M3C IT3, Canada */
-            venue_address: string | null;
-            /** @example The big convention center */
-            venue_details: string | null;
-            /** @example [Organization team](mailto:worlds@example.com) */
-            contact: string | null;
-            /** @example Seattle, Washington */
-            city: string;
-            /** @example US */
-            country_iso2: string | null;
             /**
              * Format: date
              * @example 2025-07-03
@@ -1445,62 +1433,86 @@ export interface components {
              * @example 2025-07-06
              */
             end_date: string | null;
-            /**
-             * @example [
-             *       "333"
-             *     ]
-             */
-            event_ids: string[];
-            /** @example 333 */
-            main_event_id: string | null;
-            /**
-             * Format: date-time
-             * @example 2025-01-03T14:00:00.000Z
-             */
-            registration_open: string | null;
-            /**
-             * Format: date-time
-             * @example 2025-01-10T14:00:00.000Z
-             */
-            registration_close: string | null;
             /** Format: date-time */
             results_posted_at: string | null;
-            /** @example 2000 */
-            competitor_limit: number | null;
-            extra_registration_requirements: string | null;
-            on_the_spot_registration: boolean | null;
-            /** @example 12000 */
-            base_entry_fee_lowest_denomination: number | null;
-            /** @example 1000 */
-            guests_entry_fee_lowest_denomination: number | null;
-            /** @example USD */
-            currency_code: string | null;
-            /** @example 50 */
-            refund_policy_percent: number | null;
-            /** Format: date-time */
-            refund_policy_limit_date: string | null;
-            /** Format: date-time */
-            event_change_deadline_date: string | null;
-            /** @enum {string} */
-            competitor_can_cancel: "not_accepted" | "always" | "unpaid";
             /** @enum {string} */
             scoretaking_software: "external" | "wca_live" | "internal";
             /** @example 123 */
             number_of_bookmarks: number;
-            /** @example 42 */
-            spots_left: number | null;
-            /** @example 7 */
-            waiting_list_count: number;
-            "uses_qualification?": boolean;
-            "part_of_competition_series?": boolean;
-            "registration_full?": boolean;
-            "registration_full_and_accepted?": boolean;
+            is_part_of_competition_series: boolean;
             tabs: {
                 id: number;
                 name: string;
             }[];
-            delegates: components["schemas"]["V1CompetitionStaff"][];
-            organizers: components["schemas"]["V1CompetitionStaff"][];
+            events: {
+                /**
+                 * @example [
+                 *       "333"
+                 *     ]
+                 */
+                event_ids: string[];
+                /** @example 333 */
+                main_event_id: string | null;
+                uses_qualification: boolean;
+            };
+            venue: {
+                /** @example Toronto */
+                name: string;
+                /** @example 770 Don Mills Rd, North York, ON M3C IT3, Canada */
+                address: string | null;
+                /** @example The big convention center */
+                details: string | null;
+                /** @example Seattle, Washington */
+                city: string;
+                /** @example US */
+                country_iso2: string | null;
+            };
+            registration_info: {
+                /**
+                 * Format: date-time
+                 * @example 2025-01-03T14:00:00.000Z
+                 */
+                opens_at: string | null;
+                /**
+                 * Format: date-time
+                 * @example 2025-01-10T14:00:00.000Z
+                 */
+                closes_at: string | null;
+                /** @example 2000 */
+                competitor_limit: number | null;
+                /** @example 42 */
+                spots_left: number | null;
+                /** @example 7 */
+                waiting_list_count: number;
+                is_full: boolean;
+                is_full_and_accepted: boolean;
+                on_the_spot_registration: boolean | null;
+                extra_requirements: string | null;
+                /** Format: date-time */
+                event_change_deadline_date: string | null;
+                /** @enum {string} */
+                competitor_can_cancel: "not_accepted" | "always" | "unpaid";
+                fees: {
+                    /** @example USD */
+                    currency_code: string | null;
+                    /** @example 12000 */
+                    base_entry_lowest_denomination: number | null;
+                    /** @example 1000 */
+                    guests_entry_lowest_denomination: number | null;
+                };
+                refund_policy: {
+                    /** @example 50 */
+                    percent: number | null;
+                    /** Format: date-time */
+                    limit_date: string | null;
+                };
+            };
+            staff: {
+                /** @example [Organization team](mailto:worlds@example.com) */
+                contact: string | null;
+                delegates: components["schemas"]["V1CompetitionStaff"][];
+                organizers: components["schemas"]["V1CompetitionStaff"][];
+            };
         };
         General404: {
             error: string;
