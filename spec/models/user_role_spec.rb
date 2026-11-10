@@ -22,6 +22,24 @@ RSpec.describe UserRole do
       end
     end
 
+    context 'when the role is an active competing ban of a minor' do
+      let(:minor) { create(:user, dob: 16.years.ago) }
+      let(:competing_ban) { create(:banned_competitor_role, :active, user: minor, metadata: create(:roles_metadata_banned_competitors, scope: :competing_only)) }
+      let(:attending_ban) { create(:banned_competitor_role, :active, user: minor, metadata: create(:roles_metadata_banned_competitors, scope: :competing_and_attending)) }
+
+      it 'hides the competing ban from delegates' do
+        expect(competing_ban.can_user_read?(create(:delegate))).to be false
+      end
+
+      it 'shows the competing ban to WIC members' do
+        expect(competing_ban.can_user_read?(create(:user, :wic_member))).to be true
+      end
+
+      it 'shows the attendance ban to delegates' do
+        expect(attending_ban.can_user_read?(create(:delegate))).to be true
+      end
+    end
+
     context 'when the role is past banned competitor' do
       let(:past_banned_competitor_role) { create(:banned_competitor_role, :inactive) }
 

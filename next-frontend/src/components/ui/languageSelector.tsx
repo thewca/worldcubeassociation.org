@@ -11,14 +11,11 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { LuChevronDown } from "react-icons/lu";
-import {
-  coerceLanguageCode,
-  fallbackLng,
-  storageKey,
-} from "@/lib/i18n/settings";
+import { coerceLanguageCode, storageKey } from "@/lib/i18n/settings";
 import { availableLocales } from "@/lib/i18n/settings";
 import Cookies from "js-cookie";
 import { MobileNavButton } from "@/components/MobileNav";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 export default function Wrapper() {
   return (
@@ -29,8 +26,7 @@ export default function Wrapper() {
 }
 
 const LanguageSelector = () => {
-  const currentLocaleRaw = Cookies.get(storageKey) ?? fallbackLng;
-  const currentLocale = coerceLanguageCode(currentLocaleRaw);
+  const currentLocale = coerceLanguageCode(useLocale());
 
   const handleChangeLocale = (code: string) => {
     Cookies.set(storageKey, code, { expires: 365, path: "/" });

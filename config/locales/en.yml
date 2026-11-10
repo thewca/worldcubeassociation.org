@@ -2469,6 +2469,7 @@ en:
       unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
     records:
       title: "Records"
+      load_error: "Error fetching records"
     last_updated_html: "Last updated: %{timestamp}"
     filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
     selector_elements:

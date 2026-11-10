@@ -9,6 +9,7 @@ import RegistrationStatus from "@/components/competitions/Registration/Registrat
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import {
   eventLimit,
   guestLimit,
@@ -97,6 +98,7 @@ export function StepSummary({
   registration: Registration;
 }) {
   const { t } = useT();
+  const lng = useLocale();
 
   if (step.summary_status === "hide") {
     return;
@@ -149,7 +151,7 @@ export function StepSummary({
               <DataList.ItemValue>
                 {DateTime.fromISO(
                   registration.competing.registered_on,
-                ).toLocaleString(DateTime.DATETIME_FULL)}
+                ).toLocaleString(DateTime.DATETIME_FULL, { locale: lng })}
               </DataList.ItemValue>
             </DataList.Item>
           )}
