@@ -279,7 +279,8 @@ export function eventQualificationToString(wcifEvent, qualification, { short, is
       }
       if (event.isTimedEvent) {
         const messageName = `qualification.${wcifResultType}.time`;
-        return withDate(I18n.t(messageName, { time: attemptResultToString(wcifQualificationLevel, wcifEvent.id, short) }));
+        const time = attemptResultToString(wcifQualificationLevel, wcifEvent.id, short);
+        return withDate(I18n.t(messageName, { time }));
       }
       if (event.isFewestMoves) {
         const messageName = `qualification.${wcifResultType}.moves`;
@@ -288,7 +289,8 @@ export function eventQualificationToString(wcifEvent, qualification, { short, is
       }
       if (event.isMultipleBlindfolded) {
         const messageName = `qualification.${wcifResultType}.points`;
-        return withDate(I18n.t(messageName, { points: attemptResultToMbPoints(wcifQualificationLevel) }));
+        const points = attemptResultToMbPoints(wcifQualificationLevel);
+        return withDate(I18n.t(messageName, { points }));
       }
       return '-';
     default:
