@@ -3151,10 +3151,6 @@ sl:
         competitors: Tekmovalci
         scrambles: Mešalni algoritmi
     results_table:
-      h2h_results_disclaimer: >-
-        Rezultati, določeni z neposrednim dvobojem (head-to-head). Trenutno je
-        prikazan le vrstni red tekmovalcev in najboljši rezultat, ker je
-        prikazovanje rezultatov neposrednih dvobojev še v razvoju.
       wca_profile: WCA profil
       event: Disciplina
       round: Krog

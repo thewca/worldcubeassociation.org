@@ -3320,11 +3320,6 @@ it:
         competitors: Partecipanti
         scrambles: Scramble
     results_table:
-      h2h_results_disclaimer: >-
-        I risultati sono stati determinati tramite una finale testa a testa.
-        Sono riportati solo l'ordine di piazzamento e il miglior tempo. La
-        visualizzazione completa dei risultati testa a testa è ancora in fase di
-        sviluppo.
       wca_profile: Profilo WCA
       event: Evento
       round: Turno

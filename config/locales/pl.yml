@@ -3127,10 +3127,6 @@ pl:
         competitors: Zawodnicy
         scrambles: Scramble
     results_table:
-      h2h_results_disclaimer: >-
-        Wyniki ustalone na podstawie finału Jeden na Jeden. Pokazana jest
-        jedynie kolejność i najlepsze ułożenie ze względu na to, że prace nad
-        pokazywaniem wyników Jeden na Jeden nadal trwają.
       wca_profile: Profil WCA
       event: Konkurencja
       round: Runda

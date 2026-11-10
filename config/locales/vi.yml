@@ -1156,7 +1156,7 @@ vi:
         confirmation_link: Xác nhận tài khoản của tôi.
         activate: >-
           Sau khi kích hoạt thành công, bạn có thể đăng nhập vào trang web của WCA:
-          
+
         login_form: đơn đăng nhập
         addendum: >-
           Email này được tự động gửi đi. Nếu bạn không đăng ký tài khoản trên
@@ -3065,10 +3065,6 @@ vi:
         competitors: Thí sinh
         scrambles: Công thức tráo
     results_table:
-      h2h_results_disclaimer: >-
-        Kết quả của vòng chung kết Đối đầu. Hiện tại phần này chỉ hiển thị thứ
-        hạng và lượt thi tốt nhất do hệ thống hiển thị đầy đủ kết quả vòng Đối
-        đầu đang trong quá trình phát triển.
       wca_profile: Hồ sơ WCA
       event: Nội dung
       round: Vòng đấu

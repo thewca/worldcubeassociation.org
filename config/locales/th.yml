@@ -2962,11 +2962,6 @@ th:
         competitors: ผู้เข้าแข่งขัน
         scrambles: โจทย์
     results_table:
-      h2h_results_disclaimer: >-
-        ผลการแข่งขันตัดสินจากรอบชิงชนะเลิศแบบ  Head-to-Head
-        จะแสดงเฉพาะลำดับผลการแข่งขันที่ดีที่สุดเท่านั้น
-        เนื่องจากการแสดงผลการแข่งขันแบบ Head-to-Head
-        ฉบับเต็มยังอยู่ระหว่างการพัฒนา
       wca_profile: WCA profile
       event: ประเภทการแข่งขัน
       round: รอบ
