@@ -12,6 +12,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
 import _ from "lodash";
 import { SingleEventSelector } from "@/components/EventSelector";
+import events from "@/lib/wca/data/events";
 
 type FilterState = {
   event: string;
@@ -137,13 +138,18 @@ export function RankingsFilterBox({
 }: RankingsFilterBoxProps) {
   const toValue = (label: string) => _.invert(valueLabelMap)[label];
 
+  const rankingTypeItems = events.byId[filterState.event]
+    .is_multiple_blindfolded
+    ? [valueLabelMap["single"]]
+    : [valueLabelMap["single"], valueLabelMap["average"]];
+
   return (
     <FilterBox filterState={filterState} filterActions={filterActions}>
       <Stack direction={{ base: "column", md: "row" }}>
         <SegmentedField
           label="Type"
           value={valueLabelMap[filterState.rankingType]}
-          items={[valueLabelMap["single"], valueLabelMap["average"]]}
+          items={rankingTypeItems}
           onChange={(label) => filterActions.setType(toValue(label))}
         />
         <SegmentedField
