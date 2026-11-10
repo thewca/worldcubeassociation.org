@@ -3,8 +3,6 @@
 import { components } from "@/types/openapi";
 import Loading from "@/components/ui/loading";
 import { Box, Heading, Text, useToken } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-import { route } from "nextjs-routes";
 import { dateRange, hasPassedEndOfDay } from "@/lib/wca/dates";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import MapContainer, { Layer, Popup, Source } from "react-map-gl/maplibre";
@@ -13,9 +11,10 @@ import type { FeatureCollection, Point } from "geojson";
 import { setWorkerUrl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useState } from "react";
+import FlyoutDrawer from "../competitions/FlyoutDrawer";
 
 type MapCompetition = Pick<
-  components["schemas"]["CompetitionInfo"],
+  components["schemas"]["CompetitionIndex"],
   | "id"
   | "name"
   | "city"
@@ -58,9 +57,12 @@ const pinIconSvg = (color: string, halo: string) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="${PIN_ICON_SIZE}" height="${PIN_ICON_SIZE}" viewBox="0 0 24 24"><path fill="${color}" stroke="${halo}" stroke-width="0.75" fill-rule="evenodd" d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0Zm-5 0a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z"/></svg>`;
 
 export default function Map({ competitions, isLoading = false }: MapProps) {
-  const router = useRouter();
+  // const router = useRouter();
   const lng = useLocale();
   const [hoveredCompetitionId, setHoveredCompetitionId] = useState<string>();
+  const [selectedCompetition, setSelectedCompetition] = useState<
+    components["schemas"]["CompetitionIndex"] | null
+  >(null);
 
   // maplibre paints in WebGL and cannot resolve the CSS variables that Chakra
   //   tokens compile to, so the pin palette has to be read as literal colours.
@@ -131,12 +133,16 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
       return;
     }
 
-    router.push(
-      route({
-        pathname: "/competitions/[competitionId]",
-        query: { competitionId: competition.id },
-      }),
+    setSelectedCompetition(
+      competition as components["schemas"]["CompetitionIndex"],
     );
+
+    // router.push(
+    //   route({
+    //     pathname: "/competitions/[competitionId]",
+    //     query: { competitionId: competition.id },
+    //   }),
+    // );
   };
 
   return (
@@ -189,6 +195,15 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
           </Popup>
         )}
       </MapContainer>
+
+      <FlyoutDrawer
+        open={!!selectedCompetition}
+        setOpen={() => setSelectedCompetition(null) as void}
+        comp={selectedCompetition}
+        isChampionship={
+          (selectedCompetition?.championship_types.length || 0) > 0
+        }
+      />
     </Box>
   );
 }

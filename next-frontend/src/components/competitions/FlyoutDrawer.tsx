@@ -11,14 +11,13 @@ import NationalChampionshipIcon from "../icons/NationalChampionshipIcon";
 import CompetitionShortlist from "./CompetitionShortlist";
 import { useT } from "@/lib/i18n/useI18n";
 import { components } from "@/types/openapi";
-import { Dispatch, SetStateAction } from "react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { route } from "nextjs-routes";
 
 type FlyoutProps = {
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  comp: components["schemas"]["CompetitionIndex"];
+  setOpen: (open: boolean) => void;
+  comp: components["schemas"]["CompetitionIndex"] | null;
   isChampionship: boolean;
 };
 
@@ -30,6 +29,9 @@ export default function FlyoutDrawer({
 }: FlyoutProps) {
   const { t } = useT();
   const lng = useLocale();
+  if (!comp) {
+    return null;
+  }
   return (
     <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="xl">
       <Portal>
