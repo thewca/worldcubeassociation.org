@@ -11,7 +11,7 @@ import {
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
 import _ from "lodash";
-import { SingleEventSelector } from "@/components/EventSelector";
+import EventDropdown from "@/components/EventDropdown";
 
 type FilterState = {
   event: string;
@@ -31,6 +31,7 @@ interface FilterBoxProps {
   filterState: FilterState;
   filterActions: FilterActions;
   children: React.ReactElement;
+  allEventsValue?: string;
 }
 
 interface RecordsFilterBoxProps {
@@ -111,7 +112,11 @@ export function RecordsFilterBox({
   filterActions,
 }: RecordsFilterBoxProps) {
   return (
-    <FilterBox filterState={filterState} filterActions={filterActions}>
+    <FilterBox
+      filterState={filterState}
+      filterActions={filterActions}
+      allEventsValue="all events"
+    >
       <Stack direction={{ base: "column", md: "row" }}>
         <SegmentedField
           label="Gender"
@@ -171,7 +176,12 @@ export function RankingsFilterBox({
   );
 }
 
-function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
+function FilterBox({
+  filterState,
+  filterActions,
+  children,
+  allEventsValue,
+}: FilterBoxProps) {
   const { t } = useT();
 
   return (
@@ -185,14 +195,11 @@ function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
       borderColor="gray.100"
     >
       <VStack align="left">
-        <SingleEventSelector
-          title={t("competitions.competition_form.events")}
-          selectedEvent={filterState.event}
-          onEventClick={(event) =>
-            event === filterState.event
-              ? filterActions.setEvent("all events")
-              : filterActions.setEvent(event)
-          }
+        <EventDropdown
+          label={t("competitions.competition_form.events")}
+          value={filterState.event}
+          onValueChange={filterActions.setEvent}
+          allEventsValue={allEventsValue}
         />
         <RegionSelector
           region={filterState.region}

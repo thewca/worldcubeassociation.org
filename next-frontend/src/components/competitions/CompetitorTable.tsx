@@ -10,13 +10,11 @@ export default function CompetitorTable({
   eventIds,
   registrations,
   t,
-  setPsychSheetEvent,
   linkToLive = false,
   competitionId,
 }: {
   eventIds: string[];
   registrations: components["schemas"]["RegistrationDataV2"][];
-  setPsychSheetEvent: (eventId: string) => void;
   t: TFunction;
   linkToLive?: boolean;
   competitionId: string;
@@ -29,12 +27,7 @@ export default function CompetitorTable({
             <Table.ColumnHeader>Name</Table.ColumnHeader>
             <Table.ColumnHeader>Representing</Table.ColumnHeader>
             {eventIds.map((eventId) => (
-              <Table.ColumnHeader
-                key={eventId}
-                onClick={() => setPsychSheetEvent(eventId)}
-                cursor="pointer"
-                _hover={{ bg: "grey.solid", color: "wcawhite.contrast" }}
-              >
+              <Table.ColumnHeader key={eventId}>
                 <LabelledEventIcon eventId={eventId} />
               </Table.ColumnHeader>
             ))}

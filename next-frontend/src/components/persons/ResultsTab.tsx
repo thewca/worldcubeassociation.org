@@ -4,7 +4,7 @@ import { Text, VStack } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { ByCompetitionTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
-import { SingleEventSelector } from "@/components/EventSelector";
+import EventDropdown from "@/components/EventDropdown";
 
 interface ResultsTabProps {
   wcaId: string;
@@ -19,12 +19,11 @@ const ResultsTab: React.FC<ResultsTabProps> = ({
 
   return (
     <VStack>
-      <SingleEventSelector
-        title=""
-        selectedEvent={eventId}
-        onEventClick={setEventId}
-        eventList={eventsWithResults}
-        eventButtonsCompact
+      <EventDropdown
+        value={eventId}
+        onValueChange={setEventId}
+        eventIds={eventsWithResults}
+        size="md"
       />
       <Results wcaId={wcaId} eventId={eventId} />
     </VStack>

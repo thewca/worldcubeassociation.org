@@ -6,7 +6,7 @@ import { Heading, Table, VStack } from "@chakra-ui/react";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { useT } from "@/lib/i18n/useI18n";
-import { SingleEventSelector } from "@/components/EventSelector";
+import EventDropdown from "@/components/EventDropdown";
 import roundTypes from "@/lib/wca/data/roundTypes";
 
 export default function FilteredScrambles({
@@ -36,11 +36,10 @@ export default function FilteredScrambles({
 
   return (
     <VStack align="left" gap={4}>
-      <SingleEventSelector
-        title=""
-        selectedEvent={activeEventId}
-        onEventClick={setActiveEventId}
-        eventList={competitionInfo.event_ids}
+      <EventDropdown
+        value={activeEventId}
+        onValueChange={setActiveEventId}
+        eventIds={competitionInfo.event_ids}
       />
       {_.map(orderedRounds, (roundFormat) => {
         const scramblesForRound = scramblesByRoundFormat[roundFormat];
