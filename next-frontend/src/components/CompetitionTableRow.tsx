@@ -32,6 +32,7 @@ import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { LuInfo } from "react-icons/lu";
 import {
   getRegistrationStatus,
@@ -58,12 +59,13 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
   const isChampionship = comp.championship_types.length > 0;
 
   const { t } = useT();
+  const lng = useLocale();
   return (
     <Table.Row key={comp.id}>
       <Table.Cell>{registrationStatusIcons[regoStatus]}</Table.Cell>
 
       <Table.Cell>
-        <Text>{formatDateRange(comp.start_date, comp.end_date)}</Text>
+        <Text>{formatDateRange(comp.start_date, comp.end_date, lng)}</Text>
       </Table.Cell>
 
       <Table.Cell whiteSpace={{ base: "normal", md: "nowrap" }}>
@@ -141,6 +143,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
                 <CompetitionShortlist
                   comp={comp}
                   t={t}
+                  lng={lng}
                   items={[
                     "city",
                     "venue_address",
