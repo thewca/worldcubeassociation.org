@@ -3356,10 +3356,6 @@ es-ES:
         competitors: Competidores
         scrambles: Mezclas
     results_table:
-      h2h_results_disclaimer: >-
-        Resultados determinados por una Final Cara a Cara. Solo se muestran el
-        orden de clasificación y la mejor resolución, ya que la visualización
-        completa de los resultados Cara a Cara aún se encuentra en desarrollo.
       wca_profile: Perfil de la WCA
       event: Categoría
       round: Ronda

@@ -359,10 +359,10 @@ sk:
         dob: Váš správny deň narodenia vo formáte RRRR-MM-DD
         document: >-
           Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte pridať
-          fotku hocijakého legálneho dokumentu (ID karta, vodičský preukaz, šutdentská
-          karta, pas, rodný list,...). Musí tam byť viditeľné meno a dátum narodenia
-          a musí to byť pochopiteľné pre Anglicky hovoriaceho človeka (alebo kontaktuje
-          miestneho delegáta WCA ak nemáte taký dokument).
+          fotku hocijakého legálneho dokumentu (občiansky preukaz, vodičský preukaz,
+          študentská karta, pas, rodný list...). Musí tam byť viditeľné meno a dátum
+          narodenia a musí to byť pochopiteľné pre anglicky hovoriaceho človeka (alebo
+          kontaktuje miestneho delegáta WCA ak nemáte taký dokument).
       post:
         body: >-
           Použite &lt;!-- break --&gt; aby ste ukázali ukážku domácej stránky.

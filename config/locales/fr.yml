@@ -3457,10 +3457,6 @@ fr:
         competitors: Compétiteurs
         scrambles: Mélanges
     results_table:
-      h2h_results_disclaimer: >-
-        Résultats déterminés par une finale en face à face. Seuls le classement
-        et la meilleure résolution sont affichés, car l'affichage complet des
-        résultats en face à face est encore en cours de développement.
       wca_profile: Profil WCA
       event: Épreuve
       round: Tour
