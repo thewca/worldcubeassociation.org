@@ -17,7 +17,7 @@ import _ from "lodash";
 import { TFunction } from "i18next";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { useT } from "@/lib/i18n/useI18n";
-import { Tooltip } from "@/components/ui/tooltip";
+import { ToggleTip } from "@/components/ui/toggle-tip";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import {
   computeMatchScores,
@@ -307,7 +307,7 @@ function SetAttemptsInfo({
   const setName = t("competitions.h2h.set_number", { number: set.set_number });
 
   return (
-    <Tooltip
+    <ToggleTip
       showArrow
       content={
         <Box p={1}>
@@ -322,13 +322,13 @@ function SetAttemptsInfo({
     >
       <IconButton
         variant="ghost"
-        size="2xs"
+        size={{ base: "xs", md: "2xs" }}
         colorPalette="gray"
         aria-label={setName}
       >
         <HiOutlineInformationCircle />
       </IconButton>
-    </Tooltip>
+    </ToggleTip>
   );
 }
 
