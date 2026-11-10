@@ -5,12 +5,13 @@ required:
   - id
   - name
   - information
+  - website
   - start_date
   - end_date
   - results_posted_at
   - scoretaking_software
   - number_of_bookmarks
-  - is_part_of_competition_series
+  - competition_series_ids
   - tabs
   - events
   - venue
@@ -26,6 +27,9 @@ properties:
   information:
     type: [string, "null"]
     example: "First WCA World Championship"
+  website:
+    type: [string, "null"]
+    example: "https://cubingusa.org/worlds"
   start_date:
     type: [string, "null"]
     format: date
@@ -43,8 +47,14 @@ properties:
   number_of_bookmarks:
     type: integer
     example: 123
-  is_part_of_competition_series:
-    type: boolean
+  competition_series_ids:
+    type: array
+    description: >-
+      The announced competitions of the series this competition belongs to, in start date order,
+      including itself once it is announced. Empty if it is not part of a series.
+    items:
+      type: string
+    example: ["WC2003", "WC2003Side"]
   tabs:
     type: array
     items:
@@ -57,7 +67,7 @@ properties:
           type: string
   events:
     type: object
-    required: [event_ids, main_event_id, uses_qualification]
+    required: [event_ids, main_event_id]
     properties:
       event_ids:
         type: array
@@ -67,8 +77,6 @@ properties:
       main_event_id:
         type: [string, "null"]
         example: "333"
-      uses_qualification:
-        type: boolean
   venue:
     type: object
     required: [name, address, details, city, country_iso2]
@@ -100,7 +108,9 @@ properties:
       - is_full_and_accepted
       - on_the_spot_registration
       - extra_requirements
+      - external_registration_page
       - event_change_deadline_date
+      - waiting_list_deadline_date
       - competitor_can_cancel
       - fees
       - refund_policy
@@ -130,7 +140,13 @@ properties:
         type: [boolean, "null"]
       extra_requirements:
         type: [string, "null"]
+      external_registration_page:
+        type: [string, "null"]
+        example: "https://example.com/register"
       event_change_deadline_date:
+        type: [string, "null"]
+        format: date-time
+      waiting_list_deadline_date:
         type: [string, "null"]
         format: date-time
       competitor_can_cancel:
@@ -138,7 +154,7 @@ properties:
         enum: [not_accepted, always, unpaid]
       fees:
         type: object
-        required: [currency_code, base_entry_lowest_denomination, guests_entry_lowest_denomination]
+        required: [currency_code, base_entry_lowest_denomination, guests_entry_lowest_denomination, on_the_spot_entry_lowest_denomination]
         properties:
           currency_code:
             type: [string, "null"]
@@ -149,6 +165,9 @@ properties:
           guests_entry_lowest_denomination:
             type: [integer, "null"]
             example: 1000
+          on_the_spot_entry_lowest_denomination:
+            type: [integer, "null"]
+            example: 15000
       refund_policy:
         type: object
         required: [percent, limit_date]

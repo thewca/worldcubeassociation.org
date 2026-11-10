@@ -212,6 +212,17 @@ RSpec.describe "API v1 Competitions" do
       expect(response.parsed_body).to include("id" => competition.id, "events" => include("event_ids" => ["333"]))
     end
 
+    it "lists only the announced competitions of its series" do
+      series = create(:competition_series)
+      announced_competition = create(:competition, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01')
+      unannounced_sibling = create(:competition, :not_visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02')
+
+      get api_v1_competition_path(announced_competition)
+
+      expect(response.parsed_body["competition_series_ids"]).to eq [announced_competition.id]
+      expect(unannounced_sibling.competition_series).to eq series
+    end
+
     it "serializes delegates without their deprecated team data" do
       get api_v1_competition_path(competition)
 

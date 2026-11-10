@@ -1423,6 +1423,8 @@ export interface components {
             name: string;
             /** @example First WCA World Championship */
             information: string | null;
+            /** @example https://cubingusa.org/worlds */
+            website: string | null;
             /**
              * Format: date
              * @example 2025-07-03
@@ -1439,7 +1441,14 @@ export interface components {
             scoretaking_software: "external" | "wca_live" | "internal";
             /** @example 123 */
             number_of_bookmarks: number;
-            is_part_of_competition_series: boolean;
+            /**
+             * @description The announced competitions of the series this competition belongs to, in start date order, including itself once it is announced. Empty if it is not part of a series.
+             * @example [
+             *       "WC2003",
+             *       "WC2003Side"
+             *     ]
+             */
+            competition_series_ids: string[];
             tabs: {
                 id: number;
                 name: string;
@@ -1453,7 +1462,6 @@ export interface components {
                 event_ids: string[];
                 /** @example 333 */
                 main_event_id: string | null;
-                uses_qualification: boolean;
             };
             venue: {
                 /** @example Toronto */
@@ -1488,8 +1496,12 @@ export interface components {
                 is_full_and_accepted: boolean;
                 on_the_spot_registration: boolean | null;
                 extra_requirements: string | null;
+                /** @example https://example.com/register */
+                external_registration_page: string | null;
                 /** Format: date-time */
                 event_change_deadline_date: string | null;
+                /** Format: date-time */
+                waiting_list_deadline_date: string | null;
                 /** @enum {string} */
                 competitor_can_cancel: "not_accepted" | "always" | "unpaid";
                 fees: {
@@ -1499,6 +1511,8 @@ export interface components {
                     base_entry_lowest_denomination: number | null;
                     /** @example 1000 */
                     guests_entry_lowest_denomination: number | null;
+                    /** @example 15000 */
+                    on_the_spot_entry_lowest_denomination: number | null;
                 };
                 refund_policy: {
                     /** @example 50 */
