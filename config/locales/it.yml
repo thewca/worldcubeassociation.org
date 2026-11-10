@@ -2085,8 +2085,6 @@ it:
         abbr_description: '%{short_name}: %{long_name}'
         cutoff: 'Cutoff: %{short_cutoff}'
         download_html: 'Scarica tutti i dettagli della competizione in PDF %{here}.'
-        download_pdf: "Scarica qui i dettagli del programma in PDF"
-        download: "Scarica"
       date: Data
       add_to_calendar: Aggiungi al calendario
       name: Nome
