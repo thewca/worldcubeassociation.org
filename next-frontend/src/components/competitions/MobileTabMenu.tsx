@@ -301,8 +301,8 @@ function ItemLabel({
   chevron?: boolean;
 }) {
   return (
-    <Stack justify="center" alignItems="center" h="full">
-      <Stack direction="row" alignItems="center" gap={0}>
+    <Stack justify="center" alignItems="center" h="full" gap={1}>
+      <Stack direction="row" alignItems="start" gap={0} flex={1}>
         {icon}{" "}
         {chevron && (
           <Icon size="xs">
@@ -310,17 +310,19 @@ function ItemLabel({
           </Icon>
         )}
       </Stack>
-      <Box
-        textAlign="center"
-        fontSize="0.72rem"
-        fontWeight="medium"
-        lineHeight="1.2"
-        overflowWrap="anywhere"
-        hyphens="auto"
-        lineClamp={2}
-      >
-        {text}
-      </Box>
+      <Stack flex={1} justify="center">
+        <Box
+          textAlign="center"
+          fontSize="0.72rem"
+          fontWeight="medium"
+          lineHeight="1.2"
+          overflowWrap="anywhere"
+          hyphens="auto"
+          lineClamp={2}
+        >
+          {text}
+        </Box>
+      </Stack>
     </Stack>
   );
 }
