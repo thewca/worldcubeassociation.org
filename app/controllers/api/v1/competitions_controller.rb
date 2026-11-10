@@ -7,6 +7,8 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
   # Mirrors the WCA Live landing page, which lists everything from one month back.
   LIVE_COMPETITIONS_LOOKBACK = 1.month
 
+  MANAGE_COMPETITIONS_SCOPE = 'manage_competitions'
+
   def live
     competitions = Competition.visible
                               .not_cancelled
@@ -25,7 +27,13 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     }
   end
 
-  before_action :set_competition, except: %i[live]
+  before_action :set_viewable_competition, only: %i[show]
+
+  def show
+    render json: @competition.as_json(Competition::V1_INFO_SERIALIZE_OPTIONS)
+  end
+
+  before_action :set_competition, except: %i[live show]
 
   # Every round of the competition with its results nested, ordered by event and round number.
   # The frontend regroups these by event or by person; the round carries the context that would
@@ -60,6 +68,17 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
                          )
 
     render json: rounds.as_json(Round::H2H_SERIALIZE_OPTIONS)
+  end
+
+  # Unannounced competitions answer exactly like missing ones, so their IDs can't be probed.
+  private def set_viewable_competition
+    competition_id = params.require(:id)
+    @competition = Competition.with_serialization_preloads
+                              .includes(:events, :competition_events, :tabs)
+                              .find_by(id: competition_id)
+
+    managing_user = authenticated_user if token_has_scope?(MANAGE_COMPETITIONS_SCOPE)
+    raise WcaExceptions::NotFound.new("Competition with id #{competition_id} not found", data: { model: Competition.name, id: competition_id }) unless @competition&.user_can_view?(managing_user)
   end
 
   private def set_competition

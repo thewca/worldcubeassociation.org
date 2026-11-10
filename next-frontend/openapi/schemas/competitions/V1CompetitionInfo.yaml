@@ -1,0 +1,162 @@
+type: object
+description: >-
+  Unannounced competitions are still being set up, so most of their fields can be null.
+required:
+  - id
+  - name
+  - information
+  - venue
+  - venue_address
+  - venue_details
+  - contact
+  - city
+  - country_iso2
+  - start_date
+  - end_date
+  - event_ids
+  - main_event_id
+  - registration_open
+  - registration_close
+  - results_posted_at
+  - competitor_limit
+  - extra_registration_requirements
+  - on_the_spot_registration
+  - base_entry_fee_lowest_denomination
+  - guests_entry_fee_lowest_denomination
+  - currency_code
+  - refund_policy_percent
+  - refund_policy_limit_date
+  - event_change_deadline_date
+  - competitor_can_cancel
+  - scoretaking_software
+  - number_of_bookmarks
+  - spots_left
+  - waiting_list_count
+  - uses_qualification?
+  - part_of_competition_series?
+  - registration_full?
+  - registration_full_and_accepted?
+  - tabs
+  - delegates
+  - organizers
+properties:
+  id:
+    type: string
+    example: "WC2003"
+  name:
+    type: string
+    example: "WCA World Championship 2003"
+  information:
+    type: [string, "null"]
+    example: "First WCA World Championship"
+  venue:
+    type: string
+    example: "Toronto"
+  venue_address:
+    type: [string, "null"]
+    example: "770 Don Mills Rd, North York, ON M3C IT3, Canada"
+  venue_details:
+    type: [string, "null"]
+    example: "The big convention center"
+  contact:
+    type: [string, "null"]
+    example: "[Organization team](mailto:worlds@example.com)"
+  city:
+    type: string
+    example: "Seattle, Washington"
+  country_iso2:
+    type: [string, "null"]
+    example: "US"
+  start_date:
+    type: [string, "null"]
+    format: date
+    example: "2025-07-03"
+  end_date:
+    type: [string, "null"]
+    format: date
+    example: "2025-07-06"
+  event_ids:
+    type: array
+    items:
+      type: string
+    example: ["333"]
+  main_event_id:
+    type: [string, "null"]
+    example: "333"
+  registration_open:
+    type: [string, "null"]
+    format: date-time
+    example: "2025-01-03T14:00:00.000Z"
+  registration_close:
+    type: [string, "null"]
+    format: date-time
+    example: "2025-01-10T14:00:00.000Z"
+  results_posted_at:
+    type: [string, "null"]
+    format: date-time
+  competitor_limit:
+    type: [integer, "null"]
+    example: 2000
+  extra_registration_requirements:
+    type: [string, "null"]
+  on_the_spot_registration:
+    type: [boolean, "null"]
+  base_entry_fee_lowest_denomination:
+    type: [integer, "null"]
+    example: 12000
+  guests_entry_fee_lowest_denomination:
+    type: [integer, "null"]
+    example: 1000
+  currency_code:
+    type: [string, "null"]
+    example: "USD"
+  refund_policy_percent:
+    type: [integer, "null"]
+    example: 50
+  refund_policy_limit_date:
+    type: [string, "null"]
+    format: date-time
+  event_change_deadline_date:
+    type: [string, "null"]
+    format: date-time
+  competitor_can_cancel:
+    type: string
+    enum: [not_accepted, always, unpaid]
+  scoretaking_software:
+    type: string
+    enum: [external, wca_live, internal]
+  number_of_bookmarks:
+    type: integer
+    example: 123
+  spots_left:
+    type: [integer, "null"]
+    example: 42
+  waiting_list_count:
+    type: integer
+    example: 7
+  uses_qualification?:
+    type: boolean
+  part_of_competition_series?:
+    type: boolean
+  registration_full?:
+    type: boolean
+  registration_full_and_accepted?:
+    type: boolean
+  tabs:
+    type: array
+    items:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+  delegates:
+    type: array
+    items:
+      $ref: 'V1CompetitionStaff.yaml'
+  organizers:
+    type: array
+    items:
+      $ref: 'V1CompetitionStaff.yaml'

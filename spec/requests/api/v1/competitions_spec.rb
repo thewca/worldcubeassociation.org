@@ -204,6 +204,60 @@ RSpec.describe "API v1 Competitions" do
     end
   end
 
+  describe "GET #show" do
+    it "is reachable without logging in" do
+      get api_v1_competition_path(competition)
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to include("id" => competition.id, "event_ids" => ["333"])
+    end
+
+    it "serializes delegates without their deprecated team data" do
+      get api_v1_competition_path(competition)
+
+      expect(response.parsed_body["delegates"].first.keys).to contain_exactly("id", "name", "url", "avatar", "class")
+    end
+
+    context "when the competition is unannounced" do
+      let(:unannounced_competition) { create(:competition, :not_visible, :with_organizer) }
+
+      it "is not found for anonymous users, exactly like a missing competition" do
+        get api_v1_competition_path("NotAComp2026")
+        missing_body = response.parsed_body
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.parsed_body.to_json).to eq missing_body.to_json.gsub("NotAComp2026", unannounced_competition.id)
+      end
+
+      it "is not found for users who can't manage it" do
+        api_sign_in_as(create(:user))
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "is not found for its organizers when their token lacks the manage_competitions scope" do
+        api_sign_in_as(unannounced_competition.organizers.first)
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "is returned to its organizers when their token has the manage_competitions scope" do
+        api_sign_in_as(unannounced_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to be_successful
+        expect(response.parsed_body["id"]).to eq unannounced_competition.id
+      end
+    end
+  end
+
   describe "unknown competition" do
     it "returns not found for the results" do
       get api_v1_competition_results_path("NotAComp2026")
