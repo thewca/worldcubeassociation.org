@@ -26,7 +26,7 @@ class CompetitionEvent < ApplicationRecord
   serialize :qualification_condition, coder: ResultConditions::ResultCondition
   validates_associated :qualification_condition
 
-  validates :qualification_latest_date, presence: { if: :qualification_condition? }
+  validates :qualification_latest_date, presence: { if: -> { qualification_condition? || qualification_earliest_date? } }
   validates :qualification_earliest_date, comparison: { less_than: :qualification_latest_date, allow_nil: true, if: :qualification_latest_date? }
 
   validates :qualification_gap, numericality: { greater_than_or_equal_to: MIN_QUALIFICATION_WINDOW_DAYS, allow_nil: true }
@@ -40,7 +40,7 @@ class CompetitionEvent < ApplicationRecord
   def qualification_gap
     return nil unless qualification_latest_date? && qualification_earliest_date?
 
-    (qualification_latest_date - qualification_earliest_date).days.in_days
+    (qualification_latest_date - qualification_earliest_date).to_i
   end
 
   def advancing_competitor_ids

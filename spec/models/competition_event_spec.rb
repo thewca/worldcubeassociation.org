@@ -352,6 +352,7 @@ RSpec.describe CompetitionEvent do
     # The user's 333 results are from competitions ending on 2021-02-01 and 2021-03-02 respectively.
     context "with an earliest date" do
       shared_examples "respects the qualification window" do
+        let(:latest_date) { '2021-09-30' }
         let(:competition_event_333) do
           CompetitionEvent.new(
             event_id: '333',
@@ -360,7 +361,6 @@ RSpec.describe CompetitionEvent do
             qualification_latest_date: latest_date,
           )
         end
-        let(:latest_date) { '2021-09-30' }
 
         context "when all results are before the earliest date" do
           let(:earliest_date) { '2021-04-01' }
