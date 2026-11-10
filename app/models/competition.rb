@@ -2303,6 +2303,27 @@ class Competition < ApplicationRecord
     include: {},
   }.freeze
 
+  V1_INFO_STAFF_SERIALIZE_OPTIONS = {
+    only: %w[id name],
+    methods: %w[url],
+    include: %w[avatar],
+    exclude_deprecated: true,
+  }.freeze
+
+  V1_INFO_SERIALIZE_OPTIONS = {
+    only: %w[id name information venue venue_address venue_details contact start_date end_date main_event_id
+             registration_open registration_close results_posted_at competitor_limit extra_registration_requirements
+             on_the_spot_registration base_entry_fee_lowest_denomination guests_entry_fee_lowest_denomination currency_code
+             refund_policy_percent refund_policy_limit_date event_change_deadline_date competitor_can_cancel scoretaking_software],
+    methods: %w[city country_iso2 event_ids number_of_bookmarks spots_left waiting_list_count uses_qualification?
+                part_of_competition_series? registration_full? registration_full_and_accepted?],
+    include: {
+      tabs: { only: %w[id name] },
+      delegates: V1_INFO_STAFF_SERIALIZE_OPTIONS,
+      organizers: V1_INFO_STAFF_SERIALIZE_OPTIONS,
+    },
+  }.freeze
+
   def serializable_hash(options = nil)
     # The intent behind this is to have a "good" default setup for serialization.
     # We also want the caller to be able to be picky about the attributes included
