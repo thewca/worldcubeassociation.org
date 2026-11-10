@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class CompetitionEvent < ApplicationRecord
+  # WCRP v5.5 point 5.1.5.1 (as of 2026-10-29)
+  MIN_QUALIFICATION_WINDOW_DAYS = 90
+
   belongs_to :competition
   belongs_to :event
 
@@ -26,8 +29,7 @@ class CompetitionEvent < ApplicationRecord
   validates :qualification_latest_date, presence: { if: :qualification_condition? }
   validates :qualification_earliest_date, comparison: { less_than: :qualification_latest_date, allow_nil: true, if: :qualification_latest_date? }
 
-  # WCRP v5.5 point 5.1.5.1 (as of 2026-10-29)
-  validates :qualification_gap, numericality: { greater_than_or_equal_to: 90, allow_nil: true }
+  validates :qualification_gap, numericality: { greater_than_or_equal_to: MIN_QUALIFICATION_WINDOW_DAYS, allow_nil: true }
 
   validate do
     remaining_rounds = rounds.reject(&:marked_for_destruction?)

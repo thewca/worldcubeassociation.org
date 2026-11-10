@@ -215,10 +215,10 @@ en:
       ranking: "Top %{ranking} by average"
       any_result: "Any average"
     deadline:
-      description: "Qualification Deadline"
+      description: "Qualification Window Deadline"
       by_date: "by %{date}"
     earliest_date:
-      description: "Qualification Results From"
+      description: "Qualification Window Start Date"
       from_date: "on or after %{date}"
   #context: other activities which occur in the schedule
   activity:
