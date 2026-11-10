@@ -7,7 +7,8 @@ class Round < ApplicationRecord
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
 
-  has_many :h2h_matches
+  has_many :h2h_matches, -> { order(:match_number) }, inverse_of: :round
+  alias_method :matches, :h2h_matches
 
   has_one :event, through: :competition_event
   # CompetitionEvent uses the cached value
@@ -218,10 +219,11 @@ class Round < ApplicationRecord
   def clear_round!(clearing_user)
     LiveAttempt.where(live_result_id: live_result_ids).delete_all
     # We have to use update_all here because live_attempts_count is write protected
-    live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
-    # live_results were changed via raw SQL, refresh the loaded association so lifecycle_state is accurate
-    live_results.reset
-    self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
+    live_results.update_all(best: 0, average: 0, live_attempts_count: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil).tap do
+      # live_results were changed via raw SQL, refresh the loaded association so lifecycle_state is accurate
+      live_results.reset
+      self.bulk_insert_history(live_result_ids, clearing_user, action_type: :cleared)
+    end
   end
 
   def close_round!(closing_user)
@@ -320,9 +322,9 @@ class Round < ApplicationRecord
   def recompute_local_pos
     return if format_id == "h"
 
-    rank_by = format.rank_by_column
+    rank_by = ActiveRecord::Base.connection.quote_column_name(format.rank_by_column)
     # We only want to decide ties by single in events decided by average
-    secondary_rank_by = format.secondary_rank_by_column
+    secondary_rank_by = ActiveRecord::Base.connection.quote_column_name(format.secondary_rank_by_column) if format.secondary_rank_by_column
     # The following query uses an `ORDER BY best <= 0, best ASC` trick. The idea is:
     #   1. The first part of the `ORDER BY` evaluates to a boolean. Booleans are just
     #     `TINYINT` in MySQL with TRUE=1 and FALSE=0, so that FALSE < TRUE.
@@ -972,7 +974,7 @@ class Round < ApplicationRecord
       "state_hash" => Live::DiffHelper.state_hash(to_live_state),
       "linked_round_ids" => linked_round&.wcif_ids,
       "completed_competitors" => completed_competitors,
-    }
+    }.compact
   end
 
   def to_live_info_json
@@ -1001,6 +1003,26 @@ class Round < ApplicationRecord
                         })
     end
     json
+  end
+
+  H2H_SERIALIZE_OPTIONS = {
+    only: [],
+    methods: %w[wcif_id event_id round_type_id matches],
+  }.freeze
+
+  # H2H rounds store their final standings either as posted results or, before
+  # posting, as live results. Results are keyed by WCA ID (hence the hop through
+  # Person to reach the user) and live results by registration. Both walk
+  # associations that the caller is expected to preload, so that serializing many
+  # rounds costs a constant number of queries.
+  def h2h_final_positions_by_user_id
+    @h2h_final_positions_by_user_id ||= compute_h2h_final_positions_by_user_id
+  end
+
+  private def compute_h2h_final_positions_by_user_id
+    return live_results.to_h { |live_result| [live_result.registration.user_id, live_result.global_pos] } if results.none?
+
+    results.to_h { |result| [result.person.user.id, result.pos] }
   end
 
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)

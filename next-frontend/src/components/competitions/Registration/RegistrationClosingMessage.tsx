@@ -4,6 +4,7 @@ import { Alert } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import { Trans } from "react-i18next";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { fullTimeDiff } from "@/lib/wca/dates";
 import usePerpetualState from "@/lib/hooks/usePerpetualState";
 
@@ -16,8 +17,9 @@ export default function RegistrationClosingMessage({
   registrationEnd: string;
 }) {
   const { t } = useT();
+  const lng = useLocale();
 
-  const end = DateTime.fromISO(registrationEnd);
+  const end = DateTime.fromISO(registrationEnd, { locale: lng });
   const timeLeft = usePerpetualState(() => fullTimeDiff(end));
 
   const hasClosed =

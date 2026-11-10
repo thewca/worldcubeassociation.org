@@ -1,26 +1,25 @@
 "use client";
 import React, { useState } from "react";
-import { Button, Card, Text, Table } from "@chakra-ui/react";
+import { Card, Text, Table } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
 import PsychSheet from "@/components/competitions/PsychSheet";
 import { FormEventSelector } from "@/components/EventSelector";
 import Loading from "@/components/ui/loading";
-import RailsLink from "@/components/RailsLink";
 
 interface CompetitorData {
   id: string;
   eventIds: string[];
   isLive?: boolean;
-  canAddOnTheSpot?: boolean;
+  addOnTheSpotSlot?: React.ReactNode;
 }
 
 const TabCompetitors: React.FC<CompetitorData> = ({
   id,
   eventIds,
   isLive = false,
-  canAddOnTheSpot = false,
+  addOnTheSpotSlot,
 }) => {
   const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
 
@@ -46,13 +45,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
   return (
     <Card.Root>
       <Card.Body>
-        {canAddOnTheSpot && (
-          <Button asChild alignSelf="flex-end" mb={2}>
-            <RailsLink href={`/competitions/${id}/registrations/add`}>
-              Add on the spot registration
-            </RailsLink>
-          </Button>
-        )}
+        {addOnTheSpotSlot}
         <Card.Title>
           <FormEventSelector
             title="Events"

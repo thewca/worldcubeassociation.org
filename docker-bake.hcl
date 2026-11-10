@@ -8,6 +8,7 @@ variable "ENVIRONMENT" { default = "staging" }
 variable "MONOLITH_TAG" { default = "staging" }
 variable "WCA_LIVE_SITE" { default = "false" }
 variable "SHAKAPACKER_ASSET_HOST" { default = "" }
+variable "NEXT_FRONTEND_URL" { default = "" }
 
 target "_common" {
   context    = "."
@@ -16,6 +17,7 @@ target "_common" {
     BUILD_TAG              = BUILD_TAG
     WCA_LIVE_SITE          = WCA_LIVE_SITE
     SHAKAPACKER_ASSET_HOST = SHAKAPACKER_ASSET_HOST
+    NEXT_FRONTEND_URL      = NEXT_FRONTEND_URL
   }
   cache-from = ["type=registry,ref=${REGISTRY}:buildcache-${ENVIRONMENT}"]
 }

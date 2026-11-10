@@ -369,6 +369,14 @@ class Competition < ApplicationRecord
     errors.add(:competition_events, I18n.t('competitions.errors.fto_not_yet_allowed', date: I18n.l(FTO_INTRODUCTION_DATE, format: :long)))
   end
 
+  validate :fto_requires_internal_scoretaking
+  private def fto_requires_internal_scoretaking
+    return unless self.event_ids.include?("fto")
+    return if scoretaking_software_internal?
+
+    errors.add(:scoretaking_software, I18n.t('competitions.errors.fto_requires_internal_scoretaking'))
+  end
+
   # We check for `present?` specifically so that a value of 0 will return true, and trigger the validation
   validate :auto_close_threshold_validations, if: -> { auto_close_threshold.present? }
   private def auto_close_threshold_validations
@@ -1784,6 +1792,11 @@ class Competition < ApplicationRecord
       competitions = competitions.end_date_passed_since(num_days).pending_report_or_results_posting
     end
 
+    if params[:championship_only].present?
+      championship_only = ActiveRecord::Type::Boolean.new.cast(params[:championship_only])
+      competitions = competitions.where(id: Championship.select(:competition_id)) if championship_only
+    end
+
     query&.split&.each do |part|
       like_query = %w[id name cell_name city_name country_id].map { |column| "competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
@@ -1822,10 +1835,9 @@ class Competition < ApplicationRecord
                                                     guest_entry_status
                                                     guests_per_registration_limit
                                                     guests_enabled
-                                                    uses_qualification?
                                                     allow_registration_without_qualification
                                                     force_comment_in_registration],
-                                           methods: %i[event_ids],
+                                           methods: %i[event_ids uses_qualification?],
                                            include: [])
     user_params = {
       preferredEvents: current_user.preferred_events.pluck(:id),
@@ -1851,10 +1863,6 @@ class Competition < ApplicationRecord
       auto_accept_enabled?: self.auto_accept_preference_disabled?,
       auto_accept_preference: self.auto_accept_preference,
     }
-  end
-
-  def tab_names
-    tabs.pluck(:name)
   end
 
   def available_registration_lanes(current_user)
@@ -1938,8 +1946,8 @@ class Competition < ApplicationRecord
       # TODO: h2h_rounds is a temporary method, which should be removed when full-fledged H2H backend support is added - expected in Q1 2026
       methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids
                   main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids registration_full?
-                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds tab_names],
-      include: %w[delegates organizers],
+                  part_of_competition_series? registration_full_and_accepted? spots_left waiting_list_count h2h_rounds],
+      include: %w[delegates organizers tabs],
     }
     self.as_json(options)
   end
@@ -2001,7 +2009,7 @@ class Competition < ApplicationRecord
         :competition_event,
         :wcif_extensions,
         { participation_source: [:competition_event, { rounds: :competition_event }] },
-        include_results ? { live_results: [:live_attempts] } : {},
+        include_results ? { live_results: %i[live_attempts registration] } : {},
       ] },
       :wcif_extensions,
     ]
