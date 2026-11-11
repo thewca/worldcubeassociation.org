@@ -46,7 +46,9 @@ export default async function PodiumsPage({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">Results</Card.Title>
+        <Card.Title textStyle="s4">
+          {t("competitions.nav.menu.results")}
+        </Card.Title>
         <FilteredResults
           competitionInfo={competitionInfo}
           roundsByEvent={roundsByEvent}
