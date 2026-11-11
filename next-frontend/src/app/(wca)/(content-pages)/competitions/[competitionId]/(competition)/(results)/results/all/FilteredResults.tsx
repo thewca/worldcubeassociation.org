@@ -11,6 +11,9 @@ import HeadToHeadBracket from "@/components/results/HeadToHeadBracket";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
 
+const roundCompare = (a: { wcif_id: string }, b: { wcif_id: string }) =>
+  b.wcif_id.localeCompare(a.wcif_id, undefined, { numeric: true });
+
 export default function FilteredResults({
   competitionInfo,
   roundsByEvent,
@@ -33,7 +36,9 @@ export default function FilteredResults({
         ? round.linked_round_wcif_ids?.join()
         : round.wcif_id,
     ),
-  );
+  )
+    .map((group) => [...group].sort(roundCompare))
+    .sort((a, b) => roundCompare(a[0], b[0]));
 
   return (
     <VStack align="left" gap={4}>
