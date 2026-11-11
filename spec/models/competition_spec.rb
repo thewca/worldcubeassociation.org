@@ -61,7 +61,7 @@ RSpec.describe Competition do
       wcif = competition.to_wcif
       wcif['events'] += [{ 'id' => 'fto', 'rounds' => [] }]
 
-      expect { competition.set_wcif!(wcif, admin) }.to raise_error(ActiveRecord::RecordInvalid, /Internal Live Results/)
+      expect { competition.set_wcif!(wcif, admin) }.to raise_error(ActiveRecord::RecordInvalid, /Integrated Live Results/)
       expect(competition.reload.event_ids).not_to include('fto')
     end
 
