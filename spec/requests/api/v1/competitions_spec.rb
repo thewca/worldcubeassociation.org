@@ -252,11 +252,27 @@ RSpec.describe "API v1 Competitions" do
       end
 
       it "is announced once visible" do
-        announced_competition = create(:competition, :confirmed, :visible, :announced)
+        announced_competition = create(:competition, :confirmed, :visible, :announced, :future)
 
         get api_v1_competition_path(announced_competition)
 
         expect(response.parsed_body["status"]).to eq "announced"
+      end
+
+      it "is results_pending once over without results" do
+        over_competition = create(:competition, :confirmed, :visible, :announced, :past)
+
+        get api_v1_competition_path(over_competition)
+
+        expect(response.parsed_body["status"]).to eq "results_pending"
+      end
+
+      it "is results_posted once results are posted" do
+        posted_competition = create(:competition, :confirmed, :visible, :announced, :past, :results_posted)
+
+        get api_v1_competition_path(posted_competition)
+
+        expect(response.parsed_body["status"]).to eq "results_posted"
       end
 
       it "stays cancelled even though it was announced" do

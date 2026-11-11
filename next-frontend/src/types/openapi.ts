@@ -1424,10 +1424,10 @@ export interface components {
             /** @example Worlds 2003 */
             short_name: string;
             /**
-             * @description Where the competition is in its lifecycle. A cancelled competition stays `cancelled` even though it was announced before.
+             * @description Where the competition is in its lifecycle. A cancelled competition stays `cancelled` even though it was announced before. `results_pending` means it has ended but its results are not posted yet.
              * @enum {string}
              */
-            status: "unconfirmed" | "confirmed" | "announced" | "cancelled";
+            status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "results_posted" | "cancelled";
             /** @example First WCA World Championship */
             information: string | null;
             /** @example https://cubingusa.org/worlds */
@@ -1442,8 +1442,6 @@ export interface components {
              * @example 2025-07-06
              */
             end_date: string | null;
-            /** Format: date-time */
-            results_posted_at: string | null;
             /** @enum {string} */
             scoretaking_software: "external" | "wca_live" | "internal";
             /** @example 123 */

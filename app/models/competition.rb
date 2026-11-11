@@ -2326,7 +2326,13 @@ class Competition < ApplicationRecord
     if cancelled?
       "cancelled"
     elsif show_at_all?
-      "announced"
+      if results_posted_at?
+        "results_posted"
+      elsif probably_over?
+        "results_pending"
+      else
+        "announced"
+      end
     elsif confirmed?
       "confirmed"
     else
@@ -2344,7 +2350,6 @@ class Competition < ApplicationRecord
       "website" => website,
       "start_date" => start_date,
       "end_date" => end_date,
-      "results_posted_at" => results_posted_at,
       "scoretaking_software" => scoretaking_software,
       "number_of_bookmarks" => number_of_bookmarks,
       "competition_series_ids" => competition_series&.public_competitions&.ids || [],

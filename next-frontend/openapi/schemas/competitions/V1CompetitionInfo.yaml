@@ -10,7 +10,6 @@ required:
   - website
   - start_date
   - end_date
-  - results_posted_at
   - scoretaking_software
   - number_of_bookmarks
   - competition_series_ids
@@ -34,8 +33,9 @@ properties:
     type: string
     description: >-
       Where the competition is in its lifecycle. A cancelled competition stays `cancelled` even
-      though it was announced before.
-    enum: [unconfirmed, confirmed, announced, cancelled]
+      though it was announced before. `results_pending` means it has ended but its results are not
+      posted yet.
+    enum: [unconfirmed, confirmed, announced, results_pending, results_posted, cancelled]
   information:
     type: [string, "null"]
     example: "First WCA World Championship"
@@ -50,9 +50,6 @@ properties:
     type: [string, "null"]
     format: date
     example: "2025-07-06"
-  results_posted_at:
-    type: [string, "null"]
-    format: date-time
   scoretaking_software:
     type: string
     enum: [external, wca_live, internal]
