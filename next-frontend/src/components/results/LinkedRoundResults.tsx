@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { components } from "@/types/openapi";
-import { Heading, HStack, Switch } from "@chakra-ui/react";
+import { HStack, Switch } from "@chakra-ui/react";
 import _ from "lodash";
-import events from "@/lib/wca/data/events";
 import formats from "@/lib/wca/data/formats";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import { useT } from "@/lib/i18n/useI18n";
@@ -54,9 +53,6 @@ export default function LinkedRoundResults({
   return (
     <>
       <HStack justifyContent="space-between">
-        <Heading textStyle="h3">
-          {events.byId[eventId].name} {t("competitions.live.combined_title")}
-        </Heading>
         <Switch.Root
           checked={showAll}
           onCheckedChange={(e) => setShowAll(e.checked)}

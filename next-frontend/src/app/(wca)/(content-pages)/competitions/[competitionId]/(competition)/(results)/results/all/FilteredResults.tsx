@@ -3,7 +3,7 @@
 import { Fragment, useState } from "react";
 import _ from "lodash";
 import { components } from "@/types/openapi";
-import { Heading, VStack } from "@chakra-ui/react";
+import { Accordion, Heading, VStack } from "@chakra-ui/react";
 import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import LinkedRoundResults from "@/components/results/LinkedRoundResults";
@@ -48,36 +48,66 @@ export default function FilteredResults({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
-      {roundGroups.map(([round, ...linkedRounds]) =>
-        linkedRounds.length > 0 ? (
-          <LinkedRoundResults
-            key={round.wcif_id}
-            rounds={[round, ...linkedRounds]}
-            eventId={activeEventId}
-          />
-        ) : (
-          <Fragment key={round.wcif_id}>
-            <Heading textStyle="h3">
-              {events.byId[activeEventId].name}{" "}
-              {t(`rounds.${round.round_type_id}.name`)}
-            </Heading>
-            {h2hRoundsById[round.wcif_id] ? (
-              <HeadToHeadBracket round={h2hRoundsById[round.wcif_id]} />
+
+      <Accordion.Root
+        key={activeEventId}
+        multiple
+        defaultValue={["0"]}
+        variant="enclosed"
+      >
+        {roundGroups.map(([round, ...linkedRounds], index) => (
+          <Accordion.Item key={index} value={index.toString()}>
+            {linkedRounds.length > 0 ? (
+              <>
+                <Accordion.ItemTrigger>
+                  <Heading textStyle="h4">
+                    {events.byId[activeEventId].name}{" "}
+                    {t("competitions.live.combined_title")}
+                  </Heading>
+                  <Accordion.ItemIndicator />
+                </Accordion.ItemTrigger>
+                <Accordion.ItemContent>
+                  <Accordion.ItemBody>
+                    <LinkedRoundResults
+                      key={round.wcif_id}
+                      rounds={[round, ...linkedRounds]}
+                      eventId={activeEventId}
+                    />
+                  </Accordion.ItemBody>
+                </Accordion.ItemContent>
+              </>
             ) : (
-              /* Already ordered by `pos`, the position within this round. */
-              <ResultsTable
-                results={round.results}
-                eventId={activeEventId}
-                formatId={round.format_id}
-                rankingMode={round.ranking_mode}
-                t={t}
-                isAdmin={false}
-                solveTextAlign="center"
-              />
+              <>
+                <Accordion.ItemTrigger>
+                  <Heading textStyle="h4">
+                    {events.byId[activeEventId].name}{" "}
+                    {t(`rounds.${round.round_type_id}.name`)}
+                  </Heading>
+                  <Accordion.ItemIndicator />
+                </Accordion.ItemTrigger>
+                <Accordion.ItemContent>
+                  <Accordion.ItemBody>
+                    {h2hRoundsById[round.wcif_id] ? (
+                      <HeadToHeadBracket round={h2hRoundsById[round.wcif_id]} />
+                    ) : (
+                      /* Already ordered by `pos`, the position within this round. */
+                      <ResultsTable
+                        results={round.results}
+                        eventId={activeEventId}
+                        formatId={round.format_id}
+                        rankingMode={round.ranking_mode}
+                        t={t}
+                        isAdmin={false}
+                        solveTextAlign="center"
+                      />
+                    )}
+                  </Accordion.ItemBody>
+                </Accordion.ItemContent>
+              </>
             )}
-          </Fragment>
-        ),
-      )}
+          </Accordion.Item>
+        ))}
+      </Accordion.Root>
     </VStack>
   );
 }
