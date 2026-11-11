@@ -83,10 +83,6 @@ export default function ByPersonResults({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">
-          {t("competitions.nav.menu.results")}
-        </Card.Title>
-
         <Filters
           filters={filters}
           changeFilters={changeFilters}

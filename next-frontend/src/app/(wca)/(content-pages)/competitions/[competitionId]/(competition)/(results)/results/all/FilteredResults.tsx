@@ -65,7 +65,7 @@ export default function FilteredResults({
           <Accordion.Item key={index} value={index.toString()}>
             {linkedRounds.length > 0 ? (
               <>
-                <Accordion.ItemTrigger>
+                <Accordion.ItemTrigger justifyContent="space-between">
                   <Heading textStyle="h4">
                     {events.byId[activeEventId].name}{" "}
                     {t("competitions.live.combined_title")}
@@ -84,7 +84,7 @@ export default function FilteredResults({
               </>
             ) : (
               <>
-                <Accordion.ItemTrigger>
+                <Accordion.ItemTrigger justifyContent="space-between">
                   <Heading textStyle="h4">
                     {events.byId[activeEventId].name}{" "}
                     {t(`rounds.${round.round_type_id}.name`)}
