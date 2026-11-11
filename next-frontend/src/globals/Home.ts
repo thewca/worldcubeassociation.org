@@ -37,21 +37,14 @@ const AnnouncementsSection: Block = {
   imageURL: "/payload/announcement_section.png",
   fields: [
     {
-      name: "mainAnnouncement",
-      type: "relationship",
-      relationTo: "announcements",
+      name: "announcementCount",
+      type: "number",
       required: true,
+      min: 1,
+      defaultValue: 4,
       admin: {
-        description: "Announcement shown large at the top of the section.",
-      },
-    },
-    {
-      name: "furtherAnnouncements",
-      type: "relationship",
-      relationTo: "announcements",
-      hasMany: true,
-      admin: {
-        description: "Announcements listed under the main one.",
+        description:
+          "How many of the latest announcements to show. The first one is shown large at the top, pinned announcements come first.",
       },
     },
     {
