@@ -128,7 +128,7 @@ RSpec.feature "Competition events management" do
         select_from_ui(modal, "qualificationResultType", "Single")
         select_from_ui(modal, "qualificationType", "Any result")
 
-        modal.find("div.field", text: "Qualification Deadline")
+        modal.find("div.field", text: "Qualification Window Deadline")
              .find("input")
              .fill_in with: qualification_date.strftime('%m/%d/%Y')
 
