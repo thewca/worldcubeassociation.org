@@ -1449,6 +1449,13 @@ export interface components {
              *     ]
              */
             competition_series_ids: string[];
+            /**
+             * @description One entry per championship this competition holds: `world`, a continent ID, a country ISO2 code, or a multi-country group such as `greater_china`. Empty if it is not a championship.
+             * @example [
+             *       "world"
+             *     ]
+             */
+            championship_types: string[];
             tabs: {
                 id: number;
                 name: string;

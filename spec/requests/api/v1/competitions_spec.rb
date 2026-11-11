@@ -223,6 +223,14 @@ RSpec.describe "API v1 Competitions" do
       expect(unannounced_sibling.competition_series).to eq series
     end
 
+    it "lists the championships it holds" do
+      championship = create(:competition, :visible, championship_types: %w[world PL])
+
+      get api_v1_competition_path(championship)
+
+      expect(response.parsed_body["championship_types"]).to match_array %w[world PL]
+    end
+
     it "serializes delegates without their deprecated team data" do
       get api_v1_competition_path(competition)
 

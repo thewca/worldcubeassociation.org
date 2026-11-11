@@ -2317,6 +2317,7 @@ class Competition < ApplicationRecord
     :events,
     :competition_events,
     :tabs,
+    :championships,
     { delegates: V1_INFO_STAFF_INCLUDES, organizers: V1_INFO_STAFF_INCLUDES },
   ].freeze
 
@@ -2332,6 +2333,7 @@ class Competition < ApplicationRecord
       "scoretaking_software" => scoretaking_software,
       "number_of_bookmarks" => number_of_bookmarks,
       "competition_series_ids" => competition_series&.public_competitions&.ids || [],
+      "championship_types" => championships.map(&:championship_type),
       "tabs" => tabs.as_json(only: %w[id name]),
       "events" => {
         "event_ids" => event_ids,

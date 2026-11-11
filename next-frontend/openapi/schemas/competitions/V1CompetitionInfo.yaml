@@ -12,6 +12,7 @@ required:
   - scoretaking_software
   - number_of_bookmarks
   - competition_series_ids
+  - championship_types
   - tabs
   - events
   - venue
@@ -55,6 +56,14 @@ properties:
     items:
       type: string
     example: ["WC2003", "WC2003Side"]
+  championship_types:
+    type: array
+    description: >-
+      One entry per championship this competition holds: `world`, a continent ID, a country ISO2
+      code, or a multi-country group such as `greater_china`. Empty if it is not a championship.
+    items:
+      type: string
+    example: ["world"]
   tabs:
     type: array
     items:
