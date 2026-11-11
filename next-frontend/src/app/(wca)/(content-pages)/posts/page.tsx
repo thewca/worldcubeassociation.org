@@ -5,7 +5,10 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { connection } from "next/server";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
-import { announcementColorPalette } from "@/components/announcements/announcement";
+import {
+  announcementColorPalette,
+  releasedAnnouncementsQuery,
+} from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 import AnnouncementsPagination from "@/app/(wca)/(content-pages)/posts/announcementsPagination";
 import Loading from "@/components/ui/loading";
@@ -48,7 +51,7 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
   const payload = await getPayload({ config });
   const announcements = await payload.find({
     collection: "announcements",
-    sort: "-publishedAt",
+    ...releasedAnnouncementsQuery(),
     page: currentPage,
     limit: ANNOUNCEMENTS_PER_PAGE,
   });
