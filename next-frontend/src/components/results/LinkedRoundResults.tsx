@@ -52,11 +52,12 @@ export default function LinkedRoundResults({
 
   return (
     <>
-      <HStack justifyContent="space-between">
+      <HStack justifyContent={{ base: "start", md: "end" }}>
         <Switch.Root
           checked={showAll}
           onCheckedChange={(e) => setShowAll(e.checked)}
           colorPalette="green"
+          pb="2"
         >
           <Switch.HiddenInput />
           <Switch.Control>
