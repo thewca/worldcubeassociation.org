@@ -2325,6 +2325,7 @@ class Competition < ApplicationRecord
     {
       "id" => id,
       "name" => name,
+      "short_name" => short_name,
       "information" => information,
       "website" => website,
       "start_date" => start_date,

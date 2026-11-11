@@ -4,6 +4,7 @@ description: >-
 required:
   - id
   - name
+  - short_name
   - information
   - website
   - start_date
@@ -25,6 +26,9 @@ properties:
   name:
     type: string
     example: "WCA World Championship 2003"
+  short_name:
+    type: string
+    example: "Worlds 2003"
   information:
     type: [string, "null"]
     example: "First WCA World Championship"

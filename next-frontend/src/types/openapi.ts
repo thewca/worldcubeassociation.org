@@ -1421,6 +1421,8 @@ export interface components {
             id: string;
             /** @example WCA World Championship 2003 */
             name: string;
+            /** @example Worlds 2003 */
+            short_name: string;
             /** @example First WCA World Championship */
             information: string | null;
             /** @example https://cubingusa.org/worlds */
