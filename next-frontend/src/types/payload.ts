@@ -578,9 +578,14 @@ export interface Announcement {
   };
   contentMarkdown?: string | null;
   /**
-   * Date the announcement was published, used to sort the announcements list.
+   * The announcement stays hidden until this moment. Also used to sort the announcements list, newest first.
    */
   publishedAt: string;
+  /**
+   * Pinned announcements are listed before all others, most recently pinned first.
+   */
+  isPinned?: boolean | null;
+  pinnedAt?: string | null;
   /**
    * WCA user credited as the author of the announcement.
    */
@@ -1037,6 +1042,8 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   content?: T;
   contentMarkdown?: T;
   publishedAt?: T;
+  isPinned?: T;
+  pinnedAt?: T;
   publishedBy?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1638,13 +1645,9 @@ export interface BentoActionButton {
  */
 export interface AnnouncementsSectionBlock {
   /**
-   * Announcement shown large at the top of the section.
+   * How many of the latest announcements to show. The first one is shown large at the top, pinned announcements come first.
    */
-  mainAnnouncement: string | Announcement;
-  /**
-   * Announcements listed under the main one.
-   */
-  furtherAnnouncements?: (string | Announcement)[] | null;
+  announcementCount: number;
   /**
    * Show a link to the full list of announcements at the bottom of the section
    */
@@ -2679,8 +2682,7 @@ export interface BentoActionButtonSelect<T extends boolean = true> {
  * via the `definition` "AnnouncementsSectionBlock_select".
  */
 export interface AnnouncementsSectionBlockSelect<T extends boolean = true> {
-  mainAnnouncement?: T;
-  furtherAnnouncements?: T;
+  announcementCount?: T;
   showSeeAll?: T;
   colorPalette?: T;
   id?: T;
