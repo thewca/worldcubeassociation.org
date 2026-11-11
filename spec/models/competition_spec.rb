@@ -51,7 +51,7 @@ RSpec.describe Competition do
 
     it "rejects the event without internal scoretaking" do
       competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto], scoretaking_software: :external)
-      expect(competition).to be_invalid_with_errors(scoretaking_software: ["must be set to Internal Live Results when holding Face Turning Octahedron."])
+      expect(competition).to be_invalid_with_errors(scoretaking_software: ["must be set to Integrated Live Results when holding Face Turning Octahedron."])
     end
 
     it "rejects adding the event through the WCIF without internal scoretaking" do

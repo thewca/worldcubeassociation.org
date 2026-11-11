@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get recent and future competitions using internal live results, grouped by status */
+        /** Get recent and future competitions using Integrated Live Results, grouped by status */
         get: operations["getLiveCompetitions"];
         put?: never;
         post?: never;
