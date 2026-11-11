@@ -8,6 +8,7 @@ import EditIcon from "@/components/icons/EditIcon";
 import { WarningIcon } from "@payloadcms/ui";
 import { Tooltip } from "@/components/ui/tooltip";
 import { dateRange } from "@/lib/wca/dates";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { components } from "@/types/openapi";
 import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
 import RailsLink from "@/components/RailsLink";
@@ -46,9 +47,11 @@ export function LocationTableCell({ competition }: TableCellProps) {
 }
 
 export function DateTableCell({ competition }: TableCellProps) {
+  const lng = useLocale();
+
   return (
     <Table.Cell>
-      {dateRange(competition.start_date, competition.end_date, {
+      {dateRange(competition.start_date, competition.end_date, lng, {
         separator: "-",
       })}
     </Table.Cell>

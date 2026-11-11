@@ -1163,7 +1163,7 @@ pt:
         confirmation_link: Confirmar a minha conta.
         activate: >-
           Após a ativação poderá entrar na sua conta no website da World Cube Association:
-          
+
         login_form: formulário de login
         addendum: >-
           Este email é gerado automaticamente. Se não registou uma conta no
@@ -3216,11 +3216,6 @@ pt:
         competitors: Competidores
         scrambles: Embaralhamentos
     results_table:
-      h2h_results_disclaimer: >-
-        Os resultados foram determinados por uma Final Frente a Frente. Apenas a
-        ordem de classificação e a melhor resolução são apresentadas, uma vez
-        que a exibição completa dos resultados de Finais Frente a Frente ainda
-        está em desenvolvimento.
       wca_profile: Perfil da WCA
       event: Evento
       round: Ronda

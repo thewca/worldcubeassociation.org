@@ -197,6 +197,7 @@ en:
     type_label: "Qualification Type"
     result_type: "Result Type"
     for_event: "Qualification for %{event}"
+    preview: "Qualification preview"
     type:
       none: "No qualification"
       result: "By Result"
@@ -215,8 +216,16 @@ en:
       ranking: "Top %{ranking} by average"
       any_result: "Any average"
     deadline:
-      description: "Qualification Deadline"
+      description: "Qualification Window Deadline"
       by_date: "by %{date}"
+    earliest_date:
+      description: "Qualification Window Start Date"
+      from_date: "on or after %{date}"
+      window_too_short: "The Window Start Date must be at least %{days} days before the Window Deadline."
+      explanation:
+        '1': "Qualification Window Start Date is optional. If left empty, any result achieved before the Deadline counts."
+        '2': "If a Window Start Date is entered, only results achieved on or after the Window Start Date count towards the qualification."
+        '3': "The Window Start Date must be at least %{days} days before the Window Deadline."
   #context: other activities which occur in the schedule
   activity:
     registration: "On-site registration"
@@ -2417,8 +2426,15 @@ en:
       admin: "Admin"
       results: "Results"
       events: "Events"
+    h2h:
+      set_number: "Set %{number}"
+      stage_of: "Stage of %{number}"
+      quarterfinal_stage: "Quarterfinal Stage"
+      semifinal_stage: "Semifinal Stage"
+      final_stage: "Final Stage"
+      third_place: "Third Place"
     results_table:
-      h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
+      h2h_results_disclaimer_html: "Results determined by a Head-to-Head Final. Only placement order and best solve are shown here; the full Head-to-Head bracket is available on the <a href=\"%{results_url}\">new results page</a>."
       show_all_linked_results: "Show results from both rounds"
       linked_results_disclaimer_html: "This round is part of a Dual Round. The results below are shown per round; combined results across both rounds are available on the <a href=\"%{results_url}\">new results page</a>."
       wca_profile: "WCA profile"
