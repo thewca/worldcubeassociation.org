@@ -210,6 +210,7 @@ RSpec.describe "API v1 Competitions" do
 
       expect(response).to be_successful
       expect(response.parsed_body).to include("id" => competition.id, "short_name" => competition.short_name, "events" => include("event_ids" => ["333"]))
+      expect(response.parsed_body["venue"]).to include("latitude_degrees" => competition.latitude_degrees, "longitude_degrees" => competition.longitude_degrees)
     end
 
     it "lists only the announced competitions of its series" do

@@ -99,7 +99,7 @@ properties:
         example: "333"
   venue:
     type: object
-    required: [name, address, details, city, country_iso2]
+    required: [name, address, details, city, country_iso2, latitude_degrees, longitude_degrees]
     properties:
       name:
         type: string
@@ -116,6 +116,12 @@ properties:
       country_iso2:
         type: [string, "null"]
         example: "US"
+      latitude_degrees:
+        type: [number, "null"]
+        example: 47.611387
+      longitude_degrees:
+        type: [number, "null"]
+        example: -122.332554
   registration_info:
     type: object
     required:

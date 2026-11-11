@@ -1488,6 +1488,10 @@ export interface components {
                 city: string;
                 /** @example US */
                 country_iso2: string | null;
+                /** @example 47.611387 */
+                latitude_degrees: number | null;
+                /** @example -122.332554 */
+                longitude_degrees: number | null;
             };
             registration_info: {
                 /**

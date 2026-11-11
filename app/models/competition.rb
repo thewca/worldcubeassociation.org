@@ -2360,6 +2360,8 @@ class Competition < ApplicationRecord
         "details" => venue_details,
         "city" => city,
         "country_iso2" => country_iso2,
+        "latitude_degrees" => latitude_degrees,
+        "longitude_degrees" => longitude_degrees,
       },
       "registration_info" => {
         "opens_at" => registration_open,
