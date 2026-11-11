@@ -83,8 +83,8 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
   end
 
   def show_mine
-    registration = Registration.find_by!(competition_id: params_competition_id, user: authenticated_user)
-    render json: registration.to_v2_json(admin: true, includes_admin_notes: false)
+    registration = Registration.find_by(competition_id: params_competition_id, user: authenticated_user)
+    render json: registration&.to_v2_json(admin: true, includes_admin_notes: false)
   end
 
   def registration_config

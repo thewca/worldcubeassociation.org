@@ -103,11 +103,7 @@ export default async function RegisterPage({
     return <OpenapiError t={t} response={stepConfig.response} />;
   }
 
-  // A 404 is how the backend says "this user has not registered yet", which is a normal state here.
-  if (
-    registrationResponse.error &&
-    registrationResponse.response.status !== 404
-  ) {
+  if (registrationResponse.error) {
     return <OpenapiError t={t} response={registrationResponse.response} />;
   }
 
@@ -157,7 +153,7 @@ export default async function RegisterPage({
             competitionInfo={competitionInfo}
             eligibility={eligibility.data}
             userId={session.user.wcaUserId}
-            initialRegistration={registrationResponse.data ?? null}
+            initialRegistration={registrationResponse.data}
           />
         </Card.Body>
       </Card.Root>

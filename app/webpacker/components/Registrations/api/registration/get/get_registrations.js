@@ -52,7 +52,8 @@ export async function getRegistrationByUser(
 }
 
 export async function getMyRegistration(competitionId) {
-  return fetchRegistrationOrNull(myRegistrationUrl(competitionId));
+  const { data } = await fetchJsonOrError(myRegistrationUrl(competitionId));
+  return data;
 }
 
 export async function getSingleRegistration(

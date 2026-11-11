@@ -12,10 +12,12 @@ get:
         type: string
   responses:
     '200':
-      description: Successful response
+      description: The user's registration, or null if they are not registered
       content:
         application/json:
           schema:
-            $ref: '../../schemas/registrations/RegistrationDataV2.yaml'
+            oneOf:
+              - $ref: '../../schemas/registrations/RegistrationDataV2.yaml'
+              - type: 'null'
     '4XX':
       $ref: '../../errorResponses/RegistrationError.yaml'

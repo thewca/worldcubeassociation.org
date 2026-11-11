@@ -2613,13 +2613,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** @description The user's registration, or null if they are not registered */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RegistrationDataV2"];
+                    "application/json": components["schemas"]["RegistrationDataV2"] | null;
                 };
             };
             "4XX": components["responses"]["RegistrationError"];
