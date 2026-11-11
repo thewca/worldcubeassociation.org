@@ -519,6 +519,18 @@ RSpec.describe "API Competitions" do
             patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
           end.not_to(change { competition.reload.competition_venues.size })
         end
+
+        it "backs up the WCIF without an OAuth application" do
+          patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
+          expect(CreateWcifRevisionJob).to have_been_enqueued.with(competition, competition.organizers.first, nil)
+        end
+
+        it "doesn't back up an invalid WCIF" do
+          wcif["schedule"]["venues"] = []
+          wcif["schedule"]["startDate"] = nil
+          patch api_v0_competition_update_wcif_path(competition), params: wcif.to_json, headers: headers
+          expect(CreateWcifRevisionJob).not_to have_been_enqueued
+        end
       end
     end
 
@@ -547,10 +559,16 @@ RSpec.describe "API Competitions" do
 
       context "as a competition manager" do
         let(:scopes) { Doorkeeper::OAuth::Scopes.new }
+        let(:oauth_application) { create(:oauth_application) }
 
         before :each do
           scopes.add "manage_competitions"
-          api_sign_in_as(competition.organizers.first, scopes: scopes)
+          api_sign_in_as(competition.organizers.first, scopes: scopes, application: oauth_application)
+        end
+
+        it "backs up the WCIF with the OAuth application" do
+          patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w[333]).to_json, headers: headers
+          expect(CreateWcifRevisionJob).to have_been_enqueued.with(competition, competition.organizers.first, oauth_application)
         end
 
         it "can update wcif" do
