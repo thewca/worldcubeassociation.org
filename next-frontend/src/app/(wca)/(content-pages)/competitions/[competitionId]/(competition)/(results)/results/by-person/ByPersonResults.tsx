@@ -127,7 +127,6 @@ function ResultsList({
       defaultValue={sessionWcaId ? [sessionWcaId] : undefined}
       multiple
       variant="enclosed"
-      key={sessionWcaId}
     >
       {_.map(filteredResults, (results, wcaId) => (
         <Accordion.Item key={wcaId} value={wcaId}>
