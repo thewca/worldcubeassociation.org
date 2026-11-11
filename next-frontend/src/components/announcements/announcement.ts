@@ -1,4 +1,6 @@
 import _ from "lodash";
+import { DateTime } from "luxon";
+import type { Sort, Where } from "payload";
 import { route } from "nextjs-routes";
 import { getFullDateTimeStringNoSeconds } from "@/lib/wca/dates";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
@@ -46,3 +48,10 @@ export const announcementByline = (
   announcement: Announcement,
   locale: string,
 ) => getFullDateTimeStringNoSeconds(announcement.publishedAt, locale);
+
+/// Hides announcements whose scheduled release is still ahead. Pinned ones come
+/// first; MongoDB sorts the missing `pinnedAt` of unpinned ones last.
+export const releasedAnnouncementsQuery = (): { where: Where; sort: Sort } => ({
+  where: { publishedAt: { less_than_equal: DateTime.now().toISO() } },
+  sort: ["-pinnedAt", "-publishedAt"],
+});
