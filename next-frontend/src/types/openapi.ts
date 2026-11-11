@@ -1487,7 +1487,7 @@ export interface components {
                 /** @example Seattle, Washington */
                 city: string;
                 /** @example US */
-                country_iso2: string | null;
+                country_iso2: string;
                 /** @example 47.611387 */
                 latitude_degrees: number | null;
                 /** @example -122.332554 */
@@ -1525,7 +1525,7 @@ export interface components {
                 competitor_can_cancel: "not_accepted" | "always" | "unpaid";
                 fees: {
                     /** @example USD */
-                    currency_code: string | null;
+                    currency_code: string;
                     /** @example 12000 */
                     base_entry_lowest_denomination: number | null;
                     /** @example 1000 */

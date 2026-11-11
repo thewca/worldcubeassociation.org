@@ -114,7 +114,7 @@ properties:
         type: string
         example: "Seattle, Washington"
       country_iso2:
-        type: [string, "null"]
+        type: string
         example: "US"
       latitude_degrees:
         type: [number, "null"]
@@ -178,7 +178,7 @@ properties:
         required: [currency_code, base_entry_lowest_denomination, guests_entry_lowest_denomination, on_the_spot_entry_lowest_denomination]
         properties:
           currency_code:
-            type: [string, "null"]
+            type: string
             example: "USD"
           base_entry_lowest_denomination:
             type: [integer, "null"]
