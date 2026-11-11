@@ -8,13 +8,6 @@ class RenameMarkdownImagesToAttachedImages < ActiveRecord::Migration[8.1]
       execute "UPDATE active_storage_attachments SET record_type = 'AttachedImage' WHERE record_type = 'MarkdownImage'"
     end
 
-    create_table :attached_image_usages do |t|
-      t.references :attached_image, null: false, foreign_key: true
-      t.references :attachable, polymorphic: true, null: false, type: :string
-
-      t.timestamps
-
-      t.index %i[attached_image_id attachable_type attachable_id], unique: true, name: "index_attached_image_usages_uniqueness"
-    end
+    add_reference :attached_images, :attachable, polymorphic: true, type: :string
   end
 end

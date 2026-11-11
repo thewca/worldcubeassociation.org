@@ -282,21 +282,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_07_120000) do
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
   end
 
-  create_table "attached_image_usages", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "attached_image_id", null: false
-    t.string "attachable_type", null: false
-    t.string "attachable_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["attachable_type", "attachable_id"], name: "index_attached_image_usages_on_attachable"
-    t.index ["attached_image_id", "attachable_type", "attachable_id"], name: "index_attached_image_usages_uniqueness", unique: true
-    t.index ["attached_image_id"], name: "index_attached_image_usages_on_attached_image_id"
-  end
-
   create_table "attached_images", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "attachable_id"
+    t.string "attachable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "uploaded_by_id"
+    t.index ["attachable_type", "attachable_id"], name: "index_attached_images_on_attachable"
     t.index ["uploaded_by_id"], name: "index_attached_images_on_uploaded_by_id"
   end
 
@@ -1713,7 +1705,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_07_120000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "attached_image_usages", "attached_images"
   add_foreign_key "attached_images", "users", column: "uploaded_by_id"
   add_foreign_key "concise_average_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "concise_single_results", "results", on_update: :cascade, on_delete: :cascade

@@ -4,7 +4,6 @@ module HasAttachedImages
   extend ActiveSupport::Concern
 
   included do
-    has_many :attached_image_usages, as: :attachable, dependent: :destroy
-    has_many :attached_images, through: :attached_image_usages
+    has_many :attached_images, as: :attachable, dependent: :nullify
   end
 end

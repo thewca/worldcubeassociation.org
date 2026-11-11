@@ -750,7 +750,6 @@ class Competition < ApplicationRecord
              'tickets_competition_result',
              'result_ticket',
              'lead_delegate',
-             'attached_image_usages',
              'attached_images'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
