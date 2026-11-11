@@ -358,11 +358,12 @@ sk:
       dob_contact:
         dob: Váš správny deň narodenia vo formáte RRRR-MM-DD
         document: >-
-          Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte pridať
-          fotku hocijakého legálneho dokumentu (občiansky preukaz, vodičský preukaz,
-          študentská karta, pas, rodný list...). Musí tam byť viditeľné meno a dátum
-          narodenia a musí to byť pochopiteľné pre anglicky hovoriaceho človeka (alebo
-          kontaktuje miestneho delegáta WCA ak nemáte taký dokument).
+          Nahrajte fotografiu oficiálneho dokumentu potvrdzujucého vašu identitu a
+          dátum narodenia (napr. občiansky preukaz, vodičský preukaz, ISIC, pas či
+          rodný list). Meno a dátum narodenia musia byť na fotografii zreteľne čitateľné
+          a zrozumiteľné aj pre anglicky hovoriacich (v prípade, že daný dokument
+          nemáte, kontaktujte miestneho WCA delegáta). Na dokumente stačí ponechať
+          informácie o mene a dátume narodenia, ostatné informácie nemusia byť viditeľné.
       post:
         body: >-
           Použite &lt;!-- break --&gt; aby ste ukázali ukážku domácej stránky.
@@ -372,11 +373,8 @@ sk:
         schedule_url: >-
           Odkaz na zverejnený harmonogram (napr. https://www.cubingusa.com/usnationals2016/schedule.php)
         organization: >-
-          Napíšte niečo o organizačnom tíme a ako pracovali na súťaži, ak
-          poznáte ich minulosť a či ste si všimli pokrok na ich práci, či boli
-          profesionálni a aktívni v dňoch súťaže, problémy, ktoré sa
-          vyskytli(napr. nedodržiavanie rozvrhu-oneskorenie) a ako ste ich
-          vyriešili...Prosím, buďte struční a nepíšte nepravdivé veci.
+          Vyššie uvedené body sú len pre usmernenie na písanie reportu. Nepoužité
+          časti vymažte.
         incidents: >-
           Napíšte sem incidenty, ktoré stoja za to byť spomenuté. Očíslujte ich začínajúc
           1., aby sa k nim mohli ostatní vyjadriť prostredníctvom daného čísla. Aj
