@@ -1423,6 +1423,11 @@ export interface components {
             name: string;
             /** @example Worlds 2003 */
             short_name: string;
+            /**
+             * @description Where the competition is in its lifecycle. A cancelled competition stays `cancelled` even though it was announced before.
+             * @enum {string}
+             */
+            status: "unconfirmed" | "confirmed" | "announced" | "cancelled";
             /** @example First WCA World Championship */
             information: string | null;
             /** @example https://cubingusa.org/worlds */

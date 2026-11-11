@@ -5,6 +5,7 @@ required:
   - id
   - name
   - short_name
+  - status
   - information
   - website
   - start_date
@@ -29,6 +30,12 @@ properties:
   short_name:
     type: string
     example: "Worlds 2003"
+  status:
+    type: string
+    description: >-
+      Where the competition is in its lifecycle. A cancelled competition stays `cancelled` even
+      though it was announced before.
+    enum: [unconfirmed, confirmed, announced, cancelled]
   information:
     type: [string, "null"]
     example: "First WCA World Championship"

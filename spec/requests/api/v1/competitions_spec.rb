@@ -231,6 +231,42 @@ RSpec.describe "API v1 Competitions" do
       expect(response.parsed_body["championship_types"]).to match_array %w[world PL]
     end
 
+    describe "status" do
+      it "is unconfirmed for a draft" do
+        draft = create(:competition, :not_visible, :with_organizer)
+        api_sign_in_as(draft.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(draft)
+
+        expect(response.parsed_body["status"]).to eq "unconfirmed"
+      end
+
+      it "is confirmed once confirmed but not yet announced" do
+        confirmed_competition = create(:competition, :confirmed, :not_visible)
+        api_sign_in_as(confirmed_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(confirmed_competition)
+
+        expect(response.parsed_body["status"]).to eq "confirmed"
+      end
+
+      it "is announced once visible" do
+        announced_competition = create(:competition, :confirmed, :visible, :announced)
+
+        get api_v1_competition_path(announced_competition)
+
+        expect(response.parsed_body["status"]).to eq "announced"
+      end
+
+      it "stays cancelled even though it was announced" do
+        cancelled_competition = create(:competition, :confirmed, :visible, :cancelled)
+
+        get api_v1_competition_path(cancelled_competition)
+
+        expect(response.parsed_body["status"]).to eq "cancelled"
+      end
+    end
+
     it "serializes delegates without their deprecated team data" do
       get api_v1_competition_path(competition)
 

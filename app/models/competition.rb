@@ -2321,11 +2321,25 @@ class Competition < ApplicationRecord
     { delegates: V1_INFO_STAFF_INCLUDES, organizers: V1_INFO_STAFF_INCLUDES },
   ].freeze
 
+  # `show_at_all` rather than `announced?`, so the status agrees with who may see the competition.
+  def lifecycle_status
+    if cancelled?
+      "cancelled"
+    elsif show_at_all?
+      "announced"
+    elsif confirmed?
+      "confirmed"
+    else
+      "unconfirmed"
+    end
+  end
+
   def to_v1_info_json
     {
       "id" => id,
       "name" => name,
       "short_name" => short_name,
+      "status" => lifecycle_status,
       "information" => information,
       "website" => website,
       "start_date" => start_date,
