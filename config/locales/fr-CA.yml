@@ -3473,12 +3473,23 @@ fr-CA:
         confrontation. Les résultats ci-dessous sont affichés par tour ; les 
         résultats combinés des deux tours sont disponibles sur la <a 
         href="%{results_url}">nouvelle page des résultats</a>.
+      h2h_results_disclaimer_html: Résultats déterminés par une finale en 
+        face-à-face. Seuls l'ordre de classement et la meilleure résolution sont
+        affichés ici ; le tableau complet du face-à-face est disponible sur la 
+        <a href="%{results_url}">nouvelle page des résultats</a>.
     scrambles_table:
       group: Groupe
       scramble: Mélange
     competition_series_fields:
       add_series: Ajouter à une Série
       remove_series: Retirer de la Série
+    h2h:
+      set_number: Série %{number}
+      stage_of: '%{number} ème de finale'
+      quarterfinal_stage: Quart de finale
+      semifinal_stage: Demi-finale
+      final_stage: Finale
+      third_place: Troisième place
   competition_tabs:
     headers:
       tabs: Onglets
