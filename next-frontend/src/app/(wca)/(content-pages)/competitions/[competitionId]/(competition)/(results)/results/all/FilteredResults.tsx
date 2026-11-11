@@ -3,13 +3,15 @@
 import { Fragment, useState } from "react";
 import _ from "lodash";
 import { components } from "@/types/openapi";
-import { Accordion, Heading, VStack } from "@chakra-ui/react";
+import { Accordion, Box, Heading, VStack } from "@chakra-ui/react";
 import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import LinkedRoundResults from "@/components/results/LinkedRoundResults";
 import HeadToHeadBracket from "@/components/results/HeadToHeadBracket";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
+import useIsScrolled from "@/lib/hooks/useIsScrolled";
+import BackToTopButton from "@/components/BackToTopButton";
 
 const roundCompare = (a: { wcif_id: string }, b: { wcif_id: string }) =>
   b.wcif_id.localeCompare(a.wcif_id, undefined, { numeric: true });
@@ -28,6 +30,8 @@ export default function FilteredResults({
   );
 
   const { t } = useT();
+
+  const { isScrolledDown, topSentinelRef } = useIsScrolled();
 
   // The rounds of a Dual Round are shown together, in place of the first one.
   const roundGroups = _.values(
@@ -48,6 +52,8 @@ export default function FilteredResults({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
+
+      <Box ref={topSentinelRef} position="absolute" />
 
       <Accordion.Root
         key={activeEventId}
@@ -108,6 +114,8 @@ export default function FilteredResults({
           </Accordion.Item>
         ))}
       </Accordion.Root>
+
+      <BackToTopButton visible={isScrolledDown} />
     </VStack>
   );
 }

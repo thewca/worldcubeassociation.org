@@ -2396,6 +2396,12 @@ en:
       schedule_for_date: "Schedule for %{day_name} (%{full_date})"
       schedule_for_full_date: "Schedule for %{date}"
       schedule_change_warning: "Schedules are subject to adjustments, especially once registration totals are known. Registered competitors will be notified by email of any major changes."
+    #context: results-relative tabs
+    results:
+      query_search: "Search by name or WCA ID"
+      country_search: "Filter by country"
+      no_results: "No results found"
+      all_countries: "All countries"
     #context: entry of the left navigation menu
     nav:
       menu:
