@@ -3483,7 +3483,7 @@ fr:
     h2h:
       set_number: Série %{number}
       stage_of: '%{number} ème de finale'
-      quarterfinal_stage: Quarts de finale
+      quarterfinal_stage: Quart de finale
       semifinal_stage: Demi-finale
       final_stage: Finale
       third_place: Troisième place
