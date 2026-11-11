@@ -2366,11 +2366,9 @@ class Competition < ApplicationRecord
       "registration_info" => {
         "opens_at" => registration_open,
         "closes_at" => registration_close,
-        "competitor_limit" => competitor_limit,
+        "competitor_limit" => (competitor_limit if competitor_limit_enabled?),
         "spots_left" => spots_left,
         "waiting_list_count" => waiting_list_count,
-        "is_full" => registration_full?,
-        "is_full_and_accepted" => registration_full_and_accepted?,
         "on_the_spot_registration" => on_the_spot_registration,
         "extra_requirements" => extra_registration_requirements,
         "external_registration_page" => external_registration_page,

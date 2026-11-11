@@ -1504,14 +1504,15 @@ export interface components {
                  * @example 2025-01-10T14:00:00.000Z
                  */
                 closes_at: string | null;
-                /** @example 2000 */
+                /**
+                 * @description Null if the competition has no competitor limit.
+                 * @example 2000
+                 */
                 competitor_limit: number | null;
                 /** @example 42 */
                 spots_left: number | null;
                 /** @example 7 */
                 waiting_list_count: number;
-                is_full: boolean;
-                is_full_and_accepted: boolean;
                 on_the_spot_registration: boolean | null;
                 extra_requirements: string | null;
                 /** @example https://example.com/register */

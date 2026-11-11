@@ -130,8 +130,6 @@ properties:
       - competitor_limit
       - spots_left
       - waiting_list_count
-      - is_full
-      - is_full_and_accepted
       - on_the_spot_registration
       - extra_requirements
       - external_registration_page
@@ -151,6 +149,7 @@ properties:
         example: "2025-01-10T14:00:00.000Z"
       competitor_limit:
         type: [integer, "null"]
+        description: Null if the competition has no competitor limit.
         example: 2000
       spots_left:
         type: [integer, "null"]
@@ -158,10 +157,6 @@ properties:
       waiting_list_count:
         type: integer
         example: 7
-      is_full:
-        type: boolean
-      is_full_and_accepted:
-        type: boolean
       on_the_spot_registration:
         type: [boolean, "null"]
       extra_requirements:

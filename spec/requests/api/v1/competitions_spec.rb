@@ -268,6 +268,24 @@ RSpec.describe "API v1 Competitions" do
       end
     end
 
+    describe "competitor limit" do
+      it "is returned when the limit is enabled" do
+        limited_competition = create(:competition, :visible, :with_competitor_limit)
+
+        get api_v1_competition_path(limited_competition)
+
+        expect(response.parsed_body.dig("registration_info", "competitor_limit")).to eq 100
+      end
+
+      it "is null when the limit is disabled, even if a number is stored" do
+        unlimited_competition = create(:competition, :visible, competitor_limit_enabled: false, competitor_limit: 100)
+
+        get api_v1_competition_path(unlimited_competition)
+
+        expect(response.parsed_body.dig("registration_info", "competitor_limit")).to be_nil
+      end
+    end
+
     it "serializes delegates without their deprecated team data" do
       get api_v1_competition_path(competition)
 
