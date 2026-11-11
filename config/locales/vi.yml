@@ -681,6 +681,8 @@ vi:
         use_classic: Trở lại trang đăng nhập cũ
       destroy_other:
         success: Đã đăng xuất thành công khỏi các thiết bị khác.
+      destroy:
+        success: Đăng xuất thành công.
     shared:
       links:
         sign_in: Đăng nhập
@@ -817,6 +819,20 @@ vi:
       privacy: Riêng tư
       disclaimer: Miễn trừ trách nhiệm
       find_us: Mạng xã hội
+      panels:
+        admin: Bảng điều khiển Admin
+        volunteer: Bảng điều khiển TNV
+        delegate: Bảng điều khiển Delegate
+        wapc: Bảng điều khiển WAC
+        wfc: Bảng điều khiển WFC
+        wrt: Bảng điều khiển WRT
+        wst: Bảng điều khiển WST
+        board: Bảng điều khiển BQT
+        leader: Bảng điều khiển Lãnh đạo Đội ngũ
+        senior_delegate: Bảng điều khiển Senior Delegate
+        wic: Bảng điều khiển WIC
+        weat: Bảng điều khiển WEAT
+        wqac: Bảng điều khiển WQAC
   page:
     translators:
       title: Phiên dịch viên
@@ -933,6 +949,7 @@ vi:
           này có nhiệm vụ cung cấp một quy trình xem xét công minh và độc lập để
           đảm bảo các quyết định đều công bằng, hợp lý và tuân theo các quy định
           và chính sách của WCA.
+      empty: Không tìm thấy đội ngũ hay ủy ban nào. Vui lòng thử lại sau.
     contacts:
       title: Đơn Liên hệ WCA
       faq_note_html: >-
@@ -1059,6 +1076,13 @@ vi:
         Đã gửi yêu cầu - chúng tôi sẽ liên hệ bạn trong thời gian sớm nhất. Để
         xem trạng thái yêu cầu, vui lòng truy cập <a href="%{link}">link
         này</a>.
+    executives:
+      title: Nhân sự điều hành
+      joined_wca: Gia nhập WCA
+      joined_executives: Gia nhập Đội ngũ Điều hành
+      more_information: Thêm thông tin
+      close: Đóng
+      person_not_found: Không tồn tại ID WCA %{wca_id}
   homepage:
     learn_more: Biết thêm thông tin
     title: Chào mừng đến với Hiệp hội Rubik Thế giới
@@ -1918,6 +1942,7 @@ vi:
         no_upcoming: Hiện không có giải đấu sắp tới nào sử dụng hệ thống kết quả
           trực tiếp.
         search: Tìm kiếm giải đấu
+      combined_title: Vòng thi kép gộp
     my_competitions:
       title: Giải đấu của tôi
       disclaimer: >-
@@ -2164,6 +2189,17 @@ vi:
       location_not_found: Không tìm thấy địa điểm ở địa chỉ này
       location_search_failed: Tìm kiếm bằng địa chỉ thất bại, xin vui lòng thử 
         lại sau ít phút
+      championship_only: Chỉ hiện giải vô địch
+      sort:
+        order: Thứ tự sắp xếp
+        start_date_asc: 'Ngày bắt đầu: sớm nhất lên trước'
+        start_date_desc: 'Ngày bắt đầu: muộn nhất lên trước'
+        end_date_asc: 'Ngày kết thúc: sớm nhất lên trước'
+        end_date_desc: 'Ngày kết thúc: muộn nhất lên trước'
+        announced_at_asc: 'Ngày công bố: sớm nhất lên trước'
+        announced_at_desc: 'Ngày công bố: muộn nhất lên trước'
+        name_asc: 'Tên: A-Z'
+        name_desc: 'Tên: Z-A'
     my_competitions_table:
       edit: Chỉnh sửa
       registrations: Đăng ký
@@ -2851,6 +2887,8 @@ vi:
       edited_deadline_not_in_future: >-
         Bạn chỉ được phép thêm các hạn chót trong tương lai, nhưng
         %{new_timestamp} là thời gian trong quá khứ.
+      fto_requires_internal_scoretaking: phải sử dụng Kết quả Trực tiếp Tích hợp
+        nếu có nội dung FTO.
     new:
       create_competition: Tạo giải đấu
       note_clone: >-
@@ -3027,10 +3065,6 @@ vi:
         competitors: Thí sinh
         scrambles: Công thức tráo
     results_table:
-      h2h_results_disclaimer: >-
-        Kết quả của vòng chung kết Đối đầu. Hiện tại phần này chỉ hiển thị thứ
-        hạng và lượt thi tốt nhất do hệ thống hiển thị đầy đủ kết quả vòng Đối
-        đầu đang trong quá trình phát triển.
       wca_profile: Hồ sơ WCA
       event: Nội dung
       round: Vòng đấu
@@ -3039,6 +3073,11 @@ vi:
         national: Thứ hạng Quốc gia
         continent: Thứ hạng Châu lục
         world: Thứ hạng Thế giới
+      show_all_linked_results: Hiện kết quả từ cả hai vòng thi
+      linked_results_disclaimer_html: Vòng thi này là vòng phụ của một vòng thi 
+        kép. Kết quả dưới đây được hiển thị riêng theo từng vòng thi phụ; vui 
+        lòng xem kết quả gộp của cả hai vòng thi ở <a 
+        href="%{results_url}">trang kết quả kiểu mới</a>.
     scrambles_table:
       group: Nhóm thi
       scramble: Công thức tráo
@@ -3076,6 +3115,7 @@ vi:
         khu vực"
     records:
       title: Kỷ lục
+      load_error: Lỗi khi tra cứu kỷ lục
     last_updated_html: 'Lần cuối cập nhật: %{timestamp}'
     filters_fixes_underway: >-
       Lưu ý rằng một số bộ lọc (VD: các năm trước đây) đang tạm thời bị vô hiệu
@@ -3539,7 +3579,8 @@ vi:
         lý tốt các Giải đấu WCA trước khi được thăng chức thành WCA Delegate.</p>
         <p>Các Trainee Delegate đang trong quá trình huấn luyện, học tập để trở thành
         WCA Delegate và chỉ được phép giám sát các giải đấu khi có sự có mặt của WCA
-        Delegate khác.</p>
+        Delegate khác.</p> <p>Vui lòng liên hệ Regional Delegate của khu vực của bạn
+        nếu bạn có mong muốn trở thành Trainee Delegate.</p>
       see_link_html: ' (xem %{link})'
       members_html: >-
         Tất cả thí sinh đều mặc định trở thành <strong>thành viên</strong> của

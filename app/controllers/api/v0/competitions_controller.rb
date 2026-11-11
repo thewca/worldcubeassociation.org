@@ -88,7 +88,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def tabs
     competition = competition_from_params
-    render json: competition.tabs
+    render json: competition.tabs, only: %w[id competition_id name content display_order]
   end
 
   def podiums
@@ -110,6 +110,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                             id: round.id,
                             roundTypeId: round.round_type_id,
                             isH2hMock: round.is_h2h_mock?,
+                            isLinked: round.linked_round_id.present?,
                             results: round.results.sort_by { |r| [r.pos, r.person_name] },
                           }
     end

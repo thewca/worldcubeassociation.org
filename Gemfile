@@ -64,7 +64,6 @@ gem 'aws-sdk-cloudfront'
 gem 'redis'
 # Faster Redis library
 gem 'hiredis'
-gem 'mini_magick', require: false
 gem 'ruby-vips', require: false
 gem 'mysql2'
 gem 'premailer-rails'
@@ -89,7 +88,7 @@ gem 'activestorage-validator'
 gem 'image_processing'
 gem 'rest-client'
 gem 'icalendar'
-gem 'react_on_rails', '17.2.0'
+gem 'react_on_rails', '17.2.1'
 gem 'sprockets-rails'
 gem 'jaro_winkler'
 gem 'sidekiq'
@@ -149,6 +148,7 @@ group :test do
   gem 'launchy'
   gem 'capybara'
   gem 'oga' # XML parsing library introduced for testing RSS feed
+  gem 'openapi_first'
   gem 'database_cleaner'
   gem 'rails-controller-testing'
   gem 'capybara-playwright-driver'

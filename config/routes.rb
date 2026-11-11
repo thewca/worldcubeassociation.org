@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     post 'users/generate-email-otp' => 'sessions#generate_email_otp'
     post 'users/authenticate-sensitive' => 'users#authenticate_user_for_sensitive_edit'
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
+    get 'users/sign-out-from-next' => 'sessions#destroy_from_next', as: :destroy_user_session_from_next
   end
 
   post 'registration/:id/load-payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
@@ -379,6 +380,7 @@ Rails.application.routes.draw do
       resources :competitions, only: [] do
         get '/results' => 'competitions#results', as: :results
         get '/podiums' => 'competitions#podiums', as: :podiums
+        get '/head-to-head' => 'competitions#head_to_head', as: :head_to_head
 
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         resource :bookmark, only: %i[show create destroy]

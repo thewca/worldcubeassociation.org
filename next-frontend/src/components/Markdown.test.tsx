@@ -85,4 +85,16 @@ describe("ChakraMarkdown", () => {
       "youtube(https://notyoutube.com/watch?v=abc123)",
     );
   });
+
+  it("spaces a paragraph apart from the one before it", () => {
+    renderMarkdown("First paragraph\n\nSecond paragraph");
+
+    const first = screen.getByText("First paragraph");
+    const second = screen.getByText("Second paragraph");
+
+    expect(getComputedStyle(first).marginTop).toBe("0");
+    expect(getComputedStyle(second).marginTop).toContain(
+      "var(--chakra-spacing-4)",
+    );
+  });
 });

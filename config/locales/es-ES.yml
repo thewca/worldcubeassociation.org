@@ -723,6 +723,8 @@ es-ES:
         use_classic: Cambiar a la página de inicio de sesión antigua
       destroy_other:
         success: Desconectado satisfactoriamente de otros dispositivos.
+      destroy:
+        success: Se ha cerrado tu sesión.
     shared:
       links:
         sign_in: Iniciar sesión
@@ -1136,6 +1138,14 @@ es-ES:
         Solicitud enviada, nos pondremos en contacto contigo pronto. Para
         consultar el estado de esta solicitud, visita <a href="%{link}">este
         enlace</a>.
+    executives:
+      title: Ejecutivos
+      joined_wca: Se unió a la WCA
+      joined_executives: Se unió al Equipo de Ejecutivos
+      more_information: Más información
+      close: Cerrar
+      person_not_found: No se encontró ninguna persona con el ID de la WCA 
+        %{wca_id}
   homepage:
     learn_more: Saber más
     title: Bienvenido a la World Cube Association
@@ -3346,10 +3356,6 @@ es-ES:
         competitors: Competidores
         scrambles: Mezclas
     results_table:
-      h2h_results_disclaimer: >-
-        Resultados determinados por una Final Cara a Cara. Solo se muestran el
-        orden de clasificación y la mejor resolución, ya que la visualización
-        completa de los resultados Cara a Cara aún se encuentra en desarrollo.
       wca_profile: Perfil de la WCA
       event: Categoría
       round: Ronda

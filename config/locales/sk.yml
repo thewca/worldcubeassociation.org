@@ -75,8 +75,8 @@ sk:
       name: Semifinále
       cell_name: Semifinále
     b:
-      name: B Finále
-      cell_name: B Finále
+      name: B finále
+      cell_name: B finále
     c:
       name: Finále
       cell_name: Finále
@@ -149,12 +149,12 @@ sk:
       unit_moves: ťahov
   oauth:
     applications:
-      your_apps: Vaše OAuth Aplikácie
+      your_apps: Vaše OAuth aplikácie
       new: Nový
       name: Meno
       callback_url: Callback Url
       owner: Vlastník
-      application_id: ID Aplikácie
+      application_id: ID aplikácie
       actions: Akcie
       secret: Tajomstvá
       scopes: Rozhľad
@@ -346,7 +346,7 @@ sk:
           a nie ako <strong>jozko mrkva</strong>.<br/>Stredné mená (či už celé alebo
           iba iniciály) sú voliteľné.
         pending_avatar: >-
-          Po tom, ako nahráte svojho nového Avatara budete musieť počkať, pokiaľ ho
+          Po tom, ako nahráte svojho nového avatara budete musieť počkať, pokiaľ ho
           WRT schváli.
         delegate_reports_region: 'Ak chcete dostávať reporty z celého sveta, nevypĺňajte
           toto pole (resp. vyberte prázdne pole). Poznámka: táto zmena sa môže prejaviť
@@ -359,10 +359,10 @@ sk:
         dob: Váš správny deň narodenia vo formáte RRRR-MM-DD
         document: >-
           Aby ste nám dokázali svoju identitu a správny dátum narodenia, musíte pridať
-          fotku hocijakého legálneho dokumentu (ID karta, vodičský preukaz, šutdentská
-          karta, pas, rodný list,...). Musí tam byť viditeľné meno a dátum narodenia
-          a musí to byť pochopiteľné pre Anglicky hovoriaceho človeka (alebo kontaktuje
-          miestneho delegáta WCA ak nemáte taký dokument).
+          fotku hocijakého legálneho dokumentu (občiansky preukaz, vodičský preukaz,
+          študentská karta, pas, rodný list...). Musí tam byť viditeľné meno a dátum
+          narodenia a musí to byť pochopiteľné pre anglicky hovoriaceho človeka (alebo
+          kontaktuje miestneho delegáta WCA ak nemáte taký dokument).
       post:
         body: >-
           Použite &lt;!-- break --&gt; aby ste ukázali ukážku domácej stránky.

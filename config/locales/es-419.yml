@@ -711,6 +711,8 @@ es-419:
         use_classic: Cambiar a la vista anterior
       destroy_other:
         success: Desconectado con éxito de otros dispositivos.
+      destroy:
+        success: Se ha cerrado tu sesión.
     shared:
       links:
         sign_in: Iniciar sesión
@@ -852,6 +854,20 @@ es-419:
       privacy: Privacidad
       disclaimer: Descargo de responsabilidad
       find_us: Encuéntranos
+      panels:
+        admin: Panel de administrador
+        volunteer: Panel de voluntario
+        delegate: Panel de Delegado
+        wapc: Panel del WAC
+        wfc: Panel del WFC
+        wrt: Panel del WRT
+        wst: Panel del WST
+        board: Panel de la Junta Directiva
+        leader: Panel de líder
+        senior_delegate: Panel de Delegado Senior
+        wic: Panel del WIC
+        weat: Panel del WEAT
+        wqac: Panel del WQAC
   page:
     translators:
       title: Traductores
@@ -971,6 +987,8 @@ es-419:
           decisiones hechas por otros Voluntarios WCA. El WAC provee un proceso
           independiente y parcial para asegurar que las decisiones sean justas,
           razonables, y de acuerdo con las Políticas y Reglamento de la WCA.
+      empty: No se encontraron equipos ni comités. Por favor, vuelve a consultar
+        más tarde.
     contacts:
       title: Formulario de contacto WCA
       faq_note_html: >-
@@ -1093,6 +1111,13 @@ es-419:
         Solicitud enviada, te responderemos a la brevedad. Para consultar el
         estado de tu solicitud, por favor visita <a href="%{link}">este
         enlace</a>.
+    executives:
+      title: Ejecutivos
+      joined_wca: Se unió a la WCA
+      joined_executives: Se unió al Equipo de Ejecutivos
+      more_information: Más información
+      close: Cerrar
+      person_not_found: No se encontró ninguna persona con el WCA ID %{wca_id}
   homepage:
     learn_more: Saber más
     title: Bienvenidos a la World Cube Association
@@ -2120,6 +2145,7 @@ es-419:
         past_month: Últimos 30 días
         no_upcoming: No hay próximas competiciones con resultados en vivo.
         search: Buscar competiciones
+      combined_title: Rondas duales combinadas
     my_competitions:
       title: Mis competiciones
       disclaimer: >-
@@ -2394,6 +2420,17 @@ es-419:
       location_sign_in_required: Inicia sesión para buscar una dirección
       location_not_found: No se ha encontrado una ubicación para esa dirección
       location_search_failed: La búsqueda falló, por favor intenta nuevamente
+      championship_only: Mostrar solo campeonatos
+      sort:
+        order: Orden de clasificación
+        start_date_asc: 'Fecha de inicio: ascendente'
+        start_date_desc: 'Fecha de inicio: descendente'
+        end_date_asc: 'Fecha de finalización: ascendente'
+        end_date_desc: 'Fecha de finalización: descendente'
+        announced_at_asc: 'Fecha de anuncio: ascendente'
+        announced_at_desc: 'Fecha de anuncio: descendente'
+        name_asc: 'Nombre: A-Z'
+        name_desc: 'Nombre: Z-A'
     my_competitions_table:
       edit: Editar
       registrations: Registro
@@ -3149,6 +3186,8 @@ es-419:
       edited_deadline_not_in_future: >-
         Solo se permiten fechas límites en el futuro, pero %{new_timestamp} no
         lo está. ¿Viajaste en el tiempo?
+      fto_requires_internal_scoretaking: debe configurarse como "Integrated Live
+        Results" cuando se incluya FTO.
     new:
       create_competition: Crear competición
       note_clone: >-
@@ -3332,10 +3371,6 @@ es-419:
         competitors: Competidores
         scrambles: Mezclas
     results_table:
-      h2h_results_disclaimer: >-
-        Resultados determinados por una final Head-to-Head. Solo se muestra la posición
-        y la mejor resolución, ya que la presentación de resultados Head-to-Head completos
-        sigue en desarrollo.
       wca_profile: Perfil WCA
       event: Evento
       round: Ronda
@@ -3344,12 +3379,29 @@ es-419:
         national: Ranking nacional
         continent: Ranking Continental
         world: Ranking Mundial
+      h2h_results_disclaimer_html: Resultados determinados por una final cara a 
+        cara. Aquí solo se muestran el orden de clasificación y la mejor 
+        resolución; el cuadro completo de enfrentamientos cara a cara está 
+        disponible en la <a href="%{results_url}">nueva página de 
+        resultados</a>.
+      show_all_linked_results: Mostrar resultados de ambas rondas
+      linked_results_disclaimer_html: Esta ronda forma parte de una ronda dual. 
+        Los resultados a continuación se muestran por ronda; los resultados 
+        combinados de ambas rondas están disponibles en la <a 
+        href="%{results_url}">nueva página de resultados</a>.
     scrambles_table:
       group: Grupo
       scramble: Mezcla
     competition_series_fields:
       add_series: Añadir a Serie
       remove_series: Eliminar de Serie
+    h2h:
+      set_number: Set %{number}
+      stage_of: Fase de %{number}
+      quarterfinal_stage: Fase de cuartos de final
+      semifinal_stage: Fase de semifinales
+      final_stage: Fase final
+      third_place: Tercer lugar
   competition_tabs:
     headers:
       tabs: Pestañas
@@ -3381,6 +3433,7 @@ es-419:
         region"
     records:
       title: Récords
+      load_error: Error al obtener los récords
     last_updated_html: 'Última actualización: %{timestamp}'
     filters_fixes_underway: >-
       Por favor ten en cuenta que algunos filtros (como años anteriores) se han

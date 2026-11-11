@@ -31,4 +31,24 @@ RSpec.describe "WCA Live API" do
       expect(response.parsed_body["registrations"].pluck("id")).to contain_exactly(in_event.id)
     end
   end
+
+  describe "PUT #add_competitor_to_round" do
+    let!(:delegate) { create(:delegate) }
+    let(:competition) { create(:competition, scoretaking_software: :internal, event_ids: %w[333], delegates: [delegate]) }
+    let!(:registration) { create(:registration, :accepted, competition: competition, event_ids: %w[333]) }
+
+    it "adds the competitor to the open round" do
+      sign_in delegate
+
+      round = create(:round, competition: competition, event_id: "333")
+      round.open_round!(delegate)
+      late_registration = create(:registration, :accepted, competition: competition, event_ids: %w[333])
+
+      put api_v1_competition_live_add_competitor_to_round_path(competition.id, round.wcif_id, late_registration.id), as: :json
+
+      expect(response).to be_successful
+      expect(response.parsed_body["competitor"]["id"]).to eq late_registration.id
+      expect(round.live_results.pluck(:registration_id)).to contain_exactly(registration.id, late_registration.id)
+    end
+  end
 end
