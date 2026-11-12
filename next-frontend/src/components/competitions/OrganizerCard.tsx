@@ -125,7 +125,10 @@ function OrganizersSection({
               <button
                 type="button"
                 aria-haspopup="dialog"
-                aria-label={`View ${rest.length} more team members`}
+                aria-label={t(
+                  `competitions.competition_info.view_more_members`,
+                  { count: rest.length },
+                )}
               >
                 <Card.Body
                   py="1"
@@ -144,7 +147,11 @@ function OrganizersSection({
                         </Avatar.Root>
                       ))}
                   </AvatarGroup>
-                  <Text fontSize="xs"> +{rest.length} more</Text>
+                  <Text fontSize="xs">
+                    {t("competitions.competition_info.see_more", {
+                      count: rest.length,
+                    })}
+                  </Text>
                   <Icon>
                     <LuChevronRight />
                   </Icon>

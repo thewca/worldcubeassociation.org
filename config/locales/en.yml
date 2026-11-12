@@ -1615,6 +1615,8 @@ en:
       organizer_plural:
         one: "Organizer"
         other: "Organizers"
+      view_more_members: "View %{count} more team members"
+      see_more: "+ %{count} more"
       organization_team: "Organization team"
       #context: Pluralization of the "Delegate" label for a competition form
       delegate:
