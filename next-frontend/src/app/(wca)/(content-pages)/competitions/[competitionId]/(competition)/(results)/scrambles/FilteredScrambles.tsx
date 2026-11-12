@@ -58,7 +58,7 @@ export default function FilteredScrambles({
               value={index.toString()}
             >
               <Accordion.ItemTrigger justifyContent="space-between">
-                <Heading textStyle="h4">
+                <Heading textStyle="s1">
                   {events.byId[activeEventId].name}{" "}
                   {t(`rounds.${roundFormat}.name`)}
                 </Heading>

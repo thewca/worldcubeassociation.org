@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import _ from "lodash";
 import { components } from "@/types/openapi";
 import { Accordion, Box, Heading, VStack } from "@chakra-ui/react";
@@ -13,6 +13,7 @@ import { SingleEventSelector } from "@/components/EventSelector";
 import useIsScrolled from "@/lib/hooks/useIsScrolled";
 import BackToTopButton from "@/components/BackToTopButton";
 
+// Helper for sorting rounds from final to first using their wcif_id
 const roundCompare = (a: { wcif_id: string }, b: { wcif_id: string }) =>
   b.wcif_id.localeCompare(a.wcif_id, undefined, { numeric: true });
 
@@ -44,6 +45,8 @@ export default function FilteredResults({
     .map((group) => [...group].sort(roundCompare))
     .sort((a, b) => roundCompare(a[0], b[0]));
 
+  const eventName = events.byId[activeEventId].name;
+
   return (
     <VStack align="left" gap={4}>
       <SingleEventSelector
@@ -66,9 +69,8 @@ export default function FilteredResults({
             {linkedRounds.length > 0 ? (
               <>
                 <Accordion.ItemTrigger justifyContent="space-between">
-                  <Heading textStyle="h4">
-                    {events.byId[activeEventId].name}{" "}
-                    {t("competitions.live.combined_title")}
+                  <Heading textStyle="s1">
+                    {eventName} {t("competitions.live.combined_title")}
                   </Heading>
                   <Accordion.ItemIndicator />
                 </Accordion.ItemTrigger>
@@ -85,9 +87,8 @@ export default function FilteredResults({
             ) : (
               <>
                 <Accordion.ItemTrigger justifyContent="space-between">
-                  <Heading textStyle="h4">
-                    {events.byId[activeEventId].name}{" "}
-                    {t(`rounds.${round.round_type_id}.name`)}
+                  <Heading textStyle="s1">
+                    {eventName} {t(`rounds.${round.round_type_id}.name`)}
                   </Heading>
                   <Accordion.ItemIndicator />
                 </Accordion.ItemTrigger>
