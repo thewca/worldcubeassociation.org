@@ -120,7 +120,7 @@ export default function MobileTabMenu({
       });
       return acc;
     },
-    {} as GroupedTab,
+    {},
   );
 
   const isCustomTabActive = customTabs.some(
