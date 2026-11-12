@@ -14,6 +14,7 @@ import { Link as ChakraLink } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import WcaDocsIcon from "@/components/icons/WcaDocsIcon";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { toAvatarName } from "@/lib/utils";
 
 type OrganizerPerson =
   components["schemas"]["Person"] | components["schemas"]["Organizer"];
@@ -44,7 +45,7 @@ function OrganizerCarousel({ organizers }: { organizers: OrganizerPerson[] }) {
             >
               <HStack>
                 <Avatar.Root>
-                  <Avatar.Fallback name={delegate.name} />
+                  <Avatar.Fallback name={toAvatarName(delegate.name)} />
                   <Avatar.Image src={delegate.avatar.thumb_url} />
                 </Avatar.Root>
                 <ChakraLink href={delegate.url}>{delegate.name}</ChakraLink>
