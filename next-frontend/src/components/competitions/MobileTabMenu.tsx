@@ -107,7 +107,6 @@ export default function MobileTabMenu({
     },
     {} as GroupedTab,
   );
-  console.log(tabs);
 
   const custom = customTabs.reduce<Record<string, CompetitionNavTab[]>>(
     (acc, tab) => {
