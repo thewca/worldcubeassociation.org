@@ -358,7 +358,7 @@ sk:
       dob_contact:
         dob: Váš správny deň narodenia vo formáte RRRR-MM-DD
         document: >-
-          Nahrajte fotografiu oficiálneho dokumentu potvrdzujucého vašu identitu a
+          Nahrajte fotografiu oficiálneho dokumentu potvrdzujúceho vašu identitu a
           dátum narodenia (napr. občiansky preukaz, vodičský preukaz, ISIC, pas či
           rodný list). Meno a dátum narodenia musia byť na fotografii zreteľne čitateľné
           a zrozumiteľné aj pre anglicky hovoriacich (v prípade, že daný dokument
@@ -382,10 +382,9 @@ sk:
           Ak chcete dostať spätnú väzbu od WRC/WIC, odškrtnite nižšie prislúchajúce
           políčka.
         remarks: >-
-          Napíšte o nejakých iných detailov, ktoré by ste chceli spomenúť(napr.
-          zlepšenie/zhoršenie v komunite, budúce plány pre tento región). Ak ste
-          kvôli stručnosti niečo vynechali v predošlých sekciách, nebojte sa ich
-          napísať sem.
+          Sem napíšte ďalšie detaily ohľadom súťaže (napr. zlepšenie/zhoršenie v komunite,
+          plány do budúcnosti pre tento región). Ak ste niečo vynechali v predošlých
+          sekciách, môžete to spomenúť tu.
       competition_tab:
         name: 'Príklady:Cestovanie, Platenie, Ceny, Ubytovanie'
       registration:
@@ -410,10 +409,10 @@ sk:
         document: Dokument
     errors:
       dob_contact:
-        dob_invalid: je nesprávne naformátovaný
+        dob_invalid: nesprávny formát
   errors:
     messages:
-      wrong_size: 'je v zlej veľkosti(malo byť %{file_size})'
+      wrong_size: 'nesprávna veľkosť (správne: %{file_size})'
       size_too_small: 'je veľmi malé (malo byť aspoň %{file_size})'
       size_too_big: 'je veľmi veľké (malo byť najviac %{file_size})'
   devise:
@@ -421,10 +420,9 @@ sk:
       invalid: 'Neplatný email, WCA ID alebo heslo.'
       not_found_in_database: 'Neplatný email, WCA ID alebo heslo.'
       unconfirmed: >-
-        Musíte potvrdiť vašu emailovú adresu predtým ako budete môcť pokračovať.
-        Nedostali ste potvrdzujúci email? Chodte na
-        https://www.worldcubeassociation.org/users/confirmation/new a požiadajte
-        si nový.
+        Pred pokračovaním potvrďte svoju emailovú adresu. Nedostali ste potvrdzovací
+        email? Choďte na https://www.worldcubeassociation.org/users/confirmation/
+        a požiadajte si o nový.
     registrations: {}
     sessions: {}
     shared: {}
@@ -433,9 +431,9 @@ sk:
     errors:
       messages:
         form_error:
-          one: 'Forma obsahuje jednu chybu:'
-          few: Niekoľko
-          other: 'Forma obsahuje %{count} chýb'
+          one: 'chyba:'
+          few: chýb
+          other: '%{count} chýb'
     doorkeeper:
       applications:
         help:
