@@ -123,14 +123,19 @@ export default function MobileTabMenu({
     {} as GroupedTab,
   );
 
+  const isCustomTabActive = customTabs.some(
+    (tab) => encodeURIComponent(tab) === activeMenuKey || tab === activeMenuKey,
+  );
+
+  const isLiveEventsTabActive = Object.keys(events.byId).some((event) =>
+    activeMenuKey.includes(event),
+  );
+
   const activeGroup = groupTabsMap.has(activeMenuKey)
     ? groupTabsMap.get(activeMenuKey)
-    : customTabs.some(
-          (tab) =>
-            encodeURIComponent(tab) === activeMenuKey || tab === activeMenuKey,
-        )
+    : isCustomTabActive
       ? "more"
-      : Object.keys(events.byId).some((event) => activeMenuKey.includes(event))
+      : isLiveEventsTabActive
         ? "events"
         : "";
 
