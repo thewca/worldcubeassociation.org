@@ -104,6 +104,8 @@ function OrganizersSection({
       { fallback: "md" },
     ) || 4;
 
+  // Doing it directly on the element made the linter split it into multiple lines
+  // but this caused the Ruby test for unused i18n keys to fail
   const ariaLabel = t("competitions.competition_info.view_more_members", {
     count: rest.length,
   });

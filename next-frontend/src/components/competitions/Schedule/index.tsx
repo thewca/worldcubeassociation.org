@@ -113,6 +113,8 @@ export default function Schedule({
 
   const { t } = useT();
 
+  const pdfLink = `https://www.worldcubeassociation.org/competitions/${competitionId}.pdf`;
+
   return (
     <VStack gap="3" alignItems="stretch">
       <Alert.Root status="info" variant="surface">
@@ -121,15 +123,7 @@ export default function Schedule({
             <Group justify="space-between" w="full">
               <Text>{t("competitions.competition_info.pdf.download_pdf")}</Text>
               <Button variant="outline" size="xs" asChild>
-                <Link
-                  href={
-                    "https://www.worldcubeassociation.org/competitions/" +
-                    competitionId +
-                    ".pdf"
-                  }
-                  color="inherit"
-                  textDecoration="none"
-                >
+                <Link href={pdfLink} color="inherit" textDecoration="none">
                   <WcaDocsIcon />
                   {t("competitions.competition_info.pdf.download")}
                 </Link>
