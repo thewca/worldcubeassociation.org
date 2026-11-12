@@ -136,13 +136,6 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
     setSelectedCompetition(
       competition as components["schemas"]["CompetitionIndex"],
     );
-
-    // router.push(
-    //   route({
-    //     pathname: "/competitions/[competitionId]",
-    //     query: { competitionId: competition.id },
-    //   }),
-    // );
   };
 
   return (
@@ -198,7 +191,7 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
 
       <FlyoutDrawer
         open={!!selectedCompetition}
-        setOpen={() => setSelectedCompetition(null) as void}
+        setOpen={() => setSelectedCompetition(null)}
         comp={selectedCompetition}
         isChampionship={
           (selectedCompetition?.championship_types.length || 0) > 0
