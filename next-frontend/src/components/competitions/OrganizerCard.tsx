@@ -39,7 +39,7 @@ function ClickableOrganizer({
 }) {
   return (
     <HStack key={organizer.id} minW={0}>
-      <Avatar.Root flexShrink={0}>
+      <Avatar.Root flexShrink={0} size={{ base: "md", lg: "sm", xl: "md" }}>
         <Avatar.Fallback name={organizer.name} />
         <Avatar.Image src={organizer.avatar.thumb_url} />
       </Avatar.Root>
@@ -50,6 +50,7 @@ function ClickableOrganizer({
           alignItems="center"
           minW={0}
           title={organizer.name}
+          gap={{ base: 2, lg: 1, xl: 2 }}
         >
           <Text as="span" truncate minW={0}>
             {organizer.name}
@@ -57,7 +58,6 @@ function ClickableOrganizer({
           <WcaFlag
             code={organizer.country_iso2}
             size="xs"
-            ms="1"
             flexShrink={0}
             aria-hidden
           />
@@ -96,17 +96,16 @@ function OrganizersSection({
   const avatarLimit =
     useBreakpointValue(
       {
-        base: 4,
-        sm: 8,
-        md: 8,
-        lg: 4,
-        xl: 8,
+        base: 2,
+        sm: 6,
+        lg: 2,
+        xl: 6,
       },
       { fallback: "md" },
     ) || 4;
 
   return (
-    <Stack direction="row" gap={3} minW={0} maxW="full">
+    <Stack direction="row" gap={{ base: 3, lg: 1, xl: 3 }} minW={0} maxW="full">
       {first && <ClickableOrganizer organizer={first} />}
       {!!rest.length && (
         <Dialog.Root placement="center" lazyMount>
@@ -135,7 +134,7 @@ function OrganizersSection({
                   px="1.5"
                   flexDirection="row"
                   alignItems="center"
-                  gap={2}
+                  gap={{ base: 2, lg: 0, xl: 2 }}
                 >
                   <AvatarGroup>
                     {rest
