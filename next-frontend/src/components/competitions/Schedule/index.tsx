@@ -130,7 +130,7 @@ export default function Schedule({
                   color="inherit"
                   textDecoration="none"
                 >
-                  <WcaDocsIcon />{" "}
+                  <WcaDocsIcon />
                   {t("competitions.competition_info.pdf.download")}
                 </Link>
               </Button>
