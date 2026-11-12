@@ -3,7 +3,6 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import {
   Box,
-  chakra,
   Link as ChakraLink,
   Image as ChakraImage,
   Em,
@@ -71,8 +70,6 @@ const embedYoutubeLinks = (parent: MdastParent) => {
             href: undefined,
             title: "YouTube video",
             allowFullScreen: true,
-            maxW: "640px",
-            aspectRatio: "16 / 9",
           },
           hChildren: [],
         };
@@ -189,13 +186,22 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
             </ChakraLink>
           ),
           img: (imgTag) => <ChakraImage {...imgTag} {...imageProps} />,
-          iframe: (iframeTag) => (
-            <chakra.iframe
+          // Use Box to style the iframe in server components.
+          iframe: ({ src, title, allowFullScreen }) => (
+            <Box
+              asChild
               display="block"
               width="full"
               border="none"
-              {...iframeTag}
-            />
+              maxW="640px"
+              aspectRatio="16 / 9"
+            >
+              <iframe
+                src={src}
+                title={title}
+                allowFullScreen={allowFullScreen}
+              />
+            </Box>
           ),
           h1: (h1Tag) => <HeadingRenderAs {...h1Tag} as="h1" />,
           h2: (h2Tag) => <HeadingRenderAs {...h2Tag} as="h2" />,
