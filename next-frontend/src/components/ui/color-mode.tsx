@@ -5,6 +5,8 @@ import { ClientOnly, IconButton, Skeleton, Span } from "@chakra-ui/react";
 import { useTheme } from "@wrksz/themes/client";
 import * as React from "react";
 import { LuMoon, LuSun } from "react-icons/lu";
+import { MobileNavButton } from "@/components/MobileNav";
+import { useT } from "@/lib/i18n/useI18n";
 
 export type ColorMode = "light" | "dark";
 
@@ -64,6 +66,25 @@ export const ColorModeButton = React.forwardRef<
     </ClientOnly>
   );
 });
+
+// Labelled with the mode the click switches *to*, because a bare sun/moon icon in a menu row reads
+// as a status rather than an action.
+export function ColorModeMobileNavButton() {
+  const { t } = useT();
+  const { colorMode, toggleColorMode } = useColorMode();
+  const isDarkMode = colorMode === "dark";
+
+  return (
+    <ClientOnly fallback={<Skeleton height="8" />}>
+      <MobileNavButton onClick={toggleColorMode}>
+        {isDarkMode ? <LuSun /> : <LuMoon />}
+        {isDarkMode
+          ? t("layouts.navigation.switch_to_light_mode")
+          : t("layouts.navigation.switch_to_dark_mode")}
+      </MobileNavButton>
+    </ClientOnly>
+  );
+}
 
 export const LightMode = React.forwardRef<HTMLSpanElement, SpanProps>(
   function LightMode(props, ref) {
