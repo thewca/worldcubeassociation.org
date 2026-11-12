@@ -104,6 +104,10 @@ function OrganizersSection({
       { fallback: "md" },
     ) || 4;
 
+  const ariaLabel = t("competitions.competition_info.view_more_members", {
+    count: rest.length,
+  });
+
   return (
     <Stack direction="row" gap={{ base: 3, lg: 1, xl: 3 }} minW={0} maxW="full">
       {first && <ClickableOrganizer organizer={first} />}
@@ -124,10 +128,7 @@ function OrganizersSection({
               <button
                 type="button"
                 aria-haspopup="dialog"
-                aria-label={t(
-                  `competitions.competition_info.view_more_members`,
-                  { count: rest.length },
-                )}
+                aria-label={ariaLabel}
               >
                 <Card.Body
                   py="1"
