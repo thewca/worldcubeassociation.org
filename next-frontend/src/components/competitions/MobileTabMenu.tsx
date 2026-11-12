@@ -44,7 +44,7 @@ const groupTabsMap = new Map([
   ["podiums", "results"],
   ["all", "results"],
   ["scrambles", "results"],
-  ["byPerson", "results"],
+  ["by-person", "results"],
   ["live", "live"],
   ["live_events", "events"],
 ]);
@@ -107,6 +107,7 @@ export default function MobileTabMenu({
     },
     {} as GroupedTab,
   );
+  console.log(tabs);
 
   const custom = customTabs.reduce<Record<string, CompetitionNavTab[]>>(
     (acc, tab) => {
