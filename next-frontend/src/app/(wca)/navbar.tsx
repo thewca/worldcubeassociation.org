@@ -32,6 +32,7 @@ import {
 import { getCachedGlobal } from "@/lib/payload/globals";
 import { getCachedCollection } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
+import styles from "./navbar.module.css";
 
 type NavbarEntry<K extends string = "displayText"> = {
   [P in K]: string;
@@ -134,14 +135,30 @@ export default async function Navbar() {
 
   return (
     <Box
+      className={styles.navbar}
       borderBottom="md"
       borderColor="border"
       bg="bg"
       data-testid="header-navbar"
+      position="sticky"
+      top={0}
+      zIndex={2}
+      css={{
+        "@supports (backdrop-filter: blur(1px))": {
+          bg: "bg/80",
+          backdropFilter: "blur(10px) saturate(1.2)",
+        },
+      }}
     >
       <RefreshRouteOnSave />
       <MobileNavRoot>
-        <HStack ps={3.5} pe={1.5} py={3} justifyContent="space-between">
+        <HStack
+          ps={3.5}
+          pe={1.5}
+          py={3}
+          justifyContent="space-between"
+          className={styles.row}
+        >
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
             <Box hideFrom="xl">
