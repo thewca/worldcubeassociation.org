@@ -361,6 +361,7 @@ class Competition < ApplicationRecord
   before_save :backlink_main_venue, unless: %i[is_multi_location? main_venue_id?]
   private def backlink_main_venue
     self.main_venue = self.competition_venues.first if self.competition_venues.count == 1
+    self.is_multi_location = self.competition_venues.count > 1 && self.fictive_country?
   end
 
   # We have stricter validations for confirming a competition
