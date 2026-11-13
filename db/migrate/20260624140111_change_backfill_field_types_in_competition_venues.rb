@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddDetailsFieldsToCompetitionVenuesAndRooms < ActiveRecord::Migration[8.1]
+class ChangeBackfillFieldTypesInCompetitionVenues < ActiveRecord::Migration[8.1]
   # add the size limits to existing columns
   def up
     change_table :competition_venues, bulk: true do |t|
