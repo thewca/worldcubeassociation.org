@@ -168,7 +168,7 @@ class Person < ApplicationRecord
            .joins(:event, competition: [:championships])
            .where("championships.championship_type = 'world'")
            .order("YEAR(start_date) DESC, events.rank")
-           .includes(:competition, :format)
+           .includes(:competition, :format, :result_attempts, round: :linked_round)
   end
 
   def championship_podiums_with_condition(championship_type)
@@ -208,6 +208,10 @@ class Person < ApplicationRecord
               end
             end
         end
+
+      # Only the person's own podium results are rendered with their attempts and round, so they are
+      # preloaded here instead of in the query above, which loads every eligible finalist.
+      ActiveRecord::Associations::Preloader.new(records: championship_podium_results, associations: [:result_attempts, { round: :linked_round }]).call
     end
   end
 

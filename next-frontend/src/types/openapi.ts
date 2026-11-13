@@ -1209,12 +1209,12 @@ export interface components {
     schemas: {
         UserAvatar: {
             /**
-             * Format: uri
+             * Format: uri-reference
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
              */
             url: string;
             /**
-             * Format: uri
+             * Format: uri-reference
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
@@ -1733,10 +1733,6 @@ export interface components {
             continent_rank: number;
             country_rank: number;
         };
-        SingleAndAverageRank: {
-            average: components["schemas"]["Rank"];
-            single: components["schemas"]["Rank"];
-        };
         Medals: {
             gold: number;
             silver: number;
@@ -1788,10 +1784,10 @@ export interface components {
             /** @example US */
             country_iso2: string;
             /**
-             * @description Absent for a person who is not a delegate, or who has no WCA account at all.
+             * @description Null for a person who is not a delegate, or who has no WCA account at all.
              * @example delegate
              */
-            delegate_status?: string;
+            delegate_status?: string | null;
             teams: components["schemas"]["TeamMembership"][];
             /**
              * Format: uri
@@ -1812,7 +1808,10 @@ export interface components {
             event_ids_with_results: string[];
             /** @description Keyed by event id. An event the person has no single for is absent. */
             ranks_by_event: {
-                [key: string]: components["schemas"]["SingleAndAverageRank"];
+                [key: string]: {
+                    single: components["schemas"]["Rank"];
+                    average?: components["schemas"]["Rank"];
+                };
             };
             medals: components["schemas"]["Medals"];
             records: components["schemas"]["Records"];
@@ -2330,6 +2329,10 @@ export interface components {
         };
         RecordByEvent: {
             [key: string]: components["schemas"]["Record"][];
+        };
+        SingleAndAverageRank: {
+            average: components["schemas"]["Rank"];
+            single: components["schemas"]["Rank"];
         };
         PersonInfo: {
             person: components["schemas"]["Person"];

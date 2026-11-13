@@ -31,8 +31,8 @@ properties:
     type: string
     example: "US"
   delegate_status:
-    type: string
-    description: Absent for a person who is not a delegate, or who has no WCA account at all.
+    type: [string, "null"]
+    description: Null for a person who is not a delegate, or who has no WCA account at all.
     example: "delegate"
   teams:
     type: array
@@ -59,7 +59,15 @@ properties:
     type: object
     description: Keyed by event id. An event the person has no single for is absent.
     additionalProperties:
-      $ref: '../results/SingleAndAverageRank.yaml'
+      type: object
+      description: A person can have a single in an event without an average, never the other way round.
+      required:
+        - single
+      properties:
+        single:
+          $ref: '../results/Rank.yaml'
+        average:
+          $ref: '../results/Rank.yaml'
   medals:
     $ref: '../results/Medals.yaml'
   records:
