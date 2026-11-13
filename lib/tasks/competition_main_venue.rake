@@ -4,7 +4,7 @@ namespace :competition_main_venue do
   desc "Attempt to (somewhat) intelligently backlink competitions that don't have a main_venue yet"
   task backlink: :environment do
     Competition
-      .includes(:competition_venues)
+      .includes(:competition_venues, :country)
       .where(main_venue: nil, is_multi_location: false)
       .find_each do |competition|
         venue_count = competition.competition_venues.size
