@@ -571,6 +571,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/persons/{wca_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get information for a person
+         * @description The person's profile: their public details, personal records, medal and record counts, and championship podiums. Public: no authentication required.
+         */
+        get: operations["v1PersonInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/persons/{wca_id}/results": {
         parameters: {
             query?: never;
@@ -1189,12 +1209,12 @@ export interface components {
     schemas: {
         UserAvatar: {
             /**
-             * Format: uri
+             * Format: uri-reference
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
              */
             url: string;
             /**
-             * Format: uri
+             * Format: uri-reference
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
@@ -1694,6 +1714,37 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
+        TeamMembership: {
+            id: number;
+            /** @example wst */
+            friendly_id: string;
+            leader: boolean;
+            senior_member: boolean;
+            name?: string;
+            wca_id?: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        Rank: {
+            id: number;
+            person_id: string;
+            event_id: string;
+            best: number;
+            world_rank: number;
+            continent_rank: number;
+            country_rank: number;
+        };
+        Medals: {
+            gold: number;
+            silver: number;
+            bronze: number;
+            total: number;
+        };
+        Records: {
+            national: number;
+            continental: number;
+            world: number;
+            total: number;
+        };
         V1Result: components["schemas"]["V1RoundResult"] & {
             /** @example HangzhouOpen2024 */
             competition_id: string;
@@ -1715,6 +1766,59 @@ export interface components {
             format_id: string;
             ranking_mode: components["schemas"]["RankingMode"];
         };
+        /** @description The person's podium finishes at championships, by championship level. Positions are recomputed among the competitors eligible for that championship, so they can differ from the position in the round. A level the person never podiumed at is an empty array. */
+        V1ChampionshipPodiums: {
+            world: components["schemas"]["V1Result"][];
+            continental: components["schemas"]["V1Result"][];
+            national: components["schemas"]["V1Result"][];
+            greater_china?: components["schemas"]["V1Result"][];
+        };
+        /** @description Everything the profile page renders above its tabs, for one person. This is the person shape for the v1 API; the v0 `PersonInfo` schema nests the person's own fields under `person` and is not interchangeable with it. */
+        V1PersonInfo: {
+            /** @example 2005REYN01 */
+            wca_id: string;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender?: string;
+            /** @example US */
+            country_iso2: string;
+            /**
+             * @description Null for a person who is not a delegate, or who has no WCA account at all.
+             * @example delegate
+             */
+            delegate_status?: string | null;
+            teams: components["schemas"]["TeamMembership"][];
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
+            /** @example 42 */
+            competition_count: number;
+            /**
+             * @description Every event the person has a result in, ordered by event rank. Wider than the keys of `ranks_by_event`, which only covers events the person has a successful solve in.
+             * @example [
+             *       "333",
+             *       "222",
+             *       "444"
+             *     ]
+             */
+            event_ids_with_results: string[];
+            /** @description Keyed by event id. An event the person has no single for is absent. */
+            ranks_by_event: {
+                [key: string]: {
+                    single: components["schemas"]["Rank"];
+                    average?: components["schemas"]["Rank"];
+                };
+            };
+            medals: components["schemas"]["Medals"];
+            records: components["schemas"]["Records"];
+            /** @example 1337 */
+            completed_solves_count: number;
+            championship_podium_results: components["schemas"]["V1ChampionshipPodiums"];
+        };
         V1Results: components["schemas"]["V1Result"][];
         GeocodedLocation: {
             /** @example Berlin, Germany */
@@ -1723,16 +1827,6 @@ export interface components {
             latitude: number;
             /** @example 13.405 */
             longitude: number;
-        };
-        TeamMembership: {
-            id: number;
-            /** @example wst */
-            friendly_id: string;
-            leader: boolean;
-            senior_member: boolean;
-            name?: string;
-            wca_id?: string;
-            avatar?: components["schemas"]["UserAvatar"];
         };
         Person: {
             /** @example 267 */
@@ -2235,27 +2329,6 @@ export interface components {
         };
         RecordByEvent: {
             [key: string]: components["schemas"]["Record"][];
-        };
-        Rank: {
-            id: number;
-            person_id: string;
-            event_id: string;
-            best: number;
-            world_rank: number;
-            continent_rank: number;
-            country_rank: number;
-        };
-        Medals: {
-            gold: number;
-            silver: number;
-            bronze: number;
-            total: number;
-        };
-        Records: {
-            national: number;
-            continental: number;
-            world: number;
-            total: number;
         };
         SingleAndAverageRank: {
             average: components["schemas"]["Rank"];
@@ -3300,6 +3373,35 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["LivePerson"];
                 };
+            };
+        };
+    };
+    v1PersonInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1PersonInfo"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

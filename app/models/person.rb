@@ -168,7 +168,7 @@ class Person < ApplicationRecord
            .joins(:event, competition: [:championships])
            .where("championships.championship_type = 'world'")
            .order("YEAR(start_date) DESC, events.rank")
-           .includes(:competition, :format)
+           .includes(:competition, :format, :result_attempts, round: :linked_round)
   end
 
   def championship_podiums_with_condition(championship_type)
@@ -208,6 +208,10 @@ class Person < ApplicationRecord
               end
             end
         end
+
+      # Only the person's own podium results are rendered with their attempts and round, so they are
+      # preloaded here instead of in the query above, which loads every eligible finalist.
+      ActiveRecord::Associations::Preloader.new(records: championship_podium_results, associations: [:result_attempts, { round: :linked_round }]).call
     end
   end
 
@@ -255,6 +259,51 @@ class Person < ApplicationRecord
     result_attempts.completed.count
   end
 
+  def competition_count
+    competitions.count
+  end
+
+  # Staff badges on the profile come off the linked user, and a person need not have one.
+  # Serializing through `user` is the legacy behaviour of `serializable_hash` below, but that
+  # path drops the status as soon as the caller asks for any methods of its own.
+  def delegate_status
+    user&.delegate_status
+  end
+
+  # Like `delegate_status`, these come off the linked user, which a person need not have.
+  def avatar
+    (user || User.new).avatar
+  end
+
+  def teams
+    user&.team_roles&.map(&:team_membership) || []
+  end
+
+  # A person can have a single but not an average, but never an average without a single,
+  # which is why the singles are the base for the lookup.
+  def ranks_by_event
+    ranks_average_by_event = ranks_average.index_by(&:event_id)
+
+    ranks_single.index_by(&:event_id).transform_values do |rank_single|
+      {
+        single: rank_single,
+        average: ranks_average_by_event[rank_single.event_id],
+      }.compact
+    end
+  end
+
+  # An event only earns a rank once the person has a successful solve in it, so `ranks_by_event`
+  # is not a stand-in for the events they competed in: it drops every event they only ever DNFed.
+  def event_ids_with_results
+    Event.where(id: results.select(:event_id)).ids
+  end
+
+  # `championship_podiums` hands back `Result` records, which serialize in the v0 shape unless
+  # they are told otherwise, so the v1 shape has to be spelled out here.
+  def championship_podium_results
+    championship_podiums.transform_values { |podium| podium.map { it.serializable_hash(Result::V1_SERIALIZE_OPTIONS) } }
+  end
+
   def gender_visible?
     %w[m f].include? gender
   end
@@ -280,6 +329,13 @@ class Person < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[wca_id name gender],
     methods: %w[url country_iso2],
+  }.freeze
+
+  V1_SERIALIZE_OPTIONS = {
+    v1: true,
+    only: %w[wca_id name gender],
+    methods: %w[url country_iso2 delegate_status teams competition_count event_ids_with_results ranks_by_event medals records completed_solves_count championship_podium_results],
+    include: { avatar: UserAvatar::V1_SERIALIZE_OPTIONS },
   }.freeze
 
   USER_COMMON_SERIALIZE_OPTIONS = {
@@ -392,6 +448,9 @@ class Person < ApplicationRecord
   end
 
   def serializable_hash(options = nil)
+    # The v1 shape is spelled out completely in its options and must not pick up the legacy additions below.
+    return super if options&.dig(:v1)
+
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase
     json[:id] = self.wca_id

@@ -311,6 +311,11 @@ class UserAvatar < ApplicationRecord
     methods: %w[url thumb_url is_default can_edit_thumbnail],
   }.freeze
 
+  V1_SERIALIZE_OPTIONS = {
+    only: [],
+    methods: %w[url thumb_url is_default],
+  }.freeze
+
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end

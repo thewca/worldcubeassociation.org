@@ -1,0 +1,26 @@
+type: object
+description: >-
+  The person's podium finishes at championships, by championship level. Positions are recomputed
+  among the competitors eligible for that championship, so they can differ from the position in
+  the round. A level the person never podiumed at is an empty array.
+required:
+  - world
+  - continental
+  - national
+properties:
+  world:
+    type: array
+    items:
+      $ref: '../results/V1Result.yaml'
+  continental:
+    type: array
+    items:
+      $ref: '../results/V1Result.yaml'
+  national:
+    type: array
+    items:
+      $ref: '../results/V1Result.yaml'
+  greater_china:
+    type: array
+    items:
+      $ref: '../results/V1Result.yaml'
