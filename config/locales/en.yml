@@ -2608,6 +2608,7 @@ en:
         bronze: "Bronze"
       competition: "Competition"
       results: "Results"
+      round: "Round"
       records: "Records"
       competitions_map: "Map"
       world_records: "History of World Records"
