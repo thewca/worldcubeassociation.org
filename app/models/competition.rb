@@ -345,7 +345,23 @@ class Competition < ApplicationRecord
   REGISTRATION_OPENING_EARLIEST = 172_800
 
   validates :city_name, city: true
-  validates :main_venue_id, presence: { unless: :is_multi_location? }, absence: { if: :is_multi_location? }
+
+  # Main Venue as a model is a new concept (as of writing this comment 2026-11-13).
+  # We ultimately want to enforce strict presence according to the `validates` below,
+  #   but in order to "ease in" the data for existing competitions, we do not enforce this validation from the start.
+  # TODO: Enable the validation (and consider removing the automated backfill, to incentivize Delegates to consciously fill in the main venue)
+  #   once the backfill has been completed and the data consistency has been approved by WST and WRT.
+  # validates :main_venue_id, presence: { unless: :is_multi_location? }, absence: { if: :is_multi_location? }
+
+  # As part of the migration (see `validates :main_venue_id` above), we currently don't show the selection dropdown
+  #   to Delegates in the competition UI. Instead, we "softly" fill in a main venue automatically, as long as
+  #   there is only one venue associated with the competition and there is no other main venue yet.
+  # TODO: Delete this automatic backfilling hook and force Delegates to make a conscious choice in the UI,
+  #   once the data models are congruent (via follow-up PRs) and backfilling for historical data has been completed.
+  before_save :backlink_main_venue, unless: %i[is_multi_location? main_venue_id?]
+  private def backlink_main_venue
+    self.main_venue = self.competition_venues.first if self.competition_venues.count == 1
+  end
 
   # We have stricter validations for confirming a competition
   validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
