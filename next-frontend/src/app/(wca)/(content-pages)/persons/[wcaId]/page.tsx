@@ -190,7 +190,7 @@ export default async function PersonOverview({
                         </Tabs.Trigger>
                       )}
                       <Tabs.Trigger value="map">
-                        {t("persons.show.map")}
+                        {t("persons.show.competitions_map")}
                       </Tabs.Trigger>
                       <Tabs.Indicator
                         bg="colorPalette.solid"
