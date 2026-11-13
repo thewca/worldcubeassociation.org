@@ -2423,6 +2423,11 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+      info: "General"
+      more: "More"
+      admin: "Admin"
+      results: "Results"
+      events: "Events"
     h2h:
       set_number: "Set %{number}"
       stage_of: "Stage of %{number}"

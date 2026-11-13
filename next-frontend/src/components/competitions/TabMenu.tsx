@@ -4,10 +4,7 @@ import Link from "next/link";
 import {
   Badge,
   Box,
-  CloseButton,
   Collapsible,
-  Drawer,
-  IconButton,
   Link as ChakraLink,
   Separator,
   Tabs,
@@ -25,7 +22,7 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
 import { TFunction } from "i18next";
-import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
+import { LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import IconDisplay from "@/components/IconDisplay";
 import TabTarget from "@/components/ui/tabTarget";
@@ -62,8 +59,6 @@ export default function TabMenu({
   //   navigation closes it. Until tab navigation became client-side the page reload did that
   //   for us; hanging an onClick on the links instead would mean threading a callback three
   //   components down, past two `asChild` merges that are known to drop handlers.
-  const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
-  const drawerOpen = drawerOpenedAt === pathName;
 
   return (
     <>
@@ -95,76 +90,6 @@ export default function TabMenu({
           currentPath={currentPath}
         />
       </Tabs.List>
-      <Box hideFrom="md">
-        <Drawer.Root
-          open={drawerOpen}
-          onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
-          placement="start"
-        >
-          <Drawer.Trigger asChild>
-            <IconButton
-              aria-label="Open menu"
-              colorPalette="blue"
-              size="xl"
-              position="fixed"
-              insetEnd="4"
-              bottom="4"
-              zIndex="docked"
-              rounded="full"
-              shadow="lg"
-            >
-              <LuAlignJustify />
-            </IconButton>
-          </Drawer.Trigger>
-
-          <Drawer.Backdrop />
-          <Drawer.Positioner>
-            <Drawer.Content>
-              <Drawer.Header>
-                <Drawer.Title>
-                  {backHref ? (
-                    <BackLink
-                      href={backHref}
-                      label={competitionInfo.name}
-                      onClick={() => setDrawerOpenedAt(null)}
-                    />
-                  ) : (
-                    competitionInfo.name
-                  )}
-                </Drawer.Title>
-                <Drawer.CloseTrigger asChild>
-                  <CloseButton />
-                </Drawer.CloseTrigger>
-              </Drawer.Header>
-
-              <Drawer.Body>
-                <Tabs.List
-                  flexDirection="column"
-                  gap="1"
-                  borderInlineEnd="none"
-                  w="100%"
-                  bg="none"
-                >
-                  <TabList
-                    tabs={tabs}
-                    t={t}
-                    isAdminRoute={isAdminRoute}
-                    openGroup={openGroup}
-                    onToggle={(tab: CompetitionNavTab) =>
-                      setOpenGroup((prev) =>
-                        prev === tab.menuKey ? null : tab.menuKey,
-                      )
-                    }
-                    customTabs={customTabs}
-                    competitionId={competitionInfo.id}
-                    currentPath={currentPath}
-                  />
-                </Tabs.List>
-              </Drawer.Body>
-            </Drawer.Content>
-          </Drawer.Positioner>
-        </Drawer.Root>
-      </Box>
     </>
   );
 }

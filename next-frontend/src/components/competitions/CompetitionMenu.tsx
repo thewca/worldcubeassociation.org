@@ -10,6 +10,7 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import { Alert, Link } from "@chakra-ui/react";
+import MobileTabMenu from "./MobileTabMenu";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
@@ -53,6 +54,39 @@ export default async function CompetitionMenu({
   return (
     <TabMenu
       competitionInfo={competitionInfo}
+      tabs={tabs}
+      customTabs={competitionInfo.tabs.map((tab) => tab.name)}
+    />
+  );
+}
+
+export async function MobileCompetitionMenu({
+  params,
+}: {
+  params: Promise<{ competitionId: string }>;
+}) {
+  const { competitionId } = await params;
+  const { t } = await getT();
+  const {
+    data: competitionInfo,
+    error,
+    response,
+  } = await getCompetitionInfo(competitionId);
+
+  if (error) return <OpenapiError t={t} response={response} />;
+
+  const { hasEnded, isOngoing, isAwaitingResults } =
+    competitionStatus(competitionInfo);
+
+  const baseTabs = hasEnded
+    ? afterCompetitionTabs(competitionInfo, isAwaitingResults)
+    : beforeCompetitionTabs(competitionInfo);
+
+  const tabs = isOngoing ? [...baseTabs, liveTab(competitionInfo)] : baseTabs;
+
+  return (
+    <MobileTabMenu
+      competitionId={competitionId}
       tabs={tabs}
       customTabs={competitionInfo.tabs.map((tab) => tab.name)}
     />
