@@ -136,8 +136,12 @@ function EditAvatar({
     });
   };
 
-  const deleteAvatar = (reasonForDeletion, cleanupFn) => {
-    save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, () => {
+  const deleteAvatar = (reasonForDeletion, includesAvatarPicture, cleanupFn) => {
+    save(avatarDataUrl, {
+      avatarId: workingAvatar?.id,
+      reason: reasonForDeletion,
+      include_avatar_picture: includesAvatarPicture,
+    }, () => {
       sync();
       cleanupFn();
     }, {
