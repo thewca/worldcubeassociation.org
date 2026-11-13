@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_13_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1220,16 +1219,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
     t.bigint "round_id", null: false
     t.string "round_type_id", limit: 1, default: "", null: false
     t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
-    t.index ["average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
-    t.index ["best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
     t.index ["competition_id", "person_id"], name: "index_results_on_competition_id_and_person_id"
     t.index ["competition_id", "updated_at"], name: "index_Results_on_competitionId_and_updated_at"
     t.index ["competition_id"], name: "Results_fk_tournament"
     t.index ["country_id"], name: "_tmp_index_Results_on_countryId"
+    t.index ["event_id", "average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_speedup"
     t.index ["event_id", "average"], name: "Results_eventAndAverage"
+    t.index ["event_id", "best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_speedup"
     t.index ["event_id", "best"], name: "Results_eventAndBest"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "average"], name: "Results_regionalAverageRecordCheckSpeedup"
     t.index ["event_id", "competition_id", "round_type_id", "country_id", "best"], name: "Results_regionalSingleRecordCheckSpeedup"
+    t.index ["event_id", "country_id", "average", "person_name", "competition_id", "round_type_id"], name: "results_n_results_average_region_speedup"
+    t.index ["event_id", "country_id", "best", "person_name", "competition_id", "round_type_id"], name: "results_n_results_single_region_speedup"
     t.index ["event_id"], name: "Results_fk_event"
     t.index ["format_id"], name: "Results_fk_format"
     t.index ["person_id"], name: "Results_fk_competitor"
