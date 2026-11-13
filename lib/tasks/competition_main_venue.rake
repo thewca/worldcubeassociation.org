@@ -29,12 +29,12 @@ namespace :competition_main_venue do
         end
 
         # Legacy data sometimes does not match modern WCIF conventions. Save anyways.
-        main_venue.presence&.save(validate: false)
+        main_venue.presence&.save!(validate: false)
 
         competition.assign_attributes(main_venue: main_venue, is_multi_location: is_multi_location)
 
         if competition.changed?
-          competition.save(validate: false)
+          competition.save!(validate: false)
           puts "Saved #{competition.id}"
         end
     end
@@ -53,7 +53,7 @@ namespace :competition_main_venue do
 
         if competition.main_venue.changed?
           puts "Updated information on #{competition.id}"
-          competition.main_venue.save(validate: false)
+          competition.main_venue.save!(validate: false)
         end
     end
   end
