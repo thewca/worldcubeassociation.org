@@ -6,7 +6,7 @@ RSpec.describe "API v1 Persons" do
   let(:person) { create(:person) }
 
   describe "GET #show" do
-    let!(:result) { create(:result, person: person) }
+    let!(:result) { create(:result, person: person, event_id: "333oh") }
 
     it "is reachable without logging in" do
       get api_v1_person_path(person.wca_id)
@@ -42,7 +42,7 @@ RSpec.describe "API v1 Persons" do
     end
 
     it "serializes championship podiums as v1 results" do
-      world_championship = create(:competition, championship_types: ["world"])
+      world_championship = create(:competition, :world_championship)
       podium_result = create(:result, person: person, competition: world_championship, pos: 2)
 
       get api_v1_person_path(person.wca_id)
