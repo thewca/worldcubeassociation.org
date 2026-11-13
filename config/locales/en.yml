@@ -771,6 +771,8 @@ en:
       privacy: "Privacy"
       disclaimer: "Disclaimer"
       find_us: "Find us"
+      switch_to_dark_mode: "Switch to dark mode"
+      switch_to_light_mode: "Switch to light mode"
   page:
     translators:
       title: "Translators"
