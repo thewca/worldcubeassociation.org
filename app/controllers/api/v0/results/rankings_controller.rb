@@ -61,16 +61,20 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                     average value,
                     competitions.cell_name competition_name,
                     competitions.country_id competition_country_id
-                  FROM results
-                  #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-                  JOIN competitions on competitions.id = results.competition_id
-                  WHERE average > 0
-                    #{@event_condition}
-                    #{@region_condition}
-                    #{@gender_condition}
-                  ORDER BY
-                    average, person_name, competition_id, round_type_id
-                  #{limit_condition}
+                  FROM (
+                    SELECT results.id
+                    FROM results
+                    #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+                    WHERE average > 0
+                      #{@event_condition}
+                      #{@region_condition}
+                      #{@gender_condition}
+                    ORDER BY average, person_name, competition_id, round_type_id
+                    #{limit_condition}
+                  ) AS average_results
+                    INNER JOIN results ON results.id = average_results.id
+                    JOIN competitions on competitions.id = results.competition_id
+                  ORDER BY average, person_name, competition_id, round_type_id
                 SQL
               else
                 <<~SQL.squish
@@ -106,22 +110,26 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
                   competitions.cell_name competition_name,
                   competitions.country_id competition_country_id
                 FROM (
-                  SELECT
-                    results.country_id record_country_id,
-                    MIN(#{value}) record_value
-                  FROM concise_#{type_param}_results results
+                  SELECT results.id
+                  FROM (
+                    SELECT
+                      results.country_id record_country_id,
+                      MIN(#{value}) record_value
+                    FROM concise_#{type_param}_results results
+                    #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
+                    WHERE 1
+                      #{@event_condition}
+                      #{@gender_condition}
+                    GROUP BY results.country_id
+                  ) records
+                  JOIN results ON results.#{value} = record_value AND results.country_id = record_country_id
                   #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
                   WHERE 1
                     #{@event_condition}
                     #{@gender_condition}
-                  GROUP BY results.country_id
-                ) records
-                JOIN results ON results.#{value} = record_value AND results.country_id = record_country_id
+                ) record_results
+                JOIN results ON results.id = record_results.id
                 JOIN competitions on competitions.id = results.competition_id
-                #{'JOIN persons ON results.person_id = persons.wca_id and persons.sub_id = 1' if @gender_condition.present?}
-                WHERE 1
-                  #{@event_condition}
-                  #{@gender_condition}
                 ORDER BY value, results.country_id, start_date, person_name
               SQL
             end
