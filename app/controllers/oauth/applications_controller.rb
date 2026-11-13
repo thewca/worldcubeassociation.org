@@ -7,7 +7,6 @@ class Oauth::ApplicationsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_application, only: %i[show edit update destroy]
-  before_action :require_admin_for_added_admin_only_scopes!, only: %i[create update]
 
   def index
     @applications = current_user.admin? ? Doorkeeper::Application.all : current_user.oauth_applications
@@ -22,6 +21,8 @@ class Oauth::ApplicationsController < ApplicationController
 
   def edit
   end
+
+  before_action :require_admin_for_added_admin_only_scopes, only: %i[create update]
 
   def create
     @application = Doorkeeper::Application.new(application_params)
@@ -55,7 +56,7 @@ class Oauth::ApplicationsController < ApplicationController
     raise ActionController::RoutingError.new('Not Found') if @application.owner != current_user && !current_user.admin?
   end
 
-  private def require_admin_for_added_admin_only_scopes!
+  private def require_admin_for_added_admin_only_scopes
     return if current_user.admin?
 
     # On update, owners may keep an admin-only scope that an admin granted earlier.
