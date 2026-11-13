@@ -159,6 +159,7 @@ namespace :db do
             scopes: Doorkeeper.configuration.scopes.to_s,
             owner_id: User.find_by!(wca_id: "2005FLEI01").id,
             owner_type: "User",
+            confidential: false,
           )
 
           # Run the CAD jobs so that results are available
