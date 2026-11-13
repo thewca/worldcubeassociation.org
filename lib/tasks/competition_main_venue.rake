@@ -23,6 +23,7 @@ namespace :competition_main_venue do
           )
 
           main_venue.backfill_competition_info!
+          main_venue.backfill_competition_coordinates!
         else
           is_multi_location = competition.fictive_country?
         end
