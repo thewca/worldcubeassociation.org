@@ -364,12 +364,14 @@ export function ByCompetitionTable({
             <Table.ColumnHeader>
               {t("persons.show.competition")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("persons.show.round")}</Table.ColumnHeader>
             <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
-            <Table.ColumnHeader>Single</Table.ColumnHeader>
-            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
+            <Table.ColumnHeader>{t("common.single")}</Table.ColumnHeader>
+            {anyAverages && (
+              <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
+            )}
             <Table.ColumnHeader colSpan={attemptCount} textAlign="start">
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -386,11 +388,6 @@ export function ByCompetitionTable({
 
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
-
-              if (
-                competitorResult.competition_short_name === "Maoming Open 2026"
-              )
-                console.log(competitorResult);
 
               return (
                 <Table.Row key={competitorResult.id}>
