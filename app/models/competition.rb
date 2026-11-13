@@ -132,6 +132,7 @@ class Competition < ApplicationRecord
   CLONEABLE_ATTRIBUTES = %w[
     city_name
     country_id
+    is_multi_location
     information
     venue
     venue_address
