@@ -270,6 +270,15 @@ class Person < ApplicationRecord
     user&.delegate_status
   end
 
+  # Like `delegate_status`, these come off the linked user, which a person need not have.
+  def avatar
+    (user || User.new).avatar
+  end
+
+  def teams
+    user&.team_roles&.map(&:team_membership) || []
+  end
+
   # A person can have a single but not an average, but never an average without a single,
   # which is why the singles are the base for the lookup.
   def ranks_by_event
@@ -323,8 +332,10 @@ class Person < ApplicationRecord
   }.freeze
 
   V1_SERIALIZE_OPTIONS = {
-    only: %w[wca_id name gender teams avatar],
-    methods: %w[url country_iso2 delegate_status competition_count event_ids_with_results ranks_by_event medals records completed_solves_count championship_podium_results],
+    v1: true,
+    only: %w[wca_id name gender],
+    methods: %w[url country_iso2 delegate_status teams competition_count event_ids_with_results ranks_by_event medals records completed_solves_count championship_podium_results],
+    include: { avatar: UserAvatar::V1_SERIALIZE_OPTIONS },
   }.freeze
 
   USER_COMMON_SERIALIZE_OPTIONS = {
@@ -437,6 +448,9 @@ class Person < ApplicationRecord
   end
 
   def serializable_hash(options = nil)
+    # The v1 shape is spelled out completely in its options and must not pick up the legacy additions below.
+    return super if options&.dig(:v1)
+
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase
     json[:id] = self.wca_id
