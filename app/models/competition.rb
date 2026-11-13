@@ -722,6 +722,7 @@ class Competition < ApplicationRecord
              'competition_events',
              'competition_organizers',
              'competition_venues',
+             'main_venue',
              'media',
              'scrambles',
              'country',
