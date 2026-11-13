@@ -177,7 +177,7 @@ export default async function PersonOverview({
                         {t("persons.show.results")}
                       </Tabs.Trigger>
                       <Tabs.Trigger value="competitions">
-                        {t("persons.show.competitions")}
+                        {t("competitions.index.title")}
                       </Tabs.Trigger>
                       {hasRecords && (
                         <Tabs.Trigger value="records">
