@@ -791,8 +791,8 @@ class Competition < ApplicationRecord
   #   once the data models are congruent (via follow-up PRs) and backfilling for historical data has been completed.
   before_save :backlink_main_venue, unless: %i[is_multi_location? main_venue_id?]
   private def backlink_main_venue
-    self.main_venue = self.competition_venues.first if self.competition_venues.count == 1
-    self.is_multi_location = self.competition_venues.count > 1 && self.fictive_country?
+    self.main_venue = self.competition_venues.first if self.competition_venues.size == 1
+    self.is_multi_location = self.competition_venues.size > 1 && self.fictive_country?
   end
 
   # After the cloned competition is created, clone other associations which cannot just be copied.
