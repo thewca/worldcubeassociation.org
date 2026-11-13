@@ -138,7 +138,7 @@ export default async function Navbar() {
       position="sticky"
       top={0}
       zIndex={2}
-      css={{ containerType: "scroll-state" }}
+      containerType="scroll-state"
     >
       <Box
         borderBottom="md"
@@ -150,7 +150,6 @@ export default async function Navbar() {
           "@container scroll-state(stuck: top)": {
             bg: "bg/80",
             backdropFilter: "blur(10px) saturate(1.2)",
-            "& [data-navbar-row]": { py: "1.5" },
           },
         }}
       >
@@ -163,6 +162,11 @@ export default async function Navbar() {
             justifyContent="space-between"
             transition="padding 0.2s ease"
             _motionReduce={{ transition: "none" }}
+            css={{
+              "@container scroll-state(stuck: top)": {
+                py: "1.5",
+              },
+            }}
           >
             <HStack>
               {!LIVE_RESULT_BETA && <WCALogo />}
