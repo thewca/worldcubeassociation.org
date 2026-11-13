@@ -42,16 +42,16 @@ locals {
       value = "mongodb://payload-database-staging.cluster-comp2du1hpno.us-west-2.docdb.amazonaws.com/payload?retryWrites=false"
     },
     {
-      name  = "LIVE_RESULT_BETA"
-      value = "1"
-    },
-    {
       name  = "WCA_BACKEND_API_URL"
       value = "http://${local.rails_internal_dns}:3000/api/"
     },
     {
       name  = "WCA_FRONTEND_API_URL"
       value = "https://www.staging.worldcubeassociation.org/api/"
+    },
+    {
+      name  = "WEBLATE_URL"
+      value = "http://weblate.internal:8080"
     },
     {
       name  = "PROPRIETARY_FONT"
@@ -64,6 +64,16 @@ locals {
     {
       name = "TASK_ROLE",
       value = aws_iam_role.nextjs_role.name
+    },
+    {
+      name  = "REDIS_URL"
+      value = "redis://${aws_elasticache_replication_group.cache.primary_endpoint_address}:6379"
+    },
+    {
+      # nextjs-turbo-redis-cache verifies `notify-keyspace-events` via CONFIG GET on startup, which ElastiCache blocks.
+      #   The setting itself is applied through the `redis7allkeyslfu` parameter group in shared/redis.tf instead.
+      name  = "SKIP_KEYSPACE_CONFIG_CHECK"
+      value = "true"
     }
   ]
 }

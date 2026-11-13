@@ -13,6 +13,9 @@ import Loading from "@/components/ui/loading";
 import NavbarSkeleton from "./navbar-skeleton";
 import FooterSkeleton from "./footer-skeleton";
 import { EmotionRegistry } from "@/components/ui/emotion-registry";
+import { Toaster } from "@/components/ui/toaster";
+import LocaleProvider from "@/lib/i18n/LocaleProvider";
+import { getT } from "@/lib/i18n/get18n";
 
 export const metadata: Metadata = {
   title: {
@@ -30,6 +33,14 @@ const computeFont = async () => {
 
   return appFont;
 };
+
+// Reading the language touches cookies and headers, so it has to happen inside a Suspense
+//   boundary. Otherwise Cache Components can't prerender the static shell.
+async function WithLocale({ children }: { children: React.ReactNode }) {
+  const { lng } = await getT();
+
+  return <LocaleProvider lng={lng}>{children}</LocaleProvider>;
+}
 
 export default async function RootLayout({
   children,
@@ -53,18 +64,29 @@ export default async function RootLayout({
             <EmotionRegistry>
               <UiProvider>
                 {!process.env.LIVE_RESULT_BETA && (
-                  <ClientOnly>
-                    <BetaDisclaimer />
-                  </ClientOnly>
+                  <Suspense>
+                    <WithLocale>
+                      <ClientOnly>
+                        <BetaDisclaimer />
+                      </ClientOnly>
+                    </WithLocale>
+                  </Suspense>
                 )}
                 <Suspense fallback={<NavbarSkeleton />}>
-                  <Navbar />
+                  <WithLocale>
+                    <Navbar />
+                  </WithLocale>
                 </Suspense>
-                <NextTopLoader height={5} />
-                <Suspense fallback={<Loading />}>{children}</Suspense>
+                <NextTopLoader height={5} showForHashAnchor={false} />
+                <Suspense fallback={<Loading />}>
+                  <WithLocale>{children}</WithLocale>
+                </Suspense>
                 <Suspense fallback={<FooterSkeleton />}>
-                  <Footer />
+                  <WithLocale>
+                    <Footer />
+                  </WithLocale>
                 </Suspense>
+                <Toaster />
               </UiProvider>
             </EmotionRegistry>
           </WCAQueryClientProvider>

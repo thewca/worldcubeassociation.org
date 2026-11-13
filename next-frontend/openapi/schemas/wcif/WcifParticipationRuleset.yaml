@@ -3,7 +3,9 @@ properties:
   participationSource:
     $ref: './WcifParticipationSource.yaml'
   reservedPlaces:
-    type: object
+    type:
+      - object
+      - "null"
     properties:
       nationalities:
         type: array
@@ -13,3 +15,4 @@ properties:
         type: integer
 required:
   - participationSource
+  - reservedPlaces

@@ -45,8 +45,24 @@ RSpec.describe Competition do
     end
 
     it "accepts a competition starting on the introduction date" do
-      competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto])
+      competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto], scoretaking_software: :internal)
       expect(competition).to be_valid
+    end
+
+    it "rejects the event without internal scoretaking" do
+      competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto], scoretaking_software: :external)
+      expect(competition).to be_invalid_with_errors(scoretaking_software: ["must be set to Integrated Live Results when holding Face Turning Octahedron."])
+    end
+
+    it "rejects adding the event through the WCIF without internal scoretaking" do
+      competition = create(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333], scoretaking_software: :wca_live)
+      admin = create(:admin)
+
+      wcif = competition.to_wcif
+      wcif['events'] += [{ 'id' => 'fto', 'rounds' => [] }]
+
+      expect { competition.set_wcif!(wcif, admin) }.to raise_error(ActiveRecord::RecordInvalid, /Integrated Live Results/)
+      expect(competition.reload.event_ids).not_to include('fto')
     end
 
     it "accepts a competition starting before the introduction date without the event" do
@@ -552,12 +568,12 @@ RSpec.describe Competition do
       expect(competition.warnings_for(nil)[:id]).to be_nil
     end
 
-    it "warns if advancement condition isn't present for a non final round" do
-      create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
-      create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2)
+    it "warns if participation condition isn't present for a non initial round" do
+      initial_round = create(:round, competition: competition, event_id: "333", number: 1, total_number_of_rounds: 2)
+      create(:round, competition: competition, event_id: "333", number: 2, total_number_of_rounds: 2, participation_source: initial_round)
 
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:advancement_conditions]).to eq I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
+      expect(competition.warnings_for(nil)[:participation_conditions]).to eq I18n.t('competitions.messages.advancement_condition_must_be_present_for_all_non_final_rounds')
     end
 
     it "warns if the cutoff is greater than the time limit for any round" do
@@ -1499,6 +1515,17 @@ RSpec.describe Competition do
     it "ics export includes all rounds" do
       competition.rounds.map(&:name).each do |r|
         expect(competition.to_ics.events.map { |e| e.summary.to_s }).to include(r)
+      end
+    end
+
+    it "ics export encodes datetimes as UTC with Zulu suffix" do
+      ical = competition.to_ics.to_ical
+      expect(ical).not_to include("TZID")
+
+      lines = ical.split("\r\n")
+      competition.all_activities.each do |activity|
+        expect(lines).to include("DTSTART:#{activity.start_time.utc.strftime('%Y%m%dT%H%M%SZ')}")
+        expect(lines).to include("DTEND:#{activity.end_time.utc.strftime('%Y%m%dT%H%M%SZ')}")
       end
     end
   end

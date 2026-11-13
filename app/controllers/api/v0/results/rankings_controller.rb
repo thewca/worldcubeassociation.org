@@ -14,6 +14,8 @@ class Api::V0::Results::RankingsController < Api::V0::Results::ResultsController
 
     shared_constants_and_conditions
 
+    raise WcaExceptions::BadApiParameter.new("Unknown ranking type, must be one of: #{@types.join(', ')}", json_property: :type) if @types.exclude?(params[:type])
+
     record_timestamp = ComputeAuxiliaryData.successful_start_date || Date.current
     cache_params = ResultsController.compute_cache_key(MODE_RANKINGS_NEXT, **params_for_cache)
 

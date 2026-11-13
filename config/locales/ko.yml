@@ -2380,8 +2380,6 @@ ko:
         competitors: 참가자 명단
         scrambles: 스크램블
     results_table:
-      h2h_results_disclaimer: '결과는 일대일 결승전으로 결정됩니다. 전체 일대일 결과 표시 기능은 아직 개발 중이므로, 순위와
-        최고 기록만 표시됩니다.'
       wca_profile: WCA 프로필
       event: 종목
       round: 라운드

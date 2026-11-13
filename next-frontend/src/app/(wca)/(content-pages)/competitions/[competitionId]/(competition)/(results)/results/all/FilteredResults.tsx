@@ -1,21 +1,24 @@
 "use client";
 
 import { Fragment, useState } from "react";
+import _ from "lodash";
 import { components } from "@/types/openapi";
 import { Heading, VStack } from "@chakra-ui/react";
-import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
+import LinkedRoundResults from "@/components/results/LinkedRoundResults";
+import HeadToHeadBracket from "@/components/results/HeadToHeadBracket";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
-import roundTypes from "@/lib/wca/data/roundTypes";
 
 export default function FilteredResults({
   competitionInfo,
-  resultsByEvent,
+  roundsByEvent,
+  h2hRoundsById,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
-  resultsByEvent: Record<string, components["schemas"]["Result"][]>;
+  roundsByEvent: Record<string, components["schemas"]["V1CompetitionRound"][]>;
+  h2hRoundsById: Record<string, components["schemas"]["H2hRound"]>;
 }) {
   const [activeEventId, setActiveEventId] = useState<string>(
     competitionInfo.event_ids[0],
@@ -23,14 +26,13 @@ export default function FilteredResults({
 
   const { t } = useT();
 
-  const resultsByRound = _.groupBy(
-    resultsByEvent[activeEventId],
-    "round_type_id",
-  );
-
-  const orderedRoundTypes = _.sortBy(
-    _.keys(resultsByRound),
-    (roundType) => roundTypes.byId[roundType].rank,
+  // The rounds of a Dual Round are shown together, in place of the first one.
+  const roundGroups = _.values(
+    _.groupBy(roundsByEvent[activeEventId] ?? [], (round) =>
+      round.ranking_mode === "linked_round"
+        ? round.linked_round_wcif_ids?.join()
+        : round.wcif_id,
+    ),
   );
 
   return (
@@ -41,26 +43,36 @@ export default function FilteredResults({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
-      {_.map(orderedRoundTypes, (roundType) => (
-        <Fragment key={`${activeEventId}-${roundType}`}>
-          <Heading textStyle="h3">
-            {events.byId[activeEventId].name} {t(`rounds.${roundType}.name`)}
-          </Heading>
-          <ResultsTable
-            results={resultsByRound[roundType].toSorted(
-              (a, b) => a.pos - b.pos,
-            )}
+      {roundGroups.map(([round, ...linkedRounds]) =>
+        linkedRounds.length > 0 ? (
+          <LinkedRoundResults
+            key={round.wcif_id}
+            rounds={[round, ...linkedRounds]}
             eventId={activeEventId}
-            formatId={
-              resultsByRound[roundType][0]
-                .format_id /* anti-pattern because of current prop type restrictions */
-            }
-            t={t}
-            isAdmin={false}
-            solveTextAlign="center"
           />
-        </Fragment>
-      ))}
+        ) : (
+          <Fragment key={round.wcif_id}>
+            <Heading textStyle="h3">
+              {events.byId[activeEventId].name}{" "}
+              {t(`rounds.${round.round_type_id}.name`)}
+            </Heading>
+            {h2hRoundsById[round.wcif_id] ? (
+              <HeadToHeadBracket round={h2hRoundsById[round.wcif_id]} />
+            ) : (
+              /* Already ordered by `pos`, the position within this round. */
+              <ResultsTable
+                results={round.results}
+                eventId={activeEventId}
+                formatId={round.format_id}
+                rankingMode={round.ranking_mode}
+                t={t}
+                isAdmin={false}
+                solveTextAlign="center"
+              />
+            )}
+          </Fragment>
+        ),
+      )}
     </VStack>
   );
 }

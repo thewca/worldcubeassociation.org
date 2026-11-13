@@ -58,8 +58,8 @@ fr:
     pyram: Pyraminx
     skewb: Skewb
     sq1: Square-1
-    444bf: Cube 4x4x4 à l'aveugle
-    555bf: Cube 5x5x5 à l'aveugle
+    444bf: 4x4x4 à l'aveugle
+    555bf: 5x5x5 à l'aveugle
     333mbf: 3x3x3 résolutions multiples à l'aveugle
     fto: Octaminx (FTO)
     magic: Magic
@@ -121,7 +121,7 @@ fr:
     name: '%{event_name} %{round_name}'
     round_number: 'Tour %{round_number}'
   scramble_set:
-    name: 'Ensemble de mélanges %{letter_code}'
+    name: 'Série de mélanges %{letter_code}'
     group: 'Groupe %{number}'
     attempt: 'Tentative %{number}'
   advancement_condition:
@@ -227,6 +227,7 @@ fr:
       unit_seconds: secondes
       unit_moves: mouvements
     back_to_top: Retour en haut de la page
+    back: Retour
   oauth:
     applications:
       your_apps: Vos applications OAuth
@@ -604,6 +605,9 @@ fr:
     passwords:
       edit:
         new_password_confirmation: Ressaisissez le nouveau mot de passe
+      send_paranoid_instructions: Un lien permettant de réinitialiser le mot de 
+        passe sera envoyé à l'adresse e-mail si un compte a été créé auprès de 
+        la WCA.
     sessions:
       new:
         sign_in: Connexion
@@ -718,8 +722,13 @@ fr:
           disabled_failed: >-
             Impossible de désactiver le 2FA, merci de consulter l'erreur
             ci-dessous.
+        redesign_notice: Vous consultez actuellement la nouvelle page de 
+          connexion. Elle remplacera l'ancienne d'ici la fin de l'année.
+        use_classic: Passer à l'ancienne page de connexion
       destroy_other:
         success: Vos autres appareils ont été déconnectés avec succès.
+      destroy:
+        success: Vous avez été déconnecté.
     shared:
       links:
         sign_in: Connexion
@@ -734,7 +743,10 @@ fr:
     mailer:
       confirmation_instructions:
         subject: Merci de confirmer votre nouvelle adresse e-mail
-    registrations: {}
+    registrations:
+      new:
+        redesign_notice: Vous consultez actuellement la nouvelle page 
+          d'inscription. Elle remplacera l'ancienne d'ici la fin de l'année.
   wca:
     errors:
       messages:
@@ -793,12 +805,12 @@ fr:
         Bon retour parmi nous ! Pour créer votre compte sur le site de la WCA,
         nous avons besoin de connaître l'ID WCA avec lequel vous avez participé.
       welcome_html: >-
-        Bienvenue! Avant de participer à votre première compétition WCA, nous
-        avons besoin de renseignements supplémentaires. Veuillez noter que votre
-        date de naissance ne sera jamais publiée sans votre
-        permission.<br/><br/>Si vous vous inscrivez au nom de quelqu’un d’autre,
-        veuillez fournir les information du <strong>compétiteur</strong>/de la
-        <strong>compétitrice</strong>.
+        Bienvenue! Avant de participer à votre première compétition WCA, nous avons
+        besoin de renseignements supplémentaires.<br/><br/>Si vous vous inscrivez
+        au nom de quelqu’un d’autre, veuillez fournir les information du <strong>compétiteur</strong>/de
+        la <strong>compétitrice</strong>.
+      dob_privacy: Cette information ne sera jamais divulguée sans votre 
+        autorisation.
   layouts:
     navigation:
       information: Informations
@@ -860,6 +872,20 @@ fr:
       privacy: Données personnelles
       disclaimer: Mentions légales
       find_us: Nous trouver
+      panels:
+        admin: Panneau d'administration
+        volunteer: Panneau bénévole
+        delegate: Panneau Délégué
+        wapc: Panneau WAC
+        wfc: Panneau WFC
+        wrt: Panneau WRT
+        wst: Panneau WST
+        board: Panneau du Conseil d'administration
+        leader: Panneau responsable
+        senior_delegate: Panneau Délégué Senior
+        wic: Panneau WIC
+        weat: Panneau WEAT
+        wqac: Panneau WQAC
   page:
     translators:
       title: Traducteur·rice·s
@@ -982,8 +1008,8 @@ fr:
           web, générateur de mélanges, outils de travail, outils
           d'administration).
         wsot: >-
-          L'équipe de l'organisation sportive de la WCA (WSOT) supervise et
-          soutient la reconnaissance de la WCA en tant qu'organisation sportive
+          L'équipe de reconnaissance en tant que Sport de la WCA (WSOT) supervise
+          et soutient la reconnaissance de la WCA en tant qu'organisation sportive
           internationale.
         wapc: >-
           Le Comité d'appel de la WCA (WAC) examine et résout les appels
@@ -991,6 +1017,7 @@ fr:
           WAC fournit un processus de révision indépendant et impartial pour
           s'assurer que les décisions sont justes, raisonnables et conformes aux
           politiques et règlements de la WCA.
+      empty: Aucune équipe ni aucun comité trouvé. Veuillez revenir plus tard.
     contacts:
       title: Formulaire de contact WCA
       faq_note_html: >-
@@ -1124,6 +1151,13 @@ fr:
         Original : Demande envoyée - nous vous répondrons prochainement. Pour
         consulter le statut de cette demande, veuillez vous rendre sur <a
         href="%{link}">ce lien</a>.
+    executives:
+      title: Dirigeants
+      joined_wca: A rejoint la WCA
+      joined_executives: A rejoint l'équipe de direction
+      more_information: Plus d'informations
+      close: Fermer
+      person_not_found: Aucune personne trouvée avec l'ID WCA %{wca_id}
   homepage:
     learn_more: En savoir plus
     title: Bienvenue à la World Cube Association
@@ -1193,12 +1227,11 @@ fr:
         welcome: 'Bonjour %{user_email} !'
         confirm: >-
           Votre compte est créé et vous devez l'activer avant de pouvoir l'utiliser.
-          Merci de confirmer votre compte en cliquant sur le lien ci-dessous :  #original_hash:
-          776476a
+          Merci de confirmer votre compte en cliquant sur le lien ci-dessous : 
         confirmation_link: Confirmer mon compte.
         activate: >-
           Après l'activation, vous pourrez vous connecter sur le site internet de
-          la World Cube Association :  #original_hash: fb02586
+          la World Cube Association : 
         login_form: formulaire de connexion
         addendum: >-
           Cet e-mail est envoyé automatiquement. Si vous n'avez pas créé de
@@ -1414,8 +1447,7 @@ fr:
           gestes offensants).
       staff_avatar_guidelines:
         title: >-
-          Lignes directrices supplémentaires pour les bénévoles et les délégués
-          stagiaires :
+          Lignes directrices supplémentaires pour les bénévoles et les apprentis délégués :
         paragraphs:
           '1': >-
             La photo de profil doit vous représenter, de la même manière dont
@@ -1509,6 +1541,7 @@ fr:
         contacter l'équipe de résultats de la WCA (WRT) en utilisant <a
         href="%{dob_form_path}">ce formulaire dédié</a>.
       unknown_wca_id_html: 'L''ID WCA %{link_id} n''existe pas.'
+      search_for_delegate: Rechercher un délégué
   user_roles:
     email:
       role_metadata:
@@ -1517,6 +1550,9 @@ fr:
         locale: Langue
         group_name: Nom du comité ou de l'équipe
         delegated_competitions_count: Nombre de compétition déléguées
+        wca_id: ID WCA
+        location: Lieu
+        email: E-mail
   user_groups:
     group_types:
       board: Conseil d'administration de la WCA
@@ -1973,6 +2009,8 @@ fr:
         many: '%{count} places restantes'
         other: '%{count} places restantes'
       no_spots_left: Compétition pleine
+      provisional_live_results: 'En attendant, vous pouvez consulter les résultats
+        provisoires ici :'
     live:
       title: Résultats en direct
       manage_rounds: Gérer les tours
@@ -2071,6 +2109,9 @@ fr:
           in_batch: >-
             Impossible de retirer un compétiteur dont les résultats font partie
             d'un lot non soumis
+          scoresheet_warning: Veillez à ne retirer un compétiteur que lorsque 
+            vous avez physiquement en main sa feuille de score vierge. Vous ne 
+            pouvez pas réintégrer un compétiteur dans un tour déjà terminé.
         add_competitor:
           single_round: Ajouter un compétiteur au tour
           multiple_rounds:
@@ -2087,13 +2128,23 @@ fr:
             la compétition n'autorise plus la modification des inscriptions.
             Vous pouvez tout de même l'ajouter, mais assurez-vous que c'est bien
             ce que vous souhaitez faire.
+          round_closed: Vous ne pouvez pas ajouter un compétiteur à un tour déjà
+            terminé
       results:
         competitor: Compétiteur
         mean: Moyenne
       errors:
         round_closed: Le tour n'est pas encore ouvert
+      combined_title: Doubles confrontations combinées
+      overview:
+        upcoming: À venir
+        in_progress: En ce moment
+        past_month: Dernier mois
+        no_upcoming: Il n'y a aucune compétition à venir avec des résultats en 
+          direct.
+        search: Rechercher des compétitions
     my_competitions:
-      title: Mes compétitions
+      title: Mes Compétitions
       disclaimer: >-
         Seules les compétitions qui utilisent le site de la WCA pour les
         inscriptions seront affichées ici. Si votre compétition n'est pas listée
@@ -2276,6 +2327,7 @@ fr:
       bookmark: Ajouter cette compétition aux favoris
       is_bookmarked: Vous avez ajouté cette compétition aux favoris
       number_of_bookmarks: Nombre de personne ayant cette compétition en favoris
+      waiting_list_size: Nombre de personnes sur la liste d'attente
     index:
       title: Compétitions
       all_competitions: Toutes les compétitions
@@ -2367,6 +2419,21 @@ fr:
       why_compete_description_html: |-
         <p>Les compétitions ne servent pas seulement à déterminer qui est le plus rapide : ce sont aussi des événements conviviaux ! Toute personne capable de résoudre un Rubik's Cube est la bienvenue pour venir battre son propre record personnel. Il est facile de se faire des amis, car tout le monde travaille main dans la main pour assurer le bon déroulement de la compétition.</p>
         <p>Utilisez l'outil ci-dessous pour trouver une compétition près de chez vous et vous lancer dans l'aventure du Rubik's Cube !</p>
+      location_sign_in_required: Connectez-vous pour rechercher une adresse
+      location_not_found: Aucun lieu n'a été trouvé pour cette adresse
+      location_search_failed: La recherche d'adresse a échoué, veuillez 
+        réessayer dans une minute
+      championship_only: Afficher uniquement les championnats
+      sort:
+        order: Ordre de tri
+        start_date_asc: 'Date de début : croissante'
+        start_date_desc: 'Date de début : décroissante'
+        end_date_asc: 'Date de fin : croissante'
+        end_date_desc: 'Date de fin : décroissante'
+        announced_at_asc: "Date d'annonce : croissante"
+        announced_at_desc: "Date d'annonce : décroissante"
+        name_asc: 'Nom : A-Z'
+        name_desc: 'Nom : Z-A'
     my_competitions_table:
       edit: Éditer
       registrations: Inscriptions
@@ -3193,6 +3260,8 @@ fr:
       edited_deadline_not_in_future: >-
         Vous ne pouvez introduire que des dates limites futures, mais
         %{new_timestamp} n'est pas dans le futur.
+      fto_requires_internal_scoretaking: doit être défini sur Résultats en 
+        direct internes lorsque l'Octaminx (FTO) est présent.
     new:
       create_competition: Créer une compétition
       note_clone: >-
@@ -3388,10 +3457,6 @@ fr:
         competitors: Compétiteurs
         scrambles: Mélanges
     results_table:
-      h2h_results_disclaimer: >-
-        Résultats déterminés par une finale en face à face. Seuls le classement
-        et la meilleure résolution sont affichés, car l'affichage complet des
-        résultats en face à face est encore en cours de développement.
       wca_profile: Profil WCA
       event: Épreuve
       round: Tour
@@ -3400,12 +3465,28 @@ fr:
         national: Rang national
         continent: Rang continental
         world: Rang mondial
+      show_all_linked_results: Afficher les résultats des deux tours
+      linked_results_disclaimer_html: Ce tour fait partie d'une double 
+        confrontation. Les résultats ci-dessous sont affichés par tour ; les 
+        résultats combinés des deux tours sont disponibles sur la <a 
+        href="%{results_url}">nouvelle page des résultats</a>.
+      h2h_results_disclaimer_html: Résultats déterminés par une finale en 
+        face-à-face. Seuls l'ordre de classement et la meilleure résolution sont
+        affichés ici ; le tableau complet du face-à-face est disponible sur la 
+        <a href="%{results_url}">nouvelle page des résultats</a>.
     scrambles_table:
       group: Groupe
       scramble: Mélange
     competition_series_fields:
       add_series: Ajouter à une Série
       remove_series: Retirer de la Série
+    h2h:
+      set_number: Série %{number}
+      stage_of: '%{number} ème de finale'
+      quarterfinal_stage: Quart de finale
+      semifinal_stage: Demi-finale
+      final_stage: Finale
+      third_place: Troisième place
   competition_tabs:
     headers:
       tabs: Onglets
@@ -3438,6 +3519,7 @@ fr:
         results" ou "by region"
     records:
       title: Records
+      load_error: Erreur lors de la récupération des records
     last_updated_html: 'Dernière modification : %{timestamp}'
     filters_fixes_underway: >-
       Veuillez noter que certains filtres (comme les années précédentes) sont
@@ -3476,6 +3558,7 @@ fr:
       date_circa: Date circa
   notifications:
     connect_wca_id: Associez votre ID WCA à votre compte !
+    copied_to_clipboard: Copié dans le presse-papiers
   payments:
     header: Historique des paiements
     messages:
@@ -3921,23 +4004,23 @@ fr:
         %{committees_and_teams} de la WCA.
       teams_committees: Équipes et Comités
       delegates_html: >-
-        <p><strong>Délégués WCA</strong> est un rôle défini dans les statuts de
-        la WCA et décrit dans le Règlement WCA. Le devoir principal d'un Délégué
-        est de superviser les compétitions au nom de la WCA. Le Délégué WCA est
-        responsable de s'assurer que les compétitions WCA se déroulent selon
-        l'objectif, le règlement, et les valeurs de la WCA. La WCA distingue les
-        statuts suivants : <strong>Délégués Senior</strong>, <strong>Délégués
-        Régionaux</strong>, <strong>Délégués</strong>, <strong>Délégués
-        Junior</strong>, et <strong>Délégué Stagiaire</strong>
-        %{see_link}.</p><p>En plus des devoirs d'un Délégué WCA, un Délégué
-        Senior ou un Délégué régional est responsable de la gestion des Délégués
-        dans sa zone, et peut également être contacté par la communauté pour des
-        affaires régionales.</p><p>Les nouveaux Délégués sont d'abord listés en
-        tant que Délégués Junior, et doivent montrer qu'ils sont capables de
-        gérer des compétitions avec succès avant d'être listés comme Délégués
-        WCA.</p> <p>Les Délégués Stagiaires sont en formation pour devenir
-        Délégué WCA and ne peuvent superviser que des compétitions où au moins
-        une personne avec le statut de Délégué WCA est présente.</p>
+        <p><strong>Délégué WCA</strong> est un rôle défini dans les Motions de la
+        WCA et décrit dans le Règlement WCA. Le devoir principal d'un Délégué est
+        de superviser les compétitions au nom de la WCA. Un Délégué WCA est responsable
+        de s'assurer que toutes les compétitions WCA se déroulent conformément à l'objectif,
+        aux valeurs et au Règlement de la WCA. La WCA distingue les <strong>Délégués
+        Senior</strong>, les <strong>Délégués Régionaux</strong>, les <strong>Délégués
+        Titulaires</strong>, les <strong>Délégués Junior</strong> et les <strong>Apprentis
+        Délégués</strong>%{see_link}.</p> <p>En plus des devoirs d'un Délégué WCA,
+        un Délégué Senior ou un Délégué Régional est responsable de la gestion des
+        Délégués WCA dans sa zone et peut également être contacté par la communauté
+        pour des affaires régionales.</p> <p>Les nouveaux Délégués sont d'abord listés
+        en tant que Délégués Junior ; ils doivent ensuite démontrer leur capacité
+        à gérer des compétitions WCA avant d'être promus Délégués WCA.</p> <p>Les
+        Apprentis Délégués sont en formation pour devenir Délégué WCA et ne peuvent
+        superviser que des compétitions où un Délégué WCA est présent.</p> <p>Si vous
+        souhaitez devenir Apprenti Délégué, contactez votre Délégué Régional afin
+        de déterminer votre éligibilité.</p>
       see_link_html: ' (voir %{link})'
       members_html: >-
         Tous les compétiteurs deviennent automatiquement des
@@ -3984,6 +4067,7 @@ fr:
       total_delegated: Compétitions déléguées
       lead_delegated: Compétitions en tant que délégué principal
       history: Historique
+    copy_email: Copier l'e-mail
   regional_organizations:
     title: Organisations Régionales
     content: 'La WCA reconnait les organisations régionales suivantes :'
@@ -4547,8 +4631,7 @@ fr:
         commentaire au WRT à ce sujet.
       non_matching_name_warning: >-
         Le nom '%{name}' fourni pour %{wca_id} ne correspond pas à l'enregistrement
-        actuel dans la base de données WCA ('%{expected_name}').  #original_hash:
-        333a035
+        actuel dans la base de données WCA ('%{expected_name}'). 
       non_matching_country_warning: >-
         Le pays '%{country}' fourni pour %{name} (%{wca_id}) ne correspond pas à
         l'enregistrement actuel dans la base de données WCA
@@ -4758,10 +4841,10 @@ fr:
         décocher les mélanges inutilisés. Sinon, veuillez inclure un commentaire
         au WRT expliquant pourquoi plusieurs groupes de FMC ont été utilisés.
       wrong_number_of_scramble_sets_error: >-
-        [%{round_id}] Ce tour a un nombre d'ensembles de mélanges différent
-        (%{actual}) de celui indiqué dans l'onglet Gérer les événements
-        (%{expected}). Veuillez ajuster le nombre d'ensembles de mélanges dans
-        l'onglet Gérer les événements en fonction du nombre ayant étés utilisés.
+        [%{round_id}] Ce tour a un nombre de série de mélanges différent (%{actual})
+        de celui indiqué dans l'onglet Gérer les événements (%{expected}). Veuillez
+        ajuster le nombre de série de mélanges dans l'onglet Gérer les événements
+        en fonction du nombre ayant étés utilisés.
     schedule:
       activity_outside_competition_dates_warning: >-
         L'activité « %{activity_name} » (code : %{activity_code}) est programmée
@@ -4775,3 +4858,94 @@ fr:
     stakeholder_role:
       actioner: Personne en charge
       requester: Demandeur
+  trainee_delegate_application:
+    title: Candidature au poste d'apprenti délégué
+    introduction: Ce formulaire est destiné aux speedcubeurs inscrits qui 
+      souhaitent postuler pour devenir apprentis délégués. Votre candidature 
+      sera transmise aux délégués responsables de la région que vous avez 
+      choisie.
+    success_title: Candidature déposée
+    success: Votre candidature a bien été envoyée. Une copie vous a été envoyée 
+      par e-mail à l'adresse associée à votre compte WCA.
+    eligibility:
+      title: Vous ne pouvez pas encore envoyer cette candidature
+      missing_wca_id: Votre compte WCA doit être associé à un ID WCA.
+      missing_date_of_birth: Votre compte WCA doit comporter une date de 
+        naissance vérifiée.
+      underage: Les candidats doivent être âgés d'au moins %{minimum_age} ans.
+      claim_wca_id: Demandez votre ID WCA.
+      edit_profile: Demander une mise à jour du profil.
+    errors:
+      invalid_region: Sélectionnez une région de délégué valide et active.
+      missing_reviewer: La région sélectionnée ne dispose actuellement d'aucun 
+        délégué régional ou senior habilité à recevoir la demande.
+      recommender_required: Sélectionnez au moins un délégué qui vous 
+        recommande.
+      invalid_recommender: Un ou plusieurs délégués sélectionnés ne sont plus 
+        éligibles pour la région concernée.
+      spoken_delegate_required: Sélectionnez au moins un délégué junior ou 
+        principal avec lequel vous avez discuté.
+      invalid_spoken_delegate: Un ou plusieurs délégués sélectionnés avec 
+        lesquels vous avez échangé ne sont plus délégués juniors ou principaux 
+        dans la région sélectionnée.
+      declarations_required: Toutes les déclarations doivent être acceptées.
+      business_involvement_required: Indiquez si vous êtes impliqué dans une 
+        entreprise liée au monde du cube.
+      business_involvement_explanation_required: Expliquez-nous en quoi consiste
+        votre implication dans une entreprise liée au monde du cube.
+    form:
+      subregion: Dans quelle sous-région de délégué vivez-vous actuellement ?
+      subregion_placeholder: Sélectionnez votre sous-région
+      reviewing_delegate: Examen du délégué
+      spoken_delegates: À quels délégués juniors ou principaux avez-vous parlé 
+        de la possibilité de devenir apprenti délégué ?
+      recommenders: Quels délégués juniors ou principaux de votre région ont 
+        accepté de vous recommander comme candidat au poste d'apprenti délégué ?
+      delegates_placeholder: Sélectionnez au moins un délégué
+      experience_and_motivation: Expérience et motivation
+      introduction: Présentez-vous brièvement en deux à quatre phrases.
+      competition_contributions: Présentez brièvement en quoi vous avez 
+        contribué à vos compétitions locales au-delà de ce qui est attendu de 
+        tous les compétiteurs.
+      volunteer_history: Si vous avez occupé des postes de bénévole au sein de 
+        la WCA, veuillez indiquer ici les dates correspondantes (facultatif).
+      role_history_warning: L'historique de vos postes figurera automatiquement 
+        dans votre candidature. Les postes antérieurs n'ont pas été entièrement 
+        renseignés ; veuillez donc ajouter ci-dessous les postes manquants ou 
+        apporter les corrections nécessaires.
+      present: actuel
+      board_member: Membre du conseil d'administration
+      motivation: Décrivez brièvement, en deux à quatre phrases, les raisons qui
+        vous poussent à postuler pour devenir apprenti délégué.
+      relevant_skills: Veuillez dresser la liste des compétences et de 
+        l'expérience les plus importantes dont vous disposez et qui vous 
+        aideraient à réussir en tant qu'apprenti délégué.
+      declaration_understands_application: Je comprends que ce formulaire est 
+        destiné aux speedcubeurs enregistrés qui postulent pour devenir 
+        apprentis délégués.
+      declaration_has_delegate_support: Je confirme avoir discuté avec un 
+        délégué habilité de ma région qui soutient ma candidature.
+      declaration_proficient_in_english: Je certifie que je maîtrise l'anglais à
+        l'écrit et à l'oral.
+      declaration_read_regulations_html: Je certifie avoir lu le <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">règlement de 
+        la WCA</a>.
+      regulations_note: "Remarque : on n'attend pas des délégués qu'ils connaissent
+        tous les règlements. En revanche, ils doivent en maîtriser les principes fondamentaux
+        et se renseigner en cas de doute."
+      cubing_business_involvement: Êtes-vous impliqué dans une entreprise liée 
+        au monde du cube ?
+      cubing_business_involvement_details: Pourriez-vous nous expliquer en quoi 
+        consiste votre implication dans l'entreprise liée au monde du cube.
+      "yes": Oui
+      "no": Non
+      submit: Envoyer la candidature
+      declaration_and_basic_information: Déclaration et informations générales
+      name: Nom
+      wca_id: ID WCA
+      email: E-mail
+      age: Âge
+      competition_count: Nombre de compétitions
+      region_and_references: Région et références
+      region: Dans quelle région de délégué vivez-vous actuellement ?
+      region_placeholder: Sélectionnez votre région

@@ -211,20 +211,16 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
-              {t("results.selector_elements.type_selector.type")}
+              {t("results.table_elements.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.single")}</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.event")}
             </Table.ColumnHeader>
             <Table.ColumnHeader>
               {t("results.table_elements.name")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.result")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.region")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.competition")}
-            </Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
             <Table.ColumnHeader colSpan={5}>
               {t("results.table_elements.solves")}
             </Table.ColumnHeader>

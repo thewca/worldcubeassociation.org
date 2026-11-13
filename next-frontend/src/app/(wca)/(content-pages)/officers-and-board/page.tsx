@@ -1,11 +1,11 @@
 import _ from "lodash";
-import { Heading, Link, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Heading, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
 import UserBadge from "@/components/UserBadge";
-import { MdMarkEmailUnread } from "react-icons/md";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
 import { getBoardRoles, getOfficersRoles } from "@/lib/wca/roles/activeRoles";
 import { Metadata } from "next";
+import EmailCopyButton from "@/components/EmailCopyButton";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -65,13 +65,10 @@ export default async function OfficersAndBoard() {
           />
         ))}
       </SimpleGrid>
-      <Heading size="2xl">
-        {t("user_groups.group_types.board")}{" "}
-        <Link href={boardRoles[0].group.metadata!.email}>
-          <MdMarkEmailUnread />
-          {boardRoles[0].group.metadata!.email}
-        </Link>
-      </Heading>
+      <Stack direction="row" gap={3} justify="start" align="center">
+        <Heading size="2xl">{t("user_groups.group_types.board")} </Heading>
+        <EmailCopyButton email={boardRoles[0].group.metadata!.email || ""} />
+      </Stack>
       <Text>{t("page.officers_and_board.board_description")}</Text>
       <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
         {boardRoles.map((board) => (

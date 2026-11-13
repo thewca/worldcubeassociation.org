@@ -17,7 +17,7 @@ RSpec.feature "Claim WCA ID" do
 
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
-      expect(page.find("div.user_dob_verification", visible: false).visible?).to be false
+      expect(page.find("div.user_dob_verification", visible: :hidden).visible?).to be false
 
       # Fill in WCA ID.
       fill_in_selectize "WCA ID", with: person.wca_id
@@ -27,7 +27,7 @@ RSpec.feature "Claim WCA ID" do
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
-      expect(page.find("div.user_dob_verification", visible: true).visible?).to be true
+      expect(page.find("div.user_dob_verification", visible: :visible).visible?).to be true
 
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")

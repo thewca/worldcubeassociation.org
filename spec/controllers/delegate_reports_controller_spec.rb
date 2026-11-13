@@ -39,6 +39,15 @@ RSpec.describe DelegateReportsController do
       patch :update, params: { competition_id: comp.id }
       expect(response).to redirect_to(root_url)
     end
+
+    it "cannot delete an image" do
+      image = delegate_report1.setup_images_attachments.first
+
+      delete :delete_image, params: { competition_id: comp.id, image_id: image.id }
+
+      expect(response).to redirect_to(root_url)
+      expect(ActiveStorage::Attachment.exists?(image.id)).to be true
+    end
   end
 
   context "logged in as THE delegate" do
@@ -58,6 +67,26 @@ RSpec.describe DelegateReportsController do
       expect(response).to redirect_to delegate_report_edit_path(comp)
       comp.reload
       expect(comp.delegate_report.remarks).to eq "My new remarks"
+    end
+
+    it "can delete an image of the report" do
+      image = delegate_report1.setup_images_attachments.first
+
+      delete :delete_image, params: { competition_id: comp.id, image_id: image.id }
+
+      expect(response).to redirect_to delegate_report_edit_path(comp)
+      expect(ActiveStorage::Attachment.exists?(image.id)).to be false
+    end
+
+    it "cannot delete an image of another competition's report" do
+      other_report = create(:delegate_report, :with_images, competition: create(:competition, starts: 2.days.ago))
+      image = other_report.setup_images_attachments.first
+
+      expect do
+        delete :delete_image, params: { competition_id: comp.id, image_id: image.id }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+
+      expect(ActiveStorage::Attachment.exists?(image.id)).to be true
     end
 
     it "can edit and post report before comp is over" do

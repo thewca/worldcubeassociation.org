@@ -18,5 +18,6 @@
 # end
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.irregular 'is', 'are'
+  inflect.plural(/^is$/i, 'are')
+  inflect.singular(/^are$/i, 'is')
 end

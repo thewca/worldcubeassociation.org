@@ -30,6 +30,8 @@ import {
   Text,
   VStack,
   Wrap,
+  Select,
+  createListCollection,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -52,10 +54,12 @@ import {
   type CompetitionFilterAction,
   type CompetitionFilterState,
 } from "@/lib/wca/competitions/filterUtils";
-import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
+import {
+  createSearchParams,
+  sortOrderValues,
+} from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
 import useDebounce from "@/lib/hooks/useDebounce";
-import { WCA_API_PAGINATION } from "@/lib/wca/data/wca";
 import Loading from "@/components/ui/loading";
 import { useSearchParams } from "next/navigation";
 import { useOnInView } from "react-intersection-observer";
@@ -75,8 +79,12 @@ import {
 } from "@/lib/wca/competitions/statusUtils";
 import { nonFutureCompetitionYears } from "@/lib/wca/data/competitions";
 import _ from "lodash";
+import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
+import useIsScrolled from "@/lib/hooks/useIsScrolled";
+import BackToTopButton from "@/components/BackToTopButton";
 
 const DEBOUNCE_MS = 600;
+const COMPETITIONS_PER_PAGE = 50;
 
 // Units offered by the "within X of me" filter. `toKm` converts a radius in that unit to the
 // kilometres the distance calculation works in, and each unit carries its own default and step
@@ -144,6 +152,10 @@ export default function CompetitionsPage() {
     createFilterState,
   );
 
+  const { isScrolledDown, topSentinelRef } = useIsScrolled({
+    scrollThreshold: "100px",
+  });
+
   const { t } = useT();
 
   const canViewAdminDetails = false;
@@ -164,14 +176,16 @@ export default function CompetitionsPage() {
     "get",
     "/v0/competition_index",
     {
-      params: { query: querySearchParams },
+      params: {
+        query: { ...querySearchParams, per_page: COMPETITIONS_PER_PAGE },
+      },
     },
     {
       pageParamName: "page",
       getNextPageParam: (previousPage, allPages) => {
         // Continue until less than a full page of data is fetched,
         // which indicates the very last page.
-        if (previousPage.length < WCA_API_PAGINATION) {
+        if (previousPage.length < COMPETITIONS_PER_PAGE) {
           return undefined;
         }
         return allPages.length + 1;
@@ -301,7 +315,6 @@ export default function CompetitionsPage() {
             <Collapsible.Root asChild>
               <VStack gap="3" borderBottom="black">
                 <FormEventSelector
-                  wrap
                   selectedEvents={filterState.selectedEvents}
                   title={t("competitions.index.event")}
                   onEventClick={(eventId) =>
@@ -424,12 +437,16 @@ export default function CompetitionsPage() {
               </VStack>
             </Collapsible.Root>
           </Card.Body>
-          <Card.Body>
+          <Card.Body pos="relative">
+            {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+            <Box ref={topSentinelRef} position="absolute" />
+
             <Tabs.Content value="list">
               <Stack
                 direction={{ base: "column", lg: "row" }}
                 justify="space-between"
                 align={{ base: "start", lg: "center" }}
+                mb={3}
               >
                 <Wrap gapX="3" gapY="1" align="center">
                   <Text>{t("competitions.index.registration_key")}</Text>
@@ -455,14 +472,48 @@ export default function CompetitionsPage() {
                     </Badge>
                   ))}
                 </Wrap>
-                <Text>
-                  {t("competitions.index.currently_displaying", {
-                    count: competitionsFiltered.length,
-                  })}
-                </Text>
               </Stack>
               <Table.ScrollArea>
-                <Table.Root size="xs" variant="competitions" borderWidth="2px">
+                <Table.Root
+                  size="xs"
+                  variant="competitions"
+                  borderWidth="2px"
+                  stickyHeader
+                >
+                  <Table.Header bg="bg.muted">
+                    <Table.Row>
+                      <Table.ColumnHeader
+                        colSpan={6}
+                        fontWeight="normal"
+                        textAlign="end"
+                        p={2}
+                      >
+                        {t("competitions.index.currently_displaying", {
+                          count: competitionsFiltered.length,
+                        })}
+                      </Table.ColumnHeader>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.ColumnHeader></Table.ColumnHeader>
+                      <Table.ColumnHeader>
+                        {t("competitions.competition_info.date")}
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader>
+                        {t("competitions.competition_info.name")}
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader></Table.ColumnHeader>
+                      <Table.ColumnHeader
+                        display={{ base: "none", md: "table-cell" }}
+                      >
+                        {t("competitions.competition_info.location")}
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader
+                        display={{ base: "none", md: "table-cell" }}
+                      >
+                        {t("competitions.competition_info.venue")}
+                      </Table.ColumnHeader>
+                    </Table.Row>
+                  </Table.Header>
                   <Table.Body>
                     {inProgressComps.length > 0 && (
                       <>
@@ -503,6 +554,8 @@ export default function CompetitionsPage() {
           </Card.Body>
         </Tabs.Root>
       </Card.Root>
+
+      <BackToTopButton visible={isScrolledDown} />
     </VStack>
   );
 }
@@ -737,10 +790,6 @@ function AdvancedFilters({
       label: t("competitions.index.recent"),
     },
     { value: "past", label: t("competitions.index.past") },
-    {
-      value: "by_announcement",
-      label: t("competitions.index.by_announcement"),
-    },
   ];
 
   return (
@@ -749,6 +798,7 @@ function AdvancedFilters({
       gap="4"
       width="full"
       align={{ base: "stretch", lg: "flex-end" }}
+      flexWrap="wrap"
     >
       <Field.Root width="auto">
         <Field.Label>{t("competitions.index.state")}</Field.Label>
@@ -809,6 +859,12 @@ function AdvancedFilters({
         </Field.Root>
       )}
 
+      <SortOrderSelect
+        value={filterState.sort}
+        onChange={(v) => dispatchFilter({ type: "set_sort_order", sort: v })}
+        t={t}
+      />
+
       <Checkbox.Root
         width="auto"
         minHeight="10"
@@ -824,6 +880,26 @@ function AdvancedFilters({
         <Checkbox.Control />
         <Checkbox.Label>
           {t("competitions.index.show_cancelled")}
+        </Checkbox.Label>
+      </Checkbox.Root>
+      <Checkbox.Root
+        width="auto"
+        minHeight="10"
+        checked={filterState.shouldShowChampionshipOnly}
+        onCheckedChange={(e) =>
+          dispatchFilter({
+            type: "set_championship_only",
+            shouldShowChampionshipOnly: Boolean(e.checked),
+          })
+        }
+      >
+        <Checkbox.HiddenInput />
+        <Checkbox.Control />
+        <Checkbox.Label>
+          <HStack gap={2} align="center">
+            {t("competitions.index.championship_only")}
+            <NationalChampionshipIcon />
+          </HStack>
         </Checkbox.Label>
       </Checkbox.Root>
     </Stack>
@@ -884,4 +960,63 @@ function ListViewFooter({
   }
 
   return <Box ref={bottomRef} />;
+}
+
+function SortOrderSelect({
+  value,
+  onChange,
+  t,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  t: TFunction;
+}) {
+  const values = createListCollection({
+    items: sortOrderValues.map(({ value, key }) => ({
+      value: value,
+      // i18n-tasks-use t("competitions.index.sort.start_date_asc")
+      // i18n-tasks-use t("competitions.index.sort.start_date_desc")
+      // i18n-tasks-use t("competitions.index.sort.end_date_asc")
+      // i18n-tasks-use t("competitions.index.sort.end_date_desc")
+      // i18n-tasks-use t("competitions.index.sort.name_asc")
+      // i18n-tasks-use t("competitions.index.sort.name_desc")
+      // i18n-tasks-use t("competitions.index.sort.announced_at_asc")
+      // i18n-tasks-use t("competitions.index.sort.announced_at_desc")
+      label: t(`competitions.index.sort.${key}`),
+    })),
+  });
+
+  return (
+    <Select.Root
+      collection={values}
+      value={[value]}
+      onValueChange={(item) => onChange(item.value[0])}
+      variant="outline"
+      width="auto"
+      minWidth="xs"
+    >
+      <Select.HiddenSelect />
+      <Select.Label>{t("competitions.index.sort.order")}</Select.Label>
+
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+
+      <Select.Positioner>
+        <Select.Content>
+          {values.items.length > 0 &&
+            values.items.map((item) => (
+              <Select.Item key={item.value} item={item}>
+                {item.label}
+              </Select.Item>
+            ))}
+        </Select.Content>
+      </Select.Positioner>
+    </Select.Root>
+  );
 }

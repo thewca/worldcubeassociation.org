@@ -6,7 +6,7 @@ RSpec.describe TraineeDelegateApplicationsMailer do
   let(:applicant) { create(:user_with_wca_id, name: "Applicant Name") }
   let(:region) { GroupsMetadataDelegateRegions.find_by!(friendly_id: "africa").user_group }
   let(:senior_delegate) { create(:user_with_wca_id) }
-  let(:recommender) { create(:user_with_wca_id) }
+  let(:recommender) { create(:user_with_wca_id, name: "Recommender Name") }
   let(:application) do
     TraineeDelegateApplication.create!(
       applicant: applicant,

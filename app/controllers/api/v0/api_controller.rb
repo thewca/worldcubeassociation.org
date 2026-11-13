@@ -36,6 +36,7 @@ class Api::V0::ApiController < ApplicationController
 
   def user_qualification_data
     date = cutoff_date
+
     return render json: { error: 'Invalid date format. Please provide an iso8601 date string.' }, status: :bad_request if date.blank?
     return render json: { error: 'You cannot request qualification data for a future date.' }, status: :bad_request if date > Date.current
 
@@ -124,14 +125,15 @@ class Api::V0::ApiController < ApplicationController
     end
 
     concise_results_date = ComputeAuxiliaryData.end_date || Date.current
-    cache_key = ["search", *models, concise_results_date.iso8601, query]
+    can_manage_incidents = authenticated_user&.can_manage_incidents? || false
+    cache_key = ["search", *models, concise_results_date.iso8601, query, can_manage_incidents]
 
     # Temporary fix to skip cache if this is requested from Edit Person script. Long term fix would
     # be to have an API which gives an option to force cache miss, but this API cannot be public,
     # instead should be private to the corresponding microservice.
     result = Rails.cache.fetch(cache_key, force: current_user&.results_team?) do
       ActiveRecord::Base.connected_to(role: :read_replica) do
-        models.flat_map { |model| search_scope_for(model, query).limit(DEFAULT_API_RESULT_LIMIT) }
+        models.flat_map { |model| search_scope_for(model, query, authenticated_user).limit(DEFAULT_API_RESULT_LIMIT) }
       end
     end
 
@@ -148,9 +150,10 @@ class Api::V0::ApiController < ApplicationController
 
   # These results are rendered through each model's default `as_json`, so preload whatever that
   # serialization walks. `Regulation` is not an ActiveRecord model and has no associations at all.
-  private def search_scope_for(model, query)
+  private def search_scope_for(model, query, user)
     scope = model.try(:with_serialization_preloads) || model
-    scope.search(query, params: params)
+    filtered_scope = scope.try(:filter_by_permissions, user) || scope
+    filtered_scope.search(query, params: params)
   end
 
   def posts_search
@@ -160,6 +163,13 @@ class Api::V0::ApiController < ApplicationController
   def competitions_search
     search(Competition)
   end
+
+  private def email_search_requested?
+    %i[email adminSearch].any? { ActiveRecord::Type::Boolean.new.cast(params[it]) }
+  end
+
+  before_action -> { render status: :forbidden, json: { error: "Searching by email requires permission to administer results" } if email_search_requested? && !current_user&.can_admin_results? },
+                only: %i[users_search omni_search]
 
   def users_search
     search(User)
