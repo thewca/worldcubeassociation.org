@@ -2069,6 +2069,8 @@ en:
         is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again."
         is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
         is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
+        additional: "Please ensure that you have followed any additional instructions above regarding payment or other registration requirements."
+        email: "You will receive an email when your registration status is updated."
       list:
         empty: "None"
         spots_remaining_plural:
