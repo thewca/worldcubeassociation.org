@@ -10,6 +10,10 @@ import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
 import { TFunction } from "i18next";
 import { LuPersonStanding } from "react-icons/lu";
 
+// Record badges hang past the end of their value (see `WithRecordTag`), so
+//   the last column needs room for them before the edge of the table.
+const HANGING_BADGE_PADDING = "6";
+
 export function LiveTableHeader({
   isLinked = false,
   format,
@@ -75,7 +79,11 @@ export function LiveTableHeader({
             </Table.ColumnHeader>
           ))}
           {stats.map((stat) => (
-            <Table.ColumnHeader textAlign="end" key={stat.field}>
+            <Table.ColumnHeader
+              textAlign="end"
+              key={stat.field}
+              _last={{ paddingEnd: HANGING_BADGE_PADDING }}
+            >
               {t(stat.i18nKey)}
             </Table.ColumnHeader>
           ))}
@@ -134,7 +142,7 @@ export function LiveCompetitorCell({
   t: TFunction;
 }) {
   return (
-    <Table.Cell rowSpan={rowSpan}>
+    <Table.Cell rowSpan={rowSpan} maxWidth={{ base: "24", md: "none" }}>
       <HStack gap={1}>
         {link && (
           <Link
@@ -144,7 +152,7 @@ export function LiveCompetitorCell({
             {competitor.name}
           </Link>
         )}
-        <Box as="span" hideFrom={link ? "md" : undefined}>
+        <Box as="span" hideFrom={link ? "md" : undefined} truncate>
           {competitor.name}
         </Box>
         {showFirstTimer && !competitor.wca_id && (
@@ -227,6 +235,7 @@ export function LiveStatCells({
             key={`${competitorId}-${stat.i18nKey}`}
             textAlign="end"
             fontWeight={shouldHighlight(statIndex) ? "bold" : "normal"}
+            _last={{ paddingEnd: HANGING_BADGE_PADDING }}
           >
             {showProjected ? (
               <Tooltip content="Projected average" showArrow openDelay={200}>
@@ -237,6 +246,7 @@ export function LiveStatCells({
             ) : (
               <WithRecordTag
                 recordTag={isAdmin ? null : result[stat.recordTagField]}
+                hanging
               >
                 {formatAttemptResult(result[stat.field], eventId)}
               </WithRecordTag>
