@@ -12,6 +12,7 @@ import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import { StaffColor } from "@/components/RoleBadge";
 import _ from "lodash";
+import { FULL_EVENT_IDS } from "@/lib/wca/data/events";
 import { Metadata } from "next";
 
 type TitleProps = {
@@ -28,7 +29,7 @@ export async function generateMetadata({
   if (error || !personDetails) return { title: "Person Not Found" };
 
   return {
-    title: `${personDetails.name}`,
+    title: `${personDetails.person.name}`,
   };
 }
 
@@ -52,7 +53,7 @@ export default async function PersonOverview({
     teamRole: string;
     teamText: string;
     staffColor: StaffColor;
-  }[] = personDetails.teams.map((team) => {
+  }[] = personDetails.person.teams.map((team) => {
     const teamText = team.friendly_id.toUpperCase();
 
     const roleMap = [
@@ -71,8 +72,8 @@ export default async function PersonOverview({
     return { teamRole, teamText, staffColor: staffColor as StaffColor };
   });
 
-  if (personDetails.delegate_status) {
-    const delegateText = personDetails.delegate_status
+  if (personDetails.person.delegate_status) {
+    const delegateText = personDetails.person.delegate_status
       .toUpperCase()
       .replace(/_/g, " ")
       .replace("DELEGATE", "");
@@ -94,14 +95,21 @@ export default async function PersonOverview({
     personDetails.records.continental +
     personDetails.records.world;
 
-  const championshipPodiumCount = _.sumBy(
-    Object.values(personDetails.championship_podium_results),
-    "length",
-  );
+  const podiums = personDetails.championship_podiums;
+
+  const championshipPodiumCount =
+    (podiums?.continental?.length ?? 0) +
+    (podiums?.national?.length ?? 0) +
+    (podiums?.world?.length ?? 0);
 
   const hasRecords = recordCount > 0;
   const hasMedals = medalCount > 0;
   const hasChampionshipPodiums = championshipPodiumCount !== 0;
+
+  const eventsWithResults = _.intersection(
+    FULL_EVENT_IDS,
+    Object.keys(personDetails.personal_records),
+  );
 
   return (
     <VStack align="center">
@@ -114,14 +122,14 @@ export default async function PersonOverview({
       >
         <GridItem colSpan={{ base: 1, lg: 7 }}>
           <ProfileCard
-            name={personDetails.name}
-            profilePicture={personDetails.avatar.url}
+            name={personDetails.person.name}
+            profilePicture={personDetails.person.avatar.url}
             roles={roles}
             wcaId={wcaId}
-            gender={personDetails.gender}
-            regionIso2={personDetails.country_iso2}
+            gender={personDetails.person.gender}
+            regionIso2={personDetails.person.country_iso2}
             competitions={personDetails.competition_count}
-            completedSolves={personDetails.completed_solves_count}
+            completedSolves={personDetails.total_solves}
             medalCount={medalCount}
             recordCount={recordCount}
             championshipPodiumCount={championshipPodiumCount}
@@ -129,7 +137,7 @@ export default async function PersonOverview({
         </GridItem>
         {/* Records and Medals */}
         <GridItem colSpan={{ base: 1, lg: 17 }}>
-          <PersonalRecordsTable records={personDetails.ranks_by_event} />
+          <PersonalRecordsTable records={personDetails.personal_records} />
           <SimpleGrid gap={8} columns={{ base: 1, md: 6 }} padding={0} pt={8}>
             {hasMedals && (
               <GridItem colSpan={{ base: 1, md: hasRecords ? 3 : 6 }}>
@@ -186,7 +194,7 @@ export default async function PersonOverview({
                     <Tabs.Content value="results">
                       <ResultsTab
                         wcaId={wcaId}
-                        eventsWithResults={personDetails.event_ids_with_results}
+                        eventsWithResults={eventsWithResults}
                       />
                     </Tabs.Content>
                     <Tabs.Content value="competitions">
@@ -197,15 +205,15 @@ export default async function PersonOverview({
                         <RecordsTab wcaId={wcaId} />
                       </Tabs.Content>
                     )}
-                    {hasChampionshipPodiums && (
-                      <Tabs.Content value="championship-podiums">
+                    <Tabs.Content value="championship-podiums">
+                      {hasChampionshipPodiums && (
                         <ChampionshipPodiumsTab
                           championshipPodiums={
-                            personDetails.championship_podium_results
+                            personDetails.championship_podiums
                           }
                         />
-                      </Tabs.Content>
-                    )}
+                      )}
+                    </Tabs.Content>
                     <Tabs.Content value="map">
                       <MapTab wcaId={wcaId} />
                     </Tabs.Content>
