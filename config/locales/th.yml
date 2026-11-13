@@ -178,6 +178,7 @@ th:
     deadline:
       description: วันที่สิ้นสุดการคัดเลือก
       by_date: 'ภายใน %{date}'
+    preview: ดูการคัดเลือก
   activity:
     registration: การสมัครการแข่งขันหน้างานแข่งขัน
     checkin: Check-in
