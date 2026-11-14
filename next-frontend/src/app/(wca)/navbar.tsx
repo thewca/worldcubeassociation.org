@@ -134,148 +134,79 @@ export default async function Navbar() {
 
   return (
     <Box
-      borderBottom="md"
-      borderColor="border"
-      bg="bg"
       data-testid="header-navbar"
+      position="sticky"
+      top={0}
+      zIndex={2}
+      containerType="scroll-state"
     >
-      <RefreshRouteOnSave />
-      <MobileNavRoot>
-        <HStack ps={3.5} pe={1.5} py={3} justifyContent="space-between">
-          <HStack>
-            {!LIVE_RESULT_BETA && <WCALogo />}
-            <Box hideFrom="xl">
-              <Collapsible.Trigger asChild>
-                <IconButton variant="ghost" aria-label="Toggle navigation">
-                  <Icon size="lg" asChild>
-                    <LuMenu />
-                  </Icon>
-                </IconButton>
-              </Collapsible.Trigger>
-            </Box>
-            <HStack hideBelow="xl" gap={0}>
-              {navbarEntries.map((navbarEntry) => (
-                <React.Fragment key={navbarEntry.id}>
-                  {navbarEntry.blockType === "LinkItem" && (
-                    <Button asChild variant="ghost" size="sm" px="2">
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent={Link}
-                        hideResponsive
-                      />
-                    </Button>
-                  )}
-                  {navbarEntry.blockType === "ExternalLinkItem" && (
-                    <Button asChild variant="ghost" size="sm" px="2">
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent="a"
-                        hideResponsive
-                      />
-                    </Button>
-                  )}
-                  {navbarEntry.blockType === "NavDropdown" && (
-                    <Menu.Root>
-                      <Menu.Trigger asChild>
-                        <Button variant="ghost" size="sm" px="2">
-                          <TextWrapper
-                            navbarEntry={navbarEntry}
-                            entryKey="title"
-                            hideResponsive
-                          />
-                          <LuChevronDown />
-                        </Button>
-                      </Menu.Trigger>
-                      <Menu.Positioner>
-                        <Menu.Content>
-                          {navbarEntry.entries.map((subEntry) => (
-                            <React.Fragment key={subEntry.id}>
-                              {subEntry.blockType === "LinkItem" && (
-                                <Menu.Item
-                                  value={`${navbarEntry.id}/${subEntry.id}`}
-                                  asChild
-                                >
-                                  <LinkWrapper
-                                    navbarEntry={subEntry}
-                                    linkComponent={Link}
-                                  />
-                                </Menu.Item>
-                              )}
-                              {subEntry.blockType === "ExternalLinkItem" && (
-                                <Menu.Item
-                                  value={`${navbarEntry.id}/${subEntry.id}`}
-                                  asChild
-                                >
-                                  <LinkWrapper
-                                    navbarEntry={subEntry}
-                                    linkComponent="a"
-                                  />
-                                </Menu.Item>
-                              )}
-                              {subEntry.blockType === "VisualDivider" && (
-                                <Menu.Separator />
-                              )}
-                              {subEntry.blockType === "NestedDropdown" && (
-                                <Menu.Root
-                                  positioning={{
-                                    placement: "right-start",
-                                    gutter: -2,
-                                  }}
-                                >
-                                  <Menu.TriggerItem>
-                                    {subEntry.title}
-                                  </Menu.TriggerItem>
-                                  <Menu.Positioner>
-                                    <Menu.Content>
-                                      {subEntry.entries.map((nestedEntry) => (
-                                        <React.Fragment key={nestedEntry.id}>
-                                          {nestedEntry.blockType ===
-                                            "LinkItem" && (
-                                            <Menu.Item
-                                              value={`${navbarEntry.id}/${subEntry.id}/${nestedEntry.id}`}
-                                              asChild
-                                            >
-                                              <LinkWrapper
-                                                navbarEntry={nestedEntry}
-                                                linkComponent={Link}
-                                              />
-                                            </Menu.Item>
-                                          )}
-                                          {nestedEntry.blockType ===
-                                            "ExternalLinkItem" && (
-                                            <Menu.Item
-                                              value={`${navbarEntry.id}/${subEntry.id}/${nestedEntry.id}`}
-                                              asChild
-                                            >
-                                              <LinkWrapper
-                                                navbarEntry={nestedEntry}
-                                                linkComponent="a"
-                                              />
-                                            </Menu.Item>
-                                          )}
-                                        </React.Fragment>
-                                      ))}
-                                    </Menu.Content>
-                                  </Menu.Positioner>
-                                </Menu.Root>
-                              )}
-                            </React.Fragment>
-                          ))}
-                        </Menu.Content>
-                      </Menu.Positioner>
-                    </Menu.Root>
-                  )}
-                  {navbarEntry.blockType === "SocialsMenu" &&
-                    socialLinks.length > 0 && (
+      <Box
+        borderBottom="md"
+        borderColor="border"
+        bg="bg"
+        transition="background-color 0.2s ease, backdrop-filter 0.2s ease"
+        _motionReduce={{ transition: "none" }}
+        css={{
+          "@container scroll-state(stuck: top)": {
+            bg: "bg/80",
+            backdropFilter: "blur(10px) saturate(1.2)",
+          },
+        }}
+      >
+        <RefreshRouteOnSave />
+        <MobileNavRoot>
+          <HStack
+            ps={3.5}
+            pe={1.5}
+            py={3}
+            justifyContent="space-between"
+            transition="padding 0.2s ease"
+            _motionReduce={{ transition: "none" }}
+            css={{
+              "@container scroll-state(stuck: top)": {
+                py: "1.5",
+              },
+            }}
+          >
+            <HStack>
+              {!LIVE_RESULT_BETA && <WCALogo />}
+              <Box hideFrom="xl">
+                <Collapsible.Trigger asChild>
+                  <IconButton variant="ghost" aria-label="Toggle navigation">
+                    <Icon size="lg" asChild>
+                      <LuMenu />
+                    </Icon>
+                  </IconButton>
+                </Collapsible.Trigger>
+              </Box>
+              <HStack hideBelow="xl" gap={0}>
+                {navbarEntries.map((navbarEntry) => (
+                  <React.Fragment key={navbarEntry.id}>
+                    {navbarEntry.blockType === "LinkItem" && (
+                      <Button asChild variant="ghost" size="sm" px="2">
+                        <LinkWrapper
+                          navbarEntry={navbarEntry}
+                          linkComponent={Link}
+                          hideResponsive
+                        />
+                      </Button>
+                    )}
+                    {navbarEntry.blockType === "ExternalLinkItem" && (
+                      <Button asChild variant="ghost" size="sm" px="2">
+                        <LinkWrapper
+                          navbarEntry={navbarEntry}
+                          linkComponent="a"
+                          hideResponsive
+                        />
+                      </Button>
+                    )}
+                    {navbarEntry.blockType === "NavDropdown" && (
                       <Menu.Root>
                         <Menu.Trigger asChild>
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" px="2">
                             <TextWrapper
-                              navbarEntry={{
-                                ...navbarEntry,
-                                displayIcon: "External Link",
-                              }}
-                              entryKey="label"
+                              navbarEntry={navbarEntry}
+                              entryKey="title"
                               hideResponsive
                             />
                             <LuChevronDown />
@@ -283,166 +214,167 @@ export default async function Navbar() {
                         </Menu.Trigger>
                         <Menu.Positioner>
                           <Menu.Content>
-                            {socialLinks.map((item) => (
-                              <Menu.Item
-                                key={item.id}
-                                value={item.id ?? item.targetLink}
-                                asChild
-                              >
-                                <LinkWrapper
-                                  navbarEntry={item}
-                                  linkComponent="a"
-                                />
-                              </Menu.Item>
+                            {navbarEntry.entries.map((subEntry) => (
+                              <React.Fragment key={subEntry.id}>
+                                {subEntry.blockType === "LinkItem" && (
+                                  <Menu.Item
+                                    value={`${navbarEntry.id}/${subEntry.id}`}
+                                    asChild
+                                  >
+                                    <LinkWrapper
+                                      navbarEntry={subEntry}
+                                      linkComponent={Link}
+                                    />
+                                  </Menu.Item>
+                                )}
+                                {subEntry.blockType === "ExternalLinkItem" && (
+                                  <Menu.Item
+                                    value={`${navbarEntry.id}/${subEntry.id}`}
+                                    asChild
+                                  >
+                                    <LinkWrapper
+                                      navbarEntry={subEntry}
+                                      linkComponent="a"
+                                    />
+                                  </Menu.Item>
+                                )}
+                                {subEntry.blockType === "VisualDivider" && (
+                                  <Menu.Separator />
+                                )}
+                                {subEntry.blockType === "NestedDropdown" && (
+                                  <Menu.Root
+                                    positioning={{
+                                      placement: "right-start",
+                                      gutter: -2,
+                                    }}
+                                  >
+                                    <Menu.TriggerItem>
+                                      {subEntry.title}
+                                    </Menu.TriggerItem>
+                                    <Menu.Positioner>
+                                      <Menu.Content>
+                                        {subEntry.entries.map((nestedEntry) => (
+                                          <React.Fragment key={nestedEntry.id}>
+                                            {nestedEntry.blockType ===
+                                              "LinkItem" && (
+                                              <Menu.Item
+                                                value={`${navbarEntry.id}/${subEntry.id}/${nestedEntry.id}`}
+                                                asChild
+                                              >
+                                                <LinkWrapper
+                                                  navbarEntry={nestedEntry}
+                                                  linkComponent={Link}
+                                                />
+                                              </Menu.Item>
+                                            )}
+                                            {nestedEntry.blockType ===
+                                              "ExternalLinkItem" && (
+                                              <Menu.Item
+                                                value={`${navbarEntry.id}/${subEntry.id}/${nestedEntry.id}`}
+                                                asChild
+                                              >
+                                                <LinkWrapper
+                                                  navbarEntry={nestedEntry}
+                                                  linkComponent="a"
+                                                />
+                                              </Menu.Item>
+                                            )}
+                                          </React.Fragment>
+                                        ))}
+                                      </Menu.Content>
+                                    </Menu.Positioner>
+                                  </Menu.Root>
+                                )}
+                              </React.Fragment>
                             ))}
                           </Menu.Content>
                         </Menu.Positioner>
                       </Menu.Root>
                     )}
-                </React.Fragment>
-              ))}
-            </HStack>
-          </HStack>
-          <Box flex="1" px={{ base: 0, md: 2 }}>
-            {!LIVE_RESULT_BETA && <WcaSearch />}
-          </Box>
-          <HStack>
-            {showEmptyMessage && (
-              <Text hideBelow="md">Oh no, there are no navbar items!</Text>
-            )}
-            <ColorModeButton />
-            <Box hideBelow="md">
-              <LanguageSelector />
-            </Box>
-            <Box hideBelow="md">
-              <AvatarMenu
-                session={session}
-                cmsEntries={avatarMenuEntries}
-                permissions={permissions}
-              />
-            </Box>
-          </HStack>
-        </HStack>
-
-        <Box hideFrom="xl">
-          <Collapsible.Content>
-            <VStack align="stretch" px={3.5} pt={1} pb={1.5} gap={1}>
-              {showEmptyMessage && (
-                <Text>Oh no, there are no navbar items!</Text>
-              )}
-              {navbarEntries.map((navbarEntry) => (
-                <React.Fragment key={navbarEntry.id}>
-                  {navbarEntry.blockType === "LinkItem" && (
-                    <MobileNavLink>
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent={Link}
-                      />
-                    </MobileNavLink>
-                  )}
-                  {navbarEntry.blockType === "ExternalLinkItem" && (
-                    <MobileNavLink>
-                      <LinkWrapper
-                        navbarEntry={navbarEntry}
-                        linkComponent="a"
-                      />
-                    </MobileNavLink>
-                  )}
-                  {navbarEntry.blockType === "NavDropdown" && (
-                    <Collapsible.Root
-                      overflowPadding
-                      display="flex"
-                      flexDirection="column"
-                    >
-                      <Collapsible.Trigger asChild>
-                        <MobileNavButton>
-                          <TextWrapper
-                            navbarEntry={navbarEntry}
-                            entryKey="title"
-                          />
-                          <Collapsible.Indicator ms="auto">
-                            <LuChevronDown />
-                          </Collapsible.Indicator>
-                        </MobileNavButton>
-                      </Collapsible.Trigger>
-                      <Collapsible.Content>
-                        <VStack align="stretch" ps={2} gap={1} py={1}>
-                          {navbarEntry.entries.map((subEntry) => (
-                            <React.Fragment key={subEntry.id}>
-                              {subEntry.blockType === "LinkItem" && (
-                                <MobileNavLink>
+                    {navbarEntry.blockType === "SocialsMenu" &&
+                      socialLinks.length > 0 && (
+                        <Menu.Root>
+                          <Menu.Trigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <TextWrapper
+                                navbarEntry={{
+                                  ...navbarEntry,
+                                  displayIcon: "External Link",
+                                }}
+                                entryKey="label"
+                                hideResponsive
+                              />
+                              <LuChevronDown />
+                            </Button>
+                          </Menu.Trigger>
+                          <Menu.Positioner>
+                            <Menu.Content>
+                              {socialLinks.map((item) => (
+                                <Menu.Item
+                                  key={item.id}
+                                  value={item.id ?? item.targetLink}
+                                  asChild
+                                >
                                   <LinkWrapper
-                                    navbarEntry={subEntry}
-                                    linkComponent={Link}
-                                  />
-                                </MobileNavLink>
-                              )}
-                              {subEntry.blockType === "ExternalLinkItem" && (
-                                <MobileNavLink>
-                                  <LinkWrapper
-                                    navbarEntry={subEntry}
+                                    navbarEntry={item}
                                     linkComponent="a"
                                   />
-                                </MobileNavLink>
-                              )}
-                              {subEntry.blockType === "VisualDivider" && (
-                                <Separator />
-                              )}
-                              {subEntry.blockType === "NestedDropdown" && (
-                                <Collapsible.Root
-                                  overflowPadding
-                                  display="flex"
-                                  flexDirection="column"
-                                >
-                                  <Collapsible.Trigger asChild>
-                                    <MobileNavButton>
-                                      {subEntry.title}
-                                      <Collapsible.Indicator ms="auto">
-                                        <LuChevronDown />
-                                      </Collapsible.Indicator>
-                                    </MobileNavButton>
-                                  </Collapsible.Trigger>
-                                  <Collapsible.Content>
-                                    <VStack
-                                      align="stretch"
-                                      ps={2}
-                                      gap={1}
-                                      py={1}
-                                    >
-                                      {subEntry.entries.map((nestedEntry) => (
-                                        <React.Fragment key={nestedEntry.id}>
-                                          {nestedEntry.blockType ===
-                                            "LinkItem" && (
-                                            <MobileNavLink>
-                                              <LinkWrapper
-                                                navbarEntry={nestedEntry}
-                                                linkComponent={Link}
-                                              />
-                                            </MobileNavLink>
-                                          )}
-                                          {nestedEntry.blockType ===
-                                            "ExternalLinkItem" && (
-                                            <MobileNavLink>
-                                              <LinkWrapper
-                                                navbarEntry={nestedEntry}
-                                                linkComponent="a"
-                                              />
-                                            </MobileNavLink>
-                                          )}
-                                        </React.Fragment>
-                                      ))}
-                                    </VStack>
-                                  </Collapsible.Content>
-                                </Collapsible.Root>
-                              )}
-                            </React.Fragment>
-                          ))}
-                        </VStack>
-                      </Collapsible.Content>
-                    </Collapsible.Root>
-                  )}
-                  {navbarEntry.blockType === "SocialsMenu" &&
-                    socialLinks.length > 0 && (
+                                </Menu.Item>
+                              ))}
+                            </Menu.Content>
+                          </Menu.Positioner>
+                        </Menu.Root>
+                      )}
+                  </React.Fragment>
+                ))}
+              </HStack>
+            </HStack>
+            <Box flex="1" px={{ base: 0, md: 2 }}>
+              {!LIVE_RESULT_BETA && <WcaSearch />}
+            </Box>
+            <HStack>
+              {showEmptyMessage && (
+                <Text hideBelow="md">Oh no, there are no navbar items!</Text>
+              )}
+              <ColorModeButton />
+              <Box hideBelow="md">
+                <LanguageSelector />
+              </Box>
+              <Box hideBelow="md">
+                <AvatarMenu
+                  session={session}
+                  cmsEntries={avatarMenuEntries}
+                  permissions={permissions}
+                />
+              </Box>
+            </HStack>
+          </HStack>
+
+          <Box hideFrom="xl">
+            <Collapsible.Content>
+              <VStack align="stretch" px={3.5} pt={1} pb={1.5} gap={1}>
+                {showEmptyMessage && (
+                  <Text>Oh no, there are no navbar items!</Text>
+                )}
+                {navbarEntries.map((navbarEntry) => (
+                  <React.Fragment key={navbarEntry.id}>
+                    {navbarEntry.blockType === "LinkItem" && (
+                      <MobileNavLink>
+                        <LinkWrapper
+                          navbarEntry={navbarEntry}
+                          linkComponent={Link}
+                        />
+                      </MobileNavLink>
+                    )}
+                    {navbarEntry.blockType === "ExternalLinkItem" && (
+                      <MobileNavLink>
+                        <LinkWrapper
+                          navbarEntry={navbarEntry}
+                          linkComponent="a"
+                        />
+                      </MobileNavLink>
+                    )}
+                    {navbarEntry.blockType === "NavDropdown" && (
                       <Collapsible.Root
                         overflowPadding
                         display="flex"
@@ -451,11 +383,8 @@ export default async function Navbar() {
                         <Collapsible.Trigger asChild>
                           <MobileNavButton>
                             <TextWrapper
-                              navbarEntry={{
-                                ...navbarEntry,
-                                displayIcon: "External Link",
-                              }}
-                              entryKey="label"
+                              navbarEntry={navbarEntry}
+                              entryKey="title"
                             />
                             <Collapsible.Indicator ms="auto">
                               <LuChevronDown />
@@ -464,35 +393,133 @@ export default async function Navbar() {
                         </Collapsible.Trigger>
                         <Collapsible.Content>
                           <VStack align="stretch" ps={2} gap={1} py={1}>
-                            {socialLinks.map((item) => (
-                              <MobileNavLink key={item.id}>
-                                <LinkWrapper
-                                  navbarEntry={item}
-                                  linkComponent="a"
-                                />
-                              </MobileNavLink>
+                            {navbarEntry.entries.map((subEntry) => (
+                              <React.Fragment key={subEntry.id}>
+                                {subEntry.blockType === "LinkItem" && (
+                                  <MobileNavLink>
+                                    <LinkWrapper
+                                      navbarEntry={subEntry}
+                                      linkComponent={Link}
+                                    />
+                                  </MobileNavLink>
+                                )}
+                                {subEntry.blockType === "ExternalLinkItem" && (
+                                  <MobileNavLink>
+                                    <LinkWrapper
+                                      navbarEntry={subEntry}
+                                      linkComponent="a"
+                                    />
+                                  </MobileNavLink>
+                                )}
+                                {subEntry.blockType === "VisualDivider" && (
+                                  <Separator />
+                                )}
+                                {subEntry.blockType === "NestedDropdown" && (
+                                  <Collapsible.Root
+                                    overflowPadding
+                                    display="flex"
+                                    flexDirection="column"
+                                  >
+                                    <Collapsible.Trigger asChild>
+                                      <MobileNavButton>
+                                        {subEntry.title}
+                                        <Collapsible.Indicator ms="auto">
+                                          <LuChevronDown />
+                                        </Collapsible.Indicator>
+                                      </MobileNavButton>
+                                    </Collapsible.Trigger>
+                                    <Collapsible.Content>
+                                      <VStack
+                                        align="stretch"
+                                        ps={2}
+                                        gap={1}
+                                        py={1}
+                                      >
+                                        {subEntry.entries.map((nestedEntry) => (
+                                          <React.Fragment key={nestedEntry.id}>
+                                            {nestedEntry.blockType ===
+                                              "LinkItem" && (
+                                              <MobileNavLink>
+                                                <LinkWrapper
+                                                  navbarEntry={nestedEntry}
+                                                  linkComponent={Link}
+                                                />
+                                              </MobileNavLink>
+                                            )}
+                                            {nestedEntry.blockType ===
+                                              "ExternalLinkItem" && (
+                                              <MobileNavLink>
+                                                <LinkWrapper
+                                                  navbarEntry={nestedEntry}
+                                                  linkComponent="a"
+                                                />
+                                              </MobileNavLink>
+                                            )}
+                                          </React.Fragment>
+                                        ))}
+                                      </VStack>
+                                    </Collapsible.Content>
+                                  </Collapsible.Root>
+                                )}
+                              </React.Fragment>
                             ))}
                           </VStack>
                         </Collapsible.Content>
                       </Collapsible.Root>
                     )}
-                </React.Fragment>
-              ))}
-              {/* From `md` upwards both of these already sit in the top bar, so without this the
+                    {navbarEntry.blockType === "SocialsMenu" &&
+                      socialLinks.length > 0 && (
+                        <Collapsible.Root
+                          overflowPadding
+                          display="flex"
+                          flexDirection="column"
+                        >
+                          <Collapsible.Trigger asChild>
+                            <MobileNavButton>
+                              <TextWrapper
+                                navbarEntry={{
+                                  ...navbarEntry,
+                                  displayIcon: "External Link",
+                                }}
+                                entryKey="label"
+                              />
+                              <Collapsible.Indicator ms="auto">
+                                <LuChevronDown />
+                              </Collapsible.Indicator>
+                            </MobileNavButton>
+                          </Collapsible.Trigger>
+                          <Collapsible.Content>
+                            <VStack align="stretch" ps={2} gap={1} py={1}>
+                              {socialLinks.map((item) => (
+                                <MobileNavLink key={item.id}>
+                                  <LinkWrapper
+                                    navbarEntry={item}
+                                    linkComponent="a"
+                                  />
+                                </MobileNavLink>
+                              ))}
+                            </VStack>
+                          </Collapsible.Content>
+                        </Collapsible.Root>
+                      )}
+                  </React.Fragment>
+                ))}
+                {/* From `md` upwards both of these already sit in the top bar, so without this the
                   open drawer shows a second language selector and a second avatar. */}
-              <Separator hideFrom="md" />
-              <VStack align="stretch" hideFrom="md" gap={1}>
-                <LanguageSelector />
-                <AvatarMenu
-                  session={session}
-                  cmsEntries={avatarMenuEntries}
-                  permissions={permissions}
-                />
+                <Separator hideFrom="md" />
+                <VStack align="stretch" hideFrom="md" gap={1}>
+                  <LanguageSelector />
+                  <AvatarMenu
+                    session={session}
+                    cmsEntries={avatarMenuEntries}
+                    permissions={permissions}
+                  />
+                </VStack>
               </VStack>
-            </VStack>
-          </Collapsible.Content>
-        </Box>
-      </MobileNavRoot>
+            </Collapsible.Content>
+          </Box>
+        </MobileNavRoot>
+      </Box>
     </Box>
   );
 }
