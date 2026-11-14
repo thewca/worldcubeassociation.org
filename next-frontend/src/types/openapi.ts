@@ -43,6 +43,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}/registrations/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the authenticated user's registration for a competition */
+        get: operations["myRegistration"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/registrations/{userId}": {
         parameters: {
             query?: never;
@@ -50,7 +67,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get a user's registration for a competition */
+        /** Get a user's registration for a competition, as a manager of that competition */
         get: operations["registrationByUser"];
         put?: never;
         post?: never;
@@ -2580,6 +2597,29 @@ export interface operations {
                         status: string;
                         message: string;
                     };
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
+        };
+    };
+    myRegistration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The user's registration, or null if they are not registered */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationDataV2"] | null;
                 };
             };
             "4XX": components["responses"]["RegistrationError"];

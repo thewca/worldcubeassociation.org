@@ -1,5 +1,5 @@
 get:
-  summary: Get a user's registration for a competition
+  summary: Get a user's registration for a competition, as a manager of that competition
   tags:
     - competitions
     - registrations

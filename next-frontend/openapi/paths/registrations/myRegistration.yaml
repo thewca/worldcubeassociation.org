@@ -1,0 +1,23 @@
+get:
+  summary: Get the authenticated user's registration for a competition
+  tags:
+    - competitions
+    - registrations
+  operationId: myRegistration
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: The user's registration, or null if they are not registered
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../../schemas/registrations/RegistrationDataV2.yaml'
+              - type: 'null'
+    '4XX':
+      $ref: '../../errorResponses/RegistrationError.yaml'

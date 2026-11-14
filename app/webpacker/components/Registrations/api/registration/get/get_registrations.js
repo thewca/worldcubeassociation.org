@@ -3,6 +3,7 @@ import {
   confirmedRegistrationsUrl,
   getPsychSheetForEventUrl,
   registrationByUserUrl,
+  myRegistrationUrl,
   singleRegistrationUrl,
   registrationHistoryUrl,
 } from '../../../../../lib/requests/routes.js.erb';
@@ -30,11 +31,7 @@ export async function getAllRegistrations(competition) {
   return data;
 }
 
-export async function getRegistrationByUser(
-  userId,
-  competitionId,
-) {
-  const route = registrationByUserUrl(competitionId, userId);
+async function fetchRegistrationOrNull(route) {
   try {
     const { data } = await fetchJsonOrError(route);
     return data;
@@ -45,6 +42,18 @@ export async function getRegistrationByUser(
     }
     throw e;
   }
+}
+
+export async function getRegistrationByUser(
+  userId,
+  competitionId,
+) {
+  return fetchRegistrationOrNull(registrationByUserUrl(competitionId, userId));
+}
+
+export async function getMyRegistration(competitionId) {
+  const { data } = await fetchJsonOrError(myRegistrationUrl(competitionId));
+  return data;
 }
 
 export async function getSingleRegistration(
