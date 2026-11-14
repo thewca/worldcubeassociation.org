@@ -10,7 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -388,14 +387,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
 
   create_table "competition_venues", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
-    t.string "country_iso2", null: false
     t.datetime "created_at", precision: nil, null: false
     t.integer "latitude_microdegrees", null: false
     t.integer "longitude_microdegrees", null: false
-    t.string "name", null: false
+    t.string "country_iso2", limit: 2, null: false
     t.string "timezone_id", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "wcif_id", null: false
+    t.string "name", limit: 240, null: false
     t.index ["competition_id", "wcif_id"], name: "index_competition_venues_on_competition_id_and_wcif_id", unique: true
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
   end
@@ -448,6 +447,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
     t.bigint "lead_delegate_id"
     t.integer "longitude"
     t.string "main_event_id"
+    t.bigint "main_venue_id"
+    t.boolean "is_multi_location", default: false, null: false
     t.string "name", limit: 50, default: "", null: false
     t.string "name_reason"
     t.integer "newcomer_month_reserved_spots"
@@ -479,6 +480,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
     t.index ["country_id"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_competitions_on_end_date"
     t.index ["lead_delegate_id"], name: "index_competitions_on_lead_delegate_id"
+    t.index ["main_venue_id"], name: "index_competitions_on_main_venue_id"
     t.index ["start_date"], name: "index_competitions_on_start_date"
   end
 
@@ -1704,6 +1706,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "competitions", "competition_venues", column: "main_venue_id", on_update: :cascade, on_delete: :nullify
   add_foreign_key "concise_average_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "concise_single_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "external_scramble_sets", "competitions"

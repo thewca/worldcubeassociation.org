@@ -26,6 +26,7 @@ class Competition < ApplicationRecord
   has_many :competition_venues, dependent: :destroy
   has_many :venue_countries, -> { distinct }, through: :competition_venues, source: :country
   has_many :venue_continents, -> { distinct }, through: :competition_venues, source: :continent
+  belongs_to :main_venue, class_name: "CompetitionVenue", optional: true
   belongs_to :country
   has_one :continent, through: :country
   has_many :championships, dependent: :delete_all
@@ -131,6 +132,7 @@ class Competition < ApplicationRecord
   CLONEABLE_ATTRIBUTES = %w[
     city_name
     country_id
+    is_multi_location
     information
     venue
     venue_address
@@ -199,6 +201,7 @@ class Competition < ApplicationRecord
     results_posted_by
     posting_by
     main_event_id
+    main_venue_id
     lead_delegate_id
     waiting_list_deadline_date
     event_change_deadline_date
@@ -343,6 +346,13 @@ class Competition < ApplicationRecord
   REGISTRATION_OPENING_EARLIEST = 172_800
 
   validates :city_name, city: true
+
+  # Main Venue as a model is a new concept (as of writing this comment 2026-11-13).
+  # We ultimately want to enforce strict presence according to the `validates` below,
+  #   but in order to "ease in" the data for existing competitions, we do not enforce this validation from the start.
+  # TODO: Enable the validation (and consider removing the automated backfill, to incentivize Delegates to consciously fill in the main venue)
+  #   once the backfill has been completed and the data consistency has been approved by WST and WRT.
+  # validates :main_venue_id, presence: { unless: :is_multi_location? }, absence: { if: :is_multi_location? }, if: :confirmed_or_visible?
 
   # We have stricter validations for confirming a competition
   validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
@@ -713,6 +723,7 @@ class Competition < ApplicationRecord
              'competition_events',
              'competition_organizers',
              'competition_venues',
+             'main_venue',
              'media',
              'scrambles',
              'country',
@@ -774,6 +785,18 @@ class Competition < ApplicationRecord
   #   but we need to map them down to just the general `competition_delegates` association.
   before_validation :unpack_staff_delegate_ids
   before_validation :unpack_trainee_delegate_ids
+
+  # As part of the venue migration (see `validates :main_venue_id` far above), we currently don't show the selection dropdown
+  #   to Delegates in the competition UI. Instead, we "softly" fill in a main venue automatically, as long as
+  #   there is only one venue associated with the competition and there is no other main venue yet.
+  # TODO: Delete this automatic backfilling hook and force Delegates to make a conscious choice in the UI,
+  #   once the data models are congruent (via follow-up PRs) and backfilling for historical data has been completed.
+  before_save :backlink_main_venue, unless: %i[is_multi_location? main_venue_id?]
+  private def backlink_main_venue
+    self.main_venue = self.competition_venues.first if self.competition_venues.size == 1
+    self.is_multi_location = self.competition_venues.size > 1 && self.fictive_country?
+  end
+
   # After the cloned competition is created, clone other associations which cannot just be copied.
   after_create :clone_associations
   private def clone_associations
@@ -2279,9 +2302,7 @@ class Competition < ApplicationRecord
   alias_attribute :short_name, :cell_name
   alias_attribute :city, :city_name
 
-  def country_iso2
-    country&.iso2
-  end
+  delegate :iso2, to: :country, prefix: true, allow_nil: true
 
   def url
     Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
@@ -2353,8 +2374,12 @@ class Competition < ApplicationRecord
     championships.pluck(:championship_type)
   end
 
+  def fictive_country?
+    !self.country.real?
+  end
+
   def multi_country_fmc_competition?
-    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(country_id)
+    events.length == 1 && events[0].fewest_moves? && self.fictive_country?
   end
 
   def exempt_from_wca_dues?
