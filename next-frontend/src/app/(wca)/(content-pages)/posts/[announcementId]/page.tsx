@@ -5,7 +5,10 @@ import { getPayload } from "payload";
 import config from "@payload-config";
 import { connection } from "next/server";
 import { AnnouncementFullCard } from "@/components/announcements/AnnouncementCard";
-import { randomAnnouncementColorPalette } from "@/components/announcements/announcement";
+import {
+  randomAnnouncementColorPalette,
+  releasedAnnouncementsQuery,
+} from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 
 const findAnnouncement = async (
@@ -19,7 +22,12 @@ const findAnnouncement = async (
   // that aren't valid ObjectIDs, so query instead of catching two error types.
   const { docs } = await payload.find({
     collection: "announcements",
-    where: { id: { equals: announcementId } },
+    where: {
+      and: [
+        { id: { equals: announcementId } },
+        releasedAnnouncementsQuery().where,
+      ],
+    },
     limit: 1,
   });
 

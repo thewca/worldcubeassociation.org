@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { DateTime } from "luxon";
 import { markdownConvertedField } from "@/collections/helpers";
 import { canCreatePosts } from "@/payload.access";
 
@@ -54,11 +55,44 @@ export const Announcements: CollectionConfig = {
     markdownConvertedField("content"),
     {
       name: "publishedAt",
+      label: "Scheduled release",
       type: "date",
       required: true,
       admin: {
+        date: { pickerAppearance: "dayAndTime" },
         description:
-          "Date the announcement was published, used to sort the announcements list.",
+          "The announcement stays hidden until this moment. Also used to sort the announcements list, newest first.",
+      },
+    },
+    {
+      name: "isPinned",
+      label: "Pinned",
+      type: "checkbox",
+      defaultValue: false,
+      admin: {
+        position: "sidebar",
+        description:
+          "Pinned announcements are listed before all others, most recently pinned first.",
+      },
+    },
+    {
+      name: "pinnedAt",
+      type: "date",
+      admin: {
+        position: "sidebar",
+        readOnly: true,
+        date: { pickerAppearance: "dayAndTime" },
+        condition: (data) => Boolean(data.isPinned),
+      },
+      hooks: {
+        // Only stamp when the pin is newly set, so re-saving a pinned announcement keeps its place.
+        beforeChange: [
+          ({ siblingData, originalDoc }) => {
+            if (!siblingData.isPinned) return null;
+
+            return originalDoc?.pinnedAt ?? DateTime.now().toISO();
+          },
+        ],
       },
     },
     {
