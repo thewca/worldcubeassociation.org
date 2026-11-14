@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Checkbox, HStack, Table } from "@chakra-ui/react";
+import { Button, Checkbox, Table } from "@chakra-ui/react";
 import { LuArrowDown, LuArrowUp } from "react-icons/lu";
 import { ConfirmDialog } from "@/providers/ConfirmProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
@@ -37,11 +37,7 @@ export default function BulkQuitButton({
 
   const emptyCompetitors = Object.entries(liveResultsByRegistrationId)
     .filter(([, results]) => results.every((r) => r.attempts.length === 0))
-    .map(([id]) => competitors.get(Number(id)))
-    // Results and competitors arrive in the same round payload, so a miss
-    // here would mean the backend omitted a competitor. Skip it rather than
-    // rendering an empty row that could still be selected and quit.
-    .filter((competitor) => competitor !== undefined)
+    .map(([id]) => competitors.get(Number(id))!)
     .filter((competitor) => !batchAttemptsByRegistrationId.has(competitor.id));
 
   const emptyRegistrationIds = emptyCompetitors.map(
@@ -184,25 +180,25 @@ export default function BulkQuitButton({
                   <Checkbox.Control />
                 </Checkbox.Root>
               </Table.ColumnHeader>
-              <Table.ColumnHeader
-                cursor="pointer"
-                aria-sort={ariaSort("id")}
-                onClick={() => toggleSort("id")}
-              >
-                <HStack gap="1">
+              <Table.ColumnHeader aria-sort={ariaSort("id")}>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => toggleSort("id")}
+                >
                   {t("competitions.live.admin.quit.bulk.id")}
                   {sortIcon("id")}
-                </HStack>
+                </Button>
               </Table.ColumnHeader>
-              <Table.ColumnHeader
-                cursor="pointer"
-                aria-sort={ariaSort("name")}
-                onClick={() => toggleSort("name")}
-              >
-                <HStack gap="1">
+              <Table.ColumnHeader aria-sort={ariaSort("name")}>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => toggleSort("name")}
+                >
                   {t("competitions.live.admin.quit.bulk.name")}
                   {sortIcon("name")}
-                </HStack>
+                </Button>
               </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
