@@ -84,6 +84,12 @@ module ResultConditions
       }
     end
 
+    # We store 'single' and 'average' as a reference to sort-by,
+    #   but when dealing with results a single is stored as 'best'
+    def result_field
+      self.scope == "single" ? :best : scope.to_sym
+    end
+
     # Our Regulations allow at most 75% of competitors to proceed
     def regulations_boundary(results)
       (results.count * 0.75).floor
