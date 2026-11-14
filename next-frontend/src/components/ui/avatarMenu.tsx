@@ -27,6 +27,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import buildAvatarMenuEntries, {
   type FlatMenuEntry,
 } from "@/lib/wca/avatarMenuEntries";
+import { toAvatarName } from "@/lib/utils";
 
 const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
 
@@ -136,7 +137,7 @@ function AvatarMenu({
       size={{ base: "xs", md: "md" }}
       boxSize={{ base: 7, md: 10 }}
     >
-      <Avatar.Fallback name={session.user?.name ?? undefined} />
+      <Avatar.Fallback name={toAvatarName(session.user?.name) ?? undefined} />
       <Avatar.Image src={session.user?.image ?? undefined} />
     </Avatar.Root>
   );
