@@ -1,0 +1,213 @@
+type: object
+description: >-
+  Unannounced competitions are still being set up, so most of their fields can be null.
+required:
+  - id
+  - name
+  - short_name
+  - status
+  - information
+  - website
+  - start_date
+  - end_date
+  - scoretaking_software
+  - number_of_bookmarks
+  - competition_series_ids
+  - championship_types
+  - tabs
+  - events
+  - venue
+  - registration_info
+  - staff
+properties:
+  id:
+    type: string
+    example: "WC2003"
+  name:
+    type: string
+    example: "WCA World Championship 2003"
+  short_name:
+    type: string
+    example: "Worlds 2003"
+  status:
+    type: string
+    description: >-
+      Where the competition is in its lifecycle. A cancelled competition stays `cancelled` even
+      though it was announced before. `results_pending` means it has ended but its results are not
+      posted yet.
+    enum: [unconfirmed, confirmed, announced, results_pending, results_posted, cancelled]
+  information:
+    type: [string, "null"]
+    example: "First WCA World Championship"
+  website:
+    type: [string, "null"]
+    example: "https://cubingusa.org/worlds"
+  start_date:
+    type: [string, "null"]
+    format: date
+    example: "2025-07-03"
+  end_date:
+    type: [string, "null"]
+    format: date
+    example: "2025-07-06"
+  scoretaking_software:
+    type: string
+    enum: [external, wca_live, internal]
+  number_of_bookmarks:
+    type: integer
+    example: 123
+  competition_series_ids:
+    type: array
+    description: >-
+      The announced competitions of the series this competition belongs to, in start date order,
+      including itself once it is announced. Empty if it is not part of a series.
+    items:
+      type: string
+    example: ["WC2003", "WC2003Side"]
+  championship_types:
+    type: array
+    description: >-
+      One entry per championship this competition holds: `world`, a continent ID, a country ISO2
+      code, or a multi-country group such as `greater_china`. Empty if it is not a championship.
+    items:
+      type: string
+    example: ["world"]
+  tabs:
+    type: array
+    items:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+  events:
+    type: object
+    required: [event_ids, main_event_id]
+    properties:
+      event_ids:
+        type: array
+        items:
+          type: string
+        example: ["333"]
+      main_event_id:
+        type: [string, "null"]
+        example: "333"
+  venue:
+    type: object
+    required: [name, address, details, city, country_iso2, latitude_degrees, longitude_degrees]
+    properties:
+      name:
+        type: string
+        example: "Toronto"
+      address:
+        type: [string, "null"]
+        example: "770 Don Mills Rd, North York, ON M3C IT3, Canada"
+      details:
+        type: [string, "null"]
+        example: "The big convention center"
+      city:
+        type: string
+        example: "Seattle, Washington"
+      country_iso2:
+        type: string
+        example: "US"
+      latitude_degrees:
+        type: [number, "null"]
+        example: 47.611387
+      longitude_degrees:
+        type: [number, "null"]
+        example: -122.332554
+  registration_info:
+    type: object
+    required:
+      - opens_at
+      - closes_at
+      - competitor_limit
+      - spots_left
+      - waiting_list_count
+      - on_the_spot_registration
+      - extra_requirements
+      - external_registration_page
+      - event_change_deadline_date
+      - waiting_list_deadline_date
+      - competitor_can_cancel
+      - fees
+      - refund_policy
+    properties:
+      opens_at:
+        type: [string, "null"]
+        format: date-time
+        example: "2025-01-03T14:00:00.000Z"
+      closes_at:
+        type: [string, "null"]
+        format: date-time
+        example: "2025-01-10T14:00:00.000Z"
+      competitor_limit:
+        type: [integer, "null"]
+        description: Null if the competition has no competitor limit.
+        example: 2000
+      spots_left:
+        type: [integer, "null"]
+        example: 42
+      waiting_list_count:
+        type: integer
+        example: 7
+      on_the_spot_registration:
+        type: [boolean, "null"]
+      extra_requirements:
+        type: [string, "null"]
+      external_registration_page:
+        type: [string, "null"]
+        example: "https://example.com/register"
+      event_change_deadline_date:
+        type: [string, "null"]
+        format: date-time
+      waiting_list_deadline_date:
+        type: [string, "null"]
+        format: date-time
+      competitor_can_cancel:
+        type: string
+        enum: [not_accepted, always, unpaid]
+      fees:
+        type: object
+        required: [currency_code, base_entry_lowest_denomination, guests_entry_lowest_denomination, on_the_spot_entry_lowest_denomination]
+        properties:
+          currency_code:
+            type: string
+            example: "USD"
+          base_entry_lowest_denomination:
+            type: [integer, "null"]
+            example: 12000
+          guests_entry_lowest_denomination:
+            type: [integer, "null"]
+            example: 1000
+          on_the_spot_entry_lowest_denomination:
+            type: [integer, "null"]
+            example: 15000
+      refund_policy:
+        type: object
+        required: [percent, limit_date]
+        properties:
+          percent:
+            type: [integer, "null"]
+            example: 50
+          limit_date:
+            type: [string, "null"]
+            format: date-time
+  staff:
+    type: object
+    required: [contact, delegates, organizers]
+    properties:
+      contact:
+        type: [string, "null"]
+        example: "[Organization team](mailto:worlds@example.com)"
+      delegates:
+        type: array
+        items:
+          $ref: 'V1CompetitionStaff.yaml'
+      organizers:
+        type: array
+        items:
+          $ref: 'V1CompetitionStaff.yaml'
