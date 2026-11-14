@@ -306,8 +306,10 @@ export async function RegistrationCard({
 
 export function EventCard({
   competitionInfo,
+  t,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
+  t: TFunction;
 }) {
   return (
     <Card.Root>
@@ -324,6 +326,7 @@ export function EventCard({
                   ? "green.solid"
                   : "currentColor"
               }
+              t={t}
             />
           ))}
         </Wrap>

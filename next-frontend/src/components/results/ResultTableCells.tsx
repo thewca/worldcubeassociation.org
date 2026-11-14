@@ -4,6 +4,7 @@ import events from "@/lib/wca/data/events";
 import { HStack, Link, Table } from "@chakra-ui/react";
 import countries from "@/lib/wca/data/countries";
 import RegionFilterLink from "@/components/results/RegionFilterLink";
+import { TFunction } from "i18next";
 
 type CountryCellProps = (
   | {
@@ -85,12 +86,13 @@ export function PersonCell({ personId, personName }: PersonCellProps) {
 
 interface EventCellProps {
   eventId: string;
+  t: TFunction;
 }
 
-export function EventCell({ eventId }: EventCellProps) {
+export function EventCell({ eventId, t }: EventCellProps) {
   return (
     <Table.Cell>
-      <EventIcon eventId={eventId} /> {events.byId[eventId].name}
+      <EventIcon eventId={eventId} t={t} /> {events.byId[eventId].name}
     </Table.Cell>
   );
 }

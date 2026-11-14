@@ -16,12 +16,14 @@ import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import RoundActions from "@/app/(wca)/(content-pages)/competitions/[competitionId]/live/admin/RoundActions";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function RoundAdmin({
   competitionId,
 }: {
   competitionId: string;
 }) {
+  const { t } = useT();
   const { rounds } = useAllRoundsInfo();
 
   const roundsById = _.groupBy(rounds, (d) => parseActivityCode(d.id).eventId);
@@ -45,7 +47,7 @@ export default function RoundAdmin({
               <Card.Body alignItems="baseline">
                 <Card.Title>
                   <HStack>
-                    <EventIcon eventId={eventId} fontSize="2xl" />
+                    <EventIcon eventId={eventId} fontSize="2xl" t={t} />
                     {events.byId[eventId].name}
                   </HStack>
                 </Card.Title>
