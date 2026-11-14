@@ -46,7 +46,6 @@ export default async function PodiumsPage({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">Results</Card.Title>
         <FilteredResults
           competitionInfo={competitionInfo}
           roundsByEvent={roundsByEvent}
