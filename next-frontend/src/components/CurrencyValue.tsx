@@ -1,4 +1,4 @@
-import { Badge, FormatNumber, HStack } from "@chakra-ui/react";
+import { Badge, FormatNumber, HStack, Span } from "@chakra-ui/react";
 import currencies from "@/lib/staticData/currencies.json";
 
 type Currency = (typeof currencies)[keyof typeof currencies];
@@ -17,7 +17,7 @@ export default function CurrencyValue({
 
   return (
     <HStack>
-      <span>
+      <Span>
         {currency.symbol_first && currency.symbol}
         <FormatNumber
           value={amount}
@@ -27,7 +27,7 @@ export default function CurrencyValue({
           maximumFractionDigits={currency.decimal_places}
         />
         {!currency.symbol_first && ` ${currency.symbol}`}
-      </span>
+      </Span>
       <Badge variant="solid">{currencyCode}</Badge>
     </HStack>
   );

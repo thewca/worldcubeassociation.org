@@ -10,6 +10,7 @@ module CurrencyData
   end
 
   def self.to_h
+    # As in app/webpacker/lib/wca-data.js.erb, exclude legacy aliases that overwrite canonical data
     currencies = Money::Currency.table.select { |key, currency| key.to_s == currency[:iso_code].downcase }
 
     currencies.values.to_h do |currency|
