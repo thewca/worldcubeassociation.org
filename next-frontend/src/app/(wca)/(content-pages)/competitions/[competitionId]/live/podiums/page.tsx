@@ -45,7 +45,6 @@ export default async function PodiumsPage({
 
   return (
     <>
-      <Heading textStyle="h1">{t("competitions.live.podiums.title")}</Heading>
       {noPodiums ? (
         <Text>{t("competitions.live.podiums.none")}</Text>
       ) : (
