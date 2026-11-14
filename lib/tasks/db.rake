@@ -149,7 +149,9 @@ namespace :db do
             User.update_all encrypted_password: default_encrypted_password
           end
 
-          # Create an OAuth application so people can easily play around with OAuth on staging.
+          # Create two OAuth applications so people can easily play around with OAuth on staging.
+          #   The first one is marked confidential (for full server apps that have their own backend which can serve secrets),
+          #   while the second one is public (for React SPA like TNoodle that cannot hide secrets because the client is self-contained).
           Doorkeeper::Application.create!(
             name: "Example Application for staging",
             uid: "example-application-id",
@@ -157,8 +159,17 @@ namespace :db do
             redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
             dangerously_allow_any_redirect_uri: true,
             scopes: Doorkeeper.configuration.scopes.to_s,
-            owner_id: User.find_by!(wca_id: "2005FLEI01").id,
-            owner_type: "User",
+            owner: User.find_by!(wca_id: "2005FLEI01"),
+            confidential: true,
+          )
+          Doorkeeper::Application.create!(
+            name: "Example Application for staging (Public with PKCE)",
+            uid: "example-application-id-public",
+            secret: "example-secret",
+            redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
+            dangerously_allow_any_redirect_uri: true,
+            scopes: Doorkeeper.configuration.scopes.to_s,
+            owner: User.find_by!(wca_id: "2012BILL01"),
             confidential: false,
           )
 
