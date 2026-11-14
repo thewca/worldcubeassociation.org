@@ -220,7 +220,8 @@ export async function RegistrationCard({
                   />
                   {!registrationClosed && (
                     <>
-                      /
+                      {/* Escape character for "/" */}
+                      <span>&#47;</span>
                       <FormatNumber value={competitionInfo.competitor_limit} />
                     </>
                   )}
