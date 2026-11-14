@@ -12,7 +12,7 @@ import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
 
-type SortColumn = "id" | "name";
+type SortColumn = "registrant_id" | "name";
 type SortDirection = "asc" | "desc";
 
 export default function BulkQuitButton({
@@ -33,19 +33,21 @@ export default function BulkQuitButton({
   const [sort, setSort] = useState<{
     column: SortColumn;
     direction: SortDirection;
-  }>({ column: "id", direction: "asc" });
+  }>({ column: "registrant_id", direction: "asc" });
 
-  const emptyCompetitors = Object.entries(liveResultsByRegistrationId)
-    .filter(([, results]) => results.every((r) => r.attempts.length === 0))
-    .map(([id]) => competitors.get(Number(id))!)
-    .filter((competitor) => !batchAttemptsByRegistrationId.has(competitor.id));
+  const emptyCompetitors = Array.from(competitors.values()).filter(
+    (competitor) =>
+      liveResultsByRegistrationId[competitor.id]?.every(
+        (r) => r.attempts.length === 0,
+      ) && !batchAttemptsByRegistrationId.has(competitor.id),
+  );
 
   const emptyRegistrationIds = emptyCompetitors.map(
     (competitor) => competitor.id,
   );
 
   const compareCompetitors = (a: LiveCompetitor, b: LiveCompetitor) =>
-    sort.column === "id"
+    sort.column === "registrant_id"
       ? a.registrant_id - b.registrant_id
       : a.name.localeCompare(b.name);
 
@@ -98,21 +100,21 @@ export default function BulkQuitButton({
     setOpen(true);
   };
 
-  const toggle = (id: number) =>
+  const toggle = (registrationId: number) =>
     setSelected((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
+      if (next.has(registrationId)) {
+        next.delete(registrationId);
       } else {
-        next.add(id);
+        next.add(registrationId);
       }
       return next;
     });
 
   // A competitor can receive results while the dialog is open, so only
   // count selections that are still eligible for bulk quitting.
-  const selectedRegistrationIds = emptyRegistrationIds.filter((id) =>
-    selected.has(id),
+  const selectedRegistrationIds = emptyRegistrationIds.filter(
+    (registrationId) => selected.has(registrationId),
   );
 
   const allSelected =
@@ -180,14 +182,14 @@ export default function BulkQuitButton({
                   <Checkbox.Control />
                 </Checkbox.Root>
               </Table.ColumnHeader>
-              <Table.ColumnHeader aria-sort={ariaSort("id")}>
+              <Table.ColumnHeader aria-sort={ariaSort("registrant_id")}>
                 <Button
                   variant="ghost"
                   size="xs"
-                  onClick={() => toggleSort("id")}
+                  onClick={() => toggleSort("registrant_id")}
                 >
                   {t("competitions.live.admin.quit.bulk.id")}
-                  {sortIcon("id")}
+                  {sortIcon("registrant_id")}
                 </Button>
               </Table.ColumnHeader>
               <Table.ColumnHeader aria-sort={ariaSort("name")}>
