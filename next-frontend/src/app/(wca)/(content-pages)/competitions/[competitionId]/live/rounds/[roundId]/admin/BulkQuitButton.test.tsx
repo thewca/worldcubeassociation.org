@@ -1,0 +1,262 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import BulkQuitButton from "./BulkQuitButton";
+import { LiveAttempt, LiveCompetitor, LiveResult } from "@/types/live";
+import { LiveResultsByRegistrationId } from "@/providers/LiveResultProvider";
+
+const mutate = vi.fn();
+
+const liveResultsContext: {
+  liveResultsByRegistrationId: LiveResultsByRegistrationId;
+  competitors: Map<number, LiveCompetitor>;
+  pendingLiveResults: [];
+} = {
+  liveResultsByRegistrationId: {},
+  competitors: new Map(),
+  pendingLiveResults: [],
+};
+
+const resultsAdminContext = {
+  batchAttemptsByRegistrationId: new Map<number, LiveAttempt[]>(),
+};
+
+vi.mock("@/providers/LiveResultProvider", () => ({
+  useLiveResults: () => liveResultsContext,
+}));
+
+vi.mock("@/providers/LiveResultAdminProvider", () => ({
+  useResultsAdmin: () => resultsAdminContext,
+}));
+
+vi.mock("@/lib/wca/useAPI", () => ({
+  default: () => ({ useMutation: () => ({ mutate, isPending: false }) }),
+}));
+
+vi.mock("@/lib/i18n/useI18n", () => ({
+  useT: () => ({ t: (key: string) => key }),
+}));
+
+const makeCompetitor = (
+  id: number,
+  registrantId: number,
+  name: string,
+): LiveCompetitor => ({
+  id,
+  registrant_id: registrantId,
+  user_id: id,
+  name,
+  country_iso2: "DE",
+  wca_id: null,
+});
+
+const makeResult = (
+  registrationId: number,
+  attemptCount: number,
+): LiveResult => ({
+  registration_id: registrationId,
+  best: 0,
+  average: 0,
+  single_record_tag: null,
+  average_record_tag: null,
+  advancing: false,
+  advancing_questionable: false,
+  attempts: Array.from({ length: attemptCount }, (_, i) => ({
+    attempt_number: i + 1,
+    value: 1000,
+  })),
+  last_attempt_entered_at: "2026-11-08T10:00:00.000Z",
+  global_pos: null,
+  local_pos: null,
+  round_wcif_id: "333-r1",
+});
+
+const competitors = [
+  makeCompetitor(101, 3, "Charlie"),
+  makeCompetitor(102, 1, "bob"),
+  makeCompetitor(103, 2, "Ángela"),
+  makeCompetitor(104, 4, "Dana"),
+  makeCompetitor(105, 5, "Eve"),
+];
+
+const bulkQuitButton = () => (
+  <ChakraProvider value={defaultSystem}>
+    <BulkQuitButton competitionId="Foo2026" roundId="333-r1" />
+  </ChakraProvider>
+);
+
+const openDialog = async () => {
+  const { rerender } = render(bulkQuitButton());
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "competitions.live.admin.quit.bulk.menu",
+    }),
+  );
+  await screen.findByRole("table");
+  return { rerender };
+};
+
+const displayedNames = () =>
+  within(screen.getByRole("table"))
+    .getAllByRole("row")
+    .slice(1)
+    .map((row) => within(row).getAllByRole("cell")[2].textContent);
+
+const checkboxFor = (name: string) => screen.getByRole("checkbox", { name });
+
+const selectAllCheckbox = () =>
+  checkboxFor("competitions.live.admin.quit.bulk.select_all");
+
+describe("BulkQuitButton", () => {
+  beforeEach(() => {
+    mutate.mockClear();
+    liveResultsContext.competitors = new Map(competitors.map((c) => [c.id, c]));
+    liveResultsContext.liveResultsByRegistrationId = {
+      "101": [makeResult(101, 0)],
+      "102": [makeResult(102, 0)],
+      "103": [makeResult(103, 0)],
+      // Dana already has an attempt, so she can't be bulk quit.
+      "104": [makeResult(104, 1)],
+      "105": [makeResult(105, 0)],
+    };
+    // Eve has attempts waiting in the admin batch, so she can't be bulk quit either.
+    resultsAdminContext.batchAttemptsByRegistrationId = new Map([
+      [105, [{ attempt_number: 1, value: 1000 }]],
+    ]);
+  });
+
+  it("is disabled when every competitor has results", () => {
+    liveResultsContext.liveResultsByRegistrationId = {
+      "101": [makeResult(101, 1)],
+    };
+
+    render(
+      <ChakraProvider value={defaultSystem}>
+        <BulkQuitButton competitionId="Foo2026" roundId="333-r1" />
+      </ChakraProvider>,
+    );
+
+    expect(
+      screen.getByRole("button", {
+        name: "competitions.live.admin.quit.bulk.menu",
+      }),
+    ).toBeDisabled();
+  });
+
+  it("lists only competitors without results, ordered by registrant ID", async () => {
+    await openDialog();
+
+    expect(displayedNames()).toEqual(["bob", "Ángela", "Charlie"]);
+  });
+
+  it("sorts by name ignoring case and accents, and reverses on a second click", async () => {
+    await openDialog();
+    const nameHeader = screen.getByRole("columnheader", {
+      name: "competitions.live.admin.quit.bulk.name",
+    });
+
+    fireEvent.click(nameHeader);
+    expect(displayedNames()).toEqual(["Ángela", "bob", "Charlie"]);
+    expect(nameHeader).toHaveAttribute("aria-sort", "ascending");
+
+    fireEvent.click(nameHeader);
+    expect(displayedNames()).toEqual(["Charlie", "bob", "Ángela"]);
+    expect(nameHeader).toHaveAttribute("aria-sort", "descending");
+  });
+
+  it("sorts by registrant ID descending on a click, and back to ascending on a second click", async () => {
+    await openDialog();
+    const idHeader = screen.getByRole("columnheader", {
+      name: "competitions.live.admin.quit.bulk.id",
+    });
+
+    expect(idHeader).toHaveAttribute("aria-sort", "ascending");
+
+    fireEvent.click(idHeader);
+    expect(displayedNames()).toEqual(["Charlie", "Ángela", "bob"]);
+    expect(idHeader).toHaveAttribute("aria-sort", "descending");
+
+    fireEvent.click(idHeader);
+    expect(displayedNames()).toEqual(["bob", "Ángela", "Charlie"]);
+    expect(idHeader).toHaveAttribute("aria-sort", "ascending");
+  });
+
+  it("starts with nobody selected and the confirm button disabled", async () => {
+    await openDialog();
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    // The "select all" checkbox plus one per eligible competitor.
+    expect(checkboxes).toHaveLength(4);
+    checkboxes.forEach((checkbox) => expect(checkbox).not.toBeChecked());
+    expect(
+      screen.getByRole("button", {
+        name: "competitions.live.admin.quit.quit_confirm",
+      }),
+    ).toBeDisabled();
+  });
+
+  it("toggles all from the header", async () => {
+    await openDialog();
+
+    fireEvent.click(selectAllCheckbox());
+    await waitFor(() => expect(checkboxFor("Ángela")).toBeChecked());
+    expect(selectAllCheckbox()).toBeChecked();
+
+    fireEvent.click(selectAllCheckbox());
+    await waitFor(() => expect(checkboxFor("Ángela")).not.toBeChecked());
+    expect(selectAllCheckbox()).not.toBeChecked();
+  });
+
+  it("shows a partial selection and only quits the selected competitors", async () => {
+    await openDialog();
+
+    fireEvent.click(checkboxFor("Charlie"));
+    fireEvent.click(checkboxFor("bob"));
+    await waitFor(() => expect(selectAllCheckbox()).toBePartiallyChecked());
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "competitions.live.admin.quit.quit_confirm",
+      }),
+    );
+
+    const quitRegistrationIds = mutate.mock.calls[0][0].body.registration_ids;
+    expect(quitRegistrationIds.toSorted()).toEqual([101, 102]);
+
+    await waitFor(() =>
+      expect(screen.queryByRole("table")).not.toBeInTheDocument(),
+    );
+  });
+
+  it("drops selected competitors who receive results while the dialog is open", async () => {
+    const { rerender } = await openDialog();
+
+    fireEvent.click(selectAllCheckbox());
+    await waitFor(() => expect(selectAllCheckbox()).toBeChecked());
+
+    // Charlie gets a first attempt entered from another device.
+    liveResultsContext.liveResultsByRegistrationId = {
+      ...liveResultsContext.liveResultsByRegistrationId,
+      "101": [makeResult(101, 1)],
+    };
+    rerender(bulkQuitButton());
+
+    expect(screen.queryByRole("checkbox", { name: "Charlie" })).toBeNull();
+    expect(selectAllCheckbox()).toBeChecked();
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "competitions.live.admin.quit.quit_confirm",
+      }),
+    );
+
+    const quitRegistrationIds = mutate.mock.calls[0][0].body.registration_ids;
+    expect(quitRegistrationIds.toSorted()).toEqual([102, 103]);
+  });
+});
