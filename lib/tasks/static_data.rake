@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 namespace :static_data do
+  desc 'Export RubyMoney currency data to JSON'
+  task dump_currencies: :environment do
+    CurrencyData.write_json_data!
+  end
+
   desc 'Import static data from JSON files under lib/static_data into the database'
   task load_json: :environment do
     EligibleCountryIso2ForChampionship.load_json_data!
