@@ -7,7 +7,7 @@ import {
   hydrateUserPermissions,
   type UserPermissions,
 } from "@/lib/wca/permissions";
-import type { AvatarMenuEntry } from "@/types/payload";
+import type { AvatarMenu, AvatarMenuLink } from "@/types/payload";
 
 export type FlatMenuEntry =
   | {
@@ -24,7 +24,7 @@ export type MenuEntry =
 
 export default function buildAvatarMenuEntries(
   session: Session,
-  cmsEntries: AvatarMenuEntry[],
+  cmsEntries: AvatarMenu["entries"],
   t: TFunction,
   permissions?: UserPermissions,
 ): MenuEntry[] {
@@ -37,47 +37,66 @@ export default function buildAvatarMenuEntries(
 
   const panels = permissions?.can_access_panels.scope ?? [];
 
+  const cmsLink = ({
+    label,
+    href,
+    isRailsPage,
+    targetLink,
+    newTab,
+    requiredPermission,
+  }: AvatarMenuLink): FlatMenuEntry[] => {
+    if (requiredPermission && !can[requiredPermission]()) {
+      return [];
+    }
+
+    if (isRailsPage) {
+      return href ? [rails(label, href)] : [];
+    }
+
+    if (!targetLink) {
+      return [];
+    }
+
+    return [
+      {
+        kind: "link",
+        label,
+        href:
+          targetLink === "/payload"
+            ? route({ pathname: "/payload/[[...segments]]", query: {} })
+            : targetLink,
+        newTab,
+      },
+    ];
+  };
+
   return [
-    ...cmsEntries
-      .filter(
-        ({ requiredPermission }) =>
-          !requiredPermission || can[requiredPermission](),
-      )
-      .flatMap(
-        ({ label, href, isRailsPage, targetLink, newTab }): MenuEntry[] => {
-          if (isRailsPage) {
-            return href ? [rails(label, href)] : [];
-          }
+    ...cmsEntries.flatMap((entry): MenuEntry[] => {
+      switch (entry.blockType) {
+        case "AvatarMenuLink":
+          return cmsLink(entry);
+        case "AvatarMenuMyResults":
+          return session.user?.wcaId
+            ? [
+                {
+                  kind: "link",
+                  label: t("layouts.navigation.my_results"),
+                  href: route({
+                    pathname: "/persons/[wcaId]",
+                    query: { wcaId: session.user.wcaId },
+                  }),
+                },
+              ]
+            : [];
+        case "AvatarMenuGroup": {
+          const entries = entry.entries.flatMap(cmsLink);
 
-          if (!targetLink) {
-            return [];
-          }
-
-          return [
-            {
-              kind: "link",
-              label,
-              href:
-                targetLink === "/payload"
-                  ? route({ pathname: "/payload/[[...segments]]", query: {} })
-                  : targetLink,
-              newTab,
-            },
-          ];
-        },
-      ),
-    ...(session.user?.wcaId
-      ? [
-          {
-            kind: "link",
-            label: t("layouts.navigation.my_results"),
-            href: route({
-              pathname: "/persons/[wcaId]",
-              query: { wcaId: session.user.wcaId },
-            }),
-          } satisfies MenuEntry,
-        ]
-      : []),
+          return entries.length > 0
+            ? [{ kind: "group", header: entry.header, entries }]
+            : [];
+        }
+      }
+    }),
     ...(panels.length > 0
       ? [
           {

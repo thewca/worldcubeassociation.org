@@ -1,10 +1,10 @@
-import type { CollectionConfig } from "payload";
+import type { Block, GlobalConfig } from "payload";
 import type { Route } from "nextjs-routes";
 import { hasRole } from "@delmaredigital/payload-better-auth";
 import { WCA_ROLES_FIELD } from "@/auth.config";
 import type { PermissionFunctions } from "@/lib/wca/permissions";
 import { newTabCheckbox } from "@/blocks/utils";
-import { revalidateCollection } from "@/collections/revalidateCollection";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 
 type UnscopedPermission = {
   [K in keyof PermissionFunctions]: PermissionFunctions[K] extends () => boolean
@@ -34,21 +34,9 @@ const targetLinkOptions = [
 
 const isWstAdmin = hasRole(["wst_admin"], WCA_ROLES_FIELD);
 
-export const AvatarMenuEntries: CollectionConfig = {
-  slug: "avatarMenuEntries",
-  admin: {
-    useAsTitle: "label",
-  },
-  orderable: true,
-  access: {
-    create: isWstAdmin,
-    update: isWstAdmin,
-    delete: isWstAdmin,
-  },
-  hooks: {
-    afterChange: [revalidateCollection],
-    afterDelete: [revalidateCollection],
-  },
+const AvatarMenuLink: Block = {
+  slug: "AvatarMenuLink",
+  interfaceName: "AvatarMenuLink",
   fields: [
     {
       name: "label",
@@ -94,4 +82,55 @@ export const AvatarMenuEntries: CollectionConfig = {
       interfaceName: "AvatarMenuPermission",
     },
   ],
+};
+
+const AvatarMenuMyResults: Block = {
+  slug: "AvatarMenuMyResults",
+  interfaceName: "AvatarMenuMyResults",
+  fields: [],
+};
+
+const AvatarMenuGroup: Block = {
+  slug: "AvatarMenuGroup",
+  interfaceName: "AvatarMenuGroup",
+  fields: [
+    {
+      name: "header",
+      type: "text",
+      required: true,
+      localized: true,
+      admin: {
+        description: "Header shown above the group, after a divider.",
+      },
+    },
+    {
+      name: "entries",
+      type: "blocks",
+      blocks: [AvatarMenuLink],
+      required: true,
+    },
+  ],
+};
+
+export const AvatarMenu: GlobalConfig = {
+  slug: "avatar-menu",
+  label: "Avatar Menu",
+  access: {
+    update: isWstAdmin,
+  },
+  fields: [
+    {
+      name: "entries",
+      type: "blocks",
+      blocks: [AvatarMenuLink, AvatarMenuMyResults, AvatarMenuGroup],
+      required: true,
+      admin: {
+        description:
+          "Entries of the avatar menu, top to bottom. My Results only shows for users with a WCA ID.",
+      },
+    },
+  ],
+  hooks: {
+    afterChange: [revalidateGlobal],
+  },
 };
