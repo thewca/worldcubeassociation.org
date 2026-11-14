@@ -1595,6 +1595,8 @@ en:
         #context: the "short" version of cutoff, which appear below the format (eg: Bo2/Ao5)
         cutoff: "Cutoff: %{short_cutoff}"
         download_html: "Download all the competition's details as PDF %{here}."
+        download_pdf: "Download the schedule PDF here"
+        download: "Download"
       date: "Date"
       add_to_calendar: "Add to calendar"
       #context: This is shown as a header above the column that shows competition names
@@ -1622,6 +1624,8 @@ en:
       organizer_plural:
         one: "Organizer"
         other: "Organizers"
+      view_more_members: "View %{count} more team members"
+      see_more: "+ %{count} more"
       organization_team: "Organization team"
       #context: Pluralization of the "Delegate" label for a competition form
       delegate:
