@@ -48,8 +48,6 @@ interface Props {
   isRepeatedDate: boolean;
 }
 
-const COMPETITION_FLAG_SIZE = "1.2rem";
-
 const registrationStatusIcons: Record<RegistrationStatus, JSX.Element> = {
   open: <CompRegoNotFullOpenGreenIcon />,
   notOpen: <CompRegoNotOpenYetGreyIcon />,
@@ -78,11 +76,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
 
       <Table.Cell width="1">
         <Box as="span" title={countryName(comp.country_iso2, t)} lineHeight="0">
-          <WcaFlag
-            code={comp.country_iso2}
-            boxSize={COMPETITION_FLAG_SIZE}
-            minW={COMPETITION_FLAG_SIZE}
-          />
+          <WcaFlag code={comp.country_iso2} size="md" minW="5" />
         </Box>
       </Table.Cell>
 
@@ -105,10 +99,14 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
             </ChakraLink>
             <Text hideFrom="lg" color="fg.muted" textStyle="xs">
               <Box as="span" hideFrom="md">
-                {dateLabel}
-                {" – "}
+                {t("competitions.index.date_and_city", {
+                  date: dateLabel,
+                  city: comp.city,
+                })}
               </Box>
-              {comp.city}
+              <Box as="span" hideBelow="md">
+                {comp.city}
+              </Box>
             </Text>
           </Box>
           {isChampionship && <NationalChampionshipIcon flexShrink="0" />}

@@ -255,6 +255,7 @@ export default function CompetitionsPage() {
     (competition) => showInProgressSection && isInProgress(competition),
   );
 
+  // Emphasize the first occurrence of each date label so distinct dates are easier to scan.
   const firstCompetitionIds = new Set(
     _.uniqBy([...inProgressComps, ...upcomingComps], (competition) =>
       formatDateRange(competition.start_date, competition.end_date, lng),
