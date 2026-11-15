@@ -162,6 +162,7 @@ RSpec.describe User do
       expect(dummy_avatar).to be_valid
       dummy_user.update!(current_avatar: dummy_avatar)
       expect(dummy_user.avatar.filename).to eq(dummy_avatar.filename)
+      organized_competition = create(:competition, organizers: [dummy_user])
 
       # Assigning a WCA ID to user should copy over the name from the Persons table.
       expect(user.name).to eq user.person.name
@@ -172,6 +173,27 @@ RSpec.describe User do
       # Check that the dummy account was deleted, and we inherited its avatar.
       expect(User.find_by(id: dummy_user.id)).to be_nil
       expect(user.reload.avatar).to eq dummy_avatar
+
+      # Check that the dummy account's organizer roles were transferred over.
+      expect(organized_competition.reload.organizers).to eq [user]
+    end
+
+    it "transfers dummy account's organizer roles when claiming a WCA ID on a new locked account" do
+      dummy_user = create(:dummy_user)
+      organized_competition = create(:competition, organizers: [dummy_user])
+
+      locked_account = User.new_locked_account(
+        name: dummy_user.person.name,
+        email: "new_competitor@example.com",
+        wca_id: dummy_user.wca_id,
+        country_iso2: dummy_user.person.country_iso2,
+        gender: dummy_user.person.gender,
+        dob: dummy_user.person.dob,
+      )
+      locked_account.save!
+
+      expect(User.find_by(id: dummy_user.id)).to be_nil
+      expect(organized_competition.reload.organizers).to eq [locked_account]
     end
 
     it "does not allow duplicate WCA IDs" do
