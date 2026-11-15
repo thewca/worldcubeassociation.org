@@ -1816,9 +1816,6 @@ en:
         open: "Open"
         not_open: "Not yet Open"
         closed: "Closed"
-      currently_displaying:
-        one: "Currently Displaying: %{count} competition"
-        other: "Currently Displaying: %{count} competitions"
       #context: actions in the drawer that opens when clicking a competition in the list
       register_now: "Register Now"
       view_competition: "View Competition"
