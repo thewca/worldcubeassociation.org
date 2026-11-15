@@ -6,6 +6,7 @@ import luxonFormatPlugin from "@fullcalendar/format-luxon3";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/react/timegrid";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useColorMode } from "@/components/ui/color-mode";
 import { DateTime } from "luxon";
 import {
@@ -54,7 +55,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   activeEventIds,
   wcifEvents,
 }) => {
-  const { t, i18n } = useT();
+  const { t } = useT();
+  const lng = useLocale();
   const { colorMode } = useColorMode();
 
   const fcActivities = activeRooms.flatMap((room) =>
@@ -122,7 +124,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
         slotMaxTime={calendarEnd}
         slotDuration="00:15:00"
         height="auto"
-        locale={i18n.language}
+        locale={lng}
         timeZone={timeZone}
         events={fcActivities}
       />

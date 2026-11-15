@@ -68,15 +68,15 @@ locals {
     },
     {
       name = "CACHE_REDIS_URL"
-      value = "redis://wca-main-cache.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://${aws_elasticache_replication_group.cache.primary_endpoint_address}:6379"
     },
     {
       name = "SIDEKIQ_REDIS_URL"
-      value = "redis://wca-main-sidekiq.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
+      value = "redis://${aws_elasticache_replication_group.sidekiq.primary_endpoint_address}:6379"
     },
     {
       name = "ANYCABLE_REDIS_URL",
-      value = "rediss://anycable-production-cache-001.anycable-production-cache.iebvzt.usw2.cache.amazonaws.com:6379"
+      value = "rediss://${aws_elasticache_replication_group.anycable.primary_endpoint_address}:6379"
     },
     {
       name = "STORAGE_AWS_BUCKET"

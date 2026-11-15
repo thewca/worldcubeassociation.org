@@ -21,11 +21,13 @@ runs:
           echo "MONOLITH_TAG=staging" >> $GITHUB_ENV
           echo "SHAKAPACKER_ASSET_HOST=https://assets-staging.worldcubeassociation.org" >> $GITHUB_ENV
           echo "WCA_LIVE_SITE=false" >> $GITHUB_ENV
+          echo "NEXT_FRONTEND_URL=https://staging.worldcubeassociation.org" >> $GITHUB_ENV
         elif [ "${{ inputs.environment }}" == "production" ]; then
           echo "ASSET_BUCKET=assets.worldcubeassociation.org" >> $GITHUB_ENV
           echo "MONOLITH_TAG=latest" >> $GITHUB_ENV
           echo "SHAKAPACKER_ASSET_HOST=https://assets.worldcubeassociation.org" >> $GITHUB_ENV
           echo "WCA_LIVE_SITE=true" >> $GITHUB_ENV
+          echo "NEXT_FRONTEND_URL=https://next.worldcubeassociation.org" >> $GITHUB_ENV
         fi
     - name: Build and push all images
       uses: docker/bake-action@v7
@@ -36,6 +38,7 @@ runs:
         MONOLITH_TAG: ${{ env.MONOLITH_TAG }}
         WCA_LIVE_SITE: ${{ env.WCA_LIVE_SITE }}
         SHAKAPACKER_ASSET_HOST: ${{ env.SHAKAPACKER_ASSET_HOST }}
+        NEXT_FRONTEND_URL: ${{ env.NEXT_FRONTEND_URL }}
       with:
         source: .
         files: ./docker-bake.hcl

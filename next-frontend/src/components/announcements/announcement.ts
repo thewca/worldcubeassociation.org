@@ -42,5 +42,7 @@ export const announcementRoute = (announcement: Announcement) =>
   });
 
 /// Phase 2 prefixes this with "Posted by {team name} | ".
-export const announcementByline = (announcement: Announcement) =>
-  getFullDateTimeStringNoSeconds(announcement.publishedAt);
+export const announcementByline = (
+  announcement: Announcement,
+  locale: string,
+) => getFullDateTimeStringNoSeconds(announcement.publishedAt, locale);

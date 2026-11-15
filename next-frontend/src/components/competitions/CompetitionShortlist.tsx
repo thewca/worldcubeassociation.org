@@ -22,10 +22,12 @@ type DataListItem<T extends DataCompetition> = keyof T & string;
 function ShortlistItem<T extends DataCompetition>({
   comp,
   t,
+  lng,
   item,
 }: {
   comp: T;
   t: TFunction;
+  lng: string;
   item: DataListItem<T>;
 }) {
   switch (item) {
@@ -59,7 +61,7 @@ function ShortlistItem<T extends DataCompetition>({
             <CompRegoCloseDateIcon size="2xl" />
           </DataList.ItemLabel>
           <DataList.ItemValue>
-            {formatDateRange(comp.start_date, comp.end_date)}
+            {formatDateRange(comp.start_date, comp.end_date, lng)}
           </DataList.ItemValue>
         </DataList.Item>
       );
@@ -127,17 +129,25 @@ function ShortlistItem<T extends DataCompetition>({
 export default function CompetitionShortlist<T extends DataCompetition>({
   comp,
   t,
+  lng,
   items,
 }: {
   comp: T;
   t: TFunction;
+  lng: string;
   items: DataListItem<T>[];
 }) {
   return (
     <VStack alignItems="start" gap="4">
       <DataList.Root orientation="horizontal" size="lg" iconLabel>
         {items.map((dataItem) => (
-          <ShortlistItem key={dataItem} comp={comp} t={t} item={dataItem} />
+          <ShortlistItem
+            key={dataItem}
+            comp={comp}
+            t={t}
+            lng={lng}
+            item={dataItem}
+          />
         ))}
       </DataList.Root>
     </VStack>

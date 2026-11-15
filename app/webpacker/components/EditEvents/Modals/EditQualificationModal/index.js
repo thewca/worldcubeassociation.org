@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import _ from 'lodash';
-import { Form, Label } from 'semantic-ui-react';
+import { Form, Label, Message } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import I18n from '../../../../lib/i18n';
-import { events } from '../../../../lib/wca-data.js.erb';
+import { events, minQualificationWindowDays } from '../../../../lib/wca-data.js.erb';
 import { eventQualificationToString } from '../../../../lib/utils/wcif';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
 import useInputState, { useInputUpdater } from '../../../../lib/hooks/useInputState';
@@ -100,6 +101,7 @@ export default function EditQualificationModal({
   const [conditionScope, setConditionScope] = useInputState(qualification?.resultCondition?.scope ?? '');
   const [conditionType, setConditionType] = useInputState(v1ConditionType);
   const [latestResultDate, setLatestResultDate] = useState(qualification?.latestResultDate ?? '');
+  const [earliestResultDate, setEarliestResultDate] = useState(qualification?.earliestResultDate ?? '');
   const [conditionValue, setConditionValue] = useState(qualification?.resultCondition?.value ?? 0);
 
   const qualificationStateWcif = useMemo(() => {
@@ -110,7 +112,7 @@ export default function EditQualificationModal({
     const v2ConditionValue = conditionType === 'anyResult' ? null : conditionValue;
 
     return ({
-      earliestResultDate: null,
+      earliestResultDate,
       latestResultDate,
       resultCondition: {
         type: v2ConditionType,
@@ -118,7 +120,25 @@ export default function EditQualificationModal({
         value: v2ConditionValue,
       },
     });
-  }, [conditionScope, conditionType, conditionValue, latestResultDate]);
+  }, [conditionScope, conditionType, conditionValue, earliestResultDate, latestResultDate]);
+
+  // The window must be at least `minQualificationWindowDays` long (inclusive),
+  //   so the last selectable start date is exactly that many days before the deadline.
+  const latestEarliestResultDate = useMemo(() => (
+    latestResultDate
+      ? DateTime.fromISO(latestResultDate, { zone: 'UTC' })
+        .minus({ days: minQualificationWindowDays })
+        .toISODate()
+      : null
+  ), [latestResultDate]);
+
+  // The picker already limits what can be clicked, but the start date may become too late
+  //   after the fact if the deadline is moved earlier. ISO dates compare correctly as strings.
+  const isWindowTooShort = Boolean(
+    earliestResultDate
+    && latestEarliestResultDate
+    && earliestResultDate > latestEarliestResultDate,
+  );
 
   const hasUnsavedChanges = useMemo(() => (
     !_.isEqual(qualification, qualificationStateWcif)
@@ -128,6 +148,7 @@ export default function EditQualificationModal({
     setConditionScope(qualification?.resultCondition?.scope ?? '');
     setConditionType(v1ConditionType ?? 'attemptResult');
     setLatestResultDate(qualification?.latestResultDate ?? '');
+    setEarliestResultDate(qualification?.earliestResultDate ?? '');
     setConditionValue(qualification?.resultCondition?.value ?? 0);
   };
 
@@ -150,10 +171,16 @@ export default function EditQualificationModal({
       reset={reset}
       onOk={handleOk}
       hasUnsavedChanges={hasUnsavedChanges}
+      okDisabled={isWindowTooShort}
       disabled={disabled}
       tooltip={disabledReason}
       triggerButtonProps={{ name: 'qualification' }}
     >
+      <p>
+        <strong>{I18n.t('qualification.preview')}</strong>
+        {': '}
+        {eventQualificationToString(wcifEvent, qualificationStateWcif, { isV2: true })}
+      </p>
       <QualificationResultType
         qualificationResultType={conditionScope}
         onChange={setConditionScope}
@@ -181,10 +208,29 @@ export default function EditQualificationModal({
               isoDate={latestResultDate}
             />
           </Form.Field>
-          <br />
-          <p>
-            {eventQualificationToString(wcifEvent, qualificationStateWcif, { isV2: true })}
-          </p>
+          <Form.Field disabled={!latestResultDate} error={isWindowTooShort}>
+            <Label>{I18n.t('qualification.earliest_date.description')}</Label>
+            <UtcDatePicker
+              onChange={setEarliestResultDate}
+              isoDate={earliestResultDate}
+              isoMaxDate={latestEarliestResultDate}
+            />
+            {isWindowTooShort && (
+              <Label basic color="red" pointing>
+                {I18n.t('qualification.earliest_date.window_too_short', { days: minQualificationWindowDays })}
+              </Label>
+            )}
+          </Form.Field>
+          <Message visible>
+            <Message.List>
+              {/* i18n-js doesn't interpolate inside hashes, so we have to do it per item. */}
+              {I18n.tArray('qualification.earliest_date.explanation').map((point) => (
+                <Message.Item key={point}>
+                  {I18n.interpolate(I18n, point, { days: minQualificationWindowDays })}
+                </Message.Item>
+              ))}
+            </Message.List>
+          </Message>
         </>
       ) : null}
     </ButtonActivatedModal>

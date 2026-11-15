@@ -111,6 +111,15 @@ variable "shared" {
     })
     account_id: string
     next_repository_url: string,
+    redis_subnet_group: object({
+      name: string
+    })
+    redis_cache_parameter_group: object({
+      name: string
+    })
+    redis_sidekiq_parameter_group: object({
+      name: string
+    })
     private_subnets: any
   })
   description = "The shared resources between Environments"

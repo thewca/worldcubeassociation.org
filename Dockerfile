@@ -92,9 +92,11 @@ COPY . .
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
 ARG SHAKAPACKER_ASSET_HOST
+ARG NEXT_FRONTEND_URL
 ENV BUILD_TAG=$BUILD_TAG \
     WCA_LIVE_SITE=$WCA_LIVE_SITE \
-    SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
+    SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST \
+    NEXT_FRONTEND_URL=$NEXT_FRONTEND_URL
 
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/i18n export
 RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
@@ -131,12 +133,10 @@ FROM base AS runtime
 # lmodern = Random accents and special symbols for Latin script
 # RUNTIME STUFF
 # mariadb-client = talking to our database in production mode
-# imagemagick = image processing for Rails ActiveStorage attachments
 # libvips = image processing for Rails ActiveStorage attachments
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       mariadb-client \
-      imagemagick \
       libvips \
       zip \
       python-is-python3 \

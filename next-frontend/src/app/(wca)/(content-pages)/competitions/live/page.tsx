@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LiveCompetitionsPage() {
-  const { t } = await getT();
+  const { t, lng } = await getT();
 
   const {
     data: liveCompetitions,
@@ -56,16 +56,16 @@ export default async function LiveCompetitionsPage() {
         </Tabs.List>
         <Tabs.Content value="upcoming">
           {hasUpcoming ? (
-            <LiveCompetitionsTable competitions={upcoming} t={t} />
+            <LiveCompetitionsTable competitions={upcoming} t={t} lng={lng} />
           ) : (
             <Text>{t("competitions.live.overview.no_upcoming")}</Text>
           )}
         </Tabs.Content>
         <Tabs.Content value="in_progress">
-          <LiveCompetitionsTable competitions={in_progress} t={t} />
+          <LiveCompetitionsTable competitions={in_progress} t={t} lng={lng} />
         </Tabs.Content>
         <Tabs.Content value="past">
-          <LiveCompetitionsTable competitions={past} t={t} />
+          <LiveCompetitionsTable competitions={past} t={t} lng={lng} />
         </Tabs.Content>
       </Tabs.Root>
     </VStack>

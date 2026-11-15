@@ -183,6 +183,21 @@ pl:
     deadline:
       description: Termin osiągania kwalifikacji
       by_date: 'do %{date}'
+    preview: Podgląd kwalifikacji
+    earliest_date:
+      description: Data Rozpoczęcia Okresu Kwalifikacyjnego
+      from_date: od %{date} włącznie
+      window_too_short: Data rozpoczęcia okresu musi przypadać co najmniej 
+        %{days} dni przed datą zakończenia okresu.
+      explanation:
+        '1': Data rozpoczęcia okresu kwalifikacyjnego jest opcjonalna. Jeśli 
+          pole to pozostanie puste, liczy się każdy wynik osiągnięty przed 
+          upływem terminu.
+        '2': Jeśli podano datę rozpoczęcia okresu, do kwalifikacji zaliczane są 
+          wyłącznie wyniki osiągnięte w dniu rozpoczęcia tego okresu lub 
+          później.
+        '3': Data rozpoczęcia okresu musi przypadać co najmniej %{days} dni 
+          przed datą zakończenia okresu.
   activity:
     registration: Rejestracja na miejscu
     checkin: Rejestracja
@@ -597,6 +612,8 @@ pl:
     passwords:
       edit:
         new_password_confirmation: Potwierdź nowe hasło
+      send_paranoid_instructions: Link do zresetowania hasła zostanie wysłany na
+        adres e-mail, o ile został on użyty do stworzenia konta WCA.
     sessions:
       new:
         sign_in: Zaloguj się
@@ -708,6 +725,8 @@ pl:
         use_classic: Przełącz się na starą stronę logowania
       destroy_other:
         success: Wylogowanie z pozostałych urządzeń zakończyło się sukcesem.
+      destroy:
+        success: Zostałeś wylogowany.
     shared:
       links:
         sign_in: Zaloguj się
@@ -766,6 +785,9 @@ pl:
         dob: Mieć dostęp do twojej daty urodzin
         email: Mieć dostęp do twojego adresu email
         manage_competitions: 'Zarządzać nadchodzącymi zawodami, które organizujesz.'
+        manage_registrations: Rejestruj się na zawody, edytuj lub anuluj swoje 
+          rejestrację
+        translations: Przejdź do listy języków, w których jesteś tłumaczem WCA
     devise:
       no_account: Nie posiadasz konta?
       have_competed: Brałem udział w zawodach WCA.
@@ -776,11 +798,11 @@ pl:
         Witaj ponownie! Aby utworzyć twoje konto, musimy znać WCA ID, z którym
         brałeś udział w zawodach.
       welcome_html: >-
-        Witaj! Zanim będziesz mógł wziąć udział w swoich pierwszych zawodach
-        WCA, potrzebujemy kilka dodatkowych informacji. Pamiętaj, że twoja data
-        urodzin nigdy nie zostanie ujawniona bez twojej zgody.<br/><br/>Jeżeli
-        rejestrujesz się w czyimś imieniu, podaj dane
-        <strong>zawodnika</strong>.
+        Witaj! Zanim będziesz mógł wziąć udział w swoich pierwszych zawodach WCA,
+        potrzebujemy kilka dodatkowych informacji.<br/><br/>Jeżeli rejestrujesz się
+        w czyimś imieniu, podaj dane <strong>zawodnika</strong>.
+      dob_privacy: Ta informacja nigdy nie zostanie udostępniona bez Twojej 
+        zgody.
   layouts:
     navigation:
       information: Informacje
@@ -842,6 +864,20 @@ pl:
       privacy: Prywatność
       disclaimer: Zastrzeżenie
       find_us: Znajdź nas
+      panels:
+        admin: Panel Administratora
+        volunteer: Panel Wolontariusza
+        delegate: Panel Delegata
+        wapc: Panel WAC
+        wfc: Panel WFC
+        wrt: Panel WRT
+        wst: Panel WST
+        board: Panel zarządu
+        leader: Panel lidera
+        senior_delegate: Panel Starszego Delegata
+        wic: Panel WIC
+        weat: Panel WEAT
+        wqac: Panel WQAC
   page:
     translators:
       title: Tłumacz
@@ -960,6 +996,8 @@ pl:
           dotyczące decyzji podjętych przez resztę Wolontariuszy WCA. WAC
           zapewnia niezależny i bezstronny proces przeglądu, aby zapewnić, że
           decyzje są uczciwe, rozsądne i zgodne z Politykami i Regulaminem WCA.
+      empty: Nie znaleziono zespołów ani komitetów. Prosimy o ponowne 
+        sprawdzenie później.
     contacts:
       title: Formularz kontaktowy WCA
       faq_note_html: >-
@@ -1086,6 +1124,11 @@ pl:
       success_message_with_ticket_link_html: >-
         Prośba wysłana - odpowiemy na nią wkrótce. Aby sprawdzić status tej
         prośby odwiedź <a href="%{link}">ten link</a>.
+    executives:
+      joined_wca: Dołączono do WCA
+      more_information: Więcej Informacji
+      close: Zamknij
+      person_not_found: Nie znaleziono osoby posiadającej WCA ID %{wca_id}
   homepage:
     learn_more: Dowiedz się więcej
     title: Witamy w World Cube Association
@@ -3127,10 +3170,6 @@ pl:
         competitors: Zawodnicy
         scrambles: Scramble
     results_table:
-      h2h_results_disclaimer: >-
-        Wyniki ustalone na podstawie finału Jeden na Jeden. Pokazana jest
-        jedynie kolejność i najlepsze ułożenie ze względu na to, że prace nad
-        pokazywaniem wyników Jeden na Jeden nadal trwają.
       wca_profile: Profil WCA
       event: Konkurencja
       round: Runda
@@ -4387,4 +4426,33 @@ pl:
     stakeholder_role:
       actioner: Wykonawca
       requester: Wnioskodawca
-  trainee_delegate_application: {}
+  trainee_delegate_application:
+    title: Wniosek o przyjęcie na stanowisko Delegata Praktykanta
+    introduction: Ten formularz jest przeznaczony dla zarejestrowanych 
+      speedcuberów, którzy ubiegają się o status delegata praktykanta. Twoje 
+      zgłoszenie zostanie przesłane do delegatów odpowiedzialnych za wybrany 
+      przez Ciebie region.
+    success_title: Wniosek złożony
+    success: Twój wniosek został pomyślnie wysłany. Kopia została wysłana na 
+      adres e-mail powiązany z Twoim kontem WCA.
+    eligibility:
+      title: Nie można jeszcze złożyć tego wniosku
+      missing_wca_id: Twoje konto WCA musi być powiązane z WCA ID.
+      missing_date_of_birth: Twoje konto WCA musi posiadać zweryfikowaną datę 
+        urodzenia.
+      underage: Kandydaci muszą mieć co najmniej %{minimum_age} lat.
+      claim_wca_id: Odbierz swoje WCA ID.
+      edit_profile: Poproś o aktualizację profilu.
+    errors:
+      invalid_region: Wybierz odpowiedni, aktywny region Delegacki.
+      missing_reviewer: Wybrany region nie posiada obecnie Regionalnego Delegata
+        lub Starszego Delegata, który mógłby otrzymać wniosek.
+      recommender_required: Wybierz przynajmniej jednego rekomendującego 
+        Delegata.
+      invalid_recommender: Jeden lub więcej wybranych rekomendujących Delegatów 
+        nie spełnia już warunków dla wybranego regionu.
+      spoken_delegate_required: Wybierz przynajmniej jednego Młodszego Delegata 
+        lub Delegata, z którym rozmawiałeś/aś.
+      invalid_spoken_delegate: Jeden lub więcej wybranych delegatów, z którymi 
+        rozmawiałeś/aś, nie jest już aktywnym młodszym Delegatem ani Delegatem w
+        wybranym regionie.

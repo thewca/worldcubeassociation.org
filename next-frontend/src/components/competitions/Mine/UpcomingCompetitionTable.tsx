@@ -8,6 +8,7 @@ import {
   ReportTableCell,
 } from "./TableCells";
 import { toRelativeOptions } from "@/lib/wca/dates";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { TFunction } from "i18next";
 import { SiCheckmarx, SiClockify } from "react-icons/si";
 import UserIcon from "@/components/icons/UserIcon";
@@ -134,10 +135,8 @@ export default function UpcomingCompetitionTable({
   registrationStatusByCompetition,
   fallbackMessage = undefined,
 }: UpcomingCompetitionTableProps) {
-  const {
-    t,
-    i18n: { language: lng },
-  } = useT();
+  const { t } = useT();
+  const lng = useLocale();
 
   const { data: permissions, isLoading } = usePermissionsQuery();
 

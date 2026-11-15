@@ -76,6 +76,9 @@ ja:
       '3': Bo3
       a: Ao5
       m: Mo3
+      "h": 1対1対戦
+      "5": Bo5
+    "5": Best of 5
   rounds:
     '0':
       name: 予選ラウンド
@@ -114,6 +117,8 @@ ja:
     attempt_name: '第%{number}試技'
   round:
     name: '%{event_name} %{round_name}'
+    title: ラウンド
+    round_number: '%{round_number}回戦'
   advancement_condition:
     short:
       ranking: '上位%{ranking}名'
@@ -122,12 +127,14 @@ ja:
         time: '%{round_format} < %{time}'
         moves: '%{round_format} < %{moves}'
         points: '%{round_format} > %{points}'
+      all_advance: 全員
     ranking: '上位%{ranking}名が次のラウンドに進出します。'
     percent: '上位%{percent}%が次のラウンドに進出します。'
     attempt_result:
       time: '%{time}未満の%{round_format}で次のラウンドに進出'
       moves: '%{moves}手未満の%{round_format}で次のラウンドに進出'
       points: '%{points}ポイントを超える%{round_format}で次のラウンドに進出'
+    all_advance: 全競技者が次のラウンドに進出します。
   cutoff:
     time:
       other: '最初の %{count} 試技までに %{time} 未満'
@@ -169,12 +176,15 @@ ja:
     solve_time:
       unit_seconds: 秒
       unit_moves: 手
+    country: 地域
+    back_to_top: 上へ戻る
+    back: 戻る
   oauth:
     applications:
       your_apps: OAuth アプリケーション
       new: 新規登録
       name: アプリ名
-      callback_url: コールバック URL
+      callback_url: コールバックURL
       owner: 所有者
       application_id: アプリケーション ID
       actions: 操作
@@ -212,6 +222,8 @@ ja:
         receive_delegate_reports: 代理人レポートをメールで受け取る。
         user_preferred_events: お気に入り種目
         otp_attempt: '二要素認証コードを入力してください:'
+        subRegion: 地区
+        delegate_reports_region: 以下地域の代理人レポートのみを受け取る
       registration:
         guests: 見学者人数
         comments: 補足事項
@@ -221,6 +233,9 @@ ja:
         birthday: 生年月日
         registration_competition_events: 参加競技種目
         email: メールアドレス
+        administrative_notes: 管理者メモ
+        search: 検索
+        too_few_chars: 文字数不足
       competition_tab:
         content: 内容
         name: 名前
@@ -379,18 +394,28 @@ ja:
         wca_id: WCA ID
         dob: 生年月日
         document: ドキュメント
+      contact_wrt:
+        wca_id: WCA ID
     errors:
       dob_contact:
         dob_invalid: はフォーマットが正しくありません
+    competition_link_html: 大会ページは<a href='%{url}'>こちら</a>
   errors:
     messages:
       wrong_size: 'はファイルサイズが不適切です (%{file_size} に変更してください) 。'
       size_too_small: 'はファイルサイズが小さすぎます (%{file_size} 以上にしてください)。'
       size_too_big: 'はファイルサイズが大きすぎます (%{file_size} 以下にしてください) 。'
+      no_permission: アクセス権限がありません。
+    next_frontend:
+      title: ページ表示エラーが発生しました
+      description: エラーが解決しない場合、以下の情報をWSTに報告してください
+      details: エラー詳細
   devise:
     passwords:
       edit:
         new_password_confirmation: パスワード再入力
+      send_paranoid_instructions: 
+        WCAアカウントが登録されている場合は、そのメールアドレスにパスワードリセットメールが送信されます。
     sessions:
       new:
         sign_in: ログイン
@@ -412,6 +437,10 @@ ja:
             unknown: メール送信時にエラーが発生しました。WSTに連絡を取ってください。
           otp_email:
             subject: あなたのワンタイムパスワード
+            2fa_attempt: 
+              WCAウェブサイトの認証を実行中です。二要素認証が有効なため、メールでワンタイムパスワードを送信しました。ワンタイムパスワードを確認してください：
+            disclaimer: 
+              認証コードをリクエストしていない場合、このメールへの返信ですぐWSTに知らせてください。いずれかのデバイスで有効なセッションがあるか、パスワードが漏洩している可能性があります。
           name: 二要素認証（2FA）
           support_desc_html: 'WCAウェブサイトはワンタイムパスワードによる%{two_factor_link}に対応しています。'
           options:
@@ -443,6 +472,19 @@ ja:
           backup_codes_warning: 
             バックアップコードは以下に表示されています。すぐに記録してください。これは暗号化され、再度表示することはできません。
           email_auth_desc: ログイン時にワンタイムパスワードをメールにて発行することができます。
+          dedicated_app_desc_html: 
+            WSTはワンタイムパスワード生成に%{authy}の導入を推奨しています。<br/>%{google}、%{apple}、%{microsoft}等で代用することも可能です。
+          disable_section_title: 二要素認証を無効化
+          disable_section_content: 
+            二要素認証を無効化しないことをWSTは強く推奨します。以下のボタンで無効化できますが、再び有効化するには、認証用デバイスの設定が再度必要となります。
+          disabled_success: 二要素認証を無効化しました。
+          disabled_failed: 二要素認証を無効化できませんでした。下記のエラーを確認してください。
+        redesign_notice: こちらは新しいログインページです。年内に古いログインページと置き換えられる予定です。
+        use_classic: 古いログインページに移動
+      destroy:
+        success: ログアウトしました。
+      destroy_other:
+        success: 他のデバイスからログアウトしました。
     shared:
       links:
         sign_in: ログイン
@@ -456,12 +498,22 @@ ja:
     mailer:
       confirmation_instructions:
         subject: 新しいメールアドレス認証を完了してください。
-    registrations: {}
+    registrations:
+      new:
+        redesign_notice: こちらは新しいユーザー登録ページです。年内に古いユーザー登録ページと置き換えられる予定です。
   wca:
     errors:
       messages:
         form_error:
           other: '%{count} 件のエラーがあります。'
+      error_pages:
+        500_error: エラーが発生しました。
+        500_contact_html: <a href=%{contact_url}>こちら</a>からエラー報告をお願いします。
+        400_error: アクセスしようとしたページは存在しません。
+        400_contact_html: おかしな挙動と思われる場合は、<a 
+          href=%{contact_url}>こちら</a>から報告してください。
+        comp_not_found: 大会ページが見つかりません
+        comp_not_found_action: ID "%{comp_id}" の大会が見つかりません。検索バーから再検索してください。
     doorkeeper:
       applications:
         help:
@@ -2175,3 +2227,19 @@ ja:
     email: {}
   merch: {}
   tickets: {}
+  scramble_set:
+    name: スクランブル%{letter_code}
+    group: グループ%{number}
+    attempt: 第%{number}試技
+  activity:
+    registration: 当日参加申し込み
+    checkin: 受付
+    tutorial: 初心者レクチャー
+    multi: 3x3x3 複数目隠し キューブ提出
+    breakfast: 朝食
+    lunch: 昼食
+    dinner: 夕食
+    awards: 表彰式
+    setup: 会場準備
+    teardown: 原状復帰
+    misc: その他

@@ -8,6 +8,7 @@ class Incident < ApplicationRecord
   accepts_nested_attributes_for :incident_competitions, allow_destroy: true
 
   scope :resolved, -> { where.not(resolved_at: nil) }
+  scope :filter_by_permissions, ->(user) { user&.can_manage_incidents? ? all : resolved }
 
   validate :digest_sent_at_consistent
   validates :title, presence: true
@@ -78,11 +79,12 @@ class Incident < ApplicationRecord
     end
 
     json[:competitions] = incident_competitions.map do |incident_competition|
-      {
+      competition_json = {
         id: incident_competition.competition.id,
         name: incident_competition.competition.name,
-        comments: incident_competition.comments,
       }
+      competition_json[:comments] = incident_competition.comments if options[:can_view_delegate_matters]
+      competition_json
     end
 
     json

@@ -45,7 +45,7 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
     notFound();
   }
 
-  const { t } = await getT();
+  const { t, lng } = await getT();
   const permissions = await getPermissions();
   const canManageIncidents = permissions?.canManageIncidents() ?? false;
   const resolved = Boolean(incident.resolved_at);
@@ -86,7 +86,9 @@ export default async function IncidentPage({ params }: IncidentPageProps) {
                   comments={competition.comments}
                 />
               ))}
-              <Text>{getFullDateTimeStringNoSeconds(incident.created_at)}</Text>
+              <Text>
+                {getFullDateTimeStringNoSeconds(incident.created_at, lng)}
+              </Text>
             </HStack>
 
             {!resolved && (

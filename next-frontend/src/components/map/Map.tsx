@@ -6,6 +6,7 @@ import { Box, Heading, Text, useToken } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import { dateRange, hasPassedEndOfDay } from "@/lib/wca/dates";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import MapContainer, { Layer, Popup, Source } from "react-map-gl/maplibre";
 import type { MapEvent, MapLayerMouseEvent } from "react-map-gl/maplibre";
 import type { FeatureCollection, Point } from "geojson";
@@ -58,6 +59,7 @@ const pinIconSvg = (color: string, halo: string) =>
 
 export default function Map({ competitions, isLoading = false }: MapProps) {
   const router = useRouter();
+  const lng = useLocale();
   const [hoveredCompetitionId, setHoveredCompetitionId] = useState<string>();
 
   // maplibre paints in WebGL and cannot resolve the CSS variables that Chakra
@@ -182,7 +184,7 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
               {hoveredCompetition.name}
             </Heading>
             <Text color="black">
-              {`${dateRange(hoveredCompetition.start_date, hoveredCompetition.end_date)} - ${hoveredCompetition.city}`}
+              {`${dateRange(hoveredCompetition.start_date, hoveredCompetition.end_date, lng)} - ${hoveredCompetition.city}`}
             </Text>
           </Popup>
         )}

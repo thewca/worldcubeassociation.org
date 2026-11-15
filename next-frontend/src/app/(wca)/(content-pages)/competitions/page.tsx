@@ -30,6 +30,8 @@ import {
   Text,
   VStack,
   Wrap,
+  Select,
+  createListCollection,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -52,7 +54,10 @@ import {
   type CompetitionFilterAction,
   type CompetitionFilterState,
 } from "@/lib/wca/competitions/filterUtils";
-import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
+import {
+  createSearchParams,
+  sortOrderValues,
+} from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
 import useDebounce from "@/lib/hooks/useDebounce";
 import Loading from "@/components/ui/loading";
@@ -60,6 +65,7 @@ import { useSearchParams } from "next/navigation";
 import { useOnInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import RegionSelector from "@/components/RegionSelector";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
@@ -154,6 +160,7 @@ export default function CompetitionsPage() {
   });
 
   const { t } = useT();
+  const lng = useLocale();
 
   const canViewAdminDetails = false;
 
@@ -250,7 +257,7 @@ export default function CompetitionsPage() {
 
   const firstCompetitionIds = new Set(
     _.uniqBy([...inProgressComps, ...upcomingComps], (competition) =>
-      formatDateRange(competition.start_date, competition.end_date),
+      formatDateRange(competition.start_date, competition.end_date, lng),
     ).map((competition) => competition.id),
   );
 
@@ -798,10 +805,6 @@ function AdvancedFilters({
       label: t("competitions.index.recent"),
     },
     { value: "past", label: t("competitions.index.past") },
-    {
-      value: "by_announcement",
-      label: t("competitions.index.by_announcement"),
-    },
   ];
 
   return (
@@ -810,6 +813,7 @@ function AdvancedFilters({
       gap="4"
       width="full"
       align={{ base: "stretch", lg: "flex-end" }}
+      flexWrap="wrap"
     >
       <Field.Root width="auto">
         <Field.Label>{t("competitions.index.state")}</Field.Label>
@@ -869,6 +873,12 @@ function AdvancedFilters({
           </NativeSelect.Root>
         </Field.Root>
       )}
+
+      <SortOrderSelect
+        value={filterState.sort}
+        onChange={(v) => dispatchFilter({ type: "set_sort_order", sort: v })}
+        t={t}
+      />
 
       <Checkbox.Root
         width="auto"
@@ -965,4 +975,63 @@ function ListViewFooter({
   }
 
   return <Box ref={bottomRef} />;
+}
+
+function SortOrderSelect({
+  value,
+  onChange,
+  t,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  t: TFunction;
+}) {
+  const values = createListCollection({
+    items: sortOrderValues.map(({ value, key }) => ({
+      value: value,
+      // i18n-tasks-use t("competitions.index.sort.start_date_asc")
+      // i18n-tasks-use t("competitions.index.sort.start_date_desc")
+      // i18n-tasks-use t("competitions.index.sort.end_date_asc")
+      // i18n-tasks-use t("competitions.index.sort.end_date_desc")
+      // i18n-tasks-use t("competitions.index.sort.name_asc")
+      // i18n-tasks-use t("competitions.index.sort.name_desc")
+      // i18n-tasks-use t("competitions.index.sort.announced_at_asc")
+      // i18n-tasks-use t("competitions.index.sort.announced_at_desc")
+      label: t(`competitions.index.sort.${key}`),
+    })),
+  });
+
+  return (
+    <Select.Root
+      collection={values}
+      value={[value]}
+      onValueChange={(item) => onChange(item.value[0])}
+      variant="outline"
+      width="auto"
+      minWidth="xs"
+    >
+      <Select.HiddenSelect />
+      <Select.Label>{t("competitions.index.sort.order")}</Select.Label>
+
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+
+      <Select.Positioner>
+        <Select.Content>
+          {values.items.length > 0 &&
+            values.items.map((item) => (
+              <Select.Item key={item.value} item={item}>
+                {item.label}
+              </Select.Item>
+            ))}
+        </Select.Content>
+      </Select.Positioner>
+    </Select.Root>
+  );
 }

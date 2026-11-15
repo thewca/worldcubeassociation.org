@@ -274,6 +274,7 @@ export interface UtilityValues {
     | "quote"
     | "hyperlink"
     | "headerLink"
+    | "darkModeFg"
   layerStyle:
     | "fill.muted"
     | "fill.subtle"

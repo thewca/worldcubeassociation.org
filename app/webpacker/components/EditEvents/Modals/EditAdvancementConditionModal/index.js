@@ -175,7 +175,7 @@ export default function EditAdvancementConditionModal({
       />
       <p>
         If you would like to use Dual Rounds, please make sure that
-        the scoretaking software is configured as &apos;Internal Live Results&apos;
+        the scoretaking software is configured as &apos;Integrated Live Results&apos;
         or as an external tool. It is
         {' '}
         <b>not</b>

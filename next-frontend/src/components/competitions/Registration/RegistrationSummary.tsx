@@ -1,6 +1,13 @@
 "use client";
 
-import { Button, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Heading,
+  HStack,
+  IconButton,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { LuPencil, LuSave, LuTrash2, LuUndo2 } from "react-icons/lu";
@@ -184,11 +191,27 @@ export default function RegistrationSummary({
 
         return (
           <VStack key={step.key} gap={4} alignItems="stretch">
-            <Heading textStyle="h3">
-              {t(
-                `competitions.registration_v2.register.panel.${step.key}.title`,
+            <HStack gap={2}>
+              <Heading textStyle="h3">
+                {t(
+                  `competitions.registration_v2.register.panel.${step.key}.title`,
+                )}
+              </Heading>
+              {!isEditing && isStepEditable(step, registration) && (
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  colorPalette="blue"
+                  aria-label={t("competition_tabs.form_elements.update")}
+                  onClick={() => {
+                    onStartEditing();
+                    setEditingStepKey(step.key);
+                  }}
+                >
+                  <LuPencil />
+                </IconButton>
               )}
-            </Heading>
+            </HStack>
             {isEditing ? (
               <>
                 <StepContent
@@ -210,20 +233,6 @@ export default function RegistrationSummary({
                 competitionInfo={competitionInfo}
                 registration={registration}
               />
-            )}
-            {!isEditing && isStepEditable(step, registration) && (
-              <Button
-                width="full"
-                variant="outline"
-                colorPalette="blue"
-                onClick={() => {
-                  onStartEditing();
-                  setEditingStepKey(step.key);
-                }}
-              >
-                <LuPencil />
-                {t("competition_tabs.form_elements.update")}
-              </Button>
             )}
           </VStack>
         );

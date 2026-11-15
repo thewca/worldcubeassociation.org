@@ -6,13 +6,20 @@ import {
 } from "@/components/announcements/announcement";
 import AnnouncementDialog from "@/components/announcements/AnnouncementDialog";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
+import { getT } from "@/lib/i18n/get18n";
 
-function AnnouncementHeader({ announcement }: { announcement: Announcement }) {
+async function AnnouncementHeader({
+  announcement,
+}: {
+  announcement: Announcement;
+}) {
+  const { lng } = await getT();
+
   return (
     <>
       <Card.Title textStyle="h2">{announcement.title}</Card.Title>
       <Card.Description color="currentColor">
-        {announcementByline(announcement)}
+        {announcementByline(announcement, lng)}
       </Card.Description>
       <Separator size="md" />
     </>
@@ -30,6 +37,7 @@ export function AnnouncementCard({
     <Card.Root
       colorPalette={colorPalette}
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
+      textStyle="darkModeFg"
       width="full"
     >
       <Card.Body>
@@ -59,6 +67,7 @@ export function AnnouncementFullCard({
     <Card.Root
       colorPalette={colorPalette}
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
+      textStyle="darkModeFg"
       width="full"
     >
       <Card.Body>

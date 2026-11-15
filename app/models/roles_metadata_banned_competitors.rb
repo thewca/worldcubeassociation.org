@@ -8,4 +8,9 @@ class RolesMetadataBannedCompetitors < ApplicationRecord
   }
 
   has_one :user_role, as: :metadata
+  has_one :user, through: :user_role
+
+  def minor_competing_ban?
+    competing_only? && user.minor?
+  end
 end

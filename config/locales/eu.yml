@@ -3180,10 +3180,6 @@ eu:
         competitors: Lehiakideak
         scrambles: Nahasteak
     results_table:
-      h2h_results_disclaimer: >-
-        Emaitzak buruz buruko finalak zehazten ditu. Soilik posizio ordena eta
-        ebazpen hoberena erakusten dira, buruz buruko final osoen emaitzen
-        pantaila garatzen ari baita.
       wca_profile: WCAko profila
       event: Proba
       round: Txanda

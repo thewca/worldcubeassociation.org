@@ -7,15 +7,18 @@ import { Heading, VStack } from "@chakra-ui/react";
 import events from "@/lib/wca/data/events";
 import { ResultsTable } from "@/components/results/ResultsTable";
 import LinkedRoundResults from "@/components/results/LinkedRoundResults";
+import HeadToHeadBracket from "@/components/results/HeadToHeadBracket";
 import { useT } from "@/lib/i18n/useI18n";
 import { SingleEventSelector } from "@/components/EventSelector";
 
 export default function FilteredResults({
   competitionInfo,
   roundsByEvent,
+  h2hRoundsById,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
   roundsByEvent: Record<string, components["schemas"]["V1CompetitionRound"][]>;
+  h2hRoundsById: Record<string, components["schemas"]["H2hRound"]>;
 }) {
   const [activeEventId, setActiveEventId] = useState<string>(
     competitionInfo.event_ids[0],
@@ -53,16 +56,20 @@ export default function FilteredResults({
               {events.byId[activeEventId].name}{" "}
               {t(`rounds.${round.round_type_id}.name`)}
             </Heading>
-            {/* Already ordered by `pos`, the position within this round. */}
-            <ResultsTable
-              results={round.results}
-              eventId={activeEventId}
-              formatId={round.format_id}
-              rankingMode={round.ranking_mode}
-              t={t}
-              isAdmin={false}
-              solveTextAlign="center"
-            />
+            {h2hRoundsById[round.wcif_id] ? (
+              <HeadToHeadBracket round={h2hRoundsById[round.wcif_id]} />
+            ) : (
+              /* Already ordered by `pos`, the position within this round. */
+              <ResultsTable
+                results={round.results}
+                eventId={activeEventId}
+                formatId={round.format_id}
+                rankingMode={round.ranking_mode}
+                t={t}
+                isAdmin={false}
+                solveTextAlign="center"
+              />
+            )}
           </Fragment>
         ),
       )}

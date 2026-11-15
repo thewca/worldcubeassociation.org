@@ -527,6 +527,10 @@ class User < ApplicationRecord
     had_birthday_this_year ? years_since_birth_year : years_since_birth_year - 1
   end
 
+  def minor?
+    age.present? && age < 18
+  end
+
   def below_forum_age_requirement?
     (Date.today - FORUM_AGE_REQUIREMENT.years) < dob
   end

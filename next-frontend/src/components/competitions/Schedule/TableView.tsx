@@ -38,6 +38,7 @@ import {
   type WcifRound,
 } from "@/lib/wca/wcif/rounds";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { LabelledEventIcon } from "@/components/EventIcon";
 
 interface TableViewProps {
@@ -144,9 +145,10 @@ function SingleDayTable({
   wcifEvents,
 }: SingleDayTableProps) {
   const { t } = useT();
+  const lng = useLocale();
 
   const title = t("competitions.schedule.schedule_for_full_date", {
-    date: date.toLocaleString(DateTime.DATE_HUGE),
+    date: date.toLocaleString(DateTime.DATE_HUGE, { locale: lng }),
   });
 
   const hasActivities = groupedActivities.length > 0;
@@ -268,6 +270,7 @@ function ActivityRow({
   wcifEvents,
 }: ActivityRowProps) {
   const { t } = useT();
+  const lng = useLocale();
 
   const representativeActivity = activityGroup[0];
   const { startTime, endTime } = representativeActivity;
@@ -297,10 +300,10 @@ function ActivityRow({
     <>
       <SimpleGrid columns={16} hideBelow="lg" columnGap={3}>
         <GridItem colSpan={isExpanded ? 1 : 2}>
-          {getSimpleTimeString(startTime, timeZone)}
+          {getSimpleTimeString(startTime, lng, timeZone)}
         </GridItem>
         <GridItem colSpan={isExpanded ? 1 : 2}>
-          {getSimpleTimeString(endTime, timeZone)}
+          {getSimpleTimeString(endTime, lng, timeZone)}
         </GridItem>
         <GridItem colSpan={isExpanded ? 4 : 7}>{name}</GridItem>
         <GridItem colSpan={isExpanded ? 3 : 5}>
@@ -344,7 +347,7 @@ function ActivityRow({
         <GridItem textAlign="start" colSpan={[6, 4]}>
           {t("competitions.schedule.range.from")}
           <br />
-          <b>{getSimpleTimeString(startTime, timeZone)}</b>
+          <b>{getSimpleTimeString(startTime, lng, timeZone)}</b>
         </GridItem>
         <GridItem textAlign="center" colSpan={[4, 8]}>
           <LabelledEventIcon eventId={eventId} size="2xl" />
@@ -352,7 +355,7 @@ function ActivityRow({
         <GridItem textAlign="end" colSpan={[6, 4]}>
           {t("competitions.schedule.range.to")}
           <br />
-          <b>{getSimpleTimeString(endTime, timeZone)}</b>
+          <b>{getSimpleTimeString(endTime, lng, timeZone)}</b>
         </GridItem>
         <GridItem textAlign="center" colSpan={[16, 10]}>
           <b>{name}</b>

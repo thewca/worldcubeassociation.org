@@ -2,6 +2,9 @@
 
 # Copied from https://github.com/doorkeeper-gem/doorkeeper/wiki/Associate-users-to-OAuth-applications-%28ownership%29#controllers
 class Oauth::ApplicationsController < ApplicationController
+  # Third-party registration services have to be vetted by us before they may act on registrations.
+  ADMIN_ONLY_SCOPES = %w[manage_registrations].freeze
+
   before_action :authenticate_user!
   before_action :set_application, only: %i[show edit update destroy]
 
@@ -18,6 +21,8 @@ class Oauth::ApplicationsController < ApplicationController
 
   def edit
   end
+
+  before_action :require_admin_for_added_admin_only_scopes, only: %i[create update]
 
   def create
     @application = Doorkeeper::Application.new(application_params)
@@ -49,6 +54,16 @@ class Oauth::ApplicationsController < ApplicationController
     # Don't let users view or edit applications they don't own,
     # unless they're an admin.
     raise ActionController::RoutingError.new('Not Found') if @application.owner != current_user && !current_user.admin?
+  end
+
+  private def require_admin_for_added_admin_only_scopes
+    return if current_user.admin?
+
+    # On update, owners may keep an admin-only scope that an admin granted earlier.
+    previous_scopes = action_name == 'update' ? @application.scopes.to_a : []
+    added_scopes = application_params[:scopes].to_s.split - previous_scopes
+
+    head :forbidden if added_scopes.intersect?(ADMIN_ONLY_SCOPES)
   end
 
   private def application_params

@@ -18,9 +18,11 @@ const locationLabel = (competition: LiveCompetition, t: TFunction) =>
 export default function LiveCompetitionsTable({
   competitions,
   t,
+  lng,
 }: {
   competitions: LiveCompetition[];
   t: TFunction;
+  lng: string;
 }) {
   return (
     <Table.ScrollArea>
@@ -48,7 +50,11 @@ export default function LiveCompetitionsTable({
                 </HStack>
               </Table.Cell>
               <Table.Cell>
-                {formatDateRange(competition.start_date, competition.end_date)}
+                {formatDateRange(
+                  competition.start_date,
+                  competition.end_date,
+                  lng,
+                )}
               </Table.Cell>
               <Table.Cell hideBelow="md">
                 {locationLabel(competition, t)}

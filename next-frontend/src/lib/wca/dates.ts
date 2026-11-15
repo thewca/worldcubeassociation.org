@@ -87,11 +87,12 @@ export const doesRangeCrossMidnight = (
 
 export const getSimpleTimeString = (
   dateTime: string,
+  locale: string,
   timeZone: string | Zone = "local",
 ) =>
   DateTime.fromISO(dateTime)
     .setZone(timeZone)
-    .toLocaleString(DateTime.TIME_SIMPLE);
+    .toLocaleString(DateTime.TIME_SIMPLE, { locale });
 
 export const getShortTimeString = (
   dateTime: string,
@@ -113,11 +114,12 @@ export const getShortDateString = (
 // ie: `event_change_deadline_date ?? competitionInfo.start_date`
 export const getMediumDateString = (
   dateTime: string,
+  locale: string,
   timeZone: string | Zone = "local",
 ) =>
   DateTime.fromISO(dateTime)
     .setZone(timeZone)
-    .toLocaleString(DateTime.DATE_MED);
+    .toLocaleString(DateTime.DATE_MED, { locale });
 
 export const getLongDateString = (
   dateTime: string,
@@ -134,11 +136,12 @@ export const getRegistrationTimestamp = (
 
 export const getFullDateTimeStringNoSeconds = (
   dateTime: string,
+  locale: string,
   timeZone: string | Zone = "local",
 ) =>
   DateTime.fromISO(dateTime)
     .setZone(timeZone)
-    .toLocaleString(DateTime.DATETIME_FULL);
+    .toLocaleString(DateTime.DATETIME_FULL, { locale });
 
 export const getFullDateTimeString = (
   dateTime: string,
@@ -194,12 +197,17 @@ export const todayWithTime = (dateTime: string, timeZone: string | Zone) => {
   });
 };
 
-export function dateRange(fromDate: string, toDate: string, options = {}) {
+export function dateRange(
+  fromDate: string,
+  toDate: string,
+  locale: string,
+  options = {},
+) {
   return Interval.fromDateTimes(
     DateTime.fromISO(fromDate),
     DateTime.fromISO(toDate),
   ).toLocaleString(
     { month: "short", day: "2-digit", year: "numeric" },
-    options,
+    { ...options, locale },
   );
 }

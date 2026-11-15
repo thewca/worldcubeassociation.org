@@ -33,6 +33,7 @@ import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { LuInfo } from "react-icons/lu";
 import {
   getRegistrationStatus,
@@ -61,9 +62,10 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
 
   const isChampionship = comp.championship_types.length > 0;
 
-  const dateLabel = formatDateRange(comp.start_date, comp.end_date);
-
   const { t } = useT();
+  const lng = useLocale();
+  const dateLabel = formatDateRange(comp.start_date, comp.end_date, lng);
+
   return (
     <Table.Row key={comp.id} height={{ base: "10", lg: "auto" }}>
       <Table.Cell width="10">
@@ -142,7 +144,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
       <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="xl">
         <Portal>
           <Drawer.Backdrop />
-          <Drawer.Positioner padding="4">
+          <Drawer.Positioner padding="4" alignItems="center">
             <Drawer.Content
               overflow="hidden"
               borderRadius="wca"
@@ -165,6 +167,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
                 <CompetitionShortlist
                   comp={comp}
                   t={t}
+                  lng={lng}
                   items={[
                     "city",
                     "venue_address",

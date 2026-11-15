@@ -1,0 +1,11 @@
+type: object
+required:
+  - set_number
+  - attempts
+properties:
+  set_number:
+    type: integer
+  attempts:
+    type: array
+    items:
+      $ref: "./H2hAttempt.yaml"

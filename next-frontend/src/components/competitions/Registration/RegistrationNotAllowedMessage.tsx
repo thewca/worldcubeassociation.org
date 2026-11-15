@@ -3,6 +3,7 @@
 import { Alert, Link, List } from "@chakra-ui/react";
 import { Trans } from "react-i18next";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import type { components } from "@/types/openapi";
 import { DateTime } from "luxon";
 
@@ -22,6 +23,7 @@ const PROFILE_FIELD_MESSAGES = {
 
 function BannedMessage({ bannedUntil }: { bannedUntil?: string | null }) {
   const { t } = useT();
+  const lng = useLocale();
 
   return (
     <Alert.Root status="error">
@@ -39,6 +41,7 @@ function BannedMessage({ bannedUntil }: { bannedUntil?: string | null }) {
             {t("registrations.errors.banned_until", {
               date: DateTime.fromISO(bannedUntil).toLocaleString(
                 DateTime.DATE_FULL,
+                { locale: lng },
               ),
             })}
           </Alert.Description>

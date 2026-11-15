@@ -18,7 +18,7 @@ class SearchResultsController < ApplicationController
     @persons = limit_pagination(Person.search(@omni_query), params[:people_page])
     @posts = limit_pagination(Post.search(@omni_query), params[:posts_page])
     @regulations = limit_pagination(Kaminari.paginate_array(Regulation.search(@omni_query)), params[:regulations_page])
-    @incidents = limit_pagination(Incident.search(@omni_query), params[:incidents_page])
+    @incidents = limit_pagination(Incident.filter_by_permissions(current_user).search(@omni_query), params[:incidents_page])
   end
 
   private def limit_pagination(scope, page_param)
