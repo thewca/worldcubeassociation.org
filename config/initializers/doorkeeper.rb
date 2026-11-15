@@ -120,9 +120,4 @@ Doorkeeper.configure do
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   # realm "Doorkeeper"
-
-  # Enforce PKCE for non-confidential clients using the `authorization_code` grant flow.
-  # According to https://doorkeeper.gitbook.io/guides/ruby-on-rails/pkce-flow#forcing-pkce,
-  #   this does *not* affect existing clients (which are implicitly confidential by default).
-  force_pkce
 end
