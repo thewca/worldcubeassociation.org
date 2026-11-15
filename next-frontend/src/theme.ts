@@ -585,6 +585,15 @@ const customConfig = defineConfig({
           letterSpacing: "wider",
         },
       },
+      tableSection: {
+        value: {
+          fontSize: "sm",
+          lineHeight: "1.5",
+          fontWeight: "medium",
+          textTransform: "uppercase",
+          letterSpacing: "wider",
+        },
+      },
       body: {
         value: {
           fontSize: "0.875rem",

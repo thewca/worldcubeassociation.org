@@ -267,6 +267,7 @@ export interface UtilityValues {
     | "s2"
     | "s3"
     | "s4"
+    | "tableSection"
     | "body"
     | "bodyEmphasis"
     | "annotation"

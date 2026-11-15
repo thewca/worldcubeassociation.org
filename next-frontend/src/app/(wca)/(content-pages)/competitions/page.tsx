@@ -509,7 +509,7 @@ export default function CompetitionsPage() {
                       <Table.ColumnHeader hideBelow="lg">
                         {t("competitions.competition_info.location")}
                       </Table.ColumnHeader>
-                      <Table.ColumnHeader hideBelow="lg">
+                      <Table.ColumnHeader hideBelow="xl">
                         {t("competitions.competition_info.venue")}
                       </Table.ColumnHeader>
                     </Table.Row>
@@ -925,7 +925,7 @@ function TableHeaderRow({
         // overrides the default highlighting behavior
         _hover={{ bg: "bg", _odd: { bg: "bg.subtle" } }}
       >
-        <Heading textStyle="s4" textAlign="center">
+        <Heading textStyle="tableSection" textAlign="center">
           {children}
         </Heading>
       </Table.Cell>

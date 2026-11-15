@@ -71,7 +71,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
       </Table.Cell>
 
       <Table.Cell width="1" whiteSpace="nowrap" hideBelow="md">
-        <Text opacity={isRepeatedDate ? 0.5 : 1}>{dateLabel}</Text>
+        <Text color={isRepeatedDate ? "fg.muted" : undefined}>{dateLabel}</Text>
       </Table.Cell>
 
       <Table.Cell width="1">
@@ -89,8 +89,8 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
         whiteSpace={{ base: "normal", lg: "nowrap" }}
         overflowWrap={{ base: "anywhere", lg: "normal" }}
       >
-        <Box minW="0">
-          <HStack gap="1" minW="0">
+        <HStack gap="2" minW="0">
+          <Box minW="0">
             <ChakraLink asChild minW="0">
               <Link
                 href={route({
@@ -101,16 +101,16 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
                 {comp.name}
               </Link>
             </ChakraLink>
-            {isChampionship && <NationalChampionshipIcon flexShrink="0" />}
-          </HStack>
-          <Text hideFrom="lg" color="fg.muted" textStyle="xs">
-            <Box as="span" hideFrom="md">
-              {dateLabel}
-              {" – "}
-            </Box>
-            {comp.city}
-          </Text>
-        </Box>
+            <Text hideFrom="lg" color="fg.muted" textStyle="xs">
+              <Box as="span" hideFrom="md">
+                {dateLabel}
+                {" – "}
+              </Box>
+              {comp.city}
+            </Text>
+          </Box>
+          {isChampionship && <NationalChampionshipIcon flexShrink="0" />}
+        </HStack>
       </Table.Cell>
 
       <Table.Cell width="10">
@@ -133,7 +133,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
         </Text>
       </Table.Cell>
 
-      <Table.Cell width="1/3" maxW="0" hideBelow="lg">
+      <Table.Cell width="1/3" maxW="0" hideBelow="xl">
         <Box lineClamp="1">
           <ChakraMarkdown paragraphAs={Text}>{comp.venue}</ChakraMarkdown>
         </Box>
