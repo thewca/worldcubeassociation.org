@@ -12,8 +12,9 @@ properties:
   person:
     $ref: './Person.yaml'
   user_id:
-    type: integer
-    nullable: true
+    type:
+      - integer
+      - "null"
   previous_persons:
     type: array
     items:
