@@ -19,5 +19,5 @@ get:
             oneOf:
               - $ref: '../../schemas/registrations/RegistrationDataV2.yaml'
               - type: 'null'
-    '4XX':
-      $ref: '../../errorResponses/RegistrationError.yaml'
+    '401':
+      $ref: '../../errorResponses/NotLoggedIn.yaml'

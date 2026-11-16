@@ -2622,7 +2622,7 @@ export interface operations {
                     "application/json": components["schemas"]["RegistrationDataV2"] | null;
                 };
             };
-            "4XX": components["responses"]["RegistrationError"];
+            401: components["responses"]["NotLoggedIn"];
         };
     };
     registrationByUser: {

@@ -65,6 +65,12 @@ RSpec.describe 'API Registrations' do
       expect(response).to have_http_status(:ok)
       expect(response.parsed_body).to be_nil
     end
+
+    it 'requires a signed in user' do
+      get show_mine_api_v1_competition_registrations_path(create(:competition, :registration_open))
+
+      expect(response).to have_http_status(:unauthorized)
+    end
   end
 
   describe 'admin comment visibility' do
@@ -122,8 +128,17 @@ RSpec.describe 'API Registrations' do
   end
 
   describe 'GET #show_by_user' do
-    let(:competition) { create(:competition, :registration_open) }
+    let(:delegate) { create(:delegate) }
+    let(:competition) { create(:competition, :registration_open, delegates: [delegate]) }
     let(:registration) { create(:registration, competition: competition) }
+
+    it 'returns the registration to a competition manager' do
+      api_sign_in_as(delegate)
+      get show_by_user_api_v1_competition_registrations_path(competition, registration.user_id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body['id']).to eq registration.id
+    end
 
     it 'does not return the registration of another user' do
       api_sign_in_as(create(:user))

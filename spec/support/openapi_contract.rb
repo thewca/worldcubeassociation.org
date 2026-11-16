@@ -12,6 +12,7 @@ OPENAPI_UNDOCUMENTED_LEGACY_ROUTES = [
   %w[GET /v1/registrations/{registrationId}],
   %w[GET /v1/registrations/{registrationId}/payment_ticket],
   %w[GET /v1/registrations/{registrationId}/payments],
+  %w[GET /v1/registrations/{registrationId}/history],
   %w[GET /v1/competitions/{competitionId}/registrations/admin],
   %w[PATCH /v1/competitions/{competitionId}/registrations/bulk_update],
   %w[PATCH /v1/competitions/{competitionId}/registrations/bulk_auto_accept],
