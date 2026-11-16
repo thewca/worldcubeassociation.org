@@ -289,11 +289,15 @@ en:
       name: "Name"
       callback_url: "Callback Url"
       owner: "Owner"
+      confidential: "Confidential?"
       application_id: "Application ID"
       actions: "Actions"
       secret: "Secret"
       scopes: "Scopes"
       callback_urls: "Callback Urls"
+      confidentiality:
+        'yes': "Yes"
+        'no': "No"
   helpers:
     submit:
       competition_medium:
@@ -673,6 +677,7 @@ en:
       applications:
         help:
           https_info: 'HTTPS is required unless the host is "localhost"'
+          confidential: 'Application will be used where the client secret can be kept confidential. Native mobile apps and Single Page Apps are considered non-confidential.'
           scopes_html: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10" target="_blank">here</a> for a list of supported scopes.'
       #context: and asking the user "The application will be able to"
       scopes:
