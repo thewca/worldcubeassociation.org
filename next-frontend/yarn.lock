@@ -10564,12 +10564,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-resources-to-backend@npm:^1.2.3":
-  version: 1.2.3
-  resolution: "i18next-resources-to-backend@npm:1.2.3"
+"i18next-resources-to-backend@npm:^1.2.4":
+  version: 1.2.4
+  resolution: "i18next-resources-to-backend@npm:1.2.4"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
-  checksum: 10c0/d2a95ee0d5eaeaa3a50f775670788cc624b71faaaa00d54213d1fa6079aa959d25eeb899352c0a3a55b55feb0603abef77b944c5a135b24895123c5810227629
+  checksum: 10c0/bcfca7b80d431fad9cf1030a0646406788d6c8165d91167a5b56e44b78050cff7f766b08aebe603b76c3dfea40fd78d3ae133906890d8de5686aa8c7fbac2155
   languageName: node
   linkType: hard
 
@@ -12996,7 +12996,7 @@ __metadata:
     graphql: "npm:^17.1.0"
     i18next: "npm:^26.6.0"
     i18next-browser-languagedetector: "npm:^8.3.0"
-    i18next-resources-to-backend: "npm:^1.2.3"
+    i18next-resources-to-backend: "npm:^1.2.4"
     js-cookie: "npm:^3.0.8"
     jsdom: "npm:^30.1.3"
     lodash: "npm:^4.18.1"
