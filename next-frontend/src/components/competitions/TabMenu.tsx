@@ -55,10 +55,6 @@ export default function TabMenu({
   const eventId = activityCodeFromPath(currentPath!);
 
   const [openGroup, setOpenGroup] = useState<string | null>(eventId);
-  // The drawer stays open only while the route it was opened on is still current, so any
-  //   navigation closes it. Until tab navigation became client-side the page reload did that
-  //   for us; hanging an onClick on the links instead would mean threading a callback three
-  //   components down, past two `asChild` merges that are known to drop handlers.
 
   return (
     <>
