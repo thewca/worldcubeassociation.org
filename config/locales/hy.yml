@@ -1439,6 +1439,9 @@ hy:
       չեք կարող գրանցվել։'
     refund_form: {}
     payment_form: {}
+    please_sign_in_not_yet_open_html: '%{sign_in} որ ստուգեք ձեր գրանցմսն կարգավիճակը։
+      Եթե դեռ չունեք WCA օգտահաշիվ, կարող եք ստեղծել %{here}, բայց առաջնության գրանցումը
+      դեռ բաց չէ։'
   persons: {}
   score_tools:
     tools: {}

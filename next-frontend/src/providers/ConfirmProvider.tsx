@@ -167,6 +167,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
       <ConfirmDialog
         open={isOpen}
         title="Confirm Action"
+        lazyMount
         onCancel={handleCancel}
         onConfirm={handleConfirm}
         cancelButton={options.cancelButton}

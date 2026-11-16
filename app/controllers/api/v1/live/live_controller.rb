@@ -28,7 +28,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     UpdateLiveResultJob.perform_later(live_result, results, authenticated_user.id)
 
-    render json: { status: "ok" }
+    render json: { status: "ok" }, status: :accepted
   end
 
   def batch_add_or_update_results
@@ -56,7 +56,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     BatchUpdateLiveResultJob.perform_later(round, job_entries, authenticated_user.id)
 
-    render json: { status: "ok" }
+    render json: { status: "ok" }, status: :accepted
   end
 
   def round_results
@@ -77,7 +77,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
   def by_person
     registration_id = params.require(:registration_id)
-    registration = Registration.find(registration_id)
+    registration = @competition.registrations.find(registration_id)
 
     results = registration.live_results.includes(:live_attempts)
 
@@ -128,7 +128,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     return render json: { status: "round has results entered" }, status: :bad_request if round.completed_competitors.positive?
 
-    deleted_count = round.close_round!
+    deleted_count = round.close_round!(authenticated_user)
 
     render json: { status: "ok", deleted_count: deleted_count }
   end
@@ -146,7 +146,9 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
     delete_count = Live::DiffHelper.broadcast_changes(round) do
       deleted = result.live_attempts.delete_all
       LiveResult.reset_counters(result.id, :live_attempts)
-      result.update!(average: 0, best: 0, advancing: false, advancing_questionable: false, single_record_tag: nil, average_record_tag: nil)
+      result.assign_attributes(average: 0, best: 0, single_record_tag: nil, average_record_tag: nil)
+      result.assign_attributes(advancing: false, advancing_questionable: false) unless result.locked?
+      result.save!
       deleted
     end
 
@@ -234,7 +236,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     to_advance = round.next_participating_without(registration_id)
 
-    to_advance_competitor = Registration.find(to_advance.pluck(:registration_id))
+    to_advance_competitor = @competition.registrations.find(to_advance.pluck(:registration_id))
 
     render json: { status: "ok", next_advancing: to_advance_competitor.map(&:to_live_json) }
   end
@@ -257,7 +259,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   end
 
   def add_competitor_to_round
-    registration = Registration.find(params.require(:registration_id))
+    registration = @competition.registrations.find(params.require(:registration_id))
     round = Round.find_by_wcif_id!(params.require(:round_id), @competition.id)
 
     require_scoretake!(@competition)

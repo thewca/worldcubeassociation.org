@@ -108,7 +108,7 @@
                       <%= link_to(ui_icon("pencil alt"), edit_result_path(result.id), target: '_blank', class: 'hide-new-window-icon') %>
                     </td>
                   <% end %>
-                  <td class="date"> <%= wca_date_range(competition.start_date, competition.end_date) %></td>
+                  <td class="date"> <%= wca_date_range_tag(competition.start_date, competition.end_date) %></td>
                   <td class="competition">
                     <%= link_to result.competition_id, competition_path(result.competition_id), target: '_blank', class: 'hide-new-window-icon' %>
                   </td>

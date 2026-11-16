@@ -104,7 +104,7 @@ export default function StepNavigationProvider({
 
     // The step in question already passed.
     if (stepIndex < activeIndex) {
-      const completeAndNotEditable = stepConfig.isCompleted(payload) && !stepConfig.isEditable;
+      const completeAndNotEditable = stepConfig.isCompleted(payload) && !stepConfig.is_editable;
 
       const anyPreviousStepNotCompleted = allSteps
         .slice(0, stepIndex)
@@ -119,7 +119,7 @@ export default function StepNavigationProvider({
 
     // The step in question is still in the future.
     if (stepIndex > activeIndex) {
-      const completeAndEditable = stepConfig.isCompleted(payload) && stepConfig.isEditable;
+      const completeAndEditable = stepConfig.isCompleted(payload) && stepConfig.is_editable;
 
       return !completeAndEditable;
     }

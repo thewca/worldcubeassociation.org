@@ -51,17 +51,24 @@ jobs:
       - name: Install and start MongoDB # for Payload CMS in the frontend
         uses: supercharge/mongodb-github-action@1.12.1
         with:
-          mongodb-version: 8
+          # Needs to pin 7 here until https://jira.mongodb.org/browse/SERVER-131779 is shipped:
+          #   Without this fix, Mongo 8+ currently mis-understands the `ubuntu-latest` kernel as
+          #   a "bad" kernel which it cannot run on due to a Malloc glitch. That's a false positive
+          #   but the fix has not been released in Mongo 8+ mainline as of writing this comment.
+          mongodb-version: 7
           mongodb-username: root
           mongodb-password: root
           mongodb-db: payload
       - name: Populate backend database with seeds
         run: bin/rails db:reset
+      - name: Get runner image
+        id: image
+        run: echo "os=$ImageOS" >> "$GITHUB_OUTPUT"
       - name: Cache Playwright runnables
         uses: actions/cache@v6
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
+          key: ${{ steps.image.outputs.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps
       - name: Run Playwright tests

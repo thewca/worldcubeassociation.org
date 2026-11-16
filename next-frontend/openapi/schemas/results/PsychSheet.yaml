@@ -35,23 +35,28 @@ properties:
         user_id:
           type: integer
         wca_id:
-          type: string
-          nullable: true
+          type:
+            - string
+            - "null"
         country_iso2:
           type: string
         average_best:
           type: integer
         average_rank:
-          type: integer
-          nullable: true
+          type:
+            - integer
+            - "null"
         single_best:
           type: integer
         single_rank:
-          type: integer
-          nullable: true
+          type:
+            - integer
+            - "null"
         tied_previous:
-          type: boolean
-          nullable: true
+          type:
+            - boolean
+            - "null"
         pos:
-          type: integer
-          nullable: true
+          type:
+            - integer
+            - "null"

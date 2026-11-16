@@ -37,7 +37,7 @@ RSpec.describe "competitions" do
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
 
-            series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
+            series_update_params = series.to_form_data.deep_symbolize_keys.merge({ competitionIds: [competition.id, partner_competition.id] })
             update_params = build_competition_update(competition, series: series_update_params)
             patch competition_path(competition), params: update_params, as: :json
 
@@ -142,7 +142,7 @@ RSpec.describe "competitions" do
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be true
 
-            series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
+            series_update_params = series.to_form_data.deep_symbolize_keys.merge({ competitionIds: [competition.id, partner_competition.id] })
             update_params = build_competition_update(competition, series: series_update_params)
             patch competition_path(competition), params: update_params, as: :json
 
@@ -248,7 +248,7 @@ RSpec.describe "competitions" do
           it "can add competition to an existing Series" do
             expect(competition.confirmed?).to be false
 
-            series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
+            series_update_params = series.to_form_data.deep_symbolize_keys.merge({ competitionIds: [competition.id, partner_competition.id] })
             update_params = build_competition_update(competition, series: series_update_params)
             patch competition_path(competition), params: update_params, as: :json
 

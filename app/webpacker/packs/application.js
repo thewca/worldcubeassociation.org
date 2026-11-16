@@ -17,6 +17,7 @@ import {
   getUrlParams,
   setUrlParams,
   formattedTextForDate,
+  initDateRanges,
 } from '../lib/utils/wca';
 import '../lib/acknowledge-cookies';
 // Imported for its side effects: it populates the global `window.I18n` store.
@@ -37,6 +38,7 @@ $(() => {
     const { utcTime, locale } = data;
     $(this).text(formattedTextForDate(utcTime, locale));
   });
+  initDateRanges();
 });
 
 // Export some helpers

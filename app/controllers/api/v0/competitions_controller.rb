@@ -37,14 +37,14 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     competitions = competitions_scope.search(params[:q], params: params)
 
-    serial_methods = %w[short_display_name city country_iso2 event_ids latitude_degrees longitude_degrees announced_at championship_types]
+    serial_methods = Competition::INDEX_SERIALIZE_OPTIONS[:methods]
     serial_includes = {}
 
     serial_includes["delegates"] = { only: %w[id name], methods: [], include: ["avatar"] } if admin_mode
     serial_methods |= %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user lead_delegate_id] if admin_mode
 
     paginate json: competitions,
-             only: %w[id name start_date end_date registration_open registration_close venue venue_address competitor_limit main_event_id base_entry_fee_lowest_denomination currency_code],
+             only: Competition::INDEX_SERIALIZE_OPTIONS[:only],
              methods: serial_methods,
              include: serial_includes
   end
@@ -88,7 +88,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def tabs
     competition = competition_from_params
-    render json: competition.tabs
+    render json: competition.tabs, only: %w[id competition_id name content display_order]
   end
 
   def podiums
@@ -110,6 +110,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                             id: round.id,
                             roundTypeId: round.round_type_id,
                             isH2hMock: round.is_h2h_mock?,
+                            isLinked: round.linked_round_id.present?,
                             results: round.results.sort_by { |r| [r.pos, r.person_name] },
                           }
     end
