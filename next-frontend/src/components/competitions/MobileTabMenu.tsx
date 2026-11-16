@@ -201,6 +201,7 @@ function LinkItem({ tab, selected, renderLabel }: ItemProps) {
       unstyled
       href={tab.externalHref || tab.href}
       target={tab.externalHref ? "_blank" : undefined}
+      rel={tab.externalHref ? "noopener noreferrer" : undefined}
       css={itemStyle}
       data-selected={selected ? "" : undefined}
       aria-current={selected ? "page" : undefined}
@@ -343,6 +344,7 @@ function SingleItem({
       w="full"
       minW={0}
       href={tab.disabled ? undefined : tab.externalHref || tab.href}
+      rel={tab.externalHref ? "noopener noreferrer" : undefined}
       aria-disabled={tab.disabled || undefined}
       data-disabled={tab.disabled ? "" : undefined}
       tabIndex={tab.disabled ? -1 : undefined}
