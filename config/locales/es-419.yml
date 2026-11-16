@@ -2401,10 +2401,6 @@ es-419:
         open: Abierto
         not_open: Sin abrir
         closed: Cerrado
-      currently_displaying:
-        one: Se muestra %{count} competición
-        many: Se muestran %{count} competiciones
-        other: Se muestran %{count} competiciones
       register_now: Registrarse ahora
       view_competition: Ver competición
       no_more_comps: Sin más competiciones.

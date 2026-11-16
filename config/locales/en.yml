@@ -289,11 +289,15 @@ en:
       name: "Name"
       callback_url: "Callback Url"
       owner: "Owner"
+      confidential: "Confidential?"
       application_id: "Application ID"
       actions: "Actions"
       secret: "Secret"
       scopes: "Scopes"
       callback_urls: "Callback Urls"
+      confidentiality:
+        'yes': "Yes"
+        'no': "No"
   helpers:
     submit:
       competition_medium:
@@ -673,6 +677,7 @@ en:
       applications:
         help:
           https_info: 'HTTPS is required unless the host is "localhost"'
+          confidential: 'Application will be used where the client secret can be kept confidential. Native mobile apps and Single Page Apps are considered non-confidential.'
           scopes_html: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10" target="_blank">here</a> for a list of supported scopes.'
       #context: and asking the user "The application will be able to"
       scopes:
@@ -1595,6 +1600,8 @@ en:
         #context: the "short" version of cutoff, which appear below the format (eg: Bo2/Ao5)
         cutoff: "Cutoff: %{short_cutoff}"
         download_html: "Download all the competition's details as PDF %{here}."
+        download_pdf: "Download the schedule PDF here"
+        download: "Download"
       date: "Date"
       add_to_calendar: "Add to calendar"
       #context: This is shown as a header above the column that shows competition names
@@ -1622,6 +1629,8 @@ en:
       organizer_plural:
         one: "Organizer"
         other: "Organizers"
+      view_more_members: "View %{count} more team members"
+      see_more: "+ %{count} more"
       organization_team: "Organization team"
       #context: Pluralization of the "Delegate" label for a competition form
       delegate:
@@ -1777,6 +1786,8 @@ en:
         name_desc: "Name: Z-A"
       show_registration_status: "Show registration status icon"
       use_admin_view: "Use admin view"
+      #context: date range and city beneath a competition's name on narrow screens
+      date_and_city: "%{date} – %{city}"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
@@ -1814,9 +1825,6 @@ en:
         open: "Open"
         not_open: "Not yet Open"
         closed: "Closed"
-      currently_displaying:
-        one: "Currently Displaying: %{count} competition"
-        other: "Currently Displaying: %{count} competitions"
       #context: actions in the drawer that opens when clicking a competition in the list
       register_now: "Register Now"
       view_competition: "View Competition"
@@ -2069,6 +2077,8 @@ en:
         is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again."
         is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
         is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
+        additional: "Please ensure that you have followed any additional instructions above regarding payment or other registration requirements."
+        email: "You will receive an email when your registration status is updated."
       list:
         empty: "None"
         spots_remaining_plural:
