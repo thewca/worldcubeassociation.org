@@ -395,27 +395,26 @@ function ItemWithChildren({
       <Portal>
         <Menu.Positioner>
           <Menu.Content maxW="min(20rem, calc(100vw - 2rem))">
-            {tab.children.length > 0 &&
-              tab.children.map((tab) => {
-                const isActive = tab.menuKey === activeMenuKey;
-                return (
-                  <Menu.Item
-                    key={tab.menuKey}
-                    value={tab.menuKey}
-                    disabled={tab.disabled}
-                    bg={isActive ? "blue.subtle" : undefined}
-                    color={isActive ? "blue.fg" : undefined}
-                    fontWeight={isActive ? "bold" : undefined}
-                    _highlighted={{ bg: isActive ? "blue.muted" : "bg.muted" }}
-                  >
-                    <SingleItem
-                      tab={tab}
-                      isActive={isActive}
-                      label={renderLabel(tab, t, isAdminRoute)}
-                    />
-                  </Menu.Item>
-                );
-              })}
+            {tab.children.map((tab) => {
+              const isActive = tab.menuKey === activeMenuKey;
+              return (
+                <Menu.Item
+                  key={tab.menuKey}
+                  value={tab.menuKey}
+                  disabled={tab.disabled}
+                  bg={isActive ? "blue.subtle" : undefined}
+                  color={isActive ? "blue.fg" : undefined}
+                  fontWeight={isActive ? "bold" : undefined}
+                  _highlighted={{ bg: isActive ? "blue.muted" : "bg.muted" }}
+                >
+                  <SingleItem
+                    tab={tab}
+                    isActive={isActive}
+                    label={renderLabel(tab, t, isAdminRoute)}
+                  />
+                </Menu.Item>
+              );
+            })}
           </Menu.Content>
         </Menu.Positioner>
       </Portal>
