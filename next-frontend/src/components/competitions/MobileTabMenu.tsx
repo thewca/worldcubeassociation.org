@@ -151,7 +151,7 @@ export default function MobileTabMenu({
   return (
     <Box
       as="nav"
-      aria-label="Competition sections"
+      aria-label={t("competition_tabs.headers.tabs")}
       position="fixed"
       insetInline="3"
       bottom="calc(env(safe-area-inset-bottom) + var(--chakra-spacing-4))"
