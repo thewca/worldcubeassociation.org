@@ -1,26 +1,12 @@
-import { components } from "@/types/openapi";
-import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import { liveTab } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import { Alert, Link } from "@chakra-ui/react";
-import { getCompetitionMenuData } from "@/lib/competitionMenu/getCompetitionMenuData";
-
-const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
-
-export function competitionStatus(
-  competitionInfo: components["schemas"]["CompetitionInfo"],
-) {
-  const hasEnded =
-    hasPassedEndOfDay(competitionInfo.end_date) && !LIVE_RESULT_BETA;
-
-  const isOngoing = !hasEnded && hasPassed(competitionInfo.start_date);
-
-  const isAwaitingResults = hasEnded && !competitionInfo.results_posted_at;
-
-  return { hasEnded, isOngoing, isAwaitingResults };
-}
+import {
+  competitionStatus,
+  getCompetitionMenuData,
+} from "@/lib/competitionMenu/getCompetitionMenuData";
 
 export default async function CompetitionMenu({
   params,

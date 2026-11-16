@@ -1,13 +1,28 @@
-import { cache } from "react";
+import { components } from "@/types/openapi";
 import { getCompetitionInfo } from "../wca/competitions/getCompetitionInfo";
-import { competitionStatus } from "@/components/competitions/CompetitionMenu";
 import {
   afterCompetitionTabs,
   beforeCompetitionTabs,
   liveTab,
 } from "../wca/competitions/tabs";
+import { hasPassed, hasPassedEndOfDay } from "../wca/dates";
 
-export const getCompetitionMenuData = cache(async (competitionId: string) => {
+const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
+
+export function competitionStatus(
+  competitionInfo: components["schemas"]["CompetitionInfo"],
+) {
+  const hasEnded =
+    hasPassedEndOfDay(competitionInfo.end_date) && !LIVE_RESULT_BETA;
+
+  const isOngoing = !hasEnded && hasPassed(competitionInfo.start_date);
+
+  const isAwaitingResults = hasEnded && !competitionInfo.results_posted_at;
+
+  return { hasEnded, isOngoing, isAwaitingResults };
+}
+
+export const getCompetitionMenuData = async (competitionId: string) => {
   const {
     data: competitionInfo,
     error,
@@ -34,4 +49,4 @@ export const getCompetitionMenuData = cache(async (competitionId: string) => {
     tabs,
     customTabs: competitionInfo.tabs.map((tab) => tab.name),
   };
-});
+};
