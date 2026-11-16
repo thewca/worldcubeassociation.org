@@ -2887,8 +2887,6 @@ vi:
       edited_deadline_not_in_future: >-
         Bạn chỉ được phép thêm các hạn chót trong tương lai, nhưng
         %{new_timestamp} là thời gian trong quá khứ.
-      fto_requires_internal_scoretaking: phải sử dụng Kết quả Trực tiếp Tích hợp
-        nếu có nội dung FTO.
     new:
       create_competition: Tạo giải đấu
       note_clone: >-

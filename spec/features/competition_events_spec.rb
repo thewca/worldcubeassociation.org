@@ -9,6 +9,42 @@ RSpec.feature "Competition events management" do
     allow_any_instance_of(ActionController::Base).to receive(:protect_against_forgery?).and_return(true)
   end
 
+  context "FTO scoretaking software" do
+    let(:scoretaking_software) { :wca_live }
+    let(:competition) do
+      create(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: [], scoretaking_software: scoretaking_software)
+    end
+
+    background do
+      sign_in create(:admin)
+      visit "/competitions/#{competition.id}/events/edit"
+    end
+
+    scenario "adds FTO when using WCA Live", :js do
+      within_event_panel("fto") do
+        click_button "Add event"
+      end
+      select_from_ui(find_event_panel("fto"), "selectRoundCount", "1 round")
+      save_events_react
+
+      expect(competition.reload.event_ids).to eq(%w[fto])
+    end
+
+    context "with external scoretaking" do
+      let(:scoretaking_software) { :external }
+
+      scenario "adds FTO", :js do
+        within_event_panel("fto") do
+          click_button "Add event"
+        end
+        select_from_ui(find_event_panel("fto"), "selectRoundCount", "1 round")
+        save_events_react
+
+        expect(competition.reload.event_ids).to eq(%w[fto])
+      end
+    end
+  end
+
   context "unconfirmed competition" do
     let(:competition) { create(:competition, event_ids: [], qualification_results: true, qualification_results_reason: "Because I need them for testing!") }
 

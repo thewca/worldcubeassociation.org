@@ -2966,8 +2966,6 @@ sl:
         prihodnosti.
       fto_not_yet_allowed: Discipline oktaeder ni možno izvesti na tekmovanjih, 
         ki se začnejo pred %{date}.
-      fto_requires_internal_scoretaking: mora biti nastavljeno na interne 
-        rezultate v živo, če tekmovanje vključuje disciplino Oktaeder.
     new:
       create_competition: Ustvari tekmovanje
       note_clone: >-

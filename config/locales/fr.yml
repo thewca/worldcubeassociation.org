@@ -3260,8 +3260,6 @@ fr:
       edited_deadline_not_in_future: >-
         Vous ne pouvez introduire que des dates limites futures, mais
         %{new_timestamp} n'est pas dans le futur.
-      fto_requires_internal_scoretaking: doit être défini sur Résultats en 
-        direct internes lorsque l'Octaminx (FTO) est présent.
     new:
       create_competition: Créer une compétition
       note_clone: >-

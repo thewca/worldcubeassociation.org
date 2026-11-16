@@ -3186,8 +3186,6 @@ es-419:
       edited_deadline_not_in_future: >-
         Solo se permiten fechas límites en el futuro, pero %{new_timestamp} no
         lo está. ¿Viajaste en el tiempo?
-      fto_requires_internal_scoretaking: debe configurarse como "Integrated Live
-        Results" cuando se incluya FTO.
     new:
       create_competition: Crear competición
       note_clone: >-
