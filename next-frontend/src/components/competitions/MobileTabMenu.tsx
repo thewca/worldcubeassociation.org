@@ -125,9 +125,7 @@ export default function MobileTabMenu({
     (tab) => encodeURIComponent(tab) === activeMenuKey || tab === activeMenuKey,
   );
 
-  const isLiveEventsTabActive = _.some(_.keys(events.byId), (event) =>
-    _.includes(activeMenuKey, event),
-  );
+  const isLiveEventsTabActive = _.includes(_.keys(events.byId), activeMenuKey);
 
   const activeGroup = groupTabsMap.has(activeMenuKey)
     ? groupTabsMap.get(activeMenuKey)
@@ -247,7 +245,7 @@ function GroupItem({
               const isActive =
                 tab.menuKey === activeMenuKey ||
                 encodeURIComponent(tab.menuKey) === activeMenuKey ||
-                (group === "events" && activeMenuKey.includes(tab.menuKey));
+                (group === "events" && activeMenuKey === tab.menuKey);
 
               const label = isLink ? renderLabel(tab, t, isAdminRoute) : "";
               return (
