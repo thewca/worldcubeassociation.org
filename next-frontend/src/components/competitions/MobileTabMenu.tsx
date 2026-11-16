@@ -74,7 +74,7 @@ const itemStyle: SystemStyleObject = {
   _hover: { bg: "bg.muted" },
   _selected: {
     bg: "colorPalette.emphasized",
-    color: "white",
+    color: "colorPalette.contrast",
     fontWeight: "bold",
   },
   _open: { bg: "colorPalette.subtle", color: "colorPalette.contrast" },
