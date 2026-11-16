@@ -2101,8 +2101,6 @@ th:
         open: เปิด
         not_open: ยังไม่เปิด
         closed: ปิด
-      currently_displaying:
-        other: 'กำลังแสดงผล: %{count} การแข่งขัน'
       register_now: สมัครการแข่งขันตอนนี้
       view_competition: ดูการแข่งขัน
       no_more_comps: ไม่มีการแข่งขัน
