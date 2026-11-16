@@ -255,6 +255,10 @@ pl:
       secret: Secret
       scopes: Zakresy
       callback_urls: Adresy Wywołania Zwrotnego
+      confidential: Poufne?
+      confidentiality:
+        'yes': Tak
+        'no': Nie
   helpers:
     submit:
       competition_medium:
@@ -778,6 +782,9 @@ pl:
             zakresu/zakresów. Spójrz <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">tutaj</a>, aby zobaczyć listę wspieranych zakresów.
+          confidential: Aplikacja będzie wykorzystywana w sytuacjach, w których 
+            można zapewnić poufność klucza tajnego klienta. Natywne aplikacje 
+            mobilne oraz aplikacje jednostronicowe uznaje się za niepoufne.
       scopes:
         public: >-
           Mieć dostęp do twoich publicznych danych (imię i nazwisko, WCA ID,
@@ -1481,6 +1488,7 @@ pl:
         Zespołem do Spraw Wyników WCA za pomocą <a href="%{dob_form_path}">tego
         formularza</a>.
       unknown_wca_id_html: 'WCA ID %{link_id} nie istnieje.'
+      search_for_delegate: Wyszukaj Delegata
   user_roles:
     email:
       role_metadata:
@@ -1489,6 +1497,9 @@ pl:
         locale: Język
         group_name: Nazwa Zespołu/Komitetu
         delegated_competitions_count: Liczba przedelegowanych zawodów
+        wca_id: WCA ID
+        location: Lokacja
+        email: Email
   user_groups:
     group_types:
       board: Zarząd WCA
@@ -1528,6 +1539,7 @@ pl:
         Musisz napisać komentarz. Przeczytaj Wymagania Rejestracyjne powyżej
         żeby dowiedzieć się co powinno się tam znaleźć (np. dla wielolokacyjnych
         zawodów FMC, napisz lokalizację w której będziesz startować)
+      banned_until: Twój ban kończy się dnia %{date}.
     registration_info_people:
       newcomer:
         one: nowicjusz
@@ -4456,3 +4468,65 @@ pl:
       invalid_spoken_delegate: Jeden lub więcej wybranych delegatów, z którymi 
         rozmawiałeś/aś, nie jest już aktywnym młodszym Delegatem ani Delegatem w
         wybranym regionie.
+      declarations_required: Wszystkie deklaracje muszą zostać potwierdzone.
+      business_involvement_required: Wybierz, czy prowadzisz działalność 
+        związaną z kostkami Rubika.
+      business_involvement_explanation_required: Opisz swoją działalność 
+        związaną z kostką Rubika.
+    form:
+      declaration_and_basic_information: Deklaracja i podstawowe informacje
+      name: Imie
+      wca_id: WCA ID
+      email: Email
+      age: Wiek
+      competition_count: Liczba zawodów
+      region_and_references: Region i referencje
+      region: W jakim regionie delegackim obecnie mieszkasz?
+      region_placeholder: Wybierz swój region
+      subregion: W którym podregionie Delegacji obecnie mieszkasz?
+      subregion_placeholder: Wybierz swój podregion
+      reviewing_delegate: Delegat rozpatrujący
+      spoken_delegates: Z którymi Młodszymi Delegatami lub Delegatami 
+        rozmawiałeś na temat zostania delegatem praktykantem?
+      recommenders: Którzy Młodsi Delegaci lub Delegaci z Twojego regionu 
+        zgodzili się zarekomendować Cię jako kandydata na stanowisko delegata 
+        praktykanta?
+      delegates_placeholder: Wybierz co najmniej jednego delegata
+      experience_and_motivation: Doświadczenie i motywacja
+      introduction: Przedstaw się krótko, używając od dwóch do czterech zdań.
+      competition_contributions: Opisz w skrócie, w jaki sposób wspierałeś 
+        lokalne zawody wykraczając poza to, czego oczekuje się od wszystkich 
+        zawodników.
+      volunteer_history: Jeśli pełniłeś funkcje wolontariusza WCA, podaj je 
+        tutaj chronologicznie (opcjonalnie).
+      role_history_warning: Historia ról z tej strony internetowej zostanie 
+        automatycznie uwzględniona w Twoim podaniu. Starsze stanowiska nie 
+        zostały w pełni uzupełnione, więc poniżej dodaj brakujące pozycje lub 
+        wprowadź poprawki.
+      present: Obecnie
+      board_member: Członek zarządu
+      motivation: W dwóch do czterech zdaniach krótko opisz, co skłoniło Cię do 
+        złożenia podania o przyjęcie na stanowisko delegata praktykanta.
+      relevant_skills: Proszę przedstawić listę najważniejszych umiejętności i 
+        doświadczeń, które pomogą odnieść sukces na stanowisku delegata 
+        praktykanta.
+      declaration_understands_application: Rozumiem, że ten formularz jest 
+        przeznaczony dla zarejestrowanych speedcuberów, którzy ubiegają się o 
+        zostanie delegatem praktykantem.
+      declaration_has_delegate_support: Potwierdzam, że rozmawiałem z 
+        uprawnionym delegatem z mojego regionu, który popiera moją kandydaturę.
+      declaration_proficient_in_english: Potwierdzam, że biegle posługuję się 
+        językiem angielskim w mowie i piśmie.
+      declaration_read_regulations_html: Potwierdzam, że przeczytałem <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">Regulacje 
+        WCA</a>.
+      regulations_note: 'Uwaga: Nie oczekuje się, że delegaci będą znali wszystkie
+        punkty regulaminu. Oczekuje się jednak, że będą znali podstawowe zasady i
+        w razie wątpliwości będą szukać informacji.'
+      cubing_business_involvement: Czy prowadzisz działalność związaną z kostką 
+        Rubika?
+      cubing_business_involvement_details: Proszę opisać twoją działalność 
+        związana z koską Rubika.
+      "yes": Tak
+      "no": Nie
+      submit: Wyślij aplikacje
