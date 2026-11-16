@@ -150,6 +150,7 @@ export default function MobileTabMenu({
       insetInline="3"
       bottom="4"
       mb="env(safe-area-inset-bottom)"
+      hideFrom="md"
       zIndex="sticky"
     >
       <Card.Root

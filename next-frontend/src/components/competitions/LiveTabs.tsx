@@ -9,7 +9,6 @@ import MobileTabMenu from "./MobileTabMenu";
 
 export default function LiveTabs({
   competitionInfo,
-  mode = "desktop",
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
   mode?: "desktop" | "mobile";
@@ -18,18 +17,17 @@ export default function LiveTabs({
 
   const tabs = duringCompetitionTabs(competitionInfo, rounds);
 
-  if (mode === "mobile") {
-    return <MobileTabMenu tabs={tabs} competitionId={competitionInfo.id} />;
-  }
-
   return (
-    <TabMenu
-      tabs={tabs}
-      competitionInfo={competitionInfo}
-      backHref={route({
-        pathname: "/competitions/[competitionId]",
-        query: { competitionId: competitionInfo.id },
-      })}
-    />
+    <>
+      <TabMenu
+        tabs={tabs}
+        competitionInfo={competitionInfo}
+        backHref={route({
+          pathname: "/competitions/[competitionId]",
+          query: { competitionId: competitionInfo.id },
+        })}
+      />
+      <MobileTabMenu tabs={tabs} competitionId={competitionInfo.id} />
+    </>
   );
 }

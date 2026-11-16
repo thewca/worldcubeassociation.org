@@ -40,12 +40,7 @@ export default async function LiveLayout({
       competitionId={competitionId}
       initialRounds={roundsData.rounds}
     >
-      <TabShell
-        mobileMenu={
-          <LiveTabs competitionInfo={competitionInfo} mode="mobile" />
-        }
-        menu={<LiveTabs competitionInfo={competitionInfo} />}
-      >
+      <TabShell menu={<LiveTabs competitionInfo={competitionInfo} />}>
         {children}
       </TabShell>
     </RoundsInfoProvider>

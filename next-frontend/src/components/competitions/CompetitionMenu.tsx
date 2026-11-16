@@ -52,44 +52,18 @@ export default async function CompetitionMenu({
   const tabs = isOngoing ? [...baseTabs, liveTab(competitionInfo)] : baseTabs;
 
   return (
-    <TabMenu
-      competitionInfo={competitionInfo}
-      tabs={tabs}
-      customTabs={competitionInfo.tabs.map((tab) => tab.name)}
-    />
-  );
-}
-
-export async function MobileCompetitionMenu({
-  params,
-}: {
-  params: Promise<{ competitionId: string }>;
-}) {
-  const { competitionId } = await params;
-  const { t } = await getT();
-  const {
-    data: competitionInfo,
-    error,
-    response,
-  } = await getCompetitionInfo(competitionId);
-
-  if (error) return <OpenapiError t={t} response={response} />;
-
-  const { hasEnded, isOngoing, isAwaitingResults } =
-    competitionStatus(competitionInfo);
-
-  const baseTabs = hasEnded
-    ? afterCompetitionTabs(competitionInfo, isAwaitingResults)
-    : beforeCompetitionTabs(competitionInfo);
-
-  const tabs = isOngoing ? [...baseTabs, liveTab(competitionInfo)] : baseTabs;
-
-  return (
-    <MobileTabMenu
-      competitionId={competitionId}
-      tabs={tabs}
-      customTabs={competitionInfo.tabs.map((tab) => tab.name)}
-    />
+    <>
+      <TabMenu
+        competitionInfo={competitionInfo}
+        tabs={tabs}
+        customTabs={competitionInfo.tabs.map((tab) => tab.name)}
+      />
+      <MobileTabMenu
+        tabs={tabs}
+        customTabs={competitionInfo.tabs.map((tab) => tab.name)}
+        competitionId={competitionId}
+      />
+    </>
   );
 }
 
