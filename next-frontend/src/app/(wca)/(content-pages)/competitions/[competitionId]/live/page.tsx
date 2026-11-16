@@ -1,3 +1,6 @@
+import ExternalLiveResults from "@/components/competitions/ExternalLiveResults";
+import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
+import { liveTab } from "@/lib/wca/competitions/tabs";
 import { getSchedule } from "@/lib/wca/competitions/getSchedule";
 import { earliestWithLongestTieBreaker } from "@/lib/wca/wcif/activities";
 import LiveView from "@/components/competitions/Schedule/LiveView";
@@ -12,6 +15,25 @@ export default async function LiveOverview({
 }) {
   const { competitionId } = await params;
   const { t } = await getT();
+
+  const {
+    data: competitionInfo,
+    error: competitionError,
+    response: competitionResponse,
+  } = await getCompetitionInfo(competitionId);
+
+  if (competitionError) {
+    return <OpenapiError t={t} response={competitionResponse} />;
+  }
+
+  if (competitionInfo.scoretaking_software !== "internal") {
+    return (
+      <ExternalLiveResults
+        competitionInfo={{ id: competitionInfo.id, name: competitionInfo.name }}
+        externalHref={liveTab(competitionInfo).externalHref}
+      />
+    );
+  }
 
   const [scheduleResult, permissions] = await Promise.all([
     getSchedule(competitionId),
