@@ -424,8 +424,7 @@ de:
     hints:
       incident:
         title: >-
-          Beachte dass dies öffentlich ist und es in Englisch ausgefüllt werden
-          sollte.
+          Beachte dass dies öffentlich ist und es in Englisch ausgefüllt werden sollte!
         private_description: >-
           Eine Beschreibung des Incidents, welche nur von Delegates gesehen
           werden kann. Bitte in Englisch ausfüllen.
@@ -501,10 +500,9 @@ de:
           Bitte die Zeilen mit dem nicht verwendeten Equipment entsprechend
           entfernen.
         venue: >-
-          Die oben genannten Punkte sind lediglich eine Empfehlung für einen
-          vollständigen Report. Nutze diese nach eigenem Ermessen und
-          entscheide, was für dich relevant ist. Bitte entferne nicht verwendete
-          Abschnitte.
+          Die oben genannten Punkte sind lediglich eine Empfehlung für einen vollständigen
+          Report. Nutze diese nach eigenem Ermessen und entscheide, was für dich relevant
+          ist. Bitte entferne nicht verwendete Abschnitte!
         organization: >-
           Berichte über das Organisationsteam und darüber, wie sie den
           Wettbewerb bewältigt haben, ob und wie Du dabei involviert warst,
@@ -3231,7 +3229,7 @@ de:
             Der WCA-Delegerte unterstützt das Organisationsteam auch bei der
             erfolgreichen Organisation des Wettbewerbs.
           '4': >-
-            Besuche das  <a target='_blank' href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
+            Besuche das <a target='_blank' href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
             Competition Organizer Handbook</a> für weiterführende Informationen
       '6':
         title: >-
