@@ -31,6 +31,22 @@ RSpec.describe ResultsSubmissionController do
     end
   end
 
+  context "logged in as a trainee delegate of the competition" do
+    let(:trainee) { create(:trainee_delegate) }
+
+    before do
+      comp.delegates << trainee
+      sign_in trainee
+    end
+
+    it "cannot submit results" do
+      expect do
+        post competition_submit_results_path(comp.id), params: { message: "Hello", competition_id: comp.id }
+      end.not_to(change { ActionMailer::Base.deliveries.count })
+      expect(response).to redirect_to(root_url)
+    end
+  end
+
   context "logged in as THE delegate" do
     let!(:user) { comp.delegates.first }
     let(:submission_message) { "Hello, here are the results" }

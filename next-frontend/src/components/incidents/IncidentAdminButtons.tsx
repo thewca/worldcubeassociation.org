@@ -4,7 +4,7 @@ import { Button, ButtonGroup, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ConfirmDialog } from "@/providers/ConfirmProvider";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import RailsLink from "@/components/RailsLink";
@@ -139,8 +139,6 @@ export default function IncidentAdminButtons({
       >
         <Text>{confirmation?.body}</Text>
       </ConfirmDialog>
-
-      <Toaster />
     </>
   );
 }

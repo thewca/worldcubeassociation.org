@@ -36,13 +36,23 @@ RSpec.describe "API Regulations" do
 
   describe "GET /api/v0/regulations/history/official/:version" do
     it "fetches the requested historical version" do
-      stub = stub_static_site("history/official/2024/index.html")
+      stub = stub_static_site("history/official/2024-01-01/index.html")
 
-      get api_v0_regulations_historical_path(version: "2024")
+      get api_v0_regulations_historical_path(version: "2024-01-01")
 
       expect(response).to be_successful
       expect(response.parsed_body["content_html"]).to include('id="1a"')
       expect(stub).to have_been_requested
+    end
+
+    it "does not route versions that are not dates" do
+      expect { get "/api/v0/regulations/history/official/foo" }.to raise_error(ActionController::RoutingError)
+    end
+  end
+
+  describe "GET /regulations/history/official/:id/guidelines" do
+    it "does not route ids that are not dates" do
+      expect { get "/regulations/history/official/foo/guidelines" }.to raise_error(ActionController::RoutingError)
     end
   end
 

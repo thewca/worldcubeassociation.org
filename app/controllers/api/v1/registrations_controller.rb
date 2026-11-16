@@ -129,6 +129,9 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
     # Only the user themselves can create a registration for the user
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.id == @target_user.id
 
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if
+      contains_admin_fields?(@request) || @request.dig('competing', 'status').present?
+
     # Only organizers can register when registration is closed
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || authenticated_user.can_manage_competition?(@competition)
 

@@ -6,6 +6,12 @@ module ResultConditions
     include ActiveModel::Validations
     include ActiveModel::Attributes
 
+    attribute :scope, :string
+    attribute :value, :integer
+
+    validates :scope, presence: true, inclusion: { in: %w[single average] }
+    validates :wcif_type, presence: true, inclusion: { in: %w[resultAchieved ranking percent] }
+
     def self.load(json_obj)
       if json_obj.nil? || json_obj.is_a?(self)
         json_obj
@@ -22,8 +28,17 @@ module ResultConditions
       result_condition.to_wcif
     end
 
+    delegate :wcif_type, to: :class
+
     def to_wcif
       self.attributes.reverse_merge("type" => self.class.wcif_type)
+    end
+
+    def to_v1_wcif
+      {
+        "type" => self.class.wcif_type.gsub('resultAchieved', 'attemptResult'),
+        "level" => self.value,
+      }
     end
 
     def ==(other)

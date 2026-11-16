@@ -83,6 +83,7 @@ class ScrambleFilesController < ApplicationController
     scramble_upload = ScrambleFileUpload.find_by(id: scramble_file_id)
 
     return head :not_found if scramble_upload.blank?
+    return if redirect_to_root_unless_user(:can_upload_competition_results?, scramble_upload.competition)
 
     destroyed_file = scramble_upload.destroy
 

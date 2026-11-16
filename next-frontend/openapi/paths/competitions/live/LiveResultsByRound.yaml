@@ -50,6 +50,10 @@ post:
             properties:
               status:
                 type: string
+    '403':
+      $ref: '../../../errorResponses/NotPermitted.yaml'
+    '422':
+      $ref: '../../../errorResponses/LiveResultRejected.yaml'
 patch:
   summary: Updates a live result for a given round
   parameters:
@@ -70,8 +74,8 @@ patch:
         schema:
           $ref: '../../../schemas/live/SubmitLiveResult.yaml'
   responses:
-    '200':
-      description: Result Updated
+    '202':
+      description: Result Update Accepted
       content:
         application/json:
           schema:
@@ -79,3 +83,7 @@ patch:
             properties:
               status:
                 type: string
+    '403':
+      $ref: '../../../errorResponses/NotPermitted.yaml'
+    '422':
+      $ref: '../../../errorResponses/LiveResultRejected.yaml'

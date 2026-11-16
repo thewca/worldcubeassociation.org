@@ -10,6 +10,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
  * @param {JSX.Element} content - content of modal
  * @param {boolean} hasUnsavedChanges
  *  - if true, the modal will show a confirm dialog before closing.
+ * @param {boolean} okDisabled - if true, the "Ok" button can't be pressed (e.g. invalid input).
  * @returns {React.ReactElement}
  */
 export default function ButtonActivatedModal({
@@ -22,6 +23,7 @@ export default function ButtonActivatedModal({
   tooltip,
   reset = () => null,
   contentScrolling = false,
+  okDisabled = false,
   onOk,
   ...props
 }) {
@@ -101,7 +103,7 @@ export default function ButtonActivatedModal({
       </Modal.Content>
       <Modal.Actions>
         <Button color="orange" type="button" onClick={onClose}>Close</Button>
-        <Button color="green" type="submit">Ok</Button>
+        <Button color="green" type="submit" disabled={okDisabled}>Ok</Button>
       </Modal.Actions>
     </Modal>
   );

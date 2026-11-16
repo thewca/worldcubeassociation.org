@@ -1,4 +1,4 @@
-import { cachedServerClient } from "@/lib/wca/wcaAPI";
+import { serverClient } from "@/lib/wca/wcaAPI";
 
 import { cacheLife } from "next/cache";
 
@@ -6,7 +6,7 @@ export async function getTeamsCommittees() {
   "use cache";
   cacheLife("hours");
 
-  return cachedServerClient.GET("/v0/user_groups", {
+  return serverClient.GET("/v0/user_groups", {
     params: {
       query: {
         isActive: true,
@@ -24,7 +24,7 @@ export async function getTeamCommitteeMembers(
   "use cache";
   cacheLife("hours");
 
-  return cachedServerClient.GET("/v0/user_roles", {
+  return serverClient.GET("/v0/user_roles", {
     params: {
       query: {
         groupId,

@@ -27,3 +27,7 @@ post:
             properties:
               status:
                 type: string
+    '403':
+      $ref: '../../../errorResponses/NotPermitted.yaml'
+    '422':
+      $ref: '../../../errorResponses/LiveResultRejected.yaml'

@@ -77,6 +77,24 @@ class PanelController < ApplicationController
                .order(:start_date)
   end
 
+  private def redirect_unless_can_validate_competition_list
+    return if current_user.has_permission?('can_access_panels', :wrt)
+
+    competition_ids = params.require(:competitionIds).split(',')
+    competitions = Competition.includes(:delegates).where(id: competition_ids)
+    apply_fix_when_possible = ActiveRecord::Type::Boolean.new.cast(params[:applyFixWhenPossible])
+
+    return if !apply_fix_when_possible &&
+              competitions.size == competition_ids.size &&
+              competitions.all? { current_user.can_upload_competition_results?(it) }
+
+    flash[:danger] = t("errors.messages.no_permission")
+    redirect_to root_url
+  end
+
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wrt) }, only: %i[competition_count validators_for_competitions_in_range]
+  before_action :redirect_unless_can_validate_competition_list, only: [:validators_for_competition_list]
+
   def competition_count
     start_date = params.require(:startDate)
     end_date = params.require(:endDate)
@@ -107,6 +125,8 @@ class PanelController < ApplicationController
     query_params = request.query_parameters.except(:id)
     redirect_to panel_index_path(panel_id: panel_with_panel_page, anchor: panel_page_id, **query_params)
   end
+
+  before_action -> { redirect_to_root_unless_user(:has_permission?, 'can_access_panels', :wrt) }, only: %i[cronjob_details cronjob_run cronjob_reset]
 
   def cronjob_details
     cronjob_name = params.require(:cronjob_name)

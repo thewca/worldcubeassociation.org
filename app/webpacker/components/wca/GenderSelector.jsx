@@ -7,7 +7,7 @@ import I18n from '../../lib/i18n';
 
 const genderOptions = _.map(genders.byId, (gender) => ({
   key: gender.id,
-  text: gender.name,
+  get text() { return gender.name; },
   value: gender.id,
 }));
 

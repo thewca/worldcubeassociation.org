@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Api::V0::Wfc::XeroUsersController < Api::V0::ApiController
-  before_action :current_user_can_admin_finances!, only: %i[index create]
+  before_action :current_user_can_admin_finances!
   private def current_user_can_admin_finances!
-    render json: {}, status: :unauthorized unless current_user.can_admin_finances?
+    render json: {}, status: :unauthorized unless current_user&.can_admin_finances?
   end
 
   def index

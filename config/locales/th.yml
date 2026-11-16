@@ -178,6 +178,20 @@ th:
     deadline:
       description: วันที่สิ้นสุดการคัดเลือก
       by_date: 'ภายใน %{date}'
+    preview: ดูการคัดเลือก
+    earliest_date:
+      description: วันที่เริ่มต้นช่วงเวลาสำหรับการผ่านเกณฑ์คัดเลือก
+      from_date: ภายในหรือก่อน %{date}
+      window_too_short: 
+        วันที่เริ่มต้นช่วงเวลาต้องอยู่ก่อนวันครบกำหนดช่วงเวลาอย่างน้อย %{days} 
+        วัน
+      explanation:
+        '1': วันที่เริ่มต้นช่วงเวลาสำหรับการผ่านเกณฑ์เป็นข้อมูลที่ไม่บังคับ 
+          หากเว้นว่างไว้ ผลลัพธ์ใดก็ตามที่เกิดขึ้นก่อนวันครบกำหนดจะถือว่าใช้ได้
+        '2': หากมีการระบุวันที่เริ่มต้นช่วงเวลาไว้ 
+          ผลลัพธ์ที่เกิดขึ้นในหรือหลังวันที่ดังกล่าวเท่านั้นที่จะถูกนำมานับรวมเพื่อพิจารณาคุณสมบัติ
+        '3': วันที่เริ่มต้นช่วงเวลาต้องอยู่ก่อนวันครบกำหนดช่วงเวลาอย่างน้อย 
+          %{days} วัน
   activity:
     registration: การสมัครการแข่งขันหน้างานแข่งขัน
     checkin: Check-in
@@ -651,6 +665,8 @@ th:
         use_classic: เปลี่ยนกลับไปเป็นหน้าแบบเก่า
       destroy_other:
         success: ทำการออกจากระบบที่อุปกรณ์อื่นสำเร็จ
+      destroy:
+        success: คุณได้ออกจากระบบเรียบร้อยแล้ว
     shared:
       links:
         sign_in: เข้าสู่ระบบ
@@ -780,6 +796,19 @@ th:
       privacy: Privacy
       disclaimer: Disclaimer
       find_us: Find us
+      panels:
+        delegate: สำหรับ Delegate
+        wapc: สำหรับ WAC
+        wfc: สำหรับ WFC
+        admin: สำหรับผู้ดูแลระบบ
+        volunteer: สำหรับอาสาสมัคร
+        wrt: สำหรับ WRT
+        wst: สำหรับ WST
+        board: สำหรับบอร์ดบริหารฯ
+        senior_delegate: สำหรับ Senior Delegate
+        wic: สำหรับ WIC
+        weat: สำหรับ WEAT
+        wqac: สำหรับ WQAC
   page:
     translators:
       title: ผู้แปลภาษา
@@ -894,6 +923,7 @@ th:
           อื่น ๆ โดย WAC
           จัดให้มีกระบวนการตรวจสอบที่เป็นอิสระและเป็นกลางเพื่อให้แน่ใจว่าการตัดสินใจนั้นยุติธรรม
           สมเหตุสมผล และเป็นไปตามนโยบายและระเบียบข้อบังคับของ WCA
+      empty: ไม่พบข้อมูลทีมหรือคณะกรรมการของสมาคมฯ กรุณาตรวจสอบอีกครั้งภายหลัง
     contacts:
       title: WCA Contact Form
       faq_note_html: >-
@@ -1016,6 +1046,8 @@ th:
       success_message_with_ticket_link_html: >-
         ส่งคำขอแล้ว - เราจะติดต่อกลับโดยเร็วที่สุด หากต้องการตรวจสอบสถานะของคำขอ
         โปรดไปที่ <a href="%{link}">ลิงก์นี้</a>
+    executives:
+      person_not_found: ไม่พบผู้เข้าแข่งขันที่มี WCA ID ตรงกับ %{wca_id}
   homepage:
     learn_more: เรียนรู้เพิ่มเติม
     title: ยินดีต้อนรับเข้าสู่สมาคมลูกบาศก์โลก
@@ -1683,7 +1715,7 @@ th:
         การแข่งขันนี้กำลังดำเนินการอยู่ กลับมาหลังวันที่ %{date}
         เพื่อดูผลการแข่งขัน
       in_progress_at_wca_live_html: >-
-        การแข่งขันนี้กำลังแข่งขันอยู่ คุณสามารถตรวจสอบผลการแข่งขันได้<a href='%{link_here}'>here</a>!
+        การแข่งขันนี้กำลังแข่งขันอยู่ คุณสามารถตรวจสอบผลการแข่งขันได้<a href='%{link_here}'>ที่นี่</a>!
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 
         ชั่วโมง
       registration_already_closed: กำหนดเวลาในการสมัครการแข่งขันได้ผ่านไปแล้ว 
@@ -2010,8 +2042,8 @@ th:
       use_my_location: ใช้ที่อยู่ของฉัน
       distance: ระยะห่าง
       distance_units:
-        km: km
-        mi: mi
+        km: กม.
+        mi: ไมล์
       advanced_filters: ตัวกรองขั้นสูง
       state: เมื่อ
       present: ปัจจุบัน
@@ -2029,7 +2061,7 @@ th:
       to_date: ถึง
       show_filters: แสดงตัวกรอง
       hide_filters: ซ่อนตัวกรอง
-      reset_filters: Reset Filters
+      reset_filters: ล้างค่าการกรอง
       past_from: 'อดีตตั้งแต่ปี %{year}'
       past_all: อดีตทุกปี
       no_delegates: None
@@ -2069,8 +2101,6 @@ th:
         open: เปิด
         not_open: ยังไม่เปิด
         closed: ปิด
-      currently_displaying:
-        other: 'กำลังแสดงผล: %{count} การแข่งขัน'
       register_now: สมัครการแข่งขันตอนนี้
       view_competition: ดูการแข่งขัน
       no_more_comps: ไม่มีการแข่งขัน
@@ -2087,6 +2117,13 @@ th:
       location_not_found: ไม่พบตำแหน่งสำหรับที่อยู่นี้
       location_search_failed: การค้นหาที่อยู่ล้มเหลว 
         โปรดลองใหม่อีกครั้งในอีกหนึ่งนาที
+      championship_only: แสดงเฉพาะการแข่งขันชิงแชมป์ระดับภูมิภาคเท่านั้น
+      sort:
+        order: เรียงลำดับ
+        start_date_asc: เรียงลำดับตามวันที่เริ่มแข่งขัน (เก่าสุดไปใหม่สุด)
+        start_date_desc: เรียงลำดับตามวันที่เริ่มแข่งขัน (ใหม่สุดไปเก่าสุด)
+        end_date_asc: เรียงลำดับตามวันที่สิ้นสุดการแข่งขัน (เก่าสุดไปใหม่สุด)
+        end_date_desc: เรียงลำดับตามวันที่สิ้นสุดการแข่งขัน (ใหม่สุดไปเก่าสุด)
     my_competitions_table:
       edit: แก้ไข
       registrations: การสมัคร
@@ -2473,6 +2510,10 @@ th:
           อย่าจองการเดินทางของคุณ แต่ก็อย่าหมดหวังเช่นกัน ผู้เข้าแข่งขันเต็มแล้ว
           แต่คุณถูกจัดให้อยู่ในรายชื่อรอ
           และคุณจะได้รับอีเมลหากมีที่นั่งว่างเพียงพอให้คุณเข้าร่วมได้
+        additional: 
+          โปรดตรวจสอบให้แน่ใจว่าท่านได้ปฏิบัติตามคำแนะนำเพิ่มเติมข้างต้นเกี่ยวกับการชำระค่าสมัครหรือข้อกำหนดอื่น
+          ๆ ในการสมัครการแข่งขันแล้ว
+        email: คุณจะได้รับอีเมลเมื่อสถานะการสมัครการแข่งขันของคุณได้รับการอัปเดต
       list:
         empty: ไม่พบ
         spots_remaining_plural:
@@ -2937,11 +2978,6 @@ th:
         competitors: ผู้เข้าแข่งขัน
         scrambles: โจทย์
     results_table:
-      h2h_results_disclaimer: >-
-        ผลการแข่งขันตัดสินจากรอบชิงชนะเลิศแบบ  Head-to-Head
-        จะแสดงเฉพาะลำดับผลการแข่งขันที่ดีที่สุดเท่านั้น
-        เนื่องจากการแสดงผลการแข่งขันแบบ Head-to-Head
-        ฉบับเต็มยังอยู่ระหว่างการพัฒนา
       wca_profile: WCA profile
       event: ประเภทการแข่งขัน
       round: รอบ
@@ -2950,12 +2986,23 @@ th:
         national: อันดับประเทศ
         continent: อันดับทวีป
         world: อันดับโลก
+      h2h_results_disclaimer_html: ผลลัพธ์ตัดสินจากการแข่งขันรอบชิงชนะเลิศแบบ 
+        Head-to-Head จะแสดงเพียงลำดับที่และเวลาที่ดีที่สุดเท่านั้น 
+        ท่านสามารถดูผังการแข่งขันแบบตัวต่อตัวฉบับเต็มได้ที่ <a 
+        href="%{results_url}">หน้าแสดงผลการแข่งขันแบบใหม่</a>.
     scrambles_table:
       group: กลุ่ม
       scramble: โจทย์
     competition_series_fields:
       add_series: เพิ่มลงในซีรีส์
       remove_series: ลบออกจากซีรีส์
+    h2h:
+      set_number: Set %{number}
+      stage_of: รอบ %{number}
+      quarterfinal_stage: รอบก่อนรองชนะเลิศ
+      semifinal_stage: รองชนะเลิศ
+      final_stage: ชิงชนะเลิศ
+      third_place: ชิงอันดับสาม
   competition_tabs:
     headers:
       tabs: แท็บ
@@ -3410,22 +3457,18 @@ th:
         ของ WCA'
       teams_committees: ทีมและคณะกรรมการ
       delegates_html: >-
-        <p><strong>WCA Delegate</strong>
-        เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ WCA หน้าที่หลักของ Delegate
-        คือดูแลการแข่งขันในนามของ WCA โดย WCA Delegate
-        รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA ทั้งหมดดำเนินการค่านิยม
-        และข้อบังคับของ WCA โดย WCA ได้แยกบทบาทดังนี้ <strong>Senior
-        Delegates</strong>,  <strong>Regional Delegates</strong>, <strong>Full
-        Delegates </strong>, <strong>Junior Delegates</strong>, และ
-        <strong>Trainee Delegates</strong>%{see_link}</p>
-        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates
-        ยังมีหน้าที่ในการจัดการ WCA Delegates
-        ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
-        <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น WCA Candidate Delegates ก่อน
-        หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน WCA
-        ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates</p><p>Trainee
-        Delegates จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate
-        และสามารถดูแลได้แค่การแข่งขันที่มี WCA Delegate คนอื่นด้วยเท่านั้น</p>
+        <p><strong>WCA Delegate</strong> เป็นบทบาทที่กำหนดไว้ในเจตนารมณ์และในกติกาของ
+        WCA หน้าที่หลักของ Delegate คือดูแลการแข่งขันในนามของ WCA โดย WCA Delegate
+        รับผิดชอบในการตรวจสอบให้แน่ใจว่าการแข่งขัน WCA ทั้งหมดดำเนินการตามจุดประสงค์
+        ค่านิยม และกติกาของ WCA โดย WCA ได้แยกบทบาทดังนี้ <strong>Senior Delegates</strong>,
+        <strong>Regional Delegates</strong>, <strong>Full Delegates </strong>, <strong>Junior
+        Delegates</strong>, และ <strong>Trainee Delegates</strong>%{see_link}</p>
+        <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates ยังมีหน้าที่ในการจัดการ
+        WCA Delegates ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
+        <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น Junior Delegates ก่อน หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน
+        WCA ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates</p><p>Trainee Delegates
+        จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate และสามารถดูแลได้แค่การแข่งขันที่มี
+        WCA Delegate คนอื่นด้วยเท่านั้น</p>
       see_link_html: '(ดู%{link})'
       members_html: >-
         ผู้เข้าแข่งขันทุกคนจะเข้าร่วมการเป็น<strong>สมาชิก</strong>ของ WCA

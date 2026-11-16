@@ -1,12 +1,12 @@
 // Serializable stand-in for `Response`, which cannot cross a `"use cache"` boundary.
-export interface ErrorDetails {
+export interface ResponseMetadata {
   status: number;
   url: string;
   statusText: string;
   requestId: string | null;
 }
 
-export const toErrorDetails = (response: Response): ErrorDetails => ({
+export const toResponseMetadata = (response: Response): ResponseMetadata => ({
   status: response.status,
   url: response.url,
   statusText: response.statusText,
