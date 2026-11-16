@@ -176,6 +176,15 @@ de:
     deadline:
       description: Deadline zur Qualifikation
       by_date: 'nach %{date}'
+    preview: Qualifikations Vorschau
+    earliest_date:
+      description: Start des Qualifikations Zeitfensters
+      from_date: am oder nach dem %{date}
+      window_too_short: Das Startdatum des Zeitfensters muss mindestens %{days} 
+        Tage for der Deadline des Zeitfensters liegen.
+      explanation:
+        '1': Das Zeitfenster für die Qualifikation ist optional. Wenn es frei 
+          bleibt, zählen alle Ergebnisse vor der Deadline.
   common:
     world: Welt
     continent: Kontinent
@@ -718,6 +727,12 @@ de:
       error_pages:
         500_error: 'Entschuldige, etwas ist schiefgelaufen.'
         400_error: Die angeforderte Seite existiert nicht.
+        comp_not_found: Wettbewerb nicht gefunden
+        comp_not_found_action: Wir konnten keinen Wettbewerb mit der ID 
+          "%{comp_id}" finden. Bitte suche danach in der Suchleiste.
+        comp_not_found_action_2: Wenn du über einen Link von einer anderen Seite
+          hierhin gekommen bist, benachrichtige bitte diese Webseite, dass der 
+          Link nicht korrekt ist.
     doorkeeper:
       applications:
         help:

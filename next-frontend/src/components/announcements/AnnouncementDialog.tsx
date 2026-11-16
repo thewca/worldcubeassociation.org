@@ -16,6 +16,7 @@ import {
   announcementRoute,
 } from "@/components/announcements/announcement";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 /// The announcement's own page is no longer linked from anywhere, so this is
 /// how a reader hands the announcement to someone else. It only renders inside
@@ -55,6 +56,8 @@ export default function AnnouncementDialog({
   announcement: Announcement;
   colorPalette: ColorPaletteSelect;
 }) {
+  const lng = useLocale();
+
   return (
     <Dialog.Root size="xl" scrollBehavior="inside" lazyMount>
       <Dialog.Trigger asChild>
@@ -73,7 +76,7 @@ export default function AnnouncementDialog({
             <Dialog.Header>
               <Stack gap={1}>
                 <Dialog.Title textStyle="h2">{announcement.title}</Dialog.Title>
-                <Text>{announcementByline(announcement)}</Text>
+                <Text>{announcementByline(announcement, lng)}</Text>
               </Stack>
             </Dialog.Header>
             <Dialog.Body>
