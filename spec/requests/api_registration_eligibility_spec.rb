@@ -67,4 +67,11 @@ RSpec.describe 'API Registration Eligibility' do
 
     expect(eligibility_for(create(:user))['waiting_list_count']).to eq 2
   end
+
+  it 'returns not found for an unknown competition' do
+    api_sign_in_as(create(:user))
+    get registration_eligibility_api_v1_competition_path("NotAComp2026")
+
+    expect(response).to have_http_status(:not_found)
+  end
 end

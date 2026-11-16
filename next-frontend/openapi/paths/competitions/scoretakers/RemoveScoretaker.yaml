@@ -24,3 +24,5 @@ delete:
             oneOf:
               - $ref: '../../../schemas/competitions/Scoretaker.yaml'
               - type: 'null'
+    '403':
+      $ref: '../../../errorResponses/NotPermitted.yaml'

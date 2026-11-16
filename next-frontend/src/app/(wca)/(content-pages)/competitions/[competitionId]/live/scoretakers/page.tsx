@@ -1,6 +1,5 @@
 import PermissionCheck from "@/components/PermissionCheck";
 import ScoretakerManager from "@/app/(wca)/(content-pages)/competitions/[competitionId]/live/scoretakers/ScoretakerManager";
-import { Toaster } from "@/components/ui/toaster";
 
 export default async function ScoretakersPage({
   params,
@@ -15,7 +14,6 @@ export default async function ScoretakersPage({
       item={competitionId}
     >
       <ScoretakerManager competitionId={competitionId} />
-      <Toaster />
     </PermissionCheck>
   );
 }

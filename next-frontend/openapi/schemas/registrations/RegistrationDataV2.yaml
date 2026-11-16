@@ -32,7 +32,9 @@ properties:
       country_iso2:
         type: string
       wca_id:
-        type: string
+        type:
+          - string
+          - "null"
   competing:
     type: object
     required:

@@ -20,7 +20,7 @@ export default function RequirementsStep({ form }: { form: RegistrationForm }) {
           <Checkbox.HiddenInput />
           <Alert.Root status="success">
             <Alert.Indicator>
-              <Checkbox.Control />
+              <Checkbox.Control borderColor="border.success" />
             </Alert.Indicator>
             <Alert.Title asChild>
               <Checkbox.Label>

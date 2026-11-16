@@ -17,6 +17,7 @@ import {
   PaymentAmountProvider,
   usePaymentAmount,
 } from "@/providers/PaymentAmountProvider";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import type { components } from "@/types/openapi";
 import { DateTime } from "luxon";
 
@@ -187,6 +188,7 @@ export default function PaymentStep({
   deadline?: string;
 }) {
   const { t } = useT();
+  const lng = useLocale();
 
   const isRegistrationClosed = hasPassed(competitionInfo.registration_close);
 
@@ -211,6 +213,7 @@ export default function PaymentStep({
               {t("competitions.registration_v2.register.until", {
                 date: DateTime.fromISO(deadline).toLocaleString(
                   DateTime.DATETIME_FULL,
+                  { locale: lng },
                 ),
               })}
             </Alert.Description>

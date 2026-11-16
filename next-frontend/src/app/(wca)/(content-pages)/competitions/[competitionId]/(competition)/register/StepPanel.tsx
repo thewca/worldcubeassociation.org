@@ -15,6 +15,7 @@ import { PaymentStatus } from "@/components/competitions/Registration/PaymentSte
 import {
   initialStepIndex,
   isStepComplete,
+  isStepSettled,
   StepContent,
   stepsButtonAction,
 } from "@/components/competitions/Registration/steps";
@@ -33,7 +34,7 @@ import {
   type RegistrationForm,
   type RegistrationFormValues,
 } from "@/lib/wca/registrations/registrationForm";
-import { LuSend } from "react-icons/lu";
+import { LuCheck, LuHourglass, LuSend } from "react-icons/lu";
 
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
@@ -192,21 +193,6 @@ export default function StepPanel({
 
   return (
     <VStack width="full" gap="4" align="stretch">
-      {/* Withdrawing hands the competitor back to the start of the flow, and this is what tells
-          them why the panel they were looking at has reset. */}
-      {registration !== null && currentStep < steps.length && (
-        <>
-          <RegistrationStatus registration={registration} />
-          {/* Withdrawing does not refund, so whatever they paid still counts if they sign up again. */}
-          {registration.payment !== undefined &&
-            registration.payment.paid_amount_iso > 0 && (
-              <PaymentStatus
-                competitionInfo={competitionInfo}
-                payment={registration.payment}
-              />
-            )}
-        </>
-      )}
       <Steps.Root
         count={steps.length}
         step={currentStep}
@@ -227,7 +213,18 @@ export default function StepPanel({
 
             return (
               <Steps.Item key={step.key} index={index}>
-                <Steps.Indicator />
+                <Steps.Indicator>
+                  <Steps.Status
+                    complete={
+                      isStepSettled(step, registration) ? (
+                        <LuCheck />
+                      ) : (
+                        <LuHourglass />
+                      )
+                    }
+                    incomplete={<Steps.Number />}
+                  />
+                </Steps.Indicator>
                 <VStack gap="0" alignItems="start" minWidth="0">
                   <Steps.Title>{t(`${translationKey}.title`)}</Steps.Title>
                   <Steps.Description>
@@ -239,6 +236,25 @@ export default function StepPanel({
             );
           })}
         </Steps.List>
+        {/* Withdrawing hands the competitor back to the start of the flow, and this is what tells
+            them why the panel they were looking at has reset. */}
+        {registration !== null && (
+          <RegistrationStatus
+            registration={registration}
+            hasAdditionalRequirements={Boolean(
+              competitionInfo.extra_registration_requirements,
+            )}
+          />
+        )}
+        {/* Withdrawing does not refund, so whatever they paid still counts if they sign up again. */}
+        {registration?.payment !== undefined &&
+          currentStep < steps.length &&
+          registration.payment.paid_amount_iso > 0 && (
+            <PaymentStatus
+              competitionInfo={competitionInfo}
+              payment={registration.payment}
+            />
+          )}
 
         {/* `Steps.Content` only hides the steps that are not current, so only the current one is
             mounted - each step then starts out fresh when the competitor reaches it. */}
@@ -246,36 +262,34 @@ export default function StepPanel({
           (step, index) =>
             index === currentStep && (
               <Steps.Content key={step.key} index={index}>
-                {createRegistration.isSuccess ? (
-                  <Steps.Context>
-                    {(stepsContext) => (
-                      <RegistrationProcessing
-                        competitionId={competitionInfo.id}
-                        userId={userId}
-                        onCreated={() =>
-                          finishCreation(stepsContext.goToNextStep)
-                        }
-                      />
-                    )}
-                  </Steps.Context>
-                ) : (
-                  <Stack gap="3">
-                    <StepContent
-                      step={step}
-                      competitionInfo={competitionInfo}
-                      registration={registration}
-                      form={form}
-                    />
-                    <WizardStepButton
-                      steps={steps}
-                      step={step}
-                      form={form}
-                      isSubmitting={isSubmitting}
-                    />
-                  </Stack>
-                )}
+                <Stack gap="3">
+                  <StepContent
+                    step={step}
+                    competitionInfo={competitionInfo}
+                    registration={registration}
+                    form={form}
+                  />
+                  <WizardStepButton
+                    steps={steps}
+                    step={step}
+                    form={form}
+                    isSubmitting={isSubmitting}
+                  />
+                </Stack>
               </Steps.Content>
             ),
+        )}
+
+        {createRegistration.isSuccess && (
+          <Steps.Context>
+            {(stepsContext) => (
+              <RegistrationProcessing
+                competitionId={competitionInfo.id}
+                userId={userId}
+                onCreated={() => finishCreation(stepsContext.goToNextStep)}
+              />
+            )}
+          </Steps.Context>
         )}
 
         <Steps.CompletedContent>

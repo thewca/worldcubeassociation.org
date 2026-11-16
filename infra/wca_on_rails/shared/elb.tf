@@ -529,7 +529,7 @@ resource "aws_lb_listener_rule" "rails_forward_next_staging_pages" {
   condition {
     path_pattern {
       regex_values = [
-        "^/(about|dashboard|delegates|disclaimer|documents|faq|logo|privacy|search|translators)$",
+        "^/(about|dashboard|delegates|disclaimer|documents|faq|logo|privacy|search|translators)?$",
         "^/(officers-and-board|organizations|score-tools|speedcubing-history|teams-committees)$",
         "^/results/(rankings|records)$",
         "^/export/(developer|results)$",

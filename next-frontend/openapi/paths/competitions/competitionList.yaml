@@ -18,6 +18,11 @@ get:
       in: query
       schema:
         type: boolean
+    - name: championship_only
+      in: query
+      schema:
+        type: boolean
+      description: Only return championships
     - name: continent
       in: query
       schema:

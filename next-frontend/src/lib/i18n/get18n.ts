@@ -19,10 +19,17 @@ export async function getT(
   const cookieList = await cookies();
   const headerList = await headers();
 
-  const acceptLanguage = parser.pick(
-    languages,
-    headerList.get("Accept-Language") ?? [],
-  );
+  // Browsers often send only a regional code like `de-DE`, which strict matching rejects. Loose
+  //   matching alone would ignore regions entirely and serve `zh-CN` to a `zh-TW` reader, so each
+  //   accepted language tries an exact match first.
+  const acceptLanguage = parser
+    .parse(headerList.get("Accept-Language") ?? undefined)
+    .map(
+      (accepted) =>
+        parser.pick(languages, [accepted]) ??
+        parser.pick(languages, [accepted], { loose: true }),
+    )
+    .find((picked) => picked !== null);
 
   const lngRaw =
     cookieList.get(storageKey)?.value || acceptLanguage || fallbackLng;

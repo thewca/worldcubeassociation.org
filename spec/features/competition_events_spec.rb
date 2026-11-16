@@ -116,7 +116,7 @@ RSpec.feature "Competition events management" do
 
         save_events_react
 
-        expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to next round"
+        expect(round_333_1.reload.advancement_condition_to_desc).to eq "Top 12 advance to next round"
       end
 
       scenario "change qualification time to any result", :js do
@@ -128,7 +128,7 @@ RSpec.feature "Competition events management" do
         select_from_ui(modal, "qualificationResultType", "Single")
         select_from_ui(modal, "qualificationType", "Any result")
 
-        modal.find("div.field", text: "Qualification Deadline")
+        modal.find("div.field", text: "Qualification Window Deadline")
              .find("input")
              .fill_in with: qualification_date.strftime('%m/%d/%Y')
 
@@ -138,7 +138,7 @@ RSpec.feature "Competition events management" do
         comp_event_333.reload
 
         expect(comp_event_333.qualification_to_s).to eq "Any single solve"
-        expect(comp_event_333.qualification.when_date).to eq qualification_date
+        expect(comp_event_333.qualification_latest_date).to eq qualification_date
       end
     end
   end

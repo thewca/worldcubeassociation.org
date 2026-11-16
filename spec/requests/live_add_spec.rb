@@ -19,7 +19,7 @@ RSpec.describe "WCA Live API" do
         registration_id: registration.id,
       }
 
-      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
+      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request, as: :json
       expect(response).to be_successful
       perform_enqueued_jobs
 
@@ -50,7 +50,7 @@ RSpec.describe "WCA Live API" do
           registration_id: registration.id,
         }
 
-        post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
+        post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request, as: :json
         perform_enqueued_jobs
       end.to have_broadcasted_to(Live::Config.broadcast_key(competition.id, round.wcif_id))
         .from_channel(ApplicationCable::Channel)
@@ -68,7 +68,7 @@ RSpec.describe "WCA Live API" do
         registration_id: registration.id,
       }
 
-      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
+      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request, as: :json
       expect(response).not_to be_successful
     end
 
@@ -86,7 +86,7 @@ RSpec.describe "WCA Live API" do
         registration_id: registration.id,
       }
 
-      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request
+      post api_v1_competition_live_add_results_path(competition.id, round.wcif_id), params: live_request, as: :json
       expect(response).not_to be_successful
       expect(response.parsed_body["status"]).to eq "user is not part of this round"
     end

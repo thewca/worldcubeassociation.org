@@ -26,7 +26,7 @@ const otherActivityCodes = [
 const otherActivityCodeOptions = otherActivityCodes
   .map((activityCode) => ({
     key: activityCode,
-    text: I18n.t(`activity.${activityCode.substring(6)}`),
+    get text() { return I18n.t(`activity.${activityCode.substring(6)}`); },
     value: activityCode,
   }));
 

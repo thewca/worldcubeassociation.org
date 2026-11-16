@@ -98,6 +98,26 @@ RSpec.describe "API Incidents" do
         expect(response.parsed_body.pluck("id")).to contain_exactly(resolved_incident.id)
         expect(response.parsed_body.first).not_to have_key("private_wrc_decision")
       end
+
+      it "does not expose competition comments" do
+        create(:incident, :resolved, :with_comp)
+
+        get api_v0_incidents_path
+
+        expect(response.parsed_body.flat_map { it["competitions"] }.sole).not_to have_key("comments")
+      end
+    end
+
+    context "when logged in as a Delegate" do
+      before { sign_in create(:delegate) }
+
+      it "exposes competition comments" do
+        create(:incident, :resolved, :with_comp)
+
+        get api_v0_incidents_path
+
+        expect(response.parsed_body.flat_map { it["competitions"] }).to contain_exactly(include("comments" => "some comment"))
+      end
     end
   end
 

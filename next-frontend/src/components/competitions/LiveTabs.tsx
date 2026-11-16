@@ -8,9 +8,7 @@ import { route } from "nextjs-routes";
 
 export default function LiveTabs({
   competitionInfo,
-  children,
 }: {
-  children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
   const { rounds } = useAllRoundsInfo();
@@ -25,8 +23,6 @@ export default function LiveTabs({
         pathname: "/competitions/[competitionId]",
         query: { competitionId: competitionInfo.id },
       })}
-    >
-      {children}
-    </TabMenu>
+    />
   );
 }
