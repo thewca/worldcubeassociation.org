@@ -127,20 +127,20 @@ export default function MobileTabMenu({
     .mapValues((entries) => _.map(entries, "tab"))
     .value();
 
-  const isCustomTabActive = _.some(
-    customTabs,
-    (tab) => encodeURIComponent(tab) === activeMenuKey || tab === activeMenuKey,
-  );
+  const resolveActiveGroup = (key: string): string => {
+    if (groupTabsMap.has(key)) return groupTabsMap.get(key)!;
+    if (
+      _.some(
+        customTabs,
+        (tab) => tab === key || encodeURIComponent(tab) === key,
+      )
+    )
+      return "more";
+    if (_.has(events.byId, [key])) return "events";
+    return "";
+  };
 
-  const isLiveEventsTabActive = _.includes(_.keys(events.byId), activeMenuKey);
-
-  const activeGroup = groupTabsMap.has(activeMenuKey)
-    ? groupTabsMap.get(activeMenuKey)
-    : isCustomTabActive
-      ? "more"
-      : isLiveEventsTabActive
-        ? "events"
-        : "";
+  const activeGroup = resolveActiveGroup(activeMenuKey);
 
   return (
     <Box
@@ -197,12 +197,17 @@ function LinkItem({ tab, selected, t, isAdminRoute }: ItemProps) {
   return (
     <ChakraLink
       unstyled
-      href={tab.externalHref || tab.href}
+      href={tab.disabled ? undefined : tab.externalHref || tab.href}
+      aria-disabled={tab.disabled || undefined}
+      data-disabled={tab.disabled ? "" : undefined}
+      tabIndex={tab.disabled ? -1 : undefined}
       target={tab.externalHref ? "_blank" : undefined}
       rel={tab.externalHref ? "noopener noreferrer" : undefined}
       css={itemStyle}
       data-selected={selected ? "" : undefined}
       aria-current={selected ? "page" : undefined}
+      onClick={tab.disabled ? (e) => e.preventDefault() : undefined}
+      _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
     >
       <ItemLabel
         text={renderLabel(tab, t, isAdminRoute)}
