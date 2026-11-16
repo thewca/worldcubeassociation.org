@@ -185,6 +185,12 @@ export default function MobileTabMenu({
   );
 }
 
+const getHref = (tab: TabWithLink, isAdminRoute: boolean): string => {
+  return isAdminRoute && tab.hrefAdmin
+    ? tab.hrefAdmin
+    : tab.externalHref || tab.href;
+};
+
 interface ItemProps {
   tab: CompetitionNavTab;
   selected: boolean;
@@ -194,10 +200,11 @@ interface ItemProps {
 
 function LinkItem({ tab, selected, t, isAdminRoute }: ItemProps) {
   if (!("href" in tab)) return null;
+  const href = getHref(tab, isAdminRoute);
   return (
     <ChakraLink
       unstyled
-      href={tab.disabled ? undefined : tab.externalHref || tab.href}
+      href={tab.disabled ? undefined : href}
       aria-disabled={tab.disabled || undefined}
       data-disabled={tab.disabled ? "" : undefined}
       tabIndex={tab.disabled ? -1 : undefined}
@@ -283,7 +290,12 @@ function GroupItem({
                   }}
                 >
                   {isLink ? (
-                    <SingleItem tab={tab} label={label} isActive={isActive} />
+                    <SingleItem
+                      tab={tab}
+                      label={label}
+                      isActive={isActive}
+                      isAdminRoute={isAdminRoute}
+                    />
                   ) : (
                     <ItemWithChildren
                       tab={tab}
@@ -343,17 +355,20 @@ function SingleItem({
   tab,
   label,
   isActive,
+  isAdminRoute,
 }: {
   tab: TabWithLink;
   label: string;
   isActive: boolean;
+  isAdminRoute: boolean;
 }) {
+  const href = getHref(tab, isAdminRoute);
   return (
     <ChakraLink
       unstyled
       w="full"
       minW={0}
-      href={tab.disabled ? undefined : tab.externalHref || tab.href}
+      href={tab.disabled ? undefined : href}
       rel={tab.externalHref ? "noopener noreferrer" : undefined}
       aria-disabled={tab.disabled || undefined}
       data-disabled={tab.disabled ? "" : undefined}
@@ -437,6 +452,7 @@ function ItemWithChildren({
                     tab={tab}
                     isActive={isActive}
                     label={renderLabel(tab, t, isAdminRoute)}
+                    isAdminRoute={isAdminRoute}
                   />
                 </Menu.Item>
               );
