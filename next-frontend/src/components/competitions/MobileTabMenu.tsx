@@ -98,37 +98,34 @@ export default function MobileTabMenu({
   const path = _.last(pathName.split("/")) || "";
   const activeMenuKey = path === competitionId ? "general" : path;
 
-  const grouped = tabs.reduce<Record<string, CompetitionNavTab[]>>(
-    (acc, tab) => {
-      const group = groupTabsMap.get(tab.menuKey);
-      if (group) (acc[group] ??= []).push(tab);
-      else if (tab.i18nKey.includes("events")) (acc["events"] ??= []).push(tab);
-      return acc;
-    },
-    {} as GroupedTab,
+  const resolveGroup = (tab: CompetitionNavTab): string | undefined =>
+    groupTabsMap.get(tab.menuKey) ??
+    (tab.i18nKey.includes("events") ? "events" : undefined);
+
+  const grouped: GroupedTab = _.chain(tabs)
+    .filter((tab) => !_.isUndefined(resolveGroup(tab)))
+    .groupBy(resolveGroup)
+    .value();
+
+  const custom: GroupedTab = _.groupBy(
+    _.map(customTabs, (tab) => ({
+      menuKey: tab,
+      i18nKey: tab,
+      href: route({
+        pathname: "/competitions/[competitionId]/custom-tabs/[tabName]",
+        query: { competitionId, tabName: encodeURIComponent(tab) },
+      }),
+    })),
+    () => "more",
   );
 
-  const custom = customTabs.reduce<Record<string, CompetitionNavTab[]>>(
-    (acc, tab) => {
-      (acc["more"] ??= []).push({
-        menuKey: tab,
-        i18nKey: tab,
-        href: route({
-          pathname: "/competitions/[competitionId]/custom-tabs/[tabName]",
-          query: { competitionId, tabName: encodeURIComponent(tab) },
-        }),
-      });
-      return acc;
-    },
-    {},
-  );
-
-  const isCustomTabActive = customTabs.some(
+  const isCustomTabActive = _.some(
+    customTabs,
     (tab) => encodeURIComponent(tab) === activeMenuKey || tab === activeMenuKey,
   );
 
-  const isLiveEventsTabActive = Object.keys(events.byId).some((event) =>
-    activeMenuKey.includes(event),
+  const isLiveEventsTabActive = _.some(_.keys(events.byId), (event) =>
+    _.includes(activeMenuKey, event),
   );
 
   const activeGroup = groupTabsMap.has(activeMenuKey)
