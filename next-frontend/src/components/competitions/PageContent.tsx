@@ -57,6 +57,7 @@ export default function Content({
   children: React.ReactNode;
   tabs: CompetitionNavTab[];
 }) {
+  console.log("tabs", tabs);
   const { t } = useT();
   const pathName = usePathname();
   const path = _.last(pathName.split("/"));
