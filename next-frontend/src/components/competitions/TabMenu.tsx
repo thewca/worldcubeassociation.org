@@ -196,7 +196,7 @@ export const renderLabel = (
   t: TFunction,
   isAdminRoute: boolean,
 ) =>
-  // i18n-tasks-use t('competitions.nav.info')
+  // i18n-tasks-use t('competitions.nav.general')
   // i18n-tasks-use t('competitions.nav.more')
   // i18n-tasks-use t('competitions.nav.admin')
   // i18n-tasks-use t('competitions.nav.results')

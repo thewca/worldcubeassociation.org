@@ -37,11 +37,11 @@ import { useT } from "@/lib/i18n/useI18n";
 import { renderLabel } from "./TabMenu";
 
 const groupTabsMap = new Map([
-  ["general", "info"],
+  ["general", "general"],
   ["register", "register"],
-  ["competitors", "info"],
-  ["events", "info"],
-  ["schedule", "info"],
+  ["competitors", "general"],
+  ["events", "general"],
+  ["schedule", "general"],
   ["podiums", "results"],
   ["all", "results"],
   ["scrambles", "results"],
@@ -51,7 +51,7 @@ const groupTabsMap = new Map([
 ]);
 
 const groupIcons: Record<string, React.ReactNode> = {
-  info: <LuClipboardList />,
+  general: <LuClipboardList />,
   register: null,
   more: <LuEllipsis />,
   admin: <LuLock />,

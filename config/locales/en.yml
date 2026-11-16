@@ -2421,7 +2421,7 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
-      info: "General"
+      general: "General"
       more: "More"
       admin: "Admin"
       results: "Results"
