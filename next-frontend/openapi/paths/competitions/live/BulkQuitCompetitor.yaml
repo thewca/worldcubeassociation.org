@@ -1,44 +1,45 @@
-summary: Quits multiple competitors from the round
-tags:
-  - live
-operationId: bulkQuitCompetitors
-parameters:
-  - name: competitionId
-    in: path
-    required: true
-    schema:
-      type: string
-  - name: roundId
-    in: path
-    required: true
-    schema:
-      type: string
-requestBody:
-  required: true
-  content:
-    application/json:
+delete:
+  summary: Quits multiple competitors from the round
+  tags:
+    - live
+  operationId: bulkQuitCompetitors
+  parameters:
+    - name: competitionId
+      in: path
+      required: true
       schema:
-        type: object
-        required:
-          - registration_ids
-        properties:
-          registration_ids:
-            type: array
-            items:
-              type: number
-          advancing_ids:
-            type: array
-            items:
-              type: number
-responses:
-  '200':
-    description: Returns number of competitors that were marked as quit
+        type: string
+    - name: roundId
+      in: path
+      required: true
+      schema:
+        type: string
+  requestBody:
+    required: true
     content:
       application/json:
         schema:
           type: object
           required:
-            - quit
+            - registration_ids
           properties:
-            quit:
-              type: number
+            registration_ids:
+              type: array
+              items:
+                type: number
+            advancing_ids:
+              type: array
+              items:
+                type: number
+  responses:
+    '200':
+      description: Returns number of competitors that were marked as quit
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - quit
+            properties:
+              quit:
+                type: number

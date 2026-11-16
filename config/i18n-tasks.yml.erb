@@ -130,6 +130,7 @@ ignore_unused:
 # - 'simple_form.{placeholders,hints,labels}.*'
   - 'faker.name.*'
   - 'devise.mailer.*'
+  - 'devise.passwords.send_paranoid_instructions'
   # These are keys dynamically built in lib/advancement_condition.rb
   - 'advancement_condition.*'
   # The keys below are all used on the records page
@@ -148,6 +149,8 @@ ignore_unused:
   - 'activerecord.attributes.delegate_report.*'
   - 'simple_form.hints.delegate_report.*'
   - 'competitions.live.*'
+  # Panel names are looked up by panel id in next-frontend/src/lib/wca/avatarMenuEntries.ts
+  - 'layouts.navigation.panels.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
@@ -159,7 +162,7 @@ ignore_unused:
 ## Ignore these keys completely:
 ignore:
 ## Ignore these keys as they are from external application
-  - '{time_will_tell,doorkeeper,mail_form}.*'
+  - '{doorkeeper,mail_form}.*'
 ## These are in rails.locale.yml
   - '{date, datetime, number, errors, time, support, helpers}.*'
 ## TODO: if at some point we really care about translating oauth stuff we should

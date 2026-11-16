@@ -6,7 +6,9 @@ allOf:
         type: object
         properties:
           events_per_registration_limit:
-            type: integer # nullable
+            type:
+              - integer
+              - "null"
           allow_registration_edits:
             type: boolean # always
           guest_entry_status:
@@ -16,15 +18,21 @@ allOf:
               - free
               - restricted
           guests_per_registration_limit:
-            type: integer
+            type:
+              - integer
+              - "null"
           guests_enabled:
             type: boolean
           uses_qualification?:
             type: boolean
           allow_registration_without_qualification:
-            type: boolean
+            type:
+              - boolean
+              - "null"
           force_comment_in_registration:
-            type: boolean
+            type:
+              - boolean
+              - "null"
           qualification_wcif:
             type: object
             additionalProperties:

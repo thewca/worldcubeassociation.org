@@ -46,8 +46,7 @@ RSpec.describe "Competition WCIF" do
   let(:organizer) { competition.organizers.first }
   let(:sixty_second_2_attempt_cutoff) { Cutoff.new(number_of_attempts: 2, attempt_result: 1.minute.in_centiseconds) }
   let(:top_16_average_condition) { ResultConditions::Ranking.new(value: 16, scope: 'average') }
-  let(:top_16_advance) { AdvancementConditions::RankingCondition.new(16) }
-  let(:round333_1) { build(:round, number: 1, cutoff: sixty_second_2_attempt_cutoff, advancement_condition: top_16_advance, scramble_set_count: 16, total_number_of_rounds: 2) }
+  let(:round333_1) { build(:round, number: 1, cutoff: sixty_second_2_attempt_cutoff, scramble_set_count: 16, total_number_of_rounds: 2) }
   let(:round333_2) { build(:round, number: 2, total_number_of_rounds: 2, participation_source: round333_1, participation_condition: top_16_average_condition) }
   let(:event_333) { build(:competition_event, event_id: "333", rounds: [round333_1, round333_2]) }
   let(:round444_1) { build(:round, number: 1) }
@@ -1206,7 +1205,7 @@ RSpec.describe "Competition WCIF" do
         # Previously, 333 used to be a "classic" R1 -> R2 -> R3 setup. Now that R1 and R2 are getting linked,
         # R2 cannot point to "only" R1 anymore. Instead, it has to source from the same place as R1,
         # to keep Linked Rounds state consistent.
-        round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source)
+        round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source, participation_condition: nil)
 
         expect(competition.to_wcif(version: wcif_version)["events"]).not_to eq(wcif_unlinked)
 
@@ -1215,6 +1214,33 @@ RSpec.describe "Competition WCIF" do
 
         # Our cleanup code picks up orphaned rounds, see the model spec for linked_round.rb
         expect(LinkedRound.count).to be 0
+      end
+
+      %w[1.1 2.1.1].each do |removal_version|
+        it "unlinks the remaining round when removing a linked round with WCIF #{removal_version}" do
+          round333_2.update!(cutoff: sixty_second_2_attempt_cutoff)
+
+          linked_round = create(:linked_round)
+
+          round333_1.update!(linked_round: linked_round)
+          round333_2.update!(linked_round: linked_round, participation_source: round333_1.participation_source, participation_condition: nil)
+
+          wcif_events = competition.to_wcif(version: removal_version)["events"]
+          wcif_333_event = wcif_events.find { |e| e["id"] == "333" }
+
+          wcif_333_event["rounds"] = wcif_333_event["rounds"].take(1)
+          if removal_version == '1.1'
+            wcif_333_event["rounds"][0]["advancementCondition"] = nil
+          else
+            wcif_333_event["rounds"][0]["linkedRounds"] = nil
+          end
+
+          competition.set_wcif_events!(wcif_events, delegate, version: removal_version)
+
+          expect(event_333.reload.rounds).to eq([round333_1])
+          expect(round333_1.reload.linked_round).to be_nil
+          expect(LinkedRound.count).to be 0
+        end
       end
 
       context "malformed linked_rounds entries" do
@@ -1488,6 +1514,81 @@ RSpec.describe "Competition WCIF" do
 
       expect(competition_333_event.qualification_latest_date).to eq(Date.new(2021, 7, 1))
       expect(competition_333_event.qualification_condition).not_to be_nil
+    end
+
+    it "ignores an earliest date when importing v1 qualifications" do
+      wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+      wcif_333_event["qualification"] = {
+        "resultType" => "average",
+        "type" => "attemptResult",
+        "whenDate" => "2021-07-01",
+        "level" => 6000,
+        "earliestResultDate" => "2021-01-01",
+      }
+
+      competition.set_wcif_events!(wcif["events"], delegate)
+
+      competition_333_event = competition.competition_events.find { it.event_id == '333' }
+      expect(competition_333_event.qualification_earliest_date).to be_nil
+    end
+
+    it "does not export an earliest date in v1" do
+      competition_333_event = competition.competition_events.find { it.event_id == '333' }
+      competition_333_event.update!(
+        qualification_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 6000),
+        qualification_earliest_date: Date.new(2021, 1, 1),
+        qualification_latest_date: Date.new(2021, 7, 1),
+      )
+
+      wcif_333_event = competition.to_wcif(version: '1.1')["events"].find { |e| e["id"] == "333" }
+      expect(wcif_333_event["qualification"]).not_to have_key("earliestResultDate")
+    end
+
+    context "with WCIF v2 qualifications" do
+      let(:wcif_version) { "2.0.0" }
+      let(:wcif_333_event) { wcif["events"].find { |e| e["id"] == "333" } }
+      let(:competition_333_event) { competition.competition_events.find { it.event_id == '333' } }
+
+      def v2_qualification(earliest_date:)
+        {
+          "earliestResultDate" => earliest_date,
+          "latestResultDate" => "2021-07-01",
+          "resultCondition" => {
+            "type" => "resultAchieved",
+            "scope" => "average",
+            "value" => 6000,
+          },
+        }
+      end
+
+      it "can set an earliest date" do
+        wcif_333_event["qualification"] = v2_qualification(earliest_date: "2021-01-01")
+
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        expect(competition_333_event.qualification_earliest_date).to eq(Date.new(2021, 1, 1))
+        expect(competition_333_event.qualification_latest_date).to eq(Date.new(2021, 7, 1))
+        expect(competition.to_wcif(version: wcif_version)["events"]).to eq(wcif["events"])
+      end
+
+      it "can set a qualification without an earliest date" do
+        wcif_333_event["qualification"] = v2_qualification(earliest_date: nil)
+
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        expect(competition_333_event.qualification_earliest_date).to be_nil
+        expect(competition.to_wcif(version: wcif_version)["events"]).to eq(wcif["events"])
+      end
+
+      it "can clear an existing earliest date" do
+        wcif_333_event["qualification"] = v2_qualification(earliest_date: "2021-01-01")
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        wcif_333_event["qualification"] = v2_qualification(earliest_date: nil)
+        competition.set_wcif_events!(wcif["events"], delegate, version: wcif_version)
+
+        expect(competition_333_event.reload.qualification_earliest_date).to be_nil
+      end
     end
   end
 

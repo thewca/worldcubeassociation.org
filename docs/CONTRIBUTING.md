@@ -8,7 +8,7 @@ and has been further revised and refined by Senior Members of WST.
 
 **Scope**: This guide covers the *process* around a change: how to scope a pull request, what belongs in the
 description, how to respond to review, and which changes need agreement from outside the PR.
-It is the companion to [`STYLE_GUIDE.md`](STYLE_GUIDE.md), which covers how the code itself should be written.
+It is the companion to the [style guide](https://docs.worldcubeassociation.org/style_guide/style_guide), which covers how the code itself should be written.
 
 For getting the app running locally, see the
 [quickstart](https://docs.worldcubeassociation.org/contributing/quickstart) and the
@@ -77,7 +77,7 @@ review — if a rule is wrong, that's a separate PR against the config (see [§1
     single PR in general. Only do so when it adds a substantial, helpful context for reviewers and
     otherwise make sure you're not polluting your own PR.
   - Comments about specific design choices or architectural solutions belong inside the committed code directly,
-    see the [style guide](STYLE_GUIDE.md) for details.
+    see the [style guide](https://docs.worldcubeassociation.org/style_guide/style_guide) for details.
 - If you used an LLM to produce a solution, you still own it: be able to justify why it's the right
   approach. See the LLM rules in our [README](../README.md#llm-policy) for more details.
 
@@ -102,7 +102,7 @@ at review time costs you a round trip.
   Rounds"), get community/WCT/WQAC/WRC input before it lands in `en.yml` — don't invent public vocabulary
   in a PR.
 - **Unreleased features.** Don't advertise features that aren't publicly released yet.
-- **One-off data fixes.** These ship as Rake tasks rather than migrations ([STYLE_GUIDE §3.10](STYLE_GUIDE.md#310-jobs-and-rake-tasks)), and a
+- **One-off data fixes.** These ship as Rake tasks rather than migrations ([style guide §3.10](https://docs.worldcubeassociation.org/style_guide/rails#10-jobs-and-rake-tasks)), and a
   WST senior member runs them after deploy — say so in your description so the run gets scheduled.
   - At present (2026-09-24) we do not have a cleanly established process around running Rake tasks. It's really
     a matter of ad-hoc scheduling and coordinating with Senior Members who have the required privileges

@@ -59,7 +59,7 @@
       <tr data-medium-id="<%= medium.id %>">
         <td data-sort-by="<%= medium.submitted_at.to_i %>"><%= medium.submitted_at.to_formatted_s(:long_utc) %></td>
         <td data-sort-by="<%= competition.start_date.to_time.to_i %>">
-          <%= wca_date_range(competition.start_date, competition.end_date) %>
+          <%= wca_date_range_tag(competition.start_date, competition.end_date) %>
         </td>
         <td><%= link_to competition.name, competition_path(competition) %></td>
         <td><strong><%= competition.country.name %></strong>, <%= competition.city_name %></td>

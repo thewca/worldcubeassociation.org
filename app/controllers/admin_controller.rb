@@ -3,6 +3,9 @@
 require 'csv'
 
 class AdminController < ApplicationController
+  ILR_SHARE_MIN_COMPETITIONS = 5
+  ILR_LAUNCH_DATE = Date.new(2026, 4, 1)
+
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, except: %i[all_voters leader_senior_voters regional_voters]
   before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: %i[all_voters leader_senior_voters regional_voters]
@@ -16,6 +19,64 @@ class AdminController < ApplicationController
 
   def sanity_check
     @categories = SanityCheckCategory.all
+  end
+
+  def migration_dashboard
+    @week = Date.current.all_week
+    @adoption_months = (ILR_LAUNCH_DATE..Date.current).map(&:beginning_of_month).uniq
+
+    internal_competition_ids = Competition.scoretaking_software_internal.select(:id)
+    dual_round_competition_ids = Competition.joins(:rounds).where.not(rounds: { linked_round_id: nil }).select(:id)
+    ilr_competitions = Competition.not_cancelled.scoretaking_software_internal.where(start_date: ..Date.current)
+    @ilr_competitions_count = ilr_competitions.count
+    @ilr_competitions_without_dual_rounds_count = ilr_competitions.where.not(id: dual_round_competition_ids).count
+    @upcoming_ilr_competitions_count = Competition.not_cancelled.scoretaking_software_internal.where(start_date: @week.last.next_day..).count
+    competitions_this_week = Competition.not_cancelled.between_dates(@week.first, @week.last)
+    @competitions_this_week_count = competitions_this_week.count
+    @ilr_competitions_this_week = competitions_this_week.scoretaking_software_internal.order_by_date
+    @dual_round_competition_ids_this_week = @ilr_competitions_this_week.where(id: dual_round_competition_ids).ids
+    @live_attempts_by_competition = LiveAttempt.unscoped
+                                               .joins(live_result: :registration)
+                                               .where(registrations: { competition_id: @ilr_competitions_this_week.ids })
+                                               .group("registrations.competition_id")
+                                               .count
+    ilr_attempts = LiveAttempt.joins(live_result: :registration).where(registrations: { competition_id: internal_competition_ids })
+    @live_attempts_count = ilr_attempts.count
+    @live_attempts_this_week_count = ilr_attempts.where(created_at: @week).count
+    @live_scoretakers_count = LiveResultHistoryEntry.joins(live_result: :registration)
+                                                    .where(registrations: { competition_id: internal_competition_ids })
+                                                    .distinct
+                                                    .count(:entered_by_id)
+
+    integrated_submissions = Competition.scoretaking_software_internal.where.not(results_submitted_at: nil)
+    @integrated_submissions_count = integrated_submissions.count
+    @integrated_posted_count = integrated_submissions.results_posted.count
+    @integrated_posted_results_count = Result.where(competition_id: integrated_submissions.select(:id)).count
+    @integrated_inbox_results_count = InboxResult.where(competition_id: integrated_submissions.select(:id)).count
+    @uploaded_jsons_by_type = UploadedJson.group(:upload_type).count
+
+    @scramble_file_uploads_count = ScrambleFileUpload.count
+    @scramble_file_uploads_this_week_count = ScrambleFileUpload.where(uploaded_at: @week).count
+    @scramble_upload_competitions_count = ScrambleFileUpload.distinct.count(:competition_id)
+    @external_scrambles_count = ExternalScramble.count
+    @posted_uploaded_scrambles_count = Scramble.where.not(external_scramble_id: nil).count
+    @scramble_programs = ScrambleFileUpload.group(:scramble_program).count.sort_by { |_, count| -count }
+
+    competitions_since_ilr_launch = Competition.not_cancelled.where(end_date: ILR_LAUNCH_DATE..Date.current.end_of_month)
+    @scoretaking_software_counts = competitions_since_ilr_launch.group(:scoretaking_software).count
+
+    month_of_end_date = "DATE_FORMAT(competitions.end_date, '%Y-%m')"
+    @competitions_by_month = competitions_since_ilr_launch.group(month_of_end_date).count
+    @ilr_competitions_by_month = competitions_since_ilr_launch.scoretaking_software_internal.where(start_date: ..Date.current).group(month_of_end_date).count
+    @scramble_upload_competitions_by_month = competitions_since_ilr_launch.joins(:scramble_file_uploads).group(month_of_end_date).distinct.count(:id)
+
+    started_competitions_since_ilr_launch = competitions_since_ilr_launch.where(start_date: ..Date.current)
+    ilr_competitions_by_country = started_competitions_since_ilr_launch.scoretaking_software_internal.group(:country_id).count
+    competitions_by_country = started_competitions_since_ilr_launch.where(country_id: ilr_competitions_by_country.keys).group(:country_id).count
+    @ilr_adoption_by_country = ilr_competitions_by_country.filter_map do |country_id, ilr|
+      total = competitions_by_country.fetch(country_id)
+      [country_id, ilr, total] if total >= ILR_SHARE_MIN_COMPETITIONS
+    end.sort_by { |_, ilr, total| -ilr.fdiv(total) }
   end
 
   def run_sanity_check

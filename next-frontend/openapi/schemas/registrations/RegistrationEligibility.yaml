@@ -12,9 +12,10 @@ properties:
     type: boolean
     description: Whether the user is still banned on the day the competition starts
   banned_until:
-    type: string
+    type:
+      - string
+      - "null"
     format: date
-    nullable: true
     description: When the ban lapses, or null for an indefinite ban
   missing_profile_fields:
     type: array

@@ -515,7 +515,6 @@ RSpec.describe CompetitionsController do
         round_one = competition.competition_events[0].rounds.create!(
           format: competition.competition_events[0].event.preferred_formats.first.format,
           number: 1,
-          advancement_condition: AdvancementConditions::RankingCondition.new(4),
           total_number_of_rounds: 2,
           participation_source: competition.competition_events[0],
         )
@@ -525,6 +524,7 @@ RSpec.describe CompetitionsController do
           total_number_of_rounds: 2,
           scramble_set_count: 1,
           participation_source: round_one,
+          participation_condition: ResultConditions::Ranking.new(scope: round_one.format.sort_by, value: 4),
         )
         start_time = Time.zone.local_to_utc(competition.start_time)
         end_time = start_time

@@ -64,12 +64,15 @@ class DelegateReportsController < ApplicationController
   end
 
   def delete_image
-    image = ActiveStorage::Attachment.find(params.require(:image_id))
+    @competition = competition_from_params
+    return if redirect_to_root_unless_user(:can_edit_delegate_report?, @competition.delegate_report)
+
+    image = @competition.delegate_report.setup_images_attachments.find(params.require(:image_id))
     image.purge
 
     flash[:success] = "Image deleted successfully."
 
-    redirect_to delegate_report_edit_path(competition_from_params)
+    redirect_to delegate_report_edit_path(@competition)
   end
 
   private def delegate_report_params

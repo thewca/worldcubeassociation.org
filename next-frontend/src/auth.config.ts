@@ -19,12 +19,14 @@ export const CMS_AUTH_BASE_PATH = "/api/payload/auth";
 
 const WCA_DISCOVERY_URL = `${WCA_OIDC_ISSUER}/.well-known/openid-configuration`;
 
+export const WCA_ROLES_FIELD = "roles";
+
 interface WcaProfile {
   sub: string;
   name?: string;
   email?: string;
   picture?: string;
-  roles?: string[];
+  [WCA_ROLES_FIELD]?: string[];
   preferred_username?: string;
 }
 
@@ -79,7 +81,7 @@ export const cmsWcaProvider: GenericOAuthConfig = {
  * `collections/Users.ts`, closing the Payload REST/GraphQL path.
  */
 export const wcaUserAdditionalFields = {
-  roles: { type: "string[]", required: false },
+  [WCA_ROLES_FIELD]: { type: "string[]", required: false },
   wcaId: { type: "string", required: false },
   wcaUserId: { type: "number", required: false },
 } as const;

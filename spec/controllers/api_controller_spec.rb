@@ -46,6 +46,25 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
   end
 
+  describe 'GET #incidents_search' do
+    let!(:resolved_incident) { create(:incident, :resolved) }
+    let!(:pending_incident) { create(:incident) }
+
+    before { Rails.cache.delete_matched 'search/Incident*' }
+
+    it "finds only resolved incidents" do
+      get :incidents_search, params: { q: "Incident" }
+      expect(response.parsed_body["result"].pluck("id")).to contain_exactly(resolved_incident.id)
+    end
+
+    it "finds pending incidents for incident managers" do
+      sign_in create(:user, :wrc_member)
+
+      get :incidents_search, params: { q: "Incident" }
+      expect(response.parsed_body["result"].pluck("id")).to contain_exactly(resolved_incident.id, pending_incident.id)
+    end
+  end
+
   describe 'GET #users_search' do
     before :each do
       # We cache search results, which is a very good thing in production because we have an Omnisearch bar.
@@ -97,12 +116,26 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       expect(json["result"][0]["id"]).to eq user.id
     end
 
-    it "can find by email" do
-      get :users_search, params: { q: "example", email: true }
+    it "can find by email as a results admin" do
+      sign_in create(:user, :wrt_member)
+
+      get :users_search, params: { q: "example@email.com", email: true }
       expect(response).to have_http_status :ok
       json = response.parsed_body
       expect(json["result"].length).to eq 1
       expect(json["result"][0]["id"]).to eq user.id
+    end
+
+    it "cannot search by email without being signed in" do
+      get :users_search, params: { q: "example", email: true }
+      expect(response).to have_http_status :forbidden
+    end
+
+    it "cannot search by email as a regular user" do
+      sign_in create(:user)
+
+      get :users_search, params: { q: "example@email.com", email: true, adminSearch: true }
+      expect(response).to have_http_status :forbidden
     end
 
     context 'Person without User' do
@@ -174,6 +207,13 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
       expect(json["result"].count { |r| r["class"] == "post" }).to eq 0
       expect(json["result"].count { |r| r["class"] == "user" }).to eq 0
       expect(json["result"].count { |r| r["class"] == "person" }).to eq 1
+    end
+
+    it "cannot search by email as a regular user" do
+      sign_in create(:user)
+
+      get :omni_search, params: { q: user.email, email: true, adminSearch: true }
+      expect(response).to have_http_status :forbidden
     end
 
     it "works well when parts of the name are given" do

@@ -165,7 +165,7 @@
           }
           $.ajax({
             url: url,
-            data: window.wca.lodashExtend({}, defaultSearchData, { q: query, email: true }),
+            data: window.wca.lodashExtend({}, defaultSearchData, { q: query }),
             type: 'GET',
             error: function() {
               callback();

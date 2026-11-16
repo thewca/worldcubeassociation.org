@@ -48,3 +48,5 @@ get:
               human_amount:
                 type: string
                 description: The amount formatted for display, including the currency's name
+    '400':
+      $ref: '../../errorResponses/RegistrationError.yaml'

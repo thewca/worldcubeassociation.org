@@ -20,7 +20,7 @@ RSpec.describe "users" do
     post user_confirmation_path, params: { 'user[email]' => user.email }
     follow_redirect!
     expect(response).to be_successful
-    expect(response.body).to include(I18n.t('devise.confirmations.send_instructions'))
+    expect(response.body).to include(I18n.t('devise.confirmations.send_paranoid_instructions'))
   end
 
   it 'cannot change password when not recently authenticated' do
@@ -80,13 +80,14 @@ RSpec.describe "users" do
     expect(response.body).to include "It looks like you have not created a WCA website account yet"
   end
 
-  it 'reset password shows conversion message for competitors missing accounts' do
+  it 'reset password does not reveal that a competitor is missing an account' do
     person = create(:person)
 
-    # attempt to reset password
-    post user_password_path, params: { 'user[login]' => person.wca_id, 'user[password]' => "a password" }
+    post user_password_path, params: { 'user[login]' => person.wca_id }
+    follow_redirect!
     expect(response).to be_successful
-    expect(response.body).to include "It looks like you have not created a WCA website account yet"
+    expect(response.body).to include I18n.t('devise.passwords.send_paranoid_instructions')
+    expect(response.body).not_to include "It looks like you have not created a WCA website account yet"
   end
 
   context "user without 2FA" do

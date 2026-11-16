@@ -3,6 +3,7 @@ import { colorPaletteSelect } from "@/blocks/utils";
 import { TextCardBlock } from "@/blocks/text/textCard";
 import { BannerImageBlock } from "@/blocks/image/bannerImage";
 import { ImageCardBlock } from "@/blocks/image/imageCard";
+import { marketingTeamAccess } from "@/payload.access";
 
 const FeaturedCompetitions: Block = {
   slug: "FeaturedComps", // intentionally short to avoid Payload internally assigning a long table name
@@ -12,11 +13,17 @@ const FeaturedCompetitions: Block = {
     {
       name: "competitions",
       type: "array",
+      admin: {
+        description: "The competitions to feature, in the order they appear.",
+      },
       fields: [
         {
           name: "competitionId",
           type: "text",
           required: true,
+          admin: {
+            description: "WCA competition ID, for example 'WC2025'.",
+          },
         },
         colorPaletteSelect,
       ],
@@ -34,18 +41,28 @@ const AnnouncementsSection: Block = {
       type: "relationship",
       relationTo: "announcements",
       required: true,
+      admin: {
+        description: "Announcement shown large at the top of the section.",
+      },
     },
     {
       name: "furtherAnnouncements",
       type: "relationship",
       relationTo: "announcements",
       hasMany: true,
+      admin: {
+        description: "Announcements listed under the main one.",
+      },
     },
     {
       name: "showSeeAll",
       type: "checkbox",
       required: true,
       defaultValue: true,
+      admin: {
+        description:
+          "Show a link to the full list of announcements at the bottom of the section",
+      },
     },
     colorPaletteSelect,
   ],
@@ -63,12 +80,18 @@ const TestimonialsSpinner: Block = {
     {
       name: "slides",
       type: "array",
+      admin: {
+        description: "The testimonials the spinner rotates through.",
+      },
       fields: [
         {
           name: "testimonial",
           type: "relationship",
           relationTo: "testimonials",
           required: true,
+          admin: {
+            description: "The testimonial shown on this slide.",
+          },
         },
         colorPaletteSelect,
       ],
@@ -111,6 +134,10 @@ const createTwoBlocks = (depth: number = 1): Block => {
           "1/4 & 3/4",
           "3/4 & 1/4",
         ],
+        admin: {
+          description:
+            "How the available width is split between the left and right column.",
+        },
       },
       {
         type: "row",
@@ -121,6 +148,9 @@ const createTwoBlocks = (depth: number = 1): Block => {
             blocks: allowedBlocks,
             required: true,
             minRows: 1,
+            admin: {
+              description: "Boxes stacked in the left column.",
+            },
           },
           {
             name: "right",
@@ -128,6 +158,9 @@ const createTwoBlocks = (depth: number = 1): Block => {
             blocks: allowedBlocks,
             required: true,
             minRows: 1,
+            admin: {
+              description: "Boxes stacked in the right column.",
+            },
           },
         ],
       },
@@ -146,6 +179,10 @@ const createTwoBlocks = (depth: number = 1): Block => {
             value: "justify",
           },
         ],
+        admin: {
+          description:
+            "What to do when one column ends up shorter than the other.",
+        },
       },
     ],
   };
@@ -153,12 +190,18 @@ const createTwoBlocks = (depth: number = 1): Block => {
 
 export const Home: GlobalConfig = {
   slug: "home",
+  access: {
+    update: marketingTeamAccess,
+  },
   fields: [
     {
       name: "layout",
       type: "blocks",
       blocks: [...coreBlocks, createTwoBlocks(2)],
       required: true,
+      admin: {
+        description: "The boxes making up the home page, top to bottom.",
+      },
     },
   ],
   versions: {

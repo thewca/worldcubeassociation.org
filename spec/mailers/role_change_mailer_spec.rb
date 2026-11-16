@@ -96,6 +96,32 @@ RSpec.describe RoleChangeMailer do
     end
   end
 
+  describe 'notify_role_end for teams and committees' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:team_leader) { create(:wrt_leader_role) }
+    let(:role) { create(:wrt_member_role, group: team_leader.group, end_date: Date.today) }
+    let(:mail) { described_class.notify_role_end(role, user_who_made_the_change) }
+
+    it 'renders the headers' do
+      expect(mail.to).to contain_exactly(
+        user_who_made_the_change.email,
+        GroupsMetadataBoard.email,
+        UserGroup.teams_committees_group_weat.metadata.email,
+        UserGroup.teams_committees_group_wrt.metadata.email,
+        UserGroup.teams_committees_group_wqac.metadata.email,
+        team_leader.user.email,
+      )
+      expect(mail.reply_to).to contain_exactly(user_who_made_the_change.email)
+      expect(mail.subject).to eq "Role removed for #{role.user.name} in Teams & Committees"
+    end
+
+    it 'renders the Moodle suspension instruction for WQAC' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).to include(
+        "#{UserGroup.teams_committees_group_wqac.name}: Please suspend the member's Moodle account if necessary.",
+      )
+    end
+  end
+
   describe 'notify_role_end' do
     let(:translator) { create(:regional_delegate_role) }
     let(:user_who_made_the_change) { create(:user, name: 'Sherlock Holmes') }
@@ -111,6 +137,54 @@ RSpec.describe RoleChangeMailer do
     it 'renders the body' do
       expect(CGI.unescapeHTML(mail.body.encoded)).to match translator.user.name
       expect(CGI.unescapeHTML(mail.body.encoded)).to match user_who_made_the_change.name
+    end
+  end
+
+  describe 'notify_role_end when the user is still a WCA volunteer' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:delegate) { create(:delegate_role, end_date: Date.today) }
+    let!(:wrt_role) { create(:wrt_member_role, user: delegate.user) }
+    let(:mail) { described_class.notify_role_end(delegate, user_who_made_the_change) }
+
+    it 'notes that they are still a WCA volunteer and lists the remaining roles' do
+      body = CGI.unescapeHTML(mail.body.encoded)
+      expect(body).to include "#{delegate.user.name} is still a WCA volunteer, so their WCA accounts should stay active"
+      expect(body).to include "Member (#{wrt_role.group.name})"
+    end
+  end
+
+  describe 'notify_role_end when the user is still a Board member' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:delegate) { create(:delegate_role, end_date: Date.today) }
+    let!(:board_role) { create(:board_role, user: delegate.user) }
+    let(:mail) { described_class.notify_role_end(delegate, user_who_made_the_change) }
+
+    it 'lists the Board role by its group name only' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).to include "<li>#{board_role.group.name}</li>"
+    end
+  end
+
+  describe 'notify_role_end when the user is still a member of a hidden team' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:delegate) { create(:delegate_role, end_date: Date.today) }
+    let!(:wct_china_role) { create(:wct_china_role, user: delegate.user) }
+    let(:mail) { described_class.notify_role_end(delegate, user_who_made_the_change) }
+
+    it 'lists the hidden team role too' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).to include wct_china_role.group.name
+    end
+  end
+
+  describe 'notify_role_end when the user has no other staff roles' do
+    let(:user_who_made_the_change) { create(:user) }
+    let(:delegate) { create(:delegate_role, end_date: Date.today) }
+    let!(:translator_role) { create(:translator_role, user: delegate.user) }
+    let!(:probation_role) { create(:probation_role, user: delegate.user) }
+    let!(:banned_competitor_role) { create(:banned_competitor_role, user: delegate.user) }
+    let(:mail) { described_class.notify_role_end(delegate, user_who_made_the_change) }
+
+    it 'does not mention them still being a WCA volunteer' do
+      expect(CGI.unescapeHTML(mail.body.encoded)).not_to include 'is still a WCA volunteer'
     end
   end
 end

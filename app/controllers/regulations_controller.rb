@@ -11,7 +11,7 @@ class RegulationsController < ApplicationController
   end
 
   private def ensure_trailing_slash
-    desired_url = url_for(params.permit!.merge(trailing_slash: true))
+    desired_url = url_for(params.permit!.merge(trailing_slash: true, only_path: true))
     # url_for doesn't always add a trailing slash (it won't add a slash to
     # a url like example.com/index.html, for instance).
     # Only attempt to redirect if the current url does not match the one

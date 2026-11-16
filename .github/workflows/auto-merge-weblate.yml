@@ -1,0 +1,32 @@
+name: Auto-merge Weblate PRs
+
+on:
+  pull_request_target:
+    types: [ opened, reopened, synchronize ]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.user.login == 'thewca-bot' && github.event.pull_request.head.ref == 'weblate-wca-locales'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Check that only locale files are changed
+        id: files
+        run: |
+          changed=$(gh pr diff "$PR_NUMBER" --name-only)
+          ! echo "$changed" | grep -vE '^config/locales/[^/]+\.yml$'
+      - name: Approve and enable auto-merge
+        run: |
+          gh pr review "$PR_NUMBER" --approve
+          gh pr merge "$PR_NUMBER" --auto --squash
+      # Ensures that a subsequent push that doesn't only contain locale files is rejected
+      - name: Disable auto-merge
+        if: failure() && steps.files.outcome == 'failure'
+        run: gh pr merge "$PR_NUMBER" --disable-auto || true

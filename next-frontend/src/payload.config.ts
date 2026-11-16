@@ -8,7 +8,11 @@ import {
   createBetterAuthPlugin,
 } from "@delmaredigital/payload-better-auth";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { cmsBetterAuthOptions, createCmsAuth } from "@/payload.auth";
+import {
+  cmsBetterAuthOptions,
+  createCmsAuth,
+  PAYLOAD_ADMIN_ROLES,
+} from "@/payload.auth";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/collections/Media";
 import { Testimonials } from "@/collections/Testimonials";
@@ -21,6 +25,7 @@ import { Users } from "@/collections/Users";
 import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
 import { Documents } from "@/collections/Documents";
+import { AvatarMenuEntries } from "@/collections/AvatarMenuEntries";
 import { Nav } from "@/globals/Nav";
 import { Footer } from "@/globals/Footer";
 import { SocialLinks } from "@/globals/SocialLinks";
@@ -34,13 +39,16 @@ import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
 import { DocumentsPage } from "@/globals/Documents";
 import { FaqPage } from "@/globals/FaqPage";
 import { LogoPage } from "@/globals/LogoPage";
+import { ExecutivesPage } from "@/globals/ExecutivesPage";
 import {
   compatibilityOptions,
   mongooseAdapter,
   Args,
 } from "@payloadcms/db-mongodb";
 import { fromContainerMetadata } from "@aws-sdk/credential-providers";
-import { WCA_CMS_PROVIDER_ID } from "@/auth.config";
+import { withWeblateSync } from "@/lib/translate/hooks";
+import { weblateSyncEndpoint } from "@/lib/translate/endpoint";
+import { WCA_CMS_PROVIDER_ID, WCA_ROLES_FIELD } from "@/auth.config";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -61,14 +69,14 @@ function plugins() {
       //   via https://delmaredigital.github.io/payload-better-auth/#better-auth-collections
       //   and https://github.com/delmaredigital/payload-better-auth/issues/38
       acknowledgeRoleGuardDisabled: true,
+      roleField: WCA_ROLES_FIELD,
     }),
     createBetterAuthPlugin({
       createAuth: createCmsAuth,
       admin: {
         login: {
-          // The plugin's gate looks for a singular `role` we do not have; `access.admin` on
-          //   the users collection enforces team membership instead.
-          requiredRole: null,
+          // read based on `betterAuthCollections`'s `roleField` config entry above.
+          requiredRole: PAYLOAD_ADMIN_ROLES,
           // The plugin defaults to `/admin`; our admin route is `/payload` (see `routes` below).
           afterLoginPath: "/payload",
           enableSocial: [WCA_CMS_PROVIDER_ID],
@@ -133,6 +141,9 @@ export const wcaConfig = {
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      afterDashboard: ["/lib/translate/WeblateSyncPanel#WeblateSyncPanel"],
+    },
   },
   routes: {
     admin: "/payload",
@@ -155,7 +166,8 @@ export const wcaConfig = {
     Documents,
     RegulationsHistoryItem,
     Tools,
-  ],
+    AvatarMenuEntries,
+  ].map(withWeblateSync),
   globals: [
     Nav,
     Footer,
@@ -169,7 +181,9 @@ export const wcaConfig = {
     DocumentsPage,
     FaqPage,
     LogoPage,
-  ],
+    ExecutivesPage,
+  ].map(withWeblateSync),
+  endpoints: [weblateSyncEndpoint],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

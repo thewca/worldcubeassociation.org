@@ -15,7 +15,7 @@ import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 
 const officersStatusOptions = Object.keys(officersStatus).map((option) => ({
   key: option,
-  text: I18n.t(`enums.user_roles.status.officers.${option}`),
+  get text() { return I18n.t(`enums.user_roles.status.officers.${option}`); },
   value: option,
 }));
 

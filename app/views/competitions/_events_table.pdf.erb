@@ -25,7 +25,7 @@
                   <%= t "competitions.competition_info.pdf.cutoff", short_cutoff: round.cutoff_to_s(short: true) if round.cutoff  %>
                 </td>
                 <td class="round-time-limit"><%= round.time_limit_to_s %></td>
-                <td class="round-proceed"><%= round.advancement_condition_to_s(short: true) %></td>
+                <td class="round-proceed"><%= round.advancement_condition_to_desc(short: true) %></td>
               </tr>
             <% end %>
           </table>

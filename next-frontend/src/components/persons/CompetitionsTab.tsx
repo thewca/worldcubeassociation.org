@@ -1,27 +1,39 @@
+"use client";
+
 import React from "react";
 import { Link, Table, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { getT } from "@/lib/i18n/get18n";
+import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { route } from "nextjs-routes";
 import countries from "@/lib/wca/data/countries";
-import OpenapiError from "@/components/ui/openapiError";
-import { getPersonCompetitions } from "@/lib/wca/persons/getPersonCompetitions";
+import useAPI from "@/lib/wca/useAPI";
+import Loading from "@/components/ui/loading";
 
 interface CompetitionsTabProps {
   wcaId: string;
 }
 
-const CompetitionsTab = async ({ wcaId }: CompetitionsTabProps) => {
-  const { t } = await getT();
+export default function CompetitionsTab({ wcaId }: CompetitionsTabProps) {
+  const api = useAPI();
+  const { t } = useT();
+  const lng = useLocale();
+
   const {
     data: competitions,
+    isLoading,
     error,
-    response,
-  } = await getPersonCompetitions(wcaId);
+  } = api.useQuery("get", "/v0/persons/{wca_id}/competitions", {
+    params: { path: { wca_id: wcaId } },
+  });
 
-  if (error) {
-    return <OpenapiError response={response} t={t} />;
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error || !competitions) {
+    return <Text>{t("errors.next_frontend.title")}</Text>;
   }
 
   return (
@@ -62,7 +74,7 @@ const CompetitionsTab = async ({ wcaId }: CompetitionsTabProps) => {
                 {`, ${countries.byIso2[c.country_iso2].name}`}
               </Table.Cell>
               <Table.Cell>
-                <Text>{formatDateRange(c.start_date, c.end_date)}</Text>
+                <Text>{formatDateRange(c.start_date, c.end_date, lng)}</Text>
               </Table.Cell>
             </Table.Row>
           ))}
@@ -70,6 +82,4 @@ const CompetitionsTab = async ({ wcaId }: CompetitionsTabProps) => {
       </Table.Root>
     </Table.ScrollArea>
   );
-};
-
-export default CompetitionsTab;
+}

@@ -4,11 +4,13 @@ class MatchedScramble < ApplicationRecord
   default_scope { order(:is_extra, :ordered_index) }
 
   POSTING_INCLUDES = { matched_scramble_set: { round: [:competition_event] } }.freeze
+  SERIALIZATION_INCLUDES = { external_scramble: [], external_scramble_set: [:scramble_file_upload] }.freeze
 
   belongs_to :matched_scramble_set
   belongs_to :external_scramble, optional: true
 
   has_one :round, through: :matched_scramble_set
+  has_one :external_scramble_set, through: :external_scramble
 
   scope :not_extra, -> { where(is_extra: false) }
 
@@ -33,7 +35,7 @@ class MatchedScramble < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    include: %w[external_scramble],
+    include: [:external_scramble, { external_scramble_set: { include: [] } }],
   }.freeze
 
   PREVIEW_SERIALIZE_OPTIONS = {

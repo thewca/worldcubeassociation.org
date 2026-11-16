@@ -148,13 +148,18 @@ const reducers = {
     // our reducer's state (and if you just only openend the page, also to the initialWcif state!)
     const newEvent = {
       ...event,
-      rounds: event.rounds.slice(0, event.rounds.length - roundsToRemoveCount),
+      rounds: event.rounds.slice(0, event.rounds.length - roundsToRemoveCount).map((round) => {
+        const linkedRounds = round.linkedRounds?.filter((id) => !roundIdsToRemove.includes(id));
+
+        return { ...round, linkedRounds: linkedRounds?.length > 1 ? linkedRounds : null };
+      }),
     };
 
     return {
       ...state,
-      wcifEvents: state.wcifEvents.map((e) => (
-        e.id === eventId ? newEvent : removeSharedTimeLimits(e, roundIdsToRemove)
+      wcifEvents: state.wcifEvents.map((e) => removeSharedTimeLimits(
+        e.id === eventId ? newEvent : e,
+        roundIdsToRemove,
       )),
     };
   },
