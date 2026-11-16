@@ -3319,7 +3319,7 @@ it:
         register: Registrati
         competitors: Partecipanti
         scrambles: Scramble
-      info: "Generale"
+      general: "Generale"
       more: "Di più"
       admin: "Admin"
       results: "Risultati"
