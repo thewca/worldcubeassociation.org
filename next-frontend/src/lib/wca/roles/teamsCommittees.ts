@@ -1,8 +1,12 @@
-import { cache } from "react";
 import { serverClient } from "@/lib/wca/wcaAPI";
 
-export const getTeamsCommittees = cache(async () => {
-  return await serverClient.GET("/v0/user_groups", {
+import { cacheLife } from "next/cache";
+
+export async function getTeamsCommittees() {
+  "use cache";
+  cacheLife("hours");
+
+  return serverClient.GET("/v0/user_groups", {
     params: {
       query: {
         isActive: true,
@@ -11,4 +15,4 @@ export const getTeamsCommittees = cache(async () => {
       },
     },
   });
-});
+}
