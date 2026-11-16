@@ -18,6 +18,11 @@ get:
       in: query
       schema:
         type: boolean
+    - name: championship_only
+      in: query
+      schema:
+        type: boolean
+      description: Only return championships
     - name: continent
       in: query
       schema:
@@ -63,6 +68,11 @@ get:
       schema:
         type: string
         format: datetime
+    - name: scoretaking_software
+      in: query
+      schema:
+        type: string
+        enum: [external, wca_live, internal]
   responses:
     '200':
       description: Successful response

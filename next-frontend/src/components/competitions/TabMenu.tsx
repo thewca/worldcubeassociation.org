@@ -10,7 +10,6 @@ import {
   IconButton,
   Link as ChakraLink,
   Separator,
-  Spacer,
   Tabs,
   Text,
   TextProps,
@@ -40,12 +39,10 @@ function activityCodeFromPath(path: string) {
 
 export default function TabMenu({
   competitionInfo,
-  children,
   tabs,
   backHref,
   customTabs = [],
 }: {
-  children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
   backHref?: RouteLiteral;
@@ -69,15 +66,7 @@ export default function TabMenu({
   const drawerOpen = drawerOpenedAt === pathName;
 
   return (
-    <Tabs.Root
-      variant="enclosed"
-      width="full"
-      value={currentPath}
-      orientation="vertical"
-      sideNav
-      lazyMount
-      unmountOnExit
-    >
+    <>
       <Tabs.List
         width="fit-content"
         minW="3xs"
@@ -176,12 +165,7 @@ export default function TabMenu({
           </Drawer.Positioner>
         </Drawer.Root>
       </Box>
-      {/* Tabs.Content is a flex item, which has `min-width: auto`.
-       It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
-      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
-        {children}
-      </Tabs.Content>
-    </Tabs.Root>
+    </>
   );
 }
 
@@ -393,18 +377,17 @@ function CollapsibleTabGroup({
                 key={menuKey}
                 disabled={disabled}
               >
-                <Text asChild justifyContent="left">
-                  <TabTarget
-                    tabKey={menuKey}
-                    currentPath={currentPath}
-                    href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
-                    disabled={disabled}
-                    display="flex"
-                  >
-                    {t(i18nKey)} <Spacer />
-                    {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
-                  </TabTarget>
-                </Text>
+                <TabTarget
+                  tabKey={menuKey}
+                  currentPath={currentPath}
+                  href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
+                  disabled={disabled}
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  {t(i18nKey)}
+                  {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                </TabTarget>
               </Tabs.Trigger>
             ),
           )}

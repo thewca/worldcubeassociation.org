@@ -2084,8 +2084,6 @@ zh-TW:
         competitors: 參賽者
         scrambles: 轉亂步驟內容
     results_table:
-      h2h_results_disclaimer: 
-        成績由Head-to-Head決賽決定。目前僅顯示名次順序與最佳單次成績，完整的Head-to-Head成績顯示功能仍在開發中。
       wca_profile: WCA個人頁面
       event: 項目
       round: 輪數

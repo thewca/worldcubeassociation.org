@@ -2,14 +2,14 @@
 
 module ResultConditions
   class Percent < ResultCondition
-    attribute :scope, :string
-    attribute :value, :integer
-
-    validates :scope, inclusion: { in: %w[single average] }
     validates :value, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
 
     def self.wcif_type
       "percent"
+    end
+
+    def to_desc(_source, short: false)
+      I18n.t("advancement_condition#{'.short' if short}.percent", percent: self.value)
     end
 
     def max_advancing(results)

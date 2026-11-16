@@ -26,8 +26,8 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     end
 
     it "doesn't complain when it's fine" do
-      round_333oh_1, round_333oh_2, round_333oh_3, round_333oh_f = (1..4).map { |i| create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 4, number: i) }
-      round_222_1, round_222_f = (1..2).map { |i| create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: i) }
+      round_333oh_1, round_333oh_2, round_333oh_3, round_333oh_f = create_rounds("333oh", count: 4, competition: competition1)
+      round_222_1, round_222_f = create_rounds("222", count: 2, competition: competition2)
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
         # Collecting all the results and using bulk import for better performance.
@@ -50,7 +50,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
 
     it "ignores b-final" do
       round_333oh_b_final = create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 2, number: 0, old_type: "b")
-      round_33_oh_1, round_33_oh_f = (1..2).map { |i| create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 2, number: i) }
+      round_33_oh_1, round_33_oh_f = create_rounds("333oh", count: 2, competition: competition1)
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
         # Collecting all the results and using bulk import for better performance.
@@ -77,12 +77,11 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     # COMPETED_NOT_QUALIFIED_ERROR
     it "validates round's advancement condition" do
       first_round = create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 1)
-      first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(1700))
-      second_round = create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 2)
+      second_round = create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 2, participation_source: first_round,
+                                    participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 1700))
 
       first_round2 = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1)
-      first_round2.update(advancement_condition: AdvancementConditions::RankingCondition.new(4))
-      second_round2 = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2)
+      second_round2 = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round2, participation_condition: ResultConditions::Ranking.new(scope: 'average', value: 4))
 
       expected_errors = []
       # We create 20 competitors:
@@ -108,12 +107,12 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
                                                    :rounds, competition2.id,
                                                    round_id: "222-f",
                                                    ids: "#{fake_person.name} (#{fake_person.wca_id})",
-                                                   condition: first_round.advancement_condition.to_s(first_round))
+                                                   condition: second_round.participation_condition_to_desc)
       end
       expected_errors << RV::ValidationError.new(ACV::ROUND_9P1_ERROR,
                                                  :rounds, competition2.id,
                                                  round_id: "222-f",
-                                                 condition: first_round.advancement_condition.to_s(first_round))
+                                                 condition: second_round.participation_condition_to_desc)
       expected_warnings = [
         RV::ValidationWarning.new(ACV::NOT_ENOUGH_QUALIFIED_WARNING,
                                   :rounds, competition2.id,
@@ -121,7 +120,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         RV::ValidationWarning.new(ACV::TOO_MANY_QUALIFIED_WARNING,
                                   :rounds, competition3.id,
                                   round_id: "333-f", actual: 9, expected: 4,
-                                  condition: first_round2.advancement_condition.to_s(first_round2)),
+                                  condition: second_round2.participation_condition_to_desc),
       ]
       acv = ACV.new.validate(competition_ids: [competition2.id, competition3.id], model: Result)
       expect(acv.warnings).to match_array(expected_warnings)
@@ -130,7 +129,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
 
     context 'competed_not_qualified' do
       let(:first_round) { create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 1) }
-      let(:second_round) { create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2) }
+      let(:second_round) { create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 2, number: 2, participation_source: first_round) }
 
       before do
         # This creates 8 competitors (to not trigger 9m3), only 1 of whom has a result in the second round
@@ -162,7 +161,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       # _actually_ participated in the round
       it 'recognizes that WCA_ID: nil users are distinct' do
         # Only the first inbox_result created above will pass this
-        first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(150))
+        second_round.update(participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 150))
 
         acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
         expect(acv.errors).to be_empty
@@ -170,7 +169,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
 
       it "triggers when user achieves a results in 2nd round they shouldn't have advanced to" do
         # Set an advancement condition that all inbox_results created above will fail
-        first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(99))
+        second_round.update(participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 99))
 
         acv = ACV.new.validate(competition_ids: [competition3.id], model: InboxResult)
         expect(acv.errors.length).to be(1)
@@ -178,7 +177,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       end
 
       it 'returns name, and WCA ID when available' do
-        first_round.update(advancement_condition: AdvancementConditions::AttemptResultCondition.new(99))
+        second_round.update(participation_condition: ResultConditions::ResultAchieved.new(scope: 'average', value: 99))
 
         # Create a second round result for an existing person, so that we see both output formats
         inbox_result = create(
@@ -198,8 +197,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
 
     it "ignores incomplete results when computing qualified people" do
       first_round = create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 1)
-      first_round.update(advancement_condition: AdvancementConditions::PercentCondition.new(75))
-      second_round = create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 2)
+      second_round = create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 2, participation_source: first_round, participation_condition: ResultConditions::Percent.new(scope: 'average', value: 75))
       # This creates 20 results: 10 complete, 10 DNF. With 75% proceeding it used to report a
       # warning that 15 could have proceeded but only 10 did. Now we take into account
       # the number of valid results when emitting the warning.
@@ -243,8 +241,8 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     # REGULATION_9P1_ERROR
     # OLD_REGULATION_9P_ERROR
     it "complains when it should" do
-      round_333oh_1, round_333oh_2, round_333oh_3, round_333oh_f = (1..4).map { |i| create(:round, competition: competition1, event_id: "333oh", total_number_of_rounds: 4, number: i) }
-      round_222_1, round_222_f = (1..2).map { |i| create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: i) }
+      round_333oh_1, round_333oh_2, round_333oh_3, round_333oh_f = create_rounds("333oh", count: 4, competition: competition1)
+      round_222_1, round_222_f = create_rounds("222", count: 2, competition: competition2)
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
         # Collecting all the results and using bulk import for better performance.
@@ -280,6 +278,19 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         expect(acv.warnings).to be_empty
         expect(acv.errors).to match_array(expected_errors)
       end
+    end
+  end
+
+  def create_rounds(event_id, count:, **attrs)
+    first_round = create(:round, number: 1, event_id: event_id, total_number_of_rounds: count, **attrs)
+
+    # Fold the rounds into one big array, while keeping track of the rounds we already have:
+    #   It is required to backlink the (respectively) previous round into the current round.
+    (2..count).reduce([first_round]) do |rounds, number|
+      [
+        *rounds,
+        create(:round, number: number, competition_event: first_round.competition_event, total_number_of_rounds: count, participation_source: rounds.last, **attrs),
+      ]
     end
   end
 end

@@ -658,6 +658,22 @@ RSpec.describe "API Competitions" do
       response_json = response.parsed_body
       expect(response_json.length).to eq(6)
     end
+
+    it 'takes parameter to filter by scoretaking software' do
+      create_list(:competition, 3, :visible, scoretaking_software: :internal)
+      create_list(:competition, 2, :visible, scoretaking_software: :wca_live)
+
+      get api_v0_competition_index_path, params: { scoretaking_software: 'internal' }
+      expect(response).to be_successful
+
+      response_json = response.parsed_body
+      expect(response_json.length).to eq(3)
+    end
+
+    it 'rejects an unknown scoretaking software' do
+      get api_v0_competition_index_path, params: { scoretaking_software: 'pen_and_paper' }
+      expect(response).to have_http_status(:unprocessable_content)
+    end
   end
 end
 

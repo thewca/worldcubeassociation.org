@@ -94,7 +94,6 @@ export default function ResultMenu({
         onOpenChange={({ open: o }) => onOpenChange?.(o)}
         positioning={clickPos ? { getAnchorRect: () => clickPos } : undefined}
       >
-        <Menu.Trigger>{competitor.registrant_id}</Menu.Trigger>
         <Portal>
           <Menu.Positioner>
             <Menu.Content>

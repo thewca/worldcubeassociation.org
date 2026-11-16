@@ -24,13 +24,18 @@ export default function EventPanel({
   wcifEvent,
 }) {
   const {
-    wcifEvents, canAddAndRemoveEvents, canUpdateEvents, canUpdateQualifications,
+    wcifEvents,
+    canAddAndRemoveEvents,
+    canUpdateEvents,
+    canUpdateQualifications,
+    scoretakingSoftware,
   } = useStore();
   const dispatch = useDispatch();
   const confirm = useConfirm();
 
   const disabled = !canUpdateEvents;
   const event = events.byId[wcifEvent.id];
+  const requiresInternalScoretaking = event.id === 'fto' && scoretakingSoftware !== 'internal';
 
   const handleRemoveEvent = () => {
     if (wcifEvent.rounds && wcifEvent.rounds.length > 0) {
@@ -97,11 +102,11 @@ export default function EventPanel({
     return (
       <Button
         className="add-event"
-        disabled={!canAddAndRemoveEvents}
+        disabled={!canAddAndRemoveEvents || requiresInternalScoretaking}
         title={
-          !canAddAndRemoveEvents
-            ? `Cannot add ${event.name} because the competition is confirmed.`
-            : ''
+          (!canAddAndRemoveEvents && `Cannot add ${event.name} because the competition is confirmed.`)
+          || (requiresInternalScoretaking && `${event.name} requires the scoretaking software to be set to 'Integrated Live Results'.`)
+          || ''
         }
         onClick={() => dispatch(addEvent(wcifEvent.id))}
         positive

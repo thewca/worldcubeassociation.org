@@ -4,7 +4,28 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
   # Posted results are public data — the competition results pages render them for signed-out visitors.
   skip_before_action :require_user!
 
-  before_action :set_competition
+  # Mirrors the WCA Live landing page, which lists everything from one month back.
+  LIVE_COMPETITIONS_LOOKBACK = 1.month
+
+  def live
+    competitions = Competition.visible
+                              .not_cancelled
+                              .scoretaking_software_internal
+                              .where(end_date: LIVE_COMPETITIONS_LOOKBACK.ago.to_date..)
+                              .includes(:events, :championships)
+                              .order_by_date
+
+    upcoming, started = competitions.partition(&:upcoming?)
+    in_progress, past = started.partition(&:in_progress?)
+
+    render json: {
+      upcoming: upcoming.as_json(Competition::INDEX_SERIALIZE_OPTIONS),
+      in_progress: in_progress.as_json(Competition::INDEX_SERIALIZE_OPTIONS),
+      past: past.reverse.as_json(Competition::INDEX_SERIALIZE_OPTIONS),
+    }
+  end
+
+  before_action :set_competition, except: %i[live]
 
   # Every round of the competition with its results nested, ordered by event and round number.
   # The frontend regroups these by event or by person; the round carries the context that would
@@ -23,6 +44,22 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     return unless stale?(@competition.results, public: true)
 
     render json: @competition.to_v1_podiums_json
+  end
+
+  def head_to_head
+    rounds = @competition.rounds
+                         .h2h
+                         .includes(
+                           :competition_event,
+                           { results: { person: :user } },
+                           { live_results: :registration },
+                           h2h_matches: [
+                             { h2h_match_competitors: :user },
+                             { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
+                           ],
+                         )
+
+    render json: rounds.as_json(Round::H2H_SERIALIZE_OPTIONS)
   end
 
   private def set_competition

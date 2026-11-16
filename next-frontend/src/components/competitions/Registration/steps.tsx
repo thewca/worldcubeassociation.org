@@ -5,10 +5,10 @@ import { DateTime } from "luxon";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
 import PaymentStep from "@/components/competitions/Registration/PaymentStep";
-import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import {
   eventLimit,
   guestLimit,
@@ -55,8 +55,6 @@ export function StepContent({
           deadline={step.deadline}
         />
       );
-    case "approval":
-      return registration && <RegistrationStatus registration={registration} />;
   }
 }
 
@@ -86,6 +84,22 @@ export function isStepComplete(
   }
 }
 
+/**
+ * Whether a step the competitor has walked past is actually done. Approval is up to the organizers,
+ * so walking past it only means waiting for them.
+ */
+export function isStepSettled(
+  step: StepConfig,
+  registration: Registration | null,
+) {
+  switch (step.key) {
+    case "approval":
+      return registration?.competing.registration_status === "accepted";
+    default:
+      return true;
+  }
+}
+
 /** What the competitor settled in a step, as shown on the summary once they have walked them all. */
 export function StepSummary({
   step,
@@ -97,6 +111,7 @@ export function StepSummary({
   registration: Registration;
 }) {
   const { t } = useT();
+  const lng = useLocale();
 
   if (step.summary_status === "hide") {
     return;
@@ -149,7 +164,7 @@ export function StepSummary({
               <DataList.ItemValue>
                 {DateTime.fromISO(
                   registration.competing.registered_on,
-                ).toLocaleString(DateTime.DATETIME_FULL)}
+                ).toLocaleString(DateTime.DATETIME_FULL, { locale: lng })}
               </DataList.ItemValue>
             </DataList.Item>
           )}
@@ -177,8 +192,6 @@ export function StepSummary({
         </Text>
       );
     }
-    case "approval":
-      return <RegistrationStatus registration={registration} />;
   }
 }
 
