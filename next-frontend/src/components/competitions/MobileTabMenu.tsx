@@ -49,7 +49,7 @@ const groupTabsMap = new Map([
   ["live_events", "events"],
 ]);
 
-const groupIcons = {
+const groupIcons: Record<string, React.ReactNode> = {
   info: <LuClipboardList />,
   register: null,
   more: <LuEllipsis />,
@@ -229,9 +229,7 @@ function GroupItem({
   t,
   renderLabel,
 }: GroupProps) {
-  const groupIcon = groupIcons[group as keyof typeof groupIcons] || (
-    <LuFileQuestion />
-  );
+  const groupIcon = groupIcons[group] || <LuFileQuestion />;
   return (
     <Menu.Root positioning={{ placement: "top", gutter: 12 }}>
       <Menu.Trigger asChild>
