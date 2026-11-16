@@ -6,6 +6,7 @@ import TabMenuSkeleton from "@/components/competitions/TabMenuSkeleton";
 import { Box } from "@chakra-ui/react";
 import { Suspense } from "react";
 import PageContent from "@/components/competitions/PageContentWrapper";
+import PageContentSkeleton from "@/components/competitions/PageContentSkeleton";
 
 export default async function CompetitionTabsLayout({
   children,
@@ -29,7 +30,7 @@ export default async function CompetitionTabsLayout({
         <Suspense>
           <AwaitingResultsAlert params={params} />
         </Suspense>
-        <Suspense>
+        <Suspense fallback={<PageContentSkeleton columns={1} />}>
           <PageContent params={params}>{children}</PageContent>
         </Suspense>
       </TabShell>
