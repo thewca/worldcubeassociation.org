@@ -377,7 +377,7 @@ Rails.application.routes.draw do
       get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
       get '/competitions/live' => 'competitions#live', as: :live_competitions
 
-      resources :competitions, only: [] do
+      resources :competitions, only: %i[show] do
         get '/results' => 'competitions#results', as: :results
         get '/podiums' => 'competitions#podiums', as: :podiums
         get '/head-to-head' => 'competitions#head_to_head', as: :head_to_head

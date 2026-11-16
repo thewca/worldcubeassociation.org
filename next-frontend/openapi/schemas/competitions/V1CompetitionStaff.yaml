@@ -1,0 +1,15 @@
+type: object
+required: [id, name, url, avatar]
+properties:
+  id:
+    type: integer
+    example: 267
+  name:
+    type: string
+    example: "Tim Reynolds"
+  url:
+    type: string
+    description: Empty for users without a WCA ID.
+    example: "https://www.worldcubeassociation.org/persons/2005REYN01"
+  avatar:
+    $ref: '../users/UserAvatar.yaml'

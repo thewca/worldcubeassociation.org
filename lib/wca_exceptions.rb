@@ -18,8 +18,8 @@ module WcaExceptions
   end
 
   class NotFound < ApiException
-    def initialize(error_str)
-      super(:not_found, error_str)
+    def initialize(error_str, **error_details)
+      super(:not_found, error_str, **error_details)
     end
   end
 

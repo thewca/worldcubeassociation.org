@@ -2303,6 +2303,102 @@ class Competition < ApplicationRecord
     include: {},
   }.freeze
 
+  V1_INFO_STAFF_SERIALIZE_OPTIONS = {
+    only: %w[id name],
+    methods: %w[url],
+    include: %w[avatar],
+    exclude_deprecated: true,
+  }.freeze
+
+  # `User#serializable_hash` checks `staff_delegate?` even with `exclude_deprecated`, which reads the role metadata.
+  V1_INFO_STAFF_INCLUDES = %i[current_avatar delegate_role_metadata].freeze
+
+  V1_INFO_INCLUDES = [
+    :events,
+    :competition_events,
+    :tabs,
+    :championships,
+    { delegates: V1_INFO_STAFF_INCLUDES, organizers: V1_INFO_STAFF_INCLUDES },
+  ].freeze
+
+  # `show_at_all` rather than `announced?`, so the status agrees with who may see the competition.
+  def lifecycle_status
+    if cancelled?
+      "cancelled"
+    elsif show_at_all?
+      if results_posted_at?
+        "results_posted"
+      elsif probably_over?
+        "results_pending"
+      else
+        "announced"
+      end
+    elsif confirmed?
+      "confirmed"
+    else
+      "unconfirmed"
+    end
+  end
+
+  def to_v1_info_json
+    {
+      "id" => id,
+      "name" => name,
+      "short_name" => short_name,
+      "status" => lifecycle_status,
+      "information" => information,
+      "website" => website,
+      "start_date" => start_date,
+      "end_date" => end_date,
+      "scoretaking_software" => scoretaking_software,
+      "number_of_bookmarks" => number_of_bookmarks,
+      "competition_series_ids" => competition_series&.public_competitions&.ids || [],
+      "championship_types" => championships.map(&:championship_type),
+      "tabs" => tabs.as_json(only: %w[id name]),
+      "events" => {
+        "event_ids" => event_ids,
+        "main_event_id" => main_event_id,
+      },
+      "venue" => {
+        "name" => venue,
+        "address" => venue_address,
+        "details" => venue_details,
+        "city" => city,
+        "country_iso2" => country_iso2,
+        "latitude_degrees" => latitude_degrees,
+        "longitude_degrees" => longitude_degrees,
+      },
+      "registration_info" => {
+        "opens_at" => registration_open,
+        "closes_at" => registration_close,
+        "competitor_limit" => (competitor_limit if competitor_limit_enabled?),
+        "spots_left" => spots_left,
+        "waiting_list_count" => waiting_list_count,
+        "on_the_spot_registration" => on_the_spot_registration,
+        "extra_requirements" => extra_registration_requirements,
+        "external_registration_page" => external_registration_page,
+        "event_change_deadline_date" => event_change_deadline_date,
+        "waiting_list_deadline_date" => waiting_list_deadline_date,
+        "competitor_can_cancel" => competitor_can_cancel,
+        "fees" => {
+          "currency_code" => currency_code,
+          "base_entry_lowest_denomination" => base_entry_fee_lowest_denomination,
+          "guests_entry_lowest_denomination" => guests_entry_fee_lowest_denomination,
+          "on_the_spot_entry_lowest_denomination" => on_the_spot_entry_fee_lowest_denomination,
+        },
+        "refund_policy" => {
+          "percent" => refund_policy_percent,
+          "limit_date" => refund_policy_limit_date,
+        },
+      },
+      "staff" => {
+        "contact" => contact,
+        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS),
+        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS),
+      },
+    }
+  end
+
   def serializable_hash(options = nil)
     # The intent behind this is to have a "good" default setup for serialization.
     # We also want the caller to be able to be picky about the attributes included

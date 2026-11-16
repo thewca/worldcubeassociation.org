@@ -204,6 +204,150 @@ RSpec.describe "API v1 Competitions" do
     end
   end
 
+  describe "GET #show" do
+    it "is reachable without logging in" do
+      get api_v1_competition_path(competition)
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to include("id" => competition.id, "short_name" => competition.short_name, "events" => include("event_ids" => ["333"]))
+      expect(response.parsed_body["venue"]).to include("latitude_degrees" => competition.latitude_degrees, "longitude_degrees" => competition.longitude_degrees)
+    end
+
+    it "lists only the announced competitions of its series" do
+      series = create(:competition_series)
+      announced_competition = create(:competition, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01')
+      unannounced_sibling = create(:competition, :not_visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02')
+
+      get api_v1_competition_path(announced_competition)
+
+      expect(response.parsed_body["competition_series_ids"]).to eq [announced_competition.id]
+      expect(unannounced_sibling.competition_series).to eq series
+    end
+
+    it "lists the championships it holds" do
+      championship = create(:competition, :visible, championship_types: %w[world PL])
+
+      get api_v1_competition_path(championship)
+
+      expect(response.parsed_body["championship_types"]).to match_array %w[world PL]
+    end
+
+    describe "status" do
+      it "is unconfirmed for a draft" do
+        draft = create(:competition, :not_visible, :with_organizer)
+        api_sign_in_as(draft.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(draft)
+
+        expect(response.parsed_body["status"]).to eq "unconfirmed"
+      end
+
+      it "is confirmed once confirmed but not yet announced" do
+        confirmed_competition = create(:competition, :confirmed, :not_visible)
+        api_sign_in_as(confirmed_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(confirmed_competition)
+
+        expect(response.parsed_body["status"]).to eq "confirmed"
+      end
+
+      it "is announced once visible" do
+        announced_competition = create(:competition, :confirmed, :visible, :announced, :future)
+
+        get api_v1_competition_path(announced_competition)
+
+        expect(response.parsed_body["status"]).to eq "announced"
+      end
+
+      it "is results_pending once over without results" do
+        over_competition = create(:competition, :confirmed, :visible, :announced, :past)
+
+        get api_v1_competition_path(over_competition)
+
+        expect(response.parsed_body["status"]).to eq "results_pending"
+      end
+
+      it "is results_posted once results are posted" do
+        posted_competition = create(:competition, :confirmed, :visible, :announced, :past, :results_posted)
+
+        get api_v1_competition_path(posted_competition)
+
+        expect(response.parsed_body["status"]).to eq "results_posted"
+      end
+
+      it "stays cancelled even though it was announced" do
+        cancelled_competition = create(:competition, :confirmed, :visible, :cancelled)
+
+        get api_v1_competition_path(cancelled_competition)
+
+        expect(response.parsed_body["status"]).to eq "cancelled"
+      end
+    end
+
+    describe "competitor limit" do
+      it "is returned when the limit is enabled" do
+        limited_competition = create(:competition, :visible, :with_competitor_limit)
+
+        get api_v1_competition_path(limited_competition)
+
+        expect(response.parsed_body.dig("registration_info", "competitor_limit")).to eq 100
+      end
+
+      it "is null when the limit is disabled, even if a number is stored" do
+        unlimited_competition = create(:competition, :visible, competitor_limit_enabled: false, competitor_limit: 100)
+
+        get api_v1_competition_path(unlimited_competition)
+
+        expect(response.parsed_body.dig("registration_info", "competitor_limit")).to be_nil
+      end
+    end
+
+    it "serializes delegates without their deprecated team data" do
+      get api_v1_competition_path(competition)
+
+      expect(response.parsed_body.dig("staff", "delegates").first.keys).to contain_exactly("id", "name", "url", "avatar", "class")
+    end
+
+    context "when the competition is unannounced" do
+      let(:unannounced_competition) { create(:competition, :not_visible, :with_organizer) }
+
+      it "is not found for anonymous users, exactly like a missing competition" do
+        get api_v1_competition_path("NotAComp2026")
+        missing_body = response.parsed_body
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.parsed_body.to_json).to eq missing_body.to_json.gsub("NotAComp2026", unannounced_competition.id)
+      end
+
+      it "is not found for users who can't manage it" do
+        api_sign_in_as(create(:user))
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "is not found for its organizers when their token lacks the manage_competitions scope" do
+        api_sign_in_as(unannounced_competition.organizers.first)
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "is returned to its organizers when their token has the manage_competitions scope" do
+        api_sign_in_as(unannounced_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to be_successful
+        expect(response.parsed_body["id"]).to eq unannounced_competition.id
+      end
+    end
+  end
+
   describe "unknown competition" do
     it "returns not found for the results" do
       get api_v1_competition_results_path("NotAComp2026")
