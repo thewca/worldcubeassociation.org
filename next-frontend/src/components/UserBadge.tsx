@@ -32,6 +32,16 @@ const UserBadge: React.FC<UserBadgeData> = ({
   action,
   email,
 }) => {
+  const nameOrProfileLink = wcaId ? (
+    <LinkOverlay asChild>
+      <Link href={route({ pathname: "/persons/[wcaId]", query: { wcaId } })}>
+        {name}
+      </Link>
+    </LinkOverlay>
+  ) : (
+    name
+  );
+
   return (
     <LinkBox asChild>
       <Card.Root
@@ -66,20 +76,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
           <Card.Body gap={2}>
             <Card.Title>
               <HStack direction="row" justify="space-between">
-                {wcaId ? (
-                  <LinkOverlay asChild>
-                    <Link
-                      href={route({
-                        pathname: "/persons/[wcaId]",
-                        query: { wcaId },
-                      })}
-                    >
-                      {name}
-                    </Link>
-                  </LinkOverlay>
-                ) : (
-                  name
-                )}
+                {nameOrProfileLink}
                 {email && <EmailCopyButton email={email} />}
               </HStack>
             </Card.Title>

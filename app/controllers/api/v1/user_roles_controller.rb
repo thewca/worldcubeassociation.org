@@ -5,7 +5,7 @@ class Api::V1::UserRolesController < Api::V1::ApiController
   skip_before_action :require_user!
 
   def active
-    roles = UserRole.active.includes(:user, :group)
+    roles = UserRole.active.includes(:user, :group).preload(:metadata, group: :metadata)
     roles = roles.where(group: { group_type: params[:group_type] }) if params[:group_type].present?
     roles = roles.where(group_id: params[:group_id]) if params[:group_id].present?
     roles = roles.where(group: { parent_group_id: params[:parent_group_id] }) if params[:parent_group_id].present?

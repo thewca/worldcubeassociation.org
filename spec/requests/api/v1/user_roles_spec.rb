@@ -21,9 +21,11 @@ RSpec.describe "API v1 User Roles" do
     end
 
     it "filters by group" do
-      get api_v1_active_user_roles_path(group_id: active_roles.first.group_id)
+      wrt_role = create(:user_role, :active, :wrt_member)
 
-      expect(response.parsed_body.pluck("id")).to match_array active_roles.map(&:id)
+      get api_v1_active_user_roles_path(group_id: wrt_role.group_id)
+
+      expect(response.parsed_body.pluck("id")).to eq [wrt_role.id]
     end
   end
 end

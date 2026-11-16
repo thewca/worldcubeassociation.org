@@ -13,6 +13,8 @@ async function getActiveRoles(query: ActiveUserRolesQuery) {
   return serverClient.GET("/v1/user_roles/active", { params: { query } });
 }
 
+const PAST_TEAM_COMMITTEE_MEMBERS_LIMIT = 100;
+
 async function getPastTeamCommitteeMembers(groupId: number) {
   "use cache";
   cacheLife("hours");
@@ -23,7 +25,7 @@ async function getPastTeamCommitteeMembers(groupId: number) {
         groupId,
         isActive: false,
         sort: "status:desc,name:asc",
-        per_page: 100,
+        per_page: PAST_TEAM_COMMITTEE_MEMBERS_LIMIT,
       },
     },
   });
