@@ -1,13 +1,14 @@
 import { serverClient } from "@/lib/wca/wcaAPI";
-import { cache } from "react";
+import { cacheLife } from "next/cache";
 
-const getActiveRolesOfType = cache(
-  async (groupType: string, perPage: number = 25) => {
-    return await serverClient.GET("/v0/user_roles", {
-      params: { query: { isActive: true, groupType, per_page: perPage } },
-    });
-  },
-);
+async function getActiveRolesOfType(groupType: string, perPage: number = 25) {
+  "use cache";
+  cacheLife("hours");
+
+  return serverClient.GET("/v0/user_roles", {
+    params: { query: { isActive: true, groupType, per_page: perPage } },
+  });
+}
 
 export const getOfficersRoles = () => getActiveRolesOfType("officers");
 export const getBoardRoles = () => getActiveRolesOfType("board");
