@@ -108,7 +108,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/swagger-ui-react": "^5.18.0",
-    "@vitejs/plugin-react": "^6.1.2",
+    "@vitejs/plugin-react": "^6.3.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^10",
     "eslint-config-next": "16.4.5",
