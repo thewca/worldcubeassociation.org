@@ -2239,9 +2239,6 @@ eu:
         open: Zabalik
         not_open: Zabaldu gabe
         closed: Itxita
-      currently_displaying:
-        one: 'Une honetan lehiaketa %{count} erakusten'
-        other: 'Une honetan %{count} lehiaketa erakusten'
       register_now: Izena eman orain
       view_competition: Lehiaketa ikusi
       no_more_comps: Ez dago lehiaketa gehiagorik

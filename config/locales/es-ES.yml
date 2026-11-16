@@ -2364,10 +2364,6 @@ es-ES:
         open: Abierto
         not_open: Aún sin abrir
         closed: Cerrado
-      currently_displaying:
-        one: Mostrando una competición
-        many: Mostrando %{count} competiciones
-        other: Mostrando %{count} competiciones
       register_now: Regístrate ahora
       view_competition: Ver competición
       no_more_comps: No hay más competiciones.

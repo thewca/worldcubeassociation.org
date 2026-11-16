@@ -2178,8 +2178,6 @@ vi:
         open: Đang mở
         not_open: Chưa mở
         closed: Đã đóng
-      currently_displaying:
-        other: 'Đang hiển thị: %{count} giải đấu'
       register_now: Đăng ký ngay
       view_competition: Xem giải đấu
       why_compete_description_html: |-

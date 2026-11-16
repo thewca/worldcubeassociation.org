@@ -2339,10 +2339,6 @@ it:
         open: Aperte
         not_open: Non ancora aperte
         closed: Chiuse
-      currently_displaying:
-        one: 'Attualmente visualizzata: %{count} competizione'
-        many: 'Attualmente visualizzate: %{count} competizioni'
-        other: 'Attualmente visualizzate: %{count} competizioni'
       register_now: Iscriviti ora
       view_competition: Vedi competizione
       why_compete_description_html: |-

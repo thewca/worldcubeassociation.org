@@ -2410,10 +2410,6 @@ fr-CA:
         open: Ouvert
         not_open: Non ouvert
         closed: Fermé
-      currently_displaying:
-        one: 'Affichage actuel : %{count} compétition'
-        many: 'Affichage actuel : %{count} compétitions'
-        other: 'Affichage actuel : %{count} compétitions'
       register_now: Inscrivez-vous dès maintenant
       view_competition: Voir la compétition
       no_more_comps: Plus aucune compétition.
