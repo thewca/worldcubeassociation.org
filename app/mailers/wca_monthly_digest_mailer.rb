@@ -5,6 +5,8 @@ class WcaMonthlyDigestMailer < ApplicationMailer
 
   def send_weat_digest_content
     last_month = 1.month.ago.beginning_of_month
+    @digest = WcaMonthlyDigest.new
+    @delegate_milestones = User.delegate_milestones_for_digest
     mail(
       to: ["assistants@worldcubeassociation.org"],
       reply_to: ["assistants@worldcubeassociation.org"],
