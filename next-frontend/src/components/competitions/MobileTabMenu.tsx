@@ -146,7 +146,6 @@ export default function MobileTabMenu({
       bottom="4"
       mb="env(safe-area-inset-bottom)"
       zIndex="sticky"
-      hideFrom="md"
     >
       <Card.Root variant="elevated" rounded="3xl" colorPalette="blue">
         <Card.Body p="1.5" flexDirection="row" gap="1">
