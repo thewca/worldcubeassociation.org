@@ -103,22 +103,27 @@ export default function MobileTabMenu({
     groupTabsMap.get(tab.menuKey) ??
     (tab.i18nKey.includes("events") ? "events" : undefined);
 
-  const grouped: GroupedTab = _.chain(tabs)
-    .filter((tab) => !_.isUndefined(resolveGroup(tab)))
-    .groupBy(resolveGroup)
-    .value();
+  const hasCustomTabs = !_.isEmpty(customTabs);
 
-  const custom: GroupedTab = _.groupBy(
-    _.map(customTabs, (tab) => ({
-      menuKey: tab,
-      i18nKey: tab,
-      href: route({
-        pathname: "/competitions/[competitionId]/custom-tabs/[tabName]",
-        query: { competitionId, tabName: encodeURIComponent(tab) },
-      }),
-    })),
-    () => "more",
-  );
+  const customNavTabs: CompetitionNavTab[] = _.map(customTabs, (tab) => ({
+    menuKey: tab,
+    i18nKey: tab,
+    href: route({
+      pathname: "/competitions/[competitionId]/custom-tabs/[tabName]",
+      query: { competitionId, tabName: encodeURIComponent(tab) },
+    }),
+  }));
+
+  const grouped: GroupedTab = _.chain(tabs)
+    .map((tab) => ({ group: resolveGroup(tab), tab }))
+    .filter(
+      ({ group }) =>
+        !_.isUndefined(group) && !(hasCustomTabs && group === "more"),
+    )
+    .concat(_.map(customNavTabs, (tab) => ({ group: "more", tab })))
+    .groupBy("group")
+    .mapValues((entries) => _.map(entries, "tab"))
+    .value();
 
   const isCustomTabActive = _.some(
     customTabs,
@@ -147,27 +152,26 @@ export default function MobileTabMenu({
     >
       <Card.Root variant="elevated" rounded="3xl" colorPalette="blue">
         <Card.Body p="1.5" flexDirection="row" gap="1">
-          {Object.entries({ ...grouped, ...custom }).map(
-            ([group, groupTabs]) =>
-              groupTabs.length === 1 && group !== "more" ? (
-                <LinkItem
-                  key={group}
-                  tab={groupTabs[0]}
-                  selected={group === activeGroup}
-                  t={t}
-                  isAdminRoute={isAdminRoute}
-                />
-              ) : (
-                <GroupItem
-                  key={group}
-                  group={group}
-                  tabs={groupTabs}
-                  selected={group === activeGroup}
-                  activeMenuKey={activeMenuKey}
-                  t={t}
-                  isAdminRoute={isAdminRoute}
-                />
-              ),
+          {_.map(grouped, (groupTabs, group) =>
+            groupTabs.length === 1 && group !== "more" ? (
+              <LinkItem
+                key={group}
+                tab={groupTabs[0]}
+                selected={group === activeGroup}
+                t={t}
+                isAdminRoute={isAdminRoute}
+              />
+            ) : (
+              <GroupItem
+                key={group}
+                group={group}
+                tabs={groupTabs}
+                selected={group === activeGroup}
+                activeMenuKey={activeMenuKey}
+                t={t}
+                isAdminRoute={isAdminRoute}
+              />
+            ),
           )}
         </Card.Body>
       </Card.Root>
