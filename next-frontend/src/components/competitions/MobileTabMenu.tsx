@@ -34,6 +34,7 @@ import events from "@/lib/wca/data/events";
 import { usePathname } from "next/navigation";
 import _ from "lodash";
 import { useT } from "@/lib/i18n/useI18n";
+import { renderLabel } from "./TabMenu";
 
 const groupTabsMap = new Map([
   ["general", "info"],
@@ -136,18 +137,6 @@ export default function MobileTabMenu({
         ? "events"
         : "";
 
-  const renderLabel = (renderTab: CompetitionNavTab) =>
-    // i18n-tasks-use t('competitions.nav.info')
-    // i18n-tasks-use t('competitions.nav.more')
-    // i18n-tasks-use t('competitions.nav.admin')
-    // i18n-tasks-use t('competitions.nav.results')
-    // i18n-tasks-use t('competitions.nav.events')
-    t(
-      isAdminRoute && renderTab.i18nKeyAdmin
-        ? renderTab.i18nKeyAdmin
-        : renderTab.i18nKey,
-    );
-
   return (
     <Box
       as="nav"
@@ -168,7 +157,8 @@ export default function MobileTabMenu({
                   key={group}
                   tab={groupTabs[0]}
                   selected={group === activeGroup}
-                  renderLabel={renderLabel}
+                  t={t}
+                  isAdminRoute={isAdminRoute}
                 />
               ) : (
                 <GroupItem
@@ -178,7 +168,7 @@ export default function MobileTabMenu({
                   selected={group === activeGroup}
                   activeMenuKey={activeMenuKey}
                   t={t}
-                  renderLabel={renderLabel}
+                  isAdminRoute={isAdminRoute}
                 />
               ),
           )}
@@ -191,10 +181,11 @@ export default function MobileTabMenu({
 interface ItemProps {
   tab: CompetitionNavTab;
   selected: boolean;
-  renderLabel: (renderTab: CompetitionNavTab) => string;
+  t: TFunction;
+  isAdminRoute: boolean;
 }
 
-function LinkItem({ tab, selected, renderLabel }: ItemProps) {
+function LinkItem({ tab, selected, t, isAdminRoute }: ItemProps) {
   if (!("href" in tab)) return null;
   return (
     <ChakraLink
@@ -207,7 +198,7 @@ function LinkItem({ tab, selected, renderLabel }: ItemProps) {
       aria-current={selected ? "page" : undefined}
     >
       <ItemLabel
-        text={renderLabel(tab)}
+        text={renderLabel(tab, t, isAdminRoute)}
         icon={tab.icon && <IconDisplay name={tab.icon} size="1.5em" />}
       />
     </ChakraLink>
@@ -220,7 +211,7 @@ interface GroupProps {
   selected: boolean;
   activeMenuKey: string;
   t: TFunction;
-  renderLabel: (renderTab: CompetitionNavTab) => string;
+  isAdminRoute: boolean;
 }
 
 function GroupItem({
@@ -229,7 +220,7 @@ function GroupItem({
   selected,
   activeMenuKey,
   t,
-  renderLabel,
+  isAdminRoute,
 }: GroupProps) {
   const groupIcon = groupIcons[group] || <LuFileQuestion />;
   return (
@@ -259,7 +250,7 @@ function GroupItem({
                 encodeURIComponent(tab.menuKey) === activeMenuKey ||
                 (group === "events" && activeMenuKey.includes(tab.menuKey));
 
-              const label = renderLabel(tab);
+              const label = isLink ? renderLabel(tab, t, isAdminRoute) : "";
               return (
                 <Menu.Item
                   key={tab.menuKey}
@@ -279,8 +270,9 @@ function GroupItem({
                     <ItemWithChildren
                       tab={tab}
                       isItemActive={isActive}
-                      renderLabel={renderLabel}
                       activeMenuKey={activeMenuKey}
+                      t={t}
+                      isAdminRoute={isAdminRoute}
                     />
                   )}
                 </Menu.Item>
@@ -372,12 +364,14 @@ function ItemWithChildren({
   tab,
   activeMenuKey,
   isItemActive,
-  renderLabel,
+  t,
+  isAdminRoute,
 }: {
   tab: TabWithChildren;
   activeMenuKey: string;
   isItemActive: boolean;
-  renderLabel: (renderTab: CompetitionNavTab) => string;
+  t: TFunction;
+  isAdminRoute: boolean;
 }) {
   return (
     <Menu.Root positioning={{ placement: "left", gutter: 2 }}>
@@ -390,8 +384,13 @@ function ItemWithChildren({
             <IconDisplay name={tab.icon} size="1.25em" />
           </Box>
         )}
-        <Text as="span" truncate minW={0} title={renderLabel(tab)}>
-          {renderLabel(tab)}
+        <Text
+          as="span"
+          truncate
+          minW={0}
+          title={renderLabel(tab, t, isAdminRoute)}
+        >
+          {renderLabel(tab, t, isAdminRoute)}
         </Text>
       </Menu.TriggerItem>
       <Portal>
@@ -413,7 +412,7 @@ function ItemWithChildren({
                     <SingleItem
                       tab={tab}
                       isActive={isActive}
-                      label={renderLabel(tab)}
+                      label={renderLabel(tab, t, isAdminRoute)}
                     />
                   </Menu.Item>
                 );

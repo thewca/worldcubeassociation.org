@@ -195,6 +195,22 @@ function BackLink({
   );
 }
 
+export const renderLabel = (
+  renderTab: CompetitionNavTab,
+  t: TFunction,
+  isAdminRoute: boolean,
+) =>
+  // i18n-tasks-use t('competitions.nav.info')
+  // i18n-tasks-use t('competitions.nav.more')
+  // i18n-tasks-use t('competitions.nav.admin')
+  // i18n-tasks-use t('competitions.nav.results')
+  // i18n-tasks-use t('competitions.nav.events')
+  t(
+    isAdminRoute && renderTab.i18nKeyAdmin
+      ? renderTab.i18nKeyAdmin
+      : renderTab.i18nKey,
+  );
+
 function TabLink({
   tab,
   t,
@@ -206,13 +222,6 @@ function TabLink({
   isAdminRoute: boolean;
   currentPath?: string;
 }) {
-  const renderLabel = (renderTab: TabWithLink) =>
-    t(
-      isAdminRoute && renderTab.i18nKeyAdmin
-        ? renderTab.i18nKeyAdmin
-        : renderTab.i18nKey,
-    );
-
   const trigger = (
     <Tabs.Trigger
       value={tab.menuKey}
@@ -230,7 +239,7 @@ function TabLink({
           textStyle="bodyEmphasis"
         >
           {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
-          {renderLabel(tab)}
+          {renderLabel(tab, t, isAdminRoute)}
         </ChakraLink>
       ) : (
         <TabTarget
@@ -241,7 +250,7 @@ function TabLink({
           textStyle="bodyEmphasis"
         >
           {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
-          {renderLabel(tab)}
+          {renderLabel(tab, t, isAdminRoute)}
         </TabTarget>
       )}
     </Tabs.Trigger>
