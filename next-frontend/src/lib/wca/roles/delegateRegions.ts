@@ -13,11 +13,10 @@ export const getDelegateRegions = cache(async () => {
 });
 
 export const getDelegatesInGroup = cache(async (groupId: number) => {
-  return await serverClient.GET("/v0/user_roles", {
+  return await serverClient.GET("/v1/user_roles/active", {
     params: {
       query: {
-        groupId,
-        isActive: true,
+        group_id: groupId,
         sort: "location,name",
       },
     },
@@ -25,11 +24,10 @@ export const getDelegatesInGroup = cache(async (groupId: number) => {
 });
 
 export const getDelegatesInSubgroups = cache(async (groupId: number) => {
-  return await serverClient.GET("/v0/user_roles", {
+  return await serverClient.GET("/v1/user_roles/active", {
     params: {
       query: {
-        parentGroupId: groupId,
-        isActive: true,
+        parent_group_id: groupId,
         sort: "location,name",
       },
     },

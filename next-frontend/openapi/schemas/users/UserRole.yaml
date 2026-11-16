@@ -20,7 +20,7 @@ properties:
   group:
     $ref: './UserGroup.yaml'
   user:
-    $ref: './Person.yaml'
+    $ref: './RoleUser.yaml'
   metadata:
     type: object
     properties:

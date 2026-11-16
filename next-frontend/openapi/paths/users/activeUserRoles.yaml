@@ -1,0 +1,35 @@
+get:
+  summary: Get all active user roles, unpaginated
+  tags:
+    - users
+  operationId: activeUserRoles
+  parameters:
+    - name: group_type
+      in: query
+      schema:
+        type: string
+      description: Filter by group type (e.g., "officers")
+    - name: group_id
+      in: query
+      schema:
+        type: integer
+      description: Filter by group ID
+    - name: parent_group_id
+      in: query
+      schema:
+        type: integer
+      description: Filter by parent group ID
+    - name: sort
+      in: query
+      schema:
+        type: string
+      description: Sort by a specific field (e.g., "location,name")
+  responses:
+    '200':
+      description: A list of active user roles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/users/UserRole.yaml'

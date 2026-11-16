@@ -43,17 +43,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     should_include_emails = authenticated_user&.can_view_delegate_matters?
 
-    serialize_options = {
+    # Paginating the list by sending only first 100 elements unless mentioned in the API.
+    paginate json: roles, include: {
       user: { exclude_deprecated: true, include_email: should_include_emails },
       group: {},
       metadata: {},
     }
-
-    if ActiveRecord::Type::Boolean.new.cast(params[:isActive])
-      render json: roles, include: serialize_options
-    else
-      paginate json: roles, include: serialize_options
-    end
   end
 
   def show
