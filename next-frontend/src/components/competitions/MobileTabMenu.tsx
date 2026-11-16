@@ -154,7 +154,8 @@ export default function MobileTabMenu({
       aria-label={t("competition_tabs.headers.tabs")}
       position="fixed"
       insetInline="3"
-      bottom="calc(env(safe-area-inset-bottom) + var(--chakra-spacing-4))"
+      bottom="4"
+      mb="env(safe-area-inset-bottom)"
       zIndex="sticky"
       hideFrom="md"
     >
