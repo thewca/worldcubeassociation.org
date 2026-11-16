@@ -10,8 +10,12 @@ allOf:
       round_wcif_id:
         type: string
       global_pos:
-        type: integer
+        type:
+          - integer
+          - "null"
       local_pos:
-        type: integer
+        type:
+          - integer
+          - "null"
       event_id:
         type: string

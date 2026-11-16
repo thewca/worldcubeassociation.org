@@ -166,10 +166,10 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({
                       region={REGION_WORLD}
                       textAlign="end"
                     />
-                    <Table.Cell fontWeight="medium" textAlign="end">
+                    <Table.Cell fontWeight="bold" textAlign="end">
                       {formatAttemptResult(record.single.best, event)}
                     </Table.Cell>
-                    <Table.Cell fontWeight="medium" paddingStart={3}>
+                    <Table.Cell fontWeight="bold" paddingStart={3}>
                       {record.average &&
                         formatAttemptResult(record.average.best, event)}
                     </Table.Cell>

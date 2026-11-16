@@ -106,7 +106,9 @@ class StripeRecord < ApplicationRecord
       update_intent_args,
     )
 
-    updated_parameters = self.parameters.deep_merge(update_intent_args)
+    # Database implementations store dictionary keys as strings,
+    #   so using our `update_intent_args` from above would lead to "string and symbol" duplicates
+    updated_parameters = self.parameters.deep_merge(update_intent_args.deep_stringify_keys)
 
     # Update our own journals so that we know we changed something
     self.update!(

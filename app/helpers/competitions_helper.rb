@@ -155,7 +155,8 @@ module CompetitionsHelper
         latitude_degrees: c.latitude_degrees,
         longitude_degrees: c.longitude_degrees,
         city_name: c.city_name,
-        marker_date: wca_date_range(c.start_date, c.end_date),
+        start_date: c.start_date,
+        end_date: c.end_date,
         is_probably_over: c.probably_over?,
         url: competition_path(c),
       }

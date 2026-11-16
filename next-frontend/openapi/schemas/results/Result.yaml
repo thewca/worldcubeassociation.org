@@ -48,8 +48,10 @@ properties:
   worst_index:
     type: integer
   regional_single_record:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"
   regional_average_record:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"

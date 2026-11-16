@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Box, Card, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getPayload } from "payload";
@@ -7,6 +8,7 @@ import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { announcementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 import AnnouncementsPagination from "@/app/(wca)/(content-pages)/posts/announcementsPagination";
+import Loading from "@/components/ui/loading";
 
 export const metadata: Metadata = {
   title: "Announcements",
@@ -14,11 +16,30 @@ export const metadata: Metadata = {
 
 const ANNOUNCEMENTS_PER_PAGE = 10;
 
-export default async function AnnouncementsPage({
-  searchParams,
-}: {
+type AnnouncementsPageProps = {
   searchParams: Promise<{ [key: string]: string | undefined }>;
-}) {
+};
+
+export default function AnnouncementsPage({
+  searchParams,
+}: AnnouncementsPageProps) {
+  return (
+    <Box py={8}>
+      <Card.Root size="md">
+        <Card.Header>
+          <Heading textStyle="h1">Announcements</Heading>
+        </Card.Header>
+        <Card.Body>
+          <Suspense fallback={<Loading />}>
+            <AnnouncementsList searchParams={searchParams} />
+          </Suspense>
+        </Card.Body>
+      </Card.Root>
+    </Box>
+  );
+}
+
+async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
   const { page = "1" } = await searchParams;
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
 
@@ -35,35 +56,24 @@ export default async function AnnouncementsPage({
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
 
   return (
-    <Box py={8}>
-      <Card.Root size="md">
-        <Card.Header>
-          <Heading textStyle="h1">Announcements</Heading>
-        </Card.Header>
-        <Card.Body>
-          <VStack align="stretch" gap={8}>
-            {announcements.docs.length === 0 ? (
-              <Text>There are no announcements yet.</Text>
-            ) : (
-              announcements.docs.map((announcement: Announcement, index) => (
-                <AnnouncementCard
-                  key={announcement.id}
-                  announcement={announcement}
-                  colorPalette={announcementColorPalette(
-                    firstIndexOnPage + index,
-                  )}
-                />
-              ))
-            )}
+    <VStack align="stretch" gap={8}>
+      {announcements.docs.length === 0 ? (
+        <Text>There are no announcements yet.</Text>
+      ) : (
+        announcements.docs.map((announcement: Announcement, index) => (
+          <AnnouncementCard
+            key={announcement.id}
+            announcement={announcement}
+            colorPalette={announcementColorPalette(firstIndexOnPage + index)}
+          />
+        ))
+      )}
 
-            <AnnouncementsPagination
-              page={currentPage}
-              totalAnnouncements={announcements.totalDocs}
-              pageSize={ANNOUNCEMENTS_PER_PAGE}
-            />
-          </VStack>
-        </Card.Body>
-      </Card.Root>
-    </Box>
+      <AnnouncementsPagination
+        page={currentPage}
+        totalAnnouncements={announcements.totalDocs}
+        pageSize={ANNOUNCEMENTS_PER_PAGE}
+      />
+    </VStack>
   );
 }

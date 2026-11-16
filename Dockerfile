@@ -92,9 +92,11 @@ COPY . .
 ARG BUILD_TAG=local
 ARG WCA_LIVE_SITE
 ARG SHAKAPACKER_ASSET_HOST
+ARG NEXT_FRONTEND_URL
 ENV BUILD_TAG=$BUILD_TAG \
     WCA_LIVE_SITE=$WCA_LIVE_SITE \
-    SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST
+    SHAKAPACKER_ASSET_HOST=$SHAKAPACKER_ASSET_HOST \
+    NEXT_FRONTEND_URL=$NEXT_FRONTEND_URL
 
 RUN ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/i18n export
 RUN --mount=type=cache,uid=1000,target=/rails/tmp/cache ASSETS_COMPILATION=true SECRET_KEY_BASE=1 RAILS_MAX_THREADS=4 NODE_OPTIONS="--max_old_space_size=4096" ./bin/rake assets:precompile
@@ -111,6 +113,14 @@ RUN rm -rf node_modules
 FROM scratch AS assets
 COPY --from=build /rails/public /
 
+FROM base AS mongodb-tools
+
+# mongodb-database-tools = the `mongodump` command to create Payload CMS database copies
+#   MongoDB doesn't publish packages for Debian 13 yet, but the Debian 12 build only links against libc and Kerberos
+ARG MONGODB_TOOLS_VERSION=100.15.0
+RUN curl -o ./mongodb-database-tools.deb https://fastdl.mongodb.org/tools/db/mongodb-database-tools-debian12-x86_64-${MONGODB_TOOLS_VERSION}.deb && \
+    apt-get install --no-install-recommends -y ./mongodb-database-tools.deb
+
 FROM base AS runtime
 
 # Install fonts for rendering PDFs (mostly competition summary PDFs)
@@ -123,12 +133,10 @@ FROM base AS runtime
 # lmodern = Random accents and special symbols for Latin script
 # RUNTIME STUFF
 # mariadb-client = talking to our database in production mode
-# imagemagick = image processing for Rails ActiveStorage attachments
 # libvips = image processing for Rails ActiveStorage attachments
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       mariadb-client \
-      imagemagick \
       libvips \
       zip \
       python-is-python3 \
@@ -161,6 +169,8 @@ RUN curl -o ./rds-cert.pem https://truststore.pki.rds.amazonaws.com/global/globa
 USER rails:rails
 
 FROM runtime AS sidekiq
+
+COPY --from=mongodb-tools /usr/bin/mongodump /usr/bin/mongodump
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
 

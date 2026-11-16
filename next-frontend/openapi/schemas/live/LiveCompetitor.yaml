@@ -18,5 +18,6 @@ properties:
   country_iso2:
     type: string
   wca_id:
-    type: string
-    nullable: true
+    type:
+      - string
+      - "null"

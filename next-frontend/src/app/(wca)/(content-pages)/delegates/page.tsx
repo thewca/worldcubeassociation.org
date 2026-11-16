@@ -1,7 +1,6 @@
 import {
   Heading,
   IconButton,
-  Link as ChakraLink,
   SimpleGrid,
   Tabs,
   VStack,
@@ -22,12 +21,11 @@ import { LuPencil } from "react-icons/lu";
 import getPermissions from "@/lib/wca/permissions.server";
 import AdminModeToggle from "@/app/(wca)/(content-pages)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
-import TabTarget from "@/components/ui/tabTarget";
+import RailsLink from "@/components/RailsLink";
+import ResponsiveTabsList from "@/components/ui/responsiveTabsList";
 import { Metadata } from "next";
-
-// Editing a user is still served by Rails, which sits at the root of the public API host.
-const RAILS_ROOT_URL = new URL(process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL!)
-  .origin;
+import { Suspense } from "react";
+import Loading from "@/components/ui/loading";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -37,11 +35,19 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function DelegatesPage({
-  searchParams,
-}: {
+type DelegatesPageProps = {
   searchParams: Promise<{ region?: string; admin?: string }>;
-}) {
+};
+
+export default function DelegatesPage({ searchParams }: DelegatesPageProps) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Delegates searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function Delegates({ searchParams }: DelegatesPageProps) {
   const { t } = await getT();
   const { region, admin } = await searchParams;
 
@@ -62,6 +68,24 @@ export default async function DelegatesPage({
     rootGroups[0];
   const activeFriendlyId = activeGroup.metadata!.friendly_id!;
 
+  const regionItems = rootGroups.flatMap((group) => {
+    const friendlyId = group.metadata?.friendly_id;
+    if (!friendlyId) return [];
+
+    return [
+      {
+        value: friendlyId,
+        label: group.name,
+        href: route({
+          pathname: "/delegates",
+          query: isAdminMode
+            ? { region: friendlyId, admin: "true" }
+            : { region: friendlyId },
+        }),
+      },
+    ];
+  });
+
   return (
     <VStack align="left" gap="8" width="full" alignItems="left">
       <Heading size="5xl">{t("delegates_page.title")}</Heading>
@@ -81,30 +105,12 @@ export default async function DelegatesPage({
         sideNav
         fitted
         value={activeFriendlyId}
-        gap={8}
+        gap={{ base: 8, md: 4 }}
       >
-        <Tabs.List>
-          {rootGroups.map((group) => {
-            const friendlyId = group.metadata!.friendly_id!;
-
-            return (
-              <Tabs.Trigger value={friendlyId} key={group.id} asChild>
-                <TabTarget
-                  tabKey={friendlyId}
-                  currentPath={activeFriendlyId}
-                  href={route({
-                    pathname: "/delegates",
-                    query: isAdminMode
-                      ? { region: friendlyId, admin: "true" }
-                      : { region: friendlyId },
-                  })}
-                >
-                  {group.name}
-                </TabTarget>
-              </Tabs.Trigger>
-            );
-          })}
-        </Tabs.List>
+        <ResponsiveTabsList
+          label={t("delegates_page.title")}
+          items={regionItems}
+        />
         <Tabs.Content value={activeFriendlyId} w="full">
           <DelegateTab group={activeGroup} isAdminMode={isAdminMode} />
         </Tabs.Content>
@@ -150,25 +156,30 @@ async function DelegateTab({
   );
 
   return (
-    <VStack align="left">
-      <Heading textStyle="h2">{name}</Heading>
-      <UserBadge
-        key={lead_user!.id}
-        profilePicture={lead_user!.avatar}
-        name={lead_user!.name}
-        wcaId={lead_user!.wca_id}
-        roles={[
-          {
-            teamRole: t(
-              "enums.user_roles.status.delegate_regions.senior_delegate",
-            ),
-            staffColor: "yellow",
-          },
-        ]}
-      />
-      {regionDelegates.length > 0 && (
-        <DelegateGrid delegates={regionDelegates} isAdminMode={isAdminMode} />
-      )}
+    <VStack align="left" gap="8">
+      <VStack align="left" gap="4">
+        <Heading textStyle="h2">{name}</Heading>
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+          <UserBadge
+            key={lead_user!.id}
+            profilePicture={lead_user!.avatar}
+            name={lead_user!.name}
+            wcaId={lead_user!.wca_id}
+            email={lead_user?.email}
+            roles={[
+              {
+                teamRole: t(
+                  "enums.user_roles.status.delegate_regions.senior_delegate",
+                ),
+                staffColor: "yellow",
+              },
+            ]}
+          />
+        </SimpleGrid>
+        {regionDelegates.length > 0 && (
+          <DelegateGrid delegates={regionDelegates} isAdminMode={isAdminMode} />
+        )}
+      </VStack>
       {_.map(delegatesBySubregion, (delegates, subregion) => (
         <VStack align="left" key={subregion}>
           <Heading size="xl">{subregion}</Heading>
@@ -179,16 +190,24 @@ async function DelegateTab({
   );
 }
 
-// Trainee Delegates are only listed in admin mode, and the senior Delegate is already shown as the
-// region lead.
 function listedDelegates(
   roles: components["schemas"]["UserRole"][],
   isAdminMode: boolean,
 ) {
+  const regionalDelegateUserIds = new Set(
+    roles
+      .filter((role) => role.metadata.status === "regional_delegate")
+      .map((role) => role.user.id),
+  );
+
   return roles.filter(
     (role) =>
+      // Senior Delegates are shown as region leads at the top of the list
       role.metadata.status !== "senior_delegate" &&
-      (isAdminMode || role.metadata.status !== "trainee_delegate"),
+      (isAdminMode || role.metadata.status !== "trainee_delegate") &&
+      // Avoid showing regional delegates twice in the same category
+      (!regionalDelegateUserIds.has(role.user.id) ||
+        role.metadata.status !== "delegate"),
   );
 }
 
@@ -202,13 +221,14 @@ async function DelegateGrid({
   const { t } = await getT();
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
+    <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
       {delegates.map((role) => (
         <UserBadge
           key={role.id}
           profilePicture={role.user.avatar}
           name={role.user.name}
           wcaId={role.user.wca_id}
+          email={role.user.email}
           roles={[
             {
               teamRole: t(
@@ -218,6 +238,7 @@ async function DelegateGrid({
               staffColor: "yellow",
             },
           ]}
+
           action={
             isAdminMode && (
               <IconButton
@@ -226,11 +247,9 @@ async function DelegateGrid({
                 size="sm"
                 aria-label={`Edit ${role.user.name}`}
               >
-                <ChakraLink
-                  href={`${RAILS_ROOT_URL}/users/${role.user.id}/edit`}
-                >
+                <RailsLink href={`/users/${role.user.id}/edit`}>
                   <LuPencil />
-                </ChakraLink>
+                </RailsLink>
               </IconButton>
             )
           }

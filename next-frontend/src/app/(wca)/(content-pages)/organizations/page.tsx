@@ -127,7 +127,9 @@ export default async function RegionalOrganizations() {
       <Heading size="xl">
         {t("regional_organizations.application_instructions.title")}
       </Heading>
-      <TransWithLinks i18nKey="regional_organizations.application_instructions.description_html" />
+      <Text>
+        <TransWithLinks i18nKey="regional_organizations.application_instructions.description_html" />
+      </Text>
     </VStack>
   );
 }

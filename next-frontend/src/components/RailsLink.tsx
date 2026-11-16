@@ -1,6 +1,7 @@
 import { Link, type LinkProps } from "@chakra-ui/react";
 
 interface RailsLinkProps extends LinkProps {
+  /** Root-relative path on the Rails monolith, e.g. `/profile/edit`. */
   href: string;
 }
 
@@ -11,6 +12,12 @@ interface RailsLinkProps extends LinkProps {
  *
  * TODO: swap for `next/link` per call site as each target page is migrated.
  */
-export default function RailsLink(props: RailsLinkProps) {
-  return <Link {...props} />;
+export default function RailsLink({ href, ...props }: RailsLinkProps) {
+  // Rails sits at the root of the public API host, and a root-relative `href` resolves against that.
+  return (
+    <Link
+      {...props}
+      href={new URL(href, process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL).href}
+    />
+  );
 }

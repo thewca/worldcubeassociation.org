@@ -15,6 +15,7 @@ import iconMarker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import iconMarker from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { railsEnv } from '../wca-data.js.erb';
+import { formattedDateRange } from '../utils/wca';
 import { redMarker, blueMarker } from './markers';
 import { searchProvider, userTileProvider } from './providers';
 
@@ -121,7 +122,7 @@ window.wca.addCompetitionsToMapLeaflet = function addCompToMap(map, competitions
       iconImage = redMarker;
     }
 
-    const competitionDesc = `<a href=${c.url}>${c.name}</a><br />${c.marker_date} - ${c.city_name}`;
+    const competitionDesc = `<a href=${c.url}>${c.name}</a><br />${formattedDateRange(c.start_date, c.end_date, window.I18n.locale)} - ${c.city_name}`;
     new Marker({
       lat: c.latitude_degrees,
       lng: c.longitude_degrees,

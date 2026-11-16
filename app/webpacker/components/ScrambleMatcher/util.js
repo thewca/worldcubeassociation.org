@@ -24,7 +24,7 @@ export const AUTOMATCH_DEFAULT_SETTINGS = {
   fileTimestampPreference: 'uploaded_at',
 };
 
-export const ATTEMPTS_UNPACKING_MARKER = '_attemptsUnpacking';
+export const INNER_SET_MARKER = 'set_id';
 
 export const prefixForIndex = (index) => {
   if (Number.isNaN(index)) {
@@ -50,7 +50,7 @@ export const scrambleSetToTitle = (scrambleSet) => {
 
   const setTitle = `${eventAndRound} ${scrambleSetName}`;
 
-  if (scrambleSet[ATTEMPTS_UNPACKING_MARKER]) {
+  if (scrambleSet[INNER_SET_MARKER]) {
     const attemptName = I18n.t('scramble_set.attempt', { number: scrambleSet.scramble_number });
 
     return `${setTitle} ${attemptName}`;
@@ -130,36 +130,41 @@ export function thinWcifRound(wcifRound) {
   return _.pick(wcifRound, 'id', 'format', 'scrambleSetCount');
 }
 
-export function thinExtScrambleSet(extScrSet) {
-  return _.pick(extScrSet, 'id', 'event_id', 'scramble_file_upload_id', 'round_number', 'scramble_set_number', 'original_filename', 'generated_at', 'uploaded_at', 'automatch_wcif_id');
+export function thinExtScrambleSet(extScrSet, idField = 'id') {
+  return _.pick(extScrSet, idField, 'event_id', 'scramble_file_upload_id', 'round_number', 'scramble_set_number', 'original_filename', 'generated_at', 'uploaded_at', 'automatch_wcif_id');
 }
 
 export function thinExtScramble(extScr) {
   return _.pick(extScr, 'id', 'is_extra', 'scramble_number', 'scramble_string');
 }
 
-function unpackExternalScrambleSet(extScrSet, isAttemptMode) {
-  const thinnedScrambleSet = thinExtScrambleSet(extScrSet);
+export function repackInnerScramble(extScramble, parentScrambleSet = undefined) {
+  if (extScramble[INNER_SET_MARKER] || parentScrambleSet === undefined) {
+    return {
+      ...thinExtScrambleSet(extScramble, INNER_SET_MARKER),
+      ...thinExtScramble(extScramble),
+    };
+  }
 
+  return {
+    ...thinExtScrambleSet(parentScrambleSet),
+    ...thinExtScramble(extScramble),
+    [INNER_SET_MARKER]: parentScrambleSet.id,
+  };
+}
+
+function unpackExternalScrambleSet(extScrSet, isAttemptMode) {
   if (isAttemptMode) {
     return extScrSet.external_scrambles
-      .map((extScr) => {
-        const thinnedScramble = thinExtScramble(extScr);
-
-        return ({
-          ...thinnedScrambleSet,
-          ...thinnedScramble,
-          [ATTEMPTS_UNPACKING_MARKER]: thinnedScrambleSet.id,
-        });
-      });
+      .map((extScr) => repackInnerScramble(extScr, extScrSet));
   }
 
   const repackedScrambleSet = {
-    ...thinnedScrambleSet,
+    ...thinExtScrambleSet(extScrSet),
     external_scrambles: _.sortBy(
       extScrSet.external_scrambles,
       ['is_extra', 'scramble_number'],
-    ).map((extScr) => thinExtScramble(extScr)),
+    ).map((extScr) => repackInnerScramble(extScr, extScrSet)),
   };
 
   return [repackedScrambleSet];
@@ -254,8 +259,8 @@ export function filterUnusedScrambles(
     scrFileSets,
     matchedStateSets,
     (a, b) => {
-      const miniA = _.pick(a, [ATTEMPTS_UNPACKING_MARKER, 'id']);
-      const miniB = _.pick(b, [ATTEMPTS_UNPACKING_MARKER, 'id']);
+      const miniA = _.pick(a, [INNER_SET_MARKER, 'id']);
+      const miniB = _.pick(b, [INNER_SET_MARKER, 'id']);
 
       return _.isEqual(miniA, miniB);
     },
@@ -265,7 +270,7 @@ export function filterUnusedScrambles(
 }
 
 export function calculateBestInsertIndex(scrSet, round) {
-  const isAttemptMode = scrSet[ATTEMPTS_UNPACKING_MARKER];
+  const isAttemptMode = scrSet[INNER_SET_MARKER];
   const setIndex = scrSet.scramble_set_number - 1;
 
   if (isAttemptMode) {

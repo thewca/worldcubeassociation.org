@@ -24,7 +24,14 @@ export default function BetaDisclaimer() {
   // Deliberately uncontrolled by `onOpenChange`: the dialog must not close on
   // Escape or a backdrop click, only on the acknowledgement button.
   return (
-    <Dialog.Root open={open} size="xl" role="alertdialog" placement="center">
+    <Dialog.Root
+      open={open}
+      size="xl"
+      role="alertdialog"
+      placement="center"
+      lazyMount
+      unmountOnExit
+    >
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>

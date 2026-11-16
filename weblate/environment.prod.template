@@ -43,7 +43,7 @@ WEBLATE_IP_PROXY_HEADER=HTTP_X_FORWARDED_FOR
 # — including on /healthz/ — which leaves the target permanently unhealthy while
 # the application logs look completely normal. The IP changes with every ASG
 # replacement, so render-env.sh injects it from IMDS at boot.
-WEBLATE_ALLOWED_HOSTS=translate.worldcubeassociation.org,${WEBLATE_PRIVATE_IP}
+WEBLATE_ALLOWED_HOSTS=translate.worldcubeassociation.org,weblate.internal,${WEBLATE_PRIVATE_IP}
 # ----------------------------------------------------------------------------
 
 # Fallback superuser if SSO breaks. The password comes from SSM; see the note on

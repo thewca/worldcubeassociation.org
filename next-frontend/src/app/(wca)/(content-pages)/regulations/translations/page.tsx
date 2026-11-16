@@ -39,7 +39,9 @@ export default async function RegulationsTranslations() {
       <Heading size="xl">{t("regulations_translations.old")}</Heading>
       <Heading size="2xl">{t("regulations_translations.translating")}</Heading>
       <TranslationList translations={outdated} />
-      <TransWithLinks i18nKey="regulations_translations.paragraph3_html" />
+      <Text>
+        <TransWithLinks i18nKey="regulations_translations.paragraph3_html" />
+      </Text>
     </VStack>
   );
 }

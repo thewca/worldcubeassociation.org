@@ -162,7 +162,7 @@ export function SlimRecordsRow({ singles, averages }: SlimRecordsRowProp) {
 
     return (
       <Table.Row key={`${single?.id}-${average?.id}`}>
-        {single && (
+        {single ? (
           <>
             <PersonCell
               personId={single.person_id}
@@ -171,6 +171,11 @@ export function SlimRecordsRow({ singles, averages }: SlimRecordsRowProp) {
             <Table.Cell>
               {formatAttemptResult(single.value, single.event_id)}
             </Table.Cell>
+          </>
+        ) : (
+          <>
+            <Table.Cell />
+            <Table.Cell />
           </>
         )}
         <EventCell eventId={rowRecord.event_id} />

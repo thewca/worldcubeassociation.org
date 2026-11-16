@@ -5,6 +5,7 @@ import { Link, Table, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { route } from "nextjs-routes";
 import countries from "@/lib/wca/data/countries";
 import useAPI from "@/lib/wca/useAPI";
@@ -17,6 +18,7 @@ interface CompetitionsTabProps {
 export default function CompetitionsTab({ wcaId }: CompetitionsTabProps) {
   const api = useAPI();
   const { t } = useT();
+  const lng = useLocale();
 
   const {
     data: competitions,
@@ -72,7 +74,7 @@ export default function CompetitionsTab({ wcaId }: CompetitionsTabProps) {
                 {`, ${countries.byIso2[c.country_iso2].name}`}
               </Table.Cell>
               <Table.Cell>
-                <Text>{formatDateRange(c.start_date, c.end_date)}</Text>
+                <Text>{formatDateRange(c.start_date, c.end_date, lng)}</Text>
               </Table.Cell>
             </Table.Row>
           ))}
