@@ -59,6 +59,8 @@ const groupIcons: Record<string, React.ReactNode> = {
   events: <LuBox />,
 };
 
+const NAV_COLOR_PALETTE = "blue";
+
 const itemStyle: SystemStyleObject = {
   flex: "1",
   minW: "0",
@@ -150,7 +152,11 @@ export default function MobileTabMenu({
       mb="env(safe-area-inset-bottom)"
       zIndex="sticky"
     >
-      <Card.Root variant="elevated" rounded="3xl" colorPalette="blue">
+      <Card.Root
+        variant="elevated"
+        rounded="3xl"
+        colorPalette={NAV_COLOR_PALETTE}
+      >
         <Card.Body p="1.5" flexDirection="row" gap="1">
           {_.map(grouped, (groupTabs, group) =>
             groupTabs.length === 1 && group !== "more" ? (
@@ -243,7 +249,11 @@ function GroupItem({
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content minW="56" maxW="min(20rem, calc(100vw - 2rem))">
+          <Menu.Content
+            colorPalette={NAV_COLOR_PALETTE}
+            minW="56"
+            maxW="min(20rem, calc(100vw - 2rem))"
+          >
             {tabs.map((tab) => {
               const isLink = "href" in tab;
               const isActive =
@@ -258,12 +268,14 @@ function GroupItem({
                   value={tab.menuKey}
                   asChild={!isLink}
                   disabled={tab.disabled}
-                  bg={isActive ? "blue.subtle" : undefined}
-                  color={isActive ? "blue.fg" : undefined}
+                  bg={isActive ? "colorPalette.subtle" : undefined}
+                  color={isActive ? "colorPalette.fg" : undefined}
                   fontWeight={isActive ? "bold" : undefined}
                   h="10"
                   fontSize="sm"
-                  _highlighted={{ bg: isActive ? "blue.muted" : "bg.muted" }}
+                  _highlighted={{
+                    bg: isActive ? "colorPalette.muted" : "bg.muted",
+                  }}
                 >
                   {isLink ? (
                     <SingleItem tab={tab} label={label} isActive={isActive} />
@@ -376,7 +388,9 @@ function ItemWithChildren({
 }) {
   return (
     <Menu.Root positioning={{ placement: "left", gutter: 2 }}>
-      <Menu.TriggerItem color={isItemActive ? "blue.border" : undefined}>
+      <Menu.TriggerItem
+        color={isItemActive ? "colorPalette.border" : undefined}
+      >
         <Box as="span" flexShrink={0} display="inline-flex">
           <LuChevronLeft />
         </Box>
@@ -396,7 +410,10 @@ function ItemWithChildren({
       </Menu.TriggerItem>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content maxW="min(20rem, calc(100vw - 2rem))">
+          <Menu.Content
+            colorPalette={NAV_COLOR_PALETTE}
+            maxW="min(20rem, calc(100vw - 2rem))"
+          >
             {tab.children.map((tab) => {
               const isActive = tab.menuKey === activeMenuKey;
               return (
@@ -404,10 +421,12 @@ function ItemWithChildren({
                   key={tab.menuKey}
                   value={tab.menuKey}
                   disabled={tab.disabled}
-                  bg={isActive ? "blue.subtle" : undefined}
-                  color={isActive ? "blue.fg" : undefined}
+                  bg={isActive ? "colorPalette.subtle" : undefined}
+                  color={isActive ? "colorPalette.fg" : undefined}
                   fontWeight={isActive ? "bold" : undefined}
-                  _highlighted={{ bg: isActive ? "blue.muted" : "bg.muted" }}
+                  _highlighted={{
+                    bg: isActive ? "colorPalette.muted" : "bg.muted",
+                  }}
                 >
                   <SingleItem
                     tab={tab}
