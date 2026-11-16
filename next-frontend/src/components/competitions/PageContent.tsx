@@ -4,14 +4,7 @@ import { usePathname } from "next/navigation";
 import _ from "lodash";
 import { activityCodeFromPath } from "./TabMenu";
 import { useT } from "@/lib/i18n/useI18n";
-import {
-  Breadcrumb,
-  Heading,
-  Icon,
-  Stack,
-  Text,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Box, Breadcrumb, Heading, Icon, Stack, Text } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import { LuHouse } from "react-icons/lu";
 import { route } from "nextjs-routes";
@@ -27,7 +20,7 @@ function BreadcrumbHeader({
   competitionId: string;
 }) {
   return (
-    <Breadcrumb.Root>
+    <Breadcrumb.Root hideFrom="md">
       <Breadcrumb.List flexWrap="nowrap">
         <Breadcrumb.Item flexShrink={0}>
           <Breadcrumb.Link
@@ -72,8 +65,6 @@ export default function Content({
   const eventId =
     activityCodeFromPath(currentPath!) || decodeURIComponent(currentPath!);
 
-  const isMobile = useBreakpointValue({ base: true, md: false });
-
   const headerKey = tabs.find((t) => t.menuKey === eventId)?.i18nKey;
 
   const tHeader = headerKey ? t(headerKey) : eventId;
@@ -81,34 +72,27 @@ export default function Content({
     <>
       {eventId !== "general" && (
         <Stack gap={0} mb={2}>
-          {isMobile ? (
-            <BreadcrumbHeader
-              page={tHeader}
-              competitionName={competition.name}
-              competitionId={competition.id}
-            />
-          ) : (
-            <>
-              <Text color="fg.muted" fontSize="xs">
-                {competition.name}
-              </Text>
-              <Stack
-                direction="row"
-                justifyContent="start"
-                alignItems="center"
-                mb={2}
-                gap={3}
-              >
-                <Heading
-                  size="3xl"
-                  fontWeight="bold"
-                  textTransform="capitalize"
-                >
-                  {tHeader}
-                </Heading>
-              </Stack>
-            </>
-          )}
+          <BreadcrumbHeader
+            page={tHeader}
+            competitionName={competition.name}
+            competitionId={competition.id}
+          />
+          <Box hideBelow="md">
+            <Text color="fg.muted" fontSize="xs">
+              {competition.name}
+            </Text>
+            <Stack
+              direction="row"
+              justifyContent="start"
+              alignItems="center"
+              mb={2}
+              gap={3}
+            >
+              <Heading size="3xl" fontWeight="bold" textTransform="capitalize">
+                {tHeader}
+              </Heading>
+            </Stack>
+          </Box>
         </Stack>
       )}
       {children}
