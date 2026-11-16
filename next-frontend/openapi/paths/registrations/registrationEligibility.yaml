@@ -24,4 +24,4 @@ get:
     '401':
       $ref: '../../errorResponses/NotLoggedIn.yaml'
     '404':
-      $ref: '../../errorResponses/CompetitionNotFound.yaml'
+      $ref: '../../errorResponses/RegistrationError.yaml'

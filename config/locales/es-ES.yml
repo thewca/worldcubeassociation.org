@@ -2364,10 +2364,6 @@ es-ES:
         open: Abierto
         not_open: Aún sin abrir
         closed: Cerrado
-      currently_displaying:
-        one: Mostrando una competición
-        many: Mostrando %{count} competiciones
-        other: Mostrando %{count} competiciones
       register_now: Regístrate ahora
       view_competition: Ver competición
       no_more_comps: No hay más competiciones.
@@ -3356,10 +3352,6 @@ es-ES:
         competitors: Competidores
         scrambles: Mezclas
     results_table:
-      h2h_results_disclaimer: >-
-        Resultados determinados por una Final Cara a Cara. Solo se muestran el
-        orden de clasificación y la mejor resolución, ya que la visualización
-        completa de los resultados Cara a Cara aún se encuentra en desarrollo.
       wca_profile: Perfil de la WCA
       event: Categoría
       round: Ronda

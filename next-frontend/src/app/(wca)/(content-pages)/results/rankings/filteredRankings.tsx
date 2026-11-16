@@ -6,6 +6,7 @@ import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
 import { getMediumDateString } from "@/lib/wca/dates";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import RankingsTable from "@/components/results/RankingsTable";
 import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
@@ -66,6 +67,7 @@ export default function FilteredRecords({
   }, [event, gender, rankingType, region, router, show]);
 
   const { t } = useT();
+  const lng = useLocale();
 
   return (
     <VStack align="left" gap={2}>
@@ -73,7 +75,7 @@ export default function FilteredRecords({
         {t("results.rankings.title")}
       </Heading>
       {t("results.last_updated_html", {
-        timestamp: getMediumDateString(timestamp),
+        timestamp: getMediumDateString(timestamp, lng),
       })}
       <RankingsFilterBox
         filterState={searchParams}

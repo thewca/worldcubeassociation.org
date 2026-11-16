@@ -70,6 +70,52 @@ RSpec.describe 'API Registrations' do
     end
   end
 
+  describe 'GET #show_by_user' do
+    let(:competition) { create(:competition, :registration_open) }
+    let(:registration) { create(:registration, competition: competition) }
+
+    it 'returns the registration of the signed in user' do
+      api_sign_in_as(registration.user)
+      get show_by_user_api_v1_competition_registrations_path(competition, registration.user_id)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body['id']).to eq registration.id
+    end
+
+    it 'does not return the registration of another user' do
+      api_sign_in_as(create(:user))
+      get show_by_user_api_v1_competition_registrations_path(competition, registration.user_id)
+
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.parsed_body['error']).to eq Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS
+    end
+  end
+
+  describe 'GET #registration_config' do
+    let(:competition) { create(:competition, :registration_open) }
+
+    it 'returns the registration lanes' do
+      api_sign_in_as(create(:user))
+      get registration_config_api_v1_competition_path(competition)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body).to be_present
+    end
+
+    it 'requires a signed in user' do
+      get registration_config_api_v1_competition_path(competition)
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns not found for an unknown competition' do
+      api_sign_in_as(create(:user))
+      get registration_config_api_v1_competition_path('NotAComp2026')
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe 'POST #create' do
     context 'when creating a registration' do
       let(:user) { create(:user) }

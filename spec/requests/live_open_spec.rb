@@ -11,6 +11,34 @@ RSpec.describe "WCA Live API - open_round" do
       round.live_results.update_all(live_attempts_count: round.format.expected_solve_count, advancing: true)
     end
 
+    describe "permissions" do
+      let(:competition) { create(:competition, scoretaking_software: :internal, event_ids: ["333"], delegates: [delegate]) }
+      let(:round) { create(:round, competition: competition, event_id: "333", number: 1) }
+
+      it "requires the user to be logged in" do
+        put api_v1_competition_live_live_round_open_path(competition.id, round.wcif_id), as: :json
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it "rejects a user without scoretaking privileges" do
+        sign_in create(:user)
+
+        put api_v1_competition_live_live_round_open_path(competition.id, round.wcif_id), as: :json
+
+        expect(response).to have_http_status(:forbidden)
+        expect(round.live_results).to be_empty
+      end
+
+      it "returns not found for an unknown competition" do
+        sign_in delegate
+
+        put api_v1_competition_live_live_round_open_path("NotAComp2026", round.wcif_id), as: :json
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
     it "opens a normal first round and creates live results" do
       sign_in delegate
 

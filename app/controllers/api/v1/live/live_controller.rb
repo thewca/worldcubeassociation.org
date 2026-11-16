@@ -236,7 +236,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
 
     to_advance = round.next_participating_without(registration_id)
 
-    to_advance_competitor = Registration.find(to_advance.pluck(:registration_id))
+    to_advance_competitor = @competition.registrations.find(to_advance.pluck(:registration_id))
 
     render json: { status: "ok", next_advancing: to_advance_competitor.map(&:to_live_json) }
   end
@@ -259,7 +259,7 @@ class Api::V1::Live::LiveController < Api::V1::ApiController
   end
 
   def add_competitor_to_round
-    registration = Registration.find(params.require(:registration_id))
+    registration = @competition.registrations.find(params.require(:registration_id))
     round = Round.find_by_wcif_id!(params.require(:round_id), @competition.id)
 
     require_scoretake!(@competition)

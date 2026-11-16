@@ -12,6 +12,18 @@ RSpec.describe "API v1 Bookmarks" do
     expect(response).to have_http_status(:unauthorized)
   end
 
+  it "requires the user to be logged in to bookmark" do
+    post api_v1_competition_bookmark_path(competition), as: :json
+
+    expect(response).to have_http_status(:unauthorized)
+  end
+
+  it "requires the user to be logged in to remove a bookmark" do
+    delete api_v1_competition_bookmark_path(competition), as: :json
+
+    expect(response).to have_http_status(:unauthorized)
+  end
+
   context "when logged in" do
     before { api_sign_in_as(user) }
 
@@ -52,6 +64,12 @@ RSpec.describe "API v1 Bookmarks" do
           .not_to change(BookmarkedCompetition, :count)
         expect(response).to be_successful
       end
+
+      it "returns not found for an unknown competition" do
+        post api_v1_competition_bookmark_path("NotAComp2026"), as: :json
+
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
     describe "DELETE #destroy" do
@@ -61,6 +79,12 @@ RSpec.describe "API v1 Bookmarks" do
         expect { delete api_v1_competition_bookmark_path(competition), as: :json }
           .to change { user.competition_bookmarked?(competition) }.from(true).to(false)
         expect(response.parsed_body).to eq({ "bookmarked" => false })
+      end
+
+      it "returns not found for an unknown competition" do
+        delete api_v1_competition_bookmark_path("NotAComp2026"), as: :json
+
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

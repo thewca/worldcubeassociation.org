@@ -30,6 +30,8 @@ import {
   Text,
   VStack,
   Wrap,
+  Select,
+  createListCollection,
 } from "@chakra-ui/react";
 import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
@@ -52,7 +54,10 @@ import {
   type CompetitionFilterAction,
   type CompetitionFilterState,
 } from "@/lib/wca/competitions/filterUtils";
-import { createSearchParams } from "@/lib/wca/competitions/queryUtils";
+import {
+  createSearchParams,
+  sortOrderValues,
+} from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
 import useDebounce from "@/lib/hooks/useDebounce";
 import Loading from "@/components/ui/loading";
@@ -60,10 +65,13 @@ import { useSearchParams } from "next/navigation";
 import { useOnInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import RegionSelector from "@/components/RegionSelector";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
+import EventDropdown from "@/components/EventDropdown";
+import { formatDateRange } from "@/lib/dates/format";
 import TabMap from "@/components/competitions/TabMap";
 import { LuMapPin, LuSearch, LuSettings2 } from "react-icons/lu";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -152,6 +160,7 @@ export default function CompetitionsPage() {
   });
 
   const { t } = useT();
+  const lng = useLocale();
 
   const canViewAdminDetails = false;
 
@@ -246,6 +255,13 @@ export default function CompetitionsPage() {
     (competition) => showInProgressSection && isInProgress(competition),
   );
 
+  // Emphasize the first occurrence of each date label so distinct dates are easier to scan.
+  const firstCompetitionIds = new Set(
+    _.uniqBy([...inProgressComps, ...upcomingComps], (competition) =>
+      formatDateRange(competition.start_date, competition.end_date, lng),
+    ).map((competition) => competition.id),
+  );
+
   const loadedCompetitionCount =
     rawCompetitionData?.pages.reduce((total, page) => total + page.length, 0) ??
     0;
@@ -309,18 +325,30 @@ export default function CompetitionsPage() {
           <Card.Body asChild>
             <Collapsible.Root asChild>
               <VStack gap="3" borderBottom="black">
-                <FormEventSelector
-                  selectedEvents={filterState.selectedEvents}
-                  title={t("competitions.index.event")}
-                  onEventClick={(eventId) =>
-                    dispatchFilter({ type: "toggle_event", eventId })
-                  }
-                  onClearClick={() => dispatchFilter({ type: "clear_events" })}
-                  onAllClick={() =>
-                    dispatchFilter({ type: "select_all_events" })
-                  }
-                />
-                <SimpleGrid gap="2" width="full" columns={{ base: 1, md: 2 }}>
+                <Box hideBelow="lg" width="full">
+                  <FormEventSelector
+                    selectedEvents={filterState.selectedEvents}
+                    title={t("competitions.index.event")}
+                    onEventClick={(eventId) =>
+                      dispatchFilter({ type: "toggle_event", eventId })
+                    }
+                    onClearClick={() =>
+                      dispatchFilter({ type: "clear_events" })
+                    }
+                    onAllClick={() =>
+                      dispatchFilter({ type: "select_all_events" })
+                    }
+                  />
+                </Box>
+                <SimpleGrid gap="2" width="full" columns={{ base: 3, lg: 2 }}>
+                  <Box hideFrom="lg" minW="0">
+                    <EventDropdown
+                      selectedEvents={filterState.selectedEvents}
+                      onEventsChange={(eventIds) =>
+                        dispatchFilter({ type: "set_events", eventIds })
+                      }
+                    />
+                  </Box>
                   <RegionSelector
                     t={t}
                     label={t("activerecord.attributes.user.region")}
@@ -475,36 +503,21 @@ export default function CompetitionsPage() {
                   borderWidth="2px"
                   stickyHeader
                 >
-                  <Table.Header bg="bg.muted">
-                    <Table.Row>
-                      <Table.ColumnHeader
-                        colSpan={6}
-                        fontWeight="normal"
-                        textAlign="end"
-                        p={2}
-                      >
-                        {t("competitions.index.currently_displaying", {
-                          count: competitionsFiltered.length,
-                        })}
-                      </Table.ColumnHeader>
-                    </Table.Row>
+                  <Table.Header bg="bg.muted" hideBelow="md">
                     <Table.Row>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader>
+                      <Table.ColumnHeader width="1" textAlign="start">
                         {t("competitions.competition_info.date")}
                       </Table.ColumnHeader>
+                      <Table.ColumnHeader></Table.ColumnHeader>
                       <Table.ColumnHeader>
                         {t("competitions.competition_info.name")}
                       </Table.ColumnHeader>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader
-                        display={{ base: "none", md: "table-cell" }}
-                      >
+                      <Table.ColumnHeader hideBelow="lg">
                         {t("competitions.competition_info.location")}
                       </Table.ColumnHeader>
-                      <Table.ColumnHeader
-                        display={{ base: "none", md: "table-cell" }}
-                      >
+                      <Table.ColumnHeader hideBelow="xl">
                         {t("competitions.competition_info.venue")}
                       </Table.ColumnHeader>
                     </Table.Row>
@@ -516,7 +529,11 @@ export default function CompetitionsPage() {
                           {t("competitions.index.titles.in_progress")}
                         </TableHeaderRow>
                         {inProgressComps.map((comp) => (
-                          <CompetitionTableRow comp={comp} key={comp.id} />
+                          <CompetitionTableRow
+                            comp={comp}
+                            key={comp.id}
+                            isRepeatedDate={!firstCompetitionIds.has(comp.id)}
+                          />
                         ))}
                         <TableHeaderRow>
                           {t("competitions.index.titles.upcoming")}
@@ -524,7 +541,11 @@ export default function CompetitionsPage() {
                       </>
                     )}
                     {upcomingComps.map((comp) => (
-                      <CompetitionTableRow comp={comp} key={comp.id} />
+                      <CompetitionTableRow
+                        comp={comp}
+                        key={comp.id}
+                        isRepeatedDate={!firstCompetitionIds.has(comp.id)}
+                      />
                     ))}
                   </Table.Body>
                 </Table.Root>
@@ -785,10 +806,6 @@ function AdvancedFilters({
       label: t("competitions.index.recent"),
     },
     { value: "past", label: t("competitions.index.past") },
-    {
-      value: "by_announcement",
-      label: t("competitions.index.by_announcement"),
-    },
   ];
 
   return (
@@ -797,6 +814,7 @@ function AdvancedFilters({
       gap="4"
       width="full"
       align={{ base: "stretch", lg: "flex-end" }}
+      flexWrap="wrap"
     >
       <Field.Root width="auto">
         <Field.Label>{t("competitions.index.state")}</Field.Label>
@@ -857,6 +875,12 @@ function AdvancedFilters({
         </Field.Root>
       )}
 
+      <SortOrderSelect
+        value={filterState.sort}
+        onChange={(v) => dispatchFilter({ type: "set_sort_order", sort: v })}
+        t={t}
+      />
+
       <Checkbox.Root
         width="auto"
         minHeight="10"
@@ -900,7 +924,7 @@ function AdvancedFilters({
 
 function TableHeaderRow({
   children,
-  colSpan = 6,
+  colSpan = 7,
 }: {
   children: ReactNode;
   colSpan?: number;
@@ -912,7 +936,7 @@ function TableHeaderRow({
         // overrides the default highlighting behavior
         _hover={{ bg: "bg", _odd: { bg: "bg.subtle" } }}
       >
-        <Heading textStyle="s4" textAlign="center">
+        <Heading textStyle="tableSection" textAlign="center">
           {children}
         </Heading>
       </Table.Cell>
@@ -952,4 +976,63 @@ function ListViewFooter({
   }
 
   return <Box ref={bottomRef} />;
+}
+
+function SortOrderSelect({
+  value,
+  onChange,
+  t,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  t: TFunction;
+}) {
+  const values = createListCollection({
+    items: sortOrderValues.map(({ value, key }) => ({
+      value: value,
+      // i18n-tasks-use t("competitions.index.sort.start_date_asc")
+      // i18n-tasks-use t("competitions.index.sort.start_date_desc")
+      // i18n-tasks-use t("competitions.index.sort.end_date_asc")
+      // i18n-tasks-use t("competitions.index.sort.end_date_desc")
+      // i18n-tasks-use t("competitions.index.sort.name_asc")
+      // i18n-tasks-use t("competitions.index.sort.name_desc")
+      // i18n-tasks-use t("competitions.index.sort.announced_at_asc")
+      // i18n-tasks-use t("competitions.index.sort.announced_at_desc")
+      label: t(`competitions.index.sort.${key}`),
+    })),
+  });
+
+  return (
+    <Select.Root
+      collection={values}
+      value={[value]}
+      onValueChange={(item) => onChange(item.value[0])}
+      variant="outline"
+      width="auto"
+      minWidth="xs"
+    >
+      <Select.HiddenSelect />
+      <Select.Label>{t("competitions.index.sort.order")}</Select.Label>
+
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+
+      <Select.Positioner>
+        <Select.Content>
+          {values.items.length > 0 &&
+            values.items.map((item) => (
+              <Select.Item key={item.value} item={item}>
+                {item.label}
+              </Select.Item>
+            ))}
+        </Select.Content>
+      </Select.Positioner>
+    </Select.Root>
+  );
 }

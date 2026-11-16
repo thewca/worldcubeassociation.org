@@ -2,6 +2,7 @@
 
 import { Alert, Link, Stack, Text } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import CurrencyValue from "@/components/CurrencyValue";
 import type { components } from "@/types/openapi";
 import { DateTime } from "luxon";
@@ -19,6 +20,7 @@ export default function PaymentStep({
   deadline?: string;
 }) {
   const { t } = useT();
+  const lng = useLocale();
 
   const payment = registration?.payment;
 
@@ -54,6 +56,7 @@ export default function PaymentStep({
               {t("competitions.registration_v2.register.until", {
                 date: DateTime.fromISO(deadline).toLocaleString(
                   DateTime.DATETIME_FULL,
+                  { locale: lng },
                 ),
               })}
             </Alert.Description>

@@ -142,8 +142,8 @@
   {
     "id": "21",
     "sanity_check_category_id": "5",
-    "topic": "Duplicates across multiple competitions (ignoring 222 and skewb)",
-    "comments": "222 and skewb are excluded as there would be many duplicates otherwise (scramble space for these events is so small that duplicate across multiple competitions are expected, see discussion links for more detailed math). pyram may also have very few legit duplicates, but everything else should definitely be looked into further.",
+    "topic": "Duplicates across multiple competitions (222 and skewb only if at least 3 are shared)",
+    "comments": "222 and skewb are only reported if the same two competitions share at least 3 scrambles of that event, as there would be many duplicates otherwise (scramble space for these events is so small that duplicate across multiple competitions are expected, see discussion links for more detailed math). Several shared scrambles point to a scramble set uploaded from the wrong competition. pyram may also have very few legit duplicates, but everything else should definitely be looked into further.",
     "query_file": "duplicate_across_competitions.sql"
   },
   {

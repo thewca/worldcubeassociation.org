@@ -28,9 +28,10 @@ export function AnnouncementCard({
     <Card.Root
       colorPalette={colorPalette}
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
+      textStyle="darkModeFg"
       width="full"
     >
-      <Card.Body gap={2}>
+      <Card.Body>
         <AnnouncementHeader announcement={announcement} />
         <AnnouncementMarkdown>
           {announcementSummary(announcement)}
@@ -57,9 +58,10 @@ export function AnnouncementFullCard({
     <Card.Root
       colorPalette={colorPalette}
       layerStyle={{ _light: "fill.solid", _dark: "fill.muted" }}
+      textStyle="darkModeFg"
       width="full"
     >
-      <Card.Body gap={2}>
+      <Card.Body>
         <AnnouncementHeader announcement={announcement} />
 
         <AnnouncementMarkdown>

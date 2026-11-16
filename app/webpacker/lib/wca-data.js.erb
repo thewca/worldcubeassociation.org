@@ -187,6 +187,8 @@ export const nearbyCompetitionDistanceDanger = <%= Competition::NEARBY_DISTANCE_
 
 export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENGTH.to_json.html_safe %>
 
+export const minQualificationWindowDays = <%= CompetitionEvent::MIN_QUALIFICATION_WINDOW_DAYS.to_json.html_safe %>
+
 export const newcomerMonthEnabled = <%= Competition::NEWCOMER_MONTH_ENABLED.to_json.html_safe %>
 
 export const autoAcceptPreferences = <%= Competition.auto_accept_preferences.keys.index_with(&:itself).to_json.html_safe %>
