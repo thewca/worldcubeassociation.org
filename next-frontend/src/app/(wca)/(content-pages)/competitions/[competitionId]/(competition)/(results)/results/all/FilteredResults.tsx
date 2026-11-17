@@ -13,10 +13,6 @@ import { SingleEventSelector } from "@/components/EventSelector";
 import useIsScrolled from "@/lib/hooks/useIsScrolled";
 import BackToTopButton from "@/components/BackToTopButton";
 
-// Helper for sorting rounds from final to first using their wcif_id
-const roundCompare = (a: { wcif_id: string }, b: { wcif_id: string }) =>
-  b.wcif_id.localeCompare(a.wcif_id, undefined, { numeric: true });
-
 export default function FilteredResults({
   competitionInfo,
   roundsByEvent,
@@ -41,9 +37,7 @@ export default function FilteredResults({
         ? round.linked_round_wcif_ids?.join()
         : round.wcif_id,
     ),
-  )
-    .map((group) => [...group].sort(roundCompare))
-    .sort((a, b) => roundCompare(a[0], b[0]));
+  ).toReversed();
 
   const eventName = events.byId[activeEventId].name;
 
