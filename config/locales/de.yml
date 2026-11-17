@@ -779,8 +779,8 @@ de:
             Apps und Single-Page-Apps gelten als nicht vertraulich.
       scopes:
         public: >-
-          Zugriff auf öffentliche Daten (Name, WCA-ID, Geschlecht,
-          Staatsbürgerschaft und Profilbild)
+          Zugriff auf öffentliche Daten (Name, WCA-ID, Geschlecht, Staatsangehörigkeit
+          und Profilbild)
         dob: Zugriff auf das Geburtsdatum
         email: Zugriff auf die E-Mail-Adresse
         manage_competitions: 'Zukünftige Wettbewerbe, die du organisierst, verwalten'
@@ -2603,7 +2603,7 @@ de:
         register: Anmelden
         competitors: Teilnehmer
         scrambles: Scrambles
-        newcomer_checks: Überprüfung von Erstteilnehmenden
+        newcomer_checks: Überprüfung von Neulingen
         upload_scrambles: Scrambles hochladen
     results_table:
       wca_profile: WCA-Profil
@@ -2647,7 +2647,7 @@ de:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors}
           erfasst'
         round_locked: gesperrt
-        first_timer: Erstteilnehmender
+        first_timer: Neulinge
         edit: Bearbeiten
         results: Ergebnisse
         registration: Anmeldung
