@@ -103,10 +103,12 @@ jobs:
           ocr_version: '1.13.2'
           rule: ${{ runner.temp }}/ocr-rules.json
 
-          llm_url: https://api.deepseek.com/anthropic
-          llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN }}
-          llm_model: deepseek-v4-pro
-          llm_use_anthropic: 'true'
+          llm_url: https://api.openai.com/v1
+          llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN_OPEN_API }}
+          llm_model: gpt-6.1-terra
+          llm_protocol: openai
+          llm_reasoning_effort: medium
+          llm_extra_body: '{}'
 
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
