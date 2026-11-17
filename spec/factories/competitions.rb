@@ -109,7 +109,7 @@ FactoryBot.define do
       to_create { |instance| instance.save(validate: false) }
     end
 
-    trait :auto_accept do
+    trait :auto_accept_requirements do
       stripe_connected
       use_wca_registration { true }
       competitor_limit_enabled { true }
@@ -119,12 +119,12 @@ FactoryBot.define do
     end
 
     trait :bulk_auto_accept do
-      auto_accept
+      auto_accept_requirements
       auto_accept_preference { :bulk }
     end
 
     trait :live_auto_accept do
-      auto_accept
+      auto_accept_requirements
       auto_accept_preference { :live }
     end
 
