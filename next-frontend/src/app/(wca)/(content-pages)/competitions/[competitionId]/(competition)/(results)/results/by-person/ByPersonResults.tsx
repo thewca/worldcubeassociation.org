@@ -123,6 +123,8 @@ function ResultsList({
       defaultValue={sessionWcaId ? [sessionWcaId] : undefined}
       multiple
       variant="enclosed"
+      lazyMount
+      unmountOnExit
     >
       {_.map(filteredResults, (results, wcaId) => (
         <Accordion.Item key={wcaId} value={wcaId}>
