@@ -20,6 +20,11 @@ import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
 import { DateTime } from "luxon";
+import {
+  HeadToHeadRoundRows,
+  headToHeadRunAt,
+  startsHeadToHeadRun,
+} from "./H2HRoundRows";
 
 // The solve columns push the row past the width of a phone, so the column that says
 // whose row it is stays pinned to the left edge while the rest scrolls under it.
@@ -356,6 +361,8 @@ export function ByCompetitionTable({
     "competition_id",
   );
 
+  console.log(resultsByCompetition);
+
   return (
     <Table.ScrollArea rounded="md" width="full">
       <Table.Root>
@@ -383,6 +390,23 @@ export function ByCompetitionTable({
 
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
+
+              const isH2H = competitorResult.ranking_mode === "head_to_head";
+
+              if (isH2H) {
+                if (!startsHeadToHeadRun(competitionResults, index))
+                  return null;
+                return (
+                  <HeadToHeadRoundRows
+                    key={`h2h-${competitorResult.id}`}
+                    results={headToHeadRunAt(competitionResults, index)}
+                    showCompetition={index === 0}
+                    attemptCount={attemptCount}
+                    anyAverages={anyAverages}
+                    t={t}
+                  />
+                );
+              }
 
               return (
                 <Table.Row key={competitorResult.id}>
