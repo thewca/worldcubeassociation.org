@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,6 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { io } from "next/cache";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import { ColorModeButton } from "@/components/ui/color-mode";
@@ -30,7 +29,7 @@ import {
   MobileNavRoot,
 } from "@/components/MobileNav";
 import { getCachedGlobal } from "@/lib/payload/globals";
-import { getCachedCollection } from "@/lib/payload/collections";
+import { findCached } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
 
 type NavbarEntry<K extends string = "displayText"> = {
@@ -110,22 +109,36 @@ function LinkWrapper<T extends string>({
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
-export default async function Navbar() {
-  // `io()` marks the boundary the build-time prerender stops at, so the Payload reads below
-  // never run while building, where MongoDB is unreachable. It has to stay out here rather
-  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
-  await io();
-
+async function SessionAvatarMenu() {
   const { lng } = await getT();
 
-  const [navbar, socialLinksGlobal, avatarMenuEntries] = await Promise.all([
+  const [session, permissions, { docs: avatarMenuEntries }] = await Promise.all(
+    [
+      getSession(),
+      getPermissions().then((p) => p?.permissions),
+      findCached("avatarMenuEntries", {
+        locale: lng,
+        sort: "_order",
+        pagination: false,
+      }),
+    ],
+  );
+
+  return (
+    <AvatarMenu
+      session={session}
+      cmsEntries={avatarMenuEntries}
+      permissions={permissions}
+    />
+  );
+}
+
+export default async function Navbar() {
+  const [navbar, socialLinksGlobal] = await Promise.all([
     getCachedGlobal("nav"),
     getCachedGlobal("social-links"),
-    getCachedCollection("avatarMenuEntries", lng),
   ]);
 
-  const session = await getSession();
-  const permissions = (await getPermissions())?.permissions;
   const socialLinks = socialLinksGlobal.links ?? [];
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages
@@ -315,11 +328,9 @@ export default async function Navbar() {
               <LanguageSelector />
             </Box>
             <Box hideBelow="md">
-              <AvatarMenu
-                session={session}
-                cmsEntries={avatarMenuEntries}
-                permissions={permissions}
-              />
+              <Suspense>
+                <SessionAvatarMenu />
+              </Suspense>
             </Box>
           </HStack>
         </HStack>
@@ -483,11 +494,9 @@ export default async function Navbar() {
               <Separator hideFrom="md" />
               <VStack align="stretch" hideFrom="md" gap={1}>
                 <LanguageSelector />
-                <AvatarMenu
-                  session={session}
-                  cmsEntries={avatarMenuEntries}
-                  permissions={permissions}
-                />
+                <Suspense>
+                  <SessionAvatarMenu />
+                </Suspense>
               </VStack>
             </VStack>
           </Collapsible.Content>

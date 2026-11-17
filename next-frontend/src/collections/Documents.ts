@@ -1,6 +1,7 @@
 import { CollectionConfig } from "payload";
 import { iconMap, IconName } from "@/components/icons/iconMap";
 import { qualityTeamAccess } from "@/payload.access";
+import { revalidateCollection } from "@/collections/revalidateCollection";
 
 const iconOptions = Object.keys(iconMap) as IconName[];
 
@@ -36,6 +37,10 @@ export const Documents: CollectionConfig = {
   },
   admin: {
     useAsTitle: "title",
+  },
+  hooks: {
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
   },
   fields: [
     {
