@@ -60,7 +60,7 @@ export default async function Documents() {
         {Object.entries(categorized).map(([category, docs]) => (
           <Accordion.Item key={category} value={category}>
             <Accordion.ItemTrigger>
-              <IconDisplay name="List" /> {t(`documents.${category}`)}
+              <IconDisplay name="List" /> {lng(`documents.${category}`)}
             </Accordion.ItemTrigger>
             <Accordion.ItemContent>
               <Accordion.ItemBody>
