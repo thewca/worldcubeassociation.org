@@ -818,7 +818,7 @@ th:
         wic: สำหรับ WIC
         weat: สำหรับ WEAT
         wqac: สำหรับ WQAC
-        leader: แผงควบคุมสำหรับผู้นำ
+        leader: สำหรับผู้นำ
   page:
     translators:
       title: ผู้แปลภาษา
