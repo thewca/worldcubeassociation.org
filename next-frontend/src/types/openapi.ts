@@ -143,6 +143,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/registrations/{registrationId}/payment_ticket": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Open a payment intent for a registration
+         * @description Creates a payment intent with the competition's payment provider and hands back the client
+         *     secret needed to confirm it from the browser. The amount charged is the registration's entry
+         *     fee plus the donation asked for here - the client does not get to name a price.
+         */
+        get: operations["registrationPaymentTicket"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/results": {
         parameters: {
             query?: never;
@@ -1227,6 +1249,11 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
+            /**
+             * @description How many of the currency's lowest denomination make up one unit
+             * @example 100
+             */
+            currency_subunit_to_unit: number;
             competitor_limit: number | null;
             championship_types: string[];
             /** Format: date-time */
@@ -1270,6 +1297,7 @@ export interface components {
                 payment_status?: string;
                 paid_amount_iso: number;
                 currency_code: string;
+                currency_subunit_to_unit: number;
                 /** Format: datetime */
                 updated_at?: string;
             };
@@ -1804,6 +1832,11 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
+            /**
+             * @description How many of the currency's lowest denomination make up one unit
+             * @example 100
+             */
+            currency_subunit_to_unit: number;
             /**
              * Format: date
              * @example 2025-07-03
@@ -2727,6 +2760,35 @@ export interface operations {
                 };
             };
             400: components["responses"]["RegistrationError"];
+        };
+    };
+    registrationPaymentTicket: {
+        parameters: {
+            query?: {
+                /** @description Optional donation on top of the entry fee, in the currency's lowest denomination */
+                iso_donation_amount?: number;
+            };
+            header?: never;
+            path: {
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description The provider-issued secret that confirms this payment from the browser */
+                        client_secret: string;
+                    };
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
         };
     };
     v1CompetitionResults: {
