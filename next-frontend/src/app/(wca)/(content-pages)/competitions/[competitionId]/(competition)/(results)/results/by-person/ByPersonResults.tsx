@@ -34,6 +34,7 @@ import { useRef, useState } from "react";
 import useDebounce from "@/lib/hooks/useDebounce";
 import { TFunction } from "i18next";
 import { countryName } from "@/components/CountryMap";
+import { toAvatarName } from "@/lib/utils";
 
 interface ByPersonResultsProps {
   resultsByPerson: _.Dictionary<CompetitionResultRow[]>;
@@ -127,6 +128,7 @@ function ResultsList({
       lazyMount
       unmountOnExit
       p="0.5"
+      borderRadius="sm"
     >
       {_.map(filteredResults, (results, wcaId) => (
         <Accordion.Item key={wcaId} value={wcaId} bg="bg" _open={{ bg: "bg" }}>
@@ -134,7 +136,7 @@ function ResultsList({
             <Heading size="2xl" asChild>
               <HStack gap="4">
                 <Avatar.Root>
-                  <Avatar.Fallback name={results[0].name} />
+                  <Avatar.Fallback name={toAvatarName(results[0].name)} />
                   {/* Currently we don't have the actual image URL in the API output, this is pending a bigger refactor */}
                 </Avatar.Root>
                 <VStack width="fit-content" alignItems="start" gap="0.5">
@@ -155,7 +157,7 @@ function ResultsList({
             <Accordion.ItemIndicator />
           </Accordion.ItemTrigger>
           <Accordion.ItemContent>
-            <Accordion.ItemBody>
+            <Accordion.ItemBody pt="0">
               <ByPersonTable
                 results={results}
                 isAdmin={false}

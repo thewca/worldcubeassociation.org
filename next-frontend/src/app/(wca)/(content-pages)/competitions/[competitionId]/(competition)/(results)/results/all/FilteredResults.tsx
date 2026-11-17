@@ -60,6 +60,7 @@ export default function FilteredResults({
         lazyMount
         unmountOnExit
         p="0.5"
+        borderRadius="sm"
       >
         {roundGroups.map(([round, ...linkedRounds], index) => (
           <Accordion.Item
@@ -77,7 +78,7 @@ export default function FilteredResults({
                   <Accordion.ItemIndicator />
                 </Accordion.ItemTrigger>
                 <Accordion.ItemContent>
-                  <Accordion.ItemBody>
+                  <Accordion.ItemBody pt="0">
                     <LinkedRoundResults
                       key={round.wcif_id}
                       rounds={[round, ...linkedRounds]}
@@ -95,7 +96,7 @@ export default function FilteredResults({
                   <Accordion.ItemIndicator />
                 </Accordion.ItemTrigger>
                 <Accordion.ItemContent>
-                  <Accordion.ItemBody>
+                  <Accordion.ItemBody pt="0">
                     {h2hRoundsById[round.wcif_id] ? (
                       <HeadToHeadBracket round={h2hRoundsById[round.wcif_id]} />
                     ) : (
