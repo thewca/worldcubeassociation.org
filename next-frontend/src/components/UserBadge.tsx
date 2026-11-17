@@ -19,7 +19,7 @@ interface UserBadgeData {
   name: string;
   profilePicture?: components["schemas"]["UserAvatar"];
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
-  wcaId: string;
+  wcaId: string | null;
   action?: React.ReactNode;
   email?: string;
 }
@@ -32,6 +32,16 @@ const UserBadge: React.FC<UserBadgeData> = ({
   action,
   email,
 }) => {
+  const nameOrProfileLink = wcaId ? (
+    <LinkOverlay asChild>
+      <Link href={route({ pathname: "/persons/[wcaId]", query: { wcaId } })}>
+        {name}
+      </Link>
+    </LinkOverlay>
+  ) : (
+    name
+  );
+
   return (
     <LinkBox asChild>
       <Card.Root
@@ -66,16 +76,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
           <Card.Body gap={2}>
             <Card.Title>
               <HStack direction="row" justify="space-between">
-                <LinkOverlay asChild>
-                  <Link
-                    href={route({
-                      pathname: "/persons/[wcaId]",
-                      query: { wcaId },
-                    })}
-                  >
-                    {name}
-                  </Link>
-                </LinkOverlay>
+                {nameOrProfileLink}
                 {email && <EmailCopyButton email={email} />}
               </HStack>
             </Card.Title>

@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/user_roles/active": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all active user roles, unpaginated */
+        get: operations["activeUserRoles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -1189,12 +1206,12 @@ export interface components {
     schemas: {
         UserAvatar: {
             /**
-             * Format: uri
+             * Format: uri-reference
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
              */
             url: string;
             /**
-             * Format: uri
+             * Format: uri-reference
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
@@ -1241,6 +1258,105 @@ export interface components {
                 name: string;
                 avatar: components["schemas"]["UserAvatar"];
             }[];
+        };
+        TeamMembership: {
+            id: number;
+            /** @example wst */
+            friendly_id: string;
+            leader: boolean;
+            senior_member: boolean;
+            name?: string;
+            wca_id?: string;
+            avatar?: components["schemas"]["UserAvatar"];
+        };
+        Person: {
+            /** @example 267 */
+            id: number;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender?: string;
+            /** @example 2005REYN01 */
+            wca_id: string;
+            /** @example US */
+            country_iso2: string;
+            /** @example delegate */
+            delegate_status: string;
+            /** Format: email */
+            email?: string;
+            teams: components["schemas"]["TeamMembership"][];
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
+        };
+        UserGroup: {
+            id: number;
+            name: string;
+            group_type: string;
+            parent_group_id?: number | null;
+            is_active: boolean;
+            is_hidden: boolean;
+            metadata_id?: number | null;
+            metadata_type?: string | null;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            lead_user?: components["schemas"]["Person"];
+            metadata?: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                /** Format: email */
+                email?: string;
+                preferred_contact_mode?: string;
+                friendly_id?: string;
+            };
+        };
+        RoleUser: {
+            /** @example 267 */
+            id: number;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender?: string;
+            /** @example 2005REYN01 */
+            wca_id: string | null;
+            /** @example US */
+            country_iso2: string;
+            /** Format: email */
+            email?: string;
+            /**
+             * @description Empty if the user has no WCA ID
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
+        };
+        UserRole: {
+            id: number;
+            /** Format: date */
+            start_date: string;
+            /** Format: date */
+            end_date: string | null;
+            group: components["schemas"]["UserGroup"];
+            user: components["schemas"]["RoleUser"];
+            metadata: {
+                id?: number;
+                status?: string;
+                /** Format: date-time */
+                created_at?: string;
+                /** Format: date-time */
+                updated_at?: string;
+                location?: string;
+            };
+            class?: string;
         };
         /** @enum {string} */
         CompetingStatus: "pending" | "accepted" | "cancelled" | "rejected" | "waiting_list";
@@ -1723,39 +1839,6 @@ export interface components {
             latitude: number;
             /** @example 13.405 */
             longitude: number;
-        };
-        TeamMembership: {
-            id: number;
-            /** @example wst */
-            friendly_id: string;
-            leader: boolean;
-            senior_member: boolean;
-            name?: string;
-            wca_id?: string;
-            avatar?: components["schemas"]["UserAvatar"];
-        };
-        Person: {
-            /** @example 267 */
-            id: number;
-            /** @example Tim Reynolds */
-            name: string;
-            /** @example m */
-            gender?: string;
-            /** @example 2005REYN01 */
-            wca_id: string;
-            /** @example US */
-            country_iso2: string;
-            /** @example delegate */
-            delegate_status: string;
-            /** Format: email */
-            email?: string;
-            teams: components["schemas"]["TeamMembership"][];
-            /**
-             * Format: uri
-             * @example https://www.worldcubeassociation.org/persons/2005REYN01
-             */
-            url: string;
-            avatar: components["schemas"]["UserAvatar"];
         };
         Organizer: components["schemas"]["Person"] & {
             /** @example regional_delegate */
@@ -2281,52 +2364,6 @@ export interface components {
             total_solves: number;
         };
         Competitions: components["schemas"]["CompetitionInfo"][];
-        UserGroup: {
-            id: number;
-            name: string;
-            group_type: string;
-            parent_group_id?: number | null;
-            is_active: boolean;
-            is_hidden: boolean;
-            metadata_id?: number | null;
-            metadata_type?: string | null;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            lead_user?: components["schemas"]["Person"];
-            metadata?: {
-                id?: number;
-                status?: string;
-                /** Format: date-time */
-                created_at?: string;
-                /** Format: date-time */
-                updated_at?: string;
-                /** Format: email */
-                email?: string;
-                preferred_contact_mode?: string;
-                friendly_id?: string;
-            };
-        };
-        UserRole: {
-            id: number;
-            /** Format: date */
-            start_date: string;
-            /** Format: date */
-            end_date: string | null;
-            group: components["schemas"]["UserGroup"];
-            user: components["schemas"]["Person"];
-            metadata: {
-                id?: number;
-                status?: string;
-                /** Format: date-time */
-                created_at?: string;
-                /** Format: date-time */
-                updated_at?: string;
-                location?: string;
-            };
-            class?: string;
-        };
         CompetitionPermissions: string[] | "*";
         UserPermissions: {
             can_attend_competitions: {
@@ -2522,6 +2559,35 @@ export interface operations {
                         in_progress: components["schemas"]["CompetitionIndex"][];
                         past: components["schemas"]["CompetitionIndex"][];
                     };
+                };
+            };
+        };
+    };
+    activeUserRoles: {
+        parameters: {
+            query?: {
+                /** @description Filter by group type (e.g., "officers") */
+                group_type?: string;
+                /** @description Filter by group ID */
+                group_id?: number;
+                /** @description Filter by parent group ID */
+                parent_group_id?: number;
+                /** @description Sort by a specific field (e.g., "location,name") */
+                sort?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A list of active user roles */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserRole"][];
                 };
             };
         };

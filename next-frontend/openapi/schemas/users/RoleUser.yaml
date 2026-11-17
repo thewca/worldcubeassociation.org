@@ -1,0 +1,35 @@
+type: object
+required:
+  - id
+  - name
+  - wca_id
+  - country_iso2
+  - url
+  - avatar
+properties:
+  id:
+    type: integer
+    example: 267
+  name:
+    type: string
+    example: "Tim Reynolds"
+  gender:
+    type: string
+    example: "m"
+  wca_id:
+    type:
+      - string
+      - "null"
+    example: "2005REYN01"
+  country_iso2:
+    type: string
+    example: "US"
+  email:
+    type: string
+    format: email
+  url:
+    description: Empty if the user has no WCA ID
+    type: string
+    example: "https://www.worldcubeassociation.org/persons/2005REYN01"
+  avatar:
+    $ref: './UserAvatar.yaml'

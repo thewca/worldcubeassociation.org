@@ -376,6 +376,7 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/records' => 'persons#records', as: :person_records
       get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
       get '/competitions/live' => 'competitions#live', as: :live_competitions
+      get '/user_roles/active' => 'user_roles#active', as: :active_user_roles
 
       resources :competitions, only: [] do
         get '/results' => 'competitions#results', as: :results

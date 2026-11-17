@@ -16,21 +16,3 @@ export async function getTeamsCommittees() {
     },
   });
 }
-
-export async function getTeamCommitteeMembers(
-  groupId: number,
-  pastMembers: boolean = false,
-) {
-  "use cache";
-  cacheLife("hours");
-
-  return serverClient.GET("/v0/user_roles", {
-    params: {
-      query: {
-        groupId,
-        isActive: pastMembers,
-        sort: "status:desc,name:asc",
-      },
-    },
-  });
-}
