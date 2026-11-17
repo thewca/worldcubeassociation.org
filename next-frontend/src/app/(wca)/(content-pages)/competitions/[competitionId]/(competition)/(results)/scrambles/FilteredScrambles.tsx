@@ -68,7 +68,7 @@ export default function FilteredScrambles({
                 <Accordion.ItemIndicator />
               </Accordion.ItemTrigger>
               <Accordion.ItemContent>
-                <Accordion.ItemBody>
+                <Accordion.ItemBody pt="0">
                   <Table.ScrollArea>
                     <Table.Root>
                       <Table.Header>
