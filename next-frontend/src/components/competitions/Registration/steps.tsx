@@ -1,11 +1,12 @@
 "use client";
 
-import { DataList, HStack, Text } from "@chakra-ui/react";
+import { DataList, HStack } from "@chakra-ui/react";
 import { DateTime } from "luxon";
 import RequirementsStep from "@/components/competitions/Registration/RequirementsStep";
 import CompetingStep from "@/components/competitions/Registration/CompetingStep";
-import PaymentStep from "@/components/competitions/Registration/PaymentStep";
-import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
+import PaymentStep, {
+  PaymentStatus,
+} from "@/components/competitions/Registration/PaymentStep";
 import { LabelledEventIcon } from "@/components/EventIcon";
 import canEditRegistration from "@/lib/wca/registrations/canEditRegistration";
 import { useT } from "@/lib/i18n/useI18n";
@@ -53,11 +54,10 @@ export function StepContent({
         <PaymentStep
           competitionInfo={competitionInfo}
           registration={registration}
+          parameters={step.parameters}
           deadline={step.deadline}
         />
       );
-    case "approval":
-      return registration && <RegistrationStatus registration={registration} />;
   }
 }
 
@@ -83,6 +83,22 @@ export function isStepComplete(
       );
     case "payment":
     case "approval":
+      return true;
+  }
+}
+
+/**
+ * Whether a step the competitor has walked past is actually done. Approval is up to the organizers,
+ * so walking past it only means waiting for them.
+ */
+export function isStepSettled(
+  step: StepConfig,
+  registration: Registration | null,
+) {
+  switch (step.key) {
+    case "approval":
+      return registration?.competing.registration_status === "accepted";
+    default:
       return true;
   }
 }
@@ -169,18 +185,16 @@ export function StepSummary({
         <PaymentStep
           competitionInfo={competitionInfo}
           registration={registration}
+          parameters={step.parameters}
           deadline={step.deadline}
         />
       ) : (
-        <Text>
-          {registration.payment?.has_paid
-            ? t("registrations.payment_form.labels.fees_paid")
-            : t("registrations.payment_form.labels.fees_remaining")}
-        </Text>
+        <PaymentStatus
+          competitionInfo={competitionInfo}
+          payment={registration.payment}
+        />
       );
     }
-    case "approval":
-      return <RegistrationStatus registration={registration} />;
   }
 }
 
@@ -191,6 +205,8 @@ export function isStepEditable(step: StepConfig, registration: Registration) {
       return (
         step.is_editable && canEditRegistration(step.parameters, registration)
       );
+    case "payment":
+      return step.is_editable && !registration.payment?.has_paid;
     default:
       return step.is_editable;
   }

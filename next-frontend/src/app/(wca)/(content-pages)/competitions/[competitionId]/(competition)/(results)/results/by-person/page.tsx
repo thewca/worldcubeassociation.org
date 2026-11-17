@@ -4,6 +4,7 @@ import { roundResultRows } from "@/lib/wca/results/competitionResults";
 import ByPersonResults from "./ByPersonResults";
 import { Text } from "@chakra-ui/react";
 import { getSession } from "@/auth";
+import { toAvatarName } from "@/lib/utils";
 
 export default async function PodiumsPage({
   params,
