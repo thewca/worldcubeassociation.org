@@ -84,9 +84,15 @@ class Result < ApplicationRecord
   V1_SERIALIZE_OPTIONS = {
     only: V1_ROUND_SERIALIZE_OPTIONS[:only],
     methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
-             %w[competition_id competition_short_name competition_start_date
+             %w[competition_id competition_short_name competition_start_date competition_is_championship
                 event_id round_type_id format_id ranking_mode],
   }.freeze
+
+  def competition_championship?
+    competition.championships.any?
+  end
+
+  alias_method :competition_is_championship, :competition_championship?
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))

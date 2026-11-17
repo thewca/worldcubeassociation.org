@@ -137,7 +137,11 @@ export default async function PersonOverview({
         </GridItem>
         {/* Records and Medals */}
         <GridItem colSpan={{ base: 1, lg: 17 }}>
-          <PersonalRecordsTable records={personDetails.personal_records} />
+          <PersonalRecordsTable
+            records={personDetails.personal_records}
+            countryIso2={personDetails.person.country_iso2}
+            wcaId={wcaId}
+          />
           <SimpleGrid gap={8} columns={{ base: 1, md: 6 }} padding={0} pt={8}>
             {hasMedals && (
               <GridItem colSpan={{ base: 1, md: hasRecords ? 3 : 6 }}>
