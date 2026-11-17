@@ -49,6 +49,8 @@ export default function FilteredScrambles({
         key={activeEventId}
         p="0.5"
         borderRadius="sm"
+        lazyMount
+        unmountOnExit
       >
         {_.map(orderedRounds, (roundFormat, index) => {
           const scramblesForRound = scramblesByRoundFormat[roundFormat];
