@@ -3336,21 +3336,18 @@ de:
     mission_footer: WCA Leitbild
     who_we_are_title: Wer wir sind
     who_we_are_content_html: >-
-      <p>Die World Cube Association verwaltet Wettbewerbe für mechanische
-      Puzzles, die sich durch das Drehen von Gruppen von Teilen auszeichnen.
-      Diese werden auch "Twisty Puzzles" oder "Drehpuzzle" genannt. Das
-      berühmteste jener Puzzles ist der Rubik's Cube, erfunden von Professor
-      Rubik aus Ungarn. Eine Auswahl solcher Puzzles wurde zu offiziellen Events
-      der WCA erklärt.</p> <p>Während die WCA sich innerhalb des letzten
-      Jahrzehnts weiterentwickelt hat, haben über 200.000 Personen an unseren
-      Wettbewerben teilgenommen. Trotz dieses Wachstums bleiben wir eine
-      Organisation die fast ausschließlich von Ehrenamtlichen getragen wird, von
-      lokalen Organisatoren, über WCA Delegates, bis hin zum WCA Vorstand. Wir
-      sind allen sehr dankbar, die sich die Zeit nehmen, die Arbeit der WCA zu
-      ermöglichen. Wir hoffen, dass wir mit mehr finanzieller Unterstützung ein
-      noch höheres Maß an Professionalität in unsere Wettbewerbe einbringen
-      können, während wir immer mehr Veranstaltungen in der ganzen Welt
-      genehmigen.</p>
+      <p>Die World Cube Association regelt Turniere für mechanische Puzzles, die durch
+      das Drehen von Gruppen von Teilen bedient werden und allgemein als „Twisty Puzzles“
+      bekannt sind. Das bekannteste dieser Puzzles ist der Rubik's Cube, erfunden
+      von Professor Rubik aus Ungarn. Eine Auswahl dieser Puzzles wurde als offizielle
+      Disziplinen der WCA festgelegt.</p> <p>Im Laufe der Entwicklung der WCA im vergangenen
+      Jahrzehnt haben über 245.000 Menschen an unseren Turnieren teilgenommen. Trotz
+      dieses Wachstums sind wir nach wie vor eine Organisation, die fast vollständig
+      von Ehrenamtlichen getragen wird – von den Organisatoren vor Ort über die WCA-Delegierten
+      bis hin zum WCA-Board. Wir sind allen sehr dankbar, die sich die Zeit nehmen,
+      damit die WCA funktionieren kann. Mit mehr finanzieller Unterstützung hoffen
+      wir, unseren Turnieren ein noch höheres Maß an Professionalität zu verleihen,
+      während wir weltweit immer mehr Turniere genehmigen.</p>
     spirit: >-
       Unser Wunsch ist es, dass Menschen in aller Welt in einer freundlichen
       Atmosphäre Spaß zusammen haben, anderen helfen und sich fair verhalten.
@@ -4511,9 +4508,9 @@ de:
         wqac: Das WCA Quality Assurance Committee (WQAC) fördert die 
           kontinuierliche Qualitätsverbesserung innerhalb der WCA sowie die 
           weltweite Anwendung von Qualitätsstandards, um eine gleichbleibend 
-          hohe Qualität bei Prozessen, WCA-Ehrenamtlichen, regionalen 
-          Organisationen, Wettbewerbsorganisatoren und ehrenamtlichen 
-          Wettbewerbshelfern sicherzustellen.
+          hohe Qualität der Prozesse, der Ehrenamtlichen der WCA, der regionalen
+          Organisationen, der Turnierorganisatoren und der Turnierhelfer 
+          sicherzustellen.
         wrc: Das WCA Regulations Committee (WRC) befasst sich mit allen Fragen 
           zur Anwendung, Verbesserung und Weiterentwicklung der WCA-Regeln. Es 
           unterstützt WCA-Delegierte bei sämtlichen Verfahrensfragen, die bei 
@@ -4526,9 +4523,9 @@ de:
           (Website, Scramble-Generatoren, Arbeitsmappen, Verwaltungswerkzeuge).
         wsot: Das WCA Sports Organization Team (WSOT) betreut und unterstützt 
           die Anerkennung der WCA als internationale Sportorganisation.
-        wapc: Das WCA Appeals Committee (WAC) prüft und entscheidet über 
-          Einsprüche gegen Entscheidungen anderer WCA-Ehrenamtlicher. Das WAC 
-          bietet ein unabhängiges und unparteiisches Prüfverfahren, um 
+        wapc: Das WCA Appeals Committee (WAC) prüft Einsprüche gegen 
+          Entscheidungen anderer Ehrenamtlicher der WCA und entscheidet darüber.
+          Das WAC bietet ein unabhängiges und unparteiisches Prüfverfahren, um 
           sicherzustellen, dass Entscheidungen fair und angemessen sind und den 
           Richtlinien und Regeln der WCA entsprechen.
   trainee_delegate_application:
