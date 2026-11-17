@@ -33,6 +33,7 @@ import { LuSearch } from "react-icons/lu";
 import { useRef, useState } from "react";
 import useDebounce from "@/lib/hooks/useDebounce";
 import { TFunction } from "i18next";
+import { countryName } from "@/components/CountryMap";
 
 interface ByPersonResultsProps {
   resultsByPerson: _.Dictionary<CompetitionResultRow[]>;
@@ -184,9 +185,7 @@ function Filters({
     { value: "", label: "All countries" },
     ...countries.map((c) => ({
       value: c,
-      label: (
-        <CountryMap code={c} t={t} textStyle="bodyEmphasis" color="fg.muted" />
-      ),
+      label: countryName(c, t),
     })),
   ];
   const collection = createListCollection({ items: selectValues });
