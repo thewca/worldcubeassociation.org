@@ -3,6 +3,7 @@ import { Box, Card, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { getT } from "@/lib/i18n/get18n";
 import { connection } from "next/server";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { announcementColorPalette } from "@/components/announcements/announcement";
@@ -45,9 +46,11 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
 
   await connection();
 
+  const { lng } = await getT();
   const payload = await getPayload({ config });
   const announcements = await payload.find({
     collection: "announcements",
+    locale: lng,
     sort: "-publishedAt",
     page: currentPage,
     limit: ANNOUNCEMENTS_PER_PAGE,

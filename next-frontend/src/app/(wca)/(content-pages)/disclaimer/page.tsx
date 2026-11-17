@@ -18,7 +18,9 @@ export default async function Disclaimer() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const disclaimerPage = await getCachedGlobal("disclaimer-page");
+  const { lng } = await getT();
+
+  const disclaimerPage = await getCachedGlobal("disclaimer-page", lng);
 
   const disclaimerItems = disclaimerPage.blocks;
 
