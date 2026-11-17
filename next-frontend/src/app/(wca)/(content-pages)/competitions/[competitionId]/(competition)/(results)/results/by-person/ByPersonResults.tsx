@@ -132,7 +132,12 @@ function ResultsList({
     >
       {_.map(filteredResults, (results, wcaId) => (
         <Accordion.Item key={wcaId} value={wcaId} bg="bg" _open={{ bg: "bg" }}>
-          <Accordion.ItemTrigger justifyContent="space-between">
+          <HStack
+            position="relative"
+            justifyContent="space-between"
+            paddingInline="var(--accordion-padding-x)"
+            paddingBlock="var(--accordion-padding-y)"
+          >
             <Heading size="2xl" asChild>
               <HStack gap="4">
                 <Avatar.Root>
@@ -140,7 +145,12 @@ function ResultsList({
                   {/* Currently we don't have the actual image URL in the API output, this is pending a bigger refactor */}
                 </Avatar.Root>
                 <VStack width="fit-content" alignItems="start" gap="0.5">
-                  <ChakraLink textStyle="headerLink" asChild>
+                  <ChakraLink
+                    textStyle="headerLink"
+                    position="relative"
+                    zIndex="1"
+                    asChild
+                  >
                     <Link
                       href={route({
                         pathname: "/persons/[wcaId]",
@@ -154,8 +164,20 @@ function ResultsList({
                 </VStack>
               </HStack>
             </Heading>
-            <Accordion.ItemIndicator />
-          </Accordion.ItemTrigger>
+            <Accordion.ItemTrigger
+              width="auto"
+              padding="0"
+              position="static"
+              aria-label={results[0].name}
+              _before={{
+                content: '""',
+                position: "absolute",
+                inset: "0",
+              }}
+            >
+              <Accordion.ItemIndicator />
+            </Accordion.ItemTrigger>
+          </HStack>
           <Accordion.ItemContent>
             <Accordion.ItemBody pt="0">
               <ByPersonTable
