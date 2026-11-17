@@ -6,6 +6,7 @@ import {
   Link as ChakraLink,
   Button,
   CloseButton,
+  Center,
   Drawer,
   Portal,
   Heading,
@@ -32,6 +33,7 @@ import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
 import CompetitionShortlist from "@/components/competitions/CompetitionShortlist";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { LuInfo } from "react-icons/lu";
 import {
   getRegistrationStatus,
@@ -43,6 +45,7 @@ type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 
 interface Props {
   comp: CompetitionIndex;
+  isRepeatedDate: boolean;
 }
 
 const registrationStatusIcons: Record<RegistrationStatus, JSX.Element> = {
@@ -51,65 +54,86 @@ const registrationStatusIcons: Record<RegistrationStatus, JSX.Element> = {
   closed: <CompRegoClosedRedIcon />,
 };
 
-const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
+const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
   const [open, setOpen] = useState(false);
   const regoStatus = getRegistrationStatus(comp);
 
   const isChampionship = comp.championship_types.length > 0;
 
   const { t } = useT();
-  return (
-    <Table.Row key={comp.id}>
-      <Table.Cell>{registrationStatusIcons[regoStatus]}</Table.Cell>
+  const lng = useLocale();
+  const dateLabel = formatDateRange(comp.start_date, comp.end_date, lng);
 
-      <Table.Cell>
-        <Text>{formatDateRange(comp.start_date, comp.end_date)}</Text>
+  return (
+    <Table.Row key={comp.id} height={{ base: "10", lg: "auto" }}>
+      <Table.Cell width="10">
+        <Center boxSize="10">{registrationStatusIcons[regoStatus]}</Center>
       </Table.Cell>
 
-      <Table.Cell whiteSpace={{ base: "normal", md: "nowrap" }}>
-        <HStack gap="2">
-          <Box
-            as="span"
-            title={countryName(comp.country_iso2, t)}
-            lineHeight="0"
-            flexShrink="0"
-          >
-            <WcaFlag code={comp.country_iso2} size="lg" />
+      <Table.Cell width="1" whiteSpace="nowrap" hideBelow="md">
+        <Text color={isRepeatedDate ? "fg.muted" : undefined}>{dateLabel}</Text>
+      </Table.Cell>
+
+      <Table.Cell width="1">
+        <Box as="span" title={countryName(comp.country_iso2, t)} lineHeight="0">
+          <WcaFlag code={comp.country_iso2} size="md" minW="5" />
+        </Box>
+      </Table.Cell>
+
+      <Table.Cell
+        width={{ base: "full", lg: "auto" }}
+        whiteSpace={{ base: "normal", lg: "nowrap" }}
+        overflowWrap={{ base: "anywhere", lg: "normal" }}
+      >
+        <HStack gap="2" minW="0">
+          <Box minW="0">
+            <ChakraLink asChild minW="0">
+              <Link
+                href={route({
+                  pathname: "/competitions/[competitionId]",
+                  query: { competitionId: comp.id },
+                })}
+              >
+                {comp.name}
+              </Link>
+            </ChakraLink>
+            <Text hideFrom="lg" color="fg.muted" textStyle="xs">
+              <Box as="span" hideFrom="md">
+                {t("competitions.index.date_and_city", {
+                  date: dateLabel,
+                  city: comp.city,
+                })}
+              </Box>
+              <Box as="span" hideBelow="md">
+                {comp.city}
+              </Box>
+            </Text>
           </Box>
-          {isChampionship && <NationalChampionshipIcon />}
-          <ChakraLink asChild>
-            <Link
-              href={route({
-                pathname: "/competitions/[competitionId]",
-                query: { competitionId: comp.id },
-              })}
-            >
-              {comp.name}
-            </Link>
-          </ChakraLink>
+          {isChampionship && <NationalChampionshipIcon flexShrink="0" />}
         </HStack>
       </Table.Cell>
 
-      <Table.Cell>
+      <Table.Cell width="10">
         <IconButton
           size="2xs"
+          boxSize="10"
           variant="ghost"
           color="currentColor"
-          marginX="2"
+          aria-label={t("competitions.competition_info.details")}
           onClick={() => setOpen(true)}
         >
           <LuInfo />
         </IconButton>
       </Table.Cell>
 
-      <Table.Cell hideBelow="md" whiteSpace="nowrap">
-        <Text>
+      <Table.Cell hideBelow="lg" width="2/3" maxW="0">
+        <Text truncate>
           <strong>{countryName(comp.country_iso2, t)}</strong>
           {`, ${comp.city}`}
         </Text>
       </Table.Cell>
 
-      <Table.Cell width="100%" hideBelow="md">
+      <Table.Cell width="1/3" maxW="0" hideBelow="xl">
         <Box lineClamp="1">
           <ChakraMarkdown paragraphAs={Text}>{comp.venue}</ChakraMarkdown>
         </Box>
@@ -141,6 +165,7 @@ const CompetitionTableRow: React.FC<Props> = ({ comp }) => {
                 <CompetitionShortlist
                   comp={comp}
                   t={t}
+                  lng={lng}
                   items={[
                     "city",
                     "venue_address",

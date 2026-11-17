@@ -32,6 +32,7 @@ import {
 import EventIcon from "@/components/EventIcon";
 import { route } from "nextjs-routes";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { LuLock } from "react-icons/lu";
 import _ from "lodash";
 import { getRoundName } from "@/lib/wca/live/getRoundName";
@@ -74,6 +75,7 @@ function LiveSchedule({
   canManage = false,
 }: LiveViewProps) {
   const { t } = useT();
+  const lng = useLocale();
   const { rounds } = useAllRoundsInfo();
 
   const firstStartTime = activities[0].startTime;
@@ -155,7 +157,7 @@ function LiveSchedule({
         <Tabs.List height="fit-content" position="sticky" top="3">
           {dates.map((date) => (
             <Tabs.Trigger value={date.day.toString()} key={date.day}>
-              {date.toLocaleString({ timeZone })}
+              {date.toLocaleString({ timeZone }, { locale: lng })}
             </Tabs.Trigger>
           ))}
         </Tabs.List>
@@ -208,8 +210,8 @@ function LiveSchedule({
                         </Button>
                       </Card.Body>
                       <Card.Footer>
-                        {getSimpleTimeString(activity.startTime, timeZone)} -{" "}
-                        {getSimpleTimeString(activity.endTime, timeZone)}
+                        {getSimpleTimeString(activity.startTime, lng, timeZone)}{" "}
+                        - {getSimpleTimeString(activity.endTime, lng, timeZone)}
                       </Card.Footer>
                     </Card.Root>
                   );

@@ -14,6 +14,29 @@
  */
 export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'wcaWhite';
 /**
+ * Page on this website the link points to.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AvatarMenuTargetLink".
+ */
+export type AvatarMenuTargetLink = ('/competitions/mine' | '/dashboard' | '/payload') | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AvatarMenuPermission".
+ */
+export type AvatarMenuPermission =
+  | (
+      | 'canAccessCms'
+      | 'canViewPolls'
+      | 'canViewAllUsers'
+      | 'canAdminResults'
+      | 'canCreatePosts'
+      | 'canManageRegionalOrganizations'
+      | 'canViewDelegateAdminPage'
+      | 'canManageIncidents'
+    )
+  | null;
+/**
  * Icon name
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -252,7 +275,6 @@ export interface Config {
     faqCategories: FaqCategory;
     faqQuestions: FaqQuestion;
     users: User;
-    documents: Document;
     regulationsHistoryItem: RegulationsHistoryItem;
     tools: Tool;
     sessions: Session;
@@ -275,7 +297,6 @@ export interface Config {
     faqCategories: FaqCategoriesSelect<false> | FaqCategoriesSelect<true>;
     faqQuestions: FaqQuestionsSelect<false> | FaqQuestionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    documents: DocumentsSelect<false> | DocumentsSelect<true>;
     regulationsHistoryItem: RegulationsHistoryItemSelect<false> | RegulationsHistoryItemSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
     sessions: SessionsSelect<false> | SessionsSelect<true>;
@@ -690,28 +711,6 @@ export interface FaqQuestion {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "documents".
- */
-export interface Document {
-  id: string;
-  /**
-   * Name of the document, shown as the link text.
-   */
-  title: string;
-  icon: IconName;
-  /**
-   * URL the document links to.
-   */
-  link: string;
-  /**
-   * Category name (used for grouping documents)
-   */
-  category?: ('motions' | 'minutes' | 'policies' | 'finances') | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "regulationsHistoryItem".
  */
 export interface RegulationsHistoryItem {
@@ -874,10 +873,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
-      } | null)
-    | ({
-        relationTo: 'documents';
-        value: string | Document;
       } | null)
     | ({
         relationTo: 'regulationsHistoryItem';
@@ -1049,18 +1044,6 @@ export interface UsersSelect<T extends boolean = true> {
   image?: T;
   wcaId?: T;
   wcaUserId?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "documents_select".
- */
-export interface DocumentsSelect<T extends boolean = true> {
-  title?: T;
-  icon?: T;
-  link?: T;
-  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2201,9 +2184,18 @@ export interface DocumentsPage {
    */
   documents: {
     /**
-     * The document to list here.
+     * Name of the document, shown as the link text.
      */
-    document: string | Document;
+    title: string;
+    icon: IconName;
+    /**
+     * URL the document links to.
+     */
+    link: string;
+    /**
+     * Category name (used for grouping documents)
+     */
+    category?: ('motions' | 'minutes' | 'policies' | 'finances') | null;
     id?: string | null;
   }[];
   updatedAt?: string | null;
@@ -3022,7 +3014,10 @@ export interface DocumentsPageSelect<T extends boolean = true> {
   documents?:
     | T
     | {
-        document?: T;
+        title?: T;
+        icon?: T;
+        link?: T;
+        category?: T;
         id?: T;
       };
   updatedAt?: T;

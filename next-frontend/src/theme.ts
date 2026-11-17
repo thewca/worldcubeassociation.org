@@ -585,6 +585,15 @@ const customConfig = defineConfig({
           letterSpacing: "wider",
         },
       },
+      tableSection: {
+        value: {
+          fontSize: "sm",
+          lineHeight: "1.5",
+          fontWeight: "medium",
+          textTransform: "uppercase",
+          letterSpacing: "wider",
+        },
+      },
       body: {
         value: {
           fontSize: "0.875rem",
@@ -1011,6 +1020,20 @@ const customConfig = defineConfig({
       },
       table: {
         slots: [],
+        compoundVariants: [
+          {
+            variant: "competitions",
+            size: "xs",
+            css: {
+              cell: {
+                px: "1",
+                py: "1",
+                textAlign: "start",
+                verticalAlign: "middle",
+              },
+            },
+          },
+        ],
         variants: {
           variant: {
             competitions: {

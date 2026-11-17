@@ -24,7 +24,6 @@ import {
 import { Users } from "@/collections/Users";
 import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
-import { Documents } from "@/collections/Documents";
 import { Nav } from "@/globals/Nav";
 import { Footer } from "@/globals/Footer";
 import { SocialLinks } from "@/globals/SocialLinks";
@@ -163,7 +162,6 @@ export const wcaConfig = {
     FaqCategories,
     FaqQuestions,
     Users,
-    Documents,
     RegulationsHistoryItem,
     Tools,
   ].map(withWeblateSync),

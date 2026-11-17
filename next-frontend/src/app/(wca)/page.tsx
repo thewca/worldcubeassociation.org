@@ -296,7 +296,7 @@ const FeaturedCompetition = async ({
   competitionId: string;
   colorPalette: ColorPaletteSelect;
 }) => {
-  const { t } = await getT();
+  const { t, lng } = await getT();
   const {
     data: competition,
     error,
@@ -327,6 +327,7 @@ const FeaturedCompetition = async ({
           <CompetitionShortlist
             comp={competition}
             t={t}
+            lng={lng}
             items={["city", "start_date", "spots_left"]}
           />
         </Card.Body>

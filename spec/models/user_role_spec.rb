@@ -22,6 +22,24 @@ RSpec.describe UserRole do
       end
     end
 
+    context 'when the role is an active competing ban of a minor' do
+      let(:minor) { create(:user, dob: 16.years.ago) }
+      let(:competing_ban) { create(:banned_competitor_role, :active, user: minor, metadata: create(:roles_metadata_banned_competitors, scope: :competing_only)) }
+      let(:attending_ban) { create(:banned_competitor_role, :active, user: minor, metadata: create(:roles_metadata_banned_competitors, scope: :competing_and_attending)) }
+
+      it 'hides the competing ban from delegates' do
+        expect(competing_ban.can_user_read?(create(:delegate))).to be false
+      end
+
+      it 'shows the competing ban to WIC members' do
+        expect(competing_ban.can_user_read?(create(:user, :wic_member))).to be true
+      end
+
+      it 'shows the attendance ban to delegates' do
+        expect(attending_ban.can_user_read?(create(:delegate))).to be true
+      end
+    end
+
     context 'when the role is past banned competitor' do
       let(:past_banned_competitor_role) { create(:banned_competitor_role, :inactive) }
 
@@ -69,6 +87,25 @@ RSpec.describe UserRole do
       it 'returns false if no user is passed as argument' do
         expect(delegate_probation_role.can_user_read?(nil)).to be false
       end
+    end
+  end
+
+  describe '#active_on?' do
+    let(:role) { build(:delegate_role, start_date: Date.new(2026, 3, 1), end_date: Date.new(2026, 3, 31)) }
+
+    it 'is active from its start date until the day before its end date' do
+      expect(role.active_on?(Date.new(2026, 3, 1))).to be true
+      expect(role.active_on?(Date.new(2026, 3, 30))).to be true
+    end
+
+    it 'is not active before its start date or on its end date' do
+      expect(role.active_on?(Date.new(2026, 2, 28))).to be false
+      expect(role.active_on?(Date.new(2026, 3, 31))).to be false
+    end
+
+    it 'stays active without an end date' do
+      role.end_date = nil
+      expect(role.active_on?(Date.new(2030, 1, 1))).to be true
     end
   end
 end
