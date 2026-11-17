@@ -59,6 +59,7 @@ export default function FilteredResults({
         variant="enclosed"
         lazyMount
         unmountOnExit
+        p="0.5"
       >
         {roundGroups.map(([round, ...linkedRounds], index) => (
           <Accordion.Item key={round.wcif_id} value={index.toString()}>

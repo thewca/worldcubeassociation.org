@@ -126,6 +126,7 @@ function ResultsList({
       variant="enclosed"
       lazyMount
       unmountOnExit
+      p="0.5"
     >
       {_.map(filteredResults, (results, wcaId) => (
         <Accordion.Item key={wcaId} value={wcaId}>
