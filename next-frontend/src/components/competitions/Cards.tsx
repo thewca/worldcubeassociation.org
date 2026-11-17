@@ -216,11 +216,14 @@ export async function RegistrationCard({
               ) : (
                 <>
                   <FormatNumber
-                    value={competitionInfo.competitor_limit - spotsLeft}
+                    value={
+                      competitionInfo.competitor_limit - Math.max(spotsLeft, 0)
+                    }
                   />
                   {!registrationClosed && (
                     <>
-                      &sol;
+                      {/* Escape character for "/" */}
+                      <span>&#47;</span>
                       <FormatNumber value={competitionInfo.competitor_limit} />
                     </>
                   )}
