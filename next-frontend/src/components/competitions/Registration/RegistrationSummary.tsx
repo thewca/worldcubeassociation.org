@@ -193,9 +193,10 @@ export default function RegistrationSummary({
           <VStack key={step.key} gap={4} alignItems="stretch">
             <HStack gap={2}>
               <Heading textStyle="h3">
-                {t(
+                {t([
+                  `competitions.registration_v2.register.panel.${step.key}.summary_title`,
                   `competitions.registration_v2.register.panel.${step.key}.title`,
-                )}
+                ])}
               </Heading>
               {!isEditing && isStepEditable(step, registration) && (
                 <IconButton

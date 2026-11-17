@@ -5318,9 +5318,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/react-stripe-js@npm:^7.0.0":
+  version: 7.1.0
+  resolution: "@stripe/react-stripe-js@npm:7.1.0"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ">=10.3.0 <11.0.0"
+    react: ">=16.8.0 <20.0.0"
+    react-dom: ">=16.8.0 <20.0.0"
+  checksum: 10c0/8af95131b2ea91b54de5eedada591c8505f0e80a32a6d25f5f92ee0369fa561e628246a973fd025340a930082ff427700f9e260b758c0041c8ed36ea821d28d8
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^10.1.0":
+  version: 10.3.0
+  resolution: "@stripe/stripe-js@npm:10.3.0"
+  checksum: 10c0/a271d0374c5aae246a4df637456a20d1cb6e7cd73538fcc4358ed8dfb92bbea4f2a354435b18268dc9cc4da82de7fd7e4a555a6a7d72d4b668c46ed219731a7e
+  languageName: node
+  linkType: hard
+
 "@stylistic/eslint-plugin@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@stylistic/eslint-plugin@npm:6.0.0"
+  version: 6.0.1
+  resolution: "@stylistic/eslint-plugin@npm:6.0.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.10.1"
     "@typescript-eslint/types": "npm:^8.72.2"
@@ -5335,7 +5355,7 @@ __metadata:
       optional: true
     oxlint:
       optional: true
-  checksum: 10c0/8820cece908d12e4e3f4a5443148128721ed4fff93f954855424b2b53f28697734d739d8a37661171dd34c2f91436d107b80e5e9ab3e37ea7aee83ef738487e6
+  checksum: 10c0/0a52be780f60997a83291a6da6d9c1bbd2e54c2d00b8929e27dd38d5565a8d621786994eec2a58b86aa3e0c7c10815180b5e2ff817a51b5386636cf26ebfd502
   languageName: node
   linkType: hard
 
@@ -8521,13 +8541,6 @@ __metadata:
   dependencies:
     dequal: "npm:^2.0.0"
   checksum: 10c0/e0928ab8f94c59417a2b8389c45c55ce0a02d9ac7fd74ef62d01ba48060129e1d594501b77de01f3eeafc7cb00773819b0df74d96251cf20b31c5b3071f45c0e
-  languageName: node
-  linkType: hard
-
-"dinero.js@npm:2.0.2":
-  version: 2.0.2
-  resolution: "dinero.js@npm:2.0.2"
-  checksum: 10c0/e23bf810d33438afff958610f983023bda4d390b5144864006ff15ac27778da2f3e0978f04235fcef405f732e232a4b370fc5b2180ceb6801368a62909b307d9
   languageName: node
   linkType: hard
 
@@ -12901,6 +12914,8 @@ __metadata:
     "@rails/actioncable": "npm:^8.1.401"
     "@react-aria/focus": "npm:^3.22.1"
     "@redocly/cli": "npm:2.78.0"
+    "@stripe/react-stripe-js": "npm:^7.0.0"
+    "@stripe/stripe-js": "npm:^10.1.0"
     "@stylistic/eslint-plugin": "npm:^6.0.0"
     "@tanstack/eslint-plugin-query": "npm:^5.107.1"
     "@tanstack/react-form": "npm:^1.33.5"
@@ -12926,7 +12941,6 @@ __metadata:
     babel-plugin-react-compiler: "npm:^1.0.0"
     better-auth: "npm:1.7.25"
     culori: "npm:^4.0.2"
-    dinero.js: "npm:2.0.2"
     eslint: "npm:^10"
     eslint-config-next: "npm:16.4.6"
     eslint-config-prettier: "npm:^10.1.8"
@@ -13822,7 +13836,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:

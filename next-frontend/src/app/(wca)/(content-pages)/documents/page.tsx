@@ -11,7 +11,6 @@ import { io } from "next/cache";
 import { getCachedGlobal } from "@/lib/payload/globals";
 import _ from "lodash";
 import IconDisplay from "@/components/IconDisplay";
-import { Document } from "@/types/payload";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 
@@ -32,15 +31,11 @@ export default async function Documents() {
 
   const documentsResult = await getCachedGlobal("documents-page", lng);
 
-  const documentRelation = documentsResult.documents;
+  const { documents } = documentsResult;
 
-  if (documentRelation.length === 0) {
+  if (documents.length === 0) {
     return <Heading>No documents found. Add some</Heading>;
   }
-
-  const documents = documentRelation.map(
-    ({ document }) => document as Document,
-  );
 
   const [categorizedRaw, uncategorized] = _.partition(documents, "category");
   const categorized = _.groupBy(categorizedRaw, "category");
@@ -50,7 +45,7 @@ export default async function Documents() {
       <Heading size="5xl">Documents</Heading>
       <Accordion.Root variant="enclosed" multiple>
         {uncategorized.map((doc) => (
-          <Accordion.Item key={doc.title} value={doc.title}>
+          <Accordion.Item key={doc.id} value={doc.title}>
             <LinkBox asChild>
               <Accordion.ItemTrigger>
                 <LinkOverlay asChild>
@@ -65,7 +60,7 @@ export default async function Documents() {
         {Object.entries(categorized).map(([category, docs]) => (
           <Accordion.Item key={category} value={category}>
             <Accordion.ItemTrigger>
-              <IconDisplay name="List" /> {category}
+              <IconDisplay name="List" /> {t(`documents.${category}`)}
             </Accordion.ItemTrigger>
             <Accordion.ItemContent>
               <Accordion.ItemBody>
