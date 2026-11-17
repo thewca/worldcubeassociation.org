@@ -3,6 +3,7 @@ import { Box, Card, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import { getT } from "@/lib/i18n/get18n";
 import { connection } from "next/server";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { announcementColorPalette } from "@/components/announcements/announcement";
@@ -10,7 +11,6 @@ import { Announcement } from "@/types/payload";
 import AnnouncementsPagination from "@/app/(wca)/(content-pages)/posts/announcementsPagination";
 import AnnouncementsSearch from "@/app/(wca)/(content-pages)/posts/announcementsSearch";
 import Loading from "@/components/ui/loading";
-import { getT } from "@/lib/i18n/get18n";
 
 export const metadata: Metadata = {
   title: "Announcements",
@@ -47,9 +47,11 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
 
   await connection();
 
+  const { t, lng } = await getT();
   const payload = await getPayload({ config });
   const announcements = await payload.find({
     collection: "announcements",
+    locale: lng,
     where: q
       ? { or: [{ title: { like: q } }, { summary: { like: q } }] }
       : undefined,
@@ -57,8 +59,6 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
     page: currentPage,
     limit: ANNOUNCEMENTS_PER_PAGE,
   });
-
-  const { t } = await getT();
 
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
 

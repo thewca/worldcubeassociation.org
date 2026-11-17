@@ -118,9 +118,9 @@ export default async function Navbar() {
   const { lng } = await getT();
 
   const [navbar, socialLinksGlobal, avatarMenu] = await Promise.all([
-    getCachedGlobal("nav", { locale: lng }),
-    getCachedGlobal("social-links", { locale: lng }),
-    getCachedGlobal("avatar-menu", { locale: lng }),
+    getCachedGlobal("nav", lng),
+    getCachedGlobal("social-links", lng),
+    getCachedGlobal("avatar-menu", lng),
   ]);
 
   const session = await getSession();

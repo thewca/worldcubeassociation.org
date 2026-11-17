@@ -22,15 +22,15 @@ export default async function LogoPage() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const logoPage = await getCachedGlobal("logo-page");
+  const { t, lng } = await getT();
+
+  const logoPage = await getCachedGlobal("logo-page", lng);
 
   const logoItems = logoPage.blocks;
 
   if (logoItems.length === 0) {
     return <Heading>No Logo Items, add some!</Heading>;
   }
-
-  const { t } = await getT();
 
   return (
     <VStack gap="4" alignItems="left">

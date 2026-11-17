@@ -108,8 +108,7 @@ jobs:
           llm_model: gpt-6.1-terra
           llm_protocol: openai-responses
           llm_use_anthropic: false
-          llm_reasoning_effort: medium
-          llm_extra_body: '{}'
+          llm_extra_body: '{"reasoning": {"effort": "medium"}}'
 
           github_token: ${{ secrets.GITHUB_TOKEN }}
 

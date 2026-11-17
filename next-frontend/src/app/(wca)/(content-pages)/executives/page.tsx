@@ -18,7 +18,9 @@ export default async function ExecutivesPage() {
   // See logo/page.tsx: keeps the Payload read out of the build-time prerender.
   await io();
 
-  const executivesPage = await getCachedGlobal("executives-page");
+  const { lng } = await getT();
+
+  const executivesPage = await getCachedGlobal("executives-page", lng);
 
   return (
     <VStack gap="8" alignItems="stretch" py="8">

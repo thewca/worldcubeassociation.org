@@ -21,15 +21,15 @@ export default async function SpeedcubingHistory() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const historyPage = await getCachedGlobal("speedcubing-history-page");
+  const { t, lng } = await getT();
+
+  const historyPage = await getCachedGlobal("speedcubing-history-page", lng);
 
   const historyItems = historyPage.blocks;
 
   if (historyItems.length === 0) {
     return <Heading>No History Items, add some!</Heading>;
   }
-
-  const { t } = await getT();
 
   return (
     <VStack gap="8" width="full" alignItems="left">
