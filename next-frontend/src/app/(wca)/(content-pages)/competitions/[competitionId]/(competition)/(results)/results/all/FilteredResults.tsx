@@ -61,7 +61,7 @@ export default function FilteredResults({
         unmountOnExit
       >
         {roundGroups.map(([round, ...linkedRounds], index) => (
-          <Accordion.Item key={index} value={index.toString()}>
+          <Accordion.Item key={round.wcif_id} value={index.toString()}>
             {linkedRounds.length > 0 ? (
               <>
                 <Accordion.ItemTrigger justifyContent="space-between">
