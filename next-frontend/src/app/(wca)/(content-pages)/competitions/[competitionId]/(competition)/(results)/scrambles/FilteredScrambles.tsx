@@ -32,7 +32,7 @@ export default function FilteredScrambles({
   const orderedRounds = _.sortBy(
     _.keys(scramblesByRoundFormat),
     (roundType) => roundTypes.byId[roundType].rank,
-  );
+  ).toReversed();
 
   return (
     <VStack align="left" gap={4}>
@@ -47,6 +47,7 @@ export default function FilteredScrambles({
         multiple
         variant="enclosed"
         key={activeEventId}
+        p="0.5"
       >
         {_.map(orderedRounds, (roundFormat, index) => {
           const scramblesForRound = scramblesByRoundFormat[roundFormat];
