@@ -12,7 +12,7 @@ export async function getCachedCollection<TSlug extends CollectionSlug>(
   pagination = false,
   sort = "_order",
 ) {
-  "use cache";
+  "use cache: remote";
   cacheTag(collectionCacheTag(slug));
   cacheLife("max");
 

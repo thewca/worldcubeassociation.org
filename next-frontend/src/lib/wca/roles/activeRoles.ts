@@ -2,7 +2,7 @@ import { serverClient } from "@/lib/wca/wcaAPI";
 import { cacheLife } from "next/cache";
 
 async function getActiveRolesOfType(groupType: string, perPage: number = 25) {
-  "use cache";
+  "use cache: remote";
   cacheLife("hours");
 
   return serverClient.GET("/v0/user_roles", {
