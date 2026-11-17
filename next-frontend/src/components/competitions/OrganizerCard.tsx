@@ -41,7 +41,7 @@ function ClickableOrganizer({
   return (
     <HStack key={organizer.id} minW={0}>
       <Avatar.Root flexShrink={0} size={{ base: "md", lg: "sm", xl: "md" }}>
-        <Avatar.Fallback name={toAvatarName(delegate.name)} />
+        <Avatar.Fallback name={toAvatarName(organizer.name)} />
         <Avatar.Image src={organizer.avatar.thumb_url} />
       </Avatar.Root>
       <Stack gap={0.5} justify="start" minW={0}>
