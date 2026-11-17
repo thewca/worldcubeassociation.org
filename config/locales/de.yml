@@ -2766,6 +2766,7 @@ de:
           competing:
             title: Anmelden
             description: Wähle deine Disziplinen
+            summary_title: Anmeldung
           requirements:
             title: Voraussetzungen
             description: Wettbewerbsbedingungen akzeptieren
