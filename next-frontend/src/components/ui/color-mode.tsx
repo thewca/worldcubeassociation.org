@@ -67,8 +67,6 @@ export const ColorModeButton = React.forwardRef<
   );
 });
 
-// Labelled with the mode the click switches *to*, because a bare sun/moon icon in a menu row reads
-// as a status rather than an action.
 export function ColorModeMobileNavButton() {
   const { t } = useT();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -77,7 +75,7 @@ export function ColorModeMobileNavButton() {
   return (
     <ClientOnly fallback={<Skeleton height="8" />}>
       <MobileNavButton onClick={toggleColorMode}>
-        {isDarkMode ? <LuSun /> : <LuMoon />}
+        <ColorModeIcon />
         {isDarkMode
           ? t("layouts.navigation.switch_to_light_mode")
           : t("layouts.navigation.switch_to_dark_mode")}
