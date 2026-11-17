@@ -2614,6 +2614,10 @@ en:
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
     announcement_info_html: "Announced by %{author_name} on %{date_time}"
+    #context: placeholder of the search field on the announcements list
+    search: "Search announcements"
+    no_announcements: "There are no announcements yet."
+    no_search_results: "No announcements match your search."
     errors:
       unstick_at_future: "must be in the future"
   #context: Contact forms

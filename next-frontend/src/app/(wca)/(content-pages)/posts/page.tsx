@@ -10,6 +10,7 @@ import { Announcement } from "@/types/payload";
 import AnnouncementsPagination from "@/app/(wca)/(content-pages)/posts/announcementsPagination";
 import AnnouncementsSearch from "@/app/(wca)/(content-pages)/posts/announcementsSearch";
 import Loading from "@/components/ui/loading";
+import { getT } from "@/lib/i18n/get18n";
 
 export const metadata: Metadata = {
   title: "Announcements",
@@ -57,11 +58,13 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
     limit: ANNOUNCEMENTS_PER_PAGE,
   });
 
+  const { t } = await getT();
+
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
 
   const emptyMessage = q
-    ? "No announcements match your search."
-    : "There are no announcements yet.";
+    ? t("posts.no_search_results")
+    : t("posts.no_announcements");
 
   return (
     <VStack align="stretch" gap={8}>
