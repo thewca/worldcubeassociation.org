@@ -3,8 +3,9 @@
 import { Input, InputGroup, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
-import { useRef, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useT } from "@/lib/i18n/useI18n";
+import useDebounce from "@/lib/hooks/useDebounce";
 
 const DEBOUNCE_MS = 300;
 
@@ -16,19 +17,20 @@ export default function AnnouncementsSearch({
   const router = useRouter();
   const { t } = useT();
   const [isPending, startTransition] = useTransition();
-  const debounceTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  const search = (query: string) => {
-    clearTimeout(debounceTimeout.current);
+  const [query, setQuery] = useState(searchQuery ?? "");
+  const debouncedQuery = useDebounce(query, DEBOUNCE_MS);
+
+  useEffect(() => {
+    if (debouncedQuery === (searchQuery ?? "")) return;
 
     const searchRoute = route({
       pathname: "/posts",
-      query: { q: query || undefined },
+      query: { q: debouncedQuery || undefined },
     });
-    const navigate = () => startTransition(() => router.replace(searchRoute));
 
-    debounceTimeout.current = setTimeout(navigate, DEBOUNCE_MS);
-  };
+    startTransition(() => router.replace(searchRoute));
+  }, [debouncedQuery, searchQuery, router]);
 
   return (
     <form action="/posts">
@@ -36,10 +38,10 @@ export default function AnnouncementsSearch({
         <Input
           type="search"
           name="q"
-          defaultValue={searchQuery}
+          value={query}
           placeholder={t("posts.search")}
           aria-label={t("posts.search")}
-          onChange={(event) => search(event.target.value)}
+          onChange={(event) => setQuery(event.target.value)}
         />
       </InputGroup>
     </form>
