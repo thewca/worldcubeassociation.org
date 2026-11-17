@@ -11,6 +11,7 @@ import type { components } from "@/types/openapi";
 import RegistrationSummary from "@/components/competitions/Registration/RegistrationSummary";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
+import { PaymentStatus } from "@/components/competitions/Registration/PaymentStep";
 import {
   initialStepIndex,
   isStepComplete,
@@ -245,6 +246,15 @@ export default function StepPanel({
             )}
           />
         )}
+        {/* Withdrawing does not refund, so whatever they paid still counts if they sign up again. */}
+        {registration?.payment !== undefined &&
+          currentStep < steps.length &&
+          registration.payment.paid_amount_iso > 0 && (
+            <PaymentStatus
+              competitionInfo={competitionInfo}
+              payment={registration.payment}
+            />
+          )}
 
         {/* `Steps.Content` only hides the steps that are not current, so only the current one is
             mounted - each step then starts out fresh when the competitor reaches it. */}
