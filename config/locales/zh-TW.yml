@@ -132,12 +132,14 @@ zh-TW:
         time: '%{round_format} 優於 %{time}'
         moves: '%{round_format} 優於 %{moves} 步'
         points: '%{round_format} 優於 %{points} 點'
+      all_advance: 所有晉級
     ranking: '排名前 %{ranking} 晉級下一輪'
     percent: '前 %{percent}% 晉級下一輪'
     attempt_result:
       time: '%{round_format} 優於 %{time} 晉級下一輪'
       moves: '%{round_format} 優於 %{moves} 步晉級下一輪'
       points: '%{round_format} 優於 %{points} 點晉級下一輪'
+    all_advance: 所有參賽者晉級
   cutoff:
     time:
       other: '%{count}次還原 < %{time}'
@@ -175,6 +177,15 @@ zh-TW:
     deadline:
       description: 資格取得截止日
       by_date: '在%{date}之前'
+    preview: 預覽資格
+    earliest_date:
+      description: 資格期間開始日期
+      from_date: 在 %{date}或之後
+      window_too_short: 資格期間開始日期必須至少比資格期間截止日期早%{days}天。
+      explanation:
+        '1': 資格期間開始日期是非必須。如果讓它維持空白，任何在報名截止之前的達成的成績都會計算。
+        '2': 如果有輸入資格期間開始日期，任何在該日期或之後達成的成績才會被計算在資格中。
+        '3': 資格期間開始日期必須至少比資格期間截止日期早%{days}天。
   activity:
     registration: 現場報名
     checkin: 報到
@@ -216,6 +227,8 @@ zh-TW:
     solve_time:
       unit_seconds: 秒
       unit_moves: 步
+    back_to_top: 回到最上面
+    back: 上一頁
   oauth:
     applications:
       your_apps: 您的OAuth應用程式
@@ -228,6 +241,10 @@ zh-TW:
       secret: 金鑰
       scopes: Scopes
       callback_urls: Callback Urls
+      confidential: 機密?
+      confidentiality:
+        'yes': 是
+        'no': 不是
   helpers:
     submit:
       competition_medium:
@@ -257,7 +274,7 @@ zh-TW:
         location: 地點
         region: 區域
         subRegion: 子區域
-        receive_developer_mails: 我希望接收有關WCA軟體資源變更的通知。
+        receive_developer_mails: 我希望接收有關WCA軟體資源變更的通知
         receive_delegate_reports: 我希望透過收到電子郵件收到WCA比賽報告
         delegate_reports_region: 我只想收到以下區域的比賽報告
         user_preferred_events: 喜好項目
@@ -287,7 +304,7 @@ zh-TW:
         organization: 主辦團隊
         incidents: 意外事件
         setup_images: 會場布置圖片
-        wrc_feedback_requested: 我想要WRC對於某些意外事件做意見回饋
+        wrc_feedback_requested: 我想要WRC對於某些意外事件做意見回饋。
         wrc_incidents: 需要WRC意見回饋的意外事故
         wic_feedback_requested: 我想要WIC對於某些意外事件做意見回饋。
         wic_incidents: 需要WIC意見回饋的意外事故
@@ -455,11 +472,11 @@ zh-TW:
       vote:
       competition_medium:
       regional_organization:
-        website: 必須要是正確的http(s)網址。建議是HTTPS。
-        logo: 必須是PNG格式，有好的解析度，且背景是透明的。
-        email: 應該含有所有理事和專員的郵件清單。
-        bylaws: 必須是PDF格式。
-        extra_file: 必須是PDF格式。如果您想要加入更多檔案，請合併檔案。
+        website: 必須要是正確的http(s)網址。建議是HTTPS
+        logo: 必須是PNG格式，有好的解析度，且背景是透明的
+        email: 應該含有所有理事和專員的郵件清單
+        bylaws: 必須是PDF格式
+        extra_file: 必須是PDF格式。如果您想要加入更多檔案，請合併檔案
     options:
       registration:
         status:
@@ -606,7 +623,7 @@ zh-TW:
       let_us_know: 如果您曾經參加過WCA比賽，請告知我們：
       welcome_back: 歡迎回來！我們需要知道您的WCA ID才能幫您建立WCA帳號。
       welcome_html: >-
-        歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。請注意，我們絕對不會在沒有您的許可下公開您的生日。<br/><br/>如果您是代替他人報名，請提供<strong>該參賽者</strong>的資料。
+        歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。<br/><br/>如果您是代替他人報名，請提供<strong>該參賽者</strong>的資料。
   layouts:
     navigation:
       information: 資訊
@@ -1824,8 +1841,8 @@ zh-TW:
         being_updated: 正在更新報名中...
         being_deleted: 正在刪除報名中...
         update_confirm: 您確定要更新您的報名嗎？
-        update_confirm_contact: 您需要聯絡比賽團隊來更新您的報名，按下"YES/好"來移動到連絡表單。
-        delete_confirm_contact: 您需要聯絡比賽團隊來取消您的報名，按下"YES/好"來移動到連絡表單。
+        update_confirm_contact: 您需要聯絡比賽團隊來更新您的報名，按下"好"來移動到連絡表單。
+        delete_confirm_contact: 您需要聯絡比賽團隊來取消您的報名，按下"好"來移動到連絡表單。
         update_contact_message: '我想要更新我的報名內容：%{update_params}'
         delete_contact_message: 我想要刪除我的報名
         no_changes: 沒有變化
@@ -2409,8 +2426,7 @@ zh-TW:
       teams_committees: 團隊與委員會
       delegates_html: >-
         <p><strong>WCA代表</strong>是WCA動議中定義的腳色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的宗旨、價值觀和規則。WCA將代表區別成<strong>高級代表</strong>、<strong>地區代表</strong>、<strong>一般代表</strong>、<strong>初級代表</strong>和<strong>實習代表</strong>%{see_link}。</p>
-        <p>跟一般代表職責不同的是，高級代表或是地區代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p>
-        <p>新上任的代表會先列為初級代表，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為一般代表。</p><p>實習代表是用來訓練成WCA代表的職位，在有其他WCA代表同時在場的時候才能監督一場比賽。</p>
+        <p>跟一般代表職責不同的是，高級代表或是地區代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p> <p>新上任的代表會先列為初級代表，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為一般代表。</p><p>實習代表是用來訓練成WCA代表的職位，在有其他WCA代表同時在場的時候才能監督一場比賽。</p><p>如果您想要成為實習代表，請聯絡你的地區代表來決定您是否符合資格</p>
       see_link_html: ' (參見%{link}）'
       members_html: 所有參賽者在參加第一場WCA比賽時自動成為WCA<strong>成員</strong>。
   speedcubing_history:
