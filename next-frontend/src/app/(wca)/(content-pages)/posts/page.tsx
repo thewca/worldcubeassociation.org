@@ -8,7 +8,9 @@ import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { announcementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 import AnnouncementsPagination from "@/app/(wca)/(content-pages)/posts/announcementsPagination";
+import AnnouncementsSearch from "@/app/(wca)/(content-pages)/posts/announcementsSearch";
 import Loading from "@/components/ui/loading";
+import { getT } from "@/lib/i18n/get18n";
 
 export const metadata: Metadata = {
   title: "Announcements",
@@ -40,7 +42,7 @@ export default function AnnouncementsPage({
 }
 
 async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
-  const { page = "1" } = await searchParams;
+  const { page = "1", q } = await searchParams;
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
 
   await connection();
@@ -48,17 +50,28 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
   const payload = await getPayload({ config });
   const announcements = await payload.find({
     collection: "announcements",
+    where: q
+      ? { or: [{ title: { like: q } }, { summary: { like: q } }] }
+      : undefined,
     sort: "-publishedAt",
     page: currentPage,
     limit: ANNOUNCEMENTS_PER_PAGE,
   });
 
+  const { t } = await getT();
+
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
+
+  const emptyMessage = q
+    ? t("posts.no_search_results")
+    : t("posts.no_announcements");
 
   return (
     <VStack align="stretch" gap={8}>
+      <AnnouncementsSearch searchQuery={q} />
+
       {announcements.docs.length === 0 ? (
-        <Text>There are no announcements yet.</Text>
+        <Text>{emptyMessage}</Text>
       ) : (
         announcements.docs.map((announcement: Announcement, index) => (
           <AnnouncementCard
@@ -73,6 +86,7 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
         page={currentPage}
         totalAnnouncements={announcements.totalDocs}
         pageSize={ANNOUNCEMENTS_PER_PAGE}
+        searchQuery={q}
       />
     </VStack>
   );
