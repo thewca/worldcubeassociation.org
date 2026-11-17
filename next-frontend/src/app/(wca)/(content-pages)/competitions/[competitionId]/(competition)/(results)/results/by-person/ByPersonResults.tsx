@@ -129,7 +129,7 @@ function ResultsList({
       p="0.5"
     >
       {_.map(filteredResults, (results, wcaId) => (
-        <Accordion.Item key={wcaId} value={wcaId}>
+        <Accordion.Item key={wcaId} value={wcaId} bg="bg" _open={{ bg: "bg" }}>
           <Accordion.ItemTrigger justifyContent="space-between">
             <Heading size="2xl" asChild>
               <HStack gap="4">
@@ -226,13 +226,13 @@ function Filters({
         <Select.Label>{t("competitions.results.country_search")}</Select.Label>
 
         <Select.Control>
-          <Select.Trigger>
+          <Select.Trigger bg="bg">
             <Select.ValueText>
               <SelectValue country={filters.country} t={t} />
             </Select.ValueText>
           </Select.Trigger>
           <Select.IndicatorGroup>
-            <Select.Indicator />
+            <Select.Indicator color="fg.subtle" />
           </Select.IndicatorGroup>
         </Select.Control>
 

@@ -57,6 +57,8 @@ export default function FilteredScrambles({
             <Accordion.Item
               key={`${activeEventId}-${roundFormat}`}
               value={index.toString()}
+              bg="bg"
+              _open={{ bg: "bg" }}
             >
               <Accordion.ItemTrigger justifyContent="space-between">
                 <Heading textStyle="s1">
