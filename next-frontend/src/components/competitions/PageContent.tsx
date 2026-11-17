@@ -59,18 +59,18 @@ export default function Content({
 }) {
   const { t } = useT();
   const pathName = usePathname();
-  const path = _.last(pathName.split("/"));
+  const path = _.last(pathName.split("/")) || "";
   const currentPath = path === competition.id ? "general" : path;
 
-  const eventId =
-    activityCodeFromPath(currentPath!) || decodeURIComponent(currentPath!);
+  const pageId =
+    activityCodeFromPath(currentPath) || decodeURIComponent(currentPath);
 
-  const headerKey = tabs.find((t) => t.menuKey === eventId)?.i18nKey;
+  const headerKey = tabs.find((t) => t.menuKey === pageId)?.i18nKey;
 
-  const tHeader = headerKey ? t(headerKey) : eventId;
+  const tHeader = headerKey ? t(headerKey) : pageId;
   return (
     <>
-      {eventId !== "general" && (
+      {pageId !== "general" && (
         <Stack gap={0} mb={2}>
           <BreadcrumbHeader
             page={tHeader}
