@@ -120,6 +120,12 @@ variable "shared" {
     redis_sidekiq_parameter_group: object({
       name: string
     })
+    valkey_cache_parameter_group: object({
+      name: string
+    })
+    valkey_sidekiq_parameter_group: object({
+      name: string
+    })
     private_subnets: any
   })
   description = "The shared resources between Environments"
