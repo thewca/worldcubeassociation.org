@@ -45,7 +45,9 @@ export default function buildAvatarMenuEntries(
     newTab,
     requiredPermission,
   }: AvatarMenuLink): FlatMenuEntry[] => {
-    if (requiredPermission && !can[requiredPermission]()) {
+    const lacksPermission = requiredPermission && !can[requiredPermission]();
+
+    if (lacksPermission) {
       return [];
     }
 

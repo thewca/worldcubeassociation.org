@@ -14,29 +14,6 @@
  */
 export type ColorPaletteSelect = 'blue' | 'red' | 'green' | 'orange' | 'yellow' | 'wcaWhite';
 /**
- * Page on this website the link points to.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AvatarMenuTargetLink".
- */
-export type AvatarMenuTargetLink = ('/competitions/mine' | '/dashboard' | '/payload') | null;
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AvatarMenuPermission".
- */
-export type AvatarMenuPermission =
-  | (
-      | 'canAccessCms'
-      | 'canViewPolls'
-      | 'canViewAllUsers'
-      | 'canAdminResults'
-      | 'canCreatePosts'
-      | 'canManageRegionalOrganizations'
-      | 'canViewDelegateAdminPage'
-      | 'canManageIncidents'
-    )
-  | null;
-/**
  * Icon name
  *
  * This interface was referenced by `Config`'s JSON-Schema

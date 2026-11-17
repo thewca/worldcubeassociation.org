@@ -84,6 +84,7 @@ const AvatarMenuLink: Block = {
   ],
 };
 
+// Its own block because the link depends on the user's WCA ID, which a static href can't express.
 const AvatarMenuMyResults: Block = {
   slug: "AvatarMenuMyResults",
   interfaceName: "AvatarMenuMyResults",

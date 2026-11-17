@@ -6,8 +6,7 @@ export const globalCacheTag = (slug: GlobalSlug) => `payload-global:${slug}`;
 
 export async function getCachedGlobal<TSlug extends GlobalSlug>(
   slug: TSlug,
-  depth?: number,
-  locale?: TypedLocale,
+  { depth, locale }: { depth?: number; locale?: TypedLocale } = {},
 ) {
   "use cache";
   cacheTag(globalCacheTag(slug));
