@@ -42,7 +42,7 @@ export default function FilteredResults({
   const eventName = events.byId[activeEventId].name;
 
   return (
-    <VStack align="left" gap={4}>
+    <VStack align="left" gap={4} position="relative">
       <SingleEventSelector
         title=""
         selectedEvent={activeEventId}

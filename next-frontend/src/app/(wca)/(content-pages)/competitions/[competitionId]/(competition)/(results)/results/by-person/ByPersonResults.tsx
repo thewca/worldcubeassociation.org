@@ -82,7 +82,7 @@ export default function ByPersonResults({
   );
 
   return (
-    <Card.Root>
+    <Card.Root position="relative">
       <Card.Body>
         <Filters
           filters={filters}
