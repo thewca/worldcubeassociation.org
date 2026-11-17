@@ -119,8 +119,8 @@ export default async function Navbar() {
   const { lng } = await getT();
 
   const [navbar, socialLinksGlobal, avatarMenuEntries] = await Promise.all([
-    getCachedGlobal("nav"),
-    getCachedGlobal("social-links"),
+    getCachedGlobal("nav", lng),
+    getCachedGlobal("social-links", lng),
     getCachedCollection("avatarMenuEntries", lng),
   ]);
 

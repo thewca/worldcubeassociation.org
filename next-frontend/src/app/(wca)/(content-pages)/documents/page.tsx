@@ -27,8 +27,9 @@ export default async function Documents() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const { t } = await getT();
-  const documentsResult = await getCachedGlobal("documents-page");
+  const { t, lng } = await getT();
+
+  const documentsResult = await getCachedGlobal("documents-page", lng);
 
   const { documents } = documentsResult;
 
