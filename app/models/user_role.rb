@@ -101,6 +101,10 @@ class UserRole < ApplicationRecord
     self.end_date.nil? || self.end_date > Date.today
   end
 
+  def active_on?(date)
+    self.start_date <= date && (self.end_date.nil? || self.end_date > date)
+  end
+
   def lead?
     status = metadata ? metadata[:status] : nil
     case group_type
