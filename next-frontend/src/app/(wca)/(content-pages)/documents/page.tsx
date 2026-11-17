@@ -27,7 +27,7 @@ export default async function Documents() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const documentsResult = await getCachedGlobal("documents-page", lng);
 
@@ -60,7 +60,7 @@ export default async function Documents() {
         {Object.entries(categorized).map(([category, docs]) => (
           <Accordion.Item key={category} value={category}>
             <Accordion.ItemTrigger>
-              <IconDisplay name="List" /> {lng(`documents.${category}`)}
+              <IconDisplay name="List" /> {t(`documents.${category}`)}
             </Accordion.ItemTrigger>
             <Accordion.ItemContent>
               <Accordion.ItemBody>
