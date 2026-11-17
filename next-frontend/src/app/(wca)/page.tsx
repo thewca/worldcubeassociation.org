@@ -26,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
+import { releasedAnnouncementsQuery } from "@/components/announcements/announcement";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { connection } from "next/server";
@@ -42,7 +43,6 @@ import type {
   TwoBlocksLevel2Block,
   Testimonial,
   AnnouncementsSectionBlock,
-  Announcement,
   ColorPaletteSelect,
   Home,
   GrowthStrategy,
@@ -131,21 +131,30 @@ const TextCard = ({ block }: { block: TextCardBlock }) => {
   );
 };
 
-const AnnouncementsSection = ({
+const AnnouncementsSection = async ({
   block,
 }: {
   block: AnnouncementsSectionBlock;
 }) => {
-  const mainAnnouncement = block.mainAnnouncement as Announcement;
-  const furtherAnnouncements =
-    block.furtherAnnouncements?.map(
-      (announcement) => announcement as Announcement,
-    ) || [];
+  const payload = await getPayload({ config });
+  const { lng } = await getT();
+
+  const { docs: announcements } = await payload.find({
+    collection: "announcements",
+    ...releasedAnnouncementsQuery(),
+    limit: block.announcementCount,
+    locale: lng,
+    fallbackLocale: "en",
+  });
+
+  const [hero, ...others] = announcements;
+
+  if (!hero) return null;
 
   return (
     <AnnouncementsCard
-      hero={mainAnnouncement}
-      others={furtherAnnouncements}
+      hero={hero}
+      others={others}
       colorPalette={block.colorPalette}
       showSeeAll={block.showSeeAll}
     />
