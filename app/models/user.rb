@@ -19,7 +19,7 @@ class User < ApplicationRecord
   has_many :votes
   has_many :registrations
   has_many :h2h_match_competitors
-  has_many :h2h_matches, -> { includes(H2hMatch::SERIALIZATION_INCLUDES) }, through: :h2h_match_competitors
+  has_many :h2h_matches, -> { order(:match_number) }, through: :h2h_match_competitors
   has_many :newcomer_results, through: :registrations, source: :newcomer_results
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user

@@ -106,7 +106,7 @@ RSpec.describe "API v1 Persons" do
       it "renders no matches for a result that is not from a head-to-head round" do
         get api_v1_person_results_path(person.wca_id)
 
-        expect(response.parsed_body.first["matches"]).to eq []
+        expect(response.parsed_body.first["participated_matches"]).to eq []
       end
 
       it "renders only the matches the person competed in, with both competitors, sets and attempts" do
@@ -118,7 +118,7 @@ RSpec.describe "API v1 Persons" do
 
         get path
 
-        matches = response.parsed_body.first["matches"]
+        matches = response.parsed_body.first["participated_matches"]
         expect(matches.pluck("match_number")).to eq [1, 2]
         expect(matches.first["competitors"].pluck("user_id")).to contain_exactly(target_user.id, opponent_user.id)
         expect(matches.first["competitors"].pluck("wca_id")).to contain_exactly(target_user.wca_id, opponent_user.wca_id)
@@ -131,7 +131,7 @@ RSpec.describe "API v1 Persons" do
 
         get path
 
-        competitors = response.parsed_body.first.dig("matches", 0, "competitors")
+        competitors = response.parsed_body.first.dig("participated_matches", 0, "competitors")
         expect(competitors.to_h { [it["user_id"], it["final_pos"]] })
           .to eq({ target_user.id => 1, opponent_user.id => 2 })
       end
@@ -144,7 +144,7 @@ RSpec.describe "API v1 Persons" do
 
         get path
 
-        matches_by_result_id = response.parsed_body.to_h { [it["id"], it["matches"]] }
+        matches_by_result_id = response.parsed_body.to_h { [it["id"], it["participated_matches"]] }
         expect(matches_by_result_id.fetch(first_results[target_user].id).first["competitors"].pluck("user_id"))
           .to contain_exactly(target_user.id, opponent_user.id)
         expect(matches_by_result_id.fetch(second_results[target_user].id).first["competitors"].pluck("user_id"))
@@ -162,7 +162,21 @@ RSpec.describe "API v1 Persons" do
         get api_v1_person_results_path(accountless.wca_id)
 
         expect(response).to be_successful
-        expect(response.parsed_body.first["matches"]).to eq []
+        expect(response.parsed_body.first["participated_matches"]).to eq []
+      end
+
+      it "still renders when an opponent's account was unlinked from their results" do
+        round, results = create_h2h_round([target_user, opponent_user])
+        create_match(round, results, 1, [target_user, opponent_user])
+        # This is what `User#anonymize` leaves behind for a competitor without a special account.
+        opponent_user.update!(wca_id: nil)
+
+        get path
+
+        expect(response).to be_successful
+        competitors = response.parsed_body.first.dig("participated_matches", 0, "competitors")
+        expect(competitors.to_h { [it["user_id"], it["final_pos"]] })
+          .to eq({ target_user.id => 1, opponent_user.id => nil })
       end
 
       it "does not run more queries when the person has more head-to-head results" do
@@ -190,25 +204,50 @@ RSpec.describe "API v1 Persons" do
         let(:results) { round_and_results.last }
         let!(:match) { create_match(round, results, 1, [target_user, opponent_user]) }
 
-        {
-          "a match" => -> { match.touch },
-          "a set" => -> { match.h2h_sets.first.touch },
-          "an attempt" => -> { match.h2h_sets.first.h2h_attempts.first.touch },
-          "an opponent's result in the round" => -> { results[opponent_user].touch },
-        }.each do |name, change|
-          it "is invalidated when #{name} changes" do
+        shared_examples "an invalidated ETag" do
+          it "serves a fresh response with a new ETag" do
             get path
             etag = response.headers["ETag"]
 
             get path, headers: { "If-None-Match" => etag }
             expect(response).to have_http_status(:not_modified)
 
-            travel_to(1.minute.from_now) { instance_exec(&change) }
+            travel_to(1.minute.from_now) { change_data }
 
             get path, headers: { "If-None-Match" => etag }
             expect(response).to be_successful
             expect(response.headers["ETag"]).not_to eq etag
           end
+        end
+
+        context "when a match changes" do
+          def change_data = match.touch
+
+          it_behaves_like "an invalidated ETag"
+        end
+
+        context "when a set changes" do
+          def change_data = match.h2h_sets.first.touch
+
+          it_behaves_like "an invalidated ETag"
+        end
+
+        context "when an attempt changes" do
+          def change_data = match.h2h_sets.first.h2h_attempts.first.touch
+
+          it_behaves_like "an invalidated ETag"
+        end
+
+        context "when an opponent's result in the round changes" do
+          def change_data = results[opponent_user].touch
+
+          it_behaves_like "an invalidated ETag"
+        end
+
+        it "does not send a Last-Modified that would ignore the matches" do
+          get path
+
+          expect(response.headers["Last-Modified"]).to be_nil
         end
       end
     end
@@ -240,6 +279,12 @@ RSpec.describe "API v1 Persons" do
 
       json = response.parsed_body
       expect(json.pluck("id")).to contain_exactly(single_record.id, average_record.id)
+    end
+
+    it "does not serialize head-to-head matches" do
+      get api_v1_person_records_path(person.wca_id)
+
+      expect(response.parsed_body.first.keys).not_to include("participated_matches")
     end
 
     it "404s for an unknown WCA ID" do

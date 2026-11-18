@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class H2hSet < ApplicationRecord
-  belongs_to :h2h_match
+  # Touching the match lets the match's `updated_at` stand in for its sets and attempts in ETags.
+  belongs_to :h2h_match, touch: true
   has_many :h2h_attempts, dependent: :destroy
 
   alias_method :attempts, :h2h_attempts

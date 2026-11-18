@@ -14,7 +14,6 @@ allOf:
       - round_type_id
       - format_id
       - ranking_mode
-      - participated_matches
     properties:
       competition_id:
         type: string
@@ -40,10 +39,3 @@ allOf:
         example: "a"
       ranking_mode:
         $ref: './RankingMode.yaml'
-      matches:
-        type: array
-        description: >-
-          The head-to-head matches this competitor competed in during this round, including details
-          about the opponent. For the whole bracket, use the competition's head-to-head endpoint.
-        items:
-          $ref: './H2hMatch.yaml'

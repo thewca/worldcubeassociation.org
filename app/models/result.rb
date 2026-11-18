@@ -85,7 +85,14 @@ class Result < ApplicationRecord
     only: V1_ROUND_SERIALIZE_OPTIONS[:only],
     methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
              %w[competition_id competition_short_name competition_start_date
-                event_id round_type_id format_id ranking_mode participated_matches],
+                event_id round_type_id format_id ranking_mode],
+  }.freeze
+
+  # A result on a person's results page, which also shows the head-to-head matches behind it.
+  # `participated_matches` walks `person.user.h2h_matches`, so callers have to preload that chain.
+  V1_PERSON_RESULTS_SERIALIZE_OPTIONS = {
+    only: V1_SERIALIZE_OPTIONS[:only],
+    methods: V1_SERIALIZE_OPTIONS[:methods] | %w[participated_matches],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -113,9 +120,9 @@ class Result < ApplicationRecord
   end
 
   def participated_matches
-    user = person&.user
-    return [] if user.nil?
+    # Not every person has a user account, and only users can compete in head-to-head matches.
+    return [] if person.user.nil?
 
-    user.h2h_matches.to_a.select { it.round_id == round_id }.sort_by(&:match_number)
+    person.user.h2h_matches.filter { it.round_id == round_id }
   end
 end

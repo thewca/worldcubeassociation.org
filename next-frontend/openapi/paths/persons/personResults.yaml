@@ -23,6 +23,6 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../../schemas/results/V1Results.yaml'
+            $ref: '../../schemas/results/V1PersonResults.yaml'
     '404':
       description: No person with this WCA ID

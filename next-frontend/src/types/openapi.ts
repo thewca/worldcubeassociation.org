@@ -1743,6 +1743,11 @@ export interface components {
             format_id: string;
             ranking_mode: components["schemas"]["RankingMode"];
         };
+        V1PersonResult: components["schemas"]["V1Result"] & {
+            /** @description The head-to-head matches this competitor competed in during this round, including details about the opponent, ordered by match number. Empty for a round that is not head-to-head. For the whole bracket, use the competition's head-to-head endpoint. */
+            participated_matches: components["schemas"]["H2hMatch"][];
+        };
+        V1PersonResults: components["schemas"]["V1PersonResult"][];
         V1Results: components["schemas"]["V1Result"][];
         GeocodedLocation: {
             /** @example Berlin, Germany */
@@ -3384,7 +3389,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["V1Results"];
+                    "application/json": components["schemas"]["V1PersonResults"];
                 };
             };
             /** @description No person with this WCA ID */
