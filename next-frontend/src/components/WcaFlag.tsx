@@ -1,4 +1,6 @@
 import _TwFlag from "@/components/icons/flags/_TwFlag";
+import LuGlobeFramed from "@/components/icons/LuGlobeFramed";
+import countriesFictive from "@/lib/staticData/countries.fictive.json";
 
 import type { ComponentPropsWithoutRef } from "react";
 import { Icon } from "@chakra-ui/react";
@@ -17,7 +19,25 @@ const WcaFlag = ({ code, size = "md", ...restProps }: WcaFlagProps) => {
     return null;
   }
 
-  if (code.toUpperCase() === "TW") {
+  const countryCode = code.toUpperCase();
+  const fictiveCountry = countriesFictive.find(
+    ({ iso2 }) => iso2 === countryCode,
+  );
+
+  if (fictiveCountry) {
+    return (
+      <LuGlobeFramed
+        size={size}
+        color="gray.fg"
+        role="img"
+        aria-label={fictiveCountry.name}
+        aria-hidden={false}
+        {...restProps}
+      />
+    );
+  }
+
+  if (countryCode === "TW") {
     return <_TwFlag size={size} {...restProps} />;
   }
 
