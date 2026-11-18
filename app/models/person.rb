@@ -80,6 +80,7 @@ class Person < ApplicationRecord
   end
 
   delegate :id, to: :user, prefix: true, allow_nil: true
+  delegate :delegate_status, to: :user, allow_nil: true
 
   def update_using_sub_id!(attributes)
     raise unless update_using_sub_id(attributes)
@@ -260,14 +261,7 @@ class Person < ApplicationRecord
   end
 
   def competition_count
-    competitions.count
-  end
-
-  # Staff badges on the profile come off the linked user, and a person need not have one.
-  # Serializing through `user` is the legacy behaviour of `serializable_hash` below, but that
-  # path drops the status as soon as the caller asks for any methods of its own.
-  def delegate_status
-    user&.delegate_status
+    competitions.size
   end
 
   # Like `delegate_status`, these come off the linked user, which a person need not have.
@@ -284,7 +278,7 @@ class Person < ApplicationRecord
   def ranks_by_event
     ranks_average_by_event = ranks_average.index_by(&:event_id)
 
-    ranks_single.index_by(&:event_id).transform_values do |rank_single|
+    ranks_single.select { Event::OFFICIAL_IDS.include?(it.event_id) }.index_by(&:event_id).transform_values do |rank_single|
       {
         single: rank_single,
         average: ranks_average_by_event[rank_single.event_id],

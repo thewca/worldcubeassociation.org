@@ -1773,7 +1773,7 @@ export interface components {
             national: components["schemas"]["V1Result"][];
             greater_china?: components["schemas"]["V1Result"][];
         };
-        /** @description Everything the profile page renders above its tabs, for one person. This is the person shape for the v1 API; the v0 `PersonInfo` schema nests the person's own fields under `person` and is not interchangeable with it. */
+        /** @description General information about a person, along with a summary of their results. */
         V1PersonInfo: {
             /** @example 2005REYN01 */
             wca_id: string;
@@ -1798,7 +1798,7 @@ export interface components {
             /** @example 42 */
             competition_count: number;
             /**
-             * @description Every event the person has a result in, ordered by event rank. Wider than the keys of `ranks_by_event`, which only covers events the person has a successful solve in.
+             * @description Every event the person has a result in, including events they never had a successful solve in, ordered by event rank.
              * @example [
              *       "333",
              *       "222",
@@ -1806,7 +1806,7 @@ export interface components {
              *     ]
              */
             event_ids_with_results: string[];
-            /** @description Keyed by event id. An event the person has no single for is absent. */
+            /** @description The person's ranks in official events, keyed by event id. An event the person has no single for is absent. */
             ranks_by_event: {
                 [key: string]: {
                     single: components["schemas"]["Rank"];
