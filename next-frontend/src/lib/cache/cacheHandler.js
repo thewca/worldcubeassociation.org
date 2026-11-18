@@ -12,6 +12,8 @@ import { RedisStringsHandler } from "@trieb.work/nextjs-turbo-redis-cache";
 
 const require = createRequire(import.meta.url);
 
+const IN_MEMORY_CACHING_TIME_MS = 60 * 1000;
+
 /** @type {typeof import("next/dist/server/lib/incremental-cache/file-system-cache").default} */
 const FileSystemCache =
   require("next/dist/server/lib/incremental-cache/file-system-cache.js").default;
@@ -51,6 +53,7 @@ export default class IncrementalCacheHandler {
     const redisHandler = new RedisStringsHandler({
       keyPrefix:
         process.env.KEY_PREFIX || readFileSync(buildIdPath, "utf8").trim(),
+      inMemoryCachingTime: IN_MEMORY_CACHING_TIME_MS,
     });
 
     cachedHandler = redisHandler;
