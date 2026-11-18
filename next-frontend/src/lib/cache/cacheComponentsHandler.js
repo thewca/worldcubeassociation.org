@@ -5,7 +5,7 @@
 //   See https://github.com/vercel/next.js/tree/canary/examples/cache-handler-redis-turbo
 
 import { PHASE_PRODUCTION_BUILD } from "next/constants.js";
- import { getRedisCacheComponentsHandler } from "@trieb.work/nextjs-turbo-redis-cache";
+import { getRedisCacheComponentsHandler } from "@trieb.work/nextjs-turbo-redis-cache";
 import nextDefaultCacheHandler from "next/dist/server/lib/cache-handlers/default.js";
 
 const DEFAULT_MAX_MEMORY_SIZE = 50 * 1024 * 1024;
