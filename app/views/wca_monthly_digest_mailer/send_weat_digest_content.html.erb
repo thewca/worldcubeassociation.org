@@ -1,21 +1,40 @@
 <p>Dear WCA Executive Assistants Team,</p>
 
-<p>Here's the draft for this month digest (Please verify whether all the changes were informed to the WCA Board):</p>
-
-<div><b>Changes in Teams/Committees</b></div>
-
-<p><%= sanitize UserGroup.changes_in_groups_for_digest %></p>
+<p>Here's the draft for this month digest:</p>
 
 <div><b>Delegate Milestones</b></div>
 
-<% delegate_milestones = User.delegate_milestones_for_digest %>
-<% if delegate_milestones.empty? %>
-  <p>There are no delegate milestones to show.</p>
+<% if @delegate_milestones.empty? %>
+  <p>None.</p>
 <% else %>
   <p>
-    <% delegate_milestones.each do |milestone, delegates| %>
+    <% @delegate_milestones.each do |milestone, delegates| %>
       <br><b><%= milestone %> competitions</b><br>
       <%= safe_join(delegates.map(&:name), tag.br) %>
     <% end %>
   </p>
 <% end %>
+
+<%= render "section", title: "Committee/Team Leaders", lines: @digest.leader_changes %>
+
+<%= render "section", title: "New Senior Delegates", lines: @digest.new_senior_delegates %>
+
+<%= render "section", title: "New Regional Delegates", lines: @digest.new_regional_delegates %>
+
+<%= render "section", title: "New Trainee Delegates", lines: @digest.new_trainee_delegates %>
+
+<%= render "section", title: "New Junior Delegates", lines: @digest.new_junior_delegates %>
+
+<%= render "section", title: "Delegate Promotions: Trainee Delegate to Junior Delegate", lines: @digest.trainee_to_junior_delegate_promotions %>
+
+<%= render "section", title: "Delegate Promotions: Junior Delegate to Delegate", lines: @digest.junior_delegate_to_delegate_promotions %>
+
+<%= render "section", title: "Delegate Resignations/Demotions", lines: @digest.delegate_resignations_and_demotions %>
+
+<%= render "section", title: "New Committee/Team Members", lines: @digest.new_team_members %>
+
+<%= render "section", title: "Promoted Committee/Team Members", lines: @digest.promoted_team_members %>
+
+<%= render "section", title: "Resigned/Demoted Committee/Team Members", lines: @digest.team_member_resignations_and_demotions %>
+
+<%= render "section", title: "Recognized Regional Organizations", lines: @digest.recognized_regional_organizations %>

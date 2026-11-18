@@ -7,6 +7,7 @@ import {
   competitionStatus,
   getCompetitionMenuData,
 } from "@/lib/competitionMenu/getCompetitionMenuData";
+import MobileTabMenu from "./MobileTabMenu";
 
 export default async function CompetitionMenu({
   params,
@@ -21,11 +22,18 @@ export default async function CompetitionMenu({
   if (!menu.ok) return <OpenapiError t={t} response={menu.response} />;
 
   return (
-    <TabMenu
-      competitionInfo={menu.competitionInfo}
-      tabs={menu.tabs}
-      customTabs={menu.competitionInfo.tabs.map((tab) => tab.name)}
-    />
+    <>
+      <TabMenu
+        competitionInfo={menu.competitionInfo}
+        tabs={menu.tabs}
+        customTabs={menu.competitionInfo.tabs.map((tab) => tab.name)}
+      />
+      <MobileTabMenu
+        tabs={menu.tabs}
+        customTabs={menu.competitionInfo.tabs.map((tab) => tab.name)}
+        competitionId={menu.competitionId}
+      />
+    </>
   );
 }
 

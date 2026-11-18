@@ -51,7 +51,7 @@ RSpec.describe Competition do
 
     it "rejects the event without internal scoretaking" do
       competition = build(:competition, starts: Competition::FTO_INTRODUCTION_DATE, event_ids: %w[333 fto], scoretaking_software: :external)
-      expect(competition).to be_invalid_with_errors(scoretaking_software: ["must be set to Internal Live Results when holding Face Turning Octahedron."])
+      expect(competition).to be_invalid_with_errors(scoretaking_software: ["must be set to Integrated Live Results when holding Face Turning Octahedron."])
     end
 
     it "rejects adding the event through the WCIF without internal scoretaking" do
@@ -61,7 +61,7 @@ RSpec.describe Competition do
       wcif = competition.to_wcif
       wcif['events'] += [{ 'id' => 'fto', 'rounds' => [] }]
 
-      expect { competition.set_wcif!(wcif, admin) }.to raise_error(ActiveRecord::RecordInvalid, /Internal Live Results/)
+      expect { competition.set_wcif!(wcif, admin) }.to raise_error(ActiveRecord::RecordInvalid, /Integrated Live Results/)
       expect(competition.reload.event_ids).not_to include('fto')
     end
 
@@ -1549,6 +1549,18 @@ RSpec.describe Competition do
       it 'returns nil if no matching account is found' do
         paypal_not_connected = create(:competition, :stripe_connected, :manual_connected)
         expect(paypal_not_connected.payment_account_for(:paypal)).to be_nil
+      end
+    end
+
+    describe '#currency_subunit_to_unit' do
+      it 'uses the subunits of the competition currency' do
+        competition = create(:competition, currency_code: "EUR")
+        expect(competition.currency_subunit_to_unit).to eq(100)
+      end
+
+      it 'does not use subunits for currencies that have none in practice' do
+        competition = create(:competition, currency_code: "HUF")
+        expect(competition.currency_subunit_to_unit).to eq(1)
       end
     end
 

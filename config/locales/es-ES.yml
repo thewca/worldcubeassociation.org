@@ -181,8 +181,23 @@ es-ES:
       ranking: 'Mejores %{ranking} por media'
       any_result: Cualquier media
     deadline:
-      description: Fecha límite de clasificación
+      description: Fecha final del período de clasificación
       by_date: 'hasta el %{date}'
+    preview: Vista previa de la clasificación
+    earliest_date:
+      description: Fecha de inicio del período de clasificación
+      from_date: a partir del %{date}
+      window_too_short: La fecha de inicio del período tiene que ser al menos 
+        %{days} días antes que la fecha límite del período.
+      explanation:
+        '1': La fecha de inicio del período de clasificación es opcional. Si se 
+          deja en blanco, se tendrá en cuenta cualquier resultado obtenido antes
+          de la fecha límite.
+        '2': Si se introduce una fecha de inicio del período, solo se tendrán en
+          cuenta para la clasificación los resultados obtenidos en esa fecha o 
+          después.
+        '3': La fecha de inicio del período tiene que ser al menos %{days} días 
+          antes que la fecha límite del período.
   activity:
     registration: Registro in situ | On-site registration
     checkin: Registro | Check-in
@@ -242,6 +257,10 @@ es-ES:
       secret: Secretos
       scopes: Alcances
       callback_urls: Callback URLs
+      confidential: ¿Confidencial?
+      confidentiality:
+        'yes': Sí
+        'no': No
   helpers:
     submit:
       competition_medium:
@@ -778,6 +797,10 @@ es-ES:
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">Aquí</a> puedes consultar la lista de alcances
             soportados.
+          confidential: La aplicación se usará en un entorno donde el secreto 
+            del cliente pueda mantenerse confidencial. Las aplicaciones móviles 
+            nativas y las aplicaciones de página única se consideran no 
+            confidenciales.
       scopes:
         public: >-
           Acceder a tus datos públicos (nombre, ID de la WCA, género,
@@ -880,6 +903,8 @@ es-ES:
         wic: Panel del WIC
         weat: Panel del WEAT
         wqac: Panel del WQAC
+      switch_to_dark_mode: Cambiar a modo oscuro
+      switch_to_light_mode: Cambiar a modo claro
   page:
     translators:
       title: Traductores
@@ -2066,6 +2091,7 @@ es-ES:
             menu: Eliminar de forma masiva
             id: ID
             name: Nombre
+            select_all: Seleccionar todos
           quit_menu: Eliminar
           no_next: No se pueden clasificar más competidores.
           cancel: Cancelar
@@ -2108,6 +2134,7 @@ es-ES:
         upcoming: Próximas
         in_progress: Ahora mismo
         search: Buscar competiciones
+      combined_title: Rondas duales combinadas
     my_competitions:
       title: Mis competiciones
       disclaimer: >-
@@ -2127,6 +2154,8 @@ es-ES:
         abbr_description: '%{short_name}: %{long_name}'
         cutoff: 'Corte: %{short_cutoff}'
         download_html: 'Descarga todos los detalles de la competición en PDF %{here}.'
+        download_pdf: Descarga aquí el PDF del horario
+        download: Descargar
       date: Fecha
       add_to_calendar: Añadir al calendario
       name: Nombre
@@ -2364,10 +2393,6 @@ es-ES:
         open: Abierto
         not_open: Aún sin abrir
         closed: Cerrado
-      currently_displaying:
-        one: Mostrando una competición
-        many: Mostrando %{count} competiciones
-        other: Mostrando %{count} competiciones
       register_now: Regístrate ahora
       view_competition: Ver competición
       no_more_comps: No hay más competiciones.
@@ -3356,10 +3381,6 @@ es-ES:
         competitors: Competidores
         scrambles: Mezclas
     results_table:
-      h2h_results_disclaimer: >-
-        Resultados determinados por una Final Cara a Cara. Solo se muestran el
-        orden de clasificación y la mejor resolución, ya que la visualización
-        completa de los resultados Cara a Cara aún se encuentra en desarrollo.
       wca_profile: Perfil de la WCA
       event: Categoría
       round: Ronda

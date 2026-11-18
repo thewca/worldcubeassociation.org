@@ -17,6 +17,7 @@ import { route } from "nextjs-routes";
 import WcaFlag from "@/components/WcaFlag";
 import CountryMap from "@/components/CountryMap";
 import Link from "next/link";
+import { toAvatarName } from "@/lib/utils";
 
 export default async function PodiumsPage({
   params,
@@ -50,7 +51,7 @@ export default async function PodiumsPage({
             <Heading size="2xl" asChild>
               <HStack gap="4">
                 <Avatar.Root>
-                  <Avatar.Fallback name={results[0].name} />
+                  <Avatar.Fallback name={toAvatarName(results[0].name)} />
                   {/* Currently we don't have the actual image URL in the API output, this is pending a bigger refactor */}
                 </Avatar.Root>
                 <VStack width="fit-content" alignItems="start" gap="0.5">

@@ -2239,11 +2239,6 @@ sl:
         open: Odprte
         not_open: Še niso odprte
         closed: Zaprte
-      currently_displaying:
-        one: 'Trenutno prikazano: %{count} tekmovanje'
-        two: 'Trenutno prikazani: %{count} tekmovanji'
-        few: 'Trenutno prikazana: %{count} tekmovanja'
-        other: 'Trenutno prikazanih: %{count} tekmovanj'
       register_now: Prijavi se zdaj
       view_competition: Ogled tekmovanja
       why_compete_description_html: |-
@@ -3151,10 +3146,6 @@ sl:
         competitors: Tekmovalci
         scrambles: Mešalni algoritmi
     results_table:
-      h2h_results_disclaimer: >-
-        Rezultati, določeni z neposrednim dvobojem (head-to-head). Trenutno je
-        prikazan le vrstni red tekmovalcev in najboljši rezultat, ker je
-        prikazovanje rezultatov neposrednih dvobojev še v razvoju.
       wca_profile: WCA profil
       event: Disciplina
       round: Krog

@@ -19,15 +19,15 @@ export default async function AboutTheRegulations() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const aboutRegulations = await getCachedGlobal("about-regulations-page");
+  const { t, lng } = await getT();
+
+  const aboutRegulations = await getCachedGlobal("about-regulations-page", lng);
 
   const aboutRegulationsItems = aboutRegulations.blocks;
 
   if (aboutRegulationsItems.length === 0) {
     return <Heading>No About Regulations Items, add some!</Heading>;
   }
-
-  const { t } = await getT();
 
   return (
     <VStack gap="8" width="full" alignItems="left">

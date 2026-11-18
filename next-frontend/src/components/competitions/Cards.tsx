@@ -194,6 +194,7 @@ export async function RegistrationCard({
                   competitionInfo.base_entry_fee_lowest_denomination
                 }
                 currencyCode={competitionInfo.currency_code}
+                subunitToUnit={competitionInfo.currency_subunit_to_unit}
               />
             </Stat.ValueText>
           </Stat.Root>
@@ -215,11 +216,14 @@ export async function RegistrationCard({
               ) : (
                 <>
                   <FormatNumber
-                    value={competitionInfo.competitor_limit - spotsLeft}
+                    value={
+                      competitionInfo.competitor_limit - Math.max(spotsLeft, 0)
+                    }
                   />
                   {!registrationClosed && (
                     <>
-                      &sol;
+                      {/* Escape character for "/" */}
+                      <span>&#47;</span>
                       <FormatNumber value={competitionInfo.competitor_limit} />
                     </>
                   )}
@@ -242,6 +246,7 @@ export async function RegistrationCard({
                     competitionInfo.guests_entry_fee_lowest_denomination
                   }
                   currencyCode={competitionInfo.currency_code}
+                  subunitToUnit={competitionInfo.currency_subunit_to_unit}
                 />
               ) : (
                 t("competitions.competition_info.guests_free.free")
