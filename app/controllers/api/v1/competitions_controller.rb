@@ -39,7 +39,7 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     competitions = Competition.includes(:events, :championships, :delegate_report, delegates: [:current_avatar])
                               .search(params[:q], params: params)
 
-    paginate json: competitions.as_json(ADMIN_INDEX_SERIALIZE_OPTIONS)
+    paginate json: competitions, **ADMIN_INDEX_SERIALIZE_OPTIONS
   end
 
   before_action :set_competition, except: %i[live admin_index]
