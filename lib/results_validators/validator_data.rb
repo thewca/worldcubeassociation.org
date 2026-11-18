@@ -85,6 +85,15 @@ module ResultsValidators
       ]
     end
 
+    # Within a Dual Round a competitor holds one result per round but is ranked on their better
+    # one, so the merged ranking is built from each competitor's best result.
+    def self.best_result_per_person(results)
+      results.group_by(&:person_id)
+             .values
+             .map { |person_results| person_results.min_by { self.ranking_key(it) } }
+             .sort_by { self.ranking_key(it) }
+    end
+
     def self.load_data(validator, competition, results, check_real_results: false)
       # We're sorting in-memory because it is cheaper to re-order an arbitrary Results array that was efficiently loaded by `Competition.includes`,
       # rather than firing a custom SQL ORDER BY that cannot be pre-loaded via `includes`. Bonus: We get to sort via rank and not pure ID.
