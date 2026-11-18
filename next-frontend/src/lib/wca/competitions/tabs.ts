@@ -385,12 +385,14 @@ export const adminTabs = (
         "/upload-scrambles",
         "Scrambles",
       ),
+    // i18n-tasks-use t('competitions.nav.menu.upload_and_check_results')
     canAdminResults &&
       railsLink(
         "competitions.nav.menu.upload_and_check_results",
         "/admin/upload-results",
         "Admin Results",
       ),
+    // i18n-tasks-use t('competitions.nav.menu.check_existing_results')
     canAdminResults &&
       railsLink(
         "competitions.nav.menu.check_existing_results",
