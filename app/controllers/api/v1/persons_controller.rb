@@ -5,7 +5,7 @@ class Api::V1::PersonsController < Api::V1::ApiController
   skip_before_action :require_user!
 
   def show
-    person = Person.current.includes(:ranks_single, :ranks_average, user: User::SERIALIZATION_INCLUDES).find_by!(wca_id: params.require(:wca_id))
+    person = Person.current.includes(:user, :ranks_single, :ranks_average).find_by!(wca_id: params.require(:wca_id))
 
     render json: person.as_json(Person::V1_SERIALIZE_OPTIONS)
   end

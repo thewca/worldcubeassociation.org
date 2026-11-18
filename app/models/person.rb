@@ -173,42 +173,45 @@ class Person < ApplicationRecord
   end
 
   def championship_podiums_with_condition(championship_type)
-    # Get all championship competitions of the given type where the person made it to the finals.
-    # For each of these competitions, get final results only for people eligible for the championship
-    # and reassign their positions. If a result belongs to the person, add it to the array.
-    [].tap do |championship_podium_results|
-      yield(results)
-        .final
-        .succeeded
-        .order("YEAR(start_date) DESC")
-        .includes(:competition)
-        .map(&:competition)
-        .uniq
-        .each do |competition|
-          yield(competition.results)
-            .final
-            .succeeded
-            .joins(:event)
-            .order("events.rank, pos")
-            .includes(:format, :competition)
-            .group_by do |results|
-              # Group by country_id in the case of a national championship to cover the case of a comp acting as multiple national championships
-              championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : { event_id: results.event_id }
-            end
-            .each_value do |final_results|
-              previous_old_pos = nil
-              previous_new_pos = nil
-              final_results.each_with_index do |result, index|
-                old_pos = result.pos
-                result.pos = (result.pos == previous_old_pos ? previous_new_pos : index + 1)
-                previous_old_pos = old_pos
-                previous_new_pos = result.pos
-                break if result.pos > 3
+    # Get all championship competitions of the given type where the person made it to the finals,
+    # then the final results of everyone eligible for those championships in one query.
+    # Positions are reassigned among the eligible finalists of each competition, and the person's own podiums are kept.
+    championship_competition_ids = yield(results)
+                                   .final
+                                   .succeeded
+                                   .order("YEAR(start_date) DESC")
+                                   .pluck(:competition_id)
+                                   .uniq
 
-                championship_podium_results.push result if result.person_id == self.wca_id
-              end
+    eligible_finalists_by_competition = yield(Result.where(competition_id: championship_competition_ids))
+                                        .final
+                                        .succeeded
+                                        .joins(:event)
+                                        .order("events.rank, pos")
+                                        .includes(:format, :competition)
+                                        .group_by(&:competition_id)
+
+    [].tap do |championship_podium_results|
+      championship_competition_ids.each do |competition_id|
+        eligible_finalists_by_competition[competition_id]
+          .group_by do |results|
+            # Group by country_id in the case of a national championship to cover the case of a comp acting as multiple national championships
+            championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : { event_id: results.event_id }
+          end
+          .each_value do |final_results|
+            previous_old_pos = nil
+            previous_new_pos = nil
+            final_results.each_with_index do |result, index|
+              old_pos = result.pos
+              result.pos = (result.pos == previous_old_pos ? previous_new_pos : index + 1)
+              previous_old_pos = old_pos
+              previous_new_pos = result.pos
+              break if result.pos > 3
+
+              championship_podium_results.push result if result.person_id == self.wca_id
             end
-        end
+          end
+      end
 
       # Only the person's own podium results are rendered with their attempts and round, so they are
       # preloaded here instead of in the query above, which loads every eligible finalist.
