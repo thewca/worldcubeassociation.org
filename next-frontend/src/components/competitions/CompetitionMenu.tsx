@@ -1,10 +1,12 @@
 import { components } from "@/types/openapi";
 import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
 import {
+  adminTabs,
   afterCompetitionTabs,
   beforeCompetitionTabs,
   liveTab,
 } from "@/lib/wca/competitions/tabs";
+import { getPermissions } from "@/lib/wca/permissions.server";
 import TabMenu from "@/components/competitions/TabMenu";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getT } from "@/lib/i18n/get18n";
@@ -49,7 +51,12 @@ export default async function CompetitionMenu({
     ? afterCompetitionTabs(competitionInfo, isAwaitingResults)
     : beforeCompetitionTabs(competitionInfo);
 
-  const tabs = isOngoing ? [...baseTabs, liveTab(competitionInfo)] : baseTabs;
+  const permissions = await getPermissions();
+
+  const tabs = [
+    ...(isOngoing ? [...baseTabs, liveTab(competitionInfo)] : baseTabs),
+    ...(permissions ? adminTabs(competitionInfo, permissions) : []),
+  ];
 
   return (
     <>
@@ -85,7 +92,9 @@ export async function AwaitingResultsAlert({
   const { t } = await getT();
   const competitionLiveTab = liveTab(competitionInfo);
   const liveResultsHref =
-    competitionLiveTab.externalHref ?? competitionLiveTab.href;
+    competitionLiveTab.type === "tab-with-external-link"
+      ? competitionLiveTab.externalHref
+      : competitionLiveTab.href;
 
   return (
     <Alert.Root status="info" marginBottom="4">

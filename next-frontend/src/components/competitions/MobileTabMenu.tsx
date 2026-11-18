@@ -26,6 +26,7 @@ import IconDisplay from "../IconDisplay";
 import {
   CompetitionNavTab,
   TabWithChildren,
+  TabWithExternalLink,
   TabWithLink,
 } from "@/lib/wca/competitions/tabs";
 import { TFunction } from "i18next";
@@ -48,6 +49,7 @@ const groupTabsMap = new Map([
   ["by-person", "results"],
   ["live", "live"],
   ["live_events", "events"],
+  ["admin", "admin"],
 ]);
 
 const groupIcons: Record<string, React.ReactNode> = {
@@ -108,6 +110,7 @@ export default function MobileTabMenu({
   const hasCustomTabs = !_.isEmpty(customTabs);
 
   const customNavTabs: CompetitionNavTab[] = _.map(customTabs, (tab) => ({
+    type: "tab-link",
     menuKey: tab,
     i18nKey: tab,
     href: route({
@@ -125,6 +128,11 @@ export default function MobileTabMenu({
     .concat(_.map(customNavTabs, (tab) => ({ group: "more", tab })))
     .groupBy("group")
     .mapValues((entries) => _.map(entries, "tab"))
+    .mapValues((groupTabs) =>
+      groupTabs.length === 1 && groupTabs[0].type === "tab-with-children"
+        ? groupTabs[0].children
+        : groupTabs,
+    )
     .value();
 
   const resolveActiveGroup = (key: string): string => {
@@ -186,10 +194,13 @@ export default function MobileTabMenu({
   );
 }
 
-const getHref = (tab: TabWithLink, isAdminRoute: boolean): string => {
-  return isAdminRoute && tab.hrefAdmin
-    ? tab.hrefAdmin
-    : tab.externalHref || tab.href;
+const getHref = (
+  tab: TabWithLink | TabWithExternalLink,
+  isAdminRoute: boolean,
+): string => {
+  if (tab.type === "tab-with-external-link") return tab.externalHref;
+
+  return isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href;
 };
 
 interface ItemProps {
@@ -200,8 +211,9 @@ interface ItemProps {
 }
 
 function LinkItem({ tab, selected, t, isAdminRoute }: ItemProps) {
-  if (!("href" in tab)) return null;
+  if (tab.type === "tab-with-children") return null;
   const href = getHref(tab, isAdminRoute);
+  const isExternal = tab.type === "tab-with-external-link";
   return (
     <ChakraLink
       unstyled
@@ -209,8 +221,8 @@ function LinkItem({ tab, selected, t, isAdminRoute }: ItemProps) {
       aria-disabled={tab.disabled || undefined}
       data-disabled={tab.disabled ? "" : undefined}
       tabIndex={tab.disabled ? -1 : undefined}
-      target={tab.externalHref ? "_blank" : undefined}
-      rel={tab.externalHref ? "noopener noreferrer" : undefined}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       css={itemStyle}
       data-selected={selected ? "" : undefined}
       aria-current={selected ? "page" : undefined}
@@ -268,7 +280,7 @@ function GroupItem({
             maxW="min(20rem, calc(100vw - 2rem))"
           >
             {tabs.map((tab) => {
-              const isLink = "href" in tab;
+              const isLink = tab.type !== "tab-with-children";
               const isActive =
                 tab.menuKey === activeMenuKey ||
                 encodeURIComponent(tab.menuKey) === activeMenuKey ||
@@ -357,23 +369,24 @@ function SingleItem({
   isActive,
   isAdminRoute,
 }: {
-  tab: TabWithLink;
+  tab: TabWithLink | TabWithExternalLink;
   label: string;
   isActive: boolean;
   isAdminRoute: boolean;
 }) {
   const href = getHref(tab, isAdminRoute);
+  const isExternal = tab.type === "tab-with-external-link";
   return (
     <ChakraLink
       unstyled
       w="full"
       minW={0}
       href={tab.disabled ? undefined : href}
-      rel={tab.externalHref ? "noopener noreferrer" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       aria-disabled={tab.disabled || undefined}
       data-disabled={tab.disabled ? "" : undefined}
       tabIndex={tab.disabled ? -1 : undefined}
-      target={tab.externalHref ? "_blank" : undefined}
+      target={isExternal ? "_blank" : undefined}
       onClick={tab.disabled ? (e) => e.preventDefault() : undefined}
       _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
       aria-current={isActive ? "page" : undefined}

@@ -18,6 +18,7 @@ import { useT } from "@/lib/i18n/useI18n";
 import {
   CompetitionNavTab,
   TabWithChildren,
+  TabWithExternalLink,
   TabWithLink,
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
@@ -112,7 +113,7 @@ function TabList({
   return (
     <>
       {tabs.map((tab) =>
-        "href" in tab ? (
+        tab.type !== "tab-with-children" ? (
           <TabLink
             key={tab.menuKey}
             tab={tab}
@@ -213,7 +214,7 @@ function TabLink({
   isAdminRoute,
   currentPath,
 }: {
-  tab: TabWithLink;
+  tab: TabWithLink | TabWithExternalLink;
   t: TFunction;
   isAdminRoute: boolean;
   currentPath?: string;
@@ -226,7 +227,7 @@ function TabLink({
       minHeight="fit-content"
       justifyContent="left"
     >
-      {tab.externalHref && !tab.disabled ? (
+      {tab.type === "tab-with-external-link" ? (
         <ChakraLink
           href={tab.externalHref}
           target="_blank"
@@ -299,28 +300,45 @@ function CollapsibleTabGroup({
 
       <Collapsible.Content>
         <Box ps="3" display="flex" flexDirection="column" gap="1" pt="1">
-          {children.map(
-            ({ menuKey, disabled, i18nKey, href, hrefAdmin, badgeI18nKey }) => (
-              <Tabs.Trigger
-                value={menuKey}
-                asChild
-                key={menuKey}
-                disabled={disabled}
-              >
+          {children.map((child) => (
+            <Tabs.Trigger
+              value={child.menuKey}
+              asChild
+              key={child.menuKey}
+              disabled={child.disabled}
+            >
+              {child.type === "tab-with-external-link" ? (
+                <ChakraLink
+                  href={child.externalHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  color="currentColor"
+                  justifyContent="start"
+                >
+                  {child.icon !== undefined && (
+                    <IconDisplay name={child.icon} />
+                  )}
+                  {t(child.i18nKey)}
+                </ChakraLink>
+              ) : (
                 <TabTarget
-                  tabKey={menuKey}
+                  tabKey={child.menuKey}
                   currentPath={currentPath}
-                  href={isAdminRoute && hrefAdmin ? hrefAdmin : href}
-                  disabled={disabled}
+                  href={
+                    isAdminRoute && child.hrefAdmin
+                      ? child.hrefAdmin
+                      : child.href
+                  }
+                  disabled={child.disabled}
                   display="flex"
                   justifyContent="space-between"
                 >
-                  {t(i18nKey)}
-                  {badgeI18nKey && <Badge>{t(badgeI18nKey)}</Badge>}
+                  {t(child.i18nKey)}
+                  {child.badgeI18nKey && <Badge>{t(child.badgeI18nKey)}</Badge>}
                 </TabTarget>
-              </Tabs.Trigger>
-            ),
-          )}
+              )}
+            </Tabs.Trigger>
+          ))}
         </Box>
       </Collapsible.Content>
     </Collapsible.Root>

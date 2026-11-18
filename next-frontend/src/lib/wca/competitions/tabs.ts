@@ -1,39 +1,49 @@
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
-import type { IconName } from "@/components/icons/iconMap";
+import type { IconName, LucideIconName } from "@/components/icons/iconMap";
 import type { RouteLiteral } from "nextjs-routes";
 import { getRoundTypeId, parseActivityCode } from "@/lib/wca/wcif/rounds";
 import _ from "lodash";
 import { EventId } from "@/lib/wca/data/events";
+import { hasPassed } from "@/lib/wca/dates";
+import type { PermissionFunctions } from "@/lib/wca/permissions";
 
 interface TabBase {
   i18nKey: string;
   i18nKeyAdmin?: string;
   menuKey: string;
-  icon?: IconName;
+  icon?: IconName | LucideIconName;
   disabled?: boolean;
-}
-
-export interface TabWithChildren extends TabBase {
-  icon: IconName;
-  children: TabWithLink[];
+  tooltipI18nKey?: string;
 }
 
 export interface TabWithLink extends TabBase {
+  type: "tab-link";
   badgeI18nKey?: string;
-  tooltipI18nKey?: string;
-  externalHref?: string;
   href: RouteLiteral;
   hrefAdmin?: RouteLiteral;
 }
 
-export type CompetitionNavTab = TabWithChildren | TabWithLink;
+export interface TabWithExternalLink extends TabBase {
+  type: "tab-with-external-link";
+  externalHref: string;
+}
+
+export interface TabWithChildren extends TabBase {
+  type: "tab-with-children";
+  icon: IconName | LucideIconName;
+  children: (TabWithLink | TabWithExternalLink)[];
+}
+
+export type CompetitionNavTab =
+  TabWithLink | TabWithExternalLink | TabWithChildren;
 
 const eventsAndScheduleTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
 ): TabWithLink[] => {
   return [
     {
+      type: "tab-link",
       i18nKey: "competitions.show.events",
       href: route({
         pathname: "/competitions/[competitionId]/events",
@@ -43,6 +53,7 @@ const eventsAndScheduleTabs = (
       icon: "333Icon",
     },
     {
+      type: "tab-link",
       i18nKey: "competitions.show.schedule",
       href: route({
         pathname: "/competitions/[competitionId]/schedule",
@@ -59,6 +70,7 @@ export const beforeCompetitionTabs = (
 ): TabWithLink[] => {
   return [
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.info",
       href: route({
         pathname: "/competitions/[competitionId]",
@@ -68,6 +80,7 @@ export const beforeCompetitionTabs = (
       icon: "Information",
     },
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.register",
       href: route({
         pathname: "/competitions/[competitionId]/register",
@@ -77,6 +90,7 @@ export const beforeCompetitionTabs = (
       icon: "Register",
     },
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.competitors",
       href: route({
         pathname: "/competitions/[competitionId]/competitors",
@@ -91,7 +105,7 @@ export const beforeCompetitionTabs = (
 
 export const liveTab = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
-): TabWithLink => {
+): TabWithLink | TabWithExternalLink => {
   const base = {
     i18nKey: "competitions.live.title",
     menuKey: "live",
@@ -102,6 +116,7 @@ export const liveTab = (
     case "internal":
       return {
         ...base,
+        type: "tab-link",
         href: route({
           pathname: "/competitions/[competitionId]/live",
           query: { competitionId: competitionInfo.id },
@@ -110,15 +125,13 @@ export const liveTab = (
     case "wca_live":
       return {
         ...base,
-        href: route({
-          pathname: "/competitions/[competitionId]/live",
-          query: { competitionId: competitionInfo.id },
-        }),
+        type: "tab-with-external-link",
         externalHref: `https://live.worldcubeassociation.org/link/competitions/${competitionInfo.id}`,
       };
     default:
       return {
         ...base,
+        type: "tab-link",
         href: route({
           pathname: "/competitions/[competitionId]/live",
           query: { competitionId: competitionInfo.id },
@@ -140,6 +153,7 @@ export const duringCompetitionTabs = (
 
   return [
     {
+      type: "tab-link",
       i18nKey: "competitions.show.schedule",
       i18nKeyAdmin: "competitions.live.manage_rounds",
       href: route({
@@ -154,6 +168,7 @@ export const duringCompetitionTabs = (
       icon: "Information",
     },
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.podiums",
       href: route({
         pathname: "/competitions/[competitionId]/live/podiums",
@@ -163,6 +178,7 @@ export const duringCompetitionTabs = (
       icon: "Records",
     },
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.competitors",
       href: route({
         pathname: "/competitions/[competitionId]/competitors",
@@ -171,11 +187,12 @@ export const duringCompetitionTabs = (
       menuKey: "competitors",
       icon: "Competitors",
     },
-    ..._.map(roundsByEventId, (rounds, eventId: EventId) => ({
+    ..._.map(roundsByEventId, (rounds, eventId: EventId): TabWithChildren => ({
+      type: "tab-with-children",
       i18nKey: `events.${eventId}`,
       menuKey: eventId,
       icon: `${_.capitalize(eventId)}Icon` as IconName,
-      children: rounds.map((round) => {
+      children: rounds.map((round): TabWithLink => {
         const { roundNumber } = parseActivityCode(round.id);
 
         const roundTypeId = getRoundTypeId(
@@ -189,6 +206,7 @@ export const duringCompetitionTabs = (
           (round.state === "open" &&
             round.completed_competitors === round.total_competitors);
         return {
+          type: "tab-link",
           i18nKey: `rounds.${roundTypeId}.name`,
           menuKey: round.id,
           badgeI18nKey: roundDone
@@ -212,8 +230,9 @@ export const duringCompetitionTabs = (
 export const afterCompetitionTabs = (
   competitionInfo: components["schemas"]["CompetitionInfo"],
   isAwaitingResults: boolean,
-): TabWithLink[] => {
+): CompetitionNavTab[] => {
   const infoTab: TabWithLink = {
+    type: "tab-link",
     i18nKey: "competitions.nav.menu.info",
     href: route({
       pathname: "/competitions/[competitionId]",
@@ -234,6 +253,7 @@ export const afterCompetitionTabs = (
   return [
     infoTab,
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.podiums",
       href: route({
         pathname: "/competitions/[competitionId]/podiums",
@@ -243,6 +263,7 @@ export const afterCompetitionTabs = (
       icon: "Records",
     },
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.results",
       href: route({
         pathname: "/competitions/[competitionId]/results/all",
@@ -252,6 +273,7 @@ export const afterCompetitionTabs = (
       icon: "List",
     },
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.scrambles",
       href: route({
         pathname: "/competitions/[competitionId]/scrambles",
@@ -261,6 +283,7 @@ export const afterCompetitionTabs = (
       icon: "Scrambles",
     },
     {
+      type: "tab-link",
       i18nKey: "competitions.nav.menu.by_person",
       href: route({
         pathname: "/competitions/[competitionId]/results/by-person",
@@ -270,5 +293,131 @@ export const afterCompetitionTabs = (
       icon: "Competitors",
     },
     ...eventsAndScheduleTabs(competitionInfo),
+  ];
+};
+
+// Mirrors the permission-gated links of the legacy `competitions/_nav.html.erb`, approximated
+//   from `/users/me/permissions`. The Rails pages enforce the exact permissions themselves.
+export const adminTabs = (
+  competitionInfo: components["schemas"]["CompetitionInfo"],
+  permissions: PermissionFunctions,
+): TabWithChildren[] => {
+  const competitionId = competitionInfo.id;
+
+  const canManage = permissions.canAdministerCompetition(competitionId);
+  const canAdminCompetitions = permissions.canAdminCompetitions();
+  const canAdminResults = permissions.canAdminResults();
+  // `can_edit_delegate_report` is scoped to "Results admin or Delegate of this competition".
+  const isResultsAdminOrDelegate =
+    permissions.canEditDelegateReport(competitionId);
+
+  const canUploadResults =
+    isResultsAdminOrDelegate &&
+    Boolean(competitionInfo.announced_at) &&
+    hasPassed(competitionInfo.start_date) &&
+    (canAdminResults || !competitionInfo.results_posted_at);
+
+  const railsLink = (
+    i18nKey: string,
+    path: string,
+    icon: IconName | LucideIconName,
+  ): TabWithExternalLink => ({
+    type: "tab-with-external-link",
+    i18nKey,
+    menuKey: i18nKey,
+    icon,
+    externalHref: new URL(
+      `/competitions/${competitionId}${path}`,
+      process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
+    ).href,
+  });
+
+  const children = _.compact([
+    canManage && railsLink("competitions.nav.menu.orga_view", "/edit", "Edit"),
+    canManage &&
+      railsLink("competitions.nav.menu.event_view", "/events/edit", "333Icon"),
+    canManage &&
+      (canAdminCompetitions || !competitionInfo.results_posted_at) &&
+      railsLink(
+        "competitions.nav.menu.schedule_view",
+        "/schedule/edit",
+        "Registration Open Date",
+      ),
+    canManage &&
+      railsLink(
+        "competitions.nav.menu.payment_view",
+        "/payment_integration/setup",
+        "Payment",
+      ),
+    canAdminCompetitions &&
+      railsLink("competitions.nav.menu.admin_view", "/edit/admin", "Lock"),
+    canManage &&
+      (competitionInfo.use_wca_registration
+        ? railsLink(
+            "competitions.nav.menu.registration",
+            "/edit/registrations",
+            "Registration",
+          )
+        : railsLink(
+            "competitions.nav.menu.import_registrations",
+            "/registrations/import",
+            "Upload",
+          )),
+    permissions.canCreateCompetitions() &&
+      railsLink(
+        "competitions.nav.menu.clone",
+        "/edit/clone_competition",
+        "Clone",
+      ),
+    isResultsAdminOrDelegate &&
+      railsLink(
+        "competitions.nav.menu.newcomer_checks",
+        "/newcomer-checks",
+        "Competitors",
+      ),
+    canUploadResults &&
+      railsLink(
+        "competitions.nav.menu.submit_results",
+        "/submit-results",
+        "Cloud Upload",
+      ),
+    canUploadResults &&
+      railsLink(
+        "competitions.nav.menu.upload_scrambles",
+        "/upload-scrambles",
+        "Scrambles",
+      ),
+    canAdminResults &&
+      railsLink(
+        "competitions.nav.menu.upload_and_check_results",
+        "/admin/upload-results",
+        "Admin Results",
+      ),
+    canAdminResults &&
+      railsLink(
+        "competitions.nav.menu.check_existing_results",
+        "/admin/check-existing-results",
+        "List Checks",
+      ),
+    permissions.canViewDelegateReport(competitionId) &&
+      railsLink(
+        "competitions.nav.menu.delegate_report",
+        "/report",
+        "Delegate Report",
+      ),
+    canManage &&
+      railsLink("competitions.nav.menu.tabs", "/tabs", "Manage Tabs"),
+  ]);
+
+  if (_.isEmpty(children)) return [];
+
+  return [
+    {
+      type: "tab-with-children",
+      i18nKey: "competitions.nav.admin",
+      menuKey: "admin",
+      icon: "Lock",
+      children,
+    },
   ];
 };
