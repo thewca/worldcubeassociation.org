@@ -63,7 +63,9 @@ export default function Content({
   const currentPath = path === competition.id ? "general" : path;
 
   const pageId =
-    activityCodeFromPath(currentPath) || decodeURIComponent(currentPath);
+    path === "by-person"
+      ? "by-person" // or activityCodeFroPath would delete everything after the first -
+      : activityCodeFromPath(currentPath) || decodeURIComponent(currentPath);
 
   const headerKey = tabs.find((t) => t.menuKey === pageId)?.i18nKey;
 
