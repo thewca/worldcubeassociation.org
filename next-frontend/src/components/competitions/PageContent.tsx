@@ -21,14 +21,12 @@ export function pageIdFromPath(pathname: string, fullPath: string): string {
     return COMPETITOR_RESULT_PAGE_ID;
   }
 
-  const currentPath = pathname.split("/").filter(Boolean).at(-1) ?? "";
-
   // Handled separately because activityCodeFromPath would cut "by-person" down to "by"
-  if (currentPath === BY_PERSON_PAGE_ID) {
+  if (pathname === BY_PERSON_PAGE_ID) {
     return BY_PERSON_PAGE_ID;
   }
 
-  return activityCodeFromPath(currentPath) ?? decodeURIComponent(currentPath);
+  return activityCodeFromPath(pathname) ?? decodeURIComponent(pathname);
 }
 
 export function getTabTranslation(pageId: string, tabs: CompetitionNavTab[]) {
