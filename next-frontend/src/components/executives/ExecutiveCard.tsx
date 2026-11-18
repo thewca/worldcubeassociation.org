@@ -6,6 +6,11 @@ import { getPersonInfo } from "@/lib/wca/persons/getPersonInfo";
 import { getT } from "@/lib/i18n/get18n";
 import { ExecutivesPage } from "@/types/payload";
 
+const cardStyles = {
+  layerStyle: { _light: "fill.solid", _dark: "fill.muted" },
+  valueColor: { _light: "colorPalette.contrast", _dark: "fg.muted" },
+} as const;
+
 type Executive = ExecutivesPage["executives"][number];
 
 export default async function ExecutiveCard({
@@ -57,13 +62,15 @@ export default async function ExecutiveCard({
             <DataList.ItemLabel>
               {t("page.executives.joined_wca")}
             </DataList.ItemLabel>
-            <DataList.ItemValue>{executive.joinedWcaYear}</DataList.ItemValue>
+            <DataList.ItemValue color={cardStyles.valueColor}>
+              {executive.joinedWcaYear}
+            </DataList.ItemValue>
           </DataList.Item>
           <DataList.Item>
             <DataList.ItemLabel>
               {t("page.executives.joined_executives")}
             </DataList.ItemLabel>
-            <DataList.ItemValue>
+            <DataList.ItemValue color={cardStyles.valueColor}>
               {executive.joinedExecutivesYear}
             </DataList.ItemValue>
           </DataList.Item>
