@@ -42,7 +42,7 @@ class Api::V1::PersonsController < Api::V1::ApiController
     person.results.includes(:competition, :result_attempts, round: :linked_round)
   end
 
-  # Fingerprints the person's matches, plus the standings of every round they played a match in (opponents'
+  # Fingerprints the person's matches, plus the standings of every round they competed in a match in (opponents'
   # `final_pos`). Sets and attempts touch their match, so the match fingerprint covers them too. Each part is a
   # row count (to notice deletions) plus its newest `updated_at`.
   private def h2h_etag_parts

@@ -3,7 +3,7 @@ allOf:
   - type: object
     description: >-
       A result on a person's results page, which also carries the head-to-head matches the person
-      played in that round.
+      competed in during that round.
     required:
       - participated_matches
     properties:
