@@ -41,15 +41,8 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def index
     competition_id = params_competition_id
-    competition = Competition.find(competition_id)
-    registrations = competition.registrations.accepted.competing
-    payload = Rails.cache.fetch([
-                                  "registrations_v2_public_list",
-                                  competition.id,
-                                  competition.event_ids,
-                                  registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
-                                ]) do
-      registrations.includes(:user).map(&:to_v2_json)
+    payload = Rails.cache.fetch(["registrations_v2_public_list", competition_id], expires_in: 1.minute) do
+      Competition.find(competition_id).registrations.accepted.competing.includes(:user, :events).map(&:to_v2_json)
     end
     render json: payload
   end
