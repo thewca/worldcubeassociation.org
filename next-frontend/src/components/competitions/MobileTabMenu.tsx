@@ -337,9 +337,8 @@ function ItemLabel({
       </Stack>
       <Stack flex={1} justify="center">
         <Box
+          textStyle="mobileTabItem"
           textAlign="center"
-          fontSize="0.72rem"
-          fontWeight="medium"
           lineHeight="1.2"
           overflowWrap="anywhere"
           hyphens="auto"
