@@ -1,5 +1,6 @@
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import ByPersonResults from "./ByPersonResults";
+import { Heading } from "@chakra-ui/react";
 export default async function PersonResults({
   params,
 }: {
@@ -16,10 +17,11 @@ export default async function PersonResults({
     return <p>Something went wrong while trying to fetch results</p>;
   }
 
-  const { results } = personResultRequest.data;
+  const { results, name } = personResultRequest.data;
 
   return (
     <>
+      <Heading textStyle="h1">{name}</Heading>
       <ByPersonResults competitionId={competitionId} results={results} />
     </>
   );
