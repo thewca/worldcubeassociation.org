@@ -2,7 +2,7 @@
 
 import { components } from "@/types/openapi";
 import Loading from "@/components/ui/loading";
-import { Box, Heading, Switch, Text, useToken } from "@chakra-ui/react";
+import { Box, Heading, Text, useToken } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import { dateRange, hasPassedEndOfDay } from "@/lib/wca/dates";
@@ -13,7 +13,6 @@ import type { FeatureCollection, Point } from "geojson";
 import { setWorkerUrl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useState } from "react";
-import { useT } from "@/lib/i18n/useI18n";
 
 type MapCompetition = Pick<
   components["schemas"]["CompetitionInfo"],
@@ -61,9 +60,7 @@ const pinIconSvg = (color: string, halo: string) =>
 export default function Map({ competitions, isLoading = false }: MapProps) {
   const router = useRouter();
   const lng = useLocale();
-  const { t } = useT();
   const [hoveredCompetitionId, setHoveredCompetitionId] = useState<string>();
-  const [hideMultipleVenues, setHideMultipleVenues] = useState(false);
 
   // maplibre paints in WebGL and cannot resolve the CSS variables that Chakra
   //   tokens compile to, so the pin palette has to be read as literal colours.
@@ -77,9 +74,7 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
 
   const shownCompetitions = competitions
     .slice(0, MAP_DISPLAY_LIMIT)
-    .filter((c) =>
-      hideMultipleVenues ? !c.city.toLowerCase().includes("multiple") : true,
-    );
+    .filter((c) => !c.city.toLowerCase().includes("multiple"));
 
   const competitionPins: FeatureCollection<Point> = {
     type: "FeatureCollection",
@@ -157,21 +152,6 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
       >
         <Loading />
       </Box>
-      <Switch.Root
-        checked={hideMultipleVenues}
-        onCheckedChange={(e) => setHideMultipleVenues(e.checked)}
-        size="sm"
-        mb={3}
-        hidden={isLoading}
-      >
-        <Switch.HiddenInput />
-        <Switch.Control>
-          <Switch.Thumb />
-        </Switch.Control>
-        <Switch.Label fontSize="sm">
-          {t("competitions.index.hide_multiple_venues")}
-        </Switch.Label>
-      </Switch.Root>
       <MapContainer
         initialViewState={{ longitude: 0, latitude: 0, zoom: 2 }}
         mapStyle={TILE_STYLE}
