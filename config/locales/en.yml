@@ -197,6 +197,7 @@ en:
     type_label: "Qualification Type"
     result_type: "Result Type"
     for_event: "Qualification for %{event}"
+    preview: "Qualification preview"
     type:
       none: "No qualification"
       result: "By Result"
@@ -215,8 +216,16 @@ en:
       ranking: "Top %{ranking} by average"
       any_result: "Any average"
     deadline:
-      description: "Qualification Deadline"
+      description: "Qualification Window Deadline"
       by_date: "by %{date}"
+    earliest_date:
+      description: "Qualification Window Start Date"
+      from_date: "on or after %{date}"
+      window_too_short: "The Window Start Date must be at least %{days} days before the Window Deadline."
+      explanation:
+        '1': "Qualification Window Start Date is optional. If left empty, any result achieved before the Deadline counts."
+        '2': "If a Window Start Date is entered, only results achieved on or after the Window Start Date count towards the qualification."
+        '3': "The Window Start Date must be at least %{days} days before the Window Deadline."
   #context: other activities which occur in the schedule
   activity:
     registration: "On-site registration"
@@ -280,11 +289,15 @@ en:
       name: "Name"
       callback_url: "Callback Url"
       owner: "Owner"
+      confidential: "Confidential?"
       application_id: "Application ID"
       actions: "Actions"
       secret: "Secret"
       scopes: "Scopes"
       callback_urls: "Callback Urls"
+      confidentiality:
+        'yes': "Yes"
+        'no': "No"
   helpers:
     submit:
       competition_medium:
@@ -664,6 +677,7 @@ en:
       applications:
         help:
           https_info: 'HTTPS is required unless the host is "localhost"'
+          confidential: 'Application will be used where the client secret can be kept confidential. Native mobile apps and Single Page Apps are considered non-confidential.'
           scopes_html: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10" target="_blank">here</a> for a list of supported scopes.'
       #context: and asking the user "The application will be able to"
       scopes:
@@ -762,6 +776,8 @@ en:
       privacy: "Privacy"
       disclaimer: "Disclaimer"
       find_us: "Find us"
+      switch_to_dark_mode: "Switch to Dark Mode"
+      switch_to_light_mode: "Switch to Light Mode"
   page:
     translators:
       title: "Translators"
@@ -1548,6 +1564,7 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            select_all: "Select all"
             id: "ID"
             name: "Name"
           quit_menu: "Quit"
@@ -1586,6 +1603,8 @@ en:
         #context: the "short" version of cutoff, which appear below the format (eg: Bo2/Ao5)
         cutoff: "Cutoff: %{short_cutoff}"
         download_html: "Download all the competition's details as PDF %{here}."
+        download_pdf: "Download the schedule PDF here"
+        download: "Download"
       date: "Date"
       add_to_calendar: "Add to calendar"
       #context: This is shown as a header above the column that shows competition names
@@ -1613,6 +1632,8 @@ en:
       organizer_plural:
         one: "Organizer"
         other: "Organizers"
+      view_more_members: "View %{count} more team members"
+      see_more: "+ %{count} more"
       organization_team: "Organization team"
       #context: Pluralization of the "Delegate" label for a competition form
       delegate:
@@ -1768,6 +1789,8 @@ en:
         name_desc: "Name: Z-A"
       show_registration_status: "Show registration status icon"
       use_admin_view: "Use admin view"
+      #context: date range and city beneath a competition's name on narrow screens
+      date_and_city: "%{date} – %{city}"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
@@ -1805,9 +1828,6 @@ en:
         open: "Open"
         not_open: "Not yet Open"
         closed: "Closed"
-      currently_displaying:
-        one: "Currently Displaying: %{count} competition"
-        other: "Currently Displaying: %{count} competitions"
       #context: actions in the drawer that opens when clicking a competition in the list
       register_now: "Register Now"
       view_competition: "View Competition"
@@ -2060,6 +2080,8 @@ en:
         is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again."
         is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
         is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
+        additional: "Please ensure that you have followed any additional instructions above regarding payment or other registration requirements."
+        email: "You will receive an email when your registration status is updated."
       list:
         empty: "None"
         spots_remaining_plural:
@@ -2143,10 +2165,11 @@ en:
             title: "Approval"
             description: "By organization team"
           payment:
-            title: "Payment information"
+            title: "Payment Information"
             description: "Enter billing information"
           competing:
             title: "Register"
+            summary_title: "Registration"
             description: "Choose your events"
           requirements:
             title: "Requirements"
@@ -2233,7 +2256,7 @@ en:
       cannot_delete_confirmed: "Cannot delete a confirmed competition."
       must_contain_event: "must contain at least one event for this competition"
       fto_not_yet_allowed: "Face Turning Octahedron cannot be held at competitions starting before %{date}."
-      fto_requires_internal_scoretaking: "must be set to Internal Live Results when holding Face Turning Octahedron."
+      fto_requires_internal_scoretaking: "must be set to Integrated Live Results when holding Face Turning Octahedron."
       schedule_must_match_rounds: "must have at least one round, and all rounds must be included in the schedule."
       must_contain_delegate: "must contain at least one WCA Delegate"
       must_contain_organizer: "must contain at least one organizer"
@@ -2412,8 +2435,15 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+    h2h:
+      set_number: "Set %{number}"
+      stage_of: "Stage of %{number}"
+      quarterfinal_stage: "Quarterfinal Stage"
+      semifinal_stage: "Semifinal Stage"
+      final_stage: "Final Stage"
+      third_place: "Third Place"
     results_table:
-      h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
+      h2h_results_disclaimer_html: "Results determined by a Head-to-Head Final. Only placement order and best solve are shown here; the full Head-to-Head bracket is available on the <a href=\"%{results_url}\">new results page</a>."
       show_all_linked_results: "Show results from both rounds"
       linked_results_disclaimer_html: "This round is part of a Dual Round. The results below are shown per round; combined results across both rounds are available on the <a href=\"%{results_url}\">new results page</a>."
       wca_profile: "WCA profile"
@@ -2598,6 +2628,10 @@ en:
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
     announcement_info_html: "Announced by %{author_name} on %{date_time}"
+    #context: placeholder of the search field on the announcements list
+    search: "Search announcements"
+    no_announcements: "There are no announcements yet."
+    no_search_results: "No announcements match your search."
     errors:
       unstick_at_future: "must be in the future"
   #context: Contact forms
