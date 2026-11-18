@@ -21,17 +21,19 @@ export default async function CompetitionMenu({
 
   if (!menu.ok) return <OpenapiError t={t} response={menu.response} />;
 
+  const customTabs = menu.competitionInfo.tabs.map((tab) => tab.name);
+
   return (
     <>
       <TabMenu
         competitionInfo={menu.competitionInfo}
         tabs={menu.tabs}
-        customTabs={menu.competitionInfo.tabs.map((tab) => tab.name)}
+        customTabs={customTabs}
       />
       <MobileTabMenu
         tabs={menu.tabs}
-        customTabs={menu.competitionInfo.tabs.map((tab) => tab.name)}
-        competitionId={menu.competitionId}
+        customTabs={customTabs}
+        competitionId={competitionId}
       />
     </>
   );
