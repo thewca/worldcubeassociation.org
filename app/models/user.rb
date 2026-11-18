@@ -18,6 +18,11 @@ class User < ApplicationRecord
   has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
+  has_many :h2h_match_competitors
+  # Preloaded with everything a serialized match reads, and cached on the instance once loaded: anything
+  # handling many records that share this User (e.g. a person's results, with `:person` preloaded) loads
+  # the matches once. Strip the preloads with `except(:includes)` when only aggregating over them.
+  has_many :h2h_matches, -> { includes(H2hMatch::SERIALIZATION_INCLUDES) }, through: :h2h_match_competitors
   has_many :newcomer_results, through: :registrations, source: :newcomer_results
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
