@@ -2997,6 +2997,11 @@ th:
         register: สมัครการแข่งขัน
         competitors: ผู้เข้าแข่งขัน
         scrambles: โจทย์
+      general: ทั่วไป
+      more: เพิ่มเติม
+      admin: แอดมิน
+      results: ผลการแข่งขัน
+      events: ประเภทการแข่งขัน
     results_table:
       wca_profile: WCA profile
       event: ประเภทการแข่งขัน
