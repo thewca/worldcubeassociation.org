@@ -85,7 +85,7 @@ class Result < ApplicationRecord
     only: V1_ROUND_SERIALIZE_OPTIONS[:only],
     methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
              %w[competition_id competition_short_name competition_start_date
-                event_id round_type_id format_id ranking_mode matches],
+                event_id round_type_id format_id ranking_mode participated_matches],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -112,17 +112,10 @@ class Result < ApplicationRecord
     result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
   end
 
-  # The head-to-head matches this competitor played in this result's round, not the whole round's
-  # bracket (that is `round.matches`). Empty for non-head-to-head rounds.
-  # Reads the user's matches through `person`, so callers handling many results should preload
-  # `:person`: all results then share one Person and one User, and the matches are loaded once.
   def participated_matches
     user = person&.user
     return [] if user.nil?
 
     user.h2h_matches.to_a.select { it.round_id == round_id }.sort_by(&:match_number)
   end
-
-  # The v1 API names this `matches`, to match the competition's head-to-head endpoint.
-  alias_method :matches, :participated_matches
 end

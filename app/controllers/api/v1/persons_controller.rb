@@ -20,14 +20,12 @@ class Api::V1::PersonsController < Api::V1::ApiController
     render_results single_records.or(average_records)
   end
 
-  private def person
-    @person ||= Person.current.find_by!(wca_id: params.require(:wca_id))
-  end
-
   private def person_results
+    @person ||= Person.current.find_by!(wca_id: params.require(:wca_id))
+
     # `attempts` reads `result_attempts`, and the competition columns and `ranking` come off their
     # associations, so all three have to be preloaded or every row fires its own query. `person` is
-    # preloaded so that every result shares one Person (and so one User), which loads the matches once.
+    # preloaded so that every result shares one Person (and so one User), which loads the h2h matches once.
     person.results.includes(:competition, :result_attempts, :person, round: :linked_round)
   end
 

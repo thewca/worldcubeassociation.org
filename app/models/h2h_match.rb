@@ -14,8 +14,7 @@ class H2hMatch < ApplicationRecord
     methods: %w[competitors sets],
   }.freeze
 
-  # Everything the serialized match reads: both sides, the sets and their attempts, and the round's
-  # standings (see `Round#h2h_final_positions_by_user_id`). Eager load these when serializing many matches.
+  # A defalt set of data to use with .includes() when serializing H2H matches into JSON
   SERIALIZATION_INCLUDES = [
     { h2h_match_competitors: :user },
     { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },

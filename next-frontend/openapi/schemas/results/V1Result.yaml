@@ -14,7 +14,7 @@ allOf:
       - round_type_id
       - format_id
       - ranking_mode
-      - matches
+      - participated_matches
     properties:
       competition_id:
         type: string
@@ -43,10 +43,7 @@ allOf:
       matches:
         type: array
         description: >-
-          The head-to-head matches this competitor played in this round, in match order. Only
-          their own matches: the rest of the round's bracket is not included, and the opponent
-          appears among each match's `competitors`. Always present, and empty unless
-          `ranking_mode` is `head_to_head`. `attempts` is still populated for head-to-head
-          rounds. For the whole bracket, use the competition's head-to-head endpoint.
+          The head-to-head matches this competitor competed in during this round, including details
+          about the opponent. For the whole bracket, use the competition's head-to-head endpoint.
         items:
           $ref: './H2hMatch.yaml'

@@ -109,7 +109,7 @@ RSpec.describe "API v1 Persons" do
         expect(response.parsed_body.first["matches"]).to eq []
       end
 
-      it "renders only the matches the person played in, with both competitors, sets and attempts" do
+      it "renders only the matches the person competed in, with both competitors, sets and attempts" do
         round, results = create_h2h_round([target_user, opponent_user, third_user])
         # Created out of order to check the ordering by match number.
         create_match(round, results, 2, [target_user, third_user])
@@ -136,7 +136,7 @@ RSpec.describe "API v1 Persons" do
           .to eq({ target_user.id => 1, opponent_user.id => 2 })
       end
 
-      it "attaches the matches to the result of the round they were played in" do
+      it "attaches the matches to the result of the round they were competed in" do
         first_round, first_results = create_h2h_round([target_user, opponent_user])
         second_round, second_results = create_h2h_round([target_user, third_user])
         create_match(first_round, first_results, 1, [target_user, opponent_user])
