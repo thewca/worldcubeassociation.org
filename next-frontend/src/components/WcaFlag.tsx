@@ -20,21 +20,9 @@ const WcaFlag = ({ code, size = "md", ...restProps }: WcaFlagProps) => {
   }
 
   const countryCode = code.toUpperCase();
-  const fictiveCountry = countriesFictive.find(
-    ({ iso2 }) => iso2 === countryCode,
-  );
 
-  if (fictiveCountry) {
-    return (
-      <LuGlobeFramed
-        size={size}
-        color="gray.fg"
-        role="img"
-        aria-label={fictiveCountry.name}
-        aria-hidden={false}
-        {...restProps}
-      />
-    );
+  if (countriesFictive.some(({ iso2 }) => iso2 === countryCode)) {
+    return <LuGlobeFramed size={size} color="gray.fg" {...restProps} />;
   }
 
   if (countryCode === "TW") {
