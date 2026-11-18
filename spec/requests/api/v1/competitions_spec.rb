@@ -119,6 +119,34 @@ RSpec.describe "API v1 Competitions" do
     end
   end
 
+  describe "GET #admin_index" do
+    let!(:delegated_competition) { create(:competition, :visible, delegates: [create(:delegate, :with_avatar)], starts: 1.week.from_now) }
+
+    it "requires logging in" do
+      get api_v1_admin_competitions_path
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it "rejects users who cannot see admin competition details" do
+      api_sign_in_as(create(:user))
+      get api_v1_admin_competitions_path
+
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it "lists competitions with their admin details" do
+      api_sign_in_as(create(:admin))
+      get api_v1_admin_competitions_path
+
+      expect(response).to be_successful
+      json = response.parsed_body
+      expect(json.pluck("id")).to eq [delegated_competition.id]
+      expect(json.first).to include("results_submitted_at", "report_posted_at", "lead_delegate_id")
+      expect(json.first["delegates"].pluck("id")).to eq delegated_competition.delegates.ids
+    end
+  end
+
   describe "GET #head_to_head" do
     let!(:competition) { create(:competition, :visible, with_rounds: true, h2h_finals_event_ids: ['333']) }
     let!(:round) { competition.competition_events.find_by(event_id: "333").rounds.first }

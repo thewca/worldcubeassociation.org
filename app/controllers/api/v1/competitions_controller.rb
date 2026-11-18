@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::CompetitionsController < Api::V1::ApiController
+  include Rails::Pagination
+
   # Posted results are public data — the competition results pages render them for signed-out visitors.
   skip_before_action :require_user!
 
@@ -25,7 +27,22 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     }
   end
 
-  before_action :set_competition, except: %i[live]
+  ADMIN_INDEX_SERIALIZE_OPTIONS = {
+    only: Competition::INDEX_SERIALIZE_OPTIONS[:only],
+    methods: Competition::INDEX_SERIALIZE_OPTIONS[:methods] | %w[results_submitted_at results_posted_at report_posted_at report_posted_by_user lead_delegate_id],
+    include: { delegates: { only: %w[id name], methods: [], include: ["avatar"] } },
+  }.freeze
+
+  before_action :require_admin_competitions_viewer!, only: %i[admin_index]
+
+  def admin_index
+    competitions = Competition.includes(:events, :championships, :delegate_report, delegates: [:current_avatar])
+                              .search(params[:q], params: params)
+
+    paginate json: competitions.as_json(ADMIN_INDEX_SERIALIZE_OPTIONS)
+  end
+
+  before_action :set_competition, except: %i[live admin_index]
 
   # Every round of the competition with its results nested, ordered by event and round number.
   # The frontend regroups these by event or by person; the round carries the context that would
@@ -60,6 +77,11 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
                          )
 
     render json: rounds.as_json(Round::H2H_SERIALIZE_OPTIONS)
+  end
+
+  private def require_admin_competitions_viewer!
+    require_user!
+    raise WcaExceptions::NotPermitted.new("Admin competitions view privileges required") unless authenticated_user.can_see_admin_competitions?
   end
 
   private def set_competition

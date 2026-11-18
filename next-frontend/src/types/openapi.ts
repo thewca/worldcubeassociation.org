@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a list of competitions with the details needed to oversee their announcement, delegate report and results */
+        get: operations["adminCompetitionList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/registrations": {
         parameters: {
             query?: never;
@@ -1086,6 +1103,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v0/delegates/search-index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get every active Delegate, for picking one in a search field */
+        get: operations["delegatesSearchIndex"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v0/regulations": {
         parameters: {
             query?: never;
@@ -1257,13 +1291,29 @@ export interface components {
             competitor_limit: number | null;
             championship_types: string[];
             /** Format: date-time */
-            results_submitted_at?: string;
+            results_submitted_at?: string | null;
             /** Format: date-time */
-            results_posted_at?: string;
+            results_posted_at?: string | null;
             /** Format: date-time */
-            report_posted_at?: string;
-            report_posted_by_user?: number;
+            report_posted_at?: string | null;
+            report_posted_by_user?: number | null;
             delegates?: {
+                id: number;
+                name: string;
+                avatar: components["schemas"]["UserAvatar"];
+            }[];
+        };
+        AdminCompetitionIndex: components["schemas"]["CompetitionIndex"] & {
+            /** Format: date-time */
+            results_submitted_at: string | null;
+            /** Format: date-time */
+            results_posted_at: string | null;
+            /** Format: date-time */
+            report_posted_at: string | null;
+            /** @description ID of the user who posted the delegate report */
+            report_posted_by_user: number | null;
+            lead_delegate_id: number | null;
+            delegates: {
                 id: number;
                 name: string;
                 avatar: components["schemas"]["UserAvatar"];
@@ -2421,6 +2471,9 @@ export interface components {
             can_access_cms: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
+            can_see_admin_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
             can_request_to_edit_others_profile: {
                 scope: string[] | "*";
             };
@@ -2461,6 +2514,28 @@ export interface components {
         };
     };
     responses: {
+        /** @description Not logged in */
+        NotLoggedIn: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    error: string;
+                };
+            };
+        };
+        /** @description Organizer privileges required */
+        NotPermitted: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    error: string;
+                };
+            };
+        };
         /** @description The registration request was rejected */
         RegistrationError: {
             headers: {
@@ -2473,17 +2548,6 @@ export interface components {
                 };
             };
         };
-        /** @description Not logged in */
-        NotLoggedIn: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": {
-                    error: string;
-                };
-            };
-        };
         /** @description Competition not found */
         CompetitionNotFound: {
             headers: {
@@ -2491,17 +2555,6 @@ export interface components {
             };
             content: {
                 "application/json": components["schemas"]["Competition404"];
-            };
-        };
-        /** @description Organizer privileges required */
-        NotPermitted: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": {
-                    error: string;
-                };
             };
         };
         /** @description The submitted live results were rejected */
@@ -2557,6 +2610,48 @@ export interface operations {
                     };
                 };
             };
+        };
+    };
+    adminCompetitionList: {
+        parameters: {
+            query?: {
+                /** @description Page number to retrieve */
+                page?: number;
+                /** @description Number of results per page */
+                per_page?: number;
+                include_cancelled?: boolean;
+                /** @description Only return championships */
+                championship_only?: boolean;
+                continent?: string;
+                country_iso2?: string;
+                delegate?: string;
+                "event_ids[]"?: string[];
+                start?: string;
+                end?: string;
+                /** @description Only return competitions whose delegate report or results are overdue by the given severity: `warning` or `danger` */
+                admin_status?: string;
+                q?: string;
+                sort?: string;
+                ongoing_and_future?: string;
+                scoretaking_software?: "external" | "wca_live" | "internal";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCompetitionIndex"][];
+                };
+            };
+            401: components["responses"]["NotLoggedIn"];
+            403: components["responses"]["NotPermitted"];
         };
     };
     competitionRegistrationsV2: {
@@ -4094,6 +4189,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserPermissions"];
+                };
+            };
+        };
+    };
+    delegatesSearchIndex: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        id: number;
+                        name: string;
+                        wca_id: string | null;
+                        /** Format: uri */
+                        thumb_url: string;
+                    }[];
                 };
             };
         };

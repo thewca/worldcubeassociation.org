@@ -1,0 +1,50 @@
+allOf:
+  - $ref: './CompetitionIndex.yaml'
+  - type: object
+    required:
+      - results_submitted_at
+      - results_posted_at
+      - report_posted_at
+      - report_posted_by_user
+      - lead_delegate_id
+      - delegates
+    properties:
+      results_submitted_at:
+        type:
+          - string
+          - "null"
+        format: date-time
+      results_posted_at:
+        type:
+          - string
+          - "null"
+        format: date-time
+      report_posted_at:
+        type:
+          - string
+          - "null"
+        format: date-time
+      report_posted_by_user:
+        type:
+          - integer
+          - "null"
+        description: ID of the user who posted the delegate report
+      lead_delegate_id:
+        type:
+          - integer
+          - "null"
+      delegates:
+        type: array
+        items:
+          type: object
+          required:
+            - id
+            - name
+            - avatar
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            avatar:
+              $ref: '../users/UserAvatar.yaml'

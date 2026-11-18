@@ -1,0 +1,31 @@
+get:
+  summary: Get every active Delegate, for picking one in a search field
+  tags:
+    - users
+  operationId: delegatesSearchIndex
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - id
+                - name
+                - wca_id
+                - thumb_url
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                wca_id:
+                  type:
+                    - string
+                    - "null"
+                thumb_url:
+                  type: string
+                  format: uri
