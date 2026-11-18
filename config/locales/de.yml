@@ -553,7 +553,7 @@ de:
       person:
       results_submission:
       regional_organization:
-        website: Muss eine gültige http(s) Adresse sein. HTTPS ist empfohlen.
+        website: Muss eine gültige http(s) Adresse sein. HTTPS ist empfohlen
         logo: >-
           Muss im PNG-Format sein, in guter Auflösung und mit einem
           transparenten Hintergrund.
@@ -561,8 +561,8 @@ de:
           sein
         bylaws: Muss im PDF-Format sein
         extra_file: >-
-          Muss im PDF-Format sein. Falls du mehrere Dateien hinzufügen willst,
-          fasse diese bitte zu einer zusammen.
+          Muss im PDF-Format sein. Falls du mehrere Dateien hinzufügen willst, fasse
+          diese bitte zu einer zusammen
     options:
       registration:
         status:
