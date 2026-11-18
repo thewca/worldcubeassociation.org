@@ -1,5 +1,5 @@
 import _TwFlag from "@/components/icons/flags/_TwFlag";
-import LuGlobeFramed from "@/components/icons/LuGlobeFramed";
+import OverlappingLocationPins from "@/components/icons/OverlappingLocationPins";
 import countriesFictive from "@/lib/staticData/countries.fictive.json";
 
 import type { ComponentPropsWithoutRef } from "react";
@@ -22,7 +22,9 @@ const WcaFlag = ({ code, size = "md", ...restProps }: WcaFlagProps) => {
   const countryCode = code.toUpperCase();
 
   if (countriesFictive.some(({ iso2 }) => iso2 === countryCode)) {
-    return <LuGlobeFramed size={size} color="gray.fg" {...restProps} />;
+    return (
+      <OverlappingLocationPins size={size} color="gray.fg" {...restProps} />
+    );
   }
 
   if (countryCode === "TW") {
