@@ -1818,6 +1818,13 @@ export interface components {
             /** @example 1337 */
             completed_solves_count: number;
             championship_podium_results: components["schemas"]["V1ChampionshipPodiums"];
+            /** @description The names and regions the person competed under before their current ones, oldest first. */
+            previous_persons: {
+                /** @example Tim Reynolds */
+                name: string;
+                /** @example CA */
+                country_iso2: string;
+            }[];
         };
         V1Results: components["schemas"]["V1Result"][];
         GeocodedLocation: {

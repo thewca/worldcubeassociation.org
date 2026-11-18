@@ -53,6 +53,14 @@ RSpec.describe "API v1 Persons" do
       expect(podiums["national"]).to be_empty
     end
 
+    it "serializes the names the person competed under before" do
+      renamed_person = create(:person_with_multiple_sub_ids)
+
+      get api_v1_person_path(renamed_person.wca_id)
+
+      expect(response.parsed_body["previous_persons"]).to eq [{ "name" => "old name", "country_iso2" => renamed_person.country_iso2 }]
+    end
+
     it "404s for an unknown WCA ID" do
       get api_v1_person_path("1000AAAA01")
 

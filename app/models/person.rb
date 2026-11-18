@@ -298,6 +298,10 @@ class Person < ApplicationRecord
     championship_podiums.transform_values { |podium| podium.map { it.serializable_hash(Result::V1_SERIALIZE_OPTIONS) } }
   end
 
+  def previous_persons
+    Person.where(wca_id: wca_id).where.not(sub_id: 1).order(:sub_id)
+  end
+
   def gender_visible?
     %w[m f].include? gender
   end
@@ -329,7 +333,10 @@ class Person < ApplicationRecord
     v1: true,
     only: %w[wca_id name gender],
     methods: %w[url country_iso2 delegate_status teams competition_count event_ids_with_results ranks_by_event medals records completed_solves_count championship_podium_results],
-    include: { avatar: UserAvatar::V1_SERIALIZE_OPTIONS },
+    include: {
+      avatar: UserAvatar::V1_SERIALIZE_OPTIONS,
+      previous_persons: { v1: true, only: %w[name], methods: %w[country_iso2] },
+    },
   }.freeze
 
   USER_COMMON_SERIALIZE_OPTIONS = {
