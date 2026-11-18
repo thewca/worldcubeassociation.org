@@ -2435,12 +2435,12 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+        competitor_results: "Competitor results"
       general: "General"
       more: "More"
       admin: "Admin"
       results: "Results"
       events: "Events"
-      competitor_results: "Competitor results"
     h2h:
       set_number: "Set %{number}"
       stage_of: "Stage of %{number}"
