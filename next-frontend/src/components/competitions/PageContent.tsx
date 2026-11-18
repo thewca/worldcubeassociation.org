@@ -30,6 +30,7 @@ export function pageIdFromPath(pathname: string, fullPath: string): string {
 }
 
 export function getTabTranslation(pageId: string, tabs: CompetitionNavTab[]) {
+  // i18n-tasks-use t('competitions.nav.menu.competitor_results')
   if (pageId === COMPETITOR_RESULT_PAGE_ID) {
     return "competitions.nav.menu.competitor_results";
   }
