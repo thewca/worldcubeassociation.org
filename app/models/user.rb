@@ -877,6 +877,9 @@ class User < ApplicationRecord
       can_access_cms: {
         scope: can_access_cms? ? "*" : [],
       },
+      can_edit_users: {
+        scope: can_view_all_users? ? "*" : ([id] | Registration.where(competition: organized_competitions.not_over).pluck(:user_id)).map(&:to_s),
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []

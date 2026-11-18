@@ -20,6 +20,7 @@ required:
   - can_create_posts
   - can_manage_regional_organizations
   - can_access_cms
+  - can_edit_users
 properties:
   can_attend_competitions:
     type: object
@@ -183,3 +184,10 @@ properties:
             format: "Wildcard"
             enum:
               - "*"
+  can_edit_users:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
