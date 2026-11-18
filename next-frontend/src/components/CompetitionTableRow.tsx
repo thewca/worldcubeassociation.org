@@ -48,11 +48,12 @@ interface Props {
   isRepeatedDate: boolean;
 }
 
-const registrationStatusIcons: Record<RegistrationStatus, JSX.Element> = {
-  open: <CompRegoNotFullOpenGreenIcon />,
-  notOpen: <CompRegoNotOpenYetGreyIcon />,
-  closed: <CompRegoClosedRedIcon />,
-};
+export const registrationStatusIcons: Record<RegistrationStatus, JSX.Element> =
+  {
+    open: <CompRegoNotFullOpenGreenIcon />,
+    notOpen: <CompRegoNotOpenYetGreyIcon />,
+    closed: <CompRegoClosedRedIcon />,
+  };
 
 const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
   const [open, setOpen] = useState(false);

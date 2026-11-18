@@ -25,6 +25,7 @@ import {
   SegmentGroup,
   SimpleGrid,
   Stack,
+  Switch,
   Table,
   Tabs,
   Text,
@@ -85,6 +86,10 @@ import _ from "lodash";
 import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import useIsScrolled from "@/lib/hooks/useIsScrolled";
 import BackToTopButton from "@/components/BackToTopButton";
+import AdminCompetitionTable from "@/components/competitions/AdminCompetitionTable";
+import DelegateSelector from "@/components/competitions/DelegateSelector";
+import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
+import type { components } from "@/types/openapi";
 
 const DEBOUNCE_MS = 600;
 const COMPETITIONS_PER_PAGE = 50;
@@ -106,6 +111,10 @@ const isDistanceUnit = (value: string | null): value is DistanceUnit =>
 
 // Decimal places shown for the resolved coordinates, roughly street-level precision.
 const COORDINATE_PRECISION = 4;
+
+type CompetitionIndex = components["schemas"]["CompetitionIndex"];
+
+const ADMIN_STATUS_VALUES = ["all", "warning", "danger"] as const;
 
 const REGISTRATION_STATUS_KEY = [
   {
@@ -162,7 +171,11 @@ export default function CompetitionsPage() {
   const { t } = useT();
   const lng = useLocale();
 
-  const canViewAdminDetails = false;
+  const { data: permissions } = usePermissionsQuery();
+  const canViewAdminDetails = permissions?.canSeeAdminCompetitions() ?? false;
+  // Need to make sure that people don't "hijack" admin mode by manipulating the URL
+  const shouldShowAdminDetails =
+    canViewAdminDetails && filterState.shouldShowAdminDetails;
 
   const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
 
@@ -171,32 +184,49 @@ export default function CompetitionsPage() {
     canViewAdminDetails,
   );
 
+  const competitionsQueryParams = {
+    params: {
+      query: { ...querySearchParams, per_page: COMPETITIONS_PER_PAGE },
+    },
+  };
+
+  const infiniteQueryOptions = {
+    pageParamName: "page",
+    getNextPageParam: (previousPage: unknown[], allPages: unknown[][]) => {
+      // Continue until less than a full page of data is fetched,
+      // which indicates the very last page.
+      if (previousPage.length < COMPETITIONS_PER_PAGE) {
+        return undefined;
+      }
+      return allPages.length + 1;
+    },
+    initialPageParam: 1,
+  };
+
+  const publicCompetitionsQuery = api.useInfiniteQuery(
+    "get",
+    "/v0/competition_index",
+    competitionsQueryParams,
+    { ...infiniteQueryOptions, enabled: !shouldShowAdminDetails },
+  );
+
+  const adminCompetitionsQuery = api.useInfiniteQuery(
+    "get",
+    "/v1/competitions/admin",
+    competitionsQueryParams,
+    { ...infiniteQueryOptions, enabled: shouldShowAdminDetails },
+  );
+
   const {
-    data: rawCompetitionData,
     fetchNextPage: competitionsFetchNextPage,
     isFetching: competitionsIsFetching,
     hasNextPage: hasMoreCompsToLoad,
-  } = api.useInfiniteQuery(
-    "get",
-    "/v0/competition_index",
-    {
-      params: {
-        query: { ...querySearchParams, per_page: COMPETITIONS_PER_PAGE },
-      },
-    },
-    {
-      pageParamName: "page",
-      getNextPageParam: (previousPage, allPages) => {
-        // Continue until less than a full page of data is fetched,
-        // which indicates the very last page.
-        if (previousPage.length < COMPETITIONS_PER_PAGE) {
-          return undefined;
-        }
-        return allPages.length + 1;
-      },
-      initialPageParam: 1,
-    },
-  );
+  } = shouldShowAdminDetails ? adminCompetitionsQuery : publicCompetitionsQuery;
+
+  const rawCompetitionPages: CompetitionIndex[][] =
+    (shouldShowAdminDetails
+      ? adminCompetitionsQuery.data?.pages
+      : publicCompetitionsQuery.data?.pages) ?? [];
 
   const bottomRef = useOnInView((inView) => {
     if (inView && hasMoreCompsToLoad && !competitionsIsFetching) {
@@ -222,31 +252,31 @@ export default function CompetitionsPage() {
     setRadius(DISTANCE_UNITS[value].defaultRadius.toString());
   };
 
-  const loadedCompetitions =
-    rawCompetitionData?.pages.flatMap((page) => page) ?? [];
+  const loadedCompetitions = rawCompetitionPages.flat();
 
   // An empty or half-typed radius means "no limit yet" rather than "everything is too far away".
   const maxDistanceKm = Number(radius) * DISTANCE_UNITS[distanceUnit].toKm;
   const hasDistanceLimit = maxDistanceKm > 0;
 
-  const competitionsDistanceFiltered =
-    location !== undefined && hasDistanceLimit
-      ? loadedCompetitions.filter(
-          (competition) =>
-            getDistanceInKm(location, {
-              longitude: competition.longitude_degrees,
-              latitude: competition.latitude_degrees,
-            }) <= maxDistanceKm,
-        )
-      : loadedCompetitions;
+  const isWithinDistance = (competition: CompetitionIndex) =>
+    location === undefined ||
+    !hasDistanceLimit ||
+    getDistanceInKm(location, {
+      longitude: competition.longitude_degrees,
+      latitude: competition.latitude_degrees,
+    }) <= maxDistanceKm;
 
-  const competitionsFiltered =
-    registrationStatus === null
-      ? competitionsDistanceFiltered
-      : competitionsDistanceFiltered.filter(
-          (competition) =>
-            getRegistrationStatus(competition) === registrationStatus,
-        );
+  const hasSelectedRegistrationStatus = (competition: CompetitionIndex) =>
+    registrationStatus === null ||
+    getRegistrationStatus(competition) === registrationStatus;
+
+  const isShown = (competition: CompetitionIndex) =>
+    isWithinDistance(competition) && hasSelectedRegistrationStatus(competition);
+
+  const competitionsFiltered = loadedCompetitions.filter(isShown);
+
+  const adminCompetitionsFiltered =
+    adminCompetitionsQuery.data?.pages.flat().filter(isShown) ?? [];
 
   const showInProgressSection = debouncedFilterState.timeOrder === "present";
 
@@ -262,9 +292,9 @@ export default function CompetitionsPage() {
     ).map((competition) => competition.id),
   );
 
-  const loadedCompetitionCount =
-    rawCompetitionData?.pages.reduce((total, page) => total + page.length, 0) ??
-    0;
+  const loadedCompetitionCount = loadedCompetitions.length;
+
+  const selectedDelegateId = Number(filterState.delegate) || undefined;
 
   return (
     <VStack gap="8" width="full">
@@ -495,61 +525,88 @@ export default function CompetitionsPage() {
                     </Badge>
                   ))}
                 </Wrap>
+                {canViewAdminDetails && (
+                  <Switch.Root
+                    checked={shouldShowAdminDetails}
+                    onCheckedChange={(e) =>
+                      dispatchFilter({
+                        type: "set_should_show_admin_details",
+                        shouldShowAdminDetails: e.checked,
+                      })
+                    }
+                  >
+                    <Switch.HiddenInput />
+                    <Switch.Control />
+                    <Switch.Label>
+                      {t("competitions.index.use_admin_view")}
+                    </Switch.Label>
+                  </Switch.Root>
+                )}
               </Stack>
-              <Table.ScrollArea>
-                <Table.Root
-                  size="xs"
-                  variant="competitions"
-                  borderWidth="2px"
-                  stickyHeader
-                >
-                  <Table.Header bg="bg.muted" hideBelow="md">
-                    <Table.Row>
-                      <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader width="1" textAlign="start">
-                        {t("competitions.competition_info.date")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader>
-                        {t("competitions.competition_info.name")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader hideBelow="lg">
-                        {t("competitions.competition_info.location")}
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader hideBelow="xl">
-                        {t("competitions.competition_info.venue")}
-                      </Table.ColumnHeader>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {inProgressComps.length > 0 && (
-                      <>
-                        <TableHeaderRow>
-                          {t("competitions.index.titles.in_progress")}
-                        </TableHeaderRow>
-                        {inProgressComps.map((comp) => (
-                          <CompetitionTableRow
-                            comp={comp}
-                            key={comp.id}
-                            isRepeatedDate={!firstCompetitionIds.has(comp.id)}
-                          />
-                        ))}
-                        <TableHeaderRow>
-                          {t("competitions.index.titles.upcoming")}
-                        </TableHeaderRow>
-                      </>
-                    )}
-                    {upcomingComps.map((comp) => (
-                      <CompetitionTableRow
-                        comp={comp}
-                        key={comp.id}
-                        isRepeatedDate={!firstCompetitionIds.has(comp.id)}
-                      />
-                    ))}
-                  </Table.Body>
-                </Table.Root>
-              </Table.ScrollArea>
+              {shouldShowAdminDetails ? (
+                <AdminView
+                  competitions={adminCompetitionsFiltered}
+                  filterState={filterState}
+                  dispatchFilter={dispatchFilter}
+                  selectedDelegateId={selectedDelegateId}
+                  t={t}
+                />
+              ) : (
+                <Table.ScrollArea>
+                  <Table.Root
+                    size="xs"
+                    variant="competitions"
+                    borderWidth="2px"
+                    stickyHeader
+                  >
+                    <Table.Header bg="bg.muted" hideBelow="md">
+                      <Table.Row>
+                        <Table.ColumnHeader></Table.ColumnHeader>
+                        <Table.ColumnHeader width="1" textAlign="start">
+                          {t("competitions.competition_info.date")}
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader></Table.ColumnHeader>
+                        <Table.ColumnHeader>
+                          {t("competitions.competition_info.name")}
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader></Table.ColumnHeader>
+                        <Table.ColumnHeader hideBelow="lg">
+                          {t("competitions.competition_info.location")}
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader hideBelow="xl">
+                          {t("competitions.competition_info.venue")}
+                        </Table.ColumnHeader>
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      {inProgressComps.length > 0 && (
+                        <>
+                          <TableHeaderRow>
+                            {t("competitions.index.titles.in_progress")}
+                          </TableHeaderRow>
+                          {inProgressComps.map((comp) => (
+                            <CompetitionTableRow
+                              comp={comp}
+                              key={comp.id}
+                              isRepeatedDate={!firstCompetitionIds.has(comp.id)}
+                            />
+                          ))}
+                          <TableHeaderRow>
+                            {t("competitions.index.titles.upcoming")}
+                          </TableHeaderRow>
+                        </>
+                      )}
+                      {upcomingComps.map((comp) => (
+                        <CompetitionTableRow
+                          comp={comp}
+                          key={comp.id}
+                          isRepeatedDate={!firstCompetitionIds.has(comp.id)}
+                        />
+                      ))}
+                    </Table.Body>
+                  </Table.Root>
+                </Table.ScrollArea>
+              )}
               <ListViewFooter
                 isLoading={competitionsIsFetching}
                 hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -919,6 +976,60 @@ function AdvancedFilters({
         </Checkbox.Label>
       </Checkbox.Root>
     </Stack>
+  );
+}
+
+function AdminView({
+  competitions,
+  filterState,
+  dispatchFilter,
+  selectedDelegateId,
+  t,
+}: {
+  competitions: components["schemas"]["AdminCompetitionIndex"][];
+  filterState: CompetitionFilterState;
+  dispatchFilter: Dispatch<CompetitionFilterAction>;
+  selectedDelegateId?: number;
+  t: TFunction;
+}) {
+  const adminStatusItems = ADMIN_STATUS_VALUES.map((value) => ({
+    value,
+    label: t(`competitions.index.status_flags.${value}`),
+  }));
+
+  return (
+    <VStack gap="3" align="stretch">
+      <Stack
+        direction={{ base: "column", md: "row" }}
+        gap="4"
+        align={{ base: "stretch", md: "flex-end" }}
+      >
+        <DelegateSelector
+          delegateId={selectedDelegateId}
+          onDelegateChange={(delegateId) =>
+            dispatchFilter({ type: "set_delegate", delegate: delegateId ?? "" })
+          }
+          t={t}
+        />
+        <Field.Root width="auto">
+          <Field.Label>{t("competitions.index.admin_status")}</Field.Label>
+          <SegmentGroup.Root
+            value={filterState.adminStatus}
+            onValueChange={(e) =>
+              e.value &&
+              dispatchFilter({ type: "set_admin_status", adminStatus: e.value })
+            }
+          >
+            <SegmentGroup.Indicator />
+            <SegmentGroup.Items items={adminStatusItems} />
+          </SegmentGroup.Root>
+        </Field.Root>
+      </Stack>
+      <AdminCompetitionTable
+        competitions={competitions}
+        selectedDelegateId={selectedDelegateId}
+      />
+    </VStack>
   );
 }
 
