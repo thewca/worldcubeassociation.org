@@ -301,46 +301,60 @@ function CollapsibleTabGroup({
       <Collapsible.Content>
         <Box ps="3" display="flex" flexDirection="column" gap="1" pt="1">
           {children.map((child) => (
-            <Tabs.Trigger
-              value={child.menuKey}
-              asChild
+            <CollapsibleTabChild
               key={child.menuKey}
-              disabled={child.disabled}
-            >
-              {child.type === "tab-with-external-link" ? (
-                <ChakraLink
-                  href={child.externalHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="currentColor"
-                  justifyContent="start"
-                >
-                  {child.icon !== undefined && (
-                    <IconDisplay name={child.icon} />
-                  )}
-                  {t(child.i18nKey)}
-                </ChakraLink>
-              ) : (
-                <TabTarget
-                  tabKey={child.menuKey}
-                  currentPath={currentPath}
-                  href={
-                    isAdminRoute && child.hrefAdmin
-                      ? child.hrefAdmin
-                      : child.href
-                  }
-                  disabled={child.disabled}
-                  display="flex"
-                  justifyContent="space-between"
-                >
-                  {t(child.i18nKey)}
-                  {child.badgeI18nKey && <Badge>{t(child.badgeI18nKey)}</Badge>}
-                </TabTarget>
-              )}
-            </Tabs.Trigger>
+              tab={child}
+              t={t}
+              isAdminRoute={isAdminRoute}
+              currentPath={currentPath}
+            />
           ))}
         </Box>
       </Collapsible.Content>
     </Collapsible.Root>
+  );
+}
+
+function CollapsibleTabChild({
+  tab,
+  t,
+  isAdminRoute,
+  currentPath,
+}: {
+  tab: TabWithLink | TabWithExternalLink;
+  t: TFunction;
+  isAdminRoute: boolean;
+  currentPath?: string;
+}) {
+  const link =
+    tab.type === "tab-with-external-link" ? (
+      <ChakraLink
+        href={tab.externalHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        color="currentColor"
+        justifyContent="start"
+      >
+        {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
+        {t(tab.i18nKey)}
+      </ChakraLink>
+    ) : (
+      <TabTarget
+        tabKey={tab.menuKey}
+        currentPath={currentPath}
+        href={isAdminRoute && tab.hrefAdmin ? tab.hrefAdmin : tab.href}
+        disabled={tab.disabled}
+        display="flex"
+        justifyContent="space-between"
+      >
+        {t(tab.i18nKey)}
+        {tab.badgeI18nKey && <Badge>{t(tab.badgeI18nKey)}</Badge>}
+      </TabTarget>
+    );
+
+  return (
+    <Tabs.Trigger value={tab.menuKey} asChild disabled={tab.disabled}>
+      {link}
+    </Tabs.Trigger>
   );
 }

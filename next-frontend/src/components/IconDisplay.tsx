@@ -21,7 +21,9 @@ const IconDisplay = ({
   fallback = undefined,
   size = "1em",
 }: IconDisplayProps) => {
-  if (isLucideIconName(name)) {
+  const isLucideIcon = isLucideIconName(name);
+
+  if (isLucideIcon) {
     const LucideIcon = lucideIconMap[name];
 
     return (

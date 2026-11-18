@@ -7,6 +7,7 @@ import _ from "lodash";
 import { EventId } from "@/lib/wca/data/events";
 import { hasPassed } from "@/lib/wca/dates";
 import type { PermissionFunctions } from "@/lib/wca/permissions";
+import { railsHref } from "@/components/RailsLink";
 
 interface TabBase {
   i18nKey: string;
@@ -326,10 +327,7 @@ export const adminTabs = (
     i18nKey,
     menuKey: i18nKey,
     icon,
-    externalHref: new URL(
-      `/competitions/${competitionId}${path}`,
-      process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
-    ).href,
+    externalHref: railsHref(`/competitions/${competitionId}${path}`),
   });
 
   const children = _.compact([
@@ -409,7 +407,9 @@ export const adminTabs = (
       railsLink("competitions.nav.menu.tabs", "/tabs", "Manage Tabs"),
   ]);
 
-  if (_.isEmpty(children)) return [];
+  const hasNoAdminLinks = _.isEmpty(children);
+
+  if (hasNoAdminLinks) return [];
 
   return [
     {
