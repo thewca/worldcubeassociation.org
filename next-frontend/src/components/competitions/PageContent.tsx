@@ -10,6 +10,35 @@ import { LuHouse } from "react-icons/lu";
 import { route } from "nextjs-routes";
 import { CompetitionNavTab } from "@/lib/wca/competitions/tabs";
 
+const BY_PERSON_PAGE_ID = "by-person";
+const COMPETITOR_RESULT_PAGE_ID = "competitor_results";
+
+// Matches ".../live/competitors/<registrationId>"
+const COMPETITOR_RESULT_PATH = /\/live\/competitors\/[^/]+\/?$/;
+
+export function pageIdFromPath(pathname: string, fullPath: string): string {
+  if (COMPETITOR_RESULT_PATH.test(fullPath)) {
+    return COMPETITOR_RESULT_PAGE_ID;
+  }
+
+  const currentPath = pathname.split("/").filter(Boolean).at(-1) ?? "";
+
+  // Handled separately because activityCodeFromPath would cut "by-person" down to "by"
+  if (currentPath === BY_PERSON_PAGE_ID) {
+    return BY_PERSON_PAGE_ID;
+  }
+
+  return activityCodeFromPath(currentPath) ?? decodeURIComponent(currentPath);
+}
+
+export function getTabTranslation(pageId: string, tabs: CompetitionNavTab[]) {
+  if (pageId === COMPETITOR_RESULT_PAGE_ID) {
+    return "competitions.nav.menu.competitor_results";
+  }
+
+  return _.get(_.find(tabs, { menuKey: pageId }), "i18nKey");
+}
+
 function BreadcrumbHeader({
   page,
   competitionName,
@@ -62,12 +91,9 @@ export default function Content({
   const path = _.last(pathName.split("/")) || "";
   const currentPath = path === competition.id ? "general" : path;
 
-  const pageId =
-    path === "by-person"
-      ? "by-person" // or activityCodeFroPath would delete everything after the first -
-      : activityCodeFromPath(currentPath) || decodeURIComponent(currentPath);
+  const pageId = pageIdFromPath(currentPath, pathName);
 
-  const headerKey = tabs.find((t) => t.menuKey === pageId)?.i18nKey;
+  const headerKey = getTabTranslation(pageId, tabs);
 
   const tHeader = headerKey ? t(headerKey) : pageId;
   return (
