@@ -219,6 +219,7 @@ eo:
       unit_seconds: sekundoj
       unit_moves: movoj
     back_to_top: Reen al supro
+    back: Reen
   oauth:
     applications:
       your_apps: Viaj OAuth-aplikaĵoj
@@ -231,6 +232,10 @@ eo:
       secret: Sekreto
       scopes: Ampleksoj
       callback_urls: Retejaj adresoj vokitaj per referenco
+      confidential: Ĉu konfidenca?
+      confidentiality:
+        'yes': Jes
+        'no': Ne
   helpers:
     submit:
       competition_medium:
@@ -1040,6 +1045,8 @@ eo:
       success_message_with_ticket_link_html: Peto sendita - ni baldaŭ respondos 
         al vi. Por vidi la staton de ĉi tiu peto, bonvolu viziti <a 
         href="%{link}">ĉi tiun ligilon</a>.
+    executives:
+      close: Fermi
   homepage:
     learn_more: Lernu pli
     title: Bonvenon ĉe la World Cube Association
@@ -1110,7 +1117,7 @@ eo:
         confirmation_link: Konfirmi mian konton.
         activate: >-
           Post aktivigo, vi eble devos ensaluti je la retejo de la Word Cube Association:
-          
+
         login_form: ensaluta formularo
         addendum: >-
           Tiu retmesaĝo estas aŭtomate produktita. Se vi ne kreis konton ĉe la
@@ -4055,3 +4062,11 @@ eo:
     group: Grupo %{number}
     attempt: Provo %{number}
   tickets: {}
+  trainee_delegate_application:
+    form:
+      name: Nomo
+      wca_id: WCA-ID
+      email: Retpoŝtadreso
+      age: Aĝo
+      competition_count: Kvanto da konkursoj
+      region_and_references: Regiono kaj referencoj
