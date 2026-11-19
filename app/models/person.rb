@@ -291,7 +291,7 @@ class Person < ApplicationRecord
   end
 
   def to_v1_json
-    serializable_hash(V1_STANDALONE_SERIALIZE_OPTIONS).merge(
+    serializable_hash(V1_SERIALIZE_OPTIONS).merge(
       "ranks_by_event" => ranks_by_event.transform_values do |ranks|
         ranks.transform_values { it.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS) }
       end,

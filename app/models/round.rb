@@ -938,11 +938,15 @@ class Round < ApplicationRecord
   # What decides a competitor's final position in this round. `pos` always ranks them within the
   # round itself; in a Dual Round `global_pos` additionally spans every round of the link, and in
   # a Head-to-Head round both come from match outcomes rather than from comparing times.
-  def ranking_mode
-    return RANKING_MODES[:head_to_head] if is_h2h_mock?
-    return RANKING_MODES[:linked_round] if linked_round_id?
+  def self.ranking_mode_for(is_h2h_mock:, is_linked:)
+    return RANKING_MODES[:head_to_head] if is_h2h_mock
+    return RANKING_MODES[:linked_round] if is_linked
 
     RANKING_MODES[:within_round]
+  end
+
+  def ranking_mode
+    Round.ranking_mode_for(is_h2h_mock: is_h2h_mock?, is_linked: linked_round_id?)
   end
 
   V1_RESULTS_SERIALIZE_OPTIONS = {

@@ -110,10 +110,61 @@ class Result < ApplicationRecord
     result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
   end
 
-  # Make sure to preload the relevant data when calling this method
-  private def participated_matches
-    return [] if person.user.nil?
+  V1_STANDALONE_COLUMNS = {
+    "id" => "results.id",
+    "pos" => "results.pos",
+    "global_pos" => "results.global_pos",
+    "best" => "results.best",
+    "average" => "results.average",
+    "wca_id" => "results.person_id",
+    "name" => "results.person_name",
+    "regional_single_record" => "results.regional_single_record",
+    "regional_average_record" => "results.regional_average_record",
+    "competition_id" => "results.competition_id",
+    "competition_short_name" => "competitions.cell_name",
+    "competition_start_date" => "competitions.start_date",
+    "event_id" => "results.event_id",
+    "round_type_id" => "results.round_type_id",
+    "format_id" => "results.format_id",
+  }.freeze
 
-    person.user.h2h_matches.filter { it.round_id == round_id }
+  # Needed to compute the serialized values, but not serialized themselves.
+  V1_STANDALONE_LOOKUP_COLUMNS = {
+    "country_id" => "results.country_id",
+    "round_id" => "results.round_id",
+    "is_h2h_mock" => "rounds.is_h2h_mock",
+    "linked_round_id" => "rounds.linked_round_id",
+  }.freeze
+
+  # Produces the same output as `as_json(V1_STANDALONE_SERIALIZE_OPTIONS)` plus `participated_matches`,
+  # but plucks the columns instead of instantiating every result, which is several times faster
+  # for people with thousands of results.
+  def self.to_v1_standalone_json
+    columns = V1_STANDALONE_COLUMNS.merge(V1_STANDALONE_LOOKUP_COLUMNS)
+    rows = joins(:round, :competition).pluck(*columns.values.map { Arel.sql(it) })
+                                      .map { columns.keys.zip(it).to_h }
+
+    attempts_by_result_id = ResultAttempt.where(result_id: rows.pluck("id"))
+                                         .pluck(:result_id, :attempt_number, :value)
+                                         .group_by(&:first)
+                                         .transform_values { it.to_h { |_, number, value| [number, value] } }
+
+    h2h_round_ids = rows.filter { it["is_h2h_mock"] }.pluck("round_id")
+    matches_by_round_and_wca_id = H2hMatch.where(round_id: h2h_round_ids)
+                                          .joins(:users)
+                                          .where(users: { wca_id: rows.pluck("wca_id").uniq })
+                                          .select("h2h_matches.*", "users.wca_id AS competitor_wca_id")
+                                          .preload(*H2hMatch::SERIALIZATION_INCLUDES, round: { results: { person: :user } })
+                                          .order(:match_number)
+                                          .group_by { [it.round_id, it.competitor_wca_id] }
+
+    rows.map do |row|
+      row.except(*V1_STANDALONE_LOOKUP_COLUMNS.keys).merge(
+        "country_iso2" => Country.c_find(row["country_id"]).iso2,
+        "attempts" => attempts_from_hash(attempts_by_result_id.fetch(row["id"], {})),
+        "ranking_mode" => Round.ranking_mode_for(is_h2h_mock: row["is_h2h_mock"], is_linked: row["linked_round_id"].present?),
+        "participated_matches" => matches_by_round_and_wca_id.fetch([row["round_id"], row["wca_id"]], []).as_json,
+      )
+    end
   end
 end
