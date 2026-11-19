@@ -344,7 +344,12 @@ export default function CompetitionsPage() {
                     }
                   />
                 </Box>
-                <SimpleGrid gap="2" width="full" columns={{ base: 3, lg: 2 }}>
+                <SimpleGrid
+                  gap="2"
+                  width="full"
+                  columns={{ base: 1, lg: 2 }}
+                  rowGap="0"
+                >
                   <Box hideFrom="lg" minW="0">
                     <EventDropdown
                       selectedEvents={filterState.selectedEvents}
