@@ -267,7 +267,7 @@ class Person < ApplicationRecord
     competitions.size
   end
 
-  # Like `delegate_status`, these come off the linked user, which a person need not have.
+  # Persons can exist with undefined users. In this case, we want to display the default avatar instead of nothing.
   def avatar
     (user || User.new).avatar
   end
