@@ -14,8 +14,6 @@ class H2hMatch < ApplicationRecord
     methods: %w[competitors sets],
   }.freeze
 
-  # A default set of data to use with .includes() when serializing H2H matches into JSON. `final_pos` also
-  # reads the round's standings, which callers preload themselves: only they know whether the round is posted.
   SERIALIZATION_INCLUDES = [
     { h2h_match_competitors: :user },
     { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },

@@ -72,15 +72,6 @@ class Result < ApplicationRecord
                 worst_index regional_single_record regional_average_record],
   }.freeze
 
-  # `best_index` / `worst_index` are omitted deliberately: they are derivable from `attempts`.
-  # A result rendered inside a round, which already carries the competition, event and format
-  # context, so this shape holds only what is specific to the competitor.
-  V1_ROUND_SERIALIZE_OPTIONS = {
-    only: %w[id pos global_pos best average],
-    methods: %w[wca_id name country_iso2 attempts regional_single_record regional_average_record],
-  }.freeze
-
-  # The same result rendered on its own, which has to repeat the context a round would carry.
   V1_SERIALIZE_OPTIONS = {
     only: V1_ROUND_SERIALIZE_OPTIONS[:only],
     methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
@@ -88,8 +79,14 @@ class Result < ApplicationRecord
                 event_id round_type_id format_id ranking_mode],
   }.freeze
 
-  # A result on a person's results page, which also shows the head-to-head matches behind it.
-  # `participated_matches` walks `person.user.h2h_matches`, so callers have to preload that chain.
+  # Use when serializing results that belong to a Round object
+  V1_ROUND_SERIALIZE_OPTIONS = {
+    only: %w[id pos global_pos best average],
+    methods: %w[wca_id name country_iso2 attempts regional_single_record regional_average_record],
+  }.freeze
+
+  # Use when serializing results that belong to a Person object
+  # The caller should preload .includes(person: { user: :h2h_matches })
   V1_PERSON_RESULTS_SERIALIZE_OPTIONS = {
     only: V1_SERIALIZE_OPTIONS[:only],
     methods: V1_SERIALIZE_OPTIONS[:methods] | %w[participated_matches],
@@ -120,7 +117,7 @@ class Result < ApplicationRecord
   end
 
   def participated_matches
-    # Not every person has a user account, and only users can compete in head-to-head matches.
+    # Users carry the h2h_match_competitor association, so we cover the case for if they're anonmymized
     return [] if person.user.nil?
 
     person.user.h2h_matches.filter { it.round_id == round_id }
