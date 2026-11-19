@@ -192,17 +192,27 @@ class UserRole < ApplicationRecord
     sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
+  private def team_friendly_id
+    if group_type == UserGroup.group_types[:board]
+      UserGroup.group_types[:board]
+    else
+      group.metadata.friendly_id
+    end
+  end
+
   def team_membership
-    friendly_id = if group_type == UserGroup.group_types[:board]
-                    UserGroup.group_types[:board]
-                  else
-                    group.metadata.friendly_id
-                  end
     {
       id: self.id,
-      friendly_id: friendly_id,
+      friendly_id: team_friendly_id,
       leader: metadata&.status == "leader",
       senior_member: metadata&.status == "senior_member",
+    }
+  end
+
+  def v1_team_membership
+    {
+      friendly_id: team_friendly_id,
+      status: metadata&.status,
     }
   end
 

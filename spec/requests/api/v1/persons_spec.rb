@@ -39,7 +39,7 @@ RSpec.describe "API v1 Persons" do
 
       json = response.parsed_body
       expect(json["avatar"]["is_default"]).to be false
-      expect(json["teams"].pluck("friendly_id")).to contain_exactly("wst")
+      expect(json["teams"]).to contain_exactly({ "friendly_id" => "wst", "status" => "member" })
       expect(json["delegate_status"]).to eq "delegate"
     end
 

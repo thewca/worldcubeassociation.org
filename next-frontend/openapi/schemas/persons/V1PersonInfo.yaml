@@ -37,7 +37,7 @@ properties:
   teams:
     type: array
     items:
-      $ref: '../users/TeamMembership.yaml'
+      $ref: '../users/V1TeamMembership.yaml'
   url:
     type: string
     format: uri

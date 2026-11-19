@@ -271,7 +271,7 @@ class Person < ApplicationRecord
   end
 
   def teams
-    user&.team_roles&.map(&:team_membership) || []
+    user&.team_roles&.map(&:v1_team_membership) || []
   end
 
   # Singles are the base because there is never an average without a single.

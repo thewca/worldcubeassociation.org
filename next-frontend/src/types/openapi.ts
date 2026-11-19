@@ -1714,15 +1714,16 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
-        TeamMembership: {
-            id: number;
+        /** @description A team, committee, council or the board that the person is currently part of. */
+        V1TeamMembership: {
             /** @example wst */
             friendly_id: string;
-            leader: boolean;
-            senior_member: boolean;
-            name?: string;
-            wca_id?: string;
-            avatar?: components["schemas"]["UserAvatar"];
+            /**
+             * @description Null for the board, which has no ranks among its members.
+             * @example senior_member
+             * @enum {string|null}
+             */
+            status: "leader" | "senior_member" | "member" | null;
         };
         /** @description The person's best result in an event and where it places them in the rankings. */
         V1Rank: {
@@ -1790,7 +1791,7 @@ export interface components {
              * @example delegate
              */
             delegate_status: string | null;
-            teams: components["schemas"]["TeamMembership"][];
+            teams: components["schemas"]["V1TeamMembership"][];
             /**
              * Format: uri
              * @example https://www.worldcubeassociation.org/persons/2005REYN01
@@ -1836,6 +1837,16 @@ export interface components {
             latitude: number;
             /** @example 13.405 */
             longitude: number;
+        };
+        TeamMembership: {
+            id: number;
+            /** @example wst */
+            friendly_id: string;
+            leader: boolean;
+            senior_member: boolean;
+            name?: string;
+            wca_id?: string;
+            avatar?: components["schemas"]["UserAvatar"];
         };
         Person: {
             /** @example 267 */
