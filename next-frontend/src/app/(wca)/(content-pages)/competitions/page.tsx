@@ -531,7 +531,9 @@ export default function CompetitionsPage() {
                           />
                         ))}
                         <TableHeaderRow>
-                          {t("competitions.index.titles.upcoming")}
+                          {t("competitions.index.titles.upcoming", {
+                            count: upcomingComps.length,
+                          })}
                         </TableHeaderRow>
                       </>
                     )}
@@ -540,8 +542,11 @@ export default function CompetitionsPage() {
                         {filterState.selectedYear !== "all_years"
                           ? t("competitions.index.titles.past", {
                               year: filterState.selectedYear,
+                              count: upcomingComps.length,
                             })
-                          : t("competitions.index.titles.past_all")}
+                          : t("competitions.index.titles.past_all", {
+                              count: upcomingComps.length,
+                            })}
                       </TableHeaderRow>
                     )}
                     {upcomingComps.map((comp) => (
