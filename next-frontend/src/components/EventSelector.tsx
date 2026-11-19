@@ -107,6 +107,8 @@ export function MultiEventSelector({
             align="center"
             disabled={isDisabled}
             size={eventButtonsCompact ? "sm" : undefined}
+            borderColor={currentEventSelected ? "green" : "black"}
+            opacity={currentEventSelected ? 1 : 0.5}
             checked={currentEventSelected}
             onCheckedChange={() => onEventClick(eventId)}
             maxW="16"
