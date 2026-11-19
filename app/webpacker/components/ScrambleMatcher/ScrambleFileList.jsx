@@ -267,7 +267,7 @@ function ScrambleFileBody({
         (prev) => prev.filter((scrFile) => scrFile.id !== data.id),
       );
 
-      dispatchMatchState({ type: 'removeScrambleFile', scrambleFile: data });
+      dispatchMatchState({ type: 'removeScrambleFile', scrambleFile: data, autoMatchSettings });
     },
   });
 
@@ -280,8 +280,9 @@ function ScrambleFileBody({
     () => dispatchMatchState({
       type: 'resetScrambleFile',
       scrambleFile,
+      autoMatchSettings,
     }),
-    [dispatchMatchState, scrambleFile],
+    [dispatchMatchState, scrambleFile, autoMatchSettings],
   );
 
   const currentFileSets = unpackScrambleSets(
