@@ -280,8 +280,8 @@ class Person < ApplicationRecord
 
     ranks_single.select { Event::OFFICIAL_IDS.include?(it.event_id) }.index_by(&:event_id).transform_values do |rank_single|
       {
-        single: rank_single.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS),
-        average: ranks_average_by_event[rank_single.event_id]&.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS),
+        single: rank_single,
+        average: ranks_average_by_event[rank_single.event_id],
       }.compact
     end
   end
@@ -290,9 +290,15 @@ class Person < ApplicationRecord
     Event.where(id: results.select(:event_id)).ids
   end
 
-  # Nested `Result`s would otherwise serialize in the v0 shape.
-  def championship_podium_results
-    championship_podiums.transform_values { |podium| podium.map { it.serializable_hash(Result::V1_SERIALIZE_OPTIONS) } }
+  def as_v1_json
+    serializable_hash(V1_SERIALIZE_OPTIONS).merge(
+      "ranks_by_event" => ranks_by_event.transform_values do |ranks|
+        ranks.transform_values { it.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS) }
+      end,
+      "championship_podium_results" => championship_podiums.transform_values do |podium|
+        podium.as_json(Result::V1_SERIALIZE_OPTIONS)
+      end,
+    )
   end
 
   def gender_visible?
@@ -325,7 +331,7 @@ class Person < ApplicationRecord
   V1_SERIALIZE_OPTIONS = {
     skip_legacy_user_fields: true,
     only: %w[wca_id name gender],
-    methods: %w[url country_iso2 delegate_status teams competition_count event_ids_with_results ranks_by_event medals records completed_solves_count championship_podium_results],
+    methods: %w[url country_iso2 delegate_status teams competition_count event_ids_with_results medals records completed_solves_count],
     include: {
       avatar: UserAvatar::V1_SERIALIZE_OPTIONS,
       previous_persons: { skip_legacy_user_fields: true, only: %w[name], methods: %w[country_iso2] },

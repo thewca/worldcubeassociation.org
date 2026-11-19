@@ -82,6 +82,16 @@ RSpec.describe "API v1 Persons" do
       expect(response.parsed_body["previous_persons"]).to eq [{ "name" => "old name", "country_iso2" => renamed_person.country_iso2 }]
     end
 
+    it "serializes the previous names most recent first" do
+      renamed_person = create(:person, name: "First Name")
+      renamed_person.update_using_sub_id!(name: "Second Name")
+      renamed_person.update_using_sub_id!(name: "Third Name")
+
+      get api_v1_person_path(renamed_person.wca_id)
+
+      expect(response.parsed_body["previous_persons"].pluck("name")).to eq ["Second Name", "First Name"]
+    end
+
     it "404s for an unknown WCA ID" do
       get api_v1_person_path("1000AAAA01")
 

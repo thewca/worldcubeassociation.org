@@ -81,7 +81,7 @@ properties:
     $ref: './V1ChampionshipPodiums.yaml'
   previous_persons:
     type: array
-    description: The names and regions the person competed under before their current ones, oldest first.
+    description: The names and regions the person competed under before their current ones, most recent first.
     items:
       type: object
       required:
