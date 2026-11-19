@@ -414,6 +414,7 @@ export default function CompetitionsPage() {
                     <Button
                       variant="outline"
                       width={{ base: "full", md: "auto" }}
+                      size={{ base: "sm", md: undefined }}
                     >
                       <Icon>
                         <LuSettings2 />
@@ -1066,7 +1067,9 @@ function RegistrationSelect({
           <SegmentGroup.Item
             key={status}
             value={status}
-            width={{ base: "100%", md: "fit-content" }}
+            flex="1 1 0"
+            minWidth="max-content"
+            justifyContent="center"
           >
             <SegmentGroup.ItemText>
               <Stack
