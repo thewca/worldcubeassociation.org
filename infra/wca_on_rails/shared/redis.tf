@@ -9,10 +9,10 @@ resource "aws_elasticache_subnet_group" "redis" {
   ]
 }
 
-resource "aws_elasticache_parameter_group" "redis7_allkeys_lfu" {
-  name        = "redis7allkeyslfu"
-  family      = "redis7"
-  description = "The Redis 7 default config but with LFU"
+resource "aws_elasticache_parameter_group" "valkey8_allkeys_lfu" {
+  name        = "valkey8allkeyslfu"
+  family      = "valkey8"
+  description = "The Valkey 8 default config but with LFU"
 
   parameter {
     name  = "maxmemory-policy"
@@ -25,10 +25,10 @@ resource "aws_elasticache_parameter_group" "redis7_allkeys_lfu" {
   }
 }
 
-resource "aws_elasticache_parameter_group" "sidekiq" {
-  name        = "sidekiqredis"
-  family      = "redis7"
-  description = "the parameter group for sidekiq"
+resource "aws_elasticache_parameter_group" "sidekiq_valkey8" {
+  name        = "sidekiqvalkey8"
+  family      = "valkey8"
+  description = "the valkey parameter group for sidekiq"
 
   parameter {
     name  = "maxmemory-policy"
@@ -40,10 +40,10 @@ output "redis_subnet_group" {
   value = aws_elasticache_subnet_group.redis
 }
 
-output "redis_cache_parameter_group" {
-  value = aws_elasticache_parameter_group.redis7_allkeys_lfu
+output "valkey_cache_parameter_group" {
+  value = aws_elasticache_parameter_group.valkey8_allkeys_lfu
 }
 
-output "redis_sidekiq_parameter_group" {
-  value = aws_elasticache_parameter_group.sidekiq
+output "valkey_sidekiq_parameter_group" {
+  value = aws_elasticache_parameter_group.sidekiq_valkey8
 }
