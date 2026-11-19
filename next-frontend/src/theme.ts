@@ -585,6 +585,15 @@ const customConfig = defineConfig({
           letterSpacing: "wider",
         },
       },
+      tableSection: {
+        value: {
+          fontSize: "sm",
+          lineHeight: "1.5",
+          fontWeight: "medium",
+          textTransform: "uppercase",
+          letterSpacing: "wider",
+        },
+      },
       body: {
         value: {
           fontSize: "0.875rem",
@@ -629,6 +638,19 @@ const customConfig = defineConfig({
           lineHeight: "1.5",
           fontWeight: "medium",
           color: "currentColor",
+        },
+      },
+      mobileTabItem: {
+        value: {
+          fontSize: "0.72rem",
+          fontWeight: "medium",
+        },
+      },
+      // `fill.muted` sets `colorPalette.fg`, which is unreadable on the muted
+      //   background in dark mode. Must come after `layerStyle` to override it.
+      darkModeFg: {
+        value: {
+          color: { _dark: "fg" },
         },
       },
     },
@@ -766,6 +788,11 @@ const customConfig = defineConfig({
       },
       datePicker: {
         slots: [],
+        base: {
+          trigger: {
+            cursor: "pointer",
+          },
+        },
         variants: {
           variant: {
             outline: {
@@ -999,6 +1026,20 @@ const customConfig = defineConfig({
       },
       table: {
         slots: [],
+        compoundVariants: [
+          {
+            variant: "competitions",
+            size: "xs",
+            css: {
+              cell: {
+                px: "1",
+                py: "1",
+                textAlign: "start",
+                verticalAlign: "middle",
+              },
+            },
+          },
+        ],
         variants: {
           variant: {
             competitions: {

@@ -3,13 +3,15 @@ import {
   VStack,
   Stack,
   Field,
-  NativeSelect,
+  Select,
+  Portal,
+  createListCollection,
   SegmentGroup,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import RegionSelector from "@/components/RegionSelector";
-import _ from "lodash";
 import { SingleEventSelector } from "@/components/EventSelector";
+import events from "@/lib/wca/data/events";
 
 type FilterState = {
   event: string;
@@ -39,23 +41,24 @@ interface RecordsFilterBoxProps {
 interface RankingsFilterBoxProps {
   filterState: FilterState & { rankingType: string };
   filterActions: FilterActions & { setType: (type: string) => void };
-  valueLabelMap: Record<string, string>;
 }
 
 interface SegmentedFieldProps {
   label: string;
   value: string;
-  items: string[];
+  items: { label: string; value: string }[];
   onChange: (value: string) => void;
 }
 
-// Segmented control on desktop, native select on mobile where it doesn't fit
+// Use a select on narrow screens where the segmented controls don't fit.
 function SegmentedField({
   label,
   value,
   items,
   onChange,
 }: SegmentedFieldProps) {
+  const collection = createListCollection({ items });
+
   return (
     <Field.Root>
       <Field.Label>{label}</Field.Label>
@@ -68,19 +71,36 @@ function SegmentedField({
         <SegmentGroup.Indicator />
         <SegmentGroup.Items items={items} />
       </SegmentGroup.Root>
-      <NativeSelect.Root hideFrom="md">
-        <NativeSelect.Field
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        >
-          {items.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </NativeSelect.Field>
-        <NativeSelect.Indicator />
-      </NativeSelect.Root>
+      <Select.Root
+        hideFrom="md"
+        collection={collection}
+        value={[value]}
+        onValueChange={({ value }) => value[0] && onChange(value[0])}
+        width="full"
+        lazyMount
+      >
+        <Select.HiddenSelect />
+        <Select.Control>
+          <Select.Trigger aria-label={label}>
+            <Select.ValueText />
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+        <Portal>
+          <Select.Positioner>
+            <Select.Content>
+              {items.map((item) => (
+                <Select.Item item={item} key={item.value}>
+                  <Select.ItemText>{item.label}</Select.ItemText>
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Portal>
+      </Select.Root>
     </Field.Root>
   );
 }
@@ -89,19 +109,55 @@ export function RecordsFilterBox({
   filterState,
   filterActions,
 }: RecordsFilterBoxProps) {
+  const { t } = useT();
+
   return (
     <FilterBox filterState={filterState} filterActions={filterActions}>
       <Stack direction={{ base: "column", md: "row" }}>
         <SegmentedField
-          label="Gender"
+          label={t("results.selector_elements.gender_selector.gender")}
           value={filterState.gender}
-          items={["All", "Male", "Female"]}
+          items={[
+            {
+              value: "All",
+              label: t("results.selector_elements.gender_selector.gender_all"),
+            },
+            {
+              value: "Male",
+              label: t("results.selector_elements.gender_selector.male"),
+            },
+            {
+              value: "Female",
+              label: t("results.selector_elements.gender_selector.female"),
+            },
+          ]}
           onChange={filterActions.setGender}
         />
         <SegmentedField
-          label="Show"
+          label={t("results.selector_elements.show_selector.show")}
           value={filterState.show}
-          items={["mixed", "slim", "separate", "history", "mixed history"]}
+          items={[
+            {
+              value: "mixed",
+              label: t("results.selector_elements.show_selector.mixed"),
+            },
+            {
+              value: "slim",
+              label: t("results.selector_elements.show_selector.slim"),
+            },
+            {
+              value: "separate",
+              label: t("results.selector_elements.show_selector.separate"),
+            },
+            {
+              value: "history",
+              label: t("results.selector_elements.show_selector.history"),
+            },
+            {
+              value: "mixed history",
+              label: t("results.selector_elements.show_selector.mixed_history"),
+            },
+          ]}
           onChange={filterActions.setShow}
         />
       </Stack>
@@ -112,38 +168,63 @@ export function RecordsFilterBox({
 export function RankingsFilterBox({
   filterState,
   filterActions,
-  valueLabelMap,
 }: RankingsFilterBoxProps) {
-  const toValue = (label: string) => _.invert(valueLabelMap)[label];
+  const { t } = useT();
+
+  const rankingTypes = events.byId[filterState.event].is_multiple_blindfolded
+    ? ["single"]
+    : ["single", "average"];
+  const rankingTypeItems = rankingTypes.map((value) => ({
+    value,
+    label: t(`results.selector_elements.type_selector.${value}`),
+  }));
 
   return (
     <FilterBox filterState={filterState} filterActions={filterActions}>
       <Stack direction={{ base: "column", md: "row" }}>
         <SegmentedField
-          label="Type"
-          value={valueLabelMap[filterState.rankingType]}
-          items={[valueLabelMap["single"], valueLabelMap["average"]]}
-          onChange={(label) => filterActions.setType(toValue(label))}
+          label={t("results.selector_elements.type_selector.type")}
+          value={filterState.rankingType}
+          items={rankingTypeItems}
+          onChange={filterActions.setType}
         />
         <SegmentedField
-          label="Gender"
-          value={valueLabelMap[filterState.gender]}
+          label={t("results.selector_elements.gender_selector.gender")}
+          value={filterState.gender}
           items={[
-            valueLabelMap["All"],
-            valueLabelMap["Male"],
-            valueLabelMap["Female"],
+            {
+              value: "All",
+              label: t("results.selector_elements.gender_selector.gender_all"),
+            },
+            {
+              value: "Male",
+              label: t("results.selector_elements.gender_selector.male"),
+            },
+            {
+              value: "Female",
+              label: t("results.selector_elements.gender_selector.female"),
+            },
           ]}
-          onChange={(label) => filterActions.setGender(toValue(label))}
+          onChange={filterActions.setGender}
         />
         <SegmentedField
-          label="Show"
-          value={valueLabelMap[filterState.show]}
+          label={t("results.selector_elements.show_selector.show")}
+          value={filterState.show}
           items={[
-            valueLabelMap["100 persons"],
-            valueLabelMap["100 results"],
-            valueLabelMap["by region"],
+            {
+              value: "100 persons",
+              label: t("results.selector_elements.show_selector.persons"),
+            },
+            {
+              value: "100 results",
+              label: t("results.selector_elements.show_selector.results"),
+            },
+            {
+              value: "by region",
+              label: t("results.selector_elements.show_selector.by_region"),
+            },
           ]}
-          onChange={(label) => filterActions.setShow(toValue(label))}
+          onChange={filterActions.setShow}
         />
       </Stack>
     </FilterBox>

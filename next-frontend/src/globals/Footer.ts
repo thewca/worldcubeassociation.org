@@ -1,35 +1,7 @@
 import type { Block, GlobalConfig } from "payload";
-import type { Route } from "nextjs-routes";
 import { revalidateGlobal } from "@/globals/revalidateGlobal";
-
-type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
-
-const staticLinkOptions = [
-  "/",
-  "/about",
-  "/competitions",
-  "/delegates",
-  "/disclaimer",
-  "/documents",
-  "/export/developer",
-  "/export/results",
-  "/faq",
-  "/incidents",
-  "/logo",
-  "/officers-and-board",
-  "/organizations",
-  "/privacy",
-  "/regulations/about",
-  "/regulations/history",
-  "/regulations/scrambles",
-  "/regulations/translations",
-  "/results/rankings",
-  "/results/records",
-  "/score-tools",
-  "/speedcubing-history",
-  "/teams-committees",
-  "/translators",
-] satisfies StaticRoute[];
+import { marketingTeamAccess } from "@/payload.access";
+import { staticLinkOptions } from "@/globals/staticLinkOptions";
 
 const FooterLinkItem: Block = {
   slug: "FooterLinkItem",
@@ -38,6 +10,10 @@ const FooterLinkItem: Block = {
       name: "displayText",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description: "Link text shown in the footer.",
+      },
     },
     {
       name: "targetLink",
@@ -45,6 +21,9 @@ const FooterLinkItem: Block = {
       options: staticLinkOptions,
       interfaceName: "StaticTargetLink",
       required: true,
+      admin: {
+        description: "Page on this website the link points to.",
+      },
     },
   ],
 };
@@ -56,27 +35,43 @@ const FooterExternalLinkItem: Block = {
       name: "displayText",
       type: "text",
       required: true,
+      localized: true,
+      admin: {
+        description: "Link text shown in the footer.",
+      },
     },
     {
       name: "targetLink",
       type: "text",
       required: true,
+      admin: {
+        description: "URL outside this website the link points to.",
+      },
     },
   ],
 };
 
 export const Footer: GlobalConfig = {
   slug: "footer",
+  access: {
+    update: marketingTeamAccess,
+  },
   fields: [
     {
       name: "navigationLinks",
       type: "blocks",
       blocks: [FooterLinkItem, FooterExternalLinkItem],
+      admin: {
+        description: "Links in the main part of the footer.",
+      },
     },
     {
       name: "legalLinks",
       type: "blocks",
       blocks: [FooterLinkItem],
+      admin: {
+        description: "Links in the legal row at the very bottom of the footer.",
+      },
     },
   ],
   admin: {

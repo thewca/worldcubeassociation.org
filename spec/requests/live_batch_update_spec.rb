@@ -28,7 +28,7 @@ RSpec.describe "WCA Live API batch submit" do
       }
 
       expect do
-        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request
+        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request, as: :json
       end.to have_enqueued_job(BatchUpdateLiveResultJob).once
       expect(response).to be_successful
 
@@ -54,9 +54,23 @@ RSpec.describe "WCA Live API batch submit" do
       }
 
       expect do
-        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request
+        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request, as: :json
       end.not_to have_enqueued_job(BatchUpdateLiveResultJob)
       expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "rejects a user without scoretaking privileges" do
+      sign_in create(:user)
+
+      registration = create(:registration, :accepted, competition: competition)
+      create(:live_result, round: round, registration: registration)
+
+      batch_request = { results: [{ registration_id: registration.id, attempts: attempts_for(111) }] }
+
+      expect do
+        post api_v1_competition_live_batch_add_results_path(competition.id, round.wcif_id), params: batch_request, as: :json
+      end.not_to have_enqueued_job(BatchUpdateLiveResultJob)
+      expect(response).to have_http_status(:forbidden)
     end
   end
 end

@@ -39,8 +39,8 @@
       <div class="form-group">
         <%= label_tag "events" do %>
           <%= t 'competitions.competition_form.events' %>
-          <button type="button" id="select-all-events" class="btn btn-primary btn-xs"><%= t 'competitions.index.all_events' %></button>
-          <button type="button" id="clear-all-events" class="btn btn-default btn-xs"><%= t 'competitions.index.clear' %></button>
+          <button type="button" class="btn btn-primary btn-xs select-all-events"><%= t 'competitions.index.all_events' %></button>
+          <button type="button" class="btn btn-default btn-xs clear-all-events"><%= t 'competitions.index.clear' %></button>
         <% end %>
         <div id="events">
           <% @competition.events.each do |event| %>

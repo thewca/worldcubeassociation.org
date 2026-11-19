@@ -11,6 +11,7 @@ class Person < ApplicationRecord
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
   has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
+  has_many :previous_persons, -> { where.not(sub_id: 1).order(:sub_id) }, class_name: "Person", primary_key: "wca_id", foreign_key: "wca_id", inverse_of: false
   has_many :inbox_persons, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
   has_many :tickets_edit_person, primary_key: "wca_id", foreign_key: "wca_id", class_name: "TicketsEditPerson", inverse_of: :person
   has_many :potential_duplicate_persons, foreign_key: :duplicate_person_id, class_name: "PotentialDuplicatePerson", dependent: :destroy, inverse_of: :duplicate_person
@@ -80,6 +81,7 @@ class Person < ApplicationRecord
   end
 
   delegate :id, to: :user, prefix: true, allow_nil: true
+  delegate :delegate_status, to: :user, allow_nil: true
 
   def update_using_sub_id!(attributes)
     raise unless update_using_sub_id(attributes)
@@ -168,46 +170,50 @@ class Person < ApplicationRecord
            .joins(:event, competition: [:championships])
            .where("championships.championship_type = 'world'")
            .order("YEAR(start_date) DESC, events.rank")
-           .includes(:competition, :format)
+           .includes(:competition, :format, :result_attempts, round: :linked_round)
   end
 
   def championship_podiums_with_condition(championship_type)
-    # Get all championship competitions of the given type where the person made it to the finals.
-    # For each of these competitions, get final results only for people eligible for the championship
-    # and reassign their positions. If a result belongs to the person, add it to the array.
-    [].tap do |championship_podium_results|
-      yield(results)
-        .final
-        .succeeded
-        .order("YEAR(start_date) DESC")
-        .includes(:competition)
-        .map(&:competition)
-        .uniq
-        .each do |competition|
-          yield(competition.results)
-            .final
-            .succeeded
-            .joins(:event)
-            .order("events.rank, pos")
-            .includes(:format, :competition)
-            .group_by do |results|
-              # Group by country_id in the case of a national championship to cover the case of a comp acting as multiple national championships
-              championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : { event_id: results.event_id }
-            end
-            .each_value do |final_results|
-              previous_old_pos = nil
-              previous_new_pos = nil
-              final_results.each_with_index do |result, index|
-                old_pos = result.pos
-                result.pos = (result.pos == previous_old_pos ? previous_new_pos : index + 1)
-                previous_old_pos = old_pos
-                previous_new_pos = result.pos
-                break if result.pos > 3
+    # Positions are reassigned among the finalists eligible for the championship.
+    championship_competition_ids = yield(results)
+                                   .final
+                                   .succeeded
+                                   .order("YEAR(start_date) DESC")
+                                   .pluck(:competition_id)
+                                   .uniq
 
-                championship_podium_results.push result if result.person_id == self.wca_id
-              end
+    eligible_finalists_by_competition = yield(Result.where(competition_id: championship_competition_ids))
+                                        .final
+                                        .succeeded
+                                        .joins(:event)
+                                        .order("events.rank, pos")
+                                        .includes(:format, :competition)
+                                        .group_by(&:competition_id)
+
+    [].tap do |championship_podium_results|
+      championship_competition_ids.each do |competition_id|
+        eligible_finalists_by_competition[competition_id]
+          .group_by do |results|
+            # Group by country_id in the case of a national championship to cover the case of a comp acting as multiple national championships
+            championship_type == :national ? { event_id: results.event_id, country_id: results.country_id } : { event_id: results.event_id }
+          end
+          .each_value do |final_results|
+            previous_old_pos = nil
+            previous_new_pos = nil
+            final_results.each_with_index do |result, index|
+              old_pos = result.pos
+              result.pos = (result.pos == previous_old_pos ? previous_new_pos : index + 1)
+              previous_old_pos = old_pos
+              previous_new_pos = result.pos
+              break if result.pos > 3
+
+              championship_podium_results.push result if result.person_id == self.wca_id
             end
-        end
+          end
+      end
+
+      # Preloaded here rather than above, so it only covers the person's own podiums and not every finalist.
+      ActiveRecord::Associations::Preloader.new(records: championship_podium_results, associations: [:result_attempts, { round: :linked_round }]).call
     end
   end
 
@@ -256,22 +262,23 @@ class Person < ApplicationRecord
   end
 
   def competition_count
-    competitions.count
+    competitions.size
   end
 
-  # Staff badges on the profile come off the linked user, and a person need not have one.
-  # Serializing through `user` is the legacy behaviour of `serializable_hash` below, but that
-  # path drops the status as soon as the caller asks for any methods of its own.
-  def delegate_status
-    user&.delegate_status
+  # Persons can exist with undefined users. In this case, we want to display the default avatar instead of nothing.
+  def avatar
+    (user || User.new).avatar
   end
 
-  # A person can have a single but not an average, but never an average without a single,
-  # which is why the singles are the base for the lookup.
+  def teams
+    user&.team_roles&.map(&:v1_team_membership) || []
+  end
+
+  # Singles are the base because there is never an average without a single.
   def ranks_by_event
     ranks_average_by_event = ranks_average.index_by(&:event_id)
 
-    ranks_single.index_by(&:event_id).transform_values do |rank_single|
+    ranks_single.select { Event::OFFICIAL_IDS.include?(it.event_id) }.index_by(&:event_id).transform_values do |rank_single|
       {
         single: rank_single,
         average: ranks_average_by_event[rank_single.event_id],
@@ -279,16 +286,19 @@ class Person < ApplicationRecord
     end
   end
 
-  # An event only earns a rank once the person has a successful solve in it, so `ranks_by_event`
-  # is not a stand-in for the events they competed in: it drops every event they only ever DNFed.
   def event_ids_with_results
     Event.where(id: results.select(:event_id)).ids
   end
 
-  # `championship_podiums` hands back `Result` records, which serialize in the v0 shape unless
-  # they are told otherwise, so the v1 shape has to be spelled out here.
-  def championship_podium_results
-    championship_podiums.transform_values { |podium| podium.map { it.serializable_hash(Result::V1_SERIALIZE_OPTIONS) } }
+  def to_v1_json
+    serializable_hash(V1_SERIALIZE_OPTIONS).merge(
+      "ranks_by_event" => ranks_by_event.transform_values do |ranks|
+        ranks.transform_values { it.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS) }
+      end,
+      "championship_podium_results" => championship_podiums.transform_values do |podium|
+        podium.as_json(Result::V1_SERIALIZE_OPTIONS)
+      end,
+    )
   end
 
   def gender_visible?
@@ -319,8 +329,13 @@ class Person < ApplicationRecord
   }.freeze
 
   V1_SERIALIZE_OPTIONS = {
-    only: %w[wca_id name gender teams avatar],
-    methods: %w[url country_iso2 delegate_status competition_count event_ids_with_results ranks_by_event medals records completed_solves_count championship_podium_results],
+    skip_legacy_user_fields: true,
+    only: %w[wca_id name gender],
+    methods: %w[url country_iso2 delegate_status teams competition_count event_ids_with_results medals records completed_solves_count],
+    include: {
+      avatar: UserAvatar::V1_SERIALIZE_OPTIONS,
+      previous_persons: { skip_legacy_user_fields: true, only: %w[name], methods: %w[country_iso2] },
+    },
   }.freeze
 
   USER_COMMON_SERIALIZE_OPTIONS = {
@@ -433,6 +448,9 @@ class Person < ApplicationRecord
   end
 
   def serializable_hash(options = nil)
+    # v1 does not need the additional information that is being added to the v0 endpoint by this function
+    return super if options&.dig(:skip_legacy_user_fields)
+
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase
     json[:id] = self.wca_id

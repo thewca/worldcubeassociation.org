@@ -197,6 +197,7 @@ en:
     type_label: "Qualification Type"
     result_type: "Result Type"
     for_event: "Qualification for %{event}"
+    preview: "Qualification preview"
     type:
       none: "No qualification"
       result: "By Result"
@@ -215,8 +216,16 @@ en:
       ranking: "Top %{ranking} by average"
       any_result: "Any average"
     deadline:
-      description: "Qualification Deadline"
+      description: "Qualification Window Deadline"
       by_date: "by %{date}"
+    earliest_date:
+      description: "Qualification Window Start Date"
+      from_date: "on or after %{date}"
+      window_too_short: "The Window Start Date must be at least %{days} days before the Window Deadline."
+      explanation:
+        '1': "Qualification Window Start Date is optional. If left empty, any result achieved before the Deadline counts."
+        '2': "If a Window Start Date is entered, only results achieved on or after the Window Start Date count towards the qualification."
+        '3': "The Window Start Date must be at least %{days} days before the Window Deadline."
   #context: other activities which occur in the schedule
   activity:
     registration: "On-site registration"
@@ -280,11 +289,15 @@ en:
       name: "Name"
       callback_url: "Callback Url"
       owner: "Owner"
+      confidential: "Confidential?"
       application_id: "Application ID"
       actions: "Actions"
       secret: "Secret"
       scopes: "Scopes"
       callback_urls: "Callback Urls"
+      confidentiality:
+        'yes': "Yes"
+        'no': "No"
   helpers:
     submit:
       competition_medium:
@@ -623,6 +636,8 @@ en:
           disable_section_content: "The WST strongly advise you to not disable 2FA, but you can by clicking the button below. Please note that if you reactivate 2FA you will have to reconfigure your device(s)."
           disabled_success: "Successfully disabled two-factor authentication."
           disabled_failed: "Couldn't disable 2FA, please see errors below."
+      destroy:
+        success: "You have been signed out."
       destroy_other:
         success: "Successfully signed out of other devices."
     shared:
@@ -662,6 +677,7 @@ en:
       applications:
         help:
           https_info: 'HTTPS is required unless the host is "localhost"'
+          confidential: 'Application will be used where the client secret can be kept confidential. Native mobile apps and Single Page Apps are considered non-confidential.'
           scopes_html: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10" target="_blank">here</a> for a list of supported scopes.'
       #context: and asking the user "The application will be able to"
       scopes:
@@ -726,6 +742,21 @@ en:
       manage_users: "Manage users"
       delegate: "Delegate"
       panel: "Panel"
+      #context: Names of the admin panels
+      panels:
+        admin: "Admin panel"
+        volunteer: "Volunteer panel"
+        delegate: "Delegate panel"
+        wapc: "WAC panel"
+        wfc: "WFC panel"
+        wrt: "WRT panel"
+        wst: "WST panel"
+        board: "Board panel"
+        leader: "Leader panel"
+        senior_delegate: "Senior Delegate panel"
+        wic: "WIC panel"
+        weat: "WEAT panel"
+        wqac: "WQAC panel"
       polls: "Polls"
       results_team: "Results team"
       results_database: "Database"
@@ -745,9 +776,18 @@ en:
       privacy: "Privacy"
       disclaimer: "Disclaimer"
       find_us: "Find us"
+      switch_to_dark_mode: "Switch to Dark Mode"
+      switch_to_light_mode: "Switch to Light Mode"
   page:
     translators:
       title: "Translators"
+    executives:
+      title: "Executives"
+      joined_wca: "Joined WCA"
+      joined_executives: "Joined Executives Team"
+      more_information: "More Information"
+      close: "Close"
+      person_not_found: "No person found with WCA ID %{wca_id}"
     officers_and_board:
       title: "WCA Officers & Board"
       officers_description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
@@ -757,6 +797,7 @@ en:
       description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. When there are team or committee openings, information about how to apply is posted on the front page."
       contact_button: "Contact"
       no_contact_description: "The contact details of this team/committee is not publicly available."
+      empty: "No teams or committees found. Please check back later."
       groups_name:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
@@ -907,10 +948,6 @@ en:
     volunteer:
       title: "Volunteer"
       text: "Get involved! The WCA has volunteer positions open across different teams. You do not have to be a speedcuber to be a volunteer."
-    become_delegate:
-      title: "Become a Delegate"
-      text: "Help support fair and well-run competitions in your local speedcubing community by applying to become a Trainee Delegate."
-      link_title: "Apply now"
     faq:
       title: "FAQ"
       text: "Take a look at our list of Frequently Asked Questions if you need help with anything. Many questions you have might have an answer there."
@@ -1173,6 +1210,9 @@ en:
         locale: "Locale"
         group_name: "Team/Committee Name"
         delegated_competitions_count: "Number of Delegated Competitions"
+        wca_id: "WCA ID"
+        location: "Location"
+        email: "Email"
   user_groups:
     group_types:
       board: "WCA Board of Directors"
@@ -1456,6 +1496,16 @@ en:
       no_spots_left: "Competition full"
     live:
       title: "Live Results"
+      combined_title: "Combined Dual Rounds"
+      overview:
+        #context: tab listing competitions that have not started yet
+        upcoming: "Upcoming"
+        #context: tab listing competitions that are happening today
+        in_progress: "Right now"
+        #context: tab listing competitions that ended within the last month
+        past_month: "Past month"
+        no_upcoming: "There are no upcoming competitions with live results."
+        search: "Search competitions"
       manage_rounds: "Manage Rounds"
       incompatible:
         external: "This competition is using external scoretaking software - please consult the competition information to find out where to view live scores."
@@ -1514,6 +1564,7 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            select_all: "Select all"
             id: "ID"
             name: "Name"
           quit_menu: "Quit"
@@ -1537,7 +1588,7 @@ en:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
     my_competitions:
-      title: "My competitions"
+      title: "My Competitions"
       disclaimer: "Only competitions that use the WCA registration system are shown here. If your competition isn't listed here, check the competition website's own competitor list."
       past_competitions: "Past competitions"
       bookmarked_title: "Bookmarked competitions"
@@ -1552,6 +1603,8 @@ en:
         #context: the "short" version of cutoff, which appear below the format (eg: Bo2/Ao5)
         cutoff: "Cutoff: %{short_cutoff}"
         download_html: "Download all the competition's details as PDF %{here}."
+        download_pdf: "Download the schedule PDF here"
+        download: "Download"
       date: "Date"
       add_to_calendar: "Add to calendar"
       #context: This is shown as a header above the column that shows competition names
@@ -1579,6 +1632,8 @@ en:
       organizer_plural:
         one: "Organizer"
         other: "Organizers"
+      view_more_members: "View %{count} more team members"
+      see_more: "+ %{count} more"
       organization_team: "Organization team"
       #context: Pluralization of the "Delegate" label for a competition form
       delegate:
@@ -1721,8 +1776,21 @@ en:
       delegates_loading: "Waiting to finish loading all Delegates..."
       no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
+      championship_only: "Show only championships"
+      sort:
+        order: "Sort order"
+        start_date_asc: "Start date: ascending"
+        start_date_desc: "Start date: descending"
+        end_date_asc: "End date: ascending"
+        end_date_desc: "End date: descending"
+        announced_at_asc: "Announcement date: ascending"
+        announced_at_desc: "Announcement date: descending"
+        name_asc: "Name: A-Z"
+        name_desc: "Name: Z-A"
       show_registration_status: "Show registration status icon"
       use_admin_view: "Use admin view"
+      #context: date range and city beneath a competition's name on narrow screens
+      date_and_city: "%{date} – %{city}"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
@@ -1760,9 +1828,6 @@ en:
         open: "Open"
         not_open: "Not yet Open"
         closed: "Closed"
-      currently_displaying:
-        one: "Currently Displaying: %{count} competition"
-        other: "Currently Displaying: %{count} competitions"
       #context: actions in the drawer that opens when clicking a competition in the list
       register_now: "Register Now"
       view_competition: "View Competition"
@@ -2015,6 +2080,8 @@ en:
         is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again."
         is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
         is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
+        additional: "Please ensure that you have followed any additional instructions above regarding payment or other registration requirements."
+        email: "You will receive an email when your registration status is updated."
       list:
         empty: "None"
         spots_remaining_plural:
@@ -2098,10 +2165,11 @@ en:
             title: "Approval"
             description: "By organization team"
           payment:
-            title: "Payment information"
+            title: "Payment Information"
             description: "Enter billing information"
           competing:
             title: "Register"
+            summary_title: "Registration"
             description: "Choose your events"
           requirements:
             title: "Requirements"
@@ -2188,6 +2256,7 @@ en:
       cannot_delete_confirmed: "Cannot delete a confirmed competition."
       must_contain_event: "must contain at least one event for this competition"
       fto_not_yet_allowed: "Face Turning Octahedron cannot be held at competitions starting before %{date}."
+      fto_requires_internal_scoretaking: "must be set to Integrated Live Results when holding Face Turning Octahedron."
       schedule_must_match_rounds: "must have at least one round, and all rounds must be included in the schedule."
       must_contain_delegate: "must contain at least one WCA Delegate"
       must_contain_organizer: "must contain at least one organizer"
@@ -2366,8 +2435,23 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+        competitor_results: "Competitor results"
+      general: "General"
+      more: "More"
+      admin: "Admin"
+      results: "Results"
+      events: "Events"
+    h2h:
+      set_number: "Set %{number}"
+      stage_of: "Stage of %{number}"
+      quarterfinal_stage: "Quarterfinal Stage"
+      semifinal_stage: "Semifinal Stage"
+      final_stage: "Final Stage"
+      third_place: "Third Place"
     results_table:
-      h2h_results_disclaimer: "Results determined by a Head-to-Head Finals. Only placement order and best solve are shown, as full Head-to-Head results display is still under development."
+      h2h_results_disclaimer_html: "Results determined by a Head-to-Head Final. Only placement order and best solve are shown here; the full Head-to-Head bracket is available on the <a href=\"%{results_url}\">new results page</a>."
+      show_all_linked_results: "Show results from both rounds"
+      linked_results_disclaimer_html: "This round is part of a Dual Round. The results below are shown per round; combined results across both rounds are available on the <a href=\"%{results_url}\">new results page</a>."
       wca_profile: "WCA profile"
       event: "Event"
       round: "Round"
@@ -2414,6 +2498,7 @@ en:
       unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
     records:
       title: "Records"
+      load_error: "Error fetching records"
     last_updated_html: "Last updated: %{timestamp}"
     filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
     selector_elements:
@@ -2450,6 +2535,7 @@ en:
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
+    copied_to_clipboard: "Copied to clipboard"
   payments:
     header: "Payment History"
     messages:
@@ -2548,6 +2634,10 @@ en:
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
     announcement_info_html: "Announced by %{author_name} on %{date_time}"
+    #context: placeholder of the search field on the announcements list
+    search: "Search announcements"
+    no_announcements: "There are no announcements yet."
+    no_search_results: "No announcements match your search."
     errors:
       unstick_at_future: "must be in the future"
   #context: Contact forms
@@ -2693,7 +2783,8 @@ en:
       delegates_html: "<p><strong>WCA Delegate</strong> is a role defined in the WCA Motions and depicted in the WCA Regulations. The primary duty of a Delegate is to oversee competitions on behalf of the WCA. A WCA Delegate is responsible for making sure that all WCA Competitions are run according to the Purpose, Values, and Regulations of the WCA. The WCA distinguishes between <strong>Senior Delegates</strong>, <strong>Regional Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>, and <strong>Trainee Delegates</strong>%{see_link}.</p>
 <p>In addition to the duties of a WCA Delegate, a Senior Delegate or Regional Delegate is responsible for managing the WCA Delegates in their area and can also be contacted by the community for regional matters.</p>
 <p>New Delegates are listed as Junior Delegates at first; afterwards they are requested to show proficiency managing WCA Competitions before being promoted to WCA Delegates.</p>
-<p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>"
+<p>Trainee Delegates are being trained for the position of WCA Delegate and can only oversee competitions in which a WCA Delegate is present.</p>
+<p>If you are interested in becoming a Trainee Delegate, contact your Regional Delegate to determine your eligibility.</p>"
       see_link_html: " (see %{link})"
       members_html: "All competitors automatically become <strong>members</strong> of the WCA in their first WCA competition."
   speedcubing_history:
@@ -2736,6 +2827,7 @@ en:
       total_delegated: "Total Delegated"
       lead_delegated: "Lead Delegated Competitions"
       history: "History"
+    copy_email: 'Copy email'
   regional_organizations:
     title: "Regional Organizations"
     content: "The WCA acknowledges the following Regional Organizations:"

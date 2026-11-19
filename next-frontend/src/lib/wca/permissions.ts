@@ -15,9 +15,16 @@ export interface PermissionFunctions {
   canRequestToEditProfile: (profile: string) => boolean;
   // `can_manage_incidents` is granted to WRC and admins for every incident or none, so unlike its
   // siblings its scope is never a list of ids and there is nothing to pass in. The same holds for
-  // `can_view_delegate_admin_page`.
+  // `can_view_delegate_admin_page` and `can_organize_competitions`.
   canManageIncidents: () => boolean;
   canViewDelegateAdminPage: () => boolean;
+  canViewPolls: () => boolean;
+  canViewAllUsers: () => boolean;
+  canAdminResults: () => boolean;
+  canCreatePosts: () => boolean;
+  canManageRegionalOrganizations: () => boolean;
+  canAccessCms: () => boolean;
+  canCreateCompetitions: () => boolean;
 }
 
 export type UserPermissions = components["schemas"]["UserPermissions"];
@@ -119,4 +126,13 @@ export const hydrateUserPermissions = (
   canManageIncidents: () => rawPermissions?.can_manage_incidents.scope === "*",
   canViewDelegateAdminPage: () =>
     rawPermissions?.can_view_delegate_admin_page.scope === "*",
+  canViewPolls: () => rawPermissions?.can_view_polls.scope === "*",
+  canViewAllUsers: () => rawPermissions?.can_view_all_users.scope === "*",
+  canAdminResults: () => rawPermissions?.can_admin_results.scope === "*",
+  canCreatePosts: () => rawPermissions?.can_create_posts.scope === "*",
+  canManageRegionalOrganizations: () =>
+    rawPermissions?.can_manage_regional_organizations.scope === "*",
+  canAccessCms: () => rawPermissions?.can_access_cms.scope === "*",
+  canCreateCompetitions: () =>
+    rawPermissions?.can_organize_competitions.scope === "*",
 });

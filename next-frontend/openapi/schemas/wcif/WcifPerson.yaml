@@ -27,7 +27,9 @@ properties:
     type: string
     format: email
   avatar:
-    $ref: "../users/UserAvatar.yaml"
+    oneOf:
+      - $ref: "../users/UserAvatar.yaml"
+      - type: "null"
   roles:
     type: array
     items:

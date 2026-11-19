@@ -21,7 +21,9 @@ export default async function FAQ() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const faqPage = await getCachedGlobal("faq-page", 2);
+  const { lng } = await getT();
+
+  const faqPage = await getCachedGlobal("faq-page", lng, 2);
   const faqQuestionsRaw = faqPage.questions;
 
   if (faqQuestionsRaw.length === 0) {
@@ -48,6 +50,7 @@ export default async function FAQ() {
               headingAs={Card.Title}
               paragraphAs={Card.Description}
               textStyle="body"
+              listProps={{ textStyle: "body" }}
             >
               {faqPage.introTextMarkdown}
             </ChakraMarkdown>

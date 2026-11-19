@@ -13,8 +13,11 @@ import dateSince from '../../lib/helpers/date-since';
 const otherDelegatesHeaders = [
   { label: 'Delegate Name', key: 'user.name' },
   { label: 'WCA ID', key: 'user.wca_id' },
+  { label: 'Email', key: 'user.email' },
   { label: 'Status', key: 'status' },
   { label: 'Location', key: 'metadata.location' },
+  { label: 'Senior Region', key: 'metadata.senior_region' },
+  { label: 'Junior Promotion Date', key: 'metadata.junior_delegate_promotion_date' },
   { label: 'First Delegated', key: 'metadata.first_delegated' },
   { label: 'Last Delegated', key: 'metadata.last_delegated' },
   { label: 'Total Delegated', key: 'metadata.total_delegated' },

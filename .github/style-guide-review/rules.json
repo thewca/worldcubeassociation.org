@@ -1,0 +1,21 @@
+{
+  "include": [
+    "spec/**/*_spec.rb"
+  ],
+  "exclude": [
+    "next-frontend/src/types/**",
+    "**/node_modules/**",
+    "**/vendor/**",
+    "**/*.min.js"
+  ],
+  "instructions": "Report EVERY occurrence of a violation separately, including repeats of the same rule later in the file -- do not stop after the first instance. Cite the section you are applying and explain in prose why the line violates it. Do NOT propose replacement code: leave the suggestion_code and existing_code fields empty and never emit a ```suggestion block. The author decides how to fix it; your job is to point at the rule. Do NOT report bugs, architecture opinions, missing tests, or anything RuboCop / ESLint / Prettier already enforces. Silence is the correct outcome for a clean file.",
+  "rules": [
+    { "path": "spec/**/*_spec.rb", "guides": ["rails.md", "tests.md"] },
+    { "path": "db/migrate/**/*.rb", "guides": ["rails.md"] },
+    { "path": "lib/tasks/**/*.rake", "guides": ["rails.md"] },
+    { "path": "app/webpacker/**/*.{js,jsx}", "guides": ["legacy-frontend.md"] },
+    { "path": "next-frontend/**/*.{ts,tsx}", "guides": ["nextjs-frontend.md", "chakra-ui.md"] },
+    { "path": "app/**/*.rb", "guides": ["rails.md"] },
+    { "path": "lib/**/*.rb", "guides": ["rails.md"] }
+  ]
+}

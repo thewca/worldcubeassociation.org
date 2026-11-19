@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import {
   addItemToArray,
-  ATTEMPTS_UNPACKING_MARKER,
   autoMatchSearch,
   calculateBestInsertIndex,
   getAttemptsMultiplier,
+  INNER_SET_MARKER,
   moveArrayItem,
   removeItemFromArray,
+  repackInnerScramble,
   searchRecursive,
-  thinExtScramble,
   thinExtScrambleSet,
   thinWcifEvent,
   thinWcifRound,
@@ -35,7 +35,10 @@ function mergeMatchedSetsIntoWcif(wcifEvents, matchedScrambleSets) {
             matchedScrSet.matched_scrambles,
             ['is_extra', 'ordered_index'],
           ).map((matchedScramble) => ({
-            ...thinExtScramble(matchedScramble.external_scramble),
+            ...repackInnerScramble(
+              matchedScramble.external_scramble,
+              matchedScramble.external_scramble_set,
+            ),
             scramble_string: matchedScramble.scramble_string,
             is_extra: matchedScramble.is_extra,
           })),
@@ -67,12 +70,12 @@ function unpackRoundAndApplyAction(
   const flatScrambles = unpackScrambleSetsInRound(round.external_scramble_sets, true);
 
   const updatedScrambles = scrambleActionFn(flatScrambles);
-  const maxSetBracket = _.uniqBy(updatedScrambles, ATTEMPTS_UNPACKING_MARKER);
+  const maxSetBracket = _.uniqBy(updatedScrambles, INNER_SET_MARKER);
 
   const referenceLength = getAttemptsMultiplier(round);
 
   const thinScrambles = updatedScrambles.map((scr) => ({
-    ...thinExtScramble(scr),
+    ...repackInnerScramble(scr, undefined),
     is_extra: false,
   }));
 
@@ -80,7 +83,7 @@ function unpackRoundAndApplyAction(
 
   const filledBracket = maxSetBracket.map((set, idx) => ({
     ...thinExtScrambleSet(set),
-    id: set[ATTEMPTS_UNPACKING_MARKER],
+    id: set[INNER_SET_MARKER],
     external_scrambles: chunkedScrambles[idx] ?? [],
   }));
 
@@ -136,7 +139,7 @@ function executeWithAttemptModeChunking(
   return updateFn(scrSets).map((scrSet) => ({
     ...thinExtScrambleSet(scrSet),
     external_scrambles: scrSet.external_scrambles
-      .map((scr) => thinExtScramble(scr)),
+      .map((extScr) => repackInnerScramble(extScr, scrSet)),
   }));
 }
 
@@ -159,7 +162,7 @@ function executeAddExternalToMatching(
         externalScrambleSet,
         destinationIndex,
       ),
-      externalScrambleSet[ATTEMPTS_UNPACKING_MARKER],
+      externalScrambleSet[INNER_SET_MARKER],
     ),
   );
 }
@@ -288,7 +291,7 @@ export default function scrambleMatchReducer(state, action) {
           action.from.eventId,
           action.from.roundId,
           action.originalIndex,
-          action.externalScrambleSet[ATTEMPTS_UNPACKING_MARKER],
+          action.externalScrambleSet[INNER_SET_MARKER],
         );
 
         return executeAddExternalToMatching(

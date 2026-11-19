@@ -41,15 +41,8 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
   def index
     competition_id = params_competition_id
-    competition = Competition.find(competition_id)
-    registrations = competition.registrations.accepted.competing
-    payload = Rails.cache.fetch([
-                                  "registrations_v2_list",
-                                  competition.id,
-                                  competition.event_ids,
-                                  registrations.joins(:user).order(:id).pluck(:id, :updated_at, user: [:updated_at]),
-                                ]) do
-      registrations.includes(:user).map(&:to_v2_json)
+    payload = Rails.cache.fetch(["registrations_v2_public_list", competition_id], expires_in: 1.minute) do
+      Competition.find(competition_id).registrations.accepted.competing.includes(:user, :events).map(&:to_v2_json)
     end
     render json: payload
   end
@@ -128,6 +121,9 @@ class Api::V1::RegistrationsController < Api::V1::ApiController
 
     # Only the user themselves can create a registration for the user
     raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) unless authenticated_user.id == @target_user.id
+
+    raise WcaExceptions::RegistrationError.new(:unauthorized, Registrations::ErrorCodes::USER_INSUFFICIENT_PERMISSIONS) if
+      contains_admin_fields?(@request) || @request.dig('competing', 'status').present?
 
     # Only organizers can register when registration is closed
     raise WcaExceptions::RegistrationError.new(:forbidden, Registrations::ErrorCodes::REGISTRATION_CLOSED) unless @competition.registration_currently_open? || authenticated_user.can_manage_competition?(@competition)

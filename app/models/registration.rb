@@ -337,7 +337,6 @@ class Registration < ApplicationRecord
       registrant_id: registrant_id,
       competing: {
         event_ids: event_ids,
-        comments: comments,
       },
     }
     if admin
@@ -348,6 +347,7 @@ class Registration < ApplicationRecord
                                   payment_status: last_payment_status,
                                   paid_amount_iso: paid_entry_fees.cents,
                                   currency_code: paid_entry_fees.currency.iso_code,
+                                  currency_subunit_to_unit: paid_entry_fees.currency.subunit_to_unit,
                                   updated_at: last_payment&.paid_at,
                                 },
                               })

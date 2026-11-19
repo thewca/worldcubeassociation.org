@@ -9,7 +9,7 @@ export type StaffColor = ChakraBadgeProps["colorPalette"];
 
 interface RoleBadgeProps extends ChakraBadgeProps {
   teamRole: string;
-  teamText: string;
+  teamText?: string;
   colorPalette: StaffColor;
 }
 

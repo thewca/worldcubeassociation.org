@@ -21,7 +21,9 @@ export default async function About() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const aboutPage = await getCachedGlobal("about-us-page");
+  const { lng } = await getT();
+
+  const aboutPage = await getCachedGlobal("about-us-page", lng);
 
   const aboutItems = aboutPage.blocks;
 

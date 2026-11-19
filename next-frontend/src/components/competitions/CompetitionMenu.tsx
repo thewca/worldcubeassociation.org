@@ -1,68 +1,75 @@
-import { components } from "@/types/openapi";
-import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
-import {
-  afterCompetitionTabs,
-  beforeCompetitionTabs,
-  liveTab,
-} from "@/lib/wca/competitions/tabs";
+import { liveTab } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
-import { Alert, Link } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
-
-const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
+import OpenapiError from "@/components/ui/openapiError";
+import { Alert, Link } from "@chakra-ui/react";
+import {
+  competitionStatus,
+  getCompetitionMenuData,
+} from "@/lib/competitionMenu/getCompetitionMenuData";
+import MobileTabMenu from "./MobileTabMenu";
 
 export default async function CompetitionMenu({
-  competitionInfo,
-  children,
+  params,
 }: {
-  children: React.ReactNode;
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  params: Promise<{ competitionId: string }>;
 }) {
+  const { competitionId } = await params;
   const { t } = await getT();
 
-  const hasEnded =
-    hasPassedEndOfDay(competitionInfo.end_date) && !LIVE_RESULT_BETA;
+  const menu = await getCompetitionMenuData(competitionId);
 
-  const isOngoing = !hasEnded && hasPassed(competitionInfo.start_date);
+  if (!menu.ok) return <OpenapiError t={t} response={menu.response} />;
 
-  const isAwaitingResults = hasEnded && !competitionInfo.results_posted_at;
+  const customTabs = menu.competitionInfo.tabs.map((tab) => tab.name);
 
-  const baseTabs = hasEnded
-    ? afterCompetitionTabs(competitionInfo, isAwaitingResults)
-    : beforeCompetitionTabs(competitionInfo);
+  return (
+    <>
+      <TabMenu
+        competitionInfo={menu.competitionInfo}
+        tabs={menu.tabs}
+        customTabs={customTabs}
+      />
+      <MobileTabMenu
+        tabs={menu.tabs}
+        customTabs={customTabs}
+        competitionId={competitionId}
+      />
+    </>
+  );
+}
 
-  const competitionLiveTab = liveTab(competitionInfo);
+// Streams in on its own, so the tab content above which it sits isn't held back by it.
+export async function AwaitingResultsAlert({
+  params,
+}: {
+  params: Promise<{ competitionId: string }>;
+}) {
+  const { competitionId } = await params;
+  const menu = await getCompetitionMenuData(competitionId);
 
-  const tabs = isOngoing ? [...baseTabs, competitionLiveTab] : baseTabs;
+  // `CompetitionMenu` already renders the error for this same cached request.
+  if (!menu.ok) return null;
 
+  if (!competitionStatus(menu.competitionInfo).isAwaitingResults) return null;
+
+  const { t } = await getT();
+  const competitionLiveTab = liveTab(menu.competitionInfo);
   const liveResultsHref =
     competitionLiveTab.externalHref ?? competitionLiveTab.href;
 
   return (
-    <TabMenu
-      competitionInfo={competitionInfo}
-      tabs={tabs}
-      customTabs={competitionInfo.tab_names}
-    >
-      {isAwaitingResults && (
-        <Alert.Root status="info" marginBottom="4">
-          <Alert.Indicator />
-          <Alert.Content>
-            <Alert.Title>
-              {t("competitions.messages.upload_results")}
-            </Alert.Title>
-            {!competitionLiveTab.disabled && (
-              <Alert.Description>
-                {t("competitions.messages.provisional_live_results")}{" "}
-                <Link href={liveResultsHref}>
-                  {t("competitions.live.title")}
-                </Link>
-              </Alert.Description>
-            )}
-          </Alert.Content>
-        </Alert.Root>
-      )}
-      {children}
-    </TabMenu>
+    <Alert.Root status="info" marginBottom="4">
+      <Alert.Indicator />
+      <Alert.Content>
+        <Alert.Title>{t("competitions.messages.upload_results")}</Alert.Title>
+        {!competitionLiveTab.disabled && (
+          <Alert.Description>
+            {t("competitions.messages.provisional_live_results")}{" "}
+            <Link href={liveResultsHref}>{t("competitions.live.title")}</Link>
+          </Alert.Description>
+        )}
+      </Alert.Content>
+    </Alert.Root>
   );
 }

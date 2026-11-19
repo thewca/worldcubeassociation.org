@@ -23,7 +23,7 @@ const delegateStatusOptions = [
   delegateRegionsStatus.delegate,
 ];
 const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
-  text: I18n.t(`enums.user_roles.status.delegate_regions.${option}`),
+  get text() { return I18n.t(`enums.user_roles.status.delegate_regions.${option}`); },
   value: option,
 }));
 const initialValue = {

@@ -3,7 +3,7 @@
 class MatchedScrambleSet < ApplicationRecord
   SERIALIZATION_INCLUDES = {
     external_scramble_set: ExternalScrambleSet::SERIALIZATION_INCLUDES,
-    matched_scrambles: [:external_scramble],
+    matched_scrambles: MatchedScramble::SERIALIZATION_INCLUDES,
     round: [:competition_event],
   }.freeze
 

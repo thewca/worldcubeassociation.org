@@ -5,6 +5,10 @@ require 'active_support/concern'
 module PersonalBest
   extend ActiveSupport::Concern
 
+  V1_SERIALIZE_OPTIONS = {
+    only: %w[best world_rank continent_rank country_rank],
+  }.freeze
+
   def self.rank_value_key(version: Competition::WCIF_STABLE_VERSION)
     if Gem::Version.new(version) >= Gem::Version.new("2.0.0")
       "value"

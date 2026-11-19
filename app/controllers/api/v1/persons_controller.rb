@@ -7,7 +7,7 @@ class Api::V1::PersonsController < Api::V1::ApiController
   def show
     person = Person.current.includes(:user, :ranks_single, :ranks_average).find_by!(wca_id: params.require(:wca_id))
 
-    render json: person.as_json(Person::V1_SERIALIZE_OPTIONS)
+    render json: person.to_v1_json
   end
 
   def results
@@ -29,9 +29,9 @@ class Api::V1::PersonsController < Api::V1::ApiController
   private def person_results
     person = Person.current.find_by!(wca_id: params.require(:wca_id))
 
-    # `attempts` reads `result_attempts`, and the competition columns come off the association,
-    # so both have to be preloaded or every row fires its own query.
-    person.results.includes(:competition, :result_attempts)
+    # `attempts` reads `result_attempts`, and the competition columns and `ranking` come off their
+    # associations, so all three have to be preloaded or every row fires its own query.
+    person.results.includes(:competition, :result_attempts, round: :linked_round)
   end
 
   private def render_results(results)

@@ -63,7 +63,7 @@ class UserAvatar < ApplicationRecord
         Rails.application.routes.url_helpers.rails_representation_url(self.image)
       end
     when 'local'
-      ActionController::Base.helpers.asset_url(self.filename)
+      URI.join(EnvConfig.ROOT_URL, ActionController::Base.helpers.asset_url(self.filename)).to_s
     end
   end
 
@@ -241,10 +241,7 @@ class UserAvatar < ApplicationRecord
 
     return unless thumbnail_changed
 
-    cloudfront_sdk = ::Aws::CloudFront::Client.new(
-      access_key_id: AppSecrets.AWS_ACCESS_KEY_ID,
-      secret_access_key: AppSecrets.AWS_SECRET_ACCESS_KEY,
-    )
+    cloudfront_sdk = ::Aws::CloudFront::Client.new(credentials: Aws::ECSCredentials.new)
 
     store_path = self.thumbnail_image.processed.key.delete_prefix('/')
     api_reference = "avatar-thumbnail_#{self.id}_#{Time.now.to_i}"
@@ -312,6 +309,11 @@ class UserAvatar < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id status thumbnail_crop_x thumbnail_crop_y thumbnail_crop_w thumbnail_crop_h],
     methods: %w[url thumb_url is_default can_edit_thumbnail],
+  }.freeze
+
+  V1_SERIALIZE_OPTIONS = {
+    only: [],
+    methods: %w[url thumb_url is_default],
   }.freeze
 
   def serializable_hash(options = nil)

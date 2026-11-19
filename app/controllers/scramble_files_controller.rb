@@ -83,6 +83,7 @@ class ScrambleFilesController < ApplicationController
     scramble_upload = ScrambleFileUpload.find_by(id: scramble_file_id)
 
     return head :not_found if scramble_upload.blank?
+    return if redirect_to_root_unless_user(:can_upload_competition_results?, scramble_upload.competition)
 
     destroyed_file = scramble_upload.destroy
 
@@ -106,21 +107,21 @@ class ScrambleFilesController < ApplicationController
 
         round.scramble_set_count = updated_round[:scramble_set_count]
 
-        updated_round[:matched_scramble_sets].each_with_index do |ext_set, set_idx|
+        updated_round[:matched_scramble_sets].each_with_index do |ui_matched_set, set_idx|
           matched_set = round.matched_scramble_sets.build(
-            external_scramble_set_id: ext_set[:id],
+            external_scramble_set_id: ui_matched_set[:external_id],
             ordered_index: set_idx,
           )
 
-          extra_scrambles, std_scrambles = ext_set[:matched_scrambles].partition { it[:is_extra] }
+          extra_scrambles, std_scrambles = ui_matched_set[:matched_scrambles].partition { it[:is_extra] }
 
           [std_scrambles, extra_scrambles].each do |scrambles|
-            scrambles.each_with_index do |ext_scr, scr_idx|
+            scrambles.each_with_index do |ui_matched_scr, scr_idx|
               matched_set.matched_scrambles.build(
-                external_scramble_id: ext_scr[:id],
+                external_scramble_id: ui_matched_scr[:external_id],
                 ordered_index: scr_idx,
-                scramble_string: ext_scr[:scramble_string],
-                is_extra: ext_scr[:is_extra],
+                scramble_string: ui_matched_scr[:scramble_string],
+                is_extra: ui_matched_scr[:is_extra],
               )
             end
           end

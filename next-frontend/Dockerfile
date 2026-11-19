@@ -86,13 +86,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
 COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
 COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
-COPY --from=builder /app/export-dump.sh /app/export-dump.sh
 
 # jq = Reading JSON data transmitted from Vault to extract secrets
-# mongodb-tools = the `mongodump` command to create Payload CMS database copies
-# aws-cli = The S3 sync command to upload the dump to our internal storage
-# zip = Compressing the dump(s) before upload
-RUN apk add --no-cache jq mongodb-tools aws-cli zip
+RUN apk add --no-cache jq
 
 USER nextjs
 

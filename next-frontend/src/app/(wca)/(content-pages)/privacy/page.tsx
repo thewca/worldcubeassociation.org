@@ -19,7 +19,9 @@ export default async function Privacy() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
-  const privacyPage = await getCachedGlobal("privacy-page");
+  const { lng } = await getT();
+
+  const privacyPage = await getCachedGlobal("privacy-page", lng);
 
   const privacyItems = privacyPage.blocks;
 

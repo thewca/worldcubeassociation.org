@@ -124,7 +124,9 @@ export function AdditionalInformationCard({
         <ChakraMarkdown
           paragraphAs={Card.Description}
           imageProps={{ maxW: { base: "full", md: "sm" } }}
+          listProps={{ textStyle: "body" }}
           textStyle="body"
+          linkProps={{ fontSize: "inherit" }}
         >
           {competitionInfo.information}
         </ChakraMarkdown>
@@ -192,6 +194,7 @@ export async function RegistrationCard({
                   competitionInfo.base_entry_fee_lowest_denomination
                 }
                 currencyCode={competitionInfo.currency_code}
+                subunitToUnit={competitionInfo.currency_subunit_to_unit}
               />
             </Stat.ValueText>
           </Stat.Root>
@@ -213,11 +216,14 @@ export async function RegistrationCard({
               ) : (
                 <>
                   <FormatNumber
-                    value={competitionInfo.competitor_limit - spotsLeft}
+                    value={
+                      competitionInfo.competitor_limit - Math.max(spotsLeft, 0)
+                    }
                   />
                   {!registrationClosed && (
                     <>
-                      &sol;
+                      {/* Escape character for "/" */}
+                      <span>&#47;</span>
                       <FormatNumber value={competitionInfo.competitor_limit} />
                     </>
                   )}
@@ -234,14 +240,17 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              {/* A free guest entry formats as a zero amount rather than the word "free",
-                  which has no translation of its own. */}
-              <CurrencyValue
-                lowestDenomination={
-                  competitionInfo.guests_entry_fee_lowest_denomination
-                }
-                currencyCode={competitionInfo.currency_code}
-              />
+              {competitionInfo.guests_entry_fee_lowest_denomination ? (
+                <CurrencyValue
+                  lowestDenomination={
+                    competitionInfo.guests_entry_fee_lowest_denomination
+                  }
+                  currencyCode={competitionInfo.currency_code}
+                  subunitToUnit={competitionInfo.currency_subunit_to_unit}
+                />
+              ) : (
+                t("competitions.competition_info.guests_free.free")
+              )}
             </Stat.ValueText>
           </Stat.Root>
 
@@ -340,8 +349,10 @@ export function InfoCard({
   return (
     <Card.Root>
       <Card.Body>
-        <Heading textStyle="h2" display="flex" alignItems="center">
-          {competitionInfo.name}
+        <Heading textStyle="h2" display="flex" alignItems="center" asChild>
+          <Text as="span" minW={0} overflowWrap="anywhere">
+            {competitionInfo.name}
+          </Text>
           {bookmark && (
             <BookmarkButton
               competitionId={competitionInfo.id}
@@ -398,58 +409,6 @@ export function InfoCard({
             </Stat.Label>
             <Stat.ValueText>
               <FormatNumber value={competitionInfo.number_of_bookmarks} /> Times
-            </Stat.ValueText>
-          </Stat.Root>
-        </SimpleGrid>
-      </Card.Body>
-    </Card.Root>
-  );
-}
-
-export function SubPageCard({
-  competitionInfo,
-  t,
-}: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
-  t: TFunction;
-}) {
-  return (
-    <Card.Root>
-      <Card.Body>
-        <Card.Title asChild>
-          <Heading textStyle="h2" display="flex" alignItems="center">
-            {competitionInfo.name}
-          </Heading>
-        </Card.Title>
-
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap="4">
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <CompRegoOpenDateIcon />
-              Date
-            </Stat.Label>
-            <Stat.ValueText>
-              {formatDateRange(
-                new Date(competitionInfo.start_date),
-                new Date(competitionInfo.end_date),
-              )}
-            </Stat.ValueText>
-          </Stat.Root>
-
-          <Stat.Root variant="competition">
-            <Stat.Label>
-              <LocationIcon />
-              {t("competitions.competition_info.location")}
-            </Stat.Label>
-            {/* City and country overflowed a narrow card on one line; wrapping drops the
-                country onto its own row exactly when it no longer fits. */}
-            <Stat.ValueText flexWrap="wrap">
-              <Text>{competitionInfo.city}, </Text>
-              <CountryMap
-                code={competitionInfo.country_iso2}
-                t={t}
-                fontWeight="bold"
-              />
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>

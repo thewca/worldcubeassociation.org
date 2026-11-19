@@ -7,12 +7,16 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { scrambleFileUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import {
-  ATTEMPTS_UNPACKING_MARKER,
-  autoMatchSearch, calculateBestInsertIndex, filterUnusedScrambles,
+  autoMatchSearch,
+  calculateBestInsertIndex,
+  filterUnusedScrambles,
   getAttemptsMultiplier,
+  INNER_SET_MARKER,
   prefixForIndex,
   roundToRoundTypeName,
-  searchRecursive, sortSetsForAutoMatch, unpackMatchingState,
+  searchRecursive,
+  sortSetsForAutoMatch,
+  unpackMatchingState,
   unpackScrambleSets,
 } from './util';
 import { events } from '../../lib/wca-data.js.erb';
@@ -316,7 +320,7 @@ function ScrambleFileBody({
         </Table.Header>
         <Table.Body>
           {orderedScrambleSets.map((scrSet, idx, allSets) => {
-            const isAttemptMappedScramble = scrSet[ATTEMPTS_UNPACKING_MARKER];
+            const isAttemptMappedScramble = scrSet[INNER_SET_MARKER];
             const stateSearchSuffix = isAttemptMappedScramble ? ['external_scrambles'] : [];
 
             const actualNavigation = searchRecursive(

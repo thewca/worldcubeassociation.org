@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Form } from 'semantic-ui-react';
 import {
   countries,
@@ -13,13 +13,13 @@ import {
 } from '../../wca/FormBuilder/input/FormInputs';
 import SubSection from '../../wca/FormBuilder/SubSection';
 
-const countriesOptions = Object.values(countries.byIso2).map((country) => ({
-  key: country.id,
-  value: country.id,
-  text: country.name,
-})).sort((a, b) => a.text.localeCompare(b.text));
-
 export default function VenueInfo() {
+  const countriesOptions = useMemo(() => Object.values(countries.byIso2).map((country) => ({
+    key: country.id,
+    value: country.id,
+    text: country.name,
+  })).sort((a, b) => a.text.localeCompare(b.text)), []);
+
   const circles = [
     { id: 'danger', radius: nearbyCompetitionDistanceDanger, color: '#d9534f' },
     { id: 'warning', radius: nearbyCompetitionDistanceWarning, color: '#f0ad4e' },

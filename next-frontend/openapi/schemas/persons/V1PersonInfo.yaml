@@ -1,12 +1,11 @@
 type: object
-description: >-
-  Everything the profile page renders above its tabs, for one person. This is the person shape for
-  the v1 API; the v0 `PersonInfo` schema nests the person's own fields under `person` and is not
-  interchangeable with it.
+description: General information about a person, along with a summary of their results.
 required:
   - wca_id
   - name
+  - gender
   - country_iso2
+  - delegate_status
   - url
   - teams
   - avatar
@@ -17,6 +16,7 @@ required:
   - records
   - completed_solves_count
   - championship_podium_results
+  - previous_persons
 properties:
   wca_id:
     type: string
@@ -31,13 +31,13 @@ properties:
     type: string
     example: "US"
   delegate_status:
-    type: string
-    description: Absent for a person who is not a delegate, or who has no WCA account at all.
+    type: [string, "null"]
+    description: Null for a person who is not a delegate, or who has no WCA account at all.
     example: "delegate"
   teams:
     type: array
     items:
-      $ref: '../users/TeamMembership.yaml'
+      $ref: '../users/V1TeamMembership.yaml'
   url:
     type: string
     format: uri
@@ -50,16 +50,26 @@ properties:
   event_ids_with_results:
     type: array
     description: >-
-      Every event the person has a result in, ordered by event rank. Wider than the keys of
-      `ranks_by_event`, which only covers events the person has a successful solve in.
+      Every event the person has a result in, including events they never had a successful solve
+      in, ordered by event rank.
     items:
       type: string
     example: ["333", "222", "444"]
   ranks_by_event:
     type: object
-    description: Keyed by event id. An event the person has no single for is absent.
+    description: >-
+      The person's ranks in official events, keyed by event id. An event the person has no single
+      for is absent.
     additionalProperties:
-      $ref: '../results/SingleAndAverageRank.yaml'
+      type: object
+      description: A person can have a single in an event without an average, never the other way round.
+      required:
+        - single
+      properties:
+        single:
+          $ref: '../results/V1Rank.yaml'
+        average:
+          $ref: '../results/V1Rank.yaml'
   medals:
     $ref: '../results/Medals.yaml'
   records:
@@ -69,3 +79,18 @@ properties:
     example: 1337
   championship_podium_results:
     $ref: './V1ChampionshipPodiums.yaml'
+  previous_persons:
+    type: array
+    description: The names and regions the person competed under before their current ones, most recent first.
+    items:
+      type: object
+      required:
+        - name
+        - country_iso2
+      properties:
+        name:
+          type: string
+          example: "Tim Reynolds"
+        country_iso2:
+          type: string
+          example: "CA"
