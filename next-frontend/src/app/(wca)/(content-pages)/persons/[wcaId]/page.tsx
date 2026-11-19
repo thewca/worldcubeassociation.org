@@ -57,9 +57,13 @@ export default async function PersonOverview({
 
     const roleMap = [
       { condition: teamText === "BOARD", teamRole: "", staffColor: "black" },
-      { condition: team.leader, teamRole: "LEADER", staffColor: "blue" },
       {
-        condition: team.senior_member,
+        condition: team.status === "leader",
+        teamRole: "LEADER",
+        staffColor: "blue",
+      },
+      {
+        condition: team.status === "senior_member",
         teamRole: "SENIOR MEMBER",
         staffColor: "yellow",
       },

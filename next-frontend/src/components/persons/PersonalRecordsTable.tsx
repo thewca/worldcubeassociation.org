@@ -13,8 +13,8 @@ interface RecordsProps {
 }
 
 const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
-  const getColor = (pr: number) => {
-    if (pr === 0) return undefined;
+  const getColor = (pr?: number) => {
+    if (!pr) return undefined;
     if (pr === 1) return "recordMarkers.personal";
     if (pr < 11) return "recordMarkers.national";
     return undefined;
