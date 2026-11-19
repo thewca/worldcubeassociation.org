@@ -11,6 +11,7 @@ class Person < ApplicationRecord
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranks_average, primary_key: "wca_id", class_name: "RanksAverage"
   has_many :ranks_single, primary_key: "wca_id", class_name: "RanksSingle"
+  has_many :previous_persons, -> { where.not(sub_id: 1).order(:sub_id) }, class_name: "Person", primary_key: "wca_id", foreign_key: "wca_id", inverse_of: false
   has_many :inbox_persons, primary_key: "wca_id", foreign_key: "wca_id", inverse_of: :person
   has_many :tickets_edit_person, primary_key: "wca_id", foreign_key: "wca_id", class_name: "TicketsEditPerson", inverse_of: :person
   has_many :potential_duplicate_persons, foreign_key: :duplicate_person_id, class_name: "PotentialDuplicatePerson", dependent: :destroy, inverse_of: :duplicate_person
@@ -173,9 +174,7 @@ class Person < ApplicationRecord
   end
 
   def championship_podiums_with_condition(championship_type)
-    # Get all championship competitions of the given type where the person made it to the finals,
-    # then the final results of everyone eligible for those championships in one query.
-    # Positions are reassigned among the eligible finalists of each competition, and the person's own podiums are kept.
+    # Positions are reassigned among the finalists eligible for the championship.
     championship_competition_ids = yield(results)
                                    .final
                                    .succeeded
@@ -213,8 +212,7 @@ class Person < ApplicationRecord
           end
       end
 
-      # Only the person's own podium results are rendered with their attempts and round, so they are
-      # preloaded here instead of in the query above, which loads every eligible finalist.
+      # Preloaded here rather than above, so it only covers the person's own podiums and not every finalist.
       ActiveRecord::Associations::Preloader.new(records: championship_podium_results, associations: [:result_attempts, { round: :linked_round }]).call
     end
   end
@@ -276,8 +274,7 @@ class Person < ApplicationRecord
     user&.team_roles&.map(&:team_membership) || []
   end
 
-  # A person can have a single but not an average, but never an average without a single,
-  # which is why the singles are the base for the lookup.
+  # Singles are the base because there is never an average without a single.
   def ranks_by_event
     ranks_average_by_event = ranks_average.index_by(&:event_id)
 
@@ -289,20 +286,13 @@ class Person < ApplicationRecord
     end
   end
 
-  # An event only earns a rank once the person has a successful solve in it, so `ranks_by_event`
-  # is not a stand-in for the events they competed in: it drops every event they only ever DNFed.
   def event_ids_with_results
     Event.where(id: results.select(:event_id)).ids
   end
 
-  # `championship_podiums` hands back `Result` records, which serialize in the v0 shape unless
-  # they are told otherwise, so the v1 shape has to be spelled out here.
+  # Nested `Result`s would otherwise serialize in the v0 shape.
   def championship_podium_results
     championship_podiums.transform_values { |podium| podium.map { it.serializable_hash(Result::V1_SERIALIZE_OPTIONS) } }
-  end
-
-  def previous_persons
-    Person.where(wca_id: wca_id).where.not(sub_id: 1).order(:sub_id)
   end
 
   def gender_visible?
@@ -333,12 +323,12 @@ class Person < ApplicationRecord
   }.freeze
 
   V1_SERIALIZE_OPTIONS = {
-    v1: true,
+    skip_legacy_user_fields: true,
     only: %w[wca_id name gender],
     methods: %w[url country_iso2 delegate_status teams competition_count event_ids_with_results ranks_by_event medals records completed_solves_count championship_podium_results],
     include: {
       avatar: UserAvatar::V1_SERIALIZE_OPTIONS,
-      previous_persons: { v1: true, only: %w[name], methods: %w[country_iso2] },
+      previous_persons: { skip_legacy_user_fields: true, only: %w[name], methods: %w[country_iso2] },
     },
   }.freeze
 
@@ -452,8 +442,8 @@ class Person < ApplicationRecord
   end
 
   def serializable_hash(options = nil)
-    # The v1 shape is spelled out completely in its options and must not pick up the legacy additions below.
-    return super if options&.dig(:v1)
+    # v1 does not need the additional information that is being added to the v0 endpoint by this function
+    return super if options&.dig(:skip_legacy_user_fields)
 
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase

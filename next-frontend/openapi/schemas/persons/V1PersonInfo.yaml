@@ -3,7 +3,9 @@ description: General information about a person, along with a summary of their r
 required:
   - wca_id
   - name
+  - gender
   - country_iso2
+  - delegate_status
   - url
   - teams
   - avatar
