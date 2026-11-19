@@ -23,6 +23,26 @@ RSpec.describe "API v1 Persons" do
       expect(json).not_to include("dob")
     end
 
+    it "falls back to the default avatar and no roles for a person without a user" do
+      get api_v1_person_path(person.wca_id)
+
+      json = response.parsed_body
+      expect(json["avatar"]["is_default"]).to be true
+      expect(json["teams"]).to eq []
+      expect(json["delegate_status"]).to be_nil
+    end
+
+    it "serializes the avatar and roles of the person's user" do
+      user = create(:delegate, :wst_member, :with_avatar)
+
+      get api_v1_person_path(user.wca_id)
+
+      json = response.parsed_body
+      expect(json["avatar"]["is_default"]).to be false
+      expect(json["teams"].pluck("friendly_id")).to contain_exactly("wst")
+      expect(json["delegate_status"]).to eq "delegate"
+    end
+
     it "serializes a rank per event the person has a single for" do
       create(:ranks_single, person_id: person.wca_id, event_id: "333")
 
