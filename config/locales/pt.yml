@@ -873,6 +873,8 @@ pt:
         wic: Painel WIC
         weat: Painel WEAT
         wqac: Painel WQAC
+      switch_to_dark_mode: Mudar para o modo escuro
+      switch_to_light_mode: Mudar para o modo claro
   page:
     translators:
       title: Tradutores
@@ -1945,6 +1947,7 @@ pt:
             name: Nome
             success: '%{count} competidores retirados com sucesso'
             failure: Não foi possível retirar os competidores em massa
+            select_all: Selecionar tudo
           scoresheet_warning: Certifique-se de que só retira um competidor da 
             ronda quando tiver em mãos a respetiva folha de resultados em 
             branco. Não é possível voltar a adicionar um competidor a uma ronda 
@@ -2213,6 +2216,8 @@ pt:
       is_bookmarked: Assinalou esta competição
       number_of_bookmarks: Número de vezes que a competição foi assinalada
       waiting_list_size: Tamanho da lista de espera
+      view_more_members: Ver mais %{count} membros da equipa
+      see_more: + mais %{count}
     index:
       title: Competições
       all_events: Todos

@@ -4,6 +4,12 @@ class Api::V1::PersonsController < Api::V1::ApiController
   # A Person's results are public data
   skip_before_action :require_user!
 
+  def show
+    person = Person.current.includes(:user, :ranks_single, :ranks_average).find_by!(wca_id: params.require(:wca_id))
+
+    render json: person.to_v1_json
+  end
+
   def results
     h2h_match_includes = [*H2hMatch::SERIALIZATION_INCLUDES, { round: { results: { person: :user } } }]
     results = person_results.includes(person: { user: { h2h_matches: h2h_match_includes } })
