@@ -67,9 +67,9 @@ properties:
         - single
       properties:
         single:
-          $ref: '../results/Rank.yaml'
+          $ref: '../results/V1Rank.yaml'
         average:
-          $ref: '../results/Rank.yaml'
+          $ref: '../results/V1Rank.yaml'
   medals:
     $ref: '../results/Medals.yaml'
   records:

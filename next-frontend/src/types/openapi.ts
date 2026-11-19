@@ -1724,13 +1724,15 @@ export interface components {
             wca_id?: string;
             avatar?: components["schemas"]["UserAvatar"];
         };
-        Rank: {
-            id: number;
-            person_id: string;
-            event_id: string;
+        /** @description The person's best result in an event and where it places them in the rankings. */
+        V1Rank: {
+            /** @example 452 */
             best: number;
+            /** @example 12 */
             world_rank: number;
+            /** @example 3 */
             continent_rank: number;
+            /** @example 1 */
             country_rank: number;
         };
         Medals: {
@@ -1809,8 +1811,8 @@ export interface components {
             /** @description The person's ranks in official events, keyed by event id. An event the person has no single for is absent. */
             ranks_by_event: {
                 [key: string]: {
-                    single: components["schemas"]["Rank"];
-                    average?: components["schemas"]["Rank"];
+                    single: components["schemas"]["V1Rank"];
+                    average?: components["schemas"]["V1Rank"];
                 };
             };
             medals: components["schemas"]["Medals"];
@@ -2336,6 +2338,15 @@ export interface components {
         };
         RecordByEvent: {
             [key: string]: components["schemas"]["Record"][];
+        };
+        Rank: {
+            id: number;
+            person_id: string;
+            event_id: string;
+            best: number;
+            world_rank: number;
+            continent_rank: number;
+            country_rank: number;
         };
         SingleAndAverageRank: {
             average: components["schemas"]["Rank"];

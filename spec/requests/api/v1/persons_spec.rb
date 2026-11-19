@@ -31,6 +31,7 @@ RSpec.describe "API v1 Persons" do
       ranks = response.parsed_body["ranks_by_event"]
       expect(ranks.keys).to contain_exactly("333")
       expect(ranks["333"].keys).to contain_exactly("single")
+      expect(ranks["333"]["single"].keys).to contain_exactly("best", "world_rank", "continent_rank", "country_rank")
     end
 
     it "serializes every event the person has a result in, even without a rank" do

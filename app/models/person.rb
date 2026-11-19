@@ -280,8 +280,8 @@ class Person < ApplicationRecord
 
     ranks_single.select { Event::OFFICIAL_IDS.include?(it.event_id) }.index_by(&:event_id).transform_values do |rank_single|
       {
-        single: rank_single,
-        average: ranks_average_by_event[rank_single.event_id],
+        single: rank_single.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS),
+        average: ranks_average_by_event[rank_single.event_id]&.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS),
       }.compact
     end
   end
