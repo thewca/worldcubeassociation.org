@@ -3,6 +3,7 @@ import { DateTime, Interval } from "luxon";
 export function formatDateRange(
   fromDate: string,
   toDate: string,
+  locale: string,
   options = {},
 ) {
   return Interval.fromDateTimes(
@@ -10,6 +11,6 @@ export function formatDateRange(
     DateTime.fromISO(toDate),
   ).toLocaleString(
     { month: "short", day: "2-digit", year: "numeric" },
-    options,
+    { ...options, locale },
   );
 }

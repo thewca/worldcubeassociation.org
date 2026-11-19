@@ -8,6 +8,7 @@ import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
 import { getMediumDateString } from "@/lib/wca/dates";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useSearchParams } from "next/navigation";
 import { route } from "nextjs-routes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -53,6 +54,8 @@ export default function FilteredRecords() {
   const { event, show } = filters;
   const { t } = useT();
   const currentRecords = data?.records ?? {};
+  const lng = useLocale();
+
   const filteredRecords =
     event === "all events"
       ? currentRecords
@@ -67,7 +70,7 @@ export default function FilteredRecords() {
       </Heading>
       {data &&
         t("results.last_updated_html", {
-          timestamp: getMediumDateString(data.timestamp),
+          timestamp: getMediumDateString(data.timestamp, lng),
         })}
       <RecordsFilterBox filterState={filters} filterActions={filterActions} />
       {isFetching && <Loading />}

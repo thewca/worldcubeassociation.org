@@ -1,7 +1,7 @@
 import { HStack, Heading, Tabs, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
-import { serverClient } from "@/lib/wca/wcaAPI";
+import { getLiveCompetitions } from "@/lib/wca/live/getLiveCompetitions";
 import OpenapiError from "@/components/ui/openapiError";
 import LiveCompetitionsTable from "./LiveCompetitionsTable";
 import LiveCompetitionSearch from "./LiveCompetitionSearch";
@@ -15,13 +15,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LiveCompetitionsPage() {
-  const { t } = await getT();
+  const { t, lng } = await getT();
 
   const {
     data: liveCompetitions,
     error,
     response,
-  } = await serverClient.GET("/v1/competitions/live");
+  } = await getLiveCompetitions();
 
   if (error) return <OpenapiError response={response} t={t} />;
 
@@ -56,16 +56,16 @@ export default async function LiveCompetitionsPage() {
         </Tabs.List>
         <Tabs.Content value="upcoming">
           {hasUpcoming ? (
-            <LiveCompetitionsTable competitions={upcoming} t={t} />
+            <LiveCompetitionsTable competitions={upcoming} t={t} lng={lng} />
           ) : (
             <Text>{t("competitions.live.overview.no_upcoming")}</Text>
           )}
         </Tabs.Content>
         <Tabs.Content value="in_progress">
-          <LiveCompetitionsTable competitions={in_progress} t={t} />
+          <LiveCompetitionsTable competitions={in_progress} t={t} lng={lng} />
         </Tabs.Content>
         <Tabs.Content value="past">
-          <LiveCompetitionsTable competitions={past} t={t} />
+          <LiveCompetitionsTable competitions={past} t={t} lng={lng} />
         </Tabs.Content>
       </Tabs.Root>
     </VStack>
