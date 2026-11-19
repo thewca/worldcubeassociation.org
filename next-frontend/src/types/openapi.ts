@@ -1771,7 +1771,7 @@ export interface components {
             world: components["schemas"]["V1Result"][];
             continental: components["schemas"]["V1Result"][];
             national: components["schemas"]["V1Result"][];
-            greater_china?: components["schemas"]["V1Result"][];
+            greater_china: components["schemas"]["V1Result"][];
         };
         /** @description General information about a person, along with a summary of their results. */
         V1PersonInfo: {
@@ -1780,14 +1780,14 @@ export interface components {
             /** @example Tim Reynolds */
             name: string;
             /** @example m */
-            gender?: string;
+            gender: string;
             /** @example US */
             country_iso2: string;
             /**
              * @description Null for a person who is not a delegate, or who has no WCA account at all.
              * @example delegate
              */
-            delegate_status?: string | null;
+            delegate_status: string | null;
             teams: components["schemas"]["TeamMembership"][];
             /**
              * Format: uri

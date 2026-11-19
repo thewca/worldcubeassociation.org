@@ -7,6 +7,7 @@ required:
   - world
   - continental
   - national
+  - greater_china
 properties:
   world:
     type: array
