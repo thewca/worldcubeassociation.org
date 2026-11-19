@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import {
   addItemToArray,
-  AUTOMATCH_DEFAULT_SETTINGS,
   autoMatchSearch,
   calculateBestInsertIndex,
   getAttemptsMultiplier,
@@ -104,11 +103,7 @@ function removeFileFromScrambleSets(scrSets, oldScrambleFile) {
     .filter((scrSet) => scrSet.external_scrambles.length > 0);
 }
 
-function removeScrambleFile(
-  state,
-  oldScrambleFile,
-  autoMatchSettings = AUTOMATCH_DEFAULT_SETTINGS,
-) {
+function removeScrambleFile(state, oldScrambleFile, autoMatchSettings) {
   return {
     ...state,
     events: state.events.map((wcifEvent) => {
@@ -243,13 +238,13 @@ export default function scrambleMatchReducer(state, action) {
       return applyAction(
         state,
         ['initial', 'current'],
-        (subState) => removeScrambleFile(subState, action.scrambleFile, action.autoMatchSettings),
+        (subState) => removeScrambleFile(subState, action.scrambleFile, action.settings),
       );
     case 'resetScrambleFile':
       return applyAction(
         state,
         ['current'],
-        (subState) => removeScrambleFile(subState, action.scrambleFile, action.autoMatchSettings),
+        (subState) => removeScrambleFile(subState, action.scrambleFile, action.settings),
       );
     case 'resetAfterSave':
       return initializeState({

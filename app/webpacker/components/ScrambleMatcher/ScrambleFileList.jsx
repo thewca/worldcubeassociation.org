@@ -267,7 +267,11 @@ function ScrambleFileBody({
         (prev) => prev.filter((scrFile) => scrFile.id !== data.id),
       );
 
-      dispatchMatchState({ type: 'removeScrambleFile', scrambleFile: data, autoMatchSettings });
+      dispatchMatchState({
+        type: 'removeScrambleFile',
+        scrambleFile: data,
+        settings: autoMatchSettings,
+      });
     },
   });
 
@@ -280,7 +284,7 @@ function ScrambleFileBody({
     () => dispatchMatchState({
       type: 'resetScrambleFile',
       scrambleFile,
-      autoMatchSettings,
+      settings: autoMatchSettings,
     }),
     [dispatchMatchState, scrambleFile, autoMatchSettings],
   );
