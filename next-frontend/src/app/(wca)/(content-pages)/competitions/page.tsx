@@ -536,6 +536,15 @@ export default function CompetitionsPage() {
                         </TableHeaderRow>
                       </>
                     )}
+                    {filterState.timeOrder === "past" && (
+                      <TableHeaderRow>
+                        {filterState.selectedYear !== "all_years"
+                          ? t("competitions.index.titles.past", {
+                              year: filterState.selectedYear,
+                            })
+                          : t("competitions.index.titles.past_all")}
+                      </TableHeaderRow>
+                    )}
                     {upcomingComps.map((comp) => (
                       <CompetitionTableRow
                         comp={comp}
