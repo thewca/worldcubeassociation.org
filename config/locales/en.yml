@@ -776,6 +776,8 @@ en:
       privacy: "Privacy"
       disclaimer: "Disclaimer"
       find_us: "Find us"
+      switch_to_dark_mode: "Switch to Dark Mode"
+      switch_to_light_mode: "Switch to Light Mode"
   page:
     translators:
       title: "Translators"
@@ -1562,6 +1564,7 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            select_all: "Select all"
             id: "ID"
             name: "Name"
           quit_menu: "Quit"
@@ -2432,6 +2435,11 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+      general: "General"
+      more: "More"
+      admin: "Admin"
+      results: "Results"
+      events: "Events"
     h2h:
       set_number: "Set %{number}"
       stage_of: "Stage of %{number}"

@@ -15,7 +15,10 @@ import Link from "next/link";
 import { io } from "next/cache";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
-import { ColorModeButton } from "@/components/ui/color-mode";
+import {
+  ColorModeButton,
+  ColorModeMobileNavButton,
+} from "@/components/ui/color-mode";
 import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
@@ -30,7 +33,6 @@ import {
   MobileNavRoot,
 } from "@/components/MobileNav";
 import { getCachedGlobal } from "@/lib/payload/globals";
-import { getCachedCollection } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
 
 type NavbarEntry<K extends string = "displayText"> = {
@@ -118,10 +120,10 @@ export default async function Navbar() {
 
   const { lng } = await getT();
 
-  const [navbar, socialLinksGlobal, avatarMenuEntries] = await Promise.all([
+  const [navbar, socialLinksGlobal, avatarMenu] = await Promise.all([
     getCachedGlobal("nav", lng),
     getCachedGlobal("social-links", lng),
-    getCachedCollection("avatarMenuEntries", lng),
+    getCachedGlobal("avatar-menu", lng),
   ]);
 
   const session = await getSession();
@@ -144,15 +146,6 @@ export default async function Navbar() {
         <HStack ps={3.5} pe={1.5} py={3} justifyContent="space-between">
           <HStack>
             {!LIVE_RESULT_BETA && <WCALogo />}
-            <Box hideFrom="xl">
-              <Collapsible.Trigger asChild>
-                <IconButton variant="ghost" aria-label="Toggle navigation">
-                  <Icon size="lg" asChild>
-                    <LuMenu />
-                  </Icon>
-                </IconButton>
-              </Collapsible.Trigger>
-            </Box>
             <HStack hideBelow="xl" gap={0}>
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
@@ -310,16 +303,27 @@ export default async function Navbar() {
             {showEmptyMessage && (
               <Text hideBelow="md">Oh no, there are no navbar items!</Text>
             )}
-            <ColorModeButton />
+            <Box hideBelow="md">
+              <ColorModeButton />
+            </Box>
             <Box hideBelow="md">
               <LanguageSelector />
             </Box>
             <Box hideBelow="md">
               <AvatarMenu
                 session={session}
-                cmsEntries={avatarMenuEntries}
+                cmsEntries={avatarMenu.entries}
                 permissions={permissions}
               />
+            </Box>
+            <Box hideFrom="xl">
+              <Collapsible.Trigger asChild>
+                <IconButton variant="ghost" aria-label="Toggle navigation">
+                  <Icon size="lg" asChild>
+                    <LuMenu />
+                  </Icon>
+                </IconButton>
+              </Collapsible.Trigger>
             </Box>
           </HStack>
         </HStack>
@@ -478,14 +482,15 @@ export default async function Navbar() {
                     )}
                 </React.Fragment>
               ))}
-              {/* From `md` upwards both of these already sit in the top bar, so without this the
-                  open drawer shows a second language selector and a second avatar. */}
+              {/* From `md` upwards these already sit in the top bar, so without this the open
+                  drawer shows a second color mode toggle, language selector and avatar. */}
               <Separator hideFrom="md" />
               <VStack align="stretch" hideFrom="md" gap={1}>
+                <ColorModeMobileNavButton />
                 <LanguageSelector />
                 <AvatarMenu
                   session={session}
-                  cmsEntries={avatarMenuEntries}
+                  cmsEntries={avatarMenu.entries}
                   permissions={permissions}
                 />
               </VStack>

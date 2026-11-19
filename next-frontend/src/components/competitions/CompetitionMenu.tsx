@@ -10,6 +10,7 @@ import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import { Alert, Link } from "@chakra-ui/react";
+import MobileTabMenu from "./MobileTabMenu";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
@@ -51,11 +52,18 @@ export default async function CompetitionMenu({
   const tabs = isOngoing ? [...baseTabs, liveTab(competitionInfo)] : baseTabs;
 
   return (
-    <TabMenu
-      competitionInfo={competitionInfo}
-      tabs={tabs}
-      customTabs={competitionInfo.tabs.map((tab) => tab.name)}
-    />
+    <>
+      <TabMenu
+        competitionInfo={competitionInfo}
+        tabs={tabs}
+        customTabs={competitionInfo.tabs.map((tab) => tab.name)}
+      />
+      <MobileTabMenu
+        tabs={tabs}
+        customTabs={competitionInfo.tabs.map((tab) => tab.name)}
+        competitionId={competitionId}
+      />
+    </>
   );
 }
 

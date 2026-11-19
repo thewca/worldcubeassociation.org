@@ -3315,6 +3315,11 @@ it:
         register: Registrati
         competitors: Partecipanti
         scrambles: Scramble
+      general: "Generale"
+      more: "Di più"
+      admin: "Admin"
+      results: "Risultati"
+      events: "Eventi"
     results_table:
       wca_profile: Profilo WCA
       event: Evento

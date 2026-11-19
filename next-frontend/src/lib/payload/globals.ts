@@ -9,7 +9,7 @@ export async function getCachedGlobal<TSlug extends GlobalSlug>(
   locale: TypedLocale,
   depth?: number,
 ) {
-  "use cache";
+  "use cache: remote";
   cacheTag(globalCacheTag(slug));
   cacheLife("max");
 

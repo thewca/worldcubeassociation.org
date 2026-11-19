@@ -62,7 +62,7 @@ th:
     444bf: 4x4x4 Blindfolded
     555bf: 5x5x5 Blindfolded
     333mbf: 3x3x3 Multi-Blind
-    fto: Face Turning Octahedron
+    fto: Face Turning Octahedron (FTO)
     magic: Magic
     mmagic: Master Magic
     333mbo: 3x3x3 Multi-Blind รูปแบบเก่า
@@ -2650,6 +2650,7 @@ th:
           competing:
             title: สมัครการแข่งขัน
             description: เลือกประเภทการแข่งขัน
+            summary_title: การสมัครการแข่งขัน
           requirements:
             title: Requirements
             description: ยอมรับเงื่อนไขการแข่งขัน
@@ -2996,6 +2997,11 @@ th:
         register: สมัครการแข่งขัน
         competitors: ผู้เข้าแข่งขัน
         scrambles: โจทย์
+      general: ทั่วไป
+      more: เพิ่มเติม
+      admin: แอดมิน
+      results: ผลการแข่งขัน
+      events: ประเภทการแข่งขัน
     results_table:
       wca_profile: WCA profile
       event: ประเภทการแข่งขัน
@@ -3228,6 +3234,9 @@ th:
     announcement_info_html: 'ประกาศโดย %{author_name} เมื่อ %{date_time}'
     errors:
       unstick_at_future: ต้องอยู่ในอนาคต
+    no_search_results: ไม่มีการประกาศที่ตรงตามคำค้นหา
+    search: ค้นหาประกาศ
+    no_announcements: ขณะนี้ยังไม่มีข้อความประกาศ
   contacts:
     dob:
       title: ฟอร์มการขอเปลี่ยนวันเกิด
