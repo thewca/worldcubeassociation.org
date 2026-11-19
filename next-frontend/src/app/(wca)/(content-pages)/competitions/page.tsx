@@ -328,7 +328,7 @@ export default function CompetitionsPage() {
           </Card.Header>
           <Card.Body asChild pb={0}>
             <Collapsible.Root asChild>
-              <VStack gap="3" borderBottom="black">
+              <VStack gap="2" borderBottom="black">
                 <Box hideBelow="lg" width="full">
                   <FormEventSelector
                     selectedEvents={filterState.selectedEvents}
@@ -397,24 +397,32 @@ export default function CompetitionsPage() {
                     </InputGroup>
                   </Field.Root>
                 </SimpleGrid>
-                <Stack direction="row" justify="start" width="full">
+                <Stack
+                  direction={{ base: "column", md: "row" }}
+                  align={{ base: undefined, md: "end" }}
+                  justify={{ base: undefined, md: "space-between" }}
+                  width="full"
+                  gap={{ base: 3, md: undefined }}
+                >
                   <RegistrationSelect
                     registrationStatus={registrationStatus}
                     setRegistrationStatus={setRegistrationStatus}
                     t={t}
                   />
+
+                  <Collapsible.Trigger asChild>
+                    <Button
+                      variant="outline"
+                      width={{ base: "full", md: "auto" }}
+                    >
+                      <Icon>
+                        <LuSettings2 />
+                      </Icon>{" "}
+                      {t("competitions.index.advanced_filters")}
+                    </Button>
+                  </Collapsible.Trigger>
                 </Stack>
-                <Collapsible.Trigger asChild alignSelf="flex-end">
-                  <Button
-                    variant="outline"
-                    width={{ base: "full", lg: "auto" }}
-                  >
-                    <Icon>
-                      <LuSettings2 />
-                    </Icon>{" "}
-                    {t("competitions.index.advanced_filters")}
-                  </Button>
-                </Collapsible.Trigger>
+
                 <Collapsible.Content width="full">
                   <VStack gap="4" width="full" align="stretch">
                     <Stack
@@ -476,7 +484,7 @@ export default function CompetitionsPage() {
               </VStack>
             </Collapsible.Root>
           </Card.Body>
-          <Card.Body pos="relative">
+          <Card.Body pos="relative" pt={0}>
             {/* Absolutely positioned so this marker adds neither height nor a gap. */}
             <Box ref={topSentinelRef} position="absolute" />
 
@@ -1032,7 +1040,7 @@ function RegistrationSelect({
   t: TFunction;
 }) {
   return (
-    <Stack mb={3}>
+    <Stack>
       <Text fontWeight="bold">{t("competitions.index.registration_key")}</Text>
       {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
       {/* full: <CompRegoFullButOpenOrangeIcon /> */}
@@ -1043,7 +1051,6 @@ function RegistrationSelect({
             e.value === "null" ? null : (e.value as RegistrationStatus),
           )
         }
-        width="fit-content"
       >
         <SegmentGroup.Indicator />
         {[
@@ -1054,7 +1061,11 @@ function RegistrationSelect({
           },
           ...REGISTRATION_STATUS_KEY,
         ].map(({ status, icon, labelKey }) => (
-          <SegmentGroup.Item key={status} value={status}>
+          <SegmentGroup.Item
+            key={status}
+            value={status}
+            width={{ base: "100%", md: "fit-content" }}
+          >
             <SegmentGroup.ItemText>
               <Stack
                 direction="row"
