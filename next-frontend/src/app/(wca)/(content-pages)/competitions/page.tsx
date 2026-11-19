@@ -25,6 +25,7 @@ import {
   SegmentGroup,
   SimpleGrid,
   Stack,
+  Switch,
   Table,
   Tabs,
   Text,
@@ -59,6 +60,7 @@ import {
   sortOrderValues,
 } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
+import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
 import useDebounce from "@/lib/hooks/useDebounce";
 import Loading from "@/components/ui/loading";
 import { useSearchParams } from "next/navigation";
@@ -799,6 +801,8 @@ function AdvancedFilters({
   dispatchFilter: Dispatch<CompetitionFilterAction>;
   t: TFunction;
 }) {
+  const { data: permissions } = usePermissionsQuery();
+
   const timeOrderItems = [
     { value: "present", label: t("competitions.index.present") },
     {
@@ -918,6 +922,25 @@ function AdvancedFilters({
           </HStack>
         </Checkbox.Label>
       </Checkbox.Root>
+      {permissions?.canSeeAdminCompetitions() && (
+        <Switch.Root
+          minHeight="10"
+          onCheckedChange={() =>
+            window.location.assign(
+              new URL(
+                "/competitions?show_admin_details=yes",
+                process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
+              ),
+            )
+          }
+        >
+          <Switch.HiddenInput />
+          <Switch.Control>
+            <Switch.Thumb />
+          </Switch.Control>
+          <Switch.Label>{t("competitions.index.use_admin_view")}</Switch.Label>
+        </Switch.Root>
+      )}
     </Stack>
   );
 }
