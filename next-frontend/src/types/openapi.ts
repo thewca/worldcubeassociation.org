@@ -1209,12 +1209,12 @@ export interface components {
     schemas: {
         UserAvatar: {
             /**
-             * Format: uri-reference
+             * Format: uri
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
              */
             url: string;
             /**
-             * Format: uri-reference
+             * Format: uri
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
