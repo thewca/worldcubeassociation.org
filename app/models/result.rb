@@ -110,7 +110,8 @@ class Result < ApplicationRecord
     result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
   end
 
-  def participated_matches
+  # Make sure to preload the relevant data when calling this method
+  private def participated_matches
     return [] if person.user.nil?
 
     person.user.h2h_matches.filter { it.round_id == round_id }

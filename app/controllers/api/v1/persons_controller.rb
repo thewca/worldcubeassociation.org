@@ -5,7 +5,7 @@ class Api::V1::PersonsController < Api::V1::ApiController
   skip_before_action :require_user!
 
   def results
-    h2h_match_includes = [*H2hMatch::SERIALIZATION_INCLUDES, { round: { results: { person: :user } } }].freeze
+    h2h_match_includes = [*H2hMatch::SERIALIZATION_INCLUDES, { round: { results: { person: :user } } }]
     results = person_results.includes(person: { user: { h2h_matches: h2h_match_includes } })
     results = results.in_event(params[:event_id]) if params[:event_id].present?
 
@@ -27,11 +27,8 @@ class Api::V1::PersonsController < Api::V1::ApiController
     render json: records.as_json(Result::V1_STANDALONE_SERIALIZE_OPTIONS)
   end
 
-  private def person
-    @person ||= Person.current.find_by!(wca_id: params.require(:wca_id))
-  end
-
   private def person_results
+    person = Person.current.find_by!(wca_id: params.require(:wca_id))
     person.results.includes(:competition, :result_attempts, round: :linked_round)
   end
 end
