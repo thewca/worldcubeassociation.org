@@ -328,7 +328,9 @@ export default function CompetitionsPage() {
           </Card.Header>
           <Card.Body asChild pb={0}>
             <Collapsible.Root asChild>
-              <VStack gap="2" borderBottom="black">
+              <VStack gap="2" borderBottom="black" pos="relative">
+                {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+                <Box ref={topSentinelRef} position="absolute" />
                 <Box hideBelow="lg" width="full">
                   <FormEventSelector
                     selectedEvents={filterState.selectedEvents}
@@ -485,10 +487,7 @@ export default function CompetitionsPage() {
               </VStack>
             </Collapsible.Root>
           </Card.Body>
-          <Card.Body pos="relative" pt={0}>
-            {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-            <Box ref={topSentinelRef} position="absolute" />
-
+          <Card.Body pt={0}>
             <Tabs.Content value="list">
               <Table.ScrollArea>
                 <Table.Root
