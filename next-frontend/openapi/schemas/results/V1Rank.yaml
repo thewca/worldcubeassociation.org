@@ -1,0 +1,20 @@
+type: object
+description: The person's best result in an event and where it places them in the rankings.
+required:
+  - best
+  - world_rank
+  - continent_rank
+  - country_rank
+properties:
+  best:
+    type: integer
+    example: 452
+  world_rank:
+    type: integer
+    example: 12
+  continent_rank:
+    type: integer
+    example: 3
+  country_rank:
+    type: integer
+    example: 1
