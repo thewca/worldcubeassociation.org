@@ -7,7 +7,7 @@ class Api::V1::PersonsController < Api::V1::ApiController
   def show
     person = Person.current.includes(:user, :ranks_single, :ranks_average).find_by!(wca_id: params.require(:wca_id))
 
-    render json: person.as_v1_json
+    render json: person.to_v1_json
   end
 
   def results

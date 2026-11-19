@@ -1714,7 +1714,7 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
-        /** @description A team, committee, council or the board that the person is currently part of. */
+        /** @description A team, committee or council that the person is currently a part of (including the WCA Board). */
         V1TeamMembership: {
             /** @example wst */
             friendly_id: string;
