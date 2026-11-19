@@ -72,24 +72,18 @@ class Result < ApplicationRecord
                 worst_index regional_single_record regional_average_record],
   }.freeze
 
-  V1_SERIALIZE_OPTIONS = {
-    only: V1_ROUND_SERIALIZE_OPTIONS[:only],
-    methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
-             %w[competition_id competition_short_name competition_start_date
-                event_id round_type_id format_id ranking_mode],
-  }.freeze
-
   # Use when serializing results that belong to a Round object
   V1_ROUND_SERIALIZE_OPTIONS = {
     only: %w[id pos global_pos best average],
     methods: %w[wca_id name country_iso2 attempts regional_single_record regional_average_record],
   }.freeze
 
-  # Use when serializing results that belong to a Person object
-  # The caller should preload .includes(person: { user: :h2h_matches })
-  V1_PERSON_RESULTS_SERIALIZE_OPTIONS = {
-    only: V1_SERIALIZE_OPTIONS[:only],
-    methods: V1_SERIALIZE_OPTIONS[:methods] | %w[participated_matches],
+  # Shows a result in isolation, and so the competition-specific data is included
+  V1_STANDALONE_SERIALIZE_OPTIONS = {
+    only: V1_ROUND_SERIALIZE_OPTIONS[:only],
+    methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
+             %w[competition_id competition_short_name competition_start_date
+                event_id round_type_id format_id ranking_mode],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -117,7 +111,6 @@ class Result < ApplicationRecord
   end
 
   def participated_matches
-    # Users carry the h2h_match_competitor association, so we cover the case for if they're anonmymized
     return [] if person.user.nil?
 
     person.user.h2h_matches.filter { it.round_id == round_id }

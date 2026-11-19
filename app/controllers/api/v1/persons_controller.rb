@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class Api::V1::PersonsController < Api::V1::ApiController
-  # A person's results are public data
+  # A Person's results are public data
   skip_before_action :require_user!
 
   def results
-    H2H_MATCH_INCLUDES = [*H2hMatch::SERIALIZATION_INCLUDES, { round: { results: { person: :user } } }].freeze
-    results = person_results.includes(person: { user: { h2h_matches: H2H_MATCH_INCLUDES } })
+    h2h_match_includes = [*H2hMatch::SERIALIZATION_INCLUDES, { round: { results: { person: :user } } }].freeze
+    results = person_results.includes(person: { user: { h2h_matches: h2h_match_includes } })
     results = results.in_event(params[:event_id]) if params[:event_id].present?
 
-    render json: results.as_json(Result::V1_PERSON_RESULTS_SERIALIZE_OPTIONS)
+    render json: results.as_json(
+      only: Result::V1_STANDALONE_SERIALIZE_OPTIONS[:only],
+      methods: Result::V1_STANDALONE_SERIALIZE_OPTIONS[:methods] | %w[participated_matches],
+    )
   end
 
   def records
@@ -21,7 +24,7 @@ class Api::V1::PersonsController < Api::V1::ApiController
 
     return unless stale?(records, public: true)
 
-    render json: records.as_json(Result::V1_SERIALIZE_OPTIONS)
+    render json: records.as_json(Result::V1_STANDALONE_SERIALIZE_OPTIONS)
   end
 
   private def person
@@ -29,8 +32,6 @@ class Api::V1::PersonsController < Api::V1::ApiController
   end
 
   private def person_results
-    # `attempts` reads `result_attempts`, and the competition columns and `ranking` come off their
-    # associations, so all three have to be preloaded or every row fires its own query.
     person.results.includes(:competition, :result_attempts, round: :linked_round)
   end
 end

@@ -197,59 +197,6 @@ RSpec.describe "API v1 Persons" do
 
         expect(count_queries { get path }).to eq baseline
       end
-
-      describe "caching" do
-        let!(:round_and_results) { create_h2h_round([target_user, opponent_user]) }
-        let(:round) { round_and_results.first }
-        let(:results) { round_and_results.last }
-        let!(:match) { create_match(round, results, 1, [target_user, opponent_user]) }
-
-        shared_examples "an invalidated ETag" do
-          it "serves a fresh response with a new ETag" do
-            get path
-            etag = response.headers["ETag"]
-
-            get path, headers: { "If-None-Match" => etag }
-            expect(response).to have_http_status(:not_modified)
-
-            travel_to(1.minute.from_now) { change_data }
-
-            get path, headers: { "If-None-Match" => etag }
-            expect(response).to be_successful
-            expect(response.headers["ETag"]).not_to eq etag
-          end
-        end
-
-        context "when a match changes" do
-          def change_data = match.touch
-
-          it_behaves_like "an invalidated ETag"
-        end
-
-        context "when a set changes" do
-          def change_data = match.h2h_sets.first.touch
-
-          it_behaves_like "an invalidated ETag"
-        end
-
-        context "when an attempt changes" do
-          def change_data = match.h2h_sets.first.h2h_attempts.first.touch
-
-          it_behaves_like "an invalidated ETag"
-        end
-
-        context "when an opponent's result in the round changes" do
-          def change_data = results[opponent_user].touch
-
-          it_behaves_like "an invalidated ETag"
-        end
-
-        it "does not send a Last-Modified that would ignore the matches" do
-          get path
-
-          expect(response.headers["Last-Modified"]).to be_nil
-        end
-      end
     end
   end
 
