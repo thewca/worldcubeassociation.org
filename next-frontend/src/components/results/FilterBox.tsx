@@ -9,46 +9,48 @@ import {
   SegmentGroup,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
+import EventDropdown from "@/components/EventDropdown";
 import RegionSelector from "@/components/RegionSelector";
-import { SingleEventSelector } from "@/components/EventSelector";
+import {
+  FormEventSelector,
+  SingleEventSelector,
+} from "@/components/EventSelector";
 import events from "@/lib/wca/data/events";
+import { isRecordsHistory } from "@/lib/wca/results/records";
 
-type FilterState = {
-  event: string;
+type SharedFilterState = {
   region: string;
   gender: string;
   show: string;
 };
 
-type FilterActions = {
-  setEvent: (event: string) => void;
+type SharedFilterActions = {
   setRegion: (region: string) => void;
   setGender: (gender: string) => void;
   setShow: (show: string) => void;
 };
 
-interface FilterBoxProps {
-  filterState: FilterState;
-  filterActions: FilterActions;
-  children: React.ReactElement;
-}
+type RecordsFilterBoxProps = {
+  filterState: SharedFilterState & { eventIds: string[] };
+  filterActions: SharedFilterActions & {
+    setSelectedEventIds: (eventIds: string[]) => void;
+  };
+};
 
-interface RecordsFilterBoxProps {
-  filterState: FilterState;
-  filterActions: FilterActions;
-}
+type RankingsFilterBoxProps = {
+  filterState: SharedFilterState & { event: string; rankingType: string };
+  filterActions: SharedFilterActions & {
+    setEvent: (event: string) => void;
+    setType: (type: string) => void;
+  };
+};
 
-interface RankingsFilterBoxProps {
-  filterState: FilterState & { rankingType: string };
-  filterActions: FilterActions & { setType: (type: string) => void };
-}
-
-interface SegmentedFieldProps {
+type SegmentedFieldProps = {
   label: string;
   value: string;
   items: { label: string; value: string }[];
   onChange: (value: string) => void;
-}
+};
 
 // Use a select on narrow screens where the segmented controls don't fit.
 function SegmentedField({
@@ -110,58 +112,111 @@ export function RecordsFilterBox({
   filterActions,
 }: RecordsFilterBoxProps) {
   const { t } = useT();
+  const { eventIds, show } = filterState;
+  const allowsMultipleEvents = !isRecordsHistory(show);
+  const { setSelectedEventIds } = filterActions;
+
+  const toggleEvent = (eventId: string) => {
+    const isEventSelected = eventIds.includes(eventId);
+    if (isEventSelected) {
+      setSelectedEventIds(eventIds.filter((id) => id !== eventId));
+      return;
+    }
+
+    setSelectedEventIds(
+      allowsMultipleEvents ? [...eventIds, eventId] : [eventId],
+    );
+  };
 
   return (
-    <FilterBox filterState={filterState} filterActions={filterActions}>
-      <Stack direction={{ base: "column", md: "row" }}>
-        <SegmentedField
-          label={t("results.selector_elements.gender_selector.gender")}
-          value={filterState.gender}
-          items={[
-            {
-              value: "All",
-              label: t("results.selector_elements.gender_selector.gender_all"),
-            },
-            {
-              value: "Male",
-              label: t("results.selector_elements.gender_selector.male"),
-            },
-            {
-              value: "Female",
-              label: t("results.selector_elements.gender_selector.female"),
-            },
-          ]}
-          onChange={filterActions.setGender}
+    <Box
+      bg="bg"
+      w="full"
+      p={{ base: 4, md: 6 }}
+      borderRadius="md"
+      boxShadow="md"
+      borderWidth="1px"
+      borderColor="border.muted"
+    >
+      <VStack align="left">
+        <Box hideBelow="md">
+          <FormEventSelector
+            title={t("competitions.competition_form.events")}
+            selectedEvents={eventIds}
+            onEventClick={toggleEvent}
+            onClearClick={
+              allowsMultipleEvents ? () => setSelectedEventIds([]) : undefined
+            }
+          />
+        </Box>
+        <Box hideFrom="md">
+          <EventDropdown
+            multiple={allowsMultipleEvents}
+            selectedEvents={eventIds}
+            onEventsChange={setSelectedEventIds}
+          />
+        </Box>
+        <RegionSelector
+          region={filterState.region}
+          onRegionChange={filterActions.setRegion}
+          label={t("common.country")}
+          t={t}
+          name={t("delegates_page.all_regions")}
         />
-        <SegmentedField
-          label={t("results.selector_elements.show_selector.show")}
-          value={filterState.show}
-          items={[
-            {
-              value: "mixed",
-              label: t("results.selector_elements.show_selector.mixed"),
-            },
-            {
-              value: "slim",
-              label: t("results.selector_elements.show_selector.slim"),
-            },
-            {
-              value: "separate",
-              label: t("results.selector_elements.show_selector.separate"),
-            },
-            {
-              value: "history",
-              label: t("results.selector_elements.show_selector.history"),
-            },
-            {
-              value: "mixed history",
-              label: t("results.selector_elements.show_selector.mixed_history"),
-            },
-          ]}
-          onChange={filterActions.setShow}
-        />
-      </Stack>
-    </FilterBox>
+        <Stack direction={{ base: "column", md: "row" }}>
+          <SegmentedField
+            label={t("results.selector_elements.gender_selector.gender")}
+            value={filterState.gender}
+            items={[
+              {
+                value: "All",
+                label: t(
+                  "results.selector_elements.gender_selector.gender_all",
+                ),
+              },
+              {
+                value: "Male",
+                label: t("results.selector_elements.gender_selector.male"),
+              },
+              {
+                value: "Female",
+                label: t("results.selector_elements.gender_selector.female"),
+              },
+            ]}
+            onChange={filterActions.setGender}
+          />
+          <SegmentedField
+            label={t("results.selector_elements.show_selector.show")}
+            value={filterState.show}
+            items={[
+              {
+                value: "mixed",
+                label: t("results.selector_elements.show_selector.mixed"),
+              },
+              {
+                value: "slim",
+                label: t("results.selector_elements.show_selector.slim"),
+              },
+              {
+                value: "separate",
+                label: t("results.selector_elements.show_selector.separate"),
+              },
+              {
+                value: "history",
+                label: t("results.selector_elements.show_selector.history"),
+              },
+              {
+                value: "mixed history",
+                label: t(
+                  "results.selector_elements.show_selector.mixed_history",
+                ),
+              },
+            ]}
+            onChange={filterActions.setShow}
+          />
+        </Stack>
+      </VStack>
+    </Box>
   );
 }
 
@@ -180,61 +235,6 @@ export function RankingsFilterBox({
   }));
 
   return (
-    <FilterBox filterState={filterState} filterActions={filterActions}>
-      <Stack direction={{ base: "column", md: "row" }}>
-        <SegmentedField
-          label={t("results.selector_elements.type_selector.type")}
-          value={filterState.rankingType}
-          items={rankingTypeItems}
-          onChange={filterActions.setType}
-        />
-        <SegmentedField
-          label={t("results.selector_elements.gender_selector.gender")}
-          value={filterState.gender}
-          items={[
-            {
-              value: "All",
-              label: t("results.selector_elements.gender_selector.gender_all"),
-            },
-            {
-              value: "Male",
-              label: t("results.selector_elements.gender_selector.male"),
-            },
-            {
-              value: "Female",
-              label: t("results.selector_elements.gender_selector.female"),
-            },
-          ]}
-          onChange={filterActions.setGender}
-        />
-        <SegmentedField
-          label={t("results.selector_elements.show_selector.show")}
-          value={filterState.show}
-          items={[
-            {
-              value: "100 persons",
-              label: t("results.selector_elements.show_selector.persons"),
-            },
-            {
-              value: "100 results",
-              label: t("results.selector_elements.show_selector.results"),
-            },
-            {
-              value: "by region",
-              label: t("results.selector_elements.show_selector.by_region"),
-            },
-          ]}
-          onChange={filterActions.setShow}
-        />
-      </Stack>
-    </FilterBox>
-  );
-}
-
-function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
-  const { t } = useT();
-
-  return (
     <Box
       bg="bg"
       w="full"
@@ -242,18 +242,26 @@ function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
       borderRadius="md"
       boxShadow="md"
       borderWidth="1px"
-      borderColor="gray.100"
+      borderColor="border.muted"
     >
       <VStack align="left">
-        <SingleEventSelector
-          title={t("competitions.competition_form.events")}
-          selectedEvent={filterState.event}
-          onEventClick={(event) =>
-            event === filterState.event
-              ? filterActions.setEvent("all events")
-              : filterActions.setEvent(event)
-          }
-        />
+        <Box hideBelow="md">
+          <SingleEventSelector
+            title={t("competitions.competition_form.events")}
+            selectedEvent={filterState.event}
+            onEventClick={filterActions.setEvent}
+          />
+        </Box>
+        <Box hideFrom="md">
+          <EventDropdown
+            multiple={false}
+            required
+            selectedEvents={[filterState.event]}
+            onEventsChange={([eventId]) =>
+              eventId && filterActions.setEvent(eventId)
+            }
+          />
+        </Box>
         <RegionSelector
           region={filterState.region}
           onRegionChange={filterActions.setRegion}
@@ -261,7 +269,54 @@ function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
           t={t}
           name={t("delegates_page.all_regions")}
         />
-        {children}
+        <Stack direction={{ base: "column", md: "row" }}>
+          <SegmentedField
+            label={t("results.selector_elements.type_selector.type")}
+            value={filterState.rankingType}
+            items={rankingTypeItems}
+            onChange={filterActions.setType}
+          />
+          <SegmentedField
+            label={t("results.selector_elements.gender_selector.gender")}
+            value={filterState.gender}
+            items={[
+              {
+                value: "All",
+                label: t(
+                  "results.selector_elements.gender_selector.gender_all",
+                ),
+              },
+              {
+                value: "Male",
+                label: t("results.selector_elements.gender_selector.male"),
+              },
+              {
+                value: "Female",
+                label: t("results.selector_elements.gender_selector.female"),
+              },
+            ]}
+            onChange={filterActions.setGender}
+          />
+          <SegmentedField
+            label={t("results.selector_elements.show_selector.show")}
+            value={filterState.show}
+            items={[
+              {
+                value: "100 persons",
+                label: t("results.selector_elements.show_selector.persons"),
+              },
+              {
+                value: "100 results",
+                label: t("results.selector_elements.show_selector.results"),
+              },
+              {
+                value: "by region",
+                label: t("results.selector_elements.show_selector.by_region"),
+              },
+            ]}
+            onChange={filterActions.setShow}
+          />
+        </Stack>
       </VStack>
     </Box>
   );

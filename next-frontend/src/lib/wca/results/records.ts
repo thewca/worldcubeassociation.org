@@ -6,12 +6,15 @@ export type RecordsQuery = Pick<
   "gender" | "region" | "show"
 >;
 
+export function isRecordsHistory(show?: string | null) {
+  return show === "history" || show === "mixed history";
+}
+
 export function getRecordsQueryOptions(
   api: OpenapiQueryClient<paths>,
   { gender, region, show }: RecordsQuery,
 ) {
-  const dataset =
-    show === "history" || show === "mixed history" ? "history" : "mixed";
+  const dataset = isRecordsHistory(show) ? "history" : "mixed";
 
   return api.queryOptions(
     "get",
