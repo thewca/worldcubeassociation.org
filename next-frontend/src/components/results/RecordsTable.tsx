@@ -311,7 +311,22 @@ function MixedRecordsTable({ records }: RecordsTableProps) {
 
   return (
     <Table.ScrollArea rounded="md">
-      <Table.Root size="xs" striped>
+      <Table.Root
+        size="xs"
+        striped
+        tableLayout="fixed"
+        minW="6xl"
+        whiteSpace="normal"
+        overflowWrap="anywhere"
+      >
+        <Table.ColumnGroup>
+          <Table.Column w="16" />
+          <Table.Column w={{ base: "3xs", md: "2xs" }} />
+          <Table.Column w="24" />
+          <Table.Column w="32" />
+          <Table.Column w="64" />
+          <Table.Column span={5} />
+        </Table.ColumnGroup>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
