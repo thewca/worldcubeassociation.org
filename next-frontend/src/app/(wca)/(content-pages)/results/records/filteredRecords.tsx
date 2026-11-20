@@ -97,11 +97,7 @@ export default function FilteredRecords() {
         </Text>
       )}
       <Collapsible.Root width="full" mb={2} overflowPadding lazyMount>
-        <HStack
-          justify="space-between"
-          borderBottomWidth="1px"
-          borderColor="border"
-        >
+        <HStack justify="space-between" borderBottom="sm" borderColor="border">
           <Tabs.Root
             value={view}
             onValueChange={({ value }) =>
@@ -169,7 +165,6 @@ function RecordsFilterToggle({
         }
         variant="ghost"
         colorPalette={hasActiveFilters ? "blue" : undefined}
-        color={hasActiveFilters ? "colorPalette.fg" : undefined}
         size="sm"
       >
         <Box as="span" position="relative" display="inline-flex">
@@ -180,8 +175,7 @@ function RecordsFilterToggle({
                 as="span"
                 size="1.5"
                 bg="colorPalette.solid"
-                outlineWidth="2px"
-                outlineStyle="solid"
+                outline="{borders.md}"
                 outlineColor="bg"
                 aria-hidden="true"
               />
