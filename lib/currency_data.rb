@@ -6,7 +6,7 @@ module CurrencyData
   end
 
   def self.write_json_data!
-    data_file_path.write("#{JSON.pretty_generate(to_h)}\n")
+    StaticData.write_json_file(data_file_path, to_h)
   end
 
   def self.to_h

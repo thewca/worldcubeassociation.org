@@ -1,9 +1,5 @@
 import { Badge, FormatNumber, HStack, Span } from "@chakra-ui/react";
-import currencies from "@/lib/staticData/currencies.json";
-
-type Currency = (typeof currencies)[keyof typeof currencies];
-
-const currencyTable: Record<string, Currency> = currencies;
+import currencies from "@/lib/wca/data/currencies";
 
 export default function CurrencyValue({
   lowestDenomination,
@@ -12,7 +8,7 @@ export default function CurrencyValue({
   lowestDenomination: number | null;
   currencyCode: string;
 }) {
-  const currency = currencyTable[currencyCode];
+  const currency = currencies.byIsoCode[currencyCode];
   const amount = (lowestDenomination ?? 0) / currency.subunit_to_unit;
 
   return (
