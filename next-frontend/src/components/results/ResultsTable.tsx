@@ -364,12 +364,14 @@ export function ByCompetitionTable({
             <Table.ColumnHeader>
               {t("persons.show.competition")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("persons.show.round")}</Table.ColumnHeader>
             <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
-            <Table.ColumnHeader>Single</Table.ColumnHeader>
-            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
+            <Table.ColumnHeader>{t("common.single")}</Table.ColumnHeader>
+            {anyAverages && (
+              <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
+            )}
             <Table.ColumnHeader colSpan={attemptCount} textAlign="start">
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -378,8 +380,11 @@ export function ByCompetitionTable({
             return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
 
-              const isSingleRecord = pbMarkers?.single.has(competitorResult.id);
-              const isAvgRecord = pbMarkers?.average.has(competitorResult.id);
+              const singleRecord = competitorResult.regional_single_record;
+              const avgRecord = competitorResult.regional_average_record;
+
+              const isSinglePB = pbMarkers?.single.has(competitorResult.id);
+              const isAvgPB = pbMarkers?.average.has(competitorResult.id);
 
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
@@ -413,7 +418,7 @@ export function ByCompetitionTable({
                   />
                   <Table.Cell
                     color={
-                      isSingleRecord
+                      isSinglePB || singleRecord
                         ? personalBestColor(
                             competitorResult.regional_single_record,
                           )
@@ -423,9 +428,11 @@ export function ByCompetitionTable({
                   >
                     <WithRecordTag
                       recordTag={
-                        isSingleRecord
-                          ? "PR"
-                          : competitorResult.regional_single_record
+                        singleRecord
+                          ? singleRecord
+                          : isSinglePB
+                            ? "PR"
+                            : undefined
                       }
                     >
                       {formatAttemptResult(competitorResult.best, eventId)}
@@ -434,7 +441,7 @@ export function ByCompetitionTable({
                   {anyAverages && (
                     <Table.Cell
                       color={
-                        isAvgRecord
+                        isAvgPB || avgRecord
                           ? personalBestColor(
                               competitorResult.regional_average_record,
                             )
@@ -444,9 +451,7 @@ export function ByCompetitionTable({
                     >
                       <WithRecordTag
                         recordTag={
-                          isAvgRecord
-                            ? "PR"
-                            : competitorResult.regional_average_record
+                          avgRecord ? avgRecord : isAvgPB ? "PR" : undefined
                         }
                       >
                         {formatAttemptResult(competitorResult.average, eventId)}
@@ -458,7 +463,9 @@ export function ByCompetitionTable({
                     bestResultIndex={bestResultIndex}
                     worstResultIndex={worstResultIndex}
                     eventId={eventId}
-                    recordTag={competitorResult.regional_single_record}
+                    recordTag={
+                      singleRecord ? singleRecord : isSinglePB ? "PR" : null
+                    }
                     attemptCount={attemptCount}
                   />
                 </Table.Row>

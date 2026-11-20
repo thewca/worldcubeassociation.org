@@ -14,6 +14,7 @@ import { StaffColor } from "@/components/RoleBadge";
 import _ from "lodash";
 import { FULL_EVENT_IDS } from "@/lib/wca/data/events";
 import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
 type TitleProps = {
   params: Promise<{ wcaId: string }>;
@@ -40,6 +41,7 @@ export default async function PersonOverview({
 }) {
   const { wcaId } = await params;
   const { data: personDetails, error } = await getPersonInfo(wcaId);
+  const { t } = await getT();
 
   if (error) {
     return <Text>Error fetching person</Text>;
@@ -171,19 +173,25 @@ export default async function PersonOverview({
                 >
                   <Card.Header padding={0}>
                     <Tabs.List>
-                      <Tabs.Trigger value="results">Results</Tabs.Trigger>
+                      <Tabs.Trigger value="results">
+                        {t("persons.show.results")}
+                      </Tabs.Trigger>
                       <Tabs.Trigger value="competitions">
-                        Competitions
+                        {t("competitions.index.title")}
                       </Tabs.Trigger>
                       {hasRecords && (
-                        <Tabs.Trigger value="records">Records</Tabs.Trigger>
+                        <Tabs.Trigger value="records">
+                          {t("persons.show.records")}
+                        </Tabs.Trigger>
                       )}
                       {hasChampionshipPodiums && (
                         <Tabs.Trigger value="championship-podiums">
-                          Championship Podiums
+                          {t("persons.show.championship_podiums")}
                         </Tabs.Trigger>
                       )}
-                      <Tabs.Trigger value="map">Map</Tabs.Trigger>
+                      <Tabs.Trigger value="map">
+                        {t("persons.show.competitions_map")}
+                      </Tabs.Trigger>
                       <Tabs.Indicator
                         bg="colorPalette.solid"
                         borderBottomRadius={0}
