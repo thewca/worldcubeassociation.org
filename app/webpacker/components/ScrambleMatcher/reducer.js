@@ -91,19 +91,21 @@ function unpackRoundAndApplyAction(
     .filter((set) => set.external_scrambles.length > 0);
 }
 
-function removeFileFromScrambleSets(scrSets, oldScrambleFile) {
-  const isFromOtherFile = (scrEntity) => scrEntity.scramble_file_upload_id !== oldScrambleFile.id;
-
-  return scrSets
-    .filter(isFromOtherFile)
+function removeFileFromScrambleSets(scrSets, withoutOldFile) {
+  return withoutOldFile(scrSets)
     .map((scrSet) => ({
       ...scrSet,
-      external_scrambles: scrSet.external_scrambles.filter(isFromOtherFile),
+      external_scrambles: withoutOldFile(scrSet.external_scrambles),
     }))
     .filter((scrSet) => scrSet.external_scrambles.length > 0);
 }
 
 function removeScrambleFile(state, oldScrambleFile, autoMatchSettings) {
+  const isFromOldFile = (scrEntity) => scrEntity.scramble_file_upload_id === oldScrambleFile.id;
+  const withoutOldFile = (scrEntities) => scrEntities.filter(
+    (scrEntity) => !isFromOldFile(scrEntity),
+  );
+
   return {
     ...state,
     events: state.events.map((wcifEvent) => {
@@ -116,13 +118,8 @@ function removeScrambleFile(state, oldScrambleFile, autoMatchSettings) {
           // Only attempt-based rounds may be re-chunked:
           //   elsewhere it would shift extras into the next set.
           external_scramble_sets: isAttemptMode
-            ? unpackRoundAndApplyAction(
-              round,
-              (flatScrambles) => flatScrambles.filter(
-                (scrEntity) => scrEntity.scramble_file_upload_id !== oldScrambleFile.id,
-              ),
-            )
-            : removeFileFromScrambleSets(round.external_scramble_sets, oldScrambleFile),
+            ? unpackRoundAndApplyAction(round, withoutOldFile)
+            : removeFileFromScrambleSets(round.external_scramble_sets, withoutOldFile),
         })),
       };
     }),
