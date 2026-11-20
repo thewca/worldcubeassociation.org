@@ -22,11 +22,24 @@ type FilterParams = {
   show: string;
 };
 
+function getSelectedEvent(params: URLSearchParams) {
+  return params.get("event") ?? "all events";
+}
+
+function getUpdatedFilterParams(
+  search: string,
+  changes: Partial<FilterParams>,
+) {
+  const params = new URLSearchParams(search);
+  for (const [key, value] of Object.entries(changes)) params.set(key, value);
+  return params;
+}
+
 export default function FilteredRecords() {
   const api = useAPI();
   const searchParams = useSearchParams();
   const filters: FilterParams = {
-    event: searchParams.get("event") ?? "all events",
+    event: getSelectedEvent(searchParams),
     region: searchParams.get("region") ?? "world",
     gender: searchParams.get("gender") ?? "All",
     show: searchParams.get("show") ?? "mixed",
@@ -36,8 +49,7 @@ export default function FilteredRecords() {
     placeholderData: keepPreviousData,
   });
   const updateFilters = (changes: Partial<FilterParams>) => {
-    const params = new URLSearchParams(window.location.search);
-    for (const [key, value] of Object.entries(changes)) params.set(key, value);
+    const params = getUpdatedFilterParams(window.location.search, changes);
     const url = route({
       pathname: "/results/records",
       query: Object.fromEntries(params),
