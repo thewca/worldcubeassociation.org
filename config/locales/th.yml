@@ -819,6 +819,8 @@ th:
         weat: สำหรับ WEAT
         wqac: สำหรับ WQAC
         leader: สำหรับผู้นำ
+      switch_to_dark_mode: เปลี่ยนเป็นโหมดมืด
+      switch_to_light_mode: เปลี่ยนเป็นโหมดสว่าง
   page:
     translators:
       title: ผู้แปลภาษา
@@ -1838,6 +1840,7 @@ th:
             menu: ถอนผู้เข้าแข่งขันจำนวนมาก
             id: ID
             name: ชื่อ
+            select_all: เลือกทั้งหมด
           quit_menu: Quit
           no_next: ไม่มีผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบ
           cancel: ยกเลิก
@@ -2997,6 +3000,7 @@ th:
         register: สมัครการแข่งขัน
         competitors: ผู้เข้าแข่งขัน
         scrambles: โจทย์
+        competitor_results: ผลการแข่งขันของผู้เข้าแข่งขัน
       general: ทั่วไป
       more: เพิ่มเติม
       admin: แอดมิน
