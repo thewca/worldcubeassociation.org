@@ -9,7 +9,6 @@ import {
   HistoryRow,
   MixedRecordsRow,
   SeparateRecordsRow,
-  SlimRecordsRow,
 } from "@/components/results/RecordsRow";
 import { useT } from "@/lib/i18n/useI18n";
 import events, { EventId, WCA_EVENT_IDS } from "@/lib/wca/data/events";
@@ -30,10 +29,6 @@ interface MixedHistoryTableProps {
 
 interface RecordsTableProps {
   records: components["schemas"]["Record"][];
-}
-
-interface SlimRecordsTableProps {
-  records: components["schemas"]["RecordByEvent"];
 }
 
 interface SeparateRecordsTableProps {
@@ -63,10 +58,6 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
         })}
       </VStack>
     );
-  }
-
-  if (show === "slim") {
-    return <SlimRecordsTable records={records} />;
   }
 
   if (show === "separate") {
@@ -216,57 +207,6 @@ function HistoryTable({ records }: HistoryTableProps) {
         );
       })}
     </VStack>
-  );
-}
-
-function SlimRecordsTable({ records }: SlimRecordsTableProps) {
-  const { t } = useT();
-
-  return (
-    <Table.ScrollArea rounded="md">
-      <Table.Root size="xs" striped>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeader>
-              {t("results.table_elements.name")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>{t("common.single")}</Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.event")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.name")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
-            <Table.ColumnHeader colSpan={5}>
-              {t("results.table_elements.solves")}
-            </Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {WCA_EVENT_IDS.map((eventId) => {
-            const eventRecords = records[eventId as EventId];
-            if (!eventRecords) {
-              return null;
-            }
-            const single = eventRecords.filter(
-              (record) => record.type === "single",
-            );
-            const average = eventRecords.filter(
-              (record) => record.type === "average",
-            );
-
-            return (
-              <SlimRecordsRow
-                key={eventId}
-                singles={single}
-                averages={average}
-              />
-            );
-          })}
-        </Table.Body>
-      </Table.Root>
-    </Table.ScrollArea>
   );
 }
 

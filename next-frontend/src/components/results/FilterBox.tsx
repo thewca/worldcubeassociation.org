@@ -194,10 +194,6 @@ export function RecordsFilterBox({
                 label: t("results.selector_elements.show_selector.mixed"),
               },
               {
-                value: "slim",
-                label: t("results.selector_elements.show_selector.slim"),
-              },
-              {
                 value: "separate",
                 label: t("results.selector_elements.show_selector.separate"),
               },

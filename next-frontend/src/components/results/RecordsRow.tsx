@@ -27,11 +27,6 @@ interface HistoryRowProps {
   mixed?: boolean;
 }
 
-interface SlimRecordsRowProp {
-  singles: components["schemas"]["Record"][];
-  averages: components["schemas"]["Record"][];
-}
-
 const maxAttemptCountForEvent = (eventId: string) => {
   const formatSolveCounts = events.byId[eventId].formats.map(
     (fmt) => fmt.expected_solve_count,
@@ -145,59 +140,4 @@ export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
       )}
     </Table.Row>
   );
-}
-
-export function SlimRecordsRow({ singles, averages }: SlimRecordsRowProp) {
-  const rowLengths = Math.max(singles.length, averages.length);
-
-  return _.range(rowLengths).map((i) => {
-    const single = singles[i];
-    const average = averages[i];
-    // The row count is the longer of the two lists, so either side can be missing: multi-blind
-    //   holds a single record but no average at all.
-    const rowRecord = single ?? average;
-    const averageAttempts = average && recordAttempts(average);
-
-    if (!rowRecord) return null;
-
-    return (
-      <Table.Row key={`${single?.id}-${average?.id}`}>
-        {single ? (
-          <>
-            <PersonCell
-              personId={single.person_id}
-              personName={single.person_name}
-            />
-            <Table.Cell>
-              {formatAttemptResult(single.value, single.event_id)}
-            </Table.Cell>
-          </>
-        ) : (
-          <>
-            <Table.Cell />
-            <Table.Cell />
-          </>
-        )}
-        <EventCell eventId={rowRecord.event_id} />
-        {average && averageAttempts && (
-          <>
-            <PersonCell
-              personId={average.person_id}
-              personName={average.person_name}
-            />
-            <Table.Cell>
-              {formatAttemptResult(average.value, average.event_id)}
-            </Table.Cell>
-            <AttemptsCells
-              attempts={averageAttempts.definedAttempts}
-              bestResultIndex={averageAttempts.bestResultIndex}
-              worstResultIndex={averageAttempts.worstResultIndex}
-              eventId={average.event_id}
-              attemptCount={maxAttemptCountForEvent(average.event_id)}
-            />
-          </>
-        )}
-      </Table.Row>
-    );
-  });
 }

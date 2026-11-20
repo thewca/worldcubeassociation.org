@@ -51,11 +51,12 @@ function getUpdatedFilterParams(
 export default function FilteredRecords() {
   const api = useAPI();
   const searchParams = useSearchParams();
+  const requestedShow = searchParams.get("show");
   const filters = {
     eventIds: getSelectedEventIds(searchParams),
     region: searchParams.get("region") ?? "world",
     gender: searchParams.get("gender") ?? "All",
-    show: searchParams.get("show") ?? "mixed",
+    show: requestedShow === "slim" ? "mixed" : (requestedShow ?? "mixed"),
   };
   const { data, isFetching, isPlaceholderData, error } = useQuery({
     ...getRecordsQueryOptions(api, filters),
