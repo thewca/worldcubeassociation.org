@@ -197,10 +197,16 @@ RSpec.describe UsersController do
     it "enqueues a removal email with the acting user, avatar owner, and reason" do
       expect do
         delete :delete_avatar, params: { id: user.id, avatarId: avatar.id, reason: reason }
-      end.to have_enqueued_mail(AvatarsMailer, :notify_user_of_avatar_removal).with(remover, user, reason).once
+      end.to have_enqueued_mail(AvatarsMailer, :notify_user_of_avatar_removal).with(remover, user, reason, attached_avatar: nil).once
 
       expect(response).to have_http_status(:ok)
       expect(avatar.reload).to be_deleted
+    end
+
+    it "passes the avatar to the removal email when asked to include the picture" do
+      expect do
+        delete :delete_avatar, params: { id: user.id, avatarId: avatar.id, reason: reason, include_avatar_picture: true }
+      end.to have_enqueued_mail(AvatarsMailer, :notify_user_of_avatar_removal).with(remover, user, reason, attached_avatar: avatar).once
     end
   end
 
