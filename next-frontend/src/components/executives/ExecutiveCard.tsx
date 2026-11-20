@@ -52,7 +52,7 @@ export default async function ExecutiveCard({
             colorPalette={executive.colorPalette}
           />
         </Card.Title>
-        <DataList.Root variant="bold">
+        <DataList.Root variant="bold" textAutoContrast>
           <DataList.Item>
             <DataList.ItemLabel>
               {t("page.executives.joined_wca")}
