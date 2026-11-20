@@ -1,7 +1,19 @@
 "use client";
 
 import React from "react";
-import { Alert, Heading, Tabs, VStack } from "@chakra-ui/react";
+import {
+  Alert,
+  Box,
+  Circle,
+  Collapsible,
+  Float,
+  Heading,
+  HStack,
+  IconButton,
+  Tabs,
+  VStack,
+} from "@chakra-ui/react";
+import { LuFilter } from "react-icons/lu";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
@@ -59,6 +71,10 @@ export default function FilteredRecords() {
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const lng = useLocale();
+  const hasActiveFilters =
+    eventIds.length > 0 ||
+    filters.region !== REGION_WORLD ||
+    filters.gender !== GENDER_ALL;
 
   const filteredRecords =
     eventIds.length === 0
@@ -76,24 +92,44 @@ export default function FilteredRecords() {
         t("results.last_updated_html", {
           timestamp: getMediumDateString(data.timestamp, lng),
         })}
-      <Tabs.Root
-        value={view}
-        onValueChange={({ value }) =>
-          updateFilters({ view: value === "history" ? "history" : "current" })
-        }
-        variant="line"
-        width="full"
-      >
-        <Tabs.List aria-label={t("results.records.title")}>
-          <Tabs.Trigger value="current">
-            {t("results.records.current")}
-          </Tabs.Trigger>
-          <Tabs.Trigger value="history">
-            {t("results.selector_elements.show_selector.history")}
-          </Tabs.Trigger>
-        </Tabs.List>
-      </Tabs.Root>
-      <RecordsFilterBox filterState={filters} filterActions={filterActions} />
+      <Collapsible.Root width="full" overflowPadding lazyMount>
+        <HStack
+          justify="space-between"
+          borderBottomWidth="1px"
+          borderColor="border"
+        >
+          <Tabs.Root
+            value={view}
+            onValueChange={({ value }) =>
+              updateFilters({
+                view: value === "history" ? "history" : "current",
+              })
+            }
+            variant="line"
+          >
+            <Tabs.List
+              aria-label={t("results.records.title")}
+              borderBottomWidth="0"
+            >
+              <Tabs.Trigger value="current">
+                {t("results.records.current")}
+              </Tabs.Trigger>
+              <Tabs.Trigger value="history">
+                {t("results.selector_elements.show_selector.history")}
+              </Tabs.Trigger>
+            </Tabs.List>
+          </Tabs.Root>
+          <RecordsFilterToggle hasActiveFilters={hasActiveFilters} />
+        </HStack>
+        <Collapsible.Content>
+          <Box py={3}>
+            <RecordsFilterBox
+              filterState={filters}
+              filterActions={filterActions}
+            />
+          </Box>
+        </Collapsible.Content>
+      </Collapsible.Root>
       {isFetching && <Loading />}
       {error ? (
         <Alert.Root status="error">
@@ -110,5 +146,45 @@ export default function FilteredRecords() {
         )
       )}
     </VStack>
+  );
+}
+
+function RecordsFilterToggle({
+  hasActiveFilters,
+}: {
+  hasActiveFilters: boolean;
+}) {
+  const { t } = useT();
+
+  return (
+    <Collapsible.Trigger asChild>
+      <IconButton
+        aria-label={t("common.filter")}
+        aria-description={
+          hasActiveFilters ? t("results.records.filters_applied") : undefined
+        }
+        variant="ghost"
+        colorPalette={hasActiveFilters ? "blue" : undefined}
+        color={hasActiveFilters ? "colorPalette.fg" : undefined}
+        size="sm"
+      >
+        <Box as="span" position="relative" display="inline-flex">
+          <LuFilter />
+          {hasActiveFilters && (
+            <Float placement="top-end" pointerEvents="none">
+              <Circle
+                as="span"
+                size="1.5"
+                bg="colorPalette.solid"
+                outlineWidth="2px"
+                outlineStyle="solid"
+                outlineColor="bg"
+                aria-hidden="true"
+              />
+            </Float>
+          )}
+        </Box>
+      </IconButton>
+    </Collapsible.Trigger>
   );
 }
