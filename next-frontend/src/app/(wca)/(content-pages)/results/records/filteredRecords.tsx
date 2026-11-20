@@ -55,13 +55,6 @@ export default function FilteredRecords() {
       updateFilters({ groupBy }),
   };
   const { eventIds, view, groupBy } = filters;
-  // TODO: remove show
-  const show =
-    view === "history"
-      ? "mixed history"
-      : groupBy === "type"
-        ? "separate"
-        : "mixed";
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const lng = useLocale();
@@ -108,7 +101,11 @@ export default function FilteredRecords() {
       ) : (
         data &&
         !isPlaceholderData && (
-          <RecordsTable records={filteredRecords} show={show} />
+          <RecordsTable
+            records={filteredRecords}
+            view={view}
+            groupBy={groupBy}
+          />
         )
       )}
     </VStack>

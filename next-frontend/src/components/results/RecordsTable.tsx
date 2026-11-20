@@ -3,27 +3,20 @@
 import { Heading, Table, VStack } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
 import _ from "lodash";
+import { DateTime } from "luxon";
 import {
   HistoryRow,
   MixedRecordsRow,
   SeparateRecordsRow,
 } from "@/components/results/RecordsRow";
 import { useT } from "@/lib/i18n/useI18n";
-import events, { EventId, WCA_EVENT_IDS } from "@/lib/wca/data/events";
+import events, { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import EventIcon from "@/components/EventIcon";
+import type { RecordsFilters } from "@/lib/wca/results/types";
 
-interface WrapperTableProps {
+type WrapperTableProps = Pick<RecordsFilters, "view" | "groupBy"> & {
   records: components["schemas"]["RecordByEvent"];
-  show: string;
-}
-
-interface HistoryTableProps {
-  records: components["schemas"]["RecordByEvent"];
-}
-
-interface MixedHistoryTableProps {
-  records: components["schemas"]["Record"][];
-}
+};
 
 interface RecordsTableProps {
   records: components["schemas"]["Record"][];
@@ -36,12 +29,26 @@ interface SeparateRecordsTableProps {
   };
 }
 
-export default function RecordsTable({ records, show }: WrapperTableProps) {
-  if (show === "mixed") {
+export default function RecordsTable({
+  records,
+  view,
+  groupBy,
+}: WrapperTableProps) {
+  if (view === "history") {
+    const sortedRecords = _.orderBy(
+      WCA_EVENT_IDS.toReversed().flatMap((event) => records[event] ?? []),
+      (record) => DateTime.fromISO(record.start_date).toMillis(),
+      "desc",
+    );
+
+    return <HistoryTable records={sortedRecords} />;
+  }
+
+  if (groupBy === "event") {
     return (
       <VStack align="stretch" gap={6}>
         {WCA_EVENT_IDS.map((event) => {
-          const recordsByEvent = records[event as EventId];
+          const recordsByEvent = records[event];
 
           return (
             recordsByEvent && (
@@ -58,34 +65,16 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
     );
   }
 
-  if (show === "separate") {
-    // Make sure we don't include any unofficial events and keep the right order
-    const allRecords = WCA_EVENT_IDS.reduce(
-      (acc, event) => [...(records[event as EventId] ?? []), ...acc],
-      [] as components["schemas"]["Record"][],
-    ).toReversed();
+  const allRecords = WCA_EVENT_IDS.flatMap((event) =>
+    (records[event] ?? []).toReversed(),
+  );
+  const average = allRecords.filter((record) => record.type === "average");
+  const single = allRecords.filter((record) => record.type === "single");
 
-    const average = allRecords.filter((record) => record.type === "average");
-    const single = allRecords.filter((record) => record.type === "single");
-
-    return <SeparateRecordsTable recordsByType={{ average, single }} />;
-  }
-
-  if (show === "history") {
-    return <HistoryTable records={records} />;
-  }
-
-  if (show === "mixed history") {
-    const allRecords = WCA_EVENT_IDS.reduce(
-      (acc, event) => [...(records[event as EventId] ?? []), ...acc],
-      [] as components["schemas"]["Record"][],
-    ).sort((a, b) => b.start_date.localeCompare(a.start_date));
-
-    return <MixedHistoryTable records={allRecords} />;
-  }
+  return <SeparateRecordsTable recordsByType={{ average, single }} />;
 }
 
-function MixedHistoryTable({ records }: MixedHistoryTableProps) {
+function HistoryTable({ records }: RecordsTableProps) {
   const { t } = useT();
 
   return (
@@ -121,75 +110,11 @@ function MixedHistoryTable({ records }: MixedHistoryTableProps) {
         </Table.Header>
         <Table.Body>
           {records.map((record, index) => (
-            <HistoryRow key={`${record.id}-${index}`} record={record} mixed />
+            <HistoryRow key={`${record.id}-${index}`} record={record} />
           ))}
         </Table.Body>
       </Table.Root>
     </Table.ScrollArea>
-  );
-}
-
-function HistoryTable({ records }: HistoryTableProps) {
-  const { t } = useT();
-
-  return (
-    <VStack align="stretch" gap={6}>
-      {WCA_EVENT_IDS.map((eventId) => {
-        if (!records[eventId as EventId]) return;
-
-        const groupedByType = _.groupBy(
-          records[eventId as EventId],
-          (record) => record.type,
-        );
-        const single = groupedByType["single"];
-        const average = groupedByType["average"];
-
-        return (
-          <VStack key={eventId} align="stretch">
-            <Heading size="2xl">
-              <EventIcon eventId={eventId} /> {events.byId[eventId].name}
-            </Heading>
-            <Table.ScrollArea rounded="md">
-              <Table.Root size="xs" striped>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.date_circa")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.name")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.selector_elements.type_selector.single")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.selector_elements.type_selector.average")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.region")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>
-                      {t("results.table_elements.competition")}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader colSpan={5}>
-                      {t("results.table_elements.solves")}
-                    </Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {single?.map((record) => (
-                    <HistoryRow key={record.id} record={record} />
-                  ))}
-                  {average?.map((record) => (
-                    <HistoryRow key={record.id} record={record} />
-                  ))}
-                </Table.Body>
-              </Table.Root>
-            </Table.ScrollArea>
-          </VStack>
-        );
-      })}
-    </VStack>
   );
 }
 
