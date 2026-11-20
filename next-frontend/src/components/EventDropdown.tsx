@@ -6,11 +6,15 @@ import { useT } from "@/lib/i18n/useI18n";
 import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 
 interface EventDropdownProps {
+  multiple?: boolean;
+  required?: boolean;
   selectedEvents: string[];
   onEventsChange: (eventIds: string[]) => void;
 }
 
 export default function EventDropdown({
+  multiple = true,
+  required = false,
   selectedEvents,
   onEventsChange,
 }: EventDropdownProps) {
@@ -24,7 +28,9 @@ export default function EventDropdown({
 
   return (
     <Select.Root
-      multiple
+      multiple={multiple}
+      required={required}
+      deselectable={!required}
       lazyMount
       collection={collection}
       value={selectedEvents}
@@ -42,7 +48,9 @@ export default function EventDropdown({
           />
         </Select.Trigger>
         <Select.IndicatorGroup>
-          <Select.ClearTrigger aria-label={t("competitions.index.clear")} />
+          {!required && (
+            <Select.ClearTrigger aria-label={t("competitions.index.clear")} />
+          )}
           <Select.Indicator />
         </Select.IndicatorGroup>
       </Select.Control>
