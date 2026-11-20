@@ -14,7 +14,7 @@ export type RecordsFilters = SharedFilterState & {
   groupBy: "event" | "type";
 };
 
-export type RankingsURLParams = {
+export type RankingsFilters = {
   event: string;
   region: string;
   gender: string;
