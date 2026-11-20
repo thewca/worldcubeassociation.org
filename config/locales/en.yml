@@ -1793,12 +1793,12 @@ en:
       date_and_city: "%{date} – %{city}"
       #context: titles for the competitions list
       titles:
-        in_progress: "Competitions in progress"
+        in_progress: "Competitions in progress (%{count})"
         #context: when selecting a specific year ('year' is a number)
-        past: "Past competitions from %{year}"
-        past_all: "Past competitions from all years"
+        past: "Past competitions from %{year} (%{count})"
+        past_all: "Past competitions from all years (%{count})"
         recent: "Recent competitions (last %{count} days)"
-        upcoming: "Upcoming competitions"
+        upcoming: "Upcoming competitions (%{count})"
         ongoing_and_upcoming: "Ongoing and upcoming competitions"
         custom: "Competitions in the selected period of time"
         by_announcement: "Competitions sorted by announcement date, newest on top"
