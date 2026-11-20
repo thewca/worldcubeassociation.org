@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { getRegistrationByUser } from '../api/registration/get/get_registrations';
+import { getMyRegistration, getRegistrationByUser } from '../api/registration/get/get_registrations';
 import { showMessage } from '../Register/RegistrationMessage';
 import pollRegistrations from '../api/registration/get/poll_registrations';
 
@@ -17,6 +17,7 @@ export default function RegistrationProvider({
   isProcessing,
   children,
   serverRegistration = undefined,
+  isOrganizerView = false,
 }) {
   const dispatch = useDispatch();
 
@@ -53,10 +54,9 @@ export default function RegistrationProvider({
     refetch: refetchRegistration,
   } = useQuery({
     queryKey: ['registration', competitionInfo.id, userInfo.id],
-    queryFn: () => getRegistrationByUser(
-      userInfo.id,
-      competitionInfo.id,
-    ),
+    queryFn: () => (isOrganizerView
+      ? getRegistrationByUser(userInfo.id, competitionInfo.id)
+      : getMyRegistration(competitionInfo.id)),
     initialData: serverRegistration,
     onError: (error) => {
       dispatch(

@@ -16,6 +16,8 @@ paths:
     $ref: 'paths/competitions/liveCompetitions.yaml'
   /v1/competitions/{competitionId}/registrations:
     $ref: 'paths/registrations/registrationsByCompetition.yaml'
+  /v1/competitions/{competitionId}/registrations/mine:
+    $ref: 'paths/registrations/myRegistration.yaml'
   /v1/competitions/{competitionId}/registrations/{userId}:
     $ref: 'paths/registrations/registrationByUser.yaml'
   /v1/registrations/{registrationId}:

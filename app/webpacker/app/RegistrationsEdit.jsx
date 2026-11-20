@@ -20,6 +20,7 @@ export default function RegistrationEdit({ registrationId, competitionInfo, user
             <RegistrationProvider
               competitionInfo={competitionInfo}
               userInfo={user}
+              isOrganizerView
             >
               <Sticky context={ref}>
                 <RegistrationMessage />
