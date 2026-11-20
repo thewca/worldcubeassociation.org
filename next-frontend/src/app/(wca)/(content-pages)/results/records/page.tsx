@@ -1,4 +1,4 @@
-import { getRecordsQueryOptions } from "@/lib/wca/results/records";
+import { getFilters, getRecordsQueryOptions } from "@/lib/wca/results/records";
 import { serverQueryApi } from "@/lib/wca/wcaAPI";
 import {
   dehydrate,
@@ -12,10 +12,6 @@ import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import Loading from "@/components/ui/loading";
 
-const GENDER_ALL = "All";
-const SHOW_MIXED = "mixed";
-const REGION_WORLD = "world";
-
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
 
@@ -23,8 +19,10 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t("results.records.title"),
   };
 }
+type SearchParams = Record<string, string | string[] | undefined>;
+
 type RecordsPageProps = {
-  searchParams: Promise<{ [key: string]: string | undefined }>;
+  searchParams: Promise<SearchParams>;
 };
 
 export default function RecordsPage({ searchParams }: RecordsPageProps) {
@@ -36,18 +34,10 @@ export default function RecordsPage({ searchParams }: RecordsPageProps) {
 }
 
 async function Records({ searchParams }: RecordsPageProps) {
-  const {
-    gender = GENDER_ALL,
-    region = REGION_WORLD,
-    show = SHOW_MIXED,
-  } = await searchParams;
+  const params = toURLSearchParams(await searchParams);
 
   const queryClient = new QueryClient();
-  const options = getRecordsQueryOptions(serverQueryApi, {
-    gender,
-    region,
-    show,
-  });
+  const options = getRecordsQueryOptions(serverQueryApi, getFilters(params));
   await queryClient.query(options).catch(noop);
 
   return (
@@ -55,4 +45,13 @@ async function Records({ searchParams }: RecordsPageProps) {
       <FilteredRecords />
     </HydrationBoundary>
   );
+}
+
+function toURLSearchParams(searchParams: SearchParams) {
+  const entries = Object.entries(searchParams).flatMap(([key, value]) => {
+    const values = typeof value === "string" ? [value] : (value ?? []);
+    return values.map((item) => [key, item]);
+  });
+
+  return new URLSearchParams(entries);
 }
