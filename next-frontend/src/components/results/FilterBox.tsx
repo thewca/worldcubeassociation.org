@@ -27,12 +27,6 @@ type FilterActions = {
   setShow: (show: string) => void;
 };
 
-interface FilterBoxProps {
-  filterState: FilterState;
-  filterActions: FilterActions;
-  children: React.ReactElement;
-}
-
 interface RecordsFilterBoxProps {
   filterState: FilterState;
   filterActions: FilterActions;
@@ -112,56 +106,86 @@ export function RecordsFilterBox({
   const { t } = useT();
 
   return (
-    <FilterBox filterState={filterState} filterActions={filterActions}>
-      <Stack direction={{ base: "column", md: "row" }}>
-        <SegmentedField
-          label={t("results.selector_elements.gender_selector.gender")}
-          value={filterState.gender}
-          items={[
-            {
-              value: "All",
-              label: t("results.selector_elements.gender_selector.gender_all"),
-            },
-            {
-              value: "Male",
-              label: t("results.selector_elements.gender_selector.male"),
-            },
-            {
-              value: "Female",
-              label: t("results.selector_elements.gender_selector.female"),
-            },
-          ]}
-          onChange={filterActions.setGender}
+    <Box
+      bg="bg"
+      w="full"
+      p={{ base: 4, md: 6 }}
+      borderRadius="md"
+      boxShadow="md"
+      borderWidth="1px"
+      borderColor="gray.100"
+    >
+      <VStack align="left">
+        <SingleEventSelector
+          title={t("competitions.competition_form.events")}
+          selectedEvent={filterState.event}
+          onEventClick={(event) =>
+            event === filterState.event
+              ? filterActions.setEvent("all events")
+              : filterActions.setEvent(event)
+          }
         />
-        <SegmentedField
-          label={t("results.selector_elements.show_selector.show")}
-          value={filterState.show}
-          items={[
-            {
-              value: "mixed",
-              label: t("results.selector_elements.show_selector.mixed"),
-            },
-            {
-              value: "slim",
-              label: t("results.selector_elements.show_selector.slim"),
-            },
-            {
-              value: "separate",
-              label: t("results.selector_elements.show_selector.separate"),
-            },
-            {
-              value: "history",
-              label: t("results.selector_elements.show_selector.history"),
-            },
-            {
-              value: "mixed history",
-              label: t("results.selector_elements.show_selector.mixed_history"),
-            },
-          ]}
-          onChange={filterActions.setShow}
+        <RegionSelector
+          region={filterState.region}
+          onRegionChange={filterActions.setRegion}
+          label={t("common.country")}
+          t={t}
+          name={t("delegates_page.all_regions")}
         />
-      </Stack>
-    </FilterBox>
+        <Stack direction={{ base: "column", md: "row" }}>
+          <SegmentedField
+            label={t("results.selector_elements.gender_selector.gender")}
+            value={filterState.gender}
+            items={[
+              {
+                value: "All",
+                label: t(
+                  "results.selector_elements.gender_selector.gender_all",
+                ),
+              },
+              {
+                value: "Male",
+                label: t("results.selector_elements.gender_selector.male"),
+              },
+              {
+                value: "Female",
+                label: t("results.selector_elements.gender_selector.female"),
+              },
+            ]}
+            onChange={filterActions.setGender}
+          />
+          <SegmentedField
+            label={t("results.selector_elements.show_selector.show")}
+            value={filterState.show}
+            items={[
+              {
+                value: "mixed",
+                label: t("results.selector_elements.show_selector.mixed"),
+              },
+              {
+                value: "slim",
+                label: t("results.selector_elements.show_selector.slim"),
+              },
+              {
+                value: "separate",
+                label: t("results.selector_elements.show_selector.separate"),
+              },
+              {
+                value: "history",
+                label: t("results.selector_elements.show_selector.history"),
+              },
+              {
+                value: "mixed history",
+                label: t(
+                  "results.selector_elements.show_selector.mixed_history",
+                ),
+              },
+            ]}
+            onChange={filterActions.setShow}
+          />
+        </Stack>
+      </VStack>
+    </Box>
   );
 }
 
@@ -178,61 +202,6 @@ export function RankingsFilterBox({
     value,
     label: t(`results.selector_elements.type_selector.${value}`),
   }));
-
-  return (
-    <FilterBox filterState={filterState} filterActions={filterActions}>
-      <Stack direction={{ base: "column", md: "row" }}>
-        <SegmentedField
-          label={t("results.selector_elements.type_selector.type")}
-          value={filterState.rankingType}
-          items={rankingTypeItems}
-          onChange={filterActions.setType}
-        />
-        <SegmentedField
-          label={t("results.selector_elements.gender_selector.gender")}
-          value={filterState.gender}
-          items={[
-            {
-              value: "All",
-              label: t("results.selector_elements.gender_selector.gender_all"),
-            },
-            {
-              value: "Male",
-              label: t("results.selector_elements.gender_selector.male"),
-            },
-            {
-              value: "Female",
-              label: t("results.selector_elements.gender_selector.female"),
-            },
-          ]}
-          onChange={filterActions.setGender}
-        />
-        <SegmentedField
-          label={t("results.selector_elements.show_selector.show")}
-          value={filterState.show}
-          items={[
-            {
-              value: "100 persons",
-              label: t("results.selector_elements.show_selector.persons"),
-            },
-            {
-              value: "100 results",
-              label: t("results.selector_elements.show_selector.results"),
-            },
-            {
-              value: "by region",
-              label: t("results.selector_elements.show_selector.by_region"),
-            },
-          ]}
-          onChange={filterActions.setShow}
-        />
-      </Stack>
-    </FilterBox>
-  );
-}
-
-function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
-  const { t } = useT();
 
   return (
     <Box
@@ -261,7 +230,54 @@ function FilterBox({ filterState, filterActions, children }: FilterBoxProps) {
           t={t}
           name={t("delegates_page.all_regions")}
         />
-        {children}
+        <Stack direction={{ base: "column", md: "row" }}>
+          <SegmentedField
+            label={t("results.selector_elements.type_selector.type")}
+            value={filterState.rankingType}
+            items={rankingTypeItems}
+            onChange={filterActions.setType}
+          />
+          <SegmentedField
+            label={t("results.selector_elements.gender_selector.gender")}
+            value={filterState.gender}
+            items={[
+              {
+                value: "All",
+                label: t(
+                  "results.selector_elements.gender_selector.gender_all",
+                ),
+              },
+              {
+                value: "Male",
+                label: t("results.selector_elements.gender_selector.male"),
+              },
+              {
+                value: "Female",
+                label: t("results.selector_elements.gender_selector.female"),
+              },
+            ]}
+            onChange={filterActions.setGender}
+          />
+          <SegmentedField
+            label={t("results.selector_elements.show_selector.show")}
+            value={filterState.show}
+            items={[
+              {
+                value: "100 persons",
+                label: t("results.selector_elements.show_selector.persons"),
+              },
+              {
+                value: "100 results",
+                label: t("results.selector_elements.show_selector.results"),
+              },
+              {
+                value: "by region",
+                label: t("results.selector_elements.show_selector.by_region"),
+              },
+            ]}
+            onChange={filterActions.setShow}
+          />
+        </Stack>
       </VStack>
     </Box>
   );
