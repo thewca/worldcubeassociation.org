@@ -17,33 +17,10 @@ import {
 } from "@/components/EventSelector";
 import events from "@/lib/wca/data/events";
 import { isRecordsHistory } from "@/lib/wca/results/records";
-
-type SharedFilterState = {
-  region: string;
-  gender: string;
-  show: string;
-};
-
-type SharedFilterActions = {
-  setRegion: (region: string) => void;
-  setGender: (gender: string) => void;
-  setShow: (show: string) => void;
-};
-
-type RecordsFilterBoxProps = {
-  filterState: SharedFilterState & { eventIds: string[] };
-  filterActions: SharedFilterActions & {
-    setSelectedEventIds: (eventIds: string[]) => void;
-  };
-};
-
-type RankingsFilterBoxProps = {
-  filterState: SharedFilterState & { event: string; rankingType: string };
-  filterActions: SharedFilterActions & {
-    setEvent: (event: string) => void;
-    setType: (type: string) => void;
-  };
-};
+import type {
+  RankingsFilterBoxProps,
+  RecordsFilterBoxProps,
+} from "@/lib/wca/results/types";
 
 type SegmentedFieldProps = {
   label: string;

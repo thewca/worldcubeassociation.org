@@ -18,13 +18,7 @@ import {
   getRecordsQueryOptions,
   isRecordsHistory,
 } from "@/lib/wca/results/records";
-
-type FilterParams = {
-  event: string;
-  region: string;
-  gender: string;
-  show: string;
-};
+import type { RecordsFilterParams } from "@/lib/wca/results/types";
 
 function getSelectedEventIds(params: URLSearchParams) {
   const requestedEventIds = params.get("event")?.split(",") ?? [];
@@ -37,7 +31,7 @@ function getSelectedEventIds(params: URLSearchParams) {
 
 function getUpdatedFilterParams(
   search: string,
-  changes: Partial<FilterParams>,
+  changes: Partial<RecordsFilterParams>,
 ) {
   const params = new URLSearchParams(search);
   for (const [key, value] of Object.entries(changes)) params.set(key, value);
@@ -62,7 +56,7 @@ export default function FilteredRecords() {
     ...getRecordsQueryOptions(api, filters),
     placeholderData: keepPreviousData,
   });
-  const updateFilters = (changes: Partial<FilterParams>) => {
+  const updateFilters = (changes: Partial<RecordsFilterParams>) => {
     const params = getUpdatedFilterParams(window.location.search, changes);
     const url = route({
       pathname: "/results/records",
