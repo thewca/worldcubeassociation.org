@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --webpack",
-    "check:types": "tsc --noEmit",
+    "check:types": "next typegen && tsc --noEmit",
     "build": "next build --webpack",
     "start": "next start",
     "types:openapi": "redocly lint wca && redocly bundle wca && openapi-typescript && redocly build-docs wca -o public/api.html",
