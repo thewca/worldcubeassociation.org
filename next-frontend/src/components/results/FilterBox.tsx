@@ -31,9 +31,9 @@ type SharedFilterActions = {
 };
 
 type RecordsFilterBoxProps = {
-  filterState: SharedFilterState & { events: string[] };
+  filterState: SharedFilterState & { eventIds: string[] };
   filterActions: SharedFilterActions & {
-    setEvents: (events: string[]) => void;
+    setSelectedEventIds: (eventIds: string[]) => void;
   };
 };
 
@@ -112,17 +112,20 @@ export function RecordsFilterBox({
   filterActions,
 }: RecordsFilterBoxProps) {
   const { t } = useT();
-  const { events: selectedEvents, show } = filterState;
-  const multiple = !isRecordsHistory(show);
-  const { setEvents } = filterActions;
+  const { eventIds, show } = filterState;
+  const allowsMultipleEvents = !isRecordsHistory(show);
+  const { setSelectedEventIds } = filterActions;
 
-  const toggleEvent = (event: string) => {
-    if (selectedEvents.includes(event)) {
-      setEvents(selectedEvents.filter((selected) => selected !== event));
+  const toggleEvent = (eventId: string) => {
+    const isEventSelected = eventIds.includes(eventId);
+    if (isEventSelected) {
+      setSelectedEventIds(eventIds.filter((id) => id !== eventId));
       return;
     }
 
-    setEvents(multiple ? [...selectedEvents, event] : [event]);
+    setSelectedEventIds(
+      allowsMultipleEvents ? [...eventIds, eventId] : [eventId],
+    );
   };
 
   return (
@@ -133,22 +136,24 @@ export function RecordsFilterBox({
       borderRadius="md"
       boxShadow="md"
       borderWidth="1px"
-      borderColor="gray.100"
+      borderColor="border.muted"
     >
       <VStack align="left">
         <Box hideBelow="md">
           <FormEventSelector
             title={t("competitions.competition_form.events")}
-            selectedEvents={selectedEvents}
+            selectedEvents={eventIds}
             onEventClick={toggleEvent}
-            onClearClick={multiple ? () => setEvents([]) : undefined}
+            onClearClick={
+              allowsMultipleEvents ? () => setSelectedEventIds([]) : undefined
+            }
           />
         </Box>
         <Box hideFrom="md">
           <EventDropdown
-            multiple={multiple}
-            selectedEvents={selectedEvents}
-            onEventsChange={setEvents}
+            multiple={allowsMultipleEvents}
+            selectedEvents={eventIds}
+            onEventsChange={setSelectedEventIds}
           />
         </Box>
         <RegionSelector
@@ -237,7 +242,7 @@ export function RankingsFilterBox({
       borderRadius="md"
       boxShadow="md"
       borderWidth="1px"
-      borderColor="gray.100"
+      borderColor="border.muted"
     >
       <VStack align="left">
         <Box hideBelow="md">
@@ -252,7 +257,9 @@ export function RankingsFilterBox({
             multiple={false}
             required
             selectedEvents={[filterState.event]}
-            onEventsChange={([event]) => event && filterActions.setEvent(event)}
+            onEventsChange={([eventId]) =>
+              eventId && filterActions.setEvent(eventId)
+            }
           />
         </Box>
         <RegionSelector
