@@ -2,6 +2,8 @@ import {
   Box,
   VStack,
   Stack,
+  Grid,
+  GridItem,
   Field,
   Select,
   Portal,
@@ -41,7 +43,7 @@ function SegmentedField({
     <Field.Root>
       <Field.Label>{label}</Field.Label>
       <SegmentGroup.Root
-        hideBelow="md"
+        hideBelow="sm"
         value={value}
         onValueChange={(e) => onChange(e.value!)}
         size="md"
@@ -50,7 +52,7 @@ function SegmentedField({
         <SegmentGroup.Items items={items} />
       </SegmentGroup.Root>
       <Select.Root
-        hideFrom="md"
+        hideFrom="sm"
         collection={collection}
         value={[value]}
         onValueChange={({ value }) => value[0] && onChange(value[0])}
@@ -90,6 +92,7 @@ export function RecordsFilterBox({
   const { t } = useT();
   const { eventIds, view } = filterState;
   const allowsMultipleEvents = view === "current";
+  const segmentedColumns = view === "current" ? 2 : 1;
   const { setSelectedEventIds } = filterActions;
 
   const toggleEvent = (eventId: string) => {
@@ -105,7 +108,7 @@ export function RecordsFilterBox({
   };
 
   return (
-    <Box
+    <Grid
       bg="bg"
       w="full"
       p={{ base: 4, md: 6 }}
@@ -113,25 +116,33 @@ export function RecordsFilterBox({
       boxShadow="md"
       borderWidth="1px"
       borderColor="border.muted"
+      templateColumns={{
+        base: "minmax(0, 1fr)",
+        sm: `repeat(${segmentedColumns}, minmax(0, 1fr))`,
+        // Let Event span the card while keeping the other controls start-aligned.
+        md: `minmax(0, {sizes.sm}) repeat(${segmentedColumns}, max-content) minmax(0, 1fr)`,
+      }}
+      rowGap={2}
+      columnGap={{ base: 2, md: 4 }}
     >
-      <VStack align="left">
-        <Box hideBelow="md">
-          <FormEventSelector
-            title={t("competitions.competition_form.events")}
-            selectedEvents={eventIds}
-            onEventClick={toggleEvent}
-            onClearClick={
-              allowsMultipleEvents ? () => setSelectedEventIds([]) : undefined
-            }
-          />
-        </Box>
-        <Box hideFrom="md">
-          <EventDropdown
-            multiple={allowsMultipleEvents}
-            selectedEvents={eventIds}
-            onEventsChange={setSelectedEventIds}
-          />
-        </Box>
+      <GridItem gridColumn="1 / -1" hideBelow="md" minW={0}>
+        <FormEventSelector
+          title={t("competitions.competition_form.events")}
+          selectedEvents={eventIds}
+          onEventClick={toggleEvent}
+          onClearClick={
+            allowsMultipleEvents ? () => setSelectedEventIds([]) : undefined
+          }
+        />
+      </GridItem>
+      <GridItem gridColumn="1 / -1" hideFrom="md">
+        <EventDropdown
+          multiple={allowsMultipleEvents}
+          selectedEvents={eventIds}
+          onEventsChange={setSelectedEventIds}
+        />
+      </GridItem>
+      <GridItem colSpan={{ base: 1, sm: segmentedColumns, md: 1 }}>
         <RegionSelector
           region={filterState.region}
           onRegionChange={filterActions.setRegion}
@@ -139,44 +150,40 @@ export function RecordsFilterBox({
           t={t}
           name={t("delegates_page.all_regions")}
         />
-        <Stack direction={{ base: "column", md: "row" }}>
-          <SegmentedField
-            label={t("results.selector_elements.gender_selector.gender")}
-            value={filterState.gender}
-            items={[
-              {
-                value: "All",
-                label: t(
-                  "results.selector_elements.gender_selector.gender_all",
-                ),
-              },
-              {
-                value: "Male",
-                label: t("results.selector_elements.gender_selector.male"),
-              },
-              {
-                value: "Female",
-                label: t("results.selector_elements.gender_selector.female"),
-              },
-            ]}
-            onChange={filterActions.setGender}
-          />
-          {view === "current" && (
-            <SegmentedField
-              label={t("results.records.group_by")}
-              value={filterState.groupBy}
-              items={[
-                { value: "event", label: t("results.table_elements.event") },
-                { value: "type", label: t("qualification.result_type") },
-              ]}
-              onChange={(value) =>
-                filterActions.setGroupBy(value === "type" ? "type" : "event")
-              }
-            />
-          )}
-        </Stack>
-      </VStack>
-    </Box>
+      </GridItem>
+      <SegmentedField
+        label={t("results.selector_elements.gender_selector.gender")}
+        value={filterState.gender}
+        items={[
+          {
+            value: "All",
+            label: t("results.selector_elements.gender_selector.gender_all"),
+          },
+          {
+            value: "Male",
+            label: t("results.selector_elements.gender_selector.male"),
+          },
+          {
+            value: "Female",
+            label: t("results.selector_elements.gender_selector.female"),
+          },
+        ]}
+        onChange={filterActions.setGender}
+      />
+      {view === "current" && (
+        <SegmentedField
+          label={t("results.records.group_by")}
+          value={filterState.groupBy}
+          items={[
+            { value: "event", label: t("results.table_elements.event") },
+            { value: "type", label: t("qualification.result_type") },
+          ]}
+          onChange={(value) =>
+            filterActions.setGroupBy(value === "type" ? "type" : "event")
+          }
+        />
+      )}
+    </Grid>
   );
 }
 
