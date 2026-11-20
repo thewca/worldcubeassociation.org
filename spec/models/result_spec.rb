@@ -517,6 +517,54 @@ RSpec.describe Result do
       end
     end
   end
+
+  describe ".to_v1_standalone_json" do
+    let(:user) { create(:user_with_wca_id) }
+    let(:opponent) { create(:user_with_wca_id) }
+
+    let!(:plain_result) do
+      create(:result, :mo3, person: user.person, event_id: "666", regional_single_record: "NR",
+                            best: 1000, average: 2000, value1: 1000, value2: 2000, value3: 3000)
+    end
+
+    let!(:linked_round_result) do
+      competition = create(:competition, event_ids: ["333"])
+      round = create(:round, competition: competition, event_id: "333", linked_round: create(:linked_round))
+      create(:result, person: user.person, competition: competition, round: round, event_id: "333")
+    end
+
+    let!(:h2h_result) do
+      competition = create(:competition, :visible, with_rounds: true, h2h_finals_event_ids: ["333"])
+      round = competition.competition_events.find_by(event_id: "333").rounds.first
+      result = create(:result, person: user.person, competition: competition, round: round, event_id: "333",
+                               round_type_id: round.round_type_id, format_id: "h", best: 500, average: 0)
+      create(:result, person: opponent.person, competition: competition, round: round, event_id: "333",
+                      round_type_id: round.round_type_id, format_id: "h", best: 501, average: 0, pos: 2)
+      match = round.h2h_matches.create!(match_number: 1)
+      match.h2h_match_competitors.create!(user: user)
+      match.h2h_match_competitors.create!(user: opponent)
+      result
+    end
+
+    it "serializes the same as the model serialization" do
+      expected = user.person.results.map do |result|
+        result.as_json(Result::V1_STANDALONE_SERIALIZE_OPTIONS)
+              .merge("participated_matches" => user.h2h_matches.where(round_id: result.round_id).as_json)
+      end
+
+      json = user.person.results.to_v1_standalone_json
+
+      expect(json.as_json).to match_array(expected.as_json)
+    end
+
+    it "covers a plain, a linked and a head-to-head round" do
+      json_by_result_id = user.person.results.to_v1_standalone_json.index_by { it["id"] }
+
+      expect(json_by_result_id[plain_result.id]["attempts"]).to eq [1000, 2000, 3000, SolveTime::SKIPPED_VALUE, SolveTime::SKIPPED_VALUE]
+      expect(json_by_result_id[linked_round_result.id]["ranking_mode"]).to eq Round::RANKING_MODES[:linked_round]
+      expect(json_by_result_id[h2h_result.id]["participated_matches"].size).to eq 1
+    end
+  end
 end
 
 def build_result(attrs)

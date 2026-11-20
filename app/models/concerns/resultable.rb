@@ -191,16 +191,22 @@ module Resultable
     self.result_attempts.to_h { [it.attempt_number, it.value] }
   end
 
-  def attempts
-    # This is a compromise with the legacy behavior where we had `value1..5` hard-coded as columns
-    #   and every result had at least 5 attempts.
-    # Feel free to revisit this assumption in the future and optimize our model for more generic counts
-    #   after the migration to `result_attempts` succeeded.
-    num_of_results = [result_attempts_hash.keys.max || 0, 5].max
+  class_methods do
+    def attempts_from_hash(attempts_by_number)
+      # This is a compromise with the legacy behavior where we had `value1..5` hard-coded as columns
+      #   and every result had at least 5 attempts.
+      # Feel free to revisit this assumption in the future and optimize our model for more generic counts
+      #   after the migration to `result_attempts` succeeded.
+      num_of_results = [attempts_by_number.keys.max || 0, 5].max
 
-    self.result_attempts_hash
+      attempts_by_number
         .values_at(*1..num_of_results) # turn { 1: 123, 4: 456 } into [123, nil, nil, 456]
         .map { it || SolveTime::SKIPPED_VALUE } # fill gaps with 0
+    end
+  end
+
+  def attempts
+    self.class.attempts_from_hash(result_attempts_hash)
   end
 
   def solve_times
