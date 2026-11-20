@@ -18,6 +18,7 @@ import {
   usePaymentAmount,
 } from "@/providers/PaymentAmountProvider";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import currencies from "@/lib/wca/data/currencies";
 import type { components } from "@/types/openapi";
 import { DateTime } from "luxon";
 
@@ -37,6 +38,8 @@ function DonationFields({
 
   const [isDonating, setIsDonating] = useState(false);
 
+  const currency = currencies.byIsoCode[competitionInfo.currency_code];
+
   // Unticking has to take the donation with it, otherwise the competitor keeps paying an amount
   //   they can no longer see.
   const toggleDonation = (isChecked: boolean) => {
@@ -48,7 +51,7 @@ function DonationFields({
     setDonationIso(
       Number.isNaN(donationUnits)
         ? 0
-        : Math.round(donationUnits * competitionInfo.currency_subunit_to_unit),
+        : Math.round(donationUnits * currency.subunit_to_unit),
     );
 
   return (
@@ -79,9 +82,7 @@ function DonationFields({
               <NumberInput.Root
                 min={0}
                 width="full"
-                value={(
-                  donationIso / competitionInfo.currency_subunit_to_unit
-                ).toString()}
+                value={(donationIso / currency.subunit_to_unit).toString()}
                 onValueChange={(e) => changeDonation(e.valueAsNumber)}
               >
                 <NumberInput.Input />
@@ -144,11 +145,13 @@ export function PaymentStatus({
     return <Text>{t("registrations.payment_form.labels.fees_remaining")}</Text>;
   }
 
+  const currency = currencies.byIsoCode[payment.currency_code];
+
   const formatAmount = (lowestDenomination: number) =>
     new Intl.NumberFormat(i18n.language, {
       style: "currency",
       currency: payment.currency_code,
-    }).format(lowestDenomination / payment.currency_subunit_to_unit);
+    }).format(lowestDenomination / currency.subunit_to_unit);
 
   const paid = formatAmount(payment.paid_amount_iso);
 
