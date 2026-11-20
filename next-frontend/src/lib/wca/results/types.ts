@@ -1,13 +1,17 @@
 type SharedFilterState = {
   region: string;
   gender: string;
-  show: string;
 };
 
 type SharedFilterActions = {
   setRegion: (region: string) => void;
   setGender: (gender: string) => void;
-  setShow: (show: string) => void;
+};
+
+export type RecordsFilters = SharedFilterState & {
+  eventIds: string[];
+  view: "current" | "history";
+  groupBy: "event" | "type";
 };
 
 export type RankingsURLParams = {
@@ -19,23 +23,22 @@ export type RankingsURLParams = {
 };
 
 export type RecordsFilterBoxProps = {
-  filterState: SharedFilterState & { eventIds: string[] };
+  filterState: RecordsFilters;
   filterActions: SharedFilterActions & {
     setSelectedEventIds: (eventIds: string[]) => void;
+    setGroupBy: (groupBy: RecordsFilters["groupBy"]) => void;
   };
 };
 
 export type RankingsFilterBoxProps = {
-  filterState: SharedFilterState & { event: string; rankingType: string };
+  filterState: SharedFilterState & {
+    event: string;
+    rankingType: string;
+    show: string;
+  };
   filterActions: SharedFilterActions & {
     setEvent: (event: string) => void;
     setType: (type: string) => void;
+    setShow: (show: string) => void;
   };
-};
-
-export type RecordsFilterParams = {
-  event: string;
-  region: string;
-  gender: string;
-  show: string;
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Alert, Heading, VStack } from "@chakra-ui/react";
+import { Alert, Heading, Tabs, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
@@ -12,20 +12,12 @@ import { useSearchParams } from "next/navigation";
 import { route } from "nextjs-routes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
-import { getRecordsQueryOptions, getFilters } from "@/lib/wca/results/records";
-import type { RecordsFilterParams } from "@/lib/wca/results/types";
-
-function getUpdatedFilterParams(
-  search: string,
-  changes: Partial<RecordsFilterParams>,
-) {
-  const params = new URLSearchParams(search);
-  for (const [key, value] of Object.entries(changes)) params.set(key, value);
-  const { eventIds } = getFilters(params);
-  if (eventIds.length > 0) params.set("event", eventIds.join(","));
-  else params.delete("event");
-  return params;
-}
+import {
+  getFilters,
+  getRecordsQueryOptions,
+  REGION_WORLD,
+} from "@/lib/wca/results/records";
+import type { RecordsFilters } from "@/lib/wca/results/types";
 
 export default function FilteredRecords() {
   const api = useAPI();
@@ -35,23 +27,41 @@ export default function FilteredRecords() {
     ...getRecordsQueryOptions(api, filters),
     placeholderData: keepPreviousData,
   });
-  const updateFilters = (changes: Partial<RecordsFilterParams>) => {
-    const params = getUpdatedFilterParams(window.location.search, changes);
+  const updateFilters = (changes: Partial<RecordsFilters>) => {
+    const { eventIds, region, gender, view, groupBy } = {
+      ...getFilters(new URLSearchParams(window.location.search)),
+      ...changes,
+    };
     const url = route({
       pathname: "/results/records",
-      query: Object.fromEntries(params),
+      query: {
+        event:
+          view === "history" ? eventIds[0] : eventIds.join(",") || undefined,
+        region,
+        gender,
+        view,
+        group_by: groupBy,
+      },
     });
 
     window.history.replaceState(null, "", url);
   };
   const filterActions = {
-    setSelectedEventIds: (eventIds: string[]) =>
-      updateFilters({ event: eventIds.join(",") }),
-    setRegion: (region: string) => updateFilters({ region: region || "world" }),
+    setSelectedEventIds: (eventIds: string[]) => updateFilters({ eventIds }),
+    setRegion: (region: string) =>
+      updateFilters({ region: region || REGION_WORLD }),
     setGender: (gender: string) => updateFilters({ gender }),
-    setShow: (show: string) => updateFilters({ show }),
+    setGroupBy: (groupBy: RecordsFilters["groupBy"]) =>
+      updateFilters({ groupBy }),
   };
-  const { eventIds, show } = filters;
+  const { eventIds, view, groupBy } = filters;
+  // TODO: remove show
+  const show =
+    view === "history"
+      ? "mixed history"
+      : groupBy === "type"
+        ? "separate"
+        : "mixed";
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const lng = useLocale();
@@ -72,6 +82,23 @@ export default function FilteredRecords() {
         t("results.last_updated_html", {
           timestamp: getMediumDateString(data.timestamp, lng),
         })}
+      <Tabs.Root
+        value={view}
+        onValueChange={({ value }) =>
+          updateFilters({ view: value === "history" ? "history" : "current" })
+        }
+        variant="line"
+        width="full"
+      >
+        <Tabs.List aria-label={t("results.records.title")}>
+          <Tabs.Trigger value="current">
+            {t("results.records.current")}
+          </Tabs.Trigger>
+          <Tabs.Trigger value="history">
+            {t("results.selector_elements.show_selector.history")}
+          </Tabs.Trigger>
+        </Tabs.List>
+      </Tabs.Root>
       <RecordsFilterBox filterState={filters} filterActions={filterActions} />
       {isFetching && <Loading />}
       {error ? (

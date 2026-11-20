@@ -16,7 +16,6 @@ import {
   SingleEventSelector,
 } from "@/components/EventSelector";
 import events from "@/lib/wca/data/events";
-import { isRecordsHistory } from "@/lib/wca/results/records";
 import type {
   RankingsFilterBoxProps,
   RecordsFilterBoxProps,
@@ -89,8 +88,8 @@ export function RecordsFilterBox({
   filterActions,
 }: RecordsFilterBoxProps) {
   const { t } = useT();
-  const { eventIds, show } = filterState;
-  const allowsMultipleEvents = !isRecordsHistory(show);
+  const { eventIds, view } = filterState;
+  const allowsMultipleEvents = view === "current";
   const { setSelectedEventIds } = filterActions;
 
   const toggleEvent = (eventId: string) => {
@@ -162,31 +161,19 @@ export function RecordsFilterBox({
             ]}
             onChange={filterActions.setGender}
           />
-          <SegmentedField
-            label={t("results.selector_elements.show_selector.show")}
-            value={filterState.show}
-            items={[
-              {
-                value: "mixed",
-                label: t("results.selector_elements.show_selector.mixed"),
-              },
-              {
-                value: "separate",
-                label: t("results.selector_elements.show_selector.separate"),
-              },
-              {
-                value: "history",
-                label: t("results.selector_elements.show_selector.history"),
-              },
-              {
-                value: "mixed history",
-                label: t(
-                  "results.selector_elements.show_selector.mixed_history",
-                ),
-              },
-            ]}
-            onChange={filterActions.setShow}
-          />
+          {view === "current" && (
+            <SegmentedField
+              label={t("results.records.group_by")}
+              value={filterState.groupBy}
+              items={[
+                { value: "event", label: t("results.table_elements.event") },
+                { value: "type", label: t("results.records.result_type") },
+              ]}
+              onChange={(value) =>
+                filterActions.setGroupBy(value === "type" ? "type" : "event")
+              }
+            />
+          )}
         </Stack>
       </VStack>
     </Box>
