@@ -11,6 +11,7 @@ import {
   HStack,
   IconButton,
   Tabs,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { LuFilter } from "react-icons/lu";
@@ -88,11 +89,14 @@ export default function FilteredRecords() {
       <Heading size={{ base: "3xl", md: "5xl" }}>
         {t("results.records.title")}
       </Heading>
-      {data &&
-        t("results.last_updated_html", {
-          timestamp: getMediumDateString(data.timestamp, lng),
-        })}
-      <Collapsible.Root width="full" overflowPadding lazyMount>
+      {data && (
+        <Text textStyle={{ base: "xs", md: "body" }} color="fg.muted">
+          {t("results.last_updated_html", {
+            timestamp: getMediumDateString(data.timestamp, lng),
+          })}
+        </Text>
+      )}
+      <Collapsible.Root width="full" mb={2} overflowPadding lazyMount>
         <HStack
           justify="space-between"
           borderBottomWidth="1px"

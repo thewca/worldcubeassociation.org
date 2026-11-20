@@ -113,9 +113,7 @@ export function RecordsFilterBox({
       w="full"
       p={{ base: 4, md: 6 }}
       borderRadius="md"
-      boxShadow="md"
-      borderWidth="1px"
-      borderColor="border.muted"
+      boxShadow="sm"
       templateColumns={{
         base: "minmax(0, 1fr)",
         sm: `repeat(${segmentedColumns}, minmax(0, 1fr))`,
