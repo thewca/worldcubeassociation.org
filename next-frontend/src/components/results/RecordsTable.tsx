@@ -42,6 +42,7 @@ interface SeparateRecordsTableProps {
 }
 
 export default function RecordsTable({ records, show }: WrapperTableProps) {
+  const { t } = useT();
   if (show === "mixed") {
     return (
       <VStack align="stretch" gap={6}>
@@ -52,7 +53,7 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
             recordsByEvent && (
               <VStack key={event} align="stretch">
                 <Heading size="2xl">
-                  <EventIcon eventId={event} /> {events.byId[event].name}
+                  <EventIcon eventId={event} t={t} /> {events.byId[event].name}
                 </Heading>
                 <MixedRecordsTable records={recordsByEvent} />
               </VStack>
@@ -130,7 +131,12 @@ function MixedHistoryTable({ records }: MixedHistoryTableProps) {
         </Table.Header>
         <Table.Body>
           {records.map((record, index) => (
-            <HistoryRow key={`${record.id}-${index}`} record={record} mixed />
+            <HistoryRow
+              key={`${record.id}-${index}`}
+              record={record}
+              mixed
+              t={t}
+            />
           ))}
         </Table.Body>
       </Table.Root>
@@ -156,7 +162,7 @@ function HistoryTable({ records }: HistoryTableProps) {
         return (
           <VStack key={eventId} align="stretch">
             <Heading size="2xl">
-              <EventIcon eventId={eventId} /> {events.byId[eventId].name}
+              <EventIcon eventId={eventId} t={t} /> {events.byId[eventId].name}
             </Heading>
             <Table.ScrollArea rounded="md">
               <Table.Root size="xs" striped>
@@ -187,10 +193,10 @@ function HistoryTable({ records }: HistoryTableProps) {
                 </Table.Header>
                 <Table.Body>
                   {single?.map((record) => (
-                    <HistoryRow key={record.id} record={record} />
+                    <HistoryRow key={record.id} record={record} t={t} />
                   ))}
                   {average?.map((record) => (
-                    <HistoryRow key={record.id} record={record} />
+                    <HistoryRow key={record.id} record={record} t={t} />
                   ))}
                 </Table.Body>
               </Table.Root>
@@ -244,6 +250,7 @@ function SlimRecordsTable({ records }: SlimRecordsTableProps) {
                 key={eventId}
                 singles={single}
                 averages={average}
+                t={t}
               />
             );
           })}
@@ -291,7 +298,7 @@ function SeparateRecordsTable({ recordsByType }: SeparateRecordsTableProps) {
               </Table.Header>
               <Table.Body>
                 {recordsByType[type as "single" | "average"].map((record) => (
-                  <SeparateRecordsRow key={record.id} record={record} />
+                  <SeparateRecordsRow key={record.id} record={record} t={t} />
                 ))}
               </Table.Body>
             </Table.Root>

@@ -14,6 +14,7 @@ import { StaffColor } from "@/components/RoleBadge";
 import _ from "lodash";
 import { FULL_EVENT_IDS } from "@/lib/wca/data/events";
 import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
 type TitleProps = {
   params: Promise<{ wcaId: string }>;
@@ -111,6 +112,8 @@ export default async function PersonOverview({
     Object.keys(personDetails.personal_records),
   );
 
+  const { t } = await getT();
+
   return (
     <VStack align="center">
       {/* Profile Section */}
@@ -137,7 +140,10 @@ export default async function PersonOverview({
         </GridItem>
         {/* Records and Medals */}
         <GridItem colSpan={{ base: 1, lg: 17 }}>
-          <PersonalRecordsTable records={personDetails.personal_records} />
+          <PersonalRecordsTable
+            records={personDetails.personal_records}
+            t={t}
+          />
           <SimpleGrid gap={8} columns={{ base: 1, md: 6 }} padding={0} pt={8}>
             {hasMedals && (
               <GridItem colSpan={{ base: 1, md: hasRecords ? 3 : 6 }}>

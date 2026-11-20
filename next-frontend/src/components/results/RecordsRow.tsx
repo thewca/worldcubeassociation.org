@@ -20,16 +20,19 @@ interface MixedRecordsRowProp {
 
 interface SeparateRecordsRowProp {
   record: components["schemas"]["Record"];
+  t: TFunction;
 }
 
 interface HistoryRowProps {
   record: components["schemas"]["Record"];
   mixed?: boolean;
+  t: TFunction;
 }
 
 interface SlimRecordsRowProp {
   singles: components["schemas"]["Record"][];
   averages: components["schemas"]["Record"][];
+  t: TFunction;
 }
 
 const maxAttemptCountForEvent = (eventId: string) => {
@@ -73,7 +76,7 @@ export function MixedRecordsRow({ record, t }: MixedRecordsRowProp) {
   );
 }
 
-export function HistoryRow({ record, mixed = false }: HistoryRowProps) {
+export function HistoryRow({ record, mixed = false, t }: HistoryRowProps) {
   const {
     definedAttempts: attempts,
     bestResultIndex,
@@ -85,7 +88,7 @@ export function HistoryRow({ record, mixed = false }: HistoryRowProps) {
   return (
     <Table.Row>
       <Table.Cell>{record.start_date}</Table.Cell>
-      {mixed && <EventCell eventId={record.event_id} />}
+      {mixed && <EventCell eventId={record.event_id} t={t} />}
       <PersonCell personId={record.person_id} personName={record.person_name} />
       {record.type === "single" ? (
         <Table.Cell>{formattedValue}</Table.Cell>
@@ -114,7 +117,7 @@ export function HistoryRow({ record, mixed = false }: HistoryRowProps) {
   );
 }
 
-export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
+export function SeparateRecordsRow({ record, t }: SeparateRecordsRowProp) {
   const {
     definedAttempts: attempts,
     bestResultIndex,
@@ -123,7 +126,7 @@ export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
 
   return (
     <Table.Row>
-      <EventCell eventId={record.event_id} />
+      <EventCell eventId={record.event_id} t={t} />
       <Table.Cell>
         {formatAttemptResult(record.value, record.event_id)}
       </Table.Cell>
@@ -147,7 +150,7 @@ export function SeparateRecordsRow({ record }: SeparateRecordsRowProp) {
   );
 }
 
-export function SlimRecordsRow({ singles, averages }: SlimRecordsRowProp) {
+export function SlimRecordsRow({ singles, averages, t }: SlimRecordsRowProp) {
   const rowLengths = Math.max(singles.length, averages.length);
 
   return _.range(rowLengths).map((i) => {
@@ -178,7 +181,7 @@ export function SlimRecordsRow({ singles, averages }: SlimRecordsRowProp) {
             <Table.Cell />
           </>
         )}
-        <EventCell eventId={rowRecord.event_id} />
+        <EventCell eventId={rowRecord.event_id} t={t} />
         {average && averageAttempts && (
           <>
             <PersonCell

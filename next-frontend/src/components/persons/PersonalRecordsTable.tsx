@@ -7,12 +7,14 @@ import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import EventIcon from "@/components/EventIcon";
+import { TFunction } from "i18next";
 
 interface RecordsProps {
   records: components["schemas"]["PersonInfo"]["personal_records"];
+  t: TFunction;
 }
 
-const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
+const PersonalRecordsTable: React.FC<RecordsProps> = ({ records, t }) => {
   const getColor = (pr: number) => {
     if (pr === 0) return undefined;
     if (pr === 1) return "recordMarkers.personal";
@@ -82,7 +84,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   <Table.Row key={event}>
                     <Table.Cell paddingStart={4}>
                       <HStack>
-                        <EventIcon eventId={event} fontSize="2xl" />
+                        <EventIcon eventId={event} fontSize="2xl" t={t} />
                         <Text fontWeight="medium">{eventObject.name}</Text>
                       </HStack>
                     </Table.Cell>
