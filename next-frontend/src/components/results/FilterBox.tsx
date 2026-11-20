@@ -9,6 +9,7 @@ import {
   SegmentGroup,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
+import EventDropdown from "@/components/EventDropdown";
 import RegionSelector from "@/components/RegionSelector";
 import { SingleEventSelector } from "@/components/EventSelector";
 import events from "@/lib/wca/data/events";
@@ -214,15 +215,21 @@ export function RankingsFilterBox({
       borderColor="gray.100"
     >
       <VStack align="left">
-        <SingleEventSelector
-          title={t("competitions.competition_form.events")}
-          selectedEvent={filterState.event}
-          onEventClick={(event) =>
-            event === filterState.event
-              ? filterActions.setEvent("all events")
-              : filterActions.setEvent(event)
-          }
-        />
+        <Box hideBelow="md">
+          <SingleEventSelector
+            title={t("competitions.competition_form.events")}
+            selectedEvent={filterState.event}
+            onEventClick={filterActions.setEvent}
+          />
+        </Box>
+        <Box hideFrom="md">
+          <EventDropdown
+            multiple={false}
+            required
+            selectedEvents={[filterState.event]}
+            onEventsChange={([event]) => event && filterActions.setEvent(event)}
+          />
+        </Box>
         <RegionSelector
           region={filterState.region}
           onRegionChange={filterActions.setRegion}
