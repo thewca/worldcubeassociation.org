@@ -1,4 +1,6 @@
 import _TwFlag from "@/components/icons/flags/_TwFlag";
+import OverlappingLocationPins from "@/components/icons/OverlappingLocationPins";
+import countriesFictive from "@/lib/staticData/countries.fictive.json";
 
 import type { ComponentPropsWithoutRef } from "react";
 import { Icon } from "@chakra-ui/react";
@@ -17,7 +19,15 @@ const WcaFlag = ({ code, size = "md", ...restProps }: WcaFlagProps) => {
     return null;
   }
 
-  if (code.toUpperCase() === "TW") {
+  const countryCode = code.toUpperCase();
+
+  if (countriesFictive.some(({ iso2 }) => iso2 === countryCode)) {
+    return (
+      <OverlappingLocationPins size={size} color="gray.fg" {...restProps} />
+    );
+  }
+
+  if (countryCode === "TW") {
     return <_TwFlag size={size} {...restProps} />;
   }
 
