@@ -167,7 +167,7 @@ export function RecordsFilterBox({
               value={filterState.groupBy}
               items={[
                 { value: "event", label: t("results.table_elements.event") },
-                { value: "type", label: t("results.records.result_type") },
+                { value: "type", label: t("qualification.result_type") },
               ]}
               onChange={(value) =>
                 filterActions.setGroupBy(value === "type" ? "type" : "event")
