@@ -11,9 +11,9 @@ import RankingsTable from "@/components/results/RankingsTable";
 import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
-import type { RankingsURLParams } from "@/lib/wca/results/types";
+import type { RankingsFilters } from "@/lib/wca/results/types";
 
-function createUrl(params: RankingsURLParams) {
+function createUrl(params: RankingsFilters) {
   const { event, region, gender, show, rankingType } = params;
   return route({
     pathname: "/results/rankings",
@@ -24,7 +24,7 @@ function createUrl(params: RankingsURLParams) {
 interface FilteredRecordsProps {
   rankings: components["schemas"]["ExtendedResult"][];
   timestamp: string;
-  searchParams: RankingsURLParams;
+  searchParams: RankingsFilters;
 }
 
 export default function FilteredRecords({
@@ -40,7 +40,7 @@ export default function FilteredRecords({
   const { event, region, gender, show, rankingType } = searchParams;
 
   const filterActions = useMemo(() => {
-    const navigate = (params: Partial<RankingsURLParams>) =>
+    const navigate = (params: Partial<RankingsFilters>) =>
       startTransition(() =>
         router.replace(
           createUrl({ event, region, gender, show, rankingType, ...params }),

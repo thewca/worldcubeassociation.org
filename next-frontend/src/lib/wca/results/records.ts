@@ -8,8 +8,6 @@ export const REGION_WORLD = "world";
 export const GENDER_ALL = "All";
 
 export function getFilters(params: URLSearchParams): RecordsFilters {
-  let history = params.get("view") === "history";
-  let groupedByType = params.get("group_by") === "type";
   const show = params.get("show");
 
   // handle backwards compatibility with legacy `show` param
@@ -18,21 +16,23 @@ export function getFilters(params: URLSearchParams): RecordsFilters {
   // separate -> view=current, group_by=type
   // history -> view=history
   // mixed history -> view=history
-  if (show) {
-    history = show === "history" || show === "mixed history";
-    groupedByType = show === "separate";
-  }
+  const isHistoryView = show
+    ? show === "history" || show === "mixed history"
+    : params.get("view") === "history";
+  const isGroupedByType = show
+    ? show === "separate"
+    : params.get("group_by") === "type";
 
   const requestedEventIds = params.get("event")?.split(",") ?? [];
   const selectedEventIds = _.intersection(WCA_EVENT_IDS, requestedEventIds);
 
   return {
     // History supports one event, so use WCA event order to choose consistently.
-    eventIds: history ? selectedEventIds.slice(0, 1) : selectedEventIds,
+    eventIds: isHistoryView ? selectedEventIds.slice(0, 1) : selectedEventIds,
     region: params.get("region") ?? REGION_WORLD,
     gender: params.get("gender") ?? GENDER_ALL,
-    view: history ? "history" : "current",
-    groupBy: groupedByType ? "type" : "event",
+    view: isHistoryView ? "history" : "current",
+    groupBy: isGroupedByType ? "type" : "event",
   };
 }
 

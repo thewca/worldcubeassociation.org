@@ -35,8 +35,9 @@ export default function RecordsTable({
   groupBy,
 }: WrapperTableProps) {
   if (view === "history") {
+    // Preserve the legacy Mixed History order for records with the same date.
     const sortedRecords = _.orderBy(
-      WCA_EVENT_IDS.toReversed().flatMap((event) => records[event] ?? []),
+      WCA_EVENT_IDS.toReversed().flatMap((eventId) => records[eventId] ?? []),
       (record) => DateTime.fromISO(record.start_date).toMillis(),
       "desc",
     );
@@ -47,14 +48,14 @@ export default function RecordsTable({
   if (groupBy === "event") {
     return (
       <VStack align="stretch" gap={6}>
-        {WCA_EVENT_IDS.map((event) => {
-          const recordsByEvent = records[event];
+        {WCA_EVENT_IDS.map((eventId) => {
+          const recordsByEvent = records[eventId];
 
           return (
             recordsByEvent && (
-              <VStack key={event} align="stretch">
+              <VStack key={eventId} align="stretch">
                 <Heading size="2xl">
-                  <EventIcon eventId={event} /> {events.byId[event].name}
+                  <EventIcon eventId={eventId} /> {events.byId[eventId].name}
                 </Heading>
                 <MixedRecordsTable records={recordsByEvent} />
               </VStack>
@@ -65,8 +66,8 @@ export default function RecordsTable({
     );
   }
 
-  const allRecords = WCA_EVENT_IDS.flatMap((event) =>
-    (records[event] ?? []).toReversed(),
+  const allRecords = WCA_EVENT_IDS.flatMap((eventId) =>
+    (records[eventId] ?? []).toReversed(),
   );
   const average = allRecords.filter((record) => record.type === "average");
   const single = allRecords.filter((record) => record.type === "single");
