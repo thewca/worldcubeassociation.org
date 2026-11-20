@@ -11,39 +11,46 @@ import {
 import { useT } from "@/lib/i18n/useI18n";
 import EventDropdown from "@/components/EventDropdown";
 import RegionSelector from "@/components/RegionSelector";
-import { SingleEventSelector } from "@/components/EventSelector";
+import {
+  FormEventSelector,
+  SingleEventSelector,
+} from "@/components/EventSelector";
 import events from "@/lib/wca/data/events";
+import { isRecordsHistory } from "@/lib/wca/results/records";
 
-type FilterState = {
-  event: string;
+type SharedFilterState = {
   region: string;
   gender: string;
   show: string;
 };
 
-type FilterActions = {
-  setEvent: (event: string) => void;
+type SharedFilterActions = {
   setRegion: (region: string) => void;
   setGender: (gender: string) => void;
   setShow: (show: string) => void;
 };
 
-interface RecordsFilterBoxProps {
-  filterState: FilterState;
-  filterActions: FilterActions;
-}
+type RecordsFilterBoxProps = {
+  filterState: SharedFilterState & { events: string[] };
+  filterActions: SharedFilterActions & {
+    setEvents: (events: string[]) => void;
+  };
+};
 
-interface RankingsFilterBoxProps {
-  filterState: FilterState & { rankingType: string };
-  filterActions: FilterActions & { setType: (type: string) => void };
-}
+type RankingsFilterBoxProps = {
+  filterState: SharedFilterState & { event: string; rankingType: string };
+  filterActions: SharedFilterActions & {
+    setEvent: (event: string) => void;
+    setType: (type: string) => void;
+  };
+};
 
-interface SegmentedFieldProps {
+type SegmentedFieldProps = {
   label: string;
   value: string;
   items: { label: string; value: string }[];
   onChange: (value: string) => void;
-}
+};
 
 // Use a select on narrow screens where the segmented controls don't fit.
 function SegmentedField({
@@ -105,6 +112,18 @@ export function RecordsFilterBox({
   filterActions,
 }: RecordsFilterBoxProps) {
   const { t } = useT();
+  const { events: selectedEvents, show } = filterState;
+  const multiple = !isRecordsHistory(show);
+  const { setEvents } = filterActions;
+
+  const toggleEvent = (event: string) => {
+    if (selectedEvents.includes(event)) {
+      setEvents(selectedEvents.filter((selected) => selected !== event));
+      return;
+    }
+
+    setEvents(multiple ? [...selectedEvents, event] : [event]);
+  };
 
   return (
     <Box
@@ -117,15 +136,21 @@ export function RecordsFilterBox({
       borderColor="gray.100"
     >
       <VStack align="left">
-        <SingleEventSelector
-          title={t("competitions.competition_form.events")}
-          selectedEvent={filterState.event}
-          onEventClick={(event) =>
-            event === filterState.event
-              ? filterActions.setEvent("all events")
-              : filterActions.setEvent(event)
-          }
-        />
+        <Box hideBelow="md">
+          <FormEventSelector
+            title={t("competitions.competition_form.events")}
+            selectedEvents={selectedEvents}
+            onEventClick={toggleEvent}
+            onClearClick={multiple ? () => setEvents([]) : undefined}
+          />
+        </Box>
+        <Box hideFrom="md">
+          <EventDropdown
+            multiple={multiple}
+            selectedEvents={selectedEvents}
+            onEventsChange={setEvents}
+          />
+        </Box>
         <RegionSelector
           region={filterState.region}
           onRegionChange={filterActions.setRegion}

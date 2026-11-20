@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { EventId } from "@/lib/wca/data/events";
+import _ from "lodash";
+import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
@@ -13,17 +14,24 @@ import { useSearchParams } from "next/navigation";
 import { route } from "nextjs-routes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
-import { getRecordsQueryOptions } from "@/lib/wca/results/records";
+import {
+  getRecordsQueryOptions,
+  isRecordsHistory,
+} from "@/lib/wca/results/records";
 
 type FilterParams = {
-  event: EventId | "all events";
+  event: string;
   region: string;
   gender: string;
   show: string;
 };
 
-function getSelectedEvent(params: URLSearchParams) {
-  return params.get("event") ?? "all events";
+function getSelectedEvents(params: URLSearchParams) {
+  const requestedEvents = params.get("event")?.split(",") ?? [];
+  const selectedEvents = _.intersection(WCA_EVENT_IDS, requestedEvents);
+  return isRecordsHistory(params.get("show"))
+    ? selectedEvents.slice(0, 1)
+    : selectedEvents;
 }
 
 function getUpdatedFilterParams(
@@ -32,14 +40,17 @@ function getUpdatedFilterParams(
 ) {
   const params = new URLSearchParams(search);
   for (const [key, value] of Object.entries(changes)) params.set(key, value);
+  const events = getSelectedEvents(params);
+  if (events.length > 0) params.set("event", events.join(","));
+  else params.delete("event");
   return params;
 }
 
 export default function FilteredRecords() {
   const api = useAPI();
   const searchParams = useSearchParams();
-  const filters: FilterParams = {
-    event: getSelectedEvent(searchParams),
+  const filters = {
+    events: getSelectedEvents(searchParams),
     region: searchParams.get("region") ?? "world",
     gender: searchParams.get("gender") ?? "All",
     show: searchParams.get("show") ?? "mixed",
@@ -58,22 +69,22 @@ export default function FilteredRecords() {
     window.history.replaceState(null, "", url);
   };
   const filterActions = {
-    setEvent: (event: string) => updateFilters({ event }),
+    setEvents: (events: string[]) => updateFilters({ event: events.join(",") }),
     setRegion: (region: string) => updateFilters({ region: region || "world" }),
     setGender: (gender: string) => updateFilters({ gender }),
     setShow: (show: string) => updateFilters({ show }),
   };
-  const { event, show } = filters;
+  const { events: selectedEvents, show } = filters;
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const lng = useLocale();
 
   const filteredRecords =
-    event === "all events"
+    selectedEvents.length === 0
       ? currentRecords
-      : {
-          [event]: currentRecords[event] ?? [],
-        };
+      : Object.fromEntries(
+          selectedEvents.map((event) => [event, currentRecords[event] ?? []]),
+        );
 
   return (
     <VStack align="left" gap={2}>
