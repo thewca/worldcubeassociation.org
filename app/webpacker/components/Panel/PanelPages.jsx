@@ -59,7 +59,7 @@ export default {
     component: GroupsManagerAdmin,
   },
   [PANEL_PAGES.bannedCompetitors]: {
-    name: 'Banned Competitors',
+    name: 'Suspended Competitors',
     component: BannedCompetitorsPage,
   },
   [PANEL_PAGES.translators]: {
