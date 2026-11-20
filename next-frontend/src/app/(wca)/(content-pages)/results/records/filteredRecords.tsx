@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import _ from "lodash";
-import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
 import { Alert, Heading, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
@@ -14,20 +12,8 @@ import { useSearchParams } from "next/navigation";
 import { route } from "nextjs-routes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
-import {
-  getRecordsQueryOptions,
-  isRecordsHistory,
-} from "@/lib/wca/results/records";
+import { getRecordsQueryOptions, getFilters } from "@/lib/wca/results/records";
 import type { RecordsFilterParams } from "@/lib/wca/results/types";
-
-function getSelectedEventIds(params: URLSearchParams) {
-  const requestedEventIds = params.get("event")?.split(",") ?? [];
-  const selectedEventIds = _.intersection(WCA_EVENT_IDS, requestedEventIds);
-  // History supports one event, so use WCA event order to choose consistently.
-  return isRecordsHistory(params.get("show"))
-    ? selectedEventIds.slice(0, 1)
-    : selectedEventIds;
-}
 
 function getUpdatedFilterParams(
   search: string,
@@ -35,9 +21,8 @@ function getUpdatedFilterParams(
 ) {
   const params = new URLSearchParams(search);
   for (const [key, value] of Object.entries(changes)) params.set(key, value);
-  const selectedEventIds = getSelectedEventIds(params);
-  if (selectedEventIds.length > 0)
-    params.set("event", selectedEventIds.join(","));
+  const { eventIds } = getFilters(params);
+  if (eventIds.length > 0) params.set("event", eventIds.join(","));
   else params.delete("event");
   return params;
 }
@@ -45,13 +30,7 @@ function getUpdatedFilterParams(
 export default function FilteredRecords() {
   const api = useAPI();
   const searchParams = useSearchParams();
-  const requestedShow = searchParams.get("show");
-  const filters = {
-    eventIds: getSelectedEventIds(searchParams),
-    region: searchParams.get("region") ?? "world",
-    gender: searchParams.get("gender") ?? "All",
-    show: requestedShow === "slim" ? "mixed" : (requestedShow ?? "mixed"),
-  };
+  const filters = getFilters(searchParams);
   const { data, isFetching, isPlaceholderData, error } = useQuery({
     ...getRecordsQueryOptions(api, filters),
     placeholderData: keepPreviousData,
