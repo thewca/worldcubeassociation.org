@@ -13,6 +13,7 @@ import { route } from "nextjs-routes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import {
+  GENDER_ALL,
   getFilters,
   getRecordsQueryOptions,
   REGION_WORLD,
@@ -37,10 +38,10 @@ export default function FilteredRecords() {
       query: {
         event:
           view === "history" ? eventIds[0] : eventIds.join(",") || undefined,
-        region,
-        gender,
-        view,
-        group_by: groupBy,
+        region: region === REGION_WORLD ? undefined : region,
+        gender: gender === GENDER_ALL ? undefined : gender,
+        view: view === "history" ? view : undefined,
+        group_by: groupBy === "type" ? groupBy : undefined,
       },
     });
 
