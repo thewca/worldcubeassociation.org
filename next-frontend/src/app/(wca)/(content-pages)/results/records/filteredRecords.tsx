@@ -26,12 +26,13 @@ type FilterParams = {
   show: string;
 };
 
-function getSelectedEvents(params: URLSearchParams) {
-  const requestedEvents = params.get("event")?.split(",") ?? [];
-  const selectedEvents = _.intersection(WCA_EVENT_IDS, requestedEvents);
+function getSelectedEventIds(params: URLSearchParams) {
+  const requestedEventIds = params.get("event")?.split(",") ?? [];
+  const selectedEventIds = _.intersection(WCA_EVENT_IDS, requestedEventIds);
+  // History supports one event, so use WCA event order to choose consistently.
   return isRecordsHistory(params.get("show"))
-    ? selectedEvents.slice(0, 1)
-    : selectedEvents;
+    ? selectedEventIds.slice(0, 1)
+    : selectedEventIds;
 }
 
 function getUpdatedFilterParams(
@@ -40,8 +41,9 @@ function getUpdatedFilterParams(
 ) {
   const params = new URLSearchParams(search);
   for (const [key, value] of Object.entries(changes)) params.set(key, value);
-  const events = getSelectedEvents(params);
-  if (events.length > 0) params.set("event", events.join(","));
+  const selectedEventIds = getSelectedEventIds(params);
+  if (selectedEventIds.length > 0)
+    params.set("event", selectedEventIds.join(","));
   else params.delete("event");
   return params;
 }
@@ -50,7 +52,7 @@ export default function FilteredRecords() {
   const api = useAPI();
   const searchParams = useSearchParams();
   const filters = {
-    events: getSelectedEvents(searchParams),
+    eventIds: getSelectedEventIds(searchParams),
     region: searchParams.get("region") ?? "world",
     gender: searchParams.get("gender") ?? "All",
     show: searchParams.get("show") ?? "mixed",
@@ -69,21 +71,22 @@ export default function FilteredRecords() {
     window.history.replaceState(null, "", url);
   };
   const filterActions = {
-    setEvents: (events: string[]) => updateFilters({ event: events.join(",") }),
+    setSelectedEventIds: (eventIds: string[]) =>
+      updateFilters({ event: eventIds.join(",") }),
     setRegion: (region: string) => updateFilters({ region: region || "world" }),
     setGender: (gender: string) => updateFilters({ gender }),
     setShow: (show: string) => updateFilters({ show }),
   };
-  const { events: selectedEvents, show } = filters;
+  const { eventIds, show } = filters;
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const lng = useLocale();
 
   const filteredRecords =
-    selectedEvents.length === 0
+    eventIds.length === 0
       ? currentRecords
       : Object.fromEntries(
-          selectedEvents.map((event) => [event, currentRecords[event] ?? []]),
+          eventIds.map((eventId) => [eventId, currentRecords[eventId] ?? []]),
         );
 
   return (
