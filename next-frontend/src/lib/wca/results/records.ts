@@ -5,7 +5,7 @@ import _ from "lodash";
 import type { RecordsFilters } from "@/lib/wca/results/types";
 
 export const REGION_WORLD = "world";
-const GENDER_ALL = "All";
+export const GENDER_ALL = "All";
 
 export function getFilters(params: URLSearchParams): RecordsFilters {
   let history = params.get("view") === "history";
