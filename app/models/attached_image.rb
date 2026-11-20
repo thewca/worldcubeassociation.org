@@ -4,8 +4,9 @@
 # what lets us validate it: UploadController used to create bare blobs, which
 # ActiveStorage has no way to run validations on, so any file at all could be
 # uploaded and then linked to under our own domain.
-class MarkdownImage < ApplicationRecord
+class AttachedImage < ApplicationRecord
   belongs_to :uploaded_by, class_name: "User", optional: true
+  belongs_to :attachable, polymorphic: true, optional: true
 
   has_one_attached :image
 

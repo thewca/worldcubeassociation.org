@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CompetitionTab < ApplicationRecord
+  include HasAttachedImages
+
   belongs_to :competition
 
   validates :name, presence: true
