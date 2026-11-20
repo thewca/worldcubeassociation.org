@@ -19,11 +19,8 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t("results.records.title"),
   };
 }
-type SearchParams = Record<string, string | string[] | undefined>;
-
-type RecordsPageProps = {
-  searchParams: Promise<SearchParams>;
-};
+type RecordsPageProps = Pick<PageProps<"/results/records">, "searchParams">;
+type SearchParams = Awaited<RecordsPageProps["searchParams"]>;
 
 export default function RecordsPage({ searchParams }: RecordsPageProps) {
   return (
