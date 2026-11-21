@@ -33,7 +33,7 @@ export default function WhyCompeteCard() {
     >
       <Image
         src="newcomer.png"
-        alt=""
+        alt={t("competitions.index.why_compete_image_alt")}
         maxW="1/3"
         aspectRatio={{ base: "auto", lg: "landscape" }}
       />
