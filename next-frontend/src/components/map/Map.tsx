@@ -1,6 +1,5 @@
 "use client";
 
-import { components } from "@/types/openapi";
 import Loading from "@/components/ui/loading";
 import { Box, Heading, Text, useToken } from "@chakra-ui/react";
 import { dateRange, hasPassedEndOfDay } from "@/lib/wca/dates";
@@ -11,12 +10,12 @@ import type { FeatureCollection, Point } from "geojson";
 import { setWorkerUrl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useState } from "react";
-import FlyoutDrawer from "../competitions/FlyoutDrawer";
-
-type MapCompetition = components["schemas"]["CompetitionIndex"];
+import FlyoutDrawer, {
+  type FlyoutCompetition,
+} from "../competitions/FlyoutDrawer";
 
 interface MapProps {
-  competitions: MapCompetition[];
+  competitions: FlyoutCompetition[];
   isLoading?: boolean;
 }
 
@@ -51,7 +50,7 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
   const lng = useLocale();
   const [hoveredCompetitionId, setHoveredCompetitionId] = useState<string>();
   const [selectedCompetition, setSelectedCompetition] =
-    useState<MapCompetition | null>(null);
+    useState<FlyoutCompetition | null>(null);
 
   // maplibre paints in WebGL and cannot resolve the CSS variables that Chakra
   //   tokens compile to, so the pin palette has to be read as literal colours.
@@ -181,7 +180,7 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
         setOpen={() => setSelectedCompetition(null)}
         comp={selectedCompetition}
         isChampionship={
-          (selectedCompetition?.championship_types.length || 0) > 0
+          (selectedCompetition?.championship_types?.length ?? 0) > 0
         }
       />
     </Box>
