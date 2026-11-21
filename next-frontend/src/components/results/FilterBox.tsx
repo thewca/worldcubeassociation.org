@@ -16,34 +16,10 @@ import {
   SingleEventSelector,
 } from "@/components/EventSelector";
 import events from "@/lib/wca/data/events";
-import { isRecordsHistory } from "@/lib/wca/results/records";
-
-type SharedFilterState = {
-  region: string;
-  gender: string;
-  show: string;
-};
-
-type SharedFilterActions = {
-  setRegion: (region: string) => void;
-  setGender: (gender: string) => void;
-  setShow: (show: string) => void;
-};
-
-type RecordsFilterBoxProps = {
-  filterState: SharedFilterState & { eventIds: string[] };
-  filterActions: SharedFilterActions & {
-    setSelectedEventIds: (eventIds: string[]) => void;
-  };
-};
-
-type RankingsFilterBoxProps = {
-  filterState: SharedFilterState & { event: string; rankingType: string };
-  filterActions: SharedFilterActions & {
-    setEvent: (event: string) => void;
-    setType: (type: string) => void;
-  };
-};
+import type {
+  RankingsFilterBoxProps,
+  RecordsFilterBoxProps,
+} from "@/lib/wca/results/types";
 
 type SegmentedFieldProps = {
   label: string;
@@ -112,8 +88,8 @@ export function RecordsFilterBox({
   filterActions,
 }: RecordsFilterBoxProps) {
   const { t } = useT();
-  const { eventIds, show } = filterState;
-  const allowsMultipleEvents = !isRecordsHistory(show);
+  const { eventIds, view } = filterState;
+  const allowsMultipleEvents = view === "current";
   const { setSelectedEventIds } = filterActions;
 
   const toggleEvent = (eventId: string) => {
@@ -185,35 +161,19 @@ export function RecordsFilterBox({
             ]}
             onChange={filterActions.setGender}
           />
-          <SegmentedField
-            label={t("results.selector_elements.show_selector.show")}
-            value={filterState.show}
-            items={[
-              {
-                value: "mixed",
-                label: t("results.selector_elements.show_selector.mixed"),
-              },
-              {
-                value: "slim",
-                label: t("results.selector_elements.show_selector.slim"),
-              },
-              {
-                value: "separate",
-                label: t("results.selector_elements.show_selector.separate"),
-              },
-              {
-                value: "history",
-                label: t("results.selector_elements.show_selector.history"),
-              },
-              {
-                value: "mixed history",
-                label: t(
-                  "results.selector_elements.show_selector.mixed_history",
-                ),
-              },
-            ]}
-            onChange={filterActions.setShow}
-          />
+          {view === "current" && (
+            <SegmentedField
+              label={t("results.records.group_by")}
+              value={filterState.groupBy}
+              items={[
+                { value: "event", label: t("results.table_elements.event") },
+                { value: "type", label: t("qualification.result_type") },
+              ]}
+              onChange={(value) =>
+                filterActions.setGroupBy(value === "type" ? "type" : "event")
+              }
+            />
+          )}
         </Stack>
       </VStack>
     </Box>

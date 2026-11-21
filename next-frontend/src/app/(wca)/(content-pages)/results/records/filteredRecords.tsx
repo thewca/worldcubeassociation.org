@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import _ from "lodash";
-import { WCA_EVENT_IDS } from "@/lib/wca/data/events";
-import { Alert, Heading, VStack } from "@chakra-ui/react";
+import { Alert, Heading, Tabs, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
@@ -15,69 +13,49 @@ import { route } from "nextjs-routes";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useAPI from "@/lib/wca/useAPI";
 import {
+  GENDER_ALL,
+  getFilters,
   getRecordsQueryOptions,
-  isRecordsHistory,
+  REGION_WORLD,
 } from "@/lib/wca/results/records";
-
-type FilterParams = {
-  event: string;
-  region: string;
-  gender: string;
-  show: string;
-};
-
-function getSelectedEventIds(params: URLSearchParams) {
-  const requestedEventIds = params.get("event")?.split(",") ?? [];
-  const selectedEventIds = _.intersection(WCA_EVENT_IDS, requestedEventIds);
-  // History supports one event, so use WCA event order to choose consistently.
-  return isRecordsHistory(params.get("show"))
-    ? selectedEventIds.slice(0, 1)
-    : selectedEventIds;
-}
-
-function getUpdatedFilterParams(
-  search: string,
-  changes: Partial<FilterParams>,
-) {
-  const params = new URLSearchParams(search);
-  for (const [key, value] of Object.entries(changes)) params.set(key, value);
-  const selectedEventIds = getSelectedEventIds(params);
-  if (selectedEventIds.length > 0)
-    params.set("event", selectedEventIds.join(","));
-  else params.delete("event");
-  return params;
-}
+import type { RecordsFilters } from "@/lib/wca/results/types";
 
 export default function FilteredRecords() {
   const api = useAPI();
   const searchParams = useSearchParams();
-  const filters = {
-    eventIds: getSelectedEventIds(searchParams),
-    region: searchParams.get("region") ?? "world",
-    gender: searchParams.get("gender") ?? "All",
-    show: searchParams.get("show") ?? "mixed",
-  };
+  const filters = getFilters(searchParams);
   const { data, isFetching, isPlaceholderData, error } = useQuery({
     ...getRecordsQueryOptions(api, filters),
     placeholderData: keepPreviousData,
   });
-  const updateFilters = (changes: Partial<FilterParams>) => {
-    const params = getUpdatedFilterParams(window.location.search, changes);
+  const updateFilters = (changes: Partial<RecordsFilters>) => {
+    const { eventIds, region, gender, view, groupBy } = {
+      ...getFilters(new URLSearchParams(window.location.search)),
+      ...changes,
+    };
     const url = route({
       pathname: "/results/records",
-      query: Object.fromEntries(params),
+      query: {
+        event:
+          view === "history" ? eventIds[0] : eventIds.join(",") || undefined,
+        region: region === REGION_WORLD ? undefined : region,
+        gender: gender === GENDER_ALL ? undefined : gender,
+        view: view === "history" ? view : undefined,
+        group_by: groupBy === "type" ? groupBy : undefined,
+      },
     });
 
     window.history.replaceState(null, "", url);
   };
   const filterActions = {
-    setSelectedEventIds: (eventIds: string[]) =>
-      updateFilters({ event: eventIds.join(",") }),
-    setRegion: (region: string) => updateFilters({ region: region || "world" }),
+    setSelectedEventIds: (eventIds: string[]) => updateFilters({ eventIds }),
+    setRegion: (region: string) =>
+      updateFilters({ region: region || REGION_WORLD }),
     setGender: (gender: string) => updateFilters({ gender }),
-    setShow: (show: string) => updateFilters({ show }),
+    setGroupBy: (groupBy: RecordsFilters["groupBy"]) =>
+      updateFilters({ groupBy }),
   };
-  const { eventIds, show } = filters;
+  const { eventIds, view, groupBy } = filters;
   const { t } = useT();
   const currentRecords = data?.records ?? {};
   const lng = useLocale();
@@ -98,6 +76,23 @@ export default function FilteredRecords() {
         t("results.last_updated_html", {
           timestamp: getMediumDateString(data.timestamp, lng),
         })}
+      <Tabs.Root
+        value={view}
+        onValueChange={({ value }) =>
+          updateFilters({ view: value === "history" ? "history" : "current" })
+        }
+        variant="line"
+        width="full"
+      >
+        <Tabs.List aria-label={t("results.records.title")}>
+          <Tabs.Trigger value="current">
+            {t("results.records.current")}
+          </Tabs.Trigger>
+          <Tabs.Trigger value="history">
+            {t("results.selector_elements.show_selector.history")}
+          </Tabs.Trigger>
+        </Tabs.List>
+      </Tabs.Root>
       <RecordsFilterBox filterState={filters} filterActions={filterActions} />
       {isFetching && <Loading />}
       {error ? (
@@ -107,7 +102,11 @@ export default function FilteredRecords() {
       ) : (
         data &&
         !isPlaceholderData && (
-          <RecordsTable records={filteredRecords} show={show} />
+          <RecordsTable
+            records={filteredRecords}
+            view={view}
+            groupBy={groupBy}
+          />
         )
       )}
     </VStack>
