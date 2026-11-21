@@ -11,24 +11,13 @@ import type { FeatureCollection, Point } from "geojson";
 import { setWorkerUrl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { route } from "nextjs-routes";
+import FlyoutDrawer from "../competitions/FlyoutDrawer";
 
-type MapCompetition = Pick<
-  components["schemas"]["CompetitionIndex"],
-  | "id"
-  | "name"
-  | "city"
-  | "start_date"
-  | "end_date"
-  | "latitude_degrees"
-  | "longitude_degrees"
->;
+type MapCompetition = components["schemas"]["CompetitionIndex"];
 
 interface MapProps {
   competitions: MapCompetition[];
   isLoading?: boolean;
-  selectCompetition?: (competition_id: string) => void;
 }
 
 // Limit number of markers on map, especially for "All Past Competitions"
@@ -58,14 +47,11 @@ const PIN_DISPLAY_SIZE = PIN_ICON_SIZE / PIN_ICON_PIXEL_RATIO;
 const pinIconSvg = (color: string, halo: string) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="${PIN_ICON_SIZE}" height="${PIN_ICON_SIZE}" viewBox="0 0 24 24"><path fill="${color}" stroke="${halo}" stroke-width="0.75" fill-rule="evenodd" d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0Zm-5 0a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z"/></svg>`;
 
-export default function Map({
-  competitions,
-  isLoading = false,
-  selectCompetition,
-}: MapProps) {
-  const router = useRouter();
+export default function Map({ competitions, isLoading = false }: MapProps) {
   const lng = useLocale();
   const [hoveredCompetitionId, setHoveredCompetitionId] = useState<string>();
+  const [selectedCompetition, setSelectedCompetition] =
+    useState<MapCompetition | null>(null);
 
   // maplibre paints in WebGL and cannot resolve the CSS variables that Chakra
   //   tokens compile to, so the pin palette has to be read as literal colours.
@@ -136,17 +122,7 @@ export default function Map({
       return;
     }
 
-    if (selectCompetition) {
-      selectCompetition(competition.id);
-      return;
-    }
-
-    router.push(
-      route({
-        pathname: "/competitions/[competitionId]",
-        query: { competitionId: competition.id },
-      }),
-    );
+    setSelectedCompetition(competition);
   };
 
   return (
@@ -199,6 +175,15 @@ export default function Map({
           </Popup>
         )}
       </MapContainer>
+
+      <FlyoutDrawer
+        open={!!selectedCompetition}
+        setOpen={() => setSelectedCompetition(null)}
+        comp={selectedCompetition}
+        isChampionship={
+          (selectedCompetition?.championship_types.length || 0) > 0
+        }
+      />
     </Box>
   );
 }
