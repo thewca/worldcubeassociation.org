@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useMemo, useTransition } from "react";
-import { Heading, Tabs, VStack } from "@chakra-ui/react";
+import { Heading, Tabs, Text, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
+import ResultsFilterPanel from "@/components/results/ResultsFilterPanel";
 import { useT } from "@/lib/i18n/useI18n";
 import { getMediumDateString } from "@/lib/wca/dates";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -12,6 +13,8 @@ import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 import type { RankingsFilters } from "@/lib/wca/results/types";
+
+const REGION_WORLD = "world";
 
 function createUrl(params: RankingsFilters) {
   const { event, region, gender, show, rankingType } = params;
@@ -52,7 +55,8 @@ export default function FilteredRecords({
         navigate(
           event === "333mbf" ? { event, rankingType: "single" } : { event },
         ),
-      setRegion: (region: string) => navigate({ region }),
+      setRegion: (region: string) =>
+        navigate({ region: region || REGION_WORLD }),
       setGender: (gender: string) => navigate({ gender }),
       setShow: (show: string) => navigate({ show }),
       setType: (rankingType: string) => navigate({ rankingType }),
@@ -61,44 +65,64 @@ export default function FilteredRecords({
 
   const { t } = useT();
   const lng = useLocale();
+  const isByRegion = show === "by region";
+  const hasRegionFilter =
+    !isByRegion && Boolean(region) && region !== REGION_WORLD;
+  const hasActiveFilters =
+    hasRegionFilter ||
+    event !== "333" ||
+    gender !== "All" ||
+    rankingType !== "single";
 
   return (
     <VStack align="left" gap={2}>
       <Heading size={{ base: "3xl", md: "5xl" }}>
         {t("results.rankings.title")}
       </Heading>
-      {t("results.last_updated_html", {
-        timestamp: getMediumDateString(timestamp, lng),
-      })}
-      <Tabs.Root
-        value={show}
-        onValueChange={({ value }) => filterActions.setShow(value)}
-        variant="line"
-        width="full"
+      <Text textStyle={{ base: "xs", md: "body" }} color="fg.muted">
+        {t("results.last_updated_html", {
+          timestamp: getMediumDateString(timestamp, lng),
+        })}
+      </Text>
+      <ResultsFilterPanel
+        hasActiveFilters={hasActiveFilters}
+        tabs={
+          <Tabs.Root
+            value={show}
+            onValueChange={({ value }) => filterActions.setShow(value)}
+            variant="line"
+            minW={0}
+            overflowX="auto"
+          >
+            <Tabs.List
+              aria-label={t("results.rankings.title")}
+              borderBottomWidth="0"
+            >
+              <Tabs.Trigger value="100 persons">
+                {t("results.selector_elements.show_selector.persons")}
+              </Tabs.Trigger>
+              <Tabs.Trigger value="100 results">
+                {t("results.selector_elements.show_selector.results")}
+              </Tabs.Trigger>
+              <Tabs.Trigger value="by region">
+                {t("results.selector_elements.show_selector.by_region")}
+              </Tabs.Trigger>
+            </Tabs.List>
+          </Tabs.Root>
+        }
       >
-        <Tabs.List aria-label={t("results.rankings.title")}>
-          <Tabs.Trigger value="100 persons">
-            {t("results.selector_elements.show_selector.persons")}
-          </Tabs.Trigger>
-          <Tabs.Trigger value="100 results">
-            {t("results.selector_elements.show_selector.results")}
-          </Tabs.Trigger>
-          <Tabs.Trigger value="by region">
-            {t("results.selector_elements.show_selector.by_region")}
-          </Tabs.Trigger>
-        </Tabs.List>
-      </Tabs.Root>
-      <RankingsFilterBox
-        filterState={searchParams}
-        filterActions={filterActions}
-      />
+        <RankingsFilterBox
+          filterState={searchParams}
+          filterActions={filterActions}
+        />
+      </ResultsFilterPanel>
       {/* The same indeterminate bar the router shows for a normal navigation, so
           filtering here feels like filtering anywhere else on the site. */}
       {isPending && <Loading />}
       <RankingsTable
         rankings={rankings}
         isAverage={rankingType === "average"}
-        isByRegion={show === "by region"}
+        isByRegion={isByRegion}
       />
     </VStack>
   );
