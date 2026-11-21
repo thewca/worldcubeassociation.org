@@ -7,6 +7,7 @@ on:
     branches: [ main ]
     paths:
       - 'next-frontend/**/*'
+      - 'system-tests/**/*'
       - '.github/workflows/playwright-test.yml'
       - 'playwright.config.ts'
 
@@ -45,6 +46,9 @@ jobs:
         run: bin/yarn install
       - name: Install fresh frontend Yarn packages
         run: yarn install
+        working-directory: next-frontend
+      - name: Check system test types
+        run: yarn tsc -p ../system-tests
         working-directory: next-frontend
       - name: Activate MySQL # as per https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
         run: sudo systemctl start mysql.service
