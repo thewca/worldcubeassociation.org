@@ -1,6 +1,5 @@
 "use client";
 
-import type { ReactNode } from "react";
 import {
   Card,
   HStack,
@@ -10,29 +9,17 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react";
-import Link, { type LinkProps } from "next/link";
+import Link from "next/link";
+import { Trans } from "react-i18next";
 import useStoredState from "@/lib/hooks/useStoredState";
+import { useT } from "@/lib/i18n/useI18n";
 
-interface RemovableCardProps {
-  storageKey: string;
-  imageUrl: string;
-  heading: string;
-  description: ReactNode;
-  descriptionAs?: Card.DescriptionProps["as"];
-  buttonText: string;
-  buttonUrl: LinkProps["href"];
-}
-
-export default function RemovableCard({
-  storageKey,
-  imageUrl,
-  heading,
-  description,
-  descriptionAs,
-  buttonText,
-  buttonUrl,
-}: RemovableCardProps) {
-  const [dismissed, setDismissed] = useStoredState(false, storageKey);
+export default function WhyCompeteCard() {
+  const { t } = useT();
+  const [dismissed, setDismissed] = useStoredState(
+    false,
+    "whyCompeteDismissed",
+  );
 
   if (dismissed) return null;
 
@@ -45,7 +32,7 @@ export default function RemovableCard({
       colorPalette="wcaWhite"
     >
       <Image
-        src={imageUrl}
+        src="newcomer.png"
         alt=""
         maxW="1/3"
         aspectRatio={{ base: "auto", lg: "landscape" }}
@@ -53,7 +40,7 @@ export default function RemovableCard({
       <Box flex="1" minW="0">
         <Card.Body gap={{ base: "3", md: "4" }}>
           <HStack justifyContent="space-between">
-            <Card.Title>{heading}</Card.Title>
+            <Card.Title>{t("competitions.index.why_compete_title")}</Card.Title>
             <CloseButton
               variant="ghost"
               color="currentColor"
@@ -65,11 +52,11 @@ export default function RemovableCard({
             size={{ base: "sm", md: "md" }}
             borderColor="currentColor"
           />
-          <Card.Description
-            as={descriptionAs}
-            textStyle={{ base: "xs", md: "body" }}
-          >
-            {description}
+          <Card.Description as="div" textStyle={{ base: "xs", md: "body" }}>
+            <Trans
+              t={t}
+              i18nKey="competitions.index.why_compete_description_html"
+            />
           </Card.Description>
           <Button
             asChild
@@ -77,7 +64,7 @@ export default function RemovableCard({
             alignSelf="flex-start"
             textStyle={{ base: "xs", md: "sm" }}
           >
-            <Link href={buttonUrl}>{buttonText}</Link>
+            <Link href="/faq">{t("homepage.learn_more")}</Link>
           </Button>
         </Card.Body>
       </Box>

@@ -36,7 +36,7 @@ import { AllCompsIcon } from "@/components/icons/AllCompsIcon";
 import MapIcon from "@/components/icons/MapIcon";
 import ListIcon from "@/components/icons/ListIcon";
 import CompetitionTableRow from "@/components/CompetitionTableRow";
-import RemovableCard from "@/components/RemovableCard";
+import WhyCompeteCard from "@/components/competitions/WhyCompeteCard";
 // import CompRegoFullButOpenOrangeIcon from "@/components/icons/CompRegoFullButOpen_orangeIcon";
 import CompRegoNotFullOpenGreenIcon from "@/components/icons/CompRegoNotFullOpen_greenIcon";
 import CompRegoNotOpenYetGreyIcon from "@/components/icons/CompRegoNotOpenYet_greyIcon";
@@ -44,7 +44,6 @@ import CompRegoClosedRedIcon from "@/components/icons/CompRegoClosed_redIcon";
 import CompRegoOpenDateIcon from "@/components/icons/CompRegoOpenDateIcon";
 import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
-import { Trans } from "react-i18next";
 import { useSession } from "@/auth.client";
 import {
   Dispatch,
@@ -283,22 +282,7 @@ export default function CompetitionsPage() {
       {/* Absolutely positioned so this marker adds neither height nor a gap. */}
       <Box ref={topSentinelRef} position="absolute" />
       <ClientOnly>
-        {!session.isPending && !session.data && (
-          <RemovableCard
-            storageKey="whyCompeteDismissed"
-            imageUrl="newcomer.png"
-            heading={t("competitions.index.why_compete_title")}
-            descriptionAs="div"
-            description={
-              <Trans
-                t={t}
-                i18nKey="competitions.index.why_compete_description_html"
-              />
-            }
-            buttonText={t("homepage.learn_more")}
-            buttonUrl="/faq"
-          />
-        )}
+        {!session.isPending && !session.data && <WhyCompeteCard />}
       </ClientOnly>
       <Card.Root size={{ base: "sm", md: "md" }} width="full">
         <Tabs.Root
