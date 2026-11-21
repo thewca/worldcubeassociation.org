@@ -6,10 +6,10 @@ import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import Loading from "@/components/ui/loading";
-
-const GENDER_ALL = "All";
-const SHOW_100_PERSONS = "100 persons";
-const REGION_WORLD = "world";
+import {
+  DEFAULT_RANKINGS_FILTERS,
+  getRankingsShow,
+} from "@/lib/wca/results/rankingsFilters";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -33,11 +33,11 @@ export default function RankingsPage({ searchParams }: RankingsPageProps) {
 
 async function Rankings({ searchParams }: RankingsPageProps) {
   const {
-    gender = GENDER_ALL,
-    region = REGION_WORLD,
-    show = SHOW_100_PERSONS,
-    event_id: eventId = "333",
-    type = "single",
+    gender = DEFAULT_RANKINGS_FILTERS.gender,
+    region = DEFAULT_RANKINGS_FILTERS.region,
+    show = DEFAULT_RANKINGS_FILTERS.show,
+    event_id: eventId = DEFAULT_RANKINGS_FILTERS.event,
+    type = DEFAULT_RANKINGS_FILTERS.rankingType,
   } = await searchParams;
 
   const { data, error, response } = await getRankings({
@@ -60,7 +60,7 @@ async function Rankings({ searchParams }: RankingsPageProps) {
           region,
           event: eventId,
           rankingType: type,
-          show,
+          show: getRankingsShow(show),
         }}
         rankings={data.rankings}
         timestamp={data.timestamp}

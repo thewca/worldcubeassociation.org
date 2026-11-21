@@ -17,6 +17,7 @@ import {
 } from "@/components/EventSelector";
 import events from "@/lib/wca/data/events";
 import { isRecordsHistory } from "@/lib/wca/results/records";
+import { RANKINGS_SHOW } from "@/lib/wca/results/rankingsFilters";
 
 type SharedFilterState = {
   region: string;
@@ -27,13 +28,13 @@ type SharedFilterState = {
 type SharedFilterActions = {
   setRegion: (region: string) => void;
   setGender: (gender: string) => void;
-  setShow: (show: string) => void;
 };
 
 type RecordsFilterBoxProps = {
   filterState: SharedFilterState & { eventIds: string[] };
   filterActions: SharedFilterActions & {
     setSelectedEventIds: (eventIds: string[]) => void;
+    setShow: (show: string) => void;
   };
 };
 
@@ -262,13 +263,15 @@ export function RankingsFilterBox({
             }
           />
         </Box>
-        <RegionSelector
-          region={filterState.region}
-          onRegionChange={filterActions.setRegion}
-          label={t("common.country")}
-          t={t}
-          name={t("delegates_page.all_regions")}
-        />
+        {filterState.show !== RANKINGS_SHOW.byRegion && (
+          <RegionSelector
+            region={filterState.region}
+            onRegionChange={filterActions.setRegion}
+            label={t("common.country")}
+            t={t}
+            name={t("delegates_page.all_regions")}
+          />
+        )}
         <Stack direction={{ base: "column", md: "row" }}>
           <SegmentedField
             label={t("results.selector_elements.type_selector.type")}
@@ -296,25 +299,6 @@ export function RankingsFilterBox({
               },
             ]}
             onChange={filterActions.setGender}
-          />
-          <SegmentedField
-            label={t("results.selector_elements.show_selector.show")}
-            value={filterState.show}
-            items={[
-              {
-                value: "100 persons",
-                label: t("results.selector_elements.show_selector.persons"),
-              },
-              {
-                value: "100 results",
-                label: t("results.selector_elements.show_selector.results"),
-              },
-              {
-                value: "by region",
-                label: t("results.selector_elements.show_selector.by_region"),
-              },
-            ]}
-            onChange={filterActions.setShow}
           />
         </Stack>
       </VStack>

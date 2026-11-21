@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useTransition } from "react";
-import { Heading, VStack } from "@chakra-ui/react";
+import { Heading, Tabs, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
@@ -11,12 +11,17 @@ import RankingsTable from "@/components/results/RankingsTable";
 import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
+import {
+  getRankingsShow,
+  RANKINGS_SHOW,
+  type RankingsShow,
+} from "@/lib/wca/results/rankingsFilters";
 
 type FilterParams = {
   event: string;
   region: string;
   gender: string;
-  show: string;
+  show: RankingsShow;
   rankingType: string;
 };
 
@@ -61,7 +66,7 @@ export default function FilteredRecords({
         ),
       setRegion: (region: string) => navigate({ region }),
       setGender: (gender: string) => navigate({ gender }),
-      setShow: (show: string) => navigate({ show }),
+      setShow: (show: RankingsShow) => navigate({ show }),
       setType: (rankingType: string) => navigate({ rankingType }),
     };
   }, [event, gender, rankingType, region, router, show]);
@@ -77,6 +82,26 @@ export default function FilteredRecords({
       {t("results.last_updated_html", {
         timestamp: getMediumDateString(timestamp, lng),
       })}
+      <Tabs.Root
+        value={show}
+        onValueChange={({ value }) =>
+          filterActions.setShow(getRankingsShow(value))
+        }
+        variant="line"
+        width="full"
+      >
+        <Tabs.List aria-label={t("results.rankings.title")}>
+          <Tabs.Trigger value={RANKINGS_SHOW.persons}>
+            {t("results.selector_elements.show_selector.persons")}
+          </Tabs.Trigger>
+          <Tabs.Trigger value={RANKINGS_SHOW.results}>
+            {t("results.selector_elements.show_selector.results")}
+          </Tabs.Trigger>
+          <Tabs.Trigger value={RANKINGS_SHOW.byRegion}>
+            {t("results.selector_elements.show_selector.by_region")}
+          </Tabs.Trigger>
+        </Tabs.List>
+      </Tabs.Root>
       <RankingsFilterBox
         filterState={searchParams}
         filterActions={filterActions}
@@ -87,7 +112,7 @@ export default function FilteredRecords({
       <RankingsTable
         rankings={rankings}
         isAverage={rankingType === "average"}
-        isByRegion={show === "by region"}
+        isByRegion={show === RANKINGS_SHOW.byRegion}
       />
     </VStack>
   );
