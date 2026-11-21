@@ -13,12 +13,17 @@ import {
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Trans } from "react-i18next";
+import type { useSession } from "@/auth.client";
 import useStoredState from "@/lib/hooks/useStoredState";
 import { useT } from "@/lib/i18n/useI18n";
 
 const MAX_VIEWS = 3;
 
-export default function WhyCompeteCard() {
+export default function WhyCompeteCard({
+  session,
+}: {
+  session: Pick<ReturnType<typeof useSession>, "data" | "isPending">;
+}) {
   const { t } = useT();
   const [dismissed, setDismissed] = useStoredState(
     false,
@@ -26,15 +31,17 @@ export default function WhyCompeteCard() {
   );
   const [viewCount, setViewCount] = useStoredState(0, "whyCompeteViewCount");
   const [initialViewCount] = useState(viewCount);
-  const isHidden = dismissed || initialViewCount >= MAX_VIEWS;
+  const isHidden = dismissed || initialViewCount >= MAX_VIEWS || !!session.data;
   const viewRecorded = useRef(false);
 
   useEffect(() => {
-    if (isHidden || viewRecorded.current) return;
+    if (isHidden || session.isPending || viewRecorded.current) return;
 
     viewRecorded.current = true;
     setViewCount((count) => count + 1);
-  }, [isHidden, setViewCount]);
+  }, [isHidden, session.isPending, setViewCount]);
+
+  if (session.isPending) return null;
 
   return (
     <Collapsible.Root open={!isHidden} lazyMount unmountOnExit maxW="full">

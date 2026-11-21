@@ -282,7 +282,7 @@ export default function CompetitionsPage() {
       {/* Absolutely positioned so this marker adds neither height nor a gap. */}
       <Box ref={topSentinelRef} position="absolute" />
       <ClientOnly>
-        {!session.isPending && !session.data && <WhyCompeteCard />}
+        <WhyCompeteCard session={session} />
       </ClientOnly>
       <Card.Root size={{ base: "sm", md: "md" }} width="full">
         <Tabs.Root
