@@ -12,12 +12,18 @@ import CompetitionShortlist from "./CompetitionShortlist";
 import { useT } from "@/lib/i18n/useI18n";
 import { components } from "@/types/openapi";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import type { MergeExclusive } from "@/lib/types/objects";
 import { route } from "nextjs-routes";
+
+export type FlyoutCompetition = MergeExclusive<
+  components["schemas"]["CompetitionIndex"],
+  components["schemas"]["CompetitionInfo"]
+>;
 
 type FlyoutProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  comp: components["schemas"]["CompetitionIndex"] | null;
+  comp: FlyoutCompetition | null;
   isChampionship: boolean;
 };
 
