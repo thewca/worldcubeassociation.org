@@ -252,10 +252,12 @@ export function RankingsFilterBox({
             }
           />
         </Box>
-        <RegionField
-          value={filterState.region}
-          onChange={filterActions.setRegion}
-        />
+        {filterState.show !== "by region" && (
+          <RegionField
+            value={filterState.region}
+            onChange={filterActions.setRegion}
+          />
+        )}
         <Stack direction={{ base: "column", md: "row" }}>
           <SegmentedField
             label={t("results.selector_elements.type_selector.type")}
@@ -266,25 +268,6 @@ export function RankingsFilterBox({
           <GenderField
             value={filterState.gender}
             onChange={filterActions.setGender}
-          />
-          <SegmentedField
-            label={t("results.selector_elements.show_selector.show")}
-            value={filterState.show}
-            items={[
-              {
-                value: "100 persons",
-                label: t("results.selector_elements.show_selector.persons"),
-              },
-              {
-                value: "100 results",
-                label: t("results.selector_elements.show_selector.results"),
-              },
-              {
-                value: "by region",
-                label: t("results.selector_elements.show_selector.by_region"),
-              },
-            ]}
-            onChange={filterActions.setShow}
           />
         </Stack>
       </VStack>

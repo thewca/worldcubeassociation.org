@@ -39,6 +39,5 @@ export type RankingsFilterBoxProps = {
   filterActions: SharedFilterActions & {
     setEvent: (event: string) => void;
     setType: (type: string) => void;
-    setShow: (show: string) => void;
   };
 };

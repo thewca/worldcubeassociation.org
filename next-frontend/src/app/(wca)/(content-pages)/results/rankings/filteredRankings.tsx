@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useTransition } from "react";
-import { Heading, VStack } from "@chakra-ui/react";
+import { Heading, Tabs, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
@@ -70,6 +70,24 @@ export default function FilteredRecords({
       {t("results.last_updated_html", {
         timestamp: getMediumDateString(timestamp, lng),
       })}
+      <Tabs.Root
+        value={show}
+        onValueChange={({ value }) => filterActions.setShow(value)}
+        variant="line"
+        width="full"
+      >
+        <Tabs.List aria-label={t("results.rankings.title")}>
+          <Tabs.Trigger value="100 persons">
+            {t("results.selector_elements.show_selector.persons")}
+          </Tabs.Trigger>
+          <Tabs.Trigger value="100 results">
+            {t("results.selector_elements.show_selector.results")}
+          </Tabs.Trigger>
+          <Tabs.Trigger value="by region">
+            {t("results.selector_elements.show_selector.by_region")}
+          </Tabs.Trigger>
+        </Tabs.List>
+      </Tabs.Root>
       <RankingsFilterBox
         filterState={searchParams}
         filterActions={filterActions}
