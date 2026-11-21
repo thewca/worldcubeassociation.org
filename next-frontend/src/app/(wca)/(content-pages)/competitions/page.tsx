@@ -278,7 +278,7 @@ export default function CompetitionsPage() {
     0;
 
   return (
-    <VStack gap="8" width="full" position="relative">
+    <VStack gap="0" width="full" position="relative">
       {/* Absolutely positioned so this marker adds neither height nor a gap. */}
       <Box ref={topSentinelRef} position="absolute" />
       <ClientOnly>
