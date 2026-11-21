@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import type { ReactNode } from "react";
 import {
   Card,
   HStack,
@@ -11,8 +11,10 @@ import {
   Link,
   Box,
 } from "@chakra-ui/react";
+import useStoredState from "@/lib/hooks/useStoredState";
 
 interface RemovableCardProps {
+  storageKey: string;
   imageUrl: string;
   heading: string;
   description: ReactNode;
@@ -22,6 +24,7 @@ interface RemovableCardProps {
 }
 
 export default function RemovableCard({
+  storageKey,
   imageUrl,
   heading,
   description,
@@ -29,9 +32,9 @@ export default function RemovableCard({
   buttonText,
   buttonUrl,
 }: RemovableCardProps) {
-  const [visible, setVisible] = useState(true);
+  const [dismissed, setDismissed] = useStoredState(false, storageKey);
 
-  if (!visible) return null;
+  if (dismissed) return null;
 
   return (
     <Card.Root
@@ -46,7 +49,7 @@ export default function RemovableCard({
         <Card.Body>
           <HStack justifyContent="space-between">
             <Card.Title>{heading}</Card.Title>
-            <CloseButton variant="subtle" onClick={() => setVisible(false)} />
+            <CloseButton variant="subtle" onClick={() => setDismissed(true)} />
           </HStack>
           <Separator size="md" />
           <Card.Description as={descriptionAs}>{description}</Card.Description>
