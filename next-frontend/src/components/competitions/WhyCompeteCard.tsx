@@ -48,8 +48,11 @@ export default function WhyCompeteCard() {
       <Image
         src="newcomer.png"
         alt={t("competitions.index.why_compete_image_alt")}
+        // Reserve exact width/height of the image while it's loading
+        htmlWidth={346}
+        htmlHeight={313}
         maxW="1/3"
-        aspectRatio={{ base: "auto", lg: "landscape" }}
+        lg={{ aspectRatio: "landscape" }}
       />
       <Box flex="1" minW="0">
         <Card.Body gap={{ base: "3", md: "4" }}>
