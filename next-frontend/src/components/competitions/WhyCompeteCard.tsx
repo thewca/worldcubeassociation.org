@@ -10,9 +10,12 @@ import {
   Box,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { Trans } from "react-i18next";
 import useStoredState from "@/lib/hooks/useStoredState";
 import { useT } from "@/lib/i18n/useI18n";
+
+const MAX_VIEWS = 3;
 
 export default function WhyCompeteCard() {
   const { t } = useT();
@@ -20,8 +23,19 @@ export default function WhyCompeteCard() {
     false,
     "whyCompeteDismissed",
   );
+  const [viewCount, setViewCount] = useStoredState(0, "whyCompeteViewCount");
+  const [initialViewCount] = useState(viewCount);
+  const isHidden = dismissed || initialViewCount >= MAX_VIEWS;
+  const viewRecorded = useRef(false);
 
-  if (dismissed) return null;
+  useEffect(() => {
+    if (isHidden || viewRecorded.current) return;
+
+    viewRecorded.current = true;
+    setViewCount((count) => count + 1);
+  }, [isHidden, setViewCount]);
+
+  if (isHidden) return null;
 
   return (
     <Card.Root
