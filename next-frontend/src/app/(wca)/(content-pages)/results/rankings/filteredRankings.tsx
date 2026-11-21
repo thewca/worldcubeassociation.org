@@ -1,7 +1,19 @@
 "use client";
 
 import React, { useMemo, useTransition } from "react";
-import { Heading, Tabs, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Circle,
+  Collapsible,
+  Float,
+  Heading,
+  HStack,
+  IconButton,
+  Tabs,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { LuFilter } from "react-icons/lu";
 import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import { useT } from "@/lib/i18n/useI18n";
@@ -12,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 import {
+  DEFAULT_RANKINGS_FILTERS,
   getRankingsShow,
   RANKINGS_SHOW,
   type RankingsShow,
@@ -64,7 +77,8 @@ export default function FilteredRecords({
         navigate(
           event === "333mbf" ? { event, rankingType: "single" } : { event },
         ),
-      setRegion: (region: string) => navigate({ region }),
+      setRegion: (region: string) =>
+        navigate({ region: region || DEFAULT_RANKINGS_FILTERS.region }),
       setGender: (gender: string) => navigate({ gender }),
       setShow: (show: RankingsShow) => navigate({ show }),
       setType: (rankingType: string) => navigate({ rankingType }),
@@ -73,47 +87,111 @@ export default function FilteredRecords({
 
   const { t } = useT();
   const lng = useLocale();
+  const isByRegion = show === RANKINGS_SHOW.byRegion;
+  const hasRegionFilter =
+    !isByRegion &&
+    Boolean(region) &&
+    region !== DEFAULT_RANKINGS_FILTERS.region;
+  const hasActiveFilters =
+    hasRegionFilter ||
+    event !== DEFAULT_RANKINGS_FILTERS.event ||
+    gender !== DEFAULT_RANKINGS_FILTERS.gender ||
+    rankingType !== DEFAULT_RANKINGS_FILTERS.rankingType;
 
   return (
     <VStack align="left" gap={2}>
       <Heading size={{ base: "3xl", md: "5xl" }}>
         {t("results.rankings.title")}
       </Heading>
-      {t("results.last_updated_html", {
-        timestamp: getMediumDateString(timestamp, lng),
-      })}
-      <Tabs.Root
-        value={show}
-        onValueChange={({ value }) =>
-          filterActions.setShow(getRankingsShow(value))
-        }
-        variant="line"
-        width="full"
-      >
-        <Tabs.List aria-label={t("results.rankings.title")}>
-          <Tabs.Trigger value={RANKINGS_SHOW.persons}>
-            {t("results.selector_elements.show_selector.persons")}
-          </Tabs.Trigger>
-          <Tabs.Trigger value={RANKINGS_SHOW.results}>
-            {t("results.selector_elements.show_selector.results")}
-          </Tabs.Trigger>
-          <Tabs.Trigger value={RANKINGS_SHOW.byRegion}>
-            {t("results.selector_elements.show_selector.by_region")}
-          </Tabs.Trigger>
-        </Tabs.List>
-      </Tabs.Root>
-      <RankingsFilterBox
-        filterState={searchParams}
-        filterActions={filterActions}
-      />
+      <Text textStyle={{ base: "xs", md: "body" }} color="fg.muted">
+        {t("results.last_updated_html", {
+          timestamp: getMediumDateString(timestamp, lng),
+        })}
+      </Text>
+      <Collapsible.Root width="full" mb={2} overflowPadding lazyMount>
+        <HStack justify="space-between" borderBottom="sm" borderColor="border">
+          <Tabs.Root
+            value={show}
+            onValueChange={({ value }) =>
+              filterActions.setShow(getRankingsShow(value))
+            }
+            variant="line"
+            minW={0}
+            overflowX="auto"
+          >
+            <Tabs.List
+              aria-label={t("results.rankings.title")}
+              borderBottomWidth="0"
+            >
+              <Tabs.Trigger value={RANKINGS_SHOW.persons}>
+                {t("results.selector_elements.show_selector.persons")}
+              </Tabs.Trigger>
+              <Tabs.Trigger value={RANKINGS_SHOW.results}>
+                {t("results.selector_elements.show_selector.results")}
+              </Tabs.Trigger>
+              <Tabs.Trigger value={RANKINGS_SHOW.byRegion}>
+                {t("results.selector_elements.show_selector.by_region")}
+              </Tabs.Trigger>
+            </Tabs.List>
+          </Tabs.Root>
+          <RankingsFilterToggle hasActiveFilters={hasActiveFilters} />
+        </HStack>
+        <Collapsible.Content>
+          <Box py={3}>
+            <RankingsFilterBox
+              filterState={searchParams}
+              filterActions={filterActions}
+            />
+          </Box>
+        </Collapsible.Content>
+      </Collapsible.Root>
       {/* The same indeterminate bar the router shows for a normal navigation, so
           filtering here feels like filtering anywhere else on the site. */}
       {isPending && <Loading />}
       <RankingsTable
         rankings={rankings}
         isAverage={rankingType === "average"}
-        isByRegion={show === RANKINGS_SHOW.byRegion}
+        isByRegion={isByRegion}
       />
     </VStack>
+  );
+}
+
+function RankingsFilterToggle({
+  hasActiveFilters,
+}: {
+  hasActiveFilters: boolean;
+}) {
+  const { t } = useT();
+
+  return (
+    <Collapsible.Trigger asChild>
+      <IconButton
+        aria-label={t("common.filter")}
+        aria-description={
+          hasActiveFilters ? t("results.rankings.filters_applied") : undefined
+        }
+        variant="ghost"
+        colorPalette={hasActiveFilters ? "blue" : undefined}
+        size="sm"
+        flexShrink={0}
+      >
+        <Box as="span" position="relative" display="inline-flex">
+          <LuFilter />
+          {hasActiveFilters && (
+            <Float placement="top-end" pointerEvents="none">
+              <Circle
+                as="span"
+                size="1.5"
+                bg="colorPalette.solid"
+                outline="{borders.md}"
+                outlineColor="bg"
+                aria-hidden="true"
+              />
+            </Float>
+          )}
+        </Box>
+      </IconButton>
+    </Collapsible.Trigger>
   );
 }
