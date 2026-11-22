@@ -1626,6 +1626,8 @@ class Competition < ApplicationRecord
         single_bests, average_bests = Rails.cache.fetch(recent_results_cache_key, expires_in: 1.day) do
           # The concise results tables aggregate by year, so they cannot apply a
           # rolling date cutoff. Query actual results for these competitors instead.
+          # Merge both competition filters together: Result's date scopes alias
+          # this join as "competition", conflicting with the publication scope.
           results = Result.where(person_id: users_with_rankings.filter_map(&:wca_id), event_id: event.id)
                           .joins(:competition)
                           .merge(Competition.results_posted.where(end_date: (today - 12.months)..today))

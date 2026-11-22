@@ -6,31 +6,35 @@ RSpec.describe 'API competition psych sheets' do
   before do
     travel_to(Time.zone.local(2026, 11, 22))
     allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
-    create(:ranks_single, person_id: alice.wca_id, event: event_id, best: 100, rank: 1)
-    create(:ranks_average, person_id: alice.wca_id, event: event_id, best: 200, rank: 1)
+    create(:ranks_single, person_id: alice.wca_id, event: event_id, **alice_single_ranking)
+    create(:ranks_average, person_id: alice.wca_id, event: event_id, **alice_average_ranking)
     create(:ranks_single, person_id: bob.wca_id, event: event_id, best: 300, rank: 2)
     create(:ranks_average, person_id: bob.wca_id, event: event_id, best: 400, rank: 2)
   end
 
   let(:event_id) { '333' }
+  let(:alice_single_ranking) { { best: 100, rank: 1 } }
+  let(:alice_average_ranking) { { best: 200, rank: 1 } }
+  let(:registration_trait) { :accepted }
+  let(:bob_registration_trait) { registration_trait }
   let!(:competition) { create(:competition, :with_delegate, :visible, :future, event_ids: [event_id]) }
   let!(:alice) { create(:user, :wca_id, name: 'Alice') }
   let!(:bob) { create(:user, :wca_id, name: 'Bob') }
   let!(:newcomer) { create(:user, name: 'Newcomer') }
-  let!(:alice_registration) { create(:registration, :accepted, competition: competition, user: alice, event_ids: [event_id]) }
-  let!(:bob_registration) { create(:registration, :accepted, competition: competition, user: bob, event_ids: [event_id]) }
-  let!(:newcomer_registration) { create(:registration, :accepted, competition: competition, user: newcomer, event_ids: [event_id]) }
+  let!(:alice_registration) { create(:registration, registration_trait, competition: competition, user: alice, event_ids: [event_id]) }
+  let!(:bob_registration) { create(:registration, bob_registration_trait, competition: competition, user: bob, event_ids: [event_id]) }
+  let!(:newcomer_registration) { create(:registration, registration_trait, competition: competition, user: newcomer, event_ids: [event_id]) }
 
-  def result_for(user, date:, best:, average:, result_event_id: event_id, end_date: date, published: true)
+  def result_for(user, date:, best:, average:, result_event_id: event_id, end_date: date, published: true, **attempt_values)
     traits = published ? [:results_posted] : []
     past_competition = create(:competition, *traits, starts: date, ends: end_date, event_ids: [result_event_id])
     if average.zero?
       create(:result, competition: past_competition, person: user.person, event_id: result_event_id, format_id: '1', best: best, average: average,
-                      value2: 0, value3: 0, value4: 0, value5: 0)
+                      value2: 0, value3: 0, value4: 0, value5: 0, **attempt_values)
     else
       remaining_attempt = best.negative? ? best : average
       create(:result, competition: past_competition, person: user.person, event_id: result_event_id, best: best, average: average,
-                      value2: remaining_attempt, value3: remaining_attempt, value4: remaining_attempt, value5: remaining_attempt)
+                      value2: remaining_attempt, value3: remaining_attempt, value4: remaining_attempt, value5: remaining_attempt, **attempt_values)
     end
   end
 
@@ -57,18 +61,25 @@ RSpec.describe 'API competition psych sheets' do
     expect(response.parsed_body['error']).to include('ranking_period')
   end
 
-  it 'preserves all-time ties, secondary ordering and single sorting' do
-    alice.ranks_average.find_by!(event_id: event_id).update!(best: 400, world_rank: 2)
-    rows = fetch_sheet['sorted_rankings']
-    expect(rows.pluck('user_id')).to eq([alice.id, bob.id, newcomer.id])
-    expect(rows.pluck('pos')).to eq([1, 2, nil])
+  context 'with equal all-time averages' do
+    let(:alice_average_ranking) { { best: 400, rank: 2 } }
 
-    alice.ranks_single.find_by!(event_id: event_id).update!(best: 300, world_rank: 2)
-    Rails.cache.clear
-    single_sheet = fetch_sheet(sort_by: 'single')
-    expect(single_sheet['sort_by']).to eq('single')
-    expect(single_sheet['sorted_rankings'].pluck('pos')).to eq([1, 1, nil])
-    expect(single_sheet['sorted_rankings'][1]['tied_previous']).to be(true)
+    it 'preserves secondary ordering by all-time singles' do
+      rows = fetch_sheet['sorted_rankings']
+      expect(rows.pluck('user_id')).to eq([alice.id, bob.id, newcomer.id])
+      expect(rows.pluck('pos')).to eq([1, 2, nil])
+    end
+
+    context 'with equal all-time singles' do
+      let(:alice_single_ranking) { { best: 300, rank: 2 } }
+
+      it 'preserves ties when sorting by single' do
+        single_sheet = fetch_sheet(sort_by: 'single')
+        expect(single_sheet['sort_by']).to eq('single')
+        expect(single_sheet['sorted_rankings'].pluck('pos')).to eq([1, 1, nil])
+        expect(single_sheet['sorted_rankings'][1]['tied_previous']).to be(true)
+      end
+    end
   end
 
   it 'uses competition end dates for competitions spanning the cutoff' do
@@ -92,10 +103,12 @@ RSpec.describe 'API competition psych sheets' do
     expect(rows.first['user_id']).to eq(alice.id)
   end
 
-  it 'returns an empty sheet if no accepted competitors entered the event' do
-    competition.registrations.each { |registration| registration.update!(competing_status: Registrations::Helper::STATUS_PENDING) }
+  context 'with no accepted competitors' do
+    let(:registration_trait) { :pending }
 
-    expect(fetch_sheet(ranking_period: 'last_12_months')['sorted_rankings']).to be_empty
+    it 'returns an empty sheet' do
+      expect(fetch_sheet(ranking_period: 'last_12_months')['sorted_rankings']).to be_empty
+    end
   end
 
   it 'excludes unpublished improvements from both fresh and cached recent positions' do
@@ -165,14 +178,17 @@ RSpec.describe 'API competition psych sheets' do
       expect(tied_rows[1]['tied_previous']).to be(true)
     end
 
-    it 'does not include results in another event or registrations that are not accepted' do
-      result_for(alice, date: Date.current, best: 10, average: 20, result_event_id: '222')
-      bob_registration.update!(competing_status: Registrations::Helper::STATUS_PENDING)
+    context 'with a pending registration' do
+      let(:bob_registration_trait) { :pending }
 
-      rows = fetch_sheet(ranking_period: 'last_12_months')['sorted_rankings']
+      it 'does not include results in another event or registrations that are not accepted' do
+        result_for(alice, date: Date.current, best: 10, average: 20, result_event_id: '222')
 
-      expect(rows.pluck('user_id')).to eq([alice.id, newcomer.id])
-      expect(rows.first).to include('single_best' => 900, 'average_best' => 1100)
+        rows = fetch_sheet(ranking_period: 'last_12_months')['sorted_rankings']
+
+        expect(rows.pluck('user_id')).to eq([alice.id, newcomer.id])
+        expect(rows.first).to include('single_best' => 900, 'average_best' => 1100)
+      end
     end
 
     it 'keeps period caches separate and advances the date window even without new rankings' do
@@ -202,8 +218,7 @@ RSpec.describe 'API competition psych sheets' do
     before do
       result_for(alice, date: Date.current - 2.years, best: 100, average: 200)
       result_for(alice, date: Date.current, best: -1, average: -1)
-      dns_result = result_for(alice, date: Date.current - 1.day, best: -1, average: -1)
-      dns_result.result_attempts.find_by!(attempt_number: 2).update!(value: -2)
+      result_for(alice, date: Date.current - 1.day, best: -1, average: -1, value2: -2)
       result_for(bob, date: Date.current, best: 800, average: -1)
       result_for(bob, date: Date.current - 1.day, best: 850, average: -1)
     end

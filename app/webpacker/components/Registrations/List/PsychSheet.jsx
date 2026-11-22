@@ -1,7 +1,7 @@
 import { useQueries } from '@tanstack/react-query';
 import React, { useMemo } from 'react';
 import {
-  Button, Icon, Segment, Table,
+  Button, Icon, Message, Segment, Table,
 } from 'semantic-ui-react';
 import {
   getPsychSheetForEvent,
@@ -16,6 +16,10 @@ import PreTableInfo from './PreTableInfo';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
 import RegionFlag from '../../wca/RegionFlag';
+
+// Positions, name, country, single world rank, and single result.
+const BASE_COLUMN_COUNT = 6;
+const AVERAGE_COLUMN_COUNT = 2;
 
 // for consistency with competitors table data, to reuse helper functions
 function mapPsychSheetDate(data) {
@@ -103,7 +107,9 @@ export default function PsychSheet({
     <>
       <p>{I18n.t('competitions.registration_v2.list.psychsheets.ranking_comparison_hint')}</p>
       {recentQuery.isError && (
-        <p>{I18n.t('competitions.registration_v2.list.psychsheets.recent_rankings_unavailable')}</p>
+        <Message warning>
+          {I18n.t('competitions.registration_v2.list.psychsheets.recent_rankings_unavailable')}
+        </Message>
       )}
       <PreTableInfo
         scrollToMeIsShown={userIsInTable}
@@ -220,6 +226,7 @@ function PsychSheetBody({
   hideAverage = false,
   sortsByAllTime,
 }) {
+  const columnCount = BASE_COLUMN_COUNT + (hideAverage ? 0 : AVERAGE_COLUMN_COUNT);
   // Registrations can change between requests; missing counterparts have no position.
   const recentRankingsByUserId = useMemo(
     () => new Map(recentRankings?.map((row) => [row.user.id, row])),
@@ -295,7 +302,7 @@ function PsychSheetBody({
         <Table.Row>
           <Table.Cell
             textAlign="center"
-            colSpan={hideAverage ? 6 : 8}
+            colSpan={columnCount}
           >
             {I18n.t('competitions.registration_v2.list.empty')}
           </Table.Cell>
