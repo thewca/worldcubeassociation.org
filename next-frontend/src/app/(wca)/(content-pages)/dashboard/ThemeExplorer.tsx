@@ -72,7 +72,10 @@ export const ColorTokenDoc = () => {
 export const ColorSemanticTokenDoc = () => {
   return (
     <Stack gap="8" my="8">
-      <TokenDoc title="background">
+      <TokenDoc
+        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+        title="background"
+      >
         <ColorGrid
           tokens={allColors.filter((token) =>
             token.name.startsWith("colors.bg"),
@@ -80,7 +83,10 @@ export const ColorSemanticTokenDoc = () => {
         />
       </TokenDoc>
 
-      <TokenDoc title="border">
+      <TokenDoc
+        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+        title="border"
+      >
         <ColorGrid
           variant="border"
           tokens={allColors.filter((token) =>
@@ -89,7 +95,10 @@ export const ColorSemanticTokenDoc = () => {
         />
       </TokenDoc>
 
-      <TokenDoc title="text">
+      <TokenDoc
+        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+        title="text"
+      >
         <ColorGrid
           variant="text"
           tokens={allColors.filter((token) =>
@@ -140,7 +149,12 @@ const ColorGridItem = (props: ColorGridItemProps) => {
         color={variant === "text" ? value : undefined}
         borderColor={variant === "border" ? value : undefined}
       >
-        {variant === "text" && <Text fontSize="lg">Ag</Text>}
+        {variant === "text" && (
+          <Text fontSize="lg">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Ag
+          </Text>
+        )}
       </Center>
       <Text textStyle="xs">{token.name.replace("colors.", "")}</Text>
       {conditions && (

@@ -38,20 +38,25 @@ export default function BetaDisclaimer() {
           <Dialog.Content>
             <Dialog.Header>
               <Dialog.Title textStyle="h3">
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 WCA Website Redesign Beta Disclaimer
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body display="flex" alignItems="center">
               <Text textStyle="s2">
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 You are viewing the English-only beta version of the redesigned
                 WCA Website. This is intended to give the community a sneak peek
-                at the website, for feedback and discussion. <br /> You should
-                expect to find glitches and issues when browsing the website -
-                when you do, please report them via{" "}
+                at the website, for feedback and discussion. <br />
+                {
+                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+                  " You should expect to find glitches and issues when browsing the website - when you do, please report them via"
+                }{" "}
                 <Link
                   href="https://docs.google.com/forms/d/e/1FAIpQLSfBIy3E8cpqa6QTg9SG5r6ELyV1FhNMF89fwxPrr1aafgw2Ig/viewform"
                   textStyle="s2"
                 >
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                   the feedback form
                 </Link>
                 .
@@ -64,6 +69,7 @@ export default function BetaDisclaimer() {
                 w={{ base: "full", md: "auto" }}
                 onClick={acceptDisclaimer}
               >
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 I understand, let me in!
               </Button>
             </Dialog.Footer>

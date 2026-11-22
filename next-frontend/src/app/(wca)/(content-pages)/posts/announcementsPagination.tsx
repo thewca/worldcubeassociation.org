@@ -74,6 +74,8 @@ export default function AnnouncementsPagination({
             targetPage={page - 1}
             searchQuery={searchQuery}
             disabled={page === 1}
+
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
             label="Previous page"
           >
             <LuChevronLeft />
@@ -98,6 +100,8 @@ export default function AnnouncementsPagination({
             targetPage={page + 1}
             searchQuery={searchQuery}
             disabled={page === totalPages}
+
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
             label="Next page"
           >
             <LuChevronRight />

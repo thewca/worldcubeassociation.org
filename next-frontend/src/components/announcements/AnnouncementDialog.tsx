@@ -32,7 +32,10 @@ function ShareButton({ announcement }: { announcement: Announcement }) {
           <Clipboard.Indicator copied={<LuCheck />}>
             <LuShare2 />
           </Clipboard.Indicator>
-          <Clipboard.Indicator copied="Link copied">Share</Clipboard.Indicator>
+          <Clipboard.Indicator copied="Link copied">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Share
+          </Clipboard.Indicator>
         </Button>
       </Clipboard.Trigger>
     </Clipboard.Root>
@@ -57,6 +60,7 @@ export default function AnnouncementDialog({
     <Dialog.Root size="xl" scrollBehavior="inside" lazyMount>
       <Dialog.Trigger asChild>
         <Button variant="onSolid" size="sm" alignSelf="flex-start">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Read More
         </Button>
       </Dialog.Trigger>
@@ -84,7 +88,10 @@ export default function AnnouncementDialog({
             <Dialog.Footer>
               <ShareButton announcement={announcement} />
               <Dialog.ActionTrigger asChild>
-                <Button variant="onSolid">Close</Button>
+                <Button variant="onSolid">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Close
+                </Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>

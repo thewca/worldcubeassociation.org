@@ -286,6 +286,8 @@ export default function CompetitionsPage() {
         {!session.isPending && !session.data && (
           <RemovableCard
             imageUrl="newcomer.png"
+
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
             heading="Why Compete?"
             descriptionAs="div"
             description={
@@ -294,6 +296,8 @@ export default function CompetitionsPage() {
                 i18nKey="competitions.index.why_compete_description_html"
               />
             }
+
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
             buttonText="Learn More"
             buttonUrl="/faq"
           />

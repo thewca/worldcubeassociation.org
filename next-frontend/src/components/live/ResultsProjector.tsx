@@ -134,6 +134,8 @@ function ResultsProjector({
                   <IconButton
                     variant="ghost"
                     onClick={() => setStatus("hiding")}
+
+                    // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
                     aria-label="Play"
                     size="lg"
                     me={2}
@@ -144,6 +146,8 @@ function ResultsProjector({
                   <IconButton
                     variant="ghost"
                     onClick={() => setStatus("paused")}
+
+                    // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
                     aria-label="Pause"
                     size="lg"
                     me={2}
@@ -153,6 +157,8 @@ function ResultsProjector({
                 )}
                 <IconButton
                   variant="ghost"
+
+                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
                   aria-label="Close"
                   size="lg"
                   onClick={disableProjectorView}

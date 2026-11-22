@@ -111,7 +111,10 @@ export default function LiveUpdatingResultsTable({
             <Switch.Control>
               <Switch.Thumb />
             </Switch.Control>
-            <Switch.Label>Show combined Results</Switch.Label>
+            <Switch.Label>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Show combined Results
+            </Switch.Label>
           </Switch.Root>
         )}
         {!isAdminView &&
@@ -127,10 +130,17 @@ export default function LiveUpdatingResultsTable({
                   <Switch.Thumb />
                 </Switch.Control>
                 <Switch.Label>
-                  <Box hideFrom="md" aria-label="Forecast view">
+                  <Box
+                    hideFrom="md"
+                    // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+                    aria-label="Forecast view"
+                  >
                     <LuChartLine />
                   </Box>
-                  <Box hideBelow="md">Forecast view</Box>
+                  <Box hideBelow="md">
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    Forecast view
+                  </Box>
                 </Switch.Label>
               </Switch.Root>
             </Tooltip>

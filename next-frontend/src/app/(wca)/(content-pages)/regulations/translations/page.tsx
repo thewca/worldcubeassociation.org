@@ -56,8 +56,14 @@ function TranslationList({
       <Table.Root size="sm" striped>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Version</Table.ColumnHeader>
-            <Table.ColumnHeader>Language</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Version
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Language
+            </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>

@@ -17,22 +17,42 @@ export default async function TabSchedule({
     await getSchedule(competitionId);
 
   if (scheduleError) {
-    return <Text>Error fetching competition schedule</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Error fetching competition schedule
+      </Text>
+    );
   }
 
   if (!wcifSchedule) {
-    return <Text>Competition does not exist</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Competition does not exist
+      </Text>
+    );
   }
 
   const { data: wcifEvents, error: eventsError } =
     await getEvents(competitionId);
 
   if (eventsError) {
-    return <Text>Error fetching competition schedule</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Error fetching competition schedule
+      </Text>
+    );
   }
 
   if (!wcifEvents) {
-    return <Text>Competition does not exist</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Competition does not exist
+      </Text>
+    );
   }
 
   return (

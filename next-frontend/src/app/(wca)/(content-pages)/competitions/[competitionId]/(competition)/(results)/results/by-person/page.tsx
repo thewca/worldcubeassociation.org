@@ -18,7 +18,12 @@ export default async function PodiumsPage({
     await getCompetitionResults(competitionId);
 
   if (resultsError) {
-    return <Text>Error fetching Results</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Error fetching Results
+      </Text>
+    );
   }
 
   const resultsByPerson = _.groupBy(

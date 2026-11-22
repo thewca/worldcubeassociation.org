@@ -59,6 +59,7 @@ async function AddOnTheSpotButton({
   return (
     <Button asChild alignSelf="flex-end" mb={2}>
       <Link href={`/competitions/${competitionId}/registrations/add`}>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         Add on the spot registration
       </Link>
     </Button>

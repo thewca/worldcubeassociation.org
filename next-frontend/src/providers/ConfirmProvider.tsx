@@ -29,7 +29,12 @@ interface ConfirmOptions {
 }
 
 const DEFAULT_OPTIONS: Required<ConfirmOptions> = {
-  content: <Text>Are you sure? This action cannot be undone.</Text>,
+  content: (
+    <Text>
+      {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+      Are you sure? This action cannot be undone.
+    </Text>
+  ),
   confirmButton: "Yes",
   cancelButton: "No",
   requireInput: null,
@@ -166,6 +171,8 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
       </ConfirmationContext.Provider>
       <ConfirmDialog
         open={isOpen}
+
+        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
         title="Confirm Action"
         lazyMount
         onCancel={handleCancel}
@@ -178,7 +185,12 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
         {options.requireInput && (
           <Field.Root invalid={inputError} mt={3}>
             <Text mb={1}>
-              Type <code>{options.requireInput}</code> to confirm
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Type <code>{options.requireInput}</code>
+              {
+                // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+                " to confirm"
+              }
             </Text>
             <Input
               placeholder={options.requireInput}
@@ -189,6 +201,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
               autoFocus
             />
             <Field.ErrorText>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Input does not match. Please try again.
             </Field.ErrorText>
           </Field.Root>

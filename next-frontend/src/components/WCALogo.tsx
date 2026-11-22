@@ -5,7 +5,12 @@ import WcaLogoIcon from "@/components/icons/WcaLogoIcon";
 
 export default function WCALogo() {
   return (
-    <IconButton asChild variant="ghost" aria-label="WCA Logo">
+    <IconButton
+      asChild
+      variant="ghost"
+      // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+      aria-label="WCA Logo"
+    >
       <Link href="/">
         <WcaLogoIcon boxSize={10} color="fg" />
       </Link>

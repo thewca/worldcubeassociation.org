@@ -27,7 +27,10 @@ export default function AnnouncementsPage({
     <Box py={8}>
       <Card.Root size="md">
         <Card.Header>
-          <Heading textStyle="h1">Announcements</Heading>
+          <Heading textStyle="h1">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Announcements
+          </Heading>
         </Card.Header>
         <Card.Body>
           <Suspense fallback={<Loading />}>

@@ -154,6 +154,8 @@ export default function RegulationsViewer({
           collection={collection}
           openOnClick={false}
           selectionBehavior="clear"
+
+          // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
           placeholder="Search the regulations…"
           onInputValueChange={(details) => setQuery(details.inputValue)}
           onValueChange={(details) => {
@@ -171,7 +173,10 @@ export default function RegulationsViewer({
             <Combobox.Positioner>
               <Combobox.Content maxH="20rem" overflowY="auto">
                 {hasQuery && (
-                  <Combobox.Empty>No matching regulations.</Combobox.Empty>
+                  <Combobox.Empty>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    No matching regulations.
+                  </Combobox.Empty>
                 )}
                 {collection.items.map((item) => (
                   <Combobox.Item item={item} key={item.id}>

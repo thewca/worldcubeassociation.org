@@ -50,6 +50,8 @@ export const ColorModeButton = React.forwardRef<
       <IconButton
         onClick={toggleColorMode}
         variant="ghost"
+
+        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
         aria-label="Toggle color mode"
         size="sm"
         ref={ref}

@@ -30,13 +30,19 @@ export default async function Dashboard() {
     <VStack align="center" gap="3">
       {session && (
         <>
-          <Text>Welcome, {session.user?.name}</Text>
+          <Text>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Welcome, {session.user?.name}
+          </Text>
           {permissions && (
             <Code as="pre">{JSON.stringify(permissions, null, 2)}</Code>
           )}
         </>
       )}
-      <Text>Test Links:</Text>
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Test Links:
+      </Text>
       <HStack>
         <ChakraLink asChild colorPalette="blue">
           <Link
@@ -45,7 +51,10 @@ export default async function Dashboard() {
               query: { competitionId: "OC2024" },
             })}
           >
-            <Button variant="outline">OC2024</Button>
+            <Button variant="outline">
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              OC2024
+            </Button>
           </Link>
         </ChakraLink>
         <ChakraLink asChild colorPalette="red">
@@ -56,6 +65,7 @@ export default async function Dashboard() {
             })}
           >
             <Button variant="outline" colorPalette="red">
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               WC2025
             </Button>
           </Link>
@@ -68,6 +78,7 @@ export default async function Dashboard() {
             })}
           >
             <Button variant="outline" colorPalette="red">
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               2022ANDE01
             </Button>
           </Link>
@@ -78,6 +89,7 @@ export default async function Dashboard() {
         <Card.Body>
           <Box mb="4">
             <Text fontSize="xl" fontWeight="bold">
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               WCA Icon Gallery
             </Text>
           </Box>
@@ -95,13 +107,19 @@ export default async function Dashboard() {
       </Card.Root>
       <Card.Root width="full">
         <Card.Body>
-          <Card.Title>Layer Styles</Card.Title>
+          <Card.Title>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Layer Styles
+          </Card.Title>
           <LayerStyleDoc />
         </Card.Body>
       </Card.Root>
       <Card.Root width="full">
         <Card.Body>
-          <Card.Title>Theme Explorer</Card.Title>
+          <Card.Title>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Theme Explorer
+          </Card.Title>
           <Box>
             <ColorSemanticTokenDoc />
             <ColorTokenDoc />

@@ -123,6 +123,7 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
         confirm({
           content: (
             <Text>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Are you sure you want to exit Batch Mode? All unsubmitted results
               will be lost.
             </Text>
@@ -169,6 +170,8 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
               {(api) => (
                 <Combobox.Input
                   ref={inputRef}
+
+                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
                   placeholder="Type to search"
                   onKeyDown={(e) => {
                     // Backspace at the end of the field clears the whole name,
@@ -198,7 +201,10 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
           <Portal>
             <Combobox.Positioner>
               <Combobox.Content>
-                <Combobox.Empty>No items found</Combobox.Empty>
+                <Combobox.Empty>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  No items found
+                </Combobox.Empty>
                 {collection.items.map((item) => (
                   <Combobox.Item item={item} key={item.id}>
                     {toCompetitorString(item)}
@@ -221,7 +227,10 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
                 value={attempts[index]}
                 onChange={(value) => handleAttemptChange(index, value)}
                 resultType="single"
-                placeholder={`Attempt ${index + 1}`}
+                placeholder={
+                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+                  `Attempt ${index + 1}`
+                }
                 disabled={!hasMetCutoff && index >= cutoff!.numberOfAttempts}
               />
             ))}

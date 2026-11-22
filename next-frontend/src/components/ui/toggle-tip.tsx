@@ -59,6 +59,8 @@ export const InfoTip = React.forwardRef<
     <ToggleTip content={children} {...rest} ref={ref}>
       <IconButton
         variant="ghost"
+
+        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
         aria-label="info"
         size="2xs"
         colorPalette="gray"

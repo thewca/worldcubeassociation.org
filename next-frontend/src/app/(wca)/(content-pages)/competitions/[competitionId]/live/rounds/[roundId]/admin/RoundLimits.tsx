@@ -24,7 +24,10 @@ export default function RoundLimits() {
       </Text>
       <Text>
         {t("competitions.events.cutoff")}:{" "}
-        {round.cutoff ? cutoffToString(t, round.cutoff, eventId) : "None"}
+        {round.cutoff
+          ? cutoffToString(t, round.cutoff, eventId)
+          : // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            "None"}
       </Text>
     </Stack>
   );

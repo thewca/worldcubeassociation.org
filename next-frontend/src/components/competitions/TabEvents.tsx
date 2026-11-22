@@ -28,7 +28,12 @@ export default async function TabEvents({
   if (error) return <OpenapiError response={response} t={t} />;
 
   if (!events) {
-    return <Text>Competition does not exist</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Competition does not exist
+      </Text>
+    );
   }
 
   const allRounds = events.flatMap((event) => event.rounds);
@@ -47,14 +52,37 @@ export default async function TabEvents({
           <Table.Root striped interactive>
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeader>Event</Table.ColumnHeader>
-                <Table.ColumnHeader>Round</Table.ColumnHeader>
-                <Table.ColumnHeader>Format</Table.ColumnHeader>
-                <Table.ColumnHeader>Time Limit</Table.ColumnHeader>
-                {showCutoff && <Table.ColumnHeader>Cutoff</Table.ColumnHeader>}
-                <Table.ColumnHeader>Proceed</Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Event
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Round
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Format
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Time Limit
+                </Table.ColumnHeader>
+                {showCutoff && (
+                  <Table.ColumnHeader>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    Cutoff
+                  </Table.ColumnHeader>
+                )}
+                <Table.ColumnHeader>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Proceed
+                </Table.ColumnHeader>
                 {showQualifications && (
-                  <Table.ColumnHeader>Qualification</Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    Qualification
+                  </Table.ColumnHeader>
                 )}
               </Table.Row>
             </Table.Header>

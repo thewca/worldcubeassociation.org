@@ -78,19 +78,37 @@ export function ResultsTable({
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>#</Table.ColumnHeader>
-            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
+            {isAdmin && (
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                Edit
+              </Table.ColumnHeader>
+            )}
             <Table.ColumnHeader {...STICKY_COLUMN}>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Competitor
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Best</Table.ColumnHeader>
-            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Best
+            </Table.ColumnHeader>
+            {anyAverages && (
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                Average
+              </Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Representing
+            </Table.ColumnHeader>
             {showLinkedRoundsView && (
               <Table.ColumnHeader>
                 {t("competitions.results_table.round")}
               </Table.ColumnHeader>
             )}
             <Table.ColumnHeader colSpan={solveCount} textAlign={solveTextAlign}>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Solves
             </Table.ColumnHeader>
           </Table.Row>
@@ -107,7 +125,12 @@ export function ResultsTable({
 
               return (
                 <Table.Row key={competitorResult.id}>
-                  {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                  {isAdmin && (
+                    <Table.Cell>
+                      {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                      EDIT
+                    </Table.Cell>
+                  )}
                   {showText && (
                     <PositionCell
                       result={competitorResult}
@@ -209,19 +232,40 @@ export function ByPersonTable({
       <Table.Root>
         <Table.Header>
           <Table.Row>
-            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-            <Table.ColumnHeader>Event</Table.ColumnHeader>
-            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            {isAdmin && (
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                Edit
+              </Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Event
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Round
+            </Table.ColumnHeader>
             <Table.ColumnHeader>#</Table.ColumnHeader>
-            <Table.ColumnHeader>Best</Table.ColumnHeader>
-            <Table.ColumnHeader>Average</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Best
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Average
+            </Table.ColumnHeader>
             {showNationalityColumn && (
-              <Table.ColumnHeader>Representing</Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                Representing
+              </Table.ColumnHeader>
             )}
             <Table.ColumnHeader
               colSpan={attemptCount}
               textAlign={solveTextAlign}
             >
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Solves
             </Table.ColumnHeader>
           </Table.Row>
@@ -236,7 +280,12 @@ export function ByPersonTable({
               resultAttempts(competitorResult);
             return (
               <Table.Row key={competitorResult.id}>
-                {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                {isAdmin && (
+                  <Table.Cell>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    EDIT
+                  </Table.Cell>
+                )}
                 <Table.Cell>
                   {isFirstRoundOfEvent && events.byId[eventId].name}
                 </Table.Cell>

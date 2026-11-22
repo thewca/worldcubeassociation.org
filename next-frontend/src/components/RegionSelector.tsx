@@ -174,7 +174,10 @@ export default function RegionSelector({
         <Portal>
           <Combobox.Positioner>
             <Combobox.Content>
-              <Combobox.Empty>No items found</Combobox.Empty>
+              <Combobox.Empty>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                No items found
+              </Combobox.Empty>
               {collection.items.map((item) => (
                 <Combobox.Item
                   item={item}

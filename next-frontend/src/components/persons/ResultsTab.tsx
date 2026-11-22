@@ -81,11 +81,21 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
   });
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Loading...
+      </Text>
+    );
   }
 
   if (!resultsQuery) {
-    return <Text>Failed fetching results</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Failed fetching results
+      </Text>
+    );
   }
 
   const loadedResults = resultsQuery.pages.flat();

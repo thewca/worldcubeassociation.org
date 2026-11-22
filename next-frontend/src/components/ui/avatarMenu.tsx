@@ -115,9 +115,11 @@ function AvatarMenu({
           px={2}
           justifyContent="flex-start"
         >
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Sign in
         </Button>
         <MobileNavButton hideFrom="md" onClick={() => signIn()}>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Sign in
         </MobileNavButton>
       </>
@@ -195,6 +197,7 @@ function AvatarMenu({
               })}
               <Menu.Separator />
               <Menu.Item value="logout" onSelect={handleSignOut}>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 Log Out
               </Menu.Item>
             </Menu.Content>
@@ -242,7 +245,10 @@ function AvatarMenu({
                 );
               })}
               <Separator />
-              <MobileNavButton onClick={handleSignOut}>Log Out</MobileNavButton>
+              <MobileNavButton onClick={handleSignOut}>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                Log Out
+              </MobileNavButton>
             </VStack>
           </Collapsible.Content>
         </Collapsible.Root>

@@ -5,7 +5,10 @@ export default function TabRegister() {
   return (
     <Card.Root>
       <Card.Body>
-        <Text>Register</Text>
+        <Text>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Register
+        </Text>
       </Card.Body>
     </Card.Root>
   );

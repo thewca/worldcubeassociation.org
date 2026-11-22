@@ -21,7 +21,12 @@ export default async function FAQ() {
   const faqQuestionsRaw = faqPage.questions;
 
   if (faqQuestionsRaw.length === 0) {
-    return <Heading>No FAQ Categories, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        No FAQ Categories, add some!
+      </Heading>
+    );
   }
 
   const faqQuestions = faqQuestionsRaw.map(
@@ -38,7 +43,10 @@ export default async function FAQ() {
     <VStack gap="8" width="full" alignItems="left">
       <Card.Root maxW="40em">
         <Card.Body>
-          <Card.Title textStyle="h1">Frequently Asked Questions</Card.Title>
+          <Card.Title textStyle="h1">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Frequently Asked Questions
+          </Card.Title>
           {faqPage.introTextMarkdown ? (
             <ChakraMarkdown
               headingAs={Card.Title}
@@ -49,7 +57,10 @@ export default async function FAQ() {
               {faqPage.introTextMarkdown}
             </ChakraMarkdown>
           ) : (
-            <Card.Description>No Intro text, add it!</Card.Description>
+            <Card.Description>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              No Intro text, add it!
+            </Card.Description>
           )}
         </Card.Body>
       </Card.Root>

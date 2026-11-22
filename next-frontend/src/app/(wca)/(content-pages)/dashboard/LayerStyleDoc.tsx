@@ -49,15 +49,21 @@ function LayerStyleRow({ layerStyle }: { layerStyle: LayerStyleName }) {
             flex="1"
           >
             <Text textStyle="s1">{palette}</Text>
-            <Text textStyle="body">Card body copy on this surface.</Text>
+            <Text textStyle="body">
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Card body copy on this surface.
+            </Text>
             <HStack gap="2" mt="3">
               <Button size="xs" variant="solid">
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 Solid
               </Button>
               <Button size="xs" variant="outline">
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 Outline
               </Button>
               <Button size="xs" variant="onSolid">
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 onSolid
               </Button>
             </HStack>
@@ -109,7 +115,10 @@ export default function LayerStyleDoc() {
       ))}
 
       <Stack gap="4">
-        <Text textStyle="h3">Applied directly to buttons</Text>
+        <Text textStyle="h3">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Applied directly to buttons
+        </Text>
         {NAMES.map((name) => (
           <ButtonRow key={name} layerStyle={name} />
         ))}

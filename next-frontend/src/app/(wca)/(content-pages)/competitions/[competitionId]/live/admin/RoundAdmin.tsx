@@ -35,6 +35,7 @@ export default function RoundAdmin({
             query: { competitionId },
           })}
         >
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Manage scoretakers
         </Link>
       </Button>

@@ -29,22 +29,37 @@ export default async function RegulationsHistory() {
     .reverse();
 
   if (regulationsHistoryItems.length === 0) {
-    return <Heading>No Regulation History Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        No Regulation History Items, add some!
+      </Heading>
+    );
   }
 
   return (
     <VStack gap="8" alignItems="left">
-      <Heading size="5xl">WCA Regulations</Heading>
-      <Heading size="2xl">Older Versions of the Regulations</Heading>
+      <Heading size="5xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        WCA Regulations
+      </Heading>
+      <Heading size="2xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Older Versions of the Regulations
+      </Heading>
       <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         Until 2011, the Regulations were maintained by Ron van Bruchem and the
         WCA Board. Since then, the{" "}
         <Link href="mailto:wrc@worldcubeassociation.org">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           WCA Regulations Committee
         </Link>{" "}
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         is in charge of them.
       </Text>
       <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         Previously, from the January 1st, 2013 release until the January 1st,
         2025 release, the WCA Regulations were split into the WCA Regulations
         and the WCA Guidelines. The former contents of both documents were
@@ -56,9 +71,14 @@ export default async function RegulationsHistory() {
             <Link href={item.url}>{item.version}</Link>{" "}
             {item.changesUrl && (
               <Text>
-                (<Link href={item.changesUrl}>Changes</Link>
+                (
+                <Link href={item.changesUrl}>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Changes
+                </Link>
                 {item.summarizedChangesUrl && (
                   <Link href={item.summarizedChangesUrl}>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                     , Summarized Changes
                   </Link>
                 )}
@@ -69,8 +89,12 @@ export default async function RegulationsHistory() {
         ))}
       </List.Root>
       <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         Current updates to the Regulations are available{" "}
-        <Link href="https://github.com/thewca/wca-regulations/">on GitHub</Link>
+        <Link href="https://github.com/thewca/wca-regulations/">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          on GitHub
+        </Link>
       </Text>
     </VStack>
   );

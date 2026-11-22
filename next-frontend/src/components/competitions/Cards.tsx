@@ -72,7 +72,10 @@ export function VenueDetailsCard({
   return (
     <Card.Root width="inherit">
       <Card.Body>
-        <Card.Title textStyle="s4">Venue Details</Card.Title>
+        <Card.Title textStyle="s4">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Venue Details
+        </Card.Title>
         {/* Sized against the card rather than the viewport: the card is narrow on a phone,
             but also in a narrow desktop column, and both want one column. A flex basis
             (unlike SimpleGrid's `minmax()` minimum) can still shrink below 3xs. */}
@@ -80,6 +83,7 @@ export function VenueDetailsCard({
           <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <VenueIcon />
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Venue
             </Stat.Label>
             <ChakraMarkdown paragraphAs={Stat.ValueText}>
@@ -90,6 +94,7 @@ export function VenueDetailsCard({
           <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <MapIcon />
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Address
             </Stat.Label>
             <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
@@ -99,6 +104,7 @@ export function VenueDetailsCard({
             <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
               <Stat.Label>
                 <DetailsIcon />
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 Details
               </Stat.Label>
               <ChakraMarkdown paragraphAs={Stat.ValueText}>
@@ -120,7 +126,10 @@ export function AdditionalInformationCard({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">Information</Card.Title>
+        <Card.Title textStyle="s4">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Information
+        </Card.Title>
         <ChakraMarkdown
           paragraphAs={Card.Description}
           imageProps={{ maxW: { base: "full", md: "sm" } }}
@@ -143,7 +152,10 @@ export function RefundPolicyCard({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">Refund Policy</Card.Title>
+        <Card.Title textStyle="s4">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Refund Policy
+        </Card.Title>
         <Card.Description>
           <RefundPolicyText
             refundPolicyPercent={competitionInfo.refund_policy_percent}
@@ -317,7 +329,10 @@ export function EventCard({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">Events List</Card.Title>
+        <Card.Title textStyle="s4">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Events List
+        </Card.Title>
         <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
             <LabelledEventIcon
@@ -365,6 +380,7 @@ export function InfoCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoOpenDateIcon />
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Date
             </Stat.Label>
             <Stat.ValueText>
@@ -395,6 +411,7 @@ export function InfoCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompetitorsIcon />
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Competitor Limit
             </Stat.Label>
             <Stat.ValueText>
@@ -405,10 +422,15 @@ export function InfoCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <BookmarkIcon />
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Bookmarked
             </Stat.Label>
             <Stat.ValueText>
-              <FormatNumber value={competitionInfo.number_of_bookmarks} /> Times
+              <FormatNumber value={competitionInfo.number_of_bookmarks} />
+              {
+                // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+                " Times"
+              }
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>

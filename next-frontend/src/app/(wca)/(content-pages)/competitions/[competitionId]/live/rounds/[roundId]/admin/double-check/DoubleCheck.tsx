@@ -96,8 +96,12 @@ export default function DoubleCheck({ results }: { results: LiveResult[] }) {
                   <br />
                   {roundName}
                 </Card.Header>
-                <Card.Title>Double-check</Card.Title>
+                <Card.Title>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Double-check
+                </Card.Title>
                 <Card.Description>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                   Here you can iterate over results ordered by entry time
                   (newest first). When doing double-check you can place a
                   scorecard next to the form to quickly compare attempt results.

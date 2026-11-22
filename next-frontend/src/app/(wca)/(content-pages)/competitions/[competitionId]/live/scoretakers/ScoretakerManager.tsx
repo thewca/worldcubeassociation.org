@@ -50,7 +50,12 @@ export default function ScoretakerManager({
   }
 
   if (!registrations) {
-    return <Text>No registrations found.</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        No registrations found.
+      </Text>
+    );
   }
 
   const pending = isAdding || isRemoving;
@@ -58,11 +63,17 @@ export default function ScoretakerManager({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title>Scoretakers</Card.Title>
+        <Card.Title>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Scoretakers
+        </Card.Title>
         <Table.Root>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>Name</Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                Name
+              </Table.ColumnHeader>
               <Table.ColumnHeader />
             </Table.Row>
           </Table.Header>
@@ -91,6 +102,7 @@ export default function ScoretakerManager({
                             })
                           }
                         >
+                          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                           Remove
                         </Button>
                       ) : (
@@ -104,6 +116,7 @@ export default function ScoretakerManager({
                             })
                           }
                         >
+                          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                           Add as scoretaker
                         </Button>
                       )}

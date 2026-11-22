@@ -52,7 +52,10 @@ export default function LiveResultsMobileModal({
             {selectedRow && (
               <DataList.Root orientation="vertical">
                 <DataList.Item>
-                  <DataList.ItemLabel>Name</DataList.ItemLabel>
+                  <DataList.ItemLabel>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    Name
+                  </DataList.ItemLabel>
                   <DataList.ItemValue>
                     <VStack>
                       {selectedRow.name}
@@ -66,13 +69,17 @@ export default function LiveResultsMobileModal({
                           },
                         })}
                       >
+                        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                         All Results
                       </Link>
                     </VStack>
                   </DataList.ItemValue>
                 </DataList.Item>
                 <DataList.Item>
-                  <DataList.ItemLabel>Country</DataList.ItemLabel>
+                  <DataList.ItemLabel>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    Country
+                  </DataList.ItemLabel>
                   <DataList.ItemValue>
                     <HStack>
                       {countries.byIso2[selectedRow.country_iso2].name}
@@ -82,7 +89,10 @@ export default function LiveResultsMobileModal({
                 {selectedRow.results.map((r) => (
                   <React.Fragment key={r.round_wcif_id}>
                     <DataList.Item>
-                      <DataList.ItemLabel>Attempts</DataList.ItemLabel>
+                      <DataList.ItemLabel>
+                        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                        Attempts
+                      </DataList.ItemLabel>
                       <DataList.ItemValue>
                         {r.attempts
                           .map((a) => formatAttemptResult(a.value, eventId))
@@ -108,7 +118,10 @@ export default function LiveResultsMobileModal({
           </Dialog.Body>
           <Dialog.Footer>
             <Dialog.ActionTrigger asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline">
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                Close
+              </Button>
             </Dialog.ActionTrigger>
           </Dialog.Footer>
           <Dialog.CloseTrigger asChild>

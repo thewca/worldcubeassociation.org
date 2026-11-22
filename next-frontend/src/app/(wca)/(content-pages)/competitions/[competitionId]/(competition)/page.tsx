@@ -37,7 +37,12 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
   if (error) return <OpenapiError t={t} response={response} />;
 
   if (!competitionInfo) {
-    return <Text>Competition does not exist</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Competition does not exist
+      </Text>
+    );
   }
 
   const session = await getSession();

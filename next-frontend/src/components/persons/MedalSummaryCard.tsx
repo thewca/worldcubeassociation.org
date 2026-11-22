@@ -23,13 +23,19 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
         />
       </Float>
       <Card.Body>
-        <Card.Title textStyle="s4">Medals</Card.Title>
+        <Card.Title textStyle="s4">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Medals
+        </Card.Title>
         <StatGroup justifyContent="flex-start" gap="5">
           {gold > 0 && (
             <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{gold}</Heading>
-                <Stat.ValueUnit color="yellow.contrast">Gold</Stat.ValueUnit>
+                <Stat.ValueUnit color="yellow.contrast">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Gold
+                </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>
           )}
@@ -37,7 +43,10 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
             <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{silver}</Heading>
-                <Stat.ValueUnit color="yellow.contrast">Silver</Stat.ValueUnit>
+                <Stat.ValueUnit color="yellow.contrast">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Silver
+                </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>
           )}
@@ -45,7 +54,10 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
             <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{bronze}</Heading>
-                <Stat.ValueUnit color="yellow.contrast">Bronze</Stat.ValueUnit>
+                <Stat.ValueUnit color="yellow.contrast">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Bronze
+                </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>
           )}

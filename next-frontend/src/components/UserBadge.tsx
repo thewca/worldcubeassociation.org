@@ -51,6 +51,8 @@ const UserBadge: React.FC<UserBadgeData> = ({
                 ? "/missing_avatar_thumb.png"
                 : (profilePicture.thumb_url ?? profilePicture.url)
             }
+
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
             alt="Profile Picture"
             objectFit="cover"
             // The badge needs a fixed-width column, so a non-square photo has to

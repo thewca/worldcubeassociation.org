@@ -54,7 +54,10 @@ export function LiveTableHeader({
           )}
           <Table.ColumnHeader textAlign="end">#</Table.ColumnHeader>
           {isAdmin && (
-            <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
+            <Table.ColumnHeader textAlign="center">
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              ID
+            </Table.ColumnHeader>
           )}
           {!byPerson && (
             <Table.ColumnHeader overflow="hidden" textOverflow="ellipsis">

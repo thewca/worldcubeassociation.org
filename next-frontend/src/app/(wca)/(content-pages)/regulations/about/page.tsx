@@ -20,7 +20,12 @@ export default async function AboutTheRegulations() {
   const aboutRegulationsItems = aboutRegulations.blocks;
 
   if (aboutRegulationsItems.length === 0) {
-    return <Heading>No About Regulations Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        No About Regulations Items, add some!
+      </Heading>
+    );
   }
 
   return (

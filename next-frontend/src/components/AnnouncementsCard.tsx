@@ -82,6 +82,7 @@ export default function AnnouncementsCard({
               <Accordion.ItemIndicator transition={undefined}>
                 <LuChevronsRight />
               </Accordion.ItemIndicator>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               See all announcements
             </ChakraLink>
           </Accordion.ItemTrigger>

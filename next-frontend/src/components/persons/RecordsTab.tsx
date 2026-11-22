@@ -23,11 +23,21 @@ const RecordsTab: React.FC<RecordsTabProps> = ({ wcaId }) => {
   );
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Loading...
+      </Text>
+    );
   }
 
   if (!recordsQuery) {
-    return <Text>Failed fetching records</Text>;
+    return (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Failed fetching records
+      </Text>
+    );
   }
 
   return <RecordsTable recordResults={recordsQuery} t={t} />;

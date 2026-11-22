@@ -19,12 +19,20 @@ export default async function Disclaimer() {
   const disclaimerItems = disclaimerPage.blocks;
 
   if (disclaimerItems.length === 0) {
-    return <Heading>No Disclaimer Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        No Disclaimer Items, add some!
+      </Heading>
+    );
   }
 
   return (
     <VStack gap="8" width="full" alignItems="left">
-      <Heading size="5xl">Disclaimer</Heading>
+      <Heading size="5xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Disclaimer
+      </Heading>
       {disclaimerItems.map((item) => (
         <Box key={item.id}>
           {item.title && <Heading size="xl">{item.title}</Heading>}

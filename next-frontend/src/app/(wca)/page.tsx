@@ -346,11 +346,15 @@ const FeaturedCompetitions = async ({
       <Card.Title asChild>
         <HStack justify="space-between" wrap="wrap">
           <Text textStyle={{ base: "h2", md: "h1" }}>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             Upcoming Competitions
           </Text>
           <Button asChild variant="pastelSolid">
             <ChakraLink asChild textStyle={undefined}>
-              <Link href="/competitions">View all Competitions</Link>
+              <Link href="/competitions">
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                View all Competitions
+              </Link>
             </ChakraLink>
           </Button>
         </HStack>
@@ -556,11 +560,13 @@ const PayloadContents = async () => {
     return (
       <Center p={HOMEPAGE_SPACING} asChild>
         <Text>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
             <Link
               href={route({ pathname: "/payload/[[...segments]]", query: {} })}
             >
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               add some!
             </Link>
           </ChakraLink>

@@ -245,7 +245,10 @@ async function DelegateGrid({
                 asChild
                 variant="ghost"
                 size="sm"
-                aria-label={`Edit ${role.user.name}`}
+                aria-label={
+                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+                  `Edit ${role.user.name}`
+                }
               >
                 <RailsLink href={`/users/${role.user.id}/edit`}>
                   <LuPencil />

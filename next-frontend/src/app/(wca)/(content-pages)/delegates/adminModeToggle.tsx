@@ -31,7 +31,10 @@ export default function AdminModeToggle({
         <Switch.Thumb />
       </Switch.Control>
       {/* No i18n because this is only visible to admins */}
-      <Switch.Label>Enable admin mode</Switch.Label>
+      <Switch.Label>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Enable admin mode
+      </Switch.Label>
     </Switch.Root>
   );
 }

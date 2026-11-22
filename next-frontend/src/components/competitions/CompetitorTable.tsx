@@ -26,8 +26,14 @@ export default function CompetitorTable({
       <Table.Root width="100%">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Name</Table.ColumnHeader>
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Name
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Representing
+            </Table.ColumnHeader>
             {eventIds.map((eventId) => (
               <Table.ColumnHeader
                 key={eventId}
@@ -38,7 +44,10 @@ export default function CompetitorTable({
                 <LabelledEventIcon eventId={eventId} />
               </Table.ColumnHeader>
             ))}
-            <Table.ColumnHeader>Total</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Total
+            </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
 

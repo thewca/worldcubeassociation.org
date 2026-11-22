@@ -18,7 +18,12 @@ export default async function PersonResults({
   );
 
   if (!personResultRequest.data) {
-    return <p>Something went wrong while trying to fetch results</p>;
+    return (
+      <p>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Something went wrong while trying to fetch results
+      </p>
+    );
   }
 
   const { results, name, wcaId } = personResultRequest.data;

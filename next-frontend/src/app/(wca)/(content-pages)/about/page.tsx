@@ -22,12 +22,20 @@ export default async function About() {
   const aboutItems = aboutPage.blocks;
 
   if (aboutItems.length === 0) {
-    return <Heading>No About Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        No About Items, add some!
+      </Heading>
+    );
   }
 
   return (
     <VStack gap="8" width="full" alignItems="left">
-      <Heading size="5xl">About Us</Heading>
+      <Heading size="5xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        About Us
+      </Heading>
       {aboutItems.map((item) => {
         switch (item.blockType) {
           case "callToAction":

@@ -24,7 +24,10 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
     <Card.Root overflow="hidden" width="full">
       <Card.Header>
         <HStack justify="space-between">
-          <Card.Title textStyle="s4">Current Personal Records</Card.Title>
+          <Card.Title textStyle="s4">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Current Personal Records
+          </Card.Title>
           <IconButton variant="ghost">
             <LuShare2 /> {/* TODO SLATE - implement share functionality */}
           </IconButton>
@@ -38,38 +41,63 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                 <Table.ColumnHeader paddingStart={4}>
                   <HStack>
                     <SpeedcubingHistoryIcon fontSize="md" />
-                    <Text fontWeight="medium">Event</Text>
+                    <Text fontWeight="medium">
+                      {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                      Event
+                    </Text>
                   </HStack>
                 </Table.ColumnHeader>
                 <Tooltip content="National Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader textAlign="end">NR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    NR
+                  </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip
                   content="Continental Ranking"
                   showArrow
                   openDelay={100}
                 >
-                  <Table.ColumnHeader textAlign="end">CR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    CR
+                  </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip content="World Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader textAlign="end">WR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    WR
+                  </Table.ColumnHeader>
                 </Tooltip>
-                <Table.ColumnHeader textAlign="end">Single</Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="end">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Single
+                </Table.ColumnHeader>
                 <Table.ColumnHeader paddingStart={3}>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                   Average
                 </Table.ColumnHeader>
                 <Tooltip content="World Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader>WR</Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    WR
+                  </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip
                   content="Continental Ranking"
                   showArrow
                   openDelay={100}
                 >
-                  <Table.ColumnHeader>CR</Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    CR
+                  </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip content="National Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader>NR</Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                    NR
+                  </Table.ColumnHeader>
                 </Tooltip>
               </Table.Row>
             </Table.Header>

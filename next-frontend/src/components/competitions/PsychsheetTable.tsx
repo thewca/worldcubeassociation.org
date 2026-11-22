@@ -31,15 +31,28 @@ export default function PsychsheetTable({
       <Table.Root width="100%">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Pos</Table.ColumnHeader>
-            <Table.ColumnHeader>Name</Table.ColumnHeader>
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
-            <Table.ColumnHeader>WR</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Pos
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Name
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              Representing
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              WR
+            </Table.ColumnHeader>
             <Table.ColumnHeader
               cursor="pointer"
               aria-sort={sortBy === "single" ? "ascending" : "none"}
               onClick={() => setSortBy("single")}
             >
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               Single
             </Table.ColumnHeader>
             {showAverage && (
@@ -49,9 +62,13 @@ export default function PsychsheetTable({
                   aria-sort={sortBy === "average" ? "ascending" : "none"}
                   onClick={() => setSortBy("average")}
                 >
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                   Average
                 </Table.ColumnHeader>
-                <Table.ColumnHeader>WR</Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  WR
+                </Table.ColumnHeader>
               </>
             )}
           </Table.Row>

@@ -20,12 +20,20 @@ export default async function Privacy() {
   const privacyItems = privacyPage.blocks;
 
   if (privacyItems.length === 0) {
-    return <Heading>No Privacy Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        No Privacy Items, add some!
+      </Heading>
+    );
   }
 
   return (
     <VStack gap="8" width="full" alignItems="left">
-      <Heading size="5xl">WCA Privacy Statement</Heading>
+      <Heading size="5xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        WCA Privacy Statement
+      </Heading>
       <ChakraMarkdown>{privacyPage.preambleMarkdown}</ChakraMarkdown>
       {privacyItems.map((item) => (
         <Box key={item.id}>

@@ -24,13 +24,19 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
         />
       </Float>
       <Card.Body>
-        <Card.Title textStyle="s4">Record Collection</Card.Title>
+        <Card.Title textStyle="s4">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Record Collection
+        </Card.Title>
         <StatGroup justifyContent="flex-start" gap="5">
           {world > 0 && (
             <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{world}</Heading>
-                <Stat.ValueUnit color="green.contrast">World</Stat.ValueUnit>
+                <Stat.ValueUnit color="green.contrast">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  World
+                </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>
           )}
@@ -39,6 +45,7 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{continental}</Heading>
                 <Stat.ValueUnit color="green.contrast">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                   Continental
                 </Stat.ValueUnit>
               </Stat.ValueText>
@@ -48,7 +55,10 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = ({
             <Stat.Root>
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{national}</Heading>
-                <Stat.ValueUnit color="green.contrast">National</Stat.ValueUnit>
+                <Stat.ValueUnit color="green.contrast">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  National
+                </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>
           )}

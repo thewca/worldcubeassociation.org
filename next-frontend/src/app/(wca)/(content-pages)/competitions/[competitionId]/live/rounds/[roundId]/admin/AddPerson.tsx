@@ -46,6 +46,7 @@ export default function AddPersonModal({
       >
         <Dialog.Trigger asChild>
           <Button variant="outline" disabled={roundClosed}>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             Add Competitor
           </Button>
         </Dialog.Trigger>
@@ -55,7 +56,10 @@ export default function AddPersonModal({
         <Dialog.Positioner>
           <Dialog.Content>
             <Dialog.Header>
-              <Dialog.Title>Add Competitor</Dialog.Title>
+              <Dialog.Title>
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                Add Competitor
+              </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
               <AddPerson
@@ -75,10 +79,14 @@ export default function AddPersonModal({
                   )
                 }
               >
+                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
                 Add Competitor to Round
               </Button>
               <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">
+                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  Cancel
+                </Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
@@ -199,7 +207,10 @@ function AddPersonCombobox({
         }}
       >
         <Combobox.Control>
-          <Combobox.Input placeholder="Type to search" />
+          <Combobox.Input
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            placeholder="Type to search"
+          />
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />
             <Combobox.Trigger />
@@ -210,6 +221,7 @@ function AddPersonCombobox({
         <Combobox.Positioner>
           <Combobox.Content>
             <Combobox.Empty>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
               All Competitors are already Part of the Round
             </Combobox.Empty>
             {collection.items.map((item) => (

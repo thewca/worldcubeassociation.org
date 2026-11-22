@@ -31,7 +31,12 @@ export default async function MyCompetitions() {
   const { t } = await getT();
 
   if (!session) {
-    return <p>Please Log in</p>;
+    return (
+      <p>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Please Log in
+      </p>
+    );
   }
 
   const client = serverClientWithToken(session.accessToken);
@@ -39,7 +44,12 @@ export default async function MyCompetitions() {
   const myCompetitionsRequest = await client.GET("/v0/competitions/mine");
 
   if (myCompetitionsRequest.error) {
-    return <p>Something went wrong while fetching your competitions</p>;
+    return (
+      <p>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Something went wrong while fetching your competitions
+      </p>
+    );
   }
 
   const myCompetitions = myCompetitionsRequest.data;

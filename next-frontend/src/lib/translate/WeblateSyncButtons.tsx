@@ -35,14 +35,19 @@ export function WeblateSyncButtons() {
 
   return (
     <div>
-      <h2>Weblate</h2>
+      <h2>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Weblate
+      </h2>
       <p>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         Content syncs with Weblate after every save. Press Sync now to pull in
         translations finished in Weblate since the last save. Seeding uploads
         translations that already exist in Payload; it is a one-time step, run
         it twice so strings new to Weblate are picked up.
       </p>
       <Button disabled={busy} onClick={() => start(false)}>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         Sync now
       </Button>
       <Button
@@ -50,6 +55,7 @@ export function WeblateSyncButtons() {
         disabled={busy}
         onClick={() => start(true)}
       >
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         Seed existing translations
       </Button>
     </div>

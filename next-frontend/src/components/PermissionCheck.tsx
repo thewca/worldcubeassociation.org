@@ -18,5 +18,10 @@ export default async function PermissionCheck({
     return children;
   }
 
-  return <p>You are not authorized to view this page.</p>;
+  return (
+    <p>
+      {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+      You are not authorized to view this page.
+    </p>
+  );
 }

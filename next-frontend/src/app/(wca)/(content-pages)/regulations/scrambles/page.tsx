@@ -25,327 +25,474 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ScramblesPage() {
   return (
     <VStack align="left" gap="16px">
-      <Heading size="5xl">WCA Scrambles</Heading>
+      <Heading size="5xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        WCA Scrambles
+      </Heading>
       <Text>
-        The current official scramble programs is <em>{LATEST_VERSION}</em>. It
-        generates high-quality scramble sequences for all the events of a
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        The current official scramble programs is <em>{LATEST_VERSION}</em>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        . It generates high-quality scramble sequences for all the events of a
         competition at once.
       </Text>
       <Center>
         <VStack>
-          <Text>Download the official scramble program:</Text>
+          <Text>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Download the official scramble program:
+          </Text>
           <Link href={LATEST_JARFILE}>{LATEST_VERSION}</Link>
-          <Text>Last official change: January 1st, 2026</Text>
+          <Text>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Last official change: January 1st, 2026
+          </Text>
         </VStack>
       </Center>
-      <Heading size="2xl">Important Notes for Delegates</Heading>
+      <Heading size="2xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Important Notes for Delegates
+      </Heading>
       <List.Root indented>
         <List.Item>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Official competitions must always use a current version of the
           official scramble program (see{" "}
-          <Link href="/regulations#4b">Regulation 4b</Link>).
+          <Link href="/regulations#4b">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Regulation 4b
+          </Link>
+          ).
         </List.Item>
         <List.Item>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Delegates should download TNoodle to run it on a computer. They should
           not use TNoodle running on a public server (for security reasons).
         </List.Item>
         <List.Item>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Delegates must save all scramble sequences generated for an official
           competition, and send them with the results (see the{" "}
           <Link href="https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             WCA Competition Requirements Policy
           </Link>
           ).
         </List.Item>
       </List.Root>
-      <Heading size="2xl">Scramble Secrecy</Heading>
+      <Heading size="2xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Scramble Secrecy
+      </Heading>
       <List.Root indented>
         <List.Item>
-          <b>Always</b> encrypt your scrambles in TNoodle with an unguessable
-          password. The password must have nothing to do with the competition or
-          personal data (name, birthdate) of any of the Delegates.
+          <b>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            Always
+          </b>
+          {
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            " encrypt your scrambles in TNoodle with an unguessable password. The password must have nothing to do with the competition or personal data (name, birthdate) of any of the Delegates."
+          }
         </List.Item>
         <List.Item>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           If you are displaying scrambles on a digital device, only share{" "}
-          <Code>[Competition Name] - Computer Display PDFs.zip</Code>.
+          <Code>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            [Competition Name] - Computer Display PDFs.zip
+          </Code>
+          .
         </List.Item>
         <List.Root indented>
           <List.Item>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             Make sure that only Delegates have access to any other files.
           </List.Item>
           <List.Item>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             If you are using a Delegate&#39;s computer, use the operating system
             to create a guest user account and share only the passcode-protected
             computer display PDFs with it.
           </List.Item>
           <List.Item>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             Give passcodes to scramblers when the corresponding groups begin but{" "}
-            <b>not any earlier</b>. (In particular, do not give the passcodes
-            for all the scramble sets in a round to scramblers at the beginning
-            of that round.)
+            <b>
+              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              not any earlier
+            </b>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            . (In particular, do not give the passcodes for all the scramble
+            sets in a round to scramblers at the beginning of that round.)
           </List.Item>
           <List.Item>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             Don&#39;t put someone else in charge of the passcodes unless
             absolutely necessary, and only give them the minimum amount of
             passcodes needed.
           </List.Item>
         </List.Root>
         <List.Item>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Additional precautions are outlined in the{" "}
           <Link href="https://documents.worldcubeassociation.org/documents/policies/external/Scramble%20Accountability.pdf">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             Scramble Accountability Policy
           </Link>
           .
         </List.Item>
       </List.Root>
-      <Heading size="2xl">Detailed Instructions for TNoodle</Heading>
+      <Heading size="2xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Detailed Instructions for TNoodle
+      </Heading>
       <Text>
-        TNoodle requires <Link href="https://www.java.com/en/">Java</Link> to be
-        installed on your computer.
+        {
+          // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+          "TNoodle requires "
+        }
+        <Link href="https://www.java.com/en/">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Java
+        </Link>
+        {
+          // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+          " to be installed on your computer."
+        }
       </Text>
       <List.Root indented>
         <List.Item>
-          Run the <Code>{LATEST_JARFILE}</Code> file on your computer.
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          Run the <Code>{LATEST_JARFILE}</Code>
+          {
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            " file on your computer."
+          }
           <br />
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           It will open the page{" "}
           <Link href="http://localhost:2014/scramble">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             http://localhost:2014/scramble
           </Link>{" "}
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           in your browser.
         </List.Item>
         <List.Item>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Enter the details for your competition (competition name, number of
           rounds for each event, details for each round).
           <br />
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           If you would like to password protect the file, enter a password.
         </List.Item>
         <List.Item>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Wait for the loading bar to finish and click the &#34;Scramble!&#34;
           button that appears.
-          <br />A <Code>.zip</Code> file will download in your browser.
+          <br />
+          {
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            "A "
+          }
+          <Code>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            .zip
+          </Code>
+          {
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            " file will download in your browser."
+          }
         </List.Item>
       </List.Root>
-      <Heading size="2xl">Notes</Heading>
+      <Heading size="2xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        Notes
+      </Heading>
       <List.Root indented>
         <List.Item>
-          4x4x4 scramble sequences <strong>may take a few minutes</strong> to
-          initialize and generate. If you are generating 4x4x4 scramble
-          sequences, be patient while the loading bar may appear to be stuck.
+          {
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            "4x4x4 scramble sequences "
+          }
+          <strong>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            may take a few minutes
+          </strong>
+          {
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            " to initialize and generate. If you are generating 4x4x4 scramble sequences, be patient while the loading bar may appear to be stuck."
+          }
         </List.Item>
         <List.Item>
-          TNoodle creates a <Code>tnoodle_resources</Code> folder with a few MB
-          of files (mostly cached tables) in the same folder it is run.
+          {
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            "TNoodle creates a "
+          }
+          <Code>
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            tnoodle_resources
+          </Code>
+          {
+            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+            " folder with a few MB of files (mostly cached tables) in the same folder it is run."
+          }
           <br />
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           Keep this folder if you want to generate more 4x4x4 scramble sequences
           more quickly in the future, but feel free to delete it if you need to
           reclaim disk space.
         </List.Item>
         <List.Item>
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           TNoodle performs scramble filtering according to{" "}
           <Link href="https://www.worldcubeassociation.org/regulations/#4b3">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             Regulation 4b3
           </Link>
           .
         </List.Item>
       </List.Root>
-      <Heading size="2xl">About TNoodle</Heading>
+      <Heading size="2xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        About TNoodle
+      </Heading>
       <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         TNoodle uses code developed or adapted by Jeremy Fleischman, Ryan Zheng,
         Cl&#233;ment Gallet, Shuang Chen, Bruce Norskog, and Lucas Garron. View
         the{" "}
         <Link href="https://github.com/thewca/tnoodle">
+          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
           TNoodle project on GitHub
         </Link>{" "}
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         to view the source, report an issue, or contribute to its development.
       </Text>
-      <Heading size="2xl">History of Official Releases</Heading>
+      <Heading size="2xl">
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        History of Official Releases
+      </Heading>
       <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
         Old versions must not be used. These are provided in case you want to
         check the behaviour of an older version.
       </Text>
       <List.Root indented>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.4/TNoodle-0.7.4.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-0.7.4
           </Link>{" "}
           (2013-01-01)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.5/TNoodle-0.7.5.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-0.7.5
           </Link>{" "}
           (2013-02-26)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.8/TNoodle-0.7.8.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-0.7.8
           </Link>{" "}
           (2013-04-26)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.7.12/TNoodle-0.7.12.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-0.7.12
           </Link>{" "}
           (2013-10-01)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.8.0/TNoodle-WCA-0.8.0.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.8.0
           </Link>{" "}
           (2014-01-13)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.8.1/TNoodle-WCA-0.8.1.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.8.1
           </Link>{" "}
           (2014-01-14)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.8.2/TNoodle-WCA-0.8.2.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.8.2
           </Link>{" "}
           (2014-01-28)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.8.4/TNoodle-WCA-0.8.4.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.8.4
           </Link>{" "}
           (2014-02-10)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.9.0/TNoodle-WCA-0.9.0.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.9.0
           </Link>{" "}
           (2015-03-30)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.10.0/TNoodle-WCA-0.10.0.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.10.0
           </Link>{" "}
           (2015-06-30)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.11.1/TNoodle-WCA-0.11.1.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.11.1
           </Link>{" "}
           (2016-04-04)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.11.3/TNoodle-WCA-0.11.3.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.11.3
           </Link>{" "}
           (2016-10-17)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.11.5/TNoodle-WCA-0.11.5.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.11.5
           </Link>{" "}
           (2016-12-12)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.12.0/TNoodle-WCA-0.12.0.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.12.0
           </Link>{" "}
           (2017-09-25)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.1/TNoodle-WCA-0.13.1.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.13.1
           </Link>{" "}
           (2018-01-29)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.2/TNoodle-WCA-0.13.2.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.13.2
           </Link>{" "}
           (2018-02-03)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.3/TNoodle-WCA-0.13.3.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.13.3
           </Link>{" "}
           (2018-02-05)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.4/TNoodle-WCA-0.13.4.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.13.4
           </Link>{" "}
           (2018-07-02)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.13.5/TNoodle-WCA-0.13.5.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.13.5
           </Link>{" "}
           (2018-10-08)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.14.0/TNoodle-WCA-0.14.0.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.14.0
           </Link>{" "}
           (2018-12-03)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.15.0/TNoodle-WCA-0.15.0.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.15.0
           </Link>{" "}
           (2019-07-14)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v0.15.1/TNoodle-WCA-0.15.1.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-0.15.1
           </Link>{" "}
           (2020-01-01)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.0.1/TNoodle-WCA-1.0.1.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.0.1
           </Link>{" "}
           (2020-08-17)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.1.0/TNoodle-WCA-1.1.0.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.1.0
           </Link>{" "}
           (2021-04-19)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.1.1/TNoodle-WCA-1.1.1.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.1.1
           </Link>{" "}
           (2021-07-07)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.1.2/TNoodle-WCA-1.1.2.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.1.2
           </Link>{" "}
           (2021-07-07)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.1.3.1/TNoodle-WCA-1.1.3.1.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.1.3.1
           </Link>{" "}
           (2024-01-22)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.2.0/TNoodle-WCA-1.2.0.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.2.0
           </Link>{" "}
           (2023-12-31)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.2.1/TNoodle-WCA-1.2.1.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.2.1
           </Link>{" "}
           (2024-01-02)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.2.2/TNoodle-WCA-1.2.2.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.2.2
           </Link>{" "}
           (2024-01-22)
         </List.Item>
         <List.Item>
           <Link href="https://github.com/thewca/tnoodle/releases/download/v1.2.3/TNoodle-WCA-1.2.3.jar">
+            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
             TNoodle-WCA-1.2.3
           </Link>{" "}
           (2025-12-17)
