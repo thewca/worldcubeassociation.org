@@ -218,7 +218,7 @@ RSpec.describe 'API competition psych sheets' do
     before do
       result_for(alice, date: Date.current - 2.years, best: 100, average: 200)
       result_for(alice, date: Date.current, best: -1, average: -1)
-      result_for(alice, date: Date.current - 1.day, best: -1, average: -1, value2: -2)
+      result_for(alice, date: Date.current - 1.day, best: -1, average: -1, value2: SolveTime::DNS_VALUE)
       result_for(bob, date: Date.current, best: 800, average: -1)
       result_for(bob, date: Date.current - 1.day, best: 850, average: -1)
     end

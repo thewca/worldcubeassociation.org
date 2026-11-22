@@ -146,7 +146,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     }
   end
 
-  before_action :validate_psych_sheet_ranking_period, only: :event_psych_sheet
+  before_action :validate_psych_sheet_ranking_period!, only: :event_psych_sheet
   def event_psych_sheet
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
@@ -160,7 +160,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     params.fetch(:ranking_period, 'all_time')
   end
 
-  private def validate_psych_sheet_ranking_period
+  private def validate_psych_sheet_ranking_period!
     return if %w[all_time last_12_months].include?(psych_sheet_ranking_period)
 
     raise WcaExceptions::ApiException.new(:bad_request, 'Invalid ranking_period. Use all_time or last_12_months.')
