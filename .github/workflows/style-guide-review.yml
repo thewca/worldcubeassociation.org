@@ -1,8 +1,7 @@
 name: Style guide review
 
-# Reviews pull requests against the style guide in thewca/web-dev-docs and
-# leaves inline comments. Advisory only: this workflow never fails a PR, it just
-# comments.
+# Reviews pull requests for regressions and uses the style guide in
+# thewca/web-dev-docs for advisory feedback.
 #
 # Runs OpenCodeReview (https://github.com/alibaba/open-code-review, Apache-2.0).
 # OCR cannot load the guide itself, only a rules file mapping path globs to rule
@@ -47,6 +46,7 @@ concurrency:
 
 permissions:
   contents: read
+  issues: read
   pull-requests: write
 
 jobs:
@@ -81,6 +81,46 @@ jobs:
             "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
             --jq '.[].filename' > "$RUNNER_TEMP/changed-files.txt"
 
+      - name: Collect PR and linked issue context
+        id: review-context
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const pull = context.payload.pull_request;
+            const { owner, repo } = context.repo;
+            const sections = [`Pull request #${pull.number}: ${pull.title}`];
+
+            try {
+              const { repository } = await github.graphql(`
+                query($owner: String!, $repo: String!, $number: Int!) {
+                  repository(owner: $owner, name: $repo) {
+                    pullRequest(number: $number) {
+                      closingIssuesReferences(first: 5) {
+                        nodes {
+                          number
+                          title
+                          bodyText
+                          repository { nameWithOwner }
+                        }
+                      }
+                    }
+                  }
+                }
+              `, { owner, repo, number: pull.number });
+
+              const issues = repository.pullRequest.closingIssuesReferences?.nodes ?? [];
+              for (const issue of issues) {
+                if (issue?.repository.nameWithOwner === `${owner}/${repo}`) {
+                  sections.push(`Linked issue #${issue.number}: ${issue.title}`, issue.bodyText.slice(0, 750));
+                }
+              }
+            } catch (error) {
+              core.warning(`Could not load linked issues: ${error.message}`);
+            }
+
+            sections.push(pull.body?.slice(0, 1000));
+            core.setOutput('background', sections.filter(Boolean).join('\n\n').slice(0, 2000));
+
       - name: Build OCR rules from the style guide
         run: |
           python3 base/.github/style-guide-review/build_ocr_rules.py \
@@ -89,7 +129,7 @@ jobs:
             "$RUNNER_TEMP/changed-files.txt" \
             "$RUNNER_TEMP/ocr-rules.json"
 
-      - name: Review against the style guide
+      - name: Review for regressions and style guide violations
         uses: alibaba/open-code-review@v1.13.9
         # Advisory, never a merge gate: a provider outage or a malformed diff
         # must not put a red X on a contributor's PR.
@@ -102,6 +142,7 @@ jobs:
         with:
           ocr_version: '1.13.2'
           rule: ${{ runner.temp }}/ocr-rules.json
+          background: ${{ steps.review-context.outputs.background }}
 
           llm_url: https://api.openai.com/v1
           llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN_OPEN_API }}
@@ -118,13 +159,11 @@ jobs:
           sticky_summary: 'true'
           incremental: 'true'
 
-          # Each rule carries the whole guide, so only review what was pushed
-          # since the last completed review. Falls back to the full PR whenever
-          # the checkpoint can't be trusted.
-          checkpoint_range: 'true'
+          # Review the full PR diff so follow-up pushes retain feature context.
+          checkpoint_range: 'false'
 
-          # Keep the high bar: low-severity findings go to the summary instead
-          # of interrupting the diff. Nothing is ever dropped.
+          # Keep style and low-severity findings in the summary.
+          route_categories: 'style'
           route_severity_below: 'low'
 
           # Raw model output is kept as a workflow artifact for debugging.

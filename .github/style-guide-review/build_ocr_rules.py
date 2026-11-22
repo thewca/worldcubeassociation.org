@@ -41,10 +41,9 @@ def main(template_path, guide_dir, changed_files_path, out_path):
         {
             "path": rule["path"],
             "rule": "\n\n".join([
-                "Review this file against the WCA style guide below.",
+                *template["instructions"],
                 main_guide,
                 *(read_guide(guide_dir, name) for name in rule["guides"]),
-                template["instructions"],
             ]),
         }
         for rule in template["rules"]
