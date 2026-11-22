@@ -23,11 +23,14 @@ import type {
   RecordsFilterBoxProps,
 } from "@/lib/wca/results/types";
 
-type SegmentedFieldProps = {
-  label: string;
+type FilterFieldProps = {
   value: string;
-  items: { label: string; value: string }[];
   onChange: (value: string) => void;
+};
+
+type SegmentedFieldProps = FilterFieldProps & {
+  label: string;
+  items: { label: string; value: string }[];
 };
 
 // Use a select on narrow screens where the segmented controls don't fit.
@@ -82,6 +85,46 @@ function SegmentedField({
         </Portal>
       </Select.Root>
     </Field.Root>
+  );
+}
+
+function RegionField({ value, onChange }: FilterFieldProps) {
+  const { t } = useT();
+
+  return (
+    <RegionSelector
+      region={value}
+      onRegionChange={onChange}
+      label={t("common.country")}
+      t={t}
+      name={t("delegates_page.all_regions")}
+    />
+  );
+}
+
+function GenderField({ value, onChange }: FilterFieldProps) {
+  const { t } = useT();
+
+  return (
+    <SegmentedField
+      label={t("results.selector_elements.gender_selector.gender")}
+      value={value}
+      items={[
+        {
+          value: "All",
+          label: t("results.selector_elements.gender_selector.gender_all"),
+        },
+        {
+          value: "Male",
+          label: t("results.selector_elements.gender_selector.male"),
+        },
+        {
+          value: "Female",
+          label: t("results.selector_elements.gender_selector.female"),
+        },
+      ]}
+      onChange={onChange}
+    />
   );
 }
 
@@ -141,31 +184,13 @@ export function RecordsFilterBox({
         />
       </GridItem>
       <GridItem colSpan={{ base: 1, sm: segmentedColumns, md: 1 }}>
-        <RegionSelector
-          region={filterState.region}
-          onRegionChange={filterActions.setRegion}
-          label={t("common.country")}
-          t={t}
-          name={t("delegates_page.all_regions")}
+        <RegionField
+          value={filterState.region}
+          onChange={filterActions.setRegion}
         />
       </GridItem>
-      <SegmentedField
-        label={t("results.selector_elements.gender_selector.gender")}
+      <GenderField
         value={filterState.gender}
-        items={[
-          {
-            value: "All",
-            label: t("results.selector_elements.gender_selector.gender_all"),
-          },
-          {
-            value: "Male",
-            label: t("results.selector_elements.gender_selector.male"),
-          },
-          {
-            value: "Female",
-            label: t("results.selector_elements.gender_selector.female"),
-          },
-        ]}
         onChange={filterActions.setGender}
       />
       {view === "current" && (
@@ -227,12 +252,9 @@ export function RankingsFilterBox({
             }
           />
         </Box>
-        <RegionSelector
-          region={filterState.region}
-          onRegionChange={filterActions.setRegion}
-          label={t("common.country")}
-          t={t}
-          name={t("delegates_page.all_regions")}
+        <RegionField
+          value={filterState.region}
+          onChange={filterActions.setRegion}
         />
         <Stack direction={{ base: "column", md: "row" }}>
           <SegmentedField
@@ -241,25 +263,8 @@ export function RankingsFilterBox({
             items={rankingTypeItems}
             onChange={filterActions.setType}
           />
-          <SegmentedField
-            label={t("results.selector_elements.gender_selector.gender")}
+          <GenderField
             value={filterState.gender}
-            items={[
-              {
-                value: "All",
-                label: t(
-                  "results.selector_elements.gender_selector.gender_all",
-                ),
-              },
-              {
-                value: "Male",
-                label: t("results.selector_elements.gender_selector.male"),
-              },
-              {
-                value: "Female",
-                label: t("results.selector_elements.gender_selector.female"),
-              },
-            ]}
             onChange={filterActions.setGender}
           />
           <SegmentedField
