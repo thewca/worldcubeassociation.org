@@ -21,8 +21,9 @@ RSpec.describe 'API competition psych sheets' do
   let!(:bob_registration) { create(:registration, :accepted, competition: competition, user: bob, event_ids: [event_id]) }
   let!(:newcomer_registration) { create(:registration, :accepted, competition: competition, user: newcomer, event_ids: [event_id]) }
 
-  def result_for(user, date:, best:, average:, result_event_id: event_id, end_date: date)
-    past_competition = create(:competition, starts: date, ends: end_date, event_ids: [result_event_id])
+  def result_for(user, date:, best:, average:, result_event_id: event_id, end_date: date, published: true)
+    traits = published ? [:results_posted] : []
+    past_competition = create(:competition, *traits, starts: date, ends: end_date, event_ids: [result_event_id])
     if average.zero?
       create(:result, competition: past_competition, person: user.person, event_id: result_event_id, format_id: '1', best: best, average: average,
                       value2: 0, value3: 0, value4: 0, value5: 0)
@@ -95,6 +96,30 @@ RSpec.describe 'API competition psych sheets' do
     competition.registrations.each { |registration| registration.update!(competing_status: Registrations::Helper::STATUS_PENDING) }
 
     expect(fetch_sheet(ranking_period: 'last_12_months')['sorted_rankings']).to be_empty
+  end
+
+  it 'excludes unpublished improvements from both fresh and cached recent positions' do
+    result_for(alice, date: Date.current - 2.days, best: 900, average: 1100)
+    result_for(bob, date: Date.current - 1.day, best: 800, average: 1000)
+    result_for(alice, date: Date.current, best: 100, average: 200, published: false)
+
+    rows = fetch_sheet(ranking_period: 'last_12_months')['sorted_rankings']
+    expect(rows.pluck('user_id')).to eq([bob.id, alice.id, newcomer.id])
+    expect(rows.pluck('single_best')).to eq([800, 900, 0])
+    expect(rows.pluck('average_best')).to eq([1000, 1100, 0])
+
+    cached_rows = fetch_sheet(ranking_period: 'last_12_months', sort_by: 'single')['sorted_rankings']
+    expect(cached_rows).to eq(rows)
+  end
+
+  it 'keeps competitors with only unpublished results unranked' do
+    result_for(alice, date: Date.current, best: 100, average: 200, published: false)
+    result_for(bob, date: Date.current, best: 800, average: 1000)
+
+    rows = fetch_sheet(ranking_period: 'last_12_months')['sorted_rankings']
+    expect(rows.pluck('user_id')).to eq([bob.id, alice.id, newcomer.id])
+    expect(rows.pluck('pos')).to eq([1, nil, nil])
+    expect(rows[1]).to include('single_best' => 0, 'average_best' => 0)
   end
 
   context 'with results from the last 12 months' do

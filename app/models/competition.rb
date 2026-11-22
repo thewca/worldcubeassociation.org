@@ -1627,8 +1627,8 @@ class Competition < ApplicationRecord
           # The concise results tables aggregate by year, so they cannot apply a
           # rolling date cutoff. Query actual results for these competitors instead.
           results = Result.where(person_id: users_with_rankings.filter_map(&:wca_id), event_id: event.id)
-                          .on_or_after(today - 12.months)
-                          .on_or_before(today)
+                          .joins(:competition)
+                          .merge(Competition.results_posted.where(end_date: (today - 12.months)..today))
                           .group(:person_id)
           [results.succeeded.minimum(:best), results.average_succeeded.minimum(:average)]
         end

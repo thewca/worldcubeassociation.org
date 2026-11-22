@@ -49,7 +49,9 @@ vi.mock("@/components/CountryMap", () => ({ default: () => null }));
 function sheetFor(url: URL): components["schemas"]["PsychSheet"] {
   const recent = url.searchParams.get("ranking_period") === "last_12_months";
   const multiBlind = url.pathname.endsWith("333mbf");
-  const single = url.searchParams.get("sort_by") === "single" || multiBlind;
+  const single =
+    (url.searchParams.get("sort_by") ?? (multiBlind ? "single" : "average")) ===
+    "single";
   const bobLeads = recent && (!single || multiBlind);
   const alice = {
     name: "Alice",
@@ -66,7 +68,7 @@ function sheetFor(url: URL): components["schemas"]["PsychSheet"] {
     average_best: multiBlind ? 0 : recent ? 1100 : 200,
     single_rank: recent ? null : 11,
     average_rank: recent ? null : 12,
-    pos: bobLeads ? 2 : 1,
+    pos: multiBlind && !single ? null : bobLeads ? 2 : 1,
     tied_previous: false,
   };
   const bob = {
@@ -78,7 +80,7 @@ function sheetFor(url: URL): components["schemas"]["PsychSheet"] {
     average_best: multiBlind ? 0 : recent ? 1000 : 400,
     single_rank: recent ? null : 21,
     average_rank: recent ? null : 22,
-    pos: bobLeads ? 1 : 2,
+    pos: multiBlind && !single ? null : bobLeads ? 1 : 2,
     tied_previous: false,
   };
   const inactive = {
@@ -293,6 +295,44 @@ describe("competitor position comparison", () => {
       screen.getByRole("button", { name: "Pos (12 months)", exact: true }),
     ).toBeDisabled();
     expect(screen.getAllByRole("columnheader")).toHaveLength(8);
+  });
+
+  it("restores the event's default result type after explicitly selecting Average", async () => {
+    renderCompetitors();
+    fireEvent.click(await screen.findByRole("button", { name: "3x3x3" }));
+    await screen.findByText("Alice");
+    fireEvent.click(
+      screen.getByRole("button", { name: "Pos (12 months)", exact: true }),
+    );
+    fireEvent.click(screen.getByRole("columnheader", { name: "Average" }));
+    await waitFor(() =>
+      expect(
+        fetchAPI.mock.calls.some(
+          ([input]) =>
+            requestUrl(input).searchParams.get("sort_by") === "average",
+        ),
+      ).toBe(true),
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Multi-blind" }));
+    await screen.findByText(/11\/11/);
+    expect(
+      screen.getByRole("columnheader", { name: "Single" }),
+    ).toHaveAttribute("aria-sort", "ascending");
+    expect(rowValues("Bob").slice(0, 2)).toEqual(["2", "1"]);
+    expect(
+      screen.getByRole("columnheader", {
+        name: "Pos (12 months)",
+        exact: true,
+      }),
+    ).toHaveAttribute("aria-sort", "ascending");
+    const multiBlindRequests = fetchAPI.mock.calls
+      .map(([input]) => requestUrl(input))
+      .filter((url) => url.pathname.endsWith("333mbf"));
+    expect(multiBlindRequests).toHaveLength(2);
+    expect(
+      multiBlindRequests.every((url) => !url.searchParams.has("sort_by")),
+    ).toBe(true);
   });
 
   it("retains the existing error state when the all-time request fails", async () => {

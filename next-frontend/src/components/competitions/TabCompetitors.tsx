@@ -65,7 +65,10 @@ const TabCompetitors: React.FC<CompetitorData> = ({
         </Card.Title>
         <Table.ScrollArea borderWidth="1px" maxW="full">
           {psychSheetEvent ? (
+            // Remounting per event keeps one event's rows from ever being
+            // rendered with another event's result formatting.
             <PsychSheet
+              key={psychSheetEvent}
               competitionId={id}
               eventId={psychSheetEvent}
               rankingPeriod={rankingPeriod}
