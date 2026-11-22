@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useMemo, useTransition } from "react";
-import { Heading, Tabs, Text, VStack } from "@chakra-ui/react";
+import React from "react";
+import { Alert, Heading, Tabs, Text, VStack } from "@chakra-ui/react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import Loading from "@/components/ui/loading";
 import { RankingsFilterBox } from "@/components/results/FilterBox";
 import ResultsFilterPanel from "@/components/results/ResultsFilterPanel";
@@ -9,12 +10,16 @@ import { useT } from "@/lib/i18n/useI18n";
 import { getMediumDateString } from "@/lib/wca/dates";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import RankingsTable from "@/components/results/RankingsTable";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { route } from "nextjs-routes";
-import { components } from "@/types/openapi";
+import useAPI from "@/lib/wca/useAPI";
+import {
+  GENDER_ALL,
+  getRankingsFilters,
+  getRankingsQueryOptions,
+  REGION_WORLD,
+} from "@/lib/wca/results/rankings";
 import type { RankingsFilters } from "@/lib/wca/results/types";
-
-const REGION_WORLD = "world";
 
 function createUrl(params: RankingsFilters) {
   const { event, region, gender, show, rankingType } = params;
@@ -23,52 +28,42 @@ function createUrl(params: RankingsFilters) {
     query: {
       event_id: event === "333" ? undefined : event,
       region: region === REGION_WORLD ? undefined : region,
-      gender: gender === "All" ? undefined : gender,
+      gender: gender === GENDER_ALL ? undefined : gender,
       show: show === "100 persons" ? undefined : show,
       type: rankingType === "single" ? undefined : rankingType,
     },
   });
 }
 
-interface FilteredRecordsProps {
-  rankings: components["schemas"]["ExtendedResult"][];
-  timestamp: string;
-  searchParams: RankingsFilters;
-}
+export default function FilteredRankings() {
+  const api = useAPI();
+  const searchParams = useSearchParams();
+  const filters = getRankingsFilters(searchParams);
+  const { data, isFetching, isPlaceholderData, error } = useQuery({
+    ...getRankingsQueryOptions(api, filters),
+    placeholderData: keepPreviousData,
+  });
+  const updateFilters = (changes: Partial<RankingsFilters>) => {
+    const url = createUrl({
+      ...getRankingsFilters(new URLSearchParams(window.location.search)),
+      ...changes,
+    });
 
-export default function FilteredRecords({
-  rankings,
-  timestamp,
-  searchParams,
-}: FilteredRecordsProps) {
-  const router = useRouter();
-  // Navigating inside a transition lets us show a progress bar while the server
-  // re-renders the table with the new filters
-  const [isPending, startTransition] = useTransition();
+    window.history.replaceState(null, "", url);
+  };
+  const filterActions = {
+    setEvent: (event: string) =>
+      updateFilters(
+        event === "333mbf" ? { event, rankingType: "single" } : { event },
+      ),
+    setRegion: (region: string) =>
+      updateFilters({ region: region || REGION_WORLD }),
+    setGender: (gender: string) => updateFilters({ gender }),
+    setShow: (show: string) => updateFilters({ show }),
+    setType: (rankingType: string) => updateFilters({ rankingType }),
+  };
 
-  const { event, region, gender, show, rankingType } = searchParams;
-
-  const filterActions = useMemo(() => {
-    const navigate = (params: Partial<RankingsFilters>) =>
-      startTransition(() =>
-        router.replace(
-          createUrl({ event, region, gender, show, rankingType, ...params }),
-        ),
-      );
-
-    return {
-      setEvent: (event: string) =>
-        navigate(
-          event === "333mbf" ? { event, rankingType: "single" } : { event },
-        ),
-      setRegion: (region: string) =>
-        navigate({ region: region || REGION_WORLD }),
-      setGender: (gender: string) => navigate({ gender }),
-      setShow: (show: string) => navigate({ show }),
-      setType: (rankingType: string) => navigate({ rankingType }),
-    };
-  }, [event, gender, rankingType, region, router, show]);
-
+  const { event, region, gender, show, rankingType } = filters;
   const { t } = useT();
   const lng = useLocale();
   const isByRegion = show === "by region";
@@ -77,7 +72,7 @@ export default function FilteredRecords({
   const hasActiveFilters =
     hasRegionFilter ||
     event !== "333" ||
-    gender !== "All" ||
+    gender !== GENDER_ALL ||
     rankingType !== "single";
 
   return (
@@ -85,11 +80,13 @@ export default function FilteredRecords({
       <Heading size={{ base: "3xl", md: "5xl" }}>
         {t("results.rankings.title")}
       </Heading>
-      <Text textStyle={{ base: "xs", md: "body" }} color="fg.muted">
-        {t("results.last_updated_html", {
-          timestamp: getMediumDateString(timestamp, lng),
-        })}
-      </Text>
+      {data && (
+        <Text textStyle={{ base: "xs", md: "body" }} color="fg.muted">
+          {t("results.last_updated_html", {
+            timestamp: getMediumDateString(data.timestamp, lng),
+          })}
+        </Text>
+      )}
       <ResultsFilterPanel
         hasActiveFilters={hasActiveFilters}
         tabs={
@@ -118,18 +115,25 @@ export default function FilteredRecords({
         }
       >
         <RankingsFilterBox
-          filterState={searchParams}
+          filterState={filters}
           filterActions={filterActions}
         />
       </ResultsFilterPanel>
-      {/* The same indeterminate bar the router shows for a normal navigation, so
-          filtering here feels like filtering anywhere else on the site. */}
-      {isPending && <Loading />}
-      <RankingsTable
-        rankings={rankings}
-        isAverage={rankingType === "average"}
-        isByRegion={isByRegion}
-      />
+      {isFetching && <Loading />}
+      {error ? (
+        <Alert.Root status="error">
+          <Alert.Title>{t("results.rankings.load_error")}</Alert.Title>
+        </Alert.Root>
+      ) : (
+        data &&
+        !isPlaceholderData && (
+          <RankingsTable
+            rankings={data.rankings}
+            isAverage={rankingType === "average"}
+            isByRegion={isByRegion}
+          />
+        )
+      )}
     </VStack>
   );
 }

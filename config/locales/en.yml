@@ -2493,6 +2493,7 @@ en:
     #context: On the rankings page
     rankings:
       title: "Rankings"
+      load_error: "Error fetching rankings"
       #context: Options of params to select which kind of rankings to show
       unknown_type: "Unknown type parameter, must be either \"single\" or \"average\""
       unknown_show: "Unknown show parameter, must be either \"N persons\", \"N results\", or \"by region\""
