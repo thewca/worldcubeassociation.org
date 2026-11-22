@@ -12,13 +12,13 @@ import { collectionCacheTag } from "@/lib/payload/collections";
 export const globalCacheTag = (slug: GlobalSlug) => `payload-global:${slug}`;
 
 // Globals that embed documents editors maintain in a collection, so that saving such a document
-//   also refreshes the global. Media is left out: images are swapped by editing the global itself.
+//   also refreshes the global. Home also tracks edits to its banner media.
 const GLOBAL_RELATED_COLLECTIONS: Partial<
   Record<GlobalSlug, CollectionSlug[]>
 > = {
   "faq-page": ["faqQuestions", "faqCategories"],
   "documents-page": ["documents"],
-  home: ["announcements", "testimonials"],
+  home: ["announcements", "media", "testimonials"],
 };
 
 // The build reads from the nightly public dump, which can lag behind the live CMS by a day

@@ -26,9 +26,11 @@ import {
 } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
-import { getPayload } from "payload";
+import { getPayload, type TypedLocale } from "payload";
 import config from "@payload-config";
-import { getCachedGlobal } from "@/lib/payload/globals";
+import { getCachedGlobal, globalCacheTag } from "@/lib/payload/globals";
+import { collectionCacheTag } from "@/lib/payload/collections";
+import { cacheLife, cacheTag } from "next/cache";
 
 import type {
   TextCardBlock,
@@ -50,6 +52,8 @@ import type {
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { getT } from "@/lib/i18n/get18n";
+import i18next from "@/lib/i18n/i18n";
+import { defaultNamespace } from "@/lib/i18n/settings";
 import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
@@ -292,11 +296,13 @@ const ImageOnlyCard = ({ block }: { block: ImageOnlyCardBlock }) => {
 const FeaturedCompetition = async ({
   competitionId,
   colorPalette,
+  lng,
 }: {
   competitionId: string;
   colorPalette: ColorPaletteSelect;
+  lng: TypedLocale;
 }) => {
-  const { t, lng } = await getT();
+  const t = i18next.getFixedT(lng, defaultNamespace);
   const {
     data: competition,
     error,
@@ -338,8 +344,10 @@ const FeaturedCompetition = async ({
 
 const FeaturedCompetitions = async ({
   block,
+  lng,
 }: {
   block: FeaturedCompetitionsBlock;
+  lng: TypedLocale;
 }) => (
   <Card.Root width="full">
     <Card.Body>
@@ -361,6 +369,7 @@ const FeaturedCompetitions = async ({
             key={featuredComp.id}
             competitionId={featuredComp.competitionId}
             colorPalette={featuredComp.colorPalette}
+            lng={lng}
           />
         ))}
       </SimpleGrid>
@@ -430,6 +439,7 @@ type VerticalLayout =
 
 const renderVerticalLayout = (
   verticalLayout: VerticalLayout,
+  lng: TypedLocale,
   level: number = 0,
   growthStrategy?: GrowthStrategy,
 ) => {
@@ -452,7 +462,7 @@ const renderVerticalLayout = (
             //   of "filling" the container like it would be if there was more than one item.
             _only={{ flexGrow: growthStrategy === "justify" ? "1" : undefined }}
           >
-            {renderBlock(entry, level, growthStrategy)}
+            {renderBlock(entry, lng, level, growthStrategy)}
           </Box>
         );
       })}
@@ -462,6 +472,7 @@ const renderVerticalLayout = (
 
 const renderHorizontalSplit = (
   entry: TwoBlocksUnion,
+  lng: TypedLocale,
   level: number,
   growthStrategy?: GrowthStrategy,
 ) => {
@@ -488,6 +499,7 @@ const renderHorizontalSplit = (
       >
         {renderVerticalLayout(
           entry.left,
+          lng,
           level,
           entry.growthStrategy || fallbackGrowthStrategy,
         )}
@@ -498,6 +510,7 @@ const renderHorizontalSplit = (
       >
         {renderVerticalLayout(
           entry.right,
+          lng,
           level,
           entry.growthStrategy || fallbackGrowthStrategy,
         )}
@@ -510,6 +523,7 @@ type LayoutBlock = VerticalLayout[number];
 
 const renderBlock = (
   entry: LayoutBlock,
+  lng: TypedLocale,
   level: number,
   growthStrategy?: GrowthStrategy,
 ) => {
@@ -517,7 +531,7 @@ const renderBlock = (
     case "twoBlocksLevel0":
     case "twoBlocksLevel1":
     case "twoBlocksLevel2":
-      return renderHorizontalSplit(entry, level + 1, growthStrategy);
+      return renderHorizontalSplit(entry, lng, level + 1, growthStrategy);
     case "TextCard":
       return <TextCard block={entry} />;
     case "AnnouncementsSection":
@@ -527,7 +541,7 @@ const renderBlock = (
     case "ImageOnlyCard":
       return <ImageOnlyCard block={entry} />;
     case "FeaturedComps":
-      return <FeaturedCompetitions block={entry} />;
+      return <FeaturedCompetitions block={entry} lng={lng} />;
     case "TestimonialsSpinner":
       return <TestimonialsSpinner block={entry} />;
 
@@ -536,9 +550,13 @@ const renderBlock = (
   }
 };
 
-const PayloadContents = async () => {
-  const { isEnabled: isDraftMode } = await draftMode();
-  const { lng } = await getT();
+const PayloadContents = async ({
+  lng,
+  isDraftMode,
+}: {
+  lng: TypedLocale;
+  isDraftMode: boolean;
+}) => {
   const homepage = isDraftMode
     ? await (
         await getPayload({ config })
@@ -571,9 +589,22 @@ const PayloadContents = async () => {
 
   return (
     <Center p={HOMEPAGE_SPACING} asChild>
-      {renderVerticalLayout(homepageEntries)}
+      {renderVerticalLayout(homepageEntries, lng)}
     </Center>
   );
+};
+
+const CachedPayloadContents = async ({ lng }: { lng: TypedLocale }) => {
+  "use cache: remote";
+  cacheLife("minutes");
+  cacheTag(
+    globalCacheTag("home"),
+    collectionCacheTag("announcements"),
+    collectionCacheTag("media"),
+    collectionCacheTag("testimonials"),
+  );
+
+  return <PayloadContents lng={lng} isDraftMode={false} />;
 };
 
 export default async function Homepage({
@@ -581,7 +612,8 @@ export default async function Homepage({
 }: {
   searchParams: Promise<{ signed_out?: string }>;
 }) {
-  const { t } = await getT();
+  const { t, lng } = await getT();
+  const { isEnabled: isDraftMode } = await draftMode();
 
   // Rails redirects here with this flag once it has ended its own session.
   //   Dismissing links back to the bare homepage, which drops the flag.
@@ -602,7 +634,11 @@ export default async function Homepage({
           </Alert.Root>
         </Box>
       )}
-      <PayloadContents />
+      {isDraftMode ? (
+        <PayloadContents lng={lng} isDraftMode />
+      ) : (
+        <CachedPayloadContents lng={lng} />
+      )}
     </>
   );
 }

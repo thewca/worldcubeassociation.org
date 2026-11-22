@@ -1,3 +1,4 @@
+import { revalidateCollection } from "@/collections/revalidateCollection";
 import type { CollectionConfig } from "payload";
 import { canUploadMedia } from "@/payload.access";
 
@@ -9,6 +10,10 @@ export const Media: CollectionConfig = {
     useAsTitle: "alt",
   },
   slug: "media",
+  hooks: {
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
+  },
   access: {
     read: () => true,
     create: canUploadMedia,

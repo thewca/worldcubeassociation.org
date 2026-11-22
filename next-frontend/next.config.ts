@@ -66,6 +66,9 @@ const nextConfig: NextConfig = {
     return config;
   },
   cacheComponents: true,
+  cacheHandlers: {
+    remote: require.resolve("./src/lib/cache/cacheComponentsHandler.js"),
+  },
   partialPrefetching: true,
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],

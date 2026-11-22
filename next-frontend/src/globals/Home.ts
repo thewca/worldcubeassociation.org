@@ -1,3 +1,4 @@
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 import { Block, GlobalConfig } from "payload";
 import { colorPaletteSelect } from "@/blocks/utils";
 import { TextCardBlock } from "@/blocks/text/textCard";
@@ -190,6 +191,7 @@ const createTwoBlocks = (depth: number = 1): Block => {
 
 export const Home: GlobalConfig = {
   slug: "home",
+  hooks: { afterChange: [revalidateGlobal] },
   access: {
     update: marketingTeamAccess,
   },
