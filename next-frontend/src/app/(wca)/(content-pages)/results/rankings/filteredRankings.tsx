@@ -20,7 +20,13 @@ function createUrl(params: RankingsFilters) {
   const { event, region, gender, show, rankingType } = params;
   return route({
     pathname: "/results/rankings",
-    query: { event_id: event, region, gender, show, type: rankingType },
+    query: {
+      event_id: event === "333" ? undefined : event,
+      region: region === REGION_WORLD ? undefined : region,
+      gender: gender === "All" ? undefined : gender,
+      show: show === "100 persons" ? undefined : show,
+      type: rankingType === "single" ? undefined : rankingType,
+    },
   });
 }
 
