@@ -166,12 +166,17 @@ const BannerImageWithGradient = ({
   gradientDirection: "left" | "right";
   boxWidth?: ComponentProps<typeof Box>["width"];
 }) => {
+  const { width, height } = mainImage;
+  const aspectRatio = width && height ? `${width} / ${height}` : "wide";
+
   return (
     <Box position="relative" width={boxWidth} hideBelow="md">
       <MediaImage
-        media={mainImage as Media}
+        media={mainImage}
         sizes="100vw"
         width="full"
+        // Prevent page jumps while images load
+        aspectRatio={aspectRatio}
         maxHeight="sm"
         bg={targetColor}
       />
