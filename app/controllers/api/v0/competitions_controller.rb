@@ -152,8 +152,10 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     # optional
     sort_by = params[:sort_by]
+    ranking_period = params.fetch(:ranking_period, 'all_time')
+    return render status: :bad_request, json: { error: 'Invalid ranking_period. Use all_time or last_12_months.' } unless %w[all_time last_12_months].include?(ranking_period)
 
-    render json: competition.psych_sheet_event(event, sort_by)
+    render json: competition.psych_sheet_event(event, sort_by, ranking_period: ranking_period)
   end
 
   def competitors

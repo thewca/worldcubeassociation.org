@@ -1,22 +1,30 @@
 "use client";
 import React, { useState } from "react";
 import { Text } from "@chakra-ui/react";
-import { keepPreviousData } from "@tanstack/react-query";
 import { TFunction } from "i18next";
 import useAPI from "@/lib/wca/useAPI";
 import PsychsheetTable from "@/components/competitions/PsychsheetTable";
 import Loading from "@/components/ui/loading";
-import type { components } from "@/types/openapi";
+import type { components, paths } from "@/types/openapi";
 
 type PsychSheetSortBy = components["schemas"]["PsychSheet"]["sort_by"];
+export type PsychSheetRankingPeriod = NonNullable<
+  NonNullable<
+    paths["/v0/competitions/{competitionId}/psych-sheet/{eventId}"]["get"]["parameters"]["query"]
+  >["ranking_period"]
+>;
 
 export default function PsychSheet({
   competitionId,
   eventId,
+  rankingPeriod,
+  setRankingPeriod,
   t,
 }: {
   competitionId: string;
   eventId: string;
+  rankingPeriod: PsychSheetRankingPeriod;
+  setRankingPeriod: (period: PsychSheetRankingPeriod) => void;
   t: TFunction;
 }) {
   // Until the user picks a column, the backend sorts by the event's
@@ -25,35 +33,59 @@ export default function PsychSheet({
 
   const api = useAPI();
 
-  const { data, isPending, isFetching, isError } = api.useQuery(
+  const allTimeQuery = api.useQuery(
     "get",
     "/v0/competitions/{competitionId}/psych-sheet/{eventId}",
     {
       params: {
         path: { competitionId, eventId },
-        query: sortBy ? { sort_by: sortBy } : {},
+        query: { sort_by: sortBy, ranking_period: "all_time" },
       },
     },
-    { placeholderData: keepPreviousData },
+  );
+  const recentQuery = api.useQuery(
+    "get",
+    "/v0/competitions/{competitionId}/psych-sheet/{eventId}",
+    {
+      params: {
+        path: { competitionId, eventId },
+        query: { sort_by: sortBy, ranking_period: "last_12_months" },
+      },
+    },
   );
 
-  if (isError) {
+  if (allTimeQuery.isError) {
     return <Text p={4}>{t("competitions.registration_v2.errors.-1001")}</Text>;
   }
 
-  if (isPending) {
+  if (allTimeQuery.isPending) {
     return <Loading />;
   }
 
   return (
     <>
-      {isFetching && <Loading />}
+      <Text p={4} textStyle="sm" whiteSpace="normal">
+        {t(
+          "competitions.registration_v2.list.psychsheets.ranking_comparison_hint",
+        )}
+      </Text>
+      {recentQuery.isError && (
+        <Text p={4} textStyle="sm" whiteSpace="normal">
+          {t(
+            "competitions.registration_v2.list.psychsheets.recent_rankings_unavailable",
+          )}
+        </Text>
+      )}
+      {(allTimeQuery.isFetching || recentQuery.isFetching) && <Loading />}
       <PsychsheetTable
-        psychSheet={data}
+        allTimePsychSheet={allTimeQuery.data}
+        recentPsychSheet={recentQuery.isSuccess ? recentQuery.data : undefined}
         eventId={eventId}
-        sortBy={data.sort_by}
+        sortBy={allTimeQuery.data.sort_by}
         t={t}
         setSortBy={setSortBy}
+        rankingPeriod={rankingPeriod}
+        setRankingPeriod={setRankingPeriod}
       />
     </>
   );

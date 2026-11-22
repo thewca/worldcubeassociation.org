@@ -13,6 +13,7 @@ import Competitors from './Competitors';
 export default function RegistrationList({ competitionInfo, userId }) {
   const [psychSheetEventId, setPsychSheetEventId] = useState();
   const [psychSheetSortedBy, setPsychSheetSortedBy] = useState();
+  const [rankingPeriod, setRankingPeriod] = useState('all_time');
 
   const showPsychSheetFor = (eventId) => {
     const event = events.byId[eventId];
@@ -47,6 +48,8 @@ export default function RegistrationList({ competitionInfo, userId }) {
           selectedEvent={psychSheetEventId}
           sortedBy={psychSheetSortedBy}
           setSortedBy={setPsychSheetSortedBy}
+          rankingPeriod={rankingPeriod}
+          setRankingPeriod={setRankingPeriod}
           userId={userId}
           userRowRef={userRowRef}
           onScrollToMeClick={scrollToUser}

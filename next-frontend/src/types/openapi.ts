@@ -787,6 +787,8 @@ export interface paths {
             parameters: {
                 query?: {
                     sort_by?: "average" | "single";
+                    /** @description Use lifetime personal bests (all_time, the default), or best successful results from competitions ending between today minus 12 calendar months and today, inclusive (last_12_months). World ranks are null for the latter; competitors without a successful result remain on the sheet, unranked. */
+                    ranking_period?: "all_time" | "last_12_months";
                 };
                 header?: never;
                 path: {
@@ -804,6 +806,17 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["PsychSheet"];
+                    };
+                };
+                /** @description Invalid ranking_period */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: string;
+                        };
                     };
                 };
             };

@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import { useQueries } from '@tanstack/react-query';
+import React, { useMemo } from 'react';
 import {
-  Icon, Segment, Table,
+  Button, Icon, Segment, Table,
 } from 'semantic-ui-react';
 import {
   getPsychSheetForEvent,
@@ -49,35 +49,40 @@ export default function PsychSheet({
   selectedEvent,
   sortedBy,
   setSortedBy,
+  rankingPeriod,
+  setRankingPeriod,
   userId,
   userRowRef,
   onScrollToMeClick,
 }) {
   const eventIsMbf = selectedEvent === '333mbf';
 
-  const { isLoading, data: rankings, isError } = useQuery({
-    queryKey: [
-      'psychSheet',
-      competitionInfo.id,
-      selectedEvent,
-      sortedBy,
-    ],
-    queryFn: () => getPsychSheetForEvent(
-      competitionInfo.id,
-      selectedEvent,
-      sortedBy,
-    ),
-    select: mapPsychSheetDate,
-    retry: false,
+  const [allTimeQuery, recentQuery] = useQueries({
+    queries: ['all_time', 'last_12_months'].map((period) => ({
+      queryKey: ['psychSheet', competitionInfo.id, selectedEvent, sortedBy, period],
+      queryFn: () => getPsychSheetForEvent(competitionInfo.id, selectedEvent, sortedBy, period),
+      select: mapPsychSheetDate,
+      retry: false,
+    })),
   });
+  const sortsByAllTime = rankingPeriod === 'all_time' || !recentQuery.data;
+  const rankings = useMemo(() => {
+    if (!allTimeQuery.data) return [];
+    if (sortsByAllTime) return allTimeQuery.data;
+    const recentOrderByUserId = new Map(recentQuery.data.map((row, index) => [row.user.id, index]));
+    return allTimeQuery.data.toSorted(
+      (a, b) => (recentOrderByUserId.get(a.user.id) ?? Infinity)
+        - (recentOrderByUserId.get(b.user.id) ?? Infinity),
+    );
+  }, [allTimeQuery.data, recentQuery.data, sortsByAllTime]);
 
-  if (isError) {
+  if (allTimeQuery.isError) {
     return (
       <Errored componentName="PsychSheet" />
     );
   }
 
-  if (isLoading) {
+  if (allTimeQuery.isPending) {
     return (
       <Segment>
         <Loading />
@@ -96,6 +101,10 @@ export default function PsychSheet({
 
   return (
     <>
+      <p>{I18n.t('competitions.registration_v2.list.psychsheets.ranking_comparison_hint')}</p>
+      {recentQuery.isError && (
+        <p>{I18n.t('competitions.registration_v2.list.psychsheets.recent_rankings_unavailable')}</p>
+      )}
       <PreTableInfo
         scrollToMeIsShown={userIsInTable}
         userRankIsShown={userIsInTable}
@@ -112,13 +121,18 @@ export default function PsychSheet({
             sortedColumn={sortedBy}
             onColumnClick={setSortedBy}
             hideAverage={eventIsMbf}
+            sortsByAllTime={sortsByAllTime}
+            setRankingPeriod={setRankingPeriod}
+            hasRecentRankings={!!recentQuery.data}
           />
           <PsychSheetBody
             registrations={rankings}
+            recentRankings={recentQuery.data}
             selectedEvent={selectedEvent}
             userId={userId}
             userRowRef={userRowRef}
             hideAverage={eventIsMbf}
+            sortsByAllTime={sortsByAllTime}
           />
           <PsychSheetFooter
             registrations={rankings}
@@ -135,12 +149,27 @@ function PsychSheetHeader({
   sortedColumn,
   onColumnClick,
   hideAverage = false,
+  sortsByAllTime,
+  setRankingPeriod,
+  hasRecentRankings,
 }) {
   return (
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell disabled>
-          <EventIcon id={selectedEvent} className="selected" size="1em" />
+        <Table.HeaderCell aria-sort={sortsByAllTime ? 'ascending' : 'none'}>
+          <Button basic compact onClick={() => setRankingPeriod('all_time')}>
+            <EventIcon id={selectedEvent} className="selected" size="1em" />
+            {' '}
+            {I18n.t('competitions.registration_v2.list.psychsheets.position')}
+            {/* Always render an icon so the column width stays stable when sorting. */}
+            <Icon name={sortsByAllTime ? 'sort ascending' : 'sort'} />
+          </Button>
+        </Table.HeaderCell>
+        <Table.HeaderCell aria-sort={sortsByAllTime ? 'none' : 'ascending'}>
+          <Button basic compact disabled={!hasRecentRankings} onClick={() => setRankingPeriod('last_12_months')}>
+            {I18n.t('competitions.registration_v2.list.psychsheets.position_last_12_months')}
+            <Icon name={sortsByAllTime ? 'sort' : 'sort ascending'} />
+          </Button>
         </Table.HeaderCell>
         <Table.HeaderCell disabled>
           {I18n.t('activerecord.attributes.registration.name')}
@@ -184,11 +213,18 @@ function PsychSheetHeader({
 
 function PsychSheetBody({
   registrations,
+  recentRankings,
   selectedEvent,
   userId,
   userRowRef,
   hideAverage = false,
+  sortsByAllTime,
 }) {
+  // Registrations can change between requests; missing counterparts have no position.
+  const recentRankingsByUserId = useMemo(
+    () => new Map(recentRankings?.map((row) => [row.user.id, row])),
+    [recentRankings],
+  );
   return (
     <Table.Body>
       {registrations.length > 0 ? (
@@ -202,9 +238,17 @@ function PsychSheetBody({
               <Table.Cell
                 collapsing
                 textAlign="right"
-                disabled={registration.tied_previous}
+                disabled={sortsByAllTime && registration.tied_previous}
               >
                 {registration.pos}
+              </Table.Cell>
+              <Table.Cell
+                collapsing
+                textAlign="right"
+                disabled={!sortsByAllTime
+                  && recentRankingsByUserId.get(registration.user.id)?.tied_previous}
+              >
+                {recentRankings ? (recentRankingsByUserId.get(registration.user.id)?.pos ?? '—') : ''}
               </Table.Cell>
               <Table.Cell>
                 <div ref={isUser ? userRowRef : undefined}>
@@ -251,7 +295,7 @@ function PsychSheetBody({
         <Table.Row>
           <Table.Cell
             textAlign="center"
-            colSpan={7}
+            colSpan={hideAverage ? 6 : 8}
           >
             {I18n.t('competitions.registration_v2.list.empty')}
           </Table.Cell>
@@ -271,6 +315,7 @@ function PsychSheetFooter({
     <Table.Footer>
       <Table.Row>
         <Table.Cell key="position" />
+        <Table.Cell key="recent-position" />
         <Table.Cell>
           {
             `${
