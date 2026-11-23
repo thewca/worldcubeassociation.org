@@ -1,5 +1,5 @@
 type: object
-required: [id, name, url, avatar]
+required: [id, name, url, avatar, is_lead]
 properties:
   id:
     type: integer
@@ -13,3 +13,6 @@ properties:
     example: "https://www.worldcubeassociation.org/persons/2005REYN01"
   avatar:
     $ref: '../users/UserAvatar.yaml'
+  is_lead:
+    type: boolean
+    description: Always false for organizers until lead organizers are stored.

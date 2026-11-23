@@ -27,59 +27,59 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     }
   end
 
-  before_action :set_viewable_competition, only: %i[show]
-
   def show
-    render json: @competition.to_v1_info_json
-  end
+    competition = competition_from_params(associations: Competition::V1_INFO_INCLUDES)
 
-  before_action :set_competition, except: %i[live show]
+    render json: competition.to_v1_info_json
+  end
 
   # Every round of the competition with its results nested, ordered by event and round number.
   # The frontend regroups these by event or by person; the round carries the context that would
   # otherwise be repeated on each of its results.
   def results
-    rounds = @competition.rounds
-                         .includes(:competition_event, :linked_round, results: :result_attempts)
-                         .sort_by { [it.event.rank, it.number] }
+    competition = competition_from_params
+    rounds = competition.rounds
+                        .includes(:competition_event, :linked_round, results: :result_attempts)
+                        .sort_by { [it.event.rank, it.number] }
 
-    return unless stale?(@competition.results, public: true)
+    return unless stale?(competition.results, public: true)
 
     render json: rounds.map(&:to_v1_results_json)
   end
 
   def podiums
-    return unless stale?(@competition.results, public: true)
+    competition = competition_from_params
 
-    render json: @competition.to_v1_podiums_json
+    return unless stale?(competition.results, public: true)
+
+    render json: competition.to_v1_podiums_json
   end
 
   def head_to_head
-    rounds = @competition.rounds
-                         .h2h
-                         .includes(
-                           :competition_event,
-                           { results: { person: :user } },
-                           { live_results: :registration },
-                           h2h_matches: [
-                             { h2h_match_competitors: :user },
-                             { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
-                           ],
-                         )
+    competition = competition_from_params
+    rounds = competition.rounds
+                        .h2h
+                        .includes(
+                          :competition_event,
+                          { results: { person: :user } },
+                          { live_results: :registration },
+                          h2h_matches: [
+                            { h2h_match_competitors: :user },
+                            { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
+                          ],
+                        )
 
     render json: rounds.as_json(Round::H2H_SERIALIZE_OPTIONS)
   end
 
   # Unannounced competitions answer exactly like missing ones, so their IDs can't be probed.
-  private def set_viewable_competition
-    competition_id = params.require(:id)
-    @competition = Competition.includes(Competition::V1_INFO_INCLUDES).find_by(id: competition_id)
+  private def competition_from_params(associations: {})
+    competition_id = params[:competition_id] || params[:id]
+    competition = Competition.includes(associations).find_by(id: competition_id)
 
     managing_user = authenticated_user if token_has_scope?(MANAGE_COMPETITIONS_SCOPE)
-    raise ActiveRecord::RecordNotFound.new("Competition with id #{competition_id} not found", Competition.name, :id, competition_id) unless @competition&.user_can_view?(managing_user)
-  end
+    raise ActiveRecord::RecordNotFound.new("Competition with id #{competition_id} not found", Competition.name, :id, competition_id) unless competition&.user_can_view?(managing_user)
 
-  private def set_competition
-    @competition = Competition.find(params.require(:competition_id))
+    competition
   end
 end
