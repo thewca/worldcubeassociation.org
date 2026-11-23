@@ -1,7 +1,4 @@
 import {
-  Box,
-  VStack,
-  Stack,
   Grid,
   GridItem,
   Field,
@@ -23,11 +20,14 @@ import type {
   RecordsFilterBoxProps,
 } from "@/lib/wca/results/types";
 
-type SegmentedFieldProps = {
-  label: string;
+type FilterFieldProps = {
   value: string;
-  items: { label: string; value: string }[];
   onChange: (value: string) => void;
+};
+
+type SegmentedFieldProps = FilterFieldProps & {
+  label: string;
+  items: { label: string; value: string }[];
 };
 
 // Use a select on narrow screens where the segmented controls don't fit.
@@ -82,6 +82,46 @@ function SegmentedField({
         </Portal>
       </Select.Root>
     </Field.Root>
+  );
+}
+
+function RegionField({ value, onChange }: FilterFieldProps) {
+  const { t } = useT();
+
+  return (
+    <RegionSelector
+      region={value}
+      onRegionChange={onChange}
+      label={t("common.country")}
+      t={t}
+      name={t("delegates_page.all_regions")}
+    />
+  );
+}
+
+function GenderField({ value, onChange }: FilterFieldProps) {
+  const { t } = useT();
+
+  return (
+    <SegmentedField
+      label={t("results.selector_elements.gender_selector.gender")}
+      value={value}
+      items={[
+        {
+          value: "All",
+          label: t("results.selector_elements.gender_selector.gender_all"),
+        },
+        {
+          value: "Male",
+          label: t("results.selector_elements.gender_selector.male"),
+        },
+        {
+          value: "Female",
+          label: t("results.selector_elements.gender_selector.female"),
+        },
+      ]}
+      onChange={onChange}
+    />
   );
 }
 
@@ -141,31 +181,13 @@ export function RecordsFilterBox({
         />
       </GridItem>
       <GridItem colSpan={{ base: 1, sm: segmentedColumns, md: 1 }}>
-        <RegionSelector
-          region={filterState.region}
-          onRegionChange={filterActions.setRegion}
-          label={t("common.country")}
-          t={t}
-          name={t("delegates_page.all_regions")}
+        <RegionField
+          value={filterState.region}
+          onChange={filterActions.setRegion}
         />
       </GridItem>
-      <SegmentedField
-        label={t("results.selector_elements.gender_selector.gender")}
+      <GenderField
         value={filterState.gender}
-        items={[
-          {
-            value: "All",
-            label: t("results.selector_elements.gender_selector.gender_all"),
-          },
-          {
-            value: "Male",
-            label: t("results.selector_elements.gender_selector.male"),
-          },
-          {
-            value: "Female",
-            label: t("results.selector_elements.gender_selector.female"),
-          },
-        ]}
         onChange={filterActions.setGender}
       />
       {view === "current" && (
@@ -190,8 +212,9 @@ export function RankingsFilterBox({
   filterActions,
 }: RankingsFilterBoxProps) {
   const { t } = useT();
+  const showsRegionFilter = filterState.show !== "by region";
 
-  const rankingTypes = events.byId[filterState.event].is_multiple_blindfolded
+  const rankingTypes = events.byId[filterState.event]?.is_multiple_blindfolded
     ? ["single"]
     : ["single", "average"];
   const rankingTypeItems = rankingTypes.map((value) => ({
@@ -200,89 +223,57 @@ export function RankingsFilterBox({
   }));
 
   return (
-    <Box
+    <Grid
       bg="bg"
       w="full"
       p={{ base: 4, md: 6 }}
       borderRadius="md"
-      boxShadow="md"
-      borderWidth="1px"
-      borderColor="border.muted"
+      boxShadow="sm"
+      templateColumns={{
+        base: "minmax(0, 1fr)",
+        sm: "repeat(2, minmax(0, 1fr))",
+        md: showsRegionFilter
+          ? "minmax(0, {sizes.sm}) repeat(2, max-content) minmax(0, 1fr)"
+          : "repeat(2, max-content) minmax(0, 1fr)",
+      }}
+      rowGap={2}
+      columnGap={{ base: 2, md: 4 }}
     >
-      <VStack align="left">
-        <Box hideBelow="md">
-          <SingleEventSelector
-            title={t("competitions.competition_form.events")}
-            selectedEvent={filterState.event}
-            onEventClick={filterActions.setEvent}
-          />
-        </Box>
-        <Box hideFrom="md">
-          <EventDropdown
-            multiple={false}
-            required
-            selectedEvents={[filterState.event]}
-            onEventsChange={([eventId]) =>
-              eventId && filterActions.setEvent(eventId)
-            }
-          />
-        </Box>
-        <RegionSelector
-          region={filterState.region}
-          onRegionChange={filterActions.setRegion}
-          label={t("common.country")}
-          t={t}
-          name={t("delegates_page.all_regions")}
+      <GridItem gridColumn="1 / -1" hideBelow="md" minW={0}>
+        <SingleEventSelector
+          title={t("competitions.competition_form.events")}
+          selectedEvent={filterState.event}
+          onEventClick={filterActions.setEvent}
         />
-        <Stack direction={{ base: "column", md: "row" }}>
-          <SegmentedField
-            label={t("results.selector_elements.type_selector.type")}
-            value={filterState.rankingType}
-            items={rankingTypeItems}
-            onChange={filterActions.setType}
+      </GridItem>
+      <GridItem gridColumn="1 / -1" hideFrom="md">
+        <EventDropdown
+          multiple={false}
+          required
+          selectedEvents={[filterState.event]}
+          onEventsChange={([eventId]) =>
+            eventId && filterActions.setEvent(eventId)
+          }
+        />
+      </GridItem>
+      {showsRegionFilter && (
+        <GridItem colSpan={{ base: 1, sm: 2, md: 1 }}>
+          <RegionField
+            value={filterState.region}
+            onChange={filterActions.setRegion}
           />
-          <SegmentedField
-            label={t("results.selector_elements.gender_selector.gender")}
-            value={filterState.gender}
-            items={[
-              {
-                value: "All",
-                label: t(
-                  "results.selector_elements.gender_selector.gender_all",
-                ),
-              },
-              {
-                value: "Male",
-                label: t("results.selector_elements.gender_selector.male"),
-              },
-              {
-                value: "Female",
-                label: t("results.selector_elements.gender_selector.female"),
-              },
-            ]}
-            onChange={filterActions.setGender}
-          />
-          <SegmentedField
-            label={t("results.selector_elements.show_selector.show")}
-            value={filterState.show}
-            items={[
-              {
-                value: "100 persons",
-                label: t("results.selector_elements.show_selector.persons"),
-              },
-              {
-                value: "100 results",
-                label: t("results.selector_elements.show_selector.results"),
-              },
-              {
-                value: "by region",
-                label: t("results.selector_elements.show_selector.by_region"),
-              },
-            ]}
-            onChange={filterActions.setShow}
-          />
-        </Stack>
-      </VStack>
-    </Box>
+        </GridItem>
+      )}
+      <SegmentedField
+        label={t("results.selector_elements.type_selector.type")}
+        value={filterState.rankingType}
+        items={rankingTypeItems}
+        onChange={filterActions.setType}
+      />
+      <GenderField
+        value={filterState.gender}
+        onChange={filterActions.setGender}
+      />
+    </Grid>
   );
 }

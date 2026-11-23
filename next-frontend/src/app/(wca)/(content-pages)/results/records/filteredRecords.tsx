@@ -1,23 +1,11 @@
 "use client";
 
 import React from "react";
-import {
-  Alert,
-  Box,
-  Circle,
-  Collapsible,
-  Float,
-  Heading,
-  HStack,
-  IconButton,
-  Tabs,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { LuFilter } from "react-icons/lu";
+import { Alert, Heading, Tabs, Text, VStack } from "@chakra-ui/react";
 import Loading from "@/components/ui/loading";
 import RecordsTable from "@/components/results/RecordsTable";
 import { RecordsFilterBox } from "@/components/results/FilterBox";
+import ResultsFilterPanel from "@/components/results/ResultsFilterPanel";
 import { useT } from "@/lib/i18n/useI18n";
 import { getMediumDateString } from "@/lib/wca/dates";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -96,8 +84,9 @@ export default function FilteredRecords() {
           })}
         </Text>
       )}
-      <Collapsible.Root width="full" mb={2} overflowPadding lazyMount>
-        <HStack justify="space-between" borderBottom="sm" borderColor="border">
+      <ResultsFilterPanel
+        hasActiveFilters={hasActiveFilters}
+        tabs={
           <Tabs.Root
             value={view}
             onValueChange={({ value }) =>
@@ -119,17 +108,10 @@ export default function FilteredRecords() {
               </Tabs.Trigger>
             </Tabs.List>
           </Tabs.Root>
-          <RecordsFilterToggle hasActiveFilters={hasActiveFilters} />
-        </HStack>
-        <Collapsible.Content>
-          <Box py={3}>
-            <RecordsFilterBox
-              filterState={filters}
-              filterActions={filterActions}
-            />
-          </Box>
-        </Collapsible.Content>
-      </Collapsible.Root>
+        }
+      >
+        <RecordsFilterBox filterState={filters} filterActions={filterActions} />
+      </ResultsFilterPanel>
       {isFetching && <Loading />}
       {error ? (
         <Alert.Root status="error">
@@ -146,43 +128,5 @@ export default function FilteredRecords() {
         )
       )}
     </VStack>
-  );
-}
-
-function RecordsFilterToggle({
-  hasActiveFilters,
-}: {
-  hasActiveFilters: boolean;
-}) {
-  const { t } = useT();
-
-  return (
-    <Collapsible.Trigger asChild>
-      <IconButton
-        aria-label={t("common.filter")}
-        aria-description={
-          hasActiveFilters ? t("results.records.filters_applied") : undefined
-        }
-        variant="ghost"
-        colorPalette={hasActiveFilters ? "blue" : undefined}
-        size="sm"
-      >
-        <Box as="span" position="relative" display="inline-flex">
-          <LuFilter />
-          {hasActiveFilters && (
-            <Float placement="top-end" pointerEvents="none">
-              <Circle
-                as="span"
-                size="1.5"
-                bg="colorPalette.solid"
-                outline="{borders.md}"
-                outlineColor="bg"
-                aria-hidden="true"
-              />
-            </Float>
-          )}
-        </Box>
-      </IconButton>
-    </Collapsible.Trigger>
   );
 }
