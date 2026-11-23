@@ -214,7 +214,7 @@ export function RankingsFilterBox({
   const { t } = useT();
   const showsRegionFilter = filterState.show !== "by region";
 
-  const rankingTypes = events.byId[filterState.event].is_multiple_blindfolded
+  const rankingTypes = events.byId[filterState.event]?.is_multiple_blindfolded
     ? ["single"]
     : ["single", "average"];
   const rankingTypeItems = rankingTypes.map((value) => ({

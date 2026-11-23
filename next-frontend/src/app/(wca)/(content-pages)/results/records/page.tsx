@@ -1,4 +1,8 @@
 import { getFilters, getRecordsQueryOptions } from "@/lib/wca/results/records";
+import {
+  toURLSearchParams,
+  type ResultsSearchParams,
+} from "@/lib/wca/results/searchParams";
 import { serverQueryApi } from "@/lib/wca/wcaAPI";
 import {
   dehydrate,
@@ -19,10 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t("results.records.title"),
   };
 }
-type SearchParams = Record<string, string | string[] | undefined>;
-
 type RecordsPageProps = {
-  searchParams: Promise<SearchParams>;
+  searchParams: Promise<ResultsSearchParams>;
 };
 
 export default function RecordsPage({ searchParams }: RecordsPageProps) {
@@ -45,13 +47,4 @@ async function Records({ searchParams }: RecordsPageProps) {
       <FilteredRecords />
     </HydrationBoundary>
   );
-}
-
-function toURLSearchParams(searchParams: SearchParams) {
-  const entries = Object.entries(searchParams).flatMap(([key, value]) => {
-    const values = typeof value === "string" ? [value] : (value ?? []);
-    return values.map((item) => [key, item]);
-  });
-
-  return new URLSearchParams(entries);
 }

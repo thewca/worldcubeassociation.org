@@ -1,15 +1,23 @@
-import { getRankings } from "@/lib/wca/results/rankings";
-
+import {
+  getRankingsFilters,
+  getRankingsQueryOptions,
+} from "@/lib/wca/results/rankings";
+import {
+  toURLSearchParams,
+  type ResultsSearchParams,
+} from "@/lib/wca/results/searchParams";
+import { serverQueryApi } from "@/lib/wca/wcaAPI";
+import {
+  dehydrate,
+  HydrationBoundary,
+  noop,
+  QueryClient,
+} from "@tanstack/react-query";
 import React, { Suspense } from "react";
 import FilteredRankings from "@/app/(wca)/(content-pages)/results/rankings/filteredRankings";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
-import OpenapiError from "@/components/ui/openapiError";
 import Loading from "@/components/ui/loading";
-
-const GENDER_ALL = "All";
-const SHOW_100_PERSONS = "100 persons";
-const REGION_WORLD = "world";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -20,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 type RankingsPageProps = {
-  searchParams: Promise<{ [key: string]: string | undefined }>;
+  searchParams: Promise<ResultsSearchParams>;
 };
 
 export default function RankingsPage({ searchParams }: RankingsPageProps) {
@@ -32,39 +40,17 @@ export default function RankingsPage({ searchParams }: RankingsPageProps) {
 }
 
 async function Rankings({ searchParams }: RankingsPageProps) {
-  const {
-    gender = GENDER_ALL,
-    region = REGION_WORLD,
-    show = SHOW_100_PERSONS,
-    event_id: eventId = "333",
-    type = "single",
-  } = await searchParams;
-
-  const { data, error, response } = await getRankings({
-    gender,
-    region,
-    show,
-    eventId,
-    type,
-  });
-
-  const { t } = await getT();
-
-  if (error) return <OpenapiError response={response} t={t} />;
+  const params = toURLSearchParams(await searchParams);
+  const queryClient = new QueryClient();
+  const options = getRankingsQueryOptions(
+    serverQueryApi,
+    getRankingsFilters(params),
+  );
+  await queryClient.query(options).catch(noop);
 
   return (
-    <>
-      <FilteredRankings
-        searchParams={{
-          gender,
-          region,
-          event: eventId,
-          rankingType: type,
-          show,
-        }}
-        rankings={data.rankings}
-        timestamp={data.timestamp}
-      />
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <FilteredRankings />
+    </HydrationBoundary>
   );
 }
