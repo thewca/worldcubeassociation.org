@@ -76,7 +76,7 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     @competition = Competition.includes(Competition::V1_INFO_INCLUDES).find_by(id: competition_id)
 
     managing_user = authenticated_user if token_has_scope?(MANAGE_COMPETITIONS_SCOPE)
-    raise WcaExceptions::NotFound.new("Competition with id #{competition_id} not found", data: { model: Competition.name, id: competition_id }) unless @competition&.user_can_view?(managing_user)
+    raise ActiveRecord::RecordNotFound.new("Competition with id #{competition_id} not found", Competition.name, :id, competition_id) unless @competition&.user_can_view?(managing_user)
   end
 
   private def set_competition
