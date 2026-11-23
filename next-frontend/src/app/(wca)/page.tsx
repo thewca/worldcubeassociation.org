@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, Suspense } from "react";
 
 export const metadata: Metadata = {
   title: { absolute: "World Cube Association" },
@@ -356,13 +356,15 @@ const FeaturedCompetitions = async ({
         </HStack>
       </Card.Title>
       <SimpleGrid columns={{ base: 1, md: block.competitions?.length }} gap={4}>
-        {block.competitions?.map((featuredComp) => (
-          <FeaturedCompetition
-            key={featuredComp.id}
-            competitionId={featuredComp.competitionId}
-            colorPalette={featuredComp.colorPalette}
-          />
-        ))}
+        <Suspense>
+          {block.competitions?.map((featuredComp) => (
+            <FeaturedCompetition
+              key={featuredComp.id}
+              competitionId={featuredComp.competitionId}
+              colorPalette={featuredComp.colorPalette}
+            />
+          ))}
+        </Suspense>
       </SimpleGrid>
     </Card.Body>
   </Card.Root>
