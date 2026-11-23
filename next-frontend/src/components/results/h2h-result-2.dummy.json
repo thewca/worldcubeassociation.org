@@ -1,0 +1,366 @@
+{
+  "id": 6709412,
+  "pos": 3,
+  "global_pos": 3,
+  "best": 533,
+  "average": 0,
+  "attempts": [
+    566,
+    570,
+    580,
+    0,
+    0
+  ],
+  "wca_id": "2020ROSS05",
+  "name": "Marco Rossi",
+  "country_iso2": "IT",
+  "regional_single_record": null,
+  "regional_average_record": null,
+  "competition_id": "ExampleChampionship2026",
+  "competition_short_name": "Example Championship 2026",
+  "competition_start_date": "2026-10-17",
+  "event_id": "333",
+  "round_type_id": "f",
+  "format_id": "h",
+  "ranking_mode": "head_to_head",
+  "matches": [
+    {
+      "match_number": 2,
+      "competitors": [
+        {
+          "user_id": 600101,
+          "name": "Marco Rossi",
+          "wca_id": "2020ROSS05",
+          "country_iso2": "IT",
+          "final_pos": 3
+        },
+        {
+          "user_id": 600202,
+          "name": "Hana Novak",
+          "wca_id": "2021NOVA02",
+          "country_iso2": "CZ",
+          "final_pos": 9
+        }
+      ],
+      "sets": [
+        {
+          "set_number": 1,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 600101,
+              "value": 612
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600101,
+              "value": 598
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600101,
+              "value": 575
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600101,
+              "value": 633
+            },
+            {
+              "set_attempt_number": 5,
+              "user_id": 600101,
+              "value": 580
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 600202,
+              "value": 640
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600202,
+              "value": 598
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600202,
+              "value": 601
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600202,
+              "value": 590
+            },
+            {
+              "set_attempt_number": 5,
+              "user_id": 600202,
+              "value": 612
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_number": 6,
+      "competitors": [
+        {
+          "user_id": 600101,
+          "name": "Marco Rossi",
+          "wca_id": "2020ROSS05",
+          "country_iso2": "IT",
+          "final_pos": 3
+        },
+        {
+          "user_id": 600303,
+          "name": "Ravi Menon",
+          "wca_id": "2019MENO01",
+          "country_iso2": "IN",
+          "final_pos": 5
+        }
+      ],
+      "sets": [
+        {
+          "set_number": 1,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 600101,
+              "value": -1
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600101,
+              "value": 571
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600101,
+              "value": 560
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600101,
+              "value": 549
+            },
+            {
+              "set_attempt_number": 5,
+              "user_id": 600101,
+              "value": 612
+            },
+            {
+              "set_attempt_number": 6,
+              "user_id": 600101,
+              "value": 558
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 600303,
+              "value": 566
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600303,
+              "value": 588
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600303,
+              "value": 560
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600303,
+              "value": 602
+            },
+            {
+              "set_attempt_number": 5,
+              "user_id": 600303,
+              "value": 597
+            },
+            {
+              "set_attempt_number": 6,
+              "user_id": 600303,
+              "value": 574
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_number": 10,
+      "competitors": [
+        {
+          "user_id": 600101,
+          "name": "Marco Rossi",
+          "wca_id": "2020ROSS05",
+          "country_iso2": "IT",
+          "final_pos": 3
+        },
+        {
+          "user_id": 600404,
+          "name": "Sofia Lindqvist",
+          "wca_id": "2018LIND07",
+          "country_iso2": "SE",
+          "final_pos": 2
+        }
+      ],
+      "sets": [
+        {
+          "set_number": 1,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 600101,
+              "value": 541
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600101,
+              "value": 590
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600101,
+              "value": 548
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600101,
+              "value": 560
+            },
+            {
+              "set_attempt_number": 5,
+              "user_id": 600101,
+              "value": 533
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 600404,
+              "value": 567
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600404,
+              "value": 553
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600404,
+              "value": 572
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600404,
+              "value": 560
+            },
+            {
+              "set_attempt_number": 5,
+              "user_id": 600404,
+              "value": 571
+            }
+          ]
+        },
+        {
+          "set_number": 2,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 600101,
+              "value": 588
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600101,
+              "value": 559
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600101,
+              "value": 604
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600101,
+              "value": 577
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 600404,
+              "value": 545
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600404,
+              "value": 571
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600404,
+              "value": 552
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600404,
+              "value": 539
+            }
+          ]
+        },
+        {
+          "set_number": 3,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 600101,
+              "value": 562
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600101,
+              "value": 570
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600101,
+              "value": 581
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600101,
+              "value": 551
+            },
+            {
+              "set_attempt_number": 5,
+              "user_id": 600101,
+              "value": 596
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 600404,
+              "value": 548
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 600404,
+              "value": 590
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 600404,
+              "value": 566
+            },
+            {
+              "set_attempt_number": 4,
+              "user_id": 600404,
+              "value": -1
+            },
+            {
+              "set_attempt_number": 5,
+              "user_id": 600404,
+              "value": 573
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

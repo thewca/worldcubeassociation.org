@@ -20,11 +20,11 @@ import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
 import { DateTime } from "luxon";
-import {
-  HeadToHeadRoundRows,
-  headToHeadRunAt,
-  startsHeadToHeadRun,
-} from "./H2HRoundRows";
+import { H2HResult, HeadToHeadRoundRows } from "./H2HRoundRows";
+import dummyResults from "./h2h-result.dummy.json" with { type: "json" };
+import dummyResults2 from "./h2h-result-2.dummy.json" with { type: "json" };
+
+const DUMMY_RESULTS = [dummyResults, dummyResults2] as H2HResult[];
 
 // The solve columns push the row past the width of a phone, so the column that says
 // whose row it is stays pinned to the left edge while the rest scrolls under it.
@@ -394,12 +394,14 @@ export function ByCompetitionTable({
               const isH2H = competitorResult.ranking_mode === "head_to_head";
 
               if (isH2H) {
-                if (!startsHeadToHeadRun(competitionResults, index))
-                  return null;
                 return (
                   <HeadToHeadRoundRows
                     key={`h2h-${competitorResult.id}`}
-                    results={headToHeadRunAt(competitionResults, index)}
+                    result={
+                      DUMMY_RESULTS[
+                        Math.floor(Math.random() * DUMMY_RESULTS.length)
+                      ]
+                    }
                     showCompetition={index === 0}
                     attemptCount={attemptCount}
                     anyAverages={anyAverages}

@@ -1,0 +1,301 @@
+{
+  "id": 6709306,
+  "pos": 1,
+  "global_pos": 1,
+  "best": 366,
+  "average": 0,
+  "attempts": [
+    566,
+    570,
+    580,
+    0,
+    0
+  ],
+  "wca_id": "2019WANY36",
+  "name": "Yiheng Wang (王艺衡)",
+  "country_iso2": "CN",
+  "regional_single_record": null,
+  "regional_average_record": null,
+  "competition_id": "ExampleChampionship Win 2026",
+  "competition_short_name": "Example Championship Win 2026",
+  "competition_start_date": "2026-10-17",
+  "event_id": "333",
+  "round_type_id": "f",
+  "format_id": "h",
+  "ranking_mode": "head_to_head",
+  "matches": [
+    {
+      "match_number": 5,
+      "competitors": [
+        {
+          "user_id": 181863,
+          "name": "Yiheng Wang (王艺衡)",
+          "wca_id": "2019WANY36",
+          "country_iso2": "CN",
+          "final_pos": 1
+        },
+        {
+          "user_id": 325527,
+          "name": "Lingkun Jiang (姜凌坤)",
+          "wca_id": "2019JIAN54",
+          "country_iso2": "CN",
+          "final_pos": 6
+        }
+      ],
+      "sets": [
+        {
+          "set_number": 1,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 181863,
+              "value": 415
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 181863,
+              "value": 445
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 181863,
+              "value": 483
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 325527,
+              "value": 560
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 325527,
+              "value": 552
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 325527,
+              "value": 552
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_number": 9,
+      "competitors": [
+        {
+          "user_id": 181863,
+          "name": "Yiheng Wang (王艺衡)",
+          "wca_id": "2019WANY36",
+          "country_iso2": "CN",
+          "final_pos": 1
+        },
+        {
+          "user_id": 331507,
+          "name": "Qixian Cao (曹岂娴)",
+          "wca_id": "2023CAOQ01",
+          "country_iso2": "CN",
+          "final_pos": 2
+        }
+      ],
+      "sets": [
+        {
+          "set_number": 1,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 181863,
+              "value": 383
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 181863,
+              "value": 402
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 181863,
+              "value": 366
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 331507,
+              "value": 470
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 331507,
+              "value": 421
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 331507,
+              "value": 439
+            }
+          ]
+        },
+        {
+          "set_number": 2,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 181863,
+              "value": 386
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 181863,
+              "value": 399
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 181863,
+              "value": 484
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 331507,
+              "value": 652
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 331507,
+              "value": 641
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 331507,
+              "value": 580
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_number": 12,
+      "competitors": [
+        {
+          "user_id": 181863,
+          "name": "Yiheng Wang (王艺衡)",
+          "wca_id": "2019WANY36",
+          "country_iso2": "CN",
+          "final_pos": 1
+        },
+        {
+          "user_id": 505119,
+          "name": "Yunzhi Lian (连允之)",
+          "wca_id": "2025LIAN01",
+          "country_iso2": "CN",
+          "final_pos": 3
+        }
+      ],
+      "sets": [
+        {
+          "set_number": 1,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 181863,
+              "value": 464
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 181863,
+              "value": 488
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 181863,
+              "value": 421
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 505119,
+              "value": 714
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 505119,
+              "value": 697
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 505119,
+              "value": 725
+            }
+          ]
+        },
+        {
+          "set_number": 2,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 181863,
+              "value": 528
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 181863,
+              "value": 389
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 181863,
+              "value": 474
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 505119,
+              "value": 657
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 505119,
+              "value": 460
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 505119,
+              "value": 626
+            }
+          ]
+        },
+        {
+          "set_number": 3,
+          "attempts": [
+            {
+              "set_attempt_number": 1,
+              "user_id": 181863,
+              "value": 463
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 181863,
+              "value": 397
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 181863,
+              "value": 461
+            },
+            {
+              "set_attempt_number": 1,
+              "user_id": 505119,
+              "value": 690
+            },
+            {
+              "set_attempt_number": 2,
+              "user_id": 505119,
+              "value": 517
+            },
+            {
+              "set_attempt_number": 3,
+              "user_id": 505119,
+              "value": 577
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
