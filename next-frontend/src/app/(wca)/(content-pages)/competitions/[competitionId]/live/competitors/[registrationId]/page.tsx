@@ -1,6 +1,6 @@
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import ByPersonResults from "./ByPersonResults";
-import { Heading } from "@chakra-ui/react";
+import { Button, Heading, Link, Stack } from "@chakra-ui/react";
 export default async function PersonResults({
   params,
 }: {
@@ -17,11 +17,20 @@ export default async function PersonResults({
     return <p>Something went wrong while trying to fetch results</p>;
   }
 
-  const { results, name } = personResultRequest.data;
+  console.log(personResultRequest.data);
+
+  const { results, name, wcaId } = personResultRequest.data;
 
   return (
     <>
-      <Heading textStyle="h1">{name}</Heading>
+      <Stack direction="row" alignItems="center" gap="5">
+        <Heading textStyle={{ base: "h3", md: "h2" }}>{name}</Heading>
+        <Button size="xs" asChild>
+          <Link href={`https://www.worldcubeassociation.org/persons/${wcaId}`}>
+            Visit WCA profile
+          </Link>
+        </Button>
+      </Stack>
       <ByPersonResults competitionId={competitionId} results={results} />
     </>
   );
