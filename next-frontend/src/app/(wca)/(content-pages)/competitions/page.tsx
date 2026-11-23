@@ -113,6 +113,12 @@ const COORDINATE_PRECISION = 4;
 
 const REGISTRATION_STATUS_KEY = [
   {
+    status: "all",
+    icon: <></>,
+    // i18n-tasks-use t("competitions.index.registration_status.all")
+    labelKey: "competitions.index.registration_status.all",
+  },
+  {
     status: "open",
     icon: <CompRegoNotFullOpenGreenIcon />,
     // i18n-tasks-use t("competitions.index.registration_status.open")
@@ -141,7 +147,7 @@ export default function CompetitionsPage() {
   const [location, setLocation] = useState<GeoCoordinates>();
   // Purely client side: the registration key doubles as a filter over what is already loaded.
   const [registrationStatus, setRegistrationStatus] =
-    useState<RegistrationStatus | null>(null);
+    useState<RegistrationStatus>("all");
   const [distanceUnit, setDistanceUnit] = useState(DEFAULT_DISTANCE_UNIT);
   // Held as a string because that is what NumberInput controls, and it lets the field go
   // empty while the competitor is typing.
@@ -245,7 +251,7 @@ export default function CompetitionsPage() {
       : loadedCompetitions;
 
   const competitionsFiltered =
-    registrationStatus === null
+    registrationStatus === "all"
       ? competitionsDistanceFiltered
       : competitionsDistanceFiltered.filter(
           (competition) =>
@@ -1051,8 +1057,8 @@ function RegistrationSelect({
   setRegistrationStatus,
   t,
 }: {
-  registrationStatus: RegistrationStatus | null;
-  setRegistrationStatus: Dispatch<SetStateAction<RegistrationStatus | null>>;
+  registrationStatus: RegistrationStatus;
+  setRegistrationStatus: Dispatch<SetStateAction<RegistrationStatus>>;
   t: TFunction;
 }) {
   return (
@@ -1061,22 +1067,13 @@ function RegistrationSelect({
       {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
       {/* full: <CompRegoFullButOpenOrangeIcon /> */}
       <SegmentGroup.Root
-        value={registrationStatus ?? "null"}
+        value={registrationStatus}
         onValueChange={(e) =>
-          setRegistrationStatus(
-            e.value === "null" ? null : (e.value as RegistrationStatus),
-          )
+          setRegistrationStatus(e.value as RegistrationStatus)
         }
       >
         <SegmentGroup.Indicator />
-        {[
-          {
-            status: "null",
-            icon: <></>,
-            labelKey: "All",
-          },
-          ...REGISTRATION_STATUS_KEY,
-        ].map(({ status, icon, labelKey }) => (
+        {REGISTRATION_STATUS_KEY.map(({ status, icon, labelKey }) => (
           <SegmentGroup.Item
             key={status}
             value={status}
