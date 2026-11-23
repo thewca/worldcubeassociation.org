@@ -1,11 +1,14 @@
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import ByPersonResults from "./ByPersonResults";
-import { Button, Heading, Link, Stack } from "@chakra-ui/react";
+import { Button, Heading, Icon, Link, Stack } from "@chakra-ui/react";
+import { getT } from "@/lib/i18n/get18n";
+import UserIcon from "@/components/icons/UserIcon";
 export default async function PersonResults({
   params,
 }: {
   params: Promise<{ registrationId: string; competitionId: string }>;
 }) {
+  const { t } = await getT();
   const { competitionId, registrationId } = await params;
 
   const personResultRequest = await getResultByPerson(
@@ -17,17 +20,22 @@ export default async function PersonResults({
     return <p>Something went wrong while trying to fetch results</p>;
   }
 
-  console.log(personResultRequest.data);
-
   const { results, name, wcaId } = personResultRequest.data;
 
   return (
     <>
-      <Stack direction="row" alignItems="center" gap="5">
+      <Stack
+        direction={{ base: "column", md: "row" }}
+        alignItems={{ base: undefined, md: "center" }}
+        gap={{ base: "0", md: "5" }}
+      >
         <Heading textStyle={{ base: "h3", md: "h2" }}>{name}</Heading>
         <Button size="xs" asChild variant="outline">
           <Link href={`/persons/${wcaId}`} unstyled>
-            Visit WCA profile
+            <Icon me="0.5" aria-hidden>
+              <UserIcon />
+            </Icon>
+            {t("competitions.results_table.wca_profile")}
           </Link>
         </Button>
       </Stack>
