@@ -1,6 +1,6 @@
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import ByPersonResults from "./ByPersonResults";
-import { Button, Heading, Icon, Link, Stack } from "@chakra-ui/react";
+import { Button, Heading, Link, Stack } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import UserIcon from "@/components/icons/UserIcon";
 export default async function PersonResults({
@@ -32,9 +32,7 @@ export default async function PersonResults({
         <Heading textStyle={{ base: "h3", md: "h2" }}>{name}</Heading>
         <Button size="xs" asChild variant="outline">
           <Link href={`/persons/${wcaId}`} unstyled>
-            <Icon me="0.5" aria-hidden>
-              <UserIcon />
-            </Icon>
+            <UserIcon me="0.5" aria-hidden />
             {t("competitions.results_table.wca_profile")}
           </Link>
         </Button>
