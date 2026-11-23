@@ -10216,7 +10216,7 @@ __metadata:
     stylelint-scss: "npm:^7.5.0"
     terser-webpack-plugin: "npm:^5.6.1"
     webpack: "npm:^5.112.2"
-    webpack-assets-manifest: "npm:^6.5.5"
+    webpack-assets-manifest: "npm:^6.5.6"
     webpack-bundle-analyzer: "npm:^5.4.2"
     webpack-cli: "npm:^7.3.1"
     webpack-dev-server: "npm:^5.2.7"
@@ -10377,6 +10377,25 @@ __metadata:
   bin:
     schema-utils: bin/schema-utils.js
   checksum: 10c0/b18b816e5628adb6a703883dbbb672aa3368e6462e16097c9df16d9ca192e41191b98c1b63b6cf18b0ee17a7223268ec9ca76935e8c50337cfa8484d3d289eea
+  languageName: node
+  linkType: hard
+
+"schema-utils@npm:^4.8.3":
+  version: 4.8.5
+  resolution: "schema-utils@npm:4.8.5"
+  dependencies:
+    "@types/json-schema": "npm:^7.0.15"
+    ajv: "npm:^8.20.0"
+    ajv-formats: "npm:^3.0.1"
+    ajv-keywords: "npm:^5.1.0"
+  peerDependencies:
+    webpack: ^5.0.0
+  peerDependenciesMeta:
+    webpack:
+      optional: true
+  bin:
+    schema-utils: bin/schema-utils.js
+  checksum: 10c0/fc8b01eef99310cb51efdc7af01d3c00a663f3f1a8f5971165a108ff27a7d1e2eb9300e947456de60bfcd5384a0892ce14054ab64b692fc9c1f60aef97c30d56
   languageName: node
   linkType: hard
 
@@ -11261,6 +11280,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tapable@npm:^2.3.4":
+  version: 2.3.4
+  resolution: "tapable@npm:2.3.4"
+  checksum: 10c0/63be31c49fabdcf51bba1ba9b5864ec2b60e50b67b23b510f664e3df3e337899e66797198a722bf03240ab96732f327619672ce3c5402439fd9fa3079be2db06
+  languageName: node
+  linkType: hard
+
 "tar@npm:^6.1.11, tar@npm:^6.1.2":
   version: 6.2.1
   resolution: "tar@npm:6.2.1"
@@ -11727,17 +11753,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^6.5.5":
-  version: 6.5.5
-  resolution: "webpack-assets-manifest@npm:6.5.5"
+"webpack-assets-manifest@npm:^6.5.6":
+  version: 6.5.6
+  resolution: "webpack-assets-manifest@npm:6.5.6"
   dependencies:
     deepmerge: "npm:^4.3.1"
     proper-lockfile: "npm:^4.1.2"
-    schema-utils: "npm:^4.8.1"
-    tapable: "npm:^2.3.3"
+    schema-utils: "npm:^4.8.3"
+    tapable: "npm:^2.3.4"
   peerDependencies:
     webpack: ^5.61.0
-  checksum: 10c0/780605c8571e4331df6a2fca18445be60aa7667c02bb99a75cbe633b86117ef0ff346a7e0adfd1a787e74ee46ad9489af46a3fa377fbc16971d9016d3bf0b026
+  checksum: 10c0/9ede2bf0ae07731d547bc0fc44b09b83c3910eb7ead24a4b48cdc0fd4471b501131334a99c8e4a1594f22b30cd1508d28262b3764fb0357aaf17fe316eb8bc6b
   languageName: node
   linkType: hard
 
