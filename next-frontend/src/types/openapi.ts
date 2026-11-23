@@ -2528,6 +2528,9 @@ export interface components {
             can_access_cms: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
+            can_see_admin_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
             can_request_to_edit_others_profile: {
                 scope: string[] | "*";
             };
