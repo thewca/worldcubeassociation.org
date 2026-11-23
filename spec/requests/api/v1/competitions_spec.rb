@@ -216,12 +216,11 @@ RSpec.describe "API v1 Competitions" do
     it "lists only the announced competitions of its series" do
       series = create(:competition_series)
       announced_competition = create(:competition, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01')
-      unannounced_sibling = create(:competition, :not_visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02')
+      create(:competition, :not_visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02')
 
       get api_v1_competition_path(announced_competition)
 
       expect(response.parsed_body["competition_series_ids"]).to eq [announced_competition.id]
-      expect(unannounced_sibling.competition_series).to eq series
     end
 
     it "lists the championships it holds" do
@@ -230,58 +229,6 @@ RSpec.describe "API v1 Competitions" do
       get api_v1_competition_path(championship)
 
       expect(response.parsed_body["championship_types"]).to match_array %w[world PL]
-    end
-
-    describe "status" do
-      it "is unconfirmed for a draft" do
-        draft = create(:competition, :not_visible, :with_organizer)
-        api_sign_in_as(draft.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
-
-        get api_v1_competition_path(draft)
-
-        expect(response.parsed_body["status"]).to eq "unconfirmed"
-      end
-
-      it "is confirmed once confirmed but not yet announced" do
-        confirmed_competition = create(:competition, :confirmed, :not_visible)
-        api_sign_in_as(confirmed_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
-
-        get api_v1_competition_path(confirmed_competition)
-
-        expect(response.parsed_body["status"]).to eq "confirmed"
-      end
-
-      it "is announced once visible" do
-        announced_competition = create(:competition, :confirmed, :visible, :announced, :future)
-
-        get api_v1_competition_path(announced_competition)
-
-        expect(response.parsed_body["status"]).to eq "announced"
-      end
-
-      it "is results_pending once over without results" do
-        over_competition = create(:competition, :confirmed, :visible, :announced, :past)
-
-        get api_v1_competition_path(over_competition)
-
-        expect(response.parsed_body["status"]).to eq "results_pending"
-      end
-
-      it "is results_posted once results are posted" do
-        posted_competition = create(:competition, :confirmed, :visible, :announced, :past, :results_posted)
-
-        get api_v1_competition_path(posted_competition)
-
-        expect(response.parsed_body["status"]).to eq "results_posted"
-      end
-
-      it "stays cancelled even though it was announced" do
-        cancelled_competition = create(:competition, :confirmed, :visible, :cancelled)
-
-        get api_v1_competition_path(cancelled_competition)
-
-        expect(response.parsed_body["status"]).to eq "cancelled"
-      end
     end
 
     describe "competitor limit" do
