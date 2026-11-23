@@ -3,7 +3,7 @@ import { serverClient } from "@/lib/wca/wcaAPI";
 import { cacheLife } from "next/cache";
 
 export async function getTeamsCommittees() {
-  "use cache";
+  "use cache: remote";
   cacheLife("hours");
 
   return serverClient.GET("/v0/user_groups", {
@@ -21,7 +21,7 @@ export async function getTeamCommitteeMembers(
   groupId: number,
   pastMembers: boolean = false,
 ) {
-  "use cache";
+  "use cache: remote";
   cacheLife("hours");
 
   return serverClient.GET("/v0/user_roles", {

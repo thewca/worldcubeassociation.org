@@ -52,6 +52,7 @@ const registrationStatusIcons: Record<RegistrationStatus, JSX.Element> = {
   open: <CompRegoNotFullOpenGreenIcon />,
   notOpen: <CompRegoNotOpenYetGreyIcon />,
   closed: <CompRegoClosedRedIcon />,
+  all: <></>,
 };
 
 const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
@@ -66,8 +67,8 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
 
   return (
     <Table.Row key={comp.id} height={{ base: "10", lg: "auto" }}>
-      <Table.Cell width="10">
-        <Center boxSize="10">{registrationStatusIcons[regoStatus]}</Center>
+      <Table.Cell width="7">
+        <Center boxSize="7">{registrationStatusIcons[regoStatus]}</Center>
       </Table.Cell>
 
       <Table.Cell width="1" whiteSpace="nowrap" hideBelow="md">
@@ -113,10 +114,10 @@ const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
         </HStack>
       </Table.Cell>
 
-      <Table.Cell width="10">
+      <Table.Cell width="7">
         <IconButton
           size="2xs"
-          boxSize="10"
+          boxSize="7"
           variant="ghost"
           color="currentColor"
           aria-label={t("competitions.competition_info.details")}

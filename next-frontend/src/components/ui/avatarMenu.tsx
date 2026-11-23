@@ -22,11 +22,12 @@ import { LuChevronDown } from "react-icons/lu";
 import _ from "lodash";
 import RailsLink from "@/components/RailsLink";
 import { type UserPermissions } from "@/lib/wca/permissions";
-import type { AvatarMenuEntry } from "@/types/payload";
+import type { AvatarMenu as AvatarMenuGlobal } from "@/types/payload";
 import { useT } from "@/lib/i18n/useI18n";
 import buildAvatarMenuEntries, {
   type FlatMenuEntry,
 } from "@/lib/wca/avatarMenuEntries";
+import { toAvatarName } from "@/lib/utils";
 
 const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
 
@@ -44,7 +45,7 @@ function EntryLink({
 } & React.ComponentPropsWithoutRef<"a">) {
   if (entry.kind === "rails") {
     return (
-      <RailsLink {...rest} href={entry.href}>
+      <RailsLink {...rest} href={entry.href} fontWeight="inherit">
         {entry.label}
       </RailsLink>
     );
@@ -68,7 +69,7 @@ export default function Wrapper({
   permissions,
 }: {
   session: Session | null;
-  cmsEntries: AvatarMenuEntry[];
+  cmsEntries: AvatarMenuGlobal["entries"];
   permissions?: UserPermissions;
 }) {
   return (
@@ -88,7 +89,7 @@ function AvatarMenu({
   permissions,
 }: {
   session: Session | null;
-  cmsEntries: AvatarMenuEntry[];
+  cmsEntries: AvatarMenuGlobal["entries"];
   permissions?: UserPermissions;
 }) {
   const { t } = useT();
@@ -136,7 +137,7 @@ function AvatarMenu({
       size={{ base: "xs", md: "md" }}
       boxSize={{ base: 7, md: 10 }}
     >
-      <Avatar.Fallback name={session.user?.name ?? undefined} />
+      <Avatar.Fallback name={toAvatarName(session.user?.name) ?? undefined} />
       <Avatar.Image src={session.user?.image ?? undefined} />
     </Avatar.Root>
   );

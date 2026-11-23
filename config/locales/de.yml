@@ -553,7 +553,7 @@ de:
       person:
       results_submission:
       regional_organization:
-        website: Muss eine gültige http(s) Adresse sein. HTTPS ist empfohlen.
+        website: Muss eine gültige http(s) Adresse sein. HTTPS ist empfohlen
         logo: >-
           Muss im PNG-Format sein, in guter Auflösung und mit einem
           transparenten Hintergrund.
@@ -561,8 +561,8 @@ de:
           sein
         bylaws: Muss im PDF-Format sein
         extra_file: >-
-          Muss im PDF-Format sein. Falls du mehrere Dateien hinzufügen willst,
-          fasse diese bitte zu einer zusammen.
+          Muss im PDF-Format sein. Falls du mehrere Dateien hinzufügen willst, fasse
+          diese bitte zu einer zusammen
     options:
       registration:
         status:
@@ -779,8 +779,8 @@ de:
             Apps und Single-Page-Apps gelten als nicht vertraulich.
       scopes:
         public: >-
-          Zugriff auf öffentliche Daten (Name, WCA-ID, Geschlecht,
-          Staatsbürgerschaft und Profilbild)
+          Zugriff auf öffentliche Daten (Name, WCA-ID, Geschlecht, Staatsangehörigkeit
+          und Profilbild)
         dob: Zugriff auf das Geburtsdatum
         email: Zugriff auf die E-Mail-Adresse
         manage_competitions: 'Zukünftige Wettbewerbe, die du organisierst, verwalten'
@@ -880,6 +880,8 @@ de:
         wic: WIC-Übersicht
         weat: WEAT-Übersicht
         wqac: WQAC-Übersicht
+      switch_to_dark_mode: Zum Darkmode wechseln
+      switch_to_light_mode: Zum Lightmode wechseln
   homepage:
     learn_more: Erfahre mehr
     title: Willkommen bei der World Cube Association
@@ -2603,7 +2605,7 @@ de:
         register: Anmelden
         competitors: Teilnehmer
         scrambles: Scrambles
-        newcomer_checks: Überprüfung von Erstteilnehmenden
+        newcomer_checks: Überprüfung von Neulingen
         upload_scrambles: Scrambles hochladen
     results_table:
       wca_profile: WCA-Profil
@@ -2647,7 +2649,7 @@ de:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors}
           erfasst'
         round_locked: gesperrt
-        first_timer: Erstteilnehmender
+        first_timer: Neulinge
         edit: Bearbeiten
         results: Ergebnisse
         registration: Anmeldung
@@ -2699,6 +2701,7 @@ de:
             menu: Mehrere Teilnehmende zurückziehen
             id: ID
             name: Name
+            select_all: Alle auswählen
           quit_menu: Zurückziehen
           no_next: Es gibt keinen nächsten Teilnehmenden, der nachrücken kann.
           cancel: Abbrechen
@@ -2766,6 +2769,7 @@ de:
           competing:
             title: Anmelden
             description: Wähle deine Disziplinen
+            summary_title: Anmeldung
           requirements:
             title: Voraussetzungen
             description: Wettbewerbsbedingungen akzeptieren
@@ -3137,6 +3141,9 @@ de:
     announcement_info_html: 'Angekündigt von %{author_name} am %{date_time}'
     errors:
       unstick_at_future: muss in der Zukunft liegen
+    search: Ankündigungen durchsuchen
+    no_announcements: Es gibt noch keine Ankündigungen.
+    no_search_results: Keine Ankündigungen entsprechen deiner Suche.
   contacts:
     dob:
       title: Formular zur Änderung des Geburtsdatums
@@ -3335,21 +3342,18 @@ de:
     mission_footer: WCA Leitbild
     who_we_are_title: Wer wir sind
     who_we_are_content_html: >-
-      <p>Die World Cube Association verwaltet Wettbewerbe für mechanische
-      Puzzles, die sich durch das Drehen von Gruppen von Teilen auszeichnen.
-      Diese werden auch "Twisty Puzzles" oder "Drehpuzzle" genannt. Das
-      berühmteste jener Puzzles ist der Rubik's Cube, erfunden von Professor
-      Rubik aus Ungarn. Eine Auswahl solcher Puzzles wurde zu offiziellen Events
-      der WCA erklärt.</p> <p>Während die WCA sich innerhalb des letzten
-      Jahrzehnts weiterentwickelt hat, haben über 200.000 Personen an unseren
-      Wettbewerben teilgenommen. Trotz dieses Wachstums bleiben wir eine
-      Organisation die fast ausschließlich von Ehrenamtlichen getragen wird, von
-      lokalen Organisatoren, über WCA Delegates, bis hin zum WCA Vorstand. Wir
-      sind allen sehr dankbar, die sich die Zeit nehmen, die Arbeit der WCA zu
-      ermöglichen. Wir hoffen, dass wir mit mehr finanzieller Unterstützung ein
-      noch höheres Maß an Professionalität in unsere Wettbewerbe einbringen
-      können, während wir immer mehr Veranstaltungen in der ganzen Welt
-      genehmigen.</p>
+      <p>Die World Cube Association regelt Turniere für mechanische Puzzles, die durch
+      das Drehen von Gruppen von Teilen bedient werden und allgemein als „Twisty Puzzles“
+      bekannt sind. Das bekannteste dieser Puzzles ist der Rubik's Cube, erfunden
+      von Professor Rubik aus Ungarn. Eine Auswahl dieser Puzzles wurde als offizielle
+      Disziplinen der WCA festgelegt.</p> <p>Im Laufe der Entwicklung der WCA im vergangenen
+      Jahrzehnt haben über 245.000 Menschen an unseren Turnieren teilgenommen. Trotz
+      dieses Wachstums sind wir nach wie vor eine Organisation, die fast vollständig
+      von Ehrenamtlichen getragen wird – von den Organisatoren vor Ort über die WCA-Delegierten
+      bis hin zum WCA-Board. Wir sind allen sehr dankbar, die sich die Zeit nehmen,
+      damit die WCA funktionieren kann. Mit mehr finanzieller Unterstützung hoffen
+      wir, unseren Turnieren ein noch höheres Maß an Professionalität zu verleihen,
+      während wir weltweit immer mehr Turniere genehmigen.</p>
     spirit: >-
       Unser Wunsch ist es, dass Menschen in aller Welt in einer freundlichen
       Atmosphäre Spaß zusammen haben, anderen helfen und sich fair verhalten.
@@ -4510,9 +4514,9 @@ de:
         wqac: Das WCA Quality Assurance Committee (WQAC) fördert die 
           kontinuierliche Qualitätsverbesserung innerhalb der WCA sowie die 
           weltweite Anwendung von Qualitätsstandards, um eine gleichbleibend 
-          hohe Qualität bei Prozessen, WCA-Ehrenamtlichen, regionalen 
-          Organisationen, Wettbewerbsorganisatoren und ehrenamtlichen 
-          Wettbewerbshelfern sicherzustellen.
+          hohe Qualität der Prozesse, der Ehrenamtlichen der WCA, der regionalen
+          Organisationen, der Turnierorganisatoren und der Turnierhelfer 
+          sicherzustellen.
         wrc: Das WCA Regulations Committee (WRC) befasst sich mit allen Fragen 
           zur Anwendung, Verbesserung und Weiterentwicklung der WCA-Regeln. Es 
           unterstützt WCA-Delegierte bei sämtlichen Verfahrensfragen, die bei 
@@ -4525,9 +4529,9 @@ de:
           (Website, Scramble-Generatoren, Arbeitsmappen, Verwaltungswerkzeuge).
         wsot: Das WCA Sports Organization Team (WSOT) betreut und unterstützt 
           die Anerkennung der WCA als internationale Sportorganisation.
-        wapc: Das WCA Appeals Committee (WAC) prüft und entscheidet über 
-          Einsprüche gegen Entscheidungen anderer WCA-Ehrenamtlicher. Das WAC 
-          bietet ein unabhängiges und unparteiisches Prüfverfahren, um 
+        wapc: Das WCA Appeals Committee (WAC) prüft Einsprüche gegen 
+          Entscheidungen anderer Ehrenamtlicher der WCA und entscheidet darüber.
+          Das WAC bietet ein unabhängiges und unparteiisches Prüfverfahren, um 
           sicherzustellen, dass Entscheidungen fair und angemessen sind und den 
           Richtlinien und Regeln der WCA entsprechen.
   trainee_delegate_application:
