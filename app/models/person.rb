@@ -296,7 +296,7 @@ class Person < ApplicationRecord
         ranks.transform_values { it.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS) }
       end,
       "championship_podium_results" => championship_podiums.transform_values do |podium|
-        podium.as_json(Result::V1_SERIALIZE_OPTIONS)
+        podium.as_json(Result::V1_STANDALONE_SERIALIZE_OPTIONS)
       end,
     )
   end
