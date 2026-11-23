@@ -9497,16 +9497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^7.2.1":
-  version: 7.2.1
-  resolution: "postcss-selector-parser@npm:7.2.1"
-  dependencies:
-    util-deprecate: "npm:^1.0.2"
-  checksum: 10c0/bb82454497a6d2c8ec302cb53fbdc5c4ca36b8874c5c1b61acc6f9a0d6699135b7de6b1852d8d57c0d3404500e14fa9995595cd5d73b3fcdf48d717c2264784c
-  languageName: node
-  linkType: hard
-
-"postcss-selector-parser@npm:^7.1.8":
+"postcss-selector-parser@npm:^7.1.8, postcss-selector-parser@npm:^7.2.1":
   version: 7.2.1
   resolution: "postcss-selector-parser@npm:7.2.1"
   dependencies:
