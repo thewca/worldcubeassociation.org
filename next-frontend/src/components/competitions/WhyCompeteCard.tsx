@@ -54,8 +54,8 @@ export default function WhyCompeteCard({
           flexDirection="row"
           size={{ base: "sm", md: "lg" }}
           overflow="hidden"
-          colorVariant="solid"
-          colorPalette="wcaWhite"
+          colorVariant="subtle"
+          colorPalette="gray"
           mb="8"
         >
           <Image
@@ -75,8 +75,6 @@ export default function WhyCompeteCard({
                 </Card.Title>
                 <CloseButton
                   variant="ghost"
-                  color="currentColor"
-                  _hover={{ bg: "colorPalette.contrast/10" }}
                   onClick={() => setDismissed(true)}
                 />
               </HStack>
