@@ -2315,6 +2315,11 @@ class Competition < ApplicationRecord
     exclude_deprecated: true,
   }.freeze
 
+  V1_INFO_VENUE_SERIALIZE_OPTIONS = {
+    only: %w[wcif_id name country_iso2 timezone_id],
+    methods: %w[latitude_degrees longitude_degrees],
+  }.freeze
+
   V1_INFO_STAFF_INCLUDES = %i[current_avatar delegate_role_metadata].freeze
 
   V1_INFO_INCLUDES = [
@@ -2322,14 +2327,14 @@ class Competition < ApplicationRecord
     :competition_events,
     :tabs,
     :championships,
+    :competition_venues,
     { delegates: V1_INFO_STAFF_INCLUDES, organizers: V1_INFO_STAFF_INCLUDES },
   ].freeze
 
-  # `show_at_all` rather than `announced?`, so the status agrees with who may see the competition.
   def status
     if cancelled?
       "cancelled"
-    elsif show_at_all?
+    elsif announced?
       if results_posted_at?
         "results_posted"
       elsif probably_over?
@@ -2363,7 +2368,8 @@ class Competition < ApplicationRecord
         "event_ids" => event_ids,
         "main_event_id" => main_event_id,
       },
-      "venue" => {
+      "venues" => competition_venues.as_json(V1_INFO_VENUE_SERIALIZE_OPTIONS),
+      "location" => {
         "name" => venue,
         "address" => venue_address,
         "details" => venue_details,
@@ -2397,8 +2403,9 @@ class Competition < ApplicationRecord
       },
       "staff" => {
         "contact" => contact,
-        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class") },
-        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class") },
+        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class").merge("is_lead" => it["id"] == lead_delegate_id) },
+        # TODO: mark the lead organizer once lead organizers are stored
+        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class").merge("is_lead" => false) },
       },
     }
   end

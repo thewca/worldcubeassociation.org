@@ -16,7 +16,8 @@ required:
   - championship_types
   - tabs
   - events
-  - venue
+  - venues
+  - location
   - registration_info
   - staff
 properties:
@@ -94,7 +95,11 @@ properties:
       main_event_id:
         type: [string, "null"]
         example: "333"
-  venue:
+  venues:
+    type: array
+    items:
+      $ref: 'V1CompetitionVenue.yaml'
+  location:
     type: object
     required: [name, address, details, city, country_iso2, latitude_degrees, longitude_degrees]
     properties:

@@ -210,7 +210,7 @@ RSpec.describe "API v1 Competitions" do
 
       expect(response).to be_successful
       expect(response.parsed_body).to include("id" => competition.id, "short_name" => competition.short_name, "events" => include("event_ids" => ["333"]))
-      expect(response.parsed_body["venue"]).to include("latitude_degrees" => competition.latitude_degrees, "longitude_degrees" => competition.longitude_degrees)
+      expect(response.parsed_body["location"]).to include("latitude_degrees" => competition.latitude_degrees, "longitude_degrees" => competition.longitude_degrees)
     end
 
     it "lists only the announced competitions of its series" do
@@ -252,7 +252,23 @@ RSpec.describe "API v1 Competitions" do
     it "serializes delegates without their deprecated team data" do
       get api_v1_competition_path(competition)
 
-      expect(response.parsed_body.dig("staff", "delegates").first.keys).to contain_exactly("id", "name", "url", "avatar")
+      expect(response.parsed_body.dig("staff", "delegates").first.keys).to contain_exactly("id", "name", "url", "avatar", "is_lead")
+    end
+
+    it "marks only the lead delegate as lead" do
+      get api_v1_competition_path(competition)
+
+      staff_json = response.parsed_body["staff"]
+      expect(staff_json["delegates"].to_h { [it["id"], it["is_lead"]] }).to eq({ competition.lead_delegate_id => true })
+      expect(staff_json["organizers"].pluck("is_lead")).to all(be false)
+    end
+
+    it "lists its schedule venues" do
+      scheduled_competition = create(:competition, :visible, with_schedule: true)
+
+      get api_v1_competition_path(scheduled_competition)
+
+      expect(response.parsed_body["venues"].pluck("wcif_id")).to match_array scheduled_competition.competition_venues.pluck(:wcif_id)
     end
 
     context "when the competition is unannounced" do
@@ -266,6 +282,17 @@ RSpec.describe "API v1 Competitions" do
 
         expect(response).to have_http_status(:not_found)
         expect(response.parsed_body.to_json).to eq missing_body.to_json.gsub("NotAComp2026", unannounced_competition.id)
+      end
+
+      it "hides its results, podiums and head-to-head rounds from anonymous users" do
+        get api_v1_competition_results_path(unannounced_competition)
+        expect(response).to have_http_status(:not_found)
+
+        get api_v1_competition_podiums_path(unannounced_competition)
+        expect(response).to have_http_status(:not_found)
+
+        get api_v1_competition_head_to_head_path(unannounced_competition)
+        expect(response).to have_http_status(:not_found)
       end
 
       it "is not found for users who can't manage it" do

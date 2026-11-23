@@ -1451,6 +1451,20 @@ export interface components {
             /** @description How many competitors are currently on the waiting list */
             waiting_list_count: number;
         };
+        V1CompetitionVenue: {
+            /** @example 1 */
+            wcif_id: number;
+            /** @example Seattle Convention Center */
+            name: string;
+            /** @example US */
+            country_iso2: string;
+            /** @example America/Los_Angeles */
+            timezone_id: string;
+            /** @example 47.611387 */
+            latitude_degrees: number;
+            /** @example -122.332554 */
+            longitude_degrees: number;
+        };
         V1CompetitionStaff: {
             /** @example 267 */
             id: number;
@@ -1462,6 +1476,8 @@ export interface components {
              */
             url: string;
             avatar: components["schemas"]["UserAvatar"];
+            /** @description Always false for organizers until lead organizers are stored. */
+            is_lead: boolean;
         };
         /** @description Unannounced competitions are still being set up, so most of their fields can be null. */
         V1CompetitionInfo: {
@@ -1523,7 +1539,8 @@ export interface components {
                 /** @example 333 */
                 main_event_id: string | null;
             };
-            venue: {
+            venues: components["schemas"]["V1CompetitionVenue"][];
+            location: {
                 /** @example Toronto */
                 name: string;
                 /** @example 770 Don Mills Rd, North York, ON M3C IT3, Canada */
