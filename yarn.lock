@@ -10306,7 +10306,7 @@ __metadata:
     terser-webpack-plugin: "npm:^5.6.1"
     webpack: "npm:^5.112.2"
     webpack-assets-manifest: "npm:^6.5.6"
-    webpack-bundle-analyzer: "npm:^5.4.2"
+    webpack-bundle-analyzer: "npm:^5.4.3"
     webpack-cli: "npm:^7.3.1"
     webpack-dev-server: "npm:^5.2.7"
     webpack-merge: "npm:^6.0.1"
@@ -11856,9 +11856,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:^5.4.2":
-  version: 5.4.2
-  resolution: "webpack-bundle-analyzer@npm:5.4.2"
+"webpack-bundle-analyzer@npm:^5.4.3":
+  version: 5.4.3
+  resolution: "webpack-bundle-analyzer@npm:5.4.3"
   dependencies:
     "@discoveryjs/json-ext": "npm:^0.6.3"
     acorn: "npm:^8.0.4"
@@ -11872,7 +11872,7 @@ __metadata:
     ws: "npm:^8.19.0"
   bin:
     webpack-bundle-analyzer: lib/bin/analyzer.js
-  checksum: 10c0/caa2a937952f702c9ebb821f8cb9bd7da05d87a2c8c50bc46a7b256aa16ddefe335c3f32888e0237352c35a2df87bfbda877f3a750632f635fba202d43e342ad
+  checksum: 10c0/b2cdddc797cbf8fc363d0664ca8c602bff17b2c8d6812518be151b05c9d7b84c2ca09ab1f56825b05dbba6cae816e8e3b1ec52d2bbaaeff9a70448ecd0e193a3
   languageName: node
   linkType: hard
 
