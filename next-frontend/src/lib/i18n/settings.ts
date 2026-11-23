@@ -17,8 +17,8 @@ export const languageConfig: Record<LanguageCode, LocaleConfig> =
 export const storageKey = "i18next-lng";
 export const defaultNamespace = "translation";
 
-const isValidLanguageCode = (code: string): code is LanguageCode =>
-  code in availableLocales;
+export const isValidLanguageCode = (code: string): code is LanguageCode =>
+  Object.hasOwn(availableLocales, code);
 
 export const coerceLanguageCode = (
   isoCode: string,
