@@ -52,6 +52,7 @@ const registrationStatusIcons: Record<RegistrationStatus, JSX.Element> = {
   open: <CompRegoNotFullOpenGreenIcon />,
   notOpen: <CompRegoNotOpenYetGreyIcon />,
   closed: <CompRegoClosedRedIcon />,
+  all: <></>,
 };
 
 const CompetitionTableRow: React.FC<Props> = ({ comp, isRepeatedDate }) => {
