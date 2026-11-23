@@ -105,7 +105,7 @@ class Result < ApplicationRecord
   # Ids of the results whose single (`best`) or `average` tied or beat every earlier one in the same
   # event, oldest competition first, keyed by column. This is `ResultsHelper#historical_pb_markers`
   # ported to SQL, so that a page of results is judged against the person's whole history without loading it.
-  def self.personal_best_ids
+  def self.personal_best_ids_by_column
     # A result ties or beats every earlier one exactly when it equals the best so far including itself.
     # Comparing against the earlier results only would need a frame ending at `1 PRECEDING`, which
     # MySQL recomputes for every row instead of keeping a running minimum, several times slower.
@@ -123,12 +123,10 @@ class Result < ApplicationRecord
     # turns into an eager load, which would replace our `select`.
     ranked = except(:includes).joins(:competition).select(:id, *PERSONAL_BEST_COLUMNS, *bests_so_far)
 
-    rows = unscoped.from(ranked, :results)
-                   .where(personal_best_conditions.join(" OR "))
-                   .pluck(:id, *personal_best_conditions.map { Arel.sql(it) })
+    personal_best_results = unscoped.from(ranked, :results).where(personal_best_conditions.join(" OR "))
 
-    PERSONAL_BEST_COLUMNS.each_with_index.to_h do |column, index|
-      [column, rows.filter_map { |id, *is_personal_best| id if is_personal_best[index] == 1 }.to_set]
+    PERSONAL_BEST_COLUMNS.index_with do |column|
+      personal_best_results.filter { it[column] == it["#{column}_so_far"] }.to_set(&:id)
     end
   end
 
