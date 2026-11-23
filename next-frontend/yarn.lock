@@ -10613,15 +10613,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.6.0":
-  version: 26.6.0
-  resolution: "i18next@npm:26.6.0"
+"i18next@npm:^27.2.3":
+  version: 27.2.3
+  resolution: "i18next@npm:27.2.3"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/865e3fe8a414436f8b8033a0ef5947a2233b043e78a770a0d66261e5f1dd7777c6cd89a101fc34215a328aa1d5876f768a9005da5495052ffaf6464aaa89c5d8
+  checksum: 10c0/11d73c284c8902a5bee8d9f015a2b5f35e59e9f2bfa4880432642c7652bedcbf8b475182a8dbb1b2379d060e651c08eb31e1ce9bd0f425c926844b32fc39058d
   languageName: node
   linkType: hard
 
@@ -13027,7 +13027,7 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-prettier: "npm:^5.5.7"
     graphql: "npm:^17.1.0"
-    i18next: "npm:^26.6.0"
+    i18next: "npm:^27.2.3"
     i18next-browser-languagedetector: "npm:^8.3.0"
     i18next-resources-to-backend: "npm:^1.2.4"
     js-cookie: "npm:^3.0.8"
