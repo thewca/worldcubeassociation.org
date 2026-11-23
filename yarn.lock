@@ -1326,10 +1326,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.29.14":
-  version: 7.29.14
-  resolution: "@babel/runtime@npm:7.29.14"
-  checksum: 10c0/dd809ac74c2154a549c9a9fbe73a3da84927c987d1291a1f1618f9263fa372a0de0d575c2616b3b420586a9974114c81ee47953c5d25074da66b58bf9d33d870
+"@babel/runtime@npm:^7.29.15":
+  version: 7.29.15
+  resolution: "@babel/runtime@npm:7.29.15"
+  checksum: 10c0/dd0aeddff9aa61c64431229ef243a5c08d662708c27cc6d5a3e0d90062caa243d1a72fa494f30568e87de21b4d4667092ede858e4eebc63c9c457a02ae4a0274
   languageName: node
   linkType: hard
 
@@ -10127,7 +10127,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.29.7"
     "@babel/preset-env": "npm:^7.29.14"
     "@babel/preset-react": "npm:^7.29.7"
-    "@babel/runtime": "npm:^7.29.14"
+    "@babel/runtime": "npm:^7.29.15"
     "@cubing/icons": "npm:^3.0.5"
     "@fullcalendar/core": "npm:^6.1.22"
     "@fullcalendar/interaction": "npm:^6.1.22"
