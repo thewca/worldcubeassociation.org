@@ -123,11 +123,14 @@ class Result < ApplicationRecord
     # turns into an eager load, which would replace our `select`.
     ranked = except(:includes).joins(:competition).select(:id, *PERSONAL_BEST_COLUMNS, *bests_so_far)
 
-    personal_best_results = unscoped.from(ranked, :results).where(personal_best_conditions.join(" OR "))
+    personal_best_rows = unscoped.from(ranked, :results)
+                                 .where(personal_best_conditions.join(" OR "))
+                                 .pluck(:id, :best, :best_so_far, :average, :average_so_far)
 
-    PERSONAL_BEST_COLUMNS.index_with do |column|
-      personal_best_results.filter { it[column] == it["#{column}_so_far"] }.to_set(&:id)
-    end
+    {
+      best: personal_best_rows.filter_map { |id, best, best_so_far, _, _| id if best == best_so_far }.to_set,
+      average: personal_best_rows.filter_map { |id, _, _, average, average_so_far| id if average == average_so_far }.to_set,
+    }
   end
 
   def self.augment_attempts(result_attrs, id_key: "id")
