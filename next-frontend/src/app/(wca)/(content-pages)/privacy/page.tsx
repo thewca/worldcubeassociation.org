@@ -13,7 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Privacy() {
-  const privacyPage = await getCachedGlobal("privacy-page");
+  const { lng } = await getT();
+
+  const privacyPage = await getCachedGlobal("privacy-page", lng);
 
   const privacyItems = privacyPage.blocks;
 

@@ -72,16 +72,14 @@ class Result < ApplicationRecord
                 worst_index regional_single_record regional_average_record],
   }.freeze
 
-  # `best_index` / `worst_index` are omitted deliberately: they are derivable from `attempts`.
-  # A result rendered inside a round, which already carries the competition, event and format
-  # context, so this shape holds only what is specific to the competitor.
+  # Use when serializing results that belong to a Round object
   V1_ROUND_SERIALIZE_OPTIONS = {
     only: %w[id pos global_pos best average],
     methods: %w[wca_id name country_iso2 attempts regional_single_record regional_average_record],
   }.freeze
 
-  # The same result rendered on its own, which has to repeat the context a round would carry.
-  V1_SERIALIZE_OPTIONS = {
+  # Shows a result in isolation, and so the competition-specific data is included
+  V1_STANDALONE_SERIALIZE_OPTIONS = {
     only: V1_ROUND_SERIALIZE_OPTIONS[:only],
     methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
              %w[competition_id competition_short_name competition_start_date
@@ -110,5 +108,12 @@ class Result < ApplicationRecord
                                              .transform_values { it.sort_by(&:attempt_number).map(&:value) }
 
     result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
+  end
+
+  # Make sure to preload the relevant data when calling this method
+  private def participated_matches
+    return [] if person.user.nil?
+
+    person.user.h2h_matches.filter { it.round_id == round_id }
   end
 end

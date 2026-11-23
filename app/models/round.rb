@@ -1022,7 +1022,9 @@ class Round < ApplicationRecord
   private def compute_h2h_final_positions_by_user_id
     return live_results.to_h { |live_result| [live_result.registration.user_id, live_result.global_pos] } if results.none?
 
-    results.to_h { |result| [result.person.user.id, result.pos] }
+    # Anonymizing a competitor moves their results to a fresh Person with no user account (see
+    # `User#anonymize` and `Person#anonymize`), so there is no user ID to key their position by.
+    results.filter_map { |result| [result.person.user.id, result.pos] if result.person.user.present? }.to_h
   end
 
   def self.wcif_json_schema(version: Competition::WCIF_STABLE_VERSION)

@@ -14,7 +14,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ExecutivesPage() {
-  const executivesPage = await getCachedGlobal("executives-page");
+  const { lng } = await getT();
+
+  const executivesPage = await getCachedGlobal("executives-page", lng);
 
   return (
     <VStack gap="8" alignItems="stretch" py="8">

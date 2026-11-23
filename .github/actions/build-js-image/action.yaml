@@ -31,9 +31,11 @@ runs:
       run: aws s3 cp s3://wca-fonts ./next-frontend/src/styles/fonts/ --recursive
     - name: Set asset prefix
       shell: bash
+      env:
+        ASSET_BUCKET: ${{ inputs.asset_bucket }}
       # Assets live under a per-commit prefix, so a deploy never overwrites the bundle
       #   that clients on the previous build are still fetching.
-      run: echo "NEXT_ASSET_PREFIX=https://${{ inputs.asset_bucket }}/nextjs/${{ github.sha }}" >> $GITHUB_ENV
+      run: echo "NEXT_ASSET_PREFIX=https://$ASSET_BUCKET/nextjs/$GITHUB_SHA" >> $GITHUB_ENV
     - name: Start Payload database
       uses: ./.github/actions/payload-db
     - name: Build and push JS Docker image
@@ -66,5 +68,7 @@ runs:
           NEXT_ASSET_PREFIX=${{ env.NEXT_ASSET_PREFIX }}
     - name: Push assets to S3
       shell: bash
+      env:
+        ASSET_BUCKET: ${{ inputs.asset_bucket }}
       # ./nextjs-assets comes from the same `builder` stage as the image just pushed
-      run: aws s3 sync ./nextjs-assets s3://${{ inputs.asset_bucket }}/nextjs/${{ github.sha }} --cache-control "public, max-age=31536000, immutable"
+      run: aws s3 sync ./nextjs-assets "s3://$ASSET_BUCKET/nextjs/$GITHUB_SHA" --cache-control "public, max-age=31536000, immutable"

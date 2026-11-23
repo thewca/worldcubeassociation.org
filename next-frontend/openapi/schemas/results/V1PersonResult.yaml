@@ -1,0 +1,17 @@
+allOf:
+  - $ref: './V1Result.yaml'
+  - type: object
+    description: >-
+      A result on a person's results page, which also carries the head-to-head matches the person
+      competed in during that round.
+    required:
+      - participated_matches
+    properties:
+      participated_matches:
+        type: array
+        description: >-
+          The head-to-head matches this competitor competed in during this round, including details
+          about the opponent, ordered by match number. Empty for a round that is not head-to-head.
+          For the whole bracket, use the competition's head-to-head endpoint.
+        items:
+          $ref: './H2hMatch.yaml'

@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 import { Button, Checkbox, Table } from "@chakra-ui/react";
+import { LuArrowDown, LuArrowUp } from "react-icons/lu";
 import { ConfirmDialog } from "@/providers/ConfirmProvider";
 import { useLiveResults } from "@/providers/LiveResultProvider";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
+import { LiveCompetitor } from "@/types/live";
 import useAPI from "@/lib/wca/useAPI";
 import { toaster } from "@/components/ui/toaster";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
+
+type SortColumn = "registrant_id" | "name";
+type SortDirection = "asc" | "desc";
 
 export default function BulkQuitButton({
   competitionId,
@@ -25,11 +30,49 @@ export default function BulkQuitButton({
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [sort, setSort] = useState<{
+    column: SortColumn;
+    direction: SortDirection;
+  }>({ column: "registrant_id", direction: "asc" });
 
-  const emptyRegistrationIds = Object.entries(liveResultsByRegistrationId)
-    .filter(([, results]) => results.every((r) => r.attempts.length === 0))
-    .map(([id]) => Number(id))
-    .filter((id) => !batchAttemptsByRegistrationId.has(id));
+  const emptyCompetitors = Array.from(competitors.values()).filter(
+    (competitor) =>
+      liveResultsByRegistrationId[competitor.id]?.every(
+        (r) => r.attempts.length === 0,
+      ) && !batchAttemptsByRegistrationId.has(competitor.id),
+  );
+
+  const emptyRegistrationIds = emptyCompetitors.map(
+    (competitor) => competitor.id,
+  );
+
+  const compareCompetitors = (a: LiveCompetitor, b: LiveCompetitor) =>
+    sort.column === "registrant_id"
+      ? a.registrant_id - b.registrant_id
+      : a.name.localeCompare(b.name);
+
+  const orderedCompetitors = emptyCompetitors.toSorted((a, b) =>
+    sort.direction === "asc"
+      ? compareCompetitors(a, b)
+      : compareCompetitors(b, a),
+  );
+
+  const toggleSort = (column: SortColumn) =>
+    setSort((prev) => ({
+      column,
+      direction:
+        prev.column === column && prev.direction === "asc" ? "desc" : "asc",
+    }));
+
+  const ariaSort = (column: SortColumn) => {
+    if (sort.column !== column) return "none";
+    return sort.direction === "asc" ? "ascending" : "descending";
+  };
+
+  const sortIcon = (column: SortColumn) => {
+    if (sort.column !== column) return null;
+    return sort.direction === "asc" ? <LuArrowUp /> : <LuArrowDown />;
+  };
 
   const { mutate: bulkQuit, isPending } = api.useMutation(
     "delete",
@@ -53,25 +96,41 @@ export default function BulkQuitButton({
   );
 
   const openDialog = () => {
-    setSelected(new Set(emptyRegistrationIds));
+    setSelected(new Set());
     setOpen(true);
   };
 
-  const toggle = (id: number) =>
+  const toggle = (registrationId: number) =>
     setSelected((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
+      if (next.has(registrationId)) {
+        next.delete(registrationId);
       } else {
-        next.add(id);
+        next.add(registrationId);
       }
       return next;
     });
 
+  // A competitor can receive results while the dialog is open, so only
+  // count selections that are still eligible for bulk quitting.
+  const selectedRegistrationIds = emptyRegistrationIds.filter(
+    (registrationId) => selected.has(registrationId),
+  );
+
+  const allSelected =
+    emptyRegistrationIds.length > 0 &&
+    selectedRegistrationIds.length === emptyRegistrationIds.length;
+
+  const someSelected = selectedRegistrationIds.length > 0;
+  const selectAllState = allSelected || (someSelected && "indeterminate");
+
+  const toggleAll = () =>
+    setSelected(allSelected ? new Set() : new Set(emptyRegistrationIds));
+
   const handleConfirm = () => {
     bulkQuit({
       params: { path: { competitionId, roundId } },
-      body: { registration_ids: [...selected] },
+      body: { registration_ids: selectedRegistrationIds },
     });
     setOpen(false);
   };
@@ -106,41 +165,62 @@ export default function BulkQuitButton({
         onConfirm={handleConfirm}
         cancelButton={t("competitions.live.admin.quit.cancel")}
         confirmButton={t("competitions.live.admin.quit.quit_confirm", {
-          count: selected.size,
+          count: selectedRegistrationIds.length,
         })}
-        confirmDisabled={selected.size === 0}
+        confirmDisabled={!someSelected}
       >
         <Table.Root size="sm">
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader />
               <Table.ColumnHeader>
-                {t("competitions.live.admin.quit.bulk.id")}
+                <Checkbox.Root
+                  aria-label={t("competitions.live.admin.quit.bulk.select_all")}
+                  checked={selectAllState}
+                  onCheckedChange={toggleAll}
+                >
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control />
+                </Checkbox.Root>
               </Table.ColumnHeader>
-              <Table.ColumnHeader>
-                {t("competitions.live.admin.quit.bulk.name")}
+              <Table.ColumnHeader aria-sort={ariaSort("registrant_id")}>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => toggleSort("registrant_id")}
+                >
+                  {t("competitions.live.admin.quit.bulk.id")}
+                  {sortIcon("registrant_id")}
+                </Button>
+              </Table.ColumnHeader>
+              <Table.ColumnHeader aria-sort={ariaSort("name")}>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => toggleSort("name")}
+                >
+                  {t("competitions.live.admin.quit.bulk.name")}
+                  {sortIcon("name")}
+                </Button>
               </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {emptyRegistrationIds.map((id) => {
-              const competitor = competitors.get(id);
-              return (
-                <Table.Row key={id}>
-                  <Table.Cell>
-                    <Checkbox.Root
-                      checked={selected.has(id)}
-                      onCheckedChange={() => toggle(id)}
-                    >
-                      <Checkbox.HiddenInput />
-                      <Checkbox.Control />
-                    </Checkbox.Root>
-                  </Table.Cell>
-                  <Table.Cell>{competitor?.registrant_id}</Table.Cell>
-                  <Table.Cell>{competitor?.name}</Table.Cell>
-                </Table.Row>
-              );
-            })}
+            {orderedCompetitors.map((competitor) => (
+              <Table.Row key={competitor.id}>
+                <Table.Cell>
+                  <Checkbox.Root
+                    aria-label={competitor.name}
+                    checked={selected.has(competitor.id)}
+                    onCheckedChange={() => toggle(competitor.id)}
+                  >
+                    <Checkbox.HiddenInput />
+                    <Checkbox.Control />
+                  </Checkbox.Root>
+                </Table.Cell>
+                <Table.Cell>{competitor.registrant_id}</Table.Cell>
+                <Table.Cell>{competitor.name}</Table.Cell>
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table.Root>
       </ConfirmDialog>

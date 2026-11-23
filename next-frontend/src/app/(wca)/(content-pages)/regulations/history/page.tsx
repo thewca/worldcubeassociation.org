@@ -11,9 +11,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function RegulationsHistory() {
-  const { i18n } = await getT();
+  const { i18n, lng } = await getT();
 
   const regulationsHistory = await findCached("regulationsHistoryItem", {
+    locale: lng,
     limit: 0,
     depth: 1,
   });

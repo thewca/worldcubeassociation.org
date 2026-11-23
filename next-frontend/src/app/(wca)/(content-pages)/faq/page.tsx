@@ -15,7 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function FAQ() {
-  const faqPage = await getCachedGlobal("faq-page", 2);
+  const { lng } = await getT();
+
+  const faqPage = await getCachedGlobal("faq-page", lng, 2);
   const faqQuestionsRaw = faqPage.questions;
 
   if (faqQuestionsRaw.length === 0) {

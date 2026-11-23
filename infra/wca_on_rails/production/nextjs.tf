@@ -73,7 +73,7 @@ locals {
     },
     {
       # nextjs-turbo-redis-cache verifies `notify-keyspace-events` via CONFIG GET on startup, which ElastiCache blocks.
-      #   The setting itself is applied through the `redis7allkeyslfu` parameter group in shared/redis.tf instead.
+      #   The setting itself is applied through the `valkey8allkeyslfu` parameter group in shared/redis.tf instead.
       name  = "SKIP_KEYSPACE_CONFIG_CHECK"
       value = "true"
     }

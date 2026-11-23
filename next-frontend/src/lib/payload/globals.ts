@@ -17,7 +17,6 @@ const GLOBAL_RELATED_COLLECTIONS: Partial<
   Record<GlobalSlug, CollectionSlug[]>
 > = {
   "faq-page": ["faqQuestions", "faqCategories"],
-  "documents-page": ["documents"],
   home: ["announcements", "testimonials"],
 };
 
@@ -34,10 +33,10 @@ export function payloadCacheLife() {
 
 export async function getCachedGlobal<TSlug extends GlobalSlug>(
   slug: TSlug,
+  locale: TypedLocale,
   depth?: number,
-  locale?: TypedLocale,
 ) {
-  "use cache";
+  "use cache: remote";
   cacheTag(
     globalCacheTag(slug),
     ...(GLOBAL_RELATED_COLLECTIONS[slug] ?? []).map(collectionCacheTag),
@@ -46,5 +45,5 @@ export async function getCachedGlobal<TSlug extends GlobalSlug>(
 
   const payload = await getPayload({ config });
 
-  return payload.findGlobal({ slug, depth, locale });
+  return payload.findGlobal({ slug, locale, depth });
 }

@@ -776,6 +776,8 @@ en:
       privacy: "Privacy"
       disclaimer: "Disclaimer"
       find_us: "Find us"
+      switch_to_dark_mode: "Switch to Dark Mode"
+      switch_to_light_mode: "Switch to Light Mode"
   page:
     translators:
       title: "Translators"
@@ -1562,6 +1564,7 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            select_all: "Select all"
             id: "ID"
             name: "Name"
           quit_menu: "Quit"
@@ -1791,11 +1794,13 @@ en:
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
+        #context: in_progress is still used in legacy, so we keep them separated for now
+        in_progress_count: "Competitions in progress (%{count})"
         #context: when selecting a specific year ('year' is a number)
-        past: "Past competitions from %{year}"
-        past_all: "Past competitions from all years"
+        past: "Past competitions from %{year} (%{count})"
+        past_all: "Past competitions from all years (%{count})"
         recent: "Recent competitions (last %{count} days)"
-        upcoming: "Upcoming competitions"
+        upcoming: "Upcoming competitions (%{count})"
         ongoing_and_upcoming: "Ongoing and upcoming competitions"
         custom: "Competitions in the selected period of time"
         by_announcement: "Competitions sorted by announcement date, newest on top"
@@ -1825,6 +1830,7 @@ en:
         open: "Open"
         not_open: "Not yet Open"
         closed: "Closed"
+        all: "All"
       #context: actions in the drawer that opens when clicking a competition in the list
       register_now: "Register Now"
       view_competition: "View Competition"
@@ -2162,10 +2168,11 @@ en:
             title: "Approval"
             description: "By organization team"
           payment:
-            title: "Payment information"
+            title: "Payment Information"
             description: "Enter billing information"
           competing:
             title: "Register"
+            summary_title: "Registration"
             description: "Choose your events"
           requirements:
             title: "Requirements"
@@ -2431,6 +2438,12 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+        competitor_results: "Competitor results"
+      general: "General"
+      more: "More"
+      admin: "Admin"
+      results: "Results"
+      events: "Events"
     h2h:
       set_number: "Set %{number}"
       stage_of: "Stage of %{number}"
@@ -2624,6 +2637,10 @@ en:
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
     announcement_info_html: "Announced by %{author_name} on %{date_time}"
+    #context: placeholder of the search field on the announcements list
+    search: "Search announcements"
+    no_announcements: "There are no announcements yet."
+    no_search_results: "No announcements match your search."
     errors:
       unstick_at_future: "must be in the future"
   #context: Contact forms

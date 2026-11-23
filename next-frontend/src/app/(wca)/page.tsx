@@ -548,7 +548,7 @@ const PayloadContents = async () => {
         locale: lng,
         fallbackLocale: "en",
       })
-    : await getCachedGlobal("home", undefined, lng);
+    : await getCachedGlobal("home", lng);
 
   const homepageEntries = homepage.layout;
 

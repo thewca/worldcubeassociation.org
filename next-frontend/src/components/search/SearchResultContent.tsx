@@ -2,6 +2,7 @@ import { Avatar, Box, HStack, Text, VStack } from "@chakra-ui/react";
 import WcaFlag from "@/components/WcaFlag";
 import type { components } from "@/types/openapi";
 import type { TFunction } from "i18next";
+import { toAvatarName } from "@/lib/utils";
 
 type SearchResult = components["schemas"]["SearchResult"];
 
@@ -29,7 +30,7 @@ export default function SearchResultContent({
       return (
         <HStack gap={2}>
           <Avatar.Root size="xs">
-            <Avatar.Fallback name={result.name} />
+            <Avatar.Fallback name={toAvatarName(result.name)} />
             {result.avatar && !result.avatar.is_default && (
               <Avatar.Image
                 src={result.avatar.thumb_url ?? result.avatar.url}

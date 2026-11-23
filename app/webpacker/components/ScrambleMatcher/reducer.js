@@ -91,21 +91,38 @@ function unpackRoundAndApplyAction(
     .filter((set) => set.external_scrambles.length > 0);
 }
 
-function removeScrambleFile(state, oldScrambleFile) {
+function removeFileFromScrambleSets(scrSets, withoutOldFile) {
+  return withoutOldFile(scrSets)
+    .map((scrSet) => ({
+      ...scrSet,
+      external_scrambles: withoutOldFile(scrSet.external_scrambles),
+    }))
+    .filter((scrSet) => scrSet.external_scrambles.length > 0);
+}
+
+function removeScrambleFile(state, oldScrambleFile, autoMatchSettings) {
+  const isFromOldFile = (scrEntity) => scrEntity.scramble_file_upload_id === oldScrambleFile.id;
+  const withoutOldFile = (scrEntities) => scrEntities.filter(
+    (scrEntity) => !isFromOldFile(scrEntity),
+  );
+
   return {
     ...state,
-    events: state.events.map((wcifEvent) => ({
-      ...wcifEvent,
-      rounds: wcifEvent.rounds.map((round) => ({
-        ...round,
-        external_scramble_sets: unpackRoundAndApplyAction(
-          round,
-          (flatScrambles) => flatScrambles.filter(
-            (scrEntity) => scrEntity.scramble_file_upload_id !== oldScrambleFile.id,
-          ),
-        ),
-      })),
-    })),
+    events: state.events.map((wcifEvent) => {
+      const isAttemptMode = autoMatchSettings.useAttemptsMatching.includes(wcifEvent.id);
+
+      return {
+        ...wcifEvent,
+        rounds: wcifEvent.rounds.map((round) => ({
+          ...round,
+          // Only attempt-based rounds may be re-chunked:
+          //   elsewhere it would shift extras into the next set.
+          external_scramble_sets: isAttemptMode
+            ? unpackRoundAndApplyAction(round, withoutOldFile)
+            : removeFileFromScrambleSets(round.external_scramble_sets, withoutOldFile),
+        })),
+      };
+    }),
   };
 }
 
@@ -218,13 +235,13 @@ export default function scrambleMatchReducer(state, action) {
       return applyAction(
         state,
         ['initial', 'current'],
-        (subState) => removeScrambleFile(subState, action.scrambleFile),
+        (subState) => removeScrambleFile(subState, action.scrambleFile, action.settings),
       );
     case 'resetScrambleFile':
       return applyAction(
         state,
         ['current'],
-        (subState) => removeScrambleFile(subState, action.scrambleFile),
+        (subState) => removeScrambleFile(subState, action.scrambleFile, action.settings),
       );
     case 'resetAfterSave':
       return initializeState({

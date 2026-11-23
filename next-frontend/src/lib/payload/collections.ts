@@ -31,7 +31,7 @@ export async function findCached<TSlug extends CollectionSlug>(
     pagination?: boolean;
   } = {},
 ) {
-  "use cache";
+  "use cache: remote";
   cacheTag(collectionCacheTag(collection));
   payloadCacheLife();
 

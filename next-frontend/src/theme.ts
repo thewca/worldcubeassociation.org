@@ -640,6 +640,12 @@ const customConfig = defineConfig({
           color: "currentColor",
         },
       },
+      mobileTabItem: {
+        value: {
+          fontSize: "0.72rem",
+          fontWeight: "medium",
+        },
+      },
       // `fill.muted` sets `colorPalette.fg`, which is unreadable on the muted
       //   background in dark mode. Must come after `layerStyle` to override it.
       darkModeFg: {

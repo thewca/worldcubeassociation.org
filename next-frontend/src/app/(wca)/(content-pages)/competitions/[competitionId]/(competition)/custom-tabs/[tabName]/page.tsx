@@ -35,7 +35,7 @@ export default async function Tab({
 // Keyed on the markdown itself, so the parsed output is reused until an organizer edits the tab.
 //   `getT` reads cookies and cannot run in here, which is why the error path stays in the page.
 async function TabContent({ content }: { content: string }) {
-  "use cache";
+  "use cache: remote";
   cacheLife("max");
 
   return (

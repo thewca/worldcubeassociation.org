@@ -15,7 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function About() {
-  const aboutPage = await getCachedGlobal("about-us-page");
+  const { lng } = await getT();
+
+  const aboutPage = await getCachedGlobal("about-us-page", lng);
 
   const aboutItems = aboutPage.blocks;
 

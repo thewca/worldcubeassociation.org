@@ -12,7 +12,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function Disclaimer() {
-  const disclaimerPage = await getCachedGlobal("disclaimer-page");
+  const { lng } = await getT();
+
+  const disclaimerPage = await getCachedGlobal("disclaimer-page", lng);
 
   const disclaimerItems = disclaimerPage.blocks;
 
