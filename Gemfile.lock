@@ -128,11 +128,11 @@ GEM
     autoprefixer-rails (9.4.7)
       execjs
     aws-eventstream (1.4.1)
-    aws-partitions (1.1305.0)
+    aws-partitions (1.1310.0)
     aws-sdk-cloudfront (1.167.0)
       aws-sdk-core (~> 3, >= 3.268.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.268.0)
+    aws-sdk-core (3.271.1)
       aws-eventstream (~> 1, >= 1.4.1)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -144,8 +144,8 @@ GEM
     aws-sdk-kms (1.143.0)
       aws-sdk-core (~> 3, >= 3.268.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-rds (1.334.0)
-      aws-sdk-core (~> 3, >= 3.268.0)
+    aws-sdk-rds (1.337.0)
+      aws-sdk-core (~> 3, >= 3.270.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-s3 (1.242.0)
       aws-sdk-core (~> 3, >= 3.268.0)
@@ -1158,11 +1158,11 @@ CHECKSUMS
   auth-sanitizer (0.2.5) sha256=eec0f5ee354931a1431be6f7025bc38d03db1731a2185726cbe6248e49bee177
   autoprefixer-rails (9.4.7) sha256=7104f54efa89e6390391bd894498a9db92bffaf74474942c4152e6dc0775ab3b
   aws-eventstream (1.4.1) sha256=ceb6a99c61df4bb00344e54aed0351574beca24f87a0d1487d1d2ed80929ce96
-  aws-partitions (1.1305.0) sha256=dbcf06fd557d111f8bba82180b8f32317f756516c40f3df72bdf94851ffbfa96
+  aws-partitions (1.1310.0) sha256=8f97a525563ec4803d55d02f54f9749a17f8428aa0978afe0b59e61f4ae8e3f6
   aws-sdk-cloudfront (1.167.0) sha256=d071b53b7867912c185e71f6e03b2aa86e78b249e12377c3de8739076549d3f8
-  aws-sdk-core (3.268.0) sha256=471950504724daa017711705647245ed2dcb44afc658dda88ca38176fe0f4612
+  aws-sdk-core (3.271.1) sha256=ee006612eb374da44bfe580f28063e7bdc66cb45875f71b2d2a879012a089c48
   aws-sdk-kms (1.143.0) sha256=0f1286c8abf2b91817acffc0cd58580f7de703706c2b55e5be1cfc5cc7740dac
-  aws-sdk-rds (1.334.0) sha256=8b6feb3fc42645d3c3076f268c90777f4f30529e897294115e8b271bfedc3fdd
+  aws-sdk-rds (1.337.0) sha256=f811a36ef2ae2f6e80445582b0ea95d0c263257fdaef0f649ce892457add5035
   aws-sdk-s3 (1.242.0) sha256=f0fd5ca4a41e26b84026021d19ff0c7a3ecae66536f5b38cc71b4562b75a5bba
   aws-sdk-sqs (1.129.0) sha256=d47595b110e01a30dde9fd30ecd598769895ccf74c1b3004b5ae991a262019dd
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
