@@ -1720,6 +1720,7 @@ export interface components {
             registrantId: number;
             name: string;
             wcaUserId: number;
+            wcaId: string;
             countryIso2: string;
             gender: string;
             /** Format: date */
