@@ -1,8 +1,9 @@
 import { getResultByPerson } from "@/lib/wca/live/getResultByPerson";
 import ByPersonResults from "./ByPersonResults";
-import { Button, Heading, Link, Stack } from "@chakra-ui/react";
+import { Heading, HStack, IconButton, Link } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import UserIcon from "@/components/icons/UserIcon";
+import { Tooltip } from "@/components/ui/tooltip";
 export default async function PersonResults({
   params,
 }: {
@@ -24,19 +25,22 @@ export default async function PersonResults({
 
   return (
     <>
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        alignItems={{ base: undefined, md: "center" }}
-        gap={{ base: "0", md: "5" }}
-      >
+      <HStack gap={{ base: "2", md: "3" }}>
+        <Tooltip content={t("competitions.results_table.wca_profile")}>
+          <IconButton
+            asChild
+            aria-label={t("competitions.results_table.wca_profile")}
+            variant="outline"
+            rounded="full"
+            size="xs"
+          >
+            <Link href={`/persons/${wcaId}`} unstyled>
+              <UserIcon />
+            </Link>
+          </IconButton>
+        </Tooltip>
         <Heading textStyle={{ base: "h3", md: "h2" }}>{name}</Heading>
-        <Button size="xs" asChild variant="outline">
-          <Link href={`/persons/${wcaId}`} unstyled>
-            <UserIcon me="0.5" aria-hidden />
-            {t("competitions.results_table.wca_profile")}
-          </Link>
-        </Button>
-      </Stack>
+      </HStack>
       <ByPersonResults competitionId={competitionId} results={results} />
     </>
   );
