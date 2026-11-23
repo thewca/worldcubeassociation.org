@@ -5824,6 +5824,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/luxon@npm:^3.7":
+  version: 3.7.6
+  resolution: "@types/luxon@npm:3.7.6"
+  checksum: 10c0/135c55910d8f4fb615cbfaa93b173e57e3eed9731da683005acdb84dba5ece5dbbf56cc82330015ccf5247a6e84fefbb2e2ebe255c957636f604f79efacb4214
+  languageName: node
+  linkType: hard
+
 "@types/mdast@npm:^4.0.0":
   version: 4.0.4
   resolution: "@types/mdast@npm:4.0.4"
@@ -12973,6 +12980,7 @@ __metadata:
     "@types/culori": "npm:^4.0.1"
     "@types/jest": "npm:^30.0.0"
     "@types/js-cookie": "npm:^3"
+    "@types/luxon": "npm:^3.7"
     "@types/newrelic": "npm:^9.14.8"
     "@types/node": "npm:^26"
     "@types/rails__actioncable": "npm:^8"

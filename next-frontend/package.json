@@ -105,6 +105,7 @@
     "@types/culori": "^4.0.1",
     "@types/jest": "^30.0.0",
     "@types/js-cookie": "^3",
+    "@types/luxon": "^3.7",
     "@types/newrelic": "^9.14.8",
     "@types/node": "^26",
     "@types/rails__actioncable": "^8",
