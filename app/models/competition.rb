@@ -2397,8 +2397,8 @@ class Competition < ApplicationRecord
       },
       "staff" => {
         "contact" => contact,
-        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS),
-        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS),
+        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class") },
+        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class") },
       },
     }
   end

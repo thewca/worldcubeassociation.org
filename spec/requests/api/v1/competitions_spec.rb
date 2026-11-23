@@ -252,7 +252,7 @@ RSpec.describe "API v1 Competitions" do
     it "serializes delegates without their deprecated team data" do
       get api_v1_competition_path(competition)
 
-      expect(response.parsed_body.dig("staff", "delegates").first.keys).to contain_exactly("id", "name", "url", "avatar", "class")
+      expect(response.parsed_body.dig("staff", "delegates").first.keys).to contain_exactly("id", "name", "url", "avatar")
     end
 
     context "when the competition is unannounced" do
