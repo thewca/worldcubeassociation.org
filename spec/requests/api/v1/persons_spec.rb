@@ -151,6 +151,73 @@ RSpec.describe "API v1 Persons" do
       expect(json.pluck("id")).to contain_exactly(other_event_result.id)
     end
 
+    it "paginates by competition, newest first, keeping all of a competition's results on one page" do
+      newer_competition = create(:competition, starts: result.competition.start_date + 1.week)
+      newer_results = [
+        create(:result, person: person, competition: newer_competition),
+        create(:result, person: person, competition: newer_competition, event_id: "222", format_id: "a"),
+      ]
+
+      get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 1 }
+
+      expect(response.parsed_body.pluck("id")).to match_array(newer_results.map(&:id))
+      expect(response.headers["Total"]).to eq "2"
+
+      get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 2 }
+
+      expect(response.parsed_body.pluck("id")).to contain_exactly(result.id)
+    end
+
+    describe "personal best flags" do
+      let!(:result) { create(:result, person: person, best: 1000, average: 2000) }
+
+      def create_later_result(weeks_later, **)
+        competition = create(:competition, starts: result.competition.start_date + weeks_later.weeks)
+        create(:result, person: person, competition: competition, **)
+      end
+
+      it "judges the newest page against results on older pages" do
+        create_later_result(1, best: 1100, average: 1900)
+
+        get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 1 }
+
+        expect(response.parsed_body.first).to include(
+          "is_personal_best_single" => false,
+          "is_personal_best_average" => true,
+        )
+      end
+
+      it "counts a tie as a personal best" do
+        tied_result = create_later_result(1, best: 1000, average: 2000)
+
+        get api_v1_person_results_path(person.wca_id)
+
+        json_by_id = response.parsed_body.index_by { it["id"] }
+        expect(json_by_id[tied_result.id]).to include("is_personal_best_single" => true, "is_personal_best_average" => true)
+      end
+
+      it "never flags a DNF and keeps judging later results against the last valid one" do
+        dnf_result = create_later_result(1, best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE)
+        slower_result = create_later_result(2, best: 1100, average: 2100)
+
+        get api_v1_person_results_path(person.wca_id)
+
+        json_by_id = response.parsed_body.index_by { it["id"] }
+        expect(json_by_id[result.id]).to include("is_personal_best_single" => true, "is_personal_best_average" => true)
+        expect(json_by_id[dnf_result.id]).to include("is_personal_best_single" => false, "is_personal_best_average" => false)
+        expect(json_by_id[slower_result.id]).to include("is_personal_best_single" => false, "is_personal_best_average" => false)
+      end
+
+      it "judges each event separately" do
+        other_event_result = create_later_result(1, event_id: "222", format_id: "a", best: 5000, average: 6000)
+
+        get api_v1_person_results_path(person.wca_id)
+
+        json_by_id = response.parsed_body.index_by { it["id"] }
+        expect(json_by_id[other_event_result.id]).to include("is_personal_best_single" => true, "is_personal_best_average" => true)
+      end
+    end
+
     it "404s for an unknown WCA ID" do
       get api_v1_person_results_path("1000AAAA01")
 

@@ -100,6 +100,25 @@ class Result < ApplicationRecord
     end
   end
 
+  # Ids of the results whose `value_column` tied or beat every earlier result in the same event,
+  # oldest competition first. This is `ResultsHelper#historical_pb_markers` ported to SQL, so that
+  # a page of results is judged against the person's whole history without loading it.
+  def self.personal_best_ids(value_column)
+    prior_best = <<~SQL.squish
+      MIN(CASE WHEN results.#{value_column} > 0 THEN results.#{value_column} END)
+        OVER (PARTITION BY results.event_id ORDER BY competitions.start_date, results.id
+              ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) AS prior_best
+    SQL
+
+    # Preloads don't matter for plucking ids, and an included association that is also joined
+    # turns into an eager load, which would replace our `select`.
+    ranked = except(:includes).joins(:competition).select(:id, value_column, Arel.sql(prior_best))
+
+    unscoped.from(ranked, :results)
+            .where("results.#{value_column} > 0 AND (prior_best IS NULL OR results.#{value_column} <= prior_best)")
+            .ids
+  end
+
   def self.augment_attempts(result_attrs, id_key: "id")
     result_ids = result_attrs.pluck(id_key).uniq
 
