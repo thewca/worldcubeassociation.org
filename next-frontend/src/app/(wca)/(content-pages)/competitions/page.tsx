@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Badge,
   Box,
   Button,
   Card,
@@ -30,7 +29,6 @@ import {
   Tabs,
   Text,
   VStack,
-  Wrap,
   Select,
   createListCollection,
 } from "@chakra-ui/react";
@@ -48,7 +46,13 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { Trans } from "react-i18next";
 import { useSession } from "@/auth.client";
-import { Dispatch, ReactNode, useReducer, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useReducer,
+  useState,
+} from "react";
 import {
   competitionFilterReducer,
   createFilterState,
@@ -111,6 +115,12 @@ const COORDINATE_PRECISION = 4;
 
 const REGISTRATION_STATUS_KEY = [
   {
+    status: "all",
+    icon: <></>,
+    // i18n-tasks-use t("competitions.index.registration_status.all")
+    labelKey: "competitions.index.registration_status.all",
+  },
+  {
     status: "open",
     icon: <CompRegoNotFullOpenGreenIcon />,
     // i18n-tasks-use t("competitions.index.registration_status.open")
@@ -139,7 +149,7 @@ export default function CompetitionsPage() {
   const [location, setLocation] = useState<GeoCoordinates>();
   // Purely client side: the registration key doubles as a filter over what is already loaded.
   const [registrationStatus, setRegistrationStatus] =
-    useState<RegistrationStatus | null>(null);
+    useState<RegistrationStatus>("all");
   const [distanceUnit, setDistanceUnit] = useState(DEFAULT_DISTANCE_UNIT);
   // Held as a string because that is what NumberInput controls, and it lets the field go
   // empty while the competitor is typing.
@@ -243,7 +253,7 @@ export default function CompetitionsPage() {
       : loadedCompetitions;
 
   const competitionsFiltered =
-    registrationStatus === null
+    registrationStatus === "all"
       ? competitionsDistanceFiltered
       : competitionsDistanceFiltered.filter(
           (competition) =>
@@ -269,7 +279,9 @@ export default function CompetitionsPage() {
     0;
 
   return (
-    <VStack gap="8" width="full">
+    <VStack gap="8" width="full" position="relative">
+      {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+      <Box ref={topSentinelRef} position="absolute" />
       <ClientOnly>
         {!session.isPending && !session.data && (
           <RemovableCard
@@ -324,9 +336,9 @@ export default function CompetitionsPage() {
               </Tabs.List>
             </Stack>
           </Card.Header>
-          <Card.Body asChild>
+          <Card.Body asChild pb={0}>
             <Collapsible.Root asChild>
-              <VStack gap="3" borderBottom="black">
+              <VStack gap="2" borderBottom="black">
                 <Box hideBelow="lg" width="full">
                   <FormEventSelector
                     selectedEvents={filterState.selectedEvents}
@@ -342,7 +354,12 @@ export default function CompetitionsPage() {
                     }
                   />
                 </Box>
-                <SimpleGrid gap="2" width="full" columns={{ base: 3, lg: 2 }}>
+                <SimpleGrid
+                  gap="2"
+                  width="full"
+                  columns={{ base: 1, lg: 2 }}
+                  rowGap="0"
+                >
                   <Box hideFrom="lg" minW="0">
                     <EventDropdown
                       selectedEvents={filterState.selectedEvents}
@@ -390,17 +407,33 @@ export default function CompetitionsPage() {
                     </InputGroup>
                   </Field.Root>
                 </SimpleGrid>
-                <Collapsible.Trigger asChild alignSelf="flex-end">
-                  <Button
-                    variant="outline"
-                    width={{ base: "full", lg: "auto" }}
-                  >
-                    <Icon>
-                      <LuSettings2 />
-                    </Icon>{" "}
-                    {t("competitions.index.advanced_filters")}
-                  </Button>
-                </Collapsible.Trigger>
+                <Stack
+                  direction={{ base: "column", md: "row" }}
+                  align={{ base: undefined, md: "end" }}
+                  justify={{ base: undefined, md: "space-between" }}
+                  width="full"
+                  gap={{ base: 3, md: undefined }}
+                >
+                  <RegistrationSelect
+                    registrationStatus={registrationStatus}
+                    setRegistrationStatus={setRegistrationStatus}
+                    t={t}
+                  />
+
+                  <Collapsible.Trigger asChild>
+                    <Button
+                      variant="outline"
+                      width={{ base: "full", md: "auto" }}
+                      size={{ base: "sm", md: undefined }}
+                    >
+                      <Icon>
+                        <LuSettings2 />
+                      </Icon>{" "}
+                      {t("competitions.index.advanced_filters")}
+                    </Button>
+                  </Collapsible.Trigger>
+                </Stack>
+
                 <Collapsible.Content width="full">
                   <VStack gap="4" width="full" align="stretch">
                     <Stack
@@ -462,42 +495,8 @@ export default function CompetitionsPage() {
               </VStack>
             </Collapsible.Root>
           </Card.Body>
-          <Card.Body pos="relative">
-            {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-            <Box ref={topSentinelRef} position="absolute" />
-
+          <Card.Body pt={0}>
             <Tabs.Content value="list">
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                justify="space-between"
-                align={{ base: "start", lg: "center" }}
-                mb={3}
-              >
-                <Wrap gapX="3" gapY="1" align="center">
-                  <Text>{t("competitions.index.registration_key")}</Text>
-                  {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
-                  {/* full: <CompRegoFullButOpenOrangeIcon /> */}
-                  {REGISTRATION_STATUS_KEY.map(({ status, icon, labelKey }) => (
-                    <Badge
-                      key={status}
-                      as="button"
-                      size="md"
-                      variant={
-                        registrationStatus === status ? "solid" : "surface"
-                      }
-                      cursor="pointer"
-                      onClick={() =>
-                        setRegistrationStatus(
-                          registrationStatus === status ? null : status,
-                        )
-                      }
-                    >
-                      {icon}
-                      {t(labelKey)}
-                    </Badge>
-                  ))}
-                </Wrap>
-              </Stack>
               <Table.ScrollArea>
                 <Table.Root
                   size="xs"
@@ -528,7 +527,9 @@ export default function CompetitionsPage() {
                     {inProgressComps.length > 0 && (
                       <>
                         <TableHeaderRow>
-                          {t("competitions.index.titles.in_progress")}
+                          {t("competitions.index.titles.in_progress_count", {
+                            count: inProgressComps.length,
+                          })}
                         </TableHeaderRow>
                         {inProgressComps.map((comp) => (
                           <CompetitionTableRow
@@ -538,9 +539,23 @@ export default function CompetitionsPage() {
                           />
                         ))}
                         <TableHeaderRow>
-                          {t("competitions.index.titles.upcoming")}
+                          {t("competitions.index.titles.upcoming", {
+                            count: upcomingComps.length,
+                          })}
                         </TableHeaderRow>
                       </>
+                    )}
+                    {filterState.timeOrder === "past" && (
+                      <TableHeaderRow>
+                        {filterState.selectedYear !== "all_years"
+                          ? t("competitions.index.titles.past", {
+                              year: filterState.selectedYear,
+                              count: upcomingComps.length,
+                            })
+                          : t("competitions.index.titles.past_all", {
+                              count: upcomingComps.length,
+                            })}
+                      </TableHeaderRow>
                     )}
                     {upcomingComps.map((comp) => (
                       <CompetitionTableRow
@@ -1057,5 +1072,52 @@ function SortOrderSelect({
         </Select.Content>
       </Select.Positioner>
     </Select.Root>
+  );
+}
+
+function RegistrationSelect({
+  registrationStatus,
+  setRegistrationStatus,
+  t,
+}: {
+  registrationStatus: RegistrationStatus;
+  setRegistrationStatus: Dispatch<SetStateAction<RegistrationStatus>>;
+  t: TFunction;
+}) {
+  return (
+    <Stack>
+      <Text fontWeight="bold">{t("competitions.index.registration_key")}</Text>
+      {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
+      {/* full: <CompRegoFullButOpenOrangeIcon /> */}
+      <SegmentGroup.Root
+        value={registrationStatus}
+        onValueChange={(e) =>
+          setRegistrationStatus(e.value as RegistrationStatus)
+        }
+      >
+        <SegmentGroup.Indicator />
+        {REGISTRATION_STATUS_KEY.map(({ status, icon, labelKey }) => (
+          <SegmentGroup.Item
+            key={status}
+            value={status}
+            flex="1 1 0"
+            minWidth="max-content"
+            justifyContent="center"
+          >
+            <SegmentGroup.ItemText>
+              <Stack
+                direction="row"
+                gap={{ base: 1.5, md: 3 }}
+                fontSize={{ base: "2xs", sm: "xs", md: "sm" }}
+                align="center"
+              >
+                {icon} {t(labelKey)}
+              </Stack>
+            </SegmentGroup.ItemText>
+            <SegmentGroup.ItemHiddenInput />
+          </SegmentGroup.Item>
+        ))}
+      </SegmentGroup.Root>
+    </Stack>
   );
 }
