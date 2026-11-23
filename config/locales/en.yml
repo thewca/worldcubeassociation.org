@@ -1793,7 +1793,9 @@ en:
       date_and_city: "%{date} – %{city}"
       #context: titles for the competitions list
       titles:
-        in_progress: "Competitions in progress (%{count})"
+        in_progress: "Competitions in progress"
+        #context: in_progress is still used in legacy, so we keep them separated for now
+        in_progress_count: "Competitions in progress (%{count})"
         #context: when selecting a specific year ('year' is a number)
         past: "Past competitions from %{year} (%{count})"
         past_all: "Past competitions from all years (%{count})"

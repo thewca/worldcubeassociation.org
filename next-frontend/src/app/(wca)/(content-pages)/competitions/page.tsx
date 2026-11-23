@@ -525,7 +525,7 @@ export default function CompetitionsPage() {
                     {inProgressComps.length > 0 && (
                       <>
                         <TableHeaderRow>
-                          {t("competitions.index.titles.in_progress", {
+                          {t("competitions.index.titles.in_progress_count", {
                             count: inProgressComps.length,
                           })}
                         </TableHeaderRow>
