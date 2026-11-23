@@ -1,8 +1,9 @@
 get:
   summary: Get results for a person
   description: >-
-    Every result the person has ever earned, optionally narrowed to one event. Public: no
-    authentication required.
+    The person's results, optionally narrowed to one event. Paginated by competition, newest
+    first, so a page holds every result of `per_page` competitions. Public: no authentication
+    required.
   tags:
     - persons
   operationId: v1PersonResults
@@ -17,6 +18,16 @@ get:
       required: false
       schema:
         type: string
+    - name: page
+      in: query
+      schema:
+        type: integer
+      description: Page number to retrieve
+    - name: per_page
+      in: query
+      schema:
+        type: integer
+      description: Number of competitions per page
   responses:
     '200':
       description: Successful response
